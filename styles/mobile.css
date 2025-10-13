@@ -1,0 +1,292 @@
+/**
+ * mobile.css - HackSimulator.nl
+ * Mobile-specific adaptations
+ */
+
+/* ==================== Mobile Breakpoint ==================== */
+@media (max-width: 768px) {
+  /* Typography adjustments */
+  :root {
+    --font-size-base: var(--font-size-mobile);
+  }
+
+  /* Terminal container */
+  #terminal-container {
+    padding: var(--spacing-sm);
+  }
+
+  /* Terminal output */
+  #terminal-output {
+    font-size: var(--font-size-mobile);
+    padding-bottom: 120px; /* Extra space for mobile keyboard */
+  }
+
+  /* Input wrapper */
+  #terminal-input-wrapper {
+    flex-wrap: wrap;
+  }
+
+  #terminal-prompt {
+    font-size: var(--font-size-mobile);
+  }
+
+  #terminal-input {
+    font-size: 16px; /* Prevent iOS zoom on focus */
+    width: 100%;
+  }
+
+  /* Modals */
+  .modal-content {
+    max-width: 90%;
+    padding: var(--spacing-lg);
+    max-height: 90vh;
+  }
+
+  .modal-content h2 {
+    font-size: 1.2rem;
+  }
+
+  /* Cookie banner */
+  .cookie-content {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    text-align: center;
+  }
+
+  .cookie-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Feedback widget */
+  #feedback-widget {
+    bottom: var(--spacing-md);
+    right: var(--spacing-md);
+  }
+
+  .floating-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+
+  /* Footer */
+  footer {
+    font-size: 10px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  footer nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-xs);
+  }
+
+  /* Tables */
+  .terminal-table {
+    font-size: 12px;
+  }
+
+  .terminal-table th,
+  .terminal-table td {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  /* Hints */
+  .hint-box {
+    max-width: calc(100vw - 2 * var(--spacing-md));
+    bottom: 70px;
+    right: var(--spacing-md);
+    left: var(--spacing-md);
+    font-size: 14px;
+  }
+
+  /* Man pages */
+  .man-page h1 {
+    font-size: 1.2rem;
+  }
+
+  .man-page h2 {
+    font-size: 1rem;
+  }
+
+  /* Rating stars */
+  .rating-stars {
+    justify-content: center;
+  }
+
+  .star {
+    font-size: 1.5rem;
+  }
+}
+
+/* ==================== Mobile Quick Commands ==================== */
+.mobile-quick-commands {
+  display: none;
+  position: fixed;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  background-color: var(--color-bg);
+  border-top: 1px solid var(--color-text-dim);
+  padding: var(--spacing-sm);
+  overflow-x: auto;
+  white-space: nowrap;
+  z-index: var(--z-feedback);
+}
+
+@media (max-width: 768px) {
+  .mobile-quick-commands.active {
+    display: block;
+  }
+}
+
+.quick-command-btn {
+  display: inline-block;
+  background-color: rgba(0, 255, 0, 0.1);
+  border: 1px solid var(--color-text-dim);
+  color: var(--color-text);
+  padding: var(--spacing-xs) var(--spacing-md);
+  margin-right: var(--spacing-xs);
+  font-size: 14px;
+  font-family: var(--font-terminal);
+}
+
+.quick-command-btn:active {
+  background-color: rgba(0, 255, 0, 0.2);
+  border-color: var(--color-text);
+}
+
+/* ==================== Mobile Keyboard Helpers ==================== */
+.mobile-keyboard-helper {
+  display: none;
+  position: fixed;
+  bottom: 110px;
+  left: 0;
+  right: 0;
+  background-color: var(--color-bg);
+  border-top: 1px solid var(--color-text-dim);
+  padding: var(--spacing-xs);
+  justify-content: center;
+  gap: var(--spacing-xs);
+  z-index: var(--z-feedback);
+}
+
+@media (max-width: 768px) {
+  .mobile-keyboard-helper.active {
+    display: flex;
+  }
+}
+
+.keyboard-key {
+  background-color: rgba(0, 255, 0, 0.1);
+  border: 1px solid var(--color-text-dim);
+  color: var(--color-text);
+  padding: var(--spacing-sm);
+  min-width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-family: var(--font-terminal);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.keyboard-key:active {
+  background-color: rgba(0, 255, 0, 0.2);
+  border-color: var(--color-text);
+}
+
+/* ==================== Touch Improvements ==================== */
+@media (max-width: 768px) {
+  /* Larger tap targets */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Prevent iOS text size adjustment */
+  body {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Prevent pull-to-refresh */
+  body {
+    overscroll-behavior-y: contain;
+  }
+
+  /* Smoother scrolling */
+  #terminal-output {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Remove tap highlight */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ==================== Landscape Mobile ==================== */
+@media (max-width: 768px) and (orientation: landscape) {
+  #terminal-container {
+    padding: var(--spacing-xs);
+  }
+
+  #terminal-output {
+    padding-bottom: 80px;
+  }
+
+  .modal-content {
+    max-height: 85vh;
+  }
+
+  .hint-box {
+    bottom: var(--spacing-md);
+  }
+}
+
+/* ==================== Small Mobile (< 480px) ==================== */
+@media (max-width: 480px) {
+  :root {
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+  }
+
+  .modal-content {
+    padding: var(--spacing-md);
+  }
+
+  .modal-content h2 {
+    font-size: 1.1rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 14px;
+  }
+
+  .floating-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+  }
+
+  .ascii-art {
+    font-size: 0.6em;
+  }
+}
+
+/* ==================== Tablet (768px - 1024px) ==================== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  #terminal-container {
+    padding: var(--spacing-md);
+  }
+
+  .modal-content {
+    max-width: 80%;
+  }
+}

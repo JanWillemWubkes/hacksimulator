@@ -1,0 +1,337 @@
+/**
+ * terminal.css - HackSimulator.nl
+ * Terminal-specific styling
+ */
+
+/* ==================== Terminal Container ==================== */
+#terminal-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: var(--terminal-padding);
+  max-width: var(--terminal-max-width);
+  margin: 0 auto;
+  position: relative;
+  z-index: var(--z-terminal);
+}
+
+/* ==================== Terminal Output ==================== */
+#terminal-output {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: var(--spacing-lg);
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  font-family: var(--font-terminal);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height);
+  color: var(--color-text);
+}
+
+/* Custom scrollbar */
+#terminal-output::-webkit-scrollbar {
+  width: 8px;
+}
+
+#terminal-output::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+#terminal-output::-webkit-scrollbar-thumb {
+  background: var(--color-text-dim);
+  border-radius: 4px;
+}
+
+#terminal-output::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text);
+}
+
+/* Output line styles */
+.output-line {
+  margin-bottom: var(--spacing-xs);
+}
+
+.output-command {
+  color: var(--color-prompt);
+  font-weight: var(--font-weight-bold);
+}
+
+.output-result {
+  color: var(--color-text);
+  margin-left: 0;
+}
+
+.output-error {
+  color: var(--color-error);
+}
+
+.output-warning {
+  color: var(--color-warning);
+}
+
+.output-info {
+  color: var(--color-info);
+}
+
+.output-success {
+  color: var(--color-success);
+}
+
+.output-dim {
+  color: var(--color-text-dim);
+}
+
+/* Educational tips styling */
+.tip-box {
+  border-left: 3px solid var(--color-info);
+  padding-left: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  color: var(--color-info);
+}
+
+.warning-box {
+  border-left: 3px solid var(--color-warning);
+  padding-left: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  color: var(--color-warning);
+}
+
+/* ==================== Terminal Input ==================== */
+#terminal-input-wrapper {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm) 0;
+  border-top: 1px solid var(--color-text-dim);
+  margin-top: var(--spacing-md);
+  position: relative;
+}
+
+#terminal-prompt {
+  color: var(--color-prompt);
+  font-weight: var(--font-weight-bold);
+  margin-right: var(--spacing-sm);
+  white-space: nowrap;
+  user-select: none;
+}
+
+#terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--color-text);
+  font-family: var(--font-terminal);
+  font-size: var(--font-size-base);
+  outline: none;
+  caret-color: transparent; /* Hide default caret, use custom cursor */
+}
+
+#terminal-input::placeholder {
+  color: var(--color-text-dim);
+  opacity: 0.6;
+}
+
+/* Focus state */
+#terminal-input:focus {
+  outline: none;
+}
+
+/* ==================== Custom Cursor ==================== */
+#terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 1.2em;
+  background-color: var(--color-text);
+  margin-left: 2px;
+  position: absolute;
+  animation: cursor-blink var(--cursor-blink);
+}
+
+/* ==================== Table Styling (for command output) ==================== */
+.terminal-table {
+  margin: var(--spacing-md) 0;
+  border-collapse: collapse;
+}
+
+.terminal-table th,
+.terminal-table td {
+  padding: var(--spacing-xs) var(--spacing-md);
+  text-align: left;
+  border-bottom: 1px solid var(--color-text-dim);
+}
+
+.terminal-table th {
+  color: var(--color-text);
+  font-weight: var(--font-weight-bold);
+  border-bottom: 2px solid var(--color-text);
+}
+
+.terminal-table td {
+  color: var(--color-text-dim);
+}
+
+/* ==================== List Styling ==================== */
+.terminal-list {
+  list-style: none;
+  margin: var(--spacing-sm) 0;
+}
+
+.terminal-list li {
+  padding: var(--spacing-xs) 0;
+}
+
+.terminal-list li::before {
+  content: '→ ';
+  color: var(--color-text-dim);
+  margin-right: var(--spacing-xs);
+}
+
+/* ==================== Code Blocks ==================== */
+.code-block {
+  background-color: rgba(0, 255, 0, 0.05);
+  border: 1px solid var(--color-text-dim);
+  padding: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  overflow-x: auto;
+}
+
+/* ==================== Progress Indicators ==================== */
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  border: 1px solid var(--color-text);
+  margin: var(--spacing-sm) 0;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--color-text);
+  transition: width var(--transition-normal);
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--color-bg);
+  font-weight: var(--font-weight-bold);
+  mix-blend-mode: difference;
+}
+
+/* ==================== Loading Spinner ==================== */
+.spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 2px solid var(--color-text-dim);
+  border-top-color: var(--color-text);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==================== ASCII Art Styling ==================== */
+.ascii-art {
+  color: var(--color-text);
+  line-height: 1.2;
+  font-size: 0.8em;
+  white-space: pre;
+  margin: var(--spacing-md) 0;
+}
+
+/* ==================== Help Command Styling ==================== */
+.help-section {
+  margin: var(--spacing-lg) 0;
+}
+
+.help-section h3 {
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+  text-decoration: underline;
+}
+
+.help-command {
+  display: flex;
+  margin: var(--spacing-xs) 0;
+}
+
+.help-command-name {
+  color: var(--color-text);
+  font-weight: var(--font-weight-bold);
+  min-width: 150px;
+}
+
+.help-command-desc {
+  color: var(--color-text-dim);
+}
+
+/* ==================== Man Page Styling ==================== */
+.man-page {
+  margin: var(--spacing-lg) 0;
+}
+
+.man-page h1 {
+  color: var(--color-text);
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--color-text);
+  padding-bottom: var(--spacing-sm);
+}
+
+.man-page h2 {
+  color: var(--color-text);
+  font-size: 1.2rem;
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+}
+
+.man-page p {
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-dim);
+}
+
+.man-page code {
+  color: var(--color-text);
+  background-color: rgba(0, 255, 0, 0.1);
+  padding: 2px 6px;
+}
+
+/* ==================== Hints & Suggestions ==================== */
+.hint-box {
+  position: fixed;
+  bottom: 80px;
+  right: var(--spacing-lg);
+  background-color: var(--color-bg);
+  border: 2px solid var(--color-info);
+  padding: var(--spacing-md);
+  max-width: 300px;
+  z-index: var(--z-feedback);
+  box-shadow: 0 4px 8px rgba(0, 255, 255, 0.3);
+}
+
+.hint-box::before {
+  content: '💡';
+  margin-right: var(--spacing-sm);
+}
+
+.hint-close {
+  position: absolute;
+  top: var(--spacing-xs);
+  right: var(--spacing-xs);
+  background: none;
+  color: var(--color-info);
+  font-size: 1.2rem;
+  padding: 0;
+  line-height: 1;
+}
+
+.hint-close:hover {
+  color: var(--color-text);
+}

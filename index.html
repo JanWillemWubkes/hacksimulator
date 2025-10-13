@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Leer ethisch hacken in een veilige browser-based terminal simulator. Geen installatie nodig.">
+    <meta name="keywords" content="ethisch hacken, cybersecurity, terminal simulator, leren programmeren">
+    <meta name="author" content="HackSimulator.nl">
+
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' https://www.googletagmanager.com;
+                   style-src 'self' 'unsafe-inline';">
+
+    <title>HackSimulator.nl - Leer Ethisch Hacken</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/terminal.css">
+    <link rel="stylesheet" href="styles/mobile.css">
+    <link rel="stylesheet" href="styles/animations.css">
+</head>
+<body>
+    <!-- Main Terminal Container -->
+    <main id="terminal-container" role="main" aria-label="Terminal Simulator">
+        <!-- Terminal Output Area -->
+        <div id="terminal-output" aria-live="polite" aria-atomic="false">
+            <!-- Output will be dynamically inserted here -->
+        </div>
+
+        <!-- Terminal Input Area -->
+        <div id="terminal-input-wrapper">
+            <span id="terminal-prompt" aria-hidden="true">user@hacksim:~$</span>
+            <input
+                type="text"
+                id="terminal-input"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                aria-label="Terminal commando invoer"
+                placeholder="Type 'help' om te beginnen..."
+            >
+            <span id="terminal-cursor" aria-hidden="true"></span>
+        </div>
+    </main>
+
+    <!-- Onboarding Modal (First Visit) -->
+    <div id="onboarding-modal" class="modal" role="dialog" aria-labelledby="onboarding-title" aria-hidden="true">
+        <div class="modal-content">
+            <h2 id="onboarding-title">Welkom bij HackSimulator.nl</h2>
+            <p>Een veilige omgeving om ethisch hacken te leren.</p>
+            <p><strong>Belangrijk:</strong> Dit is uitsluitend voor educatieve doeleinden. Gebruik deze kennis alleen legaal en ethisch.</p>
+            <button id="onboarding-accept" class="btn-primary">Ik begrijp het - Verder</button>
+        </div>
+    </div>
+
+    <!-- Legal Disclaimer Modal -->
+    <div id="legal-modal" class="modal" role="dialog" aria-labelledby="legal-title" aria-hidden="true">
+        <div class="modal-content">
+            <h2 id="legal-title">Juridische Kennisgeving</h2>
+            <div class="legal-content">
+                <p>Door deze simulator te gebruiken, gaat u akkoord met het volgende:</p>
+                <ul>
+                    <li>Alle activiteiten zijn gesimuleerd en beïnvloeden geen echte systemen</li>
+                    <li>Deze kennis mag alleen worden gebruikt voor legale en ethische doeleinden</li>
+                    <li>Ongeautoriseerde toegang tot computersystemen is illegaal</li>
+                    <li>U bent verantwoordelijk voor uw eigen handelingen buiten deze simulator</li>
+                </ul>
+                <p><small>Door op "Accepteren" te klikken, bevestigt u dat u deze voorwaarden begrijpt en accepteert.</small></p>
+            </div>
+            <button id="legal-accept" class="btn-primary">Accepteren en Doorgaan</button>
+        </div>
+    </div>
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-consent" class="cookie-banner" role="alertdialog" aria-labelledby="cookie-title" aria-hidden="true">
+        <div class="cookie-content">
+            <p id="cookie-title">
+                <strong>Privacy:</strong> We gebruiken cookies voor analytics om de site te verbeteren.
+                <a href="assets/legal/cookies.html" target="_blank" rel="noopener noreferrer">Meer info</a>
+            </p>
+            <div class="cookie-buttons">
+                <button id="cookie-accept" class="btn-small">Accepteren</button>
+                <button id="cookie-decline" class="btn-small btn-secondary">Weigeren</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Widget -->
+    <div id="feedback-widget" aria-label="Feedback">
+        <button id="feedback-button" class="floating-btn" aria-label="Geef feedback">
+            💬
+        </button>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div id="feedback-modal" class="modal" role="dialog" aria-labelledby="feedback-title" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Sluiten">&times;</button>
+            <h2 id="feedback-title">Feedback</h2>
+            <p>Hoe vind je HackSimulator.nl?</p>
+            <div class="rating-stars" role="radiogroup" aria-label="Beoordeling">
+                <button class="star" data-rating="1" aria-label="1 ster">⭐</button>
+                <button class="star" data-rating="2" aria-label="2 sterren">⭐</button>
+                <button class="star" data-rating="3" aria-label="3 sterren">⭐</button>
+                <button class="star" data-rating="4" aria-label="4 sterren">⭐</button>
+                <button class="star" data-rating="5" aria-label="5 sterren">⭐</button>
+            </div>
+            <textarea id="feedback-comment" placeholder="Optioneel: Vertel ons meer..." rows="4" aria-label="Feedback commentaar"></textarea>
+            <button id="feedback-submit" class="btn-primary">Versturen</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer role="contentinfo">
+        <div class="footer-content">
+            <p>&copy; 2025 HackSimulator.nl - Educatief Project</p>
+            <nav aria-label="Legal links">
+                <a href="assets/legal/privacy.html" target="_blank" rel="noopener noreferrer">Privacy</a> |
+                <a href="assets/legal/terms.html" target="_blank" rel="noopener noreferrer">Voorwaarden</a> |
+                <a href="assets/legal/cookies.html" target="_blank" rel="noopener noreferrer">Cookies</a>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- Core Scripts -->
+    <script src="src/main.js" type="module"></script>
+
+    <!-- Core Engine -->
+    <script src="src/core/terminal.js" type="module"></script>
+    <script src="src/core/parser.js" type="module"></script>
+    <script src="src/core/registry.js" type="module"></script>
+    <script src="src/core/history.js" type="module"></script>
+
+    <!-- Virtual Filesystem -->
+    <script src="src/filesystem/vfs.js" type="module"></script>
+    <script src="src/filesystem/structure.js" type="module"></script>
+    <script src="src/filesystem/persistence.js" type="module"></script>
+
+    <!-- UI Components -->
+    <script src="src/ui/renderer.js" type="module"></script>
+    <script src="src/ui/input.js" type="module"></script>
+    <script src="src/ui/autocomplete.js" type="module"></script>
+    <script src="src/ui/mobile.js" type="module"></script>
+    <script src="src/ui/onboarding.js" type="module"></script>
+
+    <!-- Utilities -->
+    <script src="src/utils/fuzzy.js" type="module"></script>
+    <script src="src/utils/formatter.js" type="module"></script>
+    <script src="src/utils/validator.js" type="module"></script>
+    <script src="src/utils/helpers.js" type="module"></script>
+
+    <!-- Help System -->
+    <script src="src/help/help-system.js" type="module"></script>
+    <script src="src/help/man-pages.js" type="module"></script>
+    <script src="src/help/tips.js" type="module"></script>
+
+    <!-- Analytics -->
+    <script src="src/analytics/tracker.js" type="module"></script>
+    <script src="src/analytics/events.js" type="module"></script>
+    <script src="src/analytics/consent.js" type="module"></script>
+</body>
+</html>

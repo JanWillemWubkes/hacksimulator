@@ -1,0 +1,357 @@
+/**
+ * animations.css - HackSimulator.nl
+ * Animations and transitions
+ */
+
+/* ==================== Cursor Blink ==================== */
+@keyframes cursor-blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
+#terminal-cursor {
+  animation: cursor-blink 1s step-end infinite;
+}
+
+/* Stop blinking when typing */
+#terminal-input:focus ~ #terminal-cursor {
+  animation: none;
+  opacity: 1;
+}
+
+/* ==================== Fade In ==================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+/* ==================== Slide Up ==================== */
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+/* ==================== Slide Down ==================== */
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-down {
+  animation: slideDown 0.3s ease-out;
+}
+
+/* ==================== Typing Effect ==================== */
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.typing-effect {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 1.5s steps(40, end);
+}
+
+/* ==================== Pulse ==================== */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ==================== Spin (for loading) ==================== */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* ==================== Shake (for errors) ==================== */
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* ==================== Glow ==================== */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--color-text);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--color-text), 0 0 30px var(--color-text);
+  }
+}
+
+.glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* ==================== Scan Lines Effect (optional) ==================== */
+@keyframes scanlines {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanlines::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 255, 0, 0.05) 50%,
+    transparent 100%
+  );
+  animation: scanlines 8s linear infinite;
+  pointer-events: none;
+}
+
+/* ==================== Text Flicker (retro effect) ==================== */
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 1;
+  }
+  20%, 24%, 55% {
+    opacity: 0.4;
+  }
+}
+
+.flicker {
+  animation: flicker 3s linear infinite;
+}
+
+/* ==================== Progress Bar Fill ==================== */
+@keyframes progressFill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.progress-fill.animate {
+  animation: progressFill 2s ease-out;
+}
+
+/* ==================== Modal Transitions ==================== */
+.modal {
+  transition: opacity var(--transition-normal);
+}
+
+.modal.active {
+  animation: fadeIn 0.3s ease-in;
+}
+
+.modal.closing {
+  animation: fadeOut 0.3s ease-out;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* ==================== Button Hover Effects ==================== */
+button {
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* ==================== Link Hover Effects ==================== */
+a {
+  position: relative;
+  transition: color var(--transition-fast);
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--color-text);
+  transition: width var(--transition-fast);
+}
+
+a:hover::after {
+  width: 100%;
+}
+
+/* ==================== Smooth Scrolling ==================== */
+html {
+  scroll-behavior: smooth;
+}
+
+#terminal-output {
+  scroll-behavior: smooth;
+}
+
+/* ==================== Reduce Motion (Accessibility) ==================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Keep cursor blink */
+  #terminal-cursor {
+    animation: cursor-blink 1s step-end infinite;
+  }
+}
+
+/* ==================== Focus Animations ==================== */
+:focus-visible {
+  outline: 2px solid var(--color-info);
+  outline-offset: 2px;
+  transition: outline-offset var(--transition-fast);
+}
+
+:focus-visible:active {
+  outline-offset: 0;
+}
+
+/* ==================== Loading States ==================== */
+.loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 0, 0.2),
+    transparent
+  );
+  animation: loading-shimmer 2s infinite;
+}
+
+@keyframes loading-shimmer {
+  to {
+    left: 100%;
+  }
+}
+
+/* ==================== Success/Error Feedback ==================== */
+.success-flash {
+  animation: successFlash 0.5s ease-out;
+}
+
+@keyframes successFlash {
+  0%, 100% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: rgba(0, 255, 0, 0.2);
+  }
+}
+
+.error-flash {
+  animation: errorFlash 0.5s ease-out;
+}
+
+@keyframes errorFlash {
+  0%, 100% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: rgba(255, 0, 0, 0.2);
+  }
+}
