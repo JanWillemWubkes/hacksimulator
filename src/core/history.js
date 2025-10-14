@@ -164,13 +164,23 @@ class HistoryManager {
     try {
       const stored = localStorage.getItem(this.storageKey);
       if (stored) {
-        this.history = JSON.parse(stored);
-        this.currentIndex = this.history.length;
+        const parsed = JSON.parse(stored);
 
-        // Enforce max size after loading
-        if (this.history.length > this.maxSize) {
-          this.history = this.history.slice(-this.maxSize);
-          this.save();
+        // Validate that parsed data is an array
+        if (Array.isArray(parsed)) {
+          this.history = parsed;
+          this.currentIndex = this.history.length;
+
+          // Enforce max size after loading
+          if (this.history.length > this.maxSize) {
+            this.history = this.history.slice(-this.maxSize);
+            this.save();
+          }
+        } else {
+          // Invalid data format, reset
+          console.warn('Invalid history data format in localStorage, resetting');
+          this.history = [];
+          this.currentIndex = -1;
         }
       }
     } catch (error) {
