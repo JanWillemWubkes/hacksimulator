@@ -48,7 +48,62 @@
   background: var(--color-text);
 }
 
-/* Output line styles */
+/* Terminal lines */
+.terminal-line {
+  margin-bottom: var(--spacing-xs);
+  word-wrap: break-word;
+}
+
+.terminal-input {
+  color: var(--color-text);
+}
+
+.terminal-prompt {
+  color: var(--color-prompt);
+  font-weight: var(--font-weight-bold);
+  margin-right: var(--spacing-xs);
+}
+
+.terminal-output {
+  color: var(--color-text);
+}
+
+/* Output types */
+.terminal-output-normal {
+  color: var(--color-text);
+}
+
+.terminal-output-error {
+  color: var(--color-error);
+}
+
+.terminal-output-warning {
+  color: var(--color-warning);
+}
+
+.terminal-output-info {
+  color: var(--color-info);
+}
+
+.terminal-output-success {
+  color: var(--color-success);
+}
+
+/* Inline formatting */
+.inline-arrow {
+  color: var(--color-text-dim);
+  margin: 0 var(--spacing-xs);
+}
+
+.tip-icon,
+.warning-icon,
+.security-icon,
+.success-icon,
+.error-icon {
+  margin-right: var(--spacing-xs);
+}
+
+/* Legacy output classes (keep for compatibility) */
 .output-line {
   margin-bottom: var(--spacing-xs);
 }
