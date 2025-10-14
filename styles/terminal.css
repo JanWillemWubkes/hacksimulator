@@ -117,18 +117,19 @@
 
 #terminal-input {
   flex: 1;
-  background: transparent;
-  border: none;
-  color: var(--color-text);
-  font-family: var(--font-terminal);
-  font-size: var(--font-size-base);
+  background-color: #000000;
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 16px;
   outline: none;
-  caret-color: transparent; /* Hide default caret, use custom cursor */
+  padding: 4px;
+  caret-color: #00ff00;
 }
 
 #terminal-input::placeholder {
-  color: var(--color-text-dim);
-  opacity: 0.6;
+  color: #00aa00;
+  opacity: 0.8;
 }
 
 /* Focus state */
