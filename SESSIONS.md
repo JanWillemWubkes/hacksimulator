@@ -262,4 +262,344 @@ CLAUDE.md was te groot geworden (503 regels, 40% sessie logs). Dit veroorzaakte:
 
 ---
 
+---
+
+## Sessie 5: M0+M1 Complete Implementation (14 oktober 2025)
+
+**Doel:** Voltooien van M0 Project Setup + M1 Foundation (Terminal Engine + Commands + VFS)
+
+**Scope:** Complete terminal implementatie met 7 system commands en virtual filesystem
+
+---
+
+### Fase 1: M0 Project Setup Completion
+
+**Taken:**
+1. ✅ Repository setup (Git al geïnitialiseerd)
+2. ✅ Project structuur aanmaken (src/ folders)
+3. ✅ Development environment (ESLint, Prettier)
+
+**Implementatie:**
+
+✅ **Project Structure** (commit `58e0017`)
+- Created missing folders: `src/core/`, `src/commands/system/`, `src/ui/`
+- All subdirectories volgens PLANNING.md architectuur
+
+✅ **ESLint Configuration** (`.eslintrc.json`)
+```json
+{
+  "env": { "browser": true, "es2015": true },
+  "extends": "eslint:recommended",
+  "parserOptions": { "ecmaVersion": 2015, "sourceType": "module" },
+  "rules": {
+    "indent": ["error", 2],
+    "quotes": ["error", "single"],
+    "semi": ["error", "always"],
+    "no-eval": ["error"],
+    "no-console": ["off"]  // Allowed for debugging
+  }
+}
+```
+
+✅ **Prettier Configuration** (`.prettierrc`)
+```json
+{
+  "semi": true,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "useTabs": false,
+  "printWidth": 80,
+  "endOfLine": "lf"
+}
+```
+
+**Resultaat M0:**
+- 15/15 taken voltooid (100%)
+- Development environment compleet
+- Ready voor M1 implementation
+
+---
+
+### Fase 2: M1 Foundation - Terminal Engine
+
+**Architectuur:** ES6 Modules met singleton pattern
+
+**Core Engine (4 modules):**
+
+✅ **1. Command Parser** (`src/core/parser.js`)
+- Tokenizer met quote support (single/double quotes)
+- Flag parsing: `-la`, `-p 80`, `--verbose`
+- Args extraction
+- Input validation
+
+✅ **2. Command Registry** (`src/core/registry.js`)
+- Command registration pattern
+- Execute method met async/await support
+- Category-based organization
+- Statistics tracking
+
+✅ **3. History Manager** (`src/core/history.js`)
+- localStorage persistence (key: `hacksim_history`)
+- Arrow key navigation (↑↓)
+- Max 100 commands
+- Search functionality
+- **BUG FIX:** Added Array validation voor localStorage data (commit `5536498`)
+
+✅ **4. Terminal Engine** (`src/core/terminal.js`)
+- Command execution flow
+- Levenshtein distance voor fuzzy matching
+- Error handling met educatieve tips
+- Context management (user, cwd, hostname)
+
+**UI Layer (2 modules):**
+
+✅ **5. Renderer** (`src/ui/renderer.js`)
+- XSS-safe HTML rendering (escapeHtml)
+- Output types: normal, error, warning, success, info
+- Emoji icons: 💡🔒⚠️✅❌
+- Welcome message
+- Auto-scroll to bottom
+
+✅ **6. Input Handler** (`src/ui/input.js`)
+- Keyboard events: Enter, ↑↓, Tab, Ctrl+L, Ctrl+C
+- Auto-focus management
+- History navigation integration
+- Disable/enable states
+
+**Main Entry Point:**
+
+✅ **7. Application Init** (`src/main.js`)
+- ES6 module imports
+- Command registration
+- DOM ready detection
+- Debug export (window.HackSimulator)
+
+---
+
+### Fase 3: System Commands (7 commands)
+
+✅ **clear.js** - Clear terminal screen
+✅ **echo.js** - Print text to terminal
+✅ **whoami.js** - Display current username
+✅ **date.js** - Display current date/time
+✅ **history.js** - Show command history (with `-c` flag to clear)
+✅ **help.js** - List all commands grouped by category
+✅ **man.js** - Display manual page for command (basic version)
+
+**Alle commands:**
+- Export default object met `{ name, description, category, usage, execute }`
+- Execute returns string output
+- No side effects (behalve clear die renderer.clear() aanroept)
+
+---
+
+### Fase 4: Virtual Filesystem
+
+**VFS Implementation (3 modules):**
+
+✅ **1. Filesystem Structure** (`src/filesystem/structure.js`)
+- Complete directory tree: `/home/hacker`, `/etc`, `/var/log`, `/tmp`
+- Educational content in files:
+  - `/home/hacker/README.txt` - Welkom + tips
+  - `/etc/passwd` - Unix user list
+  - `/etc/shadow` - Restricted (permission demo)
+  - `/var/log/auth.log` - Failed login attempts (educational)
+- Helper functions: `getHomeDirectory()`, `getInitialCwd()`
+
+✅ **2. VFS Core** (`src/filesystem/vfs.js`)
+- POSIX-like path resolution:
+  - Absolute paths: `/home/hacker`
+  - Relative paths: `../etc`
+  - Home shortcut: `~`
+  - Path normalization: `..` en `.` handling
+- File operations:
+  - `readFile()` - Met permission checks
+  - `createFile()`, `createDirectory()`
+  - `delete()` - Met recursive flag
+  - `copy()`, `move()`
+- Directory operations:
+  - `listDirectory()` - Met hidden files support
+  - `setCwd()`, `getCwd()`
+- Serialize/deserialize voor localStorage
+
+✅ **3. Persistence** (`src/filesystem/persistence.js`)
+- Auto-save to localStorage (key: `hacksim_filesystem`)
+- Auto-load on initialization
+- Reset to initial state
+- Storage size tracking
+
+---
+
+### Fase 5: Bug Fixes & Testing
+
+**🐛 localStorage Bug (commit `5536498`)**
+
+**Problem:**
+```
+TypeError: this.history.push is not a function
+```
+
+**Root Cause:**
+- Old/corrupt data in localStorage from previous session
+- `JSON.parse()` returned non-Array data
+- `this.history` was not initialized as Array
+
+**Solution:**
+```javascript
+const parsed = JSON.parse(stored);
+if (Array.isArray(parsed)) {  // ✅ Validate!
+  this.history = parsed;
+} else {
+  console.warn('Invalid history data format, resetting');
+  this.history = [];
+}
+```
+
+**CSS Updates (commit `c2646a3`)**
+- Added `.terminal-line`, `.terminal-input`, `.terminal-output` classes
+- Added output type classes: `-normal`, `-error`, `-warning`, `-success`, `-info`
+- Added inline formatting: `.inline-arrow`, `.tip-icon`, etc.
+
+**HTML Optimization:**
+- Removed 35 individual `<script>` tags
+- Single entry point: `<script src="src/main.js" type="module"></script>`
+- ES6 modules auto-load dependencies
+
+---
+
+### Fase 6: Testing & Validation
+
+**Browser Testing:**
+- URL: http://localhost:8001
+- Initial errors: CSP warnings (Google Analytics), favicon 404, history TypeError
+- After fix: ✅ All commands working
+- Manual tests performed:
+  - `help` - ✅ Shows 7 commands
+  - `echo Hello World` - ✅ Prints text
+  - `whoami` - ✅ Shows "hacker"
+  - `date` - ✅ Shows current date
+  - `history` - ✅ Shows command list
+  - `man help` - ✅ Shows manual
+  - `clear` - ✅ Clears screen
+  - ↑↓ navigation - ✅ Works
+
+---
+
+### Commits (7 total)
+
+1. **`6da7c2f`** - Update documentation structure (two-tier docs)
+2. **`58e0017`** - Complete M0 Project Setup (folders, ESLint, Prettier)
+3. **`9e3e612`** - Mark M0 as completed in TASKS.md
+4. **`c2646a3`** - Implement M1 Foundation (Terminal + 7 Commands)
+5. **`5536498`** - Fix: localStorage validation in HistoryManager
+6. **`ca63f4a`** - Implement Virtual Filesystem (VFS)
+7. **`97c5b25`** - Update TASKS.md - M1 completed (100%)
+
+---
+
+### Files Created (16 new files)
+
+**Core:**
+- `src/core/parser.js` (167 lines)
+- `src/core/registry.js` (155 lines)
+- `src/core/history.js` (192 lines)
+- `src/core/terminal.js` (194 lines)
+
+**UI:**
+- `src/ui/renderer.js` (233 lines)
+- `src/ui/input.js` (195 lines)
+
+**Commands:**
+- `src/commands/system/clear.js`
+- `src/commands/system/echo.js`
+- `src/commands/system/whoami.js`
+- `src/commands/system/date.js`
+- `src/commands/system/history.js`
+- `src/commands/system/help.js`
+- `src/commands/system/man.js`
+
+**Filesystem:**
+- `src/filesystem/vfs.js` (469 lines)
+- `src/filesystem/structure.js` (155 lines)
+- `src/filesystem/persistence.js` (98 lines)
+
+**Config:**
+- `.eslintrc.json`
+- `.prettierrc`
+
+**Total:** ~2100 lines of code
+
+---
+
+### Progress Summary
+
+**Voor sessie:**
+- M0: 2/15 (13%)
+- M1: 4/20 (20% - alleen CSS)
+- Total: 6/143 (4.2%)
+
+**Na sessie:**
+- M0: 15/15 (100%) ✅
+- M1: 20/20 (100%) ✅
+- Total: 35/143 (24.5%)
+
+**Increment:** +29 taken, +20.3% progress
+
+---
+
+### Key Technical Decisions
+
+**1. ES6 Modules (not bundled)**
+- Native browser support
+- No build step needed
+- Smaller bundle (no webpack overhead)
+
+**2. Singleton Pattern**
+- All core modules export `new Class()`
+- Shared state across imports
+- Simple dependency injection
+
+**3. localStorage for State**
+- No backend needed (MVP)
+- 5MB capacity sufficient
+- Graceful degradation if disabled
+
+**4. Vanilla JS Only**
+- No React/Vue (bundle size)
+- No TypeScript (complexity)
+- Direct DOM manipulation
+
+**5. XSS Protection**
+- All user input escaped via `textContent`
+- No `innerHTML` with user data
+- Safe emoji rendering
+
+---
+
+### Known Limitations (Deferred)
+
+- [ ] Cross-browser testing → M5
+- [ ] Mobile optimization → M4
+- [ ] Full man pages → M3
+- [ ] Favicon → Optional (skipped)
+- [ ] Analytics setup → M4
+
+---
+
+### Next Session: M2 Filesystem Commands
+
+**Scope:**
+- Implement filesystem commands: ls, cd, pwd, cat
+- File manipulation: mkdir, touch, rm, cp, mv
+- Search commands: find, grep
+- Special commands: reset
+
+**Dependencies:**
+- VFS is ready ✅
+- Commands kan VFS gebruiken via context
+
+**Estimated:** 11 new commands + testing
+
+---
+
 **Last updated:** 14 oktober 2025

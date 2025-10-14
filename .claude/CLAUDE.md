@@ -144,6 +144,20 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` (commits, root cause analysis, file changes)
 
+### localStorage & State Management (Sessie 5)
+⚠️ **Never:**
+- Assume localStorage data is valid - always validate type
+- Directly assign JSON.parse() result without checking
+- Initialize state AFTER loading (timing issues)
+- Load modules with 35+ individual script tags
+
+✅ **Always:**
+- Validate localStorage data: `Array.isArray()` before assigning
+- Initialize with safe defaults BEFORE loading external data
+- Single ES6 module entry point (main.js) - imports handle rest
+- Graceful degradation: localStorage disabled = use fallback
+- Clear old localStorage when changing data structure
+
 ---
 
 ## 🤖 Sessie Protocol
@@ -211,4 +225,4 @@ Bij nieuwe command:
 ---
 
 **Last updated:** 14 oktober 2025
-**Version:** 3.1 (two-tier documentation strategy implemented)
+**Version:** 3.2 (Sessie 5: M0+M1 completed - localStorage learnings added)
