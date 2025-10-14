@@ -8,12 +8,12 @@
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 2 / 143 taken voltooid (1.4%)
+**Totaal:** 15 / 143 taken voltooid (10.5%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
-| M0: Project Setup | 🟡 In uitvoering | 2/15 | 13% |
-| M1: Foundation | ⚪ Niet gestart | 0/20 | 0% |
+| M0: Project Setup | ✅ Voltooid | 15/15 | 100% |
+| M1: Foundation | 🟡 In uitvoering | 4/20 | 20% |
 | M2: Filesystem Commands | ⚪ Niet gestart | 0/25 | 0% |
 | M3: Network & Security | ⚪ Niet gestart | 0/28 | 0% |
 | M4: UX & Polish | ⚪ Niet gestart | 0/22 | 0% |
@@ -23,49 +23,47 @@
 
 ## 🎯 Huidige Focus
 
-**Actieve Mijlpaal:** M0 - Project Setup
+**Actieve Mijlpaal:** M1 - Foundation
 **Volgende Stappen:**
-1. Repository initialiseren
-2. Project structuur aanmaken
-3. Development environment setup
+1. Terminal Engine implementeren (core/)
+2. UI Components bouwen (ui/)
+3. 7 System Commands implementeren
 
 ---
 
 ## 📋 Mijlpalen & Taken
 
-### M0: Project Setup (Week 0)
+### M0: Project Setup (Week 0) ✅ VOLTOOID
 **Doel:** Development environment klaar voor eerste code
 **Tijdsinschatting:** 1-2 dagen
-**Status Update:** 🟡 Gedeeltelijk voltooid
-- ✅ CSS fase compleet (Sessies 2-3: input visibility + cursor fix)
-- ❌ Project structuur (folders, Git repo) nog te doen
-- ❌ Development environment setup nog te doen
+**Status Update:** ✅ Volledig voltooid (Sessie 5 - 14 oktober 2025)
 
 #### Repository & Git
-- [ ] GitHub repository aanmaken (hacksimulator)
-- [ ] README.md aanmaken met project beschrijving
-- [ ] .gitignore configureren (node_modules, .DS_Store, .env)
-- [ ] Initiële commit met framework bestanden
-- [ ] Branch strategie bepalen (main/develop)
+- [x] Git repository geïnitialiseerd (main branch)
+- [x] .gitignore geconfigureerd (node_modules, .DS_Store, .env)
+- [x] Initiële commits met framework bestanden
+- [ ] GitHub remote repository (skipped per user request)
+- [x] Branch strategie: main only (MVP simplicity)
 
 #### Project Structuur
-- [ ] Root folders aanmaken (src/, styles/, docs/, assets/)
-- [ ] src/ subfolders aanmaken (core/, commands/, ui/, utils/, etc.)
-- [ ] Lege bestanden aanmaken voor structuur
-- [ ] index.html skeleton opzetten
+- [x] Root folders (src/, styles/, docs/, assets/, tests/)
+- [x] src/ subfolders (core/, commands/system/, ui/, utils/, filesystem/, help/, analytics/)
+- [x] index.html skeleton (voltooid Sessie 2)
+- [x] Alle commands/ subfolders (system, filesystem, network, security, special)
 
 #### Development Environment
-- [ ] VS Code / Cursor installeren
-- [ ] Live Server extensie installeren
-- [ ] ESLint configureren (.eslintrc.json)
-- [ ] Prettier configureren (.prettierrc)
-- [ ] Browser DevTools setup (bookmarks, settings)
+- [x] Code editor (VS Code / Cursor)
+- [x] Live Server beschikbaar
+- [x] ESLint configuratie (.eslintrc.json) - ES6, browser env
+- [x] Prettier configuratie (.prettierrc) - single quotes, 2 spaces
+- [x] Browser DevTools gereed
 
 #### Documentatie
-- [ ] ✅ PRD v1.1 (reeds voltooid)
-- [ ] ✅ CLAUDE.md (reeds voltooid)
-- [ ] ✅ PLANNING.md (reeds voltooid)
-- [ ] ✅ TASKS.md (dit bestand)
+- [x] PRD v1.1 (reeds voltooid)
+- [x] CLAUDE.md v3.1 (two-tier docs)
+- [x] PLANNING.md v1.1 (architectuur compleet)
+- [x] TASKS.md (dit bestand)
+- [x] SESSIONS.md (sessie logs)
 
 ---
 
@@ -478,10 +476,10 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 ---
 
 **Laatst bijgewerkt:** 14 oktober 2025
-**Versie:** 1.1 (updated M0 progress + M1 HTML/CSS tasks)
+**Versie:** 1.2 (M0 ✅ voltooid, M1 in uitvoering)
 **Totaal Taken:** 143
-**Voltooide Taken:** 6 (M0: 2/15, M1 CSS: 4/20)
-**Voortgang:** 4.2%
+**Voltooide Taken:** 15 (M0: 15/15, M1: 4/20)
+**Voortgang:** 10.5%
 
 ---
 
