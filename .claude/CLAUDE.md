@@ -311,5 +311,87 @@ Bij nieuwe command toevoegen:
 
 ---
 
-**Last updated:** 13 oktober 2025
-**Version:** 2.0 (compact)
+---
+
+## 📝 Sessie Samenvattingen
+
+### Sessie 2: CSS Input Visibility Fix (14 oktober 2025)
+
+**Doel:** Input veld zichtbaar maken na reset naar M0 state
+
+**Probleem:**
+Na terugdraaien naar initial project setup (commit `fef0dd3`) was het terminal input veld **volledig onzichtbaar** door:
+1. `background: transparent` op zwarte achtergrond
+2. `caret-color: transparent` (onzichtbare cursor)
+3. Footer met `position: fixed` + `z-index: 10` lag over input veld heen
+4. `body` had `overflow: hidden` (footer niet bereikbaar)
+
+**Oplossing: 3 commits**
+
+✅ **Commit 1: Input visibility** (`2b26515`)
+- `background: transparent` → `background-color: #000000`
+- `caret-color: transparent` → `caret-color: #00ff00`
+- Added `border: 1px solid #00ff00` (groene border)
+- Added `padding: 4px`
+- Hardcoded colors (#00ff00) instead of CSS variables
+- Placeholder color: `#00aa00` with `opacity: 0.8`
+
+✅ **Commit 2: Footer overlap** (`28dad91`)
+- Footer `position: fixed` → `position: static`
+- Removed `z-index: var(--z-footer)`
+- Added `margin-top: var(--spacing-lg)`
+- Footer no longer covers input field
+
+✅ **Commit 3: Scrollable layout** (`b749755`)
+- Body: removed `height: 100%` + `overflow: hidden`
+- Body: added `min-height: 100vh` + `display: flex` + `flex-direction: column`
+- Terminal container: `height: 100vh` → `flex: 1`
+- Added `width: 100%` to terminal container
+- Footer now always visible and accessible
+
+**Huidige staat:**
+- ✅ Input veld **ZICHTBAAR** met groene border en cursor
+- ✅ Prompt `user@hacksim:~$` zichtbaar
+- ✅ Placeholder "Type 'help' om te beginnen..." zichtbaar
+- ✅ Footer zichtbaar onderaan pagina
+- ✅ Pagina scrollbaar (indien content groter dan viewport)
+- ❌ **GEEN functionaliteit** - typen doet nog niets (geen JavaScript commands)
+
+**Geleerde lessen:**
+
+⚠️ **CSS Transparency Issues:**
+1. **NOOIT `transparent` background** op terminal input in dark theme
+2. **NOOIT `transparent` caret-color** - cursor moet altijd zichtbaar zijn
+3. **TEST input visibility EERST** voordat je complexe JavaScript bouwt
+4. **Gebruik borders** voor extra visibility (1px solid helpt debugging)
+
+⚠️ **Layout Issues:**
+1. **Fixed positioning** blokkeert input fields - gebruik `static` of `relative`
+2. **Z-index conflicts** zijn moeilijk te debuggen - houd layers simpel
+3. **overflow: hidden** op body voorkomt scrollen - gebruik flexbox layout
+4. **Test footer visibility** - moet altijd bereikbaar zijn
+
+🎯 **Best Practices:**
+1. Hardcode colors tijdens debugging (#00ff00 werkt altijd)
+2. Use borders voor visibility testing (1px solid green)
+3. Flexbox layout: `body { display: flex; flex-direction: column; min-height: 100vh }`
+4. Terminal container: `flex: 1` vult beschikbare ruimte
+
+**Volgende stappen:**
+Nu de UI zichtbaar is, kunnen we **simpele JavaScript** toevoegen om commands werkend te maken:
+1. Enter key listener op input veld
+2. Echo command in output area
+3. Basic command parser (split by space)
+4. 3-5 test commands (help, clear, echo)
+5. **GEEN complexe Terminal Engine** - start ultra simpel
+
+**Files gewijzigd:**
+- `styles/terminal.css` - Input styling + custom cursor disabled
+- `styles/main.css` - Body layout + footer positioning
+
+**Voortgang:** M0 basis staat, klaar voor ultra-simpele JavaScript implementatie
+
+---
+
+**Last updated:** 14 oktober 2025
+**Version:** 2.1 (with session 2 log)
