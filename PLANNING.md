@@ -383,7 +383,6 @@ python -m http.server 8000
   --mobile-breakpoint: 768px;
 
   /* Animations */
-  --cursor-blink: 1s step-end infinite;
   --transition-fast: 0.15s ease;
   --transition-normal: 0.3s ease;
 }
@@ -700,6 +699,38 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 13 oktober 2025
-**Versie:** 1.0
+## 🎓 Sessie Learnings (uit Ontwikkeling)
+
+### Cursor Implementation (Sessie 3 - 14 oktober 2025)
+
+**Beslissing:** Native browser cursor i.p.v. custom cursor
+
+**Rationale:**
+- ✅ Browser handelt positioning automatisch correct af
+- ✅ Geen JavaScript nodig voor cursor sync tijdens typen
+- ✅ Simpeler en robuuster (vanilla JS principe)
+- ✅ Cleaner code, minder bytes (bundle size kritisch)
+- ✅ Geen edge cases (emoji, unicode, font-width berekeningen)
+
+**Verwijderd:**
+- Custom cursor HTML element
+- CSS `--cursor-blink` variable
+- CSS `@keyframes cursor-blink` animation
+- CSS `#terminal-cursor` styling rules
+- Total: 30+ regels code verwijderd
+
+**Behouden:**
+- Native cursor: `caret-color: #00ff00` (groen, zichtbaar)
+
+**Saved:** ~30 regels CSS/JS, betere performance, minder complexity
+
+**Reference:** CLAUDE.md Sessie 3 voor volledige details
+
+**Key Learning:**
+> "Gebruik native browser features waar mogelijk. Custom cursor = 30+ regels CSS+JS. Native cursor = 1 regel CSS. Performance > Aesthetics."
+
+---
+
+**Laatst bijgewerkt:** 14 oktober 2025
+**Versie:** 1.1 (added session learnings)
 **Status:** ✅ Approved voor Development

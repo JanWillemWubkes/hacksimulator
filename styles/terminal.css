@@ -138,17 +138,6 @@
   outline: none;
 }
 
-/* ==================== Custom Cursor ==================== */
-#terminal-cursor {
-  display: inline-block;
-  width: 8px;
-  height: 1.2em;
-  background-color: var(--color-text);
-  margin-left: 2px;
-  position: absolute;
-  animation: cursor-blink var(--cursor-blink);
-}
-
 /* ==================== Table Styling (for command output) ==================== */
 .terminal-table {
   margin: var(--spacing-md) 0;

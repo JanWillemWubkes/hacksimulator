@@ -37,7 +37,6 @@
   --mobile-breakpoint: 768px;
 
   /* Animations */
-  --cursor-blink: 1s step-end infinite;
   --transition-fast: 0.15s ease;
   --transition-normal: 0.3s ease;
 

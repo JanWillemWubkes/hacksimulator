@@ -8,11 +8,11 @@
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 0 / 143 taken voltooid (0%)
+**Totaal:** 2 / 143 taken voltooid (1.4%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
-| M0: Project Setup | 🟡 In uitvoering | 0/15 | 0% |
+| M0: Project Setup | 🟡 In uitvoering | 2/15 | 13% |
 | M1: Foundation | ⚪ Niet gestart | 0/20 | 0% |
 | M2: Filesystem Commands | ⚪ Niet gestart | 0/25 | 0% |
 | M3: Network & Security | ⚪ Niet gestart | 0/28 | 0% |
@@ -36,6 +36,10 @@
 ### M0: Project Setup (Week 0)
 **Doel:** Development environment klaar voor eerste code
 **Tijdsinschatting:** 1-2 dagen
+**Status Update:** 🟡 Gedeeltelijk voltooid
+- ✅ CSS fase compleet (Sessies 2-3: input visibility + cursor fix)
+- ❌ Project structuur (folders, Git repo) nog te doen
+- ❌ Development environment setup nog te doen
 
 #### Repository & Git
 - [ ] GitHub repository aanmaken (hacksimulator)
@@ -71,10 +75,10 @@
 **Dependencies:** M0 voltooid
 
 #### HTML & CSS Foundation
-- [ ] index.html structuur (semantic HTML5)
-- [ ] main.css met CSS Variables
-- [ ] terminal.css (terminal styling)
-- [ ] Responsive meta tags
+- [x] index.html structuur (semantic HTML5) - ✅ Voltooid (Sessie 2)
+- [x] main.css met CSS Variables - ✅ Voltooid (Sessie 2-3)
+- [x] terminal.css (terminal styling) - ✅ Voltooid (Sessie 2-3)
+- [x] Responsive meta tags - ✅ Voltooid (Sessie 2)
 - [ ] Favicon toevoegen (optioneel)
 
 #### Terminal Engine (Core)
@@ -473,11 +477,11 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 13 oktober 2025
-**Versie:** 1.0
+**Laatst bijgewerkt:** 14 oktober 2025
+**Versie:** 1.1 (updated M0 progress + M1 HTML/CSS tasks)
 **Totaal Taken:** 143
-**Voltooide Taken:** 0
-**Voortgang:** 0%
+**Voltooide Taken:** 6 (M0: 2/15, M1 CSS: 4/20)
+**Voortgang:** 4.2%
 
 ---
 
