@@ -3,6 +3,15 @@
  * Simulated command for the HackSimulator terminal
  */
 
+/**
+ * Check if path is critical system directory
+ */
+function isCriticalPath(path) {
+  const critical = ['/', '/etc', '/var', '/home', '/root', '/bin', '/usr'];
+  const normalized = path.startsWith('/') ? path : path;
+  return critical.includes(normalized);
+}
+
 export default {
   name: 'mv',
   category: 'filesystem',
@@ -21,7 +30,7 @@ export default {
     const destination = args[1];
 
     // Safety check: prevent moving critical system directories
-    if (this._isCriticalPath(source)) {
+    if (isCriticalPath(source)) {
       return `mv: cannot move '${source}': Critical system directory\n\n⚠️ WAARSCHUWING: Kritieke system directories kunnen niet verplaatst worden.`;
     }
 
@@ -45,16 +54,6 @@ export default {
 
       return `mv: ${error.message}`;
     }
-  },
-
-  /**
-   * Check if path is critical system directory
-   * @private
-   */
-  _isCriticalPath(path) {
-    const critical = ['/', '/etc', '/var', '/home', '/root', '/bin', '/usr'];
-    const normalized = path.startsWith('/') ? path : path;
-    return critical.includes(normalized);
   },
 
   manPage: `

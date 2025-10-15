@@ -3,6 +3,15 @@
  * Simulated command for the HackSimulator terminal
  */
 
+/**
+ * Check if path is critical system directory
+ */
+function isCriticalPath(path) {
+  const critical = ['/', '/etc', '/var', '/home', '/root', '/bin', '/usr'];
+  const normalized = path.startsWith('/') ? path : path;
+  return critical.includes(normalized);
+}
+
 export default {
   name: 'rm',
   category: 'filesystem',
@@ -21,7 +30,7 @@ export default {
     const recursive = flags.r || flags.R || flags.recursive || false;
 
     // Safety check: prevent deleting critical system directories
-    if (this._isCriticalPath(path)) {
+    if (isCriticalPath(path)) {
       return `rm: cannot remove '${path}': Critical system directory\n\n⚠️ WAARSCHUWING: Dit is een kritieke system directory. In een echte omgeving zou dit je systeem onbruikbaar maken!\n\n💡 TIP: Gebruik 'reset' om het filesystem te resetten naar de beginwaarde.`;
     }
 
@@ -45,19 +54,6 @@ export default {
 
       return `rm: ${error.message}`;
     }
-  },
-
-  /**
-   * Check if path is critical system directory
-   * @private
-   */
-  _isCriticalPath(path) {
-    const critical = ['/', '/etc', '/var', '/home', '/root', '/bin', '/usr'];
-
-    // Resolve to absolute path for comparison
-    const normalized = path.startsWith('/') ? path : path;
-
-    return critical.includes(normalized);
   },
 
   manPage: `
