@@ -1,7 +1,7 @@
 # Product Requirements Document - HackSimulator.nl
 **Versie:** 1.1
-**Status:** Goedgekeurd voor Ontwikkeling
-**Laatst bijgewerkt:** 13 oktober 2025
+**Status:** M0+M1 Completed (Development in Progress)
+**Laatst bijgewerkt:** 15 oktober 2025
 
 ---
 
@@ -1056,7 +1056,8 @@ Dit document is goedgekeurd voor de ontwikkeling van HackSimulator.nl MVP.
 
 **Document Status:** Definitief - Goedgekeurd voor Ontwikkeling
 
-**Laatste review:** 13 oktober 2025
+**Laatste review:** 15 oktober 2025
+**Development Status:** M0 (Project Setup) + M1 (Foundation) completed - M2 (Filesystem Commands) in progress
 
 ---
 

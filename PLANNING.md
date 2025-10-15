@@ -288,8 +288,8 @@ hacksimulator/
    - Safari (macOS, iOS testing)
 
 3. **Git**
-   - Voor version control
-   - GitHub account (voor repository)
+   - Voor version control (verplicht)
+   - GitHub account (optioneel - voor remote repository en auto-deploy)
 
 4. **Terminal / Command Line**
    - Bash/Zsh (macOS/Linux)
@@ -317,9 +317,14 @@ hacksimulator/
 ### Development Environment Setup
 
 ```bash
-# 1. Clone repository
+# 1. Clone repository (indien GitHub gebruikt)
+# Optie A: Vanaf GitHub
 git clone https://github.com/[username]/hacksimulator.git
 cd hacksimulator
+
+# Optie B: Lokale Git repository (geen GitHub)
+cd hacksimulator
+git init
 
 # 2. Open in editor
 code .  # VS Code
@@ -574,8 +579,9 @@ Remove cookie banner → Better UX
 npm run build  # Creates /dist folder
 
 # 2. Deploy (Netlify)
-# Optie A: Drag & drop in Netlify UI
-# Optie B: Netlify CLI
+# Optie A: Drag & drop in Netlify UI (geen Git vereist)
+# Optie B: Auto-deploy via Git (GitHub/GitLab integratie)
+# Optie C: Netlify CLI
 netlify deploy --prod
 
 # 3. Verify

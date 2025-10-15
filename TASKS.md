@@ -237,8 +237,8 @@
 
 #### Onboarding Flow
 - [ ] `src/ui/onboarding.js` - FTUE logic
-- [ ] Welkomstbericht bij eerste bezoek (3 regels)
-- [ ] "Type 'help' om te beginnen" hint
+- [ ] Welkomstbericht bij eerste bezoek (3 regels tekst + lege regel + hint = 5 regels totaal)
+- [ ] "Type 'help' om te beginnen" hint (onderdeel van welkomstbericht)
 - [ ] Na 1e command: "Goed bezig!" encouragement
 - [ ] Na 3-5 commands: Tutorial suggestie
 - [ ] Persistent hint (rechts onderin, verdwijnt na 5 commands)

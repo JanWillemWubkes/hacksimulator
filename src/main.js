@@ -14,13 +14,29 @@ import historyCmd from './commands/system/history.js';
 import helpCmd from './commands/system/help.js';
 import manCmd from './commands/system/man.js';
 
+// Import filesystem commands
+import lsCmd from './commands/filesystem/ls.js';
+import cdCmd from './commands/filesystem/cd.js';
+import pwdCmd from './commands/filesystem/pwd.js';
+import catCmd from './commands/filesystem/cat.js';
+import mkdirCmd from './commands/filesystem/mkdir.js';
+import touchCmd from './commands/filesystem/touch.js';
+import rmCmd from './commands/filesystem/rm.js';
+import cpCmd from './commands/filesystem/cp.js';
+import mvCmd from './commands/filesystem/mv.js';
+import findCmd from './commands/filesystem/find.js';
+import grepCmd from './commands/filesystem/grep.js';
+
+// Import special commands
+import resetCmd from './commands/special/reset.js';
+
 /**
  * Register all commands
  */
 function registerCommands() {
   const registry = terminal.getRegistry();
 
-  // System commands
+  // System commands (7)
   registry.register('clear', clearCmd);
   registry.register('echo', echoCmd);
   registry.register('whoami', whoamiCmd);
@@ -29,7 +45,24 @@ function registerCommands() {
   registry.register('help', helpCmd);
   registry.register('man', manCmd);
 
+  // Filesystem commands (11)
+  registry.register('ls', lsCmd);
+  registry.register('cd', cdCmd);
+  registry.register('pwd', pwdCmd);
+  registry.register('cat', catCmd);
+  registry.register('mkdir', mkdirCmd);
+  registry.register('touch', touchCmd);
+  registry.register('rm', rmCmd);
+  registry.register('cp', cpCmd);
+  registry.register('mv', mvCmd);
+  registry.register('find', findCmd);
+  registry.register('grep', grepCmd);
+
+  // Special commands (1)
+  registry.register('reset', resetCmd);
+
   console.log('Commands registered:', registry.list());
+  console.log('Total commands:', registry.getStats().total);
 }
 
 /**

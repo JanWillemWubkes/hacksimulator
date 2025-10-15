@@ -12,6 +12,7 @@
 **Stack:** Vanilla JS/CSS, client-side, localStorage, < 500KB bundle
 **Scope:** 30 commands (System, Filesystem, Network, Security)
 **Taal:** UI=NL, commands=EN, uitleg=NL
+**Analytics:** GA4 (MVP) → Plausible (bij 10k+ visitors)
 
 ---
 

@@ -9,6 +9,7 @@ import registry from './registry.js';
 import history from './history.js';
 import renderer from '../ui/renderer.js';
 import input from '../ui/input.js';
+import vfs from '../filesystem/vfs.js';
 
 class Terminal {
   constructor() {
@@ -16,6 +17,8 @@ class Terminal {
     this.isExecuting = false;
     this.context = {
       terminal: this,
+      vfs: vfs,
+      historyManager: history,
       cwd: '~',
       user: 'hacker',
       hostname: 'hacksim'
@@ -42,6 +45,9 @@ class Terminal {
 
     // Initialize renderer
     renderer.init(outputElement);
+
+    // Set initial prompt with VFS current directory
+    renderer.updatePrompt(vfs.getCwd());
 
     // Initialize input handler
     input.init(inputElement, (command) => this.execute(command));
