@@ -3,6 +3,21 @@
  * Simulated command for the HackSimulator terminal
  */
 
+/**
+ * Get educational tip based on which file is restricted
+ */
+function getPermissionTip(path) {
+  if (path.includes('shadow')) {
+    return `🔒 BEVEILIGING: /etc/shadow bevat password hashes en is alleen toegankelijk voor root.\n\n💡 TIP: Probeer 'cat /etc/passwd' - dit bestand is wel leesbaar en toont gebruikers.`;
+  }
+
+  if (path.includes('root')) {
+    return `🔒 BEVEILIGING: De /root directory is alleen toegankelijk voor de root gebruiker.\n\n💡 TIP: Als normale gebruiker heb je toegang tot je eigen home directory (/home/hacker).`;
+  }
+
+  return `🔒 BEVEILIGING: Dit bestand is beveiligd en niet toegankelijk.\n\n💡 TIP: In echte systemen zijn permissies cruciaal voor beveiliging.`;
+}
+
 export default {
   name: 'cat',
   category: 'filesystem',
@@ -34,28 +49,12 @@ export default {
       }
 
       if (error.message.includes('Permission denied')) {
-        const educationalTips = this._getPermissionTip(path);
+        const educationalTips = getPermissionTip(path);
         return `cat: ${path}: Permission denied\n\n${educationalTips}`;
       }
 
       return `cat: ${error.message}`;
     }
-  },
-
-  /**
-   * Get educational tip based on which file is restricted
-   * @private
-   */
-  _getPermissionTip(path) {
-    if (path.includes('shadow')) {
-      return `🔒 BEVEILIGING: /etc/shadow bevat password hashes en is alleen toegankelijk voor root.\n\n💡 TIP: Probeer 'cat /etc/passwd' - dit bestand is wel leesbaar en toont gebruikers.`;
-    }
-
-    if (path.includes('root')) {
-      return `🔒 BEVEILIGING: De /root directory is alleen toegankelijk voor de root gebruiker.\n\n💡 TIP: Als normale gebruiker heb je toegang tot je eigen home directory (/home/hacker).`;
-    }
-
-    return `🔒 BEVEILIGING: Dit bestand is beveiligd en niet toegankelijk.\n\n💡 TIP: In echte systemen zijn permissies cruciaal voor beveiliging.`;
   },
 
   manPage: `

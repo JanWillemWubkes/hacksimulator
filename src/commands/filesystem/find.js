@@ -3,6 +3,34 @@
  * Simulated command for the HackSimulator terminal
  */
 
+/**
+ * Recursively search filesystem for matching files
+ */
+function searchFilesystem(node, currentPath, pattern) {
+  const results = [];
+
+  if (!node || node.type !== 'directory' || !node.children) {
+    return results;
+  }
+
+  for (const [name, child] of Object.entries(node.children)) {
+    const fullPath = currentPath === '/' ? `/${name}` : `${currentPath}/${name}`;
+
+    // Check if name matches pattern
+    if (name.toLowerCase().includes(pattern)) {
+      results.push(fullPath);
+    }
+
+    // Recursively search subdirectories
+    if (child.type === 'directory') {
+      const subResults = searchFilesystem(child, fullPath, pattern);
+      results.push(...subResults);
+    }
+  }
+
+  return results;
+}
+
 export default {
   name: 'find',
   category: 'filesystem',
@@ -21,7 +49,7 @@ export default {
 
     try {
       // Search entire filesystem starting from root
-      const results = this._searchFilesystem(vfs.fs['/'], '/', pattern);
+      const results = searchFilesystem(vfs.fs['/'], '/', pattern);
 
       if (results.length === 0) {
         return `find: no files matching '${args[0]}' found\n\n💡 TIP: De zoekterm is case-insensitive en zoekt in bestandsnamen.`;
@@ -38,35 +66,6 @@ export default {
     } catch (error) {
       return `find: ${error.message}`;
     }
-  },
-
-  /**
-   * Recursively search filesystem for matching files
-   * @private
-   */
-  _searchFilesystem(node, currentPath, pattern) {
-    const results = [];
-
-    if (!node || node.type !== 'directory' || !node.children) {
-      return results;
-    }
-
-    for (const [name, child] of Object.entries(node.children)) {
-      const fullPath = currentPath === '/' ? `/${name}` : `${currentPath}/${name}`;
-
-      // Check if name matches pattern
-      if (name.toLowerCase().includes(pattern)) {
-        results.push(fullPath);
-      }
-
-      // Recursively search subdirectories
-      if (child.type === 'directory') {
-        const subResults = this._searchFilesystem(child, fullPath, pattern);
-        results.push(...subResults);
-      }
-    }
-
-    return results;
   },
 
   manPage: `
