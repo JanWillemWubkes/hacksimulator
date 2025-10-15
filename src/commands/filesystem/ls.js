@@ -3,6 +3,55 @@
  * Simulated command for the HackSimulator terminal
  */
 
+/**
+ * Format simple directory listing (default)
+ */
+function formatSimpleListing(entries) {
+  const dirEntries = entries.filter(e => e.type === 'directory');
+  const fileEntries = entries.filter(e => e.type === 'file');
+
+  const parts = [];
+
+  // Directories first (with color indicator)
+  if (dirEntries.length > 0) {
+    parts.push(dirEntries.map(e => e.name + '/').join('  '));
+  }
+
+  // Then files
+  if (fileEntries.length > 0) {
+    parts.push(fileEntries.map(e => e.name).join('  '));
+  }
+
+  return parts.join('  ');
+}
+
+/**
+ * Format long directory listing (-l flag)
+ */
+function formatLongListing(entries) {
+  const lines = [];
+
+  // Header (educational)
+  lines.push('total ' + entries.length);
+
+  for (const entry of entries) {
+    const type = entry.type === 'directory' ? 'd' : '-';
+    const perms = entry.permissions === 'restricted' ? 'r--------' : 'rw-r--r--';
+    const size = entry.type === 'file' ? '1024' : '4096';
+    const date = 'Oct 14 12:00';
+    const name = entry.type === 'directory' ? entry.name + '/' : entry.name;
+
+    // Format: type+permissions  size  date  name
+    lines.push(`${type}${perms}  ${size.padStart(6)}  ${date}  ${name}`);
+  }
+
+  // Add educational tip
+  lines.push('');
+  lines.push('💡 TIP: De eerste kolom toont type (d=directory, -=file) en permissies.');
+
+  return lines.join('\n');
+}
+
 export default {
   name: 'ls',
   category: 'filesystem',
@@ -30,11 +79,11 @@ export default {
 
       // Long format (-l flag)
       if (longFormat || combined) {
-        return this._formatLongListing(entries);
+        return formatLongListing(entries);
       }
 
       // Simple format (default)
-      return this._formatSimpleListing(entries);
+      return formatSimpleListing(entries);
 
     } catch (error) {
       // Educational error messages
@@ -48,57 +97,6 @@ export default {
 
       return `ls: ${error.message}`;
     }
-  },
-
-  /**
-   * Format simple directory listing (default)
-   * @private
-   */
-  _formatSimpleListing(entries) {
-    const dirEntries = entries.filter(e => e.type === 'directory');
-    const fileEntries = entries.filter(e => e.type === 'file');
-
-    const parts = [];
-
-    // Directories first (with color indicator)
-    if (dirEntries.length > 0) {
-      parts.push(dirEntries.map(e => e.name + '/').join('  '));
-    }
-
-    // Then files
-    if (fileEntries.length > 0) {
-      parts.push(fileEntries.map(e => e.name).join('  '));
-    }
-
-    return parts.join('  ');
-  },
-
-  /**
-   * Format long directory listing (-l flag)
-   * @private
-   */
-  _formatLongListing(entries) {
-    const lines = [];
-
-    // Header (educational)
-    lines.push('total ' + entries.length);
-
-    for (const entry of entries) {
-      const type = entry.type === 'directory' ? 'd' : '-';
-      const perms = entry.permissions === 'restricted' ? 'r--------' : 'rw-r--r--';
-      const size = entry.type === 'file' ? '1024' : '4096';
-      const date = 'Oct 14 12:00';
-      const name = entry.type === 'directory' ? entry.name + '/' : entry.name;
-
-      // Format: type+permissions  size  date  name
-      lines.push(`${type}${perms}  ${size.padStart(6)}  ${date}  ${name}`);
-    }
-
-    // Add educational tip
-    lines.push('');
-    lines.push('💡 TIP: De eerste kolom toont type (d=directory, -=file) en permissies.');
-
-    return lines.join('\n');
   },
 
   manPage: `
