@@ -103,7 +103,7 @@ class CommandParser {
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i];
 
-      // Short flags: -a, -la, -p 80
+      // Short flags: -a, -la, -r, -p 80
       if (token.startsWith('-') && !token.startsWith('--')) {
         const flagStr = token.slice(1);
 
@@ -113,15 +113,22 @@ class CommandParser {
             flags[flag] = true;
           }
         } else {
-          // Single flag, might have value
+          // Single flag
           const flag = flagStr;
 
-          // Check if next token is a value (not a flag)
-          if (i + 1 < tokens.length && !tokens[i + 1].startsWith('-')) {
-            flags[flag] = tokens[i + 1];
-            i++; // Skip next token
-          } else {
+          // Single letter flags (like -r, -a, -l) are always boolean
+          // Only numeric/special flags can have values (like -p 80)
+          if (flagStr.length === 1 && /[a-zA-Z]/.test(flagStr)) {
             flags[flag] = true;
+          } else {
+            // Flags with values (like -p 80)
+            // Check if next token is a value (not a flag)
+            if (i + 1 < tokens.length && !tokens[i + 1].startsWith('-')) {
+              flags[flag] = tokens[i + 1];
+              i++; // Skip next token
+            } else {
+              flags[flag] = true;
+            }
           }
         }
       }
