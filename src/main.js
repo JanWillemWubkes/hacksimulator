@@ -30,6 +30,21 @@ import grepCmd from './commands/filesystem/grep.js';
 // Import special commands
 import resetCmd from './commands/special/reset.js';
 
+// Import network commands
+import pingCmd from './commands/network/ping.js';
+import nmapCmd from './commands/network/nmap.js';
+import ifconfigCmd from './commands/network/ifconfig.js';
+import netstatCmd from './commands/network/netstat.js';
+import whoisCmd from './commands/network/whois.js';
+import tracerouteCmd from './commands/network/traceroute.js';
+
+// Import security commands
+import hashcatCmd from './commands/security/hashcat.js';
+import hydraCmd from './commands/security/hydra.js';
+import sqlmapCmd from './commands/security/sqlmap.js';
+import metasploitCmd from './commands/security/metasploit.js';
+import niktoCmd from './commands/security/nikto.js';
+
 /**
  * Register all commands
  */
@@ -60,6 +75,21 @@ function registerCommands() {
 
   // Special commands (1)
   registry.register('reset', resetCmd);
+
+  // Network commands (6)
+  registry.register('ping', pingCmd);
+  registry.register('nmap', nmapCmd);
+  registry.register('ifconfig', ifconfigCmd);
+  registry.register('netstat', netstatCmd);
+  registry.register('whois', whoisCmd);
+  registry.register('traceroute', tracerouteCmd);
+
+  // Security commands (5)
+  registry.register('hashcat', hashcatCmd);
+  registry.register('hydra', hydraCmd);
+  registry.register('sqlmap', sqlmapCmd);
+  registry.register('metasploit', metasploitCmd);
+  registry.register('nikto', niktoCmd);
 
   console.log('Commands registered:', registry.list());
   console.log('Total commands:', registry.getStats().total);

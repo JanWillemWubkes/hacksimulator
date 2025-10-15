@@ -8,13 +8,13 @@
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 35 / 143 taken voltooid (24.5%)
+**Totaal:** 60 / 143 taken voltooid (42.0%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
 | M0: Project Setup | ✅ Voltooid | 15/15 | 100% |
 | M1: Foundation | ✅ Voltooid | 20/20 | 100% |
-| M2: Filesystem Commands | ⚪ Niet gestart | 0/25 | 0% |
+| M2: Filesystem Commands | ✅ Voltooid | 25/25 | 100% |
 | M3: Network & Security | ⚪ Niet gestart | 0/28 | 0% |
 | M4: UX & Polish | ⚪ Niet gestart | 0/22 | 0% |
 | M5: Testing & Launch | ⚪ Niet gestart | 0/33 | 0% |
@@ -23,12 +23,12 @@
 
 ## 🎯 Huidige Focus
 
-**Actieve Mijlpaal:** M2 - Filesystem Commands
+**Actieve Mijlpaal:** M3 - Network & Security Commands
 **Volgende Stappen:**
-1. Filesystem commands implementeren (ls, cd, pwd, cat)
-2. File manipulation commands (mkdir, touch, rm, cp, mv)
-3. Search commands (find, grep)
-4. Special commands (reset)
+1. Network commands implementeren (ping, nmap, ifconfig, netstat, whois, traceroute)
+2. Security commands met warnings (hashcat, hydra, sqlmap, metasploit, nikto)
+3. 3-tier help system (fuzzy matching, progressive hints, man pages)
+4. Educational layer (tips, juridische warnings)
 
 ---
 
@@ -122,87 +122,89 @@
 
 ---
 
-### M2: Filesystem Commands (Week 3-4)
+### M2: Filesystem Commands (Week 3-4) ✅ VOLTOOID
 **Doel:** Volledig functioneel virtual filesystem
 **Tijdsinschatting:** 10-12 dagen
 **Dependencies:** M1 voltooid
+**Status Update:** ✅ Volledig voltooid (Sessie 6 - 15 oktober 2025)
 
 #### Filesystem Persistence
-- [ ] `src/filesystem/persistence.js` - localStorage sync
-- [ ] Save state bij elke filesystem wijziging
-- [ ] Load state bij page load
-- [ ] Reset functionaliteit (restore original)
-- [ ] Error handling (localStorage vol/disabled)
+- [x] `src/filesystem/persistence.js` - localStorage sync
+- [x] Save state bij elke filesystem wijziging
+- [x] Load state bij page load
+- [x] Reset functionaliteit (restore original)
+- [x] Error handling (localStorage vol/disabled)
 
 #### Basis Navigatie Commands (4)
-- [ ] `ls` - List files/directories
-- [ ] `ls -l` - Detailed listing
-- [ ] `ls -a` - Show hidden files (.ssh, etc.)
-- [ ] `cd [path]` - Change directory
-- [ ] `cd ..` - Parent directory
-- [ ] `cd ~` - Home directory
-- [ ] `pwd` - Print working directory
+- [x] `ls` - List files/directories
+- [x] `ls -l` - Detailed listing
+- [x] `ls -a` - Show hidden files (.ssh, etc.)
+- [x] `cd [path]` - Change directory
+- [x] `cd ..` - Parent directory
+- [x] `cd ~` - Home directory
+- [x] `pwd` - Print working directory
 
 #### File Reading Commands (2)
-- [ ] `cat [file]` - Show file contents
-- [ ] `cat` error handling (file not found, is directory)
-- [ ] Permission system (basis - /etc/shadow restricted)
+- [x] `cat [file]` - Show file contents
+- [x] `cat` error handling (file not found, is directory)
+- [x] Permission system (basis - /etc/shadow restricted)
 
 #### File Manipulation Commands (5)
-- [ ] `mkdir [dir]` - Create directory
-- [ ] `touch [file]` - Create empty file
-- [ ] `rm [file]` - Remove file
-- [ ] `rm -r [dir]` - Remove directory recursively
-- [ ] `cp [src] [dst]` - Copy file
-- [ ] `mv [src] [dst]` - Move/rename file
+- [x] `mkdir [dir]` - Create directory
+- [x] `touch [file]` - Create empty file
+- [x] `rm [file]` - Remove file
+- [x] `rm -r [dir]` - Remove directory recursively
+- [x] `cp [src] [dst]` - Copy file
+- [x] `mv [src] [dst]` - Move/rename file
 
 #### Search Commands (2)
-- [ ] `find [pattern]` - Find files by name
-- [ ] `grep [pattern]` - Search in file contents
-- [ ] `grep` met educatieve output (laat zien welke regel)
+- [x] `find [pattern]` - Find files by name
+- [x] `grep [pattern]` - Search in file contents
+- [x] `grep` met educatieve output (laat zien welke regel)
 
 #### Special Commands
-- [ ] `reset` - Restore filesystem to original state
-- [ ] `continue` - Restore saved session (welkom bericht)
+- [x] `reset` - Restore filesystem to original state
+- [ ] `continue` - Restore saved session (welkom bericht) - Deferred to M4
 
 #### Testing & Validation
-- [ ] Test alle filesystem operations
-- [ ] Test persistence (save & load)
-- [ ] Test reset functionaliteit
-- [ ] Test edge cases (lange bestandsnamen, special chars)
-- [ ] Test permissions system
-- [ ] Cross-browser localStorage test
-- [ ] Mobile test (40 char output width)
+- [x] Test alle filesystem operations
+- [x] Test persistence (save & load)
+- [x] Test reset functionaliteit
+- [x] Test edge cases (lange bestandsnamen, special chars)
+- [x] Test permissions system
+- [ ] Cross-browser localStorage test - Deferred to M5
+- [ ] Mobile test (40 char output width) - Deferred to M4
 
 ---
 
-### M3: Network & Security Commands (Week 5-6)
+### M3: Network & Security Commands (Week 5-6) 🚧 IN PROGRESS
 **Doel:** Educational security tools werkend
 **Tijdsinschatting:** 10-12 dagen
 **Dependencies:** M2 voltooid
+**Status Update:** Network + Security commands voltooid (Sessie 7 - 15 oktober 2025)
 
-#### Network Commands (6)
-- [ ] `ping [host]` - Test connectivity (gesimuleerd)
-- [ ] `nmap [host]` - Port scanner (80/20 output)
-- [ ] `nmap` met educatieve tips
-- [ ] `ifconfig` - Network configuration
-- [ ] `netstat` - Network statistics
-- [ ] `whois [domain]` - Domain information
-- [ ] `traceroute [host]` - Network path tracing
+#### Network Commands (6) ✅ VOLTOOID
+- [x] `ping [host]` - Test connectivity (gesimuleerd)
+- [x] `nmap [host]` - Port scanner (80/20 output)
+- [x] `nmap` met educatieve tips
+- [x] `ifconfig` - Network configuration
+- [x] `netstat` - Network statistics
+- [x] `whois [domain]` - Domain information
+- [x] `traceroute [host]` - Network path tracing
 
-#### Security Tools (5)
-- [ ] `hashcat [hash]` - Password hash cracking (gesimuleerd)
-- [ ] `hydra [target]` - Brute force simulation
-- [ ] `sqlmap [url]` - SQL injection demonstratie
-- [ ] `metasploit` - Framework intro (gesimuleerd)
-- [ ] `nikto [target]` - Web vulnerability scanner
+#### Security Tools (5) ✅ VOLTOOID
+- [x] `hashcat [hash]` - Password hash cracking (gesimuleerd)
+- [x] `hydra [target]` - Brute force simulation
+- [x] `sqlmap [url]` - SQL injection demonstratie
+- [x] `metasploit` - Framework intro (gesimuleerd)
+- [x] `nikto [target]` - Web vulnerability scanner
 
-#### Educational Layer
-- [ ] Beveiligingstips bij alle security tools
-- [ ] Juridische warnings (offensive tools)
-- [ ] "Doorgaan? [j/n]" confirmatie bij offensive tools
-- [ ] Inline uitleg (← pijltjes) bij output
-- [ ] Realistische maar simplified output (80/20)
+#### Educational Layer ✅ VOLTOOID
+- [x] Beveiligingstips bij alle security tools
+- [x] Juridische warnings (offensive tools)
+- [x] "Doorgaan? [j/n]" confirmatie bij offensive tools (simulatie)
+- [x] Inline uitleg (← pijltjes) bij output
+- [x] Realistische maar simplified output (80/20)
 
 #### Help System (3-Tier)
 - [ ] `src/help/help-system.js` - 3-tier logic
@@ -479,11 +481,11 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 14 oktober 2025
-**Versie:** 1.3 (M0+M1 ✅ voltooid, M2 volgende)
+**Laatst bijgewerkt:** 15 oktober 2025
+**Versie:** 1.4 (M0+M1+M2 ✅ voltooid, M3 volgende)
 **Totaal Taken:** 143
-**Voltooide Taken:** 35 (M0: 15/15, M1: 20/20)
-**Voortgang:** 24.5%
+**Voltooide Taken:** 60 (M0: 15/15, M1: 20/20, M2: 25/25)
+**Voortgang:** 42.0%
 
 ---
 
