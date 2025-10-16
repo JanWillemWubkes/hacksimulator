@@ -159,6 +159,53 @@ Bij nieuwe command:
 - Graceful degradation: localStorage disabled = use fallback
 - Clear old localStorage when changing data structure
 
+### ES6 Module Exports & Parser (Sessie 6)
+⚠️ **Never:**
+- Use `this._method()` in ES6 object literal exports (this = calling context, not object)
+- Allow single-letter boolean flags to consume next token as value (-r testdir broken)
+- Forget to add dependencies to terminal context (vfs, historyManager)
+
+✅ **Always:**
+- Use standalone functions for helper methods (not object methods)
+- Single-letter flags (a-z) are ALWAYS boolean - only numeric flags take values
+- Include all required instances in terminal execution context
+- Test command patterns with real use cases (rm -r, ls -la)
+- Update terminal prompt when directory changes (cd, reset)
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 6 (ES6 export bug fixes + parser flag handling)
+
+### ES6 Module Import Debugging (Sessie 7)
+⚠️ **Never:**
+- Assume ES6 module imports fail loudly (they fail silently on wrong paths)
+- Use `import vfs from './src/core/vfs.js'` (VFS is in filesystem/ not core/)
+- Forget to verify import paths when buttons don't work in test pages
+- Skip checking browser Network tab for 404s on module imports
+
+✅ **Always:**
+- Verify import paths match actual file structure (VFS → filesystem/, not core/)
+- Check browser console Network tab when ES6 modules don't load
+- Use `window.functionName = function()` for onclick handlers in ES6 modules
+- Test man page integration: man command must check `handler.manPage` exists
+- Remember module structure: core/ (terminal, parser), filesystem/ (vfs), utils/ (fuzzy), help/ (help-system)
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 7 (M3 complete: 11 commands + help system + testing)
+
+### Onboarding & Legal Implementation (Sessie 8)
+⚠️ **Never:**
+- Create legal docs without complete disclosure (contact info, data retention, user rights)
+- Use English for legal docs aimed at Dutch market (AVG compliance requires native language)
+- Implement analytics without two-tier consent strategy (functional vs tracking)
+- Forget localStorage persistence for onboarding state (poor UX on reload)
+
+✅ **Always:**
+- Progressive hints at strategic moments (1st, 5th, 10th command) - prevents information overload
+- Singleton pattern for UI managers (onboarding, modals) - shared state consistency
+- Prioritize launch-blocking tasks first (legal docs before mobile optimization)
+- Placeholder approach for incomplete info ([email@domain - TO BE ADDED]) - transparent and trackable
+- Privacy by design: Never log command arguments (privacy risk per PRD §6.6)
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 8 (M4 Phases 1-2: Onboarding + Legal docs, 8100+ words AVG compliant)
+
 ---
 
 ## 🤖 Sessie Protocol
@@ -225,5 +272,5 @@ Bij nieuwe command:
 
 ---
 
-**Last updated:** 14 oktober 2025
-**Version:** 3.2 (Sessie 5: M0+M1 completed - localStorage learnings added)
+**Last updated:** 16 oktober 2025
+**Version:** 4.1 (Sessie 8: M4 Phases 1-2 completed - Onboarding flow + Legal documents, 68.5% overall progress)
