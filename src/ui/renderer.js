@@ -113,9 +113,16 @@ class Renderer {
 
   /**
    * Render welcome message
+   * Uses onboarding system for personalized welcome
+   * @param {Object} onboarding - Onboarding instance (optional for backward compatibility)
    */
-  renderWelcome() {
-    const welcome = `
+  renderWelcome(onboarding = null) {
+    if (onboarding) {
+      const welcome = onboarding.getWelcomeMessage();
+      this.renderOutput(welcome, 'info');
+    } else {
+      // Fallback to default welcome if no onboarding provided
+      const welcome = `
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃                                                ┃
 ┃       🛡️  HACKSIMULATOR.NL - MVP BETA          ┃
@@ -126,7 +133,8 @@ class Renderer {
 
 💡 TIP: Type 'help' om te beginnen.
 `;
-    this.renderOutput(welcome.trim(), 'info');
+      this.renderOutput(welcome.trim(), 'info');
+    }
   }
 
   /**

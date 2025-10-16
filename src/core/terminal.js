@@ -10,6 +10,9 @@ import history from './history.js';
 import renderer from '../ui/renderer.js';
 import input from '../ui/input.js';
 import vfs from '../filesystem/vfs.js';
+import helpSystem from '../help/help-system.js';
+import fuzzy from '../utils/fuzzy.js';
+import onboarding from '../ui/onboarding.js';
 
 class Terminal {
   constructor() {
@@ -19,6 +22,7 @@ class Terminal {
       terminal: this,
       vfs: vfs,
       historyManager: history,
+      onboarding: onboarding,
       cwd: '~',
       user: 'hacker',
       hostname: 'hacksim'
@@ -52,11 +56,16 @@ class Terminal {
     // Initialize input handler
     input.init(inputElement, (command) => this.execute(command));
 
-    // Render welcome message
-    renderer.renderWelcome();
+    // Initialize onboarding system
+    onboarding.init();
+
+    // Render welcome message (personalized via onboarding)
+    renderer.renderWelcome(onboarding);
 
     this.isInitialized = true;
-    console.log('Terminal initialized');
+    console.log('Terminal initialized', {
+      firstVisit: onboarding.isFirstTimeVisitor()
+    });
   }
 
   /**
@@ -91,14 +100,16 @@ class Terminal {
 
     // Check if command exists
     if (!registry.has(parsed.command)) {
-      const similar = this._findSimilarCommand(parsed.command);
-      let errorMsg = `Command not found: ${parsed.command}`;
+      // Record error for progressive hints
+      helpSystem.recordError(parsed.command);
 
-      if (similar) {
-        errorMsg += `\n\n💡 TIP: Bedoelde je misschien '${similar}'?`;
-      } else {
-        errorMsg += `\n\n💡 TIP: Type 'help' voor een lijst van beschikbare commands.`;
-      }
+      // Find similar command using fuzzy matching
+      const similar = fuzzy.findClosestCommand(parsed.command, registry.list());
+
+      // Get progressive help message (3-tier system)
+      const helpMsg = helpSystem.getHelp(parsed.command, similar);
+
+      const errorMsg = `Command not found: ${parsed.command}\n\n${helpMsg}`;
 
       renderer.renderError(errorMsg);
       return;
@@ -120,6 +131,13 @@ class Terminal {
       if (output) {
         renderer.renderOutput(output);
       }
+
+      // Record command execution for onboarding hints
+      onboarding.markFirstVisitComplete();
+      const hint = onboarding.recordCommand();
+      if (hint) {
+        renderer.renderInfo(hint);
+      }
     } catch (error) {
       console.error('Command execution error:', error);
       renderer.renderError(`Error executing command: ${error.message}`);
@@ -130,57 +148,11 @@ class Terminal {
   }
 
   /**
-   * Find similar command (for typo suggestions)
-   * @private
+   * Get help system instance
+   * @returns {Object} Help system
    */
-  _findSimilarCommand(input) {
-    const commands = registry.list();
-    const maxDistance = 2; // Levenshtein distance threshold
-
-    let bestMatch = null;
-    let bestDistance = Infinity;
-
-    for (const cmd of commands) {
-      const distance = this._levenshteinDistance(input, cmd);
-      if (distance <= maxDistance && distance < bestDistance) {
-        bestDistance = distance;
-        bestMatch = cmd;
-      }
-    }
-
-    return bestMatch;
-  }
-
-  /**
-   * Calculate Levenshtein distance (edit distance)
-   * @private
-   */
-  _levenshteinDistance(a, b) {
-    const matrix = [];
-
-    for (let i = 0; i <= b.length; i++) {
-      matrix[i] = [i];
-    }
-
-    for (let j = 0; j <= a.length; j++) {
-      matrix[0][j] = j;
-    }
-
-    for (let i = 1; i <= b.length; i++) {
-      for (let j = 1; j <= a.length; j++) {
-        if (b.charAt(i - 1) === a.charAt(j - 1)) {
-          matrix[i][j] = matrix[i - 1][j - 1];
-        } else {
-          matrix[i][j] = Math.min(
-            matrix[i - 1][j - 1] + 1,
-            matrix[i][j - 1] + 1,
-            matrix[i - 1][j] + 1
-          );
-        }
-      }
-    }
-
-    return matrix[b.length][a.length];
+  getHelpSystem() {
+    return helpSystem;
   }
 
   /**
