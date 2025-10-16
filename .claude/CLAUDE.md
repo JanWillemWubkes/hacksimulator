@@ -206,6 +206,53 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessie 8 (M4 Phases 1-2: Onboarding + Legal docs, 8100+ words AVG compliant)
 
+### M4 Complete - Analytics & Mobile (Sessie 9)
+⚠️ **Never:**
+- Log command arguments in analytics (PRD §6.6 privacy violation)
+- Show cookie consent banner immediately (annoying - use 2 sec delay)
+- Forget IP anonymization in GA4 (AVG compliance required)
+- Hard-code analytics IDs in code (use placeholders for MVP)
+- Implement mobile gestures without testing on real devices
+
+✅ **Always:**
+- Build analytics abstraction layer (GA4 → Plausible migration path)
+- Two-tier timing: Legal modal (immediate) → Cookie banner (2 sec delay)
+- Privacy-first: Check consent BEFORE tracking, graceful degradation
+- Mobile CSS in single file (mobile.css) - all breakpoints + fixes together
+- Touch targets 44x44px minimum (Apple HIG + Android Material guidelines)
+- Prevent iOS zoom: font-size: 16px on inputs (not 14px!)
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 9 (M4 complete: Analytics, Mobile, Styling - 91.6% MVP done)
+
+### Scope Decisiveness & MVP Clarity (Sessie 10)
+⚠️ **Never:**
+- Assume documented features are implemented without codebase verification
+- Let PRD requirements diverge from actual implementation status
+- Keep ambiguous "deferred" items without explicit Post-MVP classification
+- Describe features in PRD without clear MVP vs. Fase 2 distinction
+
+✅ **Always:**
+- Verify implementation status via codebase inspection (Glob/Grep/Read)
+- Explicitly mark Post-MVP features with ~~strikethrough~~ **[POST-MVP]** in PRD
+- Create dedicated "Post-MVP Features" section in TASKS.md for transparency
+- Update all documents when scope decisions are made (PRD → TASKS → CLAUDE)
+- Be decisive: Feature is either MVP (implement now) or Post-MVP (explicit defer)
+
+📊 **Consistency Protocol:**
+1. PRD status must match TASKS.md completion percentage
+2. Release Criteria checkboxes must reflect actual implementation
+3. Features described in PRD examples must exist in code OR be marked Post-MVP
+4. Mobile features (gestures, quick commands) need real device testing before MVP
+
+**Scope Decisions Made:**
+- Autocomplete (FR1.4) → Post-MVP (only TODO comment exists)
+- Exit intent (FR7.2) → Post-MVP (floating button sufficient for MVP)
+- Mobile gestures → Post-MVP (requires real device testing)
+- Quick Commands UI → Post-MVP (CSS only, no JS/HTML)
+- Continue command → Post-MVP (localStorage auto-restore sufficient)
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 10 (Consistency audit: PRD v1.2, scope clarification, Post-MVP section)
+
 ---
 
 ## 🤖 Sessie Protocol
@@ -273,4 +320,4 @@ Bij nieuwe command:
 ---
 
 **Last updated:** 16 oktober 2025
-**Version:** 4.1 (Sessie 8: M4 Phases 1-2 completed - Onboarding flow + Legal documents, 68.5% overall progress)
+**Version:** 4.3 (Sessie 10: Consistency Audit - PRD v1.2, Scope Clarification, Post-MVP Features Defined)

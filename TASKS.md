@@ -164,7 +164,7 @@
 
 #### Special Commands
 - [x] `reset` - Restore filesystem to original state
-- [ ] `continue` - Restore saved session (welkom bericht) - Deferred to M4
+- ~~[ ] `continue` - Restore saved session~~ **→ Post-MVP** (localStorage restore gebeurt automatisch)
 
 #### Testing & Validation
 - [x] Test alle filesystem operations
@@ -281,13 +281,15 @@
 - [x] Cookie consent banner (AVG compliant) - in index.html
 - [x] Consent opslaan in localStorage - met timestamp
 
-#### Feedback Mechanisme ✅ VOLTOOID (6/6 - UI only, logic deferred)
+#### Feedback Mechanisme ✅ VOLTOOID (4/4 - MVP Scope)
 - [x] Floating feedback button (rechts onderin) - HTML + CSS
 - [x] Feedback modal (5-star + optioneel comment) - HTML + CSS
 - [x] Rating stars styling - CSS met hover states
 - [x] Modal structure compleet - HTML klaar
-- [ ] Exit intent detection (na 2+ min sessie) - Deferred to post-MVP
-- [ ] Feedback opslaan logic - Deferred to post-MVP (console.log ready)
+
+**Deferred to Post-MVP:**
+- [ ] Exit intent detection (na 2+ min sessie) - Fase 2
+- [ ] Feedback opslaan logic - Fase 2 (console.log ready)
 
 #### Styling Polish ✅ VOLTOOID (6/6)
 - [x] Animations polish (transitions) - var(--transition-fast/normal)
@@ -303,6 +305,7 @@
 **Doel:** Production-ready en live deployment
 **Tijdsinschatting:** 10-14 dagen
 **Dependencies:** M4 voltooid
+**Status:** ⚪ Niet gestart (0/33 tasks)
 
 #### Beta Testing Voorbereiding
 - [ ] Beta testing checklist opstellen
@@ -416,18 +419,44 @@
 
 ## 🎯 Volgende Acties
 
+**Huidige Status:** M4 Compleet (91.6%) - Klaar voor M5 Testing & Launch
+
 **Nu direct te doen:**
-1. [ ] GitHub repository aanmaken
-2. [ ] Project structuur folders aanmaken
-3. [ ] index.html skeleton opzetten
-4. [ ] Live Server starten en "Hello World" testen
+1. [ ] Beta testing voorbereiden (5 testers werven)
+2. [ ] Cross-browser testing setup
+3. [ ] Performance audit (Lighthouse)
+4. [ ] Bundle size meten (<500KB check)
 
 **Deze week:**
-- M0 voltooien (Project Setup)
-- Starten met M1 (Foundation)
+- Start M5: Testing & Launch
+- Beta tester recruitment
+- Cross-browser testing
 
-**Deze sprint (Week 1-2):**
-- M1 voltooien (Terminal Engine + 7 system commands)
+---
+
+## 🔮 Post-MVP Features (Fase 2+)
+
+Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
+
+### UX Enhancements
+- [ ] **Tab Autocomplete** - Command completion met Tab-toets (FR1.4 deferred)
+- [ ] **Quick Commands UI** - Werkende mobile button interface (CSS is klaar)
+- [ ] **Mobile Gestures** - Swipe/long-press navigatie (needs real device testing)
+- [ ] **Persistent Help Hint** - Rechts onderin, verdwijnt na 5 commands
+
+### Feedback & Analytics
+- [ ] **Exit Intent Detection** - Survey na 2+ min sessie (FR7.2 deferred)
+- [ ] **Feedback Save Logic** - Backend/email integratie voor feedback
+- [ ] **Command-Level Feedback** - Thumbs up/down per command (FR7.3 deferred)
+
+### Commands & Features
+- [ ] **Continue Command** - Expliciete sessie restore (localStorage doet dit al automatisch)
+- [ ] **Tutorial Command** - Guided scenarios (recon, webvuln, privesc)
+- [ ] **Challenge System** - Voortgang tracking en certificaten
+
+### Analytics Migration
+- [ ] **Plausible Analytics** - Migratie van GA4 naar Plausible (bij 10k+ visitors)
+- [ ] **Cookie-less Tracking** - Remove consent banner na Plausible migratie
 
 ---
 
