@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cookie Policy - HackSimulator.nl</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+      color: #333;
+    }
+    h1 {
+      color: #00ff00;
+      background: #000;
+      padding: 20px;
+      margin: -20px -20px 20px -20px;
+    }
+    h2 {
+      color: #00aa00;
+      border-bottom: 2px solid #00ff00;
+      padding-bottom: 5px;
+      margin-top: 30px;
+    }
+    h3 {
+      color: #00aa00;
+      margin-top: 20px;
+    }
+    .info-box {
+      background: #e8f5e9;
+      border: 1px solid #00aa00;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    table th {
+      background: #00ff00;
+      color: #000;
+      font-weight: bold;
+    }
+    ul {
+      margin: 10px 0;
+      padding-left: 30px;
+    }
+    li {
+      margin: 5px 0;
+    }
+    a {
+      color: #00aa00;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .back-link {
+      display: inline-block;
+      margin: 20px 0;
+      padding: 10px 20px;
+      background: #00ff00;
+      color: #000;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .back-link:hover {
+      background: #00aa00;
+      color: #fff;
+    }
+    .highlight {
+      background: #ffffcc;
+      padding: 10px;
+      border-left: 3px solid #00ff00;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cookie Policy</h1>
+
+  <p><strong>Laatst bijgewerkt:</strong> 16 oktober 2025</p>
+  <p><strong>Versie:</strong> 1.0 (MVP)</p>
+
+  <div class="info-box">
+    <strong>📌 TL;DR (Kort Samengevat):</strong><br>
+    HackSimulator.nl gebruikt <strong>localStorage</strong> (technisch geen cookies) voor website functionaliteit en <strong>Google Analytics cookies</strong> (alleen met je toestemming) voor bezoekersstatistieken.
+  </div>
+
+  <h2>1. Wat Zijn Cookies?</h2>
+
+  <p>
+    Cookies zijn kleine tekstbestanden die door websites op je apparaat worden opgeslagen.
+    Ze helpen websites om je te herkennen en voorkeuren te onthouden.
+  </p>
+
+  <h3>1.1 localStorage vs. Cookies</h3>
+  <p>
+    HackSimulator.nl gebruikt voornamelijk <strong>localStorage</strong> (browser storage) in plaats van traditionele cookies.
+    localStorage heeft meer opslagcapaciteit en wordt niet automatisch naar servers verzonden.
+  </p>
+
+  <p class="highlight">
+    <strong>ℹ️ Let op:</strong> Onder AVG wetgeving wordt localStorage behandeld als "cookie-achtige technologie" en valt onder dezelfde regels.
+  </p>
+
+  <h2>2. Welke Cookies Gebruiken We?</h2>
+
+  <h3>2.1 Functionele Cookies (Geen Toestemming Vereist)</h3>
+
+  <p>Deze zijn <strong>strikt noodzakelijk</strong> voor website functionaliteit:</p>
+
+  <table>
+    <tr>
+      <th>Naam</th>
+      <th>Type</th>
+      <th>Doel</th>
+      <th>Bewaartermijn</th>
+    </tr>
+    <tr>
+      <td>hacksim_filesystem</td>
+      <td>localStorage</td>
+      <td>Bewaart je terminal filesystem state</td>
+      <td>Tot je het verwijdert</td>
+    </tr>
+    <tr>
+      <td>hacksim_history</td>
+      <td>localStorage</td>
+      <td>Command history (↑↓ navigatie)</td>
+      <td>Tot je het verwijdert</td>
+    </tr>
+    <tr>
+      <td>hacksim_first_visit</td>
+      <td>localStorage</td>
+      <td>Onboarding state (eerste bezoek tracker)</td>
+      <td>Tot je het verwijdert</td>
+    </tr>
+    <tr>
+      <td>hacksim_command_count</td>
+      <td>localStorage</td>
+      <td>Aantal uitgevoerde commands (voor progressive hints)</td>
+      <td>Tot je het verwijdert</td>
+    </tr>
+    <tr>
+      <td>hacksim_onboarding_state</td>
+      <td>localStorage</td>
+      <td>Welke hints zijn al getoond</td>
+      <td>Tot je het verwijdert</td>
+    </tr>
+    <tr>
+      <td>hacksim_help_errors</td>
+      <td>localStorage</td>
+      <td>Error tracking voor 3-tier help system</td>
+      <td>Tot je het verwijdert</td>
+    </tr>
+  </table>
+
+  <p class="highlight">
+    <strong>✅ Waarom geen toestemming nodig?</strong><br>
+    Deze localStorage items zijn <strong>strikt noodzakelijk</strong> voor kernfunctionaliteit van de website (AVG Artikel 6.1.f - gerechtvaardigd belang).
+    Zonder deze werkt de terminal simulator niet.
+  </p>
+
+  <h3>2.2 Analytics Cookies (Toestemming Vereist - Opt-In)</h3>
+
+  <p>Deze worden <strong>alleen geplaatst met je expliciete toestemming</strong> via de cookie banner:</p>
+
+  <table>
+    <tr>
+      <th>Naam</th>
+      <th>Type</th>
+      <th>Doel</th>
+      <th>Bewaartermijn</th>
+      <th>Derde Partij</th>
+    </tr>
+    <tr>
+      <td>_ga</td>
+      <td>HTTP Cookie</td>
+      <td>Onderscheidt unieke gebruikers</td>
+      <td>2 jaar</td>
+      <td>Google Analytics</td>
+    </tr>
+    <tr>
+      <td>_gid</td>
+      <td>HTTP Cookie</td>
+      <td>Onderscheidt unieke gebruikers</td>
+      <td>24 uur</td>
+      <td>Google Analytics</td>
+    </tr>
+    <tr>
+      <td>_gat</td>
+      <td>HTTP Cookie</td>
+      <td>Limiteert aantal requests</td>
+      <td>1 minuut</td>
+      <td>Google Analytics</td>
+    </tr>
+    <tr>
+      <td>hacksim_analytics_consent</td>
+      <td>localStorage</td>
+      <td>Bewaart je cookie keuze</td>
+      <td>1 jaar</td>
+      <td>HackSimulator.nl</td>
+    </tr>
+  </table>
+
+  <p class="highlight">
+    <strong>🔒 Privacy Bescherming:</strong><br>
+    • IP-adres wordt <strong>geanonimiseerd</strong> (laatste octet verwijderd)<br>
+    • Geen cross-site tracking<br>
+    • Data retention: 14 maanden (Google default)
+  </p>
+
+  <h2>3. Waarom Gebruiken We Cookies?</h2>
+
+  <h3>3.1 Website Functionaliteit (localStorage)</h3>
+  <ul>
+    <li><strong>Filesystem persistentie:</strong> Je wijzigingen (bestanden aangemaakt/verwijderd) blijven behouden</li>
+    <li><strong>Command history:</strong> ↑↓ toetsen om vorige commands te herhalen</li>
+    <li><strong>Onboarding:</strong> Welkom bericht alleen bij eerste bezoek, niet telkens opnieuw</li>
+    <li><strong>Progressive hints:</strong> Context-gevoelige tips op het juiste moment</li>
+    <li><strong>Help system:</strong> Betere suggesties bij herhaalde fouten</li>
+  </ul>
+
+  <h3>3.2 Website Verbetering (Analytics)</h3>
+  <ul>
+    <li><strong>Usage metrics:</strong> Welke commands worden veel gebruikt?</li>
+    <li><strong>Performance:</strong> Laadtijden en responsiveness meten</li>
+    <li><strong>Bugs identificeren:</strong> Error tracking (alleen type, geen content)</li>
+    <li><strong>Device compatibility:</strong> Desktop vs. mobile usage</li>
+    <li><strong>Feature prioritering:</strong> Welke nieuwe commands moeten we toevoegen?</li>
+  </ul>
+
+  <h2>4. Je Cookie Keuzes</h2>
+
+  <h3>4.1 Toestemming Geven/Weigeren</h3>
+  <p>Bij je eerste bezoek zie je een <strong>cookie consent banner</strong> met opties:</p>
+  <ul>
+    <li><strong>Accepteren:</strong> Analytics cookies worden geplaatst</li>
+    <li><strong>Weigeren:</strong> Alleen functionele localStorage, geen analytics</li>
+  </ul>
+
+  <p>Je keuze wordt opgeslagen in localStorage (1 jaar geldig).</p>
+
+  <h3>4.2 Keuze Wijzigen</h3>
+  <p>Je kunt je cookie voorkeuren altijd wijzigen via:</p>
+  <ul>
+    <li>Footer link "Cookie Instellingen" (herlaadt cookie banner)</li>
+    <li>Browser settings → Clear Site Data (reset alles)</li>
+  </ul>
+
+  <h3>4.3 Cookies Verwijderen</h3>
+
+  <h4>Functionele localStorage:</h4>
+  <ul>
+    <li><strong>Via terminal:</strong> Type <code>reset</code> command (verwijdert filesystem + history)</li>
+    <li><strong>Via browser:</strong> Settings → Privacy → Clear Site Data → Selecteer HackSimulator.nl</li>
+  </ul>
+
+  <h4>Analytics Cookies:</h4>
+  <ul>
+    <li><strong>Via cookie banner:</strong> Klik "Weigeren" of "Cookie Instellingen"</li>
+    <li><strong>Via browser:</strong> Settings → Cookies → Verwijder cookies van hacksimulator.nl en google-analytics.com</li>
+    <li><strong>Google Opt-out:</strong> Installeer <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics Opt-out Browser Add-on</a></li>
+  </ul>
+
+  <h2>5. Browser Specifieke Instructies</h2>
+
+  <h3>Chrome</h3>
+  <ol>
+    <li>Klik op de drie puntjes (⋮) rechtsboven</li>
+    <li>Instellingen → Privacy en beveiliging → Cookies en andere sitegegevens</li>
+    <li>Alle cookies en sitegegevens bekijken → Zoek "hacksimulator.nl"</li>
+    <li>Klik op prullenbak icoon om te verwijderen</li>
+  </ol>
+
+  <h3>Firefox</h3>
+  <ol>
+    <li>Klik op de drie streepjes (≡) rechtsboven</li>
+    <li>Instellingen → Privacy & Beveiliging → Cookies en sitegegevens</li>
+    <li>Gegevens beheren → Zoek "hacksimulator.nl"</li>
+    <li>Verwijder geselecteerd</li>
+  </ol>
+
+  <h3>Safari</h3>
+  <ol>
+    <li>Safari menu → Voorkeuren → Privacy</li>
+    <li>Websitegegevens beheren → Zoek "hacksimulator.nl"</li>
+    <li>Verwijder</li>
+  </ol>
+
+  <h2>6. Derde Partij Cookies</h2>
+
+  <h3>6.1 Google Analytics</h3>
+  <p>
+    Als je cookies accepteert, plaatst Google Analytics cookies (_ga, _gid, _gat).
+  </p>
+  <ul>
+    <li><strong>Doel:</strong> Anonieme bezoekersstatistieken</li>
+    <li><strong>Privacy:</strong> IP anonymization enabled</li>
+    <li><strong>Locatie:</strong> Data kan verwerkt worden in VS (EU-US Data Privacy Framework)</li>
+    <li><strong>Meer info:</strong> <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a></li>
+  </ul>
+
+  <h3>6.2 Toekomstige Migratie: Plausible Analytics</h3>
+  <div class="info-box">
+    <strong>🔮 Roadmap:</strong><br>
+    Bij 10k+ bezoekers migreren we naar <a href="https://plausible.io/" target="_blank" rel="noopener">Plausible Analytics</a>:
+    <ul>
+      <li>✅ <strong>Geen cookies nodig</strong> (cookie-less tracking)</li>
+      <li>✅ EU hosting (geen internationale data transfers)</li>
+      <li>✅ 100% AVG compliant by design</li>
+      <li>✅ Open source en transparant</li>
+    </ul>
+    Dit betekent: <strong>geen cookie banner meer nodig!</strong>
+  </div>
+
+  <h2>7. Do Not Track (DNT)</h2>
+
+  <p>
+    We respecteren momenteel geen "Do Not Track" browser signals omdat dit geen wettelijke standaard is.
+  </p>
+  <p>
+    <strong>Alternatief:</strong> Weiger cookies via onze cookie banner voor dezelfde privacy bescherming.
+  </p>
+
+  <h2>8. Updates van deze Policy</h2>
+
+  <p>
+    We kunnen deze Cookie Policy updaten. Belangrijke wijzigingen communiceren we via:
+  </p>
+  <ul>
+    <li>Website banner bij eerste bezoek na update</li>
+    <li>"Laatst bijgewerkt" datum bovenaan dit document</li>
+    <li>Nieuwe cookie consent bij materiële wijzigingen</li>
+  </ul>
+
+  <h2>9. Contact</h2>
+
+  <p>Voor vragen over cookies en privacy:</p>
+  <ul>
+    <li><strong>Email:</strong> [cookies@hacksimulator.nl - TO BE ADDED]</li>
+    <li><strong>Privacy Policy:</strong> <a href="privacy.html">Zie volledige Privacy Policy</a></li>
+    <li><strong>Website:</strong> <a href="/">HackSimulator.nl</a></li>
+  </ul>
+
+  <h2>10. Samenvatting Per Cookie Type</h2>
+
+  <table>
+    <tr>
+      <th>Cookie Type</th>
+      <th>Toestemming Nodig?</th>
+      <th>Doel</th>
+      <th>Kan Geweigerd Worden?</th>
+    </tr>
+    <tr>
+      <td>Functionele localStorage</td>
+      <td>❌ Nee</td>
+      <td>Website functionaliteit</td>
+      <td>Ja, maar website werkt dan niet</td>
+    </tr>
+    <tr>
+      <td>Google Analytics</td>
+      <td>✅ Ja (opt-in)</td>
+      <td>Bezoekersstatistieken</td>
+      <td>Ja, via cookie banner</td>
+    </tr>
+    <tr>
+      <td>Cookie consent preference</td>
+      <td>❌ Nee</td>
+      <td>Je keuze onthouden</td>
+      <td>Ja, maar banner komt terug</td>
+    </tr>
+  </table>
+
+  <div class="info-box">
+    <strong>🔒 Privacy First Approach:</strong><br>
+    We geloven in minimale data verzameling. Daarom:
+    <ul>
+      <li>✅ Functionele data blijft lokaal (localStorage)</li>
+      <li>✅ Analytics is opt-in (niet opt-out)</li>
+      <li>✅ IP anonymization altijd enabled</li>
+      <li>✅ Geen command arguments gelogd</li>
+      <li>✅ Toekomstige migratie naar cookie-less analytics (Plausible)</li>
+    </ul>
+  </div>
+
+  <a href="/" class="back-link">← Terug naar HackSimulator</a>
+
+  <hr style="margin: 40px 0; border: none; border-top: 1px solid #ddd;">
+  <p style="text-align: center; color: #999; font-size: 0.9em;">
+    HackSimulator.nl - Cookie Policy v1.0<br>
+    Laatst bijgewerkt: 16 oktober 2025
+  </p>
+</body>
+</html>

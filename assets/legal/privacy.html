@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - HackSimulator.nl</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+      color: #333;
+    }
+    h1 {
+      color: #00ff00;
+      background: #000;
+      padding: 20px;
+      margin: -20px -20px 20px -20px;
+    }
+    h2 {
+      color: #00aa00;
+      border-bottom: 2px solid #00ff00;
+      padding-bottom: 5px;
+      margin-top: 30px;
+    }
+    h3 {
+      color: #00aa00;
+      margin-top: 20px;
+    }
+    .highlight {
+      background: #ffffcc;
+      padding: 2px 5px;
+      border-left: 3px solid #00ff00;
+      display: block;
+      margin: 10px 0;
+      padding-left: 10px;
+    }
+    .info-box {
+      background: #e8f5e9;
+      border: 1px solid #00aa00;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    table th {
+      background: #00ff00;
+      color: #000;
+      font-weight: bold;
+    }
+    a {
+      color: #00aa00;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .back-link {
+      display: inline-block;
+      margin: 20px 0;
+      padding: 10px 20px;
+      background: #00ff00;
+      color: #000;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .back-link:hover {
+      background: #00aa00;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Privacy Policy</h1>
+
+  <p><strong>Laatst bijgewerkt:</strong> 16 oktober 2025</p>
+  <p><strong>Versie:</strong> 1.0 (MVP)</p>
+
+  <div class="info-box">
+    <strong>📌 TL;DR (Kort Samengevat):</strong><br>
+    HackSimulator.nl slaat minimale data op in je browser (localStorage). We gebruiken Google Analytics om bezoekersstatistieken te verzamelen. We verkopen geen data en loggen geen gevoelige informatie. Alles draait lokaal in je browser.
+  </div>
+
+  <h2>1. Wie Zijn Wij?</h2>
+  <p>
+    HackSimulator.nl is een educatief platform voor het leren van ethisch hacken via een gesimuleerde terminal.
+    Deze website is een MVP (Minimum Viable Product) en wordt beheerd door een individuele ontwikkelaar.
+  </p>
+  <p>
+    <strong>Contact:</strong> Voor vragen over privacy: [contact@hacksimulator.nl - TO BE ADDED]
+  </p>
+
+  <h2>2. Welke Data Verzamelen We?</h2>
+
+  <h3>2.1 Data Opgeslagen in Je Browser (localStorage)</h3>
+  <p>De volgende data wordt <strong>lokaal in je browser</strong> opgeslagen en verlaat je apparaat NIET:</p>
+
+  <table>
+    <tr>
+      <th>Data Type</th>
+      <th>Doel</th>
+      <th>Voorbeeld</th>
+    </tr>
+    <tr>
+      <td>Filesystem state</td>
+      <td>Bewaar je terminal filesystem tussen sessies</td>
+      <td>Bestanden die je hebt aangemaakt/verwijderd</td>
+    </tr>
+    <tr>
+      <td>Command history</td>
+      <td>↑↓ pijltjestoetsen navigatie</td>
+      <td>Lijst van recent getypte commands</td>
+    </tr>
+    <tr>
+      <td>Onboarding status</td>
+      <td>Toon gepersonaliseerde welkomst</td>
+      <td>first_visit flag, command_count</td>
+    </tr>
+    <tr>
+      <td>Help system status</td>
+      <td>Progressive hints tracking</td>
+      <td>Error count voor hints</td>
+    </tr>
+    <tr>
+      <td>Cookie consent</td>
+      <td>Je cookie voorkeuren onthouden</td>
+      <td>analytics_consent: true/false</td>
+    </tr>
+  </table>
+
+  <p class="highlight">
+    ⚠️ <strong>Belangrijk:</strong> Command <em>arguments</em> worden NIET gelogd om privacy te beschermen.
+    Bijvoorbeeld: we tellen "ping" maar loggen niet "ping hacktarget.com".
+  </p>
+
+  <h3>2.2 Analytics Data (Google Analytics 4)</h3>
+  <p>Als je cookies accepteert, verzamelen we <strong>anonieme bezoekersstatistieken</strong> via Google Analytics 4:</p>
+
+  <table>
+    <tr>
+      <th>Metric</th>
+      <th>Doel</th>
+      <th>Privacy</th>
+    </tr>
+    <tr>
+      <td>Sessieduur</td>
+      <td>Hoe lang blijven gebruikers?</td>
+      <td>Anoniem, geen PII</td>
+    </tr>
+    <tr>
+      <td>Aantal commands</td>
+      <td>Welke commands worden gebruikt? (alleen naam, geen args)</td>
+      <td>Anoniem, geen PII</td>
+    </tr>
+    <tr>
+      <td>Device type</td>
+      <td>Desktop vs. mobile usage</td>
+      <td>Anoniem, geen PII</td>
+    </tr>
+    <tr>
+      <td>Browser type</td>
+      <td>Cross-browser compatibility</td>
+      <td>Anoniem, geen PII</td>
+    </tr>
+    <tr>
+      <td>Errors</td>
+      <td>Bug tracking (error type, niet content)</td>
+      <td>Anoniem, geen PII</td>
+    </tr>
+  </table>
+
+  <p class="highlight">
+    ✅ <strong>IP Anonymization:</strong> Je IP-adres wordt geanonimiseerd door Google Analytics (laatste octet verwijderd).
+  </p>
+
+  <h3>2.3 Data Die We NIET Verzamelen</h3>
+  <ul>
+    <li>❌ Geen persoonlijke identificeerbare informatie (PII)</li>
+    <li>❌ Geen command arguments (privacy risk)</li>
+    <li>❌ Geen email adressen, namen, of contactgegevens</li>
+    <li>❌ Geen wachtwoorden of credentials (alles is gesimuleerd)</li>
+    <li>❌ Geen tracking over andere websites (geen cross-site tracking)</li>
+    <li>❌ Geen locatie data (behalve land-niveau via Analytics)</li>
+  </ul>
+
+  <h2>3. Waarom Verzamelen We Deze Data?</h2>
+
+  <table>
+    <tr>
+      <th>Rechtsgrondslag (AVG)</th>
+      <th>Data Type</th>
+      <th>Doel</th>
+    </tr>
+    <tr>
+      <td>Gerechtvaardigd belang</td>
+      <td>localStorage (functioneel)</td>
+      <td>Website functionaliteit (terminal state bewaren)</td>
+    </tr>
+    <tr>
+      <td>Toestemming (opt-in)</td>
+      <td>Google Analytics cookies</td>
+      <td>Website verbetering, usage metrics</td>
+    </tr>
+  </table>
+
+  <h2>4. Hoe Gebruiken We Je Data?</h2>
+
+  <h3>4.1 localStorage Data</h3>
+  <ul>
+    <li>Blijft <strong>lokaal in je browser</strong>, wordt NOOIT naar servers verzonden</li>
+    <li>Gebruikt voor website functionaliteit (filesystem state, history, onboarding)</li>
+    <li>Je kunt het verwijderen via browser settings of "reset" command</li>
+  </ul>
+
+  <h3>4.2 Analytics Data</h3>
+  <ul>
+    <li>Begrijpen hoe gebruikers de website gebruiken</li>
+    <li>Identificeren bugs en verbeterpunten</li>
+    <li>Prioriteren van nieuwe features</li>
+    <li>Cross-browser/device compatibility testen</li>
+  </ul>
+
+  <h2>5. Met Wie Delen We Data?</h2>
+
+  <h3>5.1 Derde Partijen</h3>
+  <table>
+    <tr>
+      <th>Dienst</th>
+      <th>Doel</th>
+      <th>Data Gedeeld</th>
+      <th>Privacy Policy</th>
+    </tr>
+    <tr>
+      <td>Google Analytics 4</td>
+      <td>Bezoekersstatistieken</td>
+      <td>Anonieme usage metrics (geanonimiseerd IP)</td>
+      <td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy</a></td>
+    </tr>
+    <tr>
+      <td>Netlify (hosting)</td>
+      <td>Website hosting</td>
+      <td>Server logs (IP, user-agent) - max 30 dagen</td>
+      <td><a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener">Netlify Privacy</a></td>
+    </tr>
+  </table>
+
+  <p class="highlight">
+    ⚠️ <strong>Let op:</strong> Toekomstige migratie naar Plausible Analytics (privacy-friendly, EU-hosted) is gepland bij 10k+ bezoekers.
+    Plausible heeft geen cookies nodig en is AVG-compliant by design.
+  </p>
+
+  <h3>5.2 Wat We NIET Doen</h3>
+  <ul>
+    <li>❌ We verkopen GEEN data aan adverteerders</li>
+    <li>❌ We delen GEEN data met social media platforms</li>
+    <li>❌ We gebruiken GEEN tracking pixels van derde partijen</li>
+    <li>❌ We doen GEEN cross-site tracking</li>
+  </ul>
+
+  <h2>6. Hoe Lang Bewaren We Data?</h2>
+
+  <table>
+    <tr>
+      <th>Data Type</th>
+      <th>Bewaartermijn</th>
+      <th>Verwijdering</th>
+    </tr>
+    <tr>
+      <td>localStorage data</td>
+      <td>Tot je het verwijdert</td>
+      <td>Browser settings → Clear Data, of "reset" command</td>
+    </tr>
+    <tr>
+      <td>Google Analytics</td>
+      <td>14 maanden (Google default)</td>
+      <td>Automatisch na 14 maanden</td>
+    </tr>
+    <tr>
+      <td>Server logs (Netlify)</td>
+      <td>30 dagen</td>
+      <td>Automatisch na 30 dagen</td>
+    </tr>
+  </table>
+
+  <h2>7. Je Rechten (AVG/GDPR)</h2>
+
+  <p>Onder de AVG (Algemene Verordening Gegevensbescherming) heb je de volgende rechten:</p>
+
+  <h3>7.1 Recht op Inzage</h3>
+  <p>Je kunt opvragen welke data we over je hebben. Voor localStorage: check je browser DevTools → Application → localStorage.</p>
+
+  <h3>7.2 Recht op Rectificatie</h3>
+  <p>Je kunt onjuiste data laten corrigeren. Voor localStorage: gebruik de "reset" command of browser settings.</p>
+
+  <h3>7.3 Recht op Verwijdering ("Recht om Vergeten te Worden")</h3>
+  <p>Je kunt al je data laten verwijderen:</p>
+  <ul>
+    <li><strong>localStorage:</strong> Browser settings → Clear Site Data, of "reset" command in terminal</li>
+    <li><strong>Analytics:</strong> Opt-out via cookie banner, of installeer <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics Opt-out Browser Add-on</a></li>
+  </ul>
+
+  <h3>7.4 Recht op Dataportabiliteit</h3>
+  <p>localStorage data is in JSON format en kun je exporteren via browser DevTools.</p>
+
+  <h3>7.5 Recht op Bezwaar</h3>
+  <p>Je kunt bezwaar maken tegen data verwerking. Weiger cookies via de cookie banner.</p>
+
+  <h3>7.6 Klacht Indienen</h3>
+  <p>Je kunt een klacht indienen bij de <a href="https://autoriteitpersoonsgegevens.nl/" target="_blank" rel="noopener">Autoriteit Persoonsgegevens (AP)</a> in Nederland.</p>
+
+  <h2>8. Cookies</h2>
+
+  <p>Zie onze <a href="cookies.html">Cookie Policy</a> voor gedetailleerde informatie over cookies.</p>
+
+  <h3>8.1 Functionele Cookies (Geen Toestemming Nodig)</h3>
+  <ul>
+    <li>localStorage voor website functionaliteit (niet technisch een cookie, maar behandeld als zodanig)</li>
+  </ul>
+
+  <h3>8.2 Analytics Cookies (Toestemming Vereist)</h3>
+  <ul>
+    <li>Google Analytics cookies: _ga, _gid, _gat</li>
+    <li>Worden alleen geplaatst na expliciete toestemming via cookie banner</li>
+  </ul>
+
+  <h2>9. Beveiliging</h2>
+
+  <h3>9.1 Technische Maatregelen</h3>
+  <ul>
+    <li>✅ HTTPS (SSL/TLS encryptie) voor alle communicatie</li>
+    <li>✅ Content Security Policy (CSP) headers tegen XSS attacks</li>
+    <li>✅ Input sanitization tegen code injection</li>
+    <li>✅ localStorage data is niet toegankelijk voor andere websites (same-origin policy)</li>
+  </ul>
+
+  <h3>9.2 Wat Te Doen Bij Datalek?</h3>
+  <p>
+    Bij een datalek informeren we getroffen gebruikers binnen 72 uur via website banner en/of email (indien beschikbaar).
+    We melden het incident ook aan de Autoriteit Persoonsgegevens indien vereist.
+  </p>
+
+  <p class="highlight">
+    ℹ️ <strong>Let op:</strong> Omdat de meeste data lokaal in je browser staat, is het risico op datalek minimaal.
+    Er is geen centrale database met gebruikersdata.
+  </p>
+
+  <h2>10. Kinderen en Privacy</h2>
+
+  <p>
+    Deze website is bedoeld voor gebruikers van <strong>15 jaar en ouder</strong>.
+    We verzamelen niet bewust data van kinderen onder de 15 jaar.
+  </p>
+  <p>
+    Indien je jonger bent dan 15 jaar, vraag dan toestemming aan je ouders/verzorgers voordat je deze website gebruikt.
+  </p>
+
+  <h2>11. Internationale Data Transfers</h2>
+
+  <p>
+    <strong>Google Analytics:</strong> Data kan worden verwerkt in de VS. Google is gecertificeerd onder het EU-US Data Privacy Framework.
+  </p>
+  <p>
+    <strong>Netlify:</strong> Hosting in EU data centers (Amsterdam/Frankfurt). Geen internationale transfers voor hosting.
+  </p>
+
+  <h2>12. Updates van Deze Policy</h2>
+
+  <p>
+    We kunnen deze Privacy Policy updaten. Belangrijke wijzigingen communiceren we via:
+  </p>
+  <ul>
+    <li>Website banner bij eerste bezoek na update</li>
+    <li>"Laatst bijgewerkt" datum bovenaan dit document</li>
+    <li>Versienummer wijziging</li>
+  </ul>
+
+  <h2>13. Contact</h2>
+
+  <p>Voor vragen over deze Privacy Policy of je rechten:</p>
+  <ul>
+    <li><strong>Email:</strong> [privacy@hacksimulator.nl - TO BE ADDED]</li>
+    <li><strong>Website:</strong> <a href="/">HackSimulator.nl</a></li>
+  </ul>
+
+  <h2>14. Wettelijke Basis</h2>
+
+  <p>Deze Privacy Policy is opgesteld conform:</p>
+  <ul>
+    <li>AVG (Algemene Verordening Gegevensbescherming)</li>
+    <li>GDPR (General Data Protection Regulation)</li>
+    <li>Telecommunicatiewet (cookie regels)</li>
+    <li>Nederlandse wetgeving inzake privacy</li>
+  </ul>
+
+  <div class="info-box">
+    <strong>🔒 Samenvatting Kernprincipes:</strong>
+    <ul>
+      <li>Minimale data verzameling (data minimization)</li>
+      <li>Transparantie (deze policy)</li>
+      <li>Toestemming waar vereist (opt-in cookies)</li>
+      <li>Jouw controle (verwijderen via reset command)</li>
+      <li>Beveiliging (HTTPS, CSP, input sanitization)</li>
+    </ul>
+  </div>
+
+  <a href="/" class="back-link">← Terug naar HackSimulator</a>
+
+  <hr style="margin: 40px 0; border: none; border-top: 1px solid #ddd;">
+  <p style="text-align: center; color: #999; font-size: 0.9em;">
+    HackSimulator.nl - Privacy Policy v1.0<br>
+    Laatst bijgewerkt: 16 oktober 2025
+  </p>
+</body>
+</html>
