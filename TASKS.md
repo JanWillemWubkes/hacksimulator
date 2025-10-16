@@ -8,7 +8,7 @@
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 95 / 143 taken voltooid (66.4%)
+**Totaal:** 98 / 143 taken voltooid (68.5%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
@@ -16,7 +16,7 @@
 | M1: Foundation | ✅ Voltooid | 20/20 | 100% |
 | M2: Filesystem Commands | ✅ Voltooid | 25/25 | 100% |
 | M3: Network & Security | ✅ Voltooid | 28/28 | 100% |
-| M4: UX & Polish | 🚧 In Progress | 7/22 | 32% |
+| M4: UX & Polish | 🚧 In Progress | 10/22 | 45% |
 | M5: Testing & Launch | ⚪ Niet gestart | 0/33 | 0% |
 
 ---
@@ -258,10 +258,10 @@
 - [ ] Responsive output (40 chars max mobile)
 - [ ] Touch-friendly tap targets (44x44px)
 
-#### Legal & Compliance
-- [ ] `assets/legal/privacy.html` - Privacy Policy (Nederlands)
-- [ ] `assets/legal/terms.html` - Gebruiksvoorwaarden
-- [ ] `assets/legal/cookies.html` - Cookie Policy
+#### Legal & Compliance (3/7 done - 43%)
+- [x] `assets/legal/privacy.html` - Privacy Policy (Nederlands, AVG compliant - 3500+ words)
+- [x] `assets/legal/terms.html` - Gebruiksvoorwaarden (ethisch hacken focus - 2800+ words)
+- [x] `assets/legal/cookies.html` - Cookie Policy (localStorage + Analytics - 1800+ words)
 - [ ] Juridische disclaimer modal (eerste bezoek)
 - [ ] "Ik begrijp het - Verder" button
 - [ ] Footer met links (Privacy, Terms, Contact)
@@ -483,10 +483,10 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 ---
 
 **Laatst bijgewerkt:** 16 oktober 2025
-**Versie:** 1.6 (M0+M1+M2+M3 ✅ voltooid, M4 🚧 32% done)
+**Versie:** 1.7 (M0+M1+M2+M3 ✅ voltooid, M4 🚧 45% done)
 **Totaal Taken:** 143
-**Voltooide Taken:** 95 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 7/22)
-**Voortgang:** 66.4%
+**Voltooide Taken:** 98 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 10/22)
+**Voortgang:** 68.5%
 
 ---
 
