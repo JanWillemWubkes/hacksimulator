@@ -8,7 +8,7 @@
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 88 / 143 taken voltooid (61.5%)
+**Totaal:** 95 / 143 taken voltooid (66.4%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
@@ -16,7 +16,7 @@
 | M1: Foundation | ✅ Voltooid | 20/20 | 100% |
 | M2: Filesystem Commands | ✅ Voltooid | 25/25 | 100% |
 | M3: Network & Security | ✅ Voltooid | 28/28 | 100% |
-| M4: UX & Polish | ⚪ Niet gestart | 0/22 | 0% |
+| M4: UX & Polish | 🚧 In Progress | 7/22 | 32% |
 | M5: Testing & Launch | ⚪ Niet gestart | 0/33 | 0% |
 
 ---
@@ -238,15 +238,15 @@
 **Tijdsinschatting:** 10-12 dagen
 **Dependencies:** M3 voltooid
 
-#### Onboarding Flow
-- [ ] `src/ui/onboarding.js` - FTUE logic
-- [ ] Welkomstbericht bij eerste bezoek (3 regels tekst + lege regel + hint = 5 regels totaal)
-- [ ] "Type 'help' om te beginnen" hint (onderdeel van welkomstbericht)
-- [ ] Na 1e command: "Goed bezig!" encouragement
-- [ ] Na 3-5 commands: Tutorial suggestie
-- [ ] Persistent hint (rechts onderin, verdwijnt na 5 commands)
-- [ ] localStorage: first_visit flag
-- [ ] Terugkerende bezoeker: direct naar terminal
+#### Onboarding Flow ✅ VOLTOOID (7/8)
+- [x] `src/ui/onboarding.js` - FTUE logic
+- [x] Welkomstbericht bij eerste bezoek (3 regels tekst + lege regel + hint = 5 regels totaal)
+- [x] "Type 'help' om te beginnen" hint (onderdeel van welkomstbericht)
+- [x] Na 1e command: "Goed bezig!" encouragement
+- [x] Na 3-5 commands: Tutorial suggestie (na 5e en 10e command)
+- [ ] Persistent hint (rechts onderin, verdwijnt na 5 commands) - Future enhancement
+- [x] localStorage: first_visit flag
+- [x] Terugkerende bezoeker: direct naar terminal
 
 #### Mobile Optimalisaties
 - [ ] `src/ui/mobile.js` - Touch & gesture handling
@@ -483,10 +483,10 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 ---
 
 **Laatst bijgewerkt:** 16 oktober 2025
-**Versie:** 1.5 (M0+M1+M2+M3 ✅ voltooid, M4 volgende)
+**Versie:** 1.6 (M0+M1+M2+M3 ✅ voltooid, M4 🚧 32% done)
 **Totaal Taken:** 143
-**Voltooide Taken:** 88 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28)
-**Voortgang:** 61.5%
+**Voltooide Taken:** 95 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 7/22)
+**Voortgang:** 66.4%
 
 ---
 
