@@ -48,5 +48,38 @@ export default {
     output += '💡 TIP: Gebruik ↑↓ pijltjestoetsen voor command geschiedenis.';
 
     return output;
-  }
+  },
+
+  manPage: `
+NAAM
+    help - toon beschikbare commands
+
+SYNOPSIS
+    help [CATEGORY]
+
+BESCHRIJVING
+    Toont een overzicht van alle beschikbare commands, gegroepeerd per
+    categorie. Optioneel kun je een specifieke categorie opvragen.
+
+ARGUMENTEN
+    CATEGORY (optioneel)
+        Categorienaam: system, filesystem, network, security, special
+
+VOORBEELDEN
+    help
+        Toon alle commands
+
+    help filesystem
+        Toon alleen filesystem commands
+
+CATEGORIEËN
+    • system       → Basis terminal commands
+    • filesystem   → Bestanden en directories
+    • network      → Netwerk analyse tools
+    • security     → Security testing tools
+    • special      → Speciale commands (reset)
+
+GERELATEERDE COMMANDO'S
+    man <command> (gedetailleerde help voor specifiek command)
+`.trim()
 };

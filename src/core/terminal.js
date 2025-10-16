@@ -13,6 +13,7 @@ import vfs from '../filesystem/vfs.js';
 import helpSystem from '../help/help-system.js';
 import fuzzy from '../utils/fuzzy.js';
 import onboarding from '../ui/onboarding.js';
+import analyticsEvents from '../analytics/events.js';
 
 class Terminal {
   constructor() {
@@ -112,6 +113,10 @@ class Terminal {
       const errorMsg = `Command not found: ${parsed.command}\n\n${helpMsg}`;
 
       renderer.renderError(errorMsg);
+
+      // Track command not found error
+      analyticsEvents.errorOccurred('command_not_found', parsed.command);
+
       return;
     }
 
@@ -138,9 +143,16 @@ class Terminal {
       if (hint) {
         renderer.renderInfo(hint);
       }
+
+      // Track command execution (analytics - NO ARGUMENTS!)
+      analyticsEvents.commandExecuted(parsed.command, true);
+
     } catch (error) {
       console.error('Command execution error:', error);
       renderer.renderError(`Error executing command: ${error.message}`);
+
+      // Track error
+      analyticsEvents.errorOccurred('execution_error', parsed.command);
     } finally {
       this.isExecuting = false;
       input.enable();

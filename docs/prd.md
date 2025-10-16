@@ -1056,8 +1056,8 @@ Dit document is goedgekeurd voor de ontwikkeling van HackSimulator.nl MVP.
 
 **Document Status:** Definitief - Goedgekeurd voor Ontwikkeling
 
-**Laatste review:** 15 oktober 2025
-**Development Status:** M0 (Project Setup) + M1 (Foundation) completed - M2 (Filesystem Commands) in progress
+**Laatste review:** 16 oktober 2025
+**Development Status:** M0+M1+M2+M3 completed (100%), M4 in progress (45% - Onboarding + Legal docs done)
 
 ---
 

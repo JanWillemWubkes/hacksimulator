@@ -4,6 +4,11 @@
  */
 
 import terminal from './core/terminal.js';
+import legalManager from './ui/legal.js';
+import onboardingManager from './ui/onboarding.js';
+import analyticsTracker from './analytics/tracker.js';
+import analyticsEvents from './analytics/events.js';
+import consentManager from './analytics/consent.js';
 
 // Import system commands
 import clearCmd from './commands/system/clear.js';
@@ -130,6 +135,22 @@ function initialize() {
       outputElement,
       inputElement
     });
+
+    // Check and show legal modal if needed (must accept before using)
+    legalManager.checkAndShowModal();
+
+    // Show onboarding for first-time visitors (after legal is accepted)
+    onboardingManager.checkAndShowWelcome();
+
+    // Initialize analytics (will only track if user consents)
+    analyticsTracker.init('ga4');
+
+    // Show cookie consent banner (after a delay)
+    consentManager.checkAndShowBanner();
+
+    // Track session start (only if consent given)
+    analyticsEvents.incrementVisitCount();
+    analyticsEvents.sessionStart();
 
     console.log('HackSimulator.nl initialized successfully');
     console.log('Type "help" to get started');

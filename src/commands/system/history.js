@@ -28,5 +28,36 @@ export default {
     return entries
       .map((cmd, index) => `  ${index + 1}  ${cmd}`)
       .join('\n');
-  }
+  },
+
+  manPage: `
+NAAM
+    history - toon command geschiedenis
+
+SYNOPSIS
+    history [-c]
+
+BESCHRIJVING
+    Toont een genummerde lijst van alle commands die je in deze sessie
+    hebt uitgevoerd. Command history wordt opgeslagen in localStorage
+    en blijft beschikbaar tussen sessies.
+
+FLAGS
+    -c      Wis alle command geschiedenis
+
+VOORBEELDEN
+    history
+        Toon alle uitgevoerde commands
+
+    history -c
+        Wis de geschiedenis
+
+GEBRUIK
+    • Gebruik ↑↓ pijltjestoetsen om door history te navigeren
+    • History wordt automatisch opgeslagen (max 100 items)
+    • Gebruik history -c om opnieuw te beginnen
+
+GERELATEERDE COMMANDO'S
+    clear (wis scherm, maar niet history)
+`.trim()
 };
