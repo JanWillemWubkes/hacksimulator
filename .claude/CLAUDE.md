@@ -11,6 +11,7 @@
 **Wat:** Veilige terminal simulator voor Nederlandse beginners (15-25 jaar)
 **Stack:** Vanilla JS/CSS, client-side, localStorage, < 500KB bundle
 **Scope:** 30 commands (System, Filesystem, Network, Security)
+**Status:** M0-M4 Complete (91.6%) → M5 Testing & Launch (0/33 tasks)
 **Taal:** UI=NL, commands=EN, uitleg=NL
 **Analytics:** GA4 (MVP) → Plausible (bij 10k+ visitors)
 
@@ -106,9 +107,19 @@ Bij nieuwe command:
 
 ## ✅ MVP Release Criteria
 
-**Functioneel:** 30+ commands, 3-tier help, filesystem + reset
-**Technisch:** < 3s load (4G), < 500KB, cross-browser, mobile responsive
-**Legal:** Disclaimers, Privacy Policy, ToS, Cookie consent (NL)
+**Quick Check:**
+- [x] 30+ commands werkend (zie TASKS.md M0-M4 ✅)
+- [x] 3-tier help system (fuzzy + progressive + man pages) ✅
+- [x] Filesystem + reset functionaliteit ✅
+- [ ] < 3s load (4G) - **TO TEST (M5)**
+- [ ] < 500KB bundle - **TO MEASURE (M5)**
+- [ ] Cross-browser tested (Chrome, Firefox, Safari, Edge) - **TO DO (M5)**
+- [ ] Mobile responsive (iOS, Android real devices) - **TO TEST (M5)**
+- [x] Legal docs (Privacy, ToS, Cookies) ✅
+- [x] Cookie consent (NL) ✅
+
+**Volledige criteria:** Zie PRD.md §18 (Release Criteria)
+**Testing checklist:** Zie TASKS.md M5 (33 tasks)
 
 ---
 
@@ -116,34 +127,14 @@ Bij nieuwe command:
 
 **Doel:** Anti-patterns en best practices uit recente sessies voor context carry-over
 
-### CSS/Layout Pitfalls (Sessie 2-3)
-⚠️ **Never:**
-- `transparent` background/caret-color in dark theme (invisible input)
-- `position: fixed` op footer (blocks input fields)
-- `overflow: hidden` op body (prevents scrolling)
-- Custom cursor without JS positioning sync (complex, buggy)
-- `position: absolute` without explicit `left/top` coordinates
+### Foundation Learnings (Sessies 2-4) - COMPRESSED
+⚠️ **CSS/Layout:** Never use `transparent` in dark themes (invisible), `position: fixed` on footer (blocks input), custom cursors without JS sync (buggy), `position: absolute` without coordinates
+✅ **CSS/Layout:** Hardcode colors for debugging, native browser features first, flexbox layouts (`min-height: 100vh`), remove unused code completely (bundle size!)
 
-✅ **Always:**
-- Hardcode colors during debugging (#00ff00 visibility test)
-- Native browser features first (vanilla principle)
-- Test input visibility BEFORE JavaScript implementation
-- Flexbox layout: `body { min-height: 100vh; flex-direction: column }`
-- Remove unused code completely (not just `display: none` - bundle size!)
+⚠️ **Documentation:** Never let instruction files grow >250 lines, remove context without impact analysis, keep verbose logs in instruction files
+✅ **Documentation:** Two-tier docs (compact + detailed logs in SESSIONS.md), "Never/Always" format (5-7 bullets max), rotation strategy at 5+ sessions
 
-### Documentation Strategy (Sessie 4)
-⚠️ **Never:**
-- Verbose session logs in instruction files (token waste)
-- Remove context without impact analysis (functionaliteit verlies)
-- Let instruction files grow > 250 regels (becomes unscannbaar)
-
-✅ **Always:**
-- Two-tier docs: Compact key learnings (context) + detailed logs (archief)
-- Focus actionable patterns: "Never" + "Always" format (5-7 bullets max)
-- Analyze trade-offs BEFORE changes (size vs. functionality)
-- Rotation strategy: Compress oldest when 5+ sessions
-
-📄 **Detailed logs:** `SESSIONS.md` (commits, root cause analysis, file changes)
+📄 **Detailed logs:** `SESSIONS.md` Sessies 2-4 (CSS debugging, cursor implementation, documentation strategy)
 
 ### localStorage & State Management (Sessie 5)
 ⚠️ **Never:**
@@ -253,6 +244,22 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessie 10 (Consistency audit: PRD v1.2, scope clarification, Post-MVP section)
 
+### Module Integration & Error Debugging (Sessie 11)
+⚠️ **Never:**
+- Call methods without verifying they exist in target module
+- Rely solely on alert() modals for error messages (use DevTools Console)
+- Execute DOM manipulation during ES6 module load without ready check
+- Call localStorage without try-catch protection (can be disabled)
+
+✅ **Always:**
+- Check browser DevTools Console for exact error + stack trace
+- Trace initialization flow to avoid duplicate calls (main.js → terminal.init() → onboarding.init())
+- Verify method exists in exports before calling (read source code)
+- Wrap ALL localStorage operations in try-catch with safe fallback defaults
+- Check `document.readyState` before DOM manipulation in module scope
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 11 (Critical bug fix: non-existent method call, localStorage/DOM error handling)
+
 ---
 
 ## 🤖 Sessie Protocol
@@ -260,6 +267,7 @@ Bij nieuwe command:
 ### Voor Elke Sessie
 - Lees `PLANNING.md`, `TASKS.md`, dit bestand
 - Check updates sinds laatste sessie
+- **Bij M5 Testing:** Check `PRE-LAUNCH-CHECKLIST.md` voor launch-blocking items
 
 ### Tijdens Ontwikkeling
 - Markeer taken in TASKS.md **direct** na afronding
@@ -319,5 +327,5 @@ Bij nieuwe command:
 
 ---
 
-**Last updated:** 16 oktober 2025
-**Version:** 4.3 (Sessie 10: Consistency Audit - PRD v1.2, Scope Clarification, Post-MVP Features Defined)
+**Last updated:** 17 oktober 2025
+**Version:** 4.5 (Sessie 12: CLAUDE.md Review - Rotation Strategy + M5 Status Update)
