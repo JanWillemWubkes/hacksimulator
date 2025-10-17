@@ -260,6 +260,22 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessie 11 (Critical bug fix: non-existent method call, localStorage/DOM error handling)
 
+### Documentation Lifecycle & Launch Prep (Sessie 12)
+⚠️ **Never:**
+- Let rotation policy go unenforced (compress when >5 sessions in Key Learnings)
+- Create implementation checklists without linking to milestone tasks (orphaned files)
+- Focus only on process tasks, forgetting configuration tasks (placeholders, IDs)
+- Let Quick Reference status info drift from actual project status
+
+✅ **Always:**
+- Execute rotation proactively at 7+ sessions (before file bloat, not after)
+- Multi-level planning: TASKS.md (milestones) + detailed checklists (implementation)
+- Explicit "Configuration" sections for launch-blocking items (GA4 IDs, emails, etc.)
+- Cross-document consistency verification at session end (status, percentages, dates)
+- Convert compact criteria into actionable checkboxes (clarity over brevity)
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 12 (Documentation review, rotation strategy, PRE-LAUNCH-CHECKLIST.md, M5 critical tasks)
+
 ---
 
 ## 🤖 Sessie Protocol
@@ -328,4 +344,4 @@ Bij nieuwe command:
 ---
 
 **Last updated:** 17 oktober 2025
-**Version:** 4.5 (Sessie 12: CLAUDE.md Review - Rotation Strategy + M5 Status Update)
+**Version:** 4.6 (Sessie 12: Added to SESSIONS.md + CLAUDE.md Key Learnings)
