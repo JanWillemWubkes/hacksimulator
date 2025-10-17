@@ -11,7 +11,7 @@
 **Wat:** Veilige terminal simulator voor Nederlandse beginners (15-25 jaar)
 **Stack:** Vanilla JS/CSS, client-side, localStorage, < 500KB bundle
 **Scope:** 30 commands (System, Filesystem, Network, Security)
-**Status:** M0-M4 Complete (91.6%) → M5 Testing & Launch (0/33 tasks)
+**Status:** M0-M4 Complete (90.3%) → M5 Testing & Launch (0/35 tasks)
 **Taal:** UI=NL, commands=EN, uitleg=NL
 **Analytics:** GA4 (MVP) → Plausible (bij 10k+ visitors)
 

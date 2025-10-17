@@ -1,14 +1,14 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 13 oktober 2025
-**Status:** MVP Development
-**Sprint:** Pre-Development
+**Laatst bijgewerkt:** 17 oktober 2025
+**Status:** M5 Testing & Launch Phase
+**Sprint:** Pre-Launch Testing
 
 ---
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 131 / 143 taken voltooid (91.6%)
+**Totaal:** 131 / 145 taken voltooid (90.3%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
@@ -17,7 +17,7 @@
 | M2: Filesystem Commands | ✅ Voltooid | 25/25 | 100% |
 | M3: Network & Security | ✅ Voltooid | 28/28 | 100% |
 | M4: UX & Polish | ✅ Voltooid | 43/43 | 100% |
-| M5: Testing & Launch | ⚪ Niet gestart | 0/33 | 0% |
+| M5: Testing & Launch | ⚪ Niet gestart | 0/35 | 0% |
 
 ---
 
@@ -305,7 +305,13 @@
 **Doel:** Production-ready en live deployment
 **Tijdsinschatting:** 10-14 dagen
 **Dependencies:** M4 voltooid
-**Status:** ⚪ Niet gestart (0/33 tasks)
+**Status:** ⚪ Niet gestart (0/35 tasks)
+
+#### Configuration Placeholders (CRITICAL - Launch Blockers)
+- [ ] Replace GA4 Measurement ID in `src/analytics/tracker.js` (3 locations: lines 75, 121, 108)
+- [ ] Setup contact emails in legal documents (4 locations: privacy.html x2, terms.html, cookies.html)
+
+**Details:** See `PRE-LAUNCH-CHECKLIST.md` sections 1-2 for exact line numbers and instructions.
 
 #### Beta Testing Voorbereiding
 - [ ] Beta testing checklist opstellen
@@ -513,11 +519,11 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 16 oktober 2025
-**Versie:** 1.8 (M0+M1+M2+M3+M4 ✅ voltooid - 100%)
-**Totaal Taken:** 143
-**Voltooide Taken:** 131 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 0/33)
-**Voortgang:** 91.6%
+**Laatst bijgewerkt:** 17 oktober 2025
+**Versie:** 2.0 (M5 Critical Tasks Added - Configuration Placeholders)
+**Totaal Taken:** 145
+**Voltooide Taken:** 131 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 0/35)
+**Voortgang:** 90.3%
 
 ---
 
