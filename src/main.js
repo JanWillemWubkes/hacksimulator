@@ -139,8 +139,7 @@ function initialize() {
     // Check and show legal modal if needed (must accept before using)
     legalManager.checkAndShowModal();
 
-    // Show onboarding for first-time visitors (after legal is accepted)
-    onboardingManager.checkAndShowWelcome();
+    // Note: Onboarding is handled by terminal.init() - no separate call needed
 
     // Initialize analytics (will only track if user consents)
     analyticsTracker.init('ga4');

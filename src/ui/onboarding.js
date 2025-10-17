@@ -22,30 +22,37 @@ class Onboarding {
    * Load state from localStorage
    */
   init() {
-    // Check if this is first visit
-    const firstVisitFlag = localStorage.getItem(this.STORAGE_KEY_FIRST_VISIT);
-    this.isFirstVisit = firstVisitFlag === null;
+    try {
+      // Check if this is first visit
+      const firstVisitFlag = localStorage.getItem(this.STORAGE_KEY_FIRST_VISIT);
+      this.isFirstVisit = firstVisitFlag === null;
 
-    // Load command count
-    const savedCount = localStorage.getItem(this.STORAGE_KEY_COMMAND_COUNT);
-    this.commandCount = savedCount ? parseInt(savedCount, 10) : 0;
+      // Load command count
+      const savedCount = localStorage.getItem(this.STORAGE_KEY_COMMAND_COUNT);
+      this.commandCount = savedCount ? parseInt(savedCount, 10) : 0;
 
-    // Load onboarding state
-    const savedState = localStorage.getItem(this.STORAGE_KEY_ONBOARDING_STATE);
-    if (savedState) {
-      try {
-        const state = JSON.parse(savedState);
-        this.hasShownEncouragement = state.hasShownEncouragement || false;
-        this.hasShownTutorialSuggestion = state.hasShownTutorialSuggestion || false;
-      } catch (e) {
-        console.warn('Failed to parse onboarding state:', e);
+      // Load onboarding state
+      const savedState = localStorage.getItem(this.STORAGE_KEY_ONBOARDING_STATE);
+      if (savedState) {
+        try {
+          const state = JSON.parse(savedState);
+          this.hasShownEncouragement = state.hasShownEncouragement || false;
+          this.hasShownTutorialSuggestion = state.hasShownTutorialSuggestion || false;
+        } catch (e) {
+          console.warn('Failed to parse onboarding state:', e);
+        }
       }
-    }
 
-    console.log('Onboarding initialized:', {
-      isFirstVisit: this.isFirstVisit,
-      commandCount: this.commandCount
-    });
+      console.log('Onboarding initialized:', {
+        isFirstVisit: this.isFirstVisit,
+        commandCount: this.commandCount
+      });
+    } catch (e) {
+      console.error('Failed to initialize onboarding:', e);
+      // Set safe defaults
+      this.isFirstVisit = true;
+      this.commandCount = 0;
+    }
   }
 
   /**
@@ -112,8 +119,12 @@ oefenen met hacking tools en Linux commands.
    */
   markFirstVisitComplete() {
     if (this.isFirstVisit) {
-      localStorage.setItem(this.STORAGE_KEY_FIRST_VISIT, 'false');
-      this.isFirstVisit = false;
+      try {
+        localStorage.setItem(this.STORAGE_KEY_FIRST_VISIT, 'false');
+        this.isFirstVisit = false;
+      } catch (e) {
+        console.warn('Could not save first visit state:', e);
+      }
     }
   }
 
@@ -124,7 +135,12 @@ oefenen met hacking tools en Linux commands.
    */
   recordCommand() {
     this.commandCount++;
-    localStorage.setItem(this.STORAGE_KEY_COMMAND_COUNT, this.commandCount.toString());
+
+    try {
+      localStorage.setItem(this.STORAGE_KEY_COMMAND_COUNT, this.commandCount.toString());
+    } catch (e) {
+      console.warn('Could not save command count:', e);
+    }
 
     // Save state
     this._saveState();
@@ -166,11 +182,15 @@ oefenen met hacking tools en Linux commands.
    * @private
    */
   _saveState() {
-    const state = {
-      hasShownEncouragement: this.hasShownEncouragement,
-      hasShownTutorialSuggestion: this.hasShownTutorialSuggestion
-    };
-    localStorage.setItem(this.STORAGE_KEY_ONBOARDING_STATE, JSON.stringify(state));
+    try {
+      const state = {
+        hasShownEncouragement: this.hasShownEncouragement,
+        hasShownTutorialSuggestion: this.hasShownTutorialSuggestion
+      };
+      localStorage.setItem(this.STORAGE_KEY_ONBOARDING_STATE, JSON.stringify(state));
+    } catch (e) {
+      console.warn('Could not save onboarding state:', e);
+    }
   }
 
   /**
@@ -190,9 +210,13 @@ oefenen met hacking tools en Linux commands.
    * Reset onboarding (for testing or user request)
    */
   reset() {
-    localStorage.removeItem(this.STORAGE_KEY_FIRST_VISIT);
-    localStorage.removeItem(this.STORAGE_KEY_COMMAND_COUNT);
-    localStorage.removeItem(this.STORAGE_KEY_ONBOARDING_STATE);
+    try {
+      localStorage.removeItem(this.STORAGE_KEY_FIRST_VISIT);
+      localStorage.removeItem(this.STORAGE_KEY_COMMAND_COUNT);
+      localStorage.removeItem(this.STORAGE_KEY_ONBOARDING_STATE);
+    } catch (e) {
+      console.warn('Could not reset onboarding state:', e);
+    }
 
     this.isFirstVisit = true;
     this.commandCount = 0;
