@@ -1,7 +1,7 @@
 # Product Requirements Document - HackSimulator.nl
-**Versie:** 1.1
-**Status:** M0+M1 Completed (Development in Progress)
-**Laatst bijgewerkt:** 15 oktober 2025
+**Versie:** 1.3
+**Status:** M0-M4 Completed (M5 Testing Phase)
+**Laatst bijgewerkt:** 17 oktober 2025
 
 ---
 
@@ -775,7 +775,7 @@ Systeem hersteld naar oorspronkelijke staat.
 
 ### MVP Klaar voor Lancering Wanneer:
 
-**Functionele Criteria:**
+**✅ Functionele Criteria (Geïmplementeerd - M0-M4 Complete):**
 - [x] 30+ werkende commando's zonder errors (zie commands-list.md)
 - [x] Compleet help/man systeem voor alle commando's
 - [x] 3-tier error handling geïmplementeerd
@@ -783,7 +783,22 @@ Systeem hersteld naar oorspronkelijke staat.
 - [x] Command history werkt (autocomplete deferred to Post-MVP)
 - [x] Onboarding flow geïmplementeerd (welkomst + hints)
 
-**Technische Criteria:**
+**✅ Content & Legal Criteria (Geïmplementeerd - M4 Complete):**
+- [x] Juridische disclaimers prominent aanwezig (multi-layer)
+- [x] Privacy beleid gepubliceerd (AVG compliant)
+- [x] Gebruiksvoorwaarden gepubliceerd
+- [x] Cookie policy geïmplementeerd
+- [x] Alle UI teksten in Nederlands
+- [x] Educatieve tips bij alle security tools
+
+**✅ Analytics & Feedback Criteria (Geïmplementeerd - M4 Complete):**
+- [x] Analytics geïmplementeerd (GA4 met IP anonymization)
+- [x] Cookie consent banner actief
+- [x] Feedback mechanisme actief (floating button - UI only, logic post-MVP)
+- [x] Event tracking voor alle commands
+- [x] Error logging geïmplementeerd
+
+**⚪ Technische Validatie Criteria (M5 Testing - Nog Te Doen):**
 - [ ] Mobiel responsive (getest op 3+ devices: iOS, Android, tablet)
 - [ ] Load tijd < 3 seconden op 4G (gemeten)
 - [ ] Time to Interactive < 3 seconden
@@ -792,22 +807,7 @@ Systeem hersteld naar oorspronkelijke staat.
 - [ ] localStorage functionaliteit getest
 - [ ] Bundle size < 500KB
 
-**Content & Legal Criteria:**
-- [x] Juridische disclaimers prominent aanwezig (multi-layer)
-- [x] Privacy beleid gepubliceerd (AVG compliant)
-- [x] Gebruiksvoorwaarden gepubliceerd
-- [x] Cookie policy geïmplementeerd
-- [x] Alle UI teksten in Nederlands
-- [x] Educatieve tips bij alle security tools
-
-**Analytics & Feedback Criteria:**
-- [x] Analytics geïmplementeerd (GA4 met IP anonymization)
-- [x] Cookie consent banner actief
-- [x] Feedback mechanisme actief (floating button - UI only, logic post-MVP)
-- [x] Event tracking voor alle commands
-- [x] Error logging geïmplementeerd
-
-**Kwaliteitsborging:**
+**⚪ Kwaliteitsborging (M5 Testing - Nog Te Doen):**
 - [ ] Getest door minimaal 5 beta testers
 - [ ] Feedback van beta testers verwerkt
 - [ ] Accessibility basis getest (toetsenbord navigatie)
@@ -1062,10 +1062,15 @@ Dit document is goedgekeurd voor de ontwikkeling van HackSimulator.nl MVP.
   - Feedback mechanisme UI klaar (logic deferred to post-MVP)
   - Styling polish compleet (animations, states)
   - MVP 91.6% compleet (131/143 tasks)
+- **v1.3** (17 Okt 2025) - Release Criteria clarification:
+  - Split Release Criteria in implemented (M0-M4) vs. testing (M5) sections
+  - Clear visual distinction: ✅ done, ⚪ pending validation
+  - Updated timestamps to reflect Sessie 11 completion
+  - Status updated to "M5 Testing Phase"
 
 **Document Status:** Definitief - Goedgekeurd voor Ontwikkeling
 
-**Laatste review:** 16 oktober 2025
+**Laatste review:** 17 oktober 2025
 **Development Status:** M0+M1+M2+M3+M4 completed (100% - 131/143 tasks), M5 Testing & Launch (0/33 tasks)
 
 ---

@@ -1,7 +1,7 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 13 oktober 2025
-**Status:** MVP Planning Fase
+**Laatst bijgewerkt:** 17 oktober 2025
+**Status:** M5 Testing & Launch Phase
 **Verantwoordelijk:** Development Team
 
 ---
@@ -615,36 +615,39 @@ const DEBUG_MODE = false;
 
 ## 📅 Roadmap & Fases
 
-### Fase 1: MVP (Maand 1-3)
-**Doel:** Werkend product met 30 commands
+### Fase 1: MVP (Maand 1-3) - ✅ 91.6% VOLTOOID
 
-**Week 1-2: Foundation**
-- [ ] Project setup (structuur, Git)
-- [ ] Terminal engine (core)
-- [ ] Virtual filesystem (basis)
-- [ ] 7 system commands
+**Status:** M0-M4 complete (131/143 tasks), M5 in progress (0/33 tasks)
 
-**Week 3-4: Filesystem Commands**
-- [ ] 11 filesystem commands
-- [ ] localStorage persistence
-- [ ] Reset functionaliteit
+> **Note:** Voor gedetailleerde takenlijst met subtasks, zie `TASKS.md`. Dit is een high-level overzicht.
 
-**Week 5-6: Network & Security**
-- [ ] 6 network commands
-- [ ] 5 security commands
-- [ ] 3-tier help system
+**Week 1-2: Foundation** - ✅ VOLTOOID (M0+M1)
+- [x] Project setup (structuur, Git)
+- [x] Terminal engine (core)
+- [x] Virtual filesystem (basis)
+- [x] 7 system commands
 
-**Week 7-8: UX & Polish**
-- [ ] Onboarding flow
-- [ ] Mobile optimalisaties
-- [ ] Legal disclaimers
-- [ ] Analytics setup
+**Week 3-4: Filesystem Commands** - ✅ VOLTOOID (M2)
+- [x] 11 filesystem commands
+- [x] localStorage persistence
+- [x] Reset functionaliteit
 
-**Week 9-10: Testing & Launch**
+**Week 5-6: Network & Security** - ✅ VOLTOOID (M3)
+- [x] 6 network commands
+- [x] 5 security commands
+- [x] 3-tier help system
+
+**Week 7-8: UX & Polish** - ✅ VOLTOOID (M4)
+- [x] Onboarding flow
+- [x] Mobile optimalisaties
+- [x] Legal disclaimers
+- [x] Analytics setup
+
+**Week 9-10: Testing & Launch** - ⚪ IN PROGRESS (M5)
 - [ ] Beta testing (5+ testers)
-- [ ] Bug fixes
-- [ ] Performance optimization
-- [ ] Production deployment
+- [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge)
+- [ ] Performance optimization (<3s load, <500KB bundle)
+- [ ] Production deployment (Netlify)
 
 ### Fase 2: Tutorials (Maand 4-6)
 **Doel:** Guided learning scenarios
@@ -737,6 +740,6 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 14 oktober 2025
-**Versie:** 1.1 (added session learnings)
+**Laatst bijgewerkt:** 17 oktober 2025
+**Versie:** 1.2 (M0-M4 completed, M5 testing phase)
 **Status:** ✅ Approved voor Development
