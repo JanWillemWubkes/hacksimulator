@@ -11,7 +11,9 @@
 **Wat:** Veilige terminal simulator voor Nederlandse beginners (15-25 jaar)
 **Stack:** Vanilla JS/CSS, client-side, localStorage, < 500KB bundle
 **Scope:** 30 commands (System, Filesystem, Network, Security)
-**Status:** M0-M4 Complete (90.3%) → M5 Testing & Launch (0/35 tasks)
+**Status:** M0-M4 Complete (90.3%) → M5 Testing & Launch (5/35 tasks) ✅ LIVE!
+**Live URL:** https://famous-frangollo-b5a758.netlify.app/
+**GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 **Taal:** UI=NL, commands=EN, uitleg=NL
 **Analytics:** GA4 (MVP) → Plausible (bij 10k+ visitors)
 
@@ -111,15 +113,18 @@ Bij nieuwe command:
 - [x] 30+ commands werkend (zie TASKS.md M0-M4 ✅)
 - [x] 3-tier help system (fuzzy + progressive + man pages) ✅
 - [x] Filesystem + reset functionaliteit ✅
-- [ ] < 3s load (4G) - **TO TEST (M5)**
-- [ ] < 500KB bundle - **TO MEASURE (M5)**
+- [x] < 3s load (4G) - **~2.0s LCP** ✅
+- [x] < 500KB bundle - **299 KB (40% marge)** ✅
 - [ ] Cross-browser tested (Chrome, Firefox, Safari, Edge) - **TO DO (M5)**
 - [ ] Mobile responsive (iOS, Android real devices) - **TO TEST (M5)**
 - [x] Legal docs (Privacy, ToS, Cookies) ✅
 - [x] Cookie consent (NL) ✅
+- [x] Live deployment (Netlify + GitHub) ✅
+- [x] Lighthouse audit (88/100/100/100) ✅
 
+**Performance:** Bundle 299KB, Load ~2s, Lighthouse 88/100/100/100 (Perf/A11y/BP/SEO)
 **Volledige criteria:** Zie PRD.md §18 (Release Criteria)
-**Testing checklist:** Zie TASKS.md M5 (33 tasks)
+**Testing checklist:** Zie TASKS.md M5 (35 tasks, 5 done)
 
 ---
 
@@ -276,6 +281,22 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessie 12 (Documentation review, rotation strategy, PRE-LAUNCH-CHECKLIST.md, M5 critical tasks)
 
+### GitHub + Netlify Deployment (Sessie 13)
+⚠️ **Never:**
+- Setup infrastructure (GA4, email) during development - wait until 24-48u before launch
+- Assume users know publish directory settings - explain WHY (`.` for vanilla, `dist/` for frameworks)
+- Accept Lighthouse scores at face value - check for browser extension warnings
+- Count test files in production bundle measurements
+
+✅ **Always:**
+- Separate functional testing (now) from infrastructure setup (pre-launch timing)
+- Use GitHub CLI for efficiency (`gh repo create --push` = one command)
+- Test Lighthouse in Incognito mode (extensions artificially lower scores)
+- Prioritize Core Web Vitals (FCP, LCP, CLS) over composite Performance score
+- Accept trade-offs: 88/100 Lighthouse Performance acceptable for zero-build architecture
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 13 (GitHub integration, Netlify deployment, Lighthouse 88/100/100/100, Live: famous-frangollo-b5a758.netlify.app)
+
 ---
 
 ## 🤖 Sessie Protocol
@@ -343,5 +364,5 @@ Bij nieuwe command:
 
 ---
 
-**Last updated:** 17 oktober 2025
-**Version:** 4.6 (Sessie 12: Added to SESSIONS.md + CLAUDE.md Key Learnings)
+**Last updated:** 18 oktober 2025
+**Version:** 4.7 (Sessie 13: Deployment complete - Live on Netlify!)
