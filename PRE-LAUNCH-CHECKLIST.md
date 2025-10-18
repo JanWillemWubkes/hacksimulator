@@ -8,6 +8,8 @@
 
 ## 🔴 CRITICAL - Must Fix Before Launch
 
+⏰ **TIMING:** Setup deze configuratie 24-48u VOOR deployment (niet eerder nodig)
+
 ### 1. Analytics Configuration
 
 **File:** `src/analytics/tracker.js`
@@ -16,11 +18,16 @@
 - [ ] **Line 121:** Replace `G-XXXXXXXXXX` with real GA4 Measurement ID (disable tracking)
 - [ ] **Line 108:** Replace `hacksimulator.nl` with actual domain (if different)
 
+**⏱️ Setup Tijd:** ~20 minuten
+
 **How to get GA4 ID:**
 1. Visit https://analytics.google.com
 2. Create property: "HackSimulator.nl"
-3. Get Measurement ID (format: `G-XXXXXXXXXX`)
-4. Replace ALL occurrences in tracker.js
+3. Choose platform: "Web"
+4. Get Measurement ID (format: `G-XXXXXXXXXX`)
+5. Find & replace `G-XXXXXXXXXX` in tracker.js (2 locations)
+
+**💡 TIP:** Doe dit PAS vlak voor deployment - GA4 tracking werkt toch niet op localhost
 
 ---
 
@@ -38,12 +45,28 @@
 #### Cookie Policy (`cookies.html`)
 - [ ] **Line 353:** Replace `[cookies@hacksimulator.nl - TO BE ADDED]`
 
-**Email Setup Options:**
-- **Option A:** Create dedicated emails (privacy@, legal@, cookies@)
-- **Option B:** Use single contact email (contact@) for all
-- **Option C:** Use personal email temporarily (mark in docs: "temporarily")
+**⏱️ Setup Tijd:** ~30 minuten (inclusief email provider registratie)
 
-**Recommended:** Option A (professional) or B (simpler for MVP)
+**Email Setup Options:**
+
+**🎯 AANBEVOLEN voor MVP: Single Email (Option B)**
+- Service: Google Workspace (€5.75/mnd) of Zoho Mail (gratis)
+- Email: `info@hacksimulator.nl`
+- Setup: Vervang ALLE placeholder emails met `info@hacksimulator.nl`
+- Pro: Simple, compliant, eenvoudig te beheren
+
+**Alternatief: Multiple Aliases (Option A)**
+- Zelfde inbox, meerdere aliassen: privacy@, legal@, cookies@
+- Setup via Google Workspace of Zoho admin panel
+- Pro: Professioneler, filtering mogelijk
+
+**Quick Alternative: Email Forwarding**
+- Via domein registrar (TransIP, Versio, etc.)
+- Forward `info@hacksimulator.nl` → persoonlijke Gmail
+- Pro: Gratis, 5 minuten setup
+- Con: Geen afzender vanaf @hacksimulator.nl domein
+
+**💡 TIP:** Doe email setup PAS na domein registratie
 
 ---
 
@@ -210,12 +233,57 @@ Before launch, ALL these must be ✅:
 
 ---
 
-**Last updated:** 17 oktober 2025
-**Status:** Created for M5 phase
+---
+
+## 🎯 Deployment Day Workflow (24-48u voor launch)
+
+**Totale tijd:** ~1 uur voor alle configuratie
+
+### Step 1: Domain & Email (30 min)
+1. Register `hacksimulator.nl` (of verifieer ownership)
+2. Setup email forwarding OF Google Workspace/Zoho
+3. Verify email delivery (stuur testmail)
+
+### Step 2: Analytics Setup (20 min)
+1. Create GA4 property via https://analytics.google.com
+2. Copy Measurement ID (format: `G-XXXXXXXXXX`)
+3. Update `src/analytics/tracker.js` lines 75 + 121
+
+### Step 3: Replace Placeholders (5 min)
+```bash
+# Find & replace GA4 ID (gebruik echte ID)
+sed -i "s/G-XXXXXXXXXX/G-YOUR_REAL_ID/g" src/analytics/tracker.js
+
+# Replace emails (single email aanpak)
+sed -i "s/\[contact@hacksimulator.nl - TO BE ADDED\]/info@hacksimulator.nl/g" assets/legal/*.html
+sed -i "s/\[privacy@hacksimulator.nl - TO BE ADDED\]/info@hacksimulator.nl/g" assets/legal/*.html
+sed -i "s/\[legal@hacksimulator.nl - TO BE ADDED\]/info@hacksimulator.nl/g" assets/legal/*.html
+sed -i "s/\[cookies@hacksimulator.nl - TO BE ADDED\]/info@hacksimulator.nl/g" assets/legal/*.html
+```
+
+### Step 4: Verification (5 min)
+```bash
+# Check geen placeholders over
+grep -r "TO BE ADDED\|XXXXXXXXXX" src/ assets/ --include="*.js" --include="*.html"
+
+# Should return: (no output = success)
+```
+
+### Step 5: Git Commit & Deploy
+```bash
+git add .
+git commit -m "Configure production: GA4 + contact emails"
+git push origin main
+# Netlify auto-deploys from main branch
+```
+
+---
+
+**Last updated:** 18 oktober 2025
+**Status:** Updated met deployment workflow (Sessie 13)
 **Owner:** Development Team
 
 **Next steps:**
-1. Fix CRITICAL items (placeholders)
-2. Run HIGH PRIORITY validations
-3. Execute M5 testing tasks (see TASKS.md)
-4. Launch when all ✅
+1. ✅ Configuration strategy documented
+2. 🎯 Focus on M5 testing tasks (HIGH PRIORITY section)
+3. 📧 Execute deployment workflow 24-48u voor launch
