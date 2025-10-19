@@ -2,11 +2,19 @@
 
 Een veilige browser-based terminal simulator waar Nederlandse beginners de fundamenten van ethisch hacken kunnen leren door hands-on te oefenen met echte commando's.
 
+**🚀 Live Demo:** [https://famous-frangollo-b5a758.netlify.app/](https://famous-frangollo-b5a758.netlify.app/)
+**📦 GitHub:** [https://github.com/JanWillemWubkes/hacksimulator](https://github.com/JanWillemWubkes/hacksimulator)
+
 ## 🎯 Project Overzicht
 
-**Status:** MVP Development
+**Status:** ✅ **LIVE** on Netlify (M5 Testing Phase - 93.8% MVP Complete)
 **Versie:** 1.0.0-mvp
 **Doelgroep:** Nederlandse beginners (15-25 jaar) zonder technische achtergrond
+
+**Performance:**
+- Bundle Size: 299 KB (40% onder 500 KB budget)
+- Load Time: ~2.0s LCP (target: <3s)
+- Lighthouse: 88/100/100/100 (Performance/Accessibility/Best Practices/SEO)
 
 ### Kernwaarden
 - ✅ **Educatief** - Elk commando is een leermoment met context
@@ -21,7 +29,7 @@ Een veilige browser-based terminal simulator waar Nederlandse beginners de funda
 
 ```bash
 # Clone repository
-git clone https://github.com/[username]/hacksimulator.git
+git clone https://github.com/JanWillemWubkes/hacksimulator.git
 cd hacksimulator
 
 # Open in VS Code
@@ -127,12 +135,18 @@ Elk commando bevat:
 - Python (for local server)
 
 ### Browser Support
-- Chrome (last 2 versions) ✅
-- Firefox (last 2 versions) ✅
-- Safari (last 2 versions) ✅
-- Edge (last 2 versions) ✅
-- Mobile Safari (iOS 14+) ✅
-- Chrome Mobile (Android 10+) ✅
+
+**Minimum Versions (ES6 Module Support Required):**
+- Chrome 61+ ✅
+- Firefox 60+ ✅
+- Safari 11+ ✅
+- Edge 16+ (Chromium 79+) ✅
+- Mobile Safari iOS 11+ ✅
+- Chrome Mobile 61+ ✅
+
+**Not Supported:**
+- Internet Explorer 11 ❌ (no ES6 modules, no CSS variables)
+- Opera Mini ⚠️ (limited support due to extreme compression)
 
 ### Performance Budgets
 - **Bundle Size:** < 500KB (hard limit)
@@ -206,13 +220,15 @@ netlify deploy --prod
 
 ## 🗺️ Roadmap
 
-### Fase 1: MVP (Month 1-3) 🔴 Current
-- [x] Project setup
-- [ ] Terminal engine + 7 system commands
-- [ ] Filesystem (11 commands) + persistence
-- [ ] Network & security commands (11 commands)
-- [ ] UX polish + legal compliance
-- [ ] Testing & launch
+### Fase 1: MVP (Month 1-3) ✅ **93.8% Complete - LIVE!**
+- [x] Project setup (M0 - 100%)
+- [x] Terminal engine + 7 system commands (M1 - 100%)
+- [x] Filesystem (11 commands) + persistence (M2 - 100%)
+- [x] Network & security commands (11 commands) (M3 - 100%)
+- [x] UX polish + legal compliance (M4 - 100%)
+- [x] GitHub + Netlify deployment ✅ **LIVE**
+- [ ] Cross-browser testing (M5 - 14% - in progress)
+- [ ] Beta testing (5+ testers)
 
 ### Fase 2: Tutorials (Month 4-6)
 - Guided learning scenarios
@@ -240,9 +256,10 @@ TBD (will be added pre-launch)
 
 ## 📧 Contact
 
-- **Website:** hacksimulator.nl (coming soon)
-- **Issues:** GitHub Issues (post-MVP)
-- **Email:** [TBD]
+- **Live Demo:** [https://famous-frangollo-b5a758.netlify.app/](https://famous-frangollo-b5a758.netlify.app/)
+- **GitHub:** [https://github.com/JanWillemWubkes/hacksimulator](https://github.com/JanWillemWubkes/hacksimulator)
+- **Issues:** [GitHub Issues](https://github.com/JanWillemWubkes/hacksimulator/issues)
+- **Email:** [TBD - will be added before full launch]
 
 ## ⚠️ Legal Disclaimer
 
@@ -252,5 +269,6 @@ TBD (will be added pre-launch)
 
 **Built with ❤️ for Dutch cybersecurity learners**
 
-**Last Updated:** 13 oktober 2025
+**Last Updated:** 19 oktober 2025
 **Version:** 1.0.0-mvp
+**Status:** ✅ Live on Netlify (M5 Testing Phase)

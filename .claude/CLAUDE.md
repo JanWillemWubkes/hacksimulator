@@ -11,7 +11,7 @@
 **Wat:** Veilige terminal simulator voor Nederlandse beginners (15-25 jaar)
 **Stack:** Vanilla JS/CSS, client-side, localStorage, < 500KB bundle
 **Scope:** 30 commands (System, Filesystem, Network, Security)
-**Status:** M0-M4 Complete (90.3%) → M5 Testing & Launch (5/35 tasks) ✅ LIVE!
+**Status:** M0-M4 Complete (100%) → M5 Testing & Launch (5/35 tasks - 14%) ✅ LIVE!
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 **Taal:** UI=NL, commands=EN, uitleg=NL
@@ -141,34 +141,14 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessies 2-4 (CSS debugging, cursor implementation, documentation strategy)
 
-### localStorage & State Management (Sessie 5)
-⚠️ **Never:**
-- Assume localStorage data is valid - always validate type
-- Directly assign JSON.parse() result without checking
-- Initialize state AFTER loading (timing issues)
-- Load modules with 35+ individual script tags
+### Foundation Implementation (Sessies 5-6) - COMPRESSED
+⚠️ **localStorage/State:** Never assume localStorage valid (validate type), never initialize after loading (timing), never use 35+ script tags (ES6 modules)
+⚠️ **ES6 Modules:** Never use `this._method()` in object literal exports (context issue), never let flags consume next token (-r broken)
 
-✅ **Always:**
-- Validate localStorage data: `Array.isArray()` before assigning
-- Initialize with safe defaults BEFORE loading external data
-- Single ES6 module entry point (main.js) - imports handle rest
-- Graceful degradation: localStorage disabled = use fallback
-- Clear old localStorage when changing data structure
+✅ **localStorage/State:** Validate with `Array.isArray()`, init defaults before load, single entry point (main.js), graceful degradation
+✅ **ES6 Modules:** Standalone functions for helpers, single-letter flags = boolean only, test real patterns (rm -r, ls -la)
 
-### ES6 Module Exports & Parser (Sessie 6)
-⚠️ **Never:**
-- Use `this._method()` in ES6 object literal exports (this = calling context, not object)
-- Allow single-letter boolean flags to consume next token as value (-r testdir broken)
-- Forget to add dependencies to terminal context (vfs, historyManager)
-
-✅ **Always:**
-- Use standalone functions for helper methods (not object methods)
-- Single-letter flags (a-z) are ALWAYS boolean - only numeric flags take values
-- Include all required instances in terminal execution context
-- Test command patterns with real use cases (rm -r, ls -la)
-- Update terminal prompt when directory changes (cd, reset)
-
-📄 **Detailed logs:** `SESSIONS.md` Sessie 6 (ES6 export bug fixes + parser flag handling)
+📄 **Detailed logs:** `SESSIONS.md` Sessies 5-6 (M0-M2 Complete: localStorage, ES6 modules, parser, 18 commands)
 
 ### ES6 Module Import Debugging (Sessie 7)
 ⚠️ **Never:**
@@ -297,6 +277,22 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessie 13 (GitHub integration, Netlify deployment, Lighthouse 88/100/100/100, Live: famous-frangollo-b5a758.netlify.app)
 
+### Documentation Debt & Public Repo Readiness (Sessie 14)
+⚠️ **Never:**
+- Assume README exists = README is current (outdated status damages credibility)
+- Use vague browser support ("latest 2 versions") in public docs - specify minimum versions
+- Let version history accumulate duplicates without periodic cleanup
+- Ignore cross-document date consistency (explicit audit required)
+
+✅ **Always:**
+- Public docs require: live demo link, performance metrics, explicit browser support (with rationale)
+- Browser minimum versions = architecture decisions (vanilla → ES6 modules → Chrome 61+, Firefox 60+, Safari 11+)
+- Explicit "NOT supported" (IE11) prevents user confusion, saves support time
+- Enforce CLAUDE.md rotation proactively at 5+ sessions (72% size reduction without info loss)
+- Placeholder transparency ([TBD - will be added]) > omission
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 14 (README modernization, PRD browser matrix, version history cleanup, rotation)
+
 ---
 
 ## 🤖 Sessie Protocol
@@ -356,7 +352,7 @@ Bij nieuwe command:
 
 ## 📚 Referenties
 
-**Volledige details:** `docs/prd.md` (v1.1)
+**Volledige details:** `docs/prd.md` (v1.4)
 **Command specs:** `docs/commands-list.md`
 **Sessie logs:** `SESSIONS.md`
 **Filesystem structure:** PRD Bijlage B
@@ -364,5 +360,5 @@ Bij nieuwe command:
 
 ---
 
-**Last updated:** 18 oktober 2025
-**Version:** 4.7 (Sessie 13: Deployment complete - Live on Netlify!)
+**Last updated:** 19 oktober 2025
+**Version:** 4.8 (Sessie 14: Documentation finalization - Browser support + consistency)

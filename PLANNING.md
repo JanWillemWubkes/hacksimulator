@@ -1,8 +1,10 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 17 oktober 2025
-**Status:** M5 Testing & Launch Phase
+**Laatst bijgewerkt:** 19 oktober 2025
+**Status:** M5 Testing & Launch Phase - ✅ **LIVE on Netlify!**
 **Verantwoordelijk:** Development Team
+**Live URL:** https://famous-frangollo-b5a758.netlify.app/
+**GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
 ---
 
@@ -615,9 +617,11 @@ const DEBUG_MODE = false;
 
 ## 📅 Roadmap & Fases
 
-### Fase 1: MVP (Maand 1-3) - ✅ 91.6% VOLTOOID
+### Fase 1: MVP (Maand 1-3) - ✅ 93.8% VOLTOOID - **LIVE!**
 
-**Status:** M0-M4 complete (131/143 tasks), M5 in progress (0/33 tasks)
+**Status:** 136/145 tasks completed (93.8%) - M0-M4 (100%), M5 (5/35 - 14%)
+**Live URL:** https://famous-frangollo-b5a758.netlify.app/
+**GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
 > **Note:** Voor gedetailleerde takenlijst met subtasks, zie `TASKS.md`. Dit is een high-level overzicht.
 
@@ -643,11 +647,13 @@ const DEBUG_MODE = false;
 - [x] Legal disclaimers
 - [x] Analytics setup
 
-**Week 9-10: Testing & Launch** - ⚪ IN PROGRESS (M5)
-- [ ] Beta testing (5+ testers)
-- [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge)
-- [ ] Performance optimization (<3s load, <500KB bundle)
-- [ ] Production deployment (Netlify)
+**Week 9-10: Testing & Launch** - 🔵 IN PROGRESS (M5) - ✅ **DEPLOYED!**
+- [x] GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
+- [x] Netlify deployment (https://famous-frangollo-b5a758.netlify.app/)
+- [x] Performance optimization (<3s load: ~2.0s LCP, <500KB bundle: 299KB)
+- [x] Lighthouse audit (88/100/100/100)
+- [ ] Beta testing (5+ testers) - TO DO
+- [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge) - TO DO
 
 ### Fase 2: Tutorials (Maand 4-6)
 **Doel:** Guided learning scenarios
@@ -703,7 +709,7 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 - [WCAG 2.1](https://www.w3.org/WAI/WCAG21/quickref/) - Accessibility
 
 **Community:**
-- GitHub repository: [TBD]
+- GitHub repository: https://github.com/JanWillemWubkes/hacksimulator
 - Discord/Slack: [TBD - post-MVP]
 
 ---
@@ -740,6 +746,8 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 17 oktober 2025
-**Versie:** 1.2 (M0-M4 completed, M5 testing phase)
-**Status:** ✅ Approved voor Development
+**Laatst bijgewerkt:** 19 oktober 2025
+**Versie:** 1.3 (M5 Deployment Complete - LIVE on Netlify!)
+**Status:** ✅ Deployed - Live in Production
+**Live URL:** https://famous-frangollo-b5a758.netlify.app/
+**GitHub:** https://github.com/JanWillemWubkes/hacksimulator

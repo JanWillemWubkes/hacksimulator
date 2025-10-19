@@ -1,14 +1,14 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 17 oktober 2025
-**Status:** M5 Testing & Launch Phase
-**Sprint:** Pre-Launch Testing
+**Laatst bijgewerkt:** 19 oktober 2025
+**Status:** M5 Testing & Launch Phase (LIVE on Netlify)
+**Sprint:** Post-Deployment Testing & Validation
 
 ---
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 131 / 145 taken voltooid (90.3%)
+**Totaal:** 136 / 145 taken voltooid (93.8%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
@@ -17,18 +17,19 @@
 | M2: Filesystem Commands | ✅ Voltooid | 25/25 | 100% |
 | M3: Network & Security | ✅ Voltooid | 28/28 | 100% |
 | M4: UX & Polish | ✅ Voltooid | 43/43 | 100% |
-| M5: Testing & Launch | ⚪ Niet gestart | 0/35 | 0% |
+| M5: Testing & Launch | 🔵 In uitvoering | 5/35 | 14% |
 
 ---
 
 ## 🎯 Huidige Focus
 
-**Actieve Mijlpaal:** M5 - Testing & Launch
+**Actieve Mijlpaal:** M5 - Testing & Launch ✅ **LIVE on Netlify!**
 **Volgende Stappen:**
-1. Beta testing voorbereiden (5 testers werven)
-2. Cross-browser testing (Chrome, Firefox, Safari, Edge)
-3. Performance testing (Lighthouse audit, bundle size)
-4. Deployment naar Netlify
+1. ✅ GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
+2. ✅ Netlify deployment (https://famous-frangollo-b5a758.netlify.app/)
+3. ✅ Performance audit (Lighthouse 88/100/100/100)
+4. Cross-browser testing (Chrome, Firefox, Safari, Edge)
+5. Mobile real device testing (iOS, Android)
 
 ---
 
@@ -305,11 +306,11 @@
 **Doel:** Production-ready en live deployment
 **Tijdsinschatting:** 10-14 dagen
 **Dependencies:** M4 voltooid
-**Status:** ⚪ Niet gestart (0/35 tasks)
+**Status:** 🔵 In uitvoering (5/35 tasks) - ✅ **LIVE on Netlify!**
 
 #### Configuration Placeholders (CRITICAL - Launch Blockers)
-- [ ] Replace GA4 Measurement ID in `src/analytics/tracker.js` (3 locations: lines 75, 121, 108)
-- [ ] Setup contact emails in legal documents (4 locations: privacy.html x2, terms.html, cookies.html)
+- [ ] Replace GA4 Measurement ID in `src/analytics/tracker.js` (3 locations: lines 75, 121, 108) - **TO DO before launch**
+- [ ] Setup contact emails in legal documents (4 locations: privacy.html x2, terms.html, cookies.html) - **TO DO before launch**
 
 **Details:** See `PRE-LAUNCH-CHECKLIST.md` sections 1-2 for exact line numbers and instructions.
 
@@ -385,13 +386,13 @@
 - [ ] Source maps genereren (debugging)
 - [ ] Final bundle size check (<500KB)
 
-#### Deployment Setup
-- [ ] Netlify account aanmaken
-- [ ] Repository koppelen aan Netlify
-- [ ] Custom domain configureren (hacksimulator.nl)
-- [ ] HTTPS certificaat (auto via Netlify)
-- [ ] Build settings configureren
-- [ ] Environment variables instellen (production)
+#### Deployment Setup ✅ COMPLETED
+- [x] Netlify account aanmaken
+- [x] Repository koppelen aan Netlify (GitHub integration)
+- [ ] Custom domain configureren (hacksimulator.nl) - Using Netlify subdomain for now
+- [x] HTTPS certificaat (auto via Netlify)
+- [x] Build settings configureren (publish directory: `.`)
+- [ ] Environment variables instellen (production) - Using placeholders for MVP
 
 #### Pre-Launch Checklist
 - [ ] Alle 30 commands werkend (manual test)
@@ -405,13 +406,13 @@
 - [ ] Cross-browser getest (5+ browsers)
 - [ ] Performance targets gehaald (<3sec, <500KB)
 
-#### Launch
-- [ ] Final deployment naar productie
-- [ ] DNS configuratie (hacksimulator.nl)
-- [ ] Smoke test op productie URL
-- [ ] Analytics test (real events)
-- [ ] Error monitoring actief (console.log check)
-- [ ] Backup van localStorage structure (JSON export)
+#### Launch ✅ LIVE!
+- [x] Final deployment naar productie (https://famous-frangollo-b5a758.netlify.app/)
+- [ ] DNS configuratie (hacksimulator.nl) - Deferred: Using Netlify subdomain for MVP
+- [x] Smoke test op productie URL (HTTP 200 OK verified)
+- [ ] Analytics test (real events) - TO TEST with placeholder IDs
+- [x] Error monitoring actief (console.log check)
+- [ ] Backup van localStorage structure (JSON export) - TO DO
 
 #### Post-Launch (Week 1)
 - [ ] Daily monitoring (analytics + errors)
@@ -425,13 +426,14 @@
 
 ## 🎯 Volgende Acties
 
-**Huidige Status:** M4 Compleet (91.6%) - Klaar voor M5 Testing & Launch
+**Huidige Status:** M5 In Uitvoering (93.8%) - ✅ **LIVE on Netlify!**
 
 **Nu direct te doen:**
-1. [ ] Beta testing voorbereiden (5 testers werven)
-2. [ ] Cross-browser testing setup
-3. [ ] Performance audit (Lighthouse)
-4. [ ] Bundle size meten (<500KB check)
+1. [x] GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
+2. [x] Netlify deployment (https://famous-frangollo-b5a758.netlify.app/)
+3. [x] Performance audit (Lighthouse 88/100/100/100)
+4. [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge)
+5. [ ] Mobile real device testing (iOS, Android)
 
 **Deze week:**
 - Start M5: Testing & Launch
@@ -519,11 +521,13 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 17 oktober 2025
-**Versie:** 2.0 (M5 Critical Tasks Added - Configuration Placeholders)
+**Laatst bijgewerkt:** 19 oktober 2025
+**Versie:** 2.1 (M5 Deployment Complete - LIVE on Netlify!)
 **Totaal Taken:** 145
-**Voltooide Taken:** 131 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 0/35)
-**Voortgang:** 90.3%
+**Voltooide Taken:** 136 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 5/35)
+**Voortgang:** 93.8%
+**Live URL:** https://famous-frangollo-b5a758.netlify.app/
+**GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
 ---
 
