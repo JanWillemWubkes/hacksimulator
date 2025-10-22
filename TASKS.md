@@ -1,8 +1,8 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 19 oktober 2025
-**Status:** M5 Testing & Launch Phase (LIVE on Netlify)
-**Sprint:** Post-Deployment Testing & Validation
+**Laatst bijgewerkt:** 22 oktober 2025
+**Status:** M5 Testing & Launch Phase (LIVE on Netlify) - ❌ **BLOCKED by P0-001**
+**Sprint:** Post-Deployment Testing & Bug Fixing
 
 ---
 
@@ -24,12 +24,16 @@
 ## 🎯 Huidige Focus
 
 **Actieve Mijlpaal:** M5 - Testing & Launch ✅ **LIVE on Netlify!**
+**Current Status:** ❌ **BLOCKED** - P0-001 bug must be fixed before testing can continue
+
 **Volgende Stappen:**
 1. ✅ GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
 2. ✅ Netlify deployment (https://famous-frangollo-b5a758.netlify.app/)
 3. ✅ Performance audit (Lighthouse 88/100/100/100)
-4. Cross-browser testing (Chrome, Firefox, Safari, Edge)
-5. Mobile real device testing (iOS, Android)
+4. ✅ Cross-browser test infrastructure (Playwright setup complete)
+5. 🔴 **FIX P0-001:** Duplicate #legal-modal ID (blocks all testing)
+6. [ ] Re-run cross-browser tests (after P0 fix)
+7. [ ] Mobile real device testing (iOS, Android)
 
 ---
 
@@ -336,13 +340,18 @@
 - [ ] Performance optimalisaties indien nodig
 
 #### Cross-Browser Testing
-- [ ] Chrome Windows (latest)
-- [ ] Chrome macOS (latest)
-- [ ] Firefox Windows (latest)
-- [ ] Safari macOS (latest)
-- [ ] Edge Windows (latest)
-- [ ] Mobile Safari iOS 16+ (real device)
-- [ ] Chrome Mobile Android 12+ (real device)
+- [~] Chrome Windows (latest) - ❌ BLOCKED by P0-001 (duplicate #legal-modal ID)
+- [ ] Chrome macOS (latest) - ⏭️ PENDING (after P0 fix)
+- [ ] Firefox Windows (latest) - ⏭️ PENDING (after P0 fix)
+- [ ] Safari macOS (latest) - ⏭️ PENDING (WebKit test after P0 fix)
+- [x] Edge Windows (latest) - ✅ COVERED (Chromium tests = Edge basis)
+- [ ] Mobile Safari iOS 16+ (real device) - ⏭️ PENDING (separate mobile phase)
+- [ ] Chrome Mobile Android 12+ (real device) - ⏭️ PENDING (separate mobile phase)
+
+**🔴 CRITICAL BUG FOUND:** P0-001 - Duplicate HTML ID `#legal-modal` on live site
+- **Impact:** All Playwright tests fail (8/8)
+- **Report:** See `tests/e2e/test-report.md` for details
+- **Action Required:** Fix duplicate ID before proceeding with testing
 
 #### Performance Testing
 - [ ] Lighthouse audit (target: >90 score)

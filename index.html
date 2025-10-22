@@ -56,23 +56,8 @@
         </div>
     </div>
 
-    <!-- Legal Disclaimer Modal -->
-    <div id="legal-modal" class="modal" role="dialog" aria-labelledby="legal-title" aria-hidden="true">
-        <div class="modal-content">
-            <h2 id="legal-title">Juridische Kennisgeving</h2>
-            <div class="legal-content">
-                <p>Door deze simulator te gebruiken, gaat u akkoord met het volgende:</p>
-                <ul>
-                    <li>Alle activiteiten zijn gesimuleerd en beïnvloeden geen echte systemen</li>
-                    <li>Deze kennis mag alleen worden gebruikt voor legale en ethische doeleinden</li>
-                    <li>Ongeautoriseerde toegang tot computersystemen is illegaal</li>
-                    <li>U bent verantwoordelijk voor uw eigen handelingen buiten deze simulator</li>
-                </ul>
-                <p><small>Door op "Accepteren" te klikken, bevestigt u dat u deze voorwaarden begrijpt en accepteert.</small></p>
-            </div>
-            <button id="legal-accept" class="btn-primary">Accepteren en Doorgaan</button>
-        </div>
-    </div>
+    <!-- Legal Disclaimer Modal: Removed duplicate HTML modal -->
+    <!-- Modal is now dynamically created by src/ui/legal.js to avoid duplicate ID issue (P0-001) -->
 
     <!-- Cookie Consent Banner -->
     <div id="cookie-consent" class="cookie-banner" role="alertdialog" aria-labelledby="cookie-title" aria-hidden="true">
