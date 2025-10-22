@@ -12,7 +12,9 @@
 
   /* Terminal container */
   #terminal-container {
-    padding: var(--spacing-sm);
+    padding: 16px;
+    padding-top: 40px;
+    margin: 10px;
   }
 
   /* Terminal output */
@@ -72,8 +74,9 @@
 
   /* Footer */
   footer {
-    font-size: 10px;
-    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 14px;
+    padding: 12px 16px;
+    margin: 10px;
   }
 
   footer nav {

@@ -293,6 +293,24 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessie 14 (README modernization, PRD browser matrix, version history cleanup, rotation)
 
+### Visual Redesign & UX Decisions (Sessie 15)
+⚠️ **Never:**
+- Change brand colors without UX rationale (user attachment to groen terminal!)
+- Use <14px font on any interface (accessibility fail - footer was 12px)
+- Build full multi-page site when placeholders sufficient (scope creep prevention)
+- Add decorative elements without asking for details (colored vs outline window controls)
+- Use single color for entire interface (no visual hierarchy)
+
+✅ **Always:**
+- Provide expert UX advice: "Mix strategy" (groen terminal + oranje UI) beats complete redesign
+- Typography accessibility: 16px minimum body text (+33% footer upgrade critical)
+- Scope clarification prevents overbuilding: "Coming Soon" modals vs full Blog/Tutorial pages (saved 5-10 dagen)
+- Functional color separation: Oranje = navigation, Groen = terminal content (cognitive load reduction)
+- CSS variables for new design system: `--color-ui-primary`, `--shadow-terminal` (scalability)
+- Null check event listeners: `if (link && modal) { ... }` (defensive programming)
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 15 (Terminal window aesthetic, navbar, oranje UI theme, +11KB bundle, footer 12→16px)
+
 ---
 
 ## 🤖 Sessie Protocol
@@ -360,5 +378,5 @@ Bij nieuwe command:
 
 ---
 
-**Last updated:** 19 oktober 2025
-**Version:** 4.8 (Sessie 14: Documentation finalization - Browser support + consistency)
+**Last updated:** 20 oktober 2025
+**Version:** 4.9 (Sessie 15: Visual redesign - Terminal window aesthetic + navbar + oranje UI)

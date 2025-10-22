@@ -115,6 +115,81 @@ function init() {
 }
 
 /**
+ * Initialize navigation menu
+ */
+function initializeNavigation() {
+  // Mobile hamburger menu toggle
+  const navToggle = document.querySelector('.nav-toggle');
+  const navContent = document.querySelector('.nav-content');
+
+  if (navToggle && navContent) {
+    navToggle.addEventListener('click', () => {
+      const isActive = navContent.classList.toggle('active');
+      navToggle.setAttribute('aria-expanded', isActive);
+    });
+  }
+
+  // Modal links (Coming Soon pages)
+  const modalLinks = {
+    '#tutorial': 'tutorial-modal',
+    '#commands': 'commands-modal',
+    '#blog': 'blog-modal',
+    '#about': 'about-modal'
+  };
+
+  // Setup modal triggers
+  Object.entries(modalLinks).forEach(([hash, modalId]) => {
+    const link = document.querySelector(`a[href="${hash}"]`);
+    const modal = document.getElementById(modalId);
+
+    if (link && modal) {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+      });
+
+      // Close button
+      const closeBtn = modal.querySelector('.modal-close');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          modal.classList.remove('active');
+          modal.setAttribute('aria-hidden', 'true');
+        });
+      }
+
+      // Back button
+      const backBtn = modal.querySelector('.modal-back');
+      if (backBtn) {
+        backBtn.addEventListener('click', () => {
+          modal.classList.remove('active');
+          modal.setAttribute('aria-hidden', 'true');
+        });
+      }
+
+      // Close on backdrop click
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+          modal.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
+  });
+
+  // Home link (smooth scroll to top)
+  const homeLink = document.querySelector('a[href="#home"]');
+  if (homeLink) {
+    homeLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Focus terminal input
+      document.getElementById('terminal-input')?.focus();
+    });
+  }
+}
+
+/**
  * Initialize terminal and commands
  */
 function initialize() {
@@ -135,6 +210,9 @@ function initialize() {
       outputElement,
       inputElement
     });
+
+    // Initialize navigation menu
+    initializeNavigation();
 
     // Check and show legal modal if needed (must accept before using)
     legalManager.checkAndShowModal();
