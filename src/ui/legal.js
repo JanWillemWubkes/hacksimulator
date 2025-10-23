@@ -129,7 +129,18 @@ const legalManager = {
     // Handle acceptance
     btn.addEventListener('click', () => {
       this.acceptLegal();
-      backdrop.remove();
+
+      // Remove backdrop from DOM (CRITICAL: must be removed to not block other modals)
+      if (backdrop && backdrop.parentNode) {
+        backdrop.parentNode.removeChild(backdrop);
+      }
+
+      // Double-check: force remove by ID if still present
+      const backdropCheck = document.getElementById('legal-modal-backdrop');
+      if (backdropCheck) {
+        backdropCheck.remove();
+      }
+
       // Focus back to terminal input after closing modal
       const terminalInput = document.getElementById('terminal-input');
       if (terminalInput) {
