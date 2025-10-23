@@ -16,7 +16,7 @@
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 **Taal:** UI=NL, commands=EN, uitleg=NL
 **Analytics:** GA4 (MVP) → Plausible (bij 10k+ visitors)
-**Tests:** 16/16 passing (Chromium 8/8, Firefox 8/8) ✅
+**Tests:** 44/44 passing (Cross-browser 16/16, Feedback 28/28) ✅
 **Bundle:** 312 KB / 500 KB (37.5% buffer) ✅
 
 ---
@@ -335,6 +335,24 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessie 16 (M5 complete: 16/16 tests passing, 312KB bundle, 6 quality audits ✅, production-ready)
 
+### Focus Management & Event Handler Conflicts (Sessie 17)
+⚠️ **Never:**
+- Use global `document.addEventListener('click')` without checking interaction context (steals focus from modals)
+- Assume Playwright tests passing = real users can interact (`.fill()` bypasses focus mechanisms)
+- Rely solely on automated tests for focus/interaction bugs (synthetic events ≠ human interaction)
+- Ignore "works in automation but not manually" reports (classic event handler conflict symptom)
+
+✅ **Always:**
+- Check modal context before global focus actions: `if (!e.target.closest('.modal.active')) { refocus() }`
+- Use `.closest('.modal.active')` for robust modal detection (works for all modals, no hardcoded IDs)
+- Test focus-dependent features manually when Playwright succeeds but users fail
+- Create diagnostic scripts when "automation passes, humans fail" (log focus states, event flow, element stacking)
+- Pattern for future modals: `e.target.closest('.modal.active')` prevents focus conflicts without per-modal code
+
+**Debug Strategy:** When "Playwright works but humans don't" → suspect event handler conflicts (global click/keydown handlers interfering with user input)
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 17 (P1 bug fix: terminal input focus-steal, 28/28 tests passing, `.closest()` pattern for modal protection)
+
 ---
 
 ## 🤖 Sessie Protocol
@@ -402,5 +420,5 @@ Bij nieuwe command:
 
 ---
 
-**Last updated:** 22 oktober 2025
-**Version:** 5.0 (Sessie 16: M5 Testing Complete - 16/16 tests passing, 6 quality audits ✅, production-ready)
+**Last updated:** 23 oktober 2025
+**Version:** 5.1 (Sessie 17: P1 Bug Fix - Feedback textarea focus-steal resolved, 28/28 tests passing)

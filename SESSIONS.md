@@ -4643,3 +4643,187 @@ Section 5 (Cross-Browser Testing) updated with:
 **Bugs Fixed This Session:** 8 total (1 critical P0, 7 test assertions)
 **Tests Passing:** 16/16 (8 Chromium + 8 Firefox)
 **Quality Score:** PASS on all 6 audit categories
+
+---
+
+## Sessie 17: Feedback Textarea Focus-Steal Bug Fix (23 oktober 2025)
+
+**Doel:** Fix critical P1 bug preventing user input in feedback textarea
+
+**Context:**
+User reported: "Ik kan nog steeds niks typen in de feedback tool. Als ik erop klik wordt het veld wel even geactiveerd maar daarna kan ik er niet in typen"
+
+This was a continuation from previous session where P0 bug (legal modal backdrop blocking clicks) was fixed, but a second, more subtle bug remained.
+
+### Problem Discovery
+
+**Initial Investigation:**
+- Created `debug-textarea-interaction.js` (180 lines) - comprehensive diagnostic script
+- Tested textarea properties, element stacking, focus states, event listeners
+- Key finding: **Playwright could type successfully, but humans could not**
+
+**Debug Output Revealed:**
+```
+✅ Method 1 (fill): Success - value="Test via fill"
+✅ Method 2 (keyboard.type): Success - value=""  ← EMPTY!
+✅ Method 3 (JavaScript): Success - value="Test via JavaScript"
+```
+
+This asymmetry suggested a **JavaScript event handler conflict**, not a DOM/CSS issue.
+
+### Root Cause Analysis
+
+**The Culprit:** `src/ui/input.js` lines 57-60
+
+```javascript
+// Keep input focused (click anywhere refocuses)
+document.addEventListener('click', () => {
+  this.focus();  // ← ALWAYS refocuses terminal input!
+});
+```
+
+**Why This Broke Textarea Typing:**
+1. User clicks textarea → textarea gains focus (briefly)
+2. Click event bubbles to `document` level
+3. Terminal input's global click handler fires
+4. Terminal input **steals focus back immediately**
+5. User types, but focus is on terminal input (not textarea)
+6. Result: "wordt het veld wel even geactiveerd maar daarna kan ik er niet in typen"
+
+**Why Playwright Tests Didn't Catch This:**
+- Playwright's `.fill()` method bypasses focus mechanisms entirely
+- `.keyboard.type()` sends keys to currently focused element (terminal input after focus steal)
+- Only human interaction exposed the bug (synthetic events ≠ real user flow)
+
+### Solution Implementation
+
+**Fix:** Check if click is inside an active modal before refocusing terminal
+
+**Code Change (`src/ui/input.js` lines 57-68):**
+```javascript
+// Keep input focused (click anywhere refocuses)
+// BUT: Don't steal focus if user is interacting with a modal
+document.addEventListener('click', (e) => {
+  // Check if click is inside any active modal
+  const clickedElement = e.target;
+  const isInsideModal = clickedElement.closest('.modal.active');
+
+  // Don't refocus terminal if user clicked inside an active modal
+  if (!isInsideModal) {
+    this.focus();
+  }
+});
+```
+
+**Why `.closest('.modal.active')` is Robust:**
+- Traverses DOM tree upward from click target
+- Matches any element with both `.modal` and `.active` classes
+- Works for all modals (feedback, legal, onboarding, future additions)
+- No hardcoded element IDs needed
+- Handles nested elements automatically
+
+### Testing & Verification
+
+**Created `test-feedback-typing.js` (142 lines):**
+- Test 1: Click textarea → verify focus stays ✅ PASS
+- Test 2: Type character-by-character (realistic simulation) ✅ PASS
+- Test 3: Click within modal, verify text preserved ✅ PASS
+- Test 4: Click outside modal → terminal gets focus ✅ PASS
+- Test 5: Re-open modal after closing (expected reset) ⚠️ Expected behavior
+
+**Automated Test Validation:**
+```
+Chromium: 14/14 tests PASSED (1.1m)
+Firefox:  14/14 tests PASSED (1.3m)
+Total:    28/28 tests PASSED ✅
+```
+
+All existing feedback E2E tests pass without modification, confirming fix doesn't break existing functionality.
+
+### Impact Analysis
+
+**Benefits:**
+- ✅ Feedback textarea now accepts keyboard input normally
+- ✅ All modals benefit from fix (legal, onboarding, feedback)
+- ✅ Terminal auto-focus still works outside modals (desired behavior)
+- ✅ No performance impact (single condition check per click)
+- ✅ Future-proof (works for any `.modal.active` without code changes)
+
+**Files Modified:**
+1. `src/ui/input.js` - Added modal context detection (12 lines changed)
+2. `debug-textarea-interaction.js` - Diagnostic script (NEW, 180 lines)
+3. `test-feedback-typing.js` - Human-interaction test (NEW, 142 lines)
+4. `SESSIONS.md` - This entry
+
+### Commit Details
+
+**Commit:** `b648200` - "Fix P1 bug: Terminal input steals focus from feedback textarea"
+
+**Commit Message:**
+```
+ROOT CAUSE:
+- input.js had global click handler that ALWAYS refocused terminal input
+- This stole focus from feedback textarea immediately after user clicked it
+- User reported: "wordt het veld wel even geactiveerd maar daarna kan ik er niet in typen"
+
+SOLUTION:
+- Check if click is inside .modal.active before refocusing terminal
+- Use element.closest('.modal.active') to detect modal interaction
+- Only refocus terminal if click is OUTSIDE any active modal
+
+IMPACT:
+- Feedback textarea now accepts keyboard input normally
+- Other modals (legal, onboarding) also benefit from this fix
+- Terminal input still auto-focuses when clicking outside modals
+```
+
+### Key Learnings
+
+**Focus Management Complexity:**
+- Global event handlers can have unintended side effects
+- Always check interaction context (modal vs. main UI)
+- `.closest()` is powerful for detecting DOM context hierarchies
+
+**Test Asymmetry:**
+- Automated tests (Playwright `.fill()`) can pass while real users fail
+- Synthetic events ≠ real user interaction flow
+- Need human verification for focus/interaction bugs
+
+**Debugging Strategy:**
+- When "Playwright works but humans don't" → suspect event handler conflicts
+- Comprehensive logging reveals patterns invisible in manual testing
+- Test each interaction method separately (click, fill, type, JavaScript)
+
+**Pattern for Future Modals:**
+```javascript
+if (!e.target.closest('.modal.active')) {
+  // Safe to perform main UI action
+}
+```
+
+This pattern now protects all future modals without additional code.
+
+### Resultaat
+
+**Status:** ✅ **BUG FIXED - DEPLOYED TO PRODUCTION**
+
+**Before:**
+- ❌ Textarea gets brief focus, then loses it immediately
+- ❌ User types but text appears in terminal input (wrong element)
+- ❌ Feedback system unusable for text comments
+
+**After:**
+- ✅ Textarea keeps focus after clicking
+- ✅ User can type normally in textarea
+- ✅ Text appears in correct element
+- ✅ Terminal auto-focus still works outside modals
+
+**Test Coverage:**
+- 28/28 automated tests passing (14 Chromium + 14 Firefox)
+- Human verification confirmed typing works normally
+- Cross-browser validated (Chromium, Firefox)
+
+**Production URL:** https://famous-frangollo-b5a758.netlify.app/
+**Bug Severity:** P1 (High - feature unusable)
+**Time to Fix:** 1 session (~2 hours including debugging + testing)
+**Regression Risk:** Low (all existing tests pass, fix is additive only)
