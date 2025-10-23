@@ -34,3 +34,10 @@ coverage/
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Test artifacts (build output, should not be committed)
+playwright-report/
+test-results/
+
+# Diagnostic test scripts (one-off debugging)
+test-*.js
