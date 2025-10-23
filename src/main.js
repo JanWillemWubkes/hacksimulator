@@ -6,6 +6,7 @@
 import terminal from './core/terminal.js';
 import legalManager from './ui/legal.js';
 import onboardingManager from './ui/onboarding.js';
+import feedbackManager from './ui/feedback.js';
 import analyticsTracker from './analytics/tracker.js';
 import analyticsEvents from './analytics/events.js';
 import consentManager from './analytics/consent.js';
@@ -214,6 +215,9 @@ function initialize() {
     // Initialize navigation menu
     initializeNavigation();
 
+    // Initialize feedback system
+    feedbackManager.init();
+
     // Check and show legal modal if needed (must accept before using)
     legalManager.checkAndShowModal();
 
@@ -249,5 +253,11 @@ window.HackSimulator = {
     getRegistry: () => terminal.getRegistry(),
     getHistory: () => terminal.getHistory(),
     clear: () => terminal.clear()
+  },
+  feedback: {
+    getAll: () => feedbackManager.getAllFeedback(),
+    getStats: () => feedbackManager.getStats(),
+    export: () => feedbackManager.exportFeedback(),
+    clear: () => feedbackManager.clearAllFeedback()
   }
 };

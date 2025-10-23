@@ -280,7 +280,8 @@ button:focus {
 }
 
 .star:hover,
-.star.selected {
+.star.selected,
+.star.active {
   filter: grayscale(0%);
 }
 

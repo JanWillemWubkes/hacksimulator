@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Test - HackSimulator.nl</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/terminal.css">
+    <style>
+        body {
+            padding: 40px;
+            background: var(--color-bg);
+            color: var(--color-text);
+        }
+        .test-controls {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 2px solid var(--color-ui-primary);
+            border-radius: 8px;
+        }
+        .test-controls h1 {
+            color: var(--color-ui-primary);
+            margin-top: 0;
+        }
+        .test-controls button {
+            margin: 10px 10px 10px 0;
+        }
+        .test-results {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid var(--color-success);
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-controls">
+        <h1>🧪 Feedback System Test</h1>
+        <p>Test de feedback functionaliteit zonder de volledige applicatie.</p>
+
+        <h3>Acties:</h3>
+        <button onclick="openFeedbackModal()" class="btn-primary">Open Feedback Modal</button>
+        <button onclick="showStats()" class="btn-secondary">Toon Stats</button>
+        <button onclick="exportFeedback()" class="btn-secondary">Export naar JSON</button>
+        <button onclick="clearFeedback()" class="btn-warning">Clear All Feedback</button>
+
+        <div id="test-results" class="test-results" style="display: none;">
+            <strong>Results:</strong>
+            <pre id="results-content"></pre>
+        </div>
+    </div>
+
+    <!-- Feedback Widget -->
+    <div id="feedback-widget" aria-label="Feedback">
+        <button id="feedback-button" class="floating-btn" aria-label="Geef feedback">
+            💬
+        </button>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div id="feedback-modal" class="modal" role="dialog" aria-labelledby="feedback-title" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Sluiten">&times;</button>
+            <h2 id="feedback-title">Feedback</h2>
+            <p>Hoe vind je HackSimulator.nl?</p>
+            <div class="rating-stars" role="radiogroup" aria-label="Beoordeling">
+                <button class="star" data-rating="1" aria-label="1 ster">⭐</button>
+                <button class="star" data-rating="2" aria-label="2 sterren">⭐</button>
+                <button class="star" data-rating="3" aria-label="3 sterren">⭐</button>
+                <button class="star" data-rating="4" aria-label="4 sterren">⭐</button>
+                <button class="star" data-rating="5" aria-label="5 sterren">⭐</button>
+            </div>
+            <textarea id="feedback-comment" placeholder="Optioneel: Vertel ons meer..." rows="4" aria-label="Feedback commentaar"></textarea>
+            <button id="feedback-submit" class="btn-primary">Versturen</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import feedbackManager from './src/ui/feedback.js';
+
+        // Initialize feedback manager
+        feedbackManager.init();
+
+        // Expose functions for test buttons
+        window.openFeedbackModal = function() {
+            document.getElementById('feedback-modal').classList.add('active');
+            document.getElementById('feedback-modal').setAttribute('aria-hidden', 'false');
+        };
+
+        window.showStats = function() {
+            const stats = feedbackManager.getStats();
+            showResults(JSON.stringify(stats, null, 2));
+        };
+
+        window.exportFeedback = function() {
+            feedbackManager.exportFeedback();
+            showResults('Feedback exported to JSON file!');
+        };
+
+        window.clearFeedback = function() {
+            if (confirm('Weet je zeker dat je alle feedback wilt verwijderen?')) {
+                feedbackManager.clearAllFeedback();
+                showResults('All feedback cleared!');
+            }
+        };
+
+        function showResults(content) {
+            const resultsDiv = document.getElementById('test-results');
+            const resultsContent = document.getElementById('results-content');
+            resultsContent.textContent = content;
+            resultsDiv.style.display = 'block';
+
+            // Hide after 5 seconds
+            setTimeout(() => {
+                resultsDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Log initialization
+        console.log('Feedback test page loaded');
+        console.log('feedbackManager:', feedbackManager);
+    </script>
+</body>
+</html>
