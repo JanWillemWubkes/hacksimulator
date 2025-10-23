@@ -55,8 +55,16 @@ class InputHandler {
     });
 
     // Keep input focused (click anywhere refocuses)
-    document.addEventListener('click', () => {
-      this.focus();
+    // BUT: Don't steal focus if user is interacting with a modal
+    document.addEventListener('click', (e) => {
+      // Check if click is inside any active modal
+      const clickedElement = e.target;
+      const isInsideModal = clickedElement.closest('.modal.active');
+
+      // Don't refocus terminal if user clicked inside an active modal
+      if (!isInsideModal) {
+        this.focus();
+      }
     });
   }
 

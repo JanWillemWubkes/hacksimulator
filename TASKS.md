@@ -1,14 +1,14 @@
 # TASKS.md - HackSimulator.nl
 
 **Laatst bijgewerkt:** 22 oktober 2025
-**Status:** M5 Testing & Launch Phase (LIVE on Netlify) - ❌ **BLOCKED by P0-001**
-**Sprint:** Post-Deployment Testing & Bug Fixing
+**Status:** M5 Testing & Launch Phase (LIVE on Netlify) - ✅ **Cross-Browser Tests PASSING!**
+**Sprint:** Cross-Browser Testing Complete - Mobile Testing Next
 
 ---
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 136 / 145 taken voltooid (93.8%)
+**Totaal:** 139 / 145 taken voltooid (95.9%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
@@ -17,22 +17,22 @@
 | M2: Filesystem Commands | ✅ Voltooid | 25/25 | 100% |
 | M3: Network & Security | ✅ Voltooid | 28/28 | 100% |
 | M4: UX & Polish | ✅ Voltooid | 43/43 | 100% |
-| M5: Testing & Launch | 🔵 In uitvoering | 5/35 | 14% |
+| M5: Testing & Launch | 🔵 In uitvoering | 8/35 | 23% |
 
 ---
 
 ## 🎯 Huidige Focus
 
 **Actieve Mijlpaal:** M5 - Testing & Launch ✅ **LIVE on Netlify!**
-**Current Status:** ❌ **BLOCKED** - P0-001 bug must be fixed before testing can continue
+**Current Status:** ✅ **UNBLOCKED** - All automated cross-browser tests passing (16/16)
 
 **Volgende Stappen:**
 1. ✅ GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
 2. ✅ Netlify deployment (https://famous-frangollo-b5a758.netlify.app/)
 3. ✅ Performance audit (Lighthouse 88/100/100/100)
 4. ✅ Cross-browser test infrastructure (Playwright setup complete)
-5. 🔴 **FIX P0-001:** Duplicate #legal-modal ID (blocks all testing)
-6. [ ] Re-run cross-browser tests (after P0 fix)
+5. ✅ **FIXED P0-001:** Duplicate #legal-modal ID removed
+6. ✅ Cross-browser tests: Chromium 8/8, Firefox 8/8 (16/16 passing)
 7. [ ] Mobile real device testing (iOS, Android)
 
 ---
@@ -340,18 +340,17 @@
 - [ ] Performance optimalisaties indien nodig
 
 #### Cross-Browser Testing
-- [~] Chrome Windows (latest) - ❌ BLOCKED by P0-001 (duplicate #legal-modal ID)
-- [ ] Chrome macOS (latest) - ⏭️ PENDING (after P0 fix)
-- [ ] Firefox Windows (latest) - ⏭️ PENDING (after P0 fix)
-- [ ] Safari macOS (latest) - ⏭️ PENDING (WebKit test after P0 fix)
+- [x] Chrome Windows (latest) - ✅ PASSED (Chromium 8/8 tests passing)
+- [x] Chrome macOS (latest) - ✅ COVERED (Chromium tests cross-platform)
+- [x] Firefox Windows (latest) - ✅ PASSED (Firefox 8/8 tests passing)
+- [ ] Safari macOS (latest) - ⚠️ DEFERRED (WebKit blocked by system deps: libevent, libavif)
 - [x] Edge Windows (latest) - ✅ COVERED (Chromium tests = Edge basis)
-- [ ] Mobile Safari iOS 16+ (real device) - ⏭️ PENDING (separate mobile phase)
-- [ ] Chrome Mobile Android 12+ (real device) - ⏭️ PENDING (separate mobile phase)
+- [ ] Mobile Safari iOS 16+ (real device) - ⏭️ PENDING (manual testing phase)
+- [ ] Chrome Mobile Android 12+ (real device) - ⏭️ PENDING (manual testing phase)
 
-**🔴 CRITICAL BUG FOUND:** P0-001 - Duplicate HTML ID `#legal-modal` on live site
-- **Impact:** All Playwright tests fail (8/8)
-- **Report:** See `tests/e2e/test-report.md` for details
-- **Action Required:** Fix duplicate ID before proceeding with testing
+**✅ P0-001 FIXED:** Duplicate HTML ID `#legal-modal` removed (Sessie 16)
+**✅ AUTOMATED TESTING:** 16/16 tests passing (Chromium 8/8, Firefox 8/8)
+**📊 Test Coverage:** 8 comprehensive E2E tests covering all critical user flows
 
 #### Performance Testing
 - [ ] Lighthouse audit (target: >90 score)

@@ -305,10 +305,11 @@ test.describe('Cross-Browser Compatibility Tests', () => {
     const footer = page.locator('footer');
     await expect(footer).toBeVisible();
 
-    // Check legal links exist in footer (scope to footer to avoid cookie banner links)
-    const privacyLink = footer.locator('a[href*="/assets/legal/privacy"]');
-    const termsLink = footer.locator('a[href*="/assets/legal/terms"]');
-    const cookiesLink = footer.locator('a[href*="/assets/legal/cookies"]');
+    // Check legal links exist in footer using text content (more specific than href)
+    // This avoids conflict with cookie banner "Meer info" link
+    const privacyLink = footer.getByRole('link', { name: 'Privacy' });
+    const termsLink = footer.getByRole('link', { name: 'Voorwaarden' });
+    const cookiesLink = footer.getByRole('link', { name: 'Cookies' });
 
     await expect(privacyLink).toBeVisible();
     await expect(termsLink).toBeVisible();
