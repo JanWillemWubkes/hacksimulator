@@ -12,14 +12,37 @@ test.describe('Feedback System', () => {
 
     // Clear localStorage before each test
     await page.evaluate(() => {
-      localStorage.removeItem('hacksim_feedback');
-      localStorage.removeItem('hacksim_legal_accepted');
+      localStorage.clear(); // Clear ALL localStorage
     });
 
-    // Close legal modal if it appears
-    const legalBackdrop = page.locator('#legal-modal-backdrop');
-    if (await legalBackdrop.isVisible()) {
-      await page.click('button:has-text("Ik begrijp het")');
+    // Reload page after clearing localStorage to trigger legal modal
+    await page.reload();
+
+    // Wait for legal modal to appear
+    await page.waitForSelector('#legal-modal-backdrop', { timeout: 10000 });
+
+    // Accept legal terms (button is inside the backdrop)
+    await page.click('#legal-accept-btn');
+
+    // Wait for backdrop to be removed
+    await page.waitForSelector('#legal-modal-backdrop', { state: 'detached', timeout: 5000 });
+
+    // Double-check: verify backdrop is really gone
+    const backdropExists = await page.locator('#legal-modal-backdrop').count();
+    if (backdropExists > 0) {
+      console.warn('⚠️ Legal backdrop still exists after acceptance!');
+      // Force remove via JavaScript
+      await page.evaluate(() => {
+        const backdrop = document.getElementById('legal-modal-backdrop');
+        if (backdrop) backdrop.remove();
+      });
+    }
+
+    // Also dismiss cookie banner if it appears (appears after 2 sec delay)
+    await page.waitForTimeout(2500);
+    const cookieBanner = page.locator('#cookie-consent');
+    if (await cookieBanner.isVisible()) {
+      await page.click('#cookie-accept');
       await page.waitForTimeout(500);
     }
   });
