@@ -1,6 +1,6 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 22 oktober 2025
+**Laatst bijgewerkt:** 23 oktober 2025
 **Status:** M5 Testing & Launch Phase (LIVE on Netlify) - ✅ **Cross-Browser Tests PASSING!**
 **Sprint:** Cross-Browser Testing Complete - Mobile Testing Next
 
@@ -310,7 +310,7 @@
 **Doel:** Production-ready en live deployment
 **Tijdsinschatting:** 10-14 dagen
 **Dependencies:** M4 voltooid
-**Status:** 🔵 In uitvoering (5/35 tasks) - ✅ **LIVE on Netlify!**
+**Status:** 🔵 In uitvoering (8/35 tasks) - ✅ **LIVE on Netlify!**
 
 #### Configuration Placeholders (CRITICAL - Launch Blockers)
 - [ ] Replace GA4 Measurement ID in `src/analytics/tracker.js` (3 locations: lines 75, 121, 108) - **TO DO before launch**
@@ -434,7 +434,7 @@
 
 ## 🎯 Volgende Acties
 
-**Huidige Status:** M5 In Uitvoering (93.8%) - ✅ **LIVE on Netlify!**
+**Huidige Status:** M5 In Uitvoering (95.9%) - ✅ **LIVE on Netlify!**
 
 **Nu direct te doen:**
 1. [x] GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
@@ -529,11 +529,11 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 19 oktober 2025
-**Versie:** 2.1 (M5 Deployment Complete - LIVE on Netlify!)
+**Laatst bijgewerkt:** 23 oktober 2025
+**Versie:** 2.2 (Documentation Consistency - Synchronized dates, test counts, M5 progress)
 **Totaal Taken:** 145
-**Voltooide Taken:** 136 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 5/35)
-**Voortgang:** 93.8%
+**Voltooide Taken:** 139 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 8/35)
+**Voortgang:** 95.9%
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 

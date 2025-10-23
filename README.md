@@ -12,7 +12,7 @@ Een veilige browser-based terminal simulator waar Nederlandse beginners de funda
 **Doelgroep:** Nederlandse beginners (15-25 jaar) zonder technische achtergrond
 
 **Performance:**
-- Bundle Size: 299 KB (40% onder 500 KB budget)
+- Bundle Size: 312 KB (37.5% buffer remaining / 500 KB budget)
 - Load Time: ~2.0s LCP (target: <3s)
 - Lighthouse: 88/100/100/100 (Performance/Accessibility/Best Practices/SEO)
 
@@ -269,6 +269,6 @@ TBD (will be added pre-launch)
 
 **Built with ❤️ for Dutch cybersecurity learners**
 
-**Last Updated:** 19 oktober 2025
+**Last Updated:** 23 oktober 2025
 **Version:** 1.0.0-mvp
 **Status:** ✅ Live on Netlify (M5 Testing Phase)

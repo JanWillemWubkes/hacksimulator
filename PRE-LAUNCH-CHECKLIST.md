@@ -292,8 +292,8 @@ git push origin main
 
 ---
 
-**Last updated:** 18 oktober 2025
-**Status:** Updated met deployment workflow (Sessie 13)
+**Last updated:** 23 oktober 2025
+**Status:** Updated with documentation consistency fixes
 **Owner:** Development Team
 
 **Next steps:**

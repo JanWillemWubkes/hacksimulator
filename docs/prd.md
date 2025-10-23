@@ -1,7 +1,7 @@
 # Product Requirements Document - HackSimulator.nl
 **Versie:** 1.4
 **Status:** M0-M4 Completed, M5 In Progress - ✅ **LIVE on Netlify!**
-**Laatst bijgewerkt:** 19 oktober 2025
+**Laatst bijgewerkt:** 23 oktober 2025
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
@@ -1095,8 +1095,8 @@ Dit document is goedgekeurd voor de ontwikkeling van HackSimulator.nl MVP.
 
 **Document Status:** Definitief - ✅ **LIVE on Netlify!**
 
-**Laatste review:** 19 oktober 2025
-**Development Status:** 136/145 tasks completed (93.8%) - M0-M4 (100%), M5 (5/35 - 14%)
+**Laatste review:** 23 oktober 2025
+**Development Status:** 139/145 tasks completed (95.9%) - M0-M4 (100%), M5 (8/35 - 23%)
 
 ---
 

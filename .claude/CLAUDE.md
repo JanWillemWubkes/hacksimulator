@@ -16,7 +16,7 @@
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 **Taal:** UI=NL, commands=EN, uitleg=NL
 **Analytics:** GA4 (MVP) → Plausible (bij 10k+ visitors)
-**Tests:** 44/44 passing (Cross-browser 16/16, Feedback 28/28) ✅
+**Tests:** 22/22 passing (Cross-browser 16/16, Feedback 6/6) ✅
 **Bundle:** 312 KB / 500 KB (37.5% buffer) ✅
 
 ---
@@ -421,4 +421,4 @@ Bij nieuwe command:
 ---
 
 **Last updated:** 23 oktober 2025
-**Version:** 5.1 (Sessie 17: P1 Bug Fix - Feedback textarea focus-steal resolved, 28/28 tests passing)
+**Version:** 5.2 (Documentation Consistency Fix - Synchronized all dates, test counts, and M5 progress across all MD files)
