@@ -5,21 +5,35 @@
 
 /* ==================== CSS Variables ==================== */
 :root {
-  /* Colors - Hacker Theme */
-  --color-bg: #000000;
-  --color-text: #00ff00;
-  --color-text-dim: #00aa00;
-  --color-error: #ff0000;
-  --color-warning: #ffff00;
-  --color-info: #00ffff;
-  --color-success: #00ff00;
-  --color-prompt: #00ff00;
-  --color-link: #00aaff;
+  /* Colors - Cyberpunk Purple/Green Terminal Theme */
+  /* Purple Gradient - Background Layers */
+  --color-bg: #1a0d1a;              /* Body - zeer donker paars (bijna zwart) */
+  --color-bg-terminal: #2a1b2e;     /* Terminal venster - donker paars */
+  --color-bg-modal: #221529;        /* Modals/overlays - tussen beide */
+  --color-bg-hover: #3d2647;        /* Hover states - medium paars */
+
+  /* Green Spectrum - Text Hierarchy */
+  --color-prompt: #00ff88;          /* Neon groen - hoogste aandacht ($ prompt) */
+  --color-input: #8fffb0;           /* Helder groen - user typed commands */
+  --color-text: #b4f4b4;            /* Mint groen - primary output text */
+  --color-text-dim: #6d9d6d;        /* Gedempt groen - hints/secondary info */
+
+  /* Semantic Colors - Purple/Green Harmony */
+  --color-error: #ff6b9d;           /* Roze/magenta - past bij paars palette */
+  --color-warning: #ffeb82;         /* Warm geel - contrasteert groen/paars */
+  --color-info: #a78bfa;            /* Lavender - blijft in purple familie */
+  --color-success: #00ff88;         /* Neon groen - zelfde als prompt */
+
+  /* UI Elements */
+  --color-ui-primary: #8844ff;      /* Levendig paars - buttons/navbar */
+  --color-ui-hover: #a366ff;        /* Lichter paars - hover state */
+  --color-border: #6d4b7d;          /* Medium paars - borders/dividers */
+  --color-link: #00ff88;            /* Neon groen - links (zelfde als prompt) */
 
   /* Typography */
   --font-terminal: 'Courier New', 'Courier', monospace;
-  --font-size-base: 16px;
-  --font-size-mobile: 14px;
+  --font-size-base: 18px;
+  --font-size-mobile: 16px;
   --line-height: 1.5;
   --font-weight-normal: 400;
   --font-weight-bold: 700;
@@ -104,43 +118,46 @@ button:focus {
 }
 
 .btn-primary {
-  background-color: var(--color-text);
-  color: var(--color-bg);
+  background-color: var(--color-ui-primary);
+  color: #ffffff;
   padding: var(--spacing-md) var(--spacing-lg);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
-  border: 2px solid var(--color-text);
+  border: 2px solid var(--color-ui-primary);
 }
 
 .btn-primary:hover {
-  background-color: var(--color-bg);
-  color: var(--color-text);
+  background-color: var(--color-ui-hover);
+  border-color: var(--color-ui-hover);
+  color: #ffffff;
 }
 
 .btn-secondary {
   background-color: transparent;
   color: var(--color-text);
-  border: 2px solid var(--color-text);
+  border: 2px solid var(--color-border);
   padding: var(--spacing-md) var(--spacing-lg);
   font-size: var(--font-size-base);
 }
 
 .btn-secondary:hover {
-  background-color: var(--color-text);
-  color: var(--color-bg);
+  background-color: var(--color-ui-primary);
+  border-color: var(--color-ui-primary);
+  color: #ffffff;
 }
 
 .btn-small {
   padding: var(--spacing-sm) var(--spacing-md);
-  font-size: 14px;
-  background-color: var(--color-text);
-  color: var(--color-bg);
-  border: 1px solid var(--color-text);
+  font-size: 16px;
+  background-color: var(--color-ui-primary);
+  color: #ffffff;
+  border: 1px solid var(--color-ui-primary);
 }
 
 .btn-small:hover {
-  background-color: var(--color-bg);
-  color: var(--color-text);
+  background-color: var(--color-ui-hover);
+  border-color: var(--color-ui-hover);
+  color: #ffffff;
 }
 
 /* ==================== Modals ==================== */
@@ -162,13 +179,14 @@ button:focus {
 }
 
 .modal-content {
-  background-color: var(--color-bg);
-  border: 2px solid var(--color-text);
+  background-color: var(--color-bg-modal);
+  border: 2px solid var(--color-border);
   padding: var(--spacing-xl);
   max-width: 600px;
   max-height: 80vh;
   overflow-y: auto;
   position: relative;
+  box-shadow: 0 0 30px rgba(136, 68, 255, 0.4);
 }
 
 .modal-content h2 {
@@ -212,8 +230,8 @@ button:focus {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: var(--color-bg);
-  border-top: 2px solid var(--color-text);
+  background-color: var(--color-bg-modal);
+  border-top: 2px solid var(--color-border);
   padding: var(--spacing-md);
   z-index: var(--z-cookie);
 }
@@ -252,16 +270,17 @@ button:focus {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: var(--color-text);
-  color: var(--color-bg);
+  background-color: var(--color-ui-primary);
+  color: #ffffff;
   font-size: 2rem;
-  border: 2px solid var(--color-text);
-  box-shadow: 0 4px 8px rgba(0, 255, 0, 0.3);
+  border: 2px solid var(--color-ui-primary);
+  box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
 }
 
 .floating-btn:hover {
   transform: scale(1.1);
-  box-shadow: 0 6px 12px rgba(0, 255, 0, 0.5);
+  background-color: var(--color-ui-hover);
+  box-shadow: 0 6px 16px rgba(0, 255, 136, 0.5);
 }
 
 /* Rating Stars */
@@ -287,9 +306,9 @@ button:focus {
 
 #feedback-comment {
   width: 100%;
-  background-color: var(--color-bg);
+  background-color: var(--color-bg-terminal);
   color: var(--color-text);
-  border: 1px solid var(--color-text);
+  border: 1px solid var(--color-border);
   padding: var(--spacing-sm);
   font-family: var(--font-terminal);
   font-size: var(--font-size-base);
@@ -306,9 +325,9 @@ button:focus {
 footer {
   position: static;
   background-color: var(--color-bg);
-  border-top: 1px solid var(--color-text-dim);
+  border-top: 1px solid var(--color-border);
   padding: var(--spacing-sm) var(--spacing-md);
-  font-size: 12px;
+  font-size: 16px;
   text-align: center;
   margin-top: var(--spacing-lg);
 }
