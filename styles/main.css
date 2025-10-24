@@ -13,7 +13,7 @@
   --color-bg-hover: #3d2647;        /* Hover states - medium paars */
 
   /* Green Spectrum - Text Hierarchy */
-  --color-prompt: #00ff88;          /* Neon groen - hoogste aandacht ($ prompt) */
+  --color-prompt: #6dd49a;          /* Medium groen - subtiel, past in gradatie */
   --color-input: #8fffb0;           /* Helder groen - user typed commands */
   --color-text: #b4f4b4;            /* Mint groen - primary output text */
   --color-text-dim: #6d9d6d;        /* Gedempt groen - hints/secondary info */
@@ -21,8 +21,8 @@
   /* Semantic Colors - Purple/Green Harmony */
   --color-error: #ff6b9d;           /* Roze/magenta - past bij paars palette */
   --color-warning: #ffeb82;         /* Warm geel - contrasteert groen/paars */
-  --color-info: #a78bfa;            /* Lavender - blijft in purple familie */
-  --color-success: #00ff88;         /* Neon groen - zelfde als prompt */
+  --color-info: #8fffb0;            /* Helder groen - terminal-consistent */
+  --color-success: #8fffb0;         /* Helder groen - positieve feedback */
 
   /* UI Elements */
   --color-ui-primary: #8844ff;      /* Levendig paars - buttons/navbar */
