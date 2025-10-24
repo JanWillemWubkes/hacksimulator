@@ -7,9 +7,9 @@
 :root {
   /* Colors - Cyberpunk Purple/Green Terminal Theme */
   /* Purple Gradient - Background Layers */
-  --color-bg: #1a0d1a;              /* Body - zeer donker paars (bijna zwart) */
-  --color-bg-terminal: #2a1b2e;     /* Terminal venster - donker paars */
-  --color-bg-modal: #221529;        /* Modals/overlays - tussen beide */
+  --color-bg: #1a0d1a;              /* Body & Terminal - uniform donker paars */
+  --color-bg-terminal: #1a0d1a;     /* Same as body - no visual separation */
+  --color-bg-modal: #221529;        /* Modals/overlays - licht contrast */
   --color-bg-hover: #3d2647;        /* Hover states - medium paars */
 
   /* Green Spectrum - Text Hierarchy */
@@ -306,7 +306,7 @@ button:focus {
 
 #feedback-comment {
   width: 100%;
-  background-color: var(--color-bg-terminal);
+  background-color: var(--color-bg);
   color: var(--color-text);
   border: 1px solid var(--color-border);
   padding: var(--spacing-sm);
