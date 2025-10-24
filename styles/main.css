@@ -12,16 +12,16 @@
   --color-bg-modal: #221529;        /* Modals/overlays - licht contrast */
   --color-bg-hover: #3d2647;        /* Hover states - medium paars */
 
-  /* Color Hierarchy - Cyberpunk Cyan/Green */
-  --color-prompt: #00ffff;          /* CYAN - maximum contrast, cyberpunk classic */
+  /* Color Hierarchy - Cyberpunk Teal/Green */
+  --color-prompt: #00d9b3;          /* Gedempte groenblauw - zachter dan cyaan, cyberpunk harmonie */
   --color-input: #8fffb0;           /* Helder groen - user typed commands */
   --color-text: #b4f4b4;            /* Mint groen - primary output text */
   --color-text-dim: #6d9d6d;        /* Gedempt groen - hints/secondary info */
 
-  /* Semantic Colors - Purple/Cyan/Green Harmony */
+  /* Semantic Colors - Purple/Teal/Green Harmony */
   --color-error: #ff6b9d;           /* Roze/magenta - past bij paars palette */
   --color-warning: #ffeb82;         /* Warm geel - contrasteert groen/paars */
-  --color-info: #00ffff;            /* CYAN - system messages, high visibility */
+  --color-info: #00d9b3;            /* Groenblauw - system messages, interactieve elementen */
   --color-success: #8fffb0;         /* Helder groen - positieve feedback */
 
   /* UI Elements */
@@ -270,18 +270,18 @@ button:focus {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: #00ffff;
+  background-color: #00d9b3;
   color: #1a0d1a;
   font-size: 2rem;
-  border: 2px solid #00ffff;
-  box-shadow: 0 4px 12px rgba(0, 255, 255, 0.4);
+  border: 2px solid #00d9b3;
+  box-shadow: 0 4px 12px rgba(0, 217, 179, 0.4);
 }
 
 .floating-btn:hover {
   transform: scale(1.1);
-  background-color: #33ffff;
-  border-color: #33ffff;
-  box-shadow: 0 6px 16px rgba(0, 255, 255, 0.6);
+  background-color: #33edd9;
+  border-color: #33edd9;
+  box-shadow: 0 6px 16px rgba(0, 217, 179, 0.6);
 }
 
 /* Rating Stars */
@@ -320,6 +320,19 @@ button:focus {
 #feedback-comment:focus {
   outline: 2px solid var(--color-info);
   outline-offset: 2px;
+}
+
+/* Feedback submit button - matches floating button color for consistency */
+#feedback-submit {
+  background-color: var(--color-info);
+  border-color: var(--color-info);
+  color: #1a0d1a;  /* Donker paars voor leesbaar contrast (11.5:1) */
+}
+
+#feedback-submit:hover {
+  background-color: #33edd9;
+  border-color: #33edd9;
+  color: #1a0d1a;  /* Behoud donker paars bij hover */
 }
 
 /* ==================== Footer ==================== */
