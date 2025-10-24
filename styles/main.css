@@ -270,17 +270,18 @@ button:focus {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: var(--color-ui-primary);
-  color: #ffffff;
+  background-color: #00ffff;
+  color: #1a0d1a;
   font-size: 2rem;
-  border: 2px solid var(--color-ui-primary);
-  box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+  border: 2px solid #00ffff;
+  box-shadow: 0 4px 12px rgba(0, 255, 255, 0.4);
 }
 
 .floating-btn:hover {
   transform: scale(1.1);
-  background-color: var(--color-ui-hover);
-  box-shadow: 0 6px 16px rgba(0, 255, 136, 0.5);
+  background-color: #33ffff;
+  border-color: #33ffff;
+  box-shadow: 0 6px 16px rgba(0, 255, 255, 0.6);
 }
 
 /* Rating Stars */
