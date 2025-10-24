@@ -12,16 +12,16 @@
   --color-bg-modal: #221529;        /* Modals/overlays - licht contrast */
   --color-bg-hover: #3d2647;        /* Hover states - medium paars */
 
-  /* Green Spectrum - Text Hierarchy */
-  --color-prompt: #6dd49a;          /* Medium groen - subtiel, past in gradatie */
+  /* Color Hierarchy - Cyberpunk Cyan/Green */
+  --color-prompt: #00ffff;          /* CYAN - maximum contrast, cyberpunk classic */
   --color-input: #8fffb0;           /* Helder groen - user typed commands */
   --color-text: #b4f4b4;            /* Mint groen - primary output text */
   --color-text-dim: #6d9d6d;        /* Gedempt groen - hints/secondary info */
 
-  /* Semantic Colors - Purple/Green Harmony */
+  /* Semantic Colors - Purple/Cyan/Green Harmony */
   --color-error: #ff6b9d;           /* Roze/magenta - past bij paars palette */
   --color-warning: #ffeb82;         /* Warm geel - contrasteert groen/paars */
-  --color-info: #8fffb0;            /* Helder groen - terminal-consistent */
+  --color-info: #00ffff;            /* CYAN - system messages, high visibility */
   --color-success: #8fffb0;         /* Helder groen - positieve feedback */
 
   /* UI Elements */
