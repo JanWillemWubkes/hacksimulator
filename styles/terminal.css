@@ -92,7 +92,7 @@
 
 /* Inline formatting */
 .inline-arrow {
-  color: var(--color-text-dim);
+  color: var(--color-link);  /* Neon groen voor betere zichtbaarheid */
   margin: 0 var(--spacing-xs);
 }
 
