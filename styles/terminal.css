@@ -96,11 +96,29 @@
   margin: 0 var(--spacing-xs);
 }
 
-.tip-icon,
-.warning-icon,
-.security-icon,
-.success-icon,
+/* Icon color overrides - prevent inheritance from parent output type */
+.tip-icon {
+  color: var(--color-info);          /* Cyaan - altijd cyaan, ook in error messages */
+  margin-right: var(--spacing-xs);
+}
+
+.warning-icon {
+  color: var(--color-warning);       /* Oranje - altijd oranje */
+  margin-right: var(--spacing-xs);
+}
+
+.security-icon {
+  color: var(--color-warning);       /* Oranje - security warnings */
+  margin-right: var(--spacing-xs);
+}
+
+.success-icon {
+  color: var(--color-success);       /* Groen - altijd groen */
+  margin-right: var(--spacing-xs);
+}
+
 .error-icon {
+  color: var(--color-error);         /* Magenta - altijd magenta */
   margin-right: var(--spacing-xs);
 }
 

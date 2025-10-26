@@ -4,6 +4,110 @@
 
 ---
 
+## Sessie 19: Tip Color Consistency Fix - CSS Inheritance Bug (26 oktober 2025)
+
+**Doel:** Fix tip colors inheriting parent output colors instead of maintaining semantic cyan (#00ffff)
+
+**Problem Discovery:**
+User reported tips (💡) showing red color in error messages instead of cyan:
+- Welkomstboodschap tips: Correctly cyan ✅
+- Error message tips: Incorrectly red ❌
+- Help command tips: Incorrectly light green ❌
+
+**Root Cause Analysis:**
+
+1. **Initial hypothesis (WRONG):** CSS `.tip-icon` missing color property
+   - Fixed: Added explicit colors to emoji icon classes in `terminal.css`
+   - Result: Only emoji 💡 became cyan, text remained parent color ❌
+
+2. **Actual root cause:** Monolithic error rendering combining error + tip into single string
+   - `terminal.js:113`: `const errorMsg = "Command not found...\n\n💡 TIP..."`
+   - `renderer.renderError(errorMsg)` → entire block gets `.terminal-output-error` class
+   - CSS inheritance: tip text inherits parent's `color: var(--color-error)` (magenta #ff0055)
+
+3. **Secondary issue:** Help command tips embedded in normal output
+   - `help.js:47-48`: Tips concatenated to command output string
+   - `terminal.js:136-138`: `renderer.renderOutput(output)` defaults to `type='normal'`
+   - Result: Tips get `.terminal-output-normal` with light green color instead of cyan
+
+**Implementation: 3-Layer Fix**
+
+✅ **Layer 1: CSS Icon Color Overrides** (styles/terminal.css lines 99-123)
+Added explicit colors to prevent emoji inheritance:
+```css
+.tip-icon { color: var(--color-info); }       /* Cyaan */
+.warning-icon { color: var(--color-warning); } /* Oranje */
+.security-icon { color: var(--color-warning); }
+.success-icon { color: var(--color-success); } /* Groen */
+.error-icon { color: var(--color-error); }     /* Magenta */
+```
+Effect: Emoji icons maintain semantic colors, but surrounding text still inherits parent color
+
+✅ **Layer 2: Separate Error/Tip Rendering** (src/core/terminal.js lines 113-115)
+Split monolithic error message into two separate render calls:
+```javascript
+// BEFORE:
+const errorMsg = `Command not found: ${cmd}\n\n${helpMsg}`;
+renderer.renderError(errorMsg);  // Everything is red
+
+// AFTER:
+renderer.renderError(`Command not found: ${cmd}`);  // Red
+renderer.renderInfo(helpMsg);  // Cyaan ✅
+```
+Effect: Tips in error context now correctly cyan
+
+✅ **Layer 3: Semantic Line Detection** (src/ui/renderer.js lines 62-84)
+Added emoji-aware auto-detection in renderer for ALL output types:
+```javascript
+const trimmed = lineText.trim();
+let lineType = type;
+
+if (trimmed.startsWith('💡')) {
+  lineType = 'info';      // Tips → cyaan
+} else if (trimmed.startsWith('⚠️') || trimmed.startsWith('🔒')) {
+  lineType = 'warning';   // Warnings → oranje
+} else if (trimmed.startsWith('✅')) {
+  lineType = 'success';   // Success → groen
+} else if (trimmed.startsWith('❌')) {
+  lineType = 'error';     // Errors → magenta
+}
+```
+Effect: All emoji-prefixed lines get semantic colors regardless of parent output type
+
+**Architecture Insight:**
+The fix creates a **Single Source of Truth** for semantic colors:
+- Commands don't need to specify rendering types
+- Renderer automatically detects semantic markers (emoji)
+- Works for mixed content (normal output + embedded tips/warnings)
+- Zero breaking changes - all 30+ commands continue working
+
+**Files Changed:**
+1. `styles/terminal.css` - Icon color overrides (+24 lines)
+2. `src/core/terminal.js` - Separate error/tip rendering (-2 lines, +2 lines)
+3. `src/ui/renderer.js` - Semantic line detection (+16 lines)
+
+**Testing Scenarios:**
+✅ Error command tip: `fdmks` → Error red, tip cyan
+✅ Help command tips: `help` → Output green, tips cyan
+✅ Welcome message tips: Page load → Tips cyan
+✅ Security warnings: `hydra target.com` → Warning orange
+✅ Success messages: First command → Success green
+
+**Impact:**
+- Consistent semantic colors across all 30+ commands
+- No manual type specification needed in command handlers
+- Robust against future command additions
+- Improves accessibility (distinct colors for different message types)
+
+**Performance:**
+- Negligible: Single `startsWith()` check per line (O(1) for emoji detection)
+- No regex, no DOM manipulation changes
+
+**Key Learning:**
+CSS inheritance bugs in dynamic content require **rendering-level solutions**, not just CSS-level fixes. Semantic content detection at render time provides consistent UX without code duplication across commands.
+
+---
+
 ## Sessie 18: Cyberpunk Color Scheme Implementation (26 oktober 2025)
 
 **Doel:** Complete kleurenschema transformatie naar pure black + neon green cyberpunk aesthetic

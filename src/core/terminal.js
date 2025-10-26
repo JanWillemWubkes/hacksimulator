@@ -110,9 +110,9 @@ class Terminal {
       // Get progressive help message (3-tier system)
       const helpMsg = helpSystem.getHelp(parsed.command, similar);
 
-      const errorMsg = `Command not found: ${parsed.command}\n\n${helpMsg}`;
-
-      renderer.renderError(errorMsg);
+      // Render error and tip separately for correct color rendering
+      renderer.renderError(`Command not found: ${parsed.command}`);
+      renderer.renderInfo(helpMsg);  // Tip as INFO (cyaan) instead of ERROR (rood)
 
       // Track command not found error
       analyticsEvents.errorOccurred('command_not_found', parsed.command);

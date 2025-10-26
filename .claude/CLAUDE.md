@@ -154,148 +154,25 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessies 5-6 (M0-M2 Complete: localStorage, ES6 modules, parser, 18 commands)
 
-### ES6 Module Import Debugging (Sessie 7)
-⚠️ **Never:**
-- Assume ES6 module imports fail loudly (they fail silently on wrong paths)
-- Use `import vfs from './src/core/vfs.js'` (VFS is in filesystem/ not core/)
-- Forget to verify import paths when buttons don't work in test pages
-- Skip checking browser Network tab for 404s on module imports
+### M3-M4 Implementation & Launch Prep (Sessies 7-11) - COMPRESSED
+⚠️ **Module/Integration:** Never assume ES6 imports fail loudly (silent 404s), call methods without existence check, execute DOM manipulation without `readyState` check, skip localStorage try-catch wrapping
+⚠️ **Legal/Privacy:** Never create legal docs in English for NL market (AVG compliance), log command arguments (privacy violation), hardcode analytics IDs, show cookie banner immediately (use 2 sec delay)
+⚠️ **Scope/Docs:** Never assume documented = implemented (verify via Glob/Grep), let PRD diverge from TASKS.md status, keep ambiguous "deferred" items (explicit Post-MVP classification required)
 
-✅ **Always:**
-- Verify import paths match actual file structure (VFS → filesystem/, not core/)
-- Check browser console Network tab when ES6 modules don't load
-- Use `window.functionName = function()` for onclick handlers in ES6 modules
-- Test man page integration: man command must check `handler.manPage` exists
-- Remember module structure: core/ (terminal, parser), filesystem/ (vfs), utils/ (fuzzy), help/ (help-system)
+✅ **Module/Integration:** Verify import paths match file structure (VFS → filesystem/ not core/), check DevTools Console + Network tab for errors, trace init flows to prevent duplicates, wrap localStorage in try-catch with fallbacks
+✅ **Legal/Privacy:** Progressive hints at strategic moments (1st/5th/10th command), singleton pattern for UI managers, privacy by design (never log args), GA4 → Plausible abstraction layer, IP anonymization required
+✅ **Scope/Docs:** Verify implementation via codebase inspection, mark Post-MVP features with ~~strikethrough~~, update all docs when scope changes (PRD → TASKS → CLAUDE), proactive rotation at 5+ sessions
 
-📄 **Detailed logs:** `SESSIONS.md` Sessie 7 (M3 complete: 11 commands + help system + testing)
+📄 **Detailed logs:** `SESSIONS.md` Sessies 7-11 (M3: Help system + 11 commands, M4: Onboarding + Legal 8100 words + Analytics + Mobile, Scope clarification, Error debugging)
 
-### Onboarding & Legal Implementation (Sessie 8)
-⚠️ **Never:**
-- Create legal docs without complete disclosure (contact info, data retention, user rights)
-- Use English for legal docs aimed at Dutch market (AVG compliance requires native language)
-- Implement analytics without two-tier consent strategy (functional vs tracking)
-- Forget localStorage persistence for onboarding state (poor UX on reload)
+### Deployment & Public Documentation (Sessies 12-14) - COMPRESSED
+⚠️ **Documentation:** Never let rotation unenforced (compress >5 sessions), assume README exists = current (outdated damages credibility), use vague browser support ("latest 2"), let version history accumulate duplicates
+⚠️ **Deployment:** Never setup infrastructure during development (GA4/email = 24-48u pre-launch), assume users know publish directory (explain WHY), accept Lighthouse at face value (check extension warnings), count test files in bundle measurements
 
-✅ **Always:**
-- Progressive hints at strategic moments (1st, 5th, 10th command) - prevents information overload
-- Singleton pattern for UI managers (onboarding, modals) - shared state consistency
-- Prioritize launch-blocking tasks first (legal docs before mobile optimization)
-- Placeholder approach for incomplete info ([email@domain - TO BE ADDED]) - transparent and trackable
-- Privacy by design: Never log command arguments (privacy risk per PRD §6.6)
+✅ **Documentation:** Execute rotation proactively (before bloat), multi-level planning (TASKS.md milestones + detailed checklists), cross-document consistency verification (dates/status/percentages), public docs need live demo + metrics + explicit browser support with rationale
+✅ **Deployment:** Separate functional testing from infrastructure setup, GitHub CLI efficiency (`gh repo create --push`), Lighthouse in Incognito mode, prioritize Core Web Vitals > composite score, accept trade-offs (88/100 for zero-build OK)
 
-📄 **Detailed logs:** `SESSIONS.md` Sessie 8 (M4 Phases 1-2: Onboarding + Legal docs, 8100+ words AVG compliant)
-
-### M4 Complete - Analytics & Mobile (Sessie 9)
-⚠️ **Never:**
-- Log command arguments in analytics (PRD §6.6 privacy violation)
-- Show cookie consent banner immediately (annoying - use 2 sec delay)
-- Forget IP anonymization in GA4 (AVG compliance required)
-- Hard-code analytics IDs in code (use placeholders for MVP)
-- Implement mobile gestures without testing on real devices
-
-✅ **Always:**
-- Build analytics abstraction layer (GA4 → Plausible migration path)
-- Two-tier timing: Legal modal (immediate) → Cookie banner (2 sec delay)
-- Privacy-first: Check consent BEFORE tracking, graceful degradation
-- Mobile CSS in single file (mobile.css) - all breakpoints + fixes together
-- Touch targets 44x44px minimum (Apple HIG + Android Material guidelines)
-- Prevent iOS zoom: font-size: 16px on inputs (not 14px!)
-
-📄 **Detailed logs:** `SESSIONS.md` Sessie 9 (M4 complete: Analytics, Mobile, Styling - 91.6% MVP done)
-
-### Scope Decisiveness & MVP Clarity (Sessie 10)
-⚠️ **Never:**
-- Assume documented features are implemented without codebase verification
-- Let PRD requirements diverge from actual implementation status
-- Keep ambiguous "deferred" items without explicit Post-MVP classification
-- Describe features in PRD without clear MVP vs. Fase 2 distinction
-
-✅ **Always:**
-- Verify implementation status via codebase inspection (Glob/Grep/Read)
-- Explicitly mark Post-MVP features with ~~strikethrough~~ **[POST-MVP]** in PRD
-- Create dedicated "Post-MVP Features" section in TASKS.md for transparency
-- Update all documents when scope decisions are made (PRD → TASKS → CLAUDE)
-- Be decisive: Feature is either MVP (implement now) or Post-MVP (explicit defer)
-
-📊 **Consistency Protocol:**
-1. PRD status must match TASKS.md completion percentage
-2. Release Criteria checkboxes must reflect actual implementation
-3. Features described in PRD examples must exist in code OR be marked Post-MVP
-4. Mobile features (gestures, quick commands) need real device testing before MVP
-
-**Scope Decisions Made:**
-- Autocomplete (FR1.4) → Post-MVP (only TODO comment exists)
-- Exit intent (FR7.2) → Post-MVP (floating button sufficient for MVP)
-- Mobile gestures → Post-MVP (requires real device testing)
-- Quick Commands UI → Post-MVP (CSS only, no JS/HTML)
-- Continue command → Post-MVP (localStorage auto-restore sufficient)
-
-📄 **Detailed logs:** `SESSIONS.md` Sessie 10 (Consistency audit: PRD v1.2, scope clarification, Post-MVP section)
-
-### Module Integration & Error Debugging (Sessie 11)
-⚠️ **Never:**
-- Call methods without verifying they exist in target module
-- Rely solely on alert() modals for error messages (use DevTools Console)
-- Execute DOM manipulation during ES6 module load without ready check
-- Call localStorage without try-catch protection (can be disabled)
-
-✅ **Always:**
-- Check browser DevTools Console for exact error + stack trace
-- Trace initialization flow to avoid duplicate calls (main.js → terminal.init() → onboarding.init())
-- Verify method exists in exports before calling (read source code)
-- Wrap ALL localStorage operations in try-catch with safe fallback defaults
-- Check `document.readyState` before DOM manipulation in module scope
-
-📄 **Detailed logs:** `SESSIONS.md` Sessie 11 (Critical bug fix: non-existent method call, localStorage/DOM error handling)
-
-### Documentation Lifecycle & Launch Prep (Sessie 12)
-⚠️ **Never:**
-- Let rotation policy go unenforced (compress when >5 sessions in Key Learnings)
-- Create implementation checklists without linking to milestone tasks (orphaned files)
-- Focus only on process tasks, forgetting configuration tasks (placeholders, IDs)
-- Let Quick Reference status info drift from actual project status
-
-✅ **Always:**
-- Execute rotation proactively at 7+ sessions (before file bloat, not after)
-- Multi-level planning: TASKS.md (milestones) + detailed checklists (implementation)
-- Explicit "Configuration" sections for launch-blocking items (GA4 IDs, emails, etc.)
-- Cross-document consistency verification at session end (status, percentages, dates)
-- Convert compact criteria into actionable checkboxes (clarity over brevity)
-
-📄 **Detailed logs:** `SESSIONS.md` Sessie 12 (Documentation review, rotation strategy, PRE-LAUNCH-CHECKLIST.md, M5 critical tasks)
-
-### GitHub + Netlify Deployment (Sessie 13)
-⚠️ **Never:**
-- Setup infrastructure (GA4, email) during development - wait until 24-48u before launch
-- Assume users know publish directory settings - explain WHY (`.` for vanilla, `dist/` for frameworks)
-- Accept Lighthouse scores at face value - check for browser extension warnings
-- Count test files in production bundle measurements
-
-✅ **Always:**
-- Separate functional testing (now) from infrastructure setup (pre-launch timing)
-- Use GitHub CLI for efficiency (`gh repo create --push` = one command)
-- Test Lighthouse in Incognito mode (extensions artificially lower scores)
-- Prioritize Core Web Vitals (FCP, LCP, CLS) over composite Performance score
-- Accept trade-offs: 88/100 Lighthouse Performance acceptable for zero-build architecture
-
-📄 **Detailed logs:** `SESSIONS.md` Sessie 13 (GitHub integration, Netlify deployment, Lighthouse 88/100/100/100, Live: famous-frangollo-b5a758.netlify.app)
-
-### Documentation Debt & Public Repo Readiness (Sessie 14)
-⚠️ **Never:**
-- Assume README exists = README is current (outdated status damages credibility)
-- Use vague browser support ("latest 2 versions") in public docs - specify minimum versions
-- Let version history accumulate duplicates without periodic cleanup
-- Ignore cross-document date consistency (explicit audit required)
-
-✅ **Always:**
-- Public docs require: live demo link, performance metrics, explicit browser support (with rationale)
-- Browser minimum versions = architecture decisions (vanilla → ES6 modules → Chrome 61+, Firefox 60+, Safari 11+)
-- Explicit "NOT supported" (IE11) prevents user confusion, saves support time
-- Enforce CLAUDE.md rotation proactively at 5+ sessions (72% size reduction without info loss)
-- Placeholder transparency ([TBD - will be added]) > omission
-
-📄 **Detailed logs:** `SESSIONS.md` Sessie 14 (README modernization, PRD browser matrix, version history cleanup, rotation)
+📄 **Detailed logs:** `SESSIONS.md` Sessies 12-14 (Rotation strategy, PRE-LAUNCH-CHECKLIST, GitHub + Netlify deployment, Lighthouse 88/100/100/100, README modernization, browser matrix Chrome 61+/Firefox 60+/Safari 11+)
 
 ### Visual Redesign & UX Decisions (Sessie 15)
 ⚠️ **Never:**
@@ -372,6 +249,24 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessie 18 (Cyberpunk color scheme: pure black + neon green, 15 CSS var changes, deployed to production)
 
+### CSS Inheritance & Semantic Color Consistency (Sessie 19)
+⚠️ **Never:**
+- Combine semantic messages with different output types in single string (error + tip → entire block inherits error color)
+- Assume CSS icon color fix solves text inheritance (only emoji gets color, surrounding text still inherits parent)
+- Rely solely on CSS fixes for dynamic content rendering issues (requires rendering-level solution)
+- Let command handlers specify rendering types manually (code duplication across 30+ commands)
+
+✅ **Always:**
+- Separate rendering calls for different semantic types: `renderError(error)` + `renderInfo(tip)` (not combined string)
+- Implement semantic line detection in renderer: auto-detect emoji markers (💡/⚠️/✅/❌) → force correct color type
+- Single Source of Truth pattern: renderer detects semantics, commands output plain strings (zero breaking changes)
+- Multi-layer fixes for inheritance bugs: CSS overrides + split rendering + semantic detection (defense in depth)
+- Performance consideration: O(1) `startsWith()` check per line acceptable for consistent UX
+
+**Architecture Pattern:** Semantic content detection at render time beats manual type specification - works for mixed content, robust for future additions, no command-level changes needed.
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 19 (Tip color inheritance fix: 3-layer solution, emoji-aware renderer, 3 files changed)
+
 ---
 
 ## 🤖 Sessie Protocol
@@ -439,5 +334,5 @@ Bij nieuwe command:
 
 ---
 
-**Last updated:** 23 oktober 2025
-**Version:** 5.2 (Documentation Consistency Fix - Synchronized all dates, test counts, and M5 progress across all MD files)
+**Last updated:** 26 oktober 2025
+**Version:** 5.3 (Sessie 19: Tip color inheritance fix + Key Learnings rotation - Compressed Sessies 7-14, 9 active entries)

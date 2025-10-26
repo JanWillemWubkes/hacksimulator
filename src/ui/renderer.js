@@ -58,7 +58,23 @@ class Renderer {
 
     lines.forEach(lineText => {
       const line = document.createElement('div');
-      line.className = `terminal-line terminal-output terminal-output-${type}`;
+
+      // Auto-detect semantic lines and force correct color type
+      // This ensures consistent colors regardless of parent output type
+      const trimmed = lineText.trim();
+      let lineType = type;
+
+      if (trimmed.startsWith('💡')) {
+        lineType = 'info';      // Tips → cyaan
+      } else if (trimmed.startsWith('⚠️') || trimmed.startsWith('🔒')) {
+        lineType = 'warning';   // Warnings & Security → oranje
+      } else if (trimmed.startsWith('✅')) {
+        lineType = 'success';   // Success → groen
+      } else if (trimmed.startsWith('❌')) {
+        lineType = 'error';     // Errors → magenta/rood
+      }
+
+      line.className = `terminal-line terminal-output terminal-output-${lineType}`;
 
       // Process special formatting
       const formattedContent = this._formatText(lineText);
