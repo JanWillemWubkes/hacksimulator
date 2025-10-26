@@ -279,8 +279,9 @@ button:focus {
   color: #000000;
   font-size: 2rem;
   border: none;
+  outline: none;
   box-shadow:
-    0 0 0 4px #333333,
+    0 0 0 2px #333333,
     0 0 0 10px var(--color-ui-primary);
 }
 
@@ -288,8 +289,12 @@ button:focus {
   transform: scale(1.05);
   background-color: var(--color-ui-hover);
   box-shadow:
-    0 0 0 4px #333333,
+    0 0 0 2px #333333,
     0 0 0 12px var(--color-ui-hover);
+}
+
+.floating-btn:focus {
+  outline: none;
 }
 
 /* Rating Stars */
