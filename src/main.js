@@ -116,21 +116,10 @@ function init() {
 }
 
 /**
- * Initialize navigation menu
+ * Initialize navigation (modals and links)
  */
 function initializeNavigation() {
-  // Mobile hamburger menu toggle
-  const navToggle = document.querySelector('.nav-toggle');
-  const navContent = document.querySelector('.nav-content');
-
-  if (navToggle && navContent) {
-    navToggle.addEventListener('click', () => {
-      const isActive = navContent.classList.toggle('active');
-      navToggle.setAttribute('aria-expanded', isActive);
-    });
-  }
-
-  // Modal links (Coming Soon pages)
+  // Modal links (Coming Soon pages) - legacy support
   const modalLinks = {
     '#tutorial': 'tutorial-modal',
     '#commands': 'commands-modal',
