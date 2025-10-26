@@ -297,25 +297,32 @@ button:focus {
   outline: none;
 }
 
+/* Feedback Modal - Balanced spacing */
+#feedback-modal .modal-content p {
+  margin-bottom: var(--spacing-sm); /* Match rating-stars spacing for visual balance */
+}
+
 /* Rating Stars */
 .rating-stars {
   display: flex;
   gap: var(--spacing-sm);
-  margin: var(--spacing-md) 0;
+  margin: 0 0 var(--spacing-sm) 0; /* No top margin for tight visual balance */
 }
 
 .star {
   background: none;
-  font-size: 2rem;
+  font-size: 4.5rem; /* Extra large stars */
   padding: var(--spacing-xs);
-  filter: grayscale(100%);
-  transition: filter var(--transition-fast);
+  color: #333; /* Dark grey for unselected */
+  transition: all var(--transition-fast);
+  text-shadow: none;
 }
 
 .star:hover,
 .star.selected,
 .star.active {
-  filter: grayscale(0%);
+  color: var(--color-ui-primary); /* Pure neon green (#00ff00) - same as Versturen button */
+  text-shadow: 0 0 8px var(--color-ui-primary); /* Subtle glow effect */
 }
 
 #feedback-comment {
