@@ -353,6 +353,25 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessie 17 (P1 bug fix: terminal input focus-steal, 28/28 tests passing, `.closest()` pattern for modal protection)
 
+### Color Scheme Transformations & CSS Variables (Sessie 18)
+⚠️ **Never:**
+- Use pure neon (#00ff00) for large text areas (eye strain - reserve for UI accents only)
+- Change brand colors without UX consultation (users develop attachment)
+- Hardcode colors in individual components (breaks centralized theming)
+- Skip accessibility checks when changing semantic colors (colorblind users, contrast ratios)
+
+✅ **Always:**
+- CSS Variables = transformation power (15 var changes → entire site updated instantly)
+- Color hierarchy strategy: Pure neon (#00ff00) for buttons, softer neon (#00ff88) for text (reduces eye strain)
+- White text for long-form content in modals (legal docs) - readability > aesthetic consistency
+- Visual hierarchy via color roles: Green = primary actions, Cyan = secondary/links, distinct semantics
+- Cache-busting (v5 → v6) when changing visual assets (force user browser refresh)
+- Validate in browser with real commands (help, errors, warnings) - not just static screenshots
+
+**Design Pattern:** Mix strategy beats monochrome - neon green (primary) + cyan (secondary) + white (body text) = better UX than single neon color
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 18 (Cyberpunk color scheme: pure black + neon green, 15 CSS var changes, deployed to production)
+
 ---
 
 ## 🤖 Sessie Protocol
