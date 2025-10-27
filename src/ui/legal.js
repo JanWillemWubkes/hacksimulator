@@ -33,7 +33,7 @@ const legalManager = {
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.9);
+      background: #000000;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -45,40 +45,40 @@ const legalManager = {
     const modal = document.createElement('div');
     modal.id = 'legal-modal';
     modal.style.cssText = `
-      background: #1a1a1a;
-      border: 2px solid #00ff00;
+      background: #2d2d2d;
+      border: none;
       border-radius: 8px;
-      padding: 30px;
+      padding: 40px;
       max-width: 600px;
       width: 100%;
-      color: #00ff00;
+      color: #cccccc;
       font-family: 'Courier New', monospace;
-      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+      box-shadow: none;
     `;
 
     modal.innerHTML = `
-      <div style="text-align: center; margin-bottom: 24px;">
-        <div style="font-size: 32px; margin-bottom: 8px;">⚖️</div>
-        <h2 style="margin: 0; font-size: 20px; font-weight: bold;">JURIDISCHE KENNISGEVING</h2>
+      <div style="text-align: center; margin-bottom: 32px;">
+        <div style="font-size: 40px; margin-bottom: 12px;">⚖️</div>
+        <h2 style="margin: 0; font-size: 32px; font-weight: bold; color: #00ff00; text-transform: uppercase; letter-spacing: 1px;">Juridische Kennisgeving</h2>
       </div>
 
-      <div style="line-height: 1.6; margin-bottom: 24px; font-size: 14px;">
-        <p style="margin-bottom: 16px;">
-          Deze simulator is <strong>UITSLUITEND</strong> voor educatieve doeleinden.
-          Ongeautoriseerd hacken is <strong>ILLEGAAL</strong> in Nederland (Artikel 138ab Wetboek van Strafrecht).
+      <div style="line-height: 1.7; margin-bottom: 32px; font-size: 15px; color: #cccccc;">
+        <p style="margin-bottom: 18px;">
+          Deze simulator is <strong style="color: #00ff00;">UITSLUITEND</strong> voor educatieve doeleinden.
+          Ongeautoriseerd hacken is <strong style="color: #00ff00;">ILLEGAAL</strong> in Nederland (Artikel 138ab Wetboek van Strafrecht).
         </p>
 
-        <p style="margin-bottom: 16px;">
-          Alle activiteiten in deze simulator zijn <strong>gesimuleerd</strong> en beïnvloeden geen echte systemen.
+        <p style="margin-bottom: 18px;">
+          Alle activiteiten in deze simulator zijn <strong style="color: #00ff00;">gesimuleerd</strong> en beïnvloeden geen echte systemen.
         </p>
 
-        <p style="margin-bottom: 16px;">
-          <strong>Belangrijke regels:</strong>
+        <p style="margin-bottom: 12px;">
+          <strong style="color: #00ff00;">Belangrijke regels:</strong>
         </p>
-        <ul style="margin: 0 0 16px 20px; padding: 0;">
-          <li style="margin-bottom: 8px;">Vraag <strong>altijd toestemming</strong> voordat je systemen test</li>
-          <li style="margin-bottom: 8px;">Gebruik deze kennis <strong>alleen ethisch en legaal</strong></li>
-          <li style="margin-bottom: 8px;">Ongeautoriseerde toegang tot systemen is een <strong>misdrijf</strong></li>
+        <ul style="margin: 0 0 18px 20px; padding: 0;">
+          <li style="margin-bottom: 10px;">Vraag <strong style="color: #00ff00;">altijd toestemming</strong> voordat je systemen test</li>
+          <li style="margin-bottom: 10px;">Gebruik deze kennis <strong style="color: #00ff00;">alleen ethisch en legaal</strong></li>
+          <li style="margin-bottom: 10px;">Ongeautoriseerde toegang tot systemen is een <strong style="color: #00ff00;">misdrijf</strong></li>
         </ul>
 
         <p style="margin-bottom: 0;">
@@ -88,24 +88,27 @@ const legalManager = {
         </p>
       </div>
 
-      <div style="text-align: center;">
+      <div style="margin-bottom: 20px;">
         <button id="legal-accept-btn" style="
           background: #00ff00;
           color: #000000;
           border: none;
-          padding: 12px 32px;
+          padding: 16px 32px;
           font-size: 16px;
           font-weight: bold;
           font-family: 'Courier New', monospace;
           cursor: pointer;
           border-radius: 4px;
           transition: all 0.2s ease;
+          width: 100%;
+          text-transform: uppercase;
+          letter-spacing: 1px;
         ">
           Ik begrijp het - Verder
         </button>
       </div>
 
-      <div style="margin-top: 16px; text-align: center; font-size: 12px; opacity: 0.7;">
+      <div style="margin-top: 16px; text-align: center; font-size: 13px; color: #888888;">
         <a href="assets/legal/privacy.html" target="_blank" style="color: #00ff00; margin: 0 8px;">Privacy</a>
         <span>•</span>
         <a href="assets/legal/cookies.html" target="_blank" style="color: #00ff00; margin: 0 8px;">Cookies</a>
@@ -118,8 +121,8 @@ const legalManager = {
     // Add hover effect to button
     const btn = document.getElementById('legal-accept-btn');
     btn.addEventListener('mouseenter', () => {
-      btn.style.background = '#00cc00';
-      btn.style.transform = 'scale(1.05)';
+      btn.style.background = '#00dd00';
+      btn.style.transform = 'scale(1.02)';
     });
     btn.addEventListener('mouseleave', () => {
       btn.style.background = '#00ff00';

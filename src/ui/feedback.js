@@ -274,8 +274,8 @@ const feedbackManager = {
     modalContent.innerHTML = `
       <div class="feedback-success" style="text-align: center; padding: 40px 20px;">
         <div style="font-size: 64px; margin-bottom: 20px;">✅</div>
-        <h2 style="color: var(--color-success, #00ff00); margin-bottom: 10px;">Bedankt!</h2>
-        <p style="color: var(--color-text-dim, #00aa00);">Je feedback helpt ons HackSimulator.nl te verbeteren.</p>
+        <h2 style="color: #00ff00; margin-bottom: 16px; font-size: 2rem; text-transform: uppercase; letter-spacing: 1px;">Bedankt!</h2>
+        <p style="color: #cccccc; font-size: 1rem;">Je feedback helpt ons HackSimulator.nl te verbeteren.</p>
       </div>
     `;
 
@@ -306,13 +306,13 @@ const feedbackManager = {
       errorElement = document.createElement('div');
       errorElement.className = 'feedback-error';
       errorElement.style.cssText = `
-        background: rgba(255, 0, 0, 0.1);
-        border: 1px solid #ff0000;
-        color: #ff0000;
-        padding: 10px;
-        margin: 10px 0;
+        background: rgba(255, 0, 85, 0.1);
+        border: 1px solid #ff0055;
+        color: #ff0055;
+        padding: 12px;
+        margin: 12px 0;
         border-radius: 4px;
-        font-size: 14px;
+        font-size: 15px;
       `;
 
       // Insert before submit button
