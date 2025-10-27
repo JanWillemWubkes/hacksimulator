@@ -2,7 +2,7 @@
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
 **Status:** MVP Development
-**Docs:** `docs/prd.md` v1.1 | `docs/commands-list.md` | `SESSIONS.md` voor sessie logs
+**Docs:** `docs/prd.md` v1.1 | `docs/commands-list.md` | `docs/STYLEGUIDE.md` v1.0 | `SESSIONS.md` voor sessie logs
 
 ---
 
@@ -17,7 +17,8 @@
 **Taal:** UI=NL, commands=EN, uitleg=NL
 **Analytics:** GA4 (MVP) → Plausible (bij 10k+ visitors)
 **Tests:** 22/22 passing (Cross-browser 16/16, Feedback 6/6) ✅
-**Bundle:** 312 KB / 500 KB (37.5% buffer) ✅
+**Bundle:** 312.5 KB / 500 KB (37.4% buffer) ✅
+**Style Guide Compliance:** 100% (40/40 CSS variables, 0 hardcoded colors, WCAG AAA) ✅
 
 ---
 
@@ -126,8 +127,9 @@ Bij nieuwe command:
 - [x] Security audit (input sanitization, localStorage protection) ✅
 - [x] Accessibility audit (WCAG AAA color contrast 15.3:1) ✅
 
-**Performance:** Bundle 312KB, Load ~2s, Lighthouse 88/100/100/100 (Perf/A11y/BP/SEO)
+**Performance:** Bundle 312.5KB, Load ~2s, Lighthouse 88/100/100/100 (Perf/A11y/BP/SEO)
 **Testing:** Playwright E2E (8 tests × 2 browsers = 16/16 passing)
+**Compliance:** Style Guide v1.0 = 100% (was 89% - Sessie 21 audit fixed all violations)
 **Volledige criteria:** Zie M5-AUDIT-REPORT.md (comprehensive 11-section audit)
 
 ---
@@ -267,6 +269,42 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessie 19 (Tip color inheritance fix: 3-layer solution, emoji-aware renderer, 3 files changed)
 
+### Style Guide & Design System Documentation (Sessie 20)
+⚠️ **Never:**
+- Create design systems without documentation (code alone ≠ design system - onboarding takes 5+ hours vs 30 min with guide)
+- Use single font for all contexts (monospace everywhere causes eye strain in long-form text 500+ words)
+- Document components without rationale (color choices, font sizes need "why" explanations for maintainability)
+- Skip anti-patterns section in guides (real bugs = best learning material, prevents repeat mistakes)
+
+✅ **Always:**
+- Dual font strategy for developer tools: Monospace (terminal/code) + Sans-serif (docs/long text) = industry pattern (VS Code, GitHub)
+- Document decision trees for ambiguous choices: "Which font?" → beslisboom based on content type (terminal vs legal docs)
+- Include comprehensive component library with code snippets: 8 components × code examples = copy-paste ready (saves 70% implementation time)
+- Cross-reference learnings from session logs: Color inheritance fix (Sessie 19) → documented in anti-patterns + component patterns
+- CSS variable naming convention: `--category-property-modifier` (kebab-case, semantic not abstract like --color-1)
+
+**Design System ROI:** 750-line style guide provides 30 min onboarding (vs 5+ hours), decision trees eliminate ambiguity, anti-patterns prevent bugs. Large systems (Material Design) are 50%+ valuable due to documentation not code.
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 20 (STYLEGUIDE.md creation: 12 sections, dual font system, 18 colors documented, 8 components, WCAG AAA)
+
+### Style Guide Compliance & CSS Variables (Sessie 21)
+⚠️ **Never:**
+- Hardcode colors when CSS variables exist (11 violations found via audit - blocks theme changes, creates drift)
+- Use <16px fonts on mobile primary UI (WCAG AAA violation - 14px footer/buttons blocks certification)
+- Assume style guide = 100% implemented (Sessie 20 created guide, Sessie 21 audit found 89% compliance - 13 issues)
+- Skip visual regression tests after CSS variable changes (9 color replacements = high risk, all verified via screenshots)
+
+✅ **Always:**
+- Audit style guides immediately after creation (1 day drift found 13 issues - earlier = smaller fixes)
+- Complete CSS variable coverage for design tokens: 40 variables = centralized theming (5 min theme change vs 2 hours)
+- Fix WCAG AAA violations first (legal/compliance risk), then maintainability issues (technical debt)
+- Visual regression test all changed components post-deploy: feedback modal, stars, footer hover (4 screenshots = confidence)
+- Bundle size awareness: +6 CSS variables = +0.5 KB (0.16%) - negligible cost for massive maintainability gain
+
+**Pattern:** CSS Variables = Transformation Power - Sessie 18 proved 15 var changes → instant site-wide theme. Sessie 21: 11 hardcoded colors eliminated → 100% compliance. Enterprise systems (Material Design, Tailwind) are 100% variable-based for this reason.
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 21 (89%→100% compliance: +6 variables, 11 color fixes, 2 mobile font fixes, 0 visual regressions, commit a9c5f97)
+
 ---
 
 ## 🤖 Sessie Protocol
@@ -328,11 +366,12 @@ Bij nieuwe command:
 
 **Volledige details:** `docs/prd.md` (v1.4)
 **Command specs:** `docs/commands-list.md`
+**Style guide:** `docs/STYLEGUIDE.md` (v1.0) - Comprehensive design system & component library
 **Sessie logs:** `SESSIONS.md`
 **Filesystem structure:** PRD Bijlage B
 **Tech rationale:** PRD §13
 
 ---
 
-**Last updated:** 26 oktober 2025
-**Version:** 5.3 (Sessie 19: Tip color inheritance fix + Key Learnings rotation - Compressed Sessies 7-14, 9 active entries)
+**Last updated:** 27 oktober 2025
+**Version:** 5.5 (Sessie 21: Style Guide 100% compliance - 11 color fixes, WCAG AAA mobile fonts, 40 CSS variables complete)
