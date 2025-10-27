@@ -62,7 +62,7 @@ const legalManager = {
         <h2 style="margin: 0; font-size: 32px; font-weight: bold; color: #00ff00; text-transform: uppercase; letter-spacing: 1px;">Juridische Kennisgeving</h2>
       </div>
 
-      <div style="line-height: 1.7; margin-bottom: 32px; font-size: 15px; color: #cccccc;">
+      <div style="line-height: 1.7; margin-bottom: 32px; font-size: 17px; color: #cccccc;">
         <p style="margin-bottom: 18px;">
           Deze simulator is <strong style="color: #00ff00;">UITSLUITEND</strong> voor educatieve doeleinden.
           Ongeautoriseerd hacken is <strong style="color: #00ff00;">ILLEGAAL</strong> in Nederland (Artikel 138ab Wetboek van Strafrecht).
