@@ -71,6 +71,14 @@
   --z-feedback: 100;
   --z-modal: 1000;
   --z-cookie: 2000;
+
+  /* Grid Background System */
+  --grid-color-base: rgba(255, 255, 255, 0.12);      /* Grey lines - balanced visibility */
+  --grid-color-accent: rgba(0, 255, 136, 0.25);      /* Green accent lines - cyberpunk pop */
+  --grid-size-desktop: 60px;                         /* Desktop grid spacing */
+  --grid-size-mobile: 40px;                          /* Mobile grid spacing (smaller for performance) */
+  --grid-perspective: 800px;                         /* 3D perspective depth */
+  --grid-opacity: 1.0;                               /* Full visibility for grid layer */
 }
 
 /* ==================== Reset & Base ==================== */

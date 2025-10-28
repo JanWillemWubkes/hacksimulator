@@ -14,7 +14,7 @@
   width: 100%;
   position: relative;
   z-index: var(--z-terminal);
-  background-color: var(--color-bg);
+  background-color: transparent;  /* Allow grid to show through */
 }
 
 /* ==================== Terminal Output ==================== */
@@ -399,4 +399,193 @@
 
 .hint-close:hover {
   color: var(--color-text);
+}
+
+/* ==================== Perspective Grid Background ==================== */
+/* Cyberpunk 3D grid achtergrond met grijs+groen mix */
+
+.grid-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+
+  /* Perspective op container - NOT in transform */
+  perspective: var(--grid-perspective);
+  perspective-origin: center center;
+}
+
+/* Grid container met perspective transform */
+.grid-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    /* Groene accent lijnen - elke 5e horizontale lijn (300px spacing) */
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent calc(var(--grid-size-desktop) * 5 - 1px),
+      var(--grid-color-accent) calc(var(--grid-size-desktop) * 5 - 1px),
+      var(--grid-color-accent) calc(var(--grid-size-desktop) * 5),
+      transparent calc(var(--grid-size-desktop) * 5)
+    ),
+    /* Grijze basis horizontale lijnen */
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent calc(var(--grid-size-desktop) - 1px),
+      var(--grid-color-base) calc(var(--grid-size-desktop) - 1px),
+      var(--grid-color-base) var(--grid-size-desktop)
+    ),
+    /* Groene accent verticale lijnen - elke 5e lijn */
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent calc(var(--grid-size-desktop) * 5 - 1px),
+      var(--grid-color-accent) calc(var(--grid-size-desktop) * 5 - 1px),
+      var(--grid-color-accent) calc(var(--grid-size-desktop) * 5),
+      transparent calc(var(--grid-size-desktop) * 5)
+    ),
+    /* Grijze basis verticale lijnen */
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent calc(var(--grid-size-desktop) - 1px),
+      var(--grid-color-base) calc(var(--grid-size-desktop) - 1px),
+      var(--grid-color-base) var(--grid-size-desktop)
+    );
+
+  /* 3D Transform - subtle perspective effect */
+  transform: rotateX(35deg) translateY(-15%);
+  transform-origin: center center;
+  transform-style: preserve-3d;
+
+  /* Overall dimming */
+  opacity: var(--grid-opacity);
+}
+
+/* Glow effect op groene lijnen via pseudo-element */
+.grid-background::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    /* Groene glowing lijnen - alleen elke 5e lijn */
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent calc(var(--grid-size-desktop) * 5 - 2px),
+      rgba(0, 255, 136, 0.15) calc(var(--grid-size-desktop) * 5 - 2px),
+      rgba(0, 255, 136, 0.15) calc(var(--grid-size-desktop) * 5 + 1px),
+      transparent calc(var(--grid-size-desktop) * 5 + 1px)
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent calc(var(--grid-size-desktop) * 5 - 2px),
+      rgba(0, 255, 136, 0.15) calc(var(--grid-size-desktop) * 5 - 2px),
+      rgba(0, 255, 136, 0.15) calc(var(--grid-size-desktop) * 5 + 1px),
+      transparent calc(var(--grid-size-desktop) * 5 + 1px)
+    );
+
+  /* Same transform as ::before */
+  transform: rotateX(35deg) translateY(-15%);
+  transform-origin: center center;
+  transform-style: preserve-3d;
+
+  /* Blur voor glow effect */
+  filter: blur(1px);
+  opacity: 0.8;
+}
+
+/* ==================== Mobile Optimalisatie ==================== */
+@media (max-width: 768px) {
+  .grid-background::before {
+    /* Kleinere grid voor betere performance */
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent calc(var(--grid-size-mobile) * 5 - 1px),
+        var(--grid-color-accent) calc(var(--grid-size-mobile) * 5 - 1px),
+        var(--grid-color-accent) calc(var(--grid-size-mobile) * 5),
+        transparent calc(var(--grid-size-mobile) * 5)
+      ),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent calc(var(--grid-size-mobile) - 1px),
+        var(--grid-color-base) calc(var(--grid-size-mobile) - 1px),
+        var(--grid-color-base) var(--grid-size-mobile)
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent calc(var(--grid-size-mobile) * 5 - 1px),
+        var(--grid-color-accent) calc(var(--grid-size-mobile) * 5 - 1px),
+        var(--grid-color-accent) calc(var(--grid-size-mobile) * 5),
+        transparent calc(var(--grid-size-mobile) * 5)
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent calc(var(--grid-size-mobile) - 1px),
+        var(--grid-color-base) calc(var(--grid-size-mobile) - 1px),
+        var(--grid-color-base) var(--grid-size-mobile)
+      );
+
+    /* Extra dimming op mobiel */
+    opacity: 0.4;
+  }
+
+  .grid-background::after {
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent calc(var(--grid-size-mobile) * 5 - 2px),
+        rgba(0, 255, 136, 0.15) calc(var(--grid-size-mobile) * 5 - 2px),
+        rgba(0, 255, 136, 0.15) calc(var(--grid-size-mobile) * 5 + 1px),
+        transparent calc(var(--grid-size-mobile) * 5 + 1px)
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent calc(var(--grid-size-mobile) * 5 - 2px),
+        rgba(0, 255, 136, 0.15) calc(var(--grid-size-mobile) * 5 - 2px),
+        rgba(0, 255, 136, 0.15) calc(var(--grid-size-mobile) * 5 + 1px),
+        transparent calc(var(--grid-size-mobile) * 5 + 1px)
+      );
+
+    opacity: 0.6;
+  }
+}
+
+/* ==================== Accessibility: Reduced Motion ==================== */
+@media (prefers-reduced-motion: reduce) {
+  .grid-background::before,
+  .grid-background::after {
+    /* Disable 3D transform voor motion sensitivity */
+    transform: none;
+
+    /* Extra dimming voor static grid */
+    opacity: 0.3;
+  }
+
+  .grid-background::after {
+    /* Disable glow effect */
+    filter: none;
+    opacity: 0.2;
+  }
 }
