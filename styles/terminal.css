@@ -442,13 +442,13 @@
       var(--grid-color-accent) calc(var(--grid-size-desktop) * 5),
       transparent calc(var(--grid-size-desktop) * 5)
     ),
-    /* Grijze basis horizontale lijnen - INLINED to force Chrome update */
+    /* Grijze basis horizontale lijnen - LIGHTER grey for visibility */
     repeating-linear-gradient(
       0deg,
       transparent,
       transparent calc(var(--grid-size-desktop) - 1px),
-      rgba(42, 42, 42, 0.8) calc(var(--grid-size-desktop) - 1px),
-      rgba(42, 42, 42, 0.8) var(--grid-size-desktop)
+      rgba(90, 90, 90, 0.6) calc(var(--grid-size-desktop) - 1px),
+      rgba(90, 90, 90, 0.6) var(--grid-size-desktop)
     ),
     /* Groene accent verticale lijnen - elke 5e lijn */
     repeating-linear-gradient(
@@ -459,13 +459,13 @@
       var(--grid-color-accent) calc(var(--grid-size-desktop) * 5),
       transparent calc(var(--grid-size-desktop) * 5)
     ),
-    /* Grijze basis verticale lijnen - INLINED to force Chrome update */
+    /* Grijze basis verticale lijnen - LIGHTER grey for visibility */
     repeating-linear-gradient(
       90deg,
       transparent,
       transparent calc(var(--grid-size-desktop) - 1px),
-      rgba(42, 42, 42, 0.8) calc(var(--grid-size-desktop) - 1px),
-      rgba(42, 42, 42, 0.8) var(--grid-size-desktop)
+      rgba(90, 90, 90, 0.6) calc(var(--grid-size-desktop) - 1px),
+      rgba(90, 90, 90, 0.6) var(--grid-size-desktop)
     );
 
   /* 3D Transform - subtle perspective effect */
@@ -473,8 +473,8 @@
   transform-origin: center center;
   transform-style: preserve-3d;
 
-  /* Overall dimming - BALANCED for cross-browser consistency */
-  opacity: 0.35;  /* Was 1.0 via --grid-opacity - TE dominant in Chrome */
+  /* Overall dimming - TUNED for visibility + subtlety */
+  opacity: 0.5;  /* Balanced: visible maar niet dominant */
 }
 
 /* Glow effect op groene lijnen via pseudo-element */
@@ -514,9 +514,9 @@
   transform-origin: center center;
   transform-style: preserve-3d;
 
-  /* Blur voor glow effect - REDUCED for grey grid visibility */
+  /* Blur voor glow effect - Subtle accent layer */
   filter: blur(1px);
-  opacity: 0.15;  /* Was 0.8 - TE dominant, overschaduwde grijze basis */
+  opacity: 0.25;  /* Verhoogd van 0.15 - accent moet zichtbaar zijn */
 }
 
 /* ==================== Mobile Optimalisatie ==================== */
