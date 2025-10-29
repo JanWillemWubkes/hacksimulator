@@ -73,7 +73,7 @@
   --z-cookie: 2000;
 
   /* Grid Background System */
-  --grid-color-base: rgba(255, 255, 255, 0.12);      /* Grey lines - balanced visibility */
+  --grid-color-base: rgba(42, 42, 42, 0.8);          /* Dark grey (#2a2a2a) - optimal readability vs green text */
   --grid-color-accent: rgba(0, 255, 136, 0.25);      /* Green accent lines - cyberpunk pop */
   --grid-size-desktop: 60px;                         /* Desktop grid spacing */
   --grid-size-mobile: 40px;                          /* Mobile grid spacing (smaller for performance) */
