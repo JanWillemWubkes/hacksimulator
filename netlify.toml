@@ -16,13 +16,11 @@
 [build.environment]
   NODE_VERSION = "18"
 
-# Redirects (if needed in future)
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  force = false
-  conditions = {Role = ["public"]}
+# Redirects (SPA fallback - disabled for now, not needed for vanilla JS)
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200
 
 # Headers (alternative to _headers file, but _headers takes precedence)
 # Using _headers file for better readability
