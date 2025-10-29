@@ -514,9 +514,9 @@
   transform-origin: center center;
   transform-style: preserve-3d;
 
-  /* Blur voor glow effect */
+  /* Blur voor glow effect - REDUCED for grey grid visibility */
   filter: blur(1px);
-  opacity: 0.8;
+  opacity: 0.15;  /* Was 0.8 - TE dominant, overschaduwde grijze basis */
 }
 
 /* ==================== Mobile Optimalisatie ==================== */
