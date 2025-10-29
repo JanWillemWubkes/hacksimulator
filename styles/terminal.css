@@ -442,13 +442,13 @@
       var(--grid-color-accent) calc(var(--grid-size-desktop) * 5),
       transparent calc(var(--grid-size-desktop) * 5)
     ),
-    /* Grijze basis horizontale lijnen */
+    /* Grijze basis horizontale lijnen - INLINED to force Chrome update */
     repeating-linear-gradient(
       0deg,
       transparent,
       transparent calc(var(--grid-size-desktop) - 1px),
-      var(--grid-color-base) calc(var(--grid-size-desktop) - 1px),
-      var(--grid-color-base) var(--grid-size-desktop)
+      rgba(42, 42, 42, 0.8) calc(var(--grid-size-desktop) - 1px),
+      rgba(42, 42, 42, 0.8) var(--grid-size-desktop)
     ),
     /* Groene accent verticale lijnen - elke 5e lijn */
     repeating-linear-gradient(
@@ -459,13 +459,13 @@
       var(--grid-color-accent) calc(var(--grid-size-desktop) * 5),
       transparent calc(var(--grid-size-desktop) * 5)
     ),
-    /* Grijze basis verticale lijnen */
+    /* Grijze basis verticale lijnen - INLINED to force Chrome update */
     repeating-linear-gradient(
       90deg,
       transparent,
       transparent calc(var(--grid-size-desktop) - 1px),
-      var(--grid-color-base) calc(var(--grid-size-desktop) - 1px),
-      var(--grid-color-base) var(--grid-size-desktop)
+      rgba(42, 42, 42, 0.8) calc(var(--grid-size-desktop) - 1px),
+      rgba(42, 42, 42, 0.8) var(--grid-size-desktop)
     );
 
   /* 3D Transform - subtle perspective effect */
@@ -536,8 +536,8 @@
         0deg,
         transparent,
         transparent calc(var(--grid-size-mobile) - 1px),
-        var(--grid-color-base) calc(var(--grid-size-mobile) - 1px),
-        var(--grid-color-base) var(--grid-size-mobile)
+        rgba(42, 42, 42, 0.8) calc(var(--grid-size-mobile) - 1px),
+        rgba(42, 42, 42, 0.8) var(--grid-size-mobile)
       ),
       repeating-linear-gradient(
         90deg,
@@ -551,8 +551,8 @@
         90deg,
         transparent,
         transparent calc(var(--grid-size-mobile) - 1px),
-        var(--grid-color-base) calc(var(--grid-size-mobile) - 1px),
-        var(--grid-color-base) var(--grid-size-mobile)
+        rgba(42, 42, 42, 0.8) calc(var(--grid-size-mobile) - 1px),
+        rgba(42, 42, 42, 0.8) var(--grid-size-mobile)
       );
 
     /* Extra dimming op mobiel */
