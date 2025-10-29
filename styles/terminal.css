@@ -427,6 +427,11 @@
   left: 0;
   width: 100%;
   height: 100%;
+
+  /* Force Chrome to recalculate background when CSS variables change */
+  will-change: background-image;
+  background-size: 100.001% 100.001%;  /* Trivial change to bust Chrome cache */
+
   background-image:
     /* Groene accent lijnen - elke 5e horizontale lijn (300px spacing) */
     repeating-linear-gradient(
@@ -480,6 +485,11 @@
   left: 0;
   width: 100%;
   height: 100%;
+
+  /* Force Chrome to recalculate background when CSS variables change */
+  will-change: background-image;
+  background-size: 100.001% 100.001%;  /* Trivial change to bust Chrome cache */
+
   background-image:
     /* Groene glowing lijnen - alleen elke 5e lijn */
     repeating-linear-gradient(
