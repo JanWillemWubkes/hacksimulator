@@ -67,9 +67,11 @@
   }
 
   .floating-btn {
-    width: 50px;
-    height: 50px;
-    font-size: 1.5rem;
+    width: 90px;
+    height: 44px;
+    padding: 0 8px; /* Breathing room voor tablet */
+    font-size: 0.8rem;
+    line-height: 44px; /* Vertical centering */
   }
 
   /* Footer */
@@ -273,9 +275,11 @@
   }
 
   .floating-btn {
-    width: 44px;
+    width: 80px;
     height: 44px;
-    font-size: 1.2rem;
+    padding: 0 6px; /* Minimale padding voor tiny screens */
+    font-size: 0.75rem; /* Iets groter voor readability */
+    line-height: 44px; /* Vertical centering */
   }
 
   .ascii-art {

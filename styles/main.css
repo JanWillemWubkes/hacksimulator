@@ -25,8 +25,8 @@
   --color-success: #00ff88;         /* Neon green - positive feedback (consistent) */
 
   /* UI Elements - Neon Green Primary + Cyan Secondary */
-  --color-ui-primary: #00ff00;      /* PURE neon green - primary buttons (like SIGN IN image) */
-  --color-ui-hover: #33ff33;        /* Brighter neon green - hover state */
+  --color-ui-primary: #00ff88;      /* Softer neon green - primary buttons (consistent met terminal prompt) */
+  --color-ui-hover: #33ffaa;        /* Brighter neon green - hover state (optimale feedback) */
   --color-ui-secondary: #00ffff;    /* Cyan - secondary elements */
   --color-border: #333333;          /* Dark grey - subtle borders/dividers */
   --color-link: #00ffff;            /* Cyan - links (distinct from terminal output) */
@@ -292,29 +292,43 @@ button:focus {
 }
 
 .floating-btn {
-  width: 60px;
-  height: 60px;
-  border-radius: 4px;
+  /* Dimensions - optimale balans voor leesbaarheid */
+  width: 100px;
+  height: 48px;
+  padding: 0 10px;  /* Critical fix: breathing room voor tekst */
+
+  /* Brutalist aesthetics - zero radius for raw edges */
+  border-radius: 0;
+  border: 3px solid #666666;  /* Upgraded van var(--color-border) voor betere visibility */
+
+  /* Colors */
   background-color: var(--color-ui-primary);
   color: #000000;
-  font-size: 2rem;
-  border: none;
-  outline: none;
-  box-shadow:
-    0 0 0 2px var(--color-border),
-    0 0 0 10px var(--color-ui-primary);
+
+  /* Typography - geoptimaliseerd voor beschikbare ruimte */
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  line-height: 48px;  /* Perfect vertical centering */
+
+  /* Interaction */
+  cursor: pointer;
+  transition: all 0.2s ease;  /* Smooth all properties voor hover effects */
 }
 
 .floating-btn:hover {
-  transform: scale(1.05);
+  /* Multi-layer brutalist hover feedback */
   background-color: var(--color-ui-hover);
-  box-shadow:
-    0 0 0 2px var(--color-border),
-    0 0 0 12px var(--color-ui-hover);
+  border-color: var(--color-ui-hover);
+  transform: translateY(-2px);  /* Subtle lift - geen scale (te playful) */
+  box-shadow: 0 4px 0 var(--color-ui-primary);  /* Brutalist solid shadow */
 }
 
 .floating-btn:focus {
-  outline: none;
+  outline: 2px solid var(--color-ui-primary);
+  outline-offset: 4px;  /* Verhoogd voor duidelijkere focus indicator */
 }
 
 /* Feedback Modal - Balanced spacing */
@@ -343,7 +357,7 @@ button:focus {
 .star:hover,
 .star.selected,
 .star.active {
-  color: var(--color-ui-primary); /* Pure neon green (#00ff00) - same as Versturen button */
+  color: var(--color-ui-primary); /* Softer neon green (#00ff88) - consistent met terminal prompt */
   text-shadow: 0 0 8px var(--color-ui-primary); /* Subtle glow effect */
 }
 
