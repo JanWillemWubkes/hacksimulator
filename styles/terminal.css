@@ -473,8 +473,8 @@
   transform-origin: center center;
   transform-style: preserve-3d;
 
-  /* Overall dimming */
-  opacity: var(--grid-opacity);
+  /* Overall dimming - BALANCED for cross-browser consistency */
+  opacity: 0.35;  /* Was 1.0 via --grid-opacity - TE dominant in Chrome */
 }
 
 /* Glow effect op groene lijnen via pseudo-element */
