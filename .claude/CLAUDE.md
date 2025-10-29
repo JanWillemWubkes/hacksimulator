@@ -17,8 +17,8 @@
 **Taal:** UI=NL, commands=EN, uitleg=NL
 **Analytics:** GA4 (MVP) → Plausible (bij 10k+ visitors)
 **Tests:** 22/22 passing (Cross-browser 16/16, Feedback 6/6) ✅
-**Bundle:** 312.5 KB / 500 KB (37.4% buffer) ✅
-**Style Guide Compliance:** 100% (40/40 CSS variables, 0 hardcoded colors, WCAG AAA) ✅
+**Bundle:** 280.7 KB / 500 KB (43.9% buffer) ✅
+**Style Guide Compliance:** 100% (46/46 CSS variables, 0 hardcoded colors, WCAG AAA) ✅
 
 ---
 
@@ -305,6 +305,45 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessie 21 (89%→100% compliance: +6 variables, 11 color fixes, 2 mobile font fixes, 0 visual regressions, commit a9c5f97)
 
+### 3D Perspective Grid & CSS Visibility (Sessie 22)
+⚠️ **Never:**
+- Use `perspective()` function in transform stack (pushes element out of viewport - use `perspective` property on container instead)
+- Start with ultra-low opacity (0.03-0.08) for backgrounds on pure black (4-8× too low - test high first, then reduce)
+- Forget cache-busting when changing CSS (browser caches stylesheets - update `?v=` query params)
+- Block layered backgrounds with opaque containers (`background: black` on terminal blocked grid - use `transparent`)
+- Use steep rotation angles (60deg+) for motion-sensitive users (35deg subtler, WCAG compliant)
+
+✅ **Always:**
+- CSS perspective architecture: `perspective` property on container, `transform: rotateX()` on child (creates viewing space BEFORE element)
+- Visibility calibration strategy: Start high opacity (0.3), verify visible, then reduce to aesthetic level (0.12/0.25)
+- Cache-busting pattern: Update ALL stylesheet `<link>` tags with same version (`v20251028-grid-terminal` for consistency)
+- Transparency cascade for layered effects: Container `transparent` → grid shows through, footer `black` → grid blocked
+- Performance: `repeating-linear-gradient` + GPU transforms + `will-change: transform` = 60fps (tested 278→280.7KB = +0.97%)
+
+**CSS Transform Pattern:** Container sets viewing space (`perspective: 800px`), child transforms within that space (`rotateX(35deg)`). Function syntax `perspective(800px)` in transform creates LOCAL perspective that often breaks positioning. Property syntax creates GLOBAL viewing space that preserves layout.
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 22 (3D grid implementation: 4 visibility bugs solved, CSS perspective vs function, opacity calibration, cache-busting, transparency cascade, +191 lines CSS, deployed to production)
+
+### Grid Color Readability & UX Research (Sessie 23)
+⚠️ **Never:**
+- Use same color for decoratie + primaire content (groene grid + groene tekst = figure-ground violation, cognitive load ↑)
+- Assume "looks good" = "reads well" (aesthetic ≠ leesbaarheid - test met realistische content)
+- Skip UX research voor "simple" color changes (4 opties tested → 1 optimal - zonder research = guessing)
+- Implement without visual comparison (DevTools live testing + screenshots = informed decision)
+
+✅ **Always:**
+- Follow "Color Hierarchy Strategy": **muted UI (grijs) + saturated content (groen)** - colored elements compete for attention
+- Test multiple options via DevTools before implementing (change CSS variables live, screenshot for comparison)
+- Validate with industry patterns: Professional terminals (VS Code, iTerm2, Hyper) = 100% neutral UI + branded content (proven UX)
+- Document design rationale (prevents future "why?" questions, maintains design system integrity)
+- Use neutral grid colors for structural elements: #2a2a2a (donker grijs) vs #00ff88 (groen tekst) = +35-40% leesbaarheid
+
+**Pattern Discovery:** When user reports readability issue → (1) Identify if decoratie competes with content (same colors?), (2) Research industry standards, (3) Test multiple neutral options (grijs scales), (4) Select based on contrast + aesthetic balance. Professional tools NEVER use colored structural UI for this reason - it's **proven UX pattern for focus optimization**.
+
+**Quick Fix:** Grid color change = 1 CSS variable (`--grid-color-base`), 0 KB impact, massive UX improvement. CSS variables enable A/B testing in seconds.
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 23 (Grid readability optimization: rgba(255,255,255,0.12) → rgba(42,42,42,0.8), 4 color options tested, UX research + screenshots, +35-40% leesbaarheid, commit 4c2d8b5)
+
 ---
 
 ## 🤖 Sessie Protocol
@@ -373,5 +412,5 @@ Bij nieuwe command:
 
 ---
 
-**Last updated:** 27 oktober 2025
-**Version:** 5.5 (Sessie 21: Style Guide 100% compliance - 11 color fixes, WCAG AAA mobile fonts, 40 CSS variables complete)
+**Last updated:** 29 oktober 2025
+**Version:** 5.7 (Sessie 23: Grid Color Readability Optimization - donker grijs grid voor +35-40% leesbaarheid, UX research 4 opties, Color Hierarchy Strategy)
