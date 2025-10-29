@@ -59,38 +59,38 @@ const legalManager = {
     modal.innerHTML = `
       <div style="text-align: center; margin-bottom: 32px;">
         <div style="font-size: 40px; margin-bottom: 12px;">⚖️</div>
-        <h2 style="margin: 0; font-size: 32px; font-weight: bold; color: #00ff00; text-transform: uppercase; letter-spacing: 1px;">Juridische Kennisgeving</h2>
+        <h2 style="margin: 0; font-size: 32px; font-weight: bold; color: #ffffff; text-transform: uppercase; letter-spacing: 1px;">Juridische Kennisgeving</h2>
       </div>
 
       <div style="line-height: 1.7; margin-bottom: 32px; font-size: 17px; color: #cccccc;">
         <p style="margin-bottom: 18px;">
-          Deze simulator is <strong style="color: #00ff00;">UITSLUITEND</strong> voor educatieve doeleinden.
-          Ongeautoriseerd hacken is <strong style="color: #00ff00;">ILLEGAAL</strong> in Nederland (Artikel 138ab Wetboek van Strafrecht).
+          Deze simulator is <strong style="color: #00ff88;">UITSLUITEND</strong> voor educatieve doeleinden.
+          Ongeautoriseerd hacken is <strong style="color: #00ff88;">ILLEGAAL</strong> in Nederland (Artikel 138ab Wetboek van Strafrecht).
         </p>
 
         <p style="margin-bottom: 18px;">
-          Alle activiteiten in deze simulator zijn <strong style="color: #00ff00;">gesimuleerd</strong> en beïnvloeden geen echte systemen.
+          Alle activiteiten in deze simulator zijn <strong style="color: #00ff88;">gesimuleerd</strong> en beïnvloeden geen echte systemen.
         </p>
 
         <p style="margin-bottom: 12px;">
-          <strong style="color: #00ff00;">Belangrijke regels:</strong>
+          <strong style="color: #00ff88;">Belangrijke regels:</strong>
         </p>
         <ul style="margin: 0 0 18px 20px; padding: 0;">
-          <li style="margin-bottom: 10px;">Vraag <strong style="color: #00ff00;">altijd toestemming</strong> voordat je systemen test</li>
-          <li style="margin-bottom: 10px;">Gebruik deze kennis <strong style="color: #00ff00;">alleen ethisch en legaal</strong></li>
-          <li style="margin-bottom: 10px;">Ongeautoriseerde toegang tot systemen is een <strong style="color: #00ff00;">misdrijf</strong></li>
+          <li style="margin-bottom: 10px;">Vraag <strong style="color: #00ff88;">altijd toestemming</strong> voordat je systemen test</li>
+          <li style="margin-bottom: 10px;">Gebruik deze kennis <strong style="color: #00ff88;">alleen ethisch en legaal</strong></li>
+          <li style="margin-bottom: 10px;">Ongeautoriseerde toegang tot systemen is een <strong style="color: #00ff88;">misdrijf</strong></li>
         </ul>
 
         <p style="margin-bottom: 0;">
           Door verder te gaan, ga je akkoord met de
-          <a href="assets/legal/terms.html" target="_blank" style="color: #00ff00; text-decoration: underline;">Gebruiksvoorwaarden</a>
+          <a href="assets/legal/terms.html" target="_blank" style="color: #00ff88; text-decoration: underline;">Gebruiksvoorwaarden</a>
           en bevestig je deze kennis alleen voor legale doeleinden te gebruiken.
         </p>
       </div>
 
       <div style="margin-bottom: 20px;">
         <button id="legal-accept-btn" style="
-          background: #00ff00;
+          background: #00ff88;
           color: #000000;
           border: none;
           padding: 16px 32px;
@@ -109,9 +109,9 @@ const legalManager = {
       </div>
 
       <div style="margin-top: 16px; text-align: center; font-size: 13px; color: #888888;">
-        <a href="assets/legal/privacy.html" target="_blank" style="color: #00ff00; margin: 0 8px;">Privacy</a>
+        <a href="assets/legal/privacy.html" target="_blank" style="color: #00ff88; margin: 0 8px;">Privacy</a>
         <span>•</span>
-        <a href="assets/legal/cookies.html" target="_blank" style="color: #00ff00; margin: 0 8px;">Cookies</a>
+        <a href="assets/legal/cookies.html" target="_blank" style="color: #00ff88; margin: 0 8px;">Cookies</a>
       </div>
     `;
 
@@ -121,11 +121,11 @@ const legalManager = {
     // Add hover effect to button
     const btn = document.getElementById('legal-accept-btn');
     btn.addEventListener('mouseenter', () => {
-      btn.style.background = '#00dd00';
+      btn.style.background = '#00ee88';
       btn.style.transform = 'scale(1.02)';
     });
     btn.addEventListener('mouseleave', () => {
-      btn.style.background = '#00ff00';
+      btn.style.background = '#00ff88';
       btn.style.transform = 'scale(1)';
     });
 

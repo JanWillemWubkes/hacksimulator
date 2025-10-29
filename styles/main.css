@@ -39,6 +39,7 @@
   --color-border-input: #444444;      /* Form input borders */
   --color-link-hover: #33ffff;        /* Link hover states */
   --color-bg-modal-content: #2d2d2d;  /* Modal content background */
+  --color-modal-header: #ffffff;      /* Modal header text - white for maximum contrast & hierarchy */
 
   /* Typography - Dual Font System */
   --font-terminal: 'Courier New', 'Courier', monospace;  /* Primary: Terminal/UI */
@@ -210,7 +211,7 @@ button:focus {
 }
 
 .modal-content h2 {
-  color: var(--color-ui-primary);
+  color: var(--color-modal-header);
   margin-bottom: var(--spacing-lg);
   font-size: 2rem;
   text-transform: uppercase;
