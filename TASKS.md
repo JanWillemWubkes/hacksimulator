@@ -1,6 +1,6 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 23 oktober 2025
+**Laatst bijgewerkt:** 29 oktober 2025
 **Status:** M5 Testing & Launch Phase (LIVE on Netlify) - ✅ **Cross-Browser Tests PASSING!**
 **Sprint:** Cross-Browser Testing Complete - Mobile Testing Next
 
@@ -8,7 +8,7 @@
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 139 / 145 taken voltooid (95.9%)
+**Totaal:** 139 / 164 taken voltooid (84.8%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
@@ -18,6 +18,7 @@
 | M3: Network & Security | ✅ Voltooid | 28/28 | 100% |
 | M4: UX & Polish | ✅ Voltooid | 43/43 | 100% |
 | M5: Testing & Launch | 🔵 In uitvoering | 8/35 | 23% |
+| M9: Refactor Sprint | ⏭️ Gepland | 0/19 | 0% |
 
 ---
 
@@ -476,6 +477,61 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
 
 ---
 
+## 🧹 M9: Refactor Sprint (Toekomstig)
+
+**Doel:** Technical debt cleanup + code quality optimalisatie
+**Tijdsinschatting:** 1 week (7-10 dagen)
+**Dependencies:** M5 voltooid + 3-4 Post-MVP features geïmplementeerd
+**Status:** ⏭️ **Gepland** (trigger: na Milestone 6-8 voltooid)
+**When to Execute:** Elke 4-6 features OF technical debt > 20%
+
+### Cache Implementation Cleanup (3 taken)
+- [ ] Remove redundant HTML cache meta tags van `index.html` (lines 12-14)
+- [ ] Delete of move `cache-diagnostic.html` naar `/dev/` folder (development tool in production)
+- [ ] Document cache strategy in `docs/CACHING.md` (_headers file + versioning rationale)
+
+### Bundle Size Optimization (4 taken)
+- [ ] Audit bundle size breakdown (identify largest files via `ls -lh`)
+- [ ] Check for duplicate code patterns via `grep`/`ripgrep` (>10 line duplicates)
+- [ ] Consider minification: Terser for JS, cssnano for CSS (optional per PRD)
+- [ ] Target: Maintain <400KB bundle (current: 280KB = 44% buffer remaining)
+
+### Code Quality & Deduplication (4 taken)
+- [ ] Review command modules voor duplicate logic patterns
+- [ ] Extract common patterns to `src/utils/` modules (DRY principle)
+- [ ] CSS cleanup: Remove unused classes via manual audit (no build tools per PRD)
+- [ ] JavaScript cleanup: Remove unused imports/functions (grep for unreferenced code)
+
+### Documentation Updates (3 taken)
+- [ ] Sync all version numbers across docs (PRD, PLANNING, TASKS, CLAUDE, SESSIONS)
+- [ ] Update SESSIONS.md with refactor learnings (anti-patterns discovered)
+- [ ] Add inline code comments for complex logic (VFS path resolution, parser, renderer)
+
+### Performance Audit (3 taken)
+- [ ] Re-run Lighthouse audit (baseline: 88/100/100/100 - maintain or improve)
+- [ ] Check for memory leaks via DevTools (long session test: 30+ commands)
+- [ ] Optimize localStorage read/write patterns if needed (currently: on every VFS change)
+
+### Test Coverage Review (2 taken)
+- [ ] Identify untested edge cases in Playwright suite (baseline: 22/22 passing)
+- [ ] Add missing tests for refactored code (maintain 100% critical flow coverage)
+
+**Total Tasks:** 19
+**Estimated Time:** 7-10 dagen
+**Success Criteria:**
+- Bundle size ≤ 400KB (20% margin maintained)
+- Lighthouse score ≥ 88/100/100/100 (no regression)
+- Zero code duplication >10 lines (grep check)
+- All docs synchronized (dates, versions, percentages)
+- Playwright tests: 100% passing (22/22 minimum)
+
+**Triggers for Execution:**
+1. **Time-Based:** After implementing 3-4 Post-MVP features (Milestone 6-8)
+2. **Debt-Based:** Bundle size >400KB OR test failures >5% OR code duplication >15%
+3. **Pain-Based:** Developer friction signals (fear, brittleness, confusion)
+
+---
+
 ## 📝 Notities & Beslissingen
 
 ### Architecturale Beslissingen
@@ -529,11 +585,11 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 23 oktober 2025
-**Versie:** 2.2 (Documentation Consistency - Synchronized dates, test counts, M5 progress)
-**Totaal Taken:** 145
-**Voltooide Taken:** 139 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 8/35)
-**Voortgang:** 95.9%
+**Laatst bijgewerkt:** 29 oktober 2025
+**Versie:** 2.3 (M9 Refactor Sprint Planning - Technical debt roadmap added)
+**Totaal Taken:** 164 (M0-M5: 145, M9 Refactor: 19)
+**Voltooide Taken:** 139 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 8/35, M9: 0/19 pending)
+**Voortgang:** 84.8% (139/164) - M9 deferred tot Post-MVP features geïmplementeerd
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
