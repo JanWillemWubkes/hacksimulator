@@ -73,13 +73,11 @@
   --z-modal: 1000;
   --z-cookie: 2000;
 
-  /* Grid Background System */
-  --grid-color-base: rgba(42, 42, 42, 0.8);          /* Dark grey (#2a2a2a) - optimal readability vs green text */
-  --grid-color-accent: rgba(0, 255, 136, 0.25);      /* Green accent lines - cyberpunk pop */
-  --grid-size-desktop: 60px;                         /* Desktop grid spacing */
-  --grid-size-mobile: 40px;                          /* Mobile grid spacing (smaller for performance) */
-  --grid-perspective: 800px;                         /* 3D perspective depth */
-  --grid-opacity: 1.0;                               /* Full visibility for grid layer */
+  /* CRT Scanline Background System */
+  --scanline-spacing: 3px;                           /* CRT scanline spacing (desktop) */
+  --scanline-spacing-mobile: 4px;                    /* Mobile scanline spacing (performance optimized) */
+  --scanline-opacity: 0.03;                          /* Ultra-subtle scanline visibility */
+  --noise-opacity: 0.01;                             /* Barely visible grain texture */
 }
 
 /* ==================== Reset & Base ==================== */
