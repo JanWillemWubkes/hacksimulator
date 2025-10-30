@@ -274,8 +274,8 @@ const feedbackManager = {
     modalContent.innerHTML = `
       <div class="feedback-success" style="text-align: center; padding: 40px 20px;">
         <div style="font-size: 64px; margin-bottom: 20px;">✅</div>
-        <h2 style="color: #00ff00; margin-bottom: 16px; font-size: 2rem; text-transform: uppercase; letter-spacing: 1px;">Bedankt!</h2>
-        <p style="color: #cccccc; font-size: 1rem;">Je feedback helpt ons HackSimulator.nl te verbeteren.</p>
+        <h2 style="color: var(--color-success); margin-bottom: 16px; font-size: 2rem; text-transform: uppercase; letter-spacing: 1px;">Bedankt!</h2>
+        <p style="color: var(--color-modal-text); font-size: 1rem;">Je feedback helpt ons HackSimulator.nl te verbeteren.</p>
       </div>
     `;
 
