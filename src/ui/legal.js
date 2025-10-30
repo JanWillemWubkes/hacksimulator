@@ -58,7 +58,7 @@ const legalManager = {
 
     modal.innerHTML = `
       <div style="text-align: center; margin-bottom: 32px;">
-        <div style="font-size: 40px; margin-bottom: 12px;">⚖️</div>
+        <div style="color: var(--color-warning); font-size: 3rem; margin-bottom: 12px; font-family: var(--font-terminal); letter-spacing: 0.15em;">[ ! ]</div>
         <h2 style="margin: 0; font-size: 32px; font-weight: bold; color: #ffffff; text-transform: uppercase; letter-spacing: 1px;">Juridische Kennisgeving</h2>
       </div>
 
