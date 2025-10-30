@@ -73,11 +73,7 @@
   --z-modal: 1000;
   --z-cookie: 2000;
 
-  /* CRT Scanline Background System */
-  --scanline-spacing: 5px;                           /* CRT scanline spacing - visible individual lines */
-  --scanline-spacing-mobile: 4px;                    /* Mobile scanline spacing (performance optimized) */
-  --scanline-opacity: 0.15;                          /* Clearly visible scanline effect */
-  --noise-opacity: 0.08;                             /* Visible grain texture */
+  /* Background System: Radial gradient vignette (no variables needed - hardcoded for simplicity) */
 }
 
 /* ==================== Reset & Base ==================== */
