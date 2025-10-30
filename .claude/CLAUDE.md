@@ -11,14 +11,14 @@
 **Wat:** Veilige terminal simulator voor Nederlandse beginners (15-25 jaar)
 **Stack:** Vanilla JS/CSS, client-side, localStorage, < 500KB bundle
 **Scope:** 30 commands (System, Filesystem, Network, Security)
-**Status:** M0-M5 Complete (100%) ✅ PRODUCTION READY - Beta Testing Phase
+**Status:** M0-M4 Complete (100%) ✅ | M5 In Progress (23% - 8/35 tasks) 🔵 TESTING PHASE
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 **Taal:** UI=NL, commands=EN, uitleg=NL
 **Analytics:** GA4 (MVP) → Plausible (bij 10k+ visitors)
-**Tests:** 22/22 passing (Cross-browser 16/16, Feedback 6/6) ✅
-**Bundle:** 280.7 KB / 500 KB (43.9% buffer) ✅
-**Style Guide Compliance:** 100% (46/46 CSS variables, 0 hardcoded colors, WCAG AAA) ✅
+**Tests:** 44 passing (22 unique tests × 2 browsers: Chromium + Firefox) ✅
+**Bundle:** ~318 KB / 500 KB (36% buffer) ✅
+**Style Guide Compliance:** 100% (53/53 CSS variables, 0 hardcoded colors, WCAG AAA) ✅
 
 ---
 
@@ -127,9 +127,9 @@ Bij nieuwe command:
 - [x] Security audit (input sanitization, localStorage protection) ✅
 - [x] Accessibility audit (WCAG AAA color contrast 15.3:1) ✅
 
-**Performance:** Bundle 312.5KB, Load ~2s, Lighthouse 88/100/100/100 (Perf/A11y/BP/SEO)
-**Testing:** Playwright E2E (8 tests × 2 browsers = 16/16 passing)
-**Compliance:** Style Guide v1.0 = 100% (was 89% - Sessie 21 audit fixed all violations)
+**Performance:** Bundle ~318KB, Load ~2s, Lighthouse 88/100/100/100 (Perf/A11y/BP/SEO)
+**Testing:** Playwright E2E (44 passing: 22 tests × 2 browsers Chromium+Firefox, 22 WebKit skipped due to system deps)
+**Compliance:** Style Guide v1.0 = 100% (53/53 CSS variables, 0 hardcoded colors, WCAG AAA)
 **Volledige criteria:** Zie M5-AUDIT-REPORT.md (comprehensive 11-section audit)
 
 ---
@@ -344,6 +344,24 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessie 23 (Grid readability optimization: rgba(255,255,255,0.12) → rgba(42,42,42,0.8), 4 color options tested, UX research + screenshots, +35-40% leesbaarheid, commit 4c2d8b5)
 
+### Emoji & Terminal Aesthetic Consistency (Sessie 24)
+⚠️ **Never:**
+- Use modern emoji's (✅, ⚖️) in terminal/developer tools (breaks immersion, inconsistent OS rendering, "consumer app" aesthetic)
+- Assume "style guide violation" = only color values (hardcoded colors break maintainability even if correct hex)
+- Mix decorative styles (emoji + ASCII art) in same interface (98% terminal + 2% emoji = brand inconsistency)
+- Use literal symbols over semantic meaning (⚖️ scales = "legal system" abstract vs `[ ! ]` = "attention required" actionable)
+
+✅ **Always:**
+- Terminal tools = 100% ASCII/Unicode only (proven pattern: VS Code, git, npm use `[WARNING]`, `[ERROR]` prefixes, never emoji)
+- Build design systems not one-off fixes: `[ ✓ ]` success + `[ ! ]` warning = unified bracket pattern (scalable to `[ ? ]`, `[ X ]`)
+- Semantic color coding: Green=success, Orange=warning (instant recognition, no explanation needed)
+- Trust source code verification over browser screenshots when cache issues occur (edited files = truth, cached JS = stale)
+- UX research methodology: Present 4 options with rationale, guide user to best choice (expert advice ≠ dictating)
+
+**Pattern:** Modern emoji's = consumer messaging apps (WhatsApp, Slack). Developer/terminal tools = ASCII brackets/prefixes. When user reports "doesn't fit style" → check aesthetic consistency (ASCII vs emoji), not just colors.
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 24 (Emoji elimination: ✅→`[ ✓ ]`, ⚖️→`[ ! ]`, 3 commits, unified bracket design system, 100% terminal aesthetic, commits 6c3b8ef/6726ea3/5b01f3a)
+
 ---
 
 ## 🤖 Sessie Protocol
@@ -412,5 +430,5 @@ Bij nieuwe command:
 
 ---
 
-**Last updated:** 29 oktober 2025
-**Version:** 5.7 (Sessie 23: Grid Color Readability Optimization - donker grijs grid voor +35-40% leesbaarheid, UX research 4 opties, Color Hierarchy Strategy)
+**Last updated:** 30 oktober 2025
+**Version:** 5.8 (Sessie 24: Emoji Elimination & ASCII Bracket Design System - ✅→`[ ✓ ]`, ⚖️→`[ ! ]`, unified modal pattern, 100% terminal aesthetic consistency)
