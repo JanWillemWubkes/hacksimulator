@@ -138,6 +138,23 @@ Bij nieuwe command:
 
 **Doel:** Anti-patterns en best practices uit recente sessies voor context carry-over
 
+### Navbar Implementation & Responsive JS (Sessie 25)
+⚠️ **Never:**
+- Use hardcoded breakpoints in JavaScript (window.innerWidth checks) - decouples JS from CSS media queries
+- Create modal DOM nodes immediately (bloats page on load) - lazy load on first interaction
+- Mix desktop (hover) and mobile (click) event handlers without guards - causes unexpected behavior on touch devices
+- Persist theme without checking system preference fallback (ignores accessibility preferences)
+- Update ARIA attributes only on init (they become stale) - update dynamically with state changes
+
+✅ **Always:**
+- Detect mobile/responsive state via computed CSS (`getComputedStyle(element).display !== 'none'`) - respects all breakpoints
+- Lazy-load occasional features (modals, dropdowns) with singleton pattern - reuse same instance
+- Guard interaction handlers with `isMobileView()` checks - prevent cross-platform conflicts
+- Show theme toggle icon as OPPOSITE state (user expectations for "what happens next")
+- Separate initialization (theme from storage) from event setup - no timing dependencies
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 25 (Navbar redesign: grey aesthetic, Help dropdown, theme toggle, 390-line JavaScript rewrite)
+
 ### Foundation Learnings (Sessies 2-4) - COMPRESSED
 ⚠️ **CSS/Layout:** Never use `transparent` in dark themes (invisible), `position: fixed` on footer (blocks input), custom cursors without JS sync (buggy), `position: absolute` without coordinates
 ✅ **CSS/Layout:** Hardcode colors for debugging, native browser features first, flexbox layouts (`min-height: 100vh`), remove unused code completely (bundle size!)

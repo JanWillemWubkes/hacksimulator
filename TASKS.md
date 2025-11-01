@@ -494,7 +494,7 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
 - [ ] Audit bundle size breakdown (identify largest files via `ls -lh`)
 - [ ] Check for duplicate code patterns via `grep`/`ripgrep` (>10 line duplicates)
 - [ ] Consider minification: Terser for JS, cssnano for CSS (optional per PRD)
-- [ ] Target: Maintain <400KB bundle (current: 280KB = 44% buffer remaining)
+- [ ] Target: Maintain <400KB bundle (current: ~318KB = 36% buffer remaining)
 
 ### Code Quality & Deduplication (4 taken)
 - [ ] Review command modules voor duplicate logic patterns

@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 23 oktober 2025
+**Laatst bijgewerkt:** 29 oktober 2025
 **Status:** M5 Testing & Launch Phase - ✅ **LIVE on Netlify!**
 **Verantwoordelijk:** Development Team
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
@@ -617,9 +617,9 @@ const DEBUG_MODE = false;
 
 ## 📅 Roadmap & Fases
 
-### Fase 1: MVP (Maand 1-3) - ✅ 95.9% VOLTOOID - **LIVE!**
+### Fase 1: MVP (Maand 1-3) - ✅ 84.8% VOLTOOID - **LIVE!**
 
-**Status:** 139/145 tasks completed (95.9%) - M0-M4 (100%), M5 (8/35 - 23%)
+**Status:** 139/164 tasks completed (84.8%) - M0-M4 (100%), M5 (8/35 - 23%)
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
@@ -650,7 +650,7 @@ const DEBUG_MODE = false;
 **Week 9-10: Testing & Launch** - 🔵 IN PROGRESS (M5) - ✅ **DEPLOYED!**
 - [x] GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
 - [x] Netlify deployment (https://famous-frangollo-b5a758.netlify.app/)
-- [x] Performance optimization (<3s load: ~2.0s LCP, <500KB bundle: 299KB)
+- [x] Performance optimization (<3s load: ~2.0s LCP, <500KB bundle: ~318KB)
 - [x] Lighthouse audit (88/100/100/100)
 - [ ] Beta testing (5+ testers) - TO DO
 - [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge) - TO DO
@@ -746,8 +746,8 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 23 oktober 2025
-**Versie:** 1.4 (Documentation Consistency - All dates and progress synchronized)
+**Laatst bijgewerkt:** 29 oktober 2025
+**Versie:** 1.5 (Bundle Size Update - Corrected to ~318 KB, aligned M5 status 84.8%)
 **Status:** ✅ Deployed - Live in Production
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

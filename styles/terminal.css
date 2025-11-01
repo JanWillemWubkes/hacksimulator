@@ -9,6 +9,7 @@
   flex-direction: column;
   flex: 1;
   padding: var(--terminal-padding);
+  padding-top: 80px;  /* Navbar height (60px) + spacing (20px) */
   max-width: var(--terminal-max-width);
   margin: 0 auto;
   width: 100%;

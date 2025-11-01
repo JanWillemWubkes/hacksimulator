@@ -229,7 +229,8 @@ a {
   transition: color var(--transition-fast);
 }
 
-a::after {
+/* Link underline animation - excluded from navbar for cleaner navigation */
+a:not(.navbar-links a):not(.navbar-brand):not(.navbar-action)::after {
   content: '';
   position: absolute;
   bottom: -2px;
@@ -240,7 +241,7 @@ a::after {
   transition: width var(--transition-fast);
 }
 
-a:hover::after {
+a:not(.navbar-links a):not(.navbar-brand):not(.navbar-action):hover::after {
   width: 100%;
 }
 

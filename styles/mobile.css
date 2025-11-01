@@ -13,7 +13,7 @@
   /* Terminal container */
   #terminal-container {
     padding: 16px;
-    padding-top: 40px;
+    padding-top: 100px;  /* Mobile navbar height (80px) + spacing (20px) */
     margin: 10px;
   }
 
@@ -35,6 +35,172 @@
   #terminal-input {
     font-size: 18px; /* Prevent iOS zoom on focus */
     width: 100%;
+  }
+
+  /* ==================== Mobile Navbar ==================== */
+  /* Increase navbar height on mobile */
+  #navbar {
+    height: 80px;
+    padding: var(--spacing-md);
+  }
+
+  /* Show hamburger toggle on mobile */
+  .navbar-toggle {
+    display: flex;
+  }
+
+  /* Hide menu by default on mobile */
+  .navbar-menu {
+    display: none;
+    position: fixed;
+    top: 80px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.98);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: var(--spacing-lg);
+    overflow-y: auto;
+    z-index: 999;
+  }
+
+  /* Show menu when active */
+  .navbar-menu.active {
+    display: flex;
+    animation: slideDown 0.3s ease-out;
+  }
+
+  /* Stack navigation links vertically */
+  .navbar-links {
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .navbar-links li {
+    width: 100%;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .navbar-links a {
+    display: block;
+    width: 100%;
+    padding: var(--spacing-md);
+    font-size: 1.1rem;
+    text-align: left;
+    min-height: 44px; /* Touch target minimum */
+    color: #cccccc;
+    font-weight: 400;
+  }
+
+  .navbar-links a:active {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  /* Dropdown menu on mobile (nested under Help) */
+  .navbar-dropdown {
+    position: relative;
+  }
+
+  .navbar-dropdown > a::after {
+    content: ' +';
+    font-weight: 400;
+  }
+
+  .dropdown-menu {
+    display: none;
+    position: static;
+    background-color: #0a0a0a;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    min-width: 100%;
+    animation: none;
+  }
+
+  .navbar-dropdown.active .dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-menu a {
+    padding: var(--spacing-md) var(--spacing-lg) var(--spacing-md) calc(var(--spacing-lg) * 2);
+    color: #cccccc;
+    font-size: 1rem;
+    background-color: #0a0a0a;
+    border: none;
+  }
+
+  .dropdown-menu a:active {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  /* Navbar actions (search, github, theme) on mobile */
+  .navbar-actions {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    width: 100%;
+    margin-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--spacing-lg);
+  }
+
+  .navbar-action,
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 1.1rem;
+    min-height: 44px; /* Touch target minimum */
+    width: 100%;
+    background-color: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    color: #cccccc;
+    gap: var(--spacing-md);
+  }
+
+  .navbar-action:active,
+  .theme-toggle:active {
+    background-color: #1a1a1a;
+    color: #ffffff;
+  }
+
+  .navbar-action svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Add text labels for mobile actions */
+  .navbar-action[aria-label="Zoek commands"]::after {
+    content: "Zoek Commands";
+    font-family: var(--font-terminal);
+    margin-left: auto;
+  }
+
+  .navbar-action[aria-label="GitHub repository"]::after {
+    content: "GitHub";
+    font-family: var(--font-terminal);
+    margin-left: auto;
+  }
+
+  /* Theme toggle on mobile */
+  .theme-toggle {
+    border: 1px solid var(--color-border);
+    transform: none;
+  }
+
+  .theme-toggle::after {
+    content: "Dark/Light Mode";
+    font-family: var(--font-terminal);
+    margin-left: auto;
   }
 
   /* Modals */
