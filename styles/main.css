@@ -659,8 +659,8 @@ footer a:hover {
 /* Sun/Moon SVG Animation */
 .sun-moon {
   display: block;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   overflow: visible;
   transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
@@ -673,12 +673,12 @@ footer a:hover {
   opacity: 0;
 }
 
-/* Sun rays (lines) - visible in light mode */
+/* Sun rays (lines) - hidden in light mode */
 .sun-beams {
   fill: none;
   transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),
               opacity 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-  opacity: 1;
+  opacity: 0;
 }
 
 /* Moon - visible in light mode, hidden in dark mode */
@@ -697,28 +697,12 @@ footer a:hover {
 
 [data-theme="dark"] .sun-beams {
   transform: rotate(40deg);
-  opacity: 0;
+  opacity: 1;
 }
 
 [data-theme="dark"] .moon {
   transform: rotate(0deg);
   opacity: 0;
-}
-
-/* Light theme (default): sun in, moon out */
-.sun {
-  transform: rotate(0deg);
-  opacity: 0;
-}
-
-.sun-beams {
-  transform: rotate(0deg);
-  opacity: 1;
-}
-
-.moon {
-  transform: rotate(-40deg);
-  opacity: 1;
 }
 
 /* Respect prefers-reduced-motion */
