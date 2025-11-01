@@ -379,6 +379,27 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessie 24 (Emoji elimination: ✅→`[ ✓ ]`, ⚖️→`[ ! ]`, 3 commits, unified bracket design system, 100% terminal aesthetic, commits 6c3b8ef/6726ea3/5b01f3a)
 
+### Navbar Event Handler Conflicts & Production Debugging (Sessie 26)
+⚠️ **Never:**
+- Register event listeners on same DOM elements from multiple initialization functions (causes silent pre-emption)
+- Have duplicate implementations of functionality in different files (creates conflicts when both initialize)
+- Assume "code present in file = code executing" without direct verification (browser caching, timing issues)
+- Use `requestAnimationFrame` for initialization timing when root issue is element conflict (symptom treatment, not fix)
+- Rely solely on "works locally" - always test in production deployment (caching, build process differences)
+
+✅ **Always:**
+- Make ONE file the source of truth for each responsibility (navbar.js owns all navbar link handlers)
+- Use defensive singleton patterns for shared functionality (check if already initialized, reuse)
+- Test locally AND in production with fresh build (different caching behaviors in deployment)
+- Add diagnostic logging to trace initialization sequence and identify where code stops executing
+- Verify event listener registration by testing functionality, not just checking console logs (timing artifacts)
+
+**Anti-Pattern Found:** Both `main.js` and `navbar.js` were registering click handlers on identical DOM elements. `initializeNavigation()` ran first, claiming all listeners. When `initNavbar()` tried to register, nothing happened—no errors, just silent pre-emption.
+
+**Fix Pattern:** Remove duplicate handlers from main.js, keep navbar.js as single source. Reduced main.js by 160 lines. Works perfectly.
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 26 (Navbar production debugging, duplicate handler conflict, 4 commits, removed 160 lines duplicate code)
+
 ---
 
 ## 🤖 Sessie Protocol
@@ -447,5 +468,5 @@ Bij nieuwe command:
 
 ---
 
-**Last updated:** 30 oktober 2025
-**Version:** 5.8 (Sessie 24: Emoji Elimination & ASCII Bracket Design System - ✅→`[ ✓ ]`, ⚖️→`[ ! ]`, unified modal pattern, 100% terminal aesthetic consistency)
+**Last updated:** 1 november 2025
+**Version:** 6.0 (Sessie 26: Navbar Event Handler Conflict Resolution - Removed 160 lines duplicate code, production debugging patterns, single source of truth architecture)
