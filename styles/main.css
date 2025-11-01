@@ -663,10 +663,12 @@ footer a:hover {
   transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
-/* Sun circle - visible in light mode, hidden in dark mode */
+/* Sun circle - hidden in light mode, visible in dark mode */
 .sun {
   fill: currentColor;
-  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),
+              opacity 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  opacity: 0;
 }
 
 /* Sun rays (lines) - visible in light mode */
@@ -677,15 +679,18 @@ footer a:hover {
   opacity: 1;
 }
 
-/* Moon - hidden in light mode, visible in dark mode */
+/* Moon - visible in light mode, hidden in dark mode */
 .moon {
   fill: currentColor;
-  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),
+              opacity 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  opacity: 1;
 }
 
 /* Dark theme: rotate sun/rays out, moon in */
 [data-theme="dark"] .sun {
   transform: rotate(40deg);
+  opacity: 1;
 }
 
 [data-theme="dark"] .sun-beams {
@@ -695,6 +700,7 @@ footer a:hover {
 
 [data-theme="dark"] .moon {
   transform: rotate(0deg);
+  opacity: 0;
 }
 
 /* Light theme (default): sun in, moon out */
