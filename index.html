@@ -22,10 +22,10 @@
     <title>HackSimulator.nl - Leer Ethisch Hacken</title>
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles/main.css?v=20251031-vignette-boost">
-    <link rel="stylesheet" href="styles/terminal.css?v=20251031-vignette-boost">
-    <link rel="stylesheet" href="styles/mobile.css?v=20251031-vignette-boost">
-    <link rel="stylesheet" href="styles/animations.css?v=20251031-vignette-boost">
+    <link rel="stylesheet" href="styles/main.css?v=20251031-feedback-fix">
+    <link rel="stylesheet" href="styles/terminal.css?v=20251031-feedback-fix">
+    <link rel="stylesheet" href="styles/mobile.css?v=20251031-feedback-fix">
+    <link rel="stylesheet" href="styles/animations.css?v=20251031-feedback-fix">
 </head>
 <body>
     <!-- Vignette Background (Professional terminal aesthetic) -->
@@ -102,6 +102,7 @@
                 <button class="star" data-rating="5" aria-label="5 sterren">★</button>
             </div>
             <textarea id="feedback-comment" placeholder="Optioneel: Vertel ons meer..." rows="4" aria-label="Feedback commentaar"></textarea>
+            <div class="feedback-error" role="alert" aria-live="assertive"></div>
             <button id="feedback-submit" class="btn-primary">Versturen</button>
         </div>
     </div>

@@ -173,6 +173,13 @@ const feedbackManager = {
     if (commentField) {
       commentField.value = '';
     }
+
+    // Clear any visible error messages
+    const modal = document.getElementById('feedback-modal');
+    const errorElement = modal?.querySelector('.feedback-error');
+    if (errorElement) {
+      errorElement.classList.remove('visible');
+    }
   },
 
   /**
@@ -290,43 +297,23 @@ const feedbackManager = {
 
   /**
    * Show error message (validation failure)
+   * Uses CSS toggle pattern for zero layout shift (reserved space in HTML)
    * @param {string} message - Error message to display
    * @private
    */
   _showError(message) {
     const modal = document.getElementById('feedback-modal');
-    const modalContent = modal?.querySelector('.modal-content');
+    const errorElement = modal?.querySelector('.feedback-error');
 
-    if (!modalContent) return;
+    if (!errorElement) return;
 
-    // Check if error element already exists
-    let errorElement = modalContent.querySelector('.feedback-error');
-
-    if (!errorElement) {
-      errorElement = document.createElement('div');
-      errorElement.className = 'feedback-error';
-      errorElement.style.cssText = `
-        background: rgba(255, 0, 85, 0.1);
-        border: 1px solid #ff0055;
-        color: #ff0055;
-        padding: 12px;
-        margin: 12px 0;
-        border-radius: 4px;
-        font-size: 15px;
-      `;
-
-      // Insert before submit button
-      const submitButton = document.getElementById('feedback-submit');
-      if (submitButton) {
-        submitButton.parentElement.insertBefore(errorElement, submitButton);
-      }
-    }
-
+    // Set message and show via CSS class toggle
     errorElement.textContent = message;
+    errorElement.classList.add('visible');
 
-    // Remove error after 3 seconds
+    // Hide error after 3 seconds (CSS transition handles fade-out)
     setTimeout(() => {
-      errorElement?.remove();
+      errorElement.classList.remove('visible');
     }, 3000);
   },
 
