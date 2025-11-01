@@ -706,6 +706,7 @@ footer a:hover {
 /* Light theme (default): sun in, moon out */
 .sun {
   transform: rotate(0deg);
+  opacity: 0;
 }
 
 .sun-beams {
@@ -715,6 +716,7 @@ footer a:hover {
 
 .moon {
   transform: rotate(-40deg);
+  opacity: 1;
 }
 
 /* Respect prefers-reduced-motion */
