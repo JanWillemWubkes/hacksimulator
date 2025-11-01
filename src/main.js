@@ -307,17 +307,13 @@ function initialize() {
     initializeNavigation();
 
     // Initialize navbar (mobile hamburger menu)
-    // Defer to requestAnimationFrame to ensure CSS is parsed before viewport checks
-    console.log('[Main] Registering requestAnimationFrame for navbar init');
-    window.requestAnimationFrame(() => {
-      console.log('[Main] requestAnimationFrame callback executing - calling initNavbar()');
-      try {
-        initNavbar();
-        console.log('[Main] initNavbar() completed successfully');
-      } catch (e) {
-        console.error('[Main] initNavbar() failed:', e);
-      }
-    });
+    try {
+      console.log('[Main] Calling initNavbar() directly...');
+      initNavbar();
+      console.log('[Main] initNavbar() completed successfully');
+    } catch (e) {
+      console.error('[Main] initNavbar() failed:', e);
+    }
 
     // Initialize feedback system
     feedbackManager.init();
