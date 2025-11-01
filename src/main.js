@@ -304,11 +304,13 @@ function initialize() {
     });
 
     // Initialize navigation menu
+    console.log('[Main] About to call initializeNavigation()...');
     initializeNavigation();
+    console.log('[Main] initializeNavigation() completed');
 
     // Initialize navbar (mobile hamburger menu)
+    console.log('[Main] About to call initNavbar()...');
     try {
-      console.log('[Main] Calling initNavbar() directly...');
       initNavbar();
       console.log('[Main] initNavbar() completed successfully');
     } catch (e) {
