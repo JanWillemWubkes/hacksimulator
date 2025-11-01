@@ -307,7 +307,10 @@ function initialize() {
     initializeNavigation();
 
     // Initialize navbar (mobile hamburger menu)
-    initNavbar();
+    // Defer to requestAnimationFrame to ensure CSS is parsed before viewport checks
+    window.requestAnimationFrame(() => {
+      initNavbar();
+    });
 
     // Initialize feedback system
     feedbackManager.init();

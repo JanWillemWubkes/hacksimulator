@@ -21,9 +21,22 @@ export function initNavbar() {
 
   // Guard: Exit if essential elements don't exist
   if (!toggle || !menu || !navbar) {
-    console.warn('[Navbar] Required elements not found');
+    console.error('[Navbar] FATAL: Required elements not found', {
+      'navbar (#navbar)': !!navbar,
+      'toggle (.navbar-toggle)': !!toggle,
+      'menu (.navbar-menu)': !!menu,
+      'theme (.theme-toggle)': !!themeToggle,
+      'dropdown (.navbar-dropdown)': !!navbarDropdown,
+      'dropdownTrigger (.navbar-dropdown > a)': !!dropdownTrigger
+    });
     return;
   }
+
+  // Diagnostic logging for production debugging
+  console.log('[Navbar] Elements found, initializing...', {
+    'isMobileView': getComputedStyle(toggle).display !== 'none',
+    'viewport': `${window.innerWidth}x${window.innerHeight}`
+  });
 
   // ==================== Theme Toggle ====================
 
