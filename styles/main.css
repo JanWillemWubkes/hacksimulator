@@ -614,7 +614,7 @@ footer a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #cccccc;
+  color: #ffffff;
   padding: var(--spacing-sm);
   transition: all var(--transition-fast);
   background: none;
@@ -639,14 +639,15 @@ footer a:hover {
   justify-content: center;
   background: none;
   border: none;
-  color: #cccccc;
+  color: #ffffff;
   cursor: pointer;
   padding: var(--spacing-sm);
-  transition: color var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
 .theme-toggle:hover {
   color: #ffffff;
+  transform: translateY(-2px);
 }
 
 .theme-toggle:focus {
@@ -660,6 +661,7 @@ footer a:hover {
   display: block;
   width: 20px;
   height: 20px;
+  overflow: visible;
   transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 

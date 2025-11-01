@@ -168,12 +168,14 @@ HackSimulator.nl gebruikt **twee font stacks** voor verschillende contexten:
 --color-border: #333333;          /* Dark grey - subtle borders */
 --color-link: #00ffff;            /* Cyan - links (distinct from terminal) */
 --color-modal-text: #ffffff;      /* White - legal long-form text */
+--color-icon-navbar: #ffffff;     /* White - utility icons (search, github, theme toggle) */
 ```
 
 **Rationale:**
 - Pure #00ff00 voor buttons (attention-grabbing, zoals "SIGN IN" buttons in retro UI)
 - Cyan voor links (distinct van terminal green, prevents confusion)
 - White voor legal text (maximale readability bij 2000+ woorden)
+- **White voor navbar utility icons** (distinct van primary nav links, industry standard: GitHub, VS Code, Slack)
 
 ### Color Usage Rules
 
