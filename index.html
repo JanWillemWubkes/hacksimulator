@@ -22,10 +22,10 @@
     <title>HackSimulator.nl - Leer Ethisch Hacken</title>
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles/main.css?v=20251101-path-crescent-alignment">
-    <link rel="stylesheet" href="styles/terminal.css?v=20251101-path-crescent-alignment">
-    <link rel="stylesheet" href="styles/mobile.css?v=20251101-path-crescent-alignment">
-    <link rel="stylesheet" href="styles/animations.css?v=20251101-path-crescent-alignment">
+    <link rel="stylesheet" href="styles/main.css?v=20251101-simple-circles">
+    <link rel="stylesheet" href="styles/terminal.css?v=20251101-simple-circles">
+    <link rel="stylesheet" href="styles/mobile.css?v=20251101-simple-circles">
+    <link rel="stylesheet" href="styles/animations.css?v=20251101-simple-circles">
 </head>
 <body>
     <!-- Skip Link for Accessibility -->
@@ -84,22 +84,11 @@
                     </a>
                     <!-- Dark/Light Mode Toggle (Sun/Moon SVG) -->
                     <button class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle dark/light mode">
-                        <svg class="sun-moon" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
-                            <!-- Sun -->
-                            <circle class="sun" cx="12" cy="12" r="5"/>
-                            <!-- Sun rays -->
-                            <g class="sun-beams" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                                <line x1="12" y1="1" x2="12" y2="3"/>
-                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                                <line x1="1" y1="12" x2="3" y2="12"/>
-                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                                <line x1="12" y1="21" x2="12" y2="23"/>
-                                <line x1="19.78" y1="19.78" x2="18.36" y2="18.36"/>
-                                <line x1="23" y1="12" x2="21" y2="12"/>
-                                <line x1="19.78" y1="4.22" x2="18.36" y2="5.64"/>
-                            </g>
-                            <!-- Moon -->
-                            <path class="moon" d="M12,7 A5,5 0 1,1 12,17 A3,3 0 0,0 12,7"/>
+                        <svg class="sun-moon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+                            <!-- Sun - filled circle, larger -->
+                            <circle class="sun" cx="12" cy="12" r="7" fill="currentColor"/>
+                            <!-- Moon - filled circle, smaller -->
+                            <circle class="moon" cx="12" cy="12" r="5" fill="currentColor"/>
                         </svg>
                     </button>
                 </div>
@@ -199,6 +188,6 @@
     </footer>
 
     <!-- Application Entry Point -->
-    <script src="src/main.js?v=20251101-path-crescent" type="module"></script>
+    <script src="src/main.js?v=20251101-simple-circles" type="module"></script>
 </body>
 </html>

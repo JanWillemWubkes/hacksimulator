@@ -668,43 +668,23 @@ footer a:hover {
 /* Sun circle - hidden in light mode, visible in dark mode */
 .sun {
   fill: currentColor;
-  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),
-              opacity 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
   opacity: 0;
-}
-
-/* Sun rays (lines) - hidden in light mode */
-.sun-beams {
-  fill: none;
-  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),
-              opacity 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 /* Moon - visible in light mode, hidden in dark mode */
 .moon {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),
-              opacity 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  fill: currentColor;
   opacity: 1;
+  transition: opacity 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
-/* Dark theme: rotate sun/rays out, moon in */
+/* Dark theme: show sun, hide moon */
 [data-theme="dark"] .sun {
-  transform: rotate(40deg);
-  opacity: 1;
-}
-
-[data-theme="dark"] .sun-beams {
-  transform: rotate(40deg);
   opacity: 1;
 }
 
 [data-theme="dark"] .moon {
-  transform: rotate(0deg);
   opacity: 0;
 }
 
@@ -712,7 +692,6 @@ footer a:hover {
 @media (prefers-reduced-motion: reduce) {
   .sun-moon,
   .sun,
-  .sun-beams,
   .moon {
     transition: none;
   }
