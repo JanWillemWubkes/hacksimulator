@@ -154,6 +154,22 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessie 27 (Terminal Bracket Switch: CSS cascade bug fix, event delegation pattern, 53 light mode variables)
 
+### Light Theme Text Visibility & Dark Frame Pattern (Sessie 28)
+⚠️ **Never:**
+- Use theme-dependent text colors (`--color-text`) on always-dark backgrounds (navbar/footer dark in both modes = text must stay light!)
+- Apply generic hover variables (`--color-bg-hover`) to specific UI contexts (fails when background type changes between themes)
+- Assume "implemented" = "visible" without testing both themes (invisible text = critical UX bug)
+- Use hex colors for hover on varying dark backgrounds (rgba overlay technique = universal, scalable)
+
+✅ **Always:**
+- Create dedicated text color variables for always-dark chrome elements (`--color-footer-text`, `--color-toggle-text` stay light in both themes)
+- Use rgba() overlays for hover on dark backgrounds (`rgba(255,255,255,0.1-0.15)` works on #000, #1a1a1a, any dark shade)
+- Follow industry UX patterns for professional tools (VS Code/GitHub Desktop: dark navbar+footer frame light content = proven design)
+- Test text visibility with user screenshots in both themes (automated tests miss contrast failures)
+- Validate WCAG AAA contrast (10:1+) for long-reading interfaces (developer tools need comfortable extended use)
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 28 (Professional light theme: dark frame pattern, 10 CSS variables, text visibility fixes, rgba hover technique, commit e7a4099)
+
 ### Navbar Implementation & Responsive JS (Sessie 25)
 ⚠️ **Never:**
 - Use hardcoded breakpoints in JavaScript (window.innerWidth checks) - decouples JS from CSS media queries
@@ -484,5 +500,5 @@ Bij nieuwe command:
 
 ---
 
-**Last updated:** 1 november 2025
-**Version:** 7.0 (Sessie 27: Terminal Bracket Switch Theme Toggle - CSS cascade fix, event delegation pattern, 53 light mode variables, WCAG AAA compliant)
+**Last updated:** 2 november 2025
+**Version:** 8.0 (Sessie 28: Professional Light Theme - Dark frame pattern, text visibility fixes, rgba hover technique, 10 CSS variables, WCAG AAA 10:1 contrast)
