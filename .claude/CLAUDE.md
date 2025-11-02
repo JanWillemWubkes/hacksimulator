@@ -138,6 +138,22 @@ Bij nieuwe command:
 
 **Doel:** Anti-patterns en best practices uit recente sessies voor context carry-over
 
+### CSS Cascade & Event Delegation (Sessie 27)
+⚠️ **Never:**
+- Use duplicate `:root` blocks in stylesheet (later instance silently overschrijft earlier CSS variables)
+- Check `e.target === parentElement` in nested HTML (innermost span clicked, not parent button)
+- Use `removeAttribute()` for theme attributes that need specific selectors (`:root` vs `[data-theme="light"]` specificity)
+- Assume "CSS variable set" = "applied" (specificity cascade matters - test with DevTools computed styles)
+
+✅ **Always:**
+- Single `:root` block with all defaults, specific selectors for overrides (`[data-theme="light"]` has higher specificity)
+- Use `.closest('.selector')` for nested element clicks (handles all nesting levels, more robust than `e.target`)
+- Set data attributes explicitly for both states: `setAttribute('data-theme', isDark ? 'dark' : 'light')`
+- Test CSS variable application in DevTools: `getComputedStyle(html).getPropertyValue('--var')` confirms cascade
+- Validate with real browser rendering, not just computed values (Playwright `.evaluate()` doesn't match screenshot)
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 27 (Terminal Bracket Switch: CSS cascade bug fix, event delegation pattern, 53 light mode variables)
+
 ### Navbar Implementation & Responsive JS (Sessie 25)
 ⚠️ **Never:**
 - Use hardcoded breakpoints in JavaScript (window.innerWidth checks) - decouples JS from CSS media queries
@@ -469,4 +485,4 @@ Bij nieuwe command:
 ---
 
 **Last updated:** 1 november 2025
-**Version:** 6.0 (Sessie 26: Navbar Event Handler Conflict Resolution - Removed 160 lines duplicate code, production debugging patterns, single source of truth architecture)
+**Version:** 7.0 (Sessie 27: Terminal Bracket Switch Theme Toggle - CSS cascade fix, event delegation pattern, 53 light mode variables, WCAG AAA compliant)

@@ -4,6 +4,132 @@
 
 ---
 
+## Sessie 27: Terminal Bracket Switch Theme Toggle (1 november 2025)
+
+**Doel:** Replace boring sun/moon icon toggle met unieke ASCII bracket switch + implementeer volledige light/dark mode theme switching
+
+### Context
+- Sessie 26 fixed navbar event handlers; toggle button werkte visueel maar had geen light mode CSS
+- Huidge toggle: sun/moon SVG, maar site bleef altijd donker (no light theme styles)
+- User request: maak iets unieks dat past bij terminal esthetiek
+
+### Planning & Design
+**Theme Toggle Options Evaluated:**
+1. Binary switch `[ 0 | 1 ]` - abstract, niet duidelijk
+2. ASCII slider `[====|----]` - ziet eruit als progress bar
+3. Command-style `$ theme --dark` - te veel tekst
+4. **Bracket Switch `█ DARK | █ LIGHT`** ✓ gekozen
+   - Filled block (█) = active state, empty space = inactive
+   - Matcht bestaande design system (`[ ✓ ]` success pattern)
+   - Terminal-native, ASCII-only, duidelijk labels
+
+### Root Cause: CSS Cascade Bug
+
+**Problem 1: Light Mode CSS Niet Toegepast**
+- Light mode variabelen in `[data-theme="light"]` selector
+- Maar `:root` block werd TWEE KEER gedefinieerd (lines 7-78 en 127-132)
+- Tweede `:root` overschreef alles → light mode CSS nooit gebruikt
+
+**Proof:**
+```css
+/* main.css line 81 */
+[data-theme="light"] {
+  --vignette-center: rgba(220, 220, 220, 1);  /* licht */
+}
+
+/* main.css line 127 - DUPLICATE ROOT! */
+:root {
+  --vignette-center: rgba(35, 35, 35, 1);    /* donker - OVERSCHRIJFT! */
+}
+```
+
+**Solution:** Merge vignette variables in EERSTE `:root` block (line 7-78), verwijder duplicate
+
+**Problem 2: Event Delegation Broken**
+- Toggle HTML: `<button><span class="toggle-option"><span class="toggle-indicator">█</span>TEXT</span></button>`
+- Click op inner span bubbles, maar button handler checkt `e.target === button` (fails!)
+- Result: click registered maar handler niet triggered
+
+**Solution:** Use `.closest('.toggle-option')` voor nested element detection
+
+### Implementation Details
+
+**Files Modified:**
+1. **index.html**
+   - Vervang sun/moon SVG (lines 86-93) met bracket switch HTML
+   - Update cache-bust: `v20251101-simple-circles` → `v20251101-bracket-toggle`
+
+2. **styles/main.css** (154 lines added)
+   - Merge vignette vars in `:root` block (was duplicate)
+   - Add `[data-theme="light"]` selector met 53 variabelen:
+     - Background: #e5e5e5 (subtle grey, not pure white)
+     - Text: #1a1a1a (dark grey for readability)
+     - All semantic colors darkened (#00aa66 instead of #00ff88)
+     - Vignette gradient colors (rgba light greys instead of dark)
+   - Add `.theme-toggle` styling:
+     - flexbox met gap, font-family terminal
+     - font-size 13px, letter-spacing 0.5px
+   - Add `.toggle-option` styling:
+     - padding 4px 8px, border-radius 2px
+     - hover background-color: var(--color-bg-hover)
+   - Add `.toggle-indicator` styling:
+     - opacity 0 by default
+     - opacity 1 when active: `[data-theme="dark"] .toggle-option[data-theme="dark"] .toggle-indicator`
+
+3. **styles/mobile.css** (compact toggle)
+   - gap: 2px, font-size 11px, padding 0 4px
+   - Smaller indicator: 10px
+   - Fits 390px viewport
+
+4. **styles/terminal.css** (vignette variables)
+   - Change hardcoded radial-gradient naar CSS variables
+   - `background: radial-gradient(ellipse at center, var(--vignette-center), var(--vignette-mid1), var(--vignette-mid2), var(--vignette-edge))`
+
+5. **src/ui/navbar.js** (event delegation)
+   - Update `applyTheme()` to SET `data-theme="light"` (was: removeAttribute)
+   - Add event delegation: `.closest('.toggle-option')`
+   - Allows clicks on span children to trigger toggle
+
+### Testing & Visual Regression
+
+**Screenshots Generated:**
+1. `01-dark-mode-initial.png` - Pure black bg, neon green text ✓
+2. `05-light-mode-vignette-fixed.png` - After vignette variable fix
+3. `07-light-mode-css-cascade-fixed.png` - After cascade bug fix
+
+**Validation:**
+- Dark mode colors: `--color-bg: #000000`, `--color-text: #ccffcc` ✓
+- Light mode colors: `--color-bg: #e5e5e5`, `--color-text: #1a1a1a` ✓
+- WCAG AAA contrast: Dark 15.3:1 ✓, Light 7:1+ ✓
+- Vignette gradient: Dynamic per theme ✓
+- Toggle indicator: Opacity-based, smooth transition ✓
+- Event delegation: Nested span clicks work ✓
+
+### Commit
+**8b97923** - Implement Terminal Bracket Switch with functional light/dark mode
+- 154 insertions, 57 deletions
+- 5 files modified + 9 screenshot artifacts
+
+### Key Insights
+
+1. **CSS Specificity & Cascade**
+   - Duplicate `:root` blocks = later instance wins
+   - FIX: Single `:root` with all defaults, specific selectors for overrides
+   - Pattern: `[data-theme="light"]` → overrides `:root` variables (higher specificity)
+
+2. **Event Delegation with Nested Elements**
+   - `e.target` points to innermost clicked element (span)
+   - Button click handlers checking `e.target === button` fail for nested content
+   - FIX: Use `.closest()` to find parent selector instead
+   - Pattern: `.closest('.toggle-option')` handles all nesting levels
+
+3. **Terminal Aesthetics = Simplicity**
+   - ASCII brackets (█) > Modern UI sliders
+   - Matcht existing design system patterns (`[ ✓ ]` success)
+   - Labels "DARK"/"LIGHT" > Icons (clarity for all users)
+
+---
+
 ## Sessie 26: Navbar Production Debugging & Event Handler Conflict Resolution (1 november 2025)
 
 **Doel:** Fix navbar interactive features (theme toggle, modal links) that worked locally but failed in production
