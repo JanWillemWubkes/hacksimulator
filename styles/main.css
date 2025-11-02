@@ -79,6 +79,25 @@
   --vignette-mid1: rgba(22, 22, 22, 1);       /* Mid-dark grey */
   --vignette-mid2: rgba(11, 11, 11, 1);       /* Very dark grey */
   --vignette-edge: rgba(0, 0, 0, 1);          /* Pure black edges */
+
+  /* Navbar Colors - Dark mode defaults */
+  --color-bg-navbar: #000000;           /* Black navbar background */
+  --color-navbar-link: #cccccc;         /* Light grey navigation links */
+  --color-navbar-link-hover: #ffffff;   /* White hover state */
+  --color-navbar-action: #ffffff;       /* White action icons (search, github, theme toggle) */
+
+  /* Footer Colors - Dark mode defaults (matches navbar chrome pattern) */
+  --color-bg-footer: #000000;           /* Black footer background */
+  --color-footer-text: #cccccc;         /* Light grey footer text (readable on dark footer) */
+  --color-footer-link: #00ffff;         /* Cyan footer links (same as --color-link) */
+  --color-footer-link-hover: #33ffff;   /* Lighter cyan hover (same as --color-link-hover) */
+
+  /* Theme Toggle Colors */
+  --color-toggle-text: #cccccc;         /* Light grey toggle text (readable on dark navbar) */
+  --color-toggle-hover: rgba(255, 255, 255, 0.1);  /* Subtle white overlay for hover highlight */
+
+  /* Modal Overlay */
+  --color-modal-overlay: rgba(0, 0, 0, 0.95);  /* Nearly opaque black overlay */
 }
 
 /* ==================== Light Mode Theme ==================== */
@@ -125,6 +144,25 @@
   --color-link-hover: #0077aa;      /* Darker blue for link hover */
   --color-bg-modal-content: #f0f0f0;  /* Light modal content background */
   --color-modal-header: #1a1a1a;    /* Dark text for modal headers */
+
+  /* Navbar Colors - STAYS DARK in light mode (VS Code/GitHub Desktop pattern) */
+  --color-bg-navbar: #1a1a1a;           /* Dark navbar background (professional developer tool aesthetic) */
+  --color-navbar-link: #cccccc;         /* Light grey links (same as dark mode) */
+  --color-navbar-link-hover: #ffffff;   /* White hover (same as dark mode) */
+  --color-navbar-action: #ffffff;       /* White icons (same as dark mode) */
+
+  /* Footer Colors - STAYS DARK in light mode (matches navbar frame pattern) */
+  --color-bg-footer: #1a1a1a;           /* Dark footer background (same as navbar) */
+  --color-footer-text: #cccccc;         /* STAYS LIGHT (footer is dark in light mode!) */
+  --color-footer-link: #00ffff;         /* Cyan links (lighter for contrast on dark bg) */
+  --color-footer-link-hover: #33ffff;   /* Lighter cyan hover (good contrast on dark bg) */
+
+  /* Theme Toggle Colors - STAYS LIGHT in light mode (navbar is dark) */
+  --color-toggle-text: #cccccc;         /* STAYS LIGHT (navbar is dark in light mode!) */
+  --color-toggle-hover: rgba(255, 255, 255, 0.15);  /* Slightly brighter hover for visibility on #1a1a1a navbar */
+
+  /* Modal Overlay - Dark dimming in light mode (Bootstrap/Material UI pattern) */
+  --color-modal-overlay: rgba(0, 0, 0, 0.5);  /* Semi-transparent dark overlay for focus effect */
 }
 
 /* ==================== Reset & Base ==================== */
@@ -233,7 +271,7 @@ button:focus {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #000000;
+  background-color: var(--color-modal-overlay);
   z-index: var(--z-modal);
   justify-content: center;
   align-items: center;
@@ -476,7 +514,8 @@ button:focus {
 /* ==================== Footer ==================== */
 footer {
   position: static;
-  background-color: var(--color-bg);
+  background-color: var(--color-bg-footer);
+  color: var(--color-footer-text);
   border-top: 1px solid var(--color-border);
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: 16px;
@@ -494,13 +533,13 @@ footer nav {
 }
 
 footer a {
-  color: var(--color-link);
+  color: var(--color-footer-link);
   text-decoration: none;
   padding: 0 var(--spacing-sm);
 }
 
 footer a:hover {
-  color: var(--color-link-hover);
+  color: var(--color-footer-link-hover);
 }
 
 /* ==================== Skip Link (Accessibility) ==================== */
@@ -530,7 +569,7 @@ footer a:hover {
   top: 0;
   left: 0;
   right: 0;
-  background-color: var(--color-bg);
+  background-color: var(--color-bg-navbar);
   border-bottom: 1px solid var(--color-border);
   padding: var(--spacing-md) var(--spacing-lg);
   z-index: var(--z-navbar);
@@ -589,7 +628,7 @@ footer a:hover {
 }
 
 .navbar-links a {
-  color: #cccccc;
+  color: var(--color-navbar-link);
   font-family: var(--font-terminal);
   font-size: var(--font-size-base);
   padding: var(--spacing-sm) var(--spacing-md);
@@ -600,7 +639,7 @@ footer a:hover {
 }
 
 .navbar-links a:hover {
-  color: #ffffff;
+  color: var(--color-navbar-link-hover);
   font-weight: 700;
   opacity: 1;
 }
@@ -664,7 +703,7 @@ footer a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: var(--color-navbar-action);
   padding: var(--spacing-sm);
   transition: all var(--transition-fast);
   background: none;
@@ -673,37 +712,13 @@ footer a:hover {
 }
 
 .navbar-action:hover {
-  color: #ffffff;
+  color: var(--color-navbar-action);
   transform: translateY(-2px);
   opacity: 1;
 }
 
 .navbar-action svg {
   display: block;
-}
-
-/* Theme Toggle Button - Web.dev Pattern (Sun/Moon SVG) */
-.theme-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  color: #ffffff;
-  cursor: pointer;
-  padding: calc(var(--spacing-sm) + 1px);
-  transition: all var(--transition-fast);
-}
-
-.theme-toggle:hover {
-  color: #ffffff;
-  transform: translateY(-2px);
-}
-
-.theme-toggle:focus {
-  outline: 2px solid var(--color-info);
-  outline-offset: 2px;
-  border-radius: 4px;
 }
 
 /* Terminal Bracket Switch - Theme Toggle */
@@ -715,7 +730,7 @@ footer a:hover {
   padding: 0;
   background: none;
   border: none;
-  color: var(--color-text);
+  color: var(--color-toggle-text);
   cursor: pointer;
   font-family: var(--font-terminal);
   font-size: 13px;
@@ -748,7 +763,7 @@ footer a:hover {
 }
 
 .toggle-option:hover {
-  background-color: var(--color-bg-hover);
+  background-color: var(--color-toggle-hover);
 }
 
 /* Toggle Indicator - Filled block for active theme */
