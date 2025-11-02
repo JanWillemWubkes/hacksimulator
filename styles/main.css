@@ -85,6 +85,7 @@
   --color-navbar-link: #cccccc;         /* Light grey navigation links */
   --color-navbar-link-hover: #ffffff;   /* White hover state */
   --color-navbar-action: #ffffff;       /* White action icons (search, github, theme toggle) */
+  --color-navbar-dropdown-icon: #00ffff; /* Cyan dropdown icons (+/×) - distinct from link text */
 
   /* Footer Colors - Dark mode defaults (matches navbar chrome pattern) */
   --color-bg-footer: #000000;           /* Black footer background */
@@ -150,6 +151,7 @@
   --color-navbar-link: #cccccc;         /* Light grey links (same as dark mode) */
   --color-navbar-link-hover: #ffffff;   /* White hover (same as dark mode) */
   --color-navbar-action: #ffffff;       /* White icons (same as dark mode) */
+  --color-navbar-dropdown-icon: #00ffff; /* Cyan dropdown icons - same as dark mode (navbar stays dark) */
 
   /* Footer Colors - STAYS DARK in light mode (matches navbar frame pattern) */
   --color-bg-footer: #1a1a1a;           /* Dark footer background (same as navbar) */
@@ -653,6 +655,18 @@ footer a:hover {
   cursor: pointer;
 }
 
+/* Dropdown Icon (+/× animation) */
+.dropdown-icon {
+  color: var(--color-navbar-dropdown-icon);
+  display: inline-block;
+  transition: transform var(--transition-normal);
+  margin-left: 4px;
+}
+
+.navbar-dropdown.active .dropdown-icon {
+  transform: rotate(45deg);
+}
+
 .dropdown-menu {
   display: none;
   position: absolute;
@@ -668,7 +682,7 @@ footer a:hover {
   animation: fadeIn 0.2s ease-out;
 }
 
-.navbar-dropdown:hover .dropdown-menu {
+.navbar-dropdown.active .dropdown-menu {
   display: block;
 }
 

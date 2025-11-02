@@ -119,16 +119,15 @@ export function initNavbar() {
   // ==================== Dropdown Menu ====================
 
   /**
-   * Toggle dropdown on mobile
+   * Toggle dropdown (unified desktop + mobile)
+   * Accordion pattern: only one dropdown can be open at a time
    */
   function toggleDropdown(e) {
     e.preventDefault();
     e.stopPropagation();
 
-    if (isMobileView()) {
-      // Mobile: toggle active class
-      navbarDropdown.classList.toggle('active');
-    }
+    // Toggle active class (works for desktop + mobile)
+    navbarDropdown.classList.toggle('active');
   }
 
   /**
@@ -333,24 +332,9 @@ export function initNavbar() {
     }
   });
 
-  // Dropdown trigger click (mobile only)
+  // Dropdown trigger click (unified desktop + mobile)
   if (dropdownTrigger) {
     dropdownTrigger.addEventListener('click', toggleDropdown);
-  }
-
-  // Desktop dropdown hover (show on hover)
-  if (navbarDropdown && !isMobileView()) {
-    navbarDropdown.addEventListener('mouseenter', () => {
-      if (!isMobileView()) {
-        navbarDropdown.classList.add('active');
-      }
-    });
-
-    navbarDropdown.addEventListener('mouseleave', () => {
-      if (!isMobileView()) {
-        navbarDropdown.classList.remove('active');
-      }
-    });
   }
 
   // Link action handlers
