@@ -105,45 +105,45 @@
   /* Light Mode - Subtle grey palette (#1a1a1a → #e5e5e5) */
 
   /* Background Layers - Light variant */
-  --color-bg: #e5e5e5;              /* Light grey background */
-  --color-bg-terminal: #f5f5f5;     /* Terminal slightly lighter for contrast */
-  --color-bg-modal: #eeeeee;        /* Modal backgrounds - subtle contrast */
-  --color-bg-hover: #d8d8d8;        /* Hover states - darker grey */
+  --color-bg: #f8f8f8;              /* Off-white background (professional standard) */
+  --color-bg-terminal: #ffffff;     /* Pure white terminal - pops from background */
+  --color-bg-modal: #ffffff;        /* White modal backgrounds - clean aesthetic */
+  --color-bg-hover: #ebebeb;        /* Very light hover states */
 
-  /* Vignette Background - Light mode variant (replaces hardcoded dark gradient) */
-  --vignette-center: rgba(220, 220, 220, 1);   /* Light grey center */
-  --vignette-mid1: rgba(200, 200, 200, 1);     /* Mid-light grey */
-  --vignette-mid2: rgba(180, 180, 180, 1);     /* Mid grey */
-  --vignette-edge: rgba(160, 160, 160, 1);     /* Light grey edges (subtle vignette) */
+  /* Vignette Background - Light mode variant (clean white fade) */
+  --vignette-center: rgba(255, 255, 255, 1);   /* Pure white center - clean aesthetic */
+  --vignette-mid1: rgba(250, 250, 250, 1);     /* Very light grey */
+  --vignette-mid2: rgba(245, 245, 245, 1);     /* Light grey */
+  --vignette-edge: rgba(240, 240, 240, 1);     /* Off-white edges - subtle fade */
 
   /* Text Colors - Dark variant for readability */
-  --color-prompt: #00aa66;          /* Darker neon green for contrast (WCAG AAA) */
-  --color-input: #00aa66;           /* Consistent with prompt */
-  --color-text: #1a1a1a;            /* Dark grey text (primary content) */
-  --color-text-dim: #555555;        /* Dimmed grey for secondary info */
+  --color-prompt: #00dd66;          /* Vibrant neon green - moderate saturation boost */
+  --color-input: #00dd66;           /* Consistent with prompt */
+  --color-text: #0a0a0a;            /* Very dark grey - maximum contrast */
+  --color-text-dim: #444444;        /* Dimmed grey for secondary info */
 
   /* Semantic Colors - Darker variants for light backgrounds */
   --color-error: #d60047;           /* Darker magenta for contrast */
   --color-warning: #dd8800;         /* Darker orange for contrast */
-  --color-info: #0099cc;            /* Darker cyan for contrast */
-  --color-success: #00aa66;         /* Darker green for contrast */
+  --color-info: #00bbff;            /* Vibrant cyan - moderate saturation boost */
+  --color-success: #00dd66;         /* Vibrant green - matches prompt */
 
   /* UI Elements - Darker primary + contrast-optimized secondary */
-  --color-ui-primary: #00aa66;      /* Darker neon green (WCAG AAA on light bg) */
-  --color-ui-hover: #00cc77;        /* Slightly brighter for hover feedback */
-  --color-ui-secondary: #0099cc;    /* Darker cyan */
-  --color-border: #cccccc;          /* Light grey borders (visible on light bg) */
-  --color-link: #0099cc;            /* Darker cyan links */
-  --color-modal-text: #1a1a1a;      /* Dark text for modals */
+  --color-ui-primary: #00dd66;      /* Vibrant neon green - matches prompt/success */
+  --color-ui-hover: #00ee88;        /* Brighter green - consistent saturation boost */
+  --color-ui-secondary: #00bbff;    /* Vibrant cyan - matches info/links */
+  --color-border: #e0e0e0;          /* Darker grey borders - better visibility */
+  --color-link: #00bbff;            /* Vibrant cyan links */
+  --color-modal-text: #0a0a0a;      /* Very dark text - maximum contrast */
 
   /* Extended UI Colors - Light mode variants */
   --color-text-muted: #666666;      /* Darker muted text */
-  --color-text-light: #333333;      /* Light mode "light text" is actually dark */
-  --color-star-inactive: #aaaaaa;   /* Lighter grey for inactive stars */
-  --color-border-input: #bbbbbb;    /* Light grey input borders */
-  --color-link-hover: #0077aa;      /* Darker blue for link hover */
-  --color-bg-modal-content: #f0f0f0;  /* Light modal content background */
-  --color-modal-header: #1a1a1a;    /* Dark text for modal headers */
+  --color-text-light: #2a2a2a;      /* Very dark grey - better contrast */
+  --color-star-inactive: #999999;   /* Much darker grey - visibility fix! */
+  --color-border-input: #d0d0d0;    /* Darker grey - better visibility */
+  --color-link-hover: #0099ff;      /* Slightly brighter cyan for hover */
+  --color-bg-modal-content: #fafafa;  /* Off-white modal content */
+  --color-modal-header: #0a0a0a;    /* Very dark text - maximum contrast */
 
   /* Navbar Colors - STAYS DARK in light mode (VS Code/GitHub Desktop pattern) */
   --color-bg-navbar: #1a1a1a;           /* Dark navbar background (professional developer tool aesthetic) */
