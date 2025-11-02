@@ -53,17 +53,17 @@ export function initNavbar() {
 
   /**
    * Apply theme to document
-   * Updates data-theme attribute which CSS uses to animate sun/moon SVG
+   * Updates data-theme attribute which CSS uses to apply light/dark mode variables
    */
   function applyTheme(isDark) {
     const root = document.documentElement;
     if (isDark) {
-      // Dark theme: Set data-theme attribute for CSS animations
+      // Dark theme: Set data-theme attribute to trigger dark mode CSS variables
       root.setAttribute('data-theme', 'dark');
       localStorage.setItem('theme', 'dark');
     } else {
-      // Light theme: Remove data-theme attribute (default state)
-      root.removeAttribute('data-theme');
+      // Light theme: Set data-theme attribute to trigger light mode CSS variables
+      root.setAttribute('data-theme', 'light');
       localStorage.setItem('theme', 'light');
     }
   }
@@ -305,12 +305,16 @@ export function initNavbar() {
   // Initialize theme on load
   initializeTheme();
 
-  // Theme toggle button
+  // Theme toggle button - with event delegation for inner spans
   if (themeToggle) {
     themeToggle.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      toggleTheme();
+      // Handle clicks on the button or any element inside it
+      const toggleOption = e.target.closest('.toggle-option') || e.target.closest('.toggle-indicator');
+      if (toggleOption || e.target === themeToggle) {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleTheme();
+      }
     });
   }
 

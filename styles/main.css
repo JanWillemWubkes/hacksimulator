@@ -74,7 +74,57 @@
   --z-modal: 1000;
   --z-cookie: 2000;
 
-  /* Background System: Radial gradient vignette (no variables needed - hardcoded for simplicity) */
+  /* Vignette Background - Dark mode (default for :root) */
+  --vignette-center: rgba(35, 35, 35, 1);     /* Dark grey center */
+  --vignette-mid1: rgba(22, 22, 22, 1);       /* Mid-dark grey */
+  --vignette-mid2: rgba(11, 11, 11, 1);       /* Very dark grey */
+  --vignette-edge: rgba(0, 0, 0, 1);          /* Pure black edges */
+}
+
+/* ==================== Light Mode Theme ==================== */
+[data-theme="light"] {
+  /* Light Mode - Subtle grey palette (#1a1a1a → #e5e5e5) */
+
+  /* Background Layers - Light variant */
+  --color-bg: #e5e5e5;              /* Light grey background */
+  --color-bg-terminal: #f5f5f5;     /* Terminal slightly lighter for contrast */
+  --color-bg-modal: #eeeeee;        /* Modal backgrounds - subtle contrast */
+  --color-bg-hover: #d8d8d8;        /* Hover states - darker grey */
+
+  /* Vignette Background - Light mode variant (replaces hardcoded dark gradient) */
+  --vignette-center: rgba(220, 220, 220, 1);   /* Light grey center */
+  --vignette-mid1: rgba(200, 200, 200, 1);     /* Mid-light grey */
+  --vignette-mid2: rgba(180, 180, 180, 1);     /* Mid grey */
+  --vignette-edge: rgba(160, 160, 160, 1);     /* Light grey edges (subtle vignette) */
+
+  /* Text Colors - Dark variant for readability */
+  --color-prompt: #00aa66;          /* Darker neon green for contrast (WCAG AAA) */
+  --color-input: #00aa66;           /* Consistent with prompt */
+  --color-text: #1a1a1a;            /* Dark grey text (primary content) */
+  --color-text-dim: #555555;        /* Dimmed grey for secondary info */
+
+  /* Semantic Colors - Darker variants for light backgrounds */
+  --color-error: #d60047;           /* Darker magenta for contrast */
+  --color-warning: #dd8800;         /* Darker orange for contrast */
+  --color-info: #0099cc;            /* Darker cyan for contrast */
+  --color-success: #00aa66;         /* Darker green for contrast */
+
+  /* UI Elements - Darker primary + contrast-optimized secondary */
+  --color-ui-primary: #00aa66;      /* Darker neon green (WCAG AAA on light bg) */
+  --color-ui-hover: #00cc77;        /* Slightly brighter for hover feedback */
+  --color-ui-secondary: #0099cc;    /* Darker cyan */
+  --color-border: #cccccc;          /* Light grey borders (visible on light bg) */
+  --color-link: #0099cc;            /* Darker cyan links */
+  --color-modal-text: #1a1a1a;      /* Dark text for modals */
+
+  /* Extended UI Colors - Light mode variants */
+  --color-text-muted: #666666;      /* Darker muted text */
+  --color-text-light: #333333;      /* Light mode "light text" is actually dark */
+  --color-star-inactive: #aaaaaa;   /* Lighter grey for inactive stars */
+  --color-border-input: #bbbbbb;    /* Light grey input borders */
+  --color-link-hover: #0077aa;      /* Darker blue for link hover */
+  --color-bg-modal-content: #f0f0f0;  /* Light modal content background */
+  --color-modal-header: #1a1a1a;    /* Dark text for modal headers */
 }
 
 /* ==================== Reset & Base ==================== */
@@ -656,43 +706,82 @@ footer a:hover {
   border-radius: 4px;
 }
 
-/* Sun/Moon SVG Animation */
-.sun-moon {
-  display: block;
-  width: 24px;
-  height: 24px;
-  overflow: visible;
-  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+/* Terminal Bracket Switch - Theme Toggle */
+.theme-toggle {
+  display: flex !important;
+  gap: var(--spacing-sm);
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--color-text);
+  cursor: pointer;
+  font-family: var(--font-terminal);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all var(--transition-normal);
 }
 
-/* Sun circle - hidden in light mode, visible in dark mode */
-.sun {
-  fill: currentColor;
+.theme-toggle:hover {
+  transform: none;
+  opacity: 0.8;
+}
+
+.theme-toggle:focus {
+  outline: 2px solid var(--color-info);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Toggle Option (DARK/LIGHT labels) */
+.toggle-option {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 2px;
+  transition: all var(--transition-normal);
+  user-select: none;
+  white-space: nowrap;
+}
+
+.toggle-option:hover {
+  background-color: var(--color-bg-hover);
+}
+
+/* Toggle Indicator - Filled block for active theme */
+.toggle-indicator {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-ui-primary);
   opacity: 0;
-  transition: opacity 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: opacity var(--transition-normal);
 }
 
-/* Moon - visible in light mode, hidden in dark mode */
-.moon {
-  fill: currentColor;
-  opacity: 1;
-  transition: opacity 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-}
-
-/* Dark theme: show sun, hide moon */
-[data-theme="dark"] .sun {
+/* Active theme shows filled block */
+[data-theme="dark"] .toggle-option[data-theme="dark"] .toggle-indicator,
+[data-theme="light"] .toggle-option[data-theme="light"] .toggle-indicator {
   opacity: 1;
 }
 
-[data-theme="dark"] .moon {
+/* Inactive theme hides indicator */
+[data-theme="dark"] .toggle-option[data-theme="light"] .toggle-indicator,
+[data-theme="light"] .toggle-option[data-theme="dark"] .toggle-indicator {
   opacity: 0;
+}
+
+/* Both options are always clickable - enables switching between them */
+.toggle-option {
+  cursor: pointer;
 }
 
 /* Respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
-  .sun-moon,
-  .sun,
-  .moon {
+  .theme-toggle,
+  .toggle-option,
+  .toggle-indicator {
     transition: none;
   }
 }

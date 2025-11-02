@@ -191,16 +191,20 @@
     margin-left: auto;
   }
 
-  /* Theme toggle on mobile */
+  /* Theme toggle on mobile - Terminal Bracket Switch */
   .theme-toggle {
-    border: 1px solid var(--color-border);
-    transform: none;
+    gap: 2px;
+    font-size: 11px;
+    padding: 0 4px;
   }
 
-  .theme-toggle::after {
-    content: "Dark/Light Mode";
-    font-family: var(--font-terminal);
-    margin-left: auto;
+  .toggle-option {
+    padding: 2px 4px;
+    font-size: 11px;
+  }
+
+  .toggle-indicator {
+    font-size: 10px;
   }
 
   /* Modals */
