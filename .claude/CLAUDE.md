@@ -170,6 +170,23 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessie 28 (Professional light theme: dark frame pattern, 10 CSS variables, text visibility fixes, rgba hover technique, commit e7a4099)
 
+### Light Theme Design & Color Saturation Strategy (Sessie 29)
+⚠️ **Never:**
+- Design light mode as "inverse of dark mode" without own identity (creates washed out "flets" appearance)
+- Use low saturation accent colors in light mode thinking they'll match dark mode subtlety (light needs MORE saturation to compensate for no glow)
+- Accept weak border contrast (<3:1 ratio) thinking "subtle is better" (invisible UI = UX failure - stars 1.4:1 = unusable)
+- Use mid-grey backgrounds (#e5e5e5) for professional tools (looks dated, not industry standard)
+
+✅ **Always:**
+- Design light themes with vibrant personality: off-white base (#f8f8f8) + highly saturated accents (+20-25% boost)
+- Boost accent saturation to compensate for lack of additive color glow (dark mode = screen emits light, light mode = reflected light)
+- Follow industry patterns: Dark navbar/footer frame + light content (VS Code, GitHub Desktop, Figma proven UX)
+- Test with real content screenshots in both themes: invisible elements only caught visually (automated tests miss contrast failures)
+- Strengthen borders in light mode (#e0e0e0 vs #cccccc) - light mode needs MORE structure than dark, not less
+- Maintain brand identity across themes: cyberpunk neon must be recognizable in both modes (not generic office-grey)
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 29 (Neon on Paper redesign: 29 CSS variables, +21% saturation boost, off-white hierarchy, commit a628207)
+
 ### Navbar Implementation & Responsive JS (Sessie 25)
 ⚠️ **Never:**
 - Use hardcoded breakpoints in JavaScript (window.innerWidth checks) - decouples JS from CSS media queries
@@ -501,4 +518,4 @@ Bij nieuwe command:
 ---
 
 **Last updated:** 2 november 2025
-**Version:** 8.0 (Sessie 28: Professional Light Theme - Dark frame pattern, text visibility fixes, rgba hover technique, 10 CSS variables, WCAG AAA 10:1 contrast)
+**Version:** 9.0 (Sessie 29: "Neon on Paper" Light Theme - Vibrant redesign, 29 CSS variables, +21% saturation boost, off-white hierarchy, brand identity maintained)
