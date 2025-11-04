@@ -41,12 +41,13 @@ export function initNavbar() {
   // ==================== Theme Toggle ====================
 
   /**
-   * Initialize theme from localStorage or system preference
+   * Initialize theme from localStorage (default: dark mode)
+   * Always defaults to dark mode to maintain cyberpunk terminal aesthetic
    */
   function initializeTheme() {
     const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const isDark = savedTheme ? savedTheme === 'dark' : prefersDark;
+    // Always default to dark mode (brand identity) - user can switch to light if preferred
+    const isDark = savedTheme ? savedTheme === 'dark' : true;
 
     applyTheme(isDark);
   }
