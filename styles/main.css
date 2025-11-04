@@ -62,6 +62,13 @@
   --terminal-max-width: 1200px;
   --mobile-breakpoint: 768px;
 
+  /* Border Radius - Design System Standard */
+  --border-radius-button: 4px;      /* Standard buttons, inputs, dropdowns */
+  --border-radius-small: 2px;       /* Small UI chips, toggles, bars */
+  --border-radius-modal: 8px;       /* Large containers, modals */
+  --border-radius-none: 0;          /* Explicit opt-out (brutalist elements) */
+  --border-radius-circle: 50%;      /* Circular elements */
+
   /* Animations */
   --transition-fast: 0.15s ease;
   --transition-normal: 0.3s ease;
@@ -229,6 +236,7 @@ button:focus {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
   border: 2px solid var(--color-ui-primary);
+  border-radius: var(--border-radius-button);
 }
 
 .btn-primary:hover {
@@ -243,6 +251,7 @@ button:focus {
   border: 2px solid var(--color-ui-secondary);
   padding: var(--spacing-md) var(--spacing-lg);
   font-size: var(--font-size-base);
+  border-radius: var(--border-radius-button);
 }
 
 .btn-secondary:hover {
@@ -257,6 +266,7 @@ button:focus {
   background-color: var(--color-ui-primary);
   color: #000000;
   border: 1px solid var(--color-ui-primary);
+  border-radius: var(--border-radius-button);
 }
 
 .btn-small:hover {
@@ -286,7 +296,7 @@ button:focus {
 .modal-content {
   background-color: var(--color-bg-modal-content);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--border-radius-modal);
   padding: 40px;
   width: 600px;
   max-width: 90vw;
@@ -384,8 +394,8 @@ button:focus {
   height: 48px;
   padding: 0 10px;  /* Critical fix: breathing room voor tekst */
 
-  /* Brutalist aesthetics - zero radius for raw edges */
-  border-radius: 0;
+  /* Border styling */
+  border-radius: var(--border-radius-button);
   border: 3px solid #666666;  /* Upgraded van var(--color-border) voor betere visibility */
 
   /* Colors */
@@ -458,7 +468,7 @@ button:focus {
   font-size: 17px;
   resize: vertical;
   margin-bottom: var(--spacing-md);
-  border-radius: 4px;
+  border-radius: var(--border-radius-button);
 }
 
 #feedback-comment:focus {
@@ -473,7 +483,7 @@ button:focus {
   color: var(--color-error);
   padding: 12px;
   margin: 12px 0;
-  border-radius: 4px;
+  border-radius: var(--border-radius-button);
   font-size: 15px;
   line-height: 1.4;
   min-height: 48px; /* Fixed height prevents layout shift */
@@ -503,7 +513,7 @@ button:focus {
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 1px;
-  border-radius: 4px;
+  border-radius: var(--border-radius-button);
 }
 
 #feedback-submit:hover {
@@ -673,7 +683,7 @@ footer a:hover {
   top: 100%;
   left: 0;
   background-color: #0a0a0a;
-  border-radius: 4px;
+  border-radius: var(--border-radius-button);
   list-style: none;
   margin: 0;
   padding: var(--spacing-md) 0;
@@ -761,7 +771,7 @@ footer a:hover {
 .theme-toggle:focus {
   outline: 2px solid var(--color-info);
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: var(--border-radius-button);
 }
 
 /* Toggle Option (DARK/LIGHT labels) */
@@ -770,7 +780,7 @@ footer a:hover {
   align-items: center;
   gap: 4px;
   padding: 4px 8px;
-  border-radius: 2px;
+  border-radius: var(--border-radius-small);
   transition: all var(--transition-normal);
   user-select: none;
   white-space: nowrap;
@@ -835,7 +845,7 @@ footer a:hover {
   height: 3px;
   background-color: var(--color-ui-primary);
   transition: all var(--transition-fast);
-  border-radius: 2px;
+  border-radius: var(--border-radius-small);
 }
 
 .navbar-toggle:hover span {

@@ -162,7 +162,7 @@
     width: 100%;
     background-color: transparent;
     border: 1px solid var(--color-border);
-    border-radius: 4px;
+    border-radius: var(--border-radius-button);
     color: #cccccc;
     gap: var(--spacing-md);
   }

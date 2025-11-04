@@ -43,7 +43,7 @@
 
 #terminal-output::-webkit-scrollbar-thumb {
   background: var(--color-border);
-  border-radius: 4px;
+  border-radius: var(--border-radius-button);
 }
 
 #terminal-output::-webkit-scrollbar-thumb:hover {

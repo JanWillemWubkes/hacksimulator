@@ -12,15 +12,16 @@
 2. [Typography System](#typography-system)
 3. [Color System](#color-system)
 4. [Spacing System](#spacing-system)
-5. [Component Library](#component-library)
-6. [Interactive States](#interactive-states)
-7. [Animation Guidelines](#animation-guidelines)
-8. [Background Effects](#background-effects)
-9. [Responsive Design](#responsive-design)
-10. [Accessibility Standards](#accessibility-standards)
-11. [Code Conventions](#code-conventions)
-12. [Common Patterns](#common-patterns)
-13. [Anti-Patterns](#anti-patterns)
+5. [Border Radius System](#border-radius-system)
+6. [Component Library](#component-library)
+7. [Interactive States](#interactive-states)
+8. [Animation Guidelines](#animation-guidelines)
+9. [Background Effects](#background-effects)
+10. [Responsive Design](#responsive-design)
+11. [Accessibility Standards](#accessibility-standards)
+12. [Code Conventions](#code-conventions)
+13. [Common Patterns](#common-patterns)
+14. [Anti-Patterns](#anti-patterns)
 
 ---
 
@@ -260,6 +261,85 @@ renderInfo("💡 TIP: Try 'help' command");
 **Rationale:**
 - 1200px max-width: 80-90 tekens per regel (optimaal voor lezen)
 - 20px padding: ruimte voor mobiele duimen (44px touch targets)
+
+---
+
+## Border Radius System
+
+### CSS Variables
+
+```css
+:root {
+  --border-radius-button: 4px;      /* Standard buttons, inputs, dropdowns */
+  --border-radius-small: 2px;       /* Small UI chips, toggles, bars */
+  --border-radius-modal: 8px;       /* Large containers, modals */
+  --border-radius-none: 0;          /* Explicit opt-out (brutalist elements) */
+  --border-radius-circle: 50%;      /* Circular elements */
+}
+```
+
+### Beslisboom: Welke Border Radius?
+
+| Element Type | Variable | Value | Use Case |
+|--------------|----------|-------|----------|
+| Buttons (all sizes) | `--border-radius-button` | 4px | Primary, secondary, small buttons |
+| Input fields | `--border-radius-button` | 4px | Textareas, text inputs |
+| Dropdowns | `--border-radius-button` | 4px | Navbar dropdowns, select menus |
+| Error boxes | `--border-radius-button` | 4px | Feedback errors, warnings |
+| Toggle chips | `--border-radius-small` | 2px | Theme toggle labels, small badges |
+| Hamburger bars | `--border-radius-small` | 2px | Mobile menu animation bars |
+| Modals | `--border-radius-modal` | 8px | Modal containers, large overlays |
+| Circular buttons | `--border-radius-circle` | 50% | Floating action buttons |
+| Brutalist elements | `--border-radius-none` | 0 | Explicit design choice (rare) |
+
+### Rationale
+
+- **4px als standaard**: Industry pattern (GitHub, VS Code) - subtiel afgerond zonder "bubbly" te worden
+- **Hiërarchie via size**: Grotere containers (8px modals) = meer rounding, kleine UI (2px chips) = minder rounding
+- **Consistency over aesthetics**: Alle buttons gebruiken DEZELFDE radius - voorspelbaar voor gebruikers
+- **Mobile-friendly**: 4px radius verbetert touch target detectie op schermranden (iOS Safari quirk)
+
+### Anti-Patterns
+
+❌ **NEVER:**
+- Hardcode border-radius waarden (gebruik altijd CSS variables)
+- Mix verschillende radius waarden op hetzelfde component type (inconsistent UX)
+- Gebruik >12px radius (te "bubbly" voor developer tools - breekt cyberpunk aesthetic)
+- Skip border-radius op interactive elements (buttons zonder radius zien broken uit)
+
+✅ **ALWAYS:**
+- Gebruik semantische variable namen (`--border-radius-button` not `--radius-4`)
+- Test visual consistency across all button states (hover, focus, active)
+- Apply border-radius to ALL interactive elements (buttons, inputs, dropdowns)
+
+### Component Examples
+
+#### Button met Correct Border Radius
+```css
+.btn-primary {
+  background-color: var(--color-ui-primary);
+  border-radius: var(--border-radius-button);  /* ✅ Correct */
+  /* ... other styles ... */
+}
+```
+
+#### Modal met Correct Border Radius
+```css
+.modal-content {
+  background-color: var(--color-bg-modal);
+  border-radius: var(--border-radius-modal);  /* ✅ Correct - larger container */
+  /* ... other styles ... */
+}
+```
+
+#### Toggle Chip met Correct Border Radius
+```css
+.toggle-option {
+  padding: 4px 8px;
+  border-radius: var(--border-radius-small);  /* ✅ Correct - small UI element */
+  /* ... other styles ... */
+}
+```
 
 ---
 

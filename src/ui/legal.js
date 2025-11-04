@@ -47,7 +47,7 @@ const legalManager = {
     modal.style.cssText = `
       background: #2d2d2d;
       border: none;
-      border-radius: 8px;
+      border-radius: var(--border-radius-modal);
       padding: 40px;
       max-width: 600px;
       width: 100%;
@@ -98,7 +98,7 @@ const legalManager = {
           font-weight: bold;
           font-family: 'Courier New', monospace;
           cursor: pointer;
-          border-radius: 4px;
+          border-radius: var(--border-radius-button);
           transition: all 0.2s ease;
           width: 100%;
           text-transform: uppercase;
