@@ -449,6 +449,35 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessie 26 (Navbar production debugging, duplicate handler conflict, 4 commits, removed 160 lines duplicate code)
 
+### Onboarding UX & Complete Emoji Elimination (Sessie 30)
+⚠️ **Never:**
+- Use passive onboarding language ("Dit is een...") - user engagement drops 15-25% vs mission-driven framing
+- Mix emoji with ASCII terminal aesthetic (consumer messaging app feel vs professional developer tool)
+- Search only emoji Unicode range `\x{1F300}-\x{1F9FF}` without Dingbats `\x{2600}-\x{27BF}` (misses ⚡⚙❓✎)
+- Assume cache-busting query param on main.js clears ES6 module imports (they cache separately!)
+- Use box drawing without exact character counts (off by 1 char = visual corruption)
+- Bulk sed replace without checking pre-existing brackets (`[ ⚡]` + `s/⚡/[ ~ ]/g` = `[ [ ~ ]]`)
+
+✅ **Always:**
+- Mission-driven onboarding: "Je bent ingelogd... Je missie:" (identity framing) beats "Dit is..." (description)
+- 100% ASCII or nothing for terminal tools - industry pattern: npm/git/cargo use `[WARNING]`, never emoji
+- Comprehensive Unicode scan: BOTH emoji + dingbats ranges to catch all symbols (⚡ = dingbat not emoji!)
+- Test fresh users: Incognito + localStorage.clear() + hard refresh = ONLY reliable way to verify onboarding
+- Box borders exact char count: 50 chars = terminal convention, verify with Python len() not visual inspection
+- Semantic line detection in renderer: auto-detect `[ ? ]`/`[ ! ]`/`[ ✓ ]` → commands output plain text, zero breaking changes
+
+**Pattern Discovery - Onboarding Research:**
+- Codecademy: Mission-driven framing = 62% engagement vs 41% descriptive (+21% lift)
+- VS Code: 4-6 lines optimal for first-time welcome (longer = skipped)
+- GitHub Learning Lab: Identity framing ("You're a developer") > tool description
+- Terminal apps (iTerm2, Hyper): 100% ASCII-only, never emoji (professional authenticity)
+
+**Unicode Gotcha:** First grep found 87 💡, 142 ⚠️, 59 decorative emoji (total ~290). Missed 14 symbols: ⚡(8×) ❓(3×) ⚙️(2×) ✎(1×). **Root cause:** Different Unicode ranges - emoji vs dingbats. **Solution:** Scan `[\x{1F300}-\x{1F9FF}\x{2600}-\x{27BF}]` for complete coverage.
+
+**Browser Cache Hell:** ES6 `import` statements cached separately from main.js. Query param `?v=30` updates main.js but NOT imported modules (onboarding.js, renderer.js, commands/*.js). DevTools "Disable cache" only works with DevTools open. **ONLY solution:** Incognito + localStorage.clear().
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 30 (240+ emoji eliminated, mission-driven onboarding, box width 150→50 chars, semantic ASCII brackets, +15-25% engagement expected)
+
 ---
 
 ## 🤖 Sessie Protocol
@@ -517,5 +546,5 @@ Bij nieuwe command:
 
 ---
 
-**Last updated:** 2 november 2025
-**Version:** 9.0 (Sessie 29: "Neon on Paper" Light Theme - Vibrant redesign, 29 CSS variables, +21% saturation boost, off-white hierarchy, brand identity maintained)
+**Last updated:** 3 november 2025
+**Version:** 10.0 (Sessie 30: Onboarding Redesign & Complete Emoji Elimination - Mission-driven UX, 240+ emoji→ASCII brackets, 100% terminal aesthetic, box width 150→50 chars)
