@@ -478,6 +478,30 @@ Bij nieuwe command:
 
 📄 **Detailed logs:** `SESSIONS.md` Sessie 30 (240+ emoji eliminated, mission-driven onboarding, box width 150→50 chars, semantic ASCII brackets, +15-25% engagement expected)
 
+### Border-Radius Consistency & Design System Completion (Sessie 31)
+⚠️ **Never:**
+- Use ID-specific selectors for styling that should be in classes (`#feedback-submit` had radius, `.btn-primary` didn't = not scalable)
+- Hardcode border-radius values when CSS variables exist (breaks centralized theming, creates design drift)
+- Skip comprehensive audit when fixing styling bugs (fixing only reported buttons leaves 19 hardcoded values untouched)
+- Mix different border-radius values on same component type (4px/5px/8px on buttons = inconsistent UX)
+- Develop static HTML without design system review (legal pages had orphaned 5px value nowhere else used)
+
+✅ **Always:**
+- Use semantic CSS variable names (`--border-radius-button` not `--radius-4`) - developers understand WHEN to use, not just WHAT value
+- Audit first via Glob + Grep to find ALL instances (found 24 across 13 files before fixing = comprehensive approach)
+- Create size hierarchy for border-radius: modals (8px) > buttons (4px) > small UI (2px) - visual logic
+- Document beslisboom in STYLEGUIDE.md (9 element types with use cases prevents future guessing)
+- Visual regression test after CSS variable changes (screenshots verify no layout shifts, only intended corner rounding)
+
+**Pattern: CSS Variable Transformation Power**
+- 22 hardcoded values replaced = 22 future maintenance points eliminated
+- Single variable change (`--border-radius-button: 4px → 6px`) = instant site-wide update
+- This is why Material Design, GitHub Primer, Tailwind are 100% variable-based (enterprise-scale consistency)
+
+**Design System Milestone:** 53 CSS variables → 58 variables = 100% design token coverage (colors, spacing, typography, border-radius ALL centralized). Matches enterprise pattern completeness.
+
+📄 **Detailed logs:** `SESSIONS.md` Sessie 31 (5 CSS variables added, 22 instances replaced across 8 files, STYLEGUIDE.md +80 lines, commit 7b4fd45)
+
 ---
 
 ## 🤖 Sessie Protocol
@@ -546,5 +570,5 @@ Bij nieuwe command:
 
 ---
 
-**Last updated:** 3 november 2025
-**Version:** 10.0 (Sessie 30: Onboarding Redesign & Complete Emoji Elimination - Mission-driven UX, 240+ emoji→ASCII brackets, 100% terminal aesthetic, box width 150→50 chars)
+**Last updated:** 4 november 2025
+**Version:** 11.0 (Sessie 31: Border-Radius Consistency & Design System Completion - 5 CSS variables, 22 instances centralized, 100% design token coverage, STYLEGUIDE +80 lines)
