@@ -61,11 +61,23 @@ class Renderer {
 
       // Auto-detect semantic lines and force correct color type
       // This ensures consistent colors regardless of parent output type
+      // Supports both ASCII brackets ([ ? ]) and emoji (💡) for backward compatibility
       const trimmed = lineText.trim();
       let lineType = type;
 
-      if (trimmed.startsWith('💡')) {
-        lineType = 'info';      // Tips → cyaan
+      // ASCII bracket detection (primary - terminal authentic)
+      if (trimmed.startsWith('[ ? ]') || trimmed.startsWith('[ → ]')) {
+        lineType = 'info';      // Tips/Info/Educational → cyaan
+      } else if (trimmed.startsWith('[ ! ]')) {
+        lineType = 'warning';   // Warnings/Legal → oranje
+      } else if (trimmed.startsWith('[ ✓ ]')) {
+        lineType = 'success';   // Success → groen
+      } else if (trimmed.startsWith('[ X ]')) {
+        lineType = 'error';     // Errors/Critical → magenta
+      }
+      // Emoji detection (fallback for backward compatibility during migration)
+      else if (trimmed.startsWith('💡') || trimmed.startsWith('🎯')) {
+        lineType = 'info';      // Tips/Educational → cyaan
       } else if (trimmed.startsWith('⚠️') || trimmed.startsWith('🔒')) {
         lineType = 'warning';   // Warnings & Security → oranje
       } else if (trimmed.startsWith('✅')) {
@@ -139,15 +151,16 @@ class Renderer {
     } else {
       // Fallback to default welcome if no onboarding provided
       const welcome = `
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃                                                ┃
-┃       🛡️  HACKSIMULATOR.NL - MVP BETA          ┃
-┃                                                ┃
-┃   Leer ethisch hacken in een veilige terminal ┃
-┃                                                ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                            ┃
+┃  [***] HACKSIMULATOR.NL - MVP BETA        ┃
+┃                                            ┃
+┃  Leer ethisch hacken in een veilige       ┃
+┃  terminal                                  ┃
+┃                                            ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-💡 TIP: Type 'help' om te beginnen.
+[ ? ] TIP: Type 'help' om te beginnen.
 `;
       this.renderOutput(welcome.trim(), 'info');
     }
@@ -167,12 +180,8 @@ class Renderer {
     // Format inline arrows (← for Dutch explanations)
     formatted = formatted.replace(/←/g, '<span class="inline-arrow">←</span>');
 
-    // Format inline tips
-    formatted = formatted.replace(/💡/g, '<span class="tip-icon">💡</span>');
-    formatted = formatted.replace(/⚠️/g, '<span class="warning-icon">⚠️</span>');
-    formatted = formatted.replace(/🔒/g, '<span class="security-icon">🔒</span>');
-    formatted = formatted.replace(/✅/g, '<span class="success-icon">✅</span>');
-    formatted = formatted.replace(/❌/g, '<span class="error-icon">❌</span>');
+    // Note: Emoji formatting removed - we now use ASCII brackets [ ? ] [ ! ] [ ✓ ] [ X ]
+    // Icon wrapping handled by semantic line detection above (lines 68-87)
 
     return formatted;
   }

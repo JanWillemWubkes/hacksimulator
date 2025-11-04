@@ -78,38 +78,40 @@ class Onboarding {
   }
 
   /**
-   * First-time visitor welcome (3 lines + empty line + hint = 5 lines)
+   * First-time visitor welcome - Mission-driven "Hacker Mentor" tone
+   * Emphasizes identity, action, and ethical purpose
    * @private
    */
   _getFirstTimeWelcome() {
     return `
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃                                                ┃
-┃       🛡️  HACKSIMULATOR.NL - MVP BETA          ┃
-┃                                                ┃
-┃   Leer ethisch hacken in een veilige terminal ┃
-┃                                                ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  [***] HACKSIMULATOR.NL - ETHICAL HACKING  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-Welkom! Dit is een gesimuleerde terminal waarin je veilig kunt
-oefenen met hacking tools en Linux commands.
+[ ✓ ] Toegang verleend
 
-💡 TIP: Type 'help' om alle beschikbare commands te zien
-💡 TIP: Type 'man <command>' voor gedetailleerde uitleg
+Je bent ingelogd op een gesimuleerd netwerk.
+Je missie: leer de tools die ethical hackers
+gebruiken om systemen te beveiligen - volledig
+veilig en legaal.
+
+→ Type 'help' om te beginnen met reconnaissance
+→ Of spring direct in: 'ls', 'nmap 192.168.1.1'
 `.trim();
   }
 
   /**
-   * Returning visitor welcome (kort en to-the-point)
+   * Returning visitor welcome - Ultra-brief with identity reinforcement
+   * Acknowledges user as "hacker" to strengthen engagement
    * @private
    */
   _getReturningVisitorWelcome() {
     return `
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃       🛡️  HACKSIMULATOR.NL - Welkom terug!     ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  [***] Welkom terug in het lab, hacker     ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-💡 TIP: Type 'help' om te beginnen
+[ ✓ ] Systeem gereed → Type 'help' voor nieuwe opdrachten
 `.trim();
   }
 
@@ -151,27 +153,28 @@ oefenen met hacking tools en Linux commands.
 
   /**
    * Get progressive hints based on command count
+   * Uses terminal-native ASCII brackets, hacker terminology, and mission framing
    * @private
    * @returns {string|null}
    */
   _getProgressiveHint() {
-    // After 1st command: Encouragement
+    // After 1st command: Exploration encouragement
     if (this.commandCount === 1 && !this.hasShownEncouragement) {
       this.hasShownEncouragement = true;
       this._saveState();
-      return '\n✅ Goed bezig! Je eerste command is uitgevoerd.\n💡 TIP: Probeer \'ls\' om bestanden te zien, of \'help\' voor alle commands.';
+      return '\n[ ✓ ] Eerste opdracht voltooid!\n\nOntdek je omgeving:\n→ \'ls\'   - Bekijk bestanden in deze map\n→ \'help\' - Zie alle beschikbare hacking tools';
     }
 
-    // After 5 commands: Tutorial suggestion
+    // After 5 commands: Introduce reconnaissance (professional workflow)
     if (this.commandCount === 5 && !this.hasShownTutorialSuggestion) {
       this.hasShownTutorialSuggestion = true;
       this._saveState();
-      return '\n🎯 Je bent goed op weg! Je hebt al 5 commands geprobeerd.\n💡 TIP: Probeer \'nmap 192.168.1.1\' voor een port scan, of \'man nmap\' voor uitleg.';
+      return '\n[ ✓ ] 5 opdrachten voltooid - je bent onderweg!\n\nKlaar voor reconnaissance? Ethical hackers beginnen altijd\nmet informatie verzamelen:\n→ \'nmap 192.168.1.1\' - Scan een netwerk\n→ \'man nmap\'         - Leer hoe het werkt';
     }
 
-    // After 10 commands: Security tools suggestion
+    // After 10 commands: Security tools with enhanced legal warning
     if (this.commandCount === 10) {
-      return '\n🔒 Klaar voor security tools? Probeer \'help security\' voor een lijst.\n⚠️  Let op: Deze tools zijn alleen voor educatief gebruik!';
+      return '\n[ ! ] 10 opdrachten - tijd voor krachtigere tools\n\n⚠️  LET OP: De volgende tools zijn ALLEEN voor educatief gebruik.\n   In de echte wereld zijn ze illegaal zonder expliciete toestemming.\n\nKlaar? Type \'help security\' voor geavanceerde tools.';
     }
 
     return null;
