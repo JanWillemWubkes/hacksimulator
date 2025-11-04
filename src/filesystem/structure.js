@@ -28,14 +28,14 @@ BEGINNEN:
 
 EDUCATIEVE TIPS:
 [ ! ] Bestanden in /etc bevatten systeem configuratie
-🔑 SSH keys staan vaak in ~/.ssh/
-📝 Logs bevatten waardevolle informatie
+[ ? ] SSH keys staan vaak in ~/.ssh/
+[ ? ] Logs bevatten waardevolle informatie
 
 DISCLAIMER:
 Gebruik deze kennis alleen legaal en ethisch.
 Ongeautoriseerde toegang tot systemen is illegaal.
 
-Veel plezier met leren! 🎓`
+Veel plezier met leren!`
               },
               'notes.txt': {
                 type: 'file',

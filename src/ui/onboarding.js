@@ -174,7 +174,7 @@ veilig en legaal.
 
     // After 10 commands: Security tools with enhanced legal warning
     if (this.commandCount === 10) {
-      return '\n[ ! ] 10 opdrachten - tijd voor krachtigere tools\n\n⚠️  LET OP: De volgende tools zijn ALLEEN voor educatief gebruik.\n   In de echte wereld zijn ze illegaal zonder expliciete toestemming.\n\nKlaar? Type \'help security\' voor geavanceerde tools.';
+      return '\n[ ! ] 10 opdrachten - tijd voor krachtigere tools\n\n[ ! ] LET OP: De volgende tools zijn ALLEEN voor educatief gebruik.\n      In de echte wereld zijn ze illegaal zonder expliciete toestemming.\n\nKlaar? Type \'help security\' voor geavanceerde tools.';
     }
 
     return null;

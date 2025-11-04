@@ -98,7 +98,7 @@ class HelpSystem {
   _getTier3Help(command) {
     return `[ ! ]  Command '${command}' bestaat niet en je hebt dit meerdere keren geprobeerd.
 
-📚 VOLLEDIGE HULP:
+VOLLEDIGE HULP:
 
 1. Type 'help' voor complete lijst van 30 commands
 2. Type 'man <command>' voor gedetailleerde uitleg van elk command
@@ -115,7 +115,7 @@ Bijvoorbeeld:
    • ping <host>   → Test netwerk verbinding
    • help          → Alle commands met korte beschrijving
 
-📖 Zie ook: Type gewoon 'help' om te starten!`;
+[ ? ] Zie ook: Type gewoon 'help' om te starten!`;
   }
 
   /**
@@ -125,25 +125,25 @@ Bijvoorbeeld:
    */
   getCategoryHelp(category) {
     const categoryHelp = {
-      system: `📟 SYSTEM COMMANDS:
+      system: `SYSTEM COMMANDS:
    clear, help, man, history, echo, date, whoami
 
    Basis commands om de terminal te gebruiken.
    Start met: help`,
 
-      filesystem: `📁 FILESYSTEM COMMANDS:
+      filesystem: `FILESYSTEM COMMANDS:
    ls, cd, pwd, cat, mkdir, touch, rm, cp, mv, find, grep
 
    Commands om bestanden en directories te beheren.
    Start met: ls (toon bestanden)`,
 
-      network: `🌐 NETWORK COMMANDS:
+      network: `NETWORK COMMANDS:
    ping, nmap, ifconfig, netstat, whois, traceroute
 
    Commands voor netwerk analyse en troubleshooting.
    Start met: ping 8.8.8.8 (test internet)`,
 
-      security: `🔐 SECURITY COMMANDS:
+      security: `SECURITY COMMANDS:
    hashcat, hydra, sqlmap, metasploit, nikto
 
    [ ! ]  Offensive tools - alleen educatief gebruik!
@@ -158,7 +158,7 @@ Bijvoorbeeld:
    * @returns {string} Quick start guide
    */
   getQuickStart() {
-    return `🚀 QUICK START GUIDE:
+    return `QUICK START GUIDE:
 
 1. Verken het systeem:
    ls          → Bekijk bestanden
