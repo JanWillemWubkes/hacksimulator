@@ -13,18 +13,18 @@ export default {
   async execute(args, flags, context) {
     // Show warning on first use
     if (args.length === 0) {
-      return `⚠️  NIKTO - Web Server Scanner
+      return `[ ! ]  NIKTO - Web Server Scanner
 
-⚠️  JURIDISCHE WAARSCHUWING:
+[ ! ]  JURIDISCHE WAARSCHUWING:
     Scannen van websites zonder toestemming is ILLEGAAL.
     Dit wordt gezien als unauthorized access attempt.
 
     Straf: Computercriminaliteit wet + mogelijke civiele claims.
 
-🎯 EDUCATIEF GEBRUIK:
+[ → ] EDUCATIEF GEBRUIK:
     Deze simulator demonstreert web vulnerability scanning veilig.
 
-💡 GEBRUIK:
+[ ? ] GEBRUIK:
     nikto <url>
 
     Voorbeelden:
@@ -32,7 +32,7 @@ export default {
     • nikto http://vulnerable-app.com
     • nikto http://demo.example.org
 
-❓ DOORGAAN? [j/n]`;
+[ ? ] DOORGAAN? [j/n]`;
     }
 
     const url = args[0];
@@ -41,7 +41,7 @@ export default {
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
       return `nikto: invalid URL format
 
-💡 TIP: URL moet http:// of https:// bevatten
+[ ? ] TIP: URL moet http:// of https:// bevatten
         Bijvoorbeeld: nikto http://example.com`;
     }
 
@@ -68,9 +68,9 @@ export default {
 + /.git/: Git repository found  ← Source code exposure!
 + /server-status: Apache server-status enabled  ← Server info disclosure
 
-🔓 GEVONDEN KWETSBAARHEDEN: 11
+[ > ] GEVONDEN KWETSBAARHEDEN: 11
 
-⚠️  KRITIEKE BEVINDINGEN:
+[ ! ]  KRITIEKE BEVINDINGEN:
 
 1. **Git Repository Exposed (/.git/)**
    Severity: HIGH
@@ -103,7 +103,7 @@ export default {
 ---------------------------------------------------------------------------
 + 1 host(s) tested
 
-💡 LEERMOMENT: Web Security Headers
+[ ? ] LEERMOMENT: Web Security Headers
 
 **Ontbrekende headers:**
    X-Frame-Options         → Voorkomt clickjacking
@@ -111,7 +111,7 @@ export default {
    Content-Security-Policy → Voorkomt XSS attacks
    Strict-Transport-Security → Forces HTTPS
 
-🛡️  REMEDIATIE STAPPEN:
+[***]  REMEDIATIE STAPPEN:
 
 1. **Verwijder development files:**
    rm /var/www/html/phpinfo.php
@@ -136,7 +136,7 @@ export default {
 6. **Remove backup files:**
    find . -name "*.bak" -delete
 
-⚠️  PRIORITEIT: Fix HIGH severity issues eerst!`;
+[ ! ]  PRIORITEIT: Fix HIGH severity issues eerst!`;
 
     return output;
   },
@@ -162,7 +162,7 @@ VOORBEELDEN
         Scan website voor kwetsbaarheden
 
 EDUCATIEVE CONTEXT
-    🔍 Wat scant Nikto?
+    [ ? ] Wat scant Nikto?
        • Oude software versies (Apache, nginx, IIS)
        • Gevaarlijke files (phpinfo, test files, backups)
        • Server misconfiguratie (directory indexing)
@@ -170,7 +170,7 @@ EDUCATIEVE CONTEXT
        • Default files (admin panels, install scripts)
        • Bekende kwetsbaarheden (via database)
 
-    🎯 Vulnerability types:
+    [ → ] Vulnerability types:
        • **Info disclosure**: phpinfo.php, .git/, server-status
        • **Outdated software**: Oude Apache/PHP met bekende CVEs
        • **Misconfigurations**: Directory indexing, backup files
@@ -178,32 +178,32 @@ EDUCATIEVE CONTEXT
        • **Default installs**: Admin panels op default locations
 
 COMMON FINDINGS
-    📁 Development Files in Production:
+    [DIR] Development Files in Production:
        • phpinfo.php → PHP configuration details
        • test.php → Mogelijk SQL injection test code
        • debug.php → Error messages, stack traces
        → IMPACT: Information disclosure, mogelijk RCE
 
-    🗂️  Backup Files:
+    [IDX]️  Backup Files:
        • config.php.bak → Database credentials
        • .env.backup → API keys, secrets
        • database.sql → Volledige database dump
        → IMPACT: Direct toegang tot credentials/data
 
-    📂 Version Control Exposed:
+    [DIR] Version Control Exposed:
        • .git/ → Volledige source code + history
        • .svn/ → Subversion repository
        • .DS_Store → Mac OS metadata (directory listing)
        → IMPACT: Source code theft, hardcoded secrets
 
-    🔓 Directory Indexing:
+    [ > ] Directory Indexing:
        • /uploads/ → User uploaded files zichtbaar
        • /admin/ → Admin panel files
        • /backup/ → Backup files
        → IMPACT: Sensitive data exposure
 
 SECURITY HEADERS
-    🛡️  Essentiële headers:
+    [***]  Essentiële headers:
 
     **X-Frame-Options:**
        Voorkomt clickjacking (iframe embedding)
@@ -226,20 +226,20 @@ SECURITY HEADERS
        Value: strict-origin-when-cross-origin
 
 REAL-WORLD EXAMPLES
-    📰 Git Repository Exposure:
+    [ * ] Git Repository Exposure:
        • Uber (2016): .git/ exposed in web root
        • Source code downloaded door security researcher
        • AWS credentials gevonden in code
        • $3 miljoen data breach resultaat
 
-    📰 phpinfo() Exposure:
+    [ * ] phpinfo() Exposure:
        • Talloze sites laten phpinfo.php online staan
        • Toont: File paths, extensions, environment vars
        • Helpt aanvaller met reconnaissance
        • Vaak eerste stap in attack chain
 
 REMEDIATION
-    🔧 Quick fixes:
+    [CFG] Quick fixes:
 
     **1. Remove dangerous files:**
        find /var/www -name "phpinfo.php" -delete
@@ -275,7 +275,7 @@ REMEDIATION
        yum update                 # CentOS/RHEL
 
 AUTOMATED SCANNING
-    🤖 CI/CD Integration:
+    [BOT] CI/CD Integration:
        Nikto kan geautomatiseerd draaien in CI/CD pipeline:
 
        # GitLab CI
@@ -286,31 +286,31 @@ AUTOMATED SCANNING
        → Catch vulnerabilities VOOR production deploy
 
 DEFENSE IN DEPTH
-    🛡️  Layered security:
+    [***]  Layered security:
 
     **Layer 1 - Server hardening:**
-       ✅ Remove default files/folders
-       ✅ Disable directory indexing
-       ✅ Update software regelmatig
-       ✅ Minimal installed packages
+       [ ✓ ] Remove default files/folders
+       [ ✓ ] Disable directory indexing
+       [ ✓ ] Update software regelmatig
+       [ ✓ ] Minimal installed packages
 
     **Layer 2 - Web Application Firewall:**
-       ✅ ModSecurity (Apache/Nginx)
-       ✅ Cloudflare WAF
-       ✅ AWS WAF
+       [ ✓ ] ModSecurity (Apache/Nginx)
+       [ ✓ ] Cloudflare WAF
+       [ ✓ ] AWS WAF
        → Block common attack patterns
 
     **Layer 3 - Security headers:**
-       ✅ CSP, HSTS, X-Frame-Options
-       ✅ Check: securityheaders.com
+       [ ✓ ] CSP, HSTS, X-Frame-Options
+       [ ✓ ] Check: securityheaders.com
 
     **Layer 4 - Monitoring:**
-       ✅ Log analysis (fail2ban)
-       ✅ SIEM integration
-       ✅ Anomaly detection
+       [ ✓ ] Log analysis (fail2ban)
+       [ ✓ ] SIEM integration
+       [ ✓ ] Anomaly detection
 
 LIMITATIONS
-    ⚠️  Wat Nikto NIET doet:
+    [ ! ]  Wat Nikto NIET doet:
        • Geen exploit execution (alleen detectie)
        • Geen SQL injection testing (gebruik sqlmap)
        • Geen XSS testing (gebruik Burp/ZAP)
@@ -319,13 +319,13 @@ LIMITATIONS
     Nikto is RECON tool, niet exploit tool.
 
 LEGAL USE
-    ✅ Authorized testing:
+    [ ✓ ] Authorized testing:
        • Eigen websites
        • Penetration testing contract
        • Bug bounty programs (within scope)
        • Security audits
 
-    ❌ Unauthorized scanning:
+    [ X ] Unauthorized scanning:
        • Random websites scannen
        • Concurrenten scannen
        • Zonder expliciete toestemming

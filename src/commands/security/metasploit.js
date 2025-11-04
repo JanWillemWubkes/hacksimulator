@@ -28,17 +28,17 @@ export default {
 + -- --=[ 1377 payloads - 46 encoders - 11 nops          ]
 + -- --=[ 9 evasion                                       ]
 
-⚠️  JURIDISCHE WAARSCHUWING:
+[ ! ]  JURIDISCHE WAARSCHUWING:
     Metasploit is ALLEEN LEGAAL met expliciete schriftelijke toestemming.
     Ongeautoriseerd gebruik = Computercriminaliteit wet overtreding.
 
     Straf: Tot 6 jaar gevangenisstraf.
 
-🎯 WAT IS METASPLOIT?
+[ → ] WAT IS METASPLOIT?
     Het meest gebruikte penetration testing framework ter wereld.
     Bevat duizenden exploits voor bekende kwetsbaarheden.
 
-💡 EDUCATIEVE DEMONSTRATIE:
+[ ? ] EDUCATIEVE DEMONSTRATIE:
 
 msf6 > use exploit/windows/smb/ms17_010_eternalblue  ← WannaCry exploit
 msf6 exploit(ms17_010_eternalblue) > show options
@@ -62,7 +62,7 @@ msf6 exploit(ms17_010_eternalblue) > exploit
 [*] 192.168.1.100:445 - Target OS: Windows 7 Professional 7601 SP1
 [+] 192.168.1.100:445 - Host is vulnerable to MS17-010!  ← Kwetsbaarheid gevonden
 
-⚠️  SIMULATIE GESTOPT - Dit is een educatief voorbeeld.
+[ ! ]  SIMULATIE GESTOPT - Dit is een educatief voorbeeld.
 
 In een echte (geautoriseerde) pentest zou dit:
    1. De kwetsbaarheid exploiteren
@@ -70,7 +70,7 @@ In een echte (geautoriseerde) pentest zou dit:
    3. Volledige system toegang geven
    4. Mogelijk privilege escalation
 
-🔓 METASPLOIT CAPABILITIES:
+[ > ] METASPLOIT CAPABILITIES:
    • 2300+ exploits (kwetsbaarheden uitbuiten)
    • 1300+ payloads (code die na exploit draait)
    • Auxiliary modules (scanners, fuzzers)
@@ -78,21 +78,21 @@ In een echte (geautoriseerde) pentest zou dit:
    • Evasion (antivirus bypass)
    • Encoders (payload obfuscation)
 
-📚 FAMOUS EXPLOITS IN METASPLOIT:
+[ = ] FAMOUS EXPLOITS IN METASPLOIT:
    • EternalBlue (MS17-010) - WannaCry ransomware gebruikt dit
    • BlueKeep (CVE-2019-0708) - Windows RDP kwetsbaarheid
    • Log4Shell (CVE-2021-44228) - Java logging kwetsbaarheid
    • Shellshock (CVE-2014-6271) - Bash command injection
 
-🛡️  BESCHERMING:
-   ✅ Patch management (update systemen REGELMATIG!)
-   ✅ Vulnerability scanning (detect voor exploit)
-   ✅ Network segmentation (beperk lateral movement)
-   ✅ IDS/IPS (detecteer exploit attempts)
-   ✅ Firewall rules (minimaal attack surface)
-   ✅ Disable unnecessary services (SMB, RDP als niet nodig)
+[***]  BESCHERMING:
+   [ ✓ ] Patch management (update systemen REGELMATIG!)
+   [ ✓ ] Vulnerability scanning (detect voor exploit)
+   [ ✓ ] Network segmentation (beperk lateral movement)
+   [ ✓ ] IDS/IPS (detecteer exploit attempts)
+   [ ✓ ] Firewall rules (minimaal attack surface)
+   [ ✓ ] Disable unnecessary services (SMB, RDP als niet nodig)
 
-💡 LEERMOMENT:
+[ ? ] LEERMOMENT:
     De meeste exploits in Metasploit zijn voor OUDE kwetsbaarheden
     met publieke patches. Organisaties worden gehackt omdat ze
     NIET updaten, niet door 0-days.
@@ -100,16 +100,16 @@ In een echte (geautoriseerde) pentest zou dit:
     WannaCry (2017): Patch was beschikbaar MAANDEN voor aanval.
     Slachtoffers hadden gewoon niet gepatched.
 
-⚠️  ETHISCH GEBRUIK:
-    ✅ Eigen lab (VMs, virtuele netwerken)
-    ✅ Penetration testing contract (schriftelijk!)
-    ✅ Bug bounty programs (authorized scope)
-    ✅ CTF competitions (Capture The Flag)
-    ✅ Security training/certificeringen
+[ ! ]  ETHISCH GEBRUIK:
+    [ ✓ ] Eigen lab (VMs, virtuele netwerken)
+    [ ✓ ] Penetration testing contract (schriftelijk!)
+    [ ✓ ] Bug bounty programs (authorized scope)
+    [ ✓ ] CTF competitions (Capture The Flag)
+    [ ✓ ] Security training/certificeringen
 
-    ❌ Ongeautoriseerde systemen scannen/exploiteren
-    ❌ Stolen credentials gebruiken
-    ❌ Malware development voor kwaadaardig gebruik
+    [ X ] Ongeautoriseerde systemen scannen/exploiteren
+    [ X ] Stolen credentials gebruiken
+    [ X ] Malware development voor kwaadaardig gebruik
 
 msf6 > exit
 
@@ -136,18 +136,18 @@ VOORBEELDEN
         Start framework demonstratie
 
 EDUCATIEVE CONTEXT
-    🎯 Wat is een exploit framework?
+    [ → ] Wat is een exploit framework?
        Een verzameling tools en exploits voor het systematisch testen
        van systeem beveiliging. Metasploit automatiseert het exploit proces.
 
-    🔍 Framework componenten:
+    [ ? ] Framework componenten:
        • **Exploits**: Code die kwetsbaarheden uitbuit (2300+)
        • **Payloads**: Code die na exploit draait (shell, meterpreter)
        • **Auxiliary**: Scanners, fuzzers, denial of service
        • **Encoders**: Obfuscate payloads (antivirus evasion)
        • **Post-exploitation**: Keyloggers, screenshot, webcam, etc.
 
-    ⚡ Exploit workflow:
+    [ ~ ] Exploit workflow:
        1. Reconnaissance (nmap, vulnerability scanning)
        2. Vulnerability identification (matching exploits)
        3. Exploit selection (search metasploit database)
@@ -157,20 +157,20 @@ EDUCATIEVE CONTEXT
        7. Lateral movement (compromise more systems)
 
 FAMOUS EXPLOITS
-    📰 EternalBlue (MS17-010):
+    [ * ] EternalBlue (MS17-010):
        • NSA exploit, leaked door Shadow Brokers (2017)
        • Exploits Windows SMB vulnerability
        • Gebruikt door WannaCry en NotPetya ransomware
        • Infecteerde 200,000+ computers wereldwijd
        • Patch beschikbaar VOOR WannaCry (maar niet toegepast!)
 
-    📰 BlueKeep (CVE-2019-0708):
+    [ * ] BlueKeep (CVE-2019-0708):
        • Windows RDP (Remote Desktop) kwetsbaarheid
        • Pre-authentication (geen credentials nodig!)
        • Wormable (kan zich automatisch verspreiden)
        • 1 miljoen+ kwetsbare systemen gevonden
 
-    📰 Log4Shell (CVE-2021-44228):
+    [ * ] Log4Shell (CVE-2021-44228):
        • Java Log4j vulnerability
        • CVSS score 10.0 (maximum)
        • Miljoenen applicaties kwetsbaar
@@ -178,17 +178,17 @@ FAMOUS EXPLOITS
        • Metasploit module beschikbaar binnen 24 uur
 
 PAYLOAD TYPES
-    🎯 Reverse Shell:
+    [ → ] Reverse Shell:
        • Victim verbindt NAAR aanvaller
        • Bypasses firewall (outbound meestal open)
        • Meest gebruikte payload type
 
-    🎯 Bind Shell:
+    [ → ] Bind Shell:
        • Aanvaller verbindt NAAR victim
        • Victim moet port open hebben
        • Makkelijker te blokkeren
 
-    🎯 Meterpreter:
+    [ → ] Meterpreter:
        • Advanced payload (Metasploit specifiek)
        • Resides in memory (geen disk writes)
        • Post-exploitation modules (screenshots, keylogging)
@@ -196,22 +196,22 @@ PAYLOAD TYPES
        • Encrypted communication
 
 REAL-WORLD USE CASES
-    ✅ Authorized penetration testing:
+    [ ✓ ] Authorized penetration testing:
        • Red team operations (simulate attackers)
        • Vulnerability assessment
        • Security audits
        • Compliance testing (PCI-DSS, HIPAA)
 
-    ✅ Security research:
+    [ ✓ ] Security research:
        • CVE development (responsible disclosure)
        • Exploit proof-of-concepts
        • Security training/certifications (OSCP, CEH)
 
-    ✅ Incident response:
+    [ ✓ ] Incident response:
        • Forensics (understand how breach happened)
        • Remediation testing (verify patches work)
 
-    ❌ Illegal uses:
+    [ X ] Illegal uses:
        • Unauthorized access
        • Data theft
        • Ransomware deployment
@@ -221,50 +221,50 @@ REAL-WORLD USE CASES
     Straf: Tot 10 jaar gevangenis (Federal Computer Fraud Act)
 
 DEFENSE STRATEGIES
-    🛡️  Patch Management (KRITIEK!):
-       ✅ Automated patch deployment (WSUS, SCCM)
-       ✅ Vulnerability scanning (Nessus, OpenVAS)
-       ✅ Patch within 30 days (critical vulns: 7 days)
-       ✅ Virtual patching (IPS rules als patch niet mogelijk)
+    [***]  Patch Management (KRITIEK!):
+       [ ✓ ] Automated patch deployment (WSUS, SCCM)
+       [ ✓ ] Vulnerability scanning (Nessus, OpenVAS)
+       [ ✓ ] Patch within 30 days (critical vulns: 7 days)
+       [ ✓ ] Virtual patching (IPS rules als patch niet mogelijk)
 
-    🛡️  Attack Surface Reduction:
-       ✅ Disable unnecessary services (SMB, RDP, Telnet)
-       ✅ Firewall rules (default deny)
-       ✅ Network segmentation (VLANs, DMZs)
-       ✅ Least privilege (users niet admin)
+    [***]  Attack Surface Reduction:
+       [ ✓ ] Disable unnecessary services (SMB, RDP, Telnet)
+       [ ✓ ] Firewall rules (default deny)
+       [ ✓ ] Network segmentation (VLANs, DMZs)
+       [ ✓ ] Least privilege (users niet admin)
 
-    🛡️  Detection & Response:
-       ✅ IDS/IPS (Snort, Suricata)
-       ✅ EDR (Endpoint Detection & Response)
-       ✅ SIEM (Security Information & Event Management)
-       ✅ Network monitoring (anomaly detection)
+    [***]  Detection & Response:
+       [ ✓ ] IDS/IPS (Snort, Suricata)
+       [ ✓ ] EDR (Endpoint Detection & Response)
+       [ ✓ ] SIEM (Security Information & Event Management)
+       [ ✓ ] Network monitoring (anomaly detection)
 
-    🛡️  Hardening:
-       ✅ Disable SMBv1 (EternalBlue vector)
-       ✅ Strong authentication (no default creds)
-       ✅ Application whitelisting
-       ✅ DEP/ASLR enabled (exploit mitigation)
+    [***]  Hardening:
+       [ ✓ ] Disable SMBv1 (EternalBlue vector)
+       [ ✓ ] Strong authentication (no default creds)
+       [ ✓ ] Application whitelisting
+       [ ✓ ] DEP/ASLR enabled (exploit mitigation)
 
 LEARNING RESOURCES
-    📚 Hands-on practice (LEGAL):
+    [ = ] Hands-on practice (LEGAL):
        • Metasploitable (intentionally vulnerable VM)
        • HackTheBox (online pentesting labs)
        • TryHackMe (guided learning paths)
        • VulnHub (downloadable vulnerable VMs)
        • DVWA (Damn Vulnerable Web Application)
 
-    🎓 Certifications:
+    [ ^ ] Certifications:
        • OSCP (Offensive Security Certified Professional)
        • CEH (Certified Ethical Hacker)
        • GPEN (GIAC Penetration Tester)
 
-    📖 Books:
+    [ = ] Books:
        • "Metasploit: The Penetration Tester's Guide"
        • "The Hacker Playbook" series
        • "Penetration Testing" by Georgia Weidman
 
 WHY ATTACKERS WIN
-    💡 Defender's dilemma:
+    [ ? ] Defender's dilemma:
        • Defender moet ALLES beveiligen
        • Attacker hoeft MAAR ÉÉN kwetsbaarheid te vinden
        • Exploits worden geautomatiseerd (Metasploit)

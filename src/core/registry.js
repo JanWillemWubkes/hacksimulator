@@ -117,7 +117,7 @@ class CommandRegistry {
     const handler = this.get(name);
 
     if (!handler) {
-      return `Command not found: ${name}\n\n💡 TIP: Type 'help' voor een lijst van beschikbare commands.`;
+      return `Command not found: ${name}\n\n[ ? ] TIP: Type 'help' voor een lijst van beschikbare commands.`;
     }
 
     try {
@@ -127,7 +127,7 @@ class CommandRegistry {
     } catch (error) {
       // Command execution error
       console.error(`Error executing command '${name}':`, error);
-      return `Error: ${error.message}\n\n💡 TIP: Type 'man ${name}' voor meer informatie over dit commando.`;
+      return `Error: ${error.message}\n\n[ ? ] TIP: Type 'man ${name}' voor meer informatie over dit commando.`;
     }
   }
 

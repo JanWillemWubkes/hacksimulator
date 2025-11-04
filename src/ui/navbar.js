@@ -149,12 +149,64 @@ export function initNavbar() {
     closeMenu();
     closeDropdowns();
 
-    // Show onboarding modal (existing functionality in main.js)
+    // Show onboarding modal
     const onboardingModal = document.getElementById('onboarding-modal');
     if (onboardingModal) {
       onboardingModal.classList.add('active');
       onboardingModal.setAttribute('aria-hidden', 'false');
+
+      // Setup close handlers (once per opening)
+      setupOnboardingModalHandlers(onboardingModal);
     }
+  }
+
+  /**
+   * Setup event handlers for onboarding modal
+   * Handles close button, accept button, ESC key, and backdrop clicks
+   */
+  function setupOnboardingModalHandlers(modal) {
+    const closeBtn = modal.querySelector('.modal-close');
+    const acceptBtn = modal.querySelector('#onboarding-accept');
+
+    // Helper function to close modal
+    const closeModal = () => {
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+    };
+
+    // Close button (X) handler
+    if (closeBtn) {
+      // Remove existing listener to prevent duplicates
+      closeBtn.replaceWith(closeBtn.cloneNode(true));
+      const newCloseBtn = modal.querySelector('.modal-close');
+      newCloseBtn.addEventListener('click', closeModal);
+    }
+
+    // Accept button handler (also closes modal after acknowledgment)
+    if (acceptBtn) {
+      // Remove existing listener to prevent duplicates
+      acceptBtn.replaceWith(acceptBtn.cloneNode(true));
+      const newAcceptBtn = modal.querySelector('#onboarding-accept');
+      newAcceptBtn.addEventListener('click', closeModal);
+    }
+
+    // Backdrop click handler (click outside modal content)
+    const backdropHandler = (e) => {
+      if (e.target === modal) {
+        closeModal();
+        modal.removeEventListener('click', backdropHandler);
+      }
+    };
+    modal.addEventListener('click', backdropHandler);
+
+    // ESC key handler
+    const escHandler = (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        closeModal();
+        document.removeEventListener('keydown', escHandler);
+      }
+    };
+    document.addEventListener('keydown', escHandler);
   }
 
   /**

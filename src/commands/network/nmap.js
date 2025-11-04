@@ -90,7 +90,7 @@ export default {
   async execute(args, flags, context) {
     // Require target argument
     if (args.length === 0) {
-      return `nmap: missing target operand\n\n💡 TIP: Gebruik 'nmap <target>' om poorten te scannen. Bijvoorbeeld: nmap 192.168.1.100`;
+      return `nmap: missing target operand\n\n[ ? ] TIP: Gebruik 'nmap <target>' om poorten te scannen. Bijvoorbeeld: nmap 192.168.1.100`;
     }
 
     const target = args[0];
@@ -145,18 +145,18 @@ export default {
 
     // Educational tips based on scan results
     if (openCount === 1 && scanResults.openPorts[0].port === 443) {
-      output += `\n\n💡 TIP: Deze server is goed beveiligd! Alleen HTTPS open = minimale attack surface.`;
+      output += `\n\n[ ? ] TIP: Deze server is goed beveiligd! Alleen HTTPS open = minimale attack surface.`;
     } else if (openCount >= 5) {
-      output += `\n\n💡 TIP: Veel open poorten = meer aanvalsvectoren. Elke service kan kwetsbaarheden hebben.`;
+      output += `\n\n[ ? ] TIP: Veel open poorten = meer aanvalsvectoren. Elke service kan kwetsbaarheden hebben.`;
     } else if (scanResults.openPorts.some(p => p.port === 22)) {
-      output += `\n\n💡 TIP: SSH (22) open = je kunt inloggen proberen. Probeer 'hydra' voor brute force (demo).`;
+      output += `\n\n[ ? ] TIP: SSH (22) open = je kunt inloggen proberen. Probeer 'hydra' voor brute force (demo).`;
     } else {
-      output += `\n\n💡 TIP: Open poorten zijn entry points. Pentester checkt elke service op kwetsbaarheden.`;
+      output += `\n\n[ ? ] TIP: Open poorten zijn entry points. Pentester checkt elke service op kwetsbaarheden.`;
     }
 
     // Security warning for databases
     if (scanResults.openPorts.some(p => p.port === 3306 || p.port === 5432)) {
-      output += `\n\n⚠️  SECURITY: Database poort open naar buiten = risico! Zou restricted moeten zijn.`;
+      output += `\n\n[ ! ]  SECURITY: Database poort open naar buiten = risico! Zou restricted moeten zijn.`;
     }
 
     return output;
@@ -196,13 +196,13 @@ UITLEG OUTPUT
     • VERSION    → Versie van de software (service detection)
 
 EDUCATIEVE TIPS
-    🎯 Waarom port scanning?
+    [ → ] Waarom port scanning?
        • Host discovery: Welke machines zijn online?
        • Service discovery: Welke services draaien er?
        • Vulnerability assessment: Oude versies = kwetsbaarheden
        • Attack surface mapping: Hoe groot is het aanvalsoppervlak?
 
-    🔓 Veelvoorkomende poorten:
+    [ > ] Veelvoorkomende poorten:
        • 22   → SSH (remote terminal access)
        • 80   → HTTP (webserver, unencrypted)
        • 443  → HTTPS (webserver, encrypted)
@@ -213,26 +213,26 @@ EDUCATIEVE TIPS
        • 5432 → PostgreSQL (database)
        • 8080 → HTTP alternate (development servers)
 
-    🛡️  Security interpretatie:
+    [***]  Security interpretatie:
        • Weinig open poorten (1-3) = Goed! Minimale attack surface
        • Veel open poorten (>10) = Slecht! Meer aanvalsvectoren
        • Database poorten open = RISICO! Zouden restricted moeten zijn
        • Filtered poorten = Firewall aanwezig (goed teken)
 
-    ⚠️  Ethische waarschuwing:
+    [ ! ]  Ethische waarschuwing:
        Port scanning zonder toestemming is in veel landen ILLEGAAL.
        Dit wordt gezien als voorbereiding op een aanval.
        • Eigen netwerk scannen? → OK
        • Netwerk van je werk (met toestemming)? → OK
        • Willekeurige servers op internet? → ILLEGAAL!
 
-    💡 Pentesting workflow:
+    [ ? ] Pentesting workflow:
        1. nmap voor port discovery
        2. Service versies identificeren
        3. Zoeken naar known vulnerabilities (CVE database)
        4. Testen met exploits (metasploit, custom scripts)
 
-    🔍 Geavanceerde scans (niet in simulator):
+    [ ? ] Geavanceerde scans (niet in simulator):
        • -sV  → Service version detection
        • -A   → Aggressive scan (OS detection, traceroute)
        • -p-  → Scan ALLE 65535 poorten (traag!)
@@ -240,33 +240,33 @@ EDUCATIEVE TIPS
        • -O   → OS fingerprinting
 
 PRAKTISCH GEBRUIK
-    🏠 Thuis netwerk:
+    [ # ] Thuis netwerk:
        nmap 192.168.1.0/24  → Scan hele thuisnetwerk (alle 254 IPs)
 
-    💻 Development:
+    [CPU] Development:
        nmap localhost → Check welke dev servers draaien
 
-    🔒 Security audit:
+    [ ! ] Security audit:
        • Scan je eigen server vanaf buiten
        • Check of alleen essentiële poorten open zijn
        • Database poorten (3306, 5432) NOOIT naar internet!
 
 VEELGEMAAKTE FOUTEN
-    ❌ nmap (zonder target)
+    [ X ] nmap (zonder target)
        → Je moet een target opgeven
 
-    ❌ nmap google.com (zonder toestemming)
+    [ X ] nmap google.com (zonder toestemming)
        → ILLEGAAL! Scan alleen je eigen systemen
 
-    ❌ Te veel vertrouwen op firewall
+    [ X ] Te veel vertrouwen op firewall
        → "Filtered" betekent niet "veilig" - service kan alsnog kwetsbaar zijn
 
 SECURITY BEST PRACTICES
-    ✅ Minimaliseer open poorten (alleen wat noodzakelijk is)
-    ✅ Database poorten ALLEEN toegankelijk voor app servers
-    ✅ SSH op non-standard port (security through obscurity - beperkt effectief)
-    ✅ Firewall rules: whitelist approach (allow only what's needed)
-    ✅ Regelmatig scannen van je eigen infrastructure
+    [ ✓ ] Minimaliseer open poorten (alleen wat noodzakelijk is)
+    [ ✓ ] Database poorten ALLEEN toegankelijk voor app servers
+    [ ✓ ] SSH op non-standard port (security through obscurity - beperkt effectief)
+    [ ✓ ] Firewall rules: whitelist approach (allow only what's needed)
+    [ ✓ ] Regelmatig scannen van je eigen infrastructure
 
 GERELATEERDE COMMANDO'S
     ping, netstat, traceroute, nikto (web vulnerability scanner)

@@ -34,12 +34,12 @@ export default {
     if (args.length === 0) {
       return `hashcat - Advanced password recovery tool
 
-⚠️  JURIDISCHE WAARSCHUWING:
+[ ! ]  JURIDISCHE WAARSCHUWING:
     Password cracking is ALLEEN LEGAAL op systemen waar je
     explicite toestemming voor hebt. Ongeautoriseerd gebruik
     is een strafbaar feit onder de Computercriminaliteit wet.
 
-💡 GEBRUIK:
+[ ? ] GEBRUIK:
     hashcat <hash>
 
     Voorbeelden van zwakke hashes om te proberen:
@@ -61,14 +61,14 @@ Analyzing hash: ${hash}
 [*] Detecting hash type...
 [!] Hash not found in demo database
 
-💡 TIP: Deze simulator heeft een beperkte database met ALLEEN zwakke passwords.
+[ ? ] TIP: Deze simulator heeft een beperkte database met ALLEEN zwakke passwords.
         In de echte wereld gebruikt hashcat:
         • Wordlists (rockyou.txt = 14 miljoen wachtwoorden)
         • Brute force (alle combinaties proberen)
         • Rules (transformaties: password → p@ssw0rd)
         • GPU acceleration (miljarden hashes per seconde)
 
-⚠️  Security tip: Gebruik sterke, unieke wachtwoorden!`;
+[ ! ]  Security tip: Gebruik sterke, unieke wachtwoorden!`;
     }
 
     // Simulate cracking process
@@ -96,18 +96,18 @@ Hash: ${hash}
 Password: ${password}
 Time: ${time}s
 
-💡 LEERMOMENT: Waarom werd dit gekraakt?
+[ ? ] LEERMOMENT: Waarom werd dit gekraakt?
 
 1. **Zwak wachtwoord**: "${password}" staat in top 100 meest gebruikte wachtwoorden
 2. **${type} is snel**: Moderne GPU's kunnen ${type === 'MD5' ? '200+ miljard' : '50+ miljard'} ${type} hashes per seconde
 3. **Geen salt**: Hash heeft geen salt → rainbow tables werken
 4. **Wordlist match**: Stond in rockyou.txt wordlist
 
-🔒 BESCHERM JEZELF:
-   ✅ Gebruik wachtwoordmanager (LastPass, 1Password, Bitwarden)
-   ✅ Minimaal 12+ karakters met speciale tekens
-   ✅ Uniek wachtwoord per service (credential stuffing preventie)
-   ✅ 2FA waar mogelijk`;
+[ ! ] BESCHERM JEZELF:
+   [ ✓ ] Gebruik wachtwoordmanager (LastPass, 1Password, Bitwarden)
+   [ ✓ ] Minimaal 12+ karakters met speciale tekens
+   [ ✓ ] Uniek wachtwoord per service (credential stuffing preventie)
+   [ ✓ ] 2FA waar mogelijk`;
 
     return output;
   },
@@ -136,7 +136,7 @@ VOORBEELDEN
         Kraak een andere MD5 hash
 
 EDUCATIEVE CONTEXT
-    🔐 Wat is een password hash?
+    [***] Wat is een password hash?
        Als je wachtwoord "password" is, slaat de server NIET "password" op,
        maar een hash: "5f4dcc3b5aa765d61d8327deb882cf99"
 
@@ -144,26 +144,26 @@ EDUCATIEVE CONTEXT
        • Zelfde input = altijd zelfde output
        • Kleine verandering = compleet andere hash
 
-    ⚡ Hoe werkt password cracking?
+    [ ~ ] Hoe werkt password cracking?
        1. **Dictionary attack**: Probeer elk woord uit wordlist
        2. **Brute force**: Probeer alle combinaties (aaa, aab, aac...)
        3. **Hybrid**: Wordlist + transformaties (password → p@ssw0rd)
        4. **Rainbow tables**: Pre-computed hash tables
 
-    🎯 Waarom werkt dit?
+    [ → ] Waarom werkt dit?
        • Mensen kiezen voorspelbare wachtwoorden
        • Top 10: password, 123456, qwerty, admin, letmein...
        • 80% van mensen hergebruikt wachtwoorden
        • Computers zijn SNEL (miljarden pogingen per seconde)
 
-    ⚠️  Hash types:
+    [ ! ]  Hash types:
        • MD5 (insecure)     → 200 miljard hashes/sec (RTX 3090)
        • SHA1 (insecure)    → 100 miljard hashes/sec
        • SHA256 (ok)        → 50 miljard hashes/sec
        • bcrypt (secure)    → 100,000 hashes/sec ← Intentioneel traag!
        • Argon2 (secure)    → 10,000 hashes/sec ← Beste keuze
 
-    🛡️  Salting:
+    [***]  Salting:
        Salt = random data toegevoegd aan wachtwoord voor hashing
 
        Zonder salt:
@@ -177,24 +177,24 @@ EDUCATIEVE CONTEXT
        → Elke hash moet individueel gekraakt worden
 
 JURIDISCHE WAARSCHUWING
-    ⚠️  ALLEEN LEGAAL met expliciete toestemming!
+    [ ! ]  ALLEEN LEGAAL met expliciete toestemming!
 
     Legal use cases:
-       ✅ Je eigen wachtwoorden testen
-       ✅ Forensische analyse (met warrant)
-       ✅ Penetration testing (met contract)
-       ✅ Security research (ethisch)
+       [ ✓ ] Je eigen wachtwoorden testen
+       [ ✓ ] Forensische analyse (met warrant)
+       [ ✓ ] Penetration testing (met contract)
+       [ ✓ ] Security research (ethisch)
 
     Illegale use cases:
-       ❌ Stolen password databases kraken
-       ❌ Ongeautoriseerde toegang tot systemen
-       ❌ Credential stuffing attacks
-       ❌ Verkopen van gekraakte accounts
+       [ X ] Stolen password databases kraken
+       [ X ] Ongeautoriseerde toegang tot systemen
+       [ X ] Credential stuffing attacks
+       [ X ] Verkopen van gekraakte accounts
 
     Straf: Tot 6 jaar gevangenisstraf (Computercriminaliteit wet)
 
 REAL-WORLD BREACHES
-    📰 Grote data breaches met gekraakte hashes:
+    [ * ] Grote data breaches met gekraakte hashes:
        • LinkedIn (2012)    → 117 miljoen SHA1 hashes (geen salt)
        • Adobe (2013)       → 153 miljoen zwak encrypted passwords
        • RockYou (2009)     → 32 miljoen plaintext passwords
@@ -207,13 +207,13 @@ REAL-WORLD BREACHES
        • Reputatie schade voor bedrijven
 
 BESCHERMING ALS DEVELOPER
-    🔐 Best practices:
-       ✅ Gebruik bcrypt of Argon2 (NEVER MD5/SHA1/SHA256 direct!)
-       ✅ Unique salt per password (auto in bcrypt)
-       ✅ Rate limiting op login (prevent brute force)
-       ✅ 2FA/MFA waar mogelijk
-       ✅ Password strength requirements (min 12 chars)
-       ✅ Breach detection (HaveIBeenPwned API)
+    [***] Best practices:
+       [ ✓ ] Gebruik bcrypt of Argon2 (NEVER MD5/SHA1/SHA256 direct!)
+       [ ✓ ] Unique salt per password (auto in bcrypt)
+       [ ✓ ] Rate limiting op login (prevent brute force)
+       [ ✓ ] 2FA/MFA waar mogelijk
+       [ ✓ ] Password strength requirements (min 12 chars)
+       [ ✓ ] Breach detection (HaveIBeenPwned API)
 
     Code voorbeeld (Node.js + bcrypt):
        const bcrypt = require('bcrypt');
@@ -221,19 +221,19 @@ BESCHERMING ALS DEVELOPER
        // 10 rounds = 2^10 iterations = intentionally slow
 
 BESCHERMING ALS GEBRUIKER
-    🛡️  Doe dit:
-       ✅ Password manager (LastPass, 1Password, Bitwarden)
-       ✅ Uniek wachtwoord per site (credential stuffing preventie)
-       ✅ Minimaal 16+ karakters (brute force resistance)
-       ✅ Gebruik zinnen: "ILove2Eat!Pizza@Night"
-       ✅ 2FA overal (authenticator app, niet SMS)
-       ✅ Check HaveIBeenPwned.com regelmatig
+    [***]  Doe dit:
+       [ ✓ ] Password manager (LastPass, 1Password, Bitwarden)
+       [ ✓ ] Uniek wachtwoord per site (credential stuffing preventie)
+       [ ✓ ] Minimaal 16+ karakters (brute force resistance)
+       [ ✓ ] Gebruik zinnen: "ILove2Eat!Pizza@Night"
+       [ ✓ ] 2FA overal (authenticator app, niet SMS)
+       [ ✓ ] Check HaveIBeenPwned.com regelmatig
 
-    ❌ NIET doen:
-       ❌ password, 123456, qwerty, admin
-       ❌ Zelfde wachtwoord op meerdere sites
-       ❌ Wachtwoorden delen
-       ❌ Wachtwoorden opschrijven (behalve in password manager)
+    [ X ] NIET doen:
+       [ X ] password, 123456, qwerty, admin
+       [ X ] Zelfde wachtwoord op meerdere sites
+       [ X ] Wachtwoorden delen
+       [ X ] Wachtwoorden opschrijven (behalve in password manager)
 
 GERELATEERDE COMMANDO'S
     hydra (brute force), john (andere cracker), metasploit

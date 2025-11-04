@@ -46,19 +46,19 @@ export default {
   async execute(args, flags, context) {
     // Show warning on first use
     if (args.length === 0) {
-      return `⚠️  HYDRA - THC Network Logon Cracker
+      return `[ ! ]  HYDRA - THC Network Logon Cracker
 
-⚠️  JURIDISCHE WAARSCHUWING:
+[ ! ]  JURIDISCHE WAARSCHUWING:
     Brute force aanvallen zonder toestemming zijn ILLEGAAL.
     Dit is een strafbaar feit onder de Computercriminaliteit wet.
 
     Ongeautoriseerde toegang = tot 6 jaar gevangenisstraf.
 
-🎯 EDUCATIEF GEBRUIK:
+[ → ] EDUCATIEF GEBRUIK:
     Deze simulator demonstreert brute force concepten op een
     veilige manier. Alle "aanvallen" zijn gesimuleerd.
 
-💡 GEBRUIK:
+[ ? ] GEBRUIK:
     hydra <target>
 
     Voorbeelden:
@@ -66,7 +66,7 @@ export default {
     • hydra ftp://192.168.1.50
     • hydra http://target.local/admin
 
-❓ WILT U DOORGAAN MET DEZE SIMULATIE? [j/n]
+[ ? ] WILT U DOORGAAN MET DEZE SIMULATIE? [j/n]
 
     Type 'j' om door te gaan met educatieve demonstratie.
     Type 'n' om te stoppen.`;
@@ -78,7 +78,7 @@ export default {
     if (!target.startsWith('ssh://') && !target.startsWith('ftp://') && !target.startsWith('http://')) {
       return `hydra: invalid target format
 
-💡 TIP: Target moet protocol bevatten. Gebruik:
+[ ? ] TIP: Target moet protocol bevatten. Gebruik:
    • ssh://192.168.1.100
    • ftp://192.168.1.50
    • http://target.local/admin`;
@@ -92,12 +92,12 @@ export default {
 [INFO] Resolving target: ${target}
 [ERROR] Target not found in demo database
 
-💡 TIP: Deze simulator heeft beperkte demo targets:
+[ ? ] TIP: Deze simulator heeft beperkte demo targets:
    • ssh://192.168.1.100 (SSH server met zwakke credentials)
    • ftp://192.168.1.50 (FTP server)
    • http://target.local/admin (Web admin panel)
 
-⚠️  In echte scenario's:
+[ ! ]  In echte scenario's:
     • Hydra ondersteunt 50+ protocols
     • Custom wordlists met miljoenen passwords
     • Multi-threaded (snelheid)
@@ -134,7 +134,7 @@ ${'.'.repeat(40)}
 
 1 of 1 target successfully completed, 1 valid password found
 
-💡 WAAROM WERKTE DIT?
+[ ? ] WAAROM WERKTE DIT?
 
 1. **Zwakke credentials**: "${foundCred.user}:${foundCred.pass}" is voorspelbaar
 2. **Geen rate limiting**: Server blokkeert niet na failed attempts
@@ -142,13 +142,13 @@ ${'.'.repeat(40)}
 4. **Default credentials**: Veel devices komen met admin:admin
 5. **Snelheid**: Hydra probeert 16 passwords per seconde (of meer)
 
-🛡️  BESCHERMING:
-   ✅ Sterke, unieke wachtwoorden (min 16 karakters)
-   ✅ Rate limiting (max 3 pogingen per 5 minuten)
-   ✅ Account lockout (na 5 foute pogingen)
-   ✅ 2FA/MFA (brute force wordt nutteloos)
-   ✅ Fail2ban (auto-block na x pogingen)
-   ✅ Verander default credentials ALTIJD!`;
+[***]  BESCHERMING:
+   [ ✓ ] Sterke, unieke wachtwoorden (min 16 karakters)
+   [ ✓ ] Rate limiting (max 3 pogingen per 5 minuten)
+   [ ✓ ] Account lockout (na 5 foute pogingen)
+   [ ✓ ] 2FA/MFA (brute force wordt nutteloos)
+   [ ✓ ] Fail2ban (auto-block na x pogingen)
+   [ ✓ ] Verander default credentials ALTIJD!`;
 
     return output;
   },
@@ -178,7 +178,7 @@ VOORBEELDEN
         Brute force FTP login (demo)
 
 EDUCATIEVE CONTEXT
-    🎯 Wat is brute force?
+    [ → ] Wat is brute force?
        Systematisch alle mogelijke passwords proberen tot je de juiste vindt.
 
        Voorbeeld flow:
@@ -186,13 +186,13 @@ EDUCATIEVE CONTEXT
        2. Try: admin:123456 → FAIL
        3. Try: admin:admin → SUCCESS!
 
-    ⚡ Waarom werkt dit (soms)?
+    [ ~ ] Waarom werkt dit (soms)?
        • Mensen gebruiken zwakke passwords (admin, password, 123456)
        • Default credentials niet veranderd (IoT devices!)
        • Geen bescherming tegen automated attacks
        • Services zijn snel (honderden pogingen per seconde mogelijk)
 
-    🛡️  Waarom werkt dit NIET (als goed beveiligd)?
+    [***]  Waarom werkt dit NIET (als goed beveiligd)?
        • Rate limiting: Max 3 pogingen per 5 min
        • Account lockout: Account geblokkeerd na 5 fouten
        • 2FA/MFA: Wachtwoord alleen is niet genoeg
@@ -201,7 +201,7 @@ EDUCATIEVE CONTEXT
        • Strong passwords: 16+ chars = miljarden jaren om te kraken
 
 SUPPORTED PROTOCOLS (in echte Hydra)
-    📡 50+ protocols, waaronder:
+    [ ~ ] 50+ protocols, waaronder:
        • SSH, FTP, Telnet
        • HTTP(S) - forms, basic auth, digest auth
        • SMB, RDP (Windows remote desktop)
@@ -211,26 +211,26 @@ SUPPORTED PROTOCOLS (in echte Hydra)
        • En nog veel meer...
 
 ATTACK MODES
-    📚 Wordlist attack:
+    [ = ] Wordlist attack:
        hydra -L users.txt -P passwords.txt ssh://target
        → Probeer elke user/pass combinatie uit lijsten
 
-    🔢 Brute force:
+    [###] Brute force:
        hydra -l admin -x 4:6:a ssh://target
        → Genereer alle combinaties (4-6 chars, letters only)
 
-    🎭 Single credential:
+    [ > ] Single credential:
        hydra -l admin -p admin123 ssh://target
        → Test specifieke credentials (verification)
 
 REAL-WORLD USE CASES
-    ✅ Legitiem gebruik:
+    [ ✓ ] Legitiem gebruik:
        • Penetration testing (met contract)
        • Password strength audit (eigen systemen)
        • Forensische analyse (met warrant)
        • Security research (ethisch)
 
-    ❌ Illegaal gebruik:
+    [ X ] Illegaal gebruik:
        • Unauthorized access proberen
        • Credential stuffing attacks
        • Botnet spreiding
@@ -239,7 +239,7 @@ REAL-WORLD USE CASES
     Straf: Tot 6 jaar gevangenisstraf + hoge boetes
 
 FAMOUS EXAMPLES
-    📰 IoT Botnet Attacks:
+    [ * ] IoT Botnet Attacks:
        • Mirai botnet (2016): Infecteerde 600,000+ IoT devices
          → Gebruikte lijst van 60 default credentials
          → Massive DDoS attacks (1 Tbps)
@@ -250,59 +250,59 @@ FAMOUS EXAMPLES
        • Routers: admin:password
        • DVRs: admin:12345
 
-    💡 Leermoment: Miljoenen IoT devices NOOIT credentials veranderen!
+    [ ? ] Leermoment: Miljoenen IoT devices NOOIT credentials veranderen!
 
 BESCHERMING ALS SYSTEEMBEHEERDER
-    🔐 Defense in depth:
+    [***] Defense in depth:
 
     Laag 1 - Credentials:
-       ✅ Verplicht sterke passwords (min 16 chars)
-       ✅ Geen default credentials (force change on first login)
-       ✅ Password complexity requirements
+       [ ✓ ] Verplicht sterke passwords (min 16 chars)
+       [ ✓ ] Geen default credentials (force change on first login)
+       [ ✓ ] Password complexity requirements
 
     Laag 2 - Rate limiting:
-       ✅ Max 3-5 pogingen per 5 minuten
-       ✅ Exponential backoff (1s, 2s, 4s, 8s...)
-       ✅ CAPTCHA na 3 fouten
+       [ ✓ ] Max 3-5 pogingen per 5 minuten
+       [ ✓ ] Exponential backoff (1s, 2s, 4s, 8s...)
+       [ ✓ ] CAPTCHA na 3 fouten
 
     Laag 3 - Account security:
-       ✅ Account lockout na 5 foute pogingen
-       ✅ Email notificatie bij failed logins
-       ✅ 2FA/MFA verplicht (voor admin accounts)
+       [ ✓ ] Account lockout na 5 foute pogingen
+       [ ✓ ] Email notificatie bij failed logins
+       [ ✓ ] 2FA/MFA verplicht (voor admin accounts)
 
     Laag 4 - Network security:
-       ✅ Fail2ban (auto-block IP na x pogingen)
-       ✅ Firewall rules (whitelist IPs voor SSH)
-       ✅ VPN required voor remote access
-       ✅ Port knocking (verberg services)
+       [ ✓ ] Fail2ban (auto-block IP na x pogingen)
+       [ ✓ ] Firewall rules (whitelist IPs voor SSH)
+       [ ✓ ] VPN required voor remote access
+       [ ✓ ] Port knocking (verberg services)
 
     Laag 5 - Monitoring:
-       ✅ Log alle login pogingen
-       ✅ Alerts bij brute force patterns
-       ✅ SIEM integration (Security Information and Event Management)
+       [ ✓ ] Log alle login pogingen
+       [ ✓ ] Alerts bij brute force patterns
+       [ ✓ ] SIEM integration (Security Information and Event Management)
 
 BESCHERMING ALS GEBRUIKER
-    🛡️  Best practices:
-       ✅ Password manager (unieke passwords per service)
-       ✅ 16+ karakter passwords met speciale tekens
-       ✅ 2FA ALTIJD inschakelen (authenticator app)
-       ✅ Geen password reuse (credential stuffing preventie)
-       ✅ Verander default credentials onmiddellijk
+    [***]  Best practices:
+       [ ✓ ] Password manager (unieke passwords per service)
+       [ ✓ ] 16+ karakter passwords met speciale tekens
+       [ ✓ ] 2FA ALTIJD inschakelen (authenticator app)
+       [ ✓ ] Geen password reuse (credential stuffing preventie)
+       [ ✓ ] Verander default credentials onmiddellijk
 
-    ❌ NOOIT doen:
-       ❌ password, admin, 123456, qwerty
-       ❌ Zelfde wachtwoord op meerdere sites
-       ❌ Wachtwoorden delen of opschrijven
+    [ X ] NOOIT doen:
+       [ X ] password, admin, 123456, qwerty
+       [ X ] Zelfde wachtwoord op meerdere sites
+       [ X ] Wachtwoorden delen of opschrijven
 
 TECHNICAL DETAILS
-    ⚙️  Hoe Hydra werkt:
+    [ ~ ]  Hoe Hydra werkt:
        1. Connect naar service (SSH/FTP/HTTP/etc)
        2. Try credentials from wordlist
        3. Parse response (success/fail)
        4. Repeat with next credential
        5. Multi-threaded (16 connections parallel)
 
-    ⚡ Speed:
+    [ ~ ] Speed:
        • SSH: ~16 attempts/sec (handshake overhead)
        • HTTP: ~100 attempts/sec (sneller protocol)
        • FTP: ~50 attempts/sec
@@ -312,7 +312,7 @@ TECHNICAL DETAILS
          - Rate limiting
 
 COUNTERMEASURES DETECTION
-    🔍 Herken brute force aanvallen:
+    [ ? ] Herken brute force aanvallen:
        • Vele failed logins in korte tijd
        • Van zelfde IP adres
        • Verschillende usernames/passwords

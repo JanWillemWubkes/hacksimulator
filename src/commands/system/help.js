@@ -17,7 +17,7 @@ export default {
       const commands = registry.getByCategory(category);
 
       if (commands.length === 0) {
-        return `Geen commands gevonden in categorie '${category}'.\n\n💡 TIP: Type 'help' voor alle categorieën.`;
+        return `Geen commands gevonden in categorie '${category}'.\n\n[ ? ] TIP: Type 'help' voor alle categorieën.`;
       }
 
       let output = `Commands in categorie '${category}':\n\n`;
@@ -44,8 +44,8 @@ export default {
       }
     });
 
-    output += '💡 TIP: Type \'man [command]\' voor gedetailleerde informatie.\n';
-    output += '💡 TIP: Gebruik ↑↓ pijltjestoetsen voor command geschiedenis.';
+    output += '[ ? ] TIP: Type \'man [command]\' voor gedetailleerde informatie.\n';
+    output += '[ ? ] TIP: Gebruik ↑↓ pijltjestoetsen voor command geschiedenis.';
 
     return output;
   },

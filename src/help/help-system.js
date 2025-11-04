@@ -52,9 +52,9 @@ class HelpSystem {
    */
   _getTier1Help(command, suggestion) {
     if (suggestion) {
-      return `💡 TIP: Bedoelde je misschien '${suggestion}'?`;
+      return `[ ? ] TIP: Bedoelde je misschien '${suggestion}'?`;
     }
-    return `💡 TIP: Type 'help' voor een lijst van beschikbare commands.`;
+    return `[ ? ] TIP: Type 'help' voor een lijst van beschikbare commands.`;
   }
 
   /**
@@ -65,7 +65,7 @@ class HelpSystem {
     let help = '';
 
     if (suggestion) {
-      help += `💡 Je hebt dit een paar keer geprobeerd. Bedoelde je: '${suggestion}'?\n\n`;
+      help += `[ ? ] Je hebt dit een paar keer geprobeerd. Bedoelde je: '${suggestion}'?\n\n`;
       help += `Voorbeeld: ${suggestion} `;
 
       // Add example based on suggestion
@@ -81,7 +81,7 @@ class HelpSystem {
 
       help += examples[suggestion] || '← Probeer dit command';
     } else {
-      help += `💡 Command '${command}' bestaat niet.\n\n`;
+      help += `[ ? ] Command '${command}' bestaat niet.\n\n`;
       help += `Probeer:\n`;
       help += `• 'help' - Alle beschikbare commands\n`;
       help += `• 'man <command>' - Help voor specifiek command\n`;
@@ -96,7 +96,7 @@ class HelpSystem {
    * @private
    */
   _getTier3Help(command) {
-    return `⚠️  Command '${command}' bestaat niet en je hebt dit meerdere keren geprobeerd.
+    return `[ ! ]  Command '${command}' bestaat niet en je hebt dit meerdere keren geprobeerd.
 
 📚 VOLLEDIGE HULP:
 
@@ -108,7 +108,7 @@ Bijvoorbeeld:
    man cd      → Uitleg over directory wisselen
    man nmap    → Uitleg over port scanning
 
-💡 VEELGEBRUIKTE COMMANDS:
+[ ? ] VEELGEBRUIKTE COMMANDS:
    • ls            → Toon bestanden in huidige directory
    • cd <dir>      → Ga naar andere directory
    • cat <file>    → Lees bestand
@@ -146,7 +146,7 @@ Bijvoorbeeld:
       security: `🔐 SECURITY COMMANDS:
    hashcat, hydra, sqlmap, metasploit, nikto
 
-   ⚠️  Offensive tools - alleen educatief gebruik!
+   [ ! ]  Offensive tools - alleen educatief gebruik!
    Let op: Juridische warnings zijn van toepassing.`
     };
 

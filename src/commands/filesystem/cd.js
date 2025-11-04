@@ -41,15 +41,15 @@ export default {
     } catch (error) {
       // Educational error messages
       if (error.message.includes('No such directory')) {
-        return `cd: ${path}: No such file or directory\n\n💡 TIP: Gebruik 'ls' om te zien welke directories beschikbaar zijn, of 'pwd' om te zien waar je bent.`;
+        return `cd: ${path}: No such file or directory\n\n[ ? ] TIP: Gebruik 'ls' om te zien welke directories beschikbaar zijn, of 'pwd' om te zien waar je bent.`;
       }
 
       if (error.message.includes('Not a directory')) {
-        return `cd: ${path}: Not a directory\n\n💡 TIP: Je kunt alleen naar directories navigeren, niet naar bestanden.`;
+        return `cd: ${path}: Not a directory\n\n[ ? ] TIP: Je kunt alleen naar directories navigeren, niet naar bestanden.`;
       }
 
       if (error.message.includes('Permission denied')) {
-        return `cd: ${path}: Permission denied\n\n🔒 BEVEILIGING: Sommige directories zijn beveiligd en niet toegankelijk.`;
+        return `cd: ${path}: Permission denied\n\n[ ! ] BEVEILIGING: Sommige directories zijn beveiligd en niet toegankelijk.`;
       }
 
       return `cd: ${error.message}`;
@@ -96,16 +96,16 @@ VOORBEELDEN
         Ga naar de log directory
 
 EDUCATIEVE TIPS
-    🧭 Path types:
+    [ ↑ ] Path types:
        - Absoluut pad: begint met / (bijv. /etc/passwd)
        - Relatief pad: relatief aan huidige locatie (bijv. ../home)
 
-    🏠 Shortcuts:
+    [ # ] Shortcuts:
        - ~ is altijd je home directory (/home/hacker)
        - .. brengt je één niveau omhoog
        - . is de huidige directory (handig bij commands zoals 'cp file .')
 
-    💡 Combineer met 'pwd' om te zien waar je bent na een cd commando
+    [ ? ] Combineer met 'pwd' om te zien waar je bent na een cd commando
 
 GERELATEERDE COMMANDO'S
     pwd, ls, find

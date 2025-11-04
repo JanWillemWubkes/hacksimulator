@@ -13,19 +13,19 @@ export default {
   async execute(args, flags, context) {
     // Show warning on first use
     if (args.length === 0) {
-      return `⚠️  SQLMAP - Automatic SQL Injection Tool
+      return `[ ! ]  SQLMAP - Automatic SQL Injection Tool
 
-⚠️  JURIDISCHE WAARSCHUWING:
+[ ! ]  JURIDISCHE WAARSCHUWING:
     SQL injection testing zonder toestemming is ILLEGAAL.
     Ongeautoriseerde toegang tot databases = Computer Fraud en
     Computercriminaliteit wet overtreding.
 
     Straf: Tot 6 jaar gevangenisstraf + civiele aansprakelijkheid.
 
-🎯 EDUCATIEF GEBRUIK:
+[ → ] EDUCATIEF GEBRUIK:
     Deze simulator demonstreert SQL injection concepten veilig.
 
-💡 GEBRUIK:
+[ ? ] GEBRUIK:
     sqlmap <url>
 
     Voorbeelden:
@@ -33,7 +33,7 @@ export default {
     • sqlmap http://demo-app.local/login
     • sqlmap http://test-site.com/search?q=test
 
-❓ DOORGAAN MET SIMULATIE? [j/n]
+[ ? ] DOORGAAN MET SIMULATIE? [j/n]
 
     Type 'j' voor educatieve demonstratie.`;
     }
@@ -44,7 +44,7 @@ export default {
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
       return `sqlmap: invalid URL format
 
-💡 TIP: URL moet beginnen met http:// of https://
+[ ? ] TIP: URL moet beginnen met http:// of https://
         Bijvoorbeeld: sqlmap http://site.com/page?id=1`;
     }
 
@@ -75,9 +75,9 @@ export default {
 
 [*] ending @ ${new Date().toLocaleTimeString('nl-NL')}
 
-✅ GOED NIEUWS: Deze URL lijkt niet kwetsbaar voor SQL injection!
+[ ✓ ] GOED NIEUWS: Deze URL lijkt niet kwetsbaar voor SQL injection!
 
-💡 TIP: Probeer een URL met query parameters:
+[ ? ] TIP: Probeer een URL met query parameters:
    • http://vulnerable-site.com/product?id=1
    • http://demo-app.local/search?q=test`;
     }
@@ -102,7 +102,7 @@ export default {
 [12:00:08] [WARNING] reflective value(s) found  ← Parameter wordt terug getoond
 [12:00:09] [INFO] GET parameter 'id' appears to be 'MySQL >= 5.0 AND error-based' injectable
 
-✅ **VULNERABLE!**
+[ ✓ ] **VULNERABLE!**
 
 [12:00:10] [INFO] GET parameter 'id' is injectable
 [12:00:11] [INFO] backend DBMS: MySQL 5.7.32
@@ -113,7 +113,7 @@ available databases [3]:  ← Database structuur geëxtraheerd
 [*] shop_db
 [*] users_db
 
-💡 LEERMOMENT: Hoe werkt SQL Injection?
+[ ? ] LEERMOMENT: Hoe werkt SQL Injection?
 
 **Normale query:**
    SELECT * FROM products WHERE id = 1;
@@ -127,7 +127,7 @@ Gevolg: Alle producten worden getoond (niet alleen id=1)
    ' UNION SELECT username, password FROM users --
    → Haalt gebruikersnamen en wachtwoorden op!
 
-🔓 WAT EEN AANVALLER KAN DOEN:
+[ > ] WAT EEN AANVALLER KAN DOEN:
    • Database structuur ophalen (tables, columns)
    • Data lezen (credentials, persoonlijke info)
    • Data wijzigen/verwijderen (DELETE, UPDATE)
@@ -135,13 +135,13 @@ Gevolg: Alle producten worden getoond (niet alleen id=1)
    • OS commands uitvoeren (met xp_cmdshell op SQL Server)
    • Volledige server compromise
 
-🛡️  BESCHERMING (voor developers):
-   ✅ Prepared statements / parameterized queries (ALTIJD!)
-   ✅ Input validation (whitelist approach)
-   ✅ Escape special characters (last resort)
-   ✅ Least privilege (database user heeft minimale rechten)
-   ✅ WAF (Web Application Firewall)
-   ✅ Error handling (geen database errors tonen aan user)
+[***]  BESCHERMING (voor developers):
+   [ ✓ ] Prepared statements / parameterized queries (ALTIJD!)
+   [ ✓ ] Input validation (whitelist approach)
+   [ ✓ ] Escape special characters (last resort)
+   [ ✓ ] Least privilege (database user heeft minimale rechten)
+   [ ✓ ] WAF (Web Application Firewall)
+   [ ✓ ] Error handling (geen database errors tonen aan user)
 
 [*] ending @ ${new Date().toLocaleTimeString('nl-NL')}`;
 
@@ -169,27 +169,27 @@ VOORBEELDEN
         Test 'id' parameter voor SQL injection
 
 EDUCATIEVE CONTEXT
-    💉 Wat is SQL Injection?
+    [>>>] Wat is SQL Injection?
        Aanvaller injecteert malicious SQL code via user input.
 
        **Kwetsbare code (PHP):**
           $id = $_GET['id'];
           $query = "SELECT * FROM products WHERE id = $id";
-          ❌ User input direct in query = GEVAARLIJK!
+          [ X ] User input direct in query = GEVAARLIJK!
 
        **Veilige code:**
           $stmt = $pdo->prepare("SELECT * FROM products WHERE id = ?");
           $stmt->execute([$id]);
-          ✅ Prepared statement = SQL en data gescheiden
+          [ ✓ ] Prepared statement = SQL en data gescheiden
 
-    🎯 Injection types:
+    [ → ] Injection types:
        • **Error-based**: Database errors lezen voor info
        • **Boolean-based blind**: True/False responses
        • **Time-based blind**: Query delays (SLEEP) detecteren
        • **Union-based**: UNION SELECT voor data extraction
        • **Stacked queries**: Multiple queries (; DELETE...)
 
-    🔍 Detection process:
+    [ ? ] Detection process:
        SQLMap test automatisch:
        1. Single quote (') → Breekt de query?
        2. Boolean payloads → OR 1=1, AND 1=2
@@ -198,7 +198,7 @@ EDUCATIEVE CONTEXT
        5. Union payloads → UNION SELECT NULL
 
 REAL-WORLD EXAMPLES
-    📰 Beroemde SQL injection attacks:
+    [ * ] Beroemde SQL injection attacks:
 
        **TalkTalk (2015):**
           • 157,000 klanten data gestolen
@@ -215,10 +215,10 @@ REAL-WORLD EXAMPLES
           • Wachtwoorden in plaintext opgeslagen
           • Multiple SQL injection points
 
-    💡 Gemeenschappelijk patroon: Oude, ongepatched systemen
+    [ ? ] Gemeenschappelijk patroon: Oude, ongepatched systemen
 
 EXPLOITATION CAPABILITIES
-    🔓 Wat SQLMap kan doen (als kwetsbaarheid gevonden):
+    [ > ] Wat SQLMap kan doen (als kwetsbaarheid gevonden):
 
     **Information gathering:**
        • Database type en versie
@@ -243,10 +243,10 @@ EXPLOITATION CAPABILITIES
        • Pivoting naar andere systemen
 
 BESCHERMING ALS DEVELOPER
-    🛡️  Defense in depth:
+    [***]  Defense in depth:
 
     **Laag 1 - Code (KRITIEK):**
-       ✅ Prepared statements (ALTIJD!)
+       [ ✓ ] Prepared statements (ALTIJD!)
 
        PHP:
           $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
@@ -258,32 +258,32 @@ BESCHERMING ALS DEVELOPER
        Python:
           cursor.execute("SELECT * FROM users WHERE id = %s", (id,))
 
-       ❌ NOOIT string concatenation:
+       [ X ] NOOIT string concatenation:
           "SELECT * FROM users WHERE id = " + id
 
     **Laag 2 - Input validation:**
-       ✅ Whitelist approach (alleen expected input)
-       ✅ Type checking (integer voor id)
-       ✅ Length limits
-       ✅ Regex validation
+       [ ✓ ] Whitelist approach (alleen expected input)
+       [ ✓ ] Type checking (integer voor id)
+       [ ✓ ] Length limits
+       [ ✓ ] Regex validation
 
     **Laag 3 - Database:**
-       ✅ Least privilege (app user heeft ALLEEN nodige rechten)
-       ✅ Geen xp_cmdshell/file access voor app user
-       ✅ Separate credentials per application
+       [ ✓ ] Least privilege (app user heeft ALLEEN nodige rechten)
+       [ ✓ ] Geen xp_cmdshell/file access voor app user
+       [ ✓ ] Separate credentials per application
 
     **Laag 4 - Application:**
-       ✅ Error handling (geen SQL errors naar user)
-       ✅ Logging (detect injection attempts)
-       ✅ Rate limiting (voorkom automated scanning)
+       [ ✓ ] Error handling (geen SQL errors naar user)
+       [ ✓ ] Logging (detect injection attempts)
+       [ ✓ ] Rate limiting (voorkom automated scanning)
 
     **Laag 5 - Network:**
-       ✅ WAF (Web Application Firewall)
-       ✅ IDS/IPS (Intrusion Detection/Prevention)
-       ✅ Database niet publiek toegankelijk
+       [ ✓ ] WAF (Web Application Firewall)
+       [ ✓ ] IDS/IPS (Intrusion Detection/Prevention)
+       [ ✓ ] Database niet publiek toegankelijk
 
 SCANNING & TESTING
-    🔍 Test je eigen applicatie:
+    [ ? ] Test je eigen applicatie:
 
     **Manual testing:**
        1. Voeg single quote toe: product?id=1'
@@ -299,36 +299,36 @@ SCANNING & TESTING
        • OWASP ZAP (gratis)
 
 COMMON MISTAKES
-    ❌ **"Ik escape special characters"**
+    [ X ] **"Ik escape special characters"**
        → Niet genoeg! Prepared statements zijn VEREIST
        → Escaping kan bypassed worden
 
-    ❌ **"Ik valideer input"**
+    [ X ] **"Ik valideer input"**
        → Validatie is extra laag, niet vervanging
        → Combineer met prepared statements
 
-    ❌ **"Database heeft geen gevoelige data"**
+    [ X ] **"Database heeft geen gevoelige data"**
        → SQLi kan leiden tot OS compromise
        → Lateral movement naar andere systems
 
-    ❌ **"Mijn applicatie is te klein voor aanval"**
+    [ X ] **"Mijn applicatie is te klein voor aanval"**
        → Automated scanners vinden ALLES
        → Bots scannen continu het internet
 
 JURIDISCHE CONTEXT
-    ⚠️  Computer Fraud & Abuse Act / Computercriminaliteit wet:
+    [ ! ]  Computer Fraud & Abuse Act / Computercriminaliteit wet:
 
     **Illegaal:**
-       ❌ SQL injection op sites zonder toestemming
-       ❌ Data extraction zonder autorisatie
-       ❌ System compromise
-       ❌ Selling stolen data
+       [ X ] SQL injection op sites zonder toestemming
+       [ X ] Data extraction zonder autorisatie
+       [ X ] System compromise
+       [ X ] Selling stolen data
 
     **Legaal (met expliciete toestemming):**
-       ✅ Penetration testing (schriftelijk contract)
-       ✅ Bug bounty programs
-       ✅ Eigen applicaties testen
-       ✅ Geautoriseerde security research
+       [ ✓ ] Penetration testing (schriftelijk contract)
+       [ ✓ ] Bug bounty programs
+       [ ✓ ] Eigen applicaties testen
+       [ ✓ ] Geautoriseerde security research
 
     Straf: Tot 6 jaar gevangenis + boetes + civiele claims
 

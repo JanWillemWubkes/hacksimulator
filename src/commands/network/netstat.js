@@ -27,7 +27,7 @@ Summary:
    4 listening ports
    3 established connections
 
-💡 TIP: LISTEN = server wacht op inkomende verbindingen
+[ ? ] TIP: LISTEN = server wacht op inkomende verbindingen
         ESTABLISHED = actieve verbinding met remote host
         TIME_WAIT = verbinding wordt afgesloten`;
 
@@ -53,67 +53,67 @@ VOORBEELDEN
         (Niet in simulator) Toon listening ports met process info
 
 UITLEG OUTPUT
-    📊 Connection States:
+    [CHT] Connection States:
        • LISTEN       → Server wacht op inkomende verbindingen
        • ESTABLISHED  → Actieve verbinding (data transfer mogelijk)
        • TIME_WAIT    → Verbinding sluit af (wacht op final packets)
        • CLOSE_WAIT   → Remote kant heeft verbinding gesloten
        • SYN_SENT     → Bezig met opzetten verbinding (TCP handshake)
 
-    🔌 Protocol types:
+    [ ~ ] Protocol types:
        • tcp    → Transmission Control Protocol (reliable, ordered)
        • udp    → User Datagram Protocol (fast, connectionless)
        • tcp6   → TCP over IPv6
        • udp6   → UDP over IPv6
 
-    📍 Address format:
+    [ · ] Address format:
        • 0.0.0.0:80         → Luister op alle interfaces, poort 80
        • 127.0.0.1:5432     → Alleen localhost, poort 5432
        • 192.168.1.100:443  → Specifiek IP, poort 443
 
 EDUCATIEVE TIPS
-    🎯 Wanneer gebruik je netstat?
+    [ → ] Wanneer gebruik je netstat?
        • Controleren welke ports open staan (security audit)
        • Debuggen van netwerk services (draait mijn server?)
        • Monitoren van actieve verbindingen (wie is verbonden?)
        • Vinden van port conflicts (waarom start service niet?)
 
-    🔍 Security gebruik:
+    [ ? ] Security gebruik:
        • Detecteren van backdoors (onverwachte LISTEN ports)
        • Monitoren van uitgaande verbindingen (malware communicatie?)
        • Controleren van exposed services (wat is toegankelijk?)
 
-    💡 LISTEN poorten:
+    [ ? ] LISTEN poorten:
        • 0.0.0.0:X = Gevaarlijk! Toegankelijk van overal
        • 127.0.0.1:X = Veilig! Alleen localhost toegang
        • Database ports (3306, 5432) zouden NOOIT 0.0.0.0 moeten zijn
 
-    ⚠️  TIME_WAIT state:
+    [ ! ]  TIME_WAIT state:
        Veel TIME_WAIT connecties = normaal na veel korte verbindingen
        Te veel (1000+) kan duiden op:
          • DoS attack (connection exhaustion)
          • Application bug (connections niet netjes sluiten)
 
 PRAKTISCHE VOORBEELDEN
-    🔍 Checken of service draait:
+    [ ? ] Checken of service draait:
        netstat | grep :80    → Is webserver actief?
        netstat | grep :22    → Is SSH server actief?
 
-    🛡️  Security check:
+    [***]  Security check:
        • Zie je onverwachte LISTEN ports? → Mogelijk backdoor
        • Database op 0.0.0.0? → SECURITY RISK!
        • Verbindingen naar onbekende IPs? → Check wat het is
 
-    💻 Development:
+    [CPU] Development:
        • Port 3000 in gebruik? → Andere dev server draait al
        • Check welke process luistert: sudo netstat -tulpn
 
 VEELGEMAAKTE FOUTEN
-    ❌ Address already in use (bij starten server)
+    [ X ] Address already in use (bij starten server)
        → Port is bezet, check met netstat welke process
        → Kill old process of kies andere port
 
-    ❌ Can't connect to localhost:5432
+    [ X ] Can't connect to localhost:5432
        → Check met netstat of PostgreSQL LISTEN is
        → Mogelijk draait het alleen op 127.0.0.1 (niet via netwerk)
 

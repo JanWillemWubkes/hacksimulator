@@ -14,7 +14,7 @@ export default {
 
     // Require file argument
     if (args.length === 0) {
-      return `touch: missing file operand\n\n💡 TIP: Gebruik 'touch <bestand>' om een leeg bestand aan te maken. Bijvoorbeeld: touch test.txt`;
+      return `touch: missing file operand\n\n[ ? ] TIP: Gebruik 'touch <bestand>' om een leeg bestand aan te maken. Bijvoorbeeld: touch test.txt`;
     }
 
     const path = args[0];
@@ -26,15 +26,15 @@ export default {
     } catch (error) {
       // Educational error messages
       if (error.message.includes('No such directory')) {
-        return `touch: cannot touch '${path}': No such file or directory\n\n💡 TIP: De parent directory moet bestaan. Gebruik 'ls' om te zien welke directories er zijn.`;
+        return `touch: cannot touch '${path}': No such file or directory\n\n[ ? ] TIP: De parent directory moet bestaan. Gebruik 'ls' om te zien welke directories er zijn.`;
       }
 
       if (error.message.includes('Is a directory')) {
-        return `touch: cannot touch '${path}': Is a directory\n\n💡 TIP: touch werkt alleen op bestanden. Een directory met deze naam bestaat al.`;
+        return `touch: cannot touch '${path}': Is a directory\n\n[ ? ] TIP: touch werkt alleen op bestanden. Een directory met deze naam bestaat al.`;
       }
 
       if (error.message.includes('Not a directory')) {
-        return `touch: cannot touch '${path}': Not a directory\n\n💡 TIP: Een component in het pad is een bestand, geen directory.`;
+        return `touch: cannot touch '${path}': Not a directory\n\n[ ? ] TIP: Een component in het pad is een bestand, geen directory.`;
       }
 
       return `touch: ${error.message}`;
@@ -71,24 +71,24 @@ VOORBEELDEN
         Maak een leeg script bestand (kan later gevuld worden)
 
 EDUCATIEVE TIPS
-    📄 touch is handig om snel lege bestanden aan te maken
+    [DOC] touch is handig om snel lege bestanden aan te maken
 
-    💡 Workflow voorbeeld:
+    [ ? ] Workflow voorbeeld:
        1. touch payload.txt    → Maak bestand aan
        2. (bewerk met editor)  → In real Linux: nano/vim
        3. cat payload.txt      → Bekijk inhoud
 
-    🏗️ Use cases in pentesting:
+    [ + ]️ Use cases in pentesting:
        - touch wordlist.txt  → Maak wordlist voor brute force
        - touch exploits.sh   → Maak script bestand
        - touch notes.txt     → Documenteer je findings
 
-    ⚙️ In echte Linux:
+    [ ~ ] In echte Linux:
        touch wordt vaak gebruikt om timestamps te updaten zonder inhoud
        te wijzigen. Handig om build tools te triggeren of modification
        times te manipuleren.
 
-    🔒 Permissies:
+    [ ! ] Permissies:
        Je kunt alleen bestanden aanmaken in directories waar je
        schrijfrechten hebt (zoals je home directory en /tmp).
 

@@ -42,7 +42,7 @@ export default {
 
     // Require pattern argument
     if (args.length === 0) {
-      return `find: missing search pattern\n\n💡 TIP: Gebruik 'find <patroon>' om bestanden te zoeken. Bijvoorbeeld: find passwd`;
+      return `find: missing search pattern\n\n[ ? ] TIP: Gebruik 'find <patroon>' om bestanden te zoeken. Bijvoorbeeld: find passwd`;
     }
 
     const pattern = args[0].toLowerCase();
@@ -52,14 +52,14 @@ export default {
       const results = searchFilesystem(vfs.fs['/'], '/', pattern);
 
       if (results.length === 0) {
-        return `find: no files matching '${args[0]}' found\n\n💡 TIP: De zoekterm is case-insensitive en zoekt in bestandsnamen.`;
+        return `find: no files matching '${args[0]}' found\n\n[ ? ] TIP: De zoekterm is case-insensitive en zoekt in bestandsnamen.`;
       }
 
       // Format results
       const output = results.join('\n');
       const tip = results.length > 5
-        ? `\n\n💡 ${results.length} resultaten gevonden. Gebruik 'cat <pad>' om een bestand te lezen.`
-        : `\n\n💡 Gebruik 'cat <pad>' om de inhoud te bekijken.`;
+        ? `\n\n[ ? ] ${results.length} resultaten gevonden. Gebruik 'cat <pad>' om een bestand te lezen.`
+        : `\n\n[ ? ] Gebruik 'cat <pad>' om de inhoud te bekijken.`;
 
       return output + tip;
 
@@ -98,12 +98,12 @@ VOORBEELDEN
         Zoek alle .txt bestanden
 
 EDUCATIEVE TIPS
-    🔍 find is een krachtige tool voor reconnaissance:
+    [ ? ] find is een krachtige tool voor reconnaissance:
        - Ontdek de structuur van een systeem
        - Vind interessante configuratie bestanden
        - Zoek credentials, keys, of gevoelige data
 
-    💡 Handige zoekopdrachten in pentesting:
+    [ ? ] Handige zoekopdrachten in pentesting:
        - find ssh       → SSH keys en configuratie
        - find passwd    → User database bestanden
        - find log       → System logs
@@ -111,19 +111,19 @@ EDUCATIEVE TIPS
        - find shadow    → Password hash files
        - find key       → Encryption keys
 
-    🎯 In real Linux:
+    [ → ] In real Linux:
        Real 'find' is veel krachtiger:
        - find / -name "*.conf"     → Zoek met wildcards
        - find /home -type f        → Alleen files, geen directories
        - find / -user root         → Bestanden van specifieke user
        - find / -perm 777          → Bestanden met specifieke permissies
 
-    🏗️ Pentesting workflow:
+    [ + ]️ Pentesting workflow:
        1. find passwd     → Vind user databases
        2. cat <result>    → Bekijk inhoud
        3. grep <pattern>  → Zoek specifieke strings in inhoud
 
-    ⚠️ In deze simulator:
+    [ ! ] In deze simulator:
        - Simpele substring matching (geen regex of wildcards)
        - Case-insensitive zoeken
        - Altijd vanaf root directory (/)

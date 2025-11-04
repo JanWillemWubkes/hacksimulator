@@ -45,7 +45,7 @@ export default {
   async execute(args, flags, context) {
     // Require destination argument
     if (args.length === 0) {
-      return `traceroute: missing destination operand\n\n💡 TIP: Gebruik 'traceroute <host>' om route te tracen. Bijvoorbeeld: traceroute google.com`;
+      return `traceroute: missing destination operand\n\n[ ? ] TIP: Gebruik 'traceroute <host>' om route te tracen. Bijvoorbeeld: traceroute google.com`;
     }
 
     const destination = args[0];
@@ -69,12 +69,12 @@ export default {
 
     // Educational tips based on destination
     if (destination === 'localhost' || destination === '127.0.0.1') {
-      output += `\n💡 TIP: localhost = 0 hops, geen netwerk nodig (loopback interface).`;
+      output += `\n[ ? ] TIP: localhost = 0 hops, geen netwerk nodig (loopback interface).`;
     } else if (path.some(h => h.ip === '*')) {
-      output += `\n💡 TIP: * betekent hop antwoordt niet (firewall, of ICMP blocked).`;
+      output += `\n[ ? ] TIP: * betekent hop antwoordt niet (firewall, of ICMP blocked).`;
     } else {
       const hops = path.length;
-      output += `\n💡 TIP: ${hops} hops = aantal routers tussen jou en bestemming. Meer hops = langere route.`;
+      output += `\n[ ? ] TIP: ${hops} hops = aantal routers tussen jou en bestemming. Meer hops = langere route.`;
     }
 
     return output;
@@ -108,91 +108,91 @@ VOORBEELDEN
         Trace naar je eigen machine (0 hops)
 
 UITLEG OUTPUT
-    🔢 Kolommen:
+    [###] Kolommen:
        • Hop nummer    → Positie in route (1 = eerste router)
        • Hostname/IP   → Identificatie van router
        • Time (3x)     → Round-trip time voor 3 test packets (ms)
 
-    ⚠️  Special cases:
+    [ ! ]  Special cases:
        • * * *         → Hop antwoordt niet (ICMP filtered/blocked)
        • !H            → Host unreachable
        • !N            → Network unreachable
 
 EDUCATIEVE TIPS
-    🌐 Hoe werkt traceroute?
+    [ @ ] Hoe werkt traceroute?
        • Stuurt packets met oplopende TTL (Time To Live)
        • TTL=1 → Eerste router reageert (expired)
        • TTL=2 → Tweede router reageert
        • Etc. tot bestemming bereikt is
 
-    📍 Route analyse:
+    [ · ] Route analyse:
        • Hop 1 is meestal je router (192.168.x.x)
        • Hop 2-3 zijn vaak ISP routers
        • Daarna internet backbone
        • Laatste hop is destination
 
-    ⚡ Performance insights:
+    [ ~ ] Performance insights:
        • Grote tijd sprong (10ms → 100ms) = lange afstand of congestion
        • Hoge latency op vroege hop = probleem dichtbij
        • Hoge latency alleen op laatste hop = probleem bij destination
 
-    🔒 Security / Privacy:
+    [ ! ] Security / Privacy:
        • Veel bedrijven blokkeren ICMP = * * * hops
        • Geographic location kan afgeleid worden (IP ranges)
        • Traceroute gebruikt voor network mapping (recon)
 
-    🎯 In pentesting:
+    [ → ] In pentesting:
        • Netwerk topologie ontdekken
        • Firewalls identificeren (waar beginnen * hops?)
        • Routing paths begrijpen (voor man-in-the-middle)
        • Geographic location bepalen
 
 PRAKTISCHE VOORBEELDEN
-    🔍 Netwerk troubleshooting:
+    [ ? ] Netwerk troubleshooting:
        Langzame verbinding? Check waar vertraging zit:
 
        traceroute slow-site.com
        → Hop 5: 200ms (probleem zit hier!)
        → Contact je ISP of probeer andere route
 
-    🌍 Geographic routing:
+    [ @ ] Geographic routing:
        traceroute european-site.eu
        → Veel hops in Europa
        traceroute us-site.com
        → Hops springen Atlantische oceaan over (submarine cables!)
 
-    🛡️  Firewall detection:
+    [***]  Firewall detection:
        traceroute corporate-site.com
        → Hop 1-5: normaal
        → Hop 6-10: * * * (firewall blocks ICMP)
        → Hop 11: destination (past firewall)
 
 VEELGEMAAKTE FOUTEN
-    ❌ Veel * * * hops (geen response)
+    [ X ] Veel * * * hops (geen response)
        → Niet altijd een probleem! Routers mogen ICMP blokkeren
        → Als destination bereikbaar is (ping werkt) = OK
 
-    ❌ Route lijkt inefficiënt (veel hops, of omweg)
+    [ X ] Route lijkt inefficiënt (veel hops, of omweg)
        → Internet routing is complex (BGP policies)
        → Route kan dynamisch veranderen (load balancing)
 
-    ❌ Laatste hop timeout maar site werkt
+    [ X ] Laatste hop timeout maar site werkt
        → Destination server blokkeert ICMP maar accepteert HTTP
        → Dit is normaal voor security-conscious servers
 
 TECHNICAL DETAILS
-    🔧 Implementatie varianten:
+    [CFG] Implementatie varianten:
        • Linux: traceroute (gebruikt UDP)
        • Windows: tracert (gebruikt ICMP)
        • Resultaten kunnen verschillen (firewalls behandelen UDP/ICMP anders)
 
-    🌐 TTL (Time To Live):
+    [ @ ] TTL (Time To Live):
        • Start bijvoorbeeld bij 1
        • Elke router verlaagt TTL met 1
        • TTL=0 → Router stuurt "Time Exceeded" terug
        • Dit is hoe traceroute hop-by-hop ontdekt
 
-    📊 Waarom 3 packets per hop?
+    [CHT] Waarom 3 packets per hop?
        • Gemiddelde berekenen (routes kunnen variëren)
        • Packet loss detecteren (1 lost packet = OK)
        • Meer betrouwbare timing meting

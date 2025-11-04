@@ -34,7 +34,7 @@ export default {
       }
 
       // Show confirmation message
-      return `Filesystem reset to initial state.\n\n✅ Alle aangemaakte bestanden en directories zijn verwijderd.\n✅ Je bent terug in /home/hacker.\n✅ Alle originele bestanden zijn hersteld.\n\n💡 TIP: Je command history is bewaard. Gebruik ↑↓ om vorige commands te bekijken.`;
+      return `Filesystem reset to initial state.\n\n[ ✓ ] Alle aangemaakte bestanden en directories zijn verwijderd.\n[ ✓ ] Je bent terug in /home/hacker.\n[ ✓ ] Alle originele bestanden zijn hersteld.\n\n[ ? ] TIP: Je command history is bewaard. Gebruik ↑↓ om vorige commands te bekijken.`;
 
     } catch (error) {
       return `reset: ${error.message}`;
@@ -61,38 +61,38 @@ VOORBEELDEN
         Reset alles naar beginwaarde
 
 EDUCATIEVE TIPS
-    🔄 reset is je "veiligheidsnet":
+    [ ↻ ] reset is je "veiligheidsnet":
        - Per ongeluk belangrijke bestanden verwijderd? → reset
        - Filesystem is rommelig geworden? → reset
        - Wil je opnieuw beginnen? → reset
 
-    💾 Wat wordt gereset:
-       ✅ Alle bestanden naar originele inhoud
-       ✅ Alle directories naar originele structuur
-       ✅ Current working directory naar /home/hacker
-       ✅ Verwijderde bestanden worden hersteld
-       ✅ Nieuwe bestanden worden verwijderd
+    [DSK] Wat wordt gereset:
+       [ ✓ ] Alle bestanden naar originele inhoud
+       [ ✓ ] Alle directories naar originele structuur
+       [ ✓ ] Current working directory naar /home/hacker
+       [ ✓ ] Verwijderde bestanden worden hersteld
+       [ ✓ ] Nieuwe bestanden worden verwijderd
 
-    💡 Wat blijft behouden:
-       ✅ Command history (je kunt nog steeds ↑↓ gebruiken)
-       ✅ Je kennis en ervaring! 😊
+    [ ? ] Wat blijft behouden:
+       [ ✓ ] Command history (je kunt nog steeds ↑↓ gebruiken)
+       [ ✓ ] Je kennis en ervaring! [ : )]
 
-    🎯 Use cases:
+    [ → ] Use cases:
        - Je hebt per ongeluk 'rm -r' gebruikt op verkeerde directory
        - Je wilt een oefening opnieuw doen
        - Het filesystem is te rommelig geworden
        - Je wilt experimenteren zonder consequenties
 
-    ⚠️ WAARSCHUWING:
+    [ ! ] WAARSCHUWING:
        reset is PERMANENT. Alle aanpassingen sinds de laatste reset
        worden verwijderd. Er is geen "undo" voor reset zelf.
 
-    🏗️ In real Linux:
+    [ + ]️ In real Linux:
        Er is GEEN reset commando. Verwijderde bestanden zijn weg (tenzij
        je backups hebt). Dit maakt reset een unieke feature van deze
        simulator - gebruik het om veilig te experimenteren!
 
-    💡 Pro tip:
+    [ ? ] Pro tip:
        Als je complexe wijzigingen maakt en deze wilt bewaren voor later,
        maak dan eerst een backup met 'cp' naar /tmp/ voordat je reset gebruikt.
 

@@ -14,7 +14,7 @@ export default {
 
     // Require two arguments
     if (args.length < 2) {
-      return `cp: missing ${args.length === 0 ? 'file operand' : 'destination file operand'}\n\n💡 TIP: Gebruik 'cp <bron> <doel>' om een bestand te kopiëren. Bijvoorbeeld: cp file.txt backup.txt`;
+      return `cp: missing ${args.length === 0 ? 'file operand' : 'destination file operand'}\n\n[ ? ] TIP: Gebruik 'cp <bron> <doel>' om een bestand te kopiëren. Bijvoorbeeld: cp file.txt backup.txt`;
     }
 
     const source = args[0];
@@ -28,14 +28,14 @@ export default {
       // Educational error messages
       if (error.message.includes('No such file or directory')) {
         if (error.message.includes(source)) {
-          return `cp: cannot stat '${source}': No such file or directory\n\n💡 TIP: De bronbestand bestaat niet. Gebruik 'ls' om te zien welke bestanden beschikbaar zijn.`;
+          return `cp: cannot stat '${source}': No such file or directory\n\n[ ? ] TIP: De bronbestand bestaat niet. Gebruik 'ls' om te zien welke bestanden beschikbaar zijn.`;
         } else {
-          return `cp: cannot create '${destination}': No such file or directory\n\n💡 TIP: De doeldirectory bestaat niet. Maak deze eerst aan met 'mkdir'.`;
+          return `cp: cannot create '${destination}': No such file or directory\n\n[ ? ] TIP: De doeldirectory bestaat niet. Maak deze eerst aan met 'mkdir'.`;
         }
       }
 
       if (error.message.includes('Not a directory')) {
-        return `cp: cannot create '${destination}': Not a directory\n\n💡 TIP: Een component in het doelpad is een bestand, geen directory.`;
+        return `cp: cannot create '${destination}': Not a directory\n\n[ ? ] TIP: Een component in het doelpad is een bestand, geen directory.`;
       }
 
       return `cp: ${error.message}`;
@@ -71,27 +71,27 @@ VOORBEELDEN
         Kopieer naar home directory subdirectory
 
 EDUCATIEVE TIPS
-    📋 cp maakt een exacte kopie - het origineel blijft bestaan
+    [CPY] cp maakt een exacte kopie - het origineel blijft bestaan
 
-    💡 Use cases:
+    [ ? ] Use cases:
        - Backups maken voor je experimenten iets probeert
        - Bestanden dupliceren om aan te passen
        - Data naar andere locaties kopiëren
 
-    🏗️ In pentesting:
+    [ + ]️ In pentesting:
        - cp /etc/passwd /tmp/passwd → Kopie maken om lokaal te analyseren
        - Backup maken voor je configuraties aanpast
        - Exfiltratie simuleren (data naar tijdelijke locatie)
 
-    🔄 Verschil met mv:
+    [ ↻ ] Verschil met mv:
        - cp → Origineel blijft bestaan (kopie)
        - mv → Origineel wordt verplaatst (geen kopie)
 
-    ⚠️ Let op:
+    [ ! ] Let op:
        Als de destination al bestaat, wordt deze overschreven zonder
        waarschuwing in deze simulator!
 
-    💾 In real Linux:
+    [DSK] In real Linux:
        - cp -r voor recursief kopiëren van directories
        - cp -i voor interactieve bevestiging bij overschrijven
        - cp -p behoudt timestamps en permissies

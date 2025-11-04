@@ -54,7 +54,7 @@ export default {
   async execute(args, flags, context) {
     // Require domain argument
     if (args.length === 0) {
-      return `whois: missing domain operand\n\n💡 TIP: Gebruik 'whois <domain>' voor registratie info. Bijvoorbeeld: whois google.com`;
+      return `whois: missing domain operand\n\n[ ? ] TIP: Gebruik 'whois <domain>' voor registratie info. Bijvoorbeeld: whois google.com`;
     }
 
     const domain = args[0];
@@ -63,7 +63,7 @@ export default {
     if (!whoisData) {
       return `No whois data found for ${domain}
 
-💡 TIP: Probeer bekende domains:
+[ ? ] TIP: Probeer bekende domains:
    • google.com
    • github.com
    • hacksimulator.nl
@@ -86,11 +86,11 @@ export default {
 
     // Educational tip based on domain
     if (domain.includes('.nl')) {
-      output += `\n💡 TIP: .nl domains worden beheerd door SIDN (Nederlandse registry).`;
+      output += `\n[ ? ] TIP: .nl domains worden beheerd door SIDN (Nederlandse registry).`;
     } else if (domain === 'google.com' || domain === 'github.com') {
-      output += `\n💡 TIP: MarkMonitor is een premium registrar gebruikt door grote bedrijven.`;
+      output += `\n[ ? ] TIP: MarkMonitor is een premium registrar gebruikt door grote bedrijven.`;
     } else {
-      output += `\n💡 TIP: Whois data is publiek - privacy protection kan je info verbergen.`;
+      output += `\n[ ? ] TIP: Whois data is publiek - privacy protection kan je info verbergen.`;
     }
 
     return output;
@@ -119,7 +119,7 @@ VOORBEELDEN
         Check registratie info van een .nl domain
 
 UITLEG OUTPUT
-    📝 Belangrijke velden:
+    [ = ] Belangrijke velden:
        • Registrar     → Bij welk bedrijf domain geregistreerd is
        • Created       → Wanneer domain voor het eerst geregistreerd werd
        • Expires       → Wanneer registratie verloopt (moet renewed worden)
@@ -127,13 +127,13 @@ UITLEG OUTPUT
        • Name Servers  → DNS servers die domain resolven
 
 EDUCATIEVE TIPS
-    🔍 Whois in reconnaissance (OSINT):
+    [ ? ] Whois in reconnaissance (OSINT):
        • Organisatie identificeren (wie is eigenaar?)
        • Registratie datum (hoe oud is de site?)
        • Email adressen (voor social engineering of contact)
        • Nameservers (hosting provider achterhalen)
 
-    🛡️  Privacy Protection:
+    [***]  Privacy Protection:
        Veel domains gebruiken "privacy protection" services die echte
        contact details verbergen:
           • WHOIS PRIVACY PROTECTION SERVICE
@@ -142,20 +142,20 @@ EDUCATIEVE TIPS
 
        Voor .nl domains is privacy standaard sinds AVG/GDPR (2018).
 
-    🎯 Praktische use cases:
+    [ → ] Praktische use cases:
        • Verificatie: Is dit domain echt van bedrijf X?
        • Expiry check: Gaat domain binnenkort verlopen? (typosquatting opportunity)
        • Infrastructure mapping: Nameservers = hosting provider
        • Email harvesting: Contact emails (voor legitimate outreach of phishing)
 
-    ⚠️  GDPR Impact:
+    [ ! ]  GDPR Impact:
        Sinds 2018 is veel persoonlijke data verborgen in whois:
           • Geen persoonlijke namen meer (voor EU domains)
           • Geen privé adressen
           • Geen directe telefoonnummers
           • Alleen organisatie info (voor business domains)
 
-    💡 Alternative info sources:
+    [ ? ] Alternative info sources:
        Als whois weinig geeft, probeer:
           • DNSDumpster (DNS reconnaissance)
           • Builtwith (technology stack)
@@ -163,43 +163,43 @@ EDUCATIEVE TIPS
           • Certificate transparency logs (SSL cert info)
 
 PRAKTISCHE VOORBEELDEN
-    🔍 Domain research:
+    [ ? ] Domain research:
        1. whois target.com → Basic info
        2. Check nameservers → Hosting provider
        3. Check creation date → Hoe gevestigd is site?
        4. Google organization name → Meer context
 
-    🚨 Scam detection:
+    [ !! ] Scam detection:
        • Domain pas geregistreerd (< 6 maanden)? → Suspicieus
        • Privacy protection op business site? → Suspicieus
        • Nameservers in "shady" landen? → Suspicieus
        • Organisatie naam generiek (LLC, LTD)? → Check verder
 
-    💼 Business use:
+    [ $ ] Business use:
        • Domain expiry monitoring (voorkom verlies)
        • Concurrent analyse (welke domains hebben ze?)
        • Brand protection (typosquatting detecteren)
 
 VEELGEMAAKTE FOUTEN
-    ❌ whois 192.168.1.1 (IP address)
+    [ X ] whois 192.168.1.1 (IP address)
        → whois werkt met domains, niet IP adressen
        → Voor IP lookup gebruik 'whois <IP>' op grotere systemen
 
-    ❌ "No data" voor nieuwe domain
+    [ X ] "No data" voor nieuwe domain
        → Kan 24-48 uur duren voordat whois data beschikbaar is
 
-    ❌ Verouderde info
+    [ X ] Verouderde info
        → Whois databases worden periodiek geupdate (niet real-time)
 
 TECHNICAL DETAILS
-    🌐 Hoe werkt whois?
+    [ @ ] Hoe werkt whois?
        • Gedistribueerde database (per TLD een registry)
        • .com/.net → Verisign
        • .nl → SIDN
        • .org → Public Interest Registry
        • Etc.
 
-    📡 Protocol:
+    [ ~ ] Protocol:
        • Port 43 (whois protocol)
        • Simple text-based query/response
        • Different format per registry (geen standaard)

@@ -10,7 +10,7 @@ export default {
 
   execute(args, flags, context) {
     if (args.length === 0) {
-      return 'Gebruik: man [command]\n\n💡 TIP: Type \'help\' voor een lijst van beschikbare commands.';
+      return 'Gebruik: man [command]\n\n[ ? ] TIP: Type \'help\' voor een lijst van beschikbare commands.';
     }
 
     const commandName = args[0].toLowerCase();
@@ -18,7 +18,7 @@ export default {
 
     // Check if command exists
     if (!registry.has(commandName)) {
-      return `Geen manual entry gevonden voor '${commandName}'.\n\n💡 TIP: Type 'help' voor een lijst van beschikbare commands.`;
+      return `Geen manual entry gevonden voor '${commandName}'.\n\n[ ? ] TIP: Type 'help' voor een lijst van beschikbare commands.`;
     }
 
     const handler = registry.get(commandName);

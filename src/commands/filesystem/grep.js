@@ -14,7 +14,7 @@ export default {
 
     // Require pattern and file arguments
     if (args.length < 2) {
-      return `grep: ${args.length === 0 ? 'missing pattern' : 'missing file operand'}\n\n💡 TIP: Gebruik 'grep <patroon> <bestand>' om in een bestand te zoeken. Bijvoorbeeld: grep "root" /etc/passwd`;
+      return `grep: ${args.length === 0 ? 'missing pattern' : 'missing file operand'}\n\n[ ? ] TIP: Gebruik 'grep <patroon> <bestand>' om in een bestand te zoeken. Bijvoorbeeld: grep "root" /etc/passwd`;
     }
 
     const pattern = args[0].toLowerCase();
@@ -36,29 +36,29 @@ export default {
       }
 
       if (matches.length === 0) {
-        return `grep: no matches found for '${args[0]}' in ${filePath}\n\n💡 TIP: grep zoekt case-insensitive naar tekst in bestanden.`;
+        return `grep: no matches found for '${args[0]}' in ${filePath}\n\n[ ? ] TIP: grep zoekt case-insensitive naar tekst in bestanden.`;
       }
 
       // Format output
       const output = matches.join('\n');
       const tip = matches.length > 1
-        ? `\n\n💡 ${matches.length} regels gevonden met '${args[0]}'. Het getal toont de regelnummer.`
-        : `\n\n💡 1 regel gevonden. Het getal toont de regelnummer.`;
+        ? `\n\n[ ? ] ${matches.length} regels gevonden met '${args[0]}'. Het getal toont de regelnummer.`
+        : `\n\n[ ? ] 1 regel gevonden. Het getal toont de regelnummer.`;
 
       return output + tip;
 
     } catch (error) {
       // Educational error messages
       if (error.message.includes('No such file')) {
-        return `grep: ${filePath}: No such file or directory\n\n💡 TIP: Gebruik 'find' om bestanden te zoeken, of 'ls' om te zien wat er in de directory staat.`;
+        return `grep: ${filePath}: No such file or directory\n\n[ ? ] TIP: Gebruik 'find' om bestanden te zoeken, of 'ls' om te zien wat er in de directory staat.`;
       }
 
       if (error.message.includes('Is a directory')) {
-        return `grep: ${filePath}: Is a directory\n\n💡 TIP: grep werkt op bestanden, niet directories. Probeer: ls ${filePath}`;
+        return `grep: ${filePath}: Is a directory\n\n[ ? ] TIP: grep werkt op bestanden, niet directories. Probeer: ls ${filePath}`;
       }
 
       if (error.message.includes('Permission denied')) {
-        return `grep: ${filePath}: Permission denied\n\n🔒 BEVEILIGING: Dit bestand is beveiligd. Probeer een ander bestand zoals /etc/passwd.`;
+        return `grep: ${filePath}: Permission denied\n\n[ ! ] BEVEILIGING: Dit bestand is beveiligd. Probeer een ander bestand zoals /etc/passwd.`;
       }
 
       return `grep: ${error.message}`;
@@ -97,25 +97,25 @@ VOORBEELDEN
         Zoek mislukte login pogingen
 
 EDUCATIEVE TIPS
-    🔍 grep is essentieel voor log analyse en reconnaissance:
+    [ ? ] grep is essentieel voor log analyse en reconnaissance:
        - Zoek gebruikersnamen in /etc/passwd
        - Analyseer security events in logs
        - Vind configuratie opties in config files
 
-    💡 Pentesting use cases:
+    [ ? ] Pentesting use cases:
        - grep "password" <file>  → Zoek credentials in files
        - grep "admin" /etc/passwd → Zoek admin accounts
        - grep "failed" auth.log   → Brute force detectie
        - grep "error" syslog      → System vulnerabilities
 
-    🎯 Interessante patronen om te zoeken:
+    [ → ] Interessante patronen om te zoeken:
        - "root"     → Root/admin gerelateerd
        - "password" → Mogelijk credentials
        - "failed"   → Failed login attempts
        - "ssh"      → Remote access
        - "error"    → System errors
 
-    🏗️ In real Linux:
+    [ + ]️ In real Linux:
        Real 'grep' ondersteunt:
        - grep -i      → Case-insensitive (standaard in simulator)
        - grep -n      → Toon regelnummers (standaard in simulator)
@@ -123,7 +123,7 @@ EDUCATIEVE TIPS
        - grep -E      → Extended regex patterns
        - grep -v      → Inverse match (regels ZONDER patroon)
 
-    🔄 Workflow voorbeeld:
+    [ ↻ ] Workflow voorbeeld:
        1. find passwd           → Vind passwd bestanden
        2. cat /etc/passwd       → Bekijk inhoud
        3. grep "root" /etc/passwd → Filter specifieke entries

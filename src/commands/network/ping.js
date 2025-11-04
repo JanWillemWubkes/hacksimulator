@@ -31,7 +31,7 @@ export default {
   async execute(args, flags, context) {
     // Require host argument
     if (args.length === 0) {
-      return `ping: missing host operand\n\n💡 TIP: Gebruik 'ping <host>' om verbinding te testen. Bijvoorbeeld: ping 8.8.8.8`;
+      return `ping: missing host operand\n\n[ ? ] TIP: Gebruik 'ping <host>' om verbinding te testen. Bijvoorbeeld: ping 8.8.8.8`;
     }
 
     const host = args[0];
@@ -41,7 +41,7 @@ export default {
       // Unknown host - educational response
       return `ping: ${host}: Name or service not known
 
-💡 TIP: Host onbekend. Probeer een van deze bekende hosts:
+[ ? ] TIP: Host onbekend. Probeer een van deze bekende hosts:
    • 8.8.8.8 (Google DNS)
    • 1.1.1.1 (Cloudflare DNS)
    • google.com
@@ -76,13 +76,13 @@ export default {
 
     // Educational tip based on host type
     if (host === 'localhost' || host === '127.0.0.1') {
-      output += `\n\n💡 TIP: localhost (127.0.0.1) is altijd je eigen machine. 0ms response = geen netwerk nodig!`;
+      output += `\n\n[ ? ] TIP: localhost (127.0.0.1) is altijd je eigen machine. 0ms response = geen netwerk nodig!`;
     } else if (host.includes('192.168')) {
-      output += `\n\n💡 TIP: 192.168.x.x zijn private IP adressen (lokaal netwerk). Lage ping = goede verbinding.`;
+      output += `\n\n[ ? ] TIP: 192.168.x.x zijn private IP adressen (lokaal netwerk). Lage ping = goede verbinding.`;
     } else if (host.includes('8.8.8.8') || host.includes('1.1.1.1')) {
-      output += `\n\n💡 TIP: Publieke DNS servers zijn ideaal om internetverbinding te testen.`;
+      output += `\n\n[ ? ] TIP: Publieke DNS servers zijn ideaal om internetverbinding te testen.`;
     } else {
-      output += `\n\n💡 TIP: Lage ping (<50ms) = goede verbinding. Hoge ping (>100ms) kan problemen veroorzaken.`;
+      output += `\n\n[ ? ] TIP: Lage ping (<50ms) = goede verbinding. Hoge ping (>100ms) kan problemen veroorzaken.`;
     }
 
     return output;
@@ -125,27 +125,27 @@ UITLEG OUTPUT
     • packet loss → Percentage verloren packets (0% = perfect)
 
 EDUCATIEVE TIPS
-    📡 Wat doet ping?
+    [ ~ ] Wat doet ping?
        Ping stuurt ICMP "echo request" packets en meet hoe snel de
        "echo reply" terugkomt. Dit test netwerkbereikbaarheid.
 
-    ⚡ Response tijden:
+    [ ~ ] Response tijden:
        • 0-30ms    → Excellent (lokaal netwerk of nabije server)
        • 30-100ms  → Goed (normale internet verbinding)
        • 100-300ms → Acceptabel (verre server of trage verbinding)
        • >300ms    → Slecht (problemen, of zeer verre server)
 
-    🔒 Security context:
+    [ ! ] Security context:
        • Ping wordt gebruikt in recon phase (is host online?)
        • Sommige servers blokkeren ping (ICMP) om verborgen te blijven
        • Ping sweeps: automatisch een hele range pingen (192.168.1.1-254)
 
-    💡 Praktisch gebruik:
+    [ ? ] Praktisch gebruik:
        • Testen of internet werkt: ping 8.8.8.8
        • Testen of DNS werkt: ping google.com (als dit faalt, DNS probleem)
        • Testen lokaal netwerk: ping 192.168.1.1 (je router)
 
-    🎯 In pentesting:
+    [ → ] In pentesting:
        • Eerste stap: welke hosts zijn online? (host discovery)
        • ICMP blocked? Gebruik TCP ping (via nmap)
        • Firewall fingerprinting: verschillende responses = info
@@ -160,10 +160,10 @@ BEKENDE HOSTS IN SIMULATOR
     • 192.168.1.100    → Voorbeeld lokale machine
 
 VEELGEMAAKTE FOUTEN
-    ❌ ping (zonder host)
+    [ X ] ping (zonder host)
        → Je moet een host opgeven
 
-    ❌ ping unknown-host.com
+    [ X ] ping unknown-host.com
        → Host niet bekend in simulator
        → In realiteit: DNS lookup zou falen
 
