@@ -114,12 +114,14 @@ Bij nieuwe command:
 - Use global `document.addEventListener` without context checks (steals focus from modals)
 - Assume "code present = executing" without verification (browser caching, timing issues)
 - Use hardcoded breakpoints in JS (`window.innerWidth`) - decouples from CSS media queries
+- Reset state on every `input` event without checking source (breaks programmatic updates)
 
 ✅ **Always:**
 - **Single Source of Truth:** ONE file owns each responsibility (prevents duplicate handlers)
 - **Event delegation:** Use `.closest('.selector')` for nested clicks (robust, no hardcoding)
 - **Modal protection:** Check `!e.target.closest('.modal.active')` before global focus actions
 - **Responsive detection:** Use `getComputedStyle(element).display !== 'none'` (respects all breakpoints)
+- **Programmatic change detection:** Use flag (`isProgrammaticChange`) to distinguish user input from code-triggered events
 - **Test production + local** (different caching behaviors in deployment)
 
 ### UX & Design
@@ -155,6 +157,16 @@ Bij nieuwe command:
 
 **Doel:** Last 5 sessions only - older sessions archived in SESSIONS.md
 
+### Sessie 34: Input Event Handling & Browser Module Caching (5 nov 2025)
+⚠️ Never reset state on every `input` event without checking source (breaks programmatic updates)
+⚠️ Never test features on same server port after code changes (browser ES6 module caching causes false negatives)
+✅ Always use flag-based programmatic change detection (`isProgrammaticChange`) to distinguish user input from code-triggered changes
+✅ Always change server port during testing to force fresh JavaScript module cache
+✅ Use Playwright `.pressSequentially()` instead of `.fill()` when testing features that depend on input events
+✅ Implement state machine pattern for mode-dependent key handling (search vs normal mode)
+✅ Insert UI elements as siblings with `insertBefore()`, not as children, for proper layout control
+📄 SESSIONS.md Sessie 34
+
 ### Sessie 33: Modal Scrollbar Border-Radius & Footer Pattern (5 nov 2025)
 ⚠️ Never put `overflow-y: auto` + `border-radius` on same element (scrollbar cuts corners)
 ✅ Always use 3-layer modal architecture: Header (close button) + Body (scrollable) + Footer (actions)
@@ -179,14 +191,7 @@ Bij nieuwe command:
 ✅ Strengthen borders in light mode - light needs MORE structure than dark, not less
 📄 SESSIONS.md Sessie 29
 
-### Sessie 27: CSS Cascade & Event Delegation (1 nov 2025)
-⚠️ Never use duplicate `:root` blocks (later instance silently overschrijft earlier CSS variables)
-⚠️ Never check `e.target === parentElement` in nested HTML (innermost clicked, not parent)
-✅ Always use single `:root` block + specific selectors for overrides (`[data-theme="light"]`)
-✅ Use `.closest('.selector')` for nested clicks (handles all nesting levels)
-📄 SESSIONS.md Sessie 27
-
-**Older Sessions (2-26):** See SESSIONS.md for comprehensive historical context
+**Older Sessions (2-27):** See SESSIONS.md for comprehensive historical context
 
 ---
 
@@ -255,4 +260,4 @@ Bij nieuwe command:
 ---
 
 **Last updated:** 5 november 2025
-**Version:** 12.1 (Documentation Sync: PRD v1.4, Sessions 33+, CSS variables 69, deployment status standardized)
+**Version:** 12.2 (Sessie 34: Tab autocomplete + Ctrl+R history search, Phase A.4/A.6 complete, 141/166 tasks)
