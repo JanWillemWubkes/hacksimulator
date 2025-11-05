@@ -92,8 +92,6 @@ class Terminal {
     input.setSearchPromptCallback((promptText) => {
       this._updateSearchPrompt(promptText);
     });
-
-    console.log('Search prompt element created and inserted');
   }
 
   /**
