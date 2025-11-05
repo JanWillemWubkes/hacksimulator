@@ -191,6 +191,26 @@
   user-select: none;
 }
 
+/* Search Prompt (Ctrl+R reverse search) */
+.search-prompt {
+  position: absolute;
+  top: -24px; /* Position above input wrapper */
+  left: 0;
+  right: 0;
+  color: var(--color-info); /* Cyan like bash */
+  font-family: var(--font-terminal);
+  font-size: 14px;
+  font-style: italic;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: rgba(0, 255, 255, 0.05); /* Subtle cyan background */
+  border: 1px solid var(--color-info-dim);
+  border-radius: var(--border-radius-small);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  z-index: 10;
+}
+
 #terminal-input {
   flex: 1;
   background-color: var(--color-bg);

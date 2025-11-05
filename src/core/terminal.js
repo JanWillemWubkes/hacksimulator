@@ -19,6 +19,7 @@ class Terminal {
   constructor() {
     this.isInitialized = false;
     this.isExecuting = false;
+    this.searchPromptElement = null; // DOM element for search prompt
     this.context = {
       terminal: this,
       vfs: vfs,
@@ -57,6 +58,9 @@ class Terminal {
     // Initialize input handler
     input.init(inputElement, (command) => this.execute(command));
 
+    // Create and setup search prompt element
+    this._setupSearchPrompt(inputElement);
+
     // Initialize onboarding system
     onboarding.init();
 
@@ -67,6 +71,49 @@ class Terminal {
     console.log('Terminal initialized', {
       firstVisit: onboarding.isFirstTimeVisitor()
     });
+  }
+
+  /**
+   * Setup search prompt element
+   * @private
+   */
+  _setupSearchPrompt(inputElement) {
+    // Create search prompt element
+    this.searchPromptElement = document.createElement('div');
+    this.searchPromptElement.id = 'search-prompt';
+    this.searchPromptElement.className = 'search-prompt';
+    this.searchPromptElement.style.display = 'none'; // Hidden by default
+
+    // Insert before input element (within the input wrapper)
+    const wrapper = inputElement.parentElement;
+    wrapper.insertBefore(this.searchPromptElement, inputElement);
+
+    // Register search prompt callback
+    input.setSearchPromptCallback((promptText) => {
+      this._updateSearchPrompt(promptText);
+    });
+
+    console.log('Search prompt element created and inserted');
+  }
+
+  /**
+   * Update search prompt display
+   * @private
+   */
+  _updateSearchPrompt(promptText) {
+    if (!this.searchPromptElement) {
+      return;
+    }
+
+    if (promptText === null) {
+      // Hide search prompt
+      this.searchPromptElement.style.display = 'none';
+      this.searchPromptElement.textContent = '';
+    } else {
+      // Show search prompt with text
+      this.searchPromptElement.style.display = 'block';
+      this.searchPromptElement.textContent = promptText;
+    }
   }
 
   /**

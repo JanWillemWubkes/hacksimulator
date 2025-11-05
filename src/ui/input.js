@@ -1,16 +1,20 @@
 /**
  * Input Handler
  * Manages keyboard input and events
- * Handles: Enter (submit), Arrow keys (history), Tab (autocomplete future)
+ * Handles: Enter (submit), Arrow keys (history), Tab (autocomplete), Ctrl+R (history search)
  */
 
 import history from '../core/history.js';
+import autocomplete from './autocomplete.js';
+import historySearch from './history-search.js';
 
 class InputHandler {
   constructor() {
     this.inputElement = null;
     this.onSubmitCallback = null;
+    this.onSearchPromptUpdate = null; // Callback for search prompt updates
     this.currentInput = '';
+    this.isProgrammaticChange = false; // Track programmatic changes
   }
 
   /**
@@ -38,6 +42,14 @@ class InputHandler {
   }
 
   /**
+   * Set search prompt update callback
+   * @param {Function} callback - Callback for search prompt updates
+   */
+  setSearchPromptCallback(callback) {
+    this.onSearchPromptUpdate = callback;
+  }
+
+  /**
    * Attach keyboard event listeners
    * @private
    */
@@ -50,8 +62,24 @@ class InputHandler {
     // Input for tracking changes
     this.inputElement.addEventListener('input', (e) => {
       this.currentInput = e.target.value;
-      // Reset history navigation when user types
-      history.resetIndex();
+
+      // Only reset if this is actual user input (not programmatic change)
+      if (!this.isProgrammaticChange) {
+        // Check if in search mode
+        if (historySearch.isSearchActive()) {
+          // Update search with new input
+          historySearch.updateSearch(this.currentInput);
+          this._updateSearchPrompt();
+        } else {
+          // Normal mode: Reset history navigation when user types
+          history.resetIndex();
+          // Reset autocomplete state when user types
+          autocomplete.reset();
+        }
+      }
+
+      // Reset flag after handling
+      this.isProgrammaticChange = false;
     });
 
     // Keep input focused (click anywhere refocuses)
@@ -73,6 +101,13 @@ class InputHandler {
    * @private
    */
   _handleKeyDown(e) {
+    // Check if in search mode
+    if (historySearch.isSearchActive()) {
+      this._handleSearchModeKeys(e);
+      return;
+    }
+
+    // Normal mode key handling
     switch (e.key) {
       case 'Enter':
         e.preventDefault();
@@ -91,7 +126,15 @@ class InputHandler {
 
       case 'Tab':
         e.preventDefault();
-        // TODO: Autocomplete in future
+        this._handleAutocomplete();
+        break;
+
+      case 'r':
+        // Ctrl+R to start history search
+        if (e.ctrlKey || e.metaKey) {
+          e.preventDefault();
+          this._handleHistorySearchStart();
+        }
         break;
 
       case 'l':
@@ -109,6 +152,42 @@ class InputHandler {
           this._handleCancel();
         }
         break;
+    }
+  }
+
+  /**
+   * Handle keys during search mode
+   * @private
+   */
+  _handleSearchModeKeys(e) {
+    switch (e.key) {
+      case 'Enter':
+        e.preventDefault();
+        this._handleSearchAccept();
+        break;
+
+      case 'Escape':
+        e.preventDefault();
+        this._handleSearchCancel();
+        break;
+
+      case 'r':
+        // Ctrl+R to cycle through matches
+        if (e.ctrlKey || e.metaKey) {
+          e.preventDefault();
+          this._handleSearchNext();
+        }
+        break;
+
+      case 'c':
+        // Ctrl+C to cancel search
+        if (e.ctrlKey || e.metaKey) {
+          e.preventDefault();
+          this._handleSearchCancel();
+        }
+        break;
+
+      // Let other keys pass through for typing search term
     }
   }
 
@@ -151,6 +230,99 @@ class InputHandler {
   }
 
   /**
+   * Handle autocomplete (Tab)
+   * @private
+   */
+  _handleAutocomplete() {
+    const currentInput = this.getValue();
+
+    // Try to get completion
+    const completion = autocomplete.complete(currentInput);
+
+    if (completion) {
+      // Set the completed value
+      this.setValue(completion);
+    }
+    // If no completion, do nothing (Tab is simply ignored)
+  }
+
+  /**
+   * Handle history search start (Ctrl+R)
+   * @private
+   */
+  _handleHistorySearchStart() {
+    // Start search mode
+    historySearch.start();
+
+    // Initialize search with current input (if any)
+    const currentInput = this.getValue();
+    historySearch.updateSearch(currentInput);
+
+    // Update search prompt
+    this._updateSearchPrompt();
+  }
+
+  /**
+   * Handle search accept (Enter during search)
+   * @private
+   */
+  _handleSearchAccept() {
+    const selected = historySearch.accept();
+
+    if (selected) {
+      // Set the selected command
+      this.setValue(selected);
+    }
+
+    // Clear search prompt
+    this._clearSearchPrompt();
+  }
+
+  /**
+   * Handle search cancel (Esc or Ctrl+C during search)
+   * @private
+   */
+  _handleSearchCancel() {
+    historySearch.cancel();
+
+    // Clear input and search prompt
+    this.clear();
+    this._clearSearchPrompt();
+  }
+
+  /**
+   * Handle search next (Ctrl+R again during search)
+   * @private
+   */
+  _handleSearchNext() {
+    historySearch.nextMatch();
+
+    // Update search prompt with new match
+    this._updateSearchPrompt();
+  }
+
+  /**
+   * Update search prompt display
+   * @private
+   */
+  _updateSearchPrompt() {
+    if (this.onSearchPromptUpdate) {
+      const promptText = historySearch.getPromptText();
+      this.onSearchPromptUpdate(promptText);
+    }
+  }
+
+  /**
+   * Clear search prompt display
+   * @private
+   */
+  _clearSearchPrompt() {
+    if (this.onSearchPromptUpdate) {
+      this.onSearchPromptUpdate(null);
+    }
+  }
+
+  /**
    * Handle clear terminal (Ctrl+L)
    * @private
    */
@@ -181,6 +353,9 @@ class InputHandler {
    */
   setValue(value) {
     if (this.inputElement) {
+      // Mark as programmatic change before setting value
+      this.isProgrammaticChange = true;
+
       this.inputElement.value = value;
       this.currentInput = value;
 
