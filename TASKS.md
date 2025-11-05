@@ -8,7 +8,7 @@
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 139 / 164 taken voltooid (84.8%)
+**Totaal:** 141 / 166 taken voltooid (84.9%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
@@ -17,7 +17,7 @@
 | M2: Filesystem Commands | ✅ Voltooid | 25/25 | 100% |
 | M3: Network & Security | ✅ Voltooid | 28/28 | 100% |
 | M4: UX & Polish | ✅ Voltooid | 43/43 | 100% |
-| M5: Testing & Launch | 🔵 In uitvoering | 8/35 | 23% |
+| M5: Testing & Launch | 🔵 In uitvoering | 10/37 | 27% |
 | M9: Refactor Sprint | ⏭️ Gepland | 0/19 | 0% |
 
 ---
@@ -433,6 +433,51 @@
 
 ---
 
+### Phase A: Post-Launch Quick Wins (Week 11)
+**Doel:** Power user features + production validation
+**Tijdsinschatting:** 5-7 dagen
+**Status:** 🔵 In uitvoering (2/6 completed - 33%)
+**Dependencies:** M5 Launch voltooid
+
+#### Tab & History Features ✅ COMPLETED
+- [x] **A.4: Tab Autocomplete** (command names + multi-match cycling)
+  - Single match: Tab completes immediately
+  - Multiple matches: Tab cycles through options
+  - Command-only for MVP (path completion = Phase 2)
+  - Implemented: `src/ui/autocomplete.js`
+
+- [x] **A.6: Ctrl+R History Search** (bash-style reverse search)
+  - Real-time filtering with match counter [1/3]
+  - Ctrl+R: Start search / cycle matches
+  - Enter: Accept | Esc: Cancel
+  - Cyan search prompt above input (bash aesthetic)
+  - Implemented: `src/ui/history-search.js`, `src/core/terminal.js`
+
+#### Production Readiness (TODO)
+- [ ] **A.1: Beta Testing Setup**
+  - Recruit 5+ beta testers (2 beginners, 2 students, 1 dev)
+  - Create feedback formulier (Google Forms)
+  - Test scenarios document
+  - Screen recording instructions (optional)
+
+- [ ] **A.2: Cross-Browser Testing**
+  - [ ] Safari macOS (latest) - WebKit blocked by system deps
+  - [ ] Mobile Safari iOS 16+ (real device)
+  - [ ] Chrome Mobile Android 12+ (real device)
+  - ✅ Chrome/Firefox automated tests passing (16/16)
+
+- [ ] **A.3: Configuration Setup** (CRITICAL - Launch Blockers)
+  - [ ] Replace GA4 Measurement ID in tracker.js (3 locations)
+  - [ ] Setup contact emails in legal docs (4 locations)
+  - See `PRE-LAUNCH-CHECKLIST.md` for exact line numbers
+
+- [ ] **A.5: Mobile Quick Commands** (deferred until mobile UX/design fixes)
+  - Implement click handlers for quick command buttons
+  - CSS structure already in place (styles/mobile.css)
+  - Deferred per user request: fix mobile UX issues first
+
+---
+
 ## 🎯 Volgende Acties
 
 **Huidige Status:** M5 In Uitvoering (95.9%) - ✅ **LIVE on Netlify!**
@@ -456,8 +501,8 @@
 Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
 
 ### UX Enhancements
-- [ ] **Tab Autocomplete** - Command completion met Tab-toets (FR1.4 deferred)
-- [ ] **Quick Commands UI** - Werkende mobile button interface (CSS is klaar)
+- [x] **Tab Autocomplete** - ✅ COMPLETED (Phase A.4 - Week 11)
+- [ ] **Quick Commands UI** - Moved to Phase A.5 (deferred until mobile UX fixes)
 - [ ] **Mobile Gestures** - Swipe/long-press navigatie (needs real device testing)
 - [ ] **Persistent Help Hint** - Rechts onderin, verdwijnt na 5 commands
 
@@ -586,10 +631,10 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 ---
 
 **Laatst bijgewerkt:** 5 november 2025
-**Versie:** 2.4 (Documentation Sync: Test counts clarified, Lighthouse context added)
-**Totaal Taken:** 164 (M0-M5: 145, M9 Refactor: 19)
-**Voltooide Taken:** 139 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 8/35, M9: 0/19 pending)
-**Voortgang:** 84.8% (139/164) - M9 deferred tot Post-MVP features geïmplementeerd
+**Versie:** 2.5 (Phase A Quick Wins: Tab autocomplete + Ctrl+R history search completed)
+**Totaal Taken:** 166 (M0-M5: 147, M9 Refactor: 19)
+**Voltooide Taken:** 141 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 10/37, M9: 0/19 pending)
+**Voortgang:** 84.9% (141/166) - Phase A: 2/6 tasks completed
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
