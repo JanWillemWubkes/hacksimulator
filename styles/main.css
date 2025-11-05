@@ -133,15 +133,15 @@
   /* Semantic Colors - Darker variants for light backgrounds */
   --color-error: #d60047;           /* Darker magenta for contrast */
   --color-warning: #dd8800;         /* Darker orange for contrast */
-  --color-info: #00bbff;            /* Vibrant cyan - moderate saturation boost */
+  --color-info: #0969da;            /* GitHub blue - proven readability on light backgrounds */
   --color-success: #00dd66;         /* Vibrant green - matches prompt */
 
   /* UI Elements - Darker primary + contrast-optimized secondary */
   --color-ui-primary: #00dd66;      /* Vibrant neon green - matches prompt/success */
   --color-ui-hover: #00ee88;        /* Brighter green - consistent saturation boost */
-  --color-ui-secondary: #00bbff;    /* Vibrant cyan - matches info/links */
+  --color-ui-secondary: #0969da;    /* GitHub blue - matches info/links (context-aware theming) */
   --color-border: #e0e0e0;          /* Darker grey borders - better visibility */
-  --color-link: #00bbff;            /* Vibrant cyan links */
+  --color-link: #0969da;            /* GitHub blue - professional readability on light backgrounds */
   --color-modal-text: #0a0a0a;      /* Very dark text - maximum contrast */
 
   /* Extended UI Colors - Light mode variants */
@@ -149,7 +149,7 @@
   --color-text-light: #2a2a2a;      /* Very dark grey - better contrast */
   --color-star-inactive: #999999;   /* Much darker grey - visibility fix! */
   --color-border-input: #d0d0d0;    /* Darker grey - better visibility */
-  --color-link-hover: #0099ff;      /* Slightly brighter cyan for hover */
+  --color-link-hover: #0550ae;      /* Darker GitHub blue for hover (increased contrast) */
   --color-bg-modal-content: #fafafa;  /* Off-white modal content */
   --color-modal-header: #0a0a0a;    /* Very dark text - maximum contrast */
 

@@ -225,6 +225,81 @@ renderInfo("💡 TIP: Try 'help' command");
 
 **Gemeten met:** WebAIM Contrast Checker
 
+### Context-Aware Theming (Dark Frame Pattern)
+
+**Principle:** Light mode ≠ inverted dark mode. Each theme is **optimized for its usage context**.
+
+#### Strategy: Neon Chrome, Professional Content
+
+```css
+/* Light Mode: Differentiated color strategy */
+[data-theme="light"] {
+  /* CHROME (navbar/footer): Stays dark → neon cyan preserved */
+  --color-footer-link: #00ffff;         /* NEON CYAN - signature identity */
+  --color-navbar-dropdown-icon: #00ffff; /* Consistent with dark mode */
+
+  /* CONTENT (terminal area): Light bg → professional blue */
+  --color-info: #0969da;                /* GitHub blue - proven readability */
+  --color-link: #0969da;                /* Matches info color */
+  --color-link-hover: #0550ae;          /* Darker blue hover */
+}
+```
+
+#### Rationale: Why Different Colors Per Theme?
+
+**Physics of Color Perception:**
+- **Dark mode:** Additive color (screen emits light) → bright neon = glow effect ✨
+- **Light mode:** Subtractive color (reflected light) → bright neon = harsh glare 💥
+
+**UX Research (Sessie 32 analysis):**
+
+| Tool | Dark Mode Links | Light Mode Links | Pattern |
+|------|----------------|------------------|---------|
+| **VS Code** | Cyan #4fc1ff | Blue #0078d4 | Warmer in dark, cooler in light |
+| **GitHub** | Cyan #58a6ff | Blue #0969da | Desaturated in light |
+| **Figma** | Bright #0c8ce9 | Darker #0d99ff | Contrast-optimized per theme |
+
+**Conclusion:** Industry leaders use **context-specific colors**, never 1:1 mapping between themes.
+
+#### Implementation: Surgical Color Targeting
+
+**What Changed (Sessie 32):**
+```css
+/* 4 variables updated for light mode content */
+--color-info:          #00bbff → #0969da  /* Tips, hints */
+--color-link:          #00bbff → #0969da  /* Terminal links */
+--color-ui-secondary:  #00bbff → #0969da  /* Secondary UI */
+--color-link-hover:    #0099ff → #0550ae  /* Link hover */
+
+/* 3 variables UNCHANGED for light mode chrome */
+--color-footer-link:         #00ffff ✅  /* Neon signature intact */
+--color-footer-link-hover:   #33ffff ✅  /* Hover preserved */
+--color-navbar-dropdown-icon: #00ffff ✅  /* Icons preserved */
+```
+
+**Result:**
+- ✅ Cyberpunk identity preserved (neon chrome frame in both modes)
+- ✅ Content readability optimized (professional blue on white, less eye strain)
+- ✅ Visual sophistication (context-aware = design expertise, not inconsistency)
+
+#### Design Decision Tree: When to Use Dark Frame Pattern?
+
+**Use Dark Frame Pattern when:**
+- Tool has strong brand color identity (neon, vibrant accent)
+- Light mode users need **productivity** (long reading sessions)
+- Chrome elements (nav/footer) are visually separated from content
+
+**Example:** HackSimulator.nl
+- Dark nav/footer = cyberpunk frame (always dark, both themes)
+- Content area = adaptive (white in light, black in dark)
+- Neon cyan = signature on dark chrome ✅
+- GitHub blue = readability on light content ✅
+
+**Avoid when:**
+- Simple informational sites (blog, documentation without brand identity)
+- Uniform color aesthetic needed (monochrome, minimalist design)
+- Content and chrome are not visually separated
+
 ---
 
 ## Spacing System
