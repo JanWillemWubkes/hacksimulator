@@ -2,7 +2,7 @@
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
 **Status:** MVP Development
-**Docs:** `docs/prd.md` v1.1 | `docs/commands-list.md` | `docs/STYLEGUIDE.md` v1.0 | `SESSIONS.md` voor sessie logs
+**Docs:** `docs/prd.md` v1.4 | `docs/commands-list.md` | `docs/STYLEGUIDE.md` v1.0 | `SESSIONS.md` voor sessie logs
 
 ---
 
@@ -11,13 +11,13 @@
 **Wat:** Veilige terminal simulator voor Nederlandse beginners (15-25 jaar)
 **Stack:** Vanilla JS/CSS, client-side, localStorage, < 500KB bundle
 **Scope:** 30 commands (System, Filesystem, Network, Security)
-**Status:** M0-M4 Complete | M5 Testing Phase
+**Status:** M0-M4 Complete | M5 Testing Phase - ✅ LIVE on Netlify
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 **Taal:** UI=NL, commands=EN, uitleg=NL
 **Performance:** Bundle ~318KB, Load ~2s, Lighthouse 88/100/100/100
 **Testing:** Playwright E2E (Chromium + Firefox passing)
-**Compliance:** WCAG AAA, Style Guide 100% (58 CSS variables)
+**Compliance:** WCAG AAA, Style Guide 100% (69 CSS variables)
 
 ---
 
@@ -91,7 +91,7 @@ Bij nieuwe command:
 
 ## 🏗️ Architectural Patterns
 
-**Doel:** Recurring technical patterns extracted from 30+ development sessions
+**Doel:** Recurring technical patterns extracted from 33+ development sessions
 
 ### CSS & Styling
 ⚠️ **Never:**
@@ -203,7 +203,7 @@ Bij nieuwe command:
 
 ### Afsluiten
 - Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-- **Rotation trigger:** Every 5 sessions (next: Sessie 38)
+- **Rotation trigger:** Every 5 sessions (last rotation: Sessie 33, next: Sessie 38)
 - **Rotation rule:** Keep last 5 sessions full, compress 6-10, archive 11+
 
 ### Bij Requirement Changes
@@ -248,11 +248,11 @@ Bij nieuwe command:
 **Volledige details:** `docs/prd.md` (v1.4)
 **Command specs:** `docs/commands-list.md`
 **Style guide:** `docs/STYLEGUIDE.md` (v1.0) - Comprehensive design system & component library
-**Sessie logs:** `SESSIONS.md` - Complete historical record (32+ sessions)
+**Sessie logs:** `SESSIONS.md` - Complete historical record (33 sessions)
 **Filesystem structure:** PRD Bijlage B
 **Tech rationale:** PRD §13
 
 ---
 
 **Last updated:** 5 november 2025
-**Version:** 12.0 (Document Optimization: 593 → 245 lines, Architectural Patterns extraction, rotation enforcement)
+**Version:** 12.1 (Documentation Sync: PRD v1.4, Sessions 33+, CSS variables 69, deployment status standardized)

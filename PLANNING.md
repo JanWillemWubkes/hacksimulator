@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 29 oktober 2025
+**Laatst bijgewerkt:** 5 november 2025
 **Status:** M5 Testing & Launch Phase - ✅ **LIVE on Netlify!**
 **Verantwoordelijk:** Development Team
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
@@ -651,7 +651,7 @@ const DEBUG_MODE = false;
 - [x] GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
 - [x] Netlify deployment (https://famous-frangollo-b5a758.netlify.app/)
 - [x] Performance optimization (<3s load: ~2.0s LCP, <500KB bundle: ~318KB)
-- [x] Lighthouse audit (88/100/100/100)
+- [x] Lighthouse audit (88/100/100/100) - Performance 88 (target >90, acceptable for MVP, improve in M9)
 - [ ] Beta testing (5+ testers) - TO DO
 - [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge) - TO DO
 
@@ -746,8 +746,8 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 29 oktober 2025
-**Versie:** 1.5 (Bundle Size Update - Corrected to ~318 KB, aligned M5 status 84.8%)
+**Laatst bijgewerkt:** 5 november 2025
+**Versie:** 1.6 (Documentation Sync: Lighthouse context added, deployment status updated)
 **Status:** ✅ Deployed - Live in Production
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

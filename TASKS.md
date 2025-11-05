@@ -1,6 +1,6 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 29 oktober 2025
+**Laatst bijgewerkt:** 5 november 2025
 **Status:** M5 Testing & Launch Phase (LIVE on Netlify) - ✅ **Cross-Browser Tests PASSING!**
 **Sprint:** Cross-Browser Testing Complete - Mobile Testing Next
 
@@ -351,7 +351,7 @@
 
 **✅ P0-001 FIXED:** Duplicate HTML ID `#legal-modal` removed (Sessie 16)
 **✅ AUTOMATED TESTING:** 16/16 tests passing (Chromium 8/8, Firefox 8/8)
-**📊 Test Coverage:** 8 comprehensive E2E tests covering all critical user flows
+**📊 Test Coverage:** 8 comprehensive E2E tests per browser covering all critical user flows (onboarding, commands, history, storage, navigation)
 
 #### Performance Testing
 - [ ] Lighthouse audit (target: >90 score)
@@ -513,7 +513,7 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
 - [ ] Optimize localStorage read/write patterns if needed (currently: on every VFS change)
 
 ### Test Coverage Review (2 taken)
-- [ ] Identify untested edge cases in Playwright suite (baseline: 22/22 passing)
+- [ ] Identify untested edge cases in Playwright suite (current: 16/16, target baseline: 22/22 after M9 expansion)
 - [ ] Add missing tests for refactored code (maintain 100% critical flow coverage)
 
 **Total Tasks:** 19
@@ -585,8 +585,8 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 29 oktober 2025
-**Versie:** 2.3 (M9 Refactor Sprint Planning - Technical debt roadmap added)
+**Laatst bijgewerkt:** 5 november 2025
+**Versie:** 2.4 (Documentation Sync: Test counts clarified, Lighthouse context added)
 **Totaal Taken:** 164 (M0-M5: 145, M9 Refactor: 19)
 **Voltooide Taken:** 139 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 8/35, M9: 0/19 pending)
 **Voortgang:** 84.8% (139/164) - M9 deferred tot Post-MVP features geïmplementeerd
