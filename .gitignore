@@ -41,3 +41,6 @@ test-results/
 
 # Diagnostic test scripts (one-off debugging)
 test-*.js
+
+# Local Netlify folder
+.netlify

@@ -2,6 +2,8 @@
  * help - Display available commands
  */
 
+import registry from '../../core/registry.js';
+
 // ─────────────────────────────────────────────────
 // Box Drawing Configuration
 // ─────────────────────────────────────────────────
@@ -132,6 +134,14 @@ export default {
   description: 'Toon beschikbare commands',
   category: 'system',
   usage: 'help [category]',
+
+  /**
+   * Autocomplete provider for help command arguments
+   * Returns available category names for tab-completion
+   */
+  completionProvider(args) {
+    return registry.getCategories();
+  },
 
   execute(args, flags, context) {
     const registry = context.terminal.getRegistry();

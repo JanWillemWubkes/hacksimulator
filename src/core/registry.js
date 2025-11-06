@@ -16,6 +16,7 @@ class CommandRegistry {
    * @param {Function} handler.execute - Execute function
    * @param {string} handler.description - Short description (for help)
    * @param {string} handler.category - Category (system, filesystem, network, security)
+   * @param {Function} handler.completionProvider - Optional function that returns autocomplete suggestions for arguments
    */
   register(name, handler) {
     if (!name || typeof name !== 'string') {
@@ -32,7 +33,8 @@ class CommandRegistry {
       description: handler.description || 'No description available',
       category: handler.category || 'other',
       usage: handler.usage || name,
-      manPage: handler.manPage || null
+      manPage: handler.manPage || null,
+      completionProvider: handler.completionProvider || null
     };
 
     this.commands.set(name.toLowerCase(), validHandler);
@@ -103,6 +105,28 @@ class CommandRegistry {
       categories.add(handler.category);
     }
     return Array.from(categories).sort();
+  }
+
+  /**
+   * Get autocomplete suggestions for command arguments
+   * @param {string} commandName - Command name
+   * @param {Array<string>} currentArgs - Current arguments (partial input)
+   * @returns {Array<string>} Autocomplete suggestions, or empty array if none
+   */
+  getCompletions(commandName, currentArgs = []) {
+    const handler = this.get(commandName);
+
+    if (!handler || !handler.completionProvider) {
+      return [];
+    }
+
+    try {
+      const suggestions = handler.completionProvider(currentArgs);
+      return Array.isArray(suggestions) ? suggestions : [];
+    } catch (error) {
+      console.error(`Error getting completions for '${commandName}':`, error);
+      return [];
+    }
   }
 
   /**

@@ -79,12 +79,21 @@ class AutocompleteHandler {
       // Complete command name
       return this._matchCommands(parts[0]);
     } else {
-      // Complete path (Phase 2 - future)
-      const command = parts[0];
-      const partial = parts[parts.length - 1];
+      // Multi-word input: check for argument completion
+      const commandName = parts[0];
+      const args = parts.slice(1); // All parts except command name
+      const partial = parts[parts.length - 1]; // Last word being typed
 
-      // For now, only complete commands
-      // Path completion will be added in Phase 2
+      // Try to get argument completions from the command
+      const argCompletions = this._matchArguments(commandName, args, partial);
+
+      if (argCompletions.length > 0) {
+        // Return full commands with completed arguments
+        const prefix = parts.slice(0, -1).join(' '); // Everything except last word
+        return argCompletions.map(completion => `${prefix} ${completion}`.trim());
+      }
+
+      // No argument completions - path completion (Phase 2 - future)
       return [];
     }
   }
@@ -102,6 +111,31 @@ class AutocompleteHandler {
     // Exact prefix matches
     const matches = allCommands.filter(cmd =>
       cmd.toLowerCase().startsWith(lowerPartial)
+    );
+
+    return matches;
+  }
+
+  /**
+   * Match command arguments using command-specific completion provider
+   * @private
+   * @param {string} commandName - Command name
+   * @param {Array<string>} args - Current arguments (including partial)
+   * @param {string} partial - Partial argument being typed
+   * @returns {Array<string>} Matching argument completions
+   */
+  _matchArguments(commandName, args, partial) {
+    // Get completion suggestions from the command's completion provider
+    const suggestions = registry.getCompletions(commandName, args);
+
+    if (suggestions.length === 0) {
+      return [];
+    }
+
+    // Filter suggestions by the partial input
+    const lowerPartial = partial.toLowerCase();
+    const matches = suggestions.filter(suggestion =>
+      suggestion.toLowerCase().startsWith(lowerPartial)
     );
 
     return matches;

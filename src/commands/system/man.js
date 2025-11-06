@@ -2,11 +2,21 @@
  * man - Display manual page for a command
  */
 
+import registry from '../../core/registry.js';
+
 export default {
   name: 'man',
   description: 'Toon handleiding voor een command',
   category: 'system',
   usage: 'man [command]',
+
+  /**
+   * Autocomplete provider for man command arguments
+   * Returns all registered command names for tab-completion
+   */
+  completionProvider(args) {
+    return registry.list();
+  },
 
   execute(args, flags, context) {
     if (args.length === 0) {
