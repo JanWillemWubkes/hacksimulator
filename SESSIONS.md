@@ -4,6 +4,725 @@
 
 ---
 
+## Sessie 34: Phase A Quick Wins - Tab Autocomplete + Ctrl+R History Search (5 november 2025)
+
+**Doel:** Implementeer power user features (Tab autocomplete + Ctrl+R history search) als post-launch enhancement. Strategische planning voor uitbreiding beyond MVP.
+
+### Context: Strategic Planning Session
+
+**User Request:**
+- "Ik wil de site verder uitbreiden dan de MVP en heb daarvoor advies nodig"
+- Review PLANNING.md, CLAUDE.md, prd.md, TASKS.md voor strategische analyse
+
+**Strategic Analysis:**
+1. **Current State:** MVP live (30 commands, 139/164 tasks done, 84.8%)
+2. **Decision Points:** Priorities? Resources? Goals? Architecture constraints?
+3. **User Responses:**
+   - Priorities: Deferred to expert opinion
+   - Resources: Solo work, flexible time
+   - Goals: User growth → monetization
+   - Architecture: Vanilla JS/CSS or framework upgrade OK
+
+**Recommended 3-Phase Roadmap:**
+
+**Phase A: Validate & Polish (Quick Wins - 1-2 weeks)**
+- Complete M5 testing tasks
+- Add power user features (Tab autocomplete, Ctrl+R history search)
+- Production config (GA4 ID, contact emails)
+- Mobile Quick Commands (deferred until UX fixes)
+
+**Phase B: Content Differentiator (Tutorials - 3-4 weeks)**
+- Tutorial framework (command system, state management)
+- 3 guided scenarios: reconnaissance, web vulnerabilities, privilege escalation
+- Share functionality (social proof cards)
+
+**Phase C: Technical Foundation (M9 Refactor - 1 week)**
+- Bundle optimization (<400KB target)
+- Code deduplication
+- Documentation sync
+- Test coverage expansion
+
+**User Selection:** Phase A.6 (Ctrl+R history search) - explicitly deferred mobile features until after mobile UX fixes
+
+### Implementation: Tab Autocomplete (Phase A.4)
+
+**Feature Spec:**
+- **Single match:** Tab completes immediately
+- **Multiple matches:** Tab cycles through options
+- **Command-only:** MVP scope (path completion = Phase 2)
+- **Reset behavior:** Autocomplete resets on new user input
+
+**Architecture:**
+```javascript
+// src/ui/autocomplete.js
+class AutocompleteHandler {
+  complete(currentInput) {
+    const trimmed = currentInput.trim();
+
+    // Check if cycling through previous matches
+    const isCycling = this.matches.includes(trimmed);
+
+    if (!isCycling) {
+      this.matches = this._findMatches(trimmed);
+      this.currentMatchIndex = 0;
+    }
+
+    if (this.matches.length === 1) return this.matches[0];
+
+    // Cycle through multiple matches
+    const completion = this.matches[this.currentMatchIndex];
+    this.currentMatchIndex = (this.currentMatchIndex + 1) % this.matches.length;
+    return completion;
+  }
+}
+```
+
+**Integration Challenge: Input Event Conflicts**
+
+**Problem:** After Tab press, autocomplete state was being reset, breaking cycling
+
+**Root Cause:**
+```javascript
+// src/ui/input.js - BUG
+this.inputElement.addEventListener('input', (e) => {
+  this.currentInput = e.target.value;
+  autocomplete.reset(); // ← Resets on EVERY change, including programmatic!
+});
+```
+
+**Why This Failed:**
+- Tab sets new value → triggers `input` event → resets autocomplete state
+- Next Tab press starts fresh instead of cycling to next match
+
+**Solution: Programmatic Change Detection**
+```javascript
+// src/ui/input.js - FIX
+class InputHandler {
+  constructor() {
+    this.isProgrammaticChange = false; // Track source of change
+  }
+
+  setValue(value) {
+    this.isProgrammaticChange = true; // Mark before setting
+    this.inputElement.value = value;
+    this.isProgrammaticChange = false; // Reset after
+  }
+
+  _attachListeners() {
+    this.inputElement.addEventListener('input', (e) => {
+      if (!this.isProgrammaticChange) {
+        // Only reset on actual user input
+        autocomplete.reset();
+      }
+    });
+  }
+}
+```
+
+**Key Pattern:** Distinguish programmatic changes from user input to prevent state conflicts
+
+### Implementation: Ctrl+R History Search (Phase A.6)
+
+**Feature Spec (Bash-style):**
+- **Ctrl+R:** Start reverse search / cycle through matches
+- **Type:** Filter history in real-time
+- **Enter:** Accept selected command
+- **Esc/Ctrl+C:** Cancel search
+- **Visual:** Cyan search prompt above input with match counter
+
+**Architecture (3 Components):**
+
+**1. History Search State Manager (`src/ui/history-search.js`)**
+```javascript
+class HistorySearchHandler {
+  updateSearch(term) {
+    this.searchTerm = term;
+
+    if (!term.trim()) {
+      this.matches = history.getAll().reverse(); // All history
+    } else {
+      this.matches = history.search(term).reverse(); // Filtered
+    }
+
+    this.currentMatchIndex = 0;
+  }
+
+  getPromptText() {
+    const match = this.getCurrentMatch();
+    const num = this.getCurrentMatchNumber();
+    const total = this.getMatchCount();
+
+    if (total === 0) {
+      return `(reverse-i-search)\`${this.searchTerm}': [geen matches]`;
+    }
+
+    return `(reverse-i-search)\`${this.searchTerm}' [${num}/${total}]: ${match}`;
+  }
+}
+```
+
+**2. Search Prompt DOM Element (`src/core/terminal.js`)**
+```javascript
+_setupSearchPrompt(inputElement) {
+  // Create search prompt element
+  this.searchPromptElement = document.createElement('div');
+  this.searchPromptElement.id = 'search-prompt';
+  this.searchPromptElement.className = 'search-prompt';
+  this.searchPromptElement.style.display = 'none'; // Hidden by default
+
+  // Insert BEFORE input element (within wrapper)
+  const wrapper = inputElement.parentElement;
+  wrapper.insertBefore(this.searchPromptElement, inputElement);
+
+  // Register callback for updates
+  input.setSearchPromptCallback((promptText) => {
+    this._updateSearchPrompt(promptText);
+  });
+}
+```
+
+**3. Search Mode Key Handling (`src/ui/input.js`)**
+```javascript
+_handleKeyDown(e) {
+  if (historySearch.isSearchActive()) {
+    this._handleSearchModeKeys(e); // Special search mode handlers
+    return;
+  }
+
+  // Normal mode
+  if (e.key === 'r' && (e.ctrlKey || e.metaKey)) {
+    e.preventDefault();
+    this._handleHistorySearchStart();
+  }
+}
+
+_handleSearchModeKeys(e) {
+  switch (e.key) {
+    case 'Enter':
+      e.preventDefault();
+      const selected = historySearch.accept();
+      if (selected) this.setValue(selected);
+      this._clearSearchPrompt();
+      break;
+
+    case 'Escape':
+    case 'c': // Ctrl+C
+      if (e.key === 'c' && !(e.ctrlKey || e.metaKey)) break;
+      e.preventDefault();
+      historySearch.cancel();
+      this.clear();
+      this._clearSearchPrompt();
+      break;
+
+    case 'r': // Ctrl+R again cycles
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        historySearch.nextMatch();
+        this._updateSearchPrompt();
+      }
+      break;
+  }
+}
+```
+
+**CSS Styling (`styles/terminal.css`)**
+```css
+.search-prompt {
+  position: absolute;
+  top: -24px; /* Position above input wrapper */
+  left: 0;
+  right: 0;
+  color: var(--color-info); /* Cyan like bash */
+  font-family: var(--font-terminal);
+  font-size: 14px;
+  font-style: italic;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: rgba(0, 255, 255, 0.05); /* Subtle cyan bg */
+  border: 1px solid var(--color-info-dim);
+  border-radius: var(--border-radius-small);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  z-index: 10;
+}
+```
+
+### Critical Bug: Browser Caching Issue
+
+**Problem:** After deployment to Netlify, Ctrl+R feature didn't work despite code being correctly deployed
+
+**Symptoms:**
+- Console log "Search prompt element created" NOT appearing
+- DOM inspection: `#search-prompt` element missing
+- Verified deployed code had correct `_setupSearchPrompt` call
+
+**Investigation Steps:**
+1. ✅ Checked deployed files via curl → Code correct
+2. ✅ Verified method exists in deployed terminal.js
+3. ✅ Confirmed `_setupSearchPrompt` called in init method
+4. ❌ Browser serving cached version despite Netlify deploying new code
+
+**Root Cause: Browser JavaScript Module Caching**
+- Browser caches ES6 modules aggressively
+- Netlify deployed new code BUT browser kept old cached version
+- Testing on same port (8000) reinforced stale cache
+
+**Solution: Change Test Server Port**
+```bash
+# Old (cached): http://localhost:8000
+pkill -f "python3 -m http.server"
+
+# New (fresh cache): http://localhost:8002
+python3 -m http.server 8002
+```
+
+**Result:** Feature worked perfectly on fresh port - code was always correct!
+
+**Key Learning:** Browser module caching can create false negatives in testing. Changing server port forces fresh cache.
+
+### Testing & Verification
+
+**Test Scenario 1: Tab Autocomplete**
+```
+Input: "nm" + Tab
+Result: "nmap" (single match, completes immediately)
+
+Input: "l" + Tab
+Result: "ls" (first match)
+Input: Tab again
+Result: "ln" (cycles to next match)
+```
+
+**Test Scenario 2: Ctrl+R History Search**
+```
+Setup: History contains ["ls", "nmap 192.168.1.1", "whoami"]
+
+1. Press Ctrl+R
+   Display: (reverse-i-search)`' [1/3]: whoami
+
+2. Type "nmap"
+   Display: (reverse-i-search)`nmap' [1/1]: nmap 192.168.1.1
+
+3. Press Enter
+   Result: Input field contains "nmap 192.168.1.1"
+   Display: Search prompt disappears
+```
+
+**Browser Testing:**
+- ✅ Localhost:8002 (fresh cache): All features working
+- ✅ Playwright `.fill()` vs `.pressSequentially()` difference discovered
+  - `.fill()`: Replaces entire value (may not trigger input events correctly)
+  - `.pressSequentially()`: Types character-by-character (triggers events naturally)
+
+### Git Commits
+
+**Commit 1: Initial Implementation**
+```
+52b7e49 - Implement Tab autocomplete + Ctrl+R history search (Phase A.4 & A.6)
+
+Features:
+- Tab autocomplete: Command name completion with multi-match cycling
+- Ctrl+R history search: Bash-style reverse search with match counter
+- Search prompt UI: Positioned above input, cyan styling, match display
+- Programmatic change detection: Prevents state conflicts during cycling
+
+Files:
+- Created: src/ui/autocomplete.js, src/ui/history-search.js
+- Modified: src/ui/input.js, src/core/terminal.js, styles/terminal.css
+```
+
+**Commit 2: Debug Logging Cleanup**
+```
+ff1b6c9 - Clean up debug logging from history search feature
+
+Remove console.log statements from _setupSearchPrompt method.
+Feature fully tested and working correctly.
+```
+
+**Commit 3: Documentation Update**
+```
+7aebde8 - Update TASKS.md: Add Phase A Quick Wins section
+
+Track post-launch enhancements:
+- Tab autocomplete (A.4) ✅
+- Ctrl+R history search (A.6) ✅
+
+New Phase A section: 6 tasks (2 completed, 4 pending)
+Progress: 141/166 tasks (84.9%)
+
+Post-MVP Features section updated:
+- Tab Autocomplete marked as completed
+- Quick Commands UI moved to Phase A.5 (deferred)
+```
+
+### Files Changed
+
+**Created:**
+- `src/ui/autocomplete.js` (165 lines) - Tab completion logic
+- `src/ui/history-search.js` (149 lines) - Search state management
+
+**Modified:**
+- `src/ui/input.js` - Added Tab/Ctrl+R handlers, programmatic change detection
+- `src/core/terminal.js` - Search prompt DOM setup, callback registration
+- `styles/terminal.css` - Search prompt styling (absolute positioning, cyan theme)
+- `TASKS.md` - Added Phase A section, updated progress metrics
+
+**Total Changes:**
+- +563 lines added (2 new files + modifications)
+- ~10 lines removed (debug logging cleanup)
+
+### Key Architectural Patterns
+
+**1. Programmatic Change Detection**
+```javascript
+// Pattern: Flag-based state tracking
+this.isProgrammaticChange = true;  // Set before action
+this.inputElement.value = value;   // Perform action
+this.isProgrammaticChange = false; // Reset after
+
+// Usage in event listener
+if (!this.isProgrammaticChange) {
+  // Only execute for user input
+}
+```
+
+**2. Callback Pattern for Cross-Module Communication**
+```javascript
+// Terminal registers callback with Input module
+input.setSearchPromptCallback((promptText) => {
+  this._updateSearchPrompt(promptText);
+});
+
+// Input module calls callback when needed
+this.onSearchPromptUpdate(promptText);
+```
+
+**3. State Machine for Search Mode**
+```javascript
+// Mode detection
+if (historySearch.isSearchActive()) {
+  handleSearchModeKeys(); // Special key handlers
+} else {
+  handleNormalModeKeys(); // Regular key handlers
+}
+```
+
+**4. Nested DOM Containers for UI Elements**
+```javascript
+// Pattern: Insert sibling element, not child
+const wrapper = inputElement.parentElement;
+wrapper.insertBefore(searchPrompt, inputElement); // Sibling, not child
+```
+
+### Performance Impact
+
+**Bundle Size:**
+- autocomplete.js: ~4KB
+- history-search.js: ~3KB
+- Input/terminal modifications: ~2KB
+- CSS additions: ~1KB
+- **Total added: ~10KB** (within 500KB budget, current ~318KB + 10KB = ~328KB)
+
+**Runtime Performance:**
+- Tab autocomplete: O(n) command matching (n = 30 commands, negligible)
+- History search: O(m) filtering (m = history length, typically <100 items)
+- No performance degradation observed
+
+### Success Metrics
+
+**Feature Adoption (Post-Deployment):**
+- Track via analytics: `command_executed` event context (manual entry vs autocomplete vs history)
+- Success criteria: >20% of power users use Tab/Ctrl+R within 1 week
+
+**User Experience:**
+- Bash-style interface familiar to target audience (15-25 year tech enthusiasts)
+- Reduces typing for repeated commands (efficiency gain)
+- Progressive disclosure: Features discoverable but not obtrusive
+
+### Next Steps (Phase A Remaining)
+
+**Completed (2/6):**
+- ✅ A.4: Tab Autocomplete
+- ✅ A.6: Ctrl+R History Search
+
+**Pending (4/6):**
+- 🔲 A.1: Beta Testing Setup (5+ testers, feedback form)
+- 🔲 A.2: Cross-Browser Testing (Safari, mobile devices)
+- 🔲 A.3: Configuration Setup (GA4 ID, contact emails) - **CRITICAL**
+- 🔲 A.5: Mobile Quick Commands (deferred until mobile UX fixes)
+
+**Strategic Decision:** User explicitly deferred A.5 until after mobile UX improvements, prioritizing production readiness (A.1-A.3) first.
+
+---
+
+## Sessie 33: Modal Scrollbar Border-Radius & Footer Pattern (5 november 2025)
+
+**Doel:** Fix twee modal UX problemen: (1) scrollbar snijdt border-radius af aan rechterkant, (2) grote groene action buttons verdwijnen bij scrollen. Implementeer enterprise Modal Footer Pattern voor professionele modal UX.
+
+### Probleem 1: Scrollbar Border-Radius Conflict
+
+**User Report:**
+- Screenshot toonde About modal met scrollbar die border-radius wegsnijdt aan rechterkant
+- Visueel probleem: Linkerkant clean 8px rounded, rechterkant sharp 90° waar scrollbar border "bijt"
+
+**Root Cause:**
+```css
+/* VOOR (fout): */
+.modal-content {
+  border-radius: 8px;
+  overflow-y: auto;  /* ← Scrollbar INSIDE border-radius element */
+}
+```
+
+**Waarom dit faalt:**
+- Browser rendert scrollbars BINNEN content box (niet erbuiten)
+- `overflow-y: auto` + `border-radius` op zelfde element = scrollbar wint
+- Scrollbar track overschrijft border-radius rendering aan rechterrand
+
+**Oplossing: Nested Scroll Container Pattern**
+```css
+/* NA (correct): */
+.modal-content {
+  border-radius: 8px;      /* Outer: Shape container */
+  position: relative;
+  /* NO overflow here */
+}
+
+.modal-body {
+  overflow-y: auto;        /* Inner: Scroll container */
+  max-height: calc(80vh - 80px);
+}
+```
+
+**Enterprise Pattern:**
+- **Outer container** (`.modal-content`): Handles shape, border-radius, positioning context
+- **Inner container** (`.modal-body`): Handles content overflow, scrolling
+- Scheiding van verantwoordelijkheden = visual conflicts voorkomen
+
+### Probleem 2: Close Button Scrollbar Overlap
+
+**User Report #2:**
+- Close button (×) top-right wordt afgesneden door scrollbar na eerste fix
+
+**Root Cause:**
+- Close button zat BINNEN `.modal-body` (scrollende container)
+- Position: absolute relative to `.modal-body` → scrollt mee → overlapt scrollbar
+
+**Oplossing: Button Outside Body**
+```html
+<!-- VOOR (fout): -->
+<div class="modal-content">
+  <div class="modal-body">
+    <button class="modal-close">×</button>  ← Scrollt mee!
+    <h2>Content</h2>
+  </div>
+</div>
+
+<!-- NA (correct): -->
+<div class="modal-content">
+  <button class="modal-close">×</button>  ← Position: absolute to .modal-content
+  <div class="modal-body">
+    <h2>Content</h2>
+  </div>
+</div>
+```
+
+**Waarom dit werkt:**
+- `.modal-content` heeft `position: relative` → positioning context
+- Close button `position: absolute` gebruikt `.modal-content` als parent
+- Button zit BUITEN scrolling context → altijd top-right zichtbaar
+
+### Probleem 3: Footer Action Buttons Verdwijnen
+
+**User Clarification:**
+- "sorry het ging me niet om de X (sluiten rechtsboven) want die was OK volgens mij"
+- "Het gaat me om de grote groene knop onderin de about/over modal"
+
+**Root Cause:**
+- Grote groene buttons ("Sluiten", "Versturen", etc.) zaten in `.modal-body`
+- Bij lange content scrollden buttons mee naar beneden → uit beeld
+- User moet scrollen naar beneden om button te zien = slechte UX
+
+**Oplossing: Modal Footer Pattern**
+
+**3-Laags Enterprise Architectuur:**
+```html
+<div class="modal-content">
+  <!-- 1. HEADER: Altijd zichtbaar top -->
+  <button class="modal-close">×</button>
+
+  <!-- 2. BODY: Scrollbare content -->
+  <div class="modal-body">
+    <h2>Titel</h2>
+    <p>Content die kan scrollen...</p>
+  </div>
+
+  <!-- 3. FOOTER: Altijd zichtbaar bottom -->
+  <div class="modal-footer">
+    <button class="btn-primary">Sluiten</button>
+  </div>
+</div>
+```
+
+**CSS Implementation:**
+```css
+.modal-body {
+  overflow-y: auto;
+  max-height: calc(80vh - 80px - 80px);
+  /*               ^^^   ^^^    ^^^
+                   |      |      └─ Footer height (~80px)
+                   |      └──────── Top/bottom padding (40px × 2)
+                   └─────────────── Viewport limit (80%)
+  */
+}
+
+.modal-footer {
+  padding: var(--spacing-lg) 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--color-bg-modal-content);
+}
+```
+
+**Responsive Breakpoints:**
+- **Tablet (768px):** Footer padding reduced to `var(--spacing-md) var(--spacing-lg)`
+- **Small tablet (600-768px):** Same as tablet
+- **Small mobile (<480px):** Footer padding minimal `var(--spacing-sm) var(--spacing-md)`
+
+### Gewijzigde Bestanden (5 files, 8 edits)
+
+**1. index.html** (2 modals updated)
+- **Onboarding modal (line 125-138):**
+  - Close button moved BEFORE `.modal-body` (was inside)
+  - `<button id="onboarding-accept">` moved to new `.modal-footer` section
+- **Feedback modal (line 164-185):**
+  - Close button moved BEFORE `.modal-body` (was inside)
+  - `<button id="feedback-submit">` + `.feedback-error` moved to `.modal-footer`
+
+**2. src/ui/navbar.js** (About modal dynamic creation)
+- **Line 299-327:** Restructured `modal.innerHTML`:
+  - Close button before `.modal-body`
+  - All content wrapped in `.modal-body`
+  - `<button class="btn-primary">Sluiten</button>` in new `.modal-footer` section
+
+**3. styles/main.css** (desktop modal styling)
+- **Line 308-311:** Updated `.modal-body`:
+  ```css
+  .modal-body {
+    overflow-y: auto;
+    max-height: calc(80vh - 80px - 80px); /* Was: 80vh - 80px */
+  }
+  ```
+- **Line 313-317:** Added `.modal-footer`:
+  ```css
+  .modal-footer {
+    padding: var(--spacing-lg) 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: var(--color-bg-modal-content);
+  }
+  ```
+
+**4. styles/mobile.css** (responsive modal styling)
+- **Tablet breakpoint (768px, lines 217-223):**
+  ```css
+  .modal-body {
+    max-height: calc(90vh - 48px - 70px);
+  }
+  .modal-footer {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+  ```
+- **Small tablet breakpoint (600-768px, lines 429-435):**
+  ```css
+  .modal-body {
+    max-height: calc(85vh - 48px - 70px);
+  }
+  .modal-footer {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+  ```
+- **Small mobile breakpoint (<480px, lines 453-459):**
+  ```css
+  .modal-body {
+    max-height: calc(85vh - 24px - 60px);
+  }
+  .modal-footer {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  ```
+
+### Visual Verification (Screenshots)
+
+**About Modal (`.playwright-mcp/about-modal-footer-final.png`):**
+- ✅ Close button (×) altijd top-right zichtbaar
+- ✅ Border-radius 8px clean op alle 4 hoeken (rechts ook!)
+- ✅ Scrollbar binnen `.modal-body` container
+- ✅ Grote groene "Sluiten" button altijd onderaan zichtbaar in footer
+- ✅ Subtiele border-top scheiding tussen body en footer
+
+**Feedback Modal (`.playwright-mcp/feedback-modal-footer-final.png`):**
+- ✅ Close button (×) altijd top-right zichtbaar
+- ✅ Border-radius 8px clean op alle hoeken
+- ✅ Grote groene "Versturen" button altijd onderaan zichtbaar
+- ✅ Error message div in footer (logisch bij submit button)
+
+### Enterprise Pattern Validation
+
+**Modal Footer Pattern gebruikt door:**
+- Bootstrap Modal: `.modal-header` + `.modal-body` + `.modal-footer`
+- Material UI Dialog: `DialogTitle` + `DialogContent` + `DialogActions`
+- GitHub Modal Popups: Sticky header + scrollable content + sticky footer
+- Figma Dialogs: Fixed action bar at bottom
+
+**Waarom 3-laags architectuur werkt:**
+
+1. **Separation of Concerns:**
+   - Header: Chrome (close, title) - fixed positioning
+   - Body: Content - scrollable overflow
+   - Footer: Actions - fixed positioning
+
+2. **UX Best Practices:**
+   - Primary actions altijd zichtbaar (geen scrollen nodig)
+   - Visual hierarchy: Border-top scheidt content van acties
+   - Keyboard accessibility: Tab order logisch (header → body → footer)
+
+3. **Responsive Scaling:**
+   - Footer padding adapts per breakpoint (40px → 24px → 12px)
+   - Body max-height accounts for footer height automatically
+   - No JavaScript required - pure CSS layout
+
+### Key Technical Insights
+
+**CSS Calc() Magic:**
+```css
+max-height: calc(80vh - 80px - 80px);
+/*               │     │      └─ Footer height estimate
+                 │     └──────── Padding (top + bottom)
+                 └────────────── Viewport percentage
+*/
+```
+
+**Waarom estimate footer height?**
+- Button height + padding varies per breakpoint
+- Using fixed estimates (80px/70px/60px) prevents footer overlap
+- Alternative: `min-height: 0` on body + flexbox, maar calc() simpler
+
+**Position Context Layering:**
+```
+.modal (position: fixed, z-index high)
+  └─ .modal-content (position: relative) ← POSITIONING CONTEXT
+       ├─ .modal-close (position: absolute, top/right) ← Uses .modal-content
+       ├─ .modal-body (overflow-y: auto) ← Scrolls independently
+       └─ .modal-footer (static in flow) ← Always at bottom
+```
+
+### Commits
+
+Geen commits gemaakt - code klaar voor review/testing.
+
+**Deployment Status:** Ready for production (localhost testing passed)
+
+---
+
 ## Sessie 32: Light Mode Cyan Refinement - Dark Frame Pattern Implementation (5 november 2025)
 
 **Doel:** Resolve user-reported issue dat light mode cyan "niet mooi uitkomt" door context-aware theming toe te passen (Dark Frame Pattern). Behoud cyberpunk neon identiteit in chrome terwijl content readability wordt geoptimaliseerd.
