@@ -126,10 +126,14 @@
     <div id="onboarding-modal" class="modal" role="dialog" aria-labelledby="onboarding-title" aria-hidden="true">
         <div class="modal-content">
             <button class="modal-close" aria-label="Sluiten">&times;</button>
-            <h2 id="onboarding-title">Welkom bij HackSimulator.nl</h2>
-            <p>Een veilige omgeving om ethisch hacken te leren.</p>
-            <p><strong>Belangrijk:</strong> Dit is uitsluitend voor educatieve doeleinden. Gebruik deze kennis alleen legaal en ethisch.</p>
-            <button id="onboarding-accept" class="btn-primary">Ik begrijp het - Verder</button>
+            <div class="modal-body">
+                <h2 id="onboarding-title">Welkom bij HackSimulator.nl</h2>
+                <p>Een veilige omgeving om ethisch hacken te leren.</p>
+                <p><strong>Belangrijk:</strong> Dit is uitsluitend voor educatieve doeleinden. Gebruik deze kennis alleen legaal en ethisch.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="onboarding-accept" class="btn-primary">Ik begrijp het - Verder</button>
+            </div>
         </div>
     </div>
 
@@ -161,18 +165,22 @@
     <div id="feedback-modal" class="modal" role="dialog" aria-labelledby="feedback-title" aria-hidden="true">
         <div class="modal-content">
             <button class="modal-close" aria-label="Sluiten">&times;</button>
-            <h2 id="feedback-title">Feedback</h2>
-            <p>Hoe vind je HackSimulator.nl?</p>
-            <div class="rating-stars" role="radiogroup" aria-label="Beoordeling">
-                <button class="star" data-rating="1" aria-label="1 ster">★</button>
-                <button class="star" data-rating="2" aria-label="2 sterren">★</button>
-                <button class="star" data-rating="3" aria-label="3 sterren">★</button>
-                <button class="star" data-rating="4" aria-label="4 sterren">★</button>
-                <button class="star" data-rating="5" aria-label="5 sterren">★</button>
+            <div class="modal-body">
+                <h2 id="feedback-title">Feedback</h2>
+                <p>Hoe vind je HackSimulator.nl?</p>
+                <div class="rating-stars" role="radiogroup" aria-label="Beoordeling">
+                    <button class="star" data-rating="1" aria-label="1 ster">★</button>
+                    <button class="star" data-rating="2" aria-label="2 sterren">★</button>
+                    <button class="star" data-rating="3" aria-label="3 sterren">★</button>
+                    <button class="star" data-rating="4" aria-label="4 sterren">★</button>
+                    <button class="star" data-rating="5" aria-label="5 sterren">★</button>
+                </div>
+                <textarea id="feedback-comment" placeholder="Optioneel: Vertel ons meer..." rows="4" aria-label="Feedback commentaar"></textarea>
             </div>
-            <textarea id="feedback-comment" placeholder="Optioneel: Vertel ons meer..." rows="4" aria-label="Feedback commentaar"></textarea>
-            <div class="feedback-error" role="alert" aria-live="assertive"></div>
-            <button id="feedback-submit" class="btn-primary">Versturen</button>
+            <div class="modal-footer">
+                <div class="feedback-error" role="alert" aria-live="assertive"></div>
+                <button id="feedback-submit" class="btn-primary">Versturen</button>
+            </div>
         </div>
     </div>
 

@@ -214,6 +214,14 @@
     max-height: 90vh;
   }
 
+  .modal-body {
+    max-height: calc(90vh - 48px - 70px); /* 90vh minus padding (48px) and footer (~70px) */
+  }
+
+  .modal-footer {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
   .modal-content h2 {
     font-size: 1.2rem;
   }
@@ -418,6 +426,14 @@
     max-height: 85vh;
   }
 
+  .modal-body {
+    max-height: calc(85vh - 48px - 70px); /* 85vh minus padding (48px) and footer (~70px) */
+  }
+
+  .modal-footer {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
   .hint-box {
     bottom: var(--spacing-md);
   }
@@ -432,6 +448,14 @@
 
   .modal-content {
     padding: var(--spacing-md);
+  }
+
+  .modal-body {
+    max-height: calc(85vh - 24px - 60px); /* 85vh minus padding (24px) and footer (~60px) */
+  }
+
+  .modal-footer {
+    padding: var(--spacing-sm) var(--spacing-md);
   }
 
   .modal-content h2 {

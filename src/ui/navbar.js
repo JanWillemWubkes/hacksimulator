@@ -299,27 +299,30 @@ export function initNavbar() {
       modal.innerHTML = `
         <div class="modal-content">
           <button class="modal-close" aria-label="Sluiten">&times;</button>
-          <h2 id="about-title">Over HackSimulator.nl</h2>
-          <p><strong>HackSimulator.nl</strong> is een veilige browser-based terminal simulator voor het leren van ethisch hacken en cybersecurity.</p>
+          <div class="modal-body">
+            <h2 id="about-title">Over HackSimulator.nl</h2>
+            <p><strong>HackSimulator.nl</strong> is een veilige browser-based terminal simulator voor het leren van ethisch hacken en cybersecurity.</p>
 
-          <h3 style="color: var(--color-ui-primary); margin-top: var(--spacing-lg); margin-bottom: var(--spacing-md); font-size: 1.2rem;">Doel</h3>
-          <p>We bieden een toegankelijke en veilige leeromgeving voor beginners (15-25 jaar) om cybersecurity skills te ontwikkelen zonder risico op schade aan echte systemen.</p>
+            <h3 style="color: var(--color-ui-primary); margin-top: var(--spacing-lg); margin-bottom: var(--spacing-md); font-size: 1.2rem;">Doel</h3>
+            <p>We bieden een toegankelijke en veilige leeromgeving voor beginners (15-25 jaar) om cybersecurity skills te ontwikkelen zonder risico op schade aan echte systemen.</p>
 
-          <h3 style="color: var(--color-ui-primary); margin-top: var(--spacing-lg); margin-bottom: var(--spacing-md); font-size: 1.2rem;">Features</h3>
-          <ul>
-            <li>30+ authentieke terminal commands</li>
-            <li>Realistische command output met educatieve context</li>
-            <li>Virtual filesystem voor veilig experimenteren</li>
-            <li>Nederlands interface voor Nederlandse markt</li>
-            <li>100% browser-based - geen installatie nodig</li>
-          </ul>
+            <h3 style="color: var(--color-ui-primary); margin-top: var(--spacing-lg); margin-bottom: var(--spacing-md); font-size: 1.2rem;">Features</h3>
+            <ul>
+              <li>30+ authentieke terminal commands</li>
+              <li>Realistische command output met educatieve context</li>
+              <li>Virtual filesystem voor veilig experimenteren</li>
+              <li>Nederlands interface voor Nederlandse markt</li>
+              <li>100% browser-based - geen installatie nodig</li>
+            </ul>
 
-          <h3 style="color: var(--color-ui-primary); margin-top: var(--spacing-lg); margin-bottom: var(--spacing-md); font-size: 1.2rem;">Open Source</h3>
-          <p>Dit project is open source en beschikbaar op <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+            <h3 style="color: var(--color-ui-primary); margin-top: var(--spacing-lg); margin-bottom: var(--spacing-md); font-size: 1.2rem;">Open Source</h3>
+            <p>Dit project is open source en beschikbaar op <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
 
-          <p style="margin-top: var(--spacing-lg);"><strong>[ ! ] Belangrijk:</strong> Deze simulator is uitsluitend voor educatieve doeleinden. Gebruik deze kennis alleen legaal en ethisch.</p>
-
-          <button class="btn-primary" style="margin-top: var(--spacing-lg); width: 100%;">Sluiten</button>
+            <p style="margin-top: var(--spacing-lg);"><strong>[ ! ] Belangrijk:</strong> Deze simulator is uitsluitend voor educatieve doeleinden. Gebruik deze kennis alleen legaal en ethisch.</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-primary" style="width: 100%;">Sluiten</button>
+          </div>
         </div>
       `;
 
