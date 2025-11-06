@@ -2,6 +2,131 @@
  * help - Display available commands
  */
 
+// ─────────────────────────────────────────────────
+// Box Drawing Configuration
+// ─────────────────────────────────────────────────
+const BOX = {
+  topLeft: '╭',
+  topRight: '╮',
+  bottomLeft: '╰',
+  bottomRight: '╯',
+  horizontal: '─',
+  vertical: '│',
+  dividerLeft: '├',
+  dividerRight: '┤'
+};
+
+const BOX_WIDTH = 44; // Total width including borders
+const COMMAND_COL_WIDTH = 15; // Width for command name column
+
+// ─────────────────────────────────────────────────
+// Helper Functions - Box Drawing
+// ─────────────────────────────────────────────────
+
+/**
+ * Creates top border with category title and count
+ * Example: ╭─────────────── SYSTEM (7) ────────────────╮
+ */
+function createCategoryHeader(categoryName, count) {
+  const title = ` ${categoryName.toUpperCase()} (${count}) `;
+  const totalPadding = BOX_WIDTH - 2 - title.length; // -2 for corner chars
+  const leftPadding = Math.floor(totalPadding / 2);
+  const rightPadding = totalPadding - leftPadding;
+
+  return BOX.topLeft +
+    BOX.horizontal.repeat(leftPadding) +
+    title +
+    BOX.horizontal.repeat(rightPadding) +
+    BOX.topRight;
+}
+
+/**
+ * Creates column headers row
+ * Example: │ COMMAND         DESCRIPTION               │
+ */
+function createColumnHeaders() {
+  const command = 'COMMAND'.padEnd(COMMAND_COL_WIDTH);
+  const description = 'DESCRIPTION';
+  const content = ` ${command} ${description}`;
+  const padding = BOX_WIDTH - 2 - content.length;
+
+  return BOX.vertical + content + ' '.repeat(padding) + BOX.vertical;
+}
+
+/**
+ * Creates divider line between header and content
+ * Example: ├───────────────────────────────────────────┤
+ */
+function createDivider() {
+  const innerWidth = BOX_WIDTH - 2; // -2 for side borders
+  return BOX.dividerLeft + BOX.horizontal.repeat(innerWidth) + BOX.dividerRight;
+}
+
+/**
+ * Creates bottom border
+ * Example: ╰───────────────────────────────────────────╯
+ */
+function createCategoryFooter() {
+  const innerWidth = BOX_WIDTH - 2;
+  return BOX.bottomLeft + BOX.horizontal.repeat(innerWidth) + BOX.bottomRight;
+}
+
+// ─────────────────────────────────────────────────
+// Helper Functions - Content Formatting
+// ─────────────────────────────────────────────────
+
+/**
+ * Formats a single command row
+ * Example: │ clear           Clear terminal screen     │
+ */
+function formatCommandRow(cmd) {
+  const commandName = cmd.name.padEnd(COMMAND_COL_WIDTH);
+  const content = ` ${commandName} ${cmd.description}`;
+  const contentWidth = BOX_WIDTH - 2; // -2 for side borders
+
+  // Truncate description if too long
+  const truncated = content.length > contentWidth
+    ? content.substring(0, contentWidth - 3) + '...'
+    : content.padEnd(contentWidth);
+
+  return BOX.vertical + truncated + BOX.vertical;
+}
+
+/**
+ * Formats complete category section with box
+ * Phase 2 ready: can add category description between header and column headers
+ */
+function formatCategorySection(category, commands, registry) {
+  const count = commands.length;
+  let output = '';
+
+  // Top border with category name and count
+  output += createCategoryHeader(category, count) + '\n';
+
+  // Column headers
+  output += createColumnHeaders() + '\n';
+
+  // Divider
+  output += createDivider() + '\n';
+
+  // PHASE 2 PLACEHOLDER: Add formatCategoryDescription() here
+  // output += formatCategoryDescription(category) + '\n';
+
+  // Command rows
+  commands.forEach(cmd => {
+    output += formatCommandRow(cmd) + '\n';
+  });
+
+  // Bottom border
+  output += createCategoryFooter();
+
+  return output;
+}
+
+// ─────────────────────────────────────────────────
+// Main Command Implementation
+// ─────────────────────────────────────────────────
+
 export default {
   name: 'help',
   description: 'Toon beschikbare commands',
@@ -21,9 +146,7 @@ export default {
       }
 
       let output = `Commands in categorie '${category}':\n\n`;
-      commands.forEach(cmd => {
-        output += `  ${cmd.name.padEnd(15)} ${cmd.description}\n`;
-      });
+      output += formatCategorySection(category, commands, registry);
 
       return output;
     }
@@ -36,11 +159,7 @@ export default {
       const commands = registry.getByCategory(category);
 
       if (commands.length > 0) {
-        output += `${category.toUpperCase()}:\n`;
-        commands.forEach(cmd => {
-          output += `  ${cmd.name.padEnd(15)} ${cmd.description}\n`;
-        });
-        output += '\n';
+        output += formatCategorySection(category, commands, registry) + '\n\n';
       }
     });
 
