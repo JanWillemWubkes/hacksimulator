@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="styles/terminal.css?v=32-blue-content">
     <link rel="stylesheet" href="styles/mobile.css?v=32-blue-content">
     <link rel="stylesheet" href="styles/animations.css?v=32-blue-content">
+    <link rel="stylesheet" href="src/ui/command-search-modal.css?v=35-search-modal">
 </head>
 <body>
     <!-- Skip Link for Accessibility -->
@@ -184,6 +185,41 @@
         </div>
     </div>
 
+    <!-- Command Search Modal -->
+    <div id="command-search-modal-overlay" class="command-search-modal-overlay">
+        <div class="command-search-modal">
+            <!-- Header -->
+            <div class="command-search-modal-header">
+                <h2>Zoek Commands</h2>
+                <button class="modal-close" aria-label="Sluit">✕</button>
+            </div>
+
+            <!-- Search Input -->
+            <div class="command-search-input-container">
+                <input
+                    type="text"
+                    id="command-search-input"
+                    placeholder="🔍 Type to search..."
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                >
+            </div>
+
+            <!-- Body (scrollable) -->
+            <div class="command-search-modal-body">
+                <div id="command-search-results"></div>
+            </div>
+
+            <!-- Footer -->
+            <div class="command-search-modal-footer">
+                <p class="command-search-tip">[ TIP ] Klik om command in terminal te plaatsen</p>
+                <button class="btn-secondary" id="command-search-cancel">Annuleer</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer role="contentinfo">
         <div class="footer-content">
@@ -197,6 +233,8 @@
     </footer>
 
     <!-- Application Entry Point -->
+    <script src="src/ui/search-strategies.js?v=35-search-modal"></script>
+    <script src="src/ui/command-search-modal.js?v=35-search-modal"></script>
     <script src="src/main.js?v=32-blue-content" type="module"></script>
 </body>
 </html>

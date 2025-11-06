@@ -1,0 +1,336 @@
+/**
+ * Command Search Modal Styles
+ * Enterprise 3-layer modal pattern: Header + Body (scrollable) + Footer
+ *
+ * Architecture (Sessie 33):
+ * - Outer container: border-radius, no overflow
+ * - Inner body: overflow-y auto (prevents scrollbar cutting corners)
+ *
+ * Design (Sessie 29):
+ * - Muted categories (gray) + saturated commands (green) = clear hierarchy
+ * - Light mode: +20% saturation vs dark mode
+ */
+
+/* ========================================
+   MODAL OVERLAY
+   ======================================== */
+
+.command-search-modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.command-search-modal-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+
+/* ========================================
+   MODAL CONTAINER (Outer - Shape)
+   ======================================== */
+
+.command-search-modal {
+  background: var(--color-bg-terminal);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-modal);
+  max-width: 600px;
+  width: 100%;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 255, 0, 0.15);
+  overflow: hidden; /* Clips children to border-radius */
+  transform: scale(0.9);
+  transition: transform var(--transition-normal);
+}
+
+.command-search-modal-overlay.active .command-search-modal {
+  transform: scale(1);
+}
+
+/* ========================================
+   HEADER (Fixed)
+   ======================================== */
+
+.command-search-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-terminal);
+}
+
+.command-search-modal-header h2 {
+  font-family: var(--font-family-primary);
+  font-size: 1.25rem;
+  color: var(--color-success);
+  margin: 0;
+  font-weight: bold;
+}
+
+.command-search-modal-header .modal-close {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  line-height: 1;
+  transition: color var(--transition-fast);
+}
+
+.command-search-modal-header .modal-close:hover {
+  color: var(--color-danger);
+}
+
+/* ========================================
+   SEARCH INPUT
+   ======================================== */
+
+.command-search-input-container {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-terminal);
+}
+
+#command-search-input {
+  width: 100%;
+  background: var(--color-bg-input);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-button);
+  padding: var(--spacing-md);
+  color: var(--color-text);
+  font-family: var(--font-family-primary);
+  font-size: 1rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+#command-search-input:focus {
+  outline: none;
+  border-color: var(--color-success);
+  box-shadow: 0 0 0 2px rgba(0, 255, 0, 0.2);
+}
+
+#command-search-input::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.6;
+}
+
+/* ========================================
+   BODY (Scrollable)
+   ======================================== */
+
+.command-search-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-bg-terminal);
+}
+
+/* Custom scrollbar */
+.command-search-modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.command-search-modal-body::-webkit-scrollbar-track {
+  background: var(--color-bg-terminal);
+}
+
+.command-search-modal-body::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--border-radius-button);
+}
+
+.command-search-modal-body::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}
+
+/* ========================================
+   COMMAND LIST
+   ======================================== */
+
+.command-category {
+  margin-bottom: var(--spacing-lg);
+}
+
+.command-category:last-child {
+  margin-bottom: 0;
+}
+
+/* Category Header - Muted gray (Sessie 29 hierarchy) */
+.command-category-header {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--spacing-sm);
+  padding-left: var(--spacing-sm);
+  font-family: var(--font-family-primary);
+}
+
+/* Command Items - Saturated green (primary content) */
+.command-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border-left: 2px solid transparent;
+  border-radius: var(--border-radius-button);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-family-primary);
+}
+
+.command-item:hover,
+.command-item.selected {
+  background: rgba(0, 255, 0, 0.1);
+  border-left-color: var(--color-success);
+}
+
+.command-item:active {
+  transform: translateX(2px);
+}
+
+.command-item-name {
+  color: var(--color-success);
+  font-weight: bold;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.command-item-description {
+  color: var(--color-text);
+  font-size: 0.875rem;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Empty State */
+.command-search-empty {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-primary);
+}
+
+.command-search-empty-icon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.3;
+}
+
+.command-search-empty-text {
+  font-size: 1rem;
+}
+
+/* ========================================
+   FOOTER (Fixed)
+   ======================================== */
+
+.command-search-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-terminal);
+}
+
+.command-search-tip {
+  font-family: var(--font-family-primary);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+#command-search-cancel {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--border-radius-button);
+  font-family: var(--font-family-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+/* ========================================
+   MOBILE RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  .command-search-modal-overlay {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .command-search-modal {
+    max-width: none;
+    max-height: none;
+    height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .command-search-modal-header h2 {
+    font-size: 1.125rem;
+  }
+
+  #command-search-input {
+    font-size: 16px; /* Prevent iOS zoom on focus */
+  }
+
+  .command-item {
+    padding: var(--spacing-lg);
+    min-height: 44px; /* WCAG AAA touch target */
+  }
+
+  .command-item-name {
+    font-size: 1rem;
+  }
+
+  .command-item-description {
+    font-size: 0.875rem;
+  }
+
+  .command-search-modal-footer {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .command-search-tip {
+    text-align: center;
+  }
+
+  #command-search-cancel {
+    width: 100%;
+  }
+}
+
+/* ========================================
+   LIGHT MODE ADJUSTMENTS
+   ======================================== */
+
+@media (prefers-color-scheme: light) {
+  .command-search-modal {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  }
+
+  .command-item:hover,
+  .command-item.selected {
+    background: rgba(9, 105, 218, 0.08); /* GitHub blue tint in light mode */
+  }
+}

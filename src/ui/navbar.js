@@ -266,11 +266,16 @@ export function initNavbar() {
     e.preventDefault();
     closeMenu();
 
-    // Show terminal with help hint
-    const inputElement = document.getElementById('terminal-input');
-    if (inputElement) {
-      inputElement.focus();
-      inputElement.value = 'help';
+    // Open command search modal
+    if (window.commandSearchModal) {
+      window.commandSearchModal.open();
+    } else {
+      // Fallback if modal not initialized
+      const inputElement = document.getElementById('terminal-input');
+      if (inputElement) {
+        inputElement.focus();
+        inputElement.value = 'help';
+      }
     }
   }
 

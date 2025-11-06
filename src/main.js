@@ -161,6 +161,13 @@ function initialize() {
       console.error('[Main] initNavbar() failed:', e);
     }
 
+    // Initialize command search modal
+    if (window.CommandSearchModal) {
+      window.commandSearchModal = new window.CommandSearchModal(terminal.getRegistry());
+      window.commandSearchModal.init();
+      console.log('[Main] Command search modal initialized');
+    }
+
     // Initialize feedback system
     feedbackManager.init();
 
