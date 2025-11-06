@@ -157,6 +157,16 @@ Bij nieuwe command:
 
 **Doel:** Last 5 sessions only - older sessions archived in SESSIONS.md
 
+### Sessie 35: Command Discovery Modal - UX Analysis & Progressive Architecture (6 nov 2025)
+⚠️ Never implement features with broken affordance (visual promise without function = trust loss)
+⚠️ Never design discovery features for beginners as "power user first" (target audience mismatch)
+✅ Always evaluate multiple UX options (5+) with pros/cons before implementing
+✅ Use Strategy Pattern for extensible architecture (Phase 2/3 ready with zero refactor cost)
+✅ Educational pattern for beginners: Insert command (don't execute) → user learns syntax by pressing Enter
+✅ Complementary feature design: Modal = capability search (what CAN do), Ctrl+R = history (what DID)
+✅ Progressive Enhancement: Layer 1 (MVP simple) → Layer 2 (efficiency) → Layer 3 (power user) based on data
+📄 SESSIONS.md Sessie 35
+
 ### Sessie 34: Input Event Handling & Browser Module Caching (5 nov 2025)
 ⚠️ Never reset state on every `input` event without checking source (breaks programmatic updates)
 ⚠️ Never test features on same server port after code changes (browser ES6 module caching causes false negatives)
@@ -253,11 +263,11 @@ Bij nieuwe command:
 **Volledige details:** `docs/prd.md` (v1.4)
 **Command specs:** `docs/commands-list.md`
 **Style guide:** `docs/STYLEGUIDE.md` (v1.0) - Comprehensive design system & component library
-**Sessie logs:** `SESSIONS.md` - Complete historical record (33 sessions)
+**Sessie logs:** `SESSIONS.md` - Complete historical record (35 sessions)
 **Filesystem structure:** PRD Bijlage B
 **Tech rationale:** PRD §13
 
 ---
 
-**Last updated:** 5 november 2025
-**Version:** 12.2 (Sessie 34: Tab autocomplete + Ctrl+R history search, Phase A.4/A.6 complete, 141/166 tasks)
+**Last updated:** 6 november 2025
+**Version:** 12.3 (Sessie 35: Command Discovery Modal - UX analysis & implementation, search icon functional)
