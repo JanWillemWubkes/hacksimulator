@@ -171,6 +171,18 @@ class InputHandler {
         this._handleSearchCancel();
         break;
 
+      case 'ArrowUp':
+        // Navigate to previous match (newer command)
+        e.preventDefault();
+        this._handleSearchPrevious();
+        break;
+
+      case 'ArrowDown':
+        // Navigate to next match (older command)
+        e.preventDefault();
+        this._handleSearchNext();
+        break;
+
       case 'r':
         // Ctrl+R to cycle through matches
         if (e.ctrlKey || e.metaKey) {
@@ -291,7 +303,18 @@ class InputHandler {
   }
 
   /**
-   * Handle search next (Ctrl+R again during search)
+   * Handle search previous (↑ during search)
+   * @private
+   */
+  _handleSearchPrevious() {
+    historySearch.previousMatch();
+
+    // Update search prompt with new match
+    this._updateSearchPrompt();
+  }
+
+  /**
+   * Handle search next (↓ or Ctrl+R again during search)
    * @private
    */
   _handleSearchNext() {

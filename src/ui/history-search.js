@@ -84,7 +84,7 @@ class HistorySearchHandler {
   }
 
   /**
-   * Cycle to next match (Ctrl+R again)
+   * Cycle to next match (older command)
    */
   nextMatch() {
     if (this.matches.length === 0) {
@@ -92,6 +92,17 @@ class HistorySearchHandler {
     }
 
     this.currentMatchIndex = (this.currentMatchIndex + 1) % this.matches.length;
+  }
+
+  /**
+   * Cycle to previous match (newer command)
+   */
+  previousMatch() {
+    if (this.matches.length === 0) {
+      return;
+    }
+
+    this.currentMatchIndex = (this.currentMatchIndex - 1 + this.matches.length) % this.matches.length;
   }
 
   /**
