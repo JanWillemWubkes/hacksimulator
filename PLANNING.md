@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 5 november 2025
+**Laatst bijgewerkt:** 6 november 2025
 **Status:** M5 Testing & Launch Phase - ✅ **LIVE on Netlify!**
 **Verantwoordelijk:** Development Team
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
@@ -656,11 +656,18 @@ const DEBUG_MODE = false;
 - [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge) - TO DO
 
 ### Fase 2: Tutorials (Maand 4-6)
-**Doel:** Guided learning scenarios
+**Doel:** Guided learning scenarios + Command system scaling
 
 - [ ] Tutorial command (framework)
 - [ ] 3 scenario's: recon, webvuln, privesc
 - [ ] Progress tracking
+- [ ] **Help Command Interactive Paging** (conditional: when 50+ commands)
+  - SPACE/Q navigation pattern (bash `less` style)
+  - Page indicators: "Page 1/3", "-- More --"
+  - Keyboard handlers: SPACE (next page), Q (quit), Esc (exit)
+  - Architecture ready (modular functions from Sessie 36)
+  - Trigger condition: Total command count ≥ 50
+  - Estimated time: 6-8 uur (state machine + keyboard + UX testing)
 - [ ] Migratie naar Plausible
 
 ### Fase 3: Gamification (Maand 7-12)
@@ -746,8 +753,8 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 5 november 2025
-**Versie:** 1.6 (Documentation Sync: Lighthouse context added, deployment status updated)
+**Laatst bijgewerkt:** 6 november 2025
+**Versie:** 1.7 (Help Command Enhancement roadmap added - Phase 3 interactive paging planned)
 **Status:** ✅ Deployed - Live in Production
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

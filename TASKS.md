@@ -1,8 +1,8 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 5 november 2025
+**Laatst bijgewerkt:** 6 november 2025
 **Status:** M5 Testing & Launch Phase (LIVE on Netlify) - ✅ **Cross-Browser Tests PASSING!**
-**Sprint:** Cross-Browser Testing Complete - Mobile Testing Next
+**Sprint:** Help Command Visual Enhancement Complete - Phase 2/3 Planned
 
 ---
 
@@ -502,6 +502,13 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
 
 ### UX Enhancements
 - [x] **Tab Autocomplete** - ✅ COMPLETED (Phase A.4 - Week 11)
+- [x] **Ctrl+R History Search** - ✅ COMPLETED (Phase A.6 - Week 11)
+- [ ] **Help Command Educational Context** - Add category descriptions to help output
+  - Write 5 Nederlands category descriptions voor elke categorie
+  - Educational tone: "Deze tools helpen je netwerken te scannen..."
+  - Uncomment placeholder in `src/commands/system/help.js` (line 113)
+  - Estimated time: 30 min
+  - Ready to implement: Architecture done in Sessie 36
 - [ ] **Quick Commands UI** - Moved to Phase A.5 (deferred until mobile UX fixes)
 - [ ] **Mobile Gestures** - Swipe/long-press navigatie (needs real device testing)
 - [ ] **Persistent Help Hint** - Rechts onderin, verdwijnt na 5 commands
@@ -630,11 +637,11 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 5 november 2025
-**Versie:** 2.5 (Phase A Quick Wins: Tab autocomplete + Ctrl+R history search completed)
-**Totaal Taken:** 166 (M0-M5: 147, M9 Refactor: 19)
+**Laatst bijgewerkt:** 6 november 2025
+**Versie:** 2.6 (Help Command Visual Enhancement - Phase 1 complete, Phase 2/3 planned)
+**Totaal Taken:** 167 (M0-M5: 147, M9 Refactor: 19, Fase 2: 1 new)
 **Voltooide Taken:** 141 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 10/37, M9: 0/19 pending)
-**Voortgang:** 84.9% (141/166) - Phase A: 2/6 tasks completed
+**Voortgang:** 84.4% (141/167) - Phase A: 2/6 tasks completed
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 

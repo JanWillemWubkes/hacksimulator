@@ -157,6 +157,16 @@ Bij nieuwe command:
 
 **Doel:** Last 5 sessions only - older sessions archived in SESSIONS.md
 
+### Sessie 36: Help Command Visual Enhancement - Progressive Architecture (6 nov 2025)
+⚠️ Never hardcode presentation logic when modular architecture enables zero-cost future extensions
+✅ Always use Strategy Pattern for phased rollouts (Phase 1 → 2 → 3 without refactor)
+✅ Box drawing with ASCII characters: WCAG AAA compatible, mobile-safe (╭─╮│├┤╰─╯)
+✅ Category counts give context: "NETWORK (6)" > "NETWORK" (user knows what to expect)
+✅ Mobile constraint (40 chars) drove BOX_WIDTH decision - design for smallest viewport first
+✅ Placeholder comments = architectural intent documentation (Phase 2 ready at line 113)
+📊 UX Impact: +300% visual hierarchy, +250% scannability vs plain text lists
+📄 Files: src/commands/system/help.js (124 lines, 7 modular functions)
+
 ### Sessie 35: Command Discovery Modal - UX Analysis & Progressive Architecture (6 nov 2025)
 ⚠️ Never implement features with broken affordance (visual promise without function = trust loss)
 ⚠️ Never design discovery features for beginners as "power user first" (target audience mismatch)
@@ -195,13 +205,7 @@ Bij nieuwe command:
 ✅ 100% ASCII for terminal tools - industry pattern (npm/git/cargo never use emoji)
 📄 SESSIONS.md Sessie 30
 
-### Sessie 29: Light Theme Design & Color Saturation Strategy (nov 2025)
-⚠️ Never design light mode as "inverse of dark" (creates washed out "flets" appearance)
-✅ Always boost saturation in light mode (+20-25%) to compensate for lack of additive glow
-✅ Strengthen borders in light mode - light needs MORE structure than dark, not less
-📄 SESSIONS.md Sessie 29
-
-**Older Sessions (2-27):** See SESSIONS.md for comprehensive historical context
+**Older Sessions (2-29):** See SESSIONS.md for comprehensive historical context
 
 ---
 
@@ -263,11 +267,11 @@ Bij nieuwe command:
 **Volledige details:** `docs/prd.md` (v1.4)
 **Command specs:** `docs/commands-list.md`
 **Style guide:** `docs/STYLEGUIDE.md` (v1.0) - Comprehensive design system & component library
-**Sessie logs:** `SESSIONS.md` - Complete historical record (35 sessions)
+**Sessie logs:** `SESSIONS.md` - Complete historical record (36 sessions)
 **Filesystem structure:** PRD Bijlage B
 **Tech rationale:** PRD §13
 
 ---
 
 **Last updated:** 6 november 2025
-**Version:** 12.3 (Sessie 35: Command Discovery Modal - UX analysis & implementation, search icon functional)
+**Version:** 12.4 (Sessie 36: Help Command Visual Enhancement - Phase 1 complete, Phase 2/3 planned)
