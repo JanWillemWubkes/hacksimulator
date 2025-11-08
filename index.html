@@ -177,21 +177,23 @@
                     <button class="star" data-rating="5" aria-label="5 sterren">★</button>
                 </div>
                 <textarea id="feedback-comment" placeholder="Optioneel: Vertel ons meer..." rows="4" aria-label="Feedback commentaar"></textarea>
+                <div class="feedback-error" role="alert" aria-live="assertive"></div>
             </div>
             <div class="modal-footer">
-                <div class="feedback-error" role="alert" aria-live="assertive"></div>
                 <button id="feedback-submit" class="btn-primary">Versturen</button>
+                <button id="feedback-cancel" class="btn-secondary">Annuleren</button>
             </div>
         </div>
     </div>
 
     <!-- Command Search Modal -->
-    <div id="command-search-modal-overlay" class="command-search-modal-overlay">
-        <div class="command-search-modal">
+    <div id="command-search-modal-overlay" class="modal">
+        <div class="modal-content command-search-modal">
+            <button class="modal-close" aria-label="Sluit">&times;</button>
+
             <!-- Header -->
             <div class="command-search-modal-header">
                 <h2>Zoek Commands</h2>
-                <button class="modal-close" aria-label="Sluit">✕</button>
             </div>
 
             <!-- Search Input -->
@@ -208,14 +210,14 @@
             </div>
 
             <!-- Body (scrollable) -->
-            <div class="command-search-modal-body">
+            <div class="modal-body command-search-modal-body">
+                <p class="command-search-tip">[ TIP ] Klik om command in terminal te plaatsen</p>
                 <div id="command-search-results"></div>
             </div>
 
             <!-- Footer -->
-            <div class="command-search-modal-footer">
-                <p class="command-search-tip">[ TIP ] Klik om command in terminal te plaatsen</p>
-                <button class="btn-secondary" id="command-search-cancel">Annuleer</button>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="command-search-cancel">Sluiten</button>
             </div>
         </div>
     </div>

@@ -40,6 +40,7 @@ const feedbackManager = {
     const feedbackModal = document.getElementById('feedback-modal');
     const closeButton = feedbackModal?.querySelector('.modal-close');
     const submitButton = document.getElementById('feedback-submit');
+    const cancelButton = document.getElementById('feedback-cancel');
     const stars = document.querySelectorAll('.rating-stars .star');
 
     if (!feedbackButton || !feedbackModal) {
@@ -92,6 +93,13 @@ const feedbackManager = {
     if (submitButton) {
       submitButton.addEventListener('click', () => {
         this._submitFeedback();
+      });
+    }
+
+    // Cancel button - close modal without submitting
+    if (cancelButton) {
+      cancelButton.addEventListener('click', () => {
+        this._closeModal();
       });
     }
 

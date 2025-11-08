@@ -468,50 +468,177 @@ renderInfo("💡 TIP: Try 'help' command");
 
 ### Modals
 
-#### Structure
+**Unified Modal System (Sessie 37 - Pattern A Universal)**
+All modals use **Pattern A** (full-width single button footer) with consistent terminal aesthetics: black background (dark mode), white background (light mode), border, shadow, and scale animation.
+
+#### 3-Layer Architecture Pattern (Sessie 33)
+
+**Enterprise Modal Structure:**
+1. **Header** - Title + close button (fixed position, or title in body)
+2. **Body** - Scrollable content INCLUDING tips (overflow on inner element prevents border-radius clipping)
+3. **Footer** - Single action button ONLY (no tips, no competing elements)
 
 ```html
 <div class="modal" role="dialog" aria-labelledby="modal-title">
   <div class="modal-content">
     <button class="modal-close" aria-label="Sluiten">&times;</button>
-    <h2 id="modal-title">Modal Titel</h2>
-    <p>Content hier...</p>
-    <button class="btn-primary">Actie</button>
+
+    <!-- Body: ALL content goes here (title, text, tips) -->
+    <div class="modal-body">
+      <h2 id="modal-title">Modal Titel</h2>
+      <p>Content hier...</p>
+
+      <!-- Tips belong in BODY, not footer -->
+      <p class="modal-tip">[ TIP ] Educational context</p>
+    </div>
+
+    <!-- Footer: ONLY action button -->
+    <div class="modal-footer">
+      <button class="btn-secondary">Sluiten</button>
+    </div>
   </div>
 </div>
 ```
 
+**Key Principle:** Tips and educational content belong in the **body** (content), not the **footer** (chrome). Footer = actions only.
+
 #### Styling
 
 ```css
+/* Overlay */
 .modal {
-  display: none;                    /* Hidden by default */
+  display: none;
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background-color: #000000;        /* Full black overlay */
-  z-index: var(--z-modal);          /* 1000 */
+  background-color: var(--color-modal-overlay);
+  z-index: var(--z-modal);
   justify-content: center;
   align-items: center;
 }
 
 .modal.active {
-  display: flex;                    /* Show with flexbox centering */
+  display: flex;
 }
 
+/* Container (Outer - Shape) - NO PADDING on outer element */
 .modal-content {
-  background-color: #2d2d2d;        /* Dark grey (niet pure zwart) */
-  border-radius: 8px;
-  padding: 40px;
-  max-width: 600px;
+  background-color: var(--color-bg-terminal);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-modal);
+  padding: 0;  /* Padding on children, NOT container */
+  width: 600px;
+  max-width: 90vw;
   max-height: 80vh;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 255, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;  /* Clips children to border-radius */
+
+  /* Scale animation */
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+}
+
+.modal.active .modal-content {
+  opacity: 1;
+  transform: scale(1);
+}
+
+[data-theme="light"] .modal-content {
+  background-color: #ffffff;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Body: Scrollable - Padding on inner element */
+.modal-body {
+  flex: 1;
   overflow-y: auto;
+  padding: 40px;
+  background-color: var(--color-bg-terminal);
+}
+
+[data-theme="light"] .modal-body {
+  background-color: #ffffff;
+}
+
+/* Footer: Pattern A (full-width button) */
+.modal-footer {
+  flex-shrink: 0;  /* Don't compress */
+  padding: var(--spacing-lg) 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--color-bg-terminal);
+}
+
+[data-theme="light"] .modal-footer {
+  background-color: #ffffff;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.modal-footer > button {
+  width: 100%;  /* Pattern A: full-width single button */
 }
 ```
 
-**Focus Management Pattern:**
+#### Button Semantics
+
+**Dismissive Actions = Secondary Style**
+```html
+<!-- Modal close buttons always use .btn-secondary -->
+<button class="btn-secondary">Sluiten</button>
+<button class="btn-secondary">Annuleer</button>
+```
+
+**Affirming Actions = Primary Style**
+```html
+<!-- Submit/confirm actions use .btn-primary -->
+<button class="btn-primary">Versturen</button>
+<button class="btn-primary">Ik begrijp het - Verder</button>
+```
+
+**Rationale:** Primary buttons are for affirming actions (save, confirm, submit). Modal dismissal is a secondary/cancel action.
+
+#### Why Pattern A Universal?
+
+**Pattern A** (full-width single button) is the universal standard for ALL modals because:
+
+1. **Cognitive Load**: One footer pattern = one mental model for users
+2. **Terminal Aesthetic**: Tips belong in output (body), not chrome (footer)
+3. **Mobile UX**: No competing elements = thumb-friendly 44px target
+4. **Accessibility**: Single clear action = WCAG AAA compliant
+5. **Industry Standard**: VS Code, GitHub Desktop, Slack all use single-button footers
+
+**Anti-Pattern:** Flex layout with tip + button creates:
+- Competing visual elements (where do users look?)
+- Responsive complexity (stacking behavior on mobile)
+- Semantic confusion (tips are content, not actions)
+
+#### Custom Modal Extensions
+
+For specialized modals (search, settings), extend the base pattern:
+
+```html
+<div class="modal" id="custom-modal">
+  <div class="modal-content custom-modal">  <!-- Add custom class -->
+    <!-- Standard modal structure -->
+    <!-- Custom elements (search input, etc.) -->
+  </div>
+</div>
+```
+
+```css
+/* Only override specific aspects, inherit base styling */
+.custom-modal {
+  max-height: 70vh;  /* Override specific properties */
+}
+```
+
+#### Focus Management Pattern
+
 ```javascript
-// Prevent global focus-steal in modals
+// Prevent global focus-steal when modal is open
 document.addEventListener('click', (e) => {
   if (!e.target.closest('.modal.active')) {
     terminalInput.focus();  // Only refocus if click outside modal

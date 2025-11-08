@@ -24,143 +24,96 @@ const legalManager = {
   },
 
   showLegalModal() {
-    // Create modal backdrop
-    const backdrop = document.createElement('div');
-    backdrop.id = 'legal-modal-backdrop';
-    backdrop.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: #000000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      padding: 20px;
-    `;
-
-    // Create modal content
+    // Create modal using standard 3-layer architecture (Sessie 37)
     const modal = document.createElement('div');
     modal.id = 'legal-modal';
-    modal.style.cssText = `
-      background: #2d2d2d;
-      border: none;
-      border-radius: var(--border-radius-modal);
-      padding: 40px;
-      max-width: 600px;
-      width: 100%;
-      color: #cccccc;
-      font-family: 'Courier New', monospace;
-      box-shadow: none;
-    `;
+    modal.className = 'modal active';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-labelledby', 'legal-title');
+    modal.setAttribute('aria-hidden', 'false');
+    modal.setAttribute('aria-modal', 'true');
 
     modal.innerHTML = `
-      <div style="text-align: center; margin-bottom: 32px;">
-        <div style="color: var(--color-warning); font-size: 3rem; margin-bottom: 12px; font-family: var(--font-terminal); letter-spacing: 0.15em;">[ ! ]</div>
-        <h2 style="margin: 0; font-size: 32px; font-weight: bold; color: #ffffff; text-transform: uppercase; letter-spacing: 1px;">Juridische Kennisgeving</h2>
-      </div>
+      <div class="modal-content legal-modal-content">
+        <!-- Header with warning icon -->
+        <div class="legal-modal-header">
+          <div class="legal-warning-icon">[ ! ]</div>
+          <h2 id="legal-title">Juridische Kennisgeving</h2>
+        </div>
 
-      <div style="line-height: 1.7; margin-bottom: 32px; font-size: 17px; color: #cccccc;">
-        <p style="margin-bottom: 18px;">
-          Deze simulator is <strong style="color: #00ff88;">UITSLUITEND</strong> voor educatieve doeleinden.
-          Ongeautoriseerd hacken is <strong style="color: #00ff88;">ILLEGAAL</strong> in Nederland (Artikel 138ab Wetboek van Strafrecht).
-        </p>
+        <!-- Scrollable body content -->
+        <div class="modal-body">
+          <p>Deze simulator is <strong>UITSLUITEND</strong> voor educatieve doeleinden.
+          Ongeautoriseerd hacken is <strong>ILLEGAAL</strong> in Nederland (Artikel 138ab Wetboek van Strafrecht).</p>
 
-        <p style="margin-bottom: 18px;">
-          Alle activiteiten in deze simulator zijn <strong style="color: #00ff88;">gesimuleerd</strong> en beïnvloeden geen echte systemen.
-        </p>
+          <p>Alle activiteiten in deze simulator zijn <strong>gesimuleerd</strong> en beïnvloeden geen echte systemen.</p>
 
-        <p style="margin-bottom: 12px;">
-          <strong style="color: #00ff88;">Belangrijke regels:</strong>
-        </p>
-        <ul style="margin: 0 0 18px 20px; padding: 0;">
-          <li style="margin-bottom: 10px;">Vraag <strong style="color: #00ff88;">altijd toestemming</strong> voordat je systemen test</li>
-          <li style="margin-bottom: 10px;">Gebruik deze kennis <strong style="color: #00ff88;">alleen ethisch en legaal</strong></li>
-          <li style="margin-bottom: 10px;">Ongeautoriseerde toegang tot systemen is een <strong style="color: #00ff88;">misdrijf</strong></li>
-        </ul>
+          <p><strong>Belangrijke regels:</strong></p>
+          <ul>
+            <li>Vraag <strong>altijd toestemming</strong> voordat je systemen test</li>
+            <li>Gebruik deze kennis <strong>alleen ethisch en legaal</strong></li>
+            <li>Ongeautoriseerde toegang tot systemen is een <strong>misdrijf</strong></li>
+          </ul>
 
-        <p style="margin-bottom: 0;">
-          Door verder te gaan, ga je akkoord met de
-          <a href="assets/legal/terms.html" target="_blank" style="color: #00ff88; text-decoration: underline;">Gebruiksvoorwaarden</a>
-          en bevestig je deze kennis alleen voor legale doeleinden te gebruiken.
-        </p>
-      </div>
+          <p>Door verder te gaan, ga je akkoord met de
+          <a href="assets/legal/terms.html" target="_blank">Gebruiksvoorwaarden</a>
+          en bevestig je deze kennis alleen voor legale doeleinden te gebruiken.</p>
 
-      <div style="margin-bottom: 20px;">
-        <button id="legal-accept-btn" style="
-          background: #00ff88;
-          color: #000000;
-          border: none;
-          padding: 16px 32px;
-          font-size: 16px;
-          font-weight: bold;
-          font-family: 'Courier New', monospace;
-          cursor: pointer;
-          border-radius: var(--border-radius-button);
-          transition: all 0.2s ease;
-          width: 100%;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-        ">
-          Ik begrijp het - Verder
-        </button>
-      </div>
+          <!-- Warning message (shown when user tries to close without accepting) -->
+          <div id="legal-warning-text" class="legal-warning-text" style="display: none;">
+            [ ! ] Je moet akkoord gaan met de voorwaarden om verder te gaan.
+          </div>
+        </div>
 
-      <div style="margin-top: 16px; text-align: center; font-size: 13px; color: #888888;">
-        <a href="assets/legal/privacy.html" target="_blank" style="color: #00ff88; margin: 0 8px;">Privacy</a>
-        <span>•</span>
-        <a href="assets/legal/cookies.html" target="_blank" style="color: #00ff88; margin: 0 8px;">Cookies</a>
+        <!-- Footer with button and legal links -->
+        <div class="modal-footer">
+          <button id="legal-accept-btn" class="btn-primary">Ik begrijp het - Verder</button>
+          <div class="legal-footer-links">
+            <a href="assets/legal/privacy.html" target="_blank">Privacy</a>
+            <span>•</span>
+            <a href="assets/legal/cookies.html" target="_blank">Cookies</a>
+          </div>
+        </div>
       </div>
     `;
 
-    backdrop.appendChild(modal);
-    document.body.appendChild(backdrop);
+    document.body.appendChild(modal);
 
-    // Add hover effect to button
+    // Event handlers
     const btn = document.getElementById('legal-accept-btn');
-    btn.addEventListener('mouseenter', () => {
-      btn.style.background = '#00ee88';
-      btn.style.transform = 'scale(1.02)';
-    });
-    btn.addEventListener('mouseleave', () => {
-      btn.style.background = '#00ff88';
-      btn.style.transform = 'scale(1)';
-    });
-
-    // Handle acceptance
     btn.addEventListener('click', () => {
       this.acceptLegal();
+      modal.remove();
 
-      // Remove backdrop from DOM (CRITICAL: must be removed to not block other modals)
-      if (backdrop && backdrop.parentNode) {
-        backdrop.parentNode.removeChild(backdrop);
-      }
-
-      // Double-check: force remove by ID if still present
-      const backdropCheck = document.getElementById('legal-modal-backdrop');
-      if (backdropCheck) {
-        backdropCheck.remove();
-      }
-
-      // Focus back to terminal input after closing modal
+      // Focus back to terminal input
       const terminalInput = document.getElementById('terminal-input');
       if (terminalInput) {
         terminalInput.focus();
       }
     });
 
-    // Prevent closing modal by clicking backdrop (must accept)
-    backdrop.addEventListener('click', (e) => {
-      if (e.target === backdrop) {
-        // Shake animation to indicate must accept
-        modal.style.animation = 'shake 0.5s';
-        setTimeout(() => {
-          modal.style.animation = '';
-        }, 500);
+    // Backdrop click - show warning text instead of shake (accessibility)
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        const warning = document.getElementById('legal-warning-text');
+        if (warning) {
+          warning.style.display = 'block';
+          setTimeout(() => warning.style.display = 'none', 3000);
+        }
       }
     });
+
+    // ESC key disabled for legal modal (must accept)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        e.preventDefault();
+        const warning = document.getElementById('legal-warning-text');
+        if (warning) {
+          warning.style.display = 'block';
+          setTimeout(() => warning.style.display = 'none', 3000);
+        }
+      }
+    }, { once: true });
   },
 
   checkAndShowModal() {
@@ -173,25 +126,5 @@ const legalManager = {
     }
   }
 };
-
-// Add shake animation for modal (defer until DOM is ready)
-function addShakeAnimation() {
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-      20%, 40%, 60%, 80% { transform: translateX(5px); }
-    }
-  `;
-  document.head.appendChild(style);
-}
-
-// Add animation when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', addShakeAnimation);
-} else {
-  addShakeAnimation();
-}
 
 export default legalManager;

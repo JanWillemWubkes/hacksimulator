@@ -326,7 +326,7 @@ export function initNavbar() {
             <p style="margin-top: var(--spacing-lg);"><strong>[ ! ] Belangrijk:</strong> Deze simulator is uitsluitend voor educatieve doeleinden. Gebruik deze kennis alleen legaal en ethisch.</p>
           </div>
           <div class="modal-footer">
-            <button class="btn-primary" style="width: 100%;">Sluiten</button>
+            <button class="btn-secondary">Sluiten</button>
           </div>
         </div>
       `;
@@ -335,7 +335,7 @@ export function initNavbar() {
 
       // Event listeners for modal
       const closeBtn = modal.querySelector('.modal-close');
-      const primaryBtn = modal.querySelector('.btn-primary');
+      const secondaryBtn = modal.querySelector('.btn-secondary');
 
       const closeModal = () => {
         modal.classList.remove('active');
@@ -343,7 +343,7 @@ export function initNavbar() {
       };
 
       if (closeBtn) closeBtn.addEventListener('click', closeModal);
-      if (primaryBtn) primaryBtn.addEventListener('click', closeModal);
+      if (secondaryBtn) secondaryBtn.addEventListener('click', closeModal);
 
       modal.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();

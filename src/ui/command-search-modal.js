@@ -44,10 +44,10 @@ class CommandSearchModal {
   init() {
     // Get UI elements
     this.overlay = document.getElementById('command-search-modal-overlay');
-    this.modal = document.querySelector('.command-search-modal');
+    this.modal = document.querySelector('.modal-content.command-search-modal');
     this.searchInput = document.getElementById('command-search-input');
     this.resultsContainer = document.getElementById('command-search-results');
-    this.closeButton = document.querySelector('.command-search-modal-header .modal-close');
+    this.closeButton = this.modal.querySelector('.modal-close');
     this.cancelButton = document.getElementById('command-search-cancel');
 
     if (!this.overlay || !this.searchInput || !this.resultsContainer) {

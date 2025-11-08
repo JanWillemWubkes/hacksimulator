@@ -294,26 +294,98 @@ button:focus {
 }
 
 .modal-content {
-  background-color: var(--color-bg-modal-content);
-  border: none;
+  background-color: var(--color-bg-terminal);
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-modal);
-  padding: 40px;
+  padding: 0;  /* No padding on container - padding goes on children */
   width: 600px;
   max-width: 90vw;
   max-height: 80vh;
   position: relative;
-  box-shadow: none;
+  box-shadow: 0 10px 40px rgba(0, 255, 0, 0.15);
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;  /* Clips children to border-radius */
+}
+
+.modal.active .modal-content {
+  opacity: 1;
+  transform: scale(1);
+}
+
+[data-theme="light"] .modal-content {
+  background-color: #ffffff;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 
 .modal-body {
+  flex: 1;
   overflow-y: auto;
-  max-height: calc(80vh - 80px - 80px); /* 80vh minus top/bottom padding (80px) and footer (~80px) */
+  padding: 40px;
+  background-color: var(--color-bg-terminal);
+}
+
+[data-theme="light"] .modal-body {
+  background-color: #ffffff;
+}
+
+/* Custom scrollbar for all modals - consistent brand aesthetic (Sessie 37) */
+.modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: var(--color-bg-terminal);
+}
+
+[data-theme="light"] .modal-body::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--border-radius-button);
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}
+
+/* Firefox scrollbar support */
+.modal-body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) var(--color-bg-terminal);
 }
 
 .modal-footer {
+  flex-shrink: 0;  /* Don't compress footer */
   padding: var(--spacing-lg) 40px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: var(--color-bg-modal-content);
+  background-color: var(--color-bg-terminal);
+}
+
+[data-theme="light"] .modal-footer {
+  background-color: #ffffff;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Modal footer button patterns (Sessie 37) */
+/* Pattern A: Single button = full-width */
+.modal-footer > button:only-child {
+  width: 100%;
+}
+
+/* Pattern B: Multiple buttons = equal width flex layout */
+.modal-footer:has(> button + button) {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.modal-footer:has(> button + button) > button {
+  flex: 1;
 }
 
 .modal-content h2 {
@@ -353,6 +425,72 @@ button:focus {
 
 .modal-close:hover {
   color: var(--color-text-light);
+}
+
+/* ==================== Legal Modal Specific Styles (Sessie 37) ==================== */
+
+.legal-modal-content {
+  max-width: 600px;
+}
+
+/* Legal modal footer - button must be full-width despite .legal-footer-links sibling */
+.legal-modal-content .modal-footer > button {
+  width: 100%;
+}
+
+.legal-modal-header {
+  text-align: center;
+  padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-md);
+  background: var(--color-bg-terminal);
+}
+
+[data-theme="light"] .legal-modal-header {
+  background: #ffffff;
+}
+
+.legal-warning-icon {
+  color: var(--color-warning);
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+  font-family: var(--font-terminal);
+  letter-spacing: 0.15em;
+}
+
+.legal-modal-header h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--color-modal-header);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.legal-warning-text {
+  background: rgba(255, 170, 0, 0.1);
+  border: 1px solid var(--color-warning);
+  color: var(--color-warning);
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-md);
+  border-radius: var(--border-radius-button);
+  font-size: 0.9rem;
+  text-align: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.legal-footer-links {
+  margin-top: var(--spacing-md);
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+.legal-footer-links a {
+  color: var(--color-success);
+  margin: 0 var(--spacing-sm);
+}
+
+.legal-footer-links a:hover {
+  text-decoration: underline;
 }
 
 /* ==================== Cookie Consent Banner ==================== */

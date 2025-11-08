@@ -38,6 +38,7 @@ coverage/
 # Test artifacts (build output, should not be committed)
 playwright-report/
 test-results/
+.playwright-mcp/
 
 # Diagnostic test scripts (one-off debugging)
 test-*.js

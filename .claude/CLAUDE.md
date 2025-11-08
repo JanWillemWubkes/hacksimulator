@@ -157,6 +157,16 @@ Bij nieuwe command:
 
 **Doel:** Last 5 sessions only - older sessions archived in SESSIONS.md
 
+### Sessie 37: Modal Uniformity - CSS Selector Pitfalls & Accessibility (8 nov 2025)
+⚠️ Never use `:only-child` selector without considering non-button siblings in container (fails when footer has button + links)
+⚠️ Never use shake animations for required modal acceptance (WCAG 2.3.1 vestibular disorder risk, screen reader unfriendly)
+✅ Always use CSS specificity to override general rules for special cases (`.legal-modal-content .modal-footer > button` > `.modal-footer > button:only-child`)
+✅ Always use text warnings instead of animations for accessibility (screen reader compatible, clear communication)
+✅ DRY principle for repeated patterns: Universal scrollbar in base CSS (`.modal-body::-webkit-scrollbar`) = instant upgrade for all modals
+✅ Flexible button patterns with `:only-child` + `:has(> button + button)` = automatic 1-button vs 2-button layout
+📊 Impact: All 5 modals uniform (custom scrollbar + theme-aware + button centering fixed)
+📄 SESSIONS.md Sessie 37
+
 ### Sessie 36: Help Command Visual Enhancement - Progressive Architecture (6 nov 2025)
 ⚠️ Never hardcode presentation logic when modular architecture enables zero-cost future extensions
 ✅ Always use Strategy Pattern for phased rollouts (Phase 1 → 2 → 3 without refactor)
@@ -273,5 +283,5 @@ Bij nieuwe command:
 
 ---
 
-**Last updated:** 6 november 2025
-**Version:** 12.4 (Sessie 36: Help Command Visual Enhancement - Phase 1 complete, Phase 2/3 planned)
+**Last updated:** 8 november 2025
+**Version:** 12.5 (Sessie 37: Modal Uniformity - All modals uniform scrollbar + button patterns + Legal refactor complete)
