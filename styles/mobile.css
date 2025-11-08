@@ -127,14 +127,43 @@
     display: block;
   }
 
+  /* Spacing between dropdown items */
+  .dropdown-menu li + li {
+    margin-top: 2px; /* Breathing room between items */
+  }
+
   .dropdown-menu a {
     padding: var(--spacing-md) var(--spacing-lg) var(--spacing-md) calc(var(--spacing-lg) * 2);
     color: #cccccc;
     font-size: 1rem;
+    font-weight: 400; /* Keep constant - no jank */
     background-color: #0a0a0a;
     border: none;
+    transition: all 0.15s ease; /* Snappy timing */
   }
 
+  /* Arrow prefix - terminal aesthetic */
+  .dropdown-menu a::before {
+    content: '→ '; /* ASCII arrow prefix */
+    color: var(--color-navbar-dropdown-icon); /* Cyan like + icon */
+    margin-right: 6px;
+    vertical-align: baseline; /* Align with text baseline - no floating */
+  }
+
+  /* Hover state - enhanced contrast */
+  .dropdown-menu a:hover {
+    background-color: #2a2a2a; /* High contrast vs #0a0a0a base */
+    color: #ffffff;
+    border-left: 2px solid var(--color-primary); /* Cyan accent guide */
+    padding-left: calc(var(--spacing-lg) * 2 + 4px); /* Compensate border + slight indent */
+  }
+
+  /* Hover arrow - visual feedback */
+  .dropdown-menu a:hover::before {
+    content: '► '; /* Filled arrow on hover */
+  }
+
+  /* Active state (touch) */
   .dropdown-menu a:active {
     background-color: #1a1a1a;
     color: #ffffff;
