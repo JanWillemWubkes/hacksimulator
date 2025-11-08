@@ -848,20 +848,35 @@ footer a:hover {
   margin: 0;
 }
 
+.dropdown-menu li + li {
+  margin-top: 2px; /* Breathing room between items */
+}
+
 .dropdown-menu a {
   display: block;
   padding: var(--spacing-md) var(--spacing-lg);
   color: #cccccc;
   text-decoration: none;
-  font-weight: 400;
-  transition: all var(--transition-fast);
+  font-weight: 400; /* Keep constant - no jank on hover */
+  transition: all 0.15s ease; /* Snappy timing (was var(--transition-fast)) */
+}
+
+.dropdown-menu a::before {
+  content: '→ '; /* ASCII arrow prefix - terminal aesthetic */
+  color: var(--color-navbar-dropdown-icon); /* Cyan like + icon */
+  margin-right: 6px;
+  vertical-align: baseline; /* Align with text baseline - no floating */
 }
 
 .dropdown-menu a:hover {
-  background-color: #1a1a1a;
+  background-color: #2a2a2a; /* High contrast vs #0a0a0a base (was #1a1a1a - too subtle) */
   color: #ffffff;
-  font-weight: 700;
-  padding-left: calc(var(--spacing-lg) + 2px);
+  border-left: 2px solid var(--color-primary); /* Cyan accent guide */
+  padding-left: calc(var(--spacing-lg) + 4px); /* Compensate border + slight indent */
+}
+
+.dropdown-menu a:hover::before {
+  content: '► '; /* Filled arrow on hover - visual feedback */
 }
 
 /* Navbar Actions (Icons: Search, GitHub, Theme Toggle) */

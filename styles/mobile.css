@@ -138,7 +138,7 @@
   .dropdown-menu a:active {
     background-color: #1a1a1a;
     color: #ffffff;
-    font-weight: 700;
+    /* font-weight removed - keep constant (no jank) */
   }
 
   /* Navbar actions (search, github, theme) on mobile */
