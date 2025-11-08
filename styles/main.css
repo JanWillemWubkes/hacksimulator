@@ -871,6 +871,7 @@ footer a:hover {
 .dropdown-menu a:hover {
   background-color: #2a2a2a; /* High contrast vs #0a0a0a base (was #1a1a1a - too subtle) */
   color: #ffffff;
+  font-weight: 400; /* Explicit override - prevent inheritance from .navbar-links a:hover */
   border-left: 2px solid var(--color-primary); /* Cyan accent guide */
   padding-left: calc(var(--spacing-lg) + 4px); /* Compensate border + slight indent */
 }

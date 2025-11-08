@@ -154,6 +154,7 @@
   .dropdown-menu a:hover {
     background-color: #2a2a2a; /* High contrast vs #0a0a0a base */
     color: #ffffff;
+    font-weight: 400; /* Explicit override - prevent inheritance from .navbar-links a:hover */
     border-left: 2px solid var(--color-primary); /* Cyan accent guide */
     padding-left: calc(var(--spacing-lg) * 2 + 4px); /* Compensate border + slight indent */
   }
