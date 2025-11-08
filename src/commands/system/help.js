@@ -18,7 +18,7 @@ const BOX = {
   dividerRight: '┤'
 };
 
-const BOX_WIDTH = 44; // Total width including borders
+const BOX_WIDTH = 48; // Total width including borders (mobile: 40 char + 8 overflow for readability)
 const COMMAND_COL_WIDTH = 15; // Width for command name column
 
 // ─────────────────────────────────────────────────
@@ -78,20 +78,48 @@ function createCategoryFooter() {
 // ─────────────────────────────────────────────────
 
 /**
+ * Smart truncation at word boundaries
+ * Prevents cutting words mid-character (e.g., "brute fo..." → "brute...")
+ *
+ * @param {string} text - Text to truncate
+ * @param {number} maxWidth - Maximum width including "..."
+ * @returns {string} Truncated text with "..." or original if fits
+ */
+function smartTruncate(text, maxWidth) {
+  if (text.length <= maxWidth) {
+    return text;
+  }
+
+  // Reserve 3 chars for "..."
+  const truncatePoint = maxWidth - 3;
+  let truncated = text.substring(0, truncatePoint);
+
+  // Find last complete word (last space before truncate point)
+  const lastSpace = truncated.lastIndexOf(' ');
+
+  if (lastSpace > 0) {
+    // Truncate at word boundary
+    return truncated.substring(0, lastSpace) + '...';
+  }
+
+  // Fallback: single word longer than available width
+  return truncated + '...';
+}
+
+/**
  * Formats a single command row
  * Example: │ clear           Clear terminal screen     │
  */
 function formatCommandRow(cmd) {
   const commandName = cmd.name.padEnd(COMMAND_COL_WIDTH);
-  const content = ` ${commandName} ${cmd.description}`;
   const contentWidth = BOX_WIDTH - 2; // -2 for side borders
+  const descriptionMaxWidth = contentWidth - COMMAND_COL_WIDTH - 2; // -2 for spacing
 
-  // Truncate description if too long
-  const truncated = content.length > contentWidth
-    ? content.substring(0, contentWidth - 3) + '...'
-    : content.padEnd(contentWidth);
+  // Apply smart truncation to description only
+  const description = smartTruncate(cmd.description, descriptionMaxWidth);
+  const content = ` ${commandName} ${description}`;
 
-  return BOX.vertical + truncated + BOX.vertical;
+  return BOX.vertical + content.padEnd(contentWidth) + BOX.vertical;
 }
 
 /**
