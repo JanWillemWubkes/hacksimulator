@@ -55,8 +55,8 @@ class Terminal {
     // Set initial prompt with VFS current directory
     renderer.updatePrompt(vfs.getCwd());
 
-    // Initialize input handler
-    input.init(inputElement, (command) => this.execute(command));
+    // Initialize input handler (pass terminal instance for keyboard shortcuts)
+    input.init(inputElement, (command) => this.execute(command), this);
 
     // Create and setup search prompt element
     this._setupSearchPrompt(inputElement);

@@ -11,6 +11,7 @@ import historySearch from './history-search.js';
 class InputHandler {
   constructor() {
     this.inputElement = null;
+    this.terminal = null; // Terminal instance for clear functionality
     this.onSubmitCallback = null;
     this.onSearchPromptUpdate = null; // Callback for search prompt updates
     this.currentInput = '';
@@ -21,8 +22,9 @@ class InputHandler {
    * Initialize input handler
    * @param {HTMLInputElement} inputElement - Terminal input field
    * @param {Function} onSubmit - Callback when command is submitted
+   * @param {Object} terminal - Terminal instance for keyboard shortcuts
    */
-  init(inputElement, onSubmit) {
+  init(inputElement, onSubmit, terminal) {
     if (!inputElement) {
       throw new Error('Input element is required');
     }
@@ -31,8 +33,13 @@ class InputHandler {
       throw new Error('onSubmit callback is required');
     }
 
+    if (!terminal) {
+      throw new Error('Terminal instance is required');
+    }
+
     this.inputElement = inputElement;
     this.onSubmitCallback = onSubmit;
+    this.terminal = terminal;
 
     // Attach event listeners
     this._attachListeners();
@@ -350,7 +357,11 @@ class InputHandler {
    * @private
    */
   _handleClear() {
-    // Clear is handled by terminal, but we clear input
+    // Clear terminal output
+    if (this.terminal) {
+      this.terminal.clear();
+    }
+    // Clear input field
     this.clear();
   }
 
