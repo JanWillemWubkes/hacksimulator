@@ -88,7 +88,7 @@
   --vignette-edge: rgba(0, 0, 0, 1);          /* Pure black edges */
 
   /* Navbar Colors - Dark mode defaults */
-  --color-bg-navbar: #000000;           /* Black navbar background */
+  --color-bg-navbar: #1a1a1a;           /* Dark grey navbar background - uniform across themes */
   --color-navbar-link: #cccccc;         /* Light grey navigation links */
   --color-navbar-link-hover: #ffffff;   /* White hover state */
   --color-navbar-action: #ffffff;       /* White action icons (search, github, theme toggle) */
@@ -99,6 +99,10 @@
   --color-footer-text: #cccccc;         /* Light grey footer text (readable on dark footer) */
   --color-footer-link: #00ffff;         /* Cyan footer links (same as --color-link) */
   --color-footer-link-hover: #33ffff;   /* Lighter cyan hover (same as --color-link-hover) */
+
+  /* Dropdown Colors - Dark mode defaults */
+  --color-bg-dropdown: #0a0a0a;         /* Dropdown background - subtle contrast with navbar */
+  --color-bg-dropdown-hover: #0a0a0a;   /* Dropdown hover - darker than base for "pressed" effect */
 
   /* Theme Toggle Colors */
   --color-toggle-text: #cccccc;         /* Light grey toggle text (readable on dark navbar) */
@@ -169,6 +173,10 @@
   /* Theme Toggle Colors - STAYS LIGHT in light mode (navbar is dark) */
   --color-toggle-text: #cccccc;         /* STAYS LIGHT (navbar is dark in light mode!) */
   --color-toggle-hover: rgba(255, 255, 255, 0.15);  /* Slightly brighter hover for visibility on #1a1a1a navbar */
+
+  /* Dropdown Colors - STAYS DARK in light mode (Dark Frame Pattern) */
+  --color-bg-dropdown: #1a1a1a;         /* Matches dark navbar background - consistent frame aesthetic */
+  --color-bg-dropdown-hover: #0a0a0a;   /* Darker hover - same as dark mode for uniform behavior */
 
   /* Modal Overlay - Dark dimming in light mode (Bootstrap/Material UI pattern) */
   --color-modal-overlay: rgba(0, 0, 0, 0.5);  /* Semi-transparent dark overlay for focus effect */
@@ -787,7 +795,8 @@ footer a:hover {
   position: relative;
 }
 
-.navbar-links a {
+/* Generic navbar links - EXCLUDE dropdown trigger to prevent font-weight inheritance */
+.navbar-links li:not(.navbar-dropdown) > a {
   color: var(--color-navbar-link);
   font-family: var(--font-terminal);
   font-size: var(--font-size-base);
@@ -798,9 +807,9 @@ footer a:hover {
   font-weight: 400;
 }
 
-.navbar-links a:hover {
+.navbar-links li:not(.navbar-dropdown) > a:hover {
   color: var(--color-navbar-link-hover);
-  font-weight: 700;
+  font-weight: 700; /* Only regular links get bold - dropdown trigger excluded */
   opacity: 1;
 }
 
@@ -809,19 +818,40 @@ footer a:hover {
   position: relative;
 }
 
+/* Dropdown Trigger - Isolated component with explicit styles (no inheritance from generic navbar links) */
 .dropdown-trigger {
+  color: var(--color-navbar-link);
+  font-family: var(--font-terminal);
+  font-size: var(--font-size-base);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-weight: 400; /* ALWAYS 400 - never bold to prevent layout jank */
   cursor: pointer;
+  display: inline-flex; /* Flexbox enables stable icon alignment */
+  align-items: center; /* Vertically center icon with text regardless of font changes */
+  gap: 4px; /* Predictable spacing (doesn't collapse like margin) */
+  transition: color var(--transition-fast); /* Only animate color, not font-weight */
+  position: relative;
 }
 
-/* Dropdown Icon (+/× animation) */
-.dropdown-icon {
+.dropdown-trigger:hover {
+  color: var(--color-navbar-link-hover);
+  font-weight: 400; /* EXPLICIT override - prevent any inheritance */
+  opacity: 1;
+}
+
+/* Dropdown Icon - Pseudo-element pattern (industry standard: VS Code, GitHub, Slack) */
+.dropdown-trigger::after {
+  content: '+';
   color: var(--color-navbar-dropdown-icon);
-  display: inline-block;
+  font-size: 1em; /* Scale with parent text */
+  line-height: 1;
+  font-weight: 400; /* Explicit - never inherit bold */
   transition: transform var(--transition-normal);
-  margin-left: 4px;
+  display: inline-block; /* Required for transform */
 }
 
-.navbar-dropdown.active .dropdown-icon {
+/* Rotate icon when dropdown is active (+ becomes ×) */
+.navbar-dropdown.active .dropdown-trigger::after {
   transform: rotate(45deg);
 }
 
@@ -830,7 +860,8 @@ footer a:hover {
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: #0a0a0a;
+  background-color: var(--color-bg-dropdown);
+  border: 1px solid #333333; /* Subtle border - visible in light mode, nearly invisible in dark */
   border-radius: var(--border-radius-button);
   list-style: none;
   margin: 0;
@@ -849,16 +880,17 @@ footer a:hover {
 }
 
 .dropdown-menu li + li {
-  margin-top: 2px; /* Breathing room between items */
+  margin-top: 4px; /* Enhanced breathing room between items */
 }
 
 .dropdown-menu a {
   display: block;
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: var(--spacing-md) var(--spacing-xl); /* Enhanced horizontal breathing room: 16px/32px */
   color: #cccccc;
   text-decoration: none;
   font-weight: 400; /* Keep constant - no jank on hover */
-  transition: all 0.15s ease; /* Snappy timing (was var(--transition-fast)) */
+  transition: background-color var(--transition-fast), color var(--transition-fast), border-left-color var(--transition-fast);
+  border-left: 2px solid transparent; /* Reserve space - prevents 2px layout shift on hover */
 }
 
 .dropdown-menu a::before {
@@ -866,14 +898,15 @@ footer a:hover {
   color: var(--color-navbar-dropdown-icon); /* Cyan like + icon */
   margin-right: 6px;
   vertical-align: baseline; /* Align with text baseline - no floating */
+  transition: content 0s; /* Instant icon change (no fade) */
 }
 
 .dropdown-menu a:hover {
-  background-color: #2a2a2a; /* High contrast vs #0a0a0a base (was #1a1a1a - too subtle) */
+  background-color: var(--color-bg-dropdown-hover); /* Dedicated dropdown hover - uniform across themes */
   color: #ffffff;
-  font-weight: 400; /* Explicit override - prevent inheritance from .navbar-links a:hover */
-  border-left: 2px solid var(--color-primary); /* Cyan accent guide */
-  padding-left: calc(var(--spacing-lg) + 4px); /* Compensate border + slight indent */
+  font-weight: 400; /* Explicit override - prevent inheritance */
+  /* NO border color change - arrow is sufficient indicator (terminal purist approach) */
+  /* NO padding change - border space already reserved */
 }
 
 .dropdown-menu a:hover::before {
