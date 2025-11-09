@@ -202,7 +202,8 @@ export default {
     });
 
     output += '[ ? ] TIP: Type \'man [command]\' voor gedetailleerde informatie.\n';
-    output += '[ ? ] TIP: Gebruik ↑↓ pijltjestoetsen voor command geschiedenis.';
+    output += '[ ? ] TIP: Gebruik ↑↓ voor geschiedenis | Tab voor aanvullen.\n';
+    output += '[ ? ] TIP: Probeer: type "nm" + Tab → completeert naar "nmap".';
 
     return output;
   },

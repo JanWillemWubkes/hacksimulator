@@ -9,6 +9,7 @@ class Onboarding {
     this.isFirstVisit = true;
     this.commandCount = 0;
     this.hasShownEncouragement = false;
+    this.hasShownTabHint = false;
     this.hasShownTutorialSuggestion = false;
 
     // localStorage keys
@@ -37,6 +38,7 @@ class Onboarding {
         try {
           const state = JSON.parse(savedState);
           this.hasShownEncouragement = state.hasShownEncouragement || false;
+          this.hasShownTabHint = state.hasShownTabHint || false;
           this.hasShownTutorialSuggestion = state.hasShownTutorialSuggestion || false;
         } catch (e) {
           console.warn('Failed to parse onboarding state:', e);
@@ -165,6 +167,13 @@ veilig en legaal.
       return '\n[ ✓ ] Eerste opdracht voltooid!\n\nOntdek je omgeving:\n→ \'ls\'   - Bekijk bestanden in deze map\n→ \'help\' - Zie alle beschikbare hacking tools';
     }
 
+    // After 3 commands: Tab completion discovery
+    if (this.commandCount === 3 && !this.hasShownTabHint) {
+      this.hasShownTabHint = true;
+      this._saveState();
+      return '\n[ ✓ ] Pro tip: Gebruik Tab om commands snel in te typen\n\nProbeer het nu:\n→ Type "nm" en druk Tab      - Vult aan naar "nmap"\n→ Type "l" en druk Tab 2x    - Cyclet door ls, ln, ...';
+    }
+
     // After 5 commands: Introduce reconnaissance (professional workflow)
     if (this.commandCount === 5 && !this.hasShownTutorialSuggestion) {
       this.hasShownTutorialSuggestion = true;
@@ -188,6 +197,7 @@ veilig en legaal.
     try {
       const state = {
         hasShownEncouragement: this.hasShownEncouragement,
+        hasShownTabHint: this.hasShownTabHint,
         hasShownTutorialSuggestion: this.hasShownTutorialSuggestion
       };
       localStorage.setItem(this.STORAGE_KEY_ONBOARDING_STATE, JSON.stringify(state));
@@ -224,6 +234,7 @@ veilig en legaal.
     this.isFirstVisit = true;
     this.commandCount = 0;
     this.hasShownEncouragement = false;
+    this.hasShownTabHint = false;
     this.hasShownTutorialSuggestion = false;
 
     console.log('Onboarding reset');
@@ -238,6 +249,7 @@ veilig en legaal.
       isFirstVisit: this.isFirstVisit,
       commandCount: this.commandCount,
       hasShownEncouragement: this.hasShownEncouragement,
+      hasShownTabHint: this.hasShownTabHint,
       hasShownTutorialSuggestion: this.hasShownTutorialSuggestion
     };
   }
