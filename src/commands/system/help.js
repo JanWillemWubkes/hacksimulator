@@ -203,6 +203,7 @@ export default {
 
     output += '[ ? ] TIP: Type \'man [command]\' voor gedetailleerde informatie.\n';
     output += '[ ? ] TIP: Gebruik ↑↓ voor geschiedenis | Tab voor aanvullen.\n';
+    output += '[ ? ] TIP: Type \'shortcuts\' voor alle keyboard shortcuts.\n';
     output += '[ ? ] TIP: Probeer: type "nm" + Tab → completeert naar "nmap".';
 
     return output;

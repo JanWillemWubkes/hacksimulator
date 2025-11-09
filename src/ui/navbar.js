@@ -261,6 +261,31 @@ export function initNavbar() {
   }
 
   /**
+   * Handle Shortcuts link
+   */
+  function handleShortcuts(e) {
+    e.preventDefault();
+    closeMenu();
+    closeDropdowns();
+
+    // Focus terminal and insert shortcuts command
+    const inputElement = document.getElementById('terminal-input');
+    if (inputElement) {
+      inputElement.value = 'shortcuts';
+      inputElement.focus();
+
+      // Trigger Enter key event to execute command
+      const enterEvent = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        code: 'Enter',
+        keyCode: 13,
+        bubbles: true
+      });
+      inputElement.dispatchEvent(enterEvent);
+    }
+  }
+
+  /**
    * Handle About/Over link
    */
   function handleAbout(e) {
@@ -426,12 +451,14 @@ export function initNavbar() {
   // Link action handlers
   const tutorialLink = document.querySelector('a[href="#tutorial"]');
   const commandsLink = document.querySelector('a[href="#commands"]');
+  const shortcutsLink = document.querySelector('a[href="#shortcuts"]');
   const overLink = document.querySelector('a[href="#over"]');
   const blogLink = document.querySelector('a[href="#blog"]');
   const searchLink = document.querySelector('a[href="#search"]');
 
   if (tutorialLink) tutorialLink.addEventListener('click', handleTutorial);
   if (commandsLink) commandsLink.addEventListener('click', handleCommands);
+  if (shortcutsLink) shortcutsLink.addEventListener('click', handleShortcuts);
   if (overLink) overLink.addEventListener('click', handleAbout);
   if (blogLink) blogLink.addEventListener('click', handleBlog);
   if (searchLink) searchLink.addEventListener('click', handleSearch);

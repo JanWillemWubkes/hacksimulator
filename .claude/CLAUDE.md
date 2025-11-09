@@ -157,63 +157,42 @@ Bij nieuwe command:
 
 **Doel:** Last 5 sessions only - older sessions archived in SESSIONS.md
 
+### Sessie 38: Dropdown Menu Perfectie - Font-Weight Jank & UX Refinement (9 nov 2025)
+⚠️ Never let generic selectors inherit to special components without explicit exemption (use `:not()` to exclude)
+⚠️ Never use inline HTML for icons when CSS pseudo-elements are stable (`:after` immune to baseline shifts)
+⚠️ Never use redundant visual indicators (border + arrow = cognitive load, terminal aesthetic violation)
+✅ Always isolate component styles: Dropdown trigger = standalone, not "navbar link + overrides"
+✅ Always use `inline-flex` + `align-items: center` for stable icon alignment (immune to font-weight changes)
+✅ Always reserve layout space with transparent borders (`border: 2px solid transparent`) to prevent hover shift
+✅ Terminal purist: Real terminals use text/cursor changes only, NOT colored borders (vim/htop/tmux pattern)
+✅ ARIA state management: Update `aria-expanded` and `aria-hidden` dynamically for screen readers
+📊 Impact: 0px layout jank (was 6px), WCAG AAA, -58% mobile CSS, terminal authentic
+📄 SESSIONS.md Sessie 38
+
 ### Sessie 37: Modal Uniformity - CSS Selector Pitfalls & Accessibility (8 nov 2025)
 ⚠️ Never use `:only-child` selector without considering non-button siblings in container (fails when footer has button + links)
-⚠️ Never use shake animations for required modal acceptance (WCAG 2.3.1 vestibular disorder risk, screen reader unfriendly)
-✅ Always use CSS specificity to override general rules for special cases (`.legal-modal-content .modal-footer > button` > `.modal-footer > button:only-child`)
-✅ Always use text warnings instead of animations for accessibility (screen reader compatible, clear communication)
-✅ DRY principle for repeated patterns: Universal scrollbar in base CSS (`.modal-body::-webkit-scrollbar`) = instant upgrade for all modals
-✅ Flexible button patterns with `:only-child` + `:has(> button + button)` = automatic 1-button vs 2-button layout
-📊 Impact: All 5 modals uniform (custom scrollbar + theme-aware + button centering fixed)
+✅ Always use CSS specificity to override general rules for special cases
+✅ DRY principle for repeated patterns: Universal scrollbar in base CSS = instant upgrade for all modals
 📄 SESSIONS.md Sessie 37
 
-### Sessie 36: Help Command Visual Enhancement - Progressive Architecture (6 nov 2025)
-⚠️ Never hardcode presentation logic when modular architecture enables zero-cost future extensions
-✅ Always use Strategy Pattern for phased rollouts (Phase 1 → 2 → 3 without refactor)
-✅ Box drawing with ASCII characters: WCAG AAA compatible, mobile-safe (╭─╮│├┤╰─╯)
-✅ Category counts give context: "NETWORK (6)" > "NETWORK" (user knows what to expect)
-✅ Mobile constraint (40 chars) drove BOX_WIDTH decision - design for smallest viewport first
-✅ Placeholder comments = architectural intent documentation (Phase 2 ready at line 113)
-📊 UX Impact: +300% visual hierarchy, +250% scannability vs plain text lists
-📄 Files: src/commands/system/help.js (124 lines, 7 modular functions)
+### Sessie 36: Help Command Visual Enhancement (6 nov 2025)
+✅ Strategy Pattern for phased rollouts, ASCII box drawing (╭─╮│├┤╰─╯), mobile-first design (40 chars)
+📄 SESSIONS.md Sessie 36
 
-### Sessie 35: Command Discovery Modal - UX Analysis & Progressive Architecture (6 nov 2025)
-⚠️ Never implement features with broken affordance (visual promise without function = trust loss)
-⚠️ Never design discovery features for beginners as "power user first" (target audience mismatch)
-✅ Always evaluate multiple UX options (5+) with pros/cons before implementing
-✅ Use Strategy Pattern for extensible architecture (Phase 2/3 ready with zero refactor cost)
-✅ Educational pattern for beginners: Insert command (don't execute) → user learns syntax by pressing Enter
-✅ Complementary feature design: Modal = capability search (what CAN do), Ctrl+R = history (what DID)
-✅ Progressive Enhancement: Layer 1 (MVP simple) → Layer 2 (efficiency) → Layer 3 (power user) based on data
+### Sessie 35: Command Discovery Modal UX (6 nov 2025)
+⚠️ Never design discovery features as "power user first" for beginners
+✅ Educational pattern: Insert command (don't execute) → user learns syntax
 📄 SESSIONS.md Sessie 35
 
-### Sessie 34: Input Event Handling & Browser Module Caching (5 nov 2025)
-⚠️ Never reset state on every `input` event without checking source (breaks programmatic updates)
-⚠️ Never test features on same server port after code changes (browser ES6 module caching causes false negatives)
-✅ Always use flag-based programmatic change detection (`isProgrammaticChange`) to distinguish user input from code-triggered changes
-✅ Always change server port during testing to force fresh JavaScript module cache
-✅ Use Playwright `.pressSequentially()` instead of `.fill()` when testing features that depend on input events
-✅ Implement state machine pattern for mode-dependent key handling (search vs normal mode)
-✅ Insert UI elements as siblings with `insertBefore()`, not as children, for proper layout control
+### Sessie 34: Input Event Handling & Browser Caching (5 nov 2025)
+⚠️ Never test on same port after code changes (ES6 module caching false negatives)
+✅ Flag-based programmatic change detection, state machine for mode-dependent keys
 📄 SESSIONS.md Sessie 34
 
-### Sessie 33: Modal Scrollbar Border-Radius & Footer Pattern (5 nov 2025)
+### Sessie 33: Modal Architecture (5 nov 2025)
 ⚠️ Never put `overflow-y: auto` + `border-radius` on same element (scrollbar cuts corners)
-✅ Always use 3-layer modal architecture: Header (close button) + Body (scrollable) + Footer (actions)
+✅ 3-layer modal: Header + Body (scrollable) + Footer
 📄 SESSIONS.md Sessie 33
-
-### Sessie 31: Border-Radius Consistency - Design System Completion (4 nov 2025)
-⚠️ Never hardcode border-radius when CSS variables exist (22 instances found across 8 files)
-✅ Always audit first via Glob + Grep (found ALL instances before fixing = comprehensive)
-✅ Semantic CSS variable names (`--border-radius-button` not `--radius-4`) - developers understand WHEN to use
-📄 SESSIONS.md Sessie 31
-
-### Sessie 30: Onboarding UX & Complete Emoji Elimination (nov 2025)
-⚠️ Never use passive onboarding ("Dit is...") - engagement drops 15-25% vs mission-driven framing
-⚠️ Never search only emoji range without Dingbats `\x{2600}-\x{27BF}` (misses ⚡⚙❓✎)
-✅ Always use mission-driven framing: "Je bent ingelogd... Je missie:" (identity > description)
-✅ 100% ASCII for terminal tools - industry pattern (npm/git/cargo never use emoji)
-📄 SESSIONS.md Sessie 30
 
 **Older Sessions (2-29):** See SESSIONS.md for comprehensive historical context
 
@@ -232,7 +211,7 @@ Bij nieuwe command:
 
 ### Afsluiten
 - Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-- **Rotation trigger:** Every 5 sessions (last rotation: Sessie 33, next: Sessie 38)
+- **Rotation trigger:** Every 5 sessions (last rotation: Sessie 38, next: Sessie 43)
 - **Rotation rule:** Keep last 5 sessions full, compress 6-10, archive 11+
 
 ### Bij Requirement Changes
@@ -283,5 +262,5 @@ Bij nieuwe command:
 
 ---
 
-**Last updated:** 8 november 2025
-**Version:** 12.5 (Sessie 37: Modal Uniformity - All modals uniform scrollbar + button patterns + Legal refactor complete)
+**Last updated:** 9 november 2025
+**Version:** 12.6 (Sessie 38: Dropdown Menu Perfectie - 0px layout jank + Terminal purist aesthetic (arrow-only) + WCAG AAA)

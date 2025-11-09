@@ -11,6 +11,8 @@ class Onboarding {
     this.hasShownEncouragement = false;
     this.hasShownTabHint = false;
     this.hasShownTutorialSuggestion = false;
+    this.hasShownCtrlRHint = false;
+    this.hasShownCtrlLHint = false;
 
     // localStorage keys
     this.STORAGE_KEY_FIRST_VISIT = 'hacksim_first_visit';
@@ -40,6 +42,8 @@ class Onboarding {
           this.hasShownEncouragement = state.hasShownEncouragement || false;
           this.hasShownTabHint = state.hasShownTabHint || false;
           this.hasShownTutorialSuggestion = state.hasShownTutorialSuggestion || false;
+          this.hasShownCtrlRHint = state.hasShownCtrlRHint || false;
+          this.hasShownCtrlLHint = state.hasShownCtrlLHint || false;
         } catch (e) {
           console.warn('Failed to parse onboarding state:', e);
         }
@@ -98,6 +102,7 @@ gebruiken om systemen te beveiligen - volledig
 veilig en legaal.
 
 → Type 'help' om te beginnen met reconnaissance
+→ Type 'shortcuts' voor keyboard shortcuts
 → Of spring direct in: 'ls', 'nmap 192.168.1.1'
 `.trim();
   }
@@ -181,9 +186,23 @@ veilig en legaal.
       return '\n[ ✓ ] 5 opdrachten voltooid - je bent onderweg!\n\nKlaar voor reconnaissance? Ethical hackers beginnen altijd\nmet informatie verzamelen:\n→ \'nmap 192.168.1.1\' - Scan een netwerk\n→ \'man nmap\'         - Leer hoe het werkt';
     }
 
+    // After 7 commands: Ctrl+R history search
+    if (this.commandCount === 7 && !this.hasShownCtrlRHint) {
+      this.hasShownCtrlRHint = true;
+      this._saveState();
+      return '\n[ ✓ ] Pro tip: Gebruik Ctrl+R om door je geschiedenis te zoeken\n\nProbeer het nu:\n→ Druk Ctrl+R en type "ls"     - Vind vorige ls commands\n→ Druk Ctrl+R opnieuw          - Cycle door matches\n→ Enter om te accepteren       - Esc om te annuleren\n\nType \'shortcuts\' voor alle keyboard shortcuts.';
+    }
+
     // After 10 commands: Security tools with enhanced legal warning
     if (this.commandCount === 10) {
       return '\n[ ! ] 10 opdrachten - tijd voor krachtigere tools\n\n[ ! ] LET OP: De volgende tools zijn ALLEEN voor educatief gebruik.\n      In de echte wereld zijn ze illegaal zonder expliciete toestemming.\n\nKlaar? Type \'help security\' voor geavanceerde tools.';
+    }
+
+    // After 12 commands: Ctrl+L clear screen
+    if (this.commandCount === 12 && !this.hasShownCtrlLHint) {
+      this.hasShownCtrlLHint = true;
+      this._saveState();
+      return '\n[ ✓ ] Is je terminal vol? Gebruik Ctrl+L om te leegmaken\n\n(Net als echte Linux terminals - geen rommelige output meer!)';
     }
 
     return null;
@@ -198,7 +217,9 @@ veilig en legaal.
       const state = {
         hasShownEncouragement: this.hasShownEncouragement,
         hasShownTabHint: this.hasShownTabHint,
-        hasShownTutorialSuggestion: this.hasShownTutorialSuggestion
+        hasShownTutorialSuggestion: this.hasShownTutorialSuggestion,
+        hasShownCtrlRHint: this.hasShownCtrlRHint,
+        hasShownCtrlLHint: this.hasShownCtrlLHint
       };
       localStorage.setItem(this.STORAGE_KEY_ONBOARDING_STATE, JSON.stringify(state));
     } catch (e) {
@@ -236,6 +257,8 @@ veilig en legaal.
     this.hasShownEncouragement = false;
     this.hasShownTabHint = false;
     this.hasShownTutorialSuggestion = false;
+    this.hasShownCtrlRHint = false;
+    this.hasShownCtrlLHint = false;
 
     console.log('Onboarding reset');
   }
@@ -250,7 +273,9 @@ veilig en legaal.
       commandCount: this.commandCount,
       hasShownEncouragement: this.hasShownEncouragement,
       hasShownTabHint: this.hasShownTabHint,
-      hasShownTutorialSuggestion: this.hasShownTutorialSuggestion
+      hasShownTutorialSuggestion: this.hasShownTutorialSuggestion,
+      hasShownCtrlRHint: this.hasShownCtrlRHint,
+      hasShownCtrlLHint: this.hasShownCtrlLHint
     };
   }
 }

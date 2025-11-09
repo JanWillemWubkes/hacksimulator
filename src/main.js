@@ -20,6 +20,7 @@ import dateCmd from './commands/system/date.js';
 import historyCmd from './commands/system/history.js';
 import helpCmd from './commands/system/help.js';
 import manCmd from './commands/system/man.js';
+import shortcutsCmd from './commands/system/shortcuts.js';
 
 // Import filesystem commands
 import lsCmd from './commands/filesystem/ls.js';
@@ -58,7 +59,7 @@ import niktoCmd from './commands/security/nikto.js';
 function registerCommands() {
   const registry = terminal.getRegistry();
 
-  // System commands (7)
+  // System commands (8)
   registry.register('clear', clearCmd);
   registry.register('echo', echoCmd);
   registry.register('whoami', whoamiCmd);
@@ -66,6 +67,7 @@ function registerCommands() {
   registry.register('history', historyCmd);
   registry.register('help', helpCmd);
   registry.register('man', manCmd);
+  registry.register('shortcuts', shortcutsCmd);
 
   // Filesystem commands (11)
   registry.register('ls', lsCmd);
