@@ -889,6 +889,7 @@ footer a:hover {
   color: #cccccc;
   text-decoration: none;
   font-weight: 400; /* Keep constant - no jank on hover */
+  white-space: nowrap; /* Prevent text wrapping - arrow and text must stay on same line */
   transition: background-color var(--transition-fast), color var(--transition-fast), border-left-color var(--transition-fast);
   border-left: 2px solid transparent; /* Reserve space - prevents 2px layout shift on hover */
 }
@@ -896,6 +897,7 @@ footer a:hover {
 .dropdown-menu a::before {
   content: '→ '; /* ASCII arrow prefix - terminal aesthetic */
   color: var(--color-navbar-dropdown-icon); /* Cyan like + icon */
+  display: inline; /* Ensure arrow stays inline with text - prevents wrapping */
   margin-right: 6px;
   vertical-align: baseline; /* Align with text baseline - no floating */
   transition: content 0s; /* Instant icon change (no fade) */
