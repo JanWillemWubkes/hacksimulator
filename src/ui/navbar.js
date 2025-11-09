@@ -122,6 +122,7 @@ export function initNavbar() {
   /**
    * Toggle dropdown (unified desktop + mobile)
    * Accordion pattern: only one dropdown can be open at a time
+   * WCAG AAA: Updates ARIA states for screen reader announcements
    */
   function toggleDropdown(e) {
     e.preventDefault();
@@ -129,14 +130,38 @@ export function initNavbar() {
 
     // Toggle active class (works for desktop + mobile)
     navbarDropdown.classList.toggle('active');
+
+    // Update ARIA attributes based on NEW state (after toggle) for accessibility
+    const isNowActive = navbarDropdown.classList.contains('active');
+    const trigger = navbarDropdown.querySelector('.dropdown-trigger');
+    const menu = navbarDropdown.querySelector('.dropdown-menu');
+
+    if (trigger) {
+      trigger.setAttribute('aria-expanded', isNowActive ? 'true' : 'false');
+    }
+    if (menu) {
+      menu.setAttribute('aria-hidden', isNowActive ? 'false' : 'true');
+    }
   }
 
   /**
    * Close all dropdowns
+   * WCAG AAA: Resets ARIA states when closing
    */
   function closeDropdowns() {
     if (navbarDropdown) {
       navbarDropdown.classList.remove('active');
+
+      // Reset ARIA states for accessibility
+      const trigger = navbarDropdown.querySelector('.dropdown-trigger');
+      const menu = navbarDropdown.querySelector('.dropdown-menu');
+
+      if (trigger) {
+        trigger.setAttribute('aria-expanded', 'false');
+      }
+      if (menu) {
+        menu.setAttribute('aria-hidden', 'true');
+      }
     }
   }
 
