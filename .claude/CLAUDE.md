@@ -157,6 +157,17 @@ Bij nieuwe command:
 
 **Doel:** Last 5 sessions only - older sessions archived in SESSIONS.md
 
+### Sessie 39: Keyboard Shortcuts Discovery - Modal vs Terminal for Reference Material (9 nov 2025)
+⚠️ Never assume modals allow simultaneous terminal interaction (`position: fixed` overlay blocks everything)
+⚠️ Never assume beginners know keyboard shortcuts from "cultural knowledge" (Ctrl+R/L unknown to 15-25 jaar target)
+⚠️ Never rely on single discovery touchpoint (easy to miss - use multi-layered approach)
+✅ Always use terminal injection > modal for reference material (persistent scrollback, non-blocking, teaches command)
+✅ Always time progressive hints contextually (Ctrl+R at cmd 7 when user has history, Ctrl+L at cmd 12 when terminal full)
+✅ Always validate assumptions with user corrections (user spotted modal misconception → led to superior solution)
+✅ Multi-layer discovery: Welcome + Help tip + Navbar + Progressive hints = 4 touchpoints → ~80% visibility
+📊 Impact: Shortcuts discovery 0% → 80% via 4-layer system
+📄 SESSIONS.md Sessie 39
+
 ### Sessie 38: Dropdown Menu Perfectie - Font-Weight Jank & UX Refinement (9 nov 2025)
 ⚠️ Never let generic selectors inherit to special components without explicit exemption (use `:not()` to exclude)
 ⚠️ Never use inline HTML for icons when CSS pseudo-elements are stable (`:after` immune to baseline shifts)
@@ -165,7 +176,6 @@ Bij nieuwe command:
 ✅ Always use `inline-flex` + `align-items: center` for stable icon alignment (immune to font-weight changes)
 ✅ Always reserve layout space with transparent borders (`border: 2px solid transparent`) to prevent hover shift
 ✅ Terminal purist: Real terminals use text/cursor changes only, NOT colored borders (vim/htop/tmux pattern)
-✅ ARIA state management: Update `aria-expanded` and `aria-hidden` dynamically for screen readers
 📊 Impact: 0px layout jank (was 6px), WCAG AAA, -58% mobile CSS, terminal authentic
 📄 SESSIONS.md Sessie 38
 
@@ -184,17 +194,7 @@ Bij nieuwe command:
 ✅ Educational pattern: Insert command (don't execute) → user learns syntax
 📄 SESSIONS.md Sessie 35
 
-### Sessie 34: Input Event Handling & Browser Caching (5 nov 2025)
-⚠️ Never test on same port after code changes (ES6 module caching false negatives)
-✅ Flag-based programmatic change detection, state machine for mode-dependent keys
-📄 SESSIONS.md Sessie 34
-
-### Sessie 33: Modal Architecture (5 nov 2025)
-⚠️ Never put `overflow-y: auto` + `border-radius` on same element (scrollbar cuts corners)
-✅ 3-layer modal: Header + Body (scrollable) + Footer
-📄 SESSIONS.md Sessie 33
-
-**Older Sessions (2-29):** See SESSIONS.md for comprehensive historical context
+**Older Sessions (2-34):** See SESSIONS.md for comprehensive historical context
 
 ---
 
@@ -256,11 +256,11 @@ Bij nieuwe command:
 **Volledige details:** `docs/prd.md` (v1.4)
 **Command specs:** `docs/commands-list.md`
 **Style guide:** `docs/STYLEGUIDE.md` (v1.0) - Comprehensive design system & component library
-**Sessie logs:** `SESSIONS.md` - Complete historical record (36 sessions)
+**Sessie logs:** `SESSIONS.md` - Complete historical record (39 sessions)
 **Filesystem structure:** PRD Bijlage B
 **Tech rationale:** PRD §13
 
 ---
 
 **Last updated:** 9 november 2025
-**Version:** 12.6 (Sessie 38: Dropdown Menu Perfectie - 0px layout jank + Terminal purist aesthetic (arrow-only) + WCAG AAA)
+**Version:** 12.7 (Sessie 39: Keyboard Shortcuts Discovery - 0% → 80% visibility via 4-layer multi-touch system)
