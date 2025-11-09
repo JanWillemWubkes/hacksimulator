@@ -95,7 +95,7 @@
   --color-navbar-dropdown-icon: #00ffff; /* Cyan dropdown icons (+/×) - distinct from link text */
 
   /* Footer Colors - Dark mode defaults (matches navbar chrome pattern) */
-  --color-bg-footer: #000000;           /* Black footer background */
+  --color-bg-footer: #1a1a1a;           /* Dark grey footer background - matches navbar for unified frame */
   --color-footer-text: #cccccc;         /* Light grey footer text (readable on dark footer) */
   --color-footer-link: #00ffff;         /* Cyan footer links (same as --color-link) */
   --color-footer-link-hover: #33ffff;   /* Lighter cyan hover (same as --color-link-hover) */
