@@ -101,9 +101,14 @@ Je missie: leer de tools die ethical hackers
 gebruiken om systemen te beveiligen - volledig
 veilig en legaal.
 
-→ Type 'help' om te beginnen met reconnaissance
+[ ! ] Real hackers beginnen met de basics:
+
+→ FASE 1: Terminal basics     ('ls', 'cd', 'pwd')
+→ FASE 2: Network scanning    ('ping', 'nmap')
+→ FASE 3: Security tools      ('hashcat', 'hydra')
+
+→ Type 'help' om te beginnen
 → Type 'shortcuts' voor keyboard shortcuts
-→ Of spring direct in: 'ls', 'nmap 192.168.1.1'
 `.trim();
   }
 
