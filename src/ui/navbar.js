@@ -168,71 +168,28 @@ export function initNavbar() {
   // ==================== Link Actions ====================
 
   /**
-   * Handle Tutorial link
+   * Handle Leerpad link
    */
-  function handleTutorial(e) {
+  function handleLeerpad(e) {
     e.preventDefault();
     closeMenu();
     closeDropdowns();
 
-    // Show onboarding modal
-    const onboardingModal = document.getElementById('onboarding-modal');
-    if (onboardingModal) {
-      onboardingModal.classList.add('active');
-      onboardingModal.setAttribute('aria-hidden', 'false');
+    // Focus terminal and insert leerpad command
+    const inputElement = document.getElementById('terminal-input');
+    if (inputElement) {
+      inputElement.value = 'leerpad';
+      inputElement.focus();
 
-      // Setup close handlers (once per opening)
-      setupOnboardingModalHandlers(onboardingModal);
+      // Trigger Enter key event to execute command
+      const enterEvent = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        code: 'Enter',
+        keyCode: 13,
+        bubbles: true
+      });
+      inputElement.dispatchEvent(enterEvent);
     }
-  }
-
-  /**
-   * Setup event handlers for onboarding modal
-   * Handles close button, accept button, ESC key, and backdrop clicks
-   */
-  function setupOnboardingModalHandlers(modal) {
-    const closeBtn = modal.querySelector('.modal-close');
-    const acceptBtn = modal.querySelector('#onboarding-accept');
-
-    // Helper function to close modal
-    const closeModal = () => {
-      modal.classList.remove('active');
-      modal.setAttribute('aria-hidden', 'true');
-    };
-
-    // Close button (X) handler
-    if (closeBtn) {
-      // Remove existing listener to prevent duplicates
-      closeBtn.replaceWith(closeBtn.cloneNode(true));
-      const newCloseBtn = modal.querySelector('.modal-close');
-      newCloseBtn.addEventListener('click', closeModal);
-    }
-
-    // Accept button handler (also closes modal after acknowledgment)
-    if (acceptBtn) {
-      // Remove existing listener to prevent duplicates
-      acceptBtn.replaceWith(acceptBtn.cloneNode(true));
-      const newAcceptBtn = modal.querySelector('#onboarding-accept');
-      newAcceptBtn.addEventListener('click', closeModal);
-    }
-
-    // Backdrop click handler (click outside modal content)
-    const backdropHandler = (e) => {
-      if (e.target === modal) {
-        closeModal();
-        modal.removeEventListener('click', backdropHandler);
-      }
-    };
-    modal.addEventListener('click', backdropHandler);
-
-    // ESC key handler
-    const escHandler = (e) => {
-      if (e.key === 'Escape' && modal.classList.contains('active')) {
-        closeModal();
-        document.removeEventListener('keydown', escHandler);
-      }
-    };
-    document.addEventListener('keydown', escHandler);
   }
 
   /**
@@ -449,14 +406,14 @@ export function initNavbar() {
   }
 
   // Link action handlers
-  const tutorialLink = document.querySelector('a[href="#tutorial"]');
+  const leerpadLink = document.querySelector('a[href="#leerpad"]');
   const commandsLink = document.querySelector('a[href="#commands"]');
   const shortcutsLink = document.querySelector('a[href="#shortcuts"]');
   const overLink = document.querySelector('a[href="#over"]');
   const blogLink = document.querySelector('a[href="#blog"]');
   const searchLink = document.querySelector('a[href="#search"]');
 
-  if (tutorialLink) tutorialLink.addEventListener('click', handleTutorial);
+  if (leerpadLink) leerpadLink.addEventListener('click', handleLeerpad);
   if (commandsLink) commandsLink.addEventListener('click', handleCommands);
   if (shortcutsLink) shortcutsLink.addEventListener('click', handleShortcuts);
   if (overLink) overLink.addEventListener('click', handleAbout);

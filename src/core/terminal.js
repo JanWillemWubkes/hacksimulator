@@ -182,11 +182,15 @@ class Terminal {
         renderer.renderOutput(output);
       }
 
-      // Record command execution for onboarding hints
+      // Validate and record command execution for learning path tracking
       onboarding.markFirstVisitComplete();
-      const hint = onboarding.recordCommand();
-      if (hint) {
-        renderer.renderInfo(hint);
+
+      // Only track command if it was used correctly (validation logic)
+      if (this._shouldTrackCommand(parsed.command, parsed.args, output)) {
+        const hint = onboarding.recordCommand(parsed.command);
+        if (hint) {
+          renderer.renderInfo(hint);
+        }
       }
 
       // Track command execution (analytics - NO ARGUMENTS!)
@@ -266,6 +270,67 @@ class Terminal {
    */
   getRenderer() {
     return renderer;
+  }
+
+  /**
+   * Validate if command should be tracked for leerpad progress
+   * Only tracks commands that are used correctly (with required arguments)
+   * @private
+   * @param {string} commandName - Command name
+   * @param {Array<string>} args - Command arguments
+   * @param {string} output - Command output
+   * @returns {boolean} True if command should be tracked
+   */
+  _shouldTrackCommand(commandName, args, output) {
+    // Commands that work without any arguments
+    const NO_ARGS_NEEDED = [
+      'help', 'ls', 'pwd', 'whoami', 'history',
+      'ifconfig', 'netstat', 'date', 'leerpad', 'shortcuts', 'clear'
+    ];
+
+    // Commands that require at least 1 argument
+    const REQUIRES_ARGS = {
+      'ping': 1,      // ping <host>
+      'nmap': 1,      // nmap <target>
+      'cat': 1,       // cat <file>
+      'cd': 1,        // cd <directory>
+      'mkdir': 1,     // mkdir <directory>
+      'touch': 1,     // touch <file>
+      'rm': 1,        // rm <file>
+      'hashcat': 1,   // hashcat <hash>
+      'hydra': 1,     // hydra <target>
+      'sqlmap': 1,    // sqlmap <url>
+      'metasploit': 1,// metasploit <target>
+      'nikto': 1      // nikto <target>
+    };
+
+    // Always track if no args needed
+    if (NO_ARGS_NEEDED.includes(commandName)) {
+      return true;
+    }
+
+    // If command requires args, validate
+    if (REQUIRES_ARGS[commandName]) {
+      const requiredArgs = REQUIRES_ARGS[commandName];
+
+      // Not enough args provided - don't track
+      if (args.length < requiredArgs) {
+        return false;
+      }
+
+      // Args provided - check if output indicates syntax error
+      const hasSyntaxError =
+        output && (
+          output.includes('Usage:') ||
+          output.startsWith('Error:')
+        );
+
+      // Track if no syntax error (even if command failed for other reasons)
+      return !hasSyntaxError;
+    }
+
+    // Unknown command - conservative: track if has args
+    return args.length > 0;
   }
 }
 

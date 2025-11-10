@@ -18,6 +18,7 @@ class Onboarding {
     this.STORAGE_KEY_FIRST_VISIT = 'hacksim_first_visit';
     this.STORAGE_KEY_COMMAND_COUNT = 'hacksim_command_count';
     this.STORAGE_KEY_ONBOARDING_STATE = 'hacksim_onboarding_state';
+    this.STORAGE_KEY_COMMANDS_TRIED = 'hacksim_commands_tried';
   }
 
   /**
@@ -104,11 +105,12 @@ veilig en legaal.
 [ ! ] Real hackers beginnen met de basics:
 
 → FASE 1: Terminal basics     ('ls', 'cd', 'pwd')
-→ FASE 2: Network scanning    ('ping', 'nmap')
-→ FASE 3: Security tools      ('hashcat', 'hydra')
+→ FASE 2: File manipulation   ('mkdir', 'touch', 'rm')
+→ FASE 3: Network scanning    ('ping', 'nmap')
+→ FASE 4: Security tools      ('hashcat', 'hydra')
 
 → Type 'help' om te beginnen
-→ Type 'shortcuts' voor keyboard shortcuts
+→ Type 'leerpad' om voortgang te volgen
 `.trim();
   }
 
@@ -145,9 +147,10 @@ veilig en legaal.
   /**
    * Record that a command was executed
    * Returns a hint message if appropriate
+   * @param {string} commandName - Name of the command that was executed
    * @returns {string|null} Hint message or null
    */
-  recordCommand() {
+  recordCommand(commandName = null) {
     this.commandCount++;
 
     try {
@@ -156,11 +159,37 @@ veilig en legaal.
       console.warn('Could not save command count:', e);
     }
 
+    // Track individual command for leerpad
+    if (commandName) {
+      this._trackCommand(commandName);
+    }
+
     // Save state
     this._saveState();
 
     // Return progressive hints
     return this._getProgressiveHint();
+  }
+
+  /**
+   * Track individual command execution for leerpad progress
+   * @private
+   * @param {string} commandName
+   */
+  _trackCommand(commandName) {
+    try {
+      // Get existing commands
+      const stored = localStorage.getItem(this.STORAGE_KEY_COMMANDS_TRIED);
+      const commands = stored ? stored.split(',').filter(cmd => cmd.trim()) : [];
+
+      // Add new command if not already tracked
+      if (!commands.includes(commandName)) {
+        commands.push(commandName);
+        localStorage.setItem(this.STORAGE_KEY_COMMANDS_TRIED, commands.join(','));
+      }
+    } catch (e) {
+      console.warn('Could not track command:', e);
+    }
   }
 
   /**
@@ -253,6 +282,7 @@ veilig en legaal.
       localStorage.removeItem(this.STORAGE_KEY_FIRST_VISIT);
       localStorage.removeItem(this.STORAGE_KEY_COMMAND_COUNT);
       localStorage.removeItem(this.STORAGE_KEY_ONBOARDING_STATE);
+      localStorage.removeItem(this.STORAGE_KEY_COMMANDS_TRIED);
     } catch (e) {
       console.warn('Could not reset onboarding state:', e);
     }
