@@ -18,6 +18,16 @@
 **Performance:** Bundle ~318KB, Load ~2s, Lighthouse 88/100/100/100
 **Testing:** Playwright E2E (Chromium + Firefox passing)
 **Compliance:** WCAG AAA, Style Guide 100% (69 CSS variables)
+**CI/CD:** GitHub Actions → Netlify auto-deploy (main branch) | Rollback: `git revert` + push
+**Monitoring:** Netlify Analytics | Lighthouse CI
+
+---
+
+## 📑 Navigatie
+
+**Core:** §2 Kritieke Niet Doen | §3 Output Principe (80/20) | §4 Taal Strategie | §5 Educational Patterns | §6 Tone of Voice
+**Implementatie:** §7 Command Checklist | §8 Architectural Patterns | §9 Recent Learnings (Sessies 36-40)
+**Workflow:** §10 Sessie Protocol | §11 Communicatie Grondregels | §12 Troubleshooting | §13 Referenties
 
 ---
 
@@ -80,76 +90,32 @@ PORT    STATE   SERVICE
 
 ## 📋 Command Implementation Checklist
 
-Bij nieuwe command:
-- [ ] 80/20 output (simplified maar authentiek)
-- [ ] Educatieve feedback in errors
-- [ ] Help + man page (NL)
-- [ ] Warning bij offensive tools
-- [ ] Mobile-friendly (max 40 chars breed)
+Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning (offensive) | Mobile (≤40 chars)
+→ **Volledige specs:** `docs/commands-list.md`
 
 ---
 
 ## 🏗️ Architectural Patterns
 
-**Doel:** Recurring technical patterns extracted from 33+ development sessions
+**Doel:** Critical patterns from 40 sessions - full details in SESSIONS.md
 
 ### CSS & Styling
-⚠️ **Never:**
-- Hardcode colors/border-radius when CSS variables exist (breaks centralized theming)
-- Put `overflow-y: auto` + `border-radius` on same element (scrollbar cuts off corners)
-- Use theme-dependent colors (`--color-text`) on always-dark backgrounds (invisible in light mode)
-- Design light mode as "inverse of dark" (creates washed out appearance)
-
-✅ **Always:**
-- **CSS Variables = Transformation Power:** Single var change → instant site-wide update
-- **Visual regression test** after CSS changes (screenshot all affected components in both themes)
-- **Cache-busting pattern:** Update ALL stylesheet `<link>` tags with same version (`?v=X`)
-- **Light theme design:** MORE saturation (+20-25%) and structure than dark mode (compensate for no glow)
-- **Dark Frame Pattern:** Dark navbar/footer in both themes, frame light content (VS Code, GitHub Desktop proven UX)
-- **Nested scroll containers:** Outer element (shape/border-radius) + Inner element (overflow) for modals
+⚠️ Never hardcode colors/border-radius (use CSS vars) | overflow+border-radius same element | theme colors on fixed backgrounds | light = inverse dark
+✅ CSS Variables = instant site-wide updates | Visual regression test both themes | Cache-bust all stylesheets (`?v=X`) | Light theme needs +20% saturation | Dark Frame Pattern (navbar/footer) | Nested scroll: outer=shape, inner=overflow
 
 ### JavaScript & Events
-⚠️ **Never:**
-- Register event listeners on same DOM elements from multiple files (silent pre-emption)
-- Use global `document.addEventListener` without context checks (steals focus from modals)
-- Assume "code present = executing" without verification (browser caching, timing issues)
-- Use hardcoded breakpoints in JS (`window.innerWidth`) - decouples from CSS media queries
-- Reset state on every `input` event without checking source (breaks programmatic updates)
-
-✅ **Always:**
-- **Single Source of Truth:** ONE file owns each responsibility (prevents duplicate handlers)
-- **Event delegation:** Use `.closest('.selector')` for nested clicks (robust, no hardcoding)
-- **Modal protection:** Check `!e.target.closest('.modal.active')` before global focus actions
-- **Responsive detection:** Use `getComputedStyle(element).display !== 'none'` (respects all breakpoints)
-- **Programmatic change detection:** Use flag (`isProgrammaticChange`) to distinguish user input from code-triggered events
-- **Test production + local** (different caching behaviors in deployment)
+⚠️ Never duplicate listeners same element | global listeners without context check | assume code executes | hardcoded breakpoints | reset state every input
+✅ Single Source of Truth (one file = one responsibility) | Event delegation (`.closest()`) | Modal protection (`!e.target.closest('.modal.active')`) | Responsive detection (`getComputedStyle`) | Programmatic flag (`isProgrammaticChange`) | Test production + local
 
 ### UX & Design
-⚠️ **Never:**
-- Use same color for decoratie + primaire content (figure-ground violation, cognitive load ↑)
-- Use passive onboarding language ("Dit is...") - engagement drops 15-25% vs mission-driven
-- Mix emoji with ASCII terminal aesthetic (consumer app feel vs professional tool)
-- Use <16px fonts on mobile primary UI (WCAG AAA violation)
-
-✅ **Always:**
-- **UX research before implementation:** Test 3-4 options, screenshot comparison, informed decision
-- **Enterprise modal pattern:** 3-layer architecture (Header + Body + Footer), scrollbar in body only
-- **Color Hierarchy Strategy:** Muted UI (grijs) + saturated content (groen) - colored elements compete
-- **Mission-driven onboarding:** Identity framing ("Je missie:") beats description ("Dit is:")
-- **100% ASCII for terminal tools:** Industry pattern (npm, git, cargo use `[WARNING]`, never emoji)
-- **Industry validation:** VS Code, GitHub Desktop, Bootstrap = proven patterns to follow
+⚠️ Never same color for decoration + content | passive language ("Dit is") | emoji in terminal | <16px mobile fonts
+✅ UX research first (3-4 options + screenshots) | 3-layer modals (Header/Body/Footer) | Muted UI + saturated content | Mission-driven ("Je missie:") | 100% ASCII brackets | Industry validation (VS Code, GitHub, Bootstrap)
 
 ### Testing & Deployment
-⚠️ **Never:**
-- Rely solely on automated tests for focus/modal features (synthetic events ≠ human interaction)
-- Assume "Playwright passes = users can interact" (`.fill()` bypasses focus mechanisms)
-- Skip fresh user simulation when testing onboarding (cache issues hide bugs)
+⚠️ Never rely only on automated tests (synthetic ≠ human) | assume Playwright = user reality | skip fresh user testing
+✅ Semantic detection at render | Fresh simulation (incognito + clear + refresh) | Manual test on automation success | Fix P0 bugs before assertions
 
-✅ **Always:**
-- **Semantic detection at render time:** Auto-detect markers → zero command-level changes needed
-- **Fresh user simulation:** Incognito + localStorage.clear() + hard refresh
-- **Test manually when automation succeeds but users fail** (classic event handler conflict symptom)
-- **Fix P0 bugs first,** then assertion issues (blocking bugs > test expectations)
+→ **Volledige patterns met voorbeelden:** SESSIONS.md §Architectural Patterns
 
 ---
 
@@ -200,10 +166,8 @@ Bij nieuwe command:
 ✅ Strategy Pattern for phased rollouts, ASCII box drawing (╭─╮│├┤╰─╯), mobile-first design (40 chars)
 📄 SESSIONS.md Sessie 36
 
-### Sessie 35: Command Discovery Modal UX (6 nov 2025)
-⚠️ Never design discovery features as "power user first" for beginners
-✅ Educational pattern: Insert command (don't execute) → user learns syntax
-📄 SESSIONS.md Sessie 35
+### Sessie 35: Command Discovery Modal (6 nov)
+⚠️ Never "power user first" for beginners | ✅ Insert command (don't execute) = educational pattern | 📄 SESSIONS.md Sessie 35
 
 **Older Sessions (2-34):** See SESSIONS.md for comprehensive historical context
 
@@ -228,6 +192,24 @@ Bij nieuwe command:
 ### Bij Requirement Changes
 - Update volgorde: `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 - Verifieer consistentie tussen alle bestanden
+
+### Document Sync Protocol (Consistency Maintenance)
+**Trigger:** Na elke milestone completion OF elke 10 sessies
+**Single Source of Truth:** TASKS.md voor alle metrics
+
+**Sync Checklist:**
+- [ ] Task counts (totaal, voltooid, percentage)
+- [ ] Milestone voortgang (M5, M6, etc.)
+- [ ] Bundle size (production measurement)
+- [ ] "Last updated" datums (alle docs zelfde datum)
+- [ ] Performance metrics (Lighthouse, load time)
+
+**Update volgorde:**
+```
+TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
+```
+
+**Quarterly Full-Sync:** Elke 3 maanden of bij major milestone (M5→M6, MVP→Phase 2)
 
 ---
 
@@ -262,16 +244,31 @@ Bij nieuwe command:
 
 ---
 
+## 🔍 Troubleshooting
+
+**Build groter dan 500KB:** Check imports | Minification aan | Tree-shaking werkend | Ongebruikte code verwijderd
+**Playwright passes maar manual fails:** Event handler conflict (zie §8 JS Patterns: duplicate listeners)
+**CSS niet live op production:** Cache-busting vergeten - update ALL `<link>` tags met `?v=X` (zie §8 CSS Patterns)
+**Focus/keyboard bugs:** Modal protection missing - check `!e.target.closest('.modal.active')` (zie §8 JS Patterns)
+**Light mode colors invisible:** Theme-dependent colors op fixed dark backgrounds (zie §8 CSS Patterns)
+**Layout jank on hover:** Missing transparent border reserve (zie Sessie 38: Dropdown Perfectie)
+
+→ **Volledige troubleshooting + solutions:** SESSIONS.md §Common Issues
+
+---
+
 ## 📚 Referenties
 
 **Volledige details:** `docs/prd.md` (v1.4)
 **Command specs:** `docs/commands-list.md`
 **Style guide:** `docs/STYLEGUIDE.md` (v1.0) - Comprehensive design system & component library
-**Sessie logs:** `SESSIONS.md` - Complete historical record (39 sessions)
+**Sessie logs:** `SESSIONS.md` - Complete historical record (40 sessions total: Sessies 1-34 archived, Sessies 35-40 in CLAUDE.md)
 **Filesystem structure:** PRD Bijlage B
 **Tech rationale:** PRD §13
 
 ---
 
-**Last updated:** 11 november 2025
-**Version:** 12.8 (Sessie 40: Smart Scroll Removal - "Kill Your Darlings" engineering discipline, -102 lines bloat)
+**Last updated:** 11 november 2025 (Sessie 41)
+**Last synced:** 11 november 2025 (CLAUDE.md optimized - all docs aligned)
+**Next sync:** Milestone M6 completion OR Sessie 50
+**Version:** 12.9 (Sessie 41: CLAUDE.md Optimization - "Document Hygiene" -56 regels, +Troubleshooting, +Deployment info)
