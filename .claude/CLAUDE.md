@@ -157,6 +157,17 @@ Bij nieuwe command:
 
 **Doel:** Last 5 sessions only - older sessions archived in SESSIONS.md
 
+### Sessie 40: Kill Your Darlings - Smart Scroll Removal & Engineering Discipline (11 nov 2025)
+⚠️ Never build features for problems that don't exist (scrolling is obvious for digital natives)
+⚠️ Never assume architecture supports feature without testing (infinite scroll ≠ fixed viewport)
+⚠️ Never use "Pro tip" for basic functionality (reserve for advanced techniques only)
+✅ Always validate educational value BEFORE implementation (3 sessions → 0% user value = stop)
+✅ Always check correct DOM element for measurements (outputElement ≠ parentElement)
+✅ Experimentation validates decisions: Building → discovering incompatibility → removing cleanly
+✅ "Kill your darlings" = engineering maturity (-102 lines complexity, +48 lines useful features)
+📊 Impact: Clean terminal, enhanced scrollbar (12px cyaan), Home/End shortcuts, 0 bloat
+📄 SESSIONS.md Sessie 40
+
 ### Sessie 39: Keyboard Shortcuts Discovery - Modal vs Terminal for Reference Material (9 nov 2025)
 ⚠️ Never assume modals allow simultaneous terminal interaction (`position: fixed` overlay blocks everything)
 ⚠️ Never assume beginners know keyboard shortcuts from "cultural knowledge" (Ctrl+R/L unknown to 15-25 jaar target)
@@ -262,5 +273,5 @@ Bij nieuwe command:
 
 ---
 
-**Last updated:** 9 november 2025
-**Version:** 12.7 (Sessie 39: Keyboard Shortcuts Discovery - 0% → 80% visibility via 4-layer multi-touch system)
+**Last updated:** 11 november 2025
+**Version:** 12.8 (Sessie 40: Smart Scroll Removal - "Kill Your Darlings" engineering discipline, -102 lines bloat)
