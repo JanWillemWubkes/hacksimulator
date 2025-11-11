@@ -40,6 +40,7 @@ class Renderer {
     line.appendChild(commandText);
 
     this.outputElement.appendChild(line);
+
     this._scrollToBottom();
   }
 
@@ -95,6 +96,7 @@ class Renderer {
       this.outputElement.appendChild(line);
     });
 
+    // Always scroll to bottom (industry standard)
     this._scrollToBottom();
   }
 
@@ -197,14 +199,13 @@ class Renderer {
   }
 
   /**
-   * Scroll terminal to bottom
+   * Scroll terminal to bottom (industry standard behavior)
    * @private
    */
   _scrollToBottom() {
-    if (this.outputElement && this.outputElement.parentElement) {
-      // Scroll the terminal container
-      const container = this.outputElement.parentElement;
-      container.scrollTop = container.scrollHeight;
+    if (this.outputElement) {
+      // Scroll the output element itself (not parent)
+      this.outputElement.scrollTop = this.outputElement.scrollHeight;
     }
   }
 

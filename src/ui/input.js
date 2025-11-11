@@ -159,6 +159,18 @@ class InputHandler {
           this._handleCancel();
         }
         break;
+
+      case 'Home':
+        // Home key to scroll to top of terminal output
+        e.preventDefault();
+        this._handleScrollToTop();
+        break;
+
+      case 'End':
+        // End key to scroll to bottom of terminal output
+        e.preventDefault();
+        this._handleScrollToBottom();
+        break;
     }
   }
 
@@ -371,6 +383,32 @@ class InputHandler {
    */
   _handleCancel() {
     this.clear();
+  }
+
+  /**
+   * Handle scroll to top of terminal output (Home key)
+   * @private
+   */
+  _handleScrollToTop() {
+    if (!this.terminal || !this.terminal.getOutputElement()) {
+      return;
+    }
+
+    const outputElement = this.terminal.getOutputElement();
+    outputElement.scrollTop = 0;
+  }
+
+  /**
+   * Handle scroll to bottom of terminal output (End key)
+   * @private
+   */
+  _handleScrollToBottom() {
+    if (!this.terminal || !this.terminal.getOutputElement()) {
+      return;
+    }
+
+    const outputElement = this.terminal.getOutputElement();
+    outputElement.scrollTop = outputElement.scrollHeight;
   }
 
   /**

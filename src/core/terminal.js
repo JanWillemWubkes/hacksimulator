@@ -273,6 +273,14 @@ class Terminal {
   }
 
   /**
+   * Get output element (for keyboard scroll shortcuts)
+   * @returns {HTMLElement|null}
+   */
+  getOutputElement() {
+    return renderer.outputElement;
+  }
+
+  /**
    * Validate if command should be tracked for leerpad progress
    * Only tracks commands that are used correctly (with required arguments)
    * @private

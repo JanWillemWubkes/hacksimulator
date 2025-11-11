@@ -32,9 +32,9 @@
   color: var(--color-text);
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - Enhanced for better visibility */
 #terminal-output::-webkit-scrollbar {
-  width: 8px;
+  width: 12px; /* Wider for better visibility (was 8px) */
 }
 
 #terminal-output::-webkit-scrollbar-track {
@@ -42,12 +42,13 @@
 }
 
 #terminal-output::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+  background: var(--color-info); /* Cyaan = educational color */
+  border: 2px solid var(--color-bg); /* Gap creates visual separation */
   border-radius: var(--border-radius-button);
 }
 
 #terminal-output::-webkit-scrollbar-thumb:hover {
-  background: var(--color-prompt);
+  background: var(--color-prompt); /* Neon green = interactive state */
 }
 
 /* Terminal lines */
