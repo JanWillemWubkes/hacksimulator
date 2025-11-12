@@ -2,6 +2,11 @@
 
 Een veilige browser-based terminal simulator waar Nederlandse beginners de fundamenten van ethisch hacken kunnen leren door hands-on te oefenen met echte commando's.
 
+[![Live Demo](https://img.shields.io/badge/demo-live-success?style=flat-square)](https://famous-frangollo-b5a758.netlify.app/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
+[![Code of Conduct](https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square)](CODE_OF_CONDUCT.md)
+
 **🚀 Live Demo:** [https://famous-frangollo-b5a758.netlify.app/](https://famous-frangollo-b5a758.netlify.app/)
 **📦 GitHub:** [https://github.com/JanWillemWubkes/hacksimulator](https://github.com/JanWillemWubkes/hacksimulator)
 
@@ -71,6 +76,16 @@ hacksimulator/
 │   └── commands-list.md # Command specs
 └── tests/              # Tests (future)
 ```
+
+## 📸 Screenshots
+
+### Dark Mode (Default)
+![HackSimulator - Dark Mode](assets/screenshots/dark-mode.png)
+*Terminal interface met educatieve tooltips en authentic command output*
+
+### Light Mode
+![HackSimulator - Light Mode](assets/screenshots/light-mode.png)
+*Volledig responsive design met toegankelijke kleurcontrasten*
 
 ## 💻 Tech Stack
 
@@ -242,24 +257,43 @@ netlify deploy --prod
 
 ## 🤝 Contributing
 
-This is currently a solo educational project. Contributions will be considered post-MVP launch.
+Contributions are welcome! We're looking for:
+- 🐛 Bug reports and fixes
+- ✨ New command implementations
+- 📚 Documentation improvements
+- 🌍 Translations (future)
+- 🎨 UI/UX enhancements
 
-### Code Style
-- **Naming:** kebab-case for files, camelCase for JS, PascalCase for classes
-- **Comments:** Dutch for documentation, English for inline code
-- **Formatting:** Use Prettier (config included)
-- **Linting:** Use ESLint (config included)
+**Before contributing:**
+1. Read our [Contributing Guidelines](CONTRIBUTING.md) for setup and development process
+2. Check the [Command Specifications](docs/commands-list.md) for planned features
+3. Review our [Code of Conduct](CODE_OF_CONDUCT.md)
+
+### Quick Guidelines
+- **Tech:** Vanilla JS/CSS only (no frameworks!)
+- **Code Style:** ESLint + Prettier (configs included)
+- **Taal:** UI in Nederlands, commands in Engels, uitleg in Nederlands
+- **Testing:** Test both dark/light mode, mobile (40 chars), Chrome + Firefox
+
+For detailed instructions, see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## 📜 Code of Conduct
+
+This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md).
+
+We are committed to providing a welcoming and inclusive environment for all contributors. Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before participating.
 
 ## 📄 License
 
-TBD (will be added pre-launch)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+Copyright (c) 2025 HackSimulator.nl
 
 ## 📧 Contact
 
 - **Live Demo:** [https://famous-frangollo-b5a758.netlify.app/](https://famous-frangollo-b5a758.netlify.app/)
 - **GitHub:** [https://github.com/JanWillemWubkes/hacksimulator](https://github.com/JanWillemWubkes/hacksimulator)
-- **Issues:** [GitHub Issues](https://github.com/JanWillemWubkes/hacksimulator/issues)
-- **Email:** [TBD - will be added before full launch]
+- **Issues:** [GitHub Issues](https://github.com/JanWillemWubkes/hacksimulator/issues) (bug reports, feature requests, questions)
 
 ## ⚠️ Legal Disclaimer
 

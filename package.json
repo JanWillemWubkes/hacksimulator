@@ -1,4 +1,31 @@
 {
+  "name": "hacksimulator",
+  "version": "1.0.0",
+  "description": "Browser-based terminal simulator voor ethisch hacken leren - Veilige omgeving voor Nederlandse beginners (15-25 jaar)",
+  "keywords": [
+    "cybersecurity",
+    "ethical-hacking",
+    "terminal-simulator",
+    "education",
+    "dutch",
+    "vanilla-javascript",
+    "security-training",
+    "terminal",
+    "hacking-simulator",
+    "learning-platform",
+    "beginner-friendly",
+    "netherlands"
+  ],
+  "homepage": "https://famous-frangollo-b5a758.netlify.app/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JanWillemWubkes/hacksimulator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JanWillemWubkes/hacksimulator/issues"
+  },
+  "author": "HackSimulator.nl",
+  "license": "MIT",
   "devDependencies": {
     "@playwright/test": "^1.56.1"
   }
