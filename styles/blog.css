@@ -8,7 +8,7 @@
 
 /* Blog Page Container */
 .blog-container {
-  max-width: 900px;
+  max-width: 720px;  /* Optimized for 65-75 characters per line (reading comfort) */
   margin: 0 auto;
   padding: calc(60px + var(--spacing-xl)) var(--spacing-lg) var(--spacing-xl);
   min-height: 100vh;
@@ -43,6 +43,7 @@
 .blog-nav {
   display: flex;
   justify-content: center;
+  align-items: center;  /* Vertically align links and theme toggle */
   gap: var(--spacing-lg);
   margin-bottom: var(--spacing-xl);
   padding: var(--spacing-md) 0;
@@ -451,6 +452,16 @@
   font-family: var(--font-ui);
   color: var(--color-text-dim);
   margin-bottom: var(--spacing-md);
+}
+
+/* Footer Navigation - Ensure consistent styling with main app */
+footer nav a {
+  color: var(--color-footer-link);
+  text-decoration: none;
+}
+
+footer nav a:hover {
+  color: var(--color-footer-link-hover);
 }
 
 /* ==================== Responsive Design ==================== */

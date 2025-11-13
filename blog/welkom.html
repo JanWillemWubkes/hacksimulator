@@ -28,7 +28,7 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="../styles/main.css?v=2">
-  <link rel="stylesheet" href="../styles/blog.css?v=1">
+  <link rel="stylesheet" href="../styles/blog.css?v=2">
 
   <!-- Structured Data - JSON-LD -->
   <script type="application/ld+json">
@@ -65,6 +65,14 @@
   <nav class="blog-nav" aria-label="Hoofdnavigatie">
     <a href="../index.html">← Terug naar Simulator</a>
     <a href="index.html">← Blog Overzicht</a>
+    <button class="theme-toggle" aria-label="Toggle tussen dark en light mode" title="Toggle tussen dark en light mode">
+      <span class="toggle-option" data-theme="dark">
+        <span class="toggle-indicator">█</span> DARK
+      </span>
+      <span class="toggle-option" data-theme="light">
+        <span class="toggle-indicator">█</span> LIGHT
+      </span>
+    </button>
   </nav>
 
   <!-- Main Content -->
@@ -97,10 +105,10 @@
 
         <p>Denk aan het als een <strong>vliegsimulator voor hackers</strong>:</p>
         <ul>
-          <li>✅ <strong>Veilig experimenteren</strong> - Alle commands draaien in je browser, niks raakt je echte systeem</li>
-          <li>✅ <strong>Authentieke ervaring</strong> - Commands zien eruit zoals in echte terminals</li>
-          <li>✅ <strong>Educatieve feedback</strong> - Elke command komt met Nederlandse uitleg en tips</li>
-          <li>✅ <strong>Geen voorkennis nodig</strong> - Begin bij nul, bouw stap voor stap kennis op</li>
+          <li>[ ✓ ] <strong>Veilig experimenteren</strong> - Alle commands draaien in je browser, niks raakt je echte systeem</li>
+          <li>[ ✓ ] <strong>Authentieke ervaring</strong> - Commands zien eruit zoals in echte terminals</li>
+          <li>[ ✓ ] <strong>Educatieve feedback</strong> - Elke command komt met Nederlandse uitleg en tips</li>
+          <li>[ ✓ ] <strong>Geen voorkennis nodig</strong> - Begin bij nul, bouw stap voor stap kennis op</li>
         </ul>
 
         <div class="blog-tip">
@@ -124,7 +132,7 @@
           De simulator bevat <strong>30+ authentieke commands</strong> verdeeld over vier categorieën:
         </p>
 
-        <h3>📁 Filesystem Commands</h3>
+        <h3>[ FS ] Filesystem Commands</h3>
         <p>
           Navigeer door een virtueel bestandssysteem, lees bestanden, zoek naar verborgen data. Commands als <code>ls</code>,
           <code>cd</code>, <code>cat</code> en <code>find</code> zijn de basis van elke terminal gebruiker.
@@ -140,7 +148,7 @@ drwxr-xr-x 3 root   root   4096 Nov 10 10:00 ..
           </div>
         </div>
 
-        <h3>🔒 Security Commands</h3>
+        <h3>[ SEC ] Security Commands</h3>
         <p>
           Ontdek hoe professionals systemen scannen en testen. Leer tools als <code>nmap</code> voor network scanning,
           <code>hashcat</code> voor password cracking (ethisch!), en <code>sqlmap</code> voor database security testing.
@@ -152,13 +160,13 @@ drwxr-xr-x 3 root   root   4096 Nov 10 10:00 ..
           je toestemming voor hebt</strong>!
         </div>
 
-        <h3>🌐 Network Commands</h3>
+        <h3>[ NET ] Network Commands</h3>
         <p>
           Begrijp hoe netwerken werken met commands als <code>ping</code>, <code>traceroute</code>, <code>netstat</code> en
           <code>whois</code>. Essentiële kennis voor iedereen in IT.
         </p>
 
-        <h3>⚙️ System Commands</h3>
+        <h3>[ SYS ] System Commands</h3>
         <p>
           Bekijk systeeminformatie, beheer processen, en leer hoe Linux/Unix systemen werken met <code>ps</code>, <code>top</code>,
           <code>uname</code> en meer.
@@ -256,8 +264,35 @@ drwxr-xr-x 3 root   root   4096 Nov 10 10:00 ..
 
   <!-- Theme Toggle Script -->
   <script>
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    // Initialize theme from localStorage (default: dark)
+    function initializeTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const isDark = savedTheme ? savedTheme === 'dark' : true;
+      applyTheme(isDark);
+    }
+
+    // Apply theme to document
+    function applyTheme(isDark) {
+      const theme = isDark ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+    }
+
+    // Toggle between dark and light theme
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const isDark = currentTheme === 'dark';
+      applyTheme(!isDark);
+    }
+
+    // Initialize theme on page load
+    initializeTheme();
+
+    // Add click handler to theme toggle button
+    const themeToggle = document.querySelector('.theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', toggleTheme);
+    }
   </script>
 </body>
 </html>

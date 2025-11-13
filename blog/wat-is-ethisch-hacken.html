@@ -28,7 +28,7 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="../styles/main.css?v=2">
-  <link rel="stylesheet" href="../styles/blog.css?v=1">
+  <link rel="stylesheet" href="../styles/blog.css?v=2">
 
   <!-- Structured Data - JSON-LD -->
   <script type="application/ld+json">
@@ -65,6 +65,14 @@
   <nav class="blog-nav" aria-label="Hoofdnavigatie">
     <a href="../index.html">← Terug naar Simulator</a>
     <a href="index.html">← Blog Overzicht</a>
+    <button class="theme-toggle" aria-label="Toggle tussen dark en light mode" title="Toggle tussen dark en light mode">
+      <span class="toggle-option" data-theme="dark">
+        <span class="toggle-indicator">█</span> DARK
+      </span>
+      <span class="toggle-option" data-theme="light">
+        <span class="toggle-indicator">█</span> LIGHT
+      </span>
+    </button>
   </nav>
 
   <!-- Main Content -->
@@ -95,7 +103,7 @@
           western films waar cowboys witte of zwarte hoeden droegen om goed en kwaad aan te geven:
         </p>
 
-        <h3>🤠 White Hat Hackers (Ethische Hackers)</h3>
+        <h3>[ + ] White Hat Hackers (Ethische Hackers)</h3>
         <p>
           <strong>White hat hackers</strong> zijn de "goede jongens" van hacking. Ze gebruiken hun skills om systemen te <strong>beschermen</strong>,
           niet om ze aan te vallen. Hier is wat ze doen:
@@ -119,7 +127,7 @@
           <li><strong>Charlie Miller</strong> - Bekende security researcher die auto's en smartphones hack om zwaktes aan te tonen</li>
         </ul>
 
-        <h3>🏴 Black Hat Hackers (Criminele Hackers)</h3>
+        <h3>[ - ] Black Hat Hackers (Criminele Hackers)</h3>
         <p>
           <strong>Black hat hackers</strong> zijn de criminelen. Ze hacken <strong>zonder toestemming</strong> en hebben meestal
           malicieuze bedoelingen:
@@ -137,7 +145,7 @@
           computersystemen strafbaar met maximaal 4 jaar celstraf.
         </div>
 
-        <h3>⚪ Grey Hat Hackers (De Grijze Zone)</h3>
+        <h3>[ ~ ] Grey Hat Hackers (De Grijze Zone)</h3>
         <p>
           <strong>Grey hat hackers</strong> zitten tussen wit en zwart in. Ze hacken soms <strong>zonder toestemming</strong>, maar met goede bedoelingen:
         </p>
@@ -322,8 +330,35 @@ Host 192.168.1.10: OPEN ports 3306 (MySQL)
 
   <!-- Theme Toggle Script -->
   <script>
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    // Initialize theme from localStorage (default: dark)
+    function initializeTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const isDark = savedTheme ? savedTheme === 'dark' : true;
+      applyTheme(isDark);
+    }
+
+    // Apply theme to document
+    function applyTheme(isDark) {
+      const theme = isDark ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+    }
+
+    // Toggle between dark and light theme
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const isDark = currentTheme === 'dark';
+      applyTheme(!isDark);
+    }
+
+    // Initialize theme on page load
+    initializeTheme();
+
+    // Add click handler to theme toggle button
+    const themeToggle = document.querySelector('.theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', toggleTheme);
+    }
   </script>
 </body>
 </html>

@@ -31,7 +31,7 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="../styles/main.css?v=2">
-  <link rel="stylesheet" href="../styles/blog.css?v=1">
+  <link rel="stylesheet" href="../styles/blog.css?v=2">
 
   <!-- Structured Data - JSON-LD -->
   <script type="application/ld+json">
@@ -57,6 +57,14 @@
   <!-- Navigation -->
   <nav class="blog-nav" aria-label="Hoofdnavigatie">
     <a href="../index.html">← Terug naar Simulator</a>
+    <button class="theme-toggle" aria-label="Toggle tussen dark en light mode" title="Toggle tussen dark en light mode">
+      <span class="toggle-option" data-theme="dark">
+        <span class="toggle-indicator">█</span> DARK
+      </span>
+      <span class="toggle-option" data-theme="light">
+        <span class="toggle-indicator">█</span> LIGHT
+      </span>
+    </button>
   </nav>
 
   <!-- Main Content -->
@@ -74,9 +82,9 @@
       <article class="blog-post-card">
         <h2><a href="welkom.html">Welkom bij HackSimulator.nl</a></h2>
         <div class="blog-meta">
-          <span>📅 13 november 2025</span>
+          <span>[13 nov 2025]</span>
           <span class="blog-meta-separator">|</span>
-          <span>⏱️ 5 min lezen</span>
+          <span>[5 min]</span>
         </div>
         <p class="blog-excerpt">
           Ontdek HackSimulator.nl - een veilige browser-based terminal waar je ethisch hacken leert zonder risico's.
@@ -90,9 +98,9 @@
       <article class="blog-post-card">
         <h2><a href="wat-is-ethisch-hacken.html">Wat is Ethisch Hacken?</a></h2>
         <div class="blog-meta">
-          <span>📅 10 november 2025</span>
+          <span>[10 nov 2025]</span>
           <span class="blog-meta-separator">|</span>
-          <span>⏱️ 8 min lezen</span>
+          <span>[8 min]</span>
         </div>
         <p class="blog-excerpt">
           White hat, black hat, grey hat - wat betekenen deze termen eigenlijk? Leer het verschil tussen ethisch en
@@ -106,9 +114,9 @@
       <article class="blog-post-card">
         <h2><a href="terminal-basics.html">Terminal Commands voor Beginners</a></h2>
         <div class="blog-meta">
-          <span>📅 8 november 2025</span>
+          <span>[8 nov 2025]</span>
           <span class="blog-meta-separator">|</span>
-          <span>⏱️ 6 min lezen</span>
+          <span>[6 min]</span>
         </div>
         <p class="blog-excerpt">
           De terminal lijkt intimiderend, maar is eigenlijk super logisch. Deze gids legt de basis uit: wat is een terminal,
@@ -135,9 +143,35 @@
 
   <!-- Theme Toggle Script -->
   <script>
-    // Sync theme with main app
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    // Initialize theme from localStorage (default: dark)
+    function initializeTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const isDark = savedTheme ? savedTheme === 'dark' : true;
+      applyTheme(isDark);
+    }
+
+    // Apply theme to document
+    function applyTheme(isDark) {
+      const theme = isDark ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+    }
+
+    // Toggle between dark and light theme
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const isDark = currentTheme === 'dark';
+      applyTheme(!isDark);
+    }
+
+    // Initialize theme on page load
+    initializeTheme();
+
+    // Add click handler to theme toggle button
+    const themeToggle = document.querySelector('.theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', toggleTheme);
+    }
   </script>
 </body>
 </html>
