@@ -255,15 +255,16 @@ export function initNavbar() {
 
   /**
    * Handle Blog link
+   * Navigates to blog section (separate page, not SPA)
    */
   function handleBlog(e) {
     e.preventDefault();
     closeMenu();
     closeDropdowns();
 
-    // Blog is future feature - show placeholder
-    console.log('[Navbar] Blog link clicked - feature coming soon');
-    // TODO: Implement blog modal or page
+    // Navigate to blog homepage
+    console.log('[Navbar] Navigating to blog...');
+    window.location.href = '/blog/index.html';
   }
 
   /**
