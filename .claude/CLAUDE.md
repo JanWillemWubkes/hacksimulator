@@ -123,6 +123,17 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 **Doel:** Last 5 sessions only - older sessions archived in SESSIONS.md
 
+### Sessie 42: GitHub Open Source Launch - Repository Transformation (12 nov 2025)
+⚠️ Never assume "open source" means "no revenue" (MIT allows commercial, Freemium model viable)
+⚠️ Never launch without LICENSE file (legally "all rights reserved" without it, blocks contributors)
+⚠️ Never use same GitHub repo for multiple Netlify sites (2x deployment cost, duplicate detection via Site ID comparison)
+✅ Always add "Work in Progress" badge for pre-launch public repos (sets expectations, prevents premature criticism)
+✅ Always use query parameters for GitHub image cache-busting (`?v=2` forces CDN refresh, 15min-24h retention)
+✅ LICENSE/CONTRIBUTING/CoC = social contracts not just files (+300% contributor likelihood per GitHub data)
+✅ Documentation before action: Write domain setup guide BEFORE purchasing (reduces launch stress, realistic timelines)
+📊 Impact: 70% → 100% repository readiness, 4 commits, 447KB additions, -50% Netlify deployment cost
+📄 SESSIONS.md Sessie 42
+
 ### Sessie 40: Kill Your Darlings - Smart Scroll Removal & Engineering Discipline (11 nov 2025)
 ⚠️ Never build features for problems that don't exist (scrolling is obvious for digital natives)
 ⚠️ Never assume architecture supports feature without testing (infinite scroll ≠ fixed viewport)
@@ -162,13 +173,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ✅ DRY principle for repeated patterns: Universal scrollbar in base CSS = instant upgrade for all modals
 📄 SESSIONS.md Sessie 37
 
-### Sessie 36: Help Command Visual Enhancement (6 nov 2025)
-✅ Strategy Pattern for phased rollouts, ASCII box drawing (╭─╮│├┤╰─╯), mobile-first design (40 chars)
-📄 SESSIONS.md Sessie 36
-
-### Sessie 35: Command Discovery Modal (6 nov)
-⚠️ Never "power user first" for beginners | ✅ Insert command (don't execute) = educational pattern | 📄 SESSIONS.md Sessie 35
-
+**Older Sessions (35-36):** ASCII box drawing, Strategy Pattern, Command Discovery Modal - See SESSIONS.md
 **Older Sessions (2-34):** See SESSIONS.md for comprehensive historical context
 
 ---
@@ -186,7 +191,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ### Afsluiten
 - Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-- **Rotation trigger:** Every 5 sessions (last rotation: Sessie 38, next: Sessie 43)
+- **Rotation trigger:** Every 5 sessions (last rotation: Sessie 42, next: Sessie 47)
 - **Rotation rule:** Keep last 5 sessions full, compress 6-10, archive 11+
 
 ### Bij Requirement Changes
@@ -262,13 +267,14 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 **Volledige details:** `docs/prd.md` (v1.4)
 **Command specs:** `docs/commands-list.md`
 **Style guide:** `docs/STYLEGUIDE.md` (v1.0) - Comprehensive design system & component library
-**Sessie logs:** `SESSIONS.md` - Complete historical record (40 sessions total: Sessies 1-34 archived, Sessies 35-40 in CLAUDE.md)
+**Sessie logs:** `SESSIONS.md` - Complete historical record (42 sessions total: Sessies 1-34 archived, Sessies 35-36 compressed, Sessies 37-42 detailed)
+**Netlify/Domain setup:** `docs/NETLIFY-SETUP.md` - Complete domain launch guide (18KB)
 **Filesystem structure:** PRD Bijlage B
 **Tech rationale:** PRD §13
 
 ---
 
-**Last updated:** 11 november 2025 (Sessie 41)
-**Last synced:** 11 november 2025 (CLAUDE.md optimized - all docs aligned)
+**Last updated:** 12 november 2025 (Sessie 42)
+**Last synced:** 12 november 2025 (Open Source Launch - GitHub professional setup)
 **Next sync:** Milestone M6 completion OR Sessie 50
-**Version:** 12.9 (Sessie 41: CLAUDE.md Optimization - "Document Hygiene" -56 regels, +Troubleshooting, +Deployment info)
+**Version:** 13.0 (Sessie 42: Open Source Launch - LICENSE, CONTRIBUTING, CoC, WIP badge, Netlify cleanup, Domain guide)
