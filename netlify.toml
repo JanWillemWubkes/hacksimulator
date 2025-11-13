@@ -22,5 +22,54 @@
 #   to = "/index.html"
 #   status = 200
 
-# Headers (alternative to _headers file, but _headers takes precedence)
-# Using _headers file for better readability
+# Custom Domain Redirects (Activate when hacksimulator.nl is live)
+# Uncomment these redirects after domain is configured in Netlify
+
+# Redirect www to apex domain
+# [[redirects]]
+#   from = "https://www.hacksimulator.nl/*"
+#   to = "https://hacksimulator.nl/:splat"
+#   status = 301
+#   force = true
+
+# Force HTTPS
+# [[redirects]]
+#   from = "http://hacksimulator.nl/*"
+#   to = "https://hacksimulator.nl/:splat"
+#   status = 301
+#   force = true
+
+# [[redirects]]
+#   from = "http://www.hacksimulator.nl/*"
+#   to = "https://hacksimulator.nl/:splat"
+#   status = 301
+#   force = true
+
+# Optional: Redirect old Netlify subdomain to custom domain
+# [[redirects]]
+#   from = "https://famous-frangollo-b5a758.netlify.app/*"
+#   to = "https://hacksimulator.nl/:splat"
+#   status = 301
+#   force = false
+
+# Security Headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Prevent clickjacking
+    X-Frame-Options = "SAMEORIGIN"
+
+    # Prevent MIME sniffing
+    X-Content-Type-Options = "nosniff"
+
+    # XSS Protection
+    X-XSS-Protection = "1; mode=block"
+
+    # Referrer Policy
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Strict Transport Security (Uncomment when custom domain is live with HTTPS)
+# [[headers]]
+#   for = "/*"
+#   [headers.values]
+#     Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"

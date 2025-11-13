@@ -10,6 +10,28 @@ Een veilige browser-based terminal simulator waar Nederlandse beginners de funda
 **🚀 Live Demo:** [https://famous-frangollo-b5a758.netlify.app/](https://famous-frangollo-b5a758.netlify.app/)
 **📦 GitHub:** [https://github.com/JanWillemWubkes/hacksimulator](https://github.com/JanWillemWubkes/hacksimulator)
 
+---
+
+## ⚠️ Development Status
+
+**🚧 Work in Progress - Public Beta**
+
+Dit project is in actieve ontwikkeling. De officiële productie launch op `hacksimulator.nl` is gepland voor Q1 2026.
+
+**Live Beta Demo:** [famous-frangollo-b5a758.netlify.app](https://famous-frangollo-b5a758.netlify.app/)
+
+| Status | Feature |
+|--------|---------|
+| ✅ **Live** | 30 commands, filesystem simulation, dark/light mode |
+| ✅ **Live** | Educational tooltips, security warnings |
+| 🔜 **Coming** | Custom domain (hacksimulator.nl) |
+| 🔜 **Coming** | Guided tutorials & learning paths |
+| 🔜 **Coming** | Advanced scenarios & challenges |
+
+**Contributions welcome!** See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+---
+
 ## 🎯 Project Overzicht
 
 **Status:** ✅ **LIVE** on Netlify (M5 Testing Phase - 93.8% MVP Complete)
