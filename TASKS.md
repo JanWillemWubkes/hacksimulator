@@ -8,7 +8,7 @@
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 141 / 166 taken voltooid (84.9%)
+**Totaal:** 141 / 167 taken voltooid (84.4%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|

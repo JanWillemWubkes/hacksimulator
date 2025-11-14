@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 6 november 2025
+**Laatst bijgewerkt:** 11 november 2025
 **Status:** M5 Testing & Launch Phase - ✅ **LIVE on Netlify!**
 **Verantwoordelijk:** Development Team
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
@@ -617,9 +617,9 @@ const DEBUG_MODE = false;
 
 ## 📅 Roadmap & Fases
 
-### Fase 1: MVP (Maand 1-3) - ✅ 84.8% VOLTOOID - **LIVE!**
+### Fase 1: MVP (Maand 1-3) - ✅ 84.4% VOLTOOID - **LIVE!**
 
-**Status:** 139/164 tasks completed (84.8%) - M0-M4 (100%), M5 (8/35 - 23%)
+**Status:** 141/167 tasks completed (84.4%) - M0-M4 (100%), M5 (10/37 - 27%)
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
@@ -753,7 +753,7 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 6 november 2025
+**Laatst bijgewerkt:** 11 november 2025
 **Versie:** 1.7 (Help Command Enhancement roadmap added - Phase 3 interactive paging planned)
 **Status:** ✅ Deployed - Live in Production
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/

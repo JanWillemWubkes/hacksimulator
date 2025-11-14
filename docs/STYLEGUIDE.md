@@ -1,7 +1,7 @@
 # Style Guide - HackSimulator.nl
 
 **Version:** 1.0
-**Last Updated:** 27 oktober 2025
+**Last Updated:** 29 oktober 2025
 **Status:** Production Ready
 
 ---

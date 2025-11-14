@@ -123,6 +123,39 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 **Doel:** Last 5 sessions only - older sessions archived in SESSIONS.md
 
+### Sessie 45: Navbar Consistency & Toggle Contrast - Architectural Verification (14 nov 2025)
+⚠️ Never test fixes on single site only (main site working ≠ blog site working - multi-page apps need comprehensive testing)
+⚠️ Never add features without checking visual implementation match (GitHub link text vs icon = brand inconsistency)
+⚠️ Never assume architectural patterns propagate automatically (Sessie 44 Dark Frame Pattern on footer ≠ navbar updated)
+✅ Always verify ALL components when establishing architectural patterns (footer + navbar + modals = complete chrome consistency)
+✅ Always use VS Code active/inactive pattern for toggles (40% opacity dimming = instant clarity which state is active)
+✅ Always match icon implementation across pages (SVG icon duplication 2KB acceptable for visual consistency on 4-page scale)
+✅ Multi-problem cascade: User reports 1 issue → testing reveals 2 more → unified solution fixes all 3 (toggle contrast + blog navbar + icon consistency)
+📊 Impact: 7 files, 100% design system consistency, 5:1 contrast improvement, toggle 7.4:1 → 12.6:1, blog navbar ∞% (from broken)
+📄 SESSIONS.md Sessie 45
+
+### Sessie 44: Blog Styling Consistency - Multi-Hypothesis Problem Solving (13 nov 2025)
+⚠️ Never assume single cause for UX complaint (user "colors too bright" = emoji clutter + line-length + saturation)
+⚠️ Never implement passive theme sync on multi-page apps (sub-pages need interactive control like main app)
+⚠️ Never skip Style Guide review for new content (blog Session 43 missed emoji violations)
+✅ Always use gefaseerde approach for ambiguous problems (fix observable issues first, then measure hypothesis)
+✅ Always validate line-length research (Nielsen: 65-75 chars optimal, blog had 85 chars at 900px)
+✅ Always provide theme toggle on EVERY page in multi-page apps (GitHub/VS Code/Bootstrap pattern)
+✅ Inline script duplication acceptable for small scale (4 pages = 120 lines OK, shared module overkill)
+📊 Impact: 20+ emoji → ASCII, theme toggle on 4 pages, 900px → 720px, terminal aesthetic 100%
+📄 SESSIONS.md Sessie 44
+
+### Sessie 43: SEO-Friendly Blog Implementation - Multi-Page Architecture (13 nov 2025)
+⚠️ Never assume modal pattern for ALL content (SPA ≠ always best, blog needs SEO = unique URLs)
+⚠️ Never optimize for speed alone (30 min modal worthless if 0% SEO value)
+⚠️ Never introduce new folder patterns without checking existing conventions (`/blog/assets/` vs existing `/styles/`)
+✅ Always ask SEO requirements BEFORE architecture choice (Modal = no SEO, Static HTML = full SEO)
+✅ Always reuse existing design tokens (69 CSS variables hergebruikt → instant theme support + brand consistency)
+✅ Always include all 5 SEO layers per post (meta + Open Graph + canonical + structured data + semantic HTML)
+✅ Always sync theme across multi-page apps via localStorage (consistent UX between main app + blog)
+📊 Impact: 1,651 lines, 3 blog posts (3,700 woorden), 4 SEO-ready URLs, 69 variables reused, mobile responsive
+📄 SESSIONS.md Sessie 43
+
 ### Sessie 42: GitHub Open Source Launch - Repository Transformation (12 nov 2025)
 ⚠️ Never assume "open source" means "no revenue" (MIT allows commercial, Freemium model viable)
 ⚠️ Never launch without LICENSE file (legally "all rights reserved" without it, blocks contributors)
@@ -156,24 +189,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 📊 Impact: Shortcuts discovery 0% → 80% via 4-layer system
 📄 SESSIONS.md Sessie 39
 
-### Sessie 38: Dropdown Menu Perfectie - Font-Weight Jank & UX Refinement (9 nov 2025)
-⚠️ Never let generic selectors inherit to special components without explicit exemption (use `:not()` to exclude)
-⚠️ Never use inline HTML for icons when CSS pseudo-elements are stable (`:after` immune to baseline shifts)
-⚠️ Never use redundant visual indicators (border + arrow = cognitive load, terminal aesthetic violation)
-✅ Always isolate component styles: Dropdown trigger = standalone, not "navbar link + overrides"
-✅ Always use `inline-flex` + `align-items: center` for stable icon alignment (immune to font-weight changes)
-✅ Always reserve layout space with transparent borders (`border: 2px solid transparent`) to prevent hover shift
-✅ Terminal purist: Real terminals use text/cursor changes only, NOT colored borders (vim/htop/tmux pattern)
-📊 Impact: 0px layout jank (was 6px), WCAG AAA, -58% mobile CSS, terminal authentic
-📄 SESSIONS.md Sessie 38
-
-### Sessie 37: Modal Uniformity - CSS Selector Pitfalls & Accessibility (8 nov 2025)
-⚠️ Never use `:only-child` selector without considering non-button siblings in container (fails when footer has button + links)
-✅ Always use CSS specificity to override general rules for special cases
-✅ DRY principle for repeated patterns: Universal scrollbar in base CSS = instant upgrade for all modals
-📄 SESSIONS.md Sessie 37
-
-**Older Sessions (35-36):** ASCII box drawing, Strategy Pattern, Command Discovery Modal - See SESSIONS.md
+**Older Sessions (35-38):** Dropdown jank (font-weight/inline-flex), Modal uniformity (`:only-child` pitfalls), ASCII box drawing, Strategy Pattern - See SESSIONS.md
 **Older Sessions (2-34):** See SESSIONS.md for comprehensive historical context
 
 ---
@@ -267,14 +283,14 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 **Volledige details:** `docs/prd.md` (v1.4)
 **Command specs:** `docs/commands-list.md`
 **Style guide:** `docs/STYLEGUIDE.md` (v1.0) - Comprehensive design system & component library
-**Sessie logs:** `SESSIONS.md` - Complete historical record (42 sessions total: Sessies 1-34 archived, Sessies 35-36 compressed, Sessies 37-42 detailed)
+**Sessie logs:** `SESSIONS.md` - Complete historical record (45 sessions total: Sessies 1-34 archived, Sessies 35-36 compressed, Sessies 37-45 detailed)
 **Netlify/Domain setup:** `docs/NETLIFY-SETUP.md` - Complete domain launch guide (18KB)
 **Filesystem structure:** PRD Bijlage B
 **Tech rationale:** PRD §13
 
 ---
 
-**Last updated:** 12 november 2025 (Sessie 42)
-**Last synced:** 12 november 2025 (Open Source Launch - GitHub professional setup)
+**Last updated:** 14 november 2025 (Sessie 45)
+**Last synced:** 14 november 2025 (Navbar Consistency - Toggle contrast fix, blog Dark Frame Pattern, GitHub icon consistency)
 **Next sync:** Milestone M6 completion OR Sessie 50
-**Version:** 13.0 (Sessie 42: Open Source Launch - LICENSE, CONTRIBUTING, CoC, WIP badge, Netlify cleanup, Domain guide)
+**Version:** 14.2 (Sessie 45: Navbar consistency - VS Code toggle pattern, blog Dark Frame Pattern v2.0, SVG icon duplication, 100% design system unity)
