@@ -39,29 +39,46 @@
   margin: 0 auto;
 }
 
-/* Blog Navigation */
+/* Blog Navigation - Dark Frame Pattern v2.0 */
 .blog-nav {
+  /* Fixed positioning (match main navbar) */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-navbar);  /* 50 - same as main navbar */
+
+  /* Dark Frame Pattern - always dark background */
+  background-color: var(--color-bg-navbar);  /* #1a1a1a - fixed dark in both themes */
+  border-bottom: 1px solid var(--color-border);
+  height: 60px;  /* Match main navbar height */
+
+  /* Layout */
   display: flex;
   justify-content: center;
-  align-items: center;  /* Vertically align links and theme toggle */
+  align-items: center;
   gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-xl);
-  padding: var(--spacing-md) 0;
+  padding: var(--spacing-md) var(--spacing-lg);  /* Match main navbar padding */
 }
 
 .blog-nav a {
   font-family: var(--font-terminal);
-  color: var(--color-link);
+  /* Navbar link color (light grey on dark navbar - not cyan content color) */
+  color: var(--color-navbar-link);  /* #cccccc instead of cyan */
   text-decoration: none;
   padding: var(--spacing-sm) var(--spacing-md);
-  border: 1px solid var(--color-border);
+  /* Transparent border reserves space for hover effect (no layout shift) */
+  border: 1px solid transparent;
   border-radius: var(--border-radius-button);
   transition: all var(--transition-fast);
 }
 
 .blog-nav a:hover {
-  background-color: var(--color-bg-hover);
+  /* Bright white on hover (maximum contrast on dark navbar) */
+  color: var(--color-navbar-link-hover);  /* #ffffff */
+  /* Cyan accent border on hover (brand color accent) */
   border-color: var(--color-link);
+  background-color: transparent;  /* No background (keep clean chrome aesthetic) */
   opacity: 1;
 }
 

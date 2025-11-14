@@ -105,7 +105,8 @@
   --color-bg-dropdown-hover: #0a0a0a;   /* Dropdown hover - darker than base for "pressed" effect */
 
   /* Theme Toggle Colors */
-  --color-toggle-text: #cccccc;         /* Light grey toggle text (readable on dark navbar) */
+  --color-toggle-text-active: #ffffff;  /* Bright white for active toggle label (VS Code pattern) */
+  --color-toggle-text-inactive: rgba(204, 204, 204, 0.4);  /* Dimmed grey for inactive label (40% opacity) */
   --color-toggle-hover: rgba(255, 255, 255, 0.1);  /* Subtle white overlay for hover highlight */
 
   /* Modal Overlay */
@@ -171,7 +172,8 @@
   --color-footer-link-hover: #33ffff;   /* Lighter cyan hover (good contrast on dark bg) */
 
   /* Theme Toggle Colors - STAYS LIGHT in light mode (navbar is dark) */
-  --color-toggle-text: #cccccc;         /* STAYS LIGHT (navbar is dark in light mode!) */
+  --color-toggle-text-active: #ffffff;  /* Bright white for active label (same as dark mode - navbar stays dark) */
+  --color-toggle-text-inactive: rgba(204, 204, 204, 0.4);  /* Dimmed inactive label (40% opacity - VS Code pattern) */
   --color-toggle-hover: rgba(255, 255, 255, 0.15);  /* Slightly brighter hover for visibility on #1a1a1a navbar */
 
   /* Dropdown Colors - STAYS DARK in light mode (Dark Frame Pattern) */
@@ -980,6 +982,7 @@ footer a:hover {
   gap: 4px;
   padding: 4px 8px;
   border-radius: var(--border-radius-small);
+  color: var(--color-toggle-text-inactive);  /* Default: dimmed inactive state */
   transition: all var(--transition-normal);
   user-select: none;
   white-space: nowrap;
@@ -987,6 +990,11 @@ footer a:hover {
 
 .toggle-option:hover {
   background-color: var(--color-toggle-hover);
+}
+
+/* Active toggle option - bright white text (VS Code pattern) */
+.toggle-option.active {
+  color: var(--color-toggle-text-active);
 }
 
 /* Toggle Indicator - Filled block for active theme */

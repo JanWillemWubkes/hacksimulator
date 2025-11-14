@@ -55,17 +55,29 @@ export function initNavbar() {
   /**
    * Apply theme to document
    * Updates data-theme attribute which CSS uses to apply light/dark mode variables
+   * Also updates toggle label active states for visual feedback (VS Code pattern)
    */
   function applyTheme(isDark) {
     const root = document.documentElement;
+    const darkOption = document.querySelector('.toggle-option[data-theme="dark"]');
+    const lightOption = document.querySelector('.toggle-option[data-theme="light"]');
+
     if (isDark) {
       // Dark theme: Set data-theme attribute to trigger dark mode CSS variables
       root.setAttribute('data-theme', 'dark');
       localStorage.setItem('theme', 'dark');
+
+      // Update toggle labels: dark=active (bright), light=inactive (dimmed)
+      if (darkOption) darkOption.classList.add('active');
+      if (lightOption) lightOption.classList.remove('active');
     } else {
       // Light theme: Set data-theme attribute to trigger light mode CSS variables
       root.setAttribute('data-theme', 'light');
       localStorage.setItem('theme', 'light');
+
+      // Update toggle labels: light=active (bright), dark=inactive (dimmed)
+      if (lightOption) lightOption.classList.add('active');
+      if (darkOption) darkOption.classList.remove('active');
     }
   }
 
