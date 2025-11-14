@@ -229,8 +229,8 @@ a {
   transition: color var(--transition-fast);
 }
 
-/* Link underline animation - excluded from navbar for cleaner navigation */
-a:not(.navbar-links a):not(.navbar-brand):not(.navbar-action)::after {
+/* Link underline animation - excluded from navbar and footer for cleaner navigation */
+a:not(.navbar-links a):not(.navbar-brand):not(.navbar-action):not(footer a)::after {
   content: '';
   position: absolute;
   bottom: -2px;
@@ -241,7 +241,7 @@ a:not(.navbar-links a):not(.navbar-brand):not(.navbar-action)::after {
   transition: width var(--transition-fast);
 }
 
-a:not(.navbar-links a):not(.navbar-brand):not(.navbar-action):hover::after {
+a:not(.navbar-links a):not(.navbar-brand):not(.navbar-action):not(footer a):hover::after {
   width: 100%;
 }
 

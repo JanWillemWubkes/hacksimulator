@@ -712,6 +712,13 @@ footer a:hover {
   color: var(--color-footer-link-hover);
 }
 
+/* Footer nav separators - CSS pseudo-elements pattern */
+footer nav a:not(:last-child)::after {
+  content: ' | ';
+  color: var(--color-footer-text);
+  margin: 0 var(--spacing-xs);
+}
+
 /* ==================== Skip Link (Accessibility) ==================== */
 .skip-link {
   position: absolute;
