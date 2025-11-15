@@ -647,11 +647,11 @@ a[href="#all"].category-btn {
 }
 
 .blog-cta-button:hover {
-  background-color: #00ffff;
-  color: #000000;
+  background-color: transparent;
+  color: #ffffff;
   border-color: #00ffff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 255, 255, 0.5);
+  box-shadow: 0 0 16px rgba(0, 255, 255, 0.4);
   opacity: 1;
 }
 
