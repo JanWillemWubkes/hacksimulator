@@ -8,6 +8,7 @@
 
 /* Blog Page Container */
 .blog-container {
+  width: 100%;  /* CRITICAL: Force full width even when empty - prevents collapse to 48px */
   max-width: 720px;  /* Optimized for 65-75 characters per line (reading comfort) */
   margin: 0 auto;
   padding: calc(60px + var(--spacing-xl)) var(--spacing-lg) var(--spacing-xl);
@@ -161,6 +162,25 @@
   border-color: var(--color-ui-primary);
   color: #000000;
   font-weight: var(--font-weight-bold);
+}
+
+/* "Alle Posts" is active by default (when page loads or #all is clicked) */
+a[href="#all"].category-btn {
+  background-color: var(--color-ui-primary);
+  border-color: var(--color-ui-primary);
+  color: #000000;
+  font-weight: var(--font-weight-bold);
+}
+
+/* Override: "Alle Posts" NOT active when specific category is targeted */
+#beginners:target ~ .blog-category-filter a[href="#all"],
+#concepten:target ~ .blog-category-filter a[href="#all"],
+#tools:target ~ .blog-category-filter a[href="#all"],
+#gevorderden:target ~ .blog-category-filter a[href="#all"] {
+  background-color: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text-dim);
+  font-weight: normal;
 }
 
 /* Mobile responsive */
