@@ -29,9 +29,14 @@
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="../favicon.ico">
 
+  <!-- Google Fonts - Inter + JetBrains Mono (Premium Typography) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="../styles/main.css?v=49-footer-separators">
-  <link rel="stylesheet" href="../styles/blog.css?v=49-footer-separators">
+  <link rel="stylesheet" href="../styles/main.css?v=50-github-dark-inter">
+  <link rel="stylesheet" href="../styles/blog.css?v=50-github-dark-inter">
 
   <!-- Structured Data - JSON-LD -->
   <script type="application/ld+json">
@@ -84,11 +89,27 @@
       <p>Leer ethisch hacken, cybersecurity principes en terminal commands in begrijpelijke Nederlandse tutorials.</p>
     </header>
 
+    <!-- Category Filter Targets (CSS-only filtering) -->
+    <div id="all" class="category-target"></div>
+    <div id="beginners" class="category-target"></div>
+    <div id="concepten" class="category-target"></div>
+    <div id="tools" class="category-target"></div>
+    <div id="gevorderden" class="category-target"></div>
+
+    <!-- Category Filter -->
+    <nav class="blog-category-filter" role="navigation" aria-label="Filter posts by category">
+      <a href="#all" class="category-btn active">Alle Posts</a>
+      <a href="#beginners" class="category-btn">Beginners</a>
+      <a href="#concepten" class="category-btn">Concepten</a>
+      <a href="#tools" class="category-btn">Tools</a>
+      <a href="#gevorderden" class="category-btn">Gevorderden</a>
+    </nav>
+
     <!-- Blog Posts Grid -->
     <div class="blog-posts-grid">
 
       <!-- Post 1: Welkom -->
-      <article class="blog-post-card">
+      <article class="blog-post-card" data-category="beginners">
         <h2><a href="welkom.html">Welkom bij HackSimulator.nl</a></h2>
         <div class="blog-meta">
           <span>[13 nov 2025]</span>
@@ -104,7 +125,7 @@
       </article>
 
       <!-- Post 2: Wat is Ethisch Hacken -->
-      <article class="blog-post-card">
+      <article class="blog-post-card" data-category="concepten">
         <h2><a href="wat-is-ethisch-hacken.html">Wat is Ethisch Hacken?</a></h2>
         <div class="blog-meta">
           <span>[10 nov 2025]</span>
@@ -120,7 +141,7 @@
       </article>
 
       <!-- Post 3: Terminal Commands voor Beginners -->
-      <article class="blog-post-card">
+      <article class="blog-post-card" data-category="beginners">
         <h2><a href="terminal-basics.html">Terminal Commands voor Beginners</a></h2>
         <div class="blog-meta">
           <span>[8 nov 2025]</span>

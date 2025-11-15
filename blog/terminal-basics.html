@@ -26,9 +26,14 @@
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="../favicon.ico">
 
+  <!-- Google Fonts - Inter + JetBrains Mono (Premium Typography) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="../styles/main.css?v=49-footer-separators">
-  <link rel="stylesheet" href="../styles/blog.css?v=49-footer-separators">
+  <link rel="stylesheet" href="../styles/main.css?v=50-github-dark-inter">
+  <link rel="stylesheet" href="../styles/blog.css?v=50-github-dark-inter">
 
   <!-- Structured Data - JSON-LD -->
   <script type="application/ld+json">
@@ -58,6 +63,9 @@
   </script>
 </head>
 <body>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+
   <!-- Skip Link -->
   <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
 
@@ -449,6 +457,31 @@ Regel 2 van het bestand.</div>
     if (themeToggle) {
       themeToggle.addEventListener('click', toggleTheme);
     }
+  </script>
+
+  <!-- Reading Progress Bar Script -->
+  <script>
+    function updateReadingProgress() {
+      const progressBar = document.querySelector('.reading-progress');
+      if (!progressBar) return;
+
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+      // Calculate percentage (0-100)
+      const scrollPercent = (scrollTop / (documentHeight - windowHeight)) * 100;
+
+      // Update progress bar width
+      progressBar.style.width = Math.min(scrollPercent, 100) + '%';
+    }
+
+    // Update on scroll and resize
+    window.addEventListener('scroll', updateReadingProgress, { passive: true });
+    window.addEventListener('resize', updateReadingProgress, { passive: true });
+
+    // Initial update
+    updateReadingProgress();
   </script>
 </body>
 </html>

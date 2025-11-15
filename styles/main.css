@@ -5,49 +5,51 @@
 
 /* ==================== CSS Variables ==================== */
 :root {
-  /* Colors - Cyberpunk Pure Black/Neon Green Terminal Theme */
-  /* Pure Black - Background Layers */
-  --color-bg: #000000;              /* Body & Terminal - pure black cyberpunk */
-  --color-bg-terminal: #000000;     /* Same as body - unified black */
-  --color-bg-modal: #0a0a0a;        /* Modals/overlays - subtle contrast with pure black */
-  --color-bg-hover: #1a1a1a;        /* Hover states - dark grey */
+  /* Colors - GitHub Dark Muted Terminal Theme (50-60% saturatie) */
+  /* GitHub Dark - Background Layers (not pure black) */
+  --color-bg: #0d1117;              /* Body & Terminal - GitHub dark (not pure black) */
+  --color-bg-terminal: #0d1117;     /* Same as body - unified dark */
+  --color-bg-modal: #161b22;        /* Modals/overlays - secondary background */
+  --color-bg-hover: #21262d;        /* Hover states - tertiary background */
 
-  /* Color Hierarchy - Neon Green Terminal */
-  --color-prompt: #00ff88;          /* Neon green - terminal prompt (retro authentic) */
-  --color-input: #00ff88;           /* Neon green - user typed commands (consistent) */
-  --color-text: #ccffcc;            /* Light mint green - primary output text (readable) */
-  --color-text-dim: #669966;        /* Dimmed green - hints/secondary info */
+  /* Color Hierarchy - GitHub Dark Terminal (muted green) */
+  --color-prompt: #3fb950;          /* Muted green - terminal prompt (50% sat, GitHub pattern) */
+  --color-input: #3fb950;           /* Muted green - user typed commands (consistent) */
+  --color-text: #c9d1d9;            /* Soft white - primary output text (GitHub standard) */
+  --color-text-dim: #8b949e;        /* Muted grey - hints/secondary info (GitHub secondary text) */
 
-  /* Semantic Colors - Cyberpunk Neon Palette */
-  --color-error: #ff0055;           /* Bright magenta - errors stand out */
-  --color-warning: #ffaa00;         /* Neon orange - better visibility than yellow */
-  --color-info: #00ffff;            /* Cyan - tips, hints (distinct from terminal green) */
-  --color-success: #00ff88;         /* Neon green - positive feedback (consistent) */
+  /* Semantic Colors - GitHub Dark Muted Palette (50-60% sat) */
+  --color-error: #f85149;           /* GitHub red - errors stand out (60% sat) */
+  --color-warning: #d29922;         /* Muted orange - readable (55% sat) */
+  --color-info: #79c0ff;            /* Muted blue - tips, hints (60% sat) */
+  --color-success: #3fb950;         /* Muted green - positive feedback (50% sat) */
 
-  /* UI Elements - Neon Green Primary + Cyan Secondary */
-  --color-ui-primary: #00ff88;      /* Softer neon green - primary buttons (consistent met terminal prompt) */
-  --color-ui-hover: #33ffaa;        /* Brighter neon green - hover state (optimale feedback) */
-  --color-ui-secondary: #00ffff;    /* Cyan - secondary elements */
-  --color-border: #333333;          /* Dark grey - subtle borders/dividers */
-  --color-link: #00ffff;            /* Cyan - links (distinct from terminal output) */
-  --color-modal-text: #ffffff;      /* White - readable text for long legal content */
+  /* UI Elements - GitHub Dark Blue Primary (60% sat) */
+  --color-ui-primary: #58a6ff;      /* Muted blue - primary buttons/headings (60% sat, GitHub accent) */
+  --color-ui-hover: #79c0ff;        /* Lighter blue - hover state (consistent feedback) */
+  --color-ui-secondary: #8b949e;    /* Muted grey - secondary elements */
+  --color-border: #30363d;          /* GitHub border - visible but subtle */
+  --color-link: #79c0ff;            /* Muted blue - links (60% sat, readable) */
+  --color-modal-text: #c9d1d9;      /* Soft white - readable text for long legal content */
 
-  /* Extended UI Colors - Additional variables for complete consistency */
-  --color-text-muted: #888888;        /* Dimmed UI text (modal close button) */
-  --color-text-light: #cccccc;        /* Modal body text & feedback elements */
-  --color-star-inactive: #555555;     /* Unselected rating stars */
-  --color-border-input: #444444;      /* Form input borders */
-  --color-link-hover: #33ffff;        /* Link hover states */
-  --color-bg-modal-content: #2d2d2d;  /* Modal content background */
-  --color-modal-header: #ffffff;      /* Modal header text - white for maximum contrast & hierarchy */
+  /* Extended UI Colors - GitHub Dark consistency */
+  --color-text-muted: #8b949e;        /* Dimmed UI text (modal close button) - GitHub secondary */
+  --color-text-light: #c9d1d9;        /* Modal body text & feedback elements - GitHub primary text */
+  --color-star-inactive: #30363d;     /* Unselected rating stars - GitHub border color */
+  --color-border-input: #30363d;      /* Form input borders - GitHub border */
+  --color-link-hover: #58a6ff;        /* Link hover states - GitHub accent (brighter blue) */
+  --color-bg-modal-content: #161b22;  /* Modal content background - GitHub secondary bg */
+  --color-modal-header: #c9d1d9;      /* Modal header text - soft white for hierarchy */
 
-  /* Typography - Dual Font System */
-  --font-terminal: 'Courier New', 'Courier', monospace;  /* Primary: Terminal/UI */
-  --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;  /* Secondary: Long-form text */
+  /* Typography - Premium Font System (Inter + JetBrains Mono) */
+  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;  /* Primary: UI/Headings - screen-optimized */
+  --font-terminal: 'JetBrains Mono', 'Courier New', 'Courier', monospace;  /* Secondary: Code/Terminal - developer-grade */
   --font-size-base: 18px;
   --font-size-mobile: 16px;
   --line-height: 1.5;
   --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
   /* Spacing */
@@ -87,22 +89,22 @@
   --vignette-mid2: rgba(11, 11, 11, 1);       /* Very dark grey */
   --vignette-edge: rgba(0, 0, 0, 1);          /* Pure black edges */
 
-  /* Navbar Colors - Dark mode defaults */
-  --color-bg-navbar: #1a1a1a;           /* Dark grey navbar background - uniform across themes */
-  --color-navbar-link: #cccccc;         /* Light grey navigation links */
-  --color-navbar-link-hover: #ffffff;   /* White hover state */
+  /* Navbar Colors - Dark Frame Pattern (GitHub Dark accents) */
+  --color-bg-navbar: #1a1a1a;           /* Dark grey navbar background - uniform across themes (Dark Frame v2.0) */
+  --color-navbar-link: #c9d1d9;         /* Soft white navigation links (GitHub text) */
+  --color-navbar-link-hover: #ffffff;   /* White hover state (maximum contrast) */
   --color-navbar-action: #ffffff;       /* White action icons (search, github, theme toggle) */
-  --color-navbar-dropdown-icon: #00ffff; /* Cyan dropdown icons (+/×) - distinct from link text */
+  --color-navbar-dropdown-icon: #79c0ff; /* Muted blue dropdown icons (+/×) - GitHub accent */
 
-  /* Footer Colors - Dark mode defaults (matches navbar chrome pattern) */
-  --color-bg-footer: #1a1a1a;           /* Dark grey footer background - matches navbar for unified frame */
-  --color-footer-text: #cccccc;         /* Light grey footer text (readable on dark footer) */
-  --color-footer-link: #00ffff;         /* Cyan footer links (same as --color-link) */
-  --color-footer-link-hover: #33ffff;   /* Lighter cyan hover (same as --color-link-hover) */
+  /* Footer Colors - Dark Frame Pattern (GitHub Dark accents) */
+  --color-bg-footer: #1a1a1a;           /* Dark grey footer background - matches navbar (unified chrome) */
+  --color-footer-text: #c9d1d9;         /* Soft white footer text (GitHub text) */
+  --color-footer-link: #79c0ff;         /* Muted blue footer links (GitHub accent) */
+  --color-footer-link-hover: #58a6ff;   /* Brighter blue hover (GitHub primary) */
 
-  /* Dropdown Colors - Dark mode defaults */
-  --color-bg-dropdown: #0a0a0a;         /* Dropdown background - subtle contrast with navbar */
-  --color-bg-dropdown-hover: #0a0a0a;   /* Dropdown hover - darker than base for "pressed" effect */
+  /* Dropdown Colors - Dark mode (GitHub Dark) */
+  --color-bg-dropdown: #161b22;         /* Dropdown background - GitHub secondary bg */
+  --color-bg-dropdown-hover: #21262d;   /* Dropdown hover - GitHub tertiary bg */
 
   /* Theme Toggle Colors */
   --color-toggle-text-active: #ffffff;  /* Bright white for active toggle label (VS Code pattern) */
@@ -158,18 +160,18 @@
   --color-bg-modal-content: #fafafa;  /* Off-white modal content */
   --color-modal-header: #0a0a0a;    /* Very dark text - maximum contrast */
 
-  /* Navbar Colors - STAYS DARK in light mode (VS Code/GitHub Desktop pattern) */
-  --color-bg-navbar: #1a1a1a;           /* Dark navbar background (professional developer tool aesthetic) */
-  --color-navbar-link: #cccccc;         /* Light grey links (same as dark mode) */
+  /* Navbar Colors - STAYS DARK in light mode (Dark Frame Pattern v2.0) */
+  --color-bg-navbar: #1a1a1a;           /* Dark navbar background (same as dark mode) */
+  --color-navbar-link: #c9d1d9;         /* Soft white links (GitHub text - same as dark mode) */
   --color-navbar-link-hover: #ffffff;   /* White hover (same as dark mode) */
   --color-navbar-action: #ffffff;       /* White icons (same as dark mode) */
-  --color-navbar-dropdown-icon: #00ffff; /* Cyan dropdown icons - same as dark mode (navbar stays dark) */
+  --color-navbar-dropdown-icon: #79c0ff; /* Muted blue dropdown (GitHub accent - same as dark mode) */
 
-  /* Footer Colors - STAYS DARK in light mode (matches navbar frame pattern) */
+  /* Footer Colors - STAYS DARK in light mode (matches navbar chrome) */
   --color-bg-footer: #1a1a1a;           /* Dark footer background (same as navbar) */
-  --color-footer-text: #cccccc;         /* STAYS LIGHT (footer is dark in light mode!) */
-  --color-footer-link: #00ffff;         /* Cyan links (lighter for contrast on dark bg) */
-  --color-footer-link-hover: #33ffff;   /* Lighter cyan hover (good contrast on dark bg) */
+  --color-footer-text: #c9d1d9;         /* Soft white text (GitHub text - same as dark mode) */
+  --color-footer-link: #79c0ff;         /* Muted blue links (GitHub accent - same as dark mode) */
+  --color-footer-link-hover: #58a6ff;   /* Brighter blue hover (GitHub primary - same as dark mode) */
 
   /* Theme Toggle Colors - STAYS LIGHT in light mode (navbar is dark) */
   --color-toggle-text-active: #ffffff;  /* Bright white for active label (same as dark mode - navbar stays dark) */
