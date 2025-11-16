@@ -41,6 +41,10 @@
   --color-bg-modal-content: #161b22;  /* Modal content background - GitHub secondary bg */
   --color-modal-header: #c9d1d9;      /* Modal header text - soft white for hierarchy */
 
+  /* Alert/Info Box Surfaces - Neutral backgrounds for blog content boxes */
+  --color-surface-elevated: rgba(255, 255, 255, 0.05);  /* Subtle white tint - professional alerts (GitHub Docs pattern) */
+  --color-surface-elevated-hover: rgba(255, 255, 255, 0.08);  /* Slightly brighter hover state */
+
   /* Typography - Premium Font System (Inter + JetBrains Mono) */
   --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;  /* Primary: UI/Headings - screen-optimized */
   --font-terminal: 'JetBrains Mono', 'Courier New', 'Courier', monospace;  /* Secondary: Code/Terminal - developer-grade */
@@ -101,6 +105,7 @@
   --color-footer-text: #c9d1d9;         /* Soft white footer text (GitHub text) */
   --color-footer-link: #79c0ff;         /* Muted blue footer links (GitHub accent) */
   --color-footer-link-hover: #58a6ff;   /* Brighter blue hover (GitHub primary) */
+  --color-border-dark-frame: #30363d;   /* Dark Frame borders - GitHub grey for dark-on-dark transitions */
 
   /* Dropdown Colors - Dark mode (GitHub Dark) */
   --color-bg-dropdown: #161b22;         /* Dropdown background - GitHub secondary bg */
@@ -143,6 +148,10 @@
   --color-info: #0969da;            /* GitHub blue - proven readability on light backgrounds */
   --color-success: #00dd66;         /* Vibrant green - matches prompt */
 
+  /* Alert/Info Box Surfaces - Light mode overrides (subtle dark tint on white) */
+  --color-surface-elevated: rgba(0, 0, 0, 0.03);  /* Very subtle grey tint - professional alerts */
+  --color-surface-elevated-hover: rgba(0, 0, 0, 0.05);  /* Slightly darker hover state */
+
   /* UI Elements - Darker primary + contrast-optimized secondary */
   --color-ui-primary: #00dd66;      /* Vibrant neon green - matches prompt/success */
   --color-ui-hover: #00ee88;        /* Brighter green - consistent saturation boost */
@@ -172,6 +181,7 @@
   --color-footer-text: #c9d1d9;         /* Soft white text (GitHub text - same as dark mode) */
   --color-footer-link: #79c0ff;         /* Muted blue links (GitHub accent - same as dark mode) */
   --color-footer-link-hover: #58a6ff;   /* Brighter blue hover (GitHub primary - same as dark mode) */
+  --color-border-dark-frame: #999999;   /* Dark Frame borders - darker grey for better visibility (2.68:1 vs content, 9.2:1 vs footer) - VS Code pattern */
 
   /* Theme Toggle Colors - STAYS LIGHT in light mode (navbar is dark) */
   --color-toggle-text-active: #ffffff;  /* Bright white for active label (same as dark mode - navbar stays dark) */
@@ -252,9 +262,11 @@ button:focus {
 }
 
 .btn-primary:hover {
-  background-color: var(--color-ui-hover);
+  background-color: transparent;
   border-color: var(--color-ui-hover);
-  color: #000000;
+  color: var(--color-ui-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.2);
 }
 
 .btn-secondary {
@@ -267,9 +279,11 @@ button:focus {
 }
 
 .btn-secondary:hover {
-  background-color: var(--color-ui-secondary);
-  border-color: var(--color-ui-secondary);
-  color: #000000;
+  background-color: transparent;
+  border-color: var(--color-ui-hover);
+  color: var(--color-ui-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.2);
 }
 
 .btn-small {
@@ -282,9 +296,11 @@ button:focus {
 }
 
 .btn-small:hover {
-  background-color: var(--color-ui-hover);
+  background-color: transparent;
   border-color: var(--color-ui-hover);
-  color: #000000;
+  color: var(--color-ui-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.2);
 }
 
 /* ==================== Modals ==================== */
@@ -576,11 +592,12 @@ button:focus {
 }
 
 .floating-btn:hover {
-  /* Multi-layer brutalist hover feedback */
-  background-color: var(--color-ui-hover);
+  /* Professional elevation pattern - consistent met modal buttons */
+  background-color: transparent;
   border-color: var(--color-ui-hover);
-  transform: translateY(-2px);  /* Subtle lift - geen scale (te playful) */
-  box-shadow: 0 4px 0 var(--color-ui-primary);  /* Brutalist solid shadow */
+  color: var(--color-ui-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.2);  /* Subtle shadow */
 }
 
 .floating-btn:focus {
@@ -677,10 +694,11 @@ button:focus {
 }
 
 #feedback-submit:hover {
-  background-color: var(--color-ui-hover);
+  background-color: transparent;
   border-color: var(--color-ui-hover);
-  color: #000000;
-  transform: scale(1.02);
+  color: var(--color-ui-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.2);
 }
 
 /* ==================== Footer ==================== */
@@ -707,7 +725,7 @@ footer nav {
 footer a {
   color: var(--color-footer-link);
   text-decoration: none;
-  padding: 0 var(--spacing-sm);
+  padding: 0;
 }
 
 footer a:hover {
@@ -716,9 +734,15 @@ footer a:hover {
 
 /* Footer nav separators - CSS pseudo-elements pattern */
 footer nav a:not(:last-child)::after {
-  content: ' | ';
+  content: '|';
   color: var(--color-footer-text);
-  margin: 0 var(--spacing-xs);
+  margin-left: var(--spacing-sm);
+  margin-right: 0;
+}
+
+/* Mirror spacing: next link needs matching margin-left */
+footer nav a:not(:first-child) {
+  margin-left: var(--spacing-sm);
 }
 
 /* ==================== Skip Link (Accessibility) ==================== */
@@ -749,7 +773,7 @@ footer nav a:not(:last-child)::after {
   left: 0;
   right: 0;
   background-color: var(--color-bg-navbar);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border-dark-frame);
   padding: var(--spacing-md) var(--spacing-lg);
   z-index: var(--z-navbar);
   height: 60px;
