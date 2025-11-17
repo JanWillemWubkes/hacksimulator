@@ -436,7 +436,10 @@ a[href="#all"].category-btn {
   line-height: 1.6;
 }
 
-.blog-post-content a {
+/* Inline content links: underline for accessibility (WCAG 2.1) */
+.blog-post-content p a,
+.blog-post-content ul a,
+.blog-post-content ol a {
   color: var(--color-link);
   text-decoration: underline;
   text-underline-offset: 3px;  /* Wave 3.2: Better readability */
@@ -444,10 +447,25 @@ a[href="#all"].category-btn {
   transition: color var(--transition-fast);
 }
 
-.blog-post-content a:hover {
+.blog-post-content p a:hover,
+.blog-post-content ul a:hover,
+.blog-post-content ol a:hover {
   color: var(--color-link-hover);
   text-decoration-thickness: 2px;  /* Wave 3.2: Bolder on hover */
   opacity: 1;
+}
+
+/* Light mode: inline links use professional blue (Dark Frame Pattern) */
+[data-theme="light"] .blog-post-content p a,
+[data-theme="light"] .blog-post-content ul a,
+[data-theme="light"] .blog-post-content ol a {
+  color: var(--color-link);  /* #0969da - professional blue */
+}
+
+[data-theme="light"] .blog-post-content p a:hover,
+[data-theme="light"] .blog-post-content ul a:hover,
+[data-theme="light"] .blog-post-content ol a:hover {
+  color: var(--color-link-hover);  /* #0550ae - darker on hover */
 }
 
 .blog-post-content strong {
@@ -639,7 +657,7 @@ a[href="#all"].category-btn {
   color: #000000;
   border-color: var(--color-ui-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(9, 105, 218, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 184, 85, 0.3);  /* Green shadow matches #00b855 button */
 }
 
 .blog-cta-button {
@@ -662,7 +680,7 @@ a[href="#all"].category-btn {
   color: #000000;
   border-color: var(--color-ui-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.3);
+  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);  /* Blue shadow matches #58a6ff button */
 }
 
 /* Blog Post Footer - Dark Frame Pattern for unified chrome consistency */

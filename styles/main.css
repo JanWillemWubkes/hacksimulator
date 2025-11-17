@@ -153,8 +153,8 @@
   --color-surface-elevated-hover: rgba(0, 0, 0, 0.05);  /* Slightly darker hover state */
 
   /* UI Elements - Darker primary + contrast-optimized secondary */
-  --color-ui-primary: #00dd66;      /* Vibrant neon green - matches prompt/success */
-  --color-ui-hover: #00ee88;        /* Brighter green - consistent saturation boost */
+  --color-ui-primary: #00a048;      /* Darker green - 3.51:1 contrast on white (WCAG AA) */
+  --color-ui-hover: #00b855;        /* Brighter hover - 3.12:1 contrast (WCAG AA) */
   --color-ui-secondary: #0969da;    /* GitHub blue - matches info/links (context-aware theming) */
   --color-border: #e0e0e0;          /* Darker grey borders - better visibility */
   --color-link: #0969da;            /* GitHub blue - professional readability on light backgrounds */
