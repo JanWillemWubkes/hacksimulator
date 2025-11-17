@@ -262,11 +262,11 @@ button:focus {
 }
 
 .btn-primary:hover {
-  background-color: transparent;
+  background-color: var(--color-ui-hover);
   border-color: var(--color-ui-hover);
-  color: var(--color-ui-hover);
+  color: #000000;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.2);
+  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.3);
 }
 
 .btn-secondary {
@@ -296,11 +296,11 @@ button:focus {
 }
 
 .btn-small:hover {
-  background-color: transparent;
+  background-color: var(--color-ui-hover);
   border-color: var(--color-ui-hover);
-  color: var(--color-ui-hover);
+  color: #000000;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.2);
+  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.3);
 }
 
 /* ==================== Modals ==================== */
@@ -592,12 +592,12 @@ button:focus {
 }
 
 .floating-btn:hover {
-  /* Professional elevation pattern - consistent met modal buttons */
-  background-color: transparent;
+  /* Button hierarchy pattern - primary action stays filled */
+  background-color: var(--color-ui-hover);
   border-color: var(--color-ui-hover);
-  color: var(--color-ui-hover);
+  color: #000000;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.2);  /* Subtle shadow */
+  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.3);
 }
 
 .floating-btn:focus {
@@ -694,11 +694,11 @@ button:focus {
 }
 
 #feedback-submit:hover {
-  background-color: transparent;
+  background-color: var(--color-ui-hover);
   border-color: var(--color-ui-hover);
-  color: var(--color-ui-hover);
+  color: #000000;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.2);
+  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.3);
 }
 
 /* ==================== Footer ==================== */

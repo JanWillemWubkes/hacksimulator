@@ -51,7 +51,7 @@
 
   /* Dark Frame Pattern - always dark background */
   background-color: var(--color-bg-navbar);  /* #1a1a1a - fixed dark in both themes */
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border-dark-frame);
   height: 60px;  /* Match main navbar height */
 
   /* Layout */
@@ -511,6 +511,10 @@ a[href="#all"].category-btn {
   color: var(--color-ui-primary);
 }
 
+[data-theme="light"] .terminal-example .output {
+  color: #c9d1d9;  /* Soft white - consistent terminal aesthetic across themes */
+}
+
 .terminal-example .prompt {
   color: var(--color-prompt);
   user-select: none;
@@ -521,34 +525,23 @@ a[href="#all"].category-btn {
   margin-top: var(--spacing-xs);
 }
 
-/* Info/Tip/Warning Boxes - ASCII Terminal Style */
+/* Info/Tip/Warning Boxes - Professional Neutral Pattern (GitHub Docs inspired) */
+/* Unified neutral background + colored left border accent for semantic clarity */
 .blog-tip,
 .blog-warning,
 .blog-info {
-  border-left: 4px solid;  /* Wave 3.3: Stronger accent */
+  background-color: var(--color-surface-elevated);  /* Unified neutral background (5% white dark / 3% black light) */
+  color: var(--color-text-light);
   padding: var(--spacing-md) var(--spacing-lg);
   margin: var(--spacing-lg) 0;
   border-radius: var(--border-radius-button);
   font-family: var(--font-ui);
+  border-left-style: solid;  /* Border width set per variant for semantic hierarchy */
 }
 
-.blog-tip {
-  background-color: rgba(0, 255, 255, 0.1);  /* Wave 3.3: Double visibility */
-  border-color: var(--color-info);
-  color: var(--color-text-light);
-}
-
-.blog-tip::before {
-  content: '[ TIP ] ';
-  font-family: var(--font-terminal);
-  color: var(--color-info);
-  font-weight: var(--font-weight-bold);
-}
-
+/* Warning: Most prominent (security/legal alerts) - 5px accent */
 .blog-warning {
-  background-color: rgba(255, 170, 0, 0.1);  /* Wave 3.3: Double visibility */
-  border-color: var(--color-warning);
-  color: var(--color-text-light);
+  border-left: 5px solid var(--color-warning);
 }
 
 .blog-warning::before {
@@ -556,12 +549,25 @@ a[href="#all"].category-btn {
   font-family: var(--font-terminal);
   color: var(--color-warning);
   font-weight: var(--font-weight-bold);
+  margin-right: var(--spacing-sm);  /* Breathing room after bracket */
 }
 
+/* Tip: Medium prominence (educational guidance) - 4px accent */
+.blog-tip {
+  border-left: 4px solid var(--color-info);
+}
+
+.blog-tip::before {
+  content: '[ TIP ] ';
+  font-family: var(--font-terminal);
+  color: var(--color-info);
+  font-weight: var(--font-weight-bold);
+  margin-right: var(--spacing-sm);
+}
+
+/* Info: Subtle prominence (contextual information) - 3px accent */
 .blog-info {
-  background-color: rgba(0, 255, 136, 0.1);  /* Wave 3.3: Double visibility */
-  border-color: var(--color-success);
-  color: var(--color-text-light);
+  border-left: 3px solid var(--color-success);
 }
 
 .blog-info::before {
@@ -569,8 +575,10 @@ a[href="#all"].category-btn {
   font-family: var(--font-terminal);
   color: var(--color-success);
   font-weight: var(--font-weight-bold);
+  margin-right: var(--spacing-sm);
 }
 
+/* Light mode: Dark text for maximum contrast on light surface */
 [data-theme="light"] .blog-tip,
 [data-theme="light"] .blog-warning,
 [data-theme="light"] .blog-info {
@@ -621,20 +629,23 @@ a[href="#all"].category-btn {
 }
 
 [data-theme="light"] .blog-cta-button {
-  color: var(--color-link);
-  border-color: var(--color-link);
+  background-color: var(--color-ui-primary);
+  color: #000000;
+  border-color: var(--color-ui-primary);
 }
 
 [data-theme="light"] .blog-cta-button:hover {
-  background-color: var(--color-link);
-  color: #ffffff;
+  background-color: var(--color-ui-hover);
+  color: #000000;
+  border-color: var(--color-ui-hover);
+  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(9, 105, 218, 0.3);
 }
 
 .blog-cta-button {
   display: inline-block;
-  background-color: transparent;
-  color: var(--color-link);
+  background-color: var(--color-ui-primary);
+  color: #000000;
   padding: var(--spacing-md) var(--spacing-xl);
   font-family: var(--font-terminal);
   font-size: 1rem;
@@ -643,30 +654,40 @@ a[href="#all"].category-btn {
   text-decoration: none;
   border-radius: var(--border-radius-button);
   transition: all var(--transition-fast);
-  border: 2px solid var(--color-link);
+  border: 2px solid var(--color-ui-primary);
 }
 
 .blog-cta-button:hover {
-  background-color: transparent;
-  color: #ffffff;
-  border-color: #00ffff;
+  background-color: var(--color-ui-hover);
+  color: #000000;
+  border-color: var(--color-ui-hover);
   transform: translateY(-2px);
-  box-shadow: 0 0 16px rgba(0, 255, 255, 0.4);
-  opacity: 1;
+  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.3);
 }
 
-/* Blog Post Footer */
+/* Blog Post Footer - Dark Frame Pattern for unified chrome consistency */
 .blog-post-footer {
+  background-color: var(--color-bg-footer); /* #1a1a1a - dark in both themes */
+  color: var(--color-footer-text); /* #c9d1d9 - soft white on dark */
   margin-top: var(--spacing-xl);
-  padding-top: var(--spacing-lg);
-  border-top: 2px solid var(--color-border);
+  padding: var(--spacing-lg); /* 24px all sides for balanced spacing */
+  border-top: 2px solid var(--color-border-dark-frame);
   text-align: center;
 }
 
 .blog-post-footer p {
   font-family: var(--font-ui);
-  color: var(--color-text-dim);
+  color: var(--color-footer-text); /* Consistent with Dark Frame Pattern */
   margin-bottom: var(--spacing-md);
+}
+
+.blog-post-footer a {
+  color: var(--color-footer-link); /* #79c0ff - muted blue for links */
+  text-decoration: none;
+}
+
+.blog-post-footer a:hover {
+  color: var(--color-footer-link-hover); /* #58a6ff - brighter blue on hover */
 }
 
 /* Blog Page Footer - Dark Frame Pattern with comfortable spacing */
@@ -674,7 +695,7 @@ a[href="#all"].category-btn {
   position: static;
   background-color: var(--color-bg-footer);
   color: var(--color-footer-text);
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-border-dark-frame);
   padding: var(--spacing-md) var(--spacing-md); /* 16px vertical - balanced for reading context */
   font-size: 16px;
   text-align: center;

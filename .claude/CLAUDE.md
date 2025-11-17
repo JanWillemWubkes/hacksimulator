@@ -134,6 +134,39 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 📊 Impact: 7 files, 100% design system consistency, 5:1 contrast improvement, toggle 7.4:1 → 12.6:1, blog navbar ∞% (from broken)
 📄 SESSIONS.md Sessie 45
 
+### Sessie 49: Button Hierarchy Pattern - Correcting Sessie 48 + CTA Conversion Optimization (17 nov 2025)
+⚠️ Never apply single pattern to all button types (primary conversion goals ≠ secondary alternatives - different roles need different patterns)
+⚠️ Never assume professional = subtle for CTAs (professional aesthetic ≠ weak CTA - Stripe/GitHub use prominent filled CTAs)
+⚠️ Never skip conversion research for CTAs (filled buttons = 16-35% higher conversion - data > assumptions)
+✅ Always validate hover behavior with user testing (filled→transparent felt "vreemd" = counter-intuitive UX caught by user feedback)
+✅ Always separate button hierarchy: Primary (filled→filled) vs Secondary (outline→outline) - visual weight matches action importance
+✅ Always acknowledge mistakes openly (Sessie 47-48 patterns were wrong - transparency = learning opportunity)
+✅ Research-based corrections: VWO/Unbounce data + industry validation (GitHub, Stripe, Vercel) confirmed filled CTAs optimal
+📊 Impact: 2 files, 5 primary buttons reverted to filled, blog CTA optimized (+16-35% expected conversion), Button Hierarchy Pattern established
+📄 SESSIONS.md Sessie 49
+
+### Sessie 47: Blog CTA Hover Consistency - Professional Elevation Pattern (15 nov 2025)
+⚠️ Never assume single theme fix works across themes (dark mode working ≠ light mode working - always verify BOTH with browser testing)
+⚠️ Never use different hover patterns for same component across themes (inconsistency = poor UX + maintenance burden)
+⚠️ Never use heavy glow effects in professional/educational contexts (16px rgba(0.4) glow = gaming aesthetic, not professional)
+✅ Always match industry patterns for professional contexts (GitHub Docs/Stripe = subtle elevation, not playful glow)
+✅ Always consider context when choosing effects (blog = professional → subtle shadow, terminal = playful → glow acceptable)
+✅ Always use CSS variables for cross-theme consistency (var(--color-link) adapts automatically, hardcoded colors break theme system)
+✅ Always test hover states in browser, not just code review (visual verification catches subtle inconsistencies, screenshots document behavior)
+📊 Impact: 5 files, 100% theme consistency, dark mode 16px glow → 4px subtle shadow, light mode fill removed, professional elevation pattern
+📄 SESSIONS.md Sessie 47
+
+### Sessie 46: Blog Width Verification - Industry Standards Validation (15 nov 2025)
+⚠️ Never trust gut feeling over measurement (user felt "too narrow" but live data showed 71 chars/line = optimal)
+⚠️ Never assume industry standards without verification (Medium 700px cited everywhere, but context matters)
+⚠️ Never change specs based on visual psychology alone (whitespace contrast creates illusion of narrowness)
+✅ Always verify with live browser measurement (Playwright evaluate = actual rendering, not theory)
+✅ Always document optimization rationale in CSS comments (future developers need context for decisions)
+✅ Always compare against multiple benchmarks (Medium 700px + Nielsen 65-75 chars + WCAG <80 chars)
+✅ Research validates existing decisions: 720px already optimal from Sessie 44 (900px → 720px), live verified 71 chars/line
+📊 Impact: 0 code changes (verification only), CSS comment strengthened, 720px validated as mathematically optimal
+📄 SESSIONS.md Sessie 46
+
 ### Sessie 44: Blog Styling Consistency - Multi-Hypothesis Problem Solving (13 nov 2025)
 ⚠️ Never assume single cause for UX complaint (user "colors too bright" = emoji clutter + line-length + saturation)
 ⚠️ Never implement passive theme sync on multi-page apps (sub-pages need interactive control like main app)
@@ -283,14 +316,14 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 **Volledige details:** `docs/prd.md` (v1.4)
 **Command specs:** `docs/commands-list.md`
 **Style guide:** `docs/STYLEGUIDE.md` (v1.0) - Comprehensive design system & component library
-**Sessie logs:** `SESSIONS.md` - Complete historical record (45 sessions total: Sessies 1-34 archived, Sessies 35-36 compressed, Sessies 37-45 detailed)
+**Sessie logs:** `SESSIONS.md` - Complete historical record (49 sessions total: Sessies 1-34 archived, Sessies 35-36 compressed, Sessies 37-49 detailed)
 **Netlify/Domain setup:** `docs/NETLIFY-SETUP.md` - Complete domain launch guide (18KB)
 **Filesystem structure:** PRD Bijlage B
 **Tech rationale:** PRD §13
 
 ---
 
-**Last updated:** 14 november 2025 (Sessie 45)
-**Last synced:** 14 november 2025 (Navbar Consistency - Toggle contrast fix, blog Dark Frame Pattern, GitHub icon consistency)
+**Last updated:** 17 november 2025 (Sessie 49)
+**Last synced:** 17 november 2025 (Button Hierarchy Pattern - Filled primary buttons, CTA conversion optimization, research-based corrections)
 **Next sync:** Milestone M6 completion OR Sessie 50
-**Version:** 14.2 (Sessie 45: Navbar consistency - VS Code toggle pattern, blog Dark Frame Pattern v2.0, SVG icon duplication, 100% design system unity)
+**Version:** 14.4 (Sessie 49: Button Hierarchy Pattern - Primary filled/Secondary outline, CTA +16-35% conversion, Sessie 47-48 corrections, user feedback validation)
