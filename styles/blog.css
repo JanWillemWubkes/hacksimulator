@@ -121,9 +121,9 @@
 
 .category-btn.active,
 .category-btn:target {
-  background-color: var(--color-ui-primary);
-  border-color: var(--color-ui-primary);
-  color: #000000;
+  background-color: var(--color-button-bg);
+  border-color: var(--color-button-bg);
+  color: var(--color-button-text);
   font-weight: var(--font-weight-bold);
 }
 
@@ -158,17 +158,17 @@
 #concepten:target ~ .blog-category-filter a[href="#concepten"],
 #tools:target ~ .blog-category-filter a[href="#tools"],
 #gevorderden:target ~ .blog-category-filter a[href="#gevorderden"] {
-  background-color: var(--color-ui-primary);
-  border-color: var(--color-ui-primary);
-  color: #000000;
+  background-color: var(--color-button-bg);
+  border-color: var(--color-button-bg);
+  color: var(--color-button-text);
   font-weight: var(--font-weight-bold);
 }
 
 /* "Alle Posts" is active by default (when page loads or #all is clicked) */
 a[href="#all"].category-btn {
-  background-color: var(--color-ui-primary);
-  border-color: var(--color-ui-primary);
-  color: #000000;
+  background-color: var(--color-button-bg);
+  border-color: var(--color-button-bg);
+  color: var(--color-button-text);
   font-weight: var(--font-weight-bold);
 }
 
@@ -646,24 +646,10 @@ a[href="#all"].category-btn {
   color: var(--color-text);
 }
 
-[data-theme="light"] .blog-cta-button {
-  background-color: var(--color-ui-primary);
-  color: #000000;
-  border-color: var(--color-ui-primary);
-}
-
-[data-theme="light"] .blog-cta-button:hover {
-  background-color: var(--color-ui-hover);
-  color: #000000;
-  border-color: var(--color-ui-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 184, 85, 0.3);  /* Green shadow matches #00b855 button */
-}
-
 .blog-cta-button {
   display: inline-block;
-  background-color: var(--color-ui-primary);
-  color: #000000;
+  background-color: var(--color-button-bg);
+  color: var(--color-button-text);
   padding: var(--spacing-md) var(--spacing-xl);
   font-family: var(--font-terminal);
   font-size: 1rem;
@@ -672,15 +658,15 @@ a[href="#all"].category-btn {
   text-decoration: none;
   border-radius: var(--border-radius-button);
   transition: all var(--transition-fast);
-  border: 2px solid var(--color-ui-primary);
+  border: 2px solid var(--color-button-bg);
 }
 
 .blog-cta-button:hover {
-  background-color: var(--color-ui-hover);
-  color: #000000;
-  border-color: var(--color-ui-hover);
+  background-color: var(--color-button-bg-hover);
+  color: var(--color-button-text-hover);
+  border-color: var(--color-button-bg-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);  /* Blue shadow matches #58a6ff button */
+  box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
 
 /* Blog Post Footer - Dark Frame Pattern for unified chrome consistency */

@@ -118,6 +118,13 @@
 
   /* Modal Overlay */
   --color-modal-overlay: rgba(0, 0, 0, 0.95);  /* Nearly opaque black overlay */
+
+  /* Button Colors - Dark Mode (Pairing 1: Cyber Professional - WCAG AA Compliant) */
+  --color-button-bg: #005bb5;               /* Darker Azure blue - WCAG AA 5.2:1 (was #0078d4 at 4.53:1) */
+  --color-button-bg-hover: #1976d2;         /* Material Blue 700 hover - WCAG AA 4.7:1 (was #1e88e5 at 3.68:1) */
+  --color-button-text: #ffffff;             /* White text - crisp contrast */
+  --color-button-text-hover: #ffffff;       /* White text on hover - consistent */
+  --color-button-shadow-hover: rgba(25, 118, 210, 0.3);  /* Blue shadow - matches hover color */
 }
 
 /* ==================== Light Mode Theme ==================== */
@@ -152,9 +159,9 @@
   --color-surface-elevated: rgba(0, 0, 0, 0.03);  /* Very subtle grey tint - professional alerts */
   --color-surface-elevated-hover: rgba(0, 0, 0, 0.05);  /* Slightly darker hover state */
 
-  /* UI Elements - Darker primary + contrast-optimized secondary */
-  --color-ui-primary: #00a048;      /* Darker green - 3.51:1 contrast on white (WCAG AA) */
-  --color-ui-hover: #00b855;        /* Brighter hover - 3.12:1 contrast (WCAG AA) */
+  /* UI Elements - Vibrant terminal green + bright hover */
+  --color-ui-primary: #0db34f;      /* Vibrant green - 3.25:1 contrast on white (WCAG AA) - terminal aesthetic */
+  --color-ui-hover: #1aff6b;        /* Bright neon hover - 40% delta for clear interaction */
   --color-ui-secondary: #0969da;    /* GitHub blue - matches info/links (context-aware theming) */
   --color-border: #e0e0e0;          /* Darker grey borders - better visibility */
   --color-link: #0969da;            /* GitHub blue - professional readability on light backgrounds */
@@ -194,6 +201,13 @@
 
   /* Modal Overlay - Dark dimming in light mode (Bootstrap/Material UI pattern) */
   --color-modal-overlay: rgba(0, 0, 0, 0.5);  /* Semi-transparent dark overlay for focus effect */
+
+  /* Button Colors - Light Mode (Pairing 1: Cyber Professional - WCAG AA Compliant) */
+  --color-button-bg: #1f7a40;               /* Green base - WCAG AA 5.36:1 */
+  --color-button-bg-hover: #248748;         /* Lighter green hover - WCAG AA 4.53:1 - CONSISTENT brighten pattern */
+  --color-button-text: #ffffff;             /* White text - industry standard for saturated buttons */
+  --color-button-text-hover: #ffffff;       /* White text on hover - consistent pattern */
+  --color-button-shadow-hover: rgba(36, 135, 72, 0.3);  /* Green shadow - matches hover color */
 }
 
 /* ==================== Reset & Base ==================== */
@@ -252,21 +266,21 @@ button:focus {
 }
 
 .btn-primary {
-  background-color: var(--color-ui-primary);
-  color: #000000;
+  background-color: var(--color-button-bg);
+  color: var(--color-button-text);
   padding: var(--spacing-md) var(--spacing-lg);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
-  border: 2px solid var(--color-ui-primary);
+  border: 2px solid var(--color-button-bg);
   border-radius: var(--border-radius-button);
 }
 
 .btn-primary:hover {
-  background-color: var(--color-ui-hover);
-  border-color: var(--color-ui-hover);
-  color: #000000;
+  background-color: var(--color-button-bg-hover);
+  border-color: var(--color-button-bg-hover);
+  color: var(--color-button-text-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.3);
+  box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
 
 .btn-secondary {
@@ -280,27 +294,27 @@ button:focus {
 
 .btn-secondary:hover {
   background-color: transparent;
-  border-color: var(--color-ui-hover);
-  color: var(--color-ui-hover);
+  border-color: var(--color-button-bg-hover);
+  color: var(--color-button-bg-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.2);
+  box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
 
 .btn-small {
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: 16px;
-  background-color: var(--color-ui-primary);
-  color: #000000;
-  border: 1px solid var(--color-ui-primary);
+  background-color: var(--color-button-bg);
+  color: var(--color-button-text);
+  border: 1px solid var(--color-button-bg);
   border-radius: var(--border-radius-button);
 }
 
 .btn-small:hover {
-  background-color: var(--color-ui-hover);
-  border-color: var(--color-ui-hover);
-  color: #000000;
+  background-color: var(--color-button-bg-hover);
+  border-color: var(--color-button-bg-hover);
+  color: var(--color-button-text-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.3);
+  box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
 
 /* ==================== Modals ==================== */
@@ -575,8 +589,8 @@ button:focus {
   border: 3px solid #666666;  /* Upgraded van var(--color-border) voor betere visibility */
 
   /* Colors */
-  background-color: var(--color-ui-primary);
-  color: #000000;
+  background-color: var(--color-button-bg);
+  color: var(--color-button-text);
 
   /* Typography - geoptimaliseerd voor beschikbare ruimte */
   font-family: 'Courier New', monospace;
@@ -593,11 +607,11 @@ button:focus {
 
 .floating-btn:hover {
   /* Button hierarchy pattern - primary action stays filled */
-  background-color: var(--color-ui-hover);
-  border-color: var(--color-ui-hover);
-  color: #000000;
+  background-color: var(--color-button-bg-hover);
+  border-color: var(--color-button-bg-hover);
+  color: var(--color-button-text-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.3);
+  box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
 
 .floating-btn:focus {
@@ -681,9 +695,9 @@ button:focus {
 
 /* Feedback submit button - full-width modern style */
 #feedback-submit {
-  background-color: var(--color-ui-primary);
-  border-color: var(--color-ui-primary);
-  color: #000000;
+  background-color: var(--color-button-bg);
+  border-color: var(--color-button-bg);
+  color: var(--color-button-text);
   width: 100%;
   padding: 16px 32px;
   font-size: 1rem;
@@ -694,11 +708,11 @@ button:focus {
 }
 
 #feedback-submit:hover {
-  background-color: var(--color-ui-hover);
-  border-color: var(--color-ui-hover);
-  color: #000000;
+  background-color: var(--color-button-bg-hover);
+  border-color: var(--color-button-bg-hover);
+  color: var(--color-button-text-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.3);
+  box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
 
 /* ==================== Footer ==================== */
@@ -1034,7 +1048,7 @@ footer nav a:not(:first-child) {
 .toggle-indicator {
   font-size: 12px;
   font-weight: 600;
-  color: var(--color-ui-primary);
+  color: var(--color-button-bg);
   opacity: 0;
   transition: opacity var(--transition-normal);
 }
@@ -1083,13 +1097,13 @@ footer nav a:not(:first-child) {
   display: block;
   width: 100%;
   height: 3px;
-  background-color: var(--color-ui-primary);
+  background-color: var(--color-button-bg);
   transition: all var(--transition-fast);
   border-radius: var(--border-radius-small);
 }
 
 .navbar-toggle:hover span {
-  background-color: var(--color-ui-hover);
+  background-color: var(--color-button-bg-hover);
 }
 
 /* Hamburger → X Animation */

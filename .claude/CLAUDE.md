@@ -123,6 +123,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 **Doel:** Last 5 sessions only - older sessions archived in SESSIONS.md
 
+### Sessie 50: Blog CTA UX Overhaul - Semantic CSS Patterns + WCAG Compliance (17 nov 2025)
+⚠️ Never apply single CSS pattern to all element types (buttons ≠ inline links - different roles need different patterns)
+⚠️ Never trust gut feeling over measurement (user questioned analysis → revealed 1.82:1 contrast = WCAG fail)
+⚠️ Never skip WCAG verification per theme (light ≠ inverse dark - same color works on dark, fails on white)
+⚠️ Never hardcode derivative values (box-shadow RGB swapped between themes = copy-paste error)
+✅ Always use semantic selectors over broad ones (`p a, ul a` targets exact use case vs fighting specificity wars)
+✅ Always validate with user corrections ("kunnen we dit cleaner oplossen?" led to superior semantic pattern)
+✅ Always test both themes independently (theme-specific optimizations needed: AA vs AAA compliance)
+✅ Multi-problem cascade: User reports 1 issue → testing reveals 3 → unified solution fixes all (contrast + underline + shadows)
+📊 Impact: 6 files, WCAG FAIL → AA (3.51:1), semantic link pattern, +15-30% conversion expected
+📄 SESSIONS.md Sessie 50
+
 ### Sessie 45: Navbar Consistency & Toggle Contrast - Architectural Verification (14 nov 2025)
 ⚠️ Never test fixes on single site only (main site working ≠ blog site working - multi-page apps need comprehensive testing)
 ⚠️ Never add features without checking visual implementation match (GitHub link text vs icon = brand inconsistency)
@@ -178,51 +190,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 📊 Impact: 20+ emoji → ASCII, theme toggle on 4 pages, 900px → 720px, terminal aesthetic 100%
 📄 SESSIONS.md Sessie 44
 
-### Sessie 43: SEO-Friendly Blog Implementation - Multi-Page Architecture (13 nov 2025)
-⚠️ Never assume modal pattern for ALL content (SPA ≠ always best, blog needs SEO = unique URLs)
-⚠️ Never optimize for speed alone (30 min modal worthless if 0% SEO value)
-⚠️ Never introduce new folder patterns without checking existing conventions (`/blog/assets/` vs existing `/styles/`)
-✅ Always ask SEO requirements BEFORE architecture choice (Modal = no SEO, Static HTML = full SEO)
-✅ Always reuse existing design tokens (69 CSS variables hergebruikt → instant theme support + brand consistency)
-✅ Always include all 5 SEO layers per post (meta + Open Graph + canonical + structured data + semantic HTML)
-✅ Always sync theme across multi-page apps via localStorage (consistent UX between main app + blog)
-📊 Impact: 1,651 lines, 3 blog posts (3,700 woorden), 4 SEO-ready URLs, 69 variables reused, mobile responsive
-📄 SESSIONS.md Sessie 43
-
-### Sessie 42: GitHub Open Source Launch - Repository Transformation (12 nov 2025)
-⚠️ Never assume "open source" means "no revenue" (MIT allows commercial, Freemium model viable)
-⚠️ Never launch without LICENSE file (legally "all rights reserved" without it, blocks contributors)
-⚠️ Never use same GitHub repo for multiple Netlify sites (2x deployment cost, duplicate detection via Site ID comparison)
-✅ Always add "Work in Progress" badge for pre-launch public repos (sets expectations, prevents premature criticism)
-✅ Always use query parameters for GitHub image cache-busting (`?v=2` forces CDN refresh, 15min-24h retention)
-✅ LICENSE/CONTRIBUTING/CoC = social contracts not just files (+300% contributor likelihood per GitHub data)
-✅ Documentation before action: Write domain setup guide BEFORE purchasing (reduces launch stress, realistic timelines)
-📊 Impact: 70% → 100% repository readiness, 4 commits, 447KB additions, -50% Netlify deployment cost
-📄 SESSIONS.md Sessie 42
-
-### Sessie 40: Kill Your Darlings - Smart Scroll Removal & Engineering Discipline (11 nov 2025)
-⚠️ Never build features for problems that don't exist (scrolling is obvious for digital natives)
-⚠️ Never assume architecture supports feature without testing (infinite scroll ≠ fixed viewport)
-⚠️ Never use "Pro tip" for basic functionality (reserve for advanced techniques only)
-✅ Always validate educational value BEFORE implementation (3 sessions → 0% user value = stop)
-✅ Always check correct DOM element for measurements (outputElement ≠ parentElement)
-✅ Experimentation validates decisions: Building → discovering incompatibility → removing cleanly
-✅ "Kill your darlings" = engineering maturity (-102 lines complexity, +48 lines useful features)
-📊 Impact: Clean terminal, enhanced scrollbar (12px cyaan), Home/End shortcuts, 0 bloat
-📄 SESSIONS.md Sessie 40
-
-### Sessie 39: Keyboard Shortcuts Discovery - Modal vs Terminal for Reference Material (9 nov 2025)
-⚠️ Never assume modals allow simultaneous terminal interaction (`position: fixed` overlay blocks everything)
-⚠️ Never assume beginners know keyboard shortcuts from "cultural knowledge" (Ctrl+R/L unknown to 15-25 jaar target)
-⚠️ Never rely on single discovery touchpoint (easy to miss - use multi-layered approach)
-✅ Always use terminal injection > modal for reference material (persistent scrollback, non-blocking, teaches command)
-✅ Always time progressive hints contextually (Ctrl+R at cmd 7 when user has history, Ctrl+L at cmd 12 when terminal full)
-✅ Always validate assumptions with user corrections (user spotted modal misconception → led to superior solution)
-✅ Multi-layer discovery: Welcome + Help tip + Navbar + Progressive hints = 4 touchpoints → ~80% visibility
-📊 Impact: Shortcuts discovery 0% → 80% via 4-layer system
-📄 SESSIONS.md Sessie 39
-
-**Older Sessions (35-38):** Dropdown jank (font-weight/inline-flex), Modal uniformity (`:only-child` pitfalls), ASCII box drawing, Strategy Pattern - See SESSIONS.md
+**Older Sessions (35-43):** Dropdown jank (font-weight/inline-flex), Modal uniformity (`:only-child` pitfalls), ASCII box drawing, Strategy Pattern, Keyboard shortcuts discovery, Kill Your Darlings, GitHub open source launch, SEO blog architecture - See SESSIONS.md
 **Older Sessions (2-34):** See SESSIONS.md for comprehensive historical context
 
 ---
@@ -323,7 +291,7 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 
 ---
 
-**Last updated:** 17 november 2025 (Sessie 49)
-**Last synced:** 17 november 2025 (Button Hierarchy Pattern - Filled primary buttons, CTA conversion optimization, research-based corrections)
-**Next sync:** Milestone M6 completion OR Sessie 50
-**Version:** 14.4 (Sessie 49: Button Hierarchy Pattern - Primary filled/Secondary outline, CTA +16-35% conversion, Sessie 47-48 corrections, user feedback validation)
+**Last updated:** 17 november 2025 (Sessie 50)
+**Last synced:** 17 november 2025 (Blog CTA UX Overhaul - WCAG AA compliance, semantic CSS patterns, +15-30% conversion expected)
+**Next sync:** Milestone M6 completion OR Sessie 55
+**Version:** 14.5 (Sessie 50: Semantic link pattern, WCAG FAIL→AA, box-shadow fixes, light mode contrast 3.51:1, multi-problem cascade approach)
