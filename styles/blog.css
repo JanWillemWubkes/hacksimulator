@@ -81,7 +81,6 @@
   /* Main navbar pattern: bright white + bold (consistent UX) */
   color: var(--color-navbar-link-hover);  /* #ffffff */
   font-weight: 700;  /* Bold hover - matches main navbar */
-  opacity: 1;
 }
 
 /* ==================== Category Filter (Blog Index) ==================== */
@@ -117,7 +116,6 @@
 .category-btn:hover {
   color: var(--color-link);
   border-color: var(--color-link);
-  opacity: 1;
 }
 
 .category-btn.active,
@@ -244,7 +242,6 @@ a[href="#all"].category-btn {
 
 .blog-post-card h2 a:hover {
   color: var(--color-link-hover);  /* Both themes: darker on hover (dark #58a6ff, light #0550ae) - consistent pattern */
-  opacity: 1;
 }
 
 .blog-meta {
@@ -311,7 +308,6 @@ a[href="#all"].category-btn {
 .blog-read-more:hover {
   color: var(--color-link-hover);
   gap: var(--spacing-sm);
-  opacity: 1;
 }
 
 .blog-read-more::after {
@@ -476,7 +472,6 @@ a[href="#all"].category-btn {
 .blog-post-content ol a:hover {
   color: var(--color-link-hover);
   text-decoration-thickness: 2px;  /* Wave 3.2: Bolder on hover */
-  opacity: 1;
 }
 
 /* Light mode: inline links use professional blue (Dark Frame Pattern) */

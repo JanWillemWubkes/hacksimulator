@@ -255,8 +255,9 @@ a {
   transition: opacity var(--transition-fast);
 }
 
+/* Modern link hover: Explicit color change (WCAG compliant) - No opacity dimming to preserve contrast */
 a:hover {
-  opacity: 0.8;
+  color: var(--color-link-hover);
 }
 
 /* Focus indicator handled by global :focus-visible in animations.css */
@@ -827,7 +828,6 @@ footer nav a:not(:first-child) {
 
 .navbar-brand:hover {
   color: var(--color-ui-hover);
-  opacity: 1;
 }
 
 /* Navbar Menu Container (Links + Actions) */
@@ -866,7 +866,6 @@ footer nav a:not(:first-child) {
 .navbar-links li:not(.navbar-dropdown) > a:hover {
   color: var(--color-navbar-link-hover);
   font-weight: 700; /* Only regular links get bold - dropdown trigger excluded */
-  opacity: 1;
 }
 
 /* Navbar Dropdown */
@@ -892,7 +891,6 @@ footer nav a:not(:first-child) {
 .dropdown-trigger:hover {
   color: var(--color-navbar-link-hover);
   font-weight: 400; /* EXPLICIT override - prevent any inheritance */
-  opacity: 1;
 }
 
 /* Dropdown Icon - Pseudo-element pattern (industry standard: VS Code, GitHub, Slack) */
@@ -993,7 +991,6 @@ footer nav a:not(:first-child) {
 .navbar-action:hover {
   color: var(--color-navbar-action);
   transform: translateY(-2px);
-  opacity: 1;
 }
 
 .navbar-action svg {
