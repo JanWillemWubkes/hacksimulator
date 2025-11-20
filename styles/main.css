@@ -125,6 +125,14 @@
   --color-button-text: #ffffff;             /* White text - crisp contrast */
   --color-button-text-hover: #ffffff;       /* White text on hover - consistent */
   --color-button-shadow-hover: rgba(25, 118, 210, 0.3);  /* Blue shadow - matches hover color */
+
+  /* Shadow System - Professional Elevation Pattern (Medium/GitHub/Stripe standard) */
+  /* Content Cards - Subtle depth for blog posts, documentation boxes (NOT terminal UI) */
+  --shadow-elevation-1: 0 2px 8px rgba(0, 0, 0, 0.4);     /* Base state - subtle depth on dark backgrounds */
+  --shadow-elevation-2: 0 4px 16px rgba(0, 0, 0, 0.5);    /* Hover state - elevated interaction feedback */
+
+  /* Terminal Accent - Neon green glow for terminal-specific UI (hint boxes, command output) */
+  --shadow-accent-terminal: 0 0 20px rgba(0, 255, 136, 0.15);  /* Branded glow - hacking aesthetic */
 }
 
 /* ==================== Light Mode Theme ==================== */
@@ -208,6 +216,14 @@
   --color-button-text: #ffffff;             /* White text - industry standard for saturated buttons */
   --color-button-text-hover: #ffffff;       /* White text on hover - consistent pattern */
   --color-button-shadow-hover: rgba(36, 135, 72, 0.3);  /* Green shadow - matches hover color */
+
+  /* Shadow System - Light Mode (5:1 opacity ratio = visually equivalent to dark mode) */
+  /* Content Cards - Subtle shadows on white require lower opacity to avoid "dirty" appearance */
+  --shadow-elevation-1: 0 2px 8px rgba(0, 0, 0, 0.08);    /* Base state - clean subtle depth */
+  --shadow-elevation-2: 0 4px 16px rgba(0, 0, 0, 0.12);   /* Hover state - professional elevation */
+
+  /* Terminal Accent - Adapted for light backgrounds (same visual weight as dark mode) */
+  --shadow-accent-terminal: 0 0 20px rgba(0, 255, 136, 0.08);  /* Softer glow on white - prevents oversaturation */
 }
 
 /* ==================== Reset & Base ==================== */
@@ -243,10 +259,7 @@ a:hover {
   opacity: 0.8;
 }
 
-a:focus {
-  outline: 2px solid var(--color-info);
-  outline-offset: 2px;
-}
+/* Focus indicator handled by global :focus-visible in animations.css */
 
 strong {
   font-weight: var(--font-weight-bold);
@@ -260,10 +273,7 @@ button {
   transition: all var(--transition-fast);
 }
 
-button:focus {
-  outline: 2px solid var(--color-info);
-  outline-offset: 2px;
-}
+/* Focus indicator handled by global :focus-visible in animations.css */
 
 .btn-primary {
   background-color: var(--color-button-bg);
@@ -586,7 +596,7 @@ button:focus {
 
   /* Border styling */
   border-radius: var(--border-radius-button);
-  border: 3px solid #666666;  /* Upgraded van var(--color-border) voor betere visibility */
+  border: 3px solid var(--color-button-bg);  /* Button Hierarchy Pattern: border matches fill (Sessie 52) */
 
   /* Colors */
   background-color: var(--color-button-bg);
@@ -614,10 +624,7 @@ button:focus {
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
 
-.floating-btn:focus {
-  outline: 2px solid var(--color-ui-primary);
-  outline-offset: 4px;  /* Verhoogd voor duidelijkere focus indicator */
-}
+/* Focus indicator handled by global :focus-visible in animations.css */
 
 /* Feedback Modal - Balanced spacing */
 #feedback-modal .modal-content p {
@@ -774,7 +781,7 @@ footer nav a:not(:first-child) {
   transition: top var(--transition-fast);
 }
 
-.skip-link:focus {
+.skip-link:focus-visible {
   top: 0;
   outline: 2px solid #ffffff;
   outline-offset: 2px;
@@ -1016,11 +1023,7 @@ footer nav a:not(:first-child) {
   opacity: 0.8;
 }
 
-.theme-toggle:focus {
-  outline: 2px solid var(--color-info);
-  outline-offset: 2px;
-  border-radius: var(--border-radius-button);
-}
+/* Focus indicator handled by global :focus-visible in animations.css */
 
 /* Toggle Option (DARK/LIGHT labels) */
 .toggle-option {

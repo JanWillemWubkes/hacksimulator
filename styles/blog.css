@@ -32,6 +32,11 @@
   margin-bottom: var(--spacing-md);
 }
 
+/* Light mode: Professional blue heading (consistent with inline links) */
+[data-theme="light"] .blog-header h1 {
+  color: var(--color-link);  /* #0969da - professional blue (5.16:1 contrast) */
+}
+
 .blog-header p {
   font-family: var(--font-ui);
   font-size: 1.1rem;
@@ -68,18 +73,14 @@
   color: var(--color-navbar-link);  /* #cccccc instead of cyan */
   text-decoration: none;
   padding: var(--spacing-sm) var(--spacing-md);
-  /* Transparent border reserves space for hover effect (no layout shift) */
-  border: 1px solid transparent;
-  border-radius: var(--border-radius-button);
+  /* Main navbar pattern: no border, uses font-weight on hover */
   transition: all var(--transition-fast);
 }
 
 .blog-nav a:hover {
-  /* Bright white on hover (maximum contrast on dark navbar) */
+  /* Main navbar pattern: bright white + bold (consistent UX) */
   color: var(--color-navbar-link-hover);  /* #ffffff */
-  /* Cyan accent border on hover (brand color accent) */
-  border-color: var(--color-link);
-  background-color: transparent;  /* No background (keep clean chrome aesthetic) */
+  font-weight: 700;  /* Bold hover - matches main navbar */
   opacity: 1;
 }
 
@@ -208,21 +209,17 @@ a[href="#all"].category-btn {
   border-radius: var(--border-radius-modal);
   padding: var(--spacing-xl);
   transition: all var(--transition-normal);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);  /* Wave 3.1: Subtle depth */
+  box-shadow: var(--shadow-elevation-1);  /* Professional base depth - theme-aware (dark 0.4, light 0.08) */
 }
 
 .blog-post-card:hover {
-  border-color: var(--color-ui-primary);
-  box-shadow: 0 8px 24px rgba(0, 255, 136, 0.15);  /* Wave 3.1: Elevated hover */
-  transform: translateY(-2px);
+  border-color: var(--color-ui-primary);  /* Adaptive: #58a6ff dark, #0db34f light */
+  box-shadow: var(--shadow-elevation-2);  /* Professional hover elevation - theme-aware (dark 0.5, light 0.12) */
+  transform: translateY(-2px);  /* Subtle lift - industry standard (Medium/GitHub pattern) */
 }
 
 [data-theme="light"] .blog-post-card {
-  background-color: #ffffff;
-}
-
-[data-theme="light"] .blog-post-card:hover {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  background-color: #ffffff;  /* Pure white - clean professional aesthetic */
 }
 
 .blog-post-card h2 {
@@ -234,15 +231,30 @@ a[href="#all"].category-btn {
   letter-spacing: 0.5px;  /* Wave 1.4: Reduced from 1px */
 }
 
+/* Light mode: Professional blue heading (consistent with inline links) */
+[data-theme="light"] .blog-post-card h2 {
+  color: var(--color-link);  /* #0969da - professional blue (5.16:1 contrast) */
+}
+
 .blog-post-card h2 a {
   color: var(--color-ui-primary);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
+/* Light mode: Professional blue link (inherit from h2 parent or explicit) */
+[data-theme="light"] .blog-post-card h2 a {
+  color: var(--color-link);  /* #0969da - professional blue (5.16:1 contrast) */
+}
+
 .blog-post-card h2 a:hover {
   color: var(--color-ui-hover);
   opacity: 1;
+}
+
+/* Light mode: Professional blue hover (darker on hover - WCAG AAA 7.24:1) */
+[data-theme="light"] .blog-post-card h2 a:hover {
+  color: var(--color-link-hover);  /* #0550ae - darker blue hover (15-20% delta, not 42% neon) */
 }
 
 .blog-meta {
@@ -360,6 +372,11 @@ a[href="#all"].category-btn {
   line-height: 1.2;
 }
 
+/* Light mode: Professional blue heading (consistent with inline links) */
+[data-theme="light"] .blog-post-title {
+  color: var(--color-link);  /* #0969da - professional blue (5.16:1 contrast) */
+}
+
 .blog-post-meta {
   font-family: var(--font-ui);
   font-size: 1rem;
@@ -414,6 +431,11 @@ a[href="#all"].category-btn {
   letter-spacing: 0.5px;  /* Wave 1.4: Reduced from 1px */
   margin-top: var(--spacing-xl);
   margin-bottom: var(--spacing-md);
+}
+
+/* Light mode: Professional blue heading (consistent with inline links) */
+[data-theme="light"] .blog-post-content h2 {
+  color: var(--color-link);  /* #0969da - professional blue (5.16:1 contrast) */
 }
 
 .blog-post-content h3 {
@@ -473,6 +495,11 @@ a[href="#all"].category-btn {
   font-weight: var(--font-weight-bold);
 }
 
+/* Light mode: Professional blue accent (consistent with headings/links) */
+[data-theme="light"] .blog-post-content strong {
+  color: var(--color-link);  /* #0969da - professional blue (5.16:1 contrast) */
+}
+
 /* Code Blocks - Terminal Aesthetic */
 .blog-post-content code {
   font-family: var(--font-terminal);
@@ -485,7 +512,7 @@ a[href="#all"].category-btn {
 
 [data-theme="light"] .blog-post-content code {
   background-color: #f5f5f5;
-  color: var(--color-ui-primary);
+  color: var(--color-link);  /* #0969da - professional blue (consistent with headings/strong) */
 }
 
 .blog-post-content pre {
@@ -624,6 +651,11 @@ a[href="#all"].category-btn {
   color: var(--color-ui-primary);
   font-size: 1.6rem;
   margin-bottom: var(--spacing-md);
+}
+
+/* Light mode: Professional blue heading (consistent with inline links) */
+[data-theme="light"] .blog-cta h3 {
+  color: var(--color-link);  /* #0969da - professional blue (5.16:1 contrast) */
 }
 
 .blog-cta p {
