@@ -237,24 +237,14 @@ a[href="#all"].category-btn {
 }
 
 .blog-post-card h2 a {
-  color: var(--color-ui-primary);
+  color: var(--color-link);  /* Both themes: consistent with inline links (dark #79c0ff, light #0969da) */
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
-/* Light mode: Professional blue link (inherit from h2 parent or explicit) */
-[data-theme="light"] .blog-post-card h2 a {
-  color: var(--color-link);  /* #0969da - professional blue (5.16:1 contrast) */
-}
-
 .blog-post-card h2 a:hover {
-  color: var(--color-ui-hover);
+  color: var(--color-link-hover);  /* Both themes: darker on hover (dark #58a6ff, light #0550ae) - consistent pattern */
   opacity: 1;
-}
-
-/* Light mode: Professional blue hover (darker on hover - WCAG AAA 7.24:1) */
-[data-theme="light"] .blog-post-card h2 a:hover {
-  color: var(--color-link-hover);  /* #0550ae - darker blue hover (15-20% delta, not 42% neon) */
 }
 
 .blog-meta {
