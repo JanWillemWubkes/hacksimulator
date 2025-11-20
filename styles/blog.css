@@ -458,6 +458,18 @@ a[href="#all"].category-btn {
   line-height: 1.6;
 }
 
+/* Checklist component: Terminal aesthetic with ASCII checkmarks [ ✓ ]
+ * Removes default bullets to prevent double opsommingstekens (bullet + checkmark)
+ * Indent compensation maintains visual hierarchy */
+.blog-post-content .checklist {
+  list-style: none;
+  margin-left: calc(var(--spacing-xl) - var(--spacing-md)); /* Compensate for missing bullet indent */
+}
+
+.blog-post-content .checklist li {
+  margin-left: var(--spacing-md); /* Fine-tune alignment for checkmark text */
+}
+
 /* Inline content links: underline for accessibility (WCAG 2.1) */
 .blog-post-content p a,
 .blog-post-content ul a,
