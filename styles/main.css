@@ -853,7 +853,7 @@ footer nav a:not(:first-child) {
 }
 
 /* Generic navbar links - Animated Underline Pattern (Sessie 53 upgrade) */
-.navbar-links li:not(.navbar-dropdown) > a {
+.navbar-links > li:not(.navbar-dropdown) > a {
   color: var(--color-navbar-link);
   font-family: var(--font-terminal);
   font-size: 19px; /* Slightly larger for navbar prominence */
@@ -866,7 +866,7 @@ footer nav a:not(:first-child) {
 }
 
 /* Animated underline - grows from center (GitHub/VS Code pattern) */
-.navbar-links li:not(.navbar-dropdown) > a::after {
+.navbar-links > li:not(.navbar-dropdown) > a::after {
   content: '';
   position: absolute;
   bottom: 2px; /* Tight to text - industry standard (Sessie 55) */
@@ -877,11 +877,11 @@ footer nav a:not(:first-child) {
   transition: width 0.2s ease, left 0.2s ease;
 }
 
-.navbar-links li:not(.navbar-dropdown) > a:hover {
+.navbar-links > li:not(.navbar-dropdown) > a:hover {
   color: var(--color-navbar-link-hover);
 }
 
-.navbar-links li:not(.navbar-dropdown) > a:hover::after {
+.navbar-links > li:not(.navbar-dropdown) > a:hover::after {
   width: 100%;
   left: 0;
 }
