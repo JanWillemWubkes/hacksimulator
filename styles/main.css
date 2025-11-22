@@ -1052,7 +1052,8 @@ footer nav a:not(:first-child) {
 
 .theme-toggle:hover {
   transform: none;
-  opacity: 0.8;
+  box-shadow: none;
+  /* opacity verwijderd - toggle-option:hover doet het werk */
 }
 
 /* Focus indicator handled by global :focus-visible in animations.css */
