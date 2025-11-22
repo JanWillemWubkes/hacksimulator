@@ -98,7 +98,8 @@
   --color-navbar-link: #c9d1d9;         /* Soft white navigation links (GitHub text) */
   --color-navbar-link-hover: #ffffff;   /* White hover state (maximum contrast) */
   --color-navbar-action: #ffffff;       /* White action icons (search, github, theme toggle) */
-  --color-navbar-dropdown-icon: #79c0ff; /* Muted blue dropdown icons (+/×) - GitHub accent */
+  --color-navbar-dropdown-icon: #c9d1d9; /* Matches nav text - single accent rule (Sessie 53) */
+  --color-navbar-underline: #58a6ff;    /* Blue accent - consistent across themes (Dark Frame Pattern) */
 
   /* Footer Colors - Dark Frame Pattern (GitHub Dark accents) */
   --color-bg-footer: #1a1a1a;           /* Dark grey footer background - matches navbar (unified chrome) */
@@ -189,7 +190,7 @@
   --color-navbar-link: #c9d1d9;         /* Soft white links (GitHub text - same as dark mode) */
   --color-navbar-link-hover: #ffffff;   /* White hover (same as dark mode) */
   --color-navbar-action: #ffffff;       /* White icons (same as dark mode) */
-  --color-navbar-dropdown-icon: #79c0ff; /* Muted blue dropdown (GitHub accent - same as dark mode) */
+  --color-navbar-dropdown-icon: #c9d1d9; /* Matches nav text - single accent rule (Sessie 53) */
 
   /* Footer Colors - STAYS DARK in light mode (matches navbar chrome) */
   --color-bg-footer: #1a1a1a;           /* Dark footer background (same as navbar) */
@@ -851,21 +852,38 @@ footer nav a:not(:first-child) {
   position: relative;
 }
 
-/* Generic navbar links - EXCLUDE dropdown trigger to prevent font-weight inheritance */
+/* Generic navbar links - Animated Underline Pattern (Sessie 53 upgrade) */
 .navbar-links li:not(.navbar-dropdown) > a {
   color: var(--color-navbar-link);
   font-family: var(--font-terminal);
-  font-size: var(--font-size-base);
+  font-size: 19px; /* Slightly larger for navbar prominence */
+  font-weight: 500; /* Medium weight - professional developer tool aesthetic */
+  letter-spacing: 0.5px; /* Improved monospace readability */
   padding: var(--spacing-sm) var(--spacing-md);
-  transition: all var(--transition-fast);
+  transition: color var(--transition-fast);
   position: relative;
   display: block;
-  font-weight: 400;
+}
+
+/* Animated underline - grows from center (GitHub/VS Code pattern) */
+.navbar-links li:not(.navbar-dropdown) > a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; /* More breathing room below text */
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-navbar-underline); /* Consistent blue in both themes (Dark Frame Pattern) */
+  transition: width 0.2s ease, left 0.2s ease;
 }
 
 .navbar-links li:not(.navbar-dropdown) > a:hover {
   color: var(--color-navbar-link-hover);
-  font-weight: 700; /* Only regular links get bold - dropdown trigger excluded */
+}
+
+.navbar-links li:not(.navbar-dropdown) > a:hover::after {
+  width: 100%;
+  left: 0;
 }
 
 /* Navbar Dropdown */
@@ -873,24 +891,41 @@ footer nav a:not(:first-child) {
   position: relative;
 }
 
-/* Dropdown Trigger - Isolated component with explicit styles (no inheritance from generic navbar links) */
+/* Dropdown Trigger - Animated Underline Pattern (Sessie 53 upgrade) - matches generic navbar links */
 .dropdown-trigger {
   color: var(--color-navbar-link);
   font-family: var(--font-terminal);
-  font-size: var(--font-size-base);
+  font-size: 19px; /* Match generic navbar links */
+  font-weight: 500; /* Medium weight - consistent with generic links */
+  letter-spacing: 0.5px; /* Improved monospace readability */
   padding: var(--spacing-sm) var(--spacing-md);
-  font-weight: 400; /* ALWAYS 400 - never bold to prevent layout jank */
   cursor: pointer;
   display: inline-flex; /* Flexbox enables stable icon alignment */
   align-items: center; /* Vertically center icon with text regardless of font changes */
   gap: 4px; /* Predictable spacing (doesn't collapse like margin) */
-  transition: color var(--transition-fast); /* Only animate color, not font-weight */
+  transition: color var(--transition-fast);
   position: relative;
+}
+
+/* Animated underline for dropdown trigger - uses ::before (::after is '+' icon) */
+.dropdown-trigger::before {
+  content: '';
+  position: absolute;
+  bottom: -4px; /* More breathing room below text */
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-navbar-underline); /* Consistent blue in both themes (Dark Frame Pattern) */
+  transition: width 0.2s ease, left 0.2s ease;
 }
 
 .dropdown-trigger:hover {
   color: var(--color-navbar-link-hover);
-  font-weight: 400; /* EXPLICIT override - prevent any inheritance */
+}
+
+.dropdown-trigger:hover::before {
+  width: 100%;
+  left: 0;
 }
 
 /* Dropdown Icon - Pseudo-element pattern (industry standard: VS Code, GitHub, Slack) */

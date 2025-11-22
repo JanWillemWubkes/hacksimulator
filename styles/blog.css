@@ -67,20 +67,54 @@
   padding: var(--spacing-md) var(--spacing-lg);  /* Match main navbar padding */
 }
 
-.blog-nav a {
+/* Blog text link - Animated Underline Pattern (Sessie 53 upgrade) */
+/* Uses :not(.navbar-action) to exclude GitHub icon */
+.blog-nav a:not(.navbar-action) {
   font-family: var(--font-terminal);
-  /* Navbar link color (light grey on dark navbar - not cyan content color) */
-  color: var(--color-navbar-link);  /* #cccccc instead of cyan */
+  font-size: 19px; /* Match main navbar */
+  font-weight: 500; /* Medium weight - professional developer tool aesthetic */
+  letter-spacing: 0.5px; /* Improved monospace readability */
+  color: var(--color-navbar-link);
   text-decoration: none;
   padding: var(--spacing-sm) var(--spacing-md);
-  /* Main navbar pattern: no border, uses font-weight on hover */
+  transition: color var(--transition-fast);
+  position: relative;
+}
+
+/* Animated underline - grows from center (GitHub/VS Code pattern) */
+.blog-nav a:not(.navbar-action)::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; /* More breathing room below text */
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-navbar-underline); /* Consistent blue in both themes (Dark Frame Pattern) */
+  transition: width 0.2s ease, left 0.2s ease;
+}
+
+.blog-nav a:not(.navbar-action):hover {
+  color: var(--color-navbar-link-hover);
+}
+
+.blog-nav a:not(.navbar-action):hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Blog GitHub icon - Lift effect (matches main site .navbar-action) */
+.blog-nav .navbar-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-navbar-action);
+  padding: var(--spacing-sm);
   transition: all var(--transition-fast);
 }
 
-.blog-nav a:hover {
-  /* Main navbar pattern: bright white + bold (consistent UX) */
-  color: var(--color-navbar-link-hover);  /* #ffffff */
-  font-weight: 700;  /* Bold hover - matches main navbar */
+.blog-nav .navbar-action:hover {
+  color: var(--color-navbar-action);
+  transform: translateY(-2px); /* Lift effect - consistent with main site */
 }
 
 /* ==================== Category Filter (Blog Index) ==================== */
