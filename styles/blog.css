@@ -85,7 +85,7 @@
 .blog-nav a:not(.navbar-action)::after {
   content: '';
   position: absolute;
-  bottom: -4px; /* More breathing room below text */
+  bottom: 2px; /* Tight to text - industry standard (Sessie 55) */
   left: 50%;
   width: 0;
   height: 2px;

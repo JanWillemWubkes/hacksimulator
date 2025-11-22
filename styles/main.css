@@ -869,7 +869,7 @@ footer nav a:not(:first-child) {
 .navbar-links li:not(.navbar-dropdown) > a::after {
   content: '';
   position: absolute;
-  bottom: -4px; /* More breathing room below text */
+  bottom: 2px; /* Tight to text - industry standard (Sessie 55) */
   left: 50%;
   width: 0;
   height: 2px;
@@ -911,7 +911,7 @@ footer nav a:not(:first-child) {
 .dropdown-trigger::before {
   content: '';
   position: absolute;
-  bottom: -4px; /* More breathing room below text */
+  bottom: 2px; /* Tight to text - industry standard (Sessie 55) */
   left: 50%;
   width: 0;
   height: 2px;
