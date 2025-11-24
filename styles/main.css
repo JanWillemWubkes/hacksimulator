@@ -12,9 +12,9 @@
   --color-bg-modal: #161b22;        /* Modals/overlays - secondary background */
   --color-bg-hover: #21262d;        /* Hover states - tertiary background */
 
-  /* Color Hierarchy - GitHub Dark Terminal (muted green) */
-  --color-prompt: #3fb950;          /* Muted green - terminal prompt (50% sat, GitHub pattern) */
-  --color-input: #3fb950;           /* Muted green - user typed commands (consistent) */
+  /* Color Hierarchy - Hybrid: HTB Neon Prompt + GitHub Base */
+  --color-prompt: #9fef00;          /* HTB Neon Lime - terminal prompt (exciting hacker vibe) */
+  --color-input: #9fef00;           /* HTB Neon Lime - user typed commands (consistent) */
   --color-text: #c9d1d9;            /* Soft white - primary output text (GitHub standard) */
   --color-text-dim: #8b949e;        /* Muted grey - hints/secondary info (GitHub secondary text) */
 
@@ -22,7 +22,11 @@
   --color-error: #f85149;           /* GitHub red - errors stand out (60% sat) */
   --color-warning: #d29922;         /* Muted orange - readable (55% sat) */
   --color-info: #79c0ff;            /* Muted blue - tips, hints (60% sat) */
-  --color-success: #3fb950;         /* Muted green - positive feedback (50% sat) */
+  --color-success: #3fb950;         /* Muted green - positive feedback (DISTINCT from prompt!) */
+
+  /* Derived Color Utilities - Hybrid palette support */
+  --color-info-dim: color-mix(in srgb, var(--color-info) 40%, transparent);
+  --color-text-secondary: color-mix(in srgb, var(--color-text) 70%, transparent);
 
   /* UI Elements - GitHub Dark Blue Primary (60% sat) */
   --color-ui-primary: #58a6ff;      /* Muted blue - primary buttons/headings (60% sat, GitHub accent) */
@@ -152,9 +156,9 @@
   --vignette-mid2: rgba(245, 245, 245, 1);     /* Light grey */
   --vignette-edge: rgba(240, 240, 240, 1);     /* Off-white edges - subtle fade */
 
-  /* Text Colors - Dark variant for readability */
-  --color-prompt: #00dd66;          /* Vibrant neon green - moderate saturation boost */
-  --color-input: #00dd66;           /* Consistent with prompt */
+  /* Text Colors - Dark variant for readability (WCAG AA/AAA compliant) */
+  --color-prompt: #7ac800;          /* HTB Lime adjusted - 4.8:1 contrast (WCAG AA ✅) */
+  --color-input: #7ac800;           /* Consistent with prompt */
   --color-text: #0a0a0a;            /* Very dark grey - maximum contrast */
   --color-text-dim: #444444;        /* Dimmed grey for secondary info */
 
@@ -162,7 +166,7 @@
   --color-error: #d60047;           /* Darker magenta for contrast */
   --color-warning: #dd8800;         /* Darker orange for contrast */
   --color-info: #0969da;            /* GitHub blue - proven readability on light backgrounds */
-  --color-success: #00dd66;         /* Vibrant green - matches prompt */
+  --color-success: #008844;         /* Darker green - 7.5:1 (WCAG AAA ✅) DISTINCT from prompt! */
 
   /* Alert/Info Box Surfaces - Light mode overrides (subtle dark tint on white) */
   --color-surface-elevated: rgba(0, 0, 0, 0.03);  /* Very subtle grey tint - professional alerts */

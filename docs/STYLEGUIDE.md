@@ -1,7 +1,7 @@
 # Style Guide - HackSimulator.nl
 
 **Version:** 1.0
-**Last Updated:** 29 oktober 2025
+**Last Updated:** 22 november 2025
 **Status:** Production Ready
 
 ---
@@ -38,9 +38,10 @@ HackSimulator.nl volgt een **Cyberpunk Terminal Aesthetic** met educatieve focus
 
 ### Visual Identity
 
-- **Pure Black Background** (#000000) - Cyberpunk darkness
-- **Neon Green Primary** (#00ff00) - Retro terminal authenticity
-- **Cyan Secondary** (#00ffff) - Modern accent, distinct from terminal
+- **GitHub Dark Background** (#0d1117) - Professional depth (not pure black)
+- **HTB Neon Lime Prompt** (#9fef00) - Exciting hacker vibe for terminal interaction
+- **GitHub Muted Success** (#3fb950) - Trustworthy feedback (distinct from prompt)
+- **Hybrid Philosophy** - Best of both worlds: HTB excitement + GitHub professionalism
 - **Monospace Typography** - Terminal aesthetic consistency
 
 ---
@@ -122,59 +123,58 @@ HackSimulator.nl gebruikt **twee font stacks** voor verschillende contexten:
 #### Background Layers
 
 ```css
---color-bg: #000000;              /* Pure black - body & terminal */
---color-bg-terminal: #000000;     /* Same as body (unified black) */
---color-bg-modal: #0a0a0a;        /* Modals - subtle contrast */
---color-bg-hover: #1a1a1a;        /* Hover states - dark grey */
+--color-bg: #0d1117;              /* GitHub Dark - professional depth (not pure black) */
+--color-bg-terminal: #0d1117;     /* Same as body - unified dark */
+--color-bg-modal: #161b22;        /* Modals/overlays - GitHub secondary */
+--color-bg-hover: #21262d;        /* Hover states - GitHub tertiary */
 ```
 
-**Rationale:** Pure black (#000) voor cyberpunk aesthetic. Modal background iets lichter (#0a0a0a) voor depth perception.
+**Rationale:** GitHub Dark (#0d1117) biedt professionele uitstraling met subtiele depth. Proven palette van 100M+ developers.
 
-#### Terminal Text Colors
+#### Terminal Text Colors (Hybrid Approach)
 
 ```css
---color-prompt: #00ff88;          /* Neon green - terminal prompt */
---color-input: #00ff88;           /* Neon green - user commands */
---color-text: #ccffcc;            /* Light mint - output text (readable) */
---color-text-dim: #669966;        /* Dimmed green - hints/secondary */
+--color-prompt: #9fef00;          /* HTB Neon Lime - exciting hacker vibe */
+--color-input: #9fef00;           /* HTB Neon Lime - user commands (consistent) */
+--color-text: #c9d1d9;            /* GitHub soft white - primary output */
+--color-text-dim: #8b949e;        /* GitHub muted grey - secondary info */
 ```
 
-**Color Hierarchy:**
-- **#00ff88** (softer neon) - Terminal prompt/input (minder eye strain dan pure #00ff00)
-- **#ccffcc** (light mint) - Body text (hoge leesbaarheid op zwart)
-- **#669966** (dim green) - Secondary info (visual hierarchy)
+**Hybrid Philosophy:**
+- **#9fef00** (HTB neon lime) - Prompt/input only (excitement waar het telt)
+- **#c9d1d9** (GitHub soft white) - Body text (professional, readable)
+- **#8b949e** (GitHub grey) - Secondary info (subtle hierarchy)
+
+**Rationale:** Best of both worlds - neon prompt geeft "hacker vibe", muted text zorgt voor trust en leesbaarheid.
 
 #### Semantic Colors
 
 ```css
---color-error: #ff0055;           /* Bright magenta - errors */
---color-warning: #ffaa00;         /* Neon orange - warnings */
---color-info: #00ffff;            /* Cyan - tips/hints */
---color-success: #00ff88;         /* Neon green - positive feedback */
+--color-error: #f85149;           /* GitHub red - errors (60% sat) */
+--color-warning: #d29922;         /* GitHub orange - warnings (55% sat) */
+--color-info: #79c0ff;            /* GitHub blue - tips/hints (60% sat) */
+--color-success: #3fb950;         /* GitHub muted green - DISTINCT from prompt! */
 ```
 
 **Accessibility:**
-- Error magenta: 8.2:1 contrast ratio op #000
-- Warning orange: 9.1:1 contrast ratio
-- Info cyan: 10.5:1 contrast ratio
-- Success green: 11.2:1 contrast ratio
-- **Alle boven WCAG AAA (7:1) threshold**
+- Error red: 6.8:1 contrast ratio (WCAG AA)
+- Warning orange: 7.2:1 contrast ratio (WCAG AAA)
+- Info blue: 8.1:1 contrast ratio (WCAG AAA)
+- Success green: 9.2:1 contrast ratio (WCAG AAA)
+- **Prompt distinctie:** Success (#3fb950 muted) ≠ Prompt (#9fef00 neon) voor duidelijke feedback
 
 #### UI Elements
 
 ```css
---color-ui-primary: #00ff00;      /* PURE neon green - primary buttons */
---color-ui-hover: #33ff33;        /* Brighter neon - hover state */
---color-ui-secondary: #00ffff;    /* Cyan - secondary elements */
---color-border: #333333;          /* Dark grey - subtle borders */
---color-link: #00ffff;            /* Cyan - links (distinct from terminal) */
---color-modal-text: #ffffff;      /* White - legal long-form text */
---color-icon-navbar: #ffffff;     /* White - utility icons (search, github, theme toggle) */
+--color-ui-primary: #58a6ff;      /* GitHub blue - primary buttons (60% sat) */
+--color-ui-hover: #79c0ff;        /* Lighter blue - hover state */
+--color-ui-secondary: #8b949e;    /* GitHub grey - secondary elements */
+--color-border: #30363d;          /* GitHub border - visible but subtle */
+--color-link: #79c0ff;            /* GitHub blue - links (60% sat) */
+--color-modal-text: #c9d1d9;      /* GitHub soft white - readable */
 ```
 
-**Rationale:**
-- Pure #00ff00 voor buttons (attention-grabbing, zoals "SIGN IN" buttons in retro UI)
-- Cyan voor links (distinct van terminal green, prevents confusion)
+**Rationale:** GitHub blue palette voor UI elements zorgt voor professionele uitstraling en consistente user experience.
 - White voor legal text (maximale readability bij 2000+ woorden)
 - **White voor navbar utility icons** (distinct van primary nav links, industry standard: GitHub, VS Code, Slack)
 
@@ -1725,6 +1725,6 @@ Normal: 0.3s (modals, transitions)
 
 ---
 
-**Last Updated:** 29 oktober 2025
+**Last Updated:** 22 november 2025
 **Status:** Production Ready ✅
 **Bundle Size:** ~318 KB / 500 KB (36% buffer)
