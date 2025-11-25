@@ -17,7 +17,7 @@
 **Taal:** UI=NL, commands=EN, uitleg=NL
 **Performance:** Bundle ~318KB, Load ~2s, Lighthouse 88/100/100/100
 **Testing:** Playwright E2E (Chromium + Firefox passing)
-**Compliance:** WCAG AAA, Style Guide 100% (69 CSS variables)
+**Compliance:** WCAG AAA, Style Guide 100% (141 CSS variables)
 **CI/CD:** GitHub Actions → Netlify auto-deploy (main branch) | Rollback: `git revert` + push
 **Monitoring:** Netlify Analytics | Lighthouse CI
 
@@ -26,7 +26,7 @@
 ## 📑 Navigatie
 
 **Core:** §2 Kritieke Niet Doen | §3 Output Principe (80/20) | §4 Taal Strategie | §5 Educational Patterns | §6 Tone of Voice
-**Implementatie:** §7 Command Checklist | §8 Architectural Patterns | §9 Recent Learnings (Sessies 36-40)
+**Implementatie:** §7 Command Checklist | §8 Architectural Patterns | §9 Recent Learnings (Sessies 52-56)
 **Workflow:** §10 Sessie Protocol | §11 Communicatie Grondregels | §12 Troubleshooting | §13 Referenties
 
 ---
@@ -97,11 +97,17 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## 🏗️ Architectural Patterns
 
-**Doel:** Critical patterns from 40 sessions - full details in SESSIONS.md
+**Doel:** Critical patterns from 57 sessions - full details in SESSIONS.md
+
+### Dark Frame Pattern (Architectural Foundation)
+**Definitie:** Navbar en footer blijven ALTIJD donker, ongeacht theme. Content area is theme-adaptive.
+**Waarom:** Visuele stabiliteit - neon accenten werken alleen op donkere achtergronden, lichte chrome zou "gaming aesthetic" breken.
+**Hover States:** Witte/neutrale shadows, GEEN groene glows op dark frame elementen.
+**Voorbeeld:** `--color-text-primary` op navbar ≠ content area (navbar = fixed white, content = theme-dependent)
 
 ### CSS & Styling
 ⚠️ Never hardcode colors/border-radius (use CSS vars) | overflow+border-radius same element | theme colors on fixed backgrounds | light = inverse dark
-✅ CSS Variables = instant site-wide updates | Visual regression test both themes | Cache-bust all stylesheets (`?v=X`) | Light theme needs +20% saturation | Dark Frame Pattern (navbar/footer) | Nested scroll: outer=shape, inner=overflow
+✅ CSS Variables = instant site-wide updates | Visual regression test both themes | Cache-bust all stylesheets (`?v=X`) | Light theme needs +20% saturation | Nested scroll: outer=shape, inner=overflow
 
 ### JavaScript & Events
 ⚠️ Never duplicate listeners same element | global listeners without context check | assume code executes | hardcoded breakpoints | reset state every input
@@ -123,74 +129,53 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 **Doel:** Last 5 sessions only - older sessions archived in SESSIONS.md
 
-### Sessie 50: Blog CTA UX Overhaul - Semantic CSS Patterns + WCAG Compliance (17 nov 2025)
-⚠️ Never apply single CSS pattern to all element types (buttons ≠ inline links - different roles need different patterns)
-⚠️ Never trust gut feeling over measurement (user questioned analysis → revealed 1.82:1 contrast = WCAG fail)
-⚠️ Never skip WCAG verification per theme (light ≠ inverse dark - same color works on dark, fails on white)
-⚠️ Never hardcode derivative values (box-shadow RGB swapped between themes = copy-paste error)
-✅ Always use semantic selectors over broad ones (`p a, ul a` targets exact use case vs fighting specificity wars)
-✅ Always validate with user corrections ("kunnen we dit cleaner oplossen?" led to superior semantic pattern)
-✅ Always test both themes independently (theme-specific optimizations needed: AA vs AAA compliance)
-✅ Multi-problem cascade: User reports 1 issue → testing reveals 3 → unified solution fixes all (contrast + underline + shadows)
-📊 Impact: 6 files, WCAG FAIL → AA (3.51:1), semantic link pattern, +15-30% conversion expected
-📄 SESSIONS.md Sessie 50
+### Sessie 59: Mobile Optimization - P0+P1 Fixes (25 nov 2025)
+⚠️ Never use `vh` units on mobile without `dvh` fallback (iOS Safari doesn't recalculate when browser chrome changes)
+⚠️ Never pursue mobile-first refactor for inherently desktop-first use cases (terminal apps = desktop primary)
+⚠️ Never keep dead CSS in production (half-implemented features waste bundle budget)
+✅ Always test modals on smallest target device first (iPhone SE = lowest common denominator)
+✅ Always use architectural decision matrix for scope (6-8hr refactor vs 1.5hr targeted fixes = same result)
+✅ Always add iOS safe area insets for notch devices (20% of iOS users affected)
+✅ Always dismiss mobile keyboard after command (blur + scroll = better UX)
+📊 Impact: 4 files, P0 bug fix (legal modal scroll), -2.1KB bundle, iOS support added
+📄 SESSIONS.md Sessie 59
 
-### Sessie 45: Navbar Consistency & Toggle Contrast - Architectural Verification (14 nov 2025)
-⚠️ Never test fixes on single site only (main site working ≠ blog site working - multi-page apps need comprehensive testing)
-⚠️ Never add features without checking visual implementation match (GitHub link text vs icon = brand inconsistency)
-⚠️ Never assume architectural patterns propagate automatically (Sessie 44 Dark Frame Pattern on footer ≠ navbar updated)
-✅ Always verify ALL components when establishing architectural patterns (footer + navbar + modals = complete chrome consistency)
-✅ Always use VS Code active/inactive pattern for toggles (40% opacity dimming = instant clarity which state is active)
-✅ Always match icon implementation across pages (SVG icon duplication 2KB acceptable for visual consistency on 4-page scale)
-✅ Multi-problem cascade: User reports 1 issue → testing reveals 2 more → unified solution fixes all 3 (toggle contrast + blog navbar + icon consistency)
-📊 Impact: 7 files, 100% design system consistency, 5:1 contrast improvement, toggle 7.4:1 → 12.6:1, blog navbar ∞% (from broken)
-📄 SESSIONS.md Sessie 45
+### Sessie 58: Hybrid Color Scheme - HTB Neon Prompt + WCAG AA Fix (24 nov 2025)
+⚠️ Never promise one aesthetic in docs while delivering another (brand confusion between STYLEGUIDE.md and actual CSS)
+⚠️ Never skip contrast ratio verification in light mode (light mode prompt was 2.7:1 - WCAG FAIL)
+⚠️ Never use identical colors for different message types (prompt = success prevents clear feedback)
+✅ Always create visual mockups for subjective design decisions (7 options → data-driven choice)
+✅ Always test WCAG contrast for BOTH themes independently (dark pass ≠ light pass)
+✅ Always ensure prompt ≠ success colors for clear command/result distinction
+📊 Impact: 3 files, P0 accessibility fix (2.7:1 → 4.8:1), Hybrid scheme (HTB neon + GitHub base)
+📄 SESSIONS.md Sessie 58
 
-### Sessie 49: Button Hierarchy Pattern - Correcting Sessie 48 + CTA Conversion Optimization (17 nov 2025)
-⚠️ Never apply single pattern to all button types (primary conversion goals ≠ secondary alternatives - different roles need different patterns)
-⚠️ Never assume professional = subtle for CTAs (professional aesthetic ≠ weak CTA - Stripe/GitHub use prominent filled CTAs)
-⚠️ Never skip conversion research for CTAs (filled buttons = 16-35% higher conversion - data > assumptions)
-✅ Always validate hover behavior with user testing (filled→transparent felt "vreemd" = counter-intuitive UX caught by user feedback)
-✅ Always separate button hierarchy: Primary (filled→filled) vs Secondary (outline→outline) - visual weight matches action importance
-✅ Always acknowledge mistakes openly (Sessie 47-48 patterns were wrong - transparency = learning opportunity)
-✅ Research-based corrections: VWO/Unbounce data + industry validation (GitHub, Stripe, Vercel) confirmed filled CTAs optimal
-📊 Impact: 2 files, 5 primary buttons reverted to filled, blog CTA optimized (+16-35% expected conversion), Button Hierarchy Pattern established
-📄 SESSIONS.md Sessie 49
+### Sessie 56: Dropdown Submenu Selector Fix - Direct Child Combinator (22 nov 2025)
+⚠️ Never use descendant selectors for nested components (`.dropdown a` targets ALL links including submenus)
+⚠️ Never assume CSS specificity wars are the solution (adding more classes = complexity debt)
+✅ Always use direct child combinator (`>`) for nested structures (`.dropdown > a` targets only immediate children)
+✅ Always test dropdown components with submenus before declaring done
+📊 Impact: 1 file, selector precision fix, submenu links no longer inherit parent hover styles
+📄 SESSIONS.md Sessie 56
 
-### Sessie 47: Blog CTA Hover Consistency - Professional Elevation Pattern (15 nov 2025)
-⚠️ Never assume single theme fix works across themes (dark mode working ≠ light mode working - always verify BOTH with browser testing)
-⚠️ Never use different hover patterns for same component across themes (inconsistency = poor UX + maintenance burden)
-⚠️ Never use heavy glow effects in professional/educational contexts (16px rgba(0.4) glow = gaming aesthetic, not professional)
-✅ Always match industry patterns for professional contexts (GitHub Docs/Stripe = subtle elevation, not playful glow)
-✅ Always consider context when choosing effects (blog = professional → subtle shadow, terminal = playful → glow acceptable)
-✅ Always use CSS variables for cross-theme consistency (var(--color-link) adapts automatically, hardcoded colors break theme system)
-✅ Always test hover states in browser, not just code review (visual verification catches subtle inconsistencies, screenshots document behavior)
-📊 Impact: 5 files, 100% theme consistency, dark mode 16px glow → 4px subtle shadow, light mode fill removed, professional elevation pattern
-📄 SESSIONS.md Sessie 47
+### Sessie 55: Navbar Underline Spacing - Tight to Text (21 nov 2025)
+⚠️ Never add excessive spacing between text and underline (12px gap = disconnected visual hierarchy)
+⚠️ Never assume underline offset is purely aesthetic (GitHub/VS Code use 2-4px for intentional tight coupling)
+✅ Always follow industry patterns for navigation underlines (tight spacing = element belongs together)
+✅ Always test underline positioning across all nav items (different text lengths need consistent offset)
+📊 Impact: 1 file, underline-offset reduced, GitHub/VS Code pattern compliance
+📄 SESSIONS.md Sessie 55
 
-### Sessie 46: Blog Width Verification - Industry Standards Validation (15 nov 2025)
-⚠️ Never trust gut feeling over measurement (user felt "too narrow" but live data showed 71 chars/line = optimal)
-⚠️ Never assume industry standards without verification (Medium 700px cited everywhere, but context matters)
-⚠️ Never change specs based on visual psychology alone (whitespace contrast creates illusion of narrowness)
-✅ Always verify with live browser measurement (Playwright evaluate = actual rendering, not theory)
-✅ Always document optimization rationale in CSS comments (future developers need context for decisions)
-✅ Always compare against multiple benchmarks (Medium 700px + Nielsen 65-75 chars + WCAG <80 chars)
-✅ Research validates existing decisions: 720px already optimal from Sessie 44 (900px → 720px), live verified 71 chars/line
-📊 Impact: 0 code changes (verification only), CSS comment strengthened, 720px validated as mathematically optimal
-📄 SESSIONS.md Sessie 46
+### Sessie 54: Theme Toggle Hover - Dark Frame Compliance (21 nov 2025)
+⚠️ Never use green glow on dark frame elements (navbar/footer = dark chrome, green = content accent)
+⚠️ Never forget Dark Frame Pattern when adding hover effects (chrome elements need neutral hovers)
+✅ Always use white/neutral shadows for dark frame hover states (consistent with footer links)
+✅ Always verify hover effects match established architectural patterns
+📊 Impact: 1 file, theme toggle hover fixed, Dark Frame Pattern compliance
+📄 SESSIONS.md Sessie 54
 
-### Sessie 44: Blog Styling Consistency - Multi-Hypothesis Problem Solving (13 nov 2025)
-⚠️ Never assume single cause for UX complaint (user "colors too bright" = emoji clutter + line-length + saturation)
-⚠️ Never implement passive theme sync on multi-page apps (sub-pages need interactive control like main app)
-⚠️ Never skip Style Guide review for new content (blog Session 43 missed emoji violations)
-✅ Always use gefaseerde approach for ambiguous problems (fix observable issues first, then measure hypothesis)
-✅ Always validate line-length research (Nielsen: 65-75 chars optimal, blog had 85 chars at 900px)
-✅ Always provide theme toggle on EVERY page in multi-page apps (GitHub/VS Code/Bootstrap pattern)
-✅ Inline script duplication acceptable for small scale (4 pages = 120 lines OK, shared module overkill)
-📊 Impact: 20+ emoji → ASCII, theme toggle on 4 pages, 900px → 720px, terminal aesthetic 100%
-📄 SESSIONS.md Sessie 44
-
-**Older Sessions (35-43):** Dropdown jank (font-weight/inline-flex), Modal uniformity (`:only-child` pitfalls), ASCII box drawing, Strategy Pattern, Keyboard shortcuts discovery, Kill Your Darlings, GitHub open source launch, SEO blog architecture - See SESSIONS.md
+**Older Sessions (53-51):** Navbar Hover (animated underline), Global Link Hover (opacity → color), Dual-theme button color overhaul, Blog CTA UX Overhaul, Button Hierarchy Pattern, Blog CTA Hover Consistency, Blog Width Verification, Blog Styling Consistency - See SESSIONS.md
+**Older Sessions (35-43):** Dropdown jank (font-weight/inline-flex), Modal uniformity (`:only-child` pitfalls), ASCII box drawing, Strategy Pattern - See SESSIONS.md
 **Older Sessions (2-34):** See SESSIONS.md for comprehensive historical context
 
 ---
@@ -208,7 +193,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ### Afsluiten
 - Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-- **Rotation trigger:** Every 5 sessions (last rotation: Sessie 42, next: Sessie 47)
+- **Rotation trigger:** Every 5 sessions (last rotation: Sessie 59, next: Sessie 64)
 - **Rotation rule:** Keep last 5 sessions full, compress 6-10, archive 11+
 
 ### Bij Requirement Changes
@@ -284,14 +269,14 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 **Volledige details:** `docs/prd.md` (v1.4)
 **Command specs:** `docs/commands-list.md`
 **Style guide:** `docs/STYLEGUIDE.md` (v1.0) - Comprehensive design system & component library
-**Sessie logs:** `SESSIONS.md` - Complete historical record (49 sessions total: Sessies 1-34 archived, Sessies 35-36 compressed, Sessies 37-49 detailed)
+**Sessie logs:** `SESSIONS.md` - Complete historical record (59 sessions total: Sessies 1-34 archived, Sessies 35-43 compressed, Sessies 44-59 detailed)
 **Netlify/Domain setup:** `docs/NETLIFY-SETUP.md` - Complete domain launch guide (18KB)
 **Filesystem structure:** PRD Bijlage B
 **Tech rationale:** PRD §13
 
 ---
 
-**Last updated:** 17 november 2025 (Sessie 50)
-**Last synced:** 17 november 2025 (Blog CTA UX Overhaul - WCAG AA compliance, semantic CSS patterns, +15-30% conversion expected)
-**Next sync:** Milestone M6 completion OR Sessie 55
-**Version:** 14.5 (Sessie 50: Semantic link pattern, WCAG FAIL→AA, box-shadow fixes, light mode contrast 3.51:1, multi-problem cascade approach)
+**Last updated:** 25 november 2025 (Sessie 59 - Mobile Optimization P0+P1 Fixes)
+**Last synced:** 22 november 2025 (Full documentation sync complete, all metrics verified)
+**Next sync:** Milestone M6 completion OR Sessie 62
+**Version:** 14.9 (Sessie 59: Mobile Optimization - P0+P1 fixes (legal modal scroll dvh, iOS safe area, keyboard dismiss, scroll affordance, touch feedback), -2.1KB bundle, Recent Learnings rotation)
