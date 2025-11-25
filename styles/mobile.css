@@ -203,11 +203,13 @@
   .modal-content {
     max-width: 90%;
     padding: var(--spacing-lg);
-    max-height: 90vh;
+    max-height: 600px; /* Fallback for browsers without dvh support (iOS <15.4, Android <14) */
+    max-height: min(600px, 90dvh); /* dvh = dynamic vh, adjusts to browser chrome changes */
   }
 
   .modal-body {
-    max-height: calc(90vh - 48px - 70px); /* 90vh minus padding (48px) and footer (~70px) */
+    /* Removed max-height calc - let flexbox handle it naturally based on parent max-height */
+    /* OLD: max-height: calc(90vh - 48px - 70px); - caused content overflow on small phones */
   }
 
   .modal-footer {
@@ -296,83 +298,13 @@
   }
 }
 
-/* ==================== Mobile Quick Commands ==================== */
-.mobile-quick-commands {
-  display: none;
-  position: fixed;
-  bottom: 60px;
-  left: 0;
-  right: 0;
-  background-color: var(--color-bg-modal);
-  border-top: 1px solid var(--color-border);
-  padding: var(--spacing-sm);
-  overflow-x: auto;
-  white-space: nowrap;
-  z-index: var(--z-feedback);
-}
-
-@media (max-width: 768px) {
-  .mobile-quick-commands.active {
-    display: block;
-  }
-}
-
-.quick-command-btn {
-  display: inline-block;
-  background-color: rgba(0, 255, 136, 0.1);
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
-  padding: var(--spacing-xs) var(--spacing-md);
-  margin-right: var(--spacing-xs);
-  font-size: 14px;
-  font-family: var(--font-terminal);
-}
-
-.quick-command-btn:active {
-  background-color: rgba(0, 255, 136, 0.2);
-  border-color: var(--color-prompt);
-}
-
-/* ==================== Mobile Keyboard Helpers ==================== */
-.mobile-keyboard-helper {
-  display: none;
-  position: fixed;
-  bottom: 110px;
-  left: 0;
-  right: 0;
-  background-color: var(--color-bg-modal);
-  border-top: 1px solid var(--color-border);
-  padding: var(--spacing-xs);
-  justify-content: center;
-  gap: var(--spacing-xs);
-  z-index: var(--z-feedback);
-}
-
-@media (max-width: 768px) {
-  .mobile-keyboard-helper.active {
-    display: flex;
-  }
-}
-
-.keyboard-key {
-  background-color: rgba(0, 255, 136, 0.1);
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
-  padding: var(--spacing-sm);
-  min-width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-family: var(--font-terminal);
-  -webkit-tap-highlight-color: transparent;
-}
-
-.keyboard-key:active {
-  background-color: rgba(0, 255, 136, 0.2);
-  border-color: var(--color-prompt);
-}
+/* ==================== Mobile Quick Commands & Keyboard Helpers ==================== */
+/* REMOVED: Dead CSS for unimplemented features (marked Post-MVP in TASKS.md)
+ * - .mobile-quick-commands (35 lines) - Feature never activated
+ * - .mobile-keyboard-helper (39 lines) - Feature never activated
+ * Total removed: 74 lines = ~2.1KB bundle size reduction
+ * If implementing these features in future, see git history for original CSS
+ */
 
 /* ==================== Touch Improvements ==================== */
 @media (max-width: 768px) {
@@ -402,6 +334,20 @@
   * {
     -webkit-tap-highlight-color: transparent;
   }
+
+  /* Touch feedback: subtle press effect (native iOS button behavior) */
+  button:active,
+  .btn-primary:active,
+  .btn-secondary:active,
+  .floating-btn:active {
+    transform: scale(0.97);
+    transition: transform 0.1s ease;
+  }
+
+  /* Prevent default iOS tap highlight since we have custom feedback */
+  button, a {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
 /* ==================== Landscape Mobile ==================== */
@@ -415,11 +361,12 @@
   }
 
   .modal-content {
-    max-height: 85vh;
+    max-height: 550px; /* Fallback for browsers without dvh support */
+    max-height: min(550px, 85dvh); /* Landscape: less vertical space, so 85dvh instead of 90dvh */
   }
 
   .modal-body {
-    max-height: calc(85vh - 48px - 70px); /* 85vh minus padding (48px) and footer (~70px) */
+    /* Removed max-height calc - let flexbox handle it naturally */
   }
 
   .modal-footer {
@@ -443,7 +390,7 @@
   }
 
   .modal-body {
-    max-height: calc(85vh - 24px - 60px); /* 85vh minus padding (24px) and footer (~60px) */
+    /* Removed max-height calc - parent .modal-content already has dvh constraint */
   }
 
   .modal-footer {
@@ -481,5 +428,26 @@
 
   .modal-content {
     max-width: 80%;
+  }
+}
+
+/* ==================== iOS Safe Area Insets ==================== */
+/* Support for iPhone X+ notch and home indicator */
+@supports (padding: env(safe-area-inset-bottom)) {
+  #terminal-container {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+
+  footer {
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+
+  .floating-btn {
+    bottom: calc(20px + env(safe-area-inset-bottom));
+  }
+
+  /* Modal footer also needs safe area padding on iOS */
+  .modal-footer {
+    padding-bottom: calc(var(--spacing-md) + env(safe-area-inset-bottom));
   }
 }

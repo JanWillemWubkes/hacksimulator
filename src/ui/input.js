@@ -236,6 +236,21 @@ class InputHandler {
 
     // Clear input
     this.clear();
+
+    // Mobile: Dismiss keyboard and scroll output into view
+    if (window.matchMedia('(max-width: 768px)').matches) {
+      // Blur input to dismiss keyboard
+      this.inputElement.blur();
+
+      // Scroll terminal output into view after keyboard closes
+      // Timeout accounts for iOS keyboard close animation (~200-300ms)
+      setTimeout(() => {
+        if (this.terminal && this.terminal.getOutputElement()) {
+          const outputElement = this.terminal.getOutputElement();
+          outputElement.scrollTop = outputElement.scrollHeight;
+        }
+      }, 300);
+    }
   }
 
   /**

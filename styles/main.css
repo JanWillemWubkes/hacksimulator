@@ -383,11 +383,37 @@ button {
   flex: 1;
   overflow-y: auto;
   padding: 40px;
-  background-color: var(--color-bg-terminal);
+
+  /* Scroll affordance: shadows indicate scrollable content (iOS/Material Design pattern) */
+  /* Background gradient serves dual purpose: solid color base + scroll shadows */
+  background:
+    /* Top cover (hides top shadow when at top) */
+    linear-gradient(var(--color-bg-terminal) 30%, transparent),
+    /* Bottom cover (hides bottom shadow when at bottom) */
+    linear-gradient(transparent, var(--color-bg-terminal) 70%) 0 100%,
+    /* Top shadow (visible when scrolled down) */
+    radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.3), transparent),
+    /* Bottom shadow (visible when content below) */
+    radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.3), transparent) 0 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  background-attachment: local, local, scroll, scroll;
 }
 
 [data-theme="light"] .modal-body {
-  background-color: #ffffff;
+  /* Override scroll affordance gradients for light theme */
+  background:
+    /* Top cover */
+    linear-gradient(#ffffff 30%, transparent),
+    /* Bottom cover */
+    linear-gradient(transparent, #ffffff 70%) 0 100%,
+    /* Top shadow */
+    radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.2), transparent),
+    /* Bottom shadow */
+    radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.2), transparent) 0 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  background-attachment: local, local, scroll, scroll;
 }
 
 /* Custom scrollbar for all modals - consistent brand aesthetic (Sessie 37) */
