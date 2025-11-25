@@ -1145,44 +1145,64 @@ footer nav a:not(:first-child) {
   }
 }
 
-/* Hamburger Toggle (Hidden on Desktop) */
+/* Hamburger Toggle (Hidden on Desktop) - Industry Standard Architecture (Sessie 60) */
 .navbar-toggle {
   display: none;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;  /* Center-aligned for gap spacing (GitHub/VS Code pattern) */
+  align-items: center;  /* Horizontally center spans */
+  gap: 5px;  /* Explicit spacing - cleaner than space-between for rotations */
   width: 30px;
-  height: 24px;
+  height: 30px;
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
   z-index: 10;
+  overflow: visible;  /* Allow rotated spans to extend beyond bounds */
+  border-radius: var(--border-radius-button);
+  transition: background-color var(--transition-fast);
+}
+
+.navbar-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);  /* Subtle white overlay - GitHub/VS Code pattern */
 }
 
 .navbar-toggle span {
   display: block;
-  width: 100%;
+  width: 20px;  /* Reduced from 100% - fits rotated 45° diagonal (20×√2=28px < 30px container) */
   height: 3px;
-  background-color: var(--color-button-bg);
+  background-color: #c9d1d9;  /* Soft white - matches navbar links (Dark Frame Pattern) */
   transition: all var(--transition-fast);
   border-radius: var(--border-radius-small);
 }
 
 .navbar-toggle:hover span {
-  background-color: var(--color-button-bg-hover);
+  background-color: #ffffff;  /* Bright white hover - Dark Frame Pattern compliance (Sessie 60) */
 }
 
-/* Hamburger → X Animation */
+/* Active state explicitly uses same white color (no theme-dependent colors) */
+.navbar-toggle.active span {
+  background-color: #c9d1d9;  /* Soft white - consistent in both states (Sessie 60) */
+}
+
+.navbar-toggle.active:hover span {
+  background-color: #ffffff;  /* Bright white - active+hover gets same treatment (Sessie 60) */
+}
+
+/* Hamburger → X Animation - Industry Standard (Rotation-Only, No TranslateY) */
 .navbar-toggle.active span:nth-child(1) {
-  transform: rotate(45deg) translateY(10px);
+  transform: rotate(45deg);  /* Pure rotation - industry standard (GitHub/VS Code/Bootstrap) */
+  transform-origin: center center;
 }
 
 .navbar-toggle.active span:nth-child(2) {
-  opacity: 0;
+  opacity: 0;  /* Middle bar fades out */
 }
 
 .navbar-toggle.active span:nth-child(3) {
-  transform: rotate(-45deg) translateY(-10px);
+  transform: rotate(-45deg);  /* Pure rotation - spans form perfect X from center */
+  transform-origin: center center;
 }
 
 /* ==================== Utility Classes ==================== */

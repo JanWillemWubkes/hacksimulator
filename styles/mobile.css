@@ -47,6 +47,10 @@
   /* Show hamburger toggle on mobile */
   .navbar-toggle {
     display: flex;
+    width: 44px;   /* WCAG 2.1 AAA minimum tap target (Sessie 60) */
+    height: 44px;  /* WCAG 2.1 AAA minimum tap target (Sessie 60) */
+    padding: 0;  /* No padding needed - 20px spans fit comfortably in 44px with rotation (28px diagonal) */
+    margin-right: 8px;  /* Breathing room from screen edge (Sessie 60) */
   }
 
   /* Hide menu by default on mobile */
