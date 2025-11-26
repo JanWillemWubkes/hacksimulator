@@ -47,9 +47,9 @@
   /* Show hamburger toggle on mobile */
   .navbar-toggle {
     display: flex;
-    width: 44px;   /* WCAG 2.1 AAA minimum tap target (Sessie 60) */
-    height: 44px;  /* WCAG 2.1 AAA minimum tap target (Sessie 60) */
-    padding: 0;  /* No padding needed - 20px spans fit comfortably in 44px with rotation (28px diagonal) */
+    width: 44px;   /* WCAG 2.1 AAA minimum tap target (Sessie 61) */
+    height: 44px;  /* WCAG 2.1 AAA minimum tap target (Sessie 61) */
+    padding: 14px 0;  /* Vertical padding: (44px - 16px content) / 2 = 14px (Sessie 61) */
     margin-right: 8px;  /* Breathing room from screen edge (Sessie 60) */
   }
 
@@ -236,20 +236,6 @@
     justify-content: center;
   }
 
-  /* Feedback widget */
-  #feedback-widget {
-    bottom: var(--spacing-md);
-    right: var(--spacing-md);
-  }
-
-  .floating-btn {
-    width: 90px;
-    height: 44px;
-    padding: 0 8px; /* Breathing room voor tablet */
-    font-size: 0.8rem;
-    line-height: 44px; /* Vertical centering */
-  }
-
   /* Footer */
   footer {
     font-size: 16px;
@@ -342,8 +328,7 @@
   /* Touch feedback: subtle press effect (native iOS button behavior) */
   button:active,
   .btn-primary:active,
-  .btn-secondary:active,
-  .floating-btn:active {
+  .btn-secondary:active {
     transform: scale(0.97);
     transition: transform 0.1s ease;
   }
@@ -411,14 +396,6 @@
     font-size: 16px;
   }
 
-  .floating-btn {
-    width: 80px;
-    height: 44px;
-    padding: 0 6px; /* Minimale padding voor tiny screens */
-    font-size: 0.75rem; /* Iets groter voor readability */
-    line-height: 44px; /* Vertical centering */
-  }
-
   .ascii-art {
     font-size: 0.6em;
   }
@@ -444,10 +421,6 @@
 
   footer {
     padding-bottom: calc(12px + env(safe-area-inset-bottom));
-  }
-
-  .floating-btn {
-    bottom: calc(20px + env(safe-area-inset-bottom));
   }
 
   /* Modal footer also needs safe area padding on iOS */

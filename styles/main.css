@@ -611,53 +611,6 @@ button {
   display: flex;
   gap: var(--spacing-sm);
 }
-
-/* ==================== Feedback Widget ==================== */
-#feedback-widget {
-  position: fixed;
-  bottom: var(--spacing-lg);
-  right: var(--spacing-lg);
-  z-index: var(--z-feedback);
-}
-
-.floating-btn {
-  /* Dimensions - optimale balans voor leesbaarheid */
-  width: 100px;
-  height: 48px;
-  padding: 0 10px;  /* Critical fix: breathing room voor tekst */
-
-  /* Border styling */
-  border-radius: var(--border-radius-button);
-  border: 3px solid var(--color-button-bg);  /* Button Hierarchy Pattern: border matches fill (Sessie 52) */
-
-  /* Colors */
-  background-color: var(--color-button-bg);
-  color: var(--color-button-text);
-
-  /* Typography - geoptimaliseerd voor beschikbare ruimte */
-  font-family: 'Courier New', monospace;
-  font-size: 0.85rem;
-  font-weight: bold;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  line-height: 48px;  /* Perfect vertical centering */
-
-  /* Interaction */
-  cursor: pointer;
-  transition: all 0.2s ease;  /* Smooth all properties voor hover effects */
-}
-
-.floating-btn:hover {
-  /* Button hierarchy pattern - primary action stays filled */
-  background-color: var(--color-button-bg-hover);
-  border-color: var(--color-button-bg-hover);
-  color: var(--color-button-text-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px var(--color-button-shadow-hover);
-}
-
-/* Focus indicator handled by global :focus-visible in animations.css */
-
 /* Feedback Modal - Balanced spacing */
 #feedback-modal .modal-content p {
   margin-bottom: 4px; /* Reduced spacing for tighter layout */
@@ -1145,18 +1098,17 @@ footer nav a:not(:first-child) {
   }
 }
 
-/* Hamburger Toggle (Hidden on Desktop) - Industry Standard Architecture (Sessie 60) */
+/* Hamburger Toggle (Hidden on Desktop) - Industry Standard Architecture (Sessie 61) */
 .navbar-toggle {
   display: none;
   flex-direction: column;
-  justify-content: center;  /* Center-aligned for gap spacing (GitHub/VS Code pattern) */
+  justify-content: space-between;  /* Even spacing for predictable translateY calculations */
   align-items: center;  /* Horizontally center spans */
-  gap: 5px;  /* Explicit spacing - cleaner than space-between for rotations */
   width: 30px;
   height: 30px;
   background: none;
   border: none;
-  padding: 0;
+  padding: 7px 0;  /* Vertical padding: (30px - 16px content) / 2 = 7px */
   cursor: pointer;
   z-index: 10;
   overflow: visible;  /* Allow rotated spans to extend beyond bounds */
@@ -1166,6 +1118,16 @@ footer nav a:not(:first-child) {
 
 .navbar-toggle:hover {
   background-color: rgba(255, 255, 255, 0.1);  /* Subtle white overlay - GitHub/VS Code pattern */
+}
+
+/* Focus Override - Dark Frame Pattern (white instead of blue) */
+.navbar-toggle:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.4);  /* Subtle white outline - Dark Frame compliant */
+  outline-offset: 2px;
+}
+
+.navbar-toggle:focus:not(:focus-visible) {
+  outline: none;  /* Remove focus ring on mouse click (accessibility preserved for keyboard) */
 }
 
 .navbar-toggle span {
@@ -1181,18 +1143,27 @@ footer nav a:not(:first-child) {
   background-color: #ffffff;  /* Bright white hover - Dark Frame Pattern compliance (Sessie 60) */
 }
 
+/* Active state - Explicit background control to prevent green glow (Sessie 61) */
+.navbar-toggle.active,
+.navbar-toggle:active,
+.navbar-toggle.active:active {
+  background-color: transparent !important;  /* No background glow in any active state */
+}
+
 /* Active state explicitly uses same white color (no theme-dependent colors) */
 .navbar-toggle.active span {
   background-color: #c9d1d9;  /* Soft white - consistent in both states (Sessie 60) */
+  height: 2px;  /* Thinner bars for sharp, professional X (Sessie 61) */
+  border-radius: 0;  /* Sharp ends instead of rounded - technical aesthetic (Sessie 61) */
 }
 
 .navbar-toggle.active:hover span {
   background-color: #ffffff;  /* Bright white - active+hover gets same treatment (Sessie 60) */
 }
 
-/* Hamburger → X Animation - Industry Standard (Rotation-Only, No TranslateY) */
+/* Hamburger → X Animation - Industry Standard (Compound Transforms: translateY + rotate) */
 .navbar-toggle.active span:nth-child(1) {
-  transform: rotate(45deg);  /* Pure rotation - industry standard (GitHub/VS Code/Bootstrap) */
+  transform: translateY(7.5px) rotate(45deg);  /* Move DOWN to center + rotate (adjusted for 2px bars) */
   transform-origin: center center;
 }
 
@@ -1201,7 +1172,7 @@ footer nav a:not(:first-child) {
 }
 
 .navbar-toggle.active span:nth-child(3) {
-  transform: rotate(-45deg);  /* Pure rotation - spans form perfect X from center */
+  transform: translateY(-7.5px) rotate(-45deg);  /* Move UP to center + rotate (adjusted for 2px bars) */
   transform-origin: center center;
 }
 

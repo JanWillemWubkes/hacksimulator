@@ -36,20 +36,21 @@ const feedbackManager = {
    * @private
    */
   _setupEventHandlers() {
-    const feedbackButton = document.getElementById('feedback-button');
+    const feedbackLink = document.getElementById('footer-feedback-link');
     const feedbackModal = document.getElementById('feedback-modal');
     const closeButton = feedbackModal?.querySelector('.modal-close');
     const submitButton = document.getElementById('feedback-submit');
     const cancelButton = document.getElementById('feedback-cancel');
     const stars = document.querySelectorAll('.rating-stars .star');
 
-    if (!feedbackButton || !feedbackModal) {
+    if (!feedbackLink || !feedbackModal) {
       console.warn('Feedback UI elements not found in DOM');
       return;
     }
 
-    // Open modal when feedback button clicked
-    feedbackButton.addEventListener('click', () => {
+    // Open modal when feedback link clicked
+    feedbackLink.addEventListener('click', (e) => {
+      e.preventDefault(); // Prevent default anchor behavior
       this._openModal();
     });
 
