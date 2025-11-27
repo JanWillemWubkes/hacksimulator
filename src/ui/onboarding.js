@@ -91,9 +91,9 @@ class Onboarding {
    */
   _getFirstTimeWelcome() {
     return `
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃  [***] HACKSIMULATOR.NL - ETHICAL HACKING  ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+[SEPARATOR]
+[***] HACKSIMULATOR.NL - ETHICAL HACKING
+[SEPARATOR]
 
 [ ✓ ] Toegang verleend
 
@@ -121,9 +121,9 @@ veilig en legaal.
    */
   _getReturningVisitorWelcome() {
     return `
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃  [***] Welkom terug in het lab, hacker     ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+[SEPARATOR]
+[***] Welkom terug in het lab, hacker
+[SEPARATOR]
 
 [ ✓ ] Systeem gereed → Type 'help' voor nieuwe opdrachten
 `.trim();

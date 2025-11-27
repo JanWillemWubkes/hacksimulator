@@ -423,6 +423,41 @@
   color: var(--color-text);
 }
 
+/* ==================== Welcome Message ==================== */
+/* Responsive separator pattern with neon glow for gaming aesthetic */
+
+.welcome-separator {
+  width: 100%;  /* Fully responsive - adapts to all screen sizes */
+  height: 2px;
+  background: var(--color-prompt);  /* Neon green */
+  margin: var(--spacing-md) 0;
+
+  /* Neon glow effect - gaming aesthetic (theme-adaptive) */
+  box-shadow:
+    0 0 8px var(--color-prompt),
+    var(--shadow-separator-glow);
+}
+
+.welcome-message {
+  text-align: center;
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+  letter-spacing: 0.05em;  /* Slight spacing for emphasis */
+  margin: var(--spacing-sm) 0;
+
+  /* Ensure readability on all screen sizes */
+  padding: 0 var(--spacing-md);
+  word-wrap: break-word;
+}
+
+/* Mobile: reduce font size for better fit */
+@media (max-width: 480px) {
+  .welcome-message {
+    font-size: var(--font-size-base);
+  }
+}
+
 /* ==================== Vignette Background ==================== */
 /* Professional terminal aesthetic: Radial gradient from lighter center to dark edges */
 

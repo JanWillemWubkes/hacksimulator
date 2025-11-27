@@ -139,6 +139,9 @@
 
   /* Terminal Accent - Neon green glow for terminal-specific UI (hint boxes, command output) */
   --shadow-accent-terminal: 0 0 20px rgba(0, 255, 136, 0.15);  /* Branded glow - hacking aesthetic */
+
+  /* Welcome Separator Glow - Matches --color-prompt (#9fef00) for brand consistency */
+  --shadow-separator-glow: 0 0 16px rgba(159, 239, 0, 0.3);  /* HTB Neon Lime glow */
 }
 
 /* ==================== Light Mode Theme ==================== */
@@ -230,6 +233,9 @@
 
   /* Terminal Accent - Adapted for light backgrounds (same visual weight as dark mode) */
   --shadow-accent-terminal: 0 0 20px rgba(0, 255, 136, 0.08);  /* Softer glow on white - prevents oversaturation */
+
+  /* Welcome Separator Glow - Matches --color-prompt (#7ac800) with reduced opacity for light backgrounds */
+  --shadow-separator-glow: 0 0 16px rgba(122, 200, 0, 0.2);  /* HTB Lime adjusted - softer for white backgrounds */
 }
 
 /* ==================== Reset & Base ==================== */

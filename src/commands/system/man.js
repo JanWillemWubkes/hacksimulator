@@ -3,6 +3,7 @@
  */
 
 import registry from '../../core/registry.js';
+import { boxHeader } from '../../utils/asciiBox.js';
 
 export default {
   name: 'man',
@@ -35,16 +36,20 @@ export default {
 
     // Check if command has a manPage property
     if (handler.manPage) {
-      return '\n' + handler.manPage + '\n';
+      // Add ASCII box header for gaming aesthetic
+      const header = boxHeader(`${commandName.toUpperCase()} - ${handler.description}`, 60);
+      return '\n' + header + '\n\n' + handler.manPage + '\n';
     }
 
     // Fallback: Build basic manual page if no manPage property exists
-    let output = `\nNAME\n  ${commandName} - ${handler.description}\n\n`;
+    const header = boxHeader(`${commandName.toUpperCase()} - ${handler.description}`, 60);
+    let output = `\n${header}\n\n`;
+    output += `NAAM\n  ${commandName} - ${handler.description}\n\n`;
     output += `SYNOPSIS\n  ${handler.usage}\n\n`;
-    output += `DESCRIPTION\n  ${handler.description}\n\n`;
+    output += `BESCHRIJVING\n  ${handler.description}\n\n`;
 
     if (handler.category) {
-      output += `CATEGORY\n  ${handler.category}\n`;
+      output += `CATEGORIE\n  ${handler.category}\n`;
     }
 
     return output;

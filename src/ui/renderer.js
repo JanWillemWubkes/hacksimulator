@@ -58,12 +58,30 @@ class Renderer {
     const lines = output.split('\n');
 
     lines.forEach(lineText => {
+      const trimmed = lineText.trim();
+
+      // Check for separator marker - render as visual separator div
+      if (trimmed === '[SEPARATOR]') {
+        const separator = document.createElement('div');
+        separator.className = 'welcome-separator';
+        this.outputElement.appendChild(separator);
+        return;  // Skip normal line rendering
+      }
+
+      // Check for welcome message marker - render as centered message
+      if (trimmed.startsWith('[***]')) {
+        const message = document.createElement('div');
+        message.className = 'welcome-message';
+        message.textContent = trimmed;
+        this.outputElement.appendChild(message);
+        return;  // Skip normal line rendering
+      }
+
       const line = document.createElement('div');
 
       // Auto-detect semantic lines and force correct color type
       // This ensures consistent colors regardless of parent output type
       // Supports both ASCII brackets ([ ? ]) and emoji (💡) for backward compatibility
-      const trimmed = lineText.trim();
       let lineType = type;
 
       // ASCII bracket detection (primary - terminal authentic)
