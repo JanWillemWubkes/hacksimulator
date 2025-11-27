@@ -4,6 +4,8 @@
  * Educational tool demonstrating SQL injection concepts
  */
 
+import { boxText } from '../../utils/asciiBox.js';
+
 export default {
   name: 'sqlmap',
   category: 'security',
@@ -13,29 +15,30 @@ export default {
   async execute(args, flags, context) {
     // Show warning on first use
     if (args.length === 0) {
-      return `[ ! ]  SQLMAP - Automatic SQL Injection Tool
+      const warningContent = `SQLMAP - Automatic SQL Injection Tool
 
-[ ! ]  JURIDISCHE WAARSCHUWING:
-    SQL injection testing zonder toestemming is ILLEGAAL.
-    Ongeautoriseerde toegang tot databases = Computer Fraud en
-    Computercriminaliteit wet overtreding.
+JURIDISCHE WAARSCHUWING:
+SQL injection testing zonder toestemming is ILLEGAAL.
+Ongeautoriseerde toegang tot databases = strafbaar feit.
 
-    Straf: Tot 6 jaar gevangenisstraf + civiele aansprakelijkheid.
+  Straf: Tot 6 jaar + civiele aansprakelijkheid
 
-[ → ] EDUCATIEF GEBRUIK:
-    Deze simulator demonstreert SQL injection concepten veilig.
+EDUCATIEF GEBRUIK:
+Deze simulator demonstreert SQL injection concepten veilig.
+Alle aanvallen zijn gesimuleerd.
 
-[ ? ] GEBRUIK:
-    sqlmap <url>
+GEBRUIK:
+  sqlmap http://site.com/product?id=1
+  sqlmap http://demo-app.local/login
+  sqlmap http://test-site.com/search?q=test`;
 
-    Voorbeelden:
-    • sqlmap http://vulnerable-site.com/product?id=1
-    • sqlmap http://demo-app.local/login
-    • sqlmap http://test-site.com/search?q=test
+      const warningBox = boxText(warningContent, 'SECURITY WARNING', 60);
+
+      return `${warningBox}
 
 [ ? ] DOORGAAN MET SIMULATIE? [j/n]
 
-    Type 'j' voor educatieve demonstratie.`;
+    Type 'j' voor educatieve demonstratie`;
     }
 
     const url = args[0];

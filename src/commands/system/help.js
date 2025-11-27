@@ -3,6 +3,7 @@
  */
 
 import registry from '../../core/registry.js';
+import { lightBoxText } from '../../utils/asciiBox.js';
 
 // ─────────────────────────────────────────────────
 // Box Drawing Configuration
@@ -203,10 +204,14 @@ export default {
       }
     });
 
-    output += '[ ? ] TIP: Type \'man [command]\' voor gedetailleerde informatie.\n';
-    output += '[ ? ] TIP: Gebruik ↑↓ voor geschiedenis | Tab voor aanvullen.\n';
-    output += '[ ? ] TIP: Type \'shortcuts\' voor alle keyboard shortcuts.\n';
-    output += '[ ? ] TIP: Probeer: type "nm" + Tab → completeert naar "nmap".';
+    // Consolidated tip box (light rounded borders for friendly educational tone)
+    const tipContent = `• man <command> → Gedetailleerde uitleg van een tool
+• ↑↓ keys → Navigeer door command geschiedenis
+• Tab → Autocomplete (bijv. "nm" + Tab → "nmap")
+• shortcuts → Toon alle keyboard shortcuts`;
+
+    const tipBox = lightBoxText(tipContent, 'TIP: NAVIGATIE & SHORTCUTS', 60);
+    output += tipBox;
 
     return output;
   },

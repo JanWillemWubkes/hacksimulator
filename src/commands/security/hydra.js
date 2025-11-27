@@ -4,6 +4,8 @@
  * Educational tool demonstrating brute force attack concepts
  */
 
+import { boxText } from '../../utils/asciiBox.js';
+
 /**
  * Simulated vulnerable services with weak credentials
  */
@@ -46,30 +48,31 @@ export default {
   async execute(args, flags, context) {
     // Show warning on first use
     if (args.length === 0) {
-      return `[ ! ]  HYDRA - THC Network Logon Cracker
+      const warningContent = `HYDRA - Network Logon Brute Force Tool
 
-[ ! ]  JURIDISCHE WAARSCHUWING:
-    Brute force aanvallen zonder toestemming zijn ILLEGAAL.
-    Dit is een strafbaar feit onder de Computercriminaliteit wet.
+JURIDISCHE WAARSCHUWING:
+Brute force aanvallen zonder toestemming zijn ILLEGAAL.
+Dit is een strafbaar feit onder de Computercriminaliteit wet.
 
-    Ongeautoriseerde toegang = tot 6 jaar gevangenisstraf.
+  Straf: Tot 6 jaar gevangenisstraf
 
-[ → ] EDUCATIEF GEBRUIK:
-    Deze simulator demonstreert brute force concepten op een
-    veilige manier. Alle "aanvallen" zijn gesimuleerd.
+EDUCATIEF GEBRUIK:
+Deze simulator demonstreert brute force concepten veilig.
+Alle "aanvallen" zijn gesimuleerd.
 
-[ ? ] GEBRUIK:
-    hydra <target>
+GEBRUIK:
+  hydra ssh://192.168.1.100     (SSH brute force)
+  hydra ftp://192.168.1.50      (FTP brute force)
+  hydra http://target.local/admin  (HTTP brute force)`;
 
-    Voorbeelden:
-    • hydra ssh://192.168.1.100
-    • hydra ftp://192.168.1.50
-    • hydra http://target.local/admin
+      const warningBox = boxText(warningContent, 'SECURITY WARNING', 60);
 
-[ ? ] WILT U DOORGAAN MET DEZE SIMULATIE? [j/n]
+      return `${warningBox}
 
-    Type 'j' om door te gaan met educatieve demonstratie.
-    Type 'n' om te stoppen.`;
+[ ? ] WILT U DOORGAAN? [j/n]
+
+    Type 'j' voor educatieve demonstratie
+    Type 'n' om te stoppen`;
     }
 
     const target = args[0];

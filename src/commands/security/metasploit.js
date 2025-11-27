@@ -4,6 +4,8 @@
  * Educational tool demonstrating exploitation framework concepts
  */
 
+import { boxText } from '../../utils/asciiBox.js';
+
 export default {
   name: 'metasploit',
   category: 'security',
@@ -11,8 +13,29 @@ export default {
   usage: 'metasploit',
 
   async execute(args, flags, context) {
+    // Security warning box
+    const warningContent = `METASPLOIT FRAMEWORK - Penetration Testing Platform
+
+JURIDISCHE WAARSCHUWING:
+Metasploit is ALLEEN LEGAAL met expliciete schriftelijke
+toestemming. Ongeautoriseerd gebruik = strafbaar feit.
+
+  Straf: Tot 6 jaar gevangenisstraf
+
+WAT IS METASPLOIT?
+Het meest gebruikte penetration testing framework ter wereld.
+Bevat 2300+ exploits voor bekende kwetsbaarheden.
+
+EDUCATIEF GEBRUIK:
+Deze simulator demonstreert exploitation framework concepten
+op een veilige manier.`;
+
+    const warningBox = boxText(warningContent, 'SECURITY WARNING', 60);
+
     // Metasploit simulation - interactive framework intro
-    const output = `
+    const output = `${warningBox}
+
+
                                    ____________
  [%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| $a,        |%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%]
  [%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| $S\`?a,     |%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%]
@@ -27,16 +50,6 @@ export default {
 + -- --=[ 2344 exploits - 1234 auxiliary - 423 post       ]
 + -- --=[ 1377 payloads - 46 encoders - 11 nops          ]
 + -- --=[ 9 evasion                                       ]
-
-[ ! ]  JURIDISCHE WAARSCHUWING:
-    Metasploit is ALLEEN LEGAAL met expliciete schriftelijke toestemming.
-    Ongeautoriseerd gebruik = Computercriminaliteit wet overtreding.
-
-    Straf: Tot 6 jaar gevangenisstraf.
-
-[ → ] WAT IS METASPLOIT?
-    Het meest gebruikte penetration testing framework ter wereld.
-    Bevat duizenden exploits voor bekende kwetsbaarheden.
 
 [ ? ] EDUCATIEVE DEMONSTRATIE:
 

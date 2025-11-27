@@ -4,6 +4,8 @@
  * Educational tool demonstrating password cracking concepts
  */
 
+import { boxText } from '../../utils/asciiBox.js';
+
 /**
  * Simulated hash database with weak passwords
  */
@@ -32,20 +34,28 @@ export default {
   async execute(args, flags, context) {
     // Show warning on first use
     if (args.length === 0) {
-      return `hashcat - Advanced password recovery tool
+      const warningContent = `HASHCAT - Advanced Password Recovery Tool
 
-[ ! ]  JURIDISCHE WAARSCHUWING:
-    Password cracking is ALLEEN LEGAAL op systemen waar je
-    explicite toestemming voor hebt. Ongeautoriseerd gebruik
-    is een strafbaar feit onder de Computercriminaliteit wet.
+JURIDISCHE WAARSCHUWING:
+Password cracking is ALLEEN LEGAAL op systemen waar je
+expliciete toestemming voor hebt.
 
-[ ? ] GEBRUIK:
-    hashcat <hash>
+  Straf: Computercriminaliteit wet overtreding
 
-    Voorbeelden van zwakke hashes om te proberen:
-    • 5f4dcc3b5aa765d61d8327deb882cf99  (MD5)
-    • 21232f297a57a5a743894a0e4a801fc3  (MD5)
-    • ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f  (SHA256)`;
+EDUCATIEF GEBRUIK:
+Deze simulator demonstreert password cracking concepten veilig.
+Bevat alleen zwakke demo hashes.
+
+GEBRUIK:
+  hashcat <hash>
+
+Voorbeelden van zwakke demo hashes:
+  hashcat 5f4dcc3b5aa765d61d8327deb882cf99  (MD5)
+  hashcat 21232f297a57a5a743894a0e4a801fc3  (MD5)`;
+
+      const warningBox = boxText(warningContent, 'SECURITY WARNING', 60);
+
+      return `${warningBox}`;
     }
 
     const hash = args[0].toLowerCase();

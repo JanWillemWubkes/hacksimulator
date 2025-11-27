@@ -255,10 +255,9 @@ export default {
     const triedCommands = getTriedCommands();
     let output = renderLearningPath(triedCommands);
 
-    // Educational tips
+    // Educational tip (consolidated inline)
     output += '\n\n';
-    output += '[ ? ] TIP: Type een command om progressie te maken!\n';
-    output += '[ ? ] TIP: Type \'man <command>\' voor uitleg over een tool';
+    output += '[ ? ] TIP: Type commands om progressie te maken | \'man <command>\' voor uitleg';
 
     return output;
   },

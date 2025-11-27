@@ -4,6 +4,8 @@
  * Educational tool demonstrating web vulnerability scanning
  */
 
+import { boxText } from '../../utils/asciiBox.js';
+
 export default {
   name: 'nikto',
   category: 'security',
@@ -13,24 +15,26 @@ export default {
   async execute(args, flags, context) {
     // Show warning on first use
     if (args.length === 0) {
-      return `[ ! ]  NIKTO - Web Server Scanner
+      const warningContent = `NIKTO - Web Server Vulnerability Scanner
 
-[ ! ]  JURIDISCHE WAARSCHUWING:
-    Scannen van websites zonder toestemming is ILLEGAAL.
-    Dit wordt gezien als unauthorized access attempt.
+JURIDISCHE WAARSCHUWING:
+Scannen van websites zonder toestemming is ILLEGAAL.
+Dit wordt gezien als unauthorized access attempt.
 
-    Straf: Computercriminaliteit wet + mogelijke civiele claims.
+  Straf: Computercriminaliteit wet + civiele claims
 
-[ → ] EDUCATIEF GEBRUIK:
-    Deze simulator demonstreert web vulnerability scanning veilig.
+EDUCATIEF GEBRUIK:
+Deze simulator demonstreert web vulnerability scanning veilig.
+Alle scans zijn gesimuleerd.
 
-[ ? ] GEBRUIK:
-    nikto <url>
+GEBRUIK:
+  nikto http://testsite.local
+  nikto http://vulnerable-app.com
+  nikto http://demo.example.org`;
 
-    Voorbeelden:
-    • nikto http://testsite.local
-    • nikto http://vulnerable-app.com
-    • nikto http://demo.example.org
+      const warningBox = boxText(warningContent, 'SECURITY WARNING', 60);
+
+      return `${warningBox}
 
 [ ? ] DOORGAAN? [j/n]`;
     }
