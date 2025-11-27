@@ -811,6 +811,170 @@ footer {
 
 **Accessibility Fix** (Sessie 15): Footer text 12px → 16px (+33%, WCAG AAA requirement)
 
+### ASCII Box Drawing
+
+**Purpose:** ASCII boxes provide visual hierarchy and emphasis for critical content (security warnings, multi-line tips, structured data) while maintaining terminal authenticity.
+
+#### Character Set
+
+**Heavy Borders** (High visual weight - use for warnings, errors, critical content):
+```
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  SECURITY WARNING              ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+Characters:
+┏ (U+250F) Top-left     ┓ (U+2513) Top-right
+┗ (U+2517) Bottom-left  ┛ (U+251B) Bottom-right
+━ (U+2501) Horizontal   ┃ (U+2503) Vertical
+```
+
+**Light Rounded** (Friendly visual weight - use for tips, info, structured data):
+```
+╭─────────────────────────────────╮
+│ TIP: Educational Content        │
+├─────────────────────────────────┤
+│ Multi-line content here         │
+╰─────────────────────────────────╯
+
+Characters:
+╭ (U+256D) Top-left     ╮ (U+256E) Top-right
+╰ (U+2570) Bottom-left  ╯ (U+256F) Bottom-right
+─ (U+2500) Horizontal   │ (U+2502) Vertical
+├ (U+251C) Left T       ┤ (U+2524) Right T (dividers)
+```
+
+#### Utility Functions
+
+Located in `/src/utils/asciiBox.js`:
+
+```javascript
+import { boxText, boxHeader } from '../../utils/asciiBox.js';
+
+// Full content box (header + content)
+const box = boxText(content, 'HEADER TEXT', 60);
+
+// Header-only box (man pages)
+const header = boxHeader('COMMAND NAME', 60);
+```
+
+#### When to Use Boxes
+
+**✅ DO use boxes for:**
+- **Security warnings** (consent prompts, legal warnings)
+- **Multi-line tips** (3+ lines of educational content)
+- **Error explanations** (error + why + what to do)
+- **Structured data** (tables, lists with headers)
+- **Progress/status blocks** (achievements, leerpad updates)
+- **Man page titles** (header-only boxes)
+
+**❌ DON'T use boxes for:**
+- **Single-line tips** - ASCII brackets `[ TIP ]` are sufficient
+- **Command output** - Would break 80/20 realism (real terminals don't box ls output)
+- **Success messages** - Keep minimal (`[ ✓ ] File created`)
+- **Every error** - Reserve for educational multi-line explanations
+- **Decoration** - Only use when adding semantic meaning
+
+#### Semantic Rules
+
+**Heavy borders (┏━┓) for:**
+- Security warnings
+- Error messages
+- Destructive action confirmations
+- **Rationale:** Maximum visual weight = "STOP and read carefully"
+
+**Light rounded (╭─╮) for:**
+- Educational tips
+- Info boxes
+- Progress reports
+- Help system content
+- **Rationale:** Friendly, less alarming, "helpful guidance"
+
+#### Width Standards
+
+```javascript
+// Standard widths
+const WIDTH_STANDARD = 60;  // Default for most content
+const WIDTH_FULL = 80;      // Full terminal width (rare, only for tables)
+
+// Always use consistent widths - mixing 40/60/80 creates visual noise
+boxText(content, 'Header', 60);  // ✅ Standard
+boxText(content, 'Header', 45);  // ❌ Non-standard
+```
+
+#### Implementation Example
+
+**Security Warning Pattern (Heavy Borders):**
+```javascript
+import { boxText } from '../../utils/asciiBox.js';
+
+const warningContent = `HYDRA - Network Logon Brute Force Tool
+
+JURIDISCHE WAARSCHUWING:
+Brute force aanvallen zonder toestemming zijn ILLEGAAL.
+Dit is een strafbaar feit onder de Computercriminaliteit wet.
+
+  Straf: Tot 6 jaar gevangenisstraf
+
+EDUCATIEF GEBRUIK:
+Deze simulator demonstreert brute force concepten veilig.`;
+
+const warningBox = boxText(warningContent, 'SECURITY WARNING', 60);
+return `${warningBox}\n\n[ ? ] DOORGAAN? [j/n]`;
+```
+
+**Tip Consolidation Pattern (Light Borders - Future):**
+```javascript
+// Current: Multiple [ ? ] lines (verbose)
+// Future: Single boxed block (cleaner)
+const tipBox = boxText(
+  '• Open poorten = aanvalsvectoren\n' +
+  '• Closed = service niet beschikbaar\n' +
+  '• Filtered = firewall blokkeert',
+  'TIP: PORT SCANNING',
+  60
+);
+```
+
+#### Box Drawing Pitfalls
+
+**❌ Character Count Precision:**
+```javascript
+// OFF BY ONE = VISUAL CORRUPTION
+const header = 'TITLE';
+const width = 20;
+const padding = width - header.length;  // Must be EXACT
+```
+
+**❌ Mixing Styles:**
+```javascript
+// Don't mix heavy and light in same box
+┏━━━━━━━━━━┓  // ✅ Consistent heavy
+│ Content  │  // ❌ Light vertical with heavy horizontal
+┗━━━━━━━━━━┛
+```
+
+**❌ Overuse:**
+```javascript
+// Every tip in a box = visual clutter
+[ TIP ] Single line tip  // ✅ Sufficient
+┏━━━━━━━━━━━━━━━━━━┓
+┃ TIP: One line    ┃  // ❌ Overkill
+┗━━━━━━━━━━━━━━━━━━┛
+```
+
+#### Current Implementation Status
+
+**Implemented (Sessie 61):**
+- ✅ Heavy border security warnings (hydra, metasploit, sqlmap, nikto, hashcat)
+- ✅ Man page header boxes (all 32 commands)
+- ✅ Help command table (light rounded borders)
+
+**Future (Fase 2 & 3):**
+- ⏳ Tip consolidation (multi-line tips → single boxed block)
+- ⏳ Error education (permission denied + educational context)
+- ⏳ Progress reports (leerpad achievements, system messages)
+
 ---
 
 ## Interactive States
