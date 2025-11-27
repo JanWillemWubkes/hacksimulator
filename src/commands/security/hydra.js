@@ -46,8 +46,11 @@ export default {
   usage: 'hydra <target>',
 
   async execute(args, flags, context) {
-    // Show warning on first use
-    if (args.length === 0) {
+    // Check if user has given consent for security tools
+    const hasConsent = localStorage.getItem('security_tools_consent') === 'true';
+
+    // Show warning on first use (no consent + no args)
+    if (!hasConsent && args.length === 0) {
       const warningContent = `HYDRA - Network Logon Brute Force Tool
 
 JURIDISCHE WAARSCHUWING:
@@ -69,10 +72,34 @@ GEBRUIK:
 
       return `${warningBox}
 
-[ ? ] WILT U DOORGAAN? [j/n]
+[ ? ] OM DOOR TE GAAN:
 
-    Type 'j' voor educatieve demonstratie
-    Type 'n' om te stoppen`;
+    Type 'hydra <target>' om te accepteren en door te gaan
+
+    Voorbeeld: hydra ssh://192.168.1.100
+
+[ ? ] Je consent wordt opgeslagen. Type 'reset consent' om opnieuw
+      de waarschuwing te zien.`;
+    }
+
+    // User provided args but hasn't given consent yet - grant consent and proceed
+    if (!hasConsent && args.length > 0) {
+      localStorage.setItem('security_tools_consent', 'true');
+    }
+
+    // Check if target argument is provided
+    if (args.length === 0) {
+      return `hydra: missing target argument
+
+[ ? ] GEBRUIK:
+   hydra <target>
+
+   Voorbeelden:
+   • hydra ssh://192.168.1.100
+   • hydra ftp://192.168.1.50
+   • hydra http://target.local/admin
+
+[ ? ] Type 'man hydra' voor meer informatie.`;
     }
 
     const target = args[0];

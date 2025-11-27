@@ -13,8 +13,11 @@ export default {
   usage: 'nikto <url>',
 
   async execute(args, flags, context) {
-    // Show warning on first use
-    if (args.length === 0) {
+    // Check if user has given consent for security tools
+    const hasConsent = localStorage.getItem('security_tools_consent') === 'true';
+
+    // Show warning on first use (no consent + no args)
+    if (!hasConsent && args.length === 0) {
       const warningContent = `NIKTO - Web Server Vulnerability Scanner
 
 JURIDISCHE WAARSCHUWING:
@@ -36,7 +39,34 @@ GEBRUIK:
 
       return `${warningBox}
 
-[ ? ] DOORGAAN? [j/n]`;
+[ ? ] OM DOOR TE GAAN:
+
+    Type 'nikto <url>' om te accepteren en door te gaan
+
+    Voorbeeld: nikto http://testsite.local
+
+[ ? ] Je consent wordt opgeslagen. Type 'reset consent' om opnieuw
+      de waarschuwing te zien.`;
+    }
+
+    // User provided args but hasn't given consent yet - grant consent and proceed
+    if (!hasConsent && args.length > 0) {
+      localStorage.setItem('security_tools_consent', 'true');
+    }
+
+    // Check if URL argument is provided
+    if (args.length === 0) {
+      return `nikto: missing URL argument
+
+[ ? ] GEBRUIK:
+   nikto <url>
+
+   Voorbeelden:
+   • nikto http://testsite.local
+   • nikto http://vulnerable-app.com
+   • nikto http://demo.example.org
+
+[ ? ] Type 'man nikto' voor meer informatie.`;
     }
 
     const url = args[0];

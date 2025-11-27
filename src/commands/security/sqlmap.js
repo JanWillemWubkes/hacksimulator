@@ -13,8 +13,11 @@ export default {
   usage: 'sqlmap <url>',
 
   async execute(args, flags, context) {
-    // Show warning on first use
-    if (args.length === 0) {
+    // Check if user has given consent for security tools
+    const hasConsent = localStorage.getItem('security_tools_consent') === 'true';
+
+    // Show warning on first use (no consent + no args)
+    if (!hasConsent && args.length === 0) {
       const warningContent = `SQLMAP - Automatic SQL Injection Tool
 
 JURIDISCHE WAARSCHUWING:
@@ -36,9 +39,34 @@ GEBRUIK:
 
       return `${warningBox}
 
-[ ? ] DOORGAAN MET SIMULATIE? [j/n]
+[ ? ] OM DOOR TE GAAN:
 
-    Type 'j' voor educatieve demonstratie`;
+    Type 'sqlmap <url>' om te accepteren en door te gaan
+
+    Voorbeeld: sqlmap http://site.com/product?id=1
+
+[ ? ] Je consent wordt opgeslagen. Type 'reset consent' om opnieuw
+      de waarschuwing te zien.`;
+    }
+
+    // User provided args but hasn't given consent yet - grant consent and proceed
+    if (!hasConsent && args.length > 0) {
+      localStorage.setItem('security_tools_consent', 'true');
+    }
+
+    // Check if URL argument is provided
+    if (args.length === 0) {
+      return `sqlmap: missing URL argument
+
+[ ? ] GEBRUIK:
+   sqlmap <url>
+
+   Voorbeelden:
+   • sqlmap http://site.com/product?id=1
+   • sqlmap http://demo-app.local/login
+   • sqlmap http://test-site.com/search?q=test
+
+[ ? ] Type 'man sqlmap' voor meer informatie.`;
     }
 
     const url = args[0];
