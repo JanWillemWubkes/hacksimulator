@@ -130,6 +130,7 @@
   --color-button-text: #ffffff;             /* White text - crisp contrast */
   --color-button-text-hover: #ffffff;       /* White text on hover - consistent */
   --color-button-shadow-hover: rgba(25, 118, 210, 0.3);  /* Blue shadow - matches hover color */
+  --color-button-shadow-green: rgba(79, 192, 141, 0.2);  /* Teal/cyan shadow - terminal aesthetic (animations.css) */
 
   /* Shadow System - Professional Elevation Pattern (Medium/GitHub/Stripe standard) */
   /* Content Cards - Subtle depth for blog posts, documentation boxes (NOT terminal UI) */
@@ -360,7 +361,7 @@ button {
   max-width: 90vw;
   max-height: 80vh;
   position: relative;
-  box-shadow: 0 10px 40px rgba(0, 255, 0, 0.15);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);  /* Neutral dark shadow - consistent with light mode */
   opacity: 0;
   transform: scale(0.95);
   transition: opacity 0.2s ease-out, transform 0.2s ease-out;
@@ -497,18 +498,64 @@ button {
 }
 
 .modal-close {
+  /* Positioning */
   position: absolute;
-  top: var(--spacing-sm);
-  right: var(--spacing-md);
-  background: none;
-  color: var(--color-text-muted);
-  font-size: 2rem;
+  top: var(--spacing-sm);        /* 8px */
+  right: var(--spacing-md);       /* 16px */
+
+  /* Touch target - 44x44px (WCAG AAA) */
+  width: 44px;
+  height: 44px;
+  padding: 10px;                  /* Centers 24px visual icon */
+
+  /* Visual styling - Bootstrap Opacity Pattern: Background NEVER changes */
+  background: var(--color-bg-terminal);  /* Opaque - CONSTANT (never changes) */
+  border: none;
+  border-radius: var(--border-radius-button);  /* 4px - consistent */
+  color: var(--color-text-muted);  /* #8b949e - GitHub secondary */
+  font-size: 24px;                 /* 24px visual (in 44px container) */
   line-height: 1;
-  padding: 0;
+
+  /* Bootstrap pattern - dimmed at rest */
+  opacity: 0.6;
+
+  /* Interaction */
+  cursor: pointer;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
 }
 
 .modal-close:hover {
-  color: var(--color-text-light);
+  opacity: 1.0;
+  box-shadow: none;     /* Explicit override - Dark Frame Pattern (no green glow) */
+  transform: none;      /* No lift - flat UI chrome like navbar elements */
+}
+
+.modal-close:focus-visible {
+  opacity: 1.0;
+  outline: 2px solid var(--color-info);  /* #79c0ff - Keyboard nav only */
+  outline-offset: 2px;
+}
+
+.modal-close:active {
+  opacity: 1.0;
+  transform: scale(0.95);  /* Tactile feedback */
+}
+
+/* Light theme support for modal close button */
+[data-theme="light"] .modal-close {
+  background: #ffffff;  /* Opaque white - CONSTANT (never changes) */
+  color: #57606a;       /* GitHub dark grey for light mode */
+  opacity: 0.6;
+}
+
+[data-theme="light"] .modal-close:hover {
+  opacity: 1.0;
+  box-shadow: none;     /* Explicit override - Dark Frame Pattern (no green glow) */
+  transform: none;      /* No lift - flat UI chrome like navbar elements */
+}
+
+[data-theme="light"] .modal-close:focus-visible {
+  opacity: 1.0;
 }
 
 /* ==================== Legal Modal Specific Styles (Sessie 37) ==================== */
@@ -756,9 +803,9 @@ footer nav a:not(:first-child) {
   position: absolute;
   top: -40px;
   left: 0;
-  background-color: #1a1a1a;
-  color: #cccccc;
-  border: 1px solid #333333;
+  background-color: var(--color-bg-navbar);
+  color: var(--color-navbar-link);
+  border: 1px solid var(--color-border);
   padding: var(--spacing-sm) var(--spacing-md);
   text-decoration: none;
   font-weight: var(--font-weight-bold);
@@ -768,7 +815,7 @@ footer nav a:not(:first-child) {
 
 .skip-link:focus-visible {
   top: 0;
-  outline: 2px solid #ffffff;
+  outline: 2px solid var(--color-navbar-link-hover);
   outline-offset: 2px;
 }
 
@@ -933,7 +980,7 @@ footer nav a:not(:first-child) {
   top: 100%;
   left: 0;
   background-color: var(--color-bg-dropdown);
-  border: 1px solid #333333; /* Subtle border - visible in light mode, nearly invisible in dark */
+  border: 1px solid var(--color-border); /* Subtle border - visible in light mode, nearly invisible in dark */
   border-radius: var(--border-radius-button);
   list-style: none;
   margin: 0;
@@ -958,7 +1005,7 @@ footer nav a:not(:first-child) {
 .dropdown-menu a {
   display: block;
   padding: var(--spacing-md) var(--spacing-xl); /* Enhanced horizontal breathing room: 16px/32px */
-  color: #cccccc;
+  color: var(--color-navbar-link);
   text-decoration: none;
   font-weight: 400; /* Keep constant - no jank on hover */
   white-space: nowrap; /* Prevent text wrapping - arrow and text must stay on same line */
@@ -977,7 +1024,7 @@ footer nav a:not(:first-child) {
 
 .dropdown-menu a:hover {
   background-color: var(--color-bg-dropdown-hover); /* Dedicated dropdown hover - uniform across themes */
-  color: #ffffff;
+  color: var(--color-navbar-link-hover);
   font-weight: 400; /* Explicit override - prevent inheritance */
   /* NO border color change - arrow is sufficient indicator (terminal purist approach) */
   /* NO padding change - border space already reserved */
@@ -1134,13 +1181,13 @@ footer nav a:not(:first-child) {
   display: block;
   width: 20px;  /* Reduced from 100% - fits rotated 45° diagonal (20×√2=28px < 30px container) */
   height: 3px;
-  background-color: #c9d1d9;  /* Soft white - matches navbar links (Dark Frame Pattern) */
+  background-color: var(--color-navbar-link);  /* Soft white - matches navbar links (Dark Frame Pattern) */
   transition: all var(--transition-fast);
   border-radius: var(--border-radius-small);
 }
 
 .navbar-toggle:hover span {
-  background-color: #ffffff;  /* Bright white hover - Dark Frame Pattern compliance (Sessie 60) */
+  background-color: var(--color-navbar-link-hover);  /* Bright white hover - Dark Frame Pattern compliance (Sessie 60) */
 }
 
 /* Active state - Explicit background control to prevent green glow (Sessie 61) */
@@ -1152,13 +1199,13 @@ footer nav a:not(:first-child) {
 
 /* Active state explicitly uses same white color (no theme-dependent colors) */
 .navbar-toggle.active span {
-  background-color: #c9d1d9;  /* Soft white - consistent in both states (Sessie 60) */
+  background-color: var(--color-navbar-link);  /* Soft white - consistent in both states (Sessie 60) */
   height: 2px;  /* Thinner bars for sharp, professional X (Sessie 61) */
   border-radius: 0;  /* Sharp ends instead of rounded - technical aesthetic (Sessie 61) */
 }
 
 .navbar-toggle.active:hover span {
-  background-color: #ffffff;  /* Bright white - active+hover gets same treatment (Sessie 60) */
+  background-color: var(--color-navbar-link-hover);  /* Bright white - active+hover gets same treatment (Sessie 60) */
 }
 
 /* Hamburger → X Animation - Industry Standard (Compound Transforms: translateY + rotate) */

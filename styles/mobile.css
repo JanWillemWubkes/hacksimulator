@@ -96,13 +96,13 @@
     font-size: 1.1rem;
     text-align: left;
     min-height: 44px; /* Touch target minimum */
-    color: #cccccc;
+    color: var(--color-navbar-link);
     font-weight: 400;
   }
 
   .navbar-links a:active {
-    background-color: #1a1a1a;
-    color: #ffffff;
+    background-color: var(--color-bg-navbar);
+    color: var(--color-navbar-link-hover);
     font-weight: 700;
   }
 
@@ -131,8 +131,8 @@
 
   /* Touch feedback (mobile-specific) */
   .dropdown-menu a:active {
-    background-color: #1a1a1a;
-    color: #ffffff;
+    background-color: var(--color-bg-navbar);
+    color: var(--color-navbar-link-hover);
   }
 
   /* All other styles (colors, transitions, ::before arrows, font-weight) inherit from desktop base */
@@ -159,14 +159,14 @@
     background-color: transparent;
     border: 1px solid var(--color-border);
     border-radius: var(--border-radius-button);
-    color: #cccccc;
+    color: var(--color-navbar-link);
     gap: var(--spacing-md);
   }
 
   .navbar-action:active,
   .theme-toggle:active {
-    background-color: #1a1a1a;
-    color: #ffffff;
+    background-color: var(--color-bg-navbar);
+    color: var(--color-navbar-link-hover);
   }
 
   .navbar-action svg {

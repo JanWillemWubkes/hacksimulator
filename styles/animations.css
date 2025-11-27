@@ -207,7 +207,12 @@
 }
 
 /* ==================== Button Hover Effects ==================== */
-button {
+/* Scoped to content buttons only - excludes Dark Frame chrome elements (modal-close, navbar-toggle, theme-toggle) */
+.btn-primary,
+.btn-secondary,
+.btn-small,
+.btn-warning,
+.blog-cta-button {
   transition:
     background-color var(--transition-fast),
     color var(--transition-fast),
@@ -215,12 +220,20 @@ button {
     box-shadow var(--transition-fast);
 }
 
-button:hover {
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-small:hover,
+.btn-warning:hover,
+.blog-cta-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(79, 192, 141, 0.2);
+  box-shadow: 0 4px 12px var(--color-button-shadow-green);
 }
 
-button:active {
+.btn-primary:active,
+.btn-secondary:active,
+.btn-small:active,
+.btn-warning:active,
+.blog-cta-button:active {
   transform: translateY(0);
 }
 
