@@ -489,7 +489,7 @@ All modals use **Pattern A** (full-width single button footer) with consistent t
       <p>Content hier...</p>
 
       <!-- Tips belong in BODY, not footer -->
-      <p class="modal-tip">[ TIP ] Educational context</p>
+      <p class="modal-tip">[ ? ] Educational context</p>
     </div>
 
     <!-- Footer: ONLY action button -->
@@ -869,7 +869,7 @@ const header = boxHeader('COMMAND NAME', 60);
 - **Man page titles** (header-only boxes)
 
 **❌ DON'T use boxes for:**
-- **Single-line tips** - ASCII brackets `[ TIP ]` are sufficient
+- **Single-line tips** - ASCII brackets `[ ? ]` are sufficient
 - **Command output** - Would break 80/20 realism (real terminals don't box ls output)
 - **Success messages** - Keep minimal (`[ ✓ ] File created`)
 - **Every error** - Reserve for educational multi-line explanations
@@ -957,7 +957,7 @@ const padding = width - header.length;  // Must be EXACT
 **❌ Overuse:**
 ```javascript
 // Every tip in a box = visual clutter
-[ TIP ] Single line tip  // ✅ Sufficient
+[ ? ] Single line tip  // ✅ Sufficient
 ┏━━━━━━━━━━━━━━━━━━┓
 ┃ TIP: One line    ┃  // ❌ Overkill
 ┗━━━━━━━━━━━━━━━━━━┛
