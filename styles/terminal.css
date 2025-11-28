@@ -424,18 +424,34 @@
 }
 
 /* ==================== Welcome Message ==================== */
-/* Responsive separator pattern with neon glow for gaming aesthetic */
+/* Professional gradient separator - elegant terminal aesthetic */
 
 .welcome-separator {
   width: 100%;  /* Fully responsive - adapts to all screen sizes */
   height: 2px;
-  background: var(--color-prompt);  /* Neon green */
   margin: var(--spacing-md) 0;
 
-  /* Neon glow effect - gaming aesthetic (theme-adaptive) */
-  box-shadow:
-    0 0 8px var(--color-prompt),
-    var(--shadow-separator-glow);
+  /* Gradient fade: elegant professional separator (no glow) */
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--color-info) 50%,  /* #79c0ff - muted cyan (educational context) */
+    transparent 100%
+  );
+
+  opacity: 0.7;  /* Subtle presence - balanced specialness */
+  /* NO box-shadow - gradient provides visual interest */
+}
+
+/* Light mode override - darker blue for contrast on white background */
+[data-theme="light"] .welcome-separator {
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    #0969da 50%,  /* GitHub blue - darker for visibility on light bg */
+    transparent 100%
+  );
+  opacity: 0.6;  /* Slightly more subtle on white background */
 }
 
 .welcome-message {
