@@ -283,7 +283,7 @@ FAMOUS EXAMPLES
     [ ? ] Leermoment: Miljoenen IoT devices NOOIT credentials veranderen!
 
 BESCHERMING ALS SYSTEEMBEHEERDER
-    [***] Defense in depth:
+[###] Defense in depth:
 
     Laag 1 - Credentials:
        [ ✓ ] Verplicht sterke passwords (min 16 chars)
@@ -312,7 +312,7 @@ BESCHERMING ALS SYSTEEMBEHEERDER
        [ ✓ ] SIEM integration (Security Information and Event Management)
 
 BESCHERMING ALS GEBRUIKER
-    [***]  Best practices:
+[###] Best practices:
        [ ✓ ] Password manager (unieke passwords per service)
        [ ✓ ] 16+ karakter passwords met speciale tekens
        [ ✓ ] 2FA ALTIJD inschakelen (authenticator app)

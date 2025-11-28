@@ -440,7 +440,7 @@
 
 .welcome-message {
   text-align: center;
-  color: var(--color-text-primary);
+  color: var(--color-text);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-lg);
   letter-spacing: 0.05em;  /* Slight spacing for emphasis */
@@ -456,6 +456,18 @@
   .welcome-message {
     font-size: var(--font-size-base);
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Man Page Headers
+   [###] marker for section headers in man pages (left-aligned)
+   ═══════════════════════════════════════════════════════════════════ */
+.man-page-header {
+  text-align: left;
+  color: var(--color-text);
+  font-weight: var(--font-weight-bold);
+  margin: var(--spacing-xs) 0;
+  word-wrap: break-word;
 }
 
 /* ==================== Vignette Background ==================== */

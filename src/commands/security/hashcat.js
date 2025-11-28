@@ -217,7 +217,7 @@ REAL-WORLD BREACHES
        • Reputatie schade voor bedrijven
 
 BESCHERMING ALS DEVELOPER
-    [***] Best practices:
+[###] Best practices:
        [ ✓ ] Gebruik bcrypt of Argon2 (NEVER MD5/SHA1/SHA256 direct!)
        [ ✓ ] Unique salt per password (auto in bcrypt)
        [ ✓ ] Rate limiting op login (prevent brute force)
@@ -231,7 +231,7 @@ BESCHERMING ALS DEVELOPER
        // 10 rounds = 2^10 iterations = intentionally slow
 
 BESCHERMING ALS GEBRUIKER
-    [***]  Doe dit:
+[###] Doe dit:
        [ ✓ ] Password manager (LastPass, 1Password, Bitwarden)
        [ ✓ ] Uniek wachtwoord per site (credential stuffing preventie)
        [ ✓ ] Minimaal 16+ karakters (brute force resistance)

@@ -234,25 +234,25 @@ REAL-WORLD USE CASES
     Straf: Tot 10 jaar gevangenis (Federal Computer Fraud Act)
 
 DEFENSE STRATEGIES
-    [***]  Patch Management (KRITIEK!):
+[###] Patch Management (KRITIEK!):
        [ ✓ ] Automated patch deployment (WSUS, SCCM)
        [ ✓ ] Vulnerability scanning (Nessus, OpenVAS)
        [ ✓ ] Patch within 30 days (critical vulns: 7 days)
        [ ✓ ] Virtual patching (IPS rules als patch niet mogelijk)
 
-    [***]  Attack Surface Reduction:
+[###] Attack Surface Reduction:
        [ ✓ ] Disable unnecessary services (SMB, RDP, Telnet)
        [ ✓ ] Firewall rules (default deny)
        [ ✓ ] Network segmentation (VLANs, DMZs)
        [ ✓ ] Least privilege (users niet admin)
 
-    [***]  Detection & Response:
+[###] Detection & Response:
        [ ✓ ] IDS/IPS (Snort, Suricata)
        [ ✓ ] EDR (Endpoint Detection & Response)
        [ ✓ ] SIEM (Security Information & Event Management)
        [ ✓ ] Network monitoring (anomaly detection)
 
-    [***]  Hardening:
+[###] Hardening:
        [ ✓ ] Disable SMBv1 (EternalBlue vector)
        [ ✓ ] Strong authentication (no default creds)
        [ ✓ ] Application whitelisting

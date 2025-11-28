@@ -274,7 +274,7 @@ EXPLOITATION CAPABILITIES
        • Pivoting naar andere systemen
 
 BESCHERMING ALS DEVELOPER
-    [***]  Defense in depth:
+[###] Defense in depth:
 
     **Laag 1 - Code (KRITIEK):**
        [ ✓ ] Prepared statements (ALTIJD!)

@@ -68,6 +68,15 @@ class Renderer {
         return;  // Skip normal line rendering
       }
 
+      // Check for man page header marker - render as left-aligned header
+      if (trimmed.startsWith('[###]')) {
+        const header = document.createElement('div');
+        header.className = 'man-page-header';
+        header.textContent = trimmed;
+        this.outputElement.appendChild(header);
+        return;  // Skip normal line rendering
+      }
+
       // Check for welcome message marker - render as centered message
       if (trimmed.startsWith('[***]')) {
         const message = document.createElement('div');
