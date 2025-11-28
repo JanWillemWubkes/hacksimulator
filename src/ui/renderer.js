@@ -68,10 +68,10 @@ class Renderer {
         return;  // Skip normal line rendering
       }
 
-      // Check for man page header marker - render as left-aligned header
+      // Check for section header marker - render as left-aligned header (man pages + educational content)
       if (trimmed.startsWith('[###]')) {
         const header = document.createElement('div');
-        header.className = 'man-page-header';
+        header.className = 'section-header';
         header.textContent = trimmed;
         this.outputElement.appendChild(header);
         return;  // Skip normal line rendering

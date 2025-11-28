@@ -99,7 +99,7 @@ PRAKTISCHE VOORBEELDEN
        netstat | grep :80    → Is webserver actief?
        netstat | grep :22    → Is SSH server actief?
 
-    [***]  Security check:
+    [###]  Security check:
        • Zie je onverwachte LISTEN ports? → Mogelijk backdoor
        • Database op 0.0.0.0? → SECURITY RISK!
        • Verbindingen naar onbekende IPs? → Check wat het is

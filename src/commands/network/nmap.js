@@ -213,7 +213,7 @@ EDUCATIEVE TIPS
        • 5432 → PostgreSQL (database)
        • 8080 → HTTP alternate (development servers)
 
-    [***]  Security interpretatie:
+    [###]  Security interpretatie:
        • Weinig open poorten (1-3) = Goed! Minimale attack surface
        • Veel open poorten (>10) = Slecht! Meer aanvalsvectoren
        • Database poorten open = RISICO! Zouden restricted moeten zijn

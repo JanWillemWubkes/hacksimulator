@@ -459,10 +459,10 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   Man Page Headers
-   [###] marker for section headers in man pages (left-aligned)
+   Section Headers
+   [###] marker for section headers (man pages + educational content)
    ═══════════════════════════════════════════════════════════════════ */
-.man-page-header {
+.section-header {
   text-align: left;
   color: var(--color-text);
   font-weight: var(--font-weight-bold);

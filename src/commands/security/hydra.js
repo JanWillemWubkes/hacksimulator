@@ -222,7 +222,7 @@ EDUCATIEVE CONTEXT
        • Geen bescherming tegen automated attacks
        • Services zijn snel (honderden pogingen per seconde mogelijk)
 
-    [***]  Waarom werkt dit NIET (als goed beveiligd)?
+    [###]  Waarom werkt dit NIET (als goed beveiligd)?
        • Rate limiting: Max 3 pogingen per 5 min
        • Account lockout: Account geblokkeerd na 5 fouten
        • 2FA/MFA: Wachtwoord alleen is niet genoeg

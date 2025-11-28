@@ -161,7 +161,7 @@ PRAKTISCHE VOORBEELDEN
        traceroute us-site.com
        → Hops springen Atlantische oceaan over (submarine cables!)
 
-    [***]  Firewall detection:
+    [###]  Firewall detection:
        traceroute corporate-site.com
        → Hop 1-5: normaal
        → Hop 6-10: * * * (firewall blocks ICMP)

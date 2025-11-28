@@ -133,7 +133,7 @@ EDUCATIEVE TIPS
        • Email adressen (voor social engineering of contact)
        • Nameservers (hosting provider achterhalen)
 
-    [***]  Privacy Protection:
+    [###]  Privacy Protection:
        Veel domains gebruiken "privacy protection" services die echte
        contact details verbergen:
           • WHOIS PRIVACY PROTECTION SERVICE

@@ -146,7 +146,7 @@ VOORBEELDEN
         Kraak een andere MD5 hash
 
 EDUCATIEVE CONTEXT
-    [***] Wat is een password hash?
+    [###] Wat is een password hash?
        Als je wachtwoord "password" is, slaat de server NIET "password" op,
        maar een hash: "5f4dcc3b5aa765d61d8327deb882cf99"
 
@@ -173,7 +173,7 @@ EDUCATIEVE CONTEXT
        • bcrypt (secure)    → 100,000 hashes/sec ← Intentioneel traag!
        • Argon2 (secure)    → 10,000 hashes/sec ← Beste keuze
 
-    [***]  Salting:
+    [###]  Salting:
        Salt = random data toegevoegd aan wachtwoord voor hashing
 
        Zonder salt:
