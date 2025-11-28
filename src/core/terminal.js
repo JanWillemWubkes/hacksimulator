@@ -293,7 +293,7 @@ class Terminal {
     // Commands that work without any arguments
     const NO_ARGS_NEEDED = [
       'help', 'ls', 'pwd', 'whoami', 'history',
-      'ifconfig', 'netstat', 'date', 'leerpad', 'shortcuts', 'clear'
+      'ifconfig', 'netstat', 'date', 'leerpad', 'shortcuts'
     ];
 
     // Commands that require at least 1 argument
