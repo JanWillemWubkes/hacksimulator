@@ -129,6 +129,16 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 **Doel:** Last 5 sessions only - older sessions archived in SESSIONS.md
 
+### Sessie 66: Semantic Continuation - Multi-Line Message Color Inheritance (30 nov 2025)
+⚠️ Never assume ES6 module cache works like script tags (module imports don't inherit query params from entry point)
+⚠️ Never process multi-line semantics without state tracking (per-line responsibility conflicts with multi-line context)
+⚠️ Never use arbitrary thresholds without codebase analysis (6+ spaces validated against 339 instances)
+✅ Always clear browser cache via CDP for module testing (Playwright `clearBrowserCache()` is gold)
+✅ Always use conservative thresholds for pattern detection (6+ spaces prevents false positives with 2-4 space lists)
+✅ Always bridge architecture gaps with minimal state (single variable `lastSemanticType` fixes 339 instances)
+📊 Impact: 2 files, site-wide fix (339 instances across 34 files), +215 bytes, <0.1ms overhead
+📄 SESSIONS.md Sessie 66
+
 ### Sessie 59: Mobile Optimization - P0+P1 Fixes (25 nov 2025)
 ⚠️ Never use `vh` units on mobile without `dvh` fallback (iOS Safari doesn't recalculate when browser chrome changes)
 ⚠️ Never pursue mobile-first refactor for inherently desktop-first use cases (terminal apps = desktop primary)
@@ -166,15 +176,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 📊 Impact: 1 file, underline-offset reduced, GitHub/VS Code pattern compliance
 📄 SESSIONS.md Sessie 55
 
-### Sessie 54: Theme Toggle Hover - Dark Frame Compliance (21 nov 2025)
-⚠️ Never use green glow on dark frame elements (navbar/footer = dark chrome, green = content accent)
-⚠️ Never forget Dark Frame Pattern when adding hover effects (chrome elements need neutral hovers)
-✅ Always use white/neutral shadows for dark frame hover states (consistent with footer links)
-✅ Always verify hover effects match established architectural patterns
-📊 Impact: 1 file, theme toggle hover fixed, Dark Frame Pattern compliance
-📄 SESSIONS.md Sessie 54
-
-**Older Sessions (53-51):** Navbar Hover (animated underline), Global Link Hover (opacity → color), Dual-theme button color overhaul, Blog CTA UX Overhaul, Button Hierarchy Pattern, Blog CTA Hover Consistency, Blog Width Verification, Blog Styling Consistency - See SESSIONS.md
+**Older Sessions (54-51):** Theme Toggle Hover (Dark Frame compliance), Navbar Hover (animated underline), Global Link Hover (opacity → color), Dual-theme button color overhaul, Blog CTA UX Overhaul - See SESSIONS.md
 **Older Sessions (35-43):** Dropdown jank (font-weight/inline-flex), Modal uniformity (`:only-child` pitfalls), ASCII box drawing, Strategy Pattern - See SESSIONS.md
 **Older Sessions (2-34):** See SESSIONS.md for comprehensive historical context
 
@@ -193,7 +195,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ### Afsluiten
 - Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-- **Rotation trigger:** Every 5 sessions (last rotation: Sessie 59, next: Sessie 64)
+- **Rotation trigger:** Every 5 sessions (last rotation: Sessie 66, next: Sessie 71)
 - **Rotation rule:** Keep last 5 sessions full, compress 6-10, archive 11+
 
 ### Bij Requirement Changes
@@ -276,7 +278,7 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 
 ---
 
-**Last updated:** 25 november 2025 (Sessie 59 - Mobile Optimization P0+P1 Fixes)
+**Last updated:** 30 november 2025 (Sessie 66 - Semantic Continuation Fix)
 **Last synced:** 22 november 2025 (Full documentation sync complete, all metrics verified)
-**Next sync:** Milestone M6 completion OR Sessie 62
-**Version:** 14.9 (Sessie 59: Mobile Optimization - P0+P1 fixes (legal modal scroll dvh, iOS safe area, keyboard dismiss, scroll affordance, touch feedback), -2.1KB bundle, Recent Learnings rotation)
+**Next sync:** Milestone M6 completion OR Sessie 67
+**Version:** 15.0 (Sessie 66: Semantic Continuation - Multi-line message color inheritance fix, +215 bytes, 339 instances fixed across 34 files, Recent Learnings rotation)

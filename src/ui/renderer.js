@@ -56,6 +56,7 @@ class Renderer {
 
     // Split by newlines and render each line
     const lines = output.split('\n');
+    let lastSemanticType = type; // Track semantic type across lines
 
     lines.forEach(lineText => {
       const trimmed = lineText.trim();
@@ -112,6 +113,15 @@ class Renderer {
         lineType = 'success';   // Success → groen
       } else if (trimmed.startsWith('❌')) {
         lineType = 'error';     // Errors → magenta/rood
+      }
+      // Check for continuation line (6+ spaces inherit parent semantic color)
+      else if (isContinuationLine(lineText)) {
+        lineType = lastSemanticType; // Inherit previous line's color
+      }
+
+      // Update state for next line (only on non-empty lines)
+      if (trimmed !== '') {
+        lastSemanticType = lineType;
       }
 
       line.className = `terminal-line terminal-output terminal-output-${lineType}`;
@@ -251,6 +261,23 @@ class Renderer {
   getPrompt() {
     return this.promptPrefix;
   }
+}
+
+/**
+ * Check if a line is a continuation of the previous semantic message
+ * Continuation lines have 6+ leading spaces
+ * @private
+ * @param {string} lineText - Raw line text with spacing
+ * @returns {boolean}
+ */
+function isContinuationLine(lineText) {
+  // Normalize tabs to 4 spaces
+  const normalized = lineText.replace(/\t/g, '    ');
+  const leadingSpaces = normalized.match(/^(\s*)/)[1].length;
+  const trimmed = lineText.trim();
+
+  // Must have 6+ spaces AND non-empty content
+  return leadingSpaces >= 6 && trimmed.length > 0;
 }
 
 // Export as singleton
