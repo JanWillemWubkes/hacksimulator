@@ -98,30 +98,30 @@ VOORBEELDEN
 
 EDUCATIEVE TIPS
     [ ? ] grep is essentieel voor log analyse en reconnaissance:
-       - Zoek gebruikersnamen in /etc/passwd
-       - Analyseer security events in logs
-       - Vind configuratie opties in config files
+       • Zoek gebruikersnamen in /etc/passwd
+       • Analyseer security events in logs
+       • Vind configuratie opties in config files
 
     [ ? ] Pentesting use cases:
-       - grep "password" <file>  → Zoek credentials in files
-       - grep "admin" /etc/passwd → Zoek admin accounts
-       - grep "failed" auth.log   → Brute force detectie
-       - grep "error" syslog      → System vulnerabilities
+       • grep "password" <file>  → Zoek credentials in files
+       • grep "admin" /etc/passwd → Zoek admin accounts
+       • grep "failed" auth.log   → Brute force detectie
+       • grep "error" syslog      → System vulnerabilities
 
     [ → ] Interessante patronen om te zoeken:
-       - "root"     → Root/admin gerelateerd
-       - "password" → Mogelijk credentials
-       - "failed"   → Failed login attempts
-       - "ssh"      → Remote access
-       - "error"    → System errors
+       • "root"     → Root/admin gerelateerd
+       • "password" → Mogelijk credentials
+       • "failed"   → Failed login attempts
+       • "ssh"      → Remote access
+       • "error"    → System errors
 
-    [ + ]️ In real Linux:
+    [ + ] In real Linux:
        Real 'grep' ondersteunt:
-       - grep -i      → Case-insensitive (standaard in simulator)
-       - grep -n      → Toon regelnummers (standaard in simulator)
-       - grep -r      → Recursief door directories
-       - grep -E      → Extended regex patterns
-       - grep -v      → Inverse match (regels ZONDER patroon)
+       • grep -i      → Case-insensitive (standaard in simulator)
+       • grep -n      → Toon regelnummers (standaard in simulator)
+       • grep -r      → Recursief door directories
+       • grep -E      → Extended regex patterns
+       • grep -v      → Inverse match (regels ZONDER patroon)
 
     [ ↻ ] Workflow voorbeeld:
        1. find passwd           → Vind passwd bestanden

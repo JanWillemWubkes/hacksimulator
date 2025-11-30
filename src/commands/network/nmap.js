@@ -261,7 +261,7 @@ VEELGEMAAKTE FOUTEN
     [ X ] Te veel vertrouwen op firewall
        → "Filtered" betekent niet "veilig" - service kan alsnog kwetsbaar zijn
 
-SECURITY BEST PRACTICES
+[###] SECURITY BEST PRACTICES
     [ ✓ ] Minimaliseer open poorten (alleen wat noodzakelijk is)
     [ ✓ ] Database poorten ALLEEN toegankelijk voor app servers
     [ ✓ ] SSH op non-standard port (security through obscurity - beperkt effectief)

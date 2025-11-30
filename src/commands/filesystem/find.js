@@ -99,24 +99,24 @@ VOORBEELDEN
 
 EDUCATIEVE TIPS
     [ ? ] find is een krachtige tool voor reconnaissance:
-       - Ontdek de structuur van een systeem
-       - Vind interessante configuratie bestanden
-       - Zoek credentials, keys, of gevoelige data
+       • Ontdek de structuur van een systeem
+       • Vind interessante configuratie bestanden
+       • Zoek credentials, keys, of gevoelige data
 
     [ ? ] Handige zoekopdrachten in pentesting:
-       - find ssh       → SSH keys en configuratie
-       - find passwd    → User database bestanden
-       - find log       → System logs
-       - find config    → Configuratiebestanden
-       - find shadow    → Password hash files
-       - find key       → Encryption keys
+       • find ssh       → SSH keys en configuratie
+       • find passwd    → User database bestanden
+       • find log       → System logs
+       • find config    → Configuratiebestanden
+       • find shadow    → Password hash files
+       • find key       → Encryption keys
 
     [ → ] In real Linux:
        Real 'find' is veel krachtiger:
-       - find / -name "*.conf"     → Zoek met wildcards
-       - find /home -type f        → Alleen files, geen directories
-       - find / -user root         → Bestanden van specifieke user
-       - find / -perm 777          → Bestanden met specifieke permissies
+       • find / -name "*.conf"     → Zoek met wildcards
+       • find /home -type f        → Alleen files, geen directories
+       • find / -user root         → Bestanden van specifieke user
+       • find / -perm 777          → Bestanden met specifieke permissies
 
     [ + ]️ Pentesting workflow:
        1. find passwd     → Vind user databases
@@ -124,9 +124,9 @@ EDUCATIEVE TIPS
        3. grep <pattern>  → Zoek specifieke strings in inhoud
 
     [ ! ] In deze simulator:
-       - Simpele substring matching (geen regex of wildcards)
-       - Case-insensitive zoeken
-       - Altijd vanaf root directory (/)
+       • Simpele substring matching (geen regex of wildcards)
+       • Case-insensitive zoeken
+       • Altijd vanaf root directory (/)
 
 VERSCHIL MET GREP
     - find → Zoekt in BESTANDSNAMEN
