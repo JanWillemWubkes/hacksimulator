@@ -193,8 +193,7 @@ export default {
     // Show all commands grouped by category
     const categories = registry.getCategories();
     let output = 'Beschikbare commands:\n\n';
-    output += '[ ! ] Real hackers beginnen met SYSTEM & FILESYSTEM basics,\n';
-    output += '      dan NETWORK scanning, en uiteindelijk SECURITY tools.\n\n';
+    output += '[ ! ] Real hackers beginnen met SYSTEM & FILESYSTEM basics, dan NETWORK scanning, en uiteindelijk SECURITY tools.\n\n';
 
     categories.forEach(category => {
       const commands = registry.getByCategory(category);
