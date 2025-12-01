@@ -977,6 +977,127 @@ const padding = width - header.length;  // Must be EXACT
 
 ---
 
+## List Formatting Standards
+
+**Purpose:** Establish consistent symbol usage across command outputs to reduce visual noise while preserving educational clarity.
+
+**Philosophy:** Symbols signal STATE or MESSAGE TYPE, not decoration.
+
+### Symbol Usage Rules
+
+**✅ DO use symbols for:**
+- Success feedback: `[ ✓ ] Connection successful`
+- Error feedback: `[ X ] Permission denied`
+- Warnings: `[ ! ] Dit is gevaarlijk`
+- Tips: `[ TIP ] Gebruik sterke wachtwoorden`
+- Section headers: `[###] Main Section`
+
+**❌ DON'T use symbols for:**
+- Informational lists (capabilities, features, examples)
+- Defense layers (bescherming measures)
+- Technical specifications
+
+### List Formatting Patterns
+
+#### Informational Lists (Default Pattern)
+
+Use dash prefix with 4-space indentation:
+
+```
+Laag 1 - Credentials:
+    - Verplicht sterke passwords (min 16 chars)
+    - Geen default credentials
+    - Password complexity requirements
+```
+
+**Rationale:**
+- Man pages standard (40+ years terminal convention)
+- ASCII-native (no Unicode compatibility issues)
+- Maximum readability on mobile/narrow terminals
+- Clear hierarchy via indentation, not symbol weight
+
+#### User Action Lists (Checklist Pattern)
+
+Use checkmarks ONLY when user must actively do something:
+
+```
+Best practices voor gebruikers:
+   [ ✓ ] Password manager installeren
+   [ ✓ ] 2FA ALTIJD inschakelen
+   [ ✓ ] Unieke passwords per service
+
+NOOIT doen:
+   [ X ] password, admin, 123456
+   [ X ] Wachtwoorden delen
+```
+
+**Decision Tree:**
+
+Ask: "Can the user tick this off as done?"
+- **YES** → Use `[ ✓ ]` (actionable checklist)
+- **NO** → Use `-` dash (informational list)
+
+### Before/After Examples
+
+**❌ BEFORE (Visual Noise):**
+```
+Laag 1 • Credentials:
+   [ ✓ ] Verplicht sterke passwords
+   [ ✓ ] Geen default credentials
+   [ ✓ ] Password complexity requirements
+```
+*Problem:* Checkmarks imply "tick off" but content is informational, not actionable. Creates cognitive dissonance and visual clutter.
+
+**✅ AFTER (Clean Hierarchy):**
+```
+Laag 1 - Credentials:
+    - Verplicht sterke passwords
+    - Geen default credentials
+    - Password complexity requirements
+```
+*Solution:* Dash prefix for information. Hierarchy via indentation. Symbols reserved for actual state/actions.
+
+### Implementation Impact (Sessie 69)
+
+**Problem Identified:**
+- 135 checkmarks (`[ ✓ ]`) used site-wide
+- 86% were informational content (not actual checklists)
+- User complaint: "teveel X-en en Vinkjes = visual noise"
+
+**Solution Applied:**
+- hydra.js: 15 symbols → dash (Defense in Depth)
+- sqlmap.js: 21 symbols → dash (Bescherming + Defense)
+- metasploit.js: 22 symbols → dash (Defense Strategies)
+- hashcat.js: 6 symbols → dash (Developer best practices)
+- nikto.js: 11 symbols → dash (Defense in Depth)
+
+**Results:**
+- **-75 informational symbols** (145 → 70)
+- **-52% total symbol reduction** site-wide
+- Maintained checkmarks for actual user actions (45 retained)
+- Mobile readability improved (ASCII-only, no Unicode)
+- Industry standard alignment (man pages, Docker CLI, Git)
+
+### Rationale
+
+**Why dashes over bullets?**
+- **Terminal native:** Man pages (40+ years), Git, Docker all use dashes
+- **ASCII-only:** Universal compatibility (no Unicode rendering issues)
+- **Markdown convention:** Familiarity for 15-25 year tech audience
+- **Visual weight:** Lighter than bullets (`•`), reduces perceived clutter
+
+**Why remove checkmarks from info lists?**
+- **Semantic misuse:** ✓ implies "task to complete" but content describes system configuration
+- **Cognitive load:** Every ✓ triggers "should I do this?" mental check, even when not applicable
+- **False expectations:** Users can't "tick off" defense layers—they're informational context
+
+**Why keep checkmarks for user actions?**
+- **Clear intent:** "Password manager gebruiken" = user CAN do this
+- **Educational value:** Distinguishes advice (actionable) from context (informational)
+- **Motivation:** Checkmarks encourage completion of security best practices
+
+---
+
 ## Interactive States
 
 ### Hover States

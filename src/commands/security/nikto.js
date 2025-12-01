@@ -323,25 +323,25 @@ DEFENSE IN DEPTH
     [***]  Layered security:
 
     **Layer 1 - Server hardening:**
-       [ ✓ ] Remove default files/folders
-       [ ✓ ] Disable directory indexing
-       [ ✓ ] Update software regelmatig
-       [ ✓ ] Minimal installed packages
+        - Remove default files/folders
+        - Disable directory indexing
+        - Update software regelmatig
+        - Minimal installed packages
 
     **Layer 2 - Web Application Firewall:**
-       [ ✓ ] ModSecurity (Apache/Nginx)
-       [ ✓ ] Cloudflare WAF
-       [ ✓ ] AWS WAF
+        - ModSecurity (Apache/Nginx)
+        - Cloudflare WAF
+        - AWS WAF
        → Block common attack patterns
 
     **Layer 3 - Security headers:**
-       [ ✓ ] CSP, HSTS, X-Frame-Options
-       [ ✓ ] Check: securityheaders.com
+        - CSP, HSTS, X-Frame-Options
+        - Check: securityheaders.com
 
     **Layer 4 - Monitoring:**
-       [ ✓ ] Log analysis (fail2ban)
-       [ ✓ ] SIEM integration
-       [ ✓ ] Anomaly detection
+        - Log analysis (fail2ban)
+        - SIEM integration
+        - Anomaly detection
 
 LIMITATIONS
     [ ! ]  Wat Nikto NIET doet:

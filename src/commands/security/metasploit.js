@@ -98,12 +98,12 @@ In een echte (geautoriseerde) pentest zou dit:
    • Shellshock (CVE-2014-6271) - Bash command injection
 
 [***]  BESCHERMING:
-   [ ✓ ] Patch management (update systemen REGELMATIG!)
-   [ ✓ ] Vulnerability scanning (detect voor exploit)
-   [ ✓ ] Network segmentation (beperk lateral movement)
-   [ ✓ ] IDS/IPS (detecteer exploit attempts)
-   [ ✓ ] Firewall rules (minimaal attack surface)
-   [ ✓ ] Disable unnecessary services (SMB, RDP als niet nodig)
+    - Patch management (update systemen REGELMATIG!)
+    - Vulnerability scanning (detect voor exploit)
+    - Network segmentation (beperk lateral movement)
+    - IDS/IPS (detecteer exploit attempts)
+    - Firewall rules (minimaal attack surface)
+    - Disable unnecessary services (SMB, RDP als niet nodig)
 
 [ ? ] LEERMOMENT:
     De meeste exploits in Metasploit zijn voor OUDE kwetsbaarheden
@@ -235,28 +235,28 @@ REAL-WORLD USE CASES
 
 DEFENSE STRATEGIES
 [###] Patch Management (KRITIEK!):
-       [ ✓ ] Automated patch deployment (WSUS, SCCM)
-       [ ✓ ] Vulnerability scanning (Nessus, OpenVAS)
-       [ ✓ ] Patch within 30 days (critical vulns: 7 days)
-       [ ✓ ] Virtual patching (IPS rules als patch niet mogelijk)
+        - Automated patch deployment (WSUS, SCCM)
+        - Vulnerability scanning (Nessus, OpenVAS)
+        - Patch within 30 days (critical vulns: 7 days)
+        - Virtual patching (IPS rules als patch niet mogelijk)
 
 [###] Attack Surface Reduction:
-       [ ✓ ] Disable unnecessary services (SMB, RDP, Telnet)
-       [ ✓ ] Firewall rules (default deny)
-       [ ✓ ] Network segmentation (VLANs, DMZs)
-       [ ✓ ] Least privilege (users niet admin)
+        - Disable unnecessary services (SMB, RDP, Telnet)
+        - Firewall rules (default deny)
+        - Network segmentation (VLANs, DMZs)
+        - Least privilege (users niet admin)
 
 [###] Detection & Response:
-       [ ✓ ] IDS/IPS (Snort, Suricata)
-       [ ✓ ] EDR (Endpoint Detection & Response)
-       [ ✓ ] SIEM (Security Information & Event Management)
-       [ ✓ ] Network monitoring (anomaly detection)
+        - IDS/IPS (Snort, Suricata)
+        - EDR (Endpoint Detection & Response)
+        - SIEM (Security Information & Event Management)
+        - Network monitoring (anomaly detection)
 
 [###] Hardening:
-       [ ✓ ] Disable SMBv1 (EternalBlue vector)
-       [ ✓ ] Strong authentication (no default creds)
-       [ ✓ ] Application whitelisting
-       [ ✓ ] DEP/ASLR enabled (exploit mitigation)
+        - Disable SMBv1 (EternalBlue vector)
+        - Strong authentication (no default creds)
+        - Application whitelisting
+        - DEP/ASLR enabled (exploit mitigation)
 
 LEARNING RESOURCES
     [ = ] Hands-on practice (LEGAL):

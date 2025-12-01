@@ -218,12 +218,12 @@ REAL-WORLD BREACHES
 
 BESCHERMING ALS DEVELOPER
 [###] Best practices:
-       [ ✓ ] Gebruik bcrypt of Argon2 (NEVER MD5/SHA1/SHA256 direct!)
-       [ ✓ ] Unique salt per password (auto in bcrypt)
-       [ ✓ ] Rate limiting op login (prevent brute force)
-       [ ✓ ] 2FA/MFA waar mogelijk
-       [ ✓ ] Password strength requirements (min 12 chars)
-       [ ✓ ] Breach detection (HaveIBeenPwned API)
+        - Gebruik bcrypt of Argon2 (NEVER MD5/SHA1/SHA256 direct!)
+        - Unique salt per password (auto in bcrypt)
+        - Rate limiting op login (prevent brute force)
+        - 2FA/MFA waar mogelijk
+        - Password strength requirements (min 12 chars)
+        - Breach detection (HaveIBeenPwned API)
 
     Code voorbeeld (Node.js + bcrypt):
        const bcrypt = require('bcrypt');
