@@ -74,27 +74,27 @@ EDUCATIEVE TIPS
     [CPY] cp maakt een exacte kopie - het origineel blijft bestaan
 
     [ ? ] Use cases:
-       - Backups maken voor je experimenten iets probeert
-       - Bestanden dupliceren om aan te passen
-       - Data naar andere locaties kopiëren
+       • Backups maken voor je experimenten iets probeert
+       • Bestanden dupliceren om aan te passen
+       • Data naar andere locaties kopiëren
 
     [ + ]️ In pentesting:
-       - cp /etc/passwd /tmp/passwd → Kopie maken om lokaal te analyseren
-       - Backup maken voor je configuraties aanpast
-       - Exfiltratie simuleren (data naar tijdelijke locatie)
+       • cp /etc/passwd /tmp/passwd → Kopie maken om lokaal te analyseren
+       • Backup maken voor je configuraties aanpast
+       • Exfiltratie simuleren (data naar tijdelijke locatie)
 
     [ ↻ ] Verschil met mv:
-       - cp → Origineel blijft bestaan (kopie)
-       - mv → Origineel wordt verplaatst (geen kopie)
+       • cp → Origineel blijft bestaan (kopie)
+       • mv → Origineel wordt verplaatst (geen kopie)
 
     [ ! ] Let op:
        Als de destination al bestaat, wordt deze overschreven zonder
        waarschuwing in deze simulator!
 
     [DSK] In real Linux:
-       - cp -r voor recursief kopiëren van directories
-       - cp -i voor interactieve bevestiging bij overschrijven
-       - cp -p behoudt timestamps en permissies
+       • cp -r voor recursief kopiëren van directories
+       • cp -i voor interactieve bevestiging bij overschrijven
+       • cp -p behoudt timestamps en permissies
 
 GERELATEERDE COMMANDO'S
     mv, rm, ls, cat

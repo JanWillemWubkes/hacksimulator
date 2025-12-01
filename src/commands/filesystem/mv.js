@@ -93,31 +93,31 @@ EDUCATIEVE TIPS
        2. Verplaatsen (source en dest in verschillende directories)
 
     [ ? ] Use cases:
-       - Bestanden hernoemen (betere namen)
-       - Bestanden verplaatsen naar andere directories
-       - Directories reorganiseren
+       • Bestanden hernoemen (betere namen)
+       • Bestanden verplaatsen naar andere directories
+       • Directories reorganiseren
 
     [ + ]️ In pentesting:
-       - mv evidence.txt .hidden.txt  → Bestand "verbergen" met .prefix
-       - Logs verplaatsen tijdens cleanup
-       - Payload scripts hernoemen om minder verdacht te zijn
+       • mv evidence.txt .hidden.txt  → Bestand "verbergen" met .prefix
+       • Logs verplaatsen tijdens cleanup
+       • Payload scripts hernoemen om minder verdacht te zijn
 
     [ ! ] Safety features:
-       - Kritieke system directories kunnen niet verplaatst worden
-       - Root directory kan niet verplaatst worden
+       • Kritieke system directories kunnen niet verplaatst worden
+       • Root directory kan niet verplaatst worden
 
     [ ↻ ] Verschil met cp:
-       - mv → Origineel verdwijnt (verplaatsen)
-       - cp → Origineel blijft (kopiëren)
+       • mv → Origineel verdwijnt (verplaatsen)
+       • cp → Origineel blijft (kopiëren)
 
     [ ! ] Let op:
-       - Na mv bestaat het origineel NIET meer
-       - Als destination al bestaat, wordt deze overschreven
-       - mv werkt op zowel files als directories
+       • Na mv bestaat het origineel NIET meer
+       • Als destination al bestaat, wordt deze overschreven
+       • mv werkt op zowel files als directories
 
     [DSK] In real Linux:
-       - mv -i voor interactieve bevestiging bij overschrijven
-       - mv kan niet tussen verschillende filesystems (dan wordt automatisch copy+delete)
+       • mv -i voor interactieve bevestiging bij overschrijven
+       • mv kan niet tussen verschillende filesystems (dan wordt automatisch copy+delete)
 
 GERELATEERDE COMMANDO'S
     cp, rm, ls, rename
