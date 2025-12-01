@@ -315,7 +315,7 @@ AUTOMATED SCANNING
        # GitLab CI
        nikto-scan:
          script:
-           - nikto -h https://staging.example.com -o report.html
+           • nikto -h https://staging.example.com -o report.html
 
        → Catch vulnerabilities VOOR production deploy
 

@@ -337,9 +337,9 @@ TECHNICAL DETAILS
        • HTTP: ~100 attempts/sec (sneller protocol)
        • FTP: ~50 attempts/sec
        • Snelheid hangt af van:
-         - Network latency
-         - Server response time
-         - Rate limiting
+         • Network latency
+         • Server response time
+         • Rate limiting
 
 COUNTERMEASURES DETECTION
     [ ? ] Herken brute force aanvallen:

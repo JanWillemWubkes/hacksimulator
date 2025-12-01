@@ -131,10 +131,10 @@ VOORBEELDEN
 
 EDUCATIEVE TIPS
     [ ↻ ] reset is je "veiligheidsnet":
-       - Per ongeluk belangrijke bestanden verwijderd? → reset
-       - Filesystem is rommelig geworden? → reset
-       - Wil je opnieuw beginnen? → reset
-       - Waarschuwing opnieuw lezen? → reset consent
+       • Per ongeluk belangrijke bestanden verwijderd? → reset
+       • Filesystem is rommelig geworden? → reset
+       • Wil je opnieuw beginnen? → reset
+       • Waarschuwing opnieuw lezen? → reset consent
 
     [DSK] Wat wordt gereset (reset zonder args):
        [ ✓ ] Alle bestanden naar originele inhoud
@@ -149,12 +149,12 @@ EDUCATIEVE TIPS
        [ ✓ ] Je kennis en ervaring! [ : )]
 
     [ → ] Use cases:
-       - Je hebt per ongeluk 'rm -r' gebruikt op verkeerde directory
-       - Je wilt een oefening opnieuw doen
-       - Het filesystem is te rommelig geworden
-       - Je wilt experimenteren zonder consequenties
-       - Iemand anders gebruikt je computer (reset consent)
-       - Je wilt de security waarschuwing opnieuw lezen (reset consent)
+       • Je hebt per ongeluk 'rm -r' gebruikt op verkeerde directory
+       • Je wilt een oefening opnieuw doen
+       • Het filesystem is te rommelig geworden
+       • Je wilt experimenteren zonder consequenties
+       • Iemand anders gebruikt je computer (reset consent)
+       • Je wilt de security waarschuwing opnieuw lezen (reset consent)
 
     [ ~ ] reset consent - Security Tools:
        Offensive security tools (hydra, sqlmap, nikto) tonen bij eerste
