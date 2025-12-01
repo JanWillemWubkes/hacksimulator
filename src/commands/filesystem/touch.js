@@ -79,9 +79,9 @@ EDUCATIEVE TIPS
        3. cat payload.txt      → Bekijk inhoud
 
     [ + ]️ Use cases in pentesting:
-       - touch wordlist.txt  → Maak wordlist voor brute force
-       - touch exploits.sh   → Maak script bestand
-       - touch notes.txt     → Documenteer je findings
+       • touch wordlist.txt  → Maak wordlist voor brute force
+       • touch exploits.sh   → Maak script bestand
+       • touch notes.txt     → Documenteer je findings
 
     [ ~ ] In echte Linux:
        touch wordt vaak gebruikt om timestamps te updaten zonder inhoud

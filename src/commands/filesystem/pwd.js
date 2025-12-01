@@ -47,9 +47,9 @@ EDUCATIEVE TIPS
     [ # ] Je begint altijd in /home/hacker (je home directory)
 
     [DIR] Gebruik pwd in combinatie met andere commands:
-       - 'pwd' om te zien waar je bent
-       - 'ls' om te zien wat er in deze directory staat
-       - 'cd ..' om een directory omhoog te gaan
+       • 'pwd' om te zien waar je bent
+       • 'ls' om te zien wat er in deze directory staat
+       • 'cd ..' om een directory omhoog te gaan
 
 GERELATEERDE COMMANDO'S
     cd, ls
