@@ -97,13 +97,13 @@ VOORBEELDEN
 
 EDUCATIEVE TIPS
     [ ↑ ] Path types:
-       - Absoluut pad: begint met / (bijv. /etc/passwd)
-       - Relatief pad: relatief aan huidige locatie (bijv. ../home)
+       • Absoluut pad: begint met / (bijv. /etc/passwd)
+       • Relatief pad: relatief aan huidige locatie (bijv. ../home)
 
     [ # ] Shortcuts:
-       - ~ is altijd je home directory (/home/hacker)
-       - .. brengt je één niveau omhoog
-       - . is de huidige directory (handig bij commands zoals 'cp file .')
+       • ~ is altijd je home directory (/home/hacker)
+       • .. brengt je één niveau omhoog
+       • . is de huidige directory (handig bij commands zoals 'cp file .')
 
     [ ? ] Combineer met 'pwd' om te zien waar je bent na een cd commando
 

@@ -91,19 +91,19 @@ EDUCATIEVE TIPS
        of "Prullenbak". Eenmaal weg = weg.
 
     [ ! ] Safety features in deze simulator:
-       - Kritieke system directories kunnen niet verwijderd worden
-       - Root directory (/) is beveiligd
-       - Gebruik 'reset' om alles terug te zetten
+       • Kritieke system directories kunnen niet verwijderd worden
+       • Root directory (/) is beveiligd
+       • Gebruik 'reset' om alles terug te zetten
 
     [ ? ] Best practices:
-       - Gebruik 'ls' VOOR 'rm' om te verifiëren wat je gaat verwijderen
-       - Bij directories: eerst 'ls <dir>' om te zien wat erin zit
-       - Wees extra voorzichtig met -r (recursief)
+       • Gebruik 'ls' VOOR 'rm' om te verifiëren wat je gaat verwijderen
+       • Bij directories: eerst 'ls <dir>' om te zien wat erin zit
+       • Wees extra voorzichtig met -r (recursief)
 
     [ ! ] In real pentesting:
-       - rm -rf kan gebruikt worden om sporen uit te wissen (anti-forensics)
-       - Logs verwijderen is vaak een red flag voor defenders
-       - NOOIT op productie systemen gebruiken zonder backup!
+       • rm -rf kan gebruikt worden om sporen uit te wissen (anti-forensics)
+       • Logs verwijderen is vaak een red flag voor defenders
+       • NOOIT op productie systemen gebruiken zonder backup!
 
     [ ^ ] Famous disasters:
        "rm -rf /" is berucht omdat het het hele systeem verwijdert.

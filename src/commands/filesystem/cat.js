@@ -90,11 +90,11 @@ EDUCATIEVE TIPS
     [ = ] cat is één van de meest gebruikte commands voor het lezen van files
 
     [ ? ] Interessante bestanden om te verkennen:
-       - /etc/passwd    → Gebruikerslijst (veilig om te lezen)
-       - /etc/shadow    → Password hashes (restricted!)
-       - /etc/hosts     → DNS configuratie
-       - /var/log/*.log → System logs
-       - ~/README.txt   → Welkomstinformatie
+       • /etc/passwd    → Gebruikerslijst (veilig om te lezen)
+       • /etc/shadow    → Password hashes (restricted!)
+       • /etc/hosts     → DNS configuratie
+       • /var/log/*.log → System logs
+       • ~/README.txt   → Welkomstinformatie
 
     [ ! ] Permissies:
        Sommige bestanden (zoals /etc/shadow) zijn beveiligd. Dit is een
@@ -102,9 +102,9 @@ EDUCATIEVE TIPS
        iedereen leesbaar zijn!
 
     [ ? ] In real pentesting:
-       - cat /etc/passwd geeft gebruikersnamen (niet wachtwoorden!)
-       - Password hashes staan in /etc/shadow (alleen root toegang)
-       - Logs in /var/log/ kunnen gevoelige informatie bevatten
+       • cat /etc/passwd geeft gebruikersnamen (niet wachtwoorden!)
+       • Password hashes staan in /etc/shadow (alleen root toegang)
+       • Logs in /var/log/ kunnen gevoelige informatie bevatten
 
 VEELGEMAAKTE FOUTEN
     [ X ] cat /etc (Is a directory)

@@ -74,9 +74,9 @@ EDUCATIEVE TIPS
        - Directory wordt aangemaakt in huidige directory (tenzij absoluut pad)
 
     [ ? ] Veelvoorkomende use cases:
-       - mkdir logs      → Voor het opslaan van logbestanden
-       - mkdir backups   → Voor het bewaren van backups
-       - mkdir scripts   → Voor het organiseren van scripts
+       • mkdir logs      → Voor het opslaan van logbestanden
+       • mkdir backups   → Voor het bewaren van backups
+       • mkdir scripts   → Voor het organiseren van scripts
 
     [ ! ] Permissies:
        In echte systemen kun je directories alleen aanmaken waar je
