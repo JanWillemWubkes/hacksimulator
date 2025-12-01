@@ -69,9 +69,9 @@ EDUCATIEVE TIPS
     [DIR] Directories organiseren je filesystem en groeperen gerelateerde bestanden
 
     [ + ]️ Standaard gedrag:
-       - Parent directory moet bestaan
-       - Naam mag geen / bevatten (behalve in absoluut pad)
-       - Directory wordt aangemaakt in huidige directory (tenzij absoluut pad)
+       • Parent directory moet bestaan
+       • Naam mag geen / bevatten (behalve in absoluut pad)
+       • Directory wordt aangemaakt in huidige directory (tenzij absoluut pad)
 
     [ ? ] Veelvoorkomende use cases:
        • mkdir logs      → Voor het opslaan van logbestanden

@@ -276,7 +276,7 @@ EXPLOITATION CAPABILITIES
 BESCHERMING ALS DEVELOPER
 [###] Defense in depth:
 
-    **Laag 1 - Code (KRITIEK):**
+    **Laag 1 • Code (KRITIEK):**
        [ ✓ ] Prepared statements (ALTIJD!)
 
        PHP:
@@ -292,23 +292,23 @@ BESCHERMING ALS DEVELOPER
        [ X ] NOOIT string concatenation:
           "SELECT * FROM users WHERE id = " + id
 
-    **Laag 2 - Input validation:**
+    **Laag 2 • Input validation:**
        [ ✓ ] Whitelist approach (alleen expected input)
        [ ✓ ] Type checking (integer voor id)
        [ ✓ ] Length limits
        [ ✓ ] Regex validation
 
-    **Laag 3 - Database:**
+    **Laag 3 • Database:**
        [ ✓ ] Least privilege (app user heeft ALLEEN nodige rechten)
        [ ✓ ] Geen xp_cmdshell/file access voor app user
        [ ✓ ] Separate credentials per application
 
-    **Laag 4 - Application:**
+    **Laag 4 • Application:**
        [ ✓ ] Error handling (geen SQL errors naar user)
        [ ✓ ] Logging (detect injection attempts)
        [ ✓ ] Rate limiting (voorkom automated scanning)
 
-    **Laag 5 - Network:**
+    **Laag 5 • Network:**
        [ ✓ ] WAF (Web Application Firewall)
        [ ✓ ] IDS/IPS (Intrusion Detection/Prevention)
        [ ✓ ] Database niet publiek toegankelijk

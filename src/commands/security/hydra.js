@@ -285,28 +285,28 @@ FAMOUS EXAMPLES
 BESCHERMING ALS SYSTEEMBEHEERDER
 [###] Defense in depth:
 
-    Laag 1 - Credentials:
+    Laag 1 • Credentials:
        [ ✓ ] Verplicht sterke passwords (min 16 chars)
        [ ✓ ] Geen default credentials (force change on first login)
        [ ✓ ] Password complexity requirements
 
-    Laag 2 - Rate limiting:
+    Laag 2 • Rate limiting:
        [ ✓ ] Max 3-5 pogingen per 5 minuten
        [ ✓ ] Exponential backoff (1s, 2s, 4s, 8s...)
        [ ✓ ] CAPTCHA na 3 fouten
 
-    Laag 3 - Account security:
+    Laag 3 • Account security:
        [ ✓ ] Account lockout na 5 foute pogingen
        [ ✓ ] Email notificatie bij failed logins
        [ ✓ ] 2FA/MFA verplicht (voor admin accounts)
 
-    Laag 4 - Network security:
+    Laag 4 • Network security:
        [ ✓ ] Fail2ban (auto-block IP na x pogingen)
        [ ✓ ] Firewall rules (whitelist IPs voor SSH)
        [ ✓ ] VPN required voor remote access
        [ ✓ ] Port knocking (verberg services)
 
-    Laag 5 - Monitoring:
+    Laag 5 • Monitoring:
        [ ✓ ] Log alle login pogingen
        [ ✓ ] Alerts bij brute force patterns
        [ ✓ ] SIEM integration (Security Information and Event Management)
