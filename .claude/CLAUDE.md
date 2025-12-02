@@ -10,8 +10,8 @@
 
 **Wat:** Veilige terminal simulator voor Nederlandse beginners (15-25 jaar)
 **Stack:** Vanilla JS/CSS, client-side, localStorage, < 500KB bundle
-**Scope:** 30 commands (System, Filesystem, Network, Security)
-**Status:** M0-M4 Complete | M5 Testing Phase - ✅ LIVE on Netlify
+**Scope:** 30 commands (MVP) + Tutorials/Gamification/Analytics (Post-MVP)
+**Status:** M0-M4 Complete (100%) | M5 Testing (27%) - ✅ LIVE on Netlify | M6-M8 Planned
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 **Taal:** UI=NL, commands=EN, uitleg=NL
@@ -20,6 +20,7 @@
 **Compliance:** WCAG AAA, Style Guide 100% (141 CSS variables)
 **CI/CD:** GitHub Actions → Netlify auto-deploy (main branch) | Rollback: `git revert` + push
 **Monitoring:** Netlify Analytics | Lighthouse CI
+**Roadmap:** 280 tasks total (141 done, 139 planned) → 50.4% complete
 
 ---
 
@@ -278,7 +279,7 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 
 ---
 
-**Last updated:** 30 november 2025 (Sessie 66 - Semantic Continuation Fix)
-**Last synced:** 22 november 2025 (Full documentation sync complete, all metrics verified)
-**Next sync:** Milestone M6 completion OR Sessie 67
-**Version:** 15.0 (Sessie 66: Semantic Continuation - Multi-line message color inheritance fix, +215 bytes, 339 instances fixed across 34 files, Recent Learnings rotation)
+**Last updated:** 2 december 2025 (Sessie 67 - TASKS.md Expansion Complete)
+**Last synced:** 2 december 2025 (Post-MVP milestones added: M6/M7/M8 = 113 tasks, 105-135h)
+**Next sync:** Milestone M6 start OR Sessie 72
+**Version:** 16.0 (Sessie 67: TASKS.md Expansion - 3 milestones added (M6: Tutorial System 33 tasks, M7: Gamification 40 tasks, M8: Analytics & Scaling 40 tasks), total 280 tasks (50.4% complete), bundle budget tracking added)
