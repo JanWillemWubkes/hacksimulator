@@ -466,6 +466,27 @@ renderInfo("💡 TIP: Try 'help' command");
 
 **Gebruik:** Cookie banner, compact interfaces
 
+#### Donation Button
+
+```css
+.btn-donate-blue {
+  display: inline-block;
+  padding: var(--spacing-sm) var(--spacing-md);        /* 8px 16px */
+  font-size: 16px;
+  background-color: var(--color-button-bg);            /* #005bb5 dark / #1f7a40 light */
+  color: var(--color-button-text);                     /* #ffffff */
+  border: 1px solid var(--color-button-bg);
+  border-radius: var(--border-radius-button);          /* 4px */
+  font-weight: 600;
+  font-family: var(--font-terminal);
+}
+```
+
+**Gebruik:** Footer donation CTA
+**Kleur:** Matches blog buttons (`--color-button-bg`) - blue in dark mode, green in light mode
+**Size:** Small (8px/16px padding, 16px font)
+**Rationale:** Consistent with blog CTAs, subtle but visible (80/20 monetization rule)
+
 ### Modals
 
 **Unified Modal System (Sessie 37 - Pattern A Universal)**

@@ -338,6 +338,50 @@ button {
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
 
+/* ==================== DONATION CTA - COMPACT PATTERN ==================== */
+
+/* Compact donation paragraph (no box styling) */
+.donate-compact {
+  margin: var(--spacing-sm) 0;                         /* 8px top/bottom (reduced from 24px) */
+  font-size: 16px;                                     /* Reduced from 18px */
+  color: var(--color-footer-text);                     /* Footer text color */
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* Compact donation button */
+.btn-donate-compact {
+  display: inline-block;
+  padding: 6px 14px;                                   /* Slightly smaller than old button */
+  font-size: 15px;                                     /* Slightly smaller */
+  background-color: var(--color-button-bg);            /* #005bb5 dark / #1f7a40 light */
+  color: var(--color-button-text);                     /* #ffffff */
+  border: 1px solid var(--color-button-bg);
+  border-radius: var(--border-radius-button);          /* 4px */
+  font-weight: 600;
+  font-family: var(--font-terminal);
+  text-decoration: none;
+  transition: all var(--transition-fast);              /* 0.15s ease */
+  cursor: pointer;
+  margin-left: var(--spacing-xs);                      /* 4px spacing (tighter) */
+}
+
+.btn-donate-compact:hover {
+  background-color: var(--color-button-bg-hover);      /* #1976d2 dark / #248748 light */
+  transform: translateY(-1px);                         /* Subtle lift (reduced from -2px) */
+  box-shadow: 0 2px 8px var(--color-button-shadow-hover); /* Lighter shadow */
+}
+
+.btn-donate-compact:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.btn-donate-compact:focus-visible {
+  outline: 2px solid var(--color-button-bg);
+  outline-offset: 2px;
+}
+
 /* ==================== Modals ==================== */
 .modal {
   display: none;

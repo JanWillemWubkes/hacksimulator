@@ -505,6 +505,126 @@ Remove cookie banner → Better UX
 
 ---
 
+## 💰 Revenue Streams & Economics
+
+### Hosting Costs
+
+**Current (MVP):**
+- **Netlify:** €1.25/month (Pro features unused, only bandwidth)
+- **Total:** €1.25/month
+
+**Phase 3 (Backend, conditional):**
+- **Netlify:** €1.25/month
+- **Backend Hosting:** €10/month (Railway/Fly.io or Netlify Functions)
+- **Database:** €50/month (PostgreSQL managed or Supabase)
+- **Total:** €61.25/month
+
+---
+
+### Phase 1 Revenue (Month 1-3)
+
+**Components:**
+- AdSense: €50-150/month
+- Affiliates: €20-100/month
+- Donations: €10-50/month
+
+**Total:** €80-300/month
+**Net Profit:** €78.75-298.75/month (after €1.25 hosting)
+
+---
+
+### Phase 2 Revenue (Month 4-6)
+
+**Components:**
+- Phase 1 streams: €80-300/month
+- Sponsorships: €200-1000/month
+
+**Total:** €280-1300/month
+**Net Profit:** €278.75-1298.75/month (after hosting)
+
+---
+
+### Phase 3 Revenue (Month 7-12) - **CONDITIONAL**
+
+**Trigger:** If Phase 1 revenue >€200/month after 3 months
+
+**Components:**
+- Phase 1+2 streams: €280-1300/month
+- Freemium subscriptions: €300-1500/month
+- Enterprise licenses: €50-300/month (monthly amortized)
+
+**Total:** €630-3100/month
+**Net Profit:** €568.75-3038.75/month (after €61.25 hosting)
+
+---
+
+### Break-Even Analysis
+
+**Development Cost (MVP + Phase 1):**
+- MVP: 280 hours
+- Phase 1 (M5.5): 17 hours
+- **Total:** 297 hours × €50/hour = **€14,850**
+
+**Break-Even Timeline:**
+| Monthly Net Profit | Break-Even Time |
+|--------------------|-----------------|
+| €300/month         | 50 months       |
+| €1000/month        | 15 months       |
+| €2000/month        | 7 months        |
+
+---
+
+### Decision Points
+
+**Month 3 Evaluation:**
+- **If revenue >€200/month:** Proceed to Phase 3 backend build (60-80 hours investment = €3000-4000)
+- **If revenue €100-200/month:** Implement Phase 2 sponsorships, defer Phase 3
+- **If revenue <€100/month:** PAUSE monetization, focus on traffic growth (SEO, content marketing, partnerships) instead
+
+**Phase 3 Backend Investment Justification:**
+- Only invest 60-80 hours if MRR (Monthly Recurring Revenue) from Phase 1 validates market demand
+- Backend enables €300-1500/month additional revenue (freemium subscriptions)
+- ROI: 3-5 months if conversion rate >5%
+
+---
+
+### Revenue Projections
+
+**Conservative Scenario:**
+| Month  | Phase        | Revenue    | Cumulative |
+|--------|-------------|------------|------------|
+| Month 1  | Phase 1      | €80        | €80        |
+| Month 3  | Phase 1      | €150       | €450       |
+| Month 6  | Phase 2      | €300       | €1,350     |
+| Month 12 | Phase 3      | €630       | €6,390     |
+
+**Optimistic Scenario:**
+| Month  | Phase        | Revenue    | Cumulative |
+|--------|-------------|------------|------------|
+| Month 1  | Phase 1      | €150       | €150       |
+| Month 3  | Phase 1      | €300       | €750       |
+| Month 6  | Phase 2      | €1000      | €4,750     |
+| Month 12 | Phase 3      | €2000      | €19,750    |
+
+---
+
+### Cost Structure Summary
+
+**Fixed Costs (Monthly):**
+- MVP (M0-M5): €1.25/month (Netlify)
+- Phase 3 Backend: +€60/month (total €61.25/month)
+
+**Variable Costs:**
+- Development time (one-time): €14,850 (MVP + Phase 1)
+- Phase 3 Backend (one-time): €3,000-4,000 (conditional)
+
+**Revenue Streams:**
+- Passive (Phase 1): €80-300/month
+- Content-driven (Phase 2): €280-1300/month
+- Subscription-based (Phase 3): €630-3100/month (conditional)
+
+---
+
 ## 🧪 Testing Strategie
 
 ### Manual Testing (MVP)
@@ -753,8 +873,8 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 22 november 2025
-**Versie:** 1.8 (Sessie 57: Documentation Sync - all docs synchronized)
-**Status:** ✅ Deployed - Live in Production
+**Laatst bijgewerkt:** 2 december 2025
+**Versie:** 1.9 (Sessie 68: Monetization Strategy - Revenue Streams & Economics section added)
+**Status:** ✅ Deployed - Live in Production + Monetization Planning Complete
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

@@ -2,7 +2,7 @@
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
 **Status:** MVP Development
-**Docs:** `docs/prd.md` v1.4 | `docs/commands-list.md` | `docs/STYLEGUIDE.md` v1.0 | `SESSIONS.md` voor sessie logs
+**Docs:** `docs/prd.md` v1.5 | `docs/commands-list.md` | `docs/STYLEGUIDE.md` v1.0 | `SESSIONS.md` voor sessie logs
 
 ---
 
@@ -20,7 +20,7 @@
 **Compliance:** WCAG AAA, Style Guide 100% (141 CSS variables)
 **CI/CD:** GitHub Actions → Netlify auto-deploy (main branch) | Rollback: `git revert` + push
 **Monitoring:** Netlify Analytics | Lighthouse CI
-**Roadmap:** 280 tasks total (141 done, 139 planned) → 50.4% complete
+**Roadmap:** 295 tasks total (141 done, 154 planned) → 47.8% complete
 
 ---
 
@@ -29,6 +29,7 @@
 **Core:** §2 Kritieke Niet Doen | §3 Output Principe (80/20) | §4 Taal Strategie | §5 Educational Patterns | §6 Tone of Voice
 **Implementatie:** §7 Command Checklist | §8 Architectural Patterns | §9 Recent Learnings (Sessies 52-56)
 **Workflow:** §10 Sessie Protocol | §11 Communicatie Grondregels | §12 Troubleshooting | §13 Referenties
+**Monetization:** §14 Monetization Patterns
 
 ---
 
@@ -269,7 +270,7 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 
 ## 📚 Referenties
 
-**Volledige details:** `docs/prd.md` (v1.4)
+**Volledige details:** `docs/prd.md` (v1.5)
 **Command specs:** `docs/commands-list.md`
 **Style guide:** `docs/STYLEGUIDE.md` (v1.0) - Comprehensive design system & component library
 **Sessie logs:** `SESSIONS.md` - Complete historical record (59 sessions total: Sessies 1-34 archived, Sessies 35-43 compressed, Sessies 44-59 detailed)
@@ -279,7 +280,287 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 
 ---
 
-**Last updated:** 2 december 2025 (Sessie 67 - TASKS.md Expansion Complete)
-**Last synced:** 2 december 2025 (Post-MVP milestones added: M6/M7/M8 = 113 tasks, 105-135h)
-**Next sync:** Milestone M6 start OR Sessie 72
-**Version:** 16.0 (Sessie 67: TASKS.md Expansion - 3 milestones added (M6: Tutorial System 33 tasks, M7: Gamification 40 tasks, M8: Analytics & Scaling 40 tasks), total 280 tasks (50.4% complete), bundle budget tracking added)
+## 💰 Monetization Patterns
+
+**Doel:** Ethical revenue generation zonder educational mission te compromitteren
+**Strategie:** Gefaseerd (Phase 1: Passive €80-300/month → Phase 3: Freemium €630-3100/month)
+**Volledige details:** PRD §21 | PLANNING §11 | TASKS M5.5
+
+### Ethical Principles (Red Lines)
+
+**NEVER:**
+1. **Ads in terminal output** - Terminal must blijven clean en educational
+2. **Paywall basic commands** - 30 MVP commands ALTIJD gratis (cd, ls, cat, nmap, etc.)
+3. **Dark patterns** - Geen guilt-tripping ("Only €5 to unlock..."), manipulative upselling, fake urgency
+4. **Gambling mechanics** - Geen loot boxes, gacha systems, randomized rewards
+5. **Data selling** - NOOIT gebruikersdata verkopen aan third parties
+6. **Aggressive tracking** - Alleen GDPR-compliant analytics met consent
+
+**ALWAYS:**
+1. **Educational mission first** - Revenue decisions NOOIT ten koste van leren
+2. **Transparency** - Affiliate links disclosed met banner + `rel="sponsored"`
+3. **Privacy-first** - Explicit consent voor AdSense cookies (AVG Article 6(1)(a))
+4. **Youth-friendly** - Target audience = 15-25 jaar, geen exploitative tactics
+5. **Free tier valuable** - Gratis versie moet standalone waardevol zijn (not crippled)
+
+### Ad Placement 80/20 Rule
+
+**Formule:**
+- **80%:** User value (terminal, tutorials, help system, blog educatief)
+- **20%:** Monetization (ads, affiliate links, donation CTA)
+
+**Allowed Placements:**
+✅ Footer banner (728x90 desktop, 320x50 mobile)
+✅ Blog sidebar (300x250 rectangle)
+✅ Blog bottom (after educational content consumed)
+✅ Donation button in footer (subtle, non-intrusive)
+
+**Forbidden Placements:**
+❌ Terminal output area
+❌ Command prompt
+❌ Help/man pages
+❌ Interstitials (fullscreen popups)
+❌ Auto-play videos
+
+**Implementation Pattern:**
+```html
+<!-- Ad Container Pattern -->
+<div class="ad-container" data-ad-type="footer-banner">
+  <p class="ad-disclaimer">Advertisement</p>
+  <!-- AdSense script hier -->
+</div>
+```
+
+```css
+/* Ad Styling - Muted UI Principle */
+.ad-container {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-sm);
+  margin: var(--spacing-lg) 0;
+  opacity: 0.8; /* Ads minder prominent dan content */
+}
+
+.ad-disclaimer {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xs);
+}
+```
+
+### Affiliate Guidelines
+
+**Pattern: Full Disclosure**
+
+⚠️ **NEVER:**
+- Use affiliate links zonder disclosure
+- Hide sponsorship relationships (transparency = trust)
+- Recommend producten je NIET hebt getest/researched
+- Gebruik "Sponsored" als enige indicator (niet genoeg voor Nederlands publiek)
+
+✅ **ALWAYS:**
+- Add visual banner boven affiliate content:
+  ```html
+  <div class="affiliate-banner">
+    <p>🔗 <strong>Let op:</strong> Deze link bevat affiliate-verwijzingen.
+    Wij ontvangen een commissie bij aankoop, zonder extra kosten voor jou.</p>
+  </div>
+  ```
+- Use `rel="sponsored"` HTML attribute (SEO compliance)
+- Only recommend genuinely useful products (quality > commission rate)
+- Link naar `/affiliate-disclosure.html` in footer
+- Test products zelf of gebruik betrouwbare reviews
+
+**Affiliate Link Pattern:**
+```html
+<a href="https://udemy.com/course/..."
+   rel="sponsored"
+   target="_blank"
+   class="affiliate-link"
+   data-product="Udemy Ethical Hacking Course">
+  Bekijk deze cursus op Udemy
+  <span class="affiliate-badge">Affiliate</span>
+</a>
+```
+
+**Styling Pattern:**
+```css
+.affiliate-link {
+  color: var(--color-link);
+  text-decoration: underline;
+}
+
+.affiliate-badge {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-left: var(--spacing-xs);
+  font-weight: normal;
+}
+```
+
+### Donation Messaging (Tone of Voice)
+
+**Principe:** Bemoedigend, NIET smeken of guilt-tripping
+
+❌ **BAD Examples (Dark Patterns):**
+- "Zonder jouw steun kunnen we niet overleven" (te dramatisch)
+- "Slechts €5 voor duizenden uren werk" (guilt-trip)
+- "93% van gebruikers doneert NIET - ben jij anders?" (manipulatief)
+- Fullscreen popup die content blokkeert
+
+✅ **GOOD Examples (Bemoedigend):**
+- "[ SUPPORT ] Steun onze educatieve missie - Doneer" ⭐ **CURRENT** (future-proof, mission-focused)
+- "[ INFO ] Deze site is 100% gratis dankzij donaties"
+- "[ SUPPORT ] Help ons deze tool te verbeteren"
+
+**Implementation Pattern (Footer):**
+```html
+<div class="donation-cta">
+  <p>[ SUPPORT ] Steun onze educatieve missie
+  <a href="https://paypal.me/..."
+     target="_blank"
+     rel="noopener noreferrer"
+     class="btn-small btn-donate-blue"
+     aria-label="Doneer via PayPal om onze educatieve missie te steunen">
+    Doneer
+  </a>
+  </p>
+</div>
+```
+
+**Styling:**
+```css
+/* Donation Button - Blue Small (matches blog CTAs) */
+.btn-donate-blue {
+  display: inline-block;
+  padding: var(--spacing-sm) var(--spacing-md);        /* 8px 16px */
+  font-size: 16px;
+  background-color: var(--color-button-bg);            /* #005bb5 dark / #1f7a40 light */
+  color: var(--color-button-text);                     /* #ffffff */
+  border: 1px solid var(--color-button-bg);
+  border-radius: var(--border-radius-button);          /* 4px */
+  font-weight: 600;
+  font-family: var(--font-terminal);
+  text-decoration: none;
+  transition: all var(--transition-fast);              /* 0.15s ease */
+}
+
+.btn-donate-blue:hover {
+  background-color: var(--color-button-bg-hover);      /* #1976d2 dark / #248748 light */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--color-button-shadow-hover);
+}
+```
+
+**Design Rationale:**
+- **Blue color:** Matches blog buttons (consistency = trust)
+- **Small size:** Subtiel maar zichtbaar (80/20 monetization rule)
+- **Mission framing:** Future-proof voor freemium launch (Phase 3)
+- **ASCII brackets:** Terminal aesthetic compliance
+
+### Freemium Red Lines (Phase 3 - Backend Only)
+
+**Doel:** Fair value exchange, GEEN predatory pricing
+
+**What Must Stay FREE (30 MVP Commands):**
+- Basic navigation: `cd`, `ls`, `pwd`, `cat`, `clear`
+- Networking basics: `ping`, `nmap`, `whois`, `dig`, `traceroute`
+- File manipulation: `touch`, `mkdir`, `rm`, `cp`, `mv`, `nano`
+- Security basics: `sudo`, `chmod`, `ssh`, `grep`, `curl`
+- Help system: `help`, `man`, `whoami`, `history`
+- **Totaal:** 30 commands - core learning experience
+
+**What CAN Be Premium (Advanced Features):**
+✅ Advanced tutorials (beyond "Hello Terminal")
+✅ Gamification badges/achievements
+✅ Progress tracking across devices (backend sync)
+✅ Certificates met LinkedIn badge
+✅ Extra commands (35+): `metasploit`, `john`, `aircrack-ng`, etc.
+✅ Custom themes (beyond Light/Dark)
+✅ Ad-free experience
+
+**Pricing Red Lines:**
+❌ **NEVER:**
+- Charge meer dan €5/month voor studenten (target = 15-25 jaar)
+- Paywall content dat je eerder gratis was (bait-and-switch)
+- Require credit card voor "free trial" (barrier voor jongeren)
+- Auto-renew zonder duidelijke opt-out
+
+✅ **ALWAYS:**
+- Student discount (50% off met @student.nl email)
+- Family plan (3+ users krijgen 30% korting)
+- Lifetime option (€99 one-time vs €5/month recurring)
+- Clear cancellation link (geen hidden menus)
+
+### Privacy & Consent (GDPR/AVG)
+
+**AdSense Consent Pattern:**
+```javascript
+// src/analytics/consent.js update
+const CONSENT_CATEGORIES = {
+  necessary: { required: true },
+  analytics: { required: false },
+  advertising: { required: false } // NEW for AdSense
+};
+
+function updateConsentBanner() {
+  // Add "Advertising Cookies" toggle to existing banner
+  const banner = document.querySelector('.cookie-consent');
+  banner.innerHTML += `
+    <label>
+      <input type="checkbox" name="advertising" id="consent-advertising">
+      Advertising Cookies (Google AdSense)
+    </label>
+  `;
+}
+```
+
+**Legal Documents Update:**
+- `assets/legal/cookies.html`: Add AdSense cookie disclosure
+- `assets/legal/privacy.html`: Add Google LLC als data processor
+- `assets/legal/terms.html`: Add affiliate disclosure clause
+- **NEW:** `assets/legal/affiliate-disclosure.html` (detailed affiliate policy)
+
+### Bundle Size Management
+
+**Current Status (M5.5):**
+- **Before:** 318KB / 500KB (182KB buffer, 36%)
+- **After AdSense:** 335-340KB / 500KB (160KB buffer, 32%)
+- **Impact:** +17-22KB (AdSense script + consent UI)
+
+**Future Milestones:**
+- M6 (Tutorial System): +60KB → 395-400KB
+- M7 (Gamification): +50KB → 445-450KB
+- M8 (Analytics): +40KB → 485-490KB
+- **Total:** ~488KB / 500KB (98% budget used) ✅ SAFE
+
+**Monitoring:**
+```bash
+# Check bundle size na AdSense implementatie
+npm run build
+ls -lh dist/ | awk '{print $5, $9}'
+```
+
+**Red Line:** If bundle > 480KB, remove non-essential features BEFORE adding ads
+
+### Implementation Checklist (M5.5)
+
+Bij nieuwe monetization feature:
+- [ ] Check ethical principles (geen red lines crossed)
+- [ ] Test ad placement (80/20 rule compliance)
+- [ ] Add affiliate disclosure (visual banner + rel="sponsored")
+- [ ] Update legal docs (privacy/cookies/terms)
+- [ ] Verify GDPR consent (explicit opt-in voor AdSense)
+- [ ] Measure bundle impact (< 500KB hard limit)
+- [ ] Test on production (Netlify deploy + manual check)
+- [ ] Monitor revenue (Google Analytics + AdSense dashboard)
+
+→ **Volledige monetization specs:** PRD §21 | PLANNING §11 | TASKS M5.5
+
+---
+
+**Last updated:** 3 december 2025 (Sessie 69 - Monetization Strategy Implemented)
+**Last synced:** 3 december 2025 (M5.5 Monetization MVP: 15 tasks, PRD §21, PLANNING §11, CLAUDE §14)
+**Next sync:** Milestone M5.5 completion OR Sessie 74
+**Version:** 17.0 (Sessie 69: Monetization Strategy - Added M5.5 milestone (15 tasks, 15-17h), PRD §21 Monetization Strategy, PLANNING §11 Revenue Streams, CLAUDE §14 Monetization Patterns, total 295 tasks (47.8% complete), Phase 1 target €80-300/month)

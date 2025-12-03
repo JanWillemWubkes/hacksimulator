@@ -147,6 +147,11 @@ Een web-gebaseerde terminal simulator die een realistische maar veilige omgeving
 
 **Privacy & Analytics:**
 - **MVP Fase:** Google Analytics 4 met IP anonymization
+- **M5.5 Monetization:** Google AdSense met explicit user consent (GDPR Article 6(1)(a))
+  - Cookies for ad personalization
+  - IP address anonymized
+  - Data processors: Google LLC
+  - User consent required via cookie banner (extended with "Advertising Cookies" toggle)
 - **Post-MVP:** Migratie naar Plausible Analytics (privacy-first, cookie-less)
 - Geen persoonlijk identificeerbare informatie opslaan
 - Command arguments NIET loggen (privacy)
@@ -748,6 +753,7 @@ Systeem hersteld naar oorspronkelijke staat.
 - Help/man systeem
 - Educatieve tips
 - Juridische disclaimers
+- **Monetization (M5.5):** Donations (PayPal/Ko-fi), AdSense (footer/blog), Affiliate links (no backend required)
 
 ---
 
@@ -963,7 +969,7 @@ Voor elke nieuwe command:
 - Custom scenario's upload
 - Community features (delen van scores)
 - Integratie met leerplatforms
-- Affiliate partnerships (cybersecurity cursussen)
+- **Freemium model** (premium subscriptions, enterprise licensing) - **CONDITIONAL** (requires backend build)
 
 ### Lange Termijn (Jaar 2+)
 - API voor onderwijsinstellingen
@@ -973,6 +979,216 @@ Voor elke nieuwe command:
 - Mobile app (native)
 - Premium features (freemium model)
 - Corporate training modules
+
+---
+
+## 21. Monetization Strategy
+
+### Overzicht
+
+HackSimulator.nl hanteert een gefaseerde monetisatie strategie die de educatieve missie voorop stelt. We beginnen met passive revenue streams (Phase 1) en schaalen naar freemium model (Phase 3) op basis van bewezen marktvalidatie.
+
+**Kernprincipes:**
+- Educational mission first (revenue NEVER compromises learning)
+- Privacy-first (GDPR/AVG compliance mandatory)
+- Youth-friendly (no aggressive monetization tactics)
+- Data-driven (validate Phase 1 before investing in backend)
+- Transparency (all affiliate links disclosed)
+
+---
+
+### Phase 1: Passive Revenue (MVP, Maand 1-3)
+
+**Target:** €80-300/month
+**Implementation:** M5.5 Monetization MVP (15-17 uur)
+**Dependencies:** M5 Testing & Launch complete
+
+**Components:**
+
+1. **Google AdSense** (€50-150/month)
+   - Footer banner (728x90 desktop, 320x50 mobile)
+   - Blog sidebar (300x250)
+   - NEVER in terminal output
+   - Requires GDPR consent (extend existing cookie banner)
+   - Bundle impact: +15-20KB
+
+2. **Affiliate Marketing** (€20-100/month)
+   - Bol.com Partner Program (7% commission) - Hacking books
+   - Udemy Affiliate (10% commission) - Security courses
+   - TryHackMe Affiliate (15% recurring) - Premium subscriptions
+   - Skillshare Affiliate (40% first payment) - Educational platform
+   - Amazon Associates (3-5%) - Hardware (Raspberry Pi, WiFi adapters)
+   - All links disclosed with `rel="sponsored"` + visual banner
+   - Bundle impact: +2KB
+
+3. **Donations** (€10-50/month)
+   - PayPal.me link in footer
+   - Optional: Ko-fi account (€3 default donation)
+   - Zero bundle impact (external link)
+   - No GDPR requirements (external processor)
+
+**Privacy Commitment:** All monetization respects GDPR/AVG. AdSense requires explicit user consent via existing cookie consent banner (extended with "Advertising Cookies" toggle).
+
+**Success Criteria:**
+- AdSense CTR >1%
+- Affiliate clicks >10/month
+- Donations: 1-3/month
+- Bundle size increase ≤20KB (total <340KB)
+
+---
+
+### Phase 2: Content Monetization (Maand 4-6, post-M6)
+
+**Target:** €280-1300/month (cumulative with Phase 1)
+**Implementation:** Post-M6 Tutorial System
+**Dependencies:** M6 complete, Phase 1 validated
+
+**Components:**
+
+1. **Sponsored Tutorials** (€200-500 per sponsor)
+   - Partner with cybersecurity companies (NordVPN, Kaspersky, Hack The Box)
+   - Example: "Intro to VPN Security" sponsored by NordVPN
+   - Sponsor logo on tutorial header (with disclosure)
+   - Target: 1-2 sponsors
+
+2. **Premium Affiliate Content** (€50-150/month)
+   - In-depth guides (1000+ words each)
+   - "Complete Learning Path: Van Beginner tot Ethical Hacker"
+   - Affiliate links on tutorial completion pages
+   - Target: 5-10 conversions/month
+
+3. **Donation Optimization** (incremental increase)
+   - Post-tutorial prompt: "Vond je dit nuttig? Support ons!"
+   - A/B test messaging
+   - Target: >3% conversion rate
+
+**Success Criteria:**
+- Sponsorships: 1-2 secured
+- Affiliate conversions: 5-10 sales/month
+- Tutorial → donation rate >3%
+
+---
+
+### Phase 3: Freemium Model (Maand 7-12, post-M7) - **CONDITIONAL**
+
+**Target:** €630-3100/month (cumulative with Phase 1+2)
+**Implementation:** M8 or new M10 milestone (60-80 uur backend build)
+**Trigger:** If Phase 1 revenue >€200/month after 3 months
+
+**Components:**
+
+1. **Premium Subscription** (€5/month or €50/year)
+   - **Free Tier:**
+     - 30 commands (current MVP)
+     - 3 tutorials (basic scenarios)
+     - Text certificates (ASCII art)
+     - Ads present
+   - **Premium Tier:**
+     - 60+ commands (advanced security tools)
+     - All tutorials (10+ scenarios)
+     - PDF certificates (professional)
+     - Ad-free experience
+     - Priority support (<24h email response)
+   - Target: 5-10% conversion rate
+
+2. **Enterprise Licensing** (€500-2000/year for schools)
+   - Bulk licensing (50+ students)
+   - Teacher dashboard (progress tracking)
+   - Custom branding
+   - Dedicated support
+   - Target: 1-2 schools
+
+**Backend Infrastructure:**
+- Node.js + Express.js API
+- PostgreSQL database (or Supabase managed)
+- JWT authentication
+- Stripe (international) or Mollie (Dutch focus) payment gateway
+- Hosting: Railway/Fly.io (~€10/month) or Netlify Functions (serverless)
+
+**Success Criteria:**
+- Freemium conversion >5%
+- Monthly Recurring Revenue (MRR) >€500
+- Enterprise: 1-2 schools signed (€1000-2000/year)
+- Churn rate <10%
+
+---
+
+### Revenue Projections
+
+**Conservative Scenario:**
+- Month 1: €80
+- Month 3: €150
+- Month 6: €300 (Phase 2)
+- Month 12: €630 (Phase 3)
+
+**Optimistic Scenario:**
+- Month 1: €150
+- Month 3: €300
+- Month 6: €1000 (Phase 2)
+- Month 12: €2000 (Phase 3)
+
+**Break-Even Timeline:**
+- At €300/month net profit: 50 months
+- At €1000/month net profit: 15 months
+- At €2000/month net profit: 7 months
+
+*Development cost: MVP (280h) + Phase 1 (17h) = 297h × €50/hour = €14,850*
+
+---
+
+### Decision Points & Risk Mitigation
+
+**Decision Point (Month 3):**
+- **If revenue >€200/month:** Proceed to Phase 3 backend build (60-80 hours investment)
+- **If revenue €100-200/month:** Implement Phase 2 sponsorships, defer Phase 3
+- **If revenue <€100/month:** PAUSE monetization, focus on traffic growth (SEO, content marketing)
+
+**Risk Mitigation:**
+1. **AdSense Rejection:** Emphasize "EDUCATIONAL SIMULATOR" in application, reference legal disclaimers. Fallback: Media.net, Ezoic.
+2. **Low Conversion:** Diversify revenue streams (ads + affiliates + donations). Target audience has limited purchasing power.
+3. **Educational Integrity:** Strict 80/20 rule (80% value, 20% monetization). NEVER paywall basic commands.
+4. **Backend Cost Overruns:** Use serverless (Netlify Functions) for MVP backend (€0-10/month). Upgrade only when MRR >€500/month.
+
+---
+
+### Ethical Guidelines
+
+**Red Lines (NEVER):**
+- Ads in terminal output
+- Paywall basic commands (30 MVP commands must stay free)
+- Dark patterns (guilt-tripping, manipulative upselling)
+- Gambling mechanics (loot boxes)
+- Data selling
+
+**Always:**
+- Disclose affiliate links (`rel="sponsored"` + visual banner)
+- Obtain explicit consent for AdSense (GDPR/AVG)
+- Keep free tier valuable (not crippled)
+- Prioritize educational mission over revenue
+
+---
+
+### Implementation Dependencies
+
+**Phase 1 (M5.5):**
+- No backend required
+- Extend existing cookie consent banner
+- Update legal docs (cookies.html, privacy.html, terms.html)
+- Create affiliate-disclosure.html
+- Add donation button to footer
+- Implement ad placements
+
+**Phase 2 (post-M6):**
+- Tutorial system complete
+- Blog infrastructure for sponsored content
+- Sponsor outreach (business development)
+
+**Phase 3 (post-M7/M8):**
+- Backend infrastructure (40-60 hours)
+- Authentication system (JWT)
+- Payment gateway (Stripe/Mollie)
+- Database (PostgreSQL)
+- Feature gating logic
 
 ---
 
@@ -1092,11 +1308,19 @@ Dit document is goedgekeurd voor de ontwikkeling van HackSimulator.nl MVP.
   - Minimum browser versions gedocumenteerd (Chrome 61+, Firefox 60+, Safari 11+, Edge 16+)
   - IE11 explicitly marked as not supported
   - Technical rationale for minimum versions (ES6 modules, CSS variables)
+- **v1.5** (2 Dec 2025) - Monetization Strategy:
+  - New Section 21: Comprehensive monetization strategy (Phase 1-3)
+  - M5.5 Monetization MVP milestone (15 tasks, 15-17h)
+  - AdSense, Affiliate marketing, Donations (€80-300/month target)
+  - Updated §6.3 with AdSense privacy/GDPR requirements
+  - Updated §15 to include monetization in MVP scope
+  - Updated §20 to clarify freemium as Phase 3 (conditional)
+  - Revenue projections, break-even analysis, ethical guidelines
 
 **Document Status:** Definitief - ✅ **LIVE on Netlify!**
 
-**Laatste review:** 22 november 2025
-**Development Status:** 141/167 tasks completed (84.4%) - M0-M4 (100%), M5 (10/37 - 27%)
+**Laatste review:** 2 december 2025
+**Development Status:** 141/182 tasks completed (77.5%) - M0-M4 (100%), M5 (10/37 - 27%), M5.5 (0/15 - 0%)
 
 ---
 
