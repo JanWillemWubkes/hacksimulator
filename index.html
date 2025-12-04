@@ -22,9 +22,9 @@
     <title>HackSimulator.nl - Leer Ethisch Hacken</title>
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles/main.css?v=71-compact-footer">
+    <link rel="stylesheet" href="styles/main.css?v=73-button-alignment">
     <link rel="stylesheet" href="styles/terminal.css?v=66-semantic-continuation">
-    <link rel="stylesheet" href="styles/mobile.css?v=71-compact-footer">
+    <link rel="stylesheet" href="styles/mobile.css?v=73-button-alignment">
     <link rel="stylesheet" href="styles/animations.css?v=66-semantic-continuation">
     <link rel="stylesheet" href="src/ui/command-search-modal.css?v=66-semantic-continuation">
 </head>
@@ -219,20 +219,23 @@
     <!-- Footer -->
     <footer role="contentinfo">
         <div class="footer-content">
-            <p>&copy; 2025 HackSimulator.nl</p>
+            <!-- Column 1: Copyright (left) -->
+            <p class="footer-copyright">&copy; 2025 HackSimulator.nl</p>
 
-            <!-- Compact Donation CTA (no box styling) -->
+            <!-- Column 2: Donation CTA (center) - Sessie 72: shortened message -->
             <p class="donate-compact">
-                [ SUPPORT ] Steun onze educatieve missie
+                [ SUPPORT ]
                 <a href="https://paypal.me/[USERNAME]"
                    target="_blank"
                    rel="noopener noreferrer"
                    class="btn-donate-compact"
-                   aria-label="Doneer via PayPal om onze educatieve missie te steunen">
+                   aria-label="Doneer via PayPal om onze educatieve missie te steunen"
+                   title="Steun onze educatieve missie">
                     Doneer
                 </a>
             </p>
 
+            <!-- Column 3: Navigation (right) -->
             <nav aria-label="Footer navigation">
                 <a href="#feedback" id="footer-feedback-link">Feedback</a>
                 <a href="assets/legal/privacy.html" target="_blank" rel="noopener noreferrer">Privacy</a>
