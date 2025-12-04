@@ -236,11 +236,24 @@
     justify-content: center;
   }
 
-  /* Footer */
+  /* Footer - Mobile vertical stack (Sessie 72) */
   footer {
     font-size: 16px;
     padding: 12px 16px;
     margin: 10px;
+  }
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    text-align: center;
+  }
+
+  .footer-copyright,
+  .donate-compact,
+  footer nav {
+    text-align: center;
   }
 
   footer nav {
