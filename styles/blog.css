@@ -228,6 +228,18 @@ a[href="#all"].category-btn {
   }
 }
 
+/* Tablet responsive (iPad optimization) */
+@media (min-width: 769px) and (max-width: 1023px) {
+  .blog-post-card h2 {
+    font-size: 1.7rem; /* Midpoint between mobile 1.4rem and desktop 1.953rem */
+  }
+
+  .category-btn {
+    font-size: 0.9rem; /* Slightly larger than mobile */
+    padding: 7px 12px;
+  }
+}
+
 /* ==================== Blog Post Listing (Homepage) ==================== */
 
 .blog-posts-grid {
@@ -798,6 +810,31 @@ a[href="#all"].category-btn {
 
 /* ==================== Responsive Design ==================== */
 
+/* Tablet (iPad optimization - 769-1023px) */
+@media (min-width: 769px) and (max-width: 1023px) {
+  .blog-header h1,
+  .blog-post-title {
+    font-size: 2.1rem; /* Midpoint between mobile 1.8rem and desktop default */
+  }
+
+  .blog-post-content {
+    font-size: 1.1rem; /* Slightly larger for tablet readability */
+  }
+
+  .blog-post-content h2 {
+    font-size: 1.7rem; /* Midpoint between mobile 1.5rem and desktop */
+  }
+
+  .blog-post-content h3 {
+    font-size: 1.35rem; /* Midpoint between mobile 1.2rem and desktop */
+  }
+
+  .blog-post-content pre {
+    font-size: 0.9rem; /* Larger code blocks on tablet */
+  }
+}
+
+/* Mobile (≤768px) */
 @media (max-width: 768px) {
   .blog-container {
     padding: calc(60px + var(--spacing-lg)) var(--spacing-md) var(--spacing-lg);

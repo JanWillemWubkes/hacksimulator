@@ -868,6 +868,14 @@ footer nav a:not(:first-child) {
   margin-left: var(--spacing-sm);
 }
 
+/* ==================== Widescreen Modal Scaling ==================== */
+/* Widescreen: Scale modals for 1400px+ displays (4K monitors, large desktops) */
+@media (min-width: 1400px) {
+  .modal-content {
+    width: 720px; /* 20% larger than desktop default (600px) */
+  }
+}
+
 /* ==================== Footer Tablet Breakpoint ==================== */
 /* Tablet: 2-row layout (copyright+nav row 1, donation row 2) - Sessie 72 */
 @media (max-width: 1024px) {

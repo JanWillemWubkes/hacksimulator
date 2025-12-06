@@ -110,9 +110,9 @@
   .dropdown-menu {
     position: static; /* Override desktop absolute positioning */
     background-color: var(--color-bg-dropdown);
-    border: none;
-    border-radius: 0;
-    padding: 0;
+    border-top: 1px solid var(--color-border); /* Minimal separator for visual hierarchy */
+    border-radius: 0; /* Flat aesthetic for terminal design */
+    padding: var(--spacing-xs) 0; /* Subtle breathing room (4px) */
     min-width: 100%;
     animation: none; /* No fade-in animation on mobile */
   }
@@ -414,8 +414,8 @@
   }
 }
 
-/* ==================== Tablet (768px - 1024px) ==================== */
-@media (min-width: 769px) and (max-width: 1024px) {
+/* ==================== Tablet (768px - 1023px) ==================== */
+@media (min-width: 769px) and (max-width: 1023px) {
   #terminal-container {
     padding: var(--spacing-md);
   }
