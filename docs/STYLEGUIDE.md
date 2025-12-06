@@ -1452,19 +1452,121 @@ filter: blur(1px);  /* Subtle glow op groene lijnen */
 
 ### Breakpoints
 
+**Breakpoint Ranges** (Exclusive boundaries - Sessie 75-76):
+
+| Range | Width | Breakpoint | Use Case |
+|-------|-------|------------|----------|
+| **Mobile** | ≤768px | `@media (max-width: 768px)` | Phones (iPhone SE → iPhone 14 Pro Max) |
+| **Tablet** | 769-1023px | `@media (min-width: 769px) and (max-width: 1023px)` | iPads, tablets |
+| **Desktop** | 1024-1399px | `@media (min-width: 1024px)` | Laptops, desktop monitors |
+| **Widescreen** | ≥1400px | `@media (min-width: 1400px)` | 4K monitors, large displays |
+| **Small Mobile** | ≤480px | `@media (max-width: 480px)` | iPhone SE, small phones |
+| **Landscape** | ≤768px landscape | `@media (max-width: 768px) and (orientation: landscape)` | Rotated phones |
+
+**Critical: Exclusive Ranges**
+
+⚠️ **WRONG** (overlap at 1024px):
 ```css
-/* Mobile */
-@media (max-width: 768px) { ... }
+/* Tablet - BAD */
+@media (min-width: 769px) and (max-width: 1024px) { }  /* ❌ Overlaps with desktop */
 
-/* Small mobile */
-@media (max-width: 480px) { ... }
-
-/* Tablet */
-@media (min-width: 769px) and (max-width: 1024px) { ... }
-
-/* Landscape mobile */
-@media (max-width: 768px) and (orientation: landscape) { ... }
+/* Desktop - BAD */
+@media (min-width: 1024px) { }  /* ❌ Both active at 1024px! */
 ```
+
+✅ **CORRECT** (exclusive boundary):
+```css
+/* Tablet - GOOD */
+@media (min-width: 769px) and (max-width: 1023px) { }  /* ✅ Stops at 1023px */
+
+/* Desktop - GOOD */
+@media (min-width: 1024px) { }  /* ✅ Starts at 1024px */
+```
+
+**Rationale:** Exclusive ranges prevent CSS cascade conflicts. Only ONE breakpoint active at any viewport width.
+
+**Breakpoint Usage Examples:**
+
+```css
+/* Mobile-first approach */
+.modal-content {
+  width: 600px;  /* Desktop default */
+}
+
+/* Widescreen: Scale up 20% for 4K monitors */
+@media (min-width: 1400px) {
+  .modal-content {
+    width: 720px;  /* 600px * 1.2 = 720px */
+  }
+}
+
+/* Tablet: Optimize typography */
+@media (min-width: 769px) and (max-width: 1023px) {
+  h1 { font-size: 2.1rem; }  /* Midpoint between mobile/desktop */
+}
+
+/* Mobile: Fullscreen modal with iOS dvh support */
+@media (max-width: 768px) {
+  .command-search-modal {
+    height: 100vh;   /* Fallback for old browsers */
+    height: 100dvh;  /* Dynamic viewport height (iOS Safari) */
+  }
+}
+```
+
+### Responsive Testing Guidelines
+
+**E2E Tests:** `tests/e2e/responsive-breakpoints.spec.js` (Sessie 77)
+
+**Test Coverage:**
+1. ✅ Tablet breakpoint exclusivity (768px, 1023px, 1024px)
+2. ✅ Widescreen modal scaling (1399px vs 1400px)
+3. ✅ Mobile dropdown visual hierarchy (border-top separator)
+4. ✅ iOS dvh support (mobile search modal fills viewport)
+5. ✅ Responsive navbar layout (mobile vs desktop)
+
+**Manual Testing Device Matrix:**
+
+| Viewport | Width | Device Example | Critical Tests |
+|----------|-------|----------------|----------------|
+| **Small Mobile** | 375x667 | iPhone SE | Modal dvh, Dropdown borders, Touch targets |
+| **Mobile** | 414x896 | iPhone 14 Pro | Navbar collapse, Modal fullscreen |
+| **Tablet Portrait** | 768x1024 | iPad Mini | Breakpoint boundary (mobile ↔ tablet) |
+| **Tablet Landscape** | 1024x768 | iPad Air | Breakpoint boundary (tablet ↔ desktop) |
+| **Desktop** | 1280x720 | Laptop | Default modal (600px) |
+| **Desktop HD** | 1920x1080 | Monitor | Default modal (600px) |
+| **Widescreen** | 2560x1440 | 4K Monitor | Widescreen modal (720px) |
+
+**Playwright Test Pattern:**
+
+```javascript
+// Legal modal acceptance (first-time visitor)
+async function acceptLegalModal(page) {
+  try {
+    await page.waitForSelector('#legal-modal.active', { timeout: 3000 });
+    const acceptButton = page.locator('#legal-accept-btn');
+    await acceptButton.waitFor({ state: 'visible', timeout: 2000 });
+    await acceptButton.click({ force: true });
+    await page.waitForSelector('#legal-modal.active', { state: 'hidden', timeout: 3000 });
+  } catch (e) {
+    // Legal modal not present (returning visitor)
+  }
+}
+
+// Usage in test
+test('My responsive test', async ({ page }) => {
+  await page.goto(PRODUCTION_URL);
+  await acceptLegalModal(page);  // ALWAYS call first
+  await page.setViewportSize({ width: 375, height: 667 });
+  // ... test logic
+});
+```
+
+**Critical Testing Rules:**
+- ⚠️ **ALWAYS** accept legal modal before viewport-dependent tests
+- ⚠️ **NEVER** assume CSS loaded without cache clear (use `force: true` clicks)
+- ⚠️ **TEST** both theme modes (dark + light) for contrast ratios
+- ⚠️ **VERIFY** exclusive breakpoint ranges (only ONE active at boundary pixels)
 
 ### Mobile Adaptations
 

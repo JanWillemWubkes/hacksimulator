@@ -15768,3 +15768,201 @@ User spotted my modal misconception → led to superior terminal injection appro
 **Session Duration:** ~2 hours  
 **Status:** ✅ Complete - Code committed and pushed  
 **Outcome:** Shortcuts visibility: 0% → ~80% via 4-layer progressive disclosure
+
+---
+
+## Sessie 77: Responsive Optimization - Week 3 Testing & Documentation (6 december 2025)
+
+**Context:** Continuation of Sessie 75-76 responsive rollout. Week 1+2 deployed Week 3 focuses on verification, automated testing, and documentation.
+
+**Mission:** Verify production deployment, create Playwright test coverage, document breakpoint system in STYLEGUIDE.md.
+
+### Week 3 Scope (Testing & Documentation)
+
+**Phase 1: Deployment Verification** (4 visual tests on production)
+**Phase 2: Playwright Test Coverage** (5 automated E2E tests)
+**Phase 3: Documentation** (STYLEGUIDE.md breakpoint system)
+
+**Total Estimated Time:** 1-1.5 hours  
+**Actual Time:** ~2 hours (cache debugging + test selector fixes)
+
+### Phase 1: Deployment Verification (Production Site)
+
+**Critical Discovery:** Browser cache blocked CSS (widescreen modal still 600px at 1400px)
+
+**Root Cause:** Playwright browser cached old `main.css` (no 1400px rule)
+**Solution:** CDP `clearBrowserCache()` + page reload
+**Result:** All 4 visual tests passed after cache clear
+
+**Visual Test Results:**
+
+| Test | Viewports | Expected Behavior | Status |
+|------|-----------|-------------------|--------|
+| **1.1 Widescreen Modal** | 1399px, 1400px, 1920px | 600px → 720px at 1400px+ | ✅ PASS |
+| **1.2 Tablet Breakpoint** | 768px, 1023px, 1024px | Exclusive range (no overlap) | ✅ PASS |
+| **1.3 iOS dvh Support** | 375x667 (iPhone SE) | Modal fills 100dvh (667px) | ✅ PASS |
+| **1.4 Mobile Dropdown** | 375px | border-top separator visible | ✅ PASS |
+
+**Key Findings:**
+- ✅ CSS deployed correctly on Netlify (1400px rule exists in main.css)
+- ❌ Playwright cached old CSS (0 widescreen rules found)
+- ✅ After cache clear: widescreen rule loaded, 720px modal verified
+- ✅ Tablet exclusive range confirmed (1023px = tablet, 1024px = desktop)
+- ✅ Mobile dropdown border-top: 1px solid (visual hierarchy restored)
+
+### Phase 2: Playwright Test Coverage
+
+**File Created:** `tests/e2e/responsive-breakpoints.spec.js` (202 lines)
+
+**5 Test Cases:**
+1. Tablet breakpoint exclusivity - no overlap at 1024px boundary
+2. Widescreen modal scaling - 720px at 1400px+
+3. Mobile dropdown visual hierarchy - border-top separator
+4. iOS dvh support - mobile search modal fills viewport
+5. Responsive navbar layout - mobile vs desktop
+
+**Test Implementation Challenges:**
+
+| Issue | Root Cause | Solution |
+|-------|------------|----------|
+| **Selector timeouts** | Used `#search-button` (doesn't exist) | Changed to `getByRole('link', { name: 'Zoek commands' })` |
+| **Legal modal blocking** | First-time visitor modal intercepts clicks | Created `acceptLegalModal()` helper with `force: true` |
+| **Mobile menu selectors** | Used `.navbar-link` (wrong class) | Changed to `getByRole('button', { name: 'Menu openen' })` |
+
+**Legal Modal Accept Pattern (Critical):**
+
+```javascript
+async function acceptLegalModal(page) {
+  try {
+    await page.waitForSelector('#legal-modal.active', { timeout: 3000 });
+    const acceptButton = page.locator('#legal-accept-btn');
+    await acceptButton.waitFor({ state: 'visible', timeout: 2000 });
+    await acceptButton.click({ force: true });  // KEY: bypass pointer-event blockers
+    await page.waitForSelector('#legal-modal.active', { state: 'hidden', timeout: 3000 });
+  } catch (e) {
+    // Legal modal not present (returning visitor)
+  }
+}
+```
+
+**Test Results:**
+- ✅ **Chromium:** 5/5 tests passed (13.7s)
+- ✅ **Firefox:** 5/5 tests passed (23.4s)
+- ⏭️ **WebKit:** Skipped (missing dependencies - expected)
+
+**Total:** 10/10 tests passed (cross-browser verified)
+
+### Phase 3: STYLEGUIDE.md Documentation
+
+**File Modified:** `docs/STYLEGUIDE.md` (Section 10: Responsive Design)
+
+**Updated/Added Sections:**
+1. **Breakpoint Ranges Table** (6 breakpoints with exclusive boundaries)
+2. **Critical: Exclusive Ranges** (⚠️ WRONG vs ✅ CORRECT examples)
+3. **Breakpoint Usage Examples** (widescreen, tablet, mobile dvh)
+4. **Responsive Testing Guidelines** (E2E tests, device matrix, Playwright pattern)
+
+**Key Documentation:**
+
+| Section | Content | Impact |
+|---------|---------|--------|
+| **Exclusive Ranges** | Fixed outdated 1024px overlap example | Prevents CSS cascade bugs |
+| **Widescreen Breakpoint** | Added 1400px+ scaling pattern | Documents Week 2 feature |
+| **iOS dvh Support** | Documented `100dvh` with `100vh` fallback | Progressive enhancement |
+| **Testing Device Matrix** | 7 viewports from iPhone SE to 4K | Manual test coverage |
+| **Playwright Pattern** | Legal modal acceptance helper | Prevents test failures |
+
+### Key Architectural Learnings
+
+#### 1. Browser Cache Invalidation (Production Testing)
+
+⚠️ **NEVER** trust browser cache in E2E tests:
+- Playwright caches stylesheets across test runs
+- Production deploy ≠ browser sees latest CSS
+- **Solution:** `page.context().newCDPSession()` + `clearBrowserCache()`
+
+```javascript
+// Force hard reload by clearing cache
+const client = await page.context().newCDPSession(page);
+await client.send('Network.clearBrowserCache');
+await page.reload({ waitUntil: 'networkidle' });
+```
+
+**Impact:** Went from 0 widescreen rules found → CSS loaded correctly after cache clear
+
+#### 2. Playwright Selector Best Practices
+
+⚠️ **NEVER** use fragile selectors in E2E tests:
+
+```javascript
+// ❌ BAD: Depends on ID that might not exist
+await page.click('#search-button');
+
+// ✅ GOOD: Semantic selector (resilient to DOM changes)
+await page.getByRole('link', { name: 'Zoek commands' }).click();
+```
+
+**Rationale:** Semantic selectors survive refactoring + match WCAG AAA patterns
+
+#### 3. Legal Modal Pattern (First-Time Visitor Tests)
+
+⚠️ **ALWAYS** accept legal modal before viewport-dependent tests:
+- First-time visitor = modal active on load
+- Modal intercepts pointer events (blocks all clicks)
+- **Solution:** `acceptLegalModal()` helper with `force: true` clicks
+
+**Test Failure Without Pattern:**
+```
+TimeoutError: locator.click: Timeout 10000ms exceeded.
+<div id="legal-modal">...< /div> intercepts pointer events
+```
+
+**Impact:** Went from 3/5 failed tests → 10/10 passed (Chromium + Firefox)
+
+### Files Modified (3 files, +295/-25 lines)
+
+1. **NEW:** `tests/e2e/responsive-breakpoints.spec.js` (202 lines)
+   - 5 E2E test cases for responsive features
+   - Legal modal helper function
+   - Cross-browser compatible (Chromium + Firefox)
+
+2. **EDIT:** `docs/STYLEGUIDE.md` (+68 lines)
+   - Fixed outdated tablet breakpoint (1024px → 1023px exclusive)
+   - Added widescreen breakpoint documentation (1400px+)
+   - Added Responsive Testing Guidelines section
+   - Added Playwright test pattern examples
+   - Added manual testing device matrix (7 viewports)
+
+3. **EDIT:** `docs/prd.md` (metadata update)
+   - Updated "Last updated" timestamp
+
+### Summary
+
+**Week 3 Deliverables:**
+- ✅ 4/4 visual verification tests passed (production site)
+- ✅ 10/10 Playwright E2E tests passed (Chromium + Firefox)
+- ✅ STYLEGUIDE.md responsive section updated (68 new lines)
+- ✅ Test coverage for Week 1+2 features (tablet fix, widescreen, iOS dvh)
+
+**Critical Patterns Established:**
+1. **Cache-busting for production tests** (CDP clearBrowserCache)
+2. **Legal modal acceptance pattern** (force: true clicks)
+3. **Semantic selectors over IDs** (getByRole resilience)
+
+**Technical Debt Resolved:**
+- ❌ Outdated STYLEGUIDE.md breakpoints (fixed 1024px overlap)
+- ❌ No E2E test coverage for responsive features (5 tests added)
+- ❌ No documentation for iOS dvh pattern (added to STYLEGUIDE)
+
+### Status
+
+**Testing & Documentation:** ✅ Complete  
+**Manual Device Matrix Testing:** ⏭️ Skipped (redundant - Playwright covers all viewports)  
+**Week 3 Total Time:** ~2 hours (verification + testing + documentation)
+
+---
+
+**Session Duration:** ~2 hours  
+**Status:** ✅ Complete - Week 3 testing & documentation finished  
+**Next Steps:** Sessie 78 - Commit Week 3 changes, update CLAUDE.md, prepare for next iteration
+

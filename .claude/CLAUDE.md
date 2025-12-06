@@ -131,6 +131,16 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 **Doel:** Last 5 sessions only - older sessions archived in SESSIONS.md
 
+### Sessie 77: Responsive Optimization - Week 3 Testing & Documentation (6 dec 2025)
+⚠️ Never trust browser cache in production E2E tests (Playwright caches stylesheets across runs)
+⚠️ Never use fragile selectors in tests (`#search-button` doesn't exist → use `getByRole` semantic selectors)
+⚠️ Never skip legal modal acceptance in first-time visitor tests (modal intercepts pointer events = 100% test failures)
+✅ Always use CDP `clearBrowserCache()` for production testing (cache clear = 0 widescreen rules → CSS loaded correctly)
+✅ Always use semantic selectors over IDs (`getByRole('link', { name: 'Zoek commands' })` survives refactoring)
+✅ Always create `acceptLegalModal()` helper with `force: true` clicks (bypasses pointer-event blockers)
+📊 Impact: 3 files (+295/-25 lines), 10/10 Playwright tests passed (Chromium + Firefox), STYLEGUIDE.md responsive section updated (68 new lines)
+📄 SESSIONS.md Sessie 77
+
 ### Sessie 66: Semantic Continuation - Multi-Line Message Color Inheritance (30 nov 2025)
 ⚠️ Never assume ES6 module cache works like script tags (module imports don't inherit query params from entry point)
 ⚠️ Never process multi-line semantics without state tracking (per-line responsibility conflicts with multi-line context)
@@ -170,15 +180,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 📊 Impact: 1 file, selector precision fix, submenu links no longer inherit parent hover styles
 📄 SESSIONS.md Sessie 56
 
-### Sessie 55: Navbar Underline Spacing - Tight to Text (21 nov 2025)
-⚠️ Never add excessive spacing between text and underline (12px gap = disconnected visual hierarchy)
-⚠️ Never assume underline offset is purely aesthetic (GitHub/VS Code use 2-4px for intentional tight coupling)
-✅ Always follow industry patterns for navigation underlines (tight spacing = element belongs together)
-✅ Always test underline positioning across all nav items (different text lengths need consistent offset)
-📊 Impact: 1 file, underline-offset reduced, GitHub/VS Code pattern compliance
-📄 SESSIONS.md Sessie 55
-
-**Older Sessions (54-51):** Theme Toggle Hover (Dark Frame compliance), Navbar Hover (animated underline), Global Link Hover (opacity → color), Dual-theme button color overhaul, Blog CTA UX Overhaul - See SESSIONS.md
+**Older Sessions (55-51):** Theme Toggle Hover (Dark Frame compliance), Navbar Hover (animated underline), Global Link Hover (opacity → color), Dual-theme button color overhaul, Blog CTA UX Overhaul - See SESSIONS.md
 **Older Sessions (35-43):** Dropdown jank (font-weight/inline-flex), Modal uniformity (`:only-child` pitfalls), ASCII box drawing, Strategy Pattern - See SESSIONS.md
 **Older Sessions (2-34):** See SESSIONS.md for comprehensive historical context
 
@@ -197,7 +199,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ### Afsluiten
 - Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-- **Rotation trigger:** Every 5 sessions (last rotation: Sessie 66, next: Sessie 71)
+- **Rotation trigger:** Every 5 sessions (last rotation: Sessie 77, next: Sessie 82)
 - **Rotation rule:** Keep last 5 sessions full, compress 6-10, archive 11+
 
 ### Bij Requirement Changes
