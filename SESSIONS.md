@@ -4,6 +4,147 @@
 
 ---
 
+## Sessie 74: PayPal Donate Configuration - Live Username Setup (6 december 2025)
+
+**Doel:** Configure PayPal.me donation link with working username and provide strategic advice on personal vs business accounts
+
+### Initial Request
+
+User asked: "ik heb een doneer button maar die is nog niet geconfigureerd. hoe moet ik dit doen? en kan ik hiervoor mijn persoonlijke paypal gebruiken? of moet ik een aparte maken voor specifiek deze site?"
+
+**Context:**
+- Footer had placeholder: `<a href="https://paypal.me/[USERNAME]">`
+- M5.5 Monetization MVP task pending (TASKS.md line 448)
+- Target revenue: €80-300/month (Phase 1 passive, per PRD §21)
+
+### Strategic Analysis Provided
+
+**Personal vs Business Account Trade-offs:**
+
+| Aspect | Personal Account | Business Account |
+|--------|------------------|------------------|
+| **Setup time** | 5 min (instant) | 30 min (requires KVK) |
+| **Privacy** | ❌ Shows real name | ✅ Shows brand name |
+| **Costs** | 3.4% + €0.35 per donation | Same fees |
+| **Fiscal** | ⚠️ Personal income tax | ✅ Business accounting |
+| **Limits** | €2,500/year max (without ID) | ♾️ Unlimited |
+| **Professional** | ⚠️ Less professional | ✅ Brand consistency |
+
+**Key Insight:** PayPal.me with personal account shows BOTH personal name AND @username (unavoidable PayPal KYC requirement)
+
+**Alternatives Discussed:**
+1. **Ko-fi**: €0 fees, username-only display, no KVK needed
+2. **GitHub Sponsors**: €0 fees (GitHub pays), requires verification
+3. **Stripe**: 1.4% + €0.25, requires 2h setup + business entity
+
+**Privacy Strategy Recommended:**
+- Start with personal PayPal + display name alias "HackSimulator"
+- Upgrade to business account at >€2,500/year (fiscal obligation)
+- Consider Ko-fi as privacy-first alternative (no real name visible)
+
+### Implementation Decision
+
+**User chose:** Option 1 - Accept personal account with visible name
+**Username selected:** `HackSimulator`
+**Rationale:** MVP phase, minimal setup time, acceptable privacy trade-off
+
+### Code Changes
+
+**File Modified:** `index.html` (1 line change)
+
+**Before:**
+```html
+<a href="https://paypal.me/[USERNAME]"
+   target="_blank"
+   rel="noopener noreferrer"
+   class="btn-donate-compact"
+   aria-label="Doneer via PayPal om onze educatieve missie te steunen">
+    Doneer
+</a>
+```
+
+**After:**
+```html
+<a href="https://paypal.me/HackSimulator"
+   target="_blank"
+   rel="noopener noreferrer"
+   class="btn-donate-compact"
+   aria-label="Doneer via PayPal om onze educatieve missie te steunen">
+    Doneer
+</a>
+```
+
+### Testing & Verification
+
+**Privacy Test Results:**
+- User tested link in browser (screenshot provided)
+- PayPal page displays: "Jan Willem Wubkes @HackSimulator"
+- **Outcome:** Personal name visible (expected PayPal limitation)
+- **User decision:** Accepted this trade-off for MVP phase
+
+**Production Deployment:**
+```bash
+git add index.html
+git commit -m "Sessie 74: PayPal Donate Configuration - Live HackSimulator Username"
+git push origin main
+```
+
+**Commit:** `817d590`
+**Deploy:** Netlify auto-deploy (~30-60 sec)
+**Live URL:** https://famous-frangollo-b5a758.netlify.app/
+
+### Fiscal & Legal Context
+
+**Belastingdienst Reality:**
+- Donations = personal income (Box 1 inkomstenbelasting)
+- Obligation starts at >€100/year
+- BTW-plichtig at >€20K omzet/year
+- Recommendation: Track all donations in spreadsheet (date, amount, donor email)
+
+**Upgrade Path (Future):**
+```
+Phase 1 (Now): Personal PayPal (€0-2,500/year)
+    ↓
+Phase 2 (Growth): Eenmanszaak + Business PayPal (€2,500-20,000/year)
+    ↓
+Phase 3 (Scale): BTW registration + Stripe (>€20K/year)
+```
+
+### Session Metrics
+
+**Files Changed:** 1 (`index.html`)
+**Lines Changed:** 1 (placeholder → username)
+**Bundle Impact:** 0 bytes (HTML only, no JS/CSS)
+**Time Spent:** ~15 min (config + advisory discussion)
+**Commits:** 1 (`817d590`)
+
+### TASKS.md Updates
+
+**Completed:**
+- [x] Create PayPal.me account (M5.5 - line 448)
+- [x] Configure donate button with username (M5.5 - line 449)
+
+**Pending (M5.5):**
+- [ ] Create Ko-fi account (optional alternative)
+- [ ] Google AdSense setup (footer/blog ads)
+- [ ] Affiliate link disclosure page
+- [ ] Test donation flow end-to-end
+
+### Key Takeaways
+
+**Strategic Decision:** Start simple (personal account) → Upgrade when revenue justifies complexity
+**Privacy Trade-off:** Accepted visible name for faster MVP launch
+**Fiscal Awareness:** User informed of tax obligations at >€100/year
+**Scalability:** Clear upgrade path defined for business growth
+
+**Future Considerations:**
+1. Monitor donation volume (track in spreadsheet)
+2. At €2,500/year: Register eenmanszaak + upgrade to business PayPal
+3. Consider Ko-fi addition for privacy-conscious donors
+4. Add GitHub Sponsors when eligible (requires 90-day account age)
+
+---
+
 ## Sessie 66: Semantic Continuation - Fix Multi-Line Message Color Inheritance (30 november 2025)
 
 **Doel:** Fix color inconsistency where continuation lines in multi-line semantic messages lose parent color

@@ -1,14 +1,14 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 2 december 2025
-**Status:** M5 Testing & Launch Phase (LIVE on Netlify) - Post-MVP Roadmap Added
-**Sprint:** Sessie 67: TASKS.md Expansion - M6/M7/M8 Milestones Added
+**Laatst bijgewerkt:** 6 december 2025
+**Status:** M5 Testing & Launch Phase (LIVE on Netlify) - Monetization MVP Started
+**Sprint:** Sessie 74: PayPal Donate Configuration - Live Username Setup
 
 ---
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 141 / 295 taken voltooid (47.8%)
+**Totaal:** 143 / 295 taken voltooid (48.5%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
@@ -18,7 +18,7 @@
 | M3: Network & Security | ✅ Voltooid | 28/28 | 100% |
 | M4: UX & Polish | ✅ Voltooid | 43/43 | 100% |
 | M5: Testing & Launch | 🔵 In uitvoering | 10/37 | 27% |
-| M5.5: Monetization MVP | ⏭️ Gepland | 0/15 | 0% |
+| M5.5: Monetization MVP | 🏗️ In Progress | 2/15 | 13% |
 | M6: Tutorial System | ⏭️ Gepland | 0/33 | 0% |
 | M7: Gamification | ⏭️ Gepland | 0/40 | 0% |
 | M8: Analytics & Scaling | ⏭️ Gepland | 0/40 | 0% |
@@ -440,16 +440,19 @@
 ### M5.5: Monetization MVP (Week 12-13)
 **Doel:** Implement passive revenue streams without backend
 **Tijdsinschatting:** 15-17 uur (2 weken)
-**Status:** ⏭️ Gepland (0/15 tasks - 0%)
+**Status:** 🏗️ In Progress (2/15 tasks - 13%)
 **Dependencies:** M5 Testing & Launch complete
 **Revenue Target:** €80-300/month (Phase 1 validation)
 
 #### Donaties (2 tasks, 3 hours)
-- [ ] Create PayPal.me + Ko-fi accounts (30 min)
-- [ ] Add donation button to footer with CSS styling (2.5 hours)
-  - Update `index.html` footer section
-  - Add `.donate-button` class to `styles/main.css`
-  - Update `assets/legal/terms.html` with donation disclaimer
+- [x] Create PayPal.me account (Sessie 74 - 15 min)
+  - Username: `HackSimulator`
+  - Personal account (upgrade to business at >€2,500/year)
+  - Ko-fi: optional, not created yet
+- [x] Add donation button to footer with CSS styling (Sessie 69-73)
+  - ✅ Updated `index.html` footer section (`.btn-donate-compact`)
+  - ✅ Added `.btn-donate-compact` class to `styles/main.css`
+  - ✅ Updated `assets/legal/terms.html` with PayPal disclaimer
 
 #### Affiliate Links (4 tasks, 6 hours)
 - [ ] Apply to 5 affiliate programs (2 hours)
