@@ -3,21 +3,13 @@
  * Shows 3-phase hacker progression with checked/unchecked commands
  */
 
+import { BOX_CHARS, getResponsiveBoxWidth, smartTruncate } from '../../utils/box-utils.js';
+
 // ─────────────────────────────────────────────────
 // Box Drawing Configuration
 // ─────────────────────────────────────────────────
-const BOX = {
-  topLeft: '╭',
-  topRight: '╮',
-  bottomLeft: '╰',
-  bottomRight: '╯',
-  horizontal: '─',
-  vertical: '│',
-  dividerLeft: '├',
-  dividerRight: '┤'
-};
-
-const BOX_WIDTH = 56; // Wider for phase descriptions
+const BOX = BOX_CHARS; // Responsive box characters (shared utility)
+const BOX_WIDTH = getResponsiveBoxWidth(); // Dynamic width: 32-56 chars based on viewport
 const COMMAND_COL_WIDTH = 13; // Width for command name
 
 // ─────────────────────────────────────────────────
@@ -154,7 +146,15 @@ function createPhaseHeader(phaseName, progress, isComplete) {
 function createCommandRow(command, isTried) {
   const checkbox = isTried ? '✓' : '○';
   const cmdName = command.name.padEnd(COMMAND_COL_WIDTH);
-  const content = `      ${checkbox} ${cmdName}- ${command.description}`;
+
+  // Calculate available space for description
+  // Formula: BOX_WIDTH - 2 (borders) - 6 (indent) - 1 (checkbox) - 1 (space) - COMMAND_COL_WIDTH - 2 ("- ")
+  const descMaxWidth = BOX_WIDTH - 2 - 6 - 1 - 1 - COMMAND_COL_WIDTH - 2;
+
+  // Truncate description if needed (prevents overflow on mobile)
+  const description = smartTruncate(command.description, descMaxWidth);
+
+  const content = `      ${checkbox} ${cmdName}- ${description}`;
   const padding = BOX_WIDTH - 2 - content.length;
   return BOX.vertical + content + ' '.repeat(Math.max(0, padding)) + BOX.vertical;
 }

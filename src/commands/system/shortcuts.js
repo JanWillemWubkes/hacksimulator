@@ -2,21 +2,13 @@
  * shortcuts - Display keyboard shortcuts
  */
 
+import { BOX_CHARS, getResponsiveBoxWidth } from '../../utils/box-utils.js';
+
 // ─────────────────────────────────────────────────
 // Box Drawing Configuration
 // ─────────────────────────────────────────────────
-const BOX = {
-  topLeft: '╭',
-  topRight: '╮',
-  bottomLeft: '╰',
-  bottomRight: '╯',
-  horizontal: '─',
-  vertical: '│',
-  dividerLeft: '├',
-  dividerRight: '┤'
-};
-
-const BOX_WIDTH = 48; // Total width including borders (mobile-friendly)
+const BOX = BOX_CHARS; // Responsive box characters (shared utility)
+const BOX_WIDTH = getResponsiveBoxWidth(); // Dynamic width: 32-56 chars based on viewport
 const KEYS_COL_WIDTH = 16; // Width for keyboard keys column
 
 // ─────────────────────────────────────────────────

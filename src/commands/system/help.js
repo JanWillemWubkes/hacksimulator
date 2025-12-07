@@ -4,22 +4,13 @@
 
 import registry from '../../core/registry.js';
 import { lightBoxText } from '../../utils/asciiBox.js';
+import { BOX_CHARS, getResponsiveBoxWidth, smartTruncate } from '../../utils/box-utils.js';
 
 // ─────────────────────────────────────────────────
 // Box Drawing Configuration
 // ─────────────────────────────────────────────────
-const BOX = {
-  topLeft: '╭',
-  topRight: '╮',
-  bottomLeft: '╰',
-  bottomRight: '╯',
-  horizontal: '─',
-  vertical: '│',
-  dividerLeft: '├',
-  dividerRight: '┤'
-};
-
-const BOX_WIDTH = 48; // Total width including borders (mobile: 40 char + 8 overflow for readability)
+const BOX = BOX_CHARS; // Responsive box characters (shared utility)
+const BOX_WIDTH = getResponsiveBoxWidth(); // Dynamic width: 32-56 chars based on viewport
 const COMMAND_COL_WIDTH = 15; // Width for command name column
 
 // ─────────────────────────────────────────────────
@@ -77,35 +68,6 @@ function createCategoryFooter() {
 // ─────────────────────────────────────────────────
 // Helper Functions - Content Formatting
 // ─────────────────────────────────────────────────
-
-/**
- * Smart truncation at word boundaries
- * Prevents cutting words mid-character (e.g., "brute fo..." → "brute...")
- *
- * @param {string} text - Text to truncate
- * @param {number} maxWidth - Maximum width including "..."
- * @returns {string} Truncated text with "..." or original if fits
- */
-function smartTruncate(text, maxWidth) {
-  if (text.length <= maxWidth) {
-    return text;
-  }
-
-  // Reserve 3 chars for "..."
-  const truncatePoint = maxWidth - 3;
-  let truncated = text.substring(0, truncatePoint);
-
-  // Find last complete word (last space before truncate point)
-  const lastSpace = truncated.lastIndexOf(' ');
-
-  if (lastSpace > 0) {
-    // Truncate at word boundary
-    return truncated.substring(0, lastSpace) + '...';
-  }
-
-  // Fallback: single word longer than available width
-  return truncated + '...';
-}
 
 /**
  * Formats a single command row
