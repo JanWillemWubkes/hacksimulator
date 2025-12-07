@@ -35,11 +35,17 @@ const COMMANDS = ['help', 'shortcuts', 'leerpad'];
  */
 async function acceptLegalModal(page) {
   try {
-    const acceptButton = page.getByRole('button', { name: 'Accepteer' });
-    await acceptButton.click({ force: true, timeout: 2000 });
-    await page.waitForTimeout(300); // Wait for modal close animation
+    // Accept Legal modal first (blocks everything)
+    const legalButton = page.getByRole('button', { name: /Ik begrijp het.*Verder/i });
+    await legalButton.click({ force: true, timeout: 2000 });
+    await page.waitForTimeout(500); // Wait for modal close animation
+
+    // Then accept Cookie consent modal
+    const cookieButton = page.getByRole('button', { name: /Accepteren/i });
+    await cookieButton.click({ force: true, timeout: 2000 });
+    await page.waitForTimeout(300); // Wait for cookie banner to disappear
   } catch (e) {
-    // Modal may not appear if already accepted (cookies), ignore error
+    // Modals may not appear if already accepted (cookies), ignore error
   }
 }
 
