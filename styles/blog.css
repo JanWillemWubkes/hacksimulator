@@ -769,44 +769,7 @@ a[href="#all"].category-btn {
   color: var(--color-footer-link-hover); /* #58a6ff - brighter blue on hover */
 }
 
-/* Blog Page Footer - Dark Frame Pattern with comfortable spacing */
-.blog-page-footer {
-  position: static;
-  background-color: var(--color-bg-footer);
-  color: var(--color-footer-text);
-  border-top: 1px solid var(--color-border-dark-frame);
-  padding: var(--spacing-md) var(--spacing-md); /* 16px vertical - balanced for reading context */
-  font-size: 16px;
-  text-align: center;
-  margin-top: var(--spacing-xl); /* Extra breathing room above footer */
-}
-
-.blog-page-footer nav {
-  margin-top: var(--spacing-sm); /* 8px instead of 4px for better spacing */
-}
-
-.blog-page-footer a {
-  color: var(--color-footer-link);
-  text-decoration: none;
-  padding: 0;
-}
-
-.blog-page-footer a:hover {
-  color: var(--color-footer-link-hover);
-}
-
-/* Blog footer nav separators - CSS pseudo-elements pattern */
-.blog-page-footer nav a:not(:last-child)::after {
-  content: '|';
-  color: var(--color-footer-text);
-  margin-left: var(--spacing-sm);
-  margin-right: 0;
-}
-
-/* Mirror spacing: next link needs matching margin-left */
-.blog-page-footer nav a:not(:first-child) {
-  margin-left: var(--spacing-sm);
-}
+/* Blog Page Footer - REMOVED: Now using shared footer CSS from main.css for DRY compliance */
 
 /* ==================== Responsive Design ==================== */
 

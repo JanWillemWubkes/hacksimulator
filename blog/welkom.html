@@ -267,13 +267,30 @@ drwxr-xr-x 3 root   root   4096 Nov 10 10:00 ..
   </main>
 
   <!-- Footer -->
-  <footer class="blog-page-footer">
+  <footer role="contentinfo">
     <div class="footer-content">
-      <p>&copy; 2025 HackSimulator.nl</p>
+      <!-- Column 1: Copyright (left) -->
+      <p class="footer-copyright">&copy; 2025 HackSimulator.nl</p>
+
+      <!-- Column 2: Donation CTA (center) -->
+      <p class="donate-compact">
+        [ SUPPORT ]
+        <a href="https://paypal.me/HackSimulator"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="btn-donate-compact"
+           aria-label="Doneer via PayPal om onze educatieve missie te steunen"
+           title="Steun onze educatieve missie">
+          Doneer
+        </a>
+      </p>
+
+      <!-- Column 3: Navigation (right) -->
       <nav aria-label="Footer navigatie">
         <a href="../index.html">Home</a>
-        <a href="index.html">Blog</a>
-        <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="../assets/legal/privacy.html" target="_blank" rel="noopener noreferrer">Privacy</a>
+        <a href="../assets/legal/terms.html" target="_blank" rel="noopener noreferrer">Voorwaarden</a>
+        <a href="../assets/legal/cookies.html" target="_blank" rel="noopener noreferrer">Cookies</a>
       </nav>
     </div>
   </footer>
