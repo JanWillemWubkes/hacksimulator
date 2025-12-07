@@ -10,8 +10,9 @@ import { BOX_CHARS, getResponsiveBoxWidth, smartTruncate } from '../../utils/box
 // Box Drawing Configuration
 // ─────────────────────────────────────────────────
 const BOX = BOX_CHARS; // Responsive box characters (shared utility)
-const BOX_WIDTH = getResponsiveBoxWidth(); // Dynamic width: 32-56 chars based on viewport
 const COMMAND_COL_WIDTH = 15; // Width for command name column
+
+// Note: BOX_WIDTH is calculated dynamically in execute() to ensure DOM is ready
 
 // ─────────────────────────────────────────────────
 // Helper Functions - Box Drawing
@@ -22,6 +23,7 @@ const COMMAND_COL_WIDTH = 15; // Width for command name column
  * Example: ╭─────────────── SYSTEM (7) ────────────────╮
  */
 function createCategoryHeader(categoryName, count) {
+  const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
   const title = ` ${categoryName.toUpperCase()} (${count}) `;
   const totalPadding = BOX_WIDTH - 2 - title.length; // -2 for corner chars
   const leftPadding = Math.floor(totalPadding / 2);
@@ -39,6 +41,7 @@ function createCategoryHeader(categoryName, count) {
  * Example: │ COMMAND         DESCRIPTION               │
  */
 function createColumnHeaders() {
+  const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
   const command = 'COMMAND'.padEnd(COMMAND_COL_WIDTH);
   const description = 'DESCRIPTION';
   const content = ` ${command} ${description}`;
@@ -52,6 +55,7 @@ function createColumnHeaders() {
  * Example: ├───────────────────────────────────────────┤
  */
 function createDivider() {
+  const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
   const innerWidth = BOX_WIDTH - 2; // -2 for side borders
   return BOX.dividerLeft + BOX.horizontal.repeat(innerWidth) + BOX.dividerRight;
 }
@@ -61,6 +65,7 @@ function createDivider() {
  * Example: ╰───────────────────────────────────────────╯
  */
 function createCategoryFooter() {
+  const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
   const innerWidth = BOX_WIDTH - 2;
   return BOX.bottomLeft + BOX.horizontal.repeat(innerWidth) + BOX.bottomRight;
 }
@@ -74,6 +79,7 @@ function createCategoryFooter() {
  * Example: │ clear           Clear terminal screen     │
  */
 function formatCommandRow(cmd) {
+  const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
   const commandName = cmd.name.padEnd(COMMAND_COL_WIDTH);
   const contentWidth = BOX_WIDTH - 2; // -2 for side borders
   const descriptionMaxWidth = contentWidth - COMMAND_COL_WIDTH - 2; // -2 for spacing

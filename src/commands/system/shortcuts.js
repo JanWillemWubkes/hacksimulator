@@ -8,8 +8,9 @@ import { BOX_CHARS, getResponsiveBoxWidth } from '../../utils/box-utils.js';
 // Box Drawing Configuration
 // ─────────────────────────────────────────────────
 const BOX = BOX_CHARS; // Responsive box characters (shared utility)
-const BOX_WIDTH = getResponsiveBoxWidth(); // Dynamic width: 32-56 chars based on viewport
 const KEYS_COL_WIDTH = 16; // Width for keyboard keys column
+
+// Note: BOX_WIDTH is calculated dynamically in each function to ensure DOM is ready
 
 // ─────────────────────────────────────────────────
 // Shortcuts Data
@@ -50,6 +51,7 @@ const SHORTCUTS = [
  * Example: ╭───────── KEYBOARD SHORTCUTS ──────────╮
  */
 function createHeader(title) {
+  const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
   const titleText = ` ${title} `;
   const totalPadding = BOX_WIDTH - 2 - titleText.length; // -2 for corner chars
   const leftPadding = Math.floor(totalPadding / 2);
@@ -67,6 +69,7 @@ function createHeader(title) {
  * Example: │  NAVIGATION                              │
  */
 function createCategoryHeader(categoryName) {
+  const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
   const content = `  ${categoryName}`;
   const padding = BOX_WIDTH - 2 - content.length;
   return BOX.vertical + content + ' '.repeat(padding) + BOX.vertical;
@@ -77,6 +80,7 @@ function createCategoryHeader(categoryName) {
  * Example: │  ↑ / ↓           Blader door geschiedenis │
  */
 function createShortcutRow(keys, description) {
+  const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
   const keysText = keys.padEnd(KEYS_COL_WIDTH);
   const content = `  ${keysText} ${description}`;
   const padding = BOX_WIDTH - 2 - content.length;
@@ -88,6 +92,7 @@ function createShortcutRow(keys, description) {
  * Example: │                                          │
  */
 function createEmptyRow() {
+  const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
   const innerWidth = BOX_WIDTH - 2;
   return BOX.vertical + ' '.repeat(innerWidth) + BOX.vertical;
 }
@@ -97,6 +102,7 @@ function createEmptyRow() {
  * Example: ╰──────────────────────────────────────────╯
  */
 function createFooter() {
+  const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
   const innerWidth = BOX_WIDTH - 2;
   return BOX.bottomLeft + BOX.horizontal.repeat(innerWidth) + BOX.bottomRight;
 }

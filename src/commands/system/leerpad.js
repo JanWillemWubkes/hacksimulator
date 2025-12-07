@@ -9,8 +9,9 @@ import { BOX_CHARS, getResponsiveBoxWidth, smartTruncate } from '../../utils/box
 // Box Drawing Configuration
 // ─────────────────────────────────────────────────
 const BOX = BOX_CHARS; // Responsive box characters (shared utility)
-const BOX_WIDTH = getResponsiveBoxWidth(); // Dynamic width: 32-56 chars based on viewport
 const COMMAND_COL_WIDTH = 13; // Width for command name
+
+// Note: BOX_WIDTH is calculated dynamically in each function to ensure DOM is ready
 
 // ─────────────────────────────────────────────────
 // Learning Path Data (4-Phase Progression)
@@ -115,6 +116,7 @@ function calculatePhaseProgress(phase, triedCommands) {
  * Example: ╭────────── LEERPAD: ETHICAL HACKER ──────────╮
  */
 function createHeader(title) {
+  const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
   const titleText = ` ${title} `;
   const totalPadding = BOX_WIDTH - 2 - titleText.length;
   const leftPadding = Math.floor(totalPadding / 2);
@@ -132,6 +134,7 @@ function createHeader(title) {
  * Example: │  [ ✓ ] FASE 1: TERMINAL BASICS (5/7)         │
  */
 function createPhaseHeader(phaseName, progress, isComplete) {
+  const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
   const checkbox = isComplete ? '✓' : '○';
   const progressText = `(${progress.completed}/${progress.total})`;
   const content = `  [ ${checkbox} ] ${phaseName} ${progressText}`;
@@ -144,6 +147,7 @@ function createPhaseHeader(phaseName, progress, isComplete) {
  * Example: │      ✓ help         - Commands ontdekken     │
  */
 function createCommandRow(command, isTried) {
+  const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
   const checkbox = isTried ? '✓' : '○';
   const cmdName = command.name.padEnd(COMMAND_COL_WIDTH);
 
@@ -163,6 +167,7 @@ function createCommandRow(command, isTried) {
  * Creates empty row for spacing
  */
 function createEmptyRow() {
+  const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
   const innerWidth = BOX_WIDTH - 2;
   return BOX.vertical + ' '.repeat(innerWidth) + BOX.vertical;
 }
@@ -171,6 +176,7 @@ function createEmptyRow() {
  * Creates bottom border
  */
 function createFooter() {
+  const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
   const innerWidth = BOX_WIDTH - 2;
   return BOX.bottomLeft + BOX.horizontal.repeat(innerWidth) + BOX.bottomRight;
 }
@@ -180,6 +186,7 @@ function createFooter() {
  * Example: │      [ ! ] Unlock na Fase 2 voltooiing       │
  */
 function createLockedMessage(requiredPhase) {
+  const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
   const content = `      [ ! ] Unlock na ${requiredPhase} voltooiing`;
   const padding = BOX_WIDTH - 2 - content.length;
   return BOX.vertical + content + ' '.repeat(Math.max(0, padding)) + BOX.vertical;
