@@ -4,6 +4,176 @@
 
 ---
 
+## Sessie 78: Cache Strategie Optimalisatie - 1 Jaar → 1 Uur voor CSS/JS (7 december 2025)
+
+**Doel:** Fix cache invalidation probleem waarbij gebruikers updates niet zien zonder hard refresh
+
+### Initial Problem
+
+**User Report:**
+"Als ik een wijziging commit en deploy en de pagina opnieuw open dan zie ik de wijzigingen niet automatisch. Maar wel na een hard (cache) refresh. Is dit gebruikelijk of kan ik hier iets aan veranderen?"
+
+**Current State Analysis:**
+- CSS/JS bestanden hadden 1-jaar cache (`max-age=31536000, immutable`)
+- Handmatige versie bump via query parameters (`?v=73-button-alignment`) vereist
+- Vergeten versie parameter updaten = oude versie blijft zichtbaar
+- Niet schaalbaar voor frequente updates (sessies 1-77, veel wijzigingen)
+
+**Files Analyzed:**
+- `index.html:25-30` - Query parameters in `<link>` tags (`?v=73-button-alignment`, `?v=66-semantic-continuation`)
+- `_headers:21-25` - Cache-Control headers (`max-age=31536000, immutable`)
+- `netlify.toml` - Security headers (geen cache headers daar)
+
+### Solution Options Evaluated
+
+**Option 1: Korte Cache (1 uur)** ⭐ **CHOSEN**
+- **Pro:** Simpel (1 file), automatische updates binnen 60 min, vanilla JS compliant, query params blijven werken
+- **Con:** Iets minder performance (verwaarloosbaar voor 318KB bundle)
+- **Industry Standard:** Typical for vanilla JS sites zonder build process
+
+**Option 2: Automatische Versie Bump (Git Hash)**
+- **Pro:** Behoud lange cache, automatisch unieke versies
+- **Con:** Vereist deploy script, index.html diff noise, tegen "no build" principe
+- **Rejected:** Introduceert complexity zonder significante voordelen
+
+**Option 3: Service Worker (Advanced)**
+- **Pro:** Instant load + background updates + offline support
+- **Con:** Complex (+10-15KB bundle), moeilijker debugging
+- **Rejected:** Over-engineered voor MVP fase
+
+### Implementation
+
+**File Changed:** `_headers` (regel 22, 25)
+
+**Before:**
+```
+/styles/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+/src/*.js
+  Cache-Control: public, max-age=31536000, immutable
+```
+
+**After:**
+```
+/styles/*.css
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/src/*.js
+  Cache-Control: public, max-age=3600, must-revalidate
+```
+
+**Changes:**
+- `max-age=31536000` → `max-age=3600` (1 jaar → 1 uur)
+- `immutable` removed (allows updates)
+- `must-revalidate` added (forces browser check after expiry)
+
+### Deploy & Verification
+
+**Deployment:**
+```bash
+git add _headers
+git commit -m "Sessie 78: Cache Strategie - 1 jaar → 1 uur voor CSS/JS"
+git push origin main
+```
+
+**Commit:** `daf5f0f`
+
+**Production Verification (2 min after deploy):**
+```bash
+# CSS verification
+$ curl -I https://famous-frangollo-b5a758.netlify.app/styles/main.css | grep cache-control
+cache-control: public,max-age=3600,must-revalidate ✅
+
+# JavaScript verification
+$ curl -I https://famous-frangollo-b5a758.netlify.app/src/main.js | grep cache-control
+cache-control: public,max-age=3600,must-revalidate ✅
+```
+
+**Success Criteria Met:**
+- ✅ `_headers` file gewijzigd (2 secties)
+- ✅ Deploy succesvol op Netlify
+- ✅ `curl -I` toont `max-age=3600` voor CSS/JS
+- ✅ Geen bundle size impact (0 bytes - alleen HTTP header wijziging)
+- ✅ Backward compatible (query parameters blijven werken)
+
+### Impact Analysis
+
+**User Experience:**
+- **Before:** Hard refresh nodig om updates te zien (Ctrl+F5)
+- **After:** Updates zichtbaar binnen 60 min met normale refresh (F5)
+
+**Developer Workflow:**
+- **Before:** Handmatige `?v=X` bump bij elke deployment (foutgevoelig)
+- **After:** Automatische propagatie binnen 1 uur (query params blijven backup)
+
+**Performance Impact:**
+- Bundle size: 318KB (unchanged)
+- Expected bandwidth: +5-10% max (verwaarloosbaar voor static site)
+- Lighthouse score: Expected stable (~88/100)
+
+**Bundle Budget Status:**
+- Current: 318KB / 500KB (182KB buffer, 36%)
+- Change: +0KB (alleen HTTP headers)
+- Safe: ✅ Geen impact op bundle
+
+### Key Decisions
+
+**Why 1 Hour (3600 sec)?**
+- Sweet spot tussen freshness (snel updates) en performance (niet te vaak refetch)
+- Alternative considered: 4 uur (`max-age=14400`) - rejected voor MVP (te lang wachttijd)
+- Alternative considered: 24 uur (`max-age=86400`) - rejected (tegen probleem statement)
+
+**Why Keep Query Parameters?**
+- Backup mechanism voor breaking changes
+- Allows instant invalidation bij major releases (M6, M7 launches)
+- Minimal overhead (already in codebase)
+
+**Why `must-revalidate`?**
+- Forces browser to check server after cache expiry
+- Prevents stale content beyond 1 hour window
+- Industry best practice voor dynamic content
+
+### Future Considerations
+
+**Potential Optimizations (Post-MVP):**
+- 4-hour cache (`max-age=14400`) tijdens stabiele periodes
+- Content hashing bij Phase 2 (als build process wordt geïntroduceerd)
+- Service worker bij Phase 3 (freemium feature: offline mode)
+
+**Monitoring Plan:**
+- Netlify Analytics: Track bandwidth usage (baseline: current usage)
+- Browser DevTools: Verify cache behavior (random spot checks)
+- User feedback: Monitor complaints over stale content (expected: none)
+
+### CLAUDE.md Update Required
+
+**Section §12 Troubleshooting - Line ~264:**
+```markdown
+**Before:**
+**CSS niet live op production:** Cache-busting vergeten - update ALL `<link>` tags met `?v=X`
+
+**After:**
+**CSS niet live op production:** Normaal bij 1-uur cache - wacht max 60 min OF bump `?v=X` voor directe update
+```
+
+**Rationale:** Oude troubleshooting advice is nu obsolete (1-uur cache = automatische updates)
+
+### Files Modified
+- `_headers` (+2/-2 lines)
+
+### Time Spent
+- Analysis: 5 min (read files, explain options)
+- Planning: 10 min (plan mode, evaluate alternatives)
+- Implementation: 5 min (2 edits + commit + push)
+- Verification: 5 min (curl tests + production check)
+- **Total:** ~25 min
+
+### Commits
+- `daf5f0f` - Sessie 78: Cache Strategie - 1 jaar → 1 uur voor CSS/JS
+
+---
+
 ## Sessie 74: PayPal Donate Configuration - Live Username Setup (6 december 2025)
 
 **Doel:** Configure PayPal.me donation link with working username and provide strategic advice on personal vs business accounts

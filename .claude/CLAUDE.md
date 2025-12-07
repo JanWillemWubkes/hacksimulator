@@ -131,6 +131,16 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 **Doel:** Last 5 sessions only - older sessions archived in SESSIONS.md
 
+### Sessie 78: Cache Strategie Optimalisatie - 1 Jaar → 1 Uur voor CSS/JS (7 dec 2025)
+⚠️ Never use long cache (1 jaar) zonder automated versioning (handmatige `?v=X` bump = foutgevoelig)
+⚠️ Never introduce build complexity voor cache invalidation (git hash versioning = tegen vanilla JS principe)
+⚠️ Never over-engineer caching (Service Worker te complex voor MVP, +10-15KB bundle)
+✅ Always use short cache (1-4 uur) voor frequent updates zonder build process (updates binnen 60 min automatisch)
+✅ Always keep query parameters as backup (instant invalidation voor breaking changes bij major releases)
+✅ Always use `must-revalidate` directive (forces browser check na expiry, prevents stale content)
+📊 Impact: 1 file (_headers), 0KB bundle, deployment workflow simplified (geen handmatige versie bump)
+📄 SESSIONS.md Sessie 78
+
 ### Sessie 77: Responsive Optimization - Week 3 Testing & Documentation (6 dec 2025)
 ⚠️ Never trust browser cache in production E2E tests (Playwright caches stylesheets across runs)
 ⚠️ Never use fragile selectors in tests (`#search-button` doesn't exist → use `getByRole` semantic selectors)
@@ -172,15 +182,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 📊 Impact: 3 files, P0 accessibility fix (2.7:1 → 4.8:1), Hybrid scheme (HTB neon + GitHub base)
 📄 SESSIONS.md Sessie 58
 
-### Sessie 56: Dropdown Submenu Selector Fix - Direct Child Combinator (22 nov 2025)
-⚠️ Never use descendant selectors for nested components (`.dropdown a` targets ALL links including submenus)
-⚠️ Never assume CSS specificity wars are the solution (adding more classes = complexity debt)
-✅ Always use direct child combinator (`>`) for nested structures (`.dropdown > a` targets only immediate children)
-✅ Always test dropdown components with submenus before declaring done
-📊 Impact: 1 file, selector precision fix, submenu links no longer inherit parent hover styles
-📄 SESSIONS.md Sessie 56
-
-**Older Sessions (55-51):** Theme Toggle Hover (Dark Frame compliance), Navbar Hover (animated underline), Global Link Hover (opacity → color), Dual-theme button color overhaul, Blog CTA UX Overhaul - See SESSIONS.md
+**Older Sessions (56-51):** Dropdown Submenu Fix (direct child combinator), Theme Toggle Hover (Dark Frame compliance), Navbar Hover (animated underline), Global Link Hover (opacity → color), Dual-theme button color overhaul, Blog CTA UX Overhaul - See SESSIONS.md
 **Older Sessions (35-43):** Dropdown jank (font-weight/inline-flex), Modal uniformity (`:only-child` pitfalls), ASCII box drawing, Strategy Pattern - See SESSIONS.md
 **Older Sessions (2-34):** See SESSIONS.md for comprehensive historical context
 
@@ -261,7 +263,7 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 
 **Build groter dan 500KB:** Check imports | Minification aan | Tree-shaking werkend | Ongebruikte code verwijderd
 **Playwright passes maar manual fails:** Event handler conflict (zie §8 JS Patterns: duplicate listeners)
-**CSS niet live op production:** Cache-busting vergeten - update ALL `<link>` tags met `?v=X` (zie §8 CSS Patterns)
+**CSS niet live op production:** Normaal bij 1-uur cache - wacht max 60 min OF bump `?v=X` voor directe update (zie Sessie 78)
 **Focus/keyboard bugs:** Modal protection missing - check `!e.target.closest('.modal.active')` (zie §8 JS Patterns)
 **Light mode colors invisible:** Theme-dependent colors op fixed dark backgrounds (zie §8 CSS Patterns)
 **Layout jank on hover:** Missing transparent border reserve (zie Sessie 38: Dropdown Perfectie)
@@ -562,7 +564,7 @@ Bij nieuwe monetization feature:
 
 ---
 
-**Last updated:** 3 december 2025 (Sessie 69 - Monetization Strategy Implemented)
+**Last updated:** 7 december 2025 (Sessie 78 - Cache Strategie Optimalisatie)
 **Last synced:** 3 december 2025 (M5.5 Monetization MVP: 15 tasks, PRD §21, PLANNING §11, CLAUDE §14)
-**Next sync:** Milestone M5.5 completion OR Sessie 74
-**Version:** 17.0 (Sessie 69: Monetization Strategy - Added M5.5 milestone (15 tasks, 15-17h), PRD §21 Monetization Strategy, PLANNING §11 Revenue Streams, CLAUDE §14 Monetization Patterns, total 295 tasks (47.8% complete), Phase 1 target €80-300/month)
+**Next sync:** Milestone M5.5 completion OR Sessie 82 (rotation trigger)
+**Version:** 17.1 (Sessie 78: Cache Strategie - 1 jaar → 1 uur cache voor CSS/JS, _headers optimized, troubleshooting updated, deployment workflow simplified)
