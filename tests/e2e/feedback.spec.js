@@ -19,24 +19,14 @@ test.describe('Feedback System', () => {
     await page.reload();
 
     // Wait for legal modal to appear
-    await page.waitForSelector('#legal-modal-backdrop', { timeout: 10000 });
+    const legalModal = page.locator('#legal-modal');
+    await expect(legalModal).toBeVisible({ timeout: 5000 });
 
-    // Accept legal terms (button is inside the backdrop)
+    // Accept legal terms
     await page.click('#legal-accept-btn');
 
-    // Wait for backdrop to be removed
-    await page.waitForSelector('#legal-modal-backdrop', { state: 'detached', timeout: 5000 });
-
-    // Double-check: verify backdrop is really gone
-    const backdropExists = await page.locator('#legal-modal-backdrop').count();
-    if (backdropExists > 0) {
-      console.warn('⚠️ Legal backdrop still exists after acceptance!');
-      // Force remove via JavaScript
-      await page.evaluate(() => {
-        const backdrop = document.getElementById('legal-modal-backdrop');
-        if (backdrop) backdrop.remove();
-      });
-    }
+    // Wait for modal to be hidden
+    await expect(legalModal).toBeHidden({ timeout: 3000 });
 
     // Also dismiss cookie banner if it appears (appears after 2 sec delay)
     await page.waitForTimeout(2500);
