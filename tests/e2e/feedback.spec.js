@@ -48,14 +48,14 @@ test.describe('Feedback System', () => {
   });
 
   test('feedback button should be visible', async ({ page }) => {
-    const feedbackButton = page.locator('#feedback-button');
+    const feedbackButton = page.locator('#footer-feedback-link');
     await expect(feedbackButton).toBeVisible();
-    await expect(feedbackButton).toHaveText('💬');
+    await expect(feedbackButton).toHaveText('Feedback');
   });
 
   test('clicking feedback button opens modal', async ({ page }) => {
     // Click feedback button
-    await page.click('#feedback-button');
+    await page.click('#footer-feedback-link');
 
     // Modal should be visible and active
     const modal = page.locator('#feedback-modal');
@@ -69,7 +69,7 @@ test.describe('Feedback System', () => {
 
   test('can select star rating', async ({ page }) => {
     // Open modal
-    await page.click('#feedback-button');
+    await page.click('#footer-feedback-link');
 
     // Stars should be visible
     const stars = page.locator('.rating-stars .star');
@@ -88,7 +88,7 @@ test.describe('Feedback System', () => {
 
   test('star rating hover preview works', async ({ page }) => {
     // Open modal
-    await page.click('#feedback-button');
+    await page.click('#footer-feedback-link');
 
     const stars = page.locator('.rating-stars .star');
 
@@ -102,7 +102,7 @@ test.describe('Feedback System', () => {
 
   test('cannot submit without rating', async ({ page }) => {
     // Open modal
-    await page.click('#feedback-button');
+    await page.click('#footer-feedback-link');
 
     // Try to submit without selecting rating
     await page.click('#feedback-submit');
@@ -119,7 +119,7 @@ test.describe('Feedback System', () => {
 
   test('can submit feedback with rating only', async ({ page }) => {
     // Open modal
-    await page.click('#feedback-button');
+    await page.click('#footer-feedback-link');
 
     // Select 5 stars
     const stars = page.locator('.rating-stars .star');
@@ -141,7 +141,7 @@ test.describe('Feedback System', () => {
 
   test('can submit feedback with rating and comment', async ({ page }) => {
     // Open modal
-    await page.click('#feedback-button');
+    await page.click('#footer-feedback-link');
 
     // Select 3 stars
     const stars = page.locator('.rating-stars .star');
@@ -175,7 +175,7 @@ test.describe('Feedback System', () => {
 
   test('can close modal with X button', async ({ page }) => {
     // Open modal
-    await page.click('#feedback-button');
+    await page.click('#footer-feedback-link');
 
     // Modal should be open
     const modal = page.locator('#feedback-modal');
@@ -190,7 +190,7 @@ test.describe('Feedback System', () => {
 
   test('can close modal with ESC key', async ({ page }) => {
     // Open modal
-    await page.click('#feedback-button');
+    await page.click('#footer-feedback-link');
 
     // Modal should be open
     const modal = page.locator('#feedback-modal');
@@ -205,7 +205,7 @@ test.describe('Feedback System', () => {
 
   test('can close modal by clicking backdrop', async ({ page }) => {
     // Open modal
-    await page.click('#feedback-button');
+    await page.click('#footer-feedback-link');
 
     // Modal should be open
     const modal = page.locator('#feedback-modal');
@@ -220,13 +220,13 @@ test.describe('Feedback System', () => {
 
   test('multiple feedback submissions accumulate in localStorage', async ({ page }) => {
     // Submit first feedback
-    await page.click('#feedback-button');
+    await page.click('#footer-feedback-link');
     await page.locator('.rating-stars .star').nth(4).click();
     await page.click('#feedback-submit');
     await page.waitForTimeout(2500);
 
     // Submit second feedback
-    await page.click('#feedback-button');
+    await page.click('#footer-feedback-link');
     await page.locator('.rating-stars .star').nth(2).click();
     await page.locator('#feedback-comment').fill('Second feedback');
     await page.click('#feedback-submit');
@@ -249,7 +249,7 @@ test.describe('Feedback System', () => {
     const ratings = [5, 3, 4];
 
     for (const rating of ratings) {
-      await page.click('#feedback-button');
+      await page.click('#footer-feedback-link');
       await page.locator('.rating-stars .star').nth(rating - 1).click();
 
       if (rating === 3) {
@@ -275,14 +275,14 @@ test.describe('Feedback System', () => {
 
   test('feedback form resets after submission', async ({ page }) => {
     // Submit feedback
-    await page.click('#feedback-button');
+    await page.click('#footer-feedback-link');
     await page.locator('.rating-stars .star').nth(3).click();
     await page.locator('#feedback-comment').fill('Test comment');
     await page.click('#feedback-submit');
     await page.waitForTimeout(2500);
 
     // Open modal again
-    await page.click('#feedback-button');
+    await page.click('#footer-feedback-link');
 
     // Rating should be reset (no stars active)
     const stars = page.locator('.rating-stars .star');
@@ -314,7 +314,7 @@ test.describe('Feedback System', () => {
     });
 
     // Submit feedback
-    await page.click('#feedback-button');
+    await page.click('#footer-feedback-link');
     await page.locator('.rating-stars .star').nth(4).click();
     await page.locator('#feedback-comment').fill('Test');
     await page.click('#feedback-submit');

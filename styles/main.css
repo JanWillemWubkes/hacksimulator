@@ -43,7 +43,7 @@
   --color-border-input: #30363d;      /* Form input borders - GitHub border */
   --color-link-hover: #58a6ff;        /* Link hover states - GitHub accent (brighter blue) */
   --color-bg-modal-content: #161b22;  /* Modal content background - GitHub secondary bg */
-  --color-modal-header: #c9d1d9;      /* Modal header text - soft white for hierarchy */
+  --color-modal-header: #ffffff;      /* Modal header text - pure white for maximum hierarchy & test compliance */
 
   /* Alert/Info Box Surfaces - Neutral backgrounds for blog content boxes */
   --color-surface-elevated: rgba(255, 255, 255, 0.05);  /* Subtle white tint - professional alerts (GitHub Docs pattern) */
@@ -780,6 +780,32 @@ button {
 
 /* Visible state - triggered by JavaScript */
 .feedback-error.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Feedback Success Message - matching error pattern */
+.feedback-success {
+  background: color-mix(in srgb, var(--color-success) 15%, transparent);
+  border: 1px solid var(--color-success);
+  color: var(--color-success);
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: var(--border-radius-button);
+  font-size: 15px;
+  line-height: 1.4;
+  min-height: 48px; /* Fixed height prevents layout shift */
+
+  /* Default hidden state - accessibility-friendly (not display: none) */
+  opacity: 0;
+  visibility: hidden;
+
+  /* Smooth transitions */
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
+}
+
+/* Visible state - triggered by JavaScript */
+.feedback-success.visible {
   opacity: 1;
   visibility: visible;
 }
