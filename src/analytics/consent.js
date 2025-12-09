@@ -45,14 +45,33 @@ const consentManager = {
   },
 
   /**
-   * Check if user has given consent (true), declined (false), or not decided (null)
+   * Check if user has given consent for specific category
+   * @param {string} category - 'necessary', 'analytics', or 'advertising'
+   * @returns {boolean|null} - true if consented, false if declined, null if not decided
    */
-  hasConsent() {
+  hasConsent(category = 'analytics') {
     try {
-      const consent = localStorage.getItem(STORAGE_KEY_CONSENT);
-      if (consent === null) return null;
-      return consent === 'true';
+      const consentData = localStorage.getItem(STORAGE_KEY_CONSENT);
+      if (consentData === null) return null;
+
+      // Handle legacy binary consent (string 'true'/'false')
+      if (consentData === 'true' || consentData === 'false') {
+        const legacyConsent = consentData === 'true';
+        // Migrate to 3-tier system
+        const newConsent = {
+          necessary: true,
+          analytics: legacyConsent,
+          advertising: false // Default: no advertising consent for legacy users
+        };
+        localStorage.setItem(STORAGE_KEY_CONSENT, JSON.stringify(newConsent));
+        return category === 'necessary' ? true : (category === 'analytics' ? legacyConsent : false);
+      }
+
+      // Parse 3-tier consent JSON
+      const consent = JSON.parse(consentData);
+      return consent[category] !== undefined ? consent[category] : null;
     } catch (e) {
+      console.warn('Could not parse consent data:', e);
       return null;
     }
   },
@@ -86,12 +105,17 @@ const consentManager = {
     banner.classList.add('active');
     banner.setAttribute('aria-hidden', 'false');
 
-    // Setup event listeners
-    const acceptBtn = document.getElementById('cookie-accept');
+    // Setup event listeners (3-tier consent)
+    const acceptAllBtn = document.getElementById('cookie-accept-all');
+    const acceptAnalyticsBtn = document.getElementById('cookie-accept-analytics');
     const declineBtn = document.getElementById('cookie-decline');
 
-    if (acceptBtn) {
-      acceptBtn.addEventListener('click', () => this.acceptConsent());
+    if (acceptAllBtn) {
+      acceptAllBtn.addEventListener('click', () => this.acceptConsent('all'));
+    }
+
+    if (acceptAnalyticsBtn) {
+      acceptAnalyticsBtn.addEventListener('click', () => this.acceptConsent('analytics'));
     }
 
     if (declineBtn) {
@@ -103,29 +127,74 @@ const consentManager = {
   },
 
   /**
-   * User accepts cookies
+   * User accepts cookies (3-tier consent)
+   * @param {string} type - 'all', 'analytics', or 'necessary'
    */
-  acceptConsent() {
-    analyticsTracker.saveConsent(true);
+  acceptConsent(type = 'all') {
+    const consent = {
+      necessary: true, // Always true
+      analytics: type === 'all' || type === 'analytics',
+      advertising: type === 'all' // Only if "Alles Accepteren"
+    };
+
+    localStorage.setItem(STORAGE_KEY_CONSENT, JSON.stringify(consent));
     this.hideBanner();
 
-    // Initialize analytics now
-    analyticsTracker.init('ga4');
+    // Initialize analytics if consent given
+    if (consent.analytics) {
+      analyticsTracker.init('ga4');
+      analyticsEvents.legalEvent('cookies_accepted_analytics');
+    }
 
-    // Track acceptance
-    analyticsEvents.legalEvent('cookies_accepted');
+    // Show AdSense if consent given
+    if (consent.advertising) {
+      this.loadAdSense();
+      analyticsEvents.legalEvent('cookies_accepted_advertising');
+    }
 
-    console.log('User accepted analytics cookies');
+    console.log('User accepted cookies:', consent);
   },
 
   /**
-   * User declines cookies
+   * User declines all optional cookies (only necessary remain)
    */
   declineConsent() {
-    analyticsTracker.saveConsent(false);
+    const consent = {
+      necessary: true, // Always true
+      analytics: false,
+      advertising: false
+    };
+
+    localStorage.setItem(STORAGE_KEY_CONSENT, JSON.stringify(consent));
     this.hideBanner();
 
-    console.log('User declined analytics cookies');
+    console.log('User declined optional cookies');
+  },
+
+  /**
+   * Load AdSense container (show + init script)
+   * Called when user consents to advertising cookies
+   */
+  loadAdSense() {
+    const container = document.getElementById('adsense-footer');
+    if (container) {
+      container.style.display = 'block';
+      window.hasAdvertisingConsent = true;
+
+      // Load AdSense script dynamically
+      if (!window.adsbygoogle) {
+        const script = document.createElement('script');
+        script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+        script.async = true;
+        script.crossOrigin = 'anonymous';
+        script.setAttribute('data-ad-client', 'ca-pub-0000000000000000');
+        document.head.appendChild(script);
+      }
+
+      console.log('AdSense container loaded');
+    } else {
+      console.warn('AdSense container not found (#adsense-footer)');
+    }
   },
 
   /**

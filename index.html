@@ -142,15 +142,16 @@
     <!-- Legal Disclaimer Modal: Removed duplicate HTML modal -->
     <!-- Modal is now dynamically created by src/ui/legal.js to avoid duplicate ID issue (P0-001) -->
 
-    <!-- Cookie Consent Banner -->
+    <!-- Cookie Consent Banner (M5.5 - 3-Tier Consent) -->
     <div id="cookie-consent" class="cookie-banner" role="alertdialog" aria-labelledby="cookie-title" aria-hidden="true">
         <div class="cookie-content">
             <p id="cookie-title">
-                <strong>Privacy:</strong> We gebruiken cookies voor analytics om de site te verbeteren.
+                <strong>Privacy:</strong> We gebruiken cookies voor analytics en advertenties.
                 <a href="assets/legal/cookies.html" target="_blank" rel="noopener noreferrer">Meer info</a>
             </p>
             <div class="cookie-buttons">
-                <button id="cookie-accept" class="btn-small">Accepteren</button>
+                <button id="cookie-accept-all" class="btn-small">Alles Accepteren</button>
+                <button id="cookie-accept-analytics" class="btn-small">Alleen Analytics</button>
                 <button id="cookie-decline" class="btn-small btn-secondary">Weigeren</button>
             </div>
         </div>
@@ -244,6 +245,22 @@
             </nav>
         </div>
     </footer>
+
+    <!-- AdSense Ad Container - Footer Banner (M5.5 Phase 1) -->
+    <div id="adsense-footer" class="ad-container" role="region" aria-label="Advertisement area" style="display:none;">
+        <p class="ad-disclaimer">Advertisement</p>
+        <!-- Google AdSense Async Script -->
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:728px;height:90px"
+             data-ad-client="ca-pub-0000000000000000"
+             data-ad-slot="0000000000"></ins>
+        <script>
+            // Only load AdSense if advertising consent given
+            if (window.hasAdvertisingConsent) {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            }
+        </script>
+    </div>
 
     <!-- Application Entry Point -->
     <script src="src/ui/search-strategies.js?v=35-search-modal"></script>

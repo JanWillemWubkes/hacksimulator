@@ -386,6 +386,45 @@ button {
   outline-offset: 2px;
 }
 
+/* ==================== AdSense Ad Container (M5.5 Phase 1) ==================== */
+/* Ad Placement 80/20 Rule: Footer only (not terminal, not modal) */
+.ad-container {
+  background: var(--color-bg-secondary);           /* GitHub secondary bg */
+  border: 1px solid var(--color-border);          /* GitHub border */
+  border-radius: var(--border-radius-small);      /* 2px */
+  padding: var(--spacing-sm);                     /* 8px */
+  margin: var(--spacing-lg) auto;                 /* 24px top/bottom, centered */
+  max-width: var(--terminal-max-width);           /* 1200px - consistent with footer */
+  opacity: 0.8;                                   /* Muted UI Principle - ads less prominent than content */
+  text-align: center;
+  transition: opacity var(--transition-fast);     /* 0.15s ease */
+}
+
+.ad-container:hover {
+  opacity: 1;                                     /* Full opacity on hover - subtle interaction */
+}
+
+.ad-disclaimer {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin: 0 0 var(--spacing-xs) 0;
+  font-family: var(--font-terminal);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Mobile responsive: 320x50 banner (instead of 728x90 desktop) */
+@media (max-width: 768px) {
+  .ad-container ins.adsbygoogle {
+    width: 320px !important;
+    height: 50px !important;
+  }
+
+  .ad-container {
+    margin: var(--spacing-md) auto;  /* Smaller margin on mobile */
+  }
+}
+
 /* ==================== Modals ==================== */
 .modal {
   display: none;
