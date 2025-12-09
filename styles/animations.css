@@ -243,8 +243,8 @@ a {
   transition: color var(--transition-fast);
 }
 
-/* Link underline animation - excluded from navbar and footer for cleaner navigation */
-a:not(.navbar-links a):not(.navbar-brand):not(.navbar-action):not(footer a)::after {
+/* Link underline animation - excluded from navbar, footer, and cookie banner for cleaner navigation */
+a:not(.navbar-links a):not(.navbar-brand):not(.navbar-action):not(footer a):not(.cookie-banner a)::after {
   content: '';
   position: absolute;
   bottom: -2px;
@@ -255,7 +255,7 @@ a:not(.navbar-links a):not(.navbar-brand):not(.navbar-action):not(footer a)::aft
   transition: width var(--transition-fast);
 }
 
-a:not(.navbar-links a):not(.navbar-brand):not(.navbar-action):not(footer a):hover::after {
+a:not(.navbar-links a):not(.navbar-brand):not(.navbar-action):not(footer a):not(.cookie-banner a):hover::after {
   width: 100%;
 }
 
