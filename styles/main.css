@@ -321,6 +321,21 @@ button {
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
 
+/* Small secondary button override - fix CSS cascade bug (M5.5 Phase 1.5)
+   Combined selector has higher specificity (0,0,2,0) than single class (0,0,1,0)
+   to prevent .btn-small solid background from overriding .btn-secondary transparent */
+.btn-small.btn-secondary {
+  background-color: transparent;
+  border: 2px solid var(--color-ui-secondary);
+  color: var(--color-ui-secondary);
+}
+
+.btn-small.btn-secondary:hover {
+  background-color: transparent;
+  border-color: var(--color-button-bg-hover);
+  color: var(--color-button-bg-hover);
+}
+
 .btn-small {
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: 16px;
