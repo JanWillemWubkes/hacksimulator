@@ -760,6 +760,17 @@ button {
   margin: 0;
 }
 
+/* Cookie banner link styling - matches footer links (Phase 1.5.1)
+   No underline on hover, just color change for consistency with footer chrome */
+.cookie-banner a {
+  color: var(--color-footer-link);
+  text-decoration: none;
+}
+
+.cookie-banner a:hover {
+  color: var(--color-footer-link-hover);
+}
+
 .cookie-buttons {
   display: flex;
   gap: var(--spacing-sm);
