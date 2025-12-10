@@ -30,6 +30,7 @@
   font-size: var(--font-size-base);
   line-height: var(--line-height);
   color: var(--color-text);
+  letter-spacing: 0; /* Sessie 82: Reset inherited letter-spacing for monospace alignment */
 }
 
 /* Custom scrollbar - Enhanced for better visibility */

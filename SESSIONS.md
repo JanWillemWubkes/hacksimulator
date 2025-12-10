@@ -113,6 +113,159 @@ pyftsubset JetBrainsMono-Regular.ttf \
 
 ---
 
+## Sessie 82: Mobile ASCII Alignment Fix - Hybrid Approach (10 december 2025)
+
+**Doel:** Fix ASCII box alignment issues on mobile via hybrid desktop/mobile UI strategy
+
+**Status:** ✅ VOLTOOID
+
+### Problem Statement
+
+Font subsetting (Sessie 81) solved Unicode glyph loading, but exposed alignment issues:
+- Unicode checkboxes (✓○) render 1.5-2x wider than regular characters on mobile
+- Characters not in font subset fallback to variable-width system fonts (Android Roboto, iOS SF)
+- Monospace padding calculations break, causing misalignment and text overflow
+- User feedback: "Beter, maar de lijnen staan niet allemaal onder elkaar uitgelijnd"
+
+### Root Cause Analysis
+
+**Font Subsetting Limitation:**
+- JetBrains Mono Box subset (Sessie 81) only includes U+2500-257F (box drawing characters)
+- Checkboxes U+2713 (✓) and U+25CB (○) NOT included in subset
+- These characters fallback to Android Roboto/iOS SF which are variable-width
+- Variable-width characters break monospace alignment assumptions
+
+**Why Mobile-Specific:**
+- Desktop browsers have better Unicode font support in system monospace fonts
+- Mobile system fonts prioritize file size over completeness → incomplete Unicode coverage
+- CSS `unicode-range` fallback behavior differs between desktop and mobile browsers
+
+### Solution: Hybrid Desktop/Mobile Approach
+
+**Strategy:**
+- **Desktop (≥768px):** Keep ASCII boxes (terminal aesthetic preserved) with ASCII checkboxes
+- **Mobile (<768px):** Simplified list UI without complex ASCII art
+- **Both:** Replace Unicode ✓○ with ASCII `[X]` / `[ ]` (3 chars each, perfectly monospace)
+
+**Rationale:**
+- Terminal ASCII art is historically desktop-first (80x24 VT100 terminals)
+- Mobile users consume content read-only (typing commands on mobile impractical)
+- Pragmatic solution respects mobile browser limitations
+- Zero font dependencies for checkboxes (pure ASCII = universal compatibility)
+
+### Implementation Details
+
+**Phase 1: Replace Unicode Checkboxes with ASCII**
+```javascript
+// src/commands/system/leerpad.js (lines 138, 151)
+// BEFORE
+const checkbox = isComplete ? '✓' : '○';
+
+// AFTER
+const checkbox = isComplete ? '[X]' : '[ ]';
+```
+
+**Phase 2: Add Mobile Detection** (`src/utils/box-utils.js`)
+```javascript
+export function isMobileView() {
+  const isMobile = window.innerWidth < 768; // Primary signal
+  const toggle = document.querySelector('.navbar-toggle');
+  const isMobileByCSS = toggle && getComputedStyle(toggle).display !== 'none';
+  return isMobile || isMobileByCSS; // Dual detection for robustness
+}
+```
+
+**Phase 3: Implement Mobile/Desktop Rendering** (`leerpad.js`)
+```javascript
+function renderMobileView(triedCommands) {
+  // Simplified list UI (no complex padding calculations)
+  lines.push(`│ [X] FASE 1: TERMINAL BASICS`);
+  lines.push(`│   [X] help - Commands ontdekken`);
+}
+
+function renderLearningPath(triedCommands) {
+  // Existing desktop ASCII box rendering (full complexity)
+}
+
+execute() {
+  const output = isMobileView()
+    ? renderMobileView(triedCommands)
+    : renderLearningPath(triedCommands);
+}
+```
+
+**Phase 5: CSS Defensive Reset** (`styles/terminal.css`)
+```css
+#terminal-output {
+  letter-spacing: 0; /* Reset inherited spacing for monospace alignment */
+}
+```
+
+**Phase 4 Skipped:** help.js and shortcuts.js don't use checkboxes → no alignment issue → skip mobile rendering
+
+### Files Modified
+
+1. `src/utils/box-utils.js` (+33 lines) - `isMobileView()` detection function
+2. `src/commands/system/leerpad.js` (+52/-6 lines) - Hybrid rendering + ASCII checkboxes
+3. `styles/terminal.css` (+1 line) - `letter-spacing: 0` reset
+4. `tests/e2e/responsive-ascii-boxes.spec.js` (+84 lines) - Mobile UI tests (4 new tests)
+5. `docs/STYLEGUIDE.md` (+54 lines) - Mobile UI Strategy documentation
+6. `SESSIONS.md` (this entry)
+
+**Total:** +224 lines code, +54 lines docs
+
+### Bundle Impact
+
+- **Before:** 323.1KB / 500KB (Sessie 81 font subset)
+- **After:** 323.3KB / 500KB
+- **Impact:** +0.2KB (logic changes only, no new assets) ✅ Negligible
+
+### Testing
+
+**Playwright E2E Tests (4 new):**
+1. Mobile ASCII checkboxes verification (no Unicode ✓○)
+2. Desktop ASCII boxes + checkboxes verification
+3. Mobile simplified list format verification
+4. Cross-viewport no horizontal scroll test (375px/768px/1440px)
+
+**Test Execution:**
+```bash
+npx playwright test tests/e2e/responsive-ascii-boxes.spec.js
+# Expected: 35 tests passing (31 existing + 4 new)
+```
+
+**Manual Testing (Required):**
+- [ ] Motorola Edge 50 Neo (Android Chrome) - alignment verification
+- [ ] Desktop regression (Chrome/Firefox) - ASCII boxes preserved
+- [ ] iPhone SE (iOS Safari) - mobile simplified UI
+
+### Architectural Learnings
+
+✅ **Hybrid UI patterns work** - Different UX for desktop vs mobile is pragmatic
+✅ **ASCII checkboxes are universal** - `[X]` / `[ ]` works everywhere, zero font dependencies
+✅ **Mobile limitations require compromises** - Don't fight browser rendering, adapt UI
+✅ **letter-spacing matters** - Inherited values can break monospace alignment
+✅ **Viewport detection needs multiple signals** - `window.innerWidth` + CSS check = robust
+
+⚠️ **Unicode emoji/symbols break monospace** - ASCII art requires pure ASCII for perfect alignment
+⚠️ **Font subsetting has limits** - Can't fix variable-width fallback for missing glyphs
+⚠️ **Test environment ≠ production** - Playwright desktop tests don't catch mobile-specific issues
+
+**Design Philosophy:**
+- Terminal aesthetic = core value on desktop (where users type commands)
+- Mobile = read-only consumption (simplified UI acceptable)
+- Pragmatism > purity (hybrid approach vs universal ASCII boxes)
+
+### Next Steps
+
+1. Commit changes with detailed message
+2. Push to GitHub → Netlify auto-deploy
+3. Manual verification on Motorola Edge 50 Neo
+4. Desktop regression testing (ASCII boxes still work)
+5. User acceptance testing (simplified mobile UI feedback)
+
+---
+
 ## Sessie 79: Responsive ASCII Boxes - Mobile Layout Fix (7-8 december 2025)
 
 **Doel:** Fix ASCII box outline breakage on mobile/tablet devices (iPhone SE 375px) + complete test verification

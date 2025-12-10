@@ -315,6 +315,96 @@ test.describe('Cross-Browser ASCII Box Rendering', () => {
 });
 
 // ─────────────────────────────────────────────────
+// Hybrid Mobile/Desktop UI Tests (Sessie 82)
+// ─────────────────────────────────────────────────
+
+test.describe('Mobile/Desktop Hybrid UI (ASCII Checkbox Fix)', () => {
+  test('Mobile: ASCII checkboxes instead of Unicode', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE
+    await page.goto('https://famous-frangollo-b5a758.netlify.app/');
+    await acceptLegalModal(page);
+    await closeMobileMenu(page);
+
+    await executeCommand(page, 'leerpad');
+
+    const output = await page.locator('#terminal-output').innerText();
+
+    // Verify ASCII checkboxes present
+    expect(output).toContain('[X]'); // Completed checkbox (ASCII)
+    expect(output).toContain('[ ]'); // Incomplete checkbox (ASCII)
+
+    // Verify NO Unicode checkboxes (root cause of alignment issues)
+    expect(output).not.toContain('✓'); // No Unicode check mark
+    expect(output).not.toContain('○'); // No Unicode circle
+  });
+
+  test('Desktop: ASCII checkboxes with full ASCII boxes', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 }); // Desktop
+    await page.goto('https://famous-frangollo-b5a758.netlify.app/');
+    await acceptLegalModal(page);
+
+    await executeCommand(page, 'leerpad');
+
+    const output = await page.locator('#terminal-output').innerText();
+
+    // Verify box drawing characters present (desktop preserves terminal aesthetic)
+    expect(output).toContain('╭');
+    expect(output).toContain('│');
+    expect(output).toContain('─');
+    expect(output).toContain('╯');
+
+    // Verify ASCII checkboxes (not Unicode)
+    expect(output).toContain('[X]');
+    expect(output).toContain('[ ]');
+    expect(output).not.toContain('✓');
+    expect(output).not.toContain('○');
+  });
+
+  test('Mobile: Simplified list format (readable on small screens)', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE
+    await page.goto('https://famous-frangollo-b5a758.netlify.app/');
+    await acceptLegalModal(page);
+    await closeMobileMenu(page);
+
+    await executeCommand(page, 'leerpad');
+
+    const output = await page.locator('#terminal-output').innerText();
+
+    // Verify mobile-simplified formatting (phase headers)
+    expect(output).toMatch(/\[X\] FASE 1: TERMINAL BASICS/); // Completed phase
+    expect(output).toMatch(/\[ \] FASE 2: FILE MANIPULATION/); // Incomplete phase
+
+    // Verify command formatting
+    expect(output).toContain('[X] help - Commands ontdekken'); // Completed command
+    expect(output).toContain('[ ] mkdir - Directory aanmaken'); // Incomplete command
+  });
+
+  test('Cross-viewport: No horizontal scroll on any viewport', async ({ page }) => {
+    const viewports = [
+      { width: 375, height: 667, name: 'iPhone SE' },
+      { width: 768, height: 1024, name: 'iPad' },
+      { width: 1440, height: 900, name: 'Desktop' }
+    ];
+
+    for (const viewport of viewports) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      await page.goto('https://famous-frangollo-b5a758.netlify.app/');
+      await acceptLegalModal(page);
+      if (viewport.width < 768) await closeMobileMenu(page);
+
+      await executeCommand(page, 'leerpad');
+
+      // Verify no horizontal scroll (critical for mobile UX)
+      const terminalOutput = page.locator('#terminal-output');
+      const scrollWidth = await terminalOutput.evaluate(el => el.scrollWidth);
+      const clientWidth = await terminalOutput.evaluate(el => el.clientWidth);
+
+      expect(scrollWidth).toBeLessThanOrEqual(clientWidth);
+    }
+  });
+});
+
+// ─────────────────────────────────────────────────
 // Font Subset Loading Test (Sessie 81)
 // ─────────────────────────────────────────────────
 

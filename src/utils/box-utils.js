@@ -96,6 +96,41 @@ export function getResponsiveBoxWidth() {
 }
 
 // ─────────────────────────────────────────────────
+// Mobile Detection Function (Sessie 82)
+// ─────────────────────────────────────────────────
+
+/**
+ * Check if current viewport is mobile (simplified UI mode)
+ * Used by commands to render simplified lists on mobile vs ASCII boxes on desktop
+ *
+ * Detection strategy:
+ * 1. Check window.innerWidth < 768px (mobile breakpoint from mobile.css)
+ * 2. Double-check with CSS visibility of navbar-toggle (media query alignment)
+ * 3. Return true if either condition matches
+ *
+ * Rationale:
+ * - Terminal ASCII art is historically desktop-first (80x24 VT100 terminals)
+ * - Mobile users consume content read-only (typing commands on mobile impractical)
+ * - Simplified UI prevents alignment issues from variable-width fonts
+ *
+ * @returns {boolean} True if mobile viewport (<768px), false otherwise
+ */
+export function isMobileView() {
+  // Fallback for SSR/testing environments
+  if (typeof window === 'undefined') return false;
+
+  // Check viewport width (primary signal)
+  const isMobile = window.innerWidth < BREAKPOINTS.MOBILE; // 768px
+
+  // Check if mobile menu toggle is visible (CSS-based detection for consistency)
+  const toggle = document.querySelector('.navbar-toggle');
+  const isMobileByCSS = toggle && getComputedStyle(toggle).display !== 'none';
+
+  // Return true if either signal indicates mobile
+  return isMobile || isMobileByCSS;
+}
+
+// ─────────────────────────────────────────────────
 // Smart Truncation Function
 // ─────────────────────────────────────────────────
 

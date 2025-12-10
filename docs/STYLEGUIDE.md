@@ -139,6 +139,60 @@ HackSimulator.nl gebruikt **twee font stacks** voor verschillende contexten:
 
 **Rationale:** 30% of Android devices have incomplete Unicode support in system monospace fonts. Embedding guarantees consistent box-drawing character rendering across all devices (╭─╮│╰╯├┤).
 
+### Mobile UI Strategy (Sessie 82)
+
+**Challenge:** ASCII box alignment breaks on mobile due to Unicode character width variance
+
+**Root Cause:**
+- Unicode checkboxes (✓○) are 1.5-2x wider than regular monospace characters
+- Characters not in font subset fallback to Android Roboto/iOS SF (variable-width fonts)
+- Monospace padding calculations break, causing text overflow and misalignment
+
+**Solution: Hybrid Desktop/Mobile Approach**
+- **Desktop (≥768px):** Full ASCII boxes with terminal aesthetic
+- **Mobile (<768px):** Simplified list UI without complex ASCII art
+
+**Checkbox Representation:**
+- ✅ ASCII: `[X]` (completed) / `[ ]` (incomplete) - 3 characters, perfectly monospace
+- ❌ Unicode: `✓` / `○` (variable width, breaks alignment on mobile fallback fonts)
+
+**Implementation:**
+```javascript
+// box-utils.js
+export function isMobileView() {
+  const isMobile = window.innerWidth < 768;
+  const toggle = document.querySelector('.navbar-toggle');
+  const isMobileByCSS = toggle && getComputedStyle(toggle).display !== 'none';
+  return isMobile || isMobileByCSS;
+}
+
+// leerpad.js
+execute() {
+  const output = isMobileView()
+    ? renderMobileView(triedCommands)  // Simplified list
+    : renderLearningPath(triedCommands); // Full ASCII boxes
+}
+```
+
+**CSS Defensive Reset:**
+```css
+#terminal-output {
+  letter-spacing: 0; /* Reset inherited spacing for monospace alignment */
+}
+```
+
+**Files Modified:**
+- `src/utils/box-utils.js` (+33 lines) - `isMobileView()` detection
+- `src/commands/system/leerpad.js` (+52/-6 lines) - Hybrid rendering + ASCII checkboxes
+- `styles/terminal.css` (+1 line) - Letter-spacing reset
+- `tests/e2e/responsive-ascii-boxes.spec.js` (+84 lines) - Mobile UI tests
+
+**Rationale:**
+- Terminal ASCII art is historically desktop-first (80x24 VT100 terminals)
+- Mobile users consume content read-only (typing commands on mobile impractical)
+- Pragmatic solution respects browser rendering limitations
+- Zero font dependencies for checkboxes (pure ASCII = universal compatibility)
+
 ---
 
 ## Color System

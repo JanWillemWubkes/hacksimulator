@@ -3,7 +3,7 @@
  * Shows 3-phase hacker progression with checked/unchecked commands
  */
 
-import { BOX_CHARS, getResponsiveBoxWidth, smartTruncate } from '../../utils/box-utils.js';
+import { BOX_CHARS, getResponsiveBoxWidth, smartTruncate, isMobileView } from '../../utils/box-utils.js';
 
 // ─────────────────────────────────────────────────
 // Box Drawing Configuration
@@ -135,9 +135,9 @@ function createHeader(title) {
  */
 function createPhaseHeader(phaseName, progress, isComplete) {
   const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
-  const checkbox = isComplete ? '✓' : '○';
+  const checkbox = isComplete ? '[X]' : '[ ]';
   const progressText = `(${progress.completed}/${progress.total})`;
-  const content = `  [ ${checkbox} ] ${phaseName} ${progressText}`;
+  const content = `  ${checkbox} ${phaseName} ${progressText}`;
   const padding = BOX_WIDTH - 2 - content.length;
   return BOX.vertical + content + ' '.repeat(Math.max(0, padding)) + BOX.vertical;
 }
@@ -148,12 +148,12 @@ function createPhaseHeader(phaseName, progress, isComplete) {
  */
 function createCommandRow(command, isTried) {
   const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
-  const checkbox = isTried ? '✓' : '○';
+  const checkbox = isTried ? '[X]' : '[ ]';
   const cmdName = command.name.padEnd(COMMAND_COL_WIDTH);
 
   // Calculate available space for description
-  // Formula: BOX_WIDTH - 2 (borders) - 6 (indent) - 1 (checkbox) - 1 (space) - COMMAND_COL_WIDTH - 2 ("- ")
-  const descMaxWidth = BOX_WIDTH - 2 - 6 - 1 - 1 - COMMAND_COL_WIDTH - 2;
+  // Formula: BOX_WIDTH - 2 (borders) - 6 (indent) - 3 (checkbox) - 1 (space) - COMMAND_COL_WIDTH - 2 ("- ")
+  const descMaxWidth = BOX_WIDTH - 2 - 6 - 3 - 1 - COMMAND_COL_WIDTH - 2;
 
   // Truncate description if needed (prevents overflow on mobile)
   const description = smartTruncate(command.description, descMaxWidth);
@@ -197,7 +197,61 @@ function createLockedMessage(requiredPhase) {
 // ─────────────────────────────────────────────────
 
 /**
- * Render complete learning path
+ * Render mobile-optimized view (simplified list, no ASCII boxes)
+ * @param {Set<string>} triedCommands
+ * @returns {string}
+ */
+function renderMobileView(triedCommands) {
+  const lines = [];
+
+  // Header (simple, no complex box)
+  lines.push('╭───────── LEERPAD: ETHICAL HACKER ──────────╮');
+  lines.push('│                                             │');
+
+  // Track if previous phase is complete (for locking Fase 4)
+  let previousPhaseComplete = true;
+
+  // Render each phase
+  LEARNING_PATH.forEach((phase, phaseIndex) => {
+    const progress = calculatePhaseProgress(phase, triedCommands);
+    const isComplete = progress.completed === progress.total;
+    const status = isComplete ? '[X]' : '[ ]';
+
+    // Phase header (simple text, no complex padding)
+    lines.push(`│ ${status} ${phase.phase}`);
+    lines.push(`│     (${progress.completed}/${progress.total} voltooid)`);
+    lines.push(`│`);
+
+    // Fase 4 locking logic
+    const isFase4 = phaseIndex === 3;
+    const shouldLock = isFase4 && !previousPhaseComplete;
+
+    if (shouldLock) {
+      // Show locked message
+      lines.push(`│   [ ! ] Unlock na Fase 3 voltooiing`);
+    } else {
+      // Commands (simple bullet list)
+      phase.commands.forEach((cmd, cmdIndex) => {
+        const isTried = hasTriedCommand(cmd.name, triedCommands);
+        const cmdStatus = isTried ? '[X]' : '[ ]';
+        lines.push(`│   ${cmdStatus} ${cmd.name} - ${cmd.description}`);
+      });
+    }
+
+    lines.push(`│`);
+
+    // Track phase completion for next iteration
+    previousPhaseComplete = isComplete;
+  });
+
+  // Footer
+  lines.push('╰─────────────────────────────────────────────╯');
+
+  return lines.join('\n');
+}
+
+/**
+ * Render desktop view (full ASCII boxes with complex alignment)
  * @param {Set<string>} triedCommands
  * @returns {string}
  */
@@ -260,7 +314,11 @@ export default {
   category: 'system',
   execute() {
     const triedCommands = getTriedCommands();
-    let output = renderLearningPath(triedCommands);
+
+    // Hybrid rendering: simplified list on mobile, full ASCII boxes on desktop
+    let output = isMobileView()
+      ? renderMobileView(triedCommands)
+      : renderLearningPath(triedCommands);
 
     // Educational tip (consolidated inline)
     output += '\n\n';
@@ -302,10 +360,10 @@ VOORTGANG TRACKING
     Je voortgang wordt automatisch opgeslagen in je browser.
 
     Symbolen:
-        [ ✓ ] Fase voltooid
-        [ ○ ] Fase niet voltooid
-        ✓ command   Command uitgeprobeerd
-        ○ command   Command nog niet geprobeerd
+        [X] Fase voltooid
+        [ ] Fase niet voltooid
+        [X] command   Command uitgeprobeerd
+        [ ] command   Command nog niet geprobeerd
 
 VOORBEELDEN
     leerpad
