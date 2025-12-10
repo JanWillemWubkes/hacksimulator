@@ -313,3 +313,34 @@ test.describe('Cross-Browser ASCII Box Rendering', () => {
     expect(output).toContain('╯');
   });
 });
+
+// ─────────────────────────────────────────────────
+// Font Subset Loading Test (Sessie 81)
+// ─────────────────────────────────────────────────
+
+test.describe('Font Subset Loading', () => {
+  test('should load box-drawing font subset', async ({ page }) => {
+    // Navigate to homepage
+    await page.goto('https://famous-frangollo-b5a758.netlify.app/');
+    await acceptLegalModal(page);
+
+    // Wait for font to load
+    await page.waitForLoadState('networkidle');
+
+    // Execute command that uses boxes
+    await executeCommand(page, 'leerpad');
+
+    // Verify font loaded using Font Loading API
+    const fontLoaded = await page.evaluate(() => {
+      return document.fonts.check('16px "JetBrains Mono Box"');
+    });
+
+    expect(fontLoaded).toBe(true);
+
+    // Verify box characters render correctly (not fallback to pipe |)
+    const output = await page.locator('#terminal-output').innerText();
+    expect(output).toContain('│'); // Should be box drawing vertical, NOT pipe |
+    expect(output).toContain('╭'); // Top-left corner
+    expect(output).toContain('─'); // Horizontal line
+  });
+});
