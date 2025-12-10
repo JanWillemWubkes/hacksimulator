@@ -11,7 +11,7 @@
   font-weight: 400;
   font-style: normal;
   font-display: block; /* Prevent FOIT, critical for terminal rendering */
-  unicode-range: U+2500-257F; /* Box Drawing block only (128 glyphs, 5.1KB) */
+  /* unicode-range: U+2500-257F; - Removed for Android compatibility (Test 1) */
 }
 
 /* ==================== CSS Variables ==================== */
