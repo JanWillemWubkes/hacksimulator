@@ -219,6 +219,9 @@ class Renderer {
     // Format inline arrows (← for Dutch explanations)
     formatted = formatted.replace(/←/g, '<span class="inline-arrow">←</span>');
 
+    // Format markdown bold (mobile headers) - **text** → <strong>text</strong>
+    formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
     // Note: Emoji formatting removed - we now use ASCII brackets [ ? ] [ ! ] [ ✓ ] [ X ]
     // Icon wrapping handled by semantic line detection above (lines 68-87)
 

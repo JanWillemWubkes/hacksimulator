@@ -4,7 +4,7 @@
 
 import registry from '../../core/registry.js';
 import { lightBoxText } from '../../utils/asciiBox.js';
-import { BOX_CHARS, getResponsiveBoxWidth, smartTruncate } from '../../utils/box-utils.js';
+import { BOX_CHARS, getResponsiveBoxWidth, smartTruncate, isMobileView } from '../../utils/box-utils.js';
 
 // ─────────────────────────────────────────────────
 // Box Drawing Configuration
@@ -123,6 +123,33 @@ function formatCategorySection(category, commands, registry) {
 }
 
 // ─────────────────────────────────────────────────
+// Mobile Rendering (Minimalist - Terminal Zen)
+// ─────────────────────────────────────────────────
+
+/**
+ * Formats help output for mobile (typography-based, no borders)
+ * Terminal-authentic: like `man`, `ls`, `git` - content over decoration
+ */
+function formatHelpMobile(categories) {
+  let output = '\n**HELP**\n\n';
+
+  Object.entries(categories).forEach(([category, commands]) => {
+    if (commands.length > 0) {
+      output += `**${category.toUpperCase()}** (${commands.length})\n`;
+      commands.forEach(cmd => {
+        output += `  ${cmd.name} - ${cmd.description}\n`;
+      });
+      output += '\n';
+    }
+  });
+
+  output += '[ ? ] Type "man <command>" for details\n';
+  output += '[ ! ] Real hackers: start with SYSTEM & FILESYSTEM basics\n';
+
+  return output;
+}
+
+// ─────────────────────────────────────────────────
 // Main Command Implementation
 // ─────────────────────────────────────────────────
 
@@ -143,6 +170,36 @@ export default {
   execute(args, flags, context) {
     const registry = context.terminal.getRegistry();
 
+    // Mobile: simplified rendering (no box-drawing)
+    if (isMobileView()) {
+      // If category specified (mobile: simple list)
+      if (args.length > 0) {
+        const category = args[0].toLowerCase();
+        const commands = registry.getByCategory(category);
+
+        if (commands.length === 0) {
+          return `Geen commands in '${category}'.\n\n[ ? ] Type 'help' voor alle categorieën.`;
+        }
+
+        let output = `\n**${category.toUpperCase()}** (${commands.length})\n\n`;
+        commands.forEach(cmd => {
+          output += `  ${cmd.name} - ${cmd.description}\n`;
+        });
+
+        return output;
+      }
+
+      // Show all commands (mobile format)
+      const categories = registry.getCategories();
+      const categoryMap = {};
+      categories.forEach(cat => {
+        categoryMap[cat] = registry.getByCategory(cat);
+      });
+
+      return formatHelpMobile(categoryMap);
+    }
+
+    // Desktop: existing box-drawing rendering
     // If category specified, show commands in that category
     if (args.length > 0) {
       const category = args[0].toLowerCase();

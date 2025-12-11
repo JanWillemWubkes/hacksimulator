@@ -4,6 +4,7 @@
 
 import registry from '../../core/registry.js';
 import { boxHeader } from '../../utils/asciiBox.js';
+import { isMobileView } from '../../utils/box-utils.js';
 
 export default {
   name: 'man',
@@ -36,14 +37,28 @@ export default {
 
     // Check if command has a manPage property
     if (handler.manPage) {
-      // Add ASCII box header for gaming aesthetic
+      // Mobile: Use markdown header (minimalist - terminal zen)
+      if (isMobileView()) {
+        return `\n**${commandName.toUpperCase()}**\n${handler.description}\n\n${handler.manPage}\n`;
+      }
+
+      // Desktop: Add ASCII box header for gaming aesthetic
       const header = boxHeader(`${commandName.toUpperCase()} - ${handler.description}`, 60);
       return '\n' + header + '\n\n' + handler.manPage + '\n';
     }
 
     // Fallback: Build basic manual page if no manPage property exists
-    const header = boxHeader(`${commandName.toUpperCase()} - ${handler.description}`, 60);
-    let output = `\n${header}\n\n`;
+    let output = '';
+
+    // Mobile: Use markdown header
+    if (isMobileView()) {
+      output = `\n**${commandName.toUpperCase()}**\n${handler.description}\n\n`;
+    } else {
+      // Desktop: Use ASCII box header
+      const header = boxHeader(`${commandName.toUpperCase()} - ${handler.description}`, 60);
+      output = `\n${header}\n\n`;
+    }
+
     output += `NAAM\n  ${commandName} - ${handler.description}\n\n`;
     output += `SYNOPSIS\n  ${handler.usage}\n\n`;
     output += `BESCHRIJVING\n  ${handler.description}\n\n`;

@@ -2,7 +2,7 @@
  * shortcuts - Display keyboard shortcuts
  */
 
-import { BOX_CHARS, getResponsiveBoxWidth } from '../../utils/box-utils.js';
+import { BOX_CHARS, getResponsiveBoxWidth, isMobileView } from '../../utils/box-utils.js';
 
 // ─────────────────────────────────────────────────
 // Box Drawing Configuration
@@ -108,6 +108,31 @@ function createFooter() {
 }
 
 // ─────────────────────────────────────────────────
+// Mobile Rendering (Minimalist - Terminal Zen)
+// ─────────────────────────────────────────────────
+
+/**
+ * Formats shortcuts output for mobile (typography-based, no borders)
+ * Clean list format: category → items
+ */
+function formatShortcutsMobile() {
+  let output = '\n**KEYBOARD SHORTCUTS**\n\n';
+
+  SHORTCUTS.forEach(category => {
+    output += `**${category.category}**\n`;
+    category.items.forEach(item => {
+      output += `  ${item.keys} - ${item.description}\n`;
+    });
+    output += '\n';
+  });
+
+  output += '[ ? ] These shortcuts work like real Linux terminals\n';
+  output += '[ ! ] Mobile: Use Tab for autocomplete\n';
+
+  return output;
+}
+
+// ─────────────────────────────────────────────────
 // Command Implementation
 // ─────────────────────────────────────────────────
 
@@ -116,6 +141,12 @@ export default {
   description: 'Toon keyboard shortcuts',
   category: 'system',
   execute() {
+    // Mobile: simplified rendering (no box-drawing)
+    if (isMobileView()) {
+      return formatShortcutsMobile();
+    }
+
+    // Desktop: existing box-drawing rendering
     const lines = [];
 
     // Header

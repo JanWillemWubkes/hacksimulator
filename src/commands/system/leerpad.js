@@ -197,16 +197,13 @@ function createLockedMessage(requiredPhase) {
 // ─────────────────────────────────────────────────
 
 /**
- * Render mobile-optimized view (simplified list, no ASCII boxes)
+ * Render mobile-optimized view (minimalist - terminal zen)
+ * No box-drawing characters, uses markdown + whitespace
  * @param {Set<string>} triedCommands
  * @returns {string}
  */
 function renderMobileView(triedCommands) {
-  const lines = [];
-
-  // Header (simple, no complex box)
-  lines.push('╭───────── LEERPAD: ETHICAL HACKER ──────────╮');
-  lines.push('│                                             │');
+  let output = '\n**LEERPAD: ETHICAL HACKER**\n\n';
 
   // Track if previous phase is complete (for locking Fase 4)
   let previousPhaseComplete = true;
@@ -217,10 +214,8 @@ function renderMobileView(triedCommands) {
     const isComplete = progress.completed === progress.total;
     const status = isComplete ? '[X]' : '[ ]';
 
-    // Phase header (simple text, no complex padding)
-    lines.push(`│ ${status} ${phase.phase}`);
-    lines.push(`│     (${progress.completed}/${progress.total} voltooid)`);
-    lines.push(`│`);
+    // Phase header with progress
+    output += `${status} **${phase.phase}** (${progress.completed}/${progress.total})\n`;
 
     // Fase 4 locking logic
     const isFase4 = phaseIndex === 3;
@@ -228,26 +223,26 @@ function renderMobileView(triedCommands) {
 
     if (shouldLock) {
       // Show locked message
-      lines.push(`│   [ ! ] Unlock na Fase 3 voltooiing`);
+      output += `    [ ! ] Unlock na Fase 3 voltooiing\n`;
     } else {
-      // Commands (simple bullet list)
-      phase.commands.forEach((cmd, cmdIndex) => {
+      // Commands (indented list)
+      phase.commands.forEach(cmd => {
         const isTried = hasTriedCommand(cmd.name, triedCommands);
         const cmdStatus = isTried ? '[X]' : '[ ]';
-        lines.push(`│   ${cmdStatus} ${cmd.name} - ${cmd.description}`);
+        output += `    ${cmdStatus} ${cmd.name} - ${cmd.description}\n`;
       });
     }
 
-    lines.push(`│`);
+    output += '\n';
 
     // Track phase completion for next iteration
     previousPhaseComplete = isComplete;
   });
 
-  // Footer
-  lines.push('╰─────────────────────────────────────────────╯');
+  output += '[ ? ] Type commands om progressie te maken\n';
+  output += '[ ! ] Fase 4 unlocks na voltooiing Fase 3\n';
 
-  return lines.join('\n');
+  return output;
 }
 
 /**
