@@ -131,6 +131,16 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 **Doel:** Last 5 sessions only - older sessions archived in SESSIONS.md
 
+### Sessie 83: Mobile Minimalist Rendering - Terminal Zen (10 dec 2025)
+⚠️ Never fight platform limitations with technical workarounds (Android Chrome font loading fundamentally broken, 3 fixes failed)
+⚠️ Never assume technical fixes always win (design solutions can be cleaner than technical hacks)
+⚠️ Never over-engineer mobile (mobile = content-focused, decoration is desktop luxury)
+✅ Always pivot when user signals frustration ("we zijn nu al zo lang bezig" = change approach signal)
+✅ Always validate design decisions with industry precedent (real terminals use typography, not boxes for lists)
+✅ Always consider "less is more" for mobile (typography + whitespace > decorative borders = terminal-authentic)
+📊 Impact: 6 files (+84 net lines), 0KB bundle, P0 bug resolved (broken box chars on ALL Android devices)
+📄 SESSIONS.md Sessie 83
+
 ### Sessie 78: Cache Strategie Optimalisatie - 1 Jaar → 1 Uur voor CSS/JS (7 dec 2025)
 ⚠️ Never use long cache (1 jaar) zonder automated versioning (handmatige `?v=X` bump = foutgevoelig)
 ⚠️ Never introduce build complexity voor cache invalidation (git hash versioning = tegen vanilla JS principe)
@@ -172,17 +182,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 📊 Impact: 4 files, P0 bug fix (legal modal scroll), -2.1KB bundle, iOS support added
 📄 SESSIONS.md Sessie 59
 
-### Sessie 58: Hybrid Color Scheme - HTB Neon Prompt + WCAG AA Fix (24 nov 2025)
-⚠️ Never promise one aesthetic in docs while delivering another (brand confusion between STYLEGUIDE.md and actual CSS)
-⚠️ Never skip contrast ratio verification in light mode (light mode prompt was 2.7:1 - WCAG FAIL)
-⚠️ Never use identical colors for different message types (prompt = success prevents clear feedback)
-✅ Always create visual mockups for subjective design decisions (7 options → data-driven choice)
-✅ Always test WCAG contrast for BOTH themes independently (dark pass ≠ light pass)
-✅ Always ensure prompt ≠ success colors for clear command/result distinction
-📊 Impact: 3 files, P0 accessibility fix (2.7:1 → 4.8:1), Hybrid scheme (HTB neon + GitHub base)
-📄 SESSIONS.md Sessie 58
-
-**Older Sessions (56-51):** Dropdown Submenu Fix (direct child combinator), Theme Toggle Hover (Dark Frame compliance), Navbar Hover (animated underline), Global Link Hover (opacity → color), Dual-theme button color overhaul, Blog CTA UX Overhaul - See SESSIONS.md
+**Older Sessions (58-51):** Hybrid Color Scheme (HTB neon + WCAG AA fix), Dropdown Submenu Fix (direct child combinator), Theme Toggle Hover (Dark Frame compliance), Navbar Hover (animated underline), Global Link Hover (opacity → color), Dual-theme button color overhaul, Blog CTA UX Overhaul - See SESSIONS.md
 **Older Sessions (35-43):** Dropdown jank (font-weight/inline-flex), Modal uniformity (`:only-child` pitfalls), ASCII box drawing, Strategy Pattern - See SESSIONS.md
 **Older Sessions (2-34):** See SESSIONS.md for comprehensive historical context
 
@@ -201,7 +201,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ### Afsluiten
 - Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-- **Rotation trigger:** Every 5 sessions (last rotation: Sessie 77, next: Sessie 82)
+- **Rotation trigger:** Every 5 sessions (last rotation: Sessie 83, next: Sessie 87)
 - **Rotation rule:** Keep last 5 sessions full, compress 6-10, archive 11+
 
 ### Bij Requirement Changes
@@ -564,7 +564,7 @@ Bij nieuwe monetization feature:
 
 ---
 
-**Last updated:** 7 december 2025 (Sessie 78 - Cache Strategie Optimalisatie)
+**Last updated:** 10 december 2025 (Sessie 83 - Mobile Minimalist Rendering)
 **Last synced:** 3 december 2025 (M5.5 Monetization MVP: 15 tasks, PRD §21, PLANNING §11, CLAUDE §14)
-**Next sync:** Milestone M5.5 completion OR Sessie 82 (rotation trigger)
-**Version:** 17.1 (Sessie 78: Cache Strategie - 1 jaar → 1 uur cache voor CSS/JS, _headers optimized, troubleshooting updated, deployment workflow simplified)
+**Next sync:** Milestone M5.5 completion OR Sessie 87 (rotation trigger)
+**Version:** 17.2 (Sessie 83: Mobile Minimalist Rendering - Terminal Zen, design pivot > technical fixes, 6 files, 0KB bundle, P0 bug resolved)
