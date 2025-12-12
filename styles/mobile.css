@@ -22,23 +22,13 @@
     font-size: var(--font-size-mobile);
     padding-bottom: 120px; /* Extra space for mobile keyboard */
 
-    /* Man page responsive indentation - compress consecutive spaces by 15%
-     * Why: 4-8 space indentation too wide on narrow viewports (375px iPhone SE)
-     * Industry precedent: Real `man` pages adapt to terminal width ($COLUMNS)
-     * Pattern: word-spacing reduction for visual space compression
-     * Sessie 84: Mobile Man Page Text Alignment Fix */
-    letter-spacing: -0.015em;  /* Subtle tightening (~0.24px at 16px font) */
-    word-spacing: -0.15em;     /* Compress consecutive spaces by 15% */
-  }
-
-  /* Preserve spacing for semantic brackets (prevent over-compression)
-   * Semantic classes: [ TIP ] [ ! ] [ ? ] [ ✓ ] [ X ]
-   * Must maintain readability of ASCII brackets */
-  #terminal-output .semantic-success,
-  #terminal-output .semantic-error,
-  #terminal-output .semantic-warning,
-  #terminal-output .semantic-tip {
-    word-spacing: normal;      /* Reset to default (no compression) */
+    /* word-spacing compression removed - breaks plain space alignment in man pages
+     * Terminal authenticity requires fixed monospace spacing (industry standard)
+     * Root cause: CSS compression affects plain spaces but NOT .padEnd()/.padStart()
+     * Why nmap/ls work: JavaScript padding unaffected by CSS word-spacing
+     * Why man/netstat break: Plain template literal spaces get compressed
+     * Solution: Revert to fixed-width spaces, add targeted compression only if needed
+     * See Sessie 84: Mobile Text Alignment - Hybrid Approach (Phase 1 revert) */
   }
 
   /* Input wrapper */
