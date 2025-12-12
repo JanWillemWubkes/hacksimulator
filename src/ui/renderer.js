@@ -287,8 +287,10 @@ function isContinuationLine(lineText) {
   const leadingSpaces = normalized.match(/^(\s*)/)[1].length;
   const trimmed = lineText.trim();
 
-  // Must have 6+ spaces AND non-empty content
-  return leadingSpaces >= 6 && trimmed.length > 0;
+  // Must have 3+ spaces AND non-empty content
+  // Threshold lowered from 6 to 3 to include 4-space indents (GERELATEERDE COMMANDO'S sections)
+  // See Sessie 84/85: Phase 3 - Mobile continuation line wrapping (all indents need hanging indent)
+  return leadingSpaces >= 3 && trimmed.length > 0;
 }
 
 /**
