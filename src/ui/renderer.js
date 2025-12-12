@@ -126,6 +126,14 @@ class Renderer {
 
       line.className = `terminal-line terminal-output terminal-output-${lineType}`;
 
+      // Detect continuation lines and store indent level for CSS hanging indent (mobile)
+      // Reuses isContinuationLine() detection, adds data attribute for mobile.css
+      // See Sessie 84/85: Mobile Continuation Line Wrapping Fix
+      if (isContinuationLine(lineText)) {
+        const leadingSpaces = getLeadingSpaces(lineText);
+        line.dataset.indent = leadingSpaces; // CSS uses this via attr(data-indent)
+      }
+
       // Process special formatting
       const formattedContent = this._formatText(lineText);
       line.innerHTML = formattedContent;
@@ -281,6 +289,19 @@ function isContinuationLine(lineText) {
 
   // Must have 6+ spaces AND non-empty content
   return leadingSpaces >= 6 && trimmed.length > 0;
+}
+
+/**
+ * Get number of leading spaces in a line (tabs normalized to 4 spaces)
+ * Used for CSS hanging indent calculation on mobile
+ * @private
+ * @param {string} lineText - Raw line text with spacing
+ * @returns {number} Number of leading spaces
+ */
+function getLeadingSpaces(lineText) {
+  // Normalize tabs to 4 spaces (same as isContinuationLine)
+  const normalized = lineText.replace(/\t/g, '    ');
+  return normalized.match(/^(\s*)/)[1].length;
 }
 
 // Export as singleton

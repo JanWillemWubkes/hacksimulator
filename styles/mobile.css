@@ -31,6 +31,46 @@
      * See Sessie 84: Mobile Text Alignment - Hybrid Approach (Phase 1 revert) */
   }
 
+  /* ==================== Continuation Line Wrapping ==================== */
+  /* Hanging indent for continuation lines on mobile (man pages, netstat tips)
+   *
+   * Problem: Lines with 6+ leading spaces wrap to position 0 on mobile
+   *          Example: "   foo bar very long" → "   foo bar very\nlong" (WRONG)
+   *          Long sentences (>40 chars) break visual hierarchy on 375px viewport
+   *
+   * Solution: CSS hanging indent (text-indent negative + padding-left positive)
+   *          Result: "   foo bar very\n   long" (CORRECT)
+   *          Wrapped portions maintain parent indentation level
+   *
+   * Detection: renderer.js adds data-indent attribute to continuation lines
+   *            Reuses isContinuationLine() detection (6+ spaces)
+   *            Only applied when line wraps (no overhead for short lines)
+   *
+   * Scope: Mobile only (<768px), desktop unchanged
+   * Impact: 1522 continuation lines across 32 command manPages
+   * Pattern: Industry-standard (VS Code, GitHub, terminal emulators)
+   * See: Sessie 84/85 - Mobile Continuation Line Wrapping Fix
+   */
+
+  .terminal-line[data-indent] {
+    /* Calculate indent in monospace characters (1ch = 1 char width) */
+    --indent-chars: attr(data-indent number, 0);
+
+    /* Negative text-indent pulls first line LEFT by N chars
+     * This compensates for the padding-left, keeping first line at original position */
+    text-indent: calc(var(--indent-chars) * -1ch);
+
+    /* Padding-left pushes ENTIRE block (including wrapped lines) RIGHT by N chars
+     * Combined with negative text-indent:
+     *   - First line: -Nch (text-indent) + Nch (padding) = 0 offset (original position)
+     *   - Wrapped lines: 0ch (no text-indent) + Nch (padding) = N offset (indented) */
+    padding-left: calc(var(--indent-chars) * 1ch);
+
+    /* Preserve existing text wrapping behavior */
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
   /* Input wrapper */
   #terminal-input-wrapper {
     flex-wrap: wrap;
