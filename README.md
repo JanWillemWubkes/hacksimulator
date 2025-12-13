@@ -36,7 +36,7 @@ Dit project is in actieve ontwikkeling. De officiële productie launch op `hacks
 
 **Status:** ✅ **LIVE** on Netlify (M5 Testing Phase - 93.8% MVP Complete)
 **Versie:** 1.0.0-mvp
-**Doelgroep:** Nederlandse beginners (15-25 jaar) zonder technische achtergrond
+**Doelgroep:** Nederlandse beginners zonder technische achtergrond - studenten, career switchers en enthousiastelingen
 
 **Performance:**
 - Bundle Size: 312 KB (37.5% buffer remaining / 500 KB budget)

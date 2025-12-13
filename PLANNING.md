@@ -27,13 +27,20 @@ Een veilige, toegankelijke browser-based terminal simulator waar **Nederlandse b
 5. **Ethisch:** Duidelijke focus op legaal en ethisch gebruik
 
 ### Doelgroep
-- **Primair:** "De Nieuwsgierige Beginner" (15-25 jaar)
-  - Interesse in cybersecurity maar geen achtergrond
-  - Wil exploreren zonder commitment
-  - Heeft begeleiding nodig
-- **Secundair:** IT/Informatica studenten
-  - Zoekt praktische ervaring
-  - Oefenen voor certificeringen
+
+**Primaire Filter:** Skill level = Beginners (geen tot minimale cybersecurity kennis)
+**Secundaire Filter:** Passie = Enthousiastelingen die ethisch hacken willen leren
+
+**Demografische Segmenten:**
+- **Studenten (16-25 jaar):** IT-studie voorbereiding, praktijkervaring voor CV, beperkt budget, certificeringen
+- **Career Switchers (25-45 jaar):** IT-professionals die transitie overwegen naar cybersecurity, validatie interesse, hogere koopkracht
+- **Hobbyisten (Alle leeftijden):** Technologie-enthousiastelingen, nieuwsgierig door media, zelfgestuurd leren op eigen tempo
+
+**Gemeenschappelijke Eigenschappen:**
+- Geen voorkennis vereist in cybersecurity
+- Wil exploreren zonder commitment of grote investering
+- Heeft begeleiding/uitleg nodig (3-tier help systeem)
+- Zoekt veilige omgeving zonder risico (gesimuleerd, geen echte systemen)
 
 ### Succes Definitie (MVP)
 - **Primaire KPI:** Sessieduur > 2 minuten gemiddeld

@@ -28,16 +28,51 @@ Een web-gebaseerde terminal simulator die een realistische maar veilige omgeving
 ## 3. Gebruikersprofielen
 
 ### Primair: "De Nieuwsgierige Beginner"
+
+**Skill Level:** Geen tot minimale technische achtergrond in cybersecurity
+**Primaire Filter:** Passie voor cybersecurity + bereidheid om te leren
+
+**Gemeenschappelijke Kenmerken:**
 - Heeft gehoord over ethisch hacken en cybersecurity
 - Wil verkennen zonder verplichting of risico
 - Heeft begeleiding en duidelijke uitleg nodig
 - Overweegt mogelijk een cybersecurity carrière
+- Zoekt hands-on praktijkervaring
 
-### Secundair: "De Student"
-- Studeert IT of Informatica
-- Heeft praktische ervaring nodig met security concepten
-- Wil oefenen voor certificeringen
-- Heeft educatieve content nodig naast tools
+**Demografische Segmenten:**
+
+**1. Studenten (16-25 jaar)**
+- **Context:** IT/Informatica studie of carrièreoriëntatie
+- **Motivatie:** Praktische ervaring voor CV, voorbereiding op certificeringen (CEH, OSCP)
+- **Budget:** Beperkt - zoekt gratis/low-cost resources
+- **Commitment:** Middel tot hoog (studie-gerelateerd)
+- **Tech savvyness:** Basis terminal kennis (of leert snel)
+
+**2. Career Switchers (25-45 jaar)**
+- **Context:** Werken momenteel in IT-support, sysadmin, development, of gerelateerde velden
+- **Motivatie:** Willen transitie maken naar cybersecurity maar onzeker of het bij hen past
+- **Budget:** Hoger disposable income - bereid te investeren na validatie interesse
+- **Commitment:** Laag initieel (exploreren), hoog na validatie (cursussen, certificeringen)
+- **Tech savvyness:** Solide IT fundamentals, weinig specifieke security kennis
+
+**3. Enthousiastelingen / Hobbyisten (Alle leeftijden)**
+- **Context:** Nieuwsgierig door media (Mr. Robot, nieuws over hacks), tech hobbyisten
+- **Motivatie:** Pure interesse, geen carrière ambities - "willen snappen hoe het werkt"
+- **Budget:** Variabel - sommigen investeren in hobbies, anderen zoeken gratis opties
+- **Commitment:** Variabel - sommigen diep in één topic, anderen casual explorers
+- **Tech savvyness:** Zeer variabel (van beginner tot gevorderd)
+
+### Secundair: "De Gevorderde Leerling"
+
+**Skill Level:** Basale Linux/terminal kennis, enige cybersecurity exposure
+**Primaire Filter:** Zoekt praktijkoefening voor certificeringen of skill maintenance
+
+**Kenmerken:**
+- Heeft basale command-line ervaring
+- Wil oefenen voor certificeringen (CEH, OSCP, Security+)
+- Zoekt platform voor muscle memory training (commands, flags, syntax)
+- Gebruikt HackSimulator als supplement bij betaalde cursussen (TryHackMe, HackTheBox)
+- Apprecieert realistische maar gesimuleerde omgeving (geen VM setup overhead)
 
 ---
 

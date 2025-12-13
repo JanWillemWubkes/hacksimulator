@@ -8,7 +8,7 @@
 
 ## 🎯 Quick Reference
 
-**Wat:** Veilige terminal simulator voor Nederlandse beginners (15-25 jaar)
+**Wat:** Veilige terminal simulator voor Nederlandse beginners (skill-based, alle leeftijden 16+)
 **Stack:** Vanilla JS/CSS, client-side, localStorage, < 500KB bundle
 **Scope:** 30 commands (MVP) + Tutorials/Gamification/Analytics (Post-MVP)
 **Status:** M0-M4 Complete (100%) | M5 Testing (27%) - ✅ LIVE on Netlify | M6-M8 Planned
@@ -304,7 +304,7 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 1. **Educational mission first** - Revenue decisions NOOIT ten koste van leren
 2. **Transparency** - Affiliate links disclosed met banner + `rel="sponsored"`
 3. **Privacy-first** - Explicit consent voor AdSense cookies (AVG Article 6(1)(a))
-4. **Youth-friendly** - Target audience = 15-25 jaar, geen exploitative tactics
+4. **Beginner-friendly** - Target audience = beginners (skill level), alle leeftijden 16+, geen exploitative tactics
 5. **Free tier valuable** - Gratis versie moet standalone waardevol zijn (not crippled)
 
 ### Ad Placement 80/20 Rule
@@ -486,10 +486,15 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 
 **Pricing Red Lines:**
 ❌ **NEVER:**
-- Charge meer dan €5/month voor studenten (target = 15-25 jaar)
+- Charge meer dan €8/month zonder student discount (target bevat studenten + professionals)
 - Paywall content dat je eerder gratis was (bait-and-switch)
-- Require credit card voor "free trial" (barrier voor jongeren)
+- Require credit card voor "free trial" (barrier voor studenten/jongeren)
 - Auto-renew zonder duidelijke opt-out
+
+**Tiered Pricing (Phase 3):**
+- **Student tier:** €3/month (met @student.nl verificatie) - 50% discount
+- **Hobbyist tier:** €5/month (baseline, no verification)
+- **Professional tier:** €8/month (career switchers, professionals) - +60% premium
 
 ✅ **ALWAYS:**
 - Student discount (50% off met @student.nl email)
