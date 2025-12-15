@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 22 november 2025
+**Laatst bijgewerkt:** 15 december 2025
 **Status:** M5 Testing & Launch Phase - ✅ **LIVE on Netlify!**
 **Verantwoordelijk:** Development Team
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
@@ -744,13 +744,15 @@ const DEBUG_MODE = false;
 
 ## 📅 Roadmap & Fases
 
-### Fase 1: MVP (Maand 1-3) - ✅ 84.4% VOLTOOID - **LIVE!**
+### Fase 1: MVP (Maand 1-3) - 🔵 IN UITVOERING (48.5%) - **LIVE!**
 
-**Status:** 141/167 tasks completed (84.4%) - M0-M4 (100%), M5 (10/37 - 27%)
+**Status:** 143/295 tasks completed (48.5% totaal project scope)
+**MVP-only Progress:** 141/153 tasks (92.3% van MVP scope)
+**Milestone Breakdown:** M0-M4 (100%), M5 (10/37 - 27%), M5.5 (2/15 - 13%)
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
-> **Note:** Voor gedetailleerde takenlijst met subtasks, zie `TASKS.md`. Dit is een high-level overzicht.
+> **Note:** Totale project scope (295 taken) omvat MVP (M0-M5.5: 153 taken) + Post-MVP milestones (M6-M9: 142 taken). Voor gedetailleerde takenlijst met subtasks, zie `TASKS.md`. Dit is een high-level overzicht.
 
 **Week 1-2: Foundation** - ✅ VOLTOOID (M0+M1)
 - [x] Project setup (structuur, Git)
@@ -880,8 +882,8 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 2 december 2025
-**Versie:** 1.9 (Sessie 68: Monetization Strategy - Revenue Streams & Economics section added)
+**Laatst bijgewerkt:** 15 december 2025
+**Versie:** 2.0 (Sessie 85: Document Sync - Scope clarification 295 tasks, roadmap % corrected to 48.5%)
 **Status:** ✅ Deployed - Live in Production + Monetization Planning Complete
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

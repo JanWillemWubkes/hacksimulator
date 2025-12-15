@@ -1,7 +1,7 @@
 # Product Requirements Document - HackSimulator.nl
-**Versie:** 1.4
+**Versie:** 1.6
 **Status:** M0-M4 Completed, M5 In Progress - ✅ **LIVE on Netlify!**
-**Laatst bijgewerkt:** 22 november 2025
+**Laatst bijgewerkt:** 15 december 2025
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
@@ -1351,11 +1351,18 @@ Dit document is goedgekeurd voor de ontwikkeling van HackSimulator.nl MVP.
   - Updated §15 to include monetization in MVP scope
   - Updated §20 to clarify freemium as Phase 3 (conditional)
   - Revenue projections, break-even analysis, ethical guidelines
+- **v1.6** (15 Dec 2025) - Document Sync & Scope Clarification (Sessie 85):
+  - Corrected development status: 143/295 tasks (48.5% totaal scope)
+  - Clarified MVP vs Post-MVP breakdown (153 vs 142 tasks)
+  - Synced update datums across all documentation
+  - Updated M5.5 progress: 2/15 tasks (13%)
 
 **Document Status:** Definitief - ✅ **LIVE on Netlify!**
 
-**Laatste review:** 2 december 2025
-**Development Status:** 141/182 tasks completed (77.5%) - M0-M4 (100%), M5 (10/37 - 27%), M5.5 (0/15 - 0%)
+**Laatste review:** 15 december 2025
+**Development Status:** 143/295 tasks completed (48.5% totaal scope)
+**MVP Progress:** 141/153 tasks (92.3%) - M0-M4 (100%), M5 (10/37 - 27%), M5.5 (2/15 - 13%)
+**Post-MVP:** M6-M9 (0/142 tasks) - Planned for Phase 2-3
 
 ---
 

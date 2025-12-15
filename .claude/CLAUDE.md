@@ -11,7 +11,7 @@
 **Wat:** Veilige terminal simulator voor Nederlandse beginners (skill-based, alle leeftijden 16+)
 **Stack:** Vanilla JS/CSS, client-side, localStorage, < 500KB bundle
 **Scope:** 30 commands (MVP) + Tutorials/Gamification/Analytics (Post-MVP)
-**Status:** M0-M4 Complete (100%) | M5 Testing (27%) - ✅ LIVE on Netlify | M6-M8 Planned
+**Status:** M0-M4 Complete (100%) | M5 Testing (27%) | M5.5 Monetization (13%) - ✅ LIVE on Netlify | M6-M8 Planned
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 **Taal:** UI=NL, commands=EN, uitleg=NL
@@ -20,7 +20,7 @@
 **Compliance:** WCAG AAA, Style Guide 100% (141 CSS variables)
 **CI/CD:** GitHub Actions → Netlify auto-deploy (main branch) | Rollback: `git revert` + push
 **Monitoring:** Netlify Analytics | Lighthouse CI
-**Roadmap:** 295 tasks total (141 done, 154 planned) → 47.8% complete
+**Roadmap:** 295 tasks total (143 done, 152 planned) → 48.5% complete
 
 ---
 
@@ -580,7 +580,7 @@ Bij nieuwe monetization feature:
 
 ---
 
-**Last updated:** 15 december 2025 (Sessie 84 - Doelgroep Repositioning)
-**Last synced:** 3 december 2025 (M5.5 Monetization MVP: 15 tasks, PRD §21, PLANNING §11, CLAUDE §14)
-**Next sync:** Milestone M5.5 completion OR Sessie 87 (rotation trigger)
-**Version:** 17.3 (Sessie 84: Doelgroep Repositioning - Age-restrictive → Skill-based, 3-persona model, tiered pricing research, 11 files, AVG-compliant 15→16 jaar)
+**Last updated:** 15 december 2025 (Sessie 85 - Document Consistency Sync)
+**Last synced:** 15 december 2025 (Quarterly sync: All docs aligned, scope clarified 295 tasks, percentages corrected)
+**Next sync:** Milestone M5.5 completion OR Sessie 90 (next rotation trigger)
+**Version:** 17.4 (Sessie 85: Document Sync - Scope 167→295 in PLANNING.md, roadmap % 84.4%→48.5%, task count 141→143, all docs dated 15 dec 2025)

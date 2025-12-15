@@ -1,8 +1,8 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 6 december 2025
+**Laatst bijgewerkt:** 15 december 2025
 **Status:** M5 Testing & Launch Phase (LIVE on Netlify) - Monetization MVP Started
-**Sprint:** Sessie 74: PayPal Donate Configuration - Live Username Setup
+**Sprint:** Sessie 85: Document Consistency Sync - Scope Clarification
 
 ---
 
@@ -517,11 +517,12 @@
 - If revenue <€100/month → Focus on traffic growth (SEO, content marketing)
 
 **Bundle Size Impact:**
-- Current: 318KB / 500KB (36% buffer)
+- Current: 318KB / 500KB (182KB buffer, 36%)
 - AdSense script: +15-20KB
 - Affiliate manager: +2KB
 - Donations: +0KB (external link)
-- **New total:** 335-340KB / 500KB (32% buffer) ✅ SAFE
+- **New total:** 335-340KB / 500KB (160-165KB buffer, 32-33%) ✅ SAFE
+- **Total M5.5 impact:** +17-22KB
 
 ---
 
@@ -1358,14 +1359,14 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 2 december 2025
-**Versie:** 3.1 (Sessie 68: Monetization Planning - M5.5 added, 15 tasks, 15-17h)
-**Totaal Taken:** 295 (MVP: 182, Post-MVP: 113) → M0-M5: 147, M5.5: 15, M6: 33, M7: 40, M8: 40, M9: 19, Phase A: 6
-**Voltooide Taken:** 141 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 10/37, M5.5: 0/15, M6-M9: 0/132 pending)
-**Voortgang:** 47.8% (141/295) - Phase A: 2/6 completed (33%), MVP: 92.3% (141/153), Post-MVP: 0% (0/128)
+**Laatst bijgewerkt:** 15 december 2025
+**Versie:** 3.2 (Sessie 85: Document Sync - Scope clarification, percentages corrected across all docs)
+**Totaal Taken:** 295 (MVP: 153, Post-MVP: 142) → M0-M5: 138, M5.5: 15, M6: 33, M7: 40, M8: 40, M9: 19, Phase A: 6
+**Voltooide Taken:** 143 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 10/37, M5.5: 2/15, Phase A: 2/6, M6-M9: 0/132 pending)
+**Voortgang:** 48.5% (143/295 totaal) - MVP: 92.3% (141/153), M5.5: 13% (2/15), Phase A: 33% (2/6), Post-MVP: 0% (0/132)
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
-**Bundle Budget:** 318KB current, 182KB buffer → M5.5: +20KB, M6: +60KB, M7: +50KB, M8: +40KB (net +35KB), Total: ~488KB / 500KB (98%)
+**Bundle Budget:** 318KB current, 182KB buffer → M5.5: +17-22KB, M6: +60KB, M7: +50KB, M8: +40KB (net +35KB), Total: ~485-490KB / 500KB (97-98%)
 
 ---
 
