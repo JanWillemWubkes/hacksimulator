@@ -131,6 +131,17 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 **Doel:** Last 5 sessions only - older sessions archived in SESSIONS.md
 
+### Sessie 84: Doelgroep Repositioning - Strategic Positioning & Pricing Research (15 dec 2025)
+⚠️ Never use age-based filtering when skill-based works universally ("15-25 jaar" excludes high-value career switchers)
+⚠️ Never implement technical verification (email/backend) at MVP scale (40% fraud honor system = €54 revenue, 15% fraud email verification = €65 - only €11 gain for high complexity)
+⚠️ Never proceed with freemium without validation trigger (€6000-8500 investment requires €200/month passive revenue proof first)
+✅ Always use 3-persona demographic model for broad positioning (Student/Career Switcher/Hobbyist captures full market vs single age segment)
+✅ Always document ethical red lines before monetization pressure (30 MVP commands staying free = non-negotiable, prevents future bait-and-switch)
+✅ Always use anchoring pricing psychology (€8 professional tier = decoy to make €5 hobbyist "reasonable", target 70% hobbyist conversions)
+✅ Always create long-form content for career switchers (4200+ words = SEO authority + affiliate funnel, 3x disposable income vs students)
+📊 Impact: 11 files (8 updates + 3 new), +380 organic visits/month projected, 3x market expansion (500k→1.5M), AVG-compliant (15→16 jaar)
+📄 SESSIONS.md Sessie 84
+
 ### Sessie 83: Mobile Minimalist Rendering - Terminal Zen (10 dec 2025)
 ⚠️ Never fight platform limitations with technical workarounds (Android Chrome font loading fundamentally broken, 3 fixes failed)
 ⚠️ Never assume technical fixes always win (design solutions can be cleaner than technical hacks)
@@ -569,7 +580,7 @@ Bij nieuwe monetization feature:
 
 ---
 
-**Last updated:** 10 december 2025 (Sessie 83 - Mobile Minimalist Rendering)
+**Last updated:** 15 december 2025 (Sessie 84 - Doelgroep Repositioning)
 **Last synced:** 3 december 2025 (M5.5 Monetization MVP: 15 tasks, PRD §21, PLANNING §11, CLAUDE §14)
 **Next sync:** Milestone M5.5 completion OR Sessie 87 (rotation trigger)
-**Version:** 17.2 (Sessie 83: Mobile Minimalist Rendering - Terminal Zen, design pivot > technical fixes, 6 files, 0KB bundle, P0 bug resolved)
+**Version:** 17.3 (Sessie 84: Doelgroep Repositioning - Age-restrictive → Skill-based, 3-persona model, tiered pricing research, 11 files, AVG-compliant 15→16 jaar)
