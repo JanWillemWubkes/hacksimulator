@@ -3,11 +3,27 @@
  * Simulated command for the HackSimulator terminal
  */
 
+import { getPathCompletions } from '../../utils/filesystem-completion.js';
+
 export default {
   name: 'cd',
   category: 'filesystem',
   description: 'Change the current directory',
   usage: 'cd [directory]',
+
+  /**
+   * Autocomplete provider for cd command
+   * Suggests directory names based on partial path input
+   * @param {Array<string>} args - Current arguments being typed
+   * @returns {Array<string>} - Array of directory path completions
+   */
+  completionProvider(args) {
+    // Get partial path (last argument being typed, or empty string if no args)
+    const partial = args.length > 0 ? args[args.length - 1] : '';
+
+    // Get directory completions only (no files)
+    return getPathCompletions(partial, { type: 'directory' });
+  },
 
   async execute(args, flags, context) {
     const { vfs, terminal } = context;
