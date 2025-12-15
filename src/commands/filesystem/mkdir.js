@@ -3,11 +3,27 @@
  * Simulated command for the HackSimulator terminal
  */
 
+import { getPathCompletions } from '../../utils/filesystem-completion.js';
+
 export default {
   name: 'mkdir',
   category: 'filesystem',
   description: 'Create a new directory',
   usage: 'mkdir <directory>',
+
+  /**
+   * Autocomplete provider for mkdir command
+   * Suggests parent directories for context
+   * @param {Array<string>} args - Current arguments being typed
+   * @returns {Array<string>} - Array of directory path completions
+   */
+  completionProvider(args) {
+    // Get partial path (last argument being typed, or empty string if no args)
+    const partial = args.length > 0 ? args[args.length - 1] : '';
+
+    // Get directories only (mkdir creates dirs in parent dir context)
+    return getPathCompletions(partial, { type: 'directory' });
+  },
 
   async execute(args, flags, context) {
     const { vfs } = context;

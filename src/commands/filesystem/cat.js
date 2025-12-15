@@ -3,6 +3,8 @@
  * Simulated command for the HackSimulator terminal
  */
 
+import { getPathCompletions } from '../../utils/filesystem-completion.js';
+
 /**
  * Get educational tip based on which file is restricted
  */
@@ -23,6 +25,20 @@ export default {
   category: 'filesystem',
   description: 'Display file contents',
   usage: 'cat <file>',
+
+  /**
+   * Autocomplete provider for cat command
+   * Suggests files only (not directories)
+   * @param {Array<string>} args - Current arguments being typed
+   * @returns {Array<string>} - Array of file path completions
+   */
+  completionProvider(args) {
+    // Get partial path (last argument being typed, or empty string if no args)
+    const partial = args.length > 0 ? args[args.length - 1] : '';
+
+    // Get files only (cat reads files, not directories)
+    return getPathCompletions(partial, { type: 'file' });
+  },
 
   async execute(args, flags, context) {
     const { vfs } = context;

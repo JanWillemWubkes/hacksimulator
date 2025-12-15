@@ -3,11 +3,27 @@
  * Simulated command for the HackSimulator terminal
  */
 
+import { getPathCompletions } from '../../utils/filesystem-completion.js';
+
 export default {
   name: 'cp',
   category: 'filesystem',
   description: 'Copy files or directories',
   usage: 'cp <source> <destination>',
+
+  /**
+   * Autocomplete provider for cp command
+   * Suggests both files and directories
+   * @param {Array<string>} args - Current arguments being typed
+   * @returns {Array<string>} - Array of file and directory path completions
+   */
+  completionProvider(args) {
+    // Get partial path (last argument being typed, or empty string if no args)
+    const partial = args.length > 0 ? args[args.length - 1] : '';
+
+    // Get both files and directories (cp copies both)
+    return getPathCompletions(partial, { type: 'both' });
+  },
 
   async execute(args, flags, context) {
     const { vfs } = context;

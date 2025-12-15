@@ -3,6 +3,8 @@
  * Simulated command for the HackSimulator terminal
  */
 
+import { getPathCompletions } from '../../utils/filesystem-completion.js';
+
 /**
  * Check if path is critical system directory
  */
@@ -17,6 +19,20 @@ export default {
   category: 'filesystem',
   description: 'Move or rename files/directories',
   usage: 'mv <source> <destination>',
+
+  /**
+   * Autocomplete provider for mv command
+   * Suggests both files and directories
+   * @param {Array<string>} args - Current arguments being typed
+   * @returns {Array<string>} - Array of file and directory path completions
+   */
+  completionProvider(args) {
+    // Get partial path (last argument being typed, or empty string if no args)
+    const partial = args.length > 0 ? args[args.length - 1] : '';
+
+    // Get both files and directories (mv moves both)
+    return getPathCompletions(partial, { type: 'both' });
+  },
 
   async execute(args, flags, context) {
     const { vfs } = context;

@@ -3,6 +3,8 @@
  * Simulated command for the HackSimulator terminal
  */
 
+import { getPathCompletions } from '../../utils/filesystem-completion.js';
+
 /**
  * Format simple directory listing (default)
  */
@@ -57,6 +59,20 @@ export default {
   category: 'filesystem',
   description: 'List directory contents',
   usage: 'ls [options] [directory]',
+
+  /**
+   * Autocomplete provider for ls command
+   * Suggests both files and directories
+   * @param {Array<string>} args - Current arguments being typed
+   * @returns {Array<string>} - Array of file and directory path completions
+   */
+  completionProvider(args) {
+    // Get partial path (last argument being typed, or empty string if no args)
+    const partial = args.length > 0 ? args[args.length - 1] : '';
+
+    // Get both files and directories (ls lists both)
+    return getPathCompletions(partial, { type: 'both' });
+  },
 
   async execute(args, flags, context) {
     const { vfs } = context;
