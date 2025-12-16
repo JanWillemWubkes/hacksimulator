@@ -828,6 +828,25 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 - Architectuur principes ↔ PRD beperkingen
 - Roadmap ↔ PRD fases
 
+### Document Sync Protocol
+
+**Trigger:** Na elke milestone completion OF elke 10 sessies
+**Single Source of Truth:** TASKS.md voor alle metrics
+
+**Sync Checklist:**
+- [ ] Task counts (totaal, voltooid, percentage)
+- [ ] Milestone voortgang (M5, M6, etc.)
+- [ ] Bundle size (production measurement)
+- [ ] "Last updated" datums (alle docs zelfde datum)
+- [ ] Performance metrics (Lighthouse, load time)
+
+**Update volgorde:**
+```
+TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
+```
+
+**Quarterly Full-Sync:** Elke 3 maanden of bij major milestone (M5→M6, MVP→Phase 2)
+
 ---
 
 ## 📚 Referenties & Resources
@@ -883,7 +902,7 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 ---
 
 **Laatst bijgewerkt:** 15 december 2025
-**Versie:** 2.0 (Sessie 85: Document Sync - Scope clarification 295 tasks, roadmap % corrected to 48.5%)
+**Versie:** 2.1 (Sessie 86: Document Sync Protocol added to §12, CLAUDE.md optimization support)
 **Status:** ✅ Deployed - Live in Production + Monetization Planning Complete
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

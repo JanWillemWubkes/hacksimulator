@@ -1,8 +1,8 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 15 december 2025
+**Laatst bijgewerkt:** 16 december 2025
 **Status:** M5 Testing & Launch Phase (LIVE on Netlify) - Monetization MVP Started
-**Sprint:** Sessie 85: Document Consistency Sync - Scope Clarification
+**Sprint:** Sessie 87: Codebase Cleanup & Organization Audit
 
 ---
 
@@ -432,8 +432,21 @@
 - [ ] Bug reports triagen
 - [ ] User feedback verzamelen
 - [ ] Performance metrics checken (load times)
-- [ ] Success criteria evalueren (zie PRD §14)
+- [ ] Success criteria evalueren (zie PRD §21)
 - [ ] Hot fixes indien nodig (priority bugs)
+
+#### Maintenance (Ongoing)
+- [x] **Sessie 87:** Codebase Cleanup & Organization Audit (16 dec 2025)
+  - ✅ Git cleanup: Removed test-results/.last-run.json from tracking
+  - ✅ Disk cleanup: Deleted 39MB .playwright-mcp/ screenshots
+  - ✅ Debug cleanup: Removed 5 debug files from root (cache-diagnostic.html, test-*.js)
+  - ✅ Blog cleanup: Deleted 2 mockup files (57KB) - design artifacts
+  - ✅ SESSIONS.md split: 612KB → 5 archive files (docs/sessions/)
+  - ✅ Docs reorg: Created docs/sessions/, docs/milestones/, docs/archive/
+  - ✅ Git config: Added .gitattributes for cross-platform consistency
+  - ✅ .gitignore: Added explicit patterns for clarity
+  - **Impact:** -39MB disk, A+ git hygiene, root directory 25+ → 23 files
+  - **Future:** Quarterly cleanup audits, session archive rotation every 20 sessions
 
 ---
 

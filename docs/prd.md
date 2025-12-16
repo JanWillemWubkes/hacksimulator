@@ -1,7 +1,7 @@
 # Product Requirements Document - HackSimulator.nl
-**Versie:** 1.6
+**Versie:** 1.7
 **Status:** M0-M4 Completed, M5 In Progress - ✅ **LIVE on Netlify!**
-**Laatst bijgewerkt:** 15 december 2025
+**Laatst bijgewerkt:** 15 december 2025 (Sessie 86 - §21 Monetization Strategy uitgebreid met implementation patterns)
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
@@ -1026,13 +1026,34 @@ HackSimulator.nl hanteert een gefaseerde monetisatie strategie die de educatieve
 **Kernprincipes:**
 - Educational mission first (revenue NEVER compromises learning)
 - Privacy-first (GDPR/AVG compliance mandatory)
-- Youth-friendly (no aggressive monetization tactics)
+- Beginner-friendly (target audience = beginners, skill-based, alle leeftijden 16+)
 - Data-driven (validate Phase 1 before investing in backend)
 - Transparency (all affiliate links disclosed)
 
 ---
 
-### Phase 1: Passive Revenue (MVP, Maand 1-3)
+### §21.1 Ethical Principles (Red Lines)
+
+**Doel:** Ethical revenue generation zonder educational mission te compromitteren
+
+**NEVER:**
+1. **Ads in terminal output** - Terminal must blijven clean en educational
+2. **Paywall basic commands** - 30 MVP commands ALTIJD gratis (cd, ls, cat, nmap, etc.)
+3. **Dark patterns** - Geen guilt-tripping ("Only €5 to unlock..."), manipulative upselling, fake urgency
+4. **Gambling mechanics** - Geen loot boxes, gacha systems, randomized rewards
+5. **Data selling** - NOOIT gebruikersdata verkopen aan third parties
+6. **Aggressive tracking** - Alleen GDPR-compliant analytics met consent
+
+**ALWAYS:**
+1. **Educational mission first** - Revenue decisions NOOIT ten koste van leren
+2. **Transparency** - Affiliate links disclosed met banner + `rel="sponsored"`
+3. **Privacy-first** - Explicit consent voor AdSense cookies (AVG Article 6(1)(a))
+4. **Beginner-friendly** - Target audience = beginners (skill level), alle leeftijden 16+, geen exploitative tactics
+5. **Free tier valuable** - Gratis versie moet standalone waardevol zijn (not crippled)
+
+---
+
+### §21.2 Phase 1: Passive Revenue (MVP, Maand 1-3)
 
 **Target:** €80-300/month
 **Implementation:** M5.5 Monetization MVP (15-17 uur)
@@ -1072,7 +1093,7 @@ HackSimulator.nl hanteert een gefaseerde monetisatie strategie die de educatieve
 
 ---
 
-### Phase 2: Content Monetization (Maand 4-6, post-M6)
+### §21.3 Phase 2: Content Monetization (Maand 4-6, post-M6)
 
 **Target:** €280-1300/month (cumulative with Phase 1)
 **Implementation:** Post-M6 Tutorial System
@@ -1104,7 +1125,7 @@ HackSimulator.nl hanteert een gefaseerde monetisatie strategie die de educatieve
 
 ---
 
-### Phase 3: Freemium Model (Maand 7-12, post-M7) - **CONDITIONAL**
+### §21.4 Phase 3: Freemium Model (Maand 7-12, post-M7) - **CONDITIONAL**
 
 **Target:** €630-3100/month (cumulative with Phase 1+2)
 **Implementation:** M8 or new M10 milestone (60-80 uur backend build)
@@ -1140,6 +1161,44 @@ HackSimulator.nl hanteert een gefaseerde monetisatie strategie die de educatieve
 - Stripe (international) or Mollie (Dutch focus) payment gateway
 - Hosting: Railway/Fly.io (~€10/month) or Netlify Functions (serverless)
 
+**Freemium Red Lines:**
+
+**What Must Stay FREE (30 MVP Commands):**
+- Basic navigation: `cd`, `ls`, `pwd`, `cat`, `clear`
+- Networking basics: `ping`, `nmap`, `whois`, `dig`, `traceroute`
+- File manipulation: `touch`, `mkdir`, `rm`, `cp`, `mv`, `nano`
+- Security basics: `sudo`, `chmod`, `ssh`, `grep`, `curl`
+- Help system: `help`, `man`, `whoami`, `history`
+- **Totaal:** 30 commands - core learning experience
+
+**What CAN Be Premium (Advanced Features):**
+- Advanced tutorials (beyond "Hello Terminal")
+- Gamification badges/achievements
+- Progress tracking across devices (backend sync)
+- Certificates met LinkedIn badge
+- Extra commands (35+): `metasploit`, `john`, `aircrack-ng`, etc.
+- Custom themes (beyond Light/Dark)
+- Ad-free experience
+
+**Pricing Red Lines:**
+
+❌ **NEVER:**
+- Charge meer dan €8/month zonder student discount (target bevat studenten + professionals)
+- Paywall content dat je eerder gratis was (bait-and-switch)
+- Require credit card voor "free trial" (barrier voor studenten/jongeren)
+- Auto-renew zonder duidelijke opt-out
+
+**Tiered Pricing:**
+- **Student tier:** €3/month (met @student.nl verificatie) - 50% discount
+- **Hobbyist tier:** €5/month (baseline, no verification)
+- **Professional tier:** €8/month (career switchers, professionals) - +60% premium
+
+✅ **ALWAYS:**
+- Student discount (50% off met @student.nl email)
+- Family plan (3+ users krijgen 30% korting)
+- Lifetime option (€99 one-time vs €5/month recurring)
+- Clear cancellation link (geen hidden menus)
+
 **Success Criteria:**
 - Freemium conversion >5%
 - Monthly Recurring Revenue (MRR) >€500
@@ -1148,7 +1207,229 @@ HackSimulator.nl hanteert een gefaseerde monetisatie strategie die de educatieve
 
 ---
 
-### Revenue Projections
+### §21.5 Implementation Patterns (Code Examples)
+
+**Doel:** Technical implementation guidelines voor M5.5 Monetization MVP
+
+#### Ad Placement 80/20 Rule
+
+**Formule:**
+- **80%:** User value (terminal, tutorials, help system, blog educatief)
+- **20%:** Monetization (ads, affiliate links, donation CTA)
+
+**Allowed Placements:**
+✅ Footer banner (728x90 desktop, 320x50 mobile)
+✅ Blog sidebar (300x250 rectangle)
+✅ Blog bottom (after educational content consumed)
+✅ Donation button in footer (subtle, non-intrusive)
+
+**Forbidden Placements:**
+❌ Terminal output area
+❌ Command prompt
+❌ Help/man pages
+❌ Interstitials (fullscreen popups)
+❌ Auto-play videos
+
+**Ad Container Pattern:**
+```html
+<!-- Ad Container Pattern -->
+<div class="ad-container" data-ad-type="footer-banner">
+  <p class="ad-disclaimer">Advertisement</p>
+  <!-- AdSense script hier -->
+</div>
+```
+
+**Ad Styling:**
+```css
+/* Ad Styling - Muted UI Principle */
+.ad-container {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-sm);
+  margin: var(--spacing-lg) 0;
+  opacity: 0.8; /* Ads minder prominent dan content */
+}
+
+.ad-disclaimer {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-xs);
+}
+```
+
+#### Affiliate Guidelines
+
+**Pattern: Full Disclosure**
+
+⚠️ **NEVER:**
+- Use affiliate links zonder disclosure
+- Hide sponsorship relationships (transparency = trust)
+- Recommend producten je NIET hebt getest/researched
+- Gebruik "Sponsored" als enige indicator (niet genoeg voor Nederlands publiek)
+
+✅ **ALWAYS:**
+- Add visual banner boven affiliate content:
+  ```html
+  <div class="affiliate-banner">
+    <p>🔗 <strong>Let op:</strong> Deze link bevat affiliate-verwijzingen.
+    Wij ontvangen een commissie bij aankoop, zonder extra kosten voor jou.</p>
+  </div>
+  ```
+- Use `rel="sponsored"` HTML attribute (SEO compliance)
+- Only recommend genuinely useful products (quality > commission rate)
+- Link naar `/affiliate-disclosure.html` in footer
+- Test products zelf of gebruik betrouwbare reviews
+
+**Affiliate Link Pattern:**
+```html
+<a href="https://udemy.com/course/..."
+   rel="sponsored"
+   target="_blank"
+   class="affiliate-link"
+   data-product="Udemy Ethical Hacking Course">
+  Bekijk deze cursus op Udemy
+  <span class="affiliate-badge">Affiliate</span>
+</a>
+```
+
+**Affiliate Styling:**
+```css
+.affiliate-link {
+  color: var(--color-link);
+  text-decoration: underline;
+}
+
+.affiliate-badge {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-left: var(--spacing-xs);
+  font-weight: normal;
+}
+```
+
+#### Donation Messaging (Tone of Voice)
+
+**Principe:** Bemoedigend, NIET smeken of guilt-tripping
+
+❌ **BAD Examples (Dark Patterns):**
+- "Zonder jouw steun kunnen we niet overleven" (te dramatisch)
+- "Slechts €5 voor duizenden uren werk" (guilt-trip)
+- "93% van gebruikers doneert NIET - ben jij anders?" (manipulatief)
+- Fullscreen popup die content blokkeert
+
+✅ **GOOD Examples (Bemoedigend):**
+- "[ SUPPORT ] Steun onze educatieve missie - Doneer" ⭐ **CURRENT** (future-proof, mission-focused)
+- "[ INFO ] Deze site is 100% gratis dankzij donaties"
+- "[ SUPPORT ] Help ons deze tool te verbeteren"
+
+**Implementation Pattern (Footer):**
+```html
+<div class="donation-cta">
+  <p>[ SUPPORT ] Steun onze educatieve missie
+  <a href="https://paypal.me/..."
+     target="_blank"
+     rel="noopener noreferrer"
+     class="btn-small btn-donate-blue"
+     aria-label="Doneer via PayPal om onze educatieve missie te steunen">
+    Doneer
+  </a>
+  </p>
+</div>
+```
+
+**Donation Button Styling:**
+```css
+/* Donation Button - Blue Small (matches blog CTAs) */
+.btn-donate-blue {
+  display: inline-block;
+  padding: var(--spacing-sm) var(--spacing-md);        /* 8px 16px */
+  font-size: 16px;
+  background-color: var(--color-button-bg);            /* #005bb5 dark / #1f7a40 light */
+  color: var(--color-button-text);                     /* #ffffff */
+  border: 1px solid var(--color-button-bg);
+  border-radius: var(--border-radius-button);          /* 4px */
+  font-weight: 600;
+  font-family: var(--font-terminal);
+  text-decoration: none;
+  transition: all var(--transition-fast);              /* 0.15s ease */
+}
+
+.btn-donate-blue:hover {
+  background-color: var(--color-button-bg-hover);      /* #1976d2 dark / #248748 light */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--color-button-shadow-hover);
+}
+```
+
+**Design Rationale:**
+- **Blue color:** Matches blog buttons (consistency = trust)
+- **Small size:** Subtiel maar zichtbaar (80/20 monetization rule)
+- **Mission framing:** Future-proof voor freemium launch (Phase 3)
+- **ASCII brackets:** Terminal aesthetic compliance
+
+---
+
+### §21.6 Privacy & Consent (GDPR/AVG)
+
+**Doel:** Ensure full GDPR/AVG compliance voor alle monetization features
+
+**AdSense Consent Pattern:**
+```javascript
+// src/analytics/consent.js update
+const CONSENT_CATEGORIES = {
+  necessary: { required: true },
+  analytics: { required: false },
+  advertising: { required: false } // NEW for AdSense
+};
+
+function updateConsentBanner() {
+  // Add "Advertising Cookies" toggle to existing banner
+  const banner = document.querySelector('.cookie-consent');
+  banner.innerHTML += `
+    <label>
+      <input type="checkbox" name="advertising" id="consent-advertising">
+      Advertising Cookies (Google AdSense)
+    </label>
+  `;
+}
+```
+
+**Legal Documents Update:**
+- `assets/legal/cookies.html`: Add AdSense cookie disclosure
+- `assets/legal/privacy.html`: Add Google LLC als data processor
+- `assets/legal/terms.html`: Add affiliate disclosure clause
+- **NEW:** `assets/legal/affiliate-disclosure.html` (detailed affiliate policy)
+
+---
+
+### §21.7 Bundle Size Management
+
+**Doel:** Monitor bundle size impact of monetization features (hard limit: 500KB)
+
+**Current Status (M5.5):**
+- **Before:** 318KB / 500KB (182KB buffer, 36%)
+- **After AdSense:** 335-340KB / 500KB (160KB buffer, 32%)
+- **Impact:** +17-22KB (AdSense script + consent UI)
+
+**Future Milestones:**
+- M6 (Tutorial System): +60KB → 395-400KB
+- M7 (Gamification): +50KB → 445-450KB
+- M8 (Analytics): +40KB → 485-490KB
+- **Total:** ~488KB / 500KB (98% budget used) ✅ SAFE
+
+**Monitoring Commands:**
+```bash
+# Check bundle size na AdSense implementatie
+npm run build
+ls -lh dist/ | awk '{print $5, $9}'
+```
+
+**Red Line:** If bundle > 480KB, remove non-essential features BEFORE adding ads
+
+---
+
+### §21.8 Revenue Projections
 
 **Conservative Scenario:**
 - Month 1: €80
@@ -1171,7 +1452,7 @@ HackSimulator.nl hanteert een gefaseerde monetisatie strategie die de educatieve
 
 ---
 
-### Decision Points & Risk Mitigation
+### §21.9 Decision Points & Risk Mitigation
 
 **Decision Point (Month 3):**
 - **If revenue >€200/month:** Proceed to Phase 3 backend build (60-80 hours investment)
@@ -1186,24 +1467,7 @@ HackSimulator.nl hanteert een gefaseerde monetisatie strategie die de educatieve
 
 ---
 
-### Ethical Guidelines
-
-**Red Lines (NEVER):**
-- Ads in terminal output
-- Paywall basic commands (30 MVP commands must stay free)
-- Dark patterns (guilt-tripping, manipulative upselling)
-- Gambling mechanics (loot boxes)
-- Data selling
-
-**Always:**
-- Disclose affiliate links (`rel="sponsored"` + visual banner)
-- Obtain explicit consent for AdSense (GDPR/AVG)
-- Keep free tier valuable (not crippled)
-- Prioritize educational mission over revenue
-
----
-
-### Implementation Dependencies
+### §21.10 Implementation Dependencies
 
 **Phase 1 (M5.5):**
 - No backend required
@@ -1224,6 +1488,20 @@ HackSimulator.nl hanteert een gefaseerde monetisatie strategie die de educatieve
 - Payment gateway (Stripe/Mollie)
 - Database (PostgreSQL)
 - Feature gating logic
+
+---
+
+### §21.11 Implementation Checklist (M5.5)
+
+Bij nieuwe monetization feature:
+- [ ] Check ethical principles (geen red lines crossed)
+- [ ] Test ad placement (80/20 rule compliance)
+- [ ] Add affiliate disclosure (visual banner + rel="sponsored")
+- [ ] Update legal docs (privacy/cookies/terms)
+- [ ] Verify GDPR consent (explicit opt-in voor AdSense)
+- [ ] Measure bundle impact (< 500KB hard limit)
+- [ ] Test on production (Netlify deploy + manual check)
+- [ ] Monitor revenue (Google Analytics + AdSense dashboard)
 
 ---
 
