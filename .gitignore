@@ -45,3 +45,10 @@ test-*.js
 
 # Local Netlify folder
 .netlify
+
+# Root-level debug/cache files (explicit)
+cache-diagnostic.html
+debug-*.html
+
+# Test metadata (explicit)
+.last-run.json
