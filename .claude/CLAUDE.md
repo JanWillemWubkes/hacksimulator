@@ -2,7 +2,7 @@
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
 **Status:** MVP Development
-**Docs:** `docs/prd.md` v1.5 | `docs/commands-list.md` | `docs/STYLEGUIDE.md` v1.0 | `SESSIONS.md` voor sessie logs
+**Docs:** `docs/prd.md` v1.5 | `docs/commands-list.md` | `docs/style-guide.md` v1.0 | `SESSIONS.md` voor sessie logs
 
 ---
 
@@ -79,7 +79,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## 🏗️ Architectural Patterns
 
-→ **Live library:** docs/sessions/CURRENT.md §Architectural Patterns (indexed by Sessie)
+→ **Live library:** docs/sessions/current.md §Architectural Patterns (indexed by Sessie)
 
 **Quick Reference:**
 - **Dark Frame:** navbar/footer dark always (Sessie 44)
@@ -97,35 +97,35 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ### Sessie 86: CLAUDE.md Optimization (15 dec)
 ⚠️ Never keep duplication after refactor | static pattern copies
 ✅ Always second-pass optimization | Single Source of Truth per topic
-📄 docs/sessions/CURRENT.md Sessie 86 (§14→PRD, 587→307→200 lines)
+📄 docs/sessions/current.md Sessie 86 (§14→PRD, 587→307→200 lines)
 
 ### Sessie 84: Skill-Based Targeting (15 dec)
 ⚠️ Never age-filter | email verification at MVP | freemium without proof
 ✅ Always 3-persona model | ethical red lines | anchoring pricing
-📄 docs/sessions/CURRENT.md Sessie 84
+📄 docs/sessions/current.md Sessie 84
 
 ### Sessie 83: Mobile Minimalist (10 dec)
 ⚠️ Never fight platform limits | assume tech fixes win | over-engineer mobile
 ✅ Always validate industry precedent | "less is more" mobile
-📄 docs/sessions/CURRENT.md Sessie 83
+📄 docs/sessions/current.md Sessie 83
 
 ### Sessie 78: Cache Strategy (7 dec)
 ⚠️ Never long cache without versioning | build complexity | over-engineer
 ✅ Always short cache frequent updates | query params backup | must-revalidate
-📄 docs/sessions/RECENT.md Sessie 78
+📄 docs/sessions/recent.md Sessie 78
 
 ### Sessie 77: Responsive Testing (6 dec)
 ⚠️ Never trust browser cache E2E | fragile selectors | skip legal modal tests
 ✅ Always CDP clearBrowserCache | semantic selectors | acceptLegalModal helper
-📄 docs/sessions/ARCHIVE-Q4-2024.md Sessie 77
+📄 docs/sessions/archive-q4-2024.md Sessie 77
 
 **Rotation:** Keep last 5 full (82-86) | Compress 6-10 (77-81) quarterly | Archive 11+ (2-76) in docs/sessions/
 
-**Sessies 82-84:** docs/sessions/CURRENT.md (full detail)
-**Sessies 77-81:** docs/sessions/RECENT.md (full detail)
-**Sessies 51-76:** docs/sessions/ARCHIVE-Q4-2024.md (compressed)
-**Sessies 35-50:** docs/sessions/ARCHIVE-Q3-2024.md (foundations)
-**Sessies 2-34:** docs/sessions/ARCHIVE-EARLY.md (early MVP)
+**Sessies 82-84:** docs/sessions/current.md (full detail)
+**Sessies 77-81:** docs/sessions/recent.md (full detail)
+**Sessies 51-76:** docs/sessions/archive-q4-2024.md (compressed)
+**Sessies 35-50:** docs/sessions/archive-q3-2024.md (foundations)
+**Sessies 2-34:** docs/sessions/archive-early.md (early MVP)
 
 ---
 
@@ -133,7 +133,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ### Voor Sessie
 - Lees `PLANNING.md`, `TASKS.md`, dit bestand
-- Check `PRE-LAUNCH-CHECKLIST.md` voor launch-blocking items
 
 ### Tijdens Ontwikkeling
 - Markeer taken in TASKS.md direct na afronding
@@ -176,7 +175,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Command spec? → `docs/commands-list.md`
 
 ### Common Pitfalls
-→ **Tech constraints:** PRD §13 | **Pattern violations:** docs/sessions/CURRENT.md §Architectural Patterns
+→ **Tech constraints:** PRD §13 | **Pattern violations:** docs/sessions/current.md §Architectural Patterns
 
 ---
 
@@ -189,7 +188,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Light mode colors invisible:** Theme-dependent colors op fixed dark backgrounds (zie §8 CSS Patterns)
 **Layout jank on hover:** Missing transparent border reserve (zie Sessie 38: Dropdown Perfectie)
 
-→ **Volledige troubleshooting + solutions:** docs/sessions/CURRENT.md §Common Issues
+→ **Volledige troubleshooting + solutions:** docs/sessions/current.md §Common Issues
 
 ---
 
@@ -197,9 +196,9 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 **Volledige details:** `docs/prd.md` (v1.5)
 **Command specs:** `docs/commands-list.md`
-**Style guide:** `docs/STYLEGUIDE.md` (v1.0) - Comprehensive design system & component library
-**Sessie logs:** `SESSIONS.md` - Navigation hub to session archives (87 sessions total split across docs/sessions/: CURRENT.md, RECENT.md, ARCHIVE-Q4-2024.md, ARCHIVE-Q3-2024.md, ARCHIVE-EARLY.md)
-**Netlify/Domain setup:** `docs/NETLIFY-SETUP.md` - Complete domain launch guide (18KB)
+**Style guide:** `docs/style-guide.md` (v1.0) - Comprehensive design system & component library
+**Sessie logs:** `SESSIONS.md` - Navigation hub to session archives (87 sessions total split across docs/sessions/: current.md, recent.md, archive-q4-2024.md, archive-q3-2024.md, archive-early.md)
+**Netlify/Domain setup:** `docs/netlify-setup.md` - Complete domain launch guide (18KB)
 **Filesystem structure:** PRD Bijlage B
 **Tech rationale:** PRD §13
 

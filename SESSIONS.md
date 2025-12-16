@@ -8,7 +8,7 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (82-84)](docs/sessions/CURRENT.md) - Full Detail
+### [Current Sessions (82-84)](docs/sessions/current.md) - Full Detail
 **Sessies:** 84, 83, 82
 **Period:** 10-15 december 2025
 **Topics:**
@@ -18,7 +18,7 @@
 
 ---
 
-### [Recent Sessions (78-81)](docs/sessions/RECENT.md) - Full Detail
+### [Recent Sessions (78-81)](docs/sessions/recent.md) - Full Detail
 **Sessies:** 81, 79, 78
 **Period:** 7-9 december 2025
 **Topics:**
@@ -30,7 +30,7 @@
 
 ---
 
-### [Archive Q4 2024 (51-76)](docs/sessions/ARCHIVE-Q4-2024.md) - Compressed
+### [Archive Q4 2024 (51-76)](docs/sessions/archive-q4-2024.md) - Compressed
 **Sessies:** 74, 66, 59, 58, 56, 55, 54, 53, 52, 51... (compressed format)
 **Period:** 18 november - 6 december 2025
 **Topics:**
@@ -45,7 +45,7 @@
 
 ---
 
-### [Archive Q3 2024 (35-50)](docs/sessions/ARCHIVE-Q3-2024.md) - Early Foundations
+### [Archive Q3 2024 (35-50)](docs/sessions/archive-q3-2024.md) - Early Foundations
 **Sessies:** 50, 49, 48, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35
 **Period:** 5-17 november 2025
 **Topics:**
@@ -59,7 +59,7 @@
 
 ---
 
-### [Archive Early Sessions (2-34)](docs/sessions/ARCHIVE-EARLY.md) - Historical Record
+### [Archive Early Sessions (2-34)](docs/sessions/archive-early.md) - Historical Record
 **Sessies:** 34, 33, 32, 31... down to Sessie 2
 **Period:** 14 oktober - 5 november 2025
 **Topics:**
@@ -95,10 +95,10 @@
 **Quarterly (every ~20 sessions):**
 1. Move oldest "CURRENT" sessions (82-84) → RECENT
 2. Compress oldest "RECENT" sessions (78-81) → relevant archive
-3. Keep CURRENT.md lean (max 5 sessions full detail)
+3. Keep current.md lean (max 5 sessions full detail)
 
 **After each session:**
-1. Add session summary to CURRENT.md (full detail)
+1. Add session summary to current.md (full detail)
 2. Update "Total Sessions" count in this navigation file
 3. Every 5 sessions: Review compression of sessions 20+ old
 
@@ -109,15 +109,15 @@
 ## 📚 Quick Reference
 
 **Looking for specific patterns?** Use these guides:
-- **Architectural Patterns:** See CURRENT.md §Architectural Patterns section (rotates every 5 sessions)
+- **Architectural Patterns:** See current.md §Architectural Patterns section (rotates every 5 sessions)
 - **Common Issues:** See PLANNING.md §Troubleshooting
 - **Recent Learnings:** See .claude/CLAUDE.md §Recent Critical Learnings (last 5 sessions)
 
 **For historical architectural decisions:**
 - Dark Frame Pattern → Archive Q3 2024, Sessie 44
 - 3-Layer Modal System → Archive Early, Sessie 33
-- Cache Busting Strategy → RECENT.md, Sessie 78
-- Mobile Responsive Patterns → CURRENT.md, Sessies 81-83
+- Cache Busting Strategy → recent.md, Sessie 78
+- Mobile Responsive Patterns → current.md, Sessies 81-83
 
 ---
 
