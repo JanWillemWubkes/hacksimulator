@@ -4,13 +4,22 @@
 
 import registry from '../../core/registry.js';
 import { lightBoxText } from '../../utils/asciiBox.js';
-import { BOX_CHARS, getResponsiveBoxWidth, smartTruncate, isMobileView } from '../../utils/box-utils.js';
+import { BOX_CHARS, getResponsiveBoxWidth, smartTruncate, isMobileView, wordWrap } from '../../utils/box-utils.js';
 
 // ─────────────────────────────────────────────────
 // Box Drawing Configuration
 // ─────────────────────────────────────────────────
 const BOX = BOX_CHARS; // Responsive box characters (shared utility)
 const COMMAND_COL_WIDTH = 15; // Width for command name column
+
+// Category educational descriptions (Nederlands, educational tone)
+const CATEGORY_DESCRIPTIONS = {
+  system: 'Deze tools helpen je de terminal te gebruiken en je huidige sessie te beheren.',
+  filesystem: 'Deze tools laten je bestanden en mappen organiseren, net als in een grafische verkenner.',
+  network: 'Deze tools scannen netwerken en verzamelen informatie over servers en open poorten.',
+  security: 'Deze tools testen de beveiliging van systemen - gebruik ze alleen ethisch!',
+  special: 'Speciale commands om de simulator te resetten of configureren.'
+};
 
 // Note: BOX_WIDTH is calculated dynamically in execute() to ensure DOM is ready
 
@@ -92,6 +101,46 @@ function formatCommandRow(cmd) {
 }
 
 /**
+ * Formats educational category description (multi-line support)
+ * Wraps long descriptions across multiple lines within the box
+ * Appears between column headers and command list to provide learning context
+ *
+ * Example (desktop, 70 chars):
+ * │ Deze tools laten je bestanden en mappen organiseren, net als in   │
+ * │ een grafische verkenner.                                           │
+ * ├────────────────────────────────────────────────────────────────────┤
+ *
+ * @param {string} category - Category name (lowercase)
+ * @returns {string} Formatted description rows with borders + divider
+ */
+function formatCategoryDescription(category) {
+  const BOX_WIDTH = getResponsiveBoxWidth(); // Calculate width when needed (DOM ready)
+  const contentWidth = BOX_WIDTH - 2; // -2 for side borders
+  const descPadding = 2; // Space padding: " text "
+
+  // Get description text (with fallback for unknown categories)
+  const description = CATEGORY_DESCRIPTIONS[category.toLowerCase()] ||
+                      `Commands in de '${category}' categorie.`;
+
+  // Word-wrap description to fit box width
+  const maxDescWidth = contentWidth - descPadding;
+  const descLines = wordWrap(description, maxDescWidth);
+
+  // Format each wrapped line with borders
+  let output = '';
+  descLines.forEach(line => {
+    const content = ` ${line}`;
+    const paddedContent = content.padEnd(contentWidth);
+    output += BOX.vertical + paddedContent + BOX.vertical + '\n';
+  });
+
+  // Add divider separator after description
+  output += createDivider();
+
+  return output;
+}
+
+/**
  * Formats complete category section with box
  * Phase 2 ready: can add category description between header and column headers
  */
@@ -108,8 +157,8 @@ function formatCategorySection(category, commands, registry) {
   // Divider
   output += createDivider() + '\n';
 
-  // PHASE 2 PLACEHOLDER: Add formatCategoryDescription() here
-  // output += formatCategoryDescription(category) + '\n';
+  // Category description (educational context)
+  output += formatCategoryDescription(category) + '\n';
 
   // Command rows
   commands.forEach(cmd => {

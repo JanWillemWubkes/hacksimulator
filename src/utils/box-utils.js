@@ -46,7 +46,7 @@ const BOX_WIDTHS = {
   SMALL_MOBILE: 32,    // iPhone SE safe (375px / 16px font ≈ 37 chars - 5 margin)
   MOBILE: 40,          // Standard mobile safe (480px viewport)
   TABLET: 48,          // Current "mobile-friendly" standard (768px)
-  DESKTOP: 56          // Current leerpad desktop width (1024px+)
+  DESKTOP: 70          // Desktop width optimized for educational content (1024px+, 25% wider)
 };
 
 // ─────────────────────────────────────────────────
@@ -65,7 +65,7 @@ const BOX_WIDTHS = {
  *
  * Performance: ~0.1ms overhead per command execution (one getComputedStyle call)
  *
- * @returns {number} Box width in characters (32-56)
+ * @returns {number} Box width in characters (32-70)
  */
 export function getResponsiveBoxWidth() {
   // Fallback for SSR/testing environments
@@ -88,7 +88,7 @@ export function getResponsiveBoxWidth() {
     return Math.min(BOX_WIDTHS.SMALL_MOBILE, maxChars - 5); // Extra margin for safety
   } else if (containerWidth <= BREAKPOINTS.MOBILE || maxChars < 48) {
     return Math.min(BOX_WIDTHS.MOBILE, maxChars - 5);
-  } else if (containerWidth <= BREAKPOINTS.TABLET || maxChars < 56) {
+  } else if (containerWidth <= BREAKPOINTS.TABLET || maxChars < 70) {
     return Math.min(BOX_WIDTHS.TABLET, maxChars - 5);
   } else {
     return BOX_WIDTHS.DESKTOP;
@@ -179,4 +179,63 @@ export function smartTruncate(text, maxWidth) {
   // Fallback: single word longer than available width
   // Example: "Superlongcommandname" with maxWidth=10 → "Superlo..."
   return truncated + '...';
+}
+
+// ─────────────────────────────────────────────────
+// Multi-Line Word Wrapping Function
+// ─────────────────────────────────────────────────
+
+/**
+ * Smart word-wrap text to fit within max width
+ * Breaks at word boundaries, preserving readability
+ *
+ * Algorithm:
+ * 1. Split text into words
+ * 2. Build lines greedily (fit as many words per line)
+ * 3. Break when next word would exceed maxWidth
+ * 4. Return array of wrapped lines
+ *
+ * Used by: help.js formatCategoryDescription() for multi-line descriptions
+ *
+ * @param {string} text - Text to wrap
+ * @param {number} maxWidth - Maximum width per line
+ * @returns {string[]} Array of wrapped lines
+ *
+ * @example
+ * wordWrap("Deze tools laten je bestanden organiseren", 35)
+ * // Returns: ["Deze tools laten je bestanden", "organiseren"]
+ */
+export function wordWrap(text, maxWidth) {
+  if (!text || text.length === 0) return [''];
+  if (maxWidth < 10) maxWidth = 10; // Safety floor
+
+  const words = text.split(' ');
+  const lines = [];
+  let currentLine = '';
+
+  words.forEach(word => {
+    // Edge case: word itself exceeds maxWidth
+    if (word.length > maxWidth) {
+      if (currentLine) lines.push(currentLine.trim());
+      lines.push(word.substring(0, maxWidth - 3) + '...');
+      currentLine = '';
+      return;
+    }
+
+    // Try adding word to current line
+    const testLine = currentLine ? `${currentLine} ${word}` : word;
+
+    if (testLine.length <= maxWidth) {
+      currentLine = testLine; // Fits!
+    } else {
+      // Start new line
+      if (currentLine) lines.push(currentLine);
+      currentLine = word;
+    }
+  });
+
+  // Add final line
+  if (currentLine) lines.push(currentLine);
+
+  return lines.length > 0 ? lines : [''];
 }
