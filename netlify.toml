@@ -69,7 +69,9 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
 
     # Content Security Policy (M5 Performance: Moved from HTML meta tag for faster parsing)
-    Content-Security-Policy = "default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline';"
+    # 'unsafe-hashes' allows onload event handlers for deferred CSS loading
+    # font-src 'self' data: allows base64 inline fonts in main.css
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-hashes' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:;"
 
 # Strict Transport Security (Uncomment when custom domain is live with HTTPS)
 # [[headers]]
