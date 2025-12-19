@@ -68,6 +68,9 @@
     # Referrer Policy
     Referrer-Policy = "strict-origin-when-cross-origin"
 
+    # Content Security Policy (M5 Performance: Moved from HTML meta tag for faster parsing)
+    Content-Security-Policy = "default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline';"
+
 # Strict Transport Security (Uncomment when custom domain is live with HTTPS)
 # [[headers]]
 #   for = "/*"

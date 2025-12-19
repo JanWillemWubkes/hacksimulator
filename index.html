@@ -13,21 +13,25 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
-    <!-- Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy"
-          content="default-src 'self';
-                   script-src 'self' https://www.googletagmanager.com;
-                   style-src 'self' 'unsafe-inline';">
+    <!-- Content Security Policy moved to netlify.toml HTTP headers (M5 Performance) -->
 
     <title>HackSimulator.nl - Leer Ethisch Hacken</title>
 
     <!-- Font Preload removed - font is now inline base64 in main.css (Sessie 83) -->
 
+    <!-- Preload Critical Resources (M5 Performance Optimization) -->
+    <link rel="preload" href="styles/main.css?v=73-button-alignment" as="style">
+    <link rel="preload" href="styles/terminal.css?v=88-multiline-wrap" as="style">
+    <link rel="modulepreload" href="src/main.js">
+
     <!-- Stylesheets -->
     <link rel="stylesheet" href="styles/main.css?v=73-button-alignment">
     <link rel="stylesheet" href="styles/terminal.css?v=88-multiline-wrap">
-    <link rel="stylesheet" href="styles/mobile.css?v=73-button-alignment">
-    <link rel="stylesheet" href="styles/animations.css?v=88-multiline-wrap">
+    <!-- Deferred CSS (non-critical for first paint) -->
+    <link rel="stylesheet" href="styles/mobile.css?v=87-perf-defer" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="styles/mobile.css?v=87-perf-defer"></noscript>
+    <link rel="stylesheet" href="styles/animations.css?v=87-perf-defer" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="styles/animations.css?v=87-perf-defer"></noscript>
     <link rel="stylesheet" href="src/ui/command-search-modal.css?v=88-multiline-wrap">
 </head>
 <body>
