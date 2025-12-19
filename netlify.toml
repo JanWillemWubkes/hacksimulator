@@ -68,6 +68,9 @@
     # Referrer Policy
     Referrer-Policy = "strict-origin-when-cross-origin"
 
+    # Cross-Origin-Opener-Policy (M5 Best Practices: Isolate browsing context)
+    Cross-Origin-Opener-Policy = "same-origin"
+
     # Content Security Policy (M5 Performance: Moved from HTML meta tag for faster parsing)
     # 'unsafe-hashes' allows onload event handlers for deferred CSS loading
     # font-src 'self' data: allows base64 inline fonts in main.css
