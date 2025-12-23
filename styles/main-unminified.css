@@ -368,8 +368,7 @@ button {
 
 /* Compact donation paragraph (no box styling) - Column 2 (center) */
 .donate-compact {
-  flex: 1 0 100%;  /* Grow to full width when wrapping */
-  order: 3;        /* Force to bottom row when wrap occurs */
+  flex: 0 0 auto;  /* Natural width, stays inline on desktop */
   margin: 0;
   font-size: 16px;
   color: var(--color-footer-text);
@@ -988,8 +987,12 @@ footer nav a:not(:first-child) {
 @media (max-width: 1024px) {
   .footer-content {
     gap: var(--spacing-xs) var(--spacing-md);
-    /* Flexbox + flex-wrap from base styles handle wrapping automatically */
-    /* No explicit positioning needed - donate wraps naturally via order: 3 */
+  }
+
+  /* TABLET ONLY: Force donate to wrap to row 2 (Sessie 87 fix) */
+  .donate-compact {
+    flex-basis: 100%;  /* Forces wrap to new row */
+    order: 3;          /* Places after nav (copyright=0, nav=0, donate=3) */
   }
 }
 
