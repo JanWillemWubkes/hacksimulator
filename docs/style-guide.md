@@ -1198,6 +1198,78 @@ Laag 1 - Credentials:
 
 ---
 
+## Blog Content Standards
+
+**Purpose:** Establish consistent content patterns for blog posts to maintain terminal aesthetic and accessibility.
+
+### Emoji Usage Policy
+
+**Rule:** ❌ **NO EMOJIS** in blog content
+
+**Rationale:**
+1. **Terminal Aesthetic** - Blogs are part of HackSimulator.nl brand, must reflect CLI/terminal design language
+2. **Accessibility** - Screen readers often skip emoji or announce unpredictably
+3. **Compatibility** - Unicode emoji render inconsistently across devices (Android fallback fonts documented in §Typography Mobile UI Strategy)
+4. **Professional Tone** - Developer-focused audience expects ASCII-based formatting (industry standard: man pages, GitHub, VS Code)
+
+### ASCII Bracket Patterns (Blog)
+
+Use these **ASCII bracket patterns** instead of emoji:
+
+| Pattern | Use Case | Example |
+|---------|----------|---------|
+| `[ ✓ ]` | Affirmative/Pros/Recommendations | `[ ✓ ] TryHackMe subscriptie` |
+| `[ X ]` | Negative/Cons/Avoid | `[ X ] Hoge kosten zonder certificering` |
+| `[ TIP ]` | Information/Helpful hints | `[ TIP ] Voor wie is deze gids?` |
+| `[ Q ]` | Questions/FAQ headers | `[ Q ] "Ben ik niet te oud?"` |
+| `[ LINK ]` | External references/Affiliate | `[ LINK ] Let op: Deze link bevat affiliate-verwijzingen` |
+| `[ THEORY ]` | Learning/Study sections | `[ THEORY ] Structured Learning Path` |
+| `[ PRACTICE ]` | Hands-on/Practical | `[ PRACTICE ] Hands-On Labs` |
+| `[ SKILL ]` | Skill development | `[ SKILL ] Bredere Skillset` |
+| `[ BUDGET ]` | Budget/Finance | `[ BUDGET ] Budget-Friendly Optie` |
+| `[ ACTION ]` | Call-to-action/Start | `[ ACTION ] Volgende Stap` |
+| `[ PLAN ]` | Timeline/Planning | `[ PLAN ] Week 1 Actieplan` |
+| `[ GOAL ]` | Objectives/Focus | `[ GOAL ] Totale kosten: €250-400` |
+| `[ COMMUNITY ]` | Group/Audience | `[ COMMUNITY ] Community` |
+| `[ STUDENT ]` | Student persona | `[ STUDENT ] Studenten (16-25 jaar)` |
+| `[ CAREER ]` | Career switcher | `[ CAREER ] Career switchers (25-45 jaar)` |
+| `[ EXPLORE ]` | Enthusiast/Hobbyist | `[ EXPLORE ] Enthousiastelingen` |
+
+**Formatting Rules:**
+- Square brackets with spaces: `[ ✓ ]` not `[✓]`
+- Uppercase keywords: `[ TIP ]` not `[ tip ]`
+- One space after bracket before content: `[ ✓ ] Content`
+
+### Visual Hierarchy Alternatives
+
+Instead of emoji for visual hierarchy, use:
+
+**Headers:**
+```html
+<h3>[ THEORY ] Structured Learning</h3>
+```
+
+**Lists:**
+```html
+<ul>
+  <li>[ ✓ ] TryHackMe subscriptie (€10/maand)</li>
+  <li>[ ✓ ] Udemy cursus (€15 gemiddeld)</li>
+</ul>
+```
+
+**Callout Boxes:**
+```html
+<div class="callout">
+  <p>[ TIP ] Voor wie is deze gids?</p>
+</div>
+```
+
+### Exception: None
+
+**NO exceptions** for emoji usage in blog content. All visual emphasis must use ASCII brackets or HTML/CSS styling.
+
+---
+
 ## Interactive States
 
 ### Hover States
