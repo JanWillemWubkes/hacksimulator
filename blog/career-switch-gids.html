@@ -504,18 +504,7 @@
     </div>
   </footer>
 
-  <!-- Theme Toggle Script -->
-  <script src="../src/ui/theme-toggle.js"></script>
-
-  <!-- Reading Progress Script -->
-  <script>
-    window.addEventListener('scroll', () => {
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight - windowHeight;
-      const scrollTop = window.scrollY;
-      const progress = (scrollTop / documentHeight) * 100;
-      document.querySelector('.reading-progress').style.width = progress + '%';
-    });
-  </script>
+  <!-- Theme Toggle & Reading Progress (CSP-compliant external module) -->
+  <script src="../src/ui/blog-theme.js" type="module"></script>
 </body>
 </html>

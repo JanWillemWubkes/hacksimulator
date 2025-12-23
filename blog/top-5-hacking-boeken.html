@@ -382,42 +382,8 @@
     </div>
   </footer>
 
-  <!-- Scripts for theme toggle and reading progress -->
-  <script>
-    // Theme Toggle (same as main site)
-    const themeToggle = document.querySelector('.theme-toggle');
-    const html = document.documentElement;
-
-    // Load saved theme
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    html.setAttribute('data-theme', savedTheme);
-
-    // Update toggle UI
-    function updateToggleUI(theme) {
-      document.querySelectorAll('.toggle-option').forEach(opt => {
-        opt.classList.toggle('active', opt.dataset.theme === theme);
-      });
-    }
-    updateToggleUI(savedTheme);
-
-    // Toggle event
-    themeToggle.addEventListener('click', () => {
-      const currentTheme = html.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      html.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-      updateToggleUI(newTheme);
-    });
-
-    // Reading Progress Bar
-    const progressBar = document.querySelector('.reading-progress');
-    window.addEventListener('scroll', () => {
-      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      progressBar.style.width = scrolled + '%';
-    });
-  </script>
+  <!-- Theme Toggle & Reading Progress (CSP-compliant external module) -->
+  <script src="../src/ui/blog-theme.js" type="module"></script>
 
   <!-- Affiliate Tracking (blog-specific lightweight bundle) -->
   <script src="../src/blog-init.js" type="module"></script>

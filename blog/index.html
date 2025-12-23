@@ -204,57 +204,7 @@
     </div>
   </footer>
 
-  <!-- Theme Toggle Script -->
-  <script>
-    // Initialize theme from localStorage (default: dark)
-    function initializeTheme() {
-      const savedTheme = localStorage.getItem('theme');
-      const isDark = savedTheme ? savedTheme === 'dark' : true;
-      applyTheme(isDark);
-    }
-
-    // Apply theme to document
-    // Updates data-theme attribute which CSS uses to apply light/dark mode variables
-    // Also updates toggle label active states for visual feedback (VS Code pattern)
-    function applyTheme(isDark) {
-      const root = document.documentElement;
-      const darkOption = document.querySelector('.toggle-option[data-theme="dark"]');
-      const lightOption = document.querySelector('.toggle-option[data-theme="light"]');
-
-      if (isDark) {
-        // Dark theme: Set data-theme attribute to trigger dark mode CSS variables
-        root.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-
-        // Update toggle labels: dark=active (bright), light=inactive (dimmed)
-        if (darkOption) darkOption.classList.add('active');
-        if (lightOption) lightOption.classList.remove('active');
-      } else {
-        // Light theme: Set data-theme attribute to trigger light mode CSS variables
-        root.setAttribute('data-theme', 'light');
-        localStorage.setItem('theme', 'light');
-
-        // Update toggle labels: light=active (bright), dark=inactive (dimmed)
-        if (lightOption) lightOption.classList.add('active');
-        if (darkOption) darkOption.classList.remove('active');
-      }
-    }
-
-    // Toggle between dark and light theme
-    function toggleTheme() {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const isDark = currentTheme === 'dark';
-      applyTheme(!isDark);
-    }
-
-    // Initialize theme on page load
-    initializeTheme();
-
-    // Add click handler to theme toggle button
-    const themeToggle = document.querySelector('.theme-toggle');
-    if (themeToggle) {
-      themeToggle.addEventListener('click', toggleTheme);
-    }
-  </script>
+  <!-- Theme Toggle (CSP-compliant external module) -->
+  <script src="../src/ui/blog-theme.js" type="module"></script>
 </body>
 </html>
