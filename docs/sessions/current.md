@@ -4,6 +4,55 @@
 
 ---
 
+## Sessie 87: Blog Volledige Consistency Standaardisatie (24 december 2025)
+
+**Scope:** Complete consistency pass over alle 6 blog posts - metadata, structure, SEO, UX
+
+**Changes:**
+- ✅ Metadata gestandaardiseerd: `[Datum] | [Leestijd] | [Category]` format
+- ✅ Posts 5-6 toegevoegd aan blog index (was verborgen)
+- ✅ "Bronnen" category toegevoegd voor affiliate content
+- ✅ Blog post footers toegevoegd aan posts 5-6 (feedback CTA + back link)
+- ✅ JSON-LD publisher URL fixed in post 4 (SEO compliance)
+- ✅ HTML structure fixed: `<p class="post-meta">` → `<div class="blog-post-meta">`
+- ✅ Stylesheet versions aligned, favicon format standardized
+
+**Architectural Decisions:**
+
+1. **"Bronnen" Category (NL vs EN)**
+   - Decision: "Bronnen" (Nederlands)
+   - Rationale: PRD §6.6 "UI teksten: Volledig Nederlands" + majority 4/6 categories al NL
+   - Future-proof: Aligns met volledige NL standardisatie roadmap
+
+2. **Blog Metadata Format Standardization**
+   - Format: `[Datum] | [Leestijd] | [Category]`
+   - Separator: Pipe `|` (terminal aesthetic)
+   - Category visibility: Industry standard (Medium, DEV.to tonen ook category)
+   - Mobile-friendly: ≤40 chars, kort "min" format
+
+3. **Blog Post Footer Pattern**
+   - Structure: Feedback CTA + Back link
+   - Template: "Vragen over [topic]? We horen graag van je via GitHub."
+   - Consistent UX: Posts 1-4 hadden al, posts 5-6 toegevoegd
+
+**Critical Fix:**
+- Posts 5-6 gebruikten `.post-meta` class die NIET bestond in CSS → onstyled metadata
+- Fixed: `<p class="post-meta">` → `<div class="blog-post-meta">`
+
+**Files Modified (8):**
+1. career-switch-gids.html - Metadata + JSON-LD
+2. welkom.html - Metadata
+3. wat-is-ethisch-hacken.html - Metadata
+4. terminal-basics.html - Metadata
+5. beste-online-cursussen-ethical-hacking.html - HTML structure + footer + versions
+6. top-5-hacking-boeken.html - HTML structure + footer + versions
+7. blog/index.html - Posts 5-6 + Bronnen filter + category labels
+8. styles/blog.css - #bronnen filter rules
+
+**Testing:** Playwright browser tests - alle filters werkend, metadata consistent
+
+---
+
 ## Sessie 84: Doelgroep Repositioning - Age-Restrictive → Skill-Based (15 december 2025)
 
 **Doel:** Strategic repositioning from "15-25 jaar" age-restrictive targeting to skill-based + passion-based targeting (beginners + enthousiastelingen), with tiered pricing research for Phase 3 freemium

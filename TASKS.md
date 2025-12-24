@@ -477,9 +477,10 @@
 - [ ] Create `src/ui/affiliate-links.js` with click tracking (1 hour)
   - Link manager with analytics integration
   - Add `affiliate_click` event to `src/analytics/events.js`
-- [ ] Write 2 blog posts with affiliate links (2 hours)
+- [x] ✅ Write 2 blog posts with affiliate links (compleet: 24 dec 2024)
   - `blog/top-5-hacking-boeken.html` (Bol.com links)
   - `blog/beste-online-cursussen-ethical-hacking.html` (Udemy, TryHackMe, Skillshare)
+  - **Note:** Posts geschreven + geïntegreerd in blog index met "Bronnen" category
 - [ ] Update legal docs with affiliate disclosure (1 hour)
   - Create `assets/legal/affiliate-disclosure.html`
   - Update `assets/legal/terms.html` with disclosure section

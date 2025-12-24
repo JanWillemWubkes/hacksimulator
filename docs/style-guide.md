@@ -2261,6 +2261,109 @@ Normal: 0.3s (modals, transitions)
 
 ---
 
+## Blog Component Patterns
+
+### Blog Post Metadata
+
+**Format:** `[Datum] | [Leestijd] | [Category]`
+
+**HTML Structure:**
+```html
+<div class="blog-post-meta">
+  <time datetime="YYYY-MM-DD">DD maand YYYY</time>
+  <span>X min</span>
+  <span>Category</span>
+</div>
+```
+
+**Rules:**
+- **Date format:** Full Dutch format (e.g., "23 december 2025")
+- **Reading time:** Short format "X min" (not "X min lezen" or "X min leestijd")
+- **Category:** Capitalized Dutch label (e.g., "Bronnen", "Carrière", "Beginners")
+- **Separator:** Pipe `|` automatically via CSS (do NOT add manually in HTML)
+- **Mobile limit:** Total length ≤40 characters
+
+**CSS Styling:**
+- Class: `.blog-post-meta`
+- Pipe separators via CSS pseudo-elements
+- Responsive: Column layout on mobile
+
+---
+
+### Blog Post Footer
+
+**Purpose:** Provide feedback CTA + navigation back to blog index
+
+**HTML Structure:**
+```html
+<footer class="blog-post-footer">
+  <p>Vragen over [topic]? We horen graag van je via <a href="https://github.com/JanWillemWubkes/hacksimulator/issues" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+  <p><a href="index.html">← Terug naar blog overzicht</a></p>
+</footer>
+```
+
+**Rules:**
+- **Location:** Inside `<article>`, before closing `</article>` tag
+- **Feedback CTA:** Personalize topic ("Vragen over terminal commands?", "Vragen over hacking boeken?")
+- **GitHub link:** Always target="_blank" + rel="noopener noreferrer"
+- **Back link:** Consistent text "← Terug naar blog overzicht"
+
+---
+
+### Blog Categories
+
+**Available Categories:**
+
+| Category ID | Display Label | Description |
+|-------------|---------------|-------------|
+| `beginners` | Beginners | Introductory content voor nieuwe gebruikers |
+| `concepten` | Concepten | Fundamentele cybersecurity concepten |
+| `carriere` | Carrière | Career switching, professionele ontwikkeling |
+| `bronnen` | Bronnen | Learning resources (boeken, cursussen, platforms) |
+| `tools` | Tools | Tool reviews en tutorials |
+| `gevorderden` | Gevorderden | Advanced topics voor ervaren gebruikers |
+
+**Naming Convention:**
+- **Category IDs:** Lowercase, no spaces (used in `data-category` attribute)
+- **Display Labels:** Capitalized Dutch (used in metadata + filter buttons)
+- **Language:** Nederlands (aligned with PRD §6.6 "UI teksten: Volledig Nederlands")
+
+**Adding New Category:**
+1. Choose Dutch label aligned with PRD language strategy
+2. Add category target in blog/index.html: `<div id="category-id" class="category-target"></div>`
+3. Add filter button in navigation
+4. Add CSS filter rules to styles/blog.css
+5. Update this documentation
+
+---
+
+### Blog Index Card
+
+**HTML Structure:**
+```html
+<article class="blog-post-card" data-category="category-id">
+  <h2><a href="post-url.html">Post Title</a></h2>
+  <div class="blog-meta">
+    <span>[DD mmm YYYY]</span>
+    <span>[X min]</span>
+    <span>[Category]</span>
+  </div>
+  <p class="blog-excerpt">
+    Post excerpt (2-3 sentences, ~120-150 chars)
+  </p>
+  <a href="post-url.html" class="blog-read-more">Lees verder</a>
+</article>
+```
+
+**Rules:**
+- **data-category:** Must match category ID exactly (lowercase)
+- **Date format:** Abbreviated Dutch (e.g., "[23 dec 2025]")
+- **Brackets:** Square brackets around each metadata element
+- **Excerpt length:** Keep concise (~120-150 chars for grid layout)
+- **Chronological order:** Newest posts first in grid
+
+---
+
 ## Version History
 
 | Version | Date | Changes |
