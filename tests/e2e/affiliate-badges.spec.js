@@ -35,11 +35,22 @@ for (const page of pages) {
       await expect(firstRibbon).toBeVisible();
       await expect(firstRibbon).toContainText('AFFILIATE');
 
-      // Verify top-right positioning
-      const box = await firstRibbon.boundingBox();
-      expect(box).not.toBeNull();
-      expect(box.x).toBeGreaterThan(100); // Right side of card
-      expect(box.y).toBeLessThan(150);     // Top of card
+      // Verify top-right positioning RELATIVE to parent card
+      const firstCard = browserPage.locator('.resource-card').first();
+      const ribbonBox = await firstRibbon.boundingBox();
+      const cardBox = await firstCard.boundingBox();
+
+      expect(ribbonBox).not.toBeNull();
+      expect(cardBox).not.toBeNull();
+
+      // Ribbon should be in top-right corner of its card
+      // Right edge: ribbon.right ≈ card.right (within 5px tolerance)
+      const ribbonRight = ribbonBox.x + ribbonBox.width;
+      const cardRight = cardBox.x + cardBox.width;
+      expect(Math.abs(ribbonRight - cardRight)).toBeLessThan(5);
+
+      // Top edge: ribbon.top ≈ card.top (within 5px tolerance)
+      expect(Math.abs(ribbonBox.y - cardBox.y)).toBeLessThan(5);
     });
 
     test('[AFFILIATE] text does not wrap (Phase 1 fix)', async ({ page: browserPage }) => {
@@ -121,7 +132,10 @@ for (const page of pages) {
         '.badge-websec',
         '.badge-exploits',
         '.badge-python',
-        '.badge-socialeng'
+        '.badge-socialeng',
+        '.badge-bootcamp',    // Course badges
+        '.badge-creative',
+        '.badge-platform'
       ];
 
       let foundBadges = 0;
