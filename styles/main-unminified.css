@@ -654,8 +654,9 @@ button {
 }
 
 /* Focus State (Accessibility) */
-.resource-cta:focus {
-  outline: 3px solid var(--color-ui-primary);
+.resource-cta:focus,
+.resource-cta:focus-visible {
+  outline: 3px solid var(--color-ui-primary) !important;
   outline-offset: 2px;
 }
 
