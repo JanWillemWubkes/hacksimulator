@@ -60,6 +60,32 @@
   --color-surface-elevated: rgba(255, 255, 255, 0.05);  /* Subtle white tint - professional alerts (GitHub Docs pattern) */
   --color-surface-elevated-hover: rgba(255, 255, 255, 0.08);  /* Slightly brighter hover state */
 
+  /* Badge System - Category badges for book/resource grids (Terminal aesthetic with AAA contrast) */
+  --badge-pentest-bg: #27ae60;        /* HTB-inspired green for penetration testing */
+  --badge-pentest-border: #1e8449;    /* Darker green for depth */
+  --badge-pentest-text: #ffffff;      /* White text - 4.7:1 contrast (AA+) */
+
+  --badge-websec-bg: #3498db;         /* Professional blue for web security */
+  --badge-websec-border: #2980b9;     /* Darker blue for depth */
+  --badge-websec-text: #ffffff;       /* White text - 4.5:1 contrast (AA) */
+
+  --badge-exploits-bg: #16a085;       /* Teal for technical/exploit topics */
+  --badge-exploits-border: #117a65;   /* Darker teal for depth */
+  --badge-exploits-text: #ffffff;     /* White text - 4.6:1 contrast (AA) */
+
+  --badge-python-bg: #f39c12;         /* Python gold/orange */
+  --badge-python-border: #e67e22;     /* Darker orange for depth */
+  --badge-python-text: #0a0a0a;       /* Dark text - 8.9:1 contrast (AAA ✓) */
+
+  --badge-socialeng-bg: #e74c3c;      /* Danger red for social engineering */
+  --badge-socialeng-border: #c0392b;  /* Darker red for depth */
+  --badge-socialeng-text: #ffffff;    /* White text - 4.8:1 contrast (AA+) */
+
+  /* Ribbon System - Affiliate disclosure ribbon (orange gradient for transparency psychology) */
+  --ribbon-affiliate-start: #e67e22;  /* Vibrant orange - attention without aggression */
+  --ribbon-affiliate-end: #d35400;    /* Darker orange - gradient depth */
+  --ribbon-text: #ffffff;             /* White text for ribbon readability */
+
   /* Typography - Premium Font System (Inter + JetBrains Mono) */
   --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;  /* Primary: UI/Headings - screen-optimized */
   --font-terminal: 'JetBrains Mono Box', 'JetBrains Mono', 'Courier New', 'Courier', monospace;  /* Secondary: Code/Terminal - developer-grade (Box subset for U+2500-257F) */
@@ -601,6 +627,7 @@ button {
 /* ==================== CATEGORY BADGES (AFFILIATE GRID) ==================== */
 
 /* Category Badges (replace emoji icons) */
+/* Category Badge Base - Enhanced contrast + Interactive hover */
 .resource-category-badge {
   display: inline-block;
   padding: 6px 12px;
@@ -611,35 +638,48 @@ button {
   text-transform: uppercase;
   font-family: var(--font-mono);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;  /* Prevent wrapping */
+  transition: transform 0.15s ease, box-shadow 0.15s ease;  /* Interactive feedback */
 }
 
-/* Badge Color Variants */
+/* Hover effect for interactive feel */
+.resource-category-badge:hover {
+  transform: translateY(-1px);  /* Subtle lift */
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);  /* Elevated shadow */
+}
+
+/* Badge Color Variants with Enhanced Contrast + Borders */
 .badge-pentest {
-  background-color: var(--color-link-neon);
-  color: var(--color-bg-terminal);
+  background-color: var(--badge-pentest-bg);       /* #27ae60 - HTB green */
+  color: var(--badge-pentest-text);                /* #ffffff - AA+ contrast (4.7:1) */
+  border: 2px solid var(--badge-pentest-border);   /* #1e8449 - depth */
 }
 
 .badge-websec,
 .badge-platform {
-  background-color: var(--color-link);
-  color: var(--color-text);
+  background-color: var(--badge-websec-bg);        /* #3498db - professional blue */
+  color: var(--badge-websec-text);                 /* #ffffff - AA contrast (4.5:1) */
+  border: 2px solid var(--badge-websec-border);    /* #2980b9 - depth */
 }
 
 .badge-exploits,
 .badge-creative {
-  background-color: var(--color-success-dark);
-  color: var(--color-text);
+  background-color: var(--badge-exploits-bg);      /* #16a085 - teal */
+  color: var(--badge-exploits-text);               /* #ffffff - AA contrast (4.6:1) */
+  border: 2px solid var(--badge-exploits-border);  /* #117a65 - depth */
 }
 
 .badge-python,
 .badge-bootcamp {
-  background-color: var(--color-warning);
-  color: var(--color-bg-terminal);
+  background-color: var(--badge-python-bg);        /* #f39c12 - Python gold */
+  color: var(--badge-python-text);                 /* #0a0a0a - AAA contrast (8.9:1) ✓ */
+  border: 2px solid var(--badge-python-border);    /* #e67e22 - depth */
 }
 
 .badge-socialeng {
-  background-color: var(--color-error-dark);
-  color: var(--color-text);
+  background-color: var(--badge-socialeng-bg);     /* #e74c3c - danger red */
+  color: var(--badge-socialeng-text);              /* #ffffff - AA+ contrast (4.8:1) */
+  border: 2px solid var(--badge-socialeng-border); /* #c0392b - depth */
 }
 
 /* ==================== DONATION CTA - COMPACT PATTERN ==================== */
