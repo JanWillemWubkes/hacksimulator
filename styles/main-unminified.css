@@ -135,9 +135,9 @@
   /* Modal Overlay */
   --color-modal-overlay: rgba(0, 0, 0, 0.95);  /* Nearly opaque black overlay */
 
-  /* Button Colors - Dark Mode (Pairing 1: Cyber Professional - WCAG AA Compliant) */
-  --color-button-bg: #005bb5;               /* Darker Azure blue - WCAG AA 5.2:1 (was #0078d4 at 4.53:1) */
-  --color-button-bg-hover: #1976d2;         /* Material Blue 700 hover - WCAG AA 4.7:1 (was #1e88e5 at 3.68:1) */
+  /* Button Colors - Dark Mode (Pairing 1: Cyber Professional - WCAG AAA Compliant) */
+  --color-button-bg: #004494;               /* Darker Azure blue - WCAG AAA 7.2:1 (was #005bb5 at 5.2:1) */
+  --color-button-bg-hover: #003d85;         /* Even darker hover - WCAG AAA compliant */
   --color-button-text: #ffffff;             /* White text - crisp contrast */
   --color-button-text-hover: #ffffff;       /* White text on hover - consistent */
   --color-button-shadow-hover: rgba(25, 118, 210, 0.3);  /* Blue shadow - matches hover color */
@@ -229,9 +229,9 @@
   /* Modal Overlay - Dark dimming in light mode (Bootstrap/Material UI pattern) */
   --color-modal-overlay: rgba(0, 0, 0, 0.5);  /* Semi-transparent dark overlay for focus effect */
 
-  /* Button Colors - Light Mode (Pairing 1: Cyber Professional - WCAG AA Compliant) */
-  --color-button-bg: #1f7a40;               /* Green base - WCAG AA 5.36:1 */
-  --color-button-bg-hover: #248748;         /* Lighter green hover - WCAG AA 4.53:1 - CONSISTENT brighten pattern */
+  /* Button Colors - Light Mode (Pairing 1: Cyber Professional - WCAG AAA Compliant) */
+  --color-button-bg: #1a6634;               /* Darker green base - WCAG AAA 7.1:1 (was #1f7a40 at 5.36:1) */
+  --color-button-bg-hover: #155c2c;         /* Even darker hover - WCAG AAA compliant */
   --color-button-text: #ffffff;             /* White text - industry standard for saturated buttons */
   --color-button-text-hover: #ffffff;       /* White text on hover - consistent pattern */
   --color-button-shadow-hover: rgba(36, 135, 72, 0.3);  /* Green shadow - matches hover color */
@@ -362,6 +362,284 @@ button {
   color: var(--color-button-text-hover);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
+}
+
+/* ==================== AFFILIATE LINK - PROMINENT CTA ==================== */
+.affiliate-link {
+  /* Sizing: Upgrade from btn-small to prominent */
+  padding: var(--spacing-md) var(--spacing-xl);     /* 16px 32px (was 8px 16px) */
+  font-size: 1rem;                                  /* 16px responsive */
+
+  /* Visual */
+  background-color: var(--color-button-bg);         /* #005bb5 dark / #1f7a40 light */
+  color: var(--color-button-text);                  /* #ffffff */
+  border: 2px solid var(--color-button-bg);         /* Thicker border (was 1px) */
+  border-radius: var(--border-radius-button);       /* 4px */
+
+  /* Typography */
+  font-family: var(--font-terminal);
+  font-weight: var(--font-weight-bold);             /* 700 */
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: inline-block;
+
+  /* Interaction */
+  transition: all var(--transition-fast);           /* 0.15s ease */
+  cursor: pointer;
+}
+
+.affiliate-link:hover {
+  background-color: var(--color-button-bg-hover);   /* #1976d2 dark / #248748 light */
+  border-color: var(--color-button-bg-hover);
+  color: var(--color-button-text-hover);            /* #ffffff */
+  transform: translateY(-2px);                      /* Lift effect */
+  box-shadow: 0 4px 12px var(--color-button-shadow-hover);
+}
+
+.affiliate-link:focus-visible {
+  outline: 2px solid var(--color-button-bg);
+  outline-offset: 2px;
+}
+
+.affiliate-link:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Inline context: Keep in paragraph flow */
+.blog-post-content .affiliate-link {
+  margin: var(--spacing-sm) 0;                      /* 8px vertical spacing */
+}
+
+/* Terminal aesthetic: ASCII brackets + dimmed color */
+.affiliate-badge {
+  /* Positioning */
+  display: inline;
+  margin-left: var(--spacing-xs);                   /* 4px tight coupling */
+
+  /* Typography */
+  font-family: var(--font-terminal);
+  font-size: 0.75em;                                /* 75% of parent (balanced) */
+  font-weight: var(--font-weight-normal);           /* NOT bold */
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;                              /* Prevent [AFFILIATE] from wrapping */
+
+  /* Visual: Transparent bg + visible text (enhanced for button contrast) */
+  background-color: transparent;
+  color: #c9d1d9;                                   /* Light grey - visible on buttons (was #8b949e too dim) */
+  opacity: 0.85;                                    /* Subtle but readable */
+}
+
+/* ASCII brackets */
+.affiliate-badge::before {
+  content: '[ ';
+  color: var(--color-border);
+}
+
+.affiliate-badge::after {
+  content: ' ]';
+  color: var(--color-border);
+}
+
+/* Hover: Subtle emphasis */
+.affiliate-link:hover .affiliate-badge {
+  color: var(--color-text-light);
+}
+
+/* ==================== AANBEVOLEN RESOURCES SECTION ==================== */
+
+/* Section header */
+.aanbevolen-header {
+  font-family: var(--font-terminal);
+  font-size: 1.953rem;                              /* h2 size */
+  font-weight: var(--font-weight-bold);
+  color: var(--color-ui-primary);                   /* #58a6ff dark */
+  text-align: center;
+  margin-bottom: var(--spacing-xl);                 /* 32px */
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+[data-theme="light"] .aanbevolen-header {
+  color: var(--color-link);                         /* #1f7a40 light */
+}
+
+/* Responsive grid: 3-col → 2-col → 1-col */
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-xl);                           /* 32px */
+  margin-bottom: var(--spacing-xl);
+}
+
+/* Product card */
+.resource-card {
+  background-color: var(--color-bg-terminal);       /* #0d1117 dark */
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-modal);        /* 8px */
+  padding: var(--spacing-xl);                       /* 32px */
+  transition: all var(--transition-normal);         /* 0.3s ease */
+  box-shadow: var(--shadow-elevation-1);
+  max-width: 380px;                                 /* Prevent oversized cards */
+  margin: 0 auto;                                   /* Center cards in grid */
+}
+
+.resource-card:hover {
+  border-color: var(--color-ui-primary);
+  box-shadow: var(--shadow-elevation-2);
+  transform: translateY(-4px);                      /* More lift than blog cards */
+}
+
+[data-theme="light"] .resource-card {
+  background-color: var(--color-bg-modal);          /* #ffffff light */
+}
+
+/* Icon (emoji or text) */
+.resource-icon {
+  text-align: center;
+  margin-bottom: var(--spacing-md);                 /* 16px */
+}
+
+.resource-icon-text {
+  font-size: 3rem;
+  display: block;
+}
+
+/* Title */
+.resource-title {
+  font-family: var(--font-ui);
+  font-size: 1.25rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-ui-primary);
+  margin-bottom: var(--spacing-sm);                 /* 8px */
+  line-height: 1.3;
+}
+
+[data-theme="light"] .resource-title {
+  color: var(--color-link);
+}
+
+/* Description */
+.resource-description {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  color: var(--color-text-light);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-md);
+}
+
+[data-theme="light"] .resource-description {
+  color: var(--color-text);
+}
+
+/* Meta badges */
+.resource-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);                           /* 8px */
+  margin-bottom: var(--spacing-lg);                 /* 24px */
+  font-family: var(--font-terminal);
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+}
+
+.resource-meta span {
+  background-color: var(--color-surface-elevated);
+  padding: 4px 8px;
+  border-radius: var(--border-radius-small);        /* 2px */
+}
+
+.resource-platform {
+  color: var(--color-info);
+  font-weight: var(--font-weight-medium);
+}
+
+.resource-price {
+  color: var(--color-success);
+  font-weight: var(--font-weight-bold);
+}
+
+.resource-rating {
+  color: var(--color-warning);
+}
+
+/* Full-width CTA in card */
+.resource-cta {
+  width: 100%;
+  text-align: center;
+}
+
+/* Mobile: Single column */
+@media (max-width: 768px) {
+  .resource-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);                         /* 24px instead of 32px */
+  }
+
+  .resource-card {
+    padding: var(--spacing-lg);                     /* 24px instead of 32px */
+  }
+
+  .resource-title {
+    font-size: 1.1rem;
+  }
+
+  .resource-description {
+    font-size: 0.9rem;
+  }
+}
+
+/* Tablet: 2 columns */
+@media (min-width: 769px) and (max-width: 1023px) {
+  .resource-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ==================== CATEGORY BADGES (AFFILIATE GRID) ==================== */
+
+/* Category Badges (replace emoji icons) */
+.resource-category-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Badge Color Variants */
+.badge-pentest {
+  background-color: var(--color-link-neon);
+  color: var(--color-bg-terminal);
+}
+
+.badge-websec,
+.badge-platform {
+  background-color: var(--color-link);
+  color: var(--color-text);
+}
+
+.badge-exploits,
+.badge-creative {
+  background-color: var(--color-success-dark);
+  color: var(--color-text);
+}
+
+.badge-python,
+.badge-bootcamp {
+  background-color: var(--color-warning);
+  color: var(--color-bg-terminal);
+}
+
+.badge-socialeng {
+  background-color: var(--color-error-dark);
+  color: var(--color-text);
 }
 
 /* ==================== DONATION CTA - COMPACT PATTERN ==================== */
