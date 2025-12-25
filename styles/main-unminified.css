@@ -606,9 +606,63 @@ button {
 }
 
 /* Full-width CTA in card */
+/* CTA Button - Interactive with micro-animations */
 .resource-cta {
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   width: 100%;
-  text-align: center;
+
+  /* Typography */
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+
+  /* Visual - Use existing button variables */
+  background-color: var(--color-ui-primary);
+  color: #ffffff;
+  padding: 14px 24px;
+  border-radius: 6px;
+  border: 2px solid transparent;
+
+  /* Animation */
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+/* Arrow indicator */
+.resource-cta::after {
+  content: "→";
+  font-size: 1.2em;
+  transition: transform 0.2s ease;
+}
+
+/* Hover State */
+.resource-cta:hover {
+  background-color: var(--color-link-hover, #4a9eff);
+  border-color: var(--color-ui-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
+}
+
+.resource-cta:hover::after {
+  transform: translateX(4px);  /* Arrow slides right */
+}
+
+/* Focus State (Accessibility) */
+.resource-cta:focus {
+  outline: 3px solid var(--color-ui-primary);
+  outline-offset: 2px;
+}
+
+/* Active State (Click feedback) */
+.resource-cta:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(88, 166, 255, 0.2);
 }
 
 /* Mobile: Single column */
@@ -640,12 +694,40 @@ button {
   .resource-description {
     font-size: 0.9rem;
   }
+
+  /* CTA: Full width, larger touch target on mobile */
+  .resource-cta {
+    width: 100%;
+    padding: 16px 24px;  /* Bigger thumb target (44px+) */
+    font-size: 0.9rem;
+  }
 }
 
 /* Tablet: 2 columns */
 @media (min-width: 769px) and (max-width: 1023px) {
   .resource-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Accessibility: Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .resource-cta,
+  .resource-cta::after,
+  .resource-category-badge {
+    transition: none;
+  }
+
+  .resource-cta:hover {
+    transform: none;
+  }
+
+  .resource-cta:hover::after {
+    transform: none;
+  }
+
+  .resource-category-badge:hover {
+    transform: none;
   }
 }
 
