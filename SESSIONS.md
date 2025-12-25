@@ -8,13 +8,14 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (82-84)](docs/sessions/current.md) - Full Detail
-**Sessies:** 84, 83, 82
-**Period:** 10-15 december 2025
+### [Current Sessions (84-88)](docs/sessions/current.md) - Full Detail
+**Sessies:** 88, 87, 84, 83, 82
+**Period:** 10-26 december 2025
 **Topics:**
+- Affiliate CTA optimization (100% E2E test coverage)
+- Blog consistency standardization
 - Doelgroep repositioning (age-restrictive → skill-based)
 - Mobile minimalist rendering & ASCII alignment fixes
-- Responsive optimization
 
 ---
 

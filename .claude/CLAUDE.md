@@ -94,6 +94,11 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 **Doel:** Memory aids - full context in docs/sessions/
 
+### Sessie 88: E2E Testing Perfectie (26 dec)
+⚠️ Never viewport-based position checks | `textContent()` for pseudo-elements | exact pixel assertions | assume HTML structure
+✅ Always relative parent positioning | `getComputedStyle()` for ::before/::after | browser variation tolerance | curl production to verify
+📄 docs/sessions/current.md Sessie 88
+
 ### Sessie 86: CLAUDE.md Optimization (15 dec)
 ⚠️ Never keep duplication after refactor | static pattern copies
 ✅ Always second-pass optimization | Single Source of Truth per topic
@@ -114,12 +119,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ✅ Always short cache frequent updates | query params backup | must-revalidate
 📄 docs/sessions/recent.md Sessie 78
 
-### Sessie 77: Responsive Testing (6 dec)
-⚠️ Never trust browser cache E2E | fragile selectors | skip legal modal tests
-✅ Always CDP clearBrowserCache | semantic selectors | acceptLegalModal helper
-📄 docs/sessions/archive-q4-2024.md Sessie 77
-
-**Rotation:** Keep last 5 full (82-86) | Compress 6-10 (77-81) quarterly | Archive 11+ (2-76) in docs/sessions/
+**Rotation:** Keep last 5 full (84-88) | Compress 6-10 (78-83) quarterly | Archive 11+ (2-77) in docs/sessions/
 
 **Sessies 82-84:** docs/sessions/current.md (full detail)
 **Sessies 77-81:** docs/sessions/recent.md (full detail)
