@@ -438,40 +438,47 @@ button {
   margin: var(--spacing-sm) 0;                      /* 8px vertical spacing */
 }
 
-/* Terminal aesthetic: ASCII brackets + dimmed color */
-.affiliate-badge {
-  /* Positioning */
-  display: inline;
-  margin-left: var(--spacing-xs);                   /* 4px tight coupling */
+/* Affiliate Ribbon - Top Right Corner (Phase 3/5: Ribbon Redesign) */
+.affiliate-ribbon {
+  /* Positioning - Absolute top-right corner */
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
 
-  /* Typography */
+  /* Layout */
+  padding: 8px 16px;
+
+  /* Typography - Terminal Aesthetic */
   font-family: var(--font-terminal);
-  font-size: 0.75em;                                /* 75% of parent (balanced) */
-  font-weight: var(--font-weight-normal);           /* NOT bold */
-  letter-spacing: 0.5px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  white-space: nowrap;                              /* Prevent [AFFILIATE] from wrapping */
+  color: var(--ribbon-text);  /* #ffffff */
+  white-space: nowrap;
 
-  /* Visual: Transparent bg + visible text (enhanced for button contrast) */
-  background-color: transparent;
-  color: #c9d1d9;                                   /* Light grey - visible on buttons (was #8b949e too dim) */
-  opacity: 0.85;                                    /* Subtle but readable */
+  /* Visual - Orange Gradient Background */
+  background: linear-gradient(135deg,
+    var(--ribbon-affiliate-start) 0%,   /* #e67e22 - vibrant orange */
+    var(--ribbon-affiliate-end) 100%);  /* #d35400 - darker orange */
+
+  /* Ribbon Shape - Angled bottom-left corner */
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%);
+
+  /* Depth */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
-/* ASCII brackets */
-.affiliate-badge::before {
-  content: '[ ';
-  color: var(--color-border);
+/* ASCII Brackets for Terminal Feel */
+.affiliate-ribbon::before {
+  content: "[ ";
+  opacity: 0.8;
 }
 
-.affiliate-badge::after {
-  content: ' ]';
-  color: var(--color-border);
-}
-
-/* Hover: Subtle emphasis */
-.affiliate-link:hover .affiliate-badge {
-  color: var(--color-text-light);
+.affiliate-ribbon::after {
+  content: " ]";
+  opacity: 0.8;
 }
 
 /* ==================== AANBEVOLEN RESOURCES SECTION ==================== */
@@ -502,6 +509,7 @@ button {
 
 /* Product card */
 .resource-card {
+  position: relative;                               /* CRITICAL: Positioning context for ribbon */
   background-color: var(--color-bg-terminal);       /* #0d1117 dark */
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-modal);        /* 8px */
@@ -510,6 +518,7 @@ button {
   box-shadow: var(--shadow-elevation-1);
   max-width: 380px;                                 /* Prevent oversized cards */
   margin: 0 auto;                                   /* Center cards in grid */
+  overflow: visible;                                /* Allow ribbon to extend beyond card */
 }
 
 .resource-card:hover {
@@ -520,6 +529,11 @@ button {
 
 [data-theme="light"] .resource-card {
   background-color: var(--color-bg-modal);          /* #ffffff light */
+}
+
+/* Reserve space for ribbon so content doesn't overlap */
+.resource-card__header {
+  padding-top: 36px;  /* Ribbon height + margin */
 }
 
 /* Icon (emoji or text) */
@@ -606,6 +620,17 @@ button {
 
   .resource-card {
     padding: var(--spacing-lg);                     /* 24px instead of 32px */
+  }
+
+  /* Ribbon: Smaller on mobile */
+  .affiliate-ribbon {
+    font-size: 0.65rem;
+    padding: 6px 12px;
+  }
+
+  /* Header: Less padding on mobile */
+  .resource-card__header {
+    padding-top: 32px;  /* Smaller on mobile */
   }
 
   .resource-title {
