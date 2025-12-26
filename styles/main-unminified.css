@@ -458,9 +458,40 @@ a.affiliate-link:active {
   box-shadow: none;
 }
 
-/* Inline context: Keep in paragraph flow */
-.blog-post-content a.affiliate-link {
+/* Inline context: Keep in paragraph flow + Override blog link styles */
+/* ULTRA HIGH SPECIFICITY: Defeats [data-theme=light] .blog-post-content p a (0,1,3,1) with 0,1,3,2 */
+html .blog-post-content p a.affiliate-link,
+html .blog-post-content ol a.affiliate-link,
+html .blog-post-content ul a.affiliate-link,
+html[data-theme=light] .blog-post-content p a.affiliate-link,
+html[data-theme=light] .blog-post-content ol a.affiliate-link,
+html[data-theme=light] .blog-post-content ul a.affiliate-link {
   margin: var(--spacing-sm) 0;                      /* 8px vertical spacing */
+  color: var(--color-button-text) !important;       /* ✅ Force white text (spec 0,1,3,2) */
+  text-decoration: none !important;                 /* ✅ Remove underline */
+  background-color: var(--color-button-bg);         /* Ensure button background */
+}
+
+/* Visited state - maintain button appearance */
+html .blog-post-content p a.affiliate-link:visited,
+html .blog-post-content ol a.affiliate-link:visited,
+html .blog-post-content ul a.affiliate-link:visited,
+html[data-theme=light] .blog-post-content p a.affiliate-link:visited,
+html[data-theme=light] .blog-post-content ol a.affiliate-link:visited,
+html[data-theme=light] .blog-post-content ul a.affiliate-link:visited {
+  color: var(--color-button-text) !important;
+  background-color: var(--color-button-bg);
+}
+
+/* Hover state - maintain button appearance */
+html .blog-post-content p a.affiliate-link:hover,
+html .blog-post-content ol a.affiliate-link:hover,
+html .blog-post-content ul a.affiliate-link:hover,
+html[data-theme=light] .blog-post-content p a.affiliate-link:hover,
+html[data-theme=light] .blog-post-content ol a.affiliate-link:hover,
+html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
+  color: var(--color-button-text-hover) !important;
+  background-color: var(--color-button-bg-hover);
 }
 
 /* Affiliate Ribbon - Top Right Corner (Phase 3/5: Ribbon Redesign) */
