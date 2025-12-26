@@ -480,3 +480,143 @@ test.describe('Affiliate Grid: Performance', () => {
     });
   });
 });
+
+// CTA Optimization Tests (Sessie 89)
+test.describe('Affiliate CTA: Design System Compliance', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/blog/beste-online-cursussen-ethical-hacking.html');
+  });
+
+  test('inline affiliate links have arrow indicator', async ({ page }) => {
+    // Find inline affiliate link (not in card)
+    const inlineLink = page.locator('.blog-post-content .affiliate-link').first();
+    await expect(inlineLink).toBeVisible();
+
+    // Check ::after content contains arrow
+    const afterContent = await inlineLink.evaluate(el => {
+      return window.getComputedStyle(el, '::after').content;
+    });
+
+    // Arrow (→) or unicode equivalent or " →" (with space)
+    expect(afterContent).toMatch(/→|\\2192|" →"/);
+  });
+
+  test('card CTAs use terminal font (design system compliance)', async ({ page }) => {
+    const cta = page.locator('.resource-cta').first();
+
+    const fontFamily = await cta.evaluate(el =>
+      window.getComputedStyle(el).fontFamily
+    );
+
+    // Should contain 'JetBrains Mono' or fallback to monospace
+    expect(fontFamily).toMatch(/JetBrains Mono|Courier|monospace/i);
+  });
+
+  test('card CTAs use theme-aware colors (not hardcoded)', async ({ page }) => {
+    const cta = page.locator('.resource-cta').first();
+
+    const bgColor = await cta.evaluate(el =>
+      window.getComputedStyle(el).backgroundColor
+    );
+
+    // Dark theme: rgb(0, 68, 148) OR Light theme: rgb(26, 102, 52)
+    // Accept either theme's value (test runs in default theme)
+    expect(bgColor).toMatch(/rgb\(0, 68, 148\)|rgb\(26, 102, 52\)/);
+  });
+
+  test('inline affiliate link arrow animates on hover', async ({ page }) => {
+    const link = page.locator('.blog-post-content .affiliate-link').first();
+    await expect(link).toBeVisible();
+
+    // Hover on link
+    await link.hover();
+
+    // Check ::after has transform
+    const transform = await link.evaluate(el => {
+      const after = window.getComputedStyle(el, '::after');
+      return after.transform;
+    });
+
+    // Should have translateX(3px) in matrix form
+    // Matrix format: matrix(1, 0, 0, 1, 3, 0) where 5th value is X translation
+    expect(transform).toContain('matrix');
+  });
+});
+
+// Phase 3 Visual Refinements Tests (Sessie 89)
+test.describe('Affiliate CTA: Phase 3 Visual Refinements', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/blog/beste-online-cursussen-ethical-hacking.html');
+  });
+
+  test('inline affiliate links have no underline', async ({ page }) => {
+    const inlineLink = page.locator('.blog-post-content .affiliate-link').first();
+    await expect(inlineLink).toBeVisible();
+
+    const textDecoration = await inlineLink.evaluate(el =>
+      window.getComputedStyle(el).textDecoration
+    );
+
+    // Should be "none" or "none solid rgb(...)" (no underline)
+    expect(textDecoration).toMatch(/^none/);
+  });
+
+  test('light mode: regular cards have blue buttons, featured has green', async ({ page }) => {
+    // Switch to light theme
+    await page.evaluate(() => {
+      document.documentElement.setAttribute('data-theme', 'light');
+    });
+
+    // Wait for theme transition
+    await page.waitForTimeout(100);
+
+    // Regular card (first card - Udemy)
+    const regularCta = page.locator('.resource-card').first().locator('.resource-cta');
+    await expect(regularCta).toBeVisible();
+
+    const regularBg = await regularCta.evaluate(el =>
+      window.getComputedStyle(el).backgroundColor
+    );
+
+    // Should be blue (rgb(25, 118, 210) = #1976d2)
+    expect(regularBg).toBe('rgb(25, 118, 210)');
+
+    // Featured card (second card - TryHackMe with .featured-badge)
+    const featuredCta = page.locator('.resource-card:has(.featured-badge) .resource-cta');
+    await expect(featuredCta).toBeVisible();
+
+    const featuredBg = await featuredCta.evaluate(el =>
+      window.getComputedStyle(el).backgroundColor
+    );
+
+    // Should be green (var(--color-success) = #27ae60)
+    expect(featuredBg).toBe('rgb(39, 174, 96)');
+  });
+
+  test('dark mode: buttons maintain correct colors (regression test)', async ({ page }) => {
+    // Ensure dark theme (default)
+    await page.evaluate(() => {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    });
+
+    await page.waitForTimeout(100);
+
+    // Regular card should be blue in dark mode
+    const regularCta = page.locator('.resource-card').first().locator('.resource-cta');
+    const regularBg = await regularCta.evaluate(el =>
+      window.getComputedStyle(el).backgroundColor
+    );
+
+    // Dark mode blue: rgb(0, 68, 148) = #004494
+    expect(regularBg).toBe('rgb(0, 68, 148)');
+
+    // Featured card should be green in dark mode
+    const featuredCta = page.locator('.resource-card:has(.featured-badge) .resource-cta');
+    const featuredBg = await featuredCta.evaluate(el =>
+      window.getComputedStyle(el).backgroundColor
+    );
+
+    // Should be green (var(--color-success) = #27ae60)
+    expect(featuredBg).toBe('rgb(39, 174, 96)');
+  });
+});

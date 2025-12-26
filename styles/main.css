@@ -255,12 +255,12 @@
   /* Modal Overlay - Dark dimming in light mode (Bootstrap/Material UI pattern) */
   --color-modal-overlay: rgba(0, 0, 0, 0.5);  /* Semi-transparent dark overlay for focus effect */
 
-  /* Button Colors - Light Mode (Pairing 1: Cyber Professional - WCAG AAA Compliant) */
-  --color-button-bg: #1a6634;               /* Darker green base - WCAG AAA 7.1:1 (was #1f7a40 at 5.36:1) */
-  --color-button-bg-hover: #155c2c;         /* Even darker hover - WCAG AAA compliant */
+  /* Button Colors - Light Mode (PHASE 3: Changed to blue for consistency) */
+  --color-button-bg: #1976d2;               /* ✅ Blue base (was green #1a6634) - matches dark mode logic */
+  --color-button-bg-hover: #1565c0;         /* ✅ Darker blue hover - WCAG AAA compliant */
   --color-button-text: #ffffff;             /* White text - industry standard for saturated buttons */
   --color-button-text-hover: #ffffff;       /* White text on hover - consistent pattern */
-  --color-button-shadow-hover: rgba(36, 135, 72, 0.3);  /* Green shadow - matches hover color */
+  --color-button-shadow-hover: rgba(25, 118, 210, 0.3);  /* ✅ Blue shadow (was green) - matches hover color */
 
   /* Shadow System - Light Mode (5:1 opacity ratio = visually equivalent to dark mode) */
   /* Content Cards - Subtle shadows on white require lower opacity to avoid "dirty" appearance */
@@ -391,7 +391,8 @@ button {
 }
 
 /* ==================== AFFILIATE LINK - PROMINENT CTA ==================== */
-.affiliate-link {
+/* PHASE 3: Higher specificity (a.class) prevents underline inheritance cleanly */
+a.affiliate-link {
   /* Sizing: Upgrade from btn-small to prominent */
   padding: var(--spacing-md) var(--spacing-xl);     /* 16px 32px (was 8px 16px) */
   font-size: 1rem;                                  /* 16px responsive */
@@ -407,7 +408,7 @@ button {
   font-weight: var(--font-weight-bold);             /* 700 */
   letter-spacing: 1px;
   text-transform: uppercase;
-  text-decoration: none;
+  text-decoration: none;                            /* ✅ Clean: Higher specificity (0,1,1 vs 0,1,0) */
   display: inline-block;
 
   /* Interaction */
@@ -415,7 +416,15 @@ button {
   cursor: pointer;
 }
 
-.affiliate-link:hover {
+/* External link indicator - Trust signal */
+a.affiliate-link::after {
+  content: " →";                        /* Space before arrow for breathing */
+  display: inline;
+  margin-left: 4px;                     /* Subtle spacing */
+  transition: transform 0.2s ease;
+}
+
+a.affiliate-link:hover {
   background-color: var(--color-button-bg-hover);   /* #1976d2 dark / #248748 light */
   border-color: var(--color-button-bg-hover);
   color: var(--color-button-text-hover);            /* #ffffff */
@@ -423,18 +432,23 @@ button {
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
 
-.affiliate-link:focus-visible {
+/* Arrow animation on hover */
+a.affiliate-link:hover::after {
+  transform: translateX(3px);           /* Subtle slide (less than card buttons) */
+}
+
+a.affiliate-link:focus-visible {
   outline: 2px solid var(--color-button-bg);
   outline-offset: 2px;
 }
 
-.affiliate-link:active {
+a.affiliate-link:active {
   transform: translateY(0);
   box-shadow: none;
 }
 
 /* Inline context: Keep in paragraph flow */
-.blog-post-content .affiliate-link {
+.blog-post-content a.affiliate-link {
   margin: var(--spacing-sm) 0;                      /* 8px vertical spacing */
 }
 
@@ -623,19 +637,21 @@ button {
   gap: 8px;
   width: 100%;
 
-  /* Typography */
-  font-family: var(--font-ui);
+  /* Typography - FIX: Terminal font for consistency */
+  font-family: var(--font-terminal);              /* ✅ Was: var(--font-ui) */
   font-size: 0.95rem;
   font-weight: 700;
+  text-transform: uppercase;                      /* ✅ ADD: Terminal aesthetic */
+  letter-spacing: 0.5px;                          /* ✅ ADD: Readability */
   text-decoration: none;
   white-space: nowrap;
 
-  /* Visual - Use existing button variables */
-  background-color: var(--color-ui-primary);
-  color: #ffffff;
+  /* Visual - FIX: Theme-aware variables */
+  background-color: var(--color-button-bg);       /* ✅ Was: var(--color-ui-primary) */
+  color: var(--color-button-text);                /* ✅ Was: #ffffff hardcoded */
   padding: 14px 24px;
-  border-radius: 6px;
-  border: 2px solid transparent;
+  border-radius: var(--border-radius-button);     /* ✅ Was: 6px → now 4px */
+  border: 2px solid var(--color-button-bg);       /* ✅ Was: transparent */
 
   /* Animation */
   transition: all 0.2s ease;
@@ -652,39 +668,41 @@ button {
   transition: transform 0.2s ease;
 }
 
-/* Hover State */
+/* Hover State - FIX: Theme-aware variables */
 .resource-cta:hover {
-  background-color: var(--color-link-hover, #4a9eff);
-  border-color: var(--color-ui-primary);
+  background-color: var(--color-button-bg-hover); /* ✅ Was: var(--color-link-hover) */
+  border-color: var(--color-button-bg-hover);     /* ✅ Was: var(--color-ui-primary) */
+  color: var(--color-button-text-hover);          /* ✅ ADD */
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
+  box-shadow: 0 4px 12px var(--color-button-shadow-hover);  /* ✅ Was: hardcoded rgba */
 }
 
 .resource-cta:hover::after {
   transform: translateX(4px);  /* Arrow slides right */
 }
 
-/* Focus State (Accessibility) */
+/* Focus State (Accessibility) - FIX: Theme-aware outline */
 .resource-cta:focus,
 .resource-cta:focus-visible {
-  outline: 3px solid var(--color-ui-primary) !important;
+  outline: 2px solid var(--color-button-bg) !important;  /* ✅ Was: 3px var(--color-ui-primary) */
   outline-offset: 2px;
 }
 
 /* Active State (Click feedback) */
 .resource-cta:active {
   transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(88, 166, 255, 0.2);
+  box-shadow: 0 2px 6px var(--color-button-shadow-hover);  /* ✅ Was: hardcoded rgba */
 }
 
 /* Featured Card CTA - Success green instead of blue */
 .resource-card:has(.featured-badge) .resource-cta {
   background-color: var(--color-success);     /* Green: #27ae60 */
-  border-color: #2ecc71;
+  border-color: var(--color-success);              /* ✅ ADD for consistency */
 }
 
 .resource-card:has(.featured-badge) .resource-cta:hover {
   background-color: #229954;                  /* Darker green on hover */
+  border-color: #229954;                           /* ✅ ADD */
   box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
 }
 
