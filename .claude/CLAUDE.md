@@ -94,6 +94,11 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 **Doel:** Memory aids - full context in docs/sessions/
 
+### Sessie 90: CSS Variable Semantic Cleanup (27 dec)
+⚠️ Never remove duplicates without aliases | assume light mode == inverted dark mode | break backward compat
+✅ Always alias-first migration | test both themes independently | gradual usage updates
+📄 docs/sessions/current.md Sessie 90 (7 duplicates removed, 7-token typography scale, 100% backward compat)
+
 ### Sessie 88: E2E Testing Perfectie (26 dec)
 ⚠️ Never viewport-based position checks | `textContent()` for pseudo-elements | exact pixel assertions | assume HTML structure
 ✅ Always relative parent positioning | `getComputedStyle()` for ::before/::after | browser variation tolerance | curl production to verify

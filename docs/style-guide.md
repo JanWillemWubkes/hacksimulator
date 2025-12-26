@@ -90,19 +90,44 @@ HackSimulator.nl gebruikt **twee font stacks** voor verschillende contexten:
 | Help/tutorials | `--font-ui` | Educational clarity |
 | Short modals (<100w) | `--font-terminal` | Brand consistency |
 
-### Font Sizes
+### Typography Scale
+
+**Design System:** Minor Third scale (1.2 ratio) - Industry standard
 
 ```css
 :root {
-  --font-size-base: 18px;       /* Desktop terminal */
+  /* Systematic Typography Scale (Sessie 90) */
+  --font-size-xs: 0.75rem;      /* 12px - Captions, metadata */
+  --font-size-sm: 0.875rem;     /* 14px - Secondary text */
+  --font-size-md: 1rem;         /* 16px - Body text */
+  --font-size-lg: 1.25rem;      /* 20px - Subheadings */
+  --font-size-xl: 1.5rem;       /* 24px - H3 headings */
+  --font-size-2xl: 1.953rem;    /* 31px - H2 headings */
+  --font-size-3xl: 2.441rem;    /* 39px - H1 headings */
+
+  /* Legacy Tokens (Terminal-specific) */
+  --font-size-base: 18px;       /* Desktop terminal (iOS zoom fix) */
   --font-size-mobile: 16px;     /* Mobile terminal */
 }
 ```
 
+**Usage Decision Tree:**
+
+| Content Type | Token | Reason |
+|--------------|-------|--------|
+| Terminal output | `--font-size-base` (18px) | iOS zoom prevention (DO NOT CHANGE) |
+| Blog H1 | `--font-size-3xl` (39px) | Hero prominence |
+| Blog H2 | `--font-size-2xl` (31px) | Section headers |
+| Blog H3 | `--font-size-xl` (24px) | Subsections |
+| Blog body | `--font-size-md` (16px) | Readability standard |
+| Metadata | `--font-size-sm` (14px) | De-emphasized info |
+| Captions | `--font-size-xs` (12px) | Minimal viable (WCAG) |
+
 **Rationale:**
-- 18px base prevents 16px mobile zoom-on-focus on iOS
-- Minimum 16px for accessibility (WCAG AAA)
-- Legal modal text: 17px (tussen terminal en body text)
+- **Minor Third (1.2x):** Harmonious hierarchy
+- **Rem units:** User browser settings (accessibility)
+- **7 tokens:** Complete content coverage
+- **Legacy preserved:** Terminal 18px untouched (iOS zoom-on-focus fix)
 
 ### Line Heights
 
@@ -378,6 +403,27 @@ renderInfo("💡 TIP: Try 'help' command");
 - Simple informational sites (blog, documentation without brand identity)
 - Uniform color aesthetic needed (monochrome, minimalist design)
 - Content and chrome are not visually separated
+
+---
+
+### Deprecated Variables (Sessie 90)
+
+**Status:** Backward compatible aliases - Remove in v2.0 (April 2026)
+
+| Deprecated Variable | Use Instead | Reason |
+|---------------------|-------------|--------|
+| `--color-text-light` | `--color-text` | Ambiguous name in light theme |
+| `--color-modal-text` | `--color-text` | Duplicate of primary text color |
+| `--color-text-muted` | `--color-text-dim` | Duplicate of secondary text |
+| `--color-input` | `--color-prompt` | Input follows terminal prompt color |
+| `--color-footer-text` | `--color-navbar-link` | Dark Frame Pattern unification |
+| `--color-navbar-dropdown-icon` | `--color-navbar-link` | Navbar chrome consistency |
+| `--color-bg-modal-content` | `--color-bg-modal` | Duplicate modal background |
+
+**Migration Timeline:**
+- v1.2 (Sessie 90): Aliases added
+- v1.2-v2.0 (Jan-Apr 2026): Gradual usage updates
+- v2.0 (Apr 2026): Aliases removed (breaking change)
 
 ---
 
