@@ -416,10 +416,21 @@ a.affiliate-link {
   cursor: pointer;
 }
 
+/* Link states - Override browser defaults for visited links */
+a.affiliate-link:link,
+a.affiliate-link:visited {
+  text-decoration: none;                            /* Force underline removal in all states */
+  color: var(--color-button-text);                  /* Maintain white text (not browser purple) */
+  background-color: var(--color-button-bg);         /* Maintain button color */
+}
+
 /* External link indicator - Trust signal */
 a.affiliate-link::after {
   content: " →";                        /* Space before arrow for breathing */
-  display: inline;
+  font-size: 1.2em;                     /* Larger arrow (matches .resource-cta) */
+  line-height: 1;                       /* Consistent baseline */
+  display: inline-block;                /* Enable vertical-align */
+  vertical-align: middle;               /* Text-aligned centering */
   margin-left: 4px;                     /* Subtle spacing */
   transition: transform 0.2s ease;
 }

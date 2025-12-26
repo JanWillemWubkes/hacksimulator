@@ -566,6 +566,97 @@ renderInfo("💡 TIP: Try 'help' command");
 **Size:** Small (8px/16px padding, 16px font)
 **Rationale:** Consistent with blog CTAs, subtle but visible (80/20 monetization rule)
 
+#### Inline Affiliate Link Button
+
+**Class:** `a.affiliate-link`
+**Usage:** Inline CTA buttons within blog post content (e.g., "Start Cursus Nu →")
+
+**Critical Implementation Notes:**
+- ⚠️ **Selector specificity:** MUST use `a.affiliate-link` (NOT `.affiliate-link`) to override browser default underline
+- ⚠️ **:visited state:** MUST explicitly set `:link` and `:visited` pseudo-classes to prevent purple text + underline
+- ✅ **Arrow alignment:** Uses `.resource-cta` pattern (`vertical-align: middle`, `line-height: 1`)
+
+**Styling:**
+
+```css
+a.affiliate-link {
+  /* Typography */
+  font-family: var(--font-terminal);      /* JetBrains Mono */
+  font-weight: var(--font-weight-bold);   /* 700 */
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;                  /* Override browser default */
+
+  /* Colors - Theme-aware */
+  background-color: var(--color-button-bg);
+  color: var(--color-button-text);        /* White in both themes */
+  border: 2px solid var(--color-button-bg);
+
+  /* Layout */
+  display: inline-block;
+  padding: var(--spacing-md) var(--spacing-xl);  /* 16px 32px */
+  border-radius: var(--border-radius-button);    /* 4px */
+
+  /* Animation */
+  transition: all var(--transition-fast);
+}
+
+/* Arrow indicator - Centered to text baseline */
+a.affiliate-link::after {
+  content: " →";
+  font-size: 1.2em;                       /* Larger arrow */
+  line-height: 1;                         /* Consistent baseline */
+  display: inline-block;                  /* Enable vertical-align */
+  vertical-align: middle;                 /* Text-aligned centering */
+  margin-left: 4px;
+  transition: transform 0.2s ease;
+}
+
+/* Link state overrides - CRITICAL for underline removal */
+a.affiliate-link:link,
+a.affiliate-link:visited {
+  text-decoration: none;                  /* Force removal in all states */
+  color: var(--color-button-text);        /* Maintain white (not purple) */
+  background-color: var(--color-button-bg);
+}
+
+/* Hover state */
+a.affiliate-link:hover {
+  background-color: var(--color-button-bg-hover);
+  transform: translateY(-2px);            /* Lift effect */
+  box-shadow: 0 4px 12px var(--color-button-shadow-hover);
+}
+
+a.affiliate-link:hover::after {
+  transform: translateX(3px);             /* Arrow slides right */
+}
+```
+
+**Color Values:**
+
+| Theme | Background | Hover | Text | Contrast |
+|-------|------------|-------|------|----------|
+| Dark  | `#004494` (Azure blue) | `#003d85` | `#ffffff` | 7.2:1 (AAA) |
+| Light | `#1976d2` (Material blue) | `#1565c0` | `#ffffff` | 4.6:1 (AA+) |
+
+**Why Blue (not Green or Orange):**
+- ✅ Trust signal (industry standard: PayPal, Twitter, LinkedIn)
+- ✅ Matches `.resource-cta` card buttons (visual consistency)
+- ✅ Orange = ribbons (urgency), Blue = buttons (trust) - optimal hierarchy
+- ✅ WCAG AAA compliant in dark mode, AA+ in light mode
+
+**Example Location:**
+`/blog/beste-online-cursussen-ethical-hacking.html` (3 instances: "Start Cursus Nu →")
+
+**Test Coverage:**
+`tests/e2e/affiliate-inline-buttons.spec.js` (12 tests: underline removal, arrow alignment, theme colors, WCAG contrast)
+
+**Common Pitfalls:**
+- ❌ Using `.affiliate-link` selector (wrong specificity - underline persists)
+- ❌ Forgetting `:visited` state (causes purple text + underline on clicked links)
+- ❌ Using `display: inline` on `::after` (prevents `vertical-align: middle` from working)
+- ❌ Hardcoding colors instead of CSS variables (breaks theme consistency)
+
 ### Modals
 
 **Unified Modal System (Sessie 37 - Pattern A Universal)**

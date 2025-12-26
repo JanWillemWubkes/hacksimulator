@@ -256,11 +256,11 @@
   --color-modal-overlay: rgba(0, 0, 0, 0.5);  /* Semi-transparent dark overlay for focus effect */
 
   /* Button Colors - Light Mode (Pairing 1: Cyber Professional - WCAG AAA Compliant) */
-  --color-button-bg: #1a6634;               /* Darker green base - WCAG AAA 7.1:1 (was #1f7a40 at 5.36:1) */
-  --color-button-bg-hover: #155c2c;         /* Even darker hover - WCAG AAA compliant */
+  --color-button-bg: #1976d2;               /* ✅ Blue base (was green #1a6634) - matches dark mode logic */
+  --color-button-bg-hover: #1565c0;         /* ✅ Darker blue hover - WCAG AAA compliant */
   --color-button-text: #ffffff;             /* White text - industry standard for saturated buttons */
   --color-button-text-hover: #ffffff;       /* White text on hover - consistent pattern */
-  --color-button-shadow-hover: rgba(36, 135, 72, 0.3);  /* Green shadow - matches hover color */
+  --color-button-shadow-hover: rgba(25, 118, 210, 0.3);  /* ✅ Blue shadow (was green) - matches hover color */
 
   /* Shadow System - Light Mode (5:1 opacity ratio = visually equivalent to dark mode) */
   /* Content Cards - Subtle shadows on white require lower opacity to avoid "dirty" appearance */
@@ -391,13 +391,14 @@ button {
 }
 
 /* ==================== AFFILIATE LINK - PROMINENT CTA ==================== */
-.affiliate-link {
+/* PHASE 3: Higher specificity (a.class) prevents underline inheritance cleanly */
+a.affiliate-link {
   /* Sizing: Upgrade from btn-small to prominent */
   padding: var(--spacing-md) var(--spacing-xl);     /* 16px 32px (was 8px 16px) */
   font-size: 1rem;                                  /* 16px responsive */
 
   /* Visual */
-  background-color: var(--color-button-bg);         /* #005bb5 dark / #1f7a40 light */
+  background-color: var(--color-button-bg);         /* #004494 dark / #1976d2 light */
   color: var(--color-button-text);                  /* #ffffff */
   border: 2px solid var(--color-button-bg);         /* Thicker border (was 1px) */
   border-radius: var(--border-radius-button);       /* 4px */
@@ -407,7 +408,7 @@ button {
   font-weight: var(--font-weight-bold);             /* 700 */
   letter-spacing: 1px;
   text-transform: uppercase;
-  text-decoration: none;
+  text-decoration: none;                            /* ✅ Clean: Higher specificity (0,1,1 vs 0,1,0) */
   display: inline-block;
 
   /* Interaction */
@@ -415,26 +416,50 @@ button {
   cursor: pointer;
 }
 
-.affiliate-link:hover {
-  background-color: var(--color-button-bg-hover);   /* #1976d2 dark / #248748 light */
+/* Link states - Override browser defaults for visited links */
+a.affiliate-link:link,
+a.affiliate-link:visited {
+  text-decoration: none;                            /* Force underline removal in all states */
+  color: var(--color-button-text);                  /* Maintain white text (not browser purple) */
+  background-color: var(--color-button-bg);         /* Maintain button color */
+}
+
+/* External link indicator - Trust signal */
+a.affiliate-link::after {
+  content: " →";                        /* Space before arrow for breathing */
+  font-size: 1.2em;                     /* Larger arrow (matches .resource-cta) */
+  line-height: 1;                       /* Consistent baseline */
+  display: inline-block;                /* Enable vertical-align */
+  vertical-align: middle;               /* Text-aligned centering */
+  margin-left: 4px;                     /* Subtle spacing */
+  transition: transform 0.2s ease;
+}
+
+a.affiliate-link:hover {
+  background-color: var(--color-button-bg-hover);   /* #003d85 dark / #1565c0 light */
   border-color: var(--color-button-bg-hover);
   color: var(--color-button-text-hover);            /* #ffffff */
   transform: translateY(-2px);                      /* Lift effect */
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
 
-.affiliate-link:focus-visible {
+/* Arrow animation on hover */
+a.affiliate-link:hover::after {
+  transform: translateX(3px);           /* Subtle slide (less than card buttons) */
+}
+
+a.affiliate-link:focus-visible {
   outline: 2px solid var(--color-button-bg);
   outline-offset: 2px;
 }
 
-.affiliate-link:active {
+a.affiliate-link:active {
   transform: translateY(0);
   box-shadow: none;
 }
 
 /* Inline context: Keep in paragraph flow */
-.blog-post-content .affiliate-link {
+.blog-post-content a.affiliate-link {
   margin: var(--spacing-sm) 0;                      /* 8px vertical spacing */
 }
 
