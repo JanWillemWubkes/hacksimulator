@@ -97,6 +97,16 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
+  /* Typography Scale - Systematic sizing (Sessie 90) */
+  /* Based on Minor Third scale (1.2 ratio) - typescale.com */
+  --font-size-xs: 0.75rem;      /* 12px - Disclaimers, captions, metadata */
+  --font-size-sm: 0.875rem;     /* 14px - Secondary text, labels */
+  --font-size-md: 1rem;         /* 16px - Body text (default) */
+  --font-size-lg: 1.25rem;      /* 20px - Subheadings, emphasis */
+  --font-size-xl: 1.5rem;       /* 24px - H3 headings */
+  --font-size-2xl: 1.953rem;    /* 31px - H2 headings */
+  --font-size-3xl: 2.441rem;    /* 39px - H1 headings, hero text */
+
   /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
@@ -184,6 +194,22 @@
   --shadow-accent-terminal: 0 0 20px rgba(0, 255, 136, 0.15);  /* Branded glow - hacking aesthetic */
 
   /* Welcome separator now uses gradient fade (no glow) - see terminal.css .welcome-separator */
+
+  /* ==================== DEPRECATED ALIASES (v1.1 → v1.2) ==================== */
+  /* Backward compatibility - Remove in v2.0 (3 months post-Sessie 90) */
+
+  /* Text variable consolidation (Sessie 90) */
+  --color-text-light: var(--color-text);           /* DEPRECATED: Use --color-text instead */
+  --color-modal-text: var(--color-text);           /* DEPRECATED: Use --color-text instead */
+  --color-text-muted: var(--color-text-dim);       /* DEPRECATED: Use --color-text-dim instead */
+  --color-input: var(--color-prompt);              /* DEPRECATED: Use --color-prompt instead */
+
+  /* Chrome variable consolidation (Dark Frame Pattern - Sessie 44) */
+  --color-footer-text: var(--color-navbar-link);   /* DEPRECATED: Use --color-navbar-link for chrome text */
+  --color-navbar-dropdown-icon: var(--color-navbar-link); /* DEPRECATED: Use --color-navbar-link instead */
+
+  /* Modal background consolidation */
+  --color-bg-modal-content: var(--color-bg-modal); /* DEPRECATED: Use --color-bg-modal instead */
 }
 
 /* ==================== Light Mode Theme ==================== */
@@ -277,6 +303,14 @@
   --shadow-accent-terminal: 0 0 20px rgba(0, 255, 136, 0.08);  /* Softer glow on white - prevents oversaturation */
 
   /* Welcome separator now uses gradient fade (no glow) - see terminal.css .welcome-separator */
+
+  /* DEPRECATED ALIASES - Light mode overrides (Sessie 90) */
+  --color-text-light: var(--color-text);           /* Unify: #2a2a2a → #0a0a0a */
+  --color-modal-text: var(--color-text);           /* Consistent dark text */
+  --color-text-muted: var(--color-text-dim);       /* Unify: #666666 → #444444 (better contrast) */
+  --color-input: var(--color-prompt);              /* Terminal branding consistency */
+  --color-bg-modal-content: var(--color-bg-modal); /* Unify modal backgrounds */
+  /* Chrome variables identical in light mode (Dark Frame Pattern) */
 }
 
 /* ==================== Reset & Base ==================== */
