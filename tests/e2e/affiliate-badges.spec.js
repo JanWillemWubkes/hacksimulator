@@ -403,4 +403,80 @@ test.describe('Affiliate Grid: Performance', () => {
 
     expect(transition).toContain('0.2s');
   });
+
+  test('CTA button arrow should be vertically centered', async ({ page }) => {
+    await page.goto('/blog/beste-online-cursussen-ethical-hacking.html');
+
+    const arrowStyles = await page.evaluate(() => {
+      const cta = document.querySelector('.resource-cta');
+      const after = window.getComputedStyle(cta, '::after');
+      return {
+        lineHeight: after.lineHeight,
+        display: after.display,
+        verticalAlign: after.verticalAlign
+      };
+    });
+
+    expect(arrowStyles.lineHeight).toBe('1');
+    expect(arrowStyles.display).toBe('inline-block');
+    expect(arrowStyles.verticalAlign).toBe('middle');
+  });
+
+  test('CTA buttons should align at same height across cards', async ({ page }) => {
+    await page.goto('/blog/beste-online-cursussen-ethical-hacking.html');
+
+    const buttons = await page.locator('.resource-cta').all();
+    expect(buttons.length).toBeGreaterThanOrEqual(3);
+
+    const positions = await Promise.all(buttons.map(b => b.boundingBox()));
+    const bottoms = positions.map(p => p.y + p.height);
+
+    // All buttons should have bottom edge within 2px tolerance
+    const maxBottom = Math.max(...bottoms);
+    const minBottom = Math.min(...bottoms);
+    expect(maxBottom - minBottom).toBeLessThan(2);
+  });
+
+  test('Featured badge should be present on TryHackMe card', async ({ page }) => {
+    await page.goto('/blog/beste-online-cursussen-ethical-hacking.html');
+
+    const featuredBadge = page.locator('.featured-badge');
+    await expect(featuredBadge).toBeVisible();
+    await expect(featuredBadge).toHaveText('MEEST POPULAIR');
+
+    // Verify gradient background
+    const gradient = await featuredBadge.evaluate(el => {
+      const styles = window.getComputedStyle(el);
+      return styles.backgroundImage;
+    });
+
+    expect(gradient).toContain('linear-gradient');
+    expect(gradient).toContain('rgb(39, 174, 96)'); // #27ae60
+  });
+
+  test('Featured card CTA should be green', async ({ page }) => {
+    await page.goto('/blog/beste-online-cursussen-ethical-hacking.html');
+
+    // Find the featured card CTA (card containing .featured-badge)
+    const featuredCta = page.locator('.resource-card:has(.featured-badge) .resource-cta');
+    await expect(featuredCta).toBeVisible();
+
+    const bgColor = await featuredCta.evaluate(el => {
+      return window.getComputedStyle(el).backgroundColor;
+    });
+
+    // Should be green (var(--color-success) = #27ae60 or #3fb950 depending on CSS vars)
+    expect(bgColor).toMatch(/rgb\((?:39|63), (?:174|185), (?:96|80)\)/); // Accept both variants
+  });
+
+  test('All CTA buttons should have uniform text', async ({ page }) => {
+    await page.goto('/blog/beste-online-cursussen-ethical-hacking.html');
+
+    const allButtons = await page.locator('.resource-cta').allTextContents();
+
+    // All should contain "BEKIJK AANBIEDING" (arrow is in CSS ::after)
+    allButtons.forEach(text => {
+      expect(text.trim()).toBe('BEKIJK AANBIEDING');
+    });
+  });
 });

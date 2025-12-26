@@ -510,6 +510,8 @@ button {
 /* Product card */
 .resource-card {
   position: relative;                               /* CRITICAL: Positioning context for ribbon */
+  display: flex;                                    /* Enable flexbox for vertical alignment */
+  flex-direction: column;                           /* Stack content vertically */
   background-color: var(--color-bg-terminal);       /* #0d1117 dark */
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-modal);        /* 8px */
@@ -605,6 +607,12 @@ button {
   color: var(--color-warning);
 }
 
+/* CTA wrapper - Consistent spacing above button */
+.resource-card__cta {
+  margin-top: auto;                  /* Flexbox: stick to bottom */
+  padding-top: var(--spacing-md);    /* 16px visual breathing room */
+}
+
 /* Full-width CTA in card */
 /* CTA Button - Interactive with micro-animations */
 .resource-cta {
@@ -638,6 +646,9 @@ button {
 .resource-cta::after {
   content: "→";
   font-size: 1.2em;
+  line-height: 1;                    /* Force consistent baseline */
+  display: inline-block;             /* Enable transform without affecting flow */
+  vertical-align: middle;            /* Explicit vertical centering */
   transition: transform 0.2s ease;
 }
 
@@ -664,6 +675,21 @@ button {
 .resource-cta:active {
   transform: translateY(0);
   box-shadow: 0 2px 6px rgba(88, 166, 255, 0.2);
+}
+
+/* Featured Card CTA - Success green instead of blue */
+.resource-card:has(.featured-badge) .resource-cta {
+  background-color: var(--color-success);     /* Green: #27ae60 */
+  border-color: #2ecc71;
+}
+
+.resource-card:has(.featured-badge) .resource-cta:hover {
+  background-color: #229954;                  /* Darker green on hover */
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+}
+
+.resource-card:has(.featured-badge) .resource-cta:focus {
+  outline-color: var(--color-success);
 }
 
 /* Mobile: Single column */
@@ -788,6 +814,43 @@ button {
   background-color: var(--badge-socialeng-bg);     /* #e74c3c - danger red */
   color: var(--badge-socialeng-text);              /* #ffffff - AA+ contrast (4.8:1) */
   border: 2px solid var(--badge-socialeng-border); /* #c0392b - depth */
+}
+
+/* ==================== FEATURED BADGE (AFFILIATE GRID) ==================== */
+
+/* Featured Badge - Highlights recommended resource */
+.featured-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  margin-bottom: 8px;                /* Space from category badge */
+
+  font-family: var(--font-terminal);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+
+  color: #ffffff;
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);  /* Success green */
+  border: 2px solid #2ecc71;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(39, 174, 96, 0.3);
+
+  transition: all 0.15s ease;
+}
+
+.featured-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(39, 174, 96, 0.4);
+}
+
+/* Stack badges vertically in icon area */
+.resource-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 
 /* ==================== DONATION CTA - COMPACT PATTERN ==================== */
