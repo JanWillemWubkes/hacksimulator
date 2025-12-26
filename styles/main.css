@@ -128,6 +128,12 @@
   --z-modal: 1000;
   --z-cookie: 2000;
 
+  /* Missing variable definitions - Added Sessie 89 for undefined variable fixes */
+  --font-mono: var(--font-terminal);           /* Alias for consistency (used in resource badges) */
+  --color-bg-secondary: var(--color-bg-modal); /* Ad container background */
+  --font-family-primary: var(--font-ui);       /* Future-proof UI font naming (used in search modal) */
+  --color-bg-input: var(--color-bg-hover);     /* Input field background (used in search modal) */
+
   /* Vignette Background - Dark mode (default for :root) */
   --vignette-center: rgba(35, 35, 35, 1);     /* Dark grey center */
   --vignette-mid1: rgba(22, 22, 22, 1);       /* Mid-dark grey */
