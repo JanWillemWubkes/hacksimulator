@@ -26,11 +26,11 @@
 # Uncomment these redirects after domain is configured in Netlify
 
 # Redirect www to apex domain
-# [[redirects]]
-#   from = "https://www.hacksimulator.nl/*"
-#   to = "https://hacksimulator.nl/:splat"
-#   status = 301
-#   force = true
+[[redirects]]
+  from = "https://www.hacksimulator.nl/*"
+  to = "https://hacksimulator.nl/:splat"
+  status = 301
+  force = true
 
 # Force HTTPS
 # [[redirects]]
@@ -46,11 +46,11 @@
 #   force = true
 
 # Optional: Redirect old Netlify subdomain to custom domain
-# [[redirects]]
-#   from = "https://famous-frangollo-b5a758.netlify.app/*"
-#   to = "https://hacksimulator.nl/:splat"
-#   status = 301
-#   force = false
+[[redirects]]
+  from = "https://famous-frangollo-b5a758.netlify.app/*"
+  to = "https://hacksimulator.nl/:splat"
+  status = 301
+  force = false
 
 # Security Headers
 [[headers]]

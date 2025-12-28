@@ -2,12 +2,12 @@
 
 Een veilige browser-based terminal simulator waar Nederlandse beginners de fundamenten van ethisch hacken kunnen leren door hands-on te oefenen met echte commando's.
 
-[![Live Demo](https://img.shields.io/badge/demo-live-success?style=flat-square)](https://famous-frangollo-b5a758.netlify.app/)
+[![Live Demo](https://img.shields.io/badge/demo-live-success?style=flat-square)](https://hacksimulator.nl/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 [![Code of Conduct](https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square)](CODE_OF_CONDUCT.md)
 
-**🚀 Live Demo:** [https://famous-frangollo-b5a758.netlify.app/](https://famous-frangollo-b5a758.netlify.app/)
+**🚀 Live Demo:** [https://hacksimulator.nl/](https://hacksimulator.nl/)
 **📦 GitHub:** [https://github.com/JanWillemWubkes/hacksimulator](https://github.com/JanWillemWubkes/hacksimulator)
 
 ---
@@ -18,7 +18,7 @@ Een veilige browser-based terminal simulator waar Nederlandse beginners de funda
 
 Dit project is in actieve ontwikkeling. De officiële productie launch op `hacksimulator.nl` is gepland voor Q1 2026.
 
-**Live Beta Demo:** [famous-frangollo-b5a758.netlify.app](https://famous-frangollo-b5a758.netlify.app/)
+**Live Beta Demo:** [hacksimulator.nl](https://hacksimulator.nl/)
 
 | Status | Feature |
 |--------|---------|
@@ -313,7 +313,7 @@ Copyright (c) 2025 HackSimulator.nl
 
 ## 📧 Contact
 
-- **Live Demo:** [https://famous-frangollo-b5a758.netlify.app/](https://famous-frangollo-b5a758.netlify.app/)
+- **Live Demo:** [https://hacksimulator.nl/](https://hacksimulator.nl/)
 - **GitHub:** [https://github.com/JanWillemWubkes/hacksimulator](https://github.com/JanWillemWubkes/hacksimulator)
 - **Issues:** [GitHub Issues](https://github.com/JanWillemWubkes/hacksimulator/issues) (bug reports, feature requests, questions)
 
