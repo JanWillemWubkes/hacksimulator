@@ -117,19 +117,30 @@
       <section class="blog-post-content">
         <h2>Waarom Boeken in het Tijdperk van YouTube?</h2>
         <p>
-          In 2025 zwemt het internet over van gratis YouTube tutorials, Udemy cursussen en TryHackMe labs. Waarom zou je dan nog een fysiek boek kopen over ethical hacking? Het antwoord is simpel: <strong>diepgang</strong>.
+          In 2025 zwemt het internet over van gratis YouTube tutorials, online cursussen en hands-on labs. Waarom zou je dan nog een fysiek boek kopen over ethical hacking?
         </p>
         <p>
-          Waar een 10-minuten YouTube video je de basics van <code>nmap</code> laat zien, legt een goed hackingboek uit <em>waarom</em> bepaalde poorten interessant zijn, <em>hoe</em> je scan-resultaten interpreteert, en <em>wat</em> je volgende stap moet zijn. Boeken dwingen je om niet te skippen, om geen tabs te openen, en om écht te leren in plaats van "tutorial hell" in te duiken.
+          <strong>Het antwoord: diepgang en structuur.</strong>
         </p>
         <p>
-          Hieronder vind je 5 boeken die ik zelf heb gelezen (of grondig heb geanalyseerd op basis van reviews van professionals). Ze zijn gerangschikt van beginner-friendly naar iets geavanceerder, zodat je een duidelijk leerpad hebt.
+          Waar een 10-minuten YouTube video je de basics van <code>nmap</code> laat zien, legt een goed boek uit <em>waarom</em> bepaalde poorten interessant zijn, <em>hoe</em> je scan-resultaten interpreteert, en <em>wat</em> je volgende stap moet zijn.
+        </p>
+        <p>
+          Boeken geven je een complete roadmap - geen fragmenten. Je kunt niet skippen naar het "leuke" deel zonder de fundamentals. Dat voorkomt "tutorial hell" ← eindeloos tutorials kijken zonder écht te oefenen.
+        </p>
+        <p>
+          Hieronder vind je 5 boeken die zijn geanalyseerd op basis van reviews van professionals en beginners. Ze zijn gerangschikt van beginner-friendly naar iets geavanceerder, zodat je een duidelijk leerpad hebt.
         </p>
       </section>
 
       <!-- Aanbevolen Boeken Section -->
-      <section class="aanbevolen-resources">
+      <section class="aanbevolen-resources" id="aanbevolen-resources">
         <h2 class="aanbevolen-header">[ AANBEVOLEN BOEKEN ]</h2>
+
+        <p style="margin-bottom: 2rem; color: var(--color-text-muted); font-size: 0.95rem;">
+          Snelle scan? Kies hieronder. Wil je details?
+          <a href="#detail-reviews" style="color: var(--color-accent); text-decoration: underline;">Spring naar volledige reviews ↓</a>
+        </p>
 
         <div class="resource-grid">
           <!-- Card 1: Hacker Playbook 3 -->
@@ -178,7 +189,7 @@
             </div>
 
             <p class="resource-description">
-              Dé bijbel voor web security. 700+ pagina's OWASP vulnerabilities in detail door Stuttard & Pinto.
+              Dé bijbel voor web security. 700+ pagina's OWASP ← Open Web Application Security Project (lijst van veelvoorkomende web kwetsbaarheden) vulnerabilities in detail door Stuttard & Pinto.
             </p>
 
             <div class="resource-meta">
@@ -305,7 +316,11 @@
       </section>
 
       <!-- Book 1 -->
-      <section class="blog-post-content">
+      <section class="blog-post-content" id="detail-reviews">
+        <p style="margin-bottom: 1.5rem;">
+          <a href="#aanbevolen-resources" style="color: var(--color-accent); text-decoration: none;">↑ Terug naar overzicht</a>
+        </p>
+
         <h2>1. "The Hacker Playbook 3" - Peter Kim</h2>
         <p><strong>Level:</strong> Beginner tot Intermediate | <strong>Taal:</strong> Engels | <strong>Pagina's:</strong> ~350</p>
 
@@ -316,10 +331,10 @@
 
         <h3>Wat leer je?</h3>
         <ul>
-          <li><strong>Reconnaissance:</strong> OSINT-technieken, Google dorking, sociale media scraping</li>
-          <li><strong>Exploitation:</strong> Metasploit Framework, custom payloads, privilege escalation</li>
-          <li><strong>Post-Exploitation:</strong> Lateral movement, pivoting, data exfiltration</li>
-          <li><strong>Tools:</strong> Burp Suite, Nmap, Hydra, BloodHound, Empire</li>
+          <li><strong>Reconnaissance</strong> ← informatie verzamelen: OSINT-technieken ← Open Source Intelligence (publieke bronnen doorzoeken), Google dorking ← geavanceerde zoekopdrachten voor kwetsbaarheden, social media scraping</li>
+          <li><strong>Exploitation</strong> ← kwetsbaarheden uitbuiten: Metasploit Framework ← exploitation toolkit, custom payloads ← aangepaste malware voor specifieke systemen, privilege escalation ← rechten verhogen van user naar admin</li>
+          <li><strong>Post-Exploitation</strong> ← na compromitteren: Lateral movement ← verplaatsen tussen systemen in netwerk, pivoting ← gecompromitteerde machine als springplank gebruiken, data exfiltration ← gestolen data uit netwerk halen</li>
+          <li><strong>Tools:</strong> Burp Suite ← web security testing tool (intercepting proxy), Nmap, Hydra, BloodHound ← tool om Active Directory attack paths te visualiseren, Empire</li>
         </ul>
 
         <h3>Voor wie?</h3>
@@ -347,15 +362,15 @@
 
         <h3>Waarom dit boek?</h3>
         <p>
-          Als je geïnteresseerd bent in <strong>web security</strong> (SQL injection, XSS, CSRF), is dit de bijbel. Geschreven door de makers van Burp Suite (de #1 web hacking tool), behandelt het boek élke OWASP Top 10 vulnerability in extreme detail.
+          Als je geïnteresseerd bent in <strong>web security</strong>, is dit de bijbel. Geschreven door de makers van Burp Suite ← web security testing tool (intercepting proxy), behandelt het boek élke OWASP ← Open Web Application Security Project (lijst van veelvoorkomende kwetsbaarheden) Top 10 vulnerability in extreme detail.
         </p>
 
         <h3>Wat leer je?</h3>
         <ul>
-          <li><strong>SQL Injection:</strong> Van basic injections tot blind SQL-i en second-order attacks</li>
-          <li><strong>Cross-Site Scripting (XSS):</strong> Reflected, stored, DOM-based + bypasses</li>
-          <li><strong>Authentication Flaws:</strong> Session hijacking, password brute-forcing, OAuth weaknesses</li>
-          <li><strong>Logic Flaws:</strong> Race conditions, business logic vulnerabilities</li>
+          <li><strong>SQL Injection</strong> ← Structured Query Language injection (database aanvallen): Van basic injections tot blind SQL-i ← geen zichtbare output, je 'voelt' of query werkt en second-order attacks ← payload wordt later geactiveerd</li>
+          <li><strong>Cross-Site Scripting (XSS)</strong> ← JavaScript in webpagina's injecteren: Reflected ← script wordt direct teruggestuurd, Stored ← script opgeslagen in database, DOM-based ← client-side manipulation + bypasses</li>
+          <li><strong>Authentication Flaws</strong> ← inlogproblemen: Session hijacking, password brute-forcing, OAuth weaknesses</li>
+          <li><strong>Logic Flaws</strong> ← programmeerfouten in bedrijfslogica: Race conditions, business logic vulnerabilities</li>
         </ul>
 
         <h3>Voor wie?</h3>
@@ -383,7 +398,7 @@
 
         <h3>Waarom dit boek?</h3>
         <p>
-          Metasploit is het Zwitserse zakmes van penetration testing - maar het is ook overweldigend voor beginners. Dit boek, geschreven door het TrustedSec team, leert je het framework vanaf de basis tot geavanceerde technieken zoals <strong>custom exploit development</strong>.
+          Metasploit is een veelzijdige toolkit voor penetration testing - maar het is ook overweldigend voor beginners. Dit boek, geschreven door het TrustedSec team, leert je het framework vanaf de basis tot geavanceerde technieken zoals <strong>custom exploit development</strong> ← je eigen exploits schrijven voor specifieke kwetsbaarheden.
         </p>
 
         <h3>Wat leer je?</h3>
@@ -506,12 +521,12 @@
 
         <h3>Zijn deze boeken niet verouderd?</h3>
         <p>
-          De <strong>fundamentals</strong> van hacking veranderen nauwelijks - SQL injection werkt nog steeds hetzelfde sinds 2000. Wel veranderen tools (nieuwe Metasploit versies) en technieken (nieuwe bypasses). Check altijd de publicatiedatum: boeken van na 2018 zijn meestal actueel genoeg.
+          De <strong>fundamentals</strong> van hacking veranderen nauwelijks - SQL injection ← database aanvallen werkt nog steeds hetzelfde sinds 2000. Wel veranderen tools (nieuwe Metasploit versies) en technieken (nieuwe bypasses). Check altijd de publicatiedatum: boeken van na 2018 zijn meestal actueel genoeg.
         </p>
 
         <h3>Kan ik dit ook gratis leren via YouTube?</h3>
         <p>
-          Zeker! Kanalen zoals <strong>LiveOverflow</strong>, <strong>IppSec</strong> en <strong>The Cyber Mentor</strong> zijn fantastisch. Maar YouTube is gefragmenteerd - boeken geven je een <em>complete roadmap</em>. Combineer beide: lees een hoofdstuk uit The Hacker Playbook, doe daarna een HackTheBox machine om het te oefenen.
+          Zeker! Kanalen zoals <strong>LiveOverflow</strong>, <strong>IppSec</strong> en <strong>The Cyber Mentor</strong> zijn fantastisch. Maar YouTube is gefragmenteerd - boeken geven je een <em>complete roadmap</em>. Combineer beide: lees een hoofdstuk uit The Hacker Playbook, doe daarna een HackTheBox ← platform met realistische hacking labs (machines om te kraken) machine om het te oefenen.
         </p>
       </section>
 
@@ -525,7 +540,7 @@
           <li><strong>HackSimulator.nl:</strong> Oefen terminal commands zonder risico (start <a href="../index.html">hier</a>)</li>
           <li><strong>TryHackMe:</strong> Beginner-friendly hacking labs met guided paths</li>
           <li><strong>HackTheBox:</strong> Realistischere pentesting challenges (voor na The Hacker Playbook)</li>
-          <li><strong>OSCP Certificering:</strong> De gouden standaard voor penetration testers (als je serieus bent)</li>
+          <li><strong>OSCP Certificering</strong> ← Offensive Security Certified Professional, 24u hands-on pentest exam: De gouden standaard voor penetration testers (als je serieus bent)</li>
         </ul>
 
         <p>
