@@ -94,6 +94,12 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 **Doel:** Memory aids - full context in docs/sessions/
 
+### Sessie 91: Design System 100/100 Complete (27 dec)
+⚠️ Never skip M5 critical blockers (GA4, emails) for nice-to-haves
+✅ Always prioritize business impact over documentation perfection
+✅ Featured content tokens unlock monetization (premium badges, sponsored content)
+📄 docs/sessions/current.md Sessie 91 (100/100 achieved: featured tokens + 925-line blog docs + M5 config unblocked)
+
 ### Sessie 90: CSS Variable Semantic Cleanup (27 dec)
 ⚠️ Never remove duplicates without aliases | assume light mode == inverted dark mode | break backward compat
 ✅ Always alias-first migration | test both themes independently | gradual usage updates

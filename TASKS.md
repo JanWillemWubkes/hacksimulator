@@ -8,7 +8,7 @@
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 143 / 295 taken voltooid (48.5%)
+**Totaal:** 144 / 295 taken voltooid (48.8%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
@@ -17,7 +17,7 @@
 | M2: Filesystem Commands | ✅ Voltooid | 25/25 | 100% |
 | M3: Network & Security | ✅ Voltooid | 28/28 | 100% |
 | M4: UX & Polish | ✅ Voltooid | 43/43 | 100% |
-| M5: Testing & Launch | 🔵 In uitvoering | 16/37 | 43% | ✅ **Performance Testing 100%**
+| M5: Testing & Launch | 🔵 In uitvoering | 19/37 | 51% | ✅ **Performance Testing 100% + Configuration 100%**
 | M5.5: Monetization MVP | 🏗️ In Progress | 2/15 | 13% |
 | M6: Tutorial System | ⏭️ Gepland | 0/33 | 0% |
 | M7: Gamification | ⏭️ Gepland | 0/40 | 0% |
@@ -318,8 +318,8 @@
 **Status:** 🔵 In uitvoering (8/35 tasks) - ✅ **LIVE on Netlify!**
 
 #### Configuration Placeholders (CRITICAL - Launch Blockers)
-- [ ] Replace GA4 Measurement ID in `src/analytics/tracker.js` (3 locations: lines 75, 121, 108) - **TO DO before launch**
-- [ ] Setup contact emails in legal documents (4 locations: privacy.html x2, terms.html, cookies.html) - **TO DO before launch**
+- [x] Replace GA4 Measurement ID in `src/analytics/tracker.js` (3 locations: lines 75, 121, 108) - ✅ Sessie 91 (G-7F792VS6CE)
+- [x] Setup contact emails in legal documents (4 locations: privacy.html x2, terms.html, cookies.html) - ✅ Sessie 91
 
 **Details:** See `PRE-LAUNCH-CHECKLIST.md` sections 1-2 for exact line numbers and instructions.
 

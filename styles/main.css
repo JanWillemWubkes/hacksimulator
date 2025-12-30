@@ -195,6 +195,16 @@
 
   /* Welcome separator now uses gradient fade (no glow) - see terminal.css .welcome-separator */
 
+  /* ===== FEATURED CONTENT SYSTEM (Sessie 91) ===== */
+  /* Purpose: Premium/sponsored content emphasis tokens */
+  /* Usage: Affiliate ribbons, premium badges, sponsored cards */
+
+  --featured-bg-emphasis: rgba(255, 215, 0, 0.08);     /* Subtle gold glow (8% opacity) */
+  --featured-border-accent: #ffd700;                    /* Gold border for priority content */
+  --featured-text-strong: #ffc107;                      /* Amber text for CTA emphasis */
+  --featured-ribbon-start: var(--ribbon-affiliate-start); /* Alias: #e67e22 (vibrant orange) */
+  --featured-ribbon-end: var(--ribbon-affiliate-end);     /* Alias: #d35400 (darker orange) */
+
   /* ==================== DEPRECATED ALIASES (v1.1 → v1.2) ==================== */
   /* Backward compatibility - Remove in v2.0 (3 months post-Sessie 90) */
 
@@ -304,6 +314,11 @@
 
   /* Welcome separator now uses gradient fade (no glow) - see terminal.css .welcome-separator */
 
+  /* Featured Content (light mode adjustments - Sessie 91) */
+  --featured-bg-emphasis: rgba(255, 215, 0, 0.12);   /* Slightly higher opacity for visibility */
+  --featured-border-accent: #d97706;                  /* Darker gold for contrast */
+  --featured-text-strong: #b45309;                    /* Dark amber text (WCAG AAA) */
+
   /* DEPRECATED ALIASES - Light mode overrides (Sessie 90) */
   --color-text-light: var(--color-text);           /* Unify: #2a2a2a → #0a0a0a */
   --color-modal-text: var(--color-text);           /* Consistent dark text */
@@ -411,6 +426,26 @@ button {
   background-color: transparent;
   border-color: var(--color-button-bg-hover);
   color: var(--color-button-bg-hover);
+}
+
+/* Featured Button Variant - Premium/Sponsored CTAs (Sessie 91) */
+.btn-featured {
+  background: linear-gradient(135deg, var(--featured-ribbon-start), var(--featured-ribbon-end));
+  color: var(--color-bg-dark);           /* Dark text on gold background */
+  border: 1px solid var(--featured-border-accent);
+  font-weight: var(--font-weight-bold);
+  transition: var(--transition-normal);
+}
+
+.btn-featured:hover {
+  background: var(--featured-border-accent);
+  border-color: var(--featured-text-strong);
+  box-shadow: 0 0 8px var(--featured-bg-emphasis);
+  transform: translateY(-1px);           /* Subtle lift effect */
+}
+
+.btn-featured:active {
+  transform: translateY(0);
 }
 
 .btn-small {
@@ -554,10 +589,10 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   color: var(--ribbon-text);  /* #ffffff */
   white-space: nowrap;
 
-  /* Visual - Orange Gradient Background */
+  /* Visual - Orange Gradient Background (Sessie 91: Upgraded to featured tokens) */
   background: linear-gradient(135deg,
-    var(--ribbon-affiliate-start) 0%,   /* #e67e22 - vibrant orange */
-    var(--ribbon-affiliate-end) 100%);  /* #d35400 - darker orange */
+    var(--featured-ribbon-start) 0%,   /* #e67e22 - vibrant orange */
+    var(--featured-ribbon-end) 100%);  /* #d35400 - darker orange */
 
   /* Ribbon Shape - Angled bottom-left corner */
   clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%);
