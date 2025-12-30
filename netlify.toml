@@ -50,7 +50,7 @@
   from = "https://famous-frangollo-b5a758.netlify.app/*"
   to = "https://hacksimulator.nl/:splat"
   status = 301
-  force = false
+  force = true
 
 # Security Headers
 [[headers]]
