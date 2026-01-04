@@ -309,6 +309,12 @@ return `Scan complete: 3 ports open`;
 
 **Doel:** Memory aids - full context in docs/sessions/
 
+### Sessie 94: Documentation Validation Pattern (04 jan 2026)
+⚠️ Never skip file reference validation | assume test paths exist | hardcode non-existent files
+✅ Always validate cross-references quarterly | fix broken paths immediately | use validation as quality gate
+✅ AI comprehension tests (mock Q&A) validate document usability
+📄 docs/sessions/current.md Sessie 94 (command checklist 8-step expansion, 100% file validation)
+
 ### Sessie 92: CLAUDE.md Perfection (04 jan 2026)
 ⚠️ Never hardcode volatile metrics | triple dates | inconsistent learning count
 ✅ Always delegate to TASKS.md | single timestamp | strict 5-session rotation
@@ -331,12 +337,8 @@ return `Scan complete: 3 ports open`;
 ✅ Always relative parent positioning | `getComputedStyle()` for ::before/::after
 📄 docs/sessions/current.md Sessie 88
 
-### Sessie 86: CLAUDE.md Optimization (15 dec)
-⚠️ Never keep duplication after refactor | static pattern copies
-✅ Always second-pass optimization | Single Source of Truth per topic
-📄 docs/sessions/current.md Sessie 86 (§14→PRD, 587→307→200 lines)
-
-**Compressed Learnings (Sessies 83-84):**
+**Compressed Learnings (Sessies 83-86):**
+- Sessie 86: CLAUDE.md v1.0 - Single Source of Truth optimization (587→228 lines)
 - Sessie 84: Skill-Based Targeting - 3-persona model, ethical red lines, anchoring pricing
 - Sessie 83: Mobile Minimalist - "less is more" mobile, validate industry precedent
 → Full detail in docs/sessions/current.md
@@ -348,10 +350,10 @@ return `Scan complete: 3 ports open`;
 - Sessies 2-34: docs/sessions/archive-early.md
 
 **Rotation Protocol:**
-- Keep last 5 full (92-88)
-- Compress next 5 to bullets (84-80)
+- Keep last 5 full (94, 92, 91, 90, 88)
+- Compress next 5 to bullets (86-82)
 - Archive 11+ in docs/sessions/
-- Trigger: Every 5 sessions (next: Sessie 97)
+- Trigger: Every 5 sessions (next: Sessie 99)
 
 ---
 

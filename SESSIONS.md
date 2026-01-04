@@ -8,14 +8,15 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (84-88)](docs/sessions/current.md) - Full Detail
-**Sessies:** 88, 87, 84, 83, 82
-**Period:** 10-26 december 2025
+### [Current Sessions (88-94)](docs/sessions/current.md) - Full Detail
+**Sessies:** 94, 93, 92, 91, 90, 89, 88
+**Period:** 26 december 2025 - 04 januari 2026
 **Topics:**
+- CLAUDE.md 3-phase optimization (v2.0-v2.2): metrics delegation, code examples, command checklist
+- Design system 100% completion (141 CSS variables, Style Guide v1.5)
+- Blog inline jargon explanations (60+ definitions for beginners)
 - Affiliate CTA optimization (100% E2E test coverage)
-- Blog consistency standardization
-- Doelgroep repositioning (age-restrictive → skill-based)
-- Mobile minimalist rendering & ASCII alignment fixes
+- Email forwarding setup (contact@hacksimulator.nl)
 
 ---
 
@@ -78,9 +79,9 @@
 
 ## 📊 Session Overview
 
-**Total Sessions:** 84 (as of 15 december 2025)
-**Current Session:** 87 (Codebase cleanup)
-**Sessions with full documentation:** 78-84 (7 sessions)
+**Total Sessions:** 94 (as of 04 januari 2026)
+**Current Session:** 94 (CLAUDE.md Phase 3 Final Polish)
+**Sessions with full documentation:** 88-94 (7 sessions)
 **Sessions compressed:** 2-77 (various compression levels)
 
 **Structure rationale:**
@@ -122,7 +123,10 @@
 
 ---
 
-**Last updated:** 16 december 2025 (Sessie 87 - Codebase Cleanup)
-**Next update:** Sessie 88 or when CURRENT sessions exceed 5
+**Last updated:** 04 januari 2026 (Sessie 94 - CLAUDE.md Phase 3 Final Polish)
+**Next update:** Sessie 95 or when CURRENT sessions exceed 7
 
-**File structure established:** Sessie 87 (612KB monolith → 5 modular files for performance)
+**Recent updates:**
+- Sessie 94: CLAUDE.md v2.2 complete (3-phase optimization: metrics, examples, checklist)
+- Sessie 91: Design system 100% (141 CSS variables, Style Guide v1.5)
+- Sessie 87: File structure established (612KB monolith → 5 modular files)
