@@ -8,19 +8,20 @@
 
 ## 🎯 Quick Reference
 
-**Wat:** Veilige terminal simulator voor Nederlandse beginners (skill-based, alle leeftijden 16+)
-**Stack:** Vanilla JS/CSS, client-side, localStorage, < 500KB bundle
-**Scope:** 30 commands (MVP) + Tutorials/Gamification/Analytics (Post-MVP)
-**Status:** M0-M4 Complete (100%) | M5 Testing (27%) | M5.5 Monetization (13%) - ✅ LIVE on Netlify | M6-M8 Planned
-**Live URL:** https://famous-frangollo-b5a758.netlify.app/
-**GitHub:** https://github.com/JanWillemWubkes/hacksimulator
-**Taal:** UI=NL, commands=EN, uitleg=NL
-**Performance:** Bundle ~318KB, Load ~2s, Lighthouse 88/100/100/100
-**Testing:** Playwright E2E (Chromium + Firefox passing)
-**Compliance:** WCAG AAA, Style Guide 100% (141 CSS variables)
-**CI/CD:** GitHub Actions → Netlify auto-deploy (main branch) | Rollback: `git revert` + push
-**Monitoring:** Netlify Analytics | Lighthouse CI
-**Roadmap:** 295 tasks total (143 done, 152 planned) → 48.5% complete
+**What:** Browser-based terminal simulator voor Nederlandse beginners - ethisch hacken leren
+**Tech Stack:** Vanilla JS/CSS, client-side only, <500KB bundle, no backend (MVP)
+**Language:** UI=NL | Commands=EN | Help/Errors=NL (see §4 Taal Strategie)
+
+**Status:** ✅ LIVE on Netlify | M5 Testing + M5.5 Monetization in progress
+**URLs:** [Production](https://famous-frangollo-b5a758.netlify.app/) | [GitHub](https://github.com/JanWillemWubkes/hacksimulator)
+**Blog:** 7 posts live at `/blog/` (60+ inline jargon explanations - Sessie 89 FASE 2)
+**Contact:** contact@hacksimulator.nl (Gmail forwarding - Sessie 91)
+
+**Performance:** Lighthouse 88+/100/100/100 | ~2s load | Playwright E2E 16/16 passing
+**Compliance:** WCAG AAA | 141 CSS variables (Style Guide v1.5 - 100% coverage)
+
+→ **Metrics (Live):** `TASKS.md` lines 9-26 (144/295 tasks = 48.8%, M5 51%, bundle 470.87KB)
+→ **Full Specs:** `docs/prd.md` v1.8 | **Architecture:** `PLANNING.md` v2.2 | **Commands:** `docs/commands-list.md`
 
 ---
 
@@ -94,20 +95,26 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 **Doel:** Memory aids - full context in docs/sessions/
 
+### Sessie 92: CLAUDE.md Perfection (04 jan 2026)
+⚠️ Never hardcode volatile metrics | triple dates | inconsistent learning count
+✅ Always delegate to TASKS.md | single timestamp | strict 5-session rotation
+✅ Concrete code examples unlock AI pattern recognition
+📄 docs/sessions/current.md Sessie 92 (10 improvements: metrics delegation + example expansion)
+
 ### Sessie 91: Design System 100/100 Complete (27 dec)
 ⚠️ Never skip M5 critical blockers (GA4, emails) for nice-to-haves
 ✅ Always prioritize business impact over documentation perfection
 ✅ Featured content tokens unlock monetization (premium badges, sponsored content)
-📄 docs/sessions/current.md Sessie 91 (100/100 achieved: featured tokens + 925-line blog docs + M5 config unblocked)
+📄 docs/sessions/current.md Sessie 91
 
 ### Sessie 90: CSS Variable Semantic Cleanup (27 dec)
-⚠️ Never remove duplicates without aliases | assume light mode == inverted dark mode | break backward compat
-✅ Always alias-first migration | test both themes independently | gradual usage updates
-📄 docs/sessions/current.md Sessie 90 (7 duplicates removed, 7-token typography scale, 100% backward compat)
+⚠️ Never remove duplicates without aliases | assume light mode == inverted dark mode
+✅ Always alias-first migration | test both themes independently
+📄 docs/sessions/current.md Sessie 90
 
 ### Sessie 88: E2E Testing Perfectie (26 dec)
-⚠️ Never viewport-based position checks | `textContent()` for pseudo-elements | exact pixel assertions | assume HTML structure
-✅ Always relative parent positioning | `getComputedStyle()` for ::before/::after | browser variation tolerance | curl production to verify
+⚠️ Never viewport-based position checks | `textContent()` for pseudo-elements
+✅ Always relative parent positioning | `getComputedStyle()` for ::before/::after
 📄 docs/sessions/current.md Sessie 88
 
 ### Sessie 86: CLAUDE.md Optimization (15 dec)
@@ -115,28 +122,22 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ✅ Always second-pass optimization | Single Source of Truth per topic
 📄 docs/sessions/current.md Sessie 86 (§14→PRD, 587→307→200 lines)
 
-### Sessie 84: Skill-Based Targeting (15 dec)
-⚠️ Never age-filter | email verification at MVP | freemium without proof
-✅ Always 3-persona model | ethical red lines | anchoring pricing
-📄 docs/sessions/current.md Sessie 84
+**Compressed Learnings (Sessies 83-84):**
+- Sessie 84: Skill-Based Targeting - 3-persona model, ethical red lines, anchoring pricing
+- Sessie 83: Mobile Minimalist - "less is more" mobile, validate industry precedent
+→ Full detail in docs/sessions/current.md
 
-### Sessie 83: Mobile Minimalist (10 dec)
-⚠️ Never fight platform limits | assume tech fixes win | over-engineer mobile
-✅ Always validate industry precedent | "less is more" mobile
-📄 docs/sessions/current.md Sessie 83
+**Archive Index:**
+- Sessies 78-82: docs/sessions/recent.md
+- Sessies 51-77: docs/sessions/archive-q4-2024.md
+- Sessies 35-50: docs/sessions/archive-q3-2024.md
+- Sessies 2-34: docs/sessions/archive-early.md
 
-### Sessie 78: Cache Strategy (7 dec)
-⚠️ Never long cache without versioning | build complexity | over-engineer
-✅ Always short cache frequent updates | query params backup | must-revalidate
-📄 docs/sessions/recent.md Sessie 78
-
-**Rotation:** Keep last 5 full (84-88) | Compress 6-10 (78-83) quarterly | Archive 11+ (2-77) in docs/sessions/
-
-**Sessies 82-84:** docs/sessions/current.md (full detail)
-**Sessies 77-81:** docs/sessions/recent.md (full detail)
-**Sessies 51-76:** docs/sessions/archive-q4-2024.md (compressed)
-**Sessies 35-50:** docs/sessions/archive-q3-2024.md (foundations)
-**Sessies 2-34:** docs/sessions/archive-early.md (early MVP)
+**Rotation Protocol:**
+- Keep last 5 full (92-88)
+- Compress next 5 to bullets (84-80)
+- Archive 11+ in docs/sessions/
+- Trigger: Every 5 sessions (next: Sessie 97)
 
 ---
 
@@ -221,7 +222,11 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 15 december 2025 (Sessie 86 - CLAUDE.md Optimization Phase 2)
-**Last synced:** 15 december 2025 (Quarterly sync completed Sessie 85)
-**Next sync:** Milestone M5.5 completion OR Sessie 90
-**Version:** 18.1 (Sessie 86 Phase 2: Full optimization - 307→~200 lines (-35% additional), Single Source of Truth established: PRD=specs, SESSIONS=patterns, PLANNING=workflows, CLAUDE=AI context)
+**Last updated:** 04 januari 2026 (Sessie 92 - CLAUDE.md Perfection: Phase 1 Critical Fixes)
+**Version:** 2.0 (Major refactor: metrics delegation + strict 5-session learnings + concrete examples)
+**Next sync:** Every 5 sessions (Sessie 97) OR milestone M6 Tutorial System start
+
+**Version History:**
+- v2.0 (Sessie 92): Metrics delegation, learning rotation fix, example expansion
+- v1.0 (Sessie 86): Single Source of Truth optimization (587→228 lines)
+- v0.x (Sessies 1-85): Original verbose format
