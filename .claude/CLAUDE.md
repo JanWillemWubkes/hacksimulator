@@ -140,6 +140,60 @@ PORT     STATE   SERVICE
 Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning (offensive) | Mobile (≤40 chars)
 → **Volledige specs:** `docs/commands-list.md`
 
+**Nieuwe command toevoegen? Volg deze 8 stappen:**
+
+### Core Implementation
+1. ✅ **80/20 Output** - Realistische maar simplified output (PRD §9.2)
+   - Include: Command output (EN) + inline context (← NL) + tip (NL)
+   - Example: `nmap` shows ports + service names + "Poort 22 = SSH toegang"
+   - Files: All `src/commands/*/*.js` follow this pattern
+
+2. ✅ **Educational Feedback** - Elke output is een leermoment
+   - Required: `[ TIP ]` bij elke command (waarom belangrijk?)
+   - Optional: `[ ! ]` warning voor security tools (ethische gebruik)
+   - Tone: "je" (not "u"), bemoedigend, context geven (see §6)
+
+3. ✅ **Help/Man Pages** - Nederlands, 3-tier help system (PRD §8.3)
+   - Tier 1: Fuzzy matching voor typos → "Bedoelde je: [command]?"
+   - Tier 2: Progressive hints na 3 fouten → "Tip: gebruik 'man [cmd]'"
+   - Tier 3: Full man page via `man [command]` - syntax + voorbeelden + use cases
+   - Files: `src/help/help-system.js`, `manPage` property in command object
+
+### Security & Compliance
+4. ✅ **Warning (Offensive Tools)** - Juridische disclaimer + confirmatie
+   - Required for: hashcat, hydra, sqlmap, metasploit, nikto (security category)
+   - Pattern: `[ ! ] Let op: [tool] is een offensive tool. Gebruik ALLEEN met toestemming!`
+   - Confirmation: `Doorgaan? (j/n):` → if 'n' → cancel, if 'j' → proceed
+   - Files: All `src/commands/security/*.js`
+
+5. ✅ **Mobile Optimalisatie** - ≤40 chars output width voor 375px viewports
+   - Test: Resize browser to 375px (iPhone SE), check command output wraps correctly
+   - Fix: Break long lines, use abbreviations (e.g., "SSH" not "Secure Shell Protocol")
+   - Responsive: `styles/mobile.css` media queries handle layout
+   - Quick commands: Add to mobile keyboard helpers if frequently used
+
+### Quality Assurance
+6. ✅ **Error Handling** - Cover alle edge cases
+   - Missing args: `nmap` without target → "Gebruik: nmap <target>"
+   - Invalid args: `nmap invalid` → "Ongeldig IP/hostname formaat"
+   - Typos: `nmpa` → "Bedoelde je: nmap? Gebruik 'man nmap' voor help"
+   - File not found: `cat missing.txt` → "Bestand niet gevonden. Gebruik 'ls' om bestanden te zien"
+
+7. ✅ **Testing** - Manual + automated coverage
+   - Manual: Happy path + error cases + edge cases (see `docs/testing/manual-protocol.md`)
+   - Automated: Playwright E2E tests (see `tests/e2e/` directory - 15 test suites)
+   - Cross-browser: Chrome, Firefox passing (Safari deferred - WebKit deps issue)
+   - Mobile: Real device test on iOS/Android
+
+8. ✅ **Bundle Impact** - Measure KB increase, stay <500KB total
+   - Before: Check current bundle → `ls -lh styles/*.css src/**/*.js`
+   - After: Measure increase → should be <10KB per command
+   - Current: 470.87KB (29.13KB buffer = 5.8% margin)
+   - Warning: If total >490KB, optimize before adding more commands
+
+→ **Testing protocol:** `docs/testing/manual-protocol.md` v1.0
+→ **E2E tests:** `tests/e2e/` directory (15 test suites covering commands, UI, performance)
+
 ---
 
 ## 🏗️ Architectural Patterns
@@ -428,11 +482,12 @@ return `Scan complete: 3 ports open`;
 
 ---
 
-**Last updated:** 04 januari 2026 (Sessie 93 - CLAUDE.md Phase 2: High Priority Examples)
-**Version:** 2.1 (Added concrete code examples: top 3 patterns + 10 troubleshooting + tone examples)
+**Last updated:** 04 januari 2026 (Sessie 94 - CLAUDE.md Phase 3: Final Polish)
+**Version:** 2.2 (Command checklist expansion + cross-reference validation + AI comprehension test passed)
 **Next sync:** Every 5 sessions (Sessie 97) OR milestone M6 Tutorial System start
 
 **Version History:**
+- v2.2 (Sessie 94): Command checklist 8-step expansion, cross-reference validation, final polish
 - v2.1 (Sessie 93): Code examples expansion - 3 architectural patterns + 10 troubleshooting + 3 tone pairs
 - v2.0 (Sessie 92): Metrics delegation, learning rotation fix, example expansion
 - v1.0 (Sessie 86): Single Source of Truth optimization (587→228 lines)
