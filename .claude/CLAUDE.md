@@ -65,9 +65,73 @@
 
 ## 🎯 Tone of Voice
 
-**DO:** "je" (niet "u"), bemoedigend, context geven
-**DON'T:** Neerbuigend, te formeel, aannames
-**Symbols:** ASCII brackets only (`[ TIP ]`, `[ ! ]`, `[ ✓ ]`) - terminal aesthetic
+**Principles:**
+- **"je" (niet "u"):** Toegankelijk, persoonlijk (niet afstandelijk formeel)
+- **Bemoedigend:** "Goed bezig!", "Bijna!", niet "Fout." of "Wrong."
+- **Context geven:** Leg "waarom" uit, niet alleen "wat"
+- **Symbols:** ASCII brackets only (`[ TIP ]`, `[ ! ]`, `[ ✓ ]`) - terminal aesthetic, NO emojis in code
+
+**Concrete Voorbeelden:**
+
+### Error Messages
+✅ **GOOD:**
+```
+Bestand niet gevonden: passwords.txt
+[ TIP ] Gebruik 'ls' om te zien welke bestanden er zijn, of 'find passwords' om te zoeken
+```
+
+❌ **BAD:**
+```
+ERROR: File not found.
+```
+
+**Why:** Good = beginner knows next action + learns `ls`/`find` commands. Bad = frustrating, no help.
+
+---
+
+### Security Warnings
+✅ **GOOD:**
+```
+[ ! ] Let op: sqlmap is een offensive tool voor het vinden van SQL injection kwetsbaarheden.
+Gebruik dit ALLEEN op systemen waar je schriftelijke toestemming voor hebt!
+
+Doorgaan? (j/n): _
+```
+
+❌ **BAD:**
+```
+WARNING: Illegal use is prohibited.
+```
+
+**Why:** Good = educatief (wat doet de tool?) + ethisch (toestemming). Bad = juridisch jargon, beginner snapt niet waarom.
+
+---
+
+### Educational Tips
+✅ **GOOD:**
+```
+22/tcp   OPEN    SSH ← Secure Shell (remote terminal toegang)
+80/tcp   OPEN    HTTP ← Webserver (onversleuteld!)
+
+[ TIP ] Poort 22 open = mogelijkheid om op afstand in te loggen. Check of wachtwoord sterk genoeg is!
+[ TIP ] Poort 80 = onversleutelde website. Gevoelige data? Gebruik poort 443 (HTTPS).
+```
+
+❌ **BAD:**
+```
+PORT     STATE   SERVICE
+22/tcp   open    ssh
+80/tcp   open    http
+```
+
+**Why:** Good = context (← Nederlands), relevantie (waarom belangrijk?), actie (wat nu?). Bad = technisch, beginner leert niks.
+
+---
+
+**Application:**
+- All 30 commands in `src/commands/*/` follow this tone
+- Error messages in `src/core/terminal.js` lines 150-200
+- Help system in `src/help/help-system.js` 3-tier approach
 
 ---
 
@@ -80,14 +144,110 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## 🏗️ Architectural Patterns
 
-→ **Live library:** docs/sessions/current.md §Architectural Patterns (indexed by Sessie)
+→ **Full pattern library:** docs/sessions/current.md §Architectural Patterns (87 sessions, 40+ patterns)
 
-**Quick Reference:**
-- **Dark Frame:** navbar/footer dark always (Sessie 44)
-- **CSS:** use vars, test themes, cache-bust (Sessies 32, 59, 78)
-- **JS:** no duplicate listeners, event delegation, modal protection (Sessies 52, 77)
-- **UX:** 3-layer modals, muted UI, semantic detection (Sessies 33, 59, 77)
-- **Testing:** manual+automated, fresh sim, CDP cache (Sessies 59, 77)
+**Top 3 Critical Patterns (With Code Examples):**
+
+### 1. CSS Variables First (Sessie 90 - Design System)
+**Pattern:** Always use CSS variables for colors, spacing, typography
+
+✅ **DO:**
+```css
+/* styles/main.css line 145 */
+.terminal-output-error {
+  color: var(--color-error);  /* Theme-aware */
+  font-size: var(--font-size-base);
+}
+```
+
+❌ **DON'T:**
+```css
+.terminal-output-error {
+  color: #ff0000;  /* Hardcoded, breaks dark mode */
+  font-size: 16px;
+}
+```
+
+**Why:** Theme switching, design system consistency, single source of truth
+**Files:** `styles/main.css` lines 1-200 (141 variables), Style Guide v1.5
+
+---
+
+### 2. Modal Protection Pattern (Sessie 77 - Focus Management)
+**Pattern:** Prevent input capture when modal is active
+
+✅ **DO:**
+```javascript
+// src/ui/input.js line 47
+document.addEventListener('keydown', (e) => {
+  // Check if modal is active before processing
+  if (document.querySelector('.modal.active')) return;
+
+  // Safe to process terminal input
+  handleTerminalInput(e);
+});
+```
+
+❌ **DON'T:**
+```javascript
+// Global handler without modal check
+document.addEventListener('keydown', handleTerminalInput);
+```
+
+**Why:** Prevents keyboard shortcuts firing while modal open (legal disclaimer, feedback form)
+**Files:** `src/ui/input.js`, `src/ui/legal.js`, `src/ui/feedback.js`
+**Test:** Open legal modal → type command → should NOT appear in terminal
+
+---
+
+### 3. 80/20 Command Output (PRD §9.2 - Educational Balance)
+**Pattern:** Realistic output + inline Dutch context + educational tip
+
+✅ **DO:**
+```javascript
+// src/commands/network/nmap.js line 85
+return `
+Starting Nmap scan...
+PORT     STATE   SERVICE          ← Nederlands context
+22/tcp   OPEN    SSH (Secure Shell)
+80/tcp   OPEN    HTTP (Web Server)
+443/tcp  OPEN    HTTPS (Encrypted Web)
+
+[ TIP ] Poort 22 open = SSH toegang mogelijk. Check wachtwoord sterkte!
+[ ! ] Scan alleen systemen waar je toestemming voor hebt.
+`;
+```
+
+❌ **DON'T:**
+```javascript
+// Too technical (beginner gets lost)
+return `
+Starting Nmap 7.80 ( https://nmap.org ) at 2024-01-04 15:30 CET
+Nmap scan report for 192.168.1.1
+Host is up (0.0012s latency).
+Not shown: 997 filtered ports
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.5
+...
+`;
+
+// Too simplified (not realistic)
+return `Scan complete: 3 ports open`;
+```
+
+**Why:** Balances realism (authentic terminal feel) with education (beginner learns)
+**Formula:** Technical output + `← Dutch context` + `[ TIP ]` + `[ ! ]` warning
+**Files:** All 30 commands in `src/commands/*/` follow this pattern
+
+---
+
+**Quick Reference (Other Patterns):**
+- **Dark Frame:** navbar/footer always dark (Sessie 44) → `styles/main.css` lines 450-480
+- **No Duplicate Listeners:** Event delegation over per-element handlers (Sessie 52) → `src/ui/input.js`
+- **3-Layer Modals:** Legal (z-10) > Feedback (z-20) > Tutorial (z-30) - Sessie 33
+- **Cache Strategy:** 1-hour cache + `?v=X` override (Sessie 78) → `_headers` file
+
+→ **All 40+ patterns indexed:** docs/sessions/current.md §Architectural Patterns
 
 ---
 
@@ -191,16 +351,62 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-## 🔍 Troubleshooting
+## 🔍 Troubleshooting (Top 10 Common Issues)
 
-**Build groter dan 500KB:** Check imports | Minification aan | Tree-shaking werkend | Ongebruikte code verwijderd
-**Playwright passes maar manual fails:** Event handler conflict (zie §8 JS Patterns: duplicate listeners)
-**CSS niet live op production:** Normaal bij 1-uur cache - wacht max 60 min OF bump `?v=X` voor directe update (zie Sessie 78)
-**Focus/keyboard bugs:** Modal protection missing - check `!e.target.closest('.modal.active')` (zie §8 JS Patterns)
-**Light mode colors invisible:** Theme-dependent colors op fixed dark backgrounds (zie §8 CSS Patterns)
-**Layout jank on hover:** Missing transparent border reserve (zie Sessie 38: Dropdown Perfectie)
+**Build & Performance:**
+1. **Bundle >500KB:** Check imports | Minify JS/CSS | Tree-shake | Remove unused code
+   - Command: `ls -lh styles/*.css src/**/*.js | awk '{sum+=$5} END {print sum/1024 "KB"}'`
+   - Current: 470.87KB (29.13KB buffer = 5.8%)
+
+2. **CSS not live on production:** 1-hour Netlify cache normal - wait OR bump `?v=X` immediately
+   - Quick fix: `styles/main.css?v=93` in index.html line 12
+   - Root cause: Sessie 78 cache strategy (short TTL + must-revalidate)
+
+3. **Slow load time (>3s):** Check Lighthouse Performance score, optimize images, defer JS
+   - Current: 2.30s LCP (target <2.5s ✅), 2.98s TTI (target <3.0s ✅)
+   - Tool: `npx lighthouse https://famous-frangollo-b5a758.netlify.app/ --view`
+
+**Testing & Events:**
+4. **Playwright passes, manual fails:** Duplicate event listeners → commands execute 2x
+   - Root cause: Sessie 52 - event handlers registered twice
+   - Fix: Check `src/ui/input.js` line 30 - ensure `addEventListener` only called once
+   - Test: Open DevTools → Console → type command → should see 1 output, not 2
+
+5. **Focus/keyboard bugs:** Modal active but terminal still captures input
+   - Root cause: Missing modal protection check
+   - Fix: Add `if (document.querySelector('.modal.active')) return;` to keydown handler
+   - File: `src/ui/input.js` line 47
+   - Affected: Legal modal, feedback form, tutorial system
+
+6. **localStorage not persisting:** Quota exceeded (rare) OR privacy mode blocking
+   - Debug: `console.log(localStorage.length, JSON.stringify(localStorage).length)`
+   - Limit: 5-10MB (modern browsers), filesystem + history typically <500KB
+   - Fix: Implement cleanup - remove old command history >30 days
+
+**Visual & Layout:**
+7. **Light mode colors invisible:** Theme-dependent colors on fixed dark backgrounds
+   - Example: `var(--color-text)` on dark navbar → invisible in light theme
+   - Fix: Use theme-agnostic colors for fixed backgrounds (Sessie 44 Dark Frame pattern)
+   - File: `styles/main.css` lines 450-480 (navbar/footer always dark)
+
+8. **Layout jank on hover:** Missing transparent border reserve → elements shift
+   - Root cause: Sessie 38 - border appears on hover pushes adjacent elements
+   - Fix: Add `border: 2px solid transparent` to default state
+   - Example: `.btn { border: 2px solid transparent; }` then `.btn:hover { border-color: var(--color-primary); }`
+
+**Mobile Specific:**
+9. **Text wrapping on mobile:** Long text (URLs, affiliate badges) breaks layout
+   - Root cause: Sessie 88 - missing `white-space: nowrap` on critical elements
+   - Fix: `.affiliate-badge { white-space: nowrap; }` in `styles/main.css` line 427
+   - Test: Resize to 375px width, check `blog/*.html` affiliate CTAs
+
+10. **Touch events not firing:** Missing touch handlers OR tap targets <44x44px
+    - Fix: Add `touchstart` listeners alongside `click` events
+    - Minimum size: `min-width: 44px; min-height: 44px;` (WCAG AAA)
+    - File: `styles/mobile.css` lines 50-80
 
 → **Volledige troubleshooting + solutions:** docs/sessions/current.md §Common Issues
+→ **Memory leak debugging:** docs/testing/memory-leak-results.md (84% growth, GC active)
 
 ---
 
@@ -222,11 +428,12 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 04 januari 2026 (Sessie 92 - CLAUDE.md Perfection: Phase 1 Critical Fixes)
-**Version:** 2.0 (Major refactor: metrics delegation + strict 5-session learnings + concrete examples)
+**Last updated:** 04 januari 2026 (Sessie 93 - CLAUDE.md Phase 2: High Priority Examples)
+**Version:** 2.1 (Added concrete code examples: top 3 patterns + 10 troubleshooting + tone examples)
 **Next sync:** Every 5 sessions (Sessie 97) OR milestone M6 Tutorial System start
 
 **Version History:**
+- v2.1 (Sessie 93): Code examples expansion - 3 architectural patterns + 10 troubleshooting + 3 tone pairs
 - v2.0 (Sessie 92): Metrics delegation, learning rotation fix, example expansion
 - v1.0 (Sessie 86): Single Source of Truth optimization (587→228 lines)
 - v0.x (Sessies 1-85): Original verbose format
