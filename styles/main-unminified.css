@@ -664,7 +664,7 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   background-color: var(--color-bg-terminal);       /* #0d1117 dark */
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-modal);        /* 8px */
-  padding: var(--spacing-xl);                       /* 32px */
+  padding: var(--spacing-lg);                       /* 24px - Sessie 96: Reduced for CTA text space (was 32px) */
   transition: all var(--transition-normal);         /* 0.3s ease */
   box-shadow: var(--shadow-elevation-1);
   overflow: visible;                                /* Allow ribbon to extend beyond card */
