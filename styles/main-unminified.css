@@ -773,7 +773,7 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
 
   /* Typography */
   font-family: var(--font-ui);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 700;
   text-decoration: none;
   /* white-space: nowrap; ← REMOVED: Caused button overflow (forced min-width > container) */
@@ -781,7 +781,7 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   /* Visual - Uniform green base for all buttons (Sessie 93) */
   background-color: var(--color-success);     /* Green #3fb950 dark / #008844 light */
   color: #ffffff;
-  padding: 14px 24px;
+  padding: 14px 18px;
   border-radius: 6px;
   border: 2px solid #2ecc71;                   /* Lighter green border */
   min-height: 44px;                            /* WCAG AAA minimum touch target */
@@ -868,8 +868,8 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   /* CTA: Full width, larger touch target on mobile */
   .resource-cta {
     width: 100%;
-    padding: 12px 20px;  /* Reduced padding = more space for button text on 375px viewport */
-    font-size: 0.9rem;
+    padding: 12px 16px;  /* Reduced padding = more space for button text on 375px viewport */
+    font-size: 0.85rem;
   }
 
   /* ===== NEW BADGE SYSTEM - Mobile Optimizations (Sessie 92) ===== */
