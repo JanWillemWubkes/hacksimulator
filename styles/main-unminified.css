@@ -623,7 +623,7 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
 
 /* Constrain grid to max-width while keeping cards centered */
 .aanbevolen-resources .resource-grid {
-  max-width: 1000px;                     /* Sessie 95: 3 cards × 320px + gaps - Tailwind standard (was 1200px) */
+  max-width: 1040px;                     /* Sessie 96: 3 cards × 340px + 2 × 20px gaps (was 1000px) */
   margin: 0 auto;                        /* Center the grid */
 }
 
@@ -669,7 +669,7 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   box-shadow: var(--shadow-elevation-1);
   overflow: visible;                                /* Allow ribbon to extend beyond card */
   width: 100%;                                      /* Sessie 92: Full width of grid cell */
-  max-width: 320px;                                 /* Sessie 95: Tailwind standard, optimal line length (was 360px) */
+  max-width: 340px;                                 /* Sessie 96: +20px for CTA text breathing room (was 320px) */
 }
 
 /* Sessie 95: Affiliate differentiation - subtle left-border accent */
