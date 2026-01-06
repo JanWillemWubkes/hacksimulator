@@ -453,6 +453,11 @@ a.affiliate-link::after {
   transition: transform 0.2s ease;
 }
 
+/* Remove unicode arrow when combined with .resource-cta (prevent double arrows + save space) */
+a.affiliate-link.resource-cta::after {
+  content: none;  /* Disable unicode "→", keep only CSS chevron from .resource-cta */
+}
+
 a.affiliate-link:hover {
   background-color: var(--color-button-bg-hover);   /* #003d85 dark / #1565c0 light */
   border-color: var(--color-button-bg-hover);
@@ -776,7 +781,7 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   font-size: 0.9rem;
   font-weight: 700;
   text-decoration: none;
-  /* white-space: nowrap; ← REMOVED: Caused button overflow (forced min-width > container) */
+  white-space: nowrap;  /* Force single line - now safe with duplicate arrow removed */
 
   /* Visual - Uniform green base for all buttons (Sessie 93) */
   background-color: var(--color-success);     /* Green #3fb950 dark / #008844 light */
@@ -791,14 +796,26 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   cursor: pointer;
 }
 
-/* Arrow indicator */
+/* Arrow indicator - CSS chevron (Sessie 97: 7x7px border-trick, saves 5-7px vs Unicode) */
 .resource-cta::after {
-  content: "→";
-  font-size: 1.2em;
-  line-height: 1;                    /* Force consistent baseline */
+  content: "";                       /* Empty - shape created with borders */
+
+  /* Arrow dimensions: 7x7px chevron (vs 12-16px Unicode →) */
+  width: 7px;
+  height: 7px;
+
+  /* Border-trick arrow: top + right borders rotated 45deg = → */
+  border-top: 2px solid currentColor;    /* currentColor = theme-aware (light/dark) */
+  border-right: 2px solid currentColor;
+  transform: rotate(45deg);              /* Rotate to point right */
+
+  /* Layout - Align with text baseline */
   display: inline-block;             /* Enable transform without affecting flow */
-  vertical-align: middle;            /* Explicit vertical centering */
-  transition: transform 0.2s ease;
+  flex-shrink: 0;                    /* Prevent arrow from shrinking if space tight */
+  margin-left: 2px;                  /* Micro-adjustment: Fine-tune optical alignment */
+
+  /* Animation - Preserve hover slide */
+  transition: transform 0.2s ease;   /* Same as before - smooth hover */
 }
 
 /* Hover State - Default green (Sessie 93: Overridden by specific selectors) */
@@ -811,7 +828,7 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
 }
 
 .resource-cta:hover::after {
-  transform: translateX(4px);  /* Arrow slides right */
+  transform: translateX(4px) rotate(45deg);  /* BOTH transforms! Arrow slides right + stays rotated */
 }
 
 /* Focus State (Accessibility) */
