@@ -677,9 +677,9 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   max-width: 340px;                                 /* Sessie 96: +20px for CTA text breathing room (was 320px) */
 }
 
-/* Sessie 95: Affiliate differentiation - subtle left-border accent */
+/* Sessie 97: Affiliate differentiation - subtle left-border accent (bronze theme) */
 .resource-card.is-affiliate {
-  border-left: 4px solid #f39c12;                   /* Gold accent - matches hover gradient */
+  border-left: 4px solid #d4a574;                   /* Light bronze accent - matches hover gradient start */
   padding-left: 28px;                               /* 32px - 4px border = optical alignment */
 }
 
@@ -845,11 +845,11 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
 }
 
 /* Sessie 93: Removed redundant base selectors - all buttons now uniform green base */
-/* Affiliate cards: Gold gradient hover (unique override) */
+/* Affiliate cards: Bronze gradient hover (premium luxury feel) */
 .resource-card.is-affiliate .resource-cta:hover {
-  background: linear-gradient(135deg, #f39c12 0%, #f1c40f 100%);  /* Sessie 95: Gold gradient (was orange #e67e22) */
-  border-color: #f39c12;                        /* Sessie 95: Match start color (was #d35400) */
-  box-shadow: 0 4px 12px rgba(241, 196, 15, 0.4);  /* Sessie 95: Lighter gold shadow */
+  background: linear-gradient(135deg, #d4a574 0%, #a67c52 100%);  /* Sessie 97: Bronze light→dark (was gold #f1c40f - too bright) */
+  border-color: #a67c52;                        /* Sessie 97: Match gradient end (darker bronze) */
+  box-shadow: 0 4px 12px rgba(166, 124, 82, 0.3);  /* Sessie 97: Subdued bronze shadow (30% opacity vs 40% gold) */
 }
 
 /* Mobile: Single column */
