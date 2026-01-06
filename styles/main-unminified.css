@@ -783,12 +783,12 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   text-decoration: none;
   white-space: nowrap;  /* Force single line - now safe with duplicate arrow removed */
 
-  /* Visual - Uniform green base for all buttons (Sessie 93) */
-  background-color: var(--color-success);     /* Green #3fb950 dark / #008844 light */
-  color: #ffffff;
+  /* Visual - Uniform blue base for all buttons (Design System First) */
+  background-color: var(--color-button-bg);   /* Blue #2563eb dark / #1976d2 light */
+  color: var(--color-button-text);             /* #ffffff (theme-aware) */
   padding: 14px 18px;
   border-radius: 6px;
-  border: 2px solid #2ecc71;                   /* Lighter green border */
+  border: 2px solid var(--color-button-bg);    /* Blue border (consistent with .btn-primary) */
   min-height: 44px;                            /* WCAG AAA minimum touch target */
 
   /* Animation */
@@ -818,13 +818,13 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   transition: transform 0.2s ease;   /* Same as before - smooth hover */
 }
 
-/* Hover State - Default green (Sessie 93: Overridden by specific selectors) */
+/* Hover State - Theme-aware blue (Sessie 98: Design System First - consistency with all other buttons) */
 .resource-cta:hover {
-  background-color: #229954;                    /* Darker green */
-  color: #ffffff !important;                    /* Sessie 95: Force white text (fix blue text bug) */
-  border-color: #2ecc71;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+  background-color: var(--color-button-bg-hover);  /* #003d85 dark / #1565c0 light */
+  border-color: var(--color-button-bg-hover);       /* Consistent with .btn-primary, .affiliate-link */
+  color: var(--color-button-text-hover);            /* #ffffff */
+  transform: translateY(-2px);                      /* Lift effect = CTA feedback */
+  box-shadow: 0 4px 12px var(--color-button-shadow-hover);  /* Blue shadow - theme-aware */
 }
 
 .resource-cta:hover::after {
