@@ -666,6 +666,12 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   justify-items: center;                            /* Sessie 92: Center cards in grid cells */
 }
 
+/* Spacing between affiliate cards and detail reviews (Sessie 99) */
+.aanbevolen-resources + .blog-post-content {
+  margin-top: var(--spacing-xl);                    /* 32px extra whitespace */
+  padding-top: var(--spacing-lg);                   /* 24px breathing room */
+}
+
 /* Product card */
 .resource-card {
   position: relative;                               /* CRITICAL: Positioning context for ribbon */
