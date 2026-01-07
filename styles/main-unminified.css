@@ -701,7 +701,7 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
 
 /* Sessie 97: Affiliate differentiation - subtle left-border accent (bronze theme) */
 .resource-card.is-affiliate {
-  border-left: 4px solid #d4a574;                   /* Light bronze accent - matches hover gradient start */
+  border-left: 4px solid #CD7F32;                   /* Classic bronze accent - vibrant luxury (Sessie 98) */
   padding-left: 28px;                               /* 32px - 4px border = optical alignment */
 }
 
@@ -869,9 +869,9 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
 /* Sessie 93: Removed redundant base selectors - all buttons now uniform green base */
 /* Affiliate cards: Bronze gradient hover (premium luxury feel) */
 .resource-card.is-affiliate .resource-cta:hover {
-  background: linear-gradient(135deg, #d4a574 0%, #a67c52 100%);  /* Sessie 97: Bronze light→dark (was gold #f1c40f - too bright) */
-  border-color: #a67c52;                        /* Sessie 97: Match gradient end (darker bronze) */
-  box-shadow: 0 4px 12px rgba(166, 124, 82, 0.3);  /* Sessie 97: Subdued bronze shadow (30% opacity vs 40% gold) */
+  background: linear-gradient(135deg, #CD7F32 0%, #A97142 100%);  /* Sessie 98: Classic Bronze - vibrant luxury (was muted #d4a574) */
+  border-color: #A97142;                        /* Sessie 98: Metallic bronze - match gradient end */
+  box-shadow: 0 4px 12px rgba(205, 127, 50, 0.3);  /* Sessie 98: Classic bronze shadow - match badges */
 }
 
 /* Mobile: Single column */
@@ -1101,17 +1101,17 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   white-space: nowrap;
-  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);  /* Gold gradient */
+  background: linear-gradient(135deg, #CD7F32 0%, #A97142 100%);  /* Classic Bronze gradient - vibrant luxury */
   color: #0a0a0a;
-  border: 2px solid #d35400;
+  border: 2px solid #A97142;  /* Metallic bronze - match gradient end */
   border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  box-shadow: 0 2px 6px rgba(243, 156, 18, 0.3);
+  box-shadow: 0 2px 6px rgba(205, 127, 50, 0.3);  /* Classic bronze shadow */
   transition: all 0.15s ease;
 }
 
 .featured-badge-premium:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(243, 156, 18, 0.4);
+  box-shadow: 0 4px 10px rgba(205, 127, 50, 0.4);  /* Classic bronze shadow (40% opacity) */
 }
 
 .featured-badge-neutral {
