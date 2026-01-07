@@ -831,6 +831,18 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   transform: translateX(4px) rotate(45deg);  /* BOTH transforms! Arrow slides right + stays rotated */
 }
 
+/* Fix: Uniform styling when affiliate-link combined with resource-cta (card buttons) */
+a.affiliate-link.resource-cta {
+  /* Typography - Match .resource-cta exactly */
+  font-family: var(--font-ui);      /* Override affiliate-link's terminal font - Inter for cards */
+  font-size: 0.9rem;                /* Override affiliate-link's 1rem - consistent card sizing */
+  letter-spacing: 0;                /* Override affiliate-link's 1px - Inter doesn't need extra spacing */
+  text-transform: none;             /* Override affiliate-link's uppercase - cleaner aesthetic */
+
+  /* Spacing - Match .resource-cta exactly */
+  padding: 14px 18px;               /* Override affiliate-link's 16px 32px - consistent card padding */
+}
+
 /* Focus State (Accessibility) */
 .resource-cta:focus,
 .resource-cta:focus-visible {
