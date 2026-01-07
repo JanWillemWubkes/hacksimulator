@@ -453,9 +453,31 @@ a.affiliate-link::after {
   transition: transform 0.2s ease;
 }
 
-/* Remove unicode arrow when combined with .resource-cta (prevent double arrows + save space) */
+/* Fix: Uniform styling when affiliate-link combined with resource-cta (card buttons) */
+a.affiliate-link.resource-cta {
+  /* Typography - Match .resource-cta exactly */
+  font-family: var(--font-ui);      /* Override affiliate-link's terminal font - Inter for cards */
+  font-size: 0.9rem;                /* Override affiliate-link's 1rem - consistent card sizing */
+  letter-spacing: 0;                /* Override affiliate-link's 1px - Inter doesn't need extra spacing */
+  text-transform: none;             /* Override affiliate-link's uppercase - cleaner aesthetic */
+
+  /* Spacing - Match .resource-cta exactly */
+  padding: 14px 18px;               /* Override affiliate-link's 16px 32px - consistent card padding */
+
+  /* Layout - CRITICAL FIX: Override inline-block from a.affiliate-link (Sessie 98) */
+  display: inline-flex !important;  /* Override inline-block - flexbox required for align-items */
+  align-items: center;              /* Vertical centering for arrow - matches .resource-cta */
+  gap: 8px;                         /* Space between text + arrow - matches .resource-cta */
+}
+
+/* Arrow overrides for combined classes - Remove unicode arrow + fix alignment */
 a.affiliate-link.resource-cta::after {
   content: none;  /* Disable unicode "→", keep only CSS chevron from .resource-cta */
+  margin-left: 2px;  /* Match .resource-cta (was 4px from affiliate-link) - precise alignment */
+}
+
+a.affiliate-link.resource-cta:hover::after {
+  transform: translateX(4px) rotate(45deg);  /* Match .resource-cta hover - 4px slide + preserve rotation */
 }
 
 a.affiliate-link:hover {
@@ -468,7 +490,7 @@ a.affiliate-link:hover {
 
 /* Arrow animation on hover */
 a.affiliate-link:hover::after {
-  transform: translateX(3px);           /* Subtle slide (less than card buttons) */
+  transform: translateX(3px) rotate(45deg);  /* Both transforms! Subtle slide + preserve rotation */
 }
 
 a.affiliate-link:focus-visible {

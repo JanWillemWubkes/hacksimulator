@@ -474,7 +474,7 @@ a.affiliate-link:hover {
 
 /* Arrow animation on hover */
 a.affiliate-link:hover::after {
-  transform: translateX(3px);           /* Subtle slide (less than card buttons) */
+  transform: translateX(3px) rotate(45deg);  /* Both transforms! Subtle slide + preserve rotation */
 }
 
 a.affiliate-link:focus-visible {
@@ -848,6 +848,20 @@ a.affiliate-link.resource-cta {
 
   /* Spacing - Match .resource-cta exactly */
   padding: 14px 18px;               /* Override affiliate-link's 16px 32px - consistent card padding */
+
+  /* Layout - CRITICAL FIX: Override inline-block from a.affiliate-link (Sessie 98) */
+  display: inline-flex !important;  /* Override inline-block - flexbox required for align-items */
+  align-items: center;              /* Vertical centering for arrow - matches .resource-cta */
+  gap: 8px;                         /* Space between text + arrow - matches .resource-cta */
+}
+
+/* Arrow overrides for combined classes - Fix alignment + hover animation (Sessie 98) */
+a.affiliate-link.resource-cta::after {
+  margin-left: 2px;  /* Match .resource-cta (was 4px from affiliate-link) - precise alignment */
+}
+
+a.affiliate-link.resource-cta:hover::after {
+  transform: translateX(4px) rotate(45deg);  /* Match .resource-cta hover - 4px slide + preserve rotation */
 }
 
 /* Focus State (Accessibility) */
