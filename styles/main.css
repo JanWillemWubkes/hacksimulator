@@ -370,8 +370,8 @@ button {
 
 .btn-secondary:hover {
   background-color: transparent;
-  border-color: var(--color-button-bg-hover);
-  color: var(--color-button-bg-hover);
+  border-color: var(--color-ui-primary);
+  color: var(--color-ui-primary);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
@@ -387,8 +387,8 @@ button {
 
 .btn-small.btn-secondary:hover {
   background-color: transparent;
-  border-color: var(--color-button-bg-hover);
-  color: var(--color-button-bg-hover);
+  border-color: var(--color-ui-primary);
+  color: var(--color-ui-primary);
 }
 
 .btn-small {
