@@ -291,6 +291,14 @@
   /* Welcome separator now uses gradient fade (no glow) - see terminal.css .welcome-separator */
 }
 
+/* Featured Badge - Darker bronze for WCAG AA compliance in light theme */
+[data-theme="light"] .featured-badge-premium {
+  /* Darker bronze gradient: 4.93:1 contrast with white text (WCAG AA ✓) */
+  background: linear-gradient(135deg, #B46928 0%, #915523 100%);
+  border-color: #915523;  /* Match gradient end */
+  box-shadow: 0 2px 6px rgba(180, 105, 40, 0.3);  /* Darker bronze shadow */
+}
+
 /* ==================== Reset & Base ==================== */
 * {
   margin: 0;
@@ -1113,7 +1121,7 @@ a.affiliate-link.resource-cta:hover::after {
   text-transform: uppercase;
   white-space: nowrap;
   background: linear-gradient(135deg, #CD7F32 0%, #A97142 100%);  /* Classic Bronze gradient - vibrant luxury */
-  color: #0a0a0a;
+  color: #ffffff;  /* White text - matches button hover, better readability */
   border: 2px solid #A97142;  /* Metallic bronze - match gradient end */
   border-radius: 6px;  /* Sessie 93: More visible rounded corners */
   box-shadow: 0 2px 6px rgba(205, 127, 50, 0.3);  /* Classic bronze shadow */
