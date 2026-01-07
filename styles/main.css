@@ -442,20 +442,26 @@ a.affiliate-link:visited {
   background-color: var(--color-button-bg);         /* Maintain button color */
 }
 
-/* External link indicator - Trust signal */
+/* Arrow indicator - CSS chevron (consistent with .resource-cta) */
 a.affiliate-link::after {
-  content: " →";                        /* Space before arrow for breathing */
-  font-size: 1.2em;                     /* Larger arrow (matches .resource-cta) */
-  line-height: 1;                       /* Consistent baseline */
-  display: inline-block;                /* Enable vertical-align */
-  vertical-align: middle;               /* Text-aligned centering */
-  margin-left: 4px;                     /* Subtle spacing */
-  transition: transform 0.2s ease;
-}
+  content: "";                       /* Empty = border-trick arrow (not unicode "→") */
 
-/* Remove unicode arrow when combined with .resource-cta (prevent double arrows + save space) */
-a.affiliate-link.resource-cta::after {
-  content: none;  /* Disable unicode "→", keep only CSS chevron from .resource-cta */
+  /* Arrow dimensions: 7x7px chevron */
+  width: 7px;
+  height: 7px;
+
+  /* Border-trick arrow: top + right borders rotated 45deg = → */
+  border-top: 2px solid currentColor;    /* currentColor = theme-aware */
+  border-right: 2px solid currentColor;
+  transform: rotate(45deg);              /* Rotate to point right */
+
+  /* Layout - Align with text baseline */
+  display: inline-block;             /* Enable transform without affecting flow */
+  flex-shrink: 0;                    /* Prevent arrow from shrinking */
+  margin-left: 4px;                  /* Spacing from text (was 4px, keep same) */
+
+  /* Animation - Preserve hover slide */
+  transition: transform 0.2s ease;   /* Smooth hover animation */
 }
 
 a.affiliate-link:hover {
@@ -763,6 +769,7 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
 
 /* CTA wrapper - Grid positioning handles alignment */
 .resource-card__cta {
+  text-align: center;  /* Center inline-flex buttons */
   /* Grid gap handles spacing - no margins needed */
 }
 
