@@ -425,13 +425,13 @@ a.affiliate-link {
   font-family: var(--font-terminal);
   font-weight: var(--font-weight-bold);             /* 700 */
   letter-spacing: 1px;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */                  /* ✅ Removed: Use sentence case (industry best practice - Sessie 99) */
   text-decoration: none;                            /* ✅ Clean: Higher specificity (0,1,1 vs 0,1,0) */
 
   /* Layout - Flexbox for arrow centering (Sessie 99: consistent with .resource-cta pattern) */
   display: inline-flex;            /* ✅ Enable flexbox (was inline-block) */
   align-items: center;             /* ✅ Vertical center arrow with text */
-  gap: 4px;                        /* ✅ Spacing between text + arrow (replaces ::after margin-left) */
+  gap: 8px;                        /* ✅ Uniform spacing with card CTAs (was 4px - Sessie 99) */
   white-space: nowrap;             /* ✅ Prevent text wrap on narrow viewports (320px mobile) */
 
   /* Interaction */
