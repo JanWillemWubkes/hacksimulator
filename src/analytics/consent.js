@@ -301,6 +301,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // HackSimulator object only exists on index.html (set by main.js)
     // This means we're on a blog page → auto-initialize consent banner
     console.log('[consent.js] Auto-initializing for blog page (no main.js detected)');
+
+    // Restore analytics/advertising if user already consented (consent persistence)
+    if (consentManager.hasConsent('analytics') === true) {
+      console.log('[consent.js] Analytics consent found in storage, initializing tracker...');
+      tracker.init('ga4');
+    }
+
+    if (consentManager.hasConsent('advertising') === true) {
+      console.log('[consent.js] Advertising consent found in storage, loading AdSense...');
+      consentManager.loadAdSense();
+    }
+
+    // Show consent banner (only if user hasn't responded yet - shouldShowBanner checks this)
     consentManager.checkAndShowBanner();
   }
 });
