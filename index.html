@@ -158,19 +158,8 @@
     <!-- Legal Disclaimer Modal: Removed duplicate HTML modal -->
     <!-- Modal is now dynamically created by src/ui/legal.js to avoid duplicate ID issue (P0-001) -->
 
-    <!-- Cookie Consent Banner (M5.5 - 3-Tier Consent) -->
-    <div id="cookie-consent" class="cookie-banner" role="alertdialog" aria-labelledby="cookie-title" aria-hidden="true">
-        <div class="cookie-content">
-            <p id="cookie-title">
-                <strong>[ ! ] Privacy:</strong> Cookies voor analytics & ads · <a href="assets/legal/cookies.html" target="_blank" rel="noopener noreferrer">Meer info</a>
-            </p>
-            <div class="cookie-buttons">
-                <button id="cookie-accept-all" class="btn-small">Alles Accepteren</button>
-                <button id="cookie-accept-analytics" class="btn-small">Alleen Analytics</button>
-                <button id="cookie-decline" class="btn-small btn-secondary">Weigeren</button>
-            </div>
-        </div>
-    </div>
+    <!-- Cookie Consent Banner: Removed hardcoded HTML -->
+    <!-- Banner is now dynamically injected by src/analytics/consent.js + consent-banner.js (M5.5 GDPR) -->
 
     <!-- Feedback Modal -->
     <div id="feedback-modal" class="modal" role="dialog" aria-labelledby="feedback-title" aria-hidden="true">
@@ -260,11 +249,6 @@
                 <a href="assets/legal/affiliate-disclosure.html" target="_blank" rel="noopener noreferrer">Affiliate</a>
                 <a href="#" id="cookie-settings">Cookie Instellingen</a>
             </nav>
-
-            <!-- Affiliate Platform Verification (Impact.com) -->
-            <p class="footer-verification" style="font-size: 10px; color: var(--color-text-muted); text-align: center; margin-top: 0.5rem;">
-                Impact-Site-Verification: 46e5a5e9-3a4c-4826-b1d1-b6354b3806f0
-            </p>
         </div>
     </footer>
 
