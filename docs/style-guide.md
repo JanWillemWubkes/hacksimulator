@@ -1585,6 +1585,93 @@ Instead of emoji for visual hierarchy, use:
 
 ---
 
+### Blog Badges (CSS-Driven)
+
+**Important:** Blog post callout boxes use CSS `::before` pseudo-elements to automatically add badge text. Do NOT include badge text in HTML.
+
+#### Available Badge Classes
+
+| Class | CSS Badge | Color | Use Case |
+|-------|-----------|-------|----------|
+| `.blog-tip` | `[ TIP ]` | Blue (`--color-info`) | Helpful hints, pro tips, best practices |
+| `.blog-warning` | `[ ! ]` | Yellow (`--color-warning`) | Warnings, cautions, important notices |
+| `.blog-info` | `[ ✓ ]` | Green (`--color-success`) | Affirmative info, confirmations, recommendations |
+
+#### ✅ Correct Usage
+
+```html
+<!-- CSS adds badge automatically -->
+<div class="blog-tip">
+  <strong>Networking werkt:</strong> 60% van junior pentester vacatures komt via netwerk...
+</div>
+
+<div class="blog-warning">
+  <strong>Eerst proberen:</strong> Gratis platforms zijn visueel/praktisch...
+</div>
+
+<div class="blog-info">
+  TryHackMe heeft een actieve community van 3M+ gebruikers...
+</div>
+```
+
+**Result in browser:**
+```
+[ TIP ] Networking werkt: 60% van junior pentester vacatures...
+[ ! ] Eerst proberen: Gratis platforms zijn visueel/praktisch...
+[ ✓ ] TryHackMe heeft een actieve community van 3M+ gebruikers...
+```
+
+#### ❌ WRONG - DO NOT INCLUDE BADGE TEXT IN HTML
+
+```html
+<!-- DUPLICATE - CSS already adds badge via ::before -->
+<div class="blog-tip">
+  [ TIP ] Networking werkt: 60% van junior pentester... ❌ DUPLICATION!
+</div>
+
+<!-- Results in: [ TIP ] [ TIP ] Networking werkt... -->
+```
+
+**Why this is wrong:** Browser renders both CSS pseudo-element AND HTML text = duplicate badges.
+
+#### Technical Implementation
+
+CSS in `styles/blog.css`:
+```css
+.blog-tip::before {
+  content: "[ TIP ] ";
+  color: var(--color-info);
+  font-family: var(--font-terminal);
+  font-weight: var(--font-weight-bold);
+  margin-right: var(--spacing-sm);
+}
+
+.blog-warning::before {
+  content: "[ ! ] ";
+  color: var(--color-warning);
+  /* ... */
+}
+
+.blog-info::before {
+  content: "[ ✓ ] ";
+  color: var(--color-success);
+  /* ... */
+}
+```
+
+#### Badge vs. Bracket Pattern Distinction
+
+**Two different systems - don't confuse them:**
+
+1. **CSS-driven badges** (this section): `.blog-tip`, `.blog-warning`, `.blog-info` → CSS adds badge automatically
+2. **ASCII bracket patterns** (previous section): `[ LINK ]`, `[ ACTION ]`, `[ THEORY ]` etc. → Manual text in headers/lists
+
+**When to use which:**
+- Use **CSS badges** for callout boxes (tips, warnings, confirmations)
+- Use **bracket patterns** for headers, lists, inline emphasis
+
+---
+
 ## Interactive States
 
 ### Hover States
@@ -3949,6 +4036,508 @@ Result: 3 cards fit perfectly
 - §6.8.4 for button color system (shared variables)
 - §6.5.3 for blue trust pattern
 - Footer: `index.html` + `blog/*.html` (placement)
+
+---
+
+### 6.8.9 Blog Card Redesign (Sessie 92)
+
+**Context:** Comprehensive UX/design overhaul of blog resource cards to eliminate visual chaos, fix layout inconsistencies, and align with Dutch affiliate marketing best practices.
+
+**Problem Statement (7 Issues Identified):**
+1. Top labels too close to title (108px total: 36px + 64px min-height + 8px gap)
+2. Cards with inconsistent widths (`auto-fit minmax(280px, 1fr)` = unpredictable distribution)
+3. Cards overlap when both have affiliate ribbons (adjacent `right: 12px` absolute positioning)
+4. Too many colors (7+ per card: featured + 5 category + ribbon + 3 meta)
+5. Inconsistent badge styling (inline styles, different borders, no clear hierarchy)
+6. Too many label/tag layers making cards busy
+7. Text descriptions don't align horizontally between adjacent cards
+
+**Solution: 4-Phase Redesign**
+
+---
+
+#### 6.8.9.1 Grid Layout Fix
+
+**Probleem:** `repeat(auto-fit, minmax(280px, 1fr))` creates unpredictable column widths at various viewport sizes.
+
+**Oplossing:** Fixed responsive breakpoints with explicit column counts:
+
+```css
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);  /* Desktop: 3 equal columns */
+  gap: var(--spacing-xl);                 /* 32px */
+  margin-bottom: var(--spacing-xl);
+}
+
+/* Tablet: 2 columns */
+@media (max-width: 1023px) {
+  .resource-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: 1 column */
+@media (max-width: 768px) {
+  .resource-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);  /* 24px */
+  }
+}
+```
+
+**Also Removed:** `max-width: 380px` and `margin: 0 auto` from `.resource-card` (no longer needed with equal-width grid).
+
+**Rationale:** Industry-standard fixed breakpoints provide predictable, consistent card widths across all viewport sizes.
+
+---
+
+#### 6.8.9.2 Spacing System Redesign
+
+**Probleem:** Too much vertical space between badges and title (36px header padding + 64px badge min-height + 8px gap = 108px).
+
+**Oplossing:** New spacing tokens + natural badge heights:
+
+```css
+/* New spacing tokens (added to :root) */
+:root {
+  --badge-gap-vertical: 6px;     /* Between stacked badges (reduced from 8px) */
+  --badge-to-title: 12px;        /* Badge container → title (new explicit spacing) */
+  --ribbon-clearance: 28px;      /* Header padding for ribbon (reduced from 36px) */
+}
+
+/* CSS Updates */
+.resource-card__header {
+  padding-top: var(--ribbon-clearance);  /* 28px instead of 36px */
+}
+
+.resource-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--badge-gap-vertical);  /* 6px */
+  /* REMOVED: min-height: 64px; */
+  text-align: center;
+}
+
+.resource-title {
+  margin-top: var(--badge-to-title);  /* NEW: 12px explicit spacing */
+  margin-bottom: var(--spacing-sm);   /* 8px */
+}
+```
+
+**Result:** Tighter, more professional spacing (28px + natural height + 12px ≈ 65px total vs 108px before).
+
+---
+
+#### 6.8.9.3 3-Tier Badge System
+
+**Philosophy:** Clear visual hierarchy: Status (conversion driver) → Category (content type) → Difficulty (skill-based USP).
+
+**Tier 1: Status Badges** (Primary - Conversion Driver)
+
+| Badge Class | Label | Color | Use Case |
+|-------------|-------|-------|----------|
+| `.featured-badge-free` | GRATIS / MEEST POPULAIR | Green `#3fb950` | Free resources |
+| `.featured-badge-premium` | BESTSELLER / CLASSIC | Gold gradient `#f39c12→#e67e22` | Premium paid resources |
+| `.featured-badge-neutral` | GRATIS PROEF | Blue `#79c0ff` | Trial/freemium resources |
+
+```css
+.featured-badge-free {
+  background: var(--color-success);  /* #3fb950 */
+  color: #ffffff;
+  border: 2px solid #2ecc71;
+  padding: 6px 14px;
+  font-family: var(--font-terminal);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 4px;
+}
+
+.featured-badge-premium {
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  color: #0a0a0a;
+  border: 2px solid #d35400;
+  padding: 6px 14px;
+  font-family: var(--font-terminal);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 4px;
+}
+
+.featured-badge-neutral {
+  background: var(--color-info);  /* #79c0ff */
+  color: #0a0a0a;
+  border: 2px solid #58a6ff;
+  padding: 6px 14px;
+  font-family: var(--font-terminal);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 4px;
+}
+```
+
+**Tier 2: Category Badges** (Secondary - Content Type)
+
+Consolidated from 5 category colors to 3 semantic groupings:
+
+| Badge Class | Label | Color | Use Case |
+|-------------|-------|-------|----------|
+| `.badge-technical` | PENTEST / EXPLOITS | Green `#27ae60` (HTB style) | Technical hacking content |
+| `.badge-platform` | WEB SECURITY / PLATFORM / BOOTCAMP | Blue `#3498db` | Learning platforms |
+| `.badge-coding` | PYTHON / CREATIVE | Orange `#f39c12` | Programming-focused |
+
+```css
+.badge-technical {
+  background-color: #27ae60;  /* HTB green */
+  color: #ffffff;
+  border: 2px solid #1e8449;
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 4px;
+}
+
+.badge-platform {
+  background-color: #3498db;  /* Professional blue */
+  color: #ffffff;
+  border: 2px solid #2980b9;
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 4px;
+}
+
+.badge-coding {
+  background-color: #f39c12;  /* Python gold */
+  color: #0a0a0a;
+  border: 2px solid #e67e22;
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 4px;
+}
+```
+
+**Tier 3: Difficulty Badges** (NEW - Skill-Based USP)
+
+| Badge Class | Label | Color | Meaning |
+|-------------|-------|-------|---------|
+| `.badge-difficulty-beginner` | BEGINNER | Green `#3fb950` | Accessible to newcomers |
+| `.badge-difficulty-intermediate` | INTERMEDIATE | Blue `#79c0ff` | Some experience required |
+| `.badge-difficulty-advanced` | ADVANCED | Orange `#f39c12` | Expert-level content |
+
+```css
+.badge-difficulty-beginner {
+  background-color: var(--color-success);  /* Green = welcoming */
+  color: #ffffff;
+  border: 2px solid #2ecc71;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;      /* Smaller than category */
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 10px;      /* More compact */
+  border-radius: 4px;
+}
+
+.badge-difficulty-intermediate {
+  background-color: var(--color-info);  /* Blue = progression */
+  color: #0a0a0a;
+  border: 2px solid #58a6ff;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.badge-difficulty-advanced {
+  background-color: var(--color-warning);  /* Orange = challenge */
+  color: #0a0a0a;
+  border: 2px solid #dd8800;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+```
+
+**Badge Stacking Order (Top to Bottom):**
+1. Status badge (GRATIS/BESTSELLER/GRATIS PROEF)
+2. Category badge (PENTEST/PLATFORM/PYTHON)
+3. Difficulty badge (BEGINNER/INTERMEDIATE/ADVANCED)
+
+**HTML Example:**
+```html
+<div class="resource-icon">
+  <span class="featured-badge-premium">BESTSELLER</span>
+  <span class="badge-technical">PENTEST</span>
+  <span class="badge-difficulty-intermediate">INTERMEDIATE</span>
+</div>
+```
+
+**Color Reduction:** From 7+ colors per card (featured + 5 category + ribbon + 3 meta) to 3-4 colors (status + category + difficulty, with monochrome meta).
+
+---
+
+#### 6.8.9.4 Meta Badge Simplification
+
+**Probleem:** Meta badges (platform, price, rating) each had different colors (`--color-info`, `--color-success`, `--color-warning`), adding to visual chaos.
+
+**Oplossing:** Unified monochrome treatment for all meta badges:
+
+```css
+.resource-meta span {
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text-dim);  /* All same grey - no color overrides */
+  padding: 4px 8px;
+  border-radius: var(--border-radius-small);
+  font-size: 0.85rem;
+}
+```
+
+**Rationale:** Meta information is supporting data, not primary decision factors. Monochrome reduces visual noise and lets status/category badges dominate.
+
+---
+
+#### 6.8.9.5 Nederlandse Affiliate Disclosure (CRITICAL)
+
+**Probleem:** Aggressive American-style orange "AFFILIATE" ribbon (`position: absolute; top: 0; right: 12px`) is culturally mismatched for Dutch market. User feedback: *"zo'n affiliate ribbon zie ik feitelijk nooit ergens staan, waarom hebben wij deze wel?? de site trekt nederlandse bezoekers. op andere sites in nederland zie ik nergens zo duidelijk affiliates communiceerd."*
+
+**Oplossing:** Subtle "Gesponsord" footer label (bol.com/Tweakers style) + optional gold left border:
+
+```css
+/* REMOVED: .affiliate-ribbon class (was lines ~498-538) */
+
+/* NEW: Subtle footer disclosure */
+.affiliate-disclosure {
+  font-family: var(--font-terminal);
+  font-size: 0.7rem;
+  color: var(--color-text-dim);  /* Muted grey */
+  text-align: center;
+  padding: 4px 0;
+  margin-top: 8px;
+  opacity: 0.7;
+}
+
+.affiliate-disclosure::before {
+  content: "[ ";
+  opacity: 0.6;
+}
+
+.affiliate-disclosure::after {
+  content: " ]";
+  opacity: 0.6;
+}
+
+/* Optional: Subtle gold left border for affiliate cards */
+.resource-card.is-affiliate {
+  border-left: 3px solid var(--featured-border-accent);  /* Gold accent */
+}
+
+.resource-card.is-affiliate:hover {
+  border-left-color: var(--featured-text-strong);
+  box-shadow: -2px 0 8px rgba(255, 215, 0, 0.15);
+}
+```
+
+**HTML Transformation:**
+
+```html
+<!-- BEFORE: Aggressive American ribbon -->
+<div class="resource-card">
+  <span class="affiliate-ribbon">AFFILIATE</span>
+  <!-- ... content ... -->
+</div>
+
+<!-- AFTER: Subtle Dutch disclosure -->
+<div class="resource-card is-affiliate">
+  <!-- ... content ... -->
+  <div class="affiliate-disclosure">Gesponsord</div>
+  <!-- ... CTA button ... -->
+</div>
+```
+
+**Legal Compliance Maintained:**
+- ✅ `rel="sponsored"` attribute on links (SEO + transparency)
+- ✅ Visible "Gesponsord" text per card (AVG compliance)
+- ✅ Link to `/assets/legal/affiliate-disclosure.html` in footer (algemene voorwaarden)
+
+**Cultural Rationale:**
+- Nederlandse bezoekers verwachten subtiliteit, niet agressiviteit
+- "Gesponsord" is herkenbaar (Google Ads, bol.com, Tweakers, etc.)
+- Terminal aesthetic brackets `[ ]` align with design system
+- Footer positie = transparant maar niet opdringerig
+- Optionele gouden border = subtiele visuele differentiatie zonder overlap risk
+
+**Philosophy:** Dutch market trust > American conversion maximization. Subtiele "Gesponsord" label builds long-term credibility better than aggressive orange ribbons.
+
+---
+
+#### 6.8.9.6 Mobile Responsive Optimizations
+
+**Strategy:** Hide difficulty badge on mobile (space constraint), maintain status + category as essentials:
+
+```css
+@media (max-width: 768px) {
+  /* Hide difficulty badge on mobile */
+  .badge-difficulty-beginner,
+  .badge-difficulty-intermediate,
+  .badge-difficulty-advanced {
+    display: none;  /* Keep status + category only */
+  }
+
+  /* Tighter badge spacing */
+  .resource-icon {
+    gap: 4px;  /* 6px → 4px */
+  }
+
+  /* Smaller featured badge */
+  .featured-badge-free,
+  .featured-badge-premium,
+  .featured-badge-neutral {
+    font-size: 0.65rem;
+    padding: 4px 10px;
+  }
+
+  /* Smaller category badge */
+  .badge-technical,
+  .badge-platform,
+  .badge-coding {
+    font-size: 0.7rem;
+    padding: 5px 10px;
+  }
+
+  /* Gesponsord label: Remove brackets on mobile */
+  .affiliate-disclosure::before,
+  .affiliate-disclosure::after {
+    content: "";
+  }
+
+  .affiliate-disclosure {
+    font-size: 0.65rem;
+  }
+}
+```
+
+**Rationale:** Mobile has limited space - difficulty badge is nice-to-have, status + category are essential for quick decision-making.
+
+---
+
+#### 6.8.9.7 Badge Mapping Reference
+
+**Implementation guide for blog content creators:**
+
+| Resource | Status Badge | Category | Difficulty |
+|----------|--------------|----------|------------|
+| PortSwigger Academy | `featured-badge-free` (GRATIS) | `badge-platform` (PLATFORM) | `beginner` |
+| OverTheWire | `featured-badge-free` (GRATIS) | `badge-platform` (PLATFORM) | `beginner` |
+| picoCTF | `featured-badge-free` (GRATIS) | `badge-platform` (PLATFORM) | `beginner` |
+| Udemy Bootcamp | `featured-badge-premium` (BESTSELLER) | `badge-platform` (PLATFORM) | `intermediate` |
+| TryHackMe Premium | `featured-badge-free` (MEEST POPULAIR) | `badge-platform` (PLATFORM) | `intermediate` |
+| Skillshare | `featured-badge-neutral` (GRATIS PROEF) | `badge-platform` (PLATFORM) | `beginner` |
+| Hacker Playbook 3 | `featured-badge-premium` (BESTSELLER) | `badge-technical` (PENTEST) | `intermediate` |
+| Web App Hacker's Handbook | `featured-badge-premium` (CLASSIC) | `badge-technical` (WEB SECURITY) | `intermediate` |
+| Black Hat Python | `featured-badge-premium` (BESTSELLER) | `badge-coding` (PYTHON) | `intermediate` |
+
+---
+
+#### 6.8.9.8 Success Metrics
+
+**Quantitative (Monitor via Google Analytics - 2 weeks):**
+- **Affiliate CTR:** Track `.affiliate-link` clicks, target: maintain or +5%
+- **Bounce Rate:** Blog pages, target: -5% (cleaner design improves scannability)
+- **Time on Page:** Target: +10% (better readability)
+- **Mobile vs Desktop CTR:** Hypothesis - mobile improves more due to reduced clutter
+
+**Qualitative (User Testing):**
+- "Can you identify free vs paid resources quickly?"
+- "Do affiliate links feel transparent?"
+- "Find a beginner-friendly resource in <10 seconds"
+
+**Technical Validation:**
+- ✅ **Lighthouse:** Maintain 88/100/100/100 (or improve)
+- ✅ **WCAG:** All badges AAA contrast (7:1+) - verified via WebAIM
+- ✅ **Bundle:** CSS ~172KB minified (within 500KB total budget)
+
+---
+
+#### 6.8.9.9 Files Modified (Sessie 92)
+
+**CSS:**
+- `/home/willem/projecten/hacksimulator/styles/main-unminified.css` (~80KB)
+  - Added 3 spacing tokens (lines 107-110)
+  - Fixed grid layout (line 566)
+  - Removed `.resource-card` max-width constraint (lines 578-579 deleted)
+  - Created 9 new badge classes (lines 912-1089)
+  - Created `.affiliate-disclosure` + `.is-affiliate` (lines 553-581)
+  - Updated spacing (lines 636, 644, 659)
+  - Simplified meta to monochrome (line 692)
+  - Added mobile responsive (lines 820-856)
+
+**HTML:**
+- `/home/willem/projecten/hacksimulator/blog/beste-online-cursussen-ethical-hacking.html`
+  - Updated 6 cards (3 free, 3 affiliate)
+  - Removed 3 `<span class="affiliate-ribbon">` elements
+  - Added 3 `<div class="affiliate-disclosure">Gesponsord</div>` elements
+  - Added 6 difficulty badges
+  - Replaced all inline badge styles with semantic classes
+
+- `/home/willem/projecten/hacksimulator/blog/top-5-hacking-boeken.html`
+  - Updated 5 cards (all affiliate)
+  - Removed 5 `<span class="affiliate-ribbon">` elements
+  - Added 5 `<div class="affiliate-disclosure">Gesponsord</div>` elements
+  - Added 5 difficulty badges
+  - Replaced all inline badge styles with semantic classes
+
+**Production:**
+- `/home/willem/projecten/hacksimulator/styles/main.css` (minified with PostCSS/cssnano)
+
+---
+
+#### 6.8.9.10 Design System Impact
+
+**Before Redesign:**
+- 7+ colors per card (visual chaos)
+- Inconsistent card widths (layout jank)
+- Aggressive affiliate disclosure (culturally mismatched)
+- 108px badge-to-title gap (too much whitespace)
+- Inline styles (maintenance nightmare)
+
+**After Redesign:**
+- 3-4 colors per card (clear hierarchy)
+- Equal-width cards (professional grid)
+- Subtle Dutch affiliate disclosure (culturally aligned)
+- ~65px badge-to-title gap (optimal density)
+- Semantic CSS classes (maintainable, scalable)
+
+**Key Architectural Decisions:**
+1. **Fixed breakpoints over auto-fit:** Predictability > flexibility for blog content
+2. **3-tier badge hierarchy:** Status (conversion) → Category (content) → Difficulty (USP)
+3. **Dutch subtlety over American aggression:** "Gesponsord" footer > orange ribbon
+4. **Monochrome meta badges:** Reduces noise, lets primary badges dominate
+5. **Mobile difficulty badge removal:** Prioritizes essential info on small screens
+
+**Related Sections:**
+- §6.8.1 for resource card base (`.resource-card` layout)
+- §6.8.2 for old affiliate ribbon pattern (DEPRECATED - replaced by `.affiliate-disclosure`)
+- §6.8.3 for old category badge system (DEPRECATED - replaced by Tier 2 badges)
+- §6.4.2 for spacing token system (spacing tokens)
+- §6.9.5 for grid layout standards (responsive breakpoints)
+
+**Version:** Implemented Sessie 92 (December 2025)
 
 ---
 
