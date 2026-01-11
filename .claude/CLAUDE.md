@@ -45,7 +45,7 @@
 → **Formule:** Output (EN) + Inline context (← NL) + Tip (NL) + Warning (NL)
 → **Voorbeeld & Philosophy:** PRD §9.2
 
-**Quick:** `nmap 192.168.1.1` → `22/tcp OPEN SSH ← Secure Shell` + `[ TIP ] Open poorten = attack vectors`
+**Quick:** `nmap 192.168.1.1` → `22/tcp OPEN SSH ← Secure Shell` + `[TIP] Open poorten = attack vectors`
 
 ---
 
@@ -69,7 +69,7 @@
 - **"je" (niet "u"):** Toegankelijk, persoonlijk (niet afstandelijk formeel)
 - **Bemoedigend:** "Goed bezig!", "Bijna!", niet "Fout." of "Wrong."
 - **Context geven:** Leg "waarom" uit, niet alleen "wat"
-- **Symbols:** ASCII brackets only (`[ TIP ]`, `[ ! ]`, `[ ✓ ]`) - terminal aesthetic, NO emojis in code
+- **Symbols:** ASCII brackets only (`[TIP]`, `[!]`, `[✓]`) - terminal aesthetic, NO emojis in code
 
 **Concrete Voorbeelden:**
 
@@ -77,7 +77,7 @@
 ✅ **GOOD:**
 ```
 Bestand niet gevonden: passwords.txt
-[ TIP ] Gebruik 'ls' om te zien welke bestanden er zijn, of 'find passwords' om te zoeken
+[TIP] Gebruik 'ls' om te zien welke bestanden er zijn, of 'find passwords' om te zoeken
 ```
 
 ❌ **BAD:**
@@ -92,7 +92,7 @@ ERROR: File not found.
 ### Security Warnings
 ✅ **GOOD:**
 ```
-[ ! ] Let op: sqlmap is een offensive tool voor het vinden van SQL injection kwetsbaarheden.
+[!] Let op: sqlmap is een offensive tool voor het vinden van SQL injection kwetsbaarheden.
 Gebruik dit ALLEEN op systemen waar je schriftelijke toestemming voor hebt!
 
 Doorgaan? (j/n): _
@@ -113,8 +113,8 @@ WARNING: Illegal use is prohibited.
 22/tcp   OPEN    SSH ← Secure Shell (remote terminal toegang)
 80/tcp   OPEN    HTTP ← Webserver (onversleuteld!)
 
-[ TIP ] Poort 22 open = mogelijkheid om op afstand in te loggen. Check of wachtwoord sterk genoeg is!
-[ TIP ] Poort 80 = onversleutelde website. Gevoelige data? Gebruik poort 443 (HTTPS).
+[TIP] Poort 22 open = mogelijkheid om op afstand in te loggen. Check of wachtwoord sterk genoeg is!
+[TIP] Poort 80 = onversleutelde website. Gevoelige data? Gebruik poort 443 (HTTPS).
 ```
 
 ❌ **BAD:**
@@ -149,8 +149,8 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Files: All `src/commands/*/*.js` follow this pattern
 
 2. ✅ **Educational Feedback** - Elke output is een leermoment
-   - Required: `[ TIP ]` bij elke command (waarom belangrijk?)
-   - Optional: `[ ! ]` warning voor security tools (ethische gebruik)
+   - Required: `[TIP]` bij elke command (waarom belangrijk?)
+   - Optional: `[!]` warning voor security tools (ethische gebruik)
    - Tone: "je" (not "u"), bemoedigend, context geven (see §6)
 
 3. ✅ **Help/Man Pages** - Nederlands, 3-tier help system (PRD §8.3)
@@ -162,7 +162,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ### Security & Compliance
 4. ✅ **Warning (Offensive Tools)** - Juridische disclaimer + confirmatie
    - Required for: hashcat, hydra, sqlmap, metasploit, nikto (security category)
-   - Pattern: `[ ! ] Let op: [tool] is een offensive tool. Gebruik ALLEEN met toestemming!`
+   - Pattern: `[!] Let op: [tool] is een offensive tool. Gebruik ALLEEN met toestemming!`
    - Confirmation: `Doorgaan? (j/n):` → if 'n' → cancel, if 'j' → proceed
    - Files: All `src/commands/security/*.js`
 
@@ -267,8 +267,8 @@ PORT     STATE   SERVICE          ← Nederlands context
 80/tcp   OPEN    HTTP (Web Server)
 443/tcp  OPEN    HTTPS (Encrypted Web)
 
-[ TIP ] Poort 22 open = SSH toegang mogelijk. Check wachtwoord sterkte!
-[ ! ] Scan alleen systemen waar je toestemming voor hebt.
+[TIP] Poort 22 open = SSH toegang mogelijk. Check wachtwoord sterkte!
+[!] Scan alleen systemen waar je toestemming voor hebt.
 `;
 ```
 
@@ -290,7 +290,7 @@ return `Scan complete: 3 ports open`;
 ```
 
 **Why:** Balances realism (authentic terminal feel) with education (beginner learns)
-**Formula:** Technical output + `← Dutch context` + `[ TIP ]` + `[ ! ]` warning
+**Formula:** Technical output + `← Dutch context` + `[TIP]` + `[!]` warning
 **Files:** All 30 commands in `src/commands/*/` follow this pattern
 
 ---
