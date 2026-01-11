@@ -359,30 +359,6 @@ button {
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
 
-/* Arrow variant - BEM modifier for CTA buttons */
-.btn-primary--arrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  white-space: nowrap;
-}
-
-.btn-primary--arrow::after {
-  content: "";
-  width: 7px;
-  height: 7px;
-  border-top: 2px solid currentColor;
-  border-right: 2px solid currentColor;
-  transform: rotate(45deg);
-  display: inline-block;
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
-}
-
-.btn-primary--arrow:hover::after {
-  transform: translateX(4px) rotate(45deg);
-}
-
 .btn-secondary {
   background-color: transparent;
   color: var(--color-ui-secondary);
@@ -394,8 +370,8 @@ button {
 
 .btn-secondary:hover {
   background-color: transparent;
-  border-color: var(--color-ui-primary);
-  color: var(--color-ui-primary);
+  border-color: var(--color-button-bg-hover);
+  color: var(--color-button-bg-hover);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
@@ -411,8 +387,8 @@ button {
 
 .btn-small.btn-secondary:hover {
   background-color: transparent;
-  border-color: var(--color-ui-primary);
-  color: var(--color-ui-primary);
+  border-color: var(--color-button-bg-hover);
+  color: var(--color-button-bg-hover);
 }
 
 .btn-small {
@@ -449,14 +425,9 @@ a.affiliate-link {
   font-family: var(--font-terminal);
   font-weight: var(--font-weight-bold);             /* 700 */
   letter-spacing: 1px;
-  /* text-transform: uppercase; */                  /* ✅ Removed: Use sentence case (industry best practice - Sessie 99) */
+  text-transform: uppercase;
   text-decoration: none;                            /* ✅ Clean: Higher specificity (0,1,1 vs 0,1,0) */
-
-  /* Layout - Flexbox for arrow centering (Sessie 99: consistent with .resource-cta pattern) */
-  display: inline-flex;            /* ✅ Enable flexbox (was inline-block) */
-  align-items: center;             /* ✅ Vertical center arrow with text */
-  gap: 8px;                        /* ✅ Uniform spacing with card CTAs (was 4px - Sessie 99) */
-  white-space: nowrap;             /* ✅ Prevent text wrap on narrow viewports (320px mobile) */
+  display: inline-block;
 
   /* Interaction */
   transition: all var(--transition-fast);           /* 0.15s ease */
@@ -471,25 +442,15 @@ a.affiliate-link:visited {
   background-color: var(--color-button-bg);         /* Maintain button color */
 }
 
-/* Arrow indicator - CSS chevron (consistent with .resource-cta) */
+/* External link indicator - Trust signal */
 a.affiliate-link::after {
-  content: "";                       /* Empty = border-trick arrow (not unicode "→") */
-
-  /* Arrow dimensions: 7x7px chevron */
-  width: 7px;
-  height: 7px;
-
-  /* Border-trick arrow: top + right borders rotated 45deg = → */
-  border-top: 2px solid currentColor;    /* currentColor = theme-aware */
-  border-right: 2px solid currentColor;
-  transform: rotate(45deg);              /* Rotate to point right */
-
-  /* Layout - No margin needed (parent gap: 4px handles spacing) */
-  display: inline-block;             /* ✅ Keep for transform support */
-  flex-shrink: 0;                    /* ✅ Prevent arrow shrinking */
-
-  /* Animation - Preserve hover slide */
-  transition: transform 0.2s ease;   /* Smooth hover animation */
+  content: " →";                        /* Space before arrow for breathing */
+  font-size: 1.2em;                     /* Larger arrow (matches .resource-cta) */
+  line-height: 1;                       /* Consistent baseline */
+  display: inline-block;                /* Enable vertical-align */
+  vertical-align: middle;               /* Text-aligned centering */
+  margin-left: 4px;                     /* Subtle spacing */
+  transition: transform 0.2s ease;
 }
 
 a.affiliate-link:hover {
@@ -502,7 +463,7 @@ a.affiliate-link:hover {
 
 /* Arrow animation on hover */
 a.affiliate-link:hover::after {
-  transform: translateX(3px) rotate(45deg);  /* Both transforms! Subtle slide + preserve rotation */
+  transform: translateX(3px);           /* Subtle slide (less than card buttons) */
 }
 
 a.affiliate-link:focus-visible {
@@ -662,7 +623,7 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
 
 /* Constrain grid to max-width while keeping cards centered */
 .aanbevolen-resources .resource-grid {
-  max-width: 1040px;                     /* Sessie 96: 3 cards × 340px + 2 × 20px gaps (was 1000px) */
+  max-width: 1000px;                     /* Sessie 95: 3 cards × 320px + gaps - Tailwind standard (was 1200px) */
   margin: 0 auto;                        /* Center the grid */
 }
 
@@ -694,12 +655,6 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   justify-items: center;                            /* Sessie 92: Center cards in grid cells */
 }
 
-/* Spacing between affiliate cards and detail reviews (Sessie 99) */
-.aanbevolen-resources + .blog-post-content {
-  margin-top: var(--spacing-xl);                    /* 32px extra whitespace */
-  padding-top: var(--spacing-lg);                   /* 24px breathing room */
-}
-
 /* Product card */
 .resource-card {
   position: relative;                               /* CRITICAL: Positioning context for ribbon */
@@ -709,17 +664,17 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   background-color: var(--color-bg-terminal);       /* #0d1117 dark */
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-modal);        /* 8px */
-  padding: var(--spacing-lg);                       /* 24px - Sessie 96: Reduced for CTA text space (was 32px) */
+  padding: var(--spacing-xl);                       /* 32px */
   transition: all var(--transition-normal);         /* 0.3s ease */
   box-shadow: var(--shadow-elevation-1);
   overflow: visible;                                /* Allow ribbon to extend beyond card */
   width: 100%;                                      /* Sessie 92: Full width of grid cell */
-  max-width: 340px;                                 /* Sessie 96: +20px for CTA text breathing room (was 320px) */
+  max-width: 320px;                                 /* Sessie 95: Tailwind standard, optimal line length (was 360px) */
 }
 
-/* Sessie 97: Affiliate differentiation - subtle left-border accent (bronze theme) */
+/* Sessie 95: Affiliate differentiation - subtle left-border accent */
 .resource-card.is-affiliate {
-  border-left: 4px solid #CD7F32;                   /* Classic bronze accent - vibrant luxury (Sessie 98) */
+  border-left: 4px solid #f39c12;                   /* Gold accent - matches hover gradient */
   padding-left: 28px;                               /* 32px - 4px border = optical alignment */
 }
 
@@ -803,7 +758,6 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
 
 /* CTA wrapper - Grid positioning handles alignment */
 .resource-card__cta {
-  text-align: center;  /* Center inline-flex buttons */
   /* Grid gap handles spacing - no margins needed */
 }
 
@@ -819,17 +773,17 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
 
   /* Typography */
   font-family: var(--font-ui);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 700;
   text-decoration: none;
-  white-space: nowrap;  /* Force single line - now safe with duplicate arrow removed */
+  /* white-space: nowrap; ← REMOVED: Caused button overflow (forced min-width > container) */
 
-  /* Visual - Uniform blue base for all buttons (Design System First) */
-  background-color: var(--color-button-bg);   /* Blue #2563eb dark / #1976d2 light */
-  color: var(--color-button-text);             /* #ffffff (theme-aware) */
-  padding: 14px 18px;
+  /* Visual - Uniform green base for all buttons (Sessie 93) */
+  background-color: var(--color-success);     /* Green #3fb950 dark / #008844 light */
+  color: #ffffff;
+  padding: 14px 24px;
   border-radius: 6px;
-  border: 2px solid var(--color-button-bg);    /* Blue border (consistent with .btn-primary) */
+  border: 2px solid #2ecc71;                   /* Lighter green border */
   min-height: 44px;                            /* WCAG AAA minimum touch target */
 
   /* Animation */
@@ -837,61 +791,27 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   cursor: pointer;
 }
 
-/* Arrow indicator - CSS chevron (Sessie 97: 7x7px border-trick, saves 5-7px vs Unicode) */
+/* Arrow indicator */
 .resource-cta::after {
-  content: "";                       /* Empty - shape created with borders */
-
-  /* Arrow dimensions: 7x7px chevron (vs 12-16px Unicode →) */
-  width: 7px;
-  height: 7px;
-
-  /* Border-trick arrow: top + right borders rotated 45deg = → */
-  border-top: 2px solid currentColor;    /* currentColor = theme-aware (light/dark) */
-  border-right: 2px solid currentColor;
-  transform: rotate(45deg);              /* Rotate to point right */
-
-  /* Layout - Align with text baseline */
+  content: "→";
+  font-size: 1.2em;
+  line-height: 1;                    /* Force consistent baseline */
   display: inline-block;             /* Enable transform without affecting flow */
-  flex-shrink: 0;                    /* Prevent arrow from shrinking if space tight */
-  margin-left: 2px;                  /* Micro-adjustment: Fine-tune optical alignment */
-
-  /* Animation - Preserve hover slide */
-  transition: transform 0.2s ease;   /* Same as before - smooth hover */
+  vertical-align: middle;            /* Explicit vertical centering */
+  transition: transform 0.2s ease;
 }
 
-/* Hover State - Theme-aware blue (Sessie 98: Design System First - consistency with all other buttons) */
+/* Hover State - Default green (Sessie 93: Overridden by specific selectors) */
 .resource-cta:hover {
-  background-color: var(--color-button-bg-hover);  /* #003d85 dark / #1565c0 light */
-  border-color: var(--color-button-bg-hover);       /* Consistent with .btn-primary, .affiliate-link */
-  color: var(--color-button-text-hover);            /* #ffffff */
-  transform: translateY(-2px);                      /* Lift effect = CTA feedback */
-  box-shadow: 0 4px 12px var(--color-button-shadow-hover);  /* Blue shadow - theme-aware */
+  background-color: #229954;                    /* Darker green */
+  color: #ffffff !important;                    /* Sessie 95: Force white text (fix blue text bug) */
+  border-color: #2ecc71;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
 }
 
 .resource-cta:hover::after {
-  transform: translateX(4px) rotate(45deg);  /* BOTH transforms! Arrow slides right + stays rotated */
-}
-
-/* Fix: Uniform styling when affiliate-link combined with resource-cta (card buttons) */
-a.affiliate-link.resource-cta {
-  /* Typography - Match .resource-cta exactly */
-  font-family: var(--font-ui);      /* Override affiliate-link's terminal font - Inter for cards */
-  font-size: 0.9rem;                /* Override affiliate-link's 1rem - consistent card sizing */
-  letter-spacing: 0;                /* Override affiliate-link's 1px - Inter doesn't need extra spacing */
-  text-transform: none;             /* Override affiliate-link's uppercase - cleaner aesthetic */
-
-  /* Spacing - Match .resource-cta exactly */
-  padding: 14px 18px;               /* Override affiliate-link's 16px 32px - consistent card padding */
-
-  /* Layout - CRITICAL FIX: Override inline-block from a.affiliate-link (Sessie 98) */
-  display: inline-flex !important;  /* Override inline-block - flexbox required for align-items */
-  align-items: center;              /* Vertical centering for arrow - matches .resource-cta */
-  gap: 8px;                         /* Space between text + arrow - matches .resource-cta */
-}
-
-/* Arrow hover override for combined classes (Sessie 99: margin-left no longer needed - parent gap handles spacing) */
-a.affiliate-link.resource-cta:hover::after {
-  transform: translateX(4px) rotate(45deg);  /* Match .resource-cta hover - 4px slide (not 3px) + preserve rotation */
+  transform: translateX(4px);  /* Arrow slides right */
 }
 
 /* Focus State (Accessibility) */
@@ -908,11 +828,11 @@ a.affiliate-link.resource-cta:hover::after {
 }
 
 /* Sessie 93: Removed redundant base selectors - all buttons now uniform green base */
-/* Affiliate cards: Bronze gradient hover (premium luxury feel) */
+/* Affiliate cards: Gold gradient hover (unique override) */
 .resource-card.is-affiliate .resource-cta:hover {
-  background: linear-gradient(135deg, #CD7F32 0%, #A97142 100%);  /* Sessie 98: Classic Bronze - vibrant luxury (was muted #d4a574) */
-  border-color: #A97142;                        /* Sessie 98: Metallic bronze - match gradient end */
-  box-shadow: 0 4px 12px rgba(205, 127, 50, 0.3);  /* Sessie 98: Classic bronze shadow - match badges */
+  background: linear-gradient(135deg, #f39c12 0%, #f1c40f 100%);  /* Sessie 95: Gold gradient (was orange #e67e22) */
+  border-color: #f39c12;                        /* Sessie 95: Match start color (was #d35400) */
+  box-shadow: 0 4px 12px rgba(241, 196, 15, 0.4);  /* Sessie 95: Lighter gold shadow */
 }
 
 /* Mobile: Single column */
@@ -948,8 +868,8 @@ a.affiliate-link.resource-cta:hover::after {
   /* CTA: Full width, larger touch target on mobile */
   .resource-cta {
     width: 100%;
-    padding: 12px 16px;  /* Reduced padding = more space for button text on 375px viewport */
-    font-size: 0.85rem;
+    padding: 12px 20px;  /* Reduced padding = more space for button text on 375px viewport */
+    font-size: 0.9rem;
   }
 
   /* ===== NEW BADGE SYSTEM - Mobile Optimizations (Sessie 92) ===== */
@@ -1142,17 +1062,17 @@ a.affiliate-link.resource-cta:hover::after {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   white-space: nowrap;
-  background: linear-gradient(135deg, #B46928 0%, #915523 100%);  /* Darker bronze - WCAG AA + differentiation from buttons */
-  color: #ffffff;  /* White text - matches button hover, better readability */
-  border: 2px solid #915523;  /* Darker bronze border - match gradient end */
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);  /* Gold gradient */
+  color: #0a0a0a;
+  border: 2px solid #d35400;
   border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  box-shadow: 0 2px 6px rgba(180, 105, 40, 0.3);  /* Darker bronze shadow */
+  box-shadow: 0 2px 6px rgba(243, 156, 18, 0.3);
   transition: all 0.15s ease;
 }
 
 .featured-badge-premium:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(205, 127, 50, 0.4);  /* Classic bronze shadow (40% opacity) */
+  box-shadow: 0 4px 10px rgba(243, 156, 18, 0.4);
 }
 
 .featured-badge-neutral {

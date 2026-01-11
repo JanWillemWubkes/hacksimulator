@@ -1,7 +1,7 @@
 # Product Requirements Document - HackSimulator.nl
-**Versie:** 1.7
+**Versie:** 1.8
 **Status:** M0-M4 Completed, M5 In Progress - ✅ **LIVE on Netlify!**
-**Laatst bijgewerkt:** 15 december 2025 (Sessie 86 - §21 Monetization Strategy uitgebreid met implementation patterns)
+**Laatst bijgewerkt:** 16 december 2025 (Sessie 87 - Document sync: Metrics en M5 progress update)
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
@@ -866,7 +866,7 @@ Systeem hersteld naar oorspronkelijke staat.
 - [x] Geen kritieke bugs (0 console errors in productie)
 - [ ] Browser compatibility getest (Chrome, Firefox, Safari, Edge) - TO TEST
 - [x] localStorage functionaliteit getest
-- [x] Bundle size < 500KB (299 KB = 40% margin)
+- [x] Bundle size < 500KB (470.87 KB = 5.8% margin)
 
 **🔵 Kwaliteitsborging (M5 Testing - In Progress):**
 - [ ] Getest door minimaal 5 beta testers - TO DO
@@ -1634,12 +1634,17 @@ Dit document is goedgekeurd voor de ontwikkeling van HackSimulator.nl MVP.
   - Clarified MVP vs Post-MVP breakdown (153 vs 142 tasks)
   - Synced update datums across all documentation
   - Updated M5.5 progress: 2/15 tasks (13%)
+- **v1.8** (16 Dec 2025) - Full Document Sync (Sessie 87):
+  - Synced metrics from TASKS.md: 144/295 tasks (48.8%)
+  - Updated M5 progress: 27% → 51% (19/37 tasks completed)
+  - Bundle size verification: 470.87 KB (from official performance testing)
+  - Aligned all docs per PLANNING.md §Document Sync Protocol
 
 **Document Status:** Definitief - ✅ **LIVE on Netlify!**
 
-**Laatste review:** 15 december 2025
-**Development Status:** 143/295 tasks completed (48.5% totaal scope)
-**MVP Progress:** 141/153 tasks (92.3%) - M0-M4 (100%), M5 (10/37 - 27%), M5.5 (2/15 - 13%)
+**Laatste review:** 16 december 2025
+**Development Status:** 144/295 tasks completed (48.8% totaal scope)
+**MVP Progress:** 141/153 tasks (92.3%) - M0-M4 (100%), M5 (19/37 - 51%), M5.5 (2/15 - 13%)
 **Post-MVP:** M6-M9 (0/142 tasks) - Planned for Phase 2-3
 
 ---

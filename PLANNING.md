@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 15 december 2025
+**Laatst bijgewerkt:** 16 december 2025
 **Status:** M5 Testing & Launch Phase - ✅ **LIVE on Netlify!**
 **Verantwoordelijk:** Development Team
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
@@ -746,9 +746,9 @@ const DEBUG_MODE = false;
 
 ### Fase 1: MVP (Maand 1-3) - 🔵 IN UITVOERING (48.5%) - **LIVE!**
 
-**Status:** 143/295 tasks completed (48.5% totaal project scope)
+**Status:** 144/295 tasks completed (48.8% totaal project scope)
 **MVP-only Progress:** 141/153 tasks (92.3% van MVP scope)
-**Milestone Breakdown:** M0-M4 (100%), M5 (10/37 - 27%), M5.5 (2/15 - 13%)
+**Milestone Breakdown:** M0-M4 (100%), M5 (19/37 - 51%), M5.5 (2/15 - 13%)
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
@@ -779,7 +779,7 @@ const DEBUG_MODE = false;
 **Week 9-10: Testing & Launch** - 🔵 IN PROGRESS (M5) - ✅ **DEPLOYED!**
 - [x] GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
 - [x] Netlify deployment (https://famous-frangollo-b5a758.netlify.app/)
-- [x] Performance optimization (<3s load: ~2.0s LCP, <500KB bundle: ~318KB)
+- [x] Performance optimization (<3s load: ~2.0s LCP, <500KB bundle: 470.87KB)
 - [x] Lighthouse audit (88/100/100/100) - Performance 88 (target >90, acceptable for MVP, improve in M9)
 - [ ] Beta testing (5+ testers) - TO DO
 - [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge) - TO DO
@@ -901,8 +901,8 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 
 ---
 
-**Laatst bijgewerkt:** 15 december 2025
-**Versie:** 2.1 (Sessie 86: Document Sync Protocol added to §12, CLAUDE.md optimization support)
+**Laatst bijgewerkt:** 16 december 2025
+**Versie:** 2.2 (Sessie 87: Full sync - Metrics, M5 progress, bundle size aligned with TASKS.md)
 **Status:** ✅ Deployed - Live in Production + Monetization Planning Complete
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

@@ -3,14 +3,6 @@
  * Global styles and CSS Variables
  */
 
-/* ==================== Box-Sizing Reset ==================== */
-/* Modern CSS best practice - prevents padding overflow bugs globally */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
 /* ==================== Font Subsetting ==================== */
 /* Box Drawing Font Subset - Android Chrome Unicode fix (Sessie 81) */
 @font-face {
@@ -94,11 +86,6 @@
   --ribbon-affiliate-end: #d35400;    /* Darker orange - gradient depth */
   --ribbon-text: #ffffff;             /* White text for ribbon readability */
 
-  /* Featured Content System - Subtle premium/affiliate highlighting (Sessie 92) */
-  --featured-bg-emphasis: rgba(255, 215, 0, 0.08);     /* Subtle background highlights */
-  --featured-border-accent: #ffd700;                   /* Gold - priority borders */
-  --featured-text-strong: #ffc107;                     /* Amber - CTA text emphasis */
-
   /* Typography - Premium Font System (Inter + JetBrains Mono) */
   --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;  /* Primary: UI/Headings - screen-optimized */
   --font-terminal: 'JetBrains Mono Box', 'JetBrains Mono', 'Courier New', 'Courier', monospace;  /* Secondary: Code/Terminal - developer-grade (Box subset for U+2500-257F) */
@@ -116,11 +103,6 @@
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
-
-  /* Badge-specific spacing tokens (Sessie 92 - Blog Card Redesign) */
-  --badge-gap-vertical: 6px;     /* Between stacked badges (reduced from 8px) */
-  --badge-to-title: 12px;        /* Badge container → title (new explicit spacing) */
-  --ribbon-clearance: 28px;      /* Header padding for ribbon (reduced from 36px) */
 
   /* Layout */
   --terminal-padding: 20px;
@@ -145,6 +127,12 @@
   --z-feedback: 100;
   --z-modal: 1000;
   --z-cookie: 2000;
+
+  /* Missing variable definitions - Added Sessie 89 for undefined variable fixes */
+  --font-mono: var(--font-terminal);           /* Alias for consistency (used in resource badges) */
+  --color-bg-secondary: var(--color-bg-modal); /* Ad container background */
+  --font-family-primary: var(--font-ui);       /* Future-proof UI font naming (used in search modal) */
+  --color-bg-input: var(--color-bg-hover);     /* Input field background (used in search modal) */
 
   /* Vignette Background - Dark mode (default for :root) */
   --vignette-center: rgba(35, 35, 35, 1);     /* Dark grey center */
@@ -273,7 +261,7 @@
   /* Modal Overlay - Dark dimming in light mode (Bootstrap/Material UI pattern) */
   --color-modal-overlay: rgba(0, 0, 0, 0.5);  /* Semi-transparent dark overlay for focus effect */
 
-  /* Button Colors - Light Mode (Pairing 1: Cyber Professional - WCAG AAA Compliant) */
+  /* Button Colors - Light Mode (PHASE 3: Changed to blue for consistency) */
   --color-button-bg: #1976d2;               /* ✅ Blue base (was green #1a6634) - matches dark mode logic */
   --color-button-bg-hover: #1565c0;         /* ✅ Darker blue hover - WCAG AAA compliant */
   --color-button-text: #ffffff;             /* White text - industry standard for saturated buttons */
@@ -359,30 +347,6 @@ button {
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
 
-/* Arrow variant - BEM modifier for CTA buttons */
-.btn-primary--arrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  white-space: nowrap;
-}
-
-.btn-primary--arrow::after {
-  content: "";
-  width: 7px;
-  height: 7px;
-  border-top: 2px solid currentColor;
-  border-right: 2px solid currentColor;
-  transform: rotate(45deg);
-  display: inline-block;
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
-}
-
-.btn-primary--arrow:hover::after {
-  transform: translateX(4px) rotate(45deg);
-}
-
 .btn-secondary {
   background-color: transparent;
   color: var(--color-ui-secondary);
@@ -394,8 +358,8 @@ button {
 
 .btn-secondary:hover {
   background-color: transparent;
-  border-color: var(--color-ui-primary);
-  color: var(--color-ui-primary);
+  border-color: var(--color-button-bg-hover);
+  color: var(--color-button-bg-hover);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
@@ -411,8 +375,8 @@ button {
 
 .btn-small.btn-secondary:hover {
   background-color: transparent;
-  border-color: var(--color-ui-primary);
-  color: var(--color-ui-primary);
+  border-color: var(--color-button-bg-hover);
+  color: var(--color-button-bg-hover);
 }
 
 .btn-small {
@@ -440,7 +404,7 @@ a.affiliate-link {
   font-size: 1rem;                                  /* 16px responsive */
 
   /* Visual */
-  background-color: var(--color-button-bg);         /* #004494 dark / #1976d2 light */
+  background-color: var(--color-button-bg);         /* #005bb5 dark / #1f7a40 light */
   color: var(--color-button-text);                  /* #ffffff */
   border: 2px solid var(--color-button-bg);         /* Thicker border (was 1px) */
   border-radius: var(--border-radius-button);       /* 4px */
@@ -449,14 +413,9 @@ a.affiliate-link {
   font-family: var(--font-terminal);
   font-weight: var(--font-weight-bold);             /* 700 */
   letter-spacing: 1px;
-  /* text-transform: uppercase; */                  /* ✅ Removed: Use sentence case (industry best practice - Sessie 99) */
+  text-transform: uppercase;
   text-decoration: none;                            /* ✅ Clean: Higher specificity (0,1,1 vs 0,1,0) */
-
-  /* Layout - Flexbox for arrow centering (Sessie 99: consistent with .resource-cta pattern) */
-  display: inline-flex;            /* ✅ Enable flexbox (was inline-block) */
-  align-items: center;             /* ✅ Vertical center arrow with text */
-  gap: 8px;                        /* ✅ Uniform spacing with card CTAs (was 4px - Sessie 99) */
-  white-space: nowrap;             /* ✅ Prevent text wrap on narrow viewports (320px mobile) */
+  display: inline-block;
 
   /* Interaction */
   transition: all var(--transition-fast);           /* 0.15s ease */
@@ -471,29 +430,19 @@ a.affiliate-link:visited {
   background-color: var(--color-button-bg);         /* Maintain button color */
 }
 
-/* Arrow indicator - CSS chevron (consistent with .resource-cta) */
+/* External link indicator - Trust signal */
 a.affiliate-link::after {
-  content: "";                       /* Empty = border-trick arrow (not unicode "→") */
-
-  /* Arrow dimensions: 7x7px chevron */
-  width: 7px;
-  height: 7px;
-
-  /* Border-trick arrow: top + right borders rotated 45deg = → */
-  border-top: 2px solid currentColor;    /* currentColor = theme-aware */
-  border-right: 2px solid currentColor;
-  transform: rotate(45deg);              /* Rotate to point right */
-
-  /* Layout - No margin needed (parent gap: 4px handles spacing) */
-  display: inline-block;             /* ✅ Keep for transform support */
-  flex-shrink: 0;                    /* ✅ Prevent arrow shrinking */
-
-  /* Animation - Preserve hover slide */
-  transition: transform 0.2s ease;   /* Smooth hover animation */
+  content: " →";                        /* Space before arrow for breathing */
+  font-size: 1.2em;                     /* Larger arrow (matches .resource-cta) */
+  line-height: 1;                       /* Consistent baseline */
+  display: inline-block;                /* Enable vertical-align */
+  vertical-align: middle;               /* Text-aligned centering */
+  margin-left: 4px;                     /* Subtle spacing */
+  transition: transform 0.2s ease;
 }
 
 a.affiliate-link:hover {
-  background-color: var(--color-button-bg-hover);   /* #003d85 dark / #1565c0 light */
+  background-color: var(--color-button-bg-hover);   /* #1976d2 dark / #248748 light */
   border-color: var(--color-button-bg-hover);
   color: var(--color-button-text-hover);            /* #ffffff */
   transform: translateY(-2px);                      /* Lift effect */
@@ -502,7 +451,7 @@ a.affiliate-link:hover {
 
 /* Arrow animation on hover */
 a.affiliate-link:hover::after {
-  transform: translateX(3px) rotate(45deg);  /* Both transforms! Subtle slide + preserve rotation */
+  transform: translateX(3px);           /* Subtle slide (less than card buttons) */
 }
 
 a.affiliate-link:focus-visible {
@@ -553,10 +502,10 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
 
 /* Affiliate Ribbon - Top Right Corner (Phase 3/5: Ribbon Redesign) */
 .affiliate-ribbon {
-  /* Positioning - Inset binnen card boundary (prevent overlap) */
+  /* Positioning - Absolute top-right corner */
   position: absolute;
   top: 0;
-  right: 12px;
+  right: 0;
   z-index: 10;
 
   /* Layout */
@@ -594,9 +543,6 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   opacity: 0.8;
 }
 
-/* Sessie 92: Affiliate disclosure REMOVED - header disclosure sufficient for Dutch market (ACM compliant) */
-/* Sessie 92: Affiliate border rules REMOVED - all cards get equal treatment (Dutch minimalism) */
-
 /* ==================== AANBEVOLEN RESOURCES SECTION ==================== */
 
 /* Section header */
@@ -615,112 +561,28 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   color: var(--color-link);                         /* #1f7a40 light */
 }
 
-/* Mobile: Prevent bracket wrapping (Sessie 96 + Sessie 92 fix) */
-@media (max-width: 768px) {
-  .aanbevolen-header {
-    font-size: 0.875rem;              /* 14px - behoud leesbaarheid */
-    letter-spacing: 0;                /* No spacing for maximum compression */
-    white-space: nowrap;              /* Force single line, prevent wrapping */
-
-    /* Voorkom overflow en behoud terminal aesthetic */
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: clip;              /* Hard clip, geen ellipsis - terminal style */
-  }
-
-  /* Los dubbele padding op voor headers (224px → 272px ruimte) */
-  .aanbevolen-resources > .aanbevolen-header {
-    padding-left: 0;
-    padding-right: 0;
-  }
-
-  /* Preventieve fix: Voorkom bracket wrapping in alle h2 headers (Sessie 92) */
-  h2 {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: clip;              /* Terminal aesthetic, geen ellipsis */
-  }
-}
-
-/* Extra small devices: Smaller font to prevent clipping (Sessie 92) */
-@media (max-width: 320px) {
-  .aanbevolen-header {
-    font-size: 0.75rem;               /* 12px - fits in 272px (30 chars × 7.2px = ~216px) */
-  }
-}
-
-/* Breakout container: Allow grid to escape narrow blog container (Sessie 93) */
-.aanbevolen-resources {
-  width: 100vw;                          /* Full viewport width */
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  padding: 0 var(--spacing-lg);          /* 24px horizontal padding */
-}
-
-/* Constrain grid to max-width while keeping cards centered */
-.aanbevolen-resources .resource-grid {
-  max-width: 1040px;                     /* Sessie 96: 3 cards × 340px + 2 × 20px gaps (was 1000px) */
-  margin: 0 auto;                        /* Center the grid */
-}
-
-/* Constrain text elements while keeping grid full-bleed (Sessie 94) */
-/* Exclude .aanbevolen-header to prevent padding on mobile (Sessie 92) */
-.aanbevolen-resources > :not(.resource-grid):not(.aanbevolen-header) {
-  max-width: 720px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: var(--spacing-lg);       /* 24px */
-  padding-right: var(--spacing-lg);      /* 24px */
-}
-
-/* Explicit targeting for blog boxes - overwrites blog.css padding shorthand (Sessie 95) */
-.aanbevolen-resources > .blog-tip,
-.aanbevolen-resources > .blog-info,
-.aanbevolen-resources > .blog-warning {
-  max-width: 720px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Responsive grid: Fixed columns for consistent width (Sessie 92) */
+/* Responsive grid: 3-col → 2-col → 1-col */
 .resource-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);            /* 3 equal columns desktop */
-  gap: 24px;                                        /* Sessie 95: Material Design standard (was var(--spacing-xl) = 32px) */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-xl);                           /* 32px */
   margin-bottom: var(--spacing-xl);
-  justify-items: center;                            /* Sessie 92: Center cards in grid cells */
-}
-
-/* Spacing between affiliate cards and detail reviews (Sessie 99) */
-.aanbevolen-resources + .blog-post-content {
-  margin-top: var(--spacing-xl);                    /* 32px extra whitespace */
-  padding-top: var(--spacing-lg);                   /* 24px breathing room */
 }
 
 /* Product card */
 .resource-card {
   position: relative;                               /* CRITICAL: Positioning context for ribbon */
-  display: grid;                                    /* CSS Grid for perfect alignment */
-  grid-template-rows: auto 1fr auto auto;           /* Header, Description (elastic), Meta, CTA */
-  gap: var(--spacing-md);                           /* 16px between sections */
+  display: flex;                                    /* Enable flexbox for vertical alignment */
+  flex-direction: column;                           /* Stack content vertically */
   background-color: var(--color-bg-terminal);       /* #0d1117 dark */
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-modal);        /* 8px */
-  padding: var(--spacing-lg);                       /* 24px - Sessie 96: Reduced for CTA text space (was 32px) */
+  padding: var(--spacing-xl);                       /* 32px */
   transition: all var(--transition-normal);         /* 0.3s ease */
   box-shadow: var(--shadow-elevation-1);
+  max-width: 380px;                                 /* Prevent oversized cards */
+  margin: 0 auto;                                   /* Center cards in grid */
   overflow: visible;                                /* Allow ribbon to extend beyond card */
-  width: 100%;                                      /* Sessie 92: Full width of grid cell */
-  max-width: 340px;                                 /* Sessie 96: +20px for CTA text breathing room (was 320px) */
-}
-
-/* Sessie 97: Affiliate differentiation - subtle left-border accent (bronze theme) */
-.resource-card.is-affiliate {
-  border-left: 4px solid #CD7F32;                   /* Classic bronze accent - vibrant luxury (Sessie 98) */
-  padding-left: 28px;                               /* 32px - 4px border = optical alignment */
 }
 
 .resource-card:hover {
@@ -733,18 +595,15 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   background-color: var(--color-bg-modal);          /* #ffffff light */
 }
 
-/* Reserve space for ribbon so content doesn't overlap (Sessie 92 - optimized) */
+/* Reserve space for ribbon so content doesn't overlap */
 .resource-card__header {
-  padding-top: var(--ribbon-clearance);  /* 28px (reduced from 36px) */
+  padding-top: 36px;  /* Ribbon height + margin */
 }
 
-/* Icon (badges container) - Natural height (Sessie 92) */
+/* Icon (emoji or text) */
 .resource-icon {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--badge-gap-vertical);                   /* 6px (reduced from 8px) */
   text-align: center;
+  margin-bottom: var(--spacing-md);                 /* 16px */
 }
 
 .resource-icon-text {
@@ -758,37 +617,33 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   font-size: 1.25rem;
   font-weight: var(--font-weight-bold);
   color: var(--color-ui-primary);
-  margin-top: 16px;  /* Sessie 93: More breathing room (was 12px via --badge-to-title) */
   margin-bottom: var(--spacing-sm);                 /* 8px */
   line-height: 1.3;
-  overflow-wrap: break-word;  /* Break long words if needed */
-  word-break: break-word;     /* Webkit fallback */
-  hyphens: auto;              /* Add hyphens for better readability (NL language) */
 }
 
 [data-theme="light"] .resource-title {
   color: var(--color-link);
 }
 
-/* Description - Grid gap handles spacing */
+/* Description */
 .resource-description {
   font-family: var(--font-ui);
   font-size: 0.95rem;
   color: var(--color-text-light);
   line-height: 1.6;
-  overflow-wrap: break-word;  /* Break long words if needed */
-  word-break: break-word;     /* Webkit fallback */
+  margin-bottom: var(--spacing-md);
 }
 
 [data-theme="light"] .resource-description {
   color: var(--color-text);
 }
 
-/* Meta badges - Grid gap handles spacing */
+/* Meta badges */
 .resource-meta {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-sm);                           /* 8px */
+  margin-bottom: var(--spacing-lg);                 /* 24px */
   font-family: var(--font-terminal);
   font-size: 0.85rem;
   color: var(--color-text-dim);
@@ -796,15 +651,28 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
 
 .resource-meta span {
   background-color: var(--color-surface-elevated);
-  color: var(--color-text-dim);  /* Monochrome - supporting data (Sessie 92) */
   padding: 4px 8px;
   border-radius: var(--border-radius-small);        /* 2px */
 }
 
-/* CTA wrapper - Grid positioning handles alignment */
+.resource-platform {
+  color: var(--color-info);
+  font-weight: var(--font-weight-medium);
+}
+
+.resource-price {
+  color: var(--color-success);
+  font-weight: var(--font-weight-bold);
+}
+
+.resource-rating {
+  color: var(--color-warning);
+}
+
+/* CTA wrapper - Consistent spacing above button */
 .resource-card__cta {
-  text-align: center;  /* Center inline-flex buttons */
-  /* Grid gap handles spacing - no margins needed */
+  margin-top: auto;                  /* Flexbox: stick to bottom */
+  padding-top: var(--spacing-md);    /* 16px visual breathing room */
 }
 
 /* Full-width CTA in card */
@@ -817,109 +685,84 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   gap: 8px;
   width: 100%;
 
-  /* Typography */
-  font-family: var(--font-ui);
-  font-size: 0.9rem;
+  /* Typography - FIX: Terminal font for consistency */
+  font-family: var(--font-terminal);              /* ✅ Was: var(--font-ui) */
+  font-size: 0.95rem;
   font-weight: 700;
+  text-transform: uppercase;                      /* ✅ ADD: Terminal aesthetic */
+  letter-spacing: 0.5px;                          /* ✅ ADD: Readability */
   text-decoration: none;
-  white-space: nowrap;  /* Force single line - now safe with duplicate arrow removed */
+  white-space: nowrap;
 
-  /* Visual - Uniform blue base for all buttons (Design System First) */
-  background-color: var(--color-button-bg);   /* Blue #2563eb dark / #1976d2 light */
-  color: var(--color-button-text);             /* #ffffff (theme-aware) */
-  padding: 14px 18px;
-  border-radius: 6px;
-  border: 2px solid var(--color-button-bg);    /* Blue border (consistent with .btn-primary) */
-  min-height: 44px;                            /* WCAG AAA minimum touch target */
+  /* Visual - FIX: Theme-aware variables */
+  background-color: var(--color-button-bg);       /* ✅ Was: var(--color-ui-primary) */
+  color: var(--color-button-text);                /* ✅ Was: #ffffff hardcoded */
+  padding: 14px 24px;
+  border-radius: var(--border-radius-button);     /* ✅ Was: 6px → now 4px */
+  border: 2px solid var(--color-button-bg);       /* ✅ Was: transparent */
 
   /* Animation */
   transition: all 0.2s ease;
   cursor: pointer;
 }
 
-/* Arrow indicator - CSS chevron (Sessie 97: 7x7px border-trick, saves 5-7px vs Unicode) */
+/* Arrow indicator */
 .resource-cta::after {
-  content: "";                       /* Empty - shape created with borders */
-
-  /* Arrow dimensions: 7x7px chevron (vs 12-16px Unicode →) */
-  width: 7px;
-  height: 7px;
-
-  /* Border-trick arrow: top + right borders rotated 45deg = → */
-  border-top: 2px solid currentColor;    /* currentColor = theme-aware (light/dark) */
-  border-right: 2px solid currentColor;
-  transform: rotate(45deg);              /* Rotate to point right */
-
-  /* Layout - Align with text baseline */
+  content: "→";
+  font-size: 1.2em;
+  line-height: 1;                    /* Force consistent baseline */
   display: inline-block;             /* Enable transform without affecting flow */
-  flex-shrink: 0;                    /* Prevent arrow from shrinking if space tight */
-  margin-left: 2px;                  /* Micro-adjustment: Fine-tune optical alignment */
-
-  /* Animation - Preserve hover slide */
-  transition: transform 0.2s ease;   /* Same as before - smooth hover */
+  vertical-align: middle;            /* Explicit vertical centering */
+  transition: transform 0.2s ease;
 }
 
-/* Hover State - Theme-aware blue (Sessie 98: Design System First - consistency with all other buttons) */
+/* Hover State - FIX: Theme-aware variables */
 .resource-cta:hover {
-  background-color: var(--color-button-bg-hover);  /* #003d85 dark / #1565c0 light */
-  border-color: var(--color-button-bg-hover);       /* Consistent with .btn-primary, .affiliate-link */
-  color: var(--color-button-text-hover);            /* #ffffff */
-  transform: translateY(-2px);                      /* Lift effect = CTA feedback */
-  box-shadow: 0 4px 12px var(--color-button-shadow-hover);  /* Blue shadow - theme-aware */
+  background-color: var(--color-button-bg-hover); /* ✅ Was: var(--color-link-hover) */
+  border-color: var(--color-button-bg-hover);     /* ✅ Was: var(--color-ui-primary) */
+  color: var(--color-button-text-hover);          /* ✅ ADD */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--color-button-shadow-hover);  /* ✅ Was: hardcoded rgba */
 }
 
 .resource-cta:hover::after {
-  transform: translateX(4px) rotate(45deg);  /* BOTH transforms! Arrow slides right + stays rotated */
+  transform: translateX(4px);  /* Arrow slides right */
 }
 
-/* Fix: Uniform styling when affiliate-link combined with resource-cta (card buttons) */
-a.affiliate-link.resource-cta {
-  /* Typography - Match .resource-cta exactly */
-  font-family: var(--font-ui);      /* Override affiliate-link's terminal font - Inter for cards */
-  font-size: 0.9rem;                /* Override affiliate-link's 1rem - consistent card sizing */
-  letter-spacing: 0;                /* Override affiliate-link's 1px - Inter doesn't need extra spacing */
-  text-transform: none;             /* Override affiliate-link's uppercase - cleaner aesthetic */
-
-  /* Spacing - Match .resource-cta exactly */
-  padding: 14px 18px;               /* Override affiliate-link's 16px 32px - consistent card padding */
-
-  /* Layout - CRITICAL FIX: Override inline-block from a.affiliate-link (Sessie 98) */
-  display: inline-flex !important;  /* Override inline-block - flexbox required for align-items */
-  align-items: center;              /* Vertical centering for arrow - matches .resource-cta */
-  gap: 8px;                         /* Space between text + arrow - matches .resource-cta */
-}
-
-/* Arrow hover override for combined classes (Sessie 99: margin-left no longer needed - parent gap handles spacing) */
-a.affiliate-link.resource-cta:hover::after {
-  transform: translateX(4px) rotate(45deg);  /* Match .resource-cta hover - 4px slide (not 3px) + preserve rotation */
-}
-
-/* Focus State (Accessibility) */
+/* Focus State (Accessibility) - FIX: Theme-aware outline */
 .resource-cta:focus,
 .resource-cta:focus-visible {
-  outline: 3px solid var(--color-ui-primary) !important;
+  outline: 2px solid var(--color-button-bg) !important;  /* ✅ Was: 3px var(--color-ui-primary) */
   outline-offset: 2px;
 }
 
 /* Active State (Click feedback) */
 .resource-cta:active {
   transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(39, 174, 96, 0.2);  /* Green shadow */
+  box-shadow: 0 2px 6px var(--color-button-shadow-hover);  /* ✅ Was: hardcoded rgba */
 }
 
-/* Sessie 93: Removed redundant base selectors - all buttons now uniform green base */
-/* Affiliate cards: Bronze gradient hover (premium luxury feel) */
-.resource-card.is-affiliate .resource-cta:hover {
-  background: linear-gradient(135deg, #CD7F32 0%, #A97142 100%);  /* Sessie 98: Classic Bronze - vibrant luxury (was muted #d4a574) */
-  border-color: #A97142;                        /* Sessie 98: Metallic bronze - match gradient end */
-  box-shadow: 0 4px 12px rgba(205, 127, 50, 0.3);  /* Sessie 98: Classic bronze shadow - match badges */
+/* Featured Card CTA - Success green instead of blue */
+.resource-card:has(.featured-badge) .resource-cta {
+  background-color: var(--color-success);     /* Green: #27ae60 */
+  border-color: var(--color-success);              /* ✅ ADD for consistency */
+}
+
+.resource-card:has(.featured-badge) .resource-cta:hover {
+  background-color: #229954;                  /* Darker green on hover */
+  border-color: #229954;                           /* ✅ ADD */
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+}
+
+.resource-card:has(.featured-badge) .resource-cta:focus {
+  outline-color: var(--color-success);
 }
 
 /* Mobile: Single column */
 @media (max-width: 768px) {
   .resource-grid {
     grid-template-columns: 1fr;
-    gap: 20px;                                      /* Sessie 95: Tighter on mobile (was var(--spacing-lg) = 24px) */
+    gap: var(--spacing-lg);                         /* 24px instead of 32px */
   }
 
   .resource-card {
@@ -948,48 +791,8 @@ a.affiliate-link.resource-cta:hover::after {
   /* CTA: Full width, larger touch target on mobile */
   .resource-cta {
     width: 100%;
-    padding: 12px 16px;  /* Reduced padding = more space for button text on 375px viewport */
-    font-size: 0.85rem;
-  }
-
-  /* ===== NEW BADGE SYSTEM - Mobile Optimizations (Sessie 92) ===== */
-
-  /* Hide difficulty badge on mobile (space constraint) */
-  .badge-difficulty-beginner,
-  .badge-difficulty-intermediate,
-  .badge-difficulty-advanced {
-    display: none;  /* Keep status + category only */
-  }
-
-  /* Tighter badge spacing */
-  .resource-icon {
-    gap: 4px;  /* 6px → 4px */
-  }
-
-  /* Smaller featured badges */
-  .featured-badge-free,
-  .featured-badge-premium,
-  .featured-badge-neutral {
-    font-size: 0.65rem;
-    padding: 4px 10px;
-  }
-
-  /* Smaller category badges */
-  .badge-technical,
-  .badge-platform,
-  .badge-coding {
-    font-size: 0.7rem;
-    padding: 5px 10px;
-  }
-
-  /* Gesponsord label: Remove brackets on mobile */
-  .affiliate-disclosure::before,
-  .affiliate-disclosure::after {
-    content: "";
-  }
-
-  .affiliate-disclosure {
-    font-size: 0.65rem;
+    padding: 16px 24px;  /* Bigger thumb target (44px+) */
+    font-size: 0.9rem;
   }
 }
 
@@ -1028,7 +831,7 @@ a.affiliate-link.resource-cta:hover::after {
 .resource-category-badge {
   display: inline-block;
   padding: 6px 12px;
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
+  border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -1052,8 +855,8 @@ a.affiliate-link.resource-cta:hover::after {
   border: 2px solid var(--badge-pentest-border);   /* #1e8449 - depth */
 }
 
-/* Sessie 93: Removed .badge-platform (tag deleted from HTML) */
-.badge-websec {
+.badge-websec,
+.badge-platform {
   background-color: var(--badge-websec-bg);        /* #3498db - professional blue */
   color: var(--badge-websec-text);                 /* #ffffff - AA contrast (4.5:1) */
   border: 2px solid var(--badge-websec-border);    /* #2980b9 - depth */
@@ -1097,7 +900,7 @@ a.affiliate-link.resource-cta:hover::after {
   color: #ffffff;
   background: linear-gradient(135deg, #27ae60 0%, #229954 100%);  /* Success green */
   border: 2px solid #2ecc71;
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
+  border-radius: 4px;
   box-shadow: 0 2px 6px rgba(39, 174, 96, 0.3);
 
   transition: all 0.15s ease;
@@ -1106,188 +909,6 @@ a.affiliate-link.resource-cta:hover::after {
 .featured-badge:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(39, 174, 96, 0.4);
-}
-
-/* ==================== NEW BADGE SYSTEM (Sessie 92 - Blog Card Redesign) ==================== */
-
-/* TIER 1: Status Badges (Primary - Conversion driver) */
-.featured-badge-free {
-  display: inline-block;
-  padding: 6px 14px;
-  font-family: var(--font-terminal);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  background: var(--color-success);  /* #3fb950 */
-  color: #ffffff;
-  border: 2px solid #2ecc71;
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  box-shadow: 0 2px 6px rgba(39, 174, 96, 0.3);
-  transition: all 0.15s ease;
-}
-
-.featured-badge-free:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(39, 174, 96, 0.4);
-}
-
-.featured-badge-premium {
-  display: inline-block;
-  padding: 6px 14px;
-  font-family: var(--font-terminal);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  background: linear-gradient(135deg, #B46928 0%, #915523 100%);  /* Darker bronze - WCAG AA + differentiation from buttons */
-  color: #ffffff;  /* White text - matches button hover, better readability */
-  border: 2px solid #915523;  /* Darker bronze border - match gradient end */
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  box-shadow: 0 2px 6px rgba(180, 105, 40, 0.3);  /* Darker bronze shadow */
-  transition: all 0.15s ease;
-}
-
-.featured-badge-premium:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(205, 127, 50, 0.4);  /* Classic bronze shadow (40% opacity) */
-}
-
-.featured-badge-neutral {
-  display: inline-block;
-  padding: 6px 14px;
-  font-family: var(--font-terminal);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  background: var(--color-info);  /* #79c0ff */
-  color: #0a0a0a;
-  border: 2px solid #58a6ff;
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  box-shadow: 0 2px 6px rgba(121, 192, 255, 0.3);
-  transition: all 0.15s ease;
-}
-
-.featured-badge-neutral:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(121, 192, 255, 0.4);
-}
-
-/* TIER 2: Category Badges (Secondary - Content type) */
-/* Note: .badge-platform already exists above, reusing it */
-.badge-technical {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  font-family: var(--font-mono);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  background-color: #27ae60;  /* HTB green */
-  color: #ffffff;
-  border: 2px solid #1e8449;
-}
-
-.badge-technical:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-}
-
-.badge-coding {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  font-family: var(--font-mono);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  background-color: #f39c12;  /* Python gold */
-  color: #0a0a0a;
-  border: 2px solid #e67e22;
-}
-
-.badge-coding:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-}
-
-/* TIER 3: Difficulty Badges (NEW - Skill-based USP!) */
-.badge-difficulty-beginner {
-  display: inline-block;
-  padding: 4px 10px;  /* More compact than category badges */
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  font-size: 0.7rem;  /* Smaller than category */
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  font-family: var(--font-mono);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  background-color: var(--color-success);  /* Green = welcoming */
-  color: #ffffff;
-  border: 2px solid #2ecc71;
-}
-
-.badge-difficulty-beginner:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-}
-
-.badge-difficulty-intermediate {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  font-family: var(--font-mono);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  background-color: var(--color-info);  /* Blue = progression */
-  color: #0a0a0a;
-  border: 2px solid #58a6ff;
-}
-
-.badge-difficulty-intermediate:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-}
-
-.badge-difficulty-advanced {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  font-family: var(--font-mono);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  background-color: var(--color-warning);  /* Orange = challenge */
-  color: #0a0a0a;
-  border: 2px solid #dd8800;
-}
-
-.badge-difficulty-advanced:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
 }
 
 /* Stack badges vertically in icon area */

@@ -359,30 +359,6 @@ button {
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
 
-/* Arrow variant - BEM modifier for CTA buttons */
-.btn-primary--arrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  white-space: nowrap;
-}
-
-.btn-primary--arrow::after {
-  content: "";
-  width: 7px;
-  height: 7px;
-  border-top: 2px solid currentColor;
-  border-right: 2px solid currentColor;
-  transform: rotate(45deg);
-  display: inline-block;
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
-}
-
-.btn-primary--arrow:hover::after {
-  transform: translateX(4px) rotate(45deg);
-}
-
 .btn-secondary {
   background-color: transparent;
   color: var(--color-ui-secondary);
@@ -449,14 +425,9 @@ a.affiliate-link {
   font-family: var(--font-terminal);
   font-weight: var(--font-weight-bold);             /* 700 */
   letter-spacing: 1px;
-  /* text-transform: uppercase; */                  /* ✅ Removed: Use sentence case (industry best practice - Sessie 99) */
+  text-transform: uppercase;
   text-decoration: none;                            /* ✅ Clean: Higher specificity (0,1,1 vs 0,1,0) */
-
-  /* Layout - Flexbox for arrow centering (Sessie 99: consistent with .resource-cta pattern) */
-  display: inline-flex;            /* ✅ Enable flexbox (was inline-block) */
-  align-items: center;             /* ✅ Vertical center arrow with text */
-  gap: 8px;                        /* ✅ Uniform spacing with card CTAs (was 4px - Sessie 99) */
-  white-space: nowrap;             /* ✅ Prevent text wrap on narrow viewports (320px mobile) */
+  display: inline-block;
 
   /* Interaction */
   transition: all var(--transition-fast);           /* 0.15s ease */
@@ -484,9 +455,10 @@ a.affiliate-link::after {
   border-right: 2px solid currentColor;
   transform: rotate(45deg);              /* Rotate to point right */
 
-  /* Layout - No margin needed (parent gap: 4px handles spacing) */
-  display: inline-block;             /* ✅ Keep for transform support */
-  flex-shrink: 0;                    /* ✅ Prevent arrow shrinking */
+  /* Layout - Align with text baseline */
+  display: inline-block;             /* Enable transform without affecting flow */
+  flex-shrink: 0;                    /* Prevent arrow from shrinking */
+  margin-left: 4px;                  /* Spacing from text (was 4px, keep same) */
 
   /* Animation - Preserve hover slide */
   transition: transform 0.2s ease;   /* Smooth hover animation */
@@ -694,12 +666,6 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   justify-items: center;                            /* Sessie 92: Center cards in grid cells */
 }
 
-/* Spacing between affiliate cards and detail reviews (Sessie 99) */
-.aanbevolen-resources + .blog-post-content {
-  margin-top: var(--spacing-xl);                    /* 32px extra whitespace */
-  padding-top: var(--spacing-lg);                   /* 24px breathing room */
-}
-
 /* Product card */
 .resource-card {
   position: relative;                               /* CRITICAL: Positioning context for ribbon */
@@ -889,9 +855,13 @@ a.affiliate-link.resource-cta {
   gap: 8px;                         /* Space between text + arrow - matches .resource-cta */
 }
 
-/* Arrow hover override for combined classes (Sessie 99: margin-left no longer needed - parent gap handles spacing) */
+/* Arrow overrides for combined classes - Fix alignment + hover animation (Sessie 98) */
+a.affiliate-link.resource-cta::after {
+  margin-left: 2px;  /* Match .resource-cta (was 4px from affiliate-link) - precise alignment */
+}
+
 a.affiliate-link.resource-cta:hover::after {
-  transform: translateX(4px) rotate(45deg);  /* Match .resource-cta hover - 4px slide (not 3px) + preserve rotation */
+  transform: translateX(4px) rotate(45deg);  /* Match .resource-cta hover - 4px slide + preserve rotation */
 }
 
 /* Focus State (Accessibility) */
@@ -1142,11 +1112,11 @@ a.affiliate-link.resource-cta:hover::after {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   white-space: nowrap;
-  background: linear-gradient(135deg, #B46928 0%, #915523 100%);  /* Darker bronze - WCAG AA + differentiation from buttons */
-  color: #ffffff;  /* White text - matches button hover, better readability */
-  border: 2px solid #915523;  /* Darker bronze border - match gradient end */
+  background: linear-gradient(135deg, #CD7F32 0%, #A97142 100%);  /* Classic Bronze gradient - vibrant luxury */
+  color: #0a0a0a;
+  border: 2px solid #A97142;  /* Metallic bronze - match gradient end */
   border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  box-shadow: 0 2px 6px rgba(180, 105, 40, 0.3);  /* Darker bronze shadow */
+  box-shadow: 0 2px 6px rgba(205, 127, 50, 0.3);  /* Classic bronze shadow */
   transition: all 0.15s ease;
 }
 

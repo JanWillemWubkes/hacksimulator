@@ -1,8 +1,8 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 16 december 2025
-**Status:** M5 Testing & Launch Phase (LIVE on Netlify) - Monetization MVP Started
-**Sprint:** Sessie 87: Codebase Cleanup & Organization Audit
+**Laatst bijgewerkt:** 03 januari 2026
+**Status:** M5 Testing & Launch Phase (LIVE on Netlify) - Metrics Sync Complete
+**Sprint:** Sessie 92: Document Consistency & Metrics Alignment
 
 ---
 
@@ -653,7 +653,7 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
 - [ ] Audit bundle size breakdown (identify largest files via `ls -lh`)
 - [ ] Check for duplicate code patterns via `grep`/`ripgrep` (>10 line duplicates)
 - [ ] Consider minification: Terser for JS, cssnano for CSS (optional per PRD)
-- [ ] Target: Maintain <400KB bundle (current: ~318KB = 36% buffer remaining)
+- [ ] Target: Reduce to <400KB bundle (current: 470.87KB = 5.8% buffer remaining, requires optimization)
 
 ### Code Quality & Deduplication (4 taken)
 - [ ] Review command modules voor duplicate logic patterns
@@ -1373,14 +1373,14 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 15 december 2025
-**Versie:** 3.2 (Sessie 85: Document Sync - Scope clarification, percentages corrected across all docs)
+**Laatst bijgewerkt:** 03 januari 2026
+**Versie:** 3.3 (Sessie 92: Full Metrics Sync - 144/295 tasks, M5 51%, bundle 470.87 KB aligned across all docs)
 **Totaal Taken:** 295 (MVP: 153, Post-MVP: 142) → M0-M5: 138, M5.5: 15, M6: 33, M7: 40, M8: 40, M9: 19, Phase A: 6
-**Voltooide Taken:** 143 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 10/37, M5.5: 2/15, Phase A: 2/6, M6-M9: 0/132 pending)
-**Voortgang:** 48.5% (143/295 totaal) - MVP: 92.3% (141/153), M5.5: 13% (2/15), Phase A: 33% (2/6), Post-MVP: 0% (0/132)
+**Voltooide Taken:** 144 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 19/37, M5.5: 2/15, Phase A: 2/6, M6-M9: 0/132 pending)
+**Voortgang:** 48.8% (144/295 totaal) - MVP: 92.3% (141/153), M5: 51% (19/37), M5.5: 13% (2/15), Phase A: 33% (2/6), Post-MVP: 0% (0/132)
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
-**Bundle Budget:** 318KB current, 182KB buffer → M5.5: +17-22KB, M6: +60KB, M7: +50KB, M8: +40KB (net +35KB), Total: ~485-490KB / 500KB (97-98%)
+**Bundle Budget:** 470.87KB current, 29.13KB buffer (5.8%) → M5.5: +17-22KB ⚠️ TIGHT, M6: Requires optimization before expansion
 
 ---
 
