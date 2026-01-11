@@ -42,3 +42,10 @@
 # =============================================================================
 /assets/legal/*.html
   Cache-Control: public, max-age=3600, must-revalidate
+
+# =============================================================================
+# AdSense verification: Short cache (Google re-crawls regularly)
+# =============================================================================
+/ads.txt
+  Cache-Control: public, max-age=3600, must-revalidate
+  Content-Type: text/plain
