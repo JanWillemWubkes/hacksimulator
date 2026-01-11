@@ -165,7 +165,7 @@
             <div class="resource-meta">
               <span class="resource-platform">Bol.com</span>
               <span class="resource-price">€39.99</span>
-              <span class="resource-rating">★★★★★ 4.7/5</span>
+              <span class="resource-rating">4.7/5</span>
             </div>
 
             <div class="resource-card__cta">
@@ -197,7 +197,7 @@
             <div class="resource-meta">
               <span class="resource-platform">Bol.com</span>
               <span class="resource-price">€45.99</span>
-              <span class="resource-rating">★★★★★ 4.8/5</span>
+              <span class="resource-rating">4.8/5</span>
             </div>
 
             <div class="resource-card__cta">
@@ -229,7 +229,7 @@
             <div class="resource-meta">
               <span class="resource-platform">Bol.com</span>
               <span class="resource-price">€42.50</span>
-              <span class="resource-rating">★★★★☆ 4.6/5</span>
+              <span class="resource-rating">4.6/5</span>
             </div>
 
             <div class="resource-card__cta">
@@ -261,7 +261,7 @@
             <div class="resource-meta">
               <span class="resource-platform">Bol.com</span>
               <span class="resource-price">€34.99</span>
-              <span class="resource-rating">★★★★☆ 4.5/5</span>
+              <span class="resource-rating">4.5/5</span>
             </div>
 
             <div class="resource-card__cta">
@@ -293,7 +293,7 @@
             <div class="resource-meta">
               <span class="resource-platform">Bol.com</span>
               <span class="resource-price">€38.50</span>
-              <span class="resource-rating">★★★★★ 4.7/5</span>
+              <span class="resource-rating">4.7/5</span>
             </div>
 
             <div class="resource-card__cta">
@@ -313,9 +313,14 @@
 
       <!-- Book 1 -->
       <section class="blog-post-content" id="detail-reviews">
-        <p style="margin-bottom: 1.5rem;">
-          <a href="#aanbevolen-resources" style="color: var(--color-accent); text-decoration: none;">↑ Terug naar overzicht</a>
-        </p>
+
+        <!-- Navigation: Back to overview (immediate escape route) -->
+        <nav class="blog-section-nav blog-section-nav--top" aria-label="Sectie navigatie">
+          <a href="#aanbevolen-resources" class="blog-nav-link">
+            <span class="blog-nav-arrow">↑</span>
+            Terug naar overzicht
+          </a>
+        </nav>
 
         <h2>1. "The Hacker Playbook 3" - Peter Kim</h2>
         <p><strong>Level:</strong> Beginner tot Intermediate | <strong>Taal:</strong> Engels | <strong>Pagina's:</strong> ~350</p>
@@ -493,6 +498,15 @@
             Bestel nu
           </a>
         </p>
+
+        <!-- Navigation: Back to overview (natural return point after all reviews) -->
+        <nav class="blog-section-nav blog-section-nav--bottom" aria-label="Sectie navigatie">
+          <a href="#aanbevolen-resources" class="blog-nav-link">
+            <span class="blog-nav-arrow">↑</span>
+            Terug naar overzicht
+          </a>
+        </nav>
+
       </section>
 
       <!-- FAQ Section -->
