@@ -89,16 +89,6 @@
   --badge-socialeng-border: #c0392b;  /* Darker red for depth */
   --badge-socialeng-text: #ffffff;    /* White text - 4.8:1 contrast (AA+) */
 
-  /* Ribbon System - Affiliate disclosure ribbon (orange gradient for transparency psychology) */
-  --ribbon-affiliate-start: #e67e22;  /* Vibrant orange - attention without aggression */
-  --ribbon-affiliate-end: #d35400;    /* Darker orange - gradient depth */
-  --ribbon-text: #ffffff;             /* White text for ribbon readability */
-
-  /* Featured Content System - Subtle premium/affiliate highlighting (Sessie 92) */
-  --featured-bg-emphasis: rgba(255, 215, 0, 0.08);     /* Subtle background highlights */
-  --featured-border-accent: #ffd700;                   /* Gold - priority borders */
-  --featured-text-strong: #ffc107;                     /* Amber - CTA text emphasis */
-
   /* Typography - Premium Font System (Inter + JetBrains Mono) */
   --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;  /* Primary: UI/Headings - screen-optimized */
   --font-terminal: 'JetBrains Mono Box', 'JetBrains Mono', 'Courier New', 'Courier', monospace;  /* Secondary: Code/Terminal - developer-grade (Box subset for U+2500-257F) */
@@ -432,171 +422,6 @@ button {
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
 
-/* ==================== AFFILIATE LINK - PROMINENT CTA ==================== */
-/* PHASE 3: Higher specificity (a.class) prevents underline inheritance cleanly */
-a.affiliate-link {
-  /* Sizing: Upgrade from btn-small to prominent */
-  padding: var(--spacing-md) var(--spacing-xl);     /* 16px 32px (was 8px 16px) */
-  font-size: 1rem;                                  /* 16px responsive */
-
-  /* Visual */
-  background-color: var(--color-button-bg);         /* #004494 dark / #1976d2 light */
-  color: var(--color-button-text);                  /* #ffffff */
-  border: 2px solid var(--color-button-bg);         /* Thicker border (was 1px) */
-  border-radius: var(--border-radius-button);       /* 4px */
-
-  /* Typography */
-  font-family: var(--font-terminal);
-  font-weight: var(--font-weight-bold);             /* 700 */
-  letter-spacing: 1px;
-  /* text-transform: uppercase; */                  /* ✅ Removed: Use sentence case (industry best practice - Sessie 99) */
-  text-decoration: none;                            /* ✅ Clean: Higher specificity (0,1,1 vs 0,1,0) */
-
-  /* Layout - Flexbox for arrow centering (Sessie 99: consistent with .resource-cta pattern) */
-  display: inline-flex;            /* ✅ Enable flexbox (was inline-block) */
-  align-items: center;             /* ✅ Vertical center arrow with text */
-  gap: 8px;                        /* ✅ Uniform spacing with card CTAs (was 4px - Sessie 99) */
-  white-space: nowrap;             /* ✅ Prevent text wrap on narrow viewports (320px mobile) */
-
-  /* Interaction */
-  transition: all var(--transition-fast);           /* 0.15s ease */
-  cursor: pointer;
-}
-
-/* Link states - Override browser defaults for visited links */
-a.affiliate-link:link,
-a.affiliate-link:visited {
-  text-decoration: none;                            /* Force underline removal in all states */
-  color: var(--color-button-text);                  /* Maintain white text (not browser purple) */
-  background-color: var(--color-button-bg);         /* Maintain button color */
-}
-
-/* Arrow indicator - CSS chevron (consistent with .resource-cta) */
-a.affiliate-link::after {
-  content: "";                       /* Empty = border-trick arrow (not unicode "→") */
-
-  /* Arrow dimensions: 7x7px chevron */
-  width: 7px;
-  height: 7px;
-
-  /* Border-trick arrow: top + right borders rotated 45deg = → */
-  border-top: 2px solid currentColor;    /* currentColor = theme-aware */
-  border-right: 2px solid currentColor;
-  transform: rotate(45deg);              /* Rotate to point right */
-
-  /* Layout - No margin needed (parent gap: 4px handles spacing) */
-  display: inline-block;             /* ✅ Keep for transform support */
-  flex-shrink: 0;                    /* ✅ Prevent arrow shrinking */
-
-  /* Animation - Preserve hover slide */
-  transition: transform 0.2s ease;   /* Smooth hover animation */
-}
-
-a.affiliate-link:hover {
-  background-color: var(--color-button-bg-hover);   /* #003d85 dark / #1565c0 light */
-  border-color: var(--color-button-bg-hover);
-  color: var(--color-button-text-hover);            /* #ffffff */
-  transform: translateY(-2px);                      /* Lift effect */
-  box-shadow: 0 4px 12px var(--color-button-shadow-hover);
-}
-
-/* Arrow animation on hover */
-a.affiliate-link:hover::after {
-  transform: translateX(3px) rotate(45deg);  /* Both transforms! Subtle slide + preserve rotation */
-}
-
-a.affiliate-link:focus-visible {
-  outline: 2px solid var(--color-button-bg);
-  outline-offset: 2px;
-}
-
-a.affiliate-link:active {
-  transform: translateY(0);
-  box-shadow: none;
-}
-
-/* Inline context: Keep in paragraph flow + Override blog link styles */
-/* ULTRA HIGH SPECIFICITY: Defeats [data-theme=light] .blog-post-content p a (0,1,3,1) with 0,1,3,2 */
-html .blog-post-content p a.affiliate-link,
-html .blog-post-content ol a.affiliate-link,
-html .blog-post-content ul a.affiliate-link,
-html[data-theme=light] .blog-post-content p a.affiliate-link,
-html[data-theme=light] .blog-post-content ol a.affiliate-link,
-html[data-theme=light] .blog-post-content ul a.affiliate-link {
-  margin: var(--spacing-sm) 0;                      /* 8px vertical spacing */
-  color: var(--color-button-text) !important;       /* ✅ Force white text (spec 0,1,3,2) */
-  text-decoration: none !important;                 /* ✅ Remove underline */
-  background-color: var(--color-button-bg);         /* Ensure button background */
-}
-
-/* Visited state - maintain button appearance */
-html .blog-post-content p a.affiliate-link:visited,
-html .blog-post-content ol a.affiliate-link:visited,
-html .blog-post-content ul a.affiliate-link:visited,
-html[data-theme=light] .blog-post-content p a.affiliate-link:visited,
-html[data-theme=light] .blog-post-content ol a.affiliate-link:visited,
-html[data-theme=light] .blog-post-content ul a.affiliate-link:visited {
-  color: var(--color-button-text) !important;
-  background-color: var(--color-button-bg);
-}
-
-/* Hover state - maintain button appearance */
-html .blog-post-content p a.affiliate-link:hover,
-html .blog-post-content ol a.affiliate-link:hover,
-html .blog-post-content ul a.affiliate-link:hover,
-html[data-theme=light] .blog-post-content p a.affiliate-link:hover,
-html[data-theme=light] .blog-post-content ol a.affiliate-link:hover,
-html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
-  color: var(--color-button-text-hover) !important;
-  background-color: var(--color-button-bg-hover);
-}
-
-/* Affiliate Ribbon - Top Right Corner (Phase 3/5: Ribbon Redesign) */
-.affiliate-ribbon {
-  /* Positioning - Inset binnen card boundary (prevent overlap) */
-  position: absolute;
-  top: 0;
-  right: 12px;
-  z-index: 10;
-
-  /* Layout */
-  padding: 8px 16px;
-
-  /* Typography - Terminal Aesthetic */
-  font-family: var(--font-terminal);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--ribbon-text);  /* #ffffff */
-  white-space: nowrap;
-
-  /* Visual - Orange Gradient Background */
-  background: linear-gradient(135deg,
-    var(--ribbon-affiliate-start) 0%,   /* #e67e22 - vibrant orange */
-    var(--ribbon-affiliate-end) 100%);  /* #d35400 - darker orange */
-
-  /* Ribbon Shape - Angled bottom-left corner */
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 10px 100%);
-
-  /* Depth */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-}
-
-/* ASCII Brackets for Terminal Feel */
-.affiliate-ribbon::before {
-  content: "[ ";
-  opacity: 0.8;
-}
-
-.affiliate-ribbon::after {
-  content: " ]";
-  opacity: 0.8;
-}
-
-/* Sessie 92: Affiliate disclosure REMOVED - header disclosure sufficient for Dutch market (ACM compliant) */
-/* Sessie 92: Affiliate border rules REMOVED - all cards get equal treatment (Dutch minimalism) */
-
 /* ==================== AANBEVOLEN RESOURCES SECTION ==================== */
 
 /* Section header */
@@ -694,7 +519,7 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   justify-items: center;                            /* Sessie 92: Center cards in grid cells */
 }
 
-/* Spacing between affiliate cards and detail reviews (Sessie 99) */
+/* Spacing between resource cards and detail reviews (Sessie 99) */
 .aanbevolen-resources + .blog-post-content {
   margin-top: var(--spacing-xl);                    /* 32px extra whitespace */
   padding-top: var(--spacing-lg);                   /* 24px breathing room */
@@ -715,12 +540,6 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
   overflow: visible;                                /* Allow ribbon to extend beyond card */
   width: 100%;                                      /* Sessie 92: Full width of grid cell */
   max-width: 340px;                                 /* Sessie 96: +20px for CTA text breathing room (was 320px) */
-}
-
-/* Sessie 97: Affiliate differentiation - subtle left-border accent (bronze theme) */
-.resource-card.is-affiliate {
-  border-left: 4px solid #CD7F32;                   /* Classic bronze accent - vibrant luxury (Sessie 98) */
-  padding-left: 28px;                               /* 32px - 4px border = optical alignment */
 }
 
 .resource-card:hover {
@@ -862,7 +681,7 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
 /* Hover State - Theme-aware blue (Sessie 98: Design System First - consistency with all other buttons) */
 .resource-cta:hover {
   background-color: var(--color-button-bg-hover);  /* #003d85 dark / #1565c0 light */
-  border-color: var(--color-button-bg-hover);       /* Consistent with .btn-primary, .affiliate-link */
+  border-color: var(--color-button-bg-hover);       /* Consistent with .btn-primary */
   color: var(--color-button-text-hover);            /* #ffffff */
   transform: translateY(-2px);                      /* Lift effect = CTA feedback */
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);  /* Blue shadow - theme-aware */
@@ -870,28 +689,6 @@ html[data-theme=light] .blog-post-content ul a.affiliate-link:hover {
 
 .resource-cta:hover::after {
   transform: translateX(4px) rotate(45deg);  /* BOTH transforms! Arrow slides right + stays rotated */
-}
-
-/* Fix: Uniform styling when affiliate-link combined with resource-cta (card buttons) */
-a.affiliate-link.resource-cta {
-  /* Typography - Match .resource-cta exactly */
-  font-family: var(--font-ui);      /* Override affiliate-link's terminal font - Inter for cards */
-  font-size: 0.9rem;                /* Override affiliate-link's 1rem - consistent card sizing */
-  letter-spacing: 0;                /* Override affiliate-link's 1px - Inter doesn't need extra spacing */
-  text-transform: none;             /* Override affiliate-link's uppercase - cleaner aesthetic */
-
-  /* Spacing - Match .resource-cta exactly */
-  padding: 14px 18px;               /* Override affiliate-link's 16px 32px - consistent card padding */
-
-  /* Layout - CRITICAL FIX: Override inline-block from a.affiliate-link (Sessie 98) */
-  display: inline-flex !important;  /* Override inline-block - flexbox required for align-items */
-  align-items: center;              /* Vertical centering for arrow - matches .resource-cta */
-  gap: 8px;                         /* Space between text + arrow - matches .resource-cta */
-}
-
-/* Arrow hover override for combined classes (Sessie 99: margin-left no longer needed - parent gap handles spacing) */
-a.affiliate-link.resource-cta:hover::after {
-  transform: translateX(4px) rotate(45deg);  /* Match .resource-cta hover - 4px slide (not 3px) + preserve rotation */
 }
 
 /* Focus State (Accessibility) */
@@ -907,14 +704,6 @@ a.affiliate-link.resource-cta:hover::after {
   box-shadow: 0 2px 6px rgba(39, 174, 96, 0.2);  /* Green shadow */
 }
 
-/* Sessie 93: Removed redundant base selectors - all buttons now uniform green base */
-/* Affiliate cards: Bronze gradient hover (premium luxury feel) */
-.resource-card.is-affiliate .resource-cta:hover {
-  background: linear-gradient(135deg, #CD7F32 0%, #A97142 100%);  /* Sessie 98: Classic Bronze - vibrant luxury (was muted #d4a574) */
-  border-color: #A97142;                        /* Sessie 98: Metallic bronze - match gradient end */
-  box-shadow: 0 4px 12px rgba(205, 127, 50, 0.3);  /* Sessie 98: Classic bronze shadow - match badges */
-}
-
 /* Mobile: Single column */
 @media (max-width: 768px) {
   .resource-grid {
@@ -924,12 +713,6 @@ a.affiliate-link.resource-cta:hover::after {
 
   .resource-card {
     padding: var(--spacing-lg);                     /* 24px instead of 32px */
-  }
-
-  /* Ribbon: Smaller on mobile */
-  .affiliate-ribbon {
-    font-size: 0.65rem;
-    padding: 6px 12px;
   }
 
   /* Header: Less padding on mobile */
@@ -982,15 +765,6 @@ a.affiliate-link.resource-cta:hover::after {
     padding: 5px 10px;
   }
 
-  /* Gesponsord label: Remove brackets on mobile */
-  .affiliate-disclosure::before,
-  .affiliate-disclosure::after {
-    content: "";
-  }
-
-  .affiliate-disclosure {
-    font-size: 0.65rem;
-  }
 }
 
 /* Tablet: 2 columns */

@@ -12,9 +12,9 @@
 **Tech Stack:** Vanilla JS/CSS, client-side only, <500KB bundle, no backend (MVP)
 **Language:** UI=NL | Commands=EN | Help/Errors=NL (see §4 Taal Strategie)
 
-**Status:** ✅ LIVE on Netlify | M5 Testing + M5.5 Monetization in progress
+**Status:** ✅ LIVE on Netlify | M5 Testing in progress
 **URLs:** [Production](https://famous-frangollo-b5a758.netlify.app/) | [GitHub](https://github.com/JanWillemWubkes/hacksimulator)
-**Blog:** 7 posts live at `/blog/` (60+ inline jargon explanations - Sessie 89 FASE 2)
+**Blog:** 4 posts live at `/blog/` (60+ inline jargon explanations)
 **Contact:** contact@hacksimulator.nl (Gmail forwarding - Sessie 91)
 
 **Performance:** Lighthouse 88+/100/100/100 | ~2s load | Playwright E2E 16/16 passing
@@ -30,7 +30,6 @@
 **Core:** §2 Kritieke Niet Doen | §3 Output Principe (80/20) | §4 Taal Strategie | §5 Educational Patterns | §6 Tone of Voice
 **Implementatie:** §7 Command Checklist | §8 Architectural Patterns | §9 Recent Learnings (Last 5 Sessions)
 **Workflow:** §10 Sessie Protocol | §11 Communicatie Grondregels | §12 Troubleshooting | §13 Referenties
-**Monetization:** §14 Monetization Patterns
 
 ---
 
@@ -451,12 +450,7 @@ return `Scan complete: 3 ports open`;
    - Example: `.btn { border: 2px solid transparent; }` then `.btn:hover { border-color: var(--color-primary); }`
 
 **Mobile Specific:**
-9. **Text wrapping on mobile:** Long text (URLs, affiliate badges) breaks layout
-   - Root cause: Sessie 88 - missing `white-space: nowrap` on critical elements
-   - Fix: `.affiliate-badge { white-space: nowrap; }` in `styles/main.css` line 427
-   - Test: Resize to 375px width, check `blog/*.html` affiliate CTAs
-
-10. **Touch events not firing:** Missing touch handlers OR tap targets <44x44px
+9. **Touch events not firing:** Missing touch handlers OR tap targets <44x44px
     - Fix: Add `touchstart` listeners alongside `click` events
     - Minimum size: `min-width: 44px; min-height: 44px;` (WCAG AAA)
     - File: `styles/mobile.css` lines 50-80
@@ -475,12 +469,6 @@ return `Scan complete: 3 ports open`;
 **Netlify/Domain setup:** `docs/netlify-setup.md` - Complete domain launch guide (18KB)
 **Filesystem structure:** PRD Bijlage B
 **Tech rationale:** PRD §13
-
----
-
-## 💰 Monetization Patterns
-
-→ **Volledige monetization specs:** PRD §21 (Ethical principles, 3-phase strategy, implementation patterns, GDPR compliance, bundle management, revenue projections)
 
 ---
 

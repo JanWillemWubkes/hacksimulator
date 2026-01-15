@@ -18,7 +18,7 @@
 | M3: Network & Security | ✅ Voltooid | 28/28 | 100% |
 | M4: UX & Polish | ✅ Voltooid | 43/43 | 100% |
 | M5: Testing & Launch | 🔵 In uitvoering | 19/37 | 51% | ✅ **Performance Testing 100% + Configuration 100%**
-| M5.5: Monetization MVP | 🏗️ In Progress | 2/15 | 13% |
+| M5.5: Monetization MVP | ❌ Geannuleerd | - | - | Affiliate aanvragen afgewezen |
 | M6: Tutorial System | ⏭️ Gepland | 0/33 | 0% |
 | M7: Gamification | ⏭️ Gepland | 0/40 | 0% |
 | M8: Analytics & Scaling | ⏭️ Gepland | 0/40 | 0% |
@@ -450,93 +450,11 @@
 
 ---
 
-### M5.5: Monetization MVP (Week 12-13)
-**Doel:** Implement passive revenue streams without backend
-**Tijdsinschatting:** 15-17 uur (2 weken)
-**Status:** 🏗️ In Progress (2/15 tasks - 13%)
-**Dependencies:** M5 Testing & Launch complete
-**Revenue Target:** €80-300/month (Phase 1 validation)
-
-#### Donaties (2 tasks, 3 hours)
-- [x] Create PayPal.me account (Sessie 74 - 15 min)
-  - Username: `HackSimulator`
-  - Personal account (upgrade to business at >€2,500/year)
-  - Ko-fi: optional, not created yet
-- [x] Add donation button to footer with CSS styling (Sessie 69-73)
-  - ✅ Updated `index.html` footer section (`.btn-donate-compact`)
-  - ✅ Added `.btn-donate-compact` class to `styles/main.css`
-  - ✅ Updated `assets/legal/terms.html` with PayPal disclaimer
-
-#### Affiliate Links (4 tasks, 6 hours)
-- [ ] Apply to 5 affiliate programs (2 hours)
-  - Bol.com Partner Program (7% commission)
-  - Udemy Affiliate (10% commission)
-  - TryHackMe Affiliate (15% recurring)
-  - Skillshare Affiliate (40% first payment)
-  - Amazon Associates (3-5%)
-- [ ] Create `src/ui/affiliate-links.js` with click tracking (1 hour)
-  - Link manager with analytics integration
-  - Add `affiliate_click` event to `src/analytics/events.js`
-- [x] ✅ Write 2 blog posts with affiliate links (compleet: 24 dec 2024)
-  - `blog/top-5-hacking-boeken.html` (Bol.com links)
-  - `blog/beste-online-cursussen-ethical-hacking.html` (Udemy, TryHackMe, Skillshare)
-  - **Note:** Posts geschreven + geïntegreerd in blog index met "Bronnen" category
-- [ ] Update legal docs with affiliate disclosure (1 hour)
-  - Create `assets/legal/affiliate-disclosure.html`
-  - Update `assets/legal/terms.html` with disclosure section
-  - Add "Resources" page to footer in `index.html`
-
-#### AdSense Integration (9 tasks, 6 hours)
-- [ ] Apply for AdSense account (1 hour, then 1-3 days approval wait)
-  - Emphasize "EDUCATIONAL SIMULATOR" in application
-  - Reference legal disclaimers prominently
-- [ ] Update CSP in `index.html` for AdSense scripts (15 min)
-  - Add `https://*.googleadservices.com` to `script-src`
-  - Add `https://*.googlesyndication.com` to `script-src`
-- [ ] Add AdSense script tag to `<head>` in `index.html` (15 min)
-- [ ] Design ad placements (1 hour)
-  - Footer: 1 horizontal banner (728x90 desktop, 320x50 mobile)
-  - Blog sidebar: 1 vertical banner (300x250)
-  - NEVER in terminal output
-- [ ] Implement `.ad-container` CSS with responsive breakpoints (30 min)
-  - `.ad-container-footer` in `styles/main.css`
-  - `.ad-container-sidebar` in `styles/main.css`
-  - Mobile: hide sidebar ad <768px
-- [ ] Update `src/analytics/consent.js` for AdSense consent (1 hour)
-  - Add AdSense-specific consent toggle
-  - Update cookie banner with "Advertising Cookies" section
-- [ ] Update `assets/legal/cookies.html` with AdSense disclosure (30 min)
-  - Add AdSense data processing section
-  - Explain cookies for ad personalization
-- [ ] Update `assets/legal/privacy.html` with Google as data processor (30 min)
-  - Add Google to data processors list
-  - IP anonymization disclosure
-- [ ] Test on production + monitor compliance (30 min)
-  - Verify zero console errors from ad scripts
-  - Check mobile ad rendering
-  - Monitor AdSense approval status
-
-**Success Criteria:**
-- AdSense account approved (yes/no)
-- Affiliate applications approved (5/5)
-- Zero console errors from monetization scripts
-- Bundle size increase ≤20KB (target: <340KB total)
-- AdSense CTR >1% after 1 month
-- Affiliate clicks >10/month after 1 month
-- Donations: 1-3/month after 1 month
-
-**Decision Point (Month 3):**
-- If revenue >€200/month → Proceed to Phase 3 backend build (M8 or new M10)
-- If revenue €100-200/month → Implement Phase 2 sponsorships
-- If revenue <€100/month → Focus on traffic growth (SEO, content marketing)
-
-**Bundle Size Impact:**
-- Current: 318KB / 500KB (182KB buffer, 36%)
-- AdSense script: +15-20KB
-- Affiliate manager: +2KB
-- Donations: +0KB (external link)
-- **New total:** 335-340KB / 500KB (160-165KB buffer, 32-33%) ✅ SAFE
-- **Total M5.5 impact:** +17-22KB
+### M5.5: Monetization MVP ❌ GEANNULEERD
+**Status:** Geannuleerd (januari 2026)
+**Reden:** Affiliate aanvragen worden structureel afgewezen. Besloten om deze monetization strategie niet verder te vervolgen.
+**Behouden:** PayPal donatie knop in footer (reeds geïmplementeerd in Sessie 69-74)
+**Verwijderd:** Alle affiliate code, blog posts met affiliate links, disclosure pagina's
 
 ---
 
@@ -1373,14 +1291,14 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 03 januari 2026
-**Versie:** 3.3 (Sessie 92: Full Metrics Sync - 144/295 tasks, M5 51%, bundle 470.87 KB aligned across all docs)
-**Totaal Taken:** 295 (MVP: 153, Post-MVP: 142) → M0-M5: 138, M5.5: 15, M6: 33, M7: 40, M8: 40, M9: 19, Phase A: 6
-**Voltooide Taken:** 144 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 19/37, M5.5: 2/15, Phase A: 2/6, M6-M9: 0/132 pending)
-**Voortgang:** 48.8% (144/295 totaal) - MVP: 92.3% (141/153), M5: 51% (19/37), M5.5: 13% (2/15), Phase A: 33% (2/6), Post-MVP: 0% (0/132)
+**Laatst bijgewerkt:** 15 januari 2026
+**Versie:** 3.4 (Affiliate systeem verwijderd - M5.5 geannuleerd)
+**Totaal Taken:** 280 (MVP: 153, Post-MVP: 127) → M0-M5: 138, M6: 33, M7: 40, M8: 40, M9: 19, Phase A: 6
+**Voltooide Taken:** 142 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 19/37, Phase A: 2/6, M6-M9: 0/132 pending)
+**Voortgang:** 50.7% (142/280 totaal) - MVP: 92.3% (141/153), M5: 51% (19/37), Phase A: 33% (2/6), Post-MVP: 0% (0/127)
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
-**Bundle Budget:** 470.87KB current, 29.13KB buffer (5.8%) → M5.5: +17-22KB ⚠️ TIGHT, M6: Requires optimization before expansion
+**Bundle Budget:** ~445KB current (affiliate verwijderd), ~55KB buffer (11%)
 
 ---
 
