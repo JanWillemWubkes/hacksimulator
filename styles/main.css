@@ -67,28 +67,6 @@
   /* Alert/Info Box Surfaces - Neutral backgrounds for blog content boxes */
   --color-surface-elevated: rgba(255, 255, 255, 0.05);  /* Subtle white tint - professional alerts (GitHub Docs pattern) */
   --color-surface-elevated-hover: rgba(255, 255, 255, 0.08);  /* Slightly brighter hover state */
-
-  /* Badge System - Category badges for book/resource grids (Terminal aesthetic with AAA contrast) */
-  --badge-pentest-bg: #27ae60;        /* HTB-inspired green for penetration testing */
-  --badge-pentest-border: #1e8449;    /* Darker green for depth */
-  --badge-pentest-text: #ffffff;      /* White text - 4.7:1 contrast (AA+) */
-
-  --badge-websec-bg: #3498db;         /* Professional blue for web security */
-  --badge-websec-border: #2980b9;     /* Darker blue for depth */
-  --badge-websec-text: #ffffff;       /* White text - 4.5:1 contrast (AA) */
-
-  --badge-exploits-bg: #16a085;       /* Teal for technical/exploit topics */
-  --badge-exploits-border: #117a65;   /* Darker teal for depth */
-  --badge-exploits-text: #ffffff;     /* White text - 4.6:1 contrast (AA) */
-
-  --badge-python-bg: #f39c12;         /* Python gold/orange */
-  --badge-python-border: #e67e22;     /* Darker orange for depth */
-  --badge-python-text: #0a0a0a;       /* Dark text - 8.9:1 contrast (AAA ✓) */
-
-  --badge-socialeng-bg: #e74c3c;      /* Danger red for social engineering */
-  --badge-socialeng-border: #c0392b;  /* Darker red for depth */
-  --badge-socialeng-text: #ffffff;    /* White text - 4.8:1 contrast (AA+) */
-
   /* Typography - Premium Font System (Inter + JetBrains Mono) */
   --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;  /* Primary: UI/Headings - screen-optimized */
   --font-terminal: 'JetBrains Mono Box', 'JetBrains Mono', 'Courier New', 'Courier', monospace;  /* Secondary: Code/Terminal - developer-grade (Box subset for U+2500-257F) */
@@ -106,11 +84,6 @@
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
-
-  /* Badge-specific spacing tokens (Sessie 92 - Blog Card Redesign) */
-  --badge-gap-vertical: 6px;     /* Between stacked badges (reduced from 8px) */
-  --badge-to-title: 12px;        /* Badge container → title (new explicit spacing) */
-  --ribbon-clearance: 28px;      /* Header padding for ribbon (reduced from 36px) */
 
   /* Layout */
   --terminal-padding: 20px;
@@ -554,15 +527,15 @@ button {
 
 /* Reserve space for ribbon so content doesn't overlap (Sessie 92 - optimized) */
 .resource-card__header {
-  padding-top: var(--ribbon-clearance);  /* 28px (reduced from 36px) */
+  padding-top: 28px;
 }
 
-/* Icon (badges container) - Natural height (Sessie 92) */
+/* Icon container - Natural height (Sessie 92) */
 .resource-icon {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--badge-gap-vertical);                   /* 6px (reduced from 8px) */
+  gap: 6px;
   text-align: center;
 }
 
@@ -577,7 +550,7 @@ button {
   font-size: 1.25rem;
   font-weight: var(--font-weight-bold);
   color: var(--color-ui-primary);
-  margin-top: 16px;  /* Sessie 93: More breathing room (was 12px via --badge-to-title) */
+  margin-top: 16px;
   margin-bottom: var(--spacing-sm);                 /* 8px */
   line-height: 1.3;
   overflow-wrap: break-word;  /* Break long words if needed */
@@ -734,37 +707,6 @@ button {
     padding: 12px 16px;  /* Reduced padding = more space for button text on 375px viewport */
     font-size: 0.85rem;
   }
-
-  /* ===== NEW BADGE SYSTEM - Mobile Optimizations (Sessie 92) ===== */
-
-  /* Hide difficulty badge on mobile (space constraint) */
-  .badge-difficulty-beginner,
-  .badge-difficulty-intermediate,
-  .badge-difficulty-advanced {
-    display: none;  /* Keep status + category only */
-  }
-
-  /* Tighter badge spacing */
-  .resource-icon {
-    gap: 4px;  /* 6px → 4px */
-  }
-
-  /* Smaller featured badges */
-  .featured-badge-free,
-  .featured-badge-premium,
-  .featured-badge-neutral {
-    font-size: 0.65rem;
-    padding: 4px 10px;
-  }
-
-  /* Smaller category badges */
-  .badge-technical,
-  .badge-platform,
-  .badge-coding {
-    font-size: 0.7rem;
-    padding: 5px 10px;
-  }
-
 }
 
 /* Tablet: 2 columns */
@@ -772,304 +714,6 @@ button {
   .resource-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-}
-
-/* Accessibility: Respect user's motion preferences */
-@media (prefers-reduced-motion: reduce) {
-  .resource-cta,
-  .resource-cta::after,
-  .resource-category-badge {
-    transition: none;
-  }
-
-  .resource-cta:hover {
-    transform: none;
-  }
-
-  .resource-cta:hover::after {
-    transform: none;
-  }
-
-  .resource-category-badge:hover {
-    transform: none;
-  }
-}
-
-/* ==================== CATEGORY BADGES (AFFILIATE GRID) ==================== */
-
-/* Category Badges (replace emoji icons) */
-/* Category Badge Base - Enhanced contrast + Interactive hover */
-.resource-category-badge {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  font-family: var(--font-mono);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;  /* Prevent wrapping */
-  transition: transform 0.15s ease, box-shadow 0.15s ease;  /* Interactive feedback */
-}
-
-/* Hover effect for interactive feel */
-.resource-category-badge:hover {
-  transform: translateY(-1px);  /* Subtle lift */
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);  /* Elevated shadow */
-}
-
-/* Badge Color Variants with Enhanced Contrast + Borders */
-.badge-pentest {
-  background-color: var(--badge-pentest-bg);       /* #27ae60 - HTB green */
-  color: var(--badge-pentest-text);                /* #ffffff - AA+ contrast (4.7:1) */
-  border: 2px solid var(--badge-pentest-border);   /* #1e8449 - depth */
-}
-
-/* Sessie 93: Removed .badge-platform (tag deleted from HTML) */
-.badge-websec {
-  background-color: var(--badge-websec-bg);        /* #3498db - professional blue */
-  color: var(--badge-websec-text);                 /* #ffffff - AA contrast (4.5:1) */
-  border: 2px solid var(--badge-websec-border);    /* #2980b9 - depth */
-}
-
-.badge-exploits,
-.badge-creative {
-  background-color: var(--badge-exploits-bg);      /* #16a085 - teal */
-  color: var(--badge-exploits-text);               /* #ffffff - AA contrast (4.6:1) */
-  border: 2px solid var(--badge-exploits-border);  /* #117a65 - depth */
-}
-
-.badge-python,
-.badge-bootcamp {
-  background-color: var(--badge-python-bg);        /* #f39c12 - Python gold */
-  color: var(--badge-python-text);                 /* #0a0a0a - AAA contrast (8.9:1) ✓ */
-  border: 2px solid var(--badge-python-border);    /* #e67e22 - depth */
-}
-
-.badge-socialeng {
-  background-color: var(--badge-socialeng-bg);     /* #e74c3c - danger red */
-  color: var(--badge-socialeng-text);              /* #ffffff - AA+ contrast (4.8:1) */
-  border: 2px solid var(--badge-socialeng-border); /* #c0392b - depth */
-}
-
-/* ==================== FEATURED BADGE (AFFILIATE GRID) ==================== */
-
-/* Featured Badge - Highlights recommended resource */
-.featured-badge {
-  display: inline-block;
-  padding: 6px 14px;
-  margin-bottom: 8px;                /* Space from category badge */
-
-  font-family: var(--font-terminal);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  white-space: nowrap;
-
-  color: #ffffff;
-  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);  /* Success green */
-  border: 2px solid #2ecc71;
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  box-shadow: 0 2px 6px rgba(39, 174, 96, 0.3);
-
-  transition: all 0.15s ease;
-}
-
-.featured-badge:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(39, 174, 96, 0.4);
-}
-
-/* ==================== NEW BADGE SYSTEM (Sessie 92 - Blog Card Redesign) ==================== */
-
-/* TIER 1: Status Badges (Primary - Conversion driver) */
-.featured-badge-free {
-  display: inline-block;
-  padding: 6px 14px;
-  font-family: var(--font-terminal);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  background: var(--color-success);  /* #3fb950 */
-  color: #ffffff;
-  border: 2px solid #2ecc71;
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  box-shadow: 0 2px 6px rgba(39, 174, 96, 0.3);
-  transition: all 0.15s ease;
-}
-
-.featured-badge-free:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(39, 174, 96, 0.4);
-}
-
-.featured-badge-premium {
-  display: inline-block;
-  padding: 6px 14px;
-  font-family: var(--font-terminal);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  background: linear-gradient(135deg, #B46928 0%, #915523 100%);  /* Darker bronze - WCAG AA + differentiation from buttons */
-  color: #ffffff;  /* White text - matches button hover, better readability */
-  border: 2px solid #915523;  /* Darker bronze border - match gradient end */
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  box-shadow: 0 2px 6px rgba(180, 105, 40, 0.3);  /* Darker bronze shadow */
-  transition: all 0.15s ease;
-}
-
-.featured-badge-premium:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(205, 127, 50, 0.4);  /* Classic bronze shadow (40% opacity) */
-}
-
-.featured-badge-neutral {
-  display: inline-block;
-  padding: 6px 14px;
-  font-family: var(--font-terminal);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  background: var(--color-info);  /* #79c0ff */
-  color: #0a0a0a;
-  border: 2px solid #58a6ff;
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  box-shadow: 0 2px 6px rgba(121, 192, 255, 0.3);
-  transition: all 0.15s ease;
-}
-
-.featured-badge-neutral:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(121, 192, 255, 0.4);
-}
-
-/* TIER 2: Category Badges (Secondary - Content type) */
-/* Note: .badge-platform already exists above, reusing it */
-.badge-technical {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  font-family: var(--font-mono);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  background-color: #27ae60;  /* HTB green */
-  color: #ffffff;
-  border: 2px solid #1e8449;
-}
-
-.badge-technical:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-}
-
-.badge-coding {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  font-family: var(--font-mono);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  background-color: #f39c12;  /* Python gold */
-  color: #0a0a0a;
-  border: 2px solid #e67e22;
-}
-
-.badge-coding:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-}
-
-/* TIER 3: Difficulty Badges (NEW - Skill-based USP!) */
-.badge-difficulty-beginner {
-  display: inline-block;
-  padding: 4px 10px;  /* More compact than category badges */
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  font-size: 0.7rem;  /* Smaller than category */
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  font-family: var(--font-mono);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  background-color: var(--color-success);  /* Green = welcoming */
-  color: #ffffff;
-  border: 2px solid #2ecc71;
-}
-
-.badge-difficulty-beginner:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-}
-
-.badge-difficulty-intermediate {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  font-family: var(--font-mono);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  background-color: var(--color-info);  /* Blue = progression */
-  color: #0a0a0a;
-  border: 2px solid #58a6ff;
-}
-
-.badge-difficulty-intermediate:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-}
-
-.badge-difficulty-advanced {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 6px;  /* Sessie 93: More visible rounded corners */
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  font-family: var(--font-mono);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  background-color: var(--color-warning);  /* Orange = challenge */
-  color: #0a0a0a;
-  border: 2px solid #dd8800;
-}
-
-.badge-difficulty-advanced:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
-}
-
-/* Stack badges vertically in icon area */
-.resource-icon {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
 }
 
 /* ==================== DONATION CTA - COMPACT PATTERN ==================== */
@@ -1451,7 +1095,7 @@ button {
 }
 
 .legal-footer-links a {
-  color: var(--color-success);
+  color: var(--color-link);
   margin: 0 var(--spacing-sm);
 }
 
