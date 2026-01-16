@@ -1121,6 +1121,15 @@ button {
   outline-offset: 2px;
 }
 
+/* Support label styling - compact footer variant (Sessie 95) */
+/* Research: Label moet subtiel zijn, button is primaire CTA (donation UX best practice) */
+.support-label::before {
+  content: "[ SUPPORT ] ";
+  color: var(--color-footer-text);  /* Subtiel - zelfde als footer tekst, button blijft focus */
+  font-family: var(--font-terminal);
+  font-weight: 600;
+}
+
 /* ==================== AdSense Ad Container (M5.5 Phase 1) ==================== */
 /* Ad Placement 80/20 Rule: Footer only (not terminal, not modal) */
 .ad-container {
