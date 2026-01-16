@@ -1097,10 +1097,12 @@ button {
 .legal-footer-links a {
   color: var(--color-link);
   margin: 0 var(--spacing-sm);
+  text-decoration: none;
 }
 
 .legal-footer-links a:hover {
-  text-decoration: underline;
+  color: var(--color-footer-link-hover);
+  text-decoration: none;
 }
 
 /* ==================== Cookie Consent Banner ==================== */
