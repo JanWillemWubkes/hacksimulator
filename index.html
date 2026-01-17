@@ -26,15 +26,18 @@
     <!-- Favicon (M5 Performance: Fixes 404 error) -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
-    <!-- Font Preload removed - font is now inline base64 in main.css (Sessie 83) -->
+    <!-- Google Fonts: Space Grotesk + Inter + JetBrains Mono (Sessie 99 - Font System Upgrade) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Preload Critical Resources (M5 Performance Optimization) -->
-    <link rel="preload" href="styles/main.css?v=98-legal-link-hover" as="style">
+    <link rel="preload" href="styles/main.css?v=101-font-system-upgrade" as="style">
     <link rel="preload" href="styles/terminal.css?v=88-multiline-wrap" as="style">
     <link rel="modulepreload" href="src/main.js">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles/main.css?v=98-legal-link-hover">
+    <link rel="stylesheet" href="styles/main.css?v=101-font-system-upgrade">
     <link rel="stylesheet" href="styles/terminal.css?v=88-multiline-wrap">
     <!-- Deferred CSS (non-critical for first paint) -->
     <link rel="stylesheet" href="styles/mobile.css?v=87-perf-defer" media="print" onload="this.media='all'">

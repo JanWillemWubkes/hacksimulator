@@ -67,9 +67,11 @@
   /* Alert/Info Box Surfaces - Neutral backgrounds for blog content boxes */
   --color-surface-elevated: rgba(255, 255, 255, 0.05);  /* Subtle white tint - professional alerts (GitHub Docs pattern) */
   --color-surface-elevated-hover: rgba(255, 255, 255, 0.08);  /* Slightly brighter hover state */
-  /* Typography - Premium Font System (Inter + JetBrains Mono) */
-  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;  /* Primary: UI/Headings - screen-optimized */
-  --font-terminal: 'JetBrains Mono Box', 'JetBrains Mono', 'Courier New', 'Courier', monospace;  /* Secondary: Code/Terminal - developer-grade (Box subset for U+2500-257F) */
+  /* Typography - 3-Font System (Sessie 99 - Font System Upgrade) */
+  --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;  /* Headings, nav, buttons - modern tech aesthetic */
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;  /* Body text, forms, modals - screen-optimized readability */
+  --font-terminal: 'JetBrains Mono', 'JetBrains Mono Box', 'SF Mono', 'Consolas', monospace;  /* Terminal, code blocks - developer-grade */
+  --font-ui: var(--font-heading);  /* Legacy alias for backward compatibility */
   --font-size-base: 18px;
   --font-size-mobile: 16px;
   --line-height: 1.5;
@@ -267,7 +269,7 @@ html {
 }
 
 body {
-  font-family: var(--font-terminal);
+  font-family: var(--font-body);
   background-color: var(--color-bg);
   color: var(--color-text);
   line-height: var(--line-height);
@@ -296,7 +298,7 @@ strong {
 
 /* ==================== Buttons ==================== */
 button {
-  font-family: var(--font-terminal);
+  font-family: var(--font-heading);
   cursor: pointer;
   border: none;
   transition: all var(--transition-fast);
@@ -399,7 +401,7 @@ button {
 
 /* Section header */
 .aanbevolen-header {
-  font-family: var(--font-terminal);
+  font-family: var(--font-heading);
   font-size: 1.953rem;                              /* h2 size */
   font-weight: var(--font-weight-bold);
   color: var(--color-ui-primary);                   /* #58a6ff dark */
@@ -740,7 +742,7 @@ button {
   border: 1px solid var(--color-button-bg);
   border-radius: var(--border-radius-button);          /* 4px */
   font-weight: 600;
-  font-family: var(--font-terminal);
+  font-family: var(--font-heading);
   text-decoration: none;
   transition: all var(--transition-fast);              /* 0.15s ease */
   cursor: pointer;
@@ -770,7 +772,7 @@ button {
 .support-label::before {
   content: "[ SUPPORT ] ";
   color: var(--color-footer-text);  /* Subtiel - zelfde als footer tekst, button blijft focus */
-  font-family: var(--font-terminal);
+  font-family: var(--font-heading);
   font-weight: 600;
 }
 
@@ -796,7 +798,7 @@ button {
   font-size: 12px;
   color: var(--color-text-muted);
   margin: 0 0 var(--spacing-xs) 0;
-  font-family: var(--font-terminal);
+  font-family: var(--font-body);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -1186,7 +1188,7 @@ button {
   color: var(--color-text-light);
   border: 1px solid var(--color-border-input);
   padding: 12px;
-  font-family: var(--font-terminal);
+  font-family: var(--font-body);
   font-size: 17px;
   resize: vertical;
   margin-bottom: var(--spacing-md);
@@ -1408,7 +1410,7 @@ footer nav a:not(:first-child) {
 
 /* Brand/Logo */
 .navbar-brand {
-  font-family: var(--font-terminal);
+  font-family: var(--font-heading);
   font-size: 1.2rem;
   font-weight: var(--font-weight-bold);
   color: var(--color-ui-primary);
@@ -1446,7 +1448,7 @@ footer nav a:not(:first-child) {
 /* Generic navbar links - Animated Underline Pattern (Sessie 53 upgrade) */
 .navbar-links > li:not(.navbar-dropdown) > a {
   color: var(--color-navbar-link);
-  font-family: var(--font-terminal);
+  font-family: var(--font-heading);
   font-size: 19px; /* Slightly larger for navbar prominence */
   font-weight: 500; /* Medium weight - professional developer tool aesthetic */
   letter-spacing: 0.5px; /* Improved monospace readability */
@@ -1485,7 +1487,7 @@ footer nav a:not(:first-child) {
 /* Dropdown Trigger - Animated Underline Pattern (Sessie 53 upgrade) - matches generic navbar links */
 .dropdown-trigger {
   color: var(--color-navbar-link);
-  font-family: var(--font-terminal);
+  font-family: var(--font-heading);
   font-size: 19px; /* Match generic navbar links */
   font-weight: 500; /* Medium weight - consistent with generic links */
   letter-spacing: 0.5px; /* Improved monospace readability */
@@ -1634,7 +1636,7 @@ footer nav a:not(:first-child) {
   border: none;
   color: var(--color-toggle-text);
   cursor: pointer;
-  font-family: var(--font-terminal);
+  font-family: var(--font-heading);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.5px;
