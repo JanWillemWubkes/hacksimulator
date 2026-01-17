@@ -1822,3 +1822,23 @@ footer nav a:not(:first-child) {
   white-space: nowrap;
   border-width: 0;
 }
+
+/* ==================== Jargon Tooltip Styling ==================== */
+/* Inline term explanations with dotted underline + native tooltip (Sessie 100) */
+/* Pattern: <abbr class="jargon" title="uitleg">term</abbr> */
+.jargon,
+abbr[title] {
+  text-decoration: underline dotted var(--color-link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  cursor: help;
+  font-style: normal;
+}
+
+.jargon:hover,
+.jargon:focus,
+abbr[title]:hover,
+abbr[title]:focus {
+  text-decoration-style: solid;
+  color: var(--color-link);
+}
