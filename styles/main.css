@@ -1824,10 +1824,11 @@ footer nav a:not(:first-child) {
 }
 
 /* ==================== Jargon Tooltip Styling ==================== */
-/* Inline term explanations with dotted underline + native tooltip (Sessie 100) */
-/* Pattern: <abbr class="jargon" title="uitleg">term</abbr> */
+/* Custom CSS tooltips - instant display, touch-friendly, no JavaScript */
+/* Pattern: <abbr class="jargon" title="uitleg" tabindex="0">term</abbr> */
 .jargon,
-abbr[title] {
+abbr.jargon {
+  position: relative;
   text-decoration: underline dotted var(--color-link);
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
@@ -1835,10 +1836,73 @@ abbr[title] {
   font-style: normal;
 }
 
+/* Tooltip bubble using ::after */
+.jargon::after {
+  content: attr(title);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 12px;
+  background: var(--color-bg-modal);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  white-space: normal;
+  max-width: 280px;
+  width: max-content;
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Arrow pointing down */
+.jargon::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--color-border);
+  z-index: 101;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+/* Show tooltip on hover AND focus (touch-friendly via tabindex) */
+.jargon:hover::after,
+.jargon:focus::after,
+.jargon:hover::before,
+.jargon:focus::before {
+  opacity: 1;
+  visibility: visible;
+}
+
 .jargon:hover,
-.jargon:focus,
-abbr[title]:hover,
-abbr[title]:focus {
+.jargon:focus {
   text-decoration-style: solid;
   color: var(--color-link);
+  outline: none;
+}
+
+/* Mobile: left-align tooltip to prevent overflow */
+@media (max-width: 768px) {
+  .jargon::after {
+    max-width: 220px;
+    font-size: 0.8rem;
+    left: 0;
+    transform: none;
+  }
+
+  .jargon::before {
+    left: 16px;
+    transform: none;
+  }
 }
