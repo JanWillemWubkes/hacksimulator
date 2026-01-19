@@ -731,17 +731,18 @@ button {
   white-space: nowrap;
 }
 
-/* Compact donation button */
+/* Compact donation button - Ghost button style (Sessie 99: subtiele footer CTA) */
+/* Research: Ghost buttons voor secundaire acties - behoudt CTA-karakter zonder visuele dominantie */
 .btn-donate-compact {
   display: inline-block;
   vertical-align: middle;                              /* Optical alignment fix (Sessie 73) - center button vertically with text */
   padding: 6px 14px;                                   /* Slightly smaller than old button */
   font-size: 15px;                                     /* Slightly smaller */
-  background-color: var(--color-button-bg);            /* #005bb5 dark / #1f7a40 light */
-  color: var(--color-button-text);                     /* #ffffff */
-  border: 1px solid var(--color-button-bg);
+  background-color: transparent;                       /* Ghost button: transparante achtergrond */
+  color: var(--color-footer-link);                     /* #79c0ff - past bij footer links */
+  border: 1px solid var(--color-footer-link);          /* Border definieert button vorm */
   border-radius: var(--border-radius-button);          /* 4px */
-  font-weight: 600;
+  font-weight: 500;                                    /* Medium weight - consistent met footer/navbar links */
   font-family: var(--font-heading);
   text-decoration: none;
   transition: all var(--transition-fast);              /* 0.15s ease */
@@ -750,11 +751,11 @@ button {
 }
 
 .btn-donate-compact:hover {
-  background-color: var(--color-button-bg-hover);      /* #1976d2 dark / #248748 light */
-  color: var(--color-button-text-hover);               /* NEW (Sessie 72): White text on hover - prevents global a:hover blue override */
-  border-color: var(--color-button-bg-hover);          /* NEW (Sessie 72): Border matches bg on hover - consistent with .blog-cta-button */
-  transform: translateY(-2px);                         /* CHANGED (Sessie 72): Standard lift (was -1px) - matches site-wide button pattern */
-  box-shadow: 0 4px 12px var(--color-button-shadow-hover); /* CHANGED (Sessie 72): Standard shadow (was 0 2px 8px) - matches .blog-cta-button */
+  background-color: transparent;                       /* Blijft transparant op hover */
+  color: var(--color-footer-link-hover);               /* #58a6ff - brighter blue */
+  border-color: var(--color-footer-link-hover);        /* Border volgt tekst kleur */
+  transform: translateY(-2px);                         /* Standard lift - site-wide button pattern */
+  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.2);      /* Subtiele blauwe gloed - past bij footer */
 }
 
 .btn-donate-compact:active {
@@ -763,17 +764,17 @@ button {
 }
 
 .btn-donate-compact:focus-visible {
-  outline: 2px solid var(--color-button-bg);
+  outline: 2px solid var(--color-footer-link);         /* Past bij ghost button kleur */
   outline-offset: 2px;
 }
 
 /* Support label styling - compact footer variant (Sessie 95) */
-/* Research: Label moet subtiel zijn, button is primaire CTA (donation UX best practice) */
+/* Research: Label moet subtiel zijn, button is secundaire CTA (ghost button pattern) */
 .support-label::before {
   content: "[ SUPPORT ] ";
-  color: var(--color-footer-text);  /* Subtiel - zelfde als footer tekst, button blijft focus */
+  color: var(--color-footer-text);  /* Subtiel - zelfde als footer tekst */
   font-family: var(--font-heading);
-  font-weight: 600;
+  font-weight: 500;                 /* Medium weight - consistent met footer links */
 }
 
 /* ==================== AdSense Ad Container (M5.5 Phase 1) ==================== */
@@ -1305,6 +1306,8 @@ footer {
   flex: 0 0 auto;  /* No grow, no shrink, auto width */
   text-align: left;
   margin: 0;
+  font-family: var(--font-heading);          /* Space Grotesk - consistent footer chrome */
+  font-weight: 500;                          /* Medium weight - matches all footer text */
 }
 
 /* Column 2 (position 3): Navigation (right-aligned, never grows) */
@@ -1322,6 +1325,8 @@ footer a {
   color: var(--color-footer-link);
   text-decoration: none;
   padding: 0;
+  font-family: var(--font-heading);          /* Space Grotesk - consistent met navbar (Dark Frame Pattern) */
+  font-weight: 500;                          /* Medium weight - matches navbar links */
 }
 
 footer a:hover {
