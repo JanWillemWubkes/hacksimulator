@@ -39,11 +39,10 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="styles/main.css?v=101-font-system-upgrade">
     <link rel="stylesheet" href="styles/terminal.css?v=88-multiline-wrap">
-    <!-- Deferred CSS (non-critical for first paint) -->
-    <link rel="stylesheet" href="styles/mobile.css?v=87-perf-defer" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="styles/mobile.css?v=87-perf-defer"></noscript>
-    <link rel="stylesheet" href="styles/animations.css?v=87-perf-defer" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="styles/animations.css?v=87-perf-defer"></noscript>
+    <!-- Mobile & Animation CSS (direct load for CSP compliance - Sessie 95) -->
+    <!-- Note: Deferred loading via onload handler was blocked by CSP 'unsafe-hashes' -->
+    <link rel="stylesheet" href="styles/mobile.css?v=95-csp-fix">
+    <link rel="stylesheet" href="styles/animations.css?v=95-csp-fix">
     <link rel="stylesheet" href="src/ui/command-search-modal.css?v=95-light-mode-blue">
 
     <!-- Google AdSense -->
