@@ -958,6 +958,7 @@ button {
   color: var(--color-modal-header);
   margin-bottom: var(--spacing-lg);
   font-size: 2rem;
+  font-family: var(--font-heading);
   text-transform: uppercase;
   letter-spacing: 1px;
   text-align: center;
@@ -1071,6 +1072,7 @@ button {
 .legal-modal-header h2 {
   margin: 0;
   font-size: 2rem;
+  font-family: var(--font-heading);
   font-weight: bold;
   color: var(--color-modal-header);
   text-transform: uppercase;
