@@ -1,8 +1,8 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 03 januari 2026
-**Status:** M5 Testing & Launch Phase (LIVE on Netlify) - Metrics Sync Complete
-**Sprint:** Sessie 92: Document Consistency & Metrics Alignment
+**Laatst bijgewerkt:** 19 januari 2026
+**Status:** M5 Testing & Launch Phase (LIVE on Netlify) - Mobile Fix Complete
+**Sprint:** Sessie 95: Mobile CSS CSP Fix
 
 ---
 
@@ -38,7 +38,9 @@
 4. ✅ Cross-browser test infrastructure (Playwright setup complete)
 5. ✅ **FIXED P0-001:** Duplicate #legal-modal ID removed
 6. ✅ Cross-browser tests: Chromium 8/8, Firefox 8/8 (16/16 passing)
-7. [ ] Mobile real device testing (iOS, Android)
+7. ✅ **FIXED P0-002:** Mobile CSS not loading (CSP blocked onload handler) - Sessie 95
+8. [ ] Mobile real device testing (iOS, Android)
+9. [ ] Security Review (CSP audit, XSS check, localStorage)
 
 ---
 
@@ -447,6 +449,16 @@
   - ✅ .gitignore: Added explicit patterns for clarity
   - **Impact:** -39MB disk, A+ git hygiene, root directory 25+ → 23 files
   - **Future:** Quarterly cleanup audits, session archive rotation every 20 sessions
+
+- [x] **Sessie 95:** Mobile CSS CSP Fix (19 jan 2026)
+  - ✅ **P0 Bug Fixed:** Mobile CSS was not loading on production
+  - ✅ Root cause: CSP `'unsafe-hashes'` blocks `onload` event handlers
+  - ✅ Solution: Removed deferred CSS loading (`media="print" onload="..."`)
+  - ✅ Direct loading for mobile.css and animations.css
+  - ✅ Bundle impact: +6.5KB (470KB → 477KB, within 500KB budget)
+  - ✅ Verified: Hamburger menu, dropdown, no horizontal scroll
+  - **Commit:** `55b64a1` - "fix(mobile): Remove deferred CSS loading to fix CSP conflict"
+  - **Learning:** Deferred CSS via onload handlers conflicts with strict CSP
 
 ---
 
