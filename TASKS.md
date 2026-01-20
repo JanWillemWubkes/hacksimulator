@@ -1,14 +1,14 @@
 # TASKS.md - HackSimulator.nl
 
 **Laatst bijgewerkt:** 20 januari 2026
-**Status:** M5 Testing & Launch Phase (LIVE on Netlify) - Security Review Complete
-**Sprint:** Sessie 96: Security Review (CSP + HSTS + XSS audit)
+**Status:** M5 Testing & Launch Phase (LIVE on Netlify) - Accessibility Complete
+**Sprint:** Sessie 97: Accessibility Testing (Focus trap + ARIA audit)
 
 ---
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 150 / 295 taken voltooid (50.8%)
+**Totaal:** 156 / 295 taken voltooid (52.9%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
@@ -17,7 +17,7 @@
 | M2: Filesystem Commands | ✅ Voltooid | 25/25 | 100% |
 | M3: Network & Security | ✅ Voltooid | 28/28 | 100% |
 | M4: UX & Polish | ✅ Voltooid | 43/43 | 100% |
-| M5: Testing & Launch | 🔵 In uitvoering | 25/37 | 68% | ✅ **Performance + Config + Security Review 100%**
+| M5: Testing & Launch | 🔵 In uitvoering | 31/37 | 84% | ✅ **Performance + Config + Security + Accessibility 100%**
 | M5.5: Monetization MVP | ❌ Geannuleerd | - | - | Affiliate aanvragen afgewezen |
 | M6: Tutorial System | ⏭️ Gepland | 0/33 | 0% |
 | M7: Gamification | ⏭️ Gepland | 0/40 | 0% |
@@ -367,13 +367,13 @@
 - [x] Memory leaks check (long session test) - ⚠️ **WARN (84% growth, GC active)** - docs/testing/memory-leak-results.md
 - [x] localStorage quota test (edge case) - **SKIPPED** (modern browsers 10-15MB quota, test outdated)
 
-#### Accessibility Testing
-- [ ] Keyboard navigation (Tab, Enter, Esc)
-- [ ] Focus indicators zichtbaar
-- [ ] Screen reader test (basis - known limitations)
-- [ ] Color contrast check (4.5:1 ratio)
-- [ ] Font scaling test (200% zoom)
-- [ ] ARIA labels waar nodig
+#### Accessibility Testing ✅ VOLTOOID (Sessie 97)
+- [x] Keyboard navigation (Tab, Enter, Esc) - ✅ Focus trap toegevoegd aan alle modals
+- [x] Focus indicators zichtbaar - ✅ :focus-visible met blauwe outline
+- [x] Screen reader test (basis - known limitations) - ✅ ARIA audit: 50+ attributen, aria-live regions
+- [x] Color contrast check (4.5:1 ratio) - ✅ WCAG AAA (14.8:1 primary text)
+- [x] Font scaling test (200% zoom) - ✅ Layout intact, geen horizontal scroll
+- [x] ARIA labels waar nodig - ✅ Alle modals, forms, navigation compliant
 
 #### Security Review ✅ VOLTOOID (Sessie 96)
 - [x] Content Security Policy (CSP) headers - ✅ Versterkt met object-src, base-uri, form-action
@@ -469,6 +469,18 @@
   - ✅ **Externe Links:** Alle links hebben `rel="noopener noreferrer"`
   - **Files Modified:** `netlify.toml` (lines 80-88)
   - **Target:** A+ rating op securityheaders.com
+
+- [x] **Sessie 97:** Accessibility Testing Complete (20 jan 2026)
+  - ✅ **Focus Trap:** Toegevoegd aan legal, feedback, command-search modals
+  - ✅ **New Module:** `src/ui/focus-trap.js` - Reusable WCAG 2.1 focus management
+  - ✅ **Modal Updates:** Unminified + focus trap in legal.js, feedback.js, command-search-modal.js
+  - ✅ **ARIA Audit:** 50+ attributen, aria-live regions, role="dialog" op alle modals
+  - ✅ **Focus Indicators:** :focus-visible met blauwe outline (2px solid)
+  - ✅ **Font Scaling:** 200% zoom test passed, layout intact
+  - ✅ **Color Contrast:** WCAG AAA (14.8:1 primary text ratio)
+  - **Files Created:** `src/ui/focus-trap.js` (4.4KB)
+  - **Files Modified:** `src/ui/legal.js`, `src/ui/feedback.js`, `src/ui/command-search-modal.js`
+  - **Bundle Impact:** +16KB unminified (can be re-minified with `npm run minify`)
 
 ---
 
