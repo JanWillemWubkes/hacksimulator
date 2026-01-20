@@ -1,14 +1,14 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 19 januari 2026
-**Status:** M5 Testing & Launch Phase (LIVE on Netlify) - Mobile Fix Complete
-**Sprint:** Sessie 95: Mobile CSS CSP Fix
+**Laatst bijgewerkt:** 20 januari 2026
+**Status:** M5 Testing & Launch Phase (LIVE on Netlify) - Security Review Complete
+**Sprint:** Sessie 96: Security Review (CSP + HSTS + XSS audit)
 
 ---
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 144 / 295 taken voltooid (48.8%)
+**Totaal:** 150 / 295 taken voltooid (50.8%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
@@ -17,7 +17,7 @@
 | M2: Filesystem Commands | ✅ Voltooid | 25/25 | 100% |
 | M3: Network & Security | ✅ Voltooid | 28/28 | 100% |
 | M4: UX & Polish | ✅ Voltooid | 43/43 | 100% |
-| M5: Testing & Launch | 🔵 In uitvoering | 19/37 | 51% | ✅ **Performance Testing 100% + Configuration 100%**
+| M5: Testing & Launch | 🔵 In uitvoering | 25/37 | 68% | ✅ **Performance + Config + Security Review 100%**
 | M5.5: Monetization MVP | ❌ Geannuleerd | - | - | Affiliate aanvragen afgewezen |
 | M6: Tutorial System | ⏭️ Gepland | 0/33 | 0% |
 | M7: Gamification | ⏭️ Gepland | 0/40 | 0% |
@@ -39,8 +39,8 @@
 5. ✅ **FIXED P0-001:** Duplicate #legal-modal ID removed
 6. ✅ Cross-browser tests: Chromium 8/8, Firefox 8/8 (16/16 passing)
 7. ✅ **FIXED P0-002:** Mobile CSS not loading (CSP blocked onload handler) - Sessie 95
-8. [ ] Mobile real device testing (iOS, Android)
-9. [ ] Security Review (CSP audit, XSS check, localStorage)
+8. ✅ **Security Review Complete** - Sessie 96: HSTS actief, CSP versterkt, XSS audit passed
+9. [ ] Mobile real device testing (iOS, Android)
 
 ---
 
@@ -375,13 +375,13 @@
 - [ ] Font scaling test (200% zoom)
 - [ ] ARIA labels waar nodig
 
-#### Security Review
-- [ ] Content Security Policy (CSP) headers
-- [ ] Input sanitization review (XSS preventie)
-- [ ] localStorage security check (geen gevoelige data)
-- [ ] Analytics privacy check (geen PII)
-- [ ] External links: rel="noopener noreferrer"
-- [ ] HTTPS only (deployment)
+#### Security Review ✅ VOLTOOID (Sessie 96)
+- [x] Content Security Policy (CSP) headers - ✅ Versterkt met object-src, base-uri, form-action
+- [x] Input sanitization review (XSS preventie) - ✅ DOM-based escaping in renderer.js
+- [x] localStorage security check (geen gevoelige data) - ✅ Alleen non-sensitive data
+- [x] Analytics privacy check (geen PII) - ✅ IP anonymization + PII blocking actief
+- [x] External links: rel="noopener noreferrer" - ✅ Alle externe links compliant
+- [x] HTTPS only (deployment) - ✅ HSTS header geactiveerd (1h max-age voor testing)
 
 #### Content Review
 - [ ] Alle UI teksten Nederlands (compliance check)
@@ -459,6 +459,16 @@
   - ✅ Verified: Hamburger menu, dropdown, no horizontal scroll
   - **Commit:** `55b64a1` - "fix(mobile): Remove deferred CSS loading to fix CSP conflict"
   - **Learning:** Deferred CSS via onload handlers conflicts with strict CSP
+
+- [x] **Sessie 96:** Security Review Complete (20 jan 2026)
+  - ✅ **CSP Versterkt:** Added `object-src 'none'`, `base-uri 'self'`, `form-action 'self'`
+  - ✅ **HSTS Geactiveerd:** 1-hour max-age voor testing, later verhogen naar 1 jaar
+  - ✅ **XSS Audit Passed:** DOM-based escaping in renderer.js correct geïmplementeerd
+  - ✅ **localStorage Audit:** Geen gevoelige data, alleen non-PII
+  - ✅ **Analytics Privacy:** IP anonymization + PII blocking actief
+  - ✅ **Externe Links:** Alle links hebben `rel="noopener noreferrer"`
+  - **Files Modified:** `netlify.toml` (lines 80-88)
+  - **Target:** A+ rating op securityheaders.com
 
 ---
 
@@ -1303,11 +1313,11 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 15 januari 2026
-**Versie:** 3.4 (Affiliate systeem verwijderd - M5.5 geannuleerd)
+**Laatst bijgewerkt:** 20 januari 2026
+**Versie:** 3.5 (Security Review complete - Sessie 96)
 **Totaal Taken:** 280 (MVP: 153, Post-MVP: 127) → M0-M5: 138, M6: 33, M7: 40, M8: 40, M9: 19, Phase A: 6
-**Voltooide Taken:** 142 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 19/37, Phase A: 2/6, M6-M9: 0/132 pending)
-**Voortgang:** 50.7% (142/280 totaal) - MVP: 92.3% (141/153), M5: 51% (19/37), Phase A: 33% (2/6), Post-MVP: 0% (0/127)
+**Voltooide Taken:** 150 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 25/37, Phase A: 2/6, M6-M9: 0/132 pending)
+**Voortgang:** 53.6% (150/280 totaal) - MVP: 96.1% (147/153), M5: 68% (25/37), Phase A: 33% (2/6), Post-MVP: 0% (0/127)
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 **Bundle Budget:** ~445KB current (affiliate verwijderd), ~55KB buffer (11%)
