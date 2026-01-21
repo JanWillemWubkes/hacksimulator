@@ -48,6 +48,42 @@
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6345664385525701"
          crossorigin="anonymous"></script>
+
+    <!-- Structured Data - JSON-LD (AdSense Content Quality) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "HackSimulator.nl",
+      "description": "Browser-based terminal simulator voor het leren van ethisch hacken in het Nederlands. 30+ commands, virtual filesystem en educatieve tutorials voor beginners.",
+      "url": "https://hacksimulator.nl/",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "inLanguage": "nl-NL",
+      "publisher": {
+        "@type": "Organization",
+        "name": "HackSimulator.nl",
+        "url": "https://hacksimulator.nl/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://hacksimulator.nl/favicon.svg"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "contact@hacksimulator.nl",
+          "contactType": "customer service"
+        }
+      },
+      "sameAs": [
+        "https://github.com/JanWillemWubkes/hacksimulator"
+      ]
+    }
+    </script>
 </head>
 <body>
     <!-- Skip Link for Accessibility -->
@@ -84,7 +120,7 @@
                     <!-- Over Link -->
                     <li><a href="#over">Over</a></li>
                     <!-- Blog Link -->
-                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#blog-preview">Blog</a></li>
                 </ul>
 
                 <div class="navbar-actions">
@@ -144,6 +180,188 @@
             >
         </div>
     </main>
+
+    <!-- Content Sections (AdSense Content Quality - 800+ words) -->
+    <div class="homepage-sections">
+
+        <!-- Section 1: Leerpad -->
+        <section id="leerpad" class="content-section">
+            <div class="section-content">
+                <h2>[ LEERPAD ] Jouw Reis naar Ethical Hacker</h2>
+                <p>
+                    Ethisch hacken leer je niet in een dag - maar met de juiste aanpak komt elke beginner er.
+                    HackSimulator.nl begeleidt je in <strong>4 fases</strong> van complete nieuweling naar
+                    zelfverzekerde security enthusiast. Elk command dat je uitvoert bouwt voort op het vorige.
+                </p>
+
+                <div class="phase-grid">
+                    <div class="phase-card">
+                        <h3>Fase 1: Terminal Basics</h3>
+                        <p>Leer de fundamentele commands: <code>ls</code>, <code>cd</code>, <code>pwd</code>, <code>cat</code>.
+                        Dit is de basis waar elke hacker mee begint - navigeren door het systeem en bestanden lezen.</p>
+                    </div>
+                    <div class="phase-card">
+                        <h3>Fase 2: File Manipulation</h3>
+                        <p>Maak en beheer bestanden met <code>mkdir</code>, <code>touch</code>, en <code>rm</code>.
+                        Essentieel voor het organiseren van je werk en begrijpen hoe Linux systemen functioneren.</p>
+                    </div>
+                    <div class="phase-card">
+                        <h3>Fase 3: Reconnaissance</h3>
+                        <p>Ontdek netwerk scanning met <code>nmap</code>, <code>ping</code>, en <code>netstat</code>.
+                        Reconnaissance is de eerste stap van elke security audit - weten wat er draait.</p>
+                    </div>
+                    <div class="phase-card phase-locked">
+                        <h3>Fase 4: Security Tools</h3>
+                        <p>Unlock geavanceerde tools zoals <code>hashcat</code>, <code>hydra</code>, en <code>sqlmap</code>
+                        na het voltooien van Fase 3. Hier leer je echte penetration testing technieken.</p>
+                    </div>
+                </div>
+
+                <p class="section-cta">
+                    <strong>[TIP]</strong> Type <code>help</code> in de terminal hierboven om alle beschikbare commands te zien.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 2: Commands -->
+        <section id="commands" class="content-section content-section--alt">
+            <div class="section-content">
+                <h2>[ COMMANDS ] 30+ Authentieke Terminal Commands</h2>
+                <p>
+                    Van basis navigatie tot geavanceerde security tools - HackSimulator.nl simuleert echte
+                    Linux/Unix commands met educatieve Nederlandse uitleg. Elke output is ontworpen om je
+                    te leren <em>waarom</em> iets werkt, niet alleen <em>hoe</em>.
+                </p>
+
+                <div class="command-categories">
+                    <div class="command-category">
+                        <h3>Systeem</h3>
+                        <ul>
+                            <li><code>help</code> - Alle commands</li>
+                            <li><code>man</code> - Handleidingen</li>
+                            <li><code>whoami</code> - Huidige user</li>
+                            <li><code>history</code> - Geschiedenis</li>
+                        </ul>
+                    </div>
+                    <div class="command-category">
+                        <h3>Bestanden</h3>
+                        <ul>
+                            <li><code>ls</code> - Bekijk bestanden</li>
+                            <li><code>cd</code> - Navigeer</li>
+                            <li><code>cat</code> - Lees inhoud</li>
+                            <li><code>find</code> - Zoek bestanden</li>
+                        </ul>
+                    </div>
+                    <div class="command-category">
+                        <h3>Netwerk</h3>
+                        <ul>
+                            <li><code>nmap</code> - Port scanning</li>
+                            <li><code>ping</code> - Test verbinding</li>
+                            <li><code>ifconfig</code> - Netwerk info</li>
+                            <li><code>traceroute</code> - Route volgen</li>
+                        </ul>
+                    </div>
+                    <div class="command-category">
+                        <h3>Security</h3>
+                        <ul>
+                            <li><code>hashcat</code> - Hash cracking</li>
+                            <li><code>hydra</code> - Brute-force</li>
+                            <li><code>sqlmap</code> - SQL injection</li>
+                            <li><code>nikto</code> - Web scanner</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p class="section-cta">
+                    <strong>[TIP]</strong> Type <code>man [command]</code> voor gedetailleerde uitleg over elk command.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 3: Over -->
+        <section id="over" class="content-section">
+            <div class="section-content">
+                <h2>[ OVER ] Waarom HackSimulator.nl?</h2>
+                <p>
+                    HackSimulator.nl is gebouwd voor <strong>Nederlandse beginners</strong> die cybersecurity
+                    willen ontdekken zonder risico. Geen virtual machines, geen ingewikkelde installaties,
+                    geen kans op schade aan je systeem. Open je browser en begin direct met leren.
+                </p>
+
+                <div class="features-grid">
+                    <div class="feature">
+                        <span class="feature-icon">[OK]</span>
+                        <div>
+                            <h3>100% Veilig</h3>
+                            <p>Alle commands draaien in je browser. Je echte systeem wordt nooit aangeraakt.</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">[OK]</span>
+                        <div>
+                            <h3>Nederlands</h3>
+                            <p>Uitleg en tips in begrijpelijk Nederlands. Commands blijven authentiek Engels.</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">[OK]</span>
+                        <div>
+                            <h3>Geen Registratie</h3>
+                            <p>Direct beginnen zonder account. Je voortgang wordt lokaal opgeslagen.</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">[OK]</span>
+                        <div>
+                            <h3>Educatief</h3>
+                            <p>Elke output bevat context en tips. Je leert niet alleen wat, maar ook waarom.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p>
+                    Of je nu student bent die cybersecurity overweegt, een career switcher op zoek naar
+                    nieuwe skills, of gewoon nieuwsgierig bent naar hoe hackers werken - HackSimulator.nl
+                    is jouw veilige startpunt. Begin vandaag met <code>help</code> en ontdek de wereld
+                    van ethisch hacken.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 4: Blog Preview -->
+        <section id="blog-preview" class="content-section content-section--alt">
+            <div class="section-content">
+                <h2>[ BLOG ] Leer Meer over Cybersecurity</h2>
+                <p>
+                    Verdiep je kennis met onze educatieve blog artikelen. Van terminal basics tot
+                    geavanceerde security concepten - alles in begrijpelijk Nederlands.
+                </p>
+
+                <div class="blog-preview-grid">
+                    <article class="blog-preview-card">
+                        <h3><a href="/blog/welkom.html">Welkom bij HackSimulator.nl</a></h3>
+                        <p>Ontdek wat HackSimulator.nl te bieden heeft en hoe je het beste kunt beginnen met ethisch hacken leren.</p>
+                        <span class="blog-meta">[5 min] [Beginners]</span>
+                    </article>
+                    <article class="blog-preview-card">
+                        <h3><a href="/blog/wat-is-ethisch-hacken.html">Wat is Ethisch Hacken?</a></h3>
+                        <p>White hat, black hat, grey hat - leer het verschil en ontdek waarom ethisch hacken legaal en waardevol is.</p>
+                        <span class="blog-meta">[8 min] [Concepten]</span>
+                    </article>
+                    <article class="blog-preview-card">
+                        <h3><a href="/blog/terminal-basics.html">Terminal Commands voor Beginners</a></h3>
+                        <p>De basis van elke hacker: leer navigeren, bestanden lezen en het systeem verkennen.</p>
+                        <span class="blog-meta">[6 min] [Beginners]</span>
+                    </article>
+                </div>
+
+                <p class="section-cta">
+                    <a href="/blog/" class="btn-blog-link">Bekijk alle artikelen</a>
+                </p>
+            </div>
+        </section>
+
+    </div>
 
     <!-- Onboarding Modal (First Visit) -->
     <div id="onboarding-modal" class="modal" role="dialog" aria-labelledby="onboarding-title" aria-hidden="true">
