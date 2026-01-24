@@ -253,7 +253,7 @@
 .terminal-body {
   background: #1a1a1a;
   padding: var(--spacing-lg);
-  height: 220px;            /* Fixed height - prevents layout jank */
+  height: 320px;            /* Fixed height - 1.5:1 ratio at 600px width */
   overflow: hidden;         /* Hide overflow, no scrollbars */
   position: relative;       /* For fade overlay positioning */
   font-family: var(--font-terminal);
@@ -375,7 +375,7 @@
   }
 
   .terminal-body {
-    height: 180px;          /* Smaller on mobile */
+    height: 220px;          /* Slightly larger on mobile */
     padding: var(--spacing-md);
     font-size: 0.8rem;
   }
