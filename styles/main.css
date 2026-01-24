@@ -152,6 +152,12 @@
   --color-button-shadow-hover: rgba(25, 118, 210, 0.3);  /* Blue shadow - matches hover color */
   --color-button-shadow-green: rgba(79, 192, 141, 0.2);  /* Teal/cyan shadow - terminal aesthetic (animations.css) */
 
+  /* CTA Colors - Landing Page Primary Actions (Neon Lime) */
+  --color-cta-primary: #9fef00;                   /* HTB Neon Lime - Hero CTAs */
+  --color-cta-primary-hover: #8ad600;             /* Darker neon lime on hover */
+  --color-cta-primary-glow: rgba(159, 239, 0, 0.3); /* Glow effect for CTAs */
+  --color-cta-text: #0d1117;                      /* Dark text on bright CTA bg */
+
   /* Shadow System - Professional Elevation Pattern (Medium/GitHub/Stripe standard) */
   /* Content Cards - Subtle depth for blog posts, documentation boxes (NOT terminal UI) */
   --shadow-elevation-1: 0 2px 8px rgba(0, 0, 0, 0.4);     /* Base state - subtle depth on dark backgrounds */
@@ -194,6 +200,11 @@
   /* Alert/Info Box Surfaces - Light mode overrides (subtle dark tint on white) */
   --color-surface-elevated: rgba(0, 0, 0, 0.03);  /* Very subtle grey tint - professional alerts */
   --color-surface-elevated-hover: rgba(0, 0, 0, 0.05);  /* Slightly darker hover state */
+
+  /* CTA Colors - Light mode (WCAG AA contrast on light backgrounds) */
+  --color-cta-primary: #7ac800;                   /* Adjusted lime for light bg (inherits prompt adjustment) */
+  --color-cta-primary-hover: #6bb500;             /* Darker hover state */
+  --color-cta-text: #0d1117;                      /* Dark text on bright CTA */
 
   /* UI Elements - Vibrant terminal green + bright hover */
   --color-ui-primary: #0db34f;      /* Vibrant green - 3.25:1 contrast on white (WCAG AA) - terminal aesthetic */
@@ -1432,6 +1443,22 @@ footer nav a:not(:first-child) {
   color: var(--color-ui-hover);
 }
 
+/* Navbar Back Link (Terminal Page) */
+.navbar-back {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-small);
+  color: var(--navbar-link-color);
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity var(--transition-fast), color var(--transition-fast);
+  margin-left: var(--space-sm);
+}
+
+.navbar-back:hover {
+  opacity: 1;
+  color: var(--color-ui-hover);
+}
+
 /* Navbar Menu Container (Links + Actions) */
 .navbar-menu {
   display: flex;
@@ -1652,9 +1679,9 @@ footer nav a:not(:first-child) {
 }
 
 .theme-toggle:hover {
+  background: var(--color-toggle-hover);  /* Grijze hover background (consistent met landing) */
   transform: none;
   box-shadow: none;
-  /* opacity verwijderd - toggle-option:hover doet het werk */
 }
 
 /* Focus indicator handled by global :focus-visible in animations.css */

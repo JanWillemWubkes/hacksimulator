@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Leer ethisch hacken in een veilige browser-based terminal. 30+ commands, virtual filesystem en educatieve tutorials voor beginners - geen installatie of registratie nodig. Perfect voor studenten, career switchers en enthousiastelingen.">
+    <meta name="keywords" content="ethisch hacken leren, cybersecurity beginners, terminal simulator, ethical hacking tutorial, career switch cybersecurity, hacking oefenen gratis, white hat hacking, Nederlands">
+    <meta name="author" content="HackSimulator.nl">
+
+    <!-- Google AdSense Ownership Verification -->
+    <meta name="google-adsense-account" content="ca-pub-6345664385525701">
+
+    <!-- Affiliate Platform Verification -->
+    <meta name='impact-site-verification' value='46e5a5e9-3a4c-4826-b1d1-b6354b3806f0'>
+
+    <!-- Cache Control Meta Tags -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <!-- Content Security Policy moved to netlify.toml HTTP headers (M5 Performance) -->
+
+    <title>HackSimulator.nl - Leer Ethisch Hacken</title>
+
+    <!-- Favicon (M5 Performance: Fixes 404 error) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <!-- Google Fonts: Space Grotesk + Inter + JetBrains Mono (Sessie 99 - Font System Upgrade) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Preload Critical Resources (M5 Performance Optimization) -->
+    <link rel="preload" href="styles/main.css?v=101-font-system-upgrade" as="style">
+    <link rel="preload" href="styles/terminal.css?v=88-multiline-wrap" as="style">
+    <link rel="modulepreload" href="src/main.js">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles/main.css?v=101-font-system-upgrade">
+    <link rel="stylesheet" href="styles/terminal.css?v=88-multiline-wrap">
+    <!-- Mobile & Animation CSS (direct load for CSP compliance - Sessie 95) -->
+    <!-- Note: Deferred loading via onload handler was blocked by CSP 'unsafe-hashes' -->
+    <link rel="stylesheet" href="styles/mobile.css?v=95-csp-fix">
+    <link rel="stylesheet" href="styles/animations.css?v=95-csp-fix">
+    <link rel="stylesheet" href="src/ui/command-search-modal.css?v=95-light-mode-blue">
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6345664385525701"
+         crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#terminal-container" class="skip-link">Skip naar terminal</a>
+
+    <!-- Navigation Bar -->
+    <nav id="navbar" role="navigation" aria-label="Main navigation">
+        <div class="navbar-content">
+            <!-- Brand/Logo - Links to landing page -->
+            <a href="/" class="navbar-brand" aria-label="HackSimulator.nl home">[ LOGO ]</a>
+
+            <!-- Back to Home Link -->
+            <a href="/" class="navbar-back" aria-label="Terug naar home">← Home</a>
+
+            <!-- Mobile Hamburger Toggle -->
+            <button class="navbar-toggle"
+                    aria-label="Menu openen"
+                    aria-expanded="false"
+                    aria-controls="navbar-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <!-- Navigation Links & Actions -->
+            <div id="navbar-menu" class="navbar-menu">
+                <ul class="navbar-links">
+                    <!-- Help Dropdown -->
+                    <li class="navbar-dropdown">
+                        <a href="#" class="dropdown-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="help-dropdown-menu" aria-label="Help menu">Help</a>
+                        <ul class="dropdown-menu" id="help-dropdown-menu" role="menu" aria-hidden="true">
+                            <li><a href="#leerpad">Leerpad</a></li>
+                            <li><a href="#commands">Commands</a></li>
+                            <li><a href="#shortcuts">Shortcuts</a></li>
+                        </ul>
+                    </li>
+                    <!-- Over Link -->
+                    <li><a href="#over">Over</a></li>
+                    <!-- Blog Link -->
+                    <li><a href="#blog">Blog</a></li>
+                </ul>
+
+                <div class="navbar-actions">
+                    <!-- Search -->
+                    <a href="#search" class="navbar-action" aria-label="Zoek commands">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </a>
+                    <!-- GitHub -->
+                    <a href="https://github.com/JanWillemWubkes/hacksimulator"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="navbar-action"
+                       aria-label="GitHub repository">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
+                    <!-- Dark/Light Mode Toggle (Terminal Bracket Switch) -->
+                    <button class="theme-toggle" aria-label="Toggle tussen dark en light mode" title="Toggle tussen dark en light mode">
+                        <span class="toggle-option" data-theme="dark">
+                            <span class="toggle-indicator">█</span> DARK
+                        </span>
+                        <span class="toggle-option" data-theme="light">
+                            <span class="toggle-indicator">█</span> LIGHT
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Vignette Background (Professional terminal aesthetic) -->
+    <div class="grid-background" aria-hidden="true"></div>
+
+    <!-- Main Terminal Container -->
+    <main id="terminal-container" role="main" aria-label="Terminal Simulator">
+        <!-- Terminal Output Area -->
+        <div id="terminal-output" aria-live="polite" aria-atomic="false">
+            <!-- Output will be dynamically inserted here -->
+        </div>
+
+        <!-- Terminal Input Area -->
+        <div id="terminal-input-wrapper">
+            <span id="terminal-prompt" aria-hidden="true">user@hacksim:~$</span>
+            <input
+                type="text"
+                id="terminal-input"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                aria-label="Terminal commando invoer"
+                placeholder="Type 'help' om te beginnen..."
+            >
+        </div>
+    </main>
+
+    <!-- Onboarding Modal (First Visit) -->
+    <div id="onboarding-modal" class="modal" role="dialog" aria-labelledby="onboarding-title" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Sluiten">&times;</button>
+            <div class="modal-body">
+                <h2 id="onboarding-title">Welkom bij HackSimulator.nl</h2>
+                <p>Een veilige omgeving om ethisch hacken te leren.</p>
+                <p><strong>Belangrijk:</strong> Dit is uitsluitend voor educatieve doeleinden. Gebruik deze kennis alleen legaal en ethisch.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="onboarding-accept" class="btn-primary">Ik begrijp het - Verder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Legal Disclaimer Modal: Removed duplicate HTML modal -->
+    <!-- Modal is now dynamically created by src/ui/legal.js to avoid duplicate ID issue (P0-001) -->
+
+    <!-- Cookie Consent Banner: Removed hardcoded HTML -->
+    <!-- Banner is now dynamically injected by src/analytics/consent.js + consent-banner.js (M5.5 GDPR) -->
+
+    <!-- Feedback Modal -->
+    <div id="feedback-modal" class="modal" role="dialog" aria-labelledby="feedback-title" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Sluiten">&times;</button>
+            <div class="modal-body">
+                <h2 id="feedback-title">Feedback</h2>
+                <p>Hoe vind je HackSimulator.nl?</p>
+                <div class="rating-stars" role="radiogroup" aria-label="Beoordeling">
+                    <button class="star" data-rating="1" aria-label="1 ster">★</button>
+                    <button class="star" data-rating="2" aria-label="2 sterren">★</button>
+                    <button class="star" data-rating="3" aria-label="3 sterren">★</button>
+                    <button class="star" data-rating="4" aria-label="4 sterren">★</button>
+                    <button class="star" data-rating="5" aria-label="5 sterren">★</button>
+                </div>
+                <textarea id="feedback-comment" placeholder="Optioneel: Vertel ons meer..." rows="4" aria-label="Feedback commentaar"></textarea>
+                <div class="feedback-error" role="alert" aria-live="assertive"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="feedback-submit" class="btn-primary">Versturen</button>
+                <button id="feedback-cancel" class="btn-secondary">Annuleren</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Command Search Modal -->
+    <div id="command-search-modal-overlay" class="modal">
+        <div class="modal-content command-search-modal">
+            <button class="modal-close" aria-label="Sluit">&times;</button>
+
+            <!-- Header -->
+            <div class="command-search-modal-header">
+                <h2>Zoek Commands</h2>
+            </div>
+
+            <!-- Search Input -->
+            <div class="command-search-input-container">
+                <input
+                    type="text"
+                    id="command-search-input"
+                    placeholder="🔍 Type to search..."
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                >
+            </div>
+
+            <!-- Body (scrollable) -->
+            <div class="modal-body command-search-modal-body">
+                <p class="command-search-tip">[ TIP ] Klik om command in terminal te plaatsen</p>
+                <div id="command-search-results"></div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button class="btn-secondary" id="command-search-cancel">Sluiten</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer role="contentinfo">
+        <div class="footer-content">
+            <!-- Column 1: Copyright (left) -->
+            <p class="footer-copyright">&copy; 2025 HackSimulator.nl</p>
+
+            <!-- Column 2: Donation CTA (center) - Sessie 95: CSS-generated label -->
+            <p class="donate-compact support-label">
+                <a href="https://paypal.me/HackSimulator"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn-donate-compact"
+                   aria-label="Doneer via PayPal om onze educatieve missie te steunen"
+                   title="Steun onze educatieve missie">
+                    Doneer
+                </a>
+            </p>
+
+            <!-- Column 3: Navigation (right) -->
+            <nav aria-label="Footer navigation">
+                <a href="#feedback" id="footer-feedback-link">Feedback</a>
+                <a href="assets/legal/privacy.html" target="_blank" rel="noopener noreferrer">Privacy</a>
+                <a href="assets/legal/terms.html" target="_blank" rel="noopener noreferrer">Voorwaarden</a>
+                <a href="assets/legal/cookies.html" target="_blank" rel="noopener noreferrer">Cookies</a>
+                <a href="#" id="cookie-settings">Cookie Instellingen</a>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- Application Entry Point -->
+    <script src="src/ui/search-strategies.js?v=35-search-modal"></script>
+    <script src="src/ui/command-search-modal.js?v=35-search-modal"></script>
+    <script src="src/main.js?v=88-multiline-wrap" type="module"></script>
+</body>
+</html>
