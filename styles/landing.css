@@ -382,6 +382,129 @@
   border-top: 1px solid var(--color-border);
 }
 
+/* ==================== Landing Sections Base ==================== */
+.landing-section {
+  max-width: var(--landing-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--landing-padding-desktop);
+}
+
+/* ==================== Section 2: Trust Bar ==================== */
+.trust-bar {
+  /* Full-width background - no max-width constraint */
+  width: 100%;
+  padding: var(--spacing-lg) var(--landing-padding-desktop);
+  text-align: center;
+  background: var(--color-bg-modal);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.trust-bar .social-proof-headline {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  color: var(--color-text-dim);
+  margin: 0 0 var(--spacing-lg) 0;
+  white-space: nowrap;
+}
+
+.trust-bar .social-proof-headline strong {
+  color: var(--color-cta-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+.trust-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-xl);
+}
+
+.trust-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-family: var(--font-terminal);
+  font-size: 1.1rem;
+  color: var(--color-text);
+  letter-spacing: 0.5px;
+}
+
+.badge-icon {
+  color: var(--color-cta-primary);
+  font-size: 1.25rem;
+  font-weight: var(--font-weight-bold);
+}
+
+/* ==================== Section 3: Problem ==================== */
+.problem-section {
+  padding-top: calc(var(--spacing-xl) * 2);
+  padding-bottom: calc(var(--spacing-xl) * 2);
+}
+
+.problem-section h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  text-align: center;
+  margin: 0 0 calc(var(--spacing-xl) * 1.5) 0;
+}
+
+.pain-points {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+}
+
+.pain-point {
+  background: var(--color-bg-modal);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-modal);
+  padding: var(--spacing-xl);
+  text-align: left;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pain-point:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.pain-icon {
+  font-family: var(--font-terminal);
+  font-size: 1.5rem;
+  color: var(--color-warning);
+  margin-bottom: var(--spacing-md);
+}
+
+.pain-point h3 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.pain-point .pain {
+  font-family: var(--font-terminal);
+  font-size: 0.875rem;
+  color: var(--color-text-dim);
+  margin: 0 0 var(--spacing-md) 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--border-radius-button);
+  border-left: 3px solid var(--color-warning);
+}
+
+.pain-point .agitate {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  line-height: 1.6;
+  margin: 0;
+}
+
 /* ==================== Responsive: Mobile ==================== */
 @media (max-width: 768px) {
   .landing-nav {
@@ -445,6 +568,57 @@
   .cta-microcopy {
     text-align: center;
   }
+
+  /* Section 2: Trust Bar - Mobile */
+  .landing-section {
+    padding: var(--spacing-lg) var(--landing-padding-mobile);
+  }
+
+  .trust-bar {
+    padding: var(--spacing-md) var(--landing-padding-mobile);
+  }
+
+  .trust-bar .social-proof-headline {
+    font-size: 1rem;
+    white-space: normal; /* Allow wrap on mobile */
+  }
+
+  .trust-badges {
+    gap: var(--spacing-md);
+  }
+
+  .trust-badge {
+    font-size: 0.95rem;
+    flex: 0 0 calc(50% - var(--spacing-sm));
+    justify-content: center;
+  }
+
+  .badge-icon {
+    font-size: 1.1rem;
+  }
+
+  /* Section 3: Problem - Mobile */
+  .problem-section {
+    padding-top: var(--spacing-xl);
+    padding-bottom: var(--spacing-xl);
+  }
+
+  .pain-points {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .pain-point {
+    padding: var(--spacing-lg);
+  }
+
+  .pain-icon {
+    font-size: 1.25rem;
+  }
+
+  .pain-point h3 {
+    font-size: 1.1rem;
+  }
 }
 
 /* ==================== Responsive: Small Mobile ==================== */
@@ -460,6 +634,33 @@
   .terminal-body {
     font-size: 0.75rem;
     padding: var(--spacing-sm);
+  }
+
+  /* Section 2: Trust Bar - Small Mobile */
+  .trust-bar .social-proof-headline {
+    font-size: 0.9rem;
+  }
+
+  .trust-badge {
+    font-size: 0.85rem;
+    flex: 0 0 100%;
+  }
+
+  .trust-bar .badge-icon {
+    font-size: 1rem;
+  }
+
+  /* Section 3: Problem - Small Mobile */
+  .pain-point {
+    padding: var(--spacing-md);
+  }
+
+  .pain-point .pain {
+    font-size: 0.8rem;
+  }
+
+  .pain-point .agitate {
+    font-size: 0.875rem;
   }
 }
 
