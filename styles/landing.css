@@ -1,26 +1,35 @@
 /**
- * landing-new.css - HackSimulator.nl Landing Page (Phase 1: Hero)
+ * landing.css - HackSimulator.nl Landing Page
  *
- * Fresh implementation based on docs/landing-page-plan.md
- * Reuses CSS variables from main.css for consistency
+ * Clean slate: Only Nav + Hero
+ * Ready for sectie-voor-sectie implementation
  */
 
 /* ==================== Landing-Specific Variables ==================== */
 :root {
-  /* CTA Colors - Uses design system variables from main.css */
-  /* --color-cta-primary, --color-cta-primary-hover, --color-cta-primary-glow, --color-cta-text */
-
   /* Landing Layout */
   --landing-max-width: 1200px;
   --landing-padding-desktop: 60px;
   --landing-padding-mobile: 20px;
 
-  /* Typography Scale - Fluid (plan spec) */
+  /* Typography Scale - Fluid */
   --font-size-display: clamp(2rem, 5vw, 3.5rem);
   --font-size-subtitle: clamp(1rem, 2.5vw, 1.25rem);
 
   /* Terminal Demo */
   --terminal-demo-max-width: 600px;
+
+  /* Hero Background - Theme-aware */
+  --hero-grid-color: rgba(255, 255, 255, 0.03);
+  --hero-orb-green: rgba(159, 239, 0, 0.12);
+  --hero-orb-blue: rgba(88, 166, 255, 0.10);
+}
+
+/* Light theme overrides */
+[data-theme="light"] {
+  --hero-grid-color: rgba(0, 0, 0, 0.04);
+  --hero-orb-green: rgba(159, 239, 0, 0.15);
+  --hero-orb-blue: rgba(88, 166, 255, 0.12);
 }
 
 /* ==================== Landing Page Base ==================== */
@@ -117,7 +126,7 @@
 
 .btn-cta:hover {
   background: var(--color-cta-primary-hover);
-  color: var(--color-cta-text);  /* Override global a:hover blue color */
+  color: var(--color-cta-text);
   transform: translateY(-2px);
   box-shadow: 0 4px 20px var(--color-cta-primary-glow);
 }
@@ -126,7 +135,7 @@
   transform: translateY(0);
 }
 
-/* Arrow indicator - CSS chevron (consistent with blog .resource-cta) */
+/* Arrow indicator - CSS chevron */
 .btn-cta-hero::after {
   content: "";
   width: 8px;
@@ -158,12 +167,12 @@
 
 /* ==================== Hero Section ==================== */
 .hero {
-  min-height: calc(100vh - 80px);  /* Account for navbar */
+  min-height: calc(100vh - 80px);
   display: flex;
   align-items: center;
   padding: calc(80px + var(--spacing-xl)) var(--landing-padding-desktop) var(--spacing-xl);
   position: relative;
-  overflow: hidden;  /* Contain pseudo-elements */
+  overflow: hidden;
 }
 
 /* Laag 1: Subtiel Grid Pattern */
@@ -172,8 +181,8 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, var(--hero-grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--hero-grid-color) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
   z-index: 0;
@@ -185,8 +194,8 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 75% 25%, rgba(159, 239, 0, 0.12) 0%, transparent 45%),
-    radial-gradient(circle at 15% 70%, rgba(88, 166, 255, 0.10) 0%, transparent 40%);
+    radial-gradient(circle at 75% 25%, var(--hero-orb-green) 0%, transparent 45%),
+    radial-gradient(circle at 15% 70%, var(--hero-orb-blue) 0%, transparent 40%);
   pointer-events: none;
   z-index: 0;
 }
@@ -194,19 +203,31 @@
 /* Side-by-Side Layout: Text Left, Terminal Right */
 .hero-content {
   display: grid;
-  grid-template-columns: 1fr 1fr;  /* 50/50 split */
+  grid-template-columns: 1fr 1fr;
   gap: var(--spacing-xl);
   align-items: center;
   max-width: var(--landing-max-width);
   width: 100%;
   margin: 0 auto;
   position: relative;
-  z-index: 1;  /* Content boven decoratieve lagen */
+  z-index: 1;
 }
 
 /* Left Column: Text Content */
 .hero-text {
   text-align: left;
+}
+
+/* Hero Eyebrow - Product category context */
+.hero-eyebrow {
+  font-family: var(--font-terminal);
+  font-size: 0.85rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-cta-primary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0 0 var(--spacing-sm) 0;
+  opacity: 0.9;
 }
 
 /* Hero Headline */
@@ -227,7 +248,7 @@
   color: var(--color-text-dim);
   line-height: 1.6;
   margin: 0 0 var(--spacing-xl) 0;
-  max-width: 500px;  /* Constrain for readability */
+  max-width: 500px;
 }
 
 /* CTA Microcopy */
@@ -242,7 +263,7 @@
 .hero-terminal {
   width: 100%;
   max-width: var(--terminal-demo-max-width);
-  margin: 0;  /* No margin needed in grid layout */
+  margin: 0;
   border-radius: var(--border-radius-modal);
   overflow: hidden;
   border: 1px solid var(--color-border);
@@ -283,21 +304,23 @@
 .terminal-body {
   background: #1a1a1a;
   padding: var(--spacing-lg);
-  height: 320px;            /* Fixed height - 1.5:1 ratio at 600px width */
-  overflow: hidden;         /* Hide overflow, no scrollbars */
-  position: relative;       /* For fade overlay positioning */
+  height: 320px;
+  overflow: hidden;
+  position: relative;
   font-family: var(--font-terminal);
   font-size: 0.9rem;
   line-height: 1.6;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;  /* New content at bottom */
+  justify-content: flex-end;
 }
 
 /* Terminal Output Lines */
 .terminal-line {
   margin-bottom: var(--spacing-xs);
   white-space: pre-wrap;
+  opacity: 1;
+  transition: opacity 0.3s ease;
 }
 
 .terminal-line.prompt {
@@ -328,7 +351,7 @@
   51%, 100% { opacity: 0; }
 }
 
-/* Fade mask for terminal content - old content fades out at top */
+/* Fade mask for terminal content */
 .terminal-body::before {
   content: '';
   position: absolute;
@@ -346,156 +369,17 @@
   pointer-events: none;
 }
 
-/* Output lines with fade transition */
-.terminal-line {
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
 /* Terminal Input Area */
 .terminal-input-line {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-lg);
-  background: #1a1a1a;  /* Match terminal body */
+  background: #1a1a1a;
   color: var(--color-prompt);
   font-family: var(--font-terminal);
   font-size: 0.9rem;
   border-top: 1px solid var(--color-border);
-}
-
-/* ==================== Trust Bar ==================== */
-.trust-bar {
-  background: var(--color-bg-modal);
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-  padding: var(--spacing-lg) var(--landing-padding-desktop);
-}
-
-.trust-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: var(--spacing-xl);
-  max-width: var(--landing-max-width);
-  margin: 0 auto;
-  flex-wrap: wrap;
-}
-
-.trust-badge {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  color: var(--color-text-dim);
-}
-
-.trust-icon {
-  color: var(--color-cta-primary);
-  font-size: 1rem;
-}
-
-/* ==================== Problem/Solution Section ==================== */
-.section-why {
-  padding: clamp(60px, 10vh, 120px) var(--landing-padding-desktop);
-  background: var(--color-bg);
-}
-
-.section-container {
-  max-width: var(--landing-max-width);
-  margin: 0 auto;
-}
-
-.section-why h2 {
-  font-family: var(--font-heading);
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text);
-  text-align: center;
-  margin-bottom: var(--spacing-xl);
-}
-
-/* 3-Column Grid */
-.why-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-lg);
-}
-
-/* Individual Cards */
-.why-card {
-  background: var(--color-bg-modal);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-modal);
-  padding: var(--spacing-xl);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.why-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-}
-
-/* Problem Section (top of card) */
-.why-problem {
-  margin-bottom: var(--spacing-lg);
-  padding-bottom: var(--spacing-lg);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.why-emoji {
-  font-size: 2rem;
-  display: block;
-  margin-bottom: var(--spacing-sm);
-}
-
-.why-problem h3 {
-  font-family: var(--font-heading);
-  font-size: 1.1rem;
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-  margin-bottom: var(--spacing-xs);
-}
-
-.why-problem p {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  color: var(--color-text-dim);
-  line-height: 1.5;
-  margin: 0;
-}
-
-/* Solution Section (bottom of card) */
-.why-check {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  background: var(--color-cta-primary);
-  color: var(--color-bg);
-  border-radius: 50%;
-  font-size: 0.8rem;
-  font-weight: bold;
-  margin-bottom: var(--spacing-sm);
-}
-
-.why-solution h4 {
-  font-family: var(--font-heading);
-  font-size: 1rem;
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-cta-primary);
-  margin-bottom: var(--spacing-xs);
-}
-
-.why-solution p {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  color: var(--color-text);
-  line-height: 1.5;
-  margin: 0;
 }
 
 /* ==================== Responsive: Mobile ==================== */
@@ -506,25 +390,28 @@
 
   .hero {
     padding: calc(60px + var(--spacing-lg)) var(--landing-padding-mobile) var(--spacing-lg);
-    min-height: auto;  /* Let content determine height on mobile */
+    min-height: auto;
   }
 
-  /* Stack to single column on mobile */
   .hero-content {
     grid-template-columns: 1fr;
     gap: var(--spacing-lg);
   }
 
-  /* Center text on mobile */
   .hero-text {
     text-align: center;
-    order: 1;  /* Text first on mobile */
+    order: 1;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
   }
 
   .hero-terminal {
-    order: 2;  /* Terminal second on mobile */
+    order: 2;
     border-radius: var(--border-radius-button);
-    max-width: 100%;  /* Full width on mobile */
+    max-width: 100%;
   }
 
   .hero h1 {
@@ -532,19 +419,19 @@
   }
 
   .hero-subtitle {
-    max-width: 100%;  /* Full width on mobile */
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
   }
 
   .terminal-body {
-    height: 220px;          /* Slightly larger on mobile */
+    height: 220px;
     padding: var(--spacing-md);
     font-size: 0.8rem;
   }
 
   .terminal-body::before {
-    height: 30px;           /* Smaller fade gradient */
+    height: 30px;
   }
 
   .btn-cta-hero {
@@ -552,38 +439,11 @@
     font-size: 1.1rem;
     width: 100%;
     max-width: 300px;
-    margin: 0 auto;  /* Center CTA on mobile */
+    margin: 0 auto;
   }
 
   .cta-microcopy {
     text-align: center;
-  }
-
-  /* Trust Bar Mobile */
-  .trust-bar {
-    padding: var(--spacing-md) var(--landing-padding-mobile);
-  }
-
-  .trust-container {
-    gap: var(--spacing-md);
-  }
-
-  .trust-badge {
-    font-size: 0.8rem;
-  }
-
-  /* Problem/Solution Mobile */
-  .section-why {
-    padding: var(--spacing-xl) var(--landing-padding-mobile);
-  }
-
-  .why-grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-md);
-  }
-
-  .why-card {
-    padding: var(--spacing-lg);
   }
 }
 
@@ -611,10 +471,6 @@
   }
 
   .btn-cta:hover {
-    transform: none;
-  }
-
-  .why-card:hover {
     transform: none;
   }
 }
