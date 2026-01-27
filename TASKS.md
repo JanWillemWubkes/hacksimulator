@@ -2,13 +2,13 @@
 
 **Laatst bijgewerkt:** 20 januari 2026
 **Status:** M5 Testing & Launch Phase (LIVE on Netlify) - Accessibility Complete
-**Sprint:** Sessie 97: Accessibility Testing (Focus trap + ARIA audit)
+**Sprint:** Sessie 98: Content Review Spot Check (alle 8 taken PASSED)
 
 ---
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 156 / 295 taken voltooid (52.9%)
+**Totaal:** 164 / 295 taken voltooid (55.6%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
@@ -17,7 +17,7 @@
 | M2: Filesystem Commands | ✅ Voltooid | 25/25 | 100% |
 | M3: Network & Security | ✅ Voltooid | 28/28 | 100% |
 | M4: UX & Polish | ✅ Voltooid | 43/43 | 100% |
-| M5: Testing & Launch | 🔵 In uitvoering | 31/37 | 84% | ✅ **Performance + Config + Security + Accessibility 100%**
+| M5: Testing & Launch | 🔵 In uitvoering | 39/45 | 87% | ✅ **Performance + Config + Security + Accessibility + Content Review 100%**
 | M5.5: Monetization MVP | ❌ Geannuleerd | - | - | Affiliate aanvragen afgewezen |
 | M6: Tutorial System | ⏭️ Gepland | 0/33 | 0% |
 | M7: Gamification | ⏭️ Gepland | 0/40 | 0% |
@@ -383,15 +383,15 @@
 - [x] External links: rel="noopener noreferrer" - ✅ Alle externe links compliant
 - [x] HTTPS only (deployment) - ✅ HSTS header geactiveerd (1h max-age voor testing)
 
-#### Content Review
-- [ ] Alle UI teksten Nederlands (compliance check)
-- [ ] Alle man pages compleet (30 commands)
-- [ ] Educatieve tips bij security tools (aanwezig)
-- [ ] Juridische warnings correct (offensive tools)
-- [ ] Privacy Policy compleet (AVG)
-- [ ] Gebruiksvoorwaarden compleet
-- [ ] Cookie Policy compleet
-- [ ] Disclaimer prominent (homepage + modal)
+#### Content Review ✅ VOLTOOID (Sessie 98)
+- [x] Alle UI teksten Nederlands (compliance check) - ✅ 100% NL
+- [x] Alle man pages compleet (32 commands) - ✅ Meer dan target
+- [x] Educatieve tips bij security tools (aanwezig) - ✅ Alle 5 tools
+- [x] Juridische warnings correct (offensive tools) - ✅ Art. 138ab + consent
+- [x] Privacy Policy compleet (AVG) - ✅ 476 regels
+- [x] Gebruiksvoorwaarden compleet - ✅ 489 regels
+- [x] Cookie Policy compleet - ✅ 485 regels
+- [x] Disclaimer prominent (homepage + modal) - ✅ Focus trap + enforcement
 
 #### Production Build
 - [ ] Environment variabelen (production config)

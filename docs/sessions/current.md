@@ -4,6 +4,81 @@
 
 ---
 
+## Sessie 96: Landing Page Hero Section Implementation (22 januari 2026)
+
+**Scope:** Implementeer Phase 1, Section 1 (Hero) van nieuwe data-driven landing page volgens `docs/landing-page-plan.md`
+
+**Status:** ✅ VOLTOOID - 3 nieuwe bestanden, Hero section volledig functioneel
+
+**Duration:** ~45 minuten (planning + implementation + testing)
+
+---
+
+### Context & Problem
+
+**User Request:** Nieuwe landing page maken volgens plan uit Claude Code Web sessie
+**Challenge:** Plan bestand (`docs/landing-page-plan.md`) bestond alleen op remote branch `claude/fix-adsense-rejection-k63Pb`, niet lokaal gefetcht
+
+**Solution:** `git fetch origin claude/fix-adsense-rejection-k63Pb` → plan gelezen → lokaal opgeslagen
+
+---
+
+### Implementation
+
+**Nieuwe bestanden:**
+
+| Bestand | Regels | Functie |
+|---------|--------|---------|
+| `index-new.html` | 88 | Nieuwe landing page (huidige index.html intact) |
+| `styles/landing-new.css` | 250 | Hero styling, CTA buttons, responsive |
+| `src/ui/landing-demo.js` | 175 | Auto-typing terminal (help→ls→nmap→whoami loop) |
+
+**Hero Section Features:**
+- Headline: "Leer Ethisch Hacken in een Veilige Nederlandse Terminal"
+- Subheadline met value proposition
+- Mini terminal demo met 4-command auto-typing loop
+- Primary CTA: Groene button (#9fef00 - HTB Neon Lime)
+- Minimal sticky navbar met blur effect
+- Mobile responsive (375px getest)
+- Accessibility: skip link, reduced motion support, noscript fallback
+
+**Design Patterns Toegepast:**
+- CSS variable inheritance van `main.css` (consistency)
+- Fluid typography: `clamp(2rem, 5vw, 3.5rem)`
+- Page visibility API: pause animation when tab hidden
+
+---
+
+### Files Changed
+
+```
++ index-new.html (NEW)
++ styles/landing-new.css (NEW)
++ src/ui/landing-demo.js (NEW)
++ docs/landing-page-plan.md (saved from remote branch)
+```
+
+---
+
+### Key Learnings
+
+1. **Remote branch awareness:** Claude Code Web sessies kunnen branches pushen die lokaal niet bestaan - gebruik `git fetch` om plan bestanden te retrievenen
+2. **Parallel file strategy:** `index-new.html` + `landing-new.css` houdt oude implementatie intact voor vergelijking
+3. **Visibility API:** `document.visibilitychange` event voorkomt CPU-verspilling op hidden tabs
+
+---
+
+### Next Steps (Phase 1 Remaining)
+
+- [ ] Section 2: Trust Bar ("1000+ gebruikers", "100% gratis", "Geen registratie")
+- [ ] Section 3: Problem/Solution (3-column pain points)
+- [ ] Section 4: Features (30+ commands, virtual filesystem, educatieve output)
+- [ ] Section 5: Leerpad (Beginner → Intermediate → Advanced)
+- [ ] Section 6: Social Proof (testimonials, blog previews)
+- [ ] Section 7: Final CTA
+
+---
+
 ## Sessie 95: Secondary Button Dark Theme Hover Contrast Fix (06 januari 2026)
 
 **Scope:** Fix `.btn-secondary` button hover state contrast issue in dark theme (WCAG AA compliance)

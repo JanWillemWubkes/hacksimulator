@@ -8,10 +8,12 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (88-94)](docs/sessions/current.md) - Full Detail
-**Sessies:** 94, 93, 92, 91, 90, 89, 88
-**Period:** 26 december 2025 - 04 januari 2026
+### [Current Sessions (88-96)](docs/sessions/current.md) - Full Detail
+**Sessies:** 96, 95, 94, 93, 92, 91, 90, 89, 88
+**Period:** 26 december 2025 - 22 januari 2026
 **Topics:**
+- Landing page redesign Phase 1: Hero section implementation (new index-new.html)
+- Secondary button dark theme hover contrast fix (WCAG AAA)
 - CLAUDE.md 3-phase optimization (v2.0-v2.2): metrics delegation, code examples, command checklist
 - Design system 100% completion (141 CSS variables, Style Guide v1.5)
 - Blog inline jargon explanations (60+ definitions for beginners)
@@ -79,9 +81,9 @@
 
 ## 📊 Session Overview
 
-**Total Sessions:** 94 (as of 04 januari 2026)
-**Current Session:** 94 (CLAUDE.md Phase 3 Final Polish)
-**Sessions with full documentation:** 88-94 (7 sessions)
+**Total Sessions:** 96 (as of 22 januari 2026)
+**Current Session:** 96 (Landing Page Hero Implementation)
+**Sessions with full documentation:** 88-96 (9 sessions)
 **Sessions compressed:** 2-77 (various compression levels)
 
 **Structure rationale:**

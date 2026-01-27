@@ -308,6 +308,12 @@ return `Scan complete: 3 ports open`;
 
 **Doel:** Memory aids - full context in docs/sessions/
 
+### Sessie 96: Landing Page Hero Implementation (22 jan 2026)
+⚠️ Never assume plan files from Claude Web sessions exist locally | hardcode file paths without verifying branch
+✅ Always `git fetch` remote branches for plan documents | create parallel files (index-new.html) to preserve old implementation
+✅ Use Page Visibility API (`visibilitychange`) to pause animations on hidden tabs (performance)
+📄 docs/sessions/current.md Sessie 96 (3 new files: index-new.html, landing-new.css, landing-demo.js)
+
 ### Sessie 94: Documentation Validation Pattern (04 jan 2026)
 ⚠️ Never skip file reference validation | assume test paths exist | hardcode non-existent files
 ✅ Always validate cross-references quarterly | fix broken paths immediately | use validation as quality gate
@@ -331,12 +337,8 @@ return `Scan complete: 3 ports open`;
 ✅ Always alias-first migration | test both themes independently
 📄 docs/sessions/current.md Sessie 90
 
-### Sessie 88: E2E Testing Perfectie (26 dec)
-⚠️ Never viewport-based position checks | `textContent()` for pseudo-elements
-✅ Always relative parent positioning | `getComputedStyle()` for ::before/::after
-📄 docs/sessions/current.md Sessie 88
-
-**Compressed Learnings (Sessies 83-86):**
+**Compressed Learnings (Sessies 82-88):**
+- Sessie 88: E2E Testing - relative parent positioning, getComputedStyle() for pseudo-elements
 - Sessie 86: CLAUDE.md v1.0 - Single Source of Truth optimization (587→228 lines)
 - Sessie 84: Skill-Based Targeting - 3-persona model, ethical red lines, anchoring pricing
 - Sessie 83: Mobile Minimalist - "less is more" mobile, validate industry precedent
@@ -349,10 +351,10 @@ return `Scan complete: 3 ports open`;
 - Sessies 2-34: docs/sessions/archive-early.md
 
 **Rotation Protocol:**
-- Keep last 5 full (94, 92, 91, 90, 88)
-- Compress next 5 to bullets (86-82)
+- Keep last 5 full (96, 94, 92, 91, 90)
+- Compress next 5 to bullets (88, 86, 84, 83, 82)
 - Archive 11+ in docs/sessions/
-- Trigger: Every 5 sessions (next: Sessie 99)
+- Trigger: Every 5 sessions (next: Sessie 101)
 
 ---
 
