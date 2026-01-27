@@ -33,9 +33,24 @@
   <!-- Skip Link for Accessibility -->
   <a href="#hero" class="skip-link">Skip naar inhoud</a>
 
-  <!-- Minimal Navbar -->
+  <!-- ===== NAVBAR ===== -->
+  <div class="landing-nav-wrapper">
   <nav class="landing-nav" role="navigation" aria-label="Main navigation">
-    <a href="/" class="nav-brand">[ HACKSIM ]</a>
+    <a href="/" class="nav-brand">
+      <!-- Terminal Icon SVG -->
+      <svg class="brand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="4 17 10 11 4 5"></polyline>
+        <line x1="12" y1="19" x2="20" y2="19"></line>
+      </svg>
+      <span>HackSimulator<span class="brand-accent">.nl</span></span>
+    </a>
+
+    <!-- Nav Links (Desktop) -->
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#results">Cijfers</a>
+      <a href="#leerpad">Leerpad</a>
+    </div>
 
     <div class="nav-right">
       <!-- Theme Toggle -->
@@ -49,114 +64,497 @@
       </button>
 
       <!-- Primary CTA -->
-      <a href="/terminal.html" class="btn-cta btn-cta-nav">Start Nu</a>
+      <a href="/terminal.html" class="btn-cta btn-cta-nav">Start Simulator</a>
     </div>
   </nav>
+  </div>
 
-  <!-- ===== HERO SECTION ===== -->
-  <section id="hero" class="hero">
-    <div class="hero-content">
-      <!-- Left Column: Text Content -->
-      <div class="hero-text">
-        <p class="hero-eyebrow">Browser-based Terminal Simulator</p>
-        <h1>Leer Ethisch Hacken in een Veilige Nederlandse Terminal</h1>
-        <p class="hero-subtitle">
-          Voor Nederlandse studenten en career switchers die cybersecurity willen
-          leren zonder hun PC te riskeren. 30+ authentieke commands, direct in je browser.
+  <main>
+    <!-- ===== HERO SECTION ===== -->
+    <section id="hero" class="hero">
+      <div class="hero-content">
+        <!-- Left Column: Text Content -->
+        <div class="hero-text">
+          <!-- Eyebrow Badge -->
+          <div class="hero-eyebrow">
+            <span class="eyebrow-badge">Browser-based Terminal Simulator</span>
+          </div>
+
+          <h1>Leer Ethisch Hacken in een <span class="text-underline">Veilige Nederlandse</span> Terminal</h1>
+
+          <p class="hero-subtitle">
+            Voor Nederlandse studenten en career switchers die cybersecurity willen
+            leren zonder hun PC te riskeren. 30+ authentieke commands, direct in je browser.
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="/terminal.html" class="btn-cta btn-cta-hero">
+              Start Nu
+              <!-- Chevron Right Icon -->
+              <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+            <p class="cta-microcopy">Geen account nodig — direct beginnen</p>
+          </div>
+        </div>
+
+        <!-- Right Column: Terminal Demo -->
+        <div class="hero-terminal" aria-label="Terminal demonstratie">
+          <div class="terminal-header">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span class="terminal-title">❯ user@hacksim: ~</span>
+          </div>
+          <div class="terminal-body" id="hero-demo">
+            <!-- Auto-typing content injected by JavaScript -->
+            <noscript>
+              <div class="terminal-line prompt">user@hacksim:~$ help</div>
+              <div class="terminal-line output">[TIP] Start met deze basis commands:</div>
+              <div class="terminal-line output">  ls    - Toon bestanden</div>
+              <div class="terminal-line output">  nmap  - Scan netwerk</div>
+            </noscript>
+          </div>
+          <div class="terminal-input-line">
+            <span>user@hacksim:~$</span>
+            <span id="typing-target"></span>
+            <span class="cursor">_</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TRUST BAR ===== -->
+    <section class="trust-bar">
+      <p class="social-proof-headline">
+        HackSimulator helpt <strong>1.200+ studenten</strong> en hobbyisten veilig cybersecurity te leren
+      </p>
+      <div class="trust-badges">
+        <div class="trust-badge">
+          <!-- Users Icon -->
+          <svg class="badge-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          <span class="badge-text">1.200+ gebruikers</span>
+        </div>
+        <div class="trust-badge">
+          <!-- Euro Icon -->
+          <svg class="badge-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M8 12h8"></path>
+            <path d="M8 8h8"></path>
+            <path d="M10 16c2.2 0 4-1.8 4-4s-1.8-4-4-4"></path>
+          </svg>
+          <span class="badge-text">100% gratis</span>
+        </div>
+        <div class="trust-badge">
+          <!-- Zap Icon -->
+          <svg class="badge-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          <span class="badge-text">Direct starten</span>
+        </div>
+        <div class="trust-badge">
+          <!-- Shield Icon -->
+          <svg class="badge-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span class="badge-text">Geen account nodig</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PROBLEM SECTION ===== -->
+    <section class="landing-section problem-section">
+      <h2>Herkenbaar?</h2>
+      <p class="section-subtitle">Cybersecurity leren is lastig als de tools en de taal een barriere vormen.</p>
+
+      <div class="pain-points">
+        <div class="pain-point animate-on-scroll">
+          <div class="pain-icon">
+            <!-- HelpCircle Icon -->
+            <svg class="pain-icon-svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+          <h3>Te veel Engels</h3>
+          <p class="pain-quote">"Alle goede cybersecurity platforms zijn in het Engels"</p>
+          <p class="pain-description">Je wilt leren hacken, maar moet eerst een Engels woordenboek erbij pakken. Elke foutmelding, elke tutorial, alles in het Engels. Frustrerend als je gewoon wilt beginnen.</p>
+        </div>
+
+        <div class="pain-point animate-on-scroll">
+          <div class="pain-icon">
+            <!-- AlertTriangle Icon -->
+            <svg class="pain-icon-svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+          <h3>Bang je PC te breken</h3>
+          <p class="pain-quote">"Echte hacking tools kunnen je systeem beschadigen"</p>
+          <p class="pain-description">Je hebt gehoord van Kali Linux, maar durft het niet te installeren. Wat als je iets fout doet? Wat als je je laptop kapot maakt? De angst houdt je tegen.</p>
+        </div>
+
+        <div class="pain-point animate-on-scroll">
+          <div class="pain-icon">
+            <!-- BookOpen Icon -->
+            <svg class="pain-icon-svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+          </div>
+          <h3>Geen ervaring</h3>
+          <p class="pain-quote">"Terminal commands zijn te technisch en overweldigend"</p>
+          <p class="pain-description">Je opent een terminal en ziet een knipperende cursor. Wat nu? Je typt iets, krijgt een cryptische foutmelding, en geeft op. Iedereen lijkt het te snappen behalve jij.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SOLUTION SECTION (Green Banner) ===== -->
+    <section class="solution-section">
+      <div class="solution-content">
+        <h2>De Oplossing: HackSimulator.nl</h2>
+        <p class="solution-description">
+          Een browser-based terminal simulator speciaal ontworpen voor Nederlandse beginners.
+          Geen installatie, geen risico's, geen verplichte registratie. Open je browser en begin direct met leren.
         </p>
-        <a href="/terminal.html" class="btn-cta btn-cta-hero">Start Nu</a>
-        <p class="cta-microcopy">Geen account nodig - direct beginnen</p>
+      </div>
+    </section>
+
+    <!-- ===== FEATURES SECTION ===== -->
+    <section id="features" class="landing-section features-section">
+      <h2>Wat maakt HackSimulator anders?</h2>
+
+      <!-- Comparison Table -->
+      <div class="comparison-table">
+        <div class="comparison-row comparison-header">
+          <div class="comparison-cell">VOORHEEN</div>
+          <div class="comparison-cell highlight">MET HACKSIMULATOR</div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell negative">
+            <svg class="check-icon negative" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+            Engelse error messages
+          </div>
+          <div class="comparison-cell positive">
+            <svg class="check-icon positive" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="16 10 11 15 8 12"></polyline>
+            </svg>
+            Nederlandse tips en uitleg
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell negative">
+            <svg class="check-icon negative" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+            Echte systemen nodig
+          </div>
+          <div class="comparison-cell positive">
+            <svg class="check-icon positive" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="16 10 11 15 8 12"></polyline>
+            </svg>
+            Veilige browser sandbox
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell negative">
+            <svg class="check-icon negative" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+            Uren setup en installatie
+          </div>
+          <div class="comparison-cell positive">
+            <svg class="check-icon positive" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="16 10 11 15 8 12"></polyline>
+            </svg>
+            Direct starten, geen setup
+          </div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-cell negative">
+            <svg class="check-icon negative" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+            Droge documentatie
+          </div>
+          <div class="comparison-cell positive">
+            <svg class="check-icon positive" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="16 10 11 15 8 12"></polyline>
+            </svg>
+            Educatieve output + context
+          </div>
+        </div>
       </div>
 
-      <!-- Right Column: Terminal Demo -->
-      <div class="hero-terminal" aria-label="Terminal demonstratie">
-        <div class="terminal-header">
-          <span class="dot red"></span>
-          <span class="dot yellow"></span>
-          <span class="dot green"></span>
-          <span class="terminal-title">user@hacksim:~</span>
+      <!-- Feature Cards -->
+      <div class="feature-cards">
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon">
+            <!-- Terminal Icon -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="4 17 10 11 4 5"></polyline>
+              <line x1="12" y1="19" x2="20" y2="19"></line>
+            </svg>
+          </div>
+          <h3>30+ Authentieke Commands</h3>
+          <p>Van basis file system commands tot geavanceerde security tools. Elke command heeft man pages en educatieve output.</p>
         </div>
-        <div class="terminal-body" id="hero-demo">
-          <!-- Auto-typing content injected by JavaScript -->
-          <noscript>
-            <div class="terminal-line prompt">user@hacksim:~$ help</div>
-            <div class="terminal-line output">[TIP] Start met deze basis commands:</div>
-            <div class="terminal-line output">  ls    - Toon bestanden</div>
-            <div class="terminal-line output">  nmap  - Scan netwerk</div>
-          </noscript>
+
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon">
+            <!-- Database Icon -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+            </svg>
+          </div>
+          <h3>Virtual Filesystem</h3>
+          <p>Volledige Linux-achtige directory structuur. Bestanden aanmaken, verplaatsen, permissions wijzigen - alles in een veilige sandbox.</p>
         </div>
-        <div class="terminal-input-line">
-          <span>user@hacksim:~$</span>
-          <span id="typing-target"></span>
-          <span class="cursor">_</span>
+
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon">
+            <!-- Lightbulb Icon -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="9" y1="18" x2="15" y2="18"></line>
+              <line x1="10" y1="22" x2="14" y2="22"></line>
+              <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path>
+            </svg>
+          </div>
+          <h3>Educatieve Output</h3>
+          <p>Niet alleen realistische output, maar ook uitleg waarom het belangrijk is. Leer door te doen, begrijp het waarom.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== RESULTS SECTION ===== -->
+    <section id="results" class="landing-section results-section">
+      <h2>HackSimulator in Cijfers</h2>
+
+      <div class="results-grid">
+        <div class="result-item animate-on-scroll">
+          <span class="result-number">30+</span>
+          <span class="result-label">Authentieke commands</span>
+        </div>
+        <div class="result-item animate-on-scroll">
+          <span class="result-number">100%</span>
+          <span class="result-label">Gratis, geen hidden costs</span>
+        </div>
+        <div class="result-item animate-on-scroll">
+          <span class="result-number">0</span>
+          <span class="result-label">Minuten setup tijd</span>
+        </div>
+        <div class="result-item animate-on-scroll">
+          <span class="result-number">1.200+</span>
+          <span class="result-label">Actieve gebruikers</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== LEERPAD SECTION ===== -->
+    <section id="leerpad" class="landing-section leerpad-section">
+      <h2>Jouw Leerpad: Beginner tot Advanced</h2>
+      <p class="section-subtitle">HackSimulator groeit met je mee. Van je eerste command tot geavanceerde tools.</p>
+
+      <div class="leerpad-cards">
+        <div class="leerpad-card animate-on-scroll">
+          <span class="level-badge beginner">BEGINNER</span>
+          <div class="leerpad-cmd-lines">
+            <div class="leerpad-cmd-line">$ ls, cd, pwd</div>
+            <div class="leerpad-cmd-line">$ cat, grep</div>
+            <div class="leerpad-cmd-line">$ chmod, find</div>
+          </div>
+          <p>Leer de fundamenten: navigeren door mappen, bestanden lezen, en je weg vinden in de terminal.</p>
+          <a href="/terminal.html" class="btn-cta leerpad-btn">Start Leerpad</a>
+        </div>
+
+        <div class="leerpad-card animate-on-scroll">
+          <span class="level-badge intermediate">INTERMEDIATE</span>
+          <div class="leerpad-cmd-lines">
+            <div class="leerpad-cmd-line">$ nmap, netcat</div>
+            <div class="leerpad-cmd-line">$ wireshark</div>
+            <div class="leerpad-cmd-line">$ hashcat</div>
+          </div>
+          <p>Ontdek netwerken: scan poorten, analyseer verkeer, en begrijp netwerk topologie.</p>
+          <a href="/terminal.html" class="btn-cta leerpad-btn">Verken Leerpad</a>
+        </div>
+
+        <div class="leerpad-card animate-on-scroll">
+          <span class="level-badge advanced">ADVANCED</span>
+          <div class="leerpad-cmd-lines">
+            <div class="leerpad-cmd-line">$ metasploit</div>
+            <div class="leerpad-cmd-line">$ sqlmap</div>
+            <div class="leerpad-cmd-line">$ hydra</div>
+          </div>
+          <p>Echte pentesting tools: exploit frameworks, SQL injection testing, en brute force aanvallen.</p>
+          <a href="/terminal.html" class="btn-cta leerpad-btn">Master Leerpad</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TESTIMONIALS SECTION ===== -->
+    <section class="landing-section testimonials-section">
+      <h2>Wat anderen zeggen</h2>
+
+      <div class="testimonial-cards">
+        <div class="testimonial-card animate-on-scroll">
+          <div class="testimonial-author">
+            <div class="author-avatar">SD</div>
+            <div class="author-info">
+              <span class="author-name">Sanne de Vries</span>
+              <span class="author-role">Student Cybersecurity, Hogeschool Rotterdam</span>
+            </div>
+          </div>
+          <svg class="quote-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M11.192 15.757c0-.88-.23-1.618-.69-2.217-.326-.412-.768-.683-1.327-.812-.55-.128-1.07-.137-1.54-.028-.16-.95.1-1.956.76-3.022.66-1.065 1.515-1.867 2.558-2.403L9.373 5c-.8.396-1.56.898-2.26 1.505-.71.607-1.34 1.305-1.9 2.094s-.98 1.68-1.25 2.69-.346 2.04-.217 3.1c.168 1.4.62 2.52 1.356 3.35.735.84 1.652 1.26 2.748 1.26.965 0 1.766-.29 2.4-.878.628-.576.94-1.365.94-2.368l.002.004zm9.124 0c0-.88-.23-1.618-.69-2.217-.326-.42-.77-.695-1.327-.825-.56-.13-1.07-.14-1.54-.03-.16-.94.09-1.95.75-3.02.66-1.06 1.514-1.86 2.557-2.4L18.49 5c-.8.396-1.555.898-2.26 1.505-.708.607-1.34 1.305-1.894 2.094-.556.79-.97 1.68-1.24 2.69-.273 1-.345 2.04-.217 3.1.168 1.4.62 2.52 1.356 3.35.735.84 1.652 1.26 2.748 1.26.965 0 1.766-.29 2.4-.878.628-.576.94-1.365.94-2.368l-.007.004z"/>
+          </svg>
+          <blockquote>"Dankzij HackSimulator snap ik eindelijk wat nmap doet. De Nederlandse uitleg maakt echt het verschil!"</blockquote>
+        </div>
+
+        <div class="testimonial-card animate-on-scroll">
+          <div class="testimonial-author">
+            <div class="author-avatar">MJ</div>
+            <div class="author-info">
+              <span class="author-name">Mark Jansen</span>
+              <span class="author-role">Junior Security Analyst, voorheen IT Support</span>
+            </div>
+          </div>
+          <svg class="quote-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M11.192 15.757c0-.88-.23-1.618-.69-2.217-.326-.412-.768-.683-1.327-.812-.55-.128-1.07-.137-1.54-.028-.16-.95.1-1.956.76-3.022.66-1.065 1.515-1.867 2.558-2.403L9.373 5c-.8.396-1.56.898-2.26 1.505-.71.607-1.34 1.305-1.9 2.094s-.98 1.68-1.25 2.69-.346 2.04-.217 3.1c.168 1.4.62 2.52 1.356 3.35.735.84 1.652 1.26 2.748 1.26.965 0 1.766-.29 2.4-.878.628-.576.94-1.365.94-2.368l.002.004zm9.124 0c0-.88-.23-1.618-.69-2.217-.326-.42-.77-.695-1.327-.825-.56-.13-1.07-.14-1.54-.03-.16-.94.09-1.95.75-3.02.66-1.06 1.514-1.86 2.557-2.4L18.49 5c-.8.396-1.555.898-2.26 1.505-.708.607-1.34 1.305-1.894 2.094-.556.79-.97 1.68-1.24 2.69-.273 1-.345 2.04-.217 3.1.168 1.4.62 2.52 1.356 3.35.735.84 1.652 1.26 2.748 1.26.965 0 1.766-.29 2.4-.878.628-.576.94-1.365.94-2.368l-.007.004z"/>
+          </svg>
+          <blockquote>"Als career switcher was ik bang om te beginnen. HackSimulator liet me veilig oefenen zonder risico's."</blockquote>
+        </div>
+
+        <div class="testimonial-card animate-on-scroll">
+          <div class="testimonial-author">
+            <div class="author-avatar">TB</div>
+            <div class="author-info">
+              <span class="author-name">Thomas van der Berg</span>
+              <span class="author-role">Hobbyist, CTF Speler</span>
+            </div>
+          </div>
+          <svg class="quote-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M11.192 15.757c0-.88-.23-1.618-.69-2.217-.326-.412-.768-.683-1.327-.812-.55-.128-1.07-.137-1.54-.028-.16-.95.1-1.956.76-3.022.66-1.065 1.515-1.867 2.558-2.403L9.373 5c-.8.396-1.56.898-2.26 1.505-.71.607-1.34 1.305-1.9 2.094s-.98 1.68-1.25 2.69-.346 2.04-.217 3.1c.168 1.4.62 2.52 1.356 3.35.735.84 1.652 1.26 2.748 1.26.965 0 1.766-.29 2.4-.878.628-.576.94-1.365.94-2.368l.002.004zm9.124 0c0-.88-.23-1.618-.69-2.217-.326-.42-.77-.695-1.327-.825-.56-.13-1.07-.14-1.54-.03-.16-.94.09-1.95.75-3.02.66-1.06 1.514-1.86 2.557-2.4L18.49 5c-.8.396-1.555.898-2.26 1.505-.708.607-1.34 1.305-1.894 2.094-.556.79-.97 1.68-1.24 2.69-.273 1-.345 2.04-.217 3.1.168 1.4.62 2.52 1.356 3.35.735.84 1.652 1.26 2.748 1.26.965 0 1.766-.29 2.4-.878.628-.576.94-1.365.94-2.368l-.007.004z"/>
+          </svg>
+          <blockquote>"Perfect voor CTF voorbereiding. De educatieve tips helpen me de 'waarom' te begrijpen, niet alleen de 'wat'."</blockquote>
+        </div>
+      </div>
+
+      <!-- Blog Links -->
+      <div class="blog-links">
+        <p class="blog-links-title">Lees meer op ons blog</p>
+        <div class="blog-links-list">
+          <a href="/blog/welkom-bij-hacksimulator.html" class="blog-link">Welkom bij HackSimulator.nl</a>
+          <a href="/blog/wat-is-ethisch-hacken.html" class="blog-link">Wat is Ethisch Hacken?</a>
+          <a href="/blog/terminal-basics-voor-beginners.html" class="blog-link">Terminal Basics voor Beginners</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FINAL CTA ===== -->
+    <section class="final-cta">
+      <div class="final-cta-content">
+        <h2>Klaar om te beginnen?</h2>
+        <p>Geen account. Geen creditcard. Geen risico.</p>
+        <a href="/terminal.html" class="btn-cta btn-cta-hero">
+          Start de Terminal
+          <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+        <p class="final-cta-secondary">
+          <a href="/blog/">Of lees eerst hoe het werkt</a>
+        </p>
+        <p class="final-cta-contact">
+          <svg class="contact-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+          Vragen? <a href="mailto:contact@hacksimulator.nl">contact@hacksimulator.nl</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="landing-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo">
+          <svg class="brand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="4 17 10 11 4 5"></polyline>
+            <line x1="12" y1="19" x2="20" y2="19"></line>
+          </svg>
+          <span>HackSimulator<span class="brand-accent">.nl</span></span>
+        </a>
+        <p class="footer-tagline">De enige Nederlandse terminal simulator waar je direct, zonder account, ethisch hacken leert — perfect voor absolute beginners.</p>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-column">
+          <h4>Platform</h4>
+          <ul>
+            <li><a href="/terminal.html">Simulator</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/over-ons.html">Over Ons</a></li>
+            <li><a href="mailto:contact@hacksimulator.nl">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Juridisch</h4>
+          <ul>
+            <li><a href="/privacy.html">Privacy Beleid</a></li>
+            <li><a href="/voorwaarden.html">Algemene Voorwaarden</a></li>
+            <li><a href="/ethische-code.html">Ethische Code</a></li>
+          </ul>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- ===== SECTIE 2: TRUST BAR ===== -->
-  <section class="trust-bar">
-    <p class="social-proof-headline">
-      Leer ethisch hacken met de <strong>enige Nederlandse</strong> terminal simulator
-    </p>
-    <div class="trust-badges">
-      <div class="trust-badge">
-        <span class="badge-icon">[✓]</span>
-        <span class="badge-text">30+ commands</span>
-      </div>
-      <div class="trust-badge">
-        <span class="badge-icon">[NL]</span>
-        <span class="badge-text">Nederlandse uitleg</span>
-      </div>
-      <div class="trust-badge">
-        <span class="badge-icon">[⚡]</span>
-        <span class="badge-text">Direct starten</span>
-      </div>
-      <div class="trust-badge">
-        <span class="badge-icon">[~]</span>
-        <span class="badge-text">Geen account nodig</span>
+    <div class="footer-bottom">
+      <p>&copy; 2026 HackSimulator.nl — Alle rechten voorbehouden</p>
+      <div class="footer-social">
+        <a href="https://twitter.com/hacksimulator" aria-label="Twitter" rel="noopener noreferrer" target="_blank">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+        <a href="https://github.com/hacksimulator" aria-label="GitHub" rel="noopener noreferrer" target="_blank">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+        </a>
+        <a href="https://discord.gg/hacksimulator" aria-label="Discord" rel="noopener noreferrer" target="_blank">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
+          </svg>
+        </a>
       </div>
     </div>
-  </section>
-
-  <!-- ===== SECTIE 3: PROBLEM (Pain-Agitate Framework) ===== -->
-  <section class="landing-section problem-section">
-    <h2>Herkenbaar?</h2>
-    <div class="pain-points">
-      <div class="pain-point">
-        <div class="pain-icon">[EN]</div>
-        <h3>Te veel Engels</h3>
-        <p class="pain">Alle goede cybersecurity platforms zijn in het Engels</p>
-        <p class="agitate">
-          Je wilt leren hacken, maar moet eerst een Engels woordenboek erbij pakken.
-          Elke foutmelding, elke tutorial, alles in het Engels.
-          Frustrerend als je gewoon wilt beginnen.
-        </p>
-      </div>
-      <div class="pain-point">
-        <div class="pain-icon">[!]</div>
-        <h3>Bang je PC te breken</h3>
-        <p class="pain">Echte hacking tools kunnen je systeem beschadigen</p>
-        <p class="agitate">
-          Je hebt gehoord van Kali Linux, maar durft het niet te installeren.
-          Wat als je iets fout doet? Wat als je je laptop kapot maakt?
-          De angst houdt je tegen.
-        </p>
-      </div>
-      <div class="pain-point">
-        <div class="pain-icon">[?]</div>
-        <h3>Geen ervaring</h3>
-        <p class="pain">Terminal commands zijn te technisch en overweldigend</p>
-        <p class="agitate">
-          Je opent een terminal en ziet een knipperende cursor. Wat nu?
-          Je typt iets, krijgt een cryptische foutmelding, en geeft op.
-          Iedereen lijkt het te snappen behalve jij.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== VOLGENDE SECTIES: Fase 2+ ===== -->
+  </footer>
 
   <!-- Hero Terminal Animation -->
   <script src="src/ui/landing-demo.js" defer></script>

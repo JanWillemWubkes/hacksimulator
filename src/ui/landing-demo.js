@@ -232,4 +232,53 @@
   // Expose for potential external control
   window.landingDemo = { stop };
 
+  // ==================== Scroll Animations ====================
+  // Intersection Observer for all animated elements (cards, results, etc.)
+  function initScrollAnimations() {
+    // All selectors for animated elements
+    const animatedSelectors = [
+      '.pain-point',
+      '.feature-card',
+      '.leerpad-card',
+      '.testimonial-card',
+      '.result-item',
+      '.animate-on-scroll'
+    ];
+
+    const allAnimatedElements = document.querySelectorAll(animatedSelectors.join(', '));
+
+    // Skip if user prefers reduced motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // Show all elements immediately
+      allAnimatedElements.forEach(el => {
+        el.classList.add('visible');
+      });
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          // Stop observing once visible (one-time animation)
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.2, // Trigger when 20% visible
+      rootMargin: '0px 0px -50px 0px' // Slight offset for better timing
+    });
+
+    allAnimatedElements.forEach(el => {
+      observer.observe(el);
+    });
+  }
+
+  // Initialize scroll animations after DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScrollAnimations);
+  } else {
+    initScrollAnimations();
+  }
+
 })();
