@@ -1,0 +1,14 @@
+# robots.txt voor HackSimulator.nl
+# Laatste update: 29 januari 2026
+
+User-agent: *
+Allow: /
+
+# Blokkeer interne/technische directories
+Disallow: /node_modules/
+Disallow: /tests/
+Disallow: /playwright-report/
+Disallow: /docs/
+
+# Sitemap locatie
+Sitemap: https://hacksimulator.nl/sitemap.xml
