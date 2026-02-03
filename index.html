@@ -650,33 +650,13 @@
   <!-- FAQ Accordion -->
   <script src="src/ui/faq.js" defer></script>
 
-  <!-- Theme Initialization (prevents flash) -->
-  <script>
-    (function() {
-      const savedTheme = localStorage.getItem('theme');
-      const prefersDark = !savedTheme || savedTheme === 'dark';
-      document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-    })();
-  </script>
+  <!-- Theme Initialization (prevents flash) - external for CSP compliance -->
+  <script src="/src/init-theme.js"></script>
 
   <!-- Component Injection (external script for CSP compliance) -->
   <script src="/src/init-components.js" type="module"></script>
 
-  <!-- Analytics & Consent (Landing Page) -->
-  <script type="module">
-    import consentManager from './src/analytics/consent.js';
-    import tracker from './src/analytics/tracker.js';
-    import events from './src/analytics/events.js';
-
-    // Initialize GA4 tracker
-    tracker.init('ga4');
-
-    // Show consent banner if needed
-    consentManager.checkAndShowBanner();
-
-    // Track page view & session
-    events.incrementVisitCount();
-    events.sessionStart();
-  </script>
+  <!-- Analytics & Consent (external for CSP compliance) -->
+  <script src="/src/init-analytics.js" type="module"></script>
 </body>
 </html>

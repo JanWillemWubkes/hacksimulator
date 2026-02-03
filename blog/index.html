@@ -171,14 +171,8 @@
     </noscript>
   </div>
 
-  <!-- Theme Initialization (prevents flash) -->
-  <script>
-    (function() {
-      const savedTheme = localStorage.getItem('theme');
-      const prefersDark = !savedTheme || savedTheme === 'dark';
-      document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-    })();
-  </script>
+  <!-- Theme Initialization (prevents flash) - external for CSP compliance -->
+  <script src="/src/init-theme.js"></script>
 
   <!-- Component Injection (external script for CSP compliance) -->
   <script src="/src/init-components.js" type="module"></script>
