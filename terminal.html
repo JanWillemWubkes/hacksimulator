@@ -23,8 +23,13 @@
 
     <title>HackSimulator.nl - Leer Ethisch Hacken</title>
 
-    <!-- Favicon (M5 Performance: Fixes 404 error) -->
+    <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#0d1117">
 
     <!-- Google Fonts: Space Grotesk + Inter + JetBrains Mono (Sessie 99 - Font System Upgrade) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -53,74 +58,16 @@
     <!-- Skip Link for Accessibility -->
     <a href="#terminal-container" class="skip-link">Skip naar terminal</a>
 
-    <!-- Navigation Bar -->
-    <nav id="navbar" role="navigation" aria-label="Main navigation">
-        <div class="navbar-content">
-            <!-- Brand/Logo - Links to landing page -->
-            <a href="/" class="navbar-brand" aria-label="HackSimulator.nl home">[ LOGO ]</a>
-
-            <!-- Back to Home Link -->
-            <a href="/" class="navbar-back" aria-label="Terug naar home">← Home</a>
-
-            <!-- Mobile Hamburger Toggle -->
-            <button class="navbar-toggle"
-                    aria-label="Menu openen"
-                    aria-expanded="false"
-                    aria-controls="navbar-menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-
-            <!-- Navigation Links & Actions -->
-            <div id="navbar-menu" class="navbar-menu">
-                <ul class="navbar-links">
-                    <!-- Help Dropdown -->
-                    <li class="navbar-dropdown">
-                        <a href="#" class="dropdown-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="help-dropdown-menu" aria-label="Help menu">Help</a>
-                        <ul class="dropdown-menu" id="help-dropdown-menu" role="menu" aria-hidden="true">
-                            <li><a href="#leerpad">Leerpad</a></li>
-                            <li><a href="#commands">Commands</a></li>
-                            <li><a href="#shortcuts">Shortcuts</a></li>
-                        </ul>
-                    </li>
-                    <!-- Over Link -->
-                    <li><a href="#over">Over</a></li>
-                    <!-- Blog Link -->
-                    <li><a href="#blog">Blog</a></li>
-                </ul>
-
-                <div class="navbar-actions">
-                    <!-- Search -->
-                    <a href="#search" class="navbar-action" aria-label="Zoek commands">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="m21 21-4.35-4.35"></path>
-                        </svg>
-                    </a>
-                    <!-- GitHub -->
-                    <a href="https://github.com/JanWillemWubkes/hacksimulator"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="navbar-action"
-                       aria-label="GitHub repository">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                        </svg>
-                    </a>
-                    <!-- Dark/Light Mode Toggle (Terminal Bracket Switch) -->
-                    <button class="theme-toggle" aria-label="Toggle tussen dark en light mode" title="Toggle tussen dark en light mode">
-                        <span class="toggle-option" data-theme="dark">
-                            <span class="toggle-indicator">█</span> DARK
-                        </span>
-                        <span class="toggle-option" data-theme="light">
-                            <span class="toggle-indicator">█</span> LIGHT
-                        </span>
-                    </button>
+    <!-- Navigation Bar (Component Injection) -->
+    <div id="navbar-placeholder">
+        <noscript>
+            <nav id="navbar" role="navigation" aria-label="Main navigation">
+                <div class="navbar-content">
+                    <a href="/" class="navbar-brand">HackSimulator.nl</a>
                 </div>
-            </div>
-        </div>
-    </nav>
+            </nav>
+        </noscript>
+    </div>
 
     <!-- Vignette Background (Professional terminal aesthetic) -->
     <div class="grid-background" aria-hidden="true"></div>
@@ -229,34 +176,33 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer role="contentinfo">
-        <div class="footer-content">
-            <!-- Column 1: Copyright (left) -->
-            <p class="footer-copyright">&copy; 2025 HackSimulator.nl</p>
+    <!-- Footer (Component Injection) -->
+    <div id="footer-placeholder">
+        <noscript>
+            <footer class="noscript-footer">
+                <p>&copy; 2026 HackSimulator.nl</p>
+            </footer>
+        </noscript>
+    </div>
 
-            <!-- Column 2: Donation CTA (center) - Sessie 95: CSS-generated label -->
-            <p class="donate-compact support-label">
-                <a href="https://paypal.me/HackSimulator"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="btn-donate-compact"
-                   aria-label="Doneer via PayPal om onze educatieve missie te steunen"
-                   title="Steun onze educatieve missie">
-                    Doneer
-                </a>
-            </p>
+    <!-- Theme Initialization (prevents flash) -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = !savedTheme || savedTheme === 'dark';
+            document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+        })();
+    </script>
 
-            <!-- Column 3: Navigation (right) -->
-            <nav aria-label="Footer navigation">
-                <a href="#feedback" id="footer-feedback-link">Feedback</a>
-                <a href="assets/legal/privacy.html" target="_blank" rel="noopener noreferrer">Privacy</a>
-                <a href="assets/legal/terms.html" target="_blank" rel="noopener noreferrer">Voorwaarden</a>
-                <a href="assets/legal/cookies.html" target="_blank" rel="noopener noreferrer">Cookies</a>
-                <a href="#" id="cookie-settings">Cookie Instellingen</a>
-            </nav>
-        </div>
-    </footer>
+    <!-- Component Injection (Navbar + Footer) -->
+    <script type="module">
+        import { injectNavbar } from '/src/components/navbar.js';
+        import { injectFooter } from '/src/components/footer.js';
+
+        // Inject navbar FIRST - before main.js loads
+        injectNavbar('app');
+        injectFooter('compact', { showFeedback: true, showDonate: true, showCookieSettings: true });
+    </script>
 
     <!-- Application Entry Point -->
     <script src="src/ui/search-strategies.js?v=35-search-modal"></script>

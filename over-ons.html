@@ -25,8 +25,13 @@
   <!-- Canonical URL -->
   <link rel="canonical" href="https://hacksimulator.nl/over-ons.html">
 
-  <!-- Favicon -->
+  <!-- Favicons -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#0d1117">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,7 +40,8 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="styles/main.css">
-  <link rel="stylesheet" href="styles/blog.css">
+  <link rel="stylesheet" href="styles/landing.css">
+  <link rel="stylesheet" href="styles/pages.css">
 
   <!-- Google AdSense -->
   <meta name="google-adsense-account" content="ca-pub-6345664385525701">
@@ -67,155 +73,278 @@
   <script src="src/analytics/consent-banner.js" type="module"></script>
   <script src="src/analytics/consent.js" type="module"></script>
 </head>
-<body>
+<body class="landing-page">
   <!-- Skip Link -->
   <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
 
-  <!-- Navigation -->
-  <nav class="blog-nav" aria-label="Hoofdnavigatie">
-    <a href="index.html">← Terug naar Home</a>
-    <a href="terminal.html">Naar Simulator</a>
-    <div class="blog-nav-actions">
-      <a href="https://github.com/JanWillemWubkes/hacksimulator"
-         target="_blank"
-         rel="noopener noreferrer"
-         class="navbar-action"
-         aria-label="GitHub repository">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-          </svg>
-      </a>
-      <button class="theme-toggle" aria-label="Toggle tussen dark en light mode" title="Toggle dark/light mode">
-        <span class="toggle-option" data-theme="dark">
-          <span class="toggle-indicator">+</span> DARK
-        </span>
-        <span class="toggle-option" data-theme="light">
-          <span class="toggle-indicator">+</span> LIGHT
-        </span>
-      </button>
-    </div>
-  </nav>
+  <!-- Navigation (Component Injection) -->
+  <div id="navbar-placeholder">
+    <noscript>
+      <nav class="noscript-nav" role="navigation">
+        <a href="/">HackSimulator.nl</a>
+        <a href="/terminal.html">Start Simulator</a>
+      </nav>
+    </noscript>
+  </div>
 
   <!-- Main Content -->
-  <main id="main-content" class="blog-container">
-    <article class="blog-article">
-      <header class="article-header">
-        <h1>Over HackSimulator.nl</h1>
-        <p class="article-meta">De Nederlandse Terminal Simulator voor Ethisch Hacken</p>
-      </header>
+  <main id="main-content">
 
-      <section class="article-content">
-        <h2>Onze Missie</h2>
-        <p>
-          HackSimulator.nl is opgericht met een duidelijke missie: <strong>ethisch hacken toegankelijk maken voor iedereen</strong>.
-          We geloven dat cybersecurity-kennis niet voorbehouden moet zijn aan mensen die dure trainingen kunnen betalen
-          of vloeiend Engels spreken. Daarom bouwen we een gratis, Nederlandstalige leeromgeving waar je veilig
-          kunt oefenen met echte hacking-technieken.
-        </p>
+    <!-- Hero Section -->
+    <section class="page-hero">
+      <span class="eyebrow-badge">Over HackSimulator.nl</span>
+      <h1>Ethisch Hacken Toegankelijk voor Iedereen</h1>
+      <p class="hero-subtitle">
+        We geloven dat cybersecurity-kennis niet voorbehouden moet zijn aan mensen die dure trainingen
+        kunnen betalen of vloeiend Engels spreken. Daarom bouwen we een gratis, Nederlandstalige leeromgeving.
+      </p>
+    </section>
 
-        <h2>Waarom Dit Platform?</h2>
-        <p>
-          De cybersecurity-industrie groeit explosief. Nederland heeft een tekort aan gekwalificeerde professionals,
-          maar de drempel om te beginnen is hoog. Bestaande leerplatforms zijn vaak:
-        </p>
-        <ul>
-          <li><strong>Engelstalig</strong> - Moeilijk voor beginners die technisch jargon nog moeten leren</li>
-          <li><strong>Duur</strong> - Professionele labs kosten honderden euro's per maand</li>
-          <li><strong>Overweldigend</strong> - Te veel informatie zonder duidelijk leerpad</li>
-          <li><strong>Risicovol</strong> - Fouten op echte systemen kunnen juridische gevolgen hebben</li>
-        </ul>
-        <p>
-          HackSimulator.nl lost al deze problemen op met een browser-based terminal die <em>volledig gesimuleerd</em> is.
-          Je kunt niks kapotmaken, niks illegaals doen, en alles in het Nederlands leren.
-        </p>
+    <!-- Stats Bar -->
+    <section class="page-section">
+      <div class="about-stats">
+        <div class="result-item">
+          <span class="result-number">30+</span>
+          <span class="result-label">Terminal Commands</span>
+        </div>
+        <div class="result-item">
+          <span class="result-number">100%</span>
+          <span class="result-label">Gratis</span>
+        </div>
+        <div class="result-item">
+          <span class="result-number">0 min</span>
+          <span class="result-label">Setup Tijd</span>
+        </div>
+      </div>
+    </section>
 
-        <h2>Wat Maakt Ons Anders?</h2>
+    <!-- Waarom Dit Platform? -->
+    <section class="page-section">
+      <h2>Waarom Dit Platform?</h2>
+      <div class="pain-points">
+        <!-- Engelstalig -->
+        <div class="pain-point">
+          <div class="pain-icon">
+            <svg class="pain-icon-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M2 12h20"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+          </div>
+          <h3>Engelstalig Probleem</h3>
+          <p class="pain-quote">"Ik snap de commands, maar de uitleg gaat me boven de pet..."</p>
+          <p class="pain-description">Bestaande platforms zijn Engelstalig. Moeilijk als je technisch jargon nog moet leren.</p>
+        </div>
 
-        <h3>100% Nederlands</h3>
-        <p>
-          Alle uitleg, tips en foutmeldingen zijn in het Nederlands. We gebruiken wel Engelse commando's
-          (zoals <code>nmap</code> en <code>ssh</code>) omdat die industriestandaard zijn, maar elke output
-          bevat Nederlandse context zodat je begrijpt wat er gebeurt.
-        </p>
+        <!-- Duur -->
+        <div class="pain-point">
+          <div class="pain-icon">
+            <svg class="pain-icon-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+          </div>
+          <h3>Dure Trainingen</h3>
+          <p class="pain-quote">"Honderden euro's per maand voor een lab? Dat kan ik niet betalen."</p>
+          <p class="pain-description">Professionele labs kosten vaak meer dan beginners kunnen missen.</p>
+        </div>
 
-        <h3>Educatief Ontworpen</h3>
-        <p>
-          Elke command is gebouwd met het "80/20 realisme" principe: output die realistisch genoeg is om
-          te leren, maar vereenvoudigd genoeg om niet overweldigd te raken. Inline uitleg zoals
-          <code>22/tcp OPEN SSH ← Secure Shell (remote terminal toegang)</code> helpt je de theorie te begrijpen
-          terwijl je oefent.
-        </p>
+        <!-- Overweldigend -->
+        <div class="pain-point">
+          <div class="pain-icon">
+            <svg class="pain-icon-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h3>Overweldigend</h3>
+          <p class="pain-quote">"Waar begin ik? Er is zoveel informatie..."</p>
+          <p class="pain-description">Te veel opties zonder duidelijk leerpad zorgt voor keuzestress.</p>
+        </div>
+      </div>
+    </section>
 
-        <h3>Veilig en Legaal</h3>
-        <p>
-          Alles draait lokaal in je browser. Geen data wordt naar externe servers gestuurd.
-          Het virtuele filesystem en de gesimuleerde netwerken bestaan alleen in je browsersessie.
-          Je kunt onmogelijk per ongeluk echte systemen aanvallen.
-        </p>
+    <!-- Wat Maakt Ons Anders? -->
+    <section class="page-section">
+      <h2>Wat Maakt Ons Anders?</h2>
+      <div class="feature-cards features-4col">
+        <!-- 100% Nederlands -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+              <line x1="4" y1="22" x2="4" y2="15"/>
+            </svg>
+          </div>
+          <h3>100% Nederlands</h3>
+          <p>Alle uitleg en tips in het Nederlands. Engelse commands met Nederlandse context zoals <code>SSH ← remote toegang</code>.</p>
+        </div>
 
-        <h3>Gratis Toegankelijk</h3>
-        <p>
-          De kernfunctionaliteit blijft altijd gratis. We geloven dat financiele barrières
-          geen reden mogen zijn om cybersecurity niet te kunnen leren.
-        </p>
+        <!-- Educatief Ontworpen -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+          </div>
+          <h3>Educatief Ontworpen</h3>
+          <p>Elke command met het "80/20 realisme" principe: realistisch genoeg om te leren, simpel genoeg om te begrijpen.</p>
+        </div>
 
-        <h2>Over de Ontwikkelaar</h2>
+        <!-- Veilig en Legaal -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <polyline points="9 12 11 14 15 10"/>
+            </svg>
+          </div>
+          <h3>Veilig en Legaal</h3>
+          <p>Alles draait lokaal in je browser. Geen data naar externe servers. Je kunt onmogelijk echte systemen aanvallen.</p>
+        </div>
+
+        <!-- Gratis Toegankelijk -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+          <h3>Gratis Toegankelijk</h3>
+          <p>De kernfunctionaliteit blijft altijd gratis. Financiele barrières mogen geen reden zijn om niet te leren.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Over de Ontwikkelaar -->
+    <section class="page-section">
+      <h2>Over de Ontwikkelaar</h2>
+      <div class="developer-card">
+        <h3>Jan Willem Wubkes</h3>
+        <p class="role">Onafhankelijke Nederlandse Developer</p>
         <p>
-          HackSimulator.nl wordt ontwikkeld en onderhouden door een onafhankelijke Nederlandse developer
-          met passie voor cybersecurity educatie. Het project is <a href="https://github.com/JanWillemWubkes/hacksimulator"
-          target="_blank" rel="noopener noreferrer">open source op GitHub</a>, waar je de code kunt bekijken,
+          HackSimulator.nl wordt ontwikkeld en onderhouden met passie voor cybersecurity educatie.
+          Het project is volledig open source, wat betekent dat je de code kunt bekijken,
           bugs kunt melden, of kunt bijdragen aan de ontwikkeling.
         </p>
+        <div class="social-links">
+          <a href="https://github.com/JanWillemWubkes/hacksimulator"
+             target="_blank"
+             rel="noopener noreferrer"
+             aria-label="GitHub repository">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </a>
+          <a href="mailto:contact@hacksimulator.nl"
+             aria-label="Stuur een email">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
 
-        <h2>Contact</h2>
-        <p>
-          Heb je vragen, suggesties of wil je samenwerken? Neem contact met ons op:
-        </p>
-        <ul>
-          <li><strong>Email:</strong> <a href="mailto:contact@hacksimulator.nl">contact@hacksimulator.nl</a></li>
-          <li><strong>GitHub:</strong> <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">github.com/JanWillemWubkes/hacksimulator</a></li>
-        </ul>
-        <p>
-          We reageren doorgaans binnen 48 uur op berichten.
-        </p>
+    <!-- Juridische Informatie -->
+    <section class="page-section">
+      <h2>Juridische Informatie</h2>
+      <div class="legal-links">
+        <a href="assets/legal/privacy.html" class="legal-link-card">
+          <div class="legal-link-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div class="legal-link-content">
+            <h3>Privacy Policy</h3>
+            <p>Hoe we omgaan met je gegevens (spoiler: we verzamelen bijna niks).</p>
+          </div>
+          <svg class="legal-link-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </a>
+        <a href="assets/legal/terms.html" class="legal-link-card">
+          <div class="legal-link-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+          </div>
+          <div class="legal-link-content">
+            <h3>Gebruiksvoorwaarden</h3>
+            <p>De regels voor het gebruik van de simulator.</p>
+          </div>
+          <svg class="legal-link-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </a>
+        <a href="assets/legal/cookies.html" class="legal-link-card">
+          <div class="legal-link-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <circle cx="8" cy="9" r="1" fill="currentColor"/>
+              <circle cx="15" cy="8" r="1" fill="currentColor"/>
+              <circle cx="10" cy="14" r="1" fill="currentColor"/>
+              <circle cx="15" cy="14" r="1" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="legal-link-content">
+            <h3>Cookie Policy</h3>
+            <p>Welke cookies we gebruiken en waarom.</p>
+          </div>
+          <svg class="legal-link-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </a>
+      </div>
+    </section>
 
-        <h2>Juridische Informatie</h2>
-        <p>
-          Transparantie is belangrijk voor ons. Lees onze juridische documenten voor meer informatie:
+    <!-- Final CTA -->
+    <section class="final-cta">
+      <div class="final-cta-content">
+        <h2>Begin Nu met Leren</h2>
+        <p>Geen account nodig. Geen setup. Direct aan de slag.</p>
+        <a href="terminal.html" class="btn-cta btn-cta-hero">
+          Start Simulator
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </a>
+        <p class="final-cta-secondary">
+          <a href="contact.html">Vragen? Neem contact op</a>
         </p>
-        <ul>
-          <li><a href="assets/legal/privacy.html">Privacy Policy</a> - Hoe we omgaan met je gegevens (spoiler: we verzamelen bijna niks)</li>
-          <li><a href="assets/legal/terms.html">Gebruiksvoorwaarden</a> - De regels voor het gebruik van de simulator</li>
-          <li><a href="assets/legal/cookies.html">Cookie Policy</a> - Welke cookies we gebruiken en waarom</li>
-        </ul>
-      </section>
+      </div>
+    </section>
 
-      <footer class="article-footer">
-        <p>
-          <a href="terminal.html" class="cta-link">Start nu met leren in de simulator →</a>
-        </p>
-        <p class="last-updated">
-          Laatste update: januari 2026
-        </p>
-      </footer>
-    </article>
   </main>
 
-  <!-- Footer -->
-  <footer class="blog-footer">
-    <p>
-      <a href="index.html">Home</a> |
-      <a href="terminal.html">Simulator</a> |
-      <a href="blog/">Blog</a> |
-      <a href="assets/legal/privacy.html">Privacy</a> |
-      <a href="assets/legal/terms.html">Voorwaarden</a>
-    </p>
-    <p class="copyright">
-      HackSimulator.nl - De Nederlandse Terminal Simulator voor Ethisch Hacken
-    </p>
-  </footer>
+  <!-- Footer (Component Injection) -->
+  <div id="footer-placeholder">
+    <noscript>
+      <footer class="noscript-footer">
+        <p>&copy; 2026 HackSimulator.nl</p>
+      </footer>
+    </noscript>
+  </div>
 
-  <!-- Theme Toggle Script -->
-  <script src="src/ui/theme.js" type="module"></script>
+  <!-- Theme Initialization (prevents flash) -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = !savedTheme || savedTheme === 'dark';
+      document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+    })();
+  </script>
+
+  <!-- Component Injection -->
+  <script type="module">
+    import { injectNavbar } from '/src/components/navbar.js';
+    import { injectFooter } from '/src/components/footer.js';
+    injectNavbar('marketing');
+    injectFooter('marketing');
+  </script>
 </body>
 </html>
