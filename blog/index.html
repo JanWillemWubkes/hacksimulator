@@ -69,29 +69,15 @@
   <!-- Skip Link (Accessibility) -->
   <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
 
-  <!-- Navigation -->
-  <nav class="blog-nav" aria-label="Hoofdnavigatie">
-    <a href="../index.html">← Terug naar Simulator</a>
-    <div class="blog-nav-actions">
-      <a href="https://github.com/JanWillemWubkes/hacksimulator"
-         target="_blank"
-         rel="noopener noreferrer"
-         class="navbar-action"
-         aria-label="GitHub repository">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-          </svg>
-      </a>
-      <button class="theme-toggle" aria-label="Toggle tussen dark en light mode" title="Toggle tussen dark en light mode">
-        <span class="toggle-option" data-theme="dark">
-          <span class="toggle-indicator">█</span> DARK
-        </span>
-        <span class="toggle-option" data-theme="light">
-          <span class="toggle-indicator">█</span> LIGHT
-        </span>
-      </button>
-    </div>
-  </nav>
+  <!-- Navigation (Component Injection) -->
+  <div id="navbar-placeholder">
+    <noscript>
+      <nav class="noscript-nav" role="navigation">
+        <a href="../">HackSimulator.nl</a>
+        <a href="../terminal.html">Start Simulator</a>
+      </nav>
+    </noscript>
+  </div>
 
   <!-- Main Content -->
   <main id="main-content" class="blog-container">
@@ -176,36 +162,35 @@
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer role="contentinfo">
-    <div class="footer-content">
-      <!-- Column 1: Copyright (left) -->
-      <p class="footer-copyright">&copy; 2025 HackSimulator.nl</p>
+  <!-- Footer (Component Injection) -->
+  <div id="footer-placeholder">
+    <noscript>
+      <footer class="noscript-footer">
+        <p>&copy; 2026 HackSimulator.nl</p>
+      </footer>
+    </noscript>
+  </div>
 
-      <!-- Column 2: Donation CTA (center) - Sessie 95: CSS-generated label -->
-      <p class="donate-compact support-label">
-        <a href="https://paypal.me/HackSimulator"
-           target="_blank"
-           rel="noopener noreferrer"
-           class="btn-donate-compact"
-           aria-label="Doneer via PayPal om onze educatieve missie te steunen"
-           title="Steun onze educatieve missie">
-          Doneer
-        </a>
-      </p>
+  <!-- Theme Initialization (prevents flash) -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = !savedTheme || savedTheme === 'dark';
+      document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+    })();
+  </script>
 
-      <!-- Column 3: Navigation (right) -->
-      <nav aria-label="Footer navigatie">
-        <a href="../index.html">Home</a>
-        <a href="../assets/legal/privacy.html" target="_blank" rel="noopener noreferrer">Privacy</a>
-        <a href="../assets/legal/terms.html" target="_blank" rel="noopener noreferrer">Voorwaarden</a>
-        <a href="../assets/legal/cookies.html" target="_blank" rel="noopener noreferrer">Cookies</a>
-        <a href="#" id="cookie-settings">Cookie Instellingen</a>
-      </nav>
-    </div>
-  </footer>
-
-  <!-- Theme Toggle (CSP-compliant external module) -->
-  <script src="../src/ui/blog-theme.js" type="module"></script>
+  <!-- Component Injection -->
+  <script type="module">
+    import { injectNavbar } from '../src/components/navbar.js';
+    import { injectFooter } from '../src/components/footer.js';
+    injectNavbar('blog', { basePath: '../', backTo: 'blog' });
+    injectFooter('compact', {
+      basePath: '../',
+      showFeedback: true,
+      showDonate: true,
+      showCookieSettings: true
+    });
+  </script>
 </body>
 </html>
