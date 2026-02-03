@@ -240,7 +240,7 @@
       '.pain-point',
       '.feature-card',
       '.leerpad-card',
-      '.testimonial-card',
+      '.how-step',
       '.result-item',
       '.animate-on-scroll'
     ];
