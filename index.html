@@ -659,13 +659,8 @@
     })();
   </script>
 
-  <!-- Component Injection -->
-  <script type="module">
-    import { injectNavbar } from '/src/components/navbar.js';
-    import { injectFooter } from '/src/components/footer.js';
-    injectNavbar('marketing');
-    injectFooter('marketing');
-  </script>
+  <!-- Component Injection (external script for CSP compliance) -->
+  <script src="/src/init-components.js" type="module"></script>
 
   <!-- Analytics & Consent (Landing Page) -->
   <script type="module">

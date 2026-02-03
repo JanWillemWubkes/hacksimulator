@@ -194,15 +194,8 @@
         })();
     </script>
 
-    <!-- Component Injection (Navbar + Footer) -->
-    <script type="module">
-        import { injectNavbar } from '/src/components/navbar.js';
-        import { injectFooter } from '/src/components/footer.js';
-
-        // Inject navbar FIRST - before main.js loads
-        injectNavbar('app');
-        injectFooter('compact', { showFeedback: true, showDonate: true, showCookieSettings: true });
-    </script>
+    <!-- Component Injection (external script for CSP compliance) -->
+    <script src="/src/init-components.js" type="module"></script>
 
     <!-- Application Entry Point -->
     <script src="src/ui/search-strategies.js?v=35-search-modal"></script>
