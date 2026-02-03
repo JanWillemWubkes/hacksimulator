@@ -117,19 +117,25 @@
   --vignette-mid2: rgba(11, 11, 11, 1);       /* Very dark grey */
   --vignette-edge: rgba(0, 0, 0, 1);          /* Pure black edges */
 
-  /* Navbar Colors - Dark Frame Pattern (GitHub Dark accents) */
+  /* Navbar Design Tokens - Unified Dark Frame Pattern (Sessie 97) */
+  --navbar-max-width: 1400px;           /* Uniform container width across all navbars */
+  --navbar-padding-x: var(--spacing-xl); /* 32px horizontal padding - unified */
+  --navbar-toggle-size: 13px;           /* Theme toggle font size - unified */
   --color-bg-navbar: #1a1a1a;           /* Dark grey navbar background - uniform across themes (Dark Frame v2.0) */
   --color-navbar-link: #c9d1d9;         /* Soft white navigation links (GitHub text) */
   --color-navbar-link-hover: #ffffff;   /* White hover state (maximum contrast) */
   --color-navbar-action: #ffffff;       /* White action icons (search, github, theme toggle) */
   --color-navbar-dropdown-icon: #c9d1d9; /* Matches nav text - single accent rule (Sessie 53) */
   --color-navbar-underline: #58a6ff;    /* Blue accent - consistent across themes (Dark Frame Pattern) */
+  --navbar-link-size: 1rem;             /* 16px - unified across all navbars (was 14px landing, 19px terminal) */
+  --navbar-link-weight: 500;            /* Medium weight - readable, not heavy */
+  --navbar-accent: var(--color-cta-dark-frame);  /* Neon green (#9fef00) for hover accents */
 
   /* Footer Colors - Dark Frame Pattern (GitHub Dark accents) */
   --color-bg-footer: #1a1a1a;           /* Dark grey footer background - matches navbar (unified chrome) */
   --color-footer-text: #c9d1d9;         /* Soft white footer text (GitHub text) */
-  --color-footer-link: #79c0ff;         /* Muted blue footer links (GitHub accent) */
-  --color-footer-link-hover: #58a6ff;   /* Brighter blue hover (GitHub primary) */
+  --color-footer-link: #c9d1d9;         /* Soft white footer links - matches landing (Dark Frame Pattern) */
+  --color-footer-link-hover: #9fef00;   /* Neon green hover - matches landing footer (Sessie 97 uniformity) */
   --color-border-dark-frame: #30363d;   /* Dark Frame borders - GitHub grey for dark-on-dark transitions */
 
   /* Dropdown Colors - Dark mode (GitHub Dark) */
@@ -157,6 +163,7 @@
   --color-cta-primary-hover: #8ad600;             /* Darker neon lime on hover */
   --color-cta-primary-glow: rgba(159, 239, 0, 0.3); /* Glow effect for CTAs */
   --color-cta-text: #0d1117;                      /* Dark text on bright CTA bg */
+  --color-cta-dark-frame: #9fef00;                /* Neon lime - ALWAYS used in dark navbar/footer (never changes with theme) */
 
   /* Shadow System - Professional Elevation Pattern (Medium/GitHub/Stripe standard) */
   /* Content Cards - Subtle depth for blog posts, documentation boxes (NOT terminal UI) */
@@ -201,10 +208,11 @@
   --color-surface-elevated: rgba(0, 0, 0, 0.03);  /* Very subtle grey tint - professional alerts */
   --color-surface-elevated-hover: rgba(0, 0, 0, 0.05);  /* Slightly darker hover state */
 
-  /* CTA Colors - Light mode (WCAG AA contrast on light backgrounds) */
-  --color-cta-primary: #7ac800;                   /* Adjusted lime for light bg (inherits prompt adjustment) */
-  --color-cta-primary-hover: #6bb500;             /* Darker hover state */
-  --color-cta-text: #0d1117;                      /* Dark text on bright CTA */
+  /* CTA Colors - Light mode (Tailwind Green 600 - rich, modern, WCAG AA 4.2:1) */
+  --color-cta-primary: #16a34a;                   /* Tailwind Green 600 - levendig, verzadigd groen */
+  --color-cta-primary-hover: #15803d;             /* Tailwind Green 700 - darker hover state */
+  --color-cta-primary-glow: rgba(22, 163, 74, 0.2); /* Matching glow for light backgrounds */
+  --color-cta-text: #ffffff;                      /* White text on green CTA (better contrast) */
 
   /* UI Elements - Vibrant terminal green + bright hover */
   --color-ui-primary: #0db34f;      /* Vibrant green - 3.25:1 contrast on white (WCAG AA) - terminal aesthetic */
@@ -233,8 +241,8 @@
   /* Footer Colors - STAYS DARK in light mode (matches navbar chrome) */
   --color-bg-footer: #1a1a1a;           /* Dark footer background (same as navbar) */
   --color-footer-text: #c9d1d9;         /* Soft white text (GitHub text - same as dark mode) */
-  --color-footer-link: #79c0ff;         /* Muted blue links (GitHub accent - same as dark mode) */
-  --color-footer-link-hover: #58a6ff;   /* Brighter blue hover (GitHub primary - same as dark mode) */
+  --color-footer-link: #c9d1d9;         /* Soft white footer links - matches landing (Dark Frame Pattern) */
+  --color-footer-link-hover: #9fef00;   /* Neon green hover - matches landing footer (Sessie 97 uniformity) */
   --color-border-dark-frame: #999999;   /* Dark Frame borders - darker grey for better visibility (2.68:1 vs content, 9.2:1 vs footer) - VS Code pattern */
 
   /* Theme Toggle Colors - STAYS LIGHT in light mode (navbar is dark) */
@@ -1292,7 +1300,7 @@ button {
 /* ==================== Footer ==================== */
 footer {
   position: static;
-  background-color: var(--color-bg-footer);
+  background: rgba(22, 27, 34, 0.5);  /* Semi-transparant - matches landing footer (Sessie 97 uniformity) */
   color: var(--color-footer-text);
   border-top: 1px solid var(--color-border);
   padding: var(--spacing-sm) var(--spacing-md);
@@ -1427,36 +1435,47 @@ footer nav a:not(:first-child) {
   position: relative;
 }
 
-/* Brand/Logo */
-.navbar-brand {
+/* Brand/Logo - unified styling for all navbars (matches landing.css) */
+.navbar-brand,
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
   font-family: var(--font-heading);
-  font-size: 1.2rem;
-  font-weight: var(--font-weight-bold);
-  color: var(--color-ui-primary);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-size: 1.05rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-navbar-link);  /* Unified: soft white (#c9d1d9) on dark navbar */
+  letter-spacing: 0.3px;
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
-.navbar-brand:hover {
-  color: var(--color-ui-hover);
+.navbar-brand .brand-icon,
+.nav-brand .brand-icon {
+  flex-shrink: 0;
+  color: var(--color-cta-dark-frame);  /* Always neon green on dark navbar */
 }
 
-/* Navbar Back Link (Terminal Page) */
-.navbar-back {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-small);
-  color: var(--navbar-link-color);
-  text-decoration: none;
-  opacity: 0.7;
-  transition: opacity var(--transition-fast), color var(--transition-fast);
-  margin-left: var(--space-sm);
+.navbar-brand .brand-accent,
+.nav-brand .brand-accent {
+  color: var(--color-cta-dark-frame);  /* Always neon green on dark navbar */
 }
 
-.navbar-back:hover {
-  opacity: 1;
-  color: var(--color-ui-hover);
+.navbar-brand:hover,
+.nav-brand:hover {
+  color: var(--color-cta-dark-frame);  /* Neon green on hover (matches landing) */
+  text-decoration: none;  /* Explicitly prevent underline inheritance */
+}
+
+.navbar-brand:hover .brand-accent,
+.nav-brand:hover .brand-accent {
+  color: var(--color-cta-dark-frame);  /* Stay neon green on hover */
+}
+
+/* Ensure text span also turns green on hover (for nav-brand with nested span) */
+.navbar-brand:hover span,
+.nav-brand:hover span {
+  color: var(--color-cta-dark-frame);
 }
 
 /* Navbar Menu Container (Links + Actions) */
@@ -1484,8 +1503,8 @@ footer nav a:not(:first-child) {
 .navbar-links > li:not(.navbar-dropdown) > a {
   color: var(--color-navbar-link);
   font-family: var(--font-heading);
-  font-size: 19px; /* Slightly larger for navbar prominence */
-  font-weight: 500; /* Medium weight - professional developer tool aesthetic */
+  font-size: var(--navbar-link-size);  /* Unified: 16px (was 19px) - Sessie 97 */
+  font-weight: var(--navbar-link-weight);  /* Unified: 500 */
   letter-spacing: 0.5px; /* Improved monospace readability */
   padding: var(--spacing-sm) var(--spacing-md);
   transition: color var(--transition-fast);
@@ -1493,25 +1512,9 @@ footer nav a:not(:first-child) {
   display: block;
 }
 
-/* Animated underline - grows from center (GitHub/VS Code pattern) */
-.navbar-links > li:not(.navbar-dropdown) > a::after {
-  content: '';
-  position: absolute;
-  bottom: 2px; /* Tight to text - industry standard (Sessie 55) */
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background-color: var(--color-navbar-underline); /* Consistent blue in both themes (Dark Frame Pattern) */
-  transition: width 0.2s ease, left 0.2s ease;
-}
-
+/* Hover effect - white text only, no underline (Sessie 97 uniformity) */
 .navbar-links > li:not(.navbar-dropdown) > a:hover {
   color: var(--color-navbar-link-hover);
-}
-
-.navbar-links > li:not(.navbar-dropdown) > a:hover::after {
-  width: 100%;
-  left: 0;
 }
 
 /* Navbar Dropdown */
@@ -1523,8 +1526,8 @@ footer nav a:not(:first-child) {
 .dropdown-trigger {
   color: var(--color-navbar-link);
   font-family: var(--font-heading);
-  font-size: 19px; /* Match generic navbar links */
-  font-weight: 500; /* Medium weight - consistent with generic links */
+  font-size: var(--navbar-link-size);  /* Unified: 16px (was 19px) - Sessie 97 */
+  font-weight: var(--navbar-link-weight);  /* Unified: 500 */
   letter-spacing: 0.5px; /* Improved monospace readability */
   padding: var(--spacing-sm) var(--spacing-md);
   cursor: pointer;
@@ -1535,25 +1538,9 @@ footer nav a:not(:first-child) {
   position: relative;
 }
 
-/* Animated underline for dropdown trigger - uses ::before (::after is '+' icon) */
-.dropdown-trigger::before {
-  content: '';
-  position: absolute;
-  bottom: 2px; /* Tight to text - industry standard (Sessie 55) */
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background-color: var(--color-navbar-underline); /* Consistent blue in both themes (Dark Frame Pattern) */
-  transition: width 0.2s ease, left 0.2s ease;
-}
-
+/* Hover effect - white text only, no underline (Sessie 97 uniformity) */
 .dropdown-trigger:hover {
   color: var(--color-navbar-link-hover);
-}
-
-.dropdown-trigger:hover::before {
-  width: 100%;
-  left: 0;
 }
 
 /* Dropdown Icon - Pseudo-element pattern (industry standard: VS Code, GitHub, Slack) */

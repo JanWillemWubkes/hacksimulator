@@ -1,0 +1,445 @@
+/* ==================== Pages CSS ==================== */
+/* Pagina-specifieke styling voor Over Ons en Contact pagina's */
+/* Hergebruikt patterns uit landing.css */
+
+/* ==================== Page Hero (Compacte variant) ==================== */
+.page-hero {
+  padding: calc(80px + var(--spacing-xl)) var(--landing-padding-desktop) var(--spacing-xl);
+  text-align: center;
+  max-width: var(--landing-max-width);
+  margin: 0 auto;
+}
+
+.page-hero .eyebrow-badge {
+  margin-bottom: var(--spacing-md);
+}
+
+.page-hero h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-md) 0;
+  line-height: 1.2;
+}
+
+.page-hero .hero-subtitle {
+  font-family: var(--font-body);
+  font-size: var(--font-size-subtitle);
+  color: var(--color-text-dim);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ==================== Page Sections ==================== */
+.page-section {
+  padding: var(--spacing-xl) var(--landing-padding-desktop);
+  max-width: var(--landing-max-width);
+  margin: 0 auto;
+}
+
+.page-section h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  text-align: center;
+  margin: 0 0 var(--spacing-xl) 0;
+}
+
+/* ==================== Stats Bar (Compact) ==================== */
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+  max-width: 800px;
+  margin: 0 auto var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background: rgba(22, 27, 34, 0.3);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+}
+
+.about-stats .result-item {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+.about-stats .result-number {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-cta-primary);
+  display: block;
+}
+
+.about-stats .result-label {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--color-text-dim);
+}
+
+/* ==================== Feature Grid Overrides ==================== */
+/* Cards zijn standaard zichtbaar op content pagina's (geen JS entrance animation) */
+.page-section .pain-point,
+.page-section .feature-card {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* 4-kolom grid voor "Wat maakt ons anders?" */
+.features-4col {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* ==================== Contact Cards ==================== */
+.contact-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.contact-card {
+  background: rgba(22, 27, 34, 0.3);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: var(--spacing-xl);
+  text-align: center;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.contact-card:hover {
+  border-color: rgba(159, 239, 0, 0.4);
+  transform: translateY(-4px);
+}
+
+.contact-card .feature-icon {
+  margin: 0 auto var(--spacing-md);
+}
+
+.contact-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.contact-card p {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-text-dim);
+  line-height: 1.6;
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.contact-card a {
+  color: var(--color-cta-primary);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.contact-card a:hover {
+  text-decoration: underline;
+}
+
+.contact-card .stat-highlight {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-cta-primary);
+  display: block;
+  margin-top: var(--spacing-sm);
+}
+
+/* ==================== Developer Card ==================== */
+.developer-card {
+  background: rgba(22, 27, 34, 0.3);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: var(--spacing-xl);
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.developer-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.developer-card .role {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-cta-primary);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.developer-card p {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-text-dim);
+  line-height: 1.7;
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.developer-card .social-links {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+.developer-card .social-links a {
+  color: var(--color-text-dim);
+  transition: color 0.2s ease;
+}
+
+.developer-card .social-links a:hover {
+  color: var(--color-cta-primary);
+}
+
+/* ==================== FAQ Section (Mini) ==================== */
+.faq-mini {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-mini .faq-item {
+  background: rgba(22, 27, 34, 0.3);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: var(--spacing-md);
+}
+
+.faq-mini .faq-question {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: 0;
+  /* Accordion button styling */
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: var(--spacing-md) var(--spacing-lg);
+  gap: var(--spacing-md);
+}
+
+.faq-mini .faq-question:hover {
+  color: var(--color-cta-primary);
+}
+
+.faq-mini .faq-question:focus-visible {
+  outline: 2px solid var(--color-cta-primary);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Chevron icon */
+.faq-mini .faq-icon {
+  color: var(--color-text-dim);
+  transition: transform 0.3s ease, color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.faq-mini .faq-item.open .faq-icon {
+  transform: rotate(180deg);
+  color: var(--color-cta-primary);
+}
+
+/* Answer - hidden by default */
+.faq-mini .faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0 var(--spacing-lg);
+}
+
+/* Answer - visible when open */
+.faq-mini .faq-item.open .faq-answer {
+  max-height: 300px;
+  padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
+}
+
+.faq-mini .faq-answer p {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-text-dim);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.faq-mini .faq-answer a {
+  color: var(--color-cta-primary);
+  text-decoration: none;
+}
+
+.faq-mini .faq-answer a:hover {
+  text-decoration: underline;
+}
+
+/* ==================== Legal Links Section ==================== */
+.legal-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.legal-link-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: rgba(22, 27, 34, 0.3);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.legal-link-card:hover {
+  border-color: var(--color-cta-primary);
+  background: rgba(22, 27, 34, 0.5);
+  transform: translateX(4px);
+}
+
+.legal-link-card:focus-visible {
+  outline: 2px solid var(--color-cta-primary);
+  outline-offset: 2px;
+}
+
+.legal-link-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(159, 239, 0, 0.1);
+  border-radius: 10px;
+  color: var(--color-cta-primary);
+}
+
+.legal-link-content {
+  flex: 1;
+}
+
+.legal-link-content h3 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: 0 0 4px 0;
+}
+
+.legal-link-content p {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-text-dim);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.legal-link-arrow {
+  flex-shrink: 0;
+  color: var(--color-text-dim);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.legal-link-card:hover .legal-link-arrow {
+  color: var(--color-cta-primary);
+  transform: translateX(4px);
+}
+
+/* ==================== Light Theme Overrides ==================== */
+[data-theme="light"] .about-stats,
+[data-theme="light"] .contact-card,
+[data-theme="light"] .developer-card,
+[data-theme="light"] .legal-link-card,
+[data-theme="light"] .faq-mini .faq-item {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: var(--color-border);
+}
+
+[data-theme="light"] .page-section .pain-point,
+[data-theme="light"] .page-section .feature-card {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* ==================== Mobile Responsive ==================== */
+@media (max-width: 768px) {
+  .page-hero {
+    padding: calc(80px + var(--spacing-lg)) var(--spacing-md) var(--spacing-lg);
+  }
+
+  .page-hero h1 {
+    font-size: clamp(1.75rem, 7vw, 2.25rem);
+  }
+
+  .page-section {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .about-stats {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+  }
+
+  .contact-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .features-4col {
+    grid-template-columns: 1fr;
+  }
+
+  .developer-card {
+    padding: var(--spacing-lg);
+  }
+
+  .legal-link-card {
+    padding: var(--spacing-md);
+  }
+
+  .legal-link-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-hero h1 {
+    font-size: 1.5rem;
+  }
+
+  .page-hero .hero-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .contact-card {
+    padding: var(--spacing-lg);
+  }
+
+  .contact-card .stat-highlight {
+    font-size: 1.5rem;
+  }
+}
