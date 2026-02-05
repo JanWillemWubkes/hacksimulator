@@ -22,8 +22,8 @@ import { injectFooter } from '/src/components/footer.js';
 function detectPageType() {
   const path = window.location.pathname;
 
-  // Terminal page
-  if (path.includes('terminal.html')) {
+  // Terminal page (supports both /terminal.html and /terminal for Netlify Pretty URLs)
+  if (path.includes('terminal.html') || path.endsWith('/terminal') || path === '/terminal') {
     return {
       variant: 'app',
       options: {},
