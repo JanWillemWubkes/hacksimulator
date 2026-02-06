@@ -177,7 +177,6 @@ function getBlogNavbar(options = {}) {
       </button>
 
       <div class="blog-nav-links">
-        <a href="${basePath}terminal.html">Simulator</a>
         ${showBlogLink ? `<a href="${basePath}blog/">Blog</a>` : ''}
       </div>
       <div class="blog-nav-actions">
@@ -194,6 +193,7 @@ function getBlogNavbar(options = {}) {
             <span class="toggle-indicator">█</span> LIGHT
           </span>
         </button>
+        <a href="${basePath}terminal.html" class="btn-cta btn-cta-nav">Start Simulator</a>
       </div>
     </div>
   </nav>
@@ -201,7 +201,7 @@ function getBlogNavbar(options = {}) {
   <!-- Blog Mobile Menu Overlay -->
   <div class="blog-mobile-menu" id="blog-mobile-menu" aria-hidden="true">
     <nav class="blog-mobile-nav" aria-label="Mobile navigation">
-      <a href="${basePath}terminal.html" class="blog-mobile-link">Simulator</a>
+      <a href="${basePath}terminal.html" class="btn-cta btn-cta-hero blog-mobile-cta">Start Simulator</a>
       ${showBlogLink ? `<a href="${basePath}blog/" class="blog-mobile-link">Blog</a>` : ''}
       <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer" class="blog-mobile-link">GitHub</a>
     </nav>

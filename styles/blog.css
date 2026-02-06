@@ -2,7 +2,7 @@
   margin: 0 auto;
   max-width: 720px;
   min-height: 100vh;
-  padding: calc(60px + var(--spacing-xl)) var(--spacing-lg) var(--spacing-xl);
+  padding: calc(var(--navbar-height) + var(--spacing-xl)) var(--spacing-lg) var(--spacing-xl);
   width: 100%;
 }
 .blog-header {
@@ -34,9 +34,9 @@
   border-bottom: 1px solid var(--color-border-dark-frame);
   display: flex;
   justify-content: center;  /* Center the inner container */
-  height: 60px;
+  height: var(--navbar-height);
   left: 0;
-  padding: var(--spacing-md) var(--navbar-padding-x, var(--spacing-xl));  /* Was --spacing-lg, now unified 32px */
+  padding: var(--spacing-md) 0;  /* Horizontal padding moved to .blog-nav-inner for alignment */
   position: fixed;
   right: 0;
   top: 0;
@@ -47,6 +47,7 @@
   max-width: var(--navbar-max-width, 1400px);
   margin: 0 auto;
   width: 100%;
+  padding: 0 var(--layout-padding-x, 32px);  /* Padding INSIDE max-width for alignment with landing/terminal */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -100,7 +101,7 @@
   transition: all var(--transition-fast);
 }
 .blog-nav .navbar-action:hover {
-  color: var(--color-navbar-action);
+  color: var(--color-cta-dark-frame);  /* Groen - consistent met andere icons */
   transform: translateY(-2px);
 }
 .category-target {
@@ -761,6 +762,63 @@ a[href='#all'].category-btn {
   align-items: center;
 }
 
+/* ==================== Blog Navbar CTA Button ==================== */
+/* Dark Frame Pattern: navbar is always dark, so CTA needs hardcoded dark text */
+/* Using a.btn-cta for higher specificity than .blog-nav a:not(.navbar-action) */
+.blog-nav a.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  background: var(--color-cta-dark-frame);  /* Always neon on dark navbar */
+  color: #0d1117;  /* HARDCODED: Always dark text on neon button */
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  border: none;
+  border-radius: var(--border-radius-button);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.blog-nav a.btn-cta:hover {
+  background: #8ad600;  /* Neon hover - fixed for dark navbar */
+  color: #0d1117;  /* HARDCODED: Always dark text */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--color-cta-primary-glow);
+}
+
+.blog-nav a.btn-cta-nav {
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  letter-spacing: 0.5px;
+  border-radius: 10px;  /* Match landing.css */
+}
+
+/* Mobile CTA in blog overlay menu */
+.blog-mobile-nav .btn-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-cta-primary);
+  color: var(--color-cta-text);
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  border: none;
+  border-radius: var(--border-radius-button);
+  width: 100%;
+  padding: 14px 24px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.blog-mobile-nav .btn-cta:hover {
+  background: var(--color-cta-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px var(--color-cta-primary-glow);
+}
+
 /* ==================== Blog Mobile Menu (Sessie 97 uniformity) ==================== */
 .blog-mobile-toggle {
   display: none;
@@ -801,7 +859,7 @@ a[href='#all'].category-btn {
   background: rgba(12, 18, 24, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  padding-top: 80px;
+  padding-top: var(--navbar-height);
   opacity: 0;
   transition: opacity var(--transition-normal);
 }
@@ -838,11 +896,12 @@ body.menu-open {
 }
 @media (max-width: 768px) {
   .blog-nav {
-    height: 60px;
-    padding: var(--spacing-sm) var(--spacing-md);
+    height: var(--navbar-height);
+    padding: var(--spacing-sm) 0;  /* Vertical only, horizontal on inner */
   }
   .blog-nav-inner {
     width: 100%;
+    padding: 0 var(--spacing-md);  /* Mobile horizontal padding */
   }
   /* Hide nav links on mobile, show hamburger (Sessie 97 uniformity) */
   .blog-nav-links {
@@ -864,7 +923,7 @@ body.menu-open {
     overflow-x: hidden;
     overflow-wrap: break-word;
     word-wrap: break-word;
-    padding-top: calc(60px + var(--spacing-xl));  /* Was 160px, now navbar is 60px */
+    padding-top: calc(var(--navbar-height) + var(--spacing-xl));  /* Navbar height + spacing */
     padding-left: var(--spacing-md);
     padding-right: var(--spacing-md);
     min-height: auto;
