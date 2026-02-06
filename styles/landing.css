@@ -9,7 +9,7 @@
 :root {
   /* Landing Layout */
   --landing-max-width: 1400px;
-  --landing-padding-desktop: 60px;
+  --landing-padding-desktop: var(--layout-padding-x, 32px);  /* Unified with navbar (was 60px) */
   --landing-padding-mobile: 20px;
 
   /* Typography Scale - Fluid */
@@ -76,6 +76,7 @@
   z-index: var(--z-navbar);
   background: var(--color-bg-navbar);  /* #1a1a1a - Dark Frame Pattern, consistent met terminal */
   border-bottom: 1px solid var(--color-border);
+  height: var(--navbar-height);  /* Fixed height for unified navbar (Sessie 98 - was min-height) */
 }
 
 .landing-nav {
@@ -85,7 +86,8 @@
   max-width: var(--navbar-max-width, 1400px);  /* Was 1600px, now unified */
   margin: 0 auto;
   width: 100%;
-  padding: var(--spacing-md) var(--navbar-padding-x, var(--spacing-xl));  /* Was 60px, now 32px unified */
+  height: 100%;  /* Fill wrapper height, let flexbox center content */
+  padding: 0 var(--navbar-padding-x, var(--spacing-xl));  /* Remove vertical padding - flexbox centers */
 }
 
 .nav-brand {
@@ -279,7 +281,7 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 32px;
-  max-width: 1600px;
+  max-width: var(--layout-max-width, 1400px);  /* Unified with navbar (was 1600px) */
   width: 100%;
   margin: 0 auto;
   padding: 0 var(--landing-padding-desktop);
@@ -1488,7 +1490,7 @@
 }
 
 .footer-column a:hover {
-  color: var(--color-cta-dark-frame);  /* Always neon on dark footer */
+  color: var(--color-navbar-link-hover);  /* Wit - tekst links, geen groen (icons only) */
 }
 
 .footer-column a:focus-visible {
@@ -1528,6 +1530,7 @@
 
 .footer-social a:hover {
   color: var(--color-cta-dark-frame);  /* Always neon on dark footer */
+  transform: translateY(-2px);  /* Lifting effect - consistent met andere icons */
 }
 
 /* ==================== Scroll Animations ==================== */
@@ -1669,7 +1672,7 @@ html {
   background: rgba(12, 18, 24, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  padding-top: 80px;
+  padding-top: var(--navbar-height);
   opacity: 0;
   transition: opacity var(--transition-normal);
 }
