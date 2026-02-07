@@ -1662,7 +1662,7 @@ footer nav a:not(:first-child) {
 
 /* Terminal Bracket Switch - Theme Toggle */
 .theme-toggle {
-  display: flex !important;
+  display: flex;
   gap: var(--spacing-sm);
   align-items: center;
   justify-content: center;

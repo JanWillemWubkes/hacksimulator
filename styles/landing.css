@@ -1677,7 +1677,7 @@ html {
   transition: opacity var(--transition-normal);
 }
 
-.mobile-menu.open {
+.mobile-menu.active {
   display: flex;
   opacity: 1;
   align-items: center;
@@ -1708,7 +1708,7 @@ html {
   margin-top: var(--spacing-md);
 }
 
-body.menu-open {
+body.mobile-menu-open {
   overflow: hidden;
 }
 
@@ -1791,6 +1791,30 @@ body.menu-open {
 
   .mobile-menu-toggle {
     display: block;
+  }
+
+  /* Hide desktop theme toggle + CTA on mobile (now in mobile menu - Sessie 98) */
+  /* Note: !important needed to override main.css .theme-toggle rule */
+  .landing-nav .theme-toggle,
+  .nav-right .btn-cta-nav {
+    display: none !important;
+  }
+
+  /* Mobile menu nav links styling (Sessie 98 uniformity) */
+  .mobile-menu-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Mobile theme toggle styling (Sessie 98 uniformity) */
+  /* Note: !important needed to override main.css .theme-toggle rule */
+  .mobile-menu-nav .theme-toggle {
+    display: flex !important;
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md) var(--spacing-xl);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-button);
   }
 
   .hero {

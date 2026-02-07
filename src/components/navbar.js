@@ -64,6 +64,21 @@ function getMarketingNavbar() {
   <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
     <nav class="mobile-menu-nav" aria-label="Mobile navigation">
       <a href="/terminal.html" class="btn-cta btn-cta-hero mobile-menu-cta">Start Simulator</a>
+
+      <!-- Nav Links (Sessie 98 uniformity) -->
+      <a href="#features" class="mobile-menu-link">Features</a>
+      <a href="#leerpad" class="mobile-menu-link">Leerpad</a>
+      <a href="#faq" class="mobile-menu-link">FAQ</a>
+
+      <!-- Theme Toggle (Sessie 98 uniformity) -->
+      <button type="button" class="theme-toggle mobile-theme-toggle" aria-label="Toggle dark/light mode">
+        <span class="toggle-option" data-theme="dark">
+          <span class="toggle-indicator">█</span> DARK
+        </span>
+        <span class="toggle-option" data-theme="light">
+          <span class="toggle-indicator">█</span> LIGHT
+        </span>
+      </button>
     </nav>
   </div>`;
 }
@@ -204,6 +219,16 @@ function getBlogNavbar(options = {}) {
       <a href="${basePath}terminal.html" class="btn-cta btn-cta-hero blog-mobile-cta">Start Simulator</a>
       ${showBlogLink ? `<a href="${basePath}blog/" class="blog-mobile-link">Blog</a>` : ''}
       <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer" class="blog-mobile-link">GitHub</a>
+
+      <!-- Theme Toggle (Sessie 98 uniformity) -->
+      <button type="button" class="theme-toggle mobile-theme-toggle" aria-label="Toggle dark/light mode">
+        <span class="toggle-option" data-theme="dark">
+          <span class="toggle-indicator">█</span> DARK
+        </span>
+        <span class="toggle-option" data-theme="light">
+          <span class="toggle-indicator">█</span> LIGHT
+        </span>
+      </button>
     </nav>
   </div>`;
 }
@@ -214,37 +239,42 @@ function getBlogNavbar(options = {}) {
 
 /**
  * Initialize theme toggle functionality
- * Reads from localStorage and syncs UI state
+ * Reads from localStorage and syncs UI state across all toggles (desktop + mobile)
+ * Updated Sessie 98: Support multiple theme toggles per page
  */
 function initThemeToggle() {
-  const themeToggle = document.querySelector('.theme-toggle');
-  if (!themeToggle) return;
+  const themeToggles = document.querySelectorAll('.theme-toggle');
+  if (themeToggles.length === 0) return;
 
   // Get saved theme or default to dark
   const savedTheme = localStorage.getItem('theme') || 'dark';
   document.documentElement.setAttribute('data-theme', savedTheme);
   updateThemeToggleUI(savedTheme);
 
-  // Handle click
-  themeToggle.addEventListener('click', () => {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  // Handle click on ALL theme toggles (desktop + mobile)
+  themeToggles.forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    updateThemeToggleUI(newTheme);
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeToggleUI(newTheme);
+    });
   });
 }
 
 /**
- * Update theme toggle button UI to reflect current theme
+ * Update ALL theme toggle buttons UI to reflect current theme
+ * Updated Sessie 98: Sync all toggles (desktop + mobile) simultaneously
  * @param {string} theme - 'dark' or 'light'
  */
 function updateThemeToggleUI(theme) {
-  const options = document.querySelectorAll('.theme-toggle .toggle-option');
-  options.forEach(option => {
-    const isActive = option.getAttribute('data-theme') === theme;
-    option.classList.toggle('active', isActive);
+  // Update ALL theme toggles on the page (desktop + mobile menus)
+  document.querySelectorAll('.theme-toggle').forEach(toggle => {
+    toggle.querySelectorAll('.toggle-option').forEach(option => {
+      option.classList.toggle('active', option.dataset.theme === theme);
+    });
   });
 }
 
@@ -283,6 +313,16 @@ function initMobileMenu() {
       menu.classList.remove('active');
       document.body.classList.remove('mobile-menu-open');
     }
+  });
+
+  // Close when clicking anchor links (Sessie 98 uniformity)
+  menu.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', () => {
+      toggle.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-hidden', 'true');
+      menu.classList.remove('active');
+      document.body.classList.remove('mobile-menu-open');
+    });
   });
 }
 
