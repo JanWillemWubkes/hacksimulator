@@ -1968,6 +1968,7 @@ body.mobile-menu-open {
   .results-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-lg);
+    padding: 0;
   }
 
   .result-number {
@@ -2004,6 +2005,16 @@ body.mobile-menu-open {
 
   .faq-answer p {
     font-size: 0.9rem;
+  }
+
+  /* Testimonials - Mobile */
+  .testimonial-cards {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .testimonial-card {
+    padding: var(--spacing-lg);
   }
 
   /* Final CTA */
@@ -2063,7 +2074,8 @@ body.mobile-menu-open {
   .pain-point,
   .feature-card,
   .leerpad-card,
-  .how-step {
+  .how-step,
+  .result-item {
     padding: var(--spacing-md);
   }
 
