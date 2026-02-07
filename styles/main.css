@@ -466,12 +466,6 @@ button {
     padding-right: 0;
   }
 
-  /* Preventieve fix: Voorkom bracket wrapping in alle h2 headers (Sessie 92) */
-  h2 {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: clip;              /* Terminal aesthetic, geen ellipsis */
-  }
 }
 
 /* Extra small devices: Smaller font to prevent clipping (Sessie 92) */
