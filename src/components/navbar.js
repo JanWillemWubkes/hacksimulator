@@ -31,20 +31,14 @@ function getMarketingNavbar() {
       </a>
 
       <div class="nav-right">
-        <!-- Mobile Menu Toggle -->
-        <button type="button" class="mobile-menu-toggle" aria-label="Open navigatiemenu" aria-expanded="false">
-          <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-          <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
+        <!-- Mobile Hamburger Toggle (hidden on desktop via mobile.css) -->
+        <button class="navbar-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="landing-mobile-menu">
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
 
-        <!-- Theme Toggle -->
+        <!-- Theme Toggle (desktop only - hidden on mobile) -->
         <button type="button" class="theme-toggle" aria-label="Toggle tussen dark en light mode">
           <span class="toggle-option active" data-theme="dark">
             <span class="toggle-indicator">█</span> DARK
@@ -54,24 +48,22 @@ function getMarketingNavbar() {
           </span>
         </button>
 
-        <!-- Primary CTA -->
+        <!-- Primary CTA (desktop only - hidden on mobile) -->
         <a href="/terminal.html" class="btn-cta btn-cta-nav">Start Simulator</a>
       </div>
     </nav>
   </div>
 
-  <!-- Mobile Menu Overlay -->
-  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
-    <nav class="mobile-menu-nav" aria-label="Mobile navigation">
-      <a href="/terminal.html" class="btn-cta btn-cta-hero mobile-menu-cta">Start Simulator</a>
-
-      <!-- Nav Links (Sessie 98 uniformity) -->
-      <a href="#features" class="mobile-menu-link">Features</a>
-      <a href="#leerpad" class="mobile-menu-link">Leerpad</a>
-      <a href="#faq" class="mobile-menu-link">FAQ</a>
-
-      <!-- Theme Toggle (Sessie 98 uniformity) -->
-      <button type="button" class="theme-toggle mobile-theme-toggle" aria-label="Toggle dark/light mode">
+  <!-- Mobile Menu Overlay (terminal-style: opaque black, slideDown, border separators) -->
+  <div id="landing-mobile-menu" class="navbar-menu">
+    <ul class="navbar-links">
+      <li><a href="/terminal.html" class="mobile-cta-link">Start Simulator</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#leerpad">Leerpad</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <button class="theme-toggle" aria-label="Toggle tussen dark en light mode" title="Toggle tussen dark en light mode">
         <span class="toggle-option" data-theme="dark">
           <span class="toggle-indicator">█</span> DARK
         </span>
@@ -79,7 +71,7 @@ function getMarketingNavbar() {
           <span class="toggle-indicator">█</span> LIGHT
         </span>
       </button>
-    </nav>
+    </div>
   </div>`;
 }
 
@@ -178,17 +170,11 @@ function getBlogNavbar(options = {}) {
         <span>HackSimulator<span class="brand-accent">.nl</span></span>
       </a>
 
-      <!-- Mobile Menu Toggle (hidden on desktop) -->
-      <button type="button" class="blog-mobile-toggle" aria-label="Open navigatiemenu" aria-expanded="false">
-        <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-        <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
+      <!-- Mobile Hamburger Toggle (hidden on desktop) -->
+      <button class="navbar-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="blog-mobile-menu">
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
 
       <div class="blog-nav-links">
@@ -213,15 +199,15 @@ function getBlogNavbar(options = {}) {
     </div>
   </nav>
 
-  <!-- Blog Mobile Menu Overlay -->
-  <div class="blog-mobile-menu" id="blog-mobile-menu" aria-hidden="true">
-    <nav class="blog-mobile-nav" aria-label="Mobile navigation">
-      <a href="${basePath}terminal.html" class="btn-cta btn-cta-hero blog-mobile-cta">Start Simulator</a>
-      ${showBlogLink ? `<a href="${basePath}blog/" class="blog-mobile-link">Blog</a>` : ''}
-      <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer" class="blog-mobile-link">GitHub</a>
-
-      <!-- Theme Toggle (Sessie 98 uniformity) -->
-      <button type="button" class="theme-toggle mobile-theme-toggle" aria-label="Toggle dark/light mode">
+  <!-- Blog Mobile Menu Overlay (terminal-style: opaque black, slideDown, border separators) -->
+  <div id="blog-mobile-menu" class="navbar-menu">
+    <ul class="navbar-links">
+      <li><a href="${basePath}terminal.html" class="mobile-cta-link">Start Simulator</a></li>
+      ${showBlogLink ? `<li><a href="${basePath}blog/">Blog</a></li>` : ''}
+      <li><a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <button class="theme-toggle" aria-label="Toggle tussen dark en light mode" title="Toggle tussen dark en light mode">
         <span class="toggle-option" data-theme="dark">
           <span class="toggle-indicator">█</span> DARK
         </span>
@@ -229,7 +215,7 @@ function getBlogNavbar(options = {}) {
           <span class="toggle-indicator">█</span> LIGHT
         </span>
       </button>
-    </nav>
+    </div>
   </div>`;
 }
 
@@ -278,101 +264,6 @@ function updateThemeToggleUI(theme) {
   });
 }
 
-/**
- * Initialize mobile menu (hamburger) for marketing navbar
- */
-function initMobileMenu() {
-  const toggle = document.querySelector('.mobile-menu-toggle');
-  const menu = document.getElementById('mobile-menu');
-
-  if (!toggle || !menu) return;
-
-  toggle.addEventListener('click', () => {
-    const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
-    toggle.setAttribute('aria-expanded', !isExpanded);
-    menu.setAttribute('aria-hidden', isExpanded);
-    menu.classList.toggle('active', !isExpanded);
-    document.body.classList.toggle('mobile-menu-open', !isExpanded);
-  });
-
-  // Close on escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && menu.classList.contains('active')) {
-      toggle.setAttribute('aria-expanded', 'false');
-      menu.setAttribute('aria-hidden', 'true');
-      menu.classList.remove('active');
-      document.body.classList.remove('mobile-menu-open');
-    }
-  });
-
-  // Close when clicking outside
-  menu.addEventListener('click', (e) => {
-    if (e.target === menu) {
-      toggle.setAttribute('aria-expanded', 'false');
-      menu.setAttribute('aria-hidden', 'true');
-      menu.classList.remove('active');
-      document.body.classList.remove('mobile-menu-open');
-    }
-  });
-
-  // Close when clicking anchor links (Sessie 98 uniformity)
-  menu.querySelectorAll('a[href^="#"]').forEach(link => {
-    link.addEventListener('click', () => {
-      toggle.setAttribute('aria-expanded', 'false');
-      menu.setAttribute('aria-hidden', 'true');
-      menu.classList.remove('active');
-      document.body.classList.remove('mobile-menu-open');
-    });
-  });
-}
-
-/**
- * Initialize mobile menu (hamburger) for blog navbar (Sessie 97 uniformity)
- */
-function initBlogMobileMenu() {
-  const toggle = document.querySelector('.blog-mobile-toggle');
-  const menu = document.getElementById('blog-mobile-menu');
-
-  if (!toggle || !menu) return;
-
-  toggle.addEventListener('click', () => {
-    const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
-    toggle.setAttribute('aria-expanded', !isExpanded);
-    menu.setAttribute('aria-hidden', isExpanded);
-    menu.classList.toggle('open', !isExpanded);
-    document.body.classList.toggle('menu-open', !isExpanded);
-  });
-
-  // Close on escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && menu.classList.contains('open')) {
-      toggle.setAttribute('aria-expanded', 'false');
-      menu.setAttribute('aria-hidden', 'true');
-      menu.classList.remove('open');
-      document.body.classList.remove('menu-open');
-    }
-  });
-
-  // Close when clicking outside (on overlay)
-  menu.addEventListener('click', (e) => {
-    if (e.target === menu) {
-      toggle.setAttribute('aria-expanded', 'false');
-      menu.setAttribute('aria-hidden', 'true');
-      menu.classList.remove('open');
-      document.body.classList.remove('menu-open');
-    }
-  });
-
-  // Close when clicking a link
-  menu.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      toggle.setAttribute('aria-expanded', 'false');
-      menu.setAttribute('aria-hidden', 'true');
-      menu.classList.remove('open');
-      document.body.classList.remove('menu-open');
-    });
-  });
-}
 
 /**
  * Initialize help dropdown for app navbar
@@ -415,14 +306,20 @@ function initHelpDropdown() {
 }
 
 /**
- * Initialize terminal navbar toggle (hamburger for mobile)
+ * Initialize navbar toggle (hamburger for mobile)
+ * Generic: works for terminal, landing, and blog navbars
+ * Uses aria-controls to dynamically find the target menu
  */
 function initNavbarToggle() {
   const toggle = document.querySelector('.navbar-toggle');
-  const menu = document.getElementById('navbar-menu');
-  const dropdown = document.querySelector('.navbar-dropdown');
+  if (!toggle) return;
 
-  if (!toggle || !menu) return;
+  // Use aria-controls to find menu dynamically (terminal: navbar-menu, landing: landing-mobile-menu, blog: blog-mobile-menu)
+  const menuId = toggle.getAttribute('aria-controls');
+  const menu = menuId ? document.getElementById(menuId) : null;
+  if (!menu) return;
+
+  const dropdown = document.querySelector('.navbar-dropdown');
 
   // Helper to close mobile menu
   const closeMenu = () => {
@@ -430,9 +327,10 @@ function initNavbarToggle() {
     menu.classList.remove('active');
     toggle.setAttribute('aria-expanded', 'false');
     toggle.setAttribute('aria-label', 'Menu openen');
+    document.body.classList.remove('mobile-menu-open');
   };
 
-  // Helper to close dropdown
+  // Helper to close dropdown (graceful no-op if no dropdown)
   const closeDropdown = () => {
     if (dropdown) {
       dropdown.classList.remove('active');
@@ -451,12 +349,14 @@ function initNavbarToggle() {
     menu.classList.toggle('active', !isExpanded);
     toggle.setAttribute('aria-expanded', !isExpanded);
     toggle.setAttribute('aria-label', isExpanded ? 'Menu openen' : 'Menu sluiten');
+    document.body.classList.toggle('mobile-menu-open', !isExpanded);
   });
 
   // Close on click outside
   document.addEventListener('click', (e) => {
-    const navbar = document.getElementById('navbar');
-    if (menu.classList.contains('active') && navbar && !navbar.contains(e.target)) {
+    // Find the closest nav container (works for terminal #navbar, landing .landing-nav-wrapper, blog .blog-nav)
+    const navContainer = toggle.closest('nav') || toggle.closest('.landing-nav-wrapper');
+    if (menu.classList.contains('active') && navContainer && !navContainer.contains(e.target) && !menu.contains(e.target)) {
       closeMenu();
       closeDropdown();
     }
@@ -479,6 +379,13 @@ function initNavbarToggle() {
       closeMenu();
       closeDropdown();
     }
+  });
+
+  // Close when clicking anchor links (for landing's #features, #leerpad, #faq)
+  menu.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', () => {
+      closeMenu();
+    });
   });
 }
 
@@ -544,14 +451,14 @@ export function injectNavbar(variant = 'marketing', options = {}) {
       break;
     case 'marketing':
       initThemeToggle();
-      initMobileMenu();
+      initNavbarToggle();
       break;
     case 'blog':
       initThemeToggle();
-      initBlogMobileMenu();
+      initNavbarToggle();
       break;
   }
 }
 
 // Also export individual functions for flexibility
-export { initThemeToggle, initMobileMenu, initHelpDropdown };
+export { initThemeToggle, initHelpDropdown };
