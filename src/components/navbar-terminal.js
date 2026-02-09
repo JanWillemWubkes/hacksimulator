@@ -32,6 +32,9 @@ function closeMenus() {
     toggle.setAttribute('aria-label', 'Menu openen');
   }
 
+  // Remove body scroll lock (consistent with navbar.js closeMenu())
+  document.body.classList.remove('mobile-menu-open');
+
   // Close dropdown
   const dropdown = document.querySelector('.navbar-dropdown');
   if (dropdown) {
@@ -55,7 +58,7 @@ function executeTerminalCommand(command) {
   }
 
   input.value = command;
-  input.focus();
+  input.focus({ preventScroll: true });
 
   // Dispatch Enter keydown event to execute command
   const enterEvent = new KeyboardEvent('keydown', {
@@ -225,7 +228,7 @@ function initSearchIntegration() {
         // Fallback: focus terminal and show help
         const input = document.getElementById('terminal-input');
         if (input) {
-          input.focus();
+          input.focus({ preventScroll: true });
           input.value = 'help';
         }
       }
