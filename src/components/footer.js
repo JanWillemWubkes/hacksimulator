@@ -42,6 +42,7 @@ function getMarketingFooter(options = {}) {
           <ul>
             <li><a href="${basePath}terminal.html">Simulator</a></li>
             <li><a href="${basePath}blog/">Blog</a></li>
+            <li><a href="${basePath}commands/">Commands</a></li>
             <li><a href="${basePath}over-ons.html">Over Ons</a></li>
             <li><a href="${basePath}contact.html">Contact</a></li>
           </ul>

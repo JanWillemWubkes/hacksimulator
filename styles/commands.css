@@ -1,0 +1,243 @@
+/* ==================== Commands Reference Page ==================== */
+/* Styling voor de statische command reference pagina */
+/* Hergebruikt variabelen uit main.css en patronen uit pages.css */
+
+/* ==================== Category Navigation ==================== */
+.commands-category-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  padding: var(--spacing-md) 0;
+  margin-bottom: var(--spacing-xl);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.commands-category-nav a {
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-button);
+  color: var(--color-text-dim);
+  font-family: var(--font-terminal);
+  font-size: 0.9rem;
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.commands-category-nav a:hover {
+  border-color: var(--color-cta-primary);
+  color: var(--color-cta-primary);
+}
+
+/* ==================== Category Sections ==================== */
+.commands-category {
+  margin-bottom: var(--spacing-xl);
+}
+
+.commands-category h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.commands-category > p {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-text-dim);
+  line-height: 1.6;
+  margin: 0 0 var(--spacing-lg) 0;
+  max-width: 700px;
+}
+
+/* ==================== Command Cards Grid ==================== */
+.commands-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+}
+
+/* ==================== Command Card ==================== */
+.command-card {
+  background: rgba(22, 27, 34, 0.3);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: var(--spacing-lg);
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.command-card:hover {
+  border-color: rgba(159, 239, 0, 0.4);
+  transform: translateY(-4px);
+}
+
+.command-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.command-card-header code {
+  font-family: var(--font-terminal);
+  font-size: 1.25rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-cta-primary);
+}
+
+/* ==================== Level Badges ==================== */
+.command-level {
+  font-family: var(--font-terminal);
+  font-size: 0.7rem;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.command-level-beginner {
+  background: rgba(63, 185, 80, 0.15);
+  color: #3fb950;
+}
+
+.command-level-intermediate {
+  background: rgba(210, 153, 34, 0.15);
+  color: #d29922;
+}
+
+.command-level-advanced {
+  background: rgba(248, 81, 73, 0.15);
+  color: #f85149;
+}
+
+/* ==================== Card Content ==================== */
+.command-card p {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-text-dim);
+  line-height: 1.6;
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.command-usage {
+  font-family: var(--font-terminal);
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+  background: rgba(22, 27, 34, 0.5);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: 4px;
+  margin-bottom: var(--spacing-sm);
+  display: inline-block;
+}
+
+/* Terminal example inside card */
+.command-card .terminal-example {
+  font-size: 0.85rem;
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin: var(--spacing-sm) 0;
+}
+
+.command-learn {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+  font-style: italic;
+  margin: var(--spacing-sm) 0 0 0;
+}
+
+.command-learn strong {
+  color: var(--color-cta-primary);
+  font-style: normal;
+}
+
+/* ==================== Commands Page Stats ==================== */
+.commands-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-lg);
+  max-width: 900px;
+  margin: 0 auto var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background: rgba(22, 27, 34, 0.3);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+}
+
+.commands-stats .result-item {
+  text-align: center;
+  /* Override landing.css entrance animation (opacity: 0) */
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+.commands-stats .result-number {
+  font-family: var(--font-heading);
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-cta-primary);
+  display: block;
+}
+
+.commands-stats .result-label {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--color-text-dim);
+}
+
+/* ==================== Light Theme Overrides ==================== */
+[data-theme="light"] .command-card {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: var(--color-border);
+}
+
+[data-theme="light"] .command-card:hover {
+  border-color: rgba(159, 239, 0, 0.6);
+}
+
+[data-theme="light"] .commands-stats {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme="light"] .command-usage {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* ==================== Mobile Responsive ==================== */
+@media (max-width: 768px) {
+  .commands-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .commands-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+  }
+
+  .commands-category-nav {
+    gap: var(--spacing-xs);
+  }
+
+  .commands-category-nav a {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+
+  .command-card {
+    padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .commands-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .command-card-header code {
+    font-size: 1.1rem;
+  }
+}

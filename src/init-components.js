@@ -52,6 +52,16 @@ function detectPageType() {
     };
   }
 
+  // Commands page (uses marketing layout with basePath adjustment)
+  if (path.includes('/commands/') || path.endsWith('/commands')) {
+    return {
+      variant: 'marketing',
+      options: {},
+      footerVariant: 'marketing',
+      footerOptions: {}
+    };
+  }
+
   // Marketing pages (landing, over-ons, contact)
   return {
     variant: 'marketing',
