@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>Alle Terminal Commands | HackSimulator.nl - 30+ Educatieve Commands</title>
+  <meta name="description" content="Ontdek alle 30+ terminal commands in HackSimulator.nl. Van ls en cd tot nmap en metasploit - leer ethisch hacken met Nederlandse uitleg, voorbeelden en tips.">
+  <meta name="keywords" content="terminal commands, linux commands, ethisch hacken, nmap, hashcat, cybersecurity, command line, bash commands, hacking leren">
+  <meta name="author" content="HackSimulator.nl">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://hacksimulator.nl/commands/">
+  <meta property="og:title" content="Alle Terminal Commands | HackSimulator.nl">
+  <meta property="og:description" content="30+ educatieve terminal commands met Nederlandse uitleg. Van filesystem basics tot security tools - leer ethisch hacken door te doen.">
+  <meta property="og:locale" content="nl_NL">
+  <meta property="og:site_name" content="HackSimulator.nl">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Alle Terminal Commands | HackSimulator.nl">
+  <meta name="twitter:description" content="30+ educatieve terminal commands met Nederlandse uitleg voor ethisch hacken.">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://hacksimulator.nl/commands/">
+
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="HackSimulator.nl Blog" href="/feed.xml">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#0d1117">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/landing.css">
+  <link rel="stylesheet" href="../styles/pages.css">
+  <link rel="stylesheet" href="../styles/commands.css">
+  <link rel="stylesheet" href="../styles/blog.css">
+  <link rel="stylesheet" href="../styles/mobile.css">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
+
+  <!-- Cookiebot CMP (Google-certified, IAB TCF 2.3) - MUST be first script -->
+  <script id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="JOUW_COOKIEBOT_ID"
+          type="text/javascript"
+          data-blockingmode="auto"></script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6345664385525701"
+       crossorigin="anonymous"></script>
+
+  <!-- Structured Data - JSON-LD (ItemList for rich results) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "HackSimulator.nl Terminal Commands",
+    "description": "Alle 31 educatieve terminal commands voor het leren van ethisch hacken",
+    "url": "https://hacksimulator.nl/commands/",
+    "numberOfItems": 31,
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "ls", "description": "Toon bestanden en mappen in de huidige directory" },
+      { "@type": "ListItem", "position": 2, "name": "cd", "description": "Navigeer naar een andere directory" },
+      { "@type": "ListItem", "position": 3, "name": "pwd", "description": "Toon het volledige pad van je huidige locatie" },
+      { "@type": "ListItem", "position": 4, "name": "cat", "description": "Bekijk de inhoud van bestanden" },
+      { "@type": "ListItem", "position": 5, "name": "mkdir", "description": "Maak een nieuwe directory aan" },
+      { "@type": "ListItem", "position": 6, "name": "rm", "description": "Verwijder bestanden of directories" },
+      { "@type": "ListItem", "position": 7, "name": "cp", "description": "Kopieer bestanden of directories" },
+      { "@type": "ListItem", "position": 8, "name": "mv", "description": "Verplaats of hernoem bestanden" },
+      { "@type": "ListItem", "position": 9, "name": "find", "description": "Zoek bestanden op naam" },
+      { "@type": "ListItem", "position": 10, "name": "grep", "description": "Zoek naar tekst in bestanden" },
+      { "@type": "ListItem", "position": 11, "name": "touch", "description": "Maak een leeg bestand aan" },
+      { "@type": "ListItem", "position": 12, "name": "chmod", "description": "Wijzig bestandspermissies" },
+      { "@type": "ListItem", "position": 13, "name": "nmap", "description": "Scan netwerken op open poorten en services" },
+      { "@type": "ListItem", "position": 14, "name": "ping", "description": "Test de verbinding met een host" },
+      { "@type": "ListItem", "position": 15, "name": "traceroute", "description": "Toon de route naar een bestemming" },
+      { "@type": "ListItem", "position": 16, "name": "netstat", "description": "Toon actieve netwerkverbindingen" },
+      { "@type": "ListItem", "position": 17, "name": "ifconfig", "description": "Toon netwerkconfiguratie" },
+      { "@type": "ListItem", "position": 18, "name": "whois", "description": "Zoek domeinregistratie-informatie op" },
+      { "@type": "ListItem", "position": 19, "name": "hashcat", "description": "Kraak wachtwoord-hashes" },
+      { "@type": "ListItem", "position": 20, "name": "hydra", "description": "Test login-beveiliging met brute force" },
+      { "@type": "ListItem", "position": 21, "name": "sqlmap", "description": "Test websites op SQL injection kwetsbaarheden" },
+      { "@type": "ListItem", "position": 22, "name": "metasploit", "description": "Penetration testing framework" },
+      { "@type": "ListItem", "position": 23, "name": "nikto", "description": "Scan webservers op kwetsbaarheden" },
+      { "@type": "ListItem", "position": 24, "name": "whoami", "description": "Toon huidige gebruikersnaam" },
+      { "@type": "ListItem", "position": 25, "name": "date", "description": "Toon huidige datum en tijd" },
+      { "@type": "ListItem", "position": 26, "name": "echo", "description": "Print tekst naar het scherm" },
+      { "@type": "ListItem", "position": 27, "name": "help", "description": "Toon beschikbare commands" },
+      { "@type": "ListItem", "position": 28, "name": "history", "description": "Toon eerder gebruikte commands" },
+      { "@type": "ListItem", "position": 29, "name": "man", "description": "Toon de handleiding van een command" },
+      { "@type": "ListItem", "position": 30, "name": "clear", "description": "Wis het terminal scherm" },
+      { "@type": "ListItem", "position": 31, "name": "leerpad", "description": "Toon het leerpad met voortgang" }
+    ]
+  }
+  </script>
+
+  <!-- Cookie Consent & Analytics -->
+  <script src="../src/analytics/consent-banner.js" type="module"></script>
+  <script src="../src/analytics/consent.js" type="module"></script>
+</head>
+<body class="landing-page">
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
+
+  <!-- Navigation (Component Injection) -->
+  <div id="navbar-placeholder">
+    <noscript>
+      <nav class="noscript-nav" role="navigation">
+        <a href="/">HackSimulator.nl</a>
+        <a href="/terminal.html">Start Simulator</a>
+      </nav>
+    </noscript>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main-content">
+
+    <!-- Hero Section -->
+    <section class="page-hero">
+      <span class="eyebrow-badge">30+ Educatieve Commands</span>
+      <h1>Alle Terminal Commands</h1>
+      <p class="hero-subtitle">
+        Van basis filesystem navigatie tot geavanceerde security tools — elke command met Nederlandse uitleg,
+        realistische voorbeelden en educatieve tips.
+      </p>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="page-section">
+      <div class="commands-stats">
+        <div class="result-item">
+          <span class="result-number">11</span>
+          <span class="result-label">Filesystem</span>
+        </div>
+        <div class="result-item">
+          <span class="result-number">6</span>
+          <span class="result-label">Network</span>
+        </div>
+        <div class="result-item">
+          <span class="result-number">5</span>
+          <span class="result-label">Security</span>
+        </div>
+        <div class="result-item">
+          <span class="result-number">9</span>
+          <span class="result-label">System</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category Jump Links -->
+    <section class="page-section">
+      <nav class="commands-category-nav" aria-label="Ga naar categorie">
+        <a href="#filesystem">Filesystem</a>
+        <a href="#network">Network</a>
+        <a href="#security">Security</a>
+        <a href="#system">System</a>
+      </nav>
+    </section>
+
+    <!-- ==================== FILESYSTEM COMMANDS ==================== -->
+    <section id="filesystem" class="page-section commands-category">
+      <h2>Filesystem Commands</h2>
+      <p>Navigeer door het virtuele bestandssysteem, lees bestanden, maak mappen aan en beheer je data. Deze commands vormen de basis van elke terminal gebruiker.</p>
+
+      <div class="commands-grid">
+
+        <!-- ls -->
+        <div class="command-card" id="cmd-ls">
+          <div class="command-card-header">
+            <code>ls</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Toon bestanden en mappen in de huidige directory. De eerste stap bij het verkennen van elk systeem.</p>
+          <div class="command-usage">ls [opties] [directory]</div>
+          <div class="terminal-example">
+            <div class="prompt">$ ls -la</div>
+            <div class="output">drwxr-xr-x 5 hacker hacker 4096 .
+-rw-r--r-- 1 hacker hacker 3526 notes.txt
+-rw------- 1 hacker hacker  220 .bash_history</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Bestanden zien, permissions lezen, verborgen bestanden vinden</p>
+        </div>
+
+        <!-- cd -->
+        <div class="command-card" id="cmd-cd">
+          <div class="command-card-header">
+            <code>cd</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Navigeer naar een andere directory. Essentieel om door het bestandssysteem te bewegen.</p>
+          <div class="command-usage">cd [directory]</div>
+          <div class="terminal-example">
+            <div class="prompt">$ cd /var/log</div>
+            <div class="prompt">$ pwd</div>
+            <div class="output">/var/log</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Filesystem navigatie, relatieve vs absolute paden, home directory</p>
+        </div>
+
+        <!-- pwd -->
+        <div class="command-card" id="cmd-pwd">
+          <div class="command-card-header">
+            <code>pwd</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Toon het volledige pad van je huidige locatie. Handig als je verdwaald bent in het filesystem.</p>
+          <div class="command-usage">pwd</div>
+          <div class="terminal-example">
+            <div class="prompt">$ pwd</div>
+            <div class="output">/home/hacker/Documents</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Filesystem structuur, absolute paden begrijpen</p>
+        </div>
+
+        <!-- cat -->
+        <div class="command-card" id="cmd-cat">
+          <div class="command-card-header">
+            <code>cat</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Bekijk de inhoud van bestanden. Essentieel voor het lezen van configuraties, logs en geheime data.</p>
+          <div class="command-usage">cat &lt;bestand&gt;</div>
+          <div class="terminal-example">
+            <div class="prompt">$ cat /etc/passwd</div>
+            <div class="output">root:x:0:0:root:/root:/bin/bash
+hacker:x:1000:1000::/home/hacker:/bin/bash</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Bestanden lezen, systeembestanden begrijpen, data extractie</p>
+        </div>
+
+        <!-- mkdir -->
+        <div class="command-card" id="cmd-mkdir">
+          <div class="command-card-header">
+            <code>mkdir</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Maak een nieuwe directory aan. Organiseer je bestanden en creeer werkruimtes.</p>
+          <div class="command-usage">mkdir &lt;directory&gt;</div>
+          <div class="terminal-example">
+            <div class="prompt">$ mkdir projects</div>
+            <div class="prompt">$ ls</div>
+            <div class="output">Documents  Downloads  projects</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Filesystem organisatie, directory structuur opbouwen</p>
+        </div>
+
+        <!-- rm -->
+        <div class="command-card" id="cmd-rm">
+          <div class="command-card-header">
+            <code>rm</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Verwijder bestanden of directories. Let op: er is geen prullenbak in de terminal!</p>
+          <div class="command-usage">rm [opties] &lt;bestand&gt;</div>
+          <div class="terminal-example">
+            <div class="prompt">$ rm old_file.txt</div>
+            <div class="output">Bestand verwijderd: old_file.txt</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Veilig verwijderen, -r flag, risico's begrijpen</p>
+        </div>
+
+        <!-- cp -->
+        <div class="command-card" id="cmd-cp">
+          <div class="command-card-header">
+            <code>cp</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Kopieer bestanden of directories. Het origineel blijft intact, je maakt een exacte kopie.</p>
+          <div class="command-usage">cp &lt;bron&gt; &lt;doel&gt;</div>
+          <div class="terminal-example">
+            <div class="prompt">$ cp notes.txt backup.txt</div>
+            <div class="output">Gekopieerd: notes.txt naar backup.txt</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Bestanden dupliceren, backups maken</p>
+        </div>
+
+        <!-- mv -->
+        <div class="command-card" id="cmd-mv">
+          <div class="command-card-header">
+            <code>mv</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Verplaats of hernoem bestanden en directories. Twee functies in een command.</p>
+          <div class="command-usage">mv &lt;bron&gt; &lt;doel&gt;</div>
+          <div class="terminal-example">
+            <div class="prompt">$ mv old_name.txt new_name.txt</div>
+            <div class="output">Verplaatst: old_name.txt naar new_name.txt</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Bestanden hernoemen en verplaatsen, organisatie</p>
+        </div>
+
+        <!-- find -->
+        <div class="command-card" id="cmd-find">
+          <div class="command-card-header">
+            <code>find</code>
+            <span class="command-level command-level-intermediate">Intermediate</span>
+          </div>
+          <p>Zoek bestanden op naam in het hele filesystem. Onmisbaar voor het vinden van verborgen data.</p>
+          <div class="command-usage">find &lt;zoekterm&gt;</div>
+          <div class="terminal-example">
+            <div class="prompt">$ find passwords</div>
+            <div class="output">/home/hacker/.hidden/passwords.txt
+/var/backups/old_passwords.bak</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Bestanden zoeken, verborgen bestanden ontdekken, recon technieken</p>
+        </div>
+
+        <!-- grep -->
+        <div class="command-card" id="cmd-grep">
+          <div class="command-card-header">
+            <code>grep</code>
+            <span class="command-level command-level-intermediate">Intermediate</span>
+          </div>
+          <p>Zoek naar tekst in bestanden. Krachtig voor het doorzoeken van logs, configs en broncode.</p>
+          <div class="command-usage">grep &lt;patroon&gt; &lt;bestand&gt;</div>
+          <div class="terminal-example">
+            <div class="prompt">$ grep "password" config.txt</div>
+            <div class="output">3: password=my_secret_password</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Tekst zoeken, log analyse, data extractie</p>
+        </div>
+
+        <!-- touch -->
+        <div class="command-card" id="cmd-touch">
+          <div class="command-card-header">
+            <code>touch</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Maak een leeg bestand aan. Handig voor het snel aanmaken van configuratie- of scriptbestanden.</p>
+          <div class="command-usage">touch &lt;bestand&gt;</div>
+          <div class="terminal-example">
+            <div class="prompt">$ touch notes.txt</div>
+            <div class="output">Bestand aangemaakt: notes.txt</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Bestanden aanmaken, timestamps begrijpen</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== NETWORK COMMANDS ==================== -->
+    <section id="network" class="page-section commands-category">
+      <h2>Network Commands</h2>
+      <p>Begrijp hoe netwerken werken, scan poorten, traceer routes en analyseer verbindingen. Essentieel voor elke cybersecurity professional.</p>
+
+      <div class="commands-grid">
+
+        <!-- nmap -->
+        <div class="command-card" id="cmd-nmap">
+          <div class="command-card-header">
+            <code>nmap</code>
+            <span class="command-level command-level-intermediate">Intermediate</span>
+          </div>
+          <p>Scan netwerken op open poorten en services. De meest gebruikte tool voor network reconnaissance.</p>
+          <div class="command-usage">nmap &lt;target&gt;</div>
+          <div class="terminal-example">
+            <div class="prompt">$ nmap 192.168.1.1</div>
+            <div class="output">PORT    STATE  SERVICE
+22/tcp  OPEN   SSH      ← Secure Shell
+80/tcp  OPEN   HTTP     ← Webserver
+443/tcp OPEN   HTTPS    ← Versleuteld</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Poort scanning, service detectie, attack surface analyse</p>
+        </div>
+
+        <!-- ping -->
+        <div class="command-card" id="cmd-ping">
+          <div class="command-card-header">
+            <code>ping</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Test de verbinding met een host. Controleer of een server bereikbaar is en meet de snelheid.</p>
+          <div class="command-usage">ping &lt;host&gt;</div>
+          <div class="terminal-example">
+            <div class="prompt">$ ping 8.8.8.8</div>
+            <div class="output">PING 8.8.8.8: 64 bytes, time=12.3ms
+PING 8.8.8.8: 64 bytes, time=11.8ms</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> ICMP protocol, latency meten, host discovery</p>
+        </div>
+
+        <!-- traceroute -->
+        <div class="command-card" id="cmd-traceroute">
+          <div class="command-card-header">
+            <code>traceroute</code>
+            <span class="command-level command-level-intermediate">Intermediate</span>
+          </div>
+          <p>Toon de route die data aflegt naar een bestemming. Ontdek welke netwerken je verkeer passeert.</p>
+          <div class="command-usage">traceroute &lt;bestemming&gt;</div>
+          <div class="terminal-example">
+            <div class="prompt">$ traceroute google.com</div>
+            <div class="output"> 1  router.local    1.2ms
+ 2  isp-gw.nl      8.5ms
+ 3  google.com     12.1ms</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Network routing, TTL, hop-by-hop analyse</p>
+        </div>
+
+        <!-- netstat -->
+        <div class="command-card" id="cmd-netstat">
+          <div class="command-card-header">
+            <code>netstat</code>
+            <span class="command-level command-level-intermediate">Intermediate</span>
+          </div>
+          <p>Toon actieve netwerkverbindingen en luisterende poorten. Ontdek welke services actief zijn.</p>
+          <div class="command-usage">netstat</div>
+          <div class="terminal-example">
+            <div class="prompt">$ netstat</div>
+            <div class="output">Proto  Local Address     State
+tcp    0.0.0.0:22       LISTEN
+tcp    0.0.0.0:80       LISTEN
+tcp    10.0.0.1:443     ESTABLISHED</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Actieve verbindingen monitoren, verdachte connecties detecteren</p>
+        </div>
+
+        <!-- ifconfig -->
+        <div class="command-card" id="cmd-ifconfig">
+          <div class="command-card-header">
+            <code>ifconfig</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Toon je netwerkconfiguratie: IP-adressen, MAC-adressen en interface statistieken.</p>
+          <div class="command-usage">ifconfig</div>
+          <div class="terminal-example">
+            <div class="prompt">$ ifconfig</div>
+            <div class="output">eth0: inet 192.168.1.100
+      ether 00:1a:2b:3c:4d:5e
+      RX bytes: 1.2GB  TX bytes: 340MB</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> IP-adressen, MAC-adressen, network interfaces</p>
+        </div>
+
+        <!-- whois -->
+        <div class="command-card" id="cmd-whois">
+          <div class="command-card-header">
+            <code>whois</code>
+            <span class="command-level command-level-intermediate">Intermediate</span>
+          </div>
+          <p>Zoek domeinregistratie-informatie op. Ontdek wie een website bezit en wanneer deze is geregistreerd.</p>
+          <div class="command-usage">whois &lt;domein&gt;</div>
+          <div class="terminal-example">
+            <div class="prompt">$ whois example.com</div>
+            <div class="output">Domain: example.com
+Registrar: ICANN
+Created: 1995-08-14
+Expires: 2025-08-13</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> OSINT, domein onderzoek, registrar informatie</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== SECURITY COMMANDS ==================== -->
+    <section id="security" class="page-section commands-category">
+      <h2>Security Commands</h2>
+      <p>Ontdek hoe professionals systemen testen op kwetsbaarheden. Deze tools worden in de simulator alleen educatief gebruikt — in de echte wereld heb je altijd schriftelijke toestemming nodig.</p>
+
+      <div class="commands-grid">
+
+        <!-- hashcat -->
+        <div class="command-card" id="cmd-hashcat">
+          <div class="command-card-header">
+            <code>hashcat</code>
+            <span class="command-level command-level-advanced">Advanced</span>
+          </div>
+          <p>Kraak wachtwoord-hashes om de sterkte van wachtwoorden te testen. Leer waarom sterke wachtwoorden essentieel zijn.</p>
+          <div class="command-usage">hashcat &lt;hash&gt;</div>
+          <div class="terminal-example">
+            <div class="prompt">$ hashcat 5f4dcc3b5aa765d61d8327deb882cf99</div>
+            <div class="output">Hash type: MD5
+Status: CRACKED
+5f4dcc3b...cf99 → password
+[!] Tijd: 0.003s - te zwak!</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Hash algoritmes, wachtwoord sterkte, waarom MD5 onveilig is</p>
+        </div>
+
+        <!-- hydra -->
+        <div class="command-card" id="cmd-hydra">
+          <div class="command-card-header">
+            <code>hydra</code>
+            <span class="command-level command-level-advanced">Advanced</span>
+          </div>
+          <p>Test login-beveiliging met brute force aanvallen. Begrijp waarom rate limiting en sterke wachtwoorden nodig zijn.</p>
+          <div class="command-usage">hydra &lt;target&gt;</div>
+          <div class="terminal-example">
+            <div class="prompt">$ hydra 192.168.1.1</div>
+            <div class="output">[22][ssh] host: 192.168.1.1
+[ATTEMPT] admin:password
+[ATTEMPT] admin:123456
+[SUCCESS] admin:admin123</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Brute force aanvallen, login beveiliging, verdedigingsmaatregelen</p>
+        </div>
+
+        <!-- sqlmap -->
+        <div class="command-card" id="cmd-sqlmap">
+          <div class="command-card-header">
+            <code>sqlmap</code>
+            <span class="command-level command-level-advanced">Advanced</span>
+          </div>
+          <p>Test websites op SQL injection kwetsbaarheden. Ontdek hoe databases onbedoeld blootgesteld kunnen worden.</p>
+          <div class="command-usage">sqlmap &lt;url&gt;</div>
+          <div class="terminal-example">
+            <div class="prompt">$ sqlmap http://target.com/login</div>
+            <div class="output">[*] Testing parameter 'id'...
+[VULNERABLE] SQL injection found!
+Type: UNION query
+Database: MySQL 5.7</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> SQL injection, database beveiliging, parameterized queries</p>
+        </div>
+
+        <!-- metasploit -->
+        <div class="command-card" id="cmd-metasploit">
+          <div class="command-card-header">
+            <code>metasploit</code>
+            <span class="command-level command-level-advanced">Advanced</span>
+          </div>
+          <p>Het bekendste penetration testing framework. Ontdek hoe professionele pentesters kwetsbaarheden exploiteren.</p>
+          <div class="command-usage">metasploit</div>
+          <div class="terminal-example">
+            <div class="prompt">$ metasploit</div>
+            <div class="output">       =[ metasploit v6.3.0 ]
++ -- --=[ 2300+ exploits ]
++ -- --=[ 1100+ auxiliary ]
+
+msf6 > _</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Exploit frameworks, vulnerability databases, professioneel pentesten</p>
+        </div>
+
+        <!-- nikto -->
+        <div class="command-card" id="cmd-nikto">
+          <div class="command-card-header">
+            <code>nikto</code>
+            <span class="command-level command-level-advanced">Advanced</span>
+          </div>
+          <p>Scan webservers op kwetsbaarheden, misconfiguraties en verouderde software. Essentieel voor web security.</p>
+          <div class="command-usage">nikto &lt;url&gt;</div>
+          <div class="terminal-example">
+            <div class="prompt">$ nikto http://target.com</div>
+            <div class="output">+ Server: Apache/2.4.41
++ /.git/ - Git repository gevonden!
++ /admin/ - Admin panel exposed
+- X-Frame-Options header ontbreekt</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Web kwetsbaarheden, security headers, server hardening</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== SYSTEM COMMANDS ==================== -->
+    <section id="system" class="page-section commands-category">
+      <h2>System Commands</h2>
+      <p>Bekijk systeeminformatie, beheer je terminal, en gebruik het ingebouwde helpsysteem. Deze commands helpen je productief te werken in elke terminal.</p>
+
+      <div class="commands-grid">
+
+        <!-- whoami -->
+        <div class="command-card" id="cmd-whoami">
+          <div class="command-card-header">
+            <code>whoami</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Toon je huidige gebruikersnaam. Belangrijk om te weten met welke rechten je werkt.</p>
+          <div class="command-usage">whoami</div>
+          <div class="terminal-example">
+            <div class="prompt">$ whoami</div>
+            <div class="output">hacker</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Gebruikersidentiteit, privilege levels</p>
+        </div>
+
+        <!-- date -->
+        <div class="command-card" id="cmd-date">
+          <div class="command-card-header">
+            <code>date</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Toon de huidige datum en tijd. Handig voor timestamps in logs en scripts.</p>
+          <div class="command-usage">date</div>
+          <div class="terminal-example">
+            <div class="prompt">$ date</div>
+            <div class="output">Mon Feb 10 14:30:00 CET 2026</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Systeem tijd, timestamps, tijdzones</p>
+        </div>
+
+        <!-- echo -->
+        <div class="command-card" id="cmd-echo">
+          <div class="command-card-header">
+            <code>echo</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Print tekst naar het scherm. De basis van terminal output en scripting.</p>
+          <div class="command-usage">echo [tekst...]</div>
+          <div class="terminal-example">
+            <div class="prompt">$ echo Hallo wereld</div>
+            <div class="output">Hallo wereld</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Terminal output, variabelen, scripting basics</p>
+        </div>
+
+        <!-- help -->
+        <div class="command-card" id="cmd-help">
+          <div class="command-card-header">
+            <code>help</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Toon alle beschikbare commands, gegroepeerd per categorie. Je startpunt in de simulator.</p>
+          <div class="command-usage">help [categorie]</div>
+          <div class="terminal-example">
+            <div class="prompt">$ help</div>
+            <div class="output">Beschikbare commands:
+  Filesystem: ls, cd, pwd, cat...
+  Network:    nmap, ping, traceroute...
+  Security:   hashcat, hydra, sqlmap...</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Command overzicht, categorisatie, zelfstandig navigeren</p>
+        </div>
+
+        <!-- history -->
+        <div class="command-card" id="cmd-history">
+          <div class="command-card-header">
+            <code>history</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Toon eerder gebruikte commands. Bekijk je activiteit en herhaal commands snel.</p>
+          <div class="command-usage">history [-c]</div>
+          <div class="terminal-example">
+            <div class="prompt">$ history</div>
+            <div class="output"> 1  ls -la
+ 2  cd /var/log
+ 3  cat access.log
+ 4  nmap 192.168.1.1</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Command geschiedenis, workflow optimalisatie</p>
+        </div>
+
+        <!-- man -->
+        <div class="command-card" id="cmd-man">
+          <div class="command-card-header">
+            <code>man</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Toon de volledige handleiding van een command. Elke man page bevat syntax, voorbeelden en use cases.</p>
+          <div class="command-usage">man &lt;command&gt;</div>
+          <div class="terminal-example">
+            <div class="prompt">$ man nmap</div>
+            <div class="output">NMAP(1) - Network Port Scanner
+
+GEBRUIK:
+  nmap &lt;target&gt;
+
+BESCHRIJVING:
+  Scan een netwerk op open poorten...</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Zelfstandig commands leren, documentatie lezen</p>
+        </div>
+
+        <!-- clear -->
+        <div class="command-card" id="cmd-clear">
+          <div class="command-card-header">
+            <code>clear</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Wis het terminal scherm. Geeft je een schone lei zonder je sessie te verliezen.</p>
+          <div class="command-usage">clear</div>
+          <div class="terminal-example">
+            <div class="prompt">$ clear</div>
+            <div class="output">[Scherm gewist]</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Terminal beheer, Ctrl+L shortcut</p>
+        </div>
+
+        <!-- leerpad -->
+        <div class="command-card" id="cmd-leerpad">
+          <div class="command-card-header">
+            <code>leerpad</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Toon het leerpad met je voortgang. Vier fases van Terminal Basics tot Security Tools.</p>
+          <div class="command-usage">leerpad</div>
+          <div class="terminal-example">
+            <div class="prompt">$ leerpad</div>
+            <div class="output">Fase 1: Terminal Basics    [====] 100%
+Fase 2: Bestandsbeheer     [==  ]  50%
+Fase 3: Reconnaissance     [    ]   0%
+Fase 4: Security Tools     [locked]</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Gestructureerd leren, voortgang bijhouden, progressie</p>
+        </div>
+
+        <!-- reset -->
+        <div class="command-card" id="cmd-reset">
+          <div class="command-card-header">
+            <code>reset</code>
+            <span class="command-level command-level-beginner">Beginner</span>
+          </div>
+          <p>Reset het virtuele filesystem naar de beginstand. Perfect om opnieuw te beginnen na experimenten.</p>
+          <div class="command-usage">reset [opties]</div>
+          <div class="terminal-example">
+            <div class="prompt">$ reset</div>
+            <div class="output">[*] Filesystem gereset naar beginstand
+[*] Alle wijzigingen ongedaan gemaakt</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Veilig experimenteren, herstellen na fouten</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== FINAL CTA ==================== -->
+    <section class="final-cta">
+      <div class="final-cta-content">
+        <h2>Probeer Alle Commands Zelf</h2>
+        <p>Geen account nodig. Geen installatie. Direct in je browser oefenen met alle 31 commands.</p>
+        <a href="/terminal.html" class="btn-cta btn-cta-hero">
+          Start Simulator
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </a>
+        <p class="final-cta-secondary">
+          <a href="/blog/">Lees onze blog</a> of <a href="/over-ons.html">leer meer over ons</a>
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer (Component Injection) -->
+  <div id="footer-placeholder">
+    <noscript>
+      <footer class="noscript-footer">
+        <p>&copy; 2026 HackSimulator.nl</p>
+      </footer>
+    </noscript>
+  </div>
+
+  <!-- Theme Initialization (prevents flash) - external for CSP compliance -->
+  <script src="/src/init-theme.js"></script>
+
+  <!-- Component Injection (external script for CSP compliance) -->
+  <script src="/src/init-components.js" type="module"></script>
+</body>
+</html>

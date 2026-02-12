@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>5 Essentiele Tools voor Cybersecurity Beginners | HackSimulator.nl</title>
+  <meta name="description" content="Ontdek de 5 belangrijkste gratis cybersecurity tools voor beginners. Van nmap tot Wireshark - leer welke tools elke ethisch hacker moet kennen.">
+  <meta name="keywords" content="cybersecurity tools, gratis hacking tools, nmap, wireshark, burp suite, metasploit, ethisch hacken tools">
+  <meta name="author" content="HackSimulator.nl">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://hacksimulator.nl/blog/cybersecurity-tools.html">
+  <meta property="og:title" content="5 Essentiele Tools voor Cybersecurity Beginners | HackSimulator.nl">
+  <meta property="og:description" content="De 5 belangrijkste gratis cybersecurity tools die elke beginner moet kennen.">
+  <meta property="article:published_time" content="2026-02-10">
+  <meta property="article:author" content="HackSimulator.nl">
+  <meta property="article:section" content="Bronnen">
+  <meta property="og:locale" content="nl_NL">
+
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="HackSimulator.nl Blog" href="/feed.xml">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://hacksimulator.nl/blog/cybersecurity-tools.html">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+
+  <!-- Google Fonts: Space Grotesk + Inter + JetBrains Mono (Sessie 99 - Font System Upgrade) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../styles/main.css?v=101-font-system-upgrade">
+  <link rel="stylesheet" href="../styles/blog.css?v=19-mobile-title-fix">
+  <link rel="stylesheet" href="../styles/mobile.css">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
+
+  <!-- Cookiebot CMP (Google-certified, IAB TCF 2.3) - MUST be first script -->
+  <script id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="JOUW_COOKIEBOT_ID"
+          type="text/javascript"
+          data-blockingmode="auto"></script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6345664385525701"
+       crossorigin="anonymous"></script>
+
+  <!-- Structured Data - JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "5 Essentiele Tools voor Cybersecurity Beginners",
+    "description": "De 5 belangrijkste gratis cybersecurity tools die elke beginner moet kennen.",
+    "datePublished": "2026-02-10",
+    "dateModified": "2026-02-10",
+    "author": {
+      "@type": "Organization",
+      "name": "HackSimulator.nl"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "HackSimulator.nl",
+      "url": "https://hacksimulator.nl/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://hacksimulator.nl/blog/cybersecurity-tools.html"
+    },
+    "inLanguage": "nl-NL",
+    "keywords": "cybersecurity tools, nmap, wireshark, burp suite, metasploit, hashcat"
+  }
+  </script>
+
+  <!-- Cookie Consent & Analytics (M5.5 GDPR Compliance) -->
+  <script src="../src/analytics/consent-banner.js" type="module"></script>
+  <script src="../src/analytics/consent.js" type="module"></script>
+  <script src="../src/analytics/tracker.js" type="module"></script>
+  <script src="../src/analytics/events.js" type="module"></script>
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
+
+  <!-- Navigation (Component Injection) -->
+  <div id="navbar-placeholder">
+    <noscript>
+      <nav class="noscript-nav" role="navigation">
+        <a href="../">HackSimulator.nl</a>
+        <a href="../terminal.html">Start Simulator</a>
+      </nav>
+    </noscript>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main-content" class="blog-container">
+    <article class="blog-post">
+      <!-- Post Header -->
+      <header class="blog-post-header">
+        <h1 class="blog-post-title">5 Essentiele Tools voor Cybersecurity Beginners</h1>
+        <div class="blog-post-meta">
+          <time datetime="2026-02-10">10 februari 2026</time>
+          <span>7 min</span>
+          <span class="category-badge">Bronnen</span>
+        </div>
+      </header>
+
+      <!-- Post Content -->
+      <div class="blog-post-content">
+        <p>
+          Je wilt leren hacken - ethisch, uiteraard. Maar waar begin je? Het internet staat vol met lijsten van honderden tools,
+          frameworks en scripts. Overweldigend, zeker als beginner. Het goede nieuws: je hebt geen honderd tools nodig.
+          Met vijf goed gekozen tools kun je al een stevige basis leggen in cybersecurity. In dit artikel bespreken we de vijf
+          essentiele tools die elke aspirant <abbr class="jargon" title="Ethisch hacker die met toestemming systemen test op zwakke plekken" tabindex="0"><strong>pentester</strong></abbr> moet kennen,
+          waarom ze zo belangrijk zijn, en hoe je er veilig mee kunt oefenen.
+        </p>
+
+        <p>
+          Al deze tools zijn <strong>gratis en open source</strong>. Je hoeft geen dure licenties te kopen om te beginnen. En het
+          mooie is: vier van de vijf kun je direct uitproberen in de <a href="../terminal.html">HackSimulator.nl terminal</a>,
+          zonder installatie en zonder risico.
+        </p>
+
+        <div class="blog-info">
+          De tools in dit artikel worden gebruikt door professionele pentesters, security researchers en
+          <abbr class="jargon" title="Beveiligingsteam dat gesimuleerde aanvallen uitvoert om de verdediging van een organisatie te testen" tabindex="0"><strong>red teams</strong></abbr>
+          wereldwijd. Ze zijn legaal om te gebruiken - mits je ze alleen inzet op systemen waar je
+          <strong>expliciete toestemming</strong> voor hebt.
+        </div>
+
+        <h2>1. Nmap - De Ogen van een Hacker</h2>
+        <p>
+          Als er een tool is die je als allereerste moet leren, dan is het <a href="/commands/#cmd-nmap"><code>nmap</code></a>
+          (Network Mapper). Nmap is een <abbr class="jargon" title="Het systematisch controleren van netwerkpoorten om te ontdekken welke services actief zijn" tabindex="0"><strong>port scanner</strong></abbr>
+          die ontdekt welke apparaten op een netwerk actief zijn, welke poorten open staan, en welke services daarop draaien.
+          Zie het als een verkenner die het terrein in kaart brengt voordat je een plan maakt.
+        </p>
+
+        <h3>Waarom nmap essentieel is</h3>
+        <p>
+          Elke professionele pentest begint met <abbr class="jargon" title="De fase waarin je informatie verzamelt over het doelsysteem voordat je kwetsbaarheden zoekt" tabindex="0"><strong>reconnaissance</strong></abbr> -
+          verkenning. Je kunt geen kwetsbaarheden vinden als je niet weet wat er op een netwerk draait. Nmap vertelt je:
+        </p>
+        <ul>
+          <li>Welke apparaten zijn actief op het netwerk?</li>
+          <li>Welke <abbr class="jargon" title="Virtuele eindpunten voor netwerkcommunicatie, genummerd van 0 tot 65535" tabindex="0"><strong>poorten</strong></abbr> staan open? (bijv. poort 22 voor SSH, poort 80 voor HTTP)</li>
+          <li>Welke software versies draaien op die poorten?</li>
+          <li>Welk besturingssysteem gebruikt het doelwit?</li>
+        </ul>
+
+        <p>
+          Met deze informatie weet je precies waar je moet zoeken naar zwakke plekken. Een verouderde SSH-server op poort 22?
+          Dat is een potentieel aanvalspunt. Een webserver zonder HTTPS op poort 80? Dat is een risico voor onversleuteld verkeer.
+        </p>
+
+        <div class="terminal-example">
+          <div class="prompt">$ nmap -sV 192.168.1.1</div>
+          <div class="output">
+Starting Nmap scan...
+PORT     STATE   SERVICE
+22/tcp   OPEN    SSH (Secure Shell)
+80/tcp   OPEN    HTTP (Web Server)
+443/tcp  OPEN    HTTPS (Encrypted Web)
+3306/tcp CLOSED  MySQL
+
+[TIP] Poort 22 open = SSH toegang mogelijk. Check of het wachtwoord sterk genoeg is!
+          </div>
+        </div>
+
+        <div class="blog-tip">
+          Begin met eenvoudige scans zoals <code>nmap 192.168.1.1</code> en bouw langzaam op naar geavanceerde opties.
+          Gebruik <code>man nmap</code> in de simulator voor een volledige handleiding in het Nederlands.
+          Probeer nmap nu in de <a href="../terminal.html">simulator</a>.
+        </div>
+
+        <h2>2. Wireshark - Kijken Onder de Motorkap van je Netwerk</h2>
+        <p>
+          Waar nmap je vertelt <em>welke</em> services draaien, laat <strong>Wireshark</strong> je zien <em>wat</em> er precies
+          over het netwerk wordt verstuurd. Wireshark is een <abbr class="jargon" title="Software die netwerkverkeer onderschept en analyseert om te begrijpen wat er wordt gecommuniceerd" tabindex="0"><strong>packet analyzer</strong></abbr> -
+          het vangt elk datapakketje op dat over je netwerkverbinding gaat en toont je de inhoud.
+        </p>
+
+        <h3>Waarom Wireshark essentieel is</h3>
+        <p>
+          Stel je voor dat je kunt meelezen met elk gesprek dat over een netwerk plaatsvindt. Dat is precies wat Wireshark doet.
+          Het is onmisbaar voor:
+        </p>
+        <ul>
+          <li><strong>Troubleshooting</strong> - Waarom is de verbinding traag? Welk pakket gaat er fout?</li>
+          <li><strong>Security analyse</strong> - Stuurt een applicatie onversleutelde wachtwoorden over het netwerk?</li>
+          <li><strong>Leren</strong> - Begrijp hoe <abbr class="jargon" title="Gestandaardiseerde regels die bepalen hoe apparaten over een netwerk communiceren" tabindex="0"><strong>protocollen</strong></abbr> zoals HTTP, DNS en TCP werken door ze in actie te zien</li>
+          <li><strong>Forensisch onderzoek</strong> - Wat is er precies gebeurd tijdens een security incident?</li>
+        </ul>
+
+        <p>
+          Met Wireshark kun je bijvoorbeeld zien dat een website je wachtwoord onversleuteld verstuurt via HTTP in plaats van HTTPS.
+          Of je ontdekt dat een applicatie op de achtergrond data stuurt naar een verdacht IP-adres. Dit soort inzichten zijn
+          cruciaal voor elke security professional.
+        </p>
+
+        <div class="blog-tip">
+          Wireshark heeft een grafische interface en is daardoor toegankelijker dan veel andere security tools. Download het gratis
+          op <a href="https://www.wireshark.org" target="_blank" rel="noopener noreferrer">wireshark.org</a> en begin met het
+          opvangen van je eigen netwerkverkeer. Filter op <code>http</code> om webverkeer te isoleren - je zult versteld staan
+          hoeveel er over je netwerk gaat.
+        </div>
+
+        <h2>3. Hashcat - De Kracht van Wachtwoordbeveiliging Begrijpen</h2>
+        <p>
+          <a href="/commands/#cmd-hashcat"><code>hashcat</code></a> is een
+          <abbr class="jargon" title="Software die versleutelde wachtwoorden probeert te kraken door miljoenen combinaties te testen" tabindex="0"><strong>password cracking tool</strong></abbr>
+          en een van de krachtigste ter wereld. Het neemt een versleuteld wachtwoord (een
+          <abbr class="jargon" title="Een wiskundige vingerafdruk van data - een wachtwoord wordt omgezet in een schijnbaar willekeurige reeks tekens" tabindex="0"><strong>hash</strong></abbr>)
+          en probeert het originele wachtwoord te achterhalen door miljoenen mogelijkheden te testen.
+        </p>
+
+        <h3>Waarom hashcat essentieel is</h3>
+        <p>
+          "Waarom zou ik wachtwoorden willen kraken?" Goede vraag. Het antwoord: om te begrijpen hoe zwak de meeste wachtwoorden
+          zijn. Als pentester test je regelmatig of de wachtwoorden van een organisatie sterk genoeg zijn. Als hashcat het
+          wachtwoord in seconden kraakt, is dat een serieus beveiligingsprobleem dat je moet rapporteren.
+        </p>
+
+        <div class="terminal-example">
+          <div class="prompt">$ hashcat -m 0 hash.txt wordlist.txt</div>
+          <div class="output">
+hashcat v6.2.6 starting...
+
+Hash target: 5f4dcc3b5aa765d61d8327deb882cf99
+Hash type:   MD5
+
+Cracking... [===========         ] 56%
+Status:      CRACKED
+Hash:        5f4dcc3b5aa765d61d8327deb882cf99 -> password
+
+[!] Dit wachtwoord is in 0.3 seconden gekraakt!
+[TIP] Gebruik wachtwoorden van 12+ tekens met hoofdletters, cijfers en symbolen.
+          </div>
+        </div>
+
+        <p>
+          Dat voorbeeld laat precies zien waarom "password" als wachtwoord een slecht idee is. Hashcat kraakt het in minder dan
+          een seconde. Een goed wachtwoord van 16+ tekens met gemixte karakters kan dagen, weken of zelfs jaren kosten om te
+          kraken - als het uberhaupt lukt.
+        </p>
+
+        <div class="blog-warning">
+          Hashcat is een <strong>offensive tool</strong>. Gebruik het alleen om de wachtwoordsterkte van je eigen accounts te testen,
+          of tijdens een geautoriseerde pentest. Het kraken van andermans wachtwoorden zonder toestemming is illegaal en strafbaar
+          onder de Nederlandse Wet Computercriminaliteit (art. 138ab Sr).
+        </div>
+
+        <h2>4. Metasploit Framework - De Gereedschapskist voor Pentesting</h2>
+        <p>
+          <a href="/commands/#cmd-metasploit"><code>Metasploit</code></a> is het Zwitserse zakmes van pentesting. Het is een
+          <abbr class="jargon" title="Een verzameling tools en kant-en-klare aanvalsmodules die pentesters gebruiken om kwetsbaarheden in systemen te testen" tabindex="0"><strong>exploitation framework</strong></abbr>
+          dat duizenden kant-en-klare modules bevat om bekende kwetsbaarheden te testen. Waar nmap je vertelt welke services
+          draaien en welke versies ze hebben, helpt Metasploit je om te controleren of die services daadwerkelijk kwetsbaar zijn.
+        </p>
+
+        <h3>Waarom Metasploit essentieel is</h3>
+        <p>
+          Metasploit is de industriestandaard voor professionele penetration testing. Het wordt gebruikt door security bedrijven,
+          overheidsinstanties en <abbr class="jargon" title="Bug bounty hunter: iemand die beveiligingsfouten zoekt in ruil voor een beloning van het bedrijf" tabindex="0"><strong>bug bounty hunters</strong></abbr> wereldwijd.
+          De kracht zit in de eenvoud: in plaats van zelf een exploit te schrijven, selecteer je een module, stel je het doel in,
+          en Metasploit doet de rest.
+        </p>
+
+        <div class="terminal-example">
+          <div class="prompt">$ msfconsole</div>
+          <div class="output">
+Metasploit Framework v6.3.0
+2300+ exploits | 1200+ auxiliary | 400+ post modules
+
+msf6 > search type:exploit platform:linux ssh
+
+Matching Modules
+================
+#  Name                           Rank     Description
+0  exploit/linux/ssh/sshexec      normal   SSH User Code Execution
+1  exploit/multi/ssh/sshexec      manual   SSH command execution
+
+msf6 > use exploit/linux/ssh/sshexec
+msf6 exploit(linux/ssh/sshexec) > set RHOSTS 192.168.1.10
+
+[TIP] Metasploit modules zijn ingedeeld in categorieën: exploits, auxiliary, post-exploitation en payloads.
+          </div>
+        </div>
+
+        <p>
+          Het framework bevat niet alleen exploits, maar ook <strong>auxiliary modules</strong> voor scanning en informatie
+          verzamelen, <strong>post-exploitation modules</strong> voor acties na een succesvolle hack, en
+          <strong>payloads</strong> die bepalen wat er gebeurt als een exploit slaagt. Als je Metasploit leert, leer je eigenlijk
+          het hele proces van een professionele pentest.
+        </p>
+
+        <div class="blog-tip">
+          Metasploit kan overweldigend zijn door het grote aantal modules. Begin met het commando <code>search</code> om
+          relevante modules te vinden, en gebruik <code>info</code> om de documentatie van een specifieke module te lezen.
+          In de <a href="../terminal.html">HackSimulator.nl terminal</a> kun je veilig experimenteren met de basiscommando's.
+        </div>
+
+        <h2>5. SQLmap - Webapplicaties Testen op SQL Injection</h2>
+        <p>
+          <a href="/commands/#cmd-sqlmap"><code>SQLmap</code></a> is een gespecialiseerde tool die automatisch
+          <abbr class="jargon" title="Een aanvalstechniek waarbij kwaadaardige databasecommando's worden ingevoegd via invoervelden van een website" tabindex="0"><strong>SQL injection</strong></abbr>
+          kwetsbaarheden detecteert en exploiteert in webapplicaties. SQL injection is al jarenlang een van de meest voorkomende
+          en gevaarlijkste kwetsbaarheden in webapplicaties - het staat consequent in de
+          <abbr class="jargon" title="Een lijst van de tien meest kritieke beveiligingsrisico's voor webapplicaties, samengesteld door het Open Web Application Security Project" tabindex="0"><strong>OWASP Top 10</strong></abbr>.
+        </p>
+
+        <h3>Waarom SQLmap essentieel is</h3>
+        <p>
+          De meeste moderne applicaties slaan data op in databases. Als een webapplicatie gebruikersinvoer niet goed
+          controleert, kan een aanvaller kwaadaardige SQL-commando's injecteren om:
+        </p>
+        <ul>
+          <li>De volledige database uit te lezen (gebruikersnamen, wachtwoorden, persoonsgegevens)</li>
+          <li>Data te wijzigen of verwijderen</li>
+          <li>Authenticatie te omzeilen (inloggen zonder wachtwoord)</li>
+          <li>In sommige gevallen zelfs commando's uit te voeren op de server</li>
+        </ul>
+
+        <p>
+          SQLmap automatiseert het testen hiervan. Je geeft de tool een URL met een parameter, en SQLmap test automatisch
+          tientallen injection-technieken om te bepalen of de applicatie kwetsbaar is.
+        </p>
+
+        <div class="terminal-example">
+          <div class="prompt">$ sqlmap -u "http://example.com/page?id=1" --dbs</div>
+          <div class="output">
+[*] Starting SQL injection scan...
+[*] Testing parameter: id
+
+[!] Parameter 'id' is KWETSBAAR voor SQL injection!
+    Type: boolean-based blind
+    Payload: id=1' AND 1=1--
+
+Available databases:
+[*] information_schema
+[*] users_db
+[*] admin_panel
+
+[TIP] SQL injection = directe toegang tot de database. Dit is een kritieke kwetsbaarheid!
+          </div>
+        </div>
+
+        <div class="blog-warning">
+          SQLmap is een extreem krachtige offensive tool. Het uitvoeren van SQLmap tegen een website zonder toestemming is
+          <strong>illegaal</strong> en kan worden gezien als een cyberaanval. Gebruik het uitsluitend tijdens geautoriseerde
+          pentests of op je eigen testomgevingen. In de HackSimulator terminal kun je veilig oefenen.
+        </div>
+
+        <h2>De Juiste Volgorde van Leren</h2>
+        <p>
+          Nu je de vijf tools kent, vraag je je misschien af: waar begin ik? Hier is een logische volgorde die
+          aansluit bij hoe een echte pentest verloopt:
+        </p>
+
+        <ol>
+          <li>
+            <strong>Nmap (Week 1-2)</strong> - Begin hier. Leer netwerken begrijpen door te scannen.
+            Dit is de basis van alles wat volgt. Begrijp wat poorten zijn, wat services zijn, en hoe je informatie verzamelt.
+          </li>
+          <li>
+            <strong>Wireshark (Week 3-4)</strong> - Verdiep je netwerkkennis. Begrijp <em>hoe</em> data over het
+            netwerk reist en leer protocollen herkennen. Dit maakt je een betere analist.
+          </li>
+          <li>
+            <strong>Hashcat (Week 5-6)</strong> - Leer over wachtwoordbeveiliging. Begrijp hashing, salting, en
+            waarom wachtwoordbeleid zo belangrijk is. Dit is ook waardevolle kennis voor je eigen beveiliging.
+          </li>
+          <li>
+            <strong>SQLmap (Week 7-8)</strong> - Duik in webapplicatie security. De meeste bedrijven draaien
+            webapplicaties, dus SQL injection kennis is direct toepasbaar.
+          </li>
+          <li>
+            <strong>Metasploit (Week 9-12)</strong> - Combineer alles. Gebruik je nmap-scans om targets te
+            identificeren en Metasploit om kwetsbaarheden te valideren. Dit is waar alles samenkomt.
+          </li>
+        </ol>
+
+        <div class="blog-info">
+          Dit schema is een richtlijn, geen wet. Iedereen leert in een ander tempo. Het belangrijkste is dat je
+          <strong>consistent oefent</strong> - liever elke dag 30 minuten dan een keer per week een hele dag. Bouw een gewoonte op.
+        </div>
+
+        <h2>Ethische Verantwoordelijkheid</h2>
+        <p>
+          Het kennen van deze tools geeft je kracht. En zoals elke superheld weet: met grote kracht komt grote
+          verantwoordelijkheid. De grens tussen een ethisch hacker en een crimineel is simpel maar absoluut:
+          <strong>toestemming</strong>.
+        </p>
+
+        <p>Houd je altijd aan deze regels:</p>
+        <ul>
+          <li><strong>Nooit scannen of testen zonder schriftelijke toestemming</strong> - zelfs "even kijken" kan strafbaar zijn</li>
+          <li><strong>Blijf binnen de afgesproken scope</strong> - als je toestemming hebt voor een webapplicatie, scan dan niet het hele netwerk</li>
+          <li><strong>Rapporteer alles wat je vindt</strong> - kwetsbaarheden verzwijgen of zelf exploiteren is onethisch en illegaal</li>
+          <li><strong>Bescherm gevonden data</strong> - als je tijdens een test persoonsgegevens tegenkomt, behandel die met uiterste zorgvuldigheid</li>
+          <li><strong>Gebruik officiële kanalen</strong> - meld kwetsbaarheden via <abbr class="jargon" title="Het op verantwoorde wijze melden van gevonden beveiligingslekken aan de eigenaar, zodat die het kan oplossen voordat het openbaar wordt" tabindex="0"><strong>responsible disclosure</strong></abbr> of bug bounty platforms zoals HackerOne en Bugcrowd</li>
+        </ul>
+
+        <div class="blog-warning">
+          In Nederland is ongeautoriseerde toegang tot computersystemen strafbaar met maximaal <strong>4 jaar gevangenisstraf</strong>
+          (art. 138ab Wetboek van Strafrecht). Dit geldt ook als je "alleen maar wilt kijken" of "goede bedoelingen" hebt.
+          Zorg dat je altijd een getekende overeenkomst hebt voordat je begint met testen.
+        </div>
+
+        <h2>Veilig Oefenen met HackSimulator.nl</h2>
+        <p>
+          Het grootste probleem voor beginners is: waar oefen je? Je kunt niet zomaar willekeurige systemen scannen, en het
+          opzetten van een eigen lab met <abbr class="jargon" title="Gesimuleerde computers die in software draaien, waarmee je veilig kunt oefenen zonder echte systemen te raken" tabindex="0"><strong>virtual machines</strong></abbr>
+          kan ingewikkeld en tijdrovend zijn. Dat is precies waarom HackSimulator.nl bestaat.
+        </p>
+
+        <p>In de simulator kun je:</p>
+        <ul>
+          <li><strong>Nmap</strong> uitproberen - scan virtuele netwerken en ontdek open poorten</li>
+          <li><strong>Hashcat</strong> oefenen - kraak gesimuleerde wachtwoord hashes en leer over wachtwoordsterkte</li>
+          <li><strong>Metasploit</strong> verkennen - werk met het framework zonder een complex lab op te zetten</li>
+          <li><strong>SQLmap</strong> testen - ontdek SQL injection kwetsbaarheden in een veilige omgeving</li>
+        </ul>
+
+        <p>
+          Alles draait lokaal in je browser. Er worden geen echte systemen gescand, geen echte wachtwoorden gekraakt,
+          en geen echte databases aangevallen. Je krijgt wel realistische output met educatieve uitleg in het Nederlands,
+          zodat je leert wat elke tool doet en waarom.
+        </p>
+
+        <div class="terminal-example">
+          <div class="prompt">$ help security</div>
+          <div class="output">
+Beschikbare security commands:
+  nmap       - Network scanning en poort detectie
+  hashcat    - Password hash cracking
+  sqlmap     - SQL injection testing
+  metasploit - Exploitation framework
+  nikto      - Web server scanner
+  hydra      - Brute-force login tester
+
+Type 'man [command]' voor uitgebreide uitleg per tool.
+          </div>
+        </div>
+
+        <div class="blog-cta">
+          <h3>Probeer het zelf!</h3>
+          <p>
+            Open de simulator en begin met <code>nmap 192.168.1.1</code> om je eerste netwerkscan te doen, of type
+            <code>leerpad</code> voor een begeleide tutorial die je stap voor stap door de tools leidt.
+          </p>
+          <a href="../terminal.html" class="blog-cta-button">Start met oefenen</a>
+        </div>
+
+        <h2>Volgende Stappen</h2>
+        <p>
+          Nu je de vijf essentiele tools kent, zijn hier concrete stappen om verder te gaan:
+        </p>
+        <ul>
+          <li><strong>Oefen dagelijks</strong> in de <a href="../terminal.html">HackSimulator.nl terminal</a> - consistentie is de sleutel</li>
+          <li><strong>Leer de basis van netwerken</strong> - zonder netwerkkennis kun je tools als nmap en Wireshark niet effectief gebruiken</li>
+          <li><strong>Volg de <a href="/commands/">command reference</a></strong> - gedetailleerde uitleg en voorbeelden voor alle 31 commands</li>
+          <li><strong>Probeer online labs</strong> - platforms als <a href="https://tryhackme.com" target="_blank" rel="noopener noreferrer">TryHackMe</a> en <a href="https://www.hackthebox.eu" target="_blank" rel="noopener noreferrer">HackTheBox</a> bieden realistische oefenomgevingen</li>
+          <li><strong>Overweeg een certificering</strong> - de <abbr class="jargon" title="eLearnSecurity Junior Penetration Tester: een betaalbare instap-certificering voor aspirant pentesters" tabindex="0"><strong>eJPT</strong></abbr> is een uitstekende en betaalbare eerste certificering</li>
+        </ul>
+
+        <p>Meer lezen?</p>
+        <ul>
+          <li><a href="wat-is-ethisch-hacken.html">Wat is Ethisch Hacken?</a> - Begrijp de juridische grenzen en carrieremogelijkheden</li>
+          <li><a href="terminal-basics.html">Terminal Commands voor Beginners</a> - Leer eerst de basis van de command line</li>
+          <li><a href="welkom.html">Welkom bij HackSimulator.nl</a> - Ontdek alle features van de simulator</li>
+        </ul>
+      </div>
+
+      <!-- Related Articles -->
+      <section class="related-articles">
+        <h2>Verder Lezen</h2>
+        <div class="related-grid">
+          <a href="nmap-beginnersgids.html" class="related-card">
+            <span class="related-category">Tools</span>
+            <h3>Netwerk Scanning met Nmap</h3>
+            <p>Diepgaande gids over nmap - de belangrijkste tool in je arsenaal.</p>
+            <span class="related-meta">8 min leestijd</span>
+          </a>
+          <a href="ethisch-hacker-worden.html" class="related-card">
+            <span class="related-category">Carriere</span>
+            <h3>Hoe Word je Ethisch Hacker?</h3>
+            <p>Complete carrieregids met certificeringen en leerpad.</p>
+            <span class="related-meta">10 min leestijd</span>
+          </a>
+          <a href="wachtwoord-beveiliging.html" class="related-card">
+            <span class="related-category">Tools</span>
+            <h3>Wachtwoordbeveiliging</h3>
+            <p>Hoe hackers wachtwoorden kraken en hoe je jezelf beschermt.</p>
+            <span class="related-meta">8 min leestijd</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Post Footer -->
+      <footer class="blog-post-footer">
+        <p>Vragen of feedback? Laat het ons weten op <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+        <p><a href="index.html">&larr; Terug naar blog overzicht</a></p>
+      </footer>
+    </article>
+  </main>
+
+  <!-- AdSense Footer Banner (M5.5 Blog Monetization) -->
+  <div id="adsense-footer" class="ad-container" style="display: none;">
+      <p class="ad-disclaimer">Advertisement</p>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-6345664385525701"
+           data-ad-slot="1674341955"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+  </div>
+
+  <!-- Footer (Component Injection) -->
+  <div id="footer-placeholder">
+    <noscript>
+      <footer class="noscript-footer">
+        <p>&copy; 2026 HackSimulator.nl</p>
+      </footer>
+    </noscript>
+  </div>
+
+  <!-- Theme Initialization (prevents flash) - external for CSP compliance -->
+  <script src="/src/init-theme.js"></script>
+
+  <!-- Component Injection (external script for CSP compliance) -->
+  <script src="/src/init-components.js" type="module"></script>
+
+  <!-- Reading Progress (blog-specific) -->
+  <script src="../src/ui/blog-theme.js" type="module"></script>
+</body>
+</html>

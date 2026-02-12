@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>Wachtwoordbeveiliging: Hoe Hackers Kraken | HackSimulator.nl</title>
+  <meta name="description" content="Leer hoe hackers wachtwoorden kraken met brute force, dictionary attacks en rainbow tables. Ontdek hoe je sterke wachtwoorden maakt en jezelf beschermt.">
+  <meta name="keywords" content="wachtwoord kraken, brute force, hashcat, wachtwoordbeveiliging, password cracking, cybersecurity">
+  <meta name="author" content="HackSimulator.nl">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://hacksimulator.nl/blog/wachtwoord-beveiliging.html">
+  <meta property="og:title" content="Wachtwoordbeveiliging: Hoe Hackers Kraken | HackSimulator.nl">
+  <meta property="og:description" content="Leer hoe hackers wachtwoorden kraken en hoe je jezelf beschermt.">
+  <meta property="article:published_time" content="2026-02-10">
+  <meta property="article:author" content="HackSimulator.nl">
+  <meta property="article:section" content="Tools">
+  <meta property="og:locale" content="nl_NL">
+
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="HackSimulator.nl Blog" href="/feed.xml">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://hacksimulator.nl/blog/wachtwoord-beveiliging.html">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+
+  <!-- Google Fonts: Space Grotesk + Inter + JetBrains Mono (Sessie 99 - Font System Upgrade) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../styles/main.css?v=101-font-system-upgrade">
+  <link rel="stylesheet" href="../styles/blog.css?v=19-mobile-title-fix">
+  <link rel="stylesheet" href="../styles/mobile.css">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
+
+  <!-- Cookiebot CMP (Google-certified, IAB TCF 2.3) - MUST be first script -->
+  <script id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="JOUW_COOKIEBOT_ID"
+          type="text/javascript"
+          data-blockingmode="auto"></script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6345664385525701"
+       crossorigin="anonymous"></script>
+
+  <!-- Structured Data - JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Wachtwoordbeveiliging: Hoe Hackers Kraken",
+    "description": "Leer hoe hackers wachtwoorden kraken met brute force, dictionary attacks en rainbow tables.",
+    "datePublished": "2026-02-10",
+    "dateModified": "2026-02-10",
+    "author": {
+      "@type": "Organization",
+      "name": "HackSimulator.nl"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "HackSimulator.nl",
+      "url": "https://hacksimulator.nl/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://hacksimulator.nl/blog/wachtwoord-beveiliging.html"
+    },
+    "inLanguage": "nl-NL",
+    "keywords": "wachtwoord kraken, hashcat, brute force, password security"
+  }
+  </script>
+
+  <!-- Cookie Consent & Analytics (M5.5 GDPR Compliance) -->
+  <script src="../src/analytics/consent-banner.js" type="module"></script>
+  <script src="../src/analytics/consent.js" type="module"></script>
+  <script src="../src/analytics/tracker.js" type="module"></script>
+  <script src="../src/analytics/events.js" type="module"></script>
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
+
+  <!-- Navigation (Component Injection) -->
+  <div id="navbar-placeholder">
+    <noscript>
+      <nav class="noscript-nav" role="navigation">
+        <a href="../">HackSimulator.nl</a>
+        <a href="../terminal.html">Start Simulator</a>
+      </nav>
+    </noscript>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main-content" class="blog-container">
+    <article class="blog-post">
+      <!-- Post Header -->
+      <header class="blog-post-header">
+        <h1 class="blog-post-title">Wachtwoordbeveiliging: Hoe Hackers Kraken</h1>
+        <div class="blog-post-meta">
+          <time datetime="2026-02-10">10 februari 2026</time>
+          <span>8 min</span>
+          <span class="category-badge">Tools</span>
+        </div>
+      </header>
+
+      <!-- Post Content -->
+      <div class="blog-post-content">
+        <p>
+          Je wachtwoord is de sleutel tot je digitale leven: e-mail, bankzaken, social media, werk. Maar hoe veilig is die
+          sleutel eigenlijk? In dit artikel leer je hoe hackers wachtwoorden kraken, welke technieken ze gebruiken, en
+          - het allerbelangrijkste - hoe je jezelf effectief beschermt. Want als je begrijpt hoe de aanval werkt, kun je
+          je verdediging stukken beter opzetten.
+        </p>
+
+        <h2>Hoe worden wachtwoorden opgeslagen?</h2>
+        <p>
+          Voordat we het over kraken hebben, moet je eerst begrijpen hoe wachtwoorden worden opgeslagen. Een goed gebouwd
+          systeem slaat je wachtwoord <strong>nooit</strong> als leesbare tekst op. In plaats daarvan wordt je wachtwoord
+          omgezet in een onleesbare reeks tekens via een proces dat
+          <abbr class="jargon" title="Wiskundige eenrichtingsfunctie die tekst omzet in een vaste reeks tekens (hash). Je kunt de hash niet terugrekenen naar het origineel." tabindex="0"><strong>hashing</strong></abbr> heet.
+        </p>
+
+        <p>
+          Stel je wachtwoord is <code>Welkom123</code>. Het systeem berekent een hash en slaat alleen die hash op:
+        </p>
+
+        <div class="terminal-example">
+          <div class="prompt">$ echo -n "Welkom123" | sha256sum</div>
+          <div class="output">a8f5f167f44f4964e6c998dee827110c... (64 tekens)</div>
+        </div>
+
+        <p>
+          Als je inlogt, berekent het systeem opnieuw de hash van wat je intypt en vergelijkt die met de opgeslagen hash.
+          Komen ze overeen? Dan klopt je wachtwoord. Het mooie is dat het systeem je wachtwoord zelf <em>nooit hoeft te
+          kennen</em>.
+        </p>
+
+        <h3>Veelgebruikte hash-algoritmen</h3>
+        <p>Niet alle hash-algoritmen zijn even sterk. Hier zijn de meest voorkomende:</p>
+        <ul>
+          <li><abbr class="jargon" title="Message Digest 5: oud en onveilig hash-algoritme uit 1991. Kan in seconden gekraakt worden met moderne hardware." tabindex="0"><strong>MD5</strong></abbr> - Verouderd en onveilig. Wordt helaas nog steeds gebruikt door sommige systemen. Kan in seconden gekraakt worden.</li>
+          <li><abbr class="jargon" title="Secure Hash Algorithm 256-bit: sterker dan MD5, maar zonder salting nog steeds kwetsbaar voor rainbow tables." tabindex="0"><strong>SHA-256</strong></abbr> - Veel sterker dan MD5, maar nog steeds relatief snel te berekenen. Niet ideaal voor wachtwoordopslag.</li>
+          <li><abbr class="jargon" title="Adaptief hash-algoritme speciaal ontworpen voor wachtwoorden. Opzettelijk traag, waardoor brute force enorm wordt vertraagd." tabindex="0"><strong>bcrypt</strong></abbr> - Speciaal ontworpen voor wachtwoorden. Opzettelijk traag, wat brute force aanvallen extreem moeilijk maakt.</li>
+          <li><abbr class="jargon" title="Moderne wachtwoord-hashfunctie die veel geheugen vereist, waardoor aanvallen met GPU's en speciale hardware bemoeilijkt worden." tabindex="0"><strong>Argon2</strong></abbr> - De huidige gouden standaard. Winnaar van de Password Hashing Competition (2015). Vereist veel geheugen, waardoor zelfs GPU-aanvallen traag worden.</li>
+        </ul>
+
+        <div class="blog-info">
+          Een goede hashfunctie is een <strong>eenrichtingsfunctie</strong>: je kunt het wachtwoord omzetten naar een hash, maar
+          je kunt de hash niet terugrekenen naar het wachtwoord. Vergelijk het met een gehaktmolen: je kunt vlees omzetten in
+          gehakt, maar van gehakt kun je geen biefstuk meer maken.
+        </div>
+
+        <h3>Wat is salting?</h3>
+        <p>
+          Een <abbr class="jargon" title="Willekeurige data die aan je wachtwoord wordt toegevoegd voordat het gehasht wordt. Hierdoor heeft hetzelfde wachtwoord op elk systeem een andere hash." tabindex="0"><strong>salt</strong></abbr>
+          is een willekeurige reeks tekens die aan je wachtwoord wordt toegevoegd voor het hashen. Waarom? Zonder salt
+          hebben twee gebruikers met hetzelfde wachtwoord ook dezelfde hash. Een aanvaller die de database steelt, ziet
+          dan direct welke accounts hetzelfde wachtwoord gebruiken. Met een unieke salt per gebruiker krijgt hetzelfde
+          wachtwoord een compleet andere hash.
+        </p>
+
+        <div class="terminal-example">
+          <div class="prompt">$ # Zonder salt: zelfde wachtwoord = zelfde hash</div>
+          <div class="output">hash("Welkom123") = a8f5f167f44f...
+hash("Welkom123") = a8f5f167f44f...</div>
+        </div>
+
+        <div class="terminal-example">
+          <div class="prompt">$ # Met salt: zelfde wachtwoord = andere hash</div>
+          <div class="output">hash("x7k9" + "Welkom123") = 3b2c9f8e71a0...
+hash("m2p4" + "Welkom123") = 8d4e1a6c33f7...</div>
+        </div>
+
+        <div class="blog-tip">
+          Salting maakt <strong>rainbow table aanvallen</strong> nutteloos, omdat elke hash uniek is, zelfs voor identieke
+          wachtwoorden. Moderne frameworks als bcrypt en Argon2 doen dit automatisch.
+        </div>
+
+        <h2>Wat is password cracking?</h2>
+        <p>
+          <abbr class="jargon" title="Het proces van het achterhalen van wachtwoorden uit hun gehashte waarden door systematisch mogelijke wachtwoorden te proberen." tabindex="0"><strong>Password cracking</strong></abbr>
+          is het proces waarbij een aanvaller probeert om vanuit een hash het originele wachtwoord te achterhalen. Omdat
+          hashing een eenrichtingsfunctie is, kan de aanvaller niet simpelweg "terugrekenen." In plaats daarvan probeert
+          de aanvaller miljoenen mogelijke wachtwoorden te hashen en vergelijkt elke hash met de gestolen hash. Komt er een
+          match? Dan is het wachtwoord gekraakt.
+        </p>
+
+        <p>
+          Dit klinkt als een langzaam proces, maar moderne GPU's (videokaarten) kunnen <strong>miljarden hashes per
+          seconde</strong> berekenen. Een simpel wachtwoord als "hallo123" is binnen milliseconden gekraakt.
+        </p>
+
+        <h2>De vijf aanvalsmethoden</h2>
+
+        <h3>1. Brute Force Attack</h3>
+        <p>
+          De meest directe methode: probeer <em>elke mogelijke combinatie</em> van tekens. Beginnend bij "a", dan "b", dan
+          "c"... tot "aa", "ab", enzovoort. Dit klinkt primitief, maar met moderne hardware is het verrassend effectief
+          voor korte wachtwoorden.
+        </p>
+
+        <div class="terminal-example">
+          <div class="prompt">$ hashcat -m 0 -a 3 hash.txt ?a?a?a?a?a?a</div>
+          <div class="output">Session..........: hashcat
+Status...........: Running
+Speed.#1.........: 14523.8 MH/s
+Candidates.#1....: aB3$kL -> zZ9!mP
+Progress.........: 2847193/735091890625
+
+[TIP] ?a = alle tekens (a-z, A-Z, 0-9, speciale tekens)</div>
+        </div>
+
+        <p>
+          Het probleem met brute force: de tijd groeit <strong>exponentieel</strong> met elke extra teken. 6 tekens?
+          Seconden. 8 tekens? Uren. 12 tekens? Eeuwen. Lengte is je beste verdediging.
+        </p>
+
+        <h3>2. Dictionary Attack (Woordenboekaanval)</h3>
+        <p>
+          In plaats van elke combinatie te proberen, gebruikt de aanvaller een lijst met veelvoorkomende wachtwoorden.
+          Er bestaan databases met miljoenen gelekte wachtwoorden uit eerdere
+          <abbr class="jargon" title="Data breach: een beveiligingsincident waarbij gevoelige data (zoals wachtwoorden, e-mailadressen of persoonsgegevens) wordt gestolen." tabindex="0"><strong>data breaches</strong></abbr>.
+          De beroemdste is de <strong>RockYou</strong>-lijst met 14 miljoen wachtwoorden.
+        </p>
+
+        <div class="terminal-example">
+          <div class="prompt">$ hashcat -m 0 -a 0 hash.txt rockyou.txt</div>
+          <div class="output">Session..........: hashcat
+Status...........: Cracked
+Hash.Type........: MD5
+Hash.Target......: 5f4dcc3b5aa765d61d8327deb882cf99
+
+5f4dcc3b5aa765d61d8327deb882cf99:password
+
+[TIP] "password" staat op #1 in de RockYou-lijst!</div>
+        </div>
+
+        <p>
+          Varianten hierop combineren woordenboekwoorden met veelgebruikte patronen: <code>Welkom1!</code>,
+          <code>Zomer2026</code>, <code>Voetbal123</code>. Deze "rule-based" aanvallen zijn verrassend
+          effectief, omdat mensen voorspelbare patronen volgen: een hoofdletter aan het begin, cijfers aan het eind,
+          en een uitroepteken als "speciaal teken."
+        </p>
+
+        <div class="blog-tip">
+          De meest gelekte wachtwoorden ter wereld zijn: <code>123456</code>, <code>password</code>, <code>qwerty</code>,
+          <code>abc123</code> en <code>iloveyou</code>. Als jouw wachtwoord hierop lijkt, verander het vandaag nog.
+        </div>
+
+        <h3>3. Rainbow Tables</h3>
+        <p>
+          <abbr class="jargon" title="Vooraf berekende tabellen die hashes koppelen aan wachtwoorden. Hiermee kun je in seconden een hash opzoeken in plaats van berekenen." tabindex="0"><strong>Rainbow tables</strong></abbr>
+          zijn enorme tabellen met vooraf berekende hashes. In plaats van elke hash opnieuw te berekenen, zoekt de
+          aanvaller de hash simpelweg op in de tabel. Dit werkt razendsnel, maar vereist gigabytes aan opslagruimte.
+        </p>
+
+        <p>
+          Het goede nieuws: salting maakt rainbow tables nutteloos. Wanneer elke hash een unieke salt heeft, zou de
+          aanvaller voor elke salt een aparte rainbow table moeten berekenen - dat is onpraktisch.
+        </p>
+
+        <h3>4. Credential Stuffing</h3>
+        <p>
+          Bij <abbr class="jargon" title="Aanval waarbij gestolen gebruikersnaam-wachtwoord combinaties van het ene platform worden geprobeerd op andere platforms." tabindex="0"><strong>credential stuffing</strong></abbr>
+          gebruikt een aanvaller gestolen inloggegevens van de ene website om in te loggen op andere websites. Gebruik je
+          hetzelfde wachtwoord voor je e-mail, Netflix en je bank? Dan is een lek bij Netflix genoeg om al je accounts
+          in gevaar te brengen.
+        </p>
+
+        <div class="terminal-example">
+          <div class="prompt">$ hydra -L users.txt -P passwords.txt target.com http-post-form "/login:user=^USER^&pass=^PASS^:Invalid"</div>
+          <div class="output">[80][http-post-form] host: target.com
+login: admin  password: Welkom123
+login: jan    password: Zomer2025!
+
+[!] 2 van 500 combinaties succesvol
+[TIP] Credential stuffing werkt omdat 65% van
+mensen wachtwoorden hergebruikt!</div>
+        </div>
+
+        <div class="blog-warning">
+          <strong>Let op:</strong> <a href="/commands/#cmd-hydra"><code>hydra</code></a> is een krachtige offensive tool voor
+          het testen van inlogbeveiliging. Gebruik deze tool <strong>uitsluitend</strong> op systemen waar je schriftelijke
+          toestemming voor hebt. Ongeautoriseerd gebruik is strafbaar onder art. 138ab van het Wetboek van Strafrecht.
+        </div>
+
+        <h3>5. Social Engineering en Phishing</h3>
+        <p>
+          Soms hoeft een aanvaller helemaal niks te kraken. Via
+          <abbr class="jargon" title="Manipulatietechnieken waarbij mensen worden misleid om vertrouwelijke informatie te delen, bijvoorbeeld via nep-e-mails of telefoontjes." tabindex="0"><strong>social engineering</strong></abbr>
+          wordt je simpelweg gevraagd je wachtwoord in te voeren op een nep-website die eruitziet als de echte. Of je
+          krijgt een e-mail die beweert van je bank te zijn. Geen enkel sterk wachtwoord beschermt je als je het zelf
+          weggeeft.
+        </p>
+
+        <h2>Hashcat: de koning van password cracking</h2>
+        <p>
+          <a href="/commands/#cmd-hashcat"><code>hashcat</code></a> is de meest gebruikte password cracking tool ter
+          wereld, zowel door ethische hackers als door criminelen. Het maakt gebruik van je
+          <abbr class="jargon" title="Graphics Processing Unit: de chip op je videokaart. GPU's kunnen duizenden berekeningen tegelijk uitvoeren, waardoor ze ideaal zijn voor password cracking." tabindex="0"><strong>GPU</strong></abbr>
+          (videokaart) om miljarden hashes per seconde te berekenen. Ter vergelijking: een CPU doet er misschien miljoenen
+          - een GPU doet er <strong>miljarden</strong>.
+        </p>
+
+        <div class="terminal-example">
+          <div class="prompt">$ hashcat -m 1000 -a 0 ntlm_hashes.txt rockyou.txt --rules best64.rule</div>
+          <div class="output">hashcat v6.2.6
+OpenCL API (OpenCL 3.0) - Platform #1 [NVIDIA]
+* Device #1: NVIDIA GeForce RTX 4090, 24GB
+
+Approaching final keyspace - workload adjusted.
+
+aad3b435b51404eeaad3b435b51404ee:leeg_wachtwoord
+31d6cfe0d16ae931b73c59d7e0c089c0:Welkom123
+a4f49c406510bdcab6824ee7c30fd852:Zomer2026!
+
+Session..........: hashcat
+Status...........: Exhausted
+Speed.#1.........: 95238.1 MH/s
+Recovered........: 3/5 (60.00%)
+
+[TIP] -m 1000 = NTLM hashes (Windows wachtwoorden)
+[TIP] --rules past variaties toe: Welkom -> W3lk0m, welkom!, WELKOM</div>
+        </div>
+
+        <p>Hashcat ondersteunt meer dan 350 hash-types, van MD5 en SHA-256 tot WPA2 wifi-wachtwoorden en
+          Windows NTLM hashes. Het is de Zwitserse zakmessen van password cracking.</p>
+
+        <div class="blog-info">
+          In HackSimulator.nl kun je <a href="/commands/#cmd-hashcat"><code>hashcat</code></a> veilig uitproberen zonder
+          echte hashes te kraken. Je leert de syntax, de aanvalsmodi, en de logica achter password cracking - in een
+          veilige simulatie.
+        </div>
+
+        <h2>Hoe lang duurt het kraken?</h2>
+        <p>
+          De kraaktijd hangt af van drie factoren: de <strong>lengte</strong> van het wachtwoord, de
+          <strong>complexiteit</strong> (welke tekens), en het gebruikte <strong>hash-algoritme</strong>. Hieronder een
+          overzicht voor MD5-hashes op een moderne GPU (10 miljard hashes per seconde):
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Wachtwoord</th>
+              <th>Karakterset</th>
+              <th>Kraaktijd (MD5)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>6 tekens, alleen kleine letters</td>
+              <td>a-z (26)</td>
+              <td>&lt; 1 seconde</td>
+            </tr>
+            <tr>
+              <td>8 tekens, kleine + hoofdletters</td>
+              <td>a-z, A-Z (52)</td>
+              <td>~15 minuten</td>
+            </tr>
+            <tr>
+              <td>8 tekens, letters + cijfers</td>
+              <td>a-z, A-Z, 0-9 (62)</td>
+              <td>~1 uur</td>
+            </tr>
+            <tr>
+              <td>8 tekens, alles + speciale tekens</td>
+              <td>95 tekens</td>
+              <td>~19 uur</td>
+            </tr>
+            <tr>
+              <td>10 tekens, alles + speciale tekens</td>
+              <td>95 tekens</td>
+              <td>~7 maanden</td>
+            </tr>
+            <tr>
+              <td>12 tekens, alles + speciale tekens</td>
+              <td>95 tekens</td>
+              <td>~6000 jaar</td>
+            </tr>
+            <tr>
+              <td>16 tekens, alles + speciale tekens</td>
+              <td>95 tekens</td>
+              <td>~50 miljard jaar</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="blog-tip">
+          Merk op: het verschil tussen 8 en 12 tekens is niet een beetje - het is het verschil tussen <strong>uren</strong>
+          en <strong>duizenden jaren</strong>. Elke extra teken vermenigvuldigt de kraaktijd enorm.
+          Met bcrypt of Argon2 in plaats van MD5 worden bovenstaande tijden nog eens duizenden keren langer.
+        </div>
+
+        <h2>Hoe bescherm je jezelf?</h2>
+        <p>
+          Nu je weet hoe aanvallen werken, kun je je verdediging opbouwen. Hier zijn de zes belangrijkste maatregelen,
+          van meest tot minst impactvol:
+        </p>
+
+        <h3>1. Gebruik lange wachtwoorden (12+ tekens)</h3>
+        <p>
+          Lengte verslaat complexiteit. Het wachtwoord <code>mijn-kat-eet-graag-vis</code> (21 tekens, alleen kleine
+          letters en streepjes) is <strong>astronomisch veel sterker</strong> dan <code>K@t!2026</code> (7 tekens met
+          speciale tekens). De reden: brute force schaalt exponentieel met lengte.
+        </p>
+
+        <p>
+          Een goed patroon is een <strong>passphrase</strong>: vier of meer willekeurige woorden aan elkaar. Makkelijk
+          te onthouden, bijna onmogelijk te kraken:
+        </p>
+
+        <div class="terminal-example">
+          <div class="prompt">$ # Zwak: kort maar "complex"</div>
+          <div class="output">P@ssw0rd!  (9 tekens, ~2 dagen kraken)</div>
+        </div>
+
+        <div class="terminal-example">
+          <div class="prompt">$ # Sterk: lang en makkelijk te onthouden</div>
+          <div class="output">koffie-fiets-regen-piano  (24 tekens, miljoenen jaren)</div>
+        </div>
+
+        <h3>2. Gebruik een password manager</h3>
+        <p>
+          Een <abbr class="jargon" title="Software die al je wachtwoorden veilig opslaat in een versleutelde kluis. Je hoeft alleen het master-wachtwoord te onthouden." tabindex="0"><strong>password manager</strong></abbr>
+          genereert en onthoudt unieke, sterke wachtwoorden voor elk account. Je hoeft zelf maar een sterk
+          master-wachtwoord te onthouden. Populaire opties zijn Bitwarden (gratis, open source), 1Password en KeePassXC
+          (lokale opslag).
+        </p>
+
+        <div class="blog-tip">
+          Met een password manager kun je per account een uniek wachtwoord van 20+ willekeurige tekens gebruiken. Je hoeft
+          ze niet te onthouden - de manager doet dat voor je. Dit elimineert het risico van credential stuffing volledig.
+        </div>
+
+        <h3>3. Activeer tweefactorauthenticatie (2FA)</h3>
+        <p>
+          <abbr class="jargon" title="Tweefactorauthenticatie: extra beveiligingslaag waarbij je naast je wachtwoord ook een tweede bewijs nodig hebt, zoals een code op je telefoon." tabindex="0"><strong>2FA</strong></abbr>
+          voegt een tweede beveiligingslaag toe. Zelfs als een aanvaller je wachtwoord kraakt, heeft die ook nog je
+          telefoon of security key nodig om in te loggen. Gebruik bij voorkeur een authenticator app (Google Authenticator,
+          Authy) in plaats van SMS-codes, omdat SMS onderschept kan worden via
+          <abbr class="jargon" title="SIM-swap: aanval waarbij een crimineel je telefoonnummer overneemt door je provider te misleiden, waardoor SMS-codes naar de aanvaller gaan." tabindex="0"><strong>SIM-swapping</strong></abbr>.
+        </p>
+
+        <h3>4. Hergebruik nooit wachtwoorden</h3>
+        <p>
+          Dit is de nummer een fout die mensen maken. Als je hetzelfde wachtwoord gebruikt voor je e-mail en een
+          webshop, en die webshop wordt gehackt, dan is je e-mail ook compromised. En via je e-mail kan een aanvaller
+          wachtwoorden resetten van al je andere accounts. Een password manager lost dit probleem automatisch op.
+        </p>
+
+        <h3>5. Check of je gegevens gelekt zijn</h3>
+        <p>
+          Via websites als <a href="https://haveibeenpwned.com" target="_blank" rel="noopener noreferrer">Have I Been Pwned</a>
+          kun je controleren of je e-mailadres of wachtwoorden voorkomen in bekende data breaches. Dit is gratis en
+          veilig om te gebruiken. Staan je gegevens erbij? Verander dan direct je wachtwoord op die dienst en overal
+          waar je hetzelfde wachtwoord gebruikte.
+        </p>
+
+        <h3>6. Wees alert op phishing</h3>
+        <p>
+          Controleer altijd de URL voordat je inlogt. <code>login.bank.nl</code> is niet hetzelfde als
+          <code>login-bank.nl.attacker.com</code>. Klik niet op links in onverwachte e-mails, en gebruik bij twijfel
+          de officiële app of typ de URL zelf in. Geen enkel sterk wachtwoord beschermt je als je het zelf weggeeft
+          op een phishing-pagina.
+        </p>
+
+        <h2>Ethische context: responsible disclosure</h2>
+        <p>
+          Als ethisch hacker kun je password cracking technieken gebruiken om systemen <em>sterker</em> te maken. Denk
+          aan een penetratietest waarbij je de wachtwoorddatabase van een bedrijf test. Als je ontdekt dat 40% van de
+          werknemers "Bedrijfsnaam2026" als wachtwoord gebruikt, is dat waardevolle informatie voor de IT-afdeling.
+        </p>
+
+        <p>
+          Maar hiervoor gelden strenge regels:
+        </p>
+
+        <ul>
+          <li><strong>Schriftelijke toestemming</strong> - Altijd een contract of scope-document voordat je begint</li>
+          <li><strong>Responsible disclosure</strong> - Vind je een kwetsbaarheid? Meld het bij de eigenaar, publiceer het niet</li>
+          <li><strong>Data beschermen</strong> - Gekraakte wachtwoorden rapporteer je, maar deel je niet met onbevoegden</li>
+          <li><strong>Proportionaliteit</strong> - Test wat nodig is, ga niet verder dan de scope</li>
+        </ul>
+
+        <div class="blog-warning">
+          Password cracking op systemen zonder toestemming is <strong>illegaal</strong>, ongeacht je bedoelingen.
+          In Nederland valt dit onder computervredebreuk (art. 138ab Sr) met straffen tot 4 jaar gevangenis.
+          Gebruik tools als <a href="/commands/#cmd-hashcat"><code>hashcat</code></a> en
+          <a href="/commands/#cmd-hydra"><code>hydra</code></a> alleen ethisch: in een lab-omgeving, op eigen systemen,
+          of met expliciete schriftelijke toestemming.
+        </div>
+
+        <h2>Oefenen in HackSimulator.nl</h2>
+        <p>
+          Wil je zelf ervaren hoe password cracking werkt? In HackSimulator.nl kun je veilig experimenteren met
+          <a href="/commands/#cmd-hashcat"><code>hashcat</code></a> en
+          <a href="/commands/#cmd-hydra"><code>hydra</code></a> in een gesimuleerde omgeving. Je leert:
+        </p>
+
+        <ul>
+          <li>Hoe je hashes identificeert (MD5, SHA-256, bcrypt)</li>
+          <li>Welke aanvalsmodus je kiest (brute force, dictionary, rule-based)</li>
+          <li>Hoe je de output interpreteert</li>
+          <li>Waarom sommige wachtwoorden in seconden vallen en andere nooit</li>
+        </ul>
+
+        <div class="terminal-example">
+          <div class="prompt">$ hashcat -m 0 -a 0 hash.txt wordlist.txt</div>
+          <div class="output">Bezig met kraken...
+5f4dcc3b5aa765d61d8327deb882cf99:password
+
+[TIP] MD5 hash gekraakt! Dit wachtwoord stond in
+de woordenlijst. Gebruik langere, unieke wachtwoorden.
+[!] Gebruik hashcat ALLEEN met toestemming.</div>
+        </div>
+
+        <div class="blog-cta">
+          <h3>Probeer het zelf!</h3>
+          <p>
+            Open de simulator en type <code>hashcat</code> om te zien hoe password cracking werkt. Of begin met
+            <code>leerpad</code> als je helemaal nieuw bent. Alles draait veilig in je browser.
+          </p>
+          <a href="../terminal.html" class="blog-cta-button">Start de simulator</a>
+        </div>
+
+        <h2>Samenvatting</h2>
+        <p>Laten we de belangrijkste lessen op een rij zetten:</p>
+        <ul>
+          <li>Wachtwoorden worden opgeslagen als <strong>hashes</strong> - eenrichtingsfuncties die niet teruggerekend kunnen worden</li>
+          <li>Aanvallers proberen miljoenen wachtwoorden te hashen en vergelijken de resultaten (<strong>brute force</strong>, <strong>dictionary attack</strong>)</li>
+          <li><strong>Rainbow tables</strong> versnellen dit proces, maar <strong>salting</strong> maakt ze nutteloos</li>
+          <li>Moderne GPU's kraken korte wachtwoorden in seconden - <strong>lengte is je beste verdediging</strong></li>
+          <li>Gebruik een <strong>password manager</strong>, activeer <strong>2FA</strong>, en hergebruik nooit wachtwoorden</li>
+          <li>Password cracking is legaal als tool voor ethische hackers - maar <strong>alleen met toestemming</strong></li>
+        </ul>
+
+        <p>Meer lezen?</p>
+        <ul>
+          <li><a href="wat-is-ethisch-hacken.html">Wat is Ethisch Hacken?</a> - White hat vs black hat uitgelegd</li>
+          <li><a href="terminal-basics.html">Terminal Commands voor Beginners</a> - De basis van terminal gebruik</li>
+        </ul>
+      </div>
+
+      <!-- Related Articles -->
+      <section class="related-articles">
+        <h2>Verder Lezen</h2>
+        <div class="related-grid">
+          <a href="wat-is-ethisch-hacken.html" class="related-card">
+            <span class="related-category">Concepten</span>
+            <h3>Wat is Ethisch Hacken?</h3>
+            <p>White hat vs black hat - leer het verschil en ontdek carrieremogelijkheden in cybersecurity.</p>
+            <span class="related-meta">8 min leestijd</span>
+          </a>
+          <a href="terminal-basics.html" class="related-card">
+            <span class="related-category">Beginners</span>
+            <h3>Terminal Commands voor Beginners</h3>
+            <p>De basis van de command line: ls, cd, cat en meer - alles wat je moet weten om te starten.</p>
+            <span class="related-meta">6 min leestijd</span>
+          </a>
+          <a href="/commands/" class="related-card">
+            <span class="related-category">Referentie</span>
+            <h3>Alle 31 Commands</h3>
+            <p>Bekijk de volledige command reference met voorbeelden, tips en educatieve uitleg per command.</p>
+            <span class="related-meta">Command overzicht</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Post Footer -->
+      <footer class="blog-post-footer">
+        <p>Vragen of feedback? Laat het ons weten op <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+        <p><a href="index.html">&larr; Terug naar blog overzicht</a></p>
+      </footer>
+    </article>
+  </main>
+
+  <!-- AdSense Footer Banner (M5.5 Blog Monetization) -->
+  <div id="adsense-footer" class="ad-container" style="display: none;">
+      <p class="ad-disclaimer">Advertisement</p>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-6345664385525701"
+           data-ad-slot="1674341955"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+  </div>
+
+  <!-- Footer (Component Injection) -->
+  <div id="footer-placeholder">
+    <noscript>
+      <footer class="noscript-footer">
+        <p>&copy; 2026 HackSimulator.nl</p>
+      </footer>
+    </noscript>
+  </div>
+
+  <!-- Theme Initialization (prevents flash) - external for CSP compliance -->
+  <script src="/src/init-theme.js"></script>
+
+  <!-- Component Injection (external script for CSP compliance) -->
+  <script src="/src/init-components.js" type="module"></script>
+
+  <!-- Reading Progress (blog-specific) -->
+  <script src="../src/ui/blog-theme.js" type="module"></script>
+</body>
+</html>

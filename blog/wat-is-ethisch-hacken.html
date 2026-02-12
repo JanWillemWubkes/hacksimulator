@@ -20,6 +20,9 @@
   <meta property="article:section" content="Cybersecurity">
   <meta property="og:locale" content="nl_NL">
 
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="HackSimulator.nl Blog" href="/feed.xml">
+
   <!-- Canonical URL -->
   <link rel="canonical" href="https://hacksimulator.nl/blog/wat-is-ethisch-hacken.html">
 
@@ -37,6 +40,15 @@
   <link rel="stylesheet" href="../styles/mobile.css">
 
   <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
+
+  <!-- Cookiebot CMP (Google-certified, IAB TCF 2.3) - MUST be first script -->
+  <script id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="JOUW_COOKIEBOT_ID"
+          type="text/javascript"
+          data-blockingmode="auto"></script>
+
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6345664385525701"
        crossorigin="anonymous"></script>
 
@@ -99,7 +111,7 @@
         <div class="blog-post-meta">
           <time datetime="2025-11-10">10 november 2025</time>
           <span>8 min</span>
-          <span>Concepten</span>
+          <span class="category-badge">Concepten</span>
         </div>
       </header>
 
@@ -188,7 +200,7 @@
         </p>
         <ul>
           <li><abbr class="jargon" title="Open Source Intelligence: Publieke informatie verzamelen over het doelwit (LinkedIn, social media, WHOIS-data)" tabindex="0"><strong>Open-source intelligence (OSINT)</strong></abbr></li>
-          <li>Network scanning - Welke systemen zijn actief? Welke poorten staan open?</li>
+          <li>Network scanning - Welke systemen zijn actief? Welke poorten staan open? (Probeer <a href="/commands/#cmd-nmap"><code>nmap</code></a> in de simulator)</li>
           <li>Service enumeration - Welke software versies draaien er? Zijn er bekende kwetsbaarheden?</li>
         </ul>
 
@@ -326,6 +338,31 @@ Host 192.168.1.10: OPEN ports 3306 (MySQL)
           <li><a href="terminal-basics.html">Terminal Commands voor Beginners</a> - Leer de basis van de terminal</li>
         </ul>
       </div>
+
+      <!-- Related Articles -->
+      <section class="related-articles">
+        <h2>Verder Lezen</h2>
+        <div class="related-grid">
+          <a href="welkom.html" class="related-card">
+            <span class="related-category">Beginners</span>
+            <h3>Welkom bij HackSimulator.nl</h3>
+            <p>Ontdek de simulator: wat kun je leren, hoe werkt het, en waarom Nederlands?</p>
+            <span class="related-meta">5 min leestijd</span>
+          </a>
+          <a href="terminal-basics.html" class="related-card">
+            <span class="related-category">Beginners</span>
+            <h3>Terminal Commands voor Beginners</h3>
+            <p>De basis van de command line: ls, cd, cat en meer - alles wat je moet weten om te starten.</p>
+            <span class="related-meta">6 min leestijd</span>
+          </a>
+          <a href="/commands/" class="related-card">
+            <span class="related-category">Referentie</span>
+            <h3>Alle 31 Commands</h3>
+            <p>Bekijk de volledige command reference met voorbeelden, tips en educatieve uitleg per command.</p>
+            <span class="related-meta">Command overzicht</span>
+          </a>
+        </div>
+      </section>
 
       <!-- Post Footer -->
       <footer class="blog-post-footer">

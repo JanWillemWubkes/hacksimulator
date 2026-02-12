@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>HackSimulator.nl Blog</title>
+    <description>Leer ethisch hacken met educatieve tutorials over terminal commands, cybersecurity principes en veilig programmeren. In het Nederlands.</description>
+    <link>https://hacksimulator.nl/blog/</link>
+    <atom:link href="https://hacksimulator.nl/feed.xml" rel="self" type="application/rss+xml"/>
+    <language>nl-NL</language>
+    <managingEditor>contact@hacksimulator.nl (HackSimulator.nl)</managingEditor>
+    <lastBuildDate>Mon, 10 Feb 2026 12:00:00 +0100</lastBuildDate>
+
+    <item>
+      <title>Netwerk Scanning met Nmap: Beginnersgids</title>
+      <description>Leer hoe nmap werkt voor netwerk scanning. Ontdek open poorten, services en kwetsbaarheden met deze Nederlandse beginnersgids voor ethisch hacken.</description>
+      <link>https://hacksimulator.nl/blog/nmap-beginnersgids.html</link>
+      <guid isPermaLink="true">https://hacksimulator.nl/blog/nmap-beginnersgids.html</guid>
+      <pubDate>Tue, 10 Feb 2026 10:00:00 +0100</pubDate>
+      <category>Tools</category>
+    </item>
+
+    <item>
+      <title>Wachtwoordbeveiliging: Hoe Hackers Kraken</title>
+      <description>Leer hoe hackers wachtwoorden kraken met brute force, dictionary attacks en rainbow tables. Ontdek hoe je sterke wachtwoorden maakt en jezelf beschermt.</description>
+      <link>https://hacksimulator.nl/blog/wachtwoord-beveiliging.html</link>
+      <guid isPermaLink="true">https://hacksimulator.nl/blog/wachtwoord-beveiliging.html</guid>
+      <pubDate>Tue, 10 Feb 2026 10:00:00 +0100</pubDate>
+      <category>Tools</category>
+    </item>
+
+    <item>
+      <title>SQL Injection Uitgelegd voor Beginners</title>
+      <description>Leer wat SQL injection is, hoe het werkt en hoe je websites hiertegen beschermt. Begrijpelijke Nederlandse uitleg met voorbeelden.</description>
+      <link>https://hacksimulator.nl/blog/sql-injection-uitgelegd.html</link>
+      <guid isPermaLink="true">https://hacksimulator.nl/blog/sql-injection-uitgelegd.html</guid>
+      <pubDate>Tue, 10 Feb 2026 10:00:00 +0100</pubDate>
+      <category>Gevorderden</category>
+    </item>
+
+    <item>
+      <title>Linux Bestandssysteem: Basis voor Hackers</title>
+      <description>Leer de basis van het Linux bestandssysteem. Van ls en cd tot chmod en permissies - essentieel voor elke beginnende hacker en systeembeheerder.</description>
+      <link>https://hacksimulator.nl/blog/linux-bestandssysteem.html</link>
+      <guid isPermaLink="true">https://hacksimulator.nl/blog/linux-bestandssysteem.html</guid>
+      <pubDate>Tue, 10 Feb 2026 10:00:00 +0100</pubDate>
+      <category>Beginners</category>
+    </item>
+
+    <item>
+      <title>Social Engineering: De Menselijke Factor</title>
+      <description>Leer wat social engineering is en hoe aanvallers menselijke psychologie misbruiken. Ontdek phishing, pretexting, baiting en hoe je jezelf beschermt.</description>
+      <link>https://hacksimulator.nl/blog/social-engineering.html</link>
+      <guid isPermaLink="true">https://hacksimulator.nl/blog/social-engineering.html</guid>
+      <pubDate>Tue, 10 Feb 2026 10:00:00 +0100</pubDate>
+      <category>Concepten</category>
+    </item>
+
+    <item>
+      <title>Hoe Word je Ethisch Hacker? Complete Carrieregids</title>
+      <description>Complete gids om ethisch hacker te worden. Leer welke skills, certificeringen en stappen je nodig hebt voor een carriere in cybersecurity.</description>
+      <link>https://hacksimulator.nl/blog/ethisch-hacker-worden.html</link>
+      <guid isPermaLink="true">https://hacksimulator.nl/blog/ethisch-hacker-worden.html</guid>
+      <pubDate>Tue, 10 Feb 2026 10:00:00 +0100</pubDate>
+      <category>Carriere</category>
+    </item>
+
+    <item>
+      <title>5 Essentiele Tools voor Cybersecurity Beginners</title>
+      <description>Ontdek de 5 belangrijkste gratis cybersecurity tools voor beginners. Van nmap tot Wireshark - leer welke tools elke ethisch hacker moet kennen.</description>
+      <link>https://hacksimulator.nl/blog/cybersecurity-tools.html</link>
+      <guid isPermaLink="true">https://hacksimulator.nl/blog/cybersecurity-tools.html</guid>
+      <pubDate>Tue, 10 Feb 2026 10:00:00 +0100</pubDate>
+      <category>Bronnen</category>
+    </item>
+
+    <item>
+      <title>Welkom bij HackSimulator.nl</title>
+      <description>Ontdek HackSimulator.nl - een veilige browser-based terminal voor het leren van ethisch hacken. 30+ commands, virtual filesystem en educatieve tutorials voor beginners.</description>
+      <link>https://hacksimulator.nl/blog/welkom.html</link>
+      <guid isPermaLink="true">https://hacksimulator.nl/blog/welkom.html</guid>
+      <pubDate>Thu, 13 Nov 2025 10:00:00 +0100</pubDate>
+      <category>Beginners</category>
+    </item>
+
+    <item>
+      <title>Wat is Ethisch Hacken? White Hat vs Black Hat Uitgelegd</title>
+      <description>Leer het verschil tussen ethical hacking (white hat), malicious hacking (black hat) en grey hat. Ontdek carrieremogelijkheden in cybersecurity en de juridische grenzen.</description>
+      <link>https://hacksimulator.nl/blog/wat-is-ethisch-hacken.html</link>
+      <guid isPermaLink="true">https://hacksimulator.nl/blog/wat-is-ethisch-hacken.html</guid>
+      <pubDate>Mon, 10 Nov 2025 10:00:00 +0100</pubDate>
+      <category>Concepten</category>
+    </item>
+
+    <item>
+      <title>Terminal Commands voor Beginners</title>
+      <description>Leer de basis van terminal commands: ls, cd, cat, chmod en meer. Begrijpelijke uitleg voor beginners die de command line willen leren gebruiken.</description>
+      <link>https://hacksimulator.nl/blog/terminal-basics.html</link>
+      <guid isPermaLink="true">https://hacksimulator.nl/blog/terminal-basics.html</guid>
+      <pubDate>Sat, 08 Nov 2025 10:00:00 +0100</pubDate>
+      <category>Beginners</category>
+    </item>
+
+  </channel>
+</rss>

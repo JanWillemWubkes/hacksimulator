@@ -22,13 +22,27 @@ const consentManager = {
   hasShownBanner: false,
 
   /**
+   * Check if Cookiebot CMP is loaded (Google-certified, IAB TCF 2.3)
+   * When Cookiebot is active, it handles consent UI and cookie blocking.
+   *
+   * @returns {boolean} True if Cookiebot is handling consent
+   */
+  isCookiebotActive() {
+    return typeof window.Cookiebot !== 'undefined';
+  },
+
+  /**
    * Check if banner should be shown
+   * - Don't show if Cookiebot is active (it handles consent UI)
    * - Don't show if user already responded (consent stored)
    * - Don't show if shown in last 24 hours (cooldown)
    *
    * @returns {boolean} True if banner should be shown
    */
   shouldShowBanner() {
+    // Cookiebot handles consent UI when active
+    if (this.isCookiebotActive()) return false;
+
     // Don't show if user already gave/declined consent
     if (this.hasConsent() !== null) return false;
 
@@ -52,11 +66,25 @@ const consentManager = {
 
   /**
    * Check if user has given consent for a specific category
+   * Reads from Cookiebot when active, falls back to localStorage.
+   *
+   * Cookiebot category mapping:
+   * - 'analytics' → Cookiebot.consent.statistics
+   * - 'advertising' → Cookiebot.consent.marketing
+   * - 'necessary' → always true
    *
    * @param {string} category - 'necessary', 'analytics', or 'advertising'
    * @returns {boolean|null} True if consented, false if declined, null if no response yet
    */
   hasConsent(category = 'analytics') {
+    // Use Cookiebot consent state when available
+    if (this.isCookiebotActive() && window.Cookiebot.consent) {
+      if (category === 'necessary') return true;
+      if (category === 'analytics') return window.Cookiebot.consent.statistics;
+      if (category === 'advertising') return window.Cookiebot.consent.marketing;
+    }
+
+    // Fallback to localStorage (custom banner or Cookiebot not yet loaded)
     try {
       const consentData = localStorage.getItem(CONSENT_KEY);
 
@@ -248,8 +276,16 @@ const consentManager = {
 
   /**
    * Show consent settings modal (called by "Cookie Instellingen" footer link)
+   * Opens Cookiebot dialog when active, falls back to custom banner.
    */
   showConsentSettings() {
+    // Use Cookiebot's settings dialog when active
+    if (this.isCookiebotActive() && typeof window.Cookiebot.show === 'function') {
+      window.Cookiebot.show();
+      return;
+    }
+
+    // Fallback: custom banner
     // Reset shown flag to bypass shouldShowBanner() check
     this.hasShownBanner = false;
 

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>Linux Bestandssysteem: Basis voor Hackers | HackSimulator.nl</title>
+  <meta name="description" content="Leer de basis van het Linux bestandssysteem. Van ls en cd tot chmod en permissies - essentieel voor elke beginnende hacker en systeembeheerder.">
+  <meta name="keywords" content="linux filesystem, ls command, cd command, chmod, bestandspermissies, linux basis, ethical hacking">
+  <meta name="author" content="HackSimulator.nl">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://hacksimulator.nl/blog/linux-bestandssysteem.html">
+  <meta property="og:title" content="Linux Bestandssysteem: Basis voor Hackers | HackSimulator.nl">
+  <meta property="og:description" content="Leer de basis van het Linux bestandssysteem - essentieel voor elke hacker.">
+  <meta property="article:published_time" content="2026-02-10">
+  <meta property="article:author" content="HackSimulator.nl">
+  <meta property="article:section" content="Beginners">
+  <meta property="og:locale" content="nl_NL">
+
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="HackSimulator.nl Blog" href="/feed.xml">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://hacksimulator.nl/blog/linux-bestandssysteem.html">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+
+  <!-- Google Fonts: Space Grotesk + Inter + JetBrains Mono (Sessie 99 - Font System Upgrade) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../styles/main.css?v=101-font-system-upgrade">
+  <link rel="stylesheet" href="../styles/blog.css?v=19-mobile-title-fix">
+  <link rel="stylesheet" href="../styles/mobile.css">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
+
+  <!-- Cookiebot CMP (Google-certified, IAB TCF 2.3) - MUST be first script -->
+  <script id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="JOUW_COOKIEBOT_ID"
+          type="text/javascript"
+          data-blockingmode="auto"></script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6345664385525701"
+       crossorigin="anonymous"></script>
+
+  <!-- Structured Data - JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Linux Bestandssysteem: Basis voor Hackers",
+    "description": "Leer de basis van het Linux bestandssysteem - essentieel voor elke beginnende hacker.",
+    "datePublished": "2026-02-10",
+    "dateModified": "2026-02-10",
+    "author": {
+      "@type": "Organization",
+      "name": "HackSimulator.nl"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "HackSimulator.nl",
+      "url": "https://hacksimulator.nl/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://hacksimulator.nl/blog/linux-bestandssysteem.html"
+    },
+    "inLanguage": "nl-NL",
+    "keywords": "linux, filesystem, ls, cd, chmod, bestandspermissies"
+  }
+  </script>
+
+  <!-- Cookie Consent & Analytics (M5.5 GDPR Compliance) -->
+  <script src="../src/analytics/consent-banner.js" type="module"></script>
+  <script src="../src/analytics/consent.js" type="module"></script>
+  <script src="../src/analytics/tracker.js" type="module"></script>
+  <script src="../src/analytics/events.js" type="module"></script>
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
+
+  <!-- Navigation (Component Injection) -->
+  <div id="navbar-placeholder">
+    <noscript>
+      <nav class="noscript-nav" role="navigation">
+        <a href="../">HackSimulator.nl</a>
+        <a href="../terminal.html">Start Simulator</a>
+      </nav>
+    </noscript>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main-content" class="blog-container">
+    <article class="blog-post">
+      <!-- Post Header -->
+      <header class="blog-post-header">
+        <h1 class="blog-post-title">Linux Bestandssysteem: Basis voor Hackers</h1>
+        <div class="blog-post-meta">
+          <time datetime="2026-02-10">10 februari 2026</time>
+          <span>7 min</span>
+          <span class="category-badge">Beginners</span>
+        </div>
+      </header>
+
+      <!-- Post Content -->
+      <div class="blog-post-content">
+        <p>
+          Als je serieus wilt worden in cybersecurity, ontkom je niet aan Linux. Meer dan 90% van alle servers
+          draait op Linux, vrijwel alle hacking tools zijn gebouwd voor Linux, en de meeste
+          <abbr class="jargon" title="Besturingssysteem speciaal samengesteld voor penetration testing en security research" tabindex="0"><strong>pentest-distributies</strong></abbr>
+          zoals Kali Linux en Parrot OS zijn Linux-gebaseerd. Maar voordat je tools als nmap of metasploit gaat gebruiken,
+          moet je eerst de basis begrijpen: het bestandssysteem. Zonder kennis van hoe Linux bestanden en mappen organiseert,
+          ben je als een inbreker die niet weet waar de deuren zitten.
+        </p>
+
+        <h2>Waarom Linux?</h2>
+        <p>
+          Windows is het populairste desktop-besturingssysteem, maar in de wereld van servers, netwerken en security
+          is Linux de onbetwiste koning. Daar zijn goede redenen voor:
+        </p>
+        <ul>
+          <li><strong>Open source</strong> - De broncode is openbaar. Je kunt precies zien wat het systeem doet, geen verborgen processen.</li>
+          <li><strong>Stabiliteit</strong> - Linux servers draaien maanden of zelfs jaren zonder herstart. Ideaal voor kritieke systemen.</li>
+          <li><strong>Flexibiliteit</strong> - Je hebt totale controle over elk aspect van het systeem via de command line.</li>
+          <li><strong>Security tools</strong> - Nmap, Wireshark, Metasploit, John the Ripper: allemaal native Linux tools.</li>
+          <li><strong>Gratis</strong> - Geen licentiekosten. Download, installeer, en ga aan de slag.</li>
+        </ul>
+
+        <div class="blog-tip">
+          Je hoeft niet meteen je hele computer om te gooien naar Linux. Begin met een <abbr class="jargon" title="Virtuele Machine: een gesimuleerde computer binnen je echte computer" tabindex="0"><strong>VM</strong></abbr> (Virtual Machine) via VirtualBox of VMware, of gebruik de Windows Subsystem for Linux (WSL). Zo kun je veilig experimenteren zonder risico.
+        </div>
+
+        <h2>De Directory Structuur: Alles Begint bij /</h2>
+        <p>
+          In Windows heb je schijfletters: <code>C:\</code>, <code>D:\</code>, enzovoort. Linux werkt fundamenteel anders.
+          Er is geen <code>C:\</code>. Alles begint bij een enkele
+          <abbr class="jargon" title="Root directory: het absolute startpunt van het hele Linux bestandssysteem, aangeduid met /" tabindex="0"><strong>root directory</strong></abbr>,
+          geschreven als <code>/</code>. Van daaruit vertakken alle mappen en bestanden zich als een omgekeerde boom.
+        </p>
+
+        <p>De belangrijkste mappen die je als hacker moet kennen:</p>
+
+        <div class="terminal-example">
+          <div class="prompt">$ ls /</div>
+          <div class="output">bin  boot  dev  etc  home  lib  media  mnt  opt  proc  root  sbin  srv  sys  tmp  usr  var</div>
+        </div>
+
+        <ul>
+          <li><code>/</code> - De root. Het startpunt van alles.</li>
+          <li><code>/home</code> - Persoonlijke mappen van gebruikers. Jouw bestanden staan in <code>/home/jouwgebruikersnaam</code>.</li>
+          <li><code>/etc</code> - Configuratiebestanden van het hele systeem. Wachtwoorden, netwerkinstellingen, services: het zit allemaal hier.</li>
+          <li><code>/var</code> - Variabele data: logbestanden (<code>/var/log</code>), databases, e-mail wachtrijen.</li>
+          <li><code>/tmp</code> - Tijdelijke bestanden. Wordt regelmatig leeggemaakt. Aanvallers gebruiken dit vaak om payloads op te slaan.</li>
+          <li><code>/bin</code> en <code>/sbin</code> - Essentieel systeemcommando's (ls, cp, mv in /bin; admin-tools in /sbin).</li>
+          <li><code>/usr</code> - Gebruikersprogramma's en bibliotheken. De meeste geinstalleerde software staat hier.</li>
+          <li><code>/root</code> - De home directory van de root-gebruiker (de systeembeheerder). Niet te verwarren met <code>/</code>.</li>
+        </ul>
+
+        <div class="blog-info">
+          Voor security professionals is <code>/etc</code> de meest interessante map. Hier vind je <code>/etc/passwd</code> (gebruikerslijst), <code>/etc/shadow</code> (gehashte wachtwoorden), <code>/etc/ssh/sshd_config</code> (SSH configuratie) en honderden andere configuratiebestanden die een systeem kwetsbaar of juist veilig maken.
+        </div>
+
+        <h2>Navigatie: Weten Waar Je Bent</h2>
+        <p>
+          De drie basiscommando's voor navigatie zijn <a href="/commands/#cmd-ls"><code>ls</code></a>,
+          <a href="/commands/#cmd-cd"><code>cd</code></a> en <code>pwd</code>. Zonder deze drie kom je nergens.
+        </p>
+
+        <h3>pwd - Print Working Directory</h3>
+        <p>Verdwaald? <code>pwd</code> vertelt je precies waar je bent:</p>
+        <div class="terminal-example">
+          <div class="prompt">$ pwd</div>
+          <div class="output">/home/hacker/Documents</div>
+        </div>
+
+        <h3>cd - Change Directory</h3>
+        <p>Navigeer naar een andere map:</p>
+        <div class="terminal-example">
+          <div class="prompt">$ cd /etc</div>
+          <div class="prompt">$ pwd</div>
+          <div class="output">/etc</div>
+          <div class="prompt">$ cd ..</div>
+          <div class="prompt">$ pwd</div>
+          <div class="output">/</div>
+        </div>
+        <p>
+          Onthoud: <code>cd ..</code> gaat een niveau omhoog, <code>cd ~</code> brengt je terug naar je home directory,
+          en <code>cd -</code> springt terug naar de vorige locatie.
+        </p>
+
+        <h3>ls - List</h3>
+        <p>Bekijk wat er in een map staat:</p>
+        <div class="terminal-example">
+          <div class="prompt">$ ls -la /etc/ssh/</div>
+          <div class="output">drwxr-xr-x  2 root root  4096 jan 15 10:30 .
+drwxr-xr-x 96 root root  4096 jan 15 10:30 ..
+-rw-r--r--  1 root root  1580 jan 15 10:30 ssh_config
+-rw-------  1 root root  3326 jan 15 10:30 sshd_config
+-rw-------  1 root root   505 jan 15 10:30 ssh_host_rsa_key</div>
+        </div>
+        <p>
+          De <code>-l</code> flag geeft een gedetailleerde weergave met permissies, eigenaar en bestandsgrootte.
+          De <code>-a</code> flag toont ook verborgen bestanden (die met een punt beginnen).
+        </p>
+
+        <h2>Bestanden Lezen: De Inhoud Bekijken</h2>
+        <p>
+          Navigeren is stap een. Maar als hacker wil je <em>weten wat er in bestanden staat</em>. Configuratiebestanden,
+          logbestanden, scripts - ze bevatten allemaal waardevolle informatie.
+        </p>
+
+        <h3>cat - Toon Bestandsinhoud</h3>
+        <p>
+          Het simpelste commando om een bestand te lezen. <a href="/commands/#cmd-cat"><code>cat</code></a> dumpt de
+          volledige inhoud op je scherm:
+        </p>
+        <div class="terminal-example">
+          <div class="prompt">$ cat /etc/hostname</div>
+          <div class="output">webserver-prod-01</div>
+        </div>
+
+        <h3>head en tail - Begin en Eind</h3>
+        <p>
+          Grote logbestanden wil je niet helemaal lezen. <code>head</code> toont de eerste regels,
+          <code>tail</code> de laatste:
+        </p>
+        <div class="terminal-example">
+          <div class="prompt">$ tail -20 /var/log/auth.log</div>
+          <div class="output">Feb 10 03:14:22 server sshd[1842]: Failed password for root from 203.0.113.42
+Feb 10 03:14:25 server sshd[1842]: Failed password for root from 203.0.113.42
+Feb 10 03:14:28 server sshd[1842]: Failed password for root from 203.0.113.42</div>
+        </div>
+
+        <div class="blog-tip">
+          Het commando <code>tail -f /var/log/auth.log</code> volgt het logbestand in real-time. Je ziet nieuwe regels verschijnen zodra ze worden geschreven. Ideaal om live in te loggen pogingen te monitoren op een server.
+        </div>
+
+        <h2>Bestanden Zoeken: find en grep</h2>
+        <p>
+          Op een systeem met duizenden bestanden heb je zoekcommando's nodig. Twee van de krachtigste tools
+          in je arsenaal zijn <a href="/commands/#cmd-find"><code>find</code></a> en
+          <a href="/commands/#cmd-grep"><code>grep</code></a>.
+        </p>
+
+        <h3>find - Zoek Bestanden op Naam of Eigenschappen</h3>
+        <div class="terminal-example">
+          <div class="prompt">$ find / -name "*.conf" -type f 2>/dev/null</div>
+          <div class="output">/etc/ssh/sshd_config
+/etc/nginx/nginx.conf
+/etc/mysql/my.cnf
+/etc/apache2/apache2.conf</div>
+        </div>
+        <p>
+          Dit doorzoekt het hele systeem (<code>/</code>) naar bestanden (<code>-type f</code>) die eindigen op
+          <code>.conf</code>. De <code>2>/dev/null</code> onderdrukt foutmeldingen voor mappen waar je geen
+          toegang hebt.
+        </p>
+
+        <h3>grep - Zoek Tekst in Bestanden</h3>
+        <div class="terminal-example">
+          <div class="prompt">$ grep -r "password" /etc/ 2>/dev/null</div>
+          <div class="output">/etc/mysql/debian.cnf:password = geheim123
+/etc/ppp/chap-secrets:# user  server  password  IP</div>
+        </div>
+        <p>
+          Met <code>grep -r</code> doorzoek je recursief alle bestanden in een map naar een bepaalde tekst.
+          Dit is een van de eerste dingen die een hacker doet na toegang tot een systeem: zoeken naar
+          wachtwoorden, API keys en andere gevoelige informatie in configuratiebestanden.
+        </p>
+
+        <div class="blog-warning">
+          <strong>Belangrijk:</strong> Het zoeken naar wachtwoorden en gevoelige data op systemen van anderen zonder
+          toestemming is illegaal. Gebruik deze technieken alleen op je eigen systemen, in
+          <abbr class="jargon" title="Capture The Flag: security-competities waarbij je kwetsbaarheden moet vinden en exploiteren in een gecontroleerde omgeving" tabindex="0"><strong>CTF</strong></abbr>-competities,
+          of tijdens een pentest waarvoor je schriftelijke toestemming hebt.
+        </div>
+
+        <h2>Bestanden Beheren: cp, mv, rm, mkdir, touch</h2>
+        <p>
+          Naast lezen en zoeken moet je ook bestanden kunnen aanmaken, kopieren, verplaatsen en verwijderen.
+        </p>
+        <ul>
+          <li><code>touch bestand.txt</code> - Maak een leeg bestand aan (of update de tijdstempel van een bestaand bestand).</li>
+          <li><code>mkdir -p pad/naar/map</code> - Maak een mappenstructuur aan, inclusief tussenliggende mappen.</li>
+          <li><code>cp bron.txt doel.txt</code> - Kopieer een bestand. Gebruik <code>-r</code> voor mappen.</li>
+          <li><code>mv oud.txt nieuw.txt</code> - Verplaats of hernoem een bestand.</li>
+          <li><code>rm bestand.txt</code> - Verwijder een bestand. <strong>Permanent.</strong> Geen prullenbak.</li>
+        </ul>
+
+        <div class="blog-tip">
+          Gebruik altijd <code>rm -i</code> als je onzeker bent. De <code>-i</code> flag vraagt om bevestiging voordat elk bestand wordt verwijderd. Dit kan je redden van een kostbare fout, vooral wanneer je met <abbr class="jargon" title="Wildcards: speciale tekens zoals * en ? die meerdere bestanden tegelijk matchen" tabindex="0"><strong>wildcards</strong></abbr> werkt.
+        </div>
+
+        <h2>Permissies: Wie Mag Wat?</h2>
+        <p>
+          Het Linux permissiesysteem is een van de belangrijkste concepten voor security. Elk bestand en elke map
+          heeft drie sets rechten voor drie groepen: de
+          <abbr class="jargon" title="Owner: de gebruiker die eigenaar is van het bestand" tabindex="0"><strong>eigenaar</strong></abbr> (owner),
+          de <abbr class="jargon" title="Group: een groep gebruikers die gedeelde rechten hebben op bestanden" tabindex="0"><strong>groep</strong></abbr> (group),
+          en alle anderen (others). Elke set bestaat uit drie rechten:
+        </p>
+        <ul>
+          <li><strong>r</strong> (read) - Lezen: de inhoud van het bestand bekijken.</li>
+          <li><strong>w</strong> (write) - Schrijven: de inhoud van het bestand aanpassen.</li>
+          <li><strong>x</strong> (execute) - Uitvoeren: het bestand als programma draaien.</li>
+        </ul>
+
+        <div class="terminal-example">
+          <div class="prompt">$ ls -l /etc/shadow</div>
+          <div class="output">-rw-r----- 1 root shadow 1234 feb 10 08:00 /etc/shadow</div>
+        </div>
+
+        <p>Laten we <code>-rw-r-----</code> ontleden:</p>
+        <ul>
+          <li><code>-</code> - Dit is een gewoon bestand (een <code>d</code> zou een directory zijn).</li>
+          <li><code>rw-</code> - De eigenaar (root) mag lezen en schrijven, maar niet uitvoeren.</li>
+          <li><code>r--</code> - De groep (shadow) mag alleen lezen.</li>
+          <li><code>---</code> - Alle anderen mogen helemaal niks.</li>
+        </ul>
+
+        <h3>chmod - Permissies Wijzigen</h3>
+        <p>
+          Met <a href="/commands/#cmd-chmod"><code>chmod</code></a> verander je permissies. Je kunt dit op twee manieren doen:
+          symbolisch of met het
+          <abbr class="jargon" title="Octaal systeem: een getallenstelsel op basis van 8, waarbij permissies worden uitgedrukt in cijfers van 0-7" tabindex="0"><strong>octale</strong></abbr>
+          systeem.
+        </p>
+
+        <div class="terminal-example">
+          <div class="prompt">$ chmod 755 script.sh</div>
+          <div class="prompt">$ ls -l script.sh</div>
+          <div class="output">-rwxr-xr-x 1 hacker hacker 2048 feb 10 12:00 script.sh</div>
+        </div>
+
+        <p>Het getal <code>755</code> werkt zo: elk cijfer is de som van r=4, w=2, x=1:</p>
+        <ul>
+          <li><strong>7</strong> (4+2+1) = rwx - eigenaar mag alles.</li>
+          <li><strong>5</strong> (4+0+1) = r-x - groep mag lezen en uitvoeren.</li>
+          <li><strong>5</strong> (4+0+1) = r-x - anderen mogen lezen en uitvoeren.</li>
+        </ul>
+
+        <div class="blog-info">
+          Veelvoorkomende permissiewaarden: <code>644</code> (standaard voor bestanden: eigenaar leest/schrijft, rest alleen lezen), <code>755</code> (standaard voor uitvoerbare bestanden en mappen), <code>600</code> (alleen eigenaar mag lezen en schrijven - gebruikelijk voor SSH keys), <code>777</code> (iedereen mag alles - bijna altijd een security risico).
+        </div>
+
+        <h2>Verborgen Bestanden: De Punt-Conventie</h2>
+        <p>
+          In Linux zijn bestanden die beginnen met een punt (<code>.</code>) verborgen. Ze verschijnen niet bij
+          een normaal <code>ls</code> commando - je hebt <code>ls -a</code> nodig om ze te zien. Dit is
+          belangrijk omdat veel gevoelige configuratiebestanden verborgen zijn:
+        </p>
+        <ul>
+          <li><code>~/.bashrc</code> - Shell configuratie. Aanvallers voegen hier soms
+            <abbr class="jargon" title="Backdoor: een verborgen toegangspunt in een systeem waarmee je later opnieuw kunt inloggen zonder authenticatie" tabindex="0"><strong>backdoors</strong></abbr> toe.</li>
+          <li><code>~/.ssh/</code> - SSH sleutels en configuratie. De bestanden <code>id_rsa</code> (private key) en <code>authorized_keys</code> zijn hier goud waard.</li>
+          <li><code>~/.bash_history</code> - Commandogeschiedenis. Bevat soms per ongeluk ingetypte wachtwoorden.</li>
+          <li><code>~/.config/</code> - Applicatieconfiguratie. API tokens, database credentials en meer.</li>
+          <li><code>~/.gitconfig</code> - Git instellingen, inclusief naam en e-mailadres van de gebruiker.</li>
+        </ul>
+
+        <div class="blog-tip">
+          Een van de eerste dingen die een hacker doet na het verkrijgen van shell toegang is <code>ls -la ~</code> uitvoeren. Verborgen bestanden bevatten vaak de sleutel tot verdere toegang: SSH keys, opgeslagen wachtwoorden, API tokens en commandogeschiedenis met gevoelige informatie.
+        </div>
+
+        <h2>Waarom Dit Belangrijk Is voor Security</h2>
+        <p>
+          Het bestandssysteem begrijpen is niet zomaar een "nice to have" - het is de fundering van bijna elke
+          security-taak. Hier zijn concrete voorbeelden:
+        </p>
+
+        <ul>
+          <li><strong>Privilege escalation</strong> - Bestanden met verkeerde permissies (zoals een
+            <abbr class="jargon" title="SUID bit: een speciale permissie waarmee een bestand wordt uitgevoerd met de rechten van de eigenaar in plaats van de gebruiker" tabindex="0"><strong>SUID bit</strong></abbr>
+            op het verkeerde programma) kunnen een normale gebruiker root-toegang geven.</li>
+          <li><strong>Log analyse</strong> - In <code>/var/log/</code> vind je bewijs van inbraakpogingen, verdachte logins en systeemfouten.</li>
+          <li><strong>Configuratie audits</strong> - Onjuiste instellingen in <code>/etc/</code> zijn een van de meest voorkomende oorzaken van security breaches.</li>
+          <li><strong>Data exfiltratie</strong> - Weten waar gevoelige data staat (<code>/home</code>, <code>/var/lib</code>, <code>/opt</code>) is essentieel voor zowel aanvallers als verdedigers.</li>
+          <li><strong>Forensisch onderzoek</strong> - Na een incident moet je bestanden, timestamps en permissies analyseren om te bepalen wat er is gebeurd.</li>
+        </ul>
+
+        <h2>Oefenen in HackSimulator.nl</h2>
+        <div class="blog-cta">
+          <h3>Probeer het zelf!</h3>
+          <p>
+            Alle commando's uit dit artikel kun je veilig oefenen in HackSimulator.nl. Probeer
+            <a href="/commands/#cmd-ls"><code>ls</code></a> en <a href="/commands/#cmd-cd"><code>cd</code></a> om te
+            navigeren, <a href="/commands/#cmd-cat"><code>cat</code></a> om bestanden te lezen,
+            <a href="/commands/#cmd-find"><code>find</code></a> en <a href="/commands/#cmd-grep"><code>grep</code></a>
+            om te zoeken, en <a href="/commands/#cmd-chmod"><code>chmod</code></a> om permissies te oefenen.
+            Type <code>help</code> voor een overzicht van alle beschikbare commando's.
+          </p>
+          <a href="../terminal.html" class="blog-cta-button">Open de terminal</a>
+        </div>
+
+        <h2>Volgende Stappen</h2>
+        <p>Nu je de basis van het Linux bestandssysteem kent, kun je verder met:</p>
+        <ul>
+          <li><strong>Pipes en redirection</strong> - Combineer commando's met <code>|</code> en sla output op met <code>&gt;</code></li>
+          <li><strong>Proces management</strong> - Leer over <code>ps</code>, <code>top</code> en <code>kill</code> om draaiende programma's te beheren</li>
+          <li><strong>Netwerk commando's</strong> - Ontdek <code>netstat</code>, <code>ss</code> en <code>nmap</code> voor netwerkanalyse</li>
+          <li><strong>Shell scripting</strong> - Automatiseer taken met Bash scripts</li>
+          <li>Bekijk onze <a href="/commands/">volledige command reference</a> voor alle beschikbare commando's met uitleg</li>
+        </ul>
+
+        <p>Meer lezen?</p>
+        <ul>
+          <li><a href="terminal-basics.html">Terminal Commands voor Beginners</a> - De basis van de command line</li>
+          <li><a href="wat-is-ethisch-hacken.html">Wat is Ethisch Hacken?</a> - White hat vs black hat uitgelegd</li>
+        </ul>
+      </div>
+
+      <!-- Related Articles -->
+      <section class="related-articles">
+        <h2>Verder Lezen</h2>
+        <div class="related-grid">
+          <a href="terminal-basics.html" class="related-card">
+            <span class="related-category">Beginners</span>
+            <h3>Terminal Commands voor Beginners</h3>
+            <p>De basis van de command line - alles wat je moet weten om te starten.</p>
+            <span class="related-meta">6 min leestijd</span>
+          </a>
+          <a href="nmap-beginnersgids.html" class="related-card">
+            <span class="related-category">Tools</span>
+            <h3>Netwerk Scanning met Nmap</h3>
+            <p>Leer hoe je netwerken scant op open poorten en services.</p>
+            <span class="related-meta">8 min leestijd</span>
+          </a>
+          <a href="ethisch-hacker-worden.html" class="related-card">
+            <span class="related-category">Carriere</span>
+            <h3>Hoe Word je Ethisch Hacker?</h3>
+            <p>Complete carrieregids voor een baan in cybersecurity.</p>
+            <span class="related-meta">10 min leestijd</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Post Footer -->
+      <footer class="blog-post-footer">
+        <p>Vragen of feedback? Laat het ons weten op <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+        <p><a href="index.html">&larr; Terug naar blog overzicht</a></p>
+      </footer>
+    </article>
+  </main>
+
+  <!-- AdSense Footer Banner (M5.5 Blog Monetization) -->
+  <div id="adsense-footer" class="ad-container" style="display: none;">
+      <p class="ad-disclaimer">Advertisement</p>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-6345664385525701"
+           data-ad-slot="1674341955"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+  </div>
+
+  <!-- Footer (Component Injection) -->
+  <div id="footer-placeholder">
+    <noscript>
+      <footer class="noscript-footer">
+        <p>&copy; 2026 HackSimulator.nl</p>
+      </footer>
+    </noscript>
+  </div>
+
+  <!-- Theme Initialization (prevents flash) - external for CSP compliance -->
+  <script src="/src/init-theme.js"></script>
+
+  <!-- Component Injection (external script for CSP compliance) -->
+  <script src="/src/init-components.js" type="module"></script>
+
+  <!-- Reading Progress (blog-specific) -->
+  <script src="../src/ui/blog-theme.js" type="module"></script>
+</body>
+</html>

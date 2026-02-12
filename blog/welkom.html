@@ -20,6 +20,9 @@
   <meta property="article:section" content="Cybersecurity">
   <meta property="og:locale" content="nl_NL">
 
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="HackSimulator.nl Blog" href="/feed.xml">
+
   <!-- Canonical URL -->
   <link rel="canonical" href="https://hacksimulator.nl/blog/welkom.html">
 
@@ -37,6 +40,15 @@
   <link rel="stylesheet" href="../styles/mobile.css">
 
   <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
+
+  <!-- Cookiebot CMP (Google-certified, IAB TCF 2.3) - MUST be first script -->
+  <script id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="JOUW_COOKIEBOT_ID"
+          type="text/javascript"
+          data-blockingmode="auto"></script>
+
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6345664385525701"
        crossorigin="anonymous"></script>
 
@@ -99,7 +111,7 @@
         <div class="blog-post-meta">
           <time datetime="2025-11-13">13 november 2025</time>
           <span>5 min</span>
-          <span>Beginners</span>
+          <span class="category-badge">Beginners</span>
         </div>
       </header>
 
@@ -170,8 +182,9 @@
 
         <h3>Filesystem Commands</h3>
         <p>
-          Navigeer door een virtueel bestandssysteem, lees bestanden, zoek naar verborgen data. Commands als <code>ls</code>,
-          <code>cd</code>, <code>cat</code> en <code>find</code> zijn de basis van elke terminal gebruiker.
+          Navigeer door een virtueel bestandssysteem, lees bestanden, zoek naar verborgen data. Commands als <a href="/commands/#cmd-ls"><code>ls</code></a>,
+          <a href="/commands/#cmd-cd"><code>cd</code></a>, <a href="/commands/#cmd-cat"><code>cat</code></a> en <a href="/commands/#cmd-find"><code>find</code></a> zijn de basis van elke terminal gebruiker.
+          Bekijk de <a href="/commands/#filesystem">volledige lijst met filesystem commands</a>.
         </p>
 
         <div class="terminal-example">
@@ -198,8 +211,9 @@ drwxr-xr-x 3 root   root   4096 Nov 10 10:00 ..
 
         <h3>Network Commands</h3>
         <p>
-          Begrijp hoe netwerken werken met commands als <code>ping</code>, <code>traceroute</code>, <code>netstat</code> en
-          <code>whois</code>. Essentiële kennis voor iedereen in IT.
+          Begrijp hoe netwerken werken met commands als <a href="/commands/#cmd-ping"><code>ping</code></a>, <a href="/commands/#cmd-traceroute"><code>traceroute</code></a>, <a href="/commands/#cmd-netstat"><code>netstat</code></a> en
+          <a href="/commands/#cmd-whois"><code>whois</code></a>. Essentiële kennis voor iedereen in IT.
+          Bekijk alle <a href="/commands/#network">network commands</a>.
         </p>
 
         <h3>System Commands</h3>
@@ -276,6 +290,31 @@ drwxr-xr-x 3 root   root   4096 Nov 10 10:00 ..
           <li><a href="terminal-basics.html">Terminal Commands voor Beginners</a> - De basis van terminal gebruik</li>
         </ul>
       </div>
+
+      <!-- Related Articles -->
+      <section class="related-articles">
+        <h2>Verder Lezen</h2>
+        <div class="related-grid">
+          <a href="wat-is-ethisch-hacken.html" class="related-card">
+            <span class="related-category">Concepten</span>
+            <h3>Wat is Ethisch Hacken?</h3>
+            <p>White hat vs black hat - leer het verschil en ontdek carrieremogelijkheden in cybersecurity.</p>
+            <span class="related-meta">8 min leestijd</span>
+          </a>
+          <a href="terminal-basics.html" class="related-card">
+            <span class="related-category">Beginners</span>
+            <h3>Terminal Commands voor Beginners</h3>
+            <p>De basis van de command line: ls, cd, cat en meer - alles wat je moet weten om te starten.</p>
+            <span class="related-meta">6 min leestijd</span>
+          </a>
+          <a href="/commands/" class="related-card">
+            <span class="related-category">Referentie</span>
+            <h3>Alle 31 Commands</h3>
+            <p>Bekijk de volledige command reference met voorbeelden, tips en educatieve uitleg per command.</p>
+            <span class="related-meta">Command overzicht</span>
+          </a>
+        </div>
+      </section>
 
       <!-- Post Footer -->
       <footer class="blog-post-footer">

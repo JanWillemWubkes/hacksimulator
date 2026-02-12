@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>Netwerk Scanning met Nmap: Beginnersgids | HackSimulator.nl</title>
+  <meta name="description" content="Leer hoe nmap werkt voor netwerk scanning. Ontdek open poorten, services en kwetsbaarheden met deze Nederlandse beginnersgids voor ethisch hacken.">
+  <meta name="keywords" content="nmap tutorial, netwerk scanning, poort scan, ethisch hacken, cybersecurity beginners, network mapper">
+  <meta name="author" content="HackSimulator.nl">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://hacksimulator.nl/blog/nmap-beginnersgids.html">
+  <meta property="og:title" content="Netwerk Scanning met Nmap: Beginnersgids | HackSimulator.nl">
+  <meta property="og:description" content="Leer hoe nmap werkt voor netwerk scanning en ontdek open poorten en services.">
+  <meta property="article:published_time" content="2026-02-10">
+  <meta property="article:author" content="HackSimulator.nl">
+  <meta property="article:section" content="Tools">
+  <meta property="og:locale" content="nl_NL">
+
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="HackSimulator.nl Blog" href="/feed.xml">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://hacksimulator.nl/blog/nmap-beginnersgids.html">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+
+  <!-- Google Fonts: Space Grotesk + Inter + JetBrains Mono (Sessie 99 - Font System Upgrade) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../styles/main.css?v=101-font-system-upgrade">
+  <link rel="stylesheet" href="../styles/blog.css?v=19-mobile-title-fix">
+  <link rel="stylesheet" href="../styles/mobile.css">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
+
+  <!-- Cookiebot CMP (Google-certified, IAB TCF 2.3) - MUST be first script -->
+  <script id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="JOUW_COOKIEBOT_ID"
+          type="text/javascript"
+          data-blockingmode="auto"></script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6345664385525701"
+       crossorigin="anonymous"></script>
+
+  <!-- Structured Data - JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Netwerk Scanning met Nmap: Beginnersgids",
+    "description": "Leer hoe nmap werkt voor netwerk scanning. Ontdek open poorten, services en kwetsbaarheden.",
+    "datePublished": "2026-02-10",
+    "dateModified": "2026-02-10",
+    "author": {
+      "@type": "Organization",
+      "name": "HackSimulator.nl"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "HackSimulator.nl",
+      "url": "https://hacksimulator.nl/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://hacksimulator.nl/blog/nmap-beginnersgids.html"
+    },
+    "inLanguage": "nl-NL",
+    "keywords": "nmap, netwerk scanning, poort scan, ethisch hacken, cybersecurity"
+  }
+  </script>
+
+  <!-- Cookie Consent & Analytics (M5.5 GDPR Compliance) -->
+  <script src="../src/analytics/consent-banner.js" type="module"></script>
+  <script src="../src/analytics/consent.js" type="module"></script>
+  <script src="../src/analytics/tracker.js" type="module"></script>
+  <script src="../src/analytics/events.js" type="module"></script>
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
+
+  <!-- Navigation (Component Injection) -->
+  <div id="navbar-placeholder">
+    <noscript>
+      <nav class="noscript-nav" role="navigation">
+        <a href="../">HackSimulator.nl</a>
+        <a href="../terminal.html">Start Simulator</a>
+      </nav>
+    </noscript>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main-content" class="blog-container">
+    <article class="blog-post">
+      <!-- Post Header -->
+      <header class="blog-post-header">
+        <h1 class="blog-post-title">Netwerk Scanning met Nmap: Beginnersgids</h1>
+        <div class="blog-post-meta">
+          <time datetime="2026-02-10">10 februari 2026</time>
+          <span>8 min</span>
+          <span class="category-badge">Tools</span>
+        </div>
+      </header>
+
+      <!-- Post Content -->
+      <div class="blog-post-content">
+        <p>
+          Stel je voor: je bent een ethisch hacker die de opdracht krijgt om het netwerk van een bedrijf te testen. Waar begin je? Je kunt
+          niet aanvallen wat je niet kunt zien. De allereerste stap in elke security audit is <strong>verkenning</strong> - en daarvoor
+          is er een tool die al meer dan 25 jaar de standaard is: <abbr class="jargon" title="Network Mapper: open-source tool voor netwerk scanning en security auditing" tabindex="0"><strong>Nmap</strong></abbr>.
+          In deze beginnersgids leer je wat Nmap is, hoe het werkt, en hoe je het veilig en ethisch kunt gebruiken.
+        </p>
+
+        <h2>Wat is Nmap?</h2>
+        <p>
+          Nmap staat voor <strong>Network Mapper</strong>. Het is een gratis, open-source tool die oorspronkelijk is geschreven door
+          Gordon "Fyodor" Lyon in 1997. Ondanks zijn leeftijd is Nmap nog steeds de go-to tool voor netwerk verkenning en wordt het
+          dagelijks gebruikt door security professionals, systeembeheerders en ethische hackers wereldwijd.
+        </p>
+        <p>
+          Met Nmap kun je:
+        </p>
+        <ul>
+          <li><strong>Hosts ontdekken</strong> - Welke apparaten zijn actief op een netwerk?</li>
+          <li><strong>Open poorten vinden</strong> - Welke services draaien er en luisteren naar verbindingen?</li>
+          <li><strong>Service versies detecteren</strong> - Welke software (en welke versie) draait op elke poort?</li>
+          <li><strong>Besturingssystemen identificeren</strong> - Draait het doelwit Windows, Linux of iets anders?</li>
+          <li><strong>Kwetsbaarheden opsporen</strong> - Zijn er bekende security problemen met de gevonden software?</li>
+        </ul>
+
+        <div class="blog-info">
+          Nmap is volledig legaal om te downloaden en te installeren. Het wordt pas problematisch wanneer je het
+          <strong>zonder toestemming</strong> op systemen van anderen gebruikt. Meer over de juridische grenzen verderop in dit artikel.
+        </div>
+
+        <h2>Waarom is Netwerk Scanning Belangrijk?</h2>
+        <p>
+          Elk apparaat dat verbonden is met een netwerk - of dat nu een webserver, database, printer of IoT-apparaat is -
+          communiceert via <abbr class="jargon" title="Poort: een genummerd eindpunt (0-65535) waarmee netwerkverkeer naar de juiste applicatie wordt gestuurd" tabindex="0"><strong>poorten</strong></abbr>.
+          Denk aan poorten als deuren in een gebouw. Sommige deuren staan open, sommige zijn op slot, en sommige staan op een kier.
+          Een netwerk scanner zoals Nmap loopt langs al die deuren en controleert welke open staan.
+        </p>
+        <p>
+          Voor een security professional is dit essentieel, want:
+        </p>
+        <ul>
+          <li>Elke open poort is een potentieel <strong>aanvalsvector</strong> - een plek waar een aanvaller zou kunnen binnenkomen</li>
+          <li>Onbekende open services wijzen op <strong>misconfiguratie</strong> of ongeautoriseerde software</li>
+          <li>Verouderde software versies op open poorten bevatten vaak <abbr class="jargon" title="Kwetsbaarheid: een zwakte in software of configuratie die door een aanvaller kan worden misbruikt" tabindex="0"><strong>kwetsbaarheden</strong></abbr></li>
+          <li>Je kunt pas beveiligen wat je kent - <strong>"you can't secure what you can't see"</strong></li>
+        </ul>
+
+        <div class="blog-tip">
+          Netwerk scanning is de eerste fase van vrijwel elke <abbr class="jargon" title="Penetration Test: geautoriseerde gesimuleerde aanval op een computersysteem om kwetsbaarheden te vinden" tabindex="0">pentest</abbr>.
+          Als je de reconnaissance fase overslaat, mis je waarschijnlijk het grootste deel van het aanvalsoppervlak.
+          Geduld in deze fase betaalt zich later dubbel terug.
+        </div>
+
+        <h2>Hoe Werkt Port Scanning?</h2>
+        <p>
+          Om te begrijpen hoe Nmap werkt, moet je eerst iets weten over hoe computers met elkaar communiceren.
+          Het internet gebruikt het <abbr class="jargon" title="Transmission Control Protocol: betrouwbaar netwerkprotocol dat verbindingsgerichte communicatie mogelijk maakt" tabindex="0"><strong>TCP-protocol</strong></abbr>
+          voor de meeste verbindingen. Voordat twee computers data kunnen uitwisselen, moeten ze eerst een verbinding opzetten via
+          een proces dat de <strong>TCP three-way handshake</strong> heet.
+        </p>
+
+        <h3>De TCP Three-Way Handshake</h3>
+        <p>
+          Dit proces werkt als volgt:
+        </p>
+        <ol>
+          <li><strong>SYN</strong> - Jouw computer stuurt een "Hallo, mag ik verbinden?" bericht (SYN-pakket)</li>
+          <li><strong>SYN-ACK</strong> - Als de poort open is, antwoordt de server met "Ja, welkom!" (SYN-ACK)</li>
+          <li><strong>ACK</strong> - Jouw computer bevestigt: "Top, verbinding staat!" (ACK-pakket)</li>
+        </ol>
+        <p>
+          Als de poort <strong>gesloten</strong> is, stuurt de server in plaats van SYN-ACK een <strong>RST</strong> (reset) pakket
+          terug: "Nee, hier is niks." En als de poort <strong>gefilterd</strong> is door een
+          <abbr class="jargon" title="Firewall: beveiligingssysteem dat netwerkverkeer filtert op basis van vooraf ingestelde regels" tabindex="0">firewall</abbr>,
+          krijg je helemaal geen antwoord.
+        </p>
+
+        <h3>Connect Scan vs SYN Scan</h3>
+        <p>
+          Nmap gebruikt dit mechanisme om poorten te controleren, maar het heeft meerdere manieren om dat te doen:
+        </p>
+        <ul>
+          <li>
+            <strong>TCP Connect Scan (<code>-sT</code>)</strong> - Voltooit de hele three-way handshake. Betrouwbaar maar
+            langzamer en makkelijker te detecteren door het doelwit. Dit is de standaard scan als je geen root-rechten hebt.
+          </li>
+          <li>
+            <strong>SYN Scan (<code>-sS</code>)</strong> - Ook wel "half-open scan" genoemd. Stuurt een SYN, wacht op SYN-ACK,
+            maar voltooit de handshake <em>niet</em>. Sneller en stealthier omdat er geen volledige verbinding wordt gemaakt.
+            Vereist root/admin-rechten. Dit is de standaard scan met root-rechten.
+          </li>
+        </ul>
+
+        <div class="terminal-example">
+          <div class="prompt">$ nmap -sS 192.168.1.1</div>
+          <div class="output">Starting Nmap scan...
+PORT     STATE    SERVICE
+22/tcp   OPEN     SSH       <- Secure Shell (remote toegang)
+80/tcp   OPEN     HTTP      <- Webserver (onversleuteld!)
+443/tcp  OPEN     HTTPS     <- Webserver (versleuteld)
+3306/tcp CLOSED   MySQL     <- Database (dicht = goed!)
+
+[TIP] SYN scan (-sS) is sneller dan connect scan
+      omdat de handshake niet wordt voltooid.</div>
+        </div>
+
+        <div class="blog-tip">
+          In de praktijk gebruik je bijna altijd de SYN scan (<code>-sS</code>). Het is sneller, produceert minder
+          netwerkverkeer, en laat minder sporen achter in de logs van het doelwit. Maar onthoud: bij een
+          <em>geautoriseerde</em> pentest maakt stealth weinig uit - je hebt immers toestemming.
+        </div>
+
+        <h2>Veelvoorkomende Poorten en Services</h2>
+        <p>
+          Er zijn 65.535 mogelijke poorten op een systeem, maar in de praktijk kom je steeds dezelfde tegen.
+          Hier zijn de poorten die je als beginner moet kennen:
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Poort</th>
+              <th>Service</th>
+              <th>Wat doet het?</th>
+              <th>Security risico</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>21</strong></td>
+              <td><abbr class="jargon" title="File Transfer Protocol: protocol voor het overzetten van bestanden, vaak onversleuteld" tabindex="0">FTP</abbr></td>
+              <td>Bestandsoverdracht</td>
+              <td>Vaak onversleuteld - wachtwoorden in platte tekst!</td>
+            </tr>
+            <tr>
+              <td><strong>22</strong></td>
+              <td><abbr class="jargon" title="Secure Shell: versleuteld protocol voor veilige remote toegang tot servers" tabindex="0">SSH</abbr></td>
+              <td>Veilige remote toegang</td>
+              <td>Brute force aanvallen als wachtwoord zwak is</td>
+            </tr>
+            <tr>
+              <td><strong>25</strong></td>
+              <td><abbr class="jargon" title="Simple Mail Transfer Protocol: protocol voor het verzenden van e-mail" tabindex="0">SMTP</abbr></td>
+              <td>E-mail verzenden</td>
+              <td>Open relay = spam doorsturen mogelijk</td>
+            </tr>
+            <tr>
+              <td><strong>80</strong></td>
+              <td>HTTP</td>
+              <td>Webverkeer (onversleuteld)</td>
+              <td>Alle data leesbaar voor aanvallers op het netwerk</td>
+            </tr>
+            <tr>
+              <td><strong>443</strong></td>
+              <td>HTTPS</td>
+              <td>Webverkeer (versleuteld)</td>
+              <td>Veiliger, maar webapplicatie zelf kan nog kwetsbaar zijn</td>
+            </tr>
+            <tr>
+              <td><strong>3306</strong></td>
+              <td><abbr class="jargon" title="MySQL: populair open-source relationeel databasebeheersysteem" tabindex="0">MySQL</abbr></td>
+              <td>Database</td>
+              <td>Extern bereikbaar = enorm risico als wachtwoord zwak is</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="blog-tip">
+          Als je poort 3306 (MySQL) of 5432 (PostgreSQL) open vindt vanuit het internet, is dat bijna altijd een
+          <strong>misconfiguratie</strong>. Databases horen niet direct bereikbaar te zijn vanuit het publieke internet.
+          Meld dit altijd in je pentest rapport als kritieke bevinding.
+        </div>
+
+        <h2>Nmap in de Praktijk</h2>
+        <p>
+          Laten we de meest gebruikte Nmap commando's doorlopen. Je kunt al deze commando's veilig uitproberen in
+          de <a href="/commands/#cmd-nmap">HackSimulator.nl terminal</a>.
+        </p>
+
+        <h3>Basis Scan - Eenvoudige Poort Scan</h3>
+        <p>De meest simpele scan: controleer de 1000 meest voorkomende poorten op een IP-adres.</p>
+        <div class="terminal-example">
+          <div class="prompt">$ nmap 192.168.1.1</div>
+          <div class="output">Starting Nmap scan voor 192.168.1.1...
+
+PORT     STATE  SERVICE
+22/tcp   OPEN   SSH    <- Secure Shell (remote toegang)
+80/tcp   OPEN   HTTP   <- Webserver
+443/tcp  OPEN   HTTPS  <- Versleutelde webserver
+
+Scan voltooid: 3 open poorten gevonden
+
+[TIP] Open poorten = potentiele aanvalsvectoren.
+      Onderzoek elke service op kwetsbaarheden.</div>
+        </div>
+
+        <h3>Netwerk Scan - Meerdere Hosts</h3>
+        <p>Scan een heel subnet om te ontdekken welke apparaten actief zijn.</p>
+        <div class="terminal-example">
+          <div class="prompt">$ nmap 192.168.1.0/24</div>
+          <div class="output">Starting Nmap scan voor 192.168.1.0/24...
+
+Host 192.168.1.1:   OPEN ports 22, 80, 443
+Host 192.168.1.10:  OPEN ports 22, 3306
+Host 192.168.1.50:  OPEN ports 80, 8080
+Host 192.168.1.254: OPEN ports 80, 443
+
+4 hosts gevonden op netwerk
+
+[TIP] /24 betekent "scan alle 256 adressen in dit subnet"
+      (192.168.1.0 t/m 192.168.1.255)</div>
+        </div>
+
+        <h3>Service Versie Detectie (<code>-sV</code>)</h3>
+        <p>
+          Weten dat poort 22 open is, is nuttig. Maar weten dat daar <strong>OpenSSH 7.4</strong> op draait is veel
+          waardevoller - want dan kun je zoeken naar bekende kwetsbaarheden in die specifieke versie.
+        </p>
+        <div class="terminal-example">
+          <div class="prompt">$ nmap -sV 192.168.1.1</div>
+          <div class="output">Starting Nmap service scan...
+
+PORT    STATE SERVICE VERSION
+22/tcp  OPEN  SSH     OpenSSH 7.4
+                      <- Verouderd! Bevat bekende kwetsbaarheden
+80/tcp  OPEN  HTTP    Apache 2.4.49
+                      <- Kwetsbaar voor path traversal (CVE-2021-41773)
+443/tcp OPEN  HTTPS   Apache 2.4.49
+
+[TIP] Gebruik -sV om software versies te detecteren.
+      Zoek daarna in CVE-databases naar bekende kwetsbaarheden.
+[!] Apache 2.4.49 heeft een kritieke kwetsbaarheid!
+    Adviseer direct updaten naar nieuwste versie.</div>
+        </div>
+
+        <div class="blog-info">
+          <abbr class="jargon" title="Common Vulnerabilities and Exposures: publieke database van bekende beveiligingskwetsbaarheden, elk met een uniek ID-nummer" tabindex="0"><strong>CVE</strong></abbr>
+          staat voor Common Vulnerabilities and Exposures. Het is een publieke database waar bekende kwetsbaarheden
+          worden geregistreerd met een uniek nummer. Wanneer je een software versie vindt met Nmap, kun je op
+          <a href="https://cve.mitre.org" target="_blank" rel="noopener noreferrer">cve.mitre.org</a> zoeken of er
+          bekende problemen zijn.
+        </div>
+
+        <h3>Ping Scan - Host Discovery</h3>
+        <p>
+          Soms wil je alleen weten <em>welke</em> hosts actief zijn, zonder poorten te scannen.
+          Combineer dit met <a href="/commands/#cmd-ping"><code>ping</code></a> voor een compleet beeld.
+        </p>
+        <div class="terminal-example">
+          <div class="prompt">$ nmap -sn 192.168.1.0/24</div>
+          <div class="output">Starting host discovery...
+
+Host 192.168.1.1   is up (0.003s latency)
+Host 192.168.1.10  is up (0.005s latency)
+Host 192.168.1.50  is up (0.012s latency)
+Host 192.168.1.254 is up (0.001s latency)
+
+4 hosts up van 256 gescand
+
+[TIP] -sn (ping scan) is snel en niet-intrusief.
+      Gebruik dit als eerste stap om het netwerk in kaart
+      te brengen voordat je diepere scans uitvoert.</div>
+        </div>
+
+        <h3>Specifieke Poorten Scannen</h3>
+        <p>
+          Je hoeft niet altijd alle poorten te scannen. Met de <code>-p</code> flag kun je specifieke poorten of ranges opgeven.
+        </p>
+        <div class="terminal-example">
+          <div class="prompt">$ nmap -p 22,80,443,3306 192.168.1.1</div>
+          <div class="output">Starting Nmap scan...
+
+PORT     STATE  SERVICE
+22/tcp   OPEN   SSH
+80/tcp   OPEN   HTTP
+443/tcp  OPEN   HTTPS
+3306/tcp CLOSED MySQL
+
+[TIP] Met -p specificeer je exact welke poorten je wilt
+      scannen. Gebruik -p- om ALLE 65535 poorten te scannen
+      (duurt langer maar is grondiger).</div>
+        </div>
+
+        <h2>Scan Resultaten Interpreteren</h2>
+        <p>
+          Nmap rapporteert poorten in drie mogelijke states:
+        </p>
+        <ul>
+          <li>
+            <strong>OPEN</strong> - Er luistert een applicatie op deze poort. Dit is wat je zoekt als security tester:
+            elke open poort is een potentieel aanvalsvector die verder onderzocht moet worden.
+          </li>
+          <li>
+            <strong>CLOSED</strong> - De poort is bereikbaar maar er luistert geen applicatie. Het systeem antwoordt
+            met een RST-pakket. Niet direct een risico, maar het vertelt je wel dat het systeem bereikbaar is.
+          </li>
+          <li>
+            <strong>FILTERED</strong> - Nmap kan niet bepalen of de poort open of dicht is, meestal omdat een firewall
+            het verkeer blokkeert. Geen antwoord = waarschijnlijk gefilterd.
+          </li>
+        </ul>
+
+        <div class="blog-tip">
+          Let extra op als je een poort vindt die <strong>open</strong> is maar die je niet verwacht. Een webserver
+          (poort 80) op een database server? Een SSH-dienst op een printer? Dat zijn tekenen van mogelijke
+          misconfiguratie of zelfs een compromised systeem.
+        </div>
+
+        <h2>Ethische Overwegingen</h2>
+        <p>
+          Dit is het belangrijkste deel van dit artikel. Nmap is een krachtige tool, en met kracht komt verantwoordelijkheid.
+        </p>
+
+        <div class="blog-warning">
+          <strong>Scan alleen systemen waar je expliciete, schriftelijke toestemming voor hebt!</strong>
+          Ongeautoriseerde netwerk scans zijn illegaal in Nederland onder artikel 138ab van het Wetboek van Strafrecht
+          (Computercriminaliteit III). Zelfs een "onschuldige" scan zonder kwade bedoelingen kan leiden tot strafrechtelijke
+          vervolging. De wet maakt geen onderscheid tussen "even kijken" en daadwerkelijk inbreken.
+        </div>
+
+        <p>
+          De gouden regels voor ethisch gebruik van Nmap:
+        </p>
+        <ol>
+          <li>
+            <strong>Altijd schriftelijke toestemming</strong> - Een <abbr class="jargon" title="Scope of Work: document dat exact beschrijft welke systemen je mag testen, wanneer, en met welke methoden" tabindex="0">scope document</abbr>
+            of contract waarin staat welke systemen je mag scannen, wanneer, en met welke methoden.
+          </li>
+          <li>
+            <strong>Beperk je tot de scope</strong> - Als je toestemming hebt voor 192.168.1.0/24, scan dan niet
+            "even" het netwerk ernaast. Blijf binnen de afgesproken grenzen.
+          </li>
+          <li>
+            <strong>Scan op afgesproken tijden</strong> - Intensieve scans kunnen netwerken vertragen. Spreek af
+            wanneer je scant, bij voorkeur buiten kantooruren.
+          </li>
+          <li>
+            <strong>Documenteer alles</strong> - Log welke scans je hebt uitgevoerd, wanneer, en wat de resultaten waren.
+            Dit beschermt jou en je opdrachtgever.
+          </li>
+          <li>
+            <strong>Gebruik je eigen netwerk om te oefenen</strong> - Scan je eigen router, je eigen computer.
+            Of gebruik platforms zoals HackSimulator.nl, HackTheBox en TryHackMe.
+          </li>
+        </ol>
+
+        <div class="blog-info">
+          Veel bedrijven hebben een <strong>responsible disclosure</strong> beleid. Als je per ongeluk een kwetsbaarheid
+          ontdekt (bijvoorbeeld op een publieke website), kun je dit veilig melden via hun security pagina. In Nederland
+          ondersteunt het <a href="https://www.ncsc.nl" target="_blank" rel="noopener noreferrer">NCSC</a> coordinated
+          vulnerability disclosure.
+        </div>
+
+        <h2>Veelgemaakte Fouten door Beginners</h2>
+        <p>
+          Hier zijn valkuilen die je als beginner wilt vermijden:
+        </p>
+        <ul>
+          <li>
+            <strong>Scannen zonder toestemming</strong> - "Ik wilde alleen even kijken" is geen geldige verdediging.
+            Het is en blijft illegaal.
+          </li>
+          <li>
+            <strong>Te agressief scannen</strong> - Een <code>nmap -T5 -A -p-</code> scan op een productie netwerk kan
+            systemen laten crashen of beveiligingsalarmen triggeren. Begin rustig.
+          </li>
+          <li>
+            <strong>Scan resultaten niet verifiëren</strong> - Nmap geeft soms false positives. Controleer je bevindingen
+            altijd met een tweede methode voordat je ze rapporteert.
+          </li>
+          <li>
+            <strong>Alleen op poort nummers afgaan</strong> - Poort 80 hoeft geen webserver te zijn. Gebruik <code>-sV</code>
+            om te bevestigen welke service er daadwerkelijk draait.
+          </li>
+        </ul>
+
+        <h2>Oefenen in HackSimulator.nl</h2>
+        <div class="blog-cta">
+          <h3>Veilig oefenen met Nmap</h3>
+          <p>
+            Wil je Nmap leren zonder risico? In de HackSimulator.nl terminal kun je <a href="/commands/#cmd-nmap"><code>nmap</code></a>
+            en andere security tools uitproberen in een veilige, gesimuleerde omgeving. Geen installatie nodig, geen risico
+            op juridische problemen. Type <code>man nmap</code> in de simulator voor de volledige handleiding, of begin
+            met <code>nmap 192.168.1.1</code> om je eerste scan uit te voeren.
+          </p>
+          <a href="../terminal.html" class="blog-cta-button">Start met scannen</a>
+        </div>
+
+        <h2>Samenvatting</h2>
+        <p>
+          Nmap is een onmisbare tool in het arsenaal van elke security professional. Met de basis die je in dit artikel
+          hebt geleerd, kun je:
+        </p>
+        <ul>
+          <li>Netwerken verkennen en actieve hosts ontdekken</li>
+          <li>Open poorten en services identificeren</li>
+          <li>Software versies detecteren en kwetsbaarheden opsporen</li>
+          <li>Het verschil begrijpen tussen scan types (SYN vs Connect)</li>
+          <li>Scan resultaten correct interpreteren</li>
+          <li>Ethisch en legaal werken binnen afgesproken kaders</li>
+        </ul>
+        <p>
+          De volgende stap? Oefen met de commando's in HackSimulator.nl, lees over
+          <a href="wat-is-ethisch-hacken.html">ethisch hacken</a> als je dat nog niet hebt gedaan, en als je
+          de <a href="terminal-basics.html">terminal basics</a> nog niet beheerst, begin daar. Netwerk scanning
+          is pas het begin - er is een hele wereld aan security tools en technieken te ontdekken.
+        </p>
+
+        <h2>Nuttige Resources</h2>
+        <ul>
+          <li><strong>Officieel:</strong> <a href="https://nmap.org" target="_blank" rel="noopener noreferrer">nmap.org</a> - Documentatie, downloads en de Nmap Reference Guide</li>
+          <li><strong>Oefenomgevingen:</strong> <a href="https://www.hackthebox.eu" target="_blank" rel="noopener noreferrer">HackTheBox</a>,
+            <a href="https://tryhackme.com" target="_blank" rel="noopener noreferrer">TryHackMe</a> - Legale labs om je skills te oefenen</li>
+          <li><strong>CVE Database:</strong> <a href="https://cve.mitre.org" target="_blank" rel="noopener noreferrer">cve.mitre.org</a> - Zoek kwetsbaarheden op software versie</li>
+          <li><strong>Simulator:</strong> <a href="/commands/#cmd-nmap">Nmap in HackSimulator.nl</a> - Oefen veilig in je browser</li>
+        </ul>
+
+        <p>Meer lezen?</p>
+        <ul>
+          <li><a href="wat-is-ethisch-hacken.html">Wat is Ethisch Hacken?</a> - De basis van white hat hacking</li>
+          <li><a href="terminal-basics.html">Terminal Commands voor Beginners</a> - Leer eerst de command line basics</li>
+        </ul>
+      </div>
+
+      <!-- Related Articles -->
+      <section class="related-articles">
+        <h2>Verder Lezen</h2>
+        <div class="related-grid">
+          <a href="wat-is-ethisch-hacken.html" class="related-card">
+            <span class="related-category">Concepten</span>
+            <h3>Wat is Ethisch Hacken?</h3>
+            <p>White hat vs black hat - leer het verschil en ontdek carrieremogelijkheden in cybersecurity.</p>
+            <span class="related-meta">8 min leestijd</span>
+          </a>
+          <a href="terminal-basics.html" class="related-card">
+            <span class="related-category">Beginners</span>
+            <h3>Terminal Commands voor Beginners</h3>
+            <p>De basis van de command line: ls, cd, cat en meer - alles wat je moet weten om te starten.</p>
+            <span class="related-meta">6 min leestijd</span>
+          </a>
+          <a href="/commands/" class="related-card">
+            <span class="related-category">Referentie</span>
+            <h3>Alle 31 Commands</h3>
+            <p>Bekijk de volledige command reference met voorbeelden, tips en educatieve uitleg per command.</p>
+            <span class="related-meta">Command overzicht</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Post Footer -->
+      <footer class="blog-post-footer">
+        <p>Vragen of feedback? Laat het ons weten op <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+        <p><a href="index.html">&larr; Terug naar blog overzicht</a></p>
+      </footer>
+    </article>
+  </main>
+
+  <!-- AdSense Footer Banner (M5.5 Blog Monetization) -->
+  <div id="adsense-footer" class="ad-container" style="display: none;">
+      <p class="ad-disclaimer">Advertisement</p>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-6345664385525701"
+           data-ad-slot="1674341955"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+  </div>
+
+  <!-- Footer (Component Injection) -->
+  <div id="footer-placeholder">
+    <noscript>
+      <footer class="noscript-footer">
+        <p>&copy; 2026 HackSimulator.nl</p>
+      </footer>
+    </noscript>
+  </div>
+
+  <!-- Theme Initialization (prevents flash) - external for CSP compliance -->
+  <script src="/src/init-theme.js"></script>
+
+  <!-- Component Injection (external script for CSP compliance) -->
+  <script src="/src/init-components.js" type="module"></script>
+
+  <!-- Reading Progress (blog-specific) -->
+  <script src="../src/ui/blog-theme.js" type="module"></script>
+</body>
+</html>
