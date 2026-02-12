@@ -1,1 +1,36 @@
-class e{constructor(){this.html=document.documentElement,this.themeToggle=document.querySelector(".theme-toggle"),this.progressBar=document.querySelector(".reading-progress")}init(){this.loadTheme(),this.themeToggle&&this.themeToggle.addEventListener("click",()=>this.toggleTheme()),this.progressBar&&this.initProgressBar()}loadTheme(){const e=localStorage.getItem("theme")||"dark";this.applyTheme(e)}applyTheme(e){this.html.setAttribute("data-theme",e),this.updateToggleUI(e)}updateToggleUI(e){document.querySelectorAll(".toggle-option").forEach(t=>{t.classList.toggle("active",t.dataset.theme===e)})}toggleTheme(){const e="dark"===this.html.getAttribute("data-theme")?"light":"dark";this.applyTheme(e),localStorage.setItem("theme",e)}initProgressBar(){window.addEventListener("scroll",()=>{const e=(document.body.scrollTop||document.documentElement.scrollTop)/(document.documentElement.scrollHeight-document.documentElement.clientHeight)*100;this.progressBar.style.width=e+"%"})}}"loading"===document.readyState?document.addEventListener("DOMContentLoaded",()=>{(new e).init()}):(new e).init();export default e;
+/**
+ * BlogReadingProgress - Reading progress bar for blog posts
+ *
+ * Theme toggle is handled by navbar.js via init-components.js.
+ * This file only manages the reading progress indicator.
+ */
+class BlogReadingProgress {
+  constructor() {
+    this.progressBar = document.querySelector('.reading-progress');
+  }
+
+  init() {
+    if (this.progressBar) {
+      this.initProgressBar();
+    }
+  }
+
+  initProgressBar() {
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      this.progressBar.style.width = progress + '%';
+    });
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    new BlogReadingProgress().init();
+  });
+} else {
+  new BlogReadingProgress().init();
+}
+
+export default BlogReadingProgress;
