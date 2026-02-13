@@ -1,1 +1,123 @@
-export const BOX_CHARS={topLeft:"╭",topRight:"╮",bottomLeft:"╰",bottomRight:"╯",horizontal:"─",vertical:"│",dividerLeft:"├",dividerRight:"┤"};export function getResponsiveBoxWidth(){if("undefined"==typeof window||!document.getElementById("terminal-container"))return 48;const t=document.getElementById("terminal-container"),e=t.offsetWidth,n=1/(.6*(parseInt(getComputedStyle(t).fontSize)||16)),o=Math.floor(e*n*.9);return e<=480||o<37?Math.min(32,o-5):e<=768||o<48?Math.min(40,o-5):e<=1024||o<70?Math.min(48,o-5):70}export function isMobileView(){if("undefined"==typeof window)return!1;const t=window.innerWidth<768,e=document.querySelector(".navbar-toggle"),n=e&&"none"!==getComputedStyle(e).display;return t||n}export function smartTruncate(t,e){if(t.length<=e)return t;const n=e-3;let o=t.substring(0,n);const i=o.lastIndexOf(" ");return i>0?o.substring(0,i)+"...":o+"..."}export function wordWrap(t,e){if(!t||0===t.length)return[""];e<10&&(e=10);const n=t.split(" "),o=[];let i="";return n.forEach(t=>{if(t.length>e)return i&&o.push(i.trim()),o.push(t.substring(0,e-3)+"..."),void(i="");const n=i?`${i} ${t}`:t;n.length<=e?i=n:(i&&o.push(i),i=t)}),i&&o.push(i),o.length>0?o:[""]}
+export const BOX_CHARS = {
+  topLeft: "╭",
+  topRight: "╮",
+  bottomLeft: "╰",
+  bottomRight: "╯",
+  horizontal: "─",
+  vertical: "│",
+  dividerLeft: "├",
+  dividerRight: "┤"
+};
+
+// --- Character width measurement with Canvas API ---
+let _charWidthCache = null;
+let _charWidthCacheKey = '';
+
+function measureCharWidth() {
+  const container = document.getElementById('terminal-container');
+  if (!container) return 9.6; // safe fallback
+
+  const style = getComputedStyle(container);
+  const fontSize = style.fontSize || '16px';
+  const fontFamily = style.fontFamily || 'monospace';
+  const cacheKey = fontSize + '|' + fontFamily;
+
+  if (_charWidthCacheKey === cacheKey && _charWidthCache !== null) {
+    return _charWidthCache;
+  }
+
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  ctx.font = fontSize + ' ' + fontFamily;
+  // Measure 'M' - reliable monospace reference character
+  const width = ctx.measureText('M').width;
+
+  _charWidthCache = width;
+  _charWidthCacheKey = cacheKey;
+  return width;
+}
+
+export function invalidateCharWidthCache() {
+  _charWidthCache = null;
+  _charWidthCacheKey = '';
+}
+
+// Invalidate cache on font load and viewport resize
+if (typeof document !== 'undefined') {
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function() { invalidateCharWidthCache(); });
+  }
+  let _resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(invalidateCharWidthCache, 150);
+  });
+}
+
+/**
+ * Calculate the maximum number of monospace characters that fit
+ * in the terminal container, using pixel-accurate Canvas measurement.
+ * Returns a value between 30 and 120.
+ */
+export function getResponsiveBoxWidth() {
+  if (typeof window === 'undefined' || !document.getElementById('terminal-container')) return 48;
+
+  const container = document.getElementById('terminal-container');
+  // clientWidth excludes scrollbar, unlike offsetWidth
+  const clientW = container.clientWidth;
+  const style = getComputedStyle(container);
+  const paddingLeft = parseFloat(style.paddingLeft) || 0;
+  const paddingRight = parseFloat(style.paddingRight) || 0;
+  const availablePixels = clientW - paddingLeft - paddingRight;
+
+  const charWidth = measureCharWidth();
+  // Subtract 2 characters safety margin for subpixel rounding
+  const maxChars = Math.floor(availablePixels / charWidth) - 2;
+
+  // Clamp between 30 (minimum readable) and 120 (max useful)
+  return Math.max(30, Math.min(120, maxChars));
+}
+
+export function isMobileView() {
+  if (typeof window === 'undefined') return false;
+  const narrow = window.innerWidth < 768;
+  const toggle = document.querySelector('.navbar-toggle');
+  const toggleVisible = toggle && getComputedStyle(toggle).display !== 'none';
+  return narrow || toggleVisible;
+}
+
+export function smartTruncate(text, maxLen) {
+  if (text.length <= maxLen) return text;
+  const cutoff = maxLen - 3;
+  let truncated = text.substring(0, cutoff);
+  const lastSpace = truncated.lastIndexOf(' ');
+  return lastSpace > 0 ? truncated.substring(0, lastSpace) + '...' : truncated + '...';
+}
+
+export function wordWrap(text, maxLen) {
+  if (!text || text.length === 0) return [''];
+  if (maxLen < 10) maxLen = 10;
+
+  const words = text.split(' ');
+  const lines = [];
+  let current = '';
+
+  words.forEach(function(word) {
+    if (word.length > maxLen) {
+      if (current) lines.push(current.trim());
+      lines.push(word.substring(0, maxLen - 3) + '...');
+      current = '';
+      return;
+    }
+    const test = current ? current + ' ' + word : word;
+    if (test.length <= maxLen) {
+      current = test;
+    } else {
+      if (current) lines.push(current);
+      current = word;
+    }
+  });
+
+  if (current) lines.push(current);
+  return lines.length > 0 ? lines : [''];
+}

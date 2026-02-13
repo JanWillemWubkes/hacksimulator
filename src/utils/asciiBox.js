@@ -1,1 +1,81 @@
-import{getResponsiveBoxWidth}from"./box-utils.js";export function createBox(t=null,o=getResponsiveBoxWidth()){const e={topLeft:"┏",topRight:"┓",bottomLeft:"┗",bottomRight:"┛",horizontal:"━",vertical:"┃"};return{top:function(){if(!t)return e.topLeft+e.horizontal.repeat(o)+e.topRight;const n=`  ${t.toUpperCase()}  `,r=o-n.length,i=Math.floor(r/2),p=r-i;return e.topLeft+e.horizontal.repeat(i)+n+e.horizontal.repeat(p)+e.topRight}(),bottom:e.bottomLeft+e.horizontal.repeat(o)+e.bottomRight,wrap:function(t){return t.split("\n").map(t=>{const n=(t.length>o?t.slice(0,o-3)+"...":t).padEnd(o," ");return`${e.vertical}${n}${e.vertical}`}).join("\n")}}}export function boxText(t,o=null,e=getResponsiveBoxWidth()){const n=createBox(o,e);return`${n.top}\n${n.wrap(t)}\n${n.bottom}`}export function boxHeader(t,o=getResponsiveBoxWidth()){const e=createBox(t,o);return`${e.top}\n${e.bottom}`}export function createLightBox(t=null,o=getResponsiveBoxWidth()){const e={topLeft:"╭",topRight:"╮",bottomLeft:"╰",bottomRight:"╯",horizontal:"─",vertical:"│"};return{top:function(){if(!t)return e.topLeft+e.horizontal.repeat(o)+e.topRight;const n=`  ${t.toUpperCase()}  `,r=o-n.length,i=Math.floor(r/2),p=r-i;return e.topLeft+e.horizontal.repeat(i)+n+e.horizontal.repeat(p)+e.topRight}(),bottom:e.bottomLeft+e.horizontal.repeat(o)+e.bottomRight,wrap:function(t){return t.split("\n").map(t=>{const n=(t.length>o?t.slice(0,o-3)+"...":t).padEnd(o," ");return`${e.vertical}${n}${e.vertical}`}).join("\n")}}}export function lightBoxText(t,o=null,e=getResponsiveBoxWidth()){const n=createLightBox(o,e);return`${n.top}\n${n.wrap(t)}\n${n.bottom}`}
+import { getResponsiveBoxWidth } from "./box-utils.js";
+
+export function createBox(title, width) {
+  if (title === undefined) title = null;
+  if (width === undefined) width = getResponsiveBoxWidth();
+
+  var chars = {
+    topLeft: "┏", topRight: "┓",
+    bottomLeft: "┗", bottomRight: "┛",
+    horizontal: "━", vertical: "┃"
+  };
+
+  return {
+    top: (function() {
+      if (!title) return chars.topLeft + chars.horizontal.repeat(width) + chars.topRight;
+      var label = '  ' + title.toUpperCase() + '  ';
+      var remaining = width - label.length;
+      var left = Math.floor(remaining / 2);
+      var right = remaining - left;
+      return chars.topLeft + chars.horizontal.repeat(left) + label + chars.horizontal.repeat(right) + chars.topRight;
+    })(),
+    bottom: chars.bottomLeft + chars.horizontal.repeat(width) + chars.bottomRight,
+    wrap: function(text) {
+      return text.split('\n').map(function(line) {
+        var truncated = line.length > width ? line.slice(0, width - 3) + '...' : line;
+        var padded = truncated.padEnd(width, ' ');
+        return chars.vertical + padded + chars.vertical;
+      }).join('\n');
+    }
+  };
+}
+
+export function boxText(text, title, width) {
+  if (title === undefined) title = null;
+  if (width === undefined) width = getResponsiveBoxWidth();
+  var box = createBox(title, width);
+  return box.top + '\n' + box.wrap(text) + '\n' + box.bottom;
+}
+
+export function boxHeader(title, width) {
+  if (width === undefined) width = getResponsiveBoxWidth();
+  var box = createBox(title, width);
+  return box.top + '\n' + box.bottom;
+}
+
+export function createLightBox(title, width) {
+  if (title === undefined) title = null;
+  if (width === undefined) width = getResponsiveBoxWidth();
+
+  var chars = {
+    topLeft: "╭", topRight: "╮",
+    bottomLeft: "╰", bottomRight: "╯",
+    horizontal: "─", vertical: "│"
+  };
+
+  return {
+    top: (function() {
+      if (!title) return chars.topLeft + chars.horizontal.repeat(width) + chars.topRight;
+      var label = '  ' + title.toUpperCase() + '  ';
+      var remaining = width - label.length;
+      var left = Math.floor(remaining / 2);
+      var right = remaining - left;
+      return chars.topLeft + chars.horizontal.repeat(left) + label + chars.horizontal.repeat(right) + chars.topRight;
+    })(),
+    bottom: chars.bottomLeft + chars.horizontal.repeat(width) + chars.bottomRight,
+    wrap: function(text) {
+      return text.split('\n').map(function(line) {
+        var truncated = line.length > width ? line.slice(0, width - 3) + '...' : line;
+        var padded = truncated.padEnd(width, ' ');
+        return chars.vertical + padded + chars.vertical;
+      }).join('\n');
+    }
+  };
+}
+
+export function lightBoxText(text, title, width) {
+  if (title === undefined) title = null;
+  if (width === undefined) width = getResponsiveBoxWidth();
+  var box = createLightBox(title, width);
+  return box.top + '\n' + box.wrap(text) + '\n' + box.bottom;
+}
