@@ -80,12 +80,19 @@
     # CSP strengthened in Sessie 96 - Security Review: Added object-src, base-uri, form-action
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-hashes' 'unsafe-inline' https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://consent.cookiebot.com https://consentcdn.cookiebot.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://consent.cookiebot.com https://consentcdn.cookiebot.com; frame-src https://googleads.g.doubleclick.net https://consentcdn.cookiebot.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://pagead2.googlesyndication.com https://consent.cookiebot.com https://consentcdn.cookiebot.com; object-src 'none'; base-uri 'self'; form-action 'self';"
 
-# Strict Transport Security (Activated Sessie 96 - Security Review)
-# Note: Start with 1 hour max-age for testing, increase to 1 year after verification
+# Strict Transport Security (Upgraded Sessie 97 - Security Headers B → A)
+# 1-year max-age: browser remembers HTTPS-only for 12 months
 [[headers]]
   for = "/*"
   [headers.values]
-    Strict-Transport-Security = "max-age=3600; includeSubDomains"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
+# Permissions Policy (Sessie 97 - Security Headers B → A)
+# Restrict browser features not needed by the application
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
 
 # Font Caching (Sessie 81 - Android Chrome ASCII Box Rendering Fix)
 # Aggressive caching for font subset (immutable after deploy)
