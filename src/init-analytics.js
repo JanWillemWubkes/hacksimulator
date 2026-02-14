@@ -11,12 +11,16 @@ import consentManager from './analytics/consent.js';
 import tracker from './analytics/tracker.js';
 import events from './analytics/events.js';
 
-// Initialize GA4 tracker
-tracker.init('ga4');
+// Only initialize GA4 if user has already given analytics consent
+if (consentManager.hasConsent('analytics') === true) {
+  tracker.init('ga4');
+}
 
 // Show consent banner if needed
 consentManager.checkAndShowBanner();
 
-// Track page view & session
-events.incrementVisitCount();
-events.sessionStart();
+// Only track visit/session if analytics consent was given
+if (consentManager.hasConsent('analytics') === true) {
+  events.incrementVisitCount();
+  events.sessionStart();
+}

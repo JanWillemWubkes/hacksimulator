@@ -6,8 +6,8 @@
  *
  * Key Features:
  * - Dynamic banner injection (works on index.html + blog pages)
- * - localStorage persistence across pages
- * - 24-hour banner cooldown (no consent spam)
+ * - localStorage persistence for consent choices across pages
+ * - sessionStorage banner cooldown (no consent spam within session)
  * - GDPR-compliant: No tracking before explicit consent
  */
 
@@ -49,9 +49,9 @@ const consentManager = {
     // Don't show if already shown this session
     if (this.hasShownBanner) return false;
 
-    // Check if shown in last 24 hours (localStorage timestamp)
+    // Check if shown this session (sessionStorage - clears on tab close)
     try {
-      const lastShown = localStorage.getItem(BANNER_SHOWN_KEY);
+      const lastShown = sessionStorage.getItem(BANNER_SHOWN_KEY);
       if (lastShown) {
         const lastShownDate = new Date(lastShown);
         const hoursSinceShown = (new Date() - lastShownDate) / (1000 * 60 * 60);
@@ -128,7 +128,7 @@ const consentManager = {
     // Mark as shown (24-hour cooldown)
     this.hasShownBanner = true;
     try {
-      localStorage.setItem(BANNER_SHOWN_KEY, new Date().toISOString());
+      sessionStorage.setItem(BANNER_SHOWN_KEY, new Date().toISOString());
     } catch (e) {
       console.warn('Could not save banner shown state');
     }
