@@ -32,6 +32,13 @@ coverage/
 *.tmp
 .cache/
 
+# Backup files
+*.backup*
+*.tar.gz
+
+# Test screenshots
+tests/screenshots/
+
 # Claude Code local settings
 .claude/settings.local.json
 

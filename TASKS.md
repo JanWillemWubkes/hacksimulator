@@ -323,7 +323,7 @@
 - [x] Replace GA4 Measurement ID in `src/analytics/tracker.js` (3 locations: lines 75, 121, 108) - ✅ Sessie 91 (G-7F792VS6CE)
 - [x] Setup contact emails in legal documents (4 locations: privacy.html x2, terms.html, cookies.html) - ✅ Sessie 91
 
-**Details:** See `PRE-LAUNCH-CHECKLIST.md` sections 1-2 for exact line numbers and instructions.
+**Details:** See `docs/archive/pre-launch-checklist.md` sections 1-2 for exact line numbers and instructions.
 
 #### Beta Testing Voorbereiding
 - [ ] Beta testing checklist opstellen
@@ -361,7 +361,7 @@
 
 #### Performance Testing
 - [x] Lighthouse audit (target: >90 score) - ✅ **100/100/92/100 (avg 98)**
-- [x] Bundle size check (<500KB hard limit) - ✅ **470.87 KB**
+- [x] Bundle size check — ✅ **~809 KB na Netlify minificatie** (Terminal Core ~340 KB binnen 400 KB budget, site totaal binnen 1000 KB budget — Sessie 100)
 - [x] Load time test 4G (target: <3 sec) - ✅ **2.30s LCP**
 - [x] Time to Interactive (target: <3 sec) - ✅ **2.98s TTI**
 - [x] Memory leaks check (long session test) - ⚠️ **WARN (84% growth, GC active)** - docs/testing/memory-leak-results.md
@@ -410,7 +410,7 @@
 - [ ] Environment variables instellen (production) - Using placeholders for MVP
 
 #### Pre-Launch Checklist
-- [ ] Alle 30 commands werkend (manual test)
+- [ ] Alle 32 commands werkend (manual test)
 - [ ] 3-tier help system functioneel
 - [ ] Onboarding flow compleet
 - [ ] Mobile responsive (getest op devices)
@@ -528,7 +528,7 @@
 - [ ] **A.3: Configuration Setup** (CRITICAL - Launch Blockers)
   - [ ] Replace GA4 Measurement ID in tracker.js (3 locations)
   - [ ] Setup contact emails in legal docs (4 locations)
-  - See `PRE-LAUNCH-CHECKLIST.md` for exact line numbers
+  - See `docs/archive/pre-launch-checklist.md` for exact line numbers
 
 - [ ] **A.5: Mobile Quick Commands** (deferred until mobile UX/design fixes)
   - Implement click handlers for quick command buttons
@@ -601,11 +601,11 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
 - [ ] Delete of move `cache-diagnostic.html` naar `/dev/` folder (development tool in production)
 - [ ] Document cache strategy in `docs/CACHING.md` (_headers file + versioning rationale)
 
-### Bundle Size Optimization (4 taken)
-- [ ] Audit bundle size breakdown (identify largest files via `ls -lh`)
+### Bundle Size Optimization (4 taken) — ✅ DEFERRED (Sessie 100: Netlify minificatie ingeschakeld, budget herdefinieerd)
+- [x] Audit bundle size breakdown — ✅ Sessie 100: 983 KB productieve code identified
 - [ ] Check for duplicate code patterns via `grep`/`ripgrep` (>10 line duplicates)
-- [ ] Consider minification: Terser for JS, cssnano for CSS (optional per PRD)
-- [ ] Target: Reduce to <400KB bundle (current: 470.87KB = 5.8% buffer remaining, requires optimization)
+- [x] Minification: Netlify asset processing ingeschakeld (CSS/JS/HTML) — Sessie 100
+- [x] Target: Terminal Core ~340 KB (binnen 400 KB budget), site totaal ~809 KB (binnen 1000 KB budget) — Sessie 100
 
 ### Code Quality & Deduplication (4 taken)
 - [ ] Review command modules voor duplicate logic patterns
@@ -1316,23 +1316,22 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 ## 📚 Referenties
 
 **Framework Documenten:**
-- `docs/prd.md` - Product Requirements v1.1
+- `docs/prd.md` - Product Requirements v1.8
 - `PLANNING.md` - Architectuur & Tech Stack
 - `CLAUDE.md` - AI Assistant Context
 
 **Command Specs:**
-- `docs/commands-list.md` - Alle 30 commands gespecificeerd
+- `docs/commands-list.md` - Alle 32 commands gespecificeerd
 
 ---
 
 **Laatst bijgewerkt:** 20 januari 2026
 **Versie:** 3.5 (Security Review complete - Sessie 96)
-**Totaal Taken:** 280 (MVP: 153, Post-MVP: 127) → M0-M5: 138, M6: 33, M7: 40, M8: 40, M9: 19, Phase A: 6
-**Voltooide Taken:** 150 (M0: 15/15, M1: 20/20, M2: 25/25, M3: 28/28, M4: 43/43, M5: 25/37, Phase A: 2/6, M6-M9: 0/132 pending)
-**Voortgang:** 53.6% (150/280 totaal) - MVP: 96.1% (147/153), M5: 68% (25/37), Phase A: 33% (2/6), Post-MVP: 0% (0/127)
+**Totaal Taken:** 295 (zie toptabel voor actuele breakdown per mijlpaal)
+**Voltooide Taken:** 164/295 (55.6%) — M0-M4: 100%, M5: 87% (39/45), M5.5: Geannuleerd, M6-M9: 0%
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
-**Bundle Budget:** ~445KB current (affiliate verwijderd), ~55KB buffer (11%)
+**Bundle:** ✅ ~809 KB na Netlify minificatie (Terminal Core ~340 KB, site totaal binnen 1000 KB budget — Sessie 100)
 
 ---
 

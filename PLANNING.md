@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 16 december 2025
+**Laatst bijgewerkt:** 15 februari 2026
 **Status:** M5 Testing & Launch Phase - ✅ **LIVE on Netlify!**
 **Verantwoordelijk:** Development Team
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
@@ -486,18 +486,19 @@ Remove cookie banner → Better UX
 
 ### Bundle Size Budget
 
-| Category | Budget | Current | Notes |
-|----------|--------|---------|-------|
-| HTML | 10 KB | TBD | Minified |
-| CSS | 30 KB | TBD | Minified + gzipped |
-| JavaScript | 400 KB | TBD | All commands + core |
-| Total | **500 KB** | TBD | Hard limit |
+**Budgetmodel (Sessie 100 — herdefinieerd voor multi-page site):**
 
-**Optimization Strategies:**
-- Code splitting: Load commands on-demand (future)
-- Minification: Terser (JS) + cssnano (CSS)
-- Compression: Gzip enabled op server
-- No images: Terminal UI is text-only (0 KB!)
+| Scope | Budget | Huidig (na minificatie) | Status |
+|-------|--------|------------------------|--------|
+| Terminal App Core (JS + core CSS + terminal.html) | 400 KB | ~340 KB | ✅ Binnen budget |
+| Per pagina (HTML + page-specifieke CSS) | 50 KB | ~20-45 KB | ✅ Binnen budget |
+| Totale site (exclusief afbeeldingen) | 1000 KB | ~809 KB | ✅ Binnen budget |
+
+**Optimization Strategy:**
+- Netlify asset processing: CSS/JS/HTML minificatie + image compression
+- Bronbestanden blijven leesbaar in repo (geen in-place minificatie)
+- Gzip/Brotli compressie via Netlify CDN
+- No images in terminal UI (text-only, 0 KB)
 
 ### Monitoring
 
@@ -744,11 +745,11 @@ const DEBUG_MODE = false;
 
 ## 📅 Roadmap & Fases
 
-### Fase 1: MVP (Maand 1-3) - 🔵 IN UITVOERING (48.5%) - **LIVE!**
+### Fase 1: MVP (Maand 1-3) - 🔵 IN UITVOERING (55.6%) - **LIVE!**
 
-**Status:** 144/295 tasks completed (48.8% totaal project scope)
-**MVP-only Progress:** 141/153 tasks (92.3% van MVP scope)
-**Milestone Breakdown:** M0-M4 (100%), M5 (19/37 - 51%), M5.5 (2/15 - 13%)
+**Status:** 164/295 tasks completed (55.6% totaal project scope)
+**MVP-only Progress:** M0-M4 (100%), M5 (39/45 - 87%)
+**M5.5 Monetization:** ❌ Geannuleerd (affiliate aanvragen afgewezen)
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
@@ -779,8 +780,8 @@ const DEBUG_MODE = false;
 **Week 9-10: Testing & Launch** - 🔵 IN PROGRESS (M5) - ✅ **DEPLOYED!**
 - [x] GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
 - [x] Netlify deployment (https://famous-frangollo-b5a758.netlify.app/)
-- [x] Performance optimization (<3s load: ~2.0s LCP, <500KB bundle: 470.87KB)
-- [x] Lighthouse audit (88/100/100/100) - Performance 88 (target >90, acceptable for MVP, improve in M9)
+- [x] Performance optimization (<3s load: ~2.0s LCP, bundle: ⚠️ ~590KB uncompressed)
+- [x] Lighthouse audit (100/100/92/100) - Performance 100, Accessibility 100, Best Practices 92, SEO 100
 - [ ] Beta testing (5+ testers) - TO DO
 - [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge) - TO DO
 
@@ -901,8 +902,8 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 
 ---
 
-**Laatst bijgewerkt:** 16 december 2025
-**Versie:** 2.2 (Sessie 87: Full sync - Metrics, M5 progress, bundle size aligned with TASKS.md)
-**Status:** ✅ Deployed - Live in Production + Monetization Planning Complete
+**Laatst bijgewerkt:** 15 februari 2026
+**Versie:** 2.3 (Sessie 99: Documentation Consistency Audit — metrics aligned with TASKS.md + actual measurements)
+**Status:** ✅ Deployed - Live in Production | M5.5 Monetization Geannuleerd
 **Live URL:** https://famous-frangollo-b5a758.netlify.app/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

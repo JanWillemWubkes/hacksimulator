@@ -27,19 +27,11 @@
   "author": "HackSimulator.nl",
   "license": "MIT",
   "scripts": {
-    "backup": "tar -czf backup-$(date +%Y%m%d-%H%M%S).tar.gz src/ styles/",
-    "minify:inplace": "find src/ -name '*.js' -exec terser {} -o {} --compress --mangle --module \\; && find styles/ -name '*.css' -exec postcss {} --use cssnano -o {} \\;",
-    "minify": "npm run backup && npm run minify:inplace",
     "test:performance": "npx playwright test tests/e2e/performance.spec.js",
     "test:cross-browser": "npx playwright test tests/e2e/cross-browser.spec.js",
     "test:all": "npx playwright test"
   },
   "devDependencies": {
-    "@playwright/test": "^1.56.1",
-    "cssnano": "^7.1.2",
-    "csso-cli": "^4.0.2",
-    "postcss": "^8.5.6",
-    "postcss-cli": "^11.0.1",
-    "terser": "^5.44.1"
+    "@playwright/test": "^1.56.1"
   }
 }

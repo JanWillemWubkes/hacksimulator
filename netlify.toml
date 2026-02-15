@@ -8,9 +8,19 @@
   # No build command needed (vanilla JS, no bundler)
   command = "echo 'No build step required for vanilla JS'"
 
-# Build settings
-[build.processing]
-  skip_processing = true  # Disable Netlify asset optimization (we manage bundle size manually)
+# Asset optimization (Sessie 100 — Bundle Size Optimalisatie)
+# Netlify minifies on deploy; source files stay readable in repo
+[build.processing.css]
+  bundle = false
+  minify = true
+[build.processing.js]
+  bundle = false
+  minify = true
+[build.processing.html]
+  pretty_urls = false
+  minify = true
+[build.processing.images]
+  compress = true
 
 # Cache busting settings
 [build.environment]
