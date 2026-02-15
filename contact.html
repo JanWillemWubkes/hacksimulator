@@ -168,6 +168,56 @@
       </div>
     </section>
 
+    <!-- Contact Form -->
+    <section class="page-section">
+      <h2>Stuur een Bericht</h2>
+      <div class="contact-form-container">
+        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="contact-form" id="contact-form">
+          <!-- Honeypot veld (spam bescherming - verborgen voor gebruikers) -->
+          <p class="form-hidden" aria-hidden="true">
+            <label>Vul dit niet in: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+          </p>
+
+          <div class="form-group">
+            <label for="contact-name">Naam</label>
+            <input type="text" id="contact-name" name="naam" required placeholder="Je naam" autocomplete="name">
+          </div>
+
+          <div class="form-group">
+            <label for="contact-email">E-mailadres</label>
+            <input type="email" id="contact-email" name="email" required placeholder="email@voorbeeld.com" autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <label for="contact-subject">Onderwerp</label>
+            <select id="contact-subject" name="onderwerp" required>
+              <option value="" disabled selected>Kies een onderwerp</option>
+              <option value="Algemene vraag">Algemene vraag</option>
+              <option value="Bug melden">Bug melden</option>
+              <option value="Feature idee">Feature idee</option>
+              <option value="Samenwerking">Samenwerking</option>
+              <option value="Anders">Anders</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-message">Bericht</label>
+            <textarea id="contact-message" name="bericht" required placeholder="Waar kunnen we je mee helpen?" rows="5"></textarea>
+          </div>
+
+          <button type="submit" class="btn-cta btn-cta-hero contact-submit">
+            Verstuur Bericht
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
+
+          <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
     <!-- FAQ Section -->
     <section class="page-section">
       <h2>Veelgestelde Vragen</h2>
@@ -259,5 +309,49 @@
 
   <!-- FAQ Accordion Script -->
   <script src="src/ui/faq.js" defer></script>
+
+  <!-- Contact Form AJAX Submission -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var form = document.getElementById('contact-form');
+      var status = document.getElementById('form-status');
+      var submitBtn = form.querySelector('.contact-submit');
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Disable button tijdens verzenden
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Verzenden...';
+        status.textContent = '';
+        status.className = 'form-status';
+
+        var formData = new URLSearchParams(new FormData(form));
+
+        fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: formData.toString()
+        })
+        .then(function(response) {
+          if (response.ok) {
+            status.textContent = 'Bedankt voor je bericht! We reageren zo snel mogelijk.';
+            status.className = 'form-status form-status-success';
+            form.reset();
+          } else {
+            throw new Error('Verzenden mislukt');
+          }
+        })
+        .catch(function() {
+          status.textContent = 'Er ging iets mis. Probeer het opnieuw of mail naar contact@hacksimulator.nl';
+          status.className = 'form-status form-status-error';
+        })
+        .finally(function() {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Verstuur Bericht';
+        });
+      });
+    });
+  </script>
 </body>
 </html>
