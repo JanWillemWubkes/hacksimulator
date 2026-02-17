@@ -8,10 +8,13 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (88-96)](docs/sessions/current.md) - Full Detail
-**Sessies:** 96, 95, 94, 93, 92, 91, 90, 89, 88
-**Period:** 26 december 2025 - 22 januari 2026
+### [Current Sessions (88-101)](docs/sessions/current.md) - Full Detail
+**Sessies:** 101, 100, 96, 95, 94, 93, 92, 91, 90, 89, 88
+**Period:** 26 december 2025 - 17 februari 2026
 **Topics:**
+- Playwright E2E test fixes: Cookiebot blocking, selector updates, 67→7 failures (Sessie 101)
+- Mobile quick commands feature + feedback.js bug fix (Sessie 101)
+- Bundle size optimalisatie: git cleanup, Netlify minificatie, budget herdefinitie (Sessie 100)
 - Landing page redesign Phase 1: Hero section implementation (new index-new.html)
 - Secondary button dark theme hover contrast fix (WCAG AAA)
 - CLAUDE.md 3-phase optimization (v2.0-v2.2): metrics delegation, code examples, command checklist

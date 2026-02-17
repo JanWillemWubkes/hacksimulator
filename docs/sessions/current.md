@@ -4,6 +4,182 @@
 
 ---
 
+## Sessie 101: Playwright Test Fixes & Mobile Quick Commands (17 februari 2026)
+
+**Scope:** E2E test suite repareren (67→7 failures), mobile quick commands bouwen, feedback.js bug fix
+**Status:** ✅ GROTENDEELS VOLTOOID — 88/100 tests passing, 7 remaining
+**Duration:** ~2 uur
+**Commit:** `9be5f1f` fix: Playwright E2E tests — Cookiebot blocking, selector updates, mobile viewport fixes
+
+---
+
+### Context & Problem
+
+**Problem:** Na Cookiebot CMP integratie (Sessie 95+), custom domain migratie, en onboarding refactor faalden 67 van 100 Playwright E2E tests. De tests waren niet mee-geüpdatet met app changes.
+
+**Root Causes:**
+1. Cookiebot consent dialog blokkeerde alle test interacties (overlay vóór legal modal)
+2. Verouderde selectors: `#legal-modal-backdrop`, `#feedback-button`, `#cookie-consent`
+3. Onboarding modal (`#onboarding-modal.active`) bestaat niet meer — flow is nu via terminal messages
+4. Mobile viewports verwachtten box chars (╭╮╰╯) maar app gebruikt simplified format op mobile
+5. Blog pagina's hebben duplicate theme toggle elementen (navbar + mobile menu) → strict mode violations
+6. `feedback-success` CSS class had `opacity: 0; visibility: hidden` default maar JS voegde `.visible` class niet toe
+
+### Oplossing
+
+**Fase 1: Shared Test Fixture (Cookiebot blocking)**
+- Nieuw bestand: `tests/e2e/fixtures.js` — extends Playwright `test` met route interception
+- Blokkeert `consent.cookiebot.com` en `consentcdn.cookiebot.com` via `page.route()` → `route.abort()`
+- Alle 13 test files geüpdatet: `import { test, expect } from './fixtures.js'`
+- 5 CJS files (`require`) geconverteerd naar ESM (`import`)
+- **Impact:** 67 → 36 failures in één stap
+
+**Fase 2: Selector & Structure Updates**
+- `#legal-modal-backdrop` → `#legal-modal` (dynamisch gecreëerd door legal.js)
+- `#feedback-button` → `a[href="#feedback"]` (footer link)
+- `#cookie-consent`/`#cookie-accept` → verwijderd (Cookiebot is CMP)
+- `#onboarding-modal.active` → `#legal-modal` tests (onboarding is nu terminal-based)
+- Blog theme toggle: `.first()` helpers om strict mode violations te voorkomen
+
+**Fase 3: Mobile Viewport Assertions**
+- Box char assertions (`╭╮╰╯`) alleen op `viewport.width >= 1024`
+- Mobile viewport: check `text.length > 50` (simplified format)
+- Leerpad `[X]` checkbox test: execute `help` eerst om progress te genereren
+- Unicode `✓` check: alleen in leerpad section (welcome message bevat ✓)
+
+**Fase 4: App Bug Fix**
+- `src/ui/feedback.js`: `class="feedback-success"` → `class="feedback-success visible"`
+- CSS had `opacity: 0; visibility: hidden` op `.feedback-success`, vereist `.visible` class
+
+**Fase 5: Mobile Quick Commands (Feature)**
+- HTML: 5 tappable buttons (help, ls, clear, nmap, man) onder terminal input
+- CSS: Hidden desktop, flex visible op `<768px`, 44px min touch targets
+- JS: IIFE met event delegation, native input setter, Enter simulation, modal protection
+
+### Resultaat
+
+| Metric | Vóór | Na |
+|--------|------|----|
+| Passed | 30 | 88 |
+| Failed | 67 | 7 |
+| Skipped | 3 | 5 |
+
+### Resterende 7 Failures (voor volgende sessie)
+
+1. **feedback submit (2x)** — App bug fix lokaal klaar, wacht op deploy
+2. **performance load time (1x)** — Network-afhankelijk, budget mogelijk te strak
+3. **blog "all pages" toggle (1x)** — clearStorage timing bij pagina-navigatie
+4. **CSS variable test (1x)** — `--color-modal-header` flaky
+5. **feedback-onboarding headers (2x)** — Modal selector timing issues
+
+### Files Changed (24 bestanden)
+
+**Nieuw:**
+- `tests/e2e/fixtures.js` — Shared test fixture met Cookiebot blocking
+- `src/ui/mobile-quick-commands.js` — Mobile quick command buttons
+- `.claude/rules/*.md` — Architectural rules (4 bestanden)
+
+**Gewijzigd:**
+- `tests/e2e/*.spec.js` — Alle 13 test files (imports + assertions)
+- `src/ui/feedback.js` — Bug fix: visible class op success message
+- `terminal.html` — Mobile quick commands HTML + script tag
+- `styles/mobile.css` — Mobile quick commands CSS
+- `playwright.config.js` — baseURL naar hacksimulator.nl
+
+---
+
+## Sessie 100: Bundle Size Optimalisatie (15 februari 2026)
+
+**Scope:** P0 bundle size optimalisatie — rommel verwijderen, Netlify minificatie inschakelen, budget herdefiniëren, devDependencies opruimen
+**Status:** ✅ VOLTOOID — 4 fasen, 1 commit
+**Duration:** ~20 minuten
+
+---
+
+### Context & Problem
+
+**Problem:** Bundle budget was <500KB (PRD §13), maar werkelijke deploy was ~3,974 KB totaal. Hiervan was ~1,053 KB rommel (backup CSS, tar.gz archives, test screenshots) die mee-gedeployed werd omdat `publish = "."` en bestanden in git stonden. Daarnaast stond `skip_processing = true` in netlify.toml waardoor Netlify geen minificatie toepaste.
+
+**Root Causes:**
+1. `npm run minify` script creëerde tar.gz backups die in git belandden
+2. `npm run minify:inplace` overschreef bronbestanden — .backup files werden handmatig bewaard
+3. Test screenshots waren gecommit voor visuele verificatie maar nooit opgeruimd
+4. `skip_processing = true` was ooit ingesteld om controle te houden, maar blokkeerde gratis CDN-minificatie
+5. Het 500KB budget was gedefinieerd voor een single-page terminal app, niet voor een multi-page site met 10 blog posts
+
+---
+
+### Implementation (4 Fasen)
+
+**Fase 1: Git Cleanup (~1,053 KB besparing)**
+- `git rm` van 10 bestanden: 5 backup CSS, 3 tar.gz archives, 2 test screenshots
+- `.gitignore` uitgebreid met `*.backup*`, `*.tar.gz`, `tests/screenshots/`
+- Resultaat: 3,974 KB → 2,921 KB getrackte bestanden
+
+**Fase 2: Netlify Minificatie**
+- `skip_processing = true` vervangen door per-asset configuratie
+- CSS/JS/HTML minificatie + image compression ingeschakeld
+- Bronbestanden blijven leesbaar in repo (geen in-place minificatie meer)
+- Verwachte besparing: ~174 KB (983 KB → ~809 KB geserveerd)
+
+**Fase 3: Budget Herdefinitie**
+- Oud: single 500KB limiet voor alles
+- Nieuw: Terminal Core <400KB (~340 KB) | Per pagina <50KB | Site totaal <1000KB (~809 KB)
+- Geüpdatet in: CLAUDE.md, PLANNING.md, TASKS.md
+
+**Fase 4: devDependencies Cleanup**
+- `postcss.config.js` verwijderd
+- 5 devDependencies verwijderd: cssnano, csso-cli, postcss, postcss-cli, terser
+- `backup` + `minify` + `minify:inplace` npm scripts verwijderd
+- `npm prune` → 129 transitive packages verwijderd
+- Alleen `@playwright/test` blijft als devDependency
+
+---
+
+### Files Changed
+
+| Actie | Bestand | Impact |
+|-------|---------|--------|
+| `git rm` | 5× backup CSS | -363 KB |
+| `git rm` | 3× tar.gz archives | -514 KB |
+| `git rm` | 2× test screenshots | -176 KB |
+| `git rm` | postcss.config.js | -1 KB |
+| Modified | .gitignore | +7 regels (prevent future artifacts) |
+| Modified | netlify.toml | skip_processing → per-asset minification |
+| Modified | package.json | -5 devDependencies, -3 scripts |
+| Modified | .claude/CLAUDE.md | Budget metrics updated |
+| Modified | PLANNING.md | Bundle Size Budget tabel herdefinieerd |
+| Modified | TASKS.md | P0 status → ✅, M9 bundle taken updated |
+
+---
+
+### Commit
+
+```
+3c32cf6 perf: Bundle size optimalisatie — remove 1MB+ artifacts, enable Netlify minification
+```
+
+---
+
+### Key Learnings
+
+1. **In-place minificatie is een anti-pattern voor vanilla JS projects** — het overschrijft bronbestanden en vereist backup scripts die rommel genereren
+2. **Netlify's gratis asset processing is superieur** — minificatie op CDN-niveau houdt broncode leesbaar en vereist zero build tooling
+3. **Bundle budgets moeten meegroeien met de site** — een 500KB budget voor een single-page app is onrealistisch voor een multi-page site met blog content
+4. **`skip_processing = true` is een verborgen performance killer** — het schakelt alle gratis CDN-optimalisatie uit
+5. **Backup artifacts in git = deploy bloat** — `publish = "."` deployed alles wat getrackt is
+
+---
+
+### Verificatie (Post-Deploy)
+
+- [ ] `curl -s <productie-url>/styles/main.css | wc -c` → moet kleiner zijn dan 73 KB
+- [ ] Terminal pagina: 5+ commands uitvoeren → functioneel
+- [ ] Blog post openen → layout intact
+- [ ] Lighthouse scores ≥ huidige (100/100/92/100)
+
+---
+
 ## Sessie 96: Landing Page Hero Section Implementation (22 januari 2026)
 
 **Scope:** Implementeer Phase 1, Section 1 (Hero) van nieuwe data-driven landing page volgens `docs/landing-page-plan.md`

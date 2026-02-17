@@ -83,24 +83,34 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 101: Playwright E2E Test Fixes (17 feb 2026)
+⚠️ **Never:**
+- Tests draaien zonder third-party CMP blocking (Cookiebot overlay blokkeert ALLE interacties)
+- Hardcoded selectors voor dynamische modals (`#legal-modal-backdrop` → verdwenen na refactor)
+- Box char assertions op mobile viewports (app gebruikt simplified format <1024px)
+- CSS `visibility: hidden` + `opacity: 0` default ZONDER `.visible` class in JS toe te voegen
+
+✅ **Always:**
+- Shared test fixture met `page.route()` blocking voor third-party scripts (Cookiebot, ads)
+- `.first()` bij selectors die meerdere elementen matchen (navbar + mobile menu duplicates)
+- Tests updaten bij elke UI refactor (Cookiebot, onboarding, cookie banner changes)
+
 ### Sessie 100: Bundle Size Optimalisatie (15 feb 2026)
 ⚠️ **Never:**
 - In-place minificatie met backup scripts (genereert rommel in git)
 - `skip_processing = true` in netlify.toml (blokkeert gratis CDN-optimalisatie)
-- Eén vast bundle budget voor een groeiende multi-page site
 
 ✅ **Always:**
-- Gebruik Netlify asset processing voor minificatie (broncode blijft leesbaar)
-- Definieer budgets per scope: Terminal Core (<400KB) vs. site totaal (<1000KB)
-- `.gitignore` backup patterns (`*.backup*`, `*.tar.gz`) om deploy bloat te voorkomen
+- Netlify asset processing voor minificatie (broncode leesbaar)
+- Budgets per scope: Terminal Core (<400KB) vs. site totaal (<1000KB)
 
-### Sessie 98: Content Review Spot Check (20 jan 2026)
-✅ Alle 8 content review taken PASSED — command output consistent met 80/20 principe
+### Sessie 98: Content Review (20 jan 2026)
+✅ Alle 8 content review taken PASSED — 80/20 principe consistent
 
-### Sessie 97: Accessibility Complete (jan 2026)
-✅ WCAG AAA: Focus trap alle modals, :focus-visible, ARIA audit 50+ attributen, contrast 14.8:1
+### Sessie 97: Accessibility (jan 2026)
+✅ WCAG AAA: Focus trap, :focus-visible, ARIA 50+ attrs, contrast 14.8:1
 
-**Rotation:** Keep last 3 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
+**Rotation:** Keep last 4 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
 
 ---
 
