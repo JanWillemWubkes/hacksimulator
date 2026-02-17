@@ -3,7 +3,7 @@
 // Purpose: Test critical functionality across Chrome, Firefox, Safari
 // Test URL: https://famous-frangollo-b5a758.netlify.app/
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures.js';
 
 // Helper: Wait for localStorage to be ready
 async function waitForLocalStorage(page) {
@@ -33,7 +33,7 @@ test.describe('Cross-Browser Compatibility Tests', () => {
   test.beforeEach(async ({ page, context }) => {
     // Clear cookies and storage before each test
     await context.clearCookies();
-    await page.goto('/');
+    await page.goto('/terminal.html');
     await clearStorage(page);
     await page.reload();
   });
@@ -57,10 +57,8 @@ test.describe('Cross-Browser Compatibility Tests', () => {
     // Modal should disappear
     await expect(legalModal).toBeHidden({ timeout: 2000 });
 
-    // Cookie consent banner should appear after 2 second delay
-    const cookieBanner = page.locator('#cookie-consent');
-    await expect(cookieBanner).toBeVisible({ timeout: 3000 });
-    await expect(cookieBanner).toContainText('Privacy');
+    // Cookie consent is now handled by Cookiebot (third-party CMP)
+    // Cookiebot is blocked in tests via route interception (fixtures.js)
 
     // Terminal should be visible after accepting legal
     const terminalInput = page.locator('#terminal-input');
@@ -212,10 +210,7 @@ test.describe('Cross-Browser Compatibility Tests', () => {
   test('Keyboard navigation works correctly', async ({ page }) => {
     await acceptLegalModal(page);
 
-    // Accept cookie consent to enable more UI elements
-    const cookieAccept = page.locator('#cookie-accept');
-    await expect(cookieAccept).toBeVisible({ timeout: 3000 });
-    await cookieAccept.click();
+    // Cookie consent is now handled by Cookiebot (blocked in tests)
 
     // Test Tab navigation
     await page.keyboard.press('Tab');

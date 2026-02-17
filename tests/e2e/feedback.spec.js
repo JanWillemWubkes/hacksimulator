@@ -1,9 +1,9 @@
 // E2E Tests voor Feedback Systeem
 // Test de volledige feedback flow: open → rate → submit → bevestiging
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures.js';
 
-const TEST_URL = 'https://famous-frangollo-b5a758.netlify.app';
+const TEST_URL = 'https://hacksimulator.nl/terminal.html';
 
 test.describe('Feedback System', () => {
   test.beforeEach(async ({ page }) => {
@@ -28,13 +28,8 @@ test.describe('Feedback System', () => {
     // Wait for modal to be hidden
     await expect(legalModal).toBeHidden({ timeout: 3000 });
 
-    // Also dismiss cookie banner if it appears (appears after 2 sec delay)
-    await page.waitForTimeout(2500);
-    const cookieBanner = page.locator('#cookie-consent');
-    if (await cookieBanner.isVisible()) {
-      await page.click('#cookie-accept');
-      await page.waitForTimeout(500);
-    }
+    // Cookie consent is now handled by Cookiebot (blocked in tests via fixtures.js)
+    await page.waitForTimeout(500);
   });
 
   test('feedback button should be visible', async ({ page }) => {
@@ -171,8 +166,8 @@ test.describe('Feedback System', () => {
     const modal = page.locator('#feedback-modal');
     await expect(modal).toHaveClass(/active/);
 
-    // Click close button
-    await page.click('.modal-close');
+    // Click close button within feedback modal
+    await page.click('#feedback-modal .modal-close');
 
     // Modal should be closed
     await expect(modal).not.toHaveClass(/active/);

@@ -3,48 +3,35 @@
  * Directly tests feedback modal header color
  */
 
-const { test, expect } = require('@playwright/test');
+import { test, expect } from './fixtures.js';
 
 test.describe('Modal Header Colors - Simple Test', () => {
-  test('Feedback modal header should be white (#ffffff)', async ({ page, browser }) => {
-    // Create a new context with no cache
-    const context = await browser.newContext({
-      ignoreHTTPSErrors: true,
+  test('Feedback modal header should be white (#ffffff)', async ({ page }) => {
+    await page.goto('https://hacksimulator.nl/terminal.html', { waitUntil: 'networkidle' });
+
+    // Set localStorage to bypass legal modal
+    await page.evaluate(() => {
+      localStorage.setItem('hacksim_legal_accepted', 'true');
+      localStorage.setItem('hacksim_first_visit', 'false');
     });
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.waitForTimeout(1000);
 
-    const newPage = await context.newPage();
-
-    // Navigate to page
-    await newPage.goto('http://localhost:8123', { waitUntil: 'networkidle' });
-
-    // Wait for page to load completely
-    await newPage.waitForTimeout(2000);
-
-    // Click feedback button directly
-    await newPage.click('#feedback-button');
+    // Click feedback link in footer
+    await page.click('a[href="#feedback"]');
 
     // Wait for feedback modal to be visible
-    await newPage.waitForSelector('#feedback-modal.active', { timeout: 3000 });
+    await page.waitForSelector('#feedback-modal.active', { timeout: 3000 });
 
     // Get computed color of modal header
-    const headerColor = await newPage.$eval('#feedback-modal h2', (el) => {
+    const headerColor = await page.$eval('#feedback-modal h2', (el) => {
       return window.getComputedStyle(el).color;
     });
-
-    // Take screenshot
-    await newPage.screenshot({
-      path: 'tests/screenshots/feedback-modal-white-header.png',
-      fullPage: false
-    });
-
-    console.log('✓ Feedback modal header color:', headerColor);
 
     // White is rgb(255, 255, 255)
     expect(headerColor).toBe('rgb(255, 255, 255)');
 
     // Also verify it's NOT neon green
     expect(headerColor).not.toBe('rgb(0, 255, 136)'); // #00ff88
-
-    await context.close();
   });
 });

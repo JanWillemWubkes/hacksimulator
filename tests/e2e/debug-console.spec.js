@@ -1,5 +1,5 @@
 // Debug test to check console errors and persistence.save() calls
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures.js';
 
 test.describe('Debug - Console & Persistence', () => {
 
@@ -20,7 +20,7 @@ test.describe('Debug - Console & Persistence', () => {
       console.log(`[Browser ERROR] ${error.message}`);
     });
 
-    await page.goto('https://famous-frangollo-b5a758.netlify.app/');
+    await page.goto('https://hacksimulator.nl/terminal.html');
 
     const legalModal = page.locator('#legal-modal');
     await expect(legalModal).toBeVisible({ timeout: 5000 });

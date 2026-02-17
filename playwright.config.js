@@ -29,7 +29,7 @@ export default defineConfig({
   // Shared settings for all the projects below
   use: {
     // Base URL for tests
-    baseURL: 'https://famous-frangollo-b5a758.netlify.app',
+    baseURL: 'https://hacksimulator.nl',
 
     // Collect trace when retrying the failed test
     trace: 'on-first-retry',

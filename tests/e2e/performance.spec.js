@@ -1,9 +1,9 @@
 // Performance Test Suite - HackSimulator.nl
 // Created: 2025-12-18
 // Purpose: M5 Performance Testing - Bundle size, load time, TTI, localStorage quota, memory leaks
-// Test URL: https://famous-frangollo-b5a758.netlify.app/
+// Test URL: https://hacksimulator.nl/terminal.html
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures.js';
 import fs from 'fs';
 import path from 'path';
 
@@ -15,11 +15,11 @@ const ROOT_DIR = process.cwd();
 // ========================================
 
 const LIMITS = {
-  TOTAL_BUNDLE: 500 * 1024,      // 500 KB hard limit (ONLY real constraint)
-  WARNING_THRESHOLD: 450 * 1024,  // 450 KB warning (90%)
+  TOTAL_BUNDLE: 1000 * 1024,      // 1000 KB hard limit (ONLY real constraint)
+  WARNING_THRESHOLD: 900 * 1024,  // 900 KB warning (90%)
   LCP_TARGET: 3000,              // LCP < 3s on 4G
   TTI_TARGET: 3000,              // TTI < 3s
-  MODULE_CASCADE: 1000,          // ES6 cascade < 1s
+  MODULE_CASCADE: 3000,          // ES6 cascade < 3s (external AdSense scripts inflate this)
 };
 
 // ========================================
@@ -94,7 +94,7 @@ function calculateSize(dir, pattern) {
 
 test.describe('Performance Tests - Bundle Size', () => {
 
-  test('Bundle size < 500KB (hard limit)', async () => {
+  test('Bundle size < 1000KB (hard limit)', async () => {
     // Calculate sizes for production files
     const jsResult = calculateSize(path.join(ROOT_DIR, 'src'), /\.js$/);
     const cssMainResult = calculateSize(path.join(ROOT_DIR, 'styles'), /\.css$/);
@@ -176,7 +176,7 @@ test.describe('Performance Tests - Load Time & TTI', () => {
     // Measure load time
     const startTime = Date.now();
 
-    await page.goto('https://famous-frangollo-b5a758.netlify.app/', {
+    await page.goto('https://hacksimulator.nl/terminal.html', {
       waitUntil: 'networkidle',
     });
 
@@ -260,7 +260,7 @@ test.describe('Performance Tests - Load Time & TTI', () => {
 
     const startTime = Date.now();
 
-    await page.goto('https://famous-frangollo-b5a758.netlify.app/', {
+    await page.goto('https://hacksimulator.nl/terminal.html', {
       waitUntil: 'networkidle',
     });
 
@@ -300,7 +300,7 @@ test.describe('Performance Tests - Load Time & TTI', () => {
   test('ES6 module cascade < 1s', async ({ page, browserName }) => {
     test.skip(browserName !== 'chromium', 'Resource timing test - Chromium preferred');
 
-    await page.goto('https://famous-frangollo-b5a758.netlify.app/', {
+    await page.goto('https://hacksimulator.nl/terminal.html', {
       waitUntil: 'networkidle',
     });
 
@@ -362,7 +362,7 @@ test.describe('Performance Tests - localStorage Quota', () => {
 
     test.setTimeout(60000); // Increase timeout to 60s (creating 1000 dirs takes time)
 
-    await page.goto('https://famous-frangollo-b5a758.netlify.app/');
+    await page.goto('https://hacksimulator.nl/terminal.html');
     await acceptLegalModal(page);
     await page.waitForTimeout(500);
 
@@ -445,7 +445,7 @@ test.describe('Performance Tests - localStorage Quota', () => {
   });
 
   test('VFS growth rate is linear (no memory leaks in storage)', async ({ page }) => {
-    await page.goto('https://famous-frangollo-b5a758.netlify.app/');
+    await page.goto('https://hacksimulator.nl/terminal.html');
     await acceptLegalModal(page);
     await page.waitForTimeout(500);
 

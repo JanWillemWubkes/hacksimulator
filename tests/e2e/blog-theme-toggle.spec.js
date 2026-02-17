@@ -3,7 +3,7 @@
 // Purpose: Test blog theme toggle CSP-compliant external module
 // Tests: Theme toggle, persistence, main app sync, reading progress
 
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures.js';
 
 // Helper: Clear storage for fresh test
 async function clearStorage(page) {
@@ -13,44 +13,53 @@ async function clearStorage(page) {
   });
 }
 
+// Blog pages have 2 theme toggles (navbar + mobile menu) — use .first() to avoid strict mode
+function themeToggle(page) {
+  return page.locator('.theme-toggle').first();
+}
+
+function toggleOption(page, theme) {
+  return page.locator(`.toggle-option[data-theme="${theme}"]`).first();
+}
+
 test.describe('Blog Theme Toggle (CSP-Compliant)', () => {
 
   test.beforeEach(async ({ page, context }) => {
-    // Clear cookies and storage before each test
     await context.clearCookies();
+    // Navigate first (localStorage requires a page origin), then clear storage
+    await page.goto('/blog/index.html');
     await clearStorage(page);
+    await page.reload();
   });
 
   test('Blog theme toggle works and persists', async ({ page }) => {
-    // Visit blog index
     await page.goto('/blog/index.html');
 
     // Default should be dark
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-    await expect(page.locator('.toggle-option[data-theme="dark"]')).toHaveClass(/active/);
+    await expect(toggleOption(page, 'dark')).toHaveClass(/active/);
 
     // Toggle to light
-    await page.click('.theme-toggle');
+    await themeToggle(page).click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-    await expect(page.locator('.toggle-option[data-theme="light"]')).toHaveClass(/active/);
-    await expect(page.locator('.toggle-option[data-theme="dark"]')).not.toHaveClass(/active/);
+    await expect(toggleOption(page, 'light')).toHaveClass(/active/);
+    await expect(toggleOption(page, 'dark')).not.toHaveClass(/active/);
 
     // Refresh - theme should persist
     await page.reload();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-    await expect(page.locator('.toggle-option[data-theme="light"]')).toHaveClass(/active/);
+    await expect(toggleOption(page, 'light')).toHaveClass(/active/);
 
     // Toggle back to dark
-    await page.click('.theme-toggle');
+    await themeToggle(page).click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-    await expect(page.locator('.toggle-option[data-theme="dark"]')).toHaveClass(/active/);
+    await expect(toggleOption(page, 'dark')).toHaveClass(/active/);
   });
 
   test('Blog theme syncs with main app', async ({ page }) => {
     // Set theme on main app (need to accept legal modal first)
-    await page.goto('/');
+    await page.goto('/terminal.html');
 
-    // Accept legal modal
     const legalModal = page.locator('#legal-modal');
     if (await legalModal.isVisible()) {
       await page.click('#legal-accept-btn');
@@ -58,37 +67,35 @@ test.describe('Blog Theme Toggle (CSP-Compliant)', () => {
     }
 
     // Set light theme on main app
-    await page.click('.theme-toggle');
+    await themeToggle(page).click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
 
     // Visit blog - should inherit light theme from localStorage
     await page.goto('/blog/index.html');
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-    await expect(page.locator('.toggle-option[data-theme="light"]')).toHaveClass(/active/);
+    await expect(toggleOption(page, 'light')).toHaveClass(/active/);
 
     // Set dark theme on blog
-    await page.click('.theme-toggle');
+    await themeToggle(page).click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 
     // Go back to main app - should inherit dark theme
-    await page.goto('/');
-    // Wait for legal modal if it appears (shouldn't since we accepted it)
+    await page.goto('/terminal.html');
     await page.waitForTimeout(500);
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   });
 
   test('Reading progress bar works on article pages', async ({ page }) => {
-    // Visit an article page (welkom has reading progress bar)
     await page.goto('/blog/welkom.html');
+    await page.waitForTimeout(500); // Wait for JS to initialize
 
-    // Check if progress bar exists
     const progressBar = page.locator('.reading-progress');
-    await expect(progressBar).toBeVisible();
+    // Progress bar may be thin (2-3px) — check it exists in DOM rather than visibility
+    await expect(progressBar).toBeAttached();
 
-    // Initially at top - progress bar should have minimal width
+    // Initially at top
     await page.evaluate(() => window.scrollTo(0, 0));
-    await page.waitForTimeout(200); // Wait for scroll event
-
+    await page.waitForTimeout(200);
     const initialWidth = await progressBar.evaluate(el => parseFloat(el.style.width) || 0);
     expect(initialWidth).toBeLessThan(10);
 
@@ -99,7 +106,6 @@ test.describe('Blog Theme Toggle (CSP-Compliant)', () => {
       window.scrollTo(0, (scrollHeight - windowHeight) / 2);
     });
     await page.waitForTimeout(200);
-
     const midWidth = await progressBar.evaluate(el => parseFloat(el.style.width));
     expect(midWidth).toBeGreaterThan(30);
     expect(midWidth).toBeLessThan(70);
@@ -111,8 +117,6 @@ test.describe('Blog Theme Toggle (CSP-Compliant)', () => {
       window.scrollTo(0, scrollHeight - windowHeight);
     });
     await page.waitForTimeout(200);
-
-    // Progress bar should be near 100%
     const finalWidth = await progressBar.evaluate(el => parseFloat(el.style.width));
     expect(finalWidth).toBeGreaterThan(90);
   });
@@ -129,21 +133,19 @@ test.describe('Blog Theme Toggle (CSP-Compliant)', () => {
     ];
 
     for (const pagePath of blogPages) {
-      // Clear storage for fresh test
-      await clearStorage(page);
-
-      // Visit page
       await page.goto(pagePath);
+      await clearStorage(page);
+      await page.reload();
 
       // Default dark theme
-      await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark', { timeout: 3000 });
 
       // Toggle to light
-      await page.click('.theme-toggle');
+      await themeToggle(page).click();
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
 
       // Verify UI updated
-      await expect(page.locator('.toggle-option[data-theme="light"]')).toHaveClass(/active/);
+      await expect(toggleOption(page, 'light')).toHaveClass(/active/);
     }
   });
 
@@ -156,16 +158,17 @@ test.describe('Blog Theme Toggle (CSP-Compliant)', () => {
       }
     });
 
-    // Visit blog page
     await page.goto('/blog/index.html');
-
-    // Wait for page to fully load
     await page.waitForTimeout(1000);
 
-    // Check for CSP-related errors
     const cspErrors = consoleErrors.filter(err =>
-      err.includes('Content Security Policy') ||
-      err.includes('Refused to execute inline script')
+      (err.includes('Content Security Policy') ||
+       err.includes('Refused to execute inline script')) &&
+      // Exclude third-party AdSense/Google CSP errors (not our code)
+      !err.includes('googlesyndication') &&
+      !err.includes('gstatic.com') &&
+      !err.includes('adtrafficquality') &&
+      !err.includes('doubleclick')
     );
 
     expect(cspErrors).toHaveLength(0);
@@ -180,17 +183,13 @@ test.describe('Blog Theme Toggle (CSP-Compliant)', () => {
       }
     });
 
-    // Visit blog page
     await page.goto('/blog/index.html');
-
-    // Wait for module to load
     await page.waitForTimeout(1000);
 
-    // Should have no 404 or errors on blog-theme.js
     expect(networkErrors).toHaveLength(0);
 
-    // Verify theme toggle works (means module loaded successfully)
-    await page.click('.theme-toggle');
+    // Verify theme toggle works
+    await themeToggle(page).click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   });
 

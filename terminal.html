@@ -114,6 +114,15 @@
                 placeholder="Type 'help' om te beginnen..."
             >
         </div>
+
+        <!-- Mobile Quick Commands (only visible on mobile <768px) -->
+        <div id="mobile-quick-commands" class="mobile-quick-commands" aria-label="Snelle commando's">
+            <button class="quick-cmd-btn" data-command="help">help</button>
+            <button class="quick-cmd-btn" data-command="ls">ls</button>
+            <button class="quick-cmd-btn" data-command="clear">clear</button>
+            <button class="quick-cmd-btn" data-command="nmap 192.168.1.1">nmap</button>
+            <button class="quick-cmd-btn" data-command="man">man</button>
+        </div>
     </main>
 
     <!-- Onboarding Modal (First Visit) -->
@@ -215,6 +224,7 @@
     <!-- Application Entry Point -->
     <script src="src/ui/search-strategies.js?v=35-search-modal"></script>
     <script src="src/ui/command-search-modal.js?v=35-search-modal"></script>
+    <script src="src/ui/mobile-quick-commands.js?v=101-quick-commands"></script>
     <script src="src/main.js?v=88-multiline-wrap" type="module"></script>
 </body>
 </html>

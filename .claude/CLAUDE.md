@@ -83,16 +83,22 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 100: Bundle Size Optimalisatie (15 feb 2026)
+⚠️ **Never:**
+- In-place minificatie met backup scripts (genereert rommel in git)
+- `skip_processing = true` in netlify.toml (blokkeert gratis CDN-optimalisatie)
+- Eén vast bundle budget voor een groeiende multi-page site
+
+✅ **Always:**
+- Gebruik Netlify asset processing voor minificatie (broncode blijft leesbaar)
+- Definieer budgets per scope: Terminal Core (<400KB) vs. site totaal (<1000KB)
+- `.gitignore` backup patterns (`*.backup*`, `*.tar.gz`) om deploy bloat te voorkomen
+
 ### Sessie 98: Content Review Spot Check (20 jan 2026)
 ✅ Alle 8 content review taken PASSED — command output consistent met 80/20 principe
 
 ### Sessie 97: Accessibility Complete (jan 2026)
 ✅ WCAG AAA: Focus trap alle modals, :focus-visible, ARIA audit 50+ attributen, contrast 14.8:1
-
-### Sessie 96: Landing Page Hero Implementation (22 jan 2026)
-⚠️ Never assume plan files from Claude Web sessions exist locally
-✅ Use Page Visibility API (`visibilitychange`) to pause animations on hidden tabs
-📄 1 file aangemaakt: landing-demo.js
 
 **Rotation:** Keep last 3 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
 
@@ -103,7 +109,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Voor Sessie:** Lees `PLANNING.md`, `TASKS.md`, dit bestand
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-**Rotation trigger:** Every 5 sessions (last: Sessie 96, next: Sessie 101)
+**Rotation trigger:** Every 5 sessions (last: Sessie 100, next: Sessie 105)
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -125,7 +131,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 2. 80/20 output: Niet te technisch, niet te simpel
 3. Educatieve laag: Elk commando = leermoment
 4. Taal correct: UI=NL, commands=EN, uitleg=NL
-5. Performance: < 500KB budget, elke KB telt
+5. Performance: Terminal Core <400KB, site totaal <1000KB
 
 → **Tech constraints:** PRD §13 | **Pattern violations:** docs/sessions/current.md
 
@@ -150,5 +156,5 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 15 februari 2026 (Sessie 99 — Documentation Consistency Audit)
-**Version:** 3.0 (487→~160 regels, extractie naar .claude/rules/, alle metrics gecorrigeerd)
+**Last updated:** 15 februari 2026 (Sessie 100 — Bundle Size Optimalisatie)
+**Version:** 3.1 (Sessie 100: budget herdefinieerd, Netlify minificatie, learnings updated)

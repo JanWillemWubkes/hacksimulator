@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures.js';
 
 /**
  * E2E Smoke Test: Tab Autocomplete for Filesystem Commands
@@ -11,7 +11,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Tab Autocomplete - Filesystem Commands', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the application
-    await page.goto('http://localhost:8000');
+    await page.goto('https://hacksimulator.nl/terminal.html');
 
     // Wait for terminal to be ready
     await page.waitForSelector('#terminal-input');

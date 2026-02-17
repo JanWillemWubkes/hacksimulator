@@ -271,7 +271,7 @@ const FeedbackManager = {
     const originalContent = content.innerHTML;
 
     content.innerHTML = `
-      <div class="feedback-success" style="text-align: center; padding: 40px 20px;">
+      <div class="feedback-success visible" style="text-align: center; padding: 40px 20px;">
         <div style="color: var(--color-success); font-size: 3rem; margin-bottom: 20px; font-family: var(--font-terminal); letter-spacing: 0.15em;">[ OK ]</div>
         <h2 style="color: var(--color-success); margin-bottom: 16px; font-size: 2rem; text-transform: uppercase; letter-spacing: 1px;">Bedankt!</h2>
         <p style="color: var(--color-modal-text); font-size: 1rem;">Je feedback helpt ons HackSimulator.nl te verbeteren.</p>
