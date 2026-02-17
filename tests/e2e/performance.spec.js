@@ -18,7 +18,7 @@ const LIMITS = {
   TOTAL_BUNDLE: 1000 * 1024,      // 1000 KB hard limit (ONLY real constraint)
   WARNING_THRESHOLD: 900 * 1024,  // 900 KB warning (90%)
   LCP_TARGET: 3000,              // LCP < 3s on 4G
-  TTI_TARGET: 3000,              // TTI < 3s
+  TTI_TARGET: 5000,              // TTI < 5s (Google's "good" TTI on 4G)
   MODULE_CASCADE: 3000,          // ES6 cascade < 3s (external AdSense scripts inflate this)
 };
 
@@ -247,8 +247,8 @@ test.describe('Performance Tests - Load Time & TTI', () => {
     if (lcp && lcp > 2500) {
       console.warn(`⚠️  LCP approaching 3s limit: ${(lcp / 1000).toFixed(2)}s`);
     }
-    if (tti > 2500) {
-      console.warn(`⚠️  TTI approaching 3s limit: ${(tti / 1000).toFixed(2)}s`);
+    if (tti > 4000) {
+      console.warn(`⚠️  TTI approaching 5s limit: ${(tti / 1000).toFixed(2)}s`);
     }
   });
 

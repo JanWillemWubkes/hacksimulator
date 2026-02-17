@@ -127,9 +127,9 @@ test.describe('Blog Theme Toggle (CSP-Compliant)', () => {
       '/blog/welkom.html',
       '/blog/wat-is-ethisch-hacken.html',
       '/blog/terminal-basics.html',
-      '/blog/career-switch-gids.html',
-      '/blog/beste-online-cursussen-ethical-hacking.html',
-      '/blog/top-5-hacking-boeken.html'
+      '/blog/nmap-beginnersgids.html',
+      '/blog/cybersecurity-tools.html',
+      '/blog/ethisch-hacker-worden.html'
     ];
 
     for (const pagePath of blogPages) {
