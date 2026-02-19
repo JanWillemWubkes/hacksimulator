@@ -16,13 +16,17 @@
   Expires: 0
 
 # =============================================================================
-# CSS/JS: Long cache + versioning via query params
+# CSS/JS: 1-week cache + versioning via ?v= query params
+# Netlify also invalidates CDN cache on each deploy
 # =============================================================================
 /styles/*.css
-  Cache-Control: public, max-age=3600, must-revalidate
+  Cache-Control: public, max-age=604800, must-revalidate
 
 /src/*.js
-  Cache-Control: public, max-age=3600, must-revalidate
+  Cache-Control: public, max-age=604800, must-revalidate
+
+/src/**/*.js
+  Cache-Control: public, max-age=604800, must-revalidate
 
 # =============================================================================
 # Assets: Long cache (images, fonts)

@@ -31,10 +31,12 @@
     <link rel="manifest" href="/site.webmanifest">
     <meta name="theme-color" content="#0d1117">
 
-    <!-- Google Fonts: Space Grotesk + Inter + JetBrains Mono (Sessie 99 - Font System Upgrade) -->
+    <!-- Preconnect: reduce DNS/TLS latency for critical third-party origins -->
+    <link rel="preconnect" href="https://consent.cookiebot.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
 
     <!-- Preload Critical Resources (M5 Performance Optimization) -->
     <link rel="preload" href="styles/main.css?v=101-font-system-upgrade" as="style">
@@ -44,10 +46,11 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="styles/main.css?v=101-font-system-upgrade">
     <link rel="stylesheet" href="styles/terminal.css?v=88-multiline-wrap">
-    <!-- Mobile & Animation CSS (direct load for CSP compliance - Sessie 95) -->
-    <!-- Note: Deferred loading via onload handler was blocked by CSP 'unsafe-hashes' -->
-    <link rel="stylesheet" href="styles/mobile.css?v=95-csp-fix">
-    <link rel="stylesheet" href="styles/animations.css?v=95-csp-fix">
+    <!-- Mobile CSS: non-blocking on desktop via media query -->
+    <link rel="stylesheet" href="styles/mobile.css?v=95-csp-fix" media="screen and (max-width: 768px)">
+    <!-- Animations CSS: non-blocking, loaded async -->
+    <link rel="stylesheet" href="styles/animations.css?v=95-csp-fix" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="styles/animations.css?v=95-csp-fix"></noscript>
     <link rel="stylesheet" href="src/ui/command-search-modal.css?v=95-light-mode-blue">
 
     <!-- Google Consent Mode v2 defaults (must be before Cookiebot + Google scripts) -->
@@ -222,9 +225,9 @@
     <script src="/src/init-components.js" type="module"></script>
 
     <!-- Application Entry Point -->
-    <script src="src/ui/search-strategies.js?v=35-search-modal"></script>
-    <script src="src/ui/command-search-modal.js?v=35-search-modal"></script>
-    <script src="src/ui/mobile-quick-commands.js?v=101-quick-commands"></script>
+    <script src="src/ui/search-strategies.js?v=35-search-modal" defer></script>
+    <script src="src/ui/command-search-modal.js?v=35-search-modal" defer></script>
+    <script src="src/ui/mobile-quick-commands.js?v=101-quick-commands" defer></script>
     <script src="src/main.js?v=88-multiline-wrap" type="module"></script>
 </body>
 </html>

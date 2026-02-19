@@ -33,16 +33,18 @@
   <link rel="manifest" href="/site.webmanifest">
   <meta name="theme-color" content="#0d1117">
 
-  <!-- Google Fonts -->
+  <!-- Preconnect: reduce DNS/TLS latency for critical third-party origins -->
+  <link rel="preconnect" href="https://consent.cookiebot.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles/landing.css">
   <link rel="stylesheet" href="styles/pages.css">
-  <link rel="stylesheet" href="styles/mobile.css">
+  <link rel="stylesheet" href="styles/mobile.css" media="screen and (max-width: 768px)">
 
   <!-- Google AdSense -->
   <meta name="google-adsense-account" content="ca-pub-6345664385525701">
