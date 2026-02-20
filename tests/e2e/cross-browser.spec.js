@@ -1,7 +1,7 @@
 // Cross-Browser Test Suite - HackSimulator.nl
 // Created: 2025-10-22
 // Purpose: Test critical functionality across Chrome, Firefox, Safari
-// Test URL: https://famous-frangollo-b5a758.netlify.app/
+// Test URL: https://hacksimulator.nl/
 
 import { test, expect } from './fixtures.js';
 

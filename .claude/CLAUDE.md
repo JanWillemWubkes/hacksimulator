@@ -12,11 +12,11 @@
 **Tech Stack:** Vanilla JS/CSS, client-side only, no backend (MVP) | Budget: Terminal Core <400KB, Site totaal <1000KB
 **Language:** UI=NL | Commands=EN | Help/Errors=NL
 
-**URLs:** [Production](https://famous-frangollo-b5a758.netlify.app/) | [GitHub](https://github.com/JanWillemWubkes/hacksimulator)
+**URLs:** [Production](https://hacksimulator.nl/) | [GitHub](https://github.com/JanWillemWubkes/hacksimulator)
 **Blog:** 10 posts live at `/blog/` (60+ inline jargon explanations)
 **Contact:** contact@hacksimulator.nl (Gmail forwarding)
 
-**Performance:** Playwright E2E 78 tests across 13 suites | WCAG AAA | 165 CSS variables
+**Performance:** Playwright E2E 100 tests across 13 suites | WCAG AAA | 165 CSS variables
 **Bundle:** ~983 KB productieve code → ~809 KB na Netlify minificatie | Terminal Core: ~340 KB (binnen 400 KB budget)
 
 → **Live metrics:** `TASKS.md` regels 9-26 (meest recente tellingen)
@@ -166,5 +166,5 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 15 februari 2026 (Sessie 100 — Bundle Size Optimalisatie)
-**Version:** 3.1 (Sessie 100: budget herdefinieerd, Netlify minificatie, learnings updated)
+**Last updated:** 18 februari 2026 (Sessie 102 — MVP Perfectionering)
+**Version:** 3.2 (Sessie 102: domain migratie, test fixes, docs sync, pre-launch checklist afgerond)

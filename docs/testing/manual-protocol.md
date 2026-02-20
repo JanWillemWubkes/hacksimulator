@@ -28,7 +28,7 @@ This document provides detailed procedures for manual performance tests that can
 ### Prerequisites
 
 - [ ] Chrome browser installed (latest version)
-- [ ] Test URL accessible: https://famous-frangollo-b5a758.netlify.app/
+- [ ] Test URL accessible: https://hacksimulator.nl/
 - [ ] Quiet environment (no other tabs/apps consuming resources)
 - [ ] Performance results template ready (`docs/testing/performance-results.md`)
 
@@ -49,7 +49,7 @@ This document provides detailed procedures for manual performance tests that can
    ```
 
 2. **Navigate to test URL**
-   - URL: `https://famous-frangollo-b5a758.netlify.app/`
+   - URL: `https://hacksimulator.nl/`
    - Wait for page to fully load
 
 3. **Accept legal modal**
@@ -296,7 +296,7 @@ This document provides detailed procedures for manual performance tests that can
 ### Setup (2 minutes)
 
 1. **Open Chrome** (can use normal mode, not incognito)
-   - Navigate to: `https://famous-frangollo-b5a758.netlify.app/`
+   - Navigate to: `https://hacksimulator.nl/`
    - Don't interact yet
 
 2. **Open DevTools**

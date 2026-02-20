@@ -173,7 +173,7 @@ All deprecated variable names remain as aliases until v2.0 stable release (April
 npm run test:all
 
 # Lighthouse audit (check for layout shifts from CSS changes)
-npx lighthouse https://famous-frangollo-b5a758.netlify.app --view
+npx lighthouse https://hacksimulator.nl --view
 ```
 
 **Visual Regression Checklist:**

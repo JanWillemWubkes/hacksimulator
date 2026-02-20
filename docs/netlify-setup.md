@@ -9,7 +9,7 @@
 
 Je ziet **twee sites** in je Netlify dashboard:
 1. `hacksimulator`
-2. `famous-frangollo-b5a758`
+2. `hacksimulator`
 
 Dit document helpt je om:
 - ✅ Te bepalen of dit duplicates zijn of dezelfde site
@@ -38,14 +38,14 @@ Deploys from: [noteer hier, bijv. GitHub - JanWillemWubkes/hacksimulator]
 Production branch: [noteer hier, meestal "main"]
 ```
 
-#### Voor Site 2: `famous-frangollo-b5a758`
+#### Voor Site 2: `hacksimulator`
 
 Herhaal bovenstaande stappen:
 
 ```
-Site naam: famous-frangollo-b5a758
+Site naam: hacksimulator
 Site ID: [noteer hier]
-Site URL: [noteer hier, bijv. famous-frangollo-b5a758.netlify.app]
+Site URL: [noteer hier, bijv. hacksimulator.netlify.app]
 Deploys from: [noteer hier]
 Production branch: [noteer hier]
 ```
@@ -59,7 +59,7 @@ Production branch: [noteer hier]
 → **Dit is één site met twee namen (alias)**
 
 **Wat gebeurde:**
-- Je hebt de site oorspronkelijk aangemaakt met auto-generated naam `famous-frangollo-b5a758`
+- Je hebt de site oorspronkelijk aangemaakt met auto-generated naam `hacksimulator`
 - Later hernoemd naar `hacksimulator`
 - Netlify toont beide namen in de lijst, maar het is dezelfde site
 
@@ -88,10 +88,10 @@ Production branch: [noteer hier]
 
 **Welke behouden?**
 - ✅ **Behoud:** `hacksimulator` (custom naam, professioneler)
-- ❌ **Verwijder:** `famous-frangollo-b5a758` (auto-generated naam)
+- ❌ **Verwijder:** `hacksimulator` (auto-generated naam)
 
 **Hoe verwijderen:**
-1. Ga naar de site `famous-frangollo-b5a758`
+1. Ga naar de site `hacksimulator`
 2. Settings → General → scroll helemaal naar beneden
 3. Klik: **Delete site**
 4. Bevestig door site naam te typen
@@ -377,7 +377,7 @@ Voeg toe aan het bestaande `netlify.toml` bestand:
 # Optional: Redirect oude Netlify subdomain naar custom domain
 # Schakel dit IN als je wilt dat oude links automatisch redirecten
 # [[redirects]]
-#   from = "https://famous-frangollo-b5a758.netlify.app/*"
+#   from = "https://hacksimulator.netlify.app/*"
 #   to = "https://hacksimulator.nl/:splat"
 #   status = 301
 #   force = true
@@ -414,7 +414,7 @@ Netlify zal automatisch re-deployen en de redirects activeren.
 
 Verander:
 ```markdown
-**🚀 Live Demo:** [https://famous-frangollo-b5a758.netlify.app/](https://famous-frangollo-b5a758.netlify.app/)
+**🚀 Live Demo:** [https://hacksimulator.netlify.app/](https://hacksimulator.netlify.app/)
 ```
 
 Naar:
@@ -477,7 +477,7 @@ Test alle URLs en redirects:
 - [ ] `https://www.hacksimulator.nl` → redirects naar `https://hacksimulator.nl` ✅
 
 #### Old Netlify Subdomain (Optioneel):
-- [ ] `https://famous-frangollo-b5a758.netlify.app` → works (fallback URL) ✅
+- [ ] `https://hacksimulator.netlify.app` → works (fallback URL) ✅
 - [ ] Of: redirects naar custom domain (als redirect geconfigureerd) ✅
 
 #### Functionaliteit:
@@ -504,7 +504,7 @@ Test alle URLs en redirects:
 
 **Google Analytics:**
 
-1. Vervang `G-XXXXXXXXXX` in `src/analytics/tracker.js`
+1. ✅ GA4 Measurement ID ingevuld: `G-7F792VS6CE` (Sessie 91)
 2. Test dat analytics werkt: Real-time rapport in GA4
 
 ---

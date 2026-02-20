@@ -1,7 +1,7 @@
 # Cross-Browser Test Report - HackSimulator.nl
 
 **Date:** 22 oktober 2025
-**Test URL:** https://famous-frangollo-b5a758.netlify.app/
+**Test URL:** https://hacksimulator.nl/
 **Test Framework:** Playwright v1.56.1
 **Test Suite:** `tests/e2e/cross-browser.spec.js`
 **Browsers Tested:** Chromium (Chrome/Edge basis)
@@ -119,7 +119,7 @@ These tests cannot run until the duplicate ID is fixed:
 ### Immediate (Before Next Test Run)
 1. ✅ **Fix P0-001:** Remove duplicate `#legal-modal` ID from HTML
 2. ✅ **Verify Fix:** Run `npx playwright test --project=chromium` locally
-3. ✅ **Check Live Site:** Inspect https://famous-frangollo-b5a758.netlify.app/ HTML source
+3. ✅ **Check Live Site:** Inspect https://hacksimulator.nl/ HTML source
 
 ### After P0 Fix
 4. ⏭️ **Re-run Chromium Tests:** Full 8-test suite

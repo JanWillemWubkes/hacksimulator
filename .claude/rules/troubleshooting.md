@@ -11,7 +11,7 @@
    - Root cause: Sessie 78 cache strategy (short TTL + must-revalidate)
 
 3. **Slow load time (>3s):** Check Lighthouse Performance score, optimize images, defer JS
-   - Tool: `npx lighthouse https://famous-frangollo-b5a758.netlify.app/ --view`
+   - Tool: `npx lighthouse https://hacksimulator.nl/ --view`
 
 ## Testing & Events
 

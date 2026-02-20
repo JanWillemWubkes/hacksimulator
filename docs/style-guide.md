@@ -8072,7 +8072,7 @@ document.addEventListener('keydown', (e) => {
 npm run test:blog
 
 # Lighthouse audit (accessibility + performance)
-npx lighthouse https://famous-frangollo-b5a758.netlify.app/blog/ --view
+npx lighthouse https://hacksimulator.nl/blog/ --view
 
 # Check specific metrics:
 # - Accessibility: 100/100

@@ -124,7 +124,7 @@ Locator: .feedback-success
 **Oplossing 1: Wacht Langer**
 ```bash
 # Check cache headers
-curl -sI https://famous-frangollo-b5a758.netlify.app/styles/main.css | grep cache-control
+curl -sI https://hacksimulator.nl/styles/main.css | grep cache-control
 ```
 
 **Output:**
@@ -135,7 +135,7 @@ cache-control: public,max-age=3600,must-revalidate
 Als `max-age=3600` nog zichtbaar → cache actief, wacht nog 30-60 min
 
 **Oplossing 2: Hard Refresh in Browser**
-1. Open https://famous-frangollo-b5a758.netlify.app/
+1. Open https://hacksimulator.nl/
 2. Druk Ctrl+Shift+R (Linux) of Cmd+Shift+R (Mac)
 3. Check Elements tab → `.feedback-success` class heeft `opacity: 1` bij `.visible`
 4. Re-run tests
@@ -165,7 +165,7 @@ Locator: .modal-close
 **Oorzaak:** Modal rendering timing issue (mogelijk gerelateerd aan CSS cache)
 
 **Oplossing 1: Check Modal Visibility Manually**
-1. Open https://famous-frangollo-b5a758.netlify.app/
+1. Open https://hacksimulator.nl/
 2. Click "Feedback" link in footer
 3. Verify modal opens EN close button (×) is zichtbaar
 4. Als close button werkt → test timing issue, niet production bug
@@ -206,7 +206,7 @@ f9b8965 Fix test suite: Correct selectors, add success CSS
 
 3. **Check Production Deployment:**
 ```bash
-curl -sI https://famous-frangollo-b5a758.netlify.app/ | grep -E "(x-nf-request-id|server)"
+curl -sI https://hacksimulator.nl/ | grep -E "(x-nf-request-id|server)"
 ```
 
 Als Netlify deploy recent → wacht 5-10 min voor CDN propagation
@@ -343,7 +343,7 @@ If failing → troubleshoot using §Troubleshooting in this file
 - `styles/main.css` (line 46: modal header color, lines 787-811: feedback success)
 
 **Production URL:**
-https://famous-frangollo-b5a758.netlify.app/
+https://hacksimulator.nl/
 
 **Cache Policy:**
 - `max-age=3600` (1 hour)

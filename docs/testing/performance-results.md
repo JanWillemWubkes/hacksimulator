@@ -3,7 +3,7 @@
 **Date:** 2024-12-22 (FINAL UPDATE)
 **Git Commit:** df8330b (feat: Add COOP header for browser isolation)
 **Tested By:** Heisenberg + Willem (Claude Sonnet 4.5)
-**Environment:** Production (https://famous-frangollo-b5a758.netlify.app/)
+**Environment:** Production (https://hacksimulator.nl/)
 
 ---
 

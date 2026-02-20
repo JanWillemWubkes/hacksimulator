@@ -3,7 +3,7 @@
 **Datum:** 22 oktober 2025
 **Test Suite:** Playwright E2E Cross-Browser Tests
 **Test File:** `tests/e2e/cross-browser.spec.js`
-**Live URL Tested:** https://famous-frangollo-b5a758.netlify.app/
+**Live URL Tested:** https://hacksimulator.nl/
 
 ---
 
@@ -219,7 +219,7 @@ const cookiesLink = footer.getByRole('link', { name: 'Cookies' });
 - Test timeout: 30 seconds
 - Assertion timeout: 5 seconds
 
-**Base URL:** `https://famous-frangollo-b5a758.netlify.app/`
+**Base URL:** `https://hacksimulator.nl/`
 
 **Retry Strategy:**
 - Retries: 0 (no flaky tests, all deterministic)

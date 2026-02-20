@@ -2,7 +2,7 @@
 
 **Date:** 22 December 2024
 **Environment:** Production (Netlify)
-**URL:** https://famous-frangollo-b5a758.netlify.app/
+**URL:** https://hacksimulator.nl/
 **Browser:** Chrome 131 (Linux)
 **Method:** Manual DevTools Heap Profiling
 

@@ -3,7 +3,7 @@
 **Laatst bijgewerkt:** 15 februari 2026
 **Status:** M5 Testing & Launch Phase - ✅ **LIVE on Netlify!**
 **Verantwoordelijk:** Development Team
-**Live URL:** https://famous-frangollo-b5a758.netlify.app/
+**Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
 ---
@@ -750,7 +750,7 @@ const DEBUG_MODE = false;
 **Status:** 164/295 tasks completed (55.6% totaal project scope)
 **MVP-only Progress:** M0-M4 (100%), M5 (39/45 - 87%)
 **M5.5 Monetization:** ❌ Geannuleerd (affiliate aanvragen afgewezen)
-**Live URL:** https://famous-frangollo-b5a758.netlify.app/
+**Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
 > **Note:** Totale project scope (295 taken) omvat MVP (M0-M5.5: 153 taken) + Post-MVP milestones (M6-M9: 142 taken). Voor gedetailleerde takenlijst met subtasks, zie `TASKS.md`. Dit is een high-level overzicht.
@@ -779,7 +779,7 @@ const DEBUG_MODE = false;
 
 **Week 9-10: Testing & Launch** - 🔵 IN PROGRESS (M5) - ✅ **DEPLOYED!**
 - [x] GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
-- [x] Netlify deployment (https://famous-frangollo-b5a758.netlify.app/)
+- [x] Netlify deployment (https://hacksimulator.nl/)
 - [x] Performance optimization (<3s load: ~2.0s LCP, bundle: ⚠️ ~590KB uncompressed)
 - [x] Lighthouse audit (100/100/92/100) - Performance 100, Accessibility 100, Best Practices 92, SEO 100
 - [ ] Beta testing (5+ testers) - TO DO
@@ -905,5 +905,5 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 **Laatst bijgewerkt:** 15 februari 2026
 **Versie:** 2.3 (Sessie 99: Documentation Consistency Audit — metrics aligned with TASKS.md + actual measurements)
 **Status:** ✅ Deployed - Live in Production | M5.5 Monetization Geannuleerd
-**Live URL:** https://famous-frangollo-b5a758.netlify.app/
+**Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

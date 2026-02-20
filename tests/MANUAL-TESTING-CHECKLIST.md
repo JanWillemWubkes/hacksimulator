@@ -12,11 +12,11 @@
 - [ ] Clear browser cache (Ctrl+Shift+Delete or Cmd+Shift+Delete)
 - [ ] Test on fresh incognito/private window
 - [ ] Ensure latest deployment is live on Netlify
-- [ ] Check deployment status: https://app.netlify.com/sites/famous-frangollo-b5a758/deploys
+- [ ] Check deployment status: https://app.netlify.com/sites/hacksimulator/deploys
 
 **Test URLs:**
-1. https://famous-frangollo-b5a758.netlify.app/blog/top-5-hacking-boeken.html
-2. https://famous-frangollo-b5a758.netlify.app/blog/beste-online-cursussen-ethical-hacking.html
+1. https://hacksimulator.nl/blog/top-5-hacking-boeken.html
+2. https://hacksimulator.nl/blog/beste-online-cursussen-ethical-hacking.html
 
 ---
 
@@ -314,7 +314,7 @@
 
 ### Lighthouse Audit
 ```bash
-npx lighthouse https://famous-frangollo-b5a758.netlify.app/blog/top-5-hacking-boeken.html --view
+npx lighthouse https://hacksimulator.nl/blog/top-5-hacking-boeken.html --view
 
 # Target scores:
 # Accessibility: 100/100

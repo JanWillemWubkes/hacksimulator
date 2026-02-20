@@ -443,7 +443,7 @@ AFTER: .btn-secondary:hover uses --color-ui-primary
 **Deployment:**
 1. Commit CSS changes to git
 2. Deploy to Netlify
-3. Verify on live site (famous-frangollo-b5a758.netlify.app)
+3. Verify on live site (hacksimulator.nl)
 4. Test cross-browser (Chrome ✅, Firefox ✅)
 
 **Documentation Update (Future):**
@@ -1247,7 +1247,7 @@ expect(outline).toContain('solid');
 - 4 backup files (blog/backup/*.html)
 
 **Live Deployment:**
-- URL: https://famous-frangollo-b5a758.netlify.app/blog/top-5-hacking-boeken.html
+- URL: https://hacksimulator.nl/blog/top-5-hacking-boeken.html
 - Status: ✅ All changes live, 41/41 tests passing against production
 
 ---

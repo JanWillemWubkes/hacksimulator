@@ -2,7 +2,7 @@
 **Versie:** 1.8
 **Status:** M0-M4 Completed, M5 In Progress - ✅ **LIVE on Netlify!**
 **Laatst bijgewerkt:** 16 december 2025 (Sessie 87 - Document sync: Metrics en M5 progress update)
-**Live URL:** https://famous-frangollo-b5a758.netlify.app/
+**Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
 ---
@@ -877,7 +877,7 @@ Systeem hersteld naar oorspronkelijke staat.
 
 **✅ Deployment Criteria (COMPLETED):**
 - [x] GitHub repository live (https://github.com/JanWillemWubkes/hacksimulator)
-- [x] Netlify deployment actief (https://famous-frangollo-b5a758.netlify.app/)
+- [x] Netlify deployment actief (https://hacksimulator.nl/)
 - [x] HTTPS certificaat actief
 - [x] Site bereikbaar en functioneel (HTTP 200 OK verified)
 

@@ -24,7 +24,7 @@ HackSimulator.nl has successfully completed comprehensive M5 quality audits acro
 
 ### Automated Test Results (Playwright)
 
-**Test URL:** https://famous-frangollo-b5a758.netlify.app/
+**Test URL:** https://hacksimulator.nl/
 
 | Browser | Tests | Pass Rate | Runtime | Status |
 |---------|-------|-----------|---------|--------|

@@ -322,7 +322,7 @@ containerWidth > 1024px                   → 56 chars (desktop)
 ### Production Verification
 
 **Manual Testing (8 december):**
-- ✅ https://famous-frangollo-b5a758.netlify.app/src/utils/box-utils.js exists
+- ✅ https://hacksimulator.nl/src/utils/box-utils.js exists
 - ✅ `#terminal-input` selector present in HTML
 - ✅ Playwright tests: 60/60 passing (4.2 minutes)
 - ✅ Responsive boxes render correctly on mobile (screenshot evidence)
@@ -454,11 +454,11 @@ git push origin main
 **Production Verification (2 min after deploy):**
 ```bash
 # CSS verification
-$ curl -I https://famous-frangollo-b5a758.netlify.app/styles/main.css | grep cache-control
+$ curl -I https://hacksimulator.nl/styles/main.css | grep cache-control
 cache-control: public,max-age=3600,must-revalidate ✅
 
 # JavaScript verification
-$ curl -I https://famous-frangollo-b5a758.netlify.app/src/main.js | grep cache-control
+$ curl -I https://hacksimulator.nl/src/main.js | grep cache-control
 cache-control: public,max-age=3600,must-revalidate ✅
 ```
 
