@@ -1485,7 +1485,7 @@
 .footer-column a {
   font-family: var(--font-heading);  /* Space Grotesk - consistent met navbar (Dark Frame Pattern) */
   font-size: 0.9rem;
-  font-weight: 500;  /* Medium weight - matches terminal/blog footer */
+  font-weight: 600;  /* Semi-bold - matches terminal/blog footer */
   color: var(--color-footer-text);  /* Unified: soft white on dark footer */
   text-decoration: none;
   transition: color var(--transition-fast);

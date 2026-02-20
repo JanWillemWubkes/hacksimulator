@@ -768,7 +768,7 @@ button {
   color: var(--color-footer-link);                     /* #79c0ff - past bij footer links */
   border: 1px solid var(--color-footer-link);          /* Border definieert button vorm */
   border-radius: var(--border-radius-button);          /* 4px */
-  font-weight: 500;                                    /* Medium weight - consistent met footer/navbar links */
+  font-weight: 600;                                    /* Semi-bold - consistent met footer/navbar links */
   font-family: var(--font-heading);
   text-decoration: none;
   transition: all var(--transition-fast);              /* 0.15s ease */
@@ -800,7 +800,7 @@ button {
   content: "[ SUPPORT ] ";
   color: var(--color-footer-text);  /* Subtiel - zelfde als footer tekst */
   font-family: var(--font-heading);
-  font-weight: 500;                 /* Medium weight - consistent met footer links */
+  font-weight: 600;                 /* Semi-bold - consistent met footer links */
 }
 
 /* ==================== AdSense Ad Container (M5.5 Phase 1) ==================== */
@@ -1333,7 +1333,7 @@ footer {
   text-align: left;
   margin: 0;
   font-family: var(--font-heading);          /* Space Grotesk - consistent footer chrome */
-  font-weight: 500;                          /* Medium weight - matches all footer text */
+  font-weight: 600;                          /* Semi-bold - matches all footer text */
 }
 
 /* Column 2 (position 3): Navigation (right-aligned, never grows) */
@@ -1352,7 +1352,7 @@ footer a {
   text-decoration: none;
   padding: 0;
   font-family: var(--font-heading);          /* Space Grotesk - consistent met navbar (Dark Frame Pattern) */
-  font-weight: 500;                          /* Medium weight - matches navbar links */
+  font-weight: 600;                          /* Semi-bold - matches navbar links */
 }
 
 footer a:hover {
