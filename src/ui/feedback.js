@@ -31,7 +31,6 @@ const FeedbackManager = {
     }
 
     this._isInitialized = true;
-    console.log('Feedback manager initialized');
   },
 
   /**
@@ -125,7 +124,6 @@ const FeedbackManager = {
       onClose: () => this._closeModal()
     });
 
-    console.log('Feedback modal opened');
   },
 
   /**
@@ -142,7 +140,6 @@ const FeedbackManager = {
     // Deactivate focus trap and restore previous focus
     FocusTrap.deactivate();
 
-    console.log('Feedback modal closed');
   },
 
   /**
@@ -153,7 +150,6 @@ const FeedbackManager = {
   _setRating(rating) {
     this._currentRating = rating;
     this._highlightStars(rating);
-    console.log('Rating selected:', rating);
   },
 
   /**
@@ -217,11 +213,6 @@ const FeedbackManager = {
     this._trackFeedbackAnalytics(this._currentRating, comment.length > 0);
     this._showSuccess();
 
-    console.log('Feedback submitted:', {
-      rating: feedback.rating,
-      hasComment: comment.length > 0,
-      timestamp: feedback.timestamp
-    });
   },
 
   /**
@@ -234,10 +225,8 @@ const FeedbackManager = {
       const allFeedback = this.getAllFeedback();
       allFeedback.push(feedback);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(allFeedback));
-      console.log('Feedback saved to localStorage. Total entries:', allFeedback.length);
     } catch (e) {
       console.error('Could not save feedback to localStorage:', e);
-      console.log('FEEDBACK (localStorage failed):', feedback);
     }
   },
 
@@ -323,7 +312,6 @@ const FeedbackManager = {
   exportFeedback() {
     const feedback = this.getAllFeedback();
     if (feedback.length === 0) {
-      console.log('No feedback to export');
       return;
     }
 
@@ -336,7 +324,6 @@ const FeedbackManager = {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    console.log('Feedback exported:', feedback.length, 'entries');
   },
 
   /**
@@ -345,7 +332,6 @@ const FeedbackManager = {
   clearAllFeedback() {
     try {
       localStorage.removeItem(STORAGE_KEY);
-      console.log('All feedback cleared from localStorage');
     } catch (e) {
       console.error('Could not clear feedback:', e);
     }

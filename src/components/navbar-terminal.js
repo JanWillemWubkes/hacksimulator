@@ -249,7 +249,6 @@ function initBlogNavigation() {
     blogLink.addEventListener('click', (e) => {
       e.preventDefault();
       closeMenus();
-      console.log('[navbar-terminal] Navigating to blog...');
       window.location.href = '/blog/index.html';
     });
   }
@@ -264,14 +263,10 @@ function initBlogNavigation() {
  * Call this after the navbar HTML is in the DOM
  */
 export function initTerminalNavbar() {
-  console.log('[navbar-terminal] Initializing terminal-specific navbar handlers...');
-
   initHelpMenuActions();
   initAboutModal();
   initSearchIntegration();
   initBlogNavigation();
-
-  console.log('[navbar-terminal] Initialized successfully');
 }
 
 // Export individual functions for testing/flexibility

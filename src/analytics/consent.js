@@ -121,7 +121,6 @@ const consentManager = {
   showBanner() {
     // Don't show if conditions not met
     if (!this.shouldShowBanner()) {
-      console.log('Cookie consent banner not shown (already responded or shown recently)');
       return;
     }
 
@@ -138,7 +137,6 @@ const consentManager = {
 
     // If banner doesn't exist, inject it dynamically (blog pages)
     if (!banner) {
-      console.log('Cookie banner not found in DOM, injecting dynamically...');
       document.body.insertAdjacentHTML('beforeend', createConsentBanner());
       banner = document.getElementById('cookie-consent');
     }
@@ -168,7 +166,6 @@ const consentManager = {
       declineBtn.addEventListener('click', () => this.declineConsent());
     }
 
-    console.log('Cookie consent banner shown');
   },
 
   /**
@@ -201,7 +198,6 @@ const consentManager = {
       events.legalEvent('cookies_accepted_advertising');
     }
 
-    console.log('User accepted cookies:', consent);
   },
 
   /**
@@ -220,7 +216,6 @@ const consentManager = {
     // Hide banner
     this.hideBanner();
 
-    console.log('User declined optional cookies');
   },
 
   /**
@@ -248,7 +243,6 @@ const consentManager = {
         };
       }
 
-      console.log('AdSense container loaded');
     } else {
       console.warn('AdSense container not found (#adsense-footer)');
     }

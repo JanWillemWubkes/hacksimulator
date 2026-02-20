@@ -1,8 +1,8 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 18 februari 2026
-**Status:** M5 Testing & Launch Phase (LIVE on hacksimulator.nl) - MVP Perfectionering
-**Sprint:** Sessie 102: MVP Perfectionering (domain updates, test fixes, docs sync)
+**Laatst bijgewerkt:** 20 februari 2026
+**Status:** M5 Testing & Launch Phase (LIVE on hacksimulator.nl) - MVP Polish
+**Sprint:** Sessie 103: MVP Polish & Production Hardening (output buffer, meta cleanup, console.log removal)
 
 ---
 
@@ -367,7 +367,7 @@
 - [x] Bundle size check — ✅ **~809 KB na Netlify minificatie** (Terminal Core ~340 KB binnen 400 KB budget, site totaal binnen 1000 KB budget — Sessie 100)
 - [x] Load time test 4G (target: <3 sec) - ✅ **2.30s LCP**
 - [x] Time to Interactive (target: <3 sec) - ✅ **2.98s TTI**
-- [x] Memory leaks check (long session test) - ⚠️ **WARN (84% growth, GC active)** - docs/testing/memory-leak-results.md
+- [x] Memory leaks check (long session test) - ✅ **MITIGATED** (Sessie 103: MAX_OUTPUT_LINES=500 buffer cap) - docs/testing/memory-leak-results.md
 - [x] localStorage quota test (edge case) - **SKIPPED** (modern browsers 10-15MB quota, test outdated)
 
 #### Accessibility Testing ✅ VOLTOOID (Sessie 97)
@@ -505,6 +505,13 @@
   - ✅ Playwright retry strategie voor flaky tests (1 retry lokaal)
   - ✅ Analytics setup geverifieerd (CSP headers compatible)
 
+- [x] **Sessie 103:** MVP Polish & Production Hardening (20 feb 2026)
+  - ✅ Output buffer limit: MAX_OUTPUT_LINES=500 in renderer.js (DOM memory cap)
+  - ✅ Dode meta tags verwijderd: Cache-Control, Pragma, Expires, impact-site-verification
+  - ✅ animations.css loading gefixt: media="print" onload → direct load (consistent met mobile.css fix)
+  - ✅ Console.log cleanup: 25 debug traces verwijderd uit 9 bestanden (console.warn/error behouden)
+  - **Impact:** Schonere DevTools, gecapte DOM groei, consistente CSS loading, geen informatielekkage
+
 ---
 
 ### M5.5: Monetization MVP ❌ GEANNULEERD
@@ -620,7 +627,7 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
 **When to Execute:** Elke 4-6 features OF technical debt > 20%
 
 ### Cache Implementation Cleanup (3 taken)
-- [ ] Remove redundant HTML cache meta tags van `index.html` (lines 12-14)
+- [x] Remove redundant HTML cache meta tags van `terminal.html` — ✅ Sessie 103 (verwijderd: Cache-Control, Pragma, Expires meta tags + impact-site-verification)
 - [ ] Delete of move `cache-diagnostic.html` naar `/dev/` folder (development tool in production)
 - [ ] Document cache strategy in `docs/CACHING.md` (_headers file + versioning rationale)
 

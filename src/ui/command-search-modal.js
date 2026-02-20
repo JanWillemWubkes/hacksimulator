@@ -54,7 +54,6 @@ window.CommandSearchModal = class {
 
     this.loadAllCommands();
     this.attachEventListeners();
-    console.log('CommandSearchModal initialized');
   }
 
   /**
