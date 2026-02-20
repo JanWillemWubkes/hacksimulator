@@ -33,8 +33,8 @@
   <link rel="preconnect" href="https://consent.cookiebot.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="../styles/main.css?v=101-font-system-upgrade">
@@ -62,7 +62,7 @@
           src="https://consent.cookiebot.com/uc.js"
           data-cbid="c82830bc-d5cc-48b0-a83b-3ff5d8e576a0"
           type="text/javascript"
-          data-blockingmode="auto"></script>
+          data-blockingmode="manual" async></script>
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6345664385525701"
        crossorigin="anonymous"
@@ -562,6 +562,9 @@ Type 'man [command]' voor uitgebreide uitleg per tool.
 
   <!-- Component Injection (external script for CSP compliance) -->
   <script src="/src/init-components.js" type="module"></script>
+
+  <!-- Analytics & Consent (external for CSP compliance) -->
+  <script src="/src/init-analytics.js" type="module"></script>
 
   <!-- Reading Progress (blog-specific) -->
   <script src="../src/ui/blog-theme.js" type="module"></script>
