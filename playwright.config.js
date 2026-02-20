@@ -17,8 +17,8 @@ export default defineConfig({
   // Fail the build on CI if you accidentally left test.only in the source code
   forbidOnly: !!process.env.CI,
 
-  // Retry on CI only
-  retries: process.env.CI ? 2 : 0,
+  // Retry flaky tests (live production URL can cause timing issues)
+  retries: process.env.CI ? 2 : 1,
 
   // Reporter to use
   reporter: [
