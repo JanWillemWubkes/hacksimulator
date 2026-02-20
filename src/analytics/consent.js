@@ -330,28 +330,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // AUTO-INITIALIZATION for blog pages (standalone usage without main.js)
-  // Blog pages don't load main.js, so consent.js must initialize itself
-  // Check if we're NOT on index.html (which calls checkAndShowBanner via main.js)
-  if (!window.HackSimulator) {
-    // HackSimulator object only exists on index.html (set by main.js)
-    // This means we're on a blog page → auto-initialize consent banner
-    console.log('[consent.js] Auto-initializing for blog page (no main.js detected)');
-
-    // Restore analytics/advertising if user already consented (consent persistence)
-    if (consentManager.hasConsent('analytics') === true) {
-      console.log('[consent.js] Analytics consent found in storage, initializing tracker...');
-      tracker.init('ga4');
-    }
-
-    if (consentManager.hasConsent('advertising') === true) {
-      console.log('[consent.js] Advertising consent found in storage, loading AdSense...');
-      consentManager.loadAdSense();
-    }
-
-    // Show consent banner (only if user hasn't responded yet - shouldShowBanner checks this)
-    consentManager.checkAndShowBanner();
-  }
+  // Auto-initialization moved to init-analytics.js (loaded on all pages including blog)
+  // consent.js only handles the Cookie Instellingen link and consent state management
 });
 
 export default consentManager;

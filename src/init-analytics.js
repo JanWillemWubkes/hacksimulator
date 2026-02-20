@@ -19,6 +19,11 @@ if (consentManager.hasConsent('analytics') === true) {
 // Show consent banner if needed
 consentManager.checkAndShowBanner();
 
+// Restore AdSense if advertising consent was previously given (blog pages with ad slots)
+if (consentManager.hasConsent('advertising') === true) {
+  consentManager.loadAdSense();
+}
+
 // Only track visit/session if analytics consent was given
 if (consentManager.hasConsent('analytics') === true) {
   events.incrementVisitCount();
