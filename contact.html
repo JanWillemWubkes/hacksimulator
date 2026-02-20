@@ -16,6 +16,8 @@
   <meta property="og:title" content="Contact - HackSimulator.nl">
   <meta property="og:description" content="Neem contact op met HackSimulator.nl voor vragen, suggesties of samenwerkingen.">
   <meta property="og:locale" content="nl_NL">
+  <meta property="og:site_name" content="HackSimulator.nl">
+  <meta property="og:image" content="https://hacksimulator.nl/assets/og-image.png">
 
   <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary">
@@ -41,10 +43,10 @@
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="styles/main.css">
-  <link rel="stylesheet" href="styles/landing.css">
-  <link rel="stylesheet" href="styles/pages.css">
-  <link rel="stylesheet" href="styles/mobile.css" media="screen and (max-width: 768px)">
+  <link rel="stylesheet" href="styles/main.css?v=104-consistency">
+  <link rel="stylesheet" href="styles/landing.css?v=104-consistency">
+  <link rel="stylesheet" href="styles/pages.css?v=104-consistency">
+  <link rel="stylesheet" href="styles/mobile.css?v=104-consistency" media="screen and (max-width: 768px)">
 
   <!-- Google AdSense -->
   <meta name="google-adsense-account" content="ca-pub-6345664385525701">
@@ -96,9 +98,6 @@
   }
   </script>
 
-  <!-- Cookie Consent & Analytics -->
-  <script src="src/analytics/consent-banner.js" type="module"></script>
-  <script src="src/analytics/consent.js" type="module"></script>
 </head>
 <body class="landing-page">
   <!-- Skip Link -->
@@ -316,47 +315,6 @@
   <script src="src/ui/faq.js" defer></script>
 
   <!-- Contact Form AJAX Submission -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var form = document.getElementById('contact-form');
-      var status = document.getElementById('form-status');
-      var submitBtn = form.querySelector('.contact-submit');
-
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        // Disable button tijdens verzenden
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Verzenden...';
-        status.textContent = '';
-        status.className = 'form-status';
-
-        var formData = new URLSearchParams(new FormData(form));
-
-        fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: formData.toString()
-        })
-        .then(function(response) {
-          if (response.ok) {
-            status.textContent = 'Bedankt voor je bericht! We reageren zo snel mogelijk.';
-            status.className = 'form-status form-status-success';
-            form.reset();
-          } else {
-            throw new Error('Verzenden mislukt');
-          }
-        })
-        .catch(function() {
-          status.textContent = 'Er ging iets mis. Probeer het opnieuw of mail naar contact@hacksimulator.nl';
-          status.className = 'form-status form-status-error';
-        })
-        .finally(function() {
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Verstuur Bericht';
-        });
-      });
-    });
-  </script>
+  <script src="src/ui/contact-form.js" defer></script>
 </body>
 </html>

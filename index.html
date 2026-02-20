@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="Leer ethisch hacken in een veilige browser-based terminal. 30+ commands, virtual filesystem en educatieve tutorials voor beginners - geen installatie of registratie nodig.">
   <meta name="keywords" content="ethisch hacken leren, cybersecurity beginners, terminal simulator, ethical hacking tutorial, hacking oefenen gratis, white hat hacking, Nederlands">
   <meta name="author" content="HackSimulator.nl">
@@ -15,6 +14,7 @@
   <meta property="og:url" content="https://hacksimulator.nl">
   <meta property="og:image" content="https://hacksimulator.nl/assets/og-image.png">
   <meta property="og:locale" content="nl_NL">
+  <meta property="og:site_name" content="HackSimulator.nl">
 
   <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary_large_image">
@@ -42,10 +42,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 
+  <!-- Preload Critical Resources -->
+  <link rel="preload" href="styles/main.css?v=104-consistency" as="style">
+  <link rel="preload" href="styles/landing.css?v=104-consistency" as="style">
+
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="styles/main.css">
-  <link rel="stylesheet" href="styles/landing.css">
-  <link rel="stylesheet" href="styles/mobile.css" media="screen and (max-width: 768px)">
+  <link rel="stylesheet" href="styles/main.css?v=104-consistency">
+  <link rel="stylesheet" href="styles/landing.css?v=104-consistency">
+  <link rel="stylesheet" href="styles/mobile.css?v=104-consistency" media="screen and (max-width: 768px)">
 
   <!-- Google AdSense Ownership Verification (crawler + site verificatie) -->
   <meta name="google-adsense-account" content="ca-pub-6345664385525701">
@@ -74,6 +78,24 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6345664385525701"
        crossorigin="anonymous"
        data-cookieconsent="marketing"></script>
+
+  <!-- Structured Data - JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "HackSimulator.nl",
+    "url": "https://hacksimulator.nl/",
+    "description": "Browser-based terminal simulator voor ethisch hacken leren",
+    "inLanguage": "nl",
+    "publisher": {
+      "@type": "Organization",
+      "name": "HackSimulator.nl",
+      "url": "https://hacksimulator.nl",
+      "email": "contact@hacksimulator.nl"
+    }
+  }
+  </script>
 </head>
 <body class="landing-page">
   <!-- Skip Link for Accessibility -->
