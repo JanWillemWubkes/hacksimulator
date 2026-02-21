@@ -52,7 +52,7 @@ const LegalManager = {
       <div class="modal-content legal-modal-content">
         <!-- Header with warning icon -->
         <div class="legal-modal-header">
-          <div class="legal-warning-icon">[ ! ]</div>
+          <div class="legal-warning-icon">[!]</div>
           <h2 id="legal-title">Juridische Kennisgeving</h2>
         </div>
 
@@ -76,7 +76,7 @@ const LegalManager = {
 
           <!-- Warning message (shown when user tries to close without accepting) -->
           <div id="legal-warning-text" class="legal-warning-text" style="display: none;">
-            [ ! ] Je moet akkoord gaan met de voorwaarden om verder te gaan.
+            [!] Je moet akkoord gaan met de voorwaarden om verder te gaan.
           </div>
         </div>
 

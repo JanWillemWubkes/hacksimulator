@@ -1,1 +1,40 @@
-export default{name:"date",description:"Toon huidige datum en tijd",category:"system",usage:"date",execute:(e,n,t)=>(new Date).toString(),manPage:"\nNAAM\n    date - toon huidige datum en tijd\n\nSYNOPSIS\n    date\n\nBESCHRIJVING\n    Toont de huidige systeemdatum en -tijd in volledig formaat.\n\nVOORBEELDEN\n    date\n        Output: Mon Oct 15 2025 18:45:30 GMT+0200\n\nGEBRUIK\n    Gebruik dit om de huidige tijd te checken of om timestamps\n    te genereren voor logs.\n\nGERELATEERDE COMMANDO'S\n    history (toont timestamps van commands)\n".trim()};
+/**
+ * date - Display current date and time
+ */
+
+export default {
+  name: 'date',
+  description: 'Toon huidige datum en tijd',
+  category: 'system',
+  usage: 'date',
+
+  execute(args, flags, context) {
+    const now = new Date();
+
+    // Format like Unix date command (locale-aware)
+    // Example: Mon Oct 14 2025 20:45:30 GMT+0200 (Central European Summer Time)
+    return now.toString();
+  },
+
+  manPage: `
+NAAM
+    date - toon huidige datum en tijd
+
+SYNOPSIS
+    date
+
+BESCHRIJVING
+    Toont de huidige systeemdatum en -tijd in volledig formaat.
+
+VOORBEELDEN
+    date
+        Output: Mon Oct 15 2025 18:45:30 GMT+0200
+
+GEBRUIK
+    Gebruik dit om de huidige tijd te checken of om timestamps
+    te genereren voor logs.
+
+GERELATEERDE COMMANDO'S
+    history (toont timestamps van commands)
+`.trim()
+};

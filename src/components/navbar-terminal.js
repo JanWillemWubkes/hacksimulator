@@ -152,7 +152,7 @@ function showAboutModal() {
           <h3 style="color: var(--color-ui-primary); margin-top: var(--spacing-lg); margin-bottom: var(--spacing-md); font-size: 1.2rem;">Open Source</h3>
           <p>Dit project is open source en beschikbaar op <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
 
-          <p style="margin-top: var(--spacing-lg);"><strong>[ ! ] Belangrijk:</strong> Deze simulator is uitsluitend voor educatieve doeleinden. Gebruik deze kennis alleen legaal en ethisch.</p>
+          <p style="margin-top: var(--spacing-lg);"><strong>[!] Belangrijk:</strong> Deze simulator is uitsluitend voor educatieve doeleinden. Gebruik deze kennis alleen legaal en ethisch.</p>
         </div>
         <div class="modal-footer">
           <button class="btn-secondary">Sluiten</button>

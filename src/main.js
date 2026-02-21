@@ -1,1 +1,213 @@
-import e from"./core/terminal.js";import t from"./ui/legal.js";import o from"./ui/onboarding.js";import r from"./ui/feedback.js";import{initTerminalNavbar as m}from"./components/navbar-terminal.js";import i from"./analytics/tracker.js";import a from"./analytics/events.js";import n from"./analytics/consent.js";import c from"./commands/system/clear.js";import l from"./commands/system/echo.js";import d from"./commands/system/whoami.js";import g from"./commands/system/date.js";import p from"./commands/system/history.js";import f from"./commands/system/help.js";import y from"./commands/system/man.js";import j from"./commands/system/shortcuts.js";import u from"./commands/system/leerpad.js";import tutorialCmd from"./commands/system/tutorial.js";import h from"./commands/filesystem/ls.js";import w from"./commands/filesystem/cd.js";import k from"./commands/filesystem/pwd.js";import S from"./commands/filesystem/cat.js";import b from"./commands/filesystem/mkdir.js";import v from"./commands/filesystem/touch.js";import M from"./commands/filesystem/rm.js";import z from"./commands/filesystem/cp.js";import A from"./commands/filesystem/mv.js";import C from"./commands/filesystem/find.js";import E from"./commands/filesystem/grep.js";import H from"./commands/special/reset.js";import N from"./commands/network/ping.js";import F from"./commands/network/nmap.js";import R from"./commands/network/ifconfig.js";import B from"./commands/network/netstat.js";import I from"./commands/network/whois.js";import T from"./commands/network/traceroute.js";import q from"./commands/security/hashcat.js";import x from"./commands/security/hydra.js";import D from"./commands/security/sqlmap.js";import L from"./commands/security/metasploit.js";import O from"./commands/security/nikto.js";function P(){try{const o=document.getElementById("terminal-output"),P=document.getElementById("terminal-input");if(!o||!P)throw new Error("Terminal elements not found in DOM");!function(){const t=e.getRegistry();t.register("clear",c),t.register("echo",l),t.register("whoami",d),t.register("date",g),t.register("history",p),t.register("help",f),t.register("man",y),t.register("shortcuts",j),t.register("leerpad",u),t.register("tutorial",tutorialCmd),t.register("ls",h),t.register("cd",w),t.register("pwd",k),t.register("cat",S),t.register("mkdir",b),t.register("touch",v),t.register("rm",M),t.register("cp",z),t.register("mv",A),t.register("find",C),t.register("grep",E),t.register("reset",H),t.register("ping",N),t.register("nmap",F),t.register("ifconfig",R),t.register("netstat",B),t.register("whois",I),t.register("traceroute",T),t.register("hashcat",q),t.register("hydra",x),t.register("sqlmap",D),t.register("metasploit",L),t.register("nikto",O),void 0}(),e.init({outputElement:o,inputElement:P}),void 0;try{m(),void 0}catch(e){console.error("[Main] initTerminalNavbar() failed:",e)}window.CommandSearchModal&&(window.commandSearchModal=new window.CommandSearchModal(e.getRegistry()),window.commandSearchModal.init(),void 0),r.init(),t.checkAndShowModal(),i.init("ga4"),n.checkAndShowBanner(),a.incrementVisitCount(),a.sessionStart(),void 0}catch(e){console.error("Failed to initialize HackSimulator:",e),alert("Failed to initialize terminal. Please refresh the page.")}}void 0,"loading"===document.readyState?document.addEventListener("DOMContentLoaded",P):P(),window.HackSimulator={terminal:e,version:"0.1.0-mvp",debug:{getRegistry:()=>e.getRegistry(),getHistory:()=>e.getHistory(),clear:()=>e.clear()},feedback:{getAll:()=>r.getAllFeedback(),getStats:()=>r.getStats(),export:()=>r.exportFeedback(),clear:()=>r.clearAllFeedback()}};
+/**
+ * HackSimulator.nl - Main Entry Point
+ * Browser-based terminal simulator for ethical hacking education
+ */
+
+import terminal from './core/terminal.js';
+import legalManager from './ui/legal.js';
+import onboardingManager from './ui/onboarding.js';
+import feedbackManager from './ui/feedback.js';
+import { initTerminalNavbar } from './components/navbar-terminal.js';
+import analyticsTracker from './analytics/tracker.js';
+import analyticsEvents from './analytics/events.js';
+import consentManager from './analytics/consent.js';
+
+// Import system commands
+import clearCmd from './commands/system/clear.js';
+import echoCmd from './commands/system/echo.js';
+import whoamiCmd from './commands/system/whoami.js';
+import dateCmd from './commands/system/date.js';
+import historyCmd from './commands/system/history.js';
+import helpCmd from './commands/system/help.js';
+import manCmd from './commands/system/man.js';
+import shortcutsCmd from './commands/system/shortcuts.js';
+import leerpadCmd from './commands/system/leerpad.js';
+import tutorialCmd from './commands/system/tutorial.js';
+
+// Import filesystem commands
+import lsCmd from './commands/filesystem/ls.js';
+import cdCmd from './commands/filesystem/cd.js';
+import pwdCmd from './commands/filesystem/pwd.js';
+import catCmd from './commands/filesystem/cat.js';
+import mkdirCmd from './commands/filesystem/mkdir.js';
+import touchCmd from './commands/filesystem/touch.js';
+import rmCmd from './commands/filesystem/rm.js';
+import cpCmd from './commands/filesystem/cp.js';
+import mvCmd from './commands/filesystem/mv.js';
+import findCmd from './commands/filesystem/find.js';
+import grepCmd from './commands/filesystem/grep.js';
+
+// Import special commands
+import resetCmd from './commands/special/reset.js';
+
+// Import network commands
+import pingCmd from './commands/network/ping.js';
+import nmapCmd from './commands/network/nmap.js';
+import ifconfigCmd from './commands/network/ifconfig.js';
+import netstatCmd from './commands/network/netstat.js';
+import whoisCmd from './commands/network/whois.js';
+import tracerouteCmd from './commands/network/traceroute.js';
+
+// Import security commands
+import hashcatCmd from './commands/security/hashcat.js';
+import hydraCmd from './commands/security/hydra.js';
+import sqlmapCmd from './commands/security/sqlmap.js';
+import metasploitCmd from './commands/security/metasploit.js';
+import niktoCmd from './commands/security/nikto.js';
+
+/**
+ * Register all commands
+ */
+function registerCommands() {
+  const registry = terminal.getRegistry();
+
+  // System commands (9)
+  registry.register('clear', clearCmd);
+  registry.register('echo', echoCmd);
+  registry.register('whoami', whoamiCmd);
+  registry.register('date', dateCmd);
+  registry.register('history', historyCmd);
+  registry.register('help', helpCmd);
+  registry.register('man', manCmd);
+  registry.register('shortcuts', shortcutsCmd);
+  registry.register('leerpad', leerpadCmd);
+  registry.register('tutorial', tutorialCmd);
+
+  // Filesystem commands (11)
+  registry.register('ls', lsCmd);
+  registry.register('cd', cdCmd);
+  registry.register('pwd', pwdCmd);
+  registry.register('cat', catCmd);
+  registry.register('mkdir', mkdirCmd);
+  registry.register('touch', touchCmd);
+  registry.register('rm', rmCmd);
+  registry.register('cp', cpCmd);
+  registry.register('mv', mvCmd);
+  registry.register('find', findCmd);
+  registry.register('grep', grepCmd);
+
+  // Special commands (1)
+  registry.register('reset', resetCmd);
+
+  // Network commands (6)
+  registry.register('ping', pingCmd);
+  registry.register('nmap', nmapCmd);
+  registry.register('ifconfig', ifconfigCmd);
+  registry.register('netstat', netstatCmd);
+  registry.register('whois', whoisCmd);
+  registry.register('traceroute', tracerouteCmd);
+
+  // Security commands (5)
+  registry.register('hashcat', hashcatCmd);
+  registry.register('hydra', hydraCmd);
+  registry.register('sqlmap', sqlmapCmd);
+  registry.register('metasploit', metasploitCmd);
+  registry.register('nikto', niktoCmd);
+
+  // Commands registered
+}
+
+/**
+ * Initialize the application
+ */
+function init() {
+  // Initialize HackSimulator.nl
+
+  // Wait for DOM to be ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialize);
+  } else {
+    initialize();
+  }
+}
+
+/**
+ * Initialize navigation - DEPRECATED: navbar.js now handles all link navigation
+ * Kept as stub for backwards compatibility
+ */
+function initializeNavigation() {
+  // Navigation is now handled by initNavbar() in navbar.js
+  // This function is kept for backwards compatibility
+}
+
+/**
+ * Initialize terminal and commands
+ */
+function initialize() {
+  try {
+    // Get DOM elements
+    const outputElement = document.getElementById('terminal-output');
+    const inputElement = document.getElementById('terminal-input');
+
+    if (!outputElement || !inputElement) {
+      throw new Error('Terminal elements not found in DOM');
+    }
+
+    // Register all commands
+    registerCommands();
+
+    // Initialize terminal
+    terminal.init({
+      outputElement,
+      inputElement
+    });
+
+    // Initialize navigation menu
+    initializeNavigation();
+
+    // Initialize navbar (mobile hamburger menu)
+    try {
+      initTerminalNavbar();
+    } catch (e) {
+      console.error('[Main] initTerminalNavbar() failed:', e);
+    }
+
+    // Initialize command search modal
+    if (window.CommandSearchModal) {
+      window.commandSearchModal = new window.CommandSearchModal(terminal.getRegistry());
+      window.commandSearchModal.init();
+    }
+
+    // Initialize feedback system
+    feedbackManager.init();
+
+    // Check and show legal modal if needed (must accept before using)
+    legalManager.checkAndShowModal();
+
+    // Note: Onboarding is handled by terminal.init() - no separate call needed
+
+    // Initialize analytics (will only track if user consents)
+    analyticsTracker.init('ga4');
+
+    // Show cookie consent banner (after a delay)
+    consentManager.checkAndShowBanner();
+
+    // Track session start (only if consent given)
+    analyticsEvents.incrementVisitCount();
+    analyticsEvents.sessionStart();
+
+  } catch (error) {
+    console.error('Failed to initialize HackSimulator:', error);
+    alert('Failed to initialize terminal. Please refresh the page.');
+  }
+}
+
+// Start the application
+init();
+
+// Export for debugging (browser console access)
+window.HackSimulator = {
+  terminal,
+  version: '0.1.0-mvp',
+  debug: {
+    getRegistry: () => terminal.getRegistry(),
+    getHistory: () => terminal.getHistory(),
+    clear: () => terminal.clear()
+  },
+  feedback: {
+    getAll: () => feedbackManager.getAllFeedback(),
+    getStats: () => feedbackManager.getStats(),
+    export: () => feedbackManager.exportFeedback(),
+    clear: () => feedbackManager.clearAllFeedback()
+  }
+};

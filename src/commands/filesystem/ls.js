@@ -1,1 +1,163 @@
-import{getPathCompletions as e}from"../../utils/filesystem-completion.js";export default{name:"ls",category:"filesystem",description:"List directory contents",usage:"ls [options] [directory]",completionProvider(n){const t=n.length>0?n[n.length-1]:"";return e(t,{type:"both"})},async execute(e,n,t){const{vfs:r}=t,o=e[0]||r.getCwd(),i=n.a||n.all||!1,s=n.l||!1,a=n.la||n.al||!1;try{const e=r.listDirectory(o,i||a);return 0===e.length?"":s||a?function(e){const n=[];n.push("total "+e.length);for(const t of e){const e="directory"===t.type?"d":"-",r="restricted"===t.permissions?"r--------":"rw-r--r--",o="file"===t.type?"1024":"4096",i="Oct 14 12:00",s="directory"===t.type?t.name+"/":t.name;n.push(`${e}${r}  ${o.padStart(6)}  ${i}  ${s}`)}return n.push(""),n.push("[?] TIP: De eerste kolom toont type (d=directory, -=file) en permissies."),n.join("\n")}(e):function(e){const n=e.filter(e=>"directory"===e.type),t=e.filter(e=>"file"===e.type),r=[];return n.length>0&&r.push(n.map(e=>e.name+"/").join("  ")),t.length>0&&r.push(t.map(e=>e.name).join("  ")),r.join("  ")}(e)}catch(n){return n.message.includes("No such directory")?`ls: cannot access '${e[0]}': No such file or directory\n\n[?] TIP: Gebruik 'pwd' om te zien waar je bent, en 'cd' om van directory te veranderen.`:n.message.includes("Not a directory")?`ls: ${e[0]}: Not a directory\n\n[?] TIP: ls werkt alleen op directories. Gebruik 'cat ${e[0]}' om een bestand te lezen.`:`ls: ${n.message}`}},manPage:"\nNAAM\n    ls - list directory contents\n\nSYNOPSIS\n    ls [OPTIONS] [DIRECTORY]\n\nBESCHRIJVING\n    List informatie over bestanden en directories. Standaard wordt de huidige\n    directory getoond.\n\nOPTIES\n    -a, --all\n        Toon ook verborgen bestanden (bestanden die beginnen met .)\n\n    -l\n        Gebruik een lang formaat met extra details (permissions, size, date)\n\nVOORBEELDEN\n    ls\n        Toon bestanden in de huidige directory\n\n    ls /etc\n        Toon bestanden in de /etc directory\n\n    ls -a\n        Toon alle bestanden, inclusief verborgen bestanden\n\n    ls -l\n        Toon gedetailleerde informatie over bestanden\n\n    ls -la ~\n        Toon alle bestanden in je home directory met details\n\nEDUCATIEVE TIPS\n    [?] Verborgen bestanden beginnen met een punt (.) en worden vaak gebruikt\n       voor configuratie (bijv. .ssh/, .bashrc)\n\n    [DIR] Directories worden gemarkeerd met een / aan het einde\n\n    [!] De permissies kolom toont wie het bestand kan lezen/schrijven/uitvoeren\n\nGERELATEERDE COMMANDO'S\n    cd, pwd, cat, find\n".trim()};
+/**
+ * ls - List directory contents
+ * Simulated command for the HackSimulator terminal
+ */
+
+import { getPathCompletions } from '../../utils/filesystem-completion.js';
+
+/**
+ * Format simple directory listing (default)
+ */
+function formatSimpleListing(entries) {
+  const dirEntries = entries.filter(e => e.type === 'directory');
+  const fileEntries = entries.filter(e => e.type === 'file');
+
+  const parts = [];
+
+  // Directories first (with color indicator)
+  if (dirEntries.length > 0) {
+    parts.push(dirEntries.map(e => e.name + '/').join('  '));
+  }
+
+  // Then files
+  if (fileEntries.length > 0) {
+    parts.push(fileEntries.map(e => e.name).join('  '));
+  }
+
+  return parts.join('  ');
+}
+
+/**
+ * Format long directory listing (-l flag)
+ */
+function formatLongListing(entries) {
+  const lines = [];
+
+  // Header (educational)
+  lines.push('total ' + entries.length);
+
+  for (const entry of entries) {
+    const type = entry.type === 'directory' ? 'd' : '-';
+    const perms = entry.permissions === 'restricted' ? 'r--------' : 'rw-r--r--';
+    const size = entry.type === 'file' ? '1024' : '4096';
+    const date = 'Oct 14 12:00';
+    const name = entry.type === 'directory' ? entry.name + '/' : entry.name;
+
+    // Format: type+permissions  size  date  name
+    lines.push(`${type}${perms}  ${size.padStart(6)}  ${date}  ${name}`);
+  }
+
+  // Add educational tip
+  lines.push('');
+  lines.push('[?] TIP: De eerste kolom toont type (d=directory, -=file) en permissies.');
+
+  return lines.join('\n');
+}
+
+export default {
+  name: 'ls',
+  category: 'filesystem',
+  description: 'List directory contents',
+  usage: 'ls [options] [directory]',
+
+  /**
+   * Autocomplete provider for ls command
+   * Suggests both files and directories
+   * @param {Array<string>} args - Current arguments being typed
+   * @returns {Array<string>} - Array of file and directory path completions
+   */
+  completionProvider(args) {
+    // Get partial path (last argument being typed, or empty string if no args)
+    const partial = args.length > 0 ? args[args.length - 1] : '';
+
+    // Get both files and directories (ls lists both)
+    return getPathCompletions(partial, { type: 'both' });
+  },
+
+  async execute(args, flags, context) {
+    const { vfs } = context;
+
+    // Determine path (default to current directory)
+    const path = args[0] || vfs.getCwd();
+
+    // Check flags
+    const showHidden = flags.a || flags.all || false;
+    const longFormat = flags.l || false;
+    const combined = flags.la || flags.al || false;
+
+    try {
+      // Get directory listing
+      const entries = vfs.listDirectory(path, showHidden || combined);
+
+      if (entries.length === 0) {
+        return ''; // Empty directory
+      }
+
+      // Long format (-l flag)
+      if (longFormat || combined) {
+        return formatLongListing(entries);
+      }
+
+      // Simple format (default)
+      return formatSimpleListing(entries);
+
+    } catch (error) {
+      // Educational error messages
+      if (error.message.includes('No such directory')) {
+        return `ls: cannot access '${args[0]}': No such file or directory\n\n[?] TIP: Gebruik 'pwd' om te zien waar je bent, en 'cd' om van directory te veranderen.`;
+      }
+
+      if (error.message.includes('Not a directory')) {
+        return `ls: ${args[0]}: Not a directory\n\n[?] TIP: ls werkt alleen op directories. Gebruik 'cat ${args[0]}' om een bestand te lezen.`;
+      }
+
+      return `ls: ${error.message}`;
+    }
+  },
+
+  manPage: `
+NAAM
+    ls - list directory contents
+
+SYNOPSIS
+    ls [OPTIONS] [DIRECTORY]
+
+BESCHRIJVING
+    List informatie over bestanden en directories. Standaard wordt de huidige
+    directory getoond.
+
+OPTIES
+    -a, --all
+        Toon ook verborgen bestanden (bestanden die beginnen met .)
+
+    -l
+        Gebruik een lang formaat met extra details (permissions, size, date)
+
+VOORBEELDEN
+    ls
+        Toon bestanden in de huidige directory
+
+    ls /etc
+        Toon bestanden in de /etc directory
+
+    ls -a
+        Toon alle bestanden, inclusief verborgen bestanden
+
+    ls -l
+        Toon gedetailleerde informatie over bestanden
+
+    ls -la ~
+        Toon alle bestanden in je home directory met details
+
+EDUCATIEVE TIPS
+    [?] Verborgen bestanden beginnen met een punt (.) en worden vaak gebruikt
+       voor configuratie (bijv. .ssh/, .bashrc)
+
+    [DIR] Directories worden gemarkeerd met een / aan het einde
+
+    [!] De permissies kolom toont wie het bestand kan lezen/schrijven/uitvoeren
+
+GERELATEERDE COMMANDO'S
+    cd, pwd, cat, find
+`.trim()
+};

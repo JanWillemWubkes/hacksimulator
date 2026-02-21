@@ -1,1 +1,57 @@
-export default{name:"pwd",category:"filesystem",description:"Print current working directory",usage:"pwd",async execute(e,n,t){const{vfs:r}=t;try{return r.getCwd()}catch(e){return`pwd: ${e.message}`}},manPage:"\nNAAM\n    pwd - print working directory\n\nSYNOPSIS\n    pwd\n\nBESCHRIJVING\n    Print het absolute pad van de huidige working directory.\n\nVOORBEELDEN\n    pwd\n        Toon waar je momenteel bent\n\n    cd /etc && pwd\n        Ga naar /etc en toon de locatie\n\nEDUCATIEVE TIPS\n    [↑] pwd staat voor \"Print Working Directory\" - het toont altijd het\n       volledige (absolute) pad vanaf de root (/)\n\n    [?] Handig om te gebruiken na 'cd' om te verifiëren waar je bent\n\n    [#] Je begint altijd in /home/hacker (je home directory)\n\n    [DIR] Gebruik pwd in combinatie met andere commands:\n       • 'pwd' om te zien waar je bent\n       • 'ls' om te zien wat er in deze directory staat\n       • 'cd ..' om een directory omhoog te gaan\n\nGERELATEERDE COMMANDO'S\n    cd, ls\n".trim()};
+/**
+ * pwd - Print working directory
+ * Simulated command for the HackSimulator terminal
+ */
+
+export default {
+  name: 'pwd',
+  category: 'filesystem',
+  description: 'Print current working directory',
+  usage: 'pwd',
+
+  async execute(args, flags, context) {
+    const { vfs } = context;
+
+    try {
+      const cwd = vfs.getCwd();
+      return cwd;
+
+    } catch (error) {
+      return `pwd: ${error.message}`;
+    }
+  },
+
+  manPage: `
+NAAM
+    pwd - print working directory
+
+SYNOPSIS
+    pwd
+
+BESCHRIJVING
+    Print het absolute pad van de huidige working directory.
+
+VOORBEELDEN
+    pwd
+        Toon waar je momenteel bent
+
+    cd /etc && pwd
+        Ga naar /etc en toon de locatie
+
+EDUCATIEVE TIPS
+    [↑] pwd staat voor "Print Working Directory" - het toont altijd het
+       volledige (absolute) pad vanaf de root (/)
+
+    [?] Handig om te gebruiken na 'cd' om te verifiëren waar je bent
+
+    [#] Je begint altijd in /home/hacker (je home directory)
+
+    [DIR] Gebruik pwd in combinatie met andere commands:
+       • 'pwd' om te zien waar je bent
+       • 'ls' om te zien wat er in deze directory staat
+       • 'cd ..' om een directory omhoog te gaan
+
+GERELATEERDE COMMANDO'S
+    cd, ls
+`.trim()
+};

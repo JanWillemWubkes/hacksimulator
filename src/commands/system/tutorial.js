@@ -31,7 +31,7 @@ function renderList() {
   var scenarios = tutorialManager.listScenarios();
 
   if (scenarios.length === 0) {
-    return '[ ? ] Geen tutorial scenario\'s beschikbaar.';
+    return '[?] Geen tutorial scenario\'s beschikbaar.';
   }
 
   if (isMobileView()) {
@@ -71,8 +71,8 @@ function renderList() {
   lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
 
   var output = lines.join('\n');
-  output += '\n\n[ ? ] Start een tutorial: tutorial start <id>';
-  output += '\n[ ? ] Beschikbare ID\'s: ' + scenarios.map(function(s) { return s.id; }).join(', ');
+  output += '\n\n[?] Start een tutorial: tutorial start <id>';
+  output += '\n[?] Beschikbare ID\'s: ' + scenarios.map(function(s) { return s.id; }).join(', ');
 
   return output;
 }
@@ -88,8 +88,8 @@ function renderListMobile(scenarios) {
     out += '    ' + s.description + '\n\n';
   });
 
-  out += '[ ? ] Start: tutorial start <id>\n';
-  out += '[ ? ] ID\'s: ' + scenarios.map(function(s) { return s.id; }).join(', ');
+  out += '[?] Start: tutorial start <id>\n';
+  out += '[?] ID\'s: ' + scenarios.map(function(s) { return s.id; }).join(', ');
 
   return out;
 }
@@ -100,18 +100,18 @@ function renderStatus() {
   if (!status.active) {
     var completedCount = status.completedScenarios.length;
     if (completedCount > 0) {
-      return '[ ? ] Geen actieve tutorial.\n' +
-             '[ ✓ ] Voltooide scenario\'s: ' + completedCount + '\n\n' +
-             '[ ? ] Type \'tutorial\' om beschikbare scenario\'s te zien.';
+      return '[?] Geen actieve tutorial.\n' +
+             '[✓] Voltooide scenario\'s: ' + completedCount + '\n\n' +
+             '[?] Type \'tutorial\' om beschikbare scenario\'s te zien.';
     }
-    return '[ ? ] Geen actieve tutorial.\n\n' +
-           '[ ? ] Type \'tutorial\' om beschikbare scenario\'s te zien.';
+    return '[?] Geen actieve tutorial.\n\n' +
+           '[?] Type \'tutorial\' om beschikbare scenario\'s te zien.';
   }
 
-  var output = '[ ? ] Actieve tutorial: ' + status.scenarioTitle + '\n';
-  output += '[ ? ] Voortgang: stap ' + (status.currentStep + 1) + '/' + status.totalSteps + '\n';
-  output += '[ ? ] Huidige opdracht: ' + status.step.title + '\n';
-  output += '[ ? ] ' + status.step.objective;
+  var output = '[?] Actieve tutorial: ' + status.scenarioTitle + '\n';
+  output += '[?] Voortgang: stap ' + (status.currentStep + 1) + '/' + status.totalSteps + '\n';
+  output += '[?] Huidige opdracht: ' + status.step.title + '\n';
+  output += '[?] ' + status.step.objective;
 
   return output;
 }
@@ -134,8 +134,8 @@ export default {
     if (sub === 'start') {
       var scenarioId = args.length > 1 ? args[1].toLowerCase() : '';
       if (!scenarioId) {
-        return '[ ? ] Gebruik: tutorial start <scenario-id>\n\n' +
-               '[ ? ] Type \'tutorial\' om beschikbare scenario\'s te zien.';
+        return '[?] Gebruik: tutorial start <scenario-id>\n\n' +
+               '[?] Type \'tutorial\' om beschikbare scenario\'s te zien.';
       }
       return tutorialManager.start(scenarioId);
     }
@@ -158,7 +158,7 @@ export default {
     // tutorial reset (hidden/debug)
     if (sub === 'reset') {
       tutorialManager.reset();
-      return '[ ✓ ] Tutorial voortgang gereset.';
+      return '[✓] Tutorial voortgang gereset.';
     }
 
     // Maybe user typed scenario ID directly: tutorial recon
@@ -167,9 +167,9 @@ export default {
       return tutorialManager.start(sub);
     }
 
-    return '[ ? ] Onbekend subcommando: ' + sub + '\n\n' +
-           '[ ? ] Gebruik: tutorial [start <id>|status|skip|exit]\n' +
-           '[ ? ] Type \'tutorial\' voor beschikbare scenario\'s.';
+    return '[?] Onbekend subcommando: ' + sub + '\n\n' +
+           '[?] Gebruik: tutorial [start <id>|status|skip|exit]\n' +
+           '[?] Type \'tutorial\' voor beschikbare scenario\'s.';
   },
 
   manPage: (

@@ -1,1 +1,98 @@
-export default{name:"touch",category:"filesystem",description:"Create an empty file",usage:"touch <file>",async execute(e,n,t){const{vfs:a}=t;if(0===e.length)return"touch: missing file operand\n\n[?] TIP: Gebruik 'touch <bestand>' om een leeg bestand aan te maken. Bijvoorbeeld: touch test.txt";const o=e[0];try{return a.createFile(o,""),`[✓] Bestand '${o}' aangemaakt`}catch(e){return e.message.includes("No such directory")?`touch: cannot touch '${o}': No such file or directory\n\n[?] TIP: De parent directory moet bestaan. Gebruik 'ls' om te zien welke directories er zijn.`:e.message.includes("Is a directory")?`touch: cannot touch '${o}': Is a directory\n\n[?] TIP: touch werkt alleen op bestanden. Een directory met deze naam bestaat al.`:e.message.includes("Not a directory")?`touch: cannot touch '${o}': Not a directory\n\n[?] TIP: Een component in het pad is een bestand, geen directory.`:`touch: ${e.message}`}},manPage:"\nNAAM\n    touch - create empty files or update timestamps\n\nSYNOPSIS\n    touch <FILE>\n\nBESCHRIJVING\n    Maak een nieuw leeg bestand aan. In echte Linux update touch ook de\n    timestamp van bestaande bestanden, maar in deze simulator wordt alleen\n    het aanmaken van nieuwe bestanden ondersteund.\n\nARGUMENTEN\n    FILE\n        Naam van het bestand om aan te maken (verplicht)\n\nVOORBEELDEN\n    touch test.txt\n        Maak een leeg bestand genaamd test.txt\n\n    touch notes.txt\n        Maak een leeg notitiebestand\n\n    touch /tmp/tempfile\n        Maak een bestand in de /tmp directory\n\n    touch script.sh\n        Maak een leeg script bestand (kan later gevuld worden)\n\nEDUCATIEVE TIPS\n    [DOC] touch is handig om snel lege bestanden aan te maken\n\n    [?] Workflow voorbeeld:\n       1. touch payload.txt    → Maak bestand aan\n       2. (bewerk met editor)  → In real Linux: nano/vim\n       3. cat payload.txt      → Bekijk inhoud\n\n    [+]️ Use cases in pentesting:\n       • touch wordlist.txt  → Maak wordlist voor brute force\n       • touch exploits.sh   → Maak script bestand\n       • touch notes.txt     → Documenteer je findings\n\n    [ ~ ] In echte Linux:\n       touch wordt vaak gebruikt om timestamps te updaten zonder inhoud\n       te wijzigen. Handig om build tools te triggeren of modification\n       times te manipuleren.\n\n    [!] Permissies:\n       Je kunt alleen bestanden aanmaken in directories waar je\n       schrijfrechten hebt (zoals je home directory en /tmp).\n\nGERELATEERDE COMMANDO'S\n    mkdir, cat, rm, ls\n".trim()};
+/**
+ * touch - Create empty files or update timestamps
+ * Simulated command for the HackSimulator terminal
+ */
+
+export default {
+  name: 'touch',
+  category: 'filesystem',
+  description: 'Create an empty file',
+  usage: 'touch <file>',
+
+  async execute(args, flags, context) {
+    const { vfs } = context;
+
+    // Require file argument
+    if (args.length === 0) {
+      return `touch: missing file operand\n\n[?] TIP: Gebruik 'touch <bestand>' om een leeg bestand aan te maken. Bijvoorbeeld: touch test.txt`;
+    }
+
+    const path = args[0];
+
+    try {
+      vfs.createFile(path, '');
+      return `[✓] Bestand '${path}' aangemaakt`;
+
+    } catch (error) {
+      // Educational error messages
+      if (error.message.includes('No such directory')) {
+        return `touch: cannot touch '${path}': No such file or directory\n\n[?] TIP: De parent directory moet bestaan. Gebruik 'ls' om te zien welke directories er zijn.`;
+      }
+
+      if (error.message.includes('Is a directory')) {
+        return `touch: cannot touch '${path}': Is a directory\n\n[?] TIP: touch werkt alleen op bestanden. Een directory met deze naam bestaat al.`;
+      }
+
+      if (error.message.includes('Not a directory')) {
+        return `touch: cannot touch '${path}': Not a directory\n\n[?] TIP: Een component in het pad is een bestand, geen directory.`;
+      }
+
+      return `touch: ${error.message}`;
+    }
+  },
+
+  manPage: `
+NAAM
+    touch - create empty files or update timestamps
+
+SYNOPSIS
+    touch <FILE>
+
+BESCHRIJVING
+    Maak een nieuw leeg bestand aan. In echte Linux update touch ook de
+    timestamp van bestaande bestanden, maar in deze simulator wordt alleen
+    het aanmaken van nieuwe bestanden ondersteund.
+
+ARGUMENTEN
+    FILE
+        Naam van het bestand om aan te maken (verplicht)
+
+VOORBEELDEN
+    touch test.txt
+        Maak een leeg bestand genaamd test.txt
+
+    touch notes.txt
+        Maak een leeg notitiebestand
+
+    touch /tmp/tempfile
+        Maak een bestand in de /tmp directory
+
+    touch script.sh
+        Maak een leeg script bestand (kan later gevuld worden)
+
+EDUCATIEVE TIPS
+    [DOC] touch is handig om snel lege bestanden aan te maken
+
+    [?] Workflow voorbeeld:
+       1. touch payload.txt    → Maak bestand aan
+       2. (bewerk met editor)  → In real Linux: nano/vim
+       3. cat payload.txt      → Bekijk inhoud
+
+    [+]️ Use cases in pentesting:
+       • touch wordlist.txt  → Maak wordlist voor brute force
+       • touch exploits.sh   → Maak script bestand
+       • touch notes.txt     → Documenteer je findings
+
+    [~] In echte Linux:
+       touch wordt vaak gebruikt om timestamps te updaten zonder inhoud
+       te wijzigen. Handig om build tools te triggeren of modification
+       times te manipuleren.
+
+    [!] Permissies:
+       Je kunt alleen bestanden aanmaken in directories waar je
+       schrijfrechten hebt (zoals je home directory en /tmp).
+
+GERELATEERDE COMMANDO'S
+    mkdir, cat, rm, ls
+`.trim()
+};

@@ -1,1 +1,37 @@
-export default{name:"whoami",description:"Toon huidige gebruikersnaam",category:"system",usage:"whoami",execute:(e,n,i)=>i.user||"hacker",manPage:"\nNAAM\n    whoami - toon huidige gebruikersnaam\n\nSYNOPSIS\n    whoami\n\nBESCHRIJVING\n    Toont de naam van de gebruiker waarmee je bent ingelogd.\n    In deze simulator ben je altijd ingelogd als 'hacker'.\n\nVOORBEELDEN\n    whoami\n        Output: hacker\n\nGEBRUIK\n    Gebruik dit om te verifiëren met welke user account je werkt.\n    Belangrijk voor permission checks en security context.\n\nGERELATEERDE COMMANDO'S\n    id (user info - niet in simulator)\n".trim()};
+/**
+ * whoami - Display current username
+ */
+
+export default {
+  name: 'whoami',
+  description: 'Toon huidige gebruikersnaam',
+  category: 'system',
+  usage: 'whoami',
+
+  execute(args, flags, context) {
+    return context.user || 'hacker';
+  },
+
+  manPage: `
+NAAM
+    whoami - toon huidige gebruikersnaam
+
+SYNOPSIS
+    whoami
+
+BESCHRIJVING
+    Toont de naam van de gebruiker waarmee je bent ingelogd.
+    In deze simulator ben je altijd ingelogd als 'hacker'.
+
+VOORBEELDEN
+    whoami
+        Output: hacker
+
+GEBRUIK
+    Gebruik dit om te verifiëren met welke user account je werkt.
+    Belangrijk voor permission checks en security context.
+
+GERELATEERDE COMMANDO'S
+    id (user info - niet in simulator)
+`.trim()
+};

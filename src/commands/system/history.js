@@ -1,1 +1,63 @@
-export default{name:"history",description:"Toon command geschiedenis",category:"system",usage:"history [-c]",execute(e,n,s){const i=s.terminal.getHistory();if(n.c)return i.clear(),"Command history gewist.";const o=i.getAll();return 0===o.length?"Geen command geschiedenis beschikbaar.":o.map((e,n)=>`  ${n+1}  ${e}`).join("\n")},manPage:"\nNAAM\n    history - toon command geschiedenis\n\nSYNOPSIS\n    history [-c]\n\nBESCHRIJVING\n    Toont een genummerde lijst van alle commands die je in deze sessie\n    hebt uitgevoerd. Command history wordt opgeslagen in localStorage\n    en blijft beschikbaar tussen sessies.\n\nFLAGS\n    -c      Wis alle command geschiedenis\n\nVOORBEELDEN\n    history\n        Toon alle uitgevoerde commands\n\n    history -c\n        Wis de geschiedenis\n\nGEBRUIK\n    • Gebruik ↑↓ pijltjestoetsen om door history te navigeren\n    • History wordt automatisch opgeslagen (max 100 items)\n    • Gebruik history -c om opnieuw te beginnen\n\nGERELATEERDE COMMANDO'S\n    clear (wis scherm, maar niet history)\n".trim()};
+/**
+ * history - Display command history
+ */
+
+export default {
+  name: 'history',
+  description: 'Toon command geschiedenis',
+  category: 'system',
+  usage: 'history [-c]',
+
+  execute(args, flags, context) {
+    const historyManager = context.terminal.getHistory();
+
+    // Clear history flag
+    if (flags.c) {
+      historyManager.clear();
+      return 'Command history gewist.';
+    }
+
+    // Get all history
+    const entries = historyManager.getAll();
+
+    if (entries.length === 0) {
+      return 'Geen command geschiedenis beschikbaar.';
+    }
+
+    // Format like bash history (numbered)
+    return entries
+      .map((cmd, index) => `  ${index + 1}  ${cmd}`)
+      .join('\n');
+  },
+
+  manPage: `
+NAAM
+    history - toon command geschiedenis
+
+SYNOPSIS
+    history [-c]
+
+BESCHRIJVING
+    Toont een genummerde lijst van alle commands die je in deze sessie
+    hebt uitgevoerd. Command history wordt opgeslagen in localStorage
+    en blijft beschikbaar tussen sessies.
+
+FLAGS
+    -c      Wis alle command geschiedenis
+
+VOORBEELDEN
+    history
+        Toon alle uitgevoerde commands
+
+    history -c
+        Wis de geschiedenis
+
+GEBRUIK
+    • Gebruik ↑↓ pijltjestoetsen om door history te navigeren
+    • History wordt automatisch opgeslagen (max 100 items)
+    • Gebruik history -c om opnieuw te beginnen
+
+GERELATEERDE COMMANDO'S
+    clear (wis scherm, maar niet history)
+`.trim()
+};

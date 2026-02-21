@@ -102,11 +102,11 @@ export default new class TutorialManager {
   start(scenarioId) {
     var scenario = this.scenarios.get(scenarioId);
     if (!scenario) {
-      return '[ X ] Onbekend scenario: ' + scenarioId + '\n\n[ ? ] Type \'tutorial\' om beschikbare scenario\'s te zien.';
+      return '[X] Onbekend scenario: ' + scenarioId + '\n\n[?] Type \'tutorial\' om beschikbare scenario\'s te zien.';
     }
 
     if (this.isActive()) {
-      return '[ ! ] Er is al een tutorial actief: ' + this.activeScenario.title + '\n\n[ ? ] Type \'tutorial exit\' om de huidige tutorial te verlaten.';
+      return '[!] Er is al een tutorial actief: ' + this.activeScenario.title + '\n\n[?] Type \'tutorial exit\' om de huidige tutorial te verlaten.';
     }
 
     this.activeScenario = scenario;
@@ -173,12 +173,12 @@ export default new class TutorialManager {
    */
   skip() {
     if (!this.isActive()) {
-      return '[ ? ] Geen actieve tutorial. Type \'tutorial\' om te beginnen.';
+      return '[?] Geen actieve tutorial. Type \'tutorial\' om te beginnen.';
     }
 
     var step = this.activeScenario.steps[this.currentStep];
-    var output = '[ ! ] Stap overgeslagen: ' + step.title + '\n';
-    output += '[ ? ] Je mist de educatieve uitleg voor deze stap.\n';
+    var output = '[!] Stap overgeslagen: ' + step.title + '\n';
+    output += '[?] Je mist de educatieve uitleg voor deze stap.\n';
 
     this.attempts = 0;
     this._clearHintCount();
@@ -205,7 +205,7 @@ export default new class TutorialManager {
    */
   exit() {
     if (!this.isActive()) {
-      return '[ ? ] Geen actieve tutorial.';
+      return '[?] Geen actieve tutorial.';
     }
 
     var title = this.activeScenario.title;
@@ -216,8 +216,8 @@ export default new class TutorialManager {
     this.attempts = 0;
     this._save();
 
-    return '[ ✓ ] Tutorial verlaten: ' + title + '\n' +
-           '[ ? ] Voortgang (' + progress + ') opgeslagen. Type \'tutorial start <id>\' om te hervatten.';
+    return '[✓] Tutorial verlaten: ' + title + '\n' +
+           '[?] Voortgang (' + progress + ') opgeslagen. Type \'tutorial start <id>\' om te hervatten.';
   }
 
   /**
@@ -253,7 +253,7 @@ export default new class TutorialManager {
   getResumeMessage() {
     if (!this.isActive()) return null;
     var step = this.activeScenario.steps[this.currentStep];
-    return '[ ✓ ] Tutorial hervat: ' + this.activeScenario.title +
+    return '[✓] Tutorial hervat: ' + this.activeScenario.title +
            ' (stap ' + (this.currentStep + 1) + '/' + this.activeScenario.steps.length + ')\n\n' +
            this._renderer.renderObjective(step, this.currentStep, this.activeScenario.steps.length);
   }

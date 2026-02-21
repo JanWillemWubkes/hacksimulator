@@ -2,7 +2,7 @@
  * Tutorial Renderer — Generates formatted terminal output for tutorial UI.
  *
  * Uses box-utils.js for responsive ASCII boxes and mobile detection.
- * Output uses renderer-compatible prefixes ([ ✓ ], [ ! ], [ ? ]) for auto-styling.
+ * Output uses renderer-compatible prefixes ([✓], [!], [?]) for auto-styling.
  */
 
 import {
@@ -91,9 +91,9 @@ var tutorialRenderer = {
    */
   renderObjective: function(step, stepIndex, totalSteps) {
     var stepNum = stepIndex + 1;
-    var header = '[ → ] Stap ' + stepNum + '/' + totalSteps + ': ' + step.title;
+    var header = '[→] Stap ' + stepNum + '/' + totalSteps + ': ' + step.title;
     var output = '\n' + header + '\n';
-    output += '[ ? ] ' + step.objective;
+    output += '[?] ' + step.objective;
     return output;
   },
 
@@ -102,7 +102,7 @@ var tutorialRenderer = {
    */
   renderStepFeedback: function(step, isCorrect, hint) {
     if (isCorrect) {
-      var output = '\n[ ✓ ] Correct! ' + step.title + ' voltooid.';
+      var output = '\n[✓] Correct! ' + step.title + ' voltooid.';
       if (step.feedback) {
         output += '\n\n' + step.feedback;
       }
@@ -110,9 +110,9 @@ var tutorialRenderer = {
     }
 
     // Incorrect attempt
-    var output = '\n[ ! ] Dat is niet het juiste commando voor deze stap.';
+    var output = '\n[!] Dat is niet het juiste commando voor deze stap.';
     if (hint) {
-      output += '\n[ ? ] Hint: ' + hint;
+      output += '\n[?] Hint: ' + hint;
     }
     return output;
   },
@@ -159,8 +159,8 @@ var tutorialRenderer = {
     lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
 
     var output = lines.join('\n');
-    output += '\n\n[ ✓ ] Goed gedaan! Je hebt de ' + scenario.title + ' missie afgerond.';
-    output += '\n[ ? ] Type \'tutorial\' om meer scenario\'s te zien.';
+    output += '\n\n[✓] Goed gedaan! Je hebt de ' + scenario.title + ' missie afgerond.';
+    output += '\n[?] Type \'tutorial\' om meer scenario\'s te zien.';
 
     return output;
   },
@@ -172,8 +172,8 @@ var tutorialRenderer = {
     if (scenario.completionMessage) {
       out += scenario.completionMessage + '\n\n';
     }
-    out += '[ ✓ ] Goed gedaan! Je hebt de missie afgerond.\n';
-    out += '[ ? ] Type \'tutorial\' om meer scenario\'s te zien.';
+    out += '[✓] Goed gedaan! Je hebt de missie afgerond.\n';
+    out += '[?] Type \'tutorial\' om meer scenario\'s te zien.';
     return out;
   }
 };

@@ -1,1 +1,42 @@
-export default{name:"clear",description:"Wis het terminal scherm",category:"system",usage:"clear",execute:(e,n,t)=>(t.terminal.clear(),""),manPage:"\nNAAM\n    clear - wis het terminal scherm\n\nSYNOPSIS\n    clear\n\nBESCHRIJVING\n    Verwijdert alle tekst van het terminal scherm en geeft je een\n    schone lei om mee te werken.\n\nVOORBEELDEN\n    clear\n        Wis het scherm\n\nGEBRUIK\n    Gebruik dit command wanneer je terminal vol staat met tekst en je\n    een overzichtelijk scherm wilt.\n\nGERELATEERDE COMMANDO'S\n    history -c (wis command history)\n".trim()};
+/**
+ * clear - Clear terminal screen
+ */
+
+export default {
+  name: 'clear',
+  description: 'Wis het terminal scherm',
+  category: 'system',
+  usage: 'clear',
+
+  execute(args, flags, context) {
+    // Clear the terminal
+    context.terminal.clear();
+
+    // Return empty string (no output needed)
+    return '';
+  },
+
+  manPage: `
+NAAM
+    clear - wis het terminal scherm
+
+SYNOPSIS
+    clear
+
+BESCHRIJVING
+    Verwijdert alle tekst van het terminal scherm en geeft je een
+    schone lei om mee te werken.
+
+VOORBEELDEN
+    clear
+        Wis het scherm
+
+GEBRUIK
+    Gebruik dit command wanneer je terminal vol staat met tekst en je
+    een overzichtelijk scherm wilt.
+
+GERELATEERDE COMMANDO'S
+    history -c (wis command history)
+`.trim()
+};
+

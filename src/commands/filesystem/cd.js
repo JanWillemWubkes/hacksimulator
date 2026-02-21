@@ -1,1 +1,129 @@
-import{getPathCompletions as e}from"../../utils/filesystem-completion.js";export default{name:"cd",category:"filesystem",description:"Change the current directory",usage:"cd [directory]",completionProvider(n){const r=n.length>0?n[n.length-1]:"";return e(r,{type:"directory"})},async execute(e,n,r){const{vfs:t,terminal:i}=r;if(0===e.length)try{return t.setCwd("~"),i&&i.getRenderer().updatePrompt(t.getCwd()),"Huidige map: ~ (home directory)\n\n[?] TIP: Gebruik 'ls' om de inhoud te bekijken, of 'pwd' om het volledige pad te zien."}catch(e){return`cd: ${e.message}`}const o=e[0];try{return t.setCwd(o),i&&i.getRenderer().updatePrompt(t.getCwd()),`[✓] Map gewijzigd naar ${o}`}catch(e){return e.message.includes("No such directory")?`cd: ${o}: No such file or directory\n\n[?] TIP: Gebruik 'ls' om te zien welke directories beschikbaar zijn, of 'pwd' om te zien waar je bent.`:e.message.includes("Not a directory")?`cd: ${o}: Not a directory\n\n[?] TIP: Je kunt alleen naar directories navigeren, niet naar bestanden.`:e.message.includes("Permission denied")?`cd: ${o}: Permission denied\n\n[!] BEVEILIGING: Sommige directories zijn beveiligd en niet toegankelijk.`:`cd: ${e.message}`}},manPage:"\nNAAM\n    cd - change directory\n\nSYNOPSIS\n    cd [DIRECTORY]\n\nBESCHRIJVING\n    Verander de huidige working directory naar DIRECTORY. Als geen directory\n    wordt opgegeven, ga je naar je home directory.\n\nARGUMENTEN\n    DIRECTORY\n        De directory waar je naartoe wilt navigeren. Kan absoluut (/etc/log)\n        of relatief (../home) zijn.\n\n    Speciale notaties:\n        ~       Home directory (/home/hacker)\n        .       Huidige directory\n        ..      Parent directory (één niveau omhoog)\n        /       Root directory\n        -       Vorige directory (niet geïmplementeerd in simulator)\n\nVOORBEELDEN\n    cd\n        Ga naar je home directory\n\n    cd /etc\n        Ga naar de /etc directory\n\n    cd ..\n        Ga één directory omhoog\n\n    cd ~/notes\n        Ga naar de notes directory in je home folder\n\n    cd /var/log\n        Ga naar de log directory\n\nEDUCATIEVE TIPS\n    [↑] Path types:\n       • Absoluut pad: begint met / (bijv. /etc/passwd)\n       • Relatief pad: relatief aan huidige locatie (bijv. ../home)\n\n    [#] Shortcuts:\n       • ~ is altijd je home directory (/home/hacker)\n       • .. brengt je één niveau omhoog\n       • . is de huidige directory (handig bij commands zoals 'cp file .')\n\n    [?] Combineer met 'pwd' om te zien waar je bent na een cd commando\n\nGERELATEERDE COMMANDO'S\n    pwd, ls, find\n".trim()};
+/**
+ * cd - Change directory
+ * Simulated command for the HackSimulator terminal
+ */
+
+import { getPathCompletions } from '../../utils/filesystem-completion.js';
+
+export default {
+  name: 'cd',
+  category: 'filesystem',
+  description: 'Change the current directory',
+  usage: 'cd [directory]',
+
+  /**
+   * Autocomplete provider for cd command
+   * Suggests directory names based on partial path input
+   * @param {Array<string>} args - Current arguments being typed
+   * @returns {Array<string>} - Array of directory path completions
+   */
+  completionProvider(args) {
+    // Get partial path (last argument being typed, or empty string if no args)
+    const partial = args.length > 0 ? args[args.length - 1] : '';
+
+    // Get directory completions only (no files)
+    return getPathCompletions(partial, { type: 'directory' });
+  },
+
+  async execute(args, flags, context) {
+    const { vfs, terminal } = context;
+
+    // No argument = go to home directory
+    if (args.length === 0) {
+      try {
+        vfs.setCwd('~');
+        // Update terminal prompt with new directory
+        if (terminal) {
+          const renderer = terminal.getRenderer();
+          renderer.updatePrompt(vfs.getCwd());
+        }
+        return 'Huidige map: ~ (home directory)\n\n[?] TIP: Gebruik \'ls\' om de inhoud te bekijken, of \'pwd\' om het volledige pad te zien.';
+      } catch (error) {
+        return `cd: ${error.message}`;
+      }
+    }
+
+    const path = args[0];
+
+    try {
+      vfs.setCwd(path);
+      // Update terminal prompt with new directory
+      if (terminal) {
+        const renderer = terminal.getRenderer();
+        renderer.updatePrompt(vfs.getCwd());
+      }
+      return `[✓] Map gewijzigd naar ${path}`;
+
+    } catch (error) {
+      // Educational error messages
+      if (error.message.includes('No such directory')) {
+        return `cd: ${path}: No such file or directory\n\n[?] TIP: Gebruik 'ls' om te zien welke directories beschikbaar zijn, of 'pwd' om te zien waar je bent.`;
+      }
+
+      if (error.message.includes('Not a directory')) {
+        return `cd: ${path}: Not a directory\n\n[?] TIP: Je kunt alleen naar directories navigeren, niet naar bestanden.`;
+      }
+
+      if (error.message.includes('Permission denied')) {
+        return `cd: ${path}: Permission denied\n\n[!] BEVEILIGING: Sommige directories zijn beveiligd en niet toegankelijk.`;
+      }
+
+      return `cd: ${error.message}`;
+    }
+  },
+
+  manPage: `
+NAAM
+    cd - change directory
+
+SYNOPSIS
+    cd [DIRECTORY]
+
+BESCHRIJVING
+    Verander de huidige working directory naar DIRECTORY. Als geen directory
+    wordt opgegeven, ga je naar je home directory.
+
+ARGUMENTEN
+    DIRECTORY
+        De directory waar je naartoe wilt navigeren. Kan absoluut (/etc/log)
+        of relatief (../home) zijn.
+
+    Speciale notaties:
+        ~       Home directory (/home/hacker)
+        .       Huidige directory
+        ..      Parent directory (één niveau omhoog)
+        /       Root directory
+        -       Vorige directory (niet geïmplementeerd in simulator)
+
+VOORBEELDEN
+    cd
+        Ga naar je home directory
+
+    cd /etc
+        Ga naar de /etc directory
+
+    cd ..
+        Ga één directory omhoog
+
+    cd ~/notes
+        Ga naar de notes directory in je home folder
+
+    cd /var/log
+        Ga naar de log directory
+
+EDUCATIEVE TIPS
+    [↑] Path types:
+       • Absoluut pad: begint met / (bijv. /etc/passwd)
+       • Relatief pad: relatief aan huidige locatie (bijv. ../home)
+
+    [#] Shortcuts:
+       • ~ is altijd je home directory (/home/hacker)
+       • .. brengt je één niveau omhoog
+       • . is de huidige directory (handig bij commands zoals 'cp file .')
+
+    [?] Combineer met 'pwd' om te zien waar je bent na een cd commando
+
+GERELATEERDE COMMANDO'S
+    pwd, ls, find
+`.trim()
+};
