@@ -51,6 +51,37 @@ TODO:
 - Leer meer over SQL injection
 - Oefen met Metasploit basics
 - Begrijp hoe password hashes werken`
+              },
+              '.bash_history': {
+                type: 'file',
+                content: `ls -la /var/www/html
+cat /etc/passwd
+nmap 192.168.1.100
+ssh admin@192.168.1.100
+mysql -u root -pSecretPass123! shop_db
+cat /var/log/auth.log
+find / -perm -4000
+sudo apt update
+whoami
+ping 10.0.0.1`
+              },
+              'documents': {
+                type: 'directory',
+                children: {
+                  'scan-results.txt': {
+                    type: 'file',
+                    content: `Scan Results - SecureCorp Pentest
+==================================
+Datum: [nog in te vullen]
+Target: 192.168.1.100
+
+Bevindingen:
+- [voeg hier je scan resultaten toe]
+
+Aanbevelingen:
+- [voeg hier je aanbevelingen toe]`
+                  }
+                }
               }
             }
           }
@@ -131,6 +162,28 @@ Oct 14 10:30:12 hacksim kernel: [12345.678] Firewall: INPUT DROP IN=eth0 SRC=10.
   <p>This is a simulated web server.</p>
 </body>
 </html>`
+                  },
+                  'config.php': {
+                    type: 'file',
+                    content: `<?php
+// Database configuratie - SecureCorp E-commerce
+// WAARSCHUWING: Dit bestand bevat gevoelige informatie!
+
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'shop_db');
+define('DB_USER', 'root');
+define('DB_PASS', 'SecretPass123!');  // TODO: verplaats naar environment variables!
+define('DB_PORT', '3306');
+
+// API keys
+define('STRIPE_KEY', 'sk_live_abc123...');  // PRODUCTIE KEY - NIET COMMITTEN!
+define('MAIL_PASSWORD', 'email_pass_456');
+
+// [!] Dit is een voorbeeld van slechte security practices:
+// - Wachtwoorden in plain text in config bestanden
+// - Productie API keys in broncode
+// - Geen .gitignore voor config bestanden
+?>`
                   }
                 }
               }

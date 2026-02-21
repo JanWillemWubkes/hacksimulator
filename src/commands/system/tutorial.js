@@ -205,6 +205,12 @@ export default {
     "    recon    Reconnaissance: SecureCorp Pentest (4 stappen)\n" +
     "             Leer netwerk verkenning met ping, nmap, whois, traceroute\n" +
     "\n" +
+    "    webvuln  Web Vulnerabilities: E-commerce Audit (4 stappen)\n" +
+    "             Leer web kwetsbaarheden vinden met nmap, nikto, sqlmap\n" +
+    "\n" +
+    "    privesc  Privilege Escalation: Linux Server Analyse (4 stappen)\n" +
+    "             Leer systeem analyse met cat, ls, en log bestanden\n" +
+    "\n" +
     "VOORBEELDEN\n" +
     "    tutorial\n" +
     "        Bekijk alle beschikbare scenario's met status\n" +

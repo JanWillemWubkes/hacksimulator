@@ -17,6 +17,8 @@ import analyticsEvents from '../analytics/events.js';
 import tutorialManager from '../tutorial/tutorial-manager.js';
 import tutorialRenderer from '../tutorial/tutorial-renderer.js';
 import reconScenario from '../tutorial/scenarios/recon.js';
+import webvulnScenario from '../tutorial/scenarios/webvuln.js';
+import privescScenario from '../tutorial/scenarios/privesc.js';
 
 class Terminal {
   constructor() {
@@ -71,6 +73,8 @@ class Terminal {
     // Initialize tutorial system
     tutorialManager.setRenderer(tutorialRenderer);
     tutorialManager.register(reconScenario);
+    tutorialManager.register(webvulnScenario);
+    tutorialManager.register(privescScenario);
     tutorialManager.resume();
 
     // Render welcome message (personalized via onboarding)

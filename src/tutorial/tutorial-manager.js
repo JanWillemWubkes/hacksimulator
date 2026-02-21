@@ -7,6 +7,8 @@
  * executes normally, and the manager validates afterwards.
  */
 
+import analyticsEvents from '../analytics/events.js';
+
 const STATES = {
   IDLE: 'IDLE',
   INTRO: 'INTRO',
@@ -115,6 +117,8 @@ export default new class TutorialManager {
     this.state = STATES.STEP_ACTIVE;
     this._save();
 
+    analyticsEvents.tutorialEvent('started', scenarioId);
+
     // Render briefing + first step objective
     var output = this._renderer.renderBriefing(scenario);
     output += '\n\n';
@@ -136,6 +140,8 @@ export default new class TutorialManager {
       this.attempts = 0;
       this._clearHintCount();
       this.state = STATES.STEP_COMPLETE;
+
+      analyticsEvents.tutorialEvent('step_completed', this.activeScenario.id, { step: this.currentStep });
 
       var feedback = this._renderer.renderStepFeedback(step, true, null);
 
@@ -210,6 +216,9 @@ export default new class TutorialManager {
 
     var title = this.activeScenario.title;
     var progress = (this.currentStep) + '/' + this.activeScenario.steps.length;
+
+    analyticsEvents.tutorialEvent('abandoned', this.activeScenario.id, { lastStep: this.currentStep });
+
     this.state = STATES.IDLE;
     this.activeScenario = null;
     this.currentStep = 0;
@@ -309,8 +318,11 @@ export default new class TutorialManager {
   }
 
   _markComplete() {
-    if (this.activeScenario && this.completedScenarios.indexOf(this.activeScenario.id) === -1) {
-      this.completedScenarios.push(this.activeScenario.id);
+    if (this.activeScenario) {
+      analyticsEvents.tutorialEvent('completed', this.activeScenario.id);
+      if (this.completedScenarios.indexOf(this.activeScenario.id) === -1) {
+        this.completedScenarios.push(this.activeScenario.id);
+      }
     }
     this.state = STATES.IDLE;
     this.activeScenario = null;

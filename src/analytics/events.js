@@ -82,6 +82,20 @@ const analyticsEvents = {
   },
 
   /**
+   * Track tutorial events
+   * @param {string} action - tutorial action (started, step_completed, completed, abandoned)
+   * @param {string} scenarioId - Scenario identifier
+   * @param {object} extra - Additional data (stepIndex, lastStep)
+   */
+  tutorialEvent(action, scenarioId, extra = {}) {
+    analyticsTracker.trackEvent('tutorial', {
+      action: action,
+      scenario: scenarioId,
+      ...extra
+    });
+  },
+
+  /**
    * Track feedback submission
    * @param {number} rating - Star rating (1-5)
    * @param {boolean} hasComment - Whether user left a comment

@@ -12,6 +12,8 @@ import {
   wordWrap
 } from '../utils/box-utils.js';
 
+import { generateCertificate } from './certificate.js';
+
 var B = BOX_CHARS;
 
 function buildLine(text, width) {
@@ -159,6 +161,7 @@ var tutorialRenderer = {
     lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
 
     var output = lines.join('\n');
+    output += '\n\n' + generateCertificate(scenario, stats);
     output += '\n\n[✓] Goed gedaan! Je hebt de ' + scenario.title + ' missie afgerond.';
     output += '\n[?] Type \'tutorial\' om meer scenario\'s te zien.';
 
@@ -172,6 +175,7 @@ var tutorialRenderer = {
     if (scenario.completionMessage) {
       out += scenario.completionMessage + '\n\n';
     }
+    out += generateCertificate(scenario, stats) + '\n\n';
     out += '[✓] Goed gedaan! Je hebt de missie afgerond.\n';
     out += '[?] Type \'tutorial\' om meer scenario\'s te zien.';
     return out;
