@@ -64,6 +64,11 @@ class VirtualFilesystem {
       return '/home/hacker';
     }
 
+    // Home directory prefix (~/...)
+    if (path.startsWith('~/')) {
+      return this._normalizePath('/home/hacker/' + path.slice(2));
+    }
+
     // Already absolute
     if (path.startsWith('/')) {
       return this._normalizePath(path);
