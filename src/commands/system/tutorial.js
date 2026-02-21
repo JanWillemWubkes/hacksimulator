@@ -8,7 +8,9 @@ import tutorialManager from '../../tutorial/tutorial-manager.js';
 import {
   BOX_CHARS,
   getResponsiveBoxWidth,
-  isMobileView
+  isMobileView,
+  wordWrap,
+  smartTruncate
 } from '../../utils/box-utils.js';
 
 var B = BOX_CHARS;
@@ -52,14 +54,16 @@ function renderList() {
   scenarios.forEach(function(s) {
     var completed = tutorialManager.isScenarioCompleted(s.id);
     var checkbox = completed ? '[X]' : '[ ]';
-    var titleLine = '  ' + checkbox + ' ' + s.title;
+    var titleLine = '  ' + checkbox + ' ' + smartTruncate(s.title, inner - 8);
     lines.push(buildLine(titleLine, width));
 
     var detailLine = '      Niveau: ' + s.difficulty + ' | Stappen: ' + s.stepCount;
     lines.push(buildLine(detailLine, width));
 
-    var descLine = '      ' + s.description;
-    lines.push(buildLine(descLine, width));
+    var descLines = wordWrap(s.description, inner - 6);
+    descLines.forEach(function(line) {
+      lines.push(buildLine('      ' + line, width));
+    });
 
     lines.push(buildEmptyLine(width));
   });
