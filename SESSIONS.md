@@ -8,10 +8,12 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (88-101)](docs/sessions/current.md) - Full Detail
-**Sessies:** 101, 100, 96, 95, 94, 93, 92, 91, 90, 89, 88
-**Period:** 26 december 2025 - 17 februari 2026
+### [Current Sessions (88-103)](docs/sessions/current.md) - Full Detail
+**Sessies:** 103, 102, 101, 100, 96, 95, 94, 93, 92, 91, 90, 89, 88
+**Period:** 26 december 2025 - 20 februari 2026
 **Topics:**
+- M6 Tutorial System: state machine framework + reconnaissance scenario (Sessie 103)
+- MVP Polish & Production Hardening: output buffer, console.log cleanup, cross-page consistency (Sessie 102)
 - Playwright E2E test fixes: Cookiebot blocking, selector updates, 67→7 failures (Sessie 101)
 - Mobile quick commands feature + feedback.js bug fix (Sessie 101)
 - Bundle size optimalisatie: git cleanup, Netlify minificatie, budget herdefinitie (Sessie 100)
@@ -84,9 +86,9 @@
 
 ## 📊 Session Overview
 
-**Total Sessions:** 96 (as of 22 januari 2026)
-**Current Session:** 96 (Landing Page Hero Implementation)
-**Sessions with full documentation:** 88-96 (9 sessions)
+**Total Sessions:** 103 (as of 21 februari 2026)
+**Current Session:** 104 (Tutorial Box Overflow Fix)
+**Sessions with full documentation:** 88-103 (14 sessions)
 **Sessions compressed:** 2-77 (various compression levels)
 
 **Structure rationale:**
@@ -128,10 +130,11 @@
 
 ---
 
-**Last updated:** 04 januari 2026 (Sessie 94 - CLAUDE.md Phase 3 Final Polish)
-**Next update:** Sessie 95 or when CURRENT sessions exceed 7
+**Last updated:** 21 februari 2026 (Sessie 103 - M6 Tutorial System)
+**Next update:** Sessie 105 or when CURRENT sessions need rotation
 
 **Recent updates:**
+- Sessie 103: M6 Tutorial System — state machine framework + reconnaissance scenario
+- Sessie 102: MVP Polish — production hardening, cross-page consistency, 64 files
+- Sessie 101: Playwright test fixes (67→7 failures) + mobile quick commands
 - Sessie 94: CLAUDE.md v2.2 complete (3-phase optimization: metrics, examples, checklist)
-- Sessie 91: Design system 100% (141 CSS variables, Style Guide v1.5)
-- Sessie 87: File structure established (612KB monolith → 5 modular files)

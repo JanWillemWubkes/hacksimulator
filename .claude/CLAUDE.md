@@ -83,32 +83,41 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 103: M6 Tutorial System (20 feb 2026)
+⚠️ **Never:**
+- State machine zonder expliciete state enum — gebruik altijd een `STATES` object
+- Command validatie blokkeren — altijd eerst laten uitvoeren, dan checken
+- Strikte arg validatie in tutorials — beginners typen niet altijd perfecte args
+
+✅ **Always:**
+- Non-blocking tutorial overlay — UX blijft responsief, commands werken altijd
+- Progressive hints (3 tiers: 2/4/6 pogingen) — beginners zelf laten proberen
+- localStorage persistence voor tutorial voortgang
+- Losgekoppelde scenarios via registry pattern — makkelijk uitbreidbaar
+
+### Sessie 102: MVP Polish & Production Hardening (20 feb 2026)
+⚠️ **Never:**
+- `console.log` in productie — altijd opruimen voor deploy
+- Hardcoded color values in Playwright tests — theme-aware assertions gebruiken
+- `media="print" onload` pattern voor CSS — fragiel, gebruik directe load
+
+✅ **Always:**
+- Output buffer cap (MAX_OUTPUT_LINES) — voorkom unbounded DOM growth
+- OG tags + favicons consistent op alle pagina's
+- Centraliseer analytics init — één bestand, niet per pagina
+- Theme-aware test assertions
+
 ### Sessie 101: Playwright E2E Test Fixes (17 feb 2026)
 ⚠️ **Never:**
 - Tests draaien zonder third-party CMP blocking (Cookiebot overlay blokkeert ALLE interacties)
 - Hardcoded selectors voor dynamische modals (`#legal-modal-backdrop` → verdwenen na refactor)
-- Box char assertions op mobile viewports (app gebruikt simplified format <1024px)
-- CSS `visibility: hidden` + `opacity: 0` default ZONDER `.visible` class in JS toe te voegen
 
 ✅ **Always:**
-- Shared test fixture met `page.route()` blocking voor third-party scripts (Cookiebot, ads)
-- `.first()` bij selectors die meerdere elementen matchen (navbar + mobile menu duplicates)
-- Tests updaten bij elke UI refactor (Cookiebot, onboarding, cookie banner changes)
+- Shared test fixture met `page.route()` blocking voor third-party scripts
+- `.first()` bij selectors die meerdere elementen matchen
 
 ### Sessie 100: Bundle Size Optimalisatie (15 feb 2026)
-⚠️ **Never:**
-- In-place minificatie met backup scripts (genereert rommel in git)
-- `skip_processing = true` in netlify.toml (blokkeert gratis CDN-optimalisatie)
-
-✅ **Always:**
-- Netlify asset processing voor minificatie (broncode leesbaar)
-- Budgets per scope: Terminal Core (<400KB) vs. site totaal (<1000KB)
-
-### Sessie 98: Content Review (20 jan 2026)
-✅ Alle 8 content review taken PASSED — 80/20 principe consistent
-
-### Sessie 97: Accessibility (jan 2026)
-✅ WCAG AAA: Focus trap, :focus-visible, ARIA 50+ attrs, contrast 14.8:1
+✅ Netlify asset processing voor minificatie | Budgets per scope: Terminal Core (<400KB) vs. site totaal (<1000KB)
 
 **Rotation:** Keep last 4 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
 
@@ -119,7 +128,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Voor Sessie:** Lees `PLANNING.md`, `TASKS.md`, dit bestand
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-**Rotation trigger:** Every 5 sessions (last: Sessie 100, next: Sessie 105)
+**Rotation trigger:** Every 5 sessions (last: Sessie 103, next: Sessie 108)
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -166,5 +175,5 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 18 februari 2026 (Sessie 102 — MVP Perfectionering)
-**Version:** 3.2 (Sessie 102: domain migratie, test fixes, docs sync, pre-launch checklist afgerond)
+**Last updated:** 21 februari 2026 (Sessie 103 — M6 Tutorial System)
+**Version:** 3.3 (Sessie 103: tutorial system, production hardening, session summaries sync)

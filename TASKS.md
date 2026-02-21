@@ -1,8 +1,8 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 20 februari 2026
-**Status:** M5 Testing & Launch Phase (LIVE on hacksimulator.nl) - MVP Polish
-**Sprint:** Sessie 103: MVP Polish & Production Hardening (output buffer, meta cleanup, console.log removal)
+**Laatst bijgewerkt:** 21 februari 2026
+**Status:** M6 Tutorial System gestart (LIVE on hacksimulator.nl)
+**Sprint:** Sessie 103: M6 Tutorial framework + recon scenario | Sessie 102: MVP Polish & Production Hardening
 
 ---
 
@@ -19,7 +19,7 @@
 | M4: UX & Polish | ✅ Voltooid | 43/43 | 100% |
 | M5: Testing & Launch | 🔵 In uitvoering | 41/45 | 91% | ✅ **Performance + Config + Security + Accessibility + Content + Bundle Opt 100%**
 | M5.5: Monetization MVP | ❌ Geannuleerd | - | - | Affiliate aanvragen afgewezen |
-| M6: Tutorial System | ⏭️ Gepland | 0/33 | 0% |
+| M6: Tutorial System | 🔵 In uitvoering | 5/33 | 15% | ✅ Framework + recon scenario |
 | M7: Gamification | ⏭️ Gepland | 0/40 | 0% |
 | M8: Analytics & Scaling | ⏭️ Gepland | 0/40 | 0% |
 | M9: Refactor Sprint | ⏭️ Gepland | 0/19 | 0% |
