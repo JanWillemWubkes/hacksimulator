@@ -11,7 +11,7 @@ import analyticsEvents from '../analytics/events.js';
 
 const STATES = {
   IDLE: 'IDLE',
-  INTRO: 'INTRO',
+  INTRO: 'INTRO', // Reserved: planned for animated briefing intro (not yet used)
   STEP_ACTIVE: 'STEP_ACTIVE',
   STEP_COMPLETE: 'STEP_COMPLETE',
   COMPLETE: 'COMPLETE'

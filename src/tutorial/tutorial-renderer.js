@@ -163,6 +163,7 @@ var tutorialRenderer = {
     var output = lines.join('\n');
     output += '\n\n' + generateCertificate(scenario, stats);
     output += '\n\n[✓] Goed gedaan! Je hebt de ' + scenario.title + ' missie afgerond.';
+    output += '\n[?] Type \'tutorial cert\' om je certificaat te kopieren.';
     output += '\n[?] Type \'tutorial\' om meer scenario\'s te zien.';
 
     return output;
@@ -177,6 +178,7 @@ var tutorialRenderer = {
     }
     out += generateCertificate(scenario, stats) + '\n\n';
     out += '[✓] Goed gedaan! Je hebt de missie afgerond.\n';
+    out += '[?] Type \'tutorial cert\' om je certificaat te kopieren.\n';
     out += '[?] Type \'tutorial\' om meer scenario\'s te zien.';
     return out;
   }

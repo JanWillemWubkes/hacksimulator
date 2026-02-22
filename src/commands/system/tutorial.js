@@ -5,6 +5,7 @@
  */
 
 import tutorialManager from '../../tutorial/tutorial-manager.js';
+import { generateCertificate, copyCertificateToClipboard } from '../../tutorial/certificate.js';
 import {
   BOX_CHARS,
   getResponsiveBoxWidth,
@@ -120,7 +121,7 @@ export default {
   name: 'tutorial',
   description: 'Begeleide hacking scenario\'s',
   category: 'system',
-  usage: 'tutorial [start <id>|status|skip|exit]',
+  usage: 'tutorial [start <id>|status|skip|exit|cert]',
 
   execute: function(args) {
     var sub = args.length > 0 ? args[0].toLowerCase() : '';
@@ -161,6 +162,35 @@ export default {
       return '[✓] Tutorial voortgang gereset.';
     }
 
+    // tutorial cert / certificaat — show + copy last completed certificate
+    if (sub === 'cert' || sub === 'certificaat') {
+      var status = tutorialManager.getStatus();
+      var completed = status.completedScenarios;
+
+      if (!completed || completed.length === 0) {
+        return '[?] Je hebt nog geen scenario voltooid.\n\n' +
+               '[?] Type \'tutorial\' om een scenario te starten.';
+      }
+
+      // Get the most recently completed scenario
+      var lastId = completed[completed.length - 1];
+      var scenario = tutorialManager.getScenario(lastId);
+
+      if (!scenario) {
+        return '[X] Scenario niet gevonden: ' + lastId;
+      }
+
+      var stats = {
+        stepsCompleted: scenario.steps.length,
+        totalSteps: scenario.steps.length
+      };
+
+      var cert = generateCertificate(scenario, stats);
+      var copyMsg = copyCertificateToClipboard(cert);
+
+      return cert + '\n\n' + copyMsg;
+    }
+
     // Maybe user typed scenario ID directly: tutorial recon
     var scenario = tutorialManager.getScenario(sub);
     if (scenario) {
@@ -168,7 +198,7 @@ export default {
     }
 
     return '[?] Onbekend subcommando: ' + sub + '\n\n' +
-           '[?] Gebruik: tutorial [start <id>|status|skip|exit]\n' +
+           '[?] Gebruik: tutorial [start <id>|status|skip|exit|cert]\n' +
            '[?] Type \'tutorial\' voor beschikbare scenario\'s.';
   },
 
@@ -183,6 +213,8 @@ export default {
     "    tutorial status               Toon huidige voortgang\n" +
     "    tutorial skip                 Sla huidige stap over\n" +
     "    tutorial exit                 Verlaat tutorial (voortgang opgeslagen)\n" +
+    "    tutorial cert                 Toon en kopieer je laatste certificaat\n" +
+    "    tutorial reset                Reset alle tutorial voortgang (debug)\n" +
     "\n" +
     "BESCHRIJVING\n" +
     "    Het tutorial systeem biedt begeleide hacking scenario's waarin je\n" +
