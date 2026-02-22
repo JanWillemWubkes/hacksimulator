@@ -4,6 +4,63 @@
 
 ---
 
+## Sessie 105: Tutorial E2E Uitbreiding & Playwright Reporter Fix (22 februari 2026)
+
+**Scope:** 8 nieuwe E2E tests (webvuln, privesc, cert, reset, completion, hints) + Playwright html reporter hang fix
+**Status:** ✅ VOLTOOID — tutorial E2E coverage van 11 → 19 tests, reporter bug permanent gefixt
+**Duration:** ~1 uur
+
+---
+
+### Context & Problem
+
+**Problem 1:** Tutorial E2E tests dekten alleen het recon scenario (11 tests). Webvuln, privesc, certificate, reset, completion status en hint persistence waren 0% gedekt.
+
+**Problem 2:** Playwright tests hingen urenlang (5+ uur) na afloop. De `html` reporter startte een lokale webserver (`Serving HTML report at http://localhost:XXXXX. Press Ctrl+C to quit.`) die oneindig wachtte op Ctrl+C. In non-interactieve shells (Claude Code, CI) stopt dat process nooit.
+
+### Oplossing
+
+**1. 8 Nieuwe Tutorial E2E Tests**
+- Group 5: webvuln scenario — briefing + full completion (nmap → nikto → sqlmap → cat config.php)
+- Group 6: privesc scenario — briefing + full completion (cat /etc/passwd → ls /var/log → cat auth.log → cat ~/.bash_history)
+- Group 7: certificate & reset — `tutorial cert` na completion, `tutorial reset` localStorage clearing, completion indicator in scenario list
+- Group 8: hint persistence — hint counts overleven page reload (localStorage `hacksim_tutorial_hints`)
+- Alle 8 tests passing op Chromium + Firefox
+
+**2. Playwright Reporter Fix**
+- Root cause: `['html']` in `playwright.config.js` → `open: 'on-failure'` (default) start blocking webserver
+- Fix: `['html', { open: 'never' }]` — genereert report zonder server, bekijk achteraf via `npx playwright show-report`
+- 4 zombie processes gekilld die al 5+ uur hingen
+
+**3. Documentatie (3-laags)**
+- `CLAUDE.md` — Learning: nooit html reporter zonder `open: 'never'`
+- `.claude/rules/troubleshooting.md` — Item 10: Playwright reporter hang diagnose + fix
+- `playwright.config.js` — Config fix zelf
+
+### Files Changed
+
+| File | Change |
+|------|--------|
+| `tests/e2e/tutorial.spec.js` | +8 tests (Groups 5-8): webvuln, privesc, cert, reset, completion, hints |
+| `playwright.config.js` | `open: 'never'` op html reporter — process stopt na tests |
+| `.claude/CLAUDE.md` | Sessie 104 learnings uitgebreid met reporter fix |
+| `.claude/rules/troubleshooting.md` | Item 10: Playwright reporter hang |
+
+### Test Results
+
+- Tutorial suite: 19 tests (11 bestaand + 8 nieuw), alle passing
+- 2 pre-bestaande flaky tests (persistence + completion timing) — slagen op retry
+- Chromium: 16 passed, 2 flaky (pass on retry)
+- Firefox: 16 passed, 2 flaky (pass on retry)
+
+### Key Learnings
+
+- Playwright `html` reporter met default `open` setting is een tijdbom in non-interactieve omgevingen
+- Tutorial validators zijn lenient (substring match) — tests hoeven geen exacte args te gebruiken
+- `getLastOutput()` op `#terminal-output` pakt soms te vroeg content als tutorial completion nog rendert — retry mechanisme vangt dit op
+
+---
+
 ## Sessie 104: M6 Tutorial Afronding — Cert Command, E2E Tests, Progress Sync (22 februari 2026)
 
 **Scope:** Tutorial cert clipboard wiring, Playwright E2E test suite, TASKS.md progress sync, polish

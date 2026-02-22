@@ -88,11 +88,13 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Exported functions zonder caller — grep `export` + grep functienaam om orphans te detecteren
 - `acceptLegalModal` hardcoded als verplicht — legal modal is soms al dismissed (parallel workers, cached localStorage)
 - E2E assertions op features die nog niet gedeployed zijn — tests draaien tegen live URL
+- Playwright `html` reporter zonder `open: 'never'` — hangt oneindig in non-interactieve shells (Claude Code, CI)
 
 ✅ **Always:**
 - Graceful modal helpers met try/catch fallback — voorkomt false failures bij race conditions
 - Test assertions matchen met wat live staat, niet met lokale code
 - `tutorial cert` als subcommando voor clipboard — fire-and-forget pattern (async API + sync fallback)
+- `['html', { open: 'never' }]` in Playwright reporter config — bekijk achteraf via `npx playwright show-report`
 
 ### Sessie 103: M6 Tutorial System (20 feb 2026)
 ⚠️ **Never:**
@@ -140,7 +142,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
 **Rotation trigger:** Every 5 sessions (last: Sessie 103, next: Sessie 108)
-**Sessie counter:** 104
+**Sessie counter:** 105
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -187,5 +189,5 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 22 februari 2026 (Sessie 104 — M6 Tutorial Afronding)
-**Version:** 3.4 (Sessie 104: cert command, E2E tests, progress sync)
+**Last updated:** 22 februari 2026 (Sessie 105 — Tutorial E2E Uitbreiding & Playwright Fix)
+**Version:** 3.5 (Sessie 105: 8 nieuwe E2E tests, Playwright reporter hang fix)

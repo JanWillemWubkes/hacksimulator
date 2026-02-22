@@ -48,5 +48,13 @@
    - Minimum size: `min-width: 44px; min-height: 44px;` (WCAG AAA)
    - File: `styles/mobile.css`
 
+## Playwright / Testing
+
+10. **Playwright tests hangen na afloop (process stopt nooit):** `html` reporter start webserver die wacht op Ctrl+C
+   - Root cause: `['html']` in `playwright.config.js` → `open: 'on-failure'` (default) start blocking server
+   - Fix: `['html', { open: 'never' }]` — genereert report zonder server te starten
+   - Bekijk report achteraf: `npx playwright show-report`
+   - File: `playwright.config.js` (reporter sectie)
+
 → **Volledige troubleshooting:** docs/sessions/current.md §Common Issues
 → **Memory leak debugging:** docs/testing/memory-leak-results.md

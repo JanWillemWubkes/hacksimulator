@@ -229,4 +229,204 @@ test.describe('Tutorial System', () => {
     expect(output).toContain('Goed gedaan');
   });
 
+  // ----------------------------------------
+  // Group 5: Web Vulnerabilities Scenario
+  // ----------------------------------------
+
+  test('webvuln scenario starts with correct briefing', async ({ page }) => {
+    await typeCommand(page, 'tutorial webvuln');
+    const output = await getLastOutput(page);
+
+    expect(output).toContain('MISSION BRIEFING');
+    // Should mention the target context and first step command
+    expect(output).toContain('nmap');
+  });
+
+  test('completing webvuln scenario shows completion', async ({ page }) => {
+    test.setTimeout(60000);
+
+    await typeCommand(page, 'tutorial webvuln');
+
+    // Step 1: nmap (identify webserver)
+    await typeCommand(page, 'nmap target');
+    await page.waitForTimeout(300);
+
+    // Step 2: nikto (scan web vulnerabilities)
+    await typeCommand(page, 'nikto target');
+    await page.waitForTimeout(300);
+
+    // Step 3: sqlmap (test SQL injection)
+    await typeCommand(page, 'sqlmap target');
+    await page.waitForTimeout(300);
+
+    // Step 4: cat config file (discover sensitive config)
+    await typeCommand(page, 'cat config.php');
+    await page.waitForTimeout(500);
+
+    const output = await getLastOutput(page);
+    expect(output).toContain('MISSIE VOLTOOID');
+  });
+
+  // ----------------------------------------
+  // Group 6: Privilege Escalation Scenario
+  // ----------------------------------------
+
+  test('privesc scenario starts with correct briefing', async ({ page }) => {
+    await typeCommand(page, 'tutorial privesc');
+    const output = await getLastOutput(page);
+
+    expect(output).toContain('MISSION BRIEFING');
+    // Should mention the first step command
+    expect(output).toContain('cat');
+  });
+
+  test('completing privesc scenario shows completion', async ({ page }) => {
+    test.setTimeout(60000);
+
+    await typeCommand(page, 'tutorial privesc');
+
+    // Step 1: enumerate users
+    await typeCommand(page, 'cat /etc/passwd');
+    await page.waitForTimeout(300);
+
+    // Step 2: explore log files
+    await typeCommand(page, 'ls /var/log');
+    await page.waitForTimeout(300);
+
+    // Step 3: analyze login attempts
+    await typeCommand(page, 'cat /var/log/auth.log');
+    await page.waitForTimeout(300);
+
+    // Step 4: find leaked credentials
+    await typeCommand(page, 'cat ~/.bash_history');
+    await page.waitForTimeout(500);
+
+    const output = await getLastOutput(page);
+    expect(output).toContain('MISSIE VOLTOOID');
+  });
+
+  // ----------------------------------------
+  // Group 7: Certificate & Reset
+  // ----------------------------------------
+
+  test('tutorial cert after completion shows certificate', async ({ page }) => {
+    test.setTimeout(60000);
+
+    // Complete recon scenario first
+    await typeCommand(page, 'tutorial recon');
+    await typeCommand(page, 'ping 192.168.1.100');
+    await page.waitForTimeout(300);
+    await typeCommand(page, 'nmap 192.168.1.100');
+    await page.waitForTimeout(300);
+    await typeCommand(page, 'whois securecorp.com');
+    await page.waitForTimeout(300);
+    await typeCommand(page, 'traceroute 192.168.1.100');
+    await page.waitForTimeout(500);
+
+    // Now request the certificate
+    await typeCommand(page, 'tutorial cert');
+    const output = await getLastOutput(page);
+
+    expect(output).toContain('CERTIFICAAT');
+  });
+
+  test('tutorial reset clears all progress', async ({ page }) => {
+    // Start recon and complete step 1
+    await typeCommand(page, 'tutorial recon');
+    await typeCommand(page, 'ping 192.168.1.100');
+    await page.waitForTimeout(300);
+
+    // Verify progress exists in localStorage
+    const savedBefore = await page.evaluate(() => {
+      return localStorage.getItem('hacksim_tutorial_progress');
+    });
+    expect(savedBefore).toBeTruthy();
+
+    // Reset all progress
+    await typeCommand(page, 'tutorial reset');
+    const resetOutput = await getLastOutput(page);
+    expect(resetOutput).toContain('gereset');
+
+    // Verify localStorage is cleared
+    const savedAfter = await page.evaluate(() => {
+      return localStorage.getItem('hacksim_tutorial_progress');
+    });
+    expect(savedAfter).toBeNull();
+
+    // Verify no active tutorial
+    await typeCommand(page, 'tutorial status');
+    const statusOutput = await getLastOutput(page);
+    expect(statusOutput).toContain('Geen actieve tutorial');
+  });
+
+  test('scenario list shows completion status after finishing', async ({ page }) => {
+    test.setTimeout(60000);
+
+    // Complete recon scenario
+    await typeCommand(page, 'tutorial recon');
+    await typeCommand(page, 'ping 192.168.1.100');
+    await page.waitForTimeout(300);
+    await typeCommand(page, 'nmap 192.168.1.100');
+    await page.waitForTimeout(300);
+    await typeCommand(page, 'whois securecorp.com');
+    await page.waitForTimeout(300);
+    await typeCommand(page, 'traceroute 192.168.1.100');
+    await page.waitForTimeout(500);
+
+    // Check scenario list for completion indicator
+    await typeCommand(page, 'tutorial');
+    const output = await getLastOutput(page);
+
+    // Should show completed marker next to recon
+    expect(output).toContain('recon');
+    // Completion indicator: [X] or ✓ or VOLTOOID
+    const hasCompletionMarker = output.includes('[X]') ||
+      output.includes('✓') ||
+      output.includes('VOLTOOID') ||
+      output.includes('voltooid');
+    expect(hasCompletionMarker).toBe(true);
+  });
+
+  // ----------------------------------------
+  // Group 8: Hint Persistence
+  // ----------------------------------------
+
+  test('hint counts persist across page reload', async ({ page }) => {
+    test.setTimeout(60000);
+
+    await typeCommand(page, 'tutorial recon');
+
+    // Type 2 wrong commands to trigger hint tier 1
+    await typeCommand(page, 'whoami');
+    await page.waitForTimeout(300);
+    await typeCommand(page, 'ls');
+    await page.waitForTimeout(300);
+
+    // Verify hint data is saved in localStorage
+    const hintData = await page.evaluate(() => {
+      return localStorage.getItem('hacksim_tutorial_hints');
+    });
+    expect(hintData).toBeTruthy();
+
+    // Reload page (progress should persist)
+    await page.reload();
+    await page.waitForTimeout(1000);
+
+    // Legal modal should not reappear
+    try {
+      const legalModal = page.locator('#legal-modal');
+      await expect(legalModal).toBeHidden({ timeout: 2000 });
+    } catch {
+      // Modal not present — fine
+    }
+
+    // Type another wrong command — should still show hint (not reset to 0)
+    await typeCommand(page, 'echo test');
+    const output = await getLastOutput(page);
+
+    // After 3 total wrong attempts (2 before reload + 1 after),
+    // hint count should be >= tier 1 threshold (2), so hints should appear
+    expect(output).toContain('Hint');
+  });
+
 });
