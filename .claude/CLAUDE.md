@@ -83,6 +83,17 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 104: M6 Tutorial Afronding & E2E Tests (22 feb 2026)
+⚠️ **Never:**
+- Exported functions zonder caller — grep `export` + grep functienaam om orphans te detecteren
+- `acceptLegalModal` hardcoded als verplicht — legal modal is soms al dismissed (parallel workers, cached localStorage)
+- E2E assertions op features die nog niet gedeployed zijn — tests draaien tegen live URL
+
+✅ **Always:**
+- Graceful modal helpers met try/catch fallback — voorkomt false failures bij race conditions
+- Test assertions matchen met wat live staat, niet met lokale code
+- `tutorial cert` als subcommando voor clipboard — fire-and-forget pattern (async API + sync fallback)
+
 ### Sessie 103: M6 Tutorial System (20 feb 2026)
 ⚠️ **Never:**
 - State machine zonder expliciete state enum — gebruik altijd een `STATES` object
@@ -129,6 +140,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
 **Rotation trigger:** Every 5 sessions (last: Sessie 103, next: Sessie 108)
+**Sessie counter:** 104
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -168,12 +180,12 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - **PRD:** `docs/prd.md` v1.8
 - **Commands:** `docs/commands-list.md` (32 commands)
 - **Style Guide:** `docs/style-guide.md` v1.5
-- **Sessie logs:** `SESSIONS.md` → docs/sessions/ (~98 sessies)
+- **Sessie logs:** `SESSIONS.md` → docs/sessions/ (~104 sessies)
 - **Netlify/Domain:** `docs/netlify-setup.md`
 - **Rules:** `.claude/rules/` (tone-and-output, architecture-patterns, troubleshooting, command-checklist)
 - **Filesystem:** PRD Bijlage B | **Tech rationale:** PRD §13
 
 ---
 
-**Last updated:** 21 februari 2026 (Sessie 103 — M6 Tutorial System)
-**Version:** 3.3 (Sessie 103: tutorial system, production hardening, session summaries sync)
+**Last updated:** 22 februari 2026 (Sessie 104 — M6 Tutorial Afronding)
+**Version:** 3.4 (Sessie 104: cert command, E2E tests, progress sync)

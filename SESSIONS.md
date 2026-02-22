@@ -8,10 +8,11 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (88-103)](docs/sessions/current.md) - Full Detail
-**Sessies:** 103, 102, 101, 100, 96, 95, 94, 93, 92, 91, 90, 89, 88
-**Period:** 26 december 2025 - 20 februari 2026
+### [Current Sessions (88-104)](docs/sessions/current.md) - Full Detail
+**Sessies:** 104, 103, 102, 101, 100, 96, 95, 94, 93, 92, 91, 90, 89, 88
+**Period:** 26 december 2025 - 22 februari 2026
 **Topics:**
+- M6 Tutorial Afronding: cert command, E2E tests, progress sync (Sessie 104)
 - M6 Tutorial System: state machine framework + reconnaissance scenario (Sessie 103)
 - MVP Polish & Production Hardening: output buffer, console.log cleanup, cross-page consistency (Sessie 102)
 - Playwright E2E test fixes: Cookiebot blocking, selector updates, 67→7 failures (Sessie 101)
