@@ -19,6 +19,10 @@ import tutorialRenderer from '../tutorial/tutorial-renderer.js';
 import reconScenario from '../tutorial/scenarios/recon.js';
 import webvulnScenario from '../tutorial/scenarios/webvuln.js';
 import privescScenario from '../tutorial/scenarios/privesc.js';
+import challengeManager from '../gamification/challenge-manager.js';
+import challengeRenderer from '../gamification/challenge-renderer.js';
+import progressStore from '../gamification/progress-store.js';
+import easyChallenges from '../gamification/challenges/easy.js';
 
 class Terminal {
   constructor() {
@@ -76,6 +80,15 @@ class Terminal {
     tutorialManager.register(webvulnScenario);
     tutorialManager.register(privescScenario);
     tutorialManager.resume();
+
+    // Initialize challenge system
+    challengeManager.setRenderer(challengeRenderer);
+    easyChallenges.forEach(function(challenge) {
+      challengeManager.register(challenge);
+    });
+
+    // Update streak on session start
+    progressStore.updateStreak();
 
     // Render welcome message (personalized via onboarding)
     renderer.renderWelcome(onboarding);
@@ -224,6 +237,15 @@ class Terminal {
         }
       }
 
+      // Challenge system: check command against active challenge
+      if (challengeManager.isActive() &&
+          !['challenge', 'help', 'man', 'clear', 'history', 'shortcuts'].includes(parsed.command)) {
+        const challengeFeedback = challengeManager.handleCommand(parsed.command, parsed.args, parsed.flags, this.context);
+        if (challengeFeedback) {
+          renderer.renderInfo(challengeFeedback);
+        }
+      }
+
       // Track command execution (analytics - NO ARGUMENTS!)
       analyticsEvents.commandExecuted(parsed.command, true);
 
@@ -324,7 +346,8 @@ class Terminal {
     // Commands that work without any arguments
     const NO_ARGS_NEEDED = [
       'help', 'ls', 'pwd', 'whoami', 'history',
-      'ifconfig', 'netstat', 'date', 'leerpad', 'shortcuts', 'tutorial'
+      'ifconfig', 'netstat', 'date', 'leerpad', 'shortcuts', 'tutorial',
+      'challenge'
     ];
 
     // Commands that require at least 1 argument

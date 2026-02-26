@@ -96,6 +96,20 @@ const analyticsEvents = {
   },
 
   /**
+   * Track gamification events
+   * @param {string} action - gamification action (challenge_started, challenge_completed, etc.)
+   * @param {string} itemId - Challenge or badge identifier
+   * @param {object} extra - Additional data (attempts, points)
+   */
+  gamificationEvent(action, itemId, extra = {}) {
+    analyticsTracker.trackEvent('gamification', {
+      action: action,
+      item: itemId,
+      ...extra
+    });
+  },
+
+  /**
    * Track feedback submission
    * @param {number} rating - Star rating (1-5)
    * @param {boolean} hasComment - Whether user left a comment
