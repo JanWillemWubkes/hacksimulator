@@ -683,16 +683,6 @@
   z-index: 1;
 }
 
-.solution-eyebrow {
-  font-family: var(--font-terminal);
-  font-size: 0.75rem;
-  font-weight: var(--font-weight-medium);
-  color: rgba(0, 0, 0, 0.6);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin: 0 0 var(--spacing-sm) 0;
-}
-
 .solution-section h2 {
   font-family: var(--font-heading);
   font-size: clamp(2rem, 5vw, 3rem);
@@ -1041,124 +1031,6 @@
   font-size: 0.875rem;
   border-radius: 10px;
   width: fit-content;
-}
-
-/* ==================== Testimonials Section ==================== */
-.testimonials-section {
-  position: relative;
-}
-
-.testimonials-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(22, 27, 34, 0.1);
-  pointer-events: none;
-  z-index: -1;
-  /* Break out of max-width container for full-width bg */
-  margin-left: calc(-50vw + 50%);
-  margin-right: calc(-50vw + 50%);
-}
-
-.testimonials-section h2 {
-  margin-bottom: calc(var(--spacing-xl) * 1.5);
-}
-
-.testimonial-cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-lg);
-  margin-bottom: calc(var(--spacing-xl) * 2);
-}
-
-.testimonial-card {
-  background: rgb(12, 18, 24);
-  border: 1px solid var(--color-border);
-  border-radius: 16px;
-  padding: 32px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  /* Entrance animation */
-  opacity: 0;
-  transform: translateY(20px);
-  filter: blur(4px);
-  transition:
-    opacity 0.6s ease-out,
-    transform 0.6s ease-out,
-    filter 0.6s ease-out,
-    border-color 0.3s ease;
-}
-
-.testimonial-card.visible {
-  opacity: 1;
-  transform: translateY(0);
-  filter: blur(0);
-}
-
-.testimonial-card:nth-child(1) { transition-delay: 0ms; }
-.testimonial-card:nth-child(2) { transition-delay: 100ms; }
-.testimonial-card:nth-child(3) { transition-delay: 200ms; }
-
-.testimonial-card:hover {
-  border-color: rgba(159, 239, 0, 0.4);
-}
-
-.quote-icon {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  color: var(--color-cta-primary);
-  opacity: 0.3;
-}
-
-.testimonial-author {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
-}
-
-.testimonial-card blockquote {
-  font-family: var(--font-body);
-  font-size: 1rem;
-  font-style: italic;
-  color: var(--color-text-dim);
-  line-height: 1.6;
-  margin: 0;
-}
-
-.author-avatar {
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(159, 239, 0, 0.1);
-  border-radius: 50%;
-  font-family: var(--font-heading);
-  font-size: 0.875rem;
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-cta-primary);
-}
-
-.author-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.author-name {
-  font-family: var(--font-heading);
-  font-size: 0.95rem;
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-}
-
-.author-role {
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  color: var(--color-text-dim);
 }
 
 /* Blog Links */
@@ -1915,16 +1787,6 @@ html {
     font-size: 0.9rem;
   }
 
-  /* Testimonials - Mobile */
-  .testimonial-cards {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-md);
-  }
-
-  .testimonial-card {
-    padding: var(--spacing-lg);
-  }
-
   /* Final CTA */
   .final-cta {
     padding: var(--spacing-xl) var(--landing-padding-mobile);
@@ -2004,9 +1866,7 @@ html {
   }
 
   .btn-cta .btn-icon,
-  .btn-cta:hover .btn-icon,
-  .leerpad-cta svg,
-  .leerpad-cta:hover svg {
+  .btn-cta:hover .btn-icon {
     transform: none;
   }
 
@@ -2054,8 +1914,7 @@ html {
 
 [data-theme="light"] .feature-icon,
 [data-theme="light"] .pain-icon,
-[data-theme="light"] .step-icon,
-[data-theme="light"] .author-avatar {
+[data-theme="light"] .step-icon {
   background: rgba(0, 0, 0, 0.04);  /* Soft gray - clean SaaS look */
 }
 
@@ -2071,10 +1930,6 @@ html {
 /* Solution Section - Tailwind Green 600 with white text for rich, modern appearance */
 [data-theme="light"] .solution-section {
   background: #16a34a;  /* Tailwind Green 600 - consistent met CTA buttons */
-}
-
-[data-theme="light"] .solution-eyebrow {
-  color: rgba(255, 255, 255, 0.8);  /* White at 80% - subtle hierarchy */
 }
 
 [data-theme="light"] .solution-section h2 {

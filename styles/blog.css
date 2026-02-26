@@ -414,13 +414,6 @@ a[href='#all'].category-btn {
   line-height: 1.6;
   margin-bottom: var(--spacing-sm);
 }
-.blog-post-content .checklist {
-  list-style: none;
-  margin-left: calc(var(--spacing-xl) - var(--spacing-md));
-}
-.blog-post-content .checklist li {
-  margin-left: var(--spacing-md);
-}
 .blog-post-content ol a,
 .blog-post-content p a,
 .blog-post-content ul a {
@@ -514,7 +507,6 @@ a[href='#all'].category-btn {
   margin-top: var(--spacing-xs);
 }
 .blog-info,
-.blog-support,
 .blog-tip,
 .blog-warning {
   background-color: var(--color-surface-elevated);
@@ -555,18 +547,7 @@ a[href='#all'].category-btn {
   font-weight: var(--font-weight-bold);
   margin-right: var(--spacing-sm);
 }
-.blog-support {
-  border-left: 4px solid var(--color-accent);
-}
-.blog-support:before {
-  color: var(--color-accent);
-  content: '[SUPPORT] ';
-  font-family: var(--font-terminal);
-  font-weight: var(--font-weight-bold);
-  margin-right: var(--spacing-sm);
-}
 [data-theme='light'] .blog-info,
-[data-theme='light'] .blog-support,
 [data-theme='light'] .blog-tip,
 [data-theme='light'] .blog-warning {
   color: var(--color-text);
