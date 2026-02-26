@@ -63,47 +63,7 @@ export function findClosestCommand(input, commands, maxDistance = 2) {
   return bestMatch;
 }
 
-/**
- * Find multiple similar commands (top 3)
- * @param {string} input - User input
- * @param {string[]} commands - List of valid commands
- * @param {number} maxResults - Max number of suggestions (default: 3)
- * @returns {string[]} Array of suggestions
- */
-export function findSimilarCommands(input, commands, maxResults = 3) {
-  const matches = commands
-    .map(cmd => ({
-      command: cmd,
-      distance: levenshteinDistance(input.toLowerCase(), cmd.toLowerCase())
-    }))
-    .filter(m => m.distance <= 3) // Max distance of 3
-    .sort((a, b) => a.distance - b.distance)
-    .slice(0, maxResults)
-    .map(m => m.command);
-
-  return matches;
-}
-
-/**
- * Check if two strings are similar (for duplicate detection)
- * @param {string} a - First string
- * @param {string} b - Second string
- * @param {number} threshold - Similarity threshold (0-1, default: 0.8)
- * @returns {boolean} True if similar
- */
-export function isSimilar(a, b, threshold = 0.8) {
-  const maxLen = Math.max(a.length, b.length);
-  if (maxLen === 0) return true;
-
-  const distance = levenshteinDistance(a, b);
-  const similarity = 1 - (distance / maxLen);
-
-  return similarity >= threshold;
-}
-
 export default {
   levenshteinDistance,
-  findClosestCommand,
-  findSimilarCommands,
-  isSimilar
+  findClosestCommand
 };

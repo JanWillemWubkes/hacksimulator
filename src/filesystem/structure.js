@@ -205,13 +205,6 @@ define('MAIL_PASSWORD', 'email_pass_456');
 };
 
 /**
- * Get the default home directory for the current user
- */
-export function getHomeDirectory() {
-  return '/home/hacker';
-}
-
-/**
  * Get initial current working directory
  */
 export function getInitialCwd() {

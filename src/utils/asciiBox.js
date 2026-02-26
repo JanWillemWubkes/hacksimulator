@@ -1,6 +1,6 @@
 import { getResponsiveBoxWidth } from "./box-utils.js";
 
-export function createBox(title, width) {
+function createBox(title, width) {
   if (title === undefined) title = null;
   if (width === undefined) width = getResponsiveBoxWidth();
 
@@ -43,7 +43,7 @@ export function boxHeader(title, width) {
   return box.top + '\n' + box.bottom;
 }
 
-export function createLightBox(title, width) {
+function createLightBox(title, width) {
   if (title === undefined) title = null;
   if (width === undefined) width = getResponsiveBoxWidth();
 

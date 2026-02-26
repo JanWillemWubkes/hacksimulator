@@ -37,7 +37,7 @@ function measureCharWidth() {
   return width;
 }
 
-export function invalidateCharWidthCache() {
+function invalidateCharWidthCache() {
   _charWidthCache = null;
   _charWidthCacheKey = '';
 }
