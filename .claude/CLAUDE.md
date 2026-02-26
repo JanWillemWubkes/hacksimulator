@@ -16,7 +16,7 @@
 **Blog:** 10 posts live at `/blog/` (60+ inline jargon explanations)
 **Contact:** contact@hacksimulator.nl (Gmail forwarding)
 
-**Performance:** Playwright E2E 100 tests across 13 suites | WCAG AAA | 165 CSS variables
+**Performance:** Playwright E2E 131 tests across 15 suites | WCAG AAA | 165 CSS variables
 **Bundle:** ~983 KB productieve code → ~809 KB na Netlify minificatie | Terminal Core: ~340 KB (binnen 400 KB budget)
 
 → **Live metrics:** `TASKS.md` regels 9-26 (meest recente tellingen)

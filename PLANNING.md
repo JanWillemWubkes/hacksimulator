@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 15 februari 2026
+**Laatst bijgewerkt:** 22 februari 2026
 **Status:** M5 Testing & Launch Phase - ✅ **LIVE on Netlify!**
 **Verantwoordelijk:** Development Team
 **Live URL:** https://hacksimulator.nl/
@@ -747,7 +747,7 @@ const DEBUG_MODE = false;
 
 ### Fase 1: MVP (Maand 1-3) - 🔵 IN UITVOERING (55.6%) - **LIVE!**
 
-**Status:** 164/295 tasks completed (55.6% totaal project scope)
+**Status:** 191/295 tasks completed (64.7% totaal project scope)
 **MVP-only Progress:** M0-M4 (100%), M5 (39/45 - 87%)
 **M5.5 Monetization:** ❌ Geannuleerd (affiliate aanvragen afgewezen)
 **Live URL:** https://hacksimulator.nl/
@@ -788,9 +788,9 @@ const DEBUG_MODE = false;
 ### Fase 2: Tutorials (Maand 4-6)
 **Doel:** Guided learning scenarios + Command system scaling
 
-- [ ] Tutorial command (framework)
-- [ ] 3 scenario's: recon, webvuln, privesc
-- [ ] Progress tracking
+- [x] Tutorial command (framework) — ✅ Sessie 103-104
+- [x] 3 scenario's: recon, webvuln, privesc — ✅ Sessie 103
+- [x] Progress tracking — ✅ Sessie 103 (localStorage persistence)
 - [ ] **Help Command Interactive Paging** (conditional: when 50+ commands)
   - SPACE/Q navigation pattern (bash `less` style)
   - Page indicators: "Page 1/3", "-- More --"
@@ -902,8 +902,8 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 
 ---
 
-**Laatst bijgewerkt:** 15 februari 2026
-**Versie:** 2.3 (Sessie 99: Documentation Consistency Audit — metrics aligned with TASKS.md + actual measurements)
+**Laatst bijgewerkt:** 22 februari 2026
+**Versie:** 2.4 (Sessie 105: TASKS sync + M6 tutorial checkboxes + M9 Refactor Sprint)
 **Status:** ✅ Deployed - Live in Production | M5.5 Monetization Geannuleerd
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
