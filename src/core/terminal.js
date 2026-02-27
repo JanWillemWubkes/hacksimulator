@@ -23,6 +23,8 @@ import challengeManager from '../gamification/challenge-manager.js';
 import challengeRenderer from '../gamification/challenge-renderer.js';
 import progressStore from '../gamification/progress-store.js';
 import easyChallenges from '../gamification/challenges/easy.js';
+import mediumChallenges from '../gamification/challenges/medium.js';
+import hardChallenges from '../gamification/challenges/hard.js';
 
 class Terminal {
   constructor() {
@@ -84,6 +86,12 @@ class Terminal {
     // Initialize challenge system
     challengeManager.setRenderer(challengeRenderer);
     easyChallenges.forEach(function(challenge) {
+      challengeManager.register(challenge);
+    });
+    mediumChallenges.forEach(function(challenge) {
+      challengeManager.register(challenge);
+    });
+    hardChallenges.forEach(function(challenge) {
       challengeManager.register(challenge);
     });
 
