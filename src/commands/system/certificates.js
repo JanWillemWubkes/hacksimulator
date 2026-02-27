@@ -112,7 +112,7 @@ export default {
     "    - Download je certificaten als bewijs van je skills!\n" +
     "\n" +
     "GERELATEERDE COMMANDO'S\n" +
-    "    challenge (hack opdrachten), achievements (badges)"
+    "    challenge (hack opdrachten), achievements (badges), dashboard (voortgang)"
   )
 };
 

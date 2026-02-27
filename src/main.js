@@ -26,6 +26,7 @@ import tutorialCmd from './commands/system/tutorial.js';
 import challengeCmd from './commands/system/challenge.js';
 import achievementsCmd from './commands/system/achievements.js';
 import certificatesCmd from './commands/system/certificates.js';
+import dashboardCmd from './commands/system/dashboard.js';
 
 // Import filesystem commands
 import lsCmd from './commands/filesystem/ls.js';
@@ -78,6 +79,7 @@ function registerCommands() {
   registry.register('challenge', challengeCmd);
   registry.register('achievements', achievementsCmd);
   registry.register('certificates', certificatesCmd);
+  registry.register('dashboard', dashboardCmd);
 
   // Filesystem commands (11)
   registry.register('ls', lsCmd);
