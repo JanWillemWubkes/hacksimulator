@@ -193,6 +193,41 @@ export default new class ProgressStore {
   }
 
   /**
+   * Save a certificate for a completed challenge.
+   */
+  saveCertificate(challengeId, certData) {
+    var data = this.load();
+    if (!data.certificates) data.certificates = {};
+
+    // Only save once (first completion)
+    if (!data.certificates[challengeId]) {
+      data.certificates[challengeId] = {
+        earnedAt: certData.earnedAt || new Date().toISOString(),
+        attempts: certData.attempts || 0
+      };
+    }
+
+    this._cache = data;
+    this.save();
+  }
+
+  /**
+   * Get certificate data for a specific challenge.
+   */
+  getCertificate(challengeId) {
+    var data = this.load();
+    return (data.certificates || {})[challengeId] || null;
+  }
+
+  /**
+   * Get all earned certificates.
+   */
+  getAllCertificates() {
+    var data = this.load();
+    return data.certificates || {};
+  }
+
+  /**
    * Reset all gamification data.
    */
   reset() {
@@ -215,6 +250,7 @@ export default new class ProgressStore {
       commandCounts: {},
       challengeLog: [],
       badges: [],
+      certificates: {},
       streak: 0,
       lastActiveDate: null
     };

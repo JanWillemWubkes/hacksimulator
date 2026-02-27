@@ -28,8 +28,8 @@ export default defineConfig({
 
   // Shared settings for all the projects below
   use: {
-    // Base URL for tests
-    baseURL: 'https://hacksimulator.nl',
+    // Base URL for tests (override with BASE_URL env var for local testing)
+    baseURL: process.env.BASE_URL || 'https://hacksimulator.nl',
 
     // Collect trace when retrying the failed test
     trace: 'on-first-retry',

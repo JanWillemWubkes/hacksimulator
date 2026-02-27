@@ -154,12 +154,21 @@ export default new class ChallengeManager {
       this.state = STATES.COMPLETE;
       progressStore.completeChallenge(challenge.id, challenge.points);
 
+      // Save certificate for this challenge
+      progressStore.saveCertificate(challenge.id, {
+        earnedAt: new Date().toISOString(),
+        attempts: this.attempts
+      });
+
       analyticsEvents.gamificationEvent('challenge_completed', challenge.id, {
         attempts: this.attempts,
         points: challenge.points
       });
 
       var feedback = this._renderer.renderCompletion(challenge, this.attempts);
+
+      // Certificate hint
+      feedback += '\n[TIP] Type \'certificates ' + challenge.id + '\' om je certificaat te bekijken.';
 
       // Check for challenge-triggered badges
       var newBadges = badgeManager.checkUnlocks('challenge');

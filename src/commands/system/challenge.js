@@ -46,6 +46,17 @@ export default {
       return challengeManager.exit();
     }
 
+    // challenge cert → redirect to certificates command
+    if (sub === 'cert' || sub === 'certificate' || sub === 'certificates') {
+      var certId = args.length > 1 ? args[1].toLowerCase() : '';
+      if (certId) {
+        return '[?] Gebruik: certificates ' + certId + '\n\n' +
+               '[TIP] Het certificaten systeem heeft een eigen commando: \'certificates\'';
+      }
+      return '[?] Gebruik het \'certificates\' commando om je certificaten te bekijken.\n\n' +
+             '[TIP] Type \'certificates\' voor een overzicht van al je verdiende certificaten.';
+    }
+
     // challenge reset (hidden/debug)
     if (sub === 'reset') {
       challengeManager.reset();
