@@ -10,6 +10,7 @@
 
 import progressStore from './progress-store.js';
 import analyticsEvents from '../analytics/events.js';
+import badgeManager from './badge-manager.js';
 
 const STATES = {
   IDLE: 'IDLE',
@@ -159,6 +160,12 @@ export default new class ChallengeManager {
       });
 
       var feedback = this._renderer.renderCompletion(challenge, this.attempts);
+
+      // Check for challenge-triggered badges
+      var newBadges = badgeManager.checkUnlocks('challenge');
+      newBadges.forEach(function(badge) {
+        feedback += '\n\n' + badgeManager.renderNotification(badge);
+      });
 
       // Reset state
       this.state = STATES.IDLE;

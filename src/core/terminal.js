@@ -22,6 +22,7 @@ import privescScenario from '../tutorial/scenarios/privesc.js';
 import challengeManager from '../gamification/challenge-manager.js';
 import challengeRenderer from '../gamification/challenge-renderer.js';
 import progressStore from '../gamification/progress-store.js';
+import badgeManager from '../gamification/badge-manager.js';
 import easyChallenges from '../gamification/challenges/easy.js';
 import mediumChallenges from '../gamification/challenges/medium.js';
 import hardChallenges from '../gamification/challenges/hard.js';
@@ -98,6 +99,10 @@ class Terminal {
     // Update streak on session start
     progressStore.updateStreak();
 
+    // Initialize badge system and check session-triggered badges
+    badgeManager.init();
+    var sessionBadges = badgeManager.checkUnlocks('session');
+
     // Render welcome message (personalized via onboarding)
     renderer.renderWelcome(onboarding);
 
@@ -107,6 +112,15 @@ class Terminal {
     const resumeMsg = tutorialManager.getResumeMessage();
     if (resumeMsg) {
       setTimeout(() => renderer.renderInfo(resumeMsg), 100);
+    }
+
+    // Defer session badge notifications to after welcome message
+    if (sessionBadges.length > 0) {
+      setTimeout(() => {
+        sessionBadges.forEach(function(badge) {
+          renderer.renderInfo(badgeManager.renderNotification(badge));
+        });
+      }, 200);
     }
   }
 
@@ -257,6 +271,12 @@ class Terminal {
       // Track command execution (analytics - NO ARGUMENTS!)
       analyticsEvents.commandExecuted(parsed.command, true);
 
+      // Check for command-triggered badges
+      var newBadges = badgeManager.checkUnlocks('command');
+      newBadges.forEach(function(badge) {
+        renderer.renderInfo(badgeManager.renderNotification(badge));
+      });
+
     } catch (error) {
       console.error('Command execution error:', error);
       renderer.renderError(`Error executing command: ${error.message}`);
@@ -355,7 +375,7 @@ class Terminal {
     const NO_ARGS_NEEDED = [
       'help', 'ls', 'pwd', 'whoami', 'history',
       'ifconfig', 'netstat', 'date', 'leerpad', 'shortcuts', 'tutorial',
-      'challenge'
+      'challenge', 'achievements'
     ];
 
     // Commands that require at least 1 argument
