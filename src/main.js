@@ -24,6 +24,7 @@ import shortcutsCmd from './commands/system/shortcuts.js';
 import leerpadCmd from './commands/system/leerpad.js';
 import tutorialCmd from './commands/system/tutorial.js';
 import challengeCmd from './commands/system/challenge.js';
+import achievementsCmd from './commands/system/achievements.js';
 
 // Import filesystem commands
 import lsCmd from './commands/filesystem/ls.js';
@@ -62,7 +63,7 @@ import niktoCmd from './commands/security/nikto.js';
 function registerCommands() {
   const registry = terminal.getRegistry();
 
-  // System commands (10)
+  // System commands (11)
   registry.register('clear', clearCmd);
   registry.register('echo', echoCmd);
   registry.register('whoami', whoamiCmd);
@@ -74,6 +75,7 @@ function registerCommands() {
   registry.register('leerpad', leerpadCmd);
   registry.register('tutorial', tutorialCmd);
   registry.register('challenge', challengeCmd);
+  registry.register('achievements', achievementsCmd);
 
   // Filesystem commands (11)
   registry.register('ls', lsCmd);
