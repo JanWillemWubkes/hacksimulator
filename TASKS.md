@@ -2,13 +2,13 @@
 
 **Laatst bijgewerkt:** 28 februari 2026
 **Status:** M7 Gamification 83% | M6 Tutorial System 79% (LIVE on hacksimulator.nl)
-**Sprint:** Sessie 105: M7 gamification sync | Sessie 104: M6 Tutorial afronding (cert, tests, docs)
+**Sprint:** Sessie 106: M7 Gamification Phase 1-6 complete | Sessie 105: M7 gamification sync
 
 ---
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 245 / 315 taken voltooid (77.7%)
+**Totaal:** 249 / 315 taken voltooid (79.0%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
@@ -20,7 +20,7 @@
 | M5: Testing & Launch | 🔵 In uitvoering | 41/45 | 91% | ✅ **Performance + Config + Security + Accessibility + Content + Bundle Opt 100%**
 | M5.5: Monetization MVP | ❌ Geannuleerd | - | - | Affiliate aanvragen afgewezen |
 | M6: Tutorial System | 🔵 In uitvoering | 26/33 | 79% | ✅ Framework + 3 scenarios + cert + analytics + E2E tests + perf audit |
-| M7: Gamification | 🔵 In uitvoering | 39/47 | 83% | ✅ Phase 1-5 complete (challenges, badges, certs, dashboard) |
+| M7: Gamification | 🔵 In uitvoering | 43/47 | 91% | ✅ Phase 1-6 complete (challenges, badges, certs, dashboard, leaderboard) |
 | M8: Analytics & Scaling | ⏭️ Gepland | 0/40 | 0% |
 | M9: Refactor Sprint | 🔵 In uitvoering | 8/19 | 42% | ✅ Lighthouse + orphan cleanup + security dedup + test coverage + CSS audit |
 
@@ -29,13 +29,13 @@
 ## 🎯 Huidige Focus
 
 **Actieve Mijlpaal:** M5 - Testing & Launch ✅ **LIVE on hacksimulator.nl!**
-**Current Status:** ✅ **UNBLOCKED** - Playwright E2E: 131 tests across 15 suites (Chromium, Firefox, WebKit passing)
+**Current Status:** ✅ **UNBLOCKED** - Playwright E2E: 145 tests across 27 suites (Chromium, Firefox, WebKit passing)
 
 **Volgende Stappen:**
 1. ✅ GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
 2. ✅ Netlify deployment (https://hacksimulator.nl/)
 3. ✅ Performance audit (Lighthouse 100/100/92/100)
-4. ✅ Cross-browser test infrastructure (Playwright 131 tests, 15 suites)
+4. ✅ Cross-browser test infrastructure (Playwright 145 tests, 27 suites)
 5. ✅ **FIXED P0-001:** Duplicate #legal-modal ID removed
 6. ✅ Cross-browser tests: Chromium 91+, Firefox passing
 7. ✅ **FIXED P0-002:** Mobile CSS not loading (CSP blocked onload handler) - Sessie 95
@@ -388,7 +388,7 @@
 
 #### Content Review ✅ VOLTOOID (Sessie 98)
 - [x] Alle UI teksten Nederlands (compliance check) - ✅ 100% NL
-- [x] Alle man pages compleet (32 commands) - ✅ Meer dan target
+- [x] Alle man pages compleet (38 commands) - ✅ Meer dan target
 - [x] Educatieve tips bij security tools (aanwezig) - ✅ Alle 5 tools
 - [x] Juridische warnings correct (offensive tools) - ✅ Art. 138ab + consent
 - [x] Privacy Policy compleet (AVG) - ✅ 476 regels
@@ -411,7 +411,7 @@
 - [x] 301 redirect van oud Netlify subdomain naar hacksimulator.nl
 
 #### Pre-Launch Checklist ✅ GROTENDEELS VOLTOOID
-- [x] Alle 32 commands werkend (content review Sessie 98)
+- [x] Alle 38 commands werkend (content review Sessie 98, +6 in M6/M7)
 - [x] 3-tier help system functioneel
 - [x] Onboarding flow compleet
 - [x] Mobile responsive (CSS fixes Sessie 95, quick commands Sessie 101)
@@ -419,7 +419,7 @@
 - [x] Analytics tracking geconfigureerd (GA4 G-7F792VS6CE)
 - [x] Cookie consent banner werkend (Cookiebot CMP)
 - [x] Feedback mechanisme werkend (in-app feedback form)
-- [x] Cross-browser getest (Chromium + Firefox + WebKit, 118 E2E tests)
+- [x] Cross-browser getest (Chromium + Firefox + WebKit, 145 E2E tests)
 - [x] Performance targets gehaald (LCP ~2.0s, ~809 KB)
 
 #### Launch ✅ LIVE!
@@ -496,7 +496,7 @@
   - ✅ Flaky legal modal selector gefixt
   - ✅ Feedback locator geüpdatet
   - ✅ Mobile quick commands geimplementeerd
-  - **Test suite:** 131 tests across 15 suites
+  - **Test suite:** 145 tests across 27 suites (17 files)
 
 - [x] **Sessie 102:** MVP Perfectionering (18 feb 2026)
   - ✅ Domain referenties geüpdatet (famous-frangollo → hacksimulator.nl)
@@ -553,7 +553,7 @@
   - [ ] Safari macOS (latest) - WebKit blocked by system deps
   - [ ] Mobile Safari iOS 16+ (real device)
   - [ ] Chrome Mobile Android 12+ (real device)
-  - ✅ Chrome/Firefox/WebKit automated tests passing (131 tests, 15 suites)
+  - ✅ Chrome/Firefox/WebKit automated tests passing (145 tests, 27 suites)
 
 - [x] **A.3: Configuration Setup** ✅ VOLTOOID (Sessie 91)
   - [x] GA4 Measurement ID ingevuld: G-7F792VS6CE
@@ -573,7 +573,7 @@
 1. [x] GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
 2. [x] Netlify deployment + custom domain (https://hacksimulator.nl/)
 3. [x] Performance audit (Lighthouse 100/100/92/100)
-4. [x] Cross-browser testing (Chrome + Firefox + WebKit, 118 E2E tests)
+4. [x] Cross-browser testing (Chrome + Firefox + WebKit, 145 E2E tests)
 5. [x] Bundle size optimalisatie (~809 KB na Netlify minificatie)
 6. [x] GA4 geconfigureerd (G-7F792VS6CE)
 7. [x] Mobile quick commands (Sessie 101)
@@ -655,7 +655,7 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
 
 ### Test Coverage Review (2 taken)
 - [x] Identify untested edge cases in Playwright suite — ✅ Sessie 105: 13 nieuwe command-coverage tests (pwd, date, man, history, find, grep, ifconfig, netstat)
-- [x] Add missing tests for refactored code — ✅ Sessie 105: 131 tests/15 suites (was 118/14)
+- [x] Add missing tests for refactored code — ✅ Sessie 105-106: 145 tests/27 suites (was 118/14)
 
 **Total Tasks:** 19
 **Estimated Time:** 7-10 dagen
@@ -851,9 +851,9 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
 
 **Doel:** Add motivation layer through challenges, badges, and certificates
 **Tijdsinschatting:** 40-50 uur (6-7 dagen)
-**Taken:** 47 total (39 voltooid)
+**Taken:** 47 total (43 voltooid)
 **Dependencies:** M6 Tutorial System voltooid
-**Status:** 🔵 In uitvoering (Phase 1-5 voltooid, Phase 6 niet gebouwd, Phase 7 deels)
+**Status:** 🔵 In uitvoering (Phase 1-6 voltooid, Phase 7 testing deels)
 **Bundle Budget:** +50KB max (total: ~428KB / 500KB = 86%)
 
 **Success Criteria:**
@@ -1049,25 +1049,23 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
   - Scrollable dashboard sections
   - Simplified layout for narrow screens
 
-### Phase 6: Leaderboard (5h, 5 tasks) — ⏭️ Niet gebouwd (0/4)
-**Status:** Niet geïmplementeerd op feature/m7-gamification branch. Mogelijk bewust overgeslagen voor MVP.
-
-- [ ] Design local leaderboard system (1.5h)
+### Phase 6: Leaderboard (5h, 5 tasks) — ✅ 4/4 voltooid (Sessie 106)
+- [x] Design local leaderboard system (1.5h) — ✅ `src/gamification/leaderboard-data.js` (simulated top-10)
   - Local-only leaderboard (localStorage, MVP approach)
   - Track top 10 sessions by points
-  - Anonymous usernames (auto-generated: "Hacker_1234")
+  - Simulated competitive usernames for motivation
 
-- [ ] Implement local leaderboard (2h)
+- [x] Implement local leaderboard (2h) — ✅ `src/gamification/leaderboard-manager.js`
   - Store: top 10 sessions (points, date, command count)
   - Calculate rank: sort by total points
-  - Handle ties: secondary sort by time taken
+  - Personal ranking integration with simulated data
 
-- [ ] Create leaderboard command (1h)
+- [x] Create leaderboard command (1h) — ✅ `src/commands/system/leaderboard.js`
   - `leaderboard` → Show top 10
   - `leaderboard me` → Show user rank
   - Display format: ASCII table with rank, username, points
 
-- [ ] Leaderboard UI polish (0.5h)
+- [x] Leaderboard UI polish (0.5h) — ✅ Highlight user entry, percentile display
   - Highlight user's entry
   - Show percentile (e.g., "Top 15%")
 
@@ -1344,14 +1342,14 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 - `CLAUDE.md` - AI Assistant Context
 
 **Command Specs:**
-- `docs/commands-list.md` - Alle 32 commands gespecificeerd
+- `docs/commands-list.md` - Alle 38 commands gespecificeerd
 
 ---
 
 **Laatst bijgewerkt:** 28 februari 2026
-**Versie:** 3.7 (Sessie 105 — M7 Gamification sync)
-**Totaal Taken:** 302 (zie toptabel voor actuele breakdown per mijlpaal)
-**Voltooide Taken:** 245/315 (77.7%) — M0-M4: 100%, M5: 91% (41/45), M5.5: Geannuleerd, M6: 79% (26/33), M7: 83% (39/47), M9: 42% (8/19)
+**Versie:** 3.8 (Sessie 107 — Document sync)
+**Totaal Taken:** 315 (zie toptabel voor actuele breakdown per mijlpaal)
+**Voltooide Taken:** 249/315 (79.0%) — M0-M4: 100%, M5: 91% (41/45), M5.5: Geannuleerd, M6: 79% (26/33), M7: 91% (43/47), M9: 42% (8/19)
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 **Bundle:** ✅ ~809 KB na Netlify minificatie (Terminal Core ~340 KB, site totaal binnen 1000 KB budget — Sessie 100)

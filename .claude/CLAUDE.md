@@ -16,11 +16,11 @@
 **Blog:** 10 posts live at `/blog/` (60+ inline jargon explanations)
 **Contact:** contact@hacksimulator.nl (Gmail forwarding)
 
-**Performance:** Playwright E2E 131 tests across 15 suites | WCAG AAA | 165 CSS variables
+**Performance:** Playwright E2E 145 tests across 27 suites (17 files, 3 browsers) | WCAG AAA | 165 CSS variables
 **Bundle:** ~983 KB productieve code → ~809 KB na Netlify minificatie | Terminal Core: ~340 KB (binnen 400 KB budget)
 
 → **Live metrics:** `TASKS.md` regels 9-26 (meest recente tellingen)
-→ **Architecture:** `PLANNING.md` v2.3 | **Commands:** `docs/commands-list.md` (32 commands)
+→ **Architecture:** `PLANNING.md` v2.4 | **Commands:** `docs/commands-list.md` (38 commands)
 
 ---
 
@@ -83,54 +83,46 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 106: M7 Gamification — Full Stack (28 feb 2026)
+⚠️ **Never:**
+- Gamification hooks op één plek — badge checks moeten in terminal.js (na command) EN in challenge flow (na completion)
+- Meerdere localStorage keys voor gerelateerde state — consolideer naar één key (`hacksim_gamification`) voor atomair lezen/schrijven
+- TASKS.md sync vergeten na implementatie — commit `2b0ebfe` miste Phase 6 leaderboard status
+
+✅ **Always:**
+- Cross-cutting concerns (badge unlock) op meerdere hooks: terminal command execution + challenge completion
+- Simulated leaderboard data voor motivatie zonder backend — realistische usernames + scores
+- Certificate download via Blob API + clipboard fallback (mobile compatibiliteit)
+- Dashboard met subcommands (stats, badges, challenges) — vermijd monolithische output
+
 ### Sessie 104: M6 Tutorial Afronding & E2E Tests (22 feb 2026)
 ⚠️ **Never:**
 - Exported functions zonder caller — grep `export` + grep functienaam om orphans te detecteren
 - `acceptLegalModal` hardcoded als verplicht — legal modal is soms al dismissed (parallel workers, cached localStorage)
-- E2E assertions op features die nog niet gedeployed zijn — tests draaien tegen live URL
 - Playwright `html` reporter zonder `open: 'never'` — hangt oneindig in non-interactieve shells (Claude Code, CI)
 
 ✅ **Always:**
 - Graceful modal helpers met try/catch fallback — voorkomt false failures bij race conditions
-- Test assertions matchen met wat live staat, niet met lokale code
-- `tutorial cert` als subcommando voor clipboard — fire-and-forget pattern (async API + sync fallback)
 - `['html', { open: 'never' }]` in Playwright reporter config — bekijk achteraf via `npx playwright show-report`
 
 ### Sessie 103: M6 Tutorial System (20 feb 2026)
 ⚠️ **Never:**
 - State machine zonder expliciete state enum — gebruik altijd een `STATES` object
 - Command validatie blokkeren — altijd eerst laten uitvoeren, dan checken
-- Strikte arg validatie in tutorials — beginners typen niet altijd perfecte args
 
 ✅ **Always:**
 - Non-blocking tutorial overlay — UX blijft responsief, commands werken altijd
 - Progressive hints (3 tiers: 2/4/6 pogingen) — beginners zelf laten proberen
-- localStorage persistence voor tutorial voortgang
 - Losgekoppelde scenarios via registry pattern — makkelijk uitbreidbaar
 
 ### Sessie 102: MVP Polish & Production Hardening (20 feb 2026)
 ⚠️ **Never:**
 - `console.log` in productie — altijd opruimen voor deploy
-- Hardcoded color values in Playwright tests — theme-aware assertions gebruiken
 - `media="print" onload` pattern voor CSS — fragiel, gebruik directe load
 
 ✅ **Always:**
 - Output buffer cap (MAX_OUTPUT_LINES) — voorkom unbounded DOM growth
-- OG tags + favicons consistent op alle pagina's
 - Centraliseer analytics init — één bestand, niet per pagina
-- Theme-aware test assertions
-
-### Sessie 101: Playwright E2E Test Fixes (17 feb 2026)
-⚠️ **Never:**
-- Tests draaien zonder third-party CMP blocking (Cookiebot overlay blokkeert ALLE interacties)
-- Hardcoded selectors voor dynamische modals (`#legal-modal-backdrop` → verdwenen na refactor)
-
-✅ **Always:**
-- Shared test fixture met `page.route()` blocking voor third-party scripts
-- `.first()` bij selectors die meerdere elementen matchen
-
-### Sessie 100: Bundle Size Optimalisatie (15 feb 2026)
-✅ Netlify asset processing voor minificatie | Budgets per scope: Terminal Core (<400KB) vs. site totaal (<1000KB)
 
 **Rotation:** Keep last 4 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
 
@@ -142,7 +134,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
 **Rotation trigger:** Every 5 sessions (last: Sessie 103, next: Sessie 108)
-**Sessie counter:** 105
+**Sessie counter:** 107
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -180,14 +172,14 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ## Referenties
 
 - **PRD:** `docs/prd.md` v1.8
-- **Commands:** `docs/commands-list.md` (32 commands)
+- **Commands:** `docs/commands-list.md` (38 commands)
 - **Style Guide:** `docs/style-guide.md` v1.5
-- **Sessie logs:** `SESSIONS.md` → docs/sessions/ (~104 sessies)
+- **Sessie logs:** `SESSIONS.md` → docs/sessions/ (~106 sessies)
 - **Netlify/Domain:** `docs/netlify-setup.md`
 - **Rules:** `.claude/rules/` (tone-and-output, architecture-patterns, troubleshooting, command-checklist)
 - **Filesystem:** PRD Bijlage B | **Tech rationale:** PRD §13
 
 ---
 
-**Last updated:** 22 februari 2026 (Sessie 105 — Tutorial E2E Uitbreiding & Playwright Fix)
-**Version:** 3.5 (Sessie 105: 8 nieuwe E2E tests, Playwright reporter hang fix)
+**Last updated:** 28 februari 2026 (Sessie 106 — M7 Gamification: Challenges, Badges, Certificates, Dashboard, Leaderboard)
+**Version:** 3.7 (Sessie 107: Document sync — 38 commands, 145 tests, metrics aligned)

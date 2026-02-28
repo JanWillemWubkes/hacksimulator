@@ -747,8 +747,8 @@ const DEBUG_MODE = false;
 
 ### Fase 1: MVP (Maand 1-3) - 🔵 IN UITVOERING (55.6%) - **LIVE!**
 
-**Status:** 191/295 tasks completed (64.7% totaal project scope)
-**MVP-only Progress:** M0-M4 (100%), M5 (39/45 - 87%)
+**Status:** 249/315 tasks completed (79.0% totaal project scope)
+**MVP-only Progress:** M0-M4 (100%), M5 (41/45 - 91%)
 **M5.5 Monetization:** ❌ Geannuleerd (affiliate aanvragen afgewezen)
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
@@ -780,7 +780,7 @@ const DEBUG_MODE = false;
 **Week 9-10: Testing & Launch** - 🔵 IN PROGRESS (M5) - ✅ **DEPLOYED!**
 - [x] GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
 - [x] Netlify deployment (https://hacksimulator.nl/)
-- [x] Performance optimization (<3s load: ~2.0s LCP, bundle: ⚠️ ~590KB uncompressed)
+- [x] Performance optimization (<3s load: ~2.0s LCP, bundle: ~983KB → ~809KB na Netlify minificatie)
 - [x] Lighthouse audit (100/100/92/100) - Performance 100, Accessibility 100, Best Practices 92, SEO 100
 - [ ] Beta testing (5+ testers) - TO DO
 - [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge) - TO DO
@@ -800,12 +800,14 @@ const DEBUG_MODE = false;
   - Estimated time: 6-8 uur (state machine + keyboard + UX testing)
 - [ ] Migratie naar Plausible
 
-### Fase 3: Gamification (Maand 7-12)
+### Fase 3: Gamification (Maand 7-12) — ✅ M7 Phase 1-6 VOLTOOID
 **Doel:** Challenges en certificaten
 
-- [ ] Challenge system
-- [ ] Leaderboard (optional)
-- [ ] Certificaat generator
+- [x] Challenge system — ✅ M7 Phase 1: 15 challenges, 3 moeilijkheidsniveaus
+- [x] Badge/achievement system — ✅ M7 Phase 2-3: 21 badges, unlock hooks
+- [x] Certificaat generator — ✅ M7 Phase 4: download + clipboard
+- [x] Dashboard command — ✅ M7 Phase 5: stats, badges, challenges subcommands
+- [x] Leaderboard — ✅ M7 Phase 6: simulated + personal ranking
 - [ ] Advanced difficulty modes
 
 ---
@@ -902,8 +904,8 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 
 ---
 
-**Laatst bijgewerkt:** 22 februari 2026
-**Versie:** 2.4 (Sessie 105: TASKS sync + M6 tutorial checkboxes + M9 Refactor Sprint)
-**Status:** ✅ Deployed - Live in Production | M5.5 Monetization Geannuleerd
+**Laatst bijgewerkt:** 28 februari 2026
+**Versie:** 2.5 (Sessie 107: Document sync — roadmap M7 ✅, metrics aligned, 38 commands)
+**Status:** ✅ Deployed - Live in Production | M5.5 Monetization Geannuleerd | M7 Gamification Phase 1-6 ✅
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
