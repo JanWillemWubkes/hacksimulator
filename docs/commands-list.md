@@ -11,8 +11,26 @@
 | `echo [text]` | Print text | "Hello World" |
 | `date` | Show current date/time | "Tue Dec 10 2024 14:30:22" |
 | `whoami` | Show current user | "user" |
+| `shortcuts` | Show keyboard shortcuts | "Ctrl+L: clear terminal..." |
 
-## File System Commands  
+## Educational Commands
+
+| Command | Description | Example Output |
+|---------|-------------|----------------|
+| `tutorial` | Start guided learning scenarios | "Beschikbare scenario's: recon, webvuln, privesc" |
+| `leerpad` | Show learning path overview | "Module 1: Basis Linux Commands ✅" |
+
+## Gamification Commands
+
+| Command | Description | Example Output |
+|---------|-------------|----------------|
+| `challenge` | Start/manage challenges | "15 challenges beschikbaar in 3 niveaus" |
+| `achievements` | Show unlocked badges | "🏆 Badges: 5/21 unlocked" |
+| `certificates` | Generate completion certificate | "Certificaat gegenereerd! Download of kopieer..." |
+| `dashboard` | Show progress overview | "Stats \| Badges \| Challenges" |
+| `leaderboard` | Show rankings | "Top 10 hackers..." |
+
+## File System Commands
 
 | Command | Description | Example Output |
 |---------|-------------|----------------|
@@ -49,6 +67,12 @@
 | `sqlmap [url]` | Test SQL injection | "Testing parameters...<br>[VULNERABLE] id parameter" |
 | `metasploit` | Exploitation framework | "msf > show exploits" |
 | `nikto [target]` | Scan web vulnerabilities | "Found: /admin exposed" |
+
+## Special Commands
+
+| Command | Description | Example Output |
+|---------|-------------|----------------|
+| `reset` | Reset filesystem to default | "Filesystem gereset naar standaard" |
 
 ## Virtual File System Structure
 
