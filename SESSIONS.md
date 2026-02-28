@@ -8,10 +8,11 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (88-105)](docs/sessions/current.md) - Full Detail
-**Sessies:** 105, 104, 103, 102, 101, 100, 96, 95, 94, 93, 92, 91, 90, 89, 88
-**Period:** 26 december 2025 - 22 februari 2026
+### [Current Sessions (88-106)](docs/sessions/current.md) - Full Detail
+**Sessies:** 106, 105, 104, 103, 102, 101, 100, 96, 95, 94, 93, 92, 91, 90, 89, 88
+**Period:** 26 december 2025 - 28 februari 2026
 **Topics:**
+- M7 Gamification: challenges, badges, certificates, dashboard, leaderboard (Sessie 106)
 - Tutorial E2E uitbreiding (8 tests) + Playwright reporter hang fix (Sessie 105)
 - M6 Tutorial Afronding: cert command, E2E tests, progress sync (Sessie 104)
 - M6 Tutorial System: state machine framework + reconnaissance scenario (Sessie 103)
@@ -88,9 +89,9 @@
 
 ## 📊 Session Overview
 
-**Total Sessions:** 103 (as of 21 februari 2026)
-**Current Session:** 104 (Tutorial Box Overflow Fix)
-**Sessions with full documentation:** 88-103 (14 sessions)
+**Total Sessions:** 107 (as of 28 februari 2026)
+**Current Session:** 107 (Document Sync)
+**Sessions with full documentation:** 88-106 (17 sessions)
 **Sessions compressed:** 2-77 (various compression levels)
 
 **Structure rationale:**
@@ -132,11 +133,12 @@
 
 ---
 
-**Last updated:** 21 februari 2026 (Sessie 103 - M6 Tutorial System)
-**Next update:** Sessie 105 or when CURRENT sessions need rotation
+**Last updated:** 28 februari 2026 (Sessie 107 - Document Sync)
+**Next update:** Sessie 110 or when CURRENT sessions need rotation
 
 **Recent updates:**
+- Sessie 107: Document sync — metrics alignment across CLAUDE.md, TASKS.md, PLANNING.md
+- Sessie 106: M7 Gamification — challenges, badges, certificates, dashboard, leaderboard
+- Sessie 105: M7 gamification sync + tutorial E2E tests
+- Sessie 104: M6 Tutorial Afronding — cert command, E2E tests, progress sync
 - Sessie 103: M6 Tutorial System — state machine framework + reconnaissance scenario
-- Sessie 102: MVP Polish — production hardening, cross-page consistency, 64 files
-- Sessie 101: Playwright test fixes (67→7 failures) + mobile quick commands
-- Sessie 94: CLAUDE.md v2.2 complete (3-phase optimization: metrics, examples, checklist)

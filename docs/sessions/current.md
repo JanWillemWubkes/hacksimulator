@@ -4,6 +4,107 @@
 
 ---
 
+## Sessie 106: M7 Gamification — Challenges, Badges, Certificates, Dashboard & Leaderboard (26-28 februari 2026)
+
+**Scope:** Volledige M7 Gamification implementatie (Phase 1-6): challenge framework, 15 challenges, 21 badges, certificate system, progress dashboard, leaderboard
+**Status:** ✅ VOLTOOID — M7 van 0% → 83% (Phase 1-6 complete, Phase 7 testing deels)
+**Duration:** ~3 sessies (26-28 feb)
+**Commits:** `d8b79b0` → `2b0ebfe` (9 commits)
+
+---
+
+### Context & Problem
+
+**Problem:** HackSimulator had tutorials (M6) maar geen motivatielaag. Gebruikers konden scenarios doorlopen maar hadden geen reden om terug te komen — geen punten, geen badges, geen uitdagingen.
+
+**Goal:** Gamification systeem bouwen dat engagement stimuleert via challenges (met puntensysteem), badges (collectible achievements), certificaten (downloadbaar bewijs), een dashboard (voortgangsoverzicht) en een leaderboard (ranking).
+
+### Oplossing
+
+**Phase 1: Challenge Framework** (`d8b79b0`)
+- Challenge engine met state machine: IDLE → ACTIVE → COMPLETE
+- `challenge` command met subcommands (list, start, status)
+- Progress persistence via `hacksim_gamification` localStorage key
+- 5 easy challenges (5 pts elk): Network Scout, File Explorer, Identity Check, Domain Intel, Log Hunter
+- ASCII box UI voor challenge beschrijvingen + progress bars
+
+**Phase 2: Medium & Hard Challenges** (`b84145d`)
+- 5 medium challenges (15-25 pts): Port Scanner Pro, Web Recon, SQL Sleuth, Password Cracker, System Navigator
+- 5 hard challenges (30-50 pts): Full Recon, Privesc Path, Multi-Tool Master, Attack Chain, Forensic Investigator
+- Totaal: 15 challenges, 280 punten mogelijk
+
+**Phase 3: Badge System** (`4a23d00`, `7b78d32`, `7a26d6e`)
+- 21 badges across 5 rarity tiers: Common (8), Uncommon (6), Rare (4), Epic (2), Legendary (1)
+- Badge manager met unlock detection na elke command executie
+- `achievements` command met subcommands (unlocked, rarity filter)
+- ASCII notification box bij badge unlock
+- Hooked into terminal.js en challenge flow
+
+**Phase 4: Certificate System** (`7a493e0`)
+- 3 certificate templates: Easy (★), Medium (★★), Hard (★★★)
+- `certificates` command: list, download, clipboard
+- Download via Blob API (.txt), clipboard fallback voor mobile
+- Filename: `HackSim_Certificate_[ID]_[Date].txt`
+
+**Phase 5: Progress Dashboard** (`dfd6921`)
+- `dashboard` command met 4 secties: stats, challenges, badges, next step
+- Subcommands: `dashboard stats`, `dashboard badges`, `dashboard challenges`
+- Streak tracking (consecutive days met >5 commands)
+- Mobile-optimized plain format voor ≤375px viewports
+
+**Phase 6: Leaderboard** (`a5ddfb8`)
+- `leaderboard` command met simulated top-10 + persoonlijke ranking
+- `leaderboard me` voor eigen positie
+- Local-only (localStorage), geen backend nodig
+- Simulated data voor motivatie (realistische hacker usernames)
+
+**Docs Sync** (`2b0ebfe`)
+- TASKS.md bijgewerkt met Phase 1-5 completion status (Phase 6 gemist — inconsistentie)
+
+### Files Changed
+
+| File | Change |
+|------|--------|
+| `src/gamification/challenge-manager.js` | Challenge engine (state machine, validation, points) |
+| `src/gamification/challenge-renderer.js` | ASCII UI voor challenges (boxes, progress bars) |
+| `src/gamification/progress-store.js` | localStorage persistence (key: `hacksim_gamification`) |
+| `src/gamification/challenges/easy.js` | 5 easy challenges (5 pts elk) |
+| `src/gamification/challenges/medium.js` | 5 medium challenges (15-25 pts) |
+| `src/gamification/challenges/hard.js` | 5 hard challenges (30-50 pts) |
+| `src/gamification/badge-definitions.js` | 21 badges, 5 rarity tiers |
+| `src/gamification/badge-manager.js` | Unlock detection + notification system |
+| `src/gamification/certificate-generator.js` | Certificate generation (3 templates) |
+| `src/gamification/certificate-templates.js` | Easy/Medium/Hard ASCII templates |
+| `src/gamification/leaderboard-manager.js` | Local leaderboard logic |
+| `src/gamification/leaderboard-data.js` | Simulated top-10 data |
+| `src/commands/system/challenge.js` | Challenge command + hooks |
+| `src/commands/system/achievements.js` | Achievements command (+ man page) |
+| `src/commands/system/certificates.js` | Certificate command (download, clipboard) |
+| `src/commands/system/dashboard.js` | Dashboard command (4 secties) |
+| `src/commands/system/leaderboard.js` | Leaderboard command |
+| `src/core/terminal.js` | Badge unlock hooks na command executie |
+| `src/main.js` | Gamification module registratie |
+| `tests/e2e/certificates.spec.js` | 133 lines E2E tests |
+| `tests/e2e/dashboard.spec.js` | 151 lines E2E tests |
+| `TASKS.md` | M7 Phase 1-5 status sync |
+
+### Metrics
+
+- **New code:** ~3,424 lines across 21 files
+- **Challenges:** 15 (5 easy, 5 medium, 5 hard) — 280 total points
+- **Badges:** 21 (8 Common, 6 Uncommon, 4 Rare, 2 Epic, 1 Legendary)
+- **New commands:** 4 (challenge, achievements, certificates, dashboard, leaderboard)
+- **E2E tests:** 284 lines added (certificates.spec.js + dashboard.spec.js)
+
+### Key Learnings
+
+- Gamification modules zijn inherent cross-cutting: badge checks moeten in terminal.js (na command) EN in challenge flow (na completion) — twee hooks, niet één
+- localStorage key consolidatie: één `hacksim_gamification` key voor alle progress vs. meerdere keys (challenges, badges, streaks) — single key = atomair lezen/schrijven
+- Simulated leaderboard data is effectief voor motivatie zonder backend — gebruikers zien "competitie" terwijl alles local is
+- TASKS.md sync moet Phase 6 (leaderboard) nog bijwerken — commit `2b0ebfe` miste deze
+
+---
+
 ## Sessie 105: Tutorial E2E Uitbreiding & Playwright Reporter Fix (22 februari 2026)
 
 **Scope:** 8 nieuwe E2E tests (webvuln, privesc, cert, reset, completion, hints) + Playwright html reporter hang fix
