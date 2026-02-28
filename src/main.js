@@ -27,6 +27,7 @@ import challengeCmd from './commands/system/challenge.js';
 import achievementsCmd from './commands/system/achievements.js';
 import certificatesCmd from './commands/system/certificates.js';
 import dashboardCmd from './commands/system/dashboard.js';
+import leaderboardCmd from './commands/system/leaderboard.js';
 
 // Import filesystem commands
 import lsCmd from './commands/filesystem/ls.js';
@@ -65,7 +66,7 @@ import niktoCmd from './commands/security/nikto.js';
 function registerCommands() {
   const registry = terminal.getRegistry();
 
-  // System commands (12)
+  // System commands (13)
   registry.register('clear', clearCmd);
   registry.register('echo', echoCmd);
   registry.register('whoami', whoamiCmd);
@@ -80,6 +81,7 @@ function registerCommands() {
   registry.register('achievements', achievementsCmd);
   registry.register('certificates', certificatesCmd);
   registry.register('dashboard', dashboardCmd);
+  registry.register('leaderboard', leaderboardCmd);
 
   // Filesystem commands (11)
   registry.register('ls', lsCmd);
