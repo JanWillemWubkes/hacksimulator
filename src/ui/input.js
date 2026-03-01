@@ -463,7 +463,7 @@ class InputHandler {
    */
   focus() {
     if (this.inputElement) {
-      this.inputElement.focus();
+      this.inputElement.focus({ preventScroll: true });
     }
   }
 
