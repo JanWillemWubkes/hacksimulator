@@ -176,6 +176,11 @@
   border: 1px solid var(--color-border);
   border-radius: 12px;
   overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.terminal-edu-faq details:hover {
+  border-color: var(--color-cta-primary);
 }
 
 .terminal-edu-faq summary {
@@ -196,14 +201,16 @@
 }
 
 .terminal-edu-faq summary::after {
-  content: '+';
+  content: '›';
   color: var(--color-text-dim);
-  font-size: 1.2rem;
-  transition: transform 0.2s ease;
+  font-size: 1.4rem;
+  transition: transform 0.3s ease, color 0.2s ease;
+  transform: rotate(90deg);
 }
 
 .terminal-edu-faq details[open] summary::after {
-  content: '-';
+  transform: rotate(-90deg);
+  color: var(--color-cta-primary);
 }
 
 .terminal-edu-faq summary:hover {

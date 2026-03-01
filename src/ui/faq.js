@@ -1,6 +1,6 @@
 /**
  * FAQ Accordion functionality
- * Handles expand/collapse of FAQ items on the landing page
+ * Handles expand/collapse of FAQ items on landing and terminal pages
  */
 
 (function() {
@@ -35,10 +35,33 @@
     });
   }
 
+  function initTerminalFaqAccordion() {
+    const faqContainer = document.querySelector('.terminal-edu-faq');
+    if (!faqContainer) return;
+
+    const detailsElements = faqContainer.querySelectorAll('details');
+
+    detailsElements.forEach(details => {
+      details.addEventListener('toggle', function() {
+        if (!this.open) return;
+
+        detailsElements.forEach(other => {
+          if (other !== details && other.open) {
+            other.removeAttribute('open');
+          }
+        });
+      });
+    });
+  }
+
   // Run immediately since defer already waits for DOM
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initFaqAccordion);
+    document.addEventListener('DOMContentLoaded', () => {
+      initFaqAccordion();
+      initTerminalFaqAccordion();
+    });
   } else {
     initFaqAccordion();
+    initTerminalFaqAccordion();
   }
 })();
