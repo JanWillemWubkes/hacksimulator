@@ -8,24 +8,34 @@
 .terminal-education {
   background: var(--color-bg);
   border-top: 1px solid var(--color-border);
-  padding: var(--spacing-xl) 0;
+  padding: 3rem 0;
   position: relative;
   z-index: 1;
 }
 
 .terminal-edu-inner {
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0 var(--spacing-xl);
 }
 
 /* ==================== Section Spacing ==================== */
 .terminal-edu-section {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: 2.5rem;
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .terminal-edu-section:last-child {
   margin-bottom: 0;
+}
+
+/* Alternating backgrounds for visual separation */
+.terminal-edu-section:nth-child(even) {
+  background: var(--color-bg-hover);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid rgba(159, 239, 0, 0.3);
 }
 
 .terminal-edu-section h2 {
@@ -242,6 +252,10 @@
 /* ==================== Light Theme Overrides ==================== */
 [data-theme="light"] .terminal-education {
   background: var(--color-bg);
+}
+
+[data-theme="light"] .terminal-edu-section {
+  border-color: rgba(0, 0, 0, 0.08);
 }
 
 [data-theme="light"] .edu-command-card,
