@@ -1,0 +1,269 @@
+/**
+ * terminal-education.css - HackSimulator.nl
+ * Styling for educational content section below the terminal
+ * Purpose: SEO — indexable text content for Google crawlers
+ */
+
+/* ==================== Education Section Container ==================== */
+.terminal-education {
+  background: var(--color-bg);
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-xl) 0;
+  position: relative;
+  z-index: 1;
+}
+
+.terminal-edu-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-xl);
+}
+
+/* ==================== Section Spacing ==================== */
+.terminal-edu-section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.terminal-edu-section:last-child {
+  margin-bottom: 0;
+}
+
+.terminal-edu-section h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-lg) 0;
+  text-align: center;
+}
+
+.terminal-edu-section h3 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.terminal-edu-section > p {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-text-dim);
+  line-height: 1.7;
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+/* ==================== Command Cards Grid ==================== */
+.terminal-edu-commands {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+}
+
+.edu-command-card {
+  background: rgba(22, 27, 34, 0.3);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: var(--spacing-md);
+  transition: border-color 0.2s ease;
+}
+
+.edu-command-card:hover {
+  border-color: rgba(159, 239, 0, 0.4);
+}
+
+.edu-command-card code {
+  font-family: var(--font-terminal);
+  font-size: 1.1rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-cta-primary);
+  display: block;
+  margin-bottom: var(--spacing-xs);
+}
+
+.edu-cmd-category {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(159, 239, 0, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: var(--spacing-sm);
+}
+
+.edu-command-card p {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-text-dim);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ==================== Steps ==================== */
+.terminal-edu-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.edu-step {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  background: rgba(22, 27, 34, 0.3);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: var(--spacing-md);
+}
+
+.edu-step-num {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(159, 239, 0, 0.15);
+  color: var(--color-cta-primary);
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.1rem;
+  border-radius: 50%;
+}
+
+.edu-step strong {
+  color: var(--color-text);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.edu-step code {
+  color: var(--color-cta-primary);
+  font-family: var(--font-terminal);
+}
+
+.edu-step p {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-text-dim);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ==================== FAQ (details/summary) ==================== */
+.terminal-edu-faq {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.terminal-edu-faq details {
+  background: rgba(22, 27, 34, 0.3);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.terminal-edu-faq summary {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  padding: var(--spacing-md) var(--spacing-lg);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.terminal-edu-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.terminal-edu-faq summary::after {
+  content: '+';
+  color: var(--color-text-dim);
+  font-size: 1.2rem;
+  transition: transform 0.2s ease;
+}
+
+.terminal-edu-faq details[open] summary::after {
+  content: '-';
+}
+
+.terminal-edu-faq summary:hover {
+  color: var(--color-cta-primary);
+}
+
+.terminal-edu-faq details p {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-text-dim);
+  line-height: 1.6;
+  padding: 0 var(--spacing-lg) var(--spacing-lg);
+  margin: 0;
+}
+
+.terminal-edu-faq details code {
+  color: var(--color-cta-primary);
+  font-family: var(--font-terminal);
+}
+
+/* ==================== Blog Links ==================== */
+.terminal-edu-blog-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.terminal-edu-blog-links a {
+  display: block;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(22, 27, 34, 0.3);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-cta-primary);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.terminal-edu-blog-links a:hover {
+  border-color: var(--color-cta-primary);
+  transform: translateX(4px);
+}
+
+/* ==================== Light Theme Overrides ==================== */
+[data-theme="light"] .terminal-education {
+  background: var(--color-bg);
+}
+
+[data-theme="light"] .edu-command-card,
+[data-theme="light"] .edu-step,
+[data-theme="light"] .terminal-edu-faq details,
+[data-theme="light"] .terminal-edu-blog-links a {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* ==================== Mobile Responsive ==================== */
+@media (max-width: 768px) {
+  .terminal-edu-inner {
+    padding: 0 var(--spacing-md);
+  }
+
+  .terminal-edu-commands {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .terminal-edu-section h2 {
+    font-size: 1.4rem;
+  }
+}

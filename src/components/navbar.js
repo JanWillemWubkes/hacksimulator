@@ -35,6 +35,7 @@ function getMarketingNavbar() {
         <div class="nav-links">
           <a href="/blog/">Blog</a>
           <a href="/commands/">Commands</a>
+          <a href="/woordenlijst.html">Woordenlijst</a>
         </div>
         <!-- Mobile Hamburger Toggle (hidden on desktop via mobile.css) -->
         <button class="navbar-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="landing-mobile-menu">
@@ -68,6 +69,7 @@ function getMarketingNavbar() {
       <li><a href="#faq">FAQ</a></li>
       <li><a href="/blog/">Blog</a></li>
       <li><a href="/commands/">Commands</a></li>
+      <li><a href="/woordenlijst.html">Woordenlijst</a></li>
     </ul>
     <div class="navbar-actions">
       <button class="theme-toggle" aria-label="Toggle tussen dark en light mode" title="Toggle tussen dark en light mode">

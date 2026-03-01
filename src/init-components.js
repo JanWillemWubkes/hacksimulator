@@ -9,7 +9,7 @@
  * Auto-detects page type based on URL:
  * - /terminal.html -> 'app' navbar
  * - /blog/* -> 'blog' navbar
- * - / or /index.html, /over-ons.html, /contact.html -> 'marketing' navbar
+ * - / or /index.html, /over-ons.html, /contact.html, /woordenlijst.html -> 'marketing' navbar
  */
 
 import { injectNavbar } from '/src/components/navbar.js';
@@ -62,7 +62,7 @@ function detectPageType() {
     };
   }
 
-  // Marketing pages (landing, over-ons, contact)
+  // Marketing pages (landing, over-ons, contact, woordenlijst)
   return {
     variant: 'marketing',
     options: {},

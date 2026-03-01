@@ -48,6 +48,8 @@
     <link rel="stylesheet" href="styles/terminal.css?v=88-multiline-wrap">
     <!-- Mobile CSS: non-blocking on desktop via media query -->
     <link rel="stylesheet" href="styles/mobile.css?v=95-csp-fix" media="screen and (max-width: 768px)">
+    <!-- Educational Content CSS (SEO content below terminal) -->
+    <link rel="stylesheet" href="styles/terminal-education.css?v=108-adsense-content">
     <!-- Animations CSS -->
     <link rel="stylesheet" href="styles/animations.css?v=103-direct-load">
     <link rel="stylesheet" href="styles/command-search-modal.css?v=95-light-mode-blue">
@@ -87,6 +89,12 @@
             <nav id="navbar" role="navigation" aria-label="Main navigation">
                 <div class="navbar-content">
                     <a href="/" class="navbar-brand">HackSimulator.nl</a>
+                    <a href="/terminal.html">Start Simulator</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="/commands/">Commands</a>
+                    <a href="/woordenlijst.html">Woordenlijst</a>
+                    <a href="/over-ons.html">Over Ons</a>
+                    <a href="/contact.html">Contact</a>
                 </div>
             </nav>
         </noscript>
@@ -208,11 +216,134 @@
         </div>
     </div>
 
+    <!-- Educational Content (SEO: indexable text for Google crawlers) -->
+    <section class="terminal-education" aria-label="Leer ethisch hacken">
+      <div class="terminal-edu-inner">
+
+        <!-- Intro -->
+        <div class="terminal-edu-section">
+          <h2>Leer Ethisch Hacken in de Browser</h2>
+          <p>
+            HackSimulator.nl is een gratis, Nederlandstalige terminal simulator waarmee je veilig leert hoe
+            cybersecurity professionals werken. Alle commands draaien lokaal in je browser — er worden geen
+            verbindingen gemaakt met externe servers. Je kunt onmogelijk per ongeluk echte systemen aanvallen.
+            Perfect voor studenten, career switchers en iedereen die nieuwsgierig is naar ethisch hacken.
+          </p>
+        </div>
+
+        <!-- Populaire Commands -->
+        <div class="terminal-edu-section">
+          <h3>Populaire Commands</h3>
+          <div class="terminal-edu-commands">
+            <div class="edu-command-card">
+              <code>nmap</code>
+              <span class="edu-cmd-category">Netwerk</span>
+              <p>Scan netwerken en ontdek open poorten. De meest gebruikte tool voor network reconnaissance.</p>
+            </div>
+            <div class="edu-command-card">
+              <code>ls</code>
+              <span class="edu-cmd-category">Basis</span>
+              <p>Bekijk bestanden en mappen in de huidige directory. Het startpunt van elke terminal sessie.</p>
+            </div>
+            <div class="edu-command-card">
+              <code>hashcat</code>
+              <span class="edu-cmd-category">Security</span>
+              <p>Analyseer wachtwoord hashes en leer waarom sterke wachtwoorden essentieel zijn.</p>
+            </div>
+            <div class="edu-command-card">
+              <code>grep</code>
+              <span class="edu-cmd-category">Basis</span>
+              <p>Doorzoek bestanden op specifieke tekst. Onmisbaar voor log analyse en forensisch onderzoek.</p>
+            </div>
+            <div class="edu-command-card">
+              <code>sqlmap</code>
+              <span class="edu-cmd-category">Security</span>
+              <p>Test websites op SQL injection kwetsbaarheden. Leer hoe databases aangevallen en beschermd worden.</p>
+            </div>
+            <div class="edu-command-card">
+              <code>wireshark</code>
+              <span class="edu-cmd-category">Netwerk</span>
+              <p>Analyseer netwerkverkeer en begrijp hoe data over het internet reist.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Zo Begin Je -->
+        <div class="terminal-edu-section">
+          <h3>Zo Begin Je</h3>
+          <div class="terminal-edu-steps">
+            <div class="edu-step">
+              <span class="edu-step-num">1</span>
+              <div>
+                <strong>Type <code>help</code></strong>
+                <p>Krijg een overzicht van alle beschikbare commands met korte beschrijvingen in het Nederlands.</p>
+              </div>
+            </div>
+            <div class="edu-step">
+              <span class="edu-step-num">2</span>
+              <div>
+                <strong>Verken het filesystem met <code>ls</code> en <code>cd</code></strong>
+                <p>Navigeer door de virtuele mappenstructuur en ontdek verborgen bestanden en directories.</p>
+              </div>
+            </div>
+            <div class="edu-step">
+              <span class="edu-step-num">3</span>
+              <div>
+                <strong>Probeer security tools zoals <code>nmap</code></strong>
+                <p>Scan virtuele netwerken, analyseer poorten en leer denken als een ethical hacker.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="terminal-edu-section">
+          <h3>Veelgestelde Vragen</h3>
+          <div class="terminal-edu-faq">
+            <details>
+              <summary>Is HackSimulator veilig om te gebruiken?</summary>
+              <p>Ja, volledig. Alles draait lokaal in je browser. Er worden geen verbindingen gemaakt met externe servers en je kunt onmogelijk echte systemen aanvallen. Het is vergelijkbaar met een vluchtsimulator: je leert zonder risico.</p>
+            </details>
+            <details>
+              <summary>Heb ik ervaring nodig om te beginnen?</summary>
+              <p>Nee. HackSimulator is speciaal ontworpen voor absolute beginners. We beginnen met basis commands zoals <code>ls</code> en <code>cd</code>, en bouwen stap voor stap op naar security tools. Alle uitleg is in het Nederlands.</p>
+            </details>
+            <details>
+              <summary>Wat is het verschil met echte hacking tools?</summary>
+              <p>De commands geven gesimuleerde, educatieve output. Echte tools zoals Nmap produceren meer technische details en vereisen een echte netwerkomgeving. Onze "80/20 realisme" aanpak betekent dat je 80% van de concepten leert met 20% van de complexiteit.</p>
+            </details>
+            <details>
+              <summary>Is ethisch hacken legaal?</summary>
+              <p>Ja, ethisch hacken (white hat hacking) is het geautoriseerd testen van systemen op beveiligingslekken. Ethische hackers werken met toestemming van de systeemeigenaar. Het is een legitieme en gevraagde vaardigheid in de cybersecurity-industrie.</p>
+            </details>
+          </div>
+        </div>
+
+        <!-- Blog Links -->
+        <div class="terminal-edu-section">
+          <h3>Lees Meer op Onze Blog</h3>
+          <div class="terminal-edu-blog-links">
+            <a href="/blog/wat-is-ethisch-hacken.html">Wat is Ethisch Hacken? - Alles wat je moet weten</a>
+            <a href="/blog/terminal-basics.html">Terminal Basics voor Beginners</a>
+            <a href="/blog/nmap-beginnersgids.html">Nmap Beginnersgids - Netwerk Scanning Uitgelegd</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
     <!-- Footer (Component Injection) -->
     <div id="footer-placeholder">
         <noscript>
             <footer class="noscript-footer">
                 <p>&copy; 2026 HackSimulator.nl</p>
+                <nav>
+                    <a href="/assets/legal/privacy.html">Privacy</a>
+                    <a href="/assets/legal/terms.html">Voorwaarden</a>
+                    <a href="/assets/legal/cookies.html">Cookies</a>
+                    <a href="/over-ons.html">Over Ons</a>
+                    <a href="/contact.html">Contact</a>
+                </nav>
             </footer>
         </noscript>
     </div>
