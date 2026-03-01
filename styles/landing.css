@@ -1056,15 +1056,13 @@
   font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: var(--font-weight-medium);
-  color: var(--color-cta-primary);
+  color: var(--color-text);
   text-decoration: none;
   transition: opacity 0.2s ease;
 }
 
 .blog-link:hover {
-  color: var(--color-cta-primary);  /* Voorkomt globale a:hover blauw */
   opacity: 0.8;
-  text-decoration: underline;
 }
 
 .blog-link:focus-visible {
