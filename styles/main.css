@@ -405,65 +405,6 @@ button {
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
 
-/* ==================== DONATION CTA - COMPACT PATTERN ==================== */
-
-/* Compact donation paragraph (no box styling) - Column 2 (center) */
-.donate-compact {
-  flex: 0 0 auto;  /* Natural width, stays inline on desktop */
-  margin: 0;
-  font-size: 16px;
-  color: var(--color-footer-text);
-  text-align: center;
-  line-height: 1.6;
-  white-space: nowrap;
-}
-
-/* Compact donation button - Ghost button style (Sessie 99: subtiele footer CTA) */
-/* Research: Ghost buttons voor secundaire acties - behoudt CTA-karakter zonder visuele dominantie */
-.btn-donate-compact {
-  display: inline-block;
-  vertical-align: middle;                              /* Optical alignment fix (Sessie 73) - center button vertically with text */
-  padding: 6px 14px;                                   /* Slightly smaller than old button */
-  font-size: 15px;                                     /* Slightly smaller */
-  background-color: transparent;                       /* Ghost button: transparante achtergrond */
-  color: var(--color-footer-link);                     /* #79c0ff - past bij footer links */
-  border: 1px solid var(--color-footer-link);          /* Border definieert button vorm */
-  border-radius: var(--border-radius-button);          /* 4px */
-  font-weight: 600;                                    /* Semi-bold - consistent met footer/navbar links */
-  font-family: var(--font-heading);
-  text-decoration: none;
-  transition: all var(--transition-fast);              /* 0.15s ease */
-  cursor: pointer;
-  margin-left: var(--spacing-xs);                      /* 4px spacing (tighter) */
-}
-
-.btn-donate-compact:hover {
-  background-color: transparent;                       /* Blijft transparant op hover */
-  color: var(--color-footer-link-hover);               /* #58a6ff - brighter blue */
-  border-color: var(--color-footer-link-hover);        /* Border volgt tekst kleur */
-  transform: translateY(-2px);                         /* Standard lift - site-wide button pattern */
-  box-shadow: 0 4px 12px rgba(88, 166, 255, 0.2);      /* Subtiele blauwe gloed - past bij footer */
-}
-
-.btn-donate-compact:active {
-  transform: translateY(0);
-  box-shadow: none;
-}
-
-.btn-donate-compact:focus-visible {
-  outline: 2px solid var(--color-footer-link);         /* Past bij ghost button kleur */
-  outline-offset: 2px;
-}
-
-/* Support label styling - compact footer variant (Sessie 95) */
-/* Research: Label moet subtiel zijn, button is secundaire CTA (ghost button pattern) */
-.support-label::before {
-  content: "[ SUPPORT ] ";
-  color: var(--color-footer-text);  /* Subtiel - zelfde als footer tekst */
-  font-family: var(--font-heading);
-  font-weight: 600;                 /* Semi-bold - consistent met footer links */
-}
-
 /* ==================== AdSense Ad Container (M5.5 Phase 1) ==================== */
 /* Ad Placement 80/20 Rule: Footer only (not terminal, not modal) */
 .ad-container {
@@ -964,73 +905,200 @@ button {
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
 
-/* ==================== Footer ==================== */
-footer {
-  position: static;
-  background: var(--color-bg-footer);  /* Dark Frame Pattern - stays dark in all themes */
-  color: var(--color-footer-text);
+/* ==================== Marketing Footer (Sessie 107: uniforme footer) ==================== */
+/* Used on ALL pages — moved from landing.css for universal availability */
+
+.landing-footer {
+  width: 100%;
+  margin-top: 0;
+  background: rgba(22, 27, 34, 0.5);
   border-top: 1px solid var(--color-border);
-  padding: var(--spacing-sm) var(--spacing-md);
-  font-size: 16px;
-  text-align: center;
-  margin-top: var(--spacing-lg);
+  padding: 96px var(--layout-padding-x, 32px) var(--spacing-xl);
 }
 
-.footer-content {
-  max-width: var(--terminal-max-width);
-  margin: 0 auto;
+.landing-footer .footer-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  align-items: start;
+  gap: calc(var(--spacing-xl) * 2);
+  max-width: 1400px;
+  margin: 0 auto var(--spacing-xl) auto;
+  text-align: left;
+}
 
-  /* Flexbox 2-item layout - Perfect alignment (Sessie 87) */
+.footer-brand {
+  max-width: 350px;
+}
+
+.footer-logo {
   display: flex;
-  justify-content: space-between;  /* Copyright left, nav right - always */
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-footer-text);
+  text-decoration: none;
+  margin-bottom: var(--spacing-md);
+}
+
+.footer-logo .brand-icon {
+  color: var(--color-cta-dark-frame);
+}
+
+.footer-logo .brand-accent {
+  color: var(--color-cta-dark-frame);
+}
+
+.footer-logo:hover {
+  color: var(--color-cta-dark-frame);
+}
+
+.footer-tagline {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: #8b949e;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.footer-links {
+  display: contents;
+}
+
+.footer-column h3 {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-cta-dark-frame);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 var(--spacing-md) 0;
+  text-align: left;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+}
+
+.footer-column a {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-footer-text);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer-column a:hover {
+  color: var(--color-navbar-link-hover);
+}
+
+.footer-column a:focus-visible {
+  outline: 2px solid var(--color-info);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-top: var(--spacing-xl);
+  border-top: 1px solid var(--color-border);
+}
+
+.footer-bottom p {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: #8b949e;
+  margin: 0;
+}
+
+.footer-social {
+  display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  flex-wrap: wrap;  /* Donate wraps to row 2 on tablet */
 }
 
-/* Column 1: Copyright (left-aligned, never grows) */
-.footer-copyright {
-  flex: 0 0 auto;  /* No grow, no shrink, auto width */
-  text-align: left;
-  margin: 0;
-  font-family: var(--font-heading);          /* Space Grotesk - consistent footer chrome */
-  font-weight: 600;                          /* Semi-bold - matches all footer text */
+.footer-social a {
+  color: #8b949e;
+  transition: color var(--transition-fast);
 }
 
-/* Column 2 (position 3): Navigation (right-aligned, never grows) */
-footer nav {
-  flex: 0 0 auto;  /* No grow, no shrink, auto width */
-  margin: 0;
-  text-align: right;
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--spacing-xs);
-  flex-wrap: wrap;
+.footer-social a:hover {
+  color: var(--color-cta-dark-frame);
+  transform: translateY(-2px);
 }
 
-footer a {
-  color: var(--color-footer-link);
+/* Donate button - Ghost button in footer-bottom */
+a.footer-donate {
+  align-self: center;
+  padding: 6px 14px;
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #8b949e;
+  background-color: transparent;
+  border: 1px solid #8b949e;
+  border-radius: var(--border-radius-button);
   text-decoration: none;
-  padding: 0;
-  font-family: var(--font-heading);          /* Space Grotesk - consistent met navbar (Dark Frame Pattern) */
-  font-weight: 600;                          /* Semi-bold - matches navbar links */
+  transition: color 0.15s ease, border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+  transform: translateY(-2px);
 }
 
-footer a:hover {
-  color: var(--color-navbar-link-hover);  /* Wit - consistent met landing footer tekst links */
+a.footer-donate:hover {
+  color: var(--color-cta-dark-frame);
+  border-color: var(--color-cta-dark-frame);
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(159, 239, 0, 0.15);
 }
 
-/* Footer nav separators - CSS pseudo-elements pattern */
-footer nav a:not(:last-child)::after {
-  content: '|';
-  color: var(--color-footer-text);
-  margin-left: var(--spacing-sm);
-  margin-right: 0;
+a.footer-donate:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
-/* Mirror spacing: next link needs matching margin-left */
-footer nav a:not(:first-child) {
-  margin-left: var(--spacing-sm);
+a.footer-donate:focus-visible {
+  outline: 2px solid var(--color-cta-dark-frame);
+  outline-offset: 2px;
+}
+
+/* Light theme - Dark Frame Pattern (footer stays dark) */
+[data-theme="light"] .landing-footer {
+  background: var(--color-bg-footer);
+  border-top: 1px solid var(--color-border-dark-frame);
+}
+
+/* Footer Mobile */
+@media (max-width: 768px) {
+  .landing-footer {
+    padding: var(--spacing-xl) 20px;
+  }
+
+  .landing-footer .footer-content {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .footer-brand {
+    max-width: 100%;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
 }
 
 /* ==================== Widescreen Modal Scaling ==================== */
@@ -1038,20 +1106,6 @@ footer nav a:not(:first-child) {
 @media (min-width: 1400px) {
   .modal-content {
     width: 720px; /* 20% larger than desktop default (600px) */
-  }
-}
-
-/* ==================== Footer Tablet Breakpoint ==================== */
-/* Tablet: 2-row layout (copyright+nav row 1, donation row 2) - Sessie 72 */
-@media (max-width: 1024px) {
-  .footer-content {
-    gap: var(--spacing-xs) var(--spacing-md);
-  }
-
-  /* TABLET ONLY: Force donate to wrap to row 2 (Sessie 87 fix) */
-  .donate-compact {
-    flex-basis: 100%;  /* Forces wrap to new row */
-    order: 3;          /* Places after nav (copyright=0, nav=0, donate=3) */
   }
 }
 
