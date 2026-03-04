@@ -83,46 +83,52 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 109: Unified Link Hover System (4 maart 2026)
+⚠️ **Never:**
+- Opt-out CSS selectors (`:not()` chains) voor animaties — fragiel, elke nieuwe context vereist uitbreiding
+- `opacity` als hover indicator — verlaagt contrast, lijkt op disabled state, slechte accessibility
+- Eén hover kleur voor alle contexten — blauw past bij blog content, maar breekt brand coherentie op landing pages
+
+✅ **Always:**
+- Opt-in selectors voor `::after` animated underlines — alleen targeted links krijgen het effect
+- `currentColor` voor `::after` underline background — volgt automatisch de link kleur
+- Kleurstrategie per context: blauw = content (blogs), groen = brand (landing, CTA, FAQ, cards)
+
+### Sessie 108: Uniforme Marketing Footer (2 maart 2026)
+⚠️ **Never:**
+- Component CSS in page-specifieke stylesheet als component op alle pagina's verschijnt — terminal.html laadt landing.css niet
+- CSS variables uit andere stylesheets gebruiken zonder fallback — `var(--landing-max-width)` bestaat niet in main.css scope
+- Meerdere footer template functies per variant — één functie met options object is flexibeler en minder onderhoud
+
+✅ **Always:**
+- Universele component CSS in universeel geladen stylesheet (`main.css`) — voorkomt layout breaks op pagina's die page-specifieke CSS niet laden
+- CSS variable fallbacks bij cross-stylesheet gebruik: `var(--layout-padding-x, 32px)`
+- Conditionele rendering via options object (`showFeedback`, `showDonate`) — één template, meerdere configuraties
+
 ### Sessie 106: M7 Gamification — Full Stack (28 feb 2026)
 ⚠️ **Never:**
 - Gamification hooks op één plek — badge checks moeten in terminal.js (na command) EN in challenge flow (na completion)
 - Meerdere localStorage keys voor gerelateerde state — consolideer naar één key (`hacksim_gamification`) voor atomair lezen/schrijven
-- TASKS.md sync vergeten na implementatie — commit `2b0ebfe` miste Phase 6 leaderboard status
 
 ✅ **Always:**
 - Cross-cutting concerns (badge unlock) op meerdere hooks: terminal command execution + challenge completion
-- Simulated leaderboard data voor motivatie zonder backend — realistische usernames + scores
 - Certificate download via Blob API + clipboard fallback (mobile compatibiliteit)
-- Dashboard met subcommands (stats, badges, challenges) — vermijd monolithische output
 
 ### Sessie 104: M6 Tutorial Afronding & E2E Tests (22 feb 2026)
 ⚠️ **Never:**
-- Exported functions zonder caller — grep `export` + grep functienaam om orphans te detecteren
 - `acceptLegalModal` hardcoded als verplicht — legal modal is soms al dismissed (parallel workers, cached localStorage)
-- Playwright `html` reporter zonder `open: 'never'` — hangt oneindig in non-interactieve shells (Claude Code, CI)
+- Playwright `html` reporter zonder `open: 'never'` — hangt oneindig in non-interactieve shells
 
 ✅ **Always:**
 - Graceful modal helpers met try/catch fallback — voorkomt false failures bij race conditions
-- `['html', { open: 'never' }]` in Playwright reporter config — bekijk achteraf via `npx playwright show-report`
 
 ### Sessie 103: M6 Tutorial System (20 feb 2026)
 ⚠️ **Never:**
 - State machine zonder expliciete state enum — gebruik altijd een `STATES` object
-- Command validatie blokkeren — altijd eerst laten uitvoeren, dan checken
 
 ✅ **Always:**
 - Non-blocking tutorial overlay — UX blijft responsief, commands werken altijd
 - Progressive hints (3 tiers: 2/4/6 pogingen) — beginners zelf laten proberen
-- Losgekoppelde scenarios via registry pattern — makkelijk uitbreidbaar
-
-### Sessie 102: MVP Polish & Production Hardening (20 feb 2026)
-⚠️ **Never:**
-- `console.log` in productie — altijd opruimen voor deploy
-- `media="print" onload` pattern voor CSS — fragiel, gebruik directe load
-
-✅ **Always:**
-- Output buffer cap (MAX_OUTPUT_LINES) — voorkom unbounded DOM growth
-- Centraliseer analytics init — één bestand, niet per pagina
 
 **Rotation:** Keep last 4 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
 
@@ -133,8 +139,8 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Voor Sessie:** Lees `PLANNING.md`, `TASKS.md`, dit bestand
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-**Rotation trigger:** Every 5 sessions (last: Sessie 103, next: Sessie 108)
-**Sessie counter:** 107
+**Rotation trigger:** Every 5 sessions (last: Sessie 108, next: Sessie 113)
+**Sessie counter:** 109
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -181,5 +187,5 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 28 februari 2026 (Sessie 106 — M7 Gamification: Challenges, Badges, Certificates, Dashboard, Leaderboard)
-**Version:** 3.7 (Sessie 107: Document sync — 38 commands, 145 tests, metrics aligned)
+**Last updated:** 4 maart 2026 (Sessie 109 — Unified Link Hover System)
+**Version:** 3.9 (Sessie 109: 5 link hover categorieën, opt-in underlines, brand kleur strategie)

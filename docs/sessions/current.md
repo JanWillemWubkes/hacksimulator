@@ -4,6 +4,136 @@
 
 ---
 
+## Sessie 109: Unified Link Hover System (4 maart 2026)
+
+**Scope:** 23 verschillende link hover behaviors consolideren naar 5 categorieën met consistent gedrag
+**Status:** ✅ VOLTOOID
+**Commits:** `7a247ed` style: unified link hover system with 5 categories and opt-in underlines
+
+---
+
+### Context & Problem
+
+**Problem:** 23 verschillende link hover behaviors verspreid over 7 CSS bestanden, organisch gegroeid over 108 sessies. Voorbeelden: `.blog-link:hover` gebruikte `opacity: 0.8`, `.final-cta-secondary a:hover` gebruikte `text-decoration: underline`, `.faq-answer a:hover` gebruikte beide. De globale `::after` animated underline gebruikte een fragiele opt-out `:not()` chain die bij elke nieuwe link-context uitgebreid moest worden.
+
+**Goal:** Unified hover systeem met 5 categorieën, opt-in animated underlines, en brand-coherente kleuren.
+
+### Oplossing
+
+**1. 5 Link Categorieën gedefinieerd:**
+| Cat | Context | Hover Effect | Kleur |
+|---|---|---|---|
+| A | Dark Frame (navbar, footer) | Color shift | Wit/neon groen |
+| B | Blog content inline | Statische underline dikker | Blauw (`--color-link-hover`) |
+| C | Design inline (CTA, FAQ) | Color shift + animated ::after | Groen (`--color-cta-primary`) |
+| D | Card/nav links | Color shift alleen | Groen (`--color-cta-primary`) |
+| E | CTA Buttons | Lift + shadow | N/A |
+
+**2. `styles/animations.css` — Opt-out → opt-in**
+- Fragiele `a:not(.navbar-links a):not(.navbar-brand):not(...)::after` chain verwijderd
+- Vervangen door opt-in selectors: `.final-cta-secondary a::after`, `.final-cta-contact a::after`, `.faq-answer a::after`, `.faq-mini .faq-answer a::after`, `.contact-card a::after`
+- `background-color: var(--color-text)` → `currentColor` (underline volgt link kleur)
+
+**3. `styles/landing.css` — 4 hover fixes**
+- `.blog-link:hover`: `opacity: 0.8` → `color: var(--color-cta-primary)` (brand groen)
+- `.faq-answer a:hover`: `text-decoration: underline; opacity: 0.8` → `color: var(--color-cta-primary-hover)`
+- `.final-cta-secondary a:hover`: `text-decoration: underline` → `color: var(--color-cta-primary)`
+- `.final-cta-contact a:hover`: `text-decoration: underline` → `color: var(--color-cta-primary-hover)`
+
+**4. `styles/pages.css` — 2 hover fixes**
+- `.contact-card a:hover`: `text-decoration: underline` verwijderd (animated ::after neemt over)
+- `.faq-mini .faq-answer a:hover`: `text-decoration: underline` → `color: var(--color-cta-primary-hover)`
+
+**5. `styles/main.css` — Documentatie**
+- 5-categorie comment block bij globale `a:hover` regel
+
+### Kleur Beslissing
+
+Initieel waren `.blog-link:hover` en `.final-cta-secondary a:hover` op `--color-link-hover` (blauw) gezet. Na visuele review bleek blauw niet bij de landing page brand te passen — blauw is de formele content-kleur (blogs), groen is de brand-kleur (landing, CTA, FAQ). Beide gecorrigeerd naar `--color-cta-primary`.
+
+### Bestanden Gewijzigd
+- `styles/animations.css` — opt-in ::after underline selectors
+- `styles/landing.css` — 4 hover fixes + kleur correctie
+- `styles/pages.css` — 2 hover fixes
+- `styles/main.css` — 5-categorie documentatie comment
+
+### Tests
+- Playwright E2E (lokaal, Chromium): 14 passed, 2 skipped, 1 pre-bestaande failure (footer `rel` attribuut)
+- Netto resultaat: +87/-219 regels (132 regels minder CSS)
+
+---
+
+## Sessie 108: Uniforme Marketing Footer op Alle Pagina's (2 maart 2026)
+
+**Scope:** Compact footer verwijderen, uniforme marketing footer op terminal + blog + landing + commands pagina's
+**Status:** ✅ VOLTOOID
+**Commits:** Uncommitted (ready for commit)
+
+---
+
+### Context & Problem
+
+**Problem:** Terminal- en blogpagina's gebruikten een compacte footer (simpele copyright + donate + nav links) terwijl landing/commands een uitgebreide marketing footer hadden (3-kolom grid met branding, links, juridisch). Nu er een uitgebreide `terminal-education` sectie onder de terminal staat, is de ruimtebesparing van de compacte footer verwaarloosbaar. Inconsistente footers = slechte UX + SEO + onderhoud.
+
+**Goal:** Eén uniforme marketing footer op alle pagina's met conditionele elementen (Feedback, Donate, Cookie Instellingen).
+
+### Oplossing
+
+**1. Footer component herschreven** (`src/components/footer.js`)
+- `getCompactFooter()` functie en `case 'compact'` switch verwijderd
+- Enkele `getMarketingFooter(options)` met conditionele rendering:
+  - `showFeedback`: Feedback link in Platform kolom (alleen terminal)
+  - `showDonate`: PayPal donate ghost button in footer-bottom
+  - `showCookieSettings`: Cookies + Cookie Instellingen in Juridisch kolom
+  - `basePath`: Relatieve URL-resolutie voor blog subpagina's (`../`)
+
+**2. Routing aangepast** (`src/init-components.js`)
+- Alle pagina's naar `marketing` footer variant
+- Terminal: `{ showFeedback: true, showDonate: true, showCookieSettings: true }`
+- Blog: `{ basePath: '../', showFeedback: false, showDonate: true, showCookieSettings: true }`
+- Commands/Marketing: `{ showDonate: true }`
+
+**3. CSS gemigreerd** (`styles/main.css` ← `styles/landing.css`)
+- ~140 regels compact footer CSS verwijderd uit main.css
+- ~170 regels marketing footer CSS verplaatst van landing.css → main.css
+- Compact footer overrides verwijderd uit blog.css en mobile.css
+
+### Kritiek Probleem & Fix
+
+**Bug:** Na initiële implementatie was de footer op de terminal page verticaal gestapeld (geen grid).
+**Root cause:** `terminal.html` laadt `landing.css` niet — alleen `main.css`, `terminal.css`, `mobile.css`, etc.
+**Fix:** Alle footer CSS van `landing.css` naar `main.css` verplaatst (universeel geladen).
+**CSS Variable aanpassingen:**
+- `var(--landing-max-width)` → `1400px` (variable niet beschikbaar buiten landing.css)
+- `var(--landing-padding-desktop)` → `var(--layout-padding-x, 32px)` (met fallback)
+- `.footer-content` → `.landing-footer .footer-content` (specifiekere selector, geen conflicts)
+
+### Bestanden Gewijzigd
+
+| Bestand | Actie |
+|---------|-------|
+| `src/components/footer.js` | Herschreven: compact verwijderd, marketing met opties |
+| `src/init-components.js` | Alle routes → marketing footer met page-specific opties |
+| `styles/main.css` | Compact CSS verwijderd (-140), marketing CSS toegevoegd (+170) |
+| `styles/landing.css` | Footer CSS verplaatst naar main.css |
+| `styles/blog.css` | Compact footer overrides verwijderd (-22 regels) |
+| `styles/mobile.css` | Compact refs verwijderd, `footer` → `.landing-footer` |
+
+### Test Resultaten
+
+- **Playwright:** 371 passed / 10 failed / 35 flaky / 19 skipped (435 totaal)
+- **Footer test** (`cross-browser.spec.js:286`): Faalt op `acceptLegalModal` (pre-existing race condition), NIET op footer assertions
+- **Alle 10 failures pre-existing** — geen regressies door footer wijzigingen
+- **Visueel geverifieerd:** Terminal, landing, blog — alle 3-kolom grid correct
+
+### Key Learnings
+
+1. **CSS stylesheet dependencies:** Component CSS moet in een universeel geladen stylesheet staan als het component op alle pagina's verschijnt
+2. **CSS variable scope:** Variables gedefinieerd in page-specifieke stylesheets (landing.css) zijn niet beschikbaar op andere pagina's — gebruik fallbacks of hardcoded waarden
+3. **Conditioneel renderen via options object:** Flexibeler dan aparte template functies per variant
+
+---
+
 ## Sessie 106: M7 Gamification — Challenges, Badges, Certificates, Dashboard & Leaderboard (26-28 februari 2026)
 
 **Scope:** Volledige M7 Gamification implementatie (Phase 1-6): challenge framework, 15 challenges, 21 badges, certificate system, progress dashboard, leaderboard

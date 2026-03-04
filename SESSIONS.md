@@ -8,10 +8,12 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (88-106)](docs/sessions/current.md) - Full Detail
-**Sessies:** 106, 105, 104, 103, 102, 101, 100, 96, 95, 94, 93, 92, 91, 90, 89, 88
-**Period:** 26 december 2025 - 28 februari 2026
+### [Current Sessions (88-109)](docs/sessions/current.md) - Full Detail
+**Sessies:** 109, 108, 106, 105, 104, 103, 102, 101, 100, 96, 95, 94, 93, 92, 91, 90, 89, 88
+**Period:** 26 december 2025 - 4 maart 2026
 **Topics:**
+- Unified Link Hover System: 5 categorieën, opt-in underlines, brand kleuren (Sessie 109)
+- Uniforme Marketing Footer op alle pagina's (Sessie 108)
 - M7 Gamification: challenges, badges, certificates, dashboard, leaderboard (Sessie 106)
 - Tutorial E2E uitbreiding (8 tests) + Playwright reporter hang fix (Sessie 105)
 - M6 Tutorial Afronding: cert command, E2E tests, progress sync (Sessie 104)
