@@ -27,25 +27,23 @@ function detectPageType() {
     return {
       variant: 'app',
       options: {},
-      footerVariant: 'compact',
+      footerVariant: 'marketing',
       footerOptions: { showFeedback: true, showDonate: true, showCookieSettings: true }
     };
   }
 
   // Blog pages
   if (path.includes('/blog/')) {
-    // Blog index vs blog post
-    const isIndex = path.endsWith('/blog/') || path.endsWith('/blog/index.html');
     return {
       variant: 'blog',
       options: {
         basePath: '../',
-        backTo: isIndex ? 'blog' : 'simulator'
+        backTo: path.endsWith('/blog/') || path.endsWith('/blog/index.html') ? 'blog' : 'simulator'
       },
-      footerVariant: 'compact',
+      footerVariant: 'marketing',
       footerOptions: {
         basePath: '../',
-        showFeedback: true,
+        showFeedback: false,
         showDonate: true,
         showCookieSettings: true
       }
@@ -58,7 +56,7 @@ function detectPageType() {
       variant: 'marketing',
       options: {},
       footerVariant: 'marketing',
-      footerOptions: {}
+      footerOptions: { showDonate: true }
     };
   }
 
@@ -67,7 +65,7 @@ function detectPageType() {
     variant: 'marketing',
     options: {},
     footerVariant: 'marketing',
-    footerOptions: {}
+    footerOptions: { showDonate: true }
   };
 }
 
