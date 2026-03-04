@@ -33,20 +33,18 @@
 .terminal-edu-section:nth-child(even) {
   background: var(--color-bg-hover);
   border: 1px solid var(--color-border);
-  border-left: 3px solid rgba(159, 239, 0, 0.3);
+  border-left: 3px solid var(--color-prompt-border-light);
   border-radius: 16px;
 }
 
 .terminal-edu-section h2 {
-  font-family: var(--font-heading);
   font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: var(--font-weight-bold);
   color: var(--color-text);
   margin: 0 0 var(--spacing-lg) 0;
   text-align: center;
 }
 
-.terminal-edu-section h3 {
+.terminal-edu-section > h3 {
   font-family: var(--font-heading);
   font-size: clamp(1.1rem, 3vw, 1.4rem);
   font-weight: var(--font-weight-semibold);
@@ -74,11 +72,11 @@
   border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: var(--spacing-md);
-  transition: border-color 0.2s ease;
+  transition: border-color var(--transition-fast);
 }
 
 .edu-command-card:hover {
-  border-color: rgba(159, 239, 0, 0.4);
+  border-color: var(--color-prompt-border-medium);
 }
 
 .edu-command-card code {
@@ -97,7 +95,7 @@
   color: var(--color-text-dim);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  background: rgba(159, 239, 0, 0.1);
+  background: var(--color-prompt-bg-light);
   padding: 2px 8px;
   border-radius: 4px;
   display: inline-block;
@@ -136,7 +134,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(159, 239, 0, 0.15);
+  background: var(--color-prompt-bg-medium);
   color: var(--color-cta-primary);
   font-family: var(--font-heading);
   font-weight: var(--font-weight-bold);
@@ -163,71 +161,16 @@
   margin: 0;
 }
 
-/* ==================== FAQ (details/summary) ==================== */
+/* ==================== FAQ (Layout Only) ==================== */
+/* Base .faq-item styles are in main.css (shared component) */
 .terminal-edu-faq {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
 }
 
-.terminal-edu-faq details {
+.terminal-edu-faq .faq-item {
   background: rgba(22, 27, 34, 0.3);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  overflow: hidden;
-  transition: border-color 0.2s ease;
-}
-
-.terminal-edu-faq details:hover {
-  border-color: var(--color-cta-primary);
-}
-
-.terminal-edu-faq summary {
-  font-family: var(--font-heading);
-  font-size: 1rem;
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-  padding: var(--spacing-md) var(--spacing-lg);
-  cursor: pointer;
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.terminal-edu-faq summary::-webkit-details-marker {
-  display: none;
-}
-
-.terminal-edu-faq summary::after {
-  content: '›';
-  color: var(--color-text-dim);
-  font-size: 1.4rem;
-  transition: transform 0.3s ease, color 0.2s ease;
-  transform: rotate(90deg);
-}
-
-.terminal-edu-faq details[open] summary::after {
-  transform: rotate(-90deg);
-  color: var(--color-cta-primary);
-}
-
-.terminal-edu-faq summary:hover {
-  color: var(--color-cta-primary);
-}
-
-.terminal-edu-faq details p {
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  color: var(--color-text-dim);
-  line-height: 1.6;
-  padding: 0 var(--spacing-lg) var(--spacing-lg);
-  margin: 0;
-}
-
-.terminal-edu-faq details code {
-  color: var(--color-cta-primary);
-  font-family: var(--font-terminal);
 }
 
 /* ==================== Blog Links ==================== */
@@ -247,7 +190,7 @@
   font-family: var(--font-body);
   font-size: 0.95rem;
   text-decoration: none;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
 }
 
 .terminal-edu-blog-links a:hover {
@@ -266,7 +209,7 @@
 
 [data-theme="light"] .edu-command-card,
 [data-theme="light"] .edu-step,
-[data-theme="light"] .terminal-edu-faq details,
+[data-theme="light"] .terminal-edu-faq .faq-item,
 [data-theme="light"] .terminal-edu-blog-links a {
   background: rgba(255, 255, 255, 0.8);
 }

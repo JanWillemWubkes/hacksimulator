@@ -203,91 +203,18 @@
   color: var(--color-cta-primary);
 }
 
-/* ==================== FAQ Section (Mini) ==================== */
+/* ==================== FAQ Section (Mini — Layout Only) ==================== */
+/* Base .faq-item styles are in main.css (shared component) */
 .faq-mini {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
   max-width: 800px;
   margin: 0 auto;
 }
 
 .faq-mini .faq-item {
   background: rgba(22, 27, 34, 0.3);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  overflow: hidden;
-  margin-bottom: var(--spacing-md);
-}
-
-.faq-mini .faq-question {
-  font-family: var(--font-heading);
-  font-size: 1.1rem;
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-  margin: 0;
-  /* Accordion button styling */
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  background: none;
-  border: none;
-  text-align: left;
-  padding: var(--spacing-md) var(--spacing-lg);
-  gap: var(--spacing-md);
-}
-
-.faq-mini .faq-question:hover {
-  color: var(--color-cta-primary);
-}
-
-.faq-mini .faq-question:focus-visible {
-  outline: 2px solid var(--color-cta-primary);
-  outline-offset: 4px;
-  border-radius: 4px;
-}
-
-/* Chevron icon */
-.faq-mini .faq-icon {
-  color: var(--color-text-dim);
-  transition: transform var(--transition-normal), color var(--transition-fast);
-  flex-shrink: 0;
-}
-
-.faq-mini .faq-item.open .faq-icon {
-  transform: rotate(180deg);
-  color: var(--color-cta-primary);
-}
-
-/* Answer - hidden by default */
-.faq-mini .faq-answer {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height var(--transition-normal), padding var(--transition-normal);
-  padding: 0 var(--spacing-lg);
-}
-
-/* Answer - visible when open */
-.faq-mini .faq-item.open .faq-answer {
-  max-height: 300px;
-  padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
-}
-
-.faq-mini .faq-answer p {
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  color: var(--color-text-dim);
-  line-height: 1.6;
-  margin: 0;
-}
-
-.faq-mini .faq-answer a {
-  color: var(--color-cta-primary);
-  text-decoration: none;
-  transition: color var(--transition-fast);
-}
-
-.faq-mini .faq-answer a:hover {
-  color: var(--color-cta-primary-hover);
 }
 
 /* ==================== Legal Links Section ==================== */
