@@ -36,10 +36,34 @@
     });
   }
 
+  /**
+   * Scroll Hint — fade out when education section becomes visible.
+   * Uses IntersectionObserver (no scroll listeners, no performance cost).
+   */
+  function initScrollHint() {
+    const hint = document.querySelector('.scroll-hint');
+    const education = document.querySelector('.terminal-education');
+
+    if (!hint || !education) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        hint.classList.add('hidden');
+        observer.disconnect();
+      }
+    }, { threshold: 0.1 });
+
+    observer.observe(education);
+  }
+
   // Run immediately since defer already waits for DOM
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initFaqAccordion);
+    document.addEventListener('DOMContentLoaded', () => {
+      initFaqAccordion();
+      initScrollHint();
+    });
   } else {
     initFaqAccordion();
+    initScrollHint();
   }
 })();
