@@ -236,12 +236,12 @@
   font-size: 0.875rem;
   border-radius: var(--border-radius-cta-nav);
   background: var(--color-cta-dark-frame);  /* Always neon on dark navbar */
-  color: var(--color-cta-text);  /* Always dark text on neon button (Dark Frame) */
+  color: #0d1117;  /* Always dark text on neon button (Dark Frame - never changes with theme) */
 }
 
 .btn-cta-nav:hover {
   background: var(--color-cta-primary-hover);  /* Neon hover - fixed for dark navbar */
-  color: var(--color-cta-text);  /* Always dark text (Dark Frame) */
+  color: #0d1117;  /* Always dark text (Dark Frame - never changes with theme) */
 }
 
 /* Hero CTA - Larger */
