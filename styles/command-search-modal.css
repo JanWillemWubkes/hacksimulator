@@ -85,7 +85,7 @@
 #command-search-input:focus {
   outline: none;
   border-color: var(--color-success);
-  box-shadow: 0 0 0 2px rgba(0, 255, 0, 0.2);
+  box-shadow: 0 0 0 2px var(--color-prompt-bg-medium);
 }
 
 [data-theme="light"] #command-search-input:focus {
@@ -154,7 +154,7 @@
 
 .command-item:hover,
 .command-item.selected {
-  background: rgba(0, 255, 0, 0.1);
+  background: var(--color-prompt-bg-light);
   border-left-color: var(--color-success);
 }
 
@@ -216,7 +216,7 @@
   color: var(--color-text-secondary);
   margin: 0 0 var(--spacing-md) 0;
   padding: var(--spacing-sm) var(--spacing-md);
-  background: rgba(0, 255, 0, 0.05);
+  background: var(--color-prompt-bg-subtle);
   border-left: 2px solid var(--color-success);
   border-radius: var(--border-radius-button);
 }
