@@ -102,6 +102,7 @@
   --border-radius-modal: 8px;       /* Large containers, modals */
   --border-radius-none: 0;          /* Explicit opt-out (brutalist elements) */
   --border-radius-circle: 50%;      /* Circular elements */
+  --border-radius-cta-nav: 10px;   /* CTA nav buttons - ronder/opvallender dan standaard */
 
   /* Animations */
   --transition-fast: 0.15s ease;
@@ -163,6 +164,15 @@
   --color-button-shadow-hover: rgba(25, 118, 210, 0.3);  /* Blue shadow - matches hover color */
   --color-button-shadow-green: rgba(79, 192, 141, 0.2);  /* Teal/cyan shadow - terminal aesthetic (animations.css) */
 
+  /* Prompt/Neon Lime Transparency Scale - Design System Standard */
+  --color-prompt-bg-subtle: rgba(159, 239, 0, 0.05);    /* Faintest tint - code blocks, tips */
+  --color-prompt-bg-light: rgba(159, 239, 0, 0.1);      /* Light tint - badges, categories, hover fills */
+  --color-prompt-bg-medium: rgba(159, 239, 0, 0.15);    /* Medium tint - step numbers, focus rings */
+  --color-prompt-border-light: rgba(159, 239, 0, 0.3);  /* Subtle border - section accents, glow */
+  --color-prompt-border-medium: rgba(159, 239, 0, 0.4); /* Medium border - card hover states */
+  --color-prompt-border-strong: rgba(159, 239, 0, 0.6); /* Strong border - active/light-mode hover */
+  --color-prompt-shadow: rgba(159, 239, 0, 0.15);       /* Box-shadow glow - focus rings */
+
   /* CTA Colors - Landing Page Primary Actions (Neon Lime) */
   --color-cta-primary: #9fef00;                   /* HTB Neon Lime - Hero CTAs */
   --color-cta-primary-hover: #8ad600;             /* Darker neon lime on hover */
@@ -212,6 +222,15 @@
   /* Alert/Info Box Surfaces - Light mode overrides (subtle dark tint on white) */
   --color-surface-elevated: rgba(0, 0, 0, 0.03);  /* Very subtle grey tint - professional alerts */
   --color-surface-elevated-hover: rgba(0, 0, 0, 0.05);  /* Slightly darker hover state */
+
+  /* Prompt/Neon Lime Transparency Scale - Light mode (Tailwind Green 600 base) */
+  --color-prompt-bg-subtle: rgba(22, 163, 74, 0.05);
+  --color-prompt-bg-light: rgba(22, 163, 74, 0.1);
+  --color-prompt-bg-medium: rgba(22, 163, 74, 0.15);
+  --color-prompt-border-light: rgba(22, 163, 74, 0.3);
+  --color-prompt-border-medium: rgba(22, 163, 74, 0.4);
+  --color-prompt-border-strong: rgba(22, 163, 74, 0.6);
+  --color-prompt-shadow: rgba(22, 163, 74, 0.15);
 
   /* CTA Colors - Light mode (Tailwind Green 600 - rich, modern, WCAG AA 4.2:1) */
   --color-cta-primary: #16a34a;                   /* Tailwind Green 600 - levendig, verzadigd groen */
@@ -311,13 +330,26 @@ body {
 }
 
 /* ==================== Typography ==================== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+  margin: 0;
+}
+
 a {
   color: var(--color-link);
   text-decoration: none;
   transition: opacity var(--transition-fast);
 }
 
-/* Modern link hover: Explicit color change (WCAG compliant) - No opacity dimming to preserve contrast */
+/* ==================== Link Hover System (5 Categories) ====================
+ * A: Dark Frame (navbar, footer, cookie) → Color shift (white/neon) — main.css
+ * B: Inline text (blog content)          → Static underline, thicker on hover — blog.css
+ * C: Inline text (design/CTA context)    → Color shift + animated ::after underline — animations.css (opt-in)
+ * D: Card/nav links (.blog-link, etc.)   → Color shift only (no underline) — landing.css
+ * E: CTA Buttons (.btn-primary, etc.)    → Lift + shadow — animations.css
+ * ========================================================================= */
 a:hover {
   color: var(--color-link-hover);
 }
@@ -1061,7 +1093,7 @@ a.footer-donate:hover {
   color: var(--color-cta-dark-frame);
   border-color: var(--color-cta-dark-frame);
   transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(159, 239, 0, 0.15);
+  box-shadow: 0 4px 12px var(--color-prompt-shadow);
 }
 
 a.footer-donate:active {

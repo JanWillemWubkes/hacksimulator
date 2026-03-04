@@ -25,16 +25,16 @@
   --hero-orb-blue: rgba(88, 166, 255, 0.10);
 
   /* Eyebrow Badge - Theme-aware */
-  --eyebrow-border: rgba(159, 239, 0, 0.3);
-  --eyebrow-bg: rgba(159, 239, 0, 0.05);
+  --eyebrow-border: var(--color-prompt-border-light);
+  --eyebrow-bg: var(--color-prompt-bg-subtle);
 
   /* Glow Effects - Theme-aware */
   --hero-glow: rgba(160, 240, 0, 0.08);
   --final-cta-glow: rgba(159, 239, 0, 0.18);
 
   /* Terminal Demo - Theme-aware */
-  --terminal-demo-border: rgba(159, 239, 0, 0.25);
-  --terminal-demo-glow: 0 0 40px rgba(159, 239, 0, 0.1);
+  --terminal-demo-border: var(--color-prompt-border-light);
+  --terminal-demo-glow: 0 0 40px var(--color-prompt-bg-light);
 
   /* Terminal Demo Text - Fixed (always light on dark terminal) */
   --terminal-demo-text: #c9d1d9;
@@ -202,7 +202,7 @@
   border: none;
   border-radius: var(--border-radius-modal);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 }
 
 .btn-cta:hover {
@@ -223,7 +223,7 @@
 }
 
 .btn-cta .btn-icon {
-  transition: transform 0.2s ease;
+  transition: transform var(--transition-fast);
 }
 
 .btn-cta:hover .btn-icon {
@@ -234,14 +234,14 @@
 .btn-cta-nav {
   padding: 8px 16px;
   font-size: 0.875rem;
-  border-radius: 10px;
+  border-radius: var(--border-radius-cta-nav);
   background: var(--color-cta-dark-frame);  /* Always neon on dark navbar */
-  color: #0d1117;  /* Always dark text on neon button */
+  color: var(--color-cta-text);  /* Always dark text on neon button (Dark Frame) */
 }
 
 .btn-cta-nav:hover {
-  background: #8ad600;  /* Neon hover - fixed for dark navbar */
-  color: #0d1117;  /* Always dark text */
+  background: var(--color-cta-primary-hover);  /* Neon hover - fixed for dark navbar */
+  color: var(--color-cta-text);  /* Always dark text (Dark Frame) */
 }
 
 /* Hero CTA - Larger */
@@ -317,9 +317,7 @@
 
 /* Hero Headline */
 .hero h1 {
-  font-family: var(--font-heading);
   font-size: var(--font-size-display);
-  font-weight: var(--font-weight-bold);
   color: var(--color-text);
   line-height: 1.1;
   margin: 0 0 var(--spacing-md) 0;
@@ -440,7 +438,7 @@
   margin-bottom: var(--spacing-xs);
   white-space: pre-wrap;
   opacity: 1;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--transition-normal);
 }
 
 .terminal-line.prompt {
@@ -510,9 +508,7 @@
 }
 
 .landing-section h2 {
-  font-family: var(--font-heading);
   font-size: clamp(1.75rem, 4vw, 2.5rem);
-  font-weight: var(--font-weight-bold);
   color: var(--color-text);
   text-align: center;
   margin: 0 0 var(--spacing-md) 0;
@@ -597,7 +593,7 @@
     opacity 0.6s ease-out,
     transform 0.6s ease-out,
     filter 0.6s ease-out,
-    border-color 0.3s ease;
+    border-color var(--transition-normal);
 }
 
 .pain-point.visible {
@@ -612,7 +608,7 @@
 .pain-point:nth-child(3) { transition-delay: 200ms; }
 
 .pain-point:hover {
-  border-color: rgba(159, 239, 0, 0.4);
+  border-color: var(--color-prompt-border-medium);
   transform: translateY(-4px);
 }
 
@@ -624,7 +620,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(159, 239, 0, 0.1);
+  background: var(--color-prompt-bg-light);
   border-radius: 12px;
 }
 
@@ -796,7 +792,7 @@
     opacity 0.6s ease-out,
     transform 0.6s ease-out,
     filter 0.6s ease-out,
-    border-color 0.3s ease;
+    border-color var(--transition-normal);
 }
 
 .feature-card.visible {
@@ -810,7 +806,7 @@
 .feature-card:nth-child(3) { transition-delay: 200ms; }
 
 .feature-card:hover {
-  border-color: rgba(159, 239, 0, 0.4);
+  border-color: var(--color-prompt-border-medium);
   transform: translateY(-4px);
 }
 
@@ -820,7 +816,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(159, 239, 0, 0.1);
+  background: var(--color-prompt-bg-light);
   border-radius: 12px;
   margin-bottom: var(--spacing-md);
   color: var(--color-cta-primary);
@@ -846,7 +842,7 @@
   font-family: var(--font-terminal);
   font-size: 0.85rem;
   color: var(--color-cta-primary);
-  background: rgba(159, 239, 0, 0.1);
+  background: var(--color-prompt-bg-light);
   padding: 2px 6px;
   border-radius: 4px;
 }
@@ -953,7 +949,7 @@
     opacity 0.6s ease-out,
     transform 0.6s ease-out,
     filter 0.6s ease-out,
-    border-color 0.3s ease;
+    border-color var(--transition-normal);
 }
 
 .leerpad-card.visible {
@@ -967,7 +963,7 @@
 .leerpad-card:nth-child(3) { transition-delay: 200ms; }
 
 .leerpad-card:hover {
-  border-color: rgba(159, 239, 0, 0.4);
+  border-color: var(--color-prompt-border-medium);
   transform: translateY(-4px);
 }
 
@@ -1058,11 +1054,11 @@
   font-weight: var(--font-weight-medium);
   color: var(--color-text);
   text-decoration: none;
-  transition: opacity 0.2s ease;
+  transition: color var(--transition-fast);
 }
 
 .blog-link:hover {
-  opacity: 0.8;
+  color: var(--color-cta-primary);
 }
 
 .blog-link:focus-visible {
@@ -1094,7 +1090,7 @@
   border: 1px solid var(--color-border);
   border-radius: 12px;
   overflow: hidden;
-  transition: border-color 0.2s ease;
+  transition: border-color var(--transition-fast);
 }
 
 .faq-item:hover {
@@ -1136,7 +1132,7 @@
 /* FAQ Icon (Chevron) */
 .faq-icon {
   color: var(--color-text-dim);
-  transition: transform 0.3s ease, color 0.2s ease;
+  transition: transform var(--transition-normal), color var(--transition-fast);
   flex-shrink: 0;
 }
 
@@ -1149,7 +1145,7 @@
 .faq-answer {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease, padding 0.3s ease;
+  transition: max-height var(--transition-normal), padding var(--transition-normal);
   padding: 0 var(--spacing-lg);
 }
 
@@ -1169,7 +1165,7 @@
 .faq-answer code {
   font-family: var(--font-mono);
   font-size: 0.85em;
-  background: rgba(159, 239, 0, 0.1);
+  background: var(--color-prompt-bg-light);
   color: var(--color-cta-primary);
   padding: 2px 6px;
   border-radius: 4px;
@@ -1178,12 +1174,11 @@
 .faq-answer a {
   color: var(--color-cta-primary);
   text-decoration: none;
-  transition: opacity 0.2s ease;
+  transition: color var(--transition-fast);
 }
 
 .faq-answer a:hover {
-  text-decoration: underline;
-  opacity: 0.8;
+  color: var(--color-cta-primary-hover);
 }
 
 .faq-answer a:focus-visible {
@@ -1211,9 +1206,7 @@
 }
 
 .final-cta h2 {
-  font-family: var(--font-heading);
   font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: var(--font-weight-bold);
   color: var(--color-text);
   margin: 0 0 var(--spacing-md) 0;
 }
@@ -1242,7 +1235,7 @@
 }
 
 .final-cta-secondary a:hover {
-  text-decoration: underline;
+  color: var(--color-cta-primary);
 }
 
 .final-cta-contact {
@@ -1268,142 +1261,10 @@
 }
 
 .final-cta-contact a:hover {
-  color: var(--color-cta-primary);
-  text-decoration: underline;
+  color: var(--color-cta-primary-hover);
 }
 
-/* ==================== Footer ==================== */
-.landing-footer {
-  width: 100%;
-  margin-top: 0;
-  background: rgba(22, 27, 34, 0.5);
-  border-top: 1px solid var(--color-border);
-  padding: 96px var(--landing-padding-desktop) var(--spacing-xl);
-}
-
-.footer-content {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  align-items: start;
-  gap: calc(var(--spacing-xl) * 2);
-  max-width: var(--landing-max-width);
-  margin: 0 auto var(--spacing-xl) auto;
-  text-align: left;
-}
-
-.footer-brand {
-  max-width: 350px;
-}
-
-.footer-logo {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  font-family: var(--font-heading);
-  font-size: 1rem;
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-footer-text);  /* Unified: soft white on dark footer */
-  text-decoration: none;
-  margin-bottom: var(--spacing-md);
-}
-
-.footer-logo .brand-icon {
-  color: var(--color-cta-dark-frame);  /* Always neon on dark footer */
-}
-
-.footer-logo .brand-accent {
-  color: var(--color-cta-dark-frame);  /* Always neon on dark footer */
-}
-
-.footer-logo:hover {
-  color: var(--color-cta-dark-frame);  /* Always neon on dark footer */
-}
-
-.footer-tagline {
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  color: #8b949e;  /* Fixed: Dark Frame — altijd leesbaar op donkere footer */
-  line-height: 1.6;
-  margin: 0;
-}
-
-.footer-links {
-  display: contents;
-}
-
-.footer-column h3 {
-  font-family: var(--font-heading);
-  font-size: 0.8rem;
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-cta-dark-frame);  /* Always neon on dark footer */
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin: 0 0 var(--spacing-md) 0;
-  text-align: left;
-}
-
-.footer-column ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--spacing-sm);
-}
-
-.footer-column a {
-  font-family: var(--font-heading);  /* Space Grotesk - consistent met navbar (Dark Frame Pattern) */
-  font-size: 0.9rem;
-  font-weight: 600;  /* Semi-bold - matches terminal/blog footer */
-  color: var(--color-footer-text);  /* Unified: soft white on dark footer */
-  text-decoration: none;
-  transition: color var(--transition-fast);
-}
-
-.footer-column a:hover {
-  color: var(--color-navbar-link-hover);  /* Wit - tekst links, geen groen (icons only) */
-}
-
-.footer-column a:focus-visible {
-  outline: 2px solid var(--color-info);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
-
-/* Footer Bottom */
-.footer-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: var(--landing-max-width);
-  margin: 0 auto;
-  padding-top: var(--spacing-xl);
-  border-top: 1px solid var(--color-border);
-}
-
-.footer-bottom p {
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  color: #8b949e;  /* Fixed: Dark Frame — altijd leesbaar op donkere footer */
-  margin: 0;
-}
-
-.footer-social {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-}
-
-.footer-social a {
-  color: #8b949e; /* Fixed for Dark Frame */
-  transition: color var(--transition-fast);
-}
-
-.footer-social a:hover {
-  color: var(--color-cta-dark-frame);  /* Always neon on dark footer */
-  transform: translateY(-2px);  /* Lifting effect - consistent met andere icons */
-}
+/* Footer CSS moved to main.css (Sessie 107: uniforme footer op alle pagina's) */
 
 /* ==================== Scroll Animations ==================== */
 .animate-on-scroll {
@@ -1476,7 +1337,7 @@ html {
   width: 56px;
   height: 56px;
   margin-bottom: var(--spacing-md);
-  background: rgba(159, 239, 0, 0.1);
+  background: var(--color-prompt-bg-light);
   border-radius: 12px;
   color: var(--color-cta-primary);
 }
@@ -1496,7 +1357,7 @@ html {
 }
 
 .how-step code {
-  background: rgba(159, 239, 0, 0.1);
+  background: var(--color-prompt-bg-light);
   color: var(--color-cta-primary);
   padding: 2px 6px;
   border-radius: 4px;
@@ -1794,24 +1655,7 @@ html {
     font-size: clamp(1.5rem, 8vw, 2rem);
   }
 
-  /* Footer */
-  .landing-footer {
-    padding: var(--spacing-xl) var(--landing-padding-mobile);
-  }
-
-  .footer-content {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-lg);
-  }
-
-  .footer-brand {
-    max-width: 100%;
-  }
-
-  .footer-bottom {
-    flex-direction: column;
-    gap: var(--spacing-md);
-  }
+  /* Footer mobile moved to main.css (Sessie 107) */
 }
 
 /* ==================== Responsive: Small Mobile ==================== */
@@ -1950,8 +1794,4 @@ html {
     0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Footer - Dark Frame Pattern */
-[data-theme="light"] .landing-footer {
-  background: var(--color-bg-footer);  /* #1a1a1a - consistent */
-  border-top: 1px solid var(--color-border-dark-frame);
-}
+/* Footer light theme moved to main.css (Sessie 107) */

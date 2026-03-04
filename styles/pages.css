@@ -15,12 +15,9 @@
 }
 
 .page-hero h1 {
-  font-family: var(--font-heading);
   font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: var(--font-weight-bold);
   color: var(--color-text);
   margin: 0 0 var(--spacing-md) 0;
-  line-height: 1.2;
 }
 
 .page-hero .hero-subtitle {
@@ -40,9 +37,7 @@
 }
 
 .page-section h2 {
-  font-family: var(--font-heading);
   font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: var(--font-weight-bold);
   color: var(--color-text);
   text-align: center;
   margin: 0 0 var(--spacing-xl) 0;
@@ -110,11 +105,11 @@
   border-radius: 16px;
   padding: var(--spacing-xl);
   text-align: center;
-  transition: border-color 0.3s ease, transform 0.3s ease;
+  transition: border-color var(--transition-normal), transform var(--transition-normal);
 }
 
 .contact-card:hover {
-  border-color: rgba(159, 239, 0, 0.4);
+  border-color: var(--color-prompt-border-medium);
   transform: translateY(-4px);
 }
 
@@ -142,11 +137,11 @@
   color: var(--color-cta-primary);
   font-weight: var(--font-weight-semibold);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color var(--transition-fast);
 }
 
 .contact-card a:hover {
-  text-decoration: underline;
+  color: var(--color-cta-primary-hover);
 }
 
 .contact-card .stat-highlight {
@@ -201,7 +196,7 @@
 
 .developer-card .social-links a {
   color: var(--color-text-dim);
-  transition: color 0.2s ease;
+  transition: color var(--transition-fast);
 }
 
 .developer-card .social-links a:hover {
@@ -254,7 +249,7 @@
 /* Chevron icon */
 .faq-mini .faq-icon {
   color: var(--color-text-dim);
-  transition: transform 0.3s ease, color 0.2s ease;
+  transition: transform var(--transition-normal), color var(--transition-fast);
   flex-shrink: 0;
 }
 
@@ -267,7 +262,7 @@
 .faq-mini .faq-answer {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease, padding 0.3s ease;
+  transition: max-height var(--transition-normal), padding var(--transition-normal);
   padding: 0 var(--spacing-lg);
 }
 
@@ -288,10 +283,11 @@
 .faq-mini .faq-answer a {
   color: var(--color-cta-primary);
   text-decoration: none;
+  transition: color var(--transition-fast);
 }
 
 .faq-mini .faq-answer a:hover {
-  text-decoration: underline;
+  color: var(--color-cta-primary-hover);
 }
 
 /* ==================== Legal Links Section ==================== */
@@ -312,7 +308,7 @@
   border: 1px solid var(--color-border);
   border-radius: 12px;
   text-decoration: none;
-  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  transition: border-color var(--transition-fast), transform var(--transition-fast), background var(--transition-fast);
 }
 
 .legal-link-card:hover {
@@ -333,7 +329,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(159, 239, 0, 0.1);
+  background: var(--color-prompt-bg-light);
   border-radius: 10px;
   color: var(--color-cta-primary);
 }
@@ -361,7 +357,7 @@
 .legal-link-arrow {
   flex-shrink: 0;
   color: var(--color-text-dim);
-  transition: color 0.2s ease, transform 0.2s ease;
+  transition: color var(--transition-fast), transform var(--transition-fast);
 }
 
 .legal-link-card:hover .legal-link-arrow {
@@ -410,7 +406,7 @@
   background: rgba(13, 17, 23, 0.6);
   border: 1px solid var(--color-border);
   border-radius: 8px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
   box-sizing: border-box;
 }
 
@@ -425,7 +421,7 @@
 .form-group select:focus {
   outline: none;
   border-color: var(--color-cta-primary);
-  box-shadow: 0 0 0 3px rgba(159, 239, 0, 0.15);
+  box-shadow: 0 0 0 3px var(--color-prompt-shadow);
 }
 
 .form-group textarea {
@@ -459,7 +455,7 @@
   font-size: 0.95rem;
   text-align: center;
   border-radius: 8px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
 }
 
 .form-status:empty {
@@ -469,8 +465,8 @@
 .form-status-success {
   display: block;
   color: var(--color-cta-primary);
-  background: rgba(159, 239, 0, 0.1);
-  border: 1px solid rgba(159, 239, 0, 0.3);
+  background: var(--color-prompt-bg-light);
+  border: 1px solid var(--color-prompt-border-light);
   padding: var(--spacing-sm) var(--spacing-md);
 }
 
