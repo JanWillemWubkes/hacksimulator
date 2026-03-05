@@ -1408,7 +1408,8 @@ a.footer-donate:focus-visible {
   gap: var(--spacing-sm);
   align-items: center;
   justify-content: center;
-  padding: 0;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-button);
   background: none;
   border: none;
   color: var(--color-toggle-text);
@@ -1416,7 +1417,7 @@ a.footer-donate:focus-visible {
   font-family: var(--font-heading);
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   transition: all var(--transition-normal);
 }
 
@@ -1455,6 +1456,7 @@ a.footer-donate:focus-visible {
   font-size: 12px;
   font-weight: 600;
   color: var(--color-button-bg);
+  margin-right: 2px;
   opacity: 0;
   transition: opacity var(--transition-normal);
 }

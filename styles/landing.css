@@ -153,17 +153,7 @@
 
 /* Theme Toggle - Unified styling (Sessie 97 uniformity) */
 .landing-nav .theme-toggle {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);  /* Was 2px, now 8px - matches terminal navbar */
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--border-radius-button);
-  font-family: var(--font-heading);  /* Was --font-terminal, now matches terminal navbar */
-  font-size: var(--navbar-toggle-size, 13px);  /* Was 0.7rem (11px), now 13px uniform */
-  letter-spacing: 1px;
+  font-size: var(--navbar-toggle-size, 13px);
 }
 
 .landing-nav .theme-toggle:hover {
@@ -184,9 +174,6 @@
   color: var(--color-toggle-text-active);
 }
 
-.landing-nav .toggle-indicator {
-  margin-right: 2px;
-}
 
 /* ==================== CTA Buttons ==================== */
 .btn-cta {
