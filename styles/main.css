@@ -1146,7 +1146,7 @@ a.footer-donate:focus-visible {
 /* ==================== Skip Link (Accessibility) ==================== */
 .skip-link {
   position: absolute;
-  top: -40px;
+  top: -100%;
   left: 0;
   background-color: var(--color-bg-navbar);
   color: var(--color-navbar-link);
