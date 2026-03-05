@@ -755,10 +755,10 @@ a[href='#all'].category-btn {
 }
 
 .blog-nav a.btn-cta:hover {
-  background: var(--color-cta-primary-hover);  /* Neon hover - fixed for dark navbar */
+  background: var(--color-cta-dark-frame-hover);  /* Dark Frame: always neon hover (never changes with theme) */
   color: #0d1117;  /* Always dark text (Dark Frame - never changes with theme) */
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px var(--color-cta-primary-glow);
+  box-shadow: 0 4px 20px var(--color-cta-dark-frame-glow);
 }
 
 .blog-nav a.btn-cta-nav {
