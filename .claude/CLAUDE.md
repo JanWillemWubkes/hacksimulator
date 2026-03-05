@@ -180,7 +180,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - **PRD:** `docs/prd.md` v1.8
 - **Commands:** `docs/commands-list.md` (38 commands)
 - **Style Guide:** `docs/style-guide.md` v1.5
-- **Sessie logs:** `SESSIONS.md` → docs/sessions/ (~106 sessies)
+- **Sessie logs:** `SESSIONS.md` → docs/sessions/ (~109 sessies)
 - **Netlify/Domain:** `docs/netlify-setup.md`
 - **Rules:** `.claude/rules/` (tone-and-output, architecture-patterns, troubleshooting, command-checklist)
 - **Filesystem:** PRD Bijlage B | **Tech rationale:** PRD §13

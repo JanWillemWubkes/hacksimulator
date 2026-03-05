@@ -1,8 +1,8 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 28 februari 2026
-**Status:** M7 Gamification 83% | M6 Tutorial System 79% (LIVE on hacksimulator.nl)
-**Sprint:** Sessie 106: M7 Gamification Phase 1-6 complete | Sessie 105: M7 gamification sync
+**Laatst bijgewerkt:** 5 maart 2026
+**Status:** M7 Gamification 91% | M6 Tutorial System 79% (LIVE on hacksimulator.nl)
+**Sprint:** Sessie 110: Document sync — drift fixes
 
 ---
 
@@ -1346,8 +1346,8 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 28 februari 2026
-**Versie:** 3.8 (Sessie 107 — Document sync)
+**Laatst bijgewerkt:** 5 maart 2026
+**Versie:** 3.9 (Sessie 110 — Document sync drift fixes)
 **Totaal Taken:** 315 (zie toptabel voor actuele breakdown per mijlpaal)
 **Voltooide Taken:** 249/315 (79.0%) — M0-M4: 100%, M5: 91% (41/45), M5.5: Geannuleerd, M6: 79% (26/33), M7: 91% (43/47), M9: 42% (8/19)
 **Live URL:** https://hacksimulator.nl/

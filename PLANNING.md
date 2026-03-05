@@ -205,7 +205,7 @@ hacksimulator/
 ├── README.md                 # Project documentatie (nog aan te maken)
 │
 ├── docs/                     # Product documentatie
-│   ├── prd.md               # Product Requirements v1.1
+│   ├── prd.md               # Product Requirements v1.8
 │   └── commands-list.md     # Command specificaties
 │
 ├── src/                     # Source code
@@ -745,7 +745,7 @@ const DEBUG_MODE = false;
 
 ## 📅 Roadmap & Fases
 
-### Fase 1: MVP (Maand 1-3) - 🔵 IN UITVOERING (55.6%) - **LIVE!**
+### Fase 1: MVP (Maand 1-3) - 🔵 IN UITVOERING (79.0%) - **LIVE!**
 
 **Status:** 249/315 tasks completed (79.0% totaal project scope)
 **MVP-only Progress:** M0-M4 (100%), M5 (41/45 - 91%)
@@ -855,7 +855,7 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 ## 📚 Referenties & Resources
 
 **Interne Documentatie:**
-- `docs/prd.md` - Product Requirements v1.1
+- `docs/prd.md` - Product Requirements v1.8
 - `docs/commands-list.md` - Command specificaties
 - `CLAUDE.md` - AI assistant context
 - `TASKS.md` - Dagelijkse takenlijst (aan te maken)
@@ -904,8 +904,8 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 
 ---
 
-**Laatst bijgewerkt:** 28 februari 2026
-**Versie:** 2.5 (Sessie 107: Document sync — roadmap M7 ✅, metrics aligned, 38 commands)
+**Laatst bijgewerkt:** 5 maart 2026
+**Versie:** 2.6 (Sessie 110: Document sync — drift fixes, PRD v1.8, percentage correctie)
 **Status:** ✅ Deployed - Live in Production | M5.5 Monetization Geannuleerd | M7 Gamification Phase 1-6 ✅
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
