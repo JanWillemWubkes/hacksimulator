@@ -128,10 +128,12 @@ function getAppNavbar() {
               <li><a href="#shortcuts">Shortcuts</a></li>
             </ul>
           </li>
-          <!-- Over Link -->
-          <li><a href="#over">Over</a></li>
           <!-- Blog Link -->
-          <li><a href="#blog">Blog</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <!-- Commands Link -->
+          <li><a href="/commands/">Commands</a></li>
+          <!-- Over Ons Link -->
+          <li><a href="/over-ons.html">Over Ons</a></li>
         </ul>
 
         <div class="navbar-actions">
