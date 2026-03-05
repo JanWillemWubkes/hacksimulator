@@ -179,6 +179,7 @@
   --color-cta-primary-glow: rgba(159, 239, 0, 0.3); /* Glow effect for CTAs */
   --color-cta-text: #0d1117;                      /* Dark text on bright CTA bg */
   --color-cta-dark-frame: #9fef00;                /* Neon lime - ALWAYS used in dark navbar/footer (never changes with theme) */
+  --color-cta-dark-frame-hover: #8ad600;          /* Darker neon lime hover - Dark Frame only (never changes with theme) */
 
   /* Shadow System - Professional Elevation Pattern (Medium/GitHub/Stripe standard) */
   /* Content Cards - Subtle depth for blog posts, documentation boxes (NOT terminal UI) */

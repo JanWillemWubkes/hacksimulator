@@ -240,7 +240,7 @@
 }
 
 .btn-cta-nav:hover {
-  background: var(--color-cta-primary-hover);  /* Neon hover - fixed for dark navbar */
+  background: var(--color-cta-dark-frame-hover);  /* Dark Frame: always neon hover (never changes with theme) */
   color: #0d1117;  /* Always dark text (Dark Frame - never changes with theme) */
 }
 
