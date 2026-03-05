@@ -17,7 +17,15 @@
  * Marketing navbar - full featured met hamburger menu en CTA
  * Gebruikt op: index.html, over-ons.html, contact.html
  */
-function getMarketingNavbar() {
+function getMarketingNavbar(options = {}) {
+  const isLanding = options.isLanding || false;
+
+  // Landing-only anchor links for mobile menu
+  const landingAnchors = isLanding ? `
+      <li><a href="#features">Features</a></li>
+      <li><a href="#leerpad">Leerpad</a></li>
+      <li><a href="#faq">FAQ</a></li>` : '';
+
   return `
   <div class="landing-nav-wrapper">
     <nav class="landing-nav" role="navigation" aria-label="Main navigation">
@@ -36,6 +44,7 @@ function getMarketingNavbar() {
           <a href="/blog/">Blog</a>
           <a href="/commands/">Commands</a>
           <a href="/woordenlijst.html">Woordenlijst</a>
+          <a href="/over-ons.html">Over Ons</a>
         </div>
         <!-- Mobile Hamburger Toggle (hidden on desktop via mobile.css) -->
         <button class="navbar-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="landing-mobile-menu">
@@ -63,13 +72,11 @@ function getMarketingNavbar() {
   <!-- Mobile Menu Overlay (terminal-style: opaque black, slideDown, border separators) -->
   <div id="landing-mobile-menu" class="navbar-menu">
     <ul class="navbar-links">
-      <li><a href="/terminal.html" class="mobile-cta-link">Start Simulator</a></li>
-      <li><a href="#features">Features</a></li>
-      <li><a href="#leerpad">Leerpad</a></li>
-      <li><a href="#faq">FAQ</a></li>
+      <li><a href="/terminal.html" class="mobile-cta-link">Start Simulator</a></li>${landingAnchors}
       <li><a href="/blog/">Blog</a></li>
       <li><a href="/commands/">Commands</a></li>
       <li><a href="/woordenlijst.html">Woordenlijst</a></li>
+      <li><a href="/over-ons.html">Over Ons</a></li>
     </ul>
     <div class="navbar-actions">
       <button class="theme-toggle" aria-label="Toggle tussen dark en light mode" title="Toggle tussen dark en light mode">
@@ -439,7 +446,7 @@ export function injectNavbar(variant = 'marketing', options = {}) {
       break;
     case 'marketing':
     default:
-      html = getMarketingNavbar();
+      html = getMarketingNavbar(options);
   }
 
   // Inject HTML

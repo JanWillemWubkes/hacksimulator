@@ -61,9 +61,10 @@ function detectPageType() {
   }
 
   // Marketing pages (landing, over-ons, contact, woordenlijst)
+  const isLanding = path === '/' || path === '/index.html' || path.endsWith('/index');
   return {
     variant: 'marketing',
-    options: {},
+    options: { isLanding },
     footerVariant: 'marketing',
     footerOptions: { showDonate: true }
   };
