@@ -7,10 +7,15 @@
 
 const STORAGE_KEY = 'hacksim_gamification';
 const COMMAND_LOG_CAP = 100;
+const SAVE_DEBOUNCE_MS = 500;
 
 export default new class ProgressStore {
   constructor() {
     this._cache = null;
+    this._saveTimeout = null;
+
+    // Flush pending saves before page unload
+    window.addEventListener('beforeunload', () => this.flush());
   }
 
   /**
@@ -36,14 +41,41 @@ export default new class ProgressStore {
   }
 
   /**
-   * Save current data to localStorage.
+   * Schedule a debounced save to localStorage (500ms).
+   * Multiple rapid calls reset the timer — only the last one writes.
    */
   save() {
+    if (this._saveTimeout) {
+      clearTimeout(this._saveTimeout);
+    }
+
+    this._saveTimeout = setTimeout(() => {
+      this._saveNow();
+      this._saveTimeout = null;
+    }, SAVE_DEBOUNCE_MS);
+  }
+
+  /**
+   * Write to localStorage immediately (no debounce).
+   * @private
+   */
+  _saveNow() {
     try {
       var data = this._cache || this._defaults();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (e) {
       console.warn('Could not save gamification data:', e);
+    }
+  }
+
+  /**
+   * Flush any pending debounced save immediately.
+   */
+  flush() {
+    if (this._saveTimeout) {
+      clearTimeout(this._saveTimeout);
+      this._saveTimeout = null;
+      this._saveNow();
     }
   }
 

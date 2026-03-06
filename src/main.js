@@ -7,6 +7,7 @@ import terminal from './core/terminal.js';
 import legalManager from './ui/legal.js';
 import onboardingManager from './ui/onboarding.js';
 import feedbackManager from './ui/feedback.js';
+import persistence from './filesystem/persistence.js';
 import { initTerminalNavbar } from './components/navbar-terminal.js';
 import analyticsTracker from './analytics/tracker.js';
 import analyticsEvents from './analytics/events.js';
@@ -156,6 +157,9 @@ function initialize() {
     // Register all commands
     registerCommands();
 
+    // Initialize filesystem persistence (load saved VFS state before terminal starts)
+    persistence.init();
+
     // Initialize terminal
     terminal.init({
       outputElement,
@@ -212,7 +216,8 @@ window.HackSimulator = {
   debug: {
     getRegistry: () => terminal.getRegistry(),
     getHistory: () => terminal.getHistory(),
-    clear: () => terminal.clear()
+    clear: () => terminal.clear(),
+    persistence: persistence
   },
   feedback: {
     getAll: () => feedbackManager.getAllFeedback(),

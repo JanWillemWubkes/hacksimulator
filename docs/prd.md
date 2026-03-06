@@ -1,7 +1,7 @@
 # Product Requirements Document - HackSimulator.nl
 **Versie:** 1.8
 **Status:** M0-M4 Completed, M5 In Progress - ✅ **LIVE on Netlify!**
-**Laatst bijgewerkt:** 16 december 2025 (Sessie 87 - Document sync: Metrics en M5 progress update)
+**Laatst bijgewerkt:** 6 maart 2026 (Sessie 110 - M9 Refactor Sprint)
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 

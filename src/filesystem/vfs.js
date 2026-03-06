@@ -9,7 +9,27 @@ class VirtualFilesystem {
   constructor() {
     this.fs = null;
     this.cwd = '/';
+    this._onChangeCallback = null;
     this.init();
+  }
+
+  /**
+   * Register a callback to be called when the filesystem is mutated
+   * Used by persistence layer for debounced saves
+   * @param {Function} callback
+   */
+  onChange(callback) {
+    this._onChangeCallback = callback;
+  }
+
+  /**
+   * Notify that the filesystem has been mutated
+   * @private
+   */
+  _notifyChange() {
+    if (this._onChangeCallback) {
+      this._onChangeCallback();
+    }
   }
 
   /**
@@ -256,6 +276,8 @@ class VirtualFilesystem {
       type: 'directory',
       children: {}
     };
+
+    this._notifyChange();
   }
 
   /**
@@ -292,6 +314,8 @@ class VirtualFilesystem {
       type: 'file',
       content
     };
+
+    this._notifyChange();
   }
 
   /**
@@ -328,6 +352,7 @@ class VirtualFilesystem {
 
     if (parent && parent.children) {
       delete parent.children[nodeName];
+      this._notifyChange();
     }
   }
 
@@ -363,6 +388,8 @@ class VirtualFilesystem {
     }
 
     destParent.children[destName] = clone;
+
+    this._notifyChange();
   }
 
   /**

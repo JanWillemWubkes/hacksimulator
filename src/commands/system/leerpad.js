@@ -4,6 +4,7 @@ import {
   smartTruncate,
   isMobileView
 } from "../../utils/box-utils.js";
+import onboarding from "../../ui/onboarding.js";
 
 const B = BOX_CHARS;
 
@@ -151,15 +152,7 @@ function buildMobileOutput(triedSet) {
 }
 
 function getTriedCommands() {
-  try {
-    var stored = localStorage.getItem('hacksim_commands_tried');
-    if (!stored) return new Set();
-    var arr = stored.split(',').filter(function(s) { return s.trim(); });
-    return new Set(arr);
-  } catch (e) {
-    console.warn('Could not read tried commands:', e);
-    return new Set();
-  }
+  return new Set(onboarding.getCommandsTried());
 }
 
 export default {

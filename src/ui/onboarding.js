@@ -2,12 +2,26 @@
  * Onboarding System
  * First Time User Experience (FTUE) logic
  * Progressive hints and encouragement
+ *
+ * Consolidates all onboarding state into a single localStorage key:
+ * `hacksim_onboarding` (previously 4 separate keys)
  */
+
+const STORAGE_KEY = 'hacksim_onboarding';
+
+// Legacy keys (for migration)
+const LEGACY_KEYS = [
+  'hacksim_first_visit',
+  'hacksim_command_count',
+  'hacksim_onboarding_state',
+  'hacksim_commands_tried'
+];
 
 class Onboarding {
   constructor() {
     this.isFirstVisit = true;
     this.commandCount = 0;
+    this.commandsTried = [];
     this.hasShownEncouragement = false;
     this.hasShownTabHint = false;
     this.hasShownTutorialSuggestion = false;
@@ -17,30 +31,73 @@ class Onboarding {
 
     // Filesystem commands that produce no output on success (Unix convention)
     this.FILESYSTEM_COMMANDS = ['cd', 'cp', 'mkdir', 'mv', 'rm', 'touch'];
-
-    // localStorage keys
-    this.STORAGE_KEY_FIRST_VISIT = 'hacksim_first_visit';
-    this.STORAGE_KEY_COMMAND_COUNT = 'hacksim_command_count';
-    this.STORAGE_KEY_ONBOARDING_STATE = 'hacksim_onboarding_state';
-    this.STORAGE_KEY_COMMANDS_TRIED = 'hacksim_commands_tried';
   }
 
   /**
    * Initialize onboarding system
-   * Load state from localStorage
+   * Load state from localStorage (with legacy migration)
    */
   init() {
     try {
-      // Check if this is first visit
-      const firstVisitFlag = localStorage.getItem(this.STORAGE_KEY_FIRST_VISIT);
-      this.isFirstVisit = firstVisitFlag === null;
+      const saved = localStorage.getItem(STORAGE_KEY);
 
-      // Load command count
-      const savedCount = localStorage.getItem(this.STORAGE_KEY_COMMAND_COUNT);
+      if (saved) {
+        // New consolidated format
+        this._loadFromData(JSON.parse(saved));
+      } else {
+        // Try legacy migration
+        this._migrateFromLegacy();
+      }
+    } catch (e) {
+      console.error('Failed to initialize onboarding:', e);
+      this.isFirstVisit = true;
+      this.commandCount = 0;
+    }
+  }
+
+  /**
+   * Load state from consolidated data object
+   * @private
+   */
+  _loadFromData(data) {
+    this.isFirstVisit = data.firstVisit !== false; // default true
+    this.commandCount = data.commandCount || 0;
+    this.commandsTried = data.commandsTried || [];
+    this.hasShownEncouragement = data.hasShownEncouragement || false;
+    this.hasShownTabHint = data.hasShownTabHint || false;
+    this.hasShownTutorialSuggestion = data.hasShownTutorialSuggestion || false;
+    this.hasShownCtrlRHint = data.hasShownCtrlRHint || false;
+    this.hasShownCtrlLHint = data.hasShownCtrlLHint || false;
+    this.hasShownNoOutputHint = data.hasShownNoOutputHint || false;
+  }
+
+  /**
+   * Migrate from legacy 4-key format to consolidated format
+   * @private
+   */
+  _migrateFromLegacy() {
+    try {
+      // Read legacy keys
+      const firstVisitFlag = localStorage.getItem('hacksim_first_visit');
+      const savedCount = localStorage.getItem('hacksim_command_count');
+      const savedState = localStorage.getItem('hacksim_onboarding_state');
+      const savedCommands = localStorage.getItem('hacksim_commands_tried');
+
+      // If no legacy data exists either, this is truly a first visit
+      if (!firstVisitFlag && !savedCount && !savedState && !savedCommands) {
+        this.isFirstVisit = true;
+        this.commandCount = 0;
+        return;
+      }
+
+      // Migrate values
+      this.isFirstVisit = firstVisitFlag === null;
       this.commandCount = savedCount ? parseInt(savedCount, 10) : 0;
 
-      // Load onboarding state
-      const savedState = localStorage.getItem(this.STORAGE_KEY_ONBOARDING_STATE);
+      if (savedCommands) {
+        this.commandsTried = savedCommands.split(',').filter(cmd => cmd.trim());
+      }
+
       if (savedState) {
         try {
           const state = JSON.parse(savedState);
@@ -51,15 +108,29 @@ class Onboarding {
           this.hasShownCtrlLHint = state.hasShownCtrlLHint || false;
           this.hasShownNoOutputHint = state.hasShownNoOutputHint || false;
         } catch (e) {
-          console.warn('Failed to parse onboarding state:', e);
+          console.warn('Failed to parse legacy onboarding state:', e);
         }
       }
 
+      // Save in new format and remove legacy keys
+      this._save();
+      this._removeLegacyKeys();
     } catch (e) {
-      console.error('Failed to initialize onboarding:', e);
-      // Set safe defaults
-      this.isFirstVisit = true;
-      this.commandCount = 0;
+      console.warn('Legacy migration failed:', e);
+    }
+  }
+
+  /**
+   * Remove legacy localStorage keys after migration
+   * @private
+   */
+  _removeLegacyKeys() {
+    for (const key of LEGACY_KEYS) {
+      try {
+        localStorage.removeItem(key);
+      } catch (e) {
+        // Ignore
+      }
     }
   }
 
@@ -77,17 +148,13 @@ class Onboarding {
    */
   getWelcomeMessage() {
     if (!this.isFirstVisit) {
-      // Returning visitor - short welcome
       return this._getReturningVisitorWelcome();
     }
-
-    // First-time visitor - full welcome
     return this._getFirstTimeWelcome();
   }
 
   /**
-   * First-time visitor welcome - Mission-driven "Hacker Mentor" tone
-   * Emphasizes identity, action, and ethical purpose
+   * First-time visitor welcome
    * @private
    */
   _getFirstTimeWelcome() {
@@ -116,8 +183,7 @@ veilig en legaal.
   }
 
   /**
-   * Returning visitor welcome - Ultra-brief with identity reinforcement
-   * Acknowledges user as "hacker" to strengthen engagement
+   * Returning visitor welcome
    * @private
    */
   _getReturningVisitorWelcome() {
@@ -132,111 +198,77 @@ veilig en legaal.
 
   /**
    * Mark that user has completed first visit
-   * Call this after first command is executed
    */
   markFirstVisitComplete() {
     if (this.isFirstVisit) {
-      try {
-        localStorage.setItem(this.STORAGE_KEY_FIRST_VISIT, 'false');
-        this.isFirstVisit = false;
-      } catch (e) {
-        console.warn('Could not save first visit state:', e);
-      }
+      this.isFirstVisit = false;
+      this._save();
     }
   }
 
   /**
    * Record that a command was executed
    * Returns a hint message if appropriate
-   * @param {string} commandName - Name of the command that was executed
+   * @param {string} commandName - Name of the command
    * @returns {string|null} Hint message or null
    */
   recordCommand(commandName = null) {
     this.commandCount++;
 
-    try {
-      localStorage.setItem(this.STORAGE_KEY_COMMAND_COUNT, this.commandCount.toString());
-    } catch (e) {
-      console.warn('Could not save command count:', e);
-    }
-
     // Track individual command for leerpad
-    if (commandName) {
-      this._trackCommand(commandName);
+    if (commandName && !this.commandsTried.includes(commandName)) {
+      this.commandsTried.push(commandName);
     }
 
-    // Save state
-    this._saveState();
+    // Get hint before saving (hint may update state)
+    const hint = this._getProgressiveHint();
 
-    // Return progressive hints
-    return this._getProgressiveHint();
+    // Single save for everything
+    this._save();
+
+    return hint;
   }
 
   /**
-   * Track individual command execution for leerpad progress
-   * @private
-   * @param {string} commandName
+   * Get list of commands the user has tried
+   * @returns {string[]}
    */
-  _trackCommand(commandName) {
-    try {
-      // Get existing commands
-      const stored = localStorage.getItem(this.STORAGE_KEY_COMMANDS_TRIED);
-      const commands = stored ? stored.split(',').filter(cmd => cmd.trim()) : [];
-
-      // Add new command if not already tracked
-      if (!commands.includes(commandName)) {
-        commands.push(commandName);
-        localStorage.setItem(this.STORAGE_KEY_COMMANDS_TRIED, commands.join(','));
-      }
-    } catch (e) {
-      console.warn('Could not track command:', e);
-    }
+  getCommandsTried() {
+    return this.commandsTried;
   }
 
   /**
    * Get progressive hints based on command count
-   * Uses terminal-native ASCII brackets, hacker terminology, and mission framing
    * @private
    * @returns {string|null}
    */
   _getProgressiveHint() {
-    // After 1st command: Exploration encouragement
     if (this.commandCount === 1 && !this.hasShownEncouragement) {
       this.hasShownEncouragement = true;
-      this._saveState();
       return '\n[✓] Eerste opdracht voltooid!\n\nOntdek je omgeving:\n→ \'ls\'   - Bekijk bestanden in deze map\n→ \'help\' - Zie alle beschikbare hacking tools';
     }
 
-    // After 3 commands: Tab completion discovery
     if (this.commandCount === 3 && !this.hasShownTabHint) {
       this.hasShownTabHint = true;
-      this._saveState();
       return '\n[✓] Pro tip: Gebruik Tab om commands snel in te typen\n\nProbeer het nu:\n→ Type "nm" en druk Tab      - Vult aan naar "nmap"\n→ Type "l" en druk Tab 2x    - Cyclet door ls, ln, ...';
     }
 
-    // After 5 commands: Introduce reconnaissance (professional workflow)
     if (this.commandCount === 5 && !this.hasShownTutorialSuggestion) {
       this.hasShownTutorialSuggestion = true;
-      this._saveState();
       return '\n[✓] 5 opdrachten voltooid - je bent onderweg!\n\nKlaar voor je eerste missie? Probeer de begeleide tutorial:\n→ \'tutorial recon\'   - Start de Reconnaissance missie\n→ \'tutorial\'         - Bekijk alle beschikbare scenario\'s';
     }
 
-    // After 7 commands: Ctrl+R history search
     if (this.commandCount === 7 && !this.hasShownCtrlRHint) {
       this.hasShownCtrlRHint = true;
-      this._saveState();
       return '\n[✓] Pro tip: Gebruik Ctrl+R om door je geschiedenis te zoeken\n\nProbeer het nu:\n→ Druk Ctrl+R en type "ls"     - Vind vorige ls commands\n→ Druk Ctrl+R opnieuw          - Cycle door matches\n→ Enter om te accepteren       - Esc om te annuleren\n\nType \'shortcuts\' voor alle keyboard shortcuts.';
     }
 
-    // After 10 commands: Security tools with enhanced legal warning
     if (this.commandCount === 10) {
       return '\n[!] 10 opdrachten - tijd voor krachtigere tools\n\n[!] LET OP: De volgende tools zijn ALLEEN voor educatief gebruik.\n      In de echte wereld zijn ze illegaal zonder expliciete toestemming.\n\nKlaar? Type \'help security\' voor geavanceerde tools.';
     }
 
-    // After 12 commands: Ctrl+L clear screen
     if (this.commandCount === 12 && !this.hasShownCtrlLHint) {
       this.hasShownCtrlLHint = true;
-      this._saveState();
       return '\n[✓] Is je terminal vol? Gebruik Ctrl+L om te leegmaken\n\n(Net als echte Linux terminals - geen rommelige output meer!)';
     }
 
@@ -244,12 +276,15 @@ veilig en legaal.
   }
 
   /**
-   * Save onboarding state to localStorage
+   * Save all onboarding state to localStorage (single write)
    * @private
    */
-  _saveState() {
+  _save() {
     try {
-      const state = {
+      const data = {
+        firstVisit: this.isFirstVisit,
+        commandCount: this.commandCount,
+        commandsTried: this.commandsTried,
         hasShownEncouragement: this.hasShownEncouragement,
         hasShownTabHint: this.hasShownTabHint,
         hasShownTutorialSuggestion: this.hasShownTutorialSuggestion,
@@ -257,7 +292,7 @@ veilig en legaal.
         hasShownCtrlLHint: this.hasShownCtrlLHint,
         hasShownNoOutputHint: this.hasShownNoOutputHint
       };
-      localStorage.setItem(this.STORAGE_KEY_ONBOARDING_STATE, JSON.stringify(state));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (e) {
       console.warn('Could not save onboarding state:', e);
     }
@@ -265,48 +300,45 @@ veilig en legaal.
 
   /**
    * Get one-time "no news is good news" hint for filesystem commands
-   * Explains Unix convention of silent success
-   * @param {string} commandName - Name of the executed command
-   * @returns {string|null} Hint message or null
+   * @param {string} commandName
+   * @returns {string|null}
    */
   getFilesystemHint(commandName) {
     if (this.hasShownNoOutputHint) return null;
     if (!this.FILESYSTEM_COMMANDS.includes(commandName)) return null;
 
     this.hasShownNoOutputHint = true;
-    this._saveState();
+    this._save();
 
     return '\n[?] Wist je dat? In echte Linux tonen commands zoals cd, cp en rm geen output bij succes.\n    Dit heet "no news is good news". Deze simulator toont bevestigingen zodat je leert wat er gebeurt.';
   }
 
   /**
-   * Get hint for persistent display (rechts onderin)
-   * Disappears after 5 commands
+   * Get hint for persistent display
    * @returns {string|null}
    */
   getPersistentHint() {
     if (this.commandCount >= 5) {
-      return null; // Hide after 5 commands
+      return null;
     }
-
     return 'Type "help" voor commands';
   }
 
   /**
-   * Reset onboarding (for testing or user request)
+   * Reset onboarding
    */
   reset() {
     try {
-      localStorage.removeItem(this.STORAGE_KEY_FIRST_VISIT);
-      localStorage.removeItem(this.STORAGE_KEY_COMMAND_COUNT);
-      localStorage.removeItem(this.STORAGE_KEY_ONBOARDING_STATE);
-      localStorage.removeItem(this.STORAGE_KEY_COMMANDS_TRIED);
+      localStorage.removeItem(STORAGE_KEY);
+      // Also clean up any remaining legacy keys
+      this._removeLegacyKeys();
     } catch (e) {
       console.warn('Could not reset onboarding state:', e);
     }
 
     this.isFirstVisit = true;
     this.commandCount = 0;
+    this.commandsTried = [];
     this.hasShownEncouragement = false;
     this.hasShownTabHint = false;
     this.hasShownTutorialSuggestion = false;
@@ -323,6 +355,7 @@ veilig en legaal.
     return {
       isFirstVisit: this.isFirstVisit,
       commandCount: this.commandCount,
+      commandsTried: this.commandsTried,
       hasShownEncouragement: this.hasShownEncouragement,
       hasShownTabHint: this.hasShownTabHint,
       hasShownTutorialSuggestion: this.hasShownTutorialSuggestion,

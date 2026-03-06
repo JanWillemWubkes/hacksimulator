@@ -3,6 +3,8 @@
  * Simulated command for the HackSimulator terminal
  */
 
+import persistence from '../../filesystem/persistence.js';
+
 export default {
   name: 'reset',
   category: 'special',
@@ -68,8 +70,8 @@ Type 'reset --help' voor meer informatie.`;
 
     // Default behavior: Reset filesystem (no args or explicit filesystem arg)
     try {
-      // Reset the virtual filesystem
-      vfs.reset();
+      // Reset the virtual filesystem and clear persisted data
+      persistence.reset();
 
       // Update terminal prompt to home directory
       if (terminal) {

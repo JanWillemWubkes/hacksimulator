@@ -1,8 +1,8 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 5 maart 2026
+**Laatst bijgewerkt:** 6 maart 2026
 **Status:** M7 Gamification 91% | M6 Tutorial System 79% (LIVE on hacksimulator.nl)
-**Sprint:** Sessie 110: Document sync — drift fixes
+**Sprint:** Sessie 110: M9 Refactor Sprint — VFS persistence, localStorage optimization, doc sync
 
 ---
 
@@ -629,7 +629,7 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
 ### Cache Implementation Cleanup (3 taken)
 - [x] Remove redundant HTML cache meta tags van `terminal.html` — ✅ Sessie 103 (verwijderd: Cache-Control, Pragma, Expires meta tags + impact-site-verification)
 - [x] Delete of move `cache-diagnostic.html` naar `/dev/` folder — ✅ Sessie 87: bestand al verwijderd tijdens cleanup
-- [ ] Document cache strategy in `docs/CACHING.md` (_headers file + versioning rationale)
+- [x] Document cache strategy in `docs/CACHING.md` — SKIPPED (Sessie 110: Netlify `_headers` is self-documenting, apart doc overbodig)
 
 ### Bundle Size Optimization (4 taken) — ✅ DEFERRED (Sessie 100: Netlify minificatie ingeschakeld, budget herdefinieerd)
 - [x] Audit bundle size breakdown — ✅ Sessie 100: 983 KB productieve code identified
@@ -1346,8 +1346,8 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 5 maart 2026
-**Versie:** 3.9 (Sessie 110 — Document sync drift fixes)
+**Laatst bijgewerkt:** 6 maart 2026
+**Versie:** 4.0 (Sessie 110 — M9 Refactor Sprint: VFS persistence, localStorage optimization)
 **Totaal Taken:** 315 (zie toptabel voor actuele breakdown per mijlpaal)
 **Voltooide Taken:** 249/315 (79.0%) — M0-M4: 100%, M5: 91% (41/45), M5.5: Geannuleerd, M6: 79% (26/33), M7: 91% (43/47), M9: 42% (8/19)
 **Live URL:** https://hacksimulator.nl/

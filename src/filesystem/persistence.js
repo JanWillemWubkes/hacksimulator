@@ -1,14 +1,61 @@
 /**
  * Filesystem Persistence
  * Handles saving/loading VFS state to/from localStorage
+ * Uses debounced saves (1000ms) to batch rapid filesystem mutations
  */
 
 import vfs from './vfs.js';
+
+const SAVE_DEBOUNCE_MS = 1000;
 
 class FilesystemPersistence {
   constructor() {
     this.storageKey = 'hacksim_filesystem';
     this.autoSave = true;
+    this._saveTimeout = null;
+  }
+
+  /**
+   * Initialize persistence: load saved state and wire up VFS change listener
+   */
+  init() {
+    // Load saved filesystem if available
+    if (this.hasSavedData()) {
+      this.load();
+    }
+
+    // Listen for VFS mutations → debounced save
+    vfs.onChange(() => this.scheduleSave());
+
+    // Flush pending saves before page unload
+    window.addEventListener('beforeunload', () => this.flush());
+  }
+
+  /**
+   * Schedule a debounced save (resets timer on each call)
+   */
+  scheduleSave() {
+    if (!this.autoSave) return;
+
+    if (this._saveTimeout) {
+      clearTimeout(this._saveTimeout);
+    }
+
+    this._saveTimeout = setTimeout(() => {
+      this.save();
+      this._saveTimeout = null;
+    }, SAVE_DEBOUNCE_MS);
+  }
+
+  /**
+   * Flush any pending debounced save immediately
+   */
+  flush() {
+    if (this._saveTimeout) {
+      clearTimeout(this._saveTimeout);
+      this._saveTimeout = null;
+      this.save();
+    }
   }
 
   /**
@@ -51,6 +98,12 @@ class FilesystemPersistence {
    * Reset filesystem to initial state and clear storage
    */
   reset() {
+    // Cancel any pending save
+    if (this._saveTimeout) {
+      clearTimeout(this._saveTimeout);
+      this._saveTimeout = null;
+    }
+
     vfs.reset();
     this.clear();
   }
@@ -102,10 +155,4 @@ class FilesystemPersistence {
 
 // Export as singleton
 const persistence = new FilesystemPersistence();
-
-// Try to load saved filesystem on initialization
-if (persistence.hasSavedData()) {
-  persistence.load();
-}
-
 export default persistence;

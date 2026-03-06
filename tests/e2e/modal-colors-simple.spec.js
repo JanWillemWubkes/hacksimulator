@@ -12,7 +12,7 @@ test.describe('Modal Header Colors - Simple Test', () => {
     // Set localStorage to bypass legal modal
     await page.evaluate(() => {
       localStorage.setItem('hacksim_legal_accepted', 'true');
-      localStorage.setItem('hacksim_first_visit', 'false');
+      localStorage.setItem('hacksim_onboarding', JSON.stringify({ firstVisit: false, commandCount: 10 }));
     });
     await page.reload({ waitUntil: 'networkidle' });
     await page.waitForTimeout(1000);

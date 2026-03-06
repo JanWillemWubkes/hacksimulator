@@ -10,6 +10,7 @@ import tracker from '../analytics/tracker.js';
 import FocusTrap from './focus-trap.js';
 
 const STORAGE_KEY = 'hacksim_feedback';
+const FEEDBACK_CAP = 50;
 
 const FeedbackManager = {
   _currentRating: 0,
@@ -224,6 +225,12 @@ const FeedbackManager = {
     try {
       const allFeedback = this.getAllFeedback();
       allFeedback.push(feedback);
+
+      // Cap at max items, remove oldest first
+      while (allFeedback.length > FEEDBACK_CAP) {
+        allFeedback.shift();
+      }
+
       localStorage.setItem(STORAGE_KEY, JSON.stringify(allFeedback));
     } catch (e) {
       console.error('Could not save feedback to localStorage:', e);
