@@ -4,6 +4,82 @@
 
 ---
 
+## Sessie 110: M9 Refactor Sprint — VFS Persistence & localStorage Optimization (6 maart 2026)
+
+**Scope:** Fix broken VFS persistence, consolidate localStorage writes, doc sync
+**Status:** ✅ VOLTOOID
+**Commits:** `956c4fa` feat: M9 refactor — VFS persistence, localStorage optimization, doc sync
+
+---
+
+### Context & Problem
+
+**Problem 1 — VFS Persistence Broken:** `src/filesystem/persistence.js` was een orphan module — nooit geïmporteerd in `main.js` of enig ander bestand. Gevolg: VFS-wijzigingen (mkdir, touch, cp, rm, mv) overleefden geen page refresh. Gebruikers begonnen elke sessie met een vers filesystem.
+
+**Problem 2 — localStorage Write Storm:** Per command execution werden 5-6 aparte `localStorage.setItem()` calls gedaan: history (1), gamification (1), onboarding (3-4). Geen debouncing of batching.
+
+**Problem 3 — Documentation Drift:** Datums, versienummers en sessie-counters waren gedrift across 6 bestanden (PLANNING.md header ≠ footer, SESSIONS.md claimde 107 terwijl CLAUDE.md op 109 stond).
+
+### Oplossing
+
+**3D: VFS Persistence Fix (meest impactvol)**
+- `vfs.js`: `onChange(callback)` + `_notifyChange()` op alle mutatie-methods (createDirectory, createFile, delete, copy, move)
+- `persistence.js`: Herschreven met `init()` method, debounced `scheduleSave()` (1000ms), `flush()` voor `beforeunload`
+- `main.js`: `persistence.init()` toegevoegd vóór `terminal.init()` (load saved state before terminal renders)
+- `reset.js`: Gebruikt nu `persistence.reset()` i.p.v. `vfs.reset()` direct
+- `cookies.html`: `hacksim_filesystem` key gedocumenteerd
+
+**3A: Onboarding Consolidatie (4 keys → 1)**
+- `onboarding.js`: Volledig herschreven — 1 key `hacksim_onboarding` i.p.v. 4 losse keys
+- Legacy migratie: leest oude keys → migreert naar nieuw format → verwijdert oude keys
+- `leerpad.js`: Gebruikt nu `onboarding.getCommandsTried()` i.p.v. directe localStorage access
+- Impact: 3-4 writes → 1 write per `recordCommand()`
+
+**3C: Gamification Write Debounce**
+- `progress-store.js`: `save()` is nu debounced (500ms), `_saveNow()` voor directe writes, `flush()` op `beforeunload`
+
+**3B: Feedback Cap**
+- `feedback.js`: Cap van 50 items op feedback array, shift oldest when over limit
+
+**Doc Sync:** 6 bestanden bijgewerkt (PLANNING.md, TASKS.md, SESSIONS.md, CLAUDE.md, prd.md, style-guide.md)
+
+### Key Decisions
+
+1. **Debounce timing:** VFS 1000ms, gamification 500ms — VFS is grotere payload, minder frequent
+2. **Observer pattern:** VFS doesn't know about persistence — het roept alleen `_notifyChange()` aan. Loose coupling.
+3. **Legacy migration:** Onboarding leest oude keys bij eerste load, migreert, verwijdert — backward compatible
+4. **Cache strategy docs SKIPPED:** Netlify `_headers` is self-documenting, apart CACHING.md is overkill
+
+### Files Changed (17)
+
+| File | Change |
+|------|--------|
+| `src/filesystem/vfs.js` | onChange callback + _notifyChange on mutations |
+| `src/filesystem/persistence.js` | Rewritten: init(), debounced save, flush |
+| `src/main.js` | Import persistence, call init() |
+| `src/commands/special/reset.js` | Use persistence.reset() |
+| `src/ui/onboarding.js` | 4 keys → 1 key consolidation + legacy migration |
+| `src/commands/system/leerpad.js` | Use onboarding.getCommandsTried() |
+| `src/gamification/progress-store.js` | Debounced save (500ms) + flush |
+| `src/ui/feedback.js` | 50-item cap |
+| `assets/legal/cookies.html` | Updated key documentation |
+| `tests/e2e/feedback-onboarding-headers.spec.js` | New onboarding key format |
+| `tests/e2e/modal-colors-simple.spec.js` | New onboarding key format |
+| 6 doc files | Date/version/counter sync |
+
+### Test Results
+
+- **44 E2E tests passed** (Chromium, localhost): command-coverage, feedback, feedback-onboarding-headers, modal-colors-simple, debug-storage, autocomplete-filesystem
+- Note: `debug-storage.spec.js` has hardcoded production URL — shows old keys because it runs against production, not localhost
+
+### Learnings
+
+- **Orphan module detection:** grep for imports to verify modules are actually wired up
+- **Debounce + beforeunload:** Essential combo — debounce prevents write storms, beforeunload prevents data loss
+- **E2E tests met hardcoded URLs:** `debug-storage.spec.js` ignoreert `BASE_URL` env var omdat goto URL hardcoded is
+
+---
+
 ## Sessie 109: Unified Link Hover System (4 maart 2026)
 
 **Scope:** 23 verschillende link hover behaviors consolideren naar 5 categorieën met consistent gedrag

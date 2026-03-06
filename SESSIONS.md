@@ -8,10 +8,11 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (88-109)](docs/sessions/current.md) - Full Detail
-**Sessies:** 109, 108, 106, 105, 104, 103, 102, 101, 100, 96, 95, 94, 93, 92, 91, 90, 89, 88
-**Period:** 26 december 2025 - 4 maart 2026
+### [Current Sessions (88-110)](docs/sessions/current.md) - Full Detail
+**Sessies:** 110, 109, 108, 106, 105, 104, 103, 102, 101, 100, 96, 95, 94, 93, 92, 91, 90, 89, 88
+**Period:** 26 december 2025 - 6 maart 2026
 **Topics:**
+- M9 Refactor Sprint: VFS persistence fix, localStorage optimization, doc sync (Sessie 110)
 - Unified Link Hover System: 5 categorieën, opt-in underlines, brand kleuren (Sessie 109)
 - Uniforme Marketing Footer op alle pagina's (Sessie 108)
 - M7 Gamification: challenges, badges, certificates, dashboard, leaderboard (Sessie 106)

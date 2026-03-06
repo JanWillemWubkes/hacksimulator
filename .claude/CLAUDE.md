@@ -83,6 +83,17 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 110: M9 Refactor — VFS Persistence & localStorage Optimization (6 maart 2026)
+⚠️ **Never:**
+- Orphan modules laten liggen — `persistence.js` bestond maar werd nergens geïmporteerd, VFS persisteerde niet
+- Meerdere localStorage keys voor één concern — onboarding had 4 losse keys, 3-4 writes per command
+- Debounce zonder `beforeunload` flush — data gaat verloren als gebruiker tab sluit tijdens debounce window
+
+✅ **Always:**
+- Observer pattern voor persistence: VFS roept `_notifyChange()` aan, persistence luistert met debounce — loose coupling
+- Legacy migration bij key consolidatie: lees oude keys → migreer → verwijder — bestaande users verliezen geen data
+- `beforeunload` event handler voor elke debounced save — vangt edge case van snelle tab-close
+
 ### Sessie 109: Unified Link Hover System (4 maart 2026)
 ⚠️ **Never:**
 - Opt-out CSS selectors (`:not()` chains) voor animaties — fragiel, elke nieuwe context vereist uitbreiding
@@ -122,15 +133,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ✅ **Always:**
 - Graceful modal helpers met try/catch fallback — voorkomt false failures bij race conditions
 
-### Sessie 103: M6 Tutorial System (20 feb 2026)
-⚠️ **Never:**
-- State machine zonder expliciete state enum — gebruik altijd een `STATES` object
-
-✅ **Always:**
-- Non-blocking tutorial overlay — UX blijft responsief, commands werken altijd
-- Progressive hints (3 tiers: 2/4/6 pogingen) — beginners zelf laten proberen
-
-**Rotation:** Keep last 4 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
+**Rotation:** Keep last 5 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
 
 ---
 
