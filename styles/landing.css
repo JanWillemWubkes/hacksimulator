@@ -1281,7 +1281,7 @@ html {
 .btn-cta-secondary:hover {
   color: var(--color-cta-primary);  /* Behoud groene tekst - overschrijf generieke a:hover */
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(159, 239, 0, 0.25);  /* Neon lime glow - matcht CTA border */
+  box-shadow: 0 4px 12px var(--color-cta-primary-glow);  /* Theme-aware glow */
 }
 
 /* ==================== Responsive: Tablet ==================== */
