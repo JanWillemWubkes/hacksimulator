@@ -16,7 +16,7 @@
 **Blog:** 10 posts live at `/blog/` (60+ inline jargon explanations)
 **Contact:** contact@hacksimulator.nl (Gmail forwarding)
 
-**Performance:** Playwright E2E 145 tests across 27 suites (17 files, 3 browsers) | WCAG AAA | 165 CSS variables
+**Performance:** Playwright E2E 172 tests across 30 suites (20 files, 3 browsers) | WCAG AAA | 165 CSS variables
 **Bundle:** ~983 KB productieve code → ~809 KB na Netlify minificatie | Terminal Core: ~340 KB (binnen 400 KB budget)
 
 → **Live metrics:** `TASKS.md` regels 9-26 (meest recente tellingen)
@@ -83,6 +83,17 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 111: M7 Phase 7 — Gamification E2E Testing (7 maart 2026)
+⚠️ **Never:**
+- Assert op command namen in challenge briefings — briefings tonen requirement *descriptions* (NL), niet command names
+- `progressStore.recordCommand()` verwachten buiten challenges — wordt ALLEEN aangeroepen tijdens actieve challenges via `challengeManager.handleCommand()`
+- `page.evaluate()` voor localStorage injectie vóór `page.reload()` — `beforeunload` handler flusht lege `_cache`, overschrijft injected data
+
+✅ **Always:**
+- `page.addInitScript()` voor test data injectie — zet localStorage VÓÓR module-initialisatie, voorkomt beforeunload race condition
+- Badge tests binnen challenge context — start eerst een challenge, dan commands uitvoeren voor badge triggers
+- Locked badges tonen als `???` — assert op icons (`[#]`, `[*]`) en `???`, niet op badge namen
+
 ### Sessie 110: M9 Refactor — VFS Persistence & localStorage Optimization (6 maart 2026)
 ⚠️ **Never:**
 - Orphan modules laten liggen — `persistence.js` bestond maar werd nergens geïmporteerd, VFS persisteerde niet
@@ -125,14 +136,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Cross-cutting concerns (badge unlock) op meerdere hooks: terminal command execution + challenge completion
 - Certificate download via Blob API + clipboard fallback (mobile compatibiliteit)
 
-### Sessie 104: M6 Tutorial Afronding & E2E Tests (22 feb 2026)
-⚠️ **Never:**
-- `acceptLegalModal` hardcoded als verplicht — legal modal is soms al dismissed (parallel workers, cached localStorage)
-- Playwright `html` reporter zonder `open: 'never'` — hangt oneindig in non-interactieve shells
-
-✅ **Always:**
-- Graceful modal helpers met try/catch fallback — voorkomt false failures bij race conditions
-
 **Rotation:** Keep last 5 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
 
 ---
@@ -143,7 +146,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
 **Rotation trigger:** Every 5 sessions (last: Sessie 108, next: Sessie 113)
-**Sessie counter:** 110
+**Sessie counter:** 111
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -190,5 +193,5 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 6 maart 2026 (Sessie 110 — M9 Refactor Sprint)
-**Version:** 4.0 (Sessie 110: VFS persistence fix, localStorage optimization, doc sync)
+**Last updated:** 7 maart 2026 (Sessie 111 — M7 Phase 7 Gamification E2E Testing)
+**Version:** 4.1 (Sessie 111: 27 gamification E2E tests, test count 145→172)
