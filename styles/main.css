@@ -1121,11 +1121,12 @@ a.footer-donate:focus-visible {
   }
 
   .landing-footer .footer-content {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: var(--spacing-lg);
   }
 
   .footer-brand {
+    grid-column: 1 / -1;
     max-width: 100%;
   }
 
