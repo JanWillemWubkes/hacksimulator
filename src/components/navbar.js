@@ -398,7 +398,7 @@ function initNavbarToggle() {
   });
 
   // Close when clicking anchor links (for landing's #features, #leerpad, #faq)
-  menu.querySelectorAll('a[href^="#"]').forEach(link => {
+  menu.querySelectorAll('a[href^="#"]:not(.dropdown-trigger)').forEach(link => {
     link.addEventListener('click', () => {
       closeMenu();
     });
