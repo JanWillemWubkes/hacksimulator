@@ -39,10 +39,6 @@ async function typeCommand(page, command) {
   await page.waitForTimeout(500);
 }
 
-async function getLastOutput(page) {
-  return page.locator('#terminal-output').textContent();
-}
-
 // ========================================
 // TUTORIAL SYSTEM TESTS
 // ========================================
@@ -62,23 +58,23 @@ test.describe('Tutorial System', () => {
 
   test('tutorial command shows scenario list', async ({ page }) => {
     await typeCommand(page, 'tutorial');
-    const output = await getLastOutput(page);
+    const output = page.locator('#terminal-output');
 
     // Should show the TUTORIALS header
-    expect(output).toContain('TUTORIALS');
+    await expect(output).toContainText('TUTORIALS', { timeout: 5000 });
 
     // Should list at least the recon scenario (always available)
-    expect(output).toContain('recon');
+    await expect(output).toContainText('recon', { timeout: 2000 });
 
     // Should show usage hint
-    expect(output).toContain('tutorial start');
+    await expect(output).toContainText('tutorial start', { timeout: 2000 });
   });
 
   test('tutorial status without active tutorial shows message', async ({ page }) => {
     await typeCommand(page, 'tutorial status');
-    const output = await getLastOutput(page);
+    const output = page.locator('#terminal-output');
 
-    expect(output).toContain('Geen actieve tutorial');
+    await expect(output).toContainText('Geen actieve tutorial', { timeout: 5000 });
   });
 
   // ----------------------------------------
@@ -87,73 +83,80 @@ test.describe('Tutorial System', () => {
 
   test('tutorial recon starts scenario with mission briefing', async ({ page }) => {
     await typeCommand(page, 'tutorial recon');
-    const output = await getLastOutput(page);
+    const output = page.locator('#terminal-output');
 
     // Should show briefing
-    expect(output).toContain('MISSION BRIEFING');
-    expect(output).toContain('SecureCorp');
+    await expect(output).toContainText('MISSION BRIEFING', { timeout: 10000 });
+    await expect(output).toContainText('SecureCorp', { timeout: 2000 });
 
     // Should show first step objective
-    expect(output).toContain('ping');
+    await expect(output).toContainText('ping', { timeout: 2000 });
   });
 
   test('tutorial status during active tutorial shows progress', async ({ page }) => {
     await typeCommand(page, 'tutorial recon');
-    await typeCommand(page, 'tutorial status');
-    const output = await getLastOutput(page);
+    const output = page.locator('#terminal-output');
+    await expect(output).toContainText('MISSION BRIEFING', { timeout: 10000 });
 
-    expect(output).toContain('Actieve tutorial');
-    expect(output).toContain('1/4');
+    await typeCommand(page, 'tutorial status');
+
+    await expect(output).toContainText('Actieve tutorial', { timeout: 5000 });
+    await expect(output).toContainText('1/4', { timeout: 2000 });
   });
 
   test('correct command gives positive feedback and advances step', async ({ page }) => {
     await typeCommand(page, 'tutorial recon');
+    await expect(page.locator('#terminal-output')).toContainText('MISSION BRIEFING', { timeout: 10000 });
 
     // Step 1: ping with an argument
     await typeCommand(page, 'ping 192.168.1.100');
-    const output = await getLastOutput(page);
+    const output = page.locator('#terminal-output');
 
     // Should show success feedback
-    expect(output).toContain('Correct');
+    await expect(output).toContainText('Correct', { timeout: 5000 });
 
     // Should show next step (nmap)
-    expect(output).toContain('nmap');
+    await expect(output).toContainText('nmap', { timeout: 2000 });
   });
 
   test('wrong command gives hint suggestion after attempts', async ({ page }) => {
     await typeCommand(page, 'tutorial recon');
+    const output = page.locator('#terminal-output');
+    await expect(output).toContainText('MISSION BRIEFING', { timeout: 10000 });
 
     // Wrong commands — not the expected 'ping' with args
     await typeCommand(page, 'whoami');
-    const output1 = await getLastOutput(page);
-    expect(output1).toContain('niet het juiste commando');
+    await expect(output).toContainText('niet het juiste commando', { timeout: 5000 });
 
     // After 2 wrong attempts, should get a hint
     await typeCommand(page, 'ls');
     await typeCommand(page, 'echo test');
-    const output2 = await getLastOutput(page);
-    expect(output2).toContain('Hint');
+    await expect(output).toContainText('Hint', { timeout: 5000 });
   });
 
   test('tutorial skip advances to next step', async ({ page }) => {
     await typeCommand(page, 'tutorial recon');
+    await expect(page.locator('#terminal-output')).toContainText('MISSION BRIEFING', { timeout: 10000 });
+
     await typeCommand(page, 'tutorial skip');
-    const output = await getLastOutput(page);
+    const output = page.locator('#terminal-output');
 
     // Should confirm skip
-    expect(output).toContain('overgeslagen');
+    await expect(output).toContainText('overgeslagen', { timeout: 5000 });
 
     // Should show step 2 (nmap)
-    expect(output).toContain('nmap');
+    await expect(output).toContainText('nmap', { timeout: 2000 });
   });
 
   test('tutorial exit saves progress', async ({ page }) => {
     await typeCommand(page, 'tutorial recon');
-    await typeCommand(page, 'tutorial exit');
-    const output = await getLastOutput(page);
+    await expect(page.locator('#terminal-output')).toContainText('MISSION BRIEFING', { timeout: 10000 });
 
-    expect(output).toContain('Tutorial verlaten');
-    expect(output).toContain('opgeslagen');
+    await typeCommand(page, 'tutorial exit');
+    const output = page.locator('#terminal-output');
+
+    await expect(output).toContainText('Tutorial verlaten', { timeout: 5000 });
+    await expect(output).toContainText('opgeslagen', { timeout: 2000 });
   });
 
   // ----------------------------------------
@@ -161,26 +164,28 @@ test.describe('Tutorial System', () => {
   // ----------------------------------------
 
   test('tutorial progress persists across page reload', async ({ page }) => {
-    // Start a tutorial
+    // Start a tutorial — wait for briefing before next command
     await typeCommand(page, 'tutorial recon');
+    await expect(page.locator('#terminal-output')).toContainText('MISSION BRIEFING', { timeout: 10000 });
 
     // Complete step 1 (ping with arg)
     await typeCommand(page, 'ping 192.168.1.100');
-    await page.waitForTimeout(300);
 
-    // Check localStorage has tutorial progress
+    // Wait for debounced localStorage save to flush
+    await expect.poll(async () => {
+      return page.evaluate(() => localStorage.getItem('hacksim_tutorial_progress'));
+    }, { timeout: 5000 }).toBeTruthy();
+
     const saved = await page.evaluate(() => {
       return localStorage.getItem('hacksim_tutorial_progress');
     });
-    expect(saved).toBeTruthy();
-
     var parsed = JSON.parse(saved);
     expect(parsed.activeScenario).toBe('recon');
     expect(parsed.currentStep).toBe(1);
 
-    // Reload page
+    // Reload page — wait for terminal to fully initialize
     await page.reload();
-    await page.waitForTimeout(1000);
+    await expect(page.locator('#terminal-input')).toBeVisible({ timeout: 10000 });
 
     // Legal modal should NOT appear (already accepted)
     const legalModal = page.locator('#legal-modal');
@@ -188,10 +193,10 @@ test.describe('Tutorial System', () => {
 
     // Check tutorial status shows resumed state
     await typeCommand(page, 'tutorial status');
-    const output = await getLastOutput(page);
+    const output = page.locator('#terminal-output');
 
-    expect(output).toContain('Actieve tutorial');
-    expect(output).toContain('2/4');
+    await expect(output).toContainText('Actieve tutorial', { timeout: 5000 });
+    await expect(output).toContainText('2/4', { timeout: 2000 });
   });
 
   // ----------------------------------------
@@ -203,8 +208,9 @@ test.describe('Tutorial System', () => {
     test.setTimeout(60000);
 
     await typeCommand(page, 'tutorial recon');
+    await expect(page.locator('#terminal-output')).toContainText('MISSION BRIEFING', { timeout: 10000 });
 
-    // Step 1: ping
+    // Step 1: ping — wait for tutorial state machine to advance
     await typeCommand(page, 'ping 192.168.1.100');
     await page.waitForTimeout(300);
 
@@ -218,15 +224,14 @@ test.describe('Tutorial System', () => {
 
     // Step 4: traceroute
     await typeCommand(page, 'traceroute 192.168.1.100');
-    await page.waitForTimeout(500);
 
-    const output = await getLastOutput(page);
+    const output = page.locator('#terminal-output');
 
     // Should show completion
-    expect(output).toContain('MISSIE VOLTOOID');
+    await expect(output).toContainText('MISSIE VOLTOOID', { timeout: 5000 });
 
     // Should show congratulations
-    expect(output).toContain('Goed gedaan');
+    await expect(output).toContainText('Goed gedaan', { timeout: 2000 });
   });
 
   // ----------------------------------------
@@ -235,19 +240,20 @@ test.describe('Tutorial System', () => {
 
   test('webvuln scenario starts with correct briefing', async ({ page }) => {
     await typeCommand(page, 'tutorial webvuln');
-    const output = await getLastOutput(page);
+    const output = page.locator('#terminal-output');
 
-    expect(output).toContain('MISSION BRIEFING');
+    await expect(output).toContainText('MISSION BRIEFING', { timeout: 10000 });
     // Should mention the target context and first step command
-    expect(output).toContain('nmap');
+    await expect(output).toContainText('nmap', { timeout: 2000 });
   });
 
   test('completing webvuln scenario shows completion', async ({ page }) => {
     test.setTimeout(60000);
 
     await typeCommand(page, 'tutorial webvuln');
+    await expect(page.locator('#terminal-output')).toContainText('MISSION BRIEFING', { timeout: 10000 });
 
-    // Step 1: nmap (identify webserver)
+    // Step 1: nmap (identify webserver) — wait for tutorial state machine
     await typeCommand(page, 'nmap target');
     await page.waitForTimeout(300);
 
@@ -261,10 +267,9 @@ test.describe('Tutorial System', () => {
 
     // Step 4: cat config file (discover sensitive config)
     await typeCommand(page, 'cat config.php');
-    await page.waitForTimeout(500);
 
-    const output = await getLastOutput(page);
-    expect(output).toContain('MISSIE VOLTOOID');
+    const output = page.locator('#terminal-output');
+    await expect(output).toContainText('MISSIE VOLTOOID', { timeout: 5000 });
   });
 
   // ----------------------------------------
@@ -273,19 +278,20 @@ test.describe('Tutorial System', () => {
 
   test('privesc scenario starts with correct briefing', async ({ page }) => {
     await typeCommand(page, 'tutorial privesc');
-    const output = await getLastOutput(page);
+    const output = page.locator('#terminal-output');
 
-    expect(output).toContain('MISSION BRIEFING');
+    await expect(output).toContainText('MISSION BRIEFING', { timeout: 10000 });
     // Should mention the first step command
-    expect(output).toContain('cat');
+    await expect(output).toContainText('cat', { timeout: 2000 });
   });
 
   test('completing privesc scenario shows completion', async ({ page }) => {
     test.setTimeout(60000);
 
     await typeCommand(page, 'tutorial privesc');
+    await expect(page.locator('#terminal-output')).toContainText('MISSION BRIEFING', { timeout: 10000 });
 
-    // Step 1: enumerate users
+    // Step 1: enumerate users — wait for tutorial state machine
     await typeCommand(page, 'cat /etc/passwd');
     await page.waitForTimeout(300);
 
@@ -299,10 +305,9 @@ test.describe('Tutorial System', () => {
 
     // Step 4: find leaked credentials
     await typeCommand(page, 'cat ~/.bash_history');
-    await page.waitForTimeout(500);
 
-    const output = await getLastOutput(page);
-    expect(output).toContain('MISSIE VOLTOOID');
+    const output = page.locator('#terminal-output');
+    await expect(output).toContainText('MISSIE VOLTOOID', { timeout: 5000 });
   });
 
   // ----------------------------------------
@@ -312,8 +317,9 @@ test.describe('Tutorial System', () => {
   test('tutorial cert after completion shows certificate', async ({ page }) => {
     test.setTimeout(60000);
 
-    // Complete recon scenario first
+    // Complete recon scenario first — wait for briefing before steps
     await typeCommand(page, 'tutorial recon');
+    await expect(page.locator('#terminal-output')).toContainText('MISSION BRIEFING', { timeout: 10000 });
     await typeCommand(page, 'ping 192.168.1.100');
     await page.waitForTimeout(300);
     await typeCommand(page, 'nmap 192.168.1.100');
@@ -321,31 +327,29 @@ test.describe('Tutorial System', () => {
     await typeCommand(page, 'whois securecorp.com');
     await page.waitForTimeout(300);
     await typeCommand(page, 'traceroute 192.168.1.100');
-    await page.waitForTimeout(500);
 
     // Now request the certificate
     await typeCommand(page, 'tutorial cert');
-    const output = await getLastOutput(page);
+    const output = page.locator('#terminal-output');
 
-    expect(output).toContain('CERTIFICAAT');
+    await expect(output).toContainText('CERTIFICAAT', { timeout: 5000 });
   });
 
   test('tutorial reset clears all progress', async ({ page }) => {
     // Start recon and complete step 1
     await typeCommand(page, 'tutorial recon');
+    await expect(page.locator('#terminal-output')).toContainText('MISSION BRIEFING', { timeout: 10000 });
     await typeCommand(page, 'ping 192.168.1.100');
-    await page.waitForTimeout(300);
 
-    // Verify progress exists in localStorage
-    const savedBefore = await page.evaluate(() => {
-      return localStorage.getItem('hacksim_tutorial_progress');
-    });
-    expect(savedBefore).toBeTruthy();
+    // Wait for debounced localStorage save to flush
+    await expect.poll(async () => {
+      return page.evaluate(() => localStorage.getItem('hacksim_tutorial_progress'));
+    }, { timeout: 5000 }).toBeTruthy();
 
     // Reset all progress
     await typeCommand(page, 'tutorial reset');
-    const resetOutput = await getLastOutput(page);
-    expect(resetOutput).toContain('gereset');
+    const output = page.locator('#terminal-output');
+    await expect(output).toContainText('gereset', { timeout: 5000 });
 
     // Verify localStorage is cleared
     const savedAfter = await page.evaluate(() => {
@@ -355,15 +359,15 @@ test.describe('Tutorial System', () => {
 
     // Verify no active tutorial
     await typeCommand(page, 'tutorial status');
-    const statusOutput = await getLastOutput(page);
-    expect(statusOutput).toContain('Geen actieve tutorial');
+    await expect(output).toContainText('Geen actieve tutorial', { timeout: 5000 });
   });
 
   test('scenario list shows completion status after finishing', async ({ page }) => {
     test.setTimeout(60000);
 
-    // Complete recon scenario
+    // Complete recon scenario — wait for briefing before steps
     await typeCommand(page, 'tutorial recon');
+    await expect(page.locator('#terminal-output')).toContainText('MISSION BRIEFING', { timeout: 10000 });
     await typeCommand(page, 'ping 192.168.1.100');
     await page.waitForTimeout(300);
     await typeCommand(page, 'nmap 192.168.1.100');
@@ -371,19 +375,19 @@ test.describe('Tutorial System', () => {
     await typeCommand(page, 'whois securecorp.com');
     await page.waitForTimeout(300);
     await typeCommand(page, 'traceroute 192.168.1.100');
-    await page.waitForTimeout(500);
 
     // Check scenario list for completion indicator
     await typeCommand(page, 'tutorial');
-    const output = await getLastOutput(page);
+    const output = page.locator('#terminal-output');
 
     // Should show completed marker next to recon
-    expect(output).toContain('recon');
+    await expect(output).toContainText('recon', { timeout: 5000 });
     // Completion indicator: [X] or ✓ or VOLTOOID
-    const hasCompletionMarker = output.includes('[X]') ||
-      output.includes('✓') ||
-      output.includes('VOLTOOID') ||
-      output.includes('voltooid');
+    const text = await output.textContent();
+    const hasCompletionMarker = text.includes('[X]') ||
+      text.includes('✓') ||
+      text.includes('VOLTOOID') ||
+      text.includes('voltooid');
     expect(hasCompletionMarker).toBe(true);
   });
 
@@ -395,22 +399,22 @@ test.describe('Tutorial System', () => {
     test.setTimeout(60000);
 
     await typeCommand(page, 'tutorial recon');
+    await expect(page.locator('#terminal-output')).toContainText('MISSION BRIEFING', { timeout: 10000 });
 
     // Type 2 wrong commands to trigger hint tier 1
     await typeCommand(page, 'whoami');
-    await page.waitForTimeout(300);
     await typeCommand(page, 'ls');
-    await page.waitForTimeout(300);
 
-    // Verify hint data is saved in localStorage
-    const hintData = await page.evaluate(() => {
-      return localStorage.getItem('hacksim_tutorial_hints');
-    });
-    expect(hintData).toBeTruthy();
+    // Wait for debounced localStorage save to flush
+    await expect.poll(async () => {
+      return page.evaluate(() => localStorage.getItem('hacksim_tutorial_hints'));
+    }, { timeout: 5000 }).toBeTruthy();
 
-    // Reload page (progress should persist)
+    // Reload page (progress should persist) — wait for terminal to initialize
     await page.reload();
-    await page.waitForTimeout(1000);
+    await expect(page.locator('#terminal-input')).toBeVisible({ timeout: 10000 });
+
+    const output = page.locator('#terminal-output');
 
     // Legal modal should not reappear
     try {
@@ -422,11 +426,10 @@ test.describe('Tutorial System', () => {
 
     // Type another wrong command — should still show hint (not reset to 0)
     await typeCommand(page, 'echo test');
-    const output = await getLastOutput(page);
 
     // After 3 total wrong attempts (2 before reload + 1 after),
     // hint count should be >= tier 1 threshold (2), so hints should appear
-    expect(output).toContain('Hint');
+    await expect(output).toContainText('Hint', { timeout: 5000 });
   });
 
 });
