@@ -1,14 +1,14 @@
 # TASKS.md - HackSimulator.nl
 
 **Laatst bijgewerkt:** 7 maart 2026
-**Status:** M7 Gamification 98% | M6 Tutorial System 79% (LIVE on hacksimulator.nl)
+**Status:** M7 Gamification 98% | M6 Tutorial System 88% (LIVE on hacksimulator.nl)
 **Sprint:** Sessie 111: M7 Phase 7 Gamification Testing — 27 E2E tests (cross-system, mobile, performance)
 
 ---
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 263 / 315 taken voltooid (83.5%)
+**Totaal:** 267 / 315 taken voltooid (84.8%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
@@ -19,7 +19,7 @@
 | M4: UX & Polish | ✅ Voltooid | 43/43 | 100% |
 | M5: Testing & Launch | 🔵 In uitvoering | 41/45 | 91% | ✅ **Performance + Config + Security + Accessibility + Content + Bundle Opt 100%**
 | M5.5: Monetization MVP | ❌ Geannuleerd | - | - | Affiliate aanvragen afgewezen |
-| M6: Tutorial System | 🔵 In uitvoering | 26/33 | 79% | ✅ Framework + 3 scenarios + cert + analytics + E2E tests + perf audit |
+| M6: Tutorial System | 🔵 In uitvoering | 30/33 | 88% | ✅ Framework + 3 scenarios + cert + analytics + E2E tests + perf audit + mobile + cross-browser |
 | M7: Gamification | 🔵 In uitvoering | 46/47 | 98% | ✅ Phase 1-6 complete + Phase 7 testing (cross-system, performance, mobile) |
 | M8: Analytics & Scaling | ⏭️ Gepland | 0/40 | 0% |
 | M9: Refactor Sprint | ✅ Voltooid | 19/19 | 100% | ✅ Cache + bundle + code quality + docs sync + performance + test coverage + localStorage opt |
@@ -29,7 +29,7 @@
 ## 🎯 Huidige Focus
 
 **Actieve Mijlpaal:** M5 - Testing & Launch ✅ **LIVE on hacksimulator.nl!**
-**Current Status:** ✅ **UNBLOCKED** - Playwright E2E: 172 tests across 30 suites (Chromium, Firefox, WebKit passing)
+**Current Status:** ✅ **UNBLOCKED** - Playwright E2E: 184 tests across 31 suites (Chromium, Firefox, WebKit passing)
 
 **Volgende Stappen:**
 1. ✅ GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
@@ -768,7 +768,7 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
   - Progressive hints (3 tiers per step)
   - Completion message with pentest context
 
-- [ ] Mobile testing reconnaissance scenario (0.5h)
+- [x] Mobile testing reconnaissance scenario (0.5h) — ✅ Sessie 112: 4 tests in tutorial-mobile.spec.js
 - [x] Integration testing reconnaissance scenario (0.5h) — ✅ Sessie 104: Playwright E2E tests (18 tests covering all 3 scenarios)
 
 **Scenario 2: Web Vulnerabilities (6h, 5 tasks)** — 3/5
@@ -787,7 +787,7 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
   - OWASP Top 10 context
   - Ethical disclosure process
 
-- [ ] Mobile testing web vulnerabilities scenario (0.5h)
+- [x] Mobile testing web vulnerabilities scenario (0.5h) — ✅ Sessie 112: 4 tests in tutorial-mobile.spec.js
 - [x] Integration testing web vulnerabilities scenario (0.5h) — ✅ Sessie 104: Playwright E2E coverage
 
 **Scenario 3: Privilege Escalation (6h, 5 tasks)** — 3/5
@@ -807,7 +807,7 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
   - Log analysis context
   - Defense recommendations
 
-- [ ] Mobile testing privilege escalation scenario (0.5h)
+- [x] Mobile testing privilege escalation scenario (0.5h) — ✅ Sessie 112: 4 tests in tutorial-mobile.spec.js
 - [x] Integration testing privilege escalation scenario (0.5h) — ✅ Sessie 104: Playwright E2E coverage
 
 ### Phase 3: Integration & Polish (7h, 8 tasks) — 2/8 voltooid
@@ -816,7 +816,7 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
   - Long-press for hint (if gestures implemented)
   - Fallback: keyboard navigation always works
 
-- [ ] Cross-browser testing tutorials (2h)
+- [x] Cross-browser testing tutorials (2h) — ✅ Sessie 112: All 36 mobile + 24 desktop tests pass on Chromium, Firefox, WebKit
   - Test on Chrome, Firefox, Safari (desktop)
   - Test on Mobile Safari, Chrome Mobile
   - Verify localStorage persistence across browsers
