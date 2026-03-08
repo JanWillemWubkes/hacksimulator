@@ -8,10 +8,12 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (88-111)](docs/sessions/current.md) - Full Detail
-**Sessies:** 111, 110, 109, 108, 106, 105, 104, 103, 102, 101, 100, 96, 95, 94, 93, 92, 91, 90, 89, 88
+### [Current Sessions (88-113)](docs/sessions/current.md) - Full Detail
+**Sessies:** 113, 112, 111, 110, 109, 108, 106, 105, 104, 103, 102, 101, 100, 96, 95, 94, 93, 92, 91, 90, 89, 88
 **Period:** 26 december 2025 - 7 maart 2026
 **Topics:**
+- Refactor tutorial.spec.js: flaky textContent() → auto-retry toContainText() assertions (Sessie 113)
+- M6 Tutorial Mobile & Cross-Browser Testing: 12 mobile tests, 3 scenarios, 3 browsers (Sessie 112)
 - M7 Phase 7 Gamification E2E Testing: 27 tests, cross-system/mobile/performance (Sessie 111)
 - M9 Refactor Sprint: VFS persistence fix, localStorage optimization, doc sync (Sessie 110)
 - Unified Link Hover System: 5 categorieën, opt-in underlines, brand kleuren (Sessie 109)

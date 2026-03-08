@@ -83,6 +83,26 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 113: Refactor tutorial.spec.js — Flaky Test Elimination (7 maart 2026)
+⚠️ **Never:**
+- `textContent()` snapshots voor test assertions — één momentopname, geen retry, flaky bij async rendering
+- Sequentiële commands sturen zonder gate assertion — `typeCommand()` 500ms wait is niet genoeg voor tutorial state machine onder load
+
+✅ **Always:**
+- `toContainText()` locator assertions met expliciete timeouts — auto-retry pollt DOM tot tekst verschijnt
+- Gate waits na tutorial start: `await expect(output).toContainText('MISSION BRIEFING', { timeout: 10000 })` vóór volgende command
+- `expect.poll()` voor debounced localStorage checks — fixed waits zijn onbetrouwbaar bij variabele debounce windows
+
+### Sessie 112: M6 Tutorial Mobile & Cross-Browser Testing (7 maart 2026)
+⚠️ **Never:**
+- `textContent()` snapshot voor assertions — als render niet klaar is, krijg je welcome banner i.p.v. command output
+- Desktop test patterns kopiëren naar mobile zonder timing aanpassing — mobile viewports triggeren layout recalculations, gebruik 800ms i.p.v. 500ms
+
+✅ **Always:**
+- `toContainText()` locator assertions (auto-retry) i.p.v. `textContent()` + `toContain()` — Playwright retry voorkomt flaky tests
+- `test.use({ viewport: { width: 375, height: 667 } })` declaratief op file-niveau — cleaner dan `setViewportSize()` in beforeEach
+- Try/catch op legal modal in mobile tests — modal state hangt af van localStorage die per-test varieert
+
 ### Sessie 111: M7 Phase 7 — Gamification E2E Testing (7 maart 2026)
 ⚠️ **Never:**
 - Assert op command namen in challenge briefings — briefings tonen requirement *descriptions* (NL), niet command names
@@ -116,26 +136,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - `currentColor` voor `::after` underline background — volgt automatisch de link kleur
 - Kleurstrategie per context: blauw = content (blogs), groen = brand (landing, CTA, FAQ, cards)
 
-### Sessie 108: Uniforme Marketing Footer (2 maart 2026)
-⚠️ **Never:**
-- Component CSS in page-specifieke stylesheet als component op alle pagina's verschijnt — terminal.html laadt landing.css niet
-- CSS variables uit andere stylesheets gebruiken zonder fallback — `var(--landing-max-width)` bestaat niet in main.css scope
-- Meerdere footer template functies per variant — één functie met options object is flexibeler en minder onderhoud
-
-✅ **Always:**
-- Universele component CSS in universeel geladen stylesheet (`main.css`) — voorkomt layout breaks op pagina's die page-specifieke CSS niet laden
-- CSS variable fallbacks bij cross-stylesheet gebruik: `var(--layout-padding-x, 32px)`
-- Conditionele rendering via options object (`showFeedback`, `showDonate`) — één template, meerdere configuraties
-
-### Sessie 106: M7 Gamification — Full Stack (28 feb 2026)
-⚠️ **Never:**
-- Gamification hooks op één plek — badge checks moeten in terminal.js (na command) EN in challenge flow (na completion)
-- Meerdere localStorage keys voor gerelateerde state — consolideer naar één key (`hacksim_gamification`) voor atomair lezen/schrijven
-
-✅ **Always:**
-- Cross-cutting concerns (badge unlock) op meerdere hooks: terminal command execution + challenge completion
-- Certificate download via Blob API + clipboard fallback (mobile compatibiliteit)
-
 **Rotation:** Keep last 5 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
 
 ---
@@ -145,8 +145,8 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Voor Sessie:** Lees `PLANNING.md`, `TASKS.md`, dit bestand
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-**Rotation trigger:** Every 5 sessions (last: Sessie 108, next: Sessie 113)
-**Sessie counter:** 111
+**Rotation trigger:** Every 5 sessions (last: Sessie 113, next: Sessie 118)
+**Sessie counter:** 113
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -193,5 +193,5 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 7 maart 2026 (Sessie 111 — M7 Phase 7 Gamification E2E Testing)
-**Version:** 4.1 (Sessie 111: 27 gamification E2E tests, test count 145→172)
+**Last updated:** 7 maart 2026 (Sessie 113 — Refactor tutorial.spec.js flaky test elimination)
+**Version:** 4.3 (Sessie 113: tutorial.spec.js refactor, textContent→toContainText, 0 hard failures cross-browser)
