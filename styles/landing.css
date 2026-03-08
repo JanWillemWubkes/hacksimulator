@@ -1170,6 +1170,7 @@
 /* ==================== Smooth Scroll ==================== */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--navbar-height) + 16px);
 }
 
 /* ==================== "Hoe het werkt" Section ==================== */
