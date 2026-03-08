@@ -300,6 +300,7 @@ function initHelpDropdown() {
     trigger.setAttribute('aria-expanded', !isExpanded);
     menu.setAttribute('aria-hidden', isExpanded);
     dropdown.classList.toggle('active', !isExpanded);
+    trigger.blur(); // Prevent mobile keyboard from opening
   });
 
   // Close on escape
@@ -366,6 +367,7 @@ function initNavbarToggle() {
     toggle.setAttribute('aria-expanded', !isExpanded);
     toggle.setAttribute('aria-label', isExpanded ? 'Menu openen' : 'Menu sluiten');
     document.body.classList.toggle('mobile-menu-open', !isExpanded);
+    toggle.blur(); // Prevent mobile keyboard from opening
   });
 
   // Close on click outside

@@ -32,6 +32,9 @@
 
         // Update aria-expanded attribute
         this.setAttribute('aria-expanded', !isOpen);
+
+        // Remove focus to prevent mobile keyboard from opening
+        this.blur();
       });
     });
   }
