@@ -1074,12 +1074,32 @@
   align-items: start;
 }
 
+.faq-grid .faq-item {
+  transition: border-color var(--transition-fast), opacity 0.3s ease, transform 0.3s ease;
+}
+
+.faq-grid .faq-answer {
+  transition: max-height 0.45s ease, padding 0.45s ease;
+}
+
 .faq-grid .faq-item.open {
   grid-column: 1 / -1;
+  animation: faq-expand 0.35s ease;
 }
 
 .faq-grid .faq-item.open .faq-answer p {
   max-width: 75ch;
+}
+
+@keyframes faq-expand {
+  from {
+    opacity: 0.85;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* ==================== Final CTA Section ==================== */
