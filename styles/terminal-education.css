@@ -49,7 +49,7 @@
 .terminal-education {
   background: var(--color-bg);
   border-top: 1px solid var(--color-border);
-  padding: 3rem 0;
+  padding: 4.5rem 0;
   position: relative;
   z-index: 1;
 }
@@ -79,7 +79,7 @@
 }
 
 .terminal-edu-section h2 {
-  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
   color: var(--color-text);
   margin: 0 0 var(--spacing-lg) 0;
   text-align: center;
@@ -97,7 +97,7 @@
   font-family: var(--font-body);
   font-size: 1rem;
   color: var(--color-text-dim);
-  line-height: 1.7;
+  line-height: 1.6;
   margin: 0 0 var(--spacing-md) 0;
 }
 
@@ -111,13 +111,14 @@
 .edu-command-card {
   background: rgba(22, 27, 34, 0.3);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: var(--spacing-md);
-  transition: border-color var(--transition-fast);
+  border-radius: 16px;
+  padding: var(--spacing-xl);
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
 }
 
 .edu-command-card:hover {
   border-color: var(--color-prompt-border-medium);
+  transform: translateY(-4px);
 }
 
 .edu-command-card code {
@@ -164,8 +165,14 @@
   gap: var(--spacing-md);
   background: rgba(22, 27, 34, 0.3);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: var(--spacing-md);
+  border-radius: 16px;
+  padding: var(--spacing-xl);
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.edu-step:hover {
+  border-color: var(--color-prompt-border-medium);
+  transform: translateY(-4px);
 }
 
 .edu-step-num {
@@ -226,7 +233,7 @@
   padding: var(--spacing-md) var(--spacing-lg);
   background: rgba(22, 27, 34, 0.3);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: 16px;
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: 0.95rem;
@@ -252,7 +259,55 @@
 [data-theme="light"] .edu-step,
 [data-theme="light"] .terminal-edu-faq .faq-item,
 [data-theme="light"] .terminal-edu-blog-links a {
-  background: rgba(255, 255, 255, 0.8);
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* ==================== Entrance Animations ==================== */
+/* Initial hidden state — revealed by IntersectionObserver adding .visible */
+.edu-command-card,
+.edu-step,
+.terminal-edu-faq .faq-item,
+.terminal-edu-blog-links a {
+  opacity: 0;
+  transform: translateY(20px);
+  filter: blur(4px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out, filter 0.6s ease-out,
+              border-color var(--transition-fast);
+}
+
+/* Visible state (added by IntersectionObserver) */
+.edu-command-card.visible,
+.edu-step.visible,
+.terminal-edu-faq .faq-item.visible,
+.terminal-edu-blog-links a.visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* Preserve hover lift when visible */
+.edu-command-card.visible:hover,
+.edu-step.visible:hover {
+  transform: translateY(-4px);
+}
+
+/* Stagger delays for command cards */
+.edu-command-card:nth-child(1) { transition-delay: 0ms; }
+.edu-command-card:nth-child(2) { transition-delay: 100ms; }
+.edu-command-card:nth-child(3) { transition-delay: 200ms; }
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .edu-command-card,
+  .edu-step,
+  .terminal-edu-faq .faq-item,
+  .terminal-edu-blog-links a {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
 }
 
 /* ==================== Mobile Responsive ==================== */

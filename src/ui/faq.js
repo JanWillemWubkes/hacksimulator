@@ -40,6 +40,37 @@
   }
 
   /**
+   * Edu Scroll Animations — fade+slide+blur entrance for education cards.
+   * Same IntersectionObserver pattern as landing-demo.js:initScrollAnimations().
+   */
+  function initEduScrollAnimations() {
+    const selectors = [
+      '.edu-command-card',
+      '.edu-step',
+      '.terminal-edu-faq .faq-item',
+      '.terminal-edu-blog-links a'
+    ];
+    const elements = document.querySelectorAll(selectors.join(', '));
+    if (!elements.length) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      elements.forEach(el => el.classList.add('visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2, rootMargin: '0px 0px -50px 0px' });
+
+    elements.forEach(el => observer.observe(el));
+  }
+
+  /**
    * Scroll Hint — fade out when education section becomes visible.
    * Uses IntersectionObserver (no scroll listeners, no performance cost).
    */
@@ -64,9 +95,11 @@
     document.addEventListener('DOMContentLoaded', () => {
       initFaqAccordion();
       initScrollHint();
+      initEduScrollAnimations();
     });
   } else {
     initFaqAccordion();
     initScrollHint();
+    initEduScrollAnimations();
   }
 })();
