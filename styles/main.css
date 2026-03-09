@@ -269,7 +269,7 @@
   --color-footer-text: #c9d1d9;         /* Soft white text (GitHub text - same as dark mode) */
   --color-footer-link: #c9d1d9;         /* Soft white footer links - matches landing (Dark Frame Pattern) */
   --color-footer-link-hover: #9fef00;   /* Neon green hover - matches landing footer (Sessie 97 uniformity) */
-  --color-border-dark-frame: #999999;   /* Dark Frame borders - darker grey for better visibility (2.68:1 vs content, 9.2:1 vs footer) - VS Code pattern */
+  --color-border-dark-frame: #30363d;   /* Dark Frame borders - same as dark mode (navbar/footer always dark) */
 
   /* Theme Toggle Colors - STAYS LIGHT in light mode (navbar is dark) */
   --color-toggle-text-active: #ffffff;  /* Bright white for active label (same as dark mode - navbar stays dark) */
