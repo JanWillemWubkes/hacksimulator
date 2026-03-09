@@ -1187,7 +1187,7 @@ html {
 
 .how-step {
   position: relative;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(22, 27, 34, 0.3);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-card, 12px);
   padding: var(--spacing-xl) var(--spacing-lg);
