@@ -103,7 +103,7 @@ test.describe('Gamification Performance', () => {
     await clearStorage(page);
     await page.reload();
     await acceptLegalModal(page);
-    await expect(page.locator('#terminal-output')).toContainText('HACKSIMULATOR', { timeout: 10000 });
+    await expect(page.locator('#terminal-output')).toContainText('hacksim.lab', { timeout: 10000 });
   });
 
   // ----------------------------------------
@@ -113,7 +113,7 @@ test.describe('Gamification Performance', () => {
     await injectHeavyData(page, 15);
     await page.reload();
     await acceptLegalModal(page);
-    await expect(page.locator('#terminal-output')).toContainText('HACKSIMULATOR', { timeout: 10000 });
+    await expect(page.locator('#terminal-output')).toContainText('hacksim.lab', { timeout: 10000 });
 
     const renderTime = await typeCommandAndMeasure(page, 'dashboard', 'DASHBOARD', 5000);
     expect(renderTime).toBeLessThan(2000);
@@ -126,7 +126,7 @@ test.describe('Gamification Performance', () => {
     await injectHeavyData(page, 15);
     await page.reload();
     await acceptLegalModal(page);
-    await expect(page.locator('#terminal-output')).toContainText('HACKSIMULATOR', { timeout: 10000 });
+    await expect(page.locator('#terminal-output')).toContainText('hacksim.lab', { timeout: 10000 });
 
     const renderTime = await typeCommandAndMeasure(page, 'achievements', 'ACHIEVEMENTS', 5000);
     expect(renderTime).toBeLessThan(2000);
@@ -139,7 +139,7 @@ test.describe('Gamification Performance', () => {
     await injectHeavyData(page, 15);
     await page.reload();
     await acceptLegalModal(page);
-    await expect(page.locator('#terminal-output')).toContainText('HACKSIMULATOR', { timeout: 10000 });
+    await expect(page.locator('#terminal-output')).toContainText('hacksim.lab', { timeout: 10000 });
 
     const renderTime = await typeCommandAndMeasure(page, 'leaderboard', 'LEADERBOARD', 5000);
     expect(renderTime).toBeLessThan(2000);
@@ -152,7 +152,7 @@ test.describe('Gamification Performance', () => {
     await injectHeavyData(page, 15);
     await page.reload();
     await acceptLegalModal(page);
-    await expect(page.locator('#terminal-output')).toContainText('HACKSIMULATOR', { timeout: 10000 });
+    await expect(page.locator('#terminal-output')).toContainText('hacksim.lab', { timeout: 10000 });
 
     const renderTime = await typeCommandAndMeasure(page, 'challenge', 'CHALLENGES', 5000);
     expect(renderTime).toBeLessThan(2000);

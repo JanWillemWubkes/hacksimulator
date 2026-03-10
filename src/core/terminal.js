@@ -103,8 +103,18 @@ class Terminal {
     badgeManager.init();
     var sessionBadges = badgeManager.checkUnlocks('session');
 
-    // Render welcome message (personalized via onboarding)
-    renderer.renderWelcome(onboarding);
+    // Render welcome message (personalized via onboarding + gamification stats)
+    const stats = progressStore.getStats();
+
+    // Disable input during typewriter effect (first visit only)
+    if (onboarding.isFirstTimeVisitor()) {
+      input.disable();
+      document.addEventListener('typewriter-done', () => {
+        input.enable();
+      }, { once: true });
+    }
+
+    renderer.renderWelcome(onboarding, stats);
 
     this.isInitialized = true;
 

@@ -45,7 +45,7 @@ test.describe('Gamification Mobile', () => {
     await clearStorage(page);
     await page.reload();
     await acceptLegalModal(page);
-    await expect(page.locator('#terminal-output')).toContainText('HACKSIMULATOR', { timeout: 10000 });
+    await expect(page.locator('#terminal-output')).toContainText('hacksim.lab', { timeout: 10000 });
   });
 
   // ----------------------------------------
@@ -111,7 +111,7 @@ test.describe('Gamification Mobile', () => {
     });
     await page.reload();
     await acceptLegalModal(page);
-    await expect(page.locator('#terminal-output')).toContainText('HACKSIMULATOR', { timeout: 10000 });
+    await expect(page.locator('#terminal-output')).toContainText('hacksim.lab', { timeout: 10000 });
 
     await typeCommand(page, 'certificates identity-check');
     const output = page.locator('#terminal-output');

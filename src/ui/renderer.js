@@ -64,14 +64,6 @@ class Renderer {
     lines.forEach(lineText => {
       const trimmed = lineText.trim();
 
-      // Check for separator marker - render as visual separator div
-      if (trimmed === '[SEPARATOR]') {
-        const separator = document.createElement('div');
-        separator.className = 'welcome-separator';
-        this.outputElement.appendChild(separator);
-        return;  // Skip normal line rendering
-      }
-
       // Check for section header marker - render as left-aligned header (man pages + educational content)
       if (trimmed.startsWith('[###]')) {
         const header = document.createElement('div');
@@ -194,28 +186,52 @@ class Renderer {
   /**
    * Render welcome message
    * Uses onboarding system for personalized welcome
+   * First visit: typewriter effect (line by line with delay)
+   * Returning visit: instant render
    * @param {Object} onboarding - Onboarding instance (optional for backward compatibility)
+   * @param {Object|null} stats - Progress stats from progressStore
    */
-  renderWelcome(onboarding = null) {
+  renderWelcome(onboarding = null, stats = null) {
     if (onboarding) {
-      const welcome = onboarding.getWelcomeMessage();
-      this.renderOutput(welcome, 'info');
+      const welcome = onboarding.getWelcomeMessage(stats);
+      if (onboarding.isFirstTimeVisitor()) {
+        this._renderTypewriter(welcome);
+      } else {
+        this.renderOutput(welcome, 'info');
+      }
     } else {
-      // Fallback to default welcome if no onboarding provided
-      const welcome = `
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃                                            ┃
-┃  [***] HACKSIMULATOR.NL - MVP BETA        ┃
-┃                                            ┃
-┃  Leer ethisch hacken in een veilige       ┃
-┃  terminal                                  ┃
-┃                                            ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+      const welcome = `Connecting to hacksim.lab... OK
 
-[?] TIP: Type 'help' om te beginnen.
-`;
-      this.renderOutput(welcome.trim(), 'info');
+[→] Type 'help' om te beginnen.`;
+      this.renderOutput(welcome, 'info');
     }
+  }
+
+  /**
+   * Render text line-by-line with typewriter effect
+   * First 2 lines render quickly (connection simulation),
+   * remaining lines render at a steady pace
+   * @private
+   * @param {string} text - Full text to render
+   */
+  _renderTypewriter(text) {
+    const lines = text.split('\n');
+    let delay = 0;
+
+    lines.forEach((line, index) => {
+      // First 2 lines: fast (connection effect), rest: steady pace
+      const lineDelay = index < 2 ? 50 : 80;
+      delay += lineDelay;
+
+      setTimeout(() => {
+        this.renderOutput(line, 'info');
+      }, delay);
+    });
+
+    // Dispatch event when typewriter is done (for input re-enable)
+    setTimeout(() => {
+      document.dispatchEvent(new CustomEvent('typewriter-done'));
+    }, delay + 50);
   }
 
   /**

@@ -42,7 +42,7 @@ test.describe('Certificate System', () => {
     await clearStorage(page);
     await page.reload();
     await acceptLegalModal(page);
-    await expect(page.locator('#terminal-output')).toContainText('HACKSIMULATOR', { timeout: 10000 });
+    await expect(page.locator('#terminal-output')).toContainText('hacksim.lab', { timeout: 10000 });
   });
 
   // ----------------------------------------
@@ -115,7 +115,7 @@ test.describe('Certificate System', () => {
     // Reload to pick up injected data
     await page.reload();
     await acceptLegalModal(page);
-    await expect(page.locator('#terminal-output')).toContainText('HACKSIMULATOR', { timeout: 10000 });
+    await expect(page.locator('#terminal-output')).toContainText('hacksim.lab', { timeout: 10000 });
 
     // List should show the certificate
     await typeCommand(page, 'certificates');

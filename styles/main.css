@@ -190,7 +190,7 @@
   /* Terminal Accent - Neon green glow for terminal-specific UI (hint boxes, command output) */
   --shadow-accent-terminal: 0 0 20px rgba(0, 255, 136, 0.15);  /* Branded glow - hacking aesthetic */
 
-  /* Welcome separator now uses gradient fade (no glow) - see terminal.css .welcome-separator */
+  /* Muted info color for educational context */
 }
 
 /* ==================== Light Mode Theme ==================== */
@@ -298,7 +298,7 @@
   /* Terminal Accent - Adapted for light backgrounds (same visual weight as dark mode) */
   --shadow-accent-terminal: 0 0 20px rgba(0, 255, 136, 0.08);  /* Softer glow on white - prevents oversaturation */
 
-  /* Welcome separator now uses gradient fade (no glow) - see terminal.css .welcome-separator */
+  /* Muted info color for educational context */
 }
 
 /* Mobile Layout Override - Unified padding reduction */

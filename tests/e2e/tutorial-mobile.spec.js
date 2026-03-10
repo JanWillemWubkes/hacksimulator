@@ -46,7 +46,7 @@ test.describe('Tutorial Mobile', () => {
     await clearStorage(page);
     await page.reload();
     await acceptLegalModal(page);
-    await expect(page.locator('#terminal-output')).toContainText('HACKSIMULATOR', { timeout: 10000 });
+    await expect(page.locator('#terminal-output')).toContainText('hacksim.lab', { timeout: 10000 });
   });
 
   // ----------------------------------------

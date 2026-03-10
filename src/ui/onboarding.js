@@ -143,57 +143,77 @@ class Onboarding {
   }
 
   /**
-   * Get welcome message for first-time visitors
+   * Get welcome message based on visitor status
+   * @param {Object|null} stats - Progress stats from progressStore
    * @returns {string}
    */
-  getWelcomeMessage() {
+  getWelcomeMessage(stats = null) {
     if (!this.isFirstVisit) {
-      return this._getReturningVisitorWelcome();
+      return this._getReturningVisitorWelcome(stats);
     }
     return this._getFirstTimeWelcome();
   }
 
   /**
-   * First-time visitor welcome
+   * First-time visitor welcome (rendered with typewriter effect)
    * @private
    */
   _getFirstTimeWelcome() {
-    return `
-[SEPARATOR]
-[***] HACKSIMULATOR.NL - ETHICAL HACKING
-[SEPARATOR]
+    return `Connecting to hacksim.lab... OK
+Authorized access only. All activity is logged.
 
-[✓] Toegang verleend
+Welkom, hacker. Sessie gestart.
 
-Je bent ingelogd op een gesimuleerd netwerk.
-Je missie: leer de tools die ethical hackers
-gebruiken om systemen te beveiligen - volledig
-veilig en legaal.
+  Je bent ingelogd op een gesimuleerd netwerk.
+  Je missie: leer ethical hacking tools — veilig en legaal.
 
-[!] Real hackers beginnen met de basics:
+  [!] Begin met de basics:
 
-→ FASE 1: Terminal basics     ('ls', 'cd', 'pwd')
-→ FASE 2: File manipulation   ('mkdir', 'touch', 'rm')
-→ FASE 3: Network scanning    ('ping', 'nmap')
-→ FASE 4: Security tools      ('hashcat', 'hydra')
+  → FASE 1: Terminal basics     ('ls', 'cd', 'pwd')
+  → FASE 2: File manipulation   ('mkdir', 'touch', 'rm')
+  → FASE 3: Network scanning    ('ping', 'nmap')
+  → FASE 4: Security tools      ('hashcat', 'hydra')
 
-→ Type 'help' om te beginnen
-→ Type 'leerpad' om voortgang te volgen
-`.trim();
+  [→] Type 'help' om te beginnen
+  [→] Type 'leerpad' om voortgang te volgen`;
   }
 
   /**
-   * Returning visitor welcome
+   * Returning visitor welcome (rendered instantly)
    * @private
+   * @param {Object|null} stats - Progress stats from progressStore
    */
-  _getReturningVisitorWelcome() {
-    return `
-[SEPARATOR]
-[***] Welkom terug in het lab, hacker
-[SEPARATOR]
+  _getReturningVisitorWelcome(stats) {
+    const greeting = this._getTimeGreeting();
+    const commandCount = this.commandsTried.length;
 
-[✓] Systeem gereed → Type 'help' voor nieuwe opdrachten
-`.trim();
+    let statsLine = '';
+    if (stats && (stats.completedChallenges.length > 0 || stats.badges.length > 0 || commandCount > 0)) {
+      const parts = [];
+      if (commandCount > 0) parts.push(`${commandCount} commands geleerd`);
+      if (stats.completedChallenges.length > 0) parts.push(`${stats.completedChallenges.length} missies voltooid`);
+      if (stats.badges.length > 0) parts.push(`${stats.badges.length} badges`);
+      statsLine = `\n  [✓] ${parts.join(' | ')}`;
+    }
+
+    return `Connecting to hacksim.lab... OK
+
+${greeting}, hacker.
+${statsLine}
+  [→] Type 'help' voor commandolijst
+  [→] Type 'tutorial recon' voor je volgende missie`;
+  }
+
+  /**
+   * Get time-based greeting in Dutch
+   * @private
+   * @returns {string}
+   */
+  _getTimeGreeting() {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Goedemorgen';
+    if (hour < 18) return 'Goedemiddag';
+    return 'Goedenavond';
   }
 
   /**

@@ -41,7 +41,7 @@ test.describe('Command Coverage - Untested Commands', () => {
     await page.reload();
     await acceptLegalModal(page);
     // Wait for terminal to fully initialize (welcome banner renders)
-    await expect(page.locator('#terminal-output')).toContainText('HACKSIMULATOR', { timeout: 10000 });
+    await expect(page.locator('#terminal-output')).toContainText('hacksim.lab', { timeout: 10000 });
   });
 
   // ----------------------------------------

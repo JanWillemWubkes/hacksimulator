@@ -42,7 +42,7 @@ test.describe('Challenge System', () => {
     await clearStorage(page);
     await page.reload();
     await acceptLegalModal(page);
-    await expect(page.locator('#terminal-output')).toContainText('HACKSIMULATOR', { timeout: 10000 });
+    await expect(page.locator('#terminal-output')).toContainText('hacksim.lab', { timeout: 10000 });
   });
 
   // ----------------------------------------
@@ -173,7 +173,7 @@ test.describe('Challenge System', () => {
     });
     await page.reload();
     await acceptLegalModal(page);
-    await expect(page.locator('#terminal-output')).toContainText('HACKSIMULATOR', { timeout: 10000 });
+    await expect(page.locator('#terminal-output')).toContainText('hacksim.lab', { timeout: 10000 });
 
     await typeCommand(page, 'challenge start identity-check');
     const output = page.locator('#terminal-output');
@@ -193,7 +193,7 @@ test.describe('Badge System', () => {
     await clearStorage(page);
     await page.reload();
     await acceptLegalModal(page);
-    await expect(page.locator('#terminal-output')).toContainText('HACKSIMULATOR', { timeout: 10000 });
+    await expect(page.locator('#terminal-output')).toContainText('hacksim.lab', { timeout: 10000 });
   });
 
   // ----------------------------------------
@@ -249,7 +249,7 @@ test.describe('Badge System', () => {
     });
     await page.reload();
     await acceptLegalModal(page);
-    await expect(page.locator('#terminal-output')).toContainText('HACKSIMULATOR', { timeout: 10000 });
+    await expect(page.locator('#terminal-output')).toContainText('hacksim.lab', { timeout: 10000 });
 
     await typeCommand(page, 'achievements unlocked');
     const output = page.locator('#terminal-output');
@@ -283,7 +283,7 @@ test.describe('Leaderboard', () => {
     await clearStorage(page);
     await page.reload();
     await acceptLegalModal(page);
-    await expect(page.locator('#terminal-output')).toContainText('HACKSIMULATOR', { timeout: 10000 });
+    await expect(page.locator('#terminal-output')).toContainText('hacksim.lab', { timeout: 10000 });
   });
 
   // ----------------------------------------
@@ -311,7 +311,7 @@ test.describe('Leaderboard', () => {
     });
     await page.reload();
     await acceptLegalModal(page);
-    await expect(page.locator('#terminal-output')).toContainText('HACKSIMULATOR', { timeout: 10000 });
+    await expect(page.locator('#terminal-output')).toContainText('hacksim.lab', { timeout: 10000 });
 
     await typeCommand(page, 'leaderboard me');
     const output = page.locator('#terminal-output');
