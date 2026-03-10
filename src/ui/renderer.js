@@ -98,6 +98,10 @@ class Renderer {
         lineType = 'success';   // Success → groen
       } else if (trimmed.startsWith('[X]')) {
         lineType = 'error';     // Errors/Critical → magenta
+      } else if (trimmed.startsWith('[~]')) {
+        lineType = 'dim';       // Systeem notices → dim grijs
+      } else if (trimmed.startsWith('→')) {
+        lineType = 'info';      // FASE lines (bare arrow) → cyaan
       }
       // Emoji detection (fallback for backward compatibility during migration)
       else if (trimmed.startsWith('💡') || trimmed.startsWith('🎯')) {
@@ -197,13 +201,13 @@ class Renderer {
       if (onboarding.isFirstTimeVisitor()) {
         this._renderTypewriter(welcome);
       } else {
-        this.renderOutput(welcome, 'info');
+        this.renderOutput(welcome, 'normal');
       }
     } else {
       const welcome = `Connecting to hacksim.lab... OK
 
 [→] Type 'help' om te beginnen.`;
-      this.renderOutput(welcome, 'info');
+      this.renderOutput(welcome, 'normal');
     }
   }
 
@@ -219,12 +223,21 @@ class Renderer {
     let delay = 0;
 
     lines.forEach((line, index) => {
-      // First 2 lines: fast (connection effect), rest: steady pace
-      const lineDelay = index < 2 ? 50 : 80;
+      // Context-aware delays for cinematic SSH login feel
+      let lineDelay;
+      if (index < 2) {
+        lineDelay = 60;          // Connection handshake: fast
+      } else if (line.trim() === '') {
+        lineDelay = 300;         // Section breaks: dramatic pause
+      } else if (line.trim().startsWith('→')) {
+        lineDelay = 150;         // FASE lines: steady reveal
+      } else {
+        lineDelay = 120;         // Default: comfortable read pace
+      }
       delay += lineDelay;
 
       setTimeout(() => {
-        this.renderOutput(line, 'info');
+        this.renderOutput(line, 'normal');
       }, delay);
     });
 

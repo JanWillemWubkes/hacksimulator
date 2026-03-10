@@ -159,8 +159,8 @@ class Onboarding {
    * @private
    */
   _getFirstTimeWelcome() {
-    return `Connecting to hacksim.lab... OK
-Authorized access only. All activity is logged.
+    return `[✓] Connecting to hacksim.lab... OK
+[~] Authorized access only. All activity is logged.
 
 Welkom, hacker. Sessie gestart.
 
@@ -196,7 +196,7 @@ Welkom, hacker. Sessie gestart.
       statsLine = `\n  [✓] ${parts.join(' | ')}`;
     }
 
-    return `Connecting to hacksim.lab... OK
+    return `[✓] Connecting to hacksim.lab... OK
 
 ${greeting}, hacker.
 ${statsLine}
