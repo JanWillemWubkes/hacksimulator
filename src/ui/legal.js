@@ -110,6 +110,9 @@ const LegalManager = {
       FocusTrap.deactivate();
       modal.remove();
 
+      // Notify other modules that legal was accepted
+      document.dispatchEvent(new CustomEvent('legal-accepted'));
+
       // Focus terminal input after accepting
       const terminalInput = document.getElementById('terminal-input');
       if (terminalInput) {

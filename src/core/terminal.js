@@ -99,11 +99,30 @@ class Terminal {
     // Update streak on session start
     progressStore.updateStreak();
 
-    // Initialize badge system and check session-triggered badges
+    // Initialize badge system
     badgeManager.init();
-    var sessionBadges = badgeManager.checkUnlocks('session');
 
-    // Render welcome message (personalized via onboarding + gamification stats)
+    // Render welcome sequence (deferred if legal modal is shown first)
+    if (!options.deferWelcome) {
+      this._renderWelcomeSequence();
+    }
+
+    this.isInitialized = true;
+  }
+
+  /**
+   * Public method to trigger the welcome sequence (used after legal modal)
+   */
+  renderWelcome() {
+    this._renderWelcomeSequence();
+  }
+
+  /**
+   * Render welcome message, tutorial resume, and session badge notifications
+   * @private
+   */
+  _renderWelcomeSequence() {
+    var sessionBadges = badgeManager.checkUnlocks('session');
     const stats = progressStore.getStats();
 
     // Disable input during typewriter effect (first visit only)
@@ -115,8 +134,6 @@ class Terminal {
     }
 
     renderer.renderWelcome(onboarding, stats);
-
-    this.isInitialized = true;
 
     // Show tutorial resume message if applicable
     const resumeMsg = tutorialManager.getResumeMessage();

@@ -160,10 +160,14 @@ function initialize() {
     // Initialize filesystem persistence (load saved VFS state before terminal starts)
     persistence.init();
 
-    // Initialize terminal
+    // Check if legal modal needs to be shown (defer welcome animation)
+    const needsLegal = !legalManager.hasAcceptedLegal();
+
+    // Initialize terminal (defer welcome if legal modal will be shown)
     terminal.init({
       outputElement,
-      inputElement
+      inputElement,
+      deferWelcome: needsLegal
     });
 
     // Initialize navigation menu
@@ -184,6 +188,13 @@ function initialize() {
 
     // Initialize feedback system
     feedbackManager.init();
+
+    // If legal modal needed: show it and trigger welcome after acceptance
+    if (needsLegal) {
+      document.addEventListener('legal-accepted', () => {
+        terminal.renderWelcome();
+      }, { once: true });
+    }
 
     // Check and show legal modal if needed (must accept before using)
     legalManager.checkAndShowModal();
