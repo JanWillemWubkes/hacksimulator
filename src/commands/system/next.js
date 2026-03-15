@@ -43,6 +43,13 @@ var commandTips = {
   netstat:  'Toon actieve netwerkverbindingen - wie praat met wie?'
 };
 
+// Per-command voorbeeld suggesties (voorkomt naam-conflicten tussen stappen)
+var commandExamples = {
+  mkdir: 'mkdir projecten',
+  touch: 'touch notities.txt',
+  rm:    'rm notities.txt'
+};
+
 /**
  * Build context-aware "Daarna:" hint for the next step
  */
@@ -91,7 +98,7 @@ function detectStage(triedSet) {
       progress: done2 + '/' + phase2Commands.length,
       command: nextPhase2,
       tip: commandTips[nextPhase2] || '',
-      suggestion: "Type '" + nextPhase2 + " test'"
+      suggestion: "Type '" + (commandExamples[nextPhase2] || nextPhase2 + " test") + "'"
     };
   }
 
