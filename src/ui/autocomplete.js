@@ -113,7 +113,19 @@ class AutocompleteHandler {
       cmd.toLowerCase().startsWith(lowerPartial)
     );
 
-    return matches;
+    // Real Linux commands first, simulator-specific commands after
+    const simCommands = new Set([
+      'next', 'leerpad', 'leaderboard', 'dashboard',
+      'tutorial', 'challenge', 'achievements', 'certificates',
+      'shortcuts', 'reset'
+    ]);
+
+    return matches.sort((a, b) => {
+      const aIsSim = simCommands.has(a);
+      const bIsSim = simCommands.has(b);
+      if (aIsSim !== bIsSim) return aIsSim ? 1 : -1;
+      return a.localeCompare(b);
+    });
   }
 
   /**

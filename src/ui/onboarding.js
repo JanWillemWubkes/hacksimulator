@@ -282,7 +282,7 @@ ${statsLine}
 
     if (this.commandCount === 3 && !this.hasShownTabHint) {
       this.hasShownTabHint = true;
-      return '\n[✓] Pro tip: Gebruik Tab om commands snel in te typen\n\nProbeer het nu:\n→ Type "nm" en druk Tab      - Vult aan naar "nmap"\n→ Type "l" en druk Tab 2x    - Cyclet door ls, ln, ...';
+      return '\n[✓] Pro tip: Gebruik Tab om commands snel in te typen\n\nProbeer het nu:\n→ Type "nm" en druk Tab      - Vult aan naar "nmap"\n→ Type "wh" en druk Tab 2x   - Cyclet door whois, whoami\n\n→ Type \'next\' voor je volgende stap';
     }
 
     if (this.commandCount === 5 && !this.hasShownTutorialSuggestion) {
