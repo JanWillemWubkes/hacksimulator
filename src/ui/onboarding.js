@@ -254,7 +254,7 @@ ${statsLine}
     const skipReminder = ['next', 'help', 'clear', 'leerpad', 'dashboard',
                           'tutorial', 'challenge', 'achievements', 'man',
                           'shortcuts', 'certificates', 'leaderboard', 'reset'];
-    if (isNewCommand && !skipReminder.includes(commandName)) {
+    if (isNewCommand && !skipReminder.includes(commandName) && this.commandsTried.length <= 3) {
       return "\n[→] Type 'next' voor je volgende stap";
     }
 

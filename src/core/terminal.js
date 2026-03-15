@@ -263,6 +263,16 @@ class Terminal {
       // Validate and record command execution for learning path tracking
       onboarding.markFirstVisitComplete();
 
+      // Hide scroll hint after first command (user is engaged)
+      var scrollHint = document.querySelector('.scroll-hint');
+      if (scrollHint) scrollHint.classList.add('hidden');
+
+      // Update placeholder after first command (stop nudging 'next')
+      if (onboarding.commandCount >= 1) {
+        var termInput = document.getElementById('terminal-input');
+        if (termInput) termInput.placeholder = 'Typ een command...';
+      }
+
       // Only track command if it was used correctly (validation logic)
       if (this._shouldTrackCommand(parsed.command, parsed.args, output)) {
         const hint = onboarding.recordCommand(parsed.command);

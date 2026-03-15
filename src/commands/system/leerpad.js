@@ -116,6 +116,11 @@ function buildBoxOutput(triedSet, width) {
 
   lines.push(buildEmptyLine(width));
 
+  // TIP inside box
+  lines.push(B.dividerLeft + B.horizontal.repeat(inner) + B.dividerRight);
+  var tipText = "  [?] Type 'next' voor je volgende stap";
+  lines.push(B.vertical + tipText.padEnd(inner) + B.vertical);
+
   // Footer
   lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
 
@@ -146,8 +151,7 @@ function buildMobileOutput(triedSet) {
     allUnlocked = done;
   });
 
-  out += '[?] Type commands om progressie te maken\n';
-  out += '[!] Fase 4 unlocks na voltooiing Fase 3\n';
+  out += "[?] Type 'next' voor je volgende stap\n";
   return out;
 }
 
@@ -172,8 +176,6 @@ export default {
       output = buildBoxOutput(triedSet, width);
     }
 
-    output += '\n\n';
-    output += "[?] TIP: Type 'next' voor je volgende stap | 'man <command>' voor uitleg";
     return output;
   },
 

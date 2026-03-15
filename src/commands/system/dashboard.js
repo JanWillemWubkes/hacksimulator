@@ -7,6 +7,8 @@
 import progressStore from '../../gamification/progress-store.js';
 import challengeManager from '../../gamification/challenge-manager.js';
 import badgeManager from '../../gamification/badge-manager.js';
+import onboarding from '../../ui/onboarding.js';
+import tutorialManager from '../../tutorial/tutorial-manager.js';
 import {
   BOX_CHARS,
   getResponsiveBoxWidth,
@@ -83,7 +85,43 @@ function getChallengeData() {
   return { byDifficulty: byDifficulty, totalDone: totalDone, totalAll: totalAll };
 }
 
+// Phase definitions (mirrors next.js/leerpad.js)
+var phase1Commands = ['ls', 'cd', 'pwd', 'cat', 'whoami', 'history', 'help'];
+var phase2Commands = ['mkdir', 'touch', 'rm'];
+var phase3Commands = ['ping', 'nmap', 'ifconfig', 'netstat'];
+
+function countTriedInPhase(commands, triedSet) {
+  var count = 0;
+  for (var i = 0; i < commands.length; i++) {
+    if (triedSet.has(commands[i])) count++;
+  }
+  return count;
+}
+
 function getNextStep(challengeData, badgeSummary) {
+  // Check onboarding phases first (same logic as next.js)
+  var triedSet = new Set(onboarding.getCommandsTried());
+
+  var done1 = countTriedInPhase(phase1Commands, triedSet);
+  if (done1 < phase1Commands.length) {
+    return "Volgende: Fase 1 voltooien (" + done1 + "/" + phase1Commands.length + " commands geleerd). Type 'next'.";
+  }
+
+  var done2 = countTriedInPhase(phase2Commands, triedSet);
+  if (done2 < phase2Commands.length) {
+    return "Volgende: Fase 2 voltooien (" + done2 + "/" + phase2Commands.length + " commands geleerd). Type 'next'.";
+  }
+
+  if (!tutorialManager.isScenarioCompleted('recon')) {
+    return "Volgende: start de tutorial (type 'tutorial recon').";
+  }
+
+  var done3 = countTriedInPhase(phase3Commands, triedSet);
+  if (done3 < phase3Commands.length) {
+    return "Volgende: Fase 3 voltooien (" + done3 + "/" + phase3Commands.length + " commands geleerd). Type 'next'.";
+  }
+
+  // Then check challenges (original logic)
   var cd = challengeData;
 
   if (cd.totalDone === cd.totalAll) {
@@ -184,14 +222,16 @@ function renderFullDesktop() {
   });
   lines.push(buildEmptyLine(width));
 
-  // Footer
+  // Tips inside box
   var inner = width - 2;
+  lines.push(B.dividerLeft + B.horizontal.repeat(inner) + B.dividerRight);
+  lines.push(buildLine("  [?] 'dashboard stats|badges|challenges' voor details", width));
+  lines.push(buildLine("  [?] Type 'next' voor een persoonlijke suggestie", width));
+
+  // Footer
   lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
 
-  var output = lines.join('\n');
-  output += '\n\n[TIP] Gebruik \'dashboard stats|badges|challenges\' voor details per sectie.';
-  output += '\n[TIP] Type \'next\' voor een persoonlijke suggestie.';
-  return output;
+  return lines.join('\n');
 }
 
 // --- Mobile Rendering ---

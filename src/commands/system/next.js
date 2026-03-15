@@ -44,6 +44,24 @@ var commandTips = {
 };
 
 /**
+ * Build context-aware "Daarna:" hint for the next step
+ */
+function buildNextHint(stage) {
+  // Numeric progress like "2/7" → show next step number
+  if (stage.progress && stage.progress.indexOf('/') !== -1) {
+    var parts = stage.progress.split('/');
+    var current = parseInt(parts[0], 10);
+    var total = parseInt(parts[1], 10);
+    if (current < total) {
+      return "Daarna: type 'next' voor stap " + (current + 1) + '/' + total;
+    }
+    return "Daarna: type 'next' voor volgende fase";
+  }
+  // Tutorials/challenges — generic hint
+  return "Daarna: type 'next' voor je volgende stap";
+}
+
+/**
  * Detect current stage and return suggestion object
  */
 function detectStage(triedSet) {
@@ -56,8 +74,7 @@ function detectStage(triedSet) {
       progress: done1 + '/' + phase1Commands.length,
       command: nextPhase1,
       tip: commandTips[nextPhase1] || '',
-      suggestion: "Type '" + nextPhase1 + "'",
-      footer: "[→] Voer het command uit en type daarna 'next' opnieuw\n[?] Type 'leerpad' voor volledige voortgang"
+      suggestion: "Type '" + nextPhase1 + "'"
     };
   }
 
@@ -70,8 +87,7 @@ function detectStage(triedSet) {
       progress: done2 + '/' + phase2Commands.length,
       command: nextPhase2,
       tip: commandTips[nextPhase2] || '',
-      suggestion: "Type '" + nextPhase2 + " test'",
-      footer: "[→] Voer het command uit en type daarna 'next' opnieuw\n[?] Type 'leerpad' voor volledige voortgang"
+      suggestion: "Type '" + nextPhase2 + " test'"
     };
   }
 
@@ -82,8 +98,7 @@ function detectStage(triedSet) {
       progress: 'niet gestart',
       command: null,
       tip: 'Leer hoe je informatie verzamelt over een doelwit - de basis van elke hack',
-      suggestion: "Type 'tutorial recon'",
-      footer: "[→] Voer het command uit en type daarna 'next' opnieuw\n[?] Type 'tutorial' voor alle beschikbare missies"
+      suggestion: "Type 'tutorial recon'"
     };
   }
 
@@ -96,8 +111,7 @@ function detectStage(triedSet) {
       progress: done3 + '/' + phase3Commands.length,
       command: nextPhase3,
       tip: commandTips[nextPhase3] || '',
-      suggestion: "Type '" + nextPhase3 + (nextPhase3 === 'ping' || nextPhase3 === 'nmap' ? " 192.168.1.1'" : "'"),
-      footer: "[→] Voer het command uit en type daarna 'next' opnieuw\n[?] Type 'leerpad' voor volledige voortgang"
+      suggestion: "Type '" + nextPhase3 + (nextPhase3 === 'ping' || nextPhase3 === 'nmap' ? " 192.168.1.1'" : "'")
     };
   }
 
@@ -111,8 +125,7 @@ function detectStage(triedSet) {
         progress: 'niet gestart',
         command: null,
         tip: 'Begeleide missies leren je echte hacking technieken stap voor stap',
-        suggestion: "Type 'tutorial " + scenarioId + "'",
-        footer: "[→] Voer het command uit en type daarna 'next' opnieuw\n[?] Type 'tutorial' voor alle beschikbare missies"
+        suggestion: "Type 'tutorial " + scenarioId + "'"
       };
     }
   }
@@ -136,8 +149,7 @@ function detectStage(triedSet) {
         progress: countCompleted(challenges, diff) + '/' + countTotal(challenges, diff),
         command: null,
         tip: nextChallenge.title + ' - test je skills zonder begeleiding',
-        suggestion: "Type 'challenge start " + nextChallenge.id + "'",
-        footer: "[→] Voer het command uit en type daarna 'next' opnieuw\n[?] Type 'challenge' voor alle beschikbare challenges"
+        suggestion: "Type 'challenge start " + nextChallenge.id + "'"
       };
     }
   }
@@ -219,6 +231,12 @@ function buildDesktopBox(stage, width) {
     });
   }
 
+  // Next hint inside box
+  lines.push(B.vertical + ' '.repeat(inner) + B.vertical);
+  lines.push(B.dividerLeft + B.horizontal.repeat(inner) + B.dividerRight);
+  var hintText = '  ' + buildNextHint(stage);
+  lines.push(B.vertical + hintText.padEnd(inner) + B.vertical);
+
   // Footer
   lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
 
@@ -230,8 +248,9 @@ function buildMobileOutput(stage) {
   out += stage.phase + ' (' + stage.progress + ')\n\n';
   out += '[->] ' + stage.suggestion + '\n\n';
   if (stage.tip) {
-    out += '<- ' + stage.tip + '\n';
+    out += '<- ' + stage.tip + '\n\n';
   }
+  out += buildNextHint(stage) + '\n';
   return out;
 }
 
@@ -297,7 +316,6 @@ export default {
       output = buildDesktopBox(stage, width);
     }
 
-    output += '\n\n' + stage.footer;
     return output;
   },
 
