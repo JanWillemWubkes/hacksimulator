@@ -173,7 +173,7 @@ export default {
     }
 
     output += '\n\n';
-    output += "[?] TIP: Type commands om progressie te maken | 'man <command>' voor uitleg";
+    output += "[?] TIP: Type 'next' voor je volgende stap | 'man <command>' voor uitleg";
     return output;
   },
 

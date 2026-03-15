@@ -184,12 +184,14 @@ test.describe('Responsive ASCII Box Layout', () => {
 
     expect(scrollWidth).toBeLessThanOrEqual(clientWidth);
 
-    // Verify all category headers are visible (not cut off)
+    // Verify visible category headers (progressive help shows starter categories for new users)
     const output = await terminalOutput.innerText();
     expect(output).toContain('SYSTEM');
     expect(output).toContain('FILESYSTEM');
-    expect(output).toContain('NETWORK');
-    expect(output).toContain('SECURITY');
+    expect(output).toContain('SPECIAL');
+    // NETWORK and SECURITY are hidden for new users (progressive disclosure)
+    // They become visible after completing earlier phases
+    expect(output).toContain('Meer commands');
   });
 
   test('shortcuts - All shortcuts visible on mobile', async ({ page }) => {

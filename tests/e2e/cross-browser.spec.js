@@ -86,7 +86,7 @@ test.describe('Cross-Browser Compatibility Tests', () => {
     await expect(output).toBeVisible();
 
     // Check placeholder text
-    await expect(input).toHaveAttribute('placeholder', "Type 'help' om te beginnen...");
+    await expect(input).toHaveAttribute('placeholder', "Type 'next' om te beginnen...");
   });
 
   // ========================================

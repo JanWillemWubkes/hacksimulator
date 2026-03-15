@@ -234,6 +234,7 @@ var challengeRenderer = {
     output += '\n\n[✓] Goed gedaan! Je hebt deze challenge succesvol afgerond.';
     output += '\n[?] Type \'challenge\' voor meer challenges.';
     output += '\n[?] Type \'dashboard\' voor je totale voortgang.';
+    output += "\n[→] Type 'next' voor je volgende stap";
 
     return output;
   },
@@ -244,7 +245,8 @@ var challengeRenderer = {
     out += 'Punten verdiend: +' + challenge.points + '\n';
     out += 'Pogingen: ' + attempts + '\n\n';
     out += '[✓] Goed gedaan!\n';
-    out += '[?] Type \'challenge\' voor meer challenges.';
+    out += '[?] Type \'challenge\' voor meer challenges.\n';
+    out += "[→] Type 'next' voor je volgende stap";
 
     return out;
   }

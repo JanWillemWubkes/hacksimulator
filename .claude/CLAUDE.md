@@ -83,6 +83,17 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 114: Terminal Welcome Redesign — Hacker Login Prompt (10 maart 2026)
+⚠️ **Never:**
+- `[***]` markers/CSS verwijderen zonder grep — security commands (sqlmap, hydra, metasploit, nikto) gebruiken `.welcome-message` class
+- Playwright tests draaien zonder `BASE_URL` env var — default gaat naar productie, niet lokaal
+- Minified CSS met inline sourcemap handmatig re-minificeren — targeted string replacement is veiliger
+
+✅ **Always:**
+- Grep op CSS class/marker namen vóór verwijdering — check alle gebruikers, niet alleen het huidige feature
+- `BASE_URL=http://localhost:PORT` voor lokale Playwright tests — start Python HTTP server (`python3 -m http.server PORT`)
+- CustomEvent pattern voor cross-module communicatie — `typewriter-done` event voorkomt tight coupling tussen renderer en input
+
 ### Sessie 113: Refactor tutorial.spec.js — Flaky Test Elimination (7 maart 2026)
 ⚠️ **Never:**
 - `textContent()` snapshots voor test assertions — één momentopname, geen retry, flaky bij async rendering
@@ -126,15 +137,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - `beforeunload` event handler voor elke debounced save — vangt edge case van snelle tab-close
 
 ### Sessie 109: Unified Link Hover System (4 maart 2026)
-⚠️ **Never:**
-- Opt-out CSS selectors (`:not()` chains) voor animaties — fragiel, elke nieuwe context vereist uitbreiding
-- `opacity` als hover indicator — verlaagt contrast, lijkt op disabled state, slechte accessibility
-- Eén hover kleur voor alle contexten — blauw past bij blog content, maar breekt brand coherentie op landing pages
-
-✅ **Always:**
-- Opt-in selectors voor `::after` animated underlines — alleen targeted links krijgen het effect
-- `currentColor` voor `::after` underline background — volgt automatisch de link kleur
-- Kleurstrategie per context: blauw = content (blogs), groen = brand (landing, CTA, FAQ, cards)
+- Opt-in selectors voor `::after` underlines, `currentColor` voor achtergrond, kleurstrategie per context (blauw=content, groen=brand)
 
 **Rotation:** Keep last 5 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
 
@@ -146,7 +149,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
 **Rotation trigger:** Every 5 sessions (last: Sessie 113, next: Sessie 118)
-**Sessie counter:** 113
+**Sessie counter:** 114
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -193,5 +196,5 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 7 maart 2026 (Sessie 113 — Refactor tutorial.spec.js flaky test elimination)
-**Version:** 4.3 (Sessie 113: tutorial.spec.js refactor, textContent→toContainText, 0 hard failures cross-browser)
+**Last updated:** 10 maart 2026 (Sessie 114 — Terminal Welcome Redesign hacker login prompt)
+**Version:** 4.4 (Sessie 114: SSH-style welcome, typewriter effect, dynamic stats, 173/184 tests pass)

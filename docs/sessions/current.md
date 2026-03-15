@@ -4,6 +4,82 @@
 
 ---
 
+## Sessie 114: Terminal Welcome Redesign — Hacker Login Prompt (10 maart 2026)
+
+**Scope:** Vervang web UI-style welcome (centered text, gradient separators) met SSH-achtige "Hacker Login Prompt" inclusief typewriter effect, dynamische progressie stats, en tijd-gebaseerde groet
+**Status:** ✅ VOLTOOID
+**Commits:** `d24905a` feat: redesign terminal welcome as SSH-style hacker login prompt
+
+---
+
+### Context & Problem
+
+De welkomstboodschap gebruikte web UI patterns (centered text, gradient separators met `[SEPARATOR]` markers, `[***]` headers) die niet passen bij de terminal-esthetiek. Het voelde als een website popup in plaats van een echte terminal login experience.
+
+### Oplossing
+
+**4 core files + 7 test files gewijzigd (12 bestanden totaal):**
+
+1. **`src/ui/onboarding.js`** — Nieuwe welcome templates
+   - `getWelcomeMessage(stats)` accepteert nu progressStore stats parameter
+   - `_getFirstTimeWelcome()`: SSH-style login met fase-roadmap ("Connecting to hacksim.lab... OK")
+   - `_getReturningVisitorWelcome(stats)`: Dynamische groet + progressie stats
+   - `_getTimeGreeting()`: Goedemorgen/Goedemiddag/Goedenavond op basis van uur
+
+2. **`src/core/terminal.js`** — Stats doorvoer + input management
+   - `progressStore.getStats()` doorgeven aan renderer
+   - Input disable tijdens typewriter effect (first visit)
+   - CustomEvent `typewriter-done` voor re-enable
+
+3. **`src/ui/renderer.js`** — Typewriter effect + cleanup
+   - `renderWelcome(onboarding, stats)` — brancht op first/returning visit
+   - `_renderTypewriter(text)` — regel-voor-regel met delays (50ms eerste 2 regels, 80ms daarna)
+   - Verwijderd: `[SEPARATOR]` marker handling uit `renderOutput()`
+
+4. **`styles/terminal.css` + `styles/main.css`** — CSS cleanup
+   - Verwijderd: `.welcome-separator` CSS rules
+   - Behouden: `.welcome-message` (nog in gebruik door security commands via `[***]`)
+
+5. **7 E2E test files** — Gate assertion update
+   - 19 occurrences: `toContainText('HACKSIMULATOR')` → `toContainText('hacksim.lab')`
+   - Bestanden: certificates, command-coverage, dashboard, gamification (3x), tutorial-mobile
+
+### Uitdagingen
+
+- **`[***]` markers moeten blijven:** Security commands (sqlmap, hydra, metasploit, nikto) gebruiken `[***]` voor ASCII separators → `.welcome-message` CSS class moet behouden blijven
+- **`terminal.css` is geminificeerd:** Inline base64 sourcemap met originele source — targeted string replacement nodig i.p.v. re-minificatie
+- **Tests draaiden tegen productie:** Playwright config default is `https://hacksimulator.nl` — moest `BASE_URL=http://localhost:3457` gebruiken met Python HTTP server
+- **Zombie processen:** Eerste test run (tegen productie) hing 9+ uur — alle playwright/chromium processen moesten handmatig gekilld worden
+
+### Test Resultaten
+
+**173 passed | 4 failed | 2 flaky | 5 skipped** (20 min, chromium only)
+
+Alle 4 failures pre-existing (niet gerelateerd aan welcome changes):
+- Blog theme sync (legal modal intercepts)
+- Footer links (missing `rel` attribute)
+- VFS growth rate (NaN — VFS persistence issue)
+- Responsive navbar (legal modal intercepts)
+
+### Bestanden Gewijzigd
+
+| Bestand | Wijziging |
+|---|---|
+| `src/ui/onboarding.js` | Nieuwe welcome templates + `_getTimeGreeting()` + stats parameter |
+| `src/core/terminal.js` | Pass progressStore stats + input disable during typewriter |
+| `src/ui/renderer.js` | Typewriter effect + stats parameter + removed [SEPARATOR] |
+| `styles/terminal.css` | Removed `.welcome-separator` |
+| `styles/main.css` | Updated comments |
+| `tests/e2e/certificates.spec.js` | Gate: HACKSIMULATOR → hacksim.lab |
+| `tests/e2e/command-coverage.spec.js` | Gate: HACKSIMULATOR → hacksim.lab |
+| `tests/e2e/dashboard.spec.js` | Gate: HACKSIMULATOR → hacksim.lab |
+| `tests/e2e/gamification-mobile.spec.js` | Gate: HACKSIMULATOR → hacksim.lab |
+| `tests/e2e/gamification-performance.spec.js` | Gate: HACKSIMULATOR → hacksim.lab |
+| `tests/e2e/gamification.spec.js` | Gate: HACKSIMULATOR → hacksim.lab |
+| `tests/e2e/tutorial-mobile.spec.js` | Gate: HACKSIMULATOR → hacksim.lab |
+
+---
+
 ## Sessie 113: Refactor tutorial.spec.js — Flaky Test Elimination (7 maart 2026)
 
 **Scope:** Refactor 18 desktop tutorial E2E tests van flaky textContent() snapshots naar stabiele toContainText() auto-retry assertions

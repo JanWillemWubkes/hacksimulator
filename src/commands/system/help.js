@@ -7,6 +7,7 @@ import {
   isMobileView,
   wordWrap
 } from "../../utils/box-utils.js";
+import onboarding from "../../ui/onboarding.js";
 
 const B = BOX_CHARS;
 
@@ -65,6 +66,38 @@ function buildCategoryBox(categoryName, commands, width) {
   return output;
 }
 
+// Phase command sets for progressive filtering (mirrors leerpad.js)
+var phase1and2Commands = ['help', 'ls', 'cd', 'pwd', 'cat', 'whoami', 'history', 'mkdir', 'touch', 'rm'];
+var phase3Commands = ['ping', 'nmap', 'ifconfig', 'netstat'];
+
+/**
+ * Determine which categories to show based on user progress.
+ * Returns array of visible category names.
+ */
+function getVisibleCategories(allCategories) {
+  var tried = new Set(onboarding.getCommandsTried());
+
+  // Check how many phase 1+2 commands are tried
+  var phase12Done = phase1and2Commands.filter(function(c) { return tried.has(c); }).length;
+  var phase3Done = phase3Commands.filter(function(c) { return tried.has(c); }).length;
+
+  // Always visible: system, filesystem, special
+  var visible = ['system', 'filesystem', 'special'];
+
+  // After phase 1+2 mostly done (5+ of 10): show network
+  if (phase12Done >= 5) {
+    visible.push('network');
+  }
+
+  // After phase 3 mostly done (2+ of 4): show security
+  if (phase3Done >= 2) {
+    visible.push('security');
+  }
+
+  // Filter to only categories that actually exist
+  return allCategories.filter(function(cat) { return visible.indexOf(cat) !== -1; });
+}
+
 export default {
   name: "help",
   description: "Toon beschikbare commands",
@@ -86,9 +119,15 @@ export default {
         return out;
       }
       var cats = reg.getCategories();
+      var visibleCats = getVisibleCategories(cats);
+      var hiddenCount = cats.length - visibleCats.length;
       var grouped = {};
-      cats.forEach(function(c) { grouped[c] = reg.getByCategory(c); });
-      return buildMobileHelp(grouped);
+      visibleCats.forEach(function(c) { grouped[c] = reg.getByCategory(c); });
+      var mobileResult = buildMobileHelp(grouped);
+      if (hiddenCount > 0) {
+        mobileResult += '\n[?] Meer commands na meer voortgang.\n    Type "help <categorie>" voor specifiek.\n';
+      }
+      return mobileResult;
     }
 
     // Desktop: calculate width ONCE
@@ -103,11 +142,13 @@ export default {
       return out;
     }
 
-    var categories = reg.getCategories();
-    var result = "Beschikbare commands:\n\n";
-    result += "[!] Real hackers beginnen met SYSTEM & FILESYSTEM basics, dan NETWORK scanning, en uiteindelijk SECURITY tools.\n\n";
+    var allCategories = reg.getCategories();
+    var visibleCategories = getVisibleCategories(allCategories);
+    var hiddenCount = allCategories.length - visibleCategories.length;
 
-    categories.forEach(function(cat) {
+    var result = "Beschikbare commands:\n\n";
+
+    visibleCategories.forEach(function(cat) {
       var cmds = reg.getByCategory(cat);
       if (cmds.length > 0) {
         result += buildCategoryBox(cat, cmds, width) + '\n\n';
@@ -120,6 +161,10 @@ export default {
       + '• Tab → Autocomplete (bijv. "nm" + Tab → "nmap")\n'
       + '• shortcuts → Toon alle keyboard shortcuts';
     result += lightBoxText(tipText, 'TIP: NAVIGATIE & SHORTCUTS', width - 2);
+
+    if (hiddenCount > 0) {
+      result += "\n\n[?] Meer commands worden zichtbaar naarmate je vordert.\n    Type 'help <categorie>' om een specifieke categorie te bekijken.";
+    }
 
     return result;
   },

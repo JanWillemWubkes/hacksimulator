@@ -206,7 +206,7 @@ class Renderer {
     } else {
       const welcome = `Connecting to hacksim.lab... OK
 
-[→] Type 'help' om te beginnen.`;
+[→] Type 'next' om te beginnen.`;
       this.renderOutput(welcome, 'normal');
     }
   }

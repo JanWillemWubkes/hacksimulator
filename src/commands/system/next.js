@@ -1,0 +1,341 @@
+/**
+ * next command — Context-aware beginner guidance funnel.
+ *
+ * Reads state from onboarding, tutorialManager, challengeManager,
+ * and progressStore to suggest exactly ONE next step.
+ */
+
+import onboarding from '../../ui/onboarding.js';
+import tutorialManager from '../../tutorial/tutorial-manager.js';
+import challengeManager from '../../gamification/challenge-manager.js';
+import {
+  BOX_CHARS,
+  getResponsiveBoxWidth,
+  isMobileView,
+  wordWrap
+} from '../../utils/box-utils.js';
+
+var B = BOX_CHARS;
+
+// Phase definitions (mirrors leerpad.js)
+var phase1Commands = ['ls', 'cd', 'pwd', 'cat', 'whoami', 'history', 'help'];
+var phase2Commands = ['mkdir', 'touch', 'rm'];
+var phase3Commands = ['ping', 'nmap', 'ifconfig', 'netstat'];
+var phase4Commands = ['hashcat', 'hydra', 'sqlmap', 'metasploit', 'nikto'];
+
+var tutorialOrder = ['recon', 'webvuln', 'privesc'];
+
+// Educational tips per command (80/20 pattern: what + why)
+var commandTips = {
+  help:     'Ontdek welke tools je tot je beschikking hebt',
+  ls:       'Bekijk bestanden in de huidige map - het eerste commando dat elke hacker leert',
+  cd:       'Navigeer naar andere mappen - essentieel voor het verkennen van een systeem',
+  pwd:      'Toon je huidige locatie - weet altijd waar je bent in het bestandssysteem',
+  cat:      'Lees de inhoud van bestanden - zo vind je wachtwoorden en configuraties',
+  whoami:   'Check met welk account je bent ingelogd - belangrijk voor privilege escalation',
+  history:  'Bekijk eerder uitgevoerde commands - soms laten andere gebruikers sporen achter',
+  mkdir:    'Maak een nieuwe map aan - organiseer je tools en bevindingen',
+  touch:    'Maak een nieuw bestand aan - handig voor notities en scripts',
+  rm:       'Verwijder bestanden - leer hoe bestanden permanent verdwijnen',
+  ping:     'Test of een server bereikbaar is - de eerste stap van network reconnaissance',
+  nmap:     'Scan open poorten op een server - ontdek welke services draaien',
+  ifconfig: 'Bekijk je eigen netwerkinterfaces - ken je eigen IP-adres',
+  netstat:  'Toon actieve netwerkverbindingen - wie praat met wie?'
+};
+
+/**
+ * Detect current stage and return suggestion object
+ */
+function detectStage(triedSet) {
+  // Stage 1: Phase 1 incomplete
+  var nextPhase1 = findNextUntried(phase1Commands, triedSet);
+  if (nextPhase1) {
+    var done1 = countTried(phase1Commands, triedSet);
+    return {
+      phase: 'Fase 1: Terminal Basics',
+      progress: done1 + '/' + phase1Commands.length,
+      command: nextPhase1,
+      tip: commandTips[nextPhase1] || '',
+      suggestion: "Type '" + nextPhase1 + "'",
+      footer: "[→] Voer het command uit en type daarna 'next' opnieuw\n[?] Type 'leerpad' voor volledige voortgang"
+    };
+  }
+
+  // Stage 2: Phase 2 incomplete
+  var nextPhase2 = findNextUntried(phase2Commands, triedSet);
+  if (nextPhase2) {
+    var done2 = countTried(phase2Commands, triedSet);
+    return {
+      phase: 'Fase 2: File Manipulation',
+      progress: done2 + '/' + phase2Commands.length,
+      command: nextPhase2,
+      tip: commandTips[nextPhase2] || '',
+      suggestion: "Type '" + nextPhase2 + " test'",
+      footer: "[→] Voer het command uit en type daarna 'next' opnieuw\n[?] Type 'leerpad' voor volledige voortgang"
+    };
+  }
+
+  // Stage 3: Tutorial recon not completed
+  if (!tutorialManager.isScenarioCompleted('recon')) {
+    return {
+      phase: 'Missie: Reconnaissance',
+      progress: 'niet gestart',
+      command: null,
+      tip: 'Leer hoe je informatie verzamelt over een doelwit - de basis van elke hack',
+      suggestion: "Type 'tutorial recon'",
+      footer: "[→] Voer het command uit en type daarna 'next' opnieuw\n[?] Type 'tutorial' voor alle beschikbare missies"
+    };
+  }
+
+  // Stage 4: Phase 3 incomplete
+  var nextPhase3 = findNextUntried(phase3Commands, triedSet);
+  if (nextPhase3) {
+    var done3 = countTried(phase3Commands, triedSet);
+    return {
+      phase: 'Fase 3: Reconnaissance',
+      progress: done3 + '/' + phase3Commands.length,
+      command: nextPhase3,
+      tip: commandTips[nextPhase3] || '',
+      suggestion: "Type '" + nextPhase3 + (nextPhase3 === 'ping' || nextPhase3 === 'nmap' ? " 192.168.1.1'" : "'"),
+      footer: "[→] Voer het command uit en type daarna 'next' opnieuw\n[?] Type 'leerpad' voor volledige voortgang"
+    };
+  }
+
+  // Stage 5: Remaining tutorials not completed
+  for (var i = 0; i < tutorialOrder.length; i++) {
+    var scenarioId = tutorialOrder[i];
+    if (!tutorialManager.isScenarioCompleted(scenarioId)) {
+      var scenarioNames = { recon: 'Reconnaissance', webvuln: 'Web Vulnerabilities', privesc: 'Privilege Escalation' };
+      return {
+        phase: 'Missie: ' + (scenarioNames[scenarioId] || scenarioId),
+        progress: 'niet gestart',
+        command: null,
+        tip: 'Begeleide missies leren je echte hacking technieken stap voor stap',
+        suggestion: "Type 'tutorial " + scenarioId + "'",
+        footer: "[→] Voer het command uit en type daarna 'next' opnieuw\n[?] Type 'tutorial' voor alle beschikbare missies"
+      };
+    }
+  }
+
+  // Stage 6 & 7: Challenges
+  var challenges = challengeManager.listChallenges();
+  var difficulties = ['easy', 'medium', 'hard'];
+  for (var d = 0; d < difficulties.length; d++) {
+    var diff = difficulties[d];
+    var nextChallenge = null;
+    for (var c = 0; c < challenges.length; c++) {
+      if (challenges[c].difficulty === diff && !challenges[c].completed) {
+        nextChallenge = challenges[c];
+        break;
+      }
+    }
+    if (nextChallenge) {
+      var diffLabels = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
+      return {
+        phase: 'Challenge: ' + diffLabels[diff],
+        progress: countCompleted(challenges, diff) + '/' + countTotal(challenges, diff),
+        command: null,
+        tip: nextChallenge.title + ' - test je skills zonder begeleiding',
+        suggestion: "Type 'challenge start " + nextChallenge.id + "'",
+        footer: "[→] Voer het command uit en type daarna 'next' opnieuw\n[?] Type 'challenge' voor alle beschikbare challenges"
+      };
+    }
+  }
+
+  // Stage 8: Everything completed
+  return null;
+}
+
+// --- Helpers ---
+
+function findNextUntried(commands, triedSet) {
+  for (var i = 0; i < commands.length; i++) {
+    if (!triedSet.has(commands[i])) return commands[i];
+  }
+  return null;
+}
+
+function countTried(commands, triedSet) {
+  var count = 0;
+  for (var i = 0; i < commands.length; i++) {
+    if (triedSet.has(commands[i])) count++;
+  }
+  return count;
+}
+
+function countCompleted(challenges, difficulty) {
+  var count = 0;
+  for (var i = 0; i < challenges.length; i++) {
+    if (challenges[i].difficulty === difficulty && challenges[i].completed) count++;
+  }
+  return count;
+}
+
+function countTotal(challenges, difficulty) {
+  var count = 0;
+  for (var i = 0; i < challenges.length; i++) {
+    if (challenges[i].difficulty === difficulty) count++;
+  }
+  return count;
+}
+
+// --- Rendering ---
+
+function buildDesktopBox(stage, width) {
+  var inner = width - 2;
+  var lines = [];
+
+  // Header
+  var label = ' VOLGENDE STAP ';
+  var remaining = inner - label.length;
+  var leftPad = Math.floor(remaining / 2);
+  var rightPad = remaining - leftPad;
+  lines.push(B.topLeft + B.horizontal.repeat(leftPad) + label + B.horizontal.repeat(rightPad) + B.topRight);
+
+  // Divider
+  lines.push(B.dividerLeft + B.horizontal.repeat(inner) + B.dividerRight);
+
+  // Phase + progress
+  var phaseLine = '  ' + stage.phase + ' (' + stage.progress + ')';
+  lines.push(B.vertical + phaseLine.padEnd(inner) + B.vertical);
+
+  // Empty line
+  lines.push(B.vertical + ' '.repeat(inner) + B.vertical);
+
+  // Suggestion (word-wrapped)
+  var suggestionLines = wordWrap('[->] ' + stage.suggestion, inner - 4);
+  suggestionLines.forEach(function(line) {
+    lines.push(B.vertical + ('  ' + line).padEnd(inner) + B.vertical);
+  });
+
+  // Empty line
+  lines.push(B.vertical + ' '.repeat(inner) + B.vertical);
+
+  // Tip (word-wrapped with <- prefix)
+  if (stage.tip) {
+    var tipLines = wordWrap('<- ' + stage.tip, inner - 4);
+    tipLines.forEach(function(line) {
+      lines.push(B.vertical + ('  ' + line).padEnd(inner) + B.vertical);
+    });
+  }
+
+  // Footer
+  lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
+
+  return lines.join('\n');
+}
+
+function buildMobileOutput(stage) {
+  var out = '\n**VOLGENDE STAP**\n\n';
+  out += stage.phase + ' (' + stage.progress + ')\n\n';
+  out += '[->] ' + stage.suggestion + '\n\n';
+  if (stage.tip) {
+    out += '<- ' + stage.tip + '\n';
+  }
+  return out;
+}
+
+function buildCompletionMessage() {
+  if (isMobileView()) {
+    return '\n**VOLTOOID**\n\n' +
+      '[X] Alle fases, missies en challenges voltooid!\n\n' +
+      'Je hebt alle beschikbare content doorlopen.\n' +
+      'Blijf oefenen met de tools die je hebt geleerd.\n\n' +
+      "[?] Type 'dashboard' voor je statistieken\n" +
+      "[?] Type 'achievements' voor je badges";
+  }
+
+  var width = getResponsiveBoxWidth();
+  var inner = width - 2;
+  var lines = [];
+
+  var label = ' VOLTOOID ';
+  var remaining = inner - label.length;
+  var leftPad = Math.floor(remaining / 2);
+  var rightPad = remaining - leftPad;
+  lines.push(B.topLeft + B.horizontal.repeat(leftPad) + label + B.horizontal.repeat(rightPad) + B.topRight);
+  lines.push(B.dividerLeft + B.horizontal.repeat(inner) + B.dividerRight);
+
+  var completionLines = [
+    '  [X] Alle fases, missies en challenges voltooid!',
+    '',
+    '  Je hebt alle beschikbare content doorlopen.',
+    '  Blijf oefenen met de tools die je hebt geleerd.',
+    '',
+    "  [?] Type 'dashboard' voor je statistieken",
+    "  [?] Type 'achievements' voor je badges"
+  ];
+
+  completionLines.forEach(function(line) {
+    lines.push(B.vertical + line.padEnd(inner) + B.vertical);
+  });
+
+  lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
+  return lines.join('\n');
+}
+
+// --- Command Export ---
+
+export default {
+  name: 'next',
+  description: 'Toon je volgende stap',
+  category: 'system',
+
+  execute: function() {
+    var triedSet = new Set(onboarding.getCommandsTried());
+    var stage = detectStage(triedSet);
+
+    if (!stage) {
+      return buildCompletionMessage();
+    }
+
+    var output;
+    if (isMobileView()) {
+      output = buildMobileOutput(stage);
+    } else {
+      var width = getResponsiveBoxWidth();
+      output = buildDesktopBox(stage, width);
+    }
+
+    output += '\n\n' + stage.footer;
+    return output;
+  },
+
+  manPage: (
+    "NAAM\n" +
+    "    next - toon je volgende stap\n" +
+    "\n" +
+    "SYNOPSIS\n" +
+    "    next\n" +
+    "\n" +
+    "BESCHRIJVING\n" +
+    "    Analyseert je voortgang en geeft een persoonlijke suggestie\n" +
+    "    voor je volgende stap. Het command bekijkt welke fases,\n" +
+    "    tutorials en challenges je al hebt voltooid.\n" +
+    "\n" +
+    "    STAGES\n" +
+    "        1. Terminal Basics     ls, cd, pwd, cat, whoami, history\n" +
+    "        2. File Manipulation   mkdir, touch, rm\n" +
+    "        3. Tutorial Recon      Begeleide reconnaissance missie\n" +
+    "        4. Network Scanning    ping, nmap, ifconfig, netstat\n" +
+    "        5. Tutorials           Overige begeleide missies\n" +
+    "        6. Easy Challenges     Zelfstandige opdrachten\n" +
+    "        7. Medium/Hard         Moeilijkere challenges\n" +
+    "        8. Voltooid            Alles afgerond!\n" +
+    "\n" +
+    "    Elke suggestie bevat een korte uitleg waarom die stap\n" +
+    "    belangrijk is voor je ontwikkeling als ethical hacker.\n" +
+    "\n" +
+    "VOORBEELDEN\n" +
+    "    next\n" +
+    "        Bekijk wat je volgende stap is\n" +
+    "\n" +
+    "TIPS\n" +
+    "    - 'next' werkt het best als je het regelmatig gebruikt\n" +
+    "    - Je voortgang wordt automatisch bijgehouden\n" +
+    "    - Na voltooiing van alles krijg je een felicitatie\n" +
+    "\n" +
+    "GERELATEERDE COMMANDO'S\n" +
+    "    leerpad (volledige voortgang), tutorial (missies), challenge (opdrachten)"
+  )
+};

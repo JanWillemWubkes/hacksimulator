@@ -190,6 +190,7 @@ function renderFullDesktop() {
 
   var output = lines.join('\n');
   output += '\n\n[TIP] Gebruik \'dashboard stats|badges|challenges\' voor details per sectie.';
+  output += '\n[TIP] Type \'next\' voor een persoonlijke suggestie.';
   return output;
 }
 

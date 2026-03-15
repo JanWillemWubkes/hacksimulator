@@ -165,6 +165,7 @@ var tutorialRenderer = {
     output += '\n\n[✓] Goed gedaan! Je hebt de ' + scenario.title + ' missie afgerond.';
     output += '\n[?] Type \'tutorial cert\' om je certificaat te kopieren.';
     output += '\n[?] Type \'tutorial\' om meer scenario\'s te zien.';
+    output += "\n[→] Type 'next' voor je volgende stap";
 
     return output;
   },
@@ -179,7 +180,8 @@ var tutorialRenderer = {
     out += generateCertificate(scenario, stats) + '\n\n';
     out += '[✓] Goed gedaan! Je hebt de missie afgerond.\n';
     out += '[?] Type \'tutorial cert\' om je certificaat te kopieren.\n';
-    out += '[?] Type \'tutorial\' om meer scenario\'s te zien.';
+    out += '[?] Type \'tutorial\' om meer scenario\'s te zien.\n';
+    out += "[→] Type 'next' voor je volgende stap";
     return out;
   }
 };

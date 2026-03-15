@@ -174,8 +174,7 @@ Welkom, hacker. Sessie gestart.
   → FASE 3: Network scanning    ('ping', 'nmap')
   → FASE 4: Security tools      ('hashcat', 'hydra')
 
-  [→] Type 'help' om te beginnen
-  [→] Type 'leerpad' om voortgang te volgen`;
+  [→] Type 'next' om te beginnen`;
   }
 
   /**
@@ -200,8 +199,7 @@ Welkom, hacker. Sessie gestart.
 
 ${greeting}, hacker.
 ${statsLine}
-  [→] Type 'help' voor commandolijst
-  [→] Type 'tutorial recon' voor je volgende missie`;
+  [→] Type 'next' voor je volgende stap`;
   }
 
   /**
@@ -236,8 +234,10 @@ ${statsLine}
     this.commandCount++;
 
     // Track individual command for leerpad
+    let isNewCommand = false;
     if (commandName && !this.commandsTried.includes(commandName)) {
       this.commandsTried.push(commandName);
+      isNewCommand = true;
     }
 
     // Get hint before saving (hint may update state)
@@ -246,7 +246,19 @@ ${statsLine}
     // Single save for everything
     this._save();
 
-    return hint;
+    // Progressive hints have priority (some already mention 'next')
+    if (hint) return hint;
+
+    // Bij nieuw geleerd command: herinner aan 'next'
+    // Skip voor 'next' zelf en navigatie/system commands
+    const skipReminder = ['next', 'help', 'clear', 'leerpad', 'dashboard',
+                          'tutorial', 'challenge', 'achievements', 'man',
+                          'shortcuts', 'certificates', 'leaderboard', 'reset'];
+    if (isNewCommand && !skipReminder.includes(commandName)) {
+      return "\n[→] Type 'next' voor je volgende stap";
+    }
+
+    return null;
   }
 
   /**
@@ -265,7 +277,7 @@ ${statsLine}
   _getProgressiveHint() {
     if (this.commandCount === 1 && !this.hasShownEncouragement) {
       this.hasShownEncouragement = true;
-      return '\n[✓] Eerste opdracht voltooid!\n\nOntdek je omgeving:\n→ \'ls\'   - Bekijk bestanden in deze map\n→ \'help\' - Zie alle beschikbare hacking tools';
+      return '\n[✓] Eerste opdracht voltooid!\n\n→ Type \'next\' voor je volgende stap';
     }
 
     if (this.commandCount === 3 && !this.hasShownTabHint) {
@@ -275,7 +287,7 @@ ${statsLine}
 
     if (this.commandCount === 5 && !this.hasShownTutorialSuggestion) {
       this.hasShownTutorialSuggestion = true;
-      return '\n[✓] 5 opdrachten voltooid - je bent onderweg!\n\nKlaar voor je eerste missie? Probeer de begeleide tutorial:\n→ \'tutorial recon\'   - Start de Reconnaissance missie\n→ \'tutorial\'         - Bekijk alle beschikbare scenario\'s';
+      return '\n[✓] 5 opdrachten voltooid - je bent onderweg!\n\n→ Type \'next\' om te zien wat je volgende stap is';
     }
 
     if (this.commandCount === 7 && !this.hasShownCtrlRHint) {
@@ -341,7 +353,7 @@ ${statsLine}
     if (this.commandCount >= 5) {
       return null;
     }
-    return 'Type "help" voor commands';
+    return 'Type "next" voor je volgende stap';
   }
 
   /**
