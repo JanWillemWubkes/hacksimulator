@@ -410,7 +410,7 @@ class Terminal {
   _shouldTrackCommand(commandName, args, output) {
     // Commands that work without any arguments
     const NO_ARGS_NEEDED = [
-      'help', 'ls', 'pwd', 'whoami', 'history',
+      'help', 'ls', 'cd', 'pwd', 'whoami', 'history',
       'ifconfig', 'netstat', 'date', 'leerpad', 'shortcuts', 'tutorial',
       'challenge', 'achievements'
     ];
@@ -420,7 +420,6 @@ class Terminal {
       'ping': 1,      // ping <host>
       'nmap': 1,      // nmap <target>
       'cat': 1,       // cat <file>
-      'cd': 1,        // cd <directory>
       'mkdir': 1,     // mkdir <directory>
       'touch': 1,     // touch <file>
       'rm': 1,        // rm <file>
