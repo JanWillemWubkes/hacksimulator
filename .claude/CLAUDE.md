@@ -83,6 +83,17 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 115: Learning Funnel & Onboarding Redesign (10-16 maart 2026)
+⚠️ **Never:**
+- `detectTransition()` phases descending checken — hogere phases matchen altijd eerst, ascending is correct
+- Guard flags vergeten (`hasShownSecurityHint`) — veroorzaakt duplicate warnings bij elke command
+- Tab-hint stale text laten staan wanneer features beschikbaar worden
+
+✅ **Always:**
+- Transition order ascending checken (Phase 1 → 2 → 3...) — voorkomt false positives
+- Guard flags per eenmalige hint — toon security/ethics warnings exact één keer
+- Stale UI text opruimen bij state changes — `next` hint moet updaten als fase verandert
+
 ### Sessie 114: Terminal Welcome Redesign — Hacker Login Prompt (10 maart 2026)
 ⚠️ **Never:**
 - `[***]` markers/CSS verwijderen zonder grep — security commands (sqlmap, hydra, metasploit, nikto) gebruiken `.welcome-message` class
@@ -125,20 +136,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Badge tests binnen challenge context — start eerst een challenge, dan commands uitvoeren voor badge triggers
 - Locked badges tonen als `???` — assert op icons (`[#]`, `[*]`) en `???`, niet op badge namen
 
-### Sessie 110: M9 Refactor — VFS Persistence & localStorage Optimization (6 maart 2026)
-⚠️ **Never:**
-- Orphan modules laten liggen — `persistence.js` bestond maar werd nergens geïmporteerd, VFS persisteerde niet
-- Meerdere localStorage keys voor één concern — onboarding had 4 losse keys, 3-4 writes per command
-- Debounce zonder `beforeunload` flush — data gaat verloren als gebruiker tab sluit tijdens debounce window
-
-✅ **Always:**
-- Observer pattern voor persistence: VFS roept `_notifyChange()` aan, persistence luistert met debounce — loose coupling
-- Legacy migration bij key consolidatie: lees oude keys → migreer → verwijder — bestaande users verliezen geen data
-- `beforeunload` event handler voor elke debounced save — vangt edge case van snelle tab-close
-
-### Sessie 109: Unified Link Hover System (4 maart 2026)
-- Opt-in selectors voor `::after` underlines, `currentColor` voor achtergrond, kleurstrategie per context (blauw=content, groen=brand)
-
 **Rotation:** Keep last 5 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
 
 ---
@@ -149,7 +146,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
 **Rotation trigger:** Every 5 sessions (last: Sessie 113, next: Sessie 118)
-**Sessie counter:** 114
+**Sessie counter:** 115
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -196,5 +193,5 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 10 maart 2026 (Sessie 114 — Terminal Welcome Redesign hacker login prompt)
-**Version:** 4.4 (Sessie 114: SSH-style welcome, typewriter effect, dynamic stats, 173/184 tests pass)
+**Last updated:** 16 maart 2026 (Sessie 115 — Learning Funnel & Onboarding Redesign)
+**Version:** 4.5 (Sessie 115: 8-stage learning funnel, phase transitions, next command, session docs catch-up)

@@ -4,6 +4,65 @@
 
 ---
 
+## Sessie 115: Learning Funnel & Onboarding Redesign (10-16 maart 2026)
+
+**Scope:** Complete onboarding herarchitectuur: SSH-style welcome, 8-stage learning funnel, self-reinforcing `next` command, phase transitions met celebrations, localStorage consolidatie, fuzzy command matching, input gating tijdens typewriter effect
+**Status:** ✅ VOLTOOID
+**Commits:** 15 commits (`d24905a` → `bbb8e28`)
+
+---
+
+### Context & Problem
+
+De onboarding was gefragmenteerd: welcome message was web UI-style (centered text, gradient separators), er was geen gestructureerd leerpad, en localStorage gebruikte 4 losse keys met 3-4 writes per command. Nieuwe gebruikers hadden geen duidelijke "wat nu?" na elke stap.
+
+### Oplossing
+
+**8-stage learning funnel met closed-loop progressie:**
+
+1. **Terminal Basics** — `help`, `clear`, `whoami`
+2. **Navigation** — `ls`, `cd`, `pwd`
+3. **File Manipulation** — `cat`, `nano`, `find`
+4. **Network Discovery** — `ping`, `nmap`, `ifconfig`
+5. **Security Tools** — `hashcat`, `hydra`, `nikto`
+6. **Tutorials** — `tutorial start recon`
+7. **Challenges** — `challenge start`
+8. **Graduation** — alle fases voltooid
+
+**Key architectural decisions:**
+
+- **SSH-style welcome** met typewriter effect (50ms/80ms delays) — voelt als echte terminal login
+- **`next` command** als self-reinforcing loop — toont altijd volgende stap, nooit doodlopend
+- **Phase transition celebrations** — "FASE X VOLTOOID!" met ASCII art wanneer alle commands in fase geleerd
+- **localStorage consolidatie** — 4 keys (`hacksim_commands_used`, `hacksim_help_shown`, etc.) → 1 key (`hacksim_onboarding`) met legacy migration
+- **Fuzzy matching in `man`** — typo's krijgen suggesties ("Bedoelde je: nmap?")
+- **Input gating** — terminal input disabled tijdens typewriter via CustomEvent `typewriter-done`
+- **Time-based greetings** — Goedemorgen/Goedemiddag/Goedenavond + dynamische stats bij returning visits
+
+### Key Files
+
+| Bestand | Wijziging |
+|---|---|
+| `src/ui/onboarding.js` | 8-stage funnel, phase detection, transition celebrations, welcome templates |
+| `src/commands/system/next.js` | Self-reinforcing next command met closed-loop reminders |
+| `src/ui/renderer.js` | Typewriter effect, stats parameter, `typewriter-done` event |
+| `src/core/terminal.js` | Stats doorvoer, input disable/enable during typewriter |
+| `src/help/help-system.js` | Fuzzy command matching in man pages |
+
+### Lessons Learned
+
+⚠️ **Never:**
+- `detectTransition()` phases descending checken — hogere phases matchen altijd eerst, ascending is correct
+- Guard flags vergeten (`hasShownSecurityHint`) — veroorzaakt duplicate warnings bij elke command
+- Tab-hint stale text laten staan wanneer features beschikbaar worden — verwarrend voor gebruiker
+
+✅ **Always:**
+- Transition order ascending checken (Phase 1 → 2 → 3...) — voorkomt false positives
+- Guard flags per eenmalige hint — toon security/ethics warnings exact één keer
+- Stale UI text opruimen bij state changes — `next` hint moet updaten als fase verandert
+
+---
+
 ## Sessie 114: Terminal Welcome Redesign — Hacker Login Prompt (10 maart 2026)
 
 **Scope:** Vervang web UI-style welcome (centered text, gradient separators) met SSH-achtige "Hacker Login Prompt" inclusief typewriter effect, dynamische progressie stats, en tijd-gebaseerde groet
@@ -448,6 +507,41 @@ Initieel waren `.blog-link:hover` en `.final-cta-secondary a:hover` op `--color-
 1. **CSS stylesheet dependencies:** Component CSS moet in een universeel geladen stylesheet staan als het component op alle pagina's verschijnt
 2. **CSS variable scope:** Variables gedefinieerd in page-specifieke stylesheets (landing.css) zijn niet beschikbaar op andere pagina's — gebruik fallbacks of hardcoded waarden
 3. **Conditioneel renderen via options object:** Flexibeler dan aparte template functies per variant
+
+---
+
+## Sessie 107: Document Sync — Cross-Document Drift Prevention (28 februari 2026)
+
+**Scope:** Alignment van alle project-documentatie na drift door snelle development sprints
+**Status:** ✅ VOLTOOID
+
+---
+
+### Context & Problem
+
+Na meerdere snelle development sessies (M6 Tutorial, M7 Gamification) waren documenten uit sync geraakt: PRD referenties waren v1.1 terwijl actueel v1.8 was, progress tracking varieerde van 55.6% tot 79.0% afhankelijk van het document, en session counters liepen uiteen.
+
+### Oplossing
+
+1. **PRD referentie alignment** — Alle `docs/prd.md v1.1` → `v1.8` across PLANNING.md, TASKS.md, CLAUDE.md
+2. **Progress tracking unificatie** — Eenduidige 79.0% milestone completion
+3. **Session counter sync** — Consistent sessienummer across alle bestanden
+4. **Document Sync Protocol** gedefinieerd: PRD → PLANNING → TASKS → CLAUDE (waterfall update order)
+
+### Key Files
+
+| Bestand | Wijziging |
+|---|---|
+| `SESSIONS.md` | Session counter + topics list bijgewerkt |
+| `PLANNING.md` | PRD version refs, progress %, sync protocol definitie |
+| `TASKS.md` | Metrics alignment, milestone progress |
+| `.claude/CLAUDE.md` | PRD refs, session counter, recent learnings |
+
+### Lessons Learned
+
+- **Document drift** ontstaat onvermijdelijk bij snelle sprints — periodieke sync nodig
+- **Waterfall update order** (PRD → PLANNING → TASKS → CLAUDE) voorkomt circulaire inconsistenties
+- **Single source of truth** per metric — definieer welk document de "owner" is
 
 ---
 
@@ -1031,6 +1125,52 @@ Initieel waren `.blog-link:hover` en `.final-cta-secondary a:hover` op `--color-
 - [ ] Terminal pagina: 5+ commands uitvoeren → functioneel
 - [ ] Blog post openen → layout intact
 - [ ] Lighthouse scores ≥ huidige (100/100/92/100)
+
+---
+
+## Sessie 97: WCAG 2.1 Keyboard Accessibility — Focus Trap Pattern (10 januari 2026)
+
+**Scope:** Reusable FocusTrap utility + integratie in alle 3 modals voor volledige keyboard accessibility
+**Status:** ✅ VOLTOOID
+
+---
+
+### Context & Problem
+
+Modals (legal, feedback, command-search) hadden geen keyboard trapping: Tab navigeerde buiten de modal, Escape deed niets, en focus werd niet hersteld na sluiten. Dit faalde WCAG 2.1 Level AA keyboard accessibility criteria.
+
+### Oplossing
+
+**Reusable `FocusTrap` utility (157 lines):**
+- Circular Tab/Shift+Tab trapping binnen modal boundaries
+- Escape handler voor sluiten
+- Focus restore naar trigger element na modal close
+- Auto-focus op eerste focusable element bij activatie
+
+**Integratie in 3 modals:**
+1. `src/ui/legal.js` — Legal disclaimer modal
+2. `src/ui/feedback.js` — Feedback formulier
+3. `src/ui/command-search-modal.js` — Command discovery modal (Ctrl+K)
+
+**WCAG AAA audit resultaten:**
+- 14.8:1 contrast ratio (ver boven 7:1 AAA minimum)
+- 50+ ARIA attributes across alle interactieve elementen
+- 200% zoom pass — layout intact bij 2x zoom
+
+### Key Files
+
+| Bestand | Wijziging |
+|---|---|
+| `src/ui/focus-trap.js` | Nieuwe reusable FocusTrap class (157 lines) |
+| `src/ui/legal.js` | FocusTrap integratie |
+| `src/ui/feedback.js` | FocusTrap integratie |
+| `src/ui/command-search-modal.js` | FocusTrap integratie |
+
+### Lessons Learned
+
+- **Focus trap = must-have** voor modals — zonder trapping navigeert keyboard user buiten zichtbaar UI
+- **Focus restore** na modal close voorkomt "lost focus" — gebruiker keert terug naar waar ze waren
+- **Reusable utility** bespaart ~50 lines per modal — consistent gedrag, één plek om bugs te fixen
 
 ---
 
@@ -1661,6 +1801,42 @@ Related: Sessie 92 (Phase 1), Sessie 93 (Phase 2), TASKS.md M9 Refactor Sprint
 ---
 
 **Status:** ✅ CLAUDE.md v2.2 COMPLETE - All 3 phases delivered, validation passed, ready for M6
+
+---
+
+## Sessie 90: CSS Variable Semantic Cleanup — Design System 99/100 (28 december 2025)
+
+**Scope:** Semantic cleanup van CSS variables: typography scale, text color consolidatie, backward-compatible aliases
+**Status:** ✅ VOLTOOID
+
+---
+
+### Context & Problem
+
+Het design system had inconsistente typography sizing (geen gestandaardiseerde scale) en meerdere text color varianten (`--color-text-light`, `--color-text-muted`, etc.) die verwarrend waren voor onderhoud. Design system audit score: 98/100.
+
+### Oplossing
+
+1. **7-token typography scale** — `--font-size-xs` (0.75rem) t/m `--font-size-3xl` (2rem)
+2. **Text color consolidatie** — `--color-text-light` → `--color-text` (single primary text color)
+3. **7 deprecated backward-compatible aliases** — oude namen blijven werken, geen breaking changes
+4. **Zero visual impact** — alle wijzigingen puur semantic, geen visuele regressies
+
+**Design system score: 98/100 → 99/100**
+
+### Key Files
+
+| Bestand | Wijziging |
+|---|---|
+| `styles/main.css` | Typography scale + color consolidatie + aliases |
+| `docs/style-guide.md` | Updated design system documentatie |
+| `docs/css-variable-migration-guide.md` | Migration guide voor deprecated variables |
+
+### Lessons Learned
+
+- **Backward-compatible aliases** maken refactoring veilig — oude code breekt niet, nieuwe code gebruikt nieuwe namen
+- **Semantic naming** (size-xs t/m size-3xl) is zelfverklarend — geen commentaar nodig
+- **Design system score** als quality gate — meetbaar doel motiveert opruimwerk
 
 ---
 
@@ -3313,3 +3489,17 @@ pyftsubset JetBrainsMono-Regular.ttf \
 
 ---
 
+## Compressed Sessions
+
+Kleine sessies zonder grote architecturale wijzigingen, samengevat voor referentie:
+
+| Sessie | Datum | Onderwerp | Key Change |
+|--------|-------|-----------|------------|
+| **99** | 12 feb 2026 | Blog Mobile Horizontal Scroll Fix | Overflow-x hidden op blog containers, mobile viewport correcties |
+| **98** | 10 feb 2026 | Blog Mobile Navigation & Layout | Responsive nav fixes, blog card grid layout voor mobile viewports |
+| **93** | 2 jan 2026 | CLAUDE.md Phase 1 — Metrics Delegation | CLAUDE.md v2.0 refactor, metrics naar TASKS.md, code examples inline |
+| **92** | 31 dec 2025 | CLAUDE.md Optimization — Code Examples | Architecture patterns met inline code, command checklist geëxtraheerd |
+| **91** | 30 dec 2025 | Design System Docs & Legal Pages | Style Guide v1.5 finalisatie, legal pages tekst updates |
+| **89** | 27 dec 2025 | Blog Border Hover Color Consistency | Unified border-color transitions, consistent hover states across blog cards |
+
+---

@@ -8,10 +8,11 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (88-114)](docs/sessions/current.md) - Full Detail
-**Sessies:** 114, 113, 112, 111, 110, 109, 108, 106, 105, 104, 103, 102, 101, 100, 96, 95, 94, 93, 92, 91, 90, 89, 88
-**Period:** 26 december 2025 - 10 maart 2026
+### [Current Sessions (88-115)](docs/sessions/current.md) - Full Detail
+**Sessies:** 115, 114, 113, 112, 111, 110, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88
+**Period:** 26 december 2025 - 16 maart 2026
 **Topics:**
+- Learning Funnel & Onboarding Redesign: 8-stage funnel, phase transitions, next command (Sessie 115)
 - Terminal Welcome Redesign: SSH-style hacker login prompt + typewriter effect (Sessie 114)
 - Refactor tutorial.spec.js: flaky textContent() → auto-retry toContainText() assertions (Sessie 113)
 - M6 Tutorial Mobile & Cross-Browser Testing: 12 mobile tests, 3 scenarios, 3 browsers (Sessie 112)
@@ -96,9 +97,9 @@
 
 ## 📊 Session Overview
 
-**Total Sessions:** 110 (as of 6 maart 2026)
-**Current Session:** 110 (M9 Refactor Sprint)
-**Sessions with full documentation:** 88-106 (17 sessions)
+**Total Sessions:** 115 (as of 16 maart 2026)
+**Current Session:** 115 (Learning Funnel & Onboarding Redesign)
+**Sessions with full documentation:** 88-115 (28 sessions)
 **Sessions compressed:** 2-77 (various compression levels)
 
 **Structure rationale:**
@@ -140,13 +141,13 @@
 
 ---
 
-**Last updated:** 6 maart 2026 (Sessie 110 - M9 Refactor Sprint)
-**Next update:** Sessie 113 or when CURRENT sessions need rotation
+**Last updated:** 16 maart 2026 (Sessie 115 - Learning Funnel & Onboarding Redesign)
+**Next update:** Sessie 120 or when CURRENT sessions need rotation
 
 **Recent updates:**
+- Sessie 115: Learning Funnel & Onboarding Redesign — 8-stage funnel, phase transitions, next command
+- Sessie 114: Terminal Welcome Redesign — SSH-style hacker login prompt + typewriter effect
+- Sessie 113: Refactor tutorial.spec.js — flaky test elimination
+- Sessie 112: M6 Tutorial Mobile & Cross-Browser Testing
+- Sessie 111: M7 Phase 7 Gamification E2E Testing
 - Sessie 110: M9 Refactor Sprint — VFS persistence fix, localStorage optimization, doc sync
-- Sessie 107: Document sync — metrics alignment across CLAUDE.md, TASKS.md, PLANNING.md
-- Sessie 106: M7 Gamification — challenges, badges, certificates, dashboard, leaderboard
-- Sessie 105: M7 gamification sync + tutorial E2E tests
-- Sessie 104: M6 Tutorial Afronding — cert command, E2E tests, progress sync
-- Sessie 103: M6 Tutorial System — state machine framework + reconnaissance scenario
