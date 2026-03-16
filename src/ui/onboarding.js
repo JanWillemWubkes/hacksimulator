@@ -384,9 +384,9 @@ ${statsLine}
     if (this._lastFollowUpCmd === commandName) return null;
 
     const tips = {
-      ls:      "[→] Probeer nu: 'cat README.txt' om een bestand te lezen",
-      cat:     "[→] Probeer nu: 'cd documents' om te navigeren",
-      cd:      "[→] Probeer nu: 'ls' om de inhoud van deze map te zien",
+      ls:      "[→] Type 'next' voor je volgende stap",
+      cat:     "[→] Type 'next' voor je volgende stap",
+      cd:      "[→] Type 'next' voor je volgende stap",
       mkdir:   "[→] Type 'next' voor je volgende stap",
       touch:   "[→] Type 'next' voor je volgende stap",
       rm:      "[→] Type 'next' voor je volgende stap",
