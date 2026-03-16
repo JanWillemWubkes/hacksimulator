@@ -31,8 +31,8 @@ var commandTips = {
   ls:       'Bekijk bestanden in de huidige map - het eerste commando dat elke hacker leert',
   cd:       'Navigeer naar andere mappen - essentieel voor het verkennen van een systeem',
   pwd:      'Toon je huidige locatie - weet altijd waar je bent in het bestandssysteem',
-  cat:      "Lees de inhoud van bestanden - probeer 'cat readme.txt'",
-  whoami:   'Check met welk account je bent ingelogd - belangrijk voor privilege escalation',
+  cat:      "Lees de inhoud van bestanden - probeer 'cat README.txt' (let op: hoofd/kleine letters maken uit!)",
+  whoami:   'Check met welk account je bent ingelogd - ben je een gewone gebruiker of heb je admin-rechten?',
   history:  'Bekijk eerder uitgevoerde commands - soms laten andere gebruikers sporen achter',
   mkdir:    'Maak een nieuwe map aan - organiseer je tools en bevindingen',
   touch:    'Maak een nieuw bestand aan - handig voor notities en scripts',
@@ -82,7 +82,7 @@ function detectStage(triedSet) {
       command: nextPhase1,
       tip: commandTips[nextPhase1] || '',
       suggestion: nextPhase1 === 'cat'
-        ? "Type 'cat readme.txt'"
+        ? "Type 'cat README.txt'"
         : nextPhase1 === 'cd'
           ? "Type 'cd documents'"
           : "Type '" + nextPhase1 + "'"
