@@ -108,7 +108,7 @@ function detectStage(triedSet) {
       phase: 'Missie: Reconnaissance',
       progress: 'niet gestart',
       command: null,
-      tip: 'Leer hoe je informatie verzamelt over een doelwit - de basis van elke hack',
+      tip: 'Voordat je netwerk tools gebruikt, leer je eerst reconnaissance in een begeleide missie. Dit is hoe echte pentesters beginnen.',
       suggestion: "Type 'tutorial recon'"
     };
   }
@@ -202,6 +202,146 @@ function countTotal(challenges, difficulty) {
   return count;
 }
 
+// --- Transition definitions ---
+
+var transitions = [
+  {
+    id: 'phase1-phase2',
+    fromLabel: 'FASE 1 VOLTOOID!',
+    summary: 'Terminal Basics',
+    skills: [
+      'Bestanden bekijken en lezen',
+      'Door mappen navigeren',
+      'Systeem info opvragen'
+    ],
+    nextPhase: 'Fase 2: File Manipulation',
+    bridge: 'Je kent nu de basis! Tijd om bestanden te manipuleren.'
+  },
+  {
+    id: 'phase2-recon',
+    fromLabel: 'FASE 2 VOLTOOID!',
+    summary: 'File Manipulation',
+    skills: [
+      'Mappen en bestanden aanmaken',
+      'Bestanden verwijderen',
+      'Bestandssysteem beheren'
+    ],
+    nextPhase: 'Missie: Reconnaissance',
+    bridge: 'Bestanden onder controle! Tijd voor je eerste missie.'
+  },
+  {
+    id: 'recon-phase3',
+    fromLabel: 'MISSIE VOLTOOID!',
+    summary: 'Reconnaissance Tutorial',
+    skills: [
+      'Informatie verzamelen over doelwitten',
+      'Reconnaissance technieken toepassen',
+      'Gestructureerd een pentest starten'
+    ],
+    nextPhase: 'Fase 3: Network Scanning',
+    bridge: 'Missie voltooid! Nu echte network tools leren.'
+  },
+  {
+    id: 'phase3-tutorials',
+    fromLabel: 'FASE 3 VOLTOOID!',
+    summary: 'Reconnaissance & Scanning',
+    skills: [
+      'Network connectivity testen',
+      'Poorten scannen en analyseren',
+      'Netwerk interfaces begrijpen'
+    ],
+    nextPhase: 'Geavanceerde Missies',
+    bridge: 'Reconnaissance gedaan! Tijd voor geavanceerde missies.'
+  }
+];
+
+/**
+ * Check which phase just completed (if any)
+ * Returns transition object or null
+ */
+function detectTransition(triedSet) {
+  var phase1Done = findNextUntried(phase1Commands, triedSet) === null;
+  var phase2Done = findNextUntried(phase2Commands, triedSet) === null;
+  var phase3Done = findNextUntried(phase3Commands, triedSet) === null;
+
+  // Check transitions in order (only the most recent one)
+  if (phase3Done && !onboarding.hasShownTransition('phase3-tutorials')) {
+    return transitions[3];
+  }
+  if (phase2Done && tutorialManager.isScenarioCompleted('recon') && !onboarding.hasShownTransition('recon-phase3')) {
+    return transitions[2];
+  }
+  if (phase2Done && !onboarding.hasShownTransition('phase2-recon')) {
+    return transitions[1];
+  }
+  if (phase1Done && !onboarding.hasShownTransition('phase1-phase2')) {
+    return transitions[0];
+  }
+  return null;
+}
+
+/**
+ * Build a transition celebration box
+ */
+function buildTransitionBox(transition) {
+  if (isMobileView()) {
+    var out = '\n**' + transition.fromLabel + '**\n\n';
+    out += '[X] ' + transition.summary + ' afgerond!\n\n';
+    out += 'Je kunt nu:\n';
+    for (var i = 0; i < transition.skills.length; i++) {
+      out += '  [✓] ' + transition.skills[i] + '\n';
+    }
+    out += '\n' + transition.bridge + '\n\n';
+    out += "[→] Type 'next' nogmaals voor je volgende stap\n";
+    return out;
+  }
+
+  var width = getResponsiveBoxWidth();
+  var inner = width - 2;
+  var lines = [];
+
+  // Header
+  var label = ' ' + transition.fromLabel + ' ';
+  var remaining = inner - label.length;
+  var leftPad = Math.floor(remaining / 2);
+  var rightPad = remaining - leftPad;
+  lines.push(B.topLeft + B.horizontal.repeat(leftPad) + label + B.horizontal.repeat(rightPad) + B.topRight);
+  lines.push(B.dividerLeft + B.horizontal.repeat(inner) + B.dividerRight);
+
+  // Summary
+  var summaryLine = '  [X] ' + transition.summary + ' afgerond!';
+  lines.push(B.vertical + summaryLine.padEnd(inner) + B.vertical);
+  lines.push(B.vertical + ' '.repeat(inner) + B.vertical);
+
+  // Skills learned
+  var skillsHeader = '  Je kunt nu:';
+  lines.push(B.vertical + skillsHeader.padEnd(inner) + B.vertical);
+  for (var s = 0; s < transition.skills.length; s++) {
+    var skillLine = '    [✓] ' + transition.skills[s];
+    var wrappedSkill = wordWrap(skillLine, inner - 2);
+    for (var w = 0; w < wrappedSkill.length; w++) {
+      lines.push(B.vertical + ('  ' + wrappedSkill[w]).padEnd(inner) + B.vertical);
+    }
+  }
+
+  lines.push(B.vertical + ' '.repeat(inner) + B.vertical);
+
+  // Bridge text
+  var bridgeLines = wordWrap(transition.bridge, inner - 4);
+  for (var b = 0; b < bridgeLines.length; b++) {
+    lines.push(B.vertical + ('  ' + bridgeLines[b]).padEnd(inner) + B.vertical);
+  }
+
+  // Next hint
+  lines.push(B.vertical + ' '.repeat(inner) + B.vertical);
+  lines.push(B.dividerLeft + B.horizontal.repeat(inner) + B.dividerRight);
+  var hintLine = "  [→] Type 'next' nogmaals voor je volgende stap";
+  lines.push(B.vertical + hintLine.padEnd(inner) + B.vertical);
+
+  lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
+  return lines.join('\n');
+}
+
 // --- Rendering ---
 
 function buildDesktopBox(stage, width) {
@@ -266,13 +406,25 @@ function buildMobileOutput(stage) {
 }
 
 function buildCompletionMessage() {
+  var summaryLines = [
+    '[X] Alle fases, missies en challenges voltooid!',
+    '',
+    'Je hebt geleerd:',
+    '  [✓] Terminal navigatie en bestandsbeheer',
+    '  [✓] Network reconnaissance en port scanning',
+    '  [✓] Password cracking, brute force en SQL injection',
+    '  [✓] Privilege escalation technieken',
+    '',
+    "[?] Type 'certificates' voor je certificaat",
+    "[?] Type 'dashboard' voor je statistieken",
+    "[?] Type 'achievements' voor je badges",
+    '',
+    'Volgende stap? Probeer echte CTF platforms:',
+    '  TryHackMe.com | HackTheBox.com | OverTheWire.org'
+  ];
+
   if (isMobileView()) {
-    return '\n**VOLTOOID**\n\n' +
-      '[X] Alle fases, missies en challenges voltooid!\n\n' +
-      'Je hebt alle beschikbare content doorlopen.\n' +
-      'Blijf oefenen met de tools die je hebt geleerd.\n\n' +
-      "[?] Type 'dashboard' voor je statistieken\n" +
-      "[?] Type 'achievements' voor je badges";
+    return '\n**VOLTOOID**\n\n' + summaryLines.map(function(l) { return l; }).join('\n') + '\n';
   }
 
   var width = getResponsiveBoxWidth();
@@ -286,18 +438,8 @@ function buildCompletionMessage() {
   lines.push(B.topLeft + B.horizontal.repeat(leftPad) + label + B.horizontal.repeat(rightPad) + B.topRight);
   lines.push(B.dividerLeft + B.horizontal.repeat(inner) + B.dividerRight);
 
-  var completionLines = [
-    '  [X] Alle fases, missies en challenges voltooid!',
-    '',
-    '  Je hebt alle beschikbare content doorlopen.',
-    '  Blijf oefenen met de tools die je hebt geleerd.',
-    '',
-    "  [?] Type 'dashboard' voor je statistieken",
-    "  [?] Type 'achievements' voor je badges"
-  ];
-
-  completionLines.forEach(function(line) {
-    lines.push(B.vertical + line.padEnd(inner) + B.vertical);
+  summaryLines.forEach(function(line) {
+    lines.push(B.vertical + ('  ' + line).padEnd(inner) + B.vertical);
   });
 
   lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
@@ -313,6 +455,14 @@ export default {
 
   execute: function() {
     var triedSet = new Set(onboarding.getCommandsTried());
+
+    // Check for phase transitions first (celebration moment!)
+    var transition = detectTransition(triedSet);
+    if (transition) {
+      onboarding.markTransitionShown(transition.id);
+      return buildTransitionBox(transition);
+    }
+
     var stage = detectStage(triedSet);
 
     if (!stage) {

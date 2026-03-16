@@ -291,8 +291,15 @@ class InputHandler {
     if (completion) {
       // Set the completed value
       this.setValue(completion);
+    } else if (currentInput.trim()) {
+      // Flash "no matches" feedback via placeholder
+      const input = this.inputElement;
+      const originalPlaceholder = input.placeholder;
+      input.placeholder = `Geen matches voor '${currentInput.trim()}'`;
+      setTimeout(() => {
+        input.placeholder = originalPlaceholder;
+      }, 1500);
     }
-    // If no completion, do nothing (Tab is simply ignored)
   }
 
   /**

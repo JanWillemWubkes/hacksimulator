@@ -5,6 +5,7 @@
 import registry from '../../core/registry.js';
 import { boxHeader } from '../../utils/asciiBox.js';
 import { isMobileView } from '../../utils/box-utils.js';
+import { findClosestCommand } from '../../utils/fuzzy.js';
 
 export default {
   name: 'man',
@@ -30,6 +31,10 @@ export default {
 
     // Check if command exists
     if (!registry.has(commandName)) {
+      const suggestion = findClosestCommand(commandName, registry.list());
+      if (suggestion) {
+        return `Geen manual entry gevonden voor '${commandName}'.\n\n[?] Bedoelde je: 'man ${suggestion}'?`;
+      }
       return `Geen manual entry gevonden voor '${commandName}'.\n\n[?] TIP: Type 'help' voor een lijst van beschikbare commands.`;
     }
 

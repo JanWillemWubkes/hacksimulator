@@ -29,6 +29,7 @@ class Onboarding {
     this.hasShownCtrlLHint = false;
     this.hasShownNoOutputHint = false;
     this.hasShownSimulatorHint = false;
+    this.shownTransitions = [];
 
     // Filesystem commands that produce no output on success (Unix convention)
     this.FILESYSTEM_COMMANDS = ['cd', 'cp', 'mkdir', 'mv', 'rm', 'touch'];
@@ -79,6 +80,7 @@ class Onboarding {
     this.hasShownCtrlLHint = data.hasShownCtrlLHint || false;
     this.hasShownNoOutputHint = data.hasShownNoOutputHint || false;
     this.hasShownSimulatorHint = data.hasShownSimulatorHint || false;
+    this.shownTransitions = data.shownTransitions || [];
   }
 
   /**
@@ -307,7 +309,14 @@ ${statsLine}
     }
 
     if (this.commandCount === 10) {
-      return '\n[!] 10 opdrachten - tijd voor krachtigere tools\n\n[!] LET OP: De volgende tools zijn ALLEEN voor educatief gebruik.\n      In de echte wereld zijn ze illegaal zonder expliciete toestemming.\n\nKlaar? Type \'help security\' voor geavanceerde tools.';
+      // Check of security categorie zichtbaar is (vereist 2+ network commands)
+      var networkCommands = ['ping', 'nmap', 'ifconfig', 'netstat'];
+      var networkDone = networkCommands.filter(c => this.commandsTried.includes(c)).length;
+      if (networkDone >= 2) {
+        return '\n[!] 10 opdrachten - tijd voor krachtigere tools\n\n[!] LET OP: De volgende tools zijn ALLEEN voor educatief gebruik.\n      In de echte wereld zijn ze illegaal zonder expliciete toestemming.\n\nKlaar? Type \'help security\' voor geavanceerde tools.';
+      }
+      // Nog niet klaar voor security — toon generieke aanmoediging
+      return "\n[✓] 10 opdrachten voltooid - goed bezig!\n\n[→] Type 'next' om te zien wat je volgende stap is";
     }
 
     if (this.commandCount === 12 && !this.hasShownCtrlLHint) {
@@ -334,7 +343,8 @@ ${statsLine}
         hasShownCtrlRHint: this.hasShownCtrlRHint,
         hasShownCtrlLHint: this.hasShownCtrlLHint,
         hasShownNoOutputHint: this.hasShownNoOutputHint,
-        hasShownSimulatorHint: this.hasShownSimulatorHint
+        hasShownSimulatorHint: this.hasShownSimulatorHint,
+        shownTransitions: this.shownTransitions
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (e) {
@@ -403,6 +413,26 @@ ${statsLine}
   }
 
   /**
+   * Check if a phase transition message has been shown
+   * @param {string} transitionId - e.g. 'phase1-phase2'
+   * @returns {boolean}
+   */
+  hasShownTransition(transitionId) {
+    return this.shownTransitions.includes(transitionId);
+  }
+
+  /**
+   * Mark a phase transition as shown
+   * @param {string} transitionId
+   */
+  markTransitionShown(transitionId) {
+    if (!this.shownTransitions.includes(transitionId)) {
+      this.shownTransitions.push(transitionId);
+      this._save();
+    }
+  }
+
+  /**
    * Get hint for persistent display
    * @returns {string|null}
    */
@@ -435,6 +465,7 @@ ${statsLine}
     this.hasShownCtrlLHint = false;
     this.hasShownNoOutputHint = false;
     this.hasShownSimulatorHint = false;
+    this.shownTransitions = [];
   }
 
   /**

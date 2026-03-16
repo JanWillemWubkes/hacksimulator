@@ -94,6 +94,13 @@ export default {
     }
 
     const target = args[0];
+
+    // Check if target looks like a valid IP or known hostname
+    const isIP = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(target);
+    const isKnownHost = ['localhost', '127.0.0.1'].includes(target) ||
+      target.includes('database') || target.includes('db') ||
+      target.includes('secure') || target.includes('hardened');
+
     const scanResults = getPortScanResults(target);
 
     // Build output (80/20 realistic nmap style)
@@ -157,6 +164,11 @@ export default {
     // Security warning for databases
     if (scanResults.openPorts.some(p => p.port === 3306 || p.port === 5432)) {
       output += `\n\n[!]  SECURITY: Database poort open naar buiten = risico! Zou restricted moeten zijn.`;
+    }
+
+    // Educational tip for non-standard targets
+    if (!isIP && !isKnownHost) {
+      output += `\n\n[?] TIP: In de echte wereld gebruik je IP-adressen (bijv. 192.168.1.100) of hostnames (bijv. server.local). '${target}' is hier gesimuleerd.`;
     }
 
     return output;
