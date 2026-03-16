@@ -264,18 +264,18 @@ function detectTransition(triedSet) {
   var phase2Done = findNextUntried(phase2Commands, triedSet) === null;
   var phase3Done = findNextUntried(phase3Commands, triedSet) === null;
 
-  // Check transitions in order (only the most recent one)
-  if (phase3Done && !onboarding.hasShownTransition('phase3-tutorials')) {
-    return transitions[3];
-  }
-  if (phase2Done && tutorialManager.isScenarioCompleted('recon') && !onboarding.hasShownTransition('recon-phase3')) {
-    return transitions[2];
+  // Check transitions in ascending order (oldest unshown wins)
+  if (phase1Done && !onboarding.hasShownTransition('phase1-phase2')) {
+    return transitions[0];
   }
   if (phase2Done && !onboarding.hasShownTransition('phase2-recon')) {
     return transitions[1];
   }
-  if (phase1Done && !onboarding.hasShownTransition('phase1-phase2')) {
-    return transitions[0];
+  if (phase2Done && tutorialManager.isScenarioCompleted('recon') && !onboarding.hasShownTransition('recon-phase3')) {
+    return transitions[2];
+  }
+  if (phase3Done && !onboarding.hasShownTransition('phase3-tutorials')) {
+    return transitions[3];
   }
   return null;
 }

@@ -85,7 +85,7 @@ class HelpSystem {
       help += `Probeer:\n`;
       help += `• 'help' - Alle beschikbare commands\n`;
       help += `• 'man <command>' - Help voor specifiek command\n`;
-      help += `• Tab toets - Autocomplete (binnenkort beschikbaar)`;
+      help += `• Tab toets - Autocomplete commands`;
     }
 
     return help;

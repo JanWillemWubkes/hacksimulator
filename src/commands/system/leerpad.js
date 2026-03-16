@@ -92,7 +92,9 @@ function buildBoxOutput(triedSet, width) {
 
     // Phase 4 locked unless phase 3 completed
     if (idx === 3 && !allUnlocked) {
-      var lockText = '      [!] Voltooi eerst alle Fase 3 commands';
+      var prevStats = getPhaseStats(phases[2], triedSet);
+      var remaining = prevStats.total - prevStats.completed;
+      var lockText = '      [!] Nog ' + remaining + ' Fase 3 command' + (remaining === 1 ? '' : 's') + ' te gaan';
       var lockPad = inner - lockText.length;
       lines.push(B.vertical + lockText + ' '.repeat(Math.max(0, lockPad)) + B.vertical);
     } else {

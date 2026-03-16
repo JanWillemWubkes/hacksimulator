@@ -29,6 +29,7 @@ class Onboarding {
     this.hasShownCtrlLHint = false;
     this.hasShownNoOutputHint = false;
     this.hasShownSimulatorHint = false;
+    this.hasShownSecurityHint = false;
     this.shownTransitions = [];
 
     // Filesystem commands that produce no output on success (Unix convention)
@@ -80,7 +81,8 @@ class Onboarding {
     this.hasShownCtrlLHint = data.hasShownCtrlLHint || false;
     this.hasShownNoOutputHint = data.hasShownNoOutputHint || false;
     this.hasShownSimulatorHint = data.hasShownSimulatorHint || false;
-    this.shownTransitions = data.shownTransitions || [];
+    this.hasShownSecurityHint = data.hasShownSecurityHint || false;
+    this.shownTransitions = Array.isArray(data.shownTransitions) ? data.shownTransitions : [];
   }
 
   /**
@@ -308,7 +310,8 @@ ${statsLine}
       return '\n[✓] Pro tip: Gebruik Ctrl+R om door je geschiedenis te zoeken\n\nProbeer het nu:\n→ Druk Ctrl+R en type "ls"     - Vind vorige ls commands\n→ Druk Ctrl+R opnieuw          - Cycle door matches\n→ Enter om te accepteren       - Esc om te annuleren\n\nType \'shortcuts\' voor alle keyboard shortcuts.';
     }
 
-    if (this.commandCount === 10) {
+    if (this.commandCount === 10 && !this.hasShownSecurityHint) {
+      this.hasShownSecurityHint = true;
       // Check of security categorie zichtbaar is (vereist 2+ network commands)
       var networkCommands = ['ping', 'nmap', 'ifconfig', 'netstat'];
       var networkDone = networkCommands.filter(c => this.commandsTried.includes(c)).length;
@@ -344,6 +347,7 @@ ${statsLine}
         hasShownCtrlLHint: this.hasShownCtrlLHint,
         hasShownNoOutputHint: this.hasShownNoOutputHint,
         hasShownSimulatorHint: this.hasShownSimulatorHint,
+        hasShownSecurityHint: this.hasShownSecurityHint,
         shownTransitions: this.shownTransitions
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
