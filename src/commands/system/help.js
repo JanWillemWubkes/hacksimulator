@@ -11,12 +11,25 @@ import onboarding from "../../ui/onboarding.js";
 
 const B = BOX_CHARS;
 
+const SIMULATOR_COMMANDS = new Set([
+  'next', 'leerpad', 'tutorial', 'challenge', 'dashboard',
+  'achievements', 'certificates', 'leaderboard', 'welcome'
+]);
+
 const categoryDescriptions = {
   system: "Deze tools helpen je de terminal te gebruiken en je huidige sessie te beheren.",
   filesystem: "Deze tools laten je bestanden en mappen organiseren, net als in een grafische verkenner.",
   network: "Deze tools scannen netwerken en verzamelen informatie over servers en open poorten.",
   security: "Deze tools testen de beveiliging van systemen - gebruik ze alleen ethisch!",
   special: "Speciale commands om de simulator te resetten of configureren."
+};
+
+const categoryTips = {
+  system:     "[→] Start hier: type 'next' voor persoonlijke begeleiding",
+  filesystem: "[→] Probeer: 'ls' om bestanden te zien, dan 'cat README.txt' om te lezen",
+  network:    "[→] Probeer: 'ping 192.168.1.1' om je eerste netwerkscan te doen",
+  security:   "[→] Belangrijk: begin eerst met 'man hashcat' om te leren wat een tool doet\n    Of type 'next' — die wijst je de juiste volgorde",
+  special:    "[→] Type 'reset' als je het bestandssysteem wilt herstellen"
 };
 
 function buildDivider(width) {
@@ -53,10 +66,11 @@ function buildCategoryBox(categoryName, commands, width) {
   });
   output += buildDivider(width) + '\n';
 
-  // Command rows
+  // Command rows (* = simulator-only command)
   commands.forEach(function(cmd) {
     var descWidth = inner - 15 - 2;
-    var row = ' ' + cmd.name.padEnd(15) + ' ' + smartTruncate(cmd.description, descWidth);
+    var prefix = SIMULATOR_COMMANDS.has(cmd.name) ? '*' : ' ';
+    var row = prefix + cmd.name.padEnd(15) + ' ' + smartTruncate(cmd.description, descWidth);
     output += B.vertical + row.padEnd(inner) + B.vertical + '\n';
   });
 
@@ -116,6 +130,8 @@ export default {
         if (cmds.length === 0) return "Geen commands in '" + cat + "'.\n\n[?] Type 'help' voor alle categorieën.";
         var out = '\n**' + cat.toUpperCase() + '** (' + cmds.length + ')\n\n';
         cmds.forEach(function(c) { out += '  ' + c.name + ' - ' + c.description + '\n'; });
+        var tip = categoryTips[cat];
+        if (tip) out += '\n' + tip;
         return out;
       }
       var cats = reg.getCategories();
@@ -139,6 +155,8 @@ export default {
       if (cmds.length === 0) return "Geen commands gevonden in categorie '" + cat + "'.\n\n[?] TIP: Type 'help' voor alle categorieën.";
       var out = "Commands in categorie '" + cat + "':\n\n";
       out += buildCategoryBox(cat, cmds, width);
+      var tip = categoryTips[cat];
+      if (tip) out += '\n\n' + tip;
       return out;
     }
 
@@ -156,11 +174,13 @@ export default {
     });
 
     // Tip box: pass (width - 2) as inner width so total matches category boxes
-    var tipText = '• man <command> → Gedetailleerde uitleg van een tool\n'
+    var tipText = '• next → Persoonlijke suggestie voor je volgende stap\n'
+      + '• man <command> → Gedetailleerde uitleg van een tool\n'
       + '• ↑↓ keys → Navigeer door command geschiedenis\n'
       + '• Tab → Autocomplete (bijv. "nm" + Tab → "nmap")\n'
       + '• shortcuts → Toon alle keyboard shortcuts';
     result += lightBoxText(tipText, 'TIP: NAVIGATIE & SHORTCUTS', width - 2);
+    result += "\n\n[?] * = HackSimulator command (bestaat niet in echt Linux)";
 
     if (hiddenCount > 0) {
       result += "\n\n[?] Meer commands worden zichtbaar naarmate je vordert.\n    Type 'help <categorie>' om een specifieke categorie te bekijken.";
@@ -179,10 +199,14 @@ function buildMobileHelp(grouped) {
     var cmds = entry[1];
     if (cmds.length > 0) {
       out += '**' + cat.toUpperCase() + '** (' + cmds.length + ')\n';
-      cmds.forEach(function(c) { out += '  ' + c.name + ' - ' + c.description + '\n'; });
+      cmds.forEach(function(c) {
+        var prefix = SIMULATOR_COMMANDS.has(c.name) ? '*' : ' ';
+        out += prefix + ' ' + c.name + ' - ' + c.description + '\n';
+      });
       out += '\n';
     }
   });
+  out += '[?] * = HackSimulator command (niet in echt Linux)\n';
   out += '[?] Type "man <command>" for details\n';
   out += '[!] Real hackers: start with SYSTEM & FILESYSTEM basics\n';
   return out;

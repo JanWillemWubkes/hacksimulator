@@ -125,6 +125,13 @@ export default {
     "    - Gebruik 'man <command>' als je niet weet hoe een tool werkt\n" +
     "    - Hints worden beter naarmate je meer pogingen doet\n" +
     "\n" +
+    "    [HACKSIM] Dit command is uniek voor HackSimulator.\n" +
+    "       Het bestaat niet in standaard Linux.\n" +
+    "\n" +
+    "    [+] In real Linux:\n" +
+    "       CTF (Capture The Flag) wedstrijden zijn het echte\n" +
+    "       equivalent.\n" +
+    "\n" +
     "GERELATEERDE COMMANDO'S\n" +
     "    tutorial (begeleide scenario's), achievements (badges), dashboard (voortgang)"
   )

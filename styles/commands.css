@@ -113,6 +113,11 @@
   color: #f85149;
 }
 
+.command-level-simulator {
+  background: rgba(163, 113, 247, 0.15);
+  color: #a371f7;
+}
+
 /* ==================== Card Content ==================== */
 .command-card p {
   font-family: var(--font-body);

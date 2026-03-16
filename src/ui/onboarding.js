@@ -28,9 +28,18 @@ class Onboarding {
     this.hasShownCtrlRHint = false;
     this.hasShownCtrlLHint = false;
     this.hasShownNoOutputHint = false;
+    this.hasShownSimulatorHint = false;
 
     // Filesystem commands that produce no output on success (Unix convention)
     this.FILESYSTEM_COMMANDS = ['cd', 'cp', 'mkdir', 'mv', 'rm', 'touch'];
+
+    // Commands that only exist in HackSimulator (not in real Linux)
+    this.SIMULATOR_COMMANDS = ['next', 'leerpad', 'tutorial', 'challenge',
+                               'dashboard', 'achievements', 'certificates',
+                               'leaderboard', 'welcome'];
+
+    // Transient state for follow-up tips (per-session, not persisted)
+    this._lastFollowUpCmd = null;
   }
 
   /**
@@ -69,6 +78,7 @@ class Onboarding {
     this.hasShownCtrlRHint = data.hasShownCtrlRHint || false;
     this.hasShownCtrlLHint = data.hasShownCtrlLHint || false;
     this.hasShownNoOutputHint = data.hasShownNoOutputHint || false;
+    this.hasShownSimulatorHint = data.hasShownSimulatorHint || false;
   }
 
   /**
@@ -253,7 +263,8 @@ ${statsLine}
     // Skip voor 'next' zelf en navigatie/system commands
     const skipReminder = ['next', 'help', 'clear', 'leerpad', 'dashboard',
                           'tutorial', 'challenge', 'achievements', 'man',
-                          'shortcuts', 'certificates', 'leaderboard', 'reset'];
+                          'shortcuts', 'certificates', 'leaderboard', 'reset',
+                          'welcome'];
     if (isNewCommand && !skipReminder.includes(commandName) && this.commandsTried.length <= 3) {
       return "\n[→] Type 'next' voor je volgende stap";
     }
@@ -322,7 +333,8 @@ ${statsLine}
         hasShownTutorialSuggestion: this.hasShownTutorialSuggestion,
         hasShownCtrlRHint: this.hasShownCtrlRHint,
         hasShownCtrlLHint: this.hasShownCtrlLHint,
-        hasShownNoOutputHint: this.hasShownNoOutputHint
+        hasShownNoOutputHint: this.hasShownNoOutputHint,
+        hasShownSimulatorHint: this.hasShownSimulatorHint
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (e) {
@@ -343,6 +355,51 @@ ${statsLine}
     this._save();
 
     return '\n[?] Wist je dat? In echte Linux tonen commands zoals cd, cp en rm geen output bij succes.\n    Dit heet "no news is good news". Deze simulator toont bevestigingen zodat je leert wat er gebeurt.';
+  }
+
+  /**
+   * Get one-time hint when user first runs a simulator-only command.
+   * Explains that * commands in 'help' are HackSimulator-specific.
+   * @param {string} commandName
+   * @returns {string|null}
+   */
+  getSimulatorCommandHint(commandName) {
+    if (this.hasShownSimulatorHint) return null;
+    if (!this.SIMULATOR_COMMANDS.includes(commandName)) return null;
+
+    this.hasShownSimulatorHint = true;
+    this._save();
+
+    return "\n[?] '" + commandName + "' is een HackSimulator command en bestaat niet in echt Linux.\n    Commands met * in 'help' zijn simulator-specifiek.";
+  }
+
+  /**
+   * Get a follow-up tip for beginners after running basic commands.
+   * Only fires when commandCount <= 8 and tip hasn't been shown for this command yet.
+   * @param {string} commandName
+   * @returns {string|null}
+   */
+  getFollowUpTip(commandName) {
+    if (this.commandCount > 8) return null;
+    if (this._lastFollowUpCmd === commandName) return null;
+
+    const tips = {
+      ls:      "[→] Probeer nu: 'cat README.txt' om een bestand te lezen",
+      cat:     "[→] Probeer nu: 'cd documents' om te navigeren",
+      cd:      "[→] Probeer nu: 'ls' om de inhoud van deze map te zien",
+      mkdir:   "[→] Type 'next' voor je volgende stap",
+      touch:   "[→] Type 'next' voor je volgende stap",
+      rm:      "[→] Type 'next' voor je volgende stap",
+      pwd:     "[→] Type 'next' voor je volgende stap",
+      whoami:  "[→] Type 'next' voor je volgende stap",
+      history: "[→] Type 'next' voor je volgende stap"
+    };
+
+    var tip = tips[commandName];
+    if (!tip) return null;
+
+    this._lastFollowUpCmd = commandName;
+    return '\n' + tip;
   }
 
   /**
@@ -377,6 +434,7 @@ ${statsLine}
     this.hasShownCtrlRHint = false;
     this.hasShownCtrlLHint = false;
     this.hasShownNoOutputHint = false;
+    this.hasShownSimulatorHint = false;
   }
 
   /**
@@ -393,7 +451,8 @@ ${statsLine}
       hasShownTutorialSuggestion: this.hasShownTutorialSuggestion,
       hasShownCtrlRHint: this.hasShownCtrlRHint,
       hasShownCtrlLHint: this.hasShownCtrlLHint,
-      hasShownNoOutputHint: this.hasShownNoOutputHint
+      hasShownNoOutputHint: this.hasShownNoOutputHint,
+      hasShownSimulatorHint: this.hasShownSimulatorHint
     };
   }
 }

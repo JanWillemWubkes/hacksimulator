@@ -105,6 +105,13 @@ export default {
     "    - Hogere rarities vereisen meer inspanning maar zijn zeldzamer\n" +
     "    - Sommige badges vereisen een dagelijkse streak — kom elke dag terug!\n" +
     "\n" +
+    "    [HACKSIM] Dit command is uniek voor HackSimulator.\n" +
+    "       Het bestaat niet in standaard Linux.\n" +
+    "\n" +
+    "    [+] In real Linux:\n" +
+    "       In de security community verdien je certificeringen\n" +
+    "       en CVE credits.\n" +
+    "\n" +
     "GERELATEERDE COMMANDO'S\n" +
     "    challenge (hack opdrachten), tutorial (begeleide scenario's), dashboard (voortgang)"
   )

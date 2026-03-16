@@ -287,6 +287,16 @@ class Terminal {
         renderer.renderInfo(filesystemHint);
       }
 
+      // Beginner follow-up tip (only outside tutorials/challenges)
+      if (!tutorialManager.isActive() && !challengeManager.isActive()) {
+        const followUp = onboarding.getFollowUpTip(parsed.command);
+        if (followUp) renderer.renderInfo(followUp);
+      }
+
+      // One-time simulator command hint
+      const simulatorHint = onboarding.getSimulatorCommandHint(parsed.command);
+      if (simulatorHint) renderer.renderInfo(simulatorHint);
+
       // Tutorial system: check command against active tutorial
       if (tutorialManager.isActive() &&
           !['tutorial', 'help', 'man', 'clear', 'history', 'leerpad', 'shortcuts'].includes(parsed.command)) {

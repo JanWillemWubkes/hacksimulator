@@ -232,6 +232,12 @@ export default {
     "    - Je kunt de #1 positie bereiken door alle challenges te voltooien\n" +
     "    - Je positie wordt met >> gemarkeerd in de ranglijst\n" +
     "\n" +
+    "    [HACKSIM] Dit command is uniek voor HackSimulator.\n" +
+    "       Het bestaat niet in standaard Linux.\n" +
+    "\n" +
+    "    [+] In real Linux:\n" +
+    "       CTF platforms (CTFtime.org) hebben wel ranglijsten.\n" +
+    "\n" +
     "GERELATEERDE COMMANDO'S\n" +
     "    dashboard (voortgang), challenge (opdrachten), achievements (badges)"
   )

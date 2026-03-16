@@ -262,6 +262,13 @@ export default {
     "    - Gebruik 'man <command>' als je niet weet hoe een tool werkt\n" +
     "    - De tutorial blokkeert geen commands - je kunt altijd alles typen\n" +
     "\n" +
+    "    [HACKSIM] Dit command is uniek voor HackSimulator.\n" +
+    "       Het bestaat niet in standaard Linux.\n" +
+    "\n" +
+    "    [+] In real Linux:\n" +
+    "       Platforms zoals TryHackMe en HackTheBox bieden\n" +
+    "       begeleide labs.\n" +
+    "\n" +
     "GERELATEERDE COMMANDO'S\n" +
     "    leerpad (passieve voortgang), help (alle commands), man (uitleg)"
   )

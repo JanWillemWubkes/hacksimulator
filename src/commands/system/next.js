@@ -364,6 +364,13 @@ export default {
     "    - Je voortgang wordt automatisch bijgehouden\n" +
     "    - Na voltooiing van alles krijg je een felicitatie\n" +
     "\n" +
+    "    [HACKSIM] Dit command is uniek voor HackSimulator.\n" +
+    "       Het bestaat niet in standaard Linux.\n" +
+    "\n" +
+    "    [+] In real Linux:\n" +
+    "       Er is geen 'next' command. Je bepaalt zelf je leerpad\n" +
+    "       via cursussen en CTF platforms.\n" +
+    "\n" +
     "GERELATEERDE COMMANDO'S\n" +
     "    leerpad (volledige voortgang), tutorial (missies), challenge (opdrachten)"
   )

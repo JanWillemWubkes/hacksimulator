@@ -111,6 +111,13 @@ export default {
     "    - Hogere moeilijkheidsgraden geven betere rangen\n" +
     "    - Download je certificaten als bewijs van je skills!\n" +
     "\n" +
+    "    [HACKSIM] Dit command is uniek voor HackSimulator.\n" +
+    "       Het bestaat niet in standaard Linux.\n" +
+    "\n" +
+    "    [+] In real Linux:\n" +
+    "       Echte certificeringen komen van OffSec (OSCP) of\n" +
+    "       EC-Council (CEH).\n" +
+    "\n" +
     "GERELATEERDE COMMANDO'S\n" +
     "    challenge (hack opdrachten), achievements (badges), dashboard (voortgang)"
   )

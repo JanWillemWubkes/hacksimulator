@@ -431,6 +431,13 @@ export default {
     "    - Gebruik subcommando's om snel specifieke info op te vragen\n" +
     "    - Je streak telt opeenvolgende dagen dat je actief bent\n" +
     "\n" +
+    "    [HACKSIM] Dit command is uniek voor HackSimulator.\n" +
+    "       Het bestaat niet in standaard Linux.\n" +
+    "\n" +
+    "    [+] In real Linux:\n" +
+    "       Tools als 'htop' tonen systeemstatus, niet\n" +
+    "       leervoortgang.\n" +
+    "\n" +
     "GERELATEERDE COMMANDO'S\n" +
     "    challenge (hack opdrachten), achievements (badges), certificates (diploma's)"
   )
