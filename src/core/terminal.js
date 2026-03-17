@@ -274,10 +274,11 @@ class Terminal {
       }
 
       // Only track command if it was used correctly (validation logic)
+      let onboardingHint = null;
       if (this._shouldTrackCommand(parsed.command, parsed.args, output)) {
-        const hint = onboarding.recordCommand(parsed.command);
-        if (hint) {
-          renderer.renderInfo(hint);
+        onboardingHint = onboarding.recordCommand(parsed.command);
+        if (onboardingHint) {
+          renderer.renderInfo(onboardingHint);
         }
       }
 
@@ -288,7 +289,8 @@ class Terminal {
       }
 
       // Beginner follow-up tip (only outside tutorials/challenges)
-      if (!tutorialManager.isActive() && !challengeManager.isActive()) {
+      // Skip if recordCommand already showed a hint (prevents duplicate "Type 'next'" messages)
+      if (!onboardingHint && !tutorialManager.isActive() && !challengeManager.isActive()) {
         const followUp = onboarding.getFollowUpTip(parsed.command);
         if (followUp) renderer.renderInfo(followUp);
       }
