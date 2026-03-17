@@ -95,7 +95,8 @@ var tutorialRenderer = {
     var stepNum = stepIndex + 1;
     var header = '[→] Stap ' + stepNum + '/' + totalSteps + ': ' + step.title;
     var output = '\n' + header + '\n';
-    output += '[?] ' + step.objective;
+    output += '[?] ' + step.objective + '\n';
+    output += "[?] Typ 'hint' als je vastzit";
     return output;
   },
 

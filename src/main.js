@@ -30,6 +30,7 @@ import certificatesCmd from './commands/system/certificates.js';
 import dashboardCmd from './commands/system/dashboard.js';
 import leaderboardCmd from './commands/system/leaderboard.js';
 import nextCmd from './commands/system/next.js';
+import hintCmd from './commands/system/hint.js';
 import welcomeCmd from './commands/system/welcome.js';
 
 // Import filesystem commands
@@ -86,6 +87,7 @@ function registerCommands() {
   registry.register('dashboard', dashboardCmd);
   registry.register('leaderboard', leaderboardCmd);
   registry.register('next', nextCmd);
+  registry.register('hint', hintCmd);
   registry.register('welcome', welcomeCmd);
 
   // Filesystem commands (11)

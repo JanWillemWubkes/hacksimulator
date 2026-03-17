@@ -139,6 +139,7 @@ export default new class TutorialManager {
     if (isCorrect) {
       this.attempts = 0;
       this._clearHintCount();
+      this._clearHintRequestCount();
       this.state = STATES.STEP_COMPLETE;
 
       analyticsEvents.tutorialEvent('step_completed', this.activeScenario.id, { step: this.currentStep });
@@ -188,6 +189,7 @@ export default new class TutorialManager {
 
     this.attempts = 0;
     this._clearHintCount();
+    this._clearHintRequestCount();
     this.currentStep++;
 
     if (this.currentStep >= this.activeScenario.steps.length) {
@@ -271,7 +273,48 @@ export default new class TutorialManager {
     return this.completedScenarios.indexOf(scenarioId) !== -1;
   }
 
-  // --- Hint System ---
+  // --- Hint System (public: hint command) ---
+
+  /**
+   * Get a progressive hint for the current step (called by `hint` command).
+   * Uses a separate counter so hint requests don't count as wrong attempts.
+   * Each call escalates: tier 1 → 2 → 3 (then repeats tier 3).
+   */
+  getHint() {
+    if (this.state !== STATES.STEP_ACTIVE) {
+      return null;
+    }
+
+    var step = this.activeScenario.steps[this.currentStep];
+    if (!step.hints || step.hints.length === 0) {
+      return { tier: 0, text: 'Geen hints beschikbaar voor deze stap.' };
+    }
+
+    // Separate counter for explicit hint requests
+    var key = this._hintKey();
+    if (!this._hintRequestCounts) this._hintRequestCounts = {};
+    var requestCount = this._hintRequestCounts[key] || 0;
+    this._hintRequestCounts[key] = requestCount + 1;
+
+    // Map request count to tier (0-indexed): 0→tier1, 1→tier2, 2+→tier3
+    var tierIndex = Math.min(requestCount, step.hints.length - 1);
+    return {
+      tier: tierIndex + 1,
+      maxTier: step.hints.length,
+      text: step.hints[tierIndex]
+    };
+  }
+
+  /**
+   * Clear hint request counter for current step (called on step completion).
+   */
+  _clearHintRequestCount() {
+    if (!this._hintRequestCounts) return;
+    var key = this._hintKey();
+    delete this._hintRequestCounts[key];
+  }
+
+  // --- Hint System (auto: wrong attempts) ---
 
   _getHintLevel() {
     var key = this._hintKey();
