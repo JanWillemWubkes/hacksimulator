@@ -296,7 +296,7 @@ function buildTransitionBox(transition) {
       out += '  [✓] ' + transition.skills[i] + '\n';
     }
     out += '\n' + transition.bridge + '\n\n';
-    out += "[→] Type 'next' nogmaals voor je volgende stap\n";
+    out += "[→] Type 'next' om door te gaan\n";
     return out;
   }
 
@@ -339,7 +339,7 @@ function buildTransitionBox(transition) {
   // Next hint
   lines.push(B.vertical + ' '.repeat(inner) + B.vertical);
   lines.push(B.dividerLeft + B.horizontal.repeat(inner) + B.dividerRight);
-  var hintLine = "  [→] Type 'next' nogmaals voor je volgende stap";
+  var hintLine = "  [→] Type 'next' om door te gaan";
   lines.push(B.vertical + hintLine.padEnd(inner) + B.vertical);
 
   lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
