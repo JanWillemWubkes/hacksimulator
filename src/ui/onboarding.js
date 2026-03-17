@@ -406,7 +406,8 @@ ${statsLine}
       rm:      "[→] Type 'next' voor je volgende stap",
       pwd:     "[→] Type 'next' voor je volgende stap",
       whoami:  "[→] Type 'next' voor je volgende stap",
-      history: "[→] Type 'next' voor je volgende stap"
+      history: "[→] Type 'next' voor je volgende stap",
+      help:    "[→] Type 'next' voor je volgende stap"
     };
 
     var tip = tips[commandName];
