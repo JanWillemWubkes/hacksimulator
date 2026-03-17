@@ -458,6 +458,23 @@ export default {
   category: 'system',
 
   execute: function() {
+    // Check if tutorial is active — show tutorial status, not funnel
+    if (tutorialManager.isActive()) {
+      var status = tutorialManager.getStatus();
+      var step = status.step;
+      var out = '';
+      out += '[?] Je bent bezig met: ' + status.scenarioTitle + '\n';
+      out += '[→] Stap ' + (status.currentStep + 1) + '/' + status.totalSteps + ': ' + step.title + '\n';
+      out += '[?] ' + step.objective + '\n';
+      out += "\n[TIP] Typ 'hint' als je vastzit, of 'tutorial exit' om te stoppen.";
+      return out;
+    }
+
+    // Check if challenge is active — redirect to challenge status
+    if (challengeManager.isActive()) {
+      return "[?] Je bent bezig met een challenge.\n[TIP] Type 'challenge status' voor je voortgang.";
+    }
+
     var triedSet = new Set(onboarding.getCommandsTried());
 
     // Check for phase transitions first (celebration moment!)

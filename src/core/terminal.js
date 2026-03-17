@@ -277,6 +277,10 @@ class Terminal {
       let onboardingHint = null;
       if (this._shouldTrackCommand(parsed.command, parsed.args, output)) {
         onboardingHint = onboarding.recordCommand(parsed.command);
+        // Suppress "Type 'next'" hints during active tutorials/challenges
+        if (onboardingHint && (tutorialManager.isActive() || challengeManager.isActive())) {
+          onboardingHint = null;
+        }
         if (onboardingHint) {
           renderer.renderInfo(onboardingHint);
         }
@@ -301,7 +305,7 @@ class Terminal {
 
       // Tutorial system: check command against active tutorial
       if (tutorialManager.isActive() &&
-          !['tutorial', 'help', 'man', 'clear', 'history', 'leerpad', 'shortcuts'].includes(parsed.command)) {
+          !['tutorial', 'help', 'man', 'clear', 'history', 'leerpad', 'shortcuts', 'next', 'hint'].includes(parsed.command)) {
         const tutorialFeedback = tutorialManager.handleCommand(parsed.command, parsed.args, parsed.flags, this.context, output);
         if (tutorialFeedback) {
           renderer.renderInfo(tutorialFeedback);
