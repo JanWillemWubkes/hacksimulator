@@ -99,6 +99,6 @@ return `Scan complete: 3 ports open`;
 
 ## Application
 
-- All 38 commands in `src/commands/*/` follow this tone
+- All 40 commands in `src/commands/*/` follow this tone
 - Error messages in `src/core/terminal.js`
 - Help system in `src/help/help-system.js` 3-tier approach
