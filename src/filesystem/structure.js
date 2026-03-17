@@ -17,19 +17,22 @@ export const initialFilesystem = {
               'README.txt': {
                 type: 'file',
                 content: `Welkom bij HackSimulator.nl!
-
 Dit is een veilige omgeving om ethisch hacken te leren.
-Alle activiteiten zijn gesimuleerd en beïnvloeden geen echte systemen.
+Alle activiteiten zijn gesimuleerd en beinvloeden geen echte systemen.
 
 BEGINNEN:
 - Type 'help' voor een lijst van beschikbare commands
 - Type 'man [command]' voor gedetailleerde informatie
-- Gebruik ↑↓ pijltjestoetsen voor command geschiedenis
+- Gebruik pijltjestoetsen voor command geschiedenis
 
-EDUCATIEVE TIPS:
-[!] Bestanden in /etc bevatten systeem configuratie
-[?] SSH keys staan vaak in ~/.ssh/
-[?] Logs bevatten waardevolle informatie
+HANDIGE COMMANDS:
+[?] ls         - Bekijk welke bestanden er zijn
+[?] cd         - Ga naar een andere map
+[?] cat        - Lees de inhoud van een bestand
+[?] pwd        - Waar ben ik nu?
+[?] whoami     - Met welk account ben ik ingelogd?
+
+[->] Type 'next' om te zien wat je volgende stap is.
 
 DISCLAIMER:
 Gebruik deze kennis alleen legaal en ethisch.
@@ -39,18 +42,16 @@ Veel plezier met leren!`
               },
               'notes.txt': {
                 type: 'file',
-                content: `Mijn security aantekeningen:
-
-1. Altijd eerst reconnaissance doen (nmap, whois)
-2. Zoek naar open poorten en services
-3. Check voor bekende vulnerabilities
-4. Documenteer alles wat je vindt
-5. Test alleen op systemen waar je toestemming voor hebt!
+                content: `Mijn aantekeningen:
+1. Leer eerst de basis terminal commands
+2. Gebruik 'man [command]' als je niet weet hoe
+   iets werkt
+3. Verken het bestandssysteem met ls en cd
+4. Documenteer alles wat je leert!
 
 TODO:
-- Leer meer over SQL injection
-- Oefen met Metasploit basics
-- Begrijp hoe password hashes werken`
+- Alle basis commands uitproberen
+- De bestanden in /home/hacker verkennen`
               },
               '.bash_history': {
                 type: 'file',

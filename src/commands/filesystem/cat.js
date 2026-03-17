@@ -4,6 +4,7 @@
  */
 
 import { getPathCompletions } from '../../utils/filesystem-completion.js';
+import { getDynamicContent } from '../../filesystem/dynamic-content.js';
 
 /**
  * Get educational tip based on which file is restricted
@@ -49,6 +50,11 @@ export default {
     }
 
     const path = args[0];
+
+    // Check for phase-dependent dynamic content (README.txt, notes.txt)
+    const resolvedPath = vfs.resolvePath(path);
+    const dynamicContent = getDynamicContent(resolvedPath);
+    if (dynamicContent) return dynamicContent;
 
     try {
       const content = vfs.readFile(path);
