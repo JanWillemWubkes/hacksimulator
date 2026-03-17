@@ -384,7 +384,7 @@ ${statsLine}
     this.hasShownSimulatorHint = true;
     this._save();
 
-    return "\n[?] '" + commandName + "' is een HackSimulator command en bestaat niet in echt Linux.\n    Commands met * in 'help' zijn simulator-specifiek.";
+    return "\n[?] '" + commandName + "' is een HackSimulator command en geen echt Linux-command.\n    Commands met * in 'help' zijn simulator-specifiek.";
   }
 
   /**

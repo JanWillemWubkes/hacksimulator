@@ -180,7 +180,7 @@ export default {
       + '• Tab → Autocomplete (bijv. "nm" + Tab → "nmap")\n'
       + '• shortcuts → Toon alle keyboard shortcuts';
     result += lightBoxText(tipText, 'TIP: NAVIGATIE & SHORTCUTS', width - 2);
-    result += "\n\n[?] * = HackSimulator command (bestaat niet in echt Linux)";
+    result += "\n\n[?] * = HackSimulator command (geen echt Linux-command)";
 
     if (hiddenCount > 0) {
       result += "\n\n[?] Meer commands worden zichtbaar naarmate je vordert.\n    Type 'help <categorie>' om een specifieke categorie te bekijken.";
@@ -206,7 +206,7 @@ function buildMobileHelp(grouped) {
       out += '\n';
     }
   });
-  out += '[?] * = HackSimulator command (niet in echt Linux)\n';
+  out += '[?] * = HackSimulator command (geen echt Linux-command)\n';
   out += '[?] Type "man <command>" for details\n';
   out += '[!] Real hackers: start with SYSTEM & FILESYSTEM basics\n';
   return out;
