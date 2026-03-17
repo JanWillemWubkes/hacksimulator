@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 6 maart 2026
+**Laatst bijgewerkt:** 17 maart 2026
 **Status:** M5 Testing & Launch Phase - ✅ **LIVE on Netlify!**
 **Verantwoordelijk:** Development Team
 **Live URL:** https://hacksimulator.nl/
@@ -747,7 +747,7 @@ const DEBUG_MODE = false;
 
 ### Fase 1: MVP (Maand 1-3) - 🔵 IN UITVOERING (79.0%) - **LIVE!**
 
-**Status:** 249/315 tasks completed (79.0% totaal project scope)
+**Status:** 267/315 tasks completed (84.8% totaal project scope)
 **MVP-only Progress:** M0-M4 (100%), M5 (41/45 - 91%)
 **M5.5 Monetization:** ❌ Geannuleerd (affiliate aanvragen afgewezen)
 **Live URL:** https://hacksimulator.nl/
@@ -904,8 +904,8 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 
 ---
 
-**Laatst bijgewerkt:** 6 maart 2026
-**Versie:** 2.7 (Sessie 110: M9 Refactor Sprint — VFS persistence, localStorage optimization, doc sync)
+**Laatst bijgewerkt:** 17 maart 2026
+**Versie:** 2.8 (Sessie 116 — Doc Sync: tellingen, datums, percentages)
 **Status:** ✅ Deployed - Live in Production | M5.5 Monetization Geannuleerd | M7 Gamification Phase 1-6 ✅
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

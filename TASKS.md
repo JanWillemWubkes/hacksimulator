@@ -1,8 +1,8 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 7 maart 2026
+**Laatst bijgewerkt:** 17 maart 2026
 **Status:** M7 Gamification 98% | M6 Tutorial System 88% (LIVE on hacksimulator.nl)
-**Sprint:** Sessie 111: M7 Phase 7 Gamification Testing — 27 E2E tests (cross-system, mobile, performance)
+**Sprint:** Sessie 116: Doc Sync — TASKS.md, PLANNING.md, CLAUDE.md consistency
 
 ---
 
@@ -29,7 +29,7 @@
 ## 🎯 Huidige Focus
 
 **Actieve Mijlpaal:** M5 - Testing & Launch ✅ **LIVE on hacksimulator.nl!**
-**Current Status:** ✅ **UNBLOCKED** - Playwright E2E: 184 tests across 31 suites (Chromium, Firefox, WebKit passing)
+**Current Status:** ✅ **UNBLOCKED** - Playwright E2E: 160 tests across 30 suites (21 files, Chromium, Firefox, WebKit passing)
 
 **Volgende Stappen:**
 1. ✅ GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
@@ -388,7 +388,7 @@
 
 #### Content Review ✅ VOLTOOID (Sessie 98)
 - [x] Alle UI teksten Nederlands (compliance check) - ✅ 100% NL
-- [x] Alle man pages compleet (38 commands) - ✅ Meer dan target
+- [x] Alle man pages compleet (40+ commands) - ✅ Meer dan target
 - [x] Educatieve tips bij security tools (aanwezig) - ✅ Alle 5 tools
 - [x] Juridische warnings correct (offensive tools) - ✅ Art. 138ab + consent
 - [x] Privacy Policy compleet (AVG) - ✅ 476 regels
@@ -411,7 +411,7 @@
 - [x] 301 redirect van oud Netlify subdomain naar hacksimulator.nl
 
 #### Pre-Launch Checklist ✅ GROTENDEELS VOLTOOID
-- [x] Alle 38 commands werkend (content review Sessie 98, +6 in M6/M7)
+- [x] Alle 40+ commands werkend (content review Sessie 98, +6 in M6/M7)
 - [x] 3-tier help system functioneel
 - [x] Onboarding flow compleet
 - [x] Mobile responsive (CSS fixes Sessie 95, quick commands Sessie 101)
@@ -679,7 +679,7 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
 **Tijdsinschatting:** 35-45 uur (5-6 dagen)
 **Taken:** 33 total
 **Dependencies:** M5 minimaal MVP (beta testing + Safari)
-**Status:** 🔵 In uitvoering (79% — Sessie 103-106)
+**Status:** 🔵 In uitvoering (88% — Sessie 103-112)
 **Bundle Budget:** +60KB max (total: ~378KB / 500KB = 76%)
 
 **Success Criteria:**
@@ -851,7 +851,7 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
 
 **Doel:** Add motivation layer through challenges, badges, and certificates
 **Tijdsinschatting:** 40-50 uur (6-7 dagen)
-**Taken:** 47 total (43 voltooid)
+**Taken:** 47 total (46 voltooid)
 **Dependencies:** M6 Tutorial System voltooid
 **Status:** 🔵 In uitvoering (Phase 1-6 voltooid, Phase 7 testing deels)
 **Bundle Budget:** +50KB max (total: ~428KB / 500KB = 86%)
@@ -1343,14 +1343,14 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 - `CLAUDE.md` - AI Assistant Context
 
 **Command Specs:**
-- `docs/commands-list.md` - Alle 38 commands gespecificeerd
+- `docs/commands-list.md` - Alle 40 commands gespecificeerd
 
 ---
 
-**Laatst bijgewerkt:** 6 maart 2026
-**Versie:** 4.0 (Sessie 110 — M9 Refactor Sprint: VFS persistence, localStorage optimization)
+**Laatst bijgewerkt:** 17 maart 2026
+**Versie:** 4.1 (Sessie 116 — Doc Sync: tellingen, datums, percentages)
 **Totaal Taken:** 315 (zie toptabel voor actuele breakdown per mijlpaal)
-**Voltooide Taken:** 260/315 (82.5%) — M0-M4: 100%, M5: 91% (41/45), M5.5: Geannuleerd, M6: 79% (26/33), M7: 91% (43/47), M9: 100% (19/19)
+**Voltooide Taken:** 267/315 (84.8%) — M0-M4: 100%, M5: 91% (41/45), M5.5: Geannuleerd, M6: 88% (30/33), M7: 98% (46/47), M9: 100% (19/19)
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 **Bundle:** ✅ ~809 KB na Netlify minificatie (Terminal Core ~340 KB, site totaal binnen 1000 KB budget — Sessie 100)
