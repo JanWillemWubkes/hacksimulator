@@ -64,7 +64,11 @@ function buildNextHint(stage) {
     }
     return "Daarna: type 'next' voor volgende fase";
   }
-  // Tutorials/challenges — generic hint
+  // Tutorials/challenges: don't suggest 'next' — the tutorial/challenge handles its own flow
+  if (stage.suggestion && (stage.suggestion.indexOf('tutorial') !== -1 || stage.suggestion.indexOf('challenge') !== -1)) {
+    return "De missie begeleidt je stap voor stap";
+  }
+  // Generic fallback
   return "Daarna: type 'next' voor je volgende stap";
 }
 
