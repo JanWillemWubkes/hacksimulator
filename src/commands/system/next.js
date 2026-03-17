@@ -18,7 +18,7 @@ import {
 var B = BOX_CHARS;
 
 // Phase definitions (mirrors leerpad.js)
-var phase1Commands = ['ls', 'cd', 'pwd', 'cat', 'whoami', 'history', 'help'];
+var phase1Commands = ['ls', 'cat', 'pwd', 'cd', 'whoami', 'history', 'help'];
 var phase2Commands = ['mkdir', 'touch', 'rm'];
 var phase3Commands = ['ping', 'nmap', 'ifconfig', 'netstat'];
 var phase4Commands = ['hashcat', 'hydra', 'sqlmap', 'metasploit', 'nikto'];
