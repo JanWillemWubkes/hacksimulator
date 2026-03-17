@@ -389,12 +389,12 @@ ${statsLine}
 
   /**
    * Get a follow-up tip for beginners after running basic commands.
-   * Only fires when commandCount <= 8 and tip hasn't been shown for this command yet.
+   * Only fires when commandCount <= 25 and tip hasn't been shown for this command yet.
    * @param {string} commandName
    * @returns {string|null}
    */
   getFollowUpTip(commandName) {
-    if (this.commandCount > 8) return null;
+    if (this.commandCount > 25) return null;
     if (this._lastFollowUpCmd === commandName) return null;
 
     const tips = {
