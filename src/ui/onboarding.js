@@ -307,7 +307,7 @@ ${statsLine}
 
     if (this.commandCount === 7 && !this.hasShownCtrlRHint) {
       this.hasShownCtrlRHint = true;
-      return '\n[✓] Pro tip: Gebruik Ctrl+R om door je geschiedenis te zoeken\n\nProbeer het nu:\n→ Druk Ctrl+R en type "ls"     - Vind vorige ls commands\n→ Druk Ctrl+R opnieuw          - Cycle door matches\n→ Enter om te accepteren       - Esc om te annuleren\n\nType \'shortcuts\' voor alle keyboard shortcuts.';
+      return '\n[✓] Pro tip: Gebruik Ctrl+R om door je geschiedenis te zoeken\n\nProbeer het nu:\n→ Druk Ctrl+R en type "ls"     - Vind vorige ls commands\n→ Druk Ctrl+R opnieuw          - Cycle door matches\n→ Enter om te accepteren       - Esc om te annuleren\n\nType \'shortcuts\' voor alle keyboard shortcuts.\n\n→ Type \'next\' voor je volgende stap';
     }
 
     if (this.commandCount === 10 && !this.hasShownSecurityHint) {
