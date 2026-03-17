@@ -130,11 +130,11 @@ export default new class TutorialManager {
    * Handle a command typed by the user while a tutorial is active.
    * Returns feedback string or null if the command isn't relevant.
    */
-  handleCommand(command, args, flags, context) {
+  handleCommand(command, args, flags, context, output) {
     if (this.state !== STATES.STEP_ACTIVE) return null;
 
     var step = this.activeScenario.steps[this.currentStep];
-    var isCorrect = step.validate(command, args, flags, context);
+    var isCorrect = step.validate(command, args, flags, context, output);
 
     if (isCorrect) {
       this.attempts = 0;

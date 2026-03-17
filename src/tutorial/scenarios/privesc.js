@@ -5,7 +5,8 @@
  * and credential discovery on a compromised Linux system.
  * 4 steps: cat /etc/passwd → ls /var/log → cat auth.log → cat .bash_history
  *
- * Validators are lenient to keep the experience forgiving for beginners.
+ * Validators check command + args AND verify the command output
+ * doesn't contain error patterns (file not found, etc.).
  */
 
 var privescScenario = {
@@ -33,10 +34,12 @@ var privescScenario = {
       title: 'Enumereer systeem gebruikers',
       objective: 'Bekijk /etc/passwd om te zien welke gebruikers op het systeem staan.',
       command: 'cat',
-      validate: function(cmd, args) {
+      validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'cat') return false;
         var joined = args.join(' ').toLowerCase();
-        return joined.indexOf('passwd') !== -1;
+        if (joined.indexOf('passwd') === -1) return false;
+        if (output && output.includes('No such file or directory')) return false;
+        return true;
       },
       feedback:
         '[?] /etc/passwd is leesbaar voor alle gebruikers en bevat:\n' +
@@ -56,7 +59,7 @@ var privescScenario = {
       title: 'Verken de log bestanden',
       objective: 'Gebruik ls om de inhoud van /var/log te bekijken en beschikbare logs te vinden.',
       command: 'ls',
-      validate: function(cmd, args) {
+      validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'ls') return false;
         var joined = args.join(' ').toLowerCase();
         return joined.indexOf('log') !== -1 || joined.indexOf('var') !== -1;
@@ -79,10 +82,12 @@ var privescScenario = {
       title: 'Analyseer login pogingen',
       objective: 'Bekijk auth.log voor verdachte login activiteit: cat /var/log/auth.log',
       command: 'cat',
-      validate: function(cmd, args) {
+      validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'cat') return false;
         var joined = args.join(' ').toLowerCase();
-        return joined.indexOf('auth') !== -1 || joined.indexOf('syslog') !== -1;
+        if (joined.indexOf('auth') === -1 && joined.indexOf('syslog') === -1) return false;
+        if (output && output.includes('No such file or directory')) return false;
+        return true;
       },
       feedback:
         '[?] In de auth.log zie je 3 mislukte root login pogingen vanaf\n' +
@@ -103,10 +108,12 @@ var privescScenario = {
       title: 'Vind gelekte credentials',
       objective: 'Bekijk de command history voor gelekte wachtwoorden: cat ~/.bash_history',
       command: 'cat',
-      validate: function(cmd, args) {
+      validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'cat') return false;
         var joined = args.join(' ').toLowerCase();
-        return joined.indexOf('history') !== -1 || joined.indexOf('bash_history') !== -1;
+        if (joined.indexOf('history') === -1 && joined.indexOf('bash_history') === -1) return false;
+        if (output && output.includes('No such file or directory')) return false;
+        return true;
       },
       feedback:
         '[?] In de bash_history vind je: mysql -u root -pSecretPass123!\n' +

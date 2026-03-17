@@ -5,8 +5,8 @@
  * detection, and credential discovery.
  * 4 steps: nmap → nikto → sqlmap → cat config.php
  *
- * Validators are lenient (command name + at least one arg) to keep
- * the experience forgiving for beginners.
+ * Validators check command name + args AND verify the command output
+ * doesn't contain error patterns (invalid URL, missing files, etc.).
  */
 
 var webvulnScenario = {
@@ -33,8 +33,10 @@ var webvulnScenario = {
       title: 'Identificeer de webserver',
       objective: 'Gebruik nmap om de open poorten van target.com te scannen en de webserver te identificeren.',
       command: 'nmap',
-      validate: function(cmd, args) {
-        return cmd === 'nmap' && args.length > 0;
+      validate: function(cmd, args, flags, context, output) {
+        if (cmd !== 'nmap' || args.length === 0) return false;
+        if (output && output.includes('missing target operand')) return false;
+        return true;
       },
       feedback:
         '[?] Nmap onthult welke services draaien op het doelwit.\n' +
@@ -51,8 +53,14 @@ var webvulnScenario = {
       title: 'Scan op web kwetsbaarheden',
       objective: 'Gebruik nikto om de website http://target.com te scannen op bekende kwetsbaarheden.',
       command: 'nikto',
-      validate: function(cmd, args) {
-        return cmd === 'nikto' && args.length > 0;
+      validate: function(cmd, args, flags, context, output) {
+        if (cmd !== 'nikto' || args.length === 0) return false;
+        // Reject if nikto returned an error (missing URL, invalid format)
+        if (output && (
+          output.includes('missing URL argument') ||
+          output.includes('invalid URL format')
+        )) return false;
+        return true;
       },
       feedback:
         '[?] Nikto is een web vulnerability scanner die checkt op duizenden\n' +
@@ -72,8 +80,14 @@ var webvulnScenario = {
       title: 'Test op SQL injection',
       objective: 'Gebruik sqlmap om de login pagina te testen: sqlmap http://target.com/login?id=1',
       command: 'sqlmap',
-      validate: function(cmd, args) {
-        return cmd === 'sqlmap' && args.length > 0;
+      validate: function(cmd, args, flags, context, output) {
+        if (cmd !== 'sqlmap' || args.length === 0) return false;
+        // Reject if sqlmap returned an error (missing URL, invalid format)
+        if (output && (
+          output.includes('missing URL argument') ||
+          output.includes('invalid URL format')
+        )) return false;
+        return true;
       },
       feedback:
         '[?] SQL injection is een van de gevaarlijkste web kwetsbaarheden.\n' +
@@ -93,10 +107,13 @@ var webvulnScenario = {
       title: 'Ontdek gevoelige configuratie',
       objective: 'Bekijk het configuratiebestand: cat /var/www/html/config.php',
       command: 'cat',
-      validate: function(cmd, args) {
+      validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'cat') return false;
         var joined = args.join(' ').toLowerCase();
-        return joined.indexOf('config') !== -1;
+        if (joined.indexOf('config') === -1) return false;
+        // Reject if cat returned a file-not-found error
+        if (output && output.includes('No such file or directory')) return false;
+        return true;
       },
       feedback:
         '[?] Configuratiebestanden bevatten vaak gevoelige informatie:\n' +

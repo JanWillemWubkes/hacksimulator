@@ -302,7 +302,7 @@ class Terminal {
       // Tutorial system: check command against active tutorial
       if (tutorialManager.isActive() &&
           !['tutorial', 'help', 'man', 'clear', 'history', 'leerpad', 'shortcuts'].includes(parsed.command)) {
-        const tutorialFeedback = tutorialManager.handleCommand(parsed.command, parsed.args, parsed.flags, this.context);
+        const tutorialFeedback = tutorialManager.handleCommand(parsed.command, parsed.args, parsed.flags, this.context, output);
         if (tutorialFeedback) {
           renderer.renderInfo(tutorialFeedback);
         }
@@ -456,15 +456,24 @@ class Terminal {
         return false;
       }
 
-      // Args provided - check if output indicates syntax error
-      const hasSyntaxError =
+      // Args provided - check if output indicates an error
+      const hasError =
         output && (
           output.includes('Usage:') ||
-          output.startsWith('Error:')
+          output.startsWith('Error:') ||
+          output.includes('Name or service not known') ||
+          output.includes('No whois data found') ||
+          output.includes('No such file or directory') ||
+          output.includes('invalid URL format') ||
+          output.includes('missing host operand') ||
+          output.includes('missing target operand') ||
+          output.includes('missing URL argument') ||
+          output.includes('missing destination operand') ||
+          output.includes('missing domain operand')
         );
 
-      // Track if no syntax error (even if command failed for other reasons)
-      return !hasSyntaxError;
+      // Track only if command executed successfully
+      return !hasError;
     }
 
     // Unknown command - conservative: track if has args

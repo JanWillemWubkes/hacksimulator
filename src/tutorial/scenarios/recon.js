@@ -4,8 +4,8 @@
  * Teaches the first phase of ethical hacking: information gathering.
  * 4 steps: ping → nmap → whois → traceroute
  *
- * Validators check command name only (not strict on args) to keep
- * the experience forgiving for beginners.
+ * Validators check command name + args AND verify the command output
+ * doesn't contain error patterns (e.g. unknown host, missing data).
  */
 
 var reconScenario = {
@@ -31,8 +31,14 @@ var reconScenario = {
       title: 'Test connectiviteit',
       objective: 'Gebruik ping om te controleren of het doelwit (192.168.1.100) bereikbaar is.',
       command: 'ping',
-      validate: function(cmd, args) {
-        return cmd === 'ping' && args.length > 0;
+      validate: function(cmd, args, flags, context, output) {
+        if (cmd !== 'ping' || args.length === 0) return false;
+        // Reject if ping returned an error (unknown host, etc.)
+        if (output && (
+          output.includes('Name or service not known') ||
+          output.includes('missing host operand')
+        )) return false;
+        return true;
       },
       feedback:
         '[?] Ping stuurt ICMP Echo Request pakketjes naar het doelwit.\n' +
@@ -49,8 +55,10 @@ var reconScenario = {
       title: 'Scan open poorten',
       objective: 'Gebruik nmap om de open poorten van 192.168.1.100 te ontdekken.',
       command: 'nmap',
-      validate: function(cmd, args) {
-        return cmd === 'nmap' && args.length > 0;
+      validate: function(cmd, args, flags, context, output) {
+        if (cmd !== 'nmap' || args.length === 0) return false;
+        if (output && output.includes('missing target operand')) return false;
+        return true;
       },
       feedback:
         '[?] Nmap is DE standaard port scanner voor pentesters.\n' +
@@ -67,8 +75,11 @@ var reconScenario = {
       title: 'Verzamel domein informatie',
       objective: 'Gebruik whois om informatie over securecorp.com op te zoeken.',
       command: 'whois',
-      validate: function(cmd, args) {
-        return cmd === 'whois' && args.length > 0;
+      validate: function(cmd, args, flags, context, output) {
+        if (cmd !== 'whois' || args.length === 0) return false;
+        // Reject if whois returned no data for the domain
+        if (output && output.includes('No whois data found')) return false;
+        return true;
       },
       feedback:
         '[?] WHOIS geeft publieke registratie-informatie over domeinen.\n' +
@@ -85,8 +96,10 @@ var reconScenario = {
       title: 'Breng de route in kaart',
       objective: 'Gebruik traceroute om het netwerkpad naar 192.168.1.100 te volgen.',
       command: 'traceroute',
-      validate: function(cmd, args) {
-        return cmd === 'traceroute' && args.length > 0;
+      validate: function(cmd, args, flags, context, output) {
+        if (cmd !== 'traceroute' || args.length === 0) return false;
+        if (output && output.includes('missing destination operand')) return false;
+        return true;
       },
       feedback:
         '[?] Traceroute toont elke hop (router) tussen jou en het doelwit.\n' +
