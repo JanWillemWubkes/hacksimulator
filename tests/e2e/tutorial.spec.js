@@ -254,19 +254,19 @@ test.describe('Tutorial System', () => {
     await expect(page.locator('#terminal-output')).toContainText('MISSION BRIEFING', { timeout: 10000 });
 
     // Step 1: nmap (identify webserver) — wait for tutorial state machine
-    await typeCommand(page, 'nmap target');
+    await typeCommand(page, 'nmap target.com');
     await page.waitForTimeout(300);
 
     // Step 2: nikto (scan web vulnerabilities)
-    await typeCommand(page, 'nikto target');
+    await typeCommand(page, 'nikto http://target.com');
     await page.waitForTimeout(300);
 
     // Step 3: sqlmap (test SQL injection)
-    await typeCommand(page, 'sqlmap target');
+    await typeCommand(page, 'sqlmap http://target.com/login?id=1');
     await page.waitForTimeout(300);
 
     // Step 4: cat config file (discover sensitive config)
-    await typeCommand(page, 'cat config.php');
+    await typeCommand(page, 'cat /var/www/html/config.php');
 
     const output = page.locator('#terminal-output');
     await expect(output).toContainText('MISSIE VOLTOOID', { timeout: 5000 });

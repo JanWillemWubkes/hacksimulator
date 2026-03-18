@@ -255,9 +255,31 @@ class Terminal {
         this.context
       );
 
-      // Render output
-      if (output) {
-        renderer.renderOutput(output);
+      // Tutorial-aware rendering: validate BEFORE rendering so rejection appears first
+      let tutorialFeedback = null;
+      let tutorialWasCorrect = false;
+      const isTutorialRelevant = tutorialManager.isActive() &&
+          !['tutorial', 'help', 'man', 'clear', 'history', 'leerpad', 'shortcuts', 'next', 'hint'].includes(parsed.command);
+
+      if (isTutorialRelevant) {
+        const stepBefore = tutorialManager.currentStep;
+        const stateBefore = tutorialManager.getState();
+        tutorialFeedback = tutorialManager.handleCommand(parsed.command, parsed.args, parsed.flags, this.context, output);
+        tutorialWasCorrect = (tutorialManager.currentStep !== stepBefore
+            || tutorialManager.getState() !== stateBefore);
+      }
+
+      // Strip [?] TIP: lines during tutorials (hint system handles guidance)
+      const displayOutput = isTutorialRelevant ? this._stripTips(output) : output;
+
+      if (tutorialFeedback && !tutorialWasCorrect) {
+        // Wrong command: show tutorial rejection FIRST, then command output
+        renderer.renderInfo(tutorialFeedback);
+        if (displayOutput) renderer.renderOutput(displayOutput);
+      } else {
+        // Correct command or no tutorial: output first, then success feedback
+        if (displayOutput) renderer.renderOutput(displayOutput);
+        if (tutorialFeedback) renderer.renderInfo(tutorialFeedback);
       }
 
       // Validate and record command execution for learning path tracking
@@ -303,14 +325,7 @@ class Terminal {
       const simulatorHint = onboarding.getSimulatorCommandHint(parsed.command);
       if (simulatorHint) renderer.renderInfo(simulatorHint);
 
-      // Tutorial system: check command against active tutorial
-      if (tutorialManager.isActive() &&
-          !['tutorial', 'help', 'man', 'clear', 'history', 'leerpad', 'shortcuts', 'next', 'hint'].includes(parsed.command)) {
-        const tutorialFeedback = tutorialManager.handleCommand(parsed.command, parsed.args, parsed.flags, this.context, output);
-        if (tutorialFeedback) {
-          renderer.renderInfo(tutorialFeedback);
-        }
-      }
+      // Tutorial system: handled above (pre-validation for correct output order)
 
       // Challenge system: check command against active challenge
       if (challengeManager.isActive() &&
@@ -412,6 +427,22 @@ class Terminal {
    */
   getOutputElement() {
     return renderer.outputElement;
+  }
+
+  /**
+   * Strip [?] TIP: lines from command output during active tutorials.
+   * The tutorial hint system handles guidance, so command-level TIPs are redundant.
+   * @private
+   * @param {string} output - Command output
+   * @returns {string} Output without TIP lines
+   */
+  _stripTips(output) {
+    if (!output) return output;
+    return output.split('\n')
+        .filter(function(line) { return !line.trim().startsWith('[?] TIP:'); })
+        .join('\n')
+        .replace(/\n{3,}/g, '\n\n')
+        .replace(/\n+$/, '');
   }
 
   /**
