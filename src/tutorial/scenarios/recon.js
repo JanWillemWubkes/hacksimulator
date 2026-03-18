@@ -33,11 +33,12 @@ var reconScenario = {
       command: 'ping',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'ping') return false;
-        if (args[0] !== '192.168.1.100') return false;
+        if (args.length === 0) return false;
         if (output && (
           output.includes('Name or service not known') ||
           output.includes('missing host operand')
         )) return false;
+        if (args[0] !== '192.168.1.100') return 'wrong-args';
         return true;
       },
       feedback:
@@ -57,8 +58,9 @@ var reconScenario = {
       command: 'nmap',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'nmap') return false;
-        if (args[0] !== '192.168.1.100') return false;
+        if (args.length === 0) return false;
         if (output && output.includes('missing target operand')) return false;
+        if (args[0] !== '192.168.1.100') return 'wrong-args';
         return true;
       },
       feedback:
@@ -78,8 +80,9 @@ var reconScenario = {
       command: 'whois',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'whois') return false;
-        if (args[0] !== 'securecorp.com') return false;
+        if (args.length === 0) return false;
         if (output && output.includes('No whois data found')) return false;
+        if (args[0] !== 'securecorp.com') return 'wrong-args';
         return true;
       },
       feedback:
@@ -99,8 +102,9 @@ var reconScenario = {
       command: 'traceroute',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'traceroute') return false;
-        if (args[0] !== '192.168.1.100') return false;
+        if (args.length === 0) return false;
         if (output && output.includes('missing destination operand')) return false;
+        if (args[0] !== '192.168.1.100') return 'wrong-args';
         return true;
       },
       feedback:

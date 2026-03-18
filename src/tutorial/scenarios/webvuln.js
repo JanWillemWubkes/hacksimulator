@@ -109,10 +109,11 @@ var webvulnScenario = {
       command: 'cat',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'cat') return false;
-        var joined = args.join(' ').toLowerCase();
-        if (joined.indexOf('config') === -1) return false;
+        if (args.length === 0) return false;
         // Reject if cat returned a file-not-found error
         if (output && output.includes('No such file or directory')) return false;
+        var joined = args.join(' ').toLowerCase();
+        if (joined.indexOf('config') === -1) return 'wrong-args';
         return true;
       },
       feedback:

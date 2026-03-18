@@ -36,9 +36,10 @@ var privescScenario = {
       command: 'cat',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'cat') return false;
-        var joined = args.join(' ').toLowerCase();
-        if (joined.indexOf('passwd') === -1) return false;
+        if (args.length === 0) return false;
         if (output && output.includes('No such file or directory')) return false;
+        var joined = args.join(' ').toLowerCase();
+        if (joined.indexOf('passwd') === -1) return 'wrong-args';
         return true;
       },
       feedback:
@@ -84,9 +85,10 @@ var privescScenario = {
       command: 'cat',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'cat') return false;
-        var joined = args.join(' ').toLowerCase();
-        if (joined.indexOf('auth') === -1 && joined.indexOf('syslog') === -1) return false;
+        if (args.length === 0) return false;
         if (output && output.includes('No such file or directory')) return false;
+        var joined = args.join(' ').toLowerCase();
+        if (joined.indexOf('auth') === -1 && joined.indexOf('syslog') === -1) return 'wrong-args';
         return true;
       },
       feedback:
@@ -110,9 +112,10 @@ var privescScenario = {
       command: 'cat',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'cat') return false;
-        var joined = args.join(' ').toLowerCase();
-        if (joined.indexOf('history') === -1 && joined.indexOf('bash_history') === -1) return false;
+        if (args.length === 0) return false;
         if (output && output.includes('No such file or directory')) return false;
+        var joined = args.join(' ').toLowerCase();
+        if (joined.indexOf('history') === -1 && joined.indexOf('bash_history') === -1) return 'wrong-args';
         return true;
       },
       feedback:

@@ -134,9 +134,9 @@ export default new class TutorialManager {
     if (this.state !== STATES.STEP_ACTIVE) return null;
 
     var step = this.activeScenario.steps[this.currentStep];
-    var isCorrect = step.validate(command, args, flags, context, output);
+    var result = step.validate(command, args, flags, context, output);
 
-    if (isCorrect) {
+    if (result === true) {
       this.attempts = 0;
       this._clearHintCount();
       this._clearHintRequestCount();
@@ -172,7 +172,7 @@ export default new class TutorialManager {
     var hint = this._getHint(step, hintLevel);
     this._save();
 
-    return this._renderer.renderStepFeedback(step, false, hint);
+    return this._renderer.renderStepFeedback(step, false, hint, result);
   }
 
   /**

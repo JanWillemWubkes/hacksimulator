@@ -103,7 +103,7 @@ var tutorialRenderer = {
   /**
    * Render feedback after a command attempt.
    */
-  renderStepFeedback: function(step, isCorrect, hint) {
+  renderStepFeedback: function(step, isCorrect, hint, validationResult) {
     if (isCorrect) {
       var output = '\n[✓] Correct! ' + step.title + ' voltooid.';
       if (step.feedback) {
@@ -112,8 +112,13 @@ var tutorialRenderer = {
       return output;
     }
 
-    // Incorrect attempt
-    var output = '\n[!] Dat is niet het juiste commando voor deze stap.';
+    // Differentiated rejection message
+    var output;
+    if (validationResult === 'wrong-args') {
+      output = '\n[!] Goed commando! Maar je gebruikt niet het juiste argument voor deze stap.';
+    } else {
+      output = '\n[!] Dit commando hoort niet bij deze stap.';
+    }
     if (hint) {
       output += '\n[?] Hint: ' + hint;
     }

@@ -126,7 +126,7 @@ test.describe('Tutorial System', () => {
 
     // Wrong commands — not the expected 'ping' with args
     await typeCommand(page, 'whoami');
-    await expect(output).toContainText('niet het juiste commando', { timeout: 5000 });
+    await expect(output).toContainText('hoort niet bij deze stap', { timeout: 5000 });
 
     // After 2 wrong attempts, should get a hint
     await typeCommand(page, 'ls');
