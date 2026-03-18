@@ -32,6 +32,14 @@ function getWhoisData(domain) {
       organization: 'Internet Assigned Numbers Authority',
       country: 'US'
     },
+    'securecorp.com': {
+      registrar: 'GoDaddy.com, LLC',
+      created: '2019-03-22',
+      expires: '2027-03-22',
+      nameservers: ['ns1.securecorp.com', 'ns2.securecorp.com'],
+      organization: 'SecureCorp International B.V.',
+      country: 'NL'
+    },
     'hacksimulator.nl': {
       registrar: 'SIDN (Stichting Internet Domeinregistratie NL)',
       created: '2025-01-15',
@@ -66,8 +74,8 @@ export default {
 [?] TIP: Probeer bekende domains:
    • google.com
    • github.com
-   • hacksimulator.nl
-   • example.com`;
+   • securecorp.com
+   • hacksimulator.nl`;
     }
 
     // Build realistic whois output

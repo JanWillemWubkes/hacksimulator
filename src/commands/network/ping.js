@@ -39,14 +39,7 @@ export default {
 
     if (!hostInfo) {
       // Unknown host - educational response
-      return `ping: ${host}: Name or service not known
-
-[?] TIP: Host onbekend. Probeer een van deze bekende hosts:
-   • 8.8.8.8 (Google DNS)
-   • 1.1.1.1 (Cloudflare DNS)
-   • google.com
-   • localhost
-   • 192.168.1.1 (typische router)`;
+      return `ping: ${host}: Name or service not known\n\n[?] TIP: Host onbekend. Probeer bijv: ping 8.8.8.8 of ping 192.168.1.1`;
     }
 
     // Build realistic ping output (80/20 principle)

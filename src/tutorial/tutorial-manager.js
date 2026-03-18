@@ -21,9 +21,9 @@ const STORAGE_KEY_PROGRESS = 'hacksim_tutorial_progress';
 const STORAGE_KEY_HINTS = 'hacksim_tutorial_hints';
 
 // Hint tiers: after N wrong attempts, escalate
-const HINT_TIER_1 = 2;
-const HINT_TIER_2 = 4;
-const HINT_TIER_3 = 6;
+const HINT_TIER_1 = 1;
+const HINT_TIER_2 = 2;
+const HINT_TIER_3 = 3;
 
 export default new class TutorialManager {
   constructor() {

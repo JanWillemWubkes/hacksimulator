@@ -32,8 +32,8 @@ var reconScenario = {
       objective: 'Gebruik ping om te controleren of het doelwit (192.168.1.100) bereikbaar is.',
       command: 'ping',
       validate: function(cmd, args, flags, context, output) {
-        if (cmd !== 'ping' || args.length === 0) return false;
-        // Reject if ping returned an error (unknown host, etc.)
+        if (cmd !== 'ping') return false;
+        if (args[0] !== '192.168.1.100') return false;
         if (output && (
           output.includes('Name or service not known') ||
           output.includes('missing host operand')
@@ -56,7 +56,8 @@ var reconScenario = {
       objective: 'Gebruik nmap om de open poorten van 192.168.1.100 te ontdekken.',
       command: 'nmap',
       validate: function(cmd, args, flags, context, output) {
-        if (cmd !== 'nmap' || args.length === 0) return false;
+        if (cmd !== 'nmap') return false;
+        if (args[0] !== '192.168.1.100') return false;
         if (output && output.includes('missing target operand')) return false;
         return true;
       },
@@ -76,8 +77,8 @@ var reconScenario = {
       objective: 'Gebruik whois om informatie over securecorp.com op te zoeken.',
       command: 'whois',
       validate: function(cmd, args, flags, context, output) {
-        if (cmd !== 'whois' || args.length === 0) return false;
-        // Reject if whois returned no data for the domain
+        if (cmd !== 'whois') return false;
+        if (args[0] !== 'securecorp.com') return false;
         if (output && output.includes('No whois data found')) return false;
         return true;
       },
@@ -97,7 +98,8 @@ var reconScenario = {
       objective: 'Gebruik traceroute om het netwerkpad naar 192.168.1.100 te volgen.',
       command: 'traceroute',
       validate: function(cmd, args, flags, context, output) {
-        if (cmd !== 'traceroute' || args.length === 0) return false;
+        if (cmd !== 'traceroute') return false;
+        if (args[0] !== '192.168.1.100') return false;
         if (output && output.includes('missing destination operand')) return false;
         return true;
       },
