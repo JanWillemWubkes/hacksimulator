@@ -40,9 +40,9 @@ var webvulnScenario = {
         return true;
       },
       feedback:
-        '[?] Nmap onthult welke services draaien op het doelwit.\n' +
-        '[?] Poort 80 (HTTP) en 443 (HTTPS) zijn typisch voor webservers.\n' +
-        '[?] De service versie (bijv. nginx 1.18) helpt bij het zoeken\n' +
+        '[~] Nmap onthult welke services draaien op het doelwit.\n' +
+        '[~] Poort 80 (HTTP) en 443 (HTTPS) zijn typisch voor webservers.\n' +
+        '[~] De service versie (bijv. nginx 1.18) helpt bij het zoeken\n' +
         '      naar bekende kwetsbaarheden (CVEs) voor die versie.',
       hints: [
         'Gebruik nmap met de domeinnaam of het IP-adres als argument.',
@@ -65,12 +65,12 @@ var webvulnScenario = {
         return true;
       },
       feedback:
-        '[?] Nikto is een web vulnerability scanner die checkt op duizenden\n' +
+        '[~] Nikto is een web vulnerability scanner die checkt op duizenden\n' +
         '      bekende kwetsbaarheden en misconfiguraties.\n' +
-        '[?] OWASP Top 10: De meest voorkomende web kwetsbaarheden zijn:\n' +
+        '[~] OWASP Top 10: De meest voorkomende web kwetsbaarheden zijn:\n' +
         '      1. Broken Access Control  2. Cryptographic Failures\n' +
         '      3. Injection (SQL, XSS)   4. Insecure Design\n' +
-        '[?] Nikto vond exposed directories (/admin/, /.git/) — dit zijn\n' +
+        '[~] Nikto vond exposed directories (/admin/, /.git/) — dit zijn\n' +
         '      informatielekken die aanvallers kunnen uitbuiten.',
       hints: [
         'Gebruik nikto met een URL als argument (begin met http://).',
@@ -93,12 +93,12 @@ var webvulnScenario = {
         return true;
       },
       feedback:
-        '[?] SQL injection is een van de gevaarlijkste web kwetsbaarheden.\n' +
-        '[?] Een aanvaller kan via een onbeveiligd invoerveld SQL queries\n' +
+        '[~] SQL injection is een van de gevaarlijkste web kwetsbaarheden.\n' +
+        '[~] Een aanvaller kan via een onbeveiligd invoerveld SQL queries\n' +
         '      injecteren en zo de hele database uitlezen of aanpassen.\n' +
-        '[?] Bescherming: gebruik altijd prepared statements / parameterized\n' +
+        '[~] Bescherming: gebruik altijd prepared statements / parameterized\n' +
         '      queries in plaats van string concatenation voor SQL.\n' +
-        '[?] De URL bevat ?id=1 — dit soort parameters zijn vaak kwetsbaar\n' +
+        '[~] De URL bevat ?id=1 — dit soort parameters zijn vaak kwetsbaar\n' +
         '      omdat ze direct in database queries worden gebruikt.',
       hints: [
         'Gebruik sqlmap met een URL die een parameter bevat (bijv. ?id=1).',
@@ -120,11 +120,11 @@ var webvulnScenario = {
         return true;
       },
       feedback:
-        '[?] Configuratiebestanden bevatten vaak gevoelige informatie:\n' +
+        '[~] Configuratiebestanden bevatten vaak gevoelige informatie:\n' +
         '      database wachtwoorden, API keys, en andere credentials.\n' +
-        '[?] Dit is een veelvoorkomende fout: credentials in plain text\n' +
+        '[~] Dit is een veelvoorkomende fout: credentials in plain text\n' +
         '      in broncode opslaan in plaats van environment variables.\n' +
-        '[?] Best practices voor configuratie:\n' +
+        '[~] Best practices voor configuratie:\n' +
         '      - Gebruik environment variables voor secrets\n' +
         '      - Voeg config bestanden toe aan .gitignore\n' +
         '      - Roteer credentials regelmatig\n' +

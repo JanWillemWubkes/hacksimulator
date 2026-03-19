@@ -42,9 +42,9 @@ var reconScenario = {
         return true;
       },
       feedback:
-        '[?] Ping stuurt ICMP Echo Request pakketjes naar het doelwit.\n' +
-        '[?] Als je antwoord krijgt, weet je dat het systeem online is.\n' +
-        '[?] Dit is altijd stap 1: controleer of je doelwit bereikbaar is\n' +
+        '[~] Ping stuurt ICMP Echo Request pakketjes naar het doelwit.\n' +
+        '[~] Als je antwoord krijgt, weet je dat het systeem online is.\n' +
+        '[~] Dit is altijd stap 1: controleer of je doelwit bereikbaar is\n' +
         '      voordat je verder gaat met scanning.',
       hints: [
         'Gebruik het ping commando met een IP-adres als argument.',
@@ -64,9 +64,9 @@ var reconScenario = {
         return true;
       },
       feedback:
-        '[?] Nmap is DE standaard port scanner voor pentesters.\n' +
-        '[?] Open poorten onthullen welke services draaien op het systeem.\n' +
-        '[?] Elke open poort is een potentiele ingang. SSH (22), HTTP (80)\n' +
+        '[~] Nmap is DE standaard port scanner voor pentesters.\n' +
+        '[~] Open poorten onthullen welke services draaien op het systeem.\n' +
+        '[~] Elke open poort is een potentiele ingang. SSH (22), HTTP (80)\n' +
         '      en HTTPS (443) zijn de meest voorkomende.',
       hints: [
         'Gebruik nmap gevolgd door het IP-adres van het doelwit.',
@@ -86,9 +86,9 @@ var reconScenario = {
         return true;
       },
       feedback:
-        '[?] WHOIS geeft publieke registratie-informatie over domeinen.\n' +
-        '[?] Je vindt hier contactgegevens, nameservers en registratiedatums.\n' +
-        '[?] Deze info helpt bij het begrijpen van de organisatiestructuur\n' +
+        '[~] WHOIS geeft publieke registratie-informatie over domeinen.\n' +
+        '[~] Je vindt hier contactgegevens, nameservers en registratiedatums.\n' +
+        '[~] Deze info helpt bij het begrijpen van de organisatiestructuur\n' +
         '      en kan social engineering aanvalsvectoren onthullen.',
       hints: [
         'Gebruik whois met een domeinnaam als argument.',
@@ -108,9 +108,9 @@ var reconScenario = {
         return true;
       },
       feedback:
-        '[?] Traceroute toont elke hop (router) tussen jou en het doelwit.\n' +
-        '[?] Dit onthult de netwerkinfrastructuur en mogelijke firewalls.\n' +
-        '[?] Hops met hoge latency of timeouts (*) kunnen wijzen op\n' +
+        '[~] Traceroute toont elke hop (router) tussen jou en het doelwit.\n' +
+        '[~] Dit onthult de netwerkinfrastructuur en mogelijke firewalls.\n' +
+        '[~] Hops met hoge latency of timeouts (*) kunnen wijzen op\n' +
         '      beveiligingsmaatregelen zoals packet filtering.',
       hints: [
         'Gebruik traceroute gevolgd door een IP-adres.',
