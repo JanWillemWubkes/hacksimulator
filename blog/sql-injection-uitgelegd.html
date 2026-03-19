@@ -15,7 +15,7 @@
   <meta property="og:url" content="https://hacksimulator.nl/blog/sql-injection-uitgelegd.html">
   <meta property="og:title" content="SQL Injection Uitgelegd voor Beginners | HackSimulator.nl">
   <meta property="og:description" content="Leer wat SQL injection is en hoe je websites hiertegen beschermt.">
-  <meta property="article:published_time" content="2026-02-10">
+  <meta property="article:published_time" content="2026-03-10">
   <meta property="article:author" content="HackSimulator.nl">
   <meta property="article:section" content="Gevorderden">
   <meta property="og:locale" content="nl_NL">
@@ -73,8 +73,8 @@
     "@type": "Article",
     "headline": "SQL Injection Uitgelegd voor Beginners",
     "description": "Leer wat SQL injection is, hoe het werkt en hoe je websites hiertegen beschermt.",
-    "datePublished": "2026-02-10",
-    "dateModified": "2026-02-10",
+    "datePublished": "2026-03-10",
+    "dateModified": "2026-03-10",
     "author": {
       "@type": "Organization",
       "name": "HackSimulator.nl"
@@ -123,7 +123,7 @@
       <header class="blog-post-header">
         <h1 class="blog-post-title">SQL Injection Uitgelegd voor Beginners</h1>
         <div class="blog-post-meta">
-          <time datetime="2026-02-10">10 februari 2026</time>
+          <time datetime="2026-03-10">10 maart 2026</time>
           <span>9 min</span>
           <span class="category-badge">Gevorderden</span>
         </div>
@@ -252,7 +252,7 @@ WHERE naam = '' OR '1'='1' AND wachtwoord = '';</code></pre>
 
         <h2>Soorten SQL Injection</h2>
         <p>
-          Niet alle SQL injection-aanvallen werken hetzelfde. Security professionals onderscheiden drie hoofdcategorieen:
+          Niet alle SQL injection-aanvallen werken hetzelfde. Security professionals onderscheiden drie hoofdcategorieën:
         </p>
 
         <h3>1. In-Band SQLi (Klassiek)</h3>
@@ -418,7 +418,7 @@ query = "SELECT * FROM users WHERE name = ?";
 execute(query, [invoer]);</code></pre>
 
         <p>
-          Bij de veilige variant wordt de invoer van de gebruiker <strong>nooit als SQL-code geinterpreteerd</strong>.
+          Bij de veilige variant wordt de invoer van de gebruiker <strong>nooit als SQL-code geïnterpreteerd</strong>.
           Als iemand <code>' OR '1'='1</code> invoert, zoekt de database letterlijk naar een gebruiker met die naam -
           en vindt er geen.
         </p>
@@ -507,18 +507,18 @@ execute(query, [invoer]);</code></pre>
 
         <h2>Oefenen in HackSimulator.nl</h2>
         <div class="blog-cta">
-          <h3>Probeer sqlmap zelf!</h3>
+          <h3>Detecteer SQL injection zelf</h3>
           <p>
-            In de HackSimulator kun je veilig experimenteren met <code>sqlmap</code> en andere security tools. Leer hoe een
-            ethisch hacker SQL injection detecteert, welke opties belangrijk zijn, en hoe je je bevindingen rapporteert -
-            allemaal zonder risico.
+            Open de simulator en typ <code>sqlmap</code> om te zien hoe SQL injection detectie werkt. Je leert welke
+            parameters kwetsbaar zijn, hoe je databases enumereert, en waarom prepared statements de oplossing zijn -
+            allemaal veilig in je browser.
           </p>
-          <a href="../terminal.html" class="blog-cta-button">Open de simulator</a>
+          <a href="../terminal.html" class="blog-cta-button">Start met sqlmap</a>
         </div>
 
         <h2>Samenvatting</h2>
         <p>
-          SQL injection is een aanvalstechniek waarbij kwaadaardige SQL-code via invoervelden wordt geinjecteerd om een database
+          SQL injection is een aanvalstechniek waarbij kwaadaardige SQL-code via invoervelden wordt geïnjecteerd om een database
           te manipuleren. Het is al decennialang een van de meest voorkomende en gevaarlijkste kwetsbaarheden op het web. De kern
           van het probleem is simpel: gebruikersinvoer wordt als code behandeld in plaats van als data.
         </p>
@@ -541,7 +541,7 @@ execute(query, [invoer]);</code></pre>
           <a href="wat-is-ethisch-hacken.html" class="related-card">
             <span class="related-category">Concepten</span>
             <h3>Wat is Ethisch Hacken?</h3>
-            <p>White hat vs black hat - leer het verschil en ontdek carrieremogelijkheden in cybersecurity.</p>
+            <p>White hat vs black hat - leer het verschil en ontdek carrièremogelijkheden in cybersecurity.</p>
             <span class="related-meta">8 min leestijd</span>
           </a>
           <a href="nmap-beginnersgids.html" class="related-card">

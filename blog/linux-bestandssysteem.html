@@ -6,7 +6,7 @@
 
   <!-- SEO Meta Tags -->
   <title>Linux Bestandssysteem: Basis voor Hackers | HackSimulator.nl</title>
-  <meta name="description" content="Leer de basis van het Linux bestandssysteem. Van ls en cd tot chmod en permissies - essentieel voor elke beginnende hacker en systeembeheerder.">
+  <meta name="description" content="Linux bestandssysteem begrijpen: leer /etc, /var en permissies lezen zodat je precies weet waar configuraties en logs staan bij een pentest.">
   <meta name="keywords" content="linux filesystem, ls command, cd command, chmod, bestandspermissies, linux basis, ethical hacking">
   <meta name="author" content="HackSimulator.nl">
 
@@ -14,8 +14,8 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://hacksimulator.nl/blog/linux-bestandssysteem.html">
   <meta property="og:title" content="Linux Bestandssysteem: Basis voor Hackers | HackSimulator.nl">
-  <meta property="og:description" content="Leer de basis van het Linux bestandssysteem - essentieel voor elke hacker.">
-  <meta property="article:published_time" content="2026-02-10">
+  <meta property="og:description" content="Linux bestandssysteem begrijpen: leer /etc, /var en permissies lezen zodat je weet waar configuraties en logs staan bij een pentest.">
+  <meta property="article:published_time" content="2025-12-05">
   <meta property="article:author" content="HackSimulator.nl">
   <meta property="article:section" content="Beginners">
   <meta property="og:locale" content="nl_NL">
@@ -73,8 +73,8 @@
     "@type": "Article",
     "headline": "Linux Bestandssysteem: Basis voor Hackers",
     "description": "Leer de basis van het Linux bestandssysteem - essentieel voor elke beginnende hacker.",
-    "datePublished": "2026-02-10",
-    "dateModified": "2026-02-10",
+    "datePublished": "2025-12-05",
+    "dateModified": "2025-12-05",
     "author": {
       "@type": "Organization",
       "name": "HackSimulator.nl"
@@ -123,7 +123,7 @@
       <header class="blog-post-header">
         <h1 class="blog-post-title">Linux Bestandssysteem: Basis voor Hackers</h1>
         <div class="blog-post-meta">
-          <time datetime="2026-02-10">10 februari 2026</time>
+          <time datetime="2025-12-05">5 december 2025</time>
           <span>7 min</span>
           <span class="category-badge">Beginners</span>
         </div>
@@ -179,7 +179,7 @@
           <li><code>/var</code> - Variabele data: logbestanden (<code>/var/log</code>), databases, e-mail wachtrijen.</li>
           <li><code>/tmp</code> - Tijdelijke bestanden. Wordt regelmatig leeggemaakt. Aanvallers gebruiken dit vaak om payloads op te slaan.</li>
           <li><code>/bin</code> en <code>/sbin</code> - Essentieel systeemcommando's (ls, cp, mv in /bin; admin-tools in /sbin).</li>
-          <li><code>/usr</code> - Gebruikersprogramma's en bibliotheken. De meeste geinstalleerde software staat hier.</li>
+          <li><code>/usr</code> - Gebruikersprogramma's en bibliotheken. De meeste geïnstalleerde software staat hier.</li>
           <li><code>/root</code> - De home directory van de root-gebruiker (de systeembeheerder). Niet te verwarren met <code>/</code>.</li>
         </ul>
 
@@ -418,14 +418,11 @@ Feb 10 03:14:28 server sshd[1842]: Failed password for root from 203.0.113.42</d
 
         <h2>Oefenen in HackSimulator.nl</h2>
         <div class="blog-cta">
-          <h3>Probeer het zelf!</h3>
+          <h3>Verken het bestandssysteem</h3>
           <p>
-            Alle commando's uit dit artikel kun je veilig oefenen in HackSimulator.nl. Probeer
-            <a href="/commands/#cmd-ls"><code>ls</code></a> en <a href="/commands/#cmd-cd"><code>cd</code></a> om te
-            navigeren, <a href="/commands/#cmd-cat"><code>cat</code></a> om bestanden te lezen,
-            <a href="/commands/#cmd-find"><code>find</code></a> en <a href="/commands/#cmd-grep"><code>grep</code></a>
-            om te zoeken, en <a href="/commands/#cmd-chmod"><code>chmod</code></a> om permissies te oefenen.
-            Type <code>help</code> voor een overzicht van alle beschikbare commando's.
+            Open de simulator en typ <code>ls /</code> om het Linux bestandssysteem zelf te verkennen. Navigeer met
+            <code>cd</code> naar <code>/etc</code> voor configuratiebestanden, gebruik <code>cat</code> om ze te lezen,
+            en zoek met <code>find</code> en <code>grep</code> naar verborgen informatie.
           </p>
           <a href="../terminal.html" class="blog-cta-button">Open de terminal</a>
         </div>
@@ -459,9 +456,9 @@ Feb 10 03:14:28 server sshd[1842]: Failed password for root from 203.0.113.42</d
             <span class="related-meta">8 min leestijd</span>
           </a>
           <a href="ethisch-hacker-worden.html" class="related-card">
-            <span class="related-category">Carriere</span>
+            <span class="related-category">Carrière</span>
             <h3>Hoe Word je Ethisch Hacker?</h3>
-            <p>Complete carrieregids voor een baan in cybersecurity.</p>
+            <p>Complete carrièregids voor een baan in cybersecurity.</p>
             <span class="related-meta">10 min leestijd</span>
           </a>
           <a href="cybersecurity-tools.html" class="related-card">

@@ -9,14 +9,14 @@
     <atom:link href="https://hacksimulator.nl/feed.xml" rel="self" type="application/rss+xml"/>
     <language>nl-NL</language>
     <managingEditor>contact@hacksimulator.nl (HackSimulator.nl)</managingEditor>
-    <lastBuildDate>Mon, 10 Feb 2026 12:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 19 Mar 2026 12:00:00 +0100</lastBuildDate>
 
     <item>
       <title>Netwerk Scanning met Nmap: Beginnersgids</title>
       <description>Leer hoe nmap werkt voor netwerk scanning. Ontdek open poorten, services en kwetsbaarheden met deze Nederlandse beginnersgids voor ethisch hacken.</description>
       <link>https://hacksimulator.nl/blog/nmap-beginnersgids.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/nmap-beginnersgids.html</guid>
-      <pubDate>Tue, 10 Feb 2026 10:00:00 +0100</pubDate>
+      <pubDate>Sat, 25 Jan 2026 10:00:00 +0100</pubDate>
       <category>Tools</category>
     </item>
 
@@ -25,7 +25,7 @@
       <description>Leer hoe hackers wachtwoorden kraken met brute force, dictionary attacks en rainbow tables. Ontdek hoe je sterke wachtwoorden maakt en jezelf beschermt.</description>
       <link>https://hacksimulator.nl/blog/wachtwoord-beveiliging.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/wachtwoord-beveiliging.html</guid>
-      <pubDate>Tue, 10 Feb 2026 10:00:00 +0100</pubDate>
+      <pubDate>Tue, 24 Feb 2026 10:00:00 +0100</pubDate>
       <category>Tools</category>
     </item>
 
@@ -34,7 +34,7 @@
       <description>Leer wat SQL injection is, hoe het werkt en hoe je websites hiertegen beschermt. Begrijpelijke Nederlandse uitleg met voorbeelden.</description>
       <link>https://hacksimulator.nl/blog/sql-injection-uitgelegd.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/sql-injection-uitgelegd.html</guid>
-      <pubDate>Tue, 10 Feb 2026 10:00:00 +0100</pubDate>
+      <pubDate>Tue, 10 Mar 2026 10:00:00 +0100</pubDate>
       <category>Gevorderden</category>
     </item>
 
@@ -43,7 +43,7 @@
       <description>Leer de basis van het Linux bestandssysteem. Van ls en cd tot chmod en permissies - essentieel voor elke beginnende hacker en systeembeheerder.</description>
       <link>https://hacksimulator.nl/blog/linux-bestandssysteem.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/linux-bestandssysteem.html</guid>
-      <pubDate>Tue, 10 Feb 2026 10:00:00 +0100</pubDate>
+      <pubDate>Fri, 05 Dec 2025 10:00:00 +0100</pubDate>
       <category>Beginners</category>
     </item>
 
@@ -57,26 +57,26 @@
     </item>
 
     <item>
-      <title>Hoe Word je Ethisch Hacker? Complete Carrieregids</title>
-      <description>Complete gids om ethisch hacker te worden. Leer welke skills, certificeringen en stappen je nodig hebt voor een carriere in cybersecurity.</description>
+      <title>Hoe Word je Ethisch Hacker? Complete Carrièregids</title>
+      <description>Complete gids om ethisch hacker te worden. Leer welke skills, certificeringen en stappen je nodig hebt voor een carrière in cybersecurity.</description>
       <link>https://hacksimulator.nl/blog/ethisch-hacker-worden.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/ethisch-hacker-worden.html</guid>
-      <pubDate>Tue, 10 Feb 2026 10:00:00 +0100</pubDate>
-      <category>Carriere</category>
+      <pubDate>Sat, 20 Dec 2025 10:00:00 +0100</pubDate>
+      <category>Carrière</category>
     </item>
 
     <item>
-      <title>5 Essentiele Tools voor Cybersecurity Beginners</title>
+      <title>5 Essentiële Tools voor Cybersecurity Beginners</title>
       <description>Ontdek de 5 belangrijkste gratis cybersecurity tools voor beginners. Van nmap tot Wireshark - leer welke tools elke ethisch hacker moet kennen.</description>
       <link>https://hacksimulator.nl/blog/cybersecurity-tools.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/cybersecurity-tools.html</guid>
-      <pubDate>Tue, 10 Feb 2026 10:00:00 +0100</pubDate>
+      <pubDate>Sat, 10 Jan 2026 10:00:00 +0100</pubDate>
       <category>Bronnen</category>
     </item>
 
     <item>
       <title>Welkom bij HackSimulator.nl</title>
-      <description>Ontdek HackSimulator.nl - een veilige browser-based terminal voor het leren van ethisch hacken. 30+ commands, virtual filesystem en educatieve tutorials voor beginners.</description>
+      <description>Ontdek HackSimulator.nl - een veilige browser-based terminal voor het leren van ethisch hacken. 40+ commands, virtual filesystem en educatieve tutorials voor beginners.</description>
       <link>https://hacksimulator.nl/blog/welkom.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/welkom.html</guid>
       <pubDate>Thu, 13 Nov 2025 10:00:00 +0100</pubDate>
@@ -85,7 +85,7 @@
 
     <item>
       <title>Wat is Ethisch Hacken? White Hat vs Black Hat Uitgelegd</title>
-      <description>Leer het verschil tussen ethical hacking (white hat), malicious hacking (black hat) en grey hat. Ontdek carrieremogelijkheden in cybersecurity en de juridische grenzen.</description>
+      <description>Leer het verschil tussen ethical hacking (white hat), malicious hacking (black hat) en grey hat. Ontdek carrièremogelijkheden in cybersecurity en de juridische grenzen.</description>
       <link>https://hacksimulator.nl/blog/wat-is-ethisch-hacken.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/wat-is-ethisch-hacken.html</guid>
       <pubDate>Mon, 10 Nov 2025 10:00:00 +0100</pubDate>
