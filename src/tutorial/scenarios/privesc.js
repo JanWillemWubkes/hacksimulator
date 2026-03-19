@@ -36,8 +36,8 @@ var privescScenario = {
       command: 'cat',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'cat') return false;
-        if (args.length === 0) return false;
-        if (output && output.includes('No such file or directory')) return false;
+        if (args.length === 0) return 'wrong-args';
+        if (output && output.includes('No such file or directory')) return 'wrong-args';
         var joined = args.join(' ').toLowerCase();
         if (joined.indexOf('passwd') === -1) return 'wrong-args';
         return true;
@@ -62,8 +62,10 @@ var privescScenario = {
       command: 'ls',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'ls') return false;
+        if (args.length === 0) return 'wrong-args';
         var joined = args.join(' ').toLowerCase();
-        return joined.indexOf('log') !== -1 || joined.indexOf('var') !== -1;
+        if (joined.indexOf('log') === -1 && joined.indexOf('var') === -1) return 'wrong-args';
+        return true;
       },
       feedback:
         '[?] /var/log/ bevat alle systeem logbestanden op Linux.\n' +
@@ -85,8 +87,8 @@ var privescScenario = {
       command: 'cat',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'cat') return false;
-        if (args.length === 0) return false;
-        if (output && output.includes('No such file or directory')) return false;
+        if (args.length === 0) return 'wrong-args';
+        if (output && output.includes('No such file or directory')) return 'wrong-args';
         var joined = args.join(' ').toLowerCase();
         if (joined.indexOf('auth') === -1 && joined.indexOf('syslog') === -1) return 'wrong-args';
         return true;
@@ -112,8 +114,8 @@ var privescScenario = {
       command: 'cat',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'cat') return false;
-        if (args.length === 0) return false;
-        if (output && output.includes('No such file or directory')) return false;
+        if (args.length === 0) return 'wrong-args';
+        if (output && output.includes('No such file or directory')) return 'wrong-args';
         var joined = args.join(' ').toLowerCase();
         if (joined.indexOf('history') === -1 && joined.indexOf('bash_history') === -1) return 'wrong-args';
         return true;

@@ -34,8 +34,9 @@ var webvulnScenario = {
       objective: 'Gebruik nmap om de open poorten van target.com te scannen en de webserver te identificeren.',
       command: 'nmap',
       validate: function(cmd, args, flags, context, output) {
-        if (cmd !== 'nmap' || args.length === 0) return false;
-        if (output && output.includes('missing target operand')) return false;
+        if (cmd !== 'nmap') return false;
+        if (args.length === 0) return 'wrong-args';
+        if (output && output.includes('missing target operand')) return 'wrong-args';
         return true;
       },
       feedback:
@@ -54,12 +55,13 @@ var webvulnScenario = {
       objective: 'Gebruik nikto om de website http://target.com te scannen op bekende kwetsbaarheden.',
       command: 'nikto',
       validate: function(cmd, args, flags, context, output) {
-        if (cmd !== 'nikto' || args.length === 0) return false;
+        if (cmd !== 'nikto') return false;
+        if (args.length === 0) return 'wrong-args';
         // Reject if nikto returned an error (missing URL, invalid format)
         if (output && (
           output.includes('missing URL argument') ||
           output.includes('invalid URL format')
-        )) return false;
+        )) return 'wrong-args';
         return true;
       },
       feedback:
@@ -81,12 +83,13 @@ var webvulnScenario = {
       objective: 'Gebruik sqlmap om de login pagina te testen: sqlmap http://target.com/login?id=1',
       command: 'sqlmap',
       validate: function(cmd, args, flags, context, output) {
-        if (cmd !== 'sqlmap' || args.length === 0) return false;
+        if (cmd !== 'sqlmap') return false;
+        if (args.length === 0) return 'wrong-args';
         // Reject if sqlmap returned an error (missing URL, invalid format)
         if (output && (
           output.includes('missing URL argument') ||
           output.includes('invalid URL format')
-        )) return false;
+        )) return 'wrong-args';
         return true;
       },
       feedback:
@@ -109,9 +112,9 @@ var webvulnScenario = {
       command: 'cat',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'cat') return false;
-        if (args.length === 0) return false;
+        if (args.length === 0) return 'wrong-args';
         // Reject if cat returned a file-not-found error
-        if (output && output.includes('No such file or directory')) return false;
+        if (output && output.includes('No such file or directory')) return 'wrong-args';
         var joined = args.join(' ').toLowerCase();
         if (joined.indexOf('config') === -1) return 'wrong-args';
         return true;
