@@ -466,9 +466,14 @@ button {
   letter-spacing: 0.5px;
 }
 
-/* Mobile responsive: 320x50 banner (instead of 728x90 desktop) */
+/* All ad units hidden by default until advertising consent */
+.ad-unit {
+  display: none;
+}
+
+/* Mobile responsive: 320x50 banner for display ads (not fluid in-article) */
 @media (max-width: 768px) {
-  .ad-container ins.adsbygoogle {
+  .ad-container:not(.ad-in-article) ins.adsbygoogle {
     width: 320px !important;
     height: 50px !important;
   }

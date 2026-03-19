@@ -912,3 +912,8 @@ a[href='#all'].category-btn {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==================== In-Article Ad Placement ==================== */
+.ad-in-article {
+  margin: var(--spacing-xl) 0;
+}

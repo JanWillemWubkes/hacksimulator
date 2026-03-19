@@ -222,30 +222,16 @@ const consentManager = {
    * Load Google AdSense scripts (only after advertising consent)
    */
   loadAdSense() {
-    const adsenseContainer = document.getElementById('adsense-footer');
+    const adUnits = document.querySelectorAll('.ad-unit');
 
-    if (adsenseContainer) {
-      // Show AdSense container
-      adsenseContainer.style.display = 'block';
-      window.hasAdvertisingConsent = true;
+    if (adUnits.length === 0) return;
 
-      // Load AdSense script if not already loaded
-      if (!window.adsbygoogle) {
-        const script = document.createElement('script');
-        script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
-        script.async = true;
-        script.crossOrigin = 'anonymous';
-        script.setAttribute('data-ad-client', 'ca-pub-6345664385525701');
-        document.head.appendChild(script);
+    window.hasAdvertisingConsent = true;
 
-        script.onload = () => {
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
-        };
-      }
-
-    } else {
-      console.warn('AdSense container not found (#adsense-footer)');
-    }
+    adUnits.forEach(unit => {
+      unit.style.display = 'block';
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    });
   },
 
   /**
