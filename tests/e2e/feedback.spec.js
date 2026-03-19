@@ -29,7 +29,7 @@ test.describe('Feedback System', () => {
       console.log('[feedback.spec] Legal modal not found, continuing...');
     }
 
-    // Cookie consent is now handled by Cookiebot (blocked in tests via fixtures.js)
+    // Cookie consent is handled by custom consent banner (not shown during tests)
     await page.waitForTimeout(500);
   });
 

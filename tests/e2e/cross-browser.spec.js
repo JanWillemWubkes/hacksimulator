@@ -57,8 +57,7 @@ test.describe('Cross-Browser Compatibility Tests', () => {
     // Modal should disappear
     await expect(legalModal).toBeHidden({ timeout: 2000 });
 
-    // Cookie consent is now handled by Cookiebot (third-party CMP)
-    // Cookiebot is blocked in tests via route interception (fixtures.js)
+    // Cookie consent is handled by custom consent banner (not shown during tests)
 
     // Terminal should be visible after accepting legal
     const terminalInput = page.locator('#terminal-input');
@@ -210,7 +209,7 @@ test.describe('Cross-Browser Compatibility Tests', () => {
   test('Keyboard navigation works correctly', async ({ page }) => {
     await acceptLegalModal(page);
 
-    // Cookie consent is now handled by Cookiebot (blocked in tests)
+    // Cookie consent is handled by custom consent banner (not shown during tests)
 
     // Test Tab navigation
     await page.keyboard.press('Tab');
