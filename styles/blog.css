@@ -918,7 +918,7 @@ a[href='#all'].category-btn {
 /* Blog index: ad inside .blog-posts-grid needs explicit sizing to prevent grid collapse */
 .blog-posts-grid > .ad-container {
   min-height: 100px;
-  width: 100%;
+  /* width: 100% nu in base .ad-container class (main.css) */
 }
 
 /* Blog footer ad: sits outside <main>, needs container width to match blog content */

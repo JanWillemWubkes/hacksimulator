@@ -442,6 +442,7 @@ button {
 /* ==================== AdSense Ad Container (M5.5 Phase 1) ==================== */
 /* Ad Placement 80/20 Rule: Footer only (not terminal, not modal) */
 .ad-container {
+  width: 100%;                                     /* Expliciete width voor AdSense rendering */
   background: var(--color-bg-secondary);           /* GitHub secondary bg */
   border: 1px solid var(--color-border);          /* GitHub border */
   border-radius: var(--border-radius-small);      /* 2px */
