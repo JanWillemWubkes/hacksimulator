@@ -13,6 +13,9 @@ import events from './analytics/events.js';
 
 // Only initialize GA4 if user has already given analytics consent
 if (consentManager.hasConsent('analytics') === true) {
+  if (typeof gtag === 'function') {
+    gtag('consent', 'update', { 'analytics_storage': 'granted' });
+  }
   tracker.init('ga4');
 }
 

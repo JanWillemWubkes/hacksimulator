@@ -159,6 +159,20 @@ const consentManager = {
     // Hide banner
     this.hideBanner();
 
+    // Update Google Consent Mode v2
+    if (typeof gtag === 'function') {
+      if (consent.analytics) {
+        gtag('consent', 'update', { 'analytics_storage': 'granted' });
+      }
+      if (consent.advertising) {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted',
+        });
+      }
+    }
+
     // Initialize analytics if consented
     if (consent.analytics) {
       tracker.init('ga4');
@@ -198,6 +212,15 @@ const consentManager = {
     const adUnits = document.querySelectorAll('.ad-unit');
 
     if (adUnits.length === 0) return;
+
+    // Ensure Consent Mode v2 is updated when restoring consent on page load
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'ad_storage': 'granted',
+        'ad_user_data': 'granted',
+        'ad_personalization': 'granted',
+      });
+    }
 
     window.hasAdvertisingConsent = true;
 
