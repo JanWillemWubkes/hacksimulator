@@ -913,7 +913,22 @@ a[href='#all'].category-btn {
   }
 }
 
-/* ==================== In-Article Ad Placement ==================== */
+/* ==================== Blog Ad Placements ==================== */
+
+/* Blog index: ad inside .blog-posts-grid needs explicit sizing to prevent grid collapse */
+.blog-posts-grid > .ad-container {
+  min-height: 100px;
+  width: 100%;
+}
+
+/* Blog footer ad: sits outside <main>, needs container width to match blog content */
+#adsense-footer {
+  max-width: 720px;
+  margin: var(--spacing-xl) auto;
+  min-height: 100px;
+}
+
+/* In-article ads */
 .ad-in-article {
   margin: var(--spacing-xl) 0;
 }

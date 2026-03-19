@@ -224,9 +224,17 @@ const consentManager = {
 
     window.hasAdvertisingConsent = true;
 
+    // First: make all units visible so the browser can calculate layout
     adUnits.forEach(unit => {
       unit.style.display = 'block';
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    });
+
+    // Then: wait one frame for layout to flush before pushing to AdSense
+    // AdSense needs measurable container dimensions (width > 0, height > 0)
+    requestAnimationFrame(() => {
+      adUnits.forEach(() => {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      });
     });
   },
 
