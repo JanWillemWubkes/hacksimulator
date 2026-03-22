@@ -362,6 +362,31 @@ test.describe('Tutorial System', () => {
     await expect(output).toContainText('Geen actieve tutorial', { timeout: 5000 });
   });
 
+  test('filesystem reset during tutorial exits tutorial cleanly', async ({ page }) => {
+    // Start recon tutorial and reach step 1
+    await typeCommand(page, 'tutorial recon');
+    const output = page.locator('#terminal-output');
+    await expect(output).toContainText('MISSION BRIEFING', { timeout: 10000 });
+
+    // Use filesystem 'reset' (not 'tutorial reset') during active tutorial
+    await typeCommand(page, 'reset');
+
+    // Should NOT show tutorial rejection message
+    await expect(output).not.toContainText('hoort niet bij deze stap', { timeout: 3000 });
+
+    // Should show filesystem reset confirmation
+    await expect(output).toContainText('Filesystem reset to initial state', { timeout: 5000 });
+
+    // Should show tutorial exit with next-steps guidance
+    await expect(output).toContainText('Actieve tutorial verlaten', { timeout: 3000 });
+    await expect(output).toContainText('Wat wil je doen', { timeout: 3000 });
+    await expect(output).toContainText('tutorial start recon', { timeout: 3000 });
+
+    // Verify tutorial is no longer active
+    await typeCommand(page, 'tutorial status');
+    await expect(output).toContainText('Geen actieve tutorial', { timeout: 5000 });
+  });
+
   test('scenario list shows completion status after finishing', async ({ page }) => {
     test.setTimeout(60000);
 

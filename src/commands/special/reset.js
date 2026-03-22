@@ -4,6 +4,7 @@
  */
 
 import persistence from '../../filesystem/persistence.js';
+import tutorialManager from '../../tutorial/tutorial-manager.js';
 
 export default {
   name: 'reset',
@@ -70,6 +71,19 @@ Type 'reset --help' voor meer informatie.`;
 
     // Default behavior: Reset filesystem (no args or explicit filesystem arg)
     try {
+      // Exit active tutorial if running (reset = fresh start)
+      let tutorialInfo = null;
+      if (tutorialManager.isActive()) {
+        const scenario = tutorialManager.activeScenario;
+        tutorialInfo = {
+          id: scenario.id,
+          title: scenario.title,
+          step: tutorialManager.currentStep,
+          total: scenario.steps.length
+        };
+        tutorialManager.exit();
+      }
+
       // Reset the virtual filesystem and clear persisted data
       persistence.reset();
 
@@ -79,19 +93,24 @@ Type 'reset --help' voor meer informatie.`;
         renderer.updatePrompt(vfs.getCwd());
       }
 
-      // Clear command history (optional - user might want to keep it)
-      // Commented out to preserve learning history
-      // if (context.historyManager) {
-      //   context.historyManager.clear();
-      // }
-
       // Clear terminal output (visual reset)
       if (terminal && typeof terminal.clear === 'function') {
         terminal.clear();
       }
 
       // Show confirmation message
-      return `Filesystem reset to initial state.\n\n[✓] Alle aangemaakte bestanden en directories zijn verwijderd.\n[✓] Je bent terug in /home/hacker.\n[✓] Alle originele bestanden zijn hersteld.\n\n[?] Je command history is bewaard. Gebruik ↑↓ om vorige commands te bekijken.`;
+      let output = `Filesystem reset to initial state.\n\n[✓] Alle aangemaakte bestanden en directories zijn verwijderd.\n[✓] Je bent terug in /home/hacker.\n[✓] Alle originele bestanden zijn hersteld.\n\n[?] Je command history is bewaard. Gebruik ↑↓ om vorige commands te bekijken.`;
+
+      // Add tutorial next-steps if a tutorial was active
+      if (tutorialInfo) {
+        output += `\n\n[✓] Actieve tutorial verlaten (${tutorialInfo.id} - stap ${tutorialInfo.step}/${tutorialInfo.total}).`;
+        output += `\n\n[→] Wat wil je doen?`;
+        output += `\n    tutorial start ${tutorialInfo.id}   Hervat waar je was`;
+        output += `\n    tutorial               Bekijk alle tutorials`;
+        output += `\n    next                   Ontdek andere opties`;
+      }
+
+      return output;
 
     } catch (error) {
       return `reset: ${error.message}`;

@@ -259,7 +259,7 @@ class Terminal {
       let tutorialFeedback = null;
       let tutorialWasCorrect = false;
       const isTutorialRelevant = tutorialManager.isActive() &&
-          !['tutorial', 'help', 'man', 'clear', 'history', 'leerpad', 'shortcuts', 'next', 'hint'].includes(parsed.command);
+          !['tutorial', 'help', 'man', 'clear', 'history', 'leerpad', 'shortcuts', 'next', 'hint', 'reset'].includes(parsed.command);
 
       if (isTutorialRelevant) {
         const stepBefore = tutorialManager.currentStep;
