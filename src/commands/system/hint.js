@@ -26,7 +26,7 @@ export default {
     var output = '[?] Hint (' + result.tier + '/' + result.maxTier + '): ' + result.text;
 
     if (result.tier < result.maxTier) {
-      output += '\n[?] Nog vastzit? Type \'hint\' opnieuw voor een specifiekere hint.';
+      output += '\n[?] Kom je er niet uit? Type \'hint\' opnieuw voor een specifiekere hint.';
     }
 
     return output;
