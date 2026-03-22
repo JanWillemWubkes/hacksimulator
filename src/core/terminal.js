@@ -272,15 +272,10 @@ class Terminal {
       // Strip [?] TIP: lines during tutorials (hint system handles guidance)
       const displayOutput = isTutorialRelevant ? this._stripTips(output) : output;
 
-      if (tutorialFeedback && !tutorialWasCorrect) {
-        // Wrong command: show tutorial rejection FIRST, then command output
-        renderer.renderInfo(tutorialFeedback);
-        if (displayOutput) renderer.renderOutput(displayOutput);
-      } else {
-        // Correct command or no tutorial: output first, then success feedback
-        if (displayOutput) renderer.renderOutput(displayOutput);
-        if (tutorialFeedback) renderer.renderInfo(tutorialFeedback);
-      }
+      // Universal order: command output first, then tutorial feedback
+      // (applies to both correct and wrong commands)
+      if (displayOutput) renderer.renderOutput(displayOutput);
+      if (tutorialFeedback) renderer.renderInfo(tutorialFeedback);
 
       // Validate and record command execution for learning path tracking
       onboarding.markFirstVisitComplete();
