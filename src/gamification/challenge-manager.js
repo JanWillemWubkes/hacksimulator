@@ -176,6 +176,13 @@ export default new class ChallengeManager {
         feedback += '\n\n' + badgeManager.renderNotification(badge);
       });
 
+      // Support CTA on first challenge completion (peak satisfaction moment)
+      var stats = progressStore.load();
+      if (stats.completedChallenges && stats.completedChallenges.length === 1) {
+        feedback += '\n\n[~] HackSimulator is gratis en onafhankelijk. Vind je het nuttig?';
+        feedback += '\n[~] Steun het project: https://ko-fi.com/hacksimulator';
+      }
+
       // Reset state
       this.state = STATES.IDLE;
       this.activeChallenge = null;

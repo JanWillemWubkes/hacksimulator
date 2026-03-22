@@ -1080,28 +1080,29 @@ button {
   transform: translateY(-2px);
 }
 
-/* Donate button - Ghost button in footer-bottom */
+/* Donate button - Subtle accent in footer-bottom */
 a.footer-donate {
   align-self: center;
-  padding: 6px 14px;
+  padding: 7px 16px;
   font-family: var(--font-heading);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: #8b949e;
-  background-color: transparent;
-  border: 1px solid #8b949e;
+  color: #c9d1d9;
+  background-color: rgba(159, 239, 0, 0.08);
+  border: 1px solid rgba(159, 239, 0, 0.3);
   border-radius: var(--border-radius-button);
   text-decoration: none;
-  transition: color 0.15s ease, border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  transition: color 0.15s ease, border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
   cursor: pointer;
   transform: translateY(-2px);
 }
 
 a.footer-donate:hover {
-  color: var(--color-cta-dark-frame);
-  border-color: var(--color-cta-dark-frame);
+  color: #ffffff;
+  border-color: rgba(159, 239, 0, 0.6);
+  background-color: rgba(159, 239, 0, 0.15);
   transform: translateY(-4px);
-  box-shadow: 0 4px 12px var(--color-prompt-shadow);
+  box-shadow: 0 4px 12px rgba(159, 239, 0, 0.15);
 }
 
 a.footer-donate:active {
@@ -1882,6 +1883,22 @@ abbr.jargon {
 }
 [data-theme="light"] .homepage-newsletter {
   background-color: var(--color-bg-modal);
+}
+.newsletter-or-support {
+  margin-top: var(--spacing-sm);
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+}
+.newsletter-or-support a {
+  color: var(--color-text-light);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+.newsletter-or-support a:hover {
+  color: var(--color-cta-primary);
+  border-bottom-color: var(--color-cta-primary);
 }
 @media (max-width: 768px) {
   .homepage-newsletter .newsletter-form {

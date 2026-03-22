@@ -30,6 +30,7 @@ class Onboarding {
     this.hasShownNoOutputHint = false;
     this.hasShownSimulatorHint = false;
     this.hasShownSecurityHint = false;
+    this.hasShownSupportHint = false;
     this.shownTransitions = [];
 
     // Filesystem commands that produce no output on success (Unix convention)
@@ -82,6 +83,7 @@ class Onboarding {
     this.hasShownNoOutputHint = data.hasShownNoOutputHint || false;
     this.hasShownSimulatorHint = data.hasShownSimulatorHint || false;
     this.hasShownSecurityHint = data.hasShownSecurityHint || false;
+    this.hasShownSupportHint = data.hasShownSupportHint || false;
     this.shownTransitions = Array.isArray(data.shownTransitions) ? data.shownTransitions : [];
   }
 
@@ -327,6 +329,11 @@ ${statsLine}
       return '\n[✓] Is je terminal vol? Gebruik Ctrl+L om te leegmaken\n\n(Net als echte Linux terminals - geen rommelige output meer!)';
     }
 
+    if (this.commandCount === 20 && !this.hasShownSupportHint) {
+      this.hasShownSupportHint = true;
+      return '\n[✓] 20 opdrachten voltooid!\n\nHackSimulator is gratis en wordt gebouwd door een onafhankelijke developer.\nVind je het nuttig? Steun het project:\n→ https://ko-fi.com/hacksimulator';
+    }
+
     return null;
   }
 
@@ -348,6 +355,7 @@ ${statsLine}
         hasShownNoOutputHint: this.hasShownNoOutputHint,
         hasShownSimulatorHint: this.hasShownSimulatorHint,
         hasShownSecurityHint: this.hasShownSecurityHint,
+        hasShownSupportHint: this.hasShownSupportHint,
         shownTransitions: this.shownTransitions
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
