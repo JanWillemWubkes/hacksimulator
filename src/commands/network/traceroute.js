@@ -49,6 +49,16 @@ export default {
     }
 
     const destination = args[0];
+
+    // Validate target: must be IP, known host, or hostname format
+    const isIP = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(destination);
+    const isKnownHost = ['localhost', '127.0.0.1'].includes(destination.toLowerCase());
+    const isHostname = /^[a-zA-Z0-9]([a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}$/.test(destination);
+
+    if (!isIP && !isKnownHost && !isHostname) {
+      return `traceroute: Failed to resolve '${destination}'. Geen IP-adres of geldige hostname.\n\n[?] TIP: Gebruik een IP-adres (bijv. 8.8.8.8) of hostname (bijv. google.com).\nGebruik 'man traceroute' voor meer voorbeelden.`;
+    }
+
     const path = getTraceroutePath(destination);
 
     // Build traceroute output (realistic format)

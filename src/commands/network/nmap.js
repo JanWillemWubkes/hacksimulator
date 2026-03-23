@@ -100,6 +100,11 @@ export default {
     const isKnownHost = ['localhost', '127.0.0.1'].includes(target) ||
       target.includes('database') || target.includes('db') ||
       target.includes('secure') || target.includes('hardened');
+    const isHostname = /^[a-zA-Z0-9]([a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}$/.test(target);
+
+    if (!isIP && !isKnownHost && !isHostname) {
+      return `nmap: Failed to resolve '${target}'. Geen IP-adres of geldige hostname.\n\n[?] TIP: Gebruik een IP-adres (bijv. 192.168.1.100) of hostname (bijv. server.local).\nGebruik 'man nmap' voor meer voorbeelden.`;
+    }
 
     const scanResults = getPortScanResults(target);
 
@@ -166,9 +171,9 @@ export default {
       output += `\n\n[!]  SECURITY: Database poort open naar buiten = risico! Zou restricted moeten zijn.`;
     }
 
-    // Educational tip for non-standard targets
+    // Educational tip for non-standard targets (hostnames that pass validation but aren't in our known list)
     if (!isIP && !isKnownHost) {
-      output += `\n\n[?] TIP: In de echte wereld gebruik je IP-adressen (bijv. 192.168.1.100) of hostnames (bijv. server.local). '${target}' is hier gesimuleerd.`;
+      output += `\n\n[?] TIP: '${target}' is hier gesimuleerd. In de tutorial gebruik je specifieke IP-adressen zoals 192.168.1.100.`;
     }
 
     return output;
