@@ -274,8 +274,20 @@ class Terminal {
 
       // Universal order: command output first, then tutorial feedback
       // (applies to both correct and wrong commands)
-      if (displayOutput) renderer.renderOutput(displayOutput);
-      if (tutorialFeedback) renderer.renderInfo(tutorialFeedback);
+      if (displayOutput) {
+        if (typeof displayOutput === 'object' && displayOutput.isCompletion) {
+          renderer.renderCompletionBlock(displayOutput.output, displayOutput.title);
+        } else {
+          renderer.renderOutput(displayOutput);
+        }
+      }
+      if (tutorialFeedback) {
+        if (typeof tutorialFeedback === 'object' && tutorialFeedback.isCompletion) {
+          renderer.renderCompletionBlock(tutorialFeedback.output, tutorialFeedback.title);
+        } else {
+          renderer.renderInfo(tutorialFeedback);
+        }
+      }
 
       // Validate and record command execution for learning path tracking
       onboarding.markFirstVisitComplete();
@@ -327,7 +339,11 @@ class Terminal {
           !['challenge', 'help', 'man', 'clear', 'history', 'shortcuts'].includes(parsed.command)) {
         const challengeFeedback = challengeManager.handleCommand(parsed.command, parsed.args, parsed.flags, this.context);
         if (challengeFeedback) {
-          renderer.renderInfo(challengeFeedback);
+          if (typeof challengeFeedback === 'object' && challengeFeedback.isCompletion) {
+            renderer.renderCompletionBlock(challengeFeedback.output, challengeFeedback.title);
+          } else {
+            renderer.renderInfo(challengeFeedback);
+          }
         }
       }
 

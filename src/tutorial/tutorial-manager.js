@@ -149,9 +149,12 @@ export default new class TutorialManager {
       // Advance to next step or complete
       this.currentStep++;
       if (this.currentStep >= this.activeScenario.steps.length) {
+        var completedTitle = this.activeScenario.title;
         this.state = STATES.COMPLETE;
         feedback += '\n\n' + this._renderCompletion();
         this._markComplete();
+        this._save();
+        return { output: feedback, isCompletion: true, title: completedTitle };
       } else {
         this.state = STATES.STEP_ACTIVE;
         feedback += '\n\n' + this._renderer.renderObjective(
@@ -193,9 +196,12 @@ export default new class TutorialManager {
     this.currentStep++;
 
     if (this.currentStep >= this.activeScenario.steps.length) {
+      var completedTitle = this.activeScenario.title;
       this.state = STATES.COMPLETE;
       output += '\n' + this._renderCompletion();
       this._markComplete();
+      this._save();
+      return { output: output, isCompletion: true, title: completedTitle };
     } else {
       output += '\n' + this._renderer.renderObjective(
         this.activeScenario.steps[this.currentStep],

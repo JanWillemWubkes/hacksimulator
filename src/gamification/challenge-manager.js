@@ -165,6 +165,7 @@ export default new class ChallengeManager {
         points: challenge.points
       });
 
+      var completedTitle = challenge.title;
       var feedback = this._renderer.renderCompletion(challenge, this.attempts);
 
       // Certificate hint
@@ -189,7 +190,7 @@ export default new class ChallengeManager {
       this.attempts = 0;
       progressStore.clearChallengeLog();
 
-      return feedback;
+      return { output: feedback, isCompletion: true, title: completedTitle };
     }
 
     // Show progress update (every 3 commands to avoid spam)

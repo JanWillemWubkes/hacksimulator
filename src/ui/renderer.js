@@ -4,6 +4,8 @@
  * Handles special formatting (colors, icons, newlines)
  */
 
+import { showCelebrationBanner } from './celebration-banner.js';
+
 const MAX_OUTPUT_LINES = 500;
 
 class Renderer {
@@ -176,6 +178,85 @@ class Renderer {
    */
   renderInfo(message) {
     this.renderOutput(message, 'info');
+  }
+
+  /**
+   * Render completion block with enhanced styling + celebration banner
+   * Wraps output in .terminal-completion-block for visual distinction
+   * @param {string} output - Completion output text
+   * @param {string} celebrationTitle - Title shown in the flash banner
+   */
+  renderCompletionBlock(output, celebrationTitle) {
+    if (!output) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'terminal-completion-block';
+
+    const lines = output.split('\n');
+    let lastSemanticType = 'info';
+
+    lines.forEach(lineText => {
+      const trimmed = lineText.trim();
+
+      if (trimmed.startsWith('[###]')) {
+        const header = document.createElement('div');
+        header.className = 'section-header';
+        header.textContent = trimmed;
+        wrapper.appendChild(header);
+        return;
+      }
+
+      if (trimmed.startsWith('[***]')) {
+        const message = document.createElement('div');
+        message.className = 'welcome-message';
+        message.textContent = trimmed;
+        wrapper.appendChild(message);
+        return;
+      }
+
+      const line = document.createElement('div');
+      let lineType = 'info';
+
+      if (trimmed.startsWith('[?]') || trimmed.startsWith('[→]')) {
+        lineType = 'info';
+      } else if (trimmed.startsWith('[!]')) {
+        lineType = 'warning';
+      } else if (trimmed.startsWith('[✓]')) {
+        lineType = 'success';
+      } else if (trimmed.startsWith('[X]')) {
+        lineType = 'error';
+      } else if (trimmed.startsWith('[~]')) {
+        lineType = 'dim';
+      } else if (trimmed.startsWith('→')) {
+        lineType = 'info';
+      } else if (isContinuationLine(lineText)) {
+        lineType = lastSemanticType;
+      }
+
+      if (trimmed !== '') {
+        lastSemanticType = lineType;
+      }
+
+      line.className = `terminal-line terminal-output terminal-output-${lineType}`;
+
+      if (isContinuationLine(lineText)) {
+        const leadingSpaces = getLeadingSpaces(lineText);
+        line.dataset.indent = leadingSpaces;
+      }
+
+      const formattedContent = this._formatText(lineText);
+      line.innerHTML = formattedContent;
+
+      wrapper.appendChild(line);
+    });
+
+    this.outputElement.appendChild(wrapper);
+    this._trimOutput();
+    this._scrollToBottom();
+
+    if (celebrationTitle) {
+      showCelebrationBanner(celebrationTitle);
+    }
   }
 
   /**
