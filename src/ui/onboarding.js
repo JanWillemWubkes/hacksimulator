@@ -457,6 +457,21 @@ ${statsLine}
   }
 
   /**
+   * Get post-clear hint based on user experience level.
+   * Beginners get a nudge, advanced users get a clean screen.
+   * @returns {string|null}
+   */
+  getPostClearHint() {
+    if (this.commandCount < 5) {
+      return "[→] Type 'next' om te beginnen";
+    }
+    if (this.commandsTried.length < 15) {
+      return "[→] Type 'next' voor je volgende stap";
+    }
+    return null;
+  }
+
+  /**
    * Reset onboarding
    */
   reset() {

@@ -365,6 +365,14 @@ class Terminal {
    */
   clear() {
     renderer.clear();
+
+    // Subtiele hint voor beginners na clear (niet tijdens tutorial/challenge)
+    if (!tutorialManager.isActive() && !challengeManager.isActive()) {
+      const hint = onboarding.getPostClearHint();
+      if (hint) {
+        renderer.renderOutput(hint, 'info');
+      }
+    }
   }
 
   /**
