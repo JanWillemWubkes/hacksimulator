@@ -85,7 +85,7 @@ var easyChallenges = [
   {
     id: 'domain-intel',
     title: 'Domain Intelligence',
-    description: 'Doe OSINT op een domein. Zoek uit wie de eigenaar is en trace de route naar de server.',
+    description: 'Verzamel publieke info over een domein. Zoek uit wie de eigenaar is en trace de route naar de server.',
     difficulty: 'easy',
     points: 10,
     requirements: [
@@ -102,7 +102,7 @@ var easyChallenges = [
       return hasWhois && hasTraceroute;
     },
     tips: [
-      'Gebruik \'whois <domein>\' om registratie-informatie op te zoeken.',
+      'Gebruik \'whois <domein>\' om te zien wie het domein heeft geregistreerd.',
       'Gebruik \'traceroute <domein>\' om de route naar de server te volgen.',
       'Probeer: whois example.com en daarna traceroute example.com'
     ]

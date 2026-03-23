@@ -116,7 +116,7 @@ Time: ${time}s
 [!] BESCHERM JEZELF:
    [✓] Gebruik wachtwoordmanager (LastPass, 1Password, Bitwarden)
    [✓] Minimaal 12+ karakters met speciale tekens
-   [✓] Uniek wachtwoord per service (credential stuffing preventie)
+   [✓] Uniek wachtwoord per service (voorkomt dat een gelekt wachtwoord overal werkt)
    [✓] 2FA waar mogelijk`;
 
     return output;
@@ -208,7 +208,7 @@ REAL-WORLD BREACHES
        • LinkedIn (2012)    → 117 miljoen SHA1 hashes (geen salt)
        • Adobe (2013)       → 153 miljoen zwak encrypted passwords
        • RockYou (2009)     → 32 miljoen plaintext passwords
-       • Collection #1      → 773 miljoen credentials (credential stuffing)
+       • Collection #1      → 773 miljoen inloggegevens (hergebruikt op andere sites)
 
     Gevolgen:
        • Accounts overgenomen
@@ -233,7 +233,7 @@ BESCHERMING ALS DEVELOPER
 BESCHERMING ALS GEBRUIKER
 [###] Doe dit:
        [✓] Password manager (LastPass, 1Password, Bitwarden)
-       [✓] Uniek wachtwoord per site (credential stuffing preventie)
+       [✓] Uniek wachtwoord per site (voorkomt dat een lek overal werkt)
        [✓] Minimaal 16+ karakters (brute force resistance)
        [✓] Gebruik zinnen: "ILove2Eat!Pizza@Night"
        [✓] 2FA overal (authenticator app, niet SMS)

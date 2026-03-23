@@ -108,16 +108,16 @@ var hardChallenges = [
   {
     id: 'attack-chain',
     title: 'Attack Chain',
-    description: 'Voer de volledige pentest kill chain uit: van reconnaissance tot exploitation. Volgorde is cruciaal!',
+    description: 'Doorloop alle stappen van een pentest: van verkenning tot inbraak. Volgorde is cruciaal!',
     difficulty: 'hard',
     points: 50,
     requirements: [
-      { command: 'whois', minCount: 1, description: 'Fase 1: OSINT op het doelwit' },
+      { command: 'whois', minCount: 1, description: 'Fase 1: Publieke info verzamelen over het doelwit' },
       { command: 'nmap', minCount: 1, description: 'Fase 2: Poort scanning' },
       { command: 'nikto', minCount: 1, description: 'Fase 3: Vulnerability scanning' },
       { command: 'sqlmap', minCount: 1, description: 'Fase 4: Exploitation' },
-      { command: 'find', minCount: 1, description: 'Fase 5: Post-exploitation zoeken' },
-      { command: 'cat', minCount: 1, description: 'Fase 6: Data exfiltratie' },
+      { command: 'find', minCount: 1, description: 'Fase 5: Rondkijken na inbraak' },
+      { command: 'cat', minCount: 1, description: 'Fase 6: Gevoelige data buitmaken' },
       { command: 'hashcat', minCount: 1, description: 'Fase 7: Credential cracking' }
     ],
     validate: function(log) {
@@ -151,7 +151,7 @@ var hardChallenges = [
     },
     tips: [
       'De eerste 4 stappen moeten in volgorde: whois, nmap, nikto, sqlmap. Daarna find, cat en hashcat.',
-      'Dit is de pentest kill chain: Recon (whois) -> Scanning (nmap) -> Vulnerability (nikto) -> Exploit (sqlmap).',
+      'Dit zijn de pentest-stappen: Verkenning (whois) -> Scannen (nmap) -> Zwakke plekken (nikto) -> Inbreken (sqlmap).',
       'Probeer: whois example.com, nmap example.com, nikto example.com, sqlmap example.com, find password, cat shadow.txt, hashcat -m 0 hash.txt'
     ]
   },

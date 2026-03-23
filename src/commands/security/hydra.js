@@ -316,7 +316,7 @@ BESCHERMING ALS GEBRUIKER
        [✓] Password manager (unieke passwords per service)
        [✓] 16+ karakter passwords met speciale tekens
        [✓] 2FA ALTIJD inschakelen (authenticator app)
-       [✓] Geen password reuse (credential stuffing preventie)
+       [✓] Geen password reuse (voorkomt dat een gelekt wachtwoord overal werkt)
        [✓] Verander default credentials onmiddellijk
 
     [X] NOOIT doen:

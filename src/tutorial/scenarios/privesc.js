@@ -12,7 +12,7 @@
 var privescScenario = {
   id: 'privesc',
   title: 'Privilege Escalation: Linux Server Analyse',
-  description: 'Leer een gecompromitteerd Linux systeem analyseren en credentials vinden.',
+  description: 'Leer een gehackt Linux systeem onderzoeken en wachtwoorden opsporen.',
   difficulty: 'Beginner',
 
   briefing:
@@ -47,8 +47,8 @@ var privescScenario = {
         '      gebruikersnaam:wachtwoord:UID:GID:info:homedir:shell\n' +
         '[~] Let op de shell kolom: /bin/bash = kan inloggen,\n' +
         '      /usr/sbin/nologin = service account (kan niet inloggen).\n' +
-        '[~] De echte wachtwoord hashes staan in /etc/shadow (alleen root).\n' +
-        '[~] Gebruikers met UID 0 hebben root privileges — check of er\n' +
+        '[~] De echte wachtwoorden (versleuteld) staan in /etc/shadow (alleen root).\n' +
+        '[~] Gebruikers met UID 0 hebben beheerders-rechten — check of er\n' +
         '      onverwachte accounts zijn met UID 0!',
       hints: [
         'Gebruik cat om het bestand /etc/passwd te bekijken.',
@@ -100,8 +100,8 @@ var privescScenario = {
         '      - Meerdere "Failed password" van hetzelfde IP\n' +
         '      - Login pogingen op root account (moet uitgeschakeld zijn)\n' +
         '      - Onbekende IP-adressen in je netwerk\n' +
-        '[~] Tegenmaatregelen: fail2ban (auto-ban na X pogingen),\n' +
-        '      SSH key auth (wachtwoorden uitschakelen), port knocking.',
+        '[~] Tegenmaatregelen: fail2ban (blokkeert IP na te veel pogingen),\n' +
+        '      SSH key login (wachtwoorden uitschakelen), port knocking.',
       hints: [
         'Gebruik cat om een log bestand in /var/log/ te lezen.',
         'Het authenticatie log heet auth.log in de /var/log/ directory.',

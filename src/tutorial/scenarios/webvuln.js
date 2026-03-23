@@ -42,8 +42,8 @@ var webvulnScenario = {
       feedback:
         '[~] Nmap onthult welke services draaien op het doelwit.\n' +
         '[~] Poort 80 (HTTP) en 443 (HTTPS) zijn typisch voor webservers.\n' +
-        '[~] De service versie (bijv. nginx 1.18) helpt bij het zoeken\n' +
-        '      naar bekende kwetsbaarheden (CVEs) voor die versie.',
+        '[~] De service versie (bijv. nginx 1.18) helpt bij het zoeken naar\n' +
+        '      bekende beveiligingslekken voor die specifieke versie.',
       hints: [
         'Gebruik nmap met de domeinnaam of het IP-adres als argument.',
         'Probeer: nmap target.com (of nmap <IP-adres>)',
@@ -67,11 +67,10 @@ var webvulnScenario = {
       feedback:
         '[~] Nikto is een web vulnerability scanner die checkt op duizenden\n' +
         '      bekende kwetsbaarheden en misconfiguraties.\n' +
-        '[~] OWASP Top 10: De meest voorkomende web kwetsbaarheden zijn:\n' +
-        '      1. Broken Access Control  2. Cryptographic Failures\n' +
-        '      3. Injection (SQL, XSS)   4. Insecure Design\n' +
-        '[~] Nikto vond exposed directories (/admin/, /.git/) — dit zijn\n' +
-        '      informatielekken die aanvallers kunnen uitbuiten.',
+        '[~] De OWASP Top 10 is een lijst van de meest voorkomende website-\n' +
+        '      beveiligingsproblemen. Nikto checkt hier automatisch op.\n' +
+        '[~] Nikto vond blootgestelde mappen (/admin/, /.git/) — dit zijn\n' +
+        '      bestanden die niet publiek horen te zijn, maar wel bereikbaar zijn.',
       hints: [
         'Gebruik nikto met een URL als argument (begin met http://).',
         'Probeer: nikto http://target.com',
@@ -96,8 +95,8 @@ var webvulnScenario = {
         '[~] SQL injection is een van de gevaarlijkste web kwetsbaarheden.\n' +
         '[~] Een aanvaller kan via een onbeveiligd invoerveld SQL queries\n' +
         '      injecteren en zo de hele database uitlezen of aanpassen.\n' +
-        '[~] Bescherming: gebruik altijd prepared statements / parameterized\n' +
-        '      queries in plaats van string concatenation voor SQL.\n' +
+        '[~] Bescherming: zorg dat invoervelden niet direct in database-\n' +
+        '      opdrachten worden geplakt (gebruik prepared statements).\n' +
         '[~] De URL bevat ?id=1 — dit soort parameters zijn vaak kwetsbaar\n' +
         '      omdat ze direct in database queries worden gebruikt.',
       hints: [

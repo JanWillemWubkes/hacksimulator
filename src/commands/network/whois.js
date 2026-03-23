@@ -152,9 +152,9 @@ EDUCATIEVE TIPS
 
     [→] Praktische use cases:
        • Verificatie: Is dit domain echt van bedrijf X?
-       • Expiry check: Gaat domain binnenkort verlopen? (typosquatting opportunity)
+       • Expiry check: Gaat domain binnenkort verlopen? (kaper kan het overnemen)
        • Infrastructure mapping: Nameservers = hosting provider
-       • Email harvesting: Contact emails (voor legitimate outreach of phishing)
+       • Contact emails: Handig voor contact, maar ook voor gerichte phishing-aanvallen
 
     [!]  GDPR Impact:
        Sinds 2018 is veel persoonlijke data verborgen in whois:
@@ -186,7 +186,7 @@ PRAKTISCHE VOORBEELDEN
     [ $ ] Business use:
        • Domain expiry monitoring (voorkom verlies)
        • Concurrent analyse (welke domains hebben ze?)
-       • Brand protection (typosquatting detecteren)
+       • Merknaam bescherming (nep-domeinen opsporen, bijv. g00gle.com)
 
 VEELGEMAAKTE FOUTEN
     [X] whois 192.168.1.1 (IP address)

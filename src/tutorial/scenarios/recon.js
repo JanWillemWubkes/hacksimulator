@@ -86,10 +86,10 @@ var reconScenario = {
         return true;
       },
       feedback:
-        '[~] WHOIS geeft publieke registratie-informatie over domeinen.\n' +
-        '[~] Je vindt hier contactgegevens, nameservers en registratiedatums.\n' +
-        '[~] Deze info helpt bij het begrijpen van de organisatiestructuur\n' +
-        '      en kan social engineering aanvalsvectoren onthullen.',
+        '[~] WHOIS toont publieke info over wie een website heeft geregistreerd.\n' +
+        '[~] Je ziet hier: eigenaar, aanmaakdatum, en welke servers het domain beheren.\n' +
+        '[~] Handig voor hackers: namen en e-mailadressen kun je gebruiken\n' +
+        '      om gerichte phishing-mails te sturen (social engineering).',
       hints: [
         'Gebruik whois met een domeinnaam als argument.',
         'Probeer: whois <domeinnaam> (bijv. whois securecorp.com)',
@@ -110,8 +110,8 @@ var reconScenario = {
       feedback:
         '[~] Traceroute toont elke hop (router) tussen jou en het doelwit.\n' +
         '[~] Dit onthult de netwerkinfrastructuur en mogelijke firewalls.\n' +
-        '[~] Hops met hoge latency of timeouts (*) kunnen wijzen op\n' +
-        '      beveiligingsmaatregelen zoals packet filtering.',
+        '[~] Hops met hoge vertraging of timeouts (*) kunnen wijzen op\n' +
+        '      beveiligingsmaatregelen zoals een firewall die verkeer filtert.',
       hints: [
         'Gebruik traceroute gevolgd door een IP-adres.',
         'Probeer: traceroute <IP-adres> om de route te volgen.',

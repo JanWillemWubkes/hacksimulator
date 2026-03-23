@@ -109,10 +109,10 @@ EDUCATIEVE TIPS
        • Gebruikt op laag 2 (data link layer) van OSI model
 
     [?] In pentesting:
-       • Bepaal je eigen IP voor local privilege escalation
+       • Bepaal je eigen IP om meer rechten te krijgen op dit systeem
        • Check welke interfaces beschikbaar zijn
        • MAC adressen kunnen gespoofed worden (ARP spoofing)
-       • Multiple interfaces = mogelijk pivot point naar andere netwerken
+       • Meerdere netwerkkaarten = mogelijk bruggetje naar andere netwerken
 
     [!] Security implicaties:
        • Publiek IP vs Private IP (NAT)
@@ -127,8 +127,8 @@ PRAKTISCH GEBRUIK
 
     [?] Info gathering (recon):
        • Wat is mijn lokale IP? (voor local exploits)
-       • Welke interfaces zijn beschikbaar? (pivot opportunities)
-       • Wat is mijn netwerk range? (lateral movement scope)
+       • Welke netwerkkaarten zijn beschikbaar? (doorgang naar andere netwerken)
+       • Wat is mijn netwerk bereik? (welke systemen kan ik bereiken?)
 
 VEELGEMAAKTE FOUTEN
     [X] ifconfig op moderne systemen (command not found)

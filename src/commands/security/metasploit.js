@@ -79,17 +79,17 @@ msf6 exploit(ms17_010_eternalblue) > exploit
 
 In een echte (geautoriseerde) pentest zou dit:
    1. De kwetsbaarheid exploiteren
-   2. Een reverse shell openen
-   3. Volledige system toegang geven
-   4. Mogelijk privilege escalation
+   2. Een reverse shell openen  ← verbinding terug naar de aanvaller
+   3. Volledige systeemtoegang geven
+   4. Meer rechten krijgen (privilege escalation)
 
 [ > ] METASPLOIT CAPABILITIES:
    • 2300+ exploits (kwetsbaarheden uitbuiten)
    • 1300+ payloads (code die na exploit draait)
    • Auxiliary modules (scanners, fuzzers)
-   • Post-exploitation (na toegang: keyloggers, screenshots, etc.)
-   • Evasion (antivirus bypass)
-   • Encoders (payload obfuscation)
+   • Post-exploitation  ← wat je doet NA toegang: toetsaanslagen opnemen, screenshots, etc.
+   • Evasion  ← antivirussoftware omzeilen
+   • Encoders  ← code verhullen zodat antivirus het niet herkent
 
 [ = ] FAMOUS EXPLOITS IN METASPLOIT:
    • EternalBlue (MS17-010) - WannaCry ransomware gebruikt dit
@@ -100,9 +100,9 @@ In een echte (geautoriseerde) pentest zou dit:
 [***]  BESCHERMING:
     - Patch management (update systemen REGELMATIG!)
     - Vulnerability scanning (detect voor exploit)
-    - Network segmentation (beperk lateral movement)
-    - IDS/IPS (detecteer exploit attempts)
-    - Firewall rules (minimaal attack surface)
+    - Netwerk opdelen in zones  ← voorkomt dat aanvaller vrij rondbeweegt
+    - IDS/IPS  ← systemen die inbraakpogingen detecteren en blokkeren
+    - Firewall rules  ← zo min mogelijk toegankelijk van buitenaf
     - Disable unnecessary services (SMB, RDP als niet nodig)
 
 [?] LEERMOMENT:

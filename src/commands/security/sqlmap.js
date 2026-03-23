@@ -124,7 +124,7 @@ GEBRUIK:
 [*] starting @ ${new Date().toLocaleTimeString('nl-NL')}
 
 [12:00:01] [INFO] testing connection to target URL
-[12:00:02] [INFO] checking if the target is protected by WAF/IPS  ← Firewall check
+[12:00:02] [INFO] checking if the target is protected by WAF/IPS  ← Bescherming tegen web-aanvallen
 [12:00:03] [INFO] testing if the target URL is stable
 [12:00:04] [INFO] target URL is stable
 [12:00:05] [INFO] testing if GET parameter 'id' is injectable

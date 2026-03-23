@@ -159,7 +159,7 @@ export default {
     if (openCount === 1 && scanResults.openPorts[0].port === 443) {
       output += `\n\n[?] TIP: Deze server is goed beveiligd! Alleen HTTPS open = minimale attack surface.`;
     } else if (openCount >= 5) {
-      output += `\n\n[?] TIP: Veel open poorten = meer aanvalsvectoren. Elke service kan kwetsbaarheden hebben.`;
+      output += `\n\n[?] TIP: Veel open poorten = meer ingangen voor aanvallers. Elke service kan beveiligingslekken hebben.`;
     } else if (scanResults.openPorts.some(p => p.port === 22)) {
       output += `\n\n[?] TIP: SSH (22) open = je kunt inloggen proberen. Probeer 'hydra' voor brute force (demo).`;
     } else {
@@ -232,7 +232,7 @@ EDUCATIEVE TIPS
 
     [###]  Security interpretatie:
        • Weinig open poorten (1-3) = Goed! Minimale attack surface
-       • Veel open poorten (>10) = Slecht! Meer aanvalsvectoren
+       • Veel open poorten (>10) = Slecht! Meer ingangen voor aanvallers
        • Database poorten open = RISICO! Zouden restricted moeten zijn
        • Filtered poorten = Firewall aanwezig (goed teken)
 
