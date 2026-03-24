@@ -12,7 +12,7 @@ import {
   wordWrap
 } from '../utils/box-utils.js';
 
-import { generateCertificate } from './certificate.js';
+import { generateCertificate, copyCertificateToClipboard } from './certificate.js';
 
 var B = BOX_CHARS;
 
@@ -167,9 +167,11 @@ var tutorialRenderer = {
     lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
 
     var output = lines.join('\n');
-    output += '\n\n' + generateCertificate(scenario, stats);
+    var cert = generateCertificate(scenario, stats);
+    output += '\n\n' + cert;
+    copyCertificateToClipboard(cert);
     output += '\n\n[✓] Goed gedaan! Je hebt de ' + scenario.title + ' missie afgerond.';
-    output += '\n[?] Type \'tutorial cert\' om je certificaat te kopieren.';
+    output += '\n[✓] Certificaat gekopieerd naar je klembord!';
     output += '\n[?] Type \'tutorial\' om meer scenario\'s te zien.';
     output += "\n[→] Type 'next' voor je volgende stap";
 
@@ -183,9 +185,11 @@ var tutorialRenderer = {
     if (scenario.completionMessage) {
       out += scenario.completionMessage + '\n\n';
     }
-    out += generateCertificate(scenario, stats) + '\n\n';
+    var cert = generateCertificate(scenario, stats);
+    out += cert + '\n\n';
+    copyCertificateToClipboard(cert);
     out += '[✓] Goed gedaan! Je hebt de missie afgerond.\n';
-    out += '[?] Type \'tutorial cert\' om je certificaat te kopieren.\n';
+    out += '[✓] Certificaat gekopieerd naar je klembord!\n';
     out += '[?] Type \'tutorial\' om meer scenario\'s te zien.\n';
     out += "[→] Type 'next' voor je volgende stap";
     return out;

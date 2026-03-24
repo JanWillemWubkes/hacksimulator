@@ -134,20 +134,20 @@ test.describe('Tutorial Mobile', () => {
 
     await typeCommand(page, 'tutorial webvuln');
 
-    // Step 1: nmap
-    await typeCommand(page, 'nmap target');
+    // Step 1: nmap (must use valid hostname with TLD)
+    await typeCommand(page, 'nmap target.com');
     await page.waitForTimeout(300);
 
     // Step 2: nikto
-    await typeCommand(page, 'nikto target');
+    await typeCommand(page, 'nikto http://target.com');
     await page.waitForTimeout(300);
 
     // Step 3: sqlmap
-    await typeCommand(page, 'sqlmap target');
+    await typeCommand(page, 'sqlmap http://target.com/login?id=1');
     await page.waitForTimeout(300);
 
-    // Step 4: cat config
-    await typeCommand(page, 'cat config.php');
+    // Step 4: cat config (full path required — cat validates file exists)
+    await typeCommand(page, 'cat /var/www/html/config.php');
     await page.waitForTimeout(500);
 
     const output = page.locator('#terminal-output');
@@ -170,13 +170,13 @@ test.describe('Tutorial Mobile', () => {
     test.setTimeout(60000);
 
     await typeCommand(page, 'tutorial webvuln');
-    await typeCommand(page, 'nmap target');
+    await typeCommand(page, 'nmap target.com');
     await page.waitForTimeout(300);
-    await typeCommand(page, 'nikto target');
+    await typeCommand(page, 'nikto http://target.com');
     await page.waitForTimeout(300);
-    await typeCommand(page, 'sqlmap target');
+    await typeCommand(page, 'sqlmap http://target.com/login?id=1');
     await page.waitForTimeout(300);
-    await typeCommand(page, 'cat config.php');
+    await typeCommand(page, 'cat /var/www/html/config.php');
     await page.waitForTimeout(500);
 
     await typeCommand(page, 'tutorial cert');
