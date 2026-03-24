@@ -72,104 +72,177 @@ function buildNextHint(stage) {
   return "Daarna: type 'next' voor je volgende stap";
 }
 
-/**
- * Detect current stage and return suggestion object
- */
-function detectStage(triedSet) {
-  // Stage 1: Phase 1 incomplete
-  var nextPhase1 = findNextUntried(phase1Commands, triedSet);
-  if (nextPhase1) {
-    var done1 = countTried(phase1Commands, triedSet);
-    return {
-      phase: 'Fase 1: Terminal Basics',
-      progress: done1 + '/' + phase1Commands.length,
-      command: nextPhase1,
-      tip: commandTips[nextPhase1] || '',
-      suggestion: nextPhase1 === 'cat'
-        ? "Type 'cat README.txt'"
-        : nextPhase1 === 'cd'
-          ? "Type 'cd documents'"
-          : "Type '" + nextPhase1 + "'"
-    };
-  }
+// Stage builders — each returns a stage object if incomplete, null if complete
 
-  // Stage 2: Phase 2 incomplete
-  var nextPhase2 = findNextUntried(phase2Commands, triedSet);
-  if (nextPhase2) {
-    var done2 = countTried(phase2Commands, triedSet);
-    return {
-      phase: 'Fase 2: File Manipulation',
-      progress: done2 + '/' + phase2Commands.length,
-      command: nextPhase2,
-      tip: commandTips[nextPhase2] || '',
-      suggestion: "Type '" + (commandExamples[nextPhase2] || nextPhase2 + " test") + "'"
-    };
-  }
+function buildPhase1Stage(triedSet) {
+  var next = findNextUntried(phase1Commands, triedSet);
+  if (!next) return null;
+  var done = countTried(phase1Commands, triedSet);
+  return {
+    phase: 'Fase 1: Terminal Basics',
+    progress: done + '/' + phase1Commands.length,
+    command: next,
+    tip: commandTips[next] || '',
+    suggestion: next === 'cat'
+      ? "Type 'cat README.txt'"
+      : next === 'cd'
+        ? "Type 'cd documents'"
+        : "Type '" + next + "'"
+  };
+}
 
-  // Stage 3: Tutorial recon not completed
-  if (!tutorialManager.isScenarioCompleted('recon')) {
-    return {
-      phase: 'Missie: Reconnaissance',
-      progress: 'niet gestart',
-      command: null,
-      tip: 'Voordat je netwerk tools gebruikt, leer je eerst reconnaissance in een begeleide missie. Dit is hoe echte pentesters beginnen.',
-      suggestion: "Type 'tutorial recon'"
-    };
-  }
+function buildPhase2Stage(triedSet) {
+  var next = findNextUntried(phase2Commands, triedSet);
+  if (!next) return null;
+  var done = countTried(phase2Commands, triedSet);
+  return {
+    phase: 'Fase 2: File Manipulation',
+    progress: done + '/' + phase2Commands.length,
+    command: next,
+    tip: commandTips[next] || '',
+    suggestion: "Type '" + (commandExamples[next] || next + " test") + "'"
+  };
+}
 
-  // Stage 4: Phase 3 incomplete
-  var nextPhase3 = findNextUntried(phase3Commands, triedSet);
-  if (nextPhase3) {
-    var done3 = countTried(phase3Commands, triedSet);
-    return {
-      phase: 'Fase 3: Reconnaissance',
-      progress: done3 + '/' + phase3Commands.length,
-      command: nextPhase3,
-      tip: commandTips[nextPhase3] || '',
-      suggestion: "Type '" + nextPhase3 + (nextPhase3 === 'ping' || nextPhase3 === 'nmap' ? " 192.168.1.1'" : "'")
-    };
-  }
+function buildReconTutorialStage() {
+  if (tutorialManager.isScenarioCompleted('recon')) return null;
+  return {
+    phase: 'Missie: Reconnaissance',
+    progress: 'niet gestart',
+    command: null,
+    tip: 'Voordat je netwerk tools gebruikt, leer je eerst reconnaissance in een begeleide missie. Dit is hoe echte pentesters beginnen.',
+    suggestion: "Type 'tutorial recon'"
+  };
+}
 
-  // Stage 5: Remaining tutorials not completed
+function buildPhase3Stage(triedSet) {
+  var next = findNextUntried(phase3Commands, triedSet);
+  if (!next) return null;
+  var done = countTried(phase3Commands, triedSet);
+  return {
+    phase: 'Fase 3: Reconnaissance',
+    progress: done + '/' + phase3Commands.length,
+    command: next,
+    tip: commandTips[next] || '',
+    suggestion: "Type '" + next + (next === 'ping' || next === 'nmap' ? " 192.168.1.1'" : "'")
+  };
+}
+
+function buildRemainingTutorialsStage() {
+  var scenarioNames = { recon: 'Reconnaissance', webvuln: 'Web Vulnerabilities', privesc: 'Privilege Escalation' };
   for (var i = 0; i < tutorialOrder.length; i++) {
-    var scenarioId = tutorialOrder[i];
-    if (!tutorialManager.isScenarioCompleted(scenarioId)) {
-      var scenarioNames = { recon: 'Reconnaissance', webvuln: 'Web Vulnerabilities', privesc: 'Privilege Escalation' };
+    var id = tutorialOrder[i];
+    if (!tutorialManager.isScenarioCompleted(id)) {
       return {
-        phase: 'Missie: ' + (scenarioNames[scenarioId] || scenarioId),
+        phase: 'Missie: ' + (scenarioNames[id] || id),
         progress: 'niet gestart',
         command: null,
         tip: 'Begeleide missies leren je echte hacking technieken stap voor stap',
-        suggestion: "Type 'tutorial " + scenarioId + "'"
+        suggestion: "Type 'tutorial " + id + "'"
       };
     }
   }
+  return null;
+}
 
-  // Stage 6 & 7: Challenges
+function buildChallengeStage(difficulty) {
   var challenges = challengeManager.listChallenges();
-  var difficulties = ['easy', 'medium', 'hard'];
-  for (var d = 0; d < difficulties.length; d++) {
-    var diff = difficulties[d];
-    var nextChallenge = null;
-    for (var c = 0; c < challenges.length; c++) {
-      if (challenges[c].difficulty === diff && !challenges[c].completed) {
-        nextChallenge = challenges[c];
-        break;
-      }
+  var nextChallenge = null;
+  for (var c = 0; c < challenges.length; c++) {
+    if (challenges[c].difficulty === difficulty && !challenges[c].completed) {
+      nextChallenge = challenges[c];
+      break;
     }
-    if (nextChallenge) {
-      var diffLabels = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
-      return {
-        phase: 'Challenge: ' + diffLabels[diff],
-        progress: countCompleted(challenges, diff) + '/' + countTotal(challenges, diff),
-        command: null,
-        tip: nextChallenge.title + ' - test je skills zonder begeleiding',
-        suggestion: "Type 'challenge start " + nextChallenge.id + "'"
-      };
+  }
+  if (!nextChallenge) return null;
+  var diffLabels = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
+  return {
+    phase: 'Challenge: ' + diffLabels[difficulty],
+    progress: countCompleted(challenges, difficulty) + '/' + countTotal(challenges, difficulty),
+    command: null,
+    tip: nextChallenge.title + ' - test je skills zonder begeleiding',
+    suggestion: "Type 'challenge start " + nextChallenge.id + "'"
+  };
+}
+
+/**
+ * Check if user has any progress in a given stage.
+ * Used to find the high-water mark (highest stage with activity).
+ */
+function hasAnyProgress(stageIndex, triedSet) {
+  switch (stageIndex) {
+    case 0: return countTried(phase1Commands, triedSet) > 0;
+    case 1: return countTried(phase2Commands, triedSet) > 0;
+    case 2: return tutorialManager.isScenarioCompleted('recon');
+    case 3: return countTried(phase3Commands, triedSet) > 0;
+    case 4: return tutorialManager.isScenarioCompleted('webvuln') || tutorialManager.isScenarioCompleted('privesc');
+    case 5: return countCompleted(challengeManager.listChallenges(), 'easy') > 0;
+    case 6: return countCompleted(challengeManager.listChallenges(), 'medium') > 0;
+    case 7: return countCompleted(challengeManager.listChallenges(), 'hard') > 0;
+    default: return false;
+  }
+}
+
+/**
+ * Build a gentle hint about skipped earlier phases.
+ * Returns string or null.
+ */
+function buildSkippedHint(startFrom, triedSet) {
+  var gaps = [];
+  if (startFrom > 0 && findNextUntried(phase1Commands, triedSet)) {
+    var remaining = phase1Commands.length - countTried(phase1Commands, triedSet);
+    gaps.push(remaining + ' Terminal Basics');
+  }
+  if (startFrom > 1 && findNextUntried(phase2Commands, triedSet)) {
+    var remaining2 = phase2Commands.length - countTried(phase2Commands, triedSet);
+    gaps.push(remaining2 + ' File Manipulation');
+  }
+  if (startFrom > 3 && findNextUntried(phase3Commands, triedSet)) {
+    var remaining3 = phase3Commands.length - countTried(phase3Commands, triedSet);
+    gaps.push(remaining3 + ' Reconnaissance');
+  }
+  if (gaps.length === 0) return null;
+  return "[?] Tip: nog " + gaps.join(' en ') + " commands over. Type 'leerpad' voor overzicht.";
+}
+
+/**
+ * Detect current stage using forward-only high-water mark algorithm.
+ * Never sends user backwards after reaching advanced content.
+ */
+function detectStage(triedSet) {
+  // All stage builders in order
+  var stageBuilders = [
+    function() { return buildPhase1Stage(triedSet); },
+    function() { return buildPhase2Stage(triedSet); },
+    buildReconTutorialStage,
+    function() { return buildPhase3Stage(triedSet); },
+    buildRemainingTutorialsStage,
+    function() { return buildChallengeStage('easy'); },
+    function() { return buildChallengeStage('medium'); },
+    function() { return buildChallengeStage('hard'); }
+  ];
+
+  // Find high-water mark: highest stage where user has ANY progress
+  var highWater = -1;
+  for (var i = stageBuilders.length - 1; i >= 0; i--) {
+    if (hasAnyProgress(i, triedSet)) {
+      highWater = i;
+      break;
     }
   }
 
-  // Stage 8: Everything completed
+  // From high-water mark (or 0 if none), find first incomplete stage
+  var startFrom = Math.max(0, highWater);
+  for (var j = startFrom; j < stageBuilders.length; j++) {
+    var stage = stageBuilders[j]();
+    if (stage) {
+      stage.skippedHint = buildSkippedHint(startFrom, triedSet);
+      return stage;
+    }
+  }
+
+  // Everything from high-water onward is complete — check if truly all done
+  // (covers edge case: all advanced stages done but early phases have gaps)
   return null;
 }
 
@@ -395,7 +468,11 @@ function buildDesktopBox(stage, width) {
   // Footer
   lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
 
-  return lines.join('\n');
+  var result = lines.join('\n');
+  if (stage.skippedHint) {
+    result += '\n\n' + stage.skippedHint;
+  }
+  return result;
 }
 
 function buildMobileOutput(stage) {
@@ -406,6 +483,9 @@ function buildMobileOutput(stage) {
     out += '<- ' + stage.tip + '\n\n';
   }
   out += buildNextHint(stage) + '\n';
+  if (stage.skippedHint) {
+    out += '\n' + stage.skippedHint + '\n';
+  }
   return out;
 }
 
