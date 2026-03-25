@@ -160,8 +160,9 @@
 
 /* ==================== Commands Page Stats ==================== */
 .commands-stats {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: var(--spacing-lg);
   max-width: 900px;
   margin: 0 auto var(--spacing-xl);
@@ -172,6 +173,7 @@
 }
 
 .commands-stats .result-item {
+  flex: 0 0 160px;
   text-align: center;
   /* Override landing.css entrance animation (opacity: 0) */
   opacity: 1;
@@ -218,7 +220,6 @@
   }
 
   .commands-stats {
-    grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-md);
     padding: var(--spacing-md);
   }
@@ -238,8 +239,8 @@
 }
 
 @media (max-width: 480px) {
-  .commands-stats {
-    grid-template-columns: repeat(2, 1fr);
+  .commands-stats .result-item {
+    flex: 0 0 120px;
   }
 
   .command-card-header code {
