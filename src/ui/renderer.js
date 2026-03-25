@@ -181,41 +181,134 @@ class Renderer {
   }
 
   /**
-   * Render completion block with enhanced styling + celebration banner
-   * Wraps output in .terminal-completion-block for visual distinction
-   * @param {string} output - Completion output text
+   * Render completion with 3-zone layout + sequential reveal.
+   * Zone 1: Mission/challenge box (green border)
+   * Zone 2: Certificate (gold border, delayed reveal)
+   * Zone 3: Follow-up text (no special styling)
+   * @param {string} output - Step feedback text (rendered as normal output)
    * @param {string} celebrationTitle - Title shown in the flash banner
+   * @param {Object} [completion] - Structured completion data
+   * @param {string} [completion.missionBox] - Mission completion ASCII box
+   * @param {string} [completion.completionBox] - Challenge completion ASCII box
+   * @param {string} [completion.certificate] - Certificate ASCII box
+   * @param {string} [completion.followUp] - Follow-up text lines
    */
-  renderCompletionBlock(output, celebrationTitle) {
-    if (!output) return;
+  renderCompletionBlock(output, celebrationTitle, completion) {
+    // Render step feedback as normal output
+    if (output) {
+      this.renderOutput(output, 'success');
+    }
 
-    const wrapper = document.createElement('div');
-    wrapper.className = 'terminal-completion-block';
+    // If no structured completion data, fall back to legacy single-block rendering
+    if (!completion) return;
 
-    const lines = output.split('\n');
-    let lastSemanticType = 'info';
+    // Zone 1: Mission or challenge completion box
+    var boxText = completion.missionBox || completion.completionBox;
+    if (boxText) {
+      var missionWrapper = document.createElement('div');
+      missionWrapper.className = 'terminal-completion-mission';
+      this._renderLinesInto(missionWrapper, boxText);
+      this.outputElement.appendChild(missionWrapper);
+    }
 
-    lines.forEach(lineText => {
-      const trimmed = lineText.trim();
+    // Zone 2: Certificate (hidden initially for sequential reveal)
+    if (completion.certificate) {
+      var certWrapper = document.createElement('div');
+      certWrapper.className = 'terminal-completion-certificate';
+      certWrapper.style.opacity = '0';
+      this._renderLinesInto(certWrapper, completion.certificate);
+      this.outputElement.appendChild(certWrapper);
+    }
+
+    // Zone 3: Follow-up text (no special wrapper styling)
+    if (completion.followUp) {
+      var followUpWrapper = document.createElement('div');
+      followUpWrapper.className = 'terminal-completion-followup';
+      followUpWrapper.style.opacity = '0';
+      this._renderLinesInto(followUpWrapper, completion.followUp);
+      this.outputElement.appendChild(followUpWrapper);
+    }
+
+    this._trimOutput();
+    this._scrollToBottom();
+
+    // Sequential reveal animation
+    this._revealCelebration(celebrationTitle);
+  }
+
+  /**
+   * Sequential reveal: mission box → certificate → follow-up text.
+   * Respects prefers-reduced-motion.
+   */
+  _revealCelebration(celebrationTitle) {
+    var self = this;
+    var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var mission = this.outputElement.querySelector('.terminal-completion-mission:last-of-type');
+    var cert = this.outputElement.querySelector('.terminal-completion-certificate:last-of-type');
+    var followUp = this.outputElement.querySelector('.terminal-completion-followup:last-of-type');
+
+    if (prefersReduced) {
+      if (mission) mission.classList.add('celebration-visible');
+      if (cert) { cert.style.opacity = '1'; cert.classList.add('celebration-visible'); }
+      if (followUp) followUp.style.opacity = '1';
+      if (celebrationTitle) showCelebrationBanner(celebrationTitle);
+      self._scrollToBottom();
+      return;
+    }
+
+    // Step 1: Mission box animates in
+    if (mission) {
+      mission.classList.add('celebration-visible');
+    }
+
+    // Step 2: Certificate fades in after 800ms
+    setTimeout(function() {
+      if (cert) {
+        cert.style.opacity = '1';
+        cert.classList.add('celebration-visible');
+        self._scrollToBottom();
+      }
+    }, 800);
+
+    // Step 3: Follow-up text + banner after 1500ms
+    setTimeout(function() {
+      if (followUp) followUp.style.opacity = '1';
+      if (celebrationTitle) showCelebrationBanner(celebrationTitle);
+      self._scrollToBottom();
+    }, 1500);
+  }
+
+  /**
+   * Render text lines into a container with semantic coloring.
+   * Shared helper for completion zones.
+   */
+  _renderLinesInto(container, text) {
+    var lines = text.split('\n');
+    var lastSemanticType = 'info';
+    var self = this;
+
+    lines.forEach(function(lineText) {
+      var trimmed = lineText.trim();
 
       if (trimmed.startsWith('[###]')) {
-        const header = document.createElement('div');
+        var header = document.createElement('div');
         header.className = 'section-header';
         header.textContent = trimmed;
-        wrapper.appendChild(header);
+        container.appendChild(header);
         return;
       }
 
       if (trimmed.startsWith('[***]')) {
-        const message = document.createElement('div');
+        var message = document.createElement('div');
         message.className = 'welcome-message';
         message.textContent = trimmed;
-        wrapper.appendChild(message);
+        container.appendChild(message);
         return;
       }
 
-      const line = document.createElement('div');
-      let lineType = 'info';
+      var line = document.createElement('div');
+      var lineType = 'info';
 
       if (trimmed.startsWith('[?]') || trimmed.startsWith('[→]')) {
         lineType = 'info';
@@ -237,26 +330,18 @@ class Renderer {
         lastSemanticType = lineType;
       }
 
-      line.className = `terminal-line terminal-output terminal-output-${lineType}`;
+      line.className = 'terminal-line terminal-output terminal-output-' + lineType;
 
       if (isContinuationLine(lineText)) {
-        const leadingSpaces = getLeadingSpaces(lineText);
+        var leadingSpaces = getLeadingSpaces(lineText);
         line.dataset.indent = leadingSpaces;
       }
 
-      const formattedContent = this._formatText(lineText);
+      var formattedContent = self._formatText(lineText);
       line.innerHTML = formattedContent;
 
-      wrapper.appendChild(line);
+      container.appendChild(line);
     });
-
-    this.outputElement.appendChild(wrapper);
-    this._trimOutput();
-    this._scrollToBottom();
-
-    if (celebrationTitle) {
-      showCelebrationBanner(celebrationTitle);
-    }
   }
 
   /**

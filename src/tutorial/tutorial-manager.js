@@ -151,10 +151,10 @@ export default new class TutorialManager {
       if (this.currentStep >= this.activeScenario.steps.length) {
         var completedTitle = this.activeScenario.title;
         this.state = STATES.COMPLETE;
-        feedback += '\n\n' + this._renderCompletion();
+        var completion = this._renderCompletion();
         this._markComplete();
         this._save();
-        return { output: feedback, isCompletion: true, title: completedTitle };
+        return { output: feedback, isCompletion: true, title: completedTitle, completion: completion };
       } else {
         this.state = STATES.STEP_ACTIVE;
         feedback += '\n\n' + this._renderer.renderObjective(
@@ -198,10 +198,10 @@ export default new class TutorialManager {
     if (this.currentStep >= this.activeScenario.steps.length) {
       var completedTitle = this.activeScenario.title;
       this.state = STATES.COMPLETE;
-      output += '\n' + this._renderCompletion();
+      var completion = this._renderCompletion();
       this._markComplete();
       this._save();
-      return { output: output, isCompletion: true, title: completedTitle };
+      return { output: output, isCompletion: true, title: completedTitle, completion: completion };
     } else {
       output += '\n' + this._renderer.renderObjective(
         this.activeScenario.steps[this.currentStep],

@@ -166,22 +166,22 @@ export default new class ChallengeManager {
       });
 
       var completedTitle = challenge.title;
-      var feedback = this._renderer.renderCompletion(challenge, this.attempts);
+      var completion = this._renderer.renderCompletion(challenge, this.attempts);
 
-      // Certificate hint
-      feedback += '\n[TIP] Type \'certificates ' + challenge.id + '\' om je certificaat te bekijken.';
+      // Append certificate hint, badges, and support CTA to followUp
+      completion.followUp += '\n[TIP] Type \'certificates ' + challenge.id + '\' om je certificaat te bekijken.';
 
       // Check for challenge-triggered badges
       var newBadges = badgeManager.checkUnlocks('challenge');
       newBadges.forEach(function(badge) {
-        feedback += '\n\n' + badgeManager.renderNotification(badge);
+        completion.followUp += '\n\n' + badgeManager.renderNotification(badge);
       });
 
       // Support CTA on first challenge completion (peak satisfaction moment)
       var stats = progressStore.load();
       if (stats.completedChallenges && stats.completedChallenges.length === 1) {
-        feedback += '\n\n[~] HackSimulator is gratis en onafhankelijk. Vind je het nuttig?';
-        feedback += '\n[~] Steun het project: https://ko-fi.com/hacksimulator';
+        completion.followUp += '\n\n[~] HackSimulator is gratis en onafhankelijk. Vind je het nuttig?';
+        completion.followUp += '\n[~] Steun het project: https://ko-fi.com/hacksimulator';
       }
 
       // Reset state
@@ -190,7 +190,7 @@ export default new class ChallengeManager {
       this.attempts = 0;
       progressStore.clearChallengeLog();
 
-      return { output: feedback, isCompletion: true, title: completedTitle };
+      return { output: null, isCompletion: true, title: completedTitle, completion: completion };
     }
 
     // Show progress update (every 3 commands to avoid spam)

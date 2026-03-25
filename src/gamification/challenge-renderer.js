@@ -230,25 +230,33 @@ var challengeRenderer = {
 
     lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
 
-    var output = lines.join('\n');
-    output += '\n\n[✓] Goed gedaan! Je hebt deze challenge succesvol afgerond.';
-    output += '\n[?] Type \'challenge\' voor meer challenges.';
-    output += '\n[?] Type \'dashboard\' voor je totale voortgang.';
-    output += "\n[→] Type 'next' voor je volgende stap";
+    var completionBox = lines.join('\n');
 
-    return output;
+    var followUp = '[✓] Goed gedaan! Je hebt deze challenge succesvol afgerond.';
+    followUp += '\n[?] Type \'challenge\' voor meer challenges.';
+    followUp += '\n[?] Type \'dashboard\' voor je totale voortgang.';
+    followUp += "\n[→] Type 'next' voor je volgende stap";
+
+    return {
+      completionBox: completionBox,
+      followUp: followUp
+    };
   },
 
   _renderCompletionMobile: function(challenge, attempts) {
-    var out = '\n**CHALLENGE VOLTOOID**\n\n';
-    out += '**' + challenge.title + '**\n\n';
-    out += 'Punten verdiend: +' + challenge.points + '\n';
-    out += 'Pogingen: ' + attempts + '\n\n';
-    out += '[✓] Goed gedaan!\n';
-    out += '[?] Type \'challenge\' voor meer challenges.\n';
-    out += "[→] Type 'next' voor je volgende stap";
+    var completionBox = '\n**CHALLENGE VOLTOOID**\n\n';
+    completionBox += '**' + challenge.title + '**\n\n';
+    completionBox += 'Punten verdiend: +' + challenge.points + '\n';
+    completionBox += 'Pogingen: ' + attempts;
 
-    return out;
+    var followUp = '[✓] Goed gedaan!\n';
+    followUp += '[?] Type \'challenge\' voor meer challenges.\n';
+    followUp += "[→] Type 'next' voor je volgende stap";
+
+    return {
+      completionBox: completionBox,
+      followUp: followUp
+    };
   }
 };
 

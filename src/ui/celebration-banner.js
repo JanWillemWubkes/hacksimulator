@@ -22,13 +22,13 @@ function showCelebrationBanner(title) {
 
   container.appendChild(banner);
 
-  // Auto-dismiss after 4 seconds
+  // Auto-dismiss after 6 seconds (longer for milestone moments)
   setTimeout(function() {
     banner.classList.add('celebration-banner-exit');
     setTimeout(function() {
       if (banner.parentNode) banner.remove();
-    }, 500);
-  }, 4000);
+    }, 800);
+  }, 6000);
 }
 
 export { showCelebrationBanner };

@@ -276,14 +276,14 @@ class Terminal {
       // (applies to both correct and wrong commands)
       if (displayOutput) {
         if (typeof displayOutput === 'object' && displayOutput.isCompletion) {
-          renderer.renderCompletionBlock(displayOutput.output, displayOutput.title);
+          renderer.renderCompletionBlock(displayOutput.output, displayOutput.title, displayOutput.completion);
         } else {
           renderer.renderOutput(displayOutput);
         }
       }
       if (tutorialFeedback) {
         if (typeof tutorialFeedback === 'object' && tutorialFeedback.isCompletion) {
-          renderer.renderCompletionBlock(tutorialFeedback.output, tutorialFeedback.title);
+          renderer.renderCompletionBlock(tutorialFeedback.output, tutorialFeedback.title, tutorialFeedback.completion);
         } else {
           renderer.renderInfo(tutorialFeedback);
         }
@@ -340,7 +340,7 @@ class Terminal {
         const challengeFeedback = challengeManager.handleCommand(parsed.command, parsed.args, parsed.flags, this.context);
         if (challengeFeedback) {
           if (typeof challengeFeedback === 'object' && challengeFeedback.isCompletion) {
-            renderer.renderCompletionBlock(challengeFeedback.output, challengeFeedback.title);
+            renderer.renderCompletionBlock(challengeFeedback.output, challengeFeedback.title, challengeFeedback.completion);
           } else {
             renderer.renderInfo(challengeFeedback);
           }
