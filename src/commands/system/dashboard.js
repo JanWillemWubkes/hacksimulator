@@ -87,7 +87,7 @@ function getChallengeData() {
 
 // Phase definitions (mirrors next.js/leerpad.js)
 var phase1Commands = ['ls', 'cd', 'pwd', 'cat', 'whoami', 'history', 'help'];
-var phase2Commands = ['mkdir', 'touch', 'rm'];
+var phase2Commands = ['mkdir', 'touch', 'rm', 'cp', 'mv', 'echo'];
 var phase3Commands = ['ping', 'nmap', 'ifconfig', 'netstat'];
 
 function countTriedInPhase(commands, triedSet) {

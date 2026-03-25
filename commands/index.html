@@ -110,7 +110,16 @@
       { "@type": "ListItem", "position": 28, "name": "history", "description": "Toon eerder gebruikte commands" },
       { "@type": "ListItem", "position": 29, "name": "man", "description": "Toon de handleiding van een command" },
       { "@type": "ListItem", "position": 30, "name": "clear", "description": "Wis het terminal scherm" },
-      { "@type": "ListItem", "position": 31, "name": "leerpad", "description": "Toon het leerpad met voortgang" }
+      { "@type": "ListItem", "position": 31, "name": "next", "description": "Toon je volgende stap (HackSimulator command)" },
+      { "@type": "ListItem", "position": 32, "name": "tutorial", "description": "Start een begeleide missie (HackSimulator command)" },
+      { "@type": "ListItem", "position": 33, "name": "challenge", "description": "Start een hack challenge (HackSimulator command)" },
+      { "@type": "ListItem", "position": 34, "name": "leerpad", "description": "Toon het leerpad met voortgang (HackSimulator command)" },
+      { "@type": "ListItem", "position": 35, "name": "dashboard", "description": "Bekijk je voortgang en statistieken (HackSimulator command)" },
+      { "@type": "ListItem", "position": 36, "name": "achievements", "description": "Bekijk je verdiende badges (HackSimulator command)" },
+      { "@type": "ListItem", "position": 37, "name": "certificates", "description": "Bekijk en download je certificaten (HackSimulator command)" },
+      { "@type": "ListItem", "position": 38, "name": "leaderboard", "description": "Bekijk de ranglijst (HackSimulator command)" },
+      { "@type": "ListItem", "position": 39, "name": "hint", "description": "Vraag een hint tijdens een missie (HackSimulator command)" },
+      { "@type": "ListItem", "position": 40, "name": "reset", "description": "Reset het virtuele filesystem (HackSimulator command)" }
     ]
   }
   </script>
@@ -164,8 +173,12 @@
           <span class="result-label">Security</span>
         </div>
         <div class="result-item">
-          <span class="result-number">9</span>
+          <span class="result-number">7</span>
           <span class="result-label">System</span>
+        </div>
+        <div class="result-item">
+          <span class="result-number">10</span>
+          <span class="result-label">HackSimulator</span>
         </div>
       </div>
     </section>
@@ -177,6 +190,7 @@
         <a href="#network">Network</a>
         <a href="#security">Security</a>
         <a href="#system">System</a>
+        <a href="#hacksimulator">HackSimulator</a>
       </nav>
     </section>
 
@@ -721,6 +735,71 @@ BESCHRIJVING:
           <p class="command-learn"><strong>Wat leer je:</strong> Terminal beheer, Ctrl+L shortcut</p>
         </div>
 
+      </div>
+    </section>
+
+    <!-- ==================== HACKSIMULATOR COMMANDS ==================== -->
+    <section id="hacksimulator" class="page-section commands-category">
+      <h2>HackSimulator Commands</h2>
+      <p>Deze commands bestaan alleen in HackSimulator — ze zijn geen standaard Linux commands. Ze helpen je navigeren door het leerpad, je voortgang bijhouden en badges verdienen.</p>
+
+      <div class="commands-grid">
+
+        <!-- next -->
+        <div class="command-card" id="cmd-next">
+          <div class="command-card-header">
+            <code>next</code>
+            <span class="command-level command-level-simulator">HackSimulator</span>
+          </div>
+          <p>Toon je volgende stap. Analyseert je voortgang en geeft een persoonlijke suggestie.</p>
+          <div class="command-usage">next</div>
+          <div class="terminal-example">
+            <div class="prompt">$ next</div>
+            <div class="output">Fase 1: Terminal Basics (3/7)
+
+[->] Type 'cat README.txt'
+<- Lees bestanden — probeer het!</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Gestructureerd leren, stap-voor-stap begeleiding</p>
+        </div>
+
+        <!-- tutorial -->
+        <div class="command-card" id="cmd-tutorial">
+          <div class="command-card-header">
+            <code>tutorial</code>
+            <span class="command-level command-level-simulator">HackSimulator</span>
+          </div>
+          <p>Start een begeleide missie. Leer hacking technieken stap voor stap met feedback.</p>
+          <div class="command-usage">tutorial [start &lt;id&gt; | exit | status]</div>
+          <div class="terminal-example">
+            <div class="prompt">$ tutorial start recon</div>
+            <div class="output">MISSION BRIEFING: SecureCorp Pentest
+
+Stap 1/4: Test connectiviteit
+[->] Gebruik ping om het doelwit te checken</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Reconnaissance, web vulnerabilities, privilege escalation</p>
+        </div>
+
+        <!-- challenge -->
+        <div class="command-card" id="cmd-challenge">
+          <div class="command-card-header">
+            <code>challenge</code>
+            <span class="command-level command-level-simulator">HackSimulator</span>
+          </div>
+          <p>Start een hack challenge. Test je skills zonder begeleiding — van easy tot hard.</p>
+          <div class="command-usage">challenge [start &lt;id&gt; | status | list]</div>
+          <div class="terminal-example">
+            <div class="prompt">$ challenge start network-scout</div>
+            <div class="output">CHALLENGE: Network Scout (Easy)
+
+Vereisten:
+  [ ] Scan een doelwit met ping
+  [ ] Ontdek open poorten met nmap</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Zelfstandig problemen oplossen, pentest workflows</p>
+        </div>
+
         <!-- leerpad -->
         <div class="command-card" id="cmd-leerpad">
           <div class="command-card-header">
@@ -737,6 +816,92 @@ Fase 3: Reconnaissance     [    ]   0%
 Fase 4: Security Tools     [locked]</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Gestructureerd leren, voortgang bijhouden, progressie</p>
+        </div>
+
+        <!-- dashboard -->
+        <div class="command-card" id="cmd-dashboard">
+          <div class="command-card-header">
+            <code>dashboard</code>
+            <span class="command-level command-level-simulator">HackSimulator</span>
+          </div>
+          <p>Bekijk je voortgang en statistieken. Totaal punten, badges, voltooide challenges en meer.</p>
+          <div class="command-usage">dashboard [stats | badges | challenges]</div>
+          <div class="terminal-example">
+            <div class="prompt">$ dashboard</div>
+            <div class="output">DASHBOARD
+  Punten: 85  |  Badges: 3  |  Streak: 2 dagen
+  Fase voortgang: [========  ] 75%</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Voortgangsoverzicht, gamification statistieken</p>
+        </div>
+
+        <!-- achievements -->
+        <div class="command-card" id="cmd-achievements">
+          <div class="command-card-header">
+            <code>achievements</code>
+            <span class="command-level command-level-simulator">HackSimulator</span>
+          </div>
+          <p>Bekijk je verdiende badges en ontdek welke je nog kunt ontgrendelen.</p>
+          <div class="command-usage">achievements [unlocked | rarity &lt;type&gt;]</div>
+          <div class="terminal-example">
+            <div class="prompt">$ achievements</div>
+            <div class="output">BADGE GALERIJ
+  [*] First Blood     — Eerste command uitgevoerd
+  [#] Network Scout   — Eerste nmap scan
+  [?] ???             — Ontgrendel meer badges!</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Gamification, motivatie door beloningen</p>
+        </div>
+
+        <!-- certificates -->
+        <div class="command-card" id="cmd-certificates">
+          <div class="command-card-header">
+            <code>certificates</code>
+            <span class="command-level command-level-simulator">HackSimulator</span>
+          </div>
+          <p>Bekijk en download je certificaten na het voltooien van tutorials en challenges.</p>
+          <div class="command-usage">certificates [&lt;id&gt; | download &lt;id&gt; | copy &lt;id&gt;]</div>
+          <div class="terminal-example">
+            <div class="prompt">$ certificates</div>
+            <div class="output">CERTIFICATEN
+  [✓] Reconnaissance: SecureCorp Pentest
+  [✓] Web Vulnerabilities: E-commerce Audit</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Prestaties documenteren, portfolio opbouwen</p>
+        </div>
+
+        <!-- leaderboard -->
+        <div class="command-card" id="cmd-leaderboard">
+          <div class="command-card-header">
+            <code>leaderboard</code>
+            <span class="command-level command-level-simulator">HackSimulator</span>
+          </div>
+          <p>Bekijk de ranglijst en vergelijk je voortgang met andere hackers.</p>
+          <div class="command-usage">leaderboard [me]</div>
+          <div class="terminal-example">
+            <div class="prompt">$ leaderboard</div>
+            <div class="output">LEADERBOARD
+  #1  CyberNinja    850 pts
+  #2  HackMaster    720 pts
+  #3  Jij           540 pts</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Competitieve motivatie, ranglijst systeem</p>
+        </div>
+
+        <!-- hint -->
+        <div class="command-card" id="cmd-hint">
+          <div class="command-card-header">
+            <code>hint</code>
+            <span class="command-level command-level-simulator">HackSimulator</span>
+          </div>
+          <p>Vraag een hint tijdens een tutorial of challenge. Hints worden steeds specifieker.</p>
+          <div class="command-usage">hint</div>
+          <div class="terminal-example">
+            <div class="prompt">$ hint</div>
+            <div class="output">[TIP] Hint 1/3:
+Gebruik het ping commando met een IP-adres.</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Progressieve hulp, zelfstandig problemen oplossen</p>
         </div>
 
         <!-- reset -->

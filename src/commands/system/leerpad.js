@@ -26,7 +26,10 @@ const phases = [
     commands: [
       { name: "mkdir", description: "Directory aanmaken" },
       { name: "touch", description: "Bestand aanmaken" },
-      { name: "rm", description: "Bestanden verwijderen" }
+      { name: "rm", description: "Bestanden verwijderen" },
+      { name: "cp", description: "Bestanden kopiëren" },
+      { name: "mv", description: "Bestanden verplaatsen" },
+      { name: "echo", description: "Tekst weergeven" }
     ]
   },
   {

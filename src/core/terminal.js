@@ -19,6 +19,7 @@ import tutorialRenderer from '../tutorial/tutorial-renderer.js';
 import reconScenario from '../tutorial/scenarios/recon.js';
 import webvulnScenario from '../tutorial/scenarios/webvuln.js';
 import privescScenario from '../tutorial/scenarios/privesc.js';
+import exploitationScenario from '../tutorial/scenarios/exploitation.js';
 import challengeManager from '../gamification/challenge-manager.js';
 import challengeRenderer from '../gamification/challenge-renderer.js';
 import progressStore from '../gamification/progress-store.js';
@@ -82,6 +83,7 @@ class Terminal {
     tutorialManager.register(reconScenario);
     tutorialManager.register(webvulnScenario);
     tutorialManager.register(privescScenario);
+    tutorialManager.register(exploitationScenario);
     tutorialManager.resume();
 
     // Initialize challenge system

@@ -19,11 +19,11 @@ var B = BOX_CHARS;
 
 // Phase definitions (mirrors leerpad.js)
 var phase1Commands = ['ls', 'cat', 'pwd', 'cd', 'whoami', 'history', 'help'];
-var phase2Commands = ['mkdir', 'touch', 'rm'];
+var phase2Commands = ['mkdir', 'touch', 'rm', 'cp', 'mv', 'echo'];
 var phase3Commands = ['ping', 'nmap', 'ifconfig', 'netstat'];
 var phase4Commands = ['hashcat', 'hydra', 'sqlmap', 'metasploit', 'nikto'];
 
-var tutorialOrder = ['recon', 'webvuln', 'privesc'];
+var tutorialOrder = ['recon', 'webvuln', 'privesc', 'exploitation'];
 
 // Educational tips per command (80/20 pattern: what + why)
 var commandTips = {
@@ -37,6 +37,9 @@ var commandTips = {
   mkdir:    'Maak een nieuwe map aan - organiseer je tools en bevindingen',
   touch:    'Maak een nieuw bestand aan - handig voor notities en scripts',
   rm:       'Verwijder bestanden - leer hoe bestanden permanent verdwijnen',
+  cp:       'Kopieer bestanden - maak backups voordat je iets aanpast',
+  mv:       'Verplaats of hernoem bestanden - organiseer je bevindingen',
+  echo:     'Toon tekst in de terminal - de basis van shell scripting',
   ping:     'Test of een server bereikbaar is - de eerste stap van network reconnaissance',
   nmap:     'Scan open poorten op een server - ontdek welke services draaien',
   ifconfig: 'Bekijk je eigen netwerkinterfaces - ken je eigen IP-adres',
@@ -47,7 +50,10 @@ var commandTips = {
 var commandExamples = {
   mkdir: 'mkdir projecten',
   touch: 'touch notities.txt',
-  rm:    'rm notities.txt'
+  rm:    'rm notities.txt',
+  cp:    'cp notes.txt backup.txt',
+  mv:    'mv old.txt new.txt',
+  echo:  'echo "hello world"'
 };
 
 /**
@@ -129,7 +135,7 @@ function buildPhase3Stage(triedSet) {
 }
 
 function buildRemainingTutorialsStage() {
-  var scenarioNames = { recon: 'Reconnaissance', webvuln: 'Web Vulnerabilities', privesc: 'Privilege Escalation' };
+  var scenarioNames = { recon: 'Reconnaissance', webvuln: 'Web Vulnerabilities', privesc: 'Privilege Escalation', exploitation: 'Exploitation' };
   for (var i = 0; i < tutorialOrder.length; i++) {
     var id = tutorialOrder[i];
     if (!tutorialManager.isScenarioCompleted(id)) {
@@ -175,7 +181,7 @@ function hasAnyProgress(stageIndex, triedSet) {
     case 1: return countTried(phase2Commands, triedSet) > 0;
     case 2: return tutorialManager.isScenarioCompleted('recon');
     case 3: return countTried(phase3Commands, triedSet) > 0;
-    case 4: return tutorialManager.isScenarioCompleted('webvuln') || tutorialManager.isScenarioCompleted('privesc');
+    case 4: return tutorialManager.isScenarioCompleted('webvuln') || tutorialManager.isScenarioCompleted('privesc') || tutorialManager.isScenarioCompleted('exploitation');
     case 5: return countCompleted(challengeManager.listChallenges(), 'easy') > 0;
     case 6: return countCompleted(challengeManager.listChallenges(), 'medium') > 0;
     case 7: return countCompleted(challengeManager.listChallenges(), 'hard') > 0;
@@ -300,8 +306,8 @@ var transitions = [
     summary: 'File Manipulation',
     skills: [
       'Mappen en bestanden aanmaken',
-      'Bestanden verwijderen',
-      'Bestandssysteem beheren'
+      'Bestanden kopiëren en verplaatsen',
+      'Bestanden verwijderen en beheren'
     ],
     nextPhase: 'Missie: Reconnaissance',
     bridge: 'Bestanden onder controle! Tijd voor je eerste missie.'
@@ -328,7 +334,7 @@ var transitions = [
       'Netwerk interfaces begrijpen'
     ],
     nextPhase: 'Geavanceerde Missies',
-    bridge: 'Reconnaissance gedaan! Tijd voor geavanceerde missies.'
+    bridge: "Reconnaissance gedaan! Tijd voor geavanceerde missies.\n\n[?] Type 'dashboard' voor je voortgang, 'leerpad' voor een overzicht."
   }
 ];
 
@@ -498,6 +504,7 @@ function buildCompletionMessage() {
     '  [✓] Network reconnaissance en port scanning',
     '  [✓] Password cracking, brute force en SQL injection',
     '  [✓] Privilege escalation technieken',
+    '  [✓] Exploitation met Metasploit en Hydra',
     '',
     "[?] Type 'certificates' voor je certificaat",
     "[?] Type 'dashboard' voor je statistieken",
@@ -595,7 +602,7 @@ export default {
     "\n" +
     "    STAGES\n" +
     "        1. Terminal Basics     ls, cd, pwd, cat, whoami, history\n" +
-    "        2. File Manipulation   mkdir, touch, rm\n" +
+    "        2. File Manipulation   mkdir, touch, rm, cp, mv, echo\n" +
     "        3. Tutorial Recon      Begeleide reconnaissance missie\n" +
     "        4. Network Scanning    ping, nmap, ifconfig, netstat\n" +
     "        5. Tutorials           Overige begeleide missies\n" +
