@@ -173,7 +173,7 @@
 }
 
 .commands-stats .result-item {
-  flex: 0 0 160px;
+  flex: 0 0 220px;
   text-align: center;
   /* Override landing.css entrance animation (opacity: 0) */
   opacity: 1;
