@@ -13,14 +13,14 @@
 **Language:** UI=NL | Commands=EN | Help/Errors=NL
 
 **URLs:** [Production](https://hacksimulator.nl/) | [GitHub](https://github.com/JanWillemWubkes/hacksimulator)
-**Blog:** 10 posts live at `/blog/` (60+ inline jargon explanations)
+**Blog:** 10 posts live at `/blog/` (105+ inline jargon explanations)
 **Contact:** contact@hacksimulator.nl (Gmail forwarding)
 
-**Performance:** Playwright E2E 160 tests across 30 suites (21 files, 3 browsers) | WCAG AAA | 165 CSS variables
-**Bundle:** ~983 KB productieve code → ~809 KB na Netlify minificatie | Terminal Core: ~340 KB (binnen 400 KB budget)
+**Performance:** Playwright E2E 161 tests across 30 suites (21 files, 3 browsers) | WCAG AAA | 181 CSS variables
+**Bundle:** ~967 KB productieve code → ~809 KB na Netlify minificatie | Terminal Core: ~340 KB (binnen 400 KB budget)
 
 → **Live metrics:** `TASKS.md` regels 9-26 (meest recente tellingen)
-→ **Architecture:** `PLANNING.md` v2.8 | **Commands:** `docs/commands-list.md` (40 commands)
+→ **Architecture:** `PLANNING.md` v2.8 | **Commands:** `docs/commands-list.md` (41 commands)
 
 ---
 
@@ -184,9 +184,9 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ## Referenties
 
 - **PRD:** `docs/prd.md` v1.8
-- **Commands:** `docs/commands-list.md` (40 commands)
+- **Commands:** `docs/commands-list.md` (41 commands)
 - **Style Guide:** `docs/style-guide.md` v1.5
-- **Sessie logs:** `SESSIONS.md` → docs/sessions/ (~109 sessies)
+- **Sessie logs:** `SESSIONS.md` → docs/sessions/ (~115 sessies)
 - **Netlify/Domain:** `docs/netlify-setup.md`
 - **Rules:** `.claude/rules/` (tone-and-output, architecture-patterns, troubleshooting, command-checklist)
 - **Filesystem:** PRD Bijlage B | **Tech rationale:** PRD §13

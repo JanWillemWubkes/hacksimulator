@@ -29,13 +29,13 @@
 ## 🎯 Huidige Focus
 
 **Actieve Mijlpaal:** M5 - Testing & Launch ✅ **LIVE on hacksimulator.nl!**
-**Current Status:** ✅ **UNBLOCKED** - Playwright E2E: 160 tests across 30 suites (21 files, Chromium, Firefox, WebKit passing)
+**Current Status:** ✅ **UNBLOCKED** - Playwright E2E: 161 tests across 30 suites (21 files, Chromium, Firefox, WebKit passing)
 
 **Volgende Stappen:**
 1. ✅ GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
 2. ✅ Netlify deployment (https://hacksimulator.nl/)
 3. ✅ Performance audit (Lighthouse 100/100/92/100)
-4. ✅ Cross-browser test infrastructure (Playwright 145 tests, 27 suites)
+4. ✅ Cross-browser test infrastructure (Playwright 161 tests, 30 suites)
 5. ✅ **FIXED P0-001:** Duplicate #legal-modal ID removed
 6. ✅ Cross-browser tests: Chromium 91+, Firefox passing
 7. ✅ **FIXED P0-002:** Mobile CSS not loading (CSP blocked onload handler) - Sessie 95

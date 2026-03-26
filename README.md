@@ -14,19 +14,19 @@ Een veilige browser-based terminal simulator waar Nederlandse beginners de funda
 
 ## ⚠️ Development Status
 
-**🚧 Work in Progress - Public Beta**
+**✅ Live — Actieve Ontwikkeling**
 
-Dit project is in actieve ontwikkeling. De officiële productie launch op `hacksimulator.nl` is gepland voor Q1 2026.
-
-**Live Beta Demo:** [hacksimulator.nl](https://hacksimulator.nl/)
+HackSimulator.nl is live op [hacksimulator.nl](https://hacksimulator.nl/) en in actieve doorontwikkeling.
 
 | Status | Feature |
 |--------|---------|
-| ✅ **Live** | 30 commands, filesystem simulation, dark/light mode |
+| ✅ **Live** | 40+ commands, virtual filesystem, dark/light mode |
 | ✅ **Live** | Educational tooltips, security warnings |
-| 🔜 **Coming** | Custom domain (hacksimulator.nl) |
-| 🔜 **Coming** | Guided tutorials & learning paths |
-| 🔜 **Coming** | Advanced scenarios & challenges |
+| ✅ **Live** | Custom domain (hacksimulator.nl) |
+| ✅ **Live** | Guided tutorials & learning paths |
+| ✅ **Live** | 15 challenges in 3 moeilijkheidsniveaus |
+| ✅ **Live** | Gamification: 21 badges, achievements, leaderboard |
+| ✅ **Live** | 10 blog posts met 105+ jargon explanations |
 
 **Contributions welcome!** See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
@@ -34,14 +34,13 @@ Dit project is in actieve ontwikkeling. De officiële productie launch op `hacks
 
 ## 🎯 Project Overzicht
 
-**Status:** ✅ **LIVE** on Netlify (M5 Testing Phase - 93.8% MVP Complete)
-**Versie:** 1.0.0-mvp
+**Status:** ✅ **LIVE** on Netlify
 **Doelgroep:** Nederlandse beginners zonder technische achtergrond - studenten, career switchers en enthousiastelingen
 
 **Performance:**
-- Bundle Size: 312 KB (37.5% buffer remaining / 500 KB budget)
-- Load Time: ~2.0s LCP (target: <3s)
-- Lighthouse: 88/100/100/100 (Performance/Accessibility/Best Practices/SEO)
+- Terminal Core: ~340 KB (binnen 400 KB budget)
+- Load Time: < 3s LCP target
+- WCAG AAA compliant
 
 ### Kernwaarden
 - ✅ **Educatief** - Elk commando is een leermoment met context
@@ -96,7 +95,7 @@ hacksimulator/
 ├── docs/                # Documentation
 │   ├── prd.md          # Product Requirements
 │   └── commands-list.md # Command specs
-└── tests/              # Tests (future)
+└── tests/              # Playwright E2E tests (161 tests, 21 files)
 ```
 
 ## 📸 Screenshots
@@ -122,10 +121,7 @@ hacksimulator/
 - Bundle size critical (< 500KB hard limit)
 - Code must be understandable for learners (educational project)
 
-## 📋 MVP Features (30 Commands)
-
-### System Commands (7)
-`clear`, `help`, `man`, `history`, `echo`, `date`, `whoami`
+## 📋 Features (40+ Commands)
 
 ### Filesystem Commands (11)
 `ls`, `cd`, `pwd`, `cat`, `mkdir`, `touch`, `rm`, `cp`, `mv`, `find`, `grep`
@@ -135,6 +131,9 @@ hacksimulator/
 
 ### Security Commands (5)
 `hashcat`, `hydra`, `sqlmap`, `metasploit`, `nikto`
+
+### System Commands (18)
+`clear`, `help`, `man`, `history`, `echo`, `date`, `whoami`, `welcome`, `tutorial`, `challenge`, `achievements`, `dashboard`, `certificates`, `leaderboard`, `leerpad`, `hint`, `next`, `shortcuts`
 
 ### Special Commands (1)
 `reset` - Restore filesystem to original state
@@ -257,25 +256,22 @@ netlify deploy --prod
 
 ## 🗺️ Roadmap
 
-### Fase 1: MVP (Month 1-3) ✅ **93.8% Complete - LIVE!**
-- [x] Project setup (M0 - 100%)
-- [x] Terminal engine + 7 system commands (M1 - 100%)
-- [x] Filesystem (11 commands) + persistence (M2 - 100%)
-- [x] Network & security commands (11 commands) (M3 - 100%)
-- [x] UX polish + legal compliance (M4 - 100%)
-- [x] GitHub + Netlify deployment ✅ **LIVE**
-- [ ] Cross-browser testing (M5 - 14% - in progress)
-- [ ] Beta testing (5+ testers)
+### Fase 1: Terminal Core ✅
+- [x] Terminal engine + filesystem commands
+- [x] Network & security commands
+- [x] UX polish + legal compliance
+- [x] Cross-browser testing (Chromium, Firefox, WebKit)
 
-### Fase 2: Tutorials (Month 4-6)
-- Guided learning scenarios
-- Progress tracking
-- 3 scenarios: recon, webvuln, privesc
+### Fase 2: Tutorials ✅
+- [x] Guided learning scenarios
+- [x] Progress tracking
+- [x] 8-stage learning funnel
 
-### Fase 3: Gamification (Month 7-12)
-- Challenge system
-- Certificates
-- Leaderboard (optional)
+### Fase 3: Gamification ✅
+- [x] 15 challenges in 3 moeilijkheidsniveaus
+- [x] 21 badges (common → legendary)
+- [x] Certificates & leaderboard
+- [x] Achievement system
 
 ## 🤝 Contributing
 
@@ -325,6 +321,5 @@ Copyright (c) 2025 HackSimulator.nl
 
 **Built with ❤️ for Dutch cybersecurity learners**
 
-**Last Updated:** 23 oktober 2025
-**Version:** 1.0.0-mvp
-**Status:** ✅ Live on Netlify (M5 Testing Phase)
+**Last Updated:** 25 maart 2026
+**Status:** ✅ Live on Netlify
