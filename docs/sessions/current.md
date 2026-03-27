@@ -4,6 +4,49 @@
 
 ---
 
+## Sessie 121: Doc Sync & Session Catch-Up (27 maart 2026)
+
+**Scope:** Volledige documentatie synchronisatie na 56 commits drift: sessions 116-120 gedocumenteerd, M5.5 heropend in alle docs, CLAUDE.md geroteerd, metrics geverifieerd vanuit broncode
+**Status:** ✅ VOLTOOID
+**Commits:** 1 commit (`5f5edea`)
+
+---
+
+### Context & Problem
+
+Na Sessie 115 (16 maart) waren er 56 commits verspreid over 11 dagen zonder dat sessies gedocumenteerd werden. Dit leidde tot drie kritieke inconsistenties:
+
+1. **M5.5 Monetization** stond overal als "❌ Geannuleerd" terwijl AdSense (10 units), Ko-fi, newsletter signup en een eigen consent banner volledig geïmplementeerd en live waren
+2. **Sessie counter** stond op 115 terwijl de actuele werkstatus ~sessie 120 was
+3. **CSS variable count** was 181 in alle docs, werkelijk 182
+
+### Aanpak
+
+**Git log analyse:** `git log --format="%h %ai %s" --since="2026-03-16"` gegroepeerd op datum gaf 5 logische sessies (116-120).
+
+**Documenten bijgewerkt:**
+
+| Document | Wijziging |
+|---|---|
+| `docs/sessions/current.md` | Sessies 116-120 toegevoegd (full detail) |
+| `SESSIONS.md` | Index: range 88-115 → 88-120, totaal 120 |
+| `.claude/CLAUDE.md` | Counter 115→120, CSS vars 181→182, learnings geroteerd, monetization regel, v4.5→v4.6 |
+| `TASKS.md` | M5.5 heropend (8/10, 80%), totaal 267/315→275/325, focus sectie geactualiseerd |
+| `PLANNING.md` | M5.5 pivot gedocumenteerd, revenue streams bijgewerkt, v2.8→v2.9 |
+
+### Lessons Learned
+
+⚠️ **Never:**
+- Aannemen dat docs actueel zijn zonder verificatie — M5.5 was "geannuleerd" in alle docs terwijl het volledig live was
+- Metrics overnemen uit vorige docs zonder broncheck — CSS vars tellen via grep, commands tellen via registry
+
+✅ **Always:**
+- `git log --format="%h %ai %s" --since=<datum>` voor overzicht van commits per datum → logische sessiegrenzen
+- Metrics verificeren vanuit broncode voor doc updates (grep CSS vars, count test files, check registry)
+- M5.5 / milestone status-pivot altijd in alle 3 kerndocs tegelijk bijwerken (CLAUDE.md + TASKS.md + PLANNING.md)
+
+---
+
 ## Sessie 120: Site-Wide Metrics Sync (26 maart 2026)
 
 **Scope:** Synchroniseer alle site-brede claims (commands, CSS vars, tests, features) met actuele tellingen

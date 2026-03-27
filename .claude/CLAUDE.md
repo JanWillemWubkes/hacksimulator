@@ -121,15 +121,14 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Duplicate hint guards: track welke hints al getoond zijn in sessie
 - Progressive disclosure: Ctrl+R hint pas na 7+ commands (niet overweldigend voor beginners)
 
-### Sessie 115: Learning Funnel & Onboarding Redesign (10-16 maart 2026)
+### Sessie 121: Doc Sync & Session Catch-Up (27 maart 2026)
 ⚠️ **Never:**
-- `detectTransition()` phases descending checken — hogere phases matchen altijd eerst, ascending is correct
-- Guard flags vergeten (`hasShownSecurityHint`) — veroorzaakt duplicate warnings bij elke command
+- Aannemen dat docs actueel zijn na meerdere werkdagen zonder sync — metrics driften snel (M5.5 was "geannuleerd" terwijl het volledig live was)
+- Metrics overnemen uit vorige docs — altijd verifiëren vanuit broncode (grep CSS vars, count commands in registry)
 
 ✅ **Always:**
-- Transition order ascending checken (Phase 1 → 2 → 3...) — voorkomt false positives
-- Guard flags per eenmalige hint — toon security/ethics warnings exact één keer
-- Stale UI text opruimen bij state changes — `next` hint moet updaten als fase verandert
+- `git log --format="%h %ai %s" --since=<datum>` voor sessiegrenzen — commits per datum onthullen logische sessiegroepen
+- Milestone status-pivot (cancelled → active) altijd tegelijk in CLAUDE.md + TASKS.md + PLANNING.md bijwerken
 
 **Rotation:** Keep last 5 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
 
@@ -141,7 +140,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
 **Rotation trigger:** Every 5 sessions (last: Sessie 120, next: Sessie 125)
-**Sessie counter:** 120
+**Sessie counter:** 121
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -188,5 +187,5 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 27 maart 2026 (Sessie 120 — Doc Sync & Metrics Alignment)
+**Last updated:** 27 maart 2026 (Sessie 121 — Doc Sync & Session Catch-Up)
 **Version:** 4.6 (Sessie 120: M5.5 monetization revived, celebration UX, tutorial hardening, learning funnel hints, session rotation)

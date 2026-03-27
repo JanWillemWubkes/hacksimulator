@@ -8,10 +8,11 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (88-120)](docs/sessions/current.md) - Full Detail
-**Sessies:** 120, 119, 118, 117, 116, 115, 114, 113, 112, 111, 110, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88
-**Period:** 26 december 2025 - 26 maart 2026
+### [Current Sessions (88-121)](docs/sessions/current.md) - Full Detail
+**Sessies:** 121, 120, 119, 118, 117, 116, 115, 114, 113, 112, 111, 110, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88
+**Period:** 26 december 2025 - 27 maart 2026
 **Topics:**
+- Doc Sync & Session Catch-Up: sessions 116-120, M5.5 revived, CLAUDE.md rotation (Sessie 121)
 - Site-Wide Metrics Sync: claims aligned met actuele tellingen (Sessie 120)
 - 3-Zone Celebration Redesign & Stat Cards: sequential reveal, funnel direction lock (Sessie 119)
 - Ko-fi Optimization, Celebration UX & Tutorial Polish: touchpoints, nmap validation (Sessie 118)
@@ -102,9 +103,9 @@
 
 ## 📊 Session Overview
 
-**Total Sessions:** 120 (as of 27 maart 2026)
-**Current Session:** 120 (Site-Wide Metrics Sync)
-**Sessions with full documentation:** 88-120 (33 sessions)
+**Total Sessions:** 121 (as of 27 maart 2026)
+**Current Session:** 121 (Doc Sync & Session Catch-Up)
+**Sessions with full documentation:** 88-121 (34 sessions)
 **Sessions compressed:** 2-77 (various compression levels)
 
 **Structure rationale:**
@@ -146,10 +147,11 @@
 
 ---
 
-**Last updated:** 27 maart 2026 (Sessie 120 - Site-Wide Metrics Sync)
+**Last updated:** 27 maart 2026 (Sessie 121 - Doc Sync & Session Catch-Up)
 **Next update:** Sessie 125 or when CURRENT sessions need rotation
 
 **Recent updates:**
+- Sessie 121: Doc Sync & Session Catch-Up — sessions 116-120, M5.5 revived, metrics verified
 - Sessie 120: Site-Wide Metrics Sync — claims aligned met actuele tellingen
 - Sessie 119: 3-Zone Celebration Redesign & Stat Cards — sequential reveal, funnel direction lock
 - Sessie 118: Ko-fi Optimization, Celebration UX & Tutorial Polish
