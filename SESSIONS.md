@@ -8,10 +8,15 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (88-115)](docs/sessions/current.md) - Full Detail
-**Sessies:** 115, 114, 113, 112, 111, 110, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88
-**Period:** 26 december 2025 - 16 maart 2026
+### [Current Sessions (88-120)](docs/sessions/current.md) - Full Detail
+**Sessies:** 120, 119, 118, 117, 116, 115, 114, 113, 112, 111, 110, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88
+**Period:** 26 december 2025 - 26 maart 2026
 **Topics:**
+- Site-Wide Metrics Sync: claims aligned met actuele tellingen (Sessie 120)
+- 3-Zone Celebration Redesign & Stat Cards: sequential reveal, funnel direction lock (Sessie 119)
+- Ko-fi Optimization, Celebration UX & Tutorial Polish: touchpoints, nmap validation (Sessie 118)
+- Tutorial Hardening & M5.5 Monetization Pivot: AdSense + Ko-fi + Newsletter, Cookiebot verwijderd (Sessie 117)
+- Doc Sync & Learning Funnel Hints: "Type next" system, phase-dependent content (Sessie 116)
 - Learning Funnel & Onboarding Redesign: 8-stage funnel, phase transitions, next command (Sessie 115)
 - Terminal Welcome Redesign: SSH-style hacker login prompt + typewriter effect (Sessie 114)
 - Refactor tutorial.spec.js: flaky textContent() → auto-retry toContainText() assertions (Sessie 113)
@@ -97,9 +102,9 @@
 
 ## 📊 Session Overview
 
-**Total Sessions:** 115 (as of 16 maart 2026)
-**Current Session:** 115 (Learning Funnel & Onboarding Redesign)
-**Sessions with full documentation:** 88-115 (28 sessions)
+**Total Sessions:** 120 (as of 27 maart 2026)
+**Current Session:** 120 (Site-Wide Metrics Sync)
+**Sessions with full documentation:** 88-120 (33 sessions)
 **Sessions compressed:** 2-77 (various compression levels)
 
 **Structure rationale:**
@@ -141,13 +146,13 @@
 
 ---
 
-**Last updated:** 16 maart 2026 (Sessie 115 - Learning Funnel & Onboarding Redesign)
-**Next update:** Sessie 120 or when CURRENT sessions need rotation
+**Last updated:** 27 maart 2026 (Sessie 120 - Site-Wide Metrics Sync)
+**Next update:** Sessie 125 or when CURRENT sessions need rotation
 
 **Recent updates:**
-- Sessie 115: Learning Funnel & Onboarding Redesign — 8-stage funnel, phase transitions, next command
-- Sessie 114: Terminal Welcome Redesign — SSH-style hacker login prompt + typewriter effect
-- Sessie 113: Refactor tutorial.spec.js — flaky test elimination
-- Sessie 112: M6 Tutorial Mobile & Cross-Browser Testing
-- Sessie 111: M7 Phase 7 Gamification E2E Testing
-- Sessie 110: M9 Refactor Sprint — VFS persistence fix, localStorage optimization, doc sync
+- Sessie 120: Site-Wide Metrics Sync — claims aligned met actuele tellingen
+- Sessie 119: 3-Zone Celebration Redesign & Stat Cards — sequential reveal, funnel direction lock
+- Sessie 118: Ko-fi Optimization, Celebration UX & Tutorial Polish
+- Sessie 117: Tutorial Hardening & M5.5 Monetization Pivot — AdSense + Ko-fi + Newsletter
+- Sessie 116: Doc Sync & Learning Funnel Hints — "Type next" system, phase-dependent content
+- Sessie 115: Learning Funnel & Onboarding Redesign — 8-stage funnel, phase transitions

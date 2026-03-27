@@ -1,14 +1,14 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 17 maart 2026
-**Status:** M7 Gamification 98% | M6 Tutorial System 88% (LIVE on hacksimulator.nl)
-**Sprint:** Sessie 116: Doc Sync — TASKS.md, PLANNING.md, CLAUDE.md consistency
+**Laatst bijgewerkt:** 27 maart 2026
+**Status:** M7 Gamification 98% | M6 Tutorial System 88% | M5.5 Monetization ✅ Live (LIVE on hacksimulator.nl)
+**Sprint:** Sessie 121: Doc Sync — sessions 116-120, M5.5 revived, CLAUDE.md rotation
 
 ---
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 267 / 315 taken voltooid (84.8%)
+**Totaal:** 275 / 325 taken voltooid (84.6%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
@@ -18,7 +18,7 @@
 | M3: Network & Security | ✅ Voltooid | 28/28 | 100% |
 | M4: UX & Polish | ✅ Voltooid | 43/43 | 100% |
 | M5: Testing & Launch | 🔵 In uitvoering | 41/45 | 91% | ✅ **Performance + Config + Security + Accessibility + Content + Bundle Opt 100%**
-| M5.5: Monetization MVP | ❌ Geannuleerd | - | - | Affiliate aanvragen afgewezen |
+| M5.5: Monetization MVP | 🔵 In uitvoering | 8/10 | 80% | ✅ AdSense (10 units) + Ko-fi + Newsletter + eigen consent banner live |
 | M6: Tutorial System | 🔵 In uitvoering | 30/33 | 88% | ✅ Framework + 3 scenarios + cert + analytics + E2E tests + perf audit + mobile + cross-browser |
 | M7: Gamification | 🔵 In uitvoering | 46/47 | 98% | ✅ Phase 1-6 complete + Phase 7 testing (cross-system, performance, mobile) |
 | M8: Analytics & Scaling | ⏭️ Gepland | 0/40 | 0% |
@@ -28,22 +28,22 @@
 
 ## 🎯 Huidige Focus
 
-**Actieve Mijlpaal:** M5 - Testing & Launch ✅ **LIVE on hacksimulator.nl!**
-**Current Status:** ✅ **UNBLOCKED** - Playwright E2E: 161 tests across 30 suites (21 files, Chromium, Firefox, WebKit passing)
+**Actieve Mijlpalen:** M5.5 Monetization + M6 Tutorial System + M7 Gamification
+**Current Status:** ✅ LIVE — Playwright E2E: 161 tests, 30 suites (Chromium, Firefox, WebKit) | AdSense + Ko-fi + Newsletter live
 
 **Volgende Stappen:**
 1. ✅ GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
 2. ✅ Netlify deployment (https://hacksimulator.nl/)
 3. ✅ Performance audit (Lighthouse 100/100/92/100)
 4. ✅ Cross-browser test infrastructure (Playwright 161 tests, 30 suites)
-5. ✅ **FIXED P0-001:** Duplicate #legal-modal ID removed
-6. ✅ Cross-browser tests: Chromium 91+, Firefox passing
-7. ✅ **FIXED P0-002:** Mobile CSS not loading (CSP blocked onload handler) - Sessie 95
-8. ✅ **Security Review Complete** - Sessie 96: HSTS actief, CSP versterkt, XSS audit passed
-9. ✅ **Bundle Size Optimalisatie** - Sessie 100: ~809 KB na Netlify minificatie (binnen 1000 KB budget)
-10. ✅ **Playwright Test Fixes** - Sessie 101: Blog URLs, TTI budget, flaky legal modal
-11. [ ] Mobile real device testing (iOS, Android)
-12. [ ] GA4 Real-Time verificatie (handmatig)
+5. ✅ **M5.5 Monetization Pivot** (Sessie 117-118): AdSense (10 units), Ko-fi donaties, Newsletter signup, eigen consent banner (Consent Mode v2)
+6. ✅ **Celebration UX** (Sessie 118-119): 3-zone completion blocks, auto-copy certificaat, sequential reveal
+7. ✅ **Learning Funnel Hardening** (Sessie 116-119): "Type next" hints, phase-dependent content, funnel direction lock
+8. [ ] Mobile real device testing (iOS, Android)
+9. [ ] GA4 Real-Time verificatie (handmatig)
+10. [ ] AdSense performance monitoring (CTR, RPM na 30 dagen)
+11. [ ] M6 Tutorial: laatste 3 open taken (→ 100%)
+12. [ ] M7 Gamification: laatste open taak (→ 100%)
 
 ---
 
@@ -514,11 +514,24 @@
 
 ---
 
-### M5.5: Monetization MVP ❌ GEANNULEERD
-**Status:** Geannuleerd (januari 2026)
-**Reden:** Affiliate aanvragen worden structureel afgewezen. Besloten om deze monetization strategie niet verder te vervolgen.
-**Behouden:** PayPal donatie knop in footer (reeds geïmplementeerd in Sessie 69-74)
-**Verwijderd:** Alle affiliate code, blog posts met affiliate links, disclosure pagina's
+### M5.5: Monetization MVP 🔵 IN UITVOERING (Pivot)
+**Status:** Heropend maart 2026 (Sessie 117-118) — Nieuwe strategie na affiliate afwijzingen
+**Originele aanpak:** Affiliate links → ❌ Afgewezen door programma's
+**Nieuwe strategie:** AdSense display ads + Ko-fi donaties + Newsletter signup
+
+#### Voltooide taken ✅
+- [x] **Cookiebot verwijderd** → eigen consent banner (lichter, geen third-party dependency) — Sessie 117
+- [x] **AdSense integratie** — 10 ad units manueel geplaatst (blog, sidebar, footer, between-content) — Sessie 117
+- [x] **Consent Mode v2** — Google-compliant consent signaling op alle pagina's — Sessie 117
+- [x] **CSP updates** — `frame-src` + `connect-src` voor AdSense domains — Sessie 117
+- [x] **Ad container visibility** — explicit width op `.ad-container` base class — Sessie 117
+- [x] **Ko-fi donatie buttons** — sidebar, download, challenges, footer touchpoints — Sessie 118
+- [x] **Blog support banners** — call-to-action voor Ko-fi op blog posts — Sessie 118
+- [x] **Newsletter signup forms** — lead generation across site — Sessie 118
+
+#### Open taken
+- [ ] AdSense performance monitoring (CTR, RPM na 30 dagen) — manueel in Google AdSense dashboard
+- [ ] Ko-fi conversion tracking (donaties per maand) — manueel via Ko-fi dashboard
 
 ---
 
@@ -1347,10 +1360,10 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 17 maart 2026
-**Versie:** 4.1 (Sessie 116 — Doc Sync: tellingen, datums, percentages)
-**Totaal Taken:** 315 (zie toptabel voor actuele breakdown per mijlpaal)
-**Voltooide Taken:** 267/315 (84.8%) — M0-M4: 100%, M5: 91% (41/45), M5.5: Geannuleerd, M6: 88% (30/33), M7: 98% (46/47), M9: 100% (19/19)
+**Laatst bijgewerkt:** 27 maart 2026
+**Versie:** 4.2 (Sessie 121 — M5.5 revived, sessions 116-120 gedocumenteerd)
+**Totaal Taken:** 325 (M5.5 heropend met 10 taken, zie toptabel voor actuele breakdown per mijlpaal)
+**Voltooide Taken:** 275/325 (84.6%) — M0-M4: 100%, M5: 91% (41/45), M5.5: 80% (8/10), M6: 88% (30/33), M7: 98% (46/47), M9: 100% (19/19)
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 **Bundle:** ✅ ~809 KB na Netlify minificatie (Terminal Core ~340 KB, site totaal binnen 1000 KB budget — Sessie 100)

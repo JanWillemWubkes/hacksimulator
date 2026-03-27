@@ -4,6 +4,207 @@
 
 ---
 
+## Sessie 120: Site-Wide Metrics Sync (26 maart 2026)
+
+**Scope:** Synchroniseer alle site-brede claims (commands, CSS vars, tests, features) met actuele tellingen
+**Status:** ✅ VOLTOOID
+**Commits:** 1 commit (`4d0998e`)
+
+---
+
+### Wijzigingen
+
+- README.md en marketing pagina's bijgewerkt met correcte metrics: 41 commands, 182 CSS variables, 161 tests, 105+ jargon explanations
+- Alle "Coming Soon" markers vervangen door "Live" voor features die al deployed zijn
+
+---
+
+## Sessie 119: 3-Zone Celebration Redesign & Stat Cards (24-25 maart 2026)
+
+**Scope:** Celebration UX herontwerp met 3-zone blokstructuur, sequential reveal animatie, funnel bescherming tegen terugval, stat card layout fix op commands pagina
+**Status:** ✅ VOLTOOID
+**Commits:** 6 commits (`a880662` → `11ee2dc`)
+
+---
+
+### Context & Problem
+
+De celebration UX na tutorial/challenge completion was één groot blok tekst zonder visuele hiërarchie. Gebruikers misten het certificaat en de follow-up suggesties. Daarnaast kon de learning funnel gebruikers terugsturen naar een eerdere fase als ze na advanced work een basic command gebruikten.
+
+### Oplossing
+
+**3-zone celebration structuur:**
+1. **Mission zone (groen)** — "MISSIE VOLTOOID!" met scenario details
+2. **Certificate zone (goud glow)** — Certificaat met auto-copy en download prompt
+3. **Follow-up zone** — Volgende stappen suggesties
+
+**Key architectural decisions:**
+- Sequential reveal animation met 800ms stagger tussen zones
+- `maxPhaseReached` tracking — voorkomt dat gebruikers terugvallen in funnel
+- Flexbox 3+2 centered layout voor stat cards op commands pagina
+
+### Key Files
+
+| Bestand | Wijziging |
+|---|---|
+| `src/ui/renderer.js` | 3-zone celebration blocks, sequential reveal |
+| `src/ui/onboarding.js` | `maxPhaseReached` guard, funnel direction lock |
+| `styles/commands.css` | Stat card flexbox 3+2 layout |
+
+### Lessons Learned
+
+⚠️ **Never:**
+- Gebruikers terugsturen in learning funnel — check `maxPhaseReached` bij phase detection
+- Monolithische completion blocks gebruiken — splits in visueel gescheiden zones
+
+✅ **Always:**
+- Sequential reveal voor multi-zone content — 800ms stagger voelt natuurlijk
+- `maxPhaseReached` bijhouden naast `currentPhase` — voorkomt regressie
+
+---
+
+## Sessie 118: Ko-fi Optimization, Celebration UX & Tutorial Polish (22-23 maart 2026)
+
+**Scope:** Ko-fi donatie touchpoints optimaliseren, celebration UX voor achievements/certificaten, tutorial feedback polish, nmap/traceroute input validatie
+**Status:** ✅ VOLTOOID
+**Commits:** 8 commits (`d974268` → `35de51d`)
+
+---
+
+### Wijzigingen
+
+- **Ko-fi touchpoints** geoptimaliseerd: sidebar, download, challenges, footer — conversie-gericht
+- **Celebration UX** toegevoegd voor achievement/certificate moments met visuele feedback
+- **Auto-copy certificaat** bij completion + mobile webvuln test fixes
+- **Context-aware hint na `clear`** voor beginners in learning funnel
+- **nmap/traceroute input validatie** — reject invalid targets met duidelijke foutmelding
+- **Dutch grammar fixes** in hint follow-up messages
+- **Reset command** graceful handling tijdens active tutorial
+- **Beginner-friendly taal** — technisch jargon vervangen door Nederlandse uitleg
+
+### Lessons Learned
+
+⚠️ **Never:**
+- Celebration UX tonen zonder auto-copy — gebruikers verwachten dat certificaat al gekopieerd is
+
+✅ **Always:**
+- Ko-fi touchpoints op natuurlijke completion moments (challenges, certificaten) — hogere conversie
+- Input validatie op security commands (nmap, traceroute) — voorkom verwarrende output bij ongeldige targets
+
+---
+
+## Sessie 117: Tutorial Hardening & M5.5 Monetization Pivot (18-20 maart 2026)
+
+**Scope:** Tutorial validators verscherpen, M5.5 monetization heropenen met AdSense + Ko-fi + Newsletter strategie (i.p.v. affiliates), Cookiebot vervangen door eigen consent banner
+**Status:** ✅ VOLTOOID
+**Commits:** 15 commits (`d171e77` → `63e3c5b`)
+
+---
+
+### Context & Problem
+
+**Tutorial:** Feedback was niet specifiek genoeg — "verkeerd commando" vs "juiste commando maar verkeerde argumenten" gaf dezelfde melding. Validators accepteerden gefaalde commands als voltooid.
+
+**Monetization:** M5.5 was geannuleerd wegens affiliate afwijzingen. Nieuwe strategie: AdSense (display ads) + Ko-fi (donaties) + Newsletter (lead generation). Cookiebot CMP was te zwaar en blokkeerde AdSense rendering.
+
+### Oplossing
+
+**Tutorial hardening:**
+- `wrong-args` return type — onderscheidt "juiste command, verkeerde args" van "verkeerd command"
+- Strict validators — reject gefaalde commands
+- Faster hint escalation — minder wachttijd voor hulp
+- Dimmed feedback text — visuele hiërarchie tussen output en feedback
+
+**M5.5 Monetization pivot:**
+- **Cookiebot verwijderd** → eigen consent banner (lichter, geen third-party dependency)
+- **10 AdSense ad units** manueel geplaatst (blog, sidebar, footer, between-content)
+- **Consent Mode v2** — Google-compliant consent signaling
+- **CSP updates** — `frame-src` en `connect-src` voor AdSense domains
+- **Ad container visibility fixes** — explicit width op `.ad-container` base class
+
+**Content & Newsletter:**
+- Ko-fi donatie buttons + blog support banners
+- Newsletter signup forms across site
+- Dutch diacritics/SEO fixes across all content
+
+### Key Files
+
+| Bestand | Wijziging |
+|---|---|
+| `src/commands/special/tutorial.js` | `wrong-args` return, strict validators, hint escalation |
+| `src/ui/renderer.js` | Dimmed feedback styling |
+| `index.html`, `terminal.html`, blog HTML | AdSense ad units, consent banner |
+| `src/analytics/consent.js` | Cookiebot verwijderd, eigen consent banner |
+| `styles/main.css` | `.ad-container` base class, newsletter banner |
+
+### Lessons Learned
+
+⚠️ **Never:**
+- Third-party CMP (Cookiebot) gebruiken als eigen consent banner volstaat — overhead, blocking issues, privacy zorgen
+- AdSense plaatsen zonder Consent Mode v2 update calls — ads laden niet correct
+
+✅ **Always:**
+- `wrong-args` vs `false` onderscheiden in tutorial validators — specifiekere feedback
+- Explicit width op ad containers — voorkomt invisible ads door collapsed containers
+- CSP `frame-src` + `connect-src` updaten bij externe ad/analytics integraties
+
+---
+
+## Sessie 116: Doc Sync & Learning Funnel Hints (16-17 maart 2026)
+
+**Scope:** Documentatie synchronisatie (TASKS.md, PLANNING.md, CLAUDE.md, session logs), learning funnel hint systeem verfijnen, phase-dependent filesystem content, ads.txt fix
+**Status:** ✅ VOLTOOID
+**Commits:** 15 commits (`03f0aeb` → `9b0f6af`)
+
+---
+
+### Wijzigingen
+
+**Documentation:**
+- Session summaries ingehaald (90, 97, 107, 115)
+- TASKS.md en PLANNING.md metrics gesynchroniseerd
+- CLAUDE.md en tone rules bijgewerkt met actuele command/test counts
+
+**Learning Funnel Hints:**
+- "Type next" hint na relevante commands (help, clear, etc.)
+- Geen "Type next" tijdens actieve tutorials/challenges
+- Phase1 volgorde: `cat` vóór `cd` (natuurlijker leerflow)
+- Ctrl+R progressive hint bij `commandCount >= 7`
+- Duplicate hint preventie
+
+**Filesystem Content:**
+- Phase-dependent README.txt en notes.txt content
+- Progressive hint command voor tutorials
+
+**Fixes:**
+- ads.txt publisher ID prefix verwijderd
+- Reject gefaalde commands in tutorial validators en leerpad tracker
+- Next command conflict met actieve tutorials opgelost
+- Nederlandse taal verbeteringen ("nogmaals" → natuurlijker, "bestaat niet in echt Linux" → beter)
+
+### Key Files
+
+| Bestand | Wijziging |
+|---|---|
+| `src/ui/onboarding.js` | "Type next" hints, phase1 reorder, duplicate preventie |
+| `src/commands/system/next.js` | Conflict resolution met tutorials |
+| `src/filesystem/structure.js` | Phase-dependent README/notes content |
+| `src/commands/system/hint.js` | Progressive hint command |
+| `ads.txt` | Publisher ID fix |
+
+### Lessons Learned
+
+⚠️ **Never:**
+- "Type next" hint tonen tijdens actieve tutorials/challenges — verwarrend, conflicteert met tutorial flow
+- Funnel phases in willekeurige volgorde zetten — `cat` vóór `cd` is natuurlijker (lees eerst, navigeer daarna)
+
+✅ **Always:**
+- Context-aware hints: check of tutorial/challenge actief is vóór hint weergave
+- Duplicate hint guards: track welke hints al getoond zijn in sessie
+- Progressive disclosure: Ctrl+R hint pas na 7+ commands (niet overweldigend voor beginners)
+
+---
+
 ## Sessie 115: Learning Funnel & Onboarding Redesign (10-16 maart 2026)
 
 **Scope:** Complete onboarding herarchitectuur: SSH-style welcome, 8-stage learning funnel, self-reinforcing `next` command, phase transitions met celebrations, localStorage consolidatie, fuzzy command matching, input gating tijdens typewriter effect

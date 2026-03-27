@@ -531,13 +531,14 @@ Remove cookie banner → Better UX
 
 ### Phase 1 Revenue (Month 1-3)
 
-**Components:**
-- AdSense: €50-150/month
-- Affiliates: €20-100/month
-- Donations: €10-50/month
+**Components (live — Sessie 117-118):**
+- AdSense (10 units): €50-150/month — ✅ Live
+- Ko-fi donaties: €10-50/month — ✅ Live
+- Newsletter signup: lead generation, conversie later — ✅ Live
+- ~~Affiliates~~: ❌ Afgewezen, niet meer actief
 
-**Total:** €80-300/month
-**Net Profit:** €78.75-298.75/month (after €1.25 hosting)
+**Total:** €60-200/month (zonder affiliates)
+**Net Profit:** €58.75-198.75/month (after €1.25 hosting)
 
 ---
 
@@ -747,9 +748,9 @@ const DEBUG_MODE = false;
 
 ### Fase 1: MVP (Maand 1-3) - 🔵 IN UITVOERING (79.0%) - **LIVE!**
 
-**Status:** 267/315 tasks completed (84.8% totaal project scope)
-**MVP-only Progress:** M0-M4 (100%), M5 (41/45 - 91%)
-**M5.5 Monetization:** ❌ Geannuleerd (affiliate aanvragen afgewezen)
+**Status:** 275/325 tasks completed (84.6% totaal project scope)
+**MVP-only Progress:** M0-M4 (100%), M5 (41/45 - 91%), M5.5 (8/10 - 80%)
+**M5.5 Monetization:** 🔵 In uitvoering — Pivot naar AdSense + Ko-fi + Newsletter (affiliate afgewezen, Sessie 117)
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 
@@ -904,8 +905,8 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 
 ---
 
-**Laatst bijgewerkt:** 17 maart 2026
-**Versie:** 2.8 (Sessie 116 — Doc Sync: tellingen, datums, percentages)
-**Status:** ✅ Deployed - Live in Production | M5.5 Monetization Geannuleerd | M7 Gamification Phase 1-6 ✅
+**Laatst bijgewerkt:** 27 maart 2026
+**Versie:** 2.9 (Sessie 121 — M5.5 revived: AdSense + Ko-fi + Newsletter live, sessions 116-120 gedocumenteerd)
+**Status:** ✅ Deployed - Live in Production | M5.5 Monetization ✅ Live (Pivot) | M7 Gamification Phase 1-6 ✅
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

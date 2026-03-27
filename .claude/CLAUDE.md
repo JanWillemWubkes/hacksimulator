@@ -16,11 +16,12 @@
 **Blog:** 10 posts live at `/blog/` (105+ inline jargon explanations)
 **Contact:** contact@hacksimulator.nl (Gmail forwarding)
 
-**Performance:** Playwright E2E 161 tests across 30 suites (21 files, 3 browsers) | WCAG AAA | 181 CSS variables
-**Bundle:** ~967 KB productieve code → ~809 KB na Netlify minificatie | Terminal Core: ~340 KB (binnen 400 KB budget)
+**Performance:** Playwright E2E 161 tests across 30 suites (21 files, 3 browsers) | WCAG AAA | 182 CSS variables
+**Bundle:** ~848 KB productieve code → ~809 KB na Netlify minificatie | Terminal Core: ~340 KB (binnen 400 KB budget)
+**Monetization:** AdSense (10 units) + Ko-fi donaties + Newsletter signup | Eigen consent banner (Consent Mode v2)
 
 → **Live metrics:** `TASKS.md` regels 9-26 (meest recente tellingen)
-→ **Architecture:** `PLANNING.md` v2.8 | **Commands:** `docs/commands-list.md` (41 commands)
+→ **Architecture:** `PLANNING.md` v2.9 | **Commands:** `docs/commands-list.md` (41 commands)
 
 ---
 
@@ -83,58 +84,52 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 119: 3-Zone Celebration Redesign & Stat Cards (24-25 maart 2026)
+⚠️ **Never:**
+- Gebruikers terugsturen in learning funnel — check `maxPhaseReached` bij phase detection
+- Monolithische completion blocks gebruiken — splits in visueel gescheiden zones voor scanability
+
+✅ **Always:**
+- Sequential reveal voor multi-zone content — 800ms stagger voelt natuurlijk en geeft focus
+- `maxPhaseReached` bijhouden naast `currentPhase` — voorkomt regressie na advanced progress
+
+### Sessie 118: Ko-fi Optimization, Celebration UX & Tutorial Polish (22-23 maart 2026)
+⚠️ **Never:**
+- Celebration UX tonen zonder auto-copy — gebruikers verwachten dat certificaat al gekopieerd is
+
+✅ **Always:**
+- Ko-fi touchpoints op natuurlijke completion moments (challenges, certificaten) — hogere conversie
+- Input validatie op security commands (nmap, traceroute) — voorkom verwarrende output bij ongeldige targets
+
+### Sessie 117: Tutorial Hardening & M5.5 Monetization Pivot (18-20 maart 2026)
+⚠️ **Never:**
+- Third-party CMP (Cookiebot) gebruiken als eigen consent banner volstaat — overhead, blocking issues
+- AdSense plaatsen zonder Consent Mode v2 update calls — ads laden niet correct
+
+✅ **Always:**
+- `wrong-args` vs `false` onderscheiden in tutorial validators — specifiekere feedback voor gebruikers
+- Explicit width op ad containers — voorkomt invisible ads door collapsed containers
+- CSP `frame-src` + `connect-src` updaten bij externe ad/analytics integraties
+
+### Sessie 116: Doc Sync & Learning Funnel Hints (16-17 maart 2026)
+⚠️ **Never:**
+- "Type next" hint tonen tijdens actieve tutorials/challenges — verwarrend, conflicteert met tutorial flow
+- Funnel phases in willekeurige volgorde — `cat` vóór `cd` is natuurlijker (lees eerst, navigeer daarna)
+
+✅ **Always:**
+- Context-aware hints: check of tutorial/challenge actief is vóór hint weergave
+- Duplicate hint guards: track welke hints al getoond zijn in sessie
+- Progressive disclosure: Ctrl+R hint pas na 7+ commands (niet overweldigend voor beginners)
+
 ### Sessie 115: Learning Funnel & Onboarding Redesign (10-16 maart 2026)
 ⚠️ **Never:**
 - `detectTransition()` phases descending checken — hogere phases matchen altijd eerst, ascending is correct
 - Guard flags vergeten (`hasShownSecurityHint`) — veroorzaakt duplicate warnings bij elke command
-- Tab-hint stale text laten staan wanneer features beschikbaar worden
 
 ✅ **Always:**
 - Transition order ascending checken (Phase 1 → 2 → 3...) — voorkomt false positives
 - Guard flags per eenmalige hint — toon security/ethics warnings exact één keer
 - Stale UI text opruimen bij state changes — `next` hint moet updaten als fase verandert
-
-### Sessie 114: Terminal Welcome Redesign — Hacker Login Prompt (10 maart 2026)
-⚠️ **Never:**
-- `[***]` markers/CSS verwijderen zonder grep — security commands (sqlmap, hydra, metasploit, nikto) gebruiken `.welcome-message` class
-- Playwright tests draaien zonder `BASE_URL` env var — default gaat naar productie, niet lokaal
-- Minified CSS met inline sourcemap handmatig re-minificeren — targeted string replacement is veiliger
-
-✅ **Always:**
-- Grep op CSS class/marker namen vóór verwijdering — check alle gebruikers, niet alleen het huidige feature
-- `BASE_URL=http://localhost:PORT` voor lokale Playwright tests — start Python HTTP server (`python3 -m http.server PORT`)
-- CustomEvent pattern voor cross-module communicatie — `typewriter-done` event voorkomt tight coupling tussen renderer en input
-
-### Sessie 113: Refactor tutorial.spec.js — Flaky Test Elimination (7 maart 2026)
-⚠️ **Never:**
-- `textContent()` snapshots voor test assertions — één momentopname, geen retry, flaky bij async rendering
-- Sequentiële commands sturen zonder gate assertion — `typeCommand()` 500ms wait is niet genoeg voor tutorial state machine onder load
-
-✅ **Always:**
-- `toContainText()` locator assertions met expliciete timeouts — auto-retry pollt DOM tot tekst verschijnt
-- Gate waits na tutorial start: `await expect(output).toContainText('MISSION BRIEFING', { timeout: 10000 })` vóór volgende command
-- `expect.poll()` voor debounced localStorage checks — fixed waits zijn onbetrouwbaar bij variabele debounce windows
-
-### Sessie 112: M6 Tutorial Mobile & Cross-Browser Testing (7 maart 2026)
-⚠️ **Never:**
-- `textContent()` snapshot voor assertions — als render niet klaar is, krijg je welcome banner i.p.v. command output
-- Desktop test patterns kopiëren naar mobile zonder timing aanpassing — mobile viewports triggeren layout recalculations, gebruik 800ms i.p.v. 500ms
-
-✅ **Always:**
-- `toContainText()` locator assertions (auto-retry) i.p.v. `textContent()` + `toContain()` — Playwright retry voorkomt flaky tests
-- `test.use({ viewport: { width: 375, height: 667 } })` declaratief op file-niveau — cleaner dan `setViewportSize()` in beforeEach
-- Try/catch op legal modal in mobile tests — modal state hangt af van localStorage die per-test varieert
-
-### Sessie 111: M7 Phase 7 — Gamification E2E Testing (7 maart 2026)
-⚠️ **Never:**
-- Assert op command namen in challenge briefings — briefings tonen requirement *descriptions* (NL), niet command names
-- `progressStore.recordCommand()` verwachten buiten challenges — wordt ALLEEN aangeroepen tijdens actieve challenges via `challengeManager.handleCommand()`
-- `page.evaluate()` voor localStorage injectie vóór `page.reload()` — `beforeunload` handler flusht lege `_cache`, overschrijft injected data
-
-✅ **Always:**
-- `page.addInitScript()` voor test data injectie — zet localStorage VÓÓR module-initialisatie, voorkomt beforeunload race condition
-- Badge tests binnen challenge context — start eerst een challenge, dan commands uitvoeren voor badge triggers
-- Locked badges tonen als `???` — assert op icons (`[#]`, `[*]`) en `???`, niet op badge namen
 
 **Rotation:** Keep last 5 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
 
@@ -145,8 +140,8 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Voor Sessie:** Lees `PLANNING.md`, `TASKS.md`, dit bestand
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-**Rotation trigger:** Every 5 sessions (last: Sessie 115, next: Sessie 120)
-**Sessie counter:** 115
+**Rotation trigger:** Every 5 sessions (last: Sessie 120, next: Sessie 125)
+**Sessie counter:** 120
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -186,12 +181,12 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - **PRD:** `docs/prd.md` v1.8
 - **Commands:** `docs/commands-list.md` (41 commands)
 - **Style Guide:** `docs/style-guide.md` v1.5
-- **Sessie logs:** `SESSIONS.md` → docs/sessions/ (~115 sessies)
+- **Sessie logs:** `SESSIONS.md` → docs/sessions/ (~120 sessies)
 - **Netlify/Domain:** `docs/netlify-setup.md`
 - **Rules:** `.claude/rules/` (tone-and-output, architecture-patterns, troubleshooting, command-checklist)
 - **Filesystem:** PRD Bijlage B | **Tech rationale:** PRD §13
 
 ---
 
-**Last updated:** 16 maart 2026 (Sessie 115 — Learning Funnel & Onboarding Redesign)
-**Version:** 4.5 (Sessie 115: 8-stage learning funnel, phase transitions, next command, session docs catch-up)
+**Last updated:** 27 maart 2026 (Sessie 120 — Doc Sync & Metrics Alignment)
+**Version:** 4.6 (Sessie 120: M5.5 monetization revived, celebration UX, tutorial hardening, learning funnel hints, session rotation)
