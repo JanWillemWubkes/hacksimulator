@@ -984,27 +984,22 @@ a[href='#all'].category-btn {
   text-align: center;
 }
 .newsletter-signup h3 {
-  color: var(--color-ui-primary);
-  font-size: 1.5rem;
+  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3vw, 1.75rem);
+  font-weight: var(--font-weight-bold);
   margin-bottom: var(--spacing-md);
-}
-[data-theme='light'] .newsletter-signup h3 {
-  color: var(--color-link);
 }
 .newsletter-signup > p,
 .newsletter-content > p {
-  color: var(--color-text-light);
-  font-family: var(--font-heading);
-  font-size: 1.05rem;
+  color: var(--color-text-dim);
+  font-family: var(--font-body);
+  font-size: 1.125rem;
   line-height: 1.6;
   margin-bottom: var(--spacing-lg);
 }
 [data-theme='light'] .newsletter-signup {
   background-color: var(--color-bg-modal);
-}
-[data-theme='light'] .newsletter-signup > p,
-[data-theme='light'] .newsletter-content > p {
-  color: var(--color-text);
 }
 .newsletter-form {
   display: flex;
