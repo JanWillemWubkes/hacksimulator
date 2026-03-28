@@ -4,6 +4,87 @@
 
 ---
 
+## Sessie 122: MailerLite Newsletter Setup & Mailchimp Migration (28 maart 2026)
+
+**Scope:** Volledige newsletter infrastructure: Mailchimp → MailerLite migratie, welkomstmail automation met custom HTML (neon green terminal theme), embedded form op homepage + blog, domain authenticatie via TransIP DNS
+**Status:** ✅ VOLTOOID
+**Commits:** 1 commit (`eccb7cd`)
+
+---
+
+### Context & Problem
+
+Mailchimp biedt geen gratis automations — welkomstmails vereisen een betaald plan. MailerLite biedt wel gratis automations tot 1000 subscribers, betere fit voor het huidige traffic niveau (<500/maand).
+
+De site had Mailchimp forms op `index.html` en `blog/index.html` die naar Mailchimp's list-manage endpoint POSTten. Deze moesten vervangen worden door MailerLite-compatible forms, en er moest een welkomstmail automation opgezet worden.
+
+### Aanpak
+
+**1. MailerLite Account Setup:**
+- Account aangemaakt, hacksimulator.nl domain geauthenticeerd via SPF/DKIM DNS records in TransIP
+- Sender email: contact@hacksimulator.nl (forwardt naar Gmail)
+- "Newsletter" group aangemaakt als automation trigger
+
+**2. Welcome Email Automation:**
+- Custom HTML editor gebruikt (Advanced plan feature, beschikbaar tijdens 14-daagse trial)
+- HTML geïnjecteerd via ACE editor JavaScript API (`ace.edit().setValue()`) — betrouwbaarder dan drag & drop via Playwright
+- Design: neon groene (#9fef00) header balk met donkere terminal commands, matching landing page CTA styling
+- Trigger: "Joins group Newsletter" → automatische welkomstmail
+- Taal: Nederlands, sender: HackSimulator.nl
+
+**3. Form Migration (Mailchimp → MailerLite):**
+- Mailchimp form action + honeypot verwijderd uit `index.html` en `blog/index.html`
+- MailerLite AJAX form geïmplementeerd met `fetch()` naar `assets.mailerlite.com/jsonp/` endpoint
+- Inline feedback: groen "Gelukt!" bij succes, rood error bij falen
+- Button states: "Bezig..." → "Aangemeld!"
+- CORS verified: preflight retourneert 204
+- Tekst gecorrigeerd: "wekelijks" → "maandelijks"
+
+**4. Documentatie:**
+- `docs/newsletter/welkomstmail.md` — welkomstmail copy + design specs
+- `docs/newsletter/maandelijks-template.md` — maandelijks newsletter template
+- `docs/archive/monetization-plan-v2.md` — volledige monetisatiestrategie
+
+### Files Changed
+
+| Bestand | Wijziging |
+|---|---|
+| `index.html` | Mailchimp form → MailerLite AJAX + "wekelijks" → "maandelijks" |
+| `blog/index.html` | Zelfde als index.html |
+| `docs/newsletter/welkomstmail.md` | Nieuw: welkomstmail copy + design specs |
+| `docs/newsletter/maandelijks-template.md` | Nieuw: maandelijks template |
+| `docs/archive/monetization-plan-v2.md` | Nieuw: monetisatiestrategie |
+
+### Key Decisions
+
+- **MailerLite boven Mailchimp:** Gratis automations tot 1000 subscribers vs Mailchimp's betaalde Standard plan
+- **AJAX form boven MailerLite widget:** Behoud bestaande dark terminal styling, geen extra JS/CSS overhead
+- **Neon green header (#9fef00):** Sterke visuele opener in inbox, matcht landing page CTA branding
+- **Custom HTML editor:** Vereist Advanced plan (€17.10/maand), nu op 14-daagse trial — beslissing nodig voor trial afloopt
+
+### Lessons Learned
+
+⚠️ **Never:**
+- MailerLite's drag & drop editor gebruiken via Playwright — te complex, gebruik Custom HTML + ACE editor API
+- Third-party form widgets embedden als je bestaande styling wilt behouden — gebruik fetch() naar hun API endpoint
+- Mailchimp JSONP endpoint als directe form POST gebruiken — retourneert JSON, geen redirect
+
+✅ **Always:**
+- Domain authenticeren (SPF/DKIM) voordat je sender email configureert — MailerLite blokkeert unauthenticated domains
+- CORS preflight testen (`curl -X OPTIONS`) vóór client-side fetch integratie
+- `application/x-www-form-urlencoded` gebruiken voor MailerLite form submissions — niet JSON
+- Email styling testen via test email naar eigen adres — rendering verschilt per client
+
+### Open Items
+
+- [ ] Custom HTML editor vereist Advanced plan — switch naar drag & drop editor voor trial afloopt, of upgrade
+- [ ] Gmail forwarding onderzoeken — test emails komen aan op TransIP webmail maar niet in Gmail
+- [ ] Na deploy: live form testen op hacksimulator.nl (AJAX submit + subscriber check in MailerLite)
+- [ ] Eerste cheatsheet maken (Nmap voor Beginners) + Gumroad account opzetten
+- [ ] CSP headers checken: `connect-src` moet `assets.mailerlite.com` toestaan
+
+---
+
 ## Sessie 121: Doc Sync & Session Catch-Up (27 maart 2026)
 
 **Scope:** Volledige documentatie synchronisatie na 56 commits drift: sessions 116-120 gedocumenteerd, M5.5 heropend in alle docs, CLAUDE.md geroteerd, metrics geverifieerd vanuit broncode

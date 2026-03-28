@@ -18,7 +18,7 @@
 
 **Performance:** Playwright E2E 161 tests across 30 suites (21 files, 3 browsers) | WCAG AAA | 182 CSS variables
 **Bundle:** ~848 KB productieve code → ~809 KB na Netlify minificatie | Terminal Core: ~340 KB (binnen 400 KB budget)
-**Monetization:** AdSense (10 units) + Ko-fi donaties + Newsletter signup | Eigen consent banner (Consent Mode v2)
+**Monetization:** AdSense (10 units) + Ko-fi donaties + MailerLite newsletter (welkomstmail live) | Eigen consent banner (Consent Mode v2)
 
 → **Live metrics:** `TASKS.md` regels 9-26 (meest recente tellingen)
 → **Architecture:** `PLANNING.md` v2.9 | **Commands:** `docs/commands-list.md` (41 commands)
@@ -84,6 +84,17 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 122: MailerLite Newsletter Setup & Mailchimp Migration (28 maart 2026)
+⚠️ **Never:**
+- MailerLite drag & drop editor via Playwright — gebruik Custom HTML + ACE editor JS API (`ace.edit().setValue()`)
+- Third-party form widgets embedden als je bestaande styling wilt behouden — gebruik fetch() naar hun API endpoint
+- MailerLite JSONP endpoint als directe form POST — retourneert JSON, geen redirect
+
+✅ **Always:**
+- Domain authenticeren (SPF/DKIM) vóór sender email configuratie — MailerLite blokkeert unauthenticated domains
+- CORS preflight testen (`curl -X OPTIONS`) vóór client-side fetch integratie
+- `application/x-www-form-urlencoded` voor MailerLite form submissions — niet JSON
+
 ### Sessie 119: 3-Zone Celebration Redesign & Stat Cards (24-25 maart 2026)
 ⚠️ **Never:**
 - Gebruikers terugsturen in learning funnel — check `maxPhaseReached` bij phase detection
@@ -111,16 +122,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Explicit width op ad containers — voorkomt invisible ads door collapsed containers
 - CSP `frame-src` + `connect-src` updaten bij externe ad/analytics integraties
 
-### Sessie 116: Doc Sync & Learning Funnel Hints (16-17 maart 2026)
-⚠️ **Never:**
-- "Type next" hint tonen tijdens actieve tutorials/challenges — verwarrend, conflicteert met tutorial flow
-- Funnel phases in willekeurige volgorde — `cat` vóór `cd` is natuurlijker (lees eerst, navigeer daarna)
-
-✅ **Always:**
-- Context-aware hints: check of tutorial/challenge actief is vóór hint weergave
-- Duplicate hint guards: track welke hints al getoond zijn in sessie
-- Progressive disclosure: Ctrl+R hint pas na 7+ commands (niet overweldigend voor beginners)
-
 ### Sessie 121: Doc Sync & Session Catch-Up (27 maart 2026)
 ⚠️ **Never:**
 - Aannemen dat docs actueel zijn na meerdere werkdagen zonder sync — metrics driften snel (M5.5 was "geannuleerd" terwijl het volledig live was)
@@ -140,7 +141,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
 **Rotation trigger:** Every 5 sessions (last: Sessie 120, next: Sessie 125)
-**Sessie counter:** 121
+**Sessie counter:** 122
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -180,12 +181,12 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - **PRD:** `docs/prd.md` v1.8
 - **Commands:** `docs/commands-list.md` (41 commands)
 - **Style Guide:** `docs/style-guide.md` v1.5
-- **Sessie logs:** `SESSIONS.md` → docs/sessions/ (~120 sessies)
+- **Sessie logs:** `SESSIONS.md` → docs/sessions/ (~122 sessies)
 - **Netlify/Domain:** `docs/netlify-setup.md`
 - **Rules:** `.claude/rules/` (tone-and-output, architecture-patterns, troubleshooting, command-checklist)
 - **Filesystem:** PRD Bijlage B | **Tech rationale:** PRD §13
 
 ---
 
-**Last updated:** 27 maart 2026 (Sessie 121 — Doc Sync & Session Catch-Up)
-**Version:** 4.6 (Sessie 120: M5.5 monetization revived, celebration UX, tutorial hardening, learning funnel hints, session rotation)
+**Last updated:** 28 maart 2026 (Sessie 122 — MailerLite Newsletter Setup & Mailchimp Migration)
+**Version:** 4.7 (Sessie 122: MailerLite migration, welkomstmail automation, form AJAX, monetization docs)
