@@ -1003,9 +1003,14 @@ a[href='#all'].category-btn {
 }
 .newsletter-form {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--spacing-sm);
   justify-content: center;
   margin-bottom: var(--spacing-md);
+}
+.newsletter-feedback {
+  width: 100%;
+  text-align: center;
 }
 .newsletter-form input[type="email"] {
   background-color: var(--color-bg);
@@ -1048,6 +1053,12 @@ a[href='#all'].category-btn {
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
   color: var(--color-button-text-hover);
   transform: translateY(-2px);
+}
+.newsletter-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 .newsletter-privacy {
   color: var(--color-text-dim);

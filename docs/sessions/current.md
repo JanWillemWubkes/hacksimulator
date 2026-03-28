@@ -81,7 +81,7 @@ De site had Mailchimp forms op `index.html` en `blog/index.html` die naar Mailch
 - [ ] Gmail forwarding onderzoeken — test emails komen aan op TransIP webmail maar niet in Gmail
 - [ ] Na deploy: live form testen op hacksimulator.nl (AJAX submit + subscriber check in MailerLite)
 - [ ] Eerste cheatsheet maken (Nmap voor Beginners) + Gumroad account opzetten
-- [ ] CSP headers checken: `connect-src` moet `assets.mailerlite.com` toestaan
+- [x] CSP headers checken: `connect-src` moet `assets.mailerlite.com` toestaan (Sessie 123)
 
 ---
 
