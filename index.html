@@ -680,15 +680,43 @@
   <section class="homepage-newsletter" id="newsletter">
     <div class="newsletter-content">
       <h3>Gratis Cybersecurity Tips</h3>
-      <p>Ontvang wekelijks tips over ethisch hacken, nieuwe tutorials en cybersecurity nieuws. Geen spam, altijd opzegbaar.</p>
-      <form action="https://hacksimulator.us9.list-manage.com/subscribe/post?u=ad19c89c9e6fcf19c1fd68b61&amp;id=79c36648e4&amp;f_id=00f153e1f0" method="post" class="newsletter-form" target="_blank">
-        <input type="email" name="EMAIL" placeholder="je@email.nl" required
+      <p>Ontvang maandelijks tips over ethisch hacken, nieuwe tutorials en cybersecurity nieuws. Geen spam, altijd opzegbaar.</p>
+      <form class="newsletter-form" id="ml-form-homepage" onsubmit="return mlSubmit(event, this)">
+        <input type="email" name="fields[email]" placeholder="je@email.nl" required
                aria-label="Email adres voor newsletter">
-        <div aria-hidden="true" style="position: absolute; left: -5000px;">
-          <input type="text" name="b_ad19c89c9e6fcf19c1fd68b61_79c36648e4" tabindex="-1" value="">
-        </div>
+        <input type="hidden" name="ml-submit" value="1">
+        <input type="hidden" name="anticsrf" value="true">
         <button type="submit" class="newsletter-button">Aanmelden</button>
+        <p class="newsletter-feedback" style="display:none;margin-top:8px;font-size:0.9rem;"></p>
       </form>
+      <script>
+      function mlSubmit(e, form) {
+        e.preventDefault();
+        var btn = form.querySelector('button');
+        var feedback = form.querySelector('.newsletter-feedback');
+        btn.disabled = true;
+        btn.textContent = 'Bezig...';
+        feedback.style.display = 'none';
+        fetch('https://assets.mailerlite.com/jsonp/2228373/forms/183191011332195502/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(new FormData(form)).toString()
+        }).then(function() {
+          feedback.textContent = 'Gelukt! Check je inbox voor een bevestiging.';
+          feedback.style.color = '#9fef00';
+          feedback.style.display = 'block';
+          btn.textContent = 'Aangemeld!';
+          form.querySelector('input[type="email"]').value = '';
+        }).catch(function() {
+          feedback.textContent = 'Er ging iets mis. Probeer het opnieuw.';
+          feedback.style.color = '#ff6b6b';
+          feedback.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Aanmelden';
+        });
+        return false;
+      }
+      </script>
       <p class="newsletter-privacy">We respecteren je privacy. Lees ons <a href="/assets/legal/privacy.html">privacybeleid</a>.</p>
       <p class="newsletter-or-support">Of <a href="https://ko-fi.com/hacksimulator" target="_blank" rel="noopener noreferrer">steun het project met een koffie</a></p>
     </div>
