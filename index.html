@@ -703,13 +703,13 @@
           body: new URLSearchParams(new FormData(form)).toString()
         }).then(function() {
           feedback.textContent = 'Gelukt! Check je inbox voor een bevestiging.';
-          feedback.style.color = '#9fef00';
+          feedback.className = 'newsletter-feedback is-success';
           feedback.style.display = 'block';
           btn.textContent = 'Aangemeld!';
           form.querySelector('input[type="email"]').value = '';
         }).catch(function() {
           feedback.textContent = 'Er ging iets mis. Probeer het opnieuw.';
-          feedback.style.color = '#ff6b6b';
+          feedback.className = 'newsletter-feedback is-error';
           feedback.style.display = 'block';
           btn.disabled = false;
           btn.textContent = 'Aanmelden';

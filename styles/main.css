@@ -364,6 +364,8 @@ strong {
 
 /* ==================== Buttons ==================== */
 button {
+  -webkit-appearance: none;
+  appearance: none;
   font-family: var(--font-heading);
   cursor: pointer;
   border: none;
@@ -1834,6 +1836,12 @@ abbr.jargon {
 .homepage-newsletter .newsletter-feedback {
   width: 100%;
   text-align: center;
+}
+.homepage-newsletter .newsletter-feedback.is-success {
+  color: var(--color-success);
+}
+.homepage-newsletter .newsletter-feedback.is-error {
+  color: var(--color-error);
 }
 .homepage-newsletter .newsletter-form input[type="email"] {
   background-color: var(--color-bg);
