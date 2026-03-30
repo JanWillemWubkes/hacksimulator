@@ -150,6 +150,17 @@
         e.preventDefault();
         var btn = form.querySelector('button');
         var feedback = form.querySelector('.newsletter-feedback');
+        var email = form.querySelector('input[type="email"]').value.toLowerCase().trim();
+        var subs = JSON.parse(localStorage.getItem('hs_nl_subs') || '[]');
+
+        // Client-side duplicate check
+        if (subs.indexOf(email) !== -1) {
+          feedback.textContent = 'Je bent al aangemeld! Check je inbox (en spam-map) voor eerdere mails.';
+          feedback.className = 'newsletter-feedback is-info';
+          feedback.style.display = 'block';
+          return false;
+        }
+
         btn.disabled = true;
         btn.textContent = 'Bezig...';
         feedback.style.display = 'none';
@@ -157,11 +168,23 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: new URLSearchParams(new FormData(form)).toString()
-        }).then(function() {
-          feedback.textContent = 'Gelukt! Check je inbox voor een bevestiging.';
-          feedback.className = 'newsletter-feedback is-success';
+        }).then(function(r) {
+          return r.json();
+        }).then(function(data) {
+          // Save to localStorage
+          if (subs.indexOf(email) === -1) { subs.push(email); }
+          localStorage.setItem('hs_nl_subs', JSON.stringify(subs));
+
+          // Check MailerLite response for existing subscriber
+          if (data && data.success && data.already_subscribed) {
+            feedback.textContent = 'Je bent al aangemeld! Check je inbox (en spam-map) voor eerdere mails.';
+            feedback.className = 'newsletter-feedback is-info';
+          } else {
+            feedback.textContent = 'Gelukt! Check je inbox voor een bevestiging.';
+            feedback.className = 'newsletter-feedback is-success';
+            btn.textContent = 'Aangemeld!';
+          }
           feedback.style.display = 'block';
-          btn.textContent = 'Aangemeld!';
           form.querySelector('input[type="email"]').value = '';
         }).catch(function() {
           feedback.textContent = 'Er ging iets mis. Probeer het opnieuw.';

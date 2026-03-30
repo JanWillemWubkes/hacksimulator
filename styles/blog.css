@@ -1018,6 +1018,9 @@ a[href='#all'].category-btn {
 .newsletter-feedback.is-error {
   color: var(--color-error);
 }
+.newsletter-feedback.is-info {
+  color: var(--color-info);
+}
 .newsletter-form input[type="email"] {
   background-color: var(--color-bg);
   border: 1px solid var(--color-border);
