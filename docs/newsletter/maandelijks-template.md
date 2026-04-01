@@ -1,20 +1,25 @@
-# Maandelijks Newsletter Template — Mailchimp
+# Maandelijks Newsletter Template — MailerLite
 
 **Type:** Regular campaign (maandelijks)
+**Platform:** MailerLite (Account ID: 2228373)
+**Editor:** Custom HTML editor (vereist Advanced plan) of Rich Text editor
 **Verzenddag:** Eerste dinsdag van de maand (beste open rates voor B2C NL)
 **Verzendtijd:** 10:00 CET
+**Subscriber groep:** "Newsletter"
 
 ---
 
 ## Vast Format (elke maand invullen)
 
 ### Onderwerpregel formaat
-"[Maand] — [Pakkende tip/onderwerp in max 50 tekens]"
+"[Pakkende tip/onderwerp in max 50 tekens]"
+
+Geen maandprefix — subscribers zien de datum al in hun inbox. Houd het kort en creëer nieuwsgierigheid.
 
 Voorbeelden:
-- "April — 3 nmap trucs die beginners missen"
-- "Mei — Waarom poort 443 belangrijker is dan je denkt"
-- "Juni — Je eerste SQL injection (legaal)"
+- "Eén commando onthult een heel netwerk"
+- "Waarom poort 443 belangrijker is dan je denkt"
+- "Je eerste SQL injection (legaal)"
 
 **Preview tekst:** Eerste zin van de Tip van de Maand sectie.
 
@@ -27,7 +32,18 @@ Voorbeelden:
 $ cat nieuwsbrief-[maand]-2026.txt
 > Loading...
 ```
-Kleur: #3fb950 (groen), font: monospace, 13px
+Kleur: #9fef00 (neon groen), font: monospace, 13px
+
+---
+
+### [1.5] Intro (vast)
+
+**Heading (vast, elke editie hetzelfde):**
+> **Welkom bij je maandelijkse dosis cybersecurity.**
+
+**Tekst (variabel per editie):**
+> [1-2 zinnen context over wat er in deze editie staat. Bij de eerste editie:
+> introductie van de nieuwsbrief. Bij latere edities: korte teaser van de tip.]
 
 ---
 
@@ -98,9 +114,24 @@ Zelfde stijl als welkomstmail:
 - Achtergrond: #0d1117 (outer) / #161b22 (inner)
 - Tekst: #c9d1d9 (headings) / #8b949e (body)
 - Links: #79c0ff
-- Buttons: #004494 met #ffffff tekst
+- Buttons: #9fef00 met #0d1117 tekst
 - Font: Courier New / monospace, 15px
 - Max breedte: 600px
+
+---
+
+## Base CSS Block (kopieer naar elke nieuwe email)
+
+Het `<style>` blok in de `<head>` is identiek voor alle emails.
+Kopieer dit blok exact uit de meest recente nieuwsbrief (`nieuwsbrief-april-2026.html`).
+
+Het blok bevat:
+- `@media (prefers-color-scheme: dark)` — dark mode overrides (10 klassen)
+- `u + .body` — Gmail dark mode prevention (10 klassen)
+- `[data-ogsc]` — Outlook.com dark mode overrides (11 klassen)
+- `@media (max-width: 600px)` — responsive regels + mobiele header/code block
+
+**Wijzig deze klassen NIET per email.** Ze beschermen de HackSimulator kleuren tegen automatische dark mode inversie door email clients.
 
 ---
 
@@ -117,8 +148,15 @@ Zelfde stijl als welkomstmail:
 ## Checklist voor verzending
 
 - [ ] Onderwerpregel < 60 tekens
-- [ ] Preview tekst ingevuld (niet standaard Mailchimp tekst)
+- [ ] Preview tekst ingevuld (niet standaard MailerLite tekst)
 - [ ] Alle links getest (terminal, blog, cheatsheet)
-- [ ] Mobiel preview gecheckt in Mailchimp
-- [ ] Uitschrijflink werkt
+- [ ] UTM parameters op alle links (`?utm_source=newsletter&utm_medium=email&utm_campaign=[maand]-[jaar]`)
+- [ ] Mobiel preview gecheckt in MailerLite
+- [ ] Uitschrijflink werkt (`{$unsubscribe}`)
 - [ ] Verzendtijd: 10:00 CET, eerste dinsdag
+- [ ] Test-email verstuurd naar eigen adres
+
+### MailerLite variabelen
+- Uitschrijven: `{$unsubscribe}`
+- Bekijk in browser: `{$url}`
+- Voornaam: `{$name}` (optioneel)
