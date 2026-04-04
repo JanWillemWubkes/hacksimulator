@@ -112,7 +112,7 @@ Elke week heeft:
 **Tijd:** 3-4 uur
 
 **Activiteiten:**
-1. Lees de Juridische Gids van HackSimulator (als je die hebt) of de blogpost "Wat is Ethisch Hacken?"
+1. Lees de **Juridische Gids van HackSimulator** (apart verkrijgbaar op hacksimulator.nl) of de gratis blogpost "Wat is Ethisch Hacken?"
 2. Maak jezelf vertrouwd met:
    - **Art. 138ab Sr** — computervredebreuk (max. 2-4 jaar cel)
    - **Coordinated Vulnerability Disclosure** — hoe je een lek meldt zonder gearresteerd te worden
@@ -505,4 +505,4 @@ Alle feiten in dit leerplan zijn geverifieerd per april 2026:
 
 *Dit leerplan is geschreven voor HackSimulator.nl — de gratis browser-based terminal simulator voor ethical hacking.*
 *Laatst bijgewerkt: april 2026*
-*Versie: 1.0 DRAFT*
+*Versie: 1.0*

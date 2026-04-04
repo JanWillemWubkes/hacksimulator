@@ -319,4 +319,4 @@ Alle feiten in deze gids zijn geverifieerd per april 2026:
 
 *Deze gids is geschreven voor HackSimulator.nl — de gratis browser-based terminal simulator voor ethical hacking.*
 *Laatst bijgewerkt: april 2026*
-*Versie: 1.0 DRAFT*
+*Versie: 1.0*
