@@ -219,7 +219,11 @@ function initialize() {
 
   } catch (error) {
     console.error('Failed to initialize HackSimulator:', error);
-    alert('Failed to initialize terminal. Please refresh the page.');
+    const errorBanner = document.createElement('div');
+    errorBanner.setAttribute('role', 'alert');
+    errorBanner.style.cssText = 'position:fixed;top:0;left:0;right:0;padding:16px;background:#da3633;color:#fff;font-family:monospace;text-align:center;z-index:9999';
+    errorBanner.textContent = 'Terminal kon niet worden geladen. Vernieuw de pagina om het opnieuw te proberen.';
+    document.body.prepend(errorBanner);
   }
 }
 
