@@ -1,8 +1,8 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 27 maart 2026
-**Status:** M7 Gamification 98% | M6 Tutorial System 88% | M5.5 Monetization ✅ Live (LIVE on hacksimulator.nl)
-**Sprint:** Sessie 121: Doc Sync — sessions 116-120, M5.5 revived, CLAUDE.md rotation
+**Laatst bijgewerkt:** 6 april 2026
+**Status:** M7 Gamification 98% | M6 Tutorial System 88% | M5.5 Monetization ✅ Live + Gumroad track (LIVE on hacksimulator.nl)
+**Sprint:** Sessie 125: SEO/Legal/A11y polish — JSON-LD schema (10 blogs), legal pages CSS-var migratie, OG image, alert→banner
 
 ---
 
@@ -18,7 +18,7 @@
 | M3: Network & Security | ✅ Voltooid | 28/28 | 100% |
 | M4: UX & Polish | ✅ Voltooid | 43/43 | 100% |
 | M5: Testing & Launch | 🔵 In uitvoering | 41/45 | 91% | ✅ **Performance + Config + Security + Accessibility + Content + Bundle Opt 100%**
-| M5.5: Monetization MVP | 🔵 In uitvoering | 8/10 | 80% | ✅ AdSense (10 units) + Ko-fi + Newsletter + eigen consent banner live |
+| M5.5: Monetization MVP | 🔵 In uitvoering | 9/11 | 82% | ✅ AdSense (10 units) + Ko-fi + MailerLite newsletter + eigen consent banner + Gumroad products v1.0 (3 guides) |
 | M6: Tutorial System | 🔵 In uitvoering | 30/33 | 88% | ✅ Framework + 3 scenarios + cert + analytics + E2E tests + perf audit + mobile + cross-browser |
 | M7: Gamification | 🔵 In uitvoering | 46/47 | 98% | ✅ Phase 1-6 complete + Phase 7 testing (cross-system, performance, mobile) |
 | M8: Analytics & Scaling | ⏭️ Gepland | 0/40 | 0% |
@@ -29,7 +29,7 @@
 ## 🎯 Huidige Focus
 
 **Actieve Mijlpalen:** M5.5 Monetization + M6 Tutorial System + M7 Gamification
-**Current Status:** ✅ LIVE — Playwright E2E: 161 tests, 30 suites (Chromium, Firefox, WebKit) | AdSense + Ko-fi + Newsletter live
+**Current Status:** ✅ LIVE — Playwright E2E: 160 tests, 30 suites, 21 spec files (Chromium, Firefox, WebKit) | AdSense + Ko-fi + MailerLite + Gumroad live | Bundle: 1192 KB site totaal (blog 306 KB + assets 597 KB), Terminal runtime ~604 KB src/ + 249 KB styles/ — buiten oorspronkelijk 400 KB runtime budget door blog SEO assets
 
 **Volgende Stappen:**
 1. ✅ GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
@@ -44,6 +44,8 @@
 10. [ ] AdSense performance monitoring (CTR, RPM na 30 dagen)
 11. [ ] M6 Tutorial: laatste 3 open taken (→ 100%)
 12. [ ] M7 Gamification: laatste open taak (→ 100%)
+13. [ ] Bundle audit: site totaal +40% sinds laatste meting (848 → 1192 KB) — runtime vs SEO assets ontwarren, runtime budget herijken
+14. [ ] Gumroad products v1.0: publicatie + listings live zetten (3 guides klaar in `docs/products/`)
 
 ---
 

@@ -1,7 +1,7 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 17 maart 2026
-**Status:** M5 Testing & Launch Phase - ✅ **LIVE on Netlify!**
+**Laatst bijgewerkt:** 6 april 2026 (Sessie 125 — SEO/Legal/A11y polish)
+**Status:** M5 Testing & Launch Phase - ✅ **LIVE on Netlify!** | M5.5 Monetization uitgebreid met Gumroad products
 **Verantwoordelijk:** Development Team
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

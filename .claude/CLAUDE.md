@@ -13,12 +13,12 @@
 **Language:** UI=NL | Commands=EN | Help/Errors=NL
 
 **URLs:** [Production](https://hacksimulator.nl/) | [GitHub](https://github.com/JanWillemWubkes/hacksimulator)
-**Blog:** 10 posts live at `/blog/` (105+ inline jargon explanations)
+**Blog:** 10 posts live at `/blog/` (105+ inline jargon explanations) | JSON-LD schema + internal cross-linking compleet (Sessie 125)
 **Contact:** contact@hacksimulator.nl (Gmail forwarding)
 
-**Performance:** Playwright E2E 161 tests across 30 suites (21 files, 3 browsers) | WCAG AAA | 182 CSS variables
-**Bundle:** ~848 KB productieve code → ~809 KB na Netlify minificatie | Terminal Core: ~340 KB (binnen 400 KB budget)
-**Monetization:** AdSense (10 units) + Ko-fi donaties + MailerLite newsletter (welkomstmail live) | Eigen consent banner (Consent Mode v2)
+**Performance:** Playwright E2E 160 tests across 30 suites (21 files, 3 browsers) | WCAG AAA | 182 CSS variables (main.css) + 27 (landing.css) = 209 totaal
+**Bundle:** Site totaal **~1192 KB** (geverifieerd 06-04-2026) | Splitsing: src/ 604 KB, styles/ 249 KB, blog/ 306 KB (10 posts + JSON-LD), assets/ 597 KB (screenshots 401 + OG image 151) | ⚠️ Runtime budget herijking nodig — blog SEO assets vallen buiten origineel 400 KB Terminal Core budget
+**Monetization:** AdSense (10 units) + Ko-fi donaties + MailerLite newsletter (welkomstmail live) + **Gumroad products v1.0** (3 guides klaar) | Eigen consent banner (Consent Mode v2)
 
 → **Live metrics:** `TASKS.md` regels 9-26 (meest recente tellingen)
 → **Architecture:** `PLANNING.md` v2.9 | **Commands:** `docs/commands-list.md` (41 commands)
@@ -84,6 +84,37 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 125: SEO, Legal Refactor & A11y Polish (5-6 april 2026)
+⚠️ **Never:**
+- Hardcoded kleuren in legal pages laten staan na design system migratie — breekt theme support en is inconsistent met blog/pages
+- `alert()` voor user-facing errors gebruiken — blokkeert UI thread, geen styling, slechte a11y, geen brand consistency
+- Playwright screenshots zonder expliciete `.playwright-mcp/` filename — repo root vervuilt ondanks `/*.png` gitignore vangnet
+
+✅ **Always:**
+- JSON-LD schema op álle blog posts (niet alleen homepage) — Google Rich Results vereist per-page structured data
+- Internal cross-linking tussen blog posts — verhoogt dwell time en Google's topical authority signal
+- Theme toggle button met `aria-pressed` + visible focus ring — WCAG AAA voor stateful controls
+
+### Sessie 124: Gumroad Products v1.0 (3-4 april 2026)
+⚠️ **Never:**
+- Product content publiceren zonder dubbele factcheck — paid products eisen 100% verifieerbare claims (user product quality standard)
+- Generieke "leerplan" zonder concrete uren/weken/oefeningen — kopers verwachten directe actionability
+
+✅ **Always:**
+- Product drafts in `docs/products/` versioneren (v1.0, v1.1...) — git history is changelog voor refunds/disputes
+- Listings + setup guide naast product zelf opleveren — Gumroad onboarding heeft eigen metadata vereisten (preview, FAQ, refund policy)
+- Monetization track diversificatie: AdSense (passief) + Ko-fi (donaties) + Newsletter (lead nurture) + Gumroad (digital products) — geen single point of failure
+
+### Sessie 123: Newsletter Polish & April Editie (29 mrt – 1 april 2026)
+⚠️ **Never:**
+- Aannemen dat MailerLite duplicate signups silent blokkeert — server response parsen + localStorage cross-check vereist
+- Newsletter HTML schrijven zonder Outlook/Gmail dark mode test — clients renderen `<style>` tags inconsistent
+
+✅ **Always:**
+- UTM parameters op alle nieuwsbrief CTA's — anders zijn newsletter conversies onzichtbaar in GA4
+- Theme-aware feedback colors (success/error) via CSS vars, niet hardcoded greens/reds — consistent met design system
+- Mobile-first button styling testen op 375px viewport vóór desktop polish — newsletter signup is hot path op mobile
+
 ### Sessie 122: MailerLite Newsletter Setup & Mailchimp Migration (28 maart 2026)
 ⚠️ **Never:**
 - MailerLite drag & drop editor via Playwright — gebruik Custom HTML + ACE editor JS API (`ace.edit().setValue()`)
@@ -112,16 +143,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Ko-fi touchpoints op natuurlijke completion moments (challenges, certificaten) — hogere conversie
 - Input validatie op security commands (nmap, traceroute) — voorkom verwarrende output bij ongeldige targets
 
-### Sessie 117: Tutorial Hardening & M5.5 Monetization Pivot (18-20 maart 2026)
-⚠️ **Never:**
-- Third-party CMP (Cookiebot) gebruiken als eigen consent banner volstaat — overhead, blocking issues
-- AdSense plaatsen zonder Consent Mode v2 update calls — ads laden niet correct
-
-✅ **Always:**
-- `wrong-args` vs `false` onderscheiden in tutorial validators — specifiekere feedback voor gebruikers
-- Explicit width op ad containers — voorkomt invisible ads door collapsed containers
-- CSP `frame-src` + `connect-src` updaten bij externe ad/analytics integraties
-
 ### Sessie 121: Doc Sync & Session Catch-Up (27 maart 2026)
 ⚠️ **Never:**
 - Aannemen dat docs actueel zijn na meerdere werkdagen zonder sync — metrics driften snel (M5.5 was "geannuleerd" terwijl het volledig live was)
@@ -140,8 +161,8 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Voor Sessie:** Lees `PLANNING.md`, `TASKS.md`, dit bestand
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-**Rotation trigger:** Every 5 sessions (last: Sessie 120, next: Sessie 125)
-**Sessie counter:** 122
+**Rotation trigger:** Every 5 sessions (last: Sessie 125, next: Sessie 130)
+**Sessie counter:** 125
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -194,5 +215,5 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 28 maart 2026 (Sessie 122 — MailerLite Newsletter Setup & Mailchimp Migration)
-**Version:** 4.7 (Sessie 122: MailerLite migration, welkomstmail automation, form AJAX, monetization docs)
+**Last updated:** 6 april 2026 (Sessie 125 — SEO, Legal Refactor & A11y Polish)
+**Version:** 4.8 (Sessies 123-125: newsletter polish, Gumroad products v1.0, JSON-LD schema, legal CSS-var migratie, OG image, bundle drift gedocumenteerd)

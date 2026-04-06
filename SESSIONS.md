@@ -8,10 +8,13 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (88-122)](docs/sessions/current.md) - Full Detail
-**Sessies:** 122, 121, 120, 119, 118, 117, 116, 115, 114, 113, 112, 111, 110, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88
-**Period:** 26 december 2025 - 28 maart 2026
+### [Current Sessions (88-125)](docs/sessions/current.md) - Full Detail
+**Sessies:** 125, 124, 123, 122, 121, 120, 119, 118, 117, 116, 115, 114, 113, 112, 111, 110, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88
+**Period:** 26 december 2025 - 6 april 2026
 **Topics:**
+- SEO, Legal Refactor & A11y Polish: JSON-LD schema (10 blogs), legal CSS-var migratie, OG image, alert→banner, theme toggle a11y (Sessie 125)
+- Gumroad Products v1.0: 3 product drafts (juridische gids, leerplan, pentest-playbook) + listings + setup guide (Sessie 124)
+- Newsletter Polish & April Editie: duplicate signup detectie, email client compat, dark mode, UTM tracking, mobile button (Sessie 123)
 - MailerLite Newsletter Setup & Mailchimp Migration: welkomstmail automation, form migration, domain auth (Sessie 122)
 - Doc Sync & Session Catch-Up: sessions 116-120, M5.5 revived, CLAUDE.md rotation (Sessie 121)
 - Site-Wide Metrics Sync: claims aligned met actuele tellingen (Sessie 120)

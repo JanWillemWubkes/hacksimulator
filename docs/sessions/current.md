@@ -4,6 +4,138 @@
 
 ---
 
+## Sessie 125: SEO, Legal Refactor & A11y Polish (5-6 april 2026)
+
+**Scope:** SEO completion (JSON-LD schema op alle 10 blog posts + internal cross-linking), legal pages migratie naar CSS variables met theme support, OG social-share image, vervanging `alert()` door themed error banner, theme toggle accessibility, Playwright screenshot gitignore hardening
+**Status:** ✅ VOLTOOID
+**Commits:** 4 (`257d89e`, `4caf138`, `4df2180`, `f454468`, `a3cd44b`)
+
+### Context & Problem
+
+Drie losse polish-tracks die gezamenlijk aangepakt zijn omdat ze allemaal "site looks done but isn't quite consistent" issues waren:
+
+1. **SEO incompleet:** Blog posts hadden basale meta tags maar geen structured data — Google Rich Results niet mogelijk, Article schema ontbrak.
+2. **Legal pages technische schuld:** `cookies.html`, `privacy.html`, `terms.html` gebruikten nog hardcoded hex kleuren uit vóór-design-system tijdperk. Brak in dark mode, inconsistent met blog/pages styling.
+3. **A11y en UX kleine pijnpunten:** Newsletter signup gebruikte browser `alert()` voor errors (lelijk, blokkerend, geen brand consistency), theme toggle had geen `aria-pressed` state, en OG social-share image ontbrak helemaal (LinkedIn/Twitter previews waren leeg).
+
+### Aanpak
+
+**1. JSON-LD Schema (commit `4df2180`):**
+- Article schema toegevoegd op alle 10 blog posts (author, datePublished, dateModified, image, publisher)
+- Internal cross-linking sectie onderaan elke post (3 gerelateerde posts) voor topical authority
+- BreadcrumbList schema voor navigatie
+
+**2. Legal Pages CSS-Var Migratie (commits `4caf138`, `f454468`):**
+- Nieuwe `styles/legal.css` met volledig theme-aware variabelen
+- Hardcoded `#xxx` waarden vervangen door `var(--color-*)`
+- Light/dark theme parity getest in beide modes
+
+**3. OG Image + a11y (commit `257d89e`):**
+- `assets/og-image.png` (1200×630, 151 KB) met terminal aesthetic
+- `<meta property="og:image">` op alle pagina's
+- `alert("...")` in newsletter signup vervangen door themed `.error-banner` div
+- Theme toggle button: `aria-pressed` + visible focus ring (WCAG AAA)
+
+**4. Screenshot Gitignore Hardening (commit `a3cd44b`):**
+- `/*.png` regel als vangnet versterkt na incident waar Playwright screenshots in repo root belandden
+- CLAUDE.md conventie: ALTIJD `.playwright-mcp/` prefix in `browser_take_screenshot` filename
+
+### Lessen
+
+⚠️ **Never:**
+- Hardcoded kleuren in legal pages laten staan na design system migratie
+- `alert()` voor user-facing errors gebruiken — UI thread blokkerend, geen styling, slechte a11y
+- Playwright screenshots zonder expliciete `.playwright-mcp/` filename
+
+✅ **Always:**
+- JSON-LD schema op álle blog posts (niet alleen homepage)
+- Internal cross-linking tussen blog posts (topical authority)
+- Theme toggle met `aria-pressed` + visible focus ring (WCAG AAA voor stateful controls)
+
+---
+
+## Sessie 124: Gumroad Products v1.0 (3-4 april 2026)
+
+**Scope:** Drie digitale producten finaliseren als nieuwe monetization track naast AdSense/Ko-fi/MailerLite. Product drafts, listings (titel/beschrijving/preview/FAQ/refund policy) en setup guide voor Gumroad onboarding.
+**Status:** ✅ VOLTOOID (publicatie/listing live nog open task)
+**Commits:** 2 (`26fedeb`, `b590eb4`)
+
+### Context & Problem
+
+AdSense levert passief inkomen maar low RPM op een beginnerssite. Ko-fi is vrijwillige donatie — bottom funnel. Newsletter is lead nurture, geen directe omzet. Er ontbreekt een **digital product** track waar gemotiveerde leerlingen direct iets concreets kunnen kopen dat aansluit op het simulator gebruik.
+
+Gumroad gekozen om: (a) gratis tier voldoende voor MVP, (b) geen Stripe/BTW administratie nodig in startfase, (c) marketplace + own-link model.
+
+### Aanpak
+
+**3 product drafts in `docs/products/`:**
+
+1. **Juridische Gids (NL ethisch hacken):** Wat mag, wat mag niet, CCV + Wet Computercriminaliteit, voorbeeldcasussen met uitspraken
+2. **Leerplan Beginner → CTF Ready:** 12-weken gestructureerd, per week concrete oefeningen die in HackSimulator gedaan kunnen worden + externe resources
+3. **Pentest Playbook:** Recon → enumeration → exploitation → post-exploit checklist met commando's en `[!]` waarschuwingen
+
+**Daarnaast:** `docs/products/gumroad-listings.md` met per product alle Gumroad metadata-velden (titel, summary, description, FAQ, refund policy NL).
+
+### Lessen
+
+⚠️ **Never:**
+- Product content publiceren zonder dubbele factcheck (paid products = 100% verifieerbaar — user product quality standard)
+- Generieke "leerplan" zonder concrete uren/weken/oefeningen — kopers verwachten directe actionability
+
+✅ **Always:**
+- Product drafts in git versioneren (v1.0, v1.1) — git history is changelog voor refunds/disputes
+- Listings + setup guide naast product zelf opleveren — Gumroad heeft eigen metadata vereisten
+- Monetization diversificatie: AdSense + Ko-fi + Newsletter + Gumroad — geen single point of failure
+
+### Open
+
+- [ ] Gumroad account aanmaken + listings live zetten
+- [ ] PDF export van markdown drafts (pandoc of manual layout)
+
+---
+
+## Sessie 123: Newsletter Polish & April Editie (29 maart – 1 april 2026)
+
+**Scope:** Follow-ups op Sessie 122's MailerLite migratie: mobile button styling fix, theme-aware feedback colors, duplicate signup detectie via localStorage + response parsing, en eerste echte april nieuwsbrief HTML met email client compatibility (Outlook/Gmail dark mode).
+**Status:** ✅ VOLTOOID
+**Commits:** 3 (`10a2272`, `2988546`, `be1dc46`)
+
+### Context & Problem
+
+Sessie 122 zette de basis MailerLite infrastructure neer maar liet drie scherpe randjes:
+1. Newsletter signup button op mobile (375px) had verkeerde padding/font-size — overlapte met form errors
+2. Success/error feedback gebruikte hardcoded greens/reds — brak in dark mode
+3. MailerLite blokkeert duplicate signups serverside maar de UI gaf alsnog "success" feedback — gebruikers wisten niet of ze al ingeschreven waren
+
+### Aanpak
+
+**1. Mobile button + theme colors (commit `10a2272`):**
+- `.newsletter-signup__button` mobile breakpoint padding fix
+- Feedback message colors via `var(--color-success)` / `var(--color-error)`
+
+**2. Duplicate signup detectie (commit `2988546`):**
+- localStorage flag `hs_newsletter_signed_up` na succesvolle signup
+- Response parsing: MailerLite retourneert specifieke message bij duplicate — match en toon "Je bent al ingeschreven"
+- Dual-check (localStorage + response) omdat localStorage cleared kan zijn
+
+**3. April nieuwsbrief HTML (commit `be1dc46`, `docs/newsletter/nieuwsbrief-april-2026.html`):**
+- Email-safe HTML (table-based layout, inline CSS)
+- Dark mode via `@media (prefers-color-scheme: dark)` + `<style>` block (Gmail strips, Outlook respecteert deels)
+- UTM parameters op alle CTA links (`utm_source=newsletter&utm_campaign=april2026`)
+
+### Lessen
+
+⚠️ **Never:**
+- Aannemen dat MailerLite duplicate signups silent blokkeert — server response parsen + localStorage cross-check
+- Newsletter HTML schrijven zonder Outlook/Gmail dark mode test
+
+✅ **Always:**
+- UTM parameters op alle nieuwsbrief CTA's — anders zijn newsletter conversies onzichtbaar in GA4
+- Theme-aware feedback colors via CSS vars
+- Mobile-first button styling testen op 375px viewport vóór desktop polish
+
+---
+
 ## Sessie 122: MailerLite Newsletter Setup & Mailchimp Migration (28 maart 2026)
 
 **Scope:** Volledige newsletter infrastructure: Mailchimp → MailerLite migratie, welkomstmail automation met custom HTML (neon green terminal theme), embedded form op homepage + blog, domain authenticatie via TransIP DNS
