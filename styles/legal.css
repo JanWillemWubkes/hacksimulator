@@ -1,0 +1,135 @@
+/**
+ * legal.css - HackSimulator.nl
+ * Legal pages styling (privacy, terms, cookies)
+ * Requires main.css for CSS variable definitions
+ */
+
+/* ==================== Base Layout ==================== */
+body.legal-page {
+  font-family: var(--font-body);
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* ==================== Typography ==================== */
+body.legal-page h1 {
+  color: var(--color-bg);
+  background: var(--color-prompt);
+  padding: 20px;
+  margin: -20px -20px 20px -20px;
+  font-family: var(--font-heading);
+}
+
+body.legal-page h2 {
+  color: var(--color-prompt);
+  border-bottom: 2px solid var(--color-prompt);
+  padding-bottom: 5px;
+  margin-top: 30px;
+}
+
+body.legal-page h3 {
+  color: var(--color-prompt);
+  margin-top: 20px;
+}
+
+body.legal-page strong {
+  color: var(--color-text);
+}
+
+/* ==================== Content Boxes ==================== */
+body.legal-page .info-box {
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-prompt);
+  padding: 15px;
+  margin: 20px 0;
+  border-radius: var(--border-radius-button);
+  color: var(--color-text);
+}
+
+body.legal-page .warning-box {
+  background: color-mix(in srgb, var(--color-error) 10%, var(--color-bg));
+  border-left: 4px solid var(--color-error);
+  padding: 15px;
+  margin: 20px 0;
+}
+
+body.legal-page .highlight {
+  background: color-mix(in srgb, var(--color-prompt) 10%, var(--color-bg));
+  padding: 10px;
+  padding-left: 10px;
+  border-left: 3px solid var(--color-prompt);
+  margin: 10px 0;
+}
+
+/* ==================== Tables ==================== */
+body.legal-page table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+body.legal-page table th,
+body.legal-page table td {
+  border: 1px solid var(--color-border);
+  padding: 12px;
+  text-align: left;
+}
+
+body.legal-page table th {
+  background: var(--color-prompt);
+  color: var(--color-bg);
+  font-weight: bold;
+}
+
+/* ==================== Lists ==================== */
+body.legal-page ul {
+  margin: 10px 0;
+  padding-left: 30px;
+}
+
+body.legal-page li {
+  margin: 5px 0;
+}
+
+/* ==================== Links ==================== */
+body.legal-page a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+body.legal-page a:hover {
+  color: var(--color-link-hover);
+  text-decoration: underline;
+}
+
+/* ==================== Back Link Button ==================== */
+body.legal-page .back-link {
+  display: inline-block;
+  margin: 20px 0;
+  padding: 10px 20px;
+  background: var(--color-prompt);
+  color: var(--color-bg);
+  text-decoration: none;
+  border-radius: var(--border-radius-button);
+  font-weight: bold;
+}
+
+body.legal-page .back-link:hover {
+  background: var(--color-success);
+  color: var(--color-bg);
+  text-decoration: none;
+}
+
+/* ==================== Footer ==================== */
+body.legal-page .legal-footer {
+  margin-top: 40px;
+  border-top: 1px solid var(--color-border);
+  padding-top: 20px;
+  text-align: center;
+  color: var(--color-text-dim);
+  font-size: 0.9em;
+}
