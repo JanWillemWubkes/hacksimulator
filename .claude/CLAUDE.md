@@ -165,6 +165,12 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 4. Taal correct: UI=NL, commands=EN, uitleg=NL
 5. Performance: Terminal Core <400KB, site totaal <1000KB
 
+### Playwright Screenshot Conventie
+- **ALTIJD** expliciete `filename` meegeven aan `browser_take_screenshot`
+- Prefix met `.playwright-mcp/` — die dir staat in `.gitignore`, dus screenshots blijven automatisch buiten git
+- Voorbeeld: `filename: ".playwright-mcp/legal-light-h1.png"`
+- **NOOIT** screenshots zonder filename of in repo root — de `/*.png` regel in `.gitignore` is een vangnet, geen excuus
+
 → **Tech constraints:** PRD §13 | **Pattern violations:** docs/sessions/current.md
 
 ---

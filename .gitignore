@@ -59,3 +59,8 @@ debug-*.html
 
 # Test metadata (explicit)
 .last-run.json
+
+# Stray screenshot artifacts in repo root
+# (Playwright screenshots should live in .playwright-mcp/, not root)
+# Scoped to root only — assets/**/*.png en blog/**/*.png blijven tracked
+/*.png
