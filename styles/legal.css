@@ -17,23 +17,27 @@ body.legal-page {
 
 /* ==================== Typography ==================== */
 body.legal-page h1 {
-  color: var(--color-bg);
-  background: var(--color-prompt);
-  padding: 20px;
-  margin: -20px -20px 20px -20px;
+  color: var(--color-ui-primary);
+  margin-bottom: 20px;
   font-family: var(--font-heading);
 }
 
 body.legal-page h2 {
-  color: var(--color-prompt);
-  border-bottom: 2px solid var(--color-prompt);
+  color: var(--color-ui-primary);
+  border-bottom: 1px solid var(--color-border);
   padding-bottom: 5px;
   margin-top: 30px;
 }
 
 body.legal-page h3 {
-  color: var(--color-prompt);
+  color: var(--color-ui-primary);
   margin-top: 20px;
+}
+
+[data-theme="light"] body.legal-page h1,
+[data-theme="light"] body.legal-page h2,
+[data-theme="light"] body.legal-page h3 {
+  color: var(--color-link);
 }
 
 body.legal-page strong {
@@ -43,7 +47,7 @@ body.legal-page strong {
 /* ==================== Content Boxes ==================== */
 body.legal-page .info-box {
   background: var(--color-surface-elevated);
-  border: 1px solid var(--color-prompt);
+  border: 1px solid var(--color-prompt-border-medium);
   padding: 15px;
   margin: 20px 0;
   border-radius: var(--border-radius-button);
@@ -58,10 +62,10 @@ body.legal-page .warning-box {
 }
 
 body.legal-page .highlight {
-  background: color-mix(in srgb, var(--color-prompt) 10%, var(--color-bg));
+  background: var(--color-prompt-bg-light);
   padding: 10px;
   padding-left: 10px;
-  border-left: 3px solid var(--color-prompt);
+  border-left: 3px solid var(--color-prompt-border-strong);
   margin: 10px 0;
 }
 
@@ -80,8 +84,8 @@ body.legal-page table td {
 }
 
 body.legal-page table th {
-  background: var(--color-prompt);
-  color: var(--color-bg);
+  background: var(--color-button-bg);
+  color: var(--color-button-text);
   font-weight: bold;
 }
 
@@ -111,16 +115,16 @@ body.legal-page .back-link {
   display: inline-block;
   margin: 20px 0;
   padding: 10px 20px;
-  background: var(--color-prompt);
-  color: var(--color-bg);
+  background: var(--color-cta-primary);
+  color: var(--color-cta-text);
   text-decoration: none;
   border-radius: var(--border-radius-button);
   font-weight: bold;
 }
 
 body.legal-page .back-link:hover {
-  background: var(--color-success);
-  color: var(--color-bg);
+  background: var(--color-cta-primary-hover);
+  color: var(--color-cta-text);
   text-decoration: none;
 }
 
