@@ -18,7 +18,7 @@
 
 **Performance:** Playwright E2E 160 tests across 30 suites (21 files, 3 browsers) | WCAG AAA | 182 CSS variables (main.css) + 27 (landing.css) = 209 totaal
 **Bundle:** Site totaal **~1192 KB** (geverifieerd 06-04-2026) | Splitsing: src/ 604 KB, styles/ 249 KB, blog/ 306 KB (10 posts + JSON-LD), assets/ 597 KB (screenshots 401 + OG image 151) | ⚠️ Runtime budget herijking nodig — blog SEO assets vallen buiten origineel 400 KB Terminal Core budget
-**Monetization:** AdSense (10 units) + Ko-fi donaties + MailerLite newsletter (welkomstmail live) + **Gumroad products v1.0** (3 guides klaar) | Eigen consent banner (Consent Mode v2)
+**Monetization:** AdSense (10 units) + Ko-fi donaties + Brevo newsletter (double opt-in + welkomstmail live) + **Gumroad products v1.0** (3 guides klaar) | Eigen consent banner (Consent Mode v2)
 
 → **Live metrics:** `TASKS.md` regels 9-26 (meest recente tellingen)
 → **Architecture:** `PLANNING.md` v2.9 | **Commands:** `docs/commands-list.md` (41 commands)
@@ -95,6 +95,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Internal cross-linking tussen blog posts — verhoogt dwell time en Google's topical authority signal
 - Theme toggle button met `aria-pressed` + visible focus ring — WCAG AAA voor stateful controls
 
+### Sessie 126: Newsletter Platform Migratie MailerLite → Brevo (8-12 april 2026)
+⚠️ **Never:**
+- Brevo automation "Send an email" met de default template deployen — altijd eigen HTML template selecteren via trash-icoon + opnieuw koppelen
+- Brevo embed form gebruiken zonder `sib-styles.css` — `main.js` is afhankelijk van specifieke CSS klassen (`.input--hidden`, `.sib-form-message-panel`)
+- `sib-form` IDs hergebruiken op dezelfde pagina — Brevo JS koppelt aan `#sib-form`, `#error-message`, `#success-message` (uniek per pagina)
+
+✅ **Always:**
+- Domain authenticeren (SPF/DKIM) vóór eerste verzending — Brevo kan dit automatisch via TransIP API-integratie
+- Double opt-in voor GDPR-compliance — bevestigingsmail trigger zit op form-niveau, niet op list-niveau in Brevo
+- Brevo inline styles overrulen met `!important` in eigen CSS — standaard bij third-party embeds, geen anti-pattern in deze context
+- `locale` hidden field op `nl` zetten + alle `window.*_MESSAGE` variabelen in het Nederlands — Brevo's JS leest deze voor client-side validatie
+
 ### Sessie 124: Gumroad Products v1.0 (3-4 april 2026)
 ⚠️ **Never:**
 - Product content publiceren zonder dubbele factcheck — paid products eisen 100% verifieerbare claims (user product quality standard)
@@ -143,15 +155,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Ko-fi touchpoints op natuurlijke completion moments (challenges, certificaten) — hogere conversie
 - Input validatie op security commands (nmap, traceroute) — voorkom verwarrende output bij ongeldige targets
 
-### Sessie 121: Doc Sync & Session Catch-Up (27 maart 2026)
-⚠️ **Never:**
-- Aannemen dat docs actueel zijn na meerdere werkdagen zonder sync — metrics driften snel (M5.5 was "geannuleerd" terwijl het volledig live was)
-- Metrics overnemen uit vorige docs — altijd verifiëren vanuit broncode (grep CSS vars, count commands in registry)
-
-✅ **Always:**
-- `git log --format="%h %ai %s" --since=<datum>` voor sessiegrenzen — commits per datum onthullen logische sessiegroepen
-- Milestone status-pivot (cancelled → active) altijd tegelijk in CLAUDE.md + TASKS.md + PLANNING.md bijwerken
-
 **Rotation:** Keep last 5 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
 
 ---
@@ -162,7 +165,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
 **Rotation trigger:** Every 5 sessions (last: Sessie 125, next: Sessie 130)
-**Sessie counter:** 125
+**Sessie counter:** 126
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -215,5 +218,5 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 6 april 2026 (Sessie 125 — SEO, Legal Refactor & A11y Polish)
-**Version:** 4.8 (Sessies 123-125: newsletter polish, Gumroad products v1.0, JSON-LD schema, legal CSS-var migratie, OG image, bundle drift gedocumenteerd)
+**Last updated:** 12 april 2026 (Sessie 126 — Newsletter MailerLite → Brevo migratie)
+**Version:** 4.9 (Sessie 126: Brevo newsletter migratie, double opt-in, welkomstmail automation)
