@@ -52,7 +52,7 @@ Wat je leert:
 - Praktische 10-punten veiligheidscheck voordat je begint
 
 ~15 pagina's | PDF | Nederlands
-Alle feiten geverifieerd per april 2026.
+Met zorg samengesteld en gecontroleerd · april 2026.
 
 Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethical hacking.
 ```
@@ -72,7 +72,7 @@ Education > Cybersecurity
 Titel: Ethical Hacking & Nederlandse Wet
 Subtitel: Wat Mag Wel, Wat Mag Niet?
 Branding: HackSimulator.nl
-Kleuren: donkere achtergrond (#1a1a2e), groene accenten (#00ff41)
+Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site huisstijl
 ```
 
 ---
@@ -111,7 +111,7 @@ Inclusief:
 - Ernst-classificatie (CVSS-gebaseerd, vereenvoudigd)
 
 ~35 pagina's | PDF | Nederlands
-Alle feiten geverifieerd per april 2026.
+Met zorg samengesteld en gecontroleerd · april 2026.
 
 Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethical hacking.
 ```
@@ -131,7 +131,7 @@ Education > Cybersecurity
 Titel: Je Eerste Pentest
 Subtitel: Stap-voor-Stap Playbook
 Branding: HackSimulator.nl
-Kleuren: donkere achtergrond (#1a1a2e), groene accenten (#00ff41)
+Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site huisstijl
 ```
 
 ---
@@ -173,7 +173,7 @@ Inclusief:
 
 ~25 pagina's | PDF | Nederlands
 Geen voorkennis nodig. 5-8 uur per week.
-Alle feiten en platformverwijzingen geverifieerd per april 2026.
+Met zorg samengesteld en gecontroleerd · april 2026.
 
 Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethical hacking.
 ```
@@ -193,7 +193,7 @@ Education > Cybersecurity
 Titel: Van Nul naar CTF
 Subtitel: 12-Weken Leerplan
 Branding: HackSimulator.nl
-Kleuren: donkere achtergrond (#1a1a2e), groene accenten (#00ff41)
+Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site huisstijl
 ```
 
 ---
@@ -224,7 +224,7 @@ Dit pakket bevat alle drie de HackSimulator-gidsen in een bundel:
    Een gestructureerd pad van complete beginner naar je eerste Capture The Flag competitie.
 
 Samen: ~75 pagina's praktische kennis in het Nederlands.
-Geen voorkennis nodig. Alle feiten geverifieerd per april 2026.
+Geen voorkennis nodig. Met zorg samengesteld en gecontroleerd · april 2026.
 
 Waarom deze bundel?
 - De gidsen verwijzen naar elkaar (het leerplan gebruikt de beslisbomen uit het playbook, week 4 behandelt de juridische gids)
