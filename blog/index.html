@@ -41,13 +41,16 @@
   <!-- Preconnect: reduce DNS/TLS latency for critical third-party origins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://sibforms.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="../styles/main.css?v=114">
-  <link rel="stylesheet" href="../styles/blog.css?v=114">
+  <link rel="stylesheet" href="../styles/main.css?v=115">
+  <link rel="stylesheet" href="../styles/blog.css?v=115">
   <link rel="stylesheet" href="../styles/mobile.css?v=115" media="screen and (max-width: 768px)">
+  <!-- Brevo Forms (newsletter signup) -->
+  <link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
 
   <!-- Google AdSense -->
   <meta name="google-adsense-account" content="ca-pub-6345664385525701">
@@ -133,68 +136,61 @@
       <a href="#gevorderden" class="category-btn">Gevorderden</a>
     </nav>
 
-    <!-- Newsletter Signup -->
+    <!-- Newsletter Signup (Brevo) -->
     <section class="newsletter-signup" id="newsletter">
       <h3>Gratis Cybersecurity Tips</h3>
       <p>Ontvang maandelijks tips over ethisch hacken, nieuwe tutorials en cybersecurity nieuws. Geen spam, altijd opzegbaar.</p>
-      <form class="newsletter-form" id="ml-form-blog" onsubmit="return mlSubmit(event, this)">
-        <input type="email" name="fields[email]" placeholder="je@email.nl" required
-               aria-label="Email adres voor newsletter">
-        <input type="hidden" name="ml-submit" value="1">
-        <input type="hidden" name="anticsrf" value="true">
-        <button type="submit" class="newsletter-button">Aanmelden</button>
-        <p class="newsletter-feedback" style="display:none;margin-top:8px;font-size:0.9rem;"></p>
-      </form>
+      <div class="sib-form">
+        <div id="sib-form-container" class="sib-form-container">
+          <div id="error-message" class="sib-form-message-panel" style="display:none;max-width:540px;">
+            <div class="sib-form-message-panel__text sib-form-message-panel__text--center">
+              <svg viewBox="0 0 512 512" class="sib-icon sib-notification__icon">
+                <path d="M256 40c118.621 0 216 96.075 216 216 0 119.291-96.61 216-216 216-119.244 0-216-96.562-216-216 0-119.203 96.602-216 216-216m0-32C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm-11.49 120h22.979c6.823 0 12.274 5.682 11.99 12.5l-7 168c-.268 6.428-5.556 11.5-11.99 11.5h-8.979c-6.433 0-11.722-5.073-11.99-11.5l-7-168c-.283-6.818 5.167-12.5 11.99-12.5zM256 340c-15.464 0-28 12.536-28 28s12.536 28 28 28 28-12.536 28-28-12.536-28-28-28z"/>
+              </svg>
+              <span class="sib-form-message-panel__inner-text">Er ging iets mis. Probeer het opnieuw.</span>
+            </div>
+          </div>
+          <div id="success-message" class="sib-form-message-panel" style="display:none;max-width:540px;">
+            <div class="sib-form-message-panel__text sib-form-message-panel__text--center">
+              <svg viewBox="0 0 512 512" class="sib-icon sib-notification__icon">
+                <path d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 464c-118.664 0-216-96.055-216-216 0-118.663 96.055-216 216-216 118.664 0 216 96.055 216 216 0 118.663-96.055 216-216 216zm141.63-274.961L217.15 376.071c-4.705 4.667-12.303 4.637-16.97-.068l-85.878-86.572c-4.667-4.705-4.637-12.303.068-16.97l8.52-8.451c4.705-4.667 12.303-4.637 16.97.068l68.976 69.533 163.441-162.13c4.705-4.667 12.303-4.637 16.97.068l8.451 8.52c4.668 4.705 4.637 12.303-.068 16.97z"/>
+              </svg>
+              <span class="sib-form-message-panel__inner-text">Check je inbox — we hebben je een bevestigingsmail gestuurd.</span>
+            </div>
+          </div>
+          <form id="sib-form" class="newsletter-form" method="POST" action="https://09a5e5c2.sibforms.com/serve/MUIFADH0_vgGhb_FtKCDMfSZ6rjIRSJh-4N5o5GVrdzX91Jm21mM4zMY9-uyfWaYGM4uixNn1BWU_sBXVZkWtxPIicAKD37yK0Nd_cmsCXTjpKqwoE8FTTSh79CSYZos2KWR7_0_7ReDusej4VIdai0nOKAl_JfXPqEb1cAsgi-XWSGKuCKtzCCI92Wgk8T4We4iSrmAOrs43_x-SQ==" data-type="subscription">
+            <div class="sib-input sib-form-block">
+              <div class="form__entry entry_block">
+                <div class="form__label-row">
+                  <div class="entry__field">
+                    <input class="input" type="text" id="EMAIL" name="EMAIL" autocomplete="off" placeholder="je@email.nl" data-required="true" required aria-label="Email adres voor newsletter">
+                  </div>
+                </div>
+                <label class="entry__error entry__error--primary" style="display:none;"></label>
+              </div>
+            </div>
+            <button class="newsletter-button sib-form-block__button sib-form-block__button-with-loader" type="submit" form="sib-form">
+              <svg class="icon clickable__icon progress-indicator__icon sib-hide-loader-icon" viewBox="0 0 512 512" style="width:0;height:0;"><path d="M460.116 373.846l-20.823-12.022c-5.541-3.199-7.54-10.159-4.663-15.874 30.137-59.886 28.343-131.652-5.386-189.946-33.641-58.394-94.896-95.833-161.827-99.676C261.028 55.961 256 50.751 256 44.352V20.309c0-6.904 5.808-12.337 12.703-11.982 83.556 4.306 160.163 50.864 202.11 123.677 42.063 72.696 44.079 162.316 6.031 236.832-3.14 6.148-10.75 8.461-16.728 5.01z"/></svg>
+              Aanmelden
+            </button>
+            <input type="text" name="email_address_check" value="" class="input--hidden">
+            <input type="hidden" name="locale" value="nl">
+          </form>
+        </div>
+      </div>
       <script>
-      function mlSubmit(e, form) {
-        e.preventDefault();
-        var btn = form.querySelector('button');
-        var feedback = form.querySelector('.newsletter-feedback');
-        var email = form.querySelector('input[type="email"]').value.toLowerCase().trim();
-        var subs = JSON.parse(localStorage.getItem('hs_nl_subs') || '[]');
-
-        // Client-side duplicate check
-        if (subs.indexOf(email) !== -1) {
-          feedback.textContent = 'Je bent al aangemeld! Check je inbox (en spam-map) voor eerdere mails.';
-          feedback.className = 'newsletter-feedback is-info';
-          feedback.style.display = 'block';
-          return false;
+      window.REQUIRED_CODE_ERROR_MESSAGE = 'Selecteer een landcode';
+      window.LOCALE = 'nl';
+      window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE = "Het e-mailadres lijkt niet te kloppen. Controleer het en probeer opnieuw.";
+      window.REQUIRED_ERROR_MESSAGE = "Vul je e-mailadres in.";
+      window.GENERIC_INVALID_MESSAGE = "Het e-mailadres lijkt niet te kloppen. Controleer het en probeer opnieuw.";
+      window.translation = {
+        common: {
+          selectedList: '{quantity} list selected',
+          selectedLists: '{quantity} lists selected'
         }
-
-        btn.disabled = true;
-        btn.textContent = 'Bezig...';
-        feedback.style.display = 'none';
-        fetch('https://assets.mailerlite.com/jsonp/2228373/forms/183191011332195502/subscribe', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(new FormData(form)).toString()
-        }).then(function(r) {
-          return r.json();
-        }).then(function(data) {
-          // Save to localStorage
-          if (subs.indexOf(email) === -1) { subs.push(email); }
-          localStorage.setItem('hs_nl_subs', JSON.stringify(subs));
-
-          // Check MailerLite response for existing subscriber
-          if (data && data.success && data.already_subscribed) {
-            feedback.textContent = 'Je bent al aangemeld! Check je inbox (en spam-map) voor eerdere mails.';
-            feedback.className = 'newsletter-feedback is-info';
-          } else {
-            feedback.textContent = 'Gelukt! Check je inbox voor een bevestiging.';
-            feedback.className = 'newsletter-feedback is-success';
-            btn.textContent = 'Aangemeld!';
-          }
-          feedback.style.display = 'block';
-          form.querySelector('input[type="email"]').value = '';
-        }).catch(function() {
-          feedback.textContent = 'Er ging iets mis. Probeer het opnieuw.';
-          feedback.className = 'newsletter-feedback is-error';
-          feedback.style.display = 'block';
-          btn.disabled = false;
-          btn.textContent = 'Aanmelden';
-        });
-        return false;
-      }
+      };
+      var AUTOHIDE = Boolean(0);
       </script>
       <p class="newsletter-privacy">We respecteren je privacy. Lees ons <a href="../assets/legal/privacy.html">privacybeleid</a>.</p>
     </section>
@@ -400,5 +396,8 @@
 
   <!-- Analytics & Consent (external for CSP compliance) -->
   <script src="/src/init-analytics.js" type="module"></script>
+
+  <!-- Brevo Forms (newsletter signup) -->
+  <script defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
 </body>
 </html>

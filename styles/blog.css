@@ -1104,6 +1104,52 @@ a[href='#all'].category-btn {
     display: none;
   }
 }
+/* Brevo form overrides — match terminal design system */
+.newsletter-signup .sib-form {
+  max-width: 540px;
+  margin: 0 auto;
+}
+.newsletter-signup #sib-container {
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  font-family: var(--font-body) !important;
+}
+.newsletter-signup .sib-form .entry__field input,
+.newsletter-signup .sib-form .entry__field input.input {
+  background-color: var(--color-bg) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--border-radius-button) !important;
+  color: var(--color-text) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.95rem !important;
+  padding: var(--spacing-sm) var(--spacing-md) !important;
+  width: 280px;
+  max-width: 100%;
+  transition: border-color var(--transition-fast);
+}
+.newsletter-signup .sib-form .entry__field input:focus {
+  border-color: var(--color-ui-primary) !important;
+  outline: none;
+}
+[data-theme='light'] .newsletter-signup .sib-form .entry__field input {
+  background-color: #ffffff !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-text) !important;
+}
+.newsletter-signup .sib-form-message-panel {
+  font-family: var(--font-body) !important;
+  font-size: 0.9rem !important;
+  margin: 0 auto var(--spacing-md) auto;
+  border-radius: var(--border-radius-button) !important;
+}
+.newsletter-signup .entry__error {
+  font-family: var(--font-body) !important;
+  font-size: 0.85rem !important;
+}
+.newsletter-signup .sib-form .input--hidden {
+  display: none !important;
+}
 
 /* ==================== Blog Ad Placements ==================== */
 
