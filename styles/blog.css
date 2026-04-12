@@ -34,7 +34,7 @@
   justify-content: center;  /* Center the inner container */
   height: var(--navbar-height);
   left: 0;
-  padding: var(--spacing-md) 0;  /* Horizontal padding moved to .blog-nav-inner for alignment */
+  padding: 0;  /* No vertical padding — .blog-nav-inner handles alignment via align-items: center */
   position: fixed;
   right: 0;
   top: 0;
@@ -59,7 +59,9 @@
   font-size: 1.05rem;
   font-weight: var(--font-weight-semibold);
   color: var(--color-navbar-link);
+  letter-spacing: 0.3px;
   text-decoration: none;
+  transition: color var(--transition-fast);
 }
 .blog-nav .nav-brand .brand-accent {
   color: var(--color-cta-dark-frame);
@@ -72,7 +74,7 @@
   color: var(--color-cta-dark-frame);
 }
 /* Blog link inside actions group — styled like other nav links via .blog-nav a:not(.navbar-action) */
-.blog-nav a:not(.navbar-action) {
+.blog-nav a:not(.navbar-action):not(.nav-brand):not(.btn-cta) {
   color: var(--color-navbar-link);
   font-family: var(--font-heading);
   font-size: var(--navbar-link-size);
@@ -83,7 +85,7 @@
   text-decoration: none;
   transition: color var(--transition-fast);
 }
-.blog-nav a:not(.navbar-action):hover {
+.blog-nav a:not(.navbar-action):not(.nav-brand):not(.btn-cta):hover {
   color: var(--color-navbar-link-hover);
 }
 .blog-nav .navbar-action {
@@ -1010,9 +1012,10 @@ a[href='#all'].category-btn {
   margin-bottom: var(--spacing-md);
 }
 .newsletter-form .sib-input.sib-form-block {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-width: 0;
-  padding: 0 !important;
+  padding: 0 0 1.6em 0 !important;
+  position: relative;
 }
 .newsletter-feedback {
   width: 100%;
@@ -1029,12 +1032,13 @@ a[href='#all'].category-btn {
 }
 .newsletter-form input[type="email"] {
   background-color: var(--color-bg);
-  border: 1px solid var(--color-border);
+  border: 2px solid var(--color-border);
   border-radius: var(--border-radius-button);
   color: var(--color-text);
   font-family: var(--font-body);
-  font-size: 0.95rem;
-  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 1rem;
+  height: 44px;
+  padding: 0 var(--spacing-md);
   width: 280px;
   max-width: 100%;
   transition: border-color var(--transition-fast);
@@ -1054,14 +1058,18 @@ a[href='#all'].category-btn {
   border-radius: var(--border-radius-button);
   color: var(--color-button-text);
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-heading);
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: var(--font-weight-bold);
+  height: 44px;
   letter-spacing: 0.5px;
-  padding: var(--spacing-sm) var(--spacing-lg);
+  margin-bottom: 1.6em;
+  padding: 0 var(--spacing-lg);
   transition: all var(--transition-fast);
   white-space: nowrap;
-  height: auto !important;
   flex-shrink: 0;
 }
 .newsletter-button:hover {
@@ -1129,16 +1137,20 @@ a[href='#all'].category-btn {
 .newsletter-signup .sib-form .form__label-row,
 .newsletter-signup .sib-form .entry__field {
   background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 .newsletter-signup .sib-form .entry__field input,
 .newsletter-signup .sib-form .entry__field input.input {
   background-color: var(--color-bg) !important;
-  border: 1px solid var(--color-border) !important;
+  border: 2px solid var(--color-border) !important;
   border-radius: var(--border-radius-button) !important;
   color: var(--color-text) !important;
   font-family: var(--font-body) !important;
-  font-size: 0.95rem !important;
-  padding: var(--spacing-sm) var(--spacing-md) !important;
+  font-size: 1rem !important;
+  height: 44px !important;
+  padding: 0 var(--spacing-md) !important;
   width: 280px;
   max-width: 100%;
   transition: border-color var(--transition-fast);
@@ -1161,6 +1173,10 @@ a[href='#all'].category-btn {
 .newsletter-signup .entry__error {
   font-family: var(--font-body) !important;
   font-size: 0.85rem !important;
+  position: absolute !important;
+  top: 100%;
+  left: 0;
+  margin-top: 0.15em;
 }
 .newsletter-signup .sib-form .input--hidden {
   display: none !important;
