@@ -26,17 +26,17 @@
 
 ### Gumroad Titel
 ```
-Ethical Hacking & Nederlandse Wet: Wat Mag Wel, Wat Mag Niet?
+Ethisch Hacken & Nederlandse Wet: Wat Mag Wel, Wat Mag Niet?
 ```
 
 ### Korte beschrijving (Gumroad summary, max ~150 tekens)
 ```
-De complete gids over hacken en de Nederlandse wet. Wat is legaal, wat niet, en hoe bescherm je jezelf? In gewoon Nederlands.
+De complete gids over ethisch hacken en de Nederlandse wet. Wat is legaal, wat niet, en hoe bescherm je jezelf? In gewoon Nederlands.
 ```
 
 ### Lange beschrijving (Gumroad productpagina)
 ```
-Je wilt ethical hacking leren. Maar mag dat eigenlijk wel?
+Je wilt ethisch hacken leren. Maar mag dat eigenlijk wel?
 
 Het korte antwoord: hacken is niet per definitie illegaal — ongeautoriseerd hacken is dat wel. Deze gids legt in gewoon Nederlands uit waar de grens ligt.
 
@@ -54,12 +54,12 @@ Wat je leert:
 ~15 pagina's | PDF | Nederlands
 Met zorg samengesteld en gecontroleerd · april 2026.
 
-Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethical hacking.
+Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethisch hacken.
 ```
 
 ### Tags
 ```
-ethical hacking, cybersecurity, Nederlandse wet, computervredebreuk, responsible disclosure, CVD, pentesting, beginner, Nederlands
+ethisch hacken, ethical hacking, cybersecurity, Nederlandse wet, computervredebreuk, responsible disclosure, CVD, pentesting, beginner, Nederlands
 ```
 
 ### Categorie
@@ -69,7 +69,7 @@ Education > Cybersecurity
 
 ### Thumbnail tekst (voor Canva)
 ```
-Titel: Ethical Hacking & Nederlandse Wet
+Titel: Ethisch Hacken & Nederlandse Wet
 Subtitel: Wat Mag Wel, Wat Mag Niet?
 Branding: HackSimulator.nl
 Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site huisstijl
@@ -113,12 +113,12 @@ Inclusief:
 ~35 pagina's | PDF | Nederlands
 Met zorg samengesteld en gecontroleerd · april 2026.
 
-Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethical hacking.
+Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethisch hacken.
 ```
 
 ### Tags
 ```
-pentest, penetration testing, ethical hacking, cybersecurity, nmap, werkboek, playbook, beginner, methodologie, Nederlands
+pentest, penetration testing, ethisch hacken, ethical hacking, cybersecurity, nmap, werkboek, playbook, beginner, methodologie, Nederlands
 ```
 
 ### Categorie
@@ -140,7 +140,7 @@ Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site
 
 ### Gumroad Titel
 ```
-Van Nul naar CTF: 12-Weken Leerplan voor Ethical Hacking
+Van Nul naar CTF: 12-Weken Leerplan voor Ethisch Hacken
 ```
 
 ### Korte beschrijving (max ~150 tekens)
@@ -175,12 +175,12 @@ Inclusief:
 Geen voorkennis nodig. 5-8 uur per week.
 Met zorg samengesteld en gecontroleerd · april 2026.
 
-Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethical hacking.
+Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethisch hacken.
 ```
 
 ### Tags
 ```
-ethical hacking, leerplan, beginner, CTF, capture the flag, cybersecurity, TryHackMe, HackTheBox, cursus, Nederlands
+ethisch hacken, ethical hacking, leerplan, beginner, CTF, capture the flag, cybersecurity, TryHackMe, HackTheBox, cursus, Nederlands
 ```
 
 ### Categorie
@@ -202,19 +202,19 @@ Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site
 
 ### Gumroad Titel
 ```
-HackSimulator Starter Kit: 3 Gidsen voor Beginnende Ethical Hackers
+HackSimulator Starter Kit: 3 Gidsen voor Beginnende Ethische Hackers
 ```
 
 ### Korte beschrijving (max ~150 tekens)
 ```
-Alles wat je nodig hebt om te starten met ethical hacking: de wet, de methodologie, en een 12-weken plan. 3 gidsen, 1 prijs.
+Alles wat je nodig hebt om te starten met ethisch hacken: de wet, de methodologie, en een 12-weken plan. 3 gidsen, 1 prijs.
 ```
 
 ### Lange beschrijving
 ```
 Dit pakket bevat alle drie de HackSimulator-gidsen in een bundel:
 
-1. Ethical Hacking & Nederlandse Wet (~15 pagina's)
+1. Ethisch Hacken & Nederlandse Wet (~15 pagina's)
    Ken de regels voordat je begint. Nederlandse wetgeving, CVD, bug bounty's en echte rechtszaken.
 
 2. Je Eerste Pentest: Stap-voor-Stap Playbook (~35 pagina's)
@@ -231,12 +231,12 @@ Waarom deze bundel?
 - Samen vormen ze een compleet startpakket
 - Bundelkorting: goedkoper dan losse aankoop
 
-Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethical hacking.
+Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethisch hacken.
 ```
 
 ### Tags
 ```
-ethical hacking, bundel, beginner, cybersecurity, pentest, Nederlandse wet, leerplan, CTF, Nederlands
+ethisch hacken, ethical hacking, bundel, beginner, cybersecurity, pentest, Nederlandse wet, leerplan, CTF, Nederlands
 ```
 
 ---
@@ -259,14 +259,14 @@ ethical hacking, bundel, beginner, cybersecurity, pentest, Nederlandse wet, leer
 <div class="blog-cta">
   <strong>Ken je de regels?</strong> Download de gratis
   <a href="[GUMROAD_URL_JURIDISCH]">Juridische Gids</a> —
-  wat mag wel en wat niet bij ethical hacking in Nederland.
+  wat mag wel en wat niet bij ethisch hacken in Nederland.
 </div>
 ```
 
 **Generieke CTA (past overal):**
 ```html
 <div class="blog-cta">
-  <strong>Net begonnen met ethical hacking?</strong> Download het gratis
+  <strong>Net begonnen met ethisch hacken?</strong> Download het gratis
   <a href="[GUMROAD_URL_LEERPLAN]">12-Weken Leerplan</a> —
   van complete beginner naar je eerste CTF.
 </div>
@@ -290,7 +290,7 @@ ethical hacking, bundel, beginner, cybersecurity, pentest, Nederlandse wet, leer
 **Toevoegen aan bestaande welkomstmail:**
 ```
 Gratis gidsen voor beginners:
-- Ethical Hacking & Nederlandse Wet — [GUMROAD_URL_JURIDISCH]
+- Ethisch Hacken & Nederlandse Wet — [GUMROAD_URL_JURIDISCH]
 - Je Eerste Pentest: Playbook — [GUMROAD_URL_PLAYBOOK]
 - 12-Weken Leerplan — [GUMROAD_URL_LEERPLAN]
 Of download alle 3 als bundel: [GUMROAD_URL_BUNDEL]
@@ -309,7 +309,7 @@ Of download alle 3 als bundel: [GUMROAD_URL_BUNDEL]
 2. Maak een account aan (email + wachtwoord, of Google login)
 3. Stel je profiel in:
    - Naam: **HackSimulator.nl**
-   - Bio: "Browser-based terminal simulator voor ethical hacking leren"
+   - Bio: "Browser-based terminal simulator voor ethisch hacken leren"
    - Profielfoto: gebruik het HackSimulator logo/favicon
 
 ### Stap 2: Eerste product uploaden
@@ -329,7 +329,7 @@ Of download alle 3 als bundel: [GUMROAD_URL_BUNDEL]
 ### Stap 3: PDF maken van de Markdown
 **Optie A — Canva (aanbevolen, visueel):**
 1. Maak een nieuw document (A4)
-2. Gebruik donkere achtergrond (#1a1a2e) + groene accenten (#00ff41)
+2. Gebruik donkere achtergrond (#0d1117) + groene accenten (#9fef00)
 3. Monospace font voor code-blokken (Source Code Pro of Fira Code)
 4. Copy-paste de content per hoofdstuk
 5. Voeg een cover page toe
@@ -351,10 +351,10 @@ Of download alle 3 als bundel: [GUMROAD_URL_BUNDEL]
 2. Upload alle 3 PDF's als bijlagen bij hetzelfde product
 3. Of: gebruik Gumroad's "Bundle" feature (als beschikbaar)
 
-### Stap 5: MailerLite koppeling (optioneel, later)
-Gumroad heeft geen directe MailerLite integratie. Opties:
-- **Zapier (gratis tier):** Gumroad sale → MailerLite subscriber
-- **Handmatig:** Exporteer Gumroad klanten-email → importeer in MailerLite
+### Stap 5: Brevo koppeling (optioneel, later)
+Gumroad heeft geen directe Brevo integratie. Opties:
+- **Zapier (gratis tier):** Gumroad sale → Brevo subscriber
+- **Handmatig:** Exporteer Gumroad klanten-email → importeer in Brevo
 - **Later:** Als volume groeit, overweeg Zapier betaald of Make.com
 
 ### Stap 6: Testen

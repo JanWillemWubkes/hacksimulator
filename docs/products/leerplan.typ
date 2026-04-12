@@ -4,7 +4,7 @@
 
 #show: hacksimulator-doc.with(
   title: "Van Nul naar CTF",
-  subtitle: "12-Weken Leerplan voor Ethical Hacking — Een gestructureerd pad van complete beginner naar je eerste Capture The Flag",
+  subtitle: "12-Weken Leerplan voor Ethisch Hacken — Een gestructureerd pad van complete beginner naar je eerste Capture The Flag",
   version: "1.0",
   date: "april 2026",
 )
@@ -134,7 +134,7 @@ Elke week heeft:
 + Bekijk het CVD-beleid van het NCSC: ncsc.nl/contact/kwetsbaarheid-melden
 + Zoek 3 Nederlandse organisaties die een bug bounty of responsible disclosure beleid hebben
 
-#warning[Een hele week voor ethiek? Ja. Omdat dit het verschil is tussen een carrière in cybersecurity en een strafblad. Elke professionele ethical hacker zal zeggen: "Begin met de regels, niet met de tools."]
+#warning[Een hele week voor ethiek? Ja. Omdat dit het verschil is tussen een carrière in cybersecurity en een strafblad. Elke professionele ethische hacker zal zeggen: "Begin met de regels, niet met de tools."]
 
 *Zelftest:*
 - [ ] Kun je in je eigen woorden uitleggen wanneer hacken wél en wanneer het niet mag?
@@ -393,7 +393,7 @@ Een certificering bewijst aan werkgevers dat je vaardigheden hebt.
 - *Hack.lu* --- Europese hacking conferentie
 - *Tweakers.net* --- Nederlands techforum met security-subforum
 - *Nederlandse CTF-teams* --- zoek op ctftime.org naar teams uit Nederland
-- *Meetups* --- zoek "cybersecurity" of "ethical hacking" op meetup.com
+- *Meetups* --- zoek "cybersecurity" of "ethisch hacken" op meetup.com
 
 // ─────────────────────────────────────────────
 
@@ -430,8 +430,8 @@ Niet voor de eerste 4 weken. Vanaf week 5 kun je TryHackMe's browser-based "Pwnb
 *"Kan ik dit met een Chromebook?"*\
 Ja, tot en met week 4. Vanaf week 5 heb je een browser nodig die TryHackMe's Pwnbox ondersteunt.
 
-*"Is 12 weken genoeg om professioneel ethical hacker te worden?"*\
-Nee. 12 weken is genoeg om een solide basis te leggen en te bepalen of dit iets voor je is. Een professionele ethical hacker heeft typisch 1-2 jaar ervaring + minimaal één certificering.
+*"Is 12 weken genoeg om professioneel ethisch hacker te worden?"*\
+Nee. 12 weken is genoeg om een solide basis te leggen en te bepalen of dit iets voor je is. Een professionele ethische hacker heeft typisch 1-2 jaar ervaring + minimaal één certificering.
 
 *"Wat als ik een week oversla?"*\
 Pak hem de week erna op. Dit leerplan is geen deadline --- het is een routekaart.
@@ -473,7 +473,7 @@ Pak hem de week erna op. Dit leerplan is geen deadline --- het is een routekaart
   #line(length: 60%, stroke: 0.5pt + luma(200))
   #v(6pt)
   #text(size: 9pt, fill: luma(140))[
-    _Dit leerplan is geschreven voor HackSimulator.nl --- de gratis browser-based terminal simulator voor ethical hacking._\
+    _Dit leerplan is geschreven voor HackSimulator.nl --- de gratis browser-based terminal simulator voor ethisch hacken._\
     _Versie 1.0 · Met zorg samengesteld en gecontroleerd · april 2026_
   ]
 ]

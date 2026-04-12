@@ -67,7 +67,7 @@
     ]
     #h(1fr)
     #text(size: 9pt, fill: hs-text-dim)[
-      Browser-based terminal simulator voor ethical hacking
+      Browser-based terminal simulator voor ethisch hacken
     ]
   ]
 }

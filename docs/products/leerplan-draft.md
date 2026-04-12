@@ -122,7 +122,7 @@ Elke week heeft:
 
 **Waarom een hele week voor ethiek?**
 
-Omdat dit het verschil is tussen een carrière in cybersecurity en een strafblad. Elke professionele ethical hacker die je ooit ontmoet zal zeggen: "Begin met de regels, niet met de tools." Als je de wet niet kent, kun je per ongeluk strafbare feiten plegen — zelfs met goede intenties.
+Omdat dit het verschil is tussen een carrière in cybersecurity en een strafblad. Elke professionele ethische hacker die je ooit ontmoet zal zeggen: "Begin met de regels, niet met de tools." Als je de wet niet kent, kun je per ongeluk strafbare feiten plegen — zelfs met goede intenties.
 
 **Zelftest:**
 - [ ] Kun je in je eigen woorden uitleggen wanneer hacken wél en wanneer het niet mag?
@@ -422,7 +422,7 @@ Ben je een complete beginner?
 - **Hack.lu** — Europese hacking conferentie
 - **Tweakers.net** — Nederlands techforum met security-subforum
 - **Nederlandse CTF-teams** — zoek op ctftime.org naar teams uit Nederland
-- **Meetups** — zoek "cybersecurity" of "ethical hacking" op meetup.com voor je regio
+- **Meetups** — zoek "cybersecurity" of "ethisch hacken" op meetup.com voor je regio
 
 ---
 
@@ -457,8 +457,8 @@ Niet voor de eerste 4 weken. Vanaf week 5 (TryHackMe) kun je hun browser-based "
 **"Kan ik dit met een Chromebook?"**
 Ja, tot en met week 4. Vanaf week 5 heb je een browser nodig die TryHackMe's Pwnbox ondersteunt (dat werkt op Chrome). Voor HackTheBox heb je mogelijk een VPN nodig, wat op een Chromebook lastiger is.
 
-**"Is 12 weken genoeg om professioneel ethical hacker te worden?"**
-Nee. 12 weken is genoeg om een solide basis te leggen en te bepalen of dit iets voor je is. Een professionele ethical hacker heeft typisch 1-2 jaar ervaring + minimaal één certificering.
+**"Is 12 weken genoeg om professioneel ethisch hacker te worden?"**
+Nee. 12 weken is genoeg om een solide basis te leggen en te bepalen of dit iets voor je is. Een professionele ethische hacker heeft typisch 1-2 jaar ervaring + minimaal één certificering.
 
 **"Wat als ik een week oversla?"**
 Pak hem de week erna op. Dit leerplan is geen deadline — het is een routekaart. Als je 16 of 20 weken nodig hebt, is het resultaat hetzelfde.
@@ -503,6 +503,6 @@ Alle feiten in dit leerplan zijn geverifieerd per april 2026:
 
 ---
 
-*Dit leerplan is geschreven voor HackSimulator.nl — de gratis browser-based terminal simulator voor ethical hacking.*
+*Dit leerplan is geschreven voor HackSimulator.nl — de gratis browser-based terminal simulator voor ethisch hacken.*
 *Laatst bijgewerkt: april 2026*
 *Versie: 1.0*

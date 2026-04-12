@@ -1,12 +1,12 @@
-# Ethical Hacking & Nederlandse Wet: Wat Mag Wel, Wat Mag Niet
+# Ethisch Hacken & Nederlandse Wet: Wat Mag Wel, Wat Mag Niet
 
-**Een praktische gids voor (aankomende) ethical hackers in Nederland**
+**Een praktische gids voor (aankomende) ethische hackers in Nederland**
 
 ---
 
 ## Over deze gids
 
-Je wilt ethical hacking leren. Misschien heb je al wat commands uitgeprobeerd in HackSimulator, of je bent net begonnen met je eerste Nmap scan. En dan komt de vraag: *mag dit eigenlijk wel?*
+Je wilt ethisch hacken leren. Misschien heb je al wat commands uitgeprobeerd in HackSimulator, of je bent net begonnen met je eerste Nmap scan. En dan komt de vraag: *mag dit eigenlijk wel?*
 
 Het korte antwoord: **hacken is niet per definitie illegaal — ongeautoriseerd hacken is dat wél.** Het verschil zit in toestemming, proportionaliteit en hoe je ermee omgaat.
 
@@ -60,7 +60,7 @@ Nederland heeft drie belangrijke wetten op het gebied van computercriminaliteit 
 | **Wet Computercriminaliteit II** | 2006 | Uitbreiding naar DDoS, malware, voorbereidingshandelingen |
 | **Wet Computercriminaliteit III** | 2019 | Politie mag zelf terughacken (art. 126nba Sv). Geen beveiligingseis meer nodig voor computervredebreuk. Strafverzwaring bij aanvallen op vitale infrastructuur |
 
-**Wet Computercriminaliteit III** is de meest ingrijpende: de politie en het OM kregen hiermee de bevoegdheid om zelf in te breken in verdachte systemen ("terughackbevoegdheid"). Voor jou als ethical hacker veranderde vooral dit: **ook onbeveiligde systemen binnendringen is nu strafbaar.**
+**Wet Computercriminaliteit III** is de meest ingrijpende: de politie en het OM kregen hiermee de bevoegdheid om zelf in te breken in verdachte systemen ("terughackbevoegdheid"). Voor jou als ethische hacker veranderde vooral dit: **ook onbeveiligde systemen binnendringen is nu strafbaar.**
 
 ---
 
@@ -108,7 +108,7 @@ Wat als je per toeval een kwetsbaarheid vindt? Nederland heeft hiervoor een inte
 
 ### 2.3 De Drie Juridische Voorwaarden
 
-Het Openbaar Ministerie (OM) erkent dat ethical hacking onder bepaalde omstandigheden niet wederrechtelijk is. Maar je moet aan **drie voorwaarden** voldoen:
+Het Openbaar Ministerie (OM) erkent dat ethisch hacken onder bepaalde omstandigheden niet wederrechtelijk is. Maar je moet aan **drie voorwaarden** voldoen:
 
 **1. Zwaarwegend maatschappelijk belang**
 Je hack moet een echt maatschappelijk doel dienen — niet je nieuwsgierigheid bevredigen of indruk maken op vrienden.
@@ -148,7 +148,7 @@ Was er een minder ingrijpende manier om hetzelfde doel te bereiken? Had je het b
 
 **Het vonnis:** 27 maanden gevangenisstraf + €10.000 boete.
 
-**Les:** Schaal maakt het verschil. Dit is geen ethical hacking — dit is datadiefstal.
+**Les:** Schaal maakt het verschil. Dit is geen ethisch hacken — dit is datadiefstal.
 
 > **Bron:** [Rechtspraak.nl — computervredebreuk uitspraken](https://www.rechtspraak.nl)
 
@@ -194,7 +194,7 @@ Een goed pentest-toestemmingsdocument bevat minimaal:
 
 ## Hoofdstuk 5: Bug Bounty Programma's in Nederland
 
-Bug bounty programma's zijn de veiligste manier om ethical hacking te oefenen op echte systemen. Je krijgt expliciete toestemming, duidelijke scope, en soms zelfs een beloning.
+Bug bounty programma's zijn de veiligste manier om ethisch hacken te oefenen op echte systemen. Je krijgt expliciete toestemming, duidelijke scope, en soms zelfs een beloning.
 
 ### 5.1 Wat is een bug bounty programma?
 
@@ -249,7 +249,7 @@ Hack_Right is een programma van het Openbaar Ministerie (OM) en de Politie, spec
 |--------|--------|
 | **1. Juridisch & ethisch** | Wetgeving, regels en ethische grenzen |
 | **2. Impact & herstel** | Bewustwording van schade, excuses, schadeherstel |
-| **3. Talentontwikkeling** | Digitale vaardigheden positief inzetten (bijv. ethical hacking) |
+| **3. Talentontwikkeling** | Digitale vaardigheden positief inzetten (bijv. ethisch hacken) |
 | **4. Digitale weerbaarheid** | Zelfbescherming en verantwoord gedrag online |
 
 ### 6.4 Waarom is dit relevant voor jou?
@@ -317,6 +317,6 @@ Alle feiten in deze gids zijn geverifieerd per april 2026:
 
 ---
 
-*Deze gids is geschreven voor HackSimulator.nl — de gratis browser-based terminal simulator voor ethical hacking.*
+*Deze gids is geschreven voor HackSimulator.nl — de gratis browser-based terminal simulator voor ethisch hacken.*
 *Laatst bijgewerkt: april 2026*
 *Versie: 1.0*

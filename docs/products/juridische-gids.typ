@@ -1,10 +1,10 @@
-// Ethical Hacking & Nederlandse Wet — HackSimulator.nl
+// Ethisch Hacken & Nederlandse Wet — HackSimulator.nl
 // Compileer: typst compile juridische-gids.typ
 #import "template.typ": *
 
 #show: hacksimulator-doc.with(
-  title: "Ethical Hacking & de Nederlandse Wet",
-  subtitle: "Wat Mag Wel, Wat Mag Niet? — Een praktische gids voor (aankomende) ethical hackers in Nederland",
+  title: "Ethisch Hacken & de Nederlandse Wet",
+  subtitle: "Wat Mag Wel, Wat Mag Niet? — Een praktische gids voor (aankomende) ethische hackers in Nederland",
   version: "1.0",
   date: "april 2026",
 )
@@ -13,7 +13,7 @@
 
 = Over deze gids
 
-Je wilt ethical hacking leren. Misschien heb je al wat commands uitgeprobeerd in HackSimulator, of je bent net begonnen met je eerste Nmap scan. En dan komt de vraag: _mag dit eigenlijk wel?_
+Je wilt ethisch hacken leren. Misschien heb je al wat commands uitgeprobeerd in HackSimulator, of je bent net begonnen met je eerste Nmap scan. En dan komt de vraag: _mag dit eigenlijk wel?_
 
 Het korte antwoord: *hacken is niet per definitie illegaal --- ongeautoriseerd hacken is dat wél.* Het verschil zit in toestemming, proportionaliteit en hoe je ermee omgaat.
 
@@ -73,7 +73,7 @@ Nederland heeft drie belangrijke wetten op het gebied van computercriminaliteit 
   [Wet Computercriminaliteit III], [2019], [Politie mag zelf terughacken. Geen beveiligingseis meer nodig. Strafverzwaring bij vitale infra],
 )
 
-*Wet Computercriminaliteit III* is de meest ingrijpende: de politie en het OM kregen hiermee de bevoegdheid om zelf in te breken in verdachte systemen ("terughackbevoegdheid"). Voor jou als ethical hacker veranderde vooral dit: *ook onbeveiligde systemen binnendringen is nu strafbaar.*
+*Wet Computercriminaliteit III* is de meest ingrijpende: de politie en het OM kregen hiermee de bevoegdheid om zelf in te breken in verdachte systemen ("terughackbevoegdheid"). Voor jou als ethische hacker veranderde vooral dit: *ook onbeveiligde systemen binnendringen is nu strafbaar.*
 
 // ─────────────────────────────────────────────
 
@@ -126,7 +126,7 @@ _Bron: #link("https://www.ncsc.nl/contact/kwetsbaarheid-melden")[NCSC — Kwetsb
 
 == De Drie Juridische Voorwaarden
 
-Het Openbaar Ministerie (OM) erkent dat ethical hacking onder bepaalde omstandigheden niet wederrechtelijk is. Maar je moet aan *drie voorwaarden* voldoen:
+Het Openbaar Ministerie (OM) erkent dat ethisch hacken onder bepaalde omstandigheden niet wederrechtelijk is. Maar je moet aan *drie voorwaarden* voldoen:
 
 === 1. Zwaarwegend maatschappelijk belang
 Je hack moet een echt maatschappelijk doel dienen --- niet je nieuwsgierigheid bevredigen of indruk maken op vrienden.
@@ -169,7 +169,7 @@ Was er een minder ingrijpende manier om hetzelfde doel te bereiken? Had je het b
 
 *Het vonnis:* 27 maanden gevangenisstraf + €10.000 boete.
 
-#warning[Schaal maakt het verschil. Dit is geen ethical hacking --- dit is datadiefstal.]
+#warning[Schaal maakt het verschil. Dit is geen ethisch hacken --- dit is datadiefstal.]
 
 _Bron: #link("https://www.rechtspraak.nl")[Rechtspraak.nl — computervredebreuk uitspraken]_
 
@@ -217,7 +217,7 @@ Een goed pentest-toestemmingsdocument bevat minimaal:
 
 = Bug Bounty Programma's in Nederland
 
-Bug bounty programma's zijn de veiligste manier om ethical hacking te oefenen op echte systemen. Je krijgt expliciete toestemming, duidelijke scope, en soms zelfs een beloning.
+Bug bounty programma's zijn de veiligste manier om ethisch hacken te oefenen op echte systemen. Je krijgt expliciete toestemming, duidelijke scope, en soms zelfs een beloning.
 
 == Wat is een bug bounty programma?
 
@@ -275,7 +275,7 @@ Hack_Right is een programma van het Openbaar Ministerie (OM) en de Politie, spec
   [*Module*], [*Inhoud*],
   [1. Juridisch & ethisch], [Wetgeving, regels en ethische grenzen],
   [2. Impact & herstel], [Bewustwording van schade, excuses, schadeherstel],
-  [3. Talentontwikkeling], [Digitale vaardigheden positief inzetten (bijv. ethical hacking)],
+  [3. Talentontwikkeling], [Digitale vaardigheden positief inzetten (bijv. ethisch hacken)],
   [4. Digitale weerbaarheid], [Zelfbescherming en verantwoord gedrag online],
 )
 
@@ -336,7 +336,7 @@ Voordat je enige vorm van security testing uitvoert, loop deze checklist door:
   #line(length: 60%, stroke: 0.5pt + luma(200))
   #v(6pt)
   #text(size: 9pt, fill: luma(140))[
-    _Deze gids is geschreven voor HackSimulator.nl --- de gratis browser-based terminal simulator voor ethical hacking._\
+    _Deze gids is geschreven voor HackSimulator.nl --- de gratis browser-based terminal simulator voor ethisch hacken._\
     _Versie 1.0 · Met zorg samengesteld en gecontroleerd · april 2026_
   ]
 ]
