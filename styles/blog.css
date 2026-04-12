@@ -1003,10 +1003,16 @@ a[href='#all'].category-btn {
 }
 .newsletter-form {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: var(--spacing-sm);
   justify-content: center;
+  align-items: center;
   margin-bottom: var(--spacing-md);
+}
+.newsletter-form .sib-input.sib-form-block {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0 !important;
 }
 .newsletter-feedback {
   width: 100%;
@@ -1055,6 +1061,8 @@ a[href='#all'].category-btn {
   padding: var(--spacing-sm) var(--spacing-lg);
   transition: all var(--transition-fast);
   white-space: nowrap;
+  height: auto !important;
+  flex-shrink: 0;
 }
 .newsletter-button:hover {
   background-color: var(--color-button-bg-hover);
@@ -1088,6 +1096,7 @@ a[href='#all'].category-btn {
 }
 @media (max-width: 768px) {
   .newsletter-form {
+    flex-wrap: wrap;
     flex-direction: column;
     align-items: stretch;
   }
@@ -1114,6 +1123,12 @@ a[href='#all'].category-btn {
   border: none !important;
   padding: 0 !important;
   font-family: var(--font-body) !important;
+}
+.newsletter-signup .sib-form .sib-input,
+.newsletter-signup .sib-form .form__entry,
+.newsletter-signup .sib-form .form__label-row,
+.newsletter-signup .sib-form .entry__field {
+  background-color: transparent !important;
 }
 .newsletter-signup .sib-form .entry__field input,
 .newsletter-signup .sib-form .entry__field input.input {

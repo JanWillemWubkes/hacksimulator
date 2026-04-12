@@ -1958,6 +1958,12 @@ abbr.jargon {
   padding: 0 !important;
   font-family: var(--font-body) !important;
 }
+.homepage-newsletter .sib-form .sib-input,
+.homepage-newsletter .sib-form .form__entry,
+.homepage-newsletter .sib-form .form__label-row,
+.homepage-newsletter .sib-form .entry__field {
+  background-color: transparent !important;
+}
 .homepage-newsletter .sib-form .entry__field input,
 .homepage-newsletter .sib-form .entry__field input.input {
   background-color: var(--color-bg) !important;
