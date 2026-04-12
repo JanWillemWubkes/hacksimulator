@@ -158,7 +158,7 @@
               <span class="sib-form-message-panel__inner-text">Check je inbox — we hebben je een bevestigingsmail gestuurd.</span>
             </div>
           </div>
-          <form id="sib-form" class="newsletter-form" method="POST" action="https://09a5e5c2.sibforms.com/serve/MUIFADH0_vgGhb_FtKCDMfSZ6rjIRSJh-4N5o5GVrdzX91Jm21mM4zMY9-uyfWaYGM4uixNn1BWU_sBXVZkWtxPIicAKD37yK0Nd_cmsCXTjpKqwoE8FTTSh79CSYZos2KWR7_0_7ReDusej4VIdai0nOKAl_JfXPqEb1cAsgi-XWSGKuCKtzCCI92Wgk8T4We4iSrmAOrs43_x-SQ==" data-type="subscription">
+          <form id="sib-form" class="newsletter-form" method="POST" action="https://09a5e5c2.sibforms.com/serve/MUIFADH0_vgGhb_FtKCDMfSZ6rjIRSJh-4N5o5GVrdzX91Jm21mM4zMY9-uyfWaYGM4uixNn1BWU_sBXVZkWtxPIicAKD37yK0Nd_cmsCXTjpKqwoE8FTTSh79CSYZos2KWR7_0_7ReDusej4VIdai0nOKAl_JfXPqEb1cAsgi-XWSGKuCKtzCCI92Wgk8T4We4iSrmAOrs43_x-SQ==" data-type="subscription" target="_blank">
             <div class="sib-input sib-form-block">
               <div class="form__entry entry_block">
                 <div class="form__label-row">
@@ -191,6 +191,23 @@
         }
       };
       var AUTOHIDE = Boolean(0);
+
+      // Prevent Brevo main.js from auto-scrolling on validation errors
+      // Brevo calls window.scrollTo({top, behavior:'smooth'}) after form interaction
+      (function() {
+        var origScrollTo = window.scrollTo.bind(window);
+        var blocking = false;
+        document.addEventListener('click', function(e) {
+          if (e.target.closest && e.target.closest('.sib-form')) {
+            blocking = true;
+            setTimeout(function() { blocking = false; }, 500);
+          }
+        }, true);
+        window.scrollTo = function() {
+          if (blocking) return;
+          return origScrollTo.apply(window, arguments);
+        };
+      })();
       </script>
       <p class="newsletter-privacy">We respecteren je privacy. Lees ons <a href="../assets/legal/privacy.html">privacybeleid</a>.</p>
     </section>
