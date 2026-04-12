@@ -4,6 +4,75 @@
 
 ---
 
+## Sessie 126: Newsletter Platform Migratie MailerLite → Brevo (8-12 april 2026)
+
+**Scope:** Migratie newsletter-platform van MailerLite (Advanced trial verlopend, HTML editor niet beschikbaar op free tier) naar Brevo free tier. Inclusief domain authenticatie, double opt-in configuratie, welkomstmail automation, en code-integratie van embed forms op homepage + blog.
+**Status:** ✅ VOLTOOID
+**Duur:** 4 dagen (dashboard setup + guided walkthrough + code integratie)
+
+### Probleem
+MailerLite Advanced trial verliep rond 11 april 2026. Na trial-einde verdween de Custom HTML editor — alleen drag-and-drop bleef over op free tier. Dit was onacceptabel voor de handgeschreven terminal-aesthetic welkomstmail in `docs/newsletter/welkomstmail.html`. Newsletter schrappen was geen optie: het is de primaire distributiefunnel voor Gumroad cheatsheets.
+
+### Oplossing: Brevo Free Tier
+**Waarom Brevo:** Custom HTML editor beschikbaar op free tier (via file upload), 300 mails/dag, 100.000 contacten, Nederlandse UI. Trade-off: "Sent with Brevo" label in email footer (acceptabel voor huidige schaal).
+
+### Dashboard Setup (handmatig, guided walkthrough)
+1. **Brevo account** aangemaakt met `contact@hacksimulator.nl`
+2. **Domain authenticatie** (SPF/DKIM/DMARC) via TransIP automatische API-integratie — geen handmatige DNS records nodig
+3. **Sender** `HackSimulator <contact@hacksimulator.nl>` geverifieerd — DMARC `rua` tag ontbreekt (niet-blokkerend, bewust geparkeerd)
+4. **Lijst** `hacksimulator-main` (ID #3) aangemaakt
+5. **Welkomstmail template** geüpload als HTML — terminal-stijl met dark mode support intact
+6. **Signup formulier** met double opt-in configuratie:
+   - Default Template Double opt-in confirmation email
+   - Confirmation pages: Default Email Confirmation Page + Default Thank You Page
+   - Final confirmation email: uit (welkomstmail via automation neemt die rol over)
+   - Messages vertaald naar Nederlands
+7. **Automation** "Welcome message":
+   - Trigger: Contact added to list `hacksimulator-main`
+   - Wait: 1 minuut (minimaal, niet de Brevo default van 2 dagen)
+   - Send: eigen welkomstmail template (niet Brevo default)
+   - Re-entry: uit
+
+### Code Integratie
+**Bestanden gewijzigd:**
+- `index.html` — MailerLite form (regels 680-742) vervangen door Brevo embed + NL validatie JS
+- `blog/index.html` — zelfde vervanging
+- `styles/main.css` — Brevo CSS overrides (input, button, message panel via CSS variables)
+- `styles/blog.css` — zelfde overrides, blog-specifieke variabelen
+
+**Wat verwijderd:**
+- MailerLite `mlSubmit()` JavaScript functie (custom fetch naar JSONP endpoint)
+- MailerLite hidden fields (`ml-submit`, `anticsrf`)
+- Client-side `localStorage` duplicate check (`hs_nl_subs`)
+
+**Wat toegevoegd:**
+- Brevo `sib-styles.css` (extern CDN) + `main.js` (deferred)
+- Preconnect naar `sibforms.com`
+- `window.LOCALE = 'nl'` + Nederlandse error/success messages
+- Honeypot anti-spam veld (`email_address_check` met `input--hidden`)
+- CSS versie bumps `?v=114` → `?v=115`
+
+### Commits
+- `7879b41` feat(newsletter): migrate from MailerLite to Brevo (free tier)
+- `843b547` docs: update CLAUDE.md + TASKS.md for Sessie 126 (Brevo migration)
+
+### Architecturale Beslissingen
+1. **Brevo embed form i.p.v. API:** HackSimulator heeft geen backend (PRD §13), dus client-side API key is geen optie. Brevo embed form regelt alles server-side via form-action URL.
+2. **Double opt-in:** Past bij privacy-focus en Consent Mode v2 banner. Accepteert ~25% drop-off voor GDPR-stevigheid.
+3. **sib-styles.css laden:** Brevo's `main.js` is afhankelijk van specifieke CSS klassen. Extern laden (CDN, geen bundle impact) is betrouwbaarder dan alle klassen zelf dupliceren.
+4. **!important overrides:** Standaard bij third-party embeds. Brevo's inline styles zijn alleen te overrulen met `!important`.
+5. **Geen subscriber migratie:** Geen bestaande subscribers behalve Heisenberg → clean start op Brevo.
+
+### Playwright E2E
+132 passed, 0 failed, 5 skipped, 11 flaky (pre-existing). Geen nieuwe regressies door de migratie.
+
+### Open Items
+- DMARC `rua` tag ontbreekt — niet urgent bij huidig volume (<100 mails/dag), evalueren bij >1000 subs
+- Brevo default confirmation pages (Engels) → vervangen door eigen `/bevestigd.html` in terminal-stijl (nice-to-have)
+- Handmatige end-to-end test (signup → bevestigingsmail → klik → welkomstmail) nog te doen door Heisenberg
+
+---
+
 ## Sessie 125: SEO, Legal Refactor & A11y Polish (5-6 april 2026)
 
 **Scope:** SEO completion (JSON-LD schema op alle 10 blog posts + internal cross-linking), legal pages migratie naar CSS variables met theme support, OG social-share image, vervanging `alert()` door themed error banner, theme toggle accessibility, Playwright screenshot gitignore hardening
