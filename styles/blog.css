@@ -619,6 +619,19 @@ a[href='#all'].category-btn {
 .blog-cta-button:hover:after {
   transform: translateX(4px) rotate(45deg);
 }
+
+/* Product CTA variant (Gumroad downloads) — visually distinct from Simulator CTA */
+.blog-cta-product {
+  border-left: 3px solid var(--color-ui-primary);
+  text-align: left;
+}
+.blog-cta-product h3 {
+  font-size: 1.4rem;
+}
+[data-theme='light'] .blog-cta-product {
+  border-left-color: var(--color-link);
+}
+
 .blog-post-footer {
   background-color: var(--color-bg-footer);
   border-top: 2px solid var(--color-border-dark-frame);
