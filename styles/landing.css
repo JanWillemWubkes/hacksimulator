@@ -181,10 +181,13 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
+  padding: 12px 24px;
   background: var(--color-cta-primary);
   color: var(--color-cta-text);
   font-family: var(--font-heading);
+  font-size: 1rem;
   font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.3px;
   text-decoration: none;
   border: none;
   border-radius: var(--border-radius-modal);
