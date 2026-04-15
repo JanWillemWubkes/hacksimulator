@@ -365,5 +365,8 @@ JURIDISCHE CONTEXT
 
 GERELATEERDE COMMANDO'S
     nmap, nikto, metasploit, burp, hydra
+
+[TIP] Wil je leren hoe je deze tools in een echte pentest gebruikt?
+      Download het Pentest Playbook op hacksimulator.nl/gidsen
 `.trim()
 };

@@ -8,10 +8,13 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (88-126)](docs/sessions/current.md) - Full Detail
-**Sessies:** 126, 125, 124, 123, 122, 121, 120, 119, 118, 117, 116, 115, 114, 113, 112, 111, 110, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88
-**Period:** 26 december 2025 - 12 april 2026
+### [Current Sessions (88-129)](docs/sessions/current.md) - Full Detail
+**Sessies:** 129, 128, 127, 126, 125, 124, 123, 122, 121, 120, 119, 118, 117, 116, 115, 114, 113, 112, 111, 110, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88
+**Period:** 26 december 2025 - 15 april 2026
 **Topics:**
+- Gumroad Products Live & Site-Integratie: 4 producten live op Gumroad, /gidsen landing page, blog CTAs (10 posts), man page tips (6 commands), navbar + footer + sitemap (Sessie 129)
+- Gumroad Products Factcheck & Taalconsistentie: alle feiten geverifieerd, "ethical hacking" → "ethisch hacken", MailerLite→Brevo fix, huisstijlkleuren fix (Sessie 128)
+- Gumroad Products PDF Generatie: Typst template met huisstijl, 3 guides compiled, build script, kleurcorrectie listings (Sessie 127)
 - Newsletter Platform Migratie MailerLite → Brevo: free tier, double opt-in, welkomstmail automation, terminal CSS overrides, TransIP DNS auth (Sessie 126)
 - SEO, Legal Refactor & A11y Polish: JSON-LD schema (10 blogs), legal CSS-var migratie, OG image, alert→banner, theme toggle a11y (Sessie 125)
 - Gumroad Products v1.0: 3 product drafts (juridische gids, leerplan, pentest-playbook) + listings + setup guide (Sessie 124)

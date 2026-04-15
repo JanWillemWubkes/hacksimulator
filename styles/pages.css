@@ -405,13 +405,112 @@
   padding: var(--spacing-sm) var(--spacing-md);
 }
 
+/* ==================== Gidsen Cards ==================== */
+.gids-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.gids-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.gids-card p {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-text-dim);
+  line-height: 1.6;
+  margin: 0 0 var(--spacing-md) 0;
+  flex: 1;
+}
+
+.gids-card .btn-cta {
+  width: 100%;
+  justify-content: center;
+  margin-top: auto;
+}
+
+.gids-badge {
+  display: inline-block;
+  font-family: var(--font-terminal);
+  font-size: 0.7rem;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 4px;
+  width: fit-content;
+  margin-bottom: var(--spacing-md);
+  background: rgba(159, 239, 0, 0.1);
+  color: var(--color-cta-primary);
+  border: 1px solid rgba(159, 239, 0, 0.2);
+}
+
+.gids-price {
+  display: block;
+  font-family: var(--font-terminal);
+  font-size: 1.1rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-cta-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Bundle Card (full-width, highlighted) */
+.gids-bundle {
+  background: rgba(22, 27, 34, 0.3);
+  border: 1px solid rgba(159, 239, 0, 0.3);
+  border-radius: 16px;
+  padding: var(--spacing-xl) calc(var(--spacing-xl) * 1.5);
+  text-align: center;
+  transition: border-color var(--transition-normal), transform var(--transition-normal);
+}
+
+.gids-bundle:hover {
+  border-color: var(--color-cta-primary);
+  transform: translateY(-4px);
+}
+
+.gids-bundle h3 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.gids-bundle p {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-text-dim);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto var(--spacing-md);
+}
+
+.gids-bundle .gids-badge {
+  margin: 0 auto var(--spacing-md);
+}
+
+.gids-bundle .gids-price {
+  font-size: 1.25rem;
+}
+
+.gids-bundle .btn-cta {
+  margin-top: var(--spacing-sm);
+}
+
 /* ==================== Light Theme Overrides ==================== */
 [data-theme="light"] .about-stats,
 [data-theme="light"] .contact-card,
 [data-theme="light"] .contact-form,
 [data-theme="light"] .developer-card,
 [data-theme="light"] .legal-link-card,
-[data-theme="light"] .faq-mini .faq-item {
+[data-theme="light"] .faq-mini .faq-item,
+[data-theme="light"] .gids-bundle {
   background: rgba(255, 255, 255, 0.8);
   border-color: var(--color-border);
 }

@@ -26,6 +26,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- Gidsen -->
+  <url>
+    <loc>https://hacksimulator.nl/gidsen.html</loc>
+    <lastmod>2026-04-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- Commands Reference -->
   <url>
     <loc>https://hacksimulator.nl/commands/</loc>

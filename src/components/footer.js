@@ -47,6 +47,7 @@ function getMarketingFooter(options = {}) {
             <li><a href="${basePath}terminal.html">Simulator</a></li>
             <li><a href="${basePath}blog/">Blog</a></li>
             <li><a href="${basePath}commands/">Commands</a></li>
+            <li><a href="${basePath}gidsen.html">Gidsen</a></li>
             <li><a href="${basePath}over-ons.html">Over Ons</a></li>
             <li><a href="${basePath}contact.html">Contact</a></li>
             ${showFeedback ? '<li><a href="#feedback" id="footer-feedback-link">Feedback</a></li>' : ''}

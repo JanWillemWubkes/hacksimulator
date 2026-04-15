@@ -356,5 +356,8 @@ COUNTERMEASURES DETECTION
 
 GERELATEERDE COMMANDO'S
     hashcat, metasploit, nmap, john (the ripper)
+
+[TIP] Wil je weten wat legaal is en wat niet?
+      Download de Juridische Gids op hacksimulator.nl/gidsen
 `.trim()
 };

@@ -4,6 +4,185 @@
 
 ---
 
+## Sessie 129: Gumroad Products Live & Site-Integratie (13-15 april 2026)
+
+**Scope:** Gumroad producten publiceren (4 products: 3 gidsen + bundel) en volledige site-integratie: /gidsen landing page, blog CTAs, terminal man page tips, navbar + footer links.
+**Status:** ✅ VOLTOOID
+**Duur:** 1 sessie
+
+### Gumroad Setup (handmatig, begeleide walkthrough)
+- Account was al aangemaakt, profiel ingesteld als HackSimulator.nl
+- 4 producten aangemaakt: Juridische Gids (€5), Pentest Playbook (€5), 12-Weken Leerplan (€5), Starter Kit Bundle (€10)
+- Alle producten PWYW (pay what you want) met minimum = Amount
+- **Gumroad UI quirks:** PWYW toggle alleen klikbaar bij Amount >€0; Amount = altijd het minimum (kan niet lager via PWYW); thumbnails later toevoegen
+- Payout setup vereist voor publicatie, ook bij gratis producten
+- Product URLs genoteerd en getest via Gumroad dashboard
+
+### Gumroad URLs
+- Juridische Gids: `https://hacksimulator.gumroad.com/l/yzdtfx`
+- Pentest Playbook: `https://hacksimulator.gumroad.com/l/wmvpx`
+- 12-Weken Leerplan: `https://hacksimulator.gumroad.com/l/eogjdk`
+- Starter Kit Bundle: `https://hacksimulator.gumroad.com/l/emzjvj`
+
+### Site-Integratie (6 stappen)
+
+**1. CSS (`styles/pages.css`):**
+- `.gids-card` (flex column, CTA button altijd onderaan)
+- `.gids-badge` (monospace label, groene accent)
+- `.gids-price` (terminal font, primary color)
+- `.gids-bundle` (full-width card, groene border accent)
+- Light theme overrides toegevoegd
+
+**2. Landing Page (`gidsen.html`):**
+- Structuur volgt `over-ons.html` pattern (page-hero, feature-cards grid, footer injection)
+- 3 product cards in `.feature-cards` grid + bundle card daaronder
+- JSON-LD Product schema voor SEO (CollectionPage + ItemList)
+- SVG icons per product (shield, book, checkmark)
+- Getest in dark + light mode via Playwright
+
+**3. Navbar (`src/components/navbar.js`):**
+- "Gidsen" link toegevoegd aan desktop nav + mobile menu (marketing variant)
+- Positie: Blog | Commands | **Gidsen** | Woordenlijst | Over Ons
+
+**4. Blog CTAs (10 posts in `blog/`):**
+- Contextual `.blog-cta` blokken toegevoegd tussen support-banner en related-articles
+- Mapping: nmap/sql-injection/cybersecurity-tools/wachtwoord → Pentest Playbook
+- Mapping: wat-is-ethisch-hacken/ethisch-hacker-worden/social-engineering → Juridische Gids
+- Mapping: terminal-basics/linux-bestandssysteem → 12-Weken Leerplan
+- Mapping: welkom → Starter Kit Bundle
+- Hergebruikt bestaande `.blog-cta` + `.blog-cta-button` CSS
+
+**5. Man Page Tips (6 commands):**
+- nmap.js, nikto.js, sqlmap.js → Pentest Playbook tip
+- hydra.js, hashcat.js, metasploit.js → Juridische Gids tip
+- Format: `[TIP] Wil je leren hoe je deze tools in een echte pentest gebruikt? Download het Pentest Playbook op hacksimulator.nl/gidsen`
+
+**6. Sitemap + Footer:**
+- `sitemap.xml`: entry voor `/gidsen.html` (priority 0.8)
+- `src/components/footer.js`: "Gidsen" link in Platform kolom
+
+### Bestanden Gewijzigd (23 files, +329 -34 regels)
+- `gidsen.html` (NIEUW) — landing page
+- `styles/pages.css` — gids-card, bundle, badge, price CSS
+- `src/components/navbar.js` — Gidsen link desktop + mobile
+- `src/components/footer.js` — Gidsen link Platform kolom
+- `blog/*.html` (10 bestanden) — Gumroad CTAs
+- `src/commands/network/nmap.js` — man page tip
+- `src/commands/security/{nikto,sqlmap,hydra,hashcat,metasploit}.js` — man page tips
+- `sitemap.xml` — gidsen.html entry
+
+### Verificatie
+- [x] Dark mode: gidsen.html getest via Playwright screenshot
+- [x] Light mode: gidsen.html getest via Playwright screenshot
+- [x] Navbar: "Gidsen" link zichtbaar op marketing pagina's
+- [x] Footer: "Gidsen" link in Platform kolom
+- [x] Blog CTA: nmap-beginnersgids.html bevat Pentest Playbook CTA met juiste Gumroad URL
+- [ ] Playwright E2E tests: handmatig te draaien (`npx playwright test`)
+- [ ] Thumbnails: later toevoegen via Canva
+
+---
+
+## Sessie 128: Gumroad Products — Factcheck & Taalconsistentie (12 april 2026)
+
+**Scope:** Finale factcheck van alle 3 Gumroad PDF-producten op correctheid + taalconsistentie "ethical hacking" → "ethisch hacken" doorvoeren in alle product-bestanden.
+**Status:** ✅ VOLTOOID
+**Duur:** 1 sessie
+
+### Factcheck Resultaten
+Alle drie de producten (juridische gids, pentest playbook, 12-weken leerplan) systematisch doorgelopen op feitelijke correctheid. Online geverifieerd via web search:
+
+**Juridische Gids:**
+- ✅ Art. 138ab Sr straffen en leden correct (lid 1: 2 jaar, lid 2: 4 jaar, lid 3: 4 jaar)
+- ✅ Geldboete vierde categorie €27.500 per 2026 bevestigd
+- ✅ Wet Computercriminaliteit III (2019) — beveiligingseis vervallen correct
+- ✅ Hack_Right leeftijd 12-30 jaar bevestigd via OM-website
+- ✅ Zerocopter (NL), Intigriti (BE, HQ Antwerpen) correct
+
+**Pentest Playbook:**
+- ✅ EternalBlue MS17-010, Log4Shell CVE-2021-44228, BlueKeep CVE-2019-0708 — alle details correct
+- ✅ yescrypt ($y$) standaard op Ubuntu 22.04+/Debian 11+
+- ✅ CVSS v3.1/v4.0 referentie correct
+
+**Leerplan:**
+- ✅ OWASP Top 10:2025 — alle 10 categorieën geverifieerd (incl. nieuwe A03 Supply Chain + A10 Exceptional Conditions)
+- ✅ Certificeringsprijzen (Security+ $425, eJPT $249, OSCP $1.749, CEH $2.200+) bevestigd
+- ✅ TryHackMe, picoCTF, HackTheBox, GTFOBins, HackTricks URLs en beschrijvingen correct
+- ✅ Blogpost-referenties bestaan (`terminal-basics.html`, `sql-injection-uitgelegd.html`, `wat-is-ethisch-hacken.html`)
+
+### Taalwijziging "ethical hacking" → "ethisch hacken"
+**Rationale:** Nederlandse doelgroep, UI=NL taalstrategie, NCSC/OM/Wikipedia NL gebruiken "ethisch hacken". Gumroad tags behouden beide termen voor SEO.
+
+### Bestanden gewijzigd (11 totaal)
+- `docs/products/gumroad-listings.md` — titels, beschrijvingen, CTA's, bio, bundle, tags (+ MailerLite→Brevo fix + kleurcorrectie PDF setup)
+- `docs/products/juridische-gids-draft.md` — titel + 6 body-verwijzingen + footer
+- `docs/products/pentest-playbook-draft.md` — subtitle + footer
+- `docs/products/leerplan-draft.md` — week 4, FAQ, meetups, footer
+- `docs/products/juridische-gids.typ` — titel, subtitle, 7 verwijzingen, footer
+- `docs/products/leerplan.typ` — subtitle, week 4, meetups, FAQ, footer
+- `docs/products/pentest-playbook.typ` — subtitle, footer
+- `docs/products/template.typ` — header tagline (verschijnt op elke pagina)
+- `docs/products/*.pdf` — 3 PDFs opnieuw gecompileerd
+
+### Overige fixes
+- **MailerLite → Brevo** in `gumroad-listings.md` Stap 5 (verouderd na sessie 126 migratie)
+- **Kleuren PDF setup** `#1a1a2e`/`#00ff41` → `#0d1117`/`#9fef00` in Canva-instructies (thumbnail-secties waren al correct)
+
+### Commits
+- `63124dd` — fix(products): "ethical hacking" → "ethisch hacken" + MailerLite → Brevo + juiste huisstijlkleuren
+
+### Open Items (uit Sessie 127, nog steeds open)
+- [ ] Tabel-header styling in Typst (groene achtergrond)
+- [ ] Gumroad account aanmaken + producten uploaden (handmatig)
+- [ ] CTA's integreren op site + Brevo welkomstmail (na Gumroad URLs bekend)
+
+---
+
+## Sessie 127: Gumroad Products — PDF Generatie met Typst (12 april 2026)
+
+**Scope:** Markdown product drafts (Sessie 124) omzetten naar professionele PDF's met HackSimulator huisstijl via Typst. Inclusief herbruikbaar template, build script, en kleurcorrectie in listings.
+**Status:** 🔵 PDF's gegenereerd, tabel-header styling en Gumroad upload nog open
+**Duur:** 1 sessie
+
+### Probleem
+3 Gumroad product drafts (juridische gids, pentest playbook, 12-weken leerplan) stonden klaar in `docs/products/` als Markdown maar waren nog niet omgezet naar verkoopbare PDF's. De listings vermeldden verkeerde huisstijl-kleuren (`#1a1a2e`/`#00ff41` i.p.v. de echte `#0d1117`/`#9fef00`).
+
+### Oplossing: Typst Template Systeem
+**Waarom Typst:** Code-based (past bij vanilla JS/CSS workflow), herhaalbaar (één template voor alle guides + toekomstige updates), gratis, git-versioned. Alternatieven (Canva, Google Docs, Pandoc+LaTeX) afgewogen — Canva is niet herhaalbaar, Google Docs niet professioneel genoeg voor betaald product, LaTeX is overkill.
+
+### Bestanden aangemaakt
+- `docs/products/template.typ` — Herbruikbaar Typst template met HackSimulator huisstijl
+- `docs/products/juridische-gids.typ` — Typst source (~10 pagina's, 99 KB PDF)
+- `docs/products/pentest-playbook.typ` — Typst source (~18 pagina's, 111 KB PDF)
+- `docs/products/leerplan.typ` — Typst source (~16 pagina's, 105 KB PDF)
+- `docs/products/build-pdfs.sh` — One-click build script
+- `docs/products/*.pdf` — Gegenereerde PDF's (3 stuks)
+
+### Bestanden gewijzigd
+- `docs/products/gumroad-listings.md` — Kleurcorrectie thumbnail specs: `#1a1a2e`/`#00ff41` → `#0d1117`/`#9fef00` (match site huisstijl)
+
+### Template Design Beslissingen
+1. **Cover page:** Donkere achtergrond (`#0d1117`) met `user@hacksimulator:~$` prompt, neon groene titel (`#9fef00`), branding footer — terminal-aesthetic consistent met de site
+2. **Binnenwerk:** Witte achtergrond voor leesbaarheid (print-friendly), donkere code-blokken, groene heading-accenten
+3. **Helper functies:** `#tip()`, `#warning()`, `#letop()` met gekleurde zijbalken — matcht `[TIP]`/`[!]`/`[LET OP]` patronen uit de terminal
+4. **Fonts:** DejaVu Sans Mono (monospace) + Liberation Sans (body) — beschikbaar op Linux, geen extra font-installatie nodig
+5. **Kleuren uit `main.css`:** Niet de verouderde kleuren uit listings, maar de echte CSS variables (`--color-bg`, `--color-prompt`, etc.)
+
+### Typst Installatie
+- `Courier New` en `Inter` fonts niet beschikbaar op systeem → vervangen door `DejaVu Sans Mono` en `Liberation Sans`
+- Typst geïnstalleerd via GitHub release binary → `~/.local/bin/typst` (v0.13.1) — snap vereiste sudo, cargo niet geïnstalleerd
+- Syntax fix: `<8` in Typst tabel-cel parsed als label → escaped naar `\<8`
+
+### Playwright E2E
+160 passed, 30 suites — geen regressies (wijzigingen zijn puur in `docs/products/`, raken geen site-code)
+
+### Open Items
+- [ ] Tabel-header styling fixen (groene achtergrond mist — `show table.cell.where(y: 0)` werkt anders in Typst 0.13.1)
+- [ ] PDF content review en perfectie (volgende sessie)
+- [ ] Gumroad account aanmaken + producten uploaden (Heisenberg handmatig)
+- [ ] CTA's integreren op site + Brevo welkomstmail (na Gumroad URLs bekend)
+
+---
+
 ## Sessie 126: Newsletter Platform Migratie MailerLite → Brevo (8-12 april 2026)
 
 **Scope:** Migratie newsletter-platform van MailerLite (Advanced trial verlopend, HTML editor niet beschikbaar op free tier) naar Brevo free tier. Inclusief domain authenticatie, double opt-in configuratie, welkomstmail automation, en code-integratie van embed forms op homepage + blog.

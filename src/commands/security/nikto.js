@@ -368,5 +368,8 @@ LEGAL USE
 
 GERELATEERDE COMMANDO'S
     nmap (port scanning), sqlmap (SQL injection), wpscan (WordPress)
+
+[TIP] Wil je leren hoe je deze tools in een echte pentest gebruikt?
+      Download het Pentest Playbook op hacksimulator.nl/gidsen
 `.trim()
 };

@@ -84,6 +84,39 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 129: Gumroad Products Live & Site-Integratie (13-15 april 2026)
+⚠️ **Never:**
+- Gumroad PWYW toggle activeren bij Amount €0 — toggle is grayed out, zet Amount eerst op €1+, activeer PWYW, dan minimum op €0 zetten
+- Aannemen dat Gumroad PWYW "pay less" betekent — PWYW laat klanten alleen *meer* betalen dan Amount, niet minder; Amount = altijd het minimum
+- Blog CTAs via JS injecteren bij <15 posts — hardcoded HTML is beter voor SEO (zichtbaar zonder JS) en makkelijker te onderhouden bij klein aantal
+
+✅ **Always:**
+- Contextual CTAs per blogpost (match product aan topic) — verhoogt click-through vs. generieke CTA's
+- Gumroad product links naar `/gidsen` landing page in man page tips (niet direct naar Gumroad) — centraliseert traffic, makkelijker te updaten als URLs veranderen
+- Bestaande CSS patterns hergebruiken (`.feature-card`, `.btn-cta`, `.blog-cta`) — zero nieuwe JS, verwaarloosbare bundle impact
+
+### Sessie 128: Gumroad Products — Factcheck & Taalconsistentie (12 april 2026)
+⚠️ **Never:**
+- "Ethical hacking" in Nederlandse lopende tekst — gebruik "ethisch hacken" / "ethische hacker" (NCSC, OM, Wikipedia NL gebruiken de Nederlandse term)
+- MailerLite verwijzingen laten staan in product-docs na Brevo-migratie — cross-check alle referenties bij platform-switches
+- Producten publiceren zonder online factcheck van claims (OWASP categorieën, certificeringsprijzen, wetsartikelen) — feiten veranderen jaarlijks
+
+✅ **Always:**
+- Gumroad tags: beide termen ("ethisch hacken" + "ethical hacking") voor SEO-bereik op Nederlandse én Engelse zoekopdrachten
+- Na taalwijziging in drafts ook Typst templates + `template.typ` (header tagline) + listings updaten — template tagline verschijnt op élke PDF-pagina
+- PDFs opnieuw compileren na content-wijzigingen (`bash build-pdfs.sh`) — anders zijn PDF en source out-of-sync
+
+### Sessie 127: Gumroad Products — PDF Generatie met Typst (12 april 2026)
+⚠️ **Never:**
+- Huisstijl-kleuren hardcoden in product docs zonder cross-check met `main.css` — listings hadden `#1a1a2e`/`#00ff41`, site gebruikt `#0d1117`/`#9fef00`
+- `Courier New` of `Inter` in Typst templates op Linux — niet standaard geïnstalleerd, gebruik `DejaVu Sans Mono` + `Liberation Sans`
+- `<` onescaped in Typst tabel-cellen — parsed als label, geeft compile error (escape met `\<`)
+
+✅ **Always:**
+- Typst voor herhaalbare PDF-generatie bij meerdere documenten — één template, `typst compile` en klaar (geen handmatig Canva-werk per update)
+- PDF binnenwerk op witte achtergrond voor leesbaarheid (print + telefoon) — donkere covers + donkere code-blokken voor brand, witte body voor content
+- Build script (`build-pdfs.sh`) naast templates — maakt PDF-generatie reproduceerbaar voor iedereen
+
 ### Sessie 125: SEO, Legal Refactor & A11y Polish (5-6 april 2026)
 ⚠️ **Never:**
 - Hardcoded kleuren in legal pages laten staan na design system migratie — breekt theme support en is inconsistent met blog/pages
@@ -127,34 +160,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Theme-aware feedback colors (success/error) via CSS vars, niet hardcoded greens/reds — consistent met design system
 - Mobile-first button styling testen op 375px viewport vóór desktop polish — newsletter signup is hot path op mobile
 
-### Sessie 122: MailerLite Newsletter Setup & Mailchimp Migration (28 maart 2026)
-⚠️ **Never:**
-- MailerLite drag & drop editor via Playwright — gebruik Custom HTML + ACE editor JS API (`ace.edit().setValue()`)
-- Third-party form widgets embedden als je bestaande styling wilt behouden — gebruik fetch() naar hun API endpoint
-- MailerLite JSONP endpoint als directe form POST — retourneert JSON, geen redirect
-
-✅ **Always:**
-- Domain authenticeren (SPF/DKIM) vóór sender email configuratie — MailerLite blokkeert unauthenticated domains
-- CORS preflight testen (`curl -X OPTIONS`) vóór client-side fetch integratie
-- `application/x-www-form-urlencoded` voor MailerLite form submissions — niet JSON
-
-### Sessie 119: 3-Zone Celebration Redesign & Stat Cards (24-25 maart 2026)
-⚠️ **Never:**
-- Gebruikers terugsturen in learning funnel — check `maxPhaseReached` bij phase detection
-- Monolithische completion blocks gebruiken — splits in visueel gescheiden zones voor scanability
-
-✅ **Always:**
-- Sequential reveal voor multi-zone content — 800ms stagger voelt natuurlijk en geeft focus
-- `maxPhaseReached` bijhouden naast `currentPhase` — voorkomt regressie na advanced progress
-
-### Sessie 118: Ko-fi Optimization, Celebration UX & Tutorial Polish (22-23 maart 2026)
-⚠️ **Never:**
-- Celebration UX tonen zonder auto-copy — gebruikers verwachten dat certificaat al gekopieerd is
-
-✅ **Always:**
-- Ko-fi touchpoints op natuurlijke completion moments (challenges, certificaten) — hogere conversie
-- Input validatie op security commands (nmap, traceroute) — voorkom verwarrende output bij ongeldige targets
-
 **Rotation:** Keep last 5 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
 
 ---
@@ -165,7 +170,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
 **Rotation trigger:** Every 5 sessions (last: Sessie 125, next: Sessie 130)
-**Sessie counter:** 126
+**Sessie counter:** 129
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -218,5 +223,5 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 12 april 2026 (Sessie 126 — Newsletter MailerLite → Brevo migratie)
-**Version:** 4.9 (Sessie 126: Brevo newsletter migratie, double opt-in, welkomstmail automation)
+**Last updated:** 15 april 2026 (Sessie 129 — Gumroad Products live & site-integratie)
+**Version:** 5.2 (Sessie 129: /gidsen page, blog CTAs, man page tips, navbar + footer links)

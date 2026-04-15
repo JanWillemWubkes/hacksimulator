@@ -247,5 +247,8 @@ BESCHERMING ALS GEBRUIKER
 
 GERELATEERDE COMMANDO'S
     hydra (brute force), john (andere cracker), metasploit
+
+[TIP] Wil je weten wat legaal is en wat niet?
+      Download de Juridische Gids op hacksimulator.nl/gidsen
 `.trim()
 };

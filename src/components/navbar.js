@@ -43,6 +43,7 @@ function getMarketingNavbar(options = {}) {
         <div class="nav-links">
           <a href="/blog/">Blog</a>
           <a href="/commands/">Commands</a>
+          <a href="/gidsen.html">Gidsen</a>
           <a href="/woordenlijst.html">Woordenlijst</a>
           <a href="/over-ons.html">Over Ons</a>
         </div>
@@ -75,6 +76,7 @@ function getMarketingNavbar(options = {}) {
       <li><a href="/terminal.html" class="mobile-cta-link">Start Simulator</a></li>${landingAnchors}
       <li><a href="/blog/">Blog</a></li>
       <li><a href="/commands/">Commands</a></li>
+      <li><a href="/gidsen.html">Gidsen</a></li>
       <li><a href="/woordenlijst.html">Woordenlijst</a></li>
       <li><a href="/over-ons.html">Over Ons</a></li>
     </ul>
