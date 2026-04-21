@@ -67,7 +67,7 @@ export function generateChallengeCertificate(challenge, stats) {
   }
 
   var template = CERT_TEMPLATES[challenge.difficulty] || CERT_TEMPLATES.easy;
-  var discipline = DISCIPLINES[challenge.id] || 'ethical hacking';
+  var discipline = DISCIPLINES[challenge.id] || 'ethisch hacken';
   var width = getResponsiveBoxWidth();
   var inner = width - 2;
   var lines = [];
@@ -126,7 +126,7 @@ export function generateChallengeCertificate(challenge, stats) {
 
 function generateCertificateMobile(challenge, stats) {
   var template = CERT_TEMPLATES[challenge.difficulty] || CERT_TEMPLATES.easy;
-  var discipline = DISCIPLINES[challenge.id] || 'ethical hacking';
+  var discipline = DISCIPLINES[challenge.id] || 'ethisch hacken';
 
   var out = '\n**' + template.label + '**\n';
   out += template.decoration + '\n\n';

@@ -4,6 +4,73 @@
 
 ---
 
+## Sessie 130: M7 Gamification Afsluiting & QA (21 april 2026)
+
+**Scope:** M7 Gamification afsluiten (47/47 → 100%), gamification flow testen op bugs/inconsistenties, taalfixes doorvoeren, TASKS.md bijwerken.
+**Status:** ✅ VOLTOOID
+**Duur:** 1 sessie
+
+### Taken afgerond
+- TASKS.md: M7 Gamification 46/47 → 47/47 (100%), item 14 Gumroad afgevinkt, totaal 277/325 (85.2%)
+- M7 Phase 7 "Beta testing gamification" → afgerond (Heisenberg playtest + AI agent flow test)
+
+### Gamification Flow Test (Playwright + code review)
+**Getest via live site (hacksimulator.nl):**
+- ✅ `challenge` lijst — box rendering, difficulty labels, puntenwaarden
+- ✅ `challenge start network-scout` — MISSION BRIEFING box, DOELEN checkboxes
+- ✅ `challenge status` — actieve challenge info, pogingen counter
+- ✅ `challenge hint` (< 3 attempts) — "Probeer nog even!" bemoedigende toon
+- ✅ `ping` + `nmap` → CHALLENGE VOLTOOID box + badge unlocks (First Steps, Network Novice, Recon Starter, Challenge Accepted)
+- ✅ Ko-fi support CTA bij eerste challenge completion
+
+**Code review (21 bestanden, alle gamification modules):**
+- ✅ Alle 21 badge unlock condities bereikbaar, geen logic errors
+- ✅ Hint tiers correct op exact 3/6/10 pogingen
+- ✅ Edge cases: completed challenge, no active, invalid ID, empty states — allemaal correct
+- ✅ Certificaat download + clipboard fallback
+- ✅ Dashboard empty states en progress bars
+- ✅ Leaderboard: max simulated (295) < max achievable (315)
+- ✅ Consistent "je" (nooit "u") in alle gamification tekst
+
+### Gevonden issues & fixes
+
+**1. Taalinconsistentie: "ethical hacking" in Nederlandse tekst (3 plekken)**
+- `src/ui/onboarding.js:186` — "leer ethical hacking tools" → "leer ethisch hacken"
+- `src/gamification/certificate-generator.js:70,129` — fallback 'ethical hacking' → 'ethisch hacken'
+- `src/tutorial/certificate.js:135` — fallback 'ethical hacking' → 'ethisch hacken'
+
+**2. Prompt inconsistentie: `user@hacksim` vs `hacker@hacksim` (7 plekken)**
+- `src/ui/landing-demo.js:96,165` — user@ → hacker@
+- `terminal.html:106` — user@ → hacker@
+- `index.html:149,154,161` — user@ → hacker@
+- `tests/e2e/cross-browser.spec.js:81` — test assertion bijgewerkt
+
+**3. Ontbrekende hard-sweep badge**
+- `src/gamification/badge-definitions.js` — hard-sweep badge toegevoegd (rare tier, checkt 5 hard challenge IDs)
+- Badge totaal: 21 → 22 (badge-manager telt dynamisch via `this.badges.size`)
+
+**4. CSP error: AdSense `ep2.adtrafficquality.google`**
+- `netlify.toml:92` — `ep2.adtrafficquality.google` toegevoegd aan `script-src` + `connect-src`
+
+### Test resultaten
+- Playwright gamification suite (Chromium): 12 passed, 2 flaky, 0 failed
+- Flaky tests: challenge list + mission briefing (timing/race condition, niet gerelateerd aan onze wijzigingen)
+
+### Bestanden gewijzigd
+- `TASKS.md` — M7 100%, item 12 + 14 afgevinkt, totalen bijgewerkt
+- `src/ui/onboarding.js` — taalfix
+- `src/gamification/certificate-generator.js` — taalfix (2x)
+- `src/tutorial/certificate.js` — taalfix
+- `src/ui/landing-demo.js` — prompt fix (2x)
+- `terminal.html` — prompt fix
+- `index.html` — prompt fix (3x)
+- `src/gamification/badge-definitions.js` — hard-sweep badge + comment update
+- `netlify.toml` — CSP fix
+- `tests/e2e/cross-browser.spec.js` — test assertion fix
+- `SESSIONS.md` — sessie 130 index
+
+---
+
 ## Sessie 129: Gumroad Products Live & Site-Integratie (13-15 april 2026)
 
 **Scope:** Gumroad producten publiceren (4 products: 3 gidsen + bundel) en volledige site-integratie: /gidsen landing page, blog CTAs, terminal man page tips, navbar + footer links.

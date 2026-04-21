@@ -183,7 +183,7 @@ class Onboarding {
 Welkom, hacker. Sessie gestart.
 
   Je bent ingelogd op een gesimuleerd netwerk.
-  Je missie: leer ethical hacking tools — veilig en legaal.
+  Je missie: leer ethisch hacken — veilig en legaal.
 
   [!] Begin met de basics:
 

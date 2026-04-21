@@ -9,7 +9,7 @@
  *   'challenge' — checked after challenge completion
  *   'session'   — checked once at terminal init
  *
- * Rarity tiers: common(8), uncommon(6), rare(4), epic(2), legendary(1)
+ * Rarity tiers: common(8), uncommon(6), rare(5), epic(2), legendary(1)
  */
 
 var badges = [
@@ -210,6 +210,23 @@ var badges = [
     rarity: 'rare',
     trigger: 'session',
     check: function(stats) { return stats.streak >= 3; }
+  },
+
+  {
+    id: 'hard-sweep',
+    title: 'Hard Sweep',
+    description: 'Voltooi alle hard challenges',
+    icon: '[#]',
+    rarity: 'rare',
+    trigger: 'challenge',
+    check: function(stats) {
+      var hardIds = ['full-recon', 'privesc-path', 'multi-tool-master',
+                     'attack-chain', 'forensic-investigator'];
+      for (var i = 0; i < hardIds.length; i++) {
+        if (stats.completedChallenges.indexOf(hardIds[i]) === -1) return false;
+      }
+      return true;
+    }
   },
 
   // --- EPIC (2) ---

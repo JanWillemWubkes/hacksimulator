@@ -93,7 +93,7 @@
     // Show first command statically
     const firstCmd = DEMO_COMMANDS[0];
     const html = [
-      `<div class="terminal-line prompt">user@hacksim:~$ ${firstCmd.command}</div>`,
+      `<div class="terminal-line prompt">hacker@hacksim:~$ ${firstCmd.command}</div>`,
       ...firstCmd.output.map(line => `<div class="terminal-line output">${line}</div>`)
     ].join('');
 
@@ -162,7 +162,7 @@
     // Add the prompt line (shows what was typed)
     const promptLine = document.createElement('div');
     promptLine.className = 'terminal-line prompt';
-    promptLine.textContent = `user@hacksim:~$ ${command}`;
+    promptLine.textContent = `hacker@hacksim:~$ ${command}`;
     outputEl.appendChild(promptLine);
 
     // Remove oldest lines if exceeding max (fade out effect)

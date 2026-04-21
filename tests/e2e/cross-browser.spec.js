@@ -78,7 +78,7 @@ test.describe('Cross-Browser Compatibility Tests', () => {
     // Check prompt
     const prompt = page.locator('#terminal-prompt');
     await expect(prompt).toBeVisible();
-    await expect(prompt).toContainText('user@hacksim:~$');
+    await expect(prompt).toContainText('hacker@hacksim:~$');
 
     // Check output area exists
     const output = page.locator('#terminal-output');

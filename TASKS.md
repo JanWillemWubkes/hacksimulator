@@ -1,14 +1,14 @@
 # TASKS.md - HackSimulator.nl
 
 **Laatst bijgewerkt:** 12 april 2026
-**Status:** M7 Gamification 98% | M6 Tutorial System 88% | M5.5 Monetization ✅ Live + Gumroad track (LIVE on hacksimulator.nl)
+**Status:** M7 Gamification ✅ 100% | M6 Tutorial System 88% | M5.5 Monetization ✅ Live + Gumroad track (LIVE on hacksimulator.nl)
 **Sprint:** Sessie 126: Newsletter migratie MailerLite → Brevo (free tier, double opt-in, welkomstmail automation)
 
 ---
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 275 / 325 taken voltooid (84.6%)
+**Totaal:** 277 / 325 taken voltooid (85.2%)
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
@@ -20,7 +20,7 @@
 | M5: Testing & Launch | 🔵 In uitvoering | 41/45 | 91% | ✅ **Performance + Config + Security + Accessibility + Content + Bundle Opt 100%**
 | M5.5: Monetization MVP | 🔵 In uitvoering | 9/11 | 82% | ✅ AdSense (10 units) + Ko-fi + Brevo newsletter (double opt-in) + eigen consent banner + Gumroad products v1.0 (3 guides) |
 | M6: Tutorial System | 🔵 In uitvoering | 30/33 | 88% | ✅ Framework + 3 scenarios + cert + analytics + E2E tests + perf audit + mobile + cross-browser |
-| M7: Gamification | 🔵 In uitvoering | 46/47 | 98% | ✅ Phase 1-6 complete + Phase 7 testing (cross-system, performance, mobile) |
+| M7: Gamification | ✅ Voltooid | 47/47 | 100% | ✅ Phase 1-7 complete (framework, content, badges, certs, dashboard, leaderboard, testing) |
 | M8: Analytics & Scaling | ⏭️ Gepland | 0/40 | 0% |
 | M9: Refactor Sprint | ✅ Voltooid | 19/19 | 100% | ✅ Cache + bundle + code quality + docs sync + performance + test coverage + localStorage opt |
 
@@ -43,9 +43,9 @@
 9. [ ] GA4 Real-Time verificatie (handmatig)
 10. [ ] AdSense performance monitoring (CTR, RPM na 30 dagen)
 11. [ ] M6 Tutorial: laatste 3 open taken (→ 100%)
-12. [ ] M7 Gamification: laatste open taak (→ 100%)
+12. [x] M7 Gamification: alle taken voltooid (47/47 → 100%) — ✅ Sessie 130
 13. [ ] Bundle audit: site totaal +40% sinds laatste meting (848 → 1192 KB) — runtime vs SEO assets ontwarren, runtime budget herijken
-14. [ ] Gumroad products v1.0: publicatie + listings live zetten (3 guides klaar in `docs/products/`)
+14. [x] Gumroad products v1.0: publicatie + listings live zetten (3 guides klaar in `docs/products/`) — ✅ Sessie 129
 
 ---
 
@@ -868,7 +868,7 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
 **Tijdsinschatting:** 40-50 uur (6-7 dagen)
 **Taken:** 47 total (46 voltooid)
 **Dependencies:** M6 Tutorial System voltooid
-**Status:** 🔵 In uitvoering (Phase 1-6 voltooid, Phase 7 testing deels)
+**Status:** ✅ Voltooid (Phase 1-7 complete)
 **Bundle Budget:** +50KB max (total: ~428KB / 500KB = 86%)
 
 **Success Criteria:**
@@ -1084,7 +1084,7 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
   - Highlight user's entry
   - Show percentile (e.g., "Top 15%")
 
-### Phase 7: Integration & Testing (10h, 7 tasks) — 🔵 5/6 voltooid
+### Phase 7: Integration & Testing (10h, 7 tasks) — ✅ 6/6 voltooid
 - [x] Integrate gamification with terminal system (2h) — ✅ Hooks in terminal.js + challenge flow
   - Award points for tutorial completion
   - Unlock badges on terminal milestones
@@ -1110,7 +1110,7 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
   - Certificate display on mobile
   - Full challenge completion flow on mobile
 
-- [ ] Beta testing gamification (1h)
+- [x] Beta testing gamification (1h) — ✅ Sessie 130: Heisenberg playtest + AI agent flow test
   - Focus on challenge difficulty balance
   - Gather feedback on point values
   - Test badge unlock satisfaction
@@ -1365,7 +1365,7 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 **Laatst bijgewerkt:** 27 maart 2026
 **Versie:** 4.2 (Sessie 121 — M5.5 revived, sessions 116-120 gedocumenteerd)
 **Totaal Taken:** 325 (M5.5 heropend met 10 taken, zie toptabel voor actuele breakdown per mijlpaal)
-**Voltooide Taken:** 275/325 (84.6%) — M0-M4: 100%, M5: 91% (41/45), M5.5: 80% (8/10), M6: 88% (30/33), M7: 98% (46/47), M9: 100% (19/19)
+**Voltooide Taken:** 277/325 (85.2%) — M0-M4: 100%, M5: 91% (41/45), M5.5: 82% (9/11), M6: 88% (30/33), M7: 100% (47/47), M9: 100% (19/19)
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 **Bundle:** ✅ ~809 KB na Netlify minificatie (Terminal Core ~340 KB, site totaal binnen 1000 KB budget — Sessie 100)

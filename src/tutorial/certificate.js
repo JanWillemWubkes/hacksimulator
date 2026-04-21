@@ -132,7 +132,7 @@ function getDiscipline(scenarioId) {
     'webvuln': 'web applicatie security testing',
     'privesc': 'systeem analyse en credential discovery'
   };
-  return disciplines[scenarioId] || 'ethical hacking';
+  return disciplines[scenarioId] || 'ethisch hacken';
 }
 
 /**

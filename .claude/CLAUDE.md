@@ -84,6 +84,17 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 130: M7 Gamification Afsluiting & QA (21 april 2026)
+⚠️ **Never:**
+- "ethical hacking" als fallback in code — ook in fallback strings "ethisch hacken" gebruiken; de Sessie 128 taalregel geldt voor álle code, niet alleen zichtbare UI
+- Prompt prefix (`user@hacksim` vs `hacker@hacksim`) op sommige plekken anders dan de terminal — check HTML templates, JS en landing demo bij prompt-wijzigingen
+- Badge progressie asymmetrisch laten (easy-sweep + medium-sweep maar geen hard-sweep) — spelers verwachten een consistent pad
+
+✅ **Always:**
+- Gamification edge cases testen via code review naast UI test — code review vangt meer dan alleen klikken (fallback strings, empty states, boundary conditions)
+- Na prompt/branding wijziging grep uitvoeren op oude waarde in *.html, *.js én tests/ — E2E test assertions bevatten vaak gehardcode UI strings
+- CSP errors uit console logs als AdSense nieuwe domeinen toevoegt — Google voegt regelmatig subdomains toe (ep1, ep2, etc.)
+
 ### Sessie 129: Gumroad Products Live & Site-Integratie (13-15 april 2026)
 ⚠️ **Never:**
 - Gumroad PWYW toggle activeren bij Amount €0 — toggle is grayed out, zet Amount eerst op €1+, activeer PWYW, dan minimum op €0 zetten
@@ -140,27 +151,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Brevo inline styles overrulen met `!important` in eigen CSS — standaard bij third-party embeds, geen anti-pattern in deze context
 - `locale` hidden field op `nl` zetten + alle `window.*_MESSAGE` variabelen in het Nederlands — Brevo's JS leest deze voor client-side validatie
 
-### Sessie 124: Gumroad Products v1.0 (3-4 april 2026)
-⚠️ **Never:**
-- Product content publiceren zonder dubbele factcheck — paid products eisen 100% verifieerbare claims (user product quality standard)
-- Generieke "leerplan" zonder concrete uren/weken/oefeningen — kopers verwachten directe actionability
-
-✅ **Always:**
-- Product drafts in `docs/products/` versioneren (v1.0, v1.1...) — git history is changelog voor refunds/disputes
-- Listings + setup guide naast product zelf opleveren — Gumroad onboarding heeft eigen metadata vereisten (preview, FAQ, refund policy)
-- Monetization track diversificatie: AdSense (passief) + Ko-fi (donaties) + Newsletter (lead nurture) + Gumroad (digital products) — geen single point of failure
-
-### Sessie 123: Newsletter Polish & April Editie (29 mrt – 1 april 2026)
-⚠️ **Never:**
-- Aannemen dat MailerLite duplicate signups silent blokkeert — server response parsen + localStorage cross-check vereist
-- Newsletter HTML schrijven zonder Outlook/Gmail dark mode test — clients renderen `<style>` tags inconsistent
-
-✅ **Always:**
-- UTM parameters op alle nieuwsbrief CTA's — anders zijn newsletter conversies onzichtbaar in GA4
-- Theme-aware feedback colors (success/error) via CSS vars, niet hardcoded greens/reds — consistent met design system
-- Mobile-first button styling testen op 375px viewport vóór desktop polish — newsletter signup is hot path op mobile
-
-**Rotation:** Keep last 5 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
+**Rotation:** Keep last 6 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
 
 ---
 
@@ -170,7 +161,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
 **Rotation trigger:** Every 5 sessions (last: Sessie 125, next: Sessie 130)
-**Sessie counter:** 129
+**Sessie counter:** 130
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -223,5 +214,5 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 15 april 2026 (Sessie 129 — Gumroad Products live & site-integratie)
-**Version:** 5.2 (Sessie 129: /gidsen page, blog CTAs, man page tips, navbar + footer links)
+**Last updated:** 21 april 2026 (Sessie 130 — M7 Gamification 100% + QA fixes)
+**Version:** 5.3 (Sessie 130: M7 afgerond, taalfixes, prompt unificatie, hard-sweep badge, CSP fix)
