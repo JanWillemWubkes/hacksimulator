@@ -132,6 +132,30 @@ const analyticsEvents = {
   },
 
   /**
+   * Track Gumroad / product CTA click
+   * @param {string} productId - Gumroad short ID (yzdtfx, wmvpx, eogjdk, emzjvj)
+   * @param {string} location - Page context (gidsen_juridisch, blog_nmap, man_tip, etc.)
+   * @param {string} label - Visible button text (for wording-effectiveness analysis)
+   */
+  productCtaClick(productId, location, label) {
+    analyticsTracker.trackEvent('product_cta_click', {
+      product_id: productId,
+      location: location,
+      label: label
+    });
+  },
+
+  /**
+   * Track newsletter signup success (after Brevo form confirmation)
+   * @param {string} location - Where the form is placed (footer, blog_sidebar, etc.)
+   */
+  newsletterSignup(location) {
+    analyticsTracker.trackEvent('newsletter_signup', {
+      location: location
+    });
+  },
+
+  /**
    * Determine user type (first-time vs returning)
    * @returns {string} 'new' or 'returning'
    */
