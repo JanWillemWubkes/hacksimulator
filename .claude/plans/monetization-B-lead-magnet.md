@@ -1,7 +1,23 @@
 # Plan B — Lead Magnet (Sample PDF achter Brevo opt-in)
 
-**Status:** Open | **Geschat:** ~2 sessies | **Opvolger van:** Sessie 131 (CTA tracking live)
+**Status:** Sessie 1 ✅ voltooid (23 april 2026) — Sessie 2 staat klaar | **Geschat:** ~2 sessies | **Opvolger van:** Sessie 131 (CTA tracking live)
 **Reconstructed from session log:** 22 april 2026 (Sessie 132)
+
+## Sessie 1 resultaat (23 april 2026)
+
+**Gemaakt:**
+- `docs/products/pentest-playbook-sample.typ` — sample source (Fase 0 + 1 + cliffhanger-CTA)
+- `docs/products/pentest-playbook-sample.pdf` — 89 KB, 9 pagina's (onder 100 KB budget)
+- `assets/samples/pentest-playbook-sample.pdf` — hosting-ready kopie
+- `docs/newsletter/welkomstmail-sample-pentest.html` — Brevo template (hergebruikt dark-mode pattern)
+- `docs/newsletter/brevo-setup-sample-pentest.md` — 6-stappen dashboard setup guide
+- `docs/products/build-pdfs.sh` — aangepast zodat sample automatisch mee-compileert
+
+**Nog te doen door jou (handmatig in Brevo dashboard):**
+- Stap 1-4 + **Stap 3b** uit `docs/newsletter/brevo-setup-sample-pentest.md`: tag aanmaken, template uploaden, automation bouwen, bestaande welkomstmail-automation filter toevoegen, embed form voorbereiden
+- Stap 5 uit die guide: test-contact-verificatie (inclusief no-dubbele-mail test)
+
+**Sessie 2 start-conditie:** Brevo embed form HTML is gekopieerd (uit Brevo Share-tab) en ligt klaar om in `/sample-pentest.html` te plakken.
 
 ---
 
@@ -92,10 +108,10 @@ Nieuwsbriefinschrijving stimuleren **én** een direct voorproefje geven van de b
 
 ## Definition of Done
 
-- [ ] Sample PDF gegenereerd en gehost op `/assets/samples/`
+- [x] Sample PDF gegenereerd en gehost op `/assets/samples/` *(Sessie 1)*
 - [ ] `/sample-pentest.html` live met Brevo form
-- [ ] Brevo automation "sample pentest" stuurt welkomstmail binnen 5 min
-- [ ] Welkomstmail bevat download-link + Gumroad cross-sell
+- [ ] Brevo automation "sample pentest" stuurt welkomstmail binnen 5 min *(template klaar, dashboard-stap bij user)*
+- [x] Welkomstmail bevat download-link + Gumroad cross-sell *(Sessie 1)*
 - [ ] 3 CTAs geplaatst (nmap post, cybersec tools post, gidsen.html)
 - [ ] `lead_magnet_signup` event zichtbaar in GA4 DebugView bij form submit
 - [ ] Playwright E2E happy path passeert

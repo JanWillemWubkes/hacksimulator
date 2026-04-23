@@ -31,8 +31,8 @@ fi
 echo "=== HackSimulator PDF Builder ==="
 echo ""
 
-# Compileer alle guides
-for file in juridische-gids.typ pentest-playbook.typ leerplan.typ; do
+# Compileer alle guides + sample
+for file in juridische-gids.typ pentest-playbook.typ leerplan.typ pentest-playbook-sample.typ; do
     name="${file%.typ}"
     echo "[*] Compileer: $file → ${name}.pdf"
     typst compile "$file" "${name}.pdf"
@@ -42,4 +42,5 @@ echo ""
 echo "[OK] Alle PDF's gegenereerd:"
 ls -lh *.pdf 2>/dev/null
 echo ""
-echo "Upload deze PDF's naar Gumroad. Zie gumroad-listings.md voor instructies."
+echo "Upload de 3 betaalde PDF's naar Gumroad. Zie gumroad-listings.md voor instructies."
+echo "Kopieer pentest-playbook-sample.pdf naar assets/samples/ voor de lead magnet."
