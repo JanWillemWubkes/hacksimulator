@@ -84,6 +84,17 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 131: CTA Click Tracking & Session Handoff via Plan Files (21 april 2026)
+⚠️ **Never:**
+- Relatieve `src/...` paths in `<script>` tags van landing pages — `gidsen.html` miste `init-analytics.js` waardoor GA4 sinds Sessie 129 nooit initialiseerde op dé conversie-pagina; absolute `/src/...` voorkomt dat scripts niet laden bij subpad-URL-varianten
+- Per-element `onclick`-handlers voor N tracking-CTAs — één delegated `document.addEventListener('click', ... closest('[data-product-id]'))` schaalt beter én blijft CSP-compatible
+- MutationObserver zonder `fired`-flag + `disconnect()` — Brevo success panel kan meerdere style-mutaties triggeren, wat dubbele `newsletter_signup` events oplevert
+
+✅ **Always:**
+- Declaratieve `data-product-id` + `data-cta-location` attributen + delegated listener — zero inline JS, zero CSP-problemen, makkelijk uit te breiden bij nieuwe CTAs
+- GA4 consent-check verifiëren via DevTools Network (filter `collect?v=2`) i.p.v. alleen localStorage-inspectie — netwerkverkeer is de enige ground truth voor "event is echt verzonden"
+- Bij bijna-vol context window: commit + zelf-bevattende plan files in `.claude/plans/` schrijven — nieuwe sessies cold-starten zonder context-overdracht, geen informatie-verlies
+
 ### Sessie 130: M7 Gamification Afsluiting & QA (21 april 2026)
 ⚠️ **Never:**
 - "ethical hacking" als fallback in code — ook in fallback strings "ethisch hacken" gebruiken; de Sessie 128 taalregel geldt voor álle code, niet alleen zichtbare UI
@@ -128,17 +139,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - PDF binnenwerk op witte achtergrond voor leesbaarheid (print + telefoon) — donkere covers + donkere code-blokken voor brand, witte body voor content
 - Build script (`build-pdfs.sh`) naast templates — maakt PDF-generatie reproduceerbaar voor iedereen
 
-### Sessie 125: SEO, Legal Refactor & A11y Polish (5-6 april 2026)
-⚠️ **Never:**
-- Hardcoded kleuren in legal pages laten staan na design system migratie — breekt theme support en is inconsistent met blog/pages
-- `alert()` voor user-facing errors gebruiken — blokkeert UI thread, geen styling, slechte a11y, geen brand consistency
-- Playwright screenshots zonder expliciete `.playwright-mcp/` filename — repo root vervuilt ondanks `/*.png` gitignore vangnet
-
-✅ **Always:**
-- JSON-LD schema op álle blog posts (niet alleen homepage) — Google Rich Results vereist per-page structured data
-- Internal cross-linking tussen blog posts — verhoogt dwell time en Google's topical authority signal
-- Theme toggle button met `aria-pressed` + visible focus ring — WCAG AAA voor stateful controls
-
 ### Sessie 126: Newsletter Platform Migratie MailerLite → Brevo (8-12 april 2026)
 ⚠️ **Never:**
 - Brevo automation "Send an email" met de default template deployen — altijd eigen HTML template selecteren via trash-icoon + opnieuw koppelen
@@ -160,8 +160,8 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Voor Sessie:** Lees `PLANNING.md`, `TASKS.md`, dit bestand
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-**Rotation trigger:** Every 5 sessions (last: Sessie 125, next: Sessie 130)
-**Sessie counter:** 130
+**Rotation trigger:** Every 5 sessions (last: Sessie 130, next: Sessie 135)
+**Sessie counter:** 131
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -214,5 +214,5 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 21 april 2026 (Sessie 130 — M7 Gamification 100% + QA fixes)
-**Version:** 5.3 (Sessie 130: M7 afgerond, taalfixes, prompt unificatie, hard-sweep badge, CSP fix)
+**Last updated:** 21 april 2026 (Sessie 131 — CTA click tracking + plan files B/C/D)
+**Version:** 5.4 (Sessie 131: GA4 attribution laag live, `product_cta_click` + `newsletter_signup` events, M5.5 → 10/11)

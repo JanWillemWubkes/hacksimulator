@@ -4,6 +4,122 @@
 
 ---
 
+## Sessie 131: CTA Click Tracking (GA4 Attribution Layer) + Plan Files B/C/D (21 april 2026)
+
+**Scope:** Monetization-meetlaag bouwen — elke Gumroad CTA en newsletter signup meetbaar in GA4 via declarative `data-*` attributen + delegated listener. Plus 3 plan files (.claude/plans/) voor opvolgende monetization-sessies.
+**Status:** ✅ VOLTOOID
+**Duur:** 1 sessie
+**Commit:** `e0a9ab1`
+
+### Context
+Monetization-stack (AdSense, Ko-fi, Brevo, Gumroad × 4 producten) was live maar blind: Gumroad dashboard toont straks *dát* er verkopen zijn, niet *welke* blog post / CTA-positie converteert. Zonder attributie is elke vervolgkeuze (lead-magnet, SEO, bundle) giswerk.
+
+### Besluit & approach
+User koos uit 4 opties (A. Meetlaag / B. Lead-magnet / C. SEO / D. Bundle+social proof) voor **A — meetlaag eerst**. Approach: 2 generieke helpers in `events.js`, 2 mini-scripts (cta-tracking, newsletter-tracking), `data-product-id` + `data-cta-location` op 4 gidsen-CTAs + 10 blog CTAs, `data-newsletter-location` op 2 form wrappers.
+
+### Implementatie
+
+**1. Helpers — `src/analytics/events.js`:**
+```javascript
+productCtaClick(productId, location, label) {
+  analyticsTracker.trackEvent('product_cta_click', {
+    product_id: productId, location: location, label: label
+  });
+},
+newsletterSignup(location) {
+  analyticsTracker.trackEvent('newsletter_signup', { location: location });
+}
+```
+
+**2. Delegated click listener — `src/ui/cta-tracking.js` (NEW):**
+```javascript
+document.addEventListener('click', (e) => {
+  const cta = e.target.closest('[data-product-id]');
+  if (!cta) return;
+  events.productCtaClick(
+    cta.dataset.productId,
+    cta.dataset.ctaLocation || 'unknown',
+    cta.textContent.trim().slice(0, 80)
+  );
+});
+```
+Werkt met `target="_blank"` via GA4 beacon transport default — navigatie kill'd request niet.
+
+**3. Brevo success observer — `src/ui/newsletter-tracking.js` (NEW):**
+```javascript
+const successPanel = document.getElementById('success-message');
+if (successPanel) {
+  let fired = false;
+  const observer = new MutationObserver(() => {
+    if (fired) return;
+    if (successPanel.style.display && successPanel.style.display !== 'none') {
+      fired = true;
+      events.newsletterSignup(location);
+      observer.disconnect();
+    }
+  });
+  observer.observe(successPanel, { attributes: true, attributeFilter: ['style'] });
+}
+```
+`fired`-flag + `disconnect()` voorkomen dubbele events bij snel-achtereenvolgende style-mutaties.
+
+**4. Init wiring — `src/init-components.js`:**
+Side-effect imports `/src/ui/cta-tracking.js` + `/src/ui/newsletter-tracking.js` toegevoegd.
+
+### Pre-existing bug gevonden & gefixt
+
+Eerste E2E test op gidsen.html toonde `pushed: []` ondanks consent granted. Root cause: **`gidsen.html` laadde alleen `init-components.js` (relatief pad), NIET `init-analytics.js` of `init-theme.js`**. GA4 tracker was nooit geïnitialiseerd op dé conversie-pagina — silently sinds Sessie 129.
+
+**Fix:** Drie script-tags met absolute paths toegevoegd aan gidsen.html:
+```html
+<script src="/src/init-theme.js"></script>
+<script type="module" src="/src/init-components.js"></script>
+<script type="module" src="/src/init-analytics.js"></script>
+```
+
+### E2E verificatie (Playwright MCP, localhost)
+
+| Scenario | Event | Params | Status |
+|----------|-------|--------|--------|
+| Gidsen CTA klik (Juridisch) | `product_cta_click` | `product_id: yzdtfx, location: gidsen_juridisch` | ✅ |
+| Blog CTA klik (nmap) | `product_cta_click` | `product_id: wmvpx, location: blog_nmap` | ✅ |
+| Newsletter submit → success panel | `newsletter_signup` | `location: homepage` | ✅ |
+| Consent declined + klik | (geen event) | delta=0 | ✅ |
+
+### Regressie-check
+Grep op `tests/` voor `.blog-cta-button`, `.btn-cta`, `data-product-id`, `data-cta-location` — geen matches → zero regressie risico voor bestaande Playwright suite.
+
+### Plan files geschreven (session handoff)
+
+Context window raakte vol na implementatie. User wilde B/C/D ook uitvoeren. Oplossing: 3 zelf-bevattende plan files in `.claude/plans/` zodat elke volgende sessie cold-start kan zonder context-overdracht:
+
+- `monetization-B-lead-magnet.md` — Sample PDF achter Brevo opt-in, ~2 sessies
+- `monetization-C-content-seo.md` — 2-3 nieuwe blog posts met keyword research, ~2-3 sessies
+- `monetization-D-bundle-social-proof.md` — Bundle-first /gidsen layout + testimonials, ~0.5 sessie
+
+### Bestanden gewijzigd
+- `src/analytics/events.js` — +2 helpers (productCtaClick, newsletterSignup)
+- `src/ui/cta-tracking.js` — **NEW** delegated click listener
+- `src/ui/newsletter-tracking.js` — **NEW** Brevo MutationObserver
+- `src/init-components.js` — +2 side-effect imports
+- `gidsen.html` — 4 CTAs `data-product-id` + absolute script paths fix
+- `blog/welkom.html`, `blog/nmap-beginnersgids.html`, `blog/terminal-basics.html`, `blog/sql-injection-uitgelegd.html`, `blog/wat-is-ethisch-hacken.html`, `blog/cybersecurity-tools.html`, `blog/wachtwoord-beveiliging.html`, `blog/social-engineering.html`, `blog/ethisch-hacker-worden.html`, `blog/linux-bestandssysteem.html` — 10 `.blog-cta-button` tagged
+- `index.html` — `data-newsletter-location="homepage"` op `.homepage-newsletter`
+- `blog/index.html` — `data-newsletter-location="blog_index"` op `.newsletter-signup`
+- `.claude/plans/monetization-B-lead-magnet.md` — **NEW**
+- `.claude/plans/monetization-C-content-seo.md` — **NEW**
+- `.claude/plans/monetization-D-bundle-social-proof.md` — **NEW**
+
+### Milestone update
+M5.5 → **10/11 (91%)** — enige resterende: server-side Gumroad→Brevo pingback (out of MVP scope, expliciet uitgesteld).
+
+### Out of scope (expliciet)
+- Gumroad seller-pingback → Netlify Function → Brevo kopertag (fase 2, vereist meer infra)
+- AdSense click tracking (heeft eigen dashboard)
+- Ko-fi click tracking (iframe-based, beperkt nut)
+
+---
+
 ## Sessie 130: M7 Gamification Afsluiting & QA (21 april 2026)
 
 **Scope:** M7 Gamification afsluiten (47/47 → 100%), gamification flow testen op bugs/inconsistenties, taalfixes doorvoeren, TASKS.md bijwerken.
