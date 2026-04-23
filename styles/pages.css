@@ -497,10 +497,92 @@
 
 .gids-bundle .gids-price {
   font-size: 1.25rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.gids-price-old {
+  font-family: var(--font-terminal);
+  font-size: 0.95rem;
+  color: var(--color-text-dim);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  font-weight: var(--font-weight-bold);
+}
+
+.gids-price-new {
+  font-family: var(--font-terminal);
+  font-size: 1.4rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-cta-primary);
+}
+
+.gids-price-sub {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+  margin-bottom: var(--spacing-md);
+  font-style: italic;
 }
 
 .gids-bundle .btn-cta {
   margin-top: var(--spacing-sm);
+}
+
+/* Social Proof Stats Strip */
+.gids-stats-section {
+  padding-top: 0;
+}
+
+.gids-stats {
+  list-style: none;
+  margin: 0;
+  padding: var(--spacing-lg) 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-md);
+  border-top: 1px solid rgba(159, 239, 0, 0.15);
+  border-bottom: 1px solid rgba(159, 239, 0, 0.15);
+}
+
+.gids-stat {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gids-stat-value {
+  font-family: var(--font-terminal);
+  font-size: 1.75rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-cta-primary);
+  line-height: 1.1;
+}
+
+.gids-stat-label {
+  font-family: var(--font-terminal);
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+}
+
+@media (max-width: 640px) {
+  .gids-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg) var(--spacing-md);
+  }
+  .gids-stat-value {
+    font-size: 1.5rem;
+  }
+  .gids-bundle .gids-price {
+    flex-wrap: wrap;
+  }
 }
 
 /* ==================== Light Theme Overrides ==================== */
