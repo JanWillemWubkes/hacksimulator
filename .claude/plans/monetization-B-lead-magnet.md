@@ -1,6 +1,6 @@
 # Plan B — Lead Magnet (Sample PDF achter Brevo opt-in)
 
-**Status:** Sessie 1 ✅ voltooid (23 april 2026) — Sessie 2 staat klaar | **Geschat:** ~2 sessies | **Opvolger van:** Sessie 131 (CTA tracking live)
+**Status:** Sessie 1 ✅ (23 apr) + Sessie 132 Brevo-setup ✅ (24 apr) — Sessie 2 staat klaar | **Geschat:** ~1 sessie resterend
 **Reconstructed from session log:** 22 april 2026 (Sessie 132)
 
 ## Sessie 1 resultaat (23 april 2026)
@@ -13,11 +13,20 @@
 - `docs/newsletter/brevo-setup-sample-pentest.md` — 6-stappen dashboard setup guide
 - `docs/products/build-pdfs.sh` — aangepast zodat sample automatisch mee-compileert
 
-**Nog te doen door jou (handmatig in Brevo dashboard):**
-- Stap 1-4 + **Stap 3b** uit `docs/newsletter/brevo-setup-sample-pentest.md`: tag aanmaken, template uploaden, automation bouwen, bestaande welkomstmail-automation filter toevoegen, embed form voorbereiden
-- Stap 5 uit die guide: test-contact-verificatie (inclusief no-dubbele-mail test)
+## Sessie 132 resultaat (24 april 2026) — Brevo dashboard setup
 
-**Sessie 2 start-conditie:** Brevo embed form HTML is gekopieerd (uit Brevo Share-tab) en ligt klaar om in `/sample-pentest.html` te plakken.
+**Voltooid in Brevo:**
+- Sample-template geüpload + preview text gekozen (contrast-angle: "De meeste tutorials slaan Fase 0 over…")
+- Welkomstmail taalfixes: `werkwijze` i.p.v. `methodologie`, `Het volledige Playbook`, `Bekijk Volledig Playbook`
+- **Architecturale pivot — Form-submitted trigger**: tijdens setup bleek Brevo's UI veranderd — "Contact added to tag" trigger bestaat niet meer, "Contact matches custom filters" is batch (daily 8PM, niet realtime) + ondersteunt geen tag-filter. Oplossing: beide welkomstmail-automations triggeren nu op **Form submitted**:
+  - `HackSimulator Signup` form → Welcome message automation (bestaand, hergekoppeld)
+  - `Sample Pentest embed` form → nieuwe Sample Pentest automation
+- Beide automations **Active**, end-to-end test geslaagd (user confirmed)
+- Brevo form HTML gekopieerd → staat klaar in `docs/newsletter/sample-pentest-embed-form.html` (form action URL: `MUIFACJ0paJnTVMUH9lXS2lXtNFuy54...`)
+- Memory bijgewerkt: `reference_brevo_tags.md` met kritieke beperking "Tags zijn NIET filterbaar in automation custom-filter builder"
+- Commits `1d679ac` + `4b49466` gepusht (Netlify deploy PDF in progress)
+
+**Sessie 2 start-conditie:** Brevo embed form HTML staat in `docs/newsletter/sample-pentest-embed-form.html`, klaar om in `/sample-pentest.html` te plakken. Beide automations live.
 
 ---
 
