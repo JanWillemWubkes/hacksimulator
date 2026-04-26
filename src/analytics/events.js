@@ -156,6 +156,32 @@ const analyticsEvents = {
   },
 
   /**
+   * Track lead magnet signup success (after Brevo form confirmation on sample-pages)
+   * @param {string} sampleId - Sample identifier (pentest, future: juridisch, leerplan)
+   * @param {string} location - Page context (sample_pentest, etc.)
+   */
+  leadMagnetSignup(sampleId, location) {
+    analyticsTracker.trackEvent('lead_magnet_signup', {
+      sample_id: sampleId,
+      location: location
+    });
+  },
+
+  /**
+   * Track lead magnet CTA click (sample-promo links on blog/gidsen)
+   * @param {string} magnetId - Lead magnet identifier (pentest_sample, future: juridisch_sample)
+   * @param {string} location - Page context (blog_nmap_top, blog_cybertools_mid, gidsen_sample_secondary)
+   * @param {string} label - Visible button text (for wording-effectiveness analysis)
+   */
+  leadMagnetCtaClick(magnetId, location, label) {
+    analyticsTracker.trackEvent('lead_magnet_cta_click', {
+      magnet_id: magnetId,
+      location: location,
+      label: label
+    });
+  },
+
+  /**
    * Determine user type (first-time vs returning)
    * @returns {string} 'new' or 'returning'
    */

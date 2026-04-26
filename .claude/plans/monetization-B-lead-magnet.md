@@ -1,6 +1,6 @@
 # Plan B — Lead Magnet (Sample PDF achter Brevo opt-in)
 
-**Status:** Sessie 1 ✅ (23 apr) + Sessie 132 Brevo-setup ✅ (24 apr) — Sessie 2 staat klaar | **Geschat:** ~1 sessie resterend
+**Status:** ✅ COMPLETE — Sessie 1 (23 apr) + Sessie 132 Brevo-setup (24 apr) + Sessie 133 implementatie (26 apr)
 **Reconstructed from session log:** 22 april 2026 (Sessie 132)
 
 ## Sessie 1 resultaat (23 april 2026)
@@ -118,13 +118,13 @@ Nieuwsbriefinschrijving stimuleren **én** een direct voorproefje geven van de b
 ## Definition of Done
 
 - [x] Sample PDF gegenereerd en gehost op `/assets/samples/` *(Sessie 1)*
-- [ ] `/sample-pentest.html` live met Brevo form
-- [ ] Brevo automation "sample pentest" stuurt welkomstmail binnen 5 min *(template klaar, dashboard-stap bij user)*
+- [x] `/sample-pentest.html` live met Brevo form *(Sessie 133)*
+- [x] Brevo automation "sample pentest" stuurt welkomstmail binnen 5 min *(Sessie 132 dashboard-setup)*
 - [x] Welkomstmail bevat download-link + Gumroad cross-sell *(Sessie 1)*
-- [ ] 3 CTAs geplaatst (nmap post, cybersec tools post, gidsen.html)
-- [ ] `lead_magnet_signup` event zichtbaar in GA4 DebugView bij form submit
-- [ ] Playwright E2E happy path passeert
-- [ ] Sitemap.xml bijgewerkt
+- [x] 3 CTAs geplaatst (nmap post top, cybersec tools post mid, gidsen.html secundair) *(Sessie 133)*
+- [x] `lead_magnet_signup` event en `lead_magnet_cta_click` event zichtbaar via spy in Playwright *(Sessie 133 — production GA4 DebugView verificatie post-deploy)*
+- [x] Playwright E2E happy path passeert (5 tests in `tests/e2e/lead-magnet.spec.js`) *(Sessie 133)*
+- [x] Sitemap.xml bijgewerkt (`/sample-pentest.html` priority 0.7) *(Sessie 133)*
 
 ## Meetcriteria (4 weken na launch)
 

@@ -26,6 +26,11 @@ if (successPanel) {
     if (successPanel.style.display && successPanel.style.display !== 'none') {
       fired = true;
       events.newsletterSignup(location);
+      if (location.startsWith('sample_')) {
+        // Lead magnet funnel: also fire sample-specific event for separate measurement
+        const sampleId = location.replace(/^sample_/, '');
+        events.leadMagnetSignup(sampleId, location);
+      }
       observer.disconnect();
     }
   });

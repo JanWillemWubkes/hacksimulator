@@ -4,6 +4,169 @@
 
 ---
 
+## Sessie 133: Plan B Sessie 2 — Lead Magnet Landing Page + Tracking + CTAs (26 april 2026)
+
+**Scope:** Plan B (lead magnet) afronden — `/sample-pentest.html` landing page bouwen, GA4 tracking voor sample-funnel toevoegen, 3 inbound CTAs plaatsen, Playwright E2E happy path, sitemap-entry. Sluit `monetization-B-lead-magnet.md` af als ✅ COMPLETE.
+**Status:** ✅ VOLTOOID
+**Duur:** 1 sessie
+**Plan source:** `.claude/plans/heisenberg-hier-ik-ga-zazzy-muffin.md` (uitgewerkt en goedgekeurd via ExitPlanMode)
+
+### Context
+Plan B Sessie 1 (23 apr) leverde sample-PDF + Brevo template; Sessie 132 (24 apr) zette Brevo-dashboard af met Form-submitted automations. Wat ontbrak: het volledige user-facing oppervlak — landing page, attribution-events, inbound-CTAs. Zonder deze laag was de hele Brevo-setup uit Sessie 132 zonder interface.
+
+### Besluit & approach
+User koos via twee AskUserQuestion-rondes voor:
+1. **Dual-fire GA4 events** op sample-pages — zowel `newsletter_signup` (globale lijstgroei-teller) als `lead_magnet_signup` (geïsoleerde sample-funnel). Voorkomt dat sample-signers uit de globale conversie-rapporten verdwijnen.
+2. **Nieuw `data-lead-magnet` attribute** in plaats van `data-product-id` overloaden — `cta-tracking.js` krijgt tweede `closest()` branche met return-guard. Houdt `product_cta_click` zuiver voor Gumroad-revenue.
+
+### Implementatie
+
+**1. Helpers — `src/analytics/events.js` (+26 regels):**
+```javascript
+leadMagnetSignup(sampleId, location) {
+  analyticsTracker.trackEvent('lead_magnet_signup', {
+    sample_id: sampleId, location: location
+  });
+},
+leadMagnetCtaClick(magnetId, location, label) {
+  analyticsTracker.trackEvent('lead_magnet_cta_click', {
+    magnet_id: magnetId, location: location, label: label
+  });
+}
+```
+Gescheiden van `productCtaClick` zodat GA4 conversie-rapporten zuiver blijven (paid vs free funnel).
+
+**2. `cta-tracking.js` uitbreiden met return-guard tussen branches:**
+```javascript
+const productCta = e.target.closest('[data-product-id]');
+if (productCta) {
+  events.productCtaClick(...);
+  return; // ← guard tegen dubbele firing
+}
+const magnetCta = e.target.closest('[data-lead-magnet]');
+if (magnetCta) {
+  events.leadMagnetCtaClick(...);
+}
+```
+
+**3. `newsletter-tracking.js` dual-fire:**
+```javascript
+events.newsletterSignup(location);
+if (location.startsWith('sample_')) {
+  const sampleId = location.replace(/^sample_/, '');
+  events.leadMagnetSignup(sampleId, location);
+}
+observer.disconnect();
+```
+Conditional fire — sample-signups tellen mee voor zowel lijstgroei als funnel-isolation.
+
+**4. `/sample-pentest.html` (NEW, ~15 KB) — gebaseerd op `gidsen.html` skeleton:**
+- Hero met "Gratis Sample" eyebrow-badge + H1 "Download het Pentest Playbook — 9 pagina's gratis"
+- 3 feature-cards (Reconnaissance-checklist / Command-cheatsheet / Beslisboom Fase 0 → 1)
+- Brevo embed form met action `MUIFACJ0paJnTVMUH9lXS2lXtNFuy54...` + `locale="nl"`
+- `data-newsletter-location="sample_pentest"` op wrapper section (hook voor dual-fire)
+- Cross-sell card naar Gumroad `wmvpx` met `data-product-id="wmvpx"` `data-cta-location="sample_pentest_crosssell"` (paid funnel-event blijft op Gumroad-link)
+- JSON-LD `WebPage` met `potentialAction: SubscribeAction`
+- Absolute scriptpaths (`/src/init-theme.js` etc.) per Sessie 131-regel
+- `sib-styles.css` CDN-link per Sessie 126-regel
+- `window.scrollTo` override hack uit `index.html:741-754` om Brevo's auto-scroll te killen
+
+**5. CTAs op 3 pagina's — `data-lead-magnet="pentest_sample"`:**
+- `blog/nmap-beginnersgids.html` na intro, vóór `<h2>Wat is Nmap?</h2>` — `data-cta-location="blog_nmap_top"`
+- `blog/cybersecurity-tools.html` na hashcat-sectie, vóór Metasploit — `data-cta-location="blog_cybertools_mid"`
+- `gidsen.html` nieuwe sectie ná feature-cards, vóór footer — `data-cta-location="gidsen_sample_secondary"` (lagere prominantie dan bundle)
+
+**6. Sitemap + Playwright:**
+- `sitemap.xml`: entry `/sample-pentest.html` priority 0.7, lastmod 2026-04-26
+- `tests/e2e/lead-magnet.spec.js` (NEW, 5 tests):
+  1. Landing rendert hero + 3 cards + form met juiste action-URL
+  2. Nmap-blog CTA navigeert naar `/sample-pentest.html`
+  3. Cybertools-blog CTA firet `lead_magnet_cta_click` (gtag spy via `window.__gtagCalls`)
+  4. Success-panel toggle firet beide events (`newsletter_signup` + `lead_magnet_signup`)
+  5. Sitemap bevat sample-pentest entry
+
+### Verificatie
+- **Lokaal**: `python3 -m http.server 8000`, `/sample-pentest.html` rendert correct dark-theme + groen accent, CTA's op alle 3 inbound-pagina's zichtbaar en navigeren
+- **Playwright lead-magnet suite**: 5/5 pass op chromium
+- **Full regressie**: 160+ tests groen op chromium, exit code 0 — geen regressies door dual-fire of cta-tracking-uitbreiding
+- **Visuele check via Playwright MCP**: AdSense-403 op localhost is verwacht (alleen prod-domein whitelisted)
+
+### Bestanden gewijzigd
+- `src/analytics/events.js` — +2 helpers (leadMagnetSignup, leadMagnetCtaClick)
+- `src/ui/cta-tracking.js` — full rewrite met return-guard tussen product/magnet branches
+- `src/ui/newsletter-tracking.js` — dual-fire op `sample_*` locations
+- `sample-pentest.html` — **NEW** landing page
+- `tests/e2e/lead-magnet.spec.js` — **NEW** 5-test suite
+- `blog/nmap-beginnersgids.html` — CTA top
+- `blog/cybersecurity-tools.html` — CTA mid
+- `gidsen.html` — secundaire CTA-sectie
+- `sitemap.xml` — nieuwe entry priority 0.7
+- `.claude/plans/monetization-B-lead-magnet.md` — DoD afgevinkt, status ✅ COMPLETE
+
+### Milestone update
+Plan B (lead magnet) — **✅ COMPLETE** (Sessie 1 + 132 + 133 cumulatief). Eerstvolgende monetization-vector: Plan C (content-SEO) of Plan D (bundle social proof) — beide plannen liggen klaar.
+
+### Out of scope (expliciet)
+- A/B-test tussen CTA-varianten — eerst 1 variant 4 weken meten
+- Tweede sample (juridisch_sample, leerplan_sample) — `data-lead-magnet` attribute is zo ontworpen dat hergebruik zero JS-wijziging vereist, alleen nieuwe `magnet_id`-waarde
+- Drip-sequence in Brevo — één welkomstmail per Sessie 132-architectuur is genoeg
+
+### Post-deploy verificatie (na commit + push)
+- Echte sample-signup met test-email op productie-URL → check GA4 DebugView voor `newsletter_signup` (location=sample_pentest) **én** `lead_magnet_signup` (sample_id=pentest)
+- Brevo-welkomstmail moet binnen 5 min arriveren met download-link
+- Lokale `python3 -m http.server` test dat niet — Netlify-deploy voegt cache-headers toe die alleen in prod te valideren zijn
+
+---
+
+## Sessie 132: Brevo Dashboard Setup voor Lead Magnet — Form-submitted Pivot (24 april 2026)
+
+**Scope:** Plan B Sessie 1 (sample-PDF + template uit 23 apr) doorzetten in Brevo-dashboard: template uploaden, automation activeren, end-to-end test. Pure dashboard-werk, geen code.
+**Status:** ✅ VOLTOOID
+**Duur:** ~1 sessie
+**Commits:** `4b49466` (fix lead-magnet Brevo setup), `3fa140b` (docs plan delta)
+
+### Context
+Sessie 1 (23 apr) had sample-PDF + Brevo HTML-template + setup-guide klaar. Doel van 132: configuratie in Brevo-UI plus eerste automation-test.
+
+### Architecturale pivot — "Contact added to tag" trigger bestaat niet meer
+Tijdens setup bleek Brevo's automation-UI veranderd:
+- **Trigger "Contact added to tag" — verdwenen** uit de builder
+- **Alternatief "Contact matches custom filters"** — batch-mode (daily 8PM run), niet realtime, en ondersteunt geen tag-filter
+
+Onmogelijk om de oorspronkelijke architectuur (`sample_pentest` tag → automation) te realiseren. **Pivot:** beide welkomstmail-automations triggeren nu op **Form submitted**:
+- `HackSimulator Signup` form → bestaande Welcome message automation (her-gekoppeld)
+- `Sample Pentest embed` form → nieuwe Sample Pentest automation
+
+Implicaties:
+- Sample-signers worden volwaardig nieuwsbrieflid in `hacksimulator-main` lijst
+- Hoofd-welcome wordt geblokkeerd voor sample-signers omdat hun trigger-form anders is — geen duplicaat
+- Memory-record bijgewerkt: `reference_brevo_tags.md` — "Tags zijn NIET filterbaar in automation custom-filter builder"
+
+### Welkomstmail taalfixes
+Tijdens preview-review:
+- `methodologie` → `werkwijze` (academisch jargon vervangen)
+- `Het volledige Pentest Playbook` → `Het volledige Playbook`
+- CTA-knop: `Bekijk het Volledige Playbook` → `Bekijk Volledig Playbook` (compactere call)
+
+### Verificatie
+- Beide automations toggle "Active" (UI confirmed)
+- End-to-end test met Heisenberg's eigen email — sample-welcomemail arriveerde binnen 30 sec
+- Brevo form HTML uit dashboard → opgeslagen in `docs/newsletter/sample-pentest-embed-form.html` (klaar voor Sessie 133-paste)
+
+### Bestanden gewijzigd
+- `docs/newsletter/welkomstmail-sample-pentest.html` — taalfixes
+- `docs/newsletter/sample-pentest-embed-form.html` — **NEW** (form-export uit Brevo)
+- `docs/newsletter/brevo-setup-sample-pentest.md` — pivot-stappen gedocumenteerd
+- `.claude/plans/monetization-B-lead-magnet.md` — Sessie 132 delta toegevoegd
+- Memory: `reference_brevo_tags.md` — kritieke beperking geregistreerd
+
+### Out of scope (Sessie 132)
+- `/sample-pentest.html` zelf bouwen — naar Sessie 133
+- Inbound-CTAs — naar Sessie 133
+- Playwright E2E — naar Sessie 133
+
+---
+
 ## Sessie 131: CTA Click Tracking (GA4 Attribution Layer) + Plan Files B/C/D (21 april 2026)
 
 **Scope:** Monetization-meetlaag bouwen — elke Gumroad CTA en newsletter signup meetbaar in GA4 via declarative `data-*` attributen + delegated listener. Plus 3 plan files (.claude/plans/) voor opvolgende monetization-sessies.

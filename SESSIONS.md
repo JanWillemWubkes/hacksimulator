@@ -8,10 +8,12 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (88-131)](docs/sessions/current.md) - Full Detail
-**Sessies:** 131, 130, 129, 128, 127, 126, 125, 124, 123, 122, 121, 120, 119, 118, 117, 116, 115, 114, 113, 112, 111, 110, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88
-**Period:** 26 december 2025 - 21 april 2026
+### [Current Sessions (88-133)](docs/sessions/current.md) - Full Detail
+**Sessies:** 133, 132, 131, 130, 129, 128, 127, 126, 125, 124, 123, 122, 121, 120, 119, 118, 117, 116, 115, 114, 113, 112, 111, 110, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88
+**Period:** 26 december 2025 - 26 april 2026
 **Topics:**
+- Plan B Sessie 2 — Lead Magnet Landing + Tracking + CTAs: `/sample-pentest.html` live, `lead_magnet_signup` + `lead_magnet_cta_click` events, dual-fire pattern op sample-pages, 3 inbound CTAs (nmap, cybertools, gidsen), Playwright E2E (5 tests), Plan B ✅ COMPLETE (Sessie 133)
+- Brevo Dashboard Setup voor Lead Magnet — Form-submitted Pivot: "Contact added to tag" trigger verdwenen uit Brevo-UI → beide welkomstmail-automations switched naar Form-submitted trigger, taalfixes welkomstmail (methodologie→werkwijze), end-to-end test geslaagd (Sessie 132)
 - CTA Click Tracking (GA4 Attribution Layer) + Plan Files B/C/D: `product_cta_click` + `newsletter_signup` events via declaratieve `data-*` attributen, delegated listener, Brevo MutationObserver, gidsen.html script-bug fix, 3 plan files voor vervolgsessies, M5.5 → 10/11 (Sessie 131)
 - M7 Gamification Afsluiting & QA: M7 100% (47/47), gamification flow test, taalfix "ethical hacking"→"ethisch hacken", prompt unificatie user@→hacker@, hard-sweep badge, CSP fix AdSense (Sessie 130)
 - Gumroad Products Live & Site-Integratie: 4 producten live op Gumroad, /gidsen landing page, blog CTAs (10 posts), man page tips (6 commands), navbar + footer + sitemap (Sessie 129)

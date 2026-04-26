@@ -1,27 +1,38 @@
 /**
  * CTA Click Tracking - HackSimulator.nl
  *
- * Delegated click listener on any element with `data-product-id`.
- * Fires GA4 `product_cta_click` event via analytics/events.js (consent-aware).
+ * Delegated click listener for CTA tracking. Two branches:
+ *  - `[data-product-id]` → fires GA4 `product_cta_click` (paid Gumroad CTAs)
+ *  - `[data-lead-magnet]` → fires GA4 `lead_magnet_cta_click` (free sample CTAs)
  *
- * Markup contract:
+ * Markup contracts:
  *   <a href="..." data-product-id="<gumroad_id>" data-cta-location="<context>">
- *     Button label
- *   </a>
+ *   <a href="..." data-lead-magnet="<magnet_id>" data-cta-location="<context>">
  *
  * Uses `closest()` so nested elements (icons, spans inside <a>) still resolve.
  * Works with target="_blank": GA4 uses beacon transport by default.
+ * Product branch wins on conflict (early return) — defensive, not a current case.
  */
 
 import events from '../analytics/events.js';
 
 document.addEventListener('click', (e) => {
-  const cta = e.target.closest('[data-product-id]');
-  if (!cta) return;
+  const productCta = e.target.closest('[data-product-id]');
+  if (productCta) {
+    events.productCtaClick(
+      productCta.dataset.productId,
+      productCta.dataset.ctaLocation || 'unknown',
+      productCta.textContent.trim().slice(0, 80)
+    );
+    return;
+  }
 
-  events.productCtaClick(
-    cta.dataset.productId,
-    cta.dataset.ctaLocation || 'unknown',
-    cta.textContent.trim().slice(0, 80)
-  );
+  const magnetCta = e.target.closest('[data-lead-magnet]');
+  if (magnetCta) {
+    events.leadMagnetCtaClick(
+      magnetCta.dataset.leadMagnet,
+      magnetCta.dataset.ctaLocation || 'unknown',
+      magnetCta.textContent.trim().slice(0, 80)
+    );
+  }
 });

@@ -16,9 +16,9 @@
 **Blog:** 10 posts live at `/blog/` (105+ inline jargon explanations) | JSON-LD schema + internal cross-linking compleet (Sessie 125)
 **Contact:** contact@hacksimulator.nl (Gmail forwarding)
 
-**Performance:** Playwright E2E 160 tests across 30 suites (21 files, 3 browsers) | WCAG AAA | 182 CSS variables (main.css) + 27 (landing.css) = 209 totaal
-**Bundle:** Site totaal **~1192 KB** (geverifieerd 06-04-2026) | Splitsing: src/ 604 KB, styles/ 249 KB, blog/ 306 KB (10 posts + JSON-LD), assets/ 597 KB (screenshots 401 + OG image 151) | ⚠️ Runtime budget herijking nodig — blog SEO assets vallen buiten origineel 400 KB Terminal Core budget
-**Monetization:** AdSense (10 units) + Ko-fi donaties + Brevo newsletter (double opt-in + welkomstmail live) + **Gumroad products v1.0** (3 guides klaar) | Eigen consent banner (Consent Mode v2)
+**Performance:** Playwright E2E 165 tests across 31 suites (22 files, 3 browsers) | WCAG AAA | 182 CSS variables (main.css) + 27 (landing.css) = 209 totaal
+**Bundle:** Site totaal **~1192 KB** (geverifieerd 06-04-2026) + sample-pentest landing 15 KB + sample PDF 90 KB → effectief ~1297 KB | Splitsing: src/ 604 KB, styles/ 249 KB, blog/ 306 KB (10 posts + JSON-LD), assets/ 597 KB (screenshots 401 + OG image 151) | ⚠️ Runtime budget herijking nodig — blog SEO assets vallen buiten origineel 400 KB Terminal Core budget
+**Monetization:** AdSense (10 units) + Ko-fi donaties + Brevo newsletter (double opt-in + welkomstmail live) + **Gumroad products v1.0** (3 guides + bundel) + **Lead magnet** (`/sample-pentest.html` Brevo opt-in → 9-pagina sample) | Eigen consent banner (Consent Mode v2)
 
 → **Live metrics:** `TASKS.md` regels 9-26 (meest recente tellingen)
 → **Architecture:** `PLANNING.md` v2.9 | **Commands:** `docs/commands-list.md` (41 commands)
@@ -84,6 +84,28 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 133: Lead Magnet Landing + Dual-Fire Tracking + `data-lead-magnet` (26 april 2026)
+⚠️ **Never:**
+- `data-product-id` overloaden voor gratis lead-magnet CTAs — semantiek vervaagt en GA4-conversiedoel `product_cta_click` gaat revenue-funnel en lead-funnel dubbel tellen
+- `lead_magnet_signup` firen zonder óók `newsletter_signup` op sample-pages — bestaande GA4-conversiedoelen leunen op de globale teller; sample-signers raken anders uit lijstgroei-rapporten
+- Dual-fire-events zonder conditional check — `if (location.startsWith('sample_'))` houdt baseline van 160 bestaande tests op `index.html`/`blog/index.html` ongewijzigd, geen ruis op de globale newsletter-suite
+
+✅ **Always:**
+- Aparte `data-lead-magnet` attribute + tweede `closest()` branche met return-guard tussen branches in `cta-tracking.js` — voorkomt dubbel-firing en schaalt zero-cost naar volgende samples (alleen nieuwe `magnet_id`-waarde nodig)
+- Plan-file-driven sessie-handoff voor multi-sessie features — Sessie 132 was pure Brevo-dashboard-werk zonder code; plan-file capturet architecturale pivots zodat Sessie 133 cold kan starten en form-action-URL exact kan plakken
+- Cross-sell card op lead-magnet-pagina met `data-product-id` (dus `product_cta_click`-event op die specifieke link) — meet direct welk percentage van sample-signers doorklikt naar paid Gumroad-funnel zonder de gratis-funnel te vervuilen
+
+### Sessie 132: Brevo Dashboard Setup — Form-submitted Pivot (24 april 2026)
+⚠️ **Never:**
+- Aannemen dat "Contact added to tag" Brevo-trigger nog bestaat — Brevo verwijderde deze trigger uit de automation-builder; "Contact matches custom filters" is daily-batch (8PM) en kent geen tag-filter
+- Sample-funnels architectureren op tag-routing in Brevo — tags zijn niet filterbaar in de custom-filter builder, dit blokkeert élke realtime tag-gebaseerde segmentatie-strategie
+- Brevo welkomstmails uitsturen zonder NL-taalreview — academisch jargon zoals `methodologie` overleeft preview-toggles in de visual builder onopgemerkt
+
+✅ **Always:**
+- Form-submitted trigger als primaire automation-anker — multi-form-architectuur (één lijst, N forms) maakt lead-routing event-driven en realtime, geen 8PM-batch-vertraging
+- Sample-signers naar dezelfde hoofdlijst (`hacksimulator-main`) sturen — sample-form blokkeert hoofd-welcome via uniek trigger-form, dus geen duplicaat-mail terwijl ze wel volwaardig nieuwsbrieflid worden
+- Architecturale UI-veranderingen meteen in memory vastleggen — `reference_brevo_tags.md` capturet "tags ≠ filterbaar in builder" zodat een toekomstige sessie geen 30 min verspilt aan dezelfde dead-end
+
 ### Sessie 131: CTA Click Tracking & Session Handoff via Plan Files (21 april 2026)
 ⚠️ **Never:**
 - Relatieve `src/...` paths in `<script>` tags van landing pages — `gidsen.html` miste `init-analytics.js` waardoor GA4 sinds Sessie 129 nooit initialiseerde op dé conversie-pagina; absolute `/src/...` voorkomt dat scripts niet laden bij subpad-URL-varianten
@@ -128,30 +150,8 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Na taalwijziging in drafts ook Typst templates + `template.typ` (header tagline) + listings updaten — template tagline verschijnt op élke PDF-pagina
 - PDFs opnieuw compileren na content-wijzigingen (`bash build-pdfs.sh`) — anders zijn PDF en source out-of-sync
 
-### Sessie 127: Gumroad Products — PDF Generatie met Typst (12 april 2026)
-⚠️ **Never:**
-- Huisstijl-kleuren hardcoden in product docs zonder cross-check met `main.css` — listings hadden `#1a1a2e`/`#00ff41`, site gebruikt `#0d1117`/`#9fef00`
-- `Courier New` of `Inter` in Typst templates op Linux — niet standaard geïnstalleerd, gebruik `DejaVu Sans Mono` + `Liberation Sans`
-- `<` onescaped in Typst tabel-cellen — parsed als label, geeft compile error (escape met `\<`)
-
-✅ **Always:**
-- Typst voor herhaalbare PDF-generatie bij meerdere documenten — één template, `typst compile` en klaar (geen handmatig Canva-werk per update)
-- PDF binnenwerk op witte achtergrond voor leesbaarheid (print + telefoon) — donkere covers + donkere code-blokken voor brand, witte body voor content
-- Build script (`build-pdfs.sh`) naast templates — maakt PDF-generatie reproduceerbaar voor iedereen
-
-### Sessie 126: Newsletter Platform Migratie MailerLite → Brevo (8-12 april 2026)
-⚠️ **Never:**
-- Brevo automation "Send an email" met de default template deployen — altijd eigen HTML template selecteren via trash-icoon + opnieuw koppelen
-- Brevo embed form gebruiken zonder `sib-styles.css` — `main.js` is afhankelijk van specifieke CSS klassen (`.input--hidden`, `.sib-form-message-panel`)
-- `sib-form` IDs hergebruiken op dezelfde pagina — Brevo JS koppelt aan `#sib-form`, `#error-message`, `#success-message` (uniek per pagina)
-
-✅ **Always:**
-- Domain authenticeren (SPF/DKIM) vóór eerste verzending — Brevo kan dit automatisch via TransIP API-integratie
-- Double opt-in voor GDPR-compliance — bevestigingsmail trigger zit op form-niveau, niet op list-niveau in Brevo
-- Brevo inline styles overrulen met `!important` in eigen CSS — standaard bij third-party embeds, geen anti-pattern in deze context
-- `locale` hidden field op `nl` zetten + alle `window.*_MESSAGE` variabelen in het Nederlands — Brevo's JS leest deze voor client-side validatie
-
 **Rotation:** Keep last 6 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
+Pre-Sessie 128 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF) → zie `docs/sessions/current.md`.
 
 ---
 
@@ -161,7 +161,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
 **Rotation trigger:** Every 5 sessions (last: Sessie 130, next: Sessie 135)
-**Sessie counter:** 131
+**Sessie counter:** 133
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -214,5 +214,5 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 21 april 2026 (Sessie 131 — CTA click tracking + plan files B/C/D)
-**Version:** 5.4 (Sessie 131: GA4 attribution laag live, `product_cta_click` + `newsletter_signup` events, M5.5 → 10/11)
+**Last updated:** 26 april 2026 (Sessie 133 — Plan B lead magnet ✅ COMPLETE)
+**Version:** 5.5 (Sessie 132 + 133: Brevo Form-submitted automations live, `/sample-pentest.html` met dual-fire GA4 events `lead_magnet_signup` + `lead_magnet_cta_click`, 3 inbound CTAs, 165 Playwright tests groen)
