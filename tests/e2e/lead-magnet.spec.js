@@ -112,6 +112,73 @@ test.describe('Lead Magnet — Sample Pentest', () => {
     });
   });
 
+  test('form submit met mocked Brevo response toggelt success panel + firet GA4 events', async ({ page }) => {
+    await page.goto('/');
+    await page.evaluate(() => {
+      localStorage.setItem('hacksim_analytics_consent', 'true');
+    });
+
+    // Intercept Brevo POST en geef gemockte success-response — voorkomt echt contact in Brevo
+    // Regex i.p.v. glob: subdomain (09a5e5c2.sibforms.com) wordt niet consistent gematcht door **/...
+    await page.route(/sibforms\.com\/serve\//, (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          success: true,
+          message: 'Bedankt! Check je mailbox en bevestig je inschrijving om je sample te ontvangen.',
+          redirect: null
+        })
+      });
+    });
+
+    await page.goto('/sample-pentest.html');
+
+    await page.evaluate(() => {
+      window.__gtagCalls = [];
+      window.gtag = (...args) => window.__gtagCalls.push(args);
+    });
+
+    await page.locator('#EMAIL').fill('e2e-test@hacksimulator.nl');
+    await page.locator('#sib-form button[type="submit"]').click();
+
+    // Wacht tot success panel zichtbaar wordt (brevo-submit.js → MutationObserver tick)
+    await expect(page.locator('#success-message')).toBeVisible();
+
+    const calls = await page.evaluate(() => window.__gtagCalls);
+    const newsletterEvent = calls.find(c => c[0] === 'event' && c[1] === 'newsletter_signup');
+    const leadMagnetEvent = calls.find(c => c[0] === 'event' && c[1] === 'lead_magnet_signup');
+
+    expect(newsletterEvent).toBeDefined();
+    expect(newsletterEvent[2]).toMatchObject({ location: 'sample_pentest' });
+
+    expect(leadMagnetEvent).toBeDefined();
+    expect(leadMagnetEvent[2]).toMatchObject({
+      sample_id: 'pentest',
+      location: 'sample_pentest'
+    });
+  });
+
+  test('form submit met error-response toont error panel', async ({ page }) => {
+    await page.route(/sibforms\.com\/serve\//, (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          success: false,
+          message: 'Er ging iets mis. Probeer het opnieuw.'
+        })
+      });
+    });
+
+    await page.goto('/sample-pentest.html');
+    await page.locator('#EMAIL').fill('error-case@hacksimulator.nl');
+    await page.locator('#sib-form button[type="submit"]').click();
+
+    await expect(page.locator('#error-message')).toBeVisible();
+    await expect(page.locator('#success-message')).not.toBeVisible();
+  });
+
   test('sample-pentest entry zit in sitemap', async ({ request }) => {
     const response = await request.get('/sitemap.xml');
     expect(response.ok()).toBe(true);

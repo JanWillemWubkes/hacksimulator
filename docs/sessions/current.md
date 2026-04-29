@@ -116,6 +116,35 @@ Plan B (lead magnet) — **✅ COMPLETE** (Sessie 1 + 132 + 133 cumulatief). Eer
 - Brevo-welkomstmail moet binnen 5 min arriveren met download-link
 - Lokale `python3 -m http.server` test dat niet — Netlify-deploy voegt cache-headers toe die alleen in prod te valideren zijn
 
+### Post-deploy bug fix: Brevo silent panel-toggle + custom submit handler (29 april 2026)
+
+**Bug gemeld door user na productie-deploy:** form-submit op `/sample-pentest.html` triggert wél de welkomstmail (Brevo-pipeline OK), maar de UI toont **géén** success-bevestiging. User denkt dat opt-in faalt, terwijl de email gewoon arriveert. Reproduceerbaar op productie, niet op localhost.
+
+**Diagnose (live productie via Playwright MCP):**
+- Network: POST naar `https://09a5e5c2.sibforms.com/serve/MUIFACJ.../?isAjax=1` retourneert HTTP 200 met `Content-Type: application/json` en body `{"success":true,"message":"...","redirect":null}`
+- DOM-state direct na POST: `#success-message` blijft op `style="display:none"`, geen `sib-form-message-panel--active` class
+- Conclusie: Brevo's `main.js` handelt de AJAX-response wel af (lijst-insert + automation-trigger), maar voert de UI-toggle niet uit. Silent regressie aan Brevo-CDN-zijde, niet door onze code
+
+**Fix — `src/ui/brevo-submit.js` (NEW, 64 regels):**
+Capture-phase submit listener met `stopImmediatePropagation()` om Brevo's main.js volledig te bypassen. Eigen `fetch()` naar `form.action + '?isAjax=1'`, parsed JSON-response, toggelt panels handmatig. Critically: zet `style.display='block'` **én** voegt `sib-form-message-panel--active` class toe — alleen die combinatie werkt voor zowel success- als error-panel (Brevo CDN-CSS specificity vereist class voor error-panel's `display:inline-block`).
+
+Het zetten van `style.display='block'` op `#success-message` triggert ook de bestaande MutationObserver in `newsletter-tracking.js`, dus dual-fire GA4-events (`newsletter_signup` + `lead_magnet_signup`) werken zonder aanvullende code.
+
+**Tests — `tests/e2e/lead-magnet.spec.js` (+2 tests, route-pattern fix):**
+- "form submit met mocked Brevo response toggelt success panel + firet GA4 events" — happy-path met `page.route()` regex-mock
+- "form submit met error-response toont error panel" — `success:false` mock, verifieert error-panel visibility en success-panel hidden
+
+**Playwright route-mock pitfall:** glob-pattern `**/sibforms.com/serve/**` matcht subdomain `09a5e5c2.sibforms.com` *niet* consistent. Vervangen met regex `/sibforms\.com\/serve\//`. Tijdens debugging zijn drie test-contacten naar productie-Brevo gestuurd (`claude-diagnose-…`, `e2e-test-…`, `error-case-@hacksimulator.nl`) — handmatig op te ruimen door user via Brevo-dashboard.
+
+**Registratie:** `src/init-components.js` krijgt één extra import (`/src/ui/brevo-submit.js`) direct na `newsletter-tracking.js`. Werkt automatisch op élk Brevo-form met `id="sib-form"` (homepage + sample-pentest + toekomstige).
+
+**Regressie:** 184/192 chromium-tests pass, 5 skipped, 3 pre-existing flakers ongerelateerd (cross-browser footer-attr, gamification badge-tier `toContainText`, performance VFS-growth `toBeLessThan`).
+
+**Bestanden gewijzigd (post-deploy fix):**
+- `src/ui/brevo-submit.js` — **NEW** custom submit handler
+- `src/init-components.js` — +1 import-regel
+- `tests/e2e/lead-magnet.spec.js` — +2 tests, route-pattern regex ipv glob
+
 ---
 
 ## Sessie 132: Brevo Dashboard Setup voor Lead Magnet — Form-submitted Pivot (24 april 2026)

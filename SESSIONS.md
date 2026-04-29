@@ -12,7 +12,7 @@
 **Sessies:** 133, 132, 131, 130, 129, 128, 127, 126, 125, 124, 123, 122, 121, 120, 119, 118, 117, 116, 115, 114, 113, 112, 111, 110, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88
 **Period:** 26 december 2025 - 26 april 2026
 **Topics:**
-- Plan B Sessie 2 — Lead Magnet Landing + Tracking + CTAs: `/sample-pentest.html` live, `lead_magnet_signup` + `lead_magnet_cta_click` events, dual-fire pattern op sample-pages, 3 inbound CTAs (nmap, cybertools, gidsen), Playwright E2E (5 tests), Plan B ✅ COMPLETE (Sessie 133)
+- Plan B Sessie 2 — Lead Magnet Landing + Tracking + CTAs: `/sample-pentest.html` live, `lead_magnet_signup` + `lead_magnet_cta_click` events, dual-fire pattern op sample-pages, 3 inbound CTAs (nmap, cybertools, gidsen), Playwright E2E (5+2 tests), Plan B ✅ COMPLETE; **post-deploy fix** custom `brevo-submit.js` handler bypasst Brevo main.js silent panel-toggle-fail via capture-phase + `stopImmediatePropagation()` (Sessie 133)
 - Brevo Dashboard Setup voor Lead Magnet — Form-submitted Pivot: "Contact added to tag" trigger verdwenen uit Brevo-UI → beide welkomstmail-automations switched naar Form-submitted trigger, taalfixes welkomstmail (methodologie→werkwijze), end-to-end test geslaagd (Sessie 132)
 - CTA Click Tracking (GA4 Attribution Layer) + Plan Files B/C/D: `product_cta_click` + `newsletter_signup` events via declaratieve `data-*` attributen, delegated listener, Brevo MutationObserver, gidsen.html script-bug fix, 3 plan files voor vervolgsessies, M5.5 → 10/11 (Sessie 131)
 - M7 Gamification Afsluiting & QA: M7 100% (47/47), gamification flow test, taalfix "ethical hacking"→"ethisch hacken", prompt unificatie user@→hacker@, hard-sweep badge, CSP fix AdSense (Sessie 130)
@@ -159,14 +159,14 @@
 
 ---
 
-**Last updated:** 27 maart 2026 (Sessie 121 - Doc Sync & Session Catch-Up)
-**Next update:** Sessie 125 or when CURRENT sessions need rotation
+**Last updated:** 29 april 2026 (Sessie 133 — Plan B Lead Magnet ✅ COMPLETE + post-deploy Brevo submit fix)
+**Next update:** Sessie 134 or when CURRENT sessions need rotation
 
 **Recent updates:**
+- Sessie 133: Plan B Sessie 2 + post-deploy Brevo silent panel-toggle fix — custom `brevo-submit.js` handler
+- Sessie 132: Brevo Dashboard Setup voor Lead Magnet — Form-submitted Pivot
+- Sessie 131: CTA Click Tracking (GA4 Attribution Layer) + Plan Files B/C/D
+- Sessie 130: M7 Gamification Afsluiting & QA — taalfix, prompt unificatie, hard-sweep badge
+- Sessie 129: Gumroad Products Live & Site-Integratie — 4 producten live, /gidsen landing, blog CTAs
+- Sessie 128: Gumroad Products Factcheck & Taalconsistentie — "ethical hacking" → "ethisch hacken"
 - Sessie 121: Doc Sync & Session Catch-Up — sessions 116-120, M5.5 revived, metrics verified
-- Sessie 120: Site-Wide Metrics Sync — claims aligned met actuele tellingen
-- Sessie 119: 3-Zone Celebration Redesign & Stat Cards — sequential reveal, funnel direction lock
-- Sessie 118: Ko-fi Optimization, Celebration UX & Tutorial Polish
-- Sessie 117: Tutorial Hardening & M5.5 Monetization Pivot — AdSense + Ko-fi + Newsletter
-- Sessie 116: Doc Sync & Learning Funnel Hints — "Type next" system, phase-dependent content
-- Sessie 115: Learning Funnel & Onboarding Redesign — 8-stage funnel, phase transitions

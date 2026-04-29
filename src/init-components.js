@@ -16,6 +16,7 @@ import { injectNavbar } from '/src/components/navbar.js';
 import { injectFooter } from '/src/components/footer.js';
 import '/src/ui/cta-tracking.js';
 import '/src/ui/newsletter-tracking.js';
+import '/src/ui/brevo-submit.js';
 
 /**
  * Detect page type from current URL

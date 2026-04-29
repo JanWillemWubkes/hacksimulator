@@ -84,16 +84,16 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
-### Sessie 133: Lead Magnet Landing + Dual-Fire Tracking + `data-lead-magnet` (26 april 2026)
+### Sessie 133: Lead Magnet Landing + Dual-Fire Tracking + Brevo Submit Fix (26-29 april 2026)
 ⚠️ **Never:**
 - `data-product-id` overloaden voor gratis lead-magnet CTAs — semantiek vervaagt en GA4-conversiedoel `product_cta_click` gaat revenue-funnel en lead-funnel dubbel tellen
 - `lead_magnet_signup` firen zonder óók `newsletter_signup` op sample-pages — bestaande GA4-conversiedoelen leunen op de globale teller; sample-signers raken anders uit lijstgroei-rapporten
-- Dual-fire-events zonder conditional check — `if (location.startsWith('sample_'))` houdt baseline van 160 bestaande tests op `index.html`/`blog/index.html` ongewijzigd, geen ruis op de globale newsletter-suite
+- Aannemen dat Brevo's main.js de success-panel toggelt bij `{success:true}` JSON-response — POST keert 200 maar `#success-message` blijft op `display:none`. User ontvangt welkomstmail zonder visuele bevestiging; eigen submit-handler met capture-phase + `stopImmediatePropagation()` is verplicht voor élk Brevo-form
 
 ✅ **Always:**
-- Aparte `data-lead-magnet` attribute + tweede `closest()` branche met return-guard tussen branches in `cta-tracking.js` — voorkomt dubbel-firing en schaalt zero-cost naar volgende samples (alleen nieuwe `magnet_id`-waarde nodig)
-- Plan-file-driven sessie-handoff voor multi-sessie features — Sessie 132 was pure Brevo-dashboard-werk zonder code; plan-file capturet architecturale pivots zodat Sessie 133 cold kan starten en form-action-URL exact kan plakken
-- Cross-sell card op lead-magnet-pagina met `data-product-id` (dus `product_cta_click`-event op die specifieke link) — meet direct welk percentage van sample-signers doorklikt naar paid Gumroad-funnel zonder de gratis-funnel te vervuilen
+- Aparte `data-lead-magnet` attribute + tweede `closest()` branche met return-guard tussen branches in `cta-tracking.js` — voorkomt dubbel-firing en schaalt zero-cost naar volgende samples
+- Bij eigen Brevo-submit handler: panels togglen via *zowel* `style.display='block'` *als* `classList.add('sib-form-message-panel--active')` — alleen die combinatie werkt voor zowel success- als error-panel (Brevo CDN-CSS specificity vereist class voor error-panel `display:inline-block`)
+- Playwright `page.route()` met **regex** ipv glob bij Brevo-subdomains — `/sibforms\.com\/serve\//` matcht consistent terwijl `**/sibforms.com/**` faalt op `09a5e5c2.sibforms.com` door wildcard-segmentatie, met als gevolg dat mocks omzeild worden en echte test-contacten in productie-Brevo aangemaakt worden
 
 ### Sessie 132: Brevo Dashboard Setup — Form-submitted Pivot (24 april 2026)
 ⚠️ **Never:**
@@ -214,5 +214,5 @@ Pre-Sessie 128 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF) → z
 
 ---
 
-**Last updated:** 26 april 2026 (Sessie 133 — Plan B lead magnet ✅ COMPLETE)
-**Version:** 5.5 (Sessie 132 + 133: Brevo Form-submitted automations live, `/sample-pentest.html` met dual-fire GA4 events `lead_magnet_signup` + `lead_magnet_cta_click`, 3 inbound CTAs, 165 Playwright tests groen)
+**Last updated:** 29 april 2026 (Sessie 133 — Plan B lead magnet ✅ COMPLETE + post-deploy Brevo silent panel-toggle fix)
+**Version:** 5.6 (Sessie 132 + 133: Brevo Form-submitted automations live, `/sample-pentest.html` met dual-fire GA4 events `lead_magnet_signup` + `lead_magnet_cta_click`, 3 inbound CTAs, custom `brevo-submit.js` handler die main.js silent fail bypasst, 184 Playwright tests groen)
