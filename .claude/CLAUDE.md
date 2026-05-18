@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 136: Brevo Deliverability Sessie D — Postmaster Re-check + Track G Voltooid (18 mei 2026)
+⚠️ **Never:**
+- Brevo's `Blocklisted`-state op transactional channel interpreteren als binaire blocklist — het is een **per-sender approval-lijst** ("0/N senders approved" letterlijk in popup-tekst). Drie sessies (134/135/136) gaven onverklaarbare blokkades omdat het mental model verkeerd was. Werkende unblock-UI-route: **caret-dropdown (▼) náást "Transactional emails"** in Channels-sectie van contact-detail-pagina (NIET More-menu rechtsboven, NIET History-tab — beide gevalideerd nutteloos in Sessie 136)
+- Brevo's Logs gebruiken voor "is mijn testmail aangekomen?"-debug — Logs draaien op 3-5 min batch-pipeline tov Real-time stats; voor actuele delivery-status check Real-time, Logs zijn voor postmortem-analyse en reason-detail
+- Postmaster Tools "Not enough data" interpreteren als verify-issue — bij outbound-volume <10/dag voor Authentication-stats en <1000/dag voor Spam Rate is dit verwacht aggregatie-gedrag; verify-status apart valideren via `postmaster.google.com/managedomains` (toont Verified/Pending/Failed los van data-aggregatie)
+
+✅ **Always:**
+- Bij dashboard-UI-discovery met meerdere kandidaat-routes: systematisch alle valideren + screenshot per route + memory-update mét uitgesloten routes vóór de daadwerkelijke actie-klik. Voorkomt route-verlies bij UI-shifts en bespaart toekomstige sessies de discovery-cost (Sessie 135 verloor 30+ min aan UI-archeologie; Sessie 136 vond Route A in 5 min met deze methode)
+- Sample-/transactional-mails framen als "actie-response op user-trigger" (specifieke subject-line + file-delivery-context, bv. `"Je Pentest Sample staat klaar"`) i.p.v. "broadcast-newsletter" — Gmail-classifier kantelt eerder naar Primary i.p.v. Promotions; verschil welkomstmail→Promotions vs sample-pentest→Primary in Sessie 136 was puur content-framing-effect bij identieke DKIM/SPF/DMARC-state
+- Postmaster Tools re-check-target zetten op concrete trigger (eerste >100-recipient campaign-send OF kalender-datum 2 wk later) i.p.v. open "wanneer er data is" — voorkomt sessie-tijd-verlies aan "nog steeds leeg"-runs
+- Compounding deliverability-investments (Sessie 134 DnD-template-kwaliteit + Sessie 135 DNS-cleanup + Sessie 136 unblock) retroactief documenteren als gezamenlijke voorwaarde voor optimale resultaat (Primary-classificatie) — voorkomt dat individuele componenten in latere sessies als "overkill" worden afgeschreven
+
 ### Sessie 135: Brevo Deliverability Tuning — DNS Cleanup + Mail-tester Baseline (11-13 mei 2026)
 ⚠️ **Never:**
 - SPF-record met `include:_spf.mlsend.com` (of andere oude platform-includes) laten staan na een mail-platform-migratie — bij MailerLite→Brevo-switch (Sessie 126) bleef oude SPF-include ~4 maanden ongemerkt, effectief silent SPF-softfail op alle Brevo-outbound (DKIM redde de aflevering, maar Gmail-classifier zag fingerprint-mismatch). Mailer-platform-switches vereisen drie cleanup-passes: SPF-include, apex-verification-TXT, én DKIM-CNAME op subdomein (`litesrv._domainkey` werd pas bij screenshot-audit ontdekt, niet bij `dig` op apex)
@@ -173,8 +185,8 @@ Pre-Sessie 129 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
 **Voor Sessie:** Lees `PLANNING.md`, `TASKS.md`, dit bestand
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-**Rotation trigger:** Every 5 sessions (last: Sessie 135, next: Sessie 140)
-**Sessie counter:** 135
+**Rotation trigger:** Every 5 sessions (last: Sessie 136, next: Sessie 140)
+**Sessie counter:** 136
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -227,5 +239,5 @@ Pre-Sessie 129 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
 
 ---
 
-**Last updated:** 13 mei 2026 (Sessie 135 — Brevo deliverability tuning ✅ DNS-cleanup + mail-tester 8.4/8.3 + Postmaster verified; Track G geparkeerd door eigen-blocklist op transactional channel)
-**Version:** 5.8 (Sessie 135: SPF MailerLite-restanten weg + `include:spf.brevo.com` toegevoegd (4-mnd silent softfail beëindigd), `litesrv._domainkey` + `mailerlite-domain-verification` TXT verwijderd, Google Postmaster Tools geregistreerd + verified (data 24-48u pending), mail-tester baseline 8.4 (welkomstmail) + 8.3 (sample-pentest); open issues: Postmaster reputation data check + Gmail classification re-test in Sessie D na blocklist-unblock)
+**Last updated:** 18 mei 2026 (Sessie 136 — Brevo deliverability Sessie D ✅ Track G voltooid: welkomstmail→Promotions + sample-pentest→**Primary** aspirational; Postmaster no-data baseline + DMARC `p=quarantine`-promotion deferred tot ~juni)
+**Version:** 5.9 (Sessie 136: Brevo unblock-UI gevonden — Route A caret-dropdown naast "Transactional emails" in Channels-sectie werkt; Route B More-menu + Route C History-tab uitgesloten; nieuw mental model "per-sender approval ≠ binaire blocklist" in memory `reference_brevo_blocklist.md`; Track G Gmail-classificatie aspirational behaald — sample-pentest in Primary tab valideert content-framing-strategie + Sessie 134/135 compounding investments)

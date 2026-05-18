@@ -4,6 +4,83 @@
 
 ---
 
+## Sessie 136: Brevo Deliverability Sessie D — Postmaster Re-check + Track G Voltooid (18 mei 2026)
+
+**Scope:** Post-Sessie-135 baseline-doormeten + Track G (Gmail-classificatie sample-pentest welkomstmail) afronden na blocklist-resolve. Plan-source `.claude/plans/brevo-deliverability-sessie-D.md` + uitvoerings-wrapper `~/.claude/plans/lees-claude-plans-brevo-deliverability-s-hidden-dongarra.md`.
+**Status:** ✅ HOOFDDOEL BEHAALD — Track G volledig groen (welkomstmail in Promotions, sample-pentest in **Primary** — aspirational success-criterium). DMARC-policy-bump-analyse deferred (Postmaster-data nog niet geaggregeerd). Sessie kort, ~30 min totaal.
+**Duur:** 1 sessie-blok 18 mei avond.
+**Plan source:** `.claude/plans/brevo-deliverability-sessie-D.md`
+
+### Cold-start verificatie (server-side state)
+- `git log --oneline -5` → top `f278dbd` match Sessie 135 outcome ✓
+- `dig @8.8.8.8 TXT hacksimulator.nl +short` → SPF intact (`include:spf.brevo.com` aanwezig, geen `_spf.mlsend.com`-restant); apex TXT enkel Google-verify + Brevo-code + SPF; MailerLite-restanten weg ✓
+- `dig @1.1.1.1 TXT hacksimulator.nl +short` → consistent met Google-resolver (wereldwijde propagatie intact)
+- `dig @8.8.8.8 TXT _dmarc.hacksimulator.nl +short` → `v=DMARC1; p=none; rua=mailto:contact@hacksimulator.nl` zoals bedoeld ✓
+- Geen regressie sinds Sessie 135 — server-side state volledig intact.
+
+### Stap 1 — Postmaster "no-data baseline" + verify-recheck ✅
+
+**Verify-status:** `hacksimulator.nl` toont `Verified` in `https://postmaster.google.com/managedomains` ✓ — verify-pad is dus niet de bottleneck.
+
+**Dashboard-snapshot:** alle tabs (Dashboard / Authentication / Encryption / Delivery errors / IP Reputation) tonen `"Not enough data to display"`. Outbound-volume nog onder Google's laagste aggregatie-threshold (~10 mails/dag voor Authentication-stats, ~1000/dag voor Spam Rate + Domain Reputation).
+
+**Conclusie:** voor MVP-fase met enkele tientallen contacten + sporadische sends heeft Postmaster Tools beperkt analytisch nut. Waarde ligt nu in vroegtijdige flagging zodra volume toeneemt (early-warning systeem). **Datum-target re-check:** begin juni 2026, of eerder bij eerste >100-recipient-campaign-send.
+
+**Taak 2 (DMARC-policy-bump-analyse) deferred** — niet beoordeelbaar zonder Authentication-pass-%. Hervat zodra Postmaster-data zichtbaar wordt. `p=quarantine`-promotion blijft op zijn vroegst eind mei 2026 (per Sessie 135-plan conservatieve aanbeveling 2-4 wk monitoring).
+
+### Stap 2 — Brevo unblock-UI discovery + Track G ✅
+
+**Context (Sessie 135-blocker):** `jan.willem.wubkes@gmail.com` op transactional-channel-blocklist, root cause vermoedelijk Unsubscribe-klik tijdens Sessie 133/134 template-validatie. Plus-alias-workaround faalt op anti-evasion-normalisatie. Sessie 135 sloot zonder vondst van unblock-route.
+
+**UI-discovery — drie kandidaat-routes systematisch (timebox 15 min):**
+
+| Route | Hypothese | Resultaat |
+|-------|-----------|-----------|
+| A | Dropdown-caret (▼) náást "Transactional emails" in Channels-sectie | ✅ WERKT — popup met per-sender approval-toggle |
+| B | More-menu (⋮) rechtsboven contact-detail | ❌ Bevat enkel Meeting / Deal / File / Add to automation / Delete permanently — geen unblock-actie |
+| C | History-tab → Blocked-event → Restore-knop | ❌ Alleen view-mode, geen Restore/Resubscribe-actie op events |
+
+**Architecturaal inzicht — per-sender approval ≠ binaire blocklist:**
+Route A's popup toont letterlijk: `"<email> contact can receive transactional emails sent by 0/1 senders"`. Brevo's transactional channel-state is een **per-sender approval-lijst**, niet binair on/off. `Blocklisted` = "0/N senders approved", `Subscribed` = ≥1 relevante sender approved. Een contact kan transactional mails ontvangen van approved senders en geblokt worden door non-approved senders binnen dezelfde channel. Per-sender granulariteit verklaart het ontwerp: bij multi-sender accounts (transactional API met meerdere From-adressen) selectief approven.
+
+**Memory-update:** `reference_brevo_blocklist.md` sectie "Unblock-UI" volledig herschreven met (1) Route A als werkende route, (2) Route B + C expliciet gemarkeerd als niet-werkend om Sessie 137 te besparen, (3) nieuw "Mental model: per-sender approval"-sectie. Updated VÓÓR unblock-klik (memory-eerst-pattern: route vastleggen zodat hij niet weer verloren raakt bij UI-shift).
+
+**Unblock-actie + verificatie:**
+1. Klik toggle naast `contact@hacksimulator.nl` in Route A-popup → status switch `Blocklisted` → `Subscribed`
+2. Send Test `welkomstmail-v2-DnD` → recipient `jan.willem.wubkes@gmail.com`:
+   - Brevo Real-time: `Delivered` ✓ (Logs hadden 3-5 min vertraging — verwacht batch-pipeline-gedrag, niet zorgwekkend)
+   - Gmail tab: **Reclame** (Promotions) — plan-success-criterium voor welkomstmail behaald
+3. Send Test `sample-pentest-welkomstmail-v2-DnD`:
+   - Brevo: `Delivered` ✓
+   - Gmail tab: **Primair** (Primary) — **aspirational success-criterium behaald**
+
+**Track G volledig afgerond.**
+
+### Architecturale validatie
+
+Het classificatie-verschil tussen de twee templates is informatief en niet toevallig:
+- **Welkomstmail** (generieke newsletter-welkom + blog-CTAs + product-intro) → Promotions: Gmail-classifier ziet broadcast-/marketing-signalen
+- **Sample-pentest** (specifieke transactionele response op lead-magnet, file-delivery-context `"Sample staat klaar"`) → Primary: classifier ziet transactional-/actie-response-signalen
+
+**Leerpunt voor toekomstige mail-content-design:** hoe meer een mail leest als "actie-response op user-trigger" en minder als "broadcast", hoe groter de kans op Primary-tab landing. Subject-line-framing, file-delivery-context, en specificiteit van de aanleiding tellen mee.
+
+**Sessie 134/135-investering validates retro-actief:** zonder DnD-template-kwaliteit (Sessie 134 NL-taalreview + structuur) + DNS-cleanup (Sessie 135 4-mnd silent SPF-softfail beëindigd) was Primary-classificatie onhaalbaar geweest. De compounding effect is nu zichtbaar.
+
+**Conservatieve test-validity caveat:** dit is een Send Test, geen echte form-submit-trigger. Gmail's classifier heeft geen engagement-history voor dit send-event — oordeel berust puur op content + headers + sender-reputation. In productie (met form-submit + click-engagement-history) zou Primary-classificatie alleen maar stabieler zijn — onze test is dus zo conservatief als kan, en hij landt al in Primair.
+
+### Memory-updates Sessie 136
+- `reference_brevo_blocklist.md` — Unblock-UI sectie volledig herschreven met:
+  - Route A als gevalideerde werkende route (caret-dropdown naast "Transactional emails")
+  - Route B + C expliciet uitgesloten met validatie-bewijs (More-menu / History-tab — geen unblock-actie)
+  - Nieuwe sectie "Mental model: per-sender approval, géén binaire blocklist" — corrigeert eerder mental model uit Sessie 135
+
+### Geparkeerd voor latere sessies
+- **DMARC-policy-bump (`p=quarantine`):** afhankelijk van Postmaster Authentication-pass-%, vroegst eind mei 2026 + 2-4 weken extra data-aggregatie. RUA-alias `dmarc-reports@hacksimulator.nl` overwegen om hoofd-mailbox schoon te houden.
+- **Custom tracking-subdomain (Sessie 135-plan §F):** tier-gated, ROI-analyse blijft uit tot newsletter-volume materieel groeit.
+- **Postmaster re-check:** ~begin juni 2026, of na eerste >100-recipient campaign-send (early aggregation-trigger).
+
+---
+
 ## Sessie 135: Brevo Deliverability Tuning — DNS Cleanup + Mail-tester Baseline + Postmaster Tools (11-13 mei 2026)
 
 **Scope:** Deliverability-tuning na de DnD-template-herbouw uit Sessie 134. Plan-source `.claude/plans/brevo-deliverability-sessie-C.md` (7 stappen: A. DNS Audit / B. Mail-tester ≥8 / C. Postmaster Tools / D. List-Unsubscribe / E. Content audit / F. Custom tracking-subdomain optioneel / G. Gmail classificatie re-test).
