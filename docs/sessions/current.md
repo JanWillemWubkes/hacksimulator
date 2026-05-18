@@ -4,6 +4,258 @@
 
 ---
 
+## Sessie 135: Brevo Deliverability Tuning — DNS Cleanup + Mail-tester Baseline + Postmaster Tools (11-13 mei 2026)
+
+**Scope:** Deliverability-tuning na de DnD-template-herbouw uit Sessie 134. Plan-source `.claude/plans/brevo-deliverability-sessie-C.md` (7 stappen: A. DNS Audit / B. Mail-tester ≥8 / C. Postmaster Tools / D. List-Unsubscribe / E. Content audit / F. Custom tracking-subdomain optioneel / G. Gmail classificatie re-test).
+**Status:** ✅ HOOFDDOEL BEHAALD — 5 van 7 stappen volledig groen; 2 geparkeerd met goede reden (F tier-gated, G aspirational + blocked door eigen-blocklist).
+**Duur:** 3 sessie-blokken over 2 dagen (11 mei avond DNS-werk, 12 mei avond mail-tester runs, 13 mei middag Gmail-classification-poging).
+**Plan source:** `.claude/plans/brevo-deliverability-sessie-C.md`
+
+### Context (cold-start)
+Sessie 134 sloot af met deels-groene state: welkomstmail DnD 100% maar sample-pentest mobile-PDF-bug onopgelost (tier-limitatie). Plan-bron `brevo-drag-and-drop-herbouw.md` regel 150 verbood Sessie C tot Sessie B groen was — maar de open issue is tracking-pipeline-bug, geen deliverability-issue, dus C kon parallel doorgaan.
+
+### Cold-start verificatie (server-side state)
+- `git log --oneline -5` → top commit `38554e0` match Sessie 134 outcome (geen drift)
+- `curl -sI .../pentest-playbook-sample.pdf` → `content-disposition: attachment` ✓ (ac047f3 actief)
+- Beide Brevo-automations Active bevestigd door Heisenberg
+
+### Stap A — DNS Audit ✅
+
+**Initieel via `dig`:**
+```
+TXT hacksimulator.nl:
+  "v=spf1 a mx include:_spf.transip.email include:_spf.mlsend.com ~all"
+  "mailerlite-domain-verification=1f080295149954d736c429846a5da64e398d8d06"
+  "brevo-code:11f31cbc6b109f84dd9648ad1c8f3c82"
+TXT _dmarc: "v=DMARC1; p=none; rua=mailto:contact@hacksimulator.nl"
+CNAME brevo._domainkey → b1.hacksimulator-nl.dkim.brevo.com → brevo19.dkim.brevo.com (RSA pubkey)
+CNAME brevo2._domainkey → b2.hacksimulator-nl.dkim.brevo.com → brevo20.dkim.brevo.com (RSA pubkey)
+```
+
+**3 rode vlaggen geïdentificeerd:**
+1. SPF mist `include:spf.brevo.com` — sinds Brevo-migratie (Sessie 126) effectief silent SPF-softfail op alle Brevo-mails, ~4 maanden lang
+2. SPF heeft nog `include:_spf.mlsend.com` (MailerLite-restant) → DNS-lookup-quota verspilling, geen functionele rol
+3. Apex `mailerlite-domain-verification` TXT-record blijft hangen + `litesrv._domainkey` CNAME → `litesrv._domainkey.mlsend.com.` (derde MailerLite-restant, gevonden bij screenshot-audit, niet bij oorspronkelijke `dig`-output omdat het op subdomein staat)
+
+**DNS-edits in TransIP (één sessie):**
+- **EDIT** SPF van `v=spf1 a mx include:_spf.transip.email include:_spf.mlsend.com ~all` → `v=spf1 a mx include:_spf.transip.email include:spf.brevo.com ~all`
+- **DELETE** TXT `mailerlite-domain-verification=...`
+- **DELETE** CNAME `litesrv._domainkey`
+
+Pre-save verificatie via "Home-key-truc" (cursor naar begin van textbox forceren) om volledige SPF-waarde te kunnen lezen voorbij textbox-clipping — bevestigde geen typos, geen ontbrekende `v=spf1` prefix, geen dubbele includes.
+
+**Propagatie:** binnen 2 minuten zichtbaar op alle drie de resolvers (TransIP `ns0.transip.net` authoritative + Google `8.8.8.8` + Cloudflare `1.1.1.1`). SOA-serial bumped naar `2026051100`. NXDOMAIN op `litesrv._domainkey` bevestigd via 8.8.8.8.
+
+**Tweede DNS-sessie (Postmaster Tools verificatie):**
+- **ADD** TXT `google-site-verification=5c9d-C3TYP9t-82ZtB3zw1wLrbIQ-hnevkIHuvmYLxE`
+- Propagatie weer <2 min naar alle drie de resolvers
+- Verify-klik in Postmaster Tools dashboard succesvol (geconfirmeerd door Heisenberg)
+
+### Stap B — Mail-tester baseline ✅
+
+**Welkomstmail-v2-DnD: 8.4/10**
+- SpamAssassin: -0.1 (DKIM_SIGNED auto -0.1 + DKIM_VALID +0.1 + DKIM_VALID_AU +0.1 - HEADER_FROM_DIFFERENT_DOMAINS -0.25 + Mailspike whitelist +2 reputation)
+- Body: -0.5 (Brevo tracking pixel 1x1 zonder alt-attribute)
+- Blacklist: -1.0 (Brevo shared IP `77.32.148.28` op Hostkarma; clean op Spamhaus SBL/CSS/PBL/XBL, Barracuda, mailspike, 21 andere)
+- Auth: SPF_PASS ✓, DKIM valid + author-domain ✓, DMARC test passed ✓
+- Inhoud veilig ✓, geen verkorte URLs ✓, geen gebroken links ✓
+- **List-Unsubscribe header aanwezig ✓** (impliciete Stap D-validatie)
+
+**Sample-pentest-welkomstmail-v2-DnD: 8.3/10**
+- Identiek profiel op één micro-trigger na: `HTML_FONT_LOW_CONTRAST -0.001` (terminal-aesthetic donker-op-donker palet — niet de moeite om te fixen voor 0.001 punt mail-tester-score)
+- HTML 31KB vs welkomstmail 23KB (langere content, onder Gmail clipping-threshold 102KB)
+- 39% tekstratio identiek (DnD-architectuur-consistentie)
+
+**Plan-success-criterium 2 (≥ 8/10 voor beide templates):** ✅ behaald.
+
+**Niet-fixable verliezen geïdentificeerd:**
+- `HEADER_FROM_DIFFERENT_DOMAINS -0.25` — Brevo gebruikt `hb.d.sender-sib.com` envelope-from, fix vereist custom tracking-subdomain (Plan §F, tier-gated)
+- Tracking pixel zonder alt `-0.5` — Brevo DnD-editor overschrijft custom HTML-alts bij re-render
+- Hostkarma `-1.0` — Brevo shared IP, fix vereist Dedicated IP (Premium-tier ~€800/maand)
+
+**Effectieve ceiling op Free/Starter-tier dus 8.4-8.5.** Onze SPF/DKIM/DMARC/content/headers leveren 0 aftrek meer — we zitten op het pragmatische maximum.
+
+### Stap C — Gmail Postmaster Tools ✅
+
+- Geregistreerd onder `jan.willem.wubkes@gmail.com`
+- Domain `hacksimulator.nl` toegevoegd
+- TXT-verificatie via TransIP (zie Stap A tweede DNS-sessie)
+- Verify-klik succesvol
+- **Data komt 24-48u na verificatie** — dashboards (spam rate, domain reputation, IP reputation, authentication stats) zijn nu nog leeg → check in vervolgsessie
+
+### Stap D — List-Unsubscribe ✅
+Mail-tester (Stap B) bevestigde "Je bericht bevat een List-Unsubscribe header" op beide templates. Brevo's `Unsubscribe link (global)` Type-dropdown uit Sessie 134 levert dus ook de RFC 8058 List-Unsubscribe + List-Unsubscribe-Post headers op (Gmail "Easy unsubscribe" compatible).
+
+### Stap E — Content audit ✅
+Geen spam-trigger-woorden in beide templates. Pay-what-you-want-formulering ("vanaf €5") scoort niet negatief — `Je inhoud is veilig` groen bij beide. Geen verkorte URLs, geen gebroken links.
+
+### Stap F — Custom tracking-subdomain 🟦 SKIP
+Brevo's eigen tracking-subdomain (`r.hacksimulator.nl` vervangt `r.sendibm1.com`) zou potentieel mobile-PDF-prefetch-bug uit Sessie 134 mitigeren én `HEADER_FROM_DIFFERENT_DOMAINS -0.25` wegnemen, maar is **tier-gated**. Bevestigd via memory `reference_brevo_tracking_tier.md`: Free/Starter heeft geen toegang. Geparkeerd voor tier-upgrade-beslissing.
+
+### Stap G — Gmail classificatie re-test 🟦 GEBLOKKEERD → SKIP (aspirational)
+
+**Diagnose-flow tijdens uitvoeren:**
+
+1. Verstuur welkomstmail-test naar `jan.willem.wubkes@gmail.com` via Brevo Send Test
+2. Mail komt niet aan in Primary, niet in Promotions, niet in Spam, niet in All Mail
+3. Brevo Transactional → Logs onthult: `Sent → Blocked` op alle Send-Test-pogingen naar `jan.willem.wubkes@gmail.com`
+4. Detail-paneel toont reason: **`blocked : due to unsubscribed user`**
+5. Test met `jan.willem.wubkes@gmail.com` → contact-detail toont: `Email campaigns: Subscribed ✓` / `Transactional emails: Blocklisted` — Brevo's dual-channel model, transactional-channel apart geblokt
+
+**Plus-alias workaround geprobeerd, gefaald:**
+- Verstuur naar `jan.willem.wubkes+welcomesessieC@gmail.com` en `jan.willem.wubkes+samplesessieC@gmail.com`
+- **Geen mail aangekomen, geen log-regel in Brevo**
+- Conclusie: Brevo normaliseert plus-aliases pre-send tegen blocklist (anti-evasion). Match → abort vóór log-creatie
+
+**Root cause:** waarschijnlijk klikte Heisenberg in Sessie 133 of 134 op een Unsubscribe-link tijdens template-test-validatie (bekend bug-cluster: URL-encoded `{$unsubscribe}` → 404 → fix → her-test → één daadwerkelijke klik geregistreerd). Brevo's compliance-engine markeert het adres permanent op transactional channel.
+
+**Drie opties besproken:**
+1. Deblokkeer `jan.willem.wubkes@gmail.com` in Brevo Contacts → Transactional emails channel (Heisenberg kon unblock-UI niet vinden in dual-channel model — verstopt achter "More" of dropdown-toggle)
+2. Tweede e-mailadres gebruiken
+3. Skip — plan §G is expliciet *aspirational*, niet must-have
+
+Heisenberg koos optie 3. Track G geparkeerd voor latere sessie (Sessie D) wanneer Postmaster Tools data heeft, óf eerder als blocklist-removal in Brevo-UI is uitgezocht.
+
+### Files changed
+Geen code-changes deze sessie. Werk volledig in:
+- TransIP DNS-paneel (3 records: 1 edit + 2 deletes + 1 add)
+- Brevo dashboard (templates Send Test, contact-detail bekijken)
+- Postmaster Tools (registratie + verify)
+- mail-tester.com (twee testruns)
+
+Documentatie-changes:
+- `docs/sessions/current.md` — deze entry
+- `CLAUDE.md` — Recent Critical Learnings + counter + last-updated
+- `.claude/plans/brevo-deliverability-sessie-C.md` — afgerond-marker
+- Memory: nieuwe `reference_brevo_blocklist.md` + `MEMORY.md` index
+
+### Deliverability-baseline (post-sessie)
+
+| Item | Status |
+|---|---|
+| SPF | `v=spf1 a mx include:_spf.transip.email include:spf.brevo.com ~all` ✓ |
+| DKIM | `brevo._domainkey` + `brevo2._domainkey` CNAMEs, dual-RSA, valid ✓ |
+| DMARC | `v=DMARC1; p=none; rua=mailto:contact@hacksimulator.nl` ✓ (startpunt) |
+| Google site-verification | Active, dashboard data 24-48u pending |
+| Mail-tester welkomstmail | 8.4/10 |
+| Mail-tester sample-pentest | 8.3/10 |
+| Blacklists (23 lijsten) | Clean op 22/23; Hostkarma listed (-1, niet door Gmail/Outlook gehonoreerd) |
+| List-Unsubscribe header | Present (RFC 8058) |
+| Gmail classificatie | Bekend uit Sessie 134: welkomstmail = Promotions (acceptabel); sample-pentest = onbekend (Track G geparkeerd) |
+
+### Open items voor vervolgsessie (Sessie D)
+1. **Postmaster Tools data review** — 24-48u na verify (vanaf 12 mei avond) zou de eerste batch reputation/spam-rate-data binnenkomen. Snapshot maken als baseline.
+2. **DMARC `p=none` → `p=quarantine` overweging** — bij 2-4 weken groene Postmaster-stats kan policy strenger worden gezet. RUA reports kunnen naar dedicated `dmarc@` inbox om mailbox-vervuiling te voorkomen.
+3. **Brevo blocklist unblock UI uitzoeken** — voor Track G re-attempt, dual-channel-model (`Transactional emails: Blocklisted`) heeft een verstopte unblock-route die wegvalt achter "More"-menu of dropdown
+4. **Custom tracking-subdomain tier-business-case** — als mobile-PDF-prefetch-bug verzwakt of klantfeedback rapporteert: Brevo tier-upgrade kosten vs. impact afwegen
+
+---
+
+## Sessie 134: Brevo Drag-and-Drop Herbouw — Welkomstmails Templates (5-11 mei 2026)
+
+**Scope:** Twee classic-editor Brevo welkomstmail-templates herbouwen in de moderne Drag-and-Drop editor om twee productie-blokkers op te lossen: (1) URL-encoded `{$unsubscribe}` / `{$url}` placeholders die 404 gaven bij klik, (2) Gmail-mobile prefetch consumeert Brevo's click-tracking-tokens waardoor de PDF-knop in de sample-pentest-welkomstmail 404 retourneert. Sessie-plan in `.claude/plans/brevo-drag-and-drop-herbouw.md`.
+**Status:** ⚠️ DEELS VOLTOOID — welkomstmail (hoofd) 100% groen; sample-pentest visueel + functioneel werkend MAAR mobile-PDF-prefetch-bug niet opgelost door tier-limitatie.
+**Duur:** 1 multi-day sessie (5-11 mei)
+**Plan source:** `.claude/plans/brevo-drag-and-drop-herbouw.md` (bron) + `.claude/plans/lees-claude-plans-brevo-drag-and-drop-h-happy-nygaard.md` (uitvoer-plan)
+
+### Context
+Sessie 133 leverde de lead-magnet-landing op en sloot Plan B af, maar tijdens user-testing op 30 apr en 2 mei bleek dat Brevo's classic-editor templates twee hardnekkige bugs hadden. Het bron-plan stelde drag-and-drop herbouw als robuuste route voor — patchen van classic-editor templates was doodlopend (URL-encoding van curly braces in href-velden was niet te omzeilen).
+
+### Cold-start verificatie (server-side state)
+Voor de DnD-werk begon: server-side fixes uit vorige sessie geverifieerd via curl + git log:
+- Top commits: `38554e0` `ac047f3` `ee2bec8` `38ad10b` — match exact
+- `/assets/samples/pentest-playbook-sample.pdf` → `content-disposition: attachment` ✓
+- `/privacy.html` → 301 → `/assets/legal/privacy.html` ✓
+
+Geen drift sinds vorige sessie; server-side intact.
+
+### Template 1 — welkomstmail-v2-DnD (100% succesvol)
+
+**Approach:** Hybrid — één **Custom HTML-block** met de complete bron-HTML (terminal-aesthetic 100% behouden via inline styles) + één **Text/Title-block** met Brevo's `Unsubscribe link (global)` + `Web version` placeholders als footer.
+
+**Stappen uitgevoerd:**
+1. **HTML voorbereiden** — `docs/newsletter/welkomstmail.html` lokaal gepatched: footer-regel 158 (Uitschrijven `{$unsubscribe}` + Bekijk-in-browser `{$url}`) verwijderd, Privacybeleid-link behouden. Resultaat naar `~/Bureaublad/welkomstmail-brevo-paste.html` (~11.5 KB).
+2. **Brevo template** aangemaakt via Templates → Create new → **Drag and drop editor** (NIET classic). Naam: `welkomstmail-v2-DnD`.
+3. **HTML-block** uit Blocks-zijbalk gesleept, complete HTML gepaste, preview rendert terminal-aesthetic exact zoals lokaal.
+4. **Footer Title-block** onder HTML-block (Sections-tab had alleen "drukke" pre-built footers met social/address/foto die niet matchten). Tekst: `Uitschrijven · Bekijk in browser`. Voor elk link: Type-dropdown → `Unsubscribe link (global)` en `Web version` (Brevo's native placeholders, NIET handmatige `{{ unsubscribe }}` URL — eerste poging gaf URL-encoded `%7B%7B unsubscribe %7D%7D` in hover-status).
+5. **Styling** Title-block: bg `#161b22`, text `#8b949e`, link `#79c0ff`, Courier New, center.
+6. **Validatie** placeholders via testmail (canvas-preview rendert placeholders NIET, alleen verzonden mail substitueert) → bevestigd werkend in Gmail.
+7. **Save & quit** template → push naar automation "Welcome message" (automation ID 1, step ID 3) via "Use this design in automation" — Brevo maakt een **snapshot-kopie**, geen live link naar de template.
+8. **Activate** automation (Status: Active).
+
+**B4-checklist Gmail-web + Gmail-mobile:** alle 6 functionele checks ✓ (Privacybeleid via 301, Uitschrijven opent Brevo unsubscribe-flow, Bekijk in browser opent web-versie, 3 blog-links openen blogposts, mobile inline-code niet overlappend, terminal-aesthetic intact). Gmail classificeerde mail naar **Promotions** — verwacht voor newsletter-welkomstmail, geen bug, acceptabel voor MVP.
+
+### Template 2 — sample-pentest-welkomstmail-v2-DnD (deels succesvol)
+
+**Stap 1-4 + 6-7** identiek aan template 1, werkend:
+- Bron-HTML `docs/newsletter/welkomstmail-sample-pentest.html` lokaal gepatched (footer-regel 184 idem) → `~/Bureaublad/welkomstmail-sample-pentest-brevo-paste.html` (~13.9 KB)
+- DnD template aangemaakt, HTML-block + Title-block-footer geconfigureerd identiek aan template 1
+- Subject: `Je Pentest Sample staat klaar [TIP] Fase 0+1 van het volledige playbook`
+- Preview text: `De meeste tutorials slaan Fase 0 over. Dat is precies waar pentesters beginnen.`
+- Sender: `contact@hacksimulator.nl` (HackSimulator)
+- Form-submitted automation gekoppeld met re-entry AAN (lead-magnet UX: bij verloren mail moet user opnieuw kunnen submitten)
+
+**Stap 5 (tracking uit) — geblokkeerd:**
+
+Het bron-plan stelde "klik op PDF-knop in HTML-block → toggle Track clicks UIT". Dit pad bleek dubbel kapot:
+
+1. **Custom HTML-blocks hebben geen per-link tracking-toggle** in Brevo's UI (alleen native Brevo-blocks zoals Button hebben dit theoretisch)
+2. **Brevo Button-blocks hebben in de huidige modern DnD-editor evenmin een per-link tracking-toggle** — getest door Heisenberg in template-edit-paneel: geen toggle gevonden, ook niet in scrollable secties, ook niet in Additional Settings van de email-step
+3. **Globale click-tracking-toggle bestaat niet in Free/Starter-tier** — gecontroleerd in Settings → SMTP & API (alleen SMTP server config) en Settings → Senders, Domains, IPs (alleen SPF/DKIM/DMARC) — geen tracking-section te bekennen
+
+**Pad-1 escalatie (Button-block split) — geprobeerd en teruggedraaid:**
+
+Hypothese dat Brevo Button-block-tracking een andere pipeline zou gebruiken dan inline-HTML-tracking testte ik door:
+1. HTML te splitsen in DEEL1 (top tot vóór PDF-knop) + DEEL2 (na PDF-knop tot vóór footer) — beide als zelfstandige HTML-documenten naar Bureaublad
+2. Tussen beide HTML-blocks een native Brevo Button-block geplaatst (Width 50%, bg `#9fef00`, text `#0d1117`, Courier New 16px bold, radius 6px, URL = PDF, target blank)
+3. End-to-end test: **404 nog steeds aanwezig** op Gmail-mobile. Bug zit fundamenteel in Brevo's `r.sendibm1.com/?u=...&i=...` redirect-pipeline, niet in welk block-type de link host
+4. Bijkomend probleem: Button-block negeert de mobile-responsive width van de Custom HTML-blocks → button rendert te breed op mobile (Brevo design-keuze: Button heeft alleen vertical margin, geen horizontal margin/padding op block-niveau)
+
+**Beslissing op Heisenberg's voorstel:** terug naar single-HTML-block setup. Cosmetic mobile-issue weg, geen voordeel verloren (bug bleef bij beide aanpakken identiek). De Button-block-split was 30 min werk dat we hadden bespaard door eerst de aanname te verifiëren — een aanname-validatie-les voor toekomstige tooling-keuzes.
+
+**Tracking-mechanisme inzicht (waarom unsubscribe wél werkt):**
+
+Niet alle Brevo-redirects gebruiken hetzelfde mechanisme:
+- **Unsubscribe-links** (`{{ unsubscribe }}` placeholder) → idempotent endpoint, geen consumeerbaar token, werkt mobile ✓
+- **Bekijk in browser** (`{{ mirror }}` placeholder) → mirror-render gebaseerd op vaste hash, geen consumeerbaar token, werkt mobile ✓
+- **Click-tracking-redirect** (`r.sendibm1.com/?u=<target>&i=<unique-token>`) → unieke tokens worden door Gmail-prefetch geconsumeerd → bij user-klik later 404. Dit is **specifiek** voor click-tracking, niet generiek voor Brevo-links.
+
+Dat verklaart waarom alleen de PDF-link in de sample-mail 404 geeft, niet de unsubscribe/mirror-links in dezelfde mail.
+
+### Open issue (voor latere sessie)
+**Mobile-PDF-prefetch-bug in sample-pentest welkomstmail** — geschat 5-10% van mobile-users zien 404 bij eerste klik op "Download Sample (PDF) ↓". Mitigerende factoren:
+- Desktop users (~70-80%) niet getroffen
+- Promotions-tab krijgt minder mobile-prefetch dan Primary
+- Re-entry staat aan: user kan opnieuw inschrijven (`/sample-pentest.html`) → nieuwe mail → tweede klik werkt vaak wel
+- Landing-page heeft PDF direct beschikbaar als backup
+
+**Resolutie-paden voor toekomst:**
+1. Brevo support-ticket: vraag per-link tracking-uit voor één link in DnD automation-template
+2. Upgrade naar Brevo Pro/Business-tier waar globale click-tracking-toggle mogelijk wel beschikbaar is
+3. Pad 3 (URL → landing-page) als experiment — onbewezen of het token-expiry omzeilt (Brevo's tracker checkt token-validity vóór redirect, ongeacht target-type)
+
+### Bestanden gewijzigd
+Geen code-edits in repository. Alle wijzigingen waren Brevo-dashboard-werk:
+- Brevo template aangemaakt: `welkomstmail-v2-DnD`
+- Brevo template aangemaakt: `sample-pentest-welkomstmail-v2-DnD`
+- Brevo automation "Welcome message" (ID 1, step 3) gekoppeld aan welkomstmail-v2-DnD
+- Brevo automation "Sample Pentest — welkomstflow" (ID 2, step 5) gekoppeld aan sample-pentest-welkomstmail-v2-DnD, re-entry AAN
+- Lokale paste-HTMLs op `~/Bureaublad/`: `welkomstmail-brevo-paste.html`, `welkomstmail-sample-pentest-brevo-paste.html` (+ tijdelijke DEEL1/DEEL2 voor Pad-1 split, niet meer in gebruik)
+
+### Plan-files
+- `.claude/plans/brevo-drag-and-drop-herbouw.md` — bron-plan met cold-start-checklist, hybrid-aanpak, B4-checklist, fallback-strategieën
+- `.claude/plans/lees-claude-plans-brevo-drag-and-drop-h-happy-nygaard.md` — uitvoer-plan voor deze sessie
+
+### Sleutel-takeaways
+1. Brevo's modern DnD-editor heeft per-link tracking-toggles **niet** in Custom HTML-blocks én **niet** in native Button-blocks. Globale toggle alleen in betaalde tier
+2. Brevo's tracking-pipeline (`r.sendibm1.com/?u=...&i=...`) is fundamenteel kwetsbaar voor Gmail-mobile prefetch — bestand-types die strict zijn (PDF) 404-en bij token-expiry
+3. Per-link "Type" dropdown in Brevo's link-edit-popup heeft wel `Unsubscribe link (global)` en `Web version` — gebruik DIE, geen handmatige `{{ unsubscribe }}` URL (URL-encoded resultaat is broken)
+4. Brevo's automation-templates zijn **snapshot-kopieën** van source-templates, geen live links — bij source-update moet je de automation opnieuw "load template" doen
+5. Promotions-classificatie voor newsletter-welkomstmail is verwacht Gmail-gedrag (geen bug)
+6. Canvas-preview en hover-URLs in Brevo's editor renderen placeholders **niet** — echte test = testmail of "Send a test" die door Brevo's mail-server loopt
+
+---
+
 ## Sessie 133: Plan B Sessie 2 — Lead Magnet Landing Page + Tracking + CTAs (26 april 2026)
 
 **Scope:** Plan B (lead magnet) afronden — `/sample-pentest.html` landing page bouwen, GA4 tracking voor sample-funnel toevoegen, 3 inbound CTAs plaatsen, Playwright E2E happy path, sitemap-entry. Sluit `monetization-B-lead-magnet.md` af als ✅ COMPLETE.

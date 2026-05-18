@@ -84,6 +84,30 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 135: Brevo Deliverability Tuning — DNS Cleanup + Mail-tester Baseline (11-13 mei 2026)
+⚠️ **Never:**
+- SPF-record met `include:_spf.mlsend.com` (of andere oude platform-includes) laten staan na een mail-platform-migratie — bij MailerLite→Brevo-switch (Sessie 126) bleef oude SPF-include ~4 maanden ongemerkt, effectief silent SPF-softfail op alle Brevo-outbound (DKIM redde de aflevering, maar Gmail-classifier zag fingerprint-mismatch). Mailer-platform-switches vereisen drie cleanup-passes: SPF-include, apex-verification-TXT, én DKIM-CNAME op subdomein (`litesrv._domainkey` werd pas bij screenshot-audit ontdekt, niet bij `dig` op apex)
+- "Blocked" status in Brevo Transactional → Logs interpreteren als Gmail-delivery-failure — het is een **interne suppression-list-check** op Brevo's transactional channel (separate van Email Campaigns channel: dual-channel model). Mail verlaat Brevo's mailservers niet eens. Reason `blocked : due to unsubscribed user` is typisch post-template-test-bijproduct uit Sessie 133/134 unsubscribe-link-validatie
+- Plus-alias workaround (`recipient+suffix@gmail.com`) proberen voor adres dat op eigen Brevo-blocklist staat — Brevo normaliseert pre-send tegen canonical form (anti-evasion), match → abort vóór log-creatie, géén log-regel verschijnt. Workaround werkt alleen voor adressen die nog niet ge-suppressed zijn
+
+✅ **Always:**
+- Bij DNS-edit in TransIP: gebruik "Home-key-truc" (cursor naar begin van textbox forceren) om volledige record-waarde te kunnen valideren vóór "Opslaan" — TransIP single-line input clipt zonder scroll-indicator, screenshot toont alleen cursor-positie. 5-seconden-check spaart uren debug bij silent SPF-typo
+- DNS-propagatie verifiëren via drie resolvers parallel: TransIP authoritative (`ns0.transip.net`) + Google (`8.8.8.8`) + Cloudflare (`1.1.1.1`). Bij asymmetrie weet je welke caches stale zijn; bij universele match: propagatie wereldwijd compleet. TTL `5 Min.` + geen oude cache leverde <2 min wereldwijde propagatie
+- Bij delivery-issue "mail komt niet aan": eerst Brevo Transactional → Logs check op `Blocked`-status met detail-paneel-reason, dán pas DNS/auth-debug. Andersom kost 30+ min DNS-debug voor een blocklist-issue
+- Architecturale Brevo-UI-vondsten meteen in memory: dual-channel-model (Email Campaigns vs Transactional apart blocklist-state) + plus-alias-normalisatie + verstopte unblock-route achter "More"/dropdown zijn niet-derivable uit code en kosten elke nieuwe sessie 30+ min ontdekkingstijd
+
+### Sessie 134: Brevo Drag-and-Drop Herbouw — Welkomstmails (5-11 mei 2026)
+⚠️ **Never:**
+- Aannemen dat Brevo Button-blocks per-link click-tracking-toggle hebben in Free/Starter-tier — toggle bestaat niet (gevalideerd in template-edit-paneel + Additional Settings + Settings → SMTP & API + Senders). Pad-1 Button-block-split kost 30 min met nul bug-impact
+- Handmatig `{{ unsubscribe }}` / `{$unsubscribe}` als URL typen in Brevo's link-editor — Brevo wrapt het als `https://app.brevo.com/%7B%7B unsubscribe %7D%7D` (URL-encoded), 404 bij klik. Gebruik Type-dropdown `Unsubscribe link (global)` of `Web version` als native Brevo-koppeling
+- Canvas-preview hover-URLs of "Preview & test"-modal vertrouwen voor placeholder-validatie — Brevo substitueert pas in outbound rendering bij verzending. Editor toont placeholders als platte tekst-URLs. Enige ground truth = testmail via Brevo's mail-server
+
+✅ **Always:**
+- Tooling-aannames in 30 sec valideren vóór 30 min implementeren — vóór elke "fix" eerst checken of de gemaakte aanname over de tool waar is (UI-veld, toggle, feature) i.p.v. direct uitvoeren
+- Brevo's automation-templates zijn **snapshot-kopieën**, geen live links naar source-template — bij source-update altijd opnieuw "load template" + "Use this design in automation" in automation-step, anders blijft oude versie actief
+- Title/Text-blocks met Type-dropdown special-links voor DnD-footers, NIET pre-built footer-sections — pre-builts (social/address/foto) zijn te druk voor minimal terminal-aesthetic; restylen kost meer dan zelf bouwen
+- Cold-start-checklist (git log + curl headers) doorlopen vóór dashboard-werk start — bevestigt server-side state intact, voorkomt verspilde tijd aan opnieuw fixen wat al werkt
+
 ### Sessie 133: Lead Magnet Landing + Dual-Fire Tracking + Brevo Submit Fix (26-29 april 2026)
 ⚠️ **Never:**
 - `data-product-id` overloaden voor gratis lead-magnet CTAs — semantiek vervaagt en GA4-conversiedoel `product_cta_click` gaat revenue-funnel en lead-funnel dubbel tellen
@@ -139,19 +163,8 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Gumroad product links naar `/gidsen` landing page in man page tips (niet direct naar Gumroad) — centraliseert traffic, makkelijker te updaten als URLs veranderen
 - Bestaande CSS patterns hergebruiken (`.feature-card`, `.btn-cta`, `.blog-cta`) — zero nieuwe JS, verwaarloosbare bundle impact
 
-### Sessie 128: Gumroad Products — Factcheck & Taalconsistentie (12 april 2026)
-⚠️ **Never:**
-- "Ethical hacking" in Nederlandse lopende tekst — gebruik "ethisch hacken" / "ethische hacker" (NCSC, OM, Wikipedia NL gebruiken de Nederlandse term)
-- MailerLite verwijzingen laten staan in product-docs na Brevo-migratie — cross-check alle referenties bij platform-switches
-- Producten publiceren zonder online factcheck van claims (OWASP categorieën, certificeringsprijzen, wetsartikelen) — feiten veranderen jaarlijks
-
-✅ **Always:**
-- Gumroad tags: beide termen ("ethisch hacken" + "ethical hacking") voor SEO-bereik op Nederlandse én Engelse zoekopdrachten
-- Na taalwijziging in drafts ook Typst templates + `template.typ` (header tagline) + listings updaten — template tagline verschijnt op élke PDF-pagina
-- PDFs opnieuw compileren na content-wijzigingen (`bash build-pdfs.sh`) — anders zijn PDF en source out-of-sync
-
 **Rotation:** Keep last 6 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
-Pre-Sessie 128 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF) → zie `docs/sessions/current.md`.
+Pre-Sessie 129 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 Gumroad factcheck/taalconsistentie) → zie `docs/sessions/current.md`.
 
 ---
 
@@ -160,8 +173,8 @@ Pre-Sessie 128 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF) → z
 **Voor Sessie:** Lees `PLANNING.md`, `TASKS.md`, dit bestand
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-**Rotation trigger:** Every 5 sessions (last: Sessie 130, next: Sessie 135)
-**Sessie counter:** 133
+**Rotation trigger:** Every 5 sessions (last: Sessie 135, next: Sessie 140)
+**Sessie counter:** 135
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -214,5 +227,5 @@ Pre-Sessie 128 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF) → z
 
 ---
 
-**Last updated:** 29 april 2026 (Sessie 133 — Plan B lead magnet ✅ COMPLETE + post-deploy Brevo silent panel-toggle fix)
-**Version:** 5.6 (Sessie 132 + 133: Brevo Form-submitted automations live, `/sample-pentest.html` met dual-fire GA4 events `lead_magnet_signup` + `lead_magnet_cta_click`, 3 inbound CTAs, custom `brevo-submit.js` handler die main.js silent fail bypasst, 184 Playwright tests groen)
+**Last updated:** 13 mei 2026 (Sessie 135 — Brevo deliverability tuning ✅ DNS-cleanup + mail-tester 8.4/8.3 + Postmaster verified; Track G geparkeerd door eigen-blocklist op transactional channel)
+**Version:** 5.8 (Sessie 135: SPF MailerLite-restanten weg + `include:spf.brevo.com` toegevoegd (4-mnd silent softfail beëindigd), `litesrv._domainkey` + `mailerlite-domain-verification` TXT verwijderd, Google Postmaster Tools geregistreerd + verified (data 24-48u pending), mail-tester baseline 8.4 (welkomstmail) + 8.3 (sample-pentest); open issues: Postmaster reputation data check + Gmail classification re-test in Sessie D na blocklist-unblock)
