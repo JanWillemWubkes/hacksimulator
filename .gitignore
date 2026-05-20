@@ -41,6 +41,7 @@ tests/screenshots/
 
 # Claude Code local settings
 .claude/settings.local.json
+.claude/scheduled_tasks.lock
 
 # Test artifacts (build output, should not be committed)
 playwright-report/
