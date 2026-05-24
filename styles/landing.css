@@ -1694,3 +1694,129 @@ html {
 }
 
 /* Footer light theme moved to main.css (Sessie 107) */
+
+/* ==================== Sample Landing — Two-Column Hero (Form Above-the-Fold) ==================== */
+.sample-hero {
+  padding: calc(80px + var(--spacing-xl)) var(--landing-padding-desktop) var(--spacing-xl);
+  max-width: var(--layout-max-width, 1400px);
+  margin: 0 auto;
+}
+
+.sample-hero-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 64px;
+  width: 100%;
+}
+
+/* Inline arrow nudge: U+2192 sits on math-axis, looks high relative to digits */
+.arrow-glyph {
+  display: inline-block;
+  position: relative;
+  top: 1px;
+}
+
+.sample-hero-text {
+  flex: 1 1 0;
+  text-align: left;
+  min-width: 0;
+}
+
+.sample-hero-text .eyebrow-badge {
+  margin-bottom: var(--spacing-md);
+}
+
+.sample-hero-text h1 {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.sample-hero-text .hero-subtitle {
+  max-width: 100%;
+  margin: 0 0 var(--spacing-lg) 0;
+}
+
+.sample-hero-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sample-hero-bullets li {
+  position: relative;
+  padding: var(--spacing-sm) 0 var(--spacing-sm) calc(var(--spacing-lg) + 4px);
+  color: var(--color-text);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.sample-hero-bullets li::before {
+  content: '\2713';
+  position: absolute;
+  left: 0;
+  top: var(--spacing-sm);
+  color: var(--color-cta-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Right column form-card: overrides .homepage-newsletter full-bleed defaults */
+.sample-hero-form.homepage-newsletter {
+  flex: 0 0 440px;
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-modal);
+  text-align: left;
+}
+
+.sample-hero-form.homepage-newsletter .newsletter-content {
+  max-width: 100%;
+  margin: 0;
+}
+
+.sample-hero-form.homepage-newsletter h3 {
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  margin-bottom: var(--spacing-sm);
+}
+
+.sample-hero-form.homepage-newsletter > .newsletter-content > p {
+  font-size: 0.95rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.sample-hero-form.homepage-newsletter .newsletter-form {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-sm);
+}
+
+.sample-hero-form.homepage-newsletter .newsletter-form input[type="email"] {
+  width: 100%;
+}
+
+.sample-hero-form.homepage-newsletter .newsletter-button {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .sample-hero {
+    padding: calc(60px + var(--spacing-lg)) var(--landing-padding-mobile) var(--spacing-lg);
+  }
+  .sample-hero-content {
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    align-items: stretch;
+  }
+  .sample-hero-form.homepage-newsletter {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+  .sample-hero-text h1 {
+    font-size: clamp(1.75rem, 7vw, 2.25rem);
+  }
+}
