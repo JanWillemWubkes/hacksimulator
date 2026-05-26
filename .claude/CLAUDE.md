@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 138: Content SEO Plan C — OWASP Top 10 Hub-Post + Markup Fix (26 mei 2026)
+⚠️ **Never:**
+- Aannemen dat een groene content-DoD (woordcount, CTA-data-attributes, link-counts, JSON-LD, sitemap) ook HTML-structuur dekt — browsers renderen forgiving, dus een ongesloten `<div>` triggert geen JS-error en geen 404. Visuele regressie glipte door 10 groene DoD-items heen en viel pas op bij menselijke review. Tag-balans-check moet expliciet op de DoD
+- Een keyword-shortlist accepteren zonder cannibalization-grep tegen bestaande posts — 2/8 keyword-kandidaten (#1 "zonder diploma" + #4 "salaris NL") overlapten direct met `ethisch-hacker-worden.html`. 5-min check voorkwam thin-content + SERP-overlap die Google zou bestraffen
+- Een complexe regex bouwen voor een until-loop poll zonder eerst de simpele direct-check (curl + grep) te valideren — mijn `grep -zoE` hing 2.5 min tot timeout terwijl directe curl in 1 sec aantoonde dat de fix al live was. Bij polling: simpel-werkt-eerst, complex-als-nodig
+
+✅ **Always:**
+- Tag-balans-check (`grep -c '<div'` vs `grep -c '</div>'`) toevoegen aan elke blog-post DoD — 1-second sanity-check vangt deze hele klasse van ongesloten-element-bugs vóór deploy. Geplande follow-up: bake dit in `scripts/validate-blogs.sh`
+- Anker-paragrafen grep'en in bestaande posts vóór inbound-links plannen — 2/3 inbound-targets hadden al een `<abbr class="jargon">OWASP Top 10</abbr>` zonder href die ideale `<a>`-omhullings-punten zijn (organische SEO-anchor "complete OWASP Top 10 uitleg" is superior aan forced "klik hier")
+- Ground-truth-first cold-start (Sessie 137-pattern toegepast op Plan C): bevestig topic + post-aantal met user vóór schrijfwerk start — 5-min AskUserQuestion voorkwam plan-aanname over keyword-keuze en post-volume
+- Bidirectional clustering opzetten in dezelfde sessie als nieuwe hub-post — 3 inbound-edits in bestaande posts zijn maximaal 5-min werk en geven directe topical-authority-boost; geen aparte follow-up-sessie nodig
+
 ### Sessie 137: Funnel-pulse Diagnose + Lead-magnet CTA-Coverage 3→13 (26 mei 2026)
 ⚠️ **Never:**
 - Een meet-validatie-plan starten zonder eerst de ground truth te vragen aan de user — Heisenberg's "0 inschrijvingen"-onthulling falsifieerde de hele Plan B-meetcriteria-aanname. Voorkomt verspilde dashboard-runs op nul-baselines en sessie-tijd op meet-runs met voorspelbaar nul-resultaat. Cold-start checklist móét baseline-bevestiging bevatten vóór technisch werk start
@@ -198,7 +210,7 @@ Pre-Sessie 129 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
 **Rotation trigger:** Every 5 sessions (last: Sessie 136, next: Sessie 140)
-**Sessie counter:** 137
+**Sessie counter:** 138
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -251,5 +263,5 @@ Pre-Sessie 129 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
 
 ---
 
-**Last updated:** 26 mei 2026 (Sessie 137 — Funnel-pulse diagnose + Lead-magnet CTA-coverage 3→13 ✅: Plan B follow-up gepivoteerd na "0 inschrijvingen" reveal, pipeline 100% groen bevestigd end-to-end, CTA-coverage live op 8 blogposts-top + homepage + over-ons, plan-file `lead-magnet-followup.md` SUPERSEDED-banner met trigger-condities)
-**Version:** 5.10 (Sessie 137: ground-truth-first cold-start-pattern — vraag user baseline vóór meet-runs; Brevo POST consent-onafhankelijk als harder ground truth dan GA4; pulse-check via simulate success-panel toggle valideert pipeline zonder productie-pollution; delegated-listener-architectuur schaalt — één spot-check valideert N CTAs; SUPERSEDED-banner-pattern op plan-files met expliciete trigger-condities behoudt referentie zonder dode-link-risico)
+**Last updated:** 26 mei 2026 (Sessie 138 — Content SEO Plan C OWASP Top 10 hub-post ✅: 1818 woorden NL-post live met bidirectional clustering naar 3 bestaande posts, lead-magnet + Gumroad-Leerplan CTAs, sitemap-entry, Playwright smoke-test groen; **post-deploy markup-fix** voor ongesloten blog-tip div regel 175 — tag-balans-check als nieuwe DoD-item)
+**Version:** 5.11 (Sessie 138: tag-balans-check als blogpost-DoD-item — 1-second `grep -c '<div'` vs `grep -c '</div>'` vangt ongesloten-element-bugs vóór deploy; cannibalization-grep tegen bestaande posts vóór keyword-keuze — 2/8 kandidaten geschrapt door overlap; anker-paragraaf-strategie voor bidirectional clustering — bestaande `<abbr>` zonder href = ideale `<a>`-omhullings-punten met descriptive anchor; ground-truth-first cold-start uitgebreid van meet-validatie naar topic-keuze)

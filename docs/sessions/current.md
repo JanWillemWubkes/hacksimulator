@@ -4,6 +4,126 @@
 
 ---
 
+## Sessie 138: Content SEO Plan C — OWASP Top 10 Hub-Post (26 mei 2026)
+
+**Scope:** Plan C uit `monetization-C-content-seo.md` uitvoeren: 1 grondige NL-blogpost (1500-2500 woorden) met cannibalization-check, bidirectional clustering naar 3 bestaande posts, lead-magnet CTA top + Gumroad CTA mid, JSON-LD schema, sitemap-entry en Playwright productie-smoke-test. Cold-start vanuit `.claude/plans/content-seo-followup.md` (Sessie 137-handover).
+**Status:** ✅ Post live op productie + alle 10 DoD-items afgevinkt + post-deploy markup-fix toegepast en verified.
+**Duur:** 1 sessie-blok 26 mei avond.
+**Plan source:** `.claude/plans/content-seo-followup.md` → `.claude/plans/lees-claude-plans-content-seo-followup-m-snappy-pancake.md`.
+
+### Cold-start checklist + topic-selectie
+
+- `git log --oneline -10` bevestigde post-Sessie-137-state intact: top `9bbff8b docs(plans): voeg content-seo-followup plan toe voor Sessie 138 cold-start`.
+- Cannibalization-check tegen 10 bestaande blogposts geschrapt **2 van 8 keyword-kandidaten**:
+  - #1 "zonder diploma" → directe overlap met `ethisch-hacker-worden.html` "geen IT-achtergrond? Geen probleem" sectie
+  - #4 "salaris NL" → volledige salaris-sectie al in `ethisch-hacker-worden.html` (regel 411-440)
+- Aanbevolen top-3 voor Heisenberg via AskUserQuestion: OWASP Top 10 (winnaar), TryHackMe vs HackTheBox, eerste hack oefening.
+- Heisenberg's keuze: **OWASP Top 10 NL** + **1 post** (focus > volume).
+- `docs/blog-template.md` bleek verouderd (GDPR-consent-template, niet content-structuur). Referentie-post `blog/ethisch-hacker-worden.html` = ground truth voor markup-pattern.
+
+### Post-schrijven volgens template
+
+- **Slug:** `owasp-top-10-uitgelegd`, **categorie:** Concepten, **leestijd:** 11 min.
+- **6 H2's:** Wat is OWASP? + Top 10 Overzicht + 10 Risico's Toegelicht (10 H3's eronder, A01-A10) + Hoe gebruiken als beginner + Tools + Volgende Stappen.
+- **8 jargon-`<abbr>` definities:** OWASP, IDOR, plaintext, hashing, salt, XSS, threat modeling, MFA.
+- **JSON-LD `Article`** met datePublished 2026-05-26, wordCount 1818, keywords-list.
+- **2 terminal-example blokken** met `[TIP]` callouts (sqlmap + nikto).
+- **3 callouts:** `blog-tip` (na H2 §1), `blog-warning` (A03 sectie), `blog-info` (na leer-roadmap).
+- **Lead-magnet CTA top:** `[data-lead-magnet="pentest_sample"][data-cta-location="blog_owasp_top10_top"]` → `/sample-pentest.html`.
+- **Gumroad CTA mid:** `[data-product-id="eogjdk"][data-cta-location="blog_owasp_top10_mid"]` → 12-Weken Leerplan. Productkeuze: Pentest Playbook al voor lead-magnet (geen dubbele CTA voor zelfde product), Bundle te generiek voor framework-content.
+
+### Bidirectional clustering (3 inbound + 4 outbound)
+
+**Outbound** (in nieuwe post → bestaande posts):
+- `sql-injection-uitgelegd.html` in A03 sectie
+- `wachtwoord-beveiliging.html` in A07 sectie
+- `cybersecurity-tools.html` in Tools-sectie
+- `ethisch-hacker-worden.html` in Volgende Stappen + Related Articles grid
+
+**Inbound** (3 bestaande posts → nieuwe post):
+- `sql-injection-uitgelegd.html`: bestaande `<abbr>` "OWASP Top 10" → uitgebreid met `<a>` "complete OWASP Top 10 uitleg" naast
+- `cybersecurity-tools.html`: bestaande `<abbr>` "OWASP Top 10" → omhuld met `<a href="owasp-top-10-uitgelegd.html">` (één link, abbr-jargon intact)
+- `wachtwoord-beveiliging.html`: nieuwe zin toegevoegd "Zwakke wachtwoord-opslag valt onder A07 in de OWASP Top 10..."
+
+**Anker-paragraaf-strategie loont:** 2/3 inbound-doelen hadden al een `<abbr class="jargon">OWASP Top 10</abbr>` zonder href — ideale omhullings-punten. Geen forced "klik hier"-tekst nodig, organische descriptive anchors.
+
+### DoD-validatie groen
+
+| Item | Status | Bron |
+|---|---|---|
+| 1500-2500 woorden NL | ✅ 1818 | python3 regex-extract `.blog-post-content` |
+| JSON-LD Article schema | ✅ | grep + browser parse |
+| Lead-magnet CTA top | ✅ | grep `data-cta-location="blog_owasp_top10_top"` |
+| Gumroad CTA mid | ✅ | grep `data-cta-location="blog_owasp_top10_mid"` |
+| 3 outbound internal links | ✅ 4 (1 boven minimum) | DOM-query `.blog-post-content a[href$=".html"]` |
+| 3 inbound links | ✅ | grep -l in 3 bestaande posts |
+| blog/index.html post-card | ✅ bovenaan grid | grep |
+| sitemap.xml entry (priority 0.7) | ✅ | grep |
+| Playwright smoke-test groen | ✅ | beide CTAs vuren `gtag('event', ...)` |
+| Bundle delta <35 KB | ✅ 30 KB | du -sb |
+
+### Playwright productie-smoke-test (Sessie 137-pattern)
+
+- `browser_navigate` naar productie-URL → HTTP 200, title correct.
+- `browser_evaluate` met dataLayer-hook (consent-onafhankelijke ground truth, Sessie 137-learning): beide CTAs vuren correct.
+  - Lead-magnet: `gtag('event', 'lead_magnet_cta_click', {magnet_id: 'pentest_sample', location: 'blog_owasp_top10_top', label: 'Download de gratis sample'})`
+  - Gumroad: `gtag('event', 'product_cta_click', {product_id: 'eogjdk', location: 'blog_owasp_top10_mid', label: 'Bekijk het Leerplan'})`
+- Inbound-link validatie op `sql-injection-uitgelegd.html`: `a[href*="owasp-top-10-uitgelegd"]` aanwezig met descriptive anchor "complete OWASP Top 10 uitleg".
+- 9 console-errors zijn AdSense CSP-noise op `csi.gstatic.com` — pre-existing site-breed (Sessie 130-learning bevestigd), geen relatie met deze post.
+
+### POST-DEPLOY FIX — Ongesloten `<div class="blog-tip">`
+
+Heisenberg meldt na deploy: "de tip-sectie beslaat bijna de hele blog". Diagnose binnen 30 sec:
+
+- `grep -c '<div'` = 23, `grep -c '</div>'` = 22 → **één ongesloten div**
+- Referentie-post `ethisch-hacker-worden.html` = 26/26 (perfect balanced)
+- Read regel 168-182: regel 175 gebruikt `</p>` waar `</div>` had moeten staan
+- Andere 2 callouts (`blog-warning` 251, `blog-info` 364) correct gesloten
+
+**Browser-rendering is forgiving** — een ongesloten `<div>` triggert geen JS-error en geen 404. De `blog-tip`-styling (border + padding + background) erfde door over alle volgende content (7 H2's, 10 H3's, terminal-examples, AdSense-blocks) tot een ouderlijk `</div>` het opving. Daarom passeerden alle 10 DoD-items groen maar viel de visuele regressie pas op bij menselijke review.
+
+**Fix:** 1-character edit regel 175: `</p>` → `</div>`. Tag-balans hersteld naar 23/23.
+
+**Productie-verificatie:** `tip.children.length` = 2 (alleen 2 `<strong>` voor ASVS + Testing Guide), `tip.innerText.length` = 273 chars (precies de 3 tip-zinnen), `h2sInsideTip` = `[]`, `secondH2OutsideTip` = true (H2 "De OWASP Top 10 (2021) — Overzicht" valt nu BUITEN de tip).
+
+**Background-poll-anti-pattern:** mijn until-loop met `grep -zoE` regex hing 2.5 min tot timeout terwijl directe curl + grep in 1 sec aantoonde dat de fix al live was. Les: bij polling op deploy-status, valideer eerst de simpele check (curl + visueel grep) voordat je een complexe regex in een loop bouwt.
+
+### Commits
+
+- `5742949` — feat(blog): voeg OWASP Top 10 hub-post toe met bidirectional clustering (6 files, +562 inserts, +1 nieuwe file 30 KB)
+- `60f2089` — fix(blog): sluit blog-tip div correct in owasp-top-10-uitgelegd (1 file, +1/-1 lijnen)
+
+### Files Changed
+
+**Sessie totaal: 6 files in 2 commits**
+
+- `blog/owasp-top-10-uitgelegd.html` (new file, 30 KB, 1818 woorden, +1 fix-edit)
+- `blog/sql-injection-uitgelegd.html` (+1 lijn, inbound-link uitbreiding bij bestaande `<abbr>`)
+- `blog/cybersecurity-tools.html` (+1 lijn, `<a>` omhulling rond bestaande `<abbr>` OWASP Top 10)
+- `blog/wachtwoord-beveiliging.html` (+1 zin, nieuwe paragraaf-extensie met A07-context)
+- `blog/index.html` (+16 lijnen, nieuwe post-card bovenaan grid)
+- `sitemap.xml` (+6 lijnen, nieuwe `<url>` entry priority 0.7)
+
+### Geparkeerd voor latere sessies
+
+- **`scripts/validate-blogs.sh` tag-balans-check** — voeg `grep -c '<div'` vs `grep -c '</div>'` toe per blog file om deze klasse van bugs vóór deploy te vangen. Sessie 138 had het binnen 1 second gevangen.
+- **2e Plan C-post** — keuze tussen TryHackMe vs HackTheBox NL of "eerste hack oefening". Wacht op meet-baseline post-OWASP-launch.
+- **8-weken meetcheck `blog_owasp_top10_*` GA4-events** (≥3/week per location, ≥50 organic sessies/maand, top-10 Google NL voor target keyword).
+- **AdSense CSP-tuning** — voeg `csi.gstatic.com` toe aan `connect-src` in `netlify.toml` of `_headers` om de cumulatieve 9 console-errors per page-view weg te krijgen. Pre-existing site-breed issue, niet sessie-specifiek.
+- **Track A meet-validatie + Track B Brevo support-ticket** — Sessie 137-carryover, trigger-condities ongewijzigd (Brevo ≥5 contacten OF GA4 ≥50 page_views/maand).
+
+### Architecturale validatie
+
+**Cannibalization-check als 5-min pre-write-stap loont** — 2/8 keywords geschrapt voorkwam thin-content + SERP-overlap met bestaande posts. ROI-tijd: 5 min check → uren bespaard aan posts die Google zou negeren.
+
+**Anker-paragraaf-grep loont voor bidirectional clustering** — 2/3 inbound-doelen hadden al een `<abbr>` "OWASP Top 10" zonder href. Die werden organische `<a>`-omhullingspunten zonder content-rewrites. Descriptive anchor "complete OWASP Top 10 uitleg" is SEO-superior aan generieke "klik hier".
+
+**Tag-balans-check is een blind-spot in mijn DoD-process** — 10 DoD-items passeerden groen (content + CTAs + JSON-LD + bidirectional + sitemap + Playwright) maar visuele regressie viel pas op bij menselijke review. Browser-rendering is forgiving: ongesloten `<div>` = geen JS-error, geen 404. Sessie 130-learning bevestigd in nieuwe context: code-review + menselijke visual-check > geautomatiseerde test voor visuele edge cases.
+
+**Delegated-listener-architectuur (Sessie 131-leerling) bevestigd op derde sessie achter elkaar** — twee nieuwe `data-cta-location`-waardes (`blog_owasp_top10_top` + `blog_owasp_top10_mid`) werken automatisch correct in `cta-tracking.js` zonder JS-changes. Zero-cost-schaling pattern werkt nu over 15 CTAs op productie.
+
+---
+
 ## Sessie 137: Funnel-pulse Diagnose + Lead-magnet CTA-Coverage 3→13 (26 mei 2026)
 
 **Scope:** Plan B follow-up afronden (`.claude/plans/lead-magnet-followup.md`): meetcriteria-snapshot Track A (≥20 signups/wk, ≥10% CTR, ≥1 sale) + Brevo support-ticket Track B (mobile-PDF prefetch-bug). Plan-aanname (meetbare 4-weken-baseline) gefalsificeerd door Heisenberg's cold-start onthulling "0 inschrijvingen op samples of nieuwsbrief" — sessie pivoteerde naar funnel-pulse-diagnose + CTA-coverage-uitbreiding.
