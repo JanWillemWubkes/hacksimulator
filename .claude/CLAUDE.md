@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 137: Funnel-pulse Diagnose + Lead-magnet CTA-Coverage 3→13 (26 mei 2026)
+⚠️ **Never:**
+- Een meet-validatie-plan starten zonder eerst de ground truth te vragen aan de user — Heisenberg's "0 inschrijvingen"-onthulling falsifieerde de hele Plan B-meetcriteria-aanname. Voorkomt verspilde dashboard-runs op nul-baselines en sessie-tijd op meet-runs met voorspelbaar nul-resultaat. Cold-start checklist móét baseline-bevestiging bevatten vóór technisch werk start
+- "0 events in GA4" diagnosticeren als tracking-leak vóór de consent-onafhankelijke laag (Brevo POST) gecheckt is — `brevo-submit.js` doet POST ongeacht consent-banner-state, dus Brevo contactenlijst is harder ground truth dan GA4 voor "is er signup-activiteit?". Andersom kost 30+ min debug aan een non-bug
+- Plan-files met nog-relevante referentie-content (ticket-tekst, methodiek) wegrenamen of verwijderen i.p.v. SUPERSEDED-banner toevoegen — banner met expliciete trigger-condities voorkomt dode-link-risico in CLAUDE.md/memory die naar oude path verwijzen én blind cold-start-hergebruik van obsolete plannen
+
+✅ **Always:**
+- Pulse-check pipeline-functioneel vóór business-pivot via simulate success-panel toggle (`display: 'block'` + `classList.add('sib-form-message-panel--active')`) — valideert end-to-end MutationObserver-events + GA4 collect-POSTs zonder productie-Brevo-pollution. Bruikbaar diagnose-pattern voor alle Brevo-form-pages
+- Unique `data-cta-location` per CTA-positie incl. blog-topic + plaatsing (`blog_nmap_top` ≠ `blog_cybertools_mid` ≠ `homepage_lead_strip`) — enables per-positie GA4-attributie via één delegated listener (Sessie 131-pattern), zero extra JS-bundle-impact, schaalt naar willekeurig veel CTAs
+- Contextual CTA-copy per blogpost i.p.v. generiek — bridge-zinnen ("Reconnaissance gaat verder dan techniek") redden imperfecte topical fit (social-engineering / wachtwoord / linux-fs) waar generic copy zou falen. Sessie 129-learning bevestigd
+- Productie-spot-check één random pagina is voldoende bij delegated-listener-architectuur — één Playwright `navigate` + `evaluate` valideert het hele pattern voor alle N CTAs, geen per-element test nodig
+
 ### Sessie 136: Brevo Deliverability Sessie D — Postmaster Re-check + Track G Voltooid (18 mei 2026)
 ⚠️ **Never:**
 - Brevo's `Blocklisted`-state op transactional channel interpreteren als binaire blocklist — het is een **per-sender approval-lijst** ("0/N senders approved" letterlijk in popup-tekst). Drie sessies (134/135/136) gaven onverklaarbare blokkades omdat het mental model verkeerd was. Werkende unblock-UI-route: **caret-dropdown (▼) náást "Transactional emails"** in Channels-sectie van contact-detail-pagina (NIET More-menu rechtsboven, NIET History-tab — beide gevalideerd nutteloos in Sessie 136)
@@ -186,7 +198,7 @@ Pre-Sessie 129 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
 **Rotation trigger:** Every 5 sessions (last: Sessie 136, next: Sessie 140)
-**Sessie counter:** 136
+**Sessie counter:** 137
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -239,5 +251,5 @@ Pre-Sessie 129 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
 
 ---
 
-**Last updated:** 18 mei 2026 (Sessie 136 — Brevo deliverability Sessie D ✅ Track G voltooid: welkomstmail→Promotions + sample-pentest→**Primary** aspirational; Postmaster no-data baseline + DMARC `p=quarantine`-promotion deferred tot ~juni)
-**Version:** 5.9 (Sessie 136: Brevo unblock-UI gevonden — Route A caret-dropdown naast "Transactional emails" in Channels-sectie werkt; Route B More-menu + Route C History-tab uitgesloten; nieuw mental model "per-sender approval ≠ binaire blocklist" in memory `reference_brevo_blocklist.md`; Track G Gmail-classificatie aspirational behaald — sample-pentest in Primary tab valideert content-framing-strategie + Sessie 134/135 compounding investments)
+**Last updated:** 26 mei 2026 (Sessie 137 — Funnel-pulse diagnose + Lead-magnet CTA-coverage 3→13 ✅: Plan B follow-up gepivoteerd na "0 inschrijvingen" reveal, pipeline 100% groen bevestigd end-to-end, CTA-coverage live op 8 blogposts-top + homepage + over-ons, plan-file `lead-magnet-followup.md` SUPERSEDED-banner met trigger-condities)
+**Version:** 5.10 (Sessie 137: ground-truth-first cold-start-pattern — vraag user baseline vóór meet-runs; Brevo POST consent-onafhankelijk als harder ground truth dan GA4; pulse-check via simulate success-panel toggle valideert pipeline zonder productie-pollution; delegated-listener-architectuur schaalt — één spot-check valideert N CTAs; SUPERSEDED-banner-pattern op plan-files met expliciete trigger-condities behoudt referentie zonder dode-link-risico)

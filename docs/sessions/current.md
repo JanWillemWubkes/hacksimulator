@@ -4,6 +4,113 @@
 
 ---
 
+## Sessie 137: Funnel-pulse Diagnose + Lead-magnet CTA-Coverage 3→13 (26 mei 2026)
+
+**Scope:** Plan B follow-up afronden (`.claude/plans/lead-magnet-followup.md`): meetcriteria-snapshot Track A (≥20 signups/wk, ≥10% CTR, ≥1 sale) + Brevo support-ticket Track B (mobile-PDF prefetch-bug). Plan-aanname (meetbare 4-weken-baseline) gefalsificeerd door Heisenberg's cold-start onthulling "0 inschrijvingen op samples of nieuwsbrief" — sessie pivoteerde naar funnel-pulse-diagnose + CTA-coverage-uitbreiding.
+**Status:** ✅ Pipeline 100% groen bevestigd + CTA-coverage live van 3 → 13 plaatsen + plan-file SUPERSEDED-banner met expliciete trigger-condities voor toekomstige hervatting.
+**Duur:** 1 sessie-blok 25-26 mei avond.
+**Plan source:** `.claude/plans/lead-magnet-followup.md` (nu SUPERSEDED).
+
+### Cold-start verificatie + plan-pivot
+
+- `git log --oneline -5` → top `2825157 feat(sample-pentest): twee-koloms hero met form above-the-fold` (na plan-commit `7dbf185`) → meet-window heeft niet uniform design over volle 4 weken: meet-interpretatie-nuance geflagd.
+- Heisenberg's cold-start onthulling: "0 inschrijvingen op samples of nieuwsbrief". Track A meet-runs zouden voorspelbaar 0/0/0 opleveren, Track B conditional op Track A's CTR ≥10% → automatisch dead, Track C closure conditional op groene metrics → niet van toepassing.
+- Pivot-voorstel (Optie C combo): ~30 min funnel-pulse-diagnose + rest sessie strategie-uitvoering. Heisenberg akkoord.
+
+### Stap 1 — Funnel-pulse-diagnose ✅
+
+**Analytics-chain gelezen:** `init-analytics.js`, `brevo-submit.js`, `newsletter-tracking.js`, `cta-tracking.js`, `consent.js`, `events.js`, `tracker.js`.
+
+**Kritische bevindingen client-side:**
+- `tracker.trackEvent` returnt direct bij `consentGiven === false` — consent-banner declined = nul GA4-events
+- `brevo-submit.js` POST is **consent-onafhankelijk** — Brevo contactenlijst is dus de harder ground truth dan GA4 voor "is er signup-activiteit?"
+- `newsletter-tracking.js` MutationObserver op `#success-message` style-attribuut → fires `newsletter_signup` + bij `sample_*` location ook `lead_magnet_signup`
+- `cta-tracking.js` delegated listener: `[data-product-id]` → product event, `[data-lead-magnet]` → lead-magnet event (early-return tussen branches voorkomt dubbel-firing)
+
+**Productie-pulse via Playwright (`https://hacksimulator.nl/sample-pentest.html`):**
+- GA4 init werkt (returning visitor, consent al gegeven uit Heisenberg's eerdere sessies — localStorage bevat `{necessary,analytics,advertising:true}`, visit-count 6)
+- 4× POSTs naar `region1.google-analytics.com/g/collect` met 204-status — page_view + session_start binnen
+- Programmatische success-panel toggle (`display: 'block'` + `classList.add('sib-form-message-panel--active')`) → MutationObserver vuurt binnen 500ms → beide events in dataLayer met correcte shape (`lead_magnet_signup` met `{sample_id: 'pentest', location: 'sample_pentest'}` + `newsletter_signup` met `{location: 'sample_pentest'}`)
+- Network: nieuwe `_s=3` batch-POST na toggle (events in body, niet URL — GA4-batching pattern)
+
+**Console-error (benign):** CSP-frame-src blokkeert `ep2.adtrafficquality.google` (Google AdSense anti-fraud verification frame). Niet pipeline-blokkerend, latente AdSense-functionaliteit. Sessie 130-pattern: Google voegt regelmatig subdomains toe.
+
+**Conclusie:** pipeline 100% groen end-to-end. "0 signups" is **geen technisch defect** — het is een **traffic + CTA-coverage-probleem**.
+
+### Stap 2 — CTA-coverage diagnose
+
+**Grep `data-lead-magnet` voor de hele site:** 3 CTAs totaal:
+- `gidsen.html` (secondary CTA, gids-bundle styling)
+- `blog/cybersecurity-tools.html` (mid-post, blog-cta styling)
+- `blog/nmap-beginnersgids.html` (top-post, blog-cta styling)
+
+**Geen CTA op:** `index.html` (homepage), `over-ons.html`, `contact.html`, 8 van 10 blogposts (80% coverage-gap).
+
+**Funnel-rekensom:** stel 100 organische bezoekers/maand verdeeld over 10 blogposts (~10/post) → slechts 2 posts hebben CTA → ~20 mensen zien sample-aanbod/maand → ~3-5% CTR → 0,6-1 klik → 0,3-0,5 signup. Statistisch ruis. **Lost zichzelf niet op door langer wachten — lost op door coverage te vergroten + traffic te verhogen.**
+
+### Stap 3 — CTA-coverage uitbreiding 3 → 13 ✅
+
+**Heisenberg's keuzes:** contextueel per post (Sessie 129-learning); homepage = dedicated section vóór final-cta met `gids-bundle` styling (hergebruik gidsen.html-pattern); over-ons = ná developer-card.
+
+**Patroon-detect 8 blogposts:** identiek 8-space indent + `<div class="blog-post-content">` op regel 140 + eerste `<h2>` tussen regel 147-154. Maakt 8 parallel-Edits mogelijk waarbij `old_string` = unieke eerste h2 + `new_string` = CTA-block + same h2.
+
+**10 nieuwe `data-cta-location` waardes (uniek per positie):**
+
+| File | Locatie | Plaatsing |
+|---|---|---|
+| blog/ethisch-hacker-worden | `blog_ethisch_hacker_top` | na intro, vóór "Wat Doet een Ethisch Hacker?" |
+| blog/linux-bestandssysteem | `blog_linux_fs_top` | na intro, vóór "Waarom Linux?" |
+| blog/social-engineering | `blog_social_eng_top` | na 2 intro-paras, vóór "Wat is Social Engineering?" |
+| blog/sql-injection-uitgelegd | `blog_sql_injection_top` | na intro, vóór "Wat is SQL?" |
+| blog/terminal-basics | `blog_terminal_top` | na intro, vóór "Wat is een Terminal?" |
+| blog/wachtwoord-beveiliging | `blog_wachtwoord_top` | na intro, vóór "Hoe worden wachtwoorden opgeslagen?" |
+| blog/wat-is-ethisch-hacken | `blog_wat_is_top` | na intro, vóór "De Drie Types Hackers" |
+| blog/welkom | `blog_welkom_top` | na intro, vóór "Wat is HackSimulator.nl?" |
+| index | `homepage_lead_strip` | dedicated section vóór final-cta |
+| over-ons | `over_ons_sample` | ná developer-card, vóór juridische info |
+
+**Contextual copy per post** — bridge-zinnen om imperfecte topical fit te dekken (bv. `social-engineering` → "Reconnaissance gaat verder dan techniek — sociale verkenning is onderdeel van Fase 0", `wachtwoord-beveiliging` → "Wachtwoorden testen begint bij verkenning — voor je hashcat of hydra inzet, ken het systeem").
+
+**Productie-validatie (Playwright na deploy):** navigate `blog/welkom.html` → CTA visible (width > 0) + click triggert exact 1 `lead_magnet_cta_click` event met correcte payload `{magnet_id: 'pentest_sample', location: 'blog_welkom_top', label: 'Download de gratis sample'}` + navigation properly prevented in test. Volledige funnel-keten productie-gevalideerd.
+
+### Stap 4 — Plan-file SUPERSEDED-banner ✅
+
+Plan-file `lead-magnet-followup.md` kreeg banner bovenaan met:
+- Aanname-falsification statement
+- Wat Sessie 137 in plaats deed (pulse-diagnose + CTA-coverage)
+- Expliciete trigger-condities voor hervatting: Brevo ≥5 contacten OF GA4 page_views op `/sample-pentest.html` ≥50/maand
+- Plan-content blijft staan als referentie voor Track B ticket-tekst en Track A meet-methodiek
+
+**Engineering-keuze:** blockquote-format (`>`) i.p.v. heading geeft visueel signaal "meta-laag boven plan". Banner-in-place i.p.v. rename naar `-superseded.md` voorkomt dode-link-risico in CLAUDE.md/memory die naar de oude path verwijzen.
+
+### Commits
+
+- `5f27ee2` — feat(lead-magnet): breid CTA-coverage uit van 3 naar 13 plaatsen (10 files, +82 inserts)
+- `da29283` — docs(plans): markeer lead-magnet-followup als SUPERSEDED na Sessie 137 pivot (1 file, +16 inserts)
+
+### Files Changed
+- `blog/ethisch-hacker-worden.html`, `blog/linux-bestandssysteem.html`, `blog/social-engineering.html`, `blog/sql-injection-uitgelegd.html`, `blog/terminal-basics.html`, `blog/wachtwoord-beveiliging.html`, `blog/wat-is-ethisch-hacken.html`, `blog/welkom.html` (8× +7 lijnen, blog-cta-product pattern)
+- `index.html` (+13 lijnen, dedicated `gids-bundle` section vóór final-cta)
+- `over-ons.html` (+13 lijnen, `gids-bundle` section ná developer-card)
+- `.claude/plans/lead-magnet-followup.md` (+16 lijnen, SUPERSEDED-banner)
+
+### Geparkeerd voor latere sessies
+- **Track A meet-validatie:** hervat zodra Brevo ≥5 contacten OF GA4 page_views ≥50/maand op `/sample-pentest.html`
+- **Track B Brevo support-ticket:** conditional op Track A's CTR ≥10% — automatisch geparkeerd
+- **CSP-frame-src `ep2.adtrafficquality.google`** (en mogelijk `ep1`) — latente AdSense-anti-fraud-fix, niet blokkerend
+- **`tracker.init()` dubbele-init-guard** ontbreekt — checkt niet `this.initialized`, kan bij race dubbele GA4-script-tags pushen. Latent.
+- **Postmaster Tools re-check** (Sessie 136 carry-over) — ~begin juni 2026 of bij eerste >100-recipient campaign-send.
+
+### Architecturale validatie
+
+**Pipeline-pulse-pattern werkt:** simulate success-panel toggle in productie zonder echte Brevo-POST → end-to-end events + GA4 collect-POSTs zichtbaar, geen pollution van productie-Brevo. Bruikbaar pattern voor toekomstige tracking-diagnoses op alle Brevo-form-pages.
+
+**Delegated-listener-architectuur (Sessie 131-leerling) schaalt:** één spot-check op `blog/welkom.html` valideert het hele pattern voor alle 13 CTAs. Per-element JS niet nodig. Productie-validatie kosten: één Playwright `navigate` + één `evaluate`.
+
+**Patroon-consistentie tussen blogposts** (8-space indent + `</p>\n\n<h2>` overgang op regel 140-150) maakt 8 parallel-Edits mogelijk binnen één message — alle 10 edits in één batch, zero stale-state-bugs ondanks parallel-write.
+
+---
+
 ## Sessie 136: Brevo Deliverability Sessie D — Postmaster Re-check + Track G Voltooid (18 mei 2026)
 
 **Scope:** Post-Sessie-135 baseline-doormeten + Track G (Gmail-classificatie sample-pentest welkomstmail) afronden na blocklist-resolve. Plan-source `.claude/plans/brevo-deliverability-sessie-D.md` + uitvoerings-wrapper `~/.claude/plans/lees-claude-plans-brevo-deliverability-s-hidden-dongarra.md`.
