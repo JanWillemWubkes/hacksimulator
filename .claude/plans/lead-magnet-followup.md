@@ -1,5 +1,21 @@
 # Plan: Lead Magnet Follow-up — Meetcriteria-snapshot + Mobile-PDF Support-ticket
 
+> ## ⚠️ SUPERSEDED 26 mei 2026 (Sessie 137)
+>
+> **Plan-aanname gefalsificeerd:** dit plan ging uit van een meetbare 4-weken-baseline; Brevo toont **0 contacten** dus Track A meet-runs leveren voorspelbaar nul op. Track B is voorwaardelijk op Track A's CTR ≥10% en daarmee automatisch op pauze. Track C (closure) was conditional op alle 3 metrics groen → eveneens niet van toepassing.
+>
+> **Wat Sessie 137 in plaats deed:**
+> - Funnel-pulse-diagnose — pipeline 100% groen bevestigd end-to-end (GA4 init + Brevo POST + MutationObserver op `#success-message` + delegated CTA-listener + collect-POST 204). Conclusie: "0 signups" is **geen technisch defect**, het is een traffic + CTA-coverage-probleem
+> - **CTA-coverage uitbreiding van 3 → 13 plaatsen** (8 blogposts top-of-article + homepage vóór final-cta + over-ons ná developer-pitch), commit `5f27ee2`, live in productie sinds 25 mei 2026. Funnel-bereik gaat van ~20% naar >95% van organische page-views
+>
+> **Hervat dit plan (Track A + B) pas wanneer:**
+> - Brevo ≥5 contacten op hoofd-lijst (gemeten via app.brevo.com → Contacts), **OF**
+> - GA4 page_views op `/sample-pentest.html` ≥50/maand (gemeten via Reports → Engagement → Pages)
+>
+> Onder beide drempels blijft het meet-werk noise-meten en valt het mobile-PDF-bug-impact ruim onder de support-ticket-investering. Plan-content hieronder blijft integraal staan als referentie voor de Brevo ticket-tekst en de Track A meet-methodiek (mocht volume materieel worden).
+>
+> ---
+
 ## Status
 
 **Cold start hier in nieuwe sessie.** Plan B (`monetization-B-lead-magnet.md`) is technisch COMPLETE (alle 8 Definition of Done-items). Sessie 136 (18 mei 2026) voltooide Track G (Gmail-classificatie sample-pentest → Primary tab). Twee resterende open items uit het lead-magnet-werk:
