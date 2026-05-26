@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>OWASP Top 10 Uitgelegd voor Beginners | HackSimulator.nl</title>
+  <meta name="description" content="Wat is de OWASP Top 10? Complete Nederlandse uitleg van de 10 belangrijkste webapplicatie-kwetsbaarheden van 2021, met voorbeelden en praktische tips voor beginners.">
+  <meta name="keywords" content="OWASP top 10, OWASP nederlands, webapplicatie security, kwetsbaarheden, SQL injection, XSS, SSRF, ethisch hacken, pentest, web security beginner">
+  <meta name="author" content="HackSimulator.nl">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://hacksimulator.nl/blog/owasp-top-10-uitgelegd.html">
+  <meta property="og:title" content="OWASP Top 10 Uitgelegd voor Beginners | HackSimulator.nl">
+  <meta property="og:description" content="Wat is de OWASP Top 10? Complete Nederlandse uitleg van de 10 belangrijkste webapplicatie-kwetsbaarheden van 2021, met voorbeelden en praktische tips voor beginners.">
+  <meta property="article:published_time" content="2026-05-26">
+  <meta property="article:author" content="HackSimulator.nl">
+  <meta property="article:section" content="Concepten">
+  <meta property="og:locale" content="nl_NL">
+  <meta property="og:site_name" content="HackSimulator.nl">
+  <meta property="og:image" content="https://hacksimulator.nl/assets/og-image.png">
+
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="HackSimulator.nl Blog" href="/feed.xml">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://hacksimulator.nl/blog/owasp-top-10-uitgelegd.html">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#0d1117">
+
+  <!-- Preconnect: reduce DNS/TLS latency for critical third-party origins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../styles/main.css?v=114">
+  <link rel="stylesheet" href="../styles/blog.css?v=115">
+  <link rel="stylesheet" href="../styles/mobile.css?v=115" media="screen and (max-width: 768px)">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
+
+  <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
+  <script data-cookieconsent="ignore">
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied',
+      'wait_for_update': 500
+    });
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6345664385525701"
+       crossorigin="anonymous"
+       ></script>
+
+  <!-- Structured Data - JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "OWASP Top 10 Uitgelegd voor Beginners",
+    "description": "Complete Nederlandse uitleg van de OWASP Top 10 (2021) webapplicatie-kwetsbaarheden met voorbeelden en praktische tips voor beginners.",
+    "datePublished": "2026-05-26",
+    "dateModified": "2026-05-26",
+    "author": {
+      "@type": "Organization",
+      "name": "HackSimulator.nl"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "HackSimulator.nl",
+      "url": "https://hacksimulator.nl/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://hacksimulator.nl/blog/owasp-top-10-uitgelegd.html"
+    },
+    "inLanguage": "nl-NL",
+    "keywords": "OWASP top 10, webapplicatie security, kwetsbaarheden, SQL injection, XSS, SSRF, ethisch hacken, pentest",
+    "wordCount": 1818,
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://hacksimulator.nl/assets/og-image.png",
+      "width": 1200,
+      "height": 630
+    }
+  }
+  </script>
+
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
+
+  <!-- Navigation (Component Injection) -->
+  <div id="navbar-placeholder">
+    <noscript>
+      <nav class="noscript-nav" role="navigation">
+        <a href="../">HackSimulator.nl</a>
+        <a href="../terminal.html">Start Simulator</a>
+        <a href="../blog/">Blog</a>
+        <a href="../commands/">Commands</a>
+        <a href="../woordenlijst.html">Woordenlijst</a>
+        <a href="../over-ons.html">Over Ons</a>
+        <a href="../contact.html">Contact</a>
+      </nav>
+    </noscript>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main-content" class="blog-container">
+    <article class="blog-post">
+      <!-- Post Header -->
+      <header class="blog-post-header">
+        <h1 class="blog-post-title">OWASP Top 10 Uitgelegd voor Beginners</h1>
+        <div class="blog-post-meta">
+          <time datetime="2026-05-26">26 mei 2026</time>
+          <span>11 min</span>
+          <span class="category-badge">Concepten</span>
+        </div>
+      </header>
+
+      <!-- Post Content -->
+      <div class="blog-post-content">
+        <p>
+          Als je serieus aan ethisch hacken wilt beginnen, kom je er niet onderuit: de
+          <abbr class="jargon" title="OWASP: Open Worldwide Application Security Project - non-profit organisatie die wereldwijde standaarden zet voor webapplicatie-beveiliging" tabindex="0"><strong>OWASP</strong></abbr> Top 10.
+          Het is de wereldwijde standaard voor de gevaarlijkste webapplicatie-kwetsbaarheden, en bijna elke pentest-rapportage,
+          security-audit en bug-bounty-platform refereert ernaar. Maar wat staat er nou precies in, en hoe gebruik je het als beginner?
+          In deze gids loop je per categorie door de OWASP Top 10 van 2021, met Nederlandse voorbeelden en concrete vervolgstappen.
+        </p>
+
+        <!-- Lead Magnet CTA: gratis Pentest Playbook sample -->
+        <div class="blog-cta blog-cta-product">
+          <h3>Klaar om OWASP-kwetsbaarheden in de praktijk te vinden?</h3>
+          <p>Krijg gratis 9 pagina's uit het Pentest Playbook met de Fase 0 reconnaissance-checklist &mdash; de eerste stap voor elke OWASP-test. Direct in je inbox.</p>
+          <a href="/sample-pentest.html" class="blog-cta-button" data-lead-magnet="pentest_sample" data-cta-location="blog_owasp_top10_top">Download de gratis sample</a>
+        </div>
+
+        <h2>Wat is OWASP en Waarom de Top 10?</h2>
+        <p>
+          OWASP staat voor <strong>Open Worldwide Application Security Project</strong>, een internationale non-profit organisatie
+          opgericht in 2001. OWASP publiceert gratis tools, documentatie en standaarden om webapplicaties veiliger te maken.
+          De bekendste publicatie is de OWASP Top 10: een lijst met de tien meest kritieke beveiligingsrisico's voor webapplicaties,
+          gebaseerd op data van honderden organisaties en duizenden gemelde kwetsbaarheden.
+        </p>
+
+        <p>
+          De lijst wordt elke vier jaar bijgewerkt. De versie van 2021 is op het moment van schrijven nog de meest recente
+          (een 2025-update is in voorbereiding). Waarom is deze lijst zo belangrijk? Omdat hij <em>de</em> gezamenlijke taal vormt
+          tussen developers, security-engineers, ethisch hackers en compliance-officers. Als jij weet wat "A03: Injection"
+          betekent, kan je met elke security-professional ter wereld een gesprek voeren over webkwetsbaarheden.
+        </p>
+
+        <div class="blog-tip">
+          De OWASP Top 10 is geen complete lijst van alle kwetsbaarheden. Het is een prioriteits-lijst: de meest voorkomende en
+          impactvolle risico's. Voor diepere kennis bekijk je later de OWASP <strong>Application Security Verification Standard</strong>
+          (ASVS) of de uitgebreide <strong>OWASP Testing Guide</strong>.
+        </p>
+
+        <h2>De OWASP Top 10 (2021) &mdash; Overzicht</h2>
+        <p>
+          Hier is de complete lijst in volgorde. De ranking is gebaseerd op een combinatie van prevalentie (hoe vaak komt het voor),
+          detecteerbaarheid (hoe makkelijk te vinden), exploiteerbaarheid (hoe makkelijk uit te buiten) en technische impact.
+        </p>
+
+        <ul>
+          <li><strong>A01</strong> &mdash; Broken Access Control <em>(was #5 in 2017)</em></li>
+          <li><strong>A02</strong> &mdash; Cryptographic Failures <em>(voorheen "Sensitive Data Exposure")</em></li>
+          <li><strong>A03</strong> &mdash; Injection <em>(inclusief XSS sinds 2021)</em></li>
+          <li><strong>A04</strong> &mdash; Insecure Design <em>(nieuw in 2021)</em></li>
+          <li><strong>A05</strong> &mdash; Security Misconfiguration</li>
+          <li><strong>A06</strong> &mdash; Vulnerable and Outdated Components</li>
+          <li><strong>A07</strong> &mdash; Identification and Authentication Failures</li>
+          <li><strong>A08</strong> &mdash; Software and Data Integrity Failures <em>(nieuw in 2021)</em></li>
+          <li><strong>A09</strong> &mdash; Security Logging and Monitoring Failures</li>
+          <li><strong>A10</strong> &mdash; Server-Side Request Forgery (SSRF) <em>(nieuw in 2021)</em></li>
+        </ul>
+
+        <p>
+          Drie categorieën zijn nieuw in 2021: A04, A08 en A10. Dat zegt iets over hoe het dreigingslandschap verschuift &mdash;
+          van "implementatiefouten" naar "ontwerpfouten" en complexere supply-chain-risico's. Hieronder een korte uitleg per categorie.
+        </p>
+
+        <h2>De 10 Risico's Toegelicht</h2>
+
+        <h3>A01: Broken Access Control</h3>
+        <p>
+          <strong>Wat:</strong> Gebruikers krijgen toegang tot data of functies waar ze geen rechten voor hebben. Denk aan een URL
+          met <code>?user_id=42</code> die je naar <code>?user_id=43</code> kan veranderen om iemand anders' gegevens te zien
+          (een klassieke <abbr class="jargon" title="Insecure Direct Object Reference: kwetsbaarheid waarbij een gebruiker via URL-parameters of formulier-input toegang krijgt tot objecten van andere gebruikers" tabindex="0"><strong>IDOR</strong></abbr>).
+          Of een admin-pagina die niet controleert of je werkelijk admin bent, alleen of je <em>ingelogd</em> bent.
+        </p>
+        <p>
+          <strong>Impact:</strong> Hoog. Aanvaller kan andere accounts overnemen, gevoelige data lezen of admin-functies uitvoeren.
+          Volgens OWASP heeft 94% van de geteste applicaties een vorm van broken access control.
+        </p>
+
+        <h3>A02: Cryptographic Failures</h3>
+        <p>
+          <strong>Wat:</strong> Gevoelige data (wachtwoorden, creditcards, persoonsgegevens) wordt slecht of niet versleuteld
+          opgeslagen of verstuurd. Voorbeelden: wachtwoorden opgeslagen in <abbr class="jargon" title="Plaintext: leesbare, onversleutelde tekst zonder enige bescherming" tabindex="0"><strong>plaintext</strong></abbr>,
+          gebruik van verouderde algoritmes als MD5 of SHA1, missende HTTPS, of zwakke
+          <abbr class="jargon" title="Hashing: eenrichtings-cryptografische functie die data omzet naar een vaste lengte, niet omkeerbaar" tabindex="0"><strong>hashing</strong></abbr>
+          zonder <abbr class="jargon" title="Salt: willekeurige data toegevoegd aan een wachtwoord vóór hashing om rainbow-table aanvallen te voorkomen" tabindex="0"><strong>salt</strong></abbr>.
+        </p>
+        <p>
+          <strong>Impact:</strong> Bij een datalek liggen gegevens direct op straat. Zelfs als een database wordt gestolen,
+          maakt goede cryptografie het verschil tussen "incident gemeld, geen schade" en "alle wachtwoorden gekraakt binnen een week".
+        </p>
+
+        <h3>A03: Injection</h3>
+        <p>
+          <strong>Wat:</strong> De applicatie vertrouwt user-input zonder validatie, waardoor een aanvaller commando's of queries kan injecteren.
+          De bekendste vorm is <a href="sql-injection-uitgelegd.html">SQL injection</a>, maar er bestaan ook OS command injection,
+          LDAP injection, en sinds 2021 valt ook <abbr class="jargon" title="Cross-Site Scripting: aanval waarbij kwaadaardige scripts worden geïnjecteerd in webpagina's die andere gebruikers bezoeken" tabindex="0"><strong>XSS</strong></abbr>
+          (cross-site scripting) onder deze categorie.
+        </p>
+
+        <div class="terminal-example">
+          <div class="prompt">$ sqlmap -u "https://target.com/product?id=1" --batch</div>
+          <div class="output">
+[INFO] testing connection to the target URL
+[INFO] heuristic test shows that GET parameter 'id'    ← Parameter is kwetsbaar
+       might be injectable (possible DBMS: 'MySQL')
+
+[CRITICAL] Parameter 'id' is vulnerable                ← Bevestigd: SQL injection mogelijk
+[INFO] back-end DBMS: MySQL 5.7
+[INFO] retrieved: users, products, orders              ← Aanvaller leest tabellen
+
+[TIP] Voorkom dit met prepared statements + ORM. Nooit user-input concatenaten in SQL!
+          </div>
+        </div>
+
+        <div class="blog-warning">
+          Injection-kwetsbaarheden behoren tot de meest voorkomende en gevaarlijkste van de hele lijst. Test alleen
+          op systemen waar je schriftelijke toestemming voor hebt &mdash; sqlmap draaien op willekeurige websites is
+          strafbaar onder artikel 138ab Sr (Computercriminaliteit III).
+        </div>
+
+        <h3>A04: Insecure Design</h3>
+        <p>
+          <strong>Wat:</strong> Fouten die al in het <em>ontwerp</em> van de applicatie zitten, niet in de implementatie. Een typisch voorbeeld:
+          een "wachtwoord vergeten"-functie die een 4-cijferige code naar e-mail stuurt zonder rate-limiting &mdash; zelfs perfecte code
+          kan deze ontwerpkeuze niet veilig maken. De oplossing zit aan de tekentafel, niet in een security-patch.
+        </p>
+        <p>
+          <strong>Impact:</strong> Wisselend, maar lastig op te lossen. Een ontwerpfout patchen kost vaak een herontwerp van een hele feature.
+          Daarom is <abbr class="jargon" title="Threat modeling: systematische analyse van mogelijke aanvalsvectoren in het ontwerpstadium van een applicatie" tabindex="0"><strong>threat modeling</strong></abbr>
+          vroeg in het ontwikkelproces zo waardevol.
+        </p>
+
+        <h3>A05: Security Misconfiguration</h3>
+        <p>
+          <strong>Wat:</strong> Default-instellingen die nooit aangepast zijn, debug-modes die in productie aanstaan, onnodige features
+          die open staan, of cloud-storage (S3-buckets) die per ongeluk publiek bereikbaar is. Tools als
+          <a href="/commands/#cmd-nikto"><code>nikto</code></a> scannen specifiek op dit type problemen.
+        </p>
+        <p>
+          <strong>Impact:</strong> Vaak laaghangend fruit voor aanvallers. Een Elasticsearch-cluster op de open internet,
+          een phpinfo()-pagina die in productie staat, of een admin-panel op <code>/admin</code> zonder authenticatie &mdash;
+          alle drie zijn echte voorbeelden uit recente datalekken.
+        </p>
+
+        <h3>A06: Vulnerable and Outdated Components</h3>
+        <p>
+          <strong>Wat:</strong> Je applicatie gebruikt libraries, frameworks of dependencies met bekende kwetsbaarheden. Denk aan een oude
+          Log4j-versie (de beruchte <em>Log4Shell</em>-bug uit 2021), een verouderd WordPress-thema, of een npm-pakket met een gemelde CVE.
+          Het probleem zit dus niet in je eigen code, maar in iets wat je hebt geïmporteerd.
+        </p>
+        <p>
+          <strong>Impact:</strong> Soms catastrofaal. Log4Shell trof miljoenen servers wereldwijd binnen dagen na openbaarmaking.
+          Tools als <code>npm audit</code>, <code>dependabot</code> of <code>OWASP Dependency-Check</code> automatiseren het scannen
+          op kwetsbare componenten.
+        </p>
+
+        <h3>A07: Identification and Authentication Failures</h3>
+        <p>
+          <strong>Wat:</strong> Zwakke logica rond inloggen, sessies en wachtwoorden. Bijvoorbeeld: geen rate-limiting op login-pogingen
+          (brute-force-aanvallen mogelijk), session-tokens die na uitloggen geldig blijven, of geen ondersteuning voor
+          <abbr class="jargon" title="Multi-Factor Authentication: extra inlogstap naast je wachtwoord, bijvoorbeeld een code uit een app of SMS" tabindex="0"><strong>MFA</strong></abbr>.
+          Zie ook onze diepgaande gids over <a href="wachtwoord-beveiliging.html">wachtwoordbeveiliging</a>.
+        </p>
+        <p>
+          <strong>Impact:</strong> Account takeover (ATO) is de directe consequentie. Bij grote breaches komt zwakke authenticatie
+          structureel terug als root cause.
+        </p>
+
+        <h3>A08: Software and Data Integrity Failures</h3>
+        <p>
+          <strong>Wat:</strong> Updates, configuraties of code worden geaccepteerd zonder dat hun integriteit gecontroleerd wordt.
+          Denk aan een CI/CD-pipeline die onbeveiligde dependencies inlaadt, of een auto-update-mechanisme dat geen handtekening verifieert.
+          Dit is hoe de beruchte <strong>SolarWinds-aanval</strong> mogelijk werd: aanvallers injecteerden malware in een trusted update-kanaal.
+        </p>
+        <p>
+          <strong>Impact:</strong> Supply-chain-aanvallen treffen niet één organisatie, maar iedereen die de gecompromitteerde software gebruikt.
+          De impact schaalt mee met de populariteit van het component.
+        </p>
+
+        <h3>A09: Security Logging and Monitoring Failures</h3>
+        <p>
+          <strong>Wat:</strong> Niet detecteren wat er gebeurt. Geen logs, logs zonder relevante events, of logs die nooit
+          bekeken worden. Volgens onderzoek duurt het gemiddeld <em>200+ dagen</em> voor een breach gedetecteerd wordt &mdash;
+          meestal door een externe partij, niet door eigen monitoring.
+        </p>
+        <p>
+          <strong>Impact:</strong> Indirect maar enorm. Een aanvaller die maanden ongedetecteerd in je netwerk zit, kan veel meer
+          schade aanrichten dan eentje die binnen 24 uur ontdekt wordt. Goede logging is hoe je het verschil maakt tussen
+          "incident" en "ramp".
+        </p>
+
+        <h3>A10: Server-Side Request Forgery (SSRF)</h3>
+        <p>
+          <strong>Wat:</strong> De server haalt op verzoek van een gebruiker een externe resource op, zonder de URL te valideren.
+          Een aanvaller misbruikt dit om de server interne resources te laten benaderen die anders niet bereikbaar zijn
+          &mdash; denk aan cloud-metadata-endpoints (<code>169.254.169.254</code> op AWS) of interne databases.
+        </p>
+        <p>
+          <strong>Impact:</strong> Bij cloud-omgevingen vaak een opstap naar volledige compromittering: via SSRF haal je
+          IAM-credentials op, daarmee val je het rest van de cloud-account aan. Capital One's 2019-breach (100 miljoen records) begon zo.
+        </p>
+
+        <!-- AdSense In-Article -->
+        <div class="ad-container ad-unit ad-in-article" style="display: none;">
+          <p class="ad-disclaimer">Advertisement</p>
+          <ins class="adsbygoogle"
+               style="display:block; text-align:center;"
+               data-ad-layout="in-article"
+               data-ad-format="fluid"
+               data-ad-client="ca-pub-6345664385525701"
+               data-ad-slot="5971972080"></ins>
+        </div>
+
+        <h2>Hoe Gebruik je Deze Lijst als Beginner?</h2>
+        <p>
+          Tien categorieën tegelijk leren is overweldigend. Een realistische aanpak: begin met A03 (Injection) en A07
+          (Authentication). Dat zijn de meest voorkomende én de meest leerzame &mdash; je leert ineens over user-input,
+          databases, sessies en wachtwoord-opslag. Vanuit dat fundament zijn de andere categorieën makkelijker te plaatsen.
+        </p>
+
+        <p><strong>Concrete leer-volgorde voor de eerste 3 maanden:</strong></p>
+        <ol>
+          <li><strong>Maand 1:</strong> Begrijp HTTP, GET/POST, cookies en sessies. Speel met <a href="/commands/#cmd-curl"><code>curl</code></a> om requests handmatig te bouwen. Lees de OWASP-pagina voor A03 en A07.</li>
+          <li><strong>Maand 2:</strong> Installeer <strong>DVWA</strong> (Damn Vulnerable Web App) of <strong>OWASP Juice Shop</strong> &mdash; bewust kwetsbare oefenapps. Werk A01 t/m A03 door, met video-walkthroughs erbij.</li>
+          <li><strong>Maand 3:</strong> Maak een account op TryHackMe of HackTheBox en zoek "OWASP Top 10" leerpaden. Begin met begeleide rooms voordat je solo aan CTF's begint.</li>
+        </ol>
+
+        <div class="blog-info">
+          De grootste valkuil: alles tegelijk willen begrijpen. Een ethisch hacker met 5 jaar ervaring heeft nog steeds gaten
+          in zijn kennis. Het gaat om <em>diepte op de juiste categorie voor jouw target</em>, niet om elke categorie even goed kennen.
+          Specialiseer op basis van je werk: web-pentester focust op A01-A05, cloud-engineer op A05/A06/A08/A10.
+        </div>
+
+        <!-- Gumroad CTA: 12-Weken Leerplan (contextual placement na leer-roadmap) -->
+        <div class="blog-cta blog-cta-product">
+          <h3>Wil je OWASP Top 10 systematisch beheersen?</h3>
+          <p>Het 12-Weken Leerplan brengt je van OWASP-theorie naar hands-on labs &mdash; week voor week, met opdrachten en checklists.</p>
+          <a href="https://hacksimulator.gumroad.com/l/eogjdk" class="blog-cta-button" target="_blank" rel="noopener noreferrer" data-product-id="eogjdk" data-cta-location="blog_owasp_top10_mid">Bekijk het Leerplan</a>
+        </div>
+
+        <h2>Tools en Hands-on Oefenen</h2>
+        <p>
+          De OWASP-categorieën zijn theorie; je leert ze pas echt door ze in een lab te zien. Een aantal gratis tools en omgevingen
+          die elke beginnende web-tester gebruikt:
+        </p>
+
+        <ul>
+          <li><strong>Burp Suite Community Edition</strong> &mdash; HTTP-proxy waarmee je requests onderschept en aanpast. Onmisbaar voor handmatig OWASP-testen. Zie ook onze gids over <a href="cybersecurity-tools.html">essentiële security-tools</a>.</li>
+          <li><strong>OWASP ZAP</strong> &mdash; Open-source alternatief voor Burp, door OWASP zelf ontwikkeld. Goed voor automatische scans.</li>
+          <li><strong>sqlmap</strong> &mdash; Automatiseert SQL injection-detectie en -exploitatie (zie <a href="sql-injection-uitgelegd.html">SQL injection uitgelegd</a>).</li>
+          <li><strong>DVWA / Juice Shop / WebGoat</strong> &mdash; Bewust kwetsbare oefen-applicaties, lokaal te draaien in Docker.</li>
+          <li><strong>PortSwigger Web Security Academy</strong> &mdash; Gratis online labs per OWASP-categorie, gemaakt door de Burp Suite-bouwers.</li>
+        </ul>
+
+        <div class="terminal-example">
+          <div class="prompt">$ nikto -h https://target.com</div>
+          <div class="output">
+- Nikto v2.5.0
++ Target: https://target.com
++ Server: Apache/2.4.41 (Ubuntu)             ← Versie-info gelekt (A05)
++ /admin/: Admin panel detected               ← Mogelijke A01 indien open
++ X-Frame-Options: missing                    ← Misconfig (A05)
++ Cookies set without HttpOnly flag           ← Session-risico (A02/A07)
+
+[TIP] nikto detecteert vooral A05-issues. Combineer met Burp voor diepere tests.
+          </div>
+        </div>
+
+        <p>
+          In de <a href="../terminal.html">HackSimulator</a> kun je tools als <a href="/commands/#cmd-nikto"><code>nikto</code></a>,
+          <a href="/commands/#cmd-nmap"><code>nmap</code></a> en <a href="/commands/#cmd-curl"><code>curl</code></a> alvast risicovrij oefenen
+          voordat je naar echte test-omgevingen overstapt.
+        </p>
+
+        <!-- AdSense In-Article 2 -->
+        <div class="ad-container ad-unit ad-in-article" style="display: none;">
+          <p class="ad-disclaimer">Advertisement</p>
+          <ins class="adsbygoogle"
+               style="display:block; text-align:center;"
+               data-ad-layout="in-article"
+               data-ad-format="fluid"
+               data-ad-client="ca-pub-6345664385525701"
+               data-ad-slot="5270665903"></ins>
+        </div>
+
+        <h2>Volgende Stappen</h2>
+        <p>
+          De OWASP Top 10 is geen eindpunt &mdash; het is je startpunt voor webapp-security. Als je dit document onder de knie hebt,
+          ben je klaar voor verdiepende OWASP-publicaties (ASVS, Testing Guide), platforms als TryHackMe en uiteindelijk
+          certificeringen die OWASP-kennis testen, zoals de OSCP, eWPT of CompTIA PenTest+.
+        </p>
+
+        <p>Praktische vervolgstappen vanaf nu:</p>
+        <ul>
+          <li>Bookmark <a href="https://owasp.org/Top10/" target="_blank" rel="noopener noreferrer">owasp.org/Top10/</a> &mdash; dé authoritative bron, gratis</li>
+          <li>Lees de detail-pagina van A03 op de OWASP-site, en zoek dan ons <a href="sql-injection-uitgelegd.html">artikel over SQL injection</a> voor een hands-on uitleg</li>
+          <li>Start met Juice Shop in Docker en werk de eerste 5 challenges af (1-2 uur)</li>
+          <li>Lees onze <a href="ethisch-hacker-worden.html">carrièregids voor ethisch hackers</a> als je dit als beroep wilt doen</li>
+          <li>Volg de OWASP Nederland-meetups (Amsterdam, Utrecht) &mdash; gratis en zeer toegankelijk voor beginners</li>
+        </ul>
+
+        <div class="blog-cta">
+          <h3>Klaar om met OWASP-tools aan de slag te gaan?</h3>
+          <p>
+            Type <code>nikto</code>, <code>sqlmap</code> of <code>nmap</code> in de HackSimulator en zie hoe deze tools
+            OWASP-kwetsbaarheden in beeld brengen. Gebruik <code>man nikto</code> voor uitleg, of <code>leerpad</code> voor je voortgang.
+          </p>
+          <a href="../terminal.html" class="blog-cta-button">Start met oefenen</a>
+        </div>
+
+      </div>
+
+      <!-- Support Banner -->
+      <div class="blog-support-banner">
+        <h3>Vond je dit artikel nuttig?</h3>
+        <p>HackSimulator.nl is een onafhankelijk project &mdash; gebouwd door &#233;&#233;n developer. Met een koffie help je de simulator gratis houden voor iedereen.</p>
+        <div class="blog-support-actions">
+          <a href="https://ko-fi.com/hacksimulator" class="blog-cta-button" target="_blank" rel="noopener noreferrer">Steun met een koffie</a>
+          <a href="../#newsletter" class="blog-support-link">Of schrijf je in voor updates</a>
+        </div>
+      </div>
+
+      <!-- Related Articles -->
+      <section class="related-articles">
+        <h2>Verder Lezen</h2>
+        <div class="related-grid">
+          <a href="sql-injection-uitgelegd.html" class="related-card">
+            <span class="related-category">Gevorderden</span>
+            <h3>SQL Injection Uitgelegd</h3>
+            <p>Diepere duik in OWASP A03: hoe SQL-injection werkt, hoe sqlmap exploits automatiseert, en hoe je het voorkomt.</p>
+            <span class="related-meta">9 min leestijd</span>
+          </a>
+          <a href="wachtwoord-beveiliging.html" class="related-card">
+            <span class="related-category">Tools</span>
+            <h3>Wachtwoordbeveiliging: Hoe Hackers Kraken</h3>
+            <p>OWASP A07 in detail: hashing, salting, brute-force en hoe je onkraakbare wachtwoorden bouwt.</p>
+            <span class="related-meta">8 min leestijd</span>
+          </a>
+          <a href="cybersecurity-tools.html" class="related-card">
+            <span class="related-category">Bronnen</span>
+            <h3>5 Essenti&euml;le Security Tools</h3>
+            <p>Burp Suite, sqlmap, Nmap en meer &mdash; de must-know tools voor OWASP-testing.</p>
+            <span class="related-meta">7 min leestijd</span>
+          </a>
+          <a href="ethisch-hacker-worden.html" class="related-card">
+            <span class="related-category">Carri&egrave;re</span>
+            <h3>Hoe Word je Ethisch Hacker?</h3>
+            <p>Het volledige carri&egrave;repad: skills, certificeringen (CEH, OSCP) en salarisverwachtingen in Nederland.</p>
+            <span class="related-meta">10 min leestijd</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Post Footer -->
+      <footer class="blog-post-footer">
+        <p>Vragen of feedback? Laat het ons weten op <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+        <p><a href="index.html">&larr; Terug naar blog overzicht</a></p>
+      </footer>
+    </article>
+  </main>
+
+  <!-- AdSense Footer Banner (M5.5 Blog Monetization) -->
+  <div id="adsense-footer" class="ad-container ad-unit" style="display: none;">
+      <p class="ad-disclaimer">Advertisement</p>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-6345664385525701"
+           data-ad-slot="1674341955"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+  </div>
+
+  <!-- Footer (Component Injection) -->
+  <div id="footer-placeholder">
+    <noscript>
+      <footer class="noscript-footer">
+        <p>&copy; 2026 HackSimulator.nl</p>
+        <nav>
+          <a href="../assets/legal/privacy.html">Privacy</a>
+          <a href="../assets/legal/terms.html">Voorwaarden</a>
+          <a href="../assets/legal/cookies.html">Cookies</a>
+          <a href="../over-ons.html">Over Ons</a>
+          <a href="../contact.html">Contact</a>
+        </nav>
+      </footer>
+    </noscript>
+  </div>
+
+  <!-- Theme Initialization (prevents flash) - external for CSP compliance -->
+  <script src="/src/init-theme.js"></script>
+
+  <!-- Component Injection (external script for CSP compliance) -->
+  <script src="/src/init-components.js" type="module"></script>
+
+  <!-- Analytics & Consent (external for CSP compliance) -->
+  <script src="/src/init-analytics.js" type="module"></script>
+
+  <!-- Reading Progress (blog-specific) -->
+  <script src="../src/ui/blog-theme.js" type="module"></script>
+</body>
+</html>
