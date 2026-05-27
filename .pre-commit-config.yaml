@@ -3,3 +3,12 @@ repos:
     rev: v8.21.2
     hooks:
       - id: gitleaks
+
+  - repo: local
+    hooks:
+      - id: validate-blogs
+        name: Validate blog HTML structure (init-analytics + JSON-LD + tag-balans)
+        entry: ./scripts/validate-blogs.sh
+        language: script
+        files: ^blog/.*\.html$
+        pass_filenames: false
