@@ -122,6 +122,21 @@ Heisenberg meldt na deploy: "de tip-sectie beslaat bijna de hele blog". Diagnose
 
 **Delegated-listener-architectuur (Sessie 131-leerling) bevestigd op derde sessie achter elkaar** — twee nieuwe `data-cta-location`-waardes (`blog_owasp_top10_top` + `blog_owasp_top10_mid`) werken automatisch correct in `cta-tracking.js` zonder JS-changes. Zero-cost-schaling pattern werkt nu over 15 CTAs op productie.
 
+### Addendum: Operationalisatie tag-balans-learning (27 mei 2026)
+
+Directe follow-up op het "geparkeerd voor latere sessies"-item `scripts/validate-blogs.sh tag-balans-check`. Drie commits achter elkaar:
+
+- `baca677` — `chore(scripts): modernize validate-blogs.sh met 3 structurele checks`. Pre-Sessie-131 GDPR-script (4 verouderde consent-scripts met relatieve paths) vervangen door 3 relevante checks: `init-analytics.js` aanwezig + JSON-LD schema in `<head>` + HTML tag-balans (`<div>` count == `</div>` count). Plus `set -e` verwijderd zodat alle posts gecheckt worden, niet abort op eerste fout. Resultaat: 12/12 blog HTML's groen waar het oude script op alle 12 failde.
+- `bbe1942` — `docs(blog): herschrijf blog-template.md naar moderne pattern + activeer validate-blogs pre-commit hook`. Template-doc volledig herschreven (v1.0 → v2.0) met moderne stack (init-analytics, JSON-LD, dual-CTA, bidirectional clustering, tag-balans-discipline, tone-consistentie, productie-smoke-test pattern). Plus local hook `validate-blogs` toegevoegd aan `.pre-commit-config.yaml` met file-filter `^blog/.*\.html$` en `pass_filenames: false`.
+
+**Negatieve test bevestigd:** dummy `blog/_test-broken.html` met ongesloten `<div>` → hook FAIL met exit 1 en `TAG-BALANS: <div>=1, </div>=0 (diff=1)` detail. Cleanup ok, alle 12 posts daarna weer groen.
+
+**Zero-friction bij non-blog commits bewezen:** commit `bbe1942` zelf wijzigde geen `blog/*.html` → hook `(no files to check) Skipped`. File-filter werkt.
+
+**Known limitation gedocumenteerd in template:** tag-balans-check is grep-based, geen HTML-parser. False positives mogelijk bij HTML-strings in tekst-content (eerste test-bestand bevatte `</div>` als tekst-content → diff = 0 → false PASS). Voor lopende NL-content robuust; bij twijfel Playwright structure-check post-deploy als vangnet. Later mogelijk upgrade naar `html5validator` of BeautifulSoup als blog-posts complexer worden.
+
+**Effect:** future-cold-start-sessies krijgen correct moderne template-bron (geen verspilde tijd aan ontdekking dat oude verouderd is) + automatische vangnet voor de Sessie 138-bug-klasse (ongesloten elementen) zonder discipline-afhankelijkheid.
+
 ---
 
 ## Sessie 137: Funnel-pulse Diagnose + Lead-magnet CTA-Coverage 3→13 (26 mei 2026)
