@@ -1,10 +1,12 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 6 april 2026 (Sessie 125 — SEO/Legal/A11y polish)
-**Status:** M5 Testing & Launch Phase - ✅ **LIVE on Netlify!** | M5.5 Monetization uitgebreid met Gumroad products
+**Laatst bijgewerkt:** 27 mei 2026 (Sessie 139 — doc-ownership refactor + bundle budget herijking)
+**Status:** ✅ LIVE on Netlify | M5 Testing 91% | M5.5 Monetization deep (AdSense + Ko-fi + Brevo + Gumroad + Lead magnet) | M6 Tutorial 88% | M7 Gamification 100% | Blog content-pijler 10 posts live
 **Verantwoordelijk:** Development Team
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
+
+> **Scope van dit document:** Architectuur, tech rationale, design system, security/privacy strategie, performance principes, deployment. Voor milestone-percentages, task-counts, sprints, live metrics en monetization-stack-status → `TASKS.md` (single source of truth). Voor recent learnings → `.claude/CLAUDE.md`. Document-ownership-mapping in §Document Ownership.
 
 ---
 
@@ -486,19 +488,27 @@ Remove cookie banner → Better UX
 
 ### Bundle Size Budget
 
-**Budgetmodel (Sessie 100 — herdefinieerd voor multi-page site):**
+**Budgetmodel (Sessie 139 — runtime vs SEO/content gescheiden, na bundle-explosie blog/lead-magnet):**
 
-| Scope | Budget | Huidig (na minificatie) | Status |
-|-------|--------|------------------------|--------|
-| Terminal App Core (JS + core CSS + terminal.html) | 400 KB | ~340 KB | ✅ Binnen budget |
-| Per pagina (HTML + page-specifieke CSS) | 50 KB | ~20-45 KB | ✅ Binnen budget |
-| Totale site (exclusief afbeeldingen) | 1000 KB | ~809 KB | ✅ Binnen budget |
+Site is sinds Sessie 100 (~983 KB) gegroeid naar **~2196 KB unminified** door content-investering (blog 369 KB met 10 posts + JSON-LD, screenshots/OG image 700+ KB). Origineel "totale site <1000 KB" budget bewust losgelaten ten faveure van SEO-content. Runtime-budget blijft strikt.
+
+| Scope | Budget | Status |
+|-------|--------|--------|
+| **Terminal App Core (runtime van terminal.html)** — JS + core CSS + terminal.html geladen bij terminal-load | **<400 KB** (strikt) | ⏭️ Verificatie gepland (zie TASKS.md Volgende Stappen) |
+| **Per pagina** — HTML + page-specifieke CSS (homepage, blog post, sample-pentest) | <50 KB per pagina | ✅ Binnen budget |
+| **SEO/content-pijler** — blog/ + assets/ (screenshots + OG image + sample-PDF) | Geen budget (bewust losgelaten) | ⚠️ Groei monitoren bij elke Lighthouse-audit |
+
+**Rationale voor budget-split (Sessie 139):**
+- Runtime (wat gebruikers laden bij terminal-gebruik) is de UX-kritieke maat → blijft strikt
+- SEO/content (wat Google crawlt) is groei-as → budgetloos, mits Lighthouse Performance ≥90 blijft
+- Live metrics per directory: zie TASKS.md §Huidige Focus
 
 **Optimization Strategy:**
 - Netlify asset processing: CSS/JS/HTML minificatie + image compression
 - Bronbestanden blijven leesbaar in repo (geen in-place minificatie)
 - Gzip/Brotli compressie via Netlify CDN
 - No images in terminal UI (text-only, 0 KB)
+- Blog images: lazy-loaded (`loading="lazy"`) — onder-the-fold geen impact op LCP
 
 ### Monitoring
 
@@ -513,124 +523,23 @@ Remove cookie banner → Better UX
 
 ---
 
-## 💰 Revenue Streams & Economics
+## 💰 Revenue Streams & Economics (architecturale principes)
 
-### Hosting Costs
+**Hosting strategie (architecturaal):**
+- MVP/Phase 1: Static site op Netlify, €1.25/maand (bandwidth only)
+- Phase 3 (conditional, alleen bij MRR >€200/maand validatie): +backend (Netlify Functions of Railway €10/maand) + managed Postgres/Supabase (€50/maand)
+- **Trigger voor backend-investering:** 60-80 uur dev-tijd alleen bij gevalideerde Phase 1 MRR
 
-**Current (MVP):**
-- **Netlify:** €1.25/month (Pro features unused, only bandwidth)
-- **Total:** €1.25/month
+**Monetization-architectuur (5 streams, allen client-side voor MVP):**
+1. **AdSense** display-ads (passieve revenue, GDPR-consent vereist via eigen banner)
+2. **Ko-fi** donaties (lightweight iframe, geen consent vereist)
+3. **Brevo newsletter** (lead generation → product-funnel)
+4. **Gumroad products** (extern hosted checkout, embedded buy-buttons)
+5. **Lead magnet** (Sample Pentest PDF → Brevo opt-in → upsell-flow)
 
-**Phase 3 (Backend, conditional):**
-- **Netlify:** €1.25/month
-- **Backend Hosting:** €10/month (Railway/Fly.io or Netlify Functions)
-- **Database:** €50/month (PostgreSQL managed or Supabase)
-- **Total:** €61.25/month
+**Break-even principe:** Dev-tijd is gemodelleerd op €50/uur. Phase 3 backend-build (60-80 uur, ~€3000-4000) wordt alleen geïnvesteerd bij ROI <5 maanden bij >5% conversie.
 
----
-
-### Phase 1 Revenue (Month 1-3)
-
-**Components (live — Sessie 117-118):**
-- AdSense (10 units): €50-150/month — ✅ Live
-- Ko-fi donaties: €10-50/month — ✅ Live
-- Newsletter signup: lead generation, conversie later — ✅ Live
-- ~~Affiliates~~: ❌ Afgewezen, niet meer actief
-
-**Total:** €60-200/month (zonder affiliates)
-**Net Profit:** €58.75-198.75/month (after €1.25 hosting)
-
----
-
-### Phase 2 Revenue (Month 4-6)
-
-**Components:**
-- Phase 1 streams: €80-300/month
-- Sponsorships: €200-1000/month
-
-**Total:** €280-1300/month
-**Net Profit:** €278.75-1298.75/month (after hosting)
-
----
-
-### Phase 3 Revenue (Month 7-12) - **CONDITIONAL**
-
-**Trigger:** If Phase 1 revenue >€200/month after 3 months
-
-**Components:**
-- Phase 1+2 streams: €280-1300/month
-- Freemium subscriptions: €300-1500/month
-- Enterprise licenses: €50-300/month (monthly amortized)
-
-**Total:** €630-3100/month
-**Net Profit:** €568.75-3038.75/month (after €61.25 hosting)
-
----
-
-### Break-Even Analysis
-
-**Development Cost (MVP + Phase 1):**
-- MVP: 280 hours
-- Phase 1 (M5.5): 17 hours
-- **Total:** 297 hours × €50/hour = **€14,850**
-
-**Break-Even Timeline:**
-| Monthly Net Profit | Break-Even Time |
-|--------------------|-----------------|
-| €300/month         | 50 months       |
-| €1000/month        | 15 months       |
-| €2000/month        | 7 months        |
-
----
-
-### Decision Points
-
-**Month 3 Evaluation:**
-- **If revenue >€200/month:** Proceed to Phase 3 backend build (60-80 hours investment = €3000-4000)
-- **If revenue €100-200/month:** Implement Phase 2 sponsorships, defer Phase 3
-- **If revenue <€100/month:** PAUSE monetization, focus on traffic growth (SEO, content marketing, partnerships) instead
-
-**Phase 3 Backend Investment Justification:**
-- Only invest 60-80 hours if MRR (Monthly Recurring Revenue) from Phase 1 validates market demand
-- Backend enables €300-1500/month additional revenue (freemium subscriptions)
-- ROI: 3-5 months if conversion rate >5%
-
----
-
-### Revenue Projections
-
-**Conservative Scenario:**
-| Month  | Phase        | Revenue    | Cumulative |
-|--------|-------------|------------|------------|
-| Month 1  | Phase 1      | €80        | €80        |
-| Month 3  | Phase 1      | €150       | €450       |
-| Month 6  | Phase 2      | €300       | €1,350     |
-| Month 12 | Phase 3      | €630       | €6,390     |
-
-**Optimistic Scenario:**
-| Month  | Phase        | Revenue    | Cumulative |
-|--------|-------------|------------|------------|
-| Month 1  | Phase 1      | €150       | €150       |
-| Month 3  | Phase 1      | €300       | €750       |
-| Month 6  | Phase 2      | €1000      | €4,750     |
-| Month 12 | Phase 3      | €2000      | €19,750    |
-
----
-
-### Cost Structure Summary
-
-**Fixed Costs (Monthly):**
-- MVP (M0-M5): €1.25/month (Netlify)
-- Phase 3 Backend: +€60/month (total €61.25/month)
-
-**Variable Costs:**
-- Development time (one-time): €14,850 (MVP + Phase 1)
-- Phase 3 Backend (one-time): €3,000-4,000 (conditional)
-
-**Revenue Streams:**
-- Passive (Phase 1): €80-300/month
-- Content-driven (Phase 2): €280-1300/month
-- Subscription-based (Phase 3): €630-3100/month (conditional)
+→ **Actuele revenue-projecties, scenario-tabellen, Phase 1/2/3 maandelijkse targets en break-even tijdlijnen:** zie TASKS.md `## 💰 Monetization-roadmap` (zodra geconsolideerd; tot die tijd staan oude projecties in commit-historie).
 
 ---
 
@@ -744,112 +653,53 @@ const DEBUG_MODE = false;
 
 ---
 
-## 📅 Roadmap & Fases
+## 📅 Roadmap & Fases (high-level architectuur)
 
-### Fase 1: MVP (Maand 1-3) - 🔵 IN UITVOERING (79.0%) - **LIVE!**
+> Dit is een high-level fase-overzicht voor architecturale context. Voor actuele milestone-percentages, task-counts, sprints en open items: zie `TASKS.md` (single source of truth).
 
-**Status:** 275/325 tasks completed (84.6% totaal project scope)
-**MVP-only Progress:** M0-M4 (100%), M5 (41/45 - 91%), M5.5 (8/10 - 80%)
-**M5.5 Monetization:** 🔵 In uitvoering — Pivot naar AdSense + Ko-fi + Newsletter (affiliate afgewezen, Sessie 117)
-**Live URL:** https://hacksimulator.nl/
-**GitHub:** https://github.com/JanWillemWubkes/hacksimulator
+### Fase 1: MVP (M0-M5.5) — ✅ LIVE
+**Architecturale scope:** Vanilla JS/CSS client-side terminal simulator + virtual filesystem + 41 commands + 3-tier help system + onboarding + analytics (GA4) + legal compliance + monetization-stack (AdSense + Ko-fi + Brevo + Gumroad + Lead magnet).
 
-> **Note:** Totale project scope (295 taken) omvat MVP (M0-M5.5: 153 taken) + Post-MVP milestones (M6-M9: 142 taken). Voor gedetailleerde takenlijst met subtasks, zie `TASKS.md`. Dit is een high-level overzicht.
+### Fase 2: Tutorials & Scaling (M6 + M8)
+**Architecturale scope:** Tutorial state-machine + scenario-registry pattern + Help paging system (conditional bij 50+ commands) + Plausible migratie (privacy-first, cookie-loos).
 
-**Week 1-2: Foundation** - ✅ VOLTOOID (M0+M1)
-- [x] Project setup (structuur, Git)
-- [x] Terminal engine (core)
-- [x] Virtual filesystem (basis)
-- [x] 7 system commands
+### Fase 3: Gamification (M7) — ✅ VOLTOOID
+**Architecturale scope:** Challenge engine + badge-manager + certificate-generator + dashboard + leaderboard. Lokale persistentie via localStorage (`hacksim_gamification`).
 
-**Week 3-4: Filesystem Commands** - ✅ VOLTOOID (M2)
-- [x] 11 filesystem commands
-- [x] localStorage persistence
-- [x] Reset functionaliteit
-
-**Week 5-6: Network & Security** - ✅ VOLTOOID (M3)
-- [x] 6 network commands
-- [x] 5 security commands
-- [x] 3-tier help system
-
-**Week 7-8: UX & Polish** - ✅ VOLTOOID (M4)
-- [x] Onboarding flow
-- [x] Mobile optimalisaties
-- [x] Legal disclaimers
-- [x] Analytics setup
-
-**Week 9-10: Testing & Launch** - 🔵 IN PROGRESS (M5) - ✅ **DEPLOYED!**
-- [x] GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
-- [x] Netlify deployment (https://hacksimulator.nl/)
-- [x] Performance optimization (<3s load: ~2.0s LCP, bundle: ~983KB → ~809KB na Netlify minificatie)
-- [x] Lighthouse audit (100/100/92/100) - Performance 100, Accessibility 100, Best Practices 92, SEO 100
-- [ ] Beta testing (5+ testers) - TO DO
-- [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge) - TO DO
-
-### Fase 2: Tutorials (Maand 4-6)
-**Doel:** Guided learning scenarios + Command system scaling
-
-- [x] Tutorial command (framework) — ✅ Sessie 103-104
-- [x] 3 scenario's: recon, webvuln, privesc — ✅ Sessie 103
-- [x] Progress tracking — ✅ Sessie 103 (localStorage persistence)
-- [ ] **Help Command Interactive Paging** (conditional: when 50+ commands)
-  - SPACE/Q navigation pattern (bash `less` style)
-  - Page indicators: "Page 1/3", "-- More --"
-  - Keyboard handlers: SPACE (next page), Q (quit), Esc (exit)
-  - Architecture ready (modular functions from Sessie 36)
-  - Trigger condition: Total command count ≥ 50
-  - Estimated time: 6-8 uur (state machine + keyboard + UX testing)
-- [ ] Migratie naar Plausible
-
-### Fase 3: Gamification (Maand 7-12) — ✅ M7 Phase 1-6 VOLTOOID
-**Doel:** Challenges en certificaten
-
-- [x] Challenge system — ✅ M7 Phase 1: 15 challenges, 3 moeilijkheidsniveaus
-- [x] Badge/achievement system — ✅ M7 Phase 2-3: 21 badges, unlock hooks
-- [x] Certificaat generator — ✅ M7 Phase 4: download + clipboard
-- [x] Dashboard command — ✅ M7 Phase 5: stats, badges, challenges subcommands
-- [x] Leaderboard — ✅ M7 Phase 6: simulated + personal ranking
-- [ ] Advanced difficulty modes
+### Fase 4: Content-pijler (Blog) — ✅ LIVE
+**Architecturale scope:** 10 educatieve posts + JSON-LD schema + internal cross-linking + unified marketing nav (`getMarketingNavbar()`) + breadcrumbs + BreadcrumbList schema. Validation via `scripts/validate-blogs.sh` pre-commit hook (5 structurele checks).
 
 ---
 
-## 🔄 Update Protocol
+## 🔄 Document Ownership (Sessie 139 — refactor van oude Sync Protocol)
+
+**Eén bron per type informatie.** Geen duplicatie tussen docs.
+
+| Document | Owns | Update-trigger |
+|----------|------|----------------|
+| `docs/prd.md` | Product requirements, scope, success criteria, success-definitie | Handmatig bij PRD-revisie |
+| **`PLANNING.md`** (dit doc) | Architectuur, tech rationale, design system, security/privacy strategie, performance principes (budgets), deployment-strategie, monetization-architectuur (streams + hosting cost-principes, niet specifieke maandtargets) | Handmatig bij architectuur-change |
+| **`TASKS.md`** | Execution-tracking: milestones, tasks, sprints, percentages, live metrics (bundle, tests), monetization-stack-status, revenue-data, sessie-counter | `/summary` command-flow (zie `.claude/CLAUDE.md §Sessie Protocol`) |
+| **`.claude/CLAUDE.md`** | AI-context, tone, do/don'ts, top-6 sessie-learnings, sessie-protocol-instructies | `/summary` command-flow |
+| `docs/sessions/current.md` | Volledig sessie-log archief vanaf rotation-cutoff | `/summary` command-flow |
+| `scripts/validate-docs.sh` | Drift-detection: cross-doc invariants als pre-commit hook | Pre-commit (forcing function) |
 
 **Wanneer dit document updaten:**
-1. Nieuwe architecturale beslissingen
-2. Tech stack wijzigingen
-3. Tool toevoegingen
+1. Nieuwe architecturale beslissingen (modular pattern, state-management-keuze)
+2. Tech stack wijzigingen (nieuwe library, framework, build-tool)
+3. Tool toevoegingen (linter, test-runner, validator)
 4. Performance budget aanpassingen
-5. Roadmap updates
+5. Security/privacy strategie aanpassingen
+6. Roadmap fase-definities (niet task-niveau — dat woont in TASKS.md)
 
-**Update volgorde bij requirements change:**
-```
-docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
-```
+**NIET hier updaten (woont elders):**
+- Milestone-percentages → TASKS.md
+- Sprint-status → TASKS.md
+- Sessie-counter → `.claude/CLAUDE.md` + TASKS.md
+- Live metrics (bundle KB, test counts) → TASKS.md
+- Monetization-targets per maand → TASKS.md
 
-**Consistency checks:**
-- Tech stack in PLANNING ↔ CLAUDE.md
-- Architectuur principes ↔ PRD beperkingen
-- Roadmap ↔ PRD fases
-
-### Document Sync Protocol
-
-**Trigger:** Na elke milestone completion OF elke 10 sessies
-**Single Source of Truth:** TASKS.md voor alle metrics
-
-**Sync Checklist:**
-- [ ] Task counts (totaal, voltooid, percentage)
-- [ ] Milestone voortgang (M5, M6, etc.)
-- [ ] Bundle size (production measurement)
-- [ ] "Last updated" datums (alle docs zelfde datum)
-- [ ] Performance metrics (Lighthouse, load time)
-
-**Update volgorde:**
-```
-TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
-```
-
-**Quarterly Full-Sync:** Elke 3 maanden of bij major milestone (M5→M6, MVP→Phase 2)
+**Forcing function:** `scripts/validate-docs.sh` als pre-commit hook detecteert drift tussen docs (sessie-counter mismatch, datum-incongruentie, PRD-version-skew). Commits met drift worden geblokkeerd.
 
 ---
 
@@ -905,8 +755,8 @@ TASKS.md → CLAUDE.md → PLANNING.md → PRD.md → STYLEGUIDE.md
 
 ---
 
-**Laatst bijgewerkt:** 27 maart 2026
-**Versie:** 2.9 (Sessie 121 — M5.5 revived: AdSense + Ko-fi + Newsletter live, sessions 116-120 gedocumenteerd)
-**Status:** ✅ Deployed - Live in Production | M5.5 Monetization ✅ Live (Pivot) | M7 Gamification Phase 1-6 ✅
+**Laatst bijgewerkt:** 27 mei 2026 (Sessie 139)
+**Versie:** 3.0 (Sessie 139 — Document Ownership refactor: milestone-tabellen + revenue-projecties verhuisd naar TASKS.md, bundle budget herijkt naar runtime/SEO-split, §Document Sync Protocol vervangen door §Document Ownership met forcing function via `validate-docs.sh`)
+**Status:** ✅ Deployed - Live in Production | M5.5 Monetization stack deep + Brevo deliverability getuned | M7 Gamification ✅ 100% | Blog content-pijler live
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

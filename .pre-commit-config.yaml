@@ -12,3 +12,10 @@ repos:
         language: script
         files: ^blog/.*\.html$
         pass_filenames: false
+
+      - id: validate-docs
+        name: Validate cross-doc invariants (sessie-counter, datums, PRD-version, monetization-stack)
+        entry: ./scripts/validate-docs.sh
+        language: script
+        files: ^(\.claude/CLAUDE\.md|PLANNING\.md|TASKS\.md)$
+        pass_filenames: false

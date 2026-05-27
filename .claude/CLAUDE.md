@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 139)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -16,12 +16,12 @@
 **Blog:** 10 posts live at `/blog/` (105+ inline jargon explanations) | JSON-LD schema + internal cross-linking compleet (Sessie 125)
 **Contact:** contact@hacksimulator.nl (Gmail forwarding)
 
-**Performance:** Playwright E2E 165 tests across 31 suites (22 files, 3 browsers) | WCAG AAA | 182 CSS variables (main.css) + 27 (landing.css) = 209 totaal
-**Bundle:** Site totaal **~1192 KB** (geverifieerd 06-04-2026) + sample-pentest landing 15 KB + sample PDF 90 KB → effectief ~1297 KB | Splitsing: src/ 604 KB, styles/ 249 KB, blog/ 306 KB (10 posts + JSON-LD), assets/ 597 KB (screenshots 401 + OG image 151) | ⚠️ Runtime budget herijking nodig — blog SEO assets vallen buiten origineel 400 KB Terminal Core budget
-**Monetization:** AdSense (10 units) + Ko-fi donaties + Brevo newsletter (double opt-in + welkomstmail live) + **Gumroad products v1.0** (3 guides + bundel) + **Lead magnet** (`/sample-pentest.html` Brevo opt-in → 9-pagina sample) | Eigen consent banner (Consent Mode v2)
+**Performance:** Playwright E2E ~167 tests / 22 spec files (Chromium, Firefox, WebKit) | WCAG AAA | 182+27 CSS variables (main.css + landing.css)
+**Bundle:** Runtime <400 KB (strikt, terminal.html) + SEO/content-pijler budgetloos (blog + assets). Site-totaal en exacte KB-breakdown wisselen per sessie — zie TASKS.md §Huidige Focus voor ground truth.
+**Monetization stack:** AdSense + Ko-fi + Brevo newsletter (double opt-in + welkomstmail + deliverability getuned) + Gumroad v1.0 (3 guides + bundel) + Lead magnet (Sample Pentest). Eigen consent banner met Consent Mode v2. **Per-stack actuele status:** TASKS.md §M5.5 sectie-body.
 
-→ **Live metrics:** `TASKS.md` regels 9-26 (meest recente tellingen)
-→ **Architecture:** `PLANNING.md` v2.9 | **Commands:** `docs/commands-list.md` (41 commands)
+→ **Live metrics (bundle, tests, sessie-counter):** `TASKS.md` §Huidige Focus + Voortgang Overzicht — single source of truth
+→ **Architecture & document-ownership:** `PLANNING.md` v3.0 §Document Ownership | **Commands:** `docs/commands-list.md` (41 commands)
 
 ---
 
@@ -164,14 +164,50 @@ Pre-Sessie 134 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
 
 ## Sessie Protocol
 
-**Voor Sessie:** Lees `PLANNING.md`, `TASKS.md`, dit bestand
-**Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
-**Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-**Rotation trigger:** Every 5 sessions (last: Sessie 139 cleanup 129-133, next: Sessie 144)
-**Sessie counter:** 139
-**Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
+**Voor Sessie:** Lees `.claude/CLAUDE.md` (this file) + check sprint-regel + Volgende Stappen in `TASKS.md`
+**Tijdens:** Markeer taken in `TASKS.md` direct | Architecturale beslissingen alleen in `PLANNING.md` bij echte arch-change
+**Afsluiten:** Use `/summary` command → 6-step flow (zie hieronder)
 
-→ **Document Sync Protocol:** PLANNING.md §Document Sync
+### `/summary` flow — single source of truth = `TASKS.md`
+
+1. **Ground truth meting** (~30 sec, read-only)
+   - `du -sb src/ styles/ blog/ assets/` → bundle metrics
+   - `find tests/e2e -name "*.spec.js" | wc -l` → test file count
+   - `git log --oneline -1` → laatste commit voor sprint-regel
+
+2. **Update `TASKS.md`** (primary execution-tracker)
+   - Header: `Laatst bijgewerkt` datum + `Sprint` regel met huidige sessie
+   - Footer: datum + version
+   - Milestone-tabel: percentage update bij task completion
+   - Bundle/test metrics: ground-truth getallen uit stap 1
+
+3. **Update `docs/sessions/current.md`**
+   - Volledige sessie-entry (mission, work done, learnings, next steps)
+   - Rotation: bij Sessie %5 → archiveer pre-N-6 entries naar `archive-*.md`
+
+4. **Update `.claude/CLAUDE.md`** (AI-context, lean — dit bestand)
+   - "Recent Critical Learnings": prepend nieuwe sessie, behoud top 6, ouderen → `current.md`
+   - "Sessie counter" regel
+   - Footer datum + version
+   - Live metrics in Quick Reference: **niet** updaten — verwijs naar TASKS.md
+
+5. **Update `PLANNING.md`** ALLEEN bij architectuur-wijziging
+   - Nieuwe tech-stack-keuze, design-system-change, security-strategie-shift
+   - GEEN milestone-percentage-updates (woont in TASKS.md)
+
+6. **Update `docs/prd.md`** ALLEEN bij scope-wijziging
+   - Nieuwe requirements, success criteria change
+   - GEEN tactical execution updates
+
+7. **Validatie** (forcing function)
+   - `bash scripts/validate-docs.sh` → exit 0 vereist
+   - Pre-commit hook draait dit automatisch
+   - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
+
+**Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last: Sessie 139 cleanup 129-133, next: Sessie 144)
+**Sessie counter:** 139
+
+→ **Document Ownership map:** `PLANNING.md §Document Ownership`
 
 ---
 
@@ -221,5 +257,5 @@ Pre-Sessie 134 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
 
 ---
 
-**Last updated:** 27 mei 2026 (Sessie 139 — Unified marketing nav + breadcrumbs op blog-pages ✅: blog-pages krijgen `getMarketingNavbar()` met 5 nav-links + active-state op "Blog" via groene underline; breadcrumb-strip + BreadcrumbList JSON-LD per post voor SEO rich-results; `validate-blogs.sh` +2 checks; 18 files, +366/−18 in commit `c660e96`; **smooth-scroll regressie** uit landing.css import gefixed via `html { scroll-behavior: auto }` override in blog.css)
-**Version:** 5.12 (Sessie 139: `currentPage` param + `activeAttr` helper voor active-nav-state — uitbreidbaar naar Gidsen/Commands/Woordenlijst met 1 regel; CSS override-niet-fork pattern voor cross-pagina style imports — bewaart single-source-of-truth in originele file; Python-script met idempotency-check als batch-edit pattern voor 11 blog-posts — veiliger dan 22 parallelle Edit-calls; `git stash` voor regressie-isolatie bij E2E test-failures — bewijst direct of failure pre-existing of door huidige changes; rotation cleanup Sessie 129-133 — full detail blijft in current.md)
+**Last updated:** 27 mei 2026 (Sessie 139 — Unified marketing nav + breadcrumbs blog-pages ✅ + Doc-ownership refactor: §Sessie Protocol vervangen door 7-step `/summary` flow met `validate-docs.sh` als forcing function, Quick Reference live metrics verhuisd naar TASKS.md single-source-of-truth)
+**Version:** 5.13 (Sessie 139 doc-sync: ownership-mapping in PLANNING.md §Document Ownership, milestone-tabellen + revenue-projections verhuisd uit PLANNING naar TASKS.md, bundle budget gesplitst in runtime <400 KB strikt + SEO/content budgetloos, validate-docs.sh pre-commit hook geïntroduceerd — voorkomt sessie-counter/datum/PRD-version drift. Pattern-learnings Sessie 139 zelf: `currentPage` param + `activeAttr` helper voor active-nav-state, CSS override-niet-fork voor cross-pagina style imports, Python idempotency-check pattern voor batch-edits, `git stash` voor E2E regressie-isolatie)

@@ -1,14 +1,14 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 12 april 2026
-**Status:** M7 Gamification ✅ 100% | M6 Tutorial System 88% | M5.5 Monetization ✅ Live + Gumroad track (LIVE on hacksimulator.nl)
-**Sprint:** Sessie 126: Newsletter migratie MailerLite → Brevo (free tier, double opt-in, welkomstmail automation)
+**Laatst bijgewerkt:** 27 mei 2026 (Sessie 139)
+**Status:** M7 Gamification ✅ 100% | M6 Tutorial System 88% | M5.5 Monetization ✅ Live + Brevo deliverability tuned + Gumroad v1.0 + Lead magnet (LIVE on hacksimulator.nl)
+**Sprint:** Sessie 139: Unified marketing nav + breadcrumbs op blog-pages (Sessies 134-138: Brevo deliverability tuning + content SEO Plan C + funnel-pulse + lead-magnet CTA-coverage 3→13)
 
 ---
 
 ## 📊 Voortgang Overzicht
 
-**Totaal:** 277 / 325 taken voltooid (85.2%)
+**Totaal:** ~290 / ~340 taken voltooid (~85%) — exacte subtask-tellingen kunnen driften per sessie; voor ground truth zie milestone-secties hieronder. Validatie via `scripts/validate-docs.sh`.
 
 | Mijlpaal | Status | Taken | Percentage |
 |----------|--------|-------|------------|
@@ -18,34 +18,44 @@
 | M3: Network & Security | ✅ Voltooid | 28/28 | 100% |
 | M4: UX & Polish | ✅ Voltooid | 43/43 | 100% |
 | M5: Testing & Launch | 🔵 In uitvoering | 41/45 | 91% | ✅ **Performance + Config + Security + Accessibility + Content + Bundle Opt 100%**
-| M5.5: Monetization MVP | 🔵 In uitvoering | 9/11 | 82% | ✅ AdSense (10 units) + Ko-fi + Brevo newsletter (double opt-in) + eigen consent banner + Gumroad products v1.0 (3 guides) |
+| M5.5: Monetization MVP | 🔵 In uitvoering | ~16/18 | ~89% | ✅ AdSense (10 units) + Ko-fi + **Brevo** (newsletter double opt-in + welkomstmail + deliverability tuning Sessies 134-136) + eigen consent banner + **Gumroad v1.0** (3 guides + bundel) + **Lead magnet** (sample PDF + landing + CTA-coverage 13 plaatsen) |
 | M6: Tutorial System | 🔵 In uitvoering | 30/33 | 88% | ✅ Framework + 3 scenarios + cert + analytics + E2E tests + perf audit + mobile + cross-browser |
 | M7: Gamification | ✅ Voltooid | 47/47 | 100% | ✅ Phase 1-7 complete (framework, content, badges, certs, dashboard, leaderboard, testing) |
 | M8: Analytics & Scaling | ⏭️ Gepland | 0/40 | 0% |
 | M9: Refactor Sprint | ✅ Voltooid | 19/19 | 100% | ✅ Cache + bundle + code quality + docs sync + performance + test coverage + localStorage opt |
+| **Blog (content-pijler)** | ✅ Live | 10/10 posts | 100% | ✅ 105+ jargon-explanations + JSON-LD schema + internal cross-linking + unified marketing nav + breadcrumbs (Sessies 122-125 + 138-139) |
 
 ---
 
 ## 🎯 Huidige Focus
 
-**Actieve Mijlpalen:** M5.5 Monetization + M6 Tutorial System + M7 Gamification
-**Current Status:** ✅ LIVE — Playwright E2E: 160 tests, 30 suites, 21 spec files (Chromium, Firefox, WebKit) | AdSense + Ko-fi + Brevo + Gumroad live | Bundle: 1192 KB site totaal (blog 306 KB + assets 597 KB), Terminal runtime ~604 KB src/ + 249 KB styles/ — buiten oorspronkelijk 400 KB runtime budget door blog SEO assets
+**Actieve Mijlpalen:** M5.5 Monetization (deliverability + lead-magnet polish) + M6 Tutorial System (last 3 taken) + Blog content-SEO (post-Sessie 138 hub-clustering)
+**Current Status:** ✅ LIVE — Playwright E2E: **167 tests, 22 spec files** (Chromium, Firefox, WebKit) | AdSense + Ko-fi + Brevo (deliverability getuned) + Gumroad v1.0 + Lead magnet live
+**Bundle (geverifieerd 27 mei 2026):** Site totaal **~2196 KB unminified** | src/ 627 KB | styles/ 268 KB | blog/ 369 KB (12 files: 10 posts + index + welkom) | assets/ 702 KB | HTML ~155 KB
+  → ⚠️ **Budget-herijking nodig** — origineel 400 KB Terminal Core budget geldt nog voor runtime (src/ + styles/terminal*.css + animations); site-totaal budget bewust losgelaten ten faveure van SEO/content-pijler (blog + screenshots + OG image)
 
 **Volgende Stappen:**
 1. ✅ GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
 2. ✅ Netlify deployment (https://hacksimulator.nl/)
 3. ✅ Performance audit (Lighthouse 100/100/92/100)
-4. ✅ Cross-browser test infrastructure (Playwright 161 tests, 30 suites)
+4. ✅ Cross-browser test infrastructure (Playwright 167 tests, 22 spec files)
 5. ✅ **M5.5 Monetization Pivot** (Sessie 117-118): AdSense (10 units), Ko-fi donaties, Newsletter signup, eigen consent banner (Consent Mode v2)
 6. ✅ **Celebration UX** (Sessie 118-119): 3-zone completion blocks, auto-copy certificaat, sequential reveal
 7. ✅ **Learning Funnel Hardening** (Sessie 116-119): "Type next" hints, phase-dependent content, funnel direction lock
-8. [ ] Mobile real device testing (iOS, Android)
-9. [ ] GA4 Real-Time verificatie (handmatig)
-10. [ ] AdSense performance monitoring (CTR, RPM na 30 dagen)
-11. [ ] M6 Tutorial: laatste 3 open taken (→ 100%)
-12. [x] M7 Gamification: alle taken voltooid (47/47 → 100%) — ✅ Sessie 130
-13. [ ] Bundle audit: site totaal +40% sinds laatste meting (848 → 1192 KB) — runtime vs SEO assets ontwarren, runtime budget herijken
-14. [x] Gumroad products v1.0: publicatie + listings live zetten (3 guides klaar in `docs/products/`) — ✅ Sessie 129
+8. ✅ **Brevo migratie** (Sessie 126): MailerLite → Brevo (free tier, double opt-in, welkomstmail automation)
+9. ✅ **Typst PDF + Gumroad v1.0** (Sessies 127-129): 3 guides + bundel live op Gumroad
+10. ✅ **Lead magnet Sample Pentest** (Sessies 130-132): 9-pagina PDF + `/sample-pentest.html` landing + Brevo opt-in flow
+11. ✅ **Brevo deliverability tuning** (Sessies 133-136): DnD-template herbouw, DNS cleanup (SPF/DKIM/DMARC), unblock-route, Postmaster verificatie
+12. ✅ **Funnel-pulse + Lead-magnet CTA-coverage 3→13** (Sessie 137): GA4 pipeline gevalideerd via simulate success-panel toggle, contextual CTA-copy per blog
+13. ✅ **Content SEO Plan C — OWASP Top 10 hub-post** (Sessie 138): nieuwe hub + bidirectional clustering + `validate-blogs.sh` modernisatie + tag-balans-check
+14. ✅ **Unified marketing nav + breadcrumbs blog-pages** (Sessie 139): `getMarketingNavbar()` + `currentPage`-param + breadcrumb-strip + BreadcrumbList JSON-LD
+15. [ ] Mobile real device testing (iOS, Android)
+16. [ ] GA4 Real-Time verificatie (handmatig)
+17. [ ] AdSense performance monitoring (CTR, RPM na 30 dagen)
+18. [ ] Ko-fi conversion tracking (donaties per maand) — manueel via Ko-fi dashboard
+19. [ ] M6 Tutorial: laatste 3 open taken (→ 100%)
+20. [ ] Bundle runtime-budget herijken: split site-totaal in *Terminal Core* (runtime <400 KB) vs *SEO/content* (geen budget) — splitsing toepassen in PLANNING.md bundle-tabel
+21. [ ] Postmaster re-check trigger: eerste >100-recipient campaign-send OF kalender-datum 2 wk later (vanaf 18 mei 2026 → ~1 juni 2026)
 
 ---
 
@@ -516,12 +526,12 @@
 
 ---
 
-### M5.5: Monetization MVP 🔵 IN UITVOERING (Pivot)
-**Status:** Heropend maart 2026 (Sessie 117-118) — Nieuwe strategie na affiliate afwijzingen
+### M5.5: Monetization MVP 🔵 IN UITVOERING (Pivot + uitbreidingen)
+**Status:** Heropend maart 2026 (Sessie 117-118) — Nieuwe strategie na affiliate afwijzingen; verdiept naar volledige stack (Sessies 126-137)
 **Originele aanpak:** Affiliate links → ❌ Afgewezen door programma's
-**Nieuwe strategie:** AdSense display ads + Ko-fi donaties + Newsletter signup
+**Huidige stack:** AdSense + Ko-fi + Brevo newsletter + Gumroad products + Lead magnet (Sample Pentest)
 
-#### Voltooide taken ✅
+#### Voltooide taken Sessie 117-118 (Pivot) ✅
 - [x] **Cookiebot verwijderd** → eigen consent banner (lichter, geen third-party dependency) — Sessie 117
 - [x] **AdSense integratie** — 10 ad units manueel geplaatst (blog, sidebar, footer, between-content) — Sessie 117
 - [x] **Consent Mode v2** — Google-compliant consent signaling op alle pagina's — Sessie 117
@@ -531,9 +541,31 @@
 - [x] **Blog support banners** — call-to-action voor Ko-fi op blog posts — Sessie 118
 - [x] **Newsletter signup forms** — lead generation across site — Sessie 118
 
+#### Voltooide taken Sessies 126-129 (Newsletter + Products) ✅
+- [x] **Brevo migratie** — MailerLite → Brevo (free tier), double opt-in flow, welkomstmail automation — Sessie 126
+- [x] **Typst PDF guides v1.0** — 3 gidsen geschreven + factcheck + Nederlandse taalconsistentie — Sessies 127-128
+- [x] **Gumroad v1.0 publicatie** — 3 guides + bundel-listing live op Gumroad, productpagina's gestyled — Sessie 129
+
+#### Voltooide taken Sessies 130-132 (Lead Magnet) ✅
+- [x] **Sample Pentest PDF** — 9-pagina anonimised pentest sample, Typst-gegenereerd — Sessie 130
+- [x] **`/sample-pentest.html` landing** — Plan B Sessie 1: landing page met Brevo embedded form — Sessie 131
+- [x] **Brevo Form-submitted trigger + welkomstmail** — taalfixes + flow-correctie — Sessie 131
+- [x] **Custom Brevo submit handler** — success panel toggelt nu correct (MutationObserver pattern) — Sessie 132
+- [x] **Twee-koloms hero** — form above-the-fold layout op `/sample-pentest.html` — Sessie 132
+
+#### Voltooide taken Sessies 133-137 (Deliverability + Funnel) ✅
+- [x] **Brevo DnD-template herbouw** — welkomstmail clean-build met Type-dropdown special-links (unsubscribe/web-version) — Sessie 134
+- [x] **DNS cleanup** — SPF `include:_spf.mlsend.com` verwijderd, DKIM-CNAME op subdomein gefixt, DMARC stable — Sessie 135
+- [x] **Brevo blocklist unblock** — transactional channel sender approval via caret-dropdown route — Sessie 136
+- [x] **Postmaster Tools verificatie** — DKIM/SPF/DMARC verified via `postmaster.google.com/managedomains` (data aggregatie pending tot >1000 sends/day) — Sessie 136
+- [x] **Welkomstmail bug-cluster** — blog-URLs, prijsclaim €0→€5, mobile inline-code overlap gefixt — post-Sessie 135
+- [x] **Funnel-pulse diagnose** — pulse-check pipeline via simulate success-panel toggle (`display: 'block'` + classList) — Sessie 137
+- [x] **Lead-magnet CTA-coverage 3→13** — unique `data-cta-location` per CTA-positie incl. blog-topic + plaatsing — Sessie 137
+
 #### Open taken
 - [ ] AdSense performance monitoring (CTR, RPM na 30 dagen) — manueel in Google AdSense dashboard
 - [ ] Ko-fi conversion tracking (donaties per maand) — manueel via Ko-fi dashboard
+- [ ] Postmaster Tools re-check — trigger: eerste >100-recipient campaign-send OF ~1 juni 2026 (Sessie 136 vastgesteld)
 
 ---
 
@@ -1362,13 +1394,12 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 27 maart 2026
-**Versie:** 4.2 (Sessie 121 — M5.5 revived, sessions 116-120 gedocumenteerd)
-**Totaal Taken:** 325 (M5.5 heropend met 10 taken, zie toptabel voor actuele breakdown per mijlpaal)
-**Voltooide Taken:** 277/325 (85.2%) — M0-M4: 100%, M5: 91% (41/45), M5.5: 82% (9/11), M6: 88% (30/33), M7: 100% (47/47), M9: 100% (19/19)
+**Laatst bijgewerkt:** 27 mei 2026 (Sessie 139)
+**Versie:** 4.3 (Sessies 122-139 ge-backfilled — M5.5 deliverability tracks + lead magnet + Gumroad + nav unification; bundle ground-truth herijkt naar 2196 KB unminified)
+**Totaal Taken:** ~340 — zie milestone-tabel voor breakdown. Validatie via `scripts/validate-docs.sh`.
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
-**Bundle:** ✅ ~809 KB na Netlify minificatie (Terminal Core ~340 KB, site totaal binnen 1000 KB budget — Sessie 100)
+**Bundle (geverifieerd 27 mei 2026):** Site totaal **~2196 KB unminified** | src/ 627 KB + styles/ 268 KB + HTML ~155 KB + blog/ 369 KB + assets/ 702 KB | Runtime-specifieke meting voor `terminal.html` (Terminal Core <400 KB budget) staat als open taak — zie regel 20 in Volgende Stappen
 
 ---
 
