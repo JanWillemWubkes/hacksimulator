@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 139: Unified Marketing Nav + Breadcrumbs op Blog-Pages (27 mei 2026)
+⚠️ **Never:**
+- Een nieuwe stylesheet importeren in een sectie van de site zonder eerst grep'en wat er aan globale rules in zit (`^body|^html|^\*`) — `landing.css` toevoegen op blog-pages haalde stilletjes `html { scroll-behavior: smooth }` mee, waardoor `window.scrollTo` van instant naar geanimeerd kantelde en de reading-progress E2E test brak (60% ipv 90%). Klasse aan side-effects = klasse aan onverwachte regressies
+- Een ge-injecteerde nav switchen van `position: fixed` (oude `.blog-nav`) naar `position: sticky` (nieuwe `.landing-nav-wrapper`) zonder reading-progress berekeningen te verifiëren — sticky neemt ruimte in layout, fixed niet; document.documentElement.scrollHeight verschilt subtiel tussen de twee, voldoende om <90%-progress-thresholds te breken
+- Een Playwright `browser_take_screenshot` als ground truth nemen vóór een DOM-evaluate die de actual state checkt — eerste lokale screenshot toonde "twee navs" wat in feite zichtbare noscript-fallback was door ontbrekende `landing.css` (`.nav-links` viel terug naar `display: block`, mobile-menu niet `display: none`). Visuele bevindingen móét gecorreleerd worden met `getComputedStyle`-data
+
+✅ **Always:**
+- CSS overrides plaatsen op het meest specifieke niveau (in dit geval `blog.css { html: scroll-behavior: auto }`) ipv het bron-bestand te splitsen — bewaart single-source-of-truth voor de andere context (landing) en is een 2-regel fix ipv multi-file refactor. Override-niet-fork als default-strategie voor cross-pagina style imports
+- `currentPage` param + `activeAttr(page) => currentPage === page ? ' class="active" aria-current="page"' : ''` als pattern voor active-nav-state — werkt automatisch op desktop én mobile-menu zonder duplicate code, uitbreidbaar naar Gidsen/Commands/Woordenlijst met 1 regel in `init-components.js`. Bonus: `aria-current="page"` is gratis a11y-win
+- Batch-edits via Python-script met idempotency-checks (skip-condities op marker-strings als `'class="breadcrumb"' in content`) — script kan veilig herhaald draaien zonder dubbele inserts; veel robuuster dan 22 parallelle Edit-calls voor 11 bestanden. Voor uniforme single-line inserts blijft sed met unieke anker-pattern de snelste oplossing
+- `git stash` voor regressie-isolatie wanneer een E2E test faalt — stash → run test → pop. Bewijst direct of de failure pre-existing was of door huidige changes. Voorkwam in deze sessie 30+ min van speculatief CSS-debuggen
+- Browser-cache-bewustzijn bij Playwright lokaal: ES modules cachen over `browser_close` heen — als runtime-state niet matcht met source-code, eerst handmatig dynamic import met cachebust (`await import('/path?cb=' + Date.now())`) proberen vóór code-debugging. In productie geen probleem (Netlify cache-bust via `?v=` op _headers)
+
 ### Sessie 138: Content SEO Plan C — OWASP Top 10 Hub-Post + Markup Fix (26 mei 2026)
 ⚠️ **Never:**
 - Aannemen dat een groene content-DoD (woordcount, CTA-data-attributes, link-counts, JSON-LD, sitemap) ook HTML-structuur dekt — browsers renderen forgiving, dus een ongesloten `<div>` triggert geen JS-error en geen 404. Visuele regressie glipte door 10 groene DoD-items heen en viel pas op bij menselijke review. Tag-balans-check moet expliciet op de DoD
@@ -144,63 +157,8 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Title/Text-blocks met Type-dropdown special-links voor DnD-footers, NIET pre-built footer-sections — pre-builts (social/address/foto) zijn te druk voor minimal terminal-aesthetic; restylen kost meer dan zelf bouwen
 - Cold-start-checklist (git log + curl headers) doorlopen vóór dashboard-werk start — bevestigt server-side state intact, voorkomt verspilde tijd aan opnieuw fixen wat al werkt
 
-### Sessie 133: Lead Magnet Landing + Dual-Fire Tracking + Brevo Submit Fix (26-29 april 2026)
-⚠️ **Never:**
-- `data-product-id` overloaden voor gratis lead-magnet CTAs — semantiek vervaagt en GA4-conversiedoel `product_cta_click` gaat revenue-funnel en lead-funnel dubbel tellen
-- `lead_magnet_signup` firen zonder óók `newsletter_signup` op sample-pages — bestaande GA4-conversiedoelen leunen op de globale teller; sample-signers raken anders uit lijstgroei-rapporten
-- Aannemen dat Brevo's main.js de success-panel toggelt bij `{success:true}` JSON-response — POST keert 200 maar `#success-message` blijft op `display:none`. User ontvangt welkomstmail zonder visuele bevestiging; eigen submit-handler met capture-phase + `stopImmediatePropagation()` is verplicht voor élk Brevo-form
-
-✅ **Always:**
-- Aparte `data-lead-magnet` attribute + tweede `closest()` branche met return-guard tussen branches in `cta-tracking.js` — voorkomt dubbel-firing en schaalt zero-cost naar volgende samples
-- Bij eigen Brevo-submit handler: panels togglen via *zowel* `style.display='block'` *als* `classList.add('sib-form-message-panel--active')` — alleen die combinatie werkt voor zowel success- als error-panel (Brevo CDN-CSS specificity vereist class voor error-panel `display:inline-block`)
-- Playwright `page.route()` met **regex** ipv glob bij Brevo-subdomains — `/sibforms\.com\/serve\//` matcht consistent terwijl `**/sibforms.com/**` faalt op `09a5e5c2.sibforms.com` door wildcard-segmentatie, met als gevolg dat mocks omzeild worden en echte test-contacten in productie-Brevo aangemaakt worden
-
-### Sessie 132: Brevo Dashboard Setup — Form-submitted Pivot (24 april 2026)
-⚠️ **Never:**
-- Aannemen dat "Contact added to tag" Brevo-trigger nog bestaat — Brevo verwijderde deze trigger uit de automation-builder; "Contact matches custom filters" is daily-batch (8PM) en kent geen tag-filter
-- Sample-funnels architectureren op tag-routing in Brevo — tags zijn niet filterbaar in de custom-filter builder, dit blokkeert élke realtime tag-gebaseerde segmentatie-strategie
-- Brevo welkomstmails uitsturen zonder NL-taalreview — academisch jargon zoals `methodologie` overleeft preview-toggles in de visual builder onopgemerkt
-
-✅ **Always:**
-- Form-submitted trigger als primaire automation-anker — multi-form-architectuur (één lijst, N forms) maakt lead-routing event-driven en realtime, geen 8PM-batch-vertraging
-- Sample-signers naar dezelfde hoofdlijst (`hacksimulator-main`) sturen — sample-form blokkeert hoofd-welcome via uniek trigger-form, dus geen duplicaat-mail terwijl ze wel volwaardig nieuwsbrieflid worden
-- Architecturale UI-veranderingen meteen in memory vastleggen — `reference_brevo_tags.md` capturet "tags ≠ filterbaar in builder" zodat een toekomstige sessie geen 30 min verspilt aan dezelfde dead-end
-
-### Sessie 131: CTA Click Tracking & Session Handoff via Plan Files (21 april 2026)
-⚠️ **Never:**
-- Relatieve `src/...` paths in `<script>` tags van landing pages — `gidsen.html` miste `init-analytics.js` waardoor GA4 sinds Sessie 129 nooit initialiseerde op dé conversie-pagina; absolute `/src/...` voorkomt dat scripts niet laden bij subpad-URL-varianten
-- Per-element `onclick`-handlers voor N tracking-CTAs — één delegated `document.addEventListener('click', ... closest('[data-product-id]'))` schaalt beter én blijft CSP-compatible
-- MutationObserver zonder `fired`-flag + `disconnect()` — Brevo success panel kan meerdere style-mutaties triggeren, wat dubbele `newsletter_signup` events oplevert
-
-✅ **Always:**
-- Declaratieve `data-product-id` + `data-cta-location` attributen + delegated listener — zero inline JS, zero CSP-problemen, makkelijk uit te breiden bij nieuwe CTAs
-- GA4 consent-check verifiëren via DevTools Network (filter `collect?v=2`) i.p.v. alleen localStorage-inspectie — netwerkverkeer is de enige ground truth voor "event is echt verzonden"
-- Bij bijna-vol context window: commit + zelf-bevattende plan files in `.claude/plans/` schrijven — nieuwe sessies cold-starten zonder context-overdracht, geen informatie-verlies
-
-### Sessie 130: M7 Gamification Afsluiting & QA (21 april 2026)
-⚠️ **Never:**
-- "ethical hacking" als fallback in code — ook in fallback strings "ethisch hacken" gebruiken; de Sessie 128 taalregel geldt voor álle code, niet alleen zichtbare UI
-- Prompt prefix (`user@hacksim` vs `hacker@hacksim`) op sommige plekken anders dan de terminal — check HTML templates, JS en landing demo bij prompt-wijzigingen
-- Badge progressie asymmetrisch laten (easy-sweep + medium-sweep maar geen hard-sweep) — spelers verwachten een consistent pad
-
-✅ **Always:**
-- Gamification edge cases testen via code review naast UI test — code review vangt meer dan alleen klikken (fallback strings, empty states, boundary conditions)
-- Na prompt/branding wijziging grep uitvoeren op oude waarde in *.html, *.js én tests/ — E2E test assertions bevatten vaak gehardcode UI strings
-- CSP errors uit console logs als AdSense nieuwe domeinen toevoegt — Google voegt regelmatig subdomains toe (ep1, ep2, etc.)
-
-### Sessie 129: Gumroad Products Live & Site-Integratie (13-15 april 2026)
-⚠️ **Never:**
-- Gumroad PWYW toggle activeren bij Amount €0 — toggle is grayed out, zet Amount eerst op €1+, activeer PWYW, dan minimum op €0 zetten
-- Aannemen dat Gumroad PWYW "pay less" betekent — PWYW laat klanten alleen *meer* betalen dan Amount, niet minder; Amount = altijd het minimum
-- Blog CTAs via JS injecteren bij <15 posts — hardcoded HTML is beter voor SEO (zichtbaar zonder JS) en makkelijker te onderhouden bij klein aantal
-
-✅ **Always:**
-- Contextual CTAs per blogpost (match product aan topic) — verhoogt click-through vs. generieke CTA's
-- Gumroad product links naar `/gidsen` landing page in man page tips (niet direct naar Gumroad) — centraliseert traffic, makkelijker te updaten als URLs veranderen
-- Bestaande CSS patterns hergebruiken (`.feature-card`, `.btn-cta`, `.blog-cta`) — zero nieuwe JS, verwaarloosbare bundle impact
-
 **Rotation:** Keep last 6 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
-Pre-Sessie 129 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 Gumroad factcheck/taalconsistentie) → zie `docs/sessions/current.md`.
+Pre-Sessie 134 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 Gumroad factcheck/taalconsistentie + 129-133 monetization-stack) → zie `docs/sessions/current.md`.
 
 ---
 
@@ -209,8 +167,8 @@ Pre-Sessie 129 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
 **Voor Sessie:** Lees `PLANNING.md`, `TASKS.md`, dit bestand
 **Tijdens:** Markeer taken in TASKS.md direct | Noteer architecturale beslissingen
 **Afsluiten:** Use `/summary` command → Updates SESSIONS.md + CLAUDE.md
-**Rotation trigger:** Every 5 sessions (last: Sessie 136, next: Sessie 140)
-**Sessie counter:** 138
+**Rotation trigger:** Every 5 sessions (last: Sessie 139 cleanup 129-133, next: Sessie 144)
+**Sessie counter:** 139
 **Bij Requirement Changes:** `docs/prd.md` → `PLANNING.md` → `TASKS.md` → `CLAUDE.md`
 
 → **Document Sync Protocol:** PLANNING.md §Document Sync
@@ -263,5 +221,5 @@ Pre-Sessie 129 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
 
 ---
 
-**Last updated:** 26 mei 2026 (Sessie 138 — Content SEO Plan C OWASP Top 10 hub-post ✅: 1818 woorden NL-post live met bidirectional clustering naar 3 bestaande posts, lead-magnet + Gumroad-Leerplan CTAs, sitemap-entry, Playwright smoke-test groen; **post-deploy markup-fix** voor ongesloten blog-tip div regel 175 — tag-balans-check als nieuwe DoD-item)
-**Version:** 5.11 (Sessie 138: tag-balans-check als blogpost-DoD-item — 1-second `grep -c '<div'` vs `grep -c '</div>'` vangt ongesloten-element-bugs vóór deploy; cannibalization-grep tegen bestaande posts vóór keyword-keuze — 2/8 kandidaten geschrapt door overlap; anker-paragraaf-strategie voor bidirectional clustering — bestaande `<abbr>` zonder href = ideale `<a>`-omhullings-punten met descriptive anchor; ground-truth-first cold-start uitgebreid van meet-validatie naar topic-keuze)
+**Last updated:** 27 mei 2026 (Sessie 139 — Unified marketing nav + breadcrumbs op blog-pages ✅: blog-pages krijgen `getMarketingNavbar()` met 5 nav-links + active-state op "Blog" via groene underline; breadcrumb-strip + BreadcrumbList JSON-LD per post voor SEO rich-results; `validate-blogs.sh` +2 checks; 18 files, +366/−18 in commit `c660e96`; **smooth-scroll regressie** uit landing.css import gefixed via `html { scroll-behavior: auto }` override in blog.css)
+**Version:** 5.12 (Sessie 139: `currentPage` param + `activeAttr` helper voor active-nav-state — uitbreidbaar naar Gidsen/Commands/Woordenlijst met 1 regel; CSS override-niet-fork pattern voor cross-pagina style imports — bewaart single-source-of-truth in originele file; Python-script met idempotency-check als batch-edit pattern voor 11 blog-posts — veiliger dan 22 parallelle Edit-calls; `git stash` voor regressie-isolatie bij E2E test-failures — bewijst direct of failure pre-existing of door huidige changes; rotation cleanup Sessie 129-133 — full detail blijft in current.md)

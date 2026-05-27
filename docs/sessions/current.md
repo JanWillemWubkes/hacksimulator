@@ -4,6 +4,59 @@
 
 ---
 
+## Sessie 139: Unified Marketing Nav + Breadcrumbs op Blog-Pages (27 mei 2026)
+
+**Scope:** Blog-pages krijgen zelfde hoofdnav als rest van site (Blog/Commands/Gidsen/Woordenlijst/Over Ons + active-state op "Blog") + breadcrumb-strip per post met BreadcrumbList JSON-LD voor SEO rich-results. Heisenberg's vraag: "blog pages hebben eigenlijk geen main nav bar — wat is web design technisch en voor goede navigatie de beste oplossing?"
+**Status:** ✅ Geïmplementeerd + gepushed (commit `c660e96`) + Netlify auto-deploy + smooth-scroll regressie gefixed.
+**Duur:** 1 sessie-blok 27 mei avond.
+**Plan source:** `.claude/plans/de-blog-pages-hebben-zesty-pillow.md`.
+
+### Web-design analyse + beslissing
+
+- Bestaande state: `getBlogNavbar()` minimal nav (Logo + optioneel "Blog" + GitHub + Theme + CTA) — Sessie 97-keuze voor reading-focus.
+- Tegenargumenten gewogen: navigation consistency (Don't Make Me Think / NN/g), conversion-funnel naar Gumroad gidsen, woordenlijst-verbinding (105+ jargon-tags), SEO topical-clustering.
+- **Heisenberg's keuze:** unified nav + breadcrumb + mobile via bestaande hamburger. Géén lichtere padding (premature optimization).
+
+### Implementatie (18 files, +366/−18)
+
+- **`src/init-components.js`** — blog-tak: `variant: 'marketing'` + `options: { currentPage: 'blog' }`. Elimineert hele `basePath`-substitution-klasse (absolute paths werken vanuit `/blog/*` net zo goed).
+- **`src/components/navbar.js`** — `getMarketingNavbar(options)` uitgebreid met `currentPage` param + `activeAttr(page)` helper die `class="active" aria-current="page"` plakt op de matchende `<a>`. Toegepast op desktop nav-links én mobile-menu items. `getBlogNavbar()` markeer'd als `@deprecated` (backward-compat behouden, cleanup-sessie later).
+- **`styles/landing.css`** — `.nav-links a.active` + mobile equivalent met `--color-prompt` (HTB Lime #9fef00) + 2px border-bottom.
+- **`styles/blog.css`** — `.breadcrumb` styling met bestaande CSS-vars + `html { scroll-behavior: auto }` override (zie regressie hieronder).
+- **11x `blog/*.html`** — landing.css link (sed-batch), Gidsen-link in noscript-fallback (sed-batch), breadcrumb HTML in `<main>` vóór `<article>` (Python-script met idempotency-check), BreadcrumbList JSON-LD in `<head>` na Article schema (zelfde script).
+- **`scripts/validate-blogs.sh`** — Checks 4+5: `<nav class="breadcrumb">` + `"@type": "BreadcrumbList"` aanwezig. Skip voor `blog/index.html`.
+- **`docs/blog-template.md`** — Breadcrumb-vereiste gedocumenteerd voor toekomstige posts.
+
+### Verificatie-iteratie + smooth-scroll regressie
+
+- **Iteratie 1:** Eerste Playwright screenshot toonde dubbele nav: noscript-fallback zichtbaar bovenop ge-injecteerde nav. Oorzaak: blog-pages laden geen `landing.css` → `.nav-links` had `display: block` ipv `flex`, `#landing-mobile-menu` altijd zichtbaar. Fix: sed-batch voegde `landing.css` toe in alle 12 blog-bestanden.
+- **Iteratie 2:** Active-state niet zichtbaar in browser-screenshot ondanks correcte code. Oorzaak: Playwright caches ES modules over `browser_close` heen. Bewezen via dynamic import met cachebust + handmatige re-injection: code werkt, was puur cache-artefact. In productie geen probleem (eerste pageload na deploy laadt nieuwe modules).
+- **Iteratie 3 — echte regressie:** E2E test `Reading progress bar works on article pages` faalde (60% ipv >90% bij scroll-to-bottom). Git stash bewees baseline groen — mijn changes brak het. Diagnose via DOM-inspectie: `landing.css:1212` zet `html { scroll-behavior: smooth }`. Dit veranderde `window.scrollTo(0, ...)` van instant → geanimeerd. Playwright's 200ms wait te kort voor smooth-scroll-completion → progress berekend op halverwege-positie. **Fix:** `html { scroll-behavior: auto }` in `blog.css` als override. Reading-flow is sequentieel scrollen — geen anchor-jumps die smooth nodig hebben.
+
+### Test-resultaten
+
+- ✅ `validate-blogs.sh`: 12/12 groen (incl. nieuwe breadcrumb + JSON-LD checks)
+- ✅ Playwright desktop screenshot (1280×800): unified nav identiek aan gidsen.html + groen-onderlijnd "Blog" active + breadcrumb subtiel zichtbaar
+- ✅ Playwright mobile screenshot (375×812): logo + hamburger werkend + breadcrumb wraps over 2 regels
+- ✅ Mobile menu open: 6 items, "Blog" active (groen + bold)
+- ✅ Regressie-check `/gidsen.html`: 0 active-links (geen scope-creep)
+- ✅ E2E `blog-theme-toggle.spec.js`: 5/5 passed, 1 pre-existing flake (theme-sync localStorage-state, niet door deze sessie veroorzaakt)
+- ✅ Pre-commit hooks groen (secret-scan + validate-blogs.sh)
+
+### Commit / push
+
+- `c660e96 feat(blog): unified marketing nav + breadcrumbs op blog-pages (Sessie 139)`
+- Pushed `c43d440..c660e96 main → main` → Netlify auto-deploy
+- Bundle-impact: +~32KB per blog-pageload (landing.css extra) + ~0.5KB per post (breadcrumb HTML + JSON-LD) = ~5KB totaal voor 11 posts. Verwaarloosbaar tov 1192KB site-totaal (+2.7%)
+
+### Architecturale patterns vastgelegd
+
+- **`currentPage` param + `activeAttr` helper** — uitbreidbaar naar Gidsen/Commands/Woordenlijst met 1 regel per page in `init-components.js`. Out-of-scope voor 139, follow-up wanneer behoefte ontstaat.
+- **Python-script met idempotency-check** voor batch-edits (`'class="breadcrumb"' in content` + `'"@type": "BreadcrumbList"' in content` skip-checks) — script kan veilig herhaald draaien zonder dubbele inserts.
+- **CSS override-niet-fork pattern** voor cross-pagina style imports — `html { scroll-behavior: auto }` in blog.css bewaart landing.css als single-source-of-truth voor smooth-scroll op landing.
+
+---
+
 ## Sessie 138: Content SEO Plan C — OWASP Top 10 Hub-Post (26 mei 2026)
 
 **Scope:** Plan C uit `monetization-C-content-seo.md` uitvoeren: 1 grondige NL-blogpost (1500-2500 woorden) met cannibalization-check, bidirectional clustering naar 3 bestaande posts, lead-magnet CTA top + Gumroad CTA mid, JSON-LD schema, sitemap-entry en Playwright productie-smoke-test. Cold-start vanuit `.claude/plans/content-seo-followup.md` (Sessie 137-handover).
