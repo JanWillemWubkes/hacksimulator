@@ -44,6 +44,7 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="../styles/main.css?v=114">
+  <link rel="stylesheet" href="../styles/landing.css?v=114">
   <link rel="stylesheet" href="../styles/blog.css?v=115">
   <link rel="stylesheet" href="../styles/mobile.css?v=115" media="screen and (max-width: 768px)">
 
@@ -99,6 +100,18 @@
     }
   }
   </script>
+  <!-- BreadcrumbList Structured Data (Sessie 139) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://hacksimulator.nl/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://hacksimulator.nl/blog/" },
+      { "@type": "ListItem", "position": 3, "name": "Terminal Commands voor Beginners", "item": "https://hacksimulator.nl/blog/terminal-basics.html" }
+    ]
+  }
+  </script>
 
 </head>
 <body>
@@ -116,6 +129,7 @@
         <a href="../terminal.html">Start Simulator</a>
         <a href="../blog/">Blog</a>
         <a href="../commands/">Commands</a>
+        <a href="../gidsen.html">Gidsen</a>
         <a href="../woordenlijst.html">Woordenlijst</a>
         <a href="../over-ons.html">Over Ons</a>
         <a href="../contact.html">Contact</a>
@@ -125,6 +139,14 @@
 
   <!-- Main Content -->
   <main id="main-content" class="blog-container">
+    <!-- Breadcrumb (Sessie 139) -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li aria-current="page">Terminal Commands voor Beginners</li>
+      </ol>
+    </nav>
     <article class="blog-post">
       <!-- Post Header -->
       <header class="blog-post-header">

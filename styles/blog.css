@@ -1214,3 +1214,41 @@ a[href='#all'].category-btn {
 .ad-in-article {
   margin: var(--spacing-xl) 0;
 }
+
+/* Override smooth-scroll uit landing.css op blog-pages.
+ * Reading-flow is sequentieel scrollen — geen anchor-jumps die smooth nodig hebben.
+ * Smooth scroll breekt reading-progress berekening (window.scrollTo wordt animated). */
+html {
+  scroll-behavior: auto;
+}
+
+/* ==================== Breadcrumb (Sessie 139 unified nav) ==================== */
+.breadcrumb {
+  padding: var(--spacing-sm) 0 var(--spacing-md);
+  font-size: 0.875rem;
+  color: var(--color-text-dim);
+}
+.breadcrumb ol {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  margin: 0;
+  padding: 0;
+}
+.breadcrumb li + li::before {
+  content: "›";
+  margin-right: var(--spacing-xs);
+  color: var(--color-text-dim);
+}
+.breadcrumb a {
+  color: var(--color-text-dim);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+.breadcrumb a:hover {
+  color: var(--color-prompt);
+}
+.breadcrumb [aria-current="page"] {
+  color: var(--color-text);
+}

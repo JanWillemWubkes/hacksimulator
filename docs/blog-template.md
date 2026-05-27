@@ -39,6 +39,7 @@ Andere goede referenties:
 5. Stylesheets: `main.css`, `blog.css`, `mobile.css` (alle drie met `?v=NNN` versioning)
 6. Google AdSense + Consent Mode v2 defaults
 7. **JSON-LD Article schema** — verplicht voor SEO
+8. **JSON-LD BreadcrumbList schema** — verplicht voor SEO rich-results (Sessie 139)
 
 ### Pre-`</body>` scripts (in deze volgorde)
 
@@ -91,6 +92,41 @@ Plaats in `<head>`, mirror `blog/ethisch-hacker-worden.html` regel 70-101:
 }
 </script>
 ```
+
+---
+
+## Breadcrumb (verplicht, Sessie 139)
+
+Plaats direct binnen `<main>`, vóór `<article class="blog-post">`. Hardcoded HTML — geen JS-injectie (SEO-crawlbaar, valt onder unified-nav strategie):
+
+```html
+<!-- Breadcrumb (Sessie 139) -->
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li aria-current="page"><Post Titel></li>
+  </ol>
+</nav>
+```
+
+Plus de bijbehorende JSON-LD in `<head>` (direct na het Article schema-blok):
+
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://hacksimulator.nl/" },
+    { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://hacksimulator.nl/blog/" },
+    { "@type": "ListItem", "position": 3, "name": "<Post Titel>", "item": "https://hacksimulator.nl/blog/<filename>.html" }
+  ]
+}
+</script>
+```
+
+`scripts/validate-blogs.sh` controleert beide (checks 4+5). Skip alleen voor `blog/index.html` (hub-pagina).
 
 ---
 

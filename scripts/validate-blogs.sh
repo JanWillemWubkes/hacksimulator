@@ -5,6 +5,9 @@
 #   1. init-analytics.js script tag aanwezig (Sessie 131 pattern)
 #   2. JSON-LD schema in <head> (SEO requirement)
 #   3. HTML tag-balans: <div> count == </div> count (Sessie 138-learning)
+#   4. Breadcrumb <nav class="breadcrumb"> aanwezig (Sessie 139 unified nav)
+#   5. BreadcrumbList JSON-LD aanwezig (Sessie 139 SEO rich-results)
+# Checks 4+5 worden geskipped voor blog/index.html (hub-pagina, geen breadcrumb nodig).
 #
 # Replaces pre-Sessie-131 GDPR-script-checks (4 aparte consent-scripts
 # vervangen door 1 gebundelde init-analytics.js).
@@ -63,6 +66,22 @@ validate_blog() {
     local diff=$((open_count - close_count))
     issues+="    [FAIL] TAG-BALANS: <div>=$open_count, </div>=$close_count (diff=$diff)\n"
     errors=$((errors + 1))
+  fi
+
+  # Checks 4+5: breadcrumb + BreadcrumbList JSON-LD (Sessie 139)
+  # Skip voor blog/index.html — hub-pagina, geen breadcrumb nodig.
+  if [ "$filename" != "index.html" ]; then
+    # Check 4: <nav class="breadcrumb"> aanwezig
+    if ! grep -q 'class="breadcrumb"' "$file"; then
+      issues+="    [FAIL] MISSING: breadcrumb nav (<nav class=\"breadcrumb\">)\n"
+      errors=$((errors + 1))
+    fi
+
+    # Check 5: BreadcrumbList JSON-LD aanwezig
+    if ! grep -q '"@type": "BreadcrumbList"' "$file"; then
+      issues+="    [FAIL] MISSING: BreadcrumbList JSON-LD schema\n"
+      errors=$((errors + 1))
+    fi
   fi
 
   # Report per file

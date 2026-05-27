@@ -19,6 +19,8 @@
  */
 function getMarketingNavbar(options = {}) {
   const isLanding = options.isLanding || false;
+  const currentPage = options.currentPage || '';
+  const activeAttr = (page) => currentPage === page ? ' class="active" aria-current="page"' : '';
 
   // Landing-only anchor links for mobile menu
   const landingAnchors = isLanding ? `
@@ -41,11 +43,11 @@ function getMarketingNavbar(options = {}) {
       <div class="nav-right">
         <!-- Desktop Nav Links (hidden on mobile via landing.css) -->
         <div class="nav-links">
-          <a href="/blog/">Blog</a>
-          <a href="/commands/">Commands</a>
-          <a href="/gidsen.html">Gidsen</a>
-          <a href="/woordenlijst.html">Woordenlijst</a>
-          <a href="/over-ons.html">Over Ons</a>
+          <a href="/blog/"${activeAttr('blog')}>Blog</a>
+          <a href="/commands/"${activeAttr('commands')}>Commands</a>
+          <a href="/gidsen.html"${activeAttr('gidsen')}>Gidsen</a>
+          <a href="/woordenlijst.html"${activeAttr('woordenlijst')}>Woordenlijst</a>
+          <a href="/over-ons.html"${activeAttr('over-ons')}>Over Ons</a>
         </div>
         <!-- Mobile Hamburger Toggle (hidden on desktop via mobile.css) -->
         <button class="navbar-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="landing-mobile-menu">
@@ -74,11 +76,11 @@ function getMarketingNavbar(options = {}) {
   <div id="landing-mobile-menu" class="navbar-menu">
     <ul class="navbar-links">
       <li><a href="/terminal.html" class="mobile-cta-link">Start Simulator</a></li>${landingAnchors}
-      <li><a href="/blog/">Blog</a></li>
-      <li><a href="/commands/">Commands</a></li>
-      <li><a href="/gidsen.html">Gidsen</a></li>
-      <li><a href="/woordenlijst.html">Woordenlijst</a></li>
-      <li><a href="/over-ons.html">Over Ons</a></li>
+      <li><a href="/blog/"${activeAttr('blog')}>Blog</a></li>
+      <li><a href="/commands/"${activeAttr('commands')}>Commands</a></li>
+      <li><a href="/gidsen.html"${activeAttr('gidsen')}>Gidsen</a></li>
+      <li><a href="/woordenlijst.html"${activeAttr('woordenlijst')}>Woordenlijst</a></li>
+      <li><a href="/over-ons.html"${activeAttr('over-ons')}>Over Ons</a></li>
     </ul>
     <div class="navbar-actions">
       <button class="theme-toggle" aria-label="Wissel naar light mode" aria-pressed="false" title="Toggle tussen dark en light mode">
@@ -168,8 +170,11 @@ function getAppNavbar() {
 }
 
 /**
+ * @deprecated Sessie 139 — blog pages gebruiken nu getMarketingNavbar() voor unified nav.
+ * Behouden voor backwards-compat indien externe call site nog 'blog' variant doorgeeft.
+ * Cleanup: verwijder samen met .blog-nav CSS in styles/blog.css.
+ *
  * Blog navbar - minimal met terug links + hamburger menu (Sessie 97 uniformity)
- * Gebruikt op: blog/*.html
  * @param {Object} options - Configuratie opties
  * @param {string} options.backTo - 'simulator' of 'blog'
  * @param {string} options.basePath - Relatief pad naar root (bijv. '../')

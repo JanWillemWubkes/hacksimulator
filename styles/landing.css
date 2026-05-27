@@ -144,6 +144,16 @@
   border-radius: 4px;
 }
 
+/* Active-state (current page, Sessie 139 unified nav) */
+.nav-links a.active {
+  color: var(--color-prompt);
+  border-bottom: 2px solid var(--color-prompt);
+}
+.navbar-menu .navbar-links a.active {
+  color: var(--color-prompt);
+  font-weight: 600;
+}
+
 /* Nav Right */
 .landing-nav .nav-right {
   display: flex;

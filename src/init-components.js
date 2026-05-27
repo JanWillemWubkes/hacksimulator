@@ -8,7 +8,7 @@
  *
  * Auto-detects page type based on URL:
  * - /terminal.html -> 'app' navbar
- * - /blog/* -> 'blog' navbar
+ * - /blog/* -> 'marketing' navbar (unified nav; currentPage='blog' for active-state)
  * - / or /index.html, /over-ons.html, /contact.html, /woordenlijst.html -> 'marketing' navbar
  */
 
@@ -35,14 +35,11 @@ function detectPageType() {
     };
   }
 
-  // Blog pages
+  // Blog pages: unified marketing nav with currentPage='blog' for active-state
   if (path.includes('/blog/')) {
     return {
-      variant: 'blog',
-      options: {
-        basePath: '../',
-        backTo: path.endsWith('/blog/') || path.endsWith('/blog/index.html') ? 'blog' : 'simulator'
-      },
+      variant: 'marketing',
+      options: { currentPage: 'blog' },
       footerVariant: 'marketing',
       footerOptions: {
         basePath: '../',
