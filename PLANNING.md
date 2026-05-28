@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 28 mei 2026 (Sessie 141 — Terminal Core runtime gemeten ⚠️ ~781 KB unminified)
+**Laatst bijgewerkt:** 28 mei 2026 (Sessie 142 — Lighthouse productie-meting onthulde third-party perf als hoofdoorzaak; #24 paused, #25 spawned)
 **Status:** ✅ LIVE on Netlify | M5 Testing 91% | M5.5 Monetization deep (AdSense + Ko-fi + Brevo + Gumroad + Lead magnet) | M6 Tutorial 88% | M7 Gamification 100% | Blog content-pijler 10 posts live
 **Verantwoordelijk:** Development Team
 **Live URL:** https://hacksimulator.nl/
@@ -494,7 +494,7 @@ Site is sinds Sessie 100 (~983 KB) gegroeid naar **~2196 KB unminified** door co
 
 | Scope | Budget | Status |
 |-------|--------|--------|
-| **Terminal App Core (runtime van terminal.html)** — JS + core CSS + terminal.html geladen bij terminal-load | **<400 KB** (strikt) | ⚠️ **~781 KB unminified** gemeten Sessie 141 (HTML 19 KB + 6 CSS 160 KB + 99 JS module-graph 601 KB). Geschatte minified ~547 KB (70%-ratio). **Overschrijding ~37% boven budget zelfs minified** — optimalisatie nodig (zie TASKS.md Volgende Stappen #24: lazy-load gamification/tutorial modules) |
+| **Terminal App Core (runtime van terminal.html)** — JS + core CSS + terminal.html geladen bij terminal-load | **<400 KB** (strikt) | ⚠️ **~781 KB unminified** gemeten Sessie 141 (HTML 19 KB + 6 CSS 160 KB + 99 JS module-graph 601 KB). Geschatte minified ~547 KB (70%-ratio). **Overschrijding ~37% boven budget zelfs minified** — Sessie 142 Lighthouse-meting onthulde echter dat eigen bundle NIET de performance-bottleneck is (zie SEO/content-pijler rationale hieronder + TASKS.md #25). Bundle-optimalisatie sprint (#24) ⏸️ paused tot na third-party perf research |
 | **Per pagina** — HTML + page-specifieke CSS (homepage, blog post, sample-pentest) | <50 KB per pagina | ✅ Binnen budget |
 | **SEO/content-pijler** — blog/ + assets/ (screenshots + OG image + sample-PDF) | Geen budget (bewust losgelaten) | ⚠️ Groei monitoren bij elke Lighthouse-audit |
 
@@ -502,6 +502,15 @@ Site is sinds Sessie 100 (~983 KB) gegroeid naar **~2196 KB unminified** door co
 - Runtime (wat gebruikers laden bij terminal-gebruik) is de UX-kritieke maat → blijft strikt
 - SEO/content (wat Google crawlt) is groei-as → budgetloos, mits Lighthouse Performance ≥90 blijft
 - Live metrics per directory: zie TASKS.md §Huidige Focus
+
+**Sessie 142 Lighthouse-meting — frame-bias-onthulling:**
+- Productie /terminal.html gemeten: **Mobile 39/100, Desktop 64/100** Performance (beide ver onder 90-drempel)
+- Resource-breakdown on-wire (Lighthouse audit): Total 624 KB / 118 requests | **first-party scripts ~98 KB gzipped (~93 files)** | **third-party scripts 353 KB / 10 requests (~57% van bundle: AdSense + GA + Brevo + Ko-fi + misc)** | fonts 100 KB | stylesheets 48 KB
+- TBT 3,270 ms mobile / 610 ms desktop (target <300 ms) — hoofdoorzaak is third-party main-thread blocking, niet first-party bundle-grootte
+- **Frame-bias inzicht:** "bundle-source size (~547 KB minified)" ≠ "on-wire transfer (~98 KB gzipped first-party)" ≠ "Lighthouse Performance score". Deze drie metrics zijn losjes gerelateerd; eerdere `<400 KB` budget-discussie ging over (1), maar Lighthouse meet via (2)+(3)+execution-time.
+- **Implicatie voor #24 (Pad A lazy-load):** lazy-loaden van ~108 KB minified eigen code bespaart ~22 KB gzipped → niet relevant voor TBT 3.3 s die domineren wordt door third-party execution. Pad A blijft een geldige optimalisatie voor bundle-source budget, maar fixt de gemeten performance-regressie niet.
+- **Performance-regressie sinds Sessie 100 (Lighthouse Perf 100/100/92/100):** veroorzaakt door monetization-stack toevoegingen (Sessies 117-137: AdSense + Ko-fi + Brevo + Gumroad + Lead-magnet trackers), niet door bundle-groei eigen code. M6 Tutorial + M7 Gamification + nieuwe commands tellen ~207 KB minified delta op (eigen code), wat ~40 KB gzipped on-wire is — verwaarloosbaar t.o.v. ~353 KB third-party.
+- **Vervolg:** TASKS.md #25 — third-party perf research (~2 uur scope) inventariseert per script de revenue-vs-UX trade-off voorafgaand aan implementatie-beslissing. Item #24 heropent na #25 met mogelijk gecombineerde Pad A + Pad C aanpak.
 
 **Optimization Strategy:**
 - Netlify asset processing: CSS/JS/HTML minificatie + image compression
@@ -755,8 +764,8 @@ const DEBUG_MODE = false;
 
 ---
 
-**Laatst bijgewerkt:** 28 mei 2026 (Sessie 141)
-**Versie:** 3.2 (Sessie 141 — bundle-tabel regel 497 status ⏭️ Verificatie gepland → ⚠️ ~781 KB unminified gemeten via BFS module-graph trace (99 JS files reachable van terminal.html entry points). Sessie 140 doc-only split nu onderbouwd met concreet ground-truth-cijfer. Geen architectuur-wijziging, alleen claim-verificatie.)
+**Laatst bijgewerkt:** 28 mei 2026 (Sessie 142)
+**Versie:** 3.3 (Sessie 142 — Lighthouse productie-meting /terminal.html: Mobile 39, Desktop 64. Bundle Size Budget sectie uitgebreid met "Sessie 142 Lighthouse-meting — frame-bias-onthulling" subsectie: first-party bundle is NIET de Lighthouse-bottleneck, third-party scripts (AdSense+GA+Brevo+Ko-fi, ~353 KB) domineren. Bundle-source != on-wire != Lighthouse-score: drie losjes gerelateerde metrics. Item #24 status ⚠️ blijft (geen budget-shift toegepast). Geen architectuur-wijziging, doc-update over meet-frame.)
 **Status:** ✅ Deployed - Live in Production | M5.5 Monetization stack deep + Brevo deliverability getuned | M7 Gamification ✅ 100% | Blog content-pijler live
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

@@ -4,6 +4,134 @@
 
 ---
 
+## Sessie 142: Lighthouse Meet-Frame-Bias Onthuld — Item #24 Paused, #25 Spawned (28 mei 2026)
+
+**Scope:** Heisenberg's instructie was "pak item #24 op": Pad B als Lighthouse Performance ≥90, anders Pad A research. Plan-mode iteratie produceerde een concrete beslis-tabel en file-edit-lijst, exit plan mode → Lighthouse-meting → onverwacht resultaat dwong scope-correctie naar route die geen van beide originele paden volgde.
+
+**Status:** ✅ Updates op TASKS.md (item #24 → ⏸️ paused, item #25 nieuw) + PLANNING.md (Bundle Size Budget sectie uitgebreid met "Lighthouse-meting frame-bias-onthulling" subsectie) + CLAUDE.md (Sessie 142 learnings prepend, sessie-counter 141→142, Last updated, Version 5.15→5.16) doorgevoerd. Geen commits in deze sessie (Heisenberg triggert /summary apart, commit-beslissing daarna).
+**Duur:** ~50 min (plan-mode + Lighthouse-meting twee runs + verrassings-presentatie + AskUserQuestion + scope-correctie + 5 file-edits + validate-docs).
+**Plan source:** `/home/willem/.claude/plans/heisenberg-hier-pak-crispy-hennessy.md`.
+
+### Plan-mode iteratie
+
+Plan-bestand bevatte expliciete "meedogenloze feiten over de instructie zelf" sectie waarin drie observaties werden gevangen die de instructie corrigeerden:
+1. **Sessie 141 "research-vragen 1-4" bestaan niet als genummerde lijst** — alleen één regel in `current.md:73` over "lazy-load research, inventariseer sync-imports". Plan reformuleerde dit naar 4 expliciete vragen, gemarkeerd als nieuw.
+2. **Pad B decision-criterium "≥90" is extrapolatie van SEO/content-rule, niet bestaande regel voor Terminal Core** — PLANNING.md regel 503 koppelt die regel alleen aan SEO/content. Plan voegde "regel ook expliciet voor Terminal Core documenteren" toe aan Pad B-edits om niet impliciet doc-rule te creëren.
+3. **CLAUDE.md heeft TWEE bundle-budget-regels (regel 19 Quick Reference + regel 22 §Bundle), Heisenberg noemde er één** — beide zouden in Pad B moeten.
+
+ExitPlanMode goedgekeurd, Lighthouse-meting gestart.
+
+### Lighthouse-meting — Node-version friction + twee preset-runs
+
+**Iteratie 1 — Node 18 vs Lighthouse 12 mismatch:**
+- `npx --yes lighthouse` haalde laatste major (v12.x), crashte op Node 18 met `SyntaxError: Unexpected token 'with'` (import attributes syntax vereist Node 22+).
+- Fix: pin op `lighthouse@11` (laatste Node-18-compatible major). ~5 min friction.
+
+**Iteratie 2 — Mobile (default preset, 4x CPU slowdown, 1.6 Mbps):**
+- Performance: **39/100**
+- FCP: 1.8 s | LCP: **8.5 s** | TBT: **3,270 ms** | TTI: 8.5 s | Speed Index: 6.0 s | CLS: 0
+- Resource summary: Total 624 KB / 118 requests | Scripts 451 KB / 103 files | Third-party 353 KB / 10 requests | Fonts 100 KB / 3 files | Stylesheets 48 KB / 7 files
+
+**Iteratie 3 — Desktop (no throttling):**
+- Performance: **64/100**
+- FCP: 0.5 s | LCP: 1.9 s | TBT: 610 ms | TTI: 1.6 s | Speed Index: 2.0 s | CLS: 0
+- Resource summary identiek aan mobile (transfer-size hangt niet af van preset; alleen execution-time differs).
+
+Mobile vs Desktop TBT 3,270 vs 610 ms (~5x verschil) onthulde: probleem is **CPU-bound** (third-party JS main-thread execution), niet bandwidth-bound (large bundle transfer).
+
+### Surprise-bevinding en frame-bias-onthulling
+
+Beide audits ver onder 90-drempel — per Heisenberg's beslis-tabel = automatisch Pad A. **MAAR data laat zien dat Pad A de verkeerde fix is:**
+
+| Bundle-laag | Grootte | % van totaal |
+|---|---|---|
+| First-party scripts (gzipped on-wire) | ~98 KB | 16% |
+| Third-party scripts (AdSense+GA+Brevo+Ko-fi+misc) | ~353 KB | 57% |
+| Fonts | 100 KB | 16% |
+| Stylesheets + HTML + overig | ~73 KB | 12% |
+| **Total transferred** | **624 KB** | 100% |
+
+Pad A target (gamification ~68 KB + tutorial ~40 KB = ~108 KB minified bron) bespaart ~22 KB gzipped → minder dan 4% van wat browser downloadt. Gaat TBT 3.3 s niet noemenswaardig fixen want TBT is dominant main-thread execution-time, vooral third-party.
+
+**Drie meet-niveau onderscheid expliciet gemaakt** (nu vastgelegd in PLANNING.md + CLAUDE.md learnings):
+1. **Bundle-source size** — ~547 KB minified Terminal Core (eigen code, repo-resident)
+2. **On-wire transfer** — ~98 KB gzipped first-party + 353 KB third-party = 624 KB totaal
+3. **Lighthouse Performance score** — execution-time + render-path metrics (Mobile 39 / Desktop 64)
+
+Deze drie zijn losjes gerelateerd. Item #24's hele kader (Pad A lazy-load OF Pad B rebudget) opereerde op niveau (1), terwijl Heisenberg's beslis-tabel een (3)-meting als trigger gebruikte. Sessie 100 baseline ("Lighthouse 100/100/92/100" + 340 KB minified) had hoge (3) ondanks vergelijkbaar niveau (1) — vermoedelijk omdat monetization-stack (Sessies 117-137) toen nog niet bestond.
+
+### Scope-correctie via AskUserQuestion
+
+Vier opties gepresenteerd aan Heisenberg:
+- A) Pad C — third-party performance sprint (~6-10 uur, defer AdSense/GA, font-display, preconnect)
+- B) Pad A research alsnog (volg beslis-tabel mechanisch)
+- C) Pad B met aangepaste rationale (rebudget, erken bundle-groei niet de bottleneck)
+- D) Stop nu, scope expand naar #25, geen edits
+
+Heisenberg gaf "wat adviseer je als expert?" terug. Mijn aanbeveling: **D, productief geframed**. Pad C is revenue-impact-werk dat bewuste keuze vereist (AdSense viewability, Brevo signup friction); te groot voor #24-closure. Pad B is intellectueel oneerlijk gegeven net gemeten user-impact. Pad A is een uur kosten om "NO-GO" te concluderen.
+
+Heisenberg akkoord "ja" → uitvoering.
+
+### Implementatie — 5 files edited, geen budget-shift
+
+**`TASKS.md`** (4 edits):
+- Header datum + Status-regel met Lighthouse-bevinding + Sprint regel "Sessie 142: Lighthouse-meting onthulde meet-frame-bias"
+- §Huidige Focus bundle-block uitgebreid met Lighthouse-cijfers + frame-bias inzicht
+- Item #24 status update naar ⏸️ paused met scope-correctie rationale
+- Item #25 nieuw: third-party performance audit (~2 uur research-task)
+- Footer datum + Versie 4.5 → 4.6
+
+**`PLANNING.md`** (3 edits):
+- Header datum
+- Bundle Size Budget tabel regel 497: status-text uitgebreid met Sessie 142 verwijzing, ⚠️-status blijft
+- Rationale-block uitgebreid met "Sessie 142 Lighthouse-meting — frame-bias-onthulling" subsectie (6 bullets met meet-data + drie meet-niveaus + implicaties)
+- Footer Versie 3.2 → 3.3
+
+**`.claude/CLAUDE.md`** (4 edits):
+- Header §Status regel: laatste Sessie 141 → 142
+- Recent Critical Learnings: prepend Sessie 142 entry (3 ⚠️ Never, 6 ✅ Always)
+- Sessie counter 141 → 142
+- Last updated + Version 5.15 → 5.16
+
+**`docs/sessions/current.md`** (deze entry).
+
+**GEEN edits** in bundle-regels CLAUDE.md regel 19 + 22 (beide budget-claims blijven `<400 KB`) — eerlijk: we hebben de echte fix nog niet, dus rebudget zou foute rationale documenteren.
+
+### Dead-ends en surprises
+
+- **Heisenberg's beslis-tabel veronderstelde dat als er user-impact is, eigen bundle de oorzaak is.** Lighthouse falsifieerde tweede helft van die aanname. Mechanisch volgen zou hebben geleid tot 15-20 uur Pad A engineering met Lighthouse-score 39 → ~42 als "succes". Stop-en-reframe via AskUserQuestion bewees waarde.
+- **`npx lighthouse` ↔ Node-version-mismatch** kostte 5 min friction. Geleerd: pin major-version bij Node ≠ recent (`lighthouse@11` voor Node 18, `@12+` voor Node 22+). Toegevoegd aan Sessie 142 learnings voor reproduceerbaarheid.
+- **Resource-summary identiek tussen mobile en desktop preset.** Eerste hypothese was "misschien laadt mobile minder assets" — fout. Beide preset transferren identiek; alleen execution-throttling verschilt. Bevestigt: TBT-verschil is puur CPU-bound, niet network-bound.
+- **Sessie 100 baseline "Lighthouse 100/100/92/100" hangt zonder context.** TASKS.md regel 42 noemt het zonder mobile/desktop preset, zonder URL. Vermoedelijk desktop, vermoedelijk vóór AdSense+GA+Brevo+Gumroad. Score-comparison in vacuüm is valse zekerheid; absoluut cijfer zonder meet-context zegt weinig.
+
+### Methodologisch artifact
+
+Two-preset Lighthouse-meting (mobile + desktop) is reproduceerbaar in <3 min met:
+```bash
+npx --yes lighthouse@11 https://hacksimulator.nl/terminal.html \
+  --only-categories=performance --output=json \
+  --output-path=/tmp/lh.json --chrome-flags="--headless --no-sandbox" --quiet
+# Voor desktop: voeg --preset=desktop toe + --output-path=/tmp/lh-desktop.json
+```
+Parsing-snippet (Python, 10 regels) idem reproduceerbaar uit plan-file `heisenberg-hier-pak-crispy-hennessy.md`.
+
+### Next steps (deferred)
+
+- **Item #25 — Third-party performance audit (~2 uur research):** inventariseer 10 third-party requests, per-script defer-kosten in revenue/UX vs Lighthouse-impact ms TBT/LCP, quick wins (font-display:swap, preconnect hints, async/defer audit). Output = trade-off-tabel voor #24-heropening.
+- **Item #24 — Bundle-optimalisatie sprint (⏸️ paused):** heropent na #25 met mogelijk gecombineerde Pad A (lazy-load eigen code) + Pad C (third-party defer) aanpak.
+- **Sessie 144 trigger ongewijzigd** — `validate-docs.sh --deep` mode + BFS-script herbruik.
+
+### Metrics delta
+
+- Files changed: 4 (TASKS.md + PLANNING.md + CLAUDE.md + current.md)
+- Commits: 0 (sessie sloot af met /summary, commit-beslissing apart)
+- Validate-docs: target exit 0 (Check 1-4 alle slagen na sessie-counter sync 141→142 in alle 3 docs)
+- Sessie counter: 141 → 142
+- Lighthouse ground truth toegevoegd aan persistente docs: Mobile 39 / Desktop 64 + breakdown first-party (~98 KB gzipped) vs third-party (353 KB)
+- Open items: #24 status ⏸️ paused (was [ ] open), #25 nieuw geopend
+
+---
+
 ## Sessie 141: Terminal Core Runtime-Verificatie + Item #21 Sluiten (28 mei 2026)
 
 **Scope:** Cold-start vraag "lees CLAUDE.md/TASKS.md en wat is de logische volgende stap?" — Sessie 140 had de PLANNING.md bundle-tabel doc-only gesplit (runtime <400 KB vs SEO/content budgetloos) maar regel 497 stond op status `⏭️ Verificatie gepland` zonder concreet KB-cijfer. Laatste expliciete cijfer (Sessie 100, ~340 KB minified) was 40 sessies oud — exact het "ground truth degradeert silent zonder forcing function"-syndroom uit Sessie 140's eigen learnings. Sessie 141 = de baseline-meting die de doc-claim onderbouwt.

@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 141)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 142)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -83,6 +83,20 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ---
 
 ## Recent Critical Learnings
+
+### Sessie 142: Lighthouse Meet-Frame-Bias — Bundle-Source ≠ On-Wire ≠ Performance (28 mei 2026)
+⚠️ **Never:**
+- Een beslis-tabel ontwerpen die één metric als proxy voor user-impact gebruikt zonder de andere meet-niveaus uit te sluiten — Sessie 142 begon met "Pad B als Lighthouse ≥90, anders Pad A". Lighthouse mat Mobile 39 + Desktop 64; Pad A is automatische conclusie. MAAR Pad A target (eigen-code bundle ~108 KB minified lazy-loaden) bespaart ~22 KB gzipped van 624 KB on-wire totaal = niet relevant voor TBT 3,270 ms die domineren wordt door third-party (353 KB / 57%). Beslis-framework veronderstelde impliciet dat als er user-impact is, ónze bundle de oorzaak is — Lighthouse falsifieerde het tweede deel van die aanname maar niet het eerste. Klakkeloos het beslis-frame volgen zou hebben geleid tot 15-20 uur Pad A engineering met Lighthouse-score van 39 → ~42 als "succes"
+- "Lighthouse 100/100/92/100" uit Sessie 100 als baseline-claim accepteren zonder de meet-context te kennen — die historische score is vermoedelijk desktop, mogelijk vóór de complete monetization-stack (AdSense in 117-118, Brevo in 126, Gumroad in 127-129, Lead magnet in 130-132, ~10 third-party scripts toegevoegd in 20 sessies). Score-comparison zonder context creëert valse zekerheid over performance-trend; absoluut cijfer in een vacuüm zegt weinig
+- Pad B "rebudget want geen user-impact" rationale toepassen terwijl Lighthouse net 39/64 mat — dat zou een budget-shift documenteren met een bewijs dat we niet hebben. Anti-drift werk Sessie 140 voorkomt structurele drift, maar een rebudget op verkeerde rationale is rationale-drift binnen één sessie. Open laten + research-task spawn (#25) is intellectueel eerlijker dan dichten-met-foute-grond
+
+✅ **Always:**
+- Drie meet-niveaus expliciet onderscheiden bij elk bundle-performance-debat: (1) **bundle-source size** (wat in repo staat, ~781 KB unminified / ~547 KB minified Terminal Core), (2) **on-wire transfer** (wat de browser download, ~98 KB gzipped first-party + 353 KB third-party = 624 KB totaal in Sessie 142 Lighthouse-audit), (3) **performance-score** (Lighthouse executie-time + render-path metrics, niet direct uit (1) of (2) afleidbaar). Deze drie zijn losjes gerelateerd — fix op niveau (1) garandeert geen verbetering op (3). Documenteer welk niveau het probleem zit voordat je naar oplossing rent
+- Lighthouse mobile EN desktop draaien als basis-meting — default Lighthouse is mobile met 4x CPU throttling + 1.6 Mbps; desktop is no-throttling. Verschil Mobile 39 vs Desktop 64 onthult of het probleem CPU-bound (third-party JS execution) of bandwidth-bound (large bundle download) is. In Sessie 142: mobile TBT 3,270 ms / desktop 610 ms = 5x verschil → CPU-bound = third-party execution, niet transfer-size. Twee-meting is reproduceerbaar in <3 min met `npx lighthouse@11`
+- Pre-empt revenue-impact-discussies voordat performance-edits in monetization-scripts toegepast worden — AdSense lazy-loading raakt viewability metrics (CPM rates), Brevo/Ko-fi iframe defer raakt signup/donation friction. Dit zijn revenue-vs-performance trade-offs, geen pure perf-tweaks. Heisenberg moet die trade bewust maken, niet als bijproduct van bundle-budget-cleanup. Daarom: third-party perf werk eerst als RESEARCH-task scopen (#25, ~2 uur), geen implementatie zonder per-script trade-off-tabel
+- Bij surprise-bevinding in execution: stop, presenteer data + interpretatie + nieuwe opties aan user via `AskUserQuestion` met expliciete vermelding "verrassend t.o.v. plan-aanname" — Sessie 142 stopte na Lighthouse-output i.p.v. mechanisch door te gaan naar Pad A research; Heisenberg gaf akkoord op gewijzigde scope (item #24 paused + #25 spawn). Plan-bestanden zijn snapshot van veronderstellingen op moment-T; nieuwe data overrulet plan
+- Item-status "✅ gesloten" alleen toepassen als de werkelijke kwestie is opgelost — niet als bewijs-onderbouwing weerlegd is. Sessie 142 had item #24 kunnen "afronden met Pad B-conclusie" maar dat zou een sluiting met foute rationale zijn. ⏸️ paused-status + cross-link naar #25 + heropen-conditie is honester en behoudt context voor toekomstige sessies
+- npx lighthouse pinning op major-version bij Node-version-mismatch (`lighthouse@11` werkt op Node 18, `@12+` vereist Node 22+) — bespaart 5 min npm-error-debug. Documenteer in plan-file welke pinning gebruikt is voor reproduceerbaarheid
 
 ### Sessie 141: Terminal Core Runtime-Verificatie — Het Bewijs Achter de Doc-Claim (28 mei 2026)
 ⚠️ **Never:**
@@ -221,7 +235,7 @@ Pre-Sessie 135 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last: Sessie 140 cleanup Sessie 134, next: Sessie 145)
-**Sessie counter:** 141
+**Sessie counter:** 142
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -273,5 +287,5 @@ Pre-Sessie 135 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
 
 ---
 
-**Last updated:** 28 mei 2026 (Sessie 141 — Terminal Core runtime-verificatie: BFS module-graph trace vanaf terminal.html entry points → 99/103 JS files reachable + 6 CSS + HTML = ~781 KB unminified / ~547 KB minified geschat = ~37% over 400 KB budget. Item #21 gesloten, item #24 toegevoegd met twee paden (lazy-load vs budget heroverwegen). Sessie 140 forcing function bewees zich nuttig: PLANNING.md ⏭️-status werd concrete ⚠️-status met cijfer.)
-**Version:** 5.15 (Sessie 141 ground-truth-meting: 40-sessies-oude budget-claim (Sessie 100 ~340 KB minified) onderworpen aan feitelijke meting. Twee-iteratie meet-pattern bewezen (`find` snel → BFS precies, ~20 regels Python). Plan-scope tijdens uitvoering verkleind van 4 voorstellen naar 1 echte open taak na inspectie van scripts — bevestigt ground-truth-first principe ook voor task-status. Defense-in-depth follow-up #24 persistent op 3 plekken (TASKS.md item, current.md entry, CLAUDE.md learnings).)
+**Last updated:** 28 mei 2026 (Sessie 142 — Lighthouse productie-meting /terminal.html: Mobile 39/100, Desktop 64/100. Frame-bias-onthulling: first-party bundle is NIET de Lighthouse-bottleneck; third-party scripts (AdSense+GA+Brevo+Ko-fi, ~353 KB / 57% van 624 KB on-wire) domineren TBT 3.3 s. Item #24 ⏸️ paused (Pad A zou ~22 KB gzipped besparen = niet relevant), item #25 spawned voor third-party perf research ~2 uur. Geen budget-shift: ⚠️-status blijft tot echte fix.)
+**Version:** 5.16 (Sessie 142 meedogenloos-eerlijke scope-correctie: oorspronkelijk plan-mode beslis-tabel (Pad B als Lighthouse ≥90, anders Pad A) bleek incompleet na meting — beide paden adresseren niet de werkelijke performance-regressie. Stop-en-reframe-pattern toegepast via `AskUserQuestion` met meet-data + 4 opties; gekozen route = item #24 paused + item #25 spawn i.p.v. forceren naar Pad A/B. Sessie 140 anti-drift-werk gehouden: alle drift-checks slagen, geen rationale-shortcut. Drie meet-niveaus (bundle-source vs on-wire vs Lighthouse-score) expliciet gedocumenteerd in PLANNING.md + learnings.)

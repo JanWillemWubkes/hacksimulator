@@ -1,8 +1,8 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 28 mei 2026 (Sessie 141)
-**Status:** M7 Gamification ✅ 100% | M6 Tutorial System 88% | M5.5 Monetization ✅ Live + Brevo deliverability tuned + Gumroad v1.0 + Lead magnet (LIVE on hacksimulator.nl) | Doc-protocol refactor + forcing function (Sessie 140) | Terminal Core runtime ⚠️ ~781 KB unminified gemeten (Sessie 141, ~37% boven budget)
-**Sprint:** Sessie 141: Terminal Core runtime-verificatie via BFS module-graph trace → item #21 gesloten, item #24 toegevoegd voor bundle-optimalisatie-beslissing
+**Laatst bijgewerkt:** 28 mei 2026 (Sessie 142)
+**Status:** M7 Gamification ✅ 100% | M6 Tutorial System 88% | M5.5 Monetization ✅ Live + Brevo deliverability tuned + Gumroad v1.0 + Lead magnet (LIVE on hacksimulator.nl) | Doc-protocol refactor + forcing function (Sessie 140) | Terminal Core ⚠️ ~547 KB minified + ⚠️ **Lighthouse Mobile 39 / Desktop 64** gemeten (Sessie 142, hoofdoorzaak third-party scripts 353 KB van 624 KB on-wire)
+**Sprint:** Sessie 142: Lighthouse-meting onthulde meet-frame-bias — first-party bundle is NIET de Lighthouse-bottleneck; item #24 op pauze, item #25 gespawned voor third-party perf research
 
 ---
 
@@ -31,9 +31,10 @@
 
 **Actieve Mijlpalen:** M5.5 Monetization (deliverability + lead-magnet polish) + M6 Tutorial System (last 3 taken) + Blog content-SEO (post-Sessie 138 hub-clustering)
 **Current Status:** ✅ LIVE — Playwright E2E: **167 tests, 22 spec files** (Chromium, Firefox, WebKit) | AdSense + Ko-fi + Brevo (deliverability getuned) + Gumroad v1.0 + Lead magnet live
-**Bundle (geverifieerd 28 mei 2026, Sessies 140-141):**
+**Bundle (geverifieerd 28 mei 2026, Sessies 140-142):**
 - **Site totaal:** ~2196 KB unminified | src/ 627 KB | styles/ 268 KB | blog/ 369 KB (12 files: 10 posts + index + welkom) | assets/ 702 KB | HTML ~155 KB
 - **Terminal Core (runtime van terminal.html, gemeten Sessie 141 via BFS module-graph):** **~781 KB unminified** | HTML 19 KB + CSS 160 KB (6 files) + JS 601 KB (99 module-graph files). Geschatte minified ~547 KB. **⚠️ ~37% boven 400 KB budget zelfs minified** — zie #24
+- **Lighthouse on-wire (Sessie 142, productie /terminal.html):** **Mobile 39/100, Desktop 64/100** | Total transferred 624 KB / 118 requests | first-party scripts ~98 KB gzipped / ~93 files | **third-party scripts 353 KB / 10 requests (AdSense+GA+Brevo+Ko-fi+misc, ~57% van bundle)** | fonts 100 KB / 3 files | TBT 3,270 ms mobile / 610 ms desktop, LCP 8.5 s mobile / 1.9 s desktop. **Frame-bias inzicht:** bundle-source size ≠ on-wire transfer ≠ Lighthouse-performance. Eigen-code lazy-loaden (Pad A item #24) bespaart ~20 KB gzipped — niet relevant voor TBT 3.3 s. Zie #25
 - **Playwright:** 22 spec files, 167 tests
 
 **Volgende Stappen:**
@@ -60,7 +61,8 @@
 21. [x] Bundle runtime-budget herijken: split site-totaal in *Terminal Core* (runtime <400 KB) vs *SEO/content* (geen budget) — splitsing toegepast in PLANNING.md bundle-tabel (Sessie 140 doc-split + Sessie 141 ground-truth meting). **Meet-resultaat Sessie 141:** Terminal Core = ~781 KB unminified (HTML 19 + CSS 160 + JS-module-graph 601 over 99 files). Geschatte minified ~547 KB. **⚠️ Overschrijding ~37% boven 400 KB budget zelfs minified** → opvolg-actie #24
 22. [ ] Postmaster re-check trigger: eerste >100-recipient campaign-send OF kalender-datum 2 wk later (vanaf 18 mei 2026 → ~1 juni 2026)
 23. [ ] **Sessie 144 trigger** — Bouw `validate-docs.sh --deep` mode: bundle KB ground-truth-check (compare `du -sb src/ styles/ blog/ assets/` output tegen TASKS.md cijfers met tolerance van ±5%) + milestone-percentage check (raw `[x]`/`[ ]` count vs claimed percentage in Voortgang Overzicht tabel). ~20 min werk, vangt soft-drift die de huidige 4 invariant-checks (sessie-counter, datum, PRD-version, monetization-keywords) niet detecteren. Zie inline TODO in `scripts/validate-docs.sh`.
-24. [ ] **Bundle-optimalisatie sprint** (uit Sessie 141 meet-resultaat) — Terminal Core zit ~37% boven 400 KB budget (~547 KB minified vs 400 KB). Hoogwaardige kandidaten voor lazy-loading via dynamic `import()`: `src/gamification/` (~68 KB, gebruikt pas na challenge-start), `src/tutorial/` (~40 KB, gebruikt pas bij `tutorial`-commando). Verwachte besparing ~100 KB minified → terug binnen budget. Alternatief: budget heroverwegen naar realistischer cijfer (bijv. 600 KB minified) en motivatie documenteren. Beslissing vereist vóór sprint-start.
+24. [ ] **Bundle-optimalisatie sprint** (uit Sessie 141 meet-resultaat, ⏸️ PAUSED Sessie 142) — Terminal Core ~547 KB minified zit ~37% boven 400 KB budget. Origineel: Pad A (lazy-load gamification ~68 KB + tutorial ~40 KB via dynamic `import()`, besparing ~100 KB minified) vs Pad B (budget heroverwegen naar 600 KB minified met motivatie). **Sessie 142 update — beslissing uitgesteld:** Lighthouse-meting (Mobile 39 / Desktop 64) onthulde dat de hoofdoorzaak van de gemeten performance-regressie **niet first-party bundle-size is**, maar third-party scripts (353 KB / 57% van on-wire transfer). Pad A zou ~20 KB gzipped besparen → niet relevant voor TBT 3.3 s. Pad B-rationale "Lighthouse bewijst geen user-impact" is gefalsifieerd. **Heropenen na #25 third-party perf research**, mogelijk in combinatie met defer-strategie voor monetization-scripts.
+25. [ ] **Third-party performance audit** (gespawnd Sessie 142 uit Lighthouse-meting) — Inventariseer de 10 third-party requests (~353 KB transferred): welke zijn al deferred (Brevo iframe, Ko-fi iframe), welke blocken render-path (AdSense gtag, GA4 Consent Mode v2 init, misc), wat is de revenue/UX-trade per script? Scope ~2 uur research, geen implementatie. Output: trade-off-tabel per script (defer-kosten in revenue/UX vs Lighthouse-impact in ms TBT/LCP) + quick wins inventaris (font-display:swap, preconnect hints, async/defer audit — laag revenue-risico). Findings informeren #24 heropening + nieuwe Pad C beslissing.
 
 ---
 
@@ -1399,14 +1401,15 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 28 mei 2026 (Sessie 141)
-**Versie:** 4.5 (Sessie 141 — Terminal Core runtime-verificatie: BFS module-graph trace vanaf terminal.html entry points → 99 JS files + 6 CSS + HTML = ~781 KB unminified (~547 KB minified), 37% boven 400 KB budget. Item #21 gesloten, item #24 toegevoegd: lazy-load gamification/tutorial vs budget heroverwegen.)
+**Laatst bijgewerkt:** 28 mei 2026 (Sessie 142)
+**Versie:** 4.6 (Sessie 142 — Lighthouse productie-meting /terminal.html: Mobile 39/100, Desktop 64/100. Frame-bias-onthulling: first-party bundle (~98 KB gzipped) is NIET de Lighthouse-bottleneck; third-party scripts (AdSense+GA+Brevo+Ko-fi, ~353 KB / 57% van 624 KB on-wire) domineren TBT 3.3 s. Item #24 op pauze (Pad A zou ~20 KB gzipped besparen = niet relevant), item #25 gespawned voor third-party perf research ~2 uur. Geen budget-shift toegepast: ⚠️-status blijft tot echte fix.)
 **Totaal Taken:** ~340 — zie milestone-tabel voor breakdown. Validatie via `scripts/validate-docs.sh` (run automatisch op pre-commit).
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
-**Bundle (geverifieerd 28 mei 2026, Sessies 140-141):**
+**Bundle (geverifieerd 28 mei 2026, Sessies 140-142):**
 - Site totaal **~2196 KB unminified** | src/ 627 KB + styles/ 268 KB + HTML ~155 KB + blog/ 369 KB + assets/ 702 KB
-- **Terminal Core (runtime van terminal.html, gemeten Sessie 141):** **~781 KB unminified** (~547 KB minified geschat) | HTML 19 KB + CSS 160 KB (6 files) + JS module-graph 601 KB (99 files reachable van entry points). ⚠️ ~37% boven 400 KB budget — optimalisatie-beslissing in item #24
+- **Terminal Core (runtime van terminal.html, gemeten Sessie 141):** **~781 KB unminified** (~547 KB minified geschat) | HTML 19 KB + CSS 160 KB (6 files) + JS module-graph 601 KB (99 files reachable van entry points). ⚠️ ~37% boven 400 KB budget — beslissing in item #24 op pauze
+- **Lighthouse on-wire (Sessie 142):** Mobile 39, Desktop 64. Total transferred 624 KB / 118 req. First-party scripts ~98 KB gzipped vs third-party 353 KB. TBT 3,270 ms mobile / 610 ms desktop. Hoofdoorzaak performance-regressie = monetization-stack, niet bundle-groei eigen code.
 
 ---
 
