@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 140)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 141)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -83,6 +83,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ---
 
 ## Recent Critical Learnings
+
+### Sessie 141: Terminal Core Runtime-Verificatie — Het Bewijs Achter de Doc-Claim (28 mei 2026)
+⚠️ **Never:**
+- ⏭️-status in een performance-budget-tabel accepteren zonder concreet cijfer — PLANNING.md regel 497 stond 40 sessies op `⏭️ Verificatie gepland`. Werkelijke meting bleek ~781 KB unminified / ~547 KB minified = ~37% over 400 KB budget. Dit is precies het "ground truth degradeert silent zonder forcing function"-syndroom uit Sessie 140's eigen learnings — verouderde cijfers (Sessie 100 ~340 KB) creëren valse zekerheid en blijven onbetwist tot iemand het meet
+- Plan-onderwerpen accepteren op basis van claim-strings in TODO-lijsten / CLAUDE.md learnings zonder de scripts/docs zelf te inspecteren — initieel voorstel "tag-balans-check inbouwen in validate-blogs.sh" bleek al gedaan (regels 58-69, Sessie 138-modernisation deed dit in dezelfde sessie ondanks de "Geplande follow-up"-claim). Ground-truth-first principe geldt ook voor task-status zelf, niet alleen voor metrics
+- Bundle-meting via `find <dir> -name "*.js"` als ground truth nemen zonder import-trace — pakt page-specific files mee (`blog-theme.js`, `contact-form.js`, `landing-demo.js` zijn niet runtime-bereikbaar vanaf terminal.html) en kan dubbele telling geven tussen entry-points en module-graph. Verschil was klein (582 KB vs 601 KB BFS), maar voor strikte budget-checks moet methodiek precies kloppen om geloofwaardig te zijn
+
+✅ **Always:**
+- Twee-iteratie meet-aanpak voor bundle-baselines: ronde 1 snelle bovengrens via `du -bc` over `find` (~10 sec), ronde 2 precieze BFS via import-regex (`(?:from|import)\s+['"]([^'"]+)['"]`) in Python (~20 regels, <1 sec uitvoeren) — pragmatisch correct *als* ronde 1 <budget oplevert, anders kost verfijning ~20 min. Reproduceerbaar zonder externe tooling (geen madge/esbuild nodig)
+- Plan-scope tijdens uitvoering verkleinen via transparante tekst aan user als blijkt dat een deel al gedaan is — Sessie 141 dropte initieel-voorgestelde tag-balans-check + bundle-tabel-split tijdens verfijning, Heisenberg gaf onmiddellijk akkoord. Beter scope-correctie dan blind plan volgen en dubbel werk doen
+- Bij overschrijdings-bevinding een follow-up task creëren MET twee paden (Pad A: lazy-load gamification + tutorial via dynamic `import()` ~100 KB besparing / Pad B: budget heroverwegen met rationale) — geeft user een framed beslissing in plaats van "we hebben een probleem". Defense-in-depth (Sessie 140 principe): persistent op TASKS.md #24 + current.md entry + CLAUDE.md learnings tegelijk
+- BFS-script herbruikbaar maken voor Sessie 144 `--deep` mode trigger — dezelfde Python BFS uit Sessie 141 kan in `validate-docs.sh --deep` als Check 5 (bundle KB ground-truth-check tegen TASKS.md cijfers met tolerance). Eén keer goed bouwen, twee keer gebruiken. Schaalt naar elke toekomstige runtime-meting
+- Cold-start meta-rationaliteit: gebruiker vraagt "logische volgende stap?" → eerst CLAUDE.md + TASKS.md daadwerkelijk lezen + de open #items inspecteren in scripts/docs zelf (niet alleen op item-string vertrouwen). 50% van mijn eerste voorstel-set bleek al gedaan; alleen feitelijke inspectie onthulde dat
 
 ### Sessie 140: Doc-Protocol Refactor + Drift-Resistance Forcing Function (27-28 mei 2026)
 ⚠️ **Never:**
@@ -208,7 +221,7 @@ Pre-Sessie 135 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last: Sessie 140 cleanup Sessie 134, next: Sessie 145)
-**Sessie counter:** 140
+**Sessie counter:** 141
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -260,5 +273,5 @@ Pre-Sessie 135 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
 
 ---
 
-**Last updated:** 28 mei 2026 (Sessie 140 — Doc-protocol refactor + drift-resistance: §Document Ownership matrix in PLANNING.md (anti-duplicatie principe), 7-step `/summary` flow in .claude/commands/summary.md met ground-truth-meting in Step 1, `scripts/validate-docs.sh` 4-check pre-commit forcing function, Sessie 144 trigger persistent op 2 plekken)
-**Version:** 5.14 (Sessie 140 protocol-borging: Three-conflicting-protocols-syndrome opgelost door één canonieke flow + ownership-mapping; defense-in-depth voor follow-ups via TASKS.md + inline-TODO persistence; forcing function bewezen werkend via intentional drift-injection test (Sessie 200 sed → Check 2 fail vóór Check 1, bevestigt invariant-coverage); skill-registry runtime-live geverifieerd — `.claude/commands/*.md` save → system-reminder direct geüpdatet zonder restart. Sessie 134 gerouteerd naar `docs/sessions/current.md` per rotation-protocol)
+**Last updated:** 28 mei 2026 (Sessie 141 — Terminal Core runtime-verificatie: BFS module-graph trace vanaf terminal.html entry points → 99/103 JS files reachable + 6 CSS + HTML = ~781 KB unminified / ~547 KB minified geschat = ~37% over 400 KB budget. Item #21 gesloten, item #24 toegevoegd met twee paden (lazy-load vs budget heroverwegen). Sessie 140 forcing function bewees zich nuttig: PLANNING.md ⏭️-status werd concrete ⚠️-status met cijfer.)
+**Version:** 5.15 (Sessie 141 ground-truth-meting: 40-sessies-oude budget-claim (Sessie 100 ~340 KB minified) onderworpen aan feitelijke meting. Twee-iteratie meet-pattern bewezen (`find` snel → BFS precies, ~20 regels Python). Plan-scope tijdens uitvoering verkleind van 4 voorstellen naar 1 echte open taak na inspectie van scripts — bevestigt ground-truth-first principe ook voor task-status. Defense-in-depth follow-up #24 persistent op 3 plekken (TASKS.md item, current.md entry, CLAUDE.md learnings).)

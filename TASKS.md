@@ -1,8 +1,8 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 28 mei 2026 (Sessie 140)
-**Status:** M7 Gamification ✅ 100% | M6 Tutorial System 88% | M5.5 Monetization ✅ Live + Brevo deliverability tuned + Gumroad v1.0 + Lead magnet (LIVE on hacksimulator.nl) | Doc-protocol refactor + forcing function (Sessie 140)
-**Sprint:** Sessie 140: Document-ownership refactor + `validate-docs.sh` forcing function + `/summary` skill update naar 7-step flow + Sessie 144 trigger persistence
+**Laatst bijgewerkt:** 28 mei 2026 (Sessie 141)
+**Status:** M7 Gamification ✅ 100% | M6 Tutorial System 88% | M5.5 Monetization ✅ Live + Brevo deliverability tuned + Gumroad v1.0 + Lead magnet (LIVE on hacksimulator.nl) | Doc-protocol refactor + forcing function (Sessie 140) | Terminal Core runtime ⚠️ ~781 KB unminified gemeten (Sessie 141, ~37% boven budget)
+**Sprint:** Sessie 141: Terminal Core runtime-verificatie via BFS module-graph trace → item #21 gesloten, item #24 toegevoegd voor bundle-optimalisatie-beslissing
 
 ---
 
@@ -31,8 +31,10 @@
 
 **Actieve Mijlpalen:** M5.5 Monetization (deliverability + lead-magnet polish) + M6 Tutorial System (last 3 taken) + Blog content-SEO (post-Sessie 138 hub-clustering)
 **Current Status:** ✅ LIVE — Playwright E2E: **167 tests, 22 spec files** (Chromium, Firefox, WebKit) | AdSense + Ko-fi + Brevo (deliverability getuned) + Gumroad v1.0 + Lead magnet live
-**Bundle (geverifieerd 28 mei 2026, Sessie 140):** Site totaal **~2196 KB unminified** | src/ 627 KB | styles/ 268 KB | blog/ 369 KB (12 files: 10 posts + index + welkom) | assets/ 702 KB | HTML ~155 KB | Playwright: 22 spec files, 167 tests
-  → ⚠️ **Budget-herijking nodig** — origineel 400 KB Terminal Core budget geldt nog voor runtime (src/ + styles/terminal*.css + animations); site-totaal budget bewust losgelaten ten faveure van SEO/content-pijler (blog + screenshots + OG image)
+**Bundle (geverifieerd 28 mei 2026, Sessies 140-141):**
+- **Site totaal:** ~2196 KB unminified | src/ 627 KB | styles/ 268 KB | blog/ 369 KB (12 files: 10 posts + index + welkom) | assets/ 702 KB | HTML ~155 KB
+- **Terminal Core (runtime van terminal.html, gemeten Sessie 141 via BFS module-graph):** **~781 KB unminified** | HTML 19 KB + CSS 160 KB (6 files) + JS 601 KB (99 module-graph files). Geschatte minified ~547 KB. **⚠️ ~37% boven 400 KB budget zelfs minified** — zie #24
+- **Playwright:** 22 spec files, 167 tests
 
 **Volgende Stappen:**
 1. ✅ GitHub repository setup (https://github.com/JanWillemWubkes/hacksimulator)
@@ -55,9 +57,10 @@
 18. [ ] AdSense performance monitoring (CTR, RPM na 30 dagen)
 19. [ ] Ko-fi conversion tracking (donaties per maand) — manueel via Ko-fi dashboard
 20. [ ] M6 Tutorial: laatste 3 open taken (→ 100%)
-21. [ ] Bundle runtime-budget herijken: split site-totaal in *Terminal Core* (runtime <400 KB) vs *SEO/content* (geen budget) — splitsing toepassen in PLANNING.md bundle-tabel
+21. [x] Bundle runtime-budget herijken: split site-totaal in *Terminal Core* (runtime <400 KB) vs *SEO/content* (geen budget) — splitsing toegepast in PLANNING.md bundle-tabel (Sessie 140 doc-split + Sessie 141 ground-truth meting). **Meet-resultaat Sessie 141:** Terminal Core = ~781 KB unminified (HTML 19 + CSS 160 + JS-module-graph 601 over 99 files). Geschatte minified ~547 KB. **⚠️ Overschrijding ~37% boven 400 KB budget zelfs minified** → opvolg-actie #24
 22. [ ] Postmaster re-check trigger: eerste >100-recipient campaign-send OF kalender-datum 2 wk later (vanaf 18 mei 2026 → ~1 juni 2026)
 23. [ ] **Sessie 144 trigger** — Bouw `validate-docs.sh --deep` mode: bundle KB ground-truth-check (compare `du -sb src/ styles/ blog/ assets/` output tegen TASKS.md cijfers met tolerance van ±5%) + milestone-percentage check (raw `[x]`/`[ ]` count vs claimed percentage in Voortgang Overzicht tabel). ~20 min werk, vangt soft-drift die de huidige 4 invariant-checks (sessie-counter, datum, PRD-version, monetization-keywords) niet detecteren. Zie inline TODO in `scripts/validate-docs.sh`.
+24. [ ] **Bundle-optimalisatie sprint** (uit Sessie 141 meet-resultaat) — Terminal Core zit ~37% boven 400 KB budget (~547 KB minified vs 400 KB). Hoogwaardige kandidaten voor lazy-loading via dynamic `import()`: `src/gamification/` (~68 KB, gebruikt pas na challenge-start), `src/tutorial/` (~40 KB, gebruikt pas bij `tutorial`-commando). Verwachte besparing ~100 KB minified → terug binnen budget. Alternatief: budget heroverwegen naar realistischer cijfer (bijv. 600 KB minified) en motivatie documenteren. Beslissing vereist vóór sprint-start.
 
 ---
 
@@ -1396,12 +1399,14 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 28 mei 2026 (Sessie 140)
-**Versie:** 4.4 (Sessie 140 — doc-protocol refactor + drift-resistance: Document Ownership matrix als anti-duplicatie principe, validate-docs.sh 4-check forcing function als pre-commit, /summary skill naar 7-step flow met ground-truth meting. Sessie 144 trigger persistent voor --deep mode (bundle KB + milestone-% checks).)
+**Laatst bijgewerkt:** 28 mei 2026 (Sessie 141)
+**Versie:** 4.5 (Sessie 141 — Terminal Core runtime-verificatie: BFS module-graph trace vanaf terminal.html entry points → 99 JS files + 6 CSS + HTML = ~781 KB unminified (~547 KB minified), 37% boven 400 KB budget. Item #21 gesloten, item #24 toegevoegd: lazy-load gamification/tutorial vs budget heroverwegen.)
 **Totaal Taken:** ~340 — zie milestone-tabel voor breakdown. Validatie via `scripts/validate-docs.sh` (run automatisch op pre-commit).
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
-**Bundle (geverifieerd 27 mei 2026):** Site totaal **~2196 KB unminified** | src/ 627 KB + styles/ 268 KB + HTML ~155 KB + blog/ 369 KB + assets/ 702 KB | Runtime-specifieke meting voor `terminal.html` (Terminal Core <400 KB budget) staat als open taak — zie regel 20 in Volgende Stappen
+**Bundle (geverifieerd 28 mei 2026, Sessies 140-141):**
+- Site totaal **~2196 KB unminified** | src/ 627 KB + styles/ 268 KB + HTML ~155 KB + blog/ 369 KB + assets/ 702 KB
+- **Terminal Core (runtime van terminal.html, gemeten Sessie 141):** **~781 KB unminified** (~547 KB minified geschat) | HTML 19 KB + CSS 160 KB (6 files) + JS module-graph 601 KB (99 files reachable van entry points). ⚠️ ~37% boven 400 KB budget — optimalisatie-beslissing in item #24
 
 ---
 

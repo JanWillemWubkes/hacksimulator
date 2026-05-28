@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 28 mei 2026 (Sessie 140 — doc-ownership refactor + bundle budget herijking)
+**Laatst bijgewerkt:** 28 mei 2026 (Sessie 141 — Terminal Core runtime gemeten ⚠️ ~781 KB unminified)
 **Status:** ✅ LIVE on Netlify | M5 Testing 91% | M5.5 Monetization deep (AdSense + Ko-fi + Brevo + Gumroad + Lead magnet) | M6 Tutorial 88% | M7 Gamification 100% | Blog content-pijler 10 posts live
 **Verantwoordelijk:** Development Team
 **Live URL:** https://hacksimulator.nl/
@@ -494,7 +494,7 @@ Site is sinds Sessie 100 (~983 KB) gegroeid naar **~2196 KB unminified** door co
 
 | Scope | Budget | Status |
 |-------|--------|--------|
-| **Terminal App Core (runtime van terminal.html)** — JS + core CSS + terminal.html geladen bij terminal-load | **<400 KB** (strikt) | ⏭️ Verificatie gepland (zie TASKS.md Volgende Stappen) |
+| **Terminal App Core (runtime van terminal.html)** — JS + core CSS + terminal.html geladen bij terminal-load | **<400 KB** (strikt) | ⚠️ **~781 KB unminified** gemeten Sessie 141 (HTML 19 KB + 6 CSS 160 KB + 99 JS module-graph 601 KB). Geschatte minified ~547 KB (70%-ratio). **Overschrijding ~37% boven budget zelfs minified** — optimalisatie nodig (zie TASKS.md Volgende Stappen #24: lazy-load gamification/tutorial modules) |
 | **Per pagina** — HTML + page-specifieke CSS (homepage, blog post, sample-pentest) | <50 KB per pagina | ✅ Binnen budget |
 | **SEO/content-pijler** — blog/ + assets/ (screenshots + OG image + sample-PDF) | Geen budget (bewust losgelaten) | ⚠️ Groei monitoren bij elke Lighthouse-audit |
 
@@ -755,8 +755,8 @@ const DEBUG_MODE = false;
 
 ---
 
-**Laatst bijgewerkt:** 28 mei 2026 (Sessie 140)
-**Versie:** 3.1 (Sessie 140 — Document Ownership refactor: milestone-tabellen + revenue-projecties verhuisd naar TASKS.md, bundle budget herijkt naar runtime/SEO-split, §Document Sync Protocol vervangen door §Document Ownership met forcing function via `validate-docs.sh` pre-commit hook)
+**Laatst bijgewerkt:** 28 mei 2026 (Sessie 141)
+**Versie:** 3.2 (Sessie 141 — bundle-tabel regel 497 status ⏭️ Verificatie gepland → ⚠️ ~781 KB unminified gemeten via BFS module-graph trace (99 JS files reachable van terminal.html entry points). Sessie 140 doc-only split nu onderbouwd met concreet ground-truth-cijfer. Geen architectuur-wijziging, alleen claim-verificatie.)
 **Status:** ✅ Deployed - Live in Production | M5.5 Monetization stack deep + Brevo deliverability getuned | M7 Gamification ✅ 100% | Blog content-pijler live
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

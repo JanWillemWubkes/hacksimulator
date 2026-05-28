@@ -4,6 +4,84 @@
 
 ---
 
+## Sessie 141: Terminal Core Runtime-Verificatie + Item #21 Sluiten (28 mei 2026)
+
+**Scope:** Cold-start vraag "lees CLAUDE.md/TASKS.md en wat is de logische volgende stap?" — Sessie 140 had de PLANNING.md bundle-tabel doc-only gesplit (runtime <400 KB vs SEO/content budgetloos) maar regel 497 stond op status `⏭️ Verificatie gepland` zonder concreet KB-cijfer. Laatste expliciete cijfer (Sessie 100, ~340 KB minified) was 40 sessies oud — exact het "ground truth degradeert silent zonder forcing function"-syndroom uit Sessie 140's eigen learnings. Sessie 141 = de baseline-meting die de doc-claim onderbouwt.
+
+**Status:** ✅ Updates op TASKS.md + PLANNING.md doorgevoerd; `scripts/validate-docs.sh` exit 0. Geen commits in deze sessie (Heisenberg triggert /summary, commit-beslissing apart).
+**Duur:** ~25 min (plan-mode + ground-truth-discovery + meet-iteratie + edits + /summary).
+**Plan source:** `/home/willem/.claude/plans/lees-claude-claude-md-en-tasks-md-streamed-lantern.md`.
+
+### Plan-mode iteratie
+
+Initiële AskUserQuestion presenteerde 4 opties; Heisenberg koos "#21 + tag-balans-check (meta-werk)". **Tijdens verfijning ontdekt:**
+- Tag-balans-check zit al in `scripts/validate-blogs.sh` regels 58-69 (Sessie 138-modernisation deed dit in dezelfde sessie als de OWASP-hub-post). Sessie 138-learning vermeldde "Geplande follow-up" maar het was tegelijk uitgevoerd — meta-documentatie was misleidend.
+- PLANNING.md bundle-tabel was al gesplit in Sessie 140 (regels 489-510). Item #21 in TASKS.md vroeg "splitsing toepassen" maar de werkelijke open taak was alleen de meet-verificatie van regel 497 status.
+
+Scope-correctie via tekst aan Heisenberg → akkoord → plan-bestand herschreven naar uitsluitend de Terminal Core meting.
+
+### Ground-truth meting — twee iteraties
+
+**Iteratie 1 — ruwe schatting** (`du -b` op `find src -name "*.js"` minus entry points):
+- Direct (HTML + 6 CSS + 7 JS entry points): 209 KB
+- Module-graph proxy (alle 96 resterende src/*.js): 582 KB
+- **Totaal: 792 KB unminified**
+- ⚠️ Methodologisch zwak: `find` telt page-specific files mee (blog-theme.js, contact-form.js, etc.) die niet in terminal.html geladen worden + dubbele telling tussen "direct" en "module-graph".
+
+**Iteratie 2 — precieze BFS module-graph** (Python script, ~20 regels):
+- 7 entry points uit terminal.html: `init-theme.js`, `init-components.js`, `search-strategies.js`, `command-search-modal.js`, `mobile-quick-commands.js`, `faq.js`, `main.js`
+- BFS via regex `(?:from|import)\s+['"]([^'"]+)['"]` op relatieve paths
+- **Reachable: 99 van 103 JS files** (4 unreachable: `init-analytics.js`, `blog-theme.js`, `contact-form.js`, `landing-demo.js` — confirmeert dat het page-specific files zijn)
+- Schone som zonder dubbele telling: HTML 19 KB + CSS 160 KB (6 files) + JS 601 KB (99 files)
+- **Totaal: 780.6 KB unminified** | geschat minified ~547 KB (70% ratio)
+- **⚠️ 95% over 400 KB budget unminified, ~37% over budget minified**
+
+### Implementatie — geen commits, 3 files edited
+
+**`PLANNING.md` regel 497:**
+- Was: `| ... | **<400 KB** (strikt) | ⏭️ Verificatie gepland (zie TASKS.md Volgende Stappen) |`
+- Werd: `| ... | **<400 KB** (strikt) | ⚠️ **~781 KB unminified** gemeten Sessie 141 (HTML 19 KB + 6 CSS 160 KB + 99 JS module-graph 601 KB). Geschatte minified ~547 KB (70%-ratio). **Overschrijding ~37% boven budget zelfs minified** — optimalisatie nodig (zie TASKS.md Volgende Stappen #24: lazy-load gamification/tutorial modules) |`
+
+**`TASKS.md` §Huidige Focus regels 34-37:**
+- Bundle-block uitgebreid met expliciete Terminal Core breakdown (HTML + CSS + JS module-graph 99 files)
+- Format: bullet-list i.p.v. tekst-blok voor scanbaarheid
+
+**`TASKS.md` Volgende Stappen:**
+- Item #21: `[ ]` → `[x]` met meet-resultaat
+- Item #24 toegevoegd: "Bundle-optimalisatie sprint" met twee paden (lazy-load gamification + tutorial via dynamic `import()` ~100 KB besparing, vs budget heroverwegen naar realistischer cijfer). Beslissing-vereist vóór sprint-start.
+
+**`TASKS.md` header + footer + Versie:**
+- Header datum 140 → 141, Sprint regel bijgewerkt
+- Footer Versie 4.4 → 4.5 met Sessie 141 changelog
+- Bundle-block in footer uitgebreid met Terminal Core cijfer
+
+### Dead-ends en surprises
+
+- **Initiële voorstel was 50% verouderd:** zowel de tag-balans-check als de PLANNING.md bundle-split waren al gedaan tijdens eerdere sessies maar de meta-documentatie in CLAUDE.md learnings / TASKS.md task-items beschreef ze nog als "open follow-up". Lesson: bij plan-aanloop altijd écht de huidige staat van scripts/docs inspecteren, niet vertrouwen op claim-strings in TODO-lijsten. Ground-truth-first geldt ook voor task-status zelf.
+- **Ruwe vs precieze meting verschil was kleiner dan verwacht:** ruwe `find`-aanpak gaf 582 KB JS, BFS gaf 601 KB — maar 4 files (~11 KB) verschil, niet dramatisch. Page-specific files zijn marginaal in totale bundle. Conclusie: `find`-aanpak is een redelijk *bovengrens-snel* benadering bij <500 KB; pas bij >>budget verfijning nodig zoals deze sessie liet zien.
+- **99 van 103 JS files in terminal.html runtime-graph:** project-architectuur is nagenoeg "alles in één bundle", lazy-loading is in MVP niet toegepast. Dit is de structurele wortel van de overschrijding, niet één specifieke feature. Item #24 lazy-load-pad zou eerste lazy-load-laag in het project zijn.
+- **Sessie 100 baseline ~340 KB minified vs Sessie 141 ~547 KB minified geschat:** +207 KB minified delta in 40 sessies. Hoofdoorzaken plausibel: M6 Tutorial (~40 KB), M7 Gamification (~67 KB volgens TASKS.md regel 1136 zelfmeting), 10+ nieuwe commands (`challenge`, `achievements`, `certificates`, `dashboard`, `leaderboard`, `leerpad`, `next`, `hint`, `welcome`, `shortcuts`). Optellen ~150 KB, rest gaat in `src/ui/` extensions (brevo-submit, cta-tracking, newsletter-tracking, celebration-banner, history-search) + analytics-stack uitbreidingen.
+
+### Methodologisch artifact
+
+Python BFS-script (20 regels) is herbruikbaar voor toekomstige Terminal Core-metingen of voor item #23 (`validate-docs.sh --deep` mode). Niet apart opgeslagen — inline in bash heredoc, eenvoudig te reproduceren uit deze sessie-entry of plan-file.
+
+### Next steps (deferred)
+
+- **Item #24 beslissing:** Pad A (lazy-load gamification + tutorial via dynamic `import()`) vs Pad B (budget heroverwegen naar realistischer cijfer + rationale documenteren). Heisenberg-keuze nodig vóór implementatie-sprint start.
+- **Sessie 144 trigger ongewijzigd:** `validate-docs.sh --deep` blijft persistent in TASKS.md #23 + inline TODO in script.
+- **Lazy-load research:** als pad A gekozen wordt, eerst inventariseren welke modules sync-imports vanuit `main.js`-init hebben (blokkers voor dynamic import). ~15 min explore-agent kan dat in kaart brengen.
+
+### Metrics delta
+
+- Files changed: 4 (PLANNING.md regel 497 + TASKS.md §Huidige Focus + #21 + #24 + header/footer)
+- Commits: 0 (sessie sloot af met /summary, commit-beslissing apart)
+- Validate-docs: exit 0 (Check 1-4 alle slagen na sessie-counter sync 140→141 in alle 3 docs)
+- Sessie counter: 140 → 141
+- Bundle ground truth toegevoegd aan persistente docs: Terminal Core 781 KB unminified / 547 KB minified geschat / 99 JS files reachable
+
+---
+
 ## Sessie 140: Doc-Protocol Refactor + Drift-Resistance Forcing Function (27-28 mei 2026)
 
 **Scope:** Cold-start vraag "lees CLAUDE.md/TASKS.md/PLANNING.md — zijn er inconsistenties?" onthulde 14-sessie doc-drift tussen CLAUDE.md (Sessie 139) en PLANNING.md (Sessie 125) / TASKS.md (Sprint Sessie 126). Initiële vraag werd uitgebreid tot structurele protocol-redesign nadat duidelijk werd dat de drift symptoom is, niet de root cause: drie conflicterende sync-protocollen in twee bestanden, ~30% content-overlap tussen PLANNING.md en TASKS.md, en `/summary`-skill die alleen SESSIONS.md + CLAUDE.md updatete (TASKS/PLANNING vielen daarbuiten).
