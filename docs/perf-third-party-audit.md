@@ -129,6 +129,47 @@ Mobile-vs-desktop blocking-time-ratio voor AdSense = 788/104 = **7.5x** → beve
 
 > Op `/terminal.html` is de **complete AdSense-overhead vrijwel uitsluitend Google-execution-cost** (766+344+179 = 1289 ms pure scripting) **zonder enige rendering-output** (geen `<ins>`-slots in `<main>`). De Sessie 142-aanname "AdSense + viewability-CPM-trade-off" geldt voor blog-pagina's met ads, NIET voor terminal.html.
 
+> ⚠️ **Zie §3a hieronder voor de structurele onderbouwing van Pad C2-veiligheid** — revenue-baseline-data uit het AdSense-dashboard is bevestiging, NIET het primaire argument.
+
+---
+
+## §3a Productie-revenue-context + structurele Pad C2-veiligheid (post-audit verificatie, 28 mei 2026)
+
+Heisenberg verifieerde AdSense dashboard ná Sessie 143-audit-completion:
+- **Auto-ads UIT** (bevestigt grep-bewijs uit §2 + maakt dynamic ad-injectie technisch onmogelijk)
+- **Site-totaal revenue €0,02 / 30 dagen** (39 impressions, 625 pageviews, 0 klikken, viewability 17,95%)
+
+**Belangrijke context die deze cijfers nuance geeft (anti-frame-bias):**
+
+De site is sinds launch **nog nooit gepromoot** (geen social, geen SEO-push, geen paid distribution). De rapportage-data reflecteren puur organische discovery — een **pre-promotion floor**, niet representatief voor toekomstige steady-state na promotion (waar traffic 10-100x kan schalen).
+
+**Daarom: Pad C2-veiligheid wordt onderbouwd op STRUCTURELE gronden, niet op revenue-baseline:**
+
+| Argumentlaag | Status | Traffic-afhankelijk? |
+|--------------|--------|----------------------|
+| `terminal.html` heeft 0 `<ins>` ad-slots in `<body>` (grep-verified) | ✅ Hard structureel feit | Nee |
+| Auto-ads UIT in dashboard = geen dynamic injection mogelijk | ✅ Dashboard-verified 28 mei 2026 | Nee |
+| `consent.js loadAdSense()` itereert `.ad-unit` elementen → 0 elements = no-op | ✅ Code-verified | Nee |
+| €0,02 site-totaal revenue / 30 dagen | ⚪ Pre-promotion baseline (informatief, niet beslissend) | Ja — schaalt met promotion |
+
+**Conclusie:** ongeacht toekomstige traffic-volume genereert `adsbygoogle.js` op `terminal.html` 0 ad-revenue, want er bestaat geen ad-render-target op deze pagina. Pad C2 is **traffic-onafhankelijk safe**.
+
+**Wat dit NIET betekent (om misinterpretatie te voorkomen):**
+
+- §3 revenue-trade-off-framework (industry estimate 5-15% CPM-drop bij defer) **blijft volledig van toepassing voor pages MET ad-slots** (`index.html`, blog-pages, `sample-pentest.html`). Voor die pages moet bij elke toekomstige defer-audit hetzelfde framework gebruikt worden. De absolute revenue-impact in EUR/maand is **nu** laag door pre-promotion traffic, maar kan met promotion 10-100x schalen — gebruik dáár nooit huidige €-cijfers als beslis-anchor.
+- Toekomstige ad-monetization van `terminal.html` is mogelijk maar vergt expliciete code-change (`<ins>` slot toevoegen + adsbygoogle.js-script terugplaatsen). Dat is een bewuste opt-in revenue-beslissing, niet een unintended-default. Pad C2 blokkeert die toekomst niet, maakt 'm alleen expliciet.
+
+**Decision-tree voor toekomstige per-page third-party-audits:**
+
+| Page-config | Aanpak |
+|-------------|--------|
+| Heeft ad-slots + Auto-ads UIT | Defer-trade-off framework §3 toepassen, CPM-impact in EUR/maand schatten met huidige traffic + scaling-factor naar promotion-state |
+| Geen ad-slots + Auto-ads UIT | Structureel safe-to-remove (Pad C2-pattern, traffic-onafhankelijk) |
+| Geen ad-slots + Auto-ads AAN | Auto-ads kan dynamisch ads injecteren — eerst Auto-ads page-rules in dashboard checken vóór removal-decision |
+| Heeft ad-slots + Auto-ads AAN | Combinatie: §3-framework + Auto-ads-config raadplegen, hoogste revenue-impact-scenario plannen |
+
+Dit decision-tree is herbruikbaar voor latere audits (blog-pages, index.html, sample-pentest.html).
+
 ---
 
 ## §4 Quick wins inventaris (Heisenberg's Q4)
