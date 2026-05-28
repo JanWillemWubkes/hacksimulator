@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 142)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 143)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -83,6 +83,20 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ---
 
 ## Recent Critical Learnings
+
+### Sessie 143: Third-Party Audit — AdSense Domineert, Sessie 142's Attributie Verfijnd (28 mei 2026)
+⚠️ **Never:**
+- Sessie 142's casual third-party-attributie ("AdSense+GA+Brevo+Ko-fi+misc") accepteren zonder per-origin verificatie via Lighthouse JSON `audits["network-requests"]` — bij `/terminal.html` bleek GA4 NIET geladen (consent-default-denied), Brevo + Ko-fi laden ALLEEN op index.html / sample-pentest.html (sibforms script + Ko-fi widget bestaat niet als script-injectie ergens). Frame-bias-correctie binnen frame-bias-correctie: Sessie 142 was al een correctie van Pad A/B beslis-frame, en bevatte alsnog een nuance-fout in attributie. Per-pagina audit is non-fungible — wat third-party doet op index.html is anders dan op terminal.html
+- Quick-win-aannames uit instructie klakkeloos overnemen ("font-display:swap voor 3 fonts ~100 KB") zonder eerst `grep -n display=swap` op de relevante HTML-files te draaien — `&display=swap` was al actief in Google Fonts URL op alle 3 pagina's (`terminal.html:37`, `index.html:42`, `sample-pentest.html:41`). Lighthouse rapporteerde 0 ms blocking voor Fonts → al optimaal. Eerlijk-flag in audit-doc voorkomt dat een "quick win" die geen win is in de aanbeveling belandt
+- Lighthouse `third-party-summary` audit als enige ground truth nemen voor wat third-party laadt — die summary groepeert en attribueert per "entity" (`Google/Doubleclick Ads`, `Google Fonts`) wat handig is voor blocking-time-rangschikking, maar voor exacte URL+KB-breakdown moet je `network-requests` parseren. Eén audit dekt niet alle vragen; gebruik beide
+
+✅ **Always:**
+- Voor third-party perf-audits: Lighthouse JSON capture met `--output=json` + Python parse (~30 regels) van `audits["network-requests"]` + `audits["third-party-summary"]` + `audits["unused-javascript"]` + `audits["bootup-time"]` + `audits["render-blocking-resources"]` → geeft per-URL transfer/blocking/scripting-time + per-script unused-bytes percentage + per-script main-thread-cost. Volledig reproduceerbaar (geen DevTools-screenshots). Lighthouse@11 pinnen voor Node 18 compat
+- Bij pagina-specifieke audits: óók `<ins>` / `.ad-container` / iframe-elementen in `<body>` grep'en, niet alleen `<script>` in `<head>` — Sessie 143 onthulde dat `terminal.html` adsbygoogle.js laadt maar **0 ad-slots** heeft = AdSense ad-slot-module laadt 172.7 KB waarvan 132.9 KB (77%) ongebruikt blijft. Smoking gun voor "verwijder script van deze pagina" hypothese, conditional op AdSense Auto-ads dashboard-state
+- Audit-output als separate reference-doc (`docs/perf-third-party-audit.md`) ipv inline in TASKS.md — past Sessie 140 Doc Ownership matrix (TASKS = execution-tracker, niet deep-reference). 7-sectie structuur (methodologie / ground truth / trade-off / quick wins / defer-window / recommendations / verification) is template voor toekomstige audits (blog-page, index-page met Brevo, etc.). TASKS.md item krijgt enkel 1-regel-pointer naar het reference-doc
+- Bij smoking-gun-bevinding (high-impact maar revenue-gated): output framen als **gevalueerde paden voor user-decision** (Pad C1 low-risk / C2 high-impact-blocked-op-user-action / C3 status-quo) ipv auto-fix-aanbeveling. Removal van adsbygoogle.js van terminal.html vereist Heisenberg's AdSense dashboard-verificatie (Auto-ads aan/uit); zonder die input is hypothese niet falsifieerbaar. Pad-framing geeft Heisenberg keuze-structuur met expliciete revenue-risk-labels
+- Reproducibility-check tussen sessies: Sessie 142 mat Mobile 39/Desktop 64, Sessie 143 reproduction Mobile 40/Desktop 69. ±5 punten variantie binnen run-noise (vermoedelijk AdSense ad-creative-rotation + CDN-cache-warmth). Voor budget-vergelijkingen: mediaan van 3+ runs ipv enkele meting. Score-claims in CLAUDE.md / PLANNING.md zonder run-context zijn brittle
+- Eerlijk-flag bij quick-wins-tabel als oorspronkelijke instructie een aanname bevat die door grep wordt gefalsifieerd — niet stilletjes weglaten ("font-display al actief"), wél in tabel met expliciete "❌ al actief (non-task)" status. Meedogenloos-eerlijke audit = vertelt user ook waar zijn aanname fout zat
 
 ### Sessie 142: Lighthouse Meet-Frame-Bias — Bundle-Source ≠ On-Wire ≠ Performance (28 mei 2026)
 ⚠️ **Never:**
@@ -235,7 +249,7 @@ Pre-Sessie 135 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last: Sessie 140 cleanup Sessie 134, next: Sessie 145)
-**Sessie counter:** 142
+**Sessie counter:** 143
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -287,5 +301,5 @@ Pre-Sessie 135 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
 
 ---
 
-**Last updated:** 28 mei 2026 (Sessie 142 — Lighthouse productie-meting /terminal.html: Mobile 39/100, Desktop 64/100. Frame-bias-onthulling: first-party bundle is NIET de Lighthouse-bottleneck; third-party scripts (AdSense+GA+Brevo+Ko-fi, ~353 KB / 57% van 624 KB on-wire) domineren TBT 3.3 s. Item #24 ⏸️ paused (Pad A zou ~22 KB gzipped besparen = niet relevant), item #25 spawned voor third-party perf research ~2 uur. Geen budget-shift: ⚠️-status blijft tot echte fix.)
-**Version:** 5.16 (Sessie 142 meedogenloos-eerlijke scope-correctie: oorspronkelijk plan-mode beslis-tabel (Pad B als Lighthouse ≥90, anders Pad A) bleek incompleet na meting — beide paden adresseren niet de werkelijke performance-regressie. Stop-en-reframe-pattern toegepast via `AskUserQuestion` met meet-data + 4 opties; gekozen route = item #24 paused + item #25 spawn i.p.v. forceren naar Pad A/B. Sessie 140 anti-drift-werk gehouden: alle drift-checks slagen, geen rationale-shortcut. Drie meet-niveaus (bundle-source vs on-wire vs Lighthouse-score) expliciet gedocumenteerd in PLANNING.md + learnings.)
+**Last updated:** 28 mei 2026 (Sessie 143 — Third-party audit `/terminal.html` voltooid via Lighthouse@11 JSON-parse. Ground truth: AdSense ecosysteem (pagead2 230.5 KB + ep1/ep2.adtrafficquality 21.2 KB) = 73% blocking-time + 65% transfer; AdSense ad-slot script 132.9 KB / 77% ongebruikt op deze pagina (geen `<ins>` slots in body); GA4/Brevo/Ko-fi laden niet op terminal.html (frame-bias-correctie Sessie 142 verfijnd). Reproduction: Mobile 39→40, Desktop 64→69 binnen run-noise. Output: `docs/perf-third-party-audit.md` met 3 paden voor #24-heropening (C1 quick wins ~275 ms / C2 AdSense Auto-ads investigation ~788 ms / C3 budget-herijking). Item #25 ✅ voltooid.)
+**Version:** 5.17 (Sessie 143 third-party performance audit: research-only zoals scope dictecteerde, geen implementatie. Frame-bias-correctie-uitbreiding van Sessie 142: per-origin breakdown via Lighthouse JSON-parse onthulde 3 specifieke nuance-fouten in Sessie 142's casual attributie. AdSense ad-slot 77% unused-JS is smoking gun voor potentieel ~230 KB / ~788 ms gratis besparing, gated op Heisenberg's AdSense dashboard Auto-ads-state verificatie. Eerlijk-flag: oorspronkelijke instructie-aannames "font-display:swap quick win" gefalsifieerd via grep (al actief). Audit-doc als separate reference-doc gemotiveerd door Doc Ownership matrix.)

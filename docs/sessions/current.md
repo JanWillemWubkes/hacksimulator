@@ -4,6 +4,117 @@
 
 ---
 
+## Sessie 143: Third-Party Performance Audit — AdSense Domineert, Sessie 142's Attributie Verfijnd (28 mei 2026)
+
+**Scope:** Heisenberg's instructie was "pak item #25 op": de in Sessie 142 gespawnde third-party performance audit (~2 uur research, geen implementatie). Plan-mode-first gevraagd zodat scope niet creept naar "fix het meteen". Output: trade-off-tabel + quick wins inventaris + aanbeveling voor #24-heropening.
+
+**Status:** ✅ Audit-doc `docs/perf-third-party-audit.md` gecreëerd (7 secties, ~12 KB). TASKS.md item #25 ✅ gesloten. Item #24 update met 3 paden (C1/C2/C3). CLAUDE.md learnings prepend + counter 142→143 + footer Last updated + Version 5.16→5.17. PLANNING.md header datum-update voor invariant-check (geen architectuur-wijziging). Geen commits in deze sessie (Heisenberg's standaard /summary-flow).
+**Duur:** ~2 uur (plan-mode iteratie + ground-truth pre-werk + 2 Lighthouse-runs + JSON-parse + trade-off-analyse + audit-doc-schrijven + /summary-cycle).
+**Plan source:** `/home/willem/.claude/plans/heisenberg-hier-pak-groovy-unicorn.md`.
+
+### Plan-mode iteratie — Frame-bias-correctie binnen frame-bias-correctie
+
+Plan-bestand bevatte een expliciete "frame-bias-correctie reeds ontdekt tijdens plan-mode" sectie waarin Sessie 142's casual attributie ("AdSense+GA+Brevo+Ko-fi+misc") werd gefalsifieerd via grep op de werkelijke codebase:
+- `sibforms.com/forms/end-form/build/main.js` zit ALLEEN op `index.html:817` en `sample-pentest.html:297` — NIET op `terminal.html`
+- Ko-fi heeft GEEN script-injectie ergens — alleen hyperlinks in `src/components/footer.js:71`, `src/ui/onboarding.js:341`, `src/gamification/challenge-manager.js:184`
+- GA4 (`gtag.js`) wordt dynamisch geladen door `src/analytics/tracker.js:86` NA consent — Lighthouse-default = empty localStorage → no consent → mogelijk GA4 NIET in de gemeten 353 KB
+- `init-analytics.js` (waar AdSense lazy-restore + GA4-update zit) is NIET op terminal.html
+
+Hypothese vóór meting: de 353 KB third-party op `/terminal.html` is grotendeels AdSense ecosysteem. Plan goedgekeurd, exit plan-mode, Lighthouse runs gestart.
+
+### Lighthouse-runs — twee presets, reproducibility-check
+
+**Iteratie 1 — Mobile (default, 4x CPU throttling + 1.6 Mbps):**
+- Performance: **40/100** (Sessie 142 was 39 → binnen run-variance)
+- FCP 1.5 s | LCP **7.3 s** | TBT **3,020 ms** | TTI 7.4 s | Speed Index 6.4 s | CLS 0
+
+**Iteratie 2 — Desktop (no throttling):**
+- Performance: **69/100** (Sessie 142 was 64 → +5 binnen noise)
+- FCP 0.5 s | LCP 1.9 s | TBT 460 ms | TTI 1.6 s
+
+Mobile vs Desktop AdSense blocking: 788 ms vs 104 ms = **7.5x verschil** → bevestigt CPU-bound (third-party JS execution), niet bandwidth-bound. Beide presets transferreren identiek 353 KB.
+
+### Ground truth — per-origin breakdown via JSON-parse
+
+Python-script (~30 regels) over `audits["network-requests"]` + `audits["third-party-summary"]`:
+
+| Origin | KB | Requests | Blocking (mobile) | Note |
+|--------|-----|----------|--------------------|------|
+| `pagead2.googlesyndication.com` | 230.5 | 4 | 788 ms | AdSense JS-loader + ad-slot-module |
+| `fonts.gstatic.com` | 99.8 | 3 | 0 ms | woff2 files, al optimaal gedeferred |
+| `ep1.adtrafficquality.google` | 13.3 | 1 | 97 ms (gezamenlijk met ep2) | AdSense fraud-telemetry XHR |
+| `ep2.adtrafficquality.google` | 7.9 | 1 | (zie ep1) | AdSense SODAR fraud-script |
+| `fonts.googleapis.com` | 1.5 | 1 | 0 ms | Google Fonts CSS |
+| anonymous image-beacons | 0.0 | 2 | 0 ms | 0-byte pixels |
+| **Totaal** | **353.0** | **12** | **885 ms** | **6 origins** |
+
+**Frame-bias-correctie compleet:**
+- GA4 / Brevo / Ko-fi: **0 KB, 0 requests** — Sessie 142's attributie was incorrect voor terminal.html
+- AdSense ecosysteem = **65% transfer + 73% blocking-time** = dominante bottleneck
+- Sessie 143 entry in CLAUDE.md learnings vastlegt: per-pagina audit is non-fungible
+
+### Smoking gun — `unused-javascript` audit
+
+Lighthouse `audits["unused-javascript"]` top items:
+
+| Script | Total | Unused | % |
+|--------|-------|--------|---|
+| AdSense ad-slot module (`pagead/managed/js/adsense/m20...`) | 172.7 KB | **132.9 KB** | **77%** |
+| `adsbygoogle.js` (loader) | 53.9 KB | 28.7 KB | 53% |
+
+Combineren met body-grep: `terminal.html` heeft **0 `<ins>` ad-elementen** in de `<main>`-container. Adsbygoogle.js wordt geladen maar 77% van de ad-slot module is dood gewicht. Hypothese: als AdSense Auto-ads UIT staat in dashboard → script is structurele waste, verwijderen = ~230 KB transfer + ~788 ms blocking + ~1325 ms main-thread besparing zonder revenue-impact.
+
+### Audit-doc structuur + paden voor #24
+
+`docs/perf-third-party-audit.md` (7 secties):
+1. **§1 Methodologie** — reproduce-cmd + Python parse-script
+2. **§2 Ground truth** — per-origin tabel + blocking-time-tabel + render-blocking + unused-JS + bootup-time
+3. **§3 Trade-off-tabel** — 11 kolommen per origin: defer-optie / revenue-impact / UX-impact / perf-besparing / status (🟢🟡🔴)
+4. **§4 Quick wins inventaris** — 5 maatregelen, A `font-display:swap` ❌ al actief (non-task), B preconnect `pagead2` ✅ ~100 ms LCP, C `animations.css` deferred 🟡 ~165 ms, D `fetchpriority="high"` ✅ ~10-30 ms LCP, E self-host fonts 🟡 ~50 ms
+5. **§5 Defer-window-analyse** — per script: defer-baar zonder UX-stutter / Consent Mode v2-breuk?
+6. **§6 Aanbevelingen #24-heropening** — drie paden:
+   - **Pad C1** (~30 min, ~275 ms LCP): preconnect pagead2 + animations.css deferred + fetchpriority
+   - **Pad C2** (Heisenberg AdSense dashboard-actie nodig, dan ~230 KB + ~788 ms): verifieer Auto-ads-state → indien UIT, adsbygoogle.js verwijderen van terminal.html
+   - **Pad C3** (status-quo + budget-herijking 624 KB on-wire baseline)
+7. **§7 Verification** — per-pad Lighthouse re-meting + cross-page sanity check
+
+### Out-of-scope nota (eerlijkheid)
+
+Tijdens audit ontdekte ik `src/utils/box-utils.js` bootup-time = 309 ms total / 200 ms scripting → surprisingly hoog voor utility-code. Niet onderdeel van #25 (third-party scope). Registreren als nieuwe first-party-perf-task ná #24-sprint: profile + cache-warming review.
+
+### Dead-ends en surprises
+
+- **Sessie 142's "Brevo+Ko-fi+misc" attributie was inaccuraat voor terminal.html** — frame-bias-correctie binnen frame-bias-correctie. Lesson: per-pagina audit is non-fungible
+- **`font-display:swap` was al actief** in Google Fonts URL — Heisenberg's quick-win-aanname uit instructie gefalsifieerd via 1 grep. Eerlijk-flag in audit-doc voorkomt dat non-task in aanbeveling belandt
+- **`init-theme.js` is 476 bytes** — sync zonder defer is acceptabel, voorkomt theme-flash
+- **Consent-banner inline init is sync + blocking** maar required-by-Google (must be before AdSense). Niet defer-baar. `wait_for_update=500ms` verlenging zou revenue raken zonder significante TBT-winst
+- **Reproducibility score-delta** Mobile +1 / Desktop +5 binnen verwachte AdSense-ad-creative-rotation + CDN-cache-warmth noise
+
+### Methodologisch artifact
+
+Python BFS-style parse-script voor Lighthouse JSON (~30 regels, geen externe deps) opgenomen in audit-doc §1 + sessie-entry. Herbruikbaar voor:
+- Toekomstige Sessie 144 `validate-docs.sh --deep` Check 5 (third-party drift-check)
+- Cross-page audit (`index.html`, `sample-pentest.html`) als #24 daar verbreedt
+- Post-#24-implementatie validatie (Lighthouse re-meting per pad)
+
+### Next steps (deferred)
+
+- **Item #24 — heropening:** Heisenberg kiest C1/C2/C3 keuze op basis van audit-doc §6. C2 vereist eerst dashboard-verificatie (Auto-ads aan/uit + impression-data laatste 30 dagen)
+- **Out-of-scope task:** `box-utils.js` bootup-profile (309 ms / 200 ms scripting) — registreren in TASKS.md na #24-sprint
+- **Sessie 144 trigger:** `validate-docs.sh --deep` mode ongewijzigd (TASKS.md #23 + inline TODO). Mogelijk Check 5 toevoegen voor bundle KB ground-truth en Check 6 voor third-party drift via opgeslagen Lighthouse-snapshots
+
+### Metrics delta
+
+- Files created: 1 (`docs/perf-third-party-audit.md`)
+- Files modified: 4 (TASKS.md + CLAUDE.md + current.md + PLANNING.md header datum-update voor invariant)
+- Commits: 0 (sessie sloot met /summary, commit-beslissing apart)
+- Tasks: item #25 [ ] → [x] | item #24 verfijnd met Pad C1/C2/C3
+- Sessie counter: 142 → 143
+- Lighthouse JSON gepersisteerd lokaal in `/tmp/perf-audit-143/` (niet gecommit; reproduceerbaar via §1)
+- Validate-docs target: exit 0 (Check 1-4 alle slagen)
+
+---
+
 ## Sessie 142: Lighthouse Meet-Frame-Bias Onthuld — Item #24 Paused, #25 Spawned (28 mei 2026)
 
 **Scope:** Heisenberg's instructie was "pak item #24 op": Pad B als Lighthouse Performance ≥90, anders Pad A research. Plan-mode iteratie produceerde een concrete beslis-tabel en file-edit-lijst, exit plan mode → Lighthouse-meting → onverwacht resultaat dwong scope-correctie naar route die geen van beide originele paden volgde.

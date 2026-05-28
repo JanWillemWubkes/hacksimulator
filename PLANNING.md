@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 28 mei 2026 (Sessie 142 — Lighthouse productie-meting onthulde third-party perf als hoofdoorzaak; #24 paused, #25 spawned)
+**Laatst bijgewerkt:** 28 mei 2026 (Sessie 143 — third-party audit `/terminal.html` voltooid: AdSense ecosysteem = 73% blocking-time, ad-slot script 77% ongebruikt; geen architectuur-wijziging, alleen `docs/perf-third-party-audit.md` als nieuw reference-doc; item #25 ✅, #24 verfijnd met Pad C1/C2/C3)
 **Status:** ✅ LIVE on Netlify | M5 Testing 91% | M5.5 Monetization deep (AdSense + Ko-fi + Brevo + Gumroad + Lead magnet) | M6 Tutorial 88% | M7 Gamification 100% | Blog content-pijler 10 posts live
 **Verantwoordelijk:** Development Team
 **Live URL:** https://hacksimulator.nl/
@@ -764,8 +764,8 @@ const DEBUG_MODE = false;
 
 ---
 
-**Laatst bijgewerkt:** 28 mei 2026 (Sessie 142)
-**Versie:** 3.3 (Sessie 142 — Lighthouse productie-meting /terminal.html: Mobile 39, Desktop 64. Bundle Size Budget sectie uitgebreid met "Sessie 142 Lighthouse-meting — frame-bias-onthulling" subsectie: first-party bundle is NIET de Lighthouse-bottleneck, third-party scripts (AdSense+GA+Brevo+Ko-fi, ~353 KB) domineren. Bundle-source != on-wire != Lighthouse-score: drie losjes gerelateerde metrics. Item #24 status ⚠️ blijft (geen budget-shift toegepast). Geen architectuur-wijziging, doc-update over meet-frame.)
+**Laatst bijgewerkt:** 28 mei 2026 (Sessie 143)
+**Versie:** 3.4 (Sessie 143 — third-party audit `/terminal.html` voltooid via Lighthouse JSON-parse. Frame-bias-correctie verfijnd: AdSense ecosysteem (pagead2 230.5 KB + ep1/ep2.adtrafficquality 21.2 KB) = 73% blocking-time + 65% transfer; GA4/Brevo/Ko-fi laden NIET op terminal.html (alleen op index/sample-pentest). Smoking gun: AdSense ad-slot script 132.9 KB / 77% ongebruikt (geen `<ins>` slots in body). Reproduction Mobile 39→40, Desktop 64→69 binnen run-noise. Architectuur ongewijzigd; output is reference-doc `docs/perf-third-party-audit.md` (Doc Ownership matrix: nieuwe testing/reference-categorie). Bundle Size Budget sectie ⚠️-status blijft tot Pad C-keuze in #24-heropening.)
 **Status:** ✅ Deployed - Live in Production | M5.5 Monetization stack deep + Brevo deliverability getuned | M7 Gamification ✅ 100% | Blog content-pijler live
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

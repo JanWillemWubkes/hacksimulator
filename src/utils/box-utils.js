@@ -1,3 +1,5 @@
+// TODO Sessie 143: Lighthouse bootup-time = 309 ms total / 200 ms scripting (mobile preset) — verrassend hoog voor utility. Profile + cache-warming review na #24-sprint. Zie TASKS.md #26 + docs/perf-third-party-audit.md §2 out-of-scope nota.
+
 export const BOX_CHARS = {
   topLeft: "╭",
   topRight: "╮",
