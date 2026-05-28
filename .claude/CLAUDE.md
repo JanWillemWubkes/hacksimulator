@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 139)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 140)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,21 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 140: Doc-Protocol Refactor + Drift-Resistance Forcing Function (27-28 mei 2026)
+⚠️ **Never:**
+- Drie conflicterende sync-protocollen documenteren in twee bestanden — CLAUDE.md had twee verschillende update-orders (`/summary → SESSIONS+CLAUDE` én `PRD→PLANNING→TASKS→CLAUDE`), PLANNING.md had de omgekeerde volgorde (`TASKS→CLAUDE→PLANNING→PRD`). Resultaat: niemand volgt er één, drift onvermijdelijk. Conflicterende protocollen = effectief géén protocol
+- Vertrouwen op een document's "geverifieerd op datum X" claim zonder periodieke re-meting — CLAUDE.md zei "1192 KB geverifieerd 06-04-2026", werkelijke meting 2 maanden later was 2196 KB (+170%). Ground truth degradeert silent zonder forcing function; verouderde cijfers zijn erger dan ontbrekende cijfers want ze creëren valse zekerheid
+- Een follow-up uitspreken in chat zonder persistentie op tenminste 1 plek (TASKS.md / memory / inline TODO) — "bij Sessie 144 doen we X" leeft alleen in transcript en wordt over weken zekerlijk vergeten. Goodwill heeft lage hit-rate
+- ~30% content-overlap tussen docs accepteren (PLANNING.md milestone-tabel + TASKS.md milestone-tabel = drift-magneet) — elke wijziging vereist updates op 2 plekken, één wordt vergeten, drift binnen 10 sessies terug. Anti-duplicatie is anti-drift
+
+✅ **Always:**
+- Forcing function via pre-commit hook bouwen voor elk drift-gevoelig invariant — `scripts/validate-docs.sh` analoog aan `validate-blogs.sh` (Sessie 138), 4 checks (sessie-counter alignment / header-footer-sessie / PRD-version-match / monetization-keyword-superset). Drift wordt blokkerende commit-fout in plaats van slow rot. Onbevangen-runs bewijzen dat checks elkaar's blinde vlekken dekken (intentional 'Sessie 200' drift trigger Check 2 vóór Check 1, geen redundantie)
+- Document Ownership matrix expliciet maken: één bron per type informatie. Owners: PRD = requirements, PLANNING = architectuur, TASKS = execution + metrics, CLAUDE = AI-context + top-6 learnings, sessions/current.md = volledige sessie-log. Geen overlap = geen drift-mogelijkheid
+- Skill-files updaten gelijk met protocol-wijziging zodat skill-registry-runtime de nieuwe instructies oppikt — `.claude/commands/summary.md` save → system-reminder toonde direct nieuwe beschrijving zonder restart. Skill-registry leest live
+- Defense-in-depth voor follow-ups: persistent op tenminste 2 plekken met verschillende leesgewoontes (TASKS.md Volgende Stappen voor /summary-cycle + inline TODO in betreffend script voor codebase-aanraking). Verschillende leespaden vangen elk een andere blinde vlek
+- Ground-truth-first vóór doc-edits: `du -sb`, `find tests/e2e`, `git log` — verzamel cijfers vóór je iets schrijft, gebruik in alle docs tegelijk. Voorkomt dat een doc verouderde cijfers krijgt terwijl je een ander updatet
+- Plan-mode toepassen op meta-werk wanneer impact-scope onduidelijk is — AskUserQuestion met 4 concrete opties (Light sync / Full sync / Defer / Ground-truth first) gaf duidelijk frame. Voor protocol-redesigns is plan-mode beter dan direct uitvoeren, want trade-offs zijn niet self-evident
+
 ### Sessie 139: Unified Marketing Nav + Breadcrumbs op Blog-Pages (27 mei 2026)
 ⚠️ **Never:**
 - Een nieuwe stylesheet importeren in een sectie van de site zonder eerst grep'en wat er aan globale rules in zit (`^body|^html|^\*`) — `landing.css` toevoegen op blog-pages haalde stilletjes `html { scroll-behavior: smooth }` mee, waardoor `window.scrollTo` van instant naar geanimeerd kantelde en de reading-progress E2E test brak (60% ipv 90%). Klasse aan side-effects = klasse aan onverwachte regressies
@@ -145,20 +160,8 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Bij delivery-issue "mail komt niet aan": eerst Brevo Transactional → Logs check op `Blocked`-status met detail-paneel-reason, dán pas DNS/auth-debug. Andersom kost 30+ min DNS-debug voor een blocklist-issue
 - Architecturale Brevo-UI-vondsten meteen in memory: dual-channel-model (Email Campaigns vs Transactional apart blocklist-state) + plus-alias-normalisatie + verstopte unblock-route achter "More"/dropdown zijn niet-derivable uit code en kosten elke nieuwe sessie 30+ min ontdekkingstijd
 
-### Sessie 134: Brevo Drag-and-Drop Herbouw — Welkomstmails (5-11 mei 2026)
-⚠️ **Never:**
-- Aannemen dat Brevo Button-blocks per-link click-tracking-toggle hebben in Free/Starter-tier — toggle bestaat niet (gevalideerd in template-edit-paneel + Additional Settings + Settings → SMTP & API + Senders). Pad-1 Button-block-split kost 30 min met nul bug-impact
-- Handmatig `{{ unsubscribe }}` / `{$unsubscribe}` als URL typen in Brevo's link-editor — Brevo wrapt het als `https://app.brevo.com/%7B%7B unsubscribe %7D%7D` (URL-encoded), 404 bij klik. Gebruik Type-dropdown `Unsubscribe link (global)` of `Web version` als native Brevo-koppeling
-- Canvas-preview hover-URLs of "Preview & test"-modal vertrouwen voor placeholder-validatie — Brevo substitueert pas in outbound rendering bij verzending. Editor toont placeholders als platte tekst-URLs. Enige ground truth = testmail via Brevo's mail-server
-
-✅ **Always:**
-- Tooling-aannames in 30 sec valideren vóór 30 min implementeren — vóór elke "fix" eerst checken of de gemaakte aanname over de tool waar is (UI-veld, toggle, feature) i.p.v. direct uitvoeren
-- Brevo's automation-templates zijn **snapshot-kopieën**, geen live links naar source-template — bij source-update altijd opnieuw "load template" + "Use this design in automation" in automation-step, anders blijft oude versie actief
-- Title/Text-blocks met Type-dropdown special-links voor DnD-footers, NIET pre-built footer-sections — pre-builts (social/address/foto) zijn te druk voor minimal terminal-aesthetic; restylen kost meer dan zelf bouwen
-- Cold-start-checklist (git log + curl headers) doorlopen vóór dashboard-werk start — bevestigt server-side state intact, voorkomt verspilde tijd aan opnieuw fixen wat al werkt
-
 **Rotation:** Keep last 6 full. Archive: docs/sessions/ (current.md, recent.md, archive-*.md)
-Pre-Sessie 134 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 Gumroad factcheck/taalconsistentie + 129-133 monetization-stack) → zie `docs/sessions/current.md`.
+Pre-Sessie 135 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 Gumroad factcheck/taalconsistentie + 129-133 monetization-stack + 134 Brevo DnD-herbouw) → zie `docs/sessions/current.md`.
 
 ---
 
@@ -204,8 +207,8 @@ Pre-Sessie 134 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
    - Pre-commit hook draait dit automatisch
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
-**Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last: Sessie 139 cleanup 129-133, next: Sessie 144)
-**Sessie counter:** 139
+**Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last: Sessie 140 cleanup Sessie 134, next: Sessie 145)
+**Sessie counter:** 140
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -257,5 +260,5 @@ Pre-Sessie 134 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
 
 ---
 
-**Last updated:** 27 mei 2026 (Sessie 139 — Unified marketing nav + breadcrumbs blog-pages ✅ + Doc-ownership refactor: §Sessie Protocol vervangen door 7-step `/summary` flow met `validate-docs.sh` als forcing function, Quick Reference live metrics verhuisd naar TASKS.md single-source-of-truth)
-**Version:** 5.13 (Sessie 139 doc-sync: ownership-mapping in PLANNING.md §Document Ownership, milestone-tabellen + revenue-projections verhuisd uit PLANNING naar TASKS.md, bundle budget gesplitst in runtime <400 KB strikt + SEO/content budgetloos, validate-docs.sh pre-commit hook geïntroduceerd — voorkomt sessie-counter/datum/PRD-version drift. Pattern-learnings Sessie 139 zelf: `currentPage` param + `activeAttr` helper voor active-nav-state, CSS override-niet-fork voor cross-pagina style imports, Python idempotency-check pattern voor batch-edits, `git stash` voor E2E regressie-isolatie)
+**Last updated:** 28 mei 2026 (Sessie 140 — Doc-protocol refactor + drift-resistance: §Document Ownership matrix in PLANNING.md (anti-duplicatie principe), 7-step `/summary` flow in .claude/commands/summary.md met ground-truth-meting in Step 1, `scripts/validate-docs.sh` 4-check pre-commit forcing function, Sessie 144 trigger persistent op 2 plekken)
+**Version:** 5.14 (Sessie 140 protocol-borging: Three-conflicting-protocols-syndrome opgelost door één canonieke flow + ownership-mapping; defense-in-depth voor follow-ups via TASKS.md + inline-TODO persistence; forcing function bewezen werkend via intentional drift-injection test (Sessie 200 sed → Check 2 fail vóór Check 1, bevestigt invariant-coverage); skill-registry runtime-live geverifieerd — `.claude/commands/*.md` save → system-reminder direct geüpdatet zonder restart. Sessie 134 gerouteerd naar `docs/sessions/current.md` per rotation-protocol)

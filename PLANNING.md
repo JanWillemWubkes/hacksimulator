@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 27 mei 2026 (Sessie 139 — doc-ownership refactor + bundle budget herijking)
+**Laatst bijgewerkt:** 28 mei 2026 (Sessie 140 — doc-ownership refactor + bundle budget herijking)
 **Status:** ✅ LIVE on Netlify | M5 Testing 91% | M5.5 Monetization deep (AdSense + Ko-fi + Brevo + Gumroad + Lead magnet) | M6 Tutorial 88% | M7 Gamification 100% | Blog content-pijler 10 posts live
 **Verantwoordelijk:** Development Team
 **Live URL:** https://hacksimulator.nl/
@@ -488,7 +488,7 @@ Remove cookie banner → Better UX
 
 ### Bundle Size Budget
 
-**Budgetmodel (Sessie 139 — runtime vs SEO/content gescheiden, na bundle-explosie blog/lead-magnet):**
+**Budgetmodel (Sessie 140 — runtime vs SEO/content gescheiden, na bundle-explosie blog/lead-magnet):**
 
 Site is sinds Sessie 100 (~983 KB) gegroeid naar **~2196 KB unminified** door content-investering (blog 369 KB met 10 posts + JSON-LD, screenshots/OG image 700+ KB). Origineel "totale site <1000 KB" budget bewust losgelaten ten faveure van SEO-content. Runtime-budget blijft strikt.
 
@@ -498,7 +498,7 @@ Site is sinds Sessie 100 (~983 KB) gegroeid naar **~2196 KB unminified** door co
 | **Per pagina** — HTML + page-specifieke CSS (homepage, blog post, sample-pentest) | <50 KB per pagina | ✅ Binnen budget |
 | **SEO/content-pijler** — blog/ + assets/ (screenshots + OG image + sample-PDF) | Geen budget (bewust losgelaten) | ⚠️ Groei monitoren bij elke Lighthouse-audit |
 
-**Rationale voor budget-split (Sessie 139):**
+**Rationale voor budget-split (Sessie 140):**
 - Runtime (wat gebruikers laden bij terminal-gebruik) is de UX-kritieke maat → blijft strikt
 - SEO/content (wat Google crawlt) is groei-as → budgetloos, mits Lighthouse Performance ≥90 blijft
 - Live metrics per directory: zie TASKS.md §Huidige Focus
@@ -671,7 +671,7 @@ const DEBUG_MODE = false;
 
 ---
 
-## 🔄 Document Ownership (Sessie 139 — refactor van oude Sync Protocol)
+## 🔄 Document Ownership (Sessie 140 — refactor van oude Sync Protocol)
 
 **Eén bron per type informatie.** Geen duplicatie tussen docs.
 
@@ -755,8 +755,8 @@ const DEBUG_MODE = false;
 
 ---
 
-**Laatst bijgewerkt:** 27 mei 2026 (Sessie 139)
-**Versie:** 3.0 (Sessie 139 — Document Ownership refactor: milestone-tabellen + revenue-projecties verhuisd naar TASKS.md, bundle budget herijkt naar runtime/SEO-split, §Document Sync Protocol vervangen door §Document Ownership met forcing function via `validate-docs.sh`)
+**Laatst bijgewerkt:** 28 mei 2026 (Sessie 140)
+**Versie:** 3.1 (Sessie 140 — Document Ownership refactor: milestone-tabellen + revenue-projecties verhuisd naar TASKS.md, bundle budget herijkt naar runtime/SEO-split, §Document Sync Protocol vervangen door §Document Ownership met forcing function via `validate-docs.sh` pre-commit hook)
 **Status:** ✅ Deployed - Live in Production | M5.5 Monetization stack deep + Brevo deliverability getuned | M7 Gamification ✅ 100% | Blog content-pijler live
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

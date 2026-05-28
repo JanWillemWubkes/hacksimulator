@@ -4,6 +4,88 @@
 
 ---
 
+## Sessie 140: Doc-Protocol Refactor + Drift-Resistance Forcing Function (27-28 mei 2026)
+
+**Scope:** Cold-start vraag "lees CLAUDE.md/TASKS.md/PLANNING.md — zijn er inconsistenties?" onthulde 14-sessie doc-drift tussen CLAUDE.md (Sessie 139) en PLANNING.md (Sessie 125) / TASKS.md (Sprint Sessie 126). Initiële vraag werd uitgebreid tot structurele protocol-redesign nadat duidelijk werd dat de drift symptoom is, niet de root cause: drie conflicterende sync-protocollen in twee bestanden, ~30% content-overlap tussen PLANNING.md en TASKS.md, en `/summary`-skill die alleen SESSIONS.md + CLAUDE.md updatete (TASKS/PLANNING vielen daarbuiten).
+
+**Status:** ✅ Gecommit (3 commits: `78b01ba`, `fd6f07f`, `386362a`) + pre-commit hook gevalideerd live in productie + Sessie 144 follow-up persistent.
+**Duur:** 27 mei avond — 28 mei (calendar-overgang tijdens werk; gecommit als één sessie omdat scope coherent).
+**Plan source:** `/home/willem/.claude/plans/lees-claude-claude-md-tasks-md-planning-fluffy-firefly.md`.
+
+### Inconsistentie-analyse (initiële fase, plan-mode)
+
+11 inconsistenties gevonden, gegroepeerd in 8 inhoudelijk + 3 cosmetisch:
+- **Sessie-counter drift**: CLAUDE 139 vs PLANNING 125 vs TASKS sprint 126
+- **Bundle-budget liegt**: PLANNING "✅ Binnen budget" met 809 KB; werkelijke meting 2196 KB unminified (+170%)
+- **Monetization-stack onvolledig**: PLANNING.md mist Gumroad + Lead magnet compleet; TASKS.md mist bundel + sample-pentest
+- **M5.5 task-count contradictie**: 8/10 (PLANNING) vs 9/11 (TASKS)
+- **Blog content-pijler ontbreekt** uit PLANNING/TASKS volledig
+- **Newsletter sprint outdated**: TASKS sprint nog "Sessie 126: Brevo migratie" terwijl deliverability al 3 sessies verder
+- **Playwright counts**: 4 verschillende cijfers (CLAUDE 165, TASKS-sprint 160, TASKS-step 161, TASKS-M5 145)
+- **Total tasks**: 295 (PLANNING) vs 325 (TASKS)
+- **Header vs footer datum-mismatch** binnen één bestand (PLANNING + TASKS allebei intern al inconsistent)
+
+### Ground-truth-meting (Fase 1)
+
+| Item | Claim in docs | Werkelijkheid | Delta |
+|------|------|------|------|
+| Sessie | varieert per doc | 139 (latest commit) | tot 14 sessies achter |
+| Bundle src/ | 604 KB | 627 KB | +23 |
+| Bundle styles/ | 249 KB | 268 KB | +19 |
+| Bundle blog/ | 306 KB (10 posts) | 369 KB (12 files: 10 posts + index + welkom) | +63 |
+| Bundle assets/ | 597 KB | 702 KB | +105 |
+| Site totaal | 1192 KB | **2196 KB** | +1004 KB |
+| Playwright | varieert | 22 spec / 167 tests | — |
+| `CLAUDE.md` locatie | "root" | `.claude/CLAUDE.md` only (geen root file) | belangrijke vondst |
+| Pre-commit infra | onbekend | Python pre-commit framework actief (gitleaks + validate-blogs) | template beschikbaar |
+
+### Implementatie — 3 commits
+
+**Commit `78b01ba` (Fase 3a-d): cross-doc ownership refactor + validate-docs forcing function**
+
+- `TASKS.md` (+79 regels): header naar Sessie 139 (oorspronkelijk); Sessies 122-139 ge-backfilled in Volgende Stappen + M5.5 sectie-body (18 nieuwe completed tracks: Brevo migratie, Gumroad v1.0, Lead magnet, deliverability tuning, funnel-pulse); Blog content-pijler row in milestone-tabel; bundle ground truth 2196 KB
+- `PLANNING.md` (−257/+31 regels, net 30% lichter): §Document Sync Protocol → §Document Ownership matrix (één-bron-per-info-type); revenue projections + milestone-tabellen + roadmap task-counts verhuisd naar TASKS.md; bundle budget gesplitst in runtime <400 KB strikt + SEO/content budgetloos
+- `.claude/CLAUDE.md` (+64 regels): §Sessie Protocol → 7-step `/summary` flow met ground-truth-meting; Quick Reference live metrics → pointers naar TASKS.md
+- `scripts/validate-docs.sh` (NEW, 158 regels): 4 invariant-checks (sessie-counter alignment, header/footer sessie-consistency, PRD-version match, monetization-stack keyword superset)
+- `.pre-commit-config.yaml` (+7 regels): validate-docs hook geregistreerd via `repo: local` pattern (analoog aan validate-blogs Sessie 138)
+
+**Commit `fd6f07f`: /summary skill update**
+- `.claude/commands/summary.md` (+105 regels): pre-Sessie 140 two-tier → 7-step flow met expliciete ground-truth meting in Step 1 (du + find + validate-docs pre-check). Skill-registry leest live, geen restart nodig.
+
+**Commit `386362a`: Sessie 144 trigger persistence**
+- `TASKS.md` Volgende Stappen #23: expliciete Sessie 144 trigger met scope (Check 5 bundle KB ground-truth ±5%, Check 6 milestone-percentage raw checkbox-count)
+- `scripts/validate-docs.sh`: TODO-comment met kruisreferentie
+
+### Dead-ends en surprises
+
+- **Plan-mode workflow eerste keer toegepast op meta-werk**: voor dit project is plan-mode meestal feature-werk. Doc-refactor in plan-mode bleek waardevol omdat de impact-scope niet vooraf duidelijk was. 4-optie AskUserQuestion (Light sync / Full sync / Defer / Ground-truth first) gaf user duidelijk frame voor keuze.
+- **Bundle ground-truth 2196 KB vs claim 1192 KB** was schok-moment. CLAUDE.md "geverifieerd 06-04-2026" suggereerde recent, maar daarna kwamen sample-pentest landing + 2 blog files + screenshots toe. Dit bevestigt de waarde van Ground Truth-First protocol (Sessie 137-pattern).
+- **`.git/hooks/pre-commit` is `pre-commit` framework generated** — niet handgeschreven. Eerste read van `.pre-commit-config.yaml` was cruciaal voor goede integratie (`repo: local` + 6-regelige YAML-block).
+- **Drift-test execution**: intentional sed-replace 'Sessie 139' → 'Sessie 200' bewees dat Check 2 (header/footer mismatch binnen TASKS.md) failde vóór Check 1 (cross-doc sessie-counter), wat aantoont dat de checks elkaar's blinde vlekken dekken — geen redundantie.
+- **Skill-registry live**: na `.claude/commands/summary.md` save toonde system-reminder direct de nieuwe beschrijving zonder restart. Bevestigt dat skill-files runtime-geladen worden.
+- **PRD-version regex initial-fail**: eerste run van validate-docs.sh faalde op Check 3 omdat regex `'PRD[^[:alnum:]]+v[0-9]+\.[0-9]+'` niet matchte op lowercase `prd.md v1.8`. 1-regelige regex-update (`(prd\.md|PRD|Product Requirements)`) loste het op. Waarschuwing voor toekomst: regex-coverage van invariant-checks moet expliciet getest worden, niet impliciet aangenomen.
+
+### Sessie-numbering decision
+
+Werk gestart 27 mei (Sessie 139 was die ochtend gedaan, nav unification). Doc-refactor was scope-different: meta-protocol-werk vs feature-werk. Calendar-overgang 28 mei tijdens werk. Beslissing: Sessie 140, niet "Sessie 139 extended". Reden: structureel ander type werk, learning-set en commit-narratief verdienen eigen entry.
+
+### Next steps (deferred)
+
+- **Sessie 144 trigger**: `validate-docs.sh --deep` mode bouwen (bundle KB + milestone-% checks)
+- **Rotation deferred**: huidige `current.md` heeft 30 sessies (111-140), idealiter ~10. Protocol-trigger 140 % 5 == 0 zegt: archiveer 130-134 naar `archive-q2-2026.md`. Niet gedaan in deze sessie om scope-creep te vermijden; aparte focus-sessie aanbevolen (~30 min file-manipulation, ~480 regels content move).
+- **Documentation-cleanup**: PLANNING.md "Sessie Learnings (uit Ontwikkeling)" sectie heeft Sessie 3 cursor-implementation als enige entry — anachronisme, of verwijderen of uitbreiden.
+
+### Metrics delta
+
+- Files changed: 5 (4 modified + 1 new)
+- Lines: +383/−257 net +126
+- Commits: 3 (78b01ba, fd6f07f, 386362a)
+- Bundle impact: 0 KB (docs-only)
+- Test impact: 0 (geen Playwright runs nodig, geen E2E impact)
+- Forcing function: pre-commit hook nu live, eerste echte commit (78b01ba) passed validate-docs
+
+---
+
 ## Sessie 139: Unified Marketing Nav + Breadcrumbs op Blog-Pages (27 mei 2026)
 
 **Scope:** Blog-pages krijgen zelfde hoofdnav als rest van site (Blog/Commands/Gidsen/Woordenlijst/Over Ons + active-state op "Blog") + breadcrumb-strip per post met BreadcrumbList JSON-LD voor SEO rich-results. Heisenberg's vraag: "blog pages hebben eigenlijk geen main nav bar — wat is web design technisch en voor goede navigatie de beste oplossing?"

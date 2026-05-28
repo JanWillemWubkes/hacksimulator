@@ -1,8 +1,8 @@
 # TASKS.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 27 mei 2026 (Sessie 139)
-**Status:** M7 Gamification ✅ 100% | M6 Tutorial System 88% | M5.5 Monetization ✅ Live + Brevo deliverability tuned + Gumroad v1.0 + Lead magnet (LIVE on hacksimulator.nl)
-**Sprint:** Sessie 139: Unified marketing nav + breadcrumbs op blog-pages (Sessies 134-138: Brevo deliverability tuning + content SEO Plan C + funnel-pulse + lead-magnet CTA-coverage 3→13)
+**Laatst bijgewerkt:** 28 mei 2026 (Sessie 140)
+**Status:** M7 Gamification ✅ 100% | M6 Tutorial System 88% | M5.5 Monetization ✅ Live + Brevo deliverability tuned + Gumroad v1.0 + Lead magnet (LIVE on hacksimulator.nl) | Doc-protocol refactor + forcing function (Sessie 140)
+**Sprint:** Sessie 140: Document-ownership refactor + `validate-docs.sh` forcing function + `/summary` skill update naar 7-step flow + Sessie 144 trigger persistence
 
 ---
 
@@ -31,7 +31,7 @@
 
 **Actieve Mijlpalen:** M5.5 Monetization (deliverability + lead-magnet polish) + M6 Tutorial System (last 3 taken) + Blog content-SEO (post-Sessie 138 hub-clustering)
 **Current Status:** ✅ LIVE — Playwright E2E: **167 tests, 22 spec files** (Chromium, Firefox, WebKit) | AdSense + Ko-fi + Brevo (deliverability getuned) + Gumroad v1.0 + Lead magnet live
-**Bundle (geverifieerd 27 mei 2026):** Site totaal **~2196 KB unminified** | src/ 627 KB | styles/ 268 KB | blog/ 369 KB (12 files: 10 posts + index + welkom) | assets/ 702 KB | HTML ~155 KB
+**Bundle (geverifieerd 28 mei 2026, Sessie 140):** Site totaal **~2196 KB unminified** | src/ 627 KB | styles/ 268 KB | blog/ 369 KB (12 files: 10 posts + index + welkom) | assets/ 702 KB | HTML ~155 KB | Playwright: 22 spec files, 167 tests
   → ⚠️ **Budget-herijking nodig** — origineel 400 KB Terminal Core budget geldt nog voor runtime (src/ + styles/terminal*.css + animations); site-totaal budget bewust losgelaten ten faveure van SEO/content-pijler (blog + screenshots + OG image)
 
 **Volgende Stappen:**
@@ -49,14 +49,15 @@
 12. ✅ **Funnel-pulse + Lead-magnet CTA-coverage 3→13** (Sessie 137): GA4 pipeline gevalideerd via simulate success-panel toggle, contextual CTA-copy per blog
 13. ✅ **Content SEO Plan C — OWASP Top 10 hub-post** (Sessie 138): nieuwe hub + bidirectional clustering + `validate-blogs.sh` modernisatie + tag-balans-check
 14. ✅ **Unified marketing nav + breadcrumbs blog-pages** (Sessie 139): `getMarketingNavbar()` + `currentPage`-param + breadcrumb-strip + BreadcrumbList JSON-LD
-15. [ ] Mobile real device testing (iOS, Android)
-16. [ ] GA4 Real-Time verificatie (handmatig)
-17. [ ] AdSense performance monitoring (CTR, RPM na 30 dagen)
-18. [ ] Ko-fi conversion tracking (donaties per maand) — manueel via Ko-fi dashboard
-19. [ ] M6 Tutorial: laatste 3 open taken (→ 100%)
-20. [ ] Bundle runtime-budget herijken: split site-totaal in *Terminal Core* (runtime <400 KB) vs *SEO/content* (geen budget) — splitsing toepassen in PLANNING.md bundle-tabel
-21. [ ] Postmaster re-check trigger: eerste >100-recipient campaign-send OF kalender-datum 2 wk later (vanaf 18 mei 2026 → ~1 juni 2026)
-22. [ ] **Sessie 144 trigger** — Bouw `validate-docs.sh --deep` mode: bundle KB ground-truth-check (compare `du -sb src/ styles/ blog/ assets/` output tegen TASKS.md cijfers met tolerance van ±5%) + milestone-percentage check (raw `[x]`/`[ ]` count vs claimed percentage in Voortgang Overzicht tabel). ~20 min werk, vangt soft-drift die de huidige 4 invariant-checks (sessie-counter, datum, PRD-version, monetization-keywords) niet detecteren. Zie inline TODO in `scripts/validate-docs.sh`.
+15. ✅ **Doc-protocol refactor + drift-resistance** (Sessie 140): §Document Ownership matrix in PLANNING.md, milestone-tabellen + revenue-projections verhuisd naar TASKS.md, bundle budget gesplitst (runtime <400 KB strikt + SEO/content budgetloos), `scripts/validate-docs.sh` met 4 invariant-checks geïntroduceerd + pre-commit hook geactiveerd, `/summary` skill geüpdatet naar 7-step flow met ground-truth-meting, Sessie 144 trigger persistent op 2 plekken (TASKS.md #23 + inline TODO in validate-docs.sh)
+16. [ ] Mobile real device testing (iOS, Android)
+17. [ ] GA4 Real-Time verificatie (handmatig)
+18. [ ] AdSense performance monitoring (CTR, RPM na 30 dagen)
+19. [ ] Ko-fi conversion tracking (donaties per maand) — manueel via Ko-fi dashboard
+20. [ ] M6 Tutorial: laatste 3 open taken (→ 100%)
+21. [ ] Bundle runtime-budget herijken: split site-totaal in *Terminal Core* (runtime <400 KB) vs *SEO/content* (geen budget) — splitsing toepassen in PLANNING.md bundle-tabel
+22. [ ] Postmaster re-check trigger: eerste >100-recipient campaign-send OF kalender-datum 2 wk later (vanaf 18 mei 2026 → ~1 juni 2026)
+23. [ ] **Sessie 144 trigger** — Bouw `validate-docs.sh --deep` mode: bundle KB ground-truth-check (compare `du -sb src/ styles/ blog/ assets/` output tegen TASKS.md cijfers met tolerance van ±5%) + milestone-percentage check (raw `[x]`/`[ ]` count vs claimed percentage in Voortgang Overzicht tabel). ~20 min werk, vangt soft-drift die de huidige 4 invariant-checks (sessie-counter, datum, PRD-version, monetization-keywords) niet detecteren. Zie inline TODO in `scripts/validate-docs.sh`.
 
 ---
 
@@ -1395,9 +1396,9 @@ docs/prd.md → PLANNING.md → TASKS.md → CLAUDE.md
 
 ---
 
-**Laatst bijgewerkt:** 27 mei 2026 (Sessie 139)
-**Versie:** 4.3 (Sessies 122-139 ge-backfilled — M5.5 deliverability tracks + lead magnet + Gumroad + nav unification; bundle ground-truth herijkt naar 2196 KB unminified)
-**Totaal Taken:** ~340 — zie milestone-tabel voor breakdown. Validatie via `scripts/validate-docs.sh`.
+**Laatst bijgewerkt:** 28 mei 2026 (Sessie 140)
+**Versie:** 4.4 (Sessie 140 — doc-protocol refactor + drift-resistance: Document Ownership matrix als anti-duplicatie principe, validate-docs.sh 4-check forcing function als pre-commit, /summary skill naar 7-step flow met ground-truth meting. Sessie 144 trigger persistent voor --deep mode (bundle KB + milestone-% checks).)
+**Totaal Taken:** ~340 — zie milestone-tabel voor breakdown. Validatie via `scripts/validate-docs.sh` (run automatisch op pre-commit).
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
 **Bundle (geverifieerd 27 mei 2026):** Site totaal **~2196 KB unminified** | src/ 627 KB + styles/ 268 KB + HTML ~155 KB + blog/ 369 KB + assets/ 702 KB | Runtime-specifieke meting voor `terminal.html` (Terminal Core <400 KB budget) staat als open taak — zie regel 20 in Volgende Stappen

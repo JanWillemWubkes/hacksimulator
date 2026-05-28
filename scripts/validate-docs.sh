@@ -1,9 +1,11 @@
 #!/bin/bash
-# Doc Validation Script (Sessie 139 — drift-detection forcing function)
+# Doc Validation Script (Sessie 140 — drift-detection forcing function)
 #
 # Validates cross-document invariants between the four core docs:
 #   1. CLAUDE.md sessie-counter == TASKS.md sprint-regel sessie
-#   2. Header-datum-sessie == footer-datum-sessie binnen elke doc (TASKS, PLANNING, CLAUDE)
+#   2. Header canonical sessie-marker == footer canonical sessie-marker binnen elke doc
+#      (Sessie 140 refinement: regex zoekt alleen canonieke markers — "Laatst bijgewerkt"
+#      / "Last updated" / "laatste" — om random "Sessie N" mentions in body te skippen)
 #   3. PRD-versie referentie identiek in CLAUDE.md en PLANNING.md
 #   4. Monetization-stack keywords aanwezig in alle 3 docs (AdSense, Ko-fi, Brevo, Gumroad, Lead magnet)
 #
@@ -18,7 +20,7 @@
 #     output met cijfers in TASKS.md §Huidige Focus (tolerance ±5%)
 #   - Check 6: Milestone-percentage ground-truth — raw `[x]`/`[ ]` count per
 #     mijlpaal-sectie vs claimed percentage in Voortgang Overzicht tabel
-#   Trigger: Sessie 144 rotation (zie TASKS.md Volgende Stappen #22). ~20 min werk.
+#   Trigger: Sessie 144 rotation (zie TASKS.md Volgende Stappen #23). ~20 min werk.
 #   Soft-drift = cijfers die langzaam verouderen zonder dat één invariant breekt.
 
 set -o pipefail
@@ -98,32 +100,31 @@ check_doc_internal() {
   local doc=$1
   local name=$2
 
-  # Get all "Sessie N" mentions in first 10 lines (header) and last 30 lines (footer)
-  local header_sessies
-  local footer_sessies
-  header_sessies=$(head -10 "$doc" | grep -oE 'Sessie [0-9]+' | grep -oE '[0-9]+' | sort -u)
-  footer_sessies=$(tail -30 "$doc" | grep -oE 'Sessie [0-9]+' | grep -oE '[0-9]+' | sort -u)
+  # Extract canonical sessie-marker. Accepted patterns:
+  #   - "Laatst bijgewerkt:** ... (Sessie N)" (TASKS.md, PLANNING.md headers/footers)
+  #   - "Last updated:** ... (Sessie N)" (CLAUDE.md footer)
+  #   - "Status:** ... (laatste: Sessie N)" (CLAUDE.md header)
+  # Negeert random mentions in body/comments (Sessie 144 trigger, Sessie 200 test-context).
+  local header_sessie
+  local footer_sessie
+  local canon_pattern='(Laatst bijgewerkt|Last updated|laatste).{0,80}Sessie [0-9]+'
+  header_sessie=$(head -10 "$doc" | grep -oE "$canon_pattern" | grep -oE 'Sessie [0-9]+' | grep -oE '[0-9]+' | head -1)
+  footer_sessie=$(tail -30 "$doc" | grep -oE "$canon_pattern" | grep -oE 'Sessie [0-9]+' | grep -oE '[0-9]+' | head -1)
 
-  if [ -z "$header_sessies" ]; then
-    fail "$name: geen 'Sessie N' referentie in header (eerste 10 regels)"
+  if [ -z "$header_sessie" ]; then
+    fail "$name: geen canonieke sessie-marker in header (Laatst bijgewerkt / Last updated / laatste:Sessie N — eerste 10 regels)"
     return
   fi
 
-  if [ -z "$footer_sessies" ]; then
-    fail "$name: geen 'Sessie N' referentie in footer (laatste 30 regels)"
+  if [ -z "$footer_sessie" ]; then
+    fail "$name: geen canonieke sessie-marker in footer (Laatst bijgewerkt / Last updated / laatste:Sessie N — laatste 30 regels)"
     return
   fi
 
-  # Highest sessie in header
-  local header_max
-  local footer_max
-  header_max=$(echo "$header_sessies" | sort -rn | head -1)
-  footer_max=$(echo "$footer_sessies" | sort -rn | head -1)
-
-  if [ "$header_max" != "$footer_max" ]; then
-    fail "$name: header-max-sessie ($header_max) ≠ footer-max-sessie ($footer_max) — datum-drift"
+  if [ "$header_sessie" != "$footer_sessie" ]; then
+    fail "$name: header-sessie ($header_sessie) ≠ footer-sessie ($footer_sessie) — datum-drift"
   else
-    pass "$name: header & footer beide refereren aan Sessie $header_max"
+    pass "$name: header & footer beide refereren aan Sessie $header_sessie"
   fi
 }
 
