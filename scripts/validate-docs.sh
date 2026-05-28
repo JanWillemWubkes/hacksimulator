@@ -12,6 +12,14 @@
 #
 # Usage: ./scripts/validate-docs.sh
 # Exit code: 0 = all valid, 1 = drift detected
+#
+# TODO Sessie 144: voeg --deep mode toe voor soft-drift detectie
+#   - Check 5: Bundle KB ground-truth — vergelijk `du -sb src/ styles/ blog/ assets/`
+#     output met cijfers in TASKS.md §Huidige Focus (tolerance ±5%)
+#   - Check 6: Milestone-percentage ground-truth — raw `[x]`/`[ ]` count per
+#     mijlpaal-sectie vs claimed percentage in Voortgang Overzicht tabel
+#   Trigger: Sessie 144 rotation (zie TASKS.md Volgende Stappen #22). ~20 min werk.
+#   Soft-drift = cijfers die langzaam verouderen zonder dat één invariant breekt.
 
 set -o pipefail
 

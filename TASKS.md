@@ -56,6 +56,7 @@
 19. [ ] M6 Tutorial: laatste 3 open taken (→ 100%)
 20. [ ] Bundle runtime-budget herijken: split site-totaal in *Terminal Core* (runtime <400 KB) vs *SEO/content* (geen budget) — splitsing toepassen in PLANNING.md bundle-tabel
 21. [ ] Postmaster re-check trigger: eerste >100-recipient campaign-send OF kalender-datum 2 wk later (vanaf 18 mei 2026 → ~1 juni 2026)
+22. [ ] **Sessie 144 trigger** — Bouw `validate-docs.sh --deep` mode: bundle KB ground-truth-check (compare `du -sb src/ styles/ blog/ assets/` output tegen TASKS.md cijfers met tolerance van ±5%) + milestone-percentage check (raw `[x]`/`[ ]` count vs claimed percentage in Voortgang Overzicht tabel). ~20 min werk, vangt soft-drift die de huidige 4 invariant-checks (sessie-counter, datum, PRD-version, monetization-keywords) niet detecteren. Zie inline TODO in `scripts/validate-docs.sh`.
 
 ---
 
