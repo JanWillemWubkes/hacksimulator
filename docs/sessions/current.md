@@ -4,6 +4,125 @@
 
 ---
 
+## Sessie 145: Item #26 Frame B Closure — Verify-First Plan Onthult Lighthouse-Attributie-Bias, Spawn #28 (29 mei 2026)
+
+**Scope:** Heisenberg's instructie: "Pak item #26 op uit TASKS.md — box-utils.js bootup-profile (309 ms total / 200 ms scripting op mobile, nu #1 bottleneck ná Pad C2). Gebruik Chrome DevTools Performance recording om hypothese (a/b/c) te isoleren. Verwachte uitkomst: cache-warming patch + Lighthouse delta terminal mobile 59 → 65-75." Plan-mode onmiddellijk geactiveerd want directe inspectie van `src/utils/box-utils.js` source onthulde dat item #26's hypothese-set niet matcht met de werkelijke source — verify-first frame gekozen via AskUserQuestion vóór code-actie.
+
+**Status:** ✅ Voltooid. Commit `36cda01` docs(perf): item #26 Frame B closure (Lighthouse-attributie-bias) + spawn #28. Item #26 ✅ gesloten zonder code-wijziging — Frame B (Lighthouse-attributie-bias) bevestigd door multi-metric overeenstemming. Heisenberg's verwachte "+5-15 mobile-score" werd NIET vervuld, want hypothese-basis is door data gefalsifieerd. Item #28 spawned voor de écht-dominante cost-driver: Style/Layout 2172 ms in mainthread-work-breakdown.
+**Duur:** ~3 uur (plan-mode Phase 1 verkenning + Phase 2 Plan agent + Phase 4 plan-file write + ExitPlanMode + 3-run Lighthouse capture + Python parse-script + Playwright MCP cold/warm meting + docs-updates + validate-docs + commit + /summary cyclus).
+**Plan source:** `/home/willem/.claude/plans/heisenberg-hier-pak-item-pure-cascade.md` (~1180 woorden, 7 secties, gevolgd verify-first protocol).
+
+### Plan-mode Phase 1 — surprise: hypothese-set gefalsifieerd door directe source-lezing
+
+Phase 1 launchte 3 Explore-agents parallel: item #26 + audit-doc hypotheses + box-utils.js source + load-path + tooling-baseline. Eerste bevinding: item #26's hypothese-set (a)/(b)/(c) lijkt geformuleerd op snelle source-lezing zonder werkelijke trace:
+
+- **box-utils.js source** (126 regels): regels 3-12 = `BOX_CHARS` const (geen executie). Regels 14-45 = pure functie-definities (geen top-level calls). Regels 47-57 = **enige top-level werk** = `document.fonts.ready.then(invalidateCharWidthCache)` + debounced resize listener. ~1ms totaal. Regels 64-125 = pure exports.
+- Hypothese (a) "measureCharWidth herhaaldelijk zonder cache-hit op regels 12-50" → regels 12-50 bevatten ALLEEN function-definities + event-registraties, geen top-level call.
+- Hypothese (c) "box-render-loops over groot output-volume" → onboarding-welkom is plain text, geen output-volume tijdens boot.
+- **Nieuwe hypothese (d):** `main.js` importeert eager 41+ command-modules (regels 17-65), waarvan 14 importeren uit box-utils → Lighthouse `bootup-time` URL-attributie-heuristiek kan aggregaat-cost op leaf-dep dumpen.
+
+**AskUserQuestion #1** (plan-mode Phase 3 user-alignment): Hoe item #26 aan te pakken gegeven mismatch? 3 opties: (1) Verify-first via trace **[recommended]**, (2) Cache-warming patch blindly, (3) Frame C lazy-load command-modules onderzoeken. Heisenberg koos optie 1.
+
+### Plan-mode Phase 2-4 — Plan agent + plan-file write
+
+Plan agent ontwierp 7-sectie verify-first plan met decisional-thresholds-tabel (3 trace-signalen × 3 frames + 3 Playwright-signalen), decision-tree (Frame A → cache-warming + ch-unit refactor / Frame B → docs-only no-action / Frame C → spawn item #28 voor command-registry refactor), anti-drift safeguards (multi-metric vereiste, 3-run mediaan, defense-in-depth-persistence op 3 plekken). ExitPlanMode met 6 allowedPrompts (Lighthouse/Python parse/Playwright/local server/validate-docs/git).
+
+### Execution — 3-run Lighthouse + raw trace parse + Playwright MCP
+
+**Stap 1 — Lighthouse-capture** (5-10 min in background):
+```bash
+mkdir -p /tmp/perf-item26
+for i in 1 2 3; do
+  npx --yes lighthouse@11 https://hacksimulator.nl/terminal.html \
+    --only-categories=performance --save-assets \
+    --output=json --output-path=/tmp/perf-item26/lh-run${i}.json \
+    --chrome-flags="--headless --no-sandbox" --quiet
+done
+```
+Resultaten: Run 1 score=51 bootup=357ms / Run 2 score=63 bootup=312ms (mediaan) / Run 3 score=61 bootup=249ms. **Variance 51-63 = 12 punten range bevestigt direct waarom Sessie 142's "3-run mediaan, geen single-run" essentieel is.** Sessie 144 baseline van 59 valt netjes in [51, 63] range.
+
+**Stap 2 — Python parse-script** (`/tmp/perf-item26/parse-trace.py`, ~40 regels):
+- Parse Lighthouse `audits["bootup-time"].details.items` (per-URL Lighthouse-attributie)
+- Parse `trace.json` `traceEvents` filter op `EvaluateScript` + `v8.compile` + `FunctionCall` met URL-classifier (10 buckets)
+- Mismatch-detectie tussen Lighthouse-attributie en raw trace-aggregaten
+
+**Output Run 2 (mediaan):**
+- Lighthouse rapporteert box-utils.js: 434 ms total / **230 ms scripting** / 0.3 ms parse
+- Raw trace box-utils.js: **3 events totaal** = ResourceSendRequest 0ms + v8.parseOnBackground 1.24ms + v8.compileModule 0.07ms = **1.3 ms X-phase dur** (parse op worker-thread)
+- ScriptId voor box-utils.js = `set()` (leeg) → FunctionCall-events kunnen NIET via scriptId-mapping aan box-utils worden toegerekend
+- Mainthread-work-breakdown: **styleLayout 2172 ms**, scriptEvaluation totaal 376 ms, parseHTML 115 ms
+- Top single tasks boot-window 0-5s: Layout 195/137/87 ms, RunTask 240/154/135/112 ms (naamloos), enige identificeerbare FunctionCall met grote dur = `ui/legal.js` 53.9 ms
+
+**Stap 3 — Playwright MCP cold/warm meting** (5-iteratie cachebust, 375×667 viewport):
+```js
+const m = await import('/src/utils/box-utils.js?cb=' + Date.now() + '-' + i);
+// importMs / coldCallMs (getResponsiveBoxWidth) / warmCallMs / wordWrap50 / isMobile
+```
+Mediaan: importMs **30.6 ms** (incl. ~25ms netwerk-RTT), coldCallMs **1.4 ms**, warmCallMs **0.1 ms**, wordWrap50 0.4 ms, isMobile 0.1 ms.
+
+### Frame-decision via decisional-thresholds tabel
+
+| Signaal | Mediaan | Frame A drempel | Frame B drempel | Frame C drempel | Verdict |
+|---|---|---|---|---|---|
+| Raw trace EvaluateScript box-utils | 0 ms | >50 ms | <10 ms | <20 ms | **B** |
+| Raw trace v8.compile box-utils | 0.07 ms | — | — | — | background |
+| Playwright importMs cold | 30.6 ms | >50 | <10 | <20 | grijs (netwerk-RTT) |
+| Playwright coldCallMs | 1.4 ms | >20 | <5 | <5 | **B/C** |
+| Playwright warmCallMs | 0.1 ms | <1 | <1 | <1 | cache werkt |
+| Lighthouse-rapport | 230 ms | — | — | — | **177x mismatch** |
+
+**Multi-metric overeenstemming voor Frame B (Lighthouse-attributie-bias).** Hypotheses (a)/(b)/(c) allemaal gefalsifieerd door data: geen herhaalde measureCharWidth, cache werkt impeccable, geen render-loops.
+
+**AskUserQuestion #2:** Commit-go + spawn item #28 voor Layout/Style perf-audit? Heisenberg: ja op beide.
+
+### Docs-updates (Frame B = docs-only)
+
+- `src/utils/box-utils.js` regel 1: TODO Sessie 143 vervangen door "RESOLVED Sessie 145 Frame B" comment met 1-regel multi-metric rationale + verwijzing naar audit-doc §2 + TASKS.md #26.
+- `TASKS.md`: header+footer sessie-counter 144→145 (validate-docs.sh Check 2 ving intermediate drift toen ik alleen header had geüpdatet), item #26 status `[ ]` → `[x]` met volledige multi-metric tabel-cite, nieuwe item #28 met trace-bewijs + audit-vragen voor Style/Layout perf-audit (kandidaat-target: navbar/footer DOM-injection, legal-modal init, onboarding-typewriter, Google Fonts CLS).
+- `docs/perf-third-party-audit.md` §2: Out-of-scope nota uitgebreid met Sessie 145 closure-tabel (8-rij multi-metric overview) + learning over bootup-time per-URL-cijfers.
+
+### Commits
+
+| Hash | Message | Files |
+|---|---|---|
+| `36cda01` | docs(perf): item #26 Frame B closure (Lighthouse-attributie-bias) + spawn #28 | 3 files (+23 / -6) |
+
+### Critical Learnings
+
+⚠️ **Never:**
+- Lighthouse `audits["bootup-time"]` per-URL scripting-cijfers gebruiken als beslis-anchor voor optimalisatie zonder multi-metric verificatie via raw trace.json `traceEvents` filter — Sessie 145 onthulde 177x mismatch (230 ms Lighthouse-rapport vs 1.3 ms raw trace) op box-utils.js. Lighthouse's `bootup-time` algoritme attribueert v8-sampler-tijd per script-URL via call-stack-heuristiek; bij ES-module-graph met shared leaf-dependencies kan attributie falen. Een hele sessie cache-warming-engineering (Frame A pad) was gepland op deze foute basis tot multi-metric data het corrigeerde.
+- Hypothese-formulering accepteren met specifieke source-locatie-claims (regelnummers) zonder die regels te lezen — item #26 hypothese (a) zei "regels 12-50 draaien herhaaldelijk zonder cache-hit". Die regels bevatten pure function-definities + event-registraties, geen top-level executie. Source-claim-verificatie via direct Read kost 30 sec en is forcing-function tegen hypothese-drift.
+- "Bewijs-van-succes" sectie in plan §4 schrijven als enkel Frame A/C gerelevanteerd — Frame B docs-only-uitkomst heeft geen vóór/ná-meting want geen patch. Plan-design moet niet-actie-pad als gelijkwaardig behandelen, anders impliciete bias naar "altijd patchen". Sessie 145-plan §4 had Frame B expliciet als legitieme uitkomst gemarkeerd, wat ons toeliet om Frame B als ✅-closure te claimen zonder rationalisatie-discomfort.
+- `validate-docs.sh` quickfix als "minor cosmetic" afdoen en `--no-verify` overwegen wanneer Check 2 header/footer-drift vangt — die check bestaat juist omdat ik in Sessie 145 ALLEEN de TASKS.md-header had bijgewerkt en de footer-Versie was vergeten. Root-cause fix (beide regels actueel) is 30 sec werk, `--no-verify` zou Sessie 140's hele forcing-function-investering ondermijnen.
+
+✅ **Always:**
+- Drie meet-niveaus expliciet onderscheiden bij elk perf-audit-debat: (1) **Lighthouse-attributie** (audit-output, heuristisch per-URL), (2) **raw trace events** (devtools.timeline EvaluateScript/v8.compile/FunctionCall, ground-truth), (3) **isolated measurement** (Playwright dynamic import + cold/warm meting per functie). Eén-metric proxy is verboden. Sessie 142 leerde "mobile vs desktop vereist beide" — Sessie 145 breidt uit naar "Lighthouse vs raw trace vs isolated measurement vereist alle drie".
+- Plan-mode AskUserQuestion stellen bij Phase 1 surprise-finding ipv mechanisch door te gaan met originele scope-spec — Phase 1 Explore-agent onthulde hypothese-mismatch tussen item #26-formulering en source. Direct stoppen + AskUserQuestion met 3 explicit opties + mijn-aanbevelingen leverde verify-first frame-keuze binnen 1 user-turn. Mechanische cache-warming-patch had Heisenberg de werkelijke conclusie (Frame B) ontnomen.
+- `--save-assets` flag op Lighthouse gebruiken om `trace.json` + `devtoolslog.json` op te slaan voor diepe analyse — JSON-output alleen geeft summary, niet de raw event-stream nodig voor attributie-verificatie. Trace.json is groot (~6-7 MB voor 5s mobile trace) maar Python-parsing kost <1 sec.
+- Decisional-thresholds-tabel met expliciete drempels per frame OPSCHRIJVEN in plan-file vóór data binnen komt — zonder die tabel kies je Frame-conclusie waar je je goed bij voelt ipv waar data naar wijst. Sessie 145 tabel had drempels per signaal × frame zodat ik na data-collectie geen rationalisatie kon doen.
+- Defense-in-depth-persistence-pattern (Sessie 140) toepassen ook bij "geen-code-actie"-uitkomsten — Frame B bevinding op 3 plekken vastgelegd: (a) TASKS.md item #26 closure-tekst met multi-metric tabel, (b) inline comment regel 1 box-utils.js, (c) audit-doc §2 closure-tabel. Toekomstige sessies kunnen niet "stiekem" item #26 heropenen zonder al deze drie te tegenkomen.
+- Playwright MCP cold/warm via dynamic `import('...?cb=' + Date.now())` cachebust voor isolated per-functie meting — geen test-spec-bestand nodig voor ad-hoc verificatie, één `browser_evaluate`-call levert N-iteratie mediaan-cijfers. Pattern: ResourceTiming + cold-call-after-fresh-import + warm-call-on-cached-module + functioneel-werk-call. Schaalt naar elke utility-module-meting.
+
+### Next Steps (open items)
+
+- **Item #28 Style/Layout perf-audit op terminal.html** (Sessie 145 spawn) — trace-data al gecaptured in `/tmp/perf-item26/lh-run2-0.trace.json`. Audit-vragen: welke DOM-injecties triggeren grote Layouts (navbar/footer/legal-modal/onboarding-typewriter)? Welke CSS-rules forceren reflows? Gebruikt main.css `:has()` of complexe selectors? Google Fonts CLS-aandeel? Scope ~2-3 uur. Verwachte impact: mobile +5-15 score richting plan-target 70-80.
+- **Item #23 Sessie 145+ trigger validate-docs --deep mode** — onveranderd. Bundle KB ground-truth-check + milestone-percentage check.
+- **Item #27 Ad-bearing pages perf-audit + preconnect** — onveranderd. Volg na #28.
+
+### Metrics Delta
+
+| Metric | Sessie 144 | Sessie 145 | Delta |
+|---|---|---|---|
+| TASKS.md items voltooid | 290 | 291 (+#26) | +1 |
+| TASKS.md items open | ~50 | ~50 (-#26 +#28) | 0 net |
+| Test-files | 22 | 22 | 0 |
+| Test-invocaties | 167 | 167 | 0 |
+| Bundle src/ | 627 KB | 627 KB | 0 (1 comment edit) |
+| Lighthouse mobile (Run 2 mediaan) | 49→59 (+10) | 63 (single-run noise: 51-63 range) | binnen variance |
+| Files changed | (Pad C1+C2 batch) | 3 (TASKS + audit-doc + box-utils.js comment) | docs-only |
+
+---
+
 ## Sessie 144: Pad C1 + C2 Implementatie — Scope-uitbreiding 1→6 Pages, Critical-Split, AdSense KB/ms → 0 (29 mei 2026)
 
 **Scope:** Heisenberg's instructie was "pak Pad C1 + Pad C2 op uit `docs/perf-third-party-audit.md` §6" — beide gecombineerd in één sessie. AdSense Auto-ads dashboard-state UIT bevestigd in Sessie 143 (productie €0,02 / 30 dagen pre-promotion floor). Plan-mode-first met scope-expansie-vraag aan Heisenberg.
