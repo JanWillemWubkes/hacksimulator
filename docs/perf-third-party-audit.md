@@ -112,6 +112,21 @@ Mobile-vs-desktop blocking-time-ratio voor AdSense = 788/104 = **7.5x** → beve
 
 **Out-of-scope nota:** `box-utils.js` 309 ms total + 200 ms scripting is verrassend hoog voor utility-code. Niet onderdeel van #25 (third-party) — registreren als nieuwe first-party-perf-task (`box-utils.js` profile + cache-warming review) na #24-sprint.
 
+**Sessie 145 closure — Frame B bevestigd (geen actie):** verify-first-plan uitgevoerd met 3-run Lighthouse@11 + raw trace.json parsing + Playwright cold/warm. Bewijs voor attributie-bias-frame:
+
+| Meting | Waarde | Frame-implicatie |
+|---|---|---|
+| Raw trace EvaluateScript box-utils.js | 0 ms | Frame B (Lighthouse-attributie-bias) |
+| Raw trace v8.parseOnBackground + v8.compileModule | 1.31 ms | background-thread, geen main-thread cost |
+| Playwright importMs cold (mediaan N=5) | 30.6 ms | incl. ~25 ms netwerk-RTT, V8-werk <2 ms |
+| Playwright coldCallMs `getResponsiveBoxWidth()` | **1.4 ms** | Frame A vereist >20 ms → gefalsifieerd |
+| Playwright warmCallMs (na 1e call) | **0.1 ms** | cache werkt impeccable → hypothese (b) gefalsifieerd |
+| Lighthouse `audits.bootup-time` scripting | **230 ms** | **~177x mismatch t.o.v. raw trace** |
+| Mainthread-work-breakdown styleLayout | **2172 ms** | écht dominante cost-driver |
+| Mainthread-work-breakdown scriptEvaluation totaal | 376 ms | box-utils zou 61% daarvan zijn — onmogelijk |
+
+Conclusie: Lighthouse's `bootup-time` URL-attributie via call-stack-heuristiek schrijft hier ~230 ms toe aan een module die in raw event-data <2 ms main-thread-cost heeft en waarvan élke functie-aanroep sub-2-ms is. Het is een meet-artefact, niet een optimalisatie-target. Mobile-score-verbetering richting 70-80 moet uit Layout/Style-reductie komen (kandidaat-task #28 — `Layout` 195+137+87 ms top single tasks dominant). Volledige verify-first-protocol vastgelegd in `/home/willem/.claude/plans/heisenberg-hier-pak-item-pure-cascade.md`. Direct learning voor toekomstige perf-audits: **`bootup-time` per-URL-cijfers vereisen multi-metric verificatie via raw trace + isolated measurement vóór gebruikt als beslis-anchor**.
+
 ---
 
 ## §3 Trade-off-tabel per origin (defer-kosten vs perf-impact)

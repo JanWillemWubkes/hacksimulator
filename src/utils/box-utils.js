@@ -1,4 +1,4 @@
-// TODO Sessie 143: Lighthouse bootup-time = 309 ms total / 200 ms scripting (mobile preset) — verrassend hoog voor utility. Profile + cache-warming review na #24-sprint. Zie TASKS.md #26 + docs/perf-third-party-audit.md §2 out-of-scope nota.
+// RESOLVED Sessie 145 — Frame B (Lighthouse-attributie-bias): raw trace toont 1.3 ms (parse+compile op background-thread), Playwright coldCallMs 1.4 ms, warmCallMs 0.1 ms. Lighthouse's 230 ms scripting-attributie is een URL-mapping-heuristiek-artefact, geen echt main-thread werk in dit bestand. Echte cost-drivers: Style/Layout 2172 ms in mainthread-work-breakdown. Geen code-actie. Zie docs/perf-third-party-audit.md §2 + TASKS.md #26 closure.
 
 export const BOX_CHARS = {
   topLeft: "╭",
