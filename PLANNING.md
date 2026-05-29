@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 28 mei 2026 (Sessie 143 — third-party audit `/terminal.html` voltooid: AdSense ecosysteem = 73% blocking-time, ad-slot script 77% ongebruikt; geen architectuur-wijziging, alleen `docs/perf-third-party-audit.md` als nieuw reference-doc; item #25 ✅, #24 verfijnd met Pad C1/C2/C3)
+**Laatst bijgewerkt:** 29 mei 2026 (Sessie 144 — Pad C1+C2 implementatie voltooid: adsbygoogle.js verwijderd van 6 no-slot pages + animations.css critical-split + fetchpriority hints. Productie-Lighthouse terminal.html mobile 49→59 / desktop 77→94, sample-pentest desktop 99→100. AdSense KB/ms → 0 op alle 4 runs. Geen architectuur-wijziging; alleen HTML-head edits + `docs/perf-third-party-audit.md` §7 update; item #24 ✅, nieuw item #27 voor ad-bearing pages audit)
 **Status:** ✅ LIVE on Netlify | M5 Testing 91% | M5.5 Monetization deep (AdSense + Ko-fi + Brevo + Gumroad + Lead magnet) | M6 Tutorial 88% | M7 Gamification 100% | Blog content-pijler 10 posts live
 **Verantwoordelijk:** Development Team
 **Live URL:** https://hacksimulator.nl/
@@ -764,8 +764,8 @@ const DEBUG_MODE = false;
 
 ---
 
-**Laatst bijgewerkt:** 28 mei 2026 (Sessie 143)
-**Versie:** 3.4 (Sessie 143 — third-party audit `/terminal.html` voltooid via Lighthouse JSON-parse. Frame-bias-correctie verfijnd: AdSense ecosysteem (pagead2 230.5 KB + ep1/ep2.adtrafficquality 21.2 KB) = 73% blocking-time + 65% transfer; GA4/Brevo/Ko-fi laden NIET op terminal.html (alleen op index/sample-pentest). Smoking gun: AdSense ad-slot script 132.9 KB / 77% ongebruikt (geen `<ins>` slots in body). Reproduction Mobile 39→40, Desktop 64→69 binnen run-noise. Architectuur ongewijzigd; output is reference-doc `docs/perf-third-party-audit.md` (Doc Ownership matrix: nieuwe testing/reference-categorie). Bundle Size Budget sectie ⚠️-status blijft tot Pad C-keuze in #24-heropening.)
+**Laatst bijgewerkt:** 29 mei 2026 (Sessie 144)
+**Versie:** 3.5 (Sessie 144 — Pad C1+C2 implementatie voltooid. Architectuur ongewijzigd; HTML-head edits op 7 pages (6 C2 + 1 C1#3) + audit-doc §7 uitgebreid. Productie-Lighthouse delta terminal mobile 49→59 (+10) / desktop 77→94 (+17), sample-pentest mobile 73→82 (+9) / desktop 99→100 (+1). AdSense ecosysteem 252 KB / 420 ms → 0/0 op alle 4 runs. Bundle Size Budget sectie ⚠️-status ongewijzigd want bundle-source-grootte niet aangeraakt — Pad C werkte op on-wire + render-path niveau, niet bundle-source. Volgende perf-sprint: item #26 box-utils.js bootup-profile.)
 **Status:** ✅ Deployed - Live in Production | M5.5 Monetization stack deep + Brevo deliverability getuned | M7 Gamification ✅ 100% | Blog content-pijler live
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

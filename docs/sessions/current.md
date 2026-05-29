@@ -4,6 +4,104 @@
 
 ---
 
+## Sessie 144: Pad C1 + C2 Implementatie — Scope-uitbreiding 1→6 Pages, Critical-Split, AdSense KB/ms → 0 (29 mei 2026)
+
+**Scope:** Heisenberg's instructie was "pak Pad C1 + Pad C2 op uit `docs/perf-third-party-audit.md` §6" — beide gecombineerd in één sessie. AdSense Auto-ads dashboard-state UIT bevestigd in Sessie 143 (productie €0,02 / 30 dagen pre-promotion floor). Plan-mode-first met scope-expansie-vraag aan Heisenberg.
+
+**Status:** ✅ Voltooid. Commit `4e4eec5` perf(third-party): Pad C1 + C2. Lighthouse-delta gevalideerd op productie: terminal mobile **49→59** / desktop **77→94** / sample-pentest mobile **73→82** / desktop **99→100**. AdSense ecosysteem 252 KB / 420 ms → **0/0** op alle 4 runs.
+**Duur:** ~2.5 uur (plan-mode iteratie met scope-discovery + 6-pages C2 + terminal critical-split + fetchpriority + lokale visual verification via Playwright MCP + deploy + 4 Lighthouse runs vóór/ná + audit-doc §7 + TASKS.md + /summary).
+**Plan source:** `/home/willem/.claude/plans/heisenberg-hier-pak-zany-newt.md`.
+
+### Plan-mode discovery — scope-uitbreiding via grep
+
+Tijdens cold-start verifieerde ik anti-drift (terminal.html nog steeds 0 `<ins>` slots) en deed een uitgebreidere grep `<ins class="adsbygoogle"` over alle HTML-files. Onthullen: **5 andere pages** hadden dezelfde no-slot-pattern als terminal.html:
+- `sample-pentest.html` (lead magnet landing)
+- `gidsen.html` (products overzicht)
+- `assets/legal/{privacy,terms,cookies}.html`
+
+Comment in `index.html:71` ("AdSense Script nodig voor crawler") werd technisch gefalsifieerd: crawler-ownership-verificatie loopt via `<meta name="google-adsense-account">` + `/ads.txt`, NIET de runtime script. AskUserQuestion (2 vragen): C2-scope + animations.css-strategie. Heisenberg antwoord: "wat raad je aan? ik heb de tijd, ik wil alles zo perfect mogelijk hebben" → mijn aanbevelingen Optie 4 (alle 6 no-slot pages) + Optie B (D2 critical-split) goedgekeurd.
+
+### Implementatie-stappen
+
+**Stap 0 — Baseline (5 min):** mkdir + 4× Lighthouse baseline-runs in background (parallel met edits).
+
+**Stap 1 — Pad C2 op 6 pages (15 min):** delete `<script async src=".../adsbygoogle.js?..." crossorigin="anonymous"></script>` + optionele comment per page. Behoud `<meta name="google-adsense-account">` + Consent Mode v2 init blok overal. Cross-verificatie grep: 6 pages → 0 references, 6 ad-bearing pages (index/blog/woordenlijst/contact/over-ons/commands) behouden script ✅.
+
+**Stap 2 — Pad C1 #1: animations.css critical-split op terminal.html (15 min):** inline `<style>` block (~600 bytes) met `:focus-visible` outline + `prefers-reduced-motion` reset + `@keyframes fadeIn/fadeOut` + `.modal/.modal.active/.closing` + `html { scroll-behavior: smooth }`. Defer rest via `media="print" onload="this.media='all'"` pattern. Cache-bust v=114 → v=144. NoScript fallback toegevoegd.
+
+**Stap 3 — Pad C1 #3: fetchpriority="high" (5 min):** op `<link rel="preload">` en `<link rel="modulepreload">` in terminal.html (3 preloads) + index.html (2 preloads). Skip op sample-pentest (geen preloads).
+
+**Pad C1 #2 (preconnect pagead2):** GESKIPT — na C2 zinloos op terminal/sample-pentest/gidsen. Doorverwezen naar nieuw item #27 voor ad-bearing pages.
+
+### Local visual verification — Playwright MCP
+
+Lokale `python3 -m http.server 8765` + Playwright MCP browser_navigate. 10 evaluate-criteria allemaal groen:
+1. `adsbygoogleScripts: 0` — script weg uit DOM
+2. `pagead2InNetwork: false` — geen network requests
+3. `adtrafficqualityInNetwork: false`
+4. `animationsCssMedia: "all"` — onload-handler werkt (Sessie 95 CSP-issue is opgelost)
+5. `criticalInlineStyleCount: 1`
+6. `googleAdsenseMetaPresent: true`
+7. `preloadsWithFetchpriority: 3` (alle 3 preloads in terminal.html)
+8. `gtagFnPresent + dataLayerPresent: true` — Consent Mode v2 intact
+9. Console errors: 0
+10. **Tab-keypress test focus-state:** `outline: rgb(121, 192, 255) solid 2px outlineOffset: 2px` — exacte match met inline critical CSS (`var(--color-info)` resolveert naar lichtblauw). HARD bewijs WCAG-compliance werkt.
+
+Modal-test: legal-modal toont eerst (first-visit volgorde — legal disclaimer vóór onboarding). `modalAnimationName: "none"` na 2 sec = `.modal.active { animation: fadeIn 0.3s ease-in }` is voltooid. Critical-split functioneel: modal fade-in werkt zonder af te hangen van de gedefereerde animations.css.
+
+### Deploy + Lighthouse-verificatie
+
+Commit + push → Netlify deploy ~80 sec. Until-loop poll `curl | grep fetchpriority`. Daarna 4× lighthouse@11 op productie + Python JSON-parse voor delta-tabel.
+
+**Resultaten:**
+
+| Page | Preset | Score vóór→ná | Δ | TBT vóór→ná | LCP vóór→ná | Total KB | AdSense |
+|------|--------|--------------|----|-------------|-------------|----------|---------|
+| terminal.html | mobile | 49 → **59** | +10 | 1087→985 | 7716→**4265** (-3451) | 626→375 | 252/420 → **0/0** |
+| terminal.html | desktop | 77 → **94** | +17 | 268→136 | 2184→1032 | 626→375 | 252/100 → **0/0** |
+| sample-pentest | mobile | 73 → **82** | +9 | 1209→680 (-529) | 1655→1826 | 556→304 | 252/368 → **0/0** |
+| sample-pentest | desktop | 99 → **100** | +1 | 68→62 | 555→542 | 555→304 | 251/0 → **0/0** |
+
+### Eerlijk-flags (transparante observaties)
+
+1. **terminal.html mobile score 59 < plan-ondergrens 70-80** — net buiten stop-en-reframe-trigger (<55) maar lager dan verwacht. Hoofdoorzaak vermoedelijk first-party bottleneck `box-utils.js` (309 ms total / 200 ms scripting, nu #1 op bootup-tabel na AdSense weg). Item #26 prioriteit verhoogd
+2. **terminal.html mobile FCP +476 ms regression** (1566→2042) — vermoedelijk run-variance want desktop FCP -54 ms. Animations.css defer kan subtiel impact hebben op first-paint maar niet user-noticeable
+3. **sample-pentest.html mobile LCP +171 ms regression** (1655→1826) — eveneens vermoedelijk run-variance want desktop LCP -13 ms (stabiel). Brevo iframe `sibforms.com` 134 KB blijft dominant op deze page
+4. **Cumulatieve score-noise** Sessie 142 mobile 39, Sessie 143 mobile 40, Sessie 144 baseline mobile 49, Sessie 144 ná-meting mobile 59. Trend positief maar puntdelta's vereisen mediaan-meting voor statistische zekerheid (Sessie 143 §1 advisering: 3+ runs)
+
+### Critical learnings
+
+⚠️ **Never:**
+- Comments in HTML-source als ground truth gebruiken zonder verifiëring — `index.html:71` "AdSense Script nodig voor crawler" was misleidend en zou Pad C2 hebben kunnen blokkeren op andere pages. Crawler-ownership-mechanismen (`<meta name="google-adsense-account">` + `/ads.txt`) verifiëren via Google docs, niet vertrouwen op inline comment-claims
+- Een CSS-defer maatregel toepassen op een bestand dat naast animations ook accessibility-utility-styles bevat — `animations.css` had `:focus-visible` outline + `prefers-reduced-motion` reset die WCAG-compliance dekken. Volledig defer = 165 ms a11y-regressie op keyboard/vestibular-disorder-users. Critical-split extract is geen "meer werk" maar correctie-mandaat
+- Lighthouse-verwachtingen formuleren zonder ondergrens-detectie en eerlijk-flag-protocol — terminal mobile 59 < verwacht 70-80 was direct te zien in delta-tabel. Verzwijgen zou drift creëren ("Pad C1+C2 = succes"). Eerlijk-flag in zowel TASKS.md item #24 (sprint-regel "onder verwacht") als audit-doc §7 (eigenlijk-flag-sectie) plus prioriteit-bump voor item #26 = transparante navigatie naar volgende sprint
+- Heisenberg's exacte schaal-instructie ("terminal.html voor C2") accepteren als upper-bound zonder cross-page grep — discovery van 5 extra no-slot pages was 30-seconden-werk maar verviervoudigde de impact
+
+✅ **Always:**
+- Tijdens cold-start ground-truth-grep doen vóór scope te definiëren — `grep '<ins class="adsbygoogle"' *.html` over alle HTML-files toonde dat 6 pages het structurele no-slot-pattern hebben, niet 1. Sessie 143 §3a-decision-tree direct toepasbaar
+- AskUserQuestion stellen met expliciete mijn-aanbeveling + onderbouwing bij scope-keuze in plan-mode — Heisenberg's "wat raad je aan?" antwoord werd binnen seconden gegeven dankzij heldere argumentatie ("comment is technisch onjuist", "delete-cost symmetrisch"). Plan-mode is voor scope-alignment, niet pure mechanische executie
+- Playwright MCP browser-evaluate gebruiken voor multi-criteria visual verification — 10 onafhankelijke checks in 1 evaluate-call (DOM-presence, network-history, computed-styles, localStorage, dataLayer, console-errors). Sneller en complete dan screenshot-only en correspondeert direct met implementation-criteria
+- Tab-keypress simuleren voor `:focus-visible` test — programmatische `.focus()` triggert :focus maar NIET :focus-visible (intentional browser-policy). Verschil: `outlineStyle: "none"` vs `outline: "rgb(121, 192, 255) solid 2px"`. Subtiel maar belangrijk voor WCAG-claims
+- Vóór/ná Lighthouse delta-tabel met expliciete kolommen voor AdSense KB + AdSense ms (apart van total/3rd-party) — toont direct welk deel van performance-win toe te schrijven is aan Pad C2 versus Pad C1 versus run-variance. AdSense 252→0 op ALLE 4 runs = harde productie-evidence
+- Polling-pattern via `until curl | grep` + `run_in_background` ipv vaste sleep — completion-notification triggert exact wanneer deploy live is, bespaart 30-60 sec t.o.v. arbitraire `sleep 120`
+
+### Next steps (post-Sessie 144)
+
+- **Item #26 prioriteit verhoogd:** `box-utils.js` profile + cache-warming patch — 309 ms total nu zichtbaar zonder AdSense-overhead, hoofdkandidaat voor +5-15 mobile-score-verbetering
+- **Item #27 (nieuw):** ad-bearing pages perf-audit (`index.html`, `woordenlijst`, `contact`, `over-ons`, `commands/`, alle `blog/*`) — preconnect-pattern + animations critical-split-pattern hergebruiken, viewability-CPM trade-off framework uit audit-doc §3
+- **Item #23 verschoven:** `validate-docs.sh --deep` mode → Sessie 145+ trigger
+
+### Metrics delta
+
+- Files modified: 13 (7 HTML-files in commit `4e4eec5`: terminal/sample-pentest/gidsen/index/3 legal-pages + 4 docs-files in Sessie-144-docs-commit: audit-doc §7 / TASKS.md / current.md / CLAUDE.md / PLANNING.md header)
+- Commits: 2 (implementatie + docs)
+- Tasks: item #24 [ ] → [x] | item #26 prioriteit verhoogd | item #27 nieuw | item #23 verschoven
+- Sessie counter: 143 → 144
+- Lighthouse JSON gepersisteerd lokaal in `/tmp/perf-audit-144/` (8 JSON files, 4 vóór + 4 ná, niet gecommit)
+- Validate-docs target: exit 0 (Check 1-4 alle slagen)
+
+---
+
 ## Sessie 143: Third-Party Performance Audit — AdSense Domineert, Sessie 142's Attributie Verfijnd (28 mei 2026)
 
 **Scope:** Heisenberg's instructie was "pak item #25 op": de in Sessie 142 gespawnde third-party performance audit (~2 uur research, geen implementatie). Plan-mode-first gevraagd zodat scope niet creept naar "fix het meteen". Output: trade-off-tabel + quick wins inventaris + aanbeveling voor #24-heropening.

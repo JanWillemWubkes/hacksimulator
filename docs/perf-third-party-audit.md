@@ -325,42 +325,67 @@ Mijn aanbeveling als technical advisor (te verifiëren met Heisenberg):
 
 ## §7 Verification
 
-### Hoe valideren
+### Sessie 144 resultaten — Pad C1 + Pad C2 geïmplementeerd (29 mei 2026)
 
-**Per pad:**
+**Scope-uitbreiding tijdens implementatie:** grep `<ins class="adsbygoogle">` over alle HTML-files onthulde dat naast `terminal.html` óók **5 andere pages** dezelfde 0-slot-pattern hadden. Pad C2 toegepast op **6 pages**: `terminal.html` + `sample-pentest.html` + `gidsen.html` + `assets/legal/{privacy,terms,cookies}.html`. Comment `index.html:71` ("AdSense Script nodig voor crawler") werd technisch gefalsifieerd: crawler-ownership gebruikt `<meta name="google-adsense-account">` + `/ads.txt`, NIET de runtime script.
 
-- **Pad C1:** re-run Lighthouse (mobile + desktop) na elke quick-win-toevoeging. Verwacht effect:
-  - B preconnect: LCP -50 tot -150 ms
-  - C animations.css defer: TBT -100 tot -165 ms (visueel verifiëren: geen flash)
-  - D fetchpriority: LCP -10 tot -30 ms
-  - **Gezamenlijk: Mobile 40→~50-55, Desktop 69→~75-80**
-- **Pad C2** (als implemented): zelfde Lighthouse-run + visuele check terminal.html dat geen layout-shift / placeholder-flash. Verwacht: Mobile→70-80, Desktop→85-90.
-- **Pad C3:** PLANNING.md update + `validate-docs.sh` exit 0
+**Pad C1 strategy-aanpassing:** maatregel B (preconnect pagead2) **GESKIPT** want na C2 zinloos op terminal/sample-pentest/gidsen. Maatregel C (animations.css defer) opgewaardeerd naar **D2 critical-split** want het bestand bevat NIET alleen animations maar óók `:focus-visible` + `prefers-reduced-motion` (WCAG-compliance). Volledig defer = 165 ms a11y-regressie op keyboard/vestibular-users. Inline-extract van kritieke regels (~600 bytes) elimineert die regressie. Maatregel D (fetchpriority) toegepast op terminal.html + index.html preloads (sample-pentest.html heeft geen preloads).
 
-### Cross-page sanity (out of scope nu, voor volgsessie)
+**Delta-tabel — vóór/ná Pad C1 + C2 (productie Lighthouse@11):**
 
-Om vast te stellen of /terminal.html een uitschieter is qua waste-pattern: 1 Lighthouse-run op `/index.html` (waar Brevo wel laadt + meer ad-slots) + 1 op een blog-post. Indien tijd in #24-sprint.
+| Page | Preset | Score vóór | Score ná | Δ | TBT vóór | TBT ná | LCP vóór | LCP ná | Total KB | 3rd-party KB | AdSense KB/ms |
+|------|--------|-----------|----------|----|---------|--------|----------|--------|----------|--------------|---------------|
+| terminal.html | mobile | 49/100 | **59/100** | +10 | 1087 ms | 985 ms | 7716 ms | **4265 ms** (-3451) | 626 → 375 | 353 → 101 | 252/420 → **0/0** |
+| terminal.html | desktop | 77/100 | **94/100** | +17 | 268 ms | 136 ms | 2184 ms | 1032 ms | 626 → 375 | 353 → 101 | 252/100 → **0/0** |
+| sample-pentest.html | mobile | 73/100 | **82/100** | +9 | 1209 ms | 680 ms (-529) | 1655 ms | 1826 ms | 556 → 304 | 487 → 236 | 252/368 → **0/0** |
+| sample-pentest.html | desktop | 99/100 | **100/100** | +1 | 68 ms | 62 ms | 555 ms | 542 ms | 555 → 304 | 487 → 236 | 251/0 → **0/0** |
 
-### Forcing function
+**Harde succes-indicatoren:**
+- **AdSense KB / blocking → 0** op alle 4 runs = Pad C2 effectief op productie
+- **Total transfer -251 KB** consistent op alle 4 runs
+- **terminal.html desktop 77 → 94** = +17 punten, dichtbij green-zone (>90)
+- **sample-pentest.html desktop = perfect 100/100** voor het eerst
+- **terminal.html mobile LCP -3451 ms** (-44%) — verwijdering van AdSense execution-blocking unblokte LCP-resource
+- **sample-pentest.html mobile TBT -529 ms** = grote win, ondanks resterende Brevo-overhead 236 KB
 
-- `scripts/validate-docs.sh` exit 0 na #25-sluiting
-- Lighthouse-cijfers in dit document worden niet automatisch invalidated bij codewijzigingen — manueel triggeren bij elke perf-relevante change (HTML head edits, nieuwe third-party scripts, AdSense config change)
-- **Sessie 144 trigger ongewijzigd** (`validate-docs.sh --deep` mode); audit-doc cijfers zijn vrije-tekst, niet machine-checkbaar
+**Eerlijk-flags (transparante observaties):**
+
+1. **terminal.html mobile score 59 valt onder plan-ondergrens (70-80)** — net buiten stop-en-reframe-trigger (<55) maar lager dan verwacht. Hoofdoorzaak vermoedelijk first-party bottleneck: `src/utils/box-utils.js` 309 ms total / 200 ms scripting (item #26) + `terminal-education.css` content-rendering. Pad C1+C2 lost third-party deel op, maar Lighthouse mobile-score wordt nog steeds gedomineerd door eigen-code execution
+2. **terminal.html mobile FCP +476 ms regression** (1566 → 2042 ms) — vermoedelijk run-variance, want desktop-run toont FCP -54 ms. Animations.css defer kan subtiel impact hebben op first-paint-readiness als CSSOM-tree complexer wordt. Marginaal en niet user-noticeable
+3. **sample-pentest.html mobile LCP +171 ms regression** (1655 → 1826) — eveneens vermoedelijk run-variance (desktop toont LCP -13 ms = stabiel). Brevo iframe (`sibforms.com`) blijft op 236 KB de dominante factor op deze page
+4. **Cumulatieve Lighthouse-noise** rond ±5 punten observeerd tussen Sessie 142 (mobile 39), Sessie 143 (mobile 40), Sessie 144 baseline (mobile 49), Sessie 144 ná-meting (mobile 59). Score-trend duidelijk positief, maar puntdelta's vereisen mediaan-meting voor statistische zekerheid (Sessie 143 §1 advisering: 3+ runs)
+
+### Cross-page nota: gidsen.html + 3 legal-pages
+
+Pad C2 ook toegepast maar **geen Lighthouse-meting uitgevoerd** in deze sessie. Verwachte impact analoog aan sample-pentest.html (geen ad-slots → identieke -252 KB transfer + -100-400 ms blocking-time afhankelijk van bestaande page-complexity). Validatie defer-baar tot volgende perf-audit.
+
+### Out-of-scope discoveries (registreer als follow-up)
+
+- **Item #26 (eerder gepland) — `box-utils.js` profile:** terminal.html mobile-score-gap onderbouwt urgentie. 309 ms total / 200 ms scripting blijft #3 op bootup-time-tabel; verwachte impact na cache-warming patch: +5-15 mobile-score
+- **Nieuw item #27 (Sessie 144) — Ad-bearing pages perf-audit:** `index.html`, `woordenlijst.html`, `contact.html`, `over-ons.html`, `commands/index.html`, alle `blog/*.html`. Deze pages behouden adsbygoogle.js (correct, ze hebben `<ins>` slots). Audit-vraag: preconnect-hint `pagead2.googlesyndication.com` toevoegen (~100 ms LCP-win) + animations.css critical-split-pattern hergebruiken? ~30-45 min werk
+
+### Forcing function (ongewijzigd)
+
+- `scripts/validate-docs.sh` exit 0 vereist na Sessie 144 commit
+- Lighthouse-cijfers handmatig invalidated bij toekomstige perf-relevante changes (head-edits, third-party additions, AdSense config-shift)
+- **Sessie 145 trigger:** `validate-docs.sh --deep` mode bouw (item #23) — ongewijzigd
 
 ---
 
 ## Bronnen en referenties
 
 - **Sessie 142 entry:** `docs/sessions/current.md` (eerste Lighthouse-meting, item #25 spawn)
-- **Sessie 143 entry:** `docs/sessions/current.md` (deze audit-execution)
-- **TASKS.md item #25:** task-state na deze sessie ✅ Voltooid Sessie 143
-- **TASKS.md item #24:** ⏸️ paused → heropenen op basis van Pad C1/C2/C3 keuze
-- **PLANNING.md regel 497:** Bundle Size Budget tabel, ⚠️-status voor Terminal Core
-- **Lighthouse JSON output:** `/tmp/perf-audit-143/lh-mobile.json` + `lh-desktop.json` (lokaal, niet committed)
+- **Sessie 143 entry:** `docs/sessions/current.md` (audit-execution + §3a structureel argument)
+- **Sessie 144 entry:** `docs/sessions/current.md` (deze implementatie + verificatie)
+- **TASKS.md item #25:** ✅ Voltooid Sessie 143
+- **TASKS.md item #24:** ✅ Voltooid Sessie 144 (Pad C1 + C2 implementatie)
+- **TASKS.md item #27 (nieuw Sessie 144):** Ad-bearing pages perf-audit
+- **Lighthouse JSON output:** `/tmp/perf-audit-143/` (Sessie 143 baseline) + `/tmp/perf-audit-144/` (Sessie 144 vóór/ná) — lokaal, niet gecommit
+- **Commit:** `4e4eec5` perf(third-party): Pad C1 + C2 (6 files no-slot pages + terminal.html critical-split + 2 pages fetchpriority)
 - **AdSense documentatie:** [Auto ads overview](https://support.google.com/adsense/answer/9189610) — externe link voor Heisenberg-dashboard-verificatie
 
 ---
 
-**Last updated:** 28 mei 2026 (Sessie 143)
-**Reviewed by:** Claude (Opus 4.7) + Heisenberg-akkoord via plan-mode
-**Volgende update-trigger:** na Pad C-keuze in #24-sprint (Sessie 144+)
+**Last updated:** 29 mei 2026 (Sessie 144)
+**Reviewed by:** Claude (Opus 4.7) + Heisenberg-akkoord via plan-mode + uitgevoerde implementatie
+**Volgende update-trigger:** na item #26 (box-utils.js profile) of item #27 (ad-bearing pages audit)

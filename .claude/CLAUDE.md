@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 143)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 144)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,22 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 144: Pad C1 + C2 Implementatie — Scope-uitbreiding 1→6 Pages, AdSense KB/ms → 0 op productie (29 mei 2026)
+⚠️ **Never:**
+- Comments in HTML-source als ground truth gebruiken zonder verifiëring — `index.html:71` "AdSense Script nodig voor crawler, toont GEEN ads zonder ad slots" was misleidend en zou Pad C2 hebben kunnen blokkeren op 6 pages. Crawler-ownership-mechanismen zijn `<meta name="google-adsense-account">` + `/ads.txt` op root, NIET de runtime `adsbygoogle.js` script. Verifieer claims in inline comments via Google docs of grep op de daadwerkelijke mechanismen vóór ze als beslis-anchor accepteren
+- Een CSS-defer maatregel klakkeloos toepassen op een bestand dat naast animations ook accessibility-utility-styles bevat — `animations.css` had `:focus-visible` outline + `prefers-reduced-motion` reset die WCAG-compliance dekken. Volledig defer = 165 ms a11y-regressie op keyboard/vestibular-disorder-users. Critical-split (~600 bytes inline extract) is geen "meer werk" maar correctie-mandaat. Lees de ECHTE inhoud van het defer-target vóór defer-strategie kiezen
+- Lighthouse-verwachtingen formuleren zonder ondergrens-detectie en eerlijk-flag-protocol — terminal mobile 59 < verwacht 70-80 was direct zichtbaar in delta-tabel ná Pad C1+C2. Verzwijgen zou drift creëren ("Pad C1+C2 = succes"). Eerlijk-flag in zowel TASKS.md item #24 sprint-regel ("onder verwacht door box-utils.js bottleneck") als audit-doc §7 "eigenlijk-flags"-sectie plus prioriteit-bump voor item #26 = transparante navigatie naar volgende sprint
+- Heisenberg's exacte schaal-instructie ("terminal.html voor C2") accepteren als upper-bound zonder cross-page grep tijdens cold-start — `grep '<ins class="adsbygoogle"' *.html` over alle HTML-files toonde dat 6 pages (terminal + sample-pentest + gidsen + 3 legal) het structurele no-slot-pattern hadden, niet 1. Plan-mode scope-uitbreiding via AskUserQuestion verviervoudigde de impact
+
+✅ **Always:**
+- Tijdens cold-start ground-truth-grep doen vóór scope te definiëren — `grep <ins class="adsbygoogle"' *.html` was 30 sec werk en onthulde 5 extra pages met identiek waste-pattern. Sessie 143 §3a decision-tree direct toepasbaar zonder modificatie. Site-wide grep is anti-tunnel-vision pattern voor elke structurele audit
+- AskUserQuestion stellen met expliciete mijn-aanbeveling + onderbouwing bij scope-keuze in plan-mode — Heisenberg's "wat raad je aan?" antwoord komt binnen seconden als argumentatie helder is ("comment is technisch onjuist", "delete-cost symmetrisch"). Plan-mode is voor scope-alignment, niet pure mechanische executie van originele scope-spec
+- Playwright MCP browser-evaluate gebruiken voor multi-criteria visual verification — 10 onafhankelijke checks in 1 evaluate-call (DOM-presence, `performance.getEntriesByType('resource')` network-history, computed-styles, localStorage, dataLayer, console-errors). Sneller en completer dan screenshot-only, correspondeert direct met implementation-criteria
+- Tab-keypress simuleren voor `:focus-visible` test — programmatische `.focus()` triggert `:focus` maar NIET `:focus-visible` (intentional browser-policy onderscheidt keyboard van mouse). Verschil: `outlineStyle: "none"` vs `outline: "rgb(121, 192, 255) solid 2px"`. Subtiel maar fundamenteel voor WCAG-claim-verification
+- Vóór/ná Lighthouse delta-tabel met expliciete kolommen voor AdSense KB + AdSense ms apart van total/3rd-party — toont direct welk deel van performance-win toe te schrijven is aan Pad C2 versus Pad C1 versus run-variance. AdSense 252→0 op ALLE 4 runs = harde productie-evidence ipv "ongeveer beter"
+- Polling-pattern via `until curl | grep` + `run_in_background` ipv vaste sleep — completion-notification triggert exact wanneer deploy live is (Netlify 60-90 sec variabel), bespaart 30-60 sec t.o.v. arbitraire `sleep 120`. Sessie 138-pattern ("simpel-werkt-eerst") herbevestigd
+- Anti-frame-bias check uitvoeren tegen Lighthouse-resultaten — terminal mobile FCP +476 ms regressie en sample-pentest mobile LCP +171 ms regressie waren tegenovergesteld op desktop runs (-54 / -13 ms). Conclusie: run-variance, niet defer-trade-off-effect. Cross-preset vergelijking is anti-noise-sanity-check
+
 ### Sessie 143: Third-Party Audit — AdSense Domineert, Sessie 142's Attributie Verfijnd (28 mei 2026)
 ⚠️ **Never:**
 - Sessie 142's casual third-party-attributie ("AdSense+GA+Brevo+Ko-fi+misc") accepteren zonder per-origin verificatie via Lighthouse JSON `audits["network-requests"]` — bij `/terminal.html` bleek GA4 NIET geladen (consent-default-denied), Brevo + Ko-fi laden ALLEEN op index.html / sample-pentest.html (sibforms script + Ko-fi widget bestaat niet als script-injectie ergens). Frame-bias-correctie binnen frame-bias-correctie: Sessie 142 was al een correctie van Pad A/B beslis-frame, en bevatte alsnog een nuance-fout in attributie. Per-pagina audit is non-fungible — wat third-party doet op index.html is anders dan op terminal.html
@@ -153,18 +169,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Batch-edits via Python-script met idempotency-checks (skip-condities op marker-strings als `'class="breadcrumb"' in content`) — script kan veilig herhaald draaien zonder dubbele inserts; veel robuuster dan 22 parallelle Edit-calls voor 11 bestanden. Voor uniforme single-line inserts blijft sed met unieke anker-pattern de snelste oplossing
 - `git stash` voor regressie-isolatie wanneer een E2E test faalt — stash → run test → pop. Bewijst direct of de failure pre-existing was of door huidige changes. Voorkwam in deze sessie 30+ min van speculatief CSS-debuggen
 - Browser-cache-bewustzijn bij Playwright lokaal: ES modules cachen over `browser_close` heen — als runtime-state niet matcht met source-code, eerst handmatig dynamic import met cachebust (`await import('/path?cb=' + Date.now())`) proberen vóór code-debugging. In productie geen probleem (Netlify cache-bust via `?v=` op _headers)
-
-### Sessie 138: Content SEO Plan C — OWASP Top 10 Hub-Post + Markup Fix (26 mei 2026)
-⚠️ **Never:**
-- Aannemen dat een groene content-DoD (woordcount, CTA-data-attributes, link-counts, JSON-LD, sitemap) ook HTML-structuur dekt — browsers renderen forgiving, dus een ongesloten `<div>` triggert geen JS-error en geen 404. Visuele regressie glipte door 10 groene DoD-items heen en viel pas op bij menselijke review. Tag-balans-check moet expliciet op de DoD
-- Een keyword-shortlist accepteren zonder cannibalization-grep tegen bestaande posts — 2/8 keyword-kandidaten (#1 "zonder diploma" + #4 "salaris NL") overlapten direct met `ethisch-hacker-worden.html`. 5-min check voorkwam thin-content + SERP-overlap die Google zou bestraffen
-- Een complexe regex bouwen voor een until-loop poll zonder eerst de simpele direct-check (curl + grep) te valideren — mijn `grep -zoE` hing 2.5 min tot timeout terwijl directe curl in 1 sec aantoonde dat de fix al live was. Bij polling: simpel-werkt-eerst, complex-als-nodig
-
-✅ **Always:**
-- Tag-balans-check (`grep -c '<div'` vs `grep -c '</div>'`) toevoegen aan elke blog-post DoD — 1-second sanity-check vangt deze hele klasse van ongesloten-element-bugs vóór deploy. Geplande follow-up: bake dit in `scripts/validate-blogs.sh`
-- Anker-paragrafen grep'en in bestaande posts vóór inbound-links plannen — 2/3 inbound-targets hadden al een `<abbr class="jargon">OWASP Top 10</abbr>` zonder href die ideale `<a>`-omhullings-punten zijn (organische SEO-anchor "complete OWASP Top 10 uitleg" is superior aan forced "klik hier")
-- Ground-truth-first cold-start (Sessie 137-pattern toegepast op Plan C): bevestig topic + post-aantal met user vóór schrijfwerk start — 5-min AskUserQuestion voorkwam plan-aanname over keyword-keuze en post-volume
-- Bidirectional clustering opzetten in dezelfde sessie als nieuwe hub-post — 3 inbound-edits in bestaande posts zijn maximaal 5-min werk en geven directe topical-authority-boost; geen aparte follow-up-sessie nodig
 
 ### Sessie 137: Funnel-pulse Diagnose + Lead-magnet CTA-Coverage 3→13 (26 mei 2026)
 ⚠️ **Never:**
@@ -249,8 +253,8 @@ Pre-Sessie 135 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
    - Pre-commit hook draait dit automatisch
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
-**Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last: Sessie 140 cleanup Sessie 134, next: Sessie 145)
-**Sessie counter:** 143
+**Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last: Sessie 140 cleanup Sessie 134, Sessie 144 1-in-1-out Sessie 138 → current.md, next bulk: Sessie 145)
+**Sessie counter:** 144
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -302,5 +306,5 @@ Pre-Sessie 135 learnings (incl. Sessie 126 Brevo-migratie + 127 Typst PDF + 128 
 
 ---
 
-**Last updated:** 28 mei 2026 (Sessie 143 — Third-party audit `/terminal.html` voltooid via Lighthouse@11 JSON-parse. Ground truth: AdSense ecosysteem (pagead2 230.5 KB + ep1/ep2.adtrafficquality 21.2 KB) = 73% blocking-time + 65% transfer; AdSense ad-slot script 132.9 KB / 77% ongebruikt op deze pagina (geen `<ins>` slots in body); GA4/Brevo/Ko-fi laden niet op terminal.html (frame-bias-correctie Sessie 142 verfijnd). Reproduction: Mobile 39→40, Desktop 64→69 binnen run-noise. Output: `docs/perf-third-party-audit.md` met 3 paden voor #24-heropening (C1 quick wins ~275 ms / C2 AdSense Auto-ads investigation ~788 ms / C3 budget-herijking). Item #25 ✅ voltooid.)
-**Version:** 5.17 (Sessie 143 third-party performance audit: research-only zoals scope dictecteerde, geen implementatie. Frame-bias-correctie-uitbreiding van Sessie 142: per-origin breakdown via Lighthouse JSON-parse onthulde 3 specifieke nuance-fouten in Sessie 142's casual attributie. AdSense ad-slot 77% unused-JS is smoking gun voor potentieel ~230 KB / ~788 ms gratis besparing, gated op Heisenberg's AdSense dashboard Auto-ads-state verificatie. Eerlijk-flag: oorspronkelijke instructie-aannames "font-display:swap quick win" gefalsifieerd via grep (al actief). Audit-doc als separate reference-doc gemotiveerd door Doc Ownership matrix.)
+**Last updated:** 29 mei 2026 (Sessie 144 — Pad C1 + C2 implementatie voltooid via commit `4e4eec5`. Scope-uitbreiding van 1→6 no-slot pages via cold-start grep `<ins class="adsbygoogle">`: terminal.html + sample-pentest.html + gidsen.html + assets/legal/{privacy,terms,cookies}.html. Animations.css critical-split op terminal.html: inline `:focus-visible` + `prefers-reduced-motion` + modal fadeIn/fadeOut (~600 bytes) + defer rest via `media="print" onload`. fetchpriority="high" op preloads terminal.html + index.html. Productie-Lighthouse delta: terminal mobile 49→59 (+10), desktop 77→94 (+17), sample-pentest mobile 73→82 (+9), desktop 99→100 (+1). AdSense ecosysteem 252 KB / 420 ms → **0/0** op alle 4 runs. Eerlijk-flag: terminal mobile 59 < verwacht 70-80 door first-party bottleneck box-utils.js (item #26 prioriteit verhoogd). Nieuw item #27 voor ad-bearing pages perf-audit. TASKS.md item #24 ✅ voltooid.)
+**Version:** 5.18 (Sessie 144 Pad C1+C2 implementatie: scope verviervoudigde van 1 naar 6 pages via cold-start ground-truth grep. Plan-mode AskUserQuestion met expliciete mijn-aanbevelingen leidde tot Optie 4 + D2 critical-split akkoord. Visual verification via Playwright MCP: 10 evaluate-criteria allemaal groen + Tab-keypress test bewees `:focus-visible` outline werkt vanuit critical inline CSS. Productie-delta-tabel inclusief AdSense KB/ms apart van total/3rd-party = hard productie-evidence voor C2-werking. Comment in `index.html:71` "AdSense Script nodig voor crawler" als technisch onjuist gefalsifieerd via `<meta name="google-adsense-account">` + ads.txt analyse. Audit-doc §7 uitgebreid met Sessie 144 resultaten + eerlijk-flags.)
