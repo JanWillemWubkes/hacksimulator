@@ -37,10 +37,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 
-    <!-- Preload Critical Resources (M5 Performance Optimization) -->
-    <link rel="preload" href="styles/main.css?v=114" as="style">
-    <link rel="preload" href="styles/terminal.css?v=114" as="style">
-    <link rel="modulepreload" href="src/main.js">
+    <!-- Preload Critical Resources (M5 Performance Optimization + Sessie 144 fetchpriority hints) -->
+    <link rel="preload" href="styles/main.css?v=114" as="style" fetchpriority="high">
+    <link rel="preload" href="styles/terminal.css?v=114" as="style" fetchpriority="high">
+    <link rel="modulepreload" href="src/main.js" fetchpriority="high">
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="styles/main.css?v=114">
@@ -49,8 +49,16 @@
     <link rel="stylesheet" href="styles/mobile.css?v=115" media="screen and (max-width: 768px)">
     <!-- Educational Content CSS (SEO content below terminal) -->
     <link rel="stylesheet" href="styles/terminal-education.css?v=114">
-    <!-- Animations CSS -->
-    <link rel="stylesheet" href="styles/animations.css?v=114">
+    <!-- Animations CSS: critical inline (a11y + modal) + non-critical deferred -->
+    <style>
+      :focus-visible{outline:2px solid var(--color-info);outline-offset:2px;transition:outline-offset var(--transition-fast)}:focus-visible:active{outline-offset:0}
+      @media (prefers-reduced-motion:reduce){*,:after,:before{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+      @keyframes fadeIn{0%{opacity:0}to{opacity:1}}@keyframes fadeOut{0%{opacity:1}to{opacity:0}}
+      .modal{transition:opacity var(--transition-normal)}.modal.active{animation:fadeIn .3s ease-in}.modal.closing{animation:fadeOut .3s ease-out}
+      html{scroll-behavior:smooth}
+    </style>
+    <link rel="stylesheet" href="styles/animations.css?v=144" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="styles/animations.css?v=144"></noscript>
     <link rel="stylesheet" href="styles/command-search-modal.css?v=114">
 
     <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
@@ -65,10 +73,6 @@
         'wait_for_update': 500
       });
     </script>
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6345664385525701"
-         crossorigin="anonymous"
-         ></script>
 </head>
 <body>
     <!-- Skip Link for Accessibility -->

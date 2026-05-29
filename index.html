@@ -42,9 +42,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 
-  <!-- Preload Critical Resources -->
-  <link rel="preload" href="styles/main.css?v=114" as="style">
-  <link rel="preload" href="styles/landing.css?v=114" as="style">
+  <!-- Preload Critical Resources (Sessie 144 fetchpriority hints) -->
+  <link rel="preload" href="styles/main.css?v=114" as="style" fetchpriority="high">
+  <link rel="preload" href="styles/landing.css?v=114" as="style" fetchpriority="high">
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="styles/main.css?v=115">
