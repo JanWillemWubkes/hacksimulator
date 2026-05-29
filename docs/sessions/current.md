@@ -4,6 +4,120 @@
 
 ---
 
+## Sessie 146: Item #28 Frame D Closure — Lazy-Module-Fetch-Cascade Onthuld Buiten Plan v2 Framework, Spawn #29 (29 mei 2026)
+
+**Scope:** Heisenberg's instructie: "Pak item #28 op uit TASKS.md — Style/Layout perf-audit op terminal.html. Mainthread-work-breakdown uit Sessie 145 toont styleLayout 2172 ms (5.8x scriptEvaluation), top single tasks Layout 195+137+87 ms in boot-window 0-5s. Trace-data al gecaptured in /tmp/perf-item26/lh-run2-0.trace.json (Sessie 145 mediaan-run) — hergebruik voor LayoutShift event-parse, geen nieuwe Lighthouse-capture nodig vóór hypothese-set. Kandidaat-triggers: navbar-terminal.js DOM-injection, init-components.js footer + breadcrumb, ui/legal.js modal, onboarding-typewriter, Google Fonts swap-CLS. Pas Sessie 145 verify-first methodiek toe: decisional-thresholds-tabel vooraf, multi-metric vereist, Frame B (no-action) is geldige uitkomst."
+
+**Status:** ✅ Voltooid. Item #28 ✅ gesloten zonder code-wijziging — Frame D (no-meerderheid per plan v2 tie-breaker) bevestigd door multi-metric overeenstemming. Heisenberg's verwachte "+5-15 mobile-score" werd voor de tweede sessie op rij NIET vervuld; data wijst naar mechanisme buiten v2-framework (lazy-module-fetch-cascade) waarvoor item #29 gespawned is.
+**Duur:** ~2,5 uur (plan-mode Phase 1 verkenning + Phase 2 Plan agent v1→v2 + Phase 3 AskUserQuestion + Phase 4 plan-file write v2 + ExitPlanMode + Python trace parse + Playwright MCP cold-meting + AskUserQuestion frame-pad + docs-updates).
+**Plan source:** `/home/willem/.claude/plans/heisenberg-hier-pak-logical-knuth.md` (~2200 woorden, 4-frame decisional-thresholds-tabel met 8 signalen + tie-breaker).
+
+### Plan-mode Phase 1 — 3 parallelle Explore-agents
+
+Agents: (1) item #28 context + Sessie 145 plan-structuur + audit-doc closure-template, (2) candidate trigger files boot-timing + DOM-impact, (3) trace.json existence + Layout-event characterization.
+
+Belangrijke pre-data bevindingen:
+- Trace.json bestaat (6,1 MB), 195 Layout-family events, `args.beginData.stackTrace` populated → source-attributie direct mogelijk.
+- 1 LayoutShift totaal, score 0,000238, `had_recent_input=True` → CLS-impact verwaarloosbaar, Google Fonts FOUT-impact-hypothese al deels gefalsifieerd.
+- Kandidaat (a) `navbar-terminal.js` doet 0 boot-time DOM-mutaties (alleen event-listener-registratie) → vooraf gefalsifieerd als top-Layout-bron.
+- `#terminal-output` heeft `aria-live="polite" aria-atomic="false"` (terminal.html:104) → a11y-constraint voor eventuele containment-patch.
+- main.css regels 16-21 hosten al JetBrains Mono Box-subset met `font-display: block` → Frame C font-strategy moet dual-subset-conflict vermijden.
+
+### Plan-mode Phase 2-4 — Plan agent + plan v1 → v2 anti-bias-restructure
+
+Plan agent identificeerde drie hoog-impact-correcties in v1:
+1. **Decisional-thresholds tabel had structurele weegfout** — 3 van 8 signalen (1, 4, 7) maten hetzelfde causale cluster (DOM-injection-attributie). Frame A zou quasi-automatisch winnen zodra Top-1 stack `init-components.js` bevat. v2 collapseert dit tot 1 gewogen cluster met 3 verplichte sub-checks (anti-Lighthouse-attributie-bias) + voegt 2 onafhankelijke Frame B-signalen toe.
+2. **A11y-risico's niet in Verificatie-sectie** — `content-visibility: auto` op `#terminal-output` (aria-live) zou screenreader-announcement breken (chromium-bug 1018629). `contain: layout style paint` op `.modal` kan focus-visible outline afkappen. rAF-batching op typewriter is verkeerde patch — juiste is `_scrollToBottom` verplaatsen naar rAF, setTimeout-cadence intact.
+3. **Data-collectie mist `args.beginData.frame` cross-frame-filter + Playwright cold-meting moet unconditional** — zonder frame-filter rekenen Google Fonts iframe Layouts mee (= exact het mechanisme van Sessie 145's Lighthouse-bias). Zonder Playwright deterministische cross-check kan trace-stackTrace heuristisch 177× off zijn.
+
+Plan v2 integreerde alle drie correcties. AskUserQuestion Phase 3: Frame-structuur 4-frame (A/B/C/D) vs 3-frame collapse → Heisenberg koos 4-frame. Baseline trace-hergebruik vs verse 3-run → Heisenberg koos verse 3-run voor patch-vergelijking.
+
+ExitPlanMode met 5 allowedPrompts (Python parse / Lighthouse@11 / validate-docs + Playwright suite / du -bc + find / git status-diff-commit).
+
+### Execution Stap 1 — Python trace parse met cross-frame-filter
+
+Script `/tmp/parse_layout_trace.py` (~120 regels) implementeert `args.beginData.frame` filter tegen `TracingStartedInBrowser` mainFrame, parseert Top-10 Layouts + Top-10 UpdateLayoutTree + ParseAuthorStyleSheet sum + LayoutShift entries + ratio-berekeningen voor alle 8 plan v2 signalen.
+
+**Surprise #1 — alle Top-3 Layouts zijn parser-driven:**
+```
+#1 dur=194.87ms ts=92803869.09ms — stackTrace depth: 0
+#2 dur=137.42ms ts=92804162.89ms (+98ms) — stackTrace depth: 0
+#3 dur= 86.83ms ts=92804537.53ms (+473ms) — stackTrace depth: 0
+#4 dur= 23.02ms ts=92805465.69ms (+1402ms) — stackTrace=[focus-trap.js → legal.js:98]
+```
+
+Layout #4 is wel JS-attributed (focus-trap.js:144 + legal.js:98 showLegalModal) maar slechts 23 ms = factor 18× kleiner dan top-3 totaal. **Geen enkele plan v2 frame haalt zijn drempel:**
+
+| Frame | Signaal-detail | Hit |
+|---|---|---|
+| A cluster (1, vereist 3/3) | Top-1 stack empty + 0 marks/measures + factor-5× N/A | 0/3 |
+| B (2, 3, 4, 5) | RecalcStyle >5ms = 3 / ParseSheet = 11,54 ms / unique URLs = 4 / ratio = 6,38 | 0/4 |
+| C (6, 7) | Top-1 ts 631 ms buiten FOUT-window + CLS = 0,000 | 0/2 |
+| D (8) | Top-3 sum 419 ms > 100 ms = niet niet-worth-it | 0/1 |
+
+### Execution Stap 1.5 — Playwright MCP cold-meting productie (UNCONDITIONAL cross-check)
+
+Navigate naar `https://hacksimulator.nl/terminal.html?cb=20260529a`, 2 browser_evaluate-calls:
+
+**Eerste call (navigation/paint/resource/DOM):**
+- Navigation: responseEndHTML 227,7 ms / domInteractive 516,8 ms / DCL 1431,7 ms / load 1967,2 ms
+- Paint: firstPaint 680 ms / FCP 1164 ms
+- Marks/measures aanwezig: **0 / 0** (geen code-instrumentatie in productie)
+- Resource timing: init-components.js eindigt op 371 ms, MAAR navbar.js (138 ms duration) start op 522 ms / footer.js (204 ms) op 522 ms / legal.js (237 ms) op 526 ms — allemaal LAZY-FETCHED door module-graph
+- DOM totalElements 295, stylesheetCount 8, terminalOutput exists
+
+**Tweede call (buffered observers + style snapshots):**
+- LayoutShifts: 1 entry, cumulative 0,000107 (verwaarloosbaar)
+- Long tasks: 7 entries, totaal 1144 ms. **Long-task #1 = 520 ms at startTime 566 ms** — omhult navbar.js arrival (660 ms) + footer.js (726 ms) + legal.js (763 ms) + CSS-arrivals (mobile.css 506 / animations.css 507).
+- ContentVisibility / contain op navbar/footer/modal/terminalOutput = "none/visible" (bevestigt geen containment in productie, plan v2 baseline correct).
+
+### AskUserQuestion Phase 3 — pad-keuze bij plan v2-framework-gat
+
+Drie opties aan Heisenberg: (Pad A) Frame D-closure + spawn #29, (Pad B) plan v3 met Frame E + experiment nu, (Pad C) directe modulepreload-patch zonder frame-discussie. Heisenberg koos Pad A — eervolle plan-discipline volgen, anti-rationalisatie principle.
+
+### Frame D-conclusie + spawn item #29
+
+Plan v2 tie-breaker: "Bij twijfel: Frame D. Legitiem identiek aan Sessie 145 Frame B closure-pad." → no-code-actie.
+
+**Mechanisme buiten v2 framework (basis voor #29):** terminal.html laadt `<script type="module" src="/src/init-components.js">` die navbar/footer/legal als module-graph-imports lazy-fetch. Browser kan eerste Layout NIET committen tot module-graph compleet is. Long-task #1 (520 ms desktop ≈ 2000 ms mobile met 4× CPU throttling) ≈ direct verklaart styleLayout aggregaat 2172 ms uit Sessie 145 mainthread-work-breakdown. Top-3 Layouts zijn parser-driven omdat browser de Layout op default render-cycle-tick doet NA cascade-resolution, niet als JS-call side-effect.
+
+Item #29 hypothese: `<link rel="modulepreload" href="/src/components/navbar.js">` + footer.js + legal.js in terminal.html `<head>` start parallel-fetch eerder → cascade-window krimpt → Top-1 Layout (194 ms mobile) krimpt mee. Vereist eigen verify-first-cyclus met verse 3-run mediaan baseline + ná-meting + Playwright cold-check op long-task #1 dur-reductie.
+
+### Documentatie-updates (defense-in-depth Sessie 140 pattern)
+
+Frame D-uitkomst vastgelegd op 3 plekken:
+1. **`docs/perf-third-party-audit.md` §2b** — nieuwe sectie tussen §2 (Sessie 145 box-utils closure) en §3 (trade-off-tabel), bevat 11-rij multi-metric tabel + 4-frame beslis-overzicht + spawn-rationale + honest-flag.
+2. **TASKS.md item #28** — closure-tekst met Frame D-bewijs + spawn item #29 met hypothese + verify-first-vereisten.
+3. **CLAUDE.md "Recent Critical Learnings" Sessie 146** — top-6 prepend, geen rotation deze sessie (volgende bulk Sessie 150).
+
+### Learnings (verplaatst naar CLAUDE.md top-6)
+
+⚠️ **Never:**
+- Plan v2 decisional-thresholds-tabel-design accepteren zonder anti-bias-cross-check op signaal-redundantie — initiële v1 had 3 van 8 signalen (1, 4, 7) die hetzelfde causale cluster (DOM-injection-attributie) maten = Frame A zou quasi-automatisch winnen. Plan-agent's review-stap ving dit; zonder Plan-agent zou Frame A blindelings hit zijn op enige stack-match, met patches die de werkelijke parser-driven oorzaak missen. Decisional-tabellen zelf zijn bias-bron.
+- Post-hoc Frame-toevoeging ("Frame E voor lazy-module-cascade") accepteren als data-gat onthult — dat is exact het anti-pattern uit Sessie 145 ("decisional-thresholds-tabel vooraf vastleggen zodat je na data-collectie geen rationalisatie kunt doen"). Frame E NA data = post-hoc rationalisatie verkleed als frame-completeness. Eervolle weg = plan v2 tie-breaker volgen + structureel-gat als learning documenteren + spawn-item voor mechanisme-onderzoek in eigen verify-first-cyclus.
+- Trace-stackTrace empty op Top-3 Layouts interpreteren als "geen oorzaak" — parser-driven Layouts BESTAAN (browser-default render-cycle-ticks na DOM-mutaties of CSS-arrivals), maar verklaring zit niet in JS-stack. Cross-meting (long-task observer) onthult dat browser deze Layouts uitvoert NA module-graph-cascade-resolution. Zonder long-task-data zou je ten onrechte concluderen "geen actionable bottleneck".
+- Mobile-score-verwachting van user accepteren als hard target zonder data-gefalsifieerde uitkomst-acceptatie — Sessie 146 is 2e sessie op rij waarin Heisenberg's verwachting (+5-15 score) door data is gefalsifieerd. Eerlijke flag in alle 3 documentatie-plekken (audit-doc + TASKS.md + CLAUDE.md) voorkomt drift naar "ja het ging goed"-rationale terwijl het feitelijk no-action was.
+
+✅ **Always:**
+- Playwright MCP buffered PerformanceObserver met `{type: 'longtask', buffered: true}` gebruiken voor cold-meting deterministische cross-check op trace-attributie — toonde dat long-task #1 520 ms desktop boot-window omhult, identificatie van mechanisme dat trace-parse alleen niet gaf. `PerformanceObserver` met `buffered: true` retrieve't pre-observer-events na page-load, geen pre-navigation init-script nodig.
+- AskUserQuestion bij Phase 3 surprise-finding (Top-3 parser-driven = plan v2 framework-gat) — Heisenberg's keuze "Pad A eervolle plan-discipline" binnen 1 user-turn. Mechanische door-actie naar Pad B/C zou plan-design-creep introduceren. Multi-frame escape-pad-keuze hoort bij user, niet bij Claude.
+- Defense-in-depth-persistence-pattern (Sessie 140) ook bij no-action-uitkomsten — Frame D op 3 plekken (audit-doc §2b multi-metric tabel + TASKS.md item-closure + CLAUDE.md learnings). Toekomstige sessies kunnen niet "stiekem" item #28 heropenen of als "vergeten" behandelen zonder al deze drie tegen te komen.
+- Plan-agent IN Phase 2 OOK voor verify-first-plan-designs gebruiken — niet alleen voor "wat is het patch-pattern". Plan-agent ving 3 hoog-impact correcties in plan v1: anti-bias signaal-redundantie + a11y-risico's bij containment-patches + ontbrekende cross-frame-filter. Zonder Plan-agent zou plan v1 zelf de oorzaak van foute Frame-conclusie geweest zijn.
+- `args.beginData.frame` cross-frame-filter implementeren in elke trace-parse vanaf nu — Sessie 145's 177× Lighthouse-attributie-bias had deze filter als root-cause. Sessie 146 trace.json toonde 8 main-frame Layouts vs 8 totaal (alle main-frame in dit geval, maar filter is goedkoop = ~5 regels Python en voorkomt cross-origin iframe-noise in andere cases).
+- Honest-flag in elke audit-doc-sectie waar user's verwachting niet door data wordt vervuld — niet stilletjes weglaten, niet rationaliseren in andere richting. Audit-doc §2b honest-flag-zin: "Heisenberg's spawn-instructie (mobile +5-15) NIET vervuld; data toonde dat top-3 triggers geen actionable JS-events zijn binnen het plan v2 framework." Tweede zin: "2e sessie op rij waarin verwachte mobile-score-delta gefalsifieerd én transparant geaccepteerd."
+
+### Volgende stap
+
+Item #29 "Lazy-module-fetch-cascade audit + modulepreload-experiment" — eigen verify-first-cyclus met:
+- Eigen plan-file met decisional-thresholds vooraf
+- Verse 3-run mediaan Lighthouse@11 mobile baseline op huidige codebase
+- Patch: 3 `<link rel="modulepreload">` regels in terminal.html `<head>`
+- Verse 3-run mediaan ná-meting
+- Playwright cold deterministische check op long-task #1 dur-reductie
+- Eerlijke uitkomst-acceptatie ongeacht uitkomst-richting
+
+---
+
 ## Sessie 145: Item #26 Frame B Closure — Verify-First Plan Onthult Lighthouse-Attributie-Bias, Spawn #28 (29 mei 2026)
 
 **Scope:** Heisenberg's instructie: "Pak item #26 op uit TASKS.md — box-utils.js bootup-profile (309 ms total / 200 ms scripting op mobile, nu #1 bottleneck ná Pad C2). Gebruik Chrome DevTools Performance recording om hypothese (a/b/c) te isoleren. Verwachte uitkomst: cache-warming patch + Lighthouse delta terminal mobile 59 → 65-75." Plan-mode onmiddellijk geactiveerd want directe inspectie van `src/utils/box-utils.js` source onthulde dat item #26's hypothese-set niet matcht met de werkelijke source — verify-first frame gekozen via AskUserQuestion vóór code-actie.

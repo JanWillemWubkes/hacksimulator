@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 29 mei 2026 (Sessie 145 — /summary doc-sync only, geen architectuur-wijziging. Item #26 ✅ via Frame B (Lighthouse-attributie-bias) in CLAUDE.md learnings + docs/perf-third-party-audit.md §2. Item #28 spawned voor Style/Layout audit. Vorige inhoudelijke wijziging Sessie 144 — Pad C1+C2 implementatie voltooid: adsbygoogle.js verwijderd van 6 no-slot pages + animations.css critical-split + fetchpriority hints. Productie-Lighthouse terminal.html mobile 49→59 / desktop 77→94, sample-pentest desktop 99→100.)
+**Laatst bijgewerkt:** 29 mei 2026 (Sessie 146 — /summary doc-sync only, geen architectuur-wijziging. Item #28 ✅ via Frame D (no-meerderheid per plan v2 tie-breaker) in CLAUDE.md learnings + docs/perf-third-party-audit.md §2b. Item #29 spawned voor lazy-module-fetch-cascade modulepreload-experiment. Vorige inhoudelijke wijziging Sessie 144 — Pad C1+C2 implementatie voltooid: adsbygoogle.js verwijderd van 6 no-slot pages + animations.css critical-split + fetchpriority hints. Productie-Lighthouse terminal.html mobile 49→59 / desktop 77→94, sample-pentest desktop 99→100.)
 **Status:** ✅ LIVE on Netlify | M5 Testing 91% | M5.5 Monetization deep (AdSense + Ko-fi + Brevo + Gumroad + Lead magnet) | M6 Tutorial 88% | M7 Gamification 100% | Blog content-pijler 10 posts live
 **Verantwoordelijk:** Development Team
 **Live URL:** https://hacksimulator.nl/
@@ -764,8 +764,8 @@ const DEBUG_MODE = false;
 
 ---
 
-**Laatst bijgewerkt:** 29 mei 2026 (Sessie 145)
-**Versie:** 3.5 (Sessie 145 doc-sync, geen architectuur-wijziging. Item #26 ✅ gesloten via Frame B — Lighthouse-attributie-bias bevestigd via multi-metric (raw trace + Playwright cold/warm), geen code-actie. Item #28 spawned voor Style/Layout 2172 ms cost-driver. Bundle Size Budget sectie ⚠️-status ongewijzigd. Vorige inhoudelijke wijziging Sessie 144 — Pad C1+C2 implementatie voltooid: HTML-head edits op 7 pages + audit-doc §7. Productie-Lighthouse delta terminal mobile 49→59 (+10) / desktop 77→94 (+17), sample-pentest mobile 73→82 (+9) / desktop 99→100 (+1).)
+**Laatst bijgewerkt:** 29 mei 2026 (Sessie 146)
+**Versie:** 3.6 (Sessie 146 doc-sync, geen architectuur-wijziging. Item #28 ✅ gesloten via Frame D (no-meerderheid per plan v2 tie-breaker) — Top-3 Layouts parser-driven (stackTrace depth=0), alle 4 frames signalen NIET hit, mechanisme buiten v2 framework (lazy-module-fetch-cascade, long-task #1 = 520 ms desktop omhult navbar/footer/legal-imports). Item #29 spawned voor modulepreload-experiment in eigen verify-first-cyclus. Bundle Size Budget sectie ⚠️-status ongewijzigd. Heisenberg's verwachte mobile +5-15 score-delta gefalsifieerd door data, 2e sessie op rij. Vorige inhoudelijke wijziging Sessie 144 — Pad C1+C2 implementatie voltooid: HTML-head edits op 7 pages + audit-doc §7. Productie-Lighthouse delta terminal mobile 49→59 (+10) / desktop 77→94 (+17), sample-pentest mobile 73→82 (+9) / desktop 99→100 (+1).)
 **Status:** ✅ Deployed - Live in Production | M5.5 Monetization stack deep + Brevo deliverability getuned | M7 Gamification ✅ 100% | Blog content-pijler live
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

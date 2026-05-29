@@ -129,6 +129,49 @@ Conclusie: Lighthouse's `bootup-time` URL-attributie via call-stack-heuristiek s
 
 ---
 
+## §2b Sessie 146 closure — item #28 Style/Layout Frame D (geen actie, spawn item #29)
+
+**Verify-first-plan:** `/home/willem/.claude/plans/heisenberg-hier-pak-logical-knuth.md` (~2200 woorden, 4-frame decisional-thresholds-tabel met 8 signalen + tie-breaker, anti-Sessie-145-attributie-bias cross-check verplicht).
+
+**Methodiek:** hergebruik Sessie 145 mediaan-run `/tmp/perf-item26/lh-run2-0.trace.json` voor source-attributie (Layout-events met `args.beginData.frame` cross-frame-filter tegen `TracingStartedInBrowser` mainFrame) + Playwright MCP cold-meting op productie voor deterministische cross-check via `performance.getEntriesByType('navigation'|'paint'|'resource')` + buffered `PerformanceObserver({type: 'layout-shift'|'longtask', buffered: true})`.
+
+**Multi-metric bewijs voor Frame D (geen meerderheid, no-action):**
+
+| Signaal | Meting | Frame-implicatie |
+|---|---|---|
+| Raw trace main-frame Layout events (8 totaal) | Top-3 dur = 194,87 + 137,42 + 86,83 ms (som 419 ms) | parser-driven (stackTrace depth 0) — geen JS-attributie |
+| Top-1 Layout `args.beginData.stackTrace` | `depth=0` (empty) | Frame A signaal 1 sub-check 1: **NIET hit** |
+| Playwright `performance.getEntriesByType('measure')` count | **0 marks + 0 measures** | Frame A signaal 1 sub-check 2 (perf.measure >30ms): structureel N/A zonder code-instrumentatie |
+| RecalcStyle events main-frame met dur >5 ms | 3 events | Frame B signaal 2 (>50): **NIET hit** |
+| ParseAuthorStyleSheet som (5 stylesheets) | 11,54 ms | Frame B signaal 3 (>100): **NIET hit** |
+| Unique top-3-frame URLs in top-10 RecalcStyle | 4 | Frame B signaal 4 (>5): **NIET hit** |
+| Ratio UpdateLayoutTree / Layout main-frame | 6,38 (51/8) | Frame B signaal 5 (>10): **NIET hit** |
+| Top-1 Layout ts relative aan first event | 631 ms (BUITEN FOUT-window 200-400ms) | Frame C signaal 6: **NIET hit** |
+| Cumulative LayoutShift score (Playwright buffered observer, productie) | 0,000107 | Frame C signaal 7 (>0,01): **NIET hit** |
+| Som Top-3 Layout | 419 ms (>100ms = NIET niet-worth-it) | Frame D signaal 8: **NIET hit** |
+| Long-task #1 cold-meting productie desktop | **520 ms at startTime 566 ms** (omhult navbar.js arrival 660ms + footer.js 726ms + legal.js 763ms + mobile.css 506ms + animations.css 507ms) | observatie buiten v2 framework |
+
+**Frame-tabel samengevat:**
+
+| Frame | Hits | Beslissing |
+|---|---|---|
+| A (DOM-injection-driven) | 0/1 cluster sub-checks | NIET valide |
+| B (CSS-cascade-driven) | 0/4 signalen | NIET valide |
+| C (Font-swap-driven) | 0/2 signalen | NIET valide |
+| D (no-meerderheid) | tie-breaker per plan v2 | **GEKOZEN per "Bij twijfel: Frame D" regel** |
+
+**Conclusie:** plan v2's decisional-thresholds-tabel geeft 0 frames een data-driven verdict. Per tie-breaker-regel valt het in Frame D (legitiem identiek aan Sessie 145 item #26 Frame B closure-pad). Geen code-actie in Sessie 146.
+
+**Plan v2 framework-gat — structureel learning:** de cold-meting onthulde een **lazy-module-fetch-cascade-mechanisme** dat in de 4-frame-set niet gecategoriseerd is. navbar.js, footer.js, legal.js worden niet sync inline geladen maar door `<script type="module" src="/src/init-components.js">` als module-graph-imports gefetched. Long-task #1 (520 ms desktop, ≈ 2000 ms mobile met 4× CPU throttling) omhult deze cascade. Top-3 trace-Layouts (parser-driven, geen JS-stack) komen uit browser-default render-cycle-ticks NA cascade-resolution, niet als JS-call side-effect — daarom kunnen ze NIET via Frame A's "JS-injection rAF/contain"-patches gepatcht worden. Frame B (CSS-cascade) signalen falsifiëren ook de "main.css selector-complexity"-hypothese. Frame C falsifieert door cumulative LayoutShift 0,000107 + Top-1 ts buiten FOUT-window.
+
+**Spawn item #29 — lazy-module-fetch-cascade audit + modulepreload-experiment:** documenteer hypothese (`<link rel="modulepreload" href="/src/components/navbar.js">` + footer.js + legal.js → cascade-latency wegnemen → Top-1 Layout (194 ms mobile) krimpt mee). Vereist aparte verify-first-cyclus met eigen 3-run mediaan baseline + ná-meting; geen impulsief experiment NU want plan v2-framework noemt dit pad niet.
+
+**Honest-flag:** Heisenberg's spawn-instructie ("Verwachte uitkomst: mobile 59 → 70-80 indien top-3 Layout-triggers stabiel gemaakt of uitgesteld") werd NIET vervuld. Data toonde dat top-3 triggers geen actionable JS-events zijn binnen het plan v2 framework. Tweede sessie op rij waarin Heisenberg's verwachte mobile-score-delta door data wordt gefalsifieerd én transparant geaccepteerd zonder rationalisatie of plan-design-creep (Sessie 145 Frame B leerpunt herbevestigd).
+
+**Defense-in-depth-persistence-pattern (Sessie 140):** Frame D-uitkomst vastgelegd op 3 plekken — (a) dit audit-doc §2b multi-metric tabel, (b) TASKS.md item #28 closure-tekst, (c) CLAUDE.md "Recent Critical Learnings" Sessie 146.
+
+---
+
 ## §3 Trade-off-tabel per origin (defer-kosten vs perf-impact)
 
 | Origin | Functie | Huidige load | Consent-gated? | Defer-optie | Revenue-impact bij defer | UX-impact | Perf-besparing geschat | Status |
