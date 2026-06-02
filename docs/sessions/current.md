@@ -4,6 +4,167 @@
 
 ---
 
+## Sessie 148: Item #31 Quick-Win Closure — terminal.html:43 Modulepreload Version-Param-Mismatch Fix, Spawn #32 (2 jun 2026)
+
+**Scope:** Heisenberg's cold-start instructie: "Sessie 147 closure live. Twee open spawn-items in TASKS.md backlog: #31 (main.js version-param-mismatch fix, ~10 min deterministische bug-fix) en #30 (sync-inline navbar/footer, ~3-4 uur eigen verify-first cyclus). Mijn aanbeveling: pak #31 op deze sessie. Quick-win, deterministisch, KB-besparing meetbaar, GEEN verify-first overhead. #30 kan in sessie 149 met volle aandacht."
+
+**Status:** ✅ Voltooid. Item #31 ✅ gesloten via deterministische bug-fix. Geen Frame-bepaling want binaire count check (2 fetches → 1 fetch), niet speculatieve optimalisatie. Pre/post Playwright Resource Timing API bewezen werking. Spawn #32 (VFS-growth-test NaN-edge-case onthuld tijdens spot-check).
+**Duur:** ~1,5 uur (plan-mode Phase 1 read TASKS.md + terminal.html verify-claim + AskUserQuestion fix-strategie + plan-file write + ExitPlanMode + Playwright pre-baseline + Edit + validate-docs + commit + push + Netlify-poll + browser_close + cache-bust navigate + Playwright post-check + Chromium-spot-check + 2 isolated re-runs voor flake-pattern + /summary 7-step flow).
+**Plan source:** `/home/willem/.claude/plans/heisenberg-hier-cold-start-sessie-serialized-gadget.md`.
+
+### Plan-mode Phase 1-4 — Minimal-scope (geen multi-Explore/Plan-agent)
+
+Geen 3 parallelle Explore-agents nodig: scope was reeds in Sessie 147 audit gevalideerd (LH@11 network-requests audit bewees dubbele fetch met exacte byte-counts 2428 + 3107 = ~5,5 KB waste). Plan-agent ook geskipt: Plan-agent's waarde zit in verify-first-design + correcties op patch-plannen (Sessie 146/147 patroon), maar deze fix is 1 regel + 1 binaire verificatie. Geen design-ruimte voor agent-correcties.
+
+Phase 1 work:
+- Read TASKS.md eerste 100 regels voor item #30/#31 specs
+- Read terminal.html regel 35-95 (verify modulepreload regel 43 + omliggende preload-pattern op regels 41-42 CSS)
+- Read terminal.html regel 380-388 (verify script-tag regel 385)
+- Claim bevestigd: regel 43 `<link rel="modulepreload" href="src/main.js" fetchpriority="high">` (geen `?v=`) mismatcht regel 385 `<script src="src/main.js?v=88-multiline-wrap" type="module">` (met `?v=`)
+
+Phase 3 AskUserQuestion: 1 scope-vraag aan Heisenberg over fix-strategie:
+- **Optie (a) — Sync `?v=88-multiline-wrap` naar regel 43** (Recommended): conform bestaand `?v=114` pattern op CSS regels 41-42, cache-busting blijft intact
+- **Optie (b) — Strip `?v=88-multiline-wrap` van regel 385**: 1 bron van waarheid op regel 43, maar verliest cache-busting voor toekomstige bundle-updates + inconsistent met CSS-pattern
+
+Met previews die de daadwerkelijke `<head>`-sectie tonen voor visuele vergelijking. Heisenberg koos optie (a) (de "Recommended" — sync naar modulepreload).
+
+Plan-file geschreven (~3000 woorden) met: Context, Verandering (exact diff-block), Verificatie (4-stappen defense-in-depth), Persistence (Sessie 140 doc-protocol), Scope-niet-doen (geen Frame-bepaling, geen Plan-agent, geen #30, geen full Playwright-suite), Kritieke bestanden tabel, Verwachte uitkomst, Tijdsbudget.
+
+ExitPlanMode met 6 allowedPrompts (edit + validate-docs + commit/push + Netlify-poll + Playwright + /summary).
+
+### Execution Stap 1 — Pre-edit baseline (Playwright MCP Resource Timing API)
+
+```javascript
+performance.getEntriesByType('resource')
+  .filter(r => r.name.includes('main.js'))
+  .map(r => ({ name, transferSize, encodedBodySize, decodedBodySize, initiatorType, startTime, responseEnd, duration }))
+```
+
+Op `https://hacksimulator.nl/terminal.html` (warme browser-cache uit eerdere MCP-sessie):
+- **`count: 2`**
+- Entry 1: `https://hacksimulator.nl/src/main.js` | transferSize 0 | encodedBodySize 2323 | decodedBodySize 8585 | initiatorType **"other"** (modulepreload tag) | startTime 1254 | responseEnd 1294
+- Entry 2: `https://hacksimulator.nl/src/main.js?v=88-multiline-wrap` | transferSize 0 | encodedBodySize 2323 | decodedBodySize 8585 | initiatorType **"script"** (script-tag) | startTime 1258 | responseEnd 1300
+
+Smoking gun: identieke encodedBodySize 2323 + decodedBodySize 8585 = exact dezelfde file-content via twee verschillende HTTP-cache-keys. `transferSize: 0` = warm cache (beide gecached), maar 2 aparte cache-lookups + 2 aparte module-records nog steeds. Op cold-load (first-time visitors) zou transferSize ~2323 bytes per entry = ~4,6 KB netwerk-waste.
+
+Baseline vector opgeslagen in `/tmp/sessie148-item31/baseline-pre.json`.
+
+### Execution Stap 2 — Edit + validate-docs + commit + Netlify-deploy-poll
+
+Single-regel Edit op terminal.html:43:
+- Vóór: `<link rel="modulepreload" href="src/main.js" fetchpriority="high">`
+- Ná: `<link rel="modulepreload" href="src/main.js?v=88-multiline-wrap" fetchpriority="high">`
+
+git diff: 1 file changed, 1 insertion(+), 1 deletion(-). Geen andere wijzigingen.
+
+`scripts/validate-docs.sh` groen (alle 4 invariant-checks pass, sessie-counter 147 nog correct in alle docs).
+
+Pre-commit hook: secrets-scan PASSED, blog HTML check skipped (geen blog-files), validate-docs skipped (geen docs-files in deze commit) — alle protective layers respect scope.
+
+Commit `12a93a2` lokaal + git push → GitHub → Netlify auto-deploy.
+
+Netlify-poll-script gebruikt **`set -o pipefail`** uit Sessie 147-leerpunt direct toegepast (geen `cmd | tail` exit-code-misinterpretatie). Until-loop met cache-bust query om CDN-edge te triggeren:
+```bash
+until curl -s -H "Cache-Control: no-cache" "https://hacksimulator.nl/terminal.html?cb=$(date +%s)" \
+  | grep -q 'rel="modulepreload" href="src/main.js?v=88-multiline-wrap"'; do
+  ...
+done
+```
+
+**Deploy live in 36 sec** — sneller dan typische 60-90 sec range. Vermoedelijk omdat cache-busted URL immediately fresh CDN-edge-pull triggert ipv te wachten op edge-TTL-expiry.
+
+### Execution Stap 3 — Post-edit verificatie (cold cache via browser_close + cache-bust)
+
+`mcp__playwright__browser_close` → verse browser-sessie + `browser_navigate https://hacksimulator.nl/terminal.html?cb=148-post` (cache-bust query op page-document).
+
+Herhaalde Resource Timing query:
+- **`count: 1`**
+- Entry: `https://hacksimulator.nl/src/main.js?v=88-multiline-wrap` | transferSize 0 | encodedBodySize 2323 | decodedBodySize 8585 | initiatorType **"other"** | startTime 393 | responseEnd 510 | duration 117
+
+**Dedupe-mechanisme bewezen werkend zoals fetch-spec voorschrijft.** Modulepreload-tag (regel 43, in `<head>`) startte de fetch — daarom initiatorType "other" niet "script". Script-tag regel 385 (in `<body>`) hergebruikte de bestaande resource-entry via byte-exact URL-match. De Resource Timing API ziet maar 1 fetch-cycle.
+
+Identieke encodedBodySize 2323 als pre-fix = exact dezelfde file-inhoud, geen subtiele cache-poisoning of unrelated regressie. Start-time delta (1254 → 393) is irrelevant want mixt cache-states (warm vs cold) tussen pre/post metingen.
+
+Verdict-artifact opgeslagen in `/tmp/sessie148-item31/verdict.json` met volledige evidence-block, savings-breakdown, en noScopeCreep-statements.
+
+### Execution Stap 4 — Spot-check Chromium-only performance.spec.js
+
+Eerst poging `tests/e2e/terminal-load.spec.js` — bestond niet (anti-aanname-leerpunt: nooit blind spec-naam aannemen, eerst `ls tests/e2e/` voor ground-truth). Pivot naar `performance.spec.js` als meest relevante resource-loading-spec.
+
+Initial run resultaat: **2 failed + 1 flaky + 2 passed + 2 skipped** in ~1.3 min:
+- ❌ `Load time < 3s on 4G network (Chromium)`
+- ❌ `VFS growth rate is linear (no memory leaks in storage)` — NaN-error
+- ⚠️ `ES6 module cascade < 1s` — flaky, eventual pass
+
+**Sessie 147 leerpunt direct toegepast (NIET mechanisch reverten zonder root-cause-check).** Isolated re-runs als discriminator:
+
+(a) `Load time < 3s` re-run: **PASSED** in 2.69s (10% onder 3s threshold). Eerste-run flake bewezen — vermoedelijk first-run-cache-state (geen CDN-warmth) timing-dependent.
+
+(b) `VFS growth NaN` re-run: **persistent NaN failure**. Root-cause analyse:
+- Regel 496: `expect(stdDev / avgGrowth).toBeLessThan(0.5)`
+- Comment regel 494-495 erkende variance-issues maar guardde de `avgGrowth === 0` edge case niet
+- Wanneer VFS NIET groeit tussen rounds (eigenlijk een GOEDE state, geen leak): avgGrowth = 0, stdDev = 0, ratio = 0/0 = **NaN**
+- `NaN < 0.5` evaluates `false` → test fails ten onrechte
+- **Causale onmogelijkheid om door onze modulepreload-URL-fix veroorzaakt te zijn** (geen storage-codepath geraakt)
+- = pre-existing test-code-bug, spawn-kandidaat #32
+
+Spot-check verdict: **patch is veilig, beide failures niet patch-induced**.
+
+### Mechanisme-inzichten — fetch-spec URL-dedupe + v8 module-graph
+
+**Browser dedupe op resource-URLs is byte-exact, niet semantisch** (fetch-spec). `src/main.js` en `src/main.js?v=88-multiline-wrap` wijzen naar identieke file-content op disk maar zijn twee verschillende HTTP-cache-keys. Dit is geen browser-bug; het is intentional gedrag zodat servers query-params kunnen gebruiken voor server-side routing/cache-key-control. Voor static-asset-cache-busting van Netlify CDN: query-param differentieert versies maar moet identiek zijn over alle resource-hints en gebruikende tags.
+
+**`modulepreload` ≠ `preload`** voor ES modules. Modulepreload preload't niet alleen de bytes maar initieert ook de v8.parseModule + v8.compileModule + module-graph-resolution fase. Bij URL-mismatch breekt die hele optimalisatie: de eerste fetch warmt de module-graph (voor URL zonder query-param), de tweede fetch (met query-param) wordt door `<script type="module">` apart geïnitieerd alsof er nooit preload was. Dubbele v8-parse + compile cost.
+
+**`initiatorType` is attributie-handvat in Resource Timing API**: Chrome rapporteert `"other"` voor `<link rel="preload">`/`<link rel="modulepreload">` (geen direct DOM-element-trigger), `"script"` voor `<script>` tags. Verandering pre ("other" + "script" = 2 entries) → post ("other" alleen = 1 entry) is exact bewijs van dedupe-werking.
+
+### Audit-merit Sessie 147 aangetoond
+
+Ondiepe audits (3rd-party-summary tab van DevTools, single-LH-score-check, of zelfs LH JSON met alleen `bootup-time` audit) hadden deze mismatch NOOIT gevonden. De detectie-trigger was Sessie 147 Phase 1 multi-bron LH-JSON-parse waarin specifiek `audits["network-requests"]` werd geparset per-URL met transferSize/encodedBodySize-aggregatie. Dat onthulde de duplicate-fetch-pattern via `main.js` (2428 bytes) + `main.js?v=88-multiline-wrap` (3107 bytes) als aparte entries.
+
+Pleidooi voor diep-LH-pattern voor toekomstige bug-detectie OOK (niet alleen voor patch-decision-frameworks zoals Sessie 145/146/147 verify-first-cycli). Anti-attributie-bias-discipline schaalt naar bug-detection scope.
+
+### Commits
+
+- `12a93a2`: `perf(terminal): sync main.js modulepreload version-param to fix dedupe (item #31)` — 1 file changed, 1 insertion(+), 1 deletion(-)
+
+### Metrics delta
+
+| Metric | Pre-fix | Post-fix | Delta |
+|--------|---------|----------|-------|
+| `main.js` Resource Timing entries | 2 | 1 | -1 entry |
+| Transfer-besparing per cold-load | — | ~4,6 KB | -4,6 KB |
+| v8.parseModule + v8.compileModule cycles per page-load | 2× | 1× | -1× |
+| Page-perf score (estimated) | 74 (Sessie 147 mediaan) | — | onder variance-noise |
+
+Page-perf score-delta niet gemeten via LH@11 3-run mediaan — variance-noise (Sessie 145 toonde 12-punt score-range) verbergt elke ~5 KB transfer-besparing op een 600 KB-page. Single-LH-run was optioneel als sanity-check maar overgeslagen want fix-bewijs binaire (count: 2 → 1) en geen besluit-anchor.
+
+### Learnings (full reasoning)
+
+1. **Quick-win-pad ná 3 Frame B/C/D sessies is een legitieme cyclus-fase**, geen "verlies van momentum". Sessies 145/146/147 onthulden 3 verschillende structurele patronen via verify-first verify-cycli; Sessie 148 was de oogst van een spawn-item dat tijdens diep-LH-Phase-1 ontdekt werd. Quick-wins zonder Frame-bepaling zijn correct wanneer: (a) bewijs van probleem reeds in vorige sessie verzameld; (b) fix is deterministisch (binaire check, geen multi-frame mogelijke uitkomsten); (c) risk-asymmetry laag (geen JS-behavior-change, alleen resource-hint URL).
+
+2. **Byte-exact URL-dedupe-regel is fetch-spec-fundament, niet browser-bug**. Server kan query-params gebruiken voor routing/cache-key-control. Voor static-asset-cache-busting moet de query-param identiek zijn over ALLE resource-hints (preload, modulepreload, prefetch) en gebruikende tags (link rel=stylesheet, script src, image src). De bestaande `?v=114` op CSS regels 41-42 toont dat de codebase-conventie reeds bewust deze regel respecteert; main.js mismatch was de uitzondering.
+
+3. **`initiatorType` in Resource Timing API als attributie-handvat** — niet alleen voor performance-profiling maar OOK voor bug-detectie. Verandering pre→post in initiatorType-set (van `["other", "script"]` naar `["other"]`) bewijst exact dat het dedupe-mechanisme actief is, NIET alleen dat het aantal entries gedaald is. Voor toekomstige resource-hint-bugs: altijd initiatorType-attributie meten + verifiëren dat de dedupe-verschuiving plaatsvindt op het verwachte initiatorType (modulepreload "other" wint van script-tag "script", niet andersom).
+
+4. **Pipeline-exit-code-discipline `set -o pipefail` direct toegepast** uit Sessie 147 leerpunt — niet pas wanneer er een bug optreedt maar als default-pattern voor alle test/poll/build-output-validaties. Sessie 147 dacht 14/576 Playwright failures = "exit 0 = groen" wegens `cmd | tail` pipeline-exit-code-bug. In Sessie 148 was Netlify-poll-script + grep direct met pipefail uitgerust. Vermijden van een bekende valkuil = "Always"-pattern dat zich verspreidt door subsequent sessies.
+
+5. **Spot-check-flake-discriminator pattern (Sessie 147 stash-verify uitgebreid)** — Isolated re-run als goedkope eerste check vóór stash-verify. Logica: (a) als geïsoleerde re-run pass → flake (was timing/cache-state); (b) als persistent → root-cause via code-lezing voordat revert overwogen. Sessie 148 demonstreerde dit pattern OOK voor non-Playwright-spec-rerun (Load time was simpele re-run, VFS NaN vereiste code-lezing regel 496 om causale-onmogelijkheid vast te stellen).
+
+6. **AskUserQuestion previews voor visuele code-vergelijking** — Sessie 148 fix-strategie-vraag had previews met daadwerkelijke `<head>`-sectie tonend hoe optie (a) en (b) elk zouden uitkomen. Side-by-side rendering in Claude Code UI hielp Heisenberg snel de visual symmetrie met CSS-`?v=114` pattern te zien. Aanbevolen pattern voor scope-keuzes waarvan visual outcome onmiddellijk inzichtelijk is (HTML-structuur, CSS-layout, JSON-shape).
+
+7. **Audit-merit-claim Sessie 147 → Sessie 148 directe demonstratie** — Sessie 147 verify-first diep-LH-Phase-1 vond als bijproduct een out-of-scope bug (URL-mismatch in modulepreload). Sessie 148 sloot die bug in 1,5 uur. Dit toont dat diep-audit-pattern niet alleen value levert voor de directe scope (Frame C closure in #29) maar ook spawn-pijplijn voedt met deterministische bug-fixes. ROI-argument voor toekomstig diep-LH-Phase-1 ook bij hypothese-falsificatie-uitkomsten.
+
+### Next steps (open items niet in deze sessie aangepakt)
+
+- **#30 Sync-inline navbar/footer HTML compile-time pre-render** (Sessie 147 spawn, ~3-4 uur, eigen verify-first cyclus). Modulepreload-experiment Sessie 147 toonde dat fetch-deel verschuiven niet voldoende is — parse + execute + injectie blijven binnen long-task #1 cascade. Echte cascade-elimination vereist DOM al statisch aanwezig vóór JS draait. Hypothese: sync-inline reduceert mobile long-task #1 met >40%. Bewijs-van-haalbaarheid: terminal.html:82-94 noscript navbar fallback + 370-371 noscript footer bestaan al. Aanbevolen voor Sessie 149 met volle scope-aandacht.
+- **#32 VFS-growth-test NaN-edge-case fix** (Sessie 148 spawn, ~5 min). Test-code-bug op `tests/e2e/performance.spec.js:496`. Geen productie-impact, alleen suite-noise. Fix: guard met `if (avgGrowth === 0) { return; }` OF `Number.isNaN(ratio) || ratio < 0.5`. Lage prioriteit.
+- **M6 Tutorial last 3 taken → 100%** — onveranderd uit Sessie 145+ Volgende Stappen.
+- **Mobile real device testing iOS + Android** — onveranderd.
+- **GA4 Real-Time verificatie handmatig** — onveranderd.
+
+---
+
 ## Sessie 147: Item #29 Frame C Closure — Modulepreload Resource-Priority-Regressie Bewezen, Spawn #30 + #31 (2 jun 2026)
 
 **Scope:** Heisenberg's instructie: "Pak item #29 op uit TASKS.md — lazy-module-fetch-cascade audit + modulepreload-experiment op terminal.html. Sessie 146 onthulde mechanisme: long-task #1 = 520 ms desktop cold omhult navbar.js + footer.js + legal.js lazy-fetch-cascade. Hypothese item #29: `<link rel="modulepreload">` voor de cascade-modules start parallel-fetch eerder → cascade-window krimpt → Top-1 Layout krimpt mee. Pas Sessie 145/146 verify-first methodiek toe (decisional-thresholds-tabel vooraf, multi-metric vereist, anti-rationalisatie 3e-sessie-mobile-delta-verwachting-discipline). Frame B/D-equivalent legitiem als data zegt geen reductie."
