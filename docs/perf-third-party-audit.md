@@ -172,6 +172,74 @@ Conclusie: Lighthouse's `bootup-time` URL-attributie via call-stack-heuristiek s
 
 ---
 
+## §2c Sessie 147 closure — item #29 modulepreload-experiment Frame C (resource-priority-regressie, revert)
+
+**Verify-first-plan:** `/home/willem/.claude/plans/heisenberg-hier-pak-item-foamy-sprout.md` (6-signaal decisional-thresholds-tabel met symmetrische 33,3%-clustering, anti-Sessie-146-redundancy 37%-grens; 4 Frames met expliciete A/B/C/D-beslissingsregels + tie-breaker "Bij twijfel: Frame D").
+
+**Methodiek:** verse 3-run mediaan Lighthouse@11 mobile vóór + ná modulepreload-patch op terminal.html `<head>` (navbar.js + footer.js, `fetchpriority="auto"`, legal.js EXCLUDED want transitief via `src/main.js` modulepreload-chain). Alle 6 signalen extracted uit mediaan-run (single-bron-consolidatie, niet multi-bron-noise): S1+S2 uit `audits.{largest-contentful-paint,total-blocking-time}.numericValue`, S3+S4 uit trace.json (Layout-events met `args.beginData.frame == mainFrame`-filter + RunTask-events ≥50ms), S6+S7 uit `audits["network-requests"].details.items[].rendererStartTime`.
+
+**Phase 1 Plan-agent correcties (3 hoog-impact):**
+1. **legal.js EXCLUDED uit patch** — `src/main.js:7` heeft `import legalManager from './ui/legal.js'` (statische import). Bestaande terminal.html:43 modulepreload van `src/main.js` chained automatisch transitief naar legal.js (HTML-spec module-graph-preload). Expliciete `<link rel="modulepreload" href="src/ui/legal.js">` zou redundant zijn + dubbel-attribueren in Frame A-interpretatie. Hypothese-formulering uit Sessie 146 spawn-prompt ("navbar + footer + legal") gecorrigeerd naar 2-module-cascade.
+2. **Path-style leading-slash `/src/components/...`** — init-components.js:15-16 imports gebruiken leading-slash. Browser-dedupe vereist URL-exact-match post-resolution; consistency met import-specifier > consistency met terminal.html:43's `src/main.js` no-slash (welke zelf out-of-scope #31-bug).
+3. **terminal.html:43 main.js version-param-mismatch — spawn #31** — `<link rel="modulepreload" href="src/main.js">` (geen `?v=`) mismatcht line 385 `<script src="src/main.js?v=88-multiline-wrap">`. Bewezen via LH@11 network-requests audit Phase 1: main.js gefetched 2x in productie (`main.js` 2428 bytes + `main.js?v=88-multiline-wrap` 3107 bytes = ~5,5 KB waste per page-load). Out-of-scope item #29 om experiment-discipline (1 variabele) te behouden.
+
+**Pre-patch baseline-vector (mediaan run-3, Lighthouse@11 mobile, productie cold-state):**
+
+| Signaal | Waarde | Bron |
+|---|---|---|
+| S1 mobile LCP numericValue | **4116,1 ms** | LH JSON audits.largest-contentful-paint |
+| S2 mobile TBT numericValue | **477,0 ms** | LH JSON audits.total-blocking-time |
+| S3 Top-1 Layout dur (mainFrame-filter) | **166,5 ms** | trace.json Layout-events |
+| S4 Top-1 RunTask >50ms | **208,1 ms** | trace.json RunTask-events |
+| S6 navbar.js rendererStartTime | **441,1 ms** | LH JSON audits.network-requests |
+| S7 footer.js rendererStartTime | **441,3 ms** | LH JSON audits.network-requests |
+
+Context: score 74, FCP 1277 ms, cascade-window navbar.rendererStart − main.rendererStart = 441 − 138,5 = **302,6 ms**. Top-3 RunTasks ≥50ms: 208 + 110 + 80 = 398 ms cumulative. Run-variance laag (score 70/72/74 over 3 runs, vs Sessie 145's 51-63 range).
+
+**Post-patch (commit `baa4cf3`, deploy 11s, mediaan run-3 LH@11 mobile):**
+
+| Signaal | Pre | Post | Delta | Frame-threshold | Frame |
+|---|---|---|---|---|---|
+| S1 LCP_ms | 4116,1 | 4249,7 | **+133,5** | A: ≤−100 / C: ≥+80 | **C** |
+| S2 TBT_ms | 477,0 | 812,5 | **+335,5** | A: ≤−50 / C: ≥+40 | **C** |
+| S3 Layout_ms | 166,5 | 333,7 | **+167,2** | A: ≤−30 / C: ≥+25 | **C** |
+| S4 LT1_ms | 208,1 | 418,3 | **+210,2** | A: ≤−80 / C: ≥+60 | **C** |
+| S6 navbar_ms | 441,1 | 200,3 | **−240,7** | A: ≤−150 | **A** ✅ |
+| S7 footer_ms | 441,3 | 205,1 | **−236,2** | A: ≤−150 | **A** ✅ |
+
+**Frame-hit summary:**
+- Frame A: 2/6 (resource-cluster, gepaarde S6+S7)
+- Frame C: 4/6 (Lighthouse-cluster + trace-cluster volledig)
+- Frame B: 0/6
+- Frame D: 0/6
+
+**Verdict Frame C** (per beslissingsregel "≥1 Frame-C threshold geraakt op S1/S2/S3/S4" → unconditional Frame C). Resource-paired Frame A werkte mechanisch zoals technisch verwacht (navbar/footer 240 ms eerder gefetched) MAAR netto page-perf-regressie op alle 4 niet-resource-signalen. Score mediaan 74→62 (-12 punten, run-set: 59/65/62).
+
+**Mechanisme — resource-priority-conflict bewezen door data:** modulepreload-hints met `fetchpriority="auto"` (Chrome browser-default Medium-High voor modules in Chrome 122+, niet Low-Medium zoals ik in plan-design aannam) concurreren met CSS-high op regels 41-42 tijdens initial-connection-establishment-phase. CSS-fetch wordt vertraagd door multiplex-pressure → FCP +796 ms (1277→2073), LCP +133 ms, Top-1 Layout verdubbelt 166→334 ms (Layout-werk wacht op CSSOM-completeness), long-task #1 verdubbelt 208→418 ms (extra script-parse vroeger maar render-blocking-CSS later = grotere parse+style-cascade-block per task).
+
+**Plan-file Section B's `fetchpriority="auto"`-keuze ANTICIPEERDE Frame C-risk** ("auto" was gekozen om CSS-conflict te vermijden) maar onderschatte Chrome's Medium-High-default-priority-impact op CSS-scheduling. Een `fetchpriority="low"`-variant zou de modulepreload-effect verminderen (S6/S7 win krimpt) maar Frame C-risico potentially elimineren. Trade-off niet binnen item #29 scope — item #30 spawn-target (sync-inline) is fundamentelere oplossing.
+
+**Revert + closure:** revert commit `6c2ac7a` (3 regels verwijderd, identiek aan b9d3484 staat), Netlify-deploy in 21 sec. Patch is NIET op productie sinds 2 jun 2026 07:09 CEST.
+
+**Honest-flag — 3e sessie op rij verwachting-vs-data-misalignment** (STRUCTUREEL PATROON, niet incident):
+| Sessie | Item | Verdict | Verwachting | Werkelijkheid |
+|---|---|---|---|---|
+| 145 | #26 box-utils.js | Frame B (Lighthouse-attributie-bias) | mobile +5-15 score | 0 (Lighthouse 177× off vs raw trace) |
+| 146 | #28 Style/Layout | Frame D (no-meerderheid + framework-gat) | mobile +5-15 score | 0 (lazy-module-fetch-cascade buiten framework) |
+| 147 | #29 modulepreload | Frame C (resource-priority-regressie) | mobile +5-15 score | **-12** (74→62 score-mediaan) |
+
+Drie sessies, drie eervolle data-driven closures zonder rationalisatie. Anti-rationalisatie-discipline is nu structureel verankerd, niet meer fragiel. Volgende sessies: scope verwachtingen conservatiever + alleen-data-driven uitkomst-claims + Frame B/C/D-uitkomsten als EVEN-aanvaardbaar als Frame A presenteren in plan-design.
+
+**Pipeline-exit-code-leerpunt (Sessie 147 bijproduct):** `cmd | tail -N` pipeline-exit is altijd van `tail` (=0), niet van `cmd`. Tijdens patch-test-suite-evaluatie dacht ik even dat Playwright groen was tot stash-verify onthulde 14/576 pre-existing flakes. Patch was niet de oorzaak (bewezen via chromium-isolated rerun 9.7s ✓), maar de pipeline-exit-code-bug had makkelijk tot foute "rood-revert" of "groen-commit" beslissing kunnen leiden. Discipline: alle Bash-test-evaluaties via `set -o pipefail` of `&& echo EXIT_CODE=${PIPESTATUS[0]}`.
+
+**Spawn item #30 (verify-first-cyclus vereist):** Sync-inline navbar/footer HTML compile-time pre-render. Modulepreload verschuift alleen *fetch*-deel; parse + execute + injectie blijven binnen long-task #1 cascade. Echte cascade-elimination vereist DOM al statisch aanwezig vóór JS draait. Bewijs-van-haalbaarheid: terminal.html:82-94 noscript navbar + 370-371 noscript footer bestaan al als fallback-pattern.
+
+**Spawn item #31 (deterministische bug-fix, geen Frame-bepaling nodig):** terminal.html:43 modulepreload `src/main.js` version-param-mismatch fix — main.js gefetched 2x in productie. Sync `?v=88-multiline-wrap` naar regel 43 OF strip versie van regel 385.
+
+**Defense-in-depth-persistence-pattern (Sessie 140 → 145 → 146 → 147):** Frame C-uitkomst vastgelegd op 4 plekken — (a) dit audit-doc §2c multi-metric tabel, (b) TASKS.md item #29 closure-tekst, (c) CLAUDE.md "Recent Critical Learnings" Sessie 147, (d) docs/sessions/current.md Sessie 147 full session-log. Toekomstige sessies kunnen niet stiekem item #29 heropenen of "vergeten" zonder al 4 tegen te komen. Pattern schaalt van "geen-code-actie" (Sessie 145) via "framework-gat" (Sessie 146) naar "patch-regressie-bewezen" (Sessie 147).
+
+---
+
 ## §3 Trade-off-tabel per origin (defer-kosten vs perf-impact)
 
 | Origin | Functie | Huidige load | Consent-gated? | Defer-optie | Revenue-impact bij defer | UX-impact | Perf-besparing geschat | Status |

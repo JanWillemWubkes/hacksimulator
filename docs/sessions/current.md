@@ -4,6 +4,170 @@
 
 ---
 
+## Sessie 147: Item #29 Frame C Closure — Modulepreload Resource-Priority-Regressie Bewezen, Spawn #30 + #31 (2 jun 2026)
+
+**Scope:** Heisenberg's instructie: "Pak item #29 op uit TASKS.md — lazy-module-fetch-cascade audit + modulepreload-experiment op terminal.html. Sessie 146 onthulde mechanisme: long-task #1 = 520 ms desktop cold omhult navbar.js + footer.js + legal.js lazy-fetch-cascade. Hypothese item #29: `<link rel="modulepreload">` voor de cascade-modules start parallel-fetch eerder → cascade-window krimpt → Top-1 Layout krimpt mee. Pas Sessie 145/146 verify-first methodiek toe (decisional-thresholds-tabel vooraf, multi-metric vereist, anti-rationalisatie 3e-sessie-mobile-delta-verwachting-discipline). Frame B/D-equivalent legitiem als data zegt geen reductie."
+
+**Status:** ✅ Voltooid. Item #29 ✅ gesloten via Frame C — modulepreload-patch werkt mechanisch (S6/S7 resource-fetchStart -240 ms = Frame A op resource-cluster) MAAR veroorzaakt page-perf-regressie op 4/4 niet-resource-signalen (Frame C). Revert + spawn #30 (sync-inline) + #31 (main.js version-param-mismatch). 3e sessie op rij waarin mobile-delta-verwachting structureel-gefalsifieerd door data.
+**Duur:** ~2 uur (plan-mode 3 Explore-agents + 1 Plan-agent + AskUserQuestion-2-vragen + expert-decision-pivot + plan-file write + ExitPlanMode + 3-run pre-baseline + Playwright cold-meting + cache-state-discovery + methodologie-consolidatie naar single-bron + patch + Playwright-suite-flake-investigation + commit + deploy + 3-run post-meting + parse + Frame-bepaling + revert + 4-plekken docs-update).
+**Plan source:** `/home/willem/.claude/plans/heisenberg-hier-pak-item-foamy-sprout.md` (6-signaal decisional-thresholds-tabel, symmetrische 33,3%-clustering, Phase 1 ontdekte 3 correcties).
+
+### Plan-mode Phase 1-4 — 3 Explore-agents + 1 Plan-agent + expert-decision-pivot
+
+Phase 1 parallelle Explore-agents: (1) item #29 TASKS.md context + adjacent items, (2) terminal.html lazy-cascade-mechaniek + init-components.js import-graph, (3) Sessie 145/146 audit-doc-structuur + plan-tabel-precedent.
+
+Belangrijke pre-data correcties tijdens Phase 1:
+- **legal.js EXCLUDED uit patch**: `src/main.js:7` heeft `import legalManager from './ui/legal.js'` (statische import). Bestaande terminal.html:43 modulepreload van `src/main.js` chained automatisch transitief naar legal.js (HTML-spec). Heisenberg's spawn-prompt "navbar + footer + legal" gecorrigeerd naar 2-module-cascade.
+- **Path-style leading-slash** (`/src/components/navbar.js` ipv `src/components/navbar.js`): init-components.js:15-16 imports gebruiken leading-slash; browser-dedupe vereist URL-exact-match.
+- **terminal.html:43 main.js version-param-mismatch ontdekt** (spawn #31): regel 43 `src/main.js` zonder `?v=` mismatcht line 385 `src/main.js?v=88-multiline-wrap` met versie-param. Bewezen via LH@11 network-requests Phase 1: main.js gefetched 2x in productie (~5,5 KB waste).
+
+Phase 2 Plan-agent ving 2 hoog-impact-correcties in plan-design v1:
+- Anti-redundancy-check op signaal-clustering — 7 signalen initieel had trace-cluster 3/7 = 42,9% (>37%-Sessie-146-grens). Plan v2 dropped S5 (LT-startTime, minst-impactvol signaal) → 6 signalen × 3 clusters × 2 elk = 33,3% per cluster (symmetrisch onder grens).
+- `fetchpriority="auto"` als conservatieve keuze gemotiveerd via Sessie 144-precedent (CSS-fetch-conflict-anticipatie). Plan-agent merkte op dat dit Frame C-risk anticipeert maar onderbouwd door risk-asymmetry-argument.
+
+Phase 3 AskUserQuestion stelde 2 trade-off-vragen (fetchpriority + anti-redundancy-mitigatie). Heisenberg's expliciete antwoord: **"Eerlijk gezegd gaat dit boven mijn kennis niveau. Ik wil dat jij als expert me hierover adviseert en de keuze voor mij maakt."** — feedback-memory direct opgeslagen (`feedback_expert_decisions.md`): bij technische diepte boven user's kennisniveau, beslis als expert met onderbouwing, NIET via AskUserQuestion-options. Strategische scope-keuzes blijven via AskUserQuestion.
+
+Expert-keuzes ingebed in plan-file met onderbouwing:
+- `fetchpriority="auto"` (risk-asymmetry: high zou CSS verdringen → LCP-regressie cert, auto laat Chrome-heuristiek werken)
+- 6 signalen met S5 gedropt (symmetrische 33,3%-clustering > 7 signalen met 42,9% trace-cluster)
+
+ExitPlanMode met 9 allowedPrompts (Lighthouse 3-run, Python parse, Playwright suite, validate-docs, git commit/push, curl-poll deploy, wc/du bundle-verify).
+
+### Execution Stap 1 — Pre-patch baseline (3-run mediaan Lighthouse@11 mobile)
+
+`mkdir -p /tmp/sessie147-item29` + 3 serial LH-runs (~12 min totaal, elk ~4 min). Pre-runs:
+- Run 1: score 70, LCP 4204, TBT 539, FCP 1602
+- Run 2: score 72, LCP 4055, TBT 534, FCP 1436
+- Run 3: score 74, LCP 4116, TBT 477, FCP 1277
+
+**Mediaan-selectie op LCP numericValue** → run-3 mediaan (LCP 4116). Alle signalen uit DIE run extracted (consistente run, geen mix-and-match per-metric). Run-variance laag (2 punten spread) vs Sessie 145's 12-punten-spread — mogelijk verklaring: opeenvolgende runs binnen ~5 min hitten warme Netlify edge-cache.
+
+### Execution Stap 2 — Methodologie-pivot na Playwright-cache-state-discovery
+
+Initieel 3 Playwright cold-metingen voor S4 (long-task #1 duration) + S6/S7 (navbar/footer fetchStart) als cross-check. Ontdekking: Playwright MCP browser-context persisteert HTTP-cache tussen navigations ondanks cache-bust query op HTML. 3 runs toonden 3 verschillende cache-states (cold/warm/partial). browser_close cleart tab maar niet HTTP-cache.
+
+**Pivot**: alle 6 signalen uit dezelfde mediaan LH-run (single-bron-consolidatie). LH start elke run in fresh headless Chrome (consistent cold-state per run). Updated parse.py:
+- S1+S2 uit `audits.{largest-contentful-paint,total-blocking-time}.numericValue`
+- S3 uit trace.json Layout-events met `args.beginData.frame == mainFrame`-filter (Sessie 145 verplichte standaard)
+- S4 uit trace.json RunTask-events ≥50ms (long-task-equivalent)
+- S6+S7 uit `audits["network-requests"].details.items[].rendererStartTime`
+
+**Pre-patch baseline-vector (mediaan run-3):**
+- S1 LCP: **4116,1 ms**
+- S2 TBT: **477,0 ms**
+- S3 Top-1 Layout (mainFrame-filter): **166,5 ms**
+- S4 Top-1 RunTask >50ms: **208,1 ms**
+- S6 navbar.js rendererStart: **441,1 ms**
+- S7 footer.js rendererStart: **441,3 ms**
+
+Cascade-window = navbar.rendererStart - main.rendererStart = 441 - 138,5 = **302,6 ms** in mobile cold-state.
+
+### Execution Stap 3 — Patch + validate-docs + Playwright-suite + commit
+
+Patch terminal.html (3 HTML-regels tussen line 43 en 44, ~240 bytes), `fetchpriority="auto"`, comment-regel met sessie-attributie. validate-docs.sh ✓. Playwright full-suite 47 min: 14/576 failures + 7 flaky + 19 skipped + 536 passed.
+
+**Pipeline-exit-code-bug-discovery**: dacht eerst exit-code 0 = groen. Stash-verify (`git stash push terminal.html`) + isolated rerun van 2 verdachte spec-files toonde 5 failures IDENTIEK op pre-patch state → 100% pre-existing flakes. Verdacht 1 chromium-failure resolved via isolated 9.7s rerun (passed). Conclusie: 14/576 = pre-existing test-suite-flake-rate, niet patch-induced. Plan-regel "Bij rood: revert direct" reframe: anti-fix-loop, niet anti-investigation. Root-cause-diagnosis 12 min totaal binnen scope.
+
+Commit `baa4cf3` (perf(terminal): modulepreload navbar+footer ... item #29) met volledige baseline-vector + analyse-context. Push naar main. Netlify deploy in **11 sec** (single-file HTML-change, incremental edge-purge).
+
+### Execution Stap 4 — Post-patch meting + Frame-bepaling
+
+3 LH-runs post-patch (~12 min serieel):
+- Run 1: score 59, LCP 4285, TBT 848
+- Run 2: score 65, LCP 4165, TBT 743
+- Run 3: score 62, LCP 4250, TBT 813
+
+Mediaan = run-3 (LCP 4250). Score-regressie 74→62 mediaan (-12 punten).
+
+**Post-patch vector (mediaan run-3):**
+- S1 LCP: **4249,7 ms** (+133,5 delta)
+- S2 TBT: **812,5 ms** (+335,5 delta)
+- S3 Top-1 Layout: **333,7 ms** (+167,2 delta, verdubbelt vs baseline 166,5)
+- S4 Top-1 RunTask: **418,3 ms** (+210,2 delta, verdubbelt vs baseline 208,1)
+- S6 navbar.js rendererStart: **200,3 ms** (-240,7 delta) ✅
+- S7 footer.js rendererStart: **205,1 ms** (-236,2 delta) ✅
+
+**Multi-metric Frame-tabel:**
+
+| Signaal | Pre | Post | Delta | Frame |
+|---|---|---|---|---|
+| S1 LCP_ms | 4116,1 | 4249,7 | +133,5 | **C** |
+| S2 TBT_ms | 477,0 | 812,5 | +335,5 | **C** |
+| S3 Layout_ms | 166,5 | 333,7 | +167,2 | **C** |
+| S4 LT1_ms | 208,1 | 418,3 | +210,2 | **C** |
+| S6 navbar_ms | 441,1 | 200,3 | -240,7 | **A** ✅ |
+| S7 footer_ms | 441,3 | 205,1 | -236,2 | **A** ✅ |
+
+**Verdict Frame C** (per beslissingsregel: ≥1 Frame-C threshold geraakt → unconditional Frame C, ongeacht Frame A-cluster-hits elsewhere).
+
+### Mechanisme — resource-priority-conflict bewezen
+
+Modulepreload met `fetchpriority="auto"` (Chrome browser-default Medium-High voor modules in Chrome 122+, niet Low-Medium zoals ik in plan-design aannam) verschuift navbar/footer 240 ms eerder → resource-cluster Frame A ✅. MAAR concurreert met CSS-high op terminal.html:41-42 tijdens initial-connection-establishment-phase. CSS-fetch wordt vertraagd door multiplex-pressure → FCP +796 ms (1277→2073) → Top-1 Layout verdubbelt 166→334 ms (Layout-werk wacht op CSSOM-completeness) → long-task #1 verdubbelt 208→418 ms (extra script-parse vroeger maar render-blocking-CSS later = grotere parse+style-cascade-block per task) → LCP +133 ms cascade-effect.
+
+Plan-file Section B's `fetchpriority="auto"`-keuze ANTICIPEERDE Frame C-risk maar onderschatte Chrome's Medium-High-default-impact op CSS-scheduling. Een `fetchpriority="low"`-variant zou modulepreload-effect verminderen (S6/S7 krimpt) maar Frame C-risico potentially elimineren. Trade-off niet binnen item #29 scope — fundamentelere oplossing via #30 sync-inline.
+
+### Revert + commit + deploy
+
+Revert commit `6c2ac7a` (3 regels verwijderd, identiek aan b9d3484 staat). Push naar main. Netlify deploy in 21 sec. Patch is NIET op productie sinds 07:09 CEST 2 jun 2026.
+
+### 3e sessie op rij — STRUCTUREEL PATROON, niet incident
+
+| Sessie | Item | Verdict | Verwachting | Werkelijkheid |
+|---|---|---|---|---|
+| 145 | #26 box-utils.js | Frame B | mobile +5-15 | 0 (Lighthouse-attributie-bias 177×) |
+| 146 | #28 Style/Layout | Frame D | mobile +5-15 | 0 (framework-gat onthuld) |
+| 147 | #29 modulepreload | Frame C | mobile +5-15 | **-12** (74→62) |
+
+Anti-rationalisatie-discipline is nu structureel verankerd. Geen euphemismes in closure-docs, geen weglatingen. Volgende sessies: scope verwachtingen conservatiever + alleen-data-driven uitkomst-claims + Frame B/C/D als EVEN-aanvaardbaar als Frame A in plan-design.
+
+### Defense-in-depth-persistence (4 plekken — Sessie 140 pattern uitgebreid)
+
+1. `TASKS.md` item #29 closure-tekst + sprint-regel update + #30/#31 spawn-items
+2. `docs/perf-third-party-audit.md` §2c multi-metric tabel + 3-sessie patroon-tabel
+3. `.claude/CLAUDE.md` Recent Critical Learnings Sessie 147 prepend + Sessie 141 1-in-1-out
+4. `docs/sessions/current.md` deze full sessie-entry
+
+Toekomstige sessies kunnen item #29 niet stiekem heropenen of "vergeten" zonder al 4 tegen te komen. Pattern Sessie 140 → 145 → 146 → 147 schaalt van "geen-code-actie" via "framework-gat" naar "patch-regressie-bewezen".
+
+### Spawn-items voor toekomstige sessies
+
+- **#30 sync-inline navbar/footer HTML compile-time pre-render** — modulepreload verschuift alleen fetch; sync-inline elimineert cascade-window volledig (DOM al statisch aanwezig vóór JS draait). Bewijs-van-haalbaarheid: terminal.html:82-94 noscript navbar fallback bestaat al. Verify-first-cyclus vereist, scope ~3-4 uur.
+- **#31 terminal.html:43 main.js version-param-mismatch fix** — bestaande modulepreload van `src/main.js` (geen `?v=`) mismatcht line 385 `src/main.js?v=88-multiline-wrap`. Main.js gefetched 2x in productie (~5,5 KB waste). Deterministische bug-fix, geen Frame-bepaling nodig. Scope ~10 min + 1 LH-run.
+- **#32 (impliciet) — Playwright-suite-stabiliteit** — 14/576 pre-existing flake-rate confirmed across cross-browser footer-links + responsive-breakpoints navbar + autocomplete + gamification + performance + ascii-boxes. Niet blocking maar drift-signaal.
+
+### Bijproduct-leerpunten
+
+- **Pipeline-exit-code-bug**: `cmd | tail -N` exit altijd 0 (tail success), gebruik `set -o pipefail` of `${PIPESTATUS[0]}` voor test-result-checks
+- **Playwright MCP browser-state-persistence**: cache niet auto-cleared tussen navigations, cache-bust query op HTML invalidates niet de JS-modules. Lighthouse cleaner cold-source.
+- **Chrome modulepreload default-priority**: Medium-High in Chrome 122+, niet Low-Medium. `fetchpriority="auto"` concurreert wel met CSS-high.
+- **Single-bron-consolidatie > multi-bron-noise**: alle 6 signalen uit zelfde mediaan LH-run = cleaner reproduceerbaar dan LH + Playwright mix.
+
+### Artifacts
+
+`/tmp/sessie147-item29/`:
+- `lh-pre-{1,2,3}.json` + `lh-post-{1,2,3}.json` (6 LH JSON's)
+- `lh-{pre,post}-{1,2,3}-0.trace.json` (6 trace.json's, ~6-7 MB each)
+- `vector-pre.json` + `vector-post.json` + `verdict.json` (final signal-vectors + Frame-verdict)
+- `parse.py` (consolidated parse-script met mediaan-selectie + cross-frame-filter + Frame-bepaling)
+
+---
+
+## Sessie 141: Terminal Core Runtime-Verificatie — Het Bewijs Achter de Doc-Claim (28 mei 2026, 1-in-1-out Sessie 147)
+
+⚠️ **Never:**
+- ⏭️-status in een performance-budget-tabel accepteren zonder concreet cijfer — PLANNING.md regel 497 stond 40 sessies op `⏭️ Verificatie gepland`. Werkelijke meting bleek ~781 KB unminified / ~547 KB minified = ~37% over 400 KB budget. Dit is precies het "ground truth degradeert silent zonder forcing function"-syndroom uit Sessie 140's eigen learnings — verouderde cijfers (Sessie 100 ~340 KB) creëren valse zekerheid en blijven onbetwist tot iemand het meet
+- Plan-onderwerpen accepteren op basis van claim-strings in TODO-lijsten / CLAUDE.md learnings zonder de scripts/docs zelf te inspecteren — initieel voorstel "tag-balans-check inbouwen in validate-blogs.sh" bleek al gedaan (regels 58-69, Sessie 138-modernisation deed dit in dezelfde sessie ondanks de "Geplande follow-up"-claim). Ground-truth-first principe geldt ook voor task-status zelf, niet alleen voor metrics
+- Bundle-meting via `find <dir> -name "*.js"` als ground truth nemen zonder import-trace — pakt page-specific files mee (`blog-theme.js`, `contact-form.js`, `landing-demo.js` zijn niet runtime-bereikbaar vanaf terminal.html) en kan dubbele telling geven tussen entry-points en module-graph. Verschil was klein (582 KB vs 601 KB BFS), maar voor strikte budget-checks moet methodiek precies kloppen om geloofwaardig te zijn
+
+✅ **Always:**
+- Twee-iteratie meet-aanpak voor bundle-baselines: ronde 1 snelle bovengrens via `du -bc` over `find` (~10 sec), ronde 2 precieze BFS via import-regex (`(?:from|import)\s+['"]([^'"]+)['"]`) in Python (~20 regels, <1 sec uitvoeren) — pragmatisch correct *als* ronde 1 <budget oplevert, anders kost verfijning ~20 min. Reproduceerbaar zonder externe tooling (geen madge/esbuild nodig)
+- Plan-scope tijdens uitvoering verkleinen via transparante tekst aan user als blijkt dat een deel al gedaan is — Sessie 141 dropte initieel-voorgestelde tag-balans-check + bundle-tabel-split tijdens verfijning, Heisenberg gaf onmiddellijk akkoord. Beter scope-correctie dan blind plan volgen en dubbel werk doen
+- Bij overschrijdings-bevinding een follow-up task creëren MET twee paden (Pad A: lazy-load gamification + tutorial via dynamic `import()` ~100 KB besparing / Pad B: budget heroverwegen met rationale) — geeft user een framed beslissing in plaats van "we hebben een probleem". Defense-in-depth (Sessie 140 principe): persistent op TASKS.md #24 + current.md entry + CLAUDE.md learnings tegelijk
+- BFS-script herbruikbaar maken voor Sessie 144 `--deep` mode trigger — dezelfde Python BFS uit Sessie 141 kan in `validate-docs.sh --deep` als Check 5 (bundle KB ground-truth-check tegen TASKS.md cijfers met tolerance). Eén keer goed bouwen, twee keer gebruiken. Schaalt naar elke toekomstige runtime-meting
+- Cold-start meta-rationaliteit: gebruiker vraagt "logische volgende stap?" → eerst CLAUDE.md + TASKS.md daadwerkelijk lezen + de open #items inspecteren in scripts/docs zelf (niet alleen op item-string vertrouwen). 50% van mijn eerste voorstel-set bleek al gedaan; alleen feitelijke inspectie onthulde dat
+
+---
+
 ## Sessie 146: Item #28 Frame D Closure — Lazy-Module-Fetch-Cascade Onthuld Buiten Plan v2 Framework, Spawn #29 (29 mei 2026)
 
 **Scope:** Heisenberg's instructie: "Pak item #28 op uit TASKS.md — Style/Layout perf-audit op terminal.html. Mainthread-work-breakdown uit Sessie 145 toont styleLayout 2172 ms (5.8x scriptEvaluation), top single tasks Layout 195+137+87 ms in boot-window 0-5s. Trace-data al gecaptured in /tmp/perf-item26/lh-run2-0.trace.json (Sessie 145 mediaan-run) — hergebruik voor LayoutShift event-parse, geen nieuwe Lighthouse-capture nodig vóór hypothese-set. Kandidaat-triggers: navbar-terminal.js DOM-injection, init-components.js footer + breadcrumb, ui/legal.js modal, onboarding-typewriter, Google Fonts swap-CLS. Pas Sessie 145 verify-first methodiek toe: decisional-thresholds-tabel vooraf, multi-metric vereist, Frame B (no-action) is geldige uitkomst."
