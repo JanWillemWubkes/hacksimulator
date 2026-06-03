@@ -493,6 +493,11 @@ test.describe('Performance Tests - localStorage Quota', () => {
     // Growth should be roughly consistent (CV < 50% = acceptable linearity)
     // Note: first round has higher variance due to initial VFS structure serialization
     // and network latency when testing against production URL
+    // Edge case: avgGrowth === 0 means no VFS growth across rounds (= no leak = trivial pass; avoid 0/0 = NaN)
+    if (avgGrowth === 0) {
+      console.log(`  ✓ VFS growth = 0 (no leak, no variance to check)`);
+      return;
+    }
     expect(stdDev / avgGrowth).toBeLessThan(0.5);
 
     if (stdDev / avgGrowth > 0.3) {
