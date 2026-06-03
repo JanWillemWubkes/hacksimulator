@@ -240,6 +240,82 @@ Drie sessies, drie eervolle data-driven closures zonder rationalisatie. Anti-rat
 
 ---
 
+## §2d Sessie 149 closure — item #30 sync-inline navbar+footer Frame D (cascade-elimination sub-threshold, revert + spawn #33)
+
+**Verify-first-plan:** `/home/willem/.claude/plans/heisenberg-hier-cold-start-sessie-wise-book.md` (6-signaal decisional-thresholds-tabel met symmetrische 33,3%-clustering Sessie 147 mirror, anti-Sessie-146-redundancy 37%-grens; 4 Frames met expliciete A/B/C/D-beslissingsregels + tie-breaker "Bij twijfel: Frame D"). Anti-redundancy-onderbouwing per signaal-paar: S1 LCP vs S2 TBT onafhankelijke browser-metrics (paint-readiness vs main-thread-blocking-aggregaat); S3 Layout vs S5 FCP verschillende causale dimensies (post-cascade-render-werkdruk vs cascade-eliminatie-effect zelf); S4 LT1-continu vs S6 LT1-binair onafhankelijke kwantificering (gradient-effect vs structureel-mechanisme-bewijs).
+
+**Methodiek:** verse 3-run mediaan Lighthouse@11 mobile vóór + ná sync-inline patch op productie. ALLE signalen uit mediaan-run (Sessie 147 discipline). Cold real-world Playwright MCP cross-check pre-baseline (S4/S5/S6 buffered PerformanceObserver longtask). Post-patch Playwright cold-meting cache-contaminated door browser-session-persistent caching (zie cache-coherency-bug-bevinding hieronder); LH lab fresh-Chrome-per-run is single-source-of-truth voor cold-real assessment.
+
+**Phase 3 Read-verificatie correctie op Plan-agent v2:** Plan-agent claimde "HTML-only patch zonder init-components.js wijziging" als veilig. Phase 3 Read navbar.js regels 445-489 toonde dat injectNavbar() event-binding-calls (initThemeToggle/initHelpDropdown/initNavbarToggle op regels 476-488) NA placeholder-guard early-return wonen. Naïeve sync-inline + placeholder-missing → early-return → no event-binding → functioneel-regressie. Plan v3 correctie: navbar.js mini-refactor nodig met conditional injection-block + event-binding-altijd-switch.
+
+**Pre-patch baseline-vector (mediaan run-3, Lighthouse@11 mobile, productie cold-state, vers gemeten 3 jun 2026):**
+
+| Signaal | Waarde | Bron |
+|---|---|---|
+| S1 mobile LCP numericValue | **4203 ms** | LH JSON audits.largest-contentful-paint |
+| S2 mobile TBT numericValue | **816 ms** | LH JSON audits.total-blocking-time |
+| S3 Top-1 Layout dur (mainFrame-filter) | **264,88 ms** | trace.json Layout-events |
+| S4 LT1 LH-trace top-1 RunTask >50ms | **326 ms** | trace.json RunTask-events |
+| S5 FCP (LH lab cold) | **1916 ms** | LH JSON audits.first-contentful-paint |
+| S6 LT1<200 binair | **false** (326 > 200) | trace.json afgeleid |
+
+Bonus: Score 63/100 (runs: 52/63/67 = 15-punt range binnen Sessie 145-precedent variance), Speed Index 4188 ms, CLS 0,0000. Cold real-world Playwright pre-meting: FCP 296 ms, S4 LT1 236 ms, LT1 startTime 779 ms, navbar.js responseEnd 341 ms, footer.js responseEnd 342 ms, legal.js responseEnd 347 ms → cascade-window pre = LT1-start − cascade-resolved = 779 − 347 = 432 ms gap (ander werk tussenliggend, niet alleen navbar/footer/legal-cascade). Sessie 146 cascade-omhulling-hypothese mechanistisch bevestigd MAAR gap toont dat LT1 niet uitsluitend navbar/footer/legal werk omvat.
+
+**Patch:** commit `b1c6ded` — terminal.html navbar-placeholder regels 81-96 + footer-placeholder 358-372 vervangen door exacte `getAppNavbar()` + `getMarketingFooter({basePath:'/', showFeedback:true, showDonate:true, showCookieSettings:true})` output (+5826 bytes = +5,6 KB), navbar.js regels 445-489 mini-refactor splits in (1) conditional injection-block bij `#navbar-placeholder` aanwezig + (2) event-binding-switch dat ALTIJD draait wanneer `#navbar` in DOM. Init-components.js + footer.js ongewijzigd. Netlify-deploy <5 sec.
+
+**Lokale pre-commit hygiene:** themeToggleResponded=true op localhost (data-theme attr wisselt op klik = mini-refactor Path-2 functioneel bewezen), 12 footer-links + Ko-fi + feedback + cookie-settings correct gerenderd, alle aria-attributes intact (role/aria-label/aria-pressed/aria-expanded/aria-haspopup), 0 console errors + 1 expected console.warn (footer.js placeholder-skip = correct gedrag). Visuele check toonde navbar+footer identiek aan productie. Playwright Chromium 183 passed; 3 failed + 1 flaky alle 4 onthuld als pre-existing flakes via Sessie 147+148 isolated-rerun discriminator-pattern variant (rerun zelfde tests met `BASE_URL=https://hacksimulator.nl` ipv localhost = rerun tegen productie pre-patch state): cross-browser footer-links + gamification badge tiers + performance VFS NaN (= Sessie 148 spawn #32) + feedback retry. ALLE 3 reproduceren identiek = pre-existing. validate-docs.sh 4/4 ✓.
+
+**Post-patch (mediaan run-3, LH@11 mobile, productie):**
+
+| Signaal | Pre | Post | Delta | Frame A-threshold | Frame C-threshold | Verdict |
+|---|---|---|---|---|---|---|
+| S1 LCP_ms | 4203 | 4178 | **−25** | ≤−150 | ≥+100 | NOISE |
+| S2 TBT_ms | 816 | 756 | **−60** | ≤−80 | ≥+60 | NOISE (just outside Frame A) |
+| S3 Layout_ms | 264,9 | 219,6 | **−45,3** | ≤−40 | ≥+30 | **FRAME A HIT** |
+| S4 LT1_ms (LH trace) | 326 | 269 | **−57** | ≤−800 | ≥+80 | NOISE |
+| S5 FCP_ms (LH cold lab) | 1916 | 1897 | **−19** | ≤−500 | ≥+100 | NOISE |
+| S6 LT1<200 binair | false | false | unchanged | `true` | n/a | **NIET FRAME A** (vereist true) |
+
+**Bonus signalen (niet in plan-thresholds maar informatief):** Speed Index 4188 → 3981 = -207 ms (improvement), CLS 0 → 0,0002 (~0), Score 63 → 65 (+2 = NOISE).
+
+**Frame-hit summary:**
+- Frame A: 1/6 (S3 Layout). **Frame A criteria FAILED:** S6 = false vereist true; ≥1 Lighthouse-cluster hit niet geraakt (S1/S2 beide NOISE).
+- Frame C: 0/6 hits.
+- Frame B: alle signalen in noise + S6=false. **FAILED:** S3 outside noise-band (-45 > 20 ms noise-bandwidth).
+- Frame D: gemengd patroon (1 Frame A hit + 5 NOISE + S6 not-true).
+
+**Verdict Frame D** via tie-breaker "Bij twijfel: Frame D = revert + spawn #33". Plan-disciplineerd: 1 Frame A signaal in Trace-cluster alleen, 0 in Lighthouse-cluster, S6=false → NOT Frame A criteria. Sessie 147 leerpunt "Frame B/C is even-aanvaardbaar als Frame A" toegepast, geen rationalisatie naar Frame A bij partial-improvement.
+
+**Mechanisme — DOM-injection niet dominant in LT1:** sync-inline navbar+footer HTML statisch maken elimineert outerHTML+reflow voor 2 elementen MAAR dit bereikt slechts S3 Top-1 Layout -45 ms (Frame A hit) zonder S6 binair cascade-weg. Sessie 146 cascade-omhulling-hypothese MECHANISTISCH bevestigd (LT1 omvat navbar+footer+legal parse+execute+inject werk) MAAR cascade-elimination via static DOM bereikt sub-Frame-A improvement. Resterende cascade-tijd zit in: module-parse-tijd voor navbar.js + footer.js + legal.js (~33 KB), init-functies event-binding overhead, parser-driven Layouts (Sessie 146 mechanisme), en mogelijk Google Fonts DNS+TLS-handshake render-blocking / CSS-parse / compression-overhead. DOM-injection-werk is NIET dominant in long-task #1.
+
+**Bonus bevinding tijdens patch-verificatie — cache-coherency-bug ontdekt:** init-components.js regel 15-16 importeert `/src/components/navbar.js` + `/src/components/footer.js` ZONDER `?v=` query-param. Netlify-headers `cache-control: public,max-age=604800,must-revalidate` op `/src/**/*.js` route = browser-cache 7 dagen geldig zonder revalidatie tot expiration. `must-revalidate` kicks in ALLEEN ná max-age. Returning users tijdens 7-dagen-window krijgen NIEUWE sync-inline HTML + OLD cached navbar.js → mini-refactor Path-2 niet beschikbaar in cached version → no event-binding voor sync-inline DOM = broken theme-toggle/hamburger/help-dropdown tot cache expiratie. **Discovery-evidence:** Playwright MCP browser-session toonde OLD warning text "No #navbar-placeholder element found" attribuerend aan line 447 — terwijl productie navbar.js line 447 (byte-identical met local, diff exit 0) is `if (placeholder) {`. Session cached pre-patch navbar.js. **Sessie 148 #31 patroon gegeneraliseerd:** dat fixte main.js cache-coherency via `?v=`-sync op modulepreload + script-tag. Hier analoog: navbar.js + footer.js imports in init-components.js zouden `?v=149-sync-inline` cache-bust nodig hebben + terminal.html init-components.js script-tag URL ook. **Mitigatie indien #30-pad-A keep ooit gewenst:** 3-locatie `?v=` patch. Voor #30 revert is fix overbodig want returning users krijgen OLD navbar.js + OLD HTML = consistent.
+
+**Revert + closure:** revert commit `5f0f471` (2 files / 51 insertions / 124 deletions terug naar pre-patch state), Netlify-deploy 10 sec, placeholders restored in productie. Patch is NIET op productie sinds 3 jun 2026 ~19:10 CEST.
+
+**Honest-flag — 4e sessie op rij verwachting-vs-data-misalignment** (STRUCTUREEL VOLWASSEN DISCIPLINE):
+
+| Sessie | Item | Verdict | Verwachting | Werkelijkheid |
+|---|---|---|---|---|
+| 145 | #26 box-utils.js | Frame B (Lighthouse-attributie-bias) | mobile +5-15 score | 0 (Lighthouse 177× off vs raw trace) |
+| 146 | #28 Style/Layout | Frame D (no-meerderheid + framework-gat) | mobile +5-15 score | 0 (lazy-module-fetch-cascade buiten framework) |
+| 147 | #29 modulepreload | Frame C (resource-priority-regressie) | mobile +5-15 score | **−12** (74→62 score-mediaan) |
+| 149 | #30 sync-inline | Frame D (cascade-elimination sub-threshold + cache-coherency-bug) | mobile >40% LT1-reductie | S3 −45 ms hit alleen (Frame A criteria gefalsifieerd, geen S6) |
+
+Vier sessies, vier eervolle data-driven closures zonder rationalisatie. Anti-rationalisatie-discipline structureel verankerd, niet meer fragiel. Volgende sessies (incl. #33): scope verwachtingen ONDER + alleen data-driven uitkomst-claims + Frame B/C/D als even-aanvaardbaar als Frame A in plan-design.
+
+**Spawn item #33 (verify-first-cyclus vereist):** Structurelere paden voor LT1-reductie (geen mobile-delta target, alleen mechanisme-bewijs):
+- (a) **Self-host Google Fonts** (99 KB elimination + 2 origins DNS+TLS-handshake-elimineer + render-blocking-fix) — hoogste-impact-hypothese
+- (b) **HTTP/2 server-push deprecation check**
+- (c) **CSS critical-path inline** (cache-invalidation-trade-off bekend)
+- (d) **Brotli/compression-verificatie** (Netlify default-check)
+- (e) **`?v=<sessie>` cache-coherency systemic mitigation** (geen blanket fix, alleen toepassen bij volgende relevante patch)
+
+Eigen verify-first cyclus zoals #29/#30: plan-file + decisional-thresholds-tabel + signaal-clustering vooraf + Frame B/C/D eervolle paden + 4-op-rij-honest-flag pre-emptief.
+
+**Defense-in-depth-persistence-pattern (Sessie 140 → 145 → 146 → 147 → 148 → 149):** Frame D-uitkomst met bonus cache-coherency-bug-bevinding vastgelegd op **5 plekken** — (a) dit audit-doc §2d multi-metric tabel, (b) TASKS.md item #30 closure-tekst, (c) CLAUDE.md "Recent Critical Learnings" Sessie 149, (d) docs/sessions/current.md Sessie 149 full session-log, (e) plan-file outcome-sectie. Toekomstige sessies kunnen niet stiekem item #30 heropenen of "vergeten" zonder al 5 tegen te komen. Pattern schaalt nu over alle uitkomst-typen: no-action (#26), framework-gat (#28), patch-regressie (#29), bug-fix-bewezen-werkend (#31), cascade-elimination-sub-threshold met bonus-bug-discovery (#30).
+
+---
+
 ## §3 Trade-off-tabel per origin (defer-kosten vs perf-impact)
 
 | Origin | Functie | Huidige load | Consent-gated? | Defer-optie | Revenue-impact bij defer | UX-impact | Perf-besparing geschat | Status |
