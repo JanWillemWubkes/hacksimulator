@@ -444,29 +444,29 @@ function initNavbarToggle() {
  */
 export function injectNavbar(variant = 'marketing', options = {}) {
   const placeholder = document.getElementById('navbar-placeholder');
-  if (placeholder) {
-    // Path 1: dynamic injection (pages without sync-inline navbar)
-    let html;
-    switch (variant) {
-      case 'app':
-        html = getAppNavbar();
-        break;
-      case 'blog':
-        html = getBlogNavbar(options);
-        break;
-      case 'marketing':
-      default:
-        html = getMarketingNavbar(options);
-    }
-    placeholder.outerHTML = html;
-  } else if (!document.getElementById('navbar')) {
-    // Path 3: neither placeholder nor static navbar present → genuine error
-    console.warn('[navbar.js] No #navbar-placeholder element and no existing #navbar found');
+  if (!placeholder) {
+    console.warn('[navbar.js] No #navbar-placeholder element found');
     return;
   }
-  // Path 2 (implicit): sync-inline static navbar already in DOM → skip injection, bind events
 
-  // Initialize event-binding (works for both dynamic-injected and sync-inline navbars)
+  // Get appropriate HTML
+  let html;
+  switch (variant) {
+    case 'app':
+      html = getAppNavbar();
+      break;
+    case 'blog':
+      html = getBlogNavbar(options);
+      break;
+    case 'marketing':
+    default:
+      html = getMarketingNavbar(options);
+  }
+
+  // Inject HTML
+  placeholder.outerHTML = html;
+
+  // Initialize appropriate functionality
   // NOTE: Terminal-specific handlers (Help menu actions, About modal, etc.)
   // are handled separately by navbar-terminal.js (called from main.js)
   switch (variant) {
