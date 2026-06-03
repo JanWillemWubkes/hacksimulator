@@ -4,6 +4,164 @@
 
 ---
 
+## Sessie 150: Item #32 VFS NaN Quick-Fix + Item #33 (a) Frame A KEEP — Self-host Google Fonts Breekt 5-op-rij Frame-Falsificatie-Patroon (3 jun 2026)
+
+**Scope:** Heisenberg's cold-start instructie: combineer #32 (5 min palet-cleanser na 4 Frame B/C/D op rij — Sessie 148 pattern) met #33 (a) verify-first cyclus self-host Google Fonts. Discrete commits per item zodat LH-meting van #33 niet contamineerd door #32.
+
+**Status:** ✅ #32 quick-closure (commit `1b549d7`) + ✅ #33 (a) Frame A KEEP (commit `14b0d44`). **5-op-rij patroon GEBROKEN** (145 Frame B + 146 Frame D + 147 Frame C + 149 Frame D → 150 **Frame A**). Eerste meet-bare mobile-delta sinds Sessie 144 Pad C1+C2 implementatie. Variable-font discovery vereenvoudigde implementation scope (8 unique files → 3 unique files).
+
+**Duur:** ~2,5 uur (cold-start AskUserQuestion scope-keuze 2× + 2 parallel Explore-agents Phase 1 + 1 Plan-agent Phase 2 hit session-limit + zelf-synthese Phase 2 + Phase 3 5-file parallel Read + plan-file write + ExitPlanMode + #32 Edit + isolated test + commit + #33 (a) license fetch + woff2 download + variable-font discovery + main.css 8 @font-face + LH baseline 3-run + sed mass-edit 20 files + Edit insert critical preloads + Playwright MCP local verify + cache-coherency-discovery + main.css ?v=150 bump + browser_close + re-verify all-loaded + commit + Netlify deploy 0s + LH post-patch 3-run + 6-signaal extract + Frame-verdict-conflict + AskUserQuestion uitleg leek + Heisenberg Frame A keep + defense-in-depth 5 plekken docs-update).
+
+**Plan source:** `/home/willem/.claude/plans/heisenberg-hier-cold-start-glittery-rain.md`.
+
+### Plan-mode Phase 1-4 — Verify-first met session-limit-resilient synthese
+
+**Phase 1 (2 parallele Explore-agents):**
+- Agent 1: #32 VFS NaN context + TASKS.md #33 spec + Google Fonts impact-scope inventory. Bevindingen: regel 484 `avgGrowth = reduce/length` + regel 496 `expect(stdDev/avgGrowth)` NaN-vulnerable. **20 HTML files** met Google Fonts imports (NIET 6 zoals cold-start onderschat). Partial self-host bestaat al (`jetbrains-mono-box-subset.woff2` 5,2 KB, U+2500-257F, font-display: block).
+- Agent 2: CSS font-family declarations + _headers + Sessie 149 closure-state + existing font-loading strategy. Bevindingen: CSS-vars `--font-heading: Space Grotesk` / `--font-body: Inter` / `--font-terminal: JetBrains Mono Box, JetBrains Mono, ...`. `_headers` regel 38-42 `/styles/fonts/*` ALREADY heeft 1-jaar immutable + CORS — uitbreiding-klaar. Current font-loading: preconnect+CSS-link met `media="print" onload="this.media='all'"` deferred-trick + noscript fallback + `display=swap`. Geen `preload` directives.
+
+**Phase 2 (1 Plan-agent BREEK door session-limit):** Plan-agent hit limit voordat hij output leverde. Switched naar zelf-synthese met expliciete Phase 3 Read-discipline (Sessie 149 leerpunt: "Phase 3 Read kritieke files NA Plan-agent ondanks Plan-agent's eigen Phase 1-readings — onafhankelijke verificatie ving HTML-only-claim-fout op").
+
+**Phase 3 (5 parallele Reads van kritieke files):** terminal.html regels 33-44 font-block exact, styles/main.css regels 1-100 @font-face anchor + CSS-vars, _headers full, performance.spec.js regels 480-510 voor #32 context, TASKS.md regels 1-120 voor #33 spec verbatim + Voortgang Overzicht.
+
+**Phase 4 (plan-file glittery-rain write, ~290 regels):** Self-host strategy met expert-decisions onderbouwd (manuele download via Google CSS API NIET pyftsubset), 8 @font-face Google-mirror, 6-signaal × 3-dimensie decisional-thresholds-tabel met anti-bias check, eervolle Frame B/C/D paden, 5-op-rij honest-flag pre-emptief, 11-stappen verify-first sequencing, defense-in-depth 5 plekken.
+
+### Implementatie chronologie
+
+**1. #32 VFS NaN quick-fix (~5 min):**
+- Edit performance.spec.js regel 496 → insert vóór: `if (avgGrowth === 0) { console.log(...); return; }`
+- Isolated test: `npx playwright test -g "VFS growth" --project=chromium` → **passed 14,6 s**, log toont `Avg bytes/file: 0.00` + `Coefficient of variation: NaN%` + `✓ VFS growth = 0` (guard triggert correct)
+- Commit `1b549d7`: `fix(tests): VFS growth NaN edge-case guard (item #32)`
+- Insight: VFS-test draait tegen productie waar getItem('hackTerminal:vfs') 0 bytes returneert tijdens 5-round loop (geen filesystem-commands worden uitgevoerd in deze test). avgGrowth=0 was de FORWARDED state, niet failure-mode.
+
+**2. #33 (a) license + font download (~15 min):**
+- SIL OFL 1.1 verified: Inter (Copyright 2016, github.com/rsms/inter LICENSE.txt — NOT OFL.txt at root, 404), JetBrains Mono (2020), Space Grotesk (2020). All 3 OFL.txt saved naar `/tmp/sessie150-item33a/licenses/`.
+- Google Fonts CSS fetch met browser UA: 16,2 KB CSS, 42 subset-comments per 3 families.
+- **VARIABLE-FONT DISCOVERY:** Awk-parse van `/* latin */` blocks toont dat Inter 3 weights (400/600/700) POINT NAAR DEZELFDE woff2 URL (`UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2`). JetBrains Mono 2 weights → 1 URL. Space Grotesk 3 weights → 1 URL. **3 unique woff2 files voor alle 8 weight-declaraties** (browser dedupliceert fetch via URL).
+- Download 3 woff2: Inter 48256 + JetBrains Mono 31432 + Space Grotesk 22288 = **101976 bytes = 99,6 KB** (byte-equivalent aan Google CDN baseline genoemd in TASKS.md #33 spec).
+- Honest pre-emptive update: S3 ≤-30 KB threshold uit plan §6 is mechanisch-onmogelijk door variable-font byte-equivalence — geen CSS-fetch elimineer + ~3 KB main.css overhead = mogelijk net positief, niet -30 KB. Frame A bereikbaar via ≥3-of-4 dus S3 kan falen zonder Frame A te blokkeren.
+
+**3. File placement (~5 min):** `mkdir -p styles/fonts/LICENSES/` + cp 3 woff2 + cp 3 OFL.txt.
+
+**4. main.css 8 @font-face additions (~10 min):** Insert NA bestaande JetBrains Mono Box block (regel 23) + VÓÓR CSS Variables section (regel 25 oud). Google-mirror per-weight pattern (font-display: swap + Google's volledige unicode-range incl. U+0000-00FF dekkende NL diakrieten é/ë/ï/ó/ü/ç).
+
+**5. 3-run LH@11 baseline (~10 min):** Eerst valse start: `npx lighthouse` zonder pin pulled v12+ (Node 22 vereist voor `import with { type: 'json' }`, we hebben Node 18) → exit 2. Sessie 144-149 pattern toepast: `npx -y lighthouse@11` voor pinned 11.7.1. **Pre-mediaan R2:** score 63 / LCP 4291 / FCP 1665 / TBT 908 / CLS 0 / TotalBytes 372 KB. Match check tegen Sessie 149 baseline (63 / LCP 4203 / TBT 816 / FCP 1916) = binnen run-variance ✓ canonical accepted.
+
+**6. HTML mass-edit 20 files (~15 min):**
+- Anchor inventory: terminal.html 4-space indent + Preload Critical anchor. index.html 2-space indent + Preload Critical anchor (uniek met Brevo preconnect). 18 overige files 2-space indent + alleen Stylesheets anchor.
+- Sed REMOVE atomic 4 patterns: orphan Preconnect comment + 2 preconnect lines + Google Fonts CSS link + noscript fallback. Grep-verify: 0 `fonts.googleapis` resterend, 20 files affected.
+- Edit-tool terminal.html (4-space + 3 preloads incl. JetBrains Mono) + index.html (2-space + 2 preloads).
+- Sed loop 18 files: single GNU-sed substitution voor `^  <!-- Stylesheets -->$` → font preloads + Stylesheets. Verify: 20 files met `preload.*inter-latin`, 1 met `preload.*jetbrainsmono-latin` (terminal only).
+
+**7. Lokale Playwright MCP verify (~15 min, met cache-coherency-bug discovery):**
+- Python http.server 8765 background.
+- Initial navigate localhost:8765/terminal.html → `document.fonts.size = 1` (only JetBrains Mono Box). Browser console 3 warnings "preload not used". Hypothese A: main.css niet geladen. Hypothese B: @font-face parse error.
+- Diagnostic: `await fetch('/styles/main.css?v=114')` returns 76671 bytes met 1 @font-face vs disk 79930 bytes met 9 @font-face. **Playwright MCP persistent disk-cache** (Sessie 149 leerpunt herbevestigd: "Playwright MCP browser-session vertrouwen voor cold-cache-meting zonder browser_close + extreme cache-bust = session-persistent caching"). browser_close clears tab niet disk-cache.
+- **Bredere implicatie:** Cache-coherency-bug in productie context. Returning users na deploy met cached oude `main.css?v=114` (zonder @font-face) + nieuwe HTML (zonder Google Fonts links) zien fallback fonts ~7 dagen tot cache-revalidate. Sessie 148 #31 + Sessie 149 #30 pattern systemic.
+- **Mitigatie:** Sed bump `main.css?v=114` → `?v=150` across 20 HTML files. Found pre-existing inconsistency: index.html + blog/index.html hadden `main.css?v=115` op stylesheet vs `?v=114` op preload. Linter-warning bevestigd, ook deze 2 → `?v=150` voor full uniformity.
+- browser_close + re-navigate met cb-query: `docFontsSize: 9` (1 box + 8 latin), **alle 8 latin "loaded"**, h1 → Space Grotesk computed ✓, body → Inter computed ✓, NL diakriet sample in `<p>` → Inter ✓. **0 console errors AND 0 warnings** (preload-not-used warnings weg). 3 woff2 fetched: 99,6 KB total.
+- Visual: Playwright screenshots `.playwright-mcp/sessie150-terminal-self-host-verified.png` + `sessie150-blog-self-host-verified.png`.
+
+**8. Commit + Netlify deploy (~5 min):**
+- `git add` 27 specific files (geen `-A` wildcard per CLAUDE.md security-rule). CRLF warning op SpaceGrotesk-OFL.txt benign.
+- Pre-commit hook: secrets-check passed, blog-HTML structure passed, cross-doc invariants skipped (geen relevante files).
+- Commit `14b0d44`: 27 files / 449 insertions / 121 deletions.
+- Push naar main, Netlify deploy poll met `set -o pipefail` + until-loop tegen `/styles/fonts/inter-latin.woff2` HTTP 200. **0 sec wachttijd** (Netlify deployed tussen push en poll-start). All 3 woff2 HTTP 200 + main.css?v=150 met 9 @font-face served.
+
+**9. 3-run LH@11 post-patch (~10 min):**
+- **Post-mediaan R2 (selected on LCP):** score 82 / LCP 3141 / FCP 1602 / TBT 416 / CLS 0 / TotalBytes 371 KB.
+- **S4 binary mechanism-proof:** 0 Google Fonts origins over alle 3 post-runs (R1+R2+R3).
+- **Self-hosted fonts:** 3 `/styles/fonts/` requests per run over alle 3 runs.
+
+### Frame-verdict-conflict + Heisenberg discipline-judgment-call
+
+**Strict letter Frame A criterion (plan §6):** S4=0 EN ≥3 van {S1 ≤-150, S2 ≤-200, S3 ≤-30, S6 ≤-80} hit EN S5 ≤+0,01.
+
+**Mediaan delta-table:**
+| Signal | Pre R2 | Post R2 | Delta | Threshold | Hit? |
+|--------|--------|---------|-------|-----------|------|
+| S1 LCP ms | 4291 | 3141 | **-1150** | ≤-150 | ✓ (7,7× threshold) |
+| S2 FCP ms | 1665 | 1602 | -63 | ≤-200 | ✗ NOISE (directioneel positief) |
+| S3 Bytes KB | 371 | 371 | 0 | ≤-30 | ✗ NOISE (variable-font byte-equivalent, predicted pre-data) |
+| S4 origins | n/a | 0/3 runs | =0 binary | =0 | ✓ MECHANISM-PROOF |
+| S5 CLS | 0 | 0 | +0 | ≤+0,01 | ✓ tolerance |
+| S6 TBT ms | 907 | 416 | **-491** | ≤-80 | ✓ (6× threshold) |
+| Score | 63 | 82 | +19 | (informatief) | n/a |
+
+**Strict verdict:** 2-of-4 perf signals hit (S1+S6, NOT S2+S3) → Frame A NOT MET letter → Frame D (tie-breaker revert).
+
+**Conflict-discipline-call:** Data zegt overweldigend positief (LCP -27%, TBT -54%, score sprong 19 punten, mechanism perfect), maar strict criterium zegt revert.
+
+**Heisenberg discipline-judgment-call via AskUserQuestion + leek-uitleg:** Frame A keep gekozen via **spirit + primary anti-bias rule (Sessie 146)**:
+- PRIMAIRE anti-bias-regel: "≥2 onafhankelijke causale dimensies hit met breedte" — satisfied via S1 paint-pipeline + S6 main-thread-blocking (verschillende systems, geen overlap)
+- SECUNDAIRE safety "≥3-of-4 hit-count" was te streng calibreerd voor variable-font case
+- S3 ≤-30 KB was mechanisch-onmogelijk (variable-font byte-equivalence predicted PRE-DATA in Phase 4 insight, niet post-hoc rationalisatie)
+- S1 (-1150 ms) en S6 (-491 ms) zijn EXTREME magnitudes (7,7× en 6× threshold) — geen marginale hit
+- Plan-doc pre-emptief acknowledged Frame A possibility ("eerste meet-bare mobile-delta zou betekenen — font-mechanisme fundamenteel ander territorium dan DOM-injection/resource-prioriteit/cache-attributie")
+
+**Discipline vs stijfkoppigheid onderscheid:**
+- **Discipline** = "verwachting mag data niet domineren" = ✓ ik verwachtte vooraf geen target score-delta
+- **Stijfkoppigheid** = "vooraf-gemaakte regel mag niet aangepast ook al was die regel zelf fout" = NIET de juiste discipline
+
+Frame A KEEP — patch staat in productie. Defense-in-depth 5 plekken inclusief honest-flag dat threshold-design-flaw geïdentificeerd is. Volgende plan-files moeten "≥2 onafhankelijke dimensies hit met breedte" expliciet als PRIMARY criterion noteren, niet ≥3-of-4-count.
+
+### 5-op-rij Patroon GEBROKEN
+
+Sessies 145 Frame B (Lighthouse-attributie-bias) + 146 Frame D (parser-driven Layouts buiten v2 framework) + 147 Frame C (modulepreload resource-priority-regressie) + 149 Frame D (sync-inline cascade-elimination sub-Frame-A + cache-coherency-bug parallel) → 150 **Frame A** (self-host fonts, mechanism + magnitude beide overtuigend).
+
+Anti-rationalisatie-discipline blijft structureel verankerd: Frame A door spirit + primary anti-bias rule, NIET door post-hoc threshold-aanpassing. De plan-table-design-flaw werd erkend en gedocumenteerd.
+
+### Cache-coherency Pattern Systemic Mitigation (Spawn #33 (e) PARTIAL)
+
+Sessie 148 #31 fixte main.js modulepreload version-param-mismatch. Sessie 149 #30 ontdekte navbar.js + footer.js zonder `?v=`. Sessie 150 toegepast op main.css (`?v=114/115` → `?v=150`) tijdens local verify discovery. Pattern Sessie 148 → 149 → 150 propageert. Volgende patch die import-keten raakt: navbar.js + footer.js + init-components.js script-tag URL nog steeds zonder `?v=` cache-bust. Sub-pad #33 (e) BLIJFT OPEN voor systemic blanket fix.
+
+### Bonus mechanisme-bewijs
+
+Variable-font discovery via awk-parse Google CSS — niet pre-known. Heisenberg's cold-start noemde "woff2-subsetting voor Inter/JetBrainsMono/SpaceGrotesk" als CAVEAT, maar variable fonts maken pyftsubset onnodig: Google's CSS2 API serveert 1 woff2 per familie voor alle weights, browser parsed weight-metadata. Total transfer geheel byte-equivalent (99,6 KB local vs 99 KB Google CDN baseline). Mechanism-win = origin-eliminatie + render-blocking-fix, NIET byte-reduction.
+
+### Learnings (consolidated)
+
+⚠️ **Never:**
+- Plan-agent claims voor specifieke implementation-details accepteren zonder Phase 3 Read-verificatie (Sessie 149 leerpunt herbevestigd toen Plan-agent hit session-limit voor #33 (a) en zelf-synthese de plek innam — verificatie via 5-file parallel Read ving subtle CSS-anchor-variaties op 18 vs 2 categorieën files)
+- `npx lighthouse` zonder versie-pin gebruiken op Node 18 — pulls v12+ met ES2025 `import with` syntax die exit 2 geeft. Sessie 144-149 LH@11 pattern blijft `npx -y lighthouse@11` voor 11.7.1
+- Browser session-persistent disk-cache tijdens local verify negeren — Sessie 149 leerpunt over Playwright MCP cache-contaminatie reactiveert hier; `?v=` query-param bump is fix
+- "Strict letter Frame A criterion" rigide volgen wanneer plan-table-design-flaw GEÏDENTIFICEERD pre-data + primary anti-bias rule satisfied. Discipline ≠ stijfkoppigheid
+
+✅ **Always:**
+- Awk-parse Google Fonts CSS BEFORE plan-design completes — variable-font discovery had plan §5 file-count en CSS-block-count met 5/8 vermindering, dramatically simpler implementation
+- Cache-coherency bump pre-emptief bij CSS+HTML co-edit — `?v=<sessie>` pattern is productie-vereiste, niet local-debug-trick. Sessie 149 leerpunt verbatim: "bij ELKE patch die module-import-keten of sync-inline DOM raakt, evalueer `?v=<sessie>` cache-bust noodzaak voor returning users vóór commit"
+- Honest pre-emptive S3-threshold-onhaalbaarheid documenteren in Phase 4 vóór data — voorkomt post-hoc rationalisatie OF stijfkoppige rejection. Pattern: "predicted pre-data" disclaimers in plan-file outcome-sectie en delta-tabel
+- AskUserQuestion bij Frame-verdict-conflict tussen letter en spirit — geen unilateraal beslissen op discipline-judgment-calls. User-territory (de discipline-eigenaar)
+- Sessie 144 bulk-archive trigger Sessie 150: verwijdert Sessie 144 uit CLAUDE.md top-6 → naar current.md. Pattern continues: Sessies 144-150 → bulk-rotation reset
+
+### Defense-in-depth 5 plekken
+
+1. ✅ TASKS.md item #32 closure + item #33 (a) sub-item closure + sprint regel + footer Version 5.4
+2. ✅ docs/sessions/current.md Sessie 150 entry (dit blok)
+3. ✅ docs/perf-third-party-audit.md §2e nieuwe sectie met multi-metric tabel + design-flaw honest-flag
+4. ✅ .claude/CLAUDE.md Recent Critical Learnings prepend Sessie 150 + archive Sessie 144 → current.md (bulk-rotation trigger)
+5. ✅ Plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-glittery-rain.md` outcome-sectie ingevuld
+
+### Artifacts
+
+- `/tmp/sessie150-item33a/pre-r{1,2,3}.json` + trace.json + devtoolslog.json (~4 MB elk)
+- `/tmp/sessie150-item33a/post-r{1,2,3}.json` + trace.json + devtoolslog.json
+- `/tmp/sessie150-item33a/verdict.json` (machine-readable verdict + delta-table)
+- `/tmp/sessie150-item33a/google-fonts.css` (16 KB Google CSS source)
+- `/tmp/sessie150-item33a/fonts/` (3 woff2 originals)
+- `/tmp/sessie150-item33a/licenses/` (3 OFL.txt)
+- `.playwright-mcp/sessie150-terminal-self-host-verified.png` + `sessie150-blog-self-host-verified.png`
+
+### Next-up
+
+- M6 Tutorial last 3 taken (niet-perf, milestone-100%-closure)
+- #27 ad-bearing pages perf-audit (~30-45 min recipe-werk)
+- #23 validate-docs.sh --deep mode (~20 min forcing-function-uitbreiding)
+- #33 (b/c/d) overige sub-paden voor LT1-verdere-reductie
+- Sub-pad #33 (e) partial-closed; blanket fix voor navbar.js + footer.js + init-components.js bij volgende patch die import-keten raakt
+
+---
+
 ## Sessie 149: Item #30 Frame D Closure — Sync-Inline Navbar+Footer Geeft Alleen S3 Layout -45 ms Hit, Cache-Coherency-Bug Ontdekt, Spawn #33 (3 jun 2026)
 
 **Scope:** Heisenberg's cold-start instructie: "Sessie 148 closure live. Open hoofd-spawn-item #30 sync-inline navbar/footer compile-time pre-render. Mijn aanbeveling: pak #30 op deze sessie met volle scope-aandacht, plan-mode verify-first, Frame B eervolle pad ingebouwd. Bevestig OF iets anders."

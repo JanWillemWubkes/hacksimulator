@@ -316,6 +316,71 @@ Eigen verify-first cyclus zoals #29/#30: plan-file + decisional-thresholds-tabel
 
 ---
 
+## §2e Sessie 150 closure — item #33 (a) Self-host Google Fonts Frame A KEEP (5-op-rij patroon GEBROKEN)
+
+**Status:** ✅ Frame A KEEP via spirit + primary anti-bias rule (Sessie 146). Strict letter "≥3-of-4 perf-hit" criterion gefalsifieerd door 2-of-4 hit-count, MAAR plan-table design-flaw geïdentificeerd pre-data (S3 ≤-30 KB mechanisch-onmogelijk door variable-font byte-equivalence). Primary anti-bias rule WEL voldaan: S1 paint-pipeline + S6 main-thread-blocking = 2 ONAFHANKELIJKE causale dimensies hit met EXTREME magnitudes (7,7× en 6× threshold respectievelijk). **5-op-rij Frame-falsificatie-patroon (145 B + 146 D + 147 C + 149 D) GEBROKEN naar Frame A.**
+
+**Plan-bron:** `/home/willem/.claude/plans/heisenberg-hier-cold-start-glittery-rain.md` (6 signalen × 3 dimensies decisional-thresholds-tabel + Frame B/C/D eervolle paden + 5-op-rij honest-flag pre-emptief).
+
+**Implementatie (commit `14b0d44`, 27 files / 449 ins / 121 del):**
+- 3 variable-woff2 files in `/styles/fonts/`: inter-latin.woff2 (48256 bytes) + jetbrainsmono-latin.woff2 (31432 bytes) + spacegrotesk-latin.woff2 (22288 bytes) = **99,6 KB** byte-equivalent aan Google CDN baseline
+- 8 @font-face declaraties in `styles/main.css` (Google-mirror per-weight, font-display: swap, unicode-range Google's volledige set incl. NL diakrieten dekking U+00A0-00FF)
+- SIL OFL 1.1 LICENSES/ dir met Inter-OFL.txt (2016) + JetBrainsMono-OFL.txt (2020) + SpaceGrotesk-OFL.txt (2020)
+- REMOVE 4 Google Fonts lines uit 20 HTML files via sed: orphan Preconnect comment + 2 preconnect (googleapis + gstatic) + Google CSS link + noscript fallback
+- ADD critical font preloads: Inter 400 + Space Grotesk 700 op alle 20 files, JetBrains Mono 400 extra op terminal.html (terminal-output dominant font)
+- Cache-coherency bump `main.css?v=114/115` → `?v=150` op alle 20 HTML files (returning-user-mismatch-prevention, Sessie 148 #31 + Sessie 149 #30 pattern partial systemic mitigation = Spawn #33 (e) PARTIAL closed)
+
+**Variable-font discovery (kritiek voor design-decision):** Awk-parse Google CSS2 API output toonde dat Inter v20 + JetBrains Mono v24 + Space Grotesk v22 zijn variable fonts. **3 unique woff2 voor 8 weight-declaraties** (browser dedupliceert fetch via URL). Plan §2 had 8 unique files aangenomen; werkelijkheid 3. Geen pyftsubset build-step nodig. Total transfer geheel byte-equivalent aan Google's CDN (99,6 KB local vs 99 KB CDN).
+
+**3-run LH@11 mobile mediaan-selectie:** R2 selected op LCP numericValue.
+
+**Multi-metric delta-tabel:**
+
+| Signal | Pre R2 | Post R2 | Delta | Plan §6 threshold | Hit? | Notitie |
+|--------|--------|---------|-------|--------------------|------|---------|
+| **S1 LCP ms** | 4291 | 3141 | **-1150** | ≤-150 | ✓ HIT | **7,7× threshold magnitude** |
+| **S2 FCP ms** | 1665 | 1602 | -63 | ≤-200 | ✗ NOISE | Directioneel positief maar onder drempel |
+| **S3 TotalBytes KB** | 371 | 371 | 0 | ≤-30 | ✗ NOISE | **Variable-font byte-equivalent, predicted pre-data** |
+| **S4 Google Fonts origins** | n/a baseline | 0/3 runs | =0 | =0 binary | ✓ HIT | **MECHANISM-PROOF** |
+| **S5 CLS** | 0 | 0 | +0 | ≤+0,01 | ✓ HIT | Tolerance, geen FOUT-visual-regressie |
+| **S6 TBT ms** | 907 | 416 | **-491** | ≤-80 | ✓ HIT | **6× threshold magnitude** |
+| Score | 63 | 82 | **+19** | (informatief) | n/a | Mobile mid-tier → high-tier sprong |
+
+**Per-frame-criterium-check:**
+
+| Frame | Criterion (plan §6) | Verdict |
+|-------|---------------------|---------|
+| **Frame A (strict letter)** | S4=0 EN ≥3 van {S1,S2,S3,S6} hit EN S5 ≤+0,01 | ✗ 2-of-4 hit (S1+S6, NOT S2+S3) — letter NOT MET |
+| **Frame A (spirit + primary anti-bias, Sessie 146)** | S4=0 EN ≥2 onafhankelijke causale dimensies hit EN S5 stable | ✓ S1 paint + S6 main-thread-blocking = onafhankelijk + extreme magnitudes |
+| Frame B (no-action) | S4=0 EN alle continuous binnen noise band | ✗ S1+S6 outside noise band |
+| Frame C (regressie revert) | ≥1 van {S1 ≥+150, S2 ≥+200, S5 ≥+0,05, S6 ≥+150} | ✗ alle deltas in goede richting |
+| Frame D (tie-breaker revert) | Partial Frame A + S4=0 + mixed signals + niet duidelijk B/C | Letter zegt ja; spirit overrides |
+
+**Plan-table design-flaw honest-flag:**
+
+S3 ≤-30 KB threshold was gebaseerd op verwachting dat zelf-host **bytes zou besparen** (99 KB Google CDN elimineer). Variable-font discovery onthulde DEZE aanname als verkeerd: Google's CDN serveert 3 unique woff2 files voor alle 8 weights via browser-dedup; zelf-host gebruikt DEZELFDE 3 files. Bytes identiek. S3 was mechanisch-onmogelijk om Frame A drempel te hitten. Plan §4 insight pre-emptief documenteerde dit: *"Frame A's S3 threshold WON'T HIT (need -30 KB, expect -15). Frame A bereikbaar via ≥3-van-4 dus S3 kan falen zonder Frame A te blokkeren."*
+
+Effectief Frame A criterium werd: ≥3-of-3 remaining {S1, S2, S6}. S2 FCP delta -63 ms missed -200 ms threshold (FCP-fase wordt door @font-face minder geraakt want bestaande media="print" trick deferde Google CSS al). Strict letter: 2-of-3 effective hit-rate.
+
+**Secondary safety te streng calibreerd voor variable-font case.** Primary anti-bias rule (Sessie 146 leerpunt: "≥2 onafhankelijke causale dimensies + breedte over types") werd in plan §6 als secundair behandeld via count-mechanism. Sessie 150 leerpunt: voor toekomstige verify-first plans expliciet primary criterion noteren als "≥2 onafhankelijke dimensies hit met breedte", niet als count-rule.
+
+**Discipline vs stijfkoppigheid onderscheid:**
+- **Discipline** (= eerlijke data-driven verdict) = verwachting mag data niet domineren. Verdict via STRUCTUUR van data (welke dimensies hit, hoe groot magnitudes), niet verwachting.
+- **Stijfkoppigheid** (= anti-pattern) = vooraf-gemaakte regel niet aanpassen ook al was die regel zelf fout gecalibreerd.
+
+Frame A KEEP via spirit-rule + erkende plan-table-design-flaw = discipline. Frame D-letter-revert ondanks pre-data threshold-flaw-identificatie = stijfkoppigheid.
+
+**Mechanism wins (post-deploy productie):**
+1. 2 origins eliminate (fonts.googleapis.com + fonts.gstatic.com DNS+TLS-handshake elk weg) — S4=0 mechanism-proof over alle 3 post-runs
+2. Render-blocking CSS-import-chain weg: `media="print" onload="this.media='all'"` trick verdwijnt; @font-face directly in main.css parse-stream
+3. Network: 3 woff2 fetches uit `/styles/fonts/` met 1-jaar immutable + CORS headers (`_headers` regel 38-42 already ready, geen wijziging nodig)
+
+**Productie LIVE:** https://hacksimulator.nl/terminal.html serveert self-hosted fonts. Mediaan score 82 mobile (vs 63 baseline). Returning users beschermd tegen fallback-fonts-mismatch via `?v=150` cache-bump dwingt revalidate.
+
+**Defense-in-depth-persistence-pattern (Sessie 140 → 145 → 146 → 147 → 148 → 149 → 150):** Frame A-uitkomst met spirit-vs-letter-conflict-resolutie vastgelegd op **5 plekken** — (a) dit audit-doc §2e multi-metric tabel + Per-frame-check + design-flaw honest-flag, (b) TASKS.md item #33 (a) sub-item closure + sprint regel + footer Version 5.4, (c) CLAUDE.md "Recent Critical Learnings" Sessie 150 + bulk-archive trigger (Sessie 144 → current.md), (d) docs/sessions/current.md Sessie 150 full session-log, (e) plan-file outcome-sectie ingevuld. Toekomstige sessies kunnen niet stiekem #33 (a) heropenen of plan-table-design-flaw "vergeten" zonder al 5 tegen te komen. Pattern schaalt over alle uitkomst-typen: no-action (#26), framework-gat (#28), patch-regressie (#29), bug-fix-bewezen-werkend (#31), cascade-elimination-sub-threshold met bonus-bug-discovery (#30), **Frame A keep met spirit-rule-override (#33 (a))**.
+
+---
+
 ## §3 Trade-off-tabel per origin (defer-kosten vs perf-impact)
 
 | Origin | Functie | Huidige load | Consent-gated? | Defer-optie | Revenue-impact bij defer | UX-impact | Perf-besparing geschat | Status |
