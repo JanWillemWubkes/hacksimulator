@@ -381,6 +381,93 @@ Frame A KEEP via spirit-rule + erkende plan-table-design-flaw = discipline. Fram
 
 ---
 
+## §2f Sessie 151 closure — item #27 ad-bearing pages preconnect + inline critical-CSS Frame C REVERT (variance-amplification, 6-op-rij Frame-falsificatie patroon HERVAT)
+
+**Status:** ✗ **Frame C REVERT** (patch commit `a80e675` → revert commit `0354c7a`). Multi-page perf-audit op 17 ad-bearing pages (Optie B-light: preconnect `pagead2.googlesyndication.com` + inline critical-CSS 6 selectoren). Mechanism werkte clean op blog/nmap (S6 -95 ms / -62% connection-overhead reduction A HIT) MAAR netto regressie op TBT (S3 +249/+294 ms beide canonicals = Frame C HITs). **Variance-amplification hypothese:** post-patch LCP-range 802-1111 ms vs pre 123-144 ms = 6,5-7,7× variance-increase. Preconnect opent connection vroeg → AdSense backend response-variance + dependent-request-cascade-timing wordt dominant signal-source ipv stabiele lazy-connection-flow PRE-patch. **6-op-rij Frame-falsificatie patroon HERVAT** na Sessie 150 Frame A break (font-pipeline unique mechanism territorium). 145B + 146D + 147C + 149D + 150A + **151C**. Sessie 147 #29 patroon (resource-hint mechanism-proof werkend MAAR variance-cascade netto regressie) herhaalt zich op nieuw resource-type (preconnect vs modulepreload).
+
+**Plan-bron:** `/home/willem/.claude/plans/heisenberg-hier-cold-start-sessie-peppy-sprout.md` (6-signaal × 3-dimensie decisional-thresholds-tabel met symmetrische 33,3% anti-bias clustering + Frame B/C/D eervolle paden + pre-data threshold-feasibility-flags + canonical-eerst principe voor multi-page schaal).
+
+**Phase 1 surprise-findings (scope-bepalend):**
+- animations.css 0/16 ad-bearing pages aanwezig → Sessie 144 critical-split-pattern NIET hergebruikbaar → scope-aanpassing naar Optie B-light (inline-CSS-only)
+- Brevo `sibforms.com` BEPERKT tot 2 pages (index.html + blog/index.html) → orthogonale factor risk-scoped
+- 17 pages totaal (spawn-prompt typo welkom.html vs welkom-bij-hacksimulator.html)
+- Mechanism-budget krimt: preconnect ~100 ms LCP + inline-CSS ~30-80 ms TBT = ~130-180 ms gecombineerd → Frame A grensgeval, Frame B realistisch outcome pre-data acknowledged
+
+**Implementatie (commit `a80e675`, 17 files / 170 ins):**
+- Preconnect `<link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>` op alle 17
+- Inline `<style>`-block met 6 Sessie 144 selectoren verbatim copy (`:focus-visible`, `prefers-reduced-motion`, `@keyframes fadeIn/fadeOut`, `.modal` transitions, `html { scroll-behavior: smooth }`)
+- 3 sub-patterns: Pattern A (13 files standard), Pattern B (woordenlijst onder bestaande `<!-- Preconnect -->` placeholder), Pattern C (index + blog/index pagead2 VOOR sibforms preconnect)
+- GEEN externe animations.css link toegevoegd (file niet aanwezig op deze pages)
+- GEEN adsbygoogle defer (audit-doc §3 CPM-trade-off conservatief skipped)
+- Geen cache-coherency `?v=` bump nodig (HTML-only `<head>`-additions, geen module-import-chain-changes — pre-emptief gedocumenteerd plan §10)
+
+**3-run LH@11 mobile mediaan canonicals (sorted op LCP):**
+- Index.html PRE r3: LCP=2276 / FCP=1877 / TBT=1414 / Bytes=557 KB / CLS=0.084 / Score=69
+- Index.html POST r1: LCP=2375 / FCP=2147 / TBT=1663 / Bytes=557 / CLS=0.011 / Score=68
+- Blog/nmap-beginnersgids PRE r3: LCP=1865 / FCP=1865 / TBT=1133 / Bytes=425 / CLS=0.073 / Score=74
+- Blog/nmap-beginnersgids POST r2: LCP=2703 / FCP=1725 / TBT=1427 / Bytes=426 / CLS=0.073 / Score=69
+
+**Multi-metric delta-tabel:**
+
+| Signal | Index Δ | Threshold | Index hit | Blog/nmap Δ | Threshold | Blog/nmap hit |
+|--------|---------|-----------|-----------|-------------|-----------|---------------|
+| **S1 LCP ms** | +99 | A:≤-150 C:≥+100 | NOISE (borderline) | **+838** | A:≤-150 C:≥+100 | ✗ **C HIT** |
+| **S2 FCP ms** | **+270** | A:≤-100 C:≥+80 | ✗ **C HIT** | **-140** | A:≤-100 C:≥+80 | ✓ **A HIT** |
+| **S3 TBT ms** | **+249** | A:≤-80 C:≥+60 | ✗ **C HIT** | **+294** | A:≤-80 C:≥+60 | ✗ **C HIT** |
+| S4 Bytes KB | +0 | A:≤-5 C:≥+15 | NOISE | +1 | A:≤-5 C:≥+15 | NOISE |
+| **S5 CLS** | **-0.073** | A:≤+0.01 C:≥+0.05 | ✓ **A HIT improved** | 0 | A:≤+0.01 C:≥+0.05 | ✓ **A HIT stable** |
+| **S6 Preconnect proof** (Playwright cold) | 2-entry dynamic-quirk | DELTA ≤-30 ms binary | mechanism-active borderline | **152→57 ms = -95 ms / -62%** | DELTA ≤-30 ms binary | ✓ **A HIT clean** |
+| Score | -1 (69→68) | informatief | n/a | -5 (74→69) | informatief | n/a |
+
+**Verdict per plan §6:**
+- Frame A (keep) vereist: S6 hit + ≥2 dimensies uit {paint S1/S2, main-thread S3} hit met breedte (≥1,5× threshold)
+- Frame C (revert) vereist: ≥1 Frame C-threshold hit op S1/S2/S3/S4/S5
+- **Index: 2 C HITs (S2 + S3) → Frame C verdict**
+- **Blog/nmap: 2 C HITs (S1 + S3) → Frame C verdict**
+- Beide canonicals Frame C → revert per plan-mandate
+
+**Variance-amplification (Sessie 147 #29 patroon herhaalt):**
+
+| Page | PRE LCP-range | POST LCP-range | Variance-factor |
+|------|----------------|------------------|------------------|
+| Index.html | 2175-2298 = 123 ms | 2144-2946 = **802 ms** | **6,5×** |
+| Blog/nmap-beginnersgids | 1730-1874 = 144 ms | 1937-3048 = **1111 ms** | **7,7×** |
+
+Mechanism-hypothese: preconnect opent connection vroeg in document-parse-phase. AdSense backend response-time variance + dependent-request-cascade-timing (ep1/ep2/doubleclick) wordt dominant timing-source. Pre-patch had connection-opening lazy (in main-parser-flow) = stabiele timing. Post-patch verhoogd timing-sensitivity voor externe backend latency.
+
+**Spot-checks 1-run informatief (zonder PRE-baseline = niet Frame-bepalend):**
+- over-ons.html: LCP=2693 / TBT=1933 / Score=66 (high TBT)
+- blog/welkom.html: LCP=1662 / TBT=1294 / Score=75 (best in any run)
+- commands/index.html: LCP=2381 / TBT=1114 / Score=72
+
+Spot-checks tonen normale absolute-range variance maar zonder PRE-baseline geen Frame-bepalende waarde.
+
+**Spawn #34 mechanism-isolation onderzoek:**
+
+Splits Optie B-light patch in (a) preconnect-only en (b) inline-CSS-only naar separate verify-first cycli om welk mechanism culprit te isoleren.
+
+| Scenario | Hypothese | Implicatie |
+|----------|-----------|------------|
+| Preconnect-only = Frame C + inline-CSS-only = Frame B | preconnect veroorzaakt variance-amplification | inline-CSS toepasbaar als low-risk pattern |
+| Preconnect-only = Frame B + inline-CSS-only = Frame B | orthogonale variance-bron (Brevo backend? AdSense Auto-ads-state?) | Sessie 151 was random variance |
+| Beide Frame C | onbekende interactie alleen samen | resource-hint experimenten algemeen niet levenbaar op deze site |
+
+**Decisional outcome:** als spawn #34 onthult dat resource-hint experimenten op deze site fundamenteel variance-amplifying zijn (alle 3 scenarios Frame C), documenteren als "geen verdere resource-hint optimizations op ad-bearing pages, focus op andere mechanism-paden zoals #33 (b/c/d) en #34 mechanism-isolation".
+
+**Discipline-leerpunten Sessie 151:**
+
+1. **Single Frame A streak ≠ guarantee voor volgende sessie.** Sessie 150 Frame A was unique font-pipeline territorium. Sessie 151 keert direct terug naar Frame C-falsificatie op resource-priority-cascade mechanism. Anti-rationalisatie-discipline is structureel verankerd (6-op-rij Frame-falsificatie hervat), niet vatbaar voor "tweede Frame-A-streak" rationalisatie.
+
+2. **Plan-agent CLI-syntax-claims blind kopiëren in plan-file = Sessie 149 leerpunt herhaald.** Goedgekeurde plan-files krijgen CLI-snippets dry-test voor eerste loop. Sessie 151 hit `--preset=mobile` invalid flag (LH@11 default is mobile zonder preset). 30-sec fast-fail-detection bespaarde 20 min wallclock.
+
+3. **S6 Playwright MCP timing-meting kwetsbaar voor session-contamination.** Persistent DNS-cache + consent.js dynamic-script-injection (Resource Timing 2-entry quirk op index.html) vervuilen fine-grained timing-comparison. Voor mechanism-proof: LH `audits.network-requests` als fresh-Chrome-per-run single-source-of-truth boven Playwright MCP, ESPECIALLY voor preconnect-style mechanisms waar Resource Timing entry-aantallen kunnen verschillen tussen pages.
+
+4. **Defense-in-depth-persistence-pattern (Sessie 140) schaalt over Frame A keep én Frame C revert.** Pattern Sessie 140 → 145 → 146 → 147 → 148 → 149 → 150 → 151 schaalt nu over alle uitkomst-typen inclusief Frame C variance-amplification revert.
+
+**Defense-in-depth-persistence-pattern (Sessie 140 → ... → 151):** Frame C revert + variance-amplification hypothese + spawn #34 mechanism-isolation vastgelegd op **5 plekken** — (a) dit audit-doc §2f multi-metric tabel + variance-tabel + spawn-decisional-outcome, (b) TASKS.md item #27 closure + sprint regel + Version 5.5 + Voortgang Overzicht + spawn #34, (c) CLAUDE.md "Recent Critical Learnings" Sessie 151 + 1-in-1-out archive Sessie 145, (d) docs/sessions/current.md Sessie 151 full session-log, (e) plan-file outcome-sectie ingevuld. Pattern schaalt nu over alle uitkomst-typen inclusief Frame C revert met spawn (#34 mechanism-isolation onderzoek).
+
+---
+
 ## §3 Trade-off-tabel per origin (defer-kosten vs perf-impact)
 
 | Origin | Functie | Huidige load | Consent-gated? | Defer-optie | Revenue-impact bij defer | UX-impact | Perf-besparing geschat | Status |

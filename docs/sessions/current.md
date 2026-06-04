@@ -4,6 +4,77 @@
 
 ---
 
+## Sessie 151: Item #27 Frame C REVERT — Ad-bearing Pages Preconnect + Inline Critical-CSS Veroorzaakt Variance-Amplification, Spawn #34 (4 jun 2026)
+
+**Scope:** Heisenberg's cold-start: #33 (b/d) quick-closures + #27 verify-first cyclus combo of alternative. Expert-decision: **#27 alleen** (volledige verify-first) — cleanste discipline-transfer-test naar nieuw multi-page territorium na Sessie 150 Frame A break. (b/d) blijven backlog voor later quick-sessie.
+
+**Status:** ✅ #27 Frame C REVERT (patch commit `a80e675` → revert commit `0354c7a`). **6-op-rij Frame-falsificatie patroon HERVAT** na Sessie 150's unique font-pipeline Frame A break. 145B + 146D + 147C + 149D + 150A + **151C** = anti-rationalisatie-discipline structureel verankerd — Frame-falsificatie blijft norm, geen "tweede Frame-A-streak" rationalisatie. Sessie 147 #29 patroon herhaalt op nieuw resource-type (preconnect vs modulepreload).
+
+**Duur:** ~4 uur (cold-start scope-keuze AskUserQuestion 2× → expert-decision → 2 parallel Explore-agents Phase 1 → 1 Plan-agent Phase 2 met Phase 3 verification corrections → plan-file peppy-sprout write → ExitPlanMode → Phase A baseline LH 6-run in bg (~25 min) → Phase B 17-file Edit in batches → Phase C validate-docs + Playwright Chromium full-suite 12,3 min + 3-failure discriminator-pattern → S6 PRE-meting Playwright MCP → commit + push + deploy poll → Phase E LH post 6-run + 3 spot-checks in bg + S6 POST Playwright MCP → mediaan-selectie + delta-tabel + Frame C verdict → revert + push + deploy poll → defense-in-depth 5 plekken docs-update).
+
+**Plan source:** `/home/willem/.claude/plans/heisenberg-hier-cold-start-sessie-peppy-sprout.md`.
+
+### Phase 1 surprise-findings (scope-bepalend)
+
+1. **animations.css 0/16 ad-bearing pages aanwezig** — Sessie 144 critical-split-pattern NIET hergebruikbaar. Alleen inline-CSS-only variant toepasbaar (Optie B-light) ipv Optie B-classic met externe file.
+2. **Brevo `sibforms.com` BEPERKT tot 2 pages** (index.html + blog/index.html), niet alle blog posts. Orthogonale factor risk-scoped.
+3. **17 pages totaal** (typo welkom.html vs welkom-bij-hacksimulator.html in spawn-prompt).
+4. **Mechanism-budget krimt:** preconnect ~100 ms LCP + inline-CSS ~30-80 ms TBT = ~130-180 ms gecombineerd. Plan §7 pre-data flagged S1 LCP ≤-150 ms en S3 TBT ≤-80 ms als GRENSGEVAL, S4 Bytes ≤-5 KB als MECHANISCH-ONMOGELIJK (+759 bytes per page). Frame B realistisch outcome pre-data acknowledged.
+
+### Multi-metric delta-tabel canonicals (mediaan, sorted op LCP)
+
+| Signal | Index PRE→POST | Δ | Index hit | Blog/nmap PRE→POST | Δ | Blog/nmap hit |
+|--------|----------------|---|-----------|---------------------|---|---------------|
+| S1 LCP ms | 2276→2375 | **+99** | NOISE | 1865→2703 | **+838** | ✗ **C HIT** |
+| S2 FCP ms | 1877→2147 | **+270** | ✗ **C HIT** | 1865→1725 | **-140** | ✓ **A HIT** |
+| S3 TBT ms | 1414→1663 | **+249** | ✗ **C HIT** | 1133→1427 | **+294** | ✗ **C HIT** |
+| S4 Bytes KB | 557→557 | +0 | NOISE | 425→426 | +1 | NOISE |
+| S5 CLS | 0.084→0.011 | **-0.073** | ✓ **A HIT improved** | 0.073→0.073 | 0 | ✓ **A HIT stable** |
+| S6 Preconnect proof (Playwright) | 169 ms overhead → 2-entry dynamic-quirk | mechanism-active | borderline | 152→57 ms overhead | **-95 ms / -62%** | ✓ **A HIT clean** |
+| Score | 69→68 | -1 | n/a | 74→69 | -5 | n/a |
+
+**Verdict Frame C** per plan §6: beide canonicals hebben multiple Frame C HITs op S1/S2/S3 (Index 2 C HITs, Blog/nmap 2 C HITs) ondanks mechanism-proof clean.
+
+### Variance-amplification hypothese (Sessie 147 #29 patroon herhaalt)
+
+- **PRE-patch LCP-range:** Index 2175-2298 = **123 ms** / Blog/nmap 1730-1874 = **144 ms** (small variance).
+- **POST-patch LCP-range:** Index 2144-2946 = **802 ms** / Blog/nmap 1937-3048 = **1111 ms** = **6,5-7,7× variance-increase**.
+
+**Mechanism-hypothese:** Preconnect opent connection vroeg in document-parse-phase → AdSense backend response-time variance + dependent-request-cascade-timing (ep1/ep2/doubleclick) wordt dominant signal-source ipv stabiele lazy-connection-flow PRE-patch. Patch werkt mechanisch zoals verwacht maar verhoogt timing-sensitivity voor externe backend latency die we niet controleren.
+
+### Implementation chronologie kerngebeurtenissen
+
+**Phase A baseline (sequential 6-run LH@11 in bg, ~25 min):** Eerste valse start met `--preset=mobile` flag (LH@11 valid presets zijn `perf`/`experimental`/`desktop` — mobile is DEFAULT zonder flag). Sessie 149 leerpunt "Plan-agent CLI-syntax-claims blind volgen zonder dry-test" verbatim getriggerd: ik kopieerde plan-agent's flag zonder `--help`-check. Fix: drop `--preset`. Pattern: **goedgekeurde plan-files krijgen CLI-snippets dry-test voor eerste loop**.
+
+**Phase B 17-file Edit (parallel batches):** Canary blog/nmap-beginnersgids.html (Pattern A, 2 edits) → batch 1 (5 files) → Read 7 unread blog posts → batch 2 (11 files). 3 sub-patterns toegepast: Pattern A 13 files standard, Pattern B woordenlijst (insert onder bestaande `<!-- Preconnect -->` placeholder = Sessie 150 residu), Pattern C 2 files (pagead2 VOOR sibforms preconnect, primary resource hint priority). Verify: grep-count = 17.
+
+**Phase C 3-failure discriminator-pattern:** Playwright Chromium full-suite 177 passed + 3 failed (cross-browser footer, gamification badges, responsive-breakpoints). Productie isolated-rerun met `BASE_URL=https://hacksimulator.nl` (= pre-patch state): 2 failed reproduced = bekende pre-existing flakes (Sessie 149), 1 passed (responsive-breakpoints). Responsive-breakpoints test hit `https://hacksimulator.nl/terminal.html` direct (geen lokaal-patch-causale-link) — 3× isolated rerun lokaal = 3-of-3 PASS = parallel-execution flake bevestigd.
+
+**S6 mechanism-proof Playwright MCP:** blog/nmap clean 1-entry POST showed 152→57 ms connection-overhead (-95 ms / -62% A HIT clean). Index.html POST showed **2 adsbygoogle.js Resource Timing entries** (PRE had 1) — hypothese: consent.js loadAdSense() injecteert dynamisch een 2e script-tag, Resource Timing bookkept beide. Entry 1 fetchStart=366 (LATER dan PRE 137 ms) + Entry 2 connection-overhead=2 ms (mechanism-active bewezen op script-tag-resolution). Playwright MCP session-contamination via persistent DNS-cache vervuilt fine-grained timing-comparison — Sessie 149 leerpunt generaliseert.
+
+### Revert + spawn #34 mechanism-isolation
+
+**Revert commit `0354c7a`** (17 files / 170 del) + push + Netlify deploy poll ✓ productie back to pre-patch state.
+
+**Spawn #34 mechanism-isolation:** splits Optie B-light patch in (a) preconnect-only en (b) inline-CSS-only naar separate verify-first cycli. Hypothese: preconnect-only is culprit (early-connection-opening = early AdSense-dependency-cascade); inline-CSS-only is timing-neutraal (puur source-growth). Bij Frame B op inline-CSS-only + Frame C op preconnect-only = hypothese bevestigd, inline-CSS toepasbaar als low-impact low-risk pattern. Bij Frame B op beide = orthogonale variance-bron. Bij Frame C op beide = onbekende interactie alleen samen.
+
+### Discipline-leerpunten Sessie 151
+
+**Never:**
+- Plan-agent CLI-syntax-claims blind in plan-file overnemen zonder dry-test of `--help` verify — Sessie 149 leerpunt verbatim getriggerd. **Goedgekeurde plan-files krijgen CLI-snippets dry-test voor eerste loop**.
+- Single Frame A streak als guarantee voor volgende sessie behandelen — Sessie 151 keert direct terug naar Frame C-falsificatie. Anti-rationalisatie-discipline structureel verankerd (6-op-rij hervat), niet "Sessie 150 bewees we kunnen Frame A bereiken dus volgende kan ook".
+- S6 mechanism-proof via Playwright MCP als single-source-of-truth gebruiken zonder LH-cross-check — session-contamination via persistent DNS-cache + consent.js dynamic-script-injection vervuilt fine-grained timing-comparison.
+
+**Always:**
+- Phase 1 surprise-findings expliciet rapporteren naar Heisenberg + AskUserQuestion bij scope-impact — Sessie 145+146+150 patroon herbevestigd. Sessie 151 animations.css-absence surprise leidde tot scope-aanpassing (Optie B-classic→B-light).
+- Honest pre-emptive threshold-onhaalbaarheid documenteren in plan-§7 — Sessie 150 leerpunt verbatim toegepast. S4 Bytes ≤-5 KB mechanisch-onmogelijk pre-data acknowledged als reserve-signaal.
+- Sessie 147+149 isolated-rerun discriminator-pattern voor 3-failure Playwright triage: rerun tegen `BASE_URL=https://hacksimulator.nl` (productie = pre-patch). Plus 3× isolated rerun voor flake-confirmatie zonder revert-impuls.
+- Defense-in-depth-persistence-pattern (Sessie 140) schaalt over Frame A keep (150) én Frame C revert (151) — 5 plekken canonical, alle uitkomst-typen.
+
+**Artifacts:** `/tmp/sessie151-item27/{pre-r1,2,3,post-r1,2,3,spot-*,s6-pre,s6-post}.json`. Plan-file outcome-sectie filled.
+
+---
+
 ## Sessie 150: Item #32 VFS NaN Quick-Fix + Item #33 (a) Frame A KEEP — Self-host Google Fonts Breekt 5-op-rij Frame-Falsificatie-Patroon (3 jun 2026)
 
 **Scope:** Heisenberg's cold-start instructie: combineer #32 (5 min palet-cleanser na 4 Frame B/C/D op rij — Sessie 148 pattern) met #33 (a) verify-first cyclus self-host Google Fonts. Discrete commits per item zodat LH-meting van #33 niet contamineerd door #32.
