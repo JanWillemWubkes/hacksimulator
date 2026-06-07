@@ -4,6 +4,81 @@
 
 ---
 
+## Sessie 152: Combo-pad #33 (b/d) housekeeping + #34 (a) preconnect-only mechanism-isolation — Frame B NOISE-no-action REVERT met NEW cross-check-baseline-discipline (5-6 jun 2026)
+
+**Scope:** Heisenberg's cold-start: combo-pad (1) #33 (b) HTTP/2 push deprecation check, (2) #33 (d) Brotli compression verification, (3) #34 (a) preconnect-only verify-first cyclus — mechanism-isolation onderzoek voor Sessie 151 #27 variance-amplification. Sequentieel b → d → a. Plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-sessie-fancy-moon.md`.
+
+**Status:** ✅ #33 (b) CLOSED N/A (triple-source dichtdoen) + ✅ #33 (d) CLOSED PARTIAL (Brotli active default, SVG gap accepted low-impact) + ✅ #34 (a) **Frame B NOISE-no-action REVERT** (patch commit `a19926a` → revert commit `402b1d4`). **NEW DISCIPLINE introduced:** cross-check baseline-discipline canonical voor apparent-Frame-A met mechanism-vs-effect-gap >5× ratio of >2× baseline-variance-deviation. 7-sessie-streak Frame-falsificatie-patroon (145B + 146D + 147C + 149D + 150A + 151C + **152B**) = 6 falsificatie + 1 KEEP. Anti-rationalisatie-discipline structureel verankerd over alle uitkomst-typen.
+
+**Duur:** ~5 uur (cold-start scope-keuze AskUserQuestion 2× → expert-decision combo-pad sequentieel → Phase 1 1 Explore-agent ground-truth verify → Phase 2 1 Plan-agent design → Phase 3 5-parallel Read kritieke files → plan-file fancy-moon write → ExitPlanMode → #33 (b) WebSearch+WebFetch+grep ~5 min → #33 (d) curl-grep + Phase 1 surprise-finding SVG gap + AskUserQuestion expert-advice → Phase A baseline LH 6-run in bg ~6 min → Phase B 17-file Edit batch + 1 Pattern A→C correction (index.html) + validate-docs + Playwright Chromium 1-shot bg ~10 min + commit + push + deploy poll → Phase C POST LH 6-run in bg ~6 min → Phase D signal-extractie 7-signaal + mechanism-vs-effect-gap detect → Phase E AskUserQuestion verdict-conflict → Heisenberg expert-advice request → expert-decision Option C cross-check → revert + push (DNS-failure-during-revert near-miss) + push-retry + robust deploy-poll → Phase A-cross-check baseline LH 6-run in bg ~6 min → Phase D-recompute true-deltas vs cross-check → Frame B verdict-finalisatie → defense-in-depth 5+ plekken docs-update).
+
+### Phase 1 surprise-findings
+
+1. **#33 (b) ZERO local artifacts pre-Phase-2** — Plan-agent's grep tijdens design confirmed `_headers` + `netlify.toml` clean. Triple-source dichtdoen-criterium MET (config + Chrome 106 deprecation + Netlify support drop). 10 min closure.
+2. **#33 (d) SVG gap** — favicon.svg NIET Brotli-compressed door Netlify Edge (text-based maar niet in default-list). Heisenberg-AskUserQuestion expert-decision: accept gap (~184 bytes/req low-impact + Netlify Edge default-list opaak = patch-deterministicity uncertain = Sessie 148-pattern violation). Document als toekomstige cumulatieve audit-item.
+3. **#34 (a) Pattern A→C confusion on index.html** — 16/17 Edits succeeded; index.html failed because attempted Pattern A but file is Pattern C. Self-induced-error onder parallelism-druk. Edit-tool failure detectable + immediately-correctable via tool-error vs silent-bug. Pattern: zelfs binnen 1 sessie kan plan-spec verkeerd uitgevoerd worden onder cognitive-load.
+4. **#34 (a) mechanism-vs-effect-gap** — S6 137-180 ms pagead2-savings ≠ S3 1296-1926 ms TBT-savings = 7-14× ratio onverklaarbaar door preconnect alleen. Diagnostic-trigger voor cross-check baseline-discipline.
+5. **Sessie 152 PRE baseline 5-7× hoger variance dan Sessie 151 PRE** — Phase A LCP-range 844/357 ms vs Sessie 151 PRE 123/144 ms. Confound-risk geïdentificeerd; alleen empirisch testbaar via cross-check.
+6. **DNS-failure-during-revert near-miss** — `git push` faalde voor `github.com` MAAR curl poll claimed "REVERTED ✓ after 0 polls". Diagnose: curl had ook DNS-resolution-failure, returned empty, grep non-match → loop exited misleadingly. Defensive recipe-lesson: poll-loops moeten HTTP-status guard hebben VOOR content-grep.
+
+### Multi-metric tabel — APPARENT delta vs Phase A baseline (BEFORE cross-check diagnosis)
+
+| Signaal | INDEX | BLOG |
+|---|---|---|
+| S1 LCP | -28.5 ms NOISE | -251.7 ms A HIT |
+| S2 FCP | -126.9 ms A HIT | -577.3 ms A extreme |
+| S3 TBT | **-1295.5 ms A HIT (26× threshold!)** | **-1925.5 ms A HIT (39× threshold!)** |
+| S4 Bytes | -3.6 KB NOISE | +0.1 KB NOISE |
+| S5 CLS | +0.073 C HIT | 0.000 NOISE |
+| S6 adsbygoogle.js dur | -83.9 ms A HIT clean | -92.3 ms A HIT clean |
+| S7 LCP-range ratio | 0.79× A | 1.90× borderline |
+| Score | +8 (67→75) | +12 (68→80) |
+
+**Apparent Frame:** Frame A territorium — MAAR strict letter blocked door S5 CLS Index C HIT + Phase A baseline confound suspicious + mechanism-vs-effect-gap 7-14×.
+
+### Cross-check baseline (post-revert 5 jun 23:14 CET)
+
+**Diagnose:** Phase A INDEX LCP-range 844 ms vs cross-check 401 ms = **2.1× anomaly bevestigd**; Phase A INDEX TBT 2208 vs cross-check 1356 = 1.6× inflated. BLOG range 356 vs 339 = representative. **Phase A INDEX was outlier-event op 4 jun 20:15 UTC.**
+
+### Multi-metric tabel — TRUE delta vs cross-check baseline (representative)
+
+| Signaal | INDEX | BLOG |
+|---|---|---|
+| S1 LCP | **+157 ms C HIT** | -217 ms A HIT |
+| S2 FCP | +28 ms NOISE | -543 ms A extreme |
+| S3 TBT | -443 ms A HIT | -288 ms A extreme |
+| S5 CLS | +0.073 C mediaan-artifact | +0.073 C mediaan-artifact |
+| S6 adsbygoogle.js dur | -84 ms A HIT clean | -92 ms A HIT clean |
+| S7 LCP-range ratio | 1.66× A | 2.00× borderline |
+| **S7 cross-canonical AVG** | | **1.83× A HIT (≤2× threshold)** |
+| Score | +2 noise | +4 modest |
+
+**Verdict Frame B NOISE-no-action per plan §8:** mechanism-safe (S6 clean BEIDE canonicals consistent met plan §7 budget) + variance-neutral (S7 1.83×) MAAR conflicting canonicals + Score in noise-band = geen clean perf-win, source-growth +1,2 KB weegt niet op. **S7 hypothese "preconnect = variance-amplification culprit" partial-falsified** — Sessie 151 Frame C kwam NIET uit preconnect alleen.
+
+### Spawn implication: #34 (b) inline-CSS-only STILL VALUABLE
+
+Sessie 153 #34 (b) test discriminator:
+- Frame B → source-growth-only orthogonaal aan variance (Sessie 151 variance uit combined-effect of orthogonal-source)
+- Frame C → inline-CSS WAS variance-amplifier (culprit gevonden)
+- Frame A → inline-CSS beneficial alone (Sessie 151 was over-engineered)
+
+### Nieuwe disciplines geïntroduceerd Sessie 152
+
+1. **Cross-check baseline-discipline canonical** bij apparent-Frame-A met mechanism-vs-effect-gap >5× ratio of >2× baseline-variance-deviation vs prior sessie's same-baseline. Forces empirical anomaly-detection vs rationalised certainty.
+2. **Poll-loop curl-tests HTTP-status guard** VOOR content-grep — DNS-failure-during-revert near-miss in Sessie 152 toonde stille-failure-mode.
+3. **Plan-agent source-growth estimates** extrapoleren combined-patch naar isolated-component zonder structurele-decompositie — pre-compute per-component source-growth, niet inherit-from-parent.
+4. **Mechanism-vs-effect-gap >5× ratio** is diagnostic-signaal voor cross-check trigger.
+5. **Triple-source dichtdoen-criterium** voor deprecation-checks (config-grep ZERO + upstream-policy + platform-doc) voorkomt onnodige patch-cycli.
+6. **Edit-tool failure detectable + immediately-correctable** via tool-error vs silent-bug-introduction — Pattern A→C confusion bevestigt batch-parallelism-discipline-need.
+
+### Defense-in-depth 5+ plekken
+
+(a) Dit current.md Sessie 152 entry, (b) TASKS.md items #33 (b/d) closures + #34 (a) sub-item closure + sprint regel + Version 5.26 + Voortgang Overzicht, (c) perf-audit-doc §2g (multi-metric + diagnose-tabel + discriminator-spawn), (d) CLAUDE.md "Recent Critical Learnings" Sessie 152 + 1-in-1-out archive Sessie 146 → current.md, (e) plan-file `heisenberg-hier-cold-start-sessie-fancy-moon.md` §14 outcome-sectie. Pattern schaalt nu over alle uitkomst-typen inclusief Frame B NOISE-no-action met methodologische-evolutie-output.
+
+**Artifacts:** `/tmp/sessie152-item34a/{pre,post,cross}-r{1,2,3}-{index,blog}.json + baseline-summary.json + verdict.json + prod-check.html + prod-poll.html + pyserver.log`. Commits: `a19926a` (patch) → `402b1d4` (revert).
+
+---
+
 ## Sessie 151: Item #27 Frame C REVERT — Ad-bearing Pages Preconnect + Inline Critical-CSS Veroorzaakt Variance-Amplification, Spawn #34 (4 jun 2026)
 
 **Scope:** Heisenberg's cold-start: #33 (b/d) quick-closures + #27 verify-first cyclus combo of alternative. Expert-decision: **#27 alleen** (volledige verify-first) — cleanste discipline-transfer-test naar nieuw multi-page territorium na Sessie 150 Frame A break. (b/d) blijven backlog voor later quick-sessie.

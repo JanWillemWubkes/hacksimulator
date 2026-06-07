@@ -468,6 +468,152 @@ Splits Optie B-light patch in (a) preconnect-only en (b) inline-CSS-only naar se
 
 ---
 
+## §2g Sessie 152 closure — combo-pad #33 (b/d) + #34 (a) preconnect-only mechanism-isolation Frame B NOISE-no-action REVERT met NEW cross-check-baseline-discipline
+
+### #33 (b) HTTP/2 server-push deprecation check — ✅ CLOSED N/A
+
+**Triple-source dichtdoen-criterium MET:**
+1. Local config grep `_headers` + `netlify.toml` = ZERO matches voor `Link:`, `http2`, `HTTP/2`, `server.push`, `server-push`.
+2. Chrome 106 (Sep 2022) disabled HTTP/2 server-push by default — 1.25% global usage at removal time per developer.chrome.com/blog/removing-push. HTTP/3 spec includes push but virtually no implementations.
+3. Netlify Edge dropped HTTP/2 server-push support — was previously available via `Link: </js/example>; rel=preload; as=script` in `_headers` (gatsby-plugin-netlify integration historical).
+
+**Outcome:** Site mechanisch immuun voor deprecation. Geen patch, geen LH-meting. Verwacht <10 min wallclock, behaalt deterministische closure-discipline analoog aan Sessie 148 #31 (binaire fix-bewijs zonder LH-cyclus).
+
+### #33 (d) Brotli/compression-optimalisatie — ✅ CLOSED PARTIAL
+
+**Curl-grep test productie (6 file-types):**
+
+| Path | Type | Content-Encoding | Status |
+|---|---|---|---|
+| `/` | HTML | `br` | ✅ Brotli active |
+| `/blog/nmap-beginnersgids.html` | HTML | `br` | ✅ Brotli active |
+| `/styles/main.css` | CSS | `br` | ✅ Brotli active |
+| `/src/main.js` | JS | `br` | ✅ Brotli active |
+| `/favicon.svg` | SVG | (none) | ⚠️ Gap — text-based niet in Netlify default Brotli-list |
+| `/assets/og-image.png` | PNG | (none) | ✅ Correct (binary already compressed) |
+
+**SVG gap analyse (expert-decision: accept):**
+- Single file (favicon.svg 434 bytes uncompressed → ~250 bytes Brotli = ~184 bytes/req savings)
+- Aggressive cache (favicon 1+ jaar browser-cache typical)
+- Mechanism opaak (Netlify Edge default-list per support forum niet uitgedocumenteerd, `netlify.toml` MIME-tuning deterministicity-uncertain)
+- Orthogonaal aan mechanism-budget #34 (a) (verwaarloosbaar effect op LCP/TBT)
+- Sessie 148-pattern violation: patch deterministicity uncertain = niet binaire bug-fix territorium
+
+**Outcome:** CLOSED PARTIAL. Document SVG-gap als audit-item voor toekomstige cumulatieve Brotli-tuning-sweep indien gap-list groeit (extra SVG-content of andere text-based-extensions). Geen patch, geen LH-meting nodig.
+
+### #34 (a) preconnect-only mechanism-isolation — Frame B NOISE-no-action REVERT met cross-check-baseline-discipline
+
+**Patch:** 17 ad-bearing pages × 1 `<link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>` insertion. Commit `a19926a` (17 files / 17 ins / **+1,2 KB source-growth** — 10× kleiner dan Plan-agent §4 voorspelling 12,8 KB = combined-patch-extrapolation pitfall geleerd). 3 Patterns: A (14 files standard NA theme-color), B (woordenlijst onder `<!-- Preconnect -->` placeholder), C (index + blog/index VOOR sibforms-preconnect).
+
+**Pre-commit gates ✓:** validate-docs.sh exit 0 + Playwright Chromium 178 passed + 3 pre-existing flakes (cross-browser footer + gamification badge tiers + responsive ASCII box = Sessie 149+151 bekend, mechanisch onmogelijk causal link met pure-HTML preconnect-insert).
+
+#### Multi-metric tabel — APPARENT delta vs Phase A baseline (BEFORE cross-check diagnosis)
+
+| Signaal | INDEX delta | INDEX Frame | BLOG delta | BLOG Frame |
+|---|---|---|---|---|
+| S1 LCP | -28.5 ms | NOISE | -251.7 ms | **A HIT** |
+| S2 FCP | -126.9 ms | **A HIT** | -577.3 ms | **A HIT extreme** |
+| S3 TBT | **-1295.5 ms** | **A HIT (26× threshold)** | **-1925.5 ms** | **A HIT (39× threshold)** |
+| S4 Bytes | -3.6 KB | NOISE (3rd-party version variance) | +0.1 KB | NOISE stable |
+| S5 CLS | +0.073 | C HIT | 0.000 | NOISE stable |
+| S6 adsbygoogle.js dur | -83.9 ms | **A HIT clean** | -92.3 ms | **A HIT clean** |
+| S7 LCP-range ratio | 0.79× | A HIT | 1.90× | NOISE |
+| Cross-canonical AVG S7 | | | **1.35×** | **A HIT (≤2× threshold)** |
+| Score | +8 (67→75) | | +12 (68→80) | |
+
+**Apparent verdict op signaal-niveau:** Frame A territorium (4 dimensies hit A breedte, S6 mechanism-proof clean, S7 ≤2×) — MAAR strict letter blocked door S5 CLS Index C HIT (mediaan-selection-artifact plan §7 orthogonal-flag).
+
+#### Diagnostic-trigger: mechanism-vs-effect-gap
+
+**Key observation:** S6 mechanism-proof showed -84 / -92 ms pagead2 connect-overhead reduction (consistent met plan §7 budget ~100-150 ms TLS-handshake savings). Maar S3 TBT showed -1296 / -1926 ms improvement = **7-14× ratio onverklaarbaar door preconnect mechanism alleen**. Possible explanations:
+- (a) Downstream cascade-amplification van earlier-arriving ads
+- (b) Phase A baseline anomaly (specific AdSense-ecosystem-state outlier)
+- (c) Diurnal/weekly variance tussen PRE en POST run-windows
+
+Geen van deze kan data-alleen onderscheiden zonder controle-meting. **Sessie 150 spirit-rule precedent past niet cleanly:** Sessie 150 had unambiguous mechanism (font self-host) + clean baseline + 0 confound-factor. Sessie 152 heeft mechanism-vs-effect-gap + 5-7× hogere Phase A baseline-variance vs Sessie 151. Spirit-rule override in aanwezigheid van confound = rationalisatie.
+
+#### NEW DISCIPLINE — Cross-check baseline
+
+**Protocol:** Bij apparent-Frame-A met (a) mechanism-vs-effect-gap >5× ratio OF (b) baseline-variance-deviation >2× vs prior sessie's same-baseline → REVERT + 3-run cross-check baseline tegen post-revert productie om Phase A baseline-anomaly empirisch te diagnosticeren.
+
+**Cross-check uitvoering (post-revert 5 jun 23:14 CET, 3 runs × 2 canonicals):**
+
+| Signaal | INDEX cross-check mediaan (r2) | BLOG cross-check mediaan (r2) |
+|---|---|---|
+| LCP | 1968 ms | 1859 ms |
+| FCP | 1726 ms | 1859 ms |
+| TBT | 1356 ms | 1024 ms |
+| CLS | 0.011 | 0.000 |
+| Score | 73 | 76 |
+| LCP-range over 3 runs | **400.8 ms** | **338.6 ms** |
+
+**Diagnose:**
+
+| Comparison | INDEX | BLOG |
+|---|---|---|
+| Phase A LCP-range | 844 ms | 356 ms |
+| Cross-check LCP-range | 401 ms | 339 ms |
+| Phase A : Cross-check ratio | **2.1× anomaly** | 1.05× representative |
+| Phase A TBT | 2208 ms | 2661 ms |
+| Cross-check TBT | 1356 ms | 1024 ms |
+| Phase A : Cross-check ratio | **1.6× inflated** | 2.6× inflated |
+| Sessie 151 PRE LCP-range (ref) | 123 ms | 144 ms |
+
+**Conclusie:** Phase A INDEX baseline was anomalously high-variance (2.1×) AND high-TBT (1.6× inflated vs cross-check). BLOG Phase A baseline was representative for LCP-range maar inflated voor TBT (2.6×). Both baselines run higher-variance regime dan Sessie 151 (productie-state mogelijk genuine drift over 24-48u door AdSense ecosystem-state).
+
+#### Multi-metric tabel — TRUE deltas vs cross-check baseline (representative)
+
+| Signaal | INDEX delta vs cross-check | INDEX Frame | BLOG delta vs cross-check | BLOG Frame |
+|---|---|---|---|---|
+| S1 LCP | **+157.2 ms** | **C HIT** | -217.0 ms | **A HIT** |
+| S2 FCP | +27.6 ms | NOISE | -542.5 ms | **A HIT extreme** |
+| S3 TBT | -442.5 ms | **A HIT** | -287.5 ms | **A HIT extreme** |
+| S4 Bytes | -3.4 KB | NOISE | -0.1 KB | NOISE |
+| S5 CLS | +0.073 | C HIT (mediaan-artifact) | +0.073 | C HIT (mediaan-artifact) |
+| S6 adsbygoogle.js dur | -83.9 ms | **A HIT clean** | -92.3 ms | **A HIT clean** |
+| S7 LCP-range ratio | 1.66× | A HIT | 2.00× | borderline |
+| Cross-canonical AVG S7 | | | **1.83×** | **A HIT (≤2× threshold)** |
+| Score | +2 (73→75) | noise | +4 (76→80) | modest |
+
+#### Frame Verdict Logic
+
+| Frame check | Result | Rationale |
+|---|---|---|
+| Frame A KEEP | **BLOCKED** | Conflicting canonicals (INDEX LCP +157 C vs BLOG LCP -217 A) + S5 CLS C HIT (mediaan-artifact spirit-flag-able MAAR Phase A baseline confound past niet cleanly Sessie 150 spirit-rule). Strict letter Frame A not justifiable na cross-check diagnosis. |
+| Frame C REVERT | **BLOCKED** | Only INDEX LCP single C HIT (not ≥2 signals C-range per canonical per plan §8 criterion). S7 ratio 1.83× ≤2× threshold = geen variance-amplification = primary-discriminator-signaal niet HIT. |
+| **Frame B NOISE-no-action** | **MET** | Score deltas +2/+4 within noise band, no clean perf-win vs representative cross-check baseline, mechanism-safe (S6 A HIT clean BEIDE) + variance-neutral (S7 1.83×). Source-growth +1,2 KB weegt niet op tegen ~0-modest netto winst. |
+| Frame D gray | Niet van toepassing | Conflicting canonicals would suggest D MAAR no twijfel-zone after recognizing Phase A INDEX anomaly + S5 mediaan-selection-artifact. Frame B more honest. |
+
+#### Spawn implication #34 (b) inline-CSS-only
+
+**STILL VALUABLE per plan §11 5e outcome-pad:** Sessie 151 Frame C variance-amplification (6,5-7,7× LCP-range ratio) kwam NIET uit preconnect alleen — Sessie 152 #34 (a) toonde S7 1.83× (no variance-amplification). Mogelijke oorzaken voor Sessie 151 variance-amplification:
+- Inline-CSS-cascade-interactie (sync-blocking-style-parse cascade triggert variance op AdSense backend timing)
+- Combined-mechanism-effect (preconnect + inline-CSS samen onthullen variance dat alleen niet zichtbaar is)
+- Orthogonale variance-bron buiten patch-mechanism (Brevo backend variance op Index? AdSense-Auto-ads-state-variance?)
+
+**Sessie 153 #34 (b) test discriminator:**
+- Frame B → source-growth-only orthogonaal aan variance (zowel preconnect-only ALS inline-CSS-only zijn variance-neutral; Sessie 151 variance kwam uit combined-effect of orthogonal-source)
+- Frame C → inline-CSS WAS variance-amplifier (preconnect onschuldig, gevonden culprit)
+- Frame A → inline-CSS beneficial alone (Sessie 151 patch was over-engineered met destructive interaction)
+
+#### Frame-falsificatie patroon update (7 sessies)
+
+| Sessie | Item | Frame |
+|---|---|---|
+| 145 | #26 box-utils.js | B (Lighthouse-attributie-bias) |
+| 146 | #28 Style/Layout | D (framework-gat) |
+| 147 | #29 modulepreload | C (resource-priority-regressie) |
+| 149 | #30 sync-inline | D (cascade-elimination sub-Frame-A) |
+| 150 | #33 (a) self-host fonts | **A KEEP** (unique font-pipeline) |
+| 151 | #27 combined preconnect+CSS | C (variance-amplification) |
+| **152** | **#34 (a) preconnect-only** | **B (NOISE-no-action met cross-check-discipline-introductie)** |
+
+**7-sessie-streak honest data-driven outcomes:** 6 Frame-falsificatie + 1 Frame A KEEP. Anti-rationalisatie-discipline structureel verankerd over alle uitkomst-typen inclusief NEW Frame B NOISE-no-action met cross-check-baseline-discipline-introductie als methodologische evolutie.
+
+**Defense-in-depth-persistence-pattern (Sessie 140 → ... → 152):** Frame B + cross-check-baseline-discipline-introductie + #33 (b/d) triple-source dichtdoen-criterium + S7 partial-falsification + #34 (b) spawn-discriminator-design vastgelegd op **5+ plekken** — (a) dit audit-doc §2g multi-metric tabel + diagnose-tabel + discriminator-spawn, (b) TASKS.md item #33 (b/d) closures + item #34 (a) sub-item closure + sprint regel + Version 5.26 + Voortgang Overzicht, (c) CLAUDE.md "Recent Critical Learnings" Sessie 152 + 1-in-1-out archive Sessie 146, (d) docs/sessions/current.md Sessie 152 full session-log, (e) plan-file outcome-sectie ingevuld. Pattern schaalt over alle uitkomst-typen nu inclusief Frame B NOISE-no-action met cross-check-discipline-introductie als methodologische-evolutie-output.
+
+---
+
 ## §3 Trade-off-tabel per origin (defer-kosten vs perf-impact)
 
 | Origin | Functie | Huidige load | Consent-gated? | Defer-optie | Revenue-impact bij defer | UX-impact | Perf-besparing geschat | Status |
