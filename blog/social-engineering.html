@@ -46,6 +46,14 @@
   <link rel="stylesheet" href="../styles/landing.css?v=114">
   <link rel="stylesheet" href="../styles/blog.css?v=115">
   <link rel="stylesheet" href="../styles/mobile.css?v=115" media="screen and (max-width: 768px)">
+  <!-- Critical inline CSS: a11y focus + reduced-motion + modal fade -->
+  <style>
+    :focus-visible{outline:2px solid var(--color-info);outline-offset:2px;transition:outline-offset var(--transition-fast)}:focus-visible:active{outline-offset:0}
+    @media (prefers-reduced-motion:reduce){*,:after,:before{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+    @keyframes fadeIn{0%{opacity:0}to{opacity:1}}@keyframes fadeOut{0%{opacity:1}to{opacity:0}}
+    .modal{transition:opacity var(--transition-normal)}.modal.active{animation:fadeIn .3s ease-in}.modal.closing{animation:fadeOut .3s ease-out}
+    html{scroll-behavior:smooth}
+  </style>
 
   <!-- Google AdSense -->
   <meta name="google-adsense-account" content="ca-pub-6345664385525701">
