@@ -614,6 +614,78 @@ Geen van deze kan data-alleen onderscheiden zonder controle-meting. **Sessie 150
 
 ---
 
+## §2h Sessie 153 closure — item #34 (b) inline-CSS-only mechanism-isolation Frame D gray REVERT met conflicting-canonical-page-type-attribution + NEW bidirectional canary discipline
+
+**Outcome:** ✅ Frame D gray REVERT — patch commit `99bc496` (17 ad-bearing pages × 1 inline `<style>` block, 17 files / 136 ins / +12,16 KB source-growth) → revert commit `2d8b8d1` (17 files / 136 del). Verify-first plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-swift-stream.md`. 7-signaal × 4-dimensie matrix met S7 LCP-range ratio primary discriminator + proactive Phase A baseline-anomaly canary (NEW Sessie 153 evolutie uit Sessie 152 reactive).
+
+### Multi-metric tabel (mediaan-r selected on LCP per canonical, 3-run LH@11 mobile)
+
+| Signaal | INDEX PRE r2 | INDEX POST r1 | INDEX delta | INDEX Frame | BLOG PRE r2 | BLOG POST r1 | BLOG delta | BLOG Frame |
+|---|---|---|---|---|---|---|---|---|
+| **S1 LCP ms** | 2269 | 2089 | **-180** | **A HIT** | 1925 | 1596 | **-329** | **A HIT extreme** |
+| **S2 FCP ms** | 1860 | 1685 | **-175** | **A HIT** | 1925 | 1596 | **-329** | **A HIT extreme** |
+| **S3 TBT ms** | 1351 | 1790 | **+439** | **✗ C HIT** | 1330 | 1022 | **-308** | **A HIT** |
+| **S4 Bytes** | 570267 | 570682 | +415 | NOISE | 435718 | 436095 | +377 | NOISE |
+| **S5 CLS** | 0.084 | 0.084 | 0 | NOISE | 0.073 | 0.073 | 0 | NOISE |
+| **S6 Style-time ms** (LH `mainthread-work-breakdown` Style & Layout) | 1306 | 1887 | **+581** | **✗ C HIT supporting** | 1486 | 1401 | **-85** | **A HIT supporting** |
+| **Performance Score** | 70 | 68 | -2 | noise | 72 | 76 | +4 | modest |
+
+### S7 LCP-range ratio dual-baseline observation
+
+| Computation | INDEX | BLOG | Cross-canonical AVG | Frame zone |
+|---|---|---|---|---|
+| PRE Phase A range | 104 ms | 424 ms | — | — |
+| POST Phase C range | 293 ms | 1005 ms | — | — |
+| **S7 vs Phase A** | 2,82× | 2,37× | **2,59×** | Frame B 2-3× upper-bound |
+| **S7 vs Sessie 152 cross-check baseline** | 0,73× (REDUCED) | 2,96× | **1,85×** | **Frame A ≤2× variance-stable** |
+
+**KRITIEKE DISCOVERY (NEW Sessie 153 leerpunt):** Phase A INDEX LCP-range 104 ms vs Sessie 152 cross-check 401 ms = **0,26× = abnormally-STABLE baseline = counterpart van Sessie 152 INFLATED Phase A INDEX 2.1× anomaly**. Sessie 153 proactive canary unidirectional flag (alleen ≥2× HIGH-side trigger) MISTE de LOW-side anomaly-detection. **Bidirectional canary requirement** (NEW Sessie 153 discipline): proactive canary moet BIDIRECTIONEEL checken — ZOWEL ≥2× HIGH-side ALS ≤0,5× LOW-side als baseline-anomaly-trigger. Beide kanten geven misleidende Phase A baseline state.
+
+### Frame D verdict logic (used by plan §6 tabel)
+
+**Frame A KEEP BLOCKED:** INDEX heeft S3 C HIT (counter-mechanism in D2), conflicting canonicals, S7 vs Phase A 2,59× > 2× threshold.
+
+**Frame B NOISE-no-action BLOCKED:** S3 INDEX +439 ms en S1+S2 BLOG -329/-329 ms NIET in NOISE-range; verdict-criterium "alle S1/S2/S3/S5/S6 in NOISE-range" gefalsifieerd door zowel mechanism-savings (BLOG) als counter-mechanism (INDEX S3).
+
+**Frame C REVERT BLOCKED:** S7 vs Phase A 2,59× < 3× (primary discriminator NOT triggered) + S4 NIET C HIT (corrected from scale-error, plan §5 was scale-confusion tussen aggregate-source vs LH-per-page-measurement) = ≥1 C HIT under {S1,S2,S3} maar dimensie-count blijft 1 zonder S4 backing.
+
+**Frame D gray MET:** Partial-Frame-A pattern BOTH canonicals (≥1 dim A HIT) + S7 INDEX 2,82× in 2,5-3× gray-zone + **conflicting canonicals smoking-gun** (INDEX = Frame-C-leaning op S3 TBT + S6 Style-time main-thread regression; BLOG = clean Frame-A across D1+D2 met S6 supporting) → tie-breaker "bij twijfel D = revert".
+
+### Page-type-asymmetric mechanism response (NEW mechanism-categorie)
+
+**Pattern:** Inline-CSS-cascade-recompute interacteert verschillend met page-type AdSense-Auto-ads-state:
+- **INDEX (landing-page hoge-priority Auto-ads-state):** S3 TBT +439 ms + S6 Style-time +581 ms = main-thread regression. Inline-CSS-additive-render-blocking versterkt de cascade-recompute-window terwijl AdSense bootstrap-execution main-thread bezet.
+- **BLOG (content-page lichte Auto-ads-state):** S1+S2 -329 ms extreme + S3 -308 ms + S6 -85 ms = clean improvement. Inline-CSS-additive parsed cleanly want AdSense-bootstrap minder main-thread-bezet op content-pages.
+
+Dit is een **nieuwe mechanism-categorie**: per-page-type mechanism response asymmetrie wanneer patch interacteert met variable-state externe ecosystem (AdSense Auto-ads state-machine). Sessie 145+146+147+149+151+152 patches gedragen zich uniformer per canonical — Sessie 153 is eerste sessie waar page-type-asymmetry de verdict-criterium domineert.
+
+### Cumulatieve #34 closure-pad evaluatie
+
+| Sessie | Mechanism | Verdict | S7 | Cumulatieve closure-pad implicatie |
+|---|---|---|---|---|
+| 151 | preconnect + inline-CSS (combined) | Frame C REVERT | 6,5-7,7× variance-amplification | Combined = destructieve cascade. Mechanism-isolation spawn #34 nodig. |
+| 152 | preconnect alleen (#34 a) | Frame B NOISE | 1,83× clean | Preconnect alleen NIET variance-amplifier. Hypothese "preconnect = culprit" partial-falsified. |
+| **153** | **inline-CSS alleen (#34 b)** | **Frame D gray REVERT** | **vs cross-check 1,85× clean (variance-stable) MAAR conflicting canonicals + page-type-asymmetry** | **Inline-CSS alleen ook NIET variance-amplifier. Mechanism-isolation INCOMPLETE — categorische closure NIET bereikt.** |
+
+**Conclusie:** Sessie 151 #27 variance-amplification kwam NIET uit één mechanism alleen → **combined-mechanism-cascade-interactie** (preconnect × inline-CSS × AdSense-Auto-ads-state per page-type) als destructieve cascade. Page-type-asymmetric response (INDEX vs BLOG diverge) toont dat AdSense-Auto-ads-state-machine state-leakage per page-type relevant is.
+
+**Spawn implication #35:** deep-dive variance-source attribution + page-type-dependent mechanism investigation. Focus-options:
+1. **Brevo timer-fingerprint** — sibforms.com preconnect op alleen 2 pages (index + blog/index). Sessie 151 patroon spike kan timing-source zijn.
+2. **AdSense-Auto-ads-state-machine state-leakage** — landing-page hoge-priority vs content-page lichte Auto-ads-state. Per-page-type response zou variance amplification verklaren.
+3. **Per-page-type cascade-recompute-amplification** — inline-CSS-additive interacteert met AdSense bootstrap-execution main-thread-budget verschillend per page-type.
+
+**NIET combined-mechanism-re-test** (Sessie 151 #27 already proved Frame C destructive cascade). Spawn-scope wijst naar instrumentation/diagnostic experiments boven patch-iterations.
+
+### Frame-falsificatie patroon update (8-sessie-streak)
+
+**145B + 146D + 147C + 149D + 150A + 151C + 152B + 153D = 7 falsificatie + 1 KEEP over 8 sessies.** Anti-rationalisatie-discipline structureel verankerd over alle uitkomst-typen inclusief Frame D gray met conflicting-canonical-page-type-attribution als nieuwe uitkomst-categorie. Sessie 150 Frame A (#33 a self-host fonts) blijft enige KEEP — unique font-pipeline territorium met clean baseline + 0 confound-factor.
+
+### Defense-in-depth-persistence-pattern (Sessie 140 → ... → 153)
+
+5+ plekken vastgelegd: (a) dit audit-doc §2h multi-metric tabel + dual-baseline S7 + Frame D verdict logic + page-type-asymmetric mechanism + cumulatieve #34 closure-pad, (b) TASKS.md item #34 (b) sub-item closure + sprint regel + Laatst bijgewerkt (header + footer), (c) CLAUDE.md "Recent Critical Learnings" Sessie 153 + 1-in-1-out archive Sessie 147 + Last updated + Version 5.27, (d) docs/sessions/current.md Sessie 153 full session-log, (e) plan-file swift-stream.md outcome-sectie ingevuld. Pattern schaalt over Frame D gray REVERT met methodologische-evolutie-output (bidirectional canary + S4 scale-error + Edit-tool precondition + page-type-asymmetric mechanism als nieuwe categorieën).
+
+---
+
 ## §3 Trade-off-tabel per origin (defer-kosten vs perf-impact)
 
 | Origin | Functie | Huidige load | Consent-gated? | Defer-optie | Revenue-impact bij defer | UX-impact | Perf-besparing geschat | Status |

@@ -4,6 +4,164 @@
 
 ---
 
+## Sessie 153: Item #34 (b) inline-CSS-only mechanism-isolation — Frame D gray REVERT met conflicting-canonical-page-type-attribution + NEW bidirectional canary discipline (7 jun 2026)
+
+**Scope:** Heisenberg's cold-start: Sessie 152 #34 (a) closure spawned categorische closure-pad ten behoeve van #34 mechanism-isolation onderzoek. Sessie 153 isoleerde inline-CSS-only als 2e bisectie-stap na Sessie 152 preconnect-only Frame B partial-falsification. Plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-swift-stream.md`.
+
+**Status:** ✅ Item #34 (b) **Frame D gray REVERT** (patch commit `99bc496` → revert commit `2d8b8d1`). Cumulatieve #34 closure-pad evaluatie: 152 (B) + 153 (D) = mechanism-isolation incomplete + categorische closure NIET bereikt — Sessie 151 #27 variance-amplification kwam NIET uit preconnect alleen ÉN NIET uit inline-CSS alleen. **Conclusie:** combined-mechanism-cascade-interactie (preconnect × inline-CSS × AdSense-Auto-ads-state per page-type) als destructieve cascade + page-type-asymmetric response (INDEX landing-page regression vs BLOG content-page improvement). Spawn #35 deep-dive variance-source attribution + page-type-dependent mechanism investigation.
+
+**Duur:** ~3,5 uur (cold-start scope-confirm → Phase 1 read sample files + ground-truth-grep 17 ad-bearing pages → plan-file swift-stream write → ExitPlanMode → Phase A baseline LH 6-run bg ~7 min → proactive canary check ✓ → Phase B 17-file Edit batch (5/17 first batch + 12/17 second batch na Read-precondition discovery) + validate-docs + Playwright Chromium 1-shot bg ~11 min + isolated-rerun discriminator + commit + push + deploy poll ~30 sec → Phase C POST LH 6-run bg ~7 min → Phase D signaal-extractie + S7 dual-baseline observation → Phase E Frame D verdict via conflicting-canonical-attribution → revert + push + deploy poll ~30 sec → defense-in-depth 5+ plekken docs-update).
+
+### Phase 1 ground-truth + plan-file design
+
+- **Grep verificatie 17 ad-bearing pages:** `google-adsense-account` meta + 4 root-path + 13 nested-path mobile.css `<link>` anchors uniform 2-space indent. **Pattern collapse discovery:** Sessie 152 had 3 patterns (A/B/C) want preconnect-cascade-positie-gevoelig t.o.v. bestaande preconnect-links. Voor inline-CSS-block geldt dat NIET — universal anchor = NA mobile.css `<link>` regel, alleen 2 path-varianten (root `styles/mobile.css` vs nested `../styles/mobile.css`). Plan §4 patterns A/B/C collapsen tot 1 universele anchor.
+- **CSS vars sanity-check pre-patch:** `--color-info`, `--transition-fast`, `--transition-normal` bevestigd in `styles/main.css` regels 111 (dark theme) / 176 / 177 / 289 (light theme). Pre-Sessie 150 self-host refactoring zou stille break kunnen veroorzaken (var renaming) — 30 sec grep prevent silent break.
+- **Plan-file swift-stream (canonical Sessie 152 fancy-moon pattern):** §1 Context + §2 Scope+Patterns + §3 Phase Workflow + §4 7-Signaal Matrix (S6 redefined to Style-time = LH `mainthread-work-breakdown` Style & Layout duration, vs Sessie 152's pagead2 connect-overhead) + §5 Pre-Data Threshold-Feasibility Flags (S4 C HIT pre-known PRE-DATA prediction = scale-error post-hoc onthuld) + §6 Decisional Thresholds Frame A/B/C/D + §7 Risk Addressen + §8 Defense-in-Depth + §9 Verification + §10 Critical Files + §11 Outcome. **NEW Sessie 153 evolutie:** proactive Phase A baseline-anomaly canary (Sessie 152 reactive → 153 proactive) — vergelijk Phase A LCP-range tegen Sessie 152 cross-check baseline (INDEX 401 ms / BLOG 339 ms) VÓÓR patch deployt. ≥2× = STOP + AskUserQuestion.
+
+### Phase A baseline + proactive canary
+
+**6-run LH@11 mobile:** INDEX [LCP=2175, 2269, 2279], BLOG [LCP=2100, 1925, 1676]. Mediaan-selectie op LCP: INDEX r2 (2269 ms), BLOG r2 (1925 ms).
+
+**Mediaan-set extraheren:**
+- INDEX r2 PRE: LCP=2269 / FCP=1860 / TBT=1351 / CLS=0.084 / Bytes=570267 / Score=70 / Style-time=1306 ms
+- BLOG r2 PRE: LCP=1925 / FCP=1925 / TBT=1330 / CLS=0.073 / Bytes=435718 / Score=72 / Style-time=1486 ms
+
+**Proactive canary check (NEW discipline):**
+- INDEX LCP-range 104 ms vs Sessie 152 cross-check 401 ms = **0,26×** ≤ 1,5× → REPRESENTATIVE ✓
+- BLOG LCP-range 424 ms vs Sessie 152 cross-check 339 ms = **1,25×** ≤ 1,5× → REPRESENTATIVE ✓
+- TBT-range INDEX 1507 ms (r1=2698 outlier) soft-flagged maar mediaan r2=1351 isoleert natuurlijk.
+
+**Verdict canary:** PROCEED. NEW discipline werkt — vermijdt Sessie 152's post-data anomaly-diagnose-loop.
+
+### Phase B patch + Edit-tool precondition pitfall + pre-commit gates
+
+**Inline-CSS-block payload (7 lines + 1 comment = 8 lines per file, 2-space indent):**
+```html
+  <!-- Critical inline CSS: a11y focus + reduced-motion + modal fade -->
+  <style>
+    :focus-visible{outline:2px solid var(--color-info);outline-offset:2px;transition:outline-offset var(--transition-fast)}:focus-visible:active{outline-offset:0}
+    @media (prefers-reduced-motion:reduce){*,:after,:before{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+    @keyframes fadeIn{0%{opacity:0}to{opacity:1}}@keyframes fadeOut{0%{opacity:1}to{opacity:0}}
+    .modal{transition:opacity var(--transition-normal)}.modal.active{animation:fadeIn .3s ease-in}.modal.closing{animation:fadeOut .3s ease-out}
+    html{scroll-behavior:smooth}
+  </style>
+```
+
+**Edit-tool Read-precondition parallel-batch pitfall (NEW Sessie 153 leerpunt):**
+- Eerste batch 17 parallel Edits: alleen 5/17 succeeded — Edit-tool requires Read of each file in conversation history. 5 files (contact, index, woordenlijst, blog/index, blog/nmap) waren pre-read in Phase 1. 12 files faalden met "File has not been read yet".
+- Mitigatie: 12 Reads parallel (offset=40 limit=15 anchor zone) → tweede batch 12 Edits parallel succeeded.
+- **Pattern:** pre-Read ALL target-files VÓÓR Edit-batch dispatch. Generaliseert naar elke multi-file Edit-batch waar `replace_all=false` per-file old_string is.
+
+**Patch totals:** 17 files / 136 ins (8 regels/file) / 0 del. **Source-growth:** 12.461 bytes total = **12,16 KB** = 733 bytes/page (vs plan §2 estimate 750 bytes/page = 2% smaller, excellent calibratie).
+
+**Pre-commit gates ✓:**
+- `scripts/validate-docs.sh` exit 0 (alle 4 checks passed).
+- `npx playwright test --project=chromium`: 173 passed / **2 failed** (cross-browser.spec.js:285 Footer links + gamification.spec.js:218 Badge System rarity tiers) / 12 flaky (responsive-ascii-boxes × 6 + responsive-breakpoints + tutorial-mobile + others) / 5 skipped.
+- **Isolated-rerun discriminator-pattern (Sessie 147+149+151+152 canonical):** `BASE_URL=https://hacksimulator.nl npx playwright test --project=chromium tests/e2e/cross-browser.spec.js:285 tests/e2e/gamification.spec.js:218` = 2/2 reproduceer (failed identiek tegen productie pre-patch state) = pre-existing flakes confirmed = **anti-revert-impuls discipline maintained**. Geen causale link met pure-HTML inline-CSS-insert (failing tests raken geen modal/focus/scroll-codepath).
+
+**Commit `99bc496`** + push `99bc496..2d8b8d1` (wait — 2d8b8d1 is the later revert, ignore — push was just 5a30d24..99bc496). Netlify deploy poll met HTTP-status guard (Sessie 152 NEW discipline): `curl -sS -w "%{http_code}"` + `[ "$response" = "200" ]` check VOOR `grep -q ':focus-visible{outline:2px solid'`. DEPLOYED ✓ na 1 poll (~30 sec).
+
+**Productie verify ✓:** curl-grep alle 17 canonicals = 17/17 inline-CSS-marker hits.
+
+### Phase C POST + Phase D signaal-extractie + S4 scale-error confessional
+
+**6-run POST LH@11 mobile:** INDEX [LCP=2089, 2260, 1967], BLOG [LCP=1596, 1523, 2528]. Mediaan-selectie op LCP: INDEX r1 (2089 ms), BLOG r1 (1596 ms).
+
+**POST-mediaan signaal-set:**
+- INDEX r1 POST: LCP=2089 / FCP=1685 / TBT=1790 / CLS=0.084 / Bytes=570682 / Score=68 / Style-time=1887 ms
+- BLOG r1 POST: LCP=1596 / FCP=1596 / TBT=1022 / CLS=0.073 / Bytes=436095 / Score=76 / Style-time=1401 ms
+
+**S4 scale-error confessional (NEW Sessie 153 leerpunt):** Plan §5 voorspelde "S4 C HIT MECHANISCH-GEGARANDEERD" via +12,75 KB ≥ +5 KB threshold. MAAR LH `total-byte-weight` meet per-page transfer-bytes (post-Brotli), niet aggregate source-growth across 17 files. Werkelijke per-canonical S4 delta: INDEX +415 bytes, BLOG +377 bytes = **NOISE BEIDE canonicals**. Plan §5 was scale-confusion tussen aggregate-source (12,16 KB) en LH-per-page-measurement (~0,4 KB per canonical post-Brotli). **Pre-data S4-mechanism-budget moet expliciet per-page-network-transfer berekenen, niet aggregate-source-bytes.**
+
+**Delta POST vs PRE-mediaan per signaal + Frame-hits per canonical:**
+
+INDEX:
+- S1 LCP -180 ms = **A HIT** (≤ -100 ms threshold)
+- S2 FCP -175 ms = **A HIT** (≤ -100 ms threshold)
+- S3 TBT +439 ms = **C HIT** (≥ +40 ms threshold)
+- S4 Bytes +415 bytes = NOISE (NOT pre-known C HIT per scale-error correctie)
+- S5 CLS 0 = NOISE
+- S6 Style-time +581 ms = **C HIT supporting** (≥ +10 ms threshold) — main-thread Style/Layout regression
+- Score -2 = noise
+
+BLOG:
+- S1 LCP -329 ms = **A HIT extreme**
+- S2 FCP -329 ms = **A HIT extreme**
+- S3 TBT -308 ms = **A HIT**
+- S4 Bytes +377 bytes = NOISE
+- S5 CLS 0 = NOISE
+- S6 Style-time -85 ms = **A HIT supporting**
+- Score +4 = modest gain
+
+### S7 LCP-range ratio dual-baseline + bidirectional canary discipline
+
+**S7 computation:**
+- PRE INDEX range 104 ms → POST INDEX range 293 ms → INDEX S7 = **2,82×** vs Phase A
+- PRE BLOG range 424 ms → POST BLOG range 1005 ms → BLOG S7 = **2,37×** vs Phase A
+- Cross-canonical AVG S7 = **2,59×** (Frame B zone 2-3× upper-bound, plan §6 boundary)
+
+**vs Sessie 152 cross-check baseline (representative):**
+- INDEX POST range 293 ms / 401 ms = **0,73×** (REDUCED variance vs representative)
+- BLOG POST range 1005 ms / 339 ms = **2,96×**
+- Cross-canonical AVG S7 = **1,85×** (Frame A ≤ 2× = variance-stable)
+
+**KRITIEKE DISCOVERY:** Phase A INDEX LCP-range 104 ms vs Sessie 152 cross-check 401 ms = **0,26× = abnormally-STABLE baseline**. Dit is de COUNTERPART van Sessie 152's INFLATED Phase A INDEX 2.1× anomaly. Sessie 153 proactive canary unidirectional flag (alleen ≥2× HIGH-side trigger) MISTE de LOW-side anomaly-detection.
+
+**NEW DISCIPLINE — Bidirectional canary requirement:** proactive canary moet BIDIRECTIONEEL checken: ZOWEL ≥2× (HIGH-side, Sessie 152 INFLATED Phase A) ALS ≤0,5× (LOW-side, Sessie 153 STABLE Phase A) als baseline-anomaly-trigger. Beide kanten geven misleidende Phase A baseline state.
+
+### Phase E Frame D verdict + cumulatieve #34 closure-pad
+
+**Conflicting canonicals smoking-gun:**
+- INDEX = Frame-C-leaning op S3 TBT (+439 ms) + S6 Style-time (+581 ms) — **main-thread regression** ondanks S1+S2 paint A HIT
+- BLOG = clean Frame-A across D1+D2 (S1 -329 / S2 -329 / S3 -308 extreme) met S6 supporting (-85 ms)
+- Page-type-asymmetric mechanism response visible. Inline-CSS-cascade-recompute interacteert verschillend met INDEX-Auto-ads-state (landing-page hoge-priority Auto-ads-state) vs BLOG-Auto-ads-state (content-page lichte Auto-ads-state).
+
+**Verdict per plan §6 tabel:**
+- **Frame A KEEP BLOCKED:** INDEX heeft S3 C HIT (counter-mechanism in D2), conflicting canonicals, S7 vs Phase A 2,59× > 2× threshold.
+- **Frame B NOISE-no-action BLOCKED:** S3 INDEX en S1+S2 BLOG NIET in NOISE-range.
+- **Frame C REVERT BLOCKED:** S7 vs Phase A 2,59× < 3× (primary discriminator NOT triggered) + S4 NIET C HIT (corrected from scale-error) = ≥1 C HIT under {S1,S2,S3} maar dimensie-count blijft 1 zonder S4 backing.
+- **Frame D gray MET:** Partial-Frame-A pattern BOTH canonicals (≥1 dim A HIT) + S7 INDEX 2,82× in 2,5-3× gray-zone + conflicting canonicals → tie-breaker "bij twijfel D = revert".
+
+**Revert direct na verdict:** commit `2d8b8d1` (17 files / 136 del) + push + Netlify deploy poll ✓ na 1 poll (~30 sec) productie back to pre-patch state.
+
+**Cumulatieve #34 closure-pad evaluatie:**
+- 152 (B) S7 1,83× clean + 153 (D) S7 vs cross-check 1,85× clean = beide isolation NIET variance-amplifier
+- Sessie 151 #27 6,5-7,7× variance kwam NIET uit één mechanism alleen
+- **Conclusie: combined-mechanism-cascade-interactie** (preconnect × inline-CSS × AdSense-Auto-ads-state per page-type)
+- **Page-type-asymmetric response** als nieuwe mechanism-categorie zichtbaar in Sessie 153 (INDEX vs BLOG diverge significantly)
+- **Categorische closure NIET bereikt** — spawn #35 deep-dive variance-source attribution + page-type-dependent mechanism investigation. NIET combined-mechanism-re-test (Sessie 151 #27 already proved Frame C destructive). Focus: Brevo timer-fingerprint OR AdSense-Auto-ads-state-machine state-leakage OR per-page-type cascade-recompute-amplification mechanism.
+
+### Frame-falsificatie patroon update
+
+**145B + 146D + 147C + 149D + 150A + 151C + 152B + 153D = 8-sessie-streak honest data-driven outcomes (7 falsificatie + 1 KEEP).** Anti-rationalisatie-discipline structureel verankerd over alle uitkomst-typen inclusief Frame D gray met conflicting-canonical-page-type-attribution als nieuwe categorie.
+
+### Defense-in-Depth 5+ plekken (Sessie 153 verbatim execution)
+
+1. **TASKS.md:** item #34 (b) sub-item closure (regel 93) + sprint regel + Laatst bijgewerkt (header + footer) — 4 plekken updated.
+2. **docs/sessions/current.md:** Sessie 153 full session-log entry vooraan (deze entry).
+3. **docs/perf-third-party-audit.md:** §2h nieuwe sectie met multi-metric tabel + Frame D verdict logic + page-type-asymmetric-attribution + cumulatieve #34 closure-pad evaluatie.
+4. **.claude/CLAUDE.md:** Recent Critical Learnings Sessie 153 entry voorop (4 ⚠️ Never + 6 ✅ Always patterns) + 1-in-1-out archive Sessie 147 → current.md (already in current.md sinds Sessie 147 oorspronkelijke entry op regel 684) + Last updated footer + Version 5.27 bump.
+5. **Plan-file swift-stream.md:** §11 outcome-sectie ingevuld met verdict + cumulatieve closure-pad + methodologische-evolutie-output kandidaten.
+
+### Artifacts
+
+- `/tmp/sessie153-item34b/baseline-summary.json` — Phase A baseline 6 runs + canary check + mediaan-selectie.
+- `/tmp/sessie153-item34b/verdict.json` — full verdict logic + dual-baseline S7 + cumulative #34 closure-pad + new disciplines inventarisering.
+- `/tmp/sessie153-item34b/{pre,post}-r{1,2,3}-{index,blog}.json` — 12 LH JSON files (2 phases × 3 runs × 2 canonicals).
+- `/tmp/sessie153-prod.html` + `/tmp/sessie153-revert-check.html` — Netlify deploy poll evidence.
+- Git commits: `99bc496` (patch) → `2d8b8d1` (revert).
+
+### Methodologische-evolutie-output (NIEUWE Sessie 153 categorieën)
+
+1. **Proactive Phase A baseline-anomaly canary** (Sessie 152 reactive → 153 proactive evolutie): Phase A LCP-range vs prior cross-check ≤ 1,5× = representative. Forces empirische Phase A representativeness-check VÓÓR patch.
+2. **Bidirectional canary requirement** (NEW Sessie 153 pitfall-discovery): canary moet BEIDE ≥2× HIGH-side EN ≤0,5× LOW-side checken. Sessie 153 INDEX 0,26× abnormally-stable baseline maskeerde S7 ratio inflation.
+3. **Per-page LH `total-byte-weight` ≠ aggregate source-growth scale-error** (NEW Sessie 153 confessional): plan §5 S4 C HIT pre-known prediction was scale-confusion. Per-page LH measurement = per-canonical post-Brotli transfer-bytes, NIET aggregate source-bytes across N files.
+4. **Page-type-asymmetric mechanism response** als nieuwe mechanism-categorie (Sessie 153 discovery): inline-CSS-cascade-recompute interacteert verschillend met landing-page-Auto-ads-state vs content-page-Auto-ads-state.
+5. **Edit-tool Read-precondition parallel-batch pitfall**: pre-Read ALL target-files VÓÓR Edit-batch dispatch. Generaliseert naar elke multi-file Edit-batch met per-file old_string.
+6. **Plan §3 Phase E cumulative-pad enumeration gap**: 152(B)+153(D) niet pre-enumerated (alleen A/B/C combinaties). Frame D action maps closest to B-revert maar met conflicting-canonical-discriminator extra signal.
+
+---
+
 ## Sessie 152: Combo-pad #33 (b/d) housekeeping + #34 (a) preconnect-only mechanism-isolation — Frame B NOISE-no-action REVERT met NEW cross-check-baseline-discipline (5-6 jun 2026)
 
 **Scope:** Heisenberg's cold-start: combo-pad (1) #33 (b) HTTP/2 push deprecation check, (2) #33 (d) Brotli compression verification, (3) #34 (a) preconnect-only verify-first cyclus — mechanism-isolation onderzoek voor Sessie 151 #27 variance-amplification. Sequentieel b → d → a. Plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-sessie-fancy-moon.md`.
