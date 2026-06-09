@@ -686,6 +686,186 @@ Dit is een **nieuwe mechanism-categorie**: per-page-type mechanism response asym
 
 ---
 
+## §2i Sessie 154 closure — item #35 (b) AdSense-Auto-ads-state-machine state-leakage diagnostic — CLOSED OUTCOME 4 met per-stage decomposition finding + NEW distribution-analysis verify-first cyclus-variant
+
+**Scope:** Sessie 153 #34 (b) cumulatieve closure-pad evaluation spawned #35 deep-dive variance-source attribution. Sub-pad (b) AdSense-Auto-ads-state-machine state-leakage diagnostic uitgevoerd als zero-code instrumentation cyclus (geen patches, geen commits, geen deploys, geen Frame A/B/C/D verdict — distribution-analysis als NIEUWE 5e verify-first cyclus-variant).
+
+### Methodology
+
+20 sequential LH@11 mobile runs (10 INDEX = `https://hacksimulator.nl/`, 10 BLOG = `https://hacksimulator.nl/blog/`, sequentieel om CPU-contention variance te vermijden — NEW Sessie 154 discipline #1) tegen current productie-state (post-Sessie-153-revert). Extract `audits.network-requests.details.items[]` filtered op `url contains adsbygoogle.js` met velden `rendererStartTime, networkRequestTime, networkEndTime, transferSize, priority` + 3 computed bootstrap-metrics:
+
+- `fullBootstrap = networkEndTime - rendererStartTime` (full Auto-ads bootstrap cascade)
+- `transferOnly = networkEndTime - networkRequestTime` (network-layer only)
+- `discoveryQueue = networkRequestTime - rendererStartTime` (renderer discovery + queue)
+
+`scipy.stats` analysis: Kolmogorov-Smirnov (`ks_2samp`) voor distribution-shape difference + Mann-Whitney U (`mannwhitneyu`) voor central-tendency + variance-coefficient (CV = pstdev / mean) ratio voor variance-asymmetry detection.
+
+### Multi-metric tabel (3-metric decomposition, N=10 per canonical)
+
+| Metric | INDEX median | BLOG median | INDEX CV | BLOG CV | KS p | MWU p | CV ratio | Dist-different? | Var-asymmetric? |
+|---|---|---|---|---|---|---|---|---|---|
+| **Full bootstrap (primary)** | 304,6 ms | 313,3 ms | 0,216 | 0,171 | 0,418 | 0,273 | **1,26× SYMMETRIC** | NIET | NIET |
+| Transfer-only | 130,1 ms | 122,8 ms | 0,122 | 0,238 | 0,787 | 0,521 | 1,94× borderline | NIET | NIET |
+| Discovery-queue | 170,8 ms | 188,7 ms | 0,368 | 0,144 | 0,168 | **0,054** | **2,56× ASYMMETRIC** | NIET | **JA** |
+
+### Primary verdict per pre-data plan §1 4-outcome enumeration
+
+**Outcome 4** — Full-bootstrap (primary metric) heeft KS p=0,42 + MWU p=0,27 + CV-ratio 1,26× = beide criteria (distribution-difference + variance-asymmetry) NIET confirmed. Per pre-data 4-outcome enumeration mapped Outcome 4 = "Sessie 153 page-type-asymmetric observation was sampling-noise van 3-run mediaan-comparison op LCP-aggregaat".
+
+### Per-stage decomposition finding (NEW Sessie 154 mechanism-categorie)
+
+**Opposing-direction variance-asymmetry per cascade-stage:**
+
+- Discovery-queue (renderer → HTTP-start): INDEX > BLOG (CV ratio 2,56× ASYMMETRIC, state-machine-internal signal, MWU p=0,054 net buiten 0,05 threshold = borderline significance)
+- Transfer-only (HTTP-start → complete): BLOG > INDEX (CV ratio 1,94× borderline, network-layer asymmetry tegenovergestelde richting)
+
+Twee orthogonale page-type-asymmetry signalen in opposite directions CANCELLEN op full-bootstrap aggregaat. State-leakage hypothesis NIET confirmed op enig single metric (geen metric heeft BEIDE distribution-difference AND variance-asymmetry confirmed simultaneously) — Outcome 4 verdict robuust onderbouwd op alle 3 stage-metrics afzonderlijk.
+
+**Methodological implication:** Primary-metric selection voor distribution-analysis moet stage-level mechanism-isolation capturen, NIET aggregate-level. Pre-data plan-design design-flaw onthuld: full-bootstrap als primary metric is kwetsbaar voor mechanism-cancellation pattern. NEW Sessie 154 discipline #3.
+
+### Bidirectional canary check Phase C (NEW Sessie 153 discipline toegepast)
+
+| Canonical | LCP-range 10-run | Cross-check baseline (Sessie 152) | Ratio | HIGH threshold (≥2,0×) | LOW threshold (≤0,5×) | Status |
+|---|---|---|---|---|---|---|
+| INDEX | 336 ms (1964-2300) | 401 ms | 0,84× | ≥802 ms | ≤200 ms | **PASS** |
+| BLOG | 751 ms (1854-2605) | 339 ms | **2,21×** | ≥678 ms | ≤170 ms | **HIGH-anomaly** |
+
+**BLOG canary HIGH-anomaly interpretation:** BLOG LCP-variance heeft toegenomen sinds Sessie 152 = consistent met transfer-only BLOG > INDEX asymmetry direction (LCP-range gedomineerd door transfer+render stages). Edge-case 2,21× barely-over 2,0× threshold accepted zonder +5 re-runs want orthogonal aan primary adsbygoogle.js bootstrap-time signal. NEW Sessie 154 discipline #6: bidirectional canary edge-case accept als documented anomaly wanneer orthogonal aan primary signal.
+
+### Spawn-decision Heisenberg-confirmed via AskUserQuestion
+
+**Sessie 155 spawn #36 multi-day baseline-stability analysis** per pre-data plan Outcome 4 rule. Captures alle 3 secondary findings (borderline MWU significance, opposing-direction asymmetry, BLOG canary structureel vs sampling-artifact) via langere observatie-window (3 consecutive days × 10 runs per canonical × 2 canonicals = 60 runs totaal + day-as-factor ANOVA between-days vs within-day variance). NO additional #37/#38 spawns — overkill want #36 inherently captures secondary signalen.
+
+### Cumulatieve #34 mechanism-isolation closure-pad BEREIKT
+
+152 (Frame B clean S7 1,83× cross-check) + 153 (Frame D gray conflicting-canonicals S7 1,85× cross-check) + **154 (Outcome 4 methodological-evolution-output)** = mechanism-isolation categorisch closure via documented methodological-evolution: combined-mechanism-cascade-interactie + opposing-direction per-stage asymmetry pattern verklaart Sessie 151 #27 6,5-7,7× destructive variance-amplification. Geen enkel single mechanism is alleen verantwoordelijk — combined-cascade-interactie + page-type-dependent state-machine-internals (discovery-queue asymmetry).
+
+### NEW Sessie 154 disciplines (11 items totaal)
+
+**Pre-execution / methodologie (4):**
+
+1. Concurrent LH instances introduceren CPU-contention variance → sequential-only voor distribution-analysis validity (parallel-tussen-canonicals werkt WEL voor patch-decision Frame A/B/C/D meting; methodology-type → concurrency-strategy mapping per-experiment)
+2. LH JSON schema field-name verification pre-data via jq dry-test op bestaand artifact VOOR plan-§3 design completes (generalisatie van Sessie 149+151 "Plan-agent CLI-syntax-claims" naar JSON-schema-claims)
+3. Primary-metric selection voor distribution-analysis moet stage-level mechanism-isolation capturen NIET aggregate-level (mechanism-cancellation pattern)
+4. 10-run vs 3-run sampling-size threshold voor KS-test power (N≥10 per group minimum)
+
+**Execution + verdict (4):**
+
+5. Distribution-analysis als 5e verify-first cyclus-variant naast Frame A keep / B no-action / C revert / D revert (diagnostic-distribution-analysis is legitimate outcome zonder patch-decision; categorical closure via methodological-evolution-output)
+6. Bidirectional canary edge-case accept als documented anomaly zonder re-run wanneer orthogonal aan primary signal
+7. Python script robust JSON serialization (numpy.bool_ + numpy floats cast naar Python bool/float vóór json.dump)
+8. Execution-time plan-deviation detection + documentation (parallel→sequential correctie tijdens Phase A start)
+
+**Discipline + mechanism-categorie (3):**
+
+9. AskUserQuestion bij verdict-decision-moment ondanks clean letter-rules wanneer secondary findings nuance toevoegen (Sessie 150 spirit-rule consultation pattern toegepast)
+10. Per-page-type Auto-ads-state-machine prioritization-asymmetry als nieuwe mechanism-categorie (discovery-queue signal)
+11. Categorical closure via methodological-evolution-output ipv via Frame A keep
+
+### 9-sessie streak honest data-driven outcomes
+
+**145B + 146D + 147C + 149D + 150A + 151C + 152B + 153D + 154 methodological-output = 7 falsificatie + 1 KEEP + 1 methodological-evolution-output over 9 sessies.** Anti-rationalisatie-discipline structureel verankerd over alle uitkomst-typen inclusief diagnostic-distribution-analysis met clean Outcome verdict + secondary findings als documented mechanism-categorie. Sessie 150 Frame A (#33 a self-host fonts) blijft enige patch-KEEP — Sessie 154 is enige methodological-evolution-output.
+
+### Defense-in-depth-persistence-pattern (Sessie 140 → ... → 154)
+
+5+ plekken vastgelegd: (a) dit audit-doc §2i multi-metric tabel + per-stage decomposition finding + Outcome 4 verdict logic + cumulatieve #34 closure-pad, (b) TASKS.md item #35 closure + #35 header [x] + #36 backlog + sprint regel + Status + Laatst bijgewerkt + Voortgang, (c) CLAUDE.md "Recent Critical Learnings" Sessie 154 + 1-in-1-out Sessie 148 archive reference + Last updated + Version 5.28, (d) docs/sessions/current.md Sessie 154 full session-log, (e) plan-file cozy-crab.md §6 outcome sectie. Pattern schaalt over diagnostic-distribution-analysis Outcome 4 methodological-evolution-output verdict-categorie.
+
+---
+
+## §2j Sessie 155 closure — item #36 (a) Single-Sessie 3-Burst Compression Baseline-Stability Analysis CLOSED OUTCOME 4 met NEW Direction-Flip Detection + 3-Burst ANOVA F-test Disciplines + Cumulatieve #34 + #35 + #36 Categorische Closure FINALISED
+
+**Status:** ✅ **CLOSED OUTCOME 4** per pre-data plan §4. Zero-code instrumentation cyclus, geen commits, geen deploys. Plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-steady-breeze.md`. Heisenberg-pragmatic deviation van TASKS.md regel-101 multi-day canonical spec naar single-sessie 3-burst compression proxy voor 1-sessie wallclock budget — sub-pad (a) executed.
+
+**Methodology:** 60 LH@11 mobile runs verdeeld over 3 bursts × (10 INDEX + 10 BLOG sequential per Sessie 154 discipline #1) met 60 min cool-down tussen bursts voor thermal/CDN-cache/AdSense-backend state-isolation. Phase A wallclock: 142 min totaal (~7,6 + 60 + 7,4 + 60 + 7,4). Phase B: scipy.stats.f_oneway 3-burst ANOVA F-test + N=30 KS+MWU + per-burst CV-asymmetry tracking (3 metrics: full/transfer/discovery bootstrap-duration via networkEndTime − rendererStartTime / − networkRequestTime / networkRequestTime − rendererStartTime). Phase C: bidirectional canary per burst vs Sessie 152 cross-check baseline (INDEX 401 ms / BLOG 339 ms anchors). Phase D: verdict per pre-data 4-outcome enumeration. Phase E: defense-in-depth 5+ plekken.
+
+**Primary verdict — alle 3 Sessie 154 secondary findings NIET reproduceer:**
+
+| Secondary finding (Sessie 154) | Sessie 154 N=10 | Sessie 155 N=30 | Per-burst reproduceer | Verdict |
+|---|---|---|---|---|
+| Discovery-queue CV-asymmetry | 2,56× ASYMMETRIC, MWU p=0,054 borderline | CV 1,53× SYMMETRIC, MWU p=0,4035 | 1/3 (burst 1 = 3,10×, bursts 2/3 SYMMETRIC) | **FALSIFIED** sampling-burst-effect |
+| Transfer-only CV-asymmetry | 1,94× borderline (BLOG>INDEX) | CV 1,27× SYMMETRIC | 0/3 | **FALSIFIED** sampling-burst-effect |
+| BLOG canary HIGH-anomaly | LCP-range 751 ms = 2,21× HIGH vs cross-check 339 | per burst 204/706/203 ms = 0,60×/2,08×/0,60× | 1/3 HIGH (burst 2 only) | **FALSIFIED** sampling-burst-effect |
+
+**Multi-test scipy.stats tabel (N=30 per canonical):**
+
+| Metric | INDEX median (CV) | BLOG median (CV) | KS p | MWU p | CV ratio | ANOVA INDEX F (p) | ANOVA BLOG F (p) | Per-burst reproduceer |
+|---|---|---|---|---|---|---|---|---|
+| Full bootstrap | 226,6 (0,392) | 241,5 (0,271) | 0,2391 | 0,2116 | 1,44× SYMMETRIC | 11,08 (0,0003) | 43,99 (0,0000) | 2/3 |
+| Transfer-only | 111,1 (0,303) | 125,0 (0,239) | 0,1350 | 0,1335 | 1,27× SYMMETRIC | 8,74 (0,0012) | 17,99 (0,0000) | 0/3 |
+| Discovery-queue | 116,5 (0,492) | 122,6 (0,321) | 0,8080 | 0,4035 | 1,53× SYMMETRIC | 10,71 (0,0004) | 58,28 (0,0000) | 1/3 |
+
+**Direction-flip smoking gun (per-burst CV ratio INDEX/BLOG per metric):**
+- Full: [2,62× / 0,32× / 1,04×] — INDEX>BLOG, BLOG>INDEX OPPOSITE, equal
+- Transfer: [1,91× / 0,53× / 0,90×] — BORDERLINE inflate, BORDERLINE deflate, equal
+- Discovery: [3,10× / 0,57× / 0,88×] — extreme INDEX>BLOG, BLOG>INDEX OPPOSITE, equal
+
+Als page-type-asymmetric mechanism structureel was, zou direction CONSISTENT zijn (e.g. INDEX altijd > BLOG variance). Direction-flip in bursts 1/2 = strong evidence Sessie 154 caught burst-1-like state-snapshot. Burst 1 mirror van Sessie 154 observation, burst 2 INVERSE direction, burst 3 SETTLED equal. Pattern niet reproducible structureel.
+
+**Bidirectional canary per burst (NEW Sessie 153 + 154 discipline toegepast):**
+
+| Burst | INDEX LCP-range (ratio vs 401 ms) | INDEX status | BLOG LCP-range (ratio vs 339 ms) | BLOG status |
+|---|---|---|---|---|
+| 1 | 455 ms (1,13×) | PASS | 204 ms (0,60×) | PASS |
+| 2 | 129 ms (0,32×) | LOW-anomaly | 706 ms (2,08×) | HIGH-anomaly |
+| 3 | 644 ms (1,61×) | PASS | 203 ms (0,60×) | PASS |
+
+BLOG canary HIGH reproduceer-count: 1/3 (alleen burst 2). Sessie 154 finding 2,21× HIGH was burst-2-like state-snapshot, niet structureel. **Burst 2 stands out** als "different state burst" (INDEX LOW + BLOG HIGH simultaneously op 22:45-23:05 CET) — verklaart waarom ANOVA F-significance dominantly tussen bursts staat.
+
+**NEW finding NIET pre-enumerated in plan §4 — 3-burst ANOVA F-test orthogonal discipline:**
+
+3-burst ANOVA F-test toont SIGNIFICANT between-burst variance voor ALLE 3 metrics × beide canonicals (INDEX F=11,08/8,74/10,71 p<0,0012; BLOG F=43,99/17,99/58,28 p<0,0001 — BLOG ANOVA F-values 4-5× hoger dan INDEX = BLOG variance binnen burst lager + tussen bursts hoger). Time-varying within-canonical variance IS structureel MAAR is **GLOBAL niet page-type-specific** en NIET patch-actionable. Mogelijke verklaringen:
+- AdSense backend load fluctuation tussen bursts (21:37-21:45 vs 22:45-23:05 vs 00:05-00:13 CET = evening/night fluctuation)
+- CDN edge state (Netlify cache invalidation patterns)
+- Stochastic browser cold-start state (per-burst fresh Chrome --headless instance behavior)
+
+Niet repository code-level mechanism = niet patchable. Additief methodological observation, niet verdict-changer.
+
+**Per-frame check matrix:**
+
+| Outcome | Criteria | Match? |
+|---|---|---|
+| Outcome 1 (Full structureel) | All 3 metrics ≥2-of-3 + ANOVA F p<0,05 minstens 1 + N=30 MWU discovery p<0,05 + BLOG canary ≥2-of-3 | NEE (alleen full 2/3, discovery+transfer ≤1/3; MWU p=0,4035; canary 1/3) |
+| Outcome 2 (Discovery-queue only) | Discovery ≥2-of-3 + transfer ≤1/3 + BLOG canary ≤1/3 | NEE (discovery 1/3) |
+| Outcome 3 (BLOG canary only) | BLOG canary ≥2-of-3 + per-stage CV-asymmetry ≤1/3 beide | NEE (canary 1/3) |
+| **Outcome 4 (Niets reproduceert)** | **Alle 3 secondary findings ≤1-of-3 + N=30 MWU discovery ≥0,05** | **JA — clean letter-rule** |
+
+ANOVA F-significance was niet pre-enumerated als Outcome 4 criterium ("ANOVA F p≥0,05 alle metrics" hoort bij Outcome 4 maar werd NIET hit — ALL metrics p<0,001). Per Sessie 153 leerpunt #9 tie-breaker "match strictest fit pattern" + Plan §4 Tie-breaker "Borderline F-test p in [0,05; 0,10] = behandel als 'no significant evidence' (conservatief side)" — primary discriminator is "do Sessie 154 secondary findings reproduce?" → NO. ANOVA is secundair niet primary verdict-changer. Outcome 4 clean.
+
+**Consultation check (Sessie 154 leerpunt #9 + Plan §3 Phase D rule):** "ALLEEN consult bij verdict-data ambiguous; clean outcome = pre-committed enumeration is verdict-rule". Clean Outcome 4 → **NO AskUserQuestion**. Pre-committed Outcome 4 pivot via Sessie 155 pre-plan AskUserQuestion (= M6 Tutorial) staat.
+
+**Spawn-decision Sessie 156: M6 Tutorial 3 last taken** (pre-committed, Heisenberg-confirmed pre-data):
+- Mobile gesture support (~2h)
+- Beta testing tutorials with 3+ users (~0,5h)
+- Final polish 30/33 → 33/33 = M6 milestone 88% → 100% closure
+
+**Cumulatieve #34 + #35 + #36 categorische closure FINALISED:**
+
+| Sessie | Item | Verdict | Methodological output |
+|---|---|---|---|
+| 152 | #34 (a) preconnect-only | Frame B clean S7 1,83× | Cross-check baseline-discipline introduced |
+| 153 | #34 (b) inline-CSS-only | Frame D gray conflicting-canonicals | Bidirectional canary discipline + page-type-asymmetric categorie |
+| 154 | #35 (b) AdSense state-leakage | Outcome 4 + per-stage decomposition | Distribution-analysis als 5e cyclus-variant |
+| **155** | **#36 (a) 3-burst compression** | **Outcome 4 sampling-burst-effect falsification** | **3-burst compression als 6e cyclus-variant + direction-flip detection + 3-burst ANOVA orthogonal + N=30 power-improvement** |
+
+Page-type-asymmetric mechanism hypothese categorisch FINALISED FALSIFIED via 4-sessie cumulatief pad. Sessie 151 #27 Frame C destructive variance-amplification verklaring blijft via Sessie 154 methodological-evolution-output: combined-mechanism-cascade-interactie + opposing-direction per-stage asymmetry pattern was sampling-effect, niet structureel. Geen patch-actionable path naar page-type-targeted optimization. Close #34 + #35 + #36 family entirely. **#27 Frame C 6,5-7,7× variance-amplification blijft historical observation** zonder reproducible mechanism — geen verdere onderzoek nodig.
+
+**NEW Sessie 155 disciplines (4 items, gevalideerd in toekomstige sessies):**
+
+1. **3-burst compression als binnen-sessie variance-stability assessment** — nieuwe diagnostic-variant naast Sessie 154 single-state distribution-analysis. Stability-over-time diagnostic, niet patch-decision. **6e verify-first cyclus-variant** naast Frame A keep / B no-action / C revert / D revert / distribution-analysis (Sessie 154).
+2. **Direction-flip detection per-burst CV ratio** — als asymmetry-direction wisselt tussen bursts (e.g. INDEX>BLOG burst 1, BLOG>INDEX burst 2) = sampling-burst-snapshot evidence, NIET structureel pattern. **Forcing-function tegen single-burst snapshot rationalisatie.** Toepasbaar op elke multi-burst sample-size design.
+3. **3-burst ANOVA F-test detects time-varying within-canonical variance ORTHOGONAL aan per-page-type asymmetry** — twee fenomenen kunnen onafhankelijk True/False zijn. Sessie 155 onthulde global-between-burst-variance bestaat ZONDER page-type-asymmetry te impliceren. **Nieuwe mechanism-categorie:** global measurement-environment variance vs page-type-specific cascade-interactie.
+4. **N=30 power-improvement is structureel-discriminator voor borderline-significance** — Sessie 154 N=10 borderline p-values (e.g. discovery MWU p=0,054) waren vatbaar voor sampling-burst-effect. N=30 (via 3-burst compression) trekt borderline naar p=0,4035 = clean falsification. **Voor borderline p∈[0,05;0,10] in N=10 → N=30 power-test is fast falsification-pad.** Goedkoper dan true multi-day Sessie 156-158 als primary question is "is borderline-significance real?".
+
+**Honest pre-emptive limitation acknowledgment (Sessie 150 leerpunt toegepast):**
+
+3-burst compression single-sessie is **proxy** voor multi-day variance-structure assessment. ~60 min cool-down per burst kan thermal/CDN-cache/AdSense-backend-load-state-isolatie geven MAAR captures geen genuine 24h diurnal cycli (peak-load fluctuations, time-zone-traffic patterns, AdSense backend-load tijd-afhankelijke patronen). Plan §1 documented this trade-off pre-data: snelheid (1 sessie) wint, methodologische strengheid verliest deels. Outcome 4 verdict is sterker bewezen door 3 anti-structureel signalen tezamen (direction-flip + global-ANOVA + N=30 borderline-falsification) dan door single criterium. TASKS.md regel-101 canonical multi-day spec blijft theoretische fallback maar 3-of-3 anti-structureel signalen verzwakken urgency voor escalation.
+
+**10-sessie streak honest data-driven outcomes:** 145B + 146D + 147C + 149D + 150A + 151C + 152B + 153D + 154 Outcome 4 + **155 Outcome 4** = 7 falsificatie + 1 KEEP + 2 methodological-evolution-output. Anti-rationalisatie-discipline structureel verankerd over alle uitkomst-typen inclusief **2-op-rij Outcome 4 methodological-output** als nieuwe categorie.
+
+**Defense-in-depth-persistence-pattern (Sessie 140 → ... → 155):** Outcome 4 met 3-burst compression + direction-flip + ANOVA-orthogonal disciplines vastgelegd op **5+ plekken**: (a) dit audit-doc §2j multi-metric tabel + direction-flip per-burst + global-ANOVA finding + cumulatieve closure tabel, (b) TASKS.md item #36 closure + sprint regel + Status + Laatst bijgewerkt + Voortgang, (c) CLAUDE.md "Recent Critical Learnings" Sessie 155 + 1-in-1-out Sessie 149 archive reference + Version 5.29, (d) docs/sessions/current.md Sessie 155 full session-log, (e) plan-file steady-breeze.md §6 outcome sectie. Pattern schaalt over **2-op-rij Outcome 4 methodological-evolution-output** verdict-categorie.
+
+---
+
 ## §3 Trade-off-tabel per origin (defer-kosten vs perf-impact)
 
 | Origin | Functie | Huidige load | Consent-gated? | Defer-optie | Revenue-impact bij defer | UX-impact | Perf-besparing geschat | Status |

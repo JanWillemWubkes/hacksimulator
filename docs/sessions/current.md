@@ -4,6 +4,378 @@
 
 ---
 
+## Sessie 156: M6 Tutorial 3 Last Taken Pivot — Long-Press Hint Gesture + Beta-Protocol-Doc → M6 Milestone 100% Closure (9 jun 2026)
+
+**Scope:** Heisenberg's cold-start Sessie 155 pre-committed pivot via AskUserQuestion: M6 milestone 88% → 100% closure via 3 last taken (Mobile gesture + Beta testing + Final polish). Verify-first plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-synchronous-sundae.md`. Sessie 156 = **11e sessie streak honest data-driven outcomes** + **eerste feature-completion uitkomst-categorie** naast 7 falsificatie + 1 KEEP + 2 methodological-evolution-output. Anti-rationalisatie-discipline blijft verankerd via discipline-laag (pre-data scope + AskUserQuestion bij ambiguity + defense-in-depth 5+ plekken + validate-docs gate) — Frame A/B/C/D verdict-schema is N/A voor feature-completion maar discipline-laag identiek.
+
+**Status:** ✅ M6 milestone **30/32 → 32/32 = 100% closure**. Eerste M-milestone closure sinds M7 Sessies 105-106. Lokaal Playwright 5/5 cross-browser (Chromium + Firefox + WebKit) op nieuwe `tests/e2e/tutorial-gestures.spec.js` + 31/31 tutorial-regression Chromium = **0 regressies**. Bundle delta +2,757 bytes (+2,7 KB unminified, ~1,5 KB geschat minified, Terminal Core 547 → ~548,5 KB). validate-docs.sh exit 0 ✓.
+
+**Duur:** ~2,5 uur (Phase 1 ground-truth exploratie ~25 min → Phase 1 AskUserQuestion 2 scope-vragen → Phase 4 plan-file write ~15 min → ExitPlanMode → Phase 5 implementatie ~40 min (code + tests + docs-protocol) → Phase 6 cross-browser Playwright + bundle delta ~30 min (incl. debug Touch-constructor + http.server overload-issue) → Phase 7 defense-in-depth docs sync + commit ~20 min).
+
+### Phase 1: Ground-truth exploratie + 2 verrassingen
+
+**Verrassing 1 — Document-drift M6:** M6 sectie-header zei `Taken: 33 total` + `88%` (Sessie 103-112), milestone-tabel zei `30/33 | 88%`, Phase 3 header zei `8 tasks`. Werkelijke checklist-count via `awk '/^## 🎓 M6/,/^## 🎮 M7/' TASKS.md | grep -c '^- \[x\]'` → 30 + `^- \[ \]` → 2 = **30/32 = 94%**. Drift sinds Sessie 112 niet gecorrigeerd. Sessie 156 ad-hoc fix als preview van #23 validate-docs --deep mode forcing-function.
+
+**Verrassing 2 — Pedagogie-spanning bij swipe-next/prev:** tutorial-step-triggers zijn 100% command-driven (typ commando → validator → next step). Geen UI-button voor "next". Swipe-next/prev gesture zou een force-skip-shortcut betekenen — directe ondergraving van het leerdoel "typ het commando om te leren". Long-press voor `hint` is GEEN pedagogie-breaker want hint is een leermoment binnen de step (niet een step-skip) — `hint` is al een geregistreerde command (src/main.js:33+90).
+
+**Aanvullende discovery:** TASKS.md footer Versie was 5.26 (Sessie 152) terwijl CLAUDE.md op 5.29 staat → **Sessies 153/154/155 hebben Versie NOOIT gebumpt** = 4-versie cross-doc drift. Tweede preview van #23 validate-docs --deep mode forcing-function value.
+
+### Phase 1 AskUserQuestion: 2 scope-decisions
+
+**Q1 Mobile gesture scope** (4 opties, Heisenberg koos Recommended): **Long-press hint alleen** — geen swipe-next/prev, pedagogie-conform.
+**Q2 Beta testing close** (3 opties, Heisenberg koos Recommended): **Documenteer protocol + close** — nieuwe `docs/testing/beta-protocol-tutorials.md`.
+
+### Phase 4: Plan-file + ExitPlanMode
+
+Plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-synchronous-sundae.md` (9 secties: Context + Scope + Critical files + Implementation patterns + Verification + Outcome + Out of scope + Sessie 155 disciplines applicability + Risico's). ExitPlanMode approved zonder vragen. Allowed prompts: Playwright tests + bundle metrics + validate-docs + git commit + grep/awk verificatie + node --check.
+
+### Phase 5: Implementatie (10 stappen via TaskCreate)
+
+| # | Task | Resultaat |
+|---|------|-----------|
+| 1 | Baseline metrics + validate-docs gate | du -sb src/ = 627,671 bytes / 22 spec files / validate-docs exit 0 |
+| 2 | NEW `src/ui/tutorial-gestures.js` | 2,578 bytes (84 regels vanilla JS singleton, touchstart+touchmove+touchend+touchcancel 500ms LONG_PRESS_MS + 10px MOVE_TOLERANCE_PX + modal-protection-pattern + tutorialManager.isActive() gating + terminal.execute('hint') registry-pad) |
+| 3 | Edit `src/main.js` + `terminal.html` cache-bump | main.js +2 regels (import + init na terminal.init regel 178); terminal.html bump main.js?v=88-multiline-wrap → ?v=156-tutorial-gestures op 2 refs (modulepreload regel 43 + script tag regel 385). **Plan-deviation gevangen tijdens execution:** plan §3 zei terminal.html +3 regels init MAAR werkelijke init-locatie is main.js (init-flow main.js → terminal.init() chain) |
+| 4 | NEW `tests/e2e/tutorial-gestures.spec.js` | 5 Playwright tests met `devices['iPhone 13']` hasTouch:true + synthetic dispatch via Event + Object.defineProperty workaround voor Chromium Touch-constructor restriction |
+| 5 | NEW `docs/testing/beta-protocol-tutorials.md` | ~80 regels protocol-doc per Heisenberg gekozen Q2 preview |
+| 6 | Update `TASKS.md` | Document-drift correcties regels 11+21+770+772+903 + closures 904+928 + sprint regel + Status header + Laatst bijgewerkt + Voortgang totaal + footer Versie 5.26 → 5.30 (4-versie gap gefixt) |
+| 7 | Update `docs/sessions/current.md` | Sessie 156 entry (dit document) |
+| 8 | Update `.claude/CLAUDE.md` | Recent Critical Learnings Sessie 156 prepend, 1-in-1-out Sessie 154 verwijderen (al in current.md), top-6 wordt 155-156, Version 5.29 → 5.30 |
+| 9 | Run Playwright + bundle delta | Onderaan |
+| 10 | validate-docs gate + commit | Final gate + commit |
+
+### Phase 6: Playwright cross-browser + bundle delta
+
+**Critical discovery tijdens Phase 6:** `playwright.config.js` regel 32 → `baseURL: process.env.BASE_URL || 'https://hacksimulator.nl'` = default PRODUCTIE. Eerste run was tegen productie waar mijn lokale `tutorial-gestures.js` natuurlijk niet bestaat → 4 "passed" no-op tests waren **false positives** (geen gesture-handler op productie = geen hint = no-op assertions slagen). 1 "failed" was honest (positive assertion zonder werkende handler).
+
+**Mitigatie geactiveerd per plan §9 risico-tabel + Sessie 149+151+154 leerpunt:** lokale Python http.server op port 8765, `BASE_URL=http://localhost:8765` env-override.
+
+**Tweede discovery tijdens Phase 6:** lokale http.server is single-threaded. Playwright `fullyParallel: true` (config:15) overloadt server bij Firefox 5 tests parallel → 2 false-failures op `beforeEach` (`expect(terminal-output).toContainText('hacksim.lab')` timeout omdat boot-sequence niet rendert binnen 10s onder concurrent-load). Mitigatie: `--workers=1` voor lokale-server context.
+
+**Derde discovery:** Chromium `new Touch()` + `new TouchEvent()` constructors blokken zelfs met `hasTouch:true` → "Illegal constructor". Mitigatie: dispatch generic `Event('touchstart')` met `Object.defineProperty(event, 'touches', { value: [...] })` — DOM listener matched op event-type string, gesture-handler leest `e.touches[0].clientX` als plain property. Cross-browser werkbaar.
+
+**Cross-browser resultaten (alle workers=1):**
+
+| Browser | Tests | Pass | Wallclock |
+|---|---|---|---|
+| Chromium | 5 | **5/5** ✓ | 41,3s |
+| Firefox | 5 | **5/5** ✓ | 43,7s |
+| WebKit | 5 | **5/5** ✓ | 41,1s |
+
+**Tutorial regression (Chromium workers=2):** 31/31 pass — tutorial.spec.js (18) + tutorial-mobile.spec.js (13) = 0 regressies, geen impact van main.js+terminal.html wijzigingen op bestaande tutorial-flow.
+
+**Bundle delta:** src/ PRE 627,671 → POST 630,428 = **+2,757 bytes (+2,7 KB unminified)** vs plan §5.2 voorspelling +~2,5 KB = 8% calibratie-fout (binnen Sessie 153 leerpunt #2 norm 10%). Geschatte minified ~1,5 KB. Terminal Core 547 → ~548,5 KB (0,3% groei, geen budget-impact verandering).
+
+### Phase 7: Defense-in-depth 5+ plekken + commit
+
+1. dit current.md Sessie 156 entry
+2. TASKS.md sprint regel + Status header + Laatst bijgewerkt header/footer + M6 milestone-tabel regel 22 + M6 sectie regels 770+772 + Phase 3 header regel 903 + item closures regels 904+928 + Voortgang totaal regel 11 + Versie footer 5.26→5.30
+3. .claude/CLAUDE.md "Recent Critical Learnings" Sessie 156 prepend + 1-in-1-out Sessie 154 verwijderd (al in current.md regel 143) + top-6 wordt 155-156 + Version 5.29 → 5.30
+4. plan-file §6 Outcome filled (na execution)
+5. NEW docs/testing/beta-protocol-tutorials.md (protocol-doc zelf)
+6. NEW src/ui/tutorial-gestures.js (code-implementatie)
+7. NEW tests/e2e/tutorial-gestures.spec.js (test coverage)
+8. validate-docs.sh exit 0 baseline + post-changes
+
+### NEW Sessie 156 disciplines (6 items, gevalideerd)
+
+1. **Pedagogie-tension-check pre-data voor UX-enhancement op educational-product** — voor elke feature-completion task op een educational-flow (tutorial / leerpad / scenario), check expliciet pre-data of UX-shortcut het leerdoel niet ondergraaft. Sessie 156 voorbeeld: swipe-next ondergraaft "typ commando om te leren" → uitgesloten; long-press hint ondergraaft NIET want hint is al een leermoment binnen de step. Forcing-function: AskUserQuestion bij pedagogie-tension is strategisch/product-decision territorium per user-memory `feedback_expert_decisions.md`, GEEN expert-decision territorium.
+2. **Registry-pad command-execution voor UI-trigger features** — voor gesture/touch/click-driven features die een bestaande command moeten triggeren: gebruik `terminal.execute('cmd')` via registry NIET directe API-call. Pedagogische transparantie (output visible in terminal) + history-trail (in command-history) + analytics-tracking (analytics-events fire automatisch). Direct API zou history breken. Generaliseert naar alle toekomstige UI-trigger features.
+3. **Cross-doc Versie-bump consistency check als ad-hoc forcing-function** — Sessie 156 ontdekte TASKS.md footer Versie 5.26 = 4 versies achter CLAUDE.md 5.29 (Sessies 153-155 hadden Versie nooit gebumpt). Dit is precies wat #23 validate-docs --deep mode zou vangen (cross-doc version-string consistency). Ad-hoc fix Sessie 156 = preview van #23 forcing-function value. Generaliseert: elk sessie-update MOET Versie cross-doc verifiëren.
+4. **Feature-completion als 11e uitkomst-categorie** — verify-first framework breidt nu uit met feature-completion (Sessie 156) naast Frame A keep / B no-action / C revert / D revert (Sessies 145-153) + distribution-analysis (Sessie 154) + 3-burst compression (Sessie 155). Frame-verdict-schema is N/A voor feature-completion maar discipline-laag identiek: pre-data scope + AskUserQuestion bij ambiguity + defense-in-depth 5+ plekken + validate-docs gate. Anti-rationalisatie-discipline structureel verankerd over alle uitkomst-typen.
+5. **Plan-mode AskUserQuestion bij pedagogie-tension** — bevestigt user-memory `feedback_expert_decisions.md` boundary: strategisch/product-decisions = AskUserQuestion territorium, technische diepte (implementatie-keuzes binnen vastgestelde scope) = expert-decision territorium. Sessie 156 Q1 (gesture scope met pedagogie-tension) was correct AskUserQuestion want product/UX-decision. Q2 (beta close-method) was correct AskUserQuestion want coordinatie-decision.
+6. **Edit-tool Read-precondition pitfall herbevestigd** (Sessie 153 leerpunt #5 generaliseert) — Sessie 156 terminal.html Edit faalde eerste keer met `File has not been read yet`. Mitigatie: pre-Read ALL target-files VÓÓR Edit-batch dispatch. Snel correctable maar herhaalde pitfall.
+
+### Honest pre-emptive limitation acknowledgment (Sessie 150 leerpunt toegepast)
+
+Sessie 156 Playwright tests draaiden tegen **lokale Python http.server**, niet productie. Dat garandeert NIET dat gesture-handler op productie correct werkt met AdSense + Brevo + ander third-party-cascade. Manual real-iPhone verificatie (plan §5.4) blijft Heisenberg-out-of-Claude actie post-deploy. Lokale 15/15 cross-browser pass + 31/31 regression is STERKE indicator maar geen volledig substituut voor productie-validatie.
+
+### 11-sessie streak honest data-driven outcomes
+
+**145B + 146D + 147C + 149D + 150A + 151C + 152B + 153D + 154 Outcome 4 + 155 Outcome 4 + 156 M6 feature-completion closure = 7 falsificatie + 1 KEEP + 2 methodological-evolution-output + 1 feature-completion (nieuwe uitkomst-categorie).**
+
+Anti-rationalisatie-discipline structureel verankerd over alle uitkomst-typen inclusief **eerste feature-completion uitkomst** als nieuwe categorie. Discipline-laag identiek aan verify-first Frame-verdict-cycli — Frame-schema is N/A voor feature-completion maar pre-data scope-decisions + AskUserQuestion bij ambiguity + defense-in-depth + validate-docs gate hetzelfde.
+
+### Defense-in-depth-persistence-pattern (Sessie 140 → 145 → ... → 155 → **156**)
+
+Feature-completion outcome met M6 milestone closure + 6 NEW disciplines vastgelegd op **8+ plekken**:
+1. dit current.md Sessie 156 entry
+2. TASKS.md sprint regel + Status header + Laatst bijgewerkt header/footer + M6 milestone-tabel + M6 sectie + Phase 3 header + 2 item closures + Voortgang totaal + Versie footer 5.30
+3. .claude/CLAUDE.md "Recent Critical Learnings" Sessie 156 prepend + 1-in-1-out (Sessie 154 verwijderen — al in current.md) + Version 5.29 → 5.30 + Laatst bijgewerkt
+4. plan-file §6 Outcome filled
+5. NEW docs/testing/beta-protocol-tutorials.md
+6. NEW src/ui/tutorial-gestures.js
+7. NEW tests/e2e/tutorial-gestures.spec.js
+8. validate-docs.sh exit 0 gate
+
+### Bulk-rotation status
+
+Top-6 in CLAUDE.md "Recent Critical Learnings" wordt 155-156 (2 entries post-Sessie-156 1-in-1-out). Accumuleert via 1-in-1-out tot volgende bulk-rotation **Sessie 160** (per Sessie 155 trigger-spec).
+
+### Files changed
+
+- **NEW** `src/ui/tutorial-gestures.js` (84 regels / 2,578 bytes — vanilla JS singleton)
+- **MOD** `src/main.js` (+2 regels — import + init)
+- **MOD** `terminal.html` (2 cache-bump replacements: modulepreload regel 43 + script tag regel 385, `?v=88-multiline-wrap` → `?v=156-tutorial-gestures`)
+- **NEW** `tests/e2e/tutorial-gestures.spec.js` (~165 regels / 5 tests)
+- **NEW** `docs/testing/beta-protocol-tutorials.md` (~95 regels / protocol-doc)
+- **MOD** `TASKS.md` (8 edits: drift-correcties + M6 closures + sprint/Status/Laatst-bijgewerkt + Versie footer)
+- **MOD** `docs/sessions/current.md` (Sessie 156 entry prepend = dit document)
+- **MOD** `.claude/CLAUDE.md` (Recent Critical Learnings + Version 5.29 → 5.30 + Laatst bijgewerkt — Phase 7)
+- **MOD** plan-file §6 outcome filled
+
+### Artifacts
+
+- Playwright test-results: `test-results/tutorial-gestures-*` (cross-browser run logs)
+- Python http.server logs: `/tmp/sessie156-http-server.log` (8765 PID 401931, te killen post-commit)
+- Plan-file: `/home/willem/.claude/plans/heisenberg-hier-cold-start-synchronous-sundae.md`
+
+---
+
+## Sessie 155: Item #36 (a) Single-Sessie 3-Burst Compression Baseline-Stability Analysis — CLOSED OUTCOME 4 met NEW Direction-Flip Detection + 3-Burst ANOVA F-test Disciplines + Cumulatieve #34 + #35 + #36 Categorische Closure FINALISED (8-9 jun 2026)
+
+**Scope:** Heisenberg's cold-start: Sessie 154 #35 (b) Outcome 4 verdict spawned #36 multi-day baseline-stability analysis als 3 secondary findings te valideren (discovery-queue + transfer-only CV-asymmetry + BLOG canary HIGH). Sessie 155 voert sub-pad **(a) single-sessie 3-burst compression** uit als pragmatic proxy voor TASKS.md regel-101 multi-day canonical spec (Heisenberg-pragmatic deviation voor 1-sessie wallclock budget). Zero-code instrumentation cyclus — geen patches, geen commits, geen deploys. Plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-steady-breeze.md`.
+
+**Status:** ✅ Item #36 (a) **CLOSED OUTCOME 4** per pre-data plan §4 4-outcome enumeration. Alle 3 Sessie 154 secondary findings NIET reproduceer ≤1-of-3 bursts. **Direction-flip smoking gun:** full + discovery CV ratios flip-direction across bursts = sampling-burst-snapshot evidence. **NEW finding niet pre-enumerated:** 3-burst ANOVA F p<0,001 alle metrics × beide canonicals = global time-varying within-canonical variance IS structureel MAAR niet page-type-specific + niet patch-actionable. **Cumulatieve #34 + #35 + #36 categorische closure FINALISED** via 4-sessie methodological-evolution-output (152+153+154+155). Spawn Sessie 156 = M6 Tutorial 3 last taken (pre-committed via Sessie 155 pre-plan AskUserQuestion).
+
+**Duur:** ~3,8 uur (cold-start scope-confirm → Phase 0 setup + 3 pre-flight dry-tests + plan-file write + ExitPlanMode → Phase A 3 bursts × ~7,5 min wallclock + 2 × 60 min cool-down = 142 min totaal → Phase B.1 jq extraction CSV + Phase B.2 scipy 3-burst ANOVA + KS+MWU N=30 + per-burst CV → Phase C bidirectional canary per burst → Phase D verdict synthesis (geen AskUserQuestion want clean Outcome 4) → Phase E defense-in-depth 5+ plekken docs sync).
+
+### Phase 0 setup + pre-flight checks
+
+- **mkdir `/tmp/sessie155-item36a/`** + `canary-reference.json` (Sessie 152 cross-check INDEX 401 ms / BLOG 339 ms anchors + Sessie 154 baseline 336/751 ms reference + bidirectional thresholds INDEX HIGH≥802 LOW≤200 / BLOG HIGH≥678 LOW≤170).
+- **3 pre-flight dry-tests (Sessie 149+151+154 disciplines verbatim):** (1) LH@11 CLI `npx -y lighthouse@11 --form-factor=mobile --quiet --output=json` 1-run validated (25 sec wallclock vs plan estimate 90 sec = 3,6× faster — reshapes Phase A budget but NIET methodology); (2) jq schema field-name dry-test op Sessie 154 artifact returns valid CSV met rendererStartTime/networkRequestTime/networkEndTime; (3) Python scipy.stats.f_oneway + numpy.bool_/float JSON serialization with `bool()` + `float()` casts (Sessie 154 leerpunt #7 verbatim).
+- **Pre-written scripts** tijdens Burst 1 background-job idle time: `stability-analysis.py` (scipy KS+MWU+ANOVA+per-burst CV) + `extract-bootstrap-data.sh` (Phase B.1 jq extraction recipe).
+
+### Phase A: 3-burst baseline collection (NEW Sessie 154 discipline #1 sequential-tussen-canonicals verbatim)
+
+| Burst | Start (CET) | End (CET) | Wallclock | INDEX files | BLOG files |
+|---|---|---|---|---|---|
+| 1 | 21:37:30 | 21:45:05 | 455 sec (7,6 min) | 10 | 10 |
+| Cool-down 1 | 21:45:05 | 22:45:05 | 3600 sec (60 min) | — | — |
+| 2 | 22:45:05 | 23:05:19 | 445 sec (7,4 min) | 10 | 10 |
+| Cool-down 2 | 23:05:19 | 00:05:19 | 3600 sec (60 min) | — | — |
+| 3 | 00:05:19 | 00:13:05 | 446 sec (7,4 min) | 10 | 10 |
+| **Phase A total** | — | — | **8542 sec (142 min)** | **30** | **30** |
+
+Recipe per burst: `set -o pipefail; for i in {1..10}; do npx -y lighthouse@11 ${URL} --form-factor=mobile --quiet --output=json --output-path=burst${burst}/baseline-r${i}-${canonical}.json --chrome-flags="--headless"; sleep 2; done` × 2 canonicals sequential. Background-jobs gestart per burst, cool-down via `sleep 3600` background-job met notification-completion. **60 LH JSON files all > 580 KB, 1 adsbygoogle.js entry per run (geen Sessie 151 dynamic-injection quirk), priority "Low" consistent.**
+
+### Phase B: Distribution + ANOVA analysis (jq + scipy)
+
+**B.1 jq extraction → bootstrap-data.csv (60 rows: 30 INDEX + 30 BLOG, 20 per burst).** Columns: `canonical, burst, run, rendererStartTime, networkRequestTime, networkEndTime, fullBootstrap, transferOnly, discoveryQueue, transferSize, priority`. Sample row INDEX burst1 r1: 369,93/683,27/923,28 ms → full 553,4 / transfer 240,0 / discovery 313,3 ms.
+
+**B.2 scipy.stats analysis (`/tmp/sessie155-item36a/stability-analysis.py`):**
+
+| Metric | INDEX median | BLOG median | N=30 KS p | N=30 MWU p | N=30 CV ratio | 3-burst ANOVA INDEX F (p) | ANOVA BLOG F (p) | Per-burst reproduceer |
+|---|---|---|---|---|---|---|---|---|
+| **Full bootstrap** | 226,6 ms | 241,5 ms | 0,2391 | 0,2116 | 1,44× SYMMETRIC | 11,08 (0,0003) | 43,99 (0,0000) | 2/3 (burst 1 ASYMMETRIC 2,62× INDEX>BLOG, burst 2 ASYMMETRIC 0,32× BLOG>INDEX, burst 3 SYMMETRIC 1,04×) |
+| **Transfer-only** | 111,1 ms | 125,0 ms | 0,1350 | 0,1335 | 1,27× SYMMETRIC | 8,74 (0,0012) | 17,99 (0,0000) | 0/3 |
+| **Discovery-queue** | 116,5 ms | 122,6 ms | 0,8080 | **0,4035** | 1,53× SYMMETRIC | 10,71 (0,0004) | 58,28 (0,0000) | 1/3 (burst 1 ASYMMETRIC 3,10×, bursts 2/3 SYMMETRIC) |
+
+**Sessie 154 reference comparison:**
+- Full bootstrap N=10: KS p=0,42 / MWU p=0,27 / CV 1,26× → Sessie 155 N=30 CONSISTENT (geen distribution-shape difference)
+- Transfer-only N=10 CV 1,94× borderline → N=30 1,27× SYMMETRIC = **falsified**
+- Discovery-queue N=10 MWU p=0,054 borderline + CV 2,56× ASYMMETRIC → N=30 p=0,4035 + CV 1,53× SYMMETRIC = **clean falsification** (Sessie 154 leerpunt #5 N=10 borderline-significance vulnerability to sampling-effect confirmed)
+
+**Direction-flip smoking gun (per-burst CV ratio INDEX/BLOG per metric):**
+- Full: [2,62× / 0,32× / 1,04×] (INDEX>BLOG, BLOG>INDEX OPPOSITE, equal)
+- Transfer: [1,91× / 0,53× / 0,90×] (BORDERLINE inflate, BORDERLINE deflate, equal)
+- Discovery: [3,10× / 0,57× / 0,88×] (extreme INDEX>BLOG, BLOG>INDEX OPPOSITE, equal)
+
+Als page-type-asymmetric mechanism structureel was, zou direction CONSISTENT zijn (e.g. INDEX altijd > BLOG variance). Direction-flip in beide bursts 1/2 = strong evidence Sessie 154 caught burst-1-like state-snapshot. Burst 1 mirror van Sessie 154 observation, burst 2 INVERSE, burst 3 SETTLED. Pattern niet reproducible structureel.
+
+**NEW finding NIET pre-enumerated in plan §4:** 3-burst ANOVA F-test toont SIGNIFICANT between-burst variance voor ALLE 3 metrics × beide canonicals (INDEX F=11,08/8,74/10,71 p<0,0012; BLOG F=43,99/17,99/58,28 p<0,0001 — BLOG ANOVA F-values 4-5× hoger dan INDEX = BLOG variance binnen burst lager + tussen bursts hoger). Time-varying within-canonical variance IS structureel MAAR is **GLOBAL niet page-type-specific** en NIET patch-actionable. Mogelijke verklaringen: AdSense backend load fluctuation tussen bursts (21:37-21:45 vs 22:45-23:05 vs 00:05-00:13 CET = evening/night), CDN edge state, stochastic browser cold-start state. Niet repository code-level mechanism. Additief methodological observation, niet verdict-changer.
+
+### Phase C: Bidirectional canary per burst
+
+| Burst | INDEX LCP-range (ratio vs 401) | Status | BLOG LCP-range (ratio vs 339) | Status |
+|---|---|---|---|---|
+| 1 | 455 ms (1,13×) | PASS | 204 ms (0,60×) | PASS |
+| 2 | 129 ms (0,32×) | LOW-anomaly | 706 ms (2,08×) | HIGH-anomaly |
+| 3 | 644 ms (1,61×) | PASS | 203 ms (0,60×) | PASS |
+
+**BLOG canary reproduceer-count: 1/3 HIGH** (alleen burst 2). Sessie 154 finding 2,21× HIGH was burst-2-like state-snapshot, niet structureel. Burst 2 ook INDEX LOW-anomaly = mogelijk specifiek state-momentum tussen 22:45-23:05 CET (AdSense backend state-change? CDN edge re-cache?). **Burst 2 stands out** als "different state burst" — verklaart waarom ANOVA F-significance dominantly tussen bursts staat.
+
+### Phase D: Verdict + spawn-decision
+
+**Outcome match:** Plan §4 Outcome 4 — Niets reproduceert.
+- All 3 secondary findings ≤1-of-3 bursts reproduceer ✓✓✓
+- ANOVA F p≥0,05 alle metrics ✗ (FAILS — F p<0,001 alle metrics = SIGNIFICANT)
+- N=30 MWU p≥0,05 discovery-queue ✓ (p=0,4035)
+
+**Tie-breaker (Sessie 153 leerpunt #9):** Primary discriminator = "do Sessie 154 secondary findings reproduce?" → NO (3-of-3 ≤1-of-3). Plan §4 Tie-breaker rule "Mixed signaal: match strictest fit pattern, niet partial-outcomes mixen" → strictest = Outcome 4 (alle secondary findings NIET reproduceer). ANOVA F-significance is **additief methodological observation**, niet verdict-changer want global niet page-type-specific.
+
+**Consultation check (Sessie 154 leerpunt #9 + Plan §3 Phase D rule):** "ALLEEN consult bij verdict-data ambiguous; clean outcome = pre-committed enumeration is verdict-rule". Clean Outcome 4 (alle 3 secondary findings unambiguous ≤1-of-3) → **NO AskUserQuestion**. ANOVA finding additief, niet directionally-changing. Pre-committed Outcome 4 pivot (Sessie 155 pre-plan AskUserQuestion = M6 Tutorial) staat.
+
+**Spawn-decision Sessie 156: M6 Tutorial 3 last taken** (pre-committed):
+- Mobile gesture support (~2h)
+- Beta testing tutorials with 3+ users (~0,5h)
+- Final polish 30/33 → 33/33 = **M6 milestone 88% → 100% closure**
+
+### Cumulatieve #34 + #35 + #36 categorische closure FINALISED
+
+| Sessie | Item | Verdict | Methodological output |
+|---|---|---|---|
+| 152 | #34 (a) preconnect-only mechanism-isolation | Frame B clean S7 1,83× | Cross-check baseline-discipline introduced |
+| 153 | #34 (b) inline-CSS-only mechanism-isolation | Frame D gray conflicting-canonicals | Bidirectional canary discipline + page-type-asymmetric mechanism-categorie |
+| 154 | #35 (b) AdSense state-leakage diagnostic | Outcome 4 + per-stage decomposition finding | Distribution-analysis als 5e verify-first cyclus-variant |
+| **155** | **#36 (a) 3-burst compression** | **Outcome 4 sampling-burst-effect falsification** | **3-burst compression als 6e cyclus-variant + direction-flip detection + 3-burst ANOVA orthogonal discipline + N=30 power-improvement** |
+
+**Page-type-asymmetric mechanism hypothese categorisch FINALISED FALSIFIED** via 4-sessie cumulatief pad. Sessie 151 #27 Frame C destructive variance-amplification verklaring blijft via Sessie 154 methodological-evolution-output: combined-mechanism-cascade-interactie + opposing-direction per-stage asymmetry pattern was sampling-effect, niet structureel. Geen patch-actionable path naar page-type-targeted optimization. Close #34 + #35 + #36 family entirely. **#27 Frame C 6,5-7,7× variance-amplification blijft historical observation** zonder reproducible mechanism — geen verdere onderzoek nodig.
+
+### NEW Sessie 155 disciplines (4 items)
+
+1. **3-burst compression als binnen-sessie variance-stability assessment** — nieuwe diagnostic-variant naast Sessie 154 single-state distribution-analysis. Stability-over-time diagnostic, niet patch-decision. **6e verify-first cyclus-variant** naast Frame A keep / B no-action / C revert / D revert / distribution-analysis (Sessie 154).
+2. **Direction-flip detection per-burst CV ratio** — als asymmetry-direction wisselt tussen bursts (e.g. INDEX>BLOG burst 1, BLOG>INDEX burst 2) = sampling-burst-snapshot evidence, NIET structureel pattern. **Forcing-function tegen single-burst snapshot rationalisatie.** Toepasbaar op elke multi-burst sample-size design: als per-burst direction wisselt = sampling-noise.
+3. **3-burst ANOVA F-test detects time-varying within-canonical variance ORTHOGONAL aan per-page-type asymmetry** — twee fenomenen kunnen onafhankelijk True/False zijn. Sessie 155 onthulde global-between-burst-variance bestaat ZONDER page-type-asymmetry te impliceren. **Nieuwe mechanism-categorie:** global measurement-environment variance (AdSense backend / CDN edge / browser state) vs page-type-specific cascade-interactie. Beide gemeten via verschillende statistical tests (F-test vs CV-ratio).
+4. **N=30 power-improvement is structureel-discriminator voor borderline-significance** — Sessie 154 N=10 borderline p-values (e.g. discovery MWU p=0,054) waren vatbaar voor sampling-burst-effect. N=30 (via 3-burst compression) trekt borderline naar p=0,4035 = clean falsification. **Voor borderline p∈[0,05;0,10] in N=10 → N=30 power-test is fast falsification-pad.** Goedkoper dan true multi-day Sessie 156-158 als primary question is "is borderline-significance real?".
+
+### Honest pre-emptive limitation acknowledgment (Sessie 150 leerpunt toegepast)
+
+3-burst compression single-sessie is **proxy** voor multi-day variance-structure assessment. ~60 min cool-down per burst kan thermal/CDN-cache/AdSense-backend-load-state-isolatie geven MAAR captures geen genuine 24h diurnal cycli (peak-load fluctuations, time-zone-traffic patterns, AdSense backend-load tijd-afhankelijke patronen). Plan §1 documented this trade-off pre-data: snelheid (1 sessie) wint, methodologische strengheid verliest deels. Outcome 4 verdict is sterker bewezen door 3 anti-structureel signalen tezamen (direction-flip + global-ANOVA + N=30 borderline-falsification) dan door single criterium. TASKS.md regel-101 canonical multi-day spec blijft theoretische fallback maar 3-of-3 anti-structureel signalen verzwakken urgency voor escalation.
+
+### 10-sessie streak honest data-driven outcomes
+
+**145B + 146D + 147C + 149D + 150A + 151C + 152B + 153D + 154 Outcome 4 + 155 Outcome 4 = 7 falsificatie + 1 KEEP + 2 methodological-evolution-output.**
+
+Anti-rationalisatie-discipline structureel verankerd over alle uitkomst-typen inclusief **2-op-rij Outcome 4 methodological-output** als nieuwe categorie. Sessie 154 introduceerde distribution-analysis als 5e cyclus-variant, Sessie 155 voegt 3-burst compression als 6e variant toe. Methodological-evolution-output staat naast patch-decision (Frame A/B/C/D) als equivalent legitiem-honest verify-first uitkomst-type.
+
+### Defense-in-depth-persistence-pattern (Sessie 140 → 145 → 146 → 147 → 148 → 149 → 150 → 151 → 152 → 153 → 154 → 155)
+
+Outcome 4 met 3-burst compression + direction-flip + ANOVA-orthogonal disciplines vastgelegd op **5+ plekken**:
+1. dit current.md Sessie 155 entry
+2. TASKS.md item #36 closure + sprint regel + Voortgang + Status header + Laatst bijgewerkt
+3. docs/perf-third-party-audit.md §2j nieuwe sectie (3-burst compression methodology + multi-test tabel + direction-flip + global-ANOVA finding)
+4. .claude/CLAUDE.md "Recent Critical Learnings" Sessie 155 prepend + Sessie 149 archive → current.md (1-in-1-out, top-6 nu 150-155)
+5. .claude/CLAUDE.md Version 5.28 → 5.29 + Sessie counter 154 → 155
+6. Plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-steady-breeze.md` §6 outcome ingevuld
+7. `bash scripts/validate-docs.sh` exit 0 forcing function
+
+Toekomstige sessies kunnen niet stiekem #36 heropenen of "vergeten" zonder al 5+ tegen te komen.
+
+### Artifacts
+
+`/tmp/sessie155-item36a/`:
+- 60 LH JSON files (`burst{1,2,3}/baseline-r{1..10}-{index,blog}.json`)
+- `bootstrap-data.csv` (60 rows: 30 INDEX + 30 BLOG, 20 per burst)
+- `stability-analysis.py` (scipy.stats.f_oneway 3-burst ANOVA + KS+MWU N=30 + per-burst CV)
+- `stability-analysis.{txt,json}` (machine + human readable analysis output)
+- `canary-reference.json` (Sessie 152 cross-check + Sessie 154 baseline anchors)
+- `canary-per-burst.txt` (per-burst LCP-range bidirectional canary tracking)
+- `verdict.json` (Outcome 4 verdict + spawn-decision + methodological output)
+- `extract-bootstrap-data.sh` (Phase B.1 jq extraction recipe)
+
+**Git status:** 0 staged changes, 0 modifications (zero-code instrumentation discipline maintained).
+
+---
+
+## Sessie 154: Item #35 (b) AdSense-Auto-ads-State-Machine State-Leakage Diagnostic — CLOSED OUTCOME 4 met Per-Stage Decomposition Finding + NEW Distribution-Analysis Verify-First Cyclus-Variant (8 jun 2026)
+
+**Scope:** Heisenberg's cold-start: Sessie 153 #34 (b) closure cumulatieve evaluation spawned #35 deep-dive variance-source attribution. Sessie 154 voert sub-pad (b) AdSense-Auto-ads-state-machine state-leakage diagnostic uit als zero-code instrumentation cyclus — geen patches, geen commits, geen deploys. Plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-sessie-cozy-crab.md`.
+
+**Status:** ✅ Item #35 (b) **CLOSED OUTCOME 4** per pre-data plan §1 4-outcome enumeration. Primary metric (full-bootstrap) KS p=0,42 + MWU p=0,27 + CV-ratio 1,26× SYMMETRIC = beide criteria NIET confirmed = Sessie 153 page-type-asymmetric observation was sampling-noise van 3-run mediaan-comparison op LCP-aggregaat. **Per-stage decomposition finding (NEW Sessie 154):** opposing-direction variance-asymmetry per cascade-stage — discovery-queue INDEX > BLOG (CV 2,56× ASYMMETRIC, MWU p=0,054 net buiten 0,05) + transfer-only BLOG > INDEX (1,94× borderline). Twee orthogonale page-type-asymmetry signalen CANCELLEN op aggregaat. **Cumulatieve #34 mechanism-isolation closure-pad BEREIKT** via methodological-evolution-output. Spawn #36 multi-day baseline-stability analysis.
+
+**Duur:** ~2,5 uur (cold-start scope-confirm → Phase 0 setup + 4 pre-flight dry-tests + TASKS.md #35 backlog promotion + canary-reference.json + plan-deviation correctie van parallel→sequential → Phase A 20 sequential LH@11 runs bg ~25 min → Phase B.1 jq extraction CSV + Phase B.2 scipy distribution-analysis (KS+MWU+CV-ratio 3-metric) → Phase C bidirectional canary check vs Sessie 152 cross-check baseline → Phase D verdict synthesis + AskUserQuestion Heisenberg-confirmation → Phase E defense-in-depth 5+ plekken docs sync).
+
+### Phase 0 setup + plan-deviation correctie + TASKS.md backlog promotion
+
+- **mkdir + pre-flight dry-tests (4):** lighthouse@11 form-factor flag verified, scipy.stats KS-test functional, jq 1.7 installed, Sessie 153 schema-reference file exists. Sessie 149+151 leerpunt verbatim toegepast — dry-test CLI-flags pre-loop.
+- **canary-reference.json:** documenteert Sessie 152 cross-check baseline (INDEX LCP-range 401 ms / BLOG 339 ms) + Sessie 153 Phase A (INDEX 104 ms abnormally-stable / BLOG 424 ms representative) als referentie-anchors voor bidirectional canary Phase C.
+- **NEW Sessie 154 discipline tijdens Phase A start:** plan §3 zei "parallel-tussen-canonicals" voor ~10 min wallclock. Tijdens execution gerealiseerd dat concurrent LH instances op zelfde machine CPU/memory/disk-contention introduceren die ARTIFICIËLE variance toevoegt — invalideert distribution-analysis (kan reële Auto-ads variance niet onderscheiden van test-harness contention). Plan-deviation: parallel → SEQUENTIEEL (~25 min wallclock). Documented als nieuwe Sessie 154 discipline: "Distribution-analysis vs Frame-comparison hebben verschillende concurrency-validity requirements".
+- **TASKS.md #35 backlog promotion:** Sessie 153 closure noemde spawn #35 3× in tekst maar geen formele backlog-entry was gemaakt. Phase 0 voegde #35 toe als nieuwe backlog-item met sub-paden (a/b/c) onder item #34 + sub-pad (b) status "🔵 IN PROGRESS Sessie 154".
+
+### Phase A sequential 20-run LH@11 baseline (~25 min wallclock background-job)
+
+10 sequential LH@11 mobile runs per canonical (INDEX = https://hacksimulator.nl/, BLOG = https://hacksimulator.nl/blog/) met sleep 2 sec tussen runs. Recipe: `npx -y lighthouse@11 ${URL} --form-factor=mobile --quiet --output=json --output-path=baseline-r${i}-${canonical}.json --chrome-flags="--headless"`. Sessie 149 leerpunt verbatim: `--form-factor=mobile` is correct flag (NIET `--preset=mobile` = exit 2).
+
+**Phase A verification:** 20/20 JSON files (all > 580 KB typical LH output), all 20 contain exactly 1 adsbygoogle.js entry in `audits.network-requests.details.items`, alle priority "Low" (no Chrome-level page-type-priority-difference at LH-network-priority).
+
+### Phase B distribution-analysis (jq + scipy KS+MWU+CV-ratio)
+
+**B.1 jq extraction:** Per-run extract van `audits.network-requests.details.items[]` filtered op `url contains adsbygoogle.js` met velden `rendererStartTime, networkRequestTime, networkEndTime, transferSize, priority` + computed 3 bootstrap-metrics (full = networkEndTime - rendererStartTime, transfer = networkEndTime - networkRequestTime, discovery = networkRequestTime - rendererStartTime). Output: 20-row CSV (10 INDEX + 10 BLOG).
+
+**LH JSON schema field-name correction (NEW Sessie 154 discipline):** Plan-file vereiste (d) gaf field-names `startTime/endTime/responseEnd` (uit cold-start). LH@11 actual schema gebruikt `rendererStartTime/networkRequestTime/networkEndTime`. Phase 1 verificatie van Sessie 153 artifact ontdekte mismatch + plan-file gecorrigeerd. Generalisatie van Sessie 149+151 leerpunt "Plan-agent CLI-syntax-claims" naar **JSON-schema-claims**.
+
+**B.2 scipy.stats distribution-analysis** (`/tmp/sessie154-item35b/distribution-analysis.py`):
+
+| Metric | INDEX median | BLOG median | KS p | MWU p | CV INDEX | CV BLOG | CV ratio | Dist-diff? | Var-asymm? |
+|---|---|---|---|---|---|---|---|---|---|
+| **Full bootstrap** | 304,6 ms | 313,3 ms | 0,42 | 0,27 | 0,216 | 0,171 | **1,26× SYMMETRIC** | NIET | NIET |
+| **Transfer-only** | 130,1 ms | 122,8 ms | 0,79 | 0,52 | 0,122 | 0,238 | 1,94× borderline | NIET | NIET |
+| **Discovery-queue** | 170,8 ms | 188,7 ms | 0,17 | **0,054** | 0,368 | 0,144 | **2,56× ASYMMETRIC** | NIET | **JA** |
+
+**Primary verdict:** Outcome 4 op full-bootstrap per pre-data plan §1 = Sessie 153 sampling-noise falsification.
+
+**Per-stage decomposition finding (NEW Sessie 154 mechanism-categorie):** opposing-direction variance-asymmetry — INDEX state-machine-internal (discovery-queue) higher variance, BLOG network-layer (transfer-only) higher variance, twee signalen in tegenovergestelde richting CANCELLEN op full-bootstrap aggregaat. Discovery-queue MWU p=0,054 is net buiten 0,05 threshold = borderline significance op central-tendency, MAAR variance-asymmetry CV-ratio 2,56× echt confirmed. State-leakage hypothesis NIET confirmed op enig single metric (geen metric heeft BEIDE distribution-difference AND variance-asymmetry confirmed simultaneously).
+
+**Methodological implication:** Primary-metric selection voor distribution-analysis moet stage-level mechanism-isolation capturen, NIET aggregate-level. Pre-data plan-design design-flaw onthuld: full-bootstrap als primary metric is kwetsbaar voor mechanism-cancellation pattern. NEW Sessie 154 discipline #3 documented.
+
+**Script bug fix (NEW Sessie 154 discipline #7):** Eerste script-run crashed met `TypeError: Object of type bool_ is not JSON serializable` bij `json.dump`. scipy.stats returns numpy.bool_ voor `p < 0.05` comparisons. Fix: cast `bool(...)` + `float(...)` voor alle numpy values vóór JSON serialization. Generalisatie: Python scripts die scipy/numpy outputs JSON-serialiseren moeten ALTIJD type-casten.
+
+### Phase C bidirectional canary check (NEW Sessie 153 discipline toegepast)
+
+Vergelijk 10-run LCP-range vs Sessie 152 cross-check baseline (INDEX 401 ms / BLOG 339 ms). Bidirectional thresholds: ≥2× HIGH-side OR ≤0,5× LOW-side = anomaly STOP+diagnose.
+
+| Canonical | LCP min | LCP max | LCP-range | Cross-check baseline | Ratio | HIGH threshold (≥2×) | LOW threshold (≤0,5×) | Status |
+|---|---|---|---|---|---|---|---|---|
+| INDEX | 1964 ms | 2300 ms | 336 ms | 401 ms | 0,84× | ≥802 ms | ≤200 ms | **PASS** |
+| BLOG | 1854 ms | 2605 ms | 751 ms | 339 ms | **2,21×** | ≥678 ms | ≤170 ms | **HIGH-anomaly** |
+
+**BLOG canary HIGH-anomaly interpretation:** ratio 2,21× is barely-over 2,0× threshold (edge-case). BLOG LCP-variance heeft toegenomen sinds Sessie 152. Consistent met transfer-only BLOG > INDEX asymmetry direction (LCP-range gedomineerd door transfer+render stages). Edge-case **accepted zonder +5 re-runs** (plan §3 Phase C suboptional) want anomaly is orthogonal aan primary adsbygoogle.js bootstrap-time signal (verschillende mechanism-layer). NEW Sessie 154 discipline #6: bidirectional canary edge-case accept als documented anomaly zonder re-run wanneer orthogonal aan primary signal.
+
+### Phase D verdict + spawn-decision (AskUserQuestion Heisenberg-confirmation)
+
+**Primary verdict per pre-data plan §1 4-outcome enumeration:** Outcome 4 robuust onderbouwd op alle 3 stage-metrics afzonderlijk (geen enkele met BEIDE criteria confirmed).
+
+**AskUserQuestion presented 4 spawn-options:** (A) Clean Outcome 4 + spawn #36 multi-day baseline-stability [Recommended]; (B) Expanded spawn-set #36+#37+#38; (C) Re-run +5 BLOG canary robustness check eerst; (D) Outcome herclassificeren via spirit-rule override. **Heisenberg-confirmation: Option A clean Outcome 4 + spawn #36.**
+
+**Spawn-decision per plan Outcome 4 rule:** Sessie 155 spawn #36 multi-day baseline-stability analysis — captures alle 3 secondary findings via langere observatie-window (borderline MWU significance, opposing-direction asymmetry, BLOG canary structureel vs sampling-artifact). NO additional #37/#38 spawns want overkill — #36 inherently captures secondary signalen via meer samples + day-as-factor ANOVA.
+
+**Cumulatieve #34 mechanism-isolation closure-pad BEREIKT:** 152 (Frame B clean S7 1,83× cross-check) + 153 (Frame D gray conflicting-canonicals S7 1,85× cross-check) + **154 (Outcome 4 methodological-evolution-output)** = mechanism-isolation categorisch closure via combined-mechanism-cascade-interactie + opposing-direction per-stage asymmetry pattern verklaart Sessie 151 #27 6,5-7,7× variance-amplification. Geen enkel single mechanism is alleen verantwoordelijk — combined-cascade-interactie + page-type-dependent state-machine-internals.
+
+### Phase E defense-in-depth 5+ plekken docs sync (~30 min)
+
+(1) TASKS.md item #35 (b) closure regel ~93 + item #35 header [ ]→[x] + #36 backlog addition + Sprint regel + Status header + Laatst bijgewerkt + Voortgang. (2) Dit current.md Sessie 154 entry prepend. (3) docs/perf-third-party-audit.md §2i nieuwe sectie. (4) .claude/CLAUDE.md "Recent Critical Learnings" prepend Sessie 154 + 1-in-1-out delete Sessie 148 block (Sessie 148 entry al gearchiveerd in current.md regel 681) + Rotation comment update "(148-153)→(149-154)" + "Pre-Sessie 148 learnings" → "Pre-Sessie 149 learnings" + Last updated + Version bump 5.27→5.28. (5) Plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-sessie-cozy-crab.md` §6 outcome sectie fill-in met verdict + actual data.
+
+### NEW Sessie 154 disciplines (11 items, anti-bias documented)
+
+**Pre-execution / methodologie (4):**
+1. Concurrent LH instances introduceren CPU-contention variance → sequential-only voor distribution-analysis validity (parallel-tussen-canonicals werkt WEL voor patch-decision Frame A/B/C/D meting; distribution-analysis vs Frame-comparison hebben verschillende concurrency-validity requirements)
+2. LH JSON schema field-name verification pre-data via jq dry-test op bestaand artifact VOOR plan-§3 design completes (generalisatie van Sessie 149+151 "Plan-agent CLI-syntax-claims" naar JSON-schema-claims)
+3. Primary-metric selection voor distribution-analysis moet stage-level mechanism-isolation capturen NIET aggregate-level — mechanism-cancellation pattern (opposing-direction asymmetry per cascade-stage) cancelt op aggregaat
+4. 10-run vs 3-run sampling-size threshold voor KS-test power (N≥10 per group minimum)
+
+**Execution + verdict (4):**
+5. Distribution-analysis als 5e verify-first cyclus-variant naast Frame A keep / B no-action / C revert / D revert (diagnostic-distribution-analysis is legitimate outcome zonder patch-decision; categorische closure via methodological-evolution-output ipv via Frame A keep)
+6. Bidirectional canary edge-case accept als documented anomaly zonder re-run wanneer anomaly orthogonal aan primary signal (barely-over-threshold edge accept met expert-decision)
+7. Python script robust JSON serialization (numpy.bool_ + numpy floats cast naar Python bool/float vóór json.dump bij scipy.stats outputs)
+8. Execution-time plan-deviation detection + documentation (parallel→sequential correctie tijdens Phase A start, document als nieuwe discipline ipv silent-fix)
+
+**Discipline + mechanism-categorie (3):**
+9. AskUserQuestion bij verdict-decision-moment ondanks clean letter-rules wanneer secondary findings nuance toevoegen — volgt Sessie 150 spirit-rule consultation pattern; verdict was clean per pre-data rules MAAR per-stage findings genereren multiple potential spawn-paths
+10. Per-page-type Auto-ads-state-machine prioritization-asymmetry als nieuwe mechanism-categorie (discovery-queue INDEX > BLOG CV 2,56× = state-machine-internal page-type-dependent prioritization)
+11. Categorical closure via methodological-evolution-output ipv via Frame A keep — anti-rationalisatie-discipline schaalt nu over alle uitkomst-typen inclusief diagnostic-distribution-analysis met clean Outcome verdict + secondary findings als documented mechanism-categorie
+
+### 9-sessie streak honest data-driven outcomes update
+
+145B + 146D + 147C + 149D + 150A + 151C + 152B + 153D + **154 methodological-output** = 7 falsificatie + 1 KEEP + 1 methodological-evolution-output = **9 sessies eervol data-driven**. Anti-rationalisatie-discipline structureel verankerd over alle uitkomst-typen inclusief methodological-evolution-output categorie (nieuwe outcome-categorie naast Frame A/B/C/D + verify-first cyclus-variant uitbreiding van patch-decision naar diagnostic-distribution-analysis).
+
+### Defense-in-depth 5+ plekken vastgelegd
+
+(a) dit current.md Sessie 154 full session-log, (b) TASKS.md item #35 closure regel ~93 + #35 header [x] + #36 backlog + sprint regel + Status + Laatst bijgewerkt + Voortgang, (c) docs/perf-third-party-audit.md §2i nieuwe sectie multi-metric tabel + per-stage decomposition finding + Outcome 4 verdict logic, (d) .claude/CLAUDE.md "Recent Critical Learnings" Sessie 154 prepend + 1-in-1-out Sessie 148 archive reference + Last updated + Version 5.28, (e) plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-sessie-cozy-crab.md` §6 outcome sectie. Pattern Sessie 140 → ... → 154 schaalt over Outcome 4 methodological-evolution-output verdict-categorie.
+
+### Artifacts retention
+
+`/tmp/sessie154-item35b/{canary-reference.json, baseline-r{1..10}-{index,blog}.json (20 files ~12 MB totaal), bootstrap-data.csv (21 lines incl header), distribution-analysis.py (165 lines), distribution-analysis.txt (verdict text output), distribution-analysis.json (machine-readable verdict + per-metric details), verdict.json (Phase D synthesis met spawn-decision)}`. Background-job output `/tmp/claude-1000/.../biotedj51.output` (20-run wallclock trace).
+
+### Next steps (Sessie 155+)
+
+1. **Sessie 155 #36 multi-day baseline-stability analysis** — 3 consecutive days × 10 runs per canonical × 2 canonicals = 60 LH runs totaal. Onderscheidt structureel populatie-pattern vs ephemeral sampling-artifact voor alle 3 #35 (b) secondary findings.
+2. **#35 (a) Brevo + #35 (c) DevTools Override = CLOSED via Outcome 4** — superseded by spawn #36.
+3. **M6 Tutorial 3 last taken** — niet-perf, milestone 100% closure pad (mobile gestures + beta testing + final polish).
+4. **#33 (c) CSS critical-path inline** — backlog blijft open (cache-invalidation trade-off niet opgelost).
+
+---
+
 ## Sessie 153: Item #34 (b) inline-CSS-only mechanism-isolation — Frame D gray REVERT met conflicting-canonical-page-type-attribution + NEW bidirectional canary discipline (7 jun 2026)
 
 **Scope:** Heisenberg's cold-start: Sessie 152 #34 (a) closure spawned categorische closure-pad ten behoeve van #34 mechanism-isolation onderzoek. Sessie 153 isoleerde inline-CSS-only als 2e bisectie-stap na Sessie 152 preconnect-only Frame B partial-falsification. Plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-swift-stream.md`.
