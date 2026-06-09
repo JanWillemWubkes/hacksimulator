@@ -12,18 +12,27 @@
 # Doel: voorkom doc-drift die in Sessie 139 zichtbaar werd
 # (CLAUDE.md liep 14 sessies vooruit op PLANNING.md/TASKS.md).
 #
-# Usage: ./scripts/validate-docs.sh
+# Usage:
+#   ./scripts/validate-docs.sh           — Checks 1-4 (fast, pre-commit hook)
+#   ./scripts/validate-docs.sh --deep    — Checks 1-7 (opt-in, end-of-sessie /summary gate)
 # Exit code: 0 = all valid, 1 = drift detected
 #
-# TODO Sessie 144: voeg --deep mode toe voor soft-drift detectie
-#   - Check 5: Bundle KB ground-truth — vergelijk `du -sb src/ styles/ blog/ assets/`
-#     output met cijfers in TASKS.md §Huidige Focus (tolerance ±5%)
-#   - Check 6: Milestone-percentage ground-truth — raw `[x]`/`[ ]` count per
-#     mijlpaal-sectie vs claimed percentage in Voortgang Overzicht tabel
-#   Trigger: Sessie 144 rotation (zie TASKS.md Volgende Stappen #23). ~20 min werk.
-#   Soft-drift = cijfers die langzaam verouderen zonder dat één invariant breekt.
+# Sessie 157: --deep mode toegevoegd voor soft-drift detectie (Sessie 140 TODO fulfilled).
+#   - Check 5: Bundle KB ground-truth via VALIDATE-BUNDLE marker block in TASKS.md (±5% tol)
+#   - Check 6: Milestone-percentage ground-truth via [x]/[ ] count per M6/M7/M8 section
+#               (sections-loze milestones M0-M5/M5.5/M9/Blog: graceful [SKIP])
+#   - Check 7: Cross-doc Versie consistency CLAUDE.md `**Version:**` ↔ TASKS.md `**Versie:**`
+# Soft-drift = cijfers die langzaam verouderen zonder dat één invariant breekt.
 
 set -o pipefail
+
+# --deep flag parsing: opt-in soft-drift checks (5-7). Pre-commit hook blijft fast (default).
+DEEP_MODE=0
+for arg in "$@"; do
+  if [ "$arg" = "--deep" ]; then
+    DEEP_MODE=1
+  fi
+done
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -191,11 +200,127 @@ for keyword in "${!KEYWORDS[@]}"; do
 done
 
 # ============================================================
+# --deep mode: soft-drift checks (Sessie 157)
+# ============================================================
+if [ "$DEEP_MODE" = "1" ]; then
+
+  # ----------------------------------------------------------
+  # Check 5: Bundle KB ground-truth (±5% tolerance)
+  # ----------------------------------------------------------
+  check_start "Bundle KB ground-truth (--deep, ±5% tolerance)"
+
+  MARKER_LINE=$(grep -A2 'VALIDATE-BUNDLE-START' "$TASKS" | grep -oE 'src=[0-9]+ styles=[0-9]+ blog=[0-9]+ assets=[0-9]+' | head -1)
+
+  if [ -z "$MARKER_LINE" ]; then
+    fail "TASKS.md mist VALIDATE-BUNDLE marker block (verwacht: '<!-- src=N styles=N blog=N assets=N -->' tussen VALIDATE-BUNDLE-START/END HTML comments in §Huidige Focus)"
+  else
+    for dir in src styles blog assets; do
+      target=$(echo "$MARKER_LINE" | grep -oE "${dir}=[0-9]+" | grep -oE '[0-9]+')
+      if [ ! -d "${dir}/" ]; then
+        fail "Bundle ${dir}/: directory niet gevonden (skip measurement)"
+        continue
+      fi
+      measured_bytes=$(du -sb "${dir}/" | cut -f1)
+      measured_kb=$((measured_bytes / 1024))
+      # Pure-bash integer arithmetic (locale-onafhankelijk; awk printf gaf nl_NL komma's
+      # die volgende awk calls deden syntax-failen — Sessie 157 leerpunt).
+      # drift_x10 = drift% × 10 voor 1 decimal precision zonder floats.
+      delta=$((measured_kb - target))
+      abs_delta=$(( delta < 0 ? -delta : delta ))
+      abs_pct_x10=$(( abs_delta * 1000 / target ))
+      sign=""
+      if [ "$delta" -lt 0 ]; then sign="-"; fi
+      drift_int=$((abs_pct_x10 / 10))
+      drift_frac=$((abs_pct_x10 % 10))
+      if [ "$abs_pct_x10" -gt 50 ]; then
+        fail "Bundle ${dir}/ drift buiten ±5%: target=${target} KB vs measured=${measured_kb} KB = ${sign}${drift_int}.${drift_frac}%"
+      else
+        pass "Bundle ${dir}/: target=${target} KB / measured=${measured_kb} KB / drift=${sign}${drift_int}.${drift_frac}%"
+      fi
+    done
+  fi
+
+  # ----------------------------------------------------------
+  # Check 6: Milestone-percentage ground-truth (M6/M7/M8 sections)
+  # ----------------------------------------------------------
+  check_start "Milestone-percentage ground-truth (--deep)"
+
+  # Section-range mapping: alleen milestones met dynamische TASKS.md section.
+  # M0-M5/M5.5/M9/Blog: historisch of section-loos → graceful [SKIP].
+  # Bekend-fragile: awk range gebruikt emoji-anchored headers. Als emoji wijzigt → update hier.
+  declare -A MILESTONE_RANGES
+  MILESTONE_RANGES[M6]='/^## 🎓 M6:/,/^## 🎮 M7:/'
+  MILESTONE_RANGES[M7]='/^## 🎮 M7:/,/^## 📊 M8:/'
+  MILESTONE_RANGES[M8]='/^## 📊 M8:/,/^## 📚 Referenties/'
+
+  for mkey in M6 M7 M8; do
+    range="${MILESTONE_RANGES[$mkey]}"
+    done_count=$(awk "$range" "$TASKS" | grep -c '^- \[x\]' || true)
+    todo_count=$(awk "$range" "$TASKS" | grep -c '^- \[ \]' || true)
+    total=$((done_count + todo_count))
+
+    if [ "$total" -eq 0 ]; then
+      fail "$mkey: section range gevonden maar [x]+[ ] count = 0 (mogelijk verkeerde range-marker — emoji wijziging?)"
+      continue
+    fi
+
+    expected_pct=$((100 * done_count / total))
+    expected_taken="${done_count}/${total}"
+
+    table_row=$(grep -E "^\| ${mkey}:" "$TASKS" | head -1)
+    if [ -z "$table_row" ]; then
+      fail "$mkey: geen Voortgang Overzicht tabel-rij gevonden (verwacht '| $mkey: ...')"
+      continue
+    fi
+
+    claimed_taken=$(echo "$table_row" | grep -oE '\| [0-9~]+/[0-9~]+' | head -1 | tr -d '| ')
+    claimed_pct=$(echo "$table_row" | grep -oE '\| [0-9~]+%' | head -1 | tr -d '| %')
+
+    if [ "$claimed_taken" != "$expected_taken" ]; then
+      fail "$mkey: tabel-taken='$claimed_taken' ≠ section ground-truth='$expected_taken' ([x]+[ ] count)"
+    else
+      pass "$mkey: tabel-taken match section ($expected_taken)"
+    fi
+
+    if [ "$claimed_pct" != "$expected_pct" ]; then
+      fail "$mkey: tabel-pct='${claimed_pct}%' ≠ section ground-truth='${expected_pct}%'"
+    else
+      pass "$mkey: tabel-pct match section (${expected_pct}%)"
+    fi
+  done
+
+  echo -e "  ${YELLOW}[SKIP]${NC} M0-M5/M5.5/M9/Blog: geen TASKS.md section voor checklist ground-truth (historisch of section-loos)"
+
+  # ----------------------------------------------------------
+  # Check 7: Cross-doc Versie consistency (CLAUDE.md ↔ TASKS.md)
+  # ----------------------------------------------------------
+  check_start "Cross-doc Versie consistency (--deep)"
+
+  CLAUDE_VERSION=$(grep -oE '^\*\*Version:\*\* [0-9]+\.[0-9]+' "$CLAUDE" | grep -oE '[0-9]+\.[0-9]+' | head -1)
+  TASKS_VERSIE=$(grep -oE '^\*\*Versie:\*\* [0-9]+\.[0-9]+' "$TASKS" | grep -oE '[0-9]+\.[0-9]+' | head -1)
+
+  if [ -z "$CLAUDE_VERSION" ]; then
+    fail "CLAUDE.md: geen canonieke '**Version:** N.M' regel gevonden (verwacht start-of-line bold marker)"
+  elif [ -z "$TASKS_VERSIE" ]; then
+    fail "TASKS.md: geen canonieke '**Versie:** N.M' regel gevonden (verwacht start-of-line bold marker)"
+  elif [ "$CLAUDE_VERSION" != "$TASKS_VERSIE" ]; then
+    fail "Versie cross-doc mismatch: CLAUDE.md=$CLAUDE_VERSION vs TASKS.md=$TASKS_VERSIE"
+  else
+    pass "CLAUDE.md + TASKS.md beide refereren aan Versie $CLAUDE_VERSION"
+  fi
+
+fi  # end of --deep block
+
+# ============================================================
 # Summary
 # ============================================================
 echo ""
 echo "=========================================="
-echo "Summary"
+if [ "$DEEP_MODE" = "1" ]; then
+  echo "Summary (--deep mode: Checks 1-7)"
+else
+  echo "Summary (fast mode: Checks 1-4 — run with --deep for soft-drift Checks 5-7)"
+fi
 echo "=========================================="
 echo "Total checks run: $CHECK_COUNT"
 if [ $FAIL_COUNT -eq 0 ]; then
@@ -205,7 +330,11 @@ else
   echo -e "${RED}$FAIL_COUNT failure(s) detected.${NC}"
   echo ""
   echo "Doc-drift gedetecteerd. Zie failures hierboven."
-  echo "Quickfix: synchroniseer sessie-counter, datums, of monetization-keywords."
+  if [ "$DEEP_MODE" = "1" ]; then
+    echo "Quickfix: synchroniseer sessie-counter / datums / monetization-keywords / bundle KB marker / milestone-tabel / Versie."
+  else
+    echo "Quickfix: synchroniseer sessie-counter, datums, of monetization-keywords."
+  fi
   echo "Volledige protocol: PLANNING.md §Document Ownership + .claude/CLAUDE.md §Sessie Protocol"
   exit 1
 fi

@@ -4,6 +4,113 @@
 
 ---
 
+## Sessie 157: `#23` validate-docs `--deep` mode — Soft-drift Detectie (Bundle KB + Milestone-% + Cross-doc Versie) + REAL-TIME M8 Drift Caught via Zelf-test (9 jun 2026)
+
+**Scope:** Heisenberg's cold-start Sessie 157 — pak op #23 validate-docs `--deep` mode (12 sessies vertraagd inhalen van Sessie 140 inline TODO target Sessie 144). Heisenberg-recommended scope via AskUserQuestion (1 vraag, 4 opties). Verify-first plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-precious-dusk.md`. Sessie 157 = **12e sessie streak honest data-driven outcomes** + **tweede feature-completion uitkomst-categorie** (sub-categorie infra-investment, parallel met M6 milestone-closure Sessie 156). Anti-rationalisatie-discipline-laag identiek: pre-data scope + AskUserQuestion bij scope-bevestiging + defense-in-depth 14+ plekken + script-level test-injection verificatie + validate-docs zelf-test post-implementation.
+
+**Status:** ✅ #23 CLOSED. scripts/validate-docs.sh PRE 211 regels / 6,9 KB → POST 340 regels / 13,6 KB = +129 regels / +6,6 KB. 3 nieuwe checks (5/6/7) + `--deep` opt-in flag. **REAL drift gevangen tijdens Phase C clean baseline (forcing-function value real-time):** M8 Voortgang Overzicht tabel 0/40/0% vs section ground-truth 1/37/2%. Ad-hoc fix tabel. **Ad-hoc drift-fix #2:** spec count 22 → 23 (Sessie 156 added tutorial-gestures.spec.js zonder TASKS.md count-update). **Phase D 3 drift-injection scenarios verified** (Bundle/Milestone/Versie alle exit 1 zoals verwacht). **Phase F final --deep zelf-test exit 0** = forcing-function gate post-implementation.
+
+### Plan-file context
+
+Plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-precious-dusk.md` (12 secties: Context + Scope + Critical files + Implementation per check + Bash discipline + Verification + Defense-in-depth 14 plekken + Outcome categorization + NEW disciplines kandidaten + Risico's tabel + Spawn implications + Executie-volgorde). ExitPlanMode approved zonder vragen. Allowed prompts: validate-docs runs + bundle metrics + awk/grep parsing + script syntax check + git commit/push + cat/head/tail voor regex testing.
+
+### Phase 1 ground-truth meting
+
+| Metric | Sessie 156 closure | Sessie 157 cold-start |
+|--------|--------------------|-----------------------|
+| src/ bytes | 627.671 → 630.428 | 630.428 (= 615 KB) |
+| styles/ bytes | onveranderd | 386.602 (= 377 KB) |
+| blog/ bytes | onveranderd | 364.478 (= 355 KB) |
+| assets/ bytes | onveranderd | 701.230 (= 684 KB) |
+| Playwright spec files | 22 (CLAUDE.md claim) | **23 measured** (drift +1) |
+| Laatste commit | `3718779 feat(m6-closure): Sessie 156` | idem |
+
+### Phase B implementatie
+
+scripts/validate-docs.sh +129 regels / +6,6 KB. **4 sub-edits:**
+
+1. **TODO comment removal (lines 18-24):** Sessie 140 inline TODO Sessie 144-trigger verbouwd → Sessie 157 fulfillment-notice met scope + usage hint.
+2. **`--deep` flag parsing direct na `set -o pipefail`:** simpele for-loop over `"$@"` om `DEEP_MODE=1` te zetten bij `--deep` argument detectie. Opt-in pattern: pre-commit hook blijft fast (default mode).
+3. **3 nieuwe check-functies wrapped in `if [ "$DEEP_MODE" = "1" ]; then ... fi`:** Check 5 Bundle KB (4 directories × du -sb + marker block parsing + pure-bash arithmetic), Check 6 Milestone-percentage (M6/M7/M8 sections via awk-range + grep [x]/[ ] count + tabel-rij regex), Check 7 Cross-doc Versie (CLAUDE.md `**Version:**` ↔ TASKS.md `**Versie:**`).
+4. **Summary footer differentiate:** fast-mode hint ("run with --deep for soft-drift Checks 5-7") vs deep-mode label ("Summary (--deep mode: Checks 1-7)").
+
+### Phase C clean baseline + REAL drift caught
+
+`bash scripts/validate-docs.sh` → exit 0 (Checks 1-4 default). `bash scripts/validate-docs.sh --deep` → exit 1 met 2 fails op Check 6: M8 tabel-taken='0/40' ≠ section ground-truth='1/37', M8 tabel-pct='0%' ≠ section ground-truth='2%'. **Real-time forcing-function value demonstration:** M8 milestone had 1 [x] item marked done + 36 [ ] todo, totaal 37 niet 40. Voortgang Overzicht tabel-rij was stale sinds M8 milestone-creation.
+
+Ook awk-bug ontdekt:
+```
+awk: line 1: syntax error at or near ?
+```
+Drift_pct werd geprint als `0,0` (Nederlandse komma in `LC_NUMERIC=nl_NL.UTF-8`) → bash interpolatie in volgende awk call `(0,0 > 5.0) ? 0 : 1` = invalid syntax → awk returnde non-zero → `if awk` interpreteerde als false → silent pass-branch. **Fix:** pure-bash integer arithmetic met `abs_pct_x10 = abs_delta * 1000 / target` voor 0,1% precision. Test `[ "$abs_pct_x10" -gt 50 ]` voor ±5% tolerance. Locale-onafhankelijk + geen interpolation-failure.
+
+Na fix + M8 sync: `bash scripts/validate-docs.sh --deep` → exit 0, alle 7 checks pass.
+
+### Phase D 3 drift-injection scenarios
+
+| Drift | Injection | Verwacht | Resultaat |
+|-------|-----------|----------|-----------|
+| 1 | Bundle marker src=615 → src=300 | Check 5 fail +105.0%, exit 1 | ✓ pass |
+| 2 | M7 tabel 47/47 → 40/47 + 100% → 85% | Check 6 fail beide taken+pct, exit 1 | ✓ pass |
+| 3 | TASKS.md Versie 5.30 → 5.99 | Check 7 fail CLAUDE=5.30 vs TASKS=5.99, exit 1 | ✓ pass |
+
+Allen revert na verification. Forcing-function discriminator-mechanism solid.
+
+### NEW Sessie 157 disciplines (5 items, gevalideerd)
+
+1. **Pure-bash integer arithmetic met `× 1000 / target` voor 0,1% precision in driftcalc** = locale-onafhankelijk forcing-function-discipline. Mitigeert awk-printf-decimal-interpolation pitfall. Pattern: `delta=$((measured - target)); abs_delta=$(( delta < 0 ? -delta : delta )); abs_pct_x10=$(( abs_delta * 1000 / target ))`. Test `[ "$abs_pct_x10" -gt 50 ]` voor ±5%. Sign-handling via separate `sign` variabele. Generaliseert naar elke shell-script die percentage-comparisons doet zonder externe tools.
+
+2. **`--deep` opt-in flag pattern voor validate-scripts die hard-drift (must-pass) en soft-drift (tolerance-gevoelig) mengen.** Pre-commit hook blijft fast (Checks 1-4 only), end-of-sessie `/summary` flow Step 7 runs `--deep` (Checks 5-7) als forcing-function gate. Pattern: `DEEP_MODE=0; for arg in "$@"; do [ "$arg" = "--deep" ] && DEEP_MODE=1; done` + `if [ "$DEEP_MODE" = "1" ]; then ... fi` wrapping. Generaliseert naar elke validate-script met gemixte invariant-types.
+
+3. **Structured HTML-comment marker block als robust parse-target voor compound-data ground-truth in docs.** Sessie 157 TASKS.md `<!-- VALIDATE-BUNDLE-START -->` / `<!-- src=N styles=N blog=N assets=N -->` / `<!-- VALIDATE-BUNDLE-END -->`. Documenteert drift-detection-target transparant + survives doc-rewrites + parse-robuust (`grep -A2 'VALIDATE-X-START' | grep -oE 'src=[0-9]+...'`). Niet hergebruiken voor enkelvoudige sessie-counter of versie (die hebben canonieke `**Bold:**` regel-prefix als anchor). Marker-block voor compound-data zoals 4-directory bundle KB.
+
+4. **Real-time drift-catch via zelf-test = direct forcing-function value-demonstration.** Sessie 157 Phase C clean baseline ving M8 Voortgang Overzicht drift (0/40/0% vs section 1/37/2%) tijdens implementation zelf. Plus ad-hoc spec count drift gevangen pre-implementation. Bewijst value pre-PR. Generaliseert: elke nieuwe validate-check moet onmiddellijk gerund worden tegen current state als value-proof-step. Onverwachte fail = sessie ad-hoc drift-fix kandidaat. Verwachte fail = drift-injection scenario voor verificatie. Pattern: implementation Phase C = baseline + drift-catch dual-purpose.
+
+5. **TODO-inline-as-spawn-marker discipline bewezen.** Sessie 140 commit schreef inline TODO targeting Sessie 144. Sessie 144 → Pad C1+C2 implementatie (TODO overgeslagen). Sessies 145-156 → andere prioriteiten. Sessie 157 → TODO opgepakt na 13 sessies vertraging. Forcing-function werkte over lange tijdshorizon (niet vergeten). Pre-data design: schrijf TODO inline met sessie-trigger + scope-pointer + estimate voor elke deferred feature. Pre-emptive validation: elke `/summary` flow Step 1 ground-truth meting MOET inline TODOs scannen op expired sessie-trigger. Als trigger-sessie > current-sessie - 5, expliciet AskUserQuestion of TODO doorgeschoven of opgepakt wordt.
+
+### Defense-in-depth Sessie 157 closure (14+ plekken)
+
+1. `scripts/validate-docs.sh` implementatie (+129 regels / +6,6 KB)
+2. `TASKS.md` NEW VALIDATE-BUNDLE marker block in §Huidige Focus
+3. `TASKS.md` item #23 [x] CLOSED + closure-note
+4. `TASKS.md` sprint regel update naar Sessie 157
+5. `TASKS.md` Laatst bijgewerkt header (9 jun 2026 Sessie 157)
+6. `TASKS.md` Voortgang Overzicht M8 ad-hoc fix 0/40/0% → 1/37/2%
+7. `TASKS.md` §Huidige Focus spec count 22 → 23
+8. `TASKS.md` Laatst bijgewerkt footer
+9. `TASKS.md` Versie footer 5.30 → 5.31
+10. `docs/sessions/current.md` Sessie 157 entry (dit document)
+11. `.claude/CLAUDE.md` Recent Critical Learnings Sessie 157 prepend
+12. `.claude/CLAUDE.md` 1-in-1-out Sessie 155 verwijderd (al in current.md regel 143 sinds bulk-rotation Sessie 155)
+13. `.claude/CLAUDE.md` Sessie counter 156 → 157
+14. `.claude/CLAUDE.md` Rotation 155-156 → 156-157
+15. `.claude/CLAUDE.md` Last updated bump met Sessie 157 narrative
+16. `.claude/CLAUDE.md` Version 5.30 → 5.31
+17. Plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-precious-dusk.md` §6 outcome categorization
+18. `bash scripts/validate-docs.sh --deep` exit 0 forcing-function gate post-implementation
+19. Git commit + push productie (Phase G)
+
+### Outcome categorization
+
+**Sessie 157 = infra-investment sub-categorie van feature-completion** (Sessie 156 uitkomst-categorie 11). Discipline-laag identiek aan UI feature-completion: pre-data scope-decisie + AskUserQuestion bij scope-bevestiging (1 vraag, 4 opties) + defense-in-depth 14+ plekken + script-level test-injection als verificatie-pad (parallel met cross-browser Playwright voor UI features) + zelf-test post-implementation als forcing-function gate.
+
+**Frame-verdict-schema N/A** voor infra-investment (geen patch-decision Frame A/B/C/D).
+
+**12-sessie streak honest data-driven outcomes:** 145B + 146D + 147C + 149D + 150A + 151C + 152B + 153D + 154 Outcome 4 + 155 Outcome 4 + 156 M6 feature-completion + **157 infra-investment** = 7 falsificatie + 1 KEEP + 2 methodological-evolution-output + **2 feature-completion (M6 + infra-investment sub-categorie)**. Anti-rationalisatie-discipline structureel verankerd over alle uitkomst-typen inclusief infra-investment.
+
+### Spawn-kandidaten Sessie 158+
+
+Sessie 157 closure opent kandidaten voor toekomstige `--deep` extensions (niemand pre-committed):
+
+1. **#23.1 Test spec count check** — TASKS.md "23 spec files" vs `find tests/e2e -name "*.spec.js" | wc -l` ground-truth. Klein scope ~10 min implementatie.
+2. **#23.2 PRD version cross-doc** — Current Check 3 controleert CLAUDE.md ↔ PLANNING.md; uitbreiding naar TASKS.md = future spawn.
+3. **#23.3 CSS variable count drift** — TASKS.md mentions "182+27 CSS variables". `grep -c ':root.*--' styles/*.css` zou ground-truth zijn.
+4. **#23.4 PLANNING.md Versie field introductie** — als PLANNING.md ooit Versie krijgt, Check 7 uitbreiden naar 3-doc consistency.
+
+Andere candidate-paden: #33 (c) CSS critical-path inline perf-investigation (~3 uur), M5 Testing 91% closure (~2-4 uur), M5.5 Monetization 89% closure (klein), #33 (e) cache-coherency blanket fix (~30 min).
+
+---
+
 ## Sessie 156: M6 Tutorial 3 Last Taken Pivot — Long-Press Hint Gesture + Beta-Protocol-Doc → M6 Milestone 100% Closure (9 jun 2026)
 
 **Scope:** Heisenberg's cold-start Sessie 155 pre-committed pivot via AskUserQuestion: M6 milestone 88% → 100% closure via 3 last taken (Mobile gesture + Beta testing + Final polish). Verify-first plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-synchronous-sundae.md`. Sessie 156 = **11e sessie streak honest data-driven outcomes** + **eerste feature-completion uitkomst-categorie** naast 7 falsificatie + 1 KEEP + 2 methodological-evolution-output. Anti-rationalisatie-discipline blijft verankerd via discipline-laag (pre-data scope + AskUserQuestion bij ambiguity + defense-in-depth 5+ plekken + validate-docs gate) — Frame A/B/C/D verdict-schema is N/A voor feature-completion maar discipline-laag identiek.
