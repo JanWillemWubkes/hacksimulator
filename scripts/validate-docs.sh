@@ -21,9 +21,13 @@
 #   - Check 5: Bundle KB ground-truth via VALIDATE-BUNDLE marker block in TASKS.md (±5% tol)
 #   - Check 6: Milestone-percentage ground-truth via [x]/[ ] count per M5/M5.5/M6/M7/M8/M9 section
 #               + Blog file-count ground-truth (sub-check 6b: ls blog/*.html minus index/welkom)
-#               (legacy M0-M4: graceful [SKIP] — tabel-targets = MVP-essential subset niet section-total)
+#               (legacy M0-M4: permanent [SKIP] by-design — tabel-targets = MVP-essential subset,
+#                section [ ] items zijn defer-to-M5/M4 testing-tasks of legitiem-optional/Post-MVP.
+#                Frozen milestones, drift mechanisch-onmogelijk — Check 6 detection-value = 0.
+#                #23.2 CLOSED Sessie 159 (documentation-of-intent, geen code-logic change).)
 #               Awk-ranges fragile bij header-format-wijzigingen (emoji/h2-h3-shift) — zie comments.
-#               Sessie 158: extension naar M5/M5.5/M9 + Blog sub-check 6b (item #23.1)
+#               Sessie 158: extension naar M5/M5.5/M9 + Blog sub-check 6b (item #23.1).
+#               Sessie 159: M0-M4 permanent-SKIP gedocumenteerd (item #23.2).
 #   - Check 7: Cross-doc Versie consistency CLAUDE.md `**Version:**` ↔ TASKS.md `**Versie:**`
 # Soft-drift = cijfers die langzaam verouderen zonder dat één invariant breekt.
 
@@ -249,8 +253,10 @@ if [ "$DEEP_MODE" = "1" ]; then
   check_start "Milestone-percentage ground-truth (--deep)"
 
   # Section-range mapping: milestones met dynamische TASKS.md section.
-  # M0-M4: historisch voltooid, tabel-targets = MVP-essential subset niet section-total
-  #        → graceful [SKIP] (apart fix-decision #23.2 nodig).
+  # M0-M4: permanent SKIP by-design (Sessie 159 #23.2 CLOSED documentation-of-intent).
+  #        Frozen milestones — tabel-targets = MVP-essential subset, section [ ] items
+  #        zijn defer-to-M5/M4 testing-tasks of legitiem-optional/Post-MVP/Future.
+  #        Detection-value = 0 want toekomstige drift mechanisch-onmogelijk.
   # Blog: content-pijler, file-based ground-truth → aparte sub-check 6b hieronder.
   # Bekend-fragile: awk ranges gebruiken h2-emoji-anchored OF h3-plain-text-anchored headers.
   # Als header-format wijzigt (emoji-swap, h-level-shift, rename) → update hier.
@@ -300,7 +306,7 @@ if [ "$DEEP_MODE" = "1" ]; then
     fi
   done
 
-  echo -e "  ${YELLOW}[SKIP]${NC} M0-M4: legacy voltooid (tabel-targets = MVP-essential subset, section-totals bevatten optional items — apart fix-decision #23.2)"
+  echo -e "  ${YELLOW}[SKIP]${NC} M0-M4: permanent by-design (frozen milestones; section [ ] = defer-to-M5/M4 testing of optional/Post-MVP — geen drift mogelijk, #23.2 CLOSED Sessie 159)"
 
   # ----------------------------------------------------------
   # Check 6b: Blog content-pijler file-count ground-truth (sub-check, geen CHECK_COUNT bump)

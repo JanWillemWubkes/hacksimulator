@@ -4,6 +4,80 @@
 
 ---
 
+## Sessie 159: `#23.2` M0-M4 permanent-SKIP closure — documentation-of-intent (12e uitkomst-categorie), ~30 min minimal scope (10 jun 2026)
+
+**Scope:** Heisenberg's cold-start Sessie 159 — pak op #23.2 M0-M4 legacy fix-decision spawn uit Sessie 158 #23.1 SKIP-notice. Heisenberg-vroeg expert-advies, Claude shift initiële #33 (c) pivot-aanbeveling naar #23.2 minimal closure na Explore-onderzoek toonde #33 (c) niet-ready (geen perf-audit §2j scope-document + geen tooling penthouse/critical absent + cumulatief-reverted pad Sessie 151 Frame C + Sessie 153 Frame D + cache-invalidation trade-off ongedocumenteerd + scope-ambiguïteit). Verify-first plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-sessie-whimsical-shannon.md`. Sessie 159 = **14e sessie streak honest data-driven outcomes** + **NIEUWE 12e uitkomst-categorie documentation-of-intent** (minimal-closure backlog-hygiene zonder code-logic change).
+
+**Status:** ✅ #23.2 CLOSED. scripts/validate-docs.sh 3 comment-plekken (header regel 22-28 + inline regel 252-256 + echo SKIP regel 305) — M0-M4 SKIP-notice gewijzigd van "apart fix-decision #23.2 nodig" → "permanent by-design (frozen milestones; section [ ] = defer-to-M5/M4 testing of optional/Post-MVP — geen drift mogelijk)". Geen logica-change in script, alleen comment-updates.
+
+| Metric | Sessie 158 closure | Sessie 159 cold-start |
+|--------|--------------------|------------------------|
+| Sessie counter | 158 | 159 |
+| TASKS.md Versie | 5.32 | 5.33 |
+| CLAUDE.md Version | 5.32 | 5.33 |
+| Sprint regel | Sessie 158 #23.1 CLOSED | Sessie 159 #23.2 CLOSED |
+| Laatste commit | `b92a08a feat(infra): Sessie 158` | TBD Sessie 159 |
+| Validate-docs --deep | exit 0 | exit 0 (post-implementatie gate) |
+
+### Phase 1 analyse: M0-M4 drift structureel-by-design
+
+Lezen TASKS.md regels 111-376 toonde patroon:
+- **M0 (15/15 vs 18/19):** 1 [ ] = "GitHub remote repository (skipped per user request)" — legitiem skipped
+- **M1 (20/20 vs 31/34):** 3 [ ] = Favicon (optioneel), Cross-browser test (defer M5), Mobile responsive test (defer M4)
+- **M2 (25/25 vs 30/32):** 2 [ ] = Cross-browser localStorage test (defer M5), Mobile test (defer M4) + 1 strikethrough `continue` Post-MVP
+- **M3 (28/28 vs 34/36):** 2 [ ] = Cross-browser test (defer M5), Mobile test (defer M4)
+- **M4 (43/43 vs 43/46):** 3 [ ] = Persistent hint (Future enhancement), Exit intent detection (Fase 2), Feedback save logic (Fase 2)
+
+**Conclusie:** Tabel-getallen counten **MVP-essential subset** (core-MVP-tasks zonder defer/optional/Future). Sections bevatten **full implementation-detail-completeness** inclusief deferred testing-tasks. Dit is een **semantic-difference** tussen tabel-meaning en section-meaning, NIET drift. Voltooide milestones zijn frozen — toekomstige tabel/section drift is mechanisch-onmogelijk. Detection-value-add van Check 6 voor M0-M4 = 0.
+
+### Phase 2 expert-shift na Explore-onderzoek (#33 (c) niet-ready)
+
+Initiële aanbeveling: #33 (c) CSS critical-path inline als anti-overspecialisatie-pivot terug naar verify-first cyclus. Explore agent onderzoek onthulde:
+1. **Geen expliciete perf-audit §2j scope-document** — alleen 1 regel in Sessie 149 spawn-list "(c) CSS critical-path inline (cache-invalidation-trade-off bekend)"
+2. **Geen tooling** beschikbaar (penthouse/critical/puppeteer absent in package.json)
+3. **3e poging op cumulatief-reverted pad** — Sessie 151 #27 Frame C variance-amplification + Sessie 153 #34 (b) Frame D gray conflicting-canonical
+4. **Cache-invalidation trade-off "bekend" maar ongedocumenteerd**
+5. **Scope-ambiguïteit:** 17 ad-bearing pages vs 40+ totaal vs terminal-only?
+
+**Expert-shift verdict:** #33 (c) full cyclus zou swampy investigation worden zonder pre-data scope-design. Anti-rationalisatie-discipline werkt twee kanten op: niet alleen tegen sunk-cost-rationalisatie, ook tegen pivot-rationalisatie. "Diversiteit" als argument voor #33 (c) verraadt zwakke-scope-investigation. Mijn initiële pivot was rationalisatie.
+
+### Phase 3 implementation: scripts/validate-docs.sh 3 comment-plekken
+
+- **Regel 22-28 header-comment:** Sessie 158 comment uitgebreid met permanent SKIP-by-design rationale + #23.2 closure-referentie + Sessie 159 line item
+- **Regel 252-256 inline comment voor mkey loop:** "historisch voltooid" → "permanent SKIP by-design (Sessie 159 #23.2 CLOSED documentation-of-intent). Frozen milestones — detection-value = 0 want toekomstige drift mechanisch-onmogelijk"
+- **Regel 305 echo SKIP-message:** "legacy voltooid" → "permanent by-design (frozen milestones; section [ ] = defer-to-M5/M4 testing of optional/Post-MVP — geen drift mogelijk, #23.2 CLOSED Sessie 159)"
+
+Geen script-logic change. Bundle delta: geen (scripts/ buiten Terminal Core budget).
+
+### Phase 4 validate-docs --deep verificatie + drift-catch
+
+Eerste --deep run na CLAUDE.md edits faalde (forcing-function value-demonstration in actie): "PLANNING.md bevat geen referentie naar 'Sessie 159'". Fix: PLANNING.md Laatst bijgewerkt header + footer + Versie 4.3 noot updates (3 plekken). Tweede --deep run exit 0. Sessie 153 leerpunt #5 herbevestigd: PLANNING.md Edit vereiste Read eerst (parallel-Edit batch zonder pre-Read faalde "File has not been read yet"). Generaliseert ook hier.
+
+### NEW Sessie 159 disciplines (3 items, gevalideerd)
+
+1. **Pivot-rationalisatie zonder Explore-onderzoek van pivot-target.** Sessie 159 initiële aanbeveling was #33 (c) als "anti-overspecialisatie-pivot" zonder de target-readiness te onderzoeken. Explore-agent onthulde geen perf-audit §2j scope-document + geen tooling + cumulatief-reverted pad. Pivot-rationalisatie is dual van sunk-cost-rationalisatie: "diversiteit" als argument verraadt zwakke-scope-investigation. Mitigatie: voor elk pivot-besluit, Explore agent verify target-readiness pre-data. Generaliseert naar elke strategische heroriëntatie binnen sessie — verifieer alternatief vóór pivot-rationalisatie.
+
+2. **Plan-assumption verifieer pre-data ook voor self-authored plans.** Sessie 159 plan §3.2 nam aan dat #23.2 een formele TASKS.md backlog entry had. Grep toonde geen formele entry; #23.x sub-items zijn impliciet via sprint regel + script comments (dezelfde patroon als Sessie 158 #23.1). Generaliseert Sessie 153 leerpunt #5 + Sessie 156 leerpunt #6 naar plan-design assumptions (niet alleen Edit-tool Read-state). Pre-data design: voor elke plan-§3 file-target-specifiek, grep-verifieer locatie/structuur vóór Edit-batch.
+
+3. **Documentation-of-intent als 12e uitkomst-categorie.** Naast Frame A/B/C/D verify-first (Sessies 145-153) + distribution-analysis (Sessie 154) + 3-burst compression (Sessie 155) + M-milestone feature-completion (Sessie 156) + infra-investment introductie (Sessie 157) + infra-investment-extension (Sessie 158) = nu **documentation-of-intent (Sessie 159)** — minimal-closure backlog-hygiene zonder code-logic change. Discipline-laag identiek aan andere uitkomsten (pre-data scope + AskUserQuestion bij scope-keuze + defense-in-depth + validate-docs gate + final --deep zelf-test). Anti-rationalisatie-discipline structureel verankerd over alle uitkomst-typen inclusief minimal-closure.
+
+### 14-sessie streak honest data-driven outcomes
+
+145B + 146D + 147C + 149D + 150A + 151C + 152B + 153D + 154 Outcome 4 + 155 Outcome 4 + 156 M6 feature-completion + 157 infra-investment + 158 infra-investment-extension + **159 documentation-of-intent** = 7 falsificatie + 1 KEEP + 2 methodological-evolution-output + 3 feature-completion + **1 documentation-of-intent (NIEUWE 12e categorie)**. Anti-rationalisatie-discipline structureel verankerd over alle uitkomst-typen inclusief minimal-closure backlog-hygiene.
+
+**Defense-in-depth ~15 plekken:** scripts/validate-docs.sh 3 comment-plekken + TASKS.md sprint regel + Versie 5.32→5.33 + Laatst bijgewerkt header/footer + Voortgang Overzicht §11 Sessie 159 addendum + CLAUDE.md Recent Critical Learnings Sessie 159 prepend + 1-in-1-out Sessie 157 → current.md + Sessie counter 158→159 + Rotation 157-158→158-159 + Last updated bump + Version 5.32→5.33 + dit current.md Sessie 159 entry + PLANNING.md Laatst bijgewerkt header/footer + PLANNING.md Versie 4.3 noot Sessie 159 + plan-file §6 outcome + final --deep zelf-test exit 0 gate.
+
+### Spawn-decisions Sessie 160
+
+Geen pre-committed spawn. **Sessie 160 aanbeveling** (Heisenberg-tussen-pauze besluit):
+- **Optie A — #33 (c) scope-design** (~1-1.5 uur, alleen design — implementatie Sessie 161): schrijf perf-audit §2j met target pages + selectoren-methodologie + KB-budget + mechanism-hypothesis + 6×3 anti-bias frame. Pre-data scope-design VOOR implementatie = verify-first discipline-extension
+- **Optie B — M8 Analytics & Scaling feature-completion** (~3-4 uur, 36 [ ] items): diversiteit-pivot na 3 infra-leaning sessies, feature-completion-categorie (parallel met Sessie 156 M6)
+- **Optie C — Andere richting** Heisenberg's vrijheid
+
+**Verify-first discipline:** Sessie 160 plan moet pre-data scope hebben — geen swampy investigation zoals #33 (c) zou worden zonder design-prep.
+
+---
+
 ## Sessie 158: `#23.1` validate-docs `--deep` Check 6 extension naar M5/M5.5/M9 + NEW Blog sub-check 6b — 4 doc-drifts caught via Phase C zelf-test + 5 drift-injection scenarios verified (10 jun 2026)
 
 **Scope:** Heisenberg's cold-start Sessie 158 — pak op #23.1 validate-docs `--deep` Check 6 extension naar M5/M5.5/M9 secties + Blog content-pijler sub-check 6b. Heisenberg-recommended scope via AskUserQuestion (1 vraag, 4 opties) na Phase 1 honest scope-discovery toonde dat M5/M5.5 closure als feature-completion structureel onhaalbaar is (26+3 open tasks = externe/proces-werk, geen code-implementeer). Verify-first plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-sessie-bright-wind.md`. Sessie 158 = **13e sessie streak honest data-driven outcomes** + **2-op-rij infra-investment sub-categorie** (Sessie 157 introduceerde, Sessie 158 bewijst herhaalbaarheid via extension).
