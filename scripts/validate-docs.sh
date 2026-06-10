@@ -19,8 +19,11 @@
 #
 # Sessie 157: --deep mode toegevoegd voor soft-drift detectie (Sessie 140 TODO fulfilled).
 #   - Check 5: Bundle KB ground-truth via VALIDATE-BUNDLE marker block in TASKS.md (±5% tol)
-#   - Check 6: Milestone-percentage ground-truth via [x]/[ ] count per M6/M7/M8 section
-#               (sections-loze milestones M0-M5/M5.5/M9/Blog: graceful [SKIP])
+#   - Check 6: Milestone-percentage ground-truth via [x]/[ ] count per M5/M5.5/M6/M7/M8/M9 section
+#               + Blog file-count ground-truth (sub-check 6b: ls blog/*.html minus index/welkom)
+#               (legacy M0-M4: graceful [SKIP] — tabel-targets = MVP-essential subset niet section-total)
+#               Awk-ranges fragile bij header-format-wijzigingen (emoji/h2-h3-shift) — zie comments.
+#               Sessie 158: extension naar M5/M5.5/M9 + Blog sub-check 6b (item #23.1)
 #   - Check 7: Cross-doc Versie consistency CLAUDE.md `**Version:**` ↔ TASKS.md `**Versie:**`
 # Soft-drift = cijfers die langzaam verouderen zonder dat één invariant breekt.
 
@@ -245,15 +248,23 @@ if [ "$DEEP_MODE" = "1" ]; then
   # ----------------------------------------------------------
   check_start "Milestone-percentage ground-truth (--deep)"
 
-  # Section-range mapping: alleen milestones met dynamische TASKS.md section.
-  # M0-M5/M5.5/M9/Blog: historisch of section-loos → graceful [SKIP].
-  # Bekend-fragile: awk range gebruikt emoji-anchored headers. Als emoji wijzigt → update hier.
+  # Section-range mapping: milestones met dynamische TASKS.md section.
+  # M0-M4: historisch voltooid, tabel-targets = MVP-essential subset niet section-total
+  #        → graceful [SKIP] (apart fix-decision #23.2 nodig).
+  # Blog: content-pijler, file-based ground-truth → aparte sub-check 6b hieronder.
+  # Bekend-fragile: awk ranges gebruiken h2-emoji-anchored OF h3-plain-text-anchored headers.
+  # Als header-format wijzigt (emoji-swap, h-level-shift, rename) → update hier.
+  # Sessie 158 #23.1 extension: M5/M5.5/M9 toegevoegd (h3 plain-text voor M5/M5.5,
+  # h2-emoji voor M9). M6/M7/M8 onveranderd voor backwards-compatible output-order.
   declare -A MILESTONE_RANGES
   MILESTONE_RANGES[M6]='/^## 🎓 M6:/,/^## 🎮 M7:/'
   MILESTONE_RANGES[M7]='/^## 🎮 M7:/,/^## 📊 M8:/'
   MILESTONE_RANGES[M8]='/^## 📊 M8:/,/^## 📚 Referenties/'
+  MILESTONE_RANGES[M5]='/^### M5: /,/^### M5\.5:/'
+  MILESTONE_RANGES[M5.5]='/^### M5\.5:/,/^### Phase A:/'
+  MILESTONE_RANGES[M9]='/^## 🧹 M9:/,/^## 🎓 M6:/'
 
-  for mkey in M6 M7 M8; do
+  for mkey in M6 M7 M8 M5 M5.5 M9; do
     range="${MILESTONE_RANGES[$mkey]}"
     done_count=$(awk "$range" "$TASKS" | grep -c '^- \[x\]' || true)
     todo_count=$(awk "$range" "$TASKS" | grep -c '^- \[ \]' || true)
@@ -289,7 +300,38 @@ if [ "$DEEP_MODE" = "1" ]; then
     fi
   done
 
-  echo -e "  ${YELLOW}[SKIP]${NC} M0-M5/M5.5/M9/Blog: geen TASKS.md section voor checklist ground-truth (historisch of section-loos)"
+  echo -e "  ${YELLOW}[SKIP]${NC} M0-M4: legacy voltooid (tabel-targets = MVP-essential subset, section-totals bevatten optional items — apart fix-decision #23.2)"
+
+  # ----------------------------------------------------------
+  # Check 6b: Blog content-pijler file-count ground-truth (sub-check, geen CHECK_COUNT bump)
+  # ----------------------------------------------------------
+  echo ""
+  echo "Check 6b: Blog content-pijler ground-truth (--deep, filesystem-based)"
+
+  # Filesystem ground-truth: blog posts = blog/*.html minus index.html (hub) en welkom.html (welkomstpost).
+  # Future content additions (post 11+) reflecteren automatisch zonder script-update.
+  blog_count=$(ls blog/*.html 2>/dev/null | grep -vE "/(index|welkom)\.html$" | wc -l)
+  blog_table_row=$(grep -E "^\| \*\*Blog \(content-pijler\)" "$TASKS" | head -1)
+
+  if [ -z "$blog_table_row" ]; then
+    fail "Blog: geen Voortgang Overzicht tabel-rij gevonden (verwacht '| **Blog (content-pijler)** | ...')"
+  else
+    claimed_blog=$(echo "$blog_table_row" | grep -oE '\| [0-9]+/[0-9]+ posts' | grep -oE '[0-9]+/[0-9]+')
+    claimed_blog_pct=$(echo "$blog_table_row" | grep -oE '\| [0-9]+%' | head -1 | grep -oE '[0-9]+')
+    expected_blog="${blog_count}/${blog_count}"
+
+    if [ "$claimed_blog" != "$expected_blog" ]; then
+      fail "Blog: tabel-taken='$claimed_blog' ≠ filesystem ground-truth='$expected_blog' (ls blog/*.html minus index/welkom)"
+    else
+      pass "Blog: tabel-taken match filesystem ($expected_blog posts)"
+    fi
+
+    if [ "$claimed_blog_pct" != "100" ]; then
+      fail "Blog: tabel-pct='${claimed_blog_pct}%' ≠ 100% (alle aanwezige posts tellen mee)"
+    else
+      pass "Blog: tabel-pct match (100%)"
+    fi
+  fi
 
   # ----------------------------------------------------------
   # Check 7: Cross-doc Versie consistency (CLAUDE.md ↔ TASKS.md)

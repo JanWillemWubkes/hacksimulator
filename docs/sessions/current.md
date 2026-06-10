@@ -4,6 +4,115 @@
 
 ---
 
+## Sessie 158: `#23.1` validate-docs `--deep` Check 6 extension naar M5/M5.5/M9 + NEW Blog sub-check 6b — 4 doc-drifts caught via Phase C zelf-test + 5 drift-injection scenarios verified (10 jun 2026)
+
+**Scope:** Heisenberg's cold-start Sessie 158 — pak op #23.1 validate-docs `--deep` Check 6 extension naar M5/M5.5/M9 secties + Blog content-pijler sub-check 6b. Heisenberg-recommended scope via AskUserQuestion (1 vraag, 4 opties) na Phase 1 honest scope-discovery toonde dat M5/M5.5 closure als feature-completion structureel onhaalbaar is (26+3 open tasks = externe/proces-werk, geen code-implementeer). Verify-first plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-sessie-bright-wind.md`. Sessie 158 = **13e sessie streak honest data-driven outcomes** + **2-op-rij infra-investment sub-categorie** (Sessie 157 introduceerde, Sessie 158 bewijst herhaalbaarheid via extension).
+
+**Status:** ✅ #23.1 CLOSED. scripts/validate-docs.sh +44 regels (MILESTONE_RANGES dict +3 entries voor M5/M5.5/M9 + mkey loop array uitbreiding + NEW Check 6b Blog filesystem-based ground-truth + SKIP-notice update naar M0-M4-only). **Phase 1 ontdekte 3 doc-drifts** door Sessie 157 SKIP-conservatisme gemaskeerd: M5 tabel 41/45/91% ≠ section 64/26=64/90/71% ≠ section header 8/35 (3-way drift) + M5.5 tabel ~16/18/~89% ≠ section 23/26/88%. **Phase A awk-range refinement:** M5.5 = 23/26 (Phase 1 handmatige telling 20/23 telde Sessies 133-137 [x] block niet — meta-leerpunt: forcing-function disciplines moeten zelf-applicabel zijn op plan-design fase). **Phase C clean baseline ving exact voorspelde 4 fails** (M5 + M5.5 elk taken+pct, M9/Blog clean) = exit 1 forcing-function value-demonstration. **Phase D 5 plekken TASKS.md ad-hoc fixes** + **Phase E exit 0** = gate. **Phase F 5 drift-injection scenarios verified + revert.**
+
+| Metric | Sessie 157 closure | Sessie 158 cold-start |
+|--------|--------------------|------------------------|
+| Sessie counter | 157 | 158 |
+| scripts/validate-docs.sh | 340 regels / 13,6 KB | 340+44=~384 regels / ~15,1 KB |
+| TASKS.md Versie | 5.31 | 5.32 |
+| CLAUDE.md Version | 5.31 | 5.32 |
+| Sprint regel | Sessie 157 #23 CLOSED | Sessie 158 #23.1 CLOSED |
+| Laatste commit | `4143282 feat(infra): Sessie 157` | TBD Sessie 158 |
+
+### NEW Sessie 158 disciplines (4 items, gevalideerd)
+
+1. **Drift-injection tool-level revert (Edit → Edit terug) ipv `git checkout -- file`.** Sessie 158 Phase F eerste poging gebruikte `git checkout` na elke injection MAAR (a) reset ALLE uncommitted changes (gevaar voor Phase D fixes die NIET pre-Phase-F gecommit waren); (b) invalidates Edit-tool Read-state — volgende Edit-calls vereisen Read eerst (Sessie 153 leerpunt #5 generaliseert). Pre-data design: voor drift-injection in scripts met uncommitted-state, gebruik explicit Edit-injection + explicit Edit-revert per drift. Geldt voor elke drift-injection-cyclus in een sessie met andere uncommitted fixes.
+
+2. **Bash `sed -i 's|pattern|replacement|'` met `|` delimiter is gevaarlijk in markdown-tabel context.** Sessie 158 Phase F sed-commando's faalden silent met `sed: expressie onbekende optie bij 's'-opdracht` want markdown-tabel-cells gebruiken `|` als column separator → sed parse-conflict tussen delimiter en literal-pipe. Mitigatie: gebruik Edit-tool voor markdown-edits OF andere sed-delimiter (`#`, `@`, `_`, `,`). Generaliseert naar elke shell-script die structured-content edit met `|` als data-separator (e.g. tab-separated values met tab-delimiter, CSV met comma-delimiter).
+
+3. **Awk-range section-mapping fragility: header-format-mismatch zonder fallback.** Sessie 158 MILESTONE_RANGES dict mengt twee patterns — M5/M5.5 zijn h3-plain-text (`### M5: Testing...`), M9 + M6/M7/M8 zijn h2-emoji (`## 🧹 M9:...`, `## 🎓 M6:...`). Single dict — header-rename of h-level-shift of emoji-swap breekt range silent (empty count, geen exit 1). Mitigatie: documenteer in script-comment per-range welk anchor-pattern wordt gebruikt + verifieer expected count 1× post-implementation. Sessie 158 Phase A verified pre-implementation om dit te ontdekken voor merge.
+
+4. **Pre-data handmatige tellingen falen op grote sections; awk-range met canonical [x]/[ ] regex schaalt zonder telfouten.** Sessie 158 Phase 1 handmatige M5.5 telling 20/23 vs Phase A awk-range 23/26 = 13% sectie-count error op manuele inspectie. Forcing-function-discipline voor ground-truth-meting: voor sections met >15 checkboxes, vertrouw nooit handmatige telling, gebruik awk-range canonical regex. Generaliseert Sessie 154 leerpunt #2 "verifieer pre-data, vertrouw niet plan-assumptions" naar **self-authored plans** + meta-leerpunt: forcing-function disciplines moeten zelf-applicabel zijn op plan-design fase, niet alleen op uitvoering.
+
+### Phase A baseline + range verificatie
+
+- `bash scripts/validate-docs.sh --deep` baseline = exit 0 (Sessie 157 closure state)
+- M5 awk-range count: 64 [x] / 26 [ ] = 64/90 ground-truth
+- M5.5 awk-range count: 23 [x] / 3 [ ] = 23/26 ground-truth
+- M9 awk-range count: 19 [x] / 0 [ ] = 19/19 ground-truth (match tabel)
+- Tabel-rij regex test: alle 3 milestones gevonden (`^\| (M5|M5\.5|M9):`)
+- Blog file count: `ls blog/*.html | grep -vE "/(index|welkom)\.html$" | wc -l` = 10 (match tabel)
+
+### Phase B scripts/validate-docs.sh wijzigingen
+
+- Header-comment regels 22-25 update: nieuwe scope vermeld (M5/M5.5/M6/M7/M8/M9 + Blog 6b + M0-M4 SKIP)
+- MILESTONE_RANGES dict +3 entries: M5 (`/^### M5: /,/^### M5\.5:/`), M5.5 (`/^### M5\.5:/,/^### Phase A:/`), M9 (`/^## 🧹 M9:/,/^## 🎓 M6:/`)
+- mkey loop array uitbreiding: `for mkey in M6 M7 M8 M5 M5.5 M9; do` (M6/M7/M8 eerst voor backwards-compatible output-order)
+- SKIP-notice update: `M0-M4: legacy voltooid (tabel-targets = MVP-essential subset, section-totals bevatten optional items — apart fix-decision #23.2)`
+- NEW Check 6b Blog: filesystem-based ground-truth via `ls blog/*.html` exclude `index|welkom` + tabel-rij regex `^\| \*\*Blog \(content-pijler\)` + dual claim parse (`[0-9]+/[0-9]+ posts` + percentage)
+- Check 6b zonder CHECK_COUNT increment (sub-check, geen aparte tellig — manual `echo` ipv `check_start`)
+
+### Phase C clean baseline zelf-test (forcing-function value-demonstration)
+
+```
+[FAIL] M5: tabel-taken='41/45' ≠ section ground-truth='64/90' ([x]+[ ] count)
+[FAIL] M5: tabel-pct='91%' ≠ section ground-truth='71%'
+[FAIL] M5.5: tabel-taken='~16/18' ≠ section ground-truth='23/26' ([x]+[ ] count)
+[FAIL] M5.5: tabel-pct='~89%' ≠ section ground-truth='88%'
+[OK]   M9: tabel-taken match section (19/19)
+[OK]   M9: tabel-pct match section (100%)
+Blog: 10/10 + 100% — alle pass
+Total: 4 failure(s) detected. EXIT: 1
+```
+
+Real-time drift-catch = direct forcing-function value-demonstration. Sessie 157 patroon herhaalt 1-op-1 (M8 0/40→1/37 + spec count 22→23 → nu M5 + M5.5).
+
+### Phase D ad-hoc TASKS.md drift-fixes (5 plekken)
+
+1. Voortgang Overzicht tabel M5: `41/45 / 91%` → `64/90 / 71%`
+2. Voortgang Overzicht tabel M5.5: `~16/18 / ~89%` → `23/26 / 88%`
+3. M5 section header status (regel 382): `8/35 tasks` → `64/90 tasks`
+4. Volgende Acties (regel 664): `M5 In Uitvoering (91%)` → `M5 In Uitvoering (71%)`
+5. Voortgang Overzicht totaal-regel (regel 11): Sessie 158 update addendum
+
+### Phase E post-fix re-run
+
+`bash scripts/validate-docs.sh --deep` → exit 0. Alle 7 checks pass + Check 6b Blog pass.
+
+### Phase F drift-injection scenarios (5)
+
+| Drift | Inject | Verwacht | Actual exit | Result |
+|-------|--------|----------|-------------|--------|
+| A | M5 64/90 → 50/90 | exit 1, M5 tabel-taken fail | exit 1 ✓ | PASS |
+| B | M5.5 23/26 → 99/100 + 88% → 99% | exit 1, M5.5 beide fails | exit 1 ✓ | PASS |
+| C | M9 19/19 → 5/19 + 100% → 26% | exit 1, M9 beide fails | exit 1 ✓ | PASS |
+| D | Blog 10/10 → 5/10 posts | exit 1, Blog tabel-taken fail | exit 1 ✓ | PASS |
+| E | blog/welkom.html rename → blog/welkom-test-rename.html | exit 1, Blog filesystem count 10→11 | exit 1 ✓ | PASS |
+
+Elke drift na verification revert via tool-level Edit-revert (NEW discipline #1).
+
+### Phase G closure docs
+
+- TASKS.md sprint regel + Versie 5.31→5.32 + Laatst bijgewerkt 9 jun→10 jun (Sessie 157→158)
+- CLAUDE.md Sessie counter 157→158 + Rotation 156-157→157-158 + Last updated bump + Version 5.31→5.32 + Recent Critical Learnings Sessie 158 prepend + 1-in-1-out Sessie 156 removed
+- PLANNING.md Laatst bijgewerkt 9 jun (Sessie 155) → 10 jun (Sessie 158) + Versie 4.3 noot Sessie 158
+- current.md (deze entry) Sessie 158 prepend
+- plan-file §6 outcome filled
+- Final `bash scripts/validate-docs.sh --deep` exit 0 = forcing-function gate
+
+### 13-sessie streak honest data-driven outcomes
+
+145B + 146D + 147C + 149D + 150A + 151C + 152B + 153D + 154 Outcome 4 + 155 Outcome 4 + 156 M6 feature-completion + 157 infra-investment + **158 infra-investment-extension** = 7 falsificatie + 1 KEEP + 2 methodological-evolution-output + **3 feature-completion** (M6 + 2× infra-investment sub-categorie). Anti-rationalisatie-discipline structureel verankerd over alle uitkomst-typen.
+
+**Bundle delta:** scripts/ buiten Terminal Core budget (validate-docs.sh +44 regels = ~+1,5 KB). src/ 615 KB onveranderd. Geen runtime-impact.
+
+**Defense-in-depth 14+ plekken:** scripts/validate-docs.sh + TASKS.md (M5 tabel + M5.5 tabel + M5 section header + Volgende Acties + totaal-regel addendum + sprint + Versie 5.32 + Laatst bijgewerkt header/footer) + CLAUDE.md (learnings Sessie 158 prepend + 1-in-1-out Sessie 156 → current.md + Sessie counter 157→158 + Rotation 156-157→157-158 + Last updated + Version 5.32) + PLANNING.md (Laatst bijgewerkt + Versie noot) + current.md Sessie 158 entry (deze) + plan-file §6 outcome + final --deep zelf-test exit 0 gate post-implementation.
+
+### Spawn-decisions Sessie 159
+
+Geen pre-committed spawn. Heisenberg kan kiezen tussen open backlog items in TASKS.md §Huidige Focus en perf-audit §2 paden:
+- **#23.2 M0-M4 legacy fix-decision** (scope-decision: reframe tabel-targets als MVP-essential subset OF fix section [ ] items als optional/deferred; documenteer in current.md design-keuze)
+- **#33 (c) CSS critical-path inline** (~3 uur perf-investigation verify-first cyclus Frame A/B/C/D)
+- **M5.5 Postmaster Tools re-check** trigger 1 jun 2026 verstreken (~5 min Heisenberg-out-of-Claude dashboard check)
+- **Iets compleet anders**
+
+---
+
 ## Sessie 157: `#23` validate-docs `--deep` mode — Soft-drift Detectie (Bundle KB + Milestone-% + Cross-doc Versie) + REAL-TIME M8 Drift Caught via Zelf-test (9 jun 2026)
 
 **Scope:** Heisenberg's cold-start Sessie 157 — pak op #23 validate-docs `--deep` mode (12 sessies vertraagd inhalen van Sessie 140 inline TODO target Sessie 144). Heisenberg-recommended scope via AskUserQuestion (1 vraag, 4 opties). Verify-first plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-precious-dusk.md`. Sessie 157 = **12e sessie streak honest data-driven outcomes** + **tweede feature-completion uitkomst-categorie** (sub-categorie infra-investment, parallel met M6 milestone-closure Sessie 156). Anti-rationalisatie-discipline-laag identiek: pre-data scope + AskUserQuestion bij scope-bevestiging + defense-in-depth 14+ plekken + script-level test-injection verificatie + validate-docs zelf-test post-implementation.
