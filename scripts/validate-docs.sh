@@ -13,8 +13,8 @@
 # (CLAUDE.md liep 14 sessies vooruit op PLANNING.md/TASKS.md).
 #
 # Usage:
-#   ./scripts/validate-docs.sh           — Checks 1-4 (fast, pre-commit hook)
-#   ./scripts/validate-docs.sh --deep    — Checks 1-7 (opt-in, end-of-sessie /summary gate)
+#   ./scripts/validate-docs.sh           — Checks 1-4 + 8 (fast, pre-commit hook)
+#   ./scripts/validate-docs.sh --deep    — Checks 1-8 (opt-in, end-of-sessie /summary gate)
 # Exit code: 0 = all valid, 1 = drift detected
 #
 # Sessie 157: --deep mode toegevoegd voor soft-drift detectie (Sessie 140 TODO fulfilled).
@@ -30,6 +30,12 @@
 #               Sessie 159: M0-M4 permanent-SKIP gedocumenteerd (item #23.2).
 #   - Check 7: Cross-doc Versie consistency CLAUDE.md `**Version:**` ↔ TASKS.md `**Versie:**`
 # Soft-drift = cijfers die langzaam verouderen zonder dat één invariant breekt.
+#
+# #23.3 (housekeeping pre-Sessie 160): Check 8 toegevoegd voor hard structuur-constraint.
+#   - Check 8: CLAUDE.md `**Last updated:**` + `**Version:**` regels ≤500 bytes each
+#               (forcing-function tegen single-line narrative-accumulation —
+#                CLAUDE.md 77,6 KB → 12 KB cleanup voorkomt herintreding via deze check).
+#               Runs in zowel fast als --deep mode (hard constraint, niet tolerance-gevoelig).
 
 set -o pipefail
 
@@ -360,14 +366,53 @@ if [ "$DEEP_MODE" = "1" ]; then
 fi  # end of --deep block
 
 # ============================================================
+# Check 8: CLAUDE.md Last updated + Version single-line constraint
+#   Hard structural constraint — runs in fast mode + --deep.
+#   Forcing-function tegen single-line narrative-accumulation
+#   pattern. Sessie 159 housekeeping #23.3 schoonde CLAUDE.md
+#   van 77,6 KB → 12 KB; deze check voorkomt herintreding.
+#   Cap: 500 bytes per regel — historie hoort in current.md
+#   (zie .claude/CLAUDE.md §Sessie Protocol stap 4).
+# ============================================================
+check_start "CLAUDE.md Last updated + Version single-line constraint"
+
+MAX_BYTES=500
+
+# 8a. Last updated regel ≤ MAX_BYTES
+LU_LINENO=$(grep -nE '^\*\*Last updated:\*\*' "$CLAUDE" | head -1 | cut -d: -f1)
+if [ -z "$LU_LINENO" ]; then
+  fail "CLAUDE.md: geen canonieke '**Last updated:**' regel gevonden"
+else
+  LU_BYTES=$(sed -n "${LU_LINENO}p" "$CLAUDE" | wc -c)
+  if [ "$LU_BYTES" -gt "$MAX_BYTES" ]; then
+    fail "CLAUDE.md Last updated regel ${LU_BYTES} bytes > ${MAX_BYTES} max — sessie-narratief moet naar docs/sessions/current.md (zie /summary stap 4 protocol)"
+  else
+    pass "CLAUDE.md Last updated regel ${LU_BYTES} bytes ≤ ${MAX_BYTES}"
+  fi
+fi
+
+# 8b. Version regel ≤ MAX_BYTES
+V_LINENO=$(grep -nE '^\*\*Version:\*\*' "$CLAUDE" | head -1 | cut -d: -f1)
+if [ -z "$V_LINENO" ]; then
+  fail "CLAUDE.md: geen canonieke '**Version:**' regel gevonden"
+else
+  V_BYTES=$(sed -n "${V_LINENO}p" "$CLAUDE" | wc -c)
+  if [ "$V_BYTES" -gt "$MAX_BYTES" ]; then
+    fail "CLAUDE.md Version regel ${V_BYTES} bytes > ${MAX_BYTES} max — version-narratief moet naar docs/sessions/current.md"
+  else
+    pass "CLAUDE.md Version regel ${V_BYTES} bytes ≤ ${MAX_BYTES}"
+  fi
+fi
+
+# ============================================================
 # Summary
 # ============================================================
 echo ""
 echo "=========================================="
 if [ "$DEEP_MODE" = "1" ]; then
-  echo "Summary (--deep mode: Checks 1-7)"
+  echo "Summary (--deep mode: Checks 1-8)"
 else
-  echo "Summary (fast mode: Checks 1-4 — run with --deep for soft-drift Checks 5-7)"
+  echo "Summary (fast mode: Checks 1-4 + 8 — run with --deep for soft-drift Checks 5-7)"
 fi
 echo "=========================================="
 echo "Total checks run: $CHECK_COUNT"
@@ -379,9 +424,9 @@ else
   echo ""
   echo "Doc-drift gedetecteerd. Zie failures hierboven."
   if [ "$DEEP_MODE" = "1" ]; then
-    echo "Quickfix: synchroniseer sessie-counter / datums / monetization-keywords / bundle KB marker / milestone-tabel / Versie."
+    echo "Quickfix: synchroniseer sessie-counter / datums / monetization-keywords / bundle KB marker / milestone-tabel / Versie / CLAUDE.md single-line constraint."
   else
-    echo "Quickfix: synchroniseer sessie-counter, datums, of monetization-keywords."
+    echo "Quickfix: synchroniseer sessie-counter, datums, monetization-keywords, of CLAUDE.md Last updated/Version single-line."
   fi
   echo "Volledige protocol: PLANNING.md §Document Ownership + .claude/CLAUDE.md §Sessie Protocol"
   exit 1
