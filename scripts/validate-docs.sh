@@ -36,6 +36,15 @@
 #               (forcing-function tegen single-line narrative-accumulation —
 #                CLAUDE.md 77,6 KB → 12 KB cleanup voorkomt herintreding via deze check).
 #               Runs in zowel fast als --deep mode (hard constraint, niet tolerance-gevoelig).
+#
+# Sessie 160 (public-launch prep): Check 9 toegevoegd voor SEO-metadata integriteit.
+#   - Check 9: sitemap.xml + feed.xml ↔ blog content-sync (hard constraint, fast + --deep).
+#       9a: per blogpost geldt sitemap <lastmod> >= JSON-LD datePublished
+#           (vangt "gewijzigd vóór gepubliceerd"-onmogelijkheid — bug gevonden bij launch-prep).
+#       9b: RSS <item>-count == aantal blogposts (blog/*.html minus index.html) +
+#           elke post-URL aanwezig in feed.xml (vangt ontbrekende post — OWASP ontbrak).
+#       Filesystem-ground-truth (zoals Check 6b): nieuwe posts tellen automatisch mee.
+#       ISO-datums (YYYY-MM-DD) vergelijken lexicaal correct via [[ "$a" < "$b" ]].
 
 set -o pipefail
 
@@ -402,6 +411,68 @@ else
   else
     pass "CLAUDE.md Version regel ${V_BYTES} bytes ≤ ${MAX_BYTES}"
   fi
+fi
+
+# ============================================================
+# Check 9: Sitemap/RSS ↔ blog content-sync integriteit
+#   Hard constraint — runs in fast mode + --deep. SEO-metadata
+#   forcing-function (Sessie 160 public-launch prep). Vangt de
+#   twee drift-bugs gevonden bij launch-prep: sitemap-lastmod
+#   ouder dan datePublished, en ontbrekende post in feed.xml.
+# ============================================================
+check_start "Sitemap/RSS ↔ blog content-sync integriteit"
+
+SITEMAP="sitemap.xml"
+FEED="feed.xml"
+
+if [ ! -f "$SITEMAP" ] || [ ! -f "$FEED" ]; then
+  fail "sitemap.xml of feed.xml niet gevonden (run vanuit project root)"
+else
+  # 9a: per blogpost sitemap <lastmod> >= JSON-LD datePublished + sitemap-entry aanwezig
+  sync_ok=1
+  for f in blog/*.html; do
+    base=$(basename "$f")
+    [ "$base" = "index.html" ] && continue
+
+    pub=$(grep -oE '"datePublished"[[:space:]]*:[[:space:]]*"[0-9]{4}-[0-9]{2}-[0-9]{2}"' "$f" \
+          | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' | head -1)
+    lastmod=$(grep -A1 "blog/${base}</loc>" "$SITEMAP" \
+              | grep -oE '<lastmod>[0-9]{4}-[0-9]{2}-[0-9]{2}</lastmod>' \
+              | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' | head -1)
+
+    if [ -z "$pub" ]; then
+      fail "9a $base: geen JSON-LD datePublished gevonden in blogpost"
+      sync_ok=0
+    elif [ -z "$lastmod" ]; then
+      fail "9a $base: geen sitemap <lastmod> entry (post mist in sitemap.xml?)"
+      sync_ok=0
+    elif [[ "$lastmod" < "$pub" ]]; then
+      fail "9a $base: sitemap lastmod=$lastmod ouder dan datePublished=$pub (logisch onmogelijk)"
+      sync_ok=0
+    fi
+  done
+  [ "$sync_ok" = "1" ] && pass "9a: alle blog-posts: sitemap lastmod >= datePublished + entry aanwezig"
+
+  # 9b: RSS item-count == blog-post-count + elke post-URL aanwezig in feed
+  blog_posts=$(ls blog/*.html 2>/dev/null | grep -vE '/index\.html$' | wc -l | tr -d ' ')
+  rss_items=$(grep -c '<item>' "$FEED")
+
+  if [ "$rss_items" != "$blog_posts" ]; then
+    fail "9b: RSS item-count ($rss_items) ≠ blog-post-count ($blog_posts) — post mist in feed.xml?"
+  else
+    pass "9b: RSS item-count match blog-posts ($rss_items)"
+  fi
+
+  feed_ok=1
+  for f in blog/*.html; do
+    base=$(basename "$f")
+    [ "$base" = "index.html" ] && continue
+    if ! grep -q "blog/${base}" "$FEED"; then
+      fail "9b: blog/${base} ontbreekt in feed.xml"
+      feed_ok=0
+    fi
+  done
+  [ "$feed_ok" = "1" ] && pass "9b: elke blog-post-URL aanwezig in feed.xml"
 fi
 
 # ============================================================
