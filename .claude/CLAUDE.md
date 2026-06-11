@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 159)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 160)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,17 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 160: Public-launch SEO-metadata prep + drift-guard Check 9 + GSC Domain-launch (11 jun 2026)
+⚠️ **Never:**
+- `dateModified`/`lastmod` bulk-bumpen naar launch-datum zonder echte content-touch — Google straft kunstmatig-verversen af + wantrouwt `lastmod` dat overal identiek "vandaag" is. Elke datum = waar feit.
+- Sitemap `lastmod` < `datePublished` laten staan — logisch onmogelijk ("gewijzigd vóór gepubliceerd"), schaadt metadata-vertrouwen. Check 9a vangt dit nu mechanisch.
+- Een guard in een script vertrouwen zonder te verifiëren dat de hook-`files:`-filter de trigger-bestanden dekt — Check 9 zat in validate-docs.sh maar hook triggerde alleen op core-docs → guard vuurde niet bij sitemap/feed/blog-commits.
+
+✅ **Always:**
+- Disciplined-hybrid datum-strategie bij late publieke launch — historische `datePublished` behouden (autoriteitsverhaal), `dateModified` alleen bij echte verbetering. Beste voor geloofwaardigheid + SEO tegelijk; herdateren-naar-launch afgewezen.
+- GSC = feitelijke launch-hefboom (niet de datums): Domain-property (volledige sitemap-URL vereist!) + indexering-aanvraag top-5 + backlinks ontsluiten de diepe content die Google anders ondiep crawlt.
+- Drift-guard detectie-logica zelf-testen op synthetische drift (vangt-het-de-bug?) vóór vertrouwen — defense-in-depth-persistence-pattern Sessie 140 → 160 schaalt over SEO-metadata. Filesystem-ground-truth (Check 9b: RSS-count == `ls blog/*.html` minus index) → nieuwe posts tellen automatisch mee. Volledige scope: `docs/sessions/current.md` Sessie 160 entry.
+
 ### Sessie 159: `#23.2` M0-M4 permanent-SKIP closure — documentation-of-intent (12e uitkomst-categorie), ~30 min minimal scope (10 jun 2026)
 ⚠️ **Never:**
 - Pivot-rationalisatie zonder Explore-onderzoek van pivot-target — dual van sunk-cost-rationalisatie. Voor elk pivot-besluit, Explore agent verify target-readiness pre-data.
@@ -106,7 +117,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Real-time drift-catch via Phase C zelf-test = direct forcing-function value-demonstration (Sessie 157 patroon repeats) — Phase C verwachtingstabel matched 100% met werkelijke output.
 - 2-op-rij infra-investment ritme bewijst sub-categorie repeatable — Frame-verdict-schema N/A MAAR discipline-laag identiek (pre-data scope + AskUserQuestion + defense-in-depth + drift-injection + final zelf-test). Volledige scope-details: `docs/sessions/current.md` Sessie 158 entry.
 
-**Rotation:** Top-6 huidig: 158-159 (1-in-1-out tot volgende bulk-rotation Sessie 160). Pre-Sessie 158 historie + bulk-rotation administration → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 158-159-160 (bulk-rotation Sessie 160: pre-158 historie reeds in `docs/sessions/current.md`). Volgende bulk-rotation Sessie 165. Pre-Sessie 158 historie + bulk-rotation administration → `docs/sessions/current.md`.
 
 ---
 
@@ -155,7 +166,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 159
+**Sessie counter:** 160
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -207,6 +218,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 10 jun 2026 (Sessie 159 — #23.2 M0-M4 permanent-SKIP closure ✅; documentation-of-intent 12e categorie. Volledige sessie-narratief: `docs/sessions/current.md`)
-**Version:** 5.33 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
+**Last updated:** 11 jun 2026 (Sessie 160 — public-launch SEO-prep: sitemap/feed drift-fix + validate-docs Check 9 + GSC Domain-launch + runbook. Volledige sessie-narratief: `docs/sessions/current.md`)
+**Version:** 5.34 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
 

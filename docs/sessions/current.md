@@ -4,6 +4,31 @@
 
 ---
 
+## Sessie 160: Public-launch SEO-metadata prep + drift-guard Check 9 + GSC Domain-launch (11 jun 2026)
+
+**Mission:** Site is live maar nooit publiek aangekondigd. Strategisch advies + uitvoering rond datum-strategie/SEO voor de publieke launch, plus drift-preventie zodat de gevonden bugs niet terugkeren.
+
+**Work done:**
+- **Datum-strategie besluit "disciplined hybrid":** historische `datePublished` behouden (autoriteitsverhaal nov 2025–mei 2026), `dateModified`/`lastmod` alleen bumpen op pagina's die op de launch-dag écht aangeraakt worden (conform Google anti-kunstmatig-verversen-richtlijn). Herdateren-naar-launch afgewezen (oogt auto-gegenereerd, verspilt geschiedenis).
+- **Fase 1 metadata-bugs (commit `0584b3e`):** sitemap.xml 3× `lastmod < datePublished` gecorrigeerd (welkom/wat-is-ethisch-hacken/terminal-basics → = datePublished); feed.xml ontbrekende OWASP-post toegevoegd (10→11 items), newest-first geordend, `lastBuildDate` ververst, nmap-weekdag `Sat`→`Sun` gefixt. Beide well-formed XML gevalideerd via Python (xmllint absent).
+- **Drift-guard `validate-docs.sh` Check 9 (commit `0584b3e`):** 9a `sitemap lastmod >= JSON-LD datePublished` per post (lexicale ISO-vergelijking `[[ "$a" < "$b" ]]`); 9b RSS item-count == blog-post-count + elke post-URL aanwezig in feed. Filesystem-ground-truth (zoals Check 6b). Detectie-logica zelf-getest op synthetische drift (vangt beide bugs van vandaag, laat fixed-state door).
+- **Pre-commit trigger-fix (commit `60f4429`):** validate-docs hook triggerde alleen op core-docs (CLAUDE/PLANNING/TASKS) → Check 9 vuurde niet bij sitemap/feed/blog-commits. `files:`-filter verbreed naar `sitemap.xml|feed.xml|blog/.*\.html`. Geverifieerd via `pre-commit run` (was "Skipped" → "Passed").
+- **Runbook (commit `0584b3e`):** `docs/public-launch-runbook.md` — Fase 2 (content-pass), Fase 3 (GSC), Fase 4 (aankondiging/backlinks), datum-agnostisch met `<LAUNCH>`-placeholder.
+- **GSC-launch uitgevoerd (Heisenberg, samen):** Domain-property `hacksimulator.nl` **auto-geverifieerd** via domeinprovider (TransIP — geen handmatig DNS-werk); sitemap.xml gesubmit (volledige URL vereist bij Domain-property = gotcha "Ongeldig sitemapadres" bij relatief pad); indexering aangevraagd voor 2 diepe blogposts (homepage/terminal/blog-hub bleken **al geïndexeerd** ondanks geen aankondiging).
+
+**Commits:** `0584b3e` (fix/seo: metadata-sync + Check 9 + runbook) + `60f4429` (fix/infra: hook-trigger).
+
+**Learnings:**
+- Site was al **ondiep** geïndexeerd door open `robots.txt` + bereikbare sitemap; kernpagina's bekend bij Google, diepe posts niet → bevestigt keep-historical-dates besluit (verstoor geen reeds-geïndexeerde pagina's) én backlinks (Fase 4) als sleutel om de blog te "ontsluiten".
+- Domain-property GSC vereist de **volledige** sitemap-URL (geen relatief `sitemap.xml` zoals bij URL-prefix) — er is geen enkele prefix om voor te plakken.
+- Eigen oplossing-gat eerlijk gevonden+gefixt: een guard in een script ≠ actieve guard als de hook-`files:`-filter de trigger-bestanden uitsluit.
+
+**Next steps:** Fase 2 content-pass op launch-dag; Fase 4 aankondiging/backlinks (de echte hefboom); #33 (c) perf-audit §2j of M8 feature-completion nog open (Heisenberg-besluit).
+
+**Metrics:** bundle onveranderd (sitemap/feed/scripts buiten Terminal Core budget); tests 23 spec / 172. Sessie counter 159→160, Versie 5.33→5.34.
+
+---
+
 ## Sessie 159: `#23.2` M0-M4 permanent-SKIP closure — documentation-of-intent (12e uitkomst-categorie), ~30 min minimal scope (10 jun 2026)
 
 **Scope:** Heisenberg's cold-start Sessie 159 — pak op #23.2 M0-M4 legacy fix-decision spawn uit Sessie 158 #23.1 SKIP-notice. Heisenberg-vroeg expert-advies, Claude shift initiële #33 (c) pivot-aanbeveling naar #23.2 minimal closure na Explore-onderzoek toonde #33 (c) niet-ready (geen perf-audit §2j scope-document + geen tooling penthouse/critical absent + cumulatief-reverted pad Sessie 151 Frame C + Sessie 153 Frame D + cache-invalidation trade-off ongedocumenteerd + scope-ambiguïteit). Verify-first plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-sessie-whimsical-shannon.md`. Sessie 159 = **14e sessie streak honest data-driven outcomes** + **NIEUWE 12e uitkomst-categorie documentation-of-intent** (minimal-closure backlog-hygiene zonder code-logic change).
