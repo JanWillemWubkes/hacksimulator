@@ -1,5 +1,7 @@
 # Commands Reference - HackSimulator.nl
 
+**Totaal:** 41 commands
+
 ## System Commands
 
 | Command | Description | Example Output |
@@ -12,6 +14,7 @@
 | `date` | Show current date/time | "Tue Dec 10 2024 14:30:22" |
 | `whoami` | Show current user | "user" |
 | `shortcuts` | Show keyboard shortcuts | "Ctrl+L: clear terminal..." |
+| `welcome` | Toon het welkomstbericht opnieuw | *(welkomstbericht)* |
 
 ## Educational Commands
 
@@ -19,6 +22,8 @@
 |---------|-------------|----------------|
 | `tutorial` | Start guided learning scenarios | "Beschikbare scenario's: recon, webvuln, privesc" |
 | `leerpad` | Show learning path overview | "Module 1: Basis Linux Commands ✅" |
+| `hint` | Vraag een hint tijdens een tutorial | "Hint: gebruik 'ls' om bestanden te zien" |
+| `next` | Toon je volgende stap | "Volgende stap: probeer 'nmap 192.168.1.1'" |
 
 ## Gamification Commands
 
@@ -35,7 +40,7 @@
 | Command | Description | Example Output |
 |---------|-------------|----------------|
 | `ls` | List files | "documents  downloads  notes.txt" |
-| `ls -la` | List all files with details | "drwxr-xr-x user 4096 Dec 10 .ssh" |
+| `ls -la` | List all files with details (flag van `ls`, geen apart command) | "drwxr-xr-x user 4096 Dec 10 .ssh" |
 | `cd [path]` | Change directory | *(no output on success)* |
 | `pwd` | Print working directory | "/home/user" |
 | `cat [file]` | Show file contents | *(file content)* |

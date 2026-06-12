@@ -12,7 +12,7 @@ export default {
     const now = new Date();
 
     // Format like Unix date command (locale-aware)
-    // Example: Mon Oct 14 2025 20:45:30 GMT+0200 (Central European Summer Time)
+    // Example: Mon Oct 14 2026 20:45:30 GMT+0200 (Central European Summer Time)
     return now.toString();
   },
 
@@ -28,7 +28,7 @@ BESCHRIJVING
 
 VOORBEELDEN
     date
-        Output: Mon Oct 15 2025 18:45:30 GMT+0200
+        Output: Mon Oct 15 2026 18:45:30 GMT+0200
 
 GEBRUIK
     Gebruik dit om de huidige tijd te checken of om timestamps

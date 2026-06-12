@@ -42,7 +42,7 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="styles/main.css?v=150">
-  <link rel="stylesheet" href="styles/landing.css?v=114">
+  <link rel="stylesheet" href="styles/landing.css?v=116">
   <link rel="stylesheet" href="styles/pages.css?v=132">
   <link rel="stylesheet" href="styles/mobile.css?v=115" media="screen and (max-width: 768px)">
 
@@ -280,11 +280,24 @@
   </main>
 
   <!-- Footer (Component Injection) -->
-  <div id="footer-placeholder"></div>
+  <div id="footer-placeholder">
+    <noscript>
+      <footer class="noscript-footer">
+        <p>&copy; 2026 HackSimulator.nl</p>
+        <nav>
+          <a href="/assets/legal/privacy.html">Privacy</a>
+          <a href="/assets/legal/terms.html">Voorwaarden</a>
+          <a href="/assets/legal/cookies.html">Cookies</a>
+          <a href="/over-ons.html">Over Ons</a>
+          <a href="/contact.html">Contact</a>
+        </nav>
+      </footer>
+    </noscript>
+  </div>
 
   <!-- Component Injection Script -->
   <script src="/src/init-theme.js"></script>
-  <script type="module" src="/src/init-components.js"></script>
-  <script type="module" src="/src/init-analytics.js"></script>
+  <script src="/src/init-components.js" type="module"></script>
+  <script src="/src/init-analytics.js" type="module"></script>
 </body>
 </html>

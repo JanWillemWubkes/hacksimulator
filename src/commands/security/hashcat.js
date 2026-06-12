@@ -32,8 +32,11 @@ export default {
   usage: 'hashcat <hash>',
 
   async execute(args, flags, context) {
-    // Show warning on first use
-    if (args.length === 0) {
+    // Check if user has given consent for security tools
+    const hasConsent = localStorage.getItem('security_tools_consent') === 'true';
+
+    // Show warning on first use (no consent + no args)
+    if (!hasConsent && args.length === 0) {
       const warningContent = `HASHCAT - Advanced Password Recovery Tool
 
 JURIDISCHE WAARSCHUWING:
@@ -55,7 +58,33 @@ Voorbeelden van zwakke demo hashes:
 
       const warningBox = boxText(warningContent, 'SECURITY WARNING');
 
-      return `${warningBox}`;
+      return `${warningBox}
+
+[?] OM DOOR TE GAAN:
+
+    Type 'hashcat <hash>' om te accepteren en door te gaan
+
+    Voorbeeld: hashcat 5f4dcc3b5aa765d61d8327deb882cf99
+
+[?] Je consent wordt opgeslagen. Type 'reset consent' om opnieuw
+      de waarschuwing te zien.`;
+    }
+
+    // User provided args but hasn't given consent yet - grant consent and proceed
+    if (!hasConsent && args.length > 0) {
+      localStorage.setItem('security_tools_consent', 'true');
+    }
+
+    // Check if hash argument is provided
+    if (args.length === 0) {
+      return `hashcat: missing hash argument
+
+[?] GEBRUIK:
+   hashcat <hash>
+
+   Voorbeelden van zwakke demo hashes:
+   • hashcat 5f4dcc3b5aa765d61d8327deb882cf99  (MD5)
+   • hashcat 21232f297a57a5a743894a0e4a801fc3  (MD5)`;
     }
 
     const hash = args[0].toLowerCase();
