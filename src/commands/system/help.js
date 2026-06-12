@@ -207,7 +207,7 @@ function buildMobileHelp(grouped) {
     }
   });
   out += '[?] * = HackSimulator command (geen echt Linux-command)\n';
-  out += '[?] Type "man <command>" for details\n';
-  out += '[!] Real hackers: start with SYSTEM & FILESYSTEM basics\n';
+  out += '[?] Type "man <command>" voor uitleg\n';
+  out += '[!] Echte hackers beginnen met SYSTEM & FILESYSTEM basics\n';
   return out;
 }

@@ -8,10 +8,12 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (88-139)](docs/sessions/current.md) - Full Detail
-**Sessies:** 139, 138, 137, 136, 135, 134, 133, 132, 131, 130, 129, 128, 127, 126, 125, 124, 123, 122, 121, 120, 119, 118, 117, 116, 115, 114, 113, 112, 111, 110, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88
-**Period:** 26 december 2025 - 27 mei 2026
+### [Current Sessions (88-160)](docs/sessions/current.md) - Full Detail
+**Sessies:** 160, 159, 158, 157, 156, 155, 154, 153, 152, 151, 150, 149, 148, 147, 146, 145, 144, 143, 142, 141, 140, 139, 138, 137, 136, 135, 134, 133, 132, 131, 130, 129, 128, 127, 126, 125, 124, 123, 122, 121, 120, 119, 118, 117, 116, 115, 114, 113, 112, 111, 110, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88
+**Period:** 26 december 2025 - 12 juni 2026
 **Topics:**
+- Pre-launch consistency sweep: consent-flow harmonisatie hashcat/metasploit, SEO/meta-fixes legal pages + terminal.html, cache-versie-alignment, doc-metrics refresh (Sessie 160)
+- Sessies 140-159: doc-protocol forcing function (validate-docs.sh + --deep mode), verify-first performance-cycli (#27/#33/#34/#35/#36 mechanism-isolation + distribution-analysis), self-host Google Fonts (Frame A KEEP), M6 Tutorial System 100% closure (long-press hint gesture), validate-docs --deep Checks 5-7 + Check 6 extension — volledige detail in docs/sessions/current.md
 - Unified Marketing Nav + Breadcrumbs op Blog-Pages: blog-pages krijgen `getMarketingNavbar()` (5 nav-links + active-state "Blog" via groene underline op `--color-prompt`) ipv minimal `getBlogNavbar()` voor navigation consistency + conversion-funnel + SEO topical-clustering; `currentPage` param + `activeAttr()` helper in navbar.js werkt op desktop én mobile-hamburger zonder duplicate code; breadcrumb-strip per post (Home › Blog › Post-titel) + BreadcrumbList JSON-LD voor SEO rich-results in Google SERP; hardcoded HTML over JS-injection (Sessie 129-pattern); Python-script met idempotency-check (`'class="breadcrumb"' in content` skip) voor batch-edit van 11 posts; sed-batch voor uniforme noscript Gidsen-link insert; landing.css toegevoegd aan blog-pages (verwijderde dubbele-nav issue, +32KB/page); **smooth-scroll regressie ontdekt + gefixed** — landing.css regel 1212 zet `html { scroll-behavior: smooth }` waardoor `window.scrollTo` geanimeerd werd → reading-progress E2E test faalde (60% ipv 90%); override in blog.css `html { scroll-behavior: auto }` lost op zonder landing.css aan te raken; validate-blogs.sh +2 checks (breadcrumb-nav + BreadcrumbList JSON-LD, skip blog/index.html); 11 posts handmatige iteratie + 2 sed-batches + 1 Python-script + 3 verificatie-iteraties via Playwright + git stash baseline-vergelijking voor regressie-isolatie; getBlogNavbar() deprecated maar behouden voor backward-compat (Sessie 139)
 - Content SEO Plan C — OWASP Top 10 Hub-Post: 1 grondige NL-blogpost van 1818 woorden (`blog/owasp-top-10-uitgelegd.html`, 30 KB, 11 min, Concepten) live op productie via cold-start vanuit `.claude/plans/content-seo-followup.md`; cannibalization-check tegen 10 bestaande posts schrapte 2/8 keyword-kandidaten (#1 "zonder diploma" + #4 "salaris NL" overlappen `ethisch-hacker-worden.html`); bidirectional clustering met 4 outbound + 3 inbound links (anker-paragraaf-strategie: 2/3 inbound-targets hadden al `<abbr>` "OWASP Top 10" zonder href — ideale `<a>`-omhullings-punten met descriptive anchor); lead-magnet CTA top (`blog_owasp_top10_top`) + Gumroad 12-Weken Leerplan CTA mid (`blog_owasp_top10_mid`, eogjdk) — Sessie 131-delegated-listener werkt zero-JS-cost voor 2 nieuwe `data-cta-location`-waardes; Playwright smoke-test groen via dataLayer-hook (consent-onafhankelijke ground truth, Sessie 137-learning); **post-deploy markup-fix**: Heisenberg meldde "tip-sectie beslaat bijna hele blog" → tag-balans-check vond 23 `<div>` vs 22 `</div>` (1 ongesloten), regel 175 gebruikte `</p>` waar `</div>` had moeten staan, blog-tip-styling erfde over alle volgende content; 1-char fix + verified (`tip.children.length`=2, `tip.innerText.length`=273 chars, geen H2's binnen tip); tag-balans-check als nieuwe DoD-item voor toekomstige blog-posts (Sessie 138)
 - Funnel-pulse Diagnose + Lead-magnet CTA-Coverage 3→13: Plan B follow-up gepivoteerd na Heisenberg's "0 inschrijvingen" cold-start onthulling — pipeline 100% groen bevestigd via Playwright simulate-toggle (MutationObserver vuurt + GA4 collect-POSTs 204) + Brevo POST consent-onafhankelijk als harder ground truth dan GA4; CTA-coverage uitgebreid van 3 (cybertools-mid, nmap-top, gidsen-secondary) naar 13 plaatsen (8 blogposts top-of-article met contextual copy per post + homepage `gids-bundle` section vóór final-cta + over-ons ná developer-card) met unieke `data-cta-location` per positie voor GA4-attributie; plan-file `lead-magnet-followup.md` kreeg SUPERSEDED-banner met expliciete trigger-condities (Brevo ≥5 contacten OF GA4 ≥50 page_views/maand) voor toekomstige hervatting Track A/B (Sessie 137)
@@ -121,9 +123,9 @@
 
 ## 📊 Session Overview
 
-**Total Sessions:** 121 (as of 27 maart 2026)
-**Current Session:** 121 (Doc Sync & Session Catch-Up)
-**Sessions with full documentation:** 88-121 (34 sessions)
+**Total Sessions:** 160 (as of 12 juni 2026)
+**Current Session:** 160 (Pre-launch Consistency Sweep)
+**Sessions with full documentation:** 88-160 (73 sessions)
 **Sessions compressed:** 2-77 (various compression levels)
 
 **Structure rationale:**
@@ -165,8 +167,8 @@
 
 ---
 
-**Last updated:** 29 april 2026 (Sessie 133 — Plan B Lead Magnet ✅ COMPLETE + post-deploy Brevo submit fix)
-**Next update:** Sessie 134 or when CURRENT sessions need rotation
+**Last updated:** 12 juni 2026 (Sessie 160 — Pre-launch consistency sweep)
+**Next update:** Sessie 161 or when CURRENT sessions need rotation
 
 **Recent updates:**
 - Sessie 133: Plan B Sessie 2 + post-deploy Brevo silent panel-toggle fix — custom `brevo-submit.js` handler

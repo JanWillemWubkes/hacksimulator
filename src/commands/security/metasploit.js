@@ -13,6 +13,9 @@ export default {
   usage: 'metasploit',
 
   async execute(args, flags, context) {
+    // Check if user has given consent for security tools
+    const hasConsent = localStorage.getItem('security_tools_consent') === 'true';
+
     // Security warning box
     const warningContent = `METASPLOIT FRAMEWORK - Penetration Testing Platform
 
@@ -31,6 +34,20 @@ Deze simulator demonstreert exploitation framework concepten
 op een veilige manier.`;
 
     const warningBox = boxText(warningContent, 'SECURITY WARNING');
+
+    // Show warning on first use - next invocation is the accept action
+    if (!hasConsent) {
+      localStorage.setItem('security_tools_consent', 'true');
+
+      return `${warningBox}
+
+[?] OM DOOR TE GAAN:
+
+    Type 'metasploit' opnieuw om te accepteren en door te gaan
+
+[?] Je consent wordt opgeslagen. Type 'reset consent' om opnieuw
+      de waarschuwing te zien.`;
+    }
 
     // Metasploit simulation - interactive framework intro
     const output = `${warningBox}

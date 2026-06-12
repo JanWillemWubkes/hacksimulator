@@ -33,6 +33,44 @@
 - Heisenberg: docs/seo-launch-checklist.md afwerken (Bing, GSC, share-debuggers) — dag 1 na deploy
 - Content-pipeline post-launch: Metasploit, Hydra, grep/find, Netcat gidsen (hoogste keyword-kans, nog geen dekking)
 - M8 feature-completion of perf-audit §2j scope-design blijven open als Sessie 161 kandidaten (zie Sessie 159 aanbeveling)
+---
+
+## Sessie 160 (vervolg): Pre-launch consistency sweep — 3 parallelle audits + 9 fixes vóór marketing launch (12 jun 2026)
+
+**Scope:** Heisenberg's cold-start: "we gaan binnenkort de marketing launch doen, check project/site op inconsistenties". 3 parallelle Explore-audits (docs-consistency + site-content + code-vs-spec) → bevindingen geverifieerd (vals-alarm-filtering) → AskUserQuestion 3 scope-vragen (consent-harmonisatie JA / cache bijtrekken-naar-max / alle kleine fixes mee) → 9 fixes geïmplementeerd. **13e uitkomst-categorie: launch-readiness-audit** (multi-domain consistency sweep, geen feature, geen perf-cyclus).
+
+**Status:** ✅ CLOSED. Alle fixes gecommit + gepusht naar `claude/festive-albattani-w2uufm`.
+
+### Audit-bevindingen → fixes (9)
+
+1. **Consent-flow inconsistentie security tools (KRITIEK voor marketingverhaal):** hydra/sqlmap/nikto hebben first-use warning + `localStorage security_tools_consent` patroon; hashcat toonde alleen warning zonder args en ging mét args direct door; metasploit toonde warning inline mét demo. Fix: beide geharmoniseerd naar hydra-patroon (`src/commands/security/hashcat.js` + `metasploit.js`); metasploit zet consent bij eerste warning-run zodat "type 'metasploit' opnieuw" de accept-actie is (geen extra state). `reset consent` werkt automatisch mee (zelfde key).
+2. **Taalstrategie-violation:** `help.js:210-211` mobiele help had EN-teksten ("for details" / "Real hackers: start with...") → NL.
+3. **SEO-gaten:** terminal.html miste canonical; 3 legal pages (privacy/terms/cookies) misten description + og + twitter + canonical (head was kaal) → volledig blok toegevoegd (patroon contact.html, canonical = `/assets/legal/...` conform 301-redirects in netlify.toml).
+4. **gidsen.html:** noscript-fallback-footer (© 2026 + nav) ontbrak in footer-placeholder (andere pagina's hebben die wél) + script-attribuut-volgorde afwijkend.
+5. **Cache-versie-drift (returning-user stale CSS):** legal pages `main.css?v=114` terwijl rest v=150 — **Sessie 150 font-bump had legal pages gemist**; pages.css v=114 op contact/over-ons/woordenlijst vs v=132 op gidsen/sample-pentest; landing.css v=114 overal behalve sample-pentest v=116. Fix: bijgetrokken naar max per file (Heisenberg-keuze: geen uniforme verse bump = geen onnodige cache-invalidation vlak voor launch).
+6. **commands-list.md incompleet:** `hint`, `next`, `welcome` ongedocumenteerd (38 unique gedocumenteerd vs 41 geregistreerd); `ls -la` stond als apart command (is flag). Fix: 3 toegevoegd + flag-note + totaalregel 41.
+7. **Test-metrics stale:** claims "~167 tests / 22 spec files" vs ground-truth **197 tests / 23 spec files** via `npx playwright test --list --project=chromium`. NEW discipline: handmatige `grep -c 'test('` tellingen gaven 173 én 181 afhankelijk van regex = onbetrouwbaar; **CLI-listing is canoniek** voor test-counts. Gefixt in TASKS.md (3 plekken) + CLAUDE.md Quick Reference.
+8. **SESSIONS.md 26 sessies stale:** range "Current Sessions (88-139)" + Total 121 + footer 29 april → 88-160 / 160 / 12 juni 2026 + topline-topics 140-160.
+9. **date.js voorbeelden 2025 → 2026** (cosmetisch).
+
+### Vals alarm (geverifieerd, bewust NIET aangeraakt)
+
+- `structure.js:176` DB_PASS TODO = bewuste gesimuleerde kwetsbare content in nep-config.php (educatief doel) — audit-agent vlagde als "security risk", verificatie toonde by-design.
+- hydra/sqlmap/nikto localStorage-consent ≠ checklist "Doorgaan? (j/n)" letterlijk, maar is het werkende by-design patroon (command-checklist.md beschrijft oudere conventie).
+- Blog count "10 posts" klopt by-design (excl. index/welkom). Geen broken internal links. Branding/contact overal consistent. validate-docs.sh --deep exit 0 al vóór de sweep.
+
+### NEW Sessie 160 disciplines
+
+1. **Audit-agent-bevindingen pre-verificeren vóór fixen** — 2 van 5 "kritieke" bevindingen waren vals alarm (DB_PASS by-design, consent-patroon by-design-variant). Explore-agents pattern-matchen op spec-letter; verificatie tegen werkende code + design-intent is verplichte filter-stap.
+2. **CLI-listing als canonieke test-count** (`npx playwright test --list`) — handmatige greps variëren per regex (167/173/181/197-discrepanties over 3 sessies).
+3. **Cache-bump checklist-gat:** Sessie 150 bump-batch miste legal pages (subdirectory `assets/legal/` buiten de 20-file batch). Bij toekomstige `?v=` bumps: `grep -rln 'file.css?v=' --include='*.html'` over ALLE directories, niet alleen root + blog.
+4. **Launch-readiness-audit als 13e uitkomst-categorie** — discipline-laag identiek (parallelle Explore pre-data + verificatie + AskUserQuestion scope + defense-in-depth + validate-docs gate).
+
+### Verificatie
+
+- Playwright Chromium full suite lokaal (python http.server :8765, `BASE_URL` override, `--workers=1`) — zie sprint-regel TASKS.md voor uitslag.
+- `bash scripts/validate-docs.sh --deep` exit 0 (gate).
+- Bundle delta src/ < 1 KB (consent-blokken + NL-tekst), binnen VALIDATE-BUNDLE ±5% tolerance.
 
 ---
 
