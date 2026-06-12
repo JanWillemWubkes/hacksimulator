@@ -18,11 +18,14 @@
   <meta property="og:locale" content="nl_NL">
   <meta property="og:site_name" content="HackSimulator.nl">
   <meta property="og:image" content="https://hacksimulator.nl/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
 
   <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Alle Terminal Commands | HackSimulator.nl">
   <meta name="twitter:description" content="40+ educatieve terminal commands met Nederlandse uitleg voor ethisch hacken.">
+  <meta name="twitter:image" content="https://hacksimulator.nl/assets/og-image.png">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://hacksimulator.nl/commands/">
@@ -123,6 +126,18 @@
   }
   </script>
 
+  <!-- BreadcrumbList Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://hacksimulator.nl/" },
+      { "@type": "ListItem", "position": 2, "name": "Commands", "item": "https://hacksimulator.nl/commands/" }
+    ]
+  }
+  </script>
+
 </head>
 <body class="landing-page">
   <!-- Skip Link -->
@@ -196,7 +211,7 @@
     <!-- ==================== FILESYSTEM COMMANDS ==================== -->
     <section id="filesystem" class="page-section commands-category">
       <h2>Filesystem Commands</h2>
-      <p>Navigeer door het virtuele bestandssysteem, lees bestanden, maak mappen aan en beheer je data. Deze commands vormen de basis van elke terminal gebruiker.</p>
+      <p>Navigeer door het virtuele bestandssysteem, lees bestanden, maak mappen aan en beheer je data. Deze commands vormen de basis van elke terminal gebruiker. Nieuw met de terminal? Lees eerst <a href="/blog/terminal-basics.html">Terminal Commands voor Beginners</a> of duik in het <a href="/blog/linux-bestandssysteem.html">Linux bestandssysteem</a>.</p>
 
       <div class="commands-grid">
 
@@ -377,7 +392,7 @@ hacker:x:1000:1000::/home/hacker:/bin/bash</div>
     <!-- ==================== NETWORK COMMANDS ==================== -->
     <section id="network" class="page-section commands-category">
       <h2>Network Commands</h2>
-      <p>Begrijp hoe netwerken werken, scan poorten, traceer routes en analyseer verbindingen. Essentieel voor elke cybersecurity professional.</p>
+      <p>Begrijp hoe netwerken werken, scan poorten, traceer routes en analyseer verbindingen. Essentieel voor elke cybersecurity professional. Wil je dieper in netwerk scanning duiken? Lees onze <a href="/blog/nmap-beginnersgids.html">Nmap beginnersgids</a>.</p>
 
       <div class="commands-grid">
 
@@ -501,7 +516,7 @@ Expires: 2025-08-13</div>
     <!-- ==================== SECURITY COMMANDS ==================== -->
     <section id="security" class="page-section commands-category">
       <h2>Security Commands</h2>
-      <p>Ontdek hoe professionals systemen testen op kwetsbaarheden. Deze tools worden in de simulator alleen educatief gebruikt — in de echte wereld heb je altijd schriftelijke toestemming nodig.</p>
+      <p>Ontdek hoe professionals systemen testen op kwetsbaarheden. Deze tools worden in de simulator alleen educatief gebruikt — in de echte wereld heb je altijd schriftelijke toestemming nodig. Achtergrond nodig? Lees <a href="/blog/wachtwoord-beveiliging.html">hoe hackers wachtwoorden kraken</a> en <a href="/blog/sql-injection-uitgelegd.html">wat SQL injection is</a>.</p>
 
       <div class="commands-grid">
 

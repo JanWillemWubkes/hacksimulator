@@ -18,11 +18,14 @@
   <meta property="og:locale" content="nl_NL">
   <meta property="og:site_name" content="HackSimulator.nl">
   <meta property="og:image" content="https://hacksimulator.nl/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
 
   <!-- Twitter Cards -->
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Gratis Gidsen voor Ethisch Hacken | HackSimulator.nl">
   <meta name="twitter:description" content="Drie praktische PDF-gidsen in het Nederlands. Van wet en ethiek tot je eerste pentest.">
+  <meta name="twitter:image" content="https://hacksimulator.nl/assets/og-image.png">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://hacksimulator.nl/gidsen.html">
@@ -122,6 +125,18 @@
         }
       ]
     }
+  }
+  </script>
+
+  <!-- BreadcrumbList Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://hacksimulator.nl/" },
+      { "@type": "ListItem", "position": 2, "name": "Gidsen", "item": "https://hacksimulator.nl/gidsen.html" }
+    ]
   }
   </script>
 
@@ -274,6 +289,9 @@
           Download de gratis sample
           <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
         </a>
+        <p style="margin-top: 1.5rem;">
+          Liever eerst gratis verder lezen? Bekijk onze <a href="/blog/ethisch-hacker-worden.html">complete carri&egrave;regids voor ethisch hackers</a> of oefen direct in de <a href="/terminal.html">terminal simulator</a>.
+        </p>
       </div>
     </section>
 

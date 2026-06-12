@@ -4,6 +4,38 @@
 
 ---
 
+## Sessie 160: SEO launch-perfectie — site-brede on-page/technische SEO + 2 nieuwe blogposts vóór marketing-launch (12 jun 2026)
+
+**Missie:** Heisenberg lanceert over ~6 dagen de actieve marketing van hacksimulator.nl. Doel: SEO perfectioneren voor maximaal organisch verkeer. Drie parallelle Explore-audits (on-page, technisch, content) + AskUserQuestion scope-bevestiging (GSC al via DNS geverifieerd / fixes + 1-2 posts / marketing-launch) → plan-file `/root/.claude/plans/hi-claude-we-gaan-warm-blanket.md`.
+
+**Status:** ✅ CLOSED — alle 6 workstreams uitgevoerd, validate-blogs 14/14 + validate-docs --deep exit 0.
+
+### Audit-bevindingen (3 Explore agents + handmatige technische verificatie)
+- Fundamenten sterk: sitemap compleet, robots.txt correct, JSON-LD overal, GA4 + Consent Mode v2, security headers A-grade
+- Gaps: geen 404.html | terminal.html geen canonical + title/MD identiek aan index (duplicate-risk) | twitter cards misten op alle blogposts | FAQPage-schema ontbrak op terminal.html ondanks 4 zichtbare FAQ's | feed.xml miste OWASP-post + stale lastBuildDate | geen author-bylines (E-E-A-T) | 3 legal pages zonder canonical | slechts 5/41 commands met blogdekking
+
+### Uitgevoerd werk
+- **(A) Technisch:** NEW 404.html (branded terminal-stijl, noindex, bewust géén AdSense — ads op error pages schenden AdSense-policy) | terminal.html canonical + title "Terminal Simulator - Ethisch Hacken Leren in je Browser" + gedifferentieerde MD + NEW WebPage+FAQPage JSON-LD | 3× legal canonical+MD | feed.xml OWASP-item + lastBuildDate | MD-fixes contact + cybersecurity-tools (laatste corrigeerde factual error: Burp/John → Hashcat/SQLmap na H2-verificatie — les: claims in meta descriptions altijd tegen content verifiëren)
+- **(B) Social meta batch (Python, geen sed wegens `|`-delimiter danger Sessie 158 #2):** og:image:width/height 1200×630 (geverifieerd via `file`) + twitter:card summary_large_image + twitter:image op alle 19 publieke pagina's
+- **(C) Schema:** BreadcrumbList op 7 root-pagina's (homepage bewust geskipt: 1-item breadcrumb waardeloos)
+- **(D) E-E-A-T + linking:** byline "Door Jan Willem Wubkes" + JSON-LD Organization→Person + article:author op alle posts | zichtbare dateModified bewust geskipt (== datePublished overal; nep-freshness vermeden) | interne links gidsen/over-ons/commands→blog | RSS-link zichtbaar op blog-index
+- **(E) Content:** NEW blog/wireshark-beginnersgids.html (~1900 w; wireshark is GEEN simulator-command → CTA via netstat/nmap/traceroute) + NEW blog/hashcat-wachtwoorden-kraken.html (~1950 w; terminal-example 1-op-1 uit src/commands/security/hashcat.js demo-database) | blog-index cards | sitemap 23→25 | feed 10→13 | bidirectionele cross-links (wachtwoord-beveiliging→hashcat, cybersecurity-tools→beide, nmap→wireshark)
+- **(F) NEW docs/seo-launch-checklist.md:** Heisenberg-acties buiten repo — Bing WMT import-from-GSC, GSC sitemap-resubmit + URL-inspectie nieuwe posts, Rich Results Test, FB/X share-debuggers, launch-dag promotiekanalen (Tweakers, Security.NL, Reddit, HN, LinkedIn, ROC/HBO-docenten)
+
+### Leerpunten
+1. **Audit-claims verifiëren vóór fixen:** Explore-audit claimde "commands/index.html mist meta description" — bleek aanwezig en goed. Ook "8 FAQ's op terminal.html" — waren er 4. Audit-output is input, geen ground truth.
+2. **Meta description factual-check:** mijn eerste verlenging van de cybersecurity-tools MD noemde Burp Suite/John the Ripper — de post behandelt Hashcat/SQLmap. H2-grep als verificatie ving dit.
+3. **AdSense-policy op error pages:** 404.html bewust zonder AdSense-script (ads op error pages = policy-violation).
+4. **Honest freshness:** dateModified tonen zonder echte wijziging is nep-signaal; geskipt tot posts echt geüpdatet worden.
+5. **VALIDATE-BUNDLE forcing function werkte:** blog/ 355→413 KB door 2 posts → Check 5 zou zonder marker-update gefaald hebben; Check 6b blog-count 10→12 idem. Beide pre-emptief bijgewerkt, --deep exit 0.
+
+### Volgende stappen
+- Heisenberg: docs/seo-launch-checklist.md afwerken (Bing, GSC, share-debuggers) — dag 1 na deploy
+- Content-pipeline post-launch: Metasploit, Hydra, grep/find, Netcat gidsen (hoogste keyword-kans, nog geen dekking)
+- M8 feature-completion of perf-audit §2j scope-design blijven open als Sessie 161 kandidaten (zie Sessie 159 aanbeveling)
+
+---
+
 ## Sessie 159: `#23.2` M0-M4 permanent-SKIP closure — documentation-of-intent (12e uitkomst-categorie), ~30 min minimal scope (10 jun 2026)
 
 **Scope:** Heisenberg's cold-start Sessie 159 — pak op #23.2 M0-M4 legacy fix-decision spawn uit Sessie 158 #23.1 SKIP-notice. Heisenberg-vroeg expert-advies, Claude shift initiële #33 (c) pivot-aanbeveling naar #23.2 minimal closure na Explore-onderzoek toonde #33 (c) niet-ready (geen perf-audit §2j scope-document + geen tooling penthouse/critical absent + cumulatief-reverted pad Sessie 151 Frame C + Sessie 153 Frame D + cache-invalidation trade-off ongedocumenteerd + scope-ambiguïteit). Verify-first plan-file `/home/willem/.claude/plans/heisenberg-hier-cold-start-sessie-whimsical-shannon.md`. Sessie 159 = **14e sessie streak honest data-driven outcomes** + **NIEUWE 12e uitkomst-categorie documentation-of-intent** (minimal-closure backlog-hygiene zonder code-logic change).

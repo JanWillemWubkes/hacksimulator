@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>Pagina Niet Gevonden (404) - HackSimulator.nl</title>
+  <meta name="description" content="Deze pagina bestaat niet (meer). Ga terug naar de homepage of start de terminal simulator.">
+  <meta name="robots" content="noindex, follow">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#0d1117">
+
+  <!-- Critical Font Preloads (self-hosted, SIL OFL 1.1) -->
+  <link rel="preload" href="/styles/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/styles/fonts/jetbrainsmono-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/styles/main.css?v=150">
+  <link rel="stylesheet" href="/styles/landing.css?v=114">
+  <link rel="stylesheet" href="/styles/pages.css?v=114">
+  <link rel="stylesheet" href="/styles/mobile.css?v=115" media="screen and (max-width: 768px)">
+</head>
+<body class="landing-page">
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
+
+  <!-- Navigation (Component Injection) -->
+  <div id="navbar-placeholder">
+    <noscript>
+      <nav class="noscript-nav" role="navigation">
+        <a href="/">HackSimulator.nl</a>
+        <a href="/terminal.html">Start Simulator</a>
+        <a href="/blog/">Blog</a>
+        <a href="/commands/">Commands</a>
+        <a href="/woordenlijst.html">Woordenlijst</a>
+        <a href="/over-ons.html">Over Ons</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+    </noscript>
+  </div>
+
+  <main id="main-content" class="page-content">
+    <section class="page-section" style="text-align: center; padding: 4rem 1rem;">
+      <p style="font-family: var(--font-mono, monospace); color: var(--color-error, #f85149); font-size: 1.1rem; margin-bottom: 0.5rem;">hacker@hacksim:~$ cat pagina.html</p>
+      <p style="font-family: var(--font-mono, monospace); margin-bottom: 2rem;">cat: pagina.html: Bestand niet gevonden (404)</p>
+
+      <h1>Oeps, deze pagina bestaat niet</h1>
+      <p style="max-width: 540px; margin: 1rem auto 2rem;">Geen paniek — zelfs ervaren hackers lopen weleens tegen een dood spoor aan. Gebruik een van de routes hieronder om verder te gaan.</p>
+
+      <p style="font-family: var(--font-mono, monospace); margin-bottom: 1rem;">[TIP] Probeer een van deze commando's:</p>
+      <nav aria-label="Suggesties" style="display: flex; flex-direction: column; gap: 0.75rem; max-width: 420px; margin: 0 auto;">
+        <a class="btn btn-cta" href="/">Terug naar de homepage</a>
+        <a class="btn" href="/terminal.html">Start de terminal simulator</a>
+        <a class="btn" href="/blog/">Lees de blog</a>
+        <a class="btn" href="/woordenlijst.html">Bekijk de woordenlijst</a>
+      </nav>
+    </section>
+  </main>
+
+  <!-- Footer (Component Injection) -->
+  <div id="footer-placeholder">
+    <noscript>
+      <footer class="noscript-footer">
+        <p>&copy; 2026 HackSimulator.nl</p>
+        <nav>
+          <a href="/assets/legal/privacy.html">Privacy</a>
+          <a href="/assets/legal/terms.html">Voorwaarden</a>
+          <a href="/assets/legal/cookies.html">Cookies</a>
+          <a href="/over-ons.html">Over Ons</a>
+          <a href="/contact.html">Contact</a>
+        </nav>
+      </footer>
+    </noscript>
+  </div>
+
+  <!-- Theme Initialization (prevents flash) - external for CSP compliance -->
+  <script src="/src/init-theme.js"></script>
+
+  <!-- Component Injection (external script for CSP compliance) -->
+  <script src="/src/init-components.js" type="module"></script>
+</body>
+</html>

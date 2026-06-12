@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>Hashcat Uitgelegd: Hoe Wachtwoord-Hashes Gekraakt Worden | HackSimulator.nl</title>
+  <meta name="description" content="Leer hoe hashcat wachtwoord-hashes kraakt met dictionary attacks, brute force en GPU-kracht. Nederlandse beginnersgids met veilige oefenvoorbeelden.">
+  <meta name="keywords" content="hashcat tutorial, wachtwoord kraken, password hash, dictionary attack, brute force, ethisch hacken, MD5 kraken">
+  <meta name="author" content="HackSimulator.nl">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://hacksimulator.nl/blog/hashcat-wachtwoorden-kraken.html">
+  <meta property="og:title" content="Hashcat Uitgelegd: Hoe Wachtwoord-Hashes Gekraakt Worden | HackSimulator.nl">
+  <meta property="og:description" content="Leer hoe hashcat wachtwoord-hashes kraakt met dictionary attacks, brute force en GPU-kracht.">
+  <meta property="article:published_time" content="2026-06-12">
+  <meta property="article:author" content="Jan Willem Wubkes">
+  <meta property="article:section" content="Tools">
+  <meta property="og:locale" content="nl_NL">
+  <meta property="og:site_name" content="HackSimulator.nl">
+  <meta property="og:image" content="https://hacksimulator.nl/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://hacksimulator.nl/assets/og-image.png">
+
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="HackSimulator.nl Blog" href="/feed.xml">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://hacksimulator.nl/blog/hashcat-wachtwoorden-kraken.html">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#0d1117">
+
+
+  <!-- Critical Font Preloads (self-hosted, SIL OFL 1.1) -->
+  <link rel="preload" href="/styles/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../styles/main.css?v=150">
+  <link rel="stylesheet" href="../styles/landing.css?v=114">
+  <link rel="stylesheet" href="../styles/blog.css?v=115">
+  <link rel="stylesheet" href="../styles/mobile.css?v=115" media="screen and (max-width: 768px)">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
+
+  <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
+  <script data-cookieconsent="ignore">
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied',
+      'wait_for_update': 500
+    });
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6345664385525701"
+       crossorigin="anonymous"
+       ></script>
+
+  <!-- Structured Data - JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Hashcat Uitgelegd: Hoe Wachtwoord-Hashes Gekraakt Worden",
+    "description": "Leer hoe hashcat wachtwoord-hashes kraakt met dictionary attacks, brute force en GPU-kracht. Nederlandse beginnersgids met veilige oefenvoorbeelden.",
+    "datePublished": "2026-06-12",
+    "dateModified": "2026-06-12",
+    "author": {
+      "@type": "Person",
+      "name": "Jan Willem Wubkes",
+      "url": "https://hacksimulator.nl/over-ons.html"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "HackSimulator.nl",
+      "url": "https://hacksimulator.nl/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://hacksimulator.nl/blog/hashcat-wachtwoorden-kraken.html"
+    },
+    "inLanguage": "nl-NL",
+    "keywords": "hashcat, wachtwoord kraken, password hash, dictionary attack, brute force, ethisch hacken",
+    "wordCount": 1950,
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://hacksimulator.nl/assets/og-image.png",
+      "width": 1200,
+      "height": 630
+    }
+  }
+  </script>
+  <!-- BreadcrumbList Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://hacksimulator.nl/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://hacksimulator.nl/blog/" },
+      { "@type": "ListItem", "position": 3, "name": "Hashcat Uitgelegd: Hoe Wachtwoord-Hashes Gekraakt Worden", "item": "https://hacksimulator.nl/blog/hashcat-wachtwoorden-kraken.html" }
+    ]
+  }
+  </script>
+
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
+
+  <!-- Navigation (Component Injection) -->
+  <div id="navbar-placeholder">
+    <noscript>
+      <nav class="noscript-nav" role="navigation">
+        <a href="../">HackSimulator.nl</a>
+        <a href="../terminal.html">Start Simulator</a>
+        <a href="../blog/">Blog</a>
+        <a href="../commands/">Commands</a>
+        <a href="../gidsen.html">Gidsen</a>
+        <a href="../woordenlijst.html">Woordenlijst</a>
+        <a href="../over-ons.html">Over Ons</a>
+        <a href="../contact.html">Contact</a>
+      </nav>
+    </noscript>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main-content" class="blog-container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li aria-current="page">Hashcat Uitgelegd: Hoe Wachtwoord-Hashes Gekraakt Worden</li>
+      </ol>
+    </nav>
+    <article class="blog-post">
+      <!-- Post Header -->
+      <header class="blog-post-header">
+        <h1 class="blog-post-title">Hashcat Uitgelegd: Hoe Wachtwoord-Hashes Gekraakt Worden</h1>
+        <div class="blog-post-meta">
+          <time datetime="2026-06-12">12 juni 2026</time>
+          <span>Door Jan Willem Wubkes</span>
+          <span>8 min</span>
+          <span class="category-badge">Tools</span>
+        </div>
+      </header>
+
+      <!-- Post Content -->
+      <div class="blog-post-content">
+        <p>
+          Hoe kan het dat een gestolen database met "versleutelde" wachtwoorden binnen een paar uur op straat ligt
+          in leesbare vorm? Het antwoord heet <strong>hashcat</strong>: 's werelds snelste
+          <abbr class="jargon" title="Password cracker: tool die wachtwoord-hashes terugrekent naar het originele wachtwoord" tabindex="0"><strong>password cracker</strong></abbr>.
+          In dit artikel leer je hoe hashes werken, hoe hashcat ze kraakt, en — belangrijker — hoe je jezelf en je
+          gebruikers hiertegen beschermt. Want wie begrijpt hoe de aanvaller denkt, verdedigt beter.
+        </p>
+
+        <!-- Lead Magnet CTA: gratis Pentest Playbook sample (top placement, hoogste intent) -->
+        <div class="blog-cta blog-cta-product">
+          <h3>Gratis: 9 pagina's uit het Pentest Playbook</h3>
+          <p>Leer stap voor stap hoe een echte pentest werkt — van reconnaissance tot rapportage. Geen account, alleen je email.</p>
+          <a href="/sample-pentest.html" class="blog-cta-button" data-lead-magnet="pentest_sample" data-cta-location="blog_hashcat_top">Download de gratis sample</a>
+        </div>
+
+        <h2>Wat is een Password Hash?</h2>
+        <p>
+          Als je een account aanmaakt, slaat een goed gebouwde website je wachtwoord <em>nooit</em> letterlijk op.
+          In plaats daarvan wordt je wachtwoord door een
+          <abbr class="jargon" title="Hash-functie: wiskundige functie die invoer omzet naar een vaste reeks tekens, onomkeerbaar" tabindex="0"><strong>hash-functie</strong></abbr>
+          gehaald. Het resultaat is een vaste reeks tekens die er zo uitziet:
+        </p>
+        <div class="terminal-example">
+          <div class="prompt">$ echo "password" | md5sum</div>
+          <div class="output">5f4dcc3b5aa765d61d8327deb882cf99  &lt;- MD5 hash van "password"
+
+[TIP] Zelfde invoer = altijd dezelfde hash.
+      Eén letter anders = compleet andere hash.</div>
+        </div>
+        <p>
+          Drie eigenschappen maken hashes geschikt voor wachtwoord-opslag:
+        </p>
+        <ul>
+          <li><strong>One-way</strong> - Je kunt van een hash niet terugrekenen naar het wachtwoord</li>
+          <li><strong>Deterministisch</strong> - Hetzelfde wachtwoord geeft altijd dezelfde hash, dus de server kan jouw invoer vergelijken</li>
+          <li><strong>Avalanche-effect</strong> - "password" en "Password" geven totaal verschillende hashes</li>
+        </ul>
+
+        <div class="blog-info">
+          Maar wacht — als een hash niet terug te rekenen is, hoe kraakt hashcat hem dan? Simpel: hashcat rekent
+          niet terug, het <strong>raadt vooruit</strong>. Het probeert miljoenen kandidaat-wachtwoorden, hasht ze
+          allemaal, en kijkt welke hash overeenkomt. Match gevonden? Dan is het wachtwoord bekend.
+        </div>
+
+        <h2>Wat is Hashcat?</h2>
+        <p>
+          Hashcat is een gratis, open-source password recovery tool die sinds 2009 wordt ontwikkeld. Het ondersteunt
+          meer dan 350 hash-types en is berucht om zijn snelheid: door gebruik te maken van
+          <abbr class="jargon" title="GPU: grafische processor die duizenden berekeningen tegelijk kan uitvoeren, ideaal voor hash-berekeningen" tabindex="0"><strong>GPU-acceleratie</strong></abbr>
+          kraakt een moderne videokaart ruim 200 miljard MD5-hashes <em>per seconde</em>.
+        </p>
+        <p>
+          Security professionals gebruiken hashcat voor legitieme doelen:
+        </p>
+        <ul>
+          <li><strong>Password audits</strong> - Testen hoeveel medewerkers een zwak wachtwoord gebruiken</li>
+          <li><strong>Pentests</strong> - Aantonen dat gestolen hashes binnen de afgesproken scope kraakbaar zijn</li>
+          <li><strong>Forensisch onderzoek</strong> - Toegang krijgen tot versleuteld bewijsmateriaal (met gerechtelijk bevel)</li>
+          <li><strong>Eigen accounts</strong> - Een vergeten wachtwoord van je eigen archief of wallet terughalen</li>
+        </ul>
+
+        <h2>De Vier Aanvalstechnieken</h2>
+        <p>
+          Hashcat kent verschillende aanvalsmodi. Deze vier kom je het vaakst tegen:
+        </p>
+
+        <h3>1. Dictionary Attack (Wordlist)</h3>
+        <p>
+          De meest gebruikte techniek. Hashcat werkt een lijst met bekende wachtwoorden af — bijvoorbeeld
+          <strong>rockyou.txt</strong>, een beruchte wordlist met ruim 14 miljoen echte wachtwoorden uit het
+          RockYou-datalek van 2009. Omdat mensen voorspelbaar zijn, kraakt deze aanpak vaak al de helft van een database.
+        </p>
+
+        <h3>2. Brute Force</h3>
+        <p>
+          Alle mogelijke combinaties proberen: aaa, aab, aac, enzovoort. Gegarandeerd succesvol — uiteindelijk — maar
+          de tijd explodeert met elke extra positie. Een wachtwoord van 8 kleine letters is in minuten gekraakt;
+          12 willekeurige tekens met symbolen duurt eeuwen.
+        </p>
+
+        <h3>3. Hybrid Attack</h3>
+        <p>
+          Wordlist plus variaties. Mensen denken slim te zijn met "welkom2024!" — hashcat kent die truc.
+          <abbr class="jargon" title="Rules: transformatieregels die hashcat toepast op wordlist-woorden, zoals hoofdletters, cijfers en leetspeak" tabindex="0"><strong>Rules</strong></abbr>
+          transformeren elk woord automatisch: password wordt p@ssw0rd, Password1, password2024!, enzovoort.
+        </p>
+
+        <h3>4. Rainbow Tables</h3>
+        <p>
+          Vooraf berekende tabellen van hash-naar-wachtwoord. Razendsnel bij ongezouten hashes, maar volledig
+          nutteloos zodra een site <strong>salts</strong> gebruikt — daarover zo meer.
+        </p>
+
+        <!-- AdSense In-Article -->
+        <div class="ad-container ad-unit ad-in-article" style="display: none;">
+          <p class="ad-disclaimer">Advertisement</p>
+          <ins class="adsbygoogle"
+               style="display:block; text-align:center;"
+               data-ad-layout="in-article"
+               data-ad-format="fluid"
+               data-ad-client="ca-pub-6345664385525701"
+               data-ad-slot="5971972080"></ins>
+        </div>
+
+        <h2>Hashcat in de Praktijk</h2>
+        <p>
+          Je kunt veilig oefenen met hashcat in de <a href="/commands/#cmd-hashcat">HackSimulator.nl terminal</a>.
+          De simulator bevat alleen zwakke demo-hashes, dus je kunt niets kapotmaken. Probeer dit:
+        </p>
+        <div class="terminal-example">
+          <div class="prompt">$ hashcat 5f4dcc3b5aa765d61d8327deb882cf99</div>
+          <div class="output">hashcat v6.2.5 - Password Recovery Tool
+
+[*] Detecting hash type... MD5 detected
+[*] Loading wordlist... rockyou.txt (14,344,391 words)
+[*] Starting attack...
+
+[+] HASH CRACKED!
+
+Hash: 5f4dcc3b5aa765d61d8327deb882cf99
+Password: password
+Time: 0.02s
+
+[TIP] "password" staat in de top 100 meest
+      gebruikte wachtwoorden — direct gekraakt.</div>
+        </div>
+
+        <div class="blog-tip">
+          Let op de kraaktijd: 0,02 seconden. Niet omdat de computer zo snel is, maar omdat het wachtwoord zo
+          voorspelbaar is. De wordlist-aanval vond het vrijwel meteen. Typ <code>man hashcat</code> in de simulator
+          voor de volledige Nederlandstalige uitleg over hash-types en bescherming.
+        </div>
+
+        <h2>Waarom het Hash-Type Alles Bepaalt</h2>
+        <p>
+          Niet elke hash is even snel te kraken. Het verschil zit in het algoritme waarmee de site jouw wachtwoord opslaat:
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Hash-type</th>
+              <th>Snelheid (moderne GPU)</th>
+              <th>Oordeel</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>MD5</strong></td>
+              <td>200+ miljard/sec</td>
+              <td>Onveilig — nooit meer gebruiken</td>
+            </tr>
+            <tr>
+              <td><strong>SHA1</strong></td>
+              <td>100+ miljard/sec</td>
+              <td>Onveilig — verouderd</td>
+            </tr>
+            <tr>
+              <td><strong>SHA256</strong></td>
+              <td>50+ miljard/sec</td>
+              <td>Te snel voor wachtwoorden</td>
+            </tr>
+            <tr>
+              <td><strong>bcrypt</strong></td>
+              <td>~100.000/sec</td>
+              <td>Goed — bewust traag gemaakt</td>
+            </tr>
+            <tr>
+              <td><strong>Argon2</strong></td>
+              <td>~10.000/sec</td>
+              <td>Beste keuze voor nieuwe systemen</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>
+          Zie je het patroon? Algoritmes als bcrypt en Argon2 zijn <em>expres traag</em>. Voor één login-poging merk
+          je daar niets van, maar voor een aanvaller die miljarden pogingen nodig heeft, maakt het 't verschil tussen
+          uren en eeuwen.
+        </p>
+
+        <h3>Salting: de Rainbow Table Killer</h3>
+        <p>
+          Een <abbr class="jargon" title="Salt: willekeurige data die per gebruiker aan het wachtwoord wordt toegevoegd vóór het hashen" tabindex="0"><strong>salt</strong></abbr>
+          is willekeurige data die per gebruiker aan het wachtwoord wordt geplakt vóór het hashen. Het gevolg: twee
+          gebruikers met hetzelfde wachtwoord krijgen totaal verschillende hashes. Vooraf berekende rainbow tables
+          worden waardeloos en elke hash moet individueel aangevallen worden.
+        </p>
+
+        <div class="blog-info">
+          Wil je weten hoe aanvallers wachtwoorden buitmaken vóórdat ze gaan kraken? Lees ons artikel over
+          <a href="wachtwoord-beveiliging.html">wachtwoordbeveiliging en hoe hackers kraken</a> — daar behandelen we
+          ook brute force op login-formulieren en credential stuffing.
+        </div>
+
+        <h2>Ethische en Juridische Grenzen</h2>
+        <div class="blog-warning">
+          <strong>Password cracking is alleen legaal op hashes waar je expliciete, schriftelijke toestemming voor hebt!</strong>
+          Het kraken van gestolen databases of andermans accounts valt in Nederland onder computervredebreuk
+          (artikel 138ab Wetboek van Strafrecht) met straffen tot meerdere jaren cel. "De database stond toch al
+          online" is geen verdediging — ook het gebruik van gelekte gegevens is strafbaar.
+        </div>
+        <p>
+          De gouden regels:
+        </p>
+        <ol>
+          <li><strong>Eigen hashes of expliciete toestemming</strong> - Een pentest-contract of een password audit-opdracht van je werkgever</li>
+          <li><strong>Blijf binnen de scope</strong> - Toestemming voor één systeem betekent niet "alles van het bedrijf"</li>
+          <li><strong>Rapporteer verantwoord</strong> - Gekraakte wachtwoorden deel je nooit letterlijk in een rapport; statistieken zijn genoeg</li>
+          <li><strong>Oefen in een veilige omgeving</strong> - HackSimulator.nl, HackTheBox of TryHackMe</li>
+        </ol>
+
+        <!-- Gumroad CTA: Pentest Playbook -->
+        <div class="blog-cta blog-cta-product">
+          <h3>Wil je een echte pentest leren uitvoeren?</h3>
+          <p>Download het Pentest Playbook — van reconnaissance tot rapportage, met beslisbomen bij elke stap.</p>
+          <a href="https://hacksimulator.gumroad.com/l/wmvpx" class="blog-cta-button" target="_blank" rel="noopener noreferrer" data-product-id="wmvpx" data-cta-location="blog_hashcat">Download het Playbook</a>
+        </div>
+
+        <h2>Zo Bescherm je Jezelf (en je Gebruikers)</h2>
+        <p>
+          Alles wat je net hebt geleerd over kraken, vertaalt zich direct naar verdediging:
+        </p>
+        <ul>
+          <li><strong>Lengte wint van complexiteit</strong> - "fiets!Wolk?Lamp42" (16 tekens) is sterker dan "P@ssw0rd!" (9 tekens). Elke extra positie vermenigvuldigt de brute force-tijd</li>
+          <li><strong>Uniek wachtwoord per site</strong> - Eén gelekt wachtwoord mag nooit toegang geven tot je andere accounts</li>
+          <li><strong>Wachtwoordmanager</strong> - Bitwarden, 1Password of KeePass genereren en onthouden sterke wachtwoorden voor je</li>
+          <li><strong>2FA overal</strong> - Zelfs een gekraakt wachtwoord is dan niet genoeg om in te loggen</li>
+          <li><strong>Voor developers: bcrypt of Argon2</strong> - Nooit MD5, SHA1 of kale SHA256 voor wachtwoord-opslag, en altijd met salt</li>
+          <li><strong>Check HaveIBeenPwned</strong> - Zie of jouw e-mailadres in bekende datalekken voorkomt</li>
+        </ul>
+
+        <h2>Oefenen in HackSimulator.nl</h2>
+        <div class="blog-cta">
+          <h3>Kraak je eerste hash</h3>
+          <p>
+            Open de simulator en typ <code>hashcat</code> om de demo-hashes te zien. Kraak er een en lees in de
+            output precies waaróm het wachtwoord zwak was. Typ <code>man hashcat</code> voor de volledige
+            Nederlandstalige handleiding, inclusief hash-types en developer best practices.
+          </p>
+          <a href="../terminal.html" class="blog-cta-button">Start de simulator</a>
+        </div>
+
+        <h2>Samenvatting</h2>
+        <p>
+          Hashcat kraakt geen hashes door ze "terug te rekenen", maar door slim te raden op industriële schaal.
+          Wat je hebt geleerd:
+        </p>
+        <ul>
+          <li>Wachtwoorden worden als hashes opgeslagen: one-way, deterministisch, gevoelig voor elke wijziging</li>
+          <li>Dictionary attacks met wordlists zoals rockyou.txt kraken voorspelbare wachtwoorden in seconden</li>
+          <li>Het hash-algoritme bepaalt de kraaksnelheid: MD5 is hopeloos, Argon2 en bcrypt zijn bewust traag</li>
+          <li>Salts maken rainbow tables nutteloos</li>
+          <li>Lengte, uniciteit en 2FA zijn je beste verdediging</li>
+        </ul>
+        <p>
+          Volgende stap? Lees hoe aanvallers <a href="wachtwoord-beveiliging.html">wachtwoorden buitmaken en kraken</a>,
+          ontdek de andere <a href="cybersecurity-tools.html">essentiële security tools</a>, of begin bij de basis met
+          <a href="wat-is-ethisch-hacken.html">wat ethisch hacken precies is</a>.
+        </p>
+
+        <h2>Nuttige Resources</h2>
+        <ul>
+          <li><strong>Officieel:</strong> <a href="https://hashcat.net" target="_blank" rel="noopener noreferrer">hashcat.net</a> - Documentatie, downloads en de hashcat wiki</li>
+          <li><strong>Breach check:</strong> <a href="https://haveibeenpwned.com" target="_blank" rel="noopener noreferrer">HaveIBeenPwned</a> - Check of jouw gegevens in een datalek zitten</li>
+          <li><strong>Oefenomgevingen:</strong> <a href="https://www.hackthebox.eu" target="_blank" rel="noopener noreferrer">HackTheBox</a>,
+            <a href="https://tryhackme.com" target="_blank" rel="noopener noreferrer">TryHackMe</a> - Legale labs om je skills te oefenen</li>
+          <li><strong>Simulator:</strong> <a href="/commands/#cmd-hashcat">Hashcat in HackSimulator.nl</a> - Oefen veilig in je browser</li>
+        </ul>
+
+      </div>
+
+      <!-- Support Banner -->
+      <div class="blog-support-banner">
+        <h3>Vond je dit artikel nuttig?</h3>
+        <p>HackSimulator.nl is een onafhankelijk project &mdash; gebouwd door &#233;&#233;n developer. Met een koffie help je de simulator gratis houden voor iedereen.</p>
+        <div class="blog-support-actions">
+          <a href="https://ko-fi.com/hacksimulator" class="blog-cta-button" target="_blank" rel="noopener noreferrer">Steun met een koffie</a>
+          <a href="../#newsletter" class="blog-support-link">Of schrijf je in voor updates</a>
+        </div>
+      </div>
+
+      <!-- Related Articles -->
+      <section class="related-articles">
+        <h2>Verder Lezen</h2>
+        <div class="related-grid">
+          <a href="wachtwoord-beveiliging.html" class="related-card">
+            <span class="related-category">Tools</span>
+            <h3>Wachtwoordbeveiliging: Hoe Hackers Kraken</h3>
+            <p>Brute force, dictionary attacks en rainbow tables - en hoe je sterke wachtwoorden maakt.</p>
+            <span class="related-meta">8 min leestijd</span>
+          </a>
+          <a href="cybersecurity-tools.html" class="related-card">
+            <span class="related-category">Tools</span>
+            <h3>5 Essenti&euml;le Security Tools</h3>
+            <p>De must-know tools voor elke beginnende ethisch hacker.</p>
+            <span class="related-meta">8 min leestijd</span>
+          </a>
+          <a href="wat-is-ethisch-hacken.html" class="related-card">
+            <span class="related-category">Concepten</span>
+            <h3>Wat is Ethisch Hacken?</h3>
+            <p>White hat vs black hat - leer het verschil en ontdek carrièremogelijkheden in cybersecurity.</p>
+            <span class="related-meta">8 min leestijd</span>
+          </a>
+          <a href="ethisch-hacker-worden.html" class="related-card">
+            <span class="related-category">Carrière</span>
+            <h3>Hoe Word je Ethisch Hacker?</h3>
+            <p>Het concrete stappenplan van beginner tot gecertificeerd pentester.</p>
+            <span class="related-meta">10 min leestijd</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Post Footer -->
+      <footer class="blog-post-footer">
+        <p>Vragen of feedback? Laat het ons weten op <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+        <p><a href="index.html">&larr; Terug naar blog overzicht</a></p>
+      </footer>
+    </article>
+  </main>
+
+  <!-- AdSense Footer Banner (M5.5 Blog Monetization) -->
+  <div id="adsense-footer" class="ad-container ad-unit" style="display: none;">
+      <p class="ad-disclaimer">Advertisement</p>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-6345664385525701"
+           data-ad-slot="1674341955"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+  </div>
+
+  <!-- Footer (Component Injection) -->
+  <div id="footer-placeholder">
+    <noscript>
+      <footer class="noscript-footer">
+        <p>&copy; 2026 HackSimulator.nl</p>
+        <nav>
+          <a href="../assets/legal/privacy.html">Privacy</a>
+          <a href="../assets/legal/terms.html">Voorwaarden</a>
+          <a href="../assets/legal/cookies.html">Cookies</a>
+          <a href="../over-ons.html">Over Ons</a>
+          <a href="../contact.html">Contact</a>
+        </nav>
+      </footer>
+    </noscript>
+  </div>
+
+  <!-- Theme Initialization (prevents flash) - external for CSP compliance -->
+  <script src="/src/init-theme.js"></script>
+
+  <!-- Component Injection (external script for CSP compliance) -->
+  <script src="/src/init-components.js" type="module"></script>
+
+  <!-- Analytics & Consent (external for CSP compliance) -->
+  <script src="/src/init-analytics.js" type="module"></script>
+
+  <!-- Reading Progress (blog-specific) -->
+  <script src="../src/ui/blog-theme.js" type="module"></script>
+</body>
+</html>

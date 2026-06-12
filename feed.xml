@@ -9,7 +9,34 @@
     <atom:link href="https://hacksimulator.nl/feed.xml" rel="self" type="application/rss+xml"/>
     <language>nl-NL</language>
     <managingEditor>contact@hacksimulator.nl (HackSimulator.nl)</managingEditor>
-    <lastBuildDate>Thu, 19 Mar 2026 12:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Fri, 12 Jun 2026 12:00:00 +0200</lastBuildDate>
+
+    <item>
+      <title>Wireshark Tutorial: Netwerkverkeer Analyseren voor Beginners</title>
+      <description>Leer netwerkverkeer analyseren met Wireshark. Nederlandse beginnersgids over packet sniffing, display filters en het herkennen van verdacht verkeer op je netwerk.</description>
+      <link>https://hacksimulator.nl/blog/wireshark-beginnersgids.html</link>
+      <guid isPermaLink="true">https://hacksimulator.nl/blog/wireshark-beginnersgids.html</guid>
+      <pubDate>Fri, 12 Jun 2026 10:00:00 +0200</pubDate>
+      <category>Tools</category>
+    </item>
+
+    <item>
+      <title>Hashcat Uitgelegd: Hoe Wachtwoord-Hashes Gekraakt Worden</title>
+      <description>Leer hoe hashcat wachtwoord-hashes kraakt met dictionary attacks, brute force en GPU-kracht. Nederlandse beginnersgids met veilige oefenvoorbeelden.</description>
+      <link>https://hacksimulator.nl/blog/hashcat-wachtwoorden-kraken.html</link>
+      <guid isPermaLink="true">https://hacksimulator.nl/blog/hashcat-wachtwoorden-kraken.html</guid>
+      <pubDate>Fri, 12 Jun 2026 10:00:00 +0200</pubDate>
+      <category>Tools</category>
+    </item>
+
+    <item>
+      <title>OWASP Top 10 Uitgelegd voor Beginners</title>
+      <description>De OWASP Top 10 is dé lijst van de grootste beveiligingsrisico's in webapplicaties. Begrijpelijke Nederlandse uitleg van alle 10 risico's, met voorbeelden.</description>
+      <link>https://hacksimulator.nl/blog/owasp-top-10-uitgelegd.html</link>
+      <guid isPermaLink="true">https://hacksimulator.nl/blog/owasp-top-10-uitgelegd.html</guid>
+      <pubDate>Tue, 26 May 2026 10:00:00 +0200</pubDate>
+      <category>Concepten</category>
+    </item>
 
     <item>
       <title>Netwerk Scanning met Nmap: Beginnersgids</title>

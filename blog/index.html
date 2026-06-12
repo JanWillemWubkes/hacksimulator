@@ -18,11 +18,14 @@
   <meta property="og:locale" content="nl_NL">
   <meta property="og:site_name" content="HackSimulator.nl">
   <meta property="og:image" content="https://hacksimulator.nl/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Blog | HackSimulator.nl">
   <meta name="twitter:description" content="Leer ethisch hacken met onze educatieve blog.">
+  <meta name="twitter:image" content="https://hacksimulator.nl/assets/og-image.png">
 
   <!-- RSS Feed -->
   <link rel="alternate" type="application/rss+xml" title="HackSimulator.nl Blog" href="/feed.xml">
@@ -88,6 +91,18 @@
   }
   </script>
 
+  <!-- BreadcrumbList Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://hacksimulator.nl/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://hacksimulator.nl/blog/" }
+    ]
+  }
+  </script>
+
 </head>
 <body>
   <!-- Skip Link (Accessibility) -->
@@ -114,6 +129,7 @@
     <header class="blog-header">
       <h1>HackSimulator Blog</h1>
       <p>Leer ethisch hacken, cybersecurity principes en terminal commands in begrijpelijke Nederlandse tutorials.</p>
+      <p><a href="/feed.xml" rel="alternate" type="application/rss+xml">RSS feed</a> — volg nieuwe artikelen in je feedreader.</p>
     </header>
 
     <!-- Category Filter Targets (CSS-only filtering) -->
@@ -214,6 +230,38 @@
 
     <!-- Blog Posts Grid -->
     <div class="blog-posts-grid">
+
+      <!-- Post: Wireshark Beginnersgids -->
+      <article class="blog-post-card" data-category="tools">
+        <h2><a href="wireshark-beginnersgids.html">Wireshark Tutorial: Netwerkverkeer Analyseren voor Beginners</a></h2>
+        <div class="blog-meta">
+          <span>[12 jun 2026]</span>
+          <span>[8 min]</span>
+          <span>[Tools]</span>
+        </div>
+        <p class="blog-excerpt">
+          Met Wireshark kijk je rechtstreeks onder de motorkap van je netwerk: elk pakketje, elke verbinding, elk protocol.
+          Leer packet sniffing begrijpen, display filters gebruiken en verdacht verkeer herkennen &mdash; inclusief
+          hoe je een nmap-scan vanaf de andere kant ziet.
+        </p>
+        <a href="wireshark-beginnersgids.html" class="blog-read-more">Lees verder</a>
+      </article>
+
+      <!-- Post: Hashcat Uitgelegd -->
+      <article class="blog-post-card" data-category="tools">
+        <h2><a href="hashcat-wachtwoorden-kraken.html">Hashcat Uitgelegd: Hoe Wachtwoord-Hashes Gekraakt Worden</a></h2>
+        <div class="blog-meta">
+          <span>[12 jun 2026]</span>
+          <span>[8 min]</span>
+          <span>[Tools]</span>
+        </div>
+        <p class="blog-excerpt">
+          's Werelds snelste password cracker kraakt 200 miljard hashes per seconde. Leer hoe dictionary attacks,
+          brute force en rainbow tables werken, waarom het hash-algoritme alles bepaalt, en hoe je jezelf
+          beschermt. Oefen veilig met het hashcat command in de simulator.
+        </p>
+        <a href="hashcat-wachtwoorden-kraken.html" class="blog-read-more">Lees verder</a>
+      </article>
 
       <!-- Post: OWASP Top 10 Uitgelegd -->
       <article class="blog-post-card" data-category="concepten">

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>Wireshark Tutorial: Netwerkverkeer Analyseren voor Beginners | HackSimulator.nl</title>
+  <meta name="description" content="Leer netwerkverkeer analyseren met Wireshark. Nederlandse beginnersgids over packet sniffing, filters en het herkennen van verdacht verkeer op je netwerk.">
+  <meta name="keywords" content="wireshark tutorial, packet sniffing, netwerkverkeer analyseren, network analyzer, pcap, ethisch hacken, netwerk monitoring">
+  <meta name="author" content="HackSimulator.nl">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://hacksimulator.nl/blog/wireshark-beginnersgids.html">
+  <meta property="og:title" content="Wireshark Tutorial: Netwerkverkeer Analyseren voor Beginners | HackSimulator.nl">
+  <meta property="og:description" content="Leer netwerkverkeer analyseren met Wireshark: packet sniffing, filters en verdacht verkeer herkennen.">
+  <meta property="article:published_time" content="2026-06-12">
+  <meta property="article:author" content="Jan Willem Wubkes">
+  <meta property="article:section" content="Tools">
+  <meta property="og:locale" content="nl_NL">
+  <meta property="og:site_name" content="HackSimulator.nl">
+  <meta property="og:image" content="https://hacksimulator.nl/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://hacksimulator.nl/assets/og-image.png">
+
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="HackSimulator.nl Blog" href="/feed.xml">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://hacksimulator.nl/blog/wireshark-beginnersgids.html">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#0d1117">
+
+
+  <!-- Critical Font Preloads (self-hosted, SIL OFL 1.1) -->
+  <link rel="preload" href="/styles/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../styles/main.css?v=150">
+  <link rel="stylesheet" href="../styles/landing.css?v=114">
+  <link rel="stylesheet" href="../styles/blog.css?v=115">
+  <link rel="stylesheet" href="../styles/mobile.css?v=115" media="screen and (max-width: 768px)">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
+
+  <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
+  <script data-cookieconsent="ignore">
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied',
+      'wait_for_update': 500
+    });
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6345664385525701"
+       crossorigin="anonymous"
+       ></script>
+
+  <!-- Structured Data - JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Wireshark Tutorial: Netwerkverkeer Analyseren voor Beginners",
+    "description": "Leer netwerkverkeer analyseren met Wireshark. Nederlandse beginnersgids over packet sniffing, filters en het herkennen van verdacht verkeer.",
+    "datePublished": "2026-06-12",
+    "dateModified": "2026-06-12",
+    "author": {
+      "@type": "Person",
+      "name": "Jan Willem Wubkes",
+      "url": "https://hacksimulator.nl/over-ons.html"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "HackSimulator.nl",
+      "url": "https://hacksimulator.nl/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://hacksimulator.nl/blog/wireshark-beginnersgids.html"
+    },
+    "inLanguage": "nl-NL",
+    "keywords": "wireshark, packet sniffing, netwerkverkeer, network analyzer, pcap, ethisch hacken",
+    "wordCount": 1900,
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://hacksimulator.nl/assets/og-image.png",
+      "width": 1200,
+      "height": 630
+    }
+  }
+  </script>
+  <!-- BreadcrumbList Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://hacksimulator.nl/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://hacksimulator.nl/blog/" },
+      { "@type": "ListItem", "position": 3, "name": "Wireshark Tutorial: Netwerkverkeer Analyseren voor Beginners", "item": "https://hacksimulator.nl/blog/wireshark-beginnersgids.html" }
+    ]
+  }
+  </script>
+
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
+
+  <!-- Navigation (Component Injection) -->
+  <div id="navbar-placeholder">
+    <noscript>
+      <nav class="noscript-nav" role="navigation">
+        <a href="../">HackSimulator.nl</a>
+        <a href="../terminal.html">Start Simulator</a>
+        <a href="../blog/">Blog</a>
+        <a href="../commands/">Commands</a>
+        <a href="../gidsen.html">Gidsen</a>
+        <a href="../woordenlijst.html">Woordenlijst</a>
+        <a href="../over-ons.html">Over Ons</a>
+        <a href="../contact.html">Contact</a>
+      </nav>
+    </noscript>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main-content" class="blog-container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li aria-current="page">Wireshark Tutorial: Netwerkverkeer Analyseren voor Beginners</li>
+      </ol>
+    </nav>
+    <article class="blog-post">
+      <!-- Post Header -->
+      <header class="blog-post-header">
+        <h1 class="blog-post-title">Wireshark Tutorial: Netwerkverkeer Analyseren voor Beginners</h1>
+        <div class="blog-post-meta">
+          <time datetime="2026-06-12">12 juni 2026</time>
+          <span>Door Jan Willem Wubkes</span>
+          <span>8 min</span>
+          <span class="category-badge">Tools</span>
+        </div>
+      </header>
+
+      <!-- Post Content -->
+      <div class="blog-post-content">
+        <p>
+          Alles wat je computer over het netwerk verstuurt — elke website, elke chat, elke download — reist in kleine
+          pakketjes data. Meestal zie je daar niets van. Maar met <strong>Wireshark</strong> kijk je rechtstreeks
+          onder de motorkap: je ziet elk pakketje, waar het vandaan komt, waar het naartoe gaat en wat erin zit.
+          Daarom is het d&eacute; standaard-tool voor netwerkanalyse, gebruikt door netwerkbeheerders, security
+          professionals en ethische hackers. In deze beginnersgids leer je wat
+          <abbr class="jargon" title="Packet sniffing: het onderscheppen en bekijken van datapakketten die over een netwerk reizen" tabindex="0"><strong>packet sniffing</strong></abbr>
+          is, hoe Wireshark werkt, en hoe je het legaal en zinvol inzet.
+        </p>
+
+        <!-- Lead Magnet CTA: gratis Pentest Playbook sample (top placement, hoogste intent) -->
+        <div class="blog-cta blog-cta-product">
+          <h3>Gratis: 9 pagina's uit het Pentest Playbook</h3>
+          <p>Netwerkanalyse hoort bij elke pentest — download de reconnaissance-checklist + beslisboom Fase 0 → 1. Geen account, alleen je email.</p>
+          <a href="/sample-pentest.html" class="blog-cta-button" data-lead-magnet="pentest_sample" data-cta-location="blog_wireshark_top">Download de gratis sample</a>
+        </div>
+
+        <h2>Wat is Wireshark?</h2>
+        <p>
+          Wireshark is een gratis, open-source <strong>netwerk protocol analyzer</strong>. Het project bestaat sinds
+          1998 (toen nog onder de naam Ethereal) en wordt onderhouden door honderden vrijwilligers wereldwijd. De tool
+          vangt netwerkverkeer op — dat heet een <em>capture</em> — en laat je elk individueel pakket bekijken,
+          filteren en analyseren.
+        </p>
+        <p>
+          Waar gebruik je Wireshark voor?
+        </p>
+        <ul>
+          <li><strong>Netwerkproblemen oplossen</strong> - Waarom is de verbinding traag? Welke applicatie veroorzaakt al dat verkeer?</li>
+          <li><strong>Security analyse</strong> - Verdacht verkeer herkennen, zoals malware die "naar huis belt"</li>
+          <li><strong>Protocol-onderzoek</strong> - Zien hoe HTTP, DNS en TCP er in het echt uitzien</li>
+          <li><strong>Forensisch onderzoek</strong> - Achterhalen wat er precies over een netwerk is verstuurd tijdens een incident</li>
+          <li><strong>Leren</strong> - Geen betere manier om netwerken te begrijpen dan echt verkeer bekijken</li>
+        </ul>
+
+        <div class="blog-info">
+          Wireshark zelf valt niets aan en breekt nergens in — het <em>luistert</em> alleen. Toch is ook luisteren
+          aan regels gebonden: verkeer onderscheppen op netwerken die niet van jou zijn is strafbaar. Meer daarover
+          verderop.
+        </div>
+
+        <h2>Hoe Werkt Packet Sniffing?</h2>
+        <p>
+          Netwerkverkeer reist in lagen, netjes verpakt als een matroesjka-pop. Een
+          <abbr class="jargon" title="Packet: klein blokje data met adresinformatie dat over een netwerk reist" tabindex="0"><strong>pakket</strong></abbr>
+          bevat van buiten naar binnen:
+        </p>
+        <ol>
+          <li><strong>Ethernet frame</strong> - Het fysieke adres (MAC) van de volgende hop</li>
+          <li><strong>IP-header</strong> - Bron- en bestemmings-IP-adres ("van wie, naar wie")</li>
+          <li><strong>TCP/UDP-header</strong> - Poortnummers ("naar welke applicatie")</li>
+          <li><strong>Payload</strong> - De daadwerkelijke data, bijvoorbeeld een stukje webpagina</li>
+        </ol>
+        <p>
+          Normaal verwerkt je netwerkkaart alleen pakketten die voor jouw computer bestemd zijn. In
+          <abbr class="jargon" title="Promiscuous mode: instelling waarbij de netwerkkaart álle pakketten doorgeeft, ook die voor andere apparaten bestemd zijn" tabindex="0"><strong>promiscuous mode</strong></abbr>
+          geeft de kaart <em>alles</em> door wat hij ziet — en dat is precies wat Wireshark nodig heeft om mee te kijken.
+        </p>
+
+        <div class="blog-tip">
+          Versleuteld verkeer (HTTPS) blijft ook in Wireshark versleuteld: je ziet w&eacute;l dat er communicatie is
+          met een server, maar niet de inhoud. Dit is precies waarom HTTPS zo belangrijk is — op onversleuteld HTTP
+          leest een sniffer gewoon je wachtwoorden mee. Onthoud dit als je ooit op openbare wifi zit.
+        </div>
+
+        <h2>De Wireshark Interface in 3 Panelen</h2>
+        <p>
+          Open je Wireshark en start je een capture, dan zie je drie panelen:
+        </p>
+        <ul>
+          <li><strong>Packet list (boven)</strong> - Elke regel is één pakket: tijdstip, bron, bestemming, protocol en samenvatting</li>
+          <li><strong>Packet details (midden)</strong> - De gelaagde opbouw van het geselecteerde pakket, uitklapbaar per protocol-laag</li>
+          <li><strong>Packet bytes (onder)</strong> - De rauwe data in hexadecimaal en als tekst</li>
+        </ul>
+        <p>
+          Een capture op een druk netwerk levert al snel duizenden pakketten per seconde op. Zonder filters verdrink
+          je — en daarom zijn filters de belangrijkste Wireshark-vaardigheid die je kunt leren.
+        </p>
+
+        <h3>Display Filters: je Belangrijkste Gereedschap</h3>
+        <p>
+          Met display filters laat je alleen zien wat relevant is. Een paar voorbeelden die je dagelijks gebruikt:
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Filter</th>
+              <th>Wat laat het zien?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>ip.addr == 192.168.1.10</code></td>
+              <td>Al het verkeer van/naar dit IP-adres</td>
+            </tr>
+            <tr>
+              <td><code>http</code></td>
+              <td>Alleen onversleuteld webverkeer</td>
+            </tr>
+            <tr>
+              <td><code>dns</code></td>
+              <td>Alleen DNS-verzoeken ("welke domeinen worden opgezocht?")</td>
+            </tr>
+            <tr>
+              <td><code>tcp.port == 22</code></td>
+              <td>SSH-verkeer (poort 22)</td>
+            </tr>
+            <tr>
+              <td><code>tcp.flags.syn == 1</code></td>
+              <td>Verbindingspogingen — handig om poortscans te spotten</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="blog-tip">
+          Herken je <code>tcp.flags.syn</code>? Dat is dezelfde SYN uit de TCP three-way handshake die we uitleggen
+          in onze <a href="nmap-beginnersgids.html">Nmap beginnersgids</a>. Een poortscan in Wireshark herken je aan
+          honderden SYN-pakketten naar verschillende poorten in korte tijd — zo zie je een nmap-scan dus vanaf de
+          <em>andere</em> kant.
+        </div>
+
+        <!-- AdSense In-Article -->
+        <div class="ad-container ad-unit ad-in-article" style="display: none;">
+          <p class="ad-disclaimer">Advertisement</p>
+          <ins class="adsbygoogle"
+               style="display:block; text-align:center;"
+               data-ad-layout="in-article"
+               data-ad-format="fluid"
+               data-ad-client="ca-pub-6345664385525701"
+               data-ad-slot="5971972080"></ins>
+        </div>
+
+        <h2>Verdacht Verkeer Herkennen</h2>
+        <p>
+          Waar let een security analist op tijdens een capture? Dit zijn de klassieke rode vlaggen:
+        </p>
+        <ul>
+          <li>
+            <strong>Poortscans</strong> - E&eacute;n bron-IP dat in seconden tientallen poorten probeert. In de packet
+            list zie je een waterval van SYN-pakketten zonder voltooide handshakes.
+          </li>
+          <li>
+            <strong>Ongebruikelijke DNS-verzoeken</strong> - Malware gebruikt vaak DNS om commando's op te halen.
+            Lange, willekeurig ogende subdomeinen (<code>x7f2a9.kwaadaardig-domein.com</code>) zijn verdacht.
+          </li>
+          <li>
+            <strong>Verkeer naar onbekende landen/servers</strong> - Waarom praat de printer met een server in een
+            ver buitenland? Dat soort vragen wil je stellen.
+          </li>
+          <li>
+            <strong>Onversleutelde logins</strong> - Zie je <code>http</code>-verkeer met formulierdata, dan gaan
+            wachtwoorden in leesbare tekst over de lijn. Dat is een bevinding voor je rapport.
+          </li>
+          <li>
+            <strong>Grote uitgaande datastromen</strong> - Een werkstation dat 's nachts gigabytes uploadt kan duiden
+            op <abbr class="jargon" title="Data-exfiltratie: het ongeautoriseerd wegsluizen van data uit een netwerk" tabindex="0">data-exfiltratie</abbr>.
+          </li>
+        </ul>
+
+        <h2>Oefenen Zonder Wireshark te Installeren</h2>
+        <p>
+          Wireshark draait op echte netwerkdata en heeft dus een echte machine nodig. Maar de onderliggende
+          netwerk-concepten — verbindingen, poorten, protocollen — kun je direct oefenen in de
+          <a href="/terminal.html">HackSimulator.nl terminal</a>. Het command <a href="/commands/#cmd-netstat"><code>netstat</code></a>
+          toont bijvoorbeeld welke verbindingen je systeem op dit moment heeft:
+        </p>
+        <div class="terminal-example">
+          <div class="prompt">$ netstat</div>
+          <div class="output">Active Internet connections
+
+Proto  Local Address        Foreign Address      State
+tcp    192.168.1.10:443     142.250.179.142:https  ESTABLISHED
+tcp    192.168.1.10:22      192.168.1.50:51234     ESTABLISHED
+tcp    0.0.0.0:80           *:*                    LISTEN
+
+[TIP] LISTEN = poort wacht op verbindingen.
+      ESTABLISHED = actieve verbinding.</div>
+        </div>
+        <p>
+          Combineer dit met <a href="/commands/#cmd-nmap"><code>nmap</code></a> (welke poorten staan open?) en
+          <a href="/commands/#cmd-traceroute"><code>traceroute</code></a> (welke route legt verkeer af?) en je hebt
+          de mentale basis die je nodig hebt om Wireshark-captures te begrijpen.
+        </p>
+
+        <h2>Ethische en Juridische Grenzen</h2>
+        <div class="blog-warning">
+          <strong>Sniff alleen netwerken die van jou zijn of waar je expliciete, schriftelijke toestemming voor hebt!</strong>
+          Het aftappen van andermans netwerkverkeer is in Nederland strafbaar (artikel 139c Wetboek van Strafrecht).
+          Dat geldt ook voor "even meekijken" op openbare wifi in de trein of een caf&eacute; — de wet maakt geen
+          onderscheid tussen nieuwsgierigheid en kwade opzet.
+        </div>
+        <p>
+          Veilige en legale manieren om te oefenen:
+        </p>
+        <ol>
+          <li><strong>Je eigen thuisnetwerk</strong> - Capture je eigen verkeer en analyseer wat jouw apparaten doen</li>
+          <li><strong>Sample captures</strong> - De Wireshark wiki biedt honderden gratis <code>.pcap</code>-bestanden met echt (geanonimiseerd) verkeer, inclusief malware-captures</li>
+          <li><strong>Eigen lab</strong> - Draai virtuele machines en analyseer het verkeer daartussen</li>
+          <li><strong>CTF-challenges</strong> - Veel capture-the-flag wedstrijden bevatten pcap-analyse opdrachten</li>
+        </ol>
+
+        <!-- Gumroad CTA: Pentest Playbook -->
+        <div class="blog-cta blog-cta-product">
+          <h3>Wil je een echte pentest leren uitvoeren?</h3>
+          <p>Download het Pentest Playbook — van reconnaissance tot rapportage, met beslisbomen bij elke stap.</p>
+          <a href="https://hacksimulator.gumroad.com/l/wmvpx" class="blog-cta-button" target="_blank" rel="noopener noreferrer" data-product-id="wmvpx" data-cta-location="blog_wireshark">Download het Playbook</a>
+        </div>
+
+        <h2>Aan de Slag: je Eerste Capture in 5 Stappen</h2>
+        <ol>
+          <li><strong>Download Wireshark</strong> van <a href="https://www.wireshark.org" target="_blank" rel="noopener noreferrer">wireshark.org</a> (Windows, macOS, Linux)</li>
+          <li><strong>Kies je netwerkinterface</strong> - Meestal je wifi-adapter; het grafiekje ernaast toont live activiteit</li>
+          <li><strong>Start de capture</strong> en open een paar websites in je browser</li>
+          <li><strong>Stop na een minuut</strong> en filter op <code>dns</code> - je ziet elk domein dat je computer heeft opgezocht</li>
+          <li><strong>Klik een pakket aan</strong> en vouw de lagen open in het details-paneel - daar is je matroesjka-pop</li>
+        </ol>
+
+        <div class="blog-tip">
+          Schrik niet van de hoeveelheid verkeer die je ziet zonder dat je iets doet. Moderne systemen praten
+          continu met update-servers, cloud-diensten en telemetrie-endpoints. Dat in kaart brengen is op zichzelf
+          al een leerzame eerste oefening.
+        </div>
+
+        <h2>Samenvatting</h2>
+        <p>
+          Wireshark is de microscoop van de netwerkwereld. Wat je hebt geleerd:
+        </p>
+        <ul>
+          <li>Netwerkverkeer reist in gelaagde pakketten: Ethernet → IP → TCP/UDP → payload</li>
+          <li>Wireshark vangt dit verkeer op en maakt elke laag zichtbaar</li>
+          <li>Display filters zoals <code>ip.addr</code>, <code>dns</code> en <code>tcp.port</code> zijn je belangrijkste vaardigheid</li>
+          <li>Verdacht verkeer herken je aan poortscans, vreemde DNS-verzoeken en onverwachte datastromen</li>
+          <li>HTTPS beschermt de inhoud van je verkeer tegen sniffers — onversleuteld HTTP niet</li>
+          <li>Sniffen zonder toestemming is strafbaar; oefen op je eigen netwerk of met sample captures</li>
+        </ul>
+        <p>
+          Volgende stap? Leer eerst poorten scannen met onze <a href="nmap-beginnersgids.html">Nmap beginnersgids</a> —
+          dan begrijp je beide kanten van het netwerkverhaal. Of bekijk welke andere
+          <a href="cybersecurity-tools.html">essentiële security tools</a> je als beginner moet kennen.
+        </p>
+
+        <h2>Nuttige Resources</h2>
+        <ul>
+          <li><strong>Officieel:</strong> <a href="https://www.wireshark.org" target="_blank" rel="noopener noreferrer">wireshark.org</a> - Downloads, documentatie en de User's Guide</li>
+          <li><strong>Sample captures:</strong> <a href="https://wiki.wireshark.org/SampleCaptures" target="_blank" rel="noopener noreferrer">Wireshark Wiki</a> - Gratis pcap-bestanden om mee te oefenen</li>
+          <li><strong>Oefenomgevingen:</strong> <a href="https://tryhackme.com" target="_blank" rel="noopener noreferrer">TryHackMe</a> - Heeft complete Wireshark-leerpaden</li>
+          <li><strong>Simulator:</strong> <a href="/commands/#cmd-netstat">Netwerk commands in HackSimulator.nl</a> - Oefen netstat, nmap en traceroute in je browser</li>
+        </ul>
+
+      </div>
+
+      <!-- Support Banner -->
+      <div class="blog-support-banner">
+        <h3>Vond je dit artikel nuttig?</h3>
+        <p>HackSimulator.nl is een onafhankelijk project &mdash; gebouwd door &#233;&#233;n developer. Met een koffie help je de simulator gratis houden voor iedereen.</p>
+        <div class="blog-support-actions">
+          <a href="https://ko-fi.com/hacksimulator" class="blog-cta-button" target="_blank" rel="noopener noreferrer">Steun met een koffie</a>
+          <a href="../#newsletter" class="blog-support-link">Of schrijf je in voor updates</a>
+        </div>
+      </div>
+
+      <!-- Related Articles -->
+      <section class="related-articles">
+        <h2>Verder Lezen</h2>
+        <div class="related-grid">
+          <a href="nmap-beginnersgids.html" class="related-card">
+            <span class="related-category">Tools</span>
+            <h3>Netwerk Scanning met Nmap</h3>
+            <p>Ontdek open poorten, services en kwetsbaarheden - de eerste stap van elke security audit.</p>
+            <span class="related-meta">8 min leestijd</span>
+          </a>
+          <a href="cybersecurity-tools.html" class="related-card">
+            <span class="related-category">Tools</span>
+            <h3>5 Essenti&euml;le Security Tools</h3>
+            <p>De must-know tools voor elke beginnende ethisch hacker.</p>
+            <span class="related-meta">8 min leestijd</span>
+          </a>
+          <a href="hashcat-wachtwoorden-kraken.html" class="related-card">
+            <span class="related-category">Tools</span>
+            <h3>Hashcat Uitgelegd</h3>
+            <p>Hoe wachtwoord-hashes gekraakt worden met dictionary attacks en GPU-kracht.</p>
+            <span class="related-meta">8 min leestijd</span>
+          </a>
+          <a href="terminal-basics.html" class="related-card">
+            <span class="related-category">Beginners</span>
+            <h3>Terminal Commands voor Beginners</h3>
+            <p>De basis van de command line: ls, cd, cat en meer - alles wat je moet weten om te starten.</p>
+            <span class="related-meta">6 min leestijd</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Post Footer -->
+      <footer class="blog-post-footer">
+        <p>Vragen of feedback? Laat het ons weten op <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+        <p><a href="index.html">&larr; Terug naar blog overzicht</a></p>
+      </footer>
+    </article>
+  </main>
+
+  <!-- AdSense Footer Banner (M5.5 Blog Monetization) -->
+  <div id="adsense-footer" class="ad-container ad-unit" style="display: none;">
+      <p class="ad-disclaimer">Advertisement</p>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-6345664385525701"
+           data-ad-slot="1674341955"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+  </div>
+
+  <!-- Footer (Component Injection) -->
+  <div id="footer-placeholder">
+    <noscript>
+      <footer class="noscript-footer">
+        <p>&copy; 2026 HackSimulator.nl</p>
+        <nav>
+          <a href="../assets/legal/privacy.html">Privacy</a>
+          <a href="../assets/legal/terms.html">Voorwaarden</a>
+          <a href="../assets/legal/cookies.html">Cookies</a>
+          <a href="../over-ons.html">Over Ons</a>
+          <a href="../contact.html">Contact</a>
+        </nav>
+      </footer>
+    </noscript>
+  </div>
+
+  <!-- Theme Initialization (prevents flash) - external for CSP compliance -->
+  <script src="/src/init-theme.js"></script>
+
+  <!-- Component Injection (external script for CSP compliance) -->
+  <script src="/src/init-components.js" type="module"></script>
+
+  <!-- Analytics & Consent (external for CSP compliance) -->
+  <script src="/src/init-analytics.js" type="module"></script>
+
+  <!-- Reading Progress (blog-specific) -->
+  <script src="../src/ui/blog-theme.js" type="module"></script>
+</body>
+</html>
