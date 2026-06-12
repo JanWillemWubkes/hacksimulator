@@ -4,6 +4,34 @@
 
 ---
 
+## Sessie 161: Launch-aankondigings-kit — Fase 4 launch-groundwork (11 jun 2026)
+
+**Mission:** Launch-groundwork voor de publieke launch op donderdag 18 juni 2026 (runbook Fase 4). Géén site-code — een herbruikbare aankondigings-kit produceren die op de launch-dag direct uitvoerbaar is. Output: `docs/launch-announcement-kit.md`.
+
+**Work done:**
+- **Feitelijke verificatie vóór copy** (kernwaarde van deze sessie): elke marketingclaim getoetst tegen `index.html`, `docs/commands-list.md` en `src/commands/*`. Resultaat:
+  - "40+ commando's" = veilige, site-consistente claim (41 command-files; ~38 user-facing — `hint`/`next`/`welcome` zijn tutorial-intern). Geen exact getal dat een lezer kan natellen.
+  - 11 blogposts (niet 10 — feed had OWASP-post toegevoegd in Sessie 160).
+  - **Twee anti-overdrijving-flags:** `netcat`/`wireshark` staan op de homepage-leerpad maar bestaan níét als commando; en de FAQ stelt expliciet dat er géén erkend certificaat is (het `certificates`-commando maakt een completion-certificaat, geen diploma). Beide uit de copy geweerd.
+- **NEW `docs/launch-announcement-kit.md`** met 5 secties: (1) positionering (1 kernzin, toegankelijkheid-eerst) + geverifieerde-feitenlijst als single-source-of-truth voor alle varianten; (2) 3 plak-klare copy-varianten (kort X / medium fora / LinkedIn understated, met `[invullen]`-placeholders i.p.v. opgeklopt persoonlijk verhaal); (3) kanalenlijst NL/EU met per kanaal self-promo-etiquette + werkend format + CP/TP-vlag; (4) visual-plan (`help`→`nmap`-GIF primair + mobiele screenshot); (5) launch-dag tijdschema 18 jun (communities-eerst→socials).
+- **Kanaal-etiquette live geverifieerd via WebSearch** (niet uit geheugen — product-kwaliteitsstandaard): HN Show-HN = uittebproberen-only + factueel/geen-marketing + geen company-username/booster-comments; Reddit = value-first, sidebar-per-sub varieert sterk, gebruik designated project-threads; EHGN (Ethical Hacker Groep Nederland) Discord 2.130+ leden = sterke NL beginners-doelgroep-match; Tweakers = strenge reclame-regels. Eerlijke beperking gedocumenteerd: exacte sidebar-regels zijn niet betrouwbaar vooraf indexeerbaar → "check op het moment van posten".
+- **Memory** `feedback_tone_no_hype` aangemaakt (nuchtere toon, geen mooipraterij/LinkedIn-theater) + pointer in MEMORY.md, gelinkt aan `feedback_product_quality`.
+
+**Strategische keuzes (AskUserQuestion):** positionering = toegankelijkheid-eerst (gratis/NL/geen-installatie); doelgroep = dubbel spoor studenten/overstappers + nieuwsgierige hobbyisten (niet docenten); toon = nuchter/understated, expliciet ook LinkedIn (user vindt gangbare LinkedIn-toon overdreven — kernfeedback).
+
+**Commits:** geen (docs-only; commit volgt indien Heisenberg dat wil).
+
+**Learnings:**
+- **Verifieer marketingclaims tegen de bron, niet tegen andere marketing:** de homepage-leerpad zelf noemt `netcat`/`wireshark` die niet bestaan — een copy-paste uit bestaande site-tekst had de overdrijving doorgegeven. Bron = command-files + commands-list.md.
+- **Nuchterheid is hier niet alleen smaak maar werkt mechanisch:** HN straft marketing-taal direct af, Reddit/EHGN draaien op value-first. De toon-keuze van de user is congruent met wat de kanalen belonen.
+- **Single-source-of-truth feitenlijst bovenin de kit** voorkomt drift tussen de 3 copy-varianten — dezelfde defense-in-depth-logica als validate-docs Check 8/9 op de docs.
+
+**Next steps:** runbook Fase 2 (content-pass) + Fase 3 (GSC indexering-monitoring) + uitvoering kit op 18 jun (visuals opnemen, posts plaatsen volgens tijdschema). #33 (c)/M8 blijven open.
+
+**Metrics:** bundle onveranderd (alleen `docs/`, buiten runtime-budget); tests 23 spec / 172. Sessie counter 160→161, Versie 5.34→5.35.
+
+---
+
 ## Sessie 160: Public-launch SEO-metadata prep + drift-guard Check 9 + GSC Domain-launch (11 jun 2026)
 
 **Mission:** Site is live maar nooit publiek aangekondigd. Strategisch advies + uitvoering rond datum-strategie/SEO voor de publieke launch, plus drift-preventie zodat de gevonden bugs niet terugkeren.

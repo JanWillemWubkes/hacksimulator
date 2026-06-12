@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 160)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 161)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 161: Launch-aankondigings-kit — Fase 4 groundwork voor publieke launch 18 jun 2026 (11 jun 2026)
+⚠️ **Never:**
+- Marketingclaim overnemen uit bestaande site-tekst zonder bron-check — de homepage-leerpad noemt `netcat`/`wireshark` die níét als commando bestaan; copy-paste had de overdrijving doorgegeven. Bron = `src/commands/*` + commands-list.md, niet andere marketing.
+- "Certificaat" als credential claimen (FAQ zegt expliciet: geen erkend diploma) of een exact command-getal noemen i.p.v. "40+" — natelbaar = betrapbaar.
+- Kanaal-self-promo-regels uit geheugen invullen — Reddit/Tweakers/HN-regels variëren + veranderen; verkeerde gok = ban/mod-removal op launch-dag. WebSearch-verifiëren; waar niet indexeerbaar: "check sidebar op het moment zelf" documenteren.
+
+✅ **Always:**
+- Geverifieerde-feitenlijst als single-source-of-truth bovenin een multi-variant copy-document — voorkomt drift tussen varianten (zelfde defense-in-depth-logica als validate-docs Check 8/9).
+- Nuchtere/eerlijke toon als default voor marketing-copy (memory `feedback_tone_no_hype`) — niet alleen user-voorkeur maar mechanisch belonend: HN straft marketing-taal af, Reddit/EHGN draaien op value-first.
+- AskUserQuestion bij positionerings-/toon-/doelgroep-keuzes (strategisch/product = Heisenberg-territorium) vóór copy schrijven — die 3 keuzes stuurden álle output.
+- `[invullen]`-placeholders voor persoonlijke details i.p.v. namens de user een mooier-dan-waar verhaal schrijven — houdt de eerlijkheid bij de eigenaar. Volledige scope: `docs/sessions/current.md` Sessie 161 entry.
+
 ### Sessie 160: Public-launch SEO-metadata prep + drift-guard Check 9 + GSC Domain-launch (11 jun 2026)
 ⚠️ **Never:**
 - `dateModified`/`lastmod` bulk-bumpen naar launch-datum zonder echte content-touch — Google straft kunstmatig-verversen af + wantrouwt `lastmod` dat overal identiek "vandaag" is. Elke datum = waar feit.
@@ -117,7 +129,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Real-time drift-catch via Phase C zelf-test = direct forcing-function value-demonstration (Sessie 157 patroon repeats) — Phase C verwachtingstabel matched 100% met werkelijke output.
 - 2-op-rij infra-investment ritme bewijst sub-categorie repeatable — Frame-verdict-schema N/A MAAR discipline-laag identiek (pre-data scope + AskUserQuestion + defense-in-depth + drift-injection + final zelf-test). Volledige scope-details: `docs/sessions/current.md` Sessie 158 entry.
 
-**Rotation:** Top-6 huidig: 158-159-160 (bulk-rotation Sessie 160: pre-158 historie reeds in `docs/sessions/current.md`). Volgende bulk-rotation Sessie 165. Pre-Sessie 158 historie + bulk-rotation administration → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 158-159-160-161 (bulk-rotation Sessie 160: pre-158 historie reeds in `docs/sessions/current.md`). Volgende bulk-rotation Sessie 165. Pre-Sessie 158 historie + bulk-rotation administration → `docs/sessions/current.md`.
 
 ---
 
@@ -166,7 +178,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 160
+**Sessie counter:** 161
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -218,6 +230,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 11 jun 2026 (Sessie 160 — public-launch SEO-prep: sitemap/feed drift-fix + validate-docs Check 9 + GSC Domain-launch + runbook. Volledige sessie-narratief: `docs/sessions/current.md`)
-**Version:** 5.34 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
+**Last updated:** 11 jun 2026 (Sessie 161 — launch-aankondigings-kit Fase 4: positionering + 3 copy-varianten + WebSearch-geverifieerde kanaal-etiquette + visual-plan + launch-dag-volgorde 18 jun. Nuchtere toon, geen overdrijving. Volledig: `docs/sessions/current.md`)
+**Version:** 5.35 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
 
