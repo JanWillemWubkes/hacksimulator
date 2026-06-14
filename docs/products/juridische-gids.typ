@@ -145,21 +145,21 @@ Was er een minder ingrijpende manier om hetzelfde doel te bereiken? Had je het b
 
 == Zaak 1: De zorginstelling-hack (2013)
 
-*Wat gebeurde er?* Een gemeenteraadslid wilde aantonen dat een zorginstelling slechte beveiliging had. Hij drong binnen in het systeem en downloadde meerdere (geanonimiseerde) medische dossiers als bewijs.
+*Wat gebeurde er?* Een journalist en politicus wilde aantonen dat een zorginstelling slechte beveiliging had. Hij logde met de inloggegevens van een patiënt in op het systeem en bekeek en printte meerdere (echte) medische dossiers als bewijs.
 
 *Het vonnis:* €750 boete --- schuldig aan computervredebreuk.
 
-*Waarom?* De rechter oordeelde dat het downloaden van meerdere dossiers *disproportioneel* was. Eén dossier had als bewijs volstaan. De intentie was goed, maar de uitvoering ging te ver.
+*Waarom?* De rechter oordeelde dat het inzien en kopiëren van meerdere dossiers *disproportioneel* was. Eén dossier had als bewijs volstaan. De intentie was goed --- de rechter prees zelfs de zorgvuldigheid waarmee het lek in kaart werd gebracht --- maar de uitvoering ging te ver.
 
 #tip[Proportionaliteit is alles. Bewijs dat er een lek is, kopieer niet meer dan strikt noodzakelijk.]
 
-== Zaak 2: Herhaalde toegang tot zorgsysteem (2014)
+_Bron: #link("https://uitspraken.rechtspraak.nl/details?id=ECLI:NL:RBOBR:2013:BZ1157")[ECLI:NL:RBOBR:2013:BZ1157] --- Rechtbank Oost-Brabant, 2013._
 
-*Wat gebeurde er?* Een hacker logde herhaaldelijk in op een zorgsysteem en zocht door medische informatie.
+== Zaak 2: Te ver doorzoeken na binnenkomst
 
-*Het vonnis:* Veroordeling voor computervredebreuk.
+*Het patroon:* Iemand verschaft zich toegang tot een (zorg)systeem en blijft daarna herhaaldelijk inloggen en door gevoelige gegevens zoeken --- veel verder dan nodig is om een lek aan te tonen.
 
-*Waarom?* Herhaaldelijk inloggen en zoeken door gegevens overschrijdt elke redelijke grens van "kwetsbaarheid aantonen."
+*De lijn in de rechtspraak:* Dit levert een veroordeling voor computervredebreuk op. Herhaaldelijk inloggen en rondzoeken overschrijdt elke redelijke grens van "kwetsbaarheid aantonen" --- precies de proportionaliteitsgrens die ook in Zaak 1 de doorslag gaf.
 
 #tip[Eén keer binnenkomen om een lek te bewijzen is niet hetzelfde als rondneuzen in andermans data.]
 
@@ -171,7 +171,7 @@ Was er een minder ingrijpende manier om hetzelfde doel te bereiken? Had je het b
 
 #warning[Schaal maakt het verschil. Dit is geen ethisch hacken --- dit is datadiefstal.]
 
-_Bron: #link("https://www.rechtspraak.nl")[Rechtspraak.nl — computervredebreuk uitspraken]_
+_Bron: #link("https://www.rechtspraak.nl/organisatie-en-contact/organisatie/rechtbanken/rechtbank-gelderland/nieuws/2021/04/gevangenisstraf-en-forse-geldboete-voor-computervredebreuk")[Rechtbank Gelderland, april 2021 --- Rechtspraak.nl]_
 
 // ─────────────────────────────────────────────
 

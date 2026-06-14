@@ -51,7 +51,7 @@ Wat je leert:
 - Hack_Right: het OM-programma voor jonge hackers
 - Praktische 10-punten veiligheidscheck voordat je begint
 
-~15 pagina's | PDF | Nederlands
+~13 pagina's | PDF | Nederlands
 Met zorg samengesteld en gecontroleerd · april 2026.
 
 Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethisch hacken.
@@ -110,7 +110,7 @@ Inclusief:
 - Finding-template voor je rapport
 - Ernst-classificatie (CVSS-gebaseerd, vereenvoudigd)
 
-~35 pagina's | PDF | Nederlands
+~19 pagina's | PDF | Nederlands
 Met zorg samengesteld en gecontroleerd · april 2026.
 
 Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethisch hacken.
@@ -171,7 +171,7 @@ Inclusief:
 - Veelgestelde vragen ("Moet ik kunnen programmeren?" "Heb ik Kali Linux nodig?")
 - Alle bronnen en platforms per week
 
-~25 pagina's | PDF | Nederlands
+~15 pagina's | PDF | Nederlands
 Geen voorkennis nodig. 5-8 uur per week.
 Met zorg samengesteld en gecontroleerd · april 2026.
 
@@ -214,16 +214,16 @@ Alles wat je nodig hebt om te starten met ethisch hacken: de wet, de methodologi
 ```
 Dit pakket bevat alle drie de HackSimulator-gidsen in een bundel:
 
-1. Ethisch Hacken & Nederlandse Wet (~15 pagina's)
+1. Ethisch Hacken & Nederlandse Wet (~13 pagina's)
    Ken de regels voordat je begint. Nederlandse wetgeving, CVD, bug bounty's en echte rechtszaken.
 
-2. Je Eerste Pentest: Stap-voor-Stap Playbook (~35 pagina's)
+2. Je Eerste Pentest: Stap-voor-Stap Playbook (~19 pagina's)
    De methodologie die professionals gebruiken. Van reconnaissance tot rapportage, met beslisbomen bij elke stap.
 
-3. Van Nul naar CTF: 12-Weken Leerplan (~25 pagina's)
+3. Van Nul naar CTF: 12-Weken Leerplan (~15 pagina's)
    Een gestructureerd pad van complete beginner naar je eerste Capture The Flag competitie.
 
-Samen: ~75 pagina's praktische kennis in het Nederlands.
+Samen: ~47 pagina's praktische kennis in het Nederlands.
 Geen voorkennis nodig. Met zorg samengesteld en gecontroleerd · april 2026.
 
 Waarom deze bundel?
@@ -285,7 +285,7 @@ ethisch hacken, ethical hacking, bundel, beginner, cybersecurity, pentest, Neder
 [TIP] Wil je weten of dit legaal is? Lees de Juridische Gids op hacksimulator.nl/gidsen
 ```
 
-### CTA 3: In de MailerLite welkomstmail
+### CTA 3: In de Brevo welkomstmail
 
 **Toevoegen aan bestaande welkomstmail:**
 ```

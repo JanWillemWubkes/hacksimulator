@@ -108,7 +108,7 @@ Elke week heeft:
   [*Begrip*], [*Wat het is*], [*Waarom relevant voor security*],
   [HTML], [De structuur van een webpagina], [XSS-aanvallen injecteren kwaadaardige HTML],
   [JavaScript], [De programmeertaal van de browser], [Kan gebruikt worden voor XSS en data-extractie],
-  [SQL], [De taal waarmee databases bevraagd worden], [SQL injection = meest voorkomende web-aanval],
+  [SQL], [De taal waarmee databases bevraagd worden], [SQL injection = een van de bekendste web-aanvallen],
   [Cookie], [Klein bestandje dat je browser opslaat], [Session hijacking als cookie gestolen wordt],
   [HTTPS], [Versleutelde versie van HTTP], [Zonder HTTPS kan verkeer afgeluisterd worden],
 )
@@ -216,9 +216,9 @@ In HackSimulator leer je WAT nmap doet. Op TryHackMe gebruik je nmap op echte sy
   [A05], [Injection], [Kwaadaardige input wordt uitgevoerd],
   [A06], [Insecure Design], [Het ontwerp zelf is onveilig],
   [A07], [Authentication Failures], [Zwakke login-beveiliging],
-  [A08], [Software/Data Integrity Failures], [Ongecontroleerde updates of data-manipulatie],
-  [A09], [Security Logging Failures], [Aanvallen worden niet gedetecteerd],
-  [A10], [Exceptional Conditions], [Onverwachte situaties worden slecht afgehandeld],
+  [A08], [Software or Data Integrity Failures], [Ongecontroleerde updates of data-manipulatie],
+  [A09], [Security Logging and Alerting Failures], [Aanvallen worden niet gedetecteerd of gemeld],
+  [A10], [Mishandling of Exceptional Conditions], [Onverwachte situaties worden slecht afgehandeld],
 )
 
 *Zelftest:*
