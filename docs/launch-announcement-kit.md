@@ -133,12 +133,15 @@ die bewijst in één oogopslag de drie kernclaims: *echt, Nederlands, educatief*
 **Aanbevolen scenario (primair):**
 1. Open https://hacksimulator.nl/terminal.html
 2. Typ `help` → toont de command-lijst (laat de breedte/echtheid zien)
-3. Typ `nmap 192.168.1.1` → toont open poorten **mét** `← Nederlandse context` per poort,
-   een `[TIP]` en een `[!]`-waarschuwing.
+3. Typ `nmap 192.168.1.1` → toont open poorten **mét** `← Nederlandse context` per poort
+   en een `[?] TIP`-regel met educatieve duiding (dit doelwit = router-profiel: 53/DNS,
+   80/HTTP, 443/HTTPS).
 
 Waarom dit scenario: de `nmap`-output is visueel het sterkst (poorten "lichten op") én laat
-direct het 80/20-patroon zien — Engelse output + Nederlandse uitleg + tip + ethische
-waarschuwing. Dat is precies het onderscheidende verhaal, zonder een woord marketing.
+direct het 80/20-patroon zien — Engelse output + Nederlandse uitleg + tip. Dat is precies het
+onderscheidende verhaal, zonder een woord marketing. (De expliciete `[!]`-ethische
+waarschuwing verschijnt op de *offensieve* tools zelf — bv. `sqlmap`/`hydra` — niet op een
+nmap-routerscan; claim dus geen `[!]` bij dit specifieke commando.)
 
 **Alternatief scenario:** `next` (tutorial-flow) — laat de begeleiding voor absolute
 beginners zien. Iets minder spectaculair, sterker als je de "voor wie net begint"-hoek wilt.
@@ -152,6 +155,15 @@ beginners zien. Iets minder spectaculair, sterker als je de "voor wie net begint
 
 **Opname-tip:** desktop-viewport ~1280px voor leesbaarheid; donker thema (default) oogt het
 meest "terminal". Houd de GIF strak: één vloeiende take, geen muis-gedoe in beeld.
+
+**Gegenereerde artefacten** (reproduceerbaar via `node scripts/capture-launch-visuals.mjs`,
+output in `.playwright-mcp/launch/` — gitignored, dus kopieer ze eruit vóór upload):
+- `terminal-help-nmap.gif` — 1000×640, loopend, ~9,5 s, ~1,3 MB (rustig tempo, goed te volgen; ruim onder de X/Bluesky-limiet).
+- `terminal-desktop.png` — 1280×720, statische fallback.
+- `terminal-mobile-375.png` — 375×812 @2x (750×1624 px), toegankelijkheids-hook.
+Het script zet legal-modal/onboarding/consent vooraf weg via `localStorage` voor een schone
+take; de live site toont die uiteraard gewoon. Bij re-capture: controleer dat `nmap` nog het
+router-profiel teruggeeft en dat er geen banner in beeld staat.
 
 ---
 

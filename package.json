@@ -32,6 +32,8 @@
     "test:all": "npx playwright test"
   },
   "devDependencies": {
-    "@playwright/test": "^1.56.1"
+    "@playwright/test": "^1.56.1",
+    "gifenc": "^1.0.3",
+    "pngjs": "^7.0.0"
   }
 }
