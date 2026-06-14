@@ -191,8 +191,11 @@
         </p>
 
         <p>
-          De lijst wordt elke vier jaar bijgewerkt. De versie van 2021 is op het moment van schrijven nog de meest recente
-          (een 2025-update is in voorbereiding). Waarom is deze lijst zo belangrijk? Omdat hij <em>de</em> gezamenlijke taal vormt
+          De lijst wordt periodiek bijgewerkt. Begin 2026 verscheen de nieuwste editie,
+          <a href="https://owasp.org/Top10/2025/" rel="noopener" target="_blank">OWASP Top 10:2025</a>.
+          Dit artikel legt de editie van <strong>2021</strong> uit: die wordt nog jaren breed gebruikt en vormt een
+          uitstekende basis. De onderliggende principes blijven onveranderd geldig &mdash; per editie verschuiven vooral
+          de volgorde en enkele categorienamen. Waarom is deze lijst zo belangrijk? Omdat hij <em>de</em> gezamenlijke taal vormt
           tussen developers, security-engineers, ethisch hackers en compliance-officers. Als jij weet wat "A03: Injection"
           betekent, kan je met elke security-professional ter wereld een gesprek voeren over webkwetsbaarheden.
         </p>
@@ -226,6 +229,20 @@
           Drie categorieën zijn nieuw in 2021: A04, A08 en A10. Dat zegt iets over hoe het dreigingslandschap verschuift &mdash;
           van "implementatiefouten" naar "ontwerpfouten" en complexere supply-chain-risico's. Hieronder een korte uitleg per categorie.
         </p>
+
+        <div class="blog-info">
+          <strong>Wat is er nieuw in de editie van 2025?</strong> De
+          <a href="https://owasp.org/Top10/2025/" rel="noopener" target="_blank">OWASP Top 10:2025</a> bouwt voort op de lijst hieronder,
+          met een paar opvallende verschuivingen:
+          <ul>
+            <li><strong>Broken Access Control</strong> blijft onbetwist nummer 1.</li>
+            <li><strong>Security Misconfiguration</strong> springt van plek 5 naar plek 2 &mdash; verkeerd geconfigureerde systemen blijken in de praktijk het grootste probleem.</li>
+            <li><strong>Software Supply Chain Failures</strong> is een nieuwe, bredere categorie (plek 3) die het oude "Vulnerable and Outdated Components" vervangt en uitbreidt &mdash; denk aan aanvallen via je dependencies, zoals Log4Shell en SolarWinds.</li>
+            <li><strong>Mishandling of Exceptional Conditions</strong> is volledig nieuw (plek 10): fouten in hoe software omgaat met onverwachte situaties, bijvoorbeeld een systeem dat bij een crash juist toegang toelaat in plaats van te blokkeren.</li>
+            <li><strong>Injection</strong> en <strong>Cryptographic Failures</strong> zakken een paar plekken &mdash; niet omdat ze minder belangrijk zijn, maar omdat andere risico's relatief vaker voorkomen.</li>
+          </ul>
+          De principes die we hieronder uitleggen blijven onverkort gelden. Voor de exacte 2025-volgorde en -details raadpleeg je de officiële lijst.
+        </div>
 
         <h2>De 10 Risico's Toegelicht</h2>
 

@@ -336,15 +336,22 @@ WHERE naam = '' OR '1'='1' AND wachtwoord = '';</code></pre>
           door SQL injection:
         </p>
         <ul>
-          <li><strong>Heartland Payment Systems (2008)</strong> - 134 miljoen creditcardnummers gestolen via SQLi. Schade: meer dan 200 miljoen dollar.</li>
-          <li><strong>Sony PlayStation Network (2011)</strong> - Gegevens van 77 miljoen accounts gelekt. Het netwerk lag wekenlang plat.</li>
+          <li><strong>Heartland Payment Systems (2008)</strong> - ruim 130 miljoen creditcardnummers gestolen; de aanval begon met een SQL injection. Schade: meer dan 200 miljoen dollar.</li>
+          <li><strong>Sony Pictures (2011)</strong> - De groep LulzSec brak via SQL injection in op SonyPictures.com en bemachtigde gegevens van meer dan een miljoen gebruikers - opgeslagen in platte tekst, zonder versleuteling.</li>
           <li><strong>Yahoo (2012)</strong> - 450.000 gebruikersnamen en wachtwoorden gelekt via een eenvoudige UNION-based SQL injection.</li>
-          <li><strong>TalkTalk (2015)</strong> - Een 15-jarige hacker stal gegevens van 157.000 klanten. Boete: 400.000 pond.</li>
+          <li><strong>TalkTalk (2015)</strong> - Via SQL injection werden gegevens van bijna 157.000 klanten buitgemaakt; meerdere tieners werden opgepakt. TalkTalk zelf kreeg een recordboete van 400.000 pond van de Britse privacytoezichthouder wegens slechte beveiliging.</li>
         </ul>
+
+        <div class="blog-info">
+          <strong>Bronnen:</strong> deze cases zijn publiek gedocumenteerd - bijvoorbeeld het
+          <a href="https://en.wikipedia.org/wiki/2012_Yahoo!_Voices_hack" rel="noopener" target="_blank">Yahoo Voices-lek (2012)</a>
+          en de <a href="https://ico.org.uk/about-the-ico/media-centre/talktalk-cyber-attack-how-the-ico-investigation-unfolded/" rel="noopener" target="_blank">TalkTalk-zaak (2015) bij de Britse toezichthouder ICO</a>.
+          Wil je zelf verder lezen? Zoek op de bedrijfsnaam + "SQL injection breach".
+        </div>
 
         <div class="blog-warning">
           SQL injection staat al sinds de allereerste editie in de
-          <abbr class="jargon" title="Open Web Application Security Project: een non-profit organisatie die de meest kritieke beveiligingsrisico's voor webapplicaties bijhoudt" tabindex="0"><strong>OWASP Top 10</strong></abbr>
+          <abbr class="jargon" title="Open Worldwide Application Security Project: een non-profit organisatie die de meest kritieke beveiligingsrisico's voor webapplicaties bijhoudt" tabindex="0"><strong>OWASP Top 10</strong></abbr>
           - de lijst van de tien meest kritieke beveiligingsrisico's voor webapplicaties. Sinds 2021 valt het onder de bredere
           categorie "Injection", die op plaats 3 staat (zie onze <a href="owasp-top-10-uitgelegd.html">complete OWASP Top 10 uitleg</a> voor het hele plaatje). Dat het na twintig jaar nog steeds in de top staat, zegt genoeg over hoe
           wijdverspreid het probleem is.
