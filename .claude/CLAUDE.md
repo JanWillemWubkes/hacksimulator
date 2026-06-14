@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 162)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 163)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,17 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 163: nmap-profiel bug-report fix + bug-klasse-audit + cat.js-hardening (14 jun 2026)
+⚠️ **Never:**
+- Branch-selectie op gebruiker-input via ruime `target.includes('192.168.1.1')` — substring matcht supersets (`192.168.1.100` bevat `192.168.1.1`) → verkeerd profiel (router DNS 53 i.p.v. webserver SSH 22). Exacte/segment-match voor specifieke hosts; reserveer `.includes()` voor bewuste categorie-heuristiek.
+- Een output↔uitleg-mismatch fixen door de uitleg-tekst aan te passen — de bron-output was fout, de didactische tekst klopte al. Fix de bron, niet de uitleg (omgekeerde Sessie 161/162 "doc-claim vs bron-tool").
+- Audit-agent-"bugs" als waar aannemen — 2/2 kandidaten (`ping.js`/`cat.js`) waren vals alarm; de kwetsbare tak was onbereikbaar (whitelist-afgeschermd). Verifieer reachability tegen werkende code (generaliseert Sessie 160-les).
+
+✅ **Always:**
+- Reachability als criterium dat echte bugs van valse alarmen scheidt — alleen nmap was raakbaar met geldige, gedocumenteerde input (`192.168.1.100` = tutorial-doelwit + man-page-voorbeeld). Statische `.includes()`-scan vindt alle drie; reachability isoleert de echte.
+- Hardenen waar de input-ruimte open is, niet waar 'ie gesloten/bewust ruim is — `cat.js` (groeiende VFS) ankeren op `resolvedPath`; `ping.js` (gesloten whitelist) + nmap-heuristiek (feature-contract) met rust. Voorkomt over-engineering (Sessie 159 minimal-scope).
+- `?v=`-cache-busting is architectonisch begrensd tot entry-bestanden bij een ES-module-graaf — imports zonder versie-token + 1-week `/src/**/*.js`-cache laten diepe modules stale. Pre-launch onschadelijk, post-launch echte gap → esbuild content-hash als NEW M9-item. Volledig: `docs/sessions/current.md` Sessie 163.
+
 ### Sessie 162: Pre-launch visueel materiaal — kit §4 GIF + screenshots via reproduceerbaar capture-script (14 jun 2026)
 ⚠️ **Never:**
 - Een doc-claim als waarheid overnemen in een launch-asset zonder de tool te draaien — de kit beloofde een `[!]`-waarschuwing bij `nmap 192.168.1.1`, maar dat doelwit = router-profiel met alleen een `[?] TIP` (`[!]` hoort bij database-doelwit / offensieve tools). De visual legde de overdrijving bloot. Bron = `src/commands/*`, niet een andere doc.
@@ -141,18 +152,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Semantic-difference herkenning vs drift — onderscheid semantic-equivalence-check (gelijke meaning, verschillende getallen) van semantic-difference-check (verschillende meanings, gelijke getallen). Voor frozen milestones detection-value = 0.
 - Defense-in-depth-persistence-pattern (Sessie 140 → 159) schaalt over documentation-of-intent. **14-sessie streak:** 7 falsificatie + 1 KEEP + 2 methodological-evolution-output + 3 feature-completion + 1 documentation-of-intent. Volledige scope-details: `docs/sessions/current.md` Sessie 159 entry.
 
-### Sessie 158: `#23.1` validate-docs `--deep` Check 6 extension naar M5/M5.5/M9 + NEW Blog sub-check 6b — 4 doc-drifts caught via Phase C zelf-test (10 jun 2026)
-⚠️ **Never:**
-- `git checkout -- file` als revert-mechanisme voor drift-injection — git checkout reset ALLE uncommitted changes + invalidates Edit-tool Read-state. Gebruik tool-level revert (Edit → Edit terug). Generaliseert Sessie 153 #5 + Sessie 156 #6 naar drift-injection-context.
-- `sed -i 's|pattern|replacement|'` met `|` delimiter in markdown-tabel context — tabel-cells gebruiken `|` als separator → sed parse-conflict. Gebruik Edit-tool of andere delimiter (`#`, `@`, `_`).
-- Awk-range header-format-mismatch zonder fallback — h3-plain-text vs h2-emoji mengen breekt range silent. Documenteer per-range anchor-pattern in script-comment + verifieer expected count post-impl.
-
-✅ **Always:**
-- Awk-range met canonical `[x]`/`[ ]` regex schaalt zonder telfouten — voor sections >15 checkboxes nooit handmatige telling. Generaliseert Sessie 154 #2 "verifieer pre-data" naar self-authored plans.
-- Real-time drift-catch via Phase C zelf-test = direct forcing-function value-demonstration (Sessie 157 patroon repeats) — Phase C verwachtingstabel matched 100% met werkelijke output.
-- 2-op-rij infra-investment ritme bewijst sub-categorie repeatable — Frame-verdict-schema N/A MAAR discipline-laag identiek (pre-data scope + AskUserQuestion + defense-in-depth + drift-injection + final zelf-test). Volledige scope-details: `docs/sessions/current.md` Sessie 158 entry.
-
-**Rotation:** Top-6 huidig: 158-159-160-161-162 (bulk-rotation Sessie 160: pre-158 historie reeds in `docs/sessions/current.md`). Volgende bulk-rotation Sessie 165. Pre-Sessie 158 historie + bulk-rotation administration → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 159-160-161-162-163 (Sessie 158 → `docs/sessions/current.md`; bulk-rotation Sessie 160: pre-158 historie reeds gearchiveerd). Volgende bulk-rotation Sessie 165. Pre-Sessie 159 historie + bulk-rotation administration → `docs/sessions/current.md`.
 
 ---
 
@@ -201,7 +201,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 162
+**Sessie counter:** 163
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -253,6 +253,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 14 jun 2026 (Sessie 162 — pre-launch visueel materiaal kit §4: GIF + desktop/mobiele screenshots via NEW reproduceerbaar `scripts/capture-launch-visuals.mjs` (pure-JS GIF gifenc+pngjs, localStorage-schone-take) + kit §4 feitelijke correctie (`nmap 192.168.1.1` = `[?] TIP`, geen `[!]`). Beelden gitignored. Volledig: `docs/sessions/current.md`)
-**Version:** 5.36 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
+**Last updated:** 14 jun 2026 (Sessie 163 — bug-report fix: `nmap 192.168.1.100` toonde router-profiel (DNS 53) i.p.v. webserver (SSH 22) door te-ruime substring-match, fix = exacte match + cache-bump; bug-klasse-audit (geen andere reachable bugs, ping/cat vals alarm, tutorials 100% consistent); preventieve `cat.js`-hardening (resolvedPath-anker); NEW post-launch M9 esbuild content-hash cache-item. Volledig: `docs/sessions/current.md`)
+**Version:** 5.37 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
 

@@ -4,6 +4,34 @@
 
 ---
 
+## Sessie 163: Bug-report fix (nmap-profiel) + bug-klasse-audit + cat.js-hardening (14 jun 2026)
+
+**Mission:** Een per e-mail gemelde bug verifiëren en fixen (`nmap 192.168.1.100` toonde poort 53 DNS terwijl de tutorial-uitleg over SSH 22 sprak), daarna proactief auditen of dezelfde bug-klasse elders voorkomt en preventief hardenen.
+
+**Work done:**
+- **Root cause + fix (`src/commands/network/nmap.js`):** profiel-selectie gebruikte een *substring*-match `target.includes('192.168.1.1')` die ook `192.168.1.100` ving (`"192.168.1.100".includes("192.168.1.1")` === true) — én `.10`-`.19`/`.100`-`.199`. Daardoor kreeg het exploitation-doelwit het router-profiel (DNS 53) i.p.v. het bedoelde webserver-profiel (SSH 22). Fix = exacte match `target === '192.168.1.1'`; `192.168.1.100` valt nu door naar de webserver-tak. Herstelt de hele exploitation-tutorial keten (stap 2 = `hydra ssh://192.168.1.100`, zinloos zonder open SSH in stap 1) en triggert de juiste `[?] TIP` ("SSH (22) open ... hydra").
+- **Cache-bump:** `terminal.html` `main.js?v=156-tutorial-gestures` → `?v=163-nmap-profile-fix` (modulepreload + script-tag).
+- **Bug-klasse-audit (2 parallelle Explore-agents + eigen bron-verificatie):**
+  - Agent 1 (loose branch-selection): meldde `ping.js` + `cat.js` als kandidaten → **beide vals alarm na verificatie.** `ping.js` tip-blok draait alleen ná `if (!hostInfo) return` (regel 40), dus enkel voor de `knownHosts`-whitelist; beide `192.168`-hosts daarin zíjn private IP's. `cat.js` `getPermissionTip()` draait alleen bij "Permission denied", en de VFS heeft exact 2 restricted entries (`/etc/shadow`, `/root`) → beide correcte tip; niet-bestaande paden vallen af op "No such file".
+  - Agent 2 (tutorial output ↔ feedback): 4 scenario's / 17 stappen → **0 mismatches**, volledig consistent (incl. de nu-correcte exploitation stap 1).
+  - nmap `db`/`hardened`-substring-matches = bewuste categorie-heuristiek, géén bug.
+- **Preventieve hardening (`src/commands/filesystem/cat.js`):** `getPermissionTip()` geankerd op `resolvedPath` (`=== '/etc/shadow'`, `=== '/root' || startsWith('/root/')`) i.p.v. ruwe `path.includes()`. Reden: de VFS restricted-set is ontworpen om te groeien; een toekomstig bestand met "root"/"shadow" in de naam zou een misleidende tip krijgen. Tip-teksten ongewijzigd, aanroep hergebruikt de bestaande `resolvedPath` (regel 55). Geen reachable bug vandaag — puur defense-in-depth tegen de gedemonstreerde zwakke plek.
+- **NEW post-launch TASKS-item (M9 Refactor Sprint):** esbuild content-hash build + cache-correctheid. Aanleiding: de `?v=`-bump werkt alleen op entry-niveau; ES-module-imports (`import x from './...js'`) dragen geen versie-token en `_headers` cachet `/src/**/*.js` een week → diepe modules blijven tot een week stale bij terugkerende bezoekers. Geadviseerd: esbuild + content-hash + `immutable` cache (lost tegelijk bundle-budget op). Tussenoplossing (`no-cache` + ETag) gedocumenteerd maar afgeraden. Bewuste architectuurwijziging (PRD §13 red line) → ná launch.
+
+**Commits:** `bbf6aa3` (nmap-fix + cache-bump), `66588b6` (cat.js-hardening). + doc-sync (deze /summary).
+
+**Learnings:**
+- **Reachability scheidt echte bugs van valse alarmen.** Een statische "ruim `.includes()`"-scan vindt nmap, ping én cat; alleen reachability-analyse toont dat alleen nmap met geldige, gedocumenteerde input (`192.168.1.100` = tutorial-doelwit + man-page-voorbeeld) bereikbaar was. Generaliseert de CLAUDE.md Sessie 160-les ("verifieer audit-agent-bevindingen tegen werkende code") naar een concreet criterium.
+- **Fix de bron, niet de uitleg.** De verleiding was de feedback-tekst aan de (foute) output aan te passen; correct was de output herstellen naar de al-juiste didactische bedoeling. Spiegelt Sessie 161/162 "doc-claim vs bron-tool", nu omgekeerd.
+- **Hardenen waar de input-ruimte open is, niet waar 'ie gesloten of bewust ruim is.** cat.js (groeiende VFS) → ankeren; ping.js (gesloten whitelist) + nmap-heuristiek (feature-contract) → met rust. Dat onderscheid voorkomt over-engineering (Sessie 159 minimal-scope-lijn).
+- **`?v=` cache-busting is architectonisch begrensd tot entry-bestanden** bij een ES-module-graaf — een latente gap die pre-launch onschadelijk is maar post-launch een echte stale-content-bron wordt.
+
+**Next steps:** Push (deze sessie) → live deploy. Post-launch: M9 esbuild content-hash item. Launch-dag 18 jun: runbook Fase 2 + Fase 4 backlinks (uit Sessie 162).
+
+**Metrics delta:** bundle delta ~0 (alleen JS-regels in 2 commands + cache-token + docs). Tests 197/23 onveranderd, command-coverage + tutorial specs groen na beide fixes.
+
+---
+
 ## Sessie 162: Pre-launch visueel materiaal — launch-aankondigings-kit §4 (14 jun 2026)
 
 **Mission:** De enige onaf, launch-dag-blokkerende pre-launch-deliverable produceren: het visuele materiaal uit de kit §4 (GIF + screenshots). Heisenberg-keuze via AskUserQuestion (4 opties: visueel materiaal / M8 kickoff / #33 (c) perf / launch-checklist hardenen).
