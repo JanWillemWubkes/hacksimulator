@@ -4,6 +4,36 @@
 
 ---
 
+## Sessie 164: Blog feitencontrole + bronverificatie + OWASP 2025-kader (14 jun 2026)
+
+**Mission:** Gebruiker (Heisenberg) vroeg een inhoudelijke kwaliteits-/feitencontrole van alle 13 blog posts: klopt het feitelijk, dekken we ons juridisch in over hacken, en wordt alles helder uitgelegd? Doel: 100% juiste, vertrouwenwekkende educatieve content.
+
+**Work done:**
+- **Plan-fase (3 parallelle Explore-agents):** inventaris + disclaimers, feitelijke claims, didactische helderheid. Daarna 2 strategische keuzes via AskUserQuestion → "volledige redactionele pass" + "bronvermelding bij grote claims".
+- **Eigen bronverificatie (WebSearch/WebFetch) van alle "verdachte" agent-bevindingen — kern van de sessie:** 6 van 7 bleken VALS ALARM. Heartland 2008 (SQLi bevestigd, Computerworld/CSO), Yahoo Voices 2012 (UNION-based SQLi, D33Ds), TalkTalk 2015 (SQLi, 156.959, GBP 400k ICO), Metasploit-getallen (Rapid7 2025 nog accuraat), "backdoor"-gat (term stond er niet), Twitter-Florida (grotendeels juist). Alleen door zelf te checken voorkomen dat correcte feiten "gefixt" werden tot fouten (CLAUDE.md Sessie 160/163-les toegepast).
+- **1 echte feitelijke fout gevonden — pas via verificatie:** Sony PlayStation Network (77M) stond in het SQL-injection-rijtje, maar die vector is nooit publiek als SQLi bevestigd (Sony getuigde: bekende kwetsbaarheid in verouderde serversoftware). De zoekresultaten ontwarden twee Sony-incidenten: PSN (april 2011, 77M, geen bevestigde SQLi) vs Sony Pictures (juni 2011, LulzSec, WEL bevestigde SQLi, >1M plaintext). Fix: PSN-regel vervangen door het correcte Sony Pictures/LulzSec-geval. `sql-injection-uitgelegd.html`.
+- **Verouderingsfout (OWASP):** post claimde dat de 2021-editie "de meest recente" is en 2025 "in voorbereiding". OWASP Top 10:2025 is definitief sinds 7 jan 2026 (owasp.org/Top10/2025/, HTTP-200). Framing eerlijk bijgesteld (post = gelabelde 2021-uitleg + link naar 2025) + op gebruikersverzoek een "Wat is nieuw in 2025?"-kader toegevoegd, afgeleid uit naast elkaar leggen van de officiele 2021- en 2025-lijsten (Broken Access Control #1; Security Misconfiguration 5→2; Software Supply Chain Failures nieuw #3; Mishandling of Exceptional Conditions nieuw #10; Injection/Crypto zakken). SSRF-bestemming bewust weggelaten (niet met zekerheid uit de bron) — liever feit weglaten dan onzeker claimen. Volledige 2025-rewrite bewust geparkeerd als aparte sessie (verouderd-maar-eerlijk != fout).
+- **Juridische correctie:** `wat-is-ethisch-hacken.html` schreef de 4-jaar-strafmaat toe aan "voorbedachte rade of gewoonte" (verkeerde grond). Geverifieerd tegen art. 138ab Sr: kale computervredebreuk = max 2 jaar (lid 1); 4 jaar (lid 2) geldt bij gegevens overnemen/aftappen of binnendringen via openbaar telecomnetwerk. Gecorrigeerd.
+- **Precisie-nuances:** GPU "moderne videokaart" → "high-end (RTX 4090)" + tabelkop (hashcat); kraaktijd-tabel "grove schatting, hardware-afhankelijk"-disclaimer (wachtwoord-beveiliging); Heartland 134→130M; TalkTalk-boete toegeschreven aan TalkTalk i.p.v. hacker; Verizon-80% geherformuleerd (DBIR "menselijke factor" != alleen social engineering) + editie-jaar; USB-drop-stat naar gedocumenteerde 45% (Univ. of Illinois); "90% van alle servers" → "webservers"; ongebronde "70% vaker" → "aanzienlijk vaker"; Twitter-2020 "tieners uit Florida" → "geleid door een 17-jarige uit Florida".
+- **Vertrouwen + helderheid:** natrekbare bronblokken (Wikipedia/ICO/Verizon/OWASP, alle 6 HTTP-200) in sql-injection + social-engineering; `payload` getagd in linux-bestandssysteem; OWASP-tooltips naar actuele naam "Open Worldwide...".
+- **Niet gewijzigd (al sterk/correct):** nmap, wireshark, terminal-basics, cybersecurity-tools, ethisch-hacker-worden, welkom. Juridische dekking al solide (site-brede terms.html + footer-links; social-engineering heeft eigen expliciete toestemming-waarschuwing) → geen geforceerde extra ethiek-zin (Sessie 159 minimal-scope).
+- **Verificatie:** alle externe bronlinks HTTP-200; render-check (Playwright) van bronblokken + 2025-kader in light + dark + 375px; pre-commit "Validate blog HTML structure" + validate-docs exit 0.
+
+**Files touched:** 8 blog posts — `sql-injection-uitgelegd.html`, `social-engineering.html`, `owasp-top-10-uitgelegd.html`, `wat-is-ethisch-hacken.html`, `hashcat-wachtwoorden-kraken.html`, `wachtwoord-beveiliging.html`, `linux-bestandssysteem.html`, `cybersecurity-tools.html`. Net +53/-21 regels.
+
+**Commits:** `57dd28f` (blog feitencontrole) + OWASP 2025-kader (zelfde commit-batch na user-go) + doc-sync (deze /summary).
+
+**Learnings:**
+- **Eigen bronverificatie was waardevoller dan de audit zelf.** 6/7 agent-"verdachte" feiten waren vals alarm; de enige echte fout (Sony PSN→Pictures) kwam pas boven door zelf te zoeken, niet uit een agent-rapport. Reachability/bron-check scheidt echte fouten van plausibel-ogende ruis (Sessie 160/163-discipline, nu op marketing/educatieve content).
+- **"Verouderd maar eerlijk gelabeld" != "fout".** De OWASP-post die zichzelf als 2021-editie labelt en naar 2025 linkt is correct; een rewrite is een geplande verbetering, geen spoedfix. Onderscheid bepaalt nu-vs-later prioriteit.
+- **Liever een feit weglaten dan een onzekere claim plaatsen.** SSRF-fusiebestemming in 2025 niet met zekerheid uit de bron → weggelaten i.p.v. gegokt. Dezelfde discipline die de Sony-fout ontdekte.
+- **Soft statistieken zijn een feiten-risico.** Ongebronde ronde getallen ("70% vaker", "45-60%", "80% begint met social engineering") herformuleerd/geankerd aan documenteerbare bronnen of vervangen door kwalitatief — sluit aan op memory `feedback_tone_no_hype`.
+- **Grote docs (TASKS.md/current.md) overschrijden de Read/Edit-tool-tokenlimiet** → doc-sync via geverifieerd Python-script met occurrence-asserts i.p.v. Edit-tool.
+
+**Next steps:** Push → live. Later (aparte sessie): volledige OWASP Top 10:2025-rewrite (trigger: GSC-zoektermen "OWASP 2025" of geplande contentsessie). Launch-dag 18 jun: runbook Fase 2 + Fase 4 backlinks.
+
+---
+
 ## Sessie 163: Bug-report fix (nmap-profiel) + bug-klasse-audit + cat.js-hardening (14 jun 2026)
 
 **Mission:** Een per e-mail gemelde bug verifiëren en fixen (`nmap 192.168.1.100` toonde poort 53 DNS terwijl de tutorial-uitleg over SSH 22 sprak), daarna proactief auditen of dezelfde bug-klasse elders voorkomt en preventief hardenen.

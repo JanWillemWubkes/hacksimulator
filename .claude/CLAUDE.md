@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 163)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 164)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 164: Blog feitencontrole — bronverificatie ontkracht 6/7 agent-vals-alarmen + OWASP 2025-kader (14 jun 2026)
+⚠️ **Never:**
+- Audit-agent-"verdachte feiten" als fout aannemen — 6 van 7 (Heartland/Yahoo/TalkTalk/Metasploit/backdoor/Twitter) waren vals alarm; eigen WebSearch-verificatie redde correcte feiten van een onterechte "fix". De énige echte fout (Sony PSN als SQLi) kwam pas via verificatie boven, niet uit een agent-rapport.
+- Een tijdgevoelige claim ("2021 = meest recente OWASP Top 10") onverifieerd laten staan — de 2025-editie was al definitief (7 jan 2026). Verouderd-maar-eerlijk-gelabeld ≠ fout, maar de claim "meest recente" wás fout.
+- Onbronbare ronde statistieken laten staan ("70% vaker", "45-60%", "80% begint met social engineering") — herformuleren/ankeren aan een documenteerbare bron of kwalitatief maken (memory `feedback_tone_no_hype`).
+
+✅ **Always:**
+- Eigen bronverificatie boven agent-gezag — reachability/bron-check scheidt echte fouten van plausibele ruis (Sessie 160/163-discipline, nu op educatieve/marketing-content).
+- Liever een feit weglaten dan onzeker claimen — SSRF-fusiebestemming in OWASP 2025 niet met zekerheid uit de bron → weggelaten i.p.v. gegokt.
+- Juridische claims tegen de wettekst checken — art. 138ab: kale computervredebreuk max 2 jaar (lid 1); 4 jaar (lid 2) pas bij gegevens overnemen/aftappen of binnendringen via openbaar telecomnet, niet "voorbedachte rade".
+- Grote docs (TASKS.md/current.md >25k tokens) overschrijden de Read/Edit-tool-limiet → doc-sync via geverifieerd Python-script met occurrence-asserts. Volledig: `docs/sessions/current.md` Sessie 164.
+
 ### Sessie 163: nmap-profiel bug-report fix + bug-klasse-audit + cat.js-hardening (14 jun 2026)
 ⚠️ **Never:**
 - Branch-selectie op gebruiker-input via ruime `target.includes('192.168.1.1')` — substring matcht supersets (`192.168.1.100` bevat `192.168.1.1`) → verkeerd profiel (router DNS 53 i.p.v. webserver SSH 22). Exacte/segment-match voor specifieke hosts; reserveer `.includes()` voor bewuste categorie-heuristiek.
@@ -141,18 +153,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Defense-in-depth over alle 9 fixes + SEO-batch; beide live & geverifieerd. Volledige scope: `docs/sessions/current.md` Sessie 160 (cloud-spoor) entries.
 
 
-### Sessie 159: `#23.2` M0-M4 permanent-SKIP closure — documentation-of-intent (12e uitkomst-categorie), ~30 min minimal scope (10 jun 2026)
-⚠️ **Never:**
-- Pivot-rationalisatie zonder Explore-onderzoek van pivot-target — dual van sunk-cost-rationalisatie. Voor elk pivot-besluit, Explore agent verify target-readiness pre-data.
-- Plan-assumption over docs-structuur zonder pre-data verificatie — generaliseert Sessie 153 #5 + Sessie 156 #6 naar self-authored plans. Grep-verifieer locatie/structuur vóór Edit-batch.
-- Tooling-overspecialisatie-fear-of-missing-out — minimal-closure scope (~30 min) ipv aut-pivot naar product-werk dat niet-ready is. Trust scope-context, niet macro-trend-bias.
-
-✅ **Always:**
-- Documentation-of-intent als 12e uitkomst-categorie naast Frame A/B/C/D + distribution-analysis + 3-burst compression + feature-completion + infra-investment + infra-investment-extension. Discipline-laag identiek: pre-data scope + AskUserQuestion + defense-in-depth + validate-docs gate.
-- Semantic-difference herkenning vs drift — onderscheid semantic-equivalence-check (gelijke meaning, verschillende getallen) van semantic-difference-check (verschillende meanings, gelijke getallen). Voor frozen milestones detection-value = 0.
-- Defense-in-depth-persistence-pattern (Sessie 140 → 159) schaalt over documentation-of-intent. **14-sessie streak:** 7 falsificatie + 1 KEEP + 2 methodological-evolution-output + 3 feature-completion + 1 documentation-of-intent. Volledige scope-details: `docs/sessions/current.md` Sessie 159 entry.
-
-**Rotation:** Top-6 huidig: 159-160-161-162-163 (Sessie 158 → `docs/sessions/current.md`; bulk-rotation Sessie 160: pre-158 historie reeds gearchiveerd). Volgende bulk-rotation Sessie 165. Pre-Sessie 159 historie + bulk-rotation administration → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 160-161-162-163-164 (Sessie 159 → `docs/sessions/current.md` via 1-in-1-out; bulk-rotation Sessie 160: pre-158 historie reeds gearchiveerd). Volgende bulk-rotation Sessie 165. Pre-Sessie 160 historie + bulk-rotation administration → `docs/sessions/current.md`.
 
 ---
 
@@ -201,7 +202,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 163
+**Sessie counter:** 164
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -253,6 +254,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 14 jun 2026 (Sessie 163 — bug-report fix: `nmap 192.168.1.100` toonde router-profiel (DNS 53) i.p.v. webserver (SSH 22) door te-ruime substring-match, fix = exacte match + cache-bump; bug-klasse-audit (geen andere reachable bugs, ping/cat vals alarm, tutorials 100% consistent); preventieve `cat.js`-hardening (resolvedPath-anker); NEW post-launch M9 esbuild content-hash cache-item. Volledig: `docs/sessions/current.md`)
-**Version:** 5.37 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
+**Last updated:** 14 jun 2026 (Sessie 164 — blog feitencontrole 13 posts: eigen bronverificatie ontkrachtte 6/7 agent-'verdachte' feiten als vals alarm; 1 echte fout Sony PSN→Pictures SQLi; OWASP verouderingsfout + 'Wat is nieuw in 2025'-kader; art.138ab 4-jaar-trigger-fix; precisie-nuances + natrekbare bronblokken (HTTP-200). Volledig: `docs/sessions/current.md`)
+**Version:** 5.38 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
 
