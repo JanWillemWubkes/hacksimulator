@@ -9,12 +9,12 @@ import { getDynamicContent } from '../../filesystem/dynamic-content.js';
 /**
  * Get educational tip based on which file is restricted
  */
-function getPermissionTip(path) {
-  if (path.includes('shadow')) {
+function getPermissionTip(resolvedPath) {
+  if (resolvedPath === '/etc/shadow') {
     return `[!] BEVEILIGING: /etc/shadow bevat password hashes en is alleen toegankelijk voor root.\n\n[?] TIP: Probeer 'cat /etc/passwd' - dit bestand is wel leesbaar en toont gebruikers.`;
   }
 
-  if (path.includes('root')) {
+  if (resolvedPath === '/root' || resolvedPath.startsWith('/root/')) {
     return `[!] BEVEILIGING: De /root directory is alleen toegankelijk voor de root gebruiker.\n\n[?] TIP: Als normale gebruiker heb je toegang tot je eigen home directory (/home/hacker).`;
   }
 
@@ -71,7 +71,7 @@ export default {
       }
 
       if (error.message.includes('Permission denied')) {
-        const educationalTips = getPermissionTip(path);
+        const educationalTips = getPermissionTip(resolvedPath);
         return `cat: ${path}: Permission denied\n\n${educationalTips}`;
       }
 
