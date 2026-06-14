@@ -4,6 +4,36 @@
 
 ---
 
+## Sessie 165: Kwaliteits-/feitencontrole betaalde Gumroad-producten (14 jun 2026)
+
+**Mission:** Grondige inhoudelijke kwaliteits- en feitencontrole op de betaalde Gumroad-producten (`docs/products/`), met een hógere lat dan de Sessie-164-blog-audit want dit zijn betaalde producten (memory `feedback_product_quality`: 100% accuraat). Plan-mode: verkennen → eigen bronverificatie → AskUserQuestion-scopekeuzes → uitvoeren.
+
+**Work done:**
+- **Inventaris:** canonieke bron = `.typ` (build-pdfs.sh compileert die; `-draft.md` stale). `typst 0.13.1` lokaal aanwezig. 3 Explore-agents bouwden claim-inventaris (juridische-gids / playbook+sample / listings+leerplan). **Vondst:** `leerplan.typ` is óók een betaald product maar stond niet in de opdracht — meegenomen (clean bevonden).
+- **Eigen bronverificatie (WebSearch/WebFetch)** scheidde echte fouten van vals alarm. **Vals alarm (NIET aangeraakt):** OWASP Top 10:2025-volgorde in playbook (A05 Injection) + leerplan (A01–A10) — exact correct vs. officiële editie; art. 138ab-strafmaten (2/4/4 jr, 4e cat) + ingangsdatum "20 april 2016" (= officiële datum huidige tekst, maxius.nl); boete 4e cat €27.500 per 2026; art. 138b/139c/139d/350a/350b; Gelderland-zaak (€10.000/27 mnd/3,7 mln); OSCP $1.749; eJPT→INE; TryHackMe 54 rooms/13 modules; Wet Computercriminaliteit 1993/2006/2019; alle door playbook genoemde sim-commando's bestaan (`dig` correct als "niet in sim" gelabeld).
+- **3 echte issues gefixt:**
+  1. **Pagina-claims overdreven** (`gumroad-listings.md`): ~15/~35/~25 → "~75 totaal", echte PDF-telling (`pdfinfo`, 3 methodes) = 13/19/15 = 47. Playbook 84% overdreven. Gecorrigeerd naar 13/19/15/47 (regels 54/113/174/217/220/223/226). Geen filler — listings naar realiteit (`feedback_tone_no_hype`).
+  2. **Juridische Gids Krol-zaak** (`juridische-gids.typ` r.148): "gemeenteraadslid" → "journalist en politicus" (Krol was journalist/Kamerlid); "(geanonimiseerde)" → "(echte)" medische dossiers (waren echt — dat was de pointe). Geverifieerde bronnen toegevoegd: ECLI:NL:RBOBR:2013:BZ1157 (zaak 1) + Rechtbank-Gelderland-news-URL (zaak 3, april 2021). Zaak 2 ("2014", onverifieerbaar — geen bron matcht) genericeerd tot het rechts­principe (Sessie 164: liever weglaten dan onzeker claimen). Krol-ruling-nuance toegevoegd ("rechter prees de zorgvuldigheid").
+  3. **Listings MailerLite → Brevo** (r.288, stale na migratie commit 63124dd).
+- **Helderheids-pass** (playbook + leerplan, volledig gelezen): offensive-tool-disclaimer in playbook bevestigd aanwezig + sterk (`#warning` schriftelijke toestemming + Fase-0 toestemmingsdocument + proportionaliteits-warnings). Glosses toegevoegd voor beginner-jargon: ICMP ("netwerkprotocol achter ping"), CVE ("openbaar gedocumenteerde kwetsbaarheden"), CVSS ("Common Vulnerability Scoring System, 0–10"). Leerplan: OWASP-2025-namen exact uitgelijnd op officiële editie (A08 "Software or Data Integrity Failures", A09 "Security Logging and Alerting Failures" — let op 2025 Monitoring→Alerting, A10 "Mishandling of Exceptional Conditions") + SQLi-superlatief "meest voorkomende" → "een van de bekendste". Cert-prijzen ongemoeid (al afgedekt door bestaande `#letop` "prijzen veranderen").
+- **PDF's herbouwd** via `build-pdfs.sh` (typst 0.13.1, geen warnings). Geverifieerd: paginatelling 13/19/15/9 (matcht listings), alle fixes aanwezig in PDF-output (`pdftotext`), oude foute teksten verdwenen. `sample.pdf` (ongewijzigde bron, alleen rebuild-timestamp-ruis) teruggedraaid voor schone diff.
+
+**Commits:** (zie git log Sessie 165 — products `.typ`+`.pdf` + listings + doc-sync).
+
+**Learnings:**
+- **Eigen bronverificatie redde wéér correcte feiten** (generaliseert Sessie 164 naar betaalde producten): élk verdacht juridisch punt + OWASP-volgorde bleek vals alarm. Blind agent/intuïtie volgen had correcte content "kapot-gefixt" (bv. "20 april 2016" leek fout maar is de officiële ingangsdatum; eJPT→INE was correcter dan de zoek-snippet die "OffSec" zei).
+- **Belofte-vs-inhoud is de echte zwakte, niet de feiten:** verkoopcopy-cijfers tegen het gebouwde artefact tellen (`pdfinfo`), niet tegen de draft/schatting — *natelbaar = betrapbaar* (Sessie 161). Nieuwe memory `feedback_verify_claims_against_artifact`.
+- **Onverifieerbaar specifiek = genericeren, niet gokken:** geen ECLI verzonnen voor de Gelderland-zaak (kon niet bevestigd) → geverifieerde news-URL; zaak-2-"2014" zonder bron → tot principe herschreven.
+- **Eerlijk deferren boven blind protocol:** current.md bulk-rotatie (155-159) gedefererd — archief-bestemmingsconventie dubbelzinnig (recent.md t/m 149 oplopend; archive-q* 2024; N-10..N-6-regel zou een gat in current.md slaan), niet door validate-docs gecontroleerd → risico > baat vóór commit.
+
+**Next steps:**
+- **Handmatig (Heisenberg, buiten repo):** herbouwde PDF's (3 betaald + sample naar `assets/samples/`) opnieuw naar Gumroad uploaden + listing-teksten op gumroad.com met de gecorrigeerde pagina-aantallen bijwerken.
+- current.md bulk-rotatie 155-159 — bestemmingsconventie bevestigen, dan uitvoeren.
+
+**Metrics delta:** geen runtime-bundle-impact (alleen `docs/products/`). PDF-bytes: juridische 106K, playbook 118K (was 120K), leerplan 110K (was 113K), sample 89K (ongewijzigd). Tests/bundle ongewijzigd.
+
+---
+
 ## Sessie 164: Blog feitencontrole + bronverificatie + OWASP 2025-kader (14 jun 2026)
 
 **Mission:** Gebruiker (Heisenberg) vroeg een inhoudelijke kwaliteits-/feitencontrole van alle 13 blog posts: klopt het feitelijk, dekken we ons juridisch in over hacken, en wordt alles helder uitgelegd? Doel: 100% juiste, vertrouwenwekkende educatieve content.

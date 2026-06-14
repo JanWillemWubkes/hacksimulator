@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 165: Kwaliteits-/feitencontrole betaalde Gumroad-producten (14 jun 2026)
+⚠️ **Never:**
+- Een verdacht feit in een betaald product "fixen" vóór eigen bronverificatie — élk verdacht juridisch punt + de OWASP-2025-volgorde bleek vals alarm; "20 april 2016" léék fout maar is de officiële ingangsdatum (maxius.nl), eJPT→INE was correcter dan de zoek-snippet ("OffSec"). Blind volgen had correcte content kapot-gefixt (generaliseert Sessie 164 naar betaalde producten).
+- Verkoopcopy-cijfers (pagina's/getallen) baseren op de draft of een schatting — de listings beloofden "~75 pagina's", de gebouwde PDF's leveren 47 (playbook 84% over). Tel tegen het artefact dat de koper krijgt (`pdfinfo`). Natelbaar = betrapbaar.
+- Een onverifieerbare specifieke claim laten staan of gokken — geen ECLI verzonnen voor de Gelderland-zaak (niet te bevestigen → geverifieerde news-URL); zaak-2-"2014" zonder bron → tot rechtsprincipe genericeerd.
+
+✅ **Always:**
+- Eigen WebSearch/WebFetch-bronverificatie als scheidslijn echte fout vs. vals alarm — bevestigde 3 echte issues (pagina-claims, Krol-feitfout 'gemeenteraadslid'/'geanonimiseerde', stale MailerLite) tussen een grote meerderheid correcte feiten.
+- Belofte-vs-inhoud als eerste verdachte bij "met zorg gecontroleerde" content — de feiten waren sterk; de zwakte zat in de marketing-cijfers. Nieuwe memory `feedback_verify_claims_against_artifact`.
+- Fix in de canonieke bron (`.typ`) + artefact herbouwen + output verifiëren (`pdftotext`/`pdfinfo`) — een fix is pas klaar als de PDF die de koper downloadt klopt; rebuild-only timestamp-ruis terugdraaien houdt de diff eerlijk.
+- Eerlijk deferren boven blind protocol — current.md bulk-rotatie 155-159 gedefererd wegens dubbelzinnige archief-bestemming (niet door validate-docs gedekt); risico > baat vóór commit. Volledig: `docs/sessions/current.md` Sessie 165.
+
 ### Sessie 164: Blog feitencontrole — bronverificatie ontkracht 6/7 agent-vals-alarmen + OWASP 2025-kader (14 jun 2026)
 ⚠️ **Never:**
 - Audit-agent-"verdachte feiten" als fout aannemen — 6 van 7 (Heartland/Yahoo/TalkTalk/Metasploit/backdoor/Twitter) waren vals alarm; eigen WebSearch-verificatie redde correcte feiten van een onterechte "fix". De énige echte fout (Sony PSN als SQLi) kwam pas via verificatie boven, niet uit een agent-rapport.
@@ -141,19 +153,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Disciplined-hybrid datum-strategie bij late publieke launch — historische `datePublished` behouden (autoriteitsverhaal), `dateModified` alleen bij echte verbetering. Beste voor geloofwaardigheid + SEO tegelijk; herdateren-naar-launch afgewezen.
 - GSC = feitelijke launch-hefboom (niet de datums): Domain-property (volledige sitemap-URL vereist!) + indexering-aanvraag top-5 + backlinks ontsluiten de diepe content die Google anders ondiep crawlt.
 - Drift-guard detectie-logica zelf-testen op synthetische drift (vangt-het-de-bug?) vóór vertrouwen — defense-in-depth-persistence-pattern Sessie 140 → 160 schaalt over SEO-metadata. Filesystem-ground-truth (Check 9b: RSS-count == `ls blog/*.html` minus index) → nieuwe posts tellen automatisch mee. Volledige scope: `docs/sessions/current.md` Sessie 160 entry.
-### Sessie 160 (cloud-spoor, gemerged 14 jun): SEO launch-perfectie + pre-launch consistency sweep (12 jun 2026)
-⚠️ **Never:**
-- Audit-agent-bevindingen fixen zonder eigen verificatie — 2 van 5 "kritieke" Explore-bevindingen waren vals alarm (DB_PASS TODO = bewuste gesimuleerde content; hydra/sqlmap/nikto localStorage-consent = by-design). Verifieer tegen werkende code + design-intent vóór fix.
-- Handmatige `grep -c 'test('` als test-count ground-truth — gaf 167/173/181; `npx playwright test --list --project=chromium` (197 tests/23 files) is canoniek.
-- Cache-bump beperken tot root + blog — Sessie 150 main.css v=150 bump miste `assets/legal/*.html` (10 sessies stale CSS). Bij elke `?v=` bump: grep over ALLE directories.
-
-✅ **Always:**
-- Consent-patroon-consistentie over alle security tools — hashcat/metasploit geharmoniseerd naar hydra/sqlmap/nikto `security_tools_consent` localStorage-patroon (`reset consent` werkt mee).
-- Parallelle Explore-audits (docs + site-content + code-vs-spec) + vals-alarm-verificatie + AskUserQuestion scope-keuzes = launch-readiness-audit. SEO-helft: canonicals + FAQPage + BreadcrumbList + E-E-A-T + 2 blogposts (10→12).
-- Defense-in-depth over alle 9 fixes + SEO-batch; beide live & geverifieerd. Volledige scope: `docs/sessions/current.md` Sessie 160 (cloud-spoor) entries.
-
-
-**Rotation:** Top-6 huidig: 160-161-162-163-164 (Sessie 159 → `docs/sessions/current.md` via 1-in-1-out; bulk-rotation Sessie 160: pre-158 historie reeds gearchiveerd). Volgende bulk-rotation Sessie 165. Pre-Sessie 160 historie + bulk-rotation administration → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 161-162-163-164-165 (Sessie 160 cloud-spoor → `docs/sessions/current.md` via 1-in-1-out). Bulk-rotatie 155-159 (Sessie 165 due) GEDEFERD — archief-bestemmingsconventie dubbelzinnig (recent.md t/m 149 oplopend; archive-q* 2024), bevestigen vóór uitvoeren. Volgende bulk-rotation Sessie 170. Pre-Sessie 161 historie → `docs/sessions/current.md`.
 
 ---
 
@@ -183,7 +183,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 4. **Update `.claude/CLAUDE.md`** (AI-context, lean — dit bestand)
    - "Recent Critical Learnings": prepend nieuwe sessie, behoud top 6, ouderen → `current.md`
    - "Sessie counter" regel
-   - **`**Last updated:**` regel:** VERVANG volledig (1 regel: datum + Sessie N + 1-zin scope-aanduiding + verwijzing naar `current.md`). **NIET appenden** — historie zit al in `current.md`. Hard limit: ≤500 bytes.
+   - **`**Last updated:** 14 jun 2026 (Sessie 165 — kwaliteits-/feitencontrole betaalde Gumroad-producten: pagina-claims → echte PDF-telling (13/19/15/47), Krol-zaak feitfout + ECLI-bronnen, helderheids-glosses CVE/CVSS/ICMP + OWASP-2025-namen exact, MailerLite→Brevo; meeste agent-'verdachte' feiten vals alarm; PDF's herbouwd. Volledig: `docs/sessions/current.md`)
    - **`**Version:**` regel:** VERVANG volledig (1 regel: versienummer + verwijzing naar `current.md`). **NIET appenden**. Hard limit: ≤500 bytes.
    - Live metrics in Quick Reference: **niet** updaten — verwijs naar TASKS.md
    - Forcing-function: `scripts/validate-docs.sh` Check 8 verifieert beide single-line constraints automatisch (#23.3)
@@ -202,7 +202,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 164
+**Sessie counter:** 165
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -255,5 +255,5 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ---
 
 **Last updated:** 14 jun 2026 (Sessie 164 — blog feitencontrole 13 posts: eigen bronverificatie ontkrachtte 6/7 agent-'verdachte' feiten als vals alarm; 1 echte fout Sony PSN→Pictures SQLi; OWASP verouderingsfout + 'Wat is nieuw in 2025'-kader; art.138ab 4-jaar-trigger-fix; precisie-nuances + natrekbare bronblokken (HTTP-200). Volledig: `docs/sessions/current.md`)
-**Version:** 5.38 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
+**Version:** 5.39 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
 
