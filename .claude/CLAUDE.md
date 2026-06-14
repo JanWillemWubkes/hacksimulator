@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 161)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 162)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 162: Pre-launch visueel materiaal — kit §4 GIF + screenshots via reproduceerbaar capture-script (14 jun 2026)
+⚠️ **Never:**
+- Een doc-claim als waarheid overnemen in een launch-asset zonder de tool te draaien — de kit beloofde een `[!]`-waarschuwing bij `nmap 192.168.1.1`, maar dat doelwit = router-profiel met alleen een `[?] TIP` (`[!]` hoort bij database-doelwit / offensieve tools). De visual legde de overdrijving bloot. Bron = `src/commands/*`, niet een andere doc.
+- Aannemen dat een gebundelde tool volledig is — Playwright's `ffmpeg-1011` is een gestripte build (geen gif-muxer/palettegen, alleen VP8/webm). Verifieer feature-support (`-muxers`/`-filters`) vóór je erop bouwt.
+- Rekenen op ongecommit werk dat een parallelle-terminal git-operatie overleeft — een `git stash -u` + pull elders wisselde de working tree; het werk leek weg.
+
+✅ **Always:**
+- Verifieer doc-claims tegen de bron-tool/code vóór ze in een extern-zichtbaar artefact belanden (generaliseert Sessie 161 "natelbaar = betrapbaar" naar marketing-visuals).
+- Pure-JS fallback (gifenc+pngjs) bij ontbrekende/gestripte system-tooling — geen sudo/wachtwoord, reproduceerbaar; frame-per-teken geeft volledige tempo/loop-controle. GIF-grootte schaalt met frame-aantal, niet duur → langere hold = lange-delay enkele frame.
+- localStorage-state (legal/onboarding/consent) vooraf via Playwright `addInitScript` wegzetten voor een schone capture-take — keys eerst in de bron verifiëren.
+- Recovery-route bij "verdwenen" werk: `git reflog` + `git stash list` vóór paniek; gegenereerde marketing-assets in gitignored map + het reproduceerbare script committen. Volledig: `docs/sessions/current.md` Sessie 162.
+
 ### Sessie 161: Launch-aankondigings-kit — Fase 4 groundwork voor publieke launch 18 jun 2026 (11 jun 2026)
 ⚠️ **Never:**
 - Marketingclaim overnemen uit bestaande site-tekst zonder bron-check — de homepage-leerpad noemt `netcat`/`wireshark` die níét als commando bestaan; copy-paste had de overdrijving doorgegeven. Bron = `src/commands/*` + commands-list.md, niet andere marketing.
@@ -140,7 +152,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Real-time drift-catch via Phase C zelf-test = direct forcing-function value-demonstration (Sessie 157 patroon repeats) — Phase C verwachtingstabel matched 100% met werkelijke output.
 - 2-op-rij infra-investment ritme bewijst sub-categorie repeatable — Frame-verdict-schema N/A MAAR discipline-laag identiek (pre-data scope + AskUserQuestion + defense-in-depth + drift-injection + final zelf-test). Volledige scope-details: `docs/sessions/current.md` Sessie 158 entry.
 
-**Rotation:** Top-6 huidig: 158-159-160-161 (bulk-rotation Sessie 160: pre-158 historie reeds in `docs/sessions/current.md`). Volgende bulk-rotation Sessie 165. Pre-Sessie 158 historie + bulk-rotation administration → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 158-159-160-161-162 (bulk-rotation Sessie 160: pre-158 historie reeds in `docs/sessions/current.md`). Volgende bulk-rotation Sessie 165. Pre-Sessie 158 historie + bulk-rotation administration → `docs/sessions/current.md`.
 
 ---
 
@@ -189,7 +201,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 161
+**Sessie counter:** 162
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -241,6 +253,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 11 jun 2026 (Sessie 161 — launch-aankondigings-kit Fase 4: positionering + 3 copy-varianten + WebSearch-geverifieerde kanaal-etiquette + visual-plan + launch-dag-volgorde 18 jun. Nuchtere toon, geen overdrijving. Volledig: `docs/sessions/current.md`)
-**Version:** 5.35 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
+**Last updated:** 14 jun 2026 (Sessie 162 — pre-launch visueel materiaal kit §4: GIF + desktop/mobiele screenshots via NEW reproduceerbaar `scripts/capture-launch-visuals.mjs` (pure-JS GIF gifenc+pngjs, localStorage-schone-take) + kit §4 feitelijke correctie (`nmap 192.168.1.1` = `[?] TIP`, geen `[!]`). Beelden gitignored. Volledig: `docs/sessions/current.md`)
+**Version:** 5.36 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
 

@@ -4,6 +4,41 @@
 
 ---
 
+## Sessie 162: Pre-launch visueel materiaal — launch-aankondigings-kit §4 (14 jun 2026)
+
+**Mission:** De enige onaf, launch-dag-blokkerende pre-launch-deliverable produceren: het visuele materiaal uit de kit §4 (GIF + screenshots). Heisenberg-keuze via AskUserQuestion (4 opties: visueel materiaal / M8 kickoff / #33 (c) perf / launch-checklist hardenen).
+
+**Work done:**
+- **3 artefacten** in `.playwright-mcp/launch/` (gitignored — externe marketing-assets, geen site-runtime-assets):
+  - `terminal-help-nmap.gif` — 1000×640, 44 frames, ~9,5 s, oneindige loop, 1,3 MB. Scenario `help`→`nmap 192.168.1.1`.
+  - `terminal-desktop.png` — 1280×720, statische fallback.
+  - `terminal-mobile-375.png` — 375×812 @2x (750×1624 px), toegankelijkheids-hook.
+- **NEW `scripts/capture-launch-visuals.mjs`** (~178 regels) — reproduceerbaar Playwright-capture-script tegen productie (`https://hacksimulator.nl/terminal.html`). Pure-JS GIF via `gifenc`+`pngjs` (frame-per-teken capture → vloeiende typ-animatie + volledige tempo/loop-controle). `addInitScript` zet `hacksim_legal_accepted`/`hacksim_first_visit`/`hacksim_analytics_consent` vooraf weg = schone take (geen modal/banner/muis). Donker thema via `colorScheme:'dark'`.
+- **Kit §4 feitelijke correctie** in `docs/launch-announcement-kit.md`: de kit beloofde een `[!]`-waarschuwing bij `nmap 192.168.1.1`, maar dat doelwit mapt naar het router-profiel (`src/commands/network/nmap.js:67`) dat alleen een `[?] TIP` geeft — de `[!] SECURITY`-regel verschijnt enkel bij een database-doelwit. Gecorrigeerd + artefact-paden/specs gedocumenteerd.
+- **package.json:** `gifenc` + `pngjs` als devDependencies.
+
+**Tempo-iteratie (Heisenberg-feedback):** eerste GIF 7,4 s voelde te snel. Typsnelheid 95/85→135/125 ms/teken + nmap-output-hold 1,5→3,6 s. Slimme truc: langere pauze via één lange-delay hold-frame i.p.v. meer frames → trager (9,5 s) én kleiner (2,1→1,3 MB), want GIF-grootte schaalt met frame-aantal, niet duur.
+
+**Git-recovery (incident):** tussen capture en commit had Heisenberg in een parallelle terminal een `git stash -u` + `git pull` (fast-forward naar `ea0f3cc`, merge Sessie 160-161 cloud+lokaal) gedaan → mijn sessie-werk leek verdwenen uit de working tree. Diagnose via reflog + `git stash list`: alles zat in `stash@{0}` ("lokaal werk voor pull 14 juni"); `-u` had ook het untracked script meegenomen. `git stash pop` (geen conflict, pull raakte deze bestanden niet) herstelde alles 1-op-1.
+
+**Tooling-pivot:** geplande ffmpeg-route afgekeurd — Playwright's gebundelde ffmpeg (`ffmpeg-1011`) is een gestripte build (12 encoders, geen gif-muxer/palettegen, alleen VP8/webm voor recording); system-ffmpeg vereist sudo-wachtwoord (non-interactief geblokkeerd). Pure-JS (gifenc+pngjs) = geen system-install, geen wachtwoord.
+
+**Commits:** `c299ce4` (launch-visuals: script + kit §4 correctie + devDeps).
+
+**Verificatie:** GIF-metadata (1000×640 / 44 frames / loop / 9,5 s / 1,3 MB) + late-frame render in Chromium (nmap-output met `← NL-context` per poort + `[?] TIP`, donker, geen banner) + beide PNG-dimensies. `validate-docs.sh` exit 0.
+
+**Metrics delta:** bundle delta 0 (alleen docs/scripts, buiten runtime-budget). Tests/specs onveranderd (197/23). devDeps +2 (gifenc, pngjs).
+
+**Learnings:**
+- **Doc-claim ≠ tool-werkelijkheid:** de kit-`[!]`-belofte was overdrijving die `nmap 192.168.1.1` niet waarmaakt. De visual legde het bloot. Bron-van-waarheid = `src/commands/*`, niet een andere doc (generaliseert Sessie 161 "natelbaar = betrapbaar").
+- **Verifieer feature-support van gebundelde tools** vóór je erop bouwt (`ffmpeg -muxers`/`-filters`) — gestripte builds bestaan.
+- **Ongecommit werk is fragiel over parallelle git-operaties** — een stash/pull/branch-switch in een andere terminal kan de working tree wisselen. Reflog + stash list zijn de recovery-route.
+- **GIF-grootte schaalt met frame-aantal, niet duur** — langere holds via lange-delay enkele frames = trager zonder groter bestand.
+
+**Next steps:** runbook Fase 2 op launch-dag 18 jun (content-pass) + Fase 4 backlinks (echte hefboom). Open feature-paden: #33 (c) CSS critical-path (needs pre-data scope-design) / M8 Analytics & Scaling (2%). Beelden vóór upload uit `.playwright-mcp/launch/` kopiëren (gitignored).
+
+---
+
 ## Sessie 161: Launch-aankondigings-kit — Fase 4 launch-groundwork (11 jun 2026)
 
 **Mission:** Launch-groundwork voor de publieke launch op donderdag 18 juni 2026 (runbook Fase 4). Géén site-code — een herbruikbare aankondigings-kit produceren die op de launch-dag direct uitvoerbaar is. Output: `docs/launch-announcement-kit.md`.
