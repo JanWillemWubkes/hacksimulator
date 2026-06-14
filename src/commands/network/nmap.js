@@ -64,7 +64,7 @@ function getPortScanResults(target) {
   if (target === 'localhost' || target === '127.0.0.1') {
     return scanProfiles.localhost;
   }
-  if (target.includes('192.168.1.1')) {
+  if (target === '192.168.1.1') {
     return scanProfiles.router;
   }
   if (target.includes('192.168.1')) {
