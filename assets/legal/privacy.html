@@ -28,22 +28,10 @@
   <link rel="canonical" href="https://hacksimulator.nl/assets/legal/privacy.html">
 
   <!-- Theme detection (respect user preference from main site) -->
-  <script>
-    document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');
-  </script>
+  <script src="/src/init-theme.js"></script>
 
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
-  <script data-cookieconsent="ignore">
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('consent', 'default', {
-      'ad_storage': 'denied',
-      'ad_user_data': 'denied',
-      'ad_personalization': 'denied',
-      'analytics_storage': 'denied',
-      'wait_for_update': 500
-    });
-  </script>
+  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
   <!-- Stylesheets -->
   <link rel="stylesheet" href="../../styles/main.css?v=150">
   <link rel="stylesheet" href="../../styles/legal.css?v=2">
@@ -87,7 +75,7 @@
     <tr>
       <td>Command history</td>
       <td>↑↓ pijltjestoetsen navigatie</td>
-      <td>Lijst van recent getypte commands</td>
+      <td>Volledige commands inclusief argumenten — alleen lokaal</td>
     </tr>
     <tr>
       <td>Onboarding status</td>
@@ -107,8 +95,12 @@
   </table>
 
   <p class="highlight">
-    ⚠️ <strong>Belangrijk:</strong> Command <em>arguments</em> worden NIET gelogd om privacy te beschermen.
-    Bijvoorbeeld: we tellen "ping" maar loggen niet "ping hacktarget.com".
+    ⚠️ <strong>Belangrijk — lokaal vs. verzonden:</strong> Je command history wordt
+    <strong>volledig (inclusief argumenten)</strong> in je eigen browser bewaard zodat ↑↓ werkt,
+    maar verlaat je apparaat <strong>nooit</strong>. Naar onze statistieken (Google Analytics) sturen
+    we uitsluitend de <em>naam</em> van een command, nóóit de argumenten: we tellen bijvoorbeeld
+    "ping", maar "ping hacktarget.com" wordt niet verzonden. Je wist de lokale history met het
+    <code>history -c</code>-command of via je browserinstellingen.
   </p>
 
   <h3>2.2 Analytics Data (Google Analytics 4)</h3>
@@ -187,7 +179,8 @@
   <ul>
     <li>Blijft <strong>lokaal in je browser</strong>, wordt NOOIT naar servers verzonden</li>
     <li>Gebruikt voor website functionaliteit (filesystem state, history, onboarding)</li>
-    <li>Je kunt het verwijderen via browser settings of "reset" command</li>
+    <li>Je kunt het verwijderen via je browserinstellingen, of deels via commands
+        (<code>reset</code> wist je filesystem, <code>history -c</code> wist je command history)</li>
   </ul>
 
   <h3>4.2 Analytics Data</h3>

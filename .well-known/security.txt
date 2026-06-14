@@ -1,0 +1,7 @@
+# Beveiligingscontact voor HackSimulator.nl — zie ook /SECURITY.md
+# RFC 9116 (https://www.rfc-editor.org/rfc/rfc9116)
+Contact: mailto:contact@hacksimulator.nl
+Expires: 2027-06-14T00:00:00.000Z
+Preferred-Languages: nl, en
+Canonical: https://hacksimulator.nl/.well-known/security.txt
+Policy: https://github.com/JanWillemWubkes/hacksimulator/blob/main/SECURITY.md

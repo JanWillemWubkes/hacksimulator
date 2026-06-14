@@ -122,8 +122,18 @@ class HistoryManager {
    * @returns {Array<string>} Matching commands
    */
   search(pattern) {
-    const regex = new RegExp(pattern, 'i');
-    return this.history.filter(cmd => regex.test(cmd));
+    // User input wordt live als regex-bron gebruikt (search-as-you-type).
+    // Een onvolledig/ongeldig patroon (bv. '[' of '(') zou new RegExp laten
+    // crashen, en een pathologisch patroon zou ReDoS kunnen veroorzaken.
+    // Vang dat af en val terug op een letterlijke substring-match — precies
+    // wat een gebruiker van history-zoeken (bash Ctrl+R) verwacht.
+    try {
+      const regex = new RegExp(pattern, 'i');
+      return this.history.filter(cmd => regex.test(cmd));
+    } catch (error) {
+      const needle = pattern.toLowerCase();
+      return this.history.filter(cmd => cmd.toLowerCase().includes(needle));
+    }
   }
 
   /**

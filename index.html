@@ -58,21 +58,7 @@
   <meta name="google-adsense-account" content="ca-pub-6345664385525701">
 
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
-  <script data-cookieconsent="ignore">
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('consent', 'default', {
-      'ad_storage': 'denied',
-      'ad_user_data': 'denied',
-      'ad_personalization': 'denied',
-      'analytics_storage': 'denied',
-      'wait_for_update': 500
-    });
-  </script>
-  <!-- AdSense Script (nodig voor crawler, toont GEEN ads zonder ad slots) -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6345664385525701"
-       crossorigin="anonymous"
-       ></script>
+  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore" data-adsense="ca-pub-6345664385525701"></script>
 
   <!-- Structured Data - JSON-LD -->
   <script type="application/ld+json">
@@ -746,37 +732,7 @@
           </form>
         </div>
       </div>
-      <script>
-      window.REQUIRED_CODE_ERROR_MESSAGE = 'Selecteer een landcode';
-      window.LOCALE = 'nl';
-      window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE = "Het e-mailadres lijkt niet te kloppen. Controleer het en probeer opnieuw.";
-      window.REQUIRED_ERROR_MESSAGE = "Vul je e-mailadres in.";
-      window.GENERIC_INVALID_MESSAGE = "Het e-mailadres lijkt niet te kloppen. Controleer het en probeer opnieuw.";
-      window.translation = {
-        common: {
-          selectedList: '{quantity} list selected',
-          selectedLists: '{quantity} lists selected'
-        }
-      };
-      var AUTOHIDE = Boolean(0);
-
-      // Prevent Brevo main.js from auto-scrolling on validation errors
-      // Brevo calls window.scrollTo({top, behavior:'smooth'}) after form interaction
-      (function() {
-        var origScrollTo = window.scrollTo.bind(window);
-        var blocking = false;
-        document.addEventListener('click', function(e) {
-          if (e.target.closest && e.target.closest('.sib-form')) {
-            blocking = true;
-            setTimeout(function() { blocking = false; }, 500);
-          }
-        }, true);
-        window.scrollTo = function() {
-          if (blocking) return;
-          return origScrollTo.apply(window, arguments);
-        };
-      })();
-      </script>
+      <script src="/src/ui/brevo-config.js"></script>
       <p class="newsletter-privacy">We respecteren je privacy. Lees ons <a href="/assets/legal/privacy.html">privacybeleid</a>.</p>
       <p class="newsletter-or-support">Of <a href="https://ko-fi.com/hacksimulator" target="_blank" rel="noopener noreferrer">steun het project met een koffie</a></p>
     </div>

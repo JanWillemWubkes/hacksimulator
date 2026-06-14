@@ -84,6 +84,13 @@
   status = 301
   force = true
 
+# security.txt: legacy locatie /security.txt → canonieke /.well-known/security.txt (RFC 9116)
+[[redirects]]
+  from = "/security.txt"
+  to = "/.well-known/security.txt"
+  status = 301
+  force = true
+
 # Security Headers
 [[headers]]
   for = "/*"
@@ -94,8 +101,11 @@
     # Prevent MIME sniffing
     X-Content-Type-Options = "nosniff"
 
-    # XSS Protection
-    X-XSS-Protection = "1; mode=block"
+    # XSS Protection: explicitly disabled (OWASP guidance).
+    # De legacy XSS-auditor introduceerde zelf kwetsbaarheden in oude browsers
+    # en wordt door moderne browsers genegeerd; "0" is de aanbevolen waarde.
+    # Echte XSS-bescherming komt van output-escaping (src/ui/renderer.js) + CSP.
+    X-XSS-Protection = "0"
 
     # Referrer Policy
     Referrer-Policy = "strict-origin-when-cross-origin"
@@ -104,14 +114,16 @@
     Cross-Origin-Opener-Policy = "same-origin"
 
     # Content Security Policy (M5 Performance: Moved from HTML meta tag for faster parsing)
-    # 'unsafe-hashes' allows onload event handlers for deferred CSS loading
+    # script-src: GEEN 'unsafe-inline'/'unsafe-hashes' — alle inline scripts zijn
+    #   geëxternaliseerd naar /src/*.js (consent-default.js, brevo-config.js,
+    #   init-theme.js, load-animations-css.js), gedekt door 'self'.
     # font-src: 'self' data: for base64 inline fonts, fonts.gstatic.com for Google Fonts
     # style-src: fonts.googleapis.com for Google Fonts CSS (Sessie 95: Font loading fix)
     # connect-src allows Google Analytics API calls (Sessie 91: GA4 integration)
     # M5.5 Monetization: AdSense domains added (pagead2.googlesyndication.com, googleads.g.doubleclick.net, adservice.google.com)
     # CSP strengthened in Sessie 96 - Security Review: Added object-src, base-uri, form-action
     # Sessie 126: Brevo newsletter (sibforms.com) added to script-src, style-src, connect-src, form-action; MailerLite removed
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-hashes' 'unsafe-inline' https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://ep2.adtrafficquality.google https://sibforms.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://sibforms.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net; frame-src https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://pagead2.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://sibforms.com https://*.sibforms.com; object-src 'none'; base-uri 'self'; form-action 'self' https://sibforms.com https://*.sibforms.com;"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://ep2.adtrafficquality.google https://sibforms.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://sibforms.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google; frame-src https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://pagead2.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://sibforms.com https://*.sibforms.com; object-src 'none'; base-uri 'self'; form-action 'self' https://sibforms.com https://*.sibforms.com;"
 
 # Strict Transport Security (Upgraded Sessie 97 - Security Headers B → A)
 # 1-year max-age: browser remembers HTTPS-only for 12 months

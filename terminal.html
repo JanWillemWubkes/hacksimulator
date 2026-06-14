@@ -126,22 +126,13 @@
       .modal{transition:opacity var(--transition-normal)}.modal.active{animation:fadeIn .3s ease-in}.modal.closing{animation:fadeOut .3s ease-out}
       html{scroll-behavior:smooth}
     </style>
-    <link rel="stylesheet" href="styles/animations.css?v=144" media="print" onload="this.media='all'">
+    <link id="animations-css" rel="stylesheet" href="styles/animations.css?v=144" media="print">
+    <script src="/src/load-animations-css.js"></script>
     <noscript><link rel="stylesheet" href="styles/animations.css?v=144"></noscript>
     <link rel="stylesheet" href="styles/command-search-modal.css?v=114">
 
     <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
-    <script data-cookieconsent="ignore">
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('consent', 'default', {
-        'ad_storage': 'denied',
-        'ad_user_data': 'denied',
-        'ad_personalization': 'denied',
-        'analytics_storage': 'denied',
-        'wait_for_update': 500
-      });
-    </script>
+    <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
 </head>
 <body>
     <!-- Skip Link for Accessibility -->
