@@ -13,8 +13,8 @@
 # (CLAUDE.md liep 14 sessies vooruit op PLANNING.md/TASKS.md).
 #
 # Usage:
-#   ./scripts/validate-docs.sh           — Checks 1-4 (fast, pre-commit hook)
-#   ./scripts/validate-docs.sh --deep    — Checks 1-7 (opt-in, end-of-sessie /summary gate)
+#   ./scripts/validate-docs.sh           — Checks 1-4 + 8 (fast, pre-commit hook)
+#   ./scripts/validate-docs.sh --deep    — Checks 1-8 (opt-in, end-of-sessie /summary gate)
 # Exit code: 0 = all valid, 1 = drift detected
 #
 # Sessie 157: --deep mode toegevoegd voor soft-drift detectie (Sessie 140 TODO fulfilled).
@@ -30,6 +30,21 @@
 #               Sessie 159: M0-M4 permanent-SKIP gedocumenteerd (item #23.2).
 #   - Check 7: Cross-doc Versie consistency CLAUDE.md `**Version:**` ↔ TASKS.md `**Versie:**`
 # Soft-drift = cijfers die langzaam verouderen zonder dat één invariant breekt.
+#
+# #23.3 (housekeeping pre-Sessie 160): Check 8 toegevoegd voor hard structuur-constraint.
+#   - Check 8: CLAUDE.md `**Last updated:**` + `**Version:**` regels ≤500 bytes each
+#               (forcing-function tegen single-line narrative-accumulation —
+#                CLAUDE.md 77,6 KB → 12 KB cleanup voorkomt herintreding via deze check).
+#               Runs in zowel fast als --deep mode (hard constraint, niet tolerance-gevoelig).
+#
+# Sessie 160 (public-launch prep): Check 9 toegevoegd voor SEO-metadata integriteit.
+#   - Check 9: sitemap.xml + feed.xml ↔ blog content-sync (hard constraint, fast + --deep).
+#       9a: per blogpost geldt sitemap <lastmod> >= JSON-LD datePublished
+#           (vangt "gewijzigd vóór gepubliceerd"-onmogelijkheid — bug gevonden bij launch-prep).
+#       9b: RSS <item>-count == aantal blogposts (blog/*.html minus index.html) +
+#           elke post-URL aanwezig in feed.xml (vangt ontbrekende post — OWASP ontbrak).
+#       Filesystem-ground-truth (zoals Check 6b): nieuwe posts tellen automatisch mee.
+#       ISO-datums (YYYY-MM-DD) vergelijken lexicaal correct via [[ "$a" < "$b" ]].
 
 set -o pipefail
 
@@ -360,14 +375,115 @@ if [ "$DEEP_MODE" = "1" ]; then
 fi  # end of --deep block
 
 # ============================================================
+# Check 8: CLAUDE.md Last updated + Version single-line constraint
+#   Hard structural constraint — runs in fast mode + --deep.
+#   Forcing-function tegen single-line narrative-accumulation
+#   pattern. Sessie 159 housekeeping #23.3 schoonde CLAUDE.md
+#   van 77,6 KB → 12 KB; deze check voorkomt herintreding.
+#   Cap: 500 bytes per regel — historie hoort in current.md
+#   (zie .claude/CLAUDE.md §Sessie Protocol stap 4).
+# ============================================================
+check_start "CLAUDE.md Last updated + Version single-line constraint"
+
+MAX_BYTES=500
+
+# 8a. Last updated regel ≤ MAX_BYTES
+LU_LINENO=$(grep -nE '^\*\*Last updated:\*\*' "$CLAUDE" | head -1 | cut -d: -f1)
+if [ -z "$LU_LINENO" ]; then
+  fail "CLAUDE.md: geen canonieke '**Last updated:**' regel gevonden"
+else
+  LU_BYTES=$(sed -n "${LU_LINENO}p" "$CLAUDE" | wc -c)
+  if [ "$LU_BYTES" -gt "$MAX_BYTES" ]; then
+    fail "CLAUDE.md Last updated regel ${LU_BYTES} bytes > ${MAX_BYTES} max — sessie-narratief moet naar docs/sessions/current.md (zie /summary stap 4 protocol)"
+  else
+    pass "CLAUDE.md Last updated regel ${LU_BYTES} bytes ≤ ${MAX_BYTES}"
+  fi
+fi
+
+# 8b. Version regel ≤ MAX_BYTES
+V_LINENO=$(grep -nE '^\*\*Version:\*\*' "$CLAUDE" | head -1 | cut -d: -f1)
+if [ -z "$V_LINENO" ]; then
+  fail "CLAUDE.md: geen canonieke '**Version:**' regel gevonden"
+else
+  V_BYTES=$(sed -n "${V_LINENO}p" "$CLAUDE" | wc -c)
+  if [ "$V_BYTES" -gt "$MAX_BYTES" ]; then
+    fail "CLAUDE.md Version regel ${V_BYTES} bytes > ${MAX_BYTES} max — version-narratief moet naar docs/sessions/current.md"
+  else
+    pass "CLAUDE.md Version regel ${V_BYTES} bytes ≤ ${MAX_BYTES}"
+  fi
+fi
+
+# ============================================================
+# Check 9: Sitemap/RSS ↔ blog content-sync integriteit
+#   Hard constraint — runs in fast mode + --deep. SEO-metadata
+#   forcing-function (Sessie 160 public-launch prep). Vangt de
+#   twee drift-bugs gevonden bij launch-prep: sitemap-lastmod
+#   ouder dan datePublished, en ontbrekende post in feed.xml.
+# ============================================================
+check_start "Sitemap/RSS ↔ blog content-sync integriteit"
+
+SITEMAP="sitemap.xml"
+FEED="feed.xml"
+
+if [ ! -f "$SITEMAP" ] || [ ! -f "$FEED" ]; then
+  fail "sitemap.xml of feed.xml niet gevonden (run vanuit project root)"
+else
+  # 9a: per blogpost sitemap <lastmod> >= JSON-LD datePublished + sitemap-entry aanwezig
+  sync_ok=1
+  for f in blog/*.html; do
+    base=$(basename "$f")
+    [ "$base" = "index.html" ] && continue
+
+    pub=$(grep -oE '"datePublished"[[:space:]]*:[[:space:]]*"[0-9]{4}-[0-9]{2}-[0-9]{2}"' "$f" \
+          | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' | head -1)
+    lastmod=$(grep -A1 "blog/${base}</loc>" "$SITEMAP" \
+              | grep -oE '<lastmod>[0-9]{4}-[0-9]{2}-[0-9]{2}</lastmod>' \
+              | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' | head -1)
+
+    if [ -z "$pub" ]; then
+      fail "9a $base: geen JSON-LD datePublished gevonden in blogpost"
+      sync_ok=0
+    elif [ -z "$lastmod" ]; then
+      fail "9a $base: geen sitemap <lastmod> entry (post mist in sitemap.xml?)"
+      sync_ok=0
+    elif [[ "$lastmod" < "$pub" ]]; then
+      fail "9a $base: sitemap lastmod=$lastmod ouder dan datePublished=$pub (logisch onmogelijk)"
+      sync_ok=0
+    fi
+  done
+  [ "$sync_ok" = "1" ] && pass "9a: alle blog-posts: sitemap lastmod >= datePublished + entry aanwezig"
+
+  # 9b: RSS item-count == blog-post-count + elke post-URL aanwezig in feed
+  blog_posts=$(ls blog/*.html 2>/dev/null | grep -vE '/index\.html$' | wc -l | tr -d ' ')
+  rss_items=$(grep -c '<item>' "$FEED")
+
+  if [ "$rss_items" != "$blog_posts" ]; then
+    fail "9b: RSS item-count ($rss_items) ≠ blog-post-count ($blog_posts) — post mist in feed.xml?"
+  else
+    pass "9b: RSS item-count match blog-posts ($rss_items)"
+  fi
+
+  feed_ok=1
+  for f in blog/*.html; do
+    base=$(basename "$f")
+    [ "$base" = "index.html" ] && continue
+    if ! grep -q "blog/${base}" "$FEED"; then
+      fail "9b: blog/${base} ontbreekt in feed.xml"
+      feed_ok=0
+    fi
+  done
+  [ "$feed_ok" = "1" ] && pass "9b: elke blog-post-URL aanwezig in feed.xml"
+fi
+
+# ============================================================
 # Summary
 # ============================================================
 echo ""
 echo "=========================================="
 if [ "$DEEP_MODE" = "1" ]; then
-  echo "Summary (--deep mode: Checks 1-7)"
+  echo "Summary (--deep mode: Checks 1-8)"
 else
-  echo "Summary (fast mode: Checks 1-4 — run with --deep for soft-drift Checks 5-7)"
+  echo "Summary (fast mode: Checks 1-4 + 8 — run with --deep for soft-drift Checks 5-7)"
 fi
 echo "=========================================="
 echo "Total checks run: $CHECK_COUNT"
@@ -379,9 +495,9 @@ else
   echo ""
   echo "Doc-drift gedetecteerd. Zie failures hierboven."
   if [ "$DEEP_MODE" = "1" ]; then
-    echo "Quickfix: synchroniseer sessie-counter / datums / monetization-keywords / bundle KB marker / milestone-tabel / Versie."
+    echo "Quickfix: synchroniseer sessie-counter / datums / monetization-keywords / bundle KB marker / milestone-tabel / Versie / CLAUDE.md single-line constraint."
   else
-    echo "Quickfix: synchroniseer sessie-counter, datums, of monetization-keywords."
+    echo "Quickfix: synchroniseer sessie-counter, datums, monetization-keywords, of CLAUDE.md Last updated/Version single-line."
   fi
   echo "Volledige protocol: PLANNING.md §Document Ownership + .claude/CLAUDE.md §Sessie Protocol"
   exit 1

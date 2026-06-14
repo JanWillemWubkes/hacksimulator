@@ -14,8 +14,8 @@ repos:
         pass_filenames: false
 
       - id: validate-docs
-        name: Validate cross-doc invariants (sessie-counter, datums, PRD-version, monetization-stack)
+        name: Validate cross-doc invariants + SEO-metadata sync (sessie-counter, datums, PRD-version, monetization-stack, sitemap/feed)
         entry: ./scripts/validate-docs.sh
         language: script
-        files: ^(\.claude/CLAUDE\.md|PLANNING\.md|TASKS\.md)$
+        files: ^(\.claude/CLAUDE\.md|PLANNING\.md|TASKS\.md|sitemap\.xml|feed\.xml|blog/.*\.html)$
         pass_filenames: false

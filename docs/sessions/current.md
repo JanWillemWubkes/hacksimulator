@@ -4,7 +4,60 @@
 
 ---
 
-## Sessie 160: SEO launch-perfectie — site-brede on-page/technische SEO + 2 nieuwe blogposts vóór marketing-launch (12 jun 2026)
+## Sessie 161: Launch-aankondigings-kit — Fase 4 launch-groundwork (11 jun 2026)
+
+**Mission:** Launch-groundwork voor de publieke launch op donderdag 18 juni 2026 (runbook Fase 4). Géén site-code — een herbruikbare aankondigings-kit produceren die op de launch-dag direct uitvoerbaar is. Output: `docs/launch-announcement-kit.md`.
+
+**Work done:**
+- **Feitelijke verificatie vóór copy** (kernwaarde van deze sessie): elke marketingclaim getoetst tegen `index.html`, `docs/commands-list.md` en `src/commands/*`. Resultaat:
+  - "40+ commando's" = veilige, site-consistente claim (41 command-files; ~38 user-facing — `hint`/`next`/`welcome` zijn tutorial-intern). Geen exact getal dat een lezer kan natellen.
+  - 11 blogposts (niet 10 — feed had OWASP-post toegevoegd in Sessie 160).
+  - **Twee anti-overdrijving-flags:** `netcat`/`wireshark` staan op de homepage-leerpad maar bestaan níét als commando; en de FAQ stelt expliciet dat er géén erkend certificaat is (het `certificates`-commando maakt een completion-certificaat, geen diploma). Beide uit de copy geweerd.
+- **NEW `docs/launch-announcement-kit.md`** met 5 secties: (1) positionering (1 kernzin, toegankelijkheid-eerst) + geverifieerde-feitenlijst als single-source-of-truth voor alle varianten; (2) 3 plak-klare copy-varianten (kort X / medium fora / LinkedIn understated, met `[invullen]`-placeholders i.p.v. opgeklopt persoonlijk verhaal); (3) kanalenlijst NL/EU met per kanaal self-promo-etiquette + werkend format + CP/TP-vlag; (4) visual-plan (`help`→`nmap`-GIF primair + mobiele screenshot); (5) launch-dag tijdschema 18 jun (communities-eerst→socials).
+- **Kanaal-etiquette live geverifieerd via WebSearch** (niet uit geheugen — product-kwaliteitsstandaard): HN Show-HN = uittebproberen-only + factueel/geen-marketing + geen company-username/booster-comments; Reddit = value-first, sidebar-per-sub varieert sterk, gebruik designated project-threads; EHGN (Ethical Hacker Groep Nederland) Discord 2.130+ leden = sterke NL beginners-doelgroep-match; Tweakers = strenge reclame-regels. Eerlijke beperking gedocumenteerd: exacte sidebar-regels zijn niet betrouwbaar vooraf indexeerbaar → "check op het moment van posten".
+- **Memory** `feedback_tone_no_hype` aangemaakt (nuchtere toon, geen mooipraterij/LinkedIn-theater) + pointer in MEMORY.md, gelinkt aan `feedback_product_quality`.
+
+**Strategische keuzes (AskUserQuestion):** positionering = toegankelijkheid-eerst (gratis/NL/geen-installatie); doelgroep = dubbel spoor studenten/overstappers + nieuwsgierige hobbyisten (niet docenten); toon = nuchter/understated, expliciet ook LinkedIn (user vindt gangbare LinkedIn-toon overdreven — kernfeedback).
+
+**Commits:** geen (docs-only; commit volgt indien Heisenberg dat wil).
+
+**Learnings:**
+- **Verifieer marketingclaims tegen de bron, niet tegen andere marketing:** de homepage-leerpad zelf noemt `netcat`/`wireshark` die niet bestaan — een copy-paste uit bestaande site-tekst had de overdrijving doorgegeven. Bron = command-files + commands-list.md.
+- **Nuchterheid is hier niet alleen smaak maar werkt mechanisch:** HN straft marketing-taal direct af, Reddit/EHGN draaien op value-first. De toon-keuze van de user is congruent met wat de kanalen belonen.
+- **Single-source-of-truth feitenlijst bovenin de kit** voorkomt drift tussen de 3 copy-varianten — dezelfde defense-in-depth-logica als validate-docs Check 8/9 op de docs.
+
+**Next steps:** runbook Fase 2 (content-pass) + Fase 3 (GSC indexering-monitoring) + uitvoering kit op 18 jun (visuals opnemen, posts plaatsen volgens tijdschema). #33 (c)/M8 blijven open.
+
+**Metrics:** bundle onveranderd (alleen `docs/`, buiten runtime-budget); tests 23 spec / 172. Sessie counter 160→161, Versie 5.34→5.35.
+
+---
+
+## Sessie 160: Public-launch SEO-metadata prep + drift-guard Check 9 + GSC Domain-launch (11 jun 2026)
+
+**Mission:** Site is live maar nooit publiek aangekondigd. Strategisch advies + uitvoering rond datum-strategie/SEO voor de publieke launch, plus drift-preventie zodat de gevonden bugs niet terugkeren.
+
+**Work done:**
+- **Datum-strategie besluit "disciplined hybrid":** historische `datePublished` behouden (autoriteitsverhaal nov 2025–mei 2026), `dateModified`/`lastmod` alleen bumpen op pagina's die op de launch-dag écht aangeraakt worden (conform Google anti-kunstmatig-verversen-richtlijn). Herdateren-naar-launch afgewezen (oogt auto-gegenereerd, verspilt geschiedenis).
+- **Fase 1 metadata-bugs (commit `0584b3e`):** sitemap.xml 3× `lastmod < datePublished` gecorrigeerd (welkom/wat-is-ethisch-hacken/terminal-basics → = datePublished); feed.xml ontbrekende OWASP-post toegevoegd (10→11 items), newest-first geordend, `lastBuildDate` ververst, nmap-weekdag `Sat`→`Sun` gefixt. Beide well-formed XML gevalideerd via Python (xmllint absent).
+- **Drift-guard `validate-docs.sh` Check 9 (commit `0584b3e`):** 9a `sitemap lastmod >= JSON-LD datePublished` per post (lexicale ISO-vergelijking `[[ "$a" < "$b" ]]`); 9b RSS item-count == blog-post-count + elke post-URL aanwezig in feed. Filesystem-ground-truth (zoals Check 6b). Detectie-logica zelf-getest op synthetische drift (vangt beide bugs van vandaag, laat fixed-state door).
+- **Pre-commit trigger-fix (commit `60f4429`):** validate-docs hook triggerde alleen op core-docs (CLAUDE/PLANNING/TASKS) → Check 9 vuurde niet bij sitemap/feed/blog-commits. `files:`-filter verbreed naar `sitemap.xml|feed.xml|blog/.*\.html`. Geverifieerd via `pre-commit run` (was "Skipped" → "Passed").
+- **Runbook (commit `0584b3e`):** `docs/public-launch-runbook.md` — Fase 2 (content-pass), Fase 3 (GSC), Fase 4 (aankondiging/backlinks), datum-agnostisch met `<LAUNCH>`-placeholder.
+- **GSC-launch uitgevoerd (Heisenberg, samen):** Domain-property `hacksimulator.nl` **auto-geverifieerd** via domeinprovider (TransIP — geen handmatig DNS-werk); sitemap.xml gesubmit (volledige URL vereist bij Domain-property = gotcha "Ongeldig sitemapadres" bij relatief pad); indexering aangevraagd voor 2 diepe blogposts (homepage/terminal/blog-hub bleken **al geïndexeerd** ondanks geen aankondiging).
+
+**Commits:** `0584b3e` (fix/seo: metadata-sync + Check 9 + runbook) + `60f4429` (fix/infra: hook-trigger).
+
+**Learnings:**
+- Site was al **ondiep** geïndexeerd door open `robots.txt` + bereikbare sitemap; kernpagina's bekend bij Google, diepe posts niet → bevestigt keep-historical-dates besluit (verstoor geen reeds-geïndexeerde pagina's) én backlinks (Fase 4) als sleutel om de blog te "ontsluiten".
+- Domain-property GSC vereist de **volledige** sitemap-URL (geen relatief `sitemap.xml` zoals bij URL-prefix) — er is geen enkele prefix om voor te plakken.
+- Eigen oplossing-gat eerlijk gevonden+gefixt: een guard in een script ≠ actieve guard als de hook-`files:`-filter de trigger-bestanden uitsluit.
+
+**Next steps:** Fase 2 content-pass op launch-dag; Fase 4 aankondiging/backlinks (de echte hefboom); #33 (c) perf-audit §2j of M8 feature-completion nog open (Heisenberg-besluit).
+
+**Metrics:** bundle onveranderd (sitemap/feed/scripts buiten Terminal Core budget); tests 23 spec / 172. Sessie counter 159→160, Versie 5.33→5.34.
+
+---
+
+## Sessie 160 (cloud-spoor, gemerged 14 jun): SEO launch-perfectie — site-brede on-page/technische SEO + 2 nieuwe blogposts (12 jun 2026)
 
 **Missie:** Heisenberg lanceert over ~6 dagen de actieve marketing van hacksimulator.nl. Doel: SEO perfectioneren voor maximaal organisch verkeer. Drie parallelle Explore-audits (on-page, technisch, content) + AskUserQuestion scope-bevestiging (GSC al via DNS geverifieerd / fixes + 1-2 posts / marketing-launch) → plan-file `/root/.claude/plans/hi-claude-we-gaan-warm-blanket.md`.
 
@@ -35,7 +88,7 @@
 - M8 feature-completion of perf-audit §2j scope-design blijven open als Sessie 161 kandidaten (zie Sessie 159 aanbeveling)
 ---
 
-## Sessie 160 (vervolg): Pre-launch consistency sweep — 3 parallelle audits + 9 fixes vóór marketing launch (12 jun 2026)
+## Sessie 160 (cloud-spoor, vervolg): Pre-launch consistency sweep — 3 parallelle audits + 9 fixes (12 jun 2026)
 
 **Scope:** Heisenberg's cold-start: "we gaan binnenkort de marketing launch doen, check project/site op inconsistenties". 3 parallelle Explore-audits (docs-consistency + site-content + code-vs-spec) → bevindingen geverifieerd (vals-alarm-filtering) → AskUserQuestion 3 scope-vragen (consent-harmonisatie JA / cache bijtrekken-naar-max / alle kleine fixes mee) → 9 fixes geïmplementeerd. **13e uitkomst-categorie: launch-readiness-audit** (multi-domain consistency sweep, geen feature, geen perf-cyclus).
 
