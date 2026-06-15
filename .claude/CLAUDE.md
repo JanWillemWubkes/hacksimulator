@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 164)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 166)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 166: Pre-launch security-audit + CSP-hardening (14 jun 2026)
+⚠️ **Never:**
+- CSP `script-src` `'unsafe-inline'` wegwerken via hashes op een host die HTML minificeert — Netlify `build.processing.html minify` verandert de bytes → SHA-256 breekt. Externaliseer inline scripts naar `/src/*.js` (bestaand `init-theme.js`-patroon); nonce/Edge-Function schendt "no backend".
+- Een geëxternaliseerd consent-default-blok los/async laden naast een async AdSense-tag — race: AdSense kan vóór de `denied`-defaults draaien (ads zonder toestemming). Injecteer AdSense ná de defaults vanuit consent-default.js; verifieer in `dataLayer`.
+- Een agent-bevinding of een "rode" E2E-test als waar/jouw-schuld aannemen zonder bron- resp. schone-baseline-verificatie — privacy-agent claimde vals "geen unsafe-inline in script-src"; 2/3 testfailures faalden óók zonder de diff (pre-existing), 1 was flaky (`git stash` + rerun scheidt regressie van ruis).
+
+✅ **Always:**
+- Launch-kritische CSP browser-verifiëren onder de échte header (lokale server die `netlify.toml`-CSP injecteert) — een gewone static server stuurt geen CSP, dus violations blijven onzichtbaar; zo kwamen 2 pre-existing gaten boven (frame-src/img-src `adtrafficquality` = geblokkeerde AdSense fraud-beacons, F6).
+- `gtag` als globale binding houden bij externalisatie — consent.js/init-analytics.js roepen 'm als kale identifier; een IIFE-wrapper breekt de consent-update stil.
+- Veilige fixes eerst, de risicovolle (CSP) als laatste met volledige verificatie als gate (nul console-violations per pagina-archetype + E2E-baseline-vergelijking).
+- Bij her-verzoek tot veiligheidscheck vóór launch een eerder advies durven herroepen als verificatie risico toont — correctheid boven consistentie ([[feedback_verify_before_launch_critical]]). Volledig: `docs/sessions/current.md` Sessie 166.
+
 ### Sessie 165: Kwaliteits-/feitencontrole betaalde Gumroad-producten (14 jun 2026)
 ⚠️ **Never:**
 - Een verdacht feit in een betaald product "fixen" vóór eigen bronverificatie — élk verdacht juridisch punt + de OWASP-2025-volgorde bleek vals alarm; "20 april 2016" léék fout maar is de officiële ingangsdatum (maxius.nl), eJPT→INE was correcter dan de zoek-snippet ("OffSec"). Blind volgen had correcte content kapot-gefixt (generaliseert Sessie 164 naar betaalde producten).
@@ -143,17 +155,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - AskUserQuestion bij positionerings-/toon-/doelgroep-keuzes (strategisch/product = Heisenberg-territorium) vóór copy schrijven — die 3 keuzes stuurden álle output.
 - `[invullen]`-placeholders voor persoonlijke details i.p.v. namens de user een mooier-dan-waar verhaal schrijven — houdt de eerlijkheid bij de eigenaar. Volledige scope: `docs/sessions/current.md` Sessie 161 entry.
 
-### Sessie 160: Public-launch SEO-metadata prep + drift-guard Check 9 + GSC Domain-launch (11 jun 2026)
-⚠️ **Never:**
-- `dateModified`/`lastmod` bulk-bumpen naar launch-datum zonder echte content-touch — Google straft kunstmatig-verversen af + wantrouwt `lastmod` dat overal identiek "vandaag" is. Elke datum = waar feit.
-- Sitemap `lastmod` < `datePublished` laten staan — logisch onmogelijk ("gewijzigd vóór gepubliceerd"), schaadt metadata-vertrouwen. Check 9a vangt dit nu mechanisch.
-- Een guard in een script vertrouwen zonder te verifiëren dat de hook-`files:`-filter de trigger-bestanden dekt — Check 9 zat in validate-docs.sh maar hook triggerde alleen op core-docs → guard vuurde niet bij sitemap/feed/blog-commits.
-
-✅ **Always:**
-- Disciplined-hybrid datum-strategie bij late publieke launch — historische `datePublished` behouden (autoriteitsverhaal), `dateModified` alleen bij echte verbetering. Beste voor geloofwaardigheid + SEO tegelijk; herdateren-naar-launch afgewezen.
-- GSC = feitelijke launch-hefboom (niet de datums): Domain-property (volledige sitemap-URL vereist!) + indexering-aanvraag top-5 + backlinks ontsluiten de diepe content die Google anders ondiep crawlt.
-- Drift-guard detectie-logica zelf-testen op synthetische drift (vangt-het-de-bug?) vóór vertrouwen — defense-in-depth-persistence-pattern Sessie 140 → 160 schaalt over SEO-metadata. Filesystem-ground-truth (Check 9b: RSS-count == `ls blog/*.html` minus index) → nieuwe posts tellen automatisch mee. Volledige scope: `docs/sessions/current.md` Sessie 160 entry.
-**Rotation:** Top-6 huidig: 161-162-163-164-165 (Sessie 160 cloud-spoor → `docs/sessions/current.md` via 1-in-1-out). Bulk-rotatie 155-159 (Sessie 165 due) GEDEFERD — archief-bestemmingsconventie dubbelzinnig (recent.md t/m 149 oplopend; archive-q* 2024), bevestigen vóór uitvoeren. Volgende bulk-rotation Sessie 170. Pre-Sessie 161 historie → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 161-162-163-164-165-166 (Sessie 160 → `docs/sessions/current.md` via 1-in-1-out). Bulk-rotatie 155-159 (Sessie 165 due) GEDEFERD — archief-bestemmingsconventie dubbelzinnig (recent.md t/m 149 oplopend; archive-q* 2024), bevestigen vóór uitvoeren. Volgende bulk-rotation Sessie 170. Pre-Sessie 161 historie → `docs/sessions/current.md`.
 
 ---
 
@@ -202,7 +204,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 165
+**Sessie counter:** 166
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -254,6 +256,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 14 jun 2026 (Sessie 164 — blog feitencontrole 13 posts: eigen bronverificatie ontkrachtte 6/7 agent-'verdachte' feiten als vals alarm; 1 echte fout Sony PSN→Pictures SQLi; OWASP verouderingsfout + 'Wat is nieuw in 2025'-kader; art.138ab 4-jaar-trigger-fix; precisie-nuances + natrekbare bronblokken (HTTP-200). Volledig: `docs/sessions/current.md`)
-**Version:** 5.39 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
+**Last updated:** 14 jun 2026 (Sessie 166 — pre-launch security-audit + CSP-hardening: 'unsafe-inline'/'unsafe-hashes' uit script-src via inline-script-externalisatie (consent-default/brevo-config/init-theme/load-animations-css), AdSense-consent-race gesloten, X-XSS-Protection->0, history ReDoS-fix, privacy feitfout, frame-src/img-src adtrafficquality F6, security.txt+SECURITY.md; browser-geverifieerd nul CSP-violations + E2E 183 passed. Volledig: `docs/sessions/current.md`)
+**Version:** 5.40 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
 

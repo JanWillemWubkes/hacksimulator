@@ -4,6 +4,31 @@
 
 ---
 
+## Sessie 166: Pre-launch security-audit + CSP-hardening (14 jun 2026)
+
+**Mission:** Volledige security-audit van het project zélf vóór de marketing-launch, zodat een security-/ethisch-hacken-product geen eigen zwakheden bevat (geloofwaardigheid). Plan-mode: 3 parallelle Explore-agents (XSS-surface / headers+integraties / privacy+deps) → eigen bronverificatie → AskUserQuestion (scope + timing) → uitvoeren met verificatie als gate.
+
+**Work done:**
+- **Audit-uitkomst:** codebase structureel gezond. Geverifieerd in orde: renderer-escaping (`src/ui/renderer.js:420` `_formatText` escapet eerst, formatteert daarna), geen secrets (alleen publieke IDs), sterke header-set (HSTS/X-Frame/nosniff/COOP/Permissions-Policy), Consent Mode v2 gate, `rel=noopener`, `_headers` (cache) ≠ conflict met `netlify.toml` (security).
+- **F1 — `'unsafe-inline'`/`'unsafe-hashes'` uit CSP `script-src`** via externalisatie (niet hashen — Netlify HTML-minify breekt hashes; niet nonce — schendt "no backend"). NEW `src/analytics/consent-default.js` (gedeeld, gtag globaal gehouden, injecteert AdSense ná consent-defaults → race dicht), NEW `src/ui/brevo-config.js`, NEW `src/load-animations-css.js` (vervangt inline `onload=`); legal-pagina's inline theme → bestaande `init-theme.js`. 11 HTML-files via geverifieerd Python-transform (occurrence-asserts). Statische AdSense-tag van 4 ad-pagina's verwijderd.
+- **F2** `X-XSS-Protection: 1; mode=block` → `0` (OWASP). **F4** `history.search()` try/catch + substring-fallback (invalide/ReDoS-regex). **F3** `privacy.html` feitfout gecorrigeerd (claimde misleidend "args niet gelogd" pal onder command-history-rij; args wórden lokaal bewaard ≠ verzonden; wissen via `history -c`, niet `reset`). **F6** (pre-existing, gevonden tijdens verificatie) CSP `frame-src` + `img-src` kregen `ep1/ep2.adtrafficquality.google` (AdSense fraud-frame + sodar-beacon werden geblokkeerd).
+- **Trust:** NEW `.well-known/security.txt` (RFC 9116) + `SECURITY.md` + `_headers` text/plain + `/security.txt` redirect in `netlify.toml`.
+- **Verificatie:** lokale server die de échte `netlify.toml`-CSP injecteert (gewone static server stuurt geen CSP) → Playwright per pagina-archetype: index/terminal/legal/brevo = **nul CSP-violations**; consent-default-denied vóór AdSense-injectie bevestigd in `dataLayer`; `gtag` globaal werkt; animations.css media→all. E2E chromium **183 passed**; de 3 "failures" via `git stash` schone-baseline ontmaskerd als 2 pre-existing + 1 flaky (geen regressie).
+
+**Commits:** `aa0396d` (security-werk, branch `security/csp-hardening-audit`) + deze /summary doc-sync.
+
+**Learnings:**
+- Eigen bronverificatie redde de centrale bevinding: een Explore-agent claimde vals "geen unsafe-inline in script-src" terwijl `netlify.toml` het tegendeel toont.
+- De gevraagde extra veiligheidscheck vóór uitvoering vond een echte consent-vs-async-AdSense race in het eerste plan → opgelost door AdSense ná de defaults te injecteren. Memory `feedback_verify_before_launch_critical` toegevoegd.
+- Een "rode" test is pas een regressie als 'ie groen is zónder de diff: stash-baseline scheidde 2 pre-existing + 1 flaky van echte regressie.
+- F6 was alleen zichtbaar omdat ik de echte CSP-header serveerde — anders blijven third-party CSP-gaten onzichtbaar in lokale tests.
+
+**Next steps (handmatig voor Heisenberg):** branch pushen → Netlify deploy-preview met de echte headers verifiëren (de enige check die lokaal niet 100% na te bootsen was: Netlify-header-toepassing + HTML-minify-interactie) → merge naar `main` = productie-deploy. Niet-gedraaid: firefox/webkit E2E (wijzigingen browser-agnostisch, laag risico).
+
+**Metrics delta:** src/ 636796 bytes (+3 kleine JS-files, verwaarloosbaar); E2E 23 specs / 172 tests (ongewijzigd). CSP `script-src` na: `'self'` + Google/Brevo hosts, geen `'unsafe-inline'`/`'unsafe-hashes'`.
+
+---
+
 ## Sessie 165: Kwaliteits-/feitencontrole betaalde Gumroad-producten (14 jun 2026)
 
 **Mission:** Grondige inhoudelijke kwaliteits- en feitencontrole op de betaalde Gumroad-producten (`docs/products/`), met een hógere lat dan de Sessie-164-blog-audit want dit zijn betaalde producten (memory `feedback_product_quality`: 100% accuraat). Plan-mode: verkennen → eigen bronverificatie → AskUserQuestion-scopekeuzes → uitvoeren.
