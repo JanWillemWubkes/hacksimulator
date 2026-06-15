@@ -4,6 +4,29 @@
 
 ---
 
+## Sessie 167: Doc-drift fix M9 — esbuild post-launch-blok uit milestone-sectie (15 jun 2026)
+
+**Mission:** Losstaande doc-drift opruimen (geen site-code). `scripts/validate-docs.sh --deep` Check 6 faalde op M9: de milestone-tabel zegt `19/19` (100%), maar de M9-sectie telt via `[x]+[ ]` ground-truth `19/24` (79%). Plan-mode: reproduceren → bron lezen → bewuste (a)/(b)-beslissing met aanbeveling vóór edit.
+
+**Work done:**
+- **Diagnose:** In Sessie 162/163 is een esbuild content-hash post-launch-blok (`### 🔵 OPEN (post-launch): esbuild content-hash build + cache-correctheid`, 5 `[ ]`-items) toegevoegd ALS h3 *binnen* de M9-sectie. Check 6 bakent M9 af als h2-emoji-anchored awk-range `/^## 🧹 M9:/,/^## 🎓 M6:/` → de h3 valt binnen die range → 19 `[x]` + 5 `[ ]` = 24. Fast-mode (pre-commit-gate) telt geen sectie-checkboxes en miste dit; alleen `--deep` vangt het.
+- **Beslissing (b), bevestigd via AskUserQuestion:** esbuild = nieuwe post-launch scope, GEEN M9-taak. Bron-onderbouwing: M9 Status = ✅ Voltooid (Sessie 105-110), footer `Total Tasks: 19`, 6 sub-secties tellen exact op tot 19 (3+4+4+3+3+2) allen `[x]`; het esbuild-blok zegt letterlijk "**Geen pre-launch werk**", is getagd Sessie 162 (50+ sessies ná M9-closure), raakt PRD §13 "no build step" red line, en de eerste taak is een PRD/PLANNING scope-*besluit* (nog niet genomen). Optie (a) (reopen → 🔵 In uitvoering) zou een afgeronde sprint heropenen voor niet-besloten werk = drift institutionaliseren.
+- **Fix:** Python-script met occurrence-asserts (`/tmp/move_esbuild.py`) — knip het blok van de h3-anchor t/m (excl.) `### Bundle Size Optimization`, plak het na `- [ ] **Cookie-less Tracking**` in `## 🔮 Post-MVP Features` (regel 686, vóór de M9-h2 → buiten élke `MILESTONE_RANGES`-entry). Asserts: h3 exact 1×, 5×`[ ]` behouden in blok, ná move M9-range 0 `[ ]` + 19 `[x]`, h3 buiten M9-range, totaal-`[ ]` ongewijzigd (97→97). Twee cosmetische witregel-artefacten (cut nam de scheider mee → ontbrekende leegregel vóór `### Bundle Size Optimization`; paste verdubbelde een leegregel vóór de M9-`---`) handmatig met Edit gecorrigeerd.
+- **Gate:** `bash scripts/validate-docs.sh --deep` exit 0; M9 nu `OK 19/19` + `OK 100%`, nul FAIL.
+
+**Commits:** deze /summary doc-sync.
+
+**Learnings:**
+- De "fix" voor een sectie↔tabel-drift is fysieke *verplaatsing* over een h2-grens, niet cijfers herschrijven: Check 6's awk-range is h2-anchored, dus een h3-subsectie erft de milestone-telling van z'n omhullende h2. Topische verwantschap (esbuild ≈ M9 bundle/cache-sprint) ≠ sprint-lidmaatschap.
+- Fast-mode vs `--deep` asymmetrie bevestigd in de praktijk: een drift die de pre-commit-gate passeert maar `--deep` faalt, betekent dat de drift via sectie-checkbox-telling binnenkwam — precies het gat dat Sessie 158 #23.1 dichtte.
+- Occurrence-asserts bewaken semantiek (checkbox-counts, h3-uniciteit, range-grenzen) maar niet cosmetische witruimte → losse visuele controle ná de geautomatiseerde move blijft nodig bij blok-verplaatsingen in markdown.
+
+**Next steps:** Geen. Bulk-rotatie 155-159 in CLAUDE.md blijft apart gedeferd (dubbelzinnige archief-bestemming). esbuild content-hash blijft post-launch backlog-item, geblokkeerd op PRD §13 scope-besluit.
+
+**Metrics delta:** Doc-only. Bundle onveranderd (src 637 / styles 387 / blog 427 / assets 704 KB — alle binnen Check 5 ±5% tolerantie). E2E 23 specs / 172 tests ongewijzigd. M9 19/19 (100%).
+
+---
+
 ## Sessie 166: Pre-launch security-audit + CSP-hardening (14 jun 2026)
 
 **Mission:** Volledige security-audit van het project zélf vóór de marketing-launch, zodat een security-/ethisch-hacken-product geen eigen zwakheden bevat (geloofwaardigheid). Plan-mode: 3 parallelle Explore-agents (XSS-surface / headers+integraties / privacy+deps) → eigen bronverificatie → AskUserQuestion (scope + timing) → uitvoeren met verificatie als gate.

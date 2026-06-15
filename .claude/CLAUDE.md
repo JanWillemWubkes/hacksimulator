@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 166)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 167)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 167: Doc-drift fix M9 — esbuild post-launch-blok uit milestone-sectie (15 jun 2026)
+⚠️ **Never:**
+- Een sectie↔tabel-drift "fixen" door de tabelcijfers te herschrijven — de echte fix is fysieke *verplaatsing* over een h2-grens. Check 6's awk-range is h2-emoji-anchored (`/^## 🧹 M9:/,/^## 🎓 M6:/`), dus een h3-subsectie erft de milestone-checkbox-telling van z'n omhullende h2; 5 `[ ]` binnen M9 → 19/24 i.p.v. 19/19.
+- Topisch verwante toekomst-scope onder een afgeronde milestone-h3 parkeren — esbuild (Sessie 162, post-launch, raakt PRD §13 red line) zat onder M9 (bundle/cache-sprint, ✅ Voltooid Sessie 110). Verwantschap ≠ sprint-lidmaatschap; het heropende M9 vals in `--deep`.
+- Vertrouwen dat de pre-commit-gate (fast-mode) sectie-drift vangt — fast-mode telt geen sectie-checkboxes; alleen `--deep` doet dat. Een drift die fast passeert maar `--deep` faalt, kwam binnen via checkbox-telling (het gat dat Sessie 158 #23.1 dichtte).
+
+✅ **Always:**
+- Bij een (a)/(b)-scope-beslissing over milestone-toewijzing: bron-onderbouwing eerst (Status, `Total Tasks`-footer, sub-sectie-som, "geen pre-launch werk"-labels, tag-sessie) en de keuze met aanbeveling via AskUserQuestion vóór de edit — milestone-membership is scope-territorium (Heisenberg).
+- Blok-verplaatsing in grote docs (>25k tokens) via Python met occurrence-asserts: h3-uniciteit, behoud `[ ]`-count in blok, ná-move M9-range 0 `[ ]`/19 `[x]`, h3 buiten range, totaal-`[ ]` ongewijzigd. Asserts bewaken semantiek, niet witruimte.
+- Cosmetische witregel-controle ná een geautomatiseerde markdown-move — een cut neemt de sectie-scheider mee (ontbrekende leegregel), een paste verdubbelt er een; occurrence-asserts zien dat niet.
+- `--deep` exit 0 als harde gate ná de fix (M9 `OK 19/19` + `OK 100%`). Volledig: `docs/sessions/current.md` Sessie 167.
+
 ### Sessie 166: Pre-launch security-audit + CSP-hardening (14 jun 2026)
 ⚠️ **Never:**
 - CSP `script-src` `'unsafe-inline'` wegwerken via hashes op een host die HTML minificeert — Netlify `build.processing.html minify` verandert de bytes → SHA-256 breekt. Externaliseer inline scripts naar `/src/*.js` (bestaand `init-theme.js`-patroon); nonce/Edge-Function schendt "no backend".
@@ -143,19 +155,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - localStorage-state (legal/onboarding/consent) vooraf via Playwright `addInitScript` wegzetten voor een schone capture-take — keys eerst in de bron verifiëren.
 - Recovery-route bij "verdwenen" werk: `git reflog` + `git stash list` vóór paniek; gegenereerde marketing-assets in gitignored map + het reproduceerbare script committen. Volledig: `docs/sessions/current.md` Sessie 162.
 
-### Sessie 161: Launch-aankondigings-kit — Fase 4 groundwork voor publieke launch 18 jun 2026 (11 jun 2026)
-⚠️ **Never:**
-- Marketingclaim overnemen uit bestaande site-tekst zonder bron-check — de homepage-leerpad noemt `netcat`/`wireshark` die níét als commando bestaan; copy-paste had de overdrijving doorgegeven. Bron = `src/commands/*` + commands-list.md, niet andere marketing.
-- "Certificaat" als credential claimen (FAQ zegt expliciet: geen erkend diploma) of een exact command-getal noemen i.p.v. "40+" — natelbaar = betrapbaar.
-- Kanaal-self-promo-regels uit geheugen invullen — Reddit/Tweakers/HN-regels variëren + veranderen; verkeerde gok = ban/mod-removal op launch-dag. WebSearch-verifiëren; waar niet indexeerbaar: "check sidebar op het moment zelf" documenteren.
-
-✅ **Always:**
-- Geverifieerde-feitenlijst als single-source-of-truth bovenin een multi-variant copy-document — voorkomt drift tussen varianten (zelfde defense-in-depth-logica als validate-docs Check 8/9).
-- Nuchtere/eerlijke toon als default voor marketing-copy (memory `feedback_tone_no_hype`) — niet alleen user-voorkeur maar mechanisch belonend: HN straft marketing-taal af, Reddit/EHGN draaien op value-first.
-- AskUserQuestion bij positionerings-/toon-/doelgroep-keuzes (strategisch/product = Heisenberg-territorium) vóór copy schrijven — die 3 keuzes stuurden álle output.
-- `[invullen]`-placeholders voor persoonlijke details i.p.v. namens de user een mooier-dan-waar verhaal schrijven — houdt de eerlijkheid bij de eigenaar. Volledige scope: `docs/sessions/current.md` Sessie 161 entry.
-
-**Rotation:** Top-6 huidig: 161-162-163-164-165-166 (Sessie 160 → `docs/sessions/current.md` via 1-in-1-out). Bulk-rotatie 155-159 (Sessie 165 due) GEDEFERD — archief-bestemmingsconventie dubbelzinnig (recent.md t/m 149 oplopend; archive-q* 2024), bevestigen vóór uitvoeren. Volgende bulk-rotation Sessie 170. Pre-Sessie 161 historie → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 162-163-164-165-166-167 (Sessie 161 → `docs/sessions/current.md` via 1-in-1-out). Bulk-rotatie 155-159 GEDEFERD — archief-bestemmingsconventie dubbelzinnig (recent.md t/m 149 oplopend; archive-q* 2024), bevestigen vóór uitvoeren. Volgende bulk-rotation Sessie 170. Pre-Sessie 162 historie → `docs/sessions/current.md`.
 
 ---
 
@@ -204,7 +204,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 166
+**Sessie counter:** 167
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -256,6 +256,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 14 jun 2026 (Sessie 166 — pre-launch security-audit + CSP-hardening: 'unsafe-inline'/'unsafe-hashes' uit script-src via inline-script-externalisatie (consent-default/brevo-config/init-theme/load-animations-css), AdSense-consent-race gesloten, X-XSS-Protection->0, history ReDoS-fix, privacy feitfout, frame-src/img-src adtrafficquality F6, security.txt+SECURITY.md; browser-geverifieerd nul CSP-violations + E2E 183 passed. Volledig: `docs/sessions/current.md`)
-**Version:** 5.40 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
+**Last updated:** 15 jun 2026 (Sessie 167 — doc-drift fix M9: esbuild content-hash post-launch-blok (5 `[ ]`) uit M9-sectie verplaatst naar Post-MVP Features; het zat als h3 binnen de Check 6 awk-range → `--deep` telde 19/24 vs tabel 19/19. Besluit (b): post-launch scope, geen M9-taak. `--deep` exit 0, M9 19/19. Volledig: `docs/sessions/current.md`)
+**Version:** 5.41 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
 
