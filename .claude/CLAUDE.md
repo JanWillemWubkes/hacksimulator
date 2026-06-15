@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 167)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 168)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,16 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 168: Blog-tabel-uitlijning fix (Filter ↔ beschrijving) (15 jun 2026)
+⚠️ **Never:**
+- Aannemen dat een nette HTML-`<table>` vanzelf uitlijnt — zonder eigen CSS valt 'ie terug op browser-default `vertical-align: baseline`; bij een afgebroken (multi-line) cel lijnt de buurcel uit op de baseline van de laatste regel → rijen uit sync. `styles/blog.css` had nul tabel-regels (latente bug, pas zichtbaar toen een filter-cel afbrak).
+- Een uitlijn-fix "verifiëren" op het oog via screenshot — meet het: `getBoundingClientRect().top` cel-1 vs cel-2 per rij (`filterTop == descTop`) is binair pass/fail, ook over dark/light/375px.
+
+✅ **Always:**
+- Fix op cascade-niveau wanneer de oorzaak een *ontbrekende* regel is, niet een verkeerde override — één scoped `.blog-post-content table/th/td`-blok repareerde alle 4 blog-tabellen (wireshark/nmap/hashcat/wachtwoord-beveiliging) tegelijk i.p.v. symptoom-per-pagina.
+- `vertical-align: top` op `th,td` als kern-fix tegen baseline-drift bij wrappende cellen; `border-collapse: collapse` + rij-randen voor leesbaarheid.
+- Bewezen patroon hergebruiken (`legal.css` tabel-styling) maar met de doel-context z'n eigen CSS-variabelen (`--spacing-*`/`--color-*`) → thema-aware "gratis", conform architecture-patterns.md §1. Volledig: `docs/sessions/current.md` Sessie 168.
+
 ### Sessie 167: Doc-drift fix M9 — esbuild post-launch-blok uit milestone-sectie (15 jun 2026)
 ⚠️ **Never:**
 - Een sectie↔tabel-drift "fixen" door de tabelcijfers te herschrijven — de echte fix is fysieke *verplaatsing* over een h2-grens. Check 6's awk-range is h2-emoji-anchored (`/^## 🧹 M9:/,/^## 🎓 M6:/`), dus een h3-subsectie erft de milestone-checkbox-telling van z'n omhullende h2; 5 `[ ]` binnen M9 → 19/24 i.p.v. 19/19.
@@ -143,19 +153,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Hardenen waar de input-ruimte open is, niet waar 'ie gesloten/bewust ruim is — `cat.js` (groeiende VFS) ankeren op `resolvedPath`; `ping.js` (gesloten whitelist) + nmap-heuristiek (feature-contract) met rust. Voorkomt over-engineering (Sessie 159 minimal-scope).
 - `?v=`-cache-busting is architectonisch begrensd tot entry-bestanden bij een ES-module-graaf — imports zonder versie-token + 1-week `/src/**/*.js`-cache laten diepe modules stale. Pre-launch onschadelijk, post-launch echte gap → esbuild content-hash als NEW M9-item. Volledig: `docs/sessions/current.md` Sessie 163.
 
-### Sessie 162: Pre-launch visueel materiaal — kit §4 GIF + screenshots via reproduceerbaar capture-script (14 jun 2026)
-⚠️ **Never:**
-- Een doc-claim als waarheid overnemen in een launch-asset zonder de tool te draaien — de kit beloofde een `[!]`-waarschuwing bij `nmap 192.168.1.1`, maar dat doelwit = router-profiel met alleen een `[?] TIP` (`[!]` hoort bij database-doelwit / offensieve tools). De visual legde de overdrijving bloot. Bron = `src/commands/*`, niet een andere doc.
-- Aannemen dat een gebundelde tool volledig is — Playwright's `ffmpeg-1011` is een gestripte build (geen gif-muxer/palettegen, alleen VP8/webm). Verifieer feature-support (`-muxers`/`-filters`) vóór je erop bouwt.
-- Rekenen op ongecommit werk dat een parallelle-terminal git-operatie overleeft — een `git stash -u` + pull elders wisselde de working tree; het werk leek weg.
-
-✅ **Always:**
-- Verifieer doc-claims tegen de bron-tool/code vóór ze in een extern-zichtbaar artefact belanden (generaliseert Sessie 161 "natelbaar = betrapbaar" naar marketing-visuals).
-- Pure-JS fallback (gifenc+pngjs) bij ontbrekende/gestripte system-tooling — geen sudo/wachtwoord, reproduceerbaar; frame-per-teken geeft volledige tempo/loop-controle. GIF-grootte schaalt met frame-aantal, niet duur → langere hold = lange-delay enkele frame.
-- localStorage-state (legal/onboarding/consent) vooraf via Playwright `addInitScript` wegzetten voor een schone capture-take — keys eerst in de bron verifiëren.
-- Recovery-route bij "verdwenen" werk: `git reflog` + `git stash list` vóór paniek; gegenereerde marketing-assets in gitignored map + het reproduceerbare script committen. Volledig: `docs/sessions/current.md` Sessie 162.
-
-**Rotation:** Top-6 huidig: 162-163-164-165-166-167 (Sessie 161 → `docs/sessions/current.md` via 1-in-1-out). Bulk-rotatie 155-159 GEDEFERD — archief-bestemmingsconventie dubbelzinnig (recent.md t/m 149 oplopend; archive-q* 2024), bevestigen vóór uitvoeren. Volgende bulk-rotation Sessie 170. Pre-Sessie 162 historie → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 163-164-165-166-167-168 (Sessie 162 → `docs/sessions/current.md` via 1-in-1-out). Bulk-rotatie 155-159 GEDEFERD — archief-bestemmingsconventie dubbelzinnig (recent.md t/m 149 oplopend; archive-q* 2024), bevestigen vóór uitvoeren. Volgende bulk-rotation Sessie 170. Pre-Sessie 162 historie → `docs/sessions/current.md`.
 
 ---
 
@@ -204,7 +202,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 167
+**Sessie counter:** 168
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -256,6 +254,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 15 jun 2026 (Sessie 167 — doc-drift fix M9: esbuild content-hash post-launch-blok (5 `[ ]`) uit M9-sectie verplaatst naar Post-MVP Features; het zat als h3 binnen de Check 6 awk-range → `--deep` telde 19/24 vs tabel 19/19. Besluit (b): post-launch scope, geen M9-taak. `--deep` exit 0, M9 19/19. Volledig: `docs/sessions/current.md`)
-**Version:** 5.41 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
+**Last updated:** 15 jun 2026 (Sessie 168 — blog-tabel-uitlijning fix: scoped `.blog-post-content table/th/td`-blok in `styles/blog.css` met `vertical-align: top` als kern-fix (browser-default `baseline` trok rijen uit sync bij afgebroken code-cellen) + `border-collapse`/padding/rij-randen, thema-aware via blog-CSS-variabelen. Repareert alle 4 blog-tabellen; browser-geverifieerd `filterTop == descTop` in dark/light/375px. Commit `4368bb4`. Volledig: `docs/sessions/current.md`)
+**Version:** 5.42 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
 

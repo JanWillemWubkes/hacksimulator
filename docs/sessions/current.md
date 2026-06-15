@@ -4,6 +4,30 @@
 
 ---
 
+## Sessie 168: Blog-tabel-uitlijning fix (Filter ↔ beschrijving) (15 jun 2026)
+
+**Mission:** Door gebruiker gemelde visuele bug: in de blog-tabellen (screenshot Wireshark-gids) liepen de kolommen "Filter" en "Wat laat het zien?" per rij niet gelijk. Oorzaak achterhalen en oplossen, daarna committen + doc-sync.
+
+**Work done:**
+- **Diagnose (plan-mode, read-only):** De tabel is een correcte HTML-`<table>` binnen `.blog-post-content`. `styles/blog.css` bevat één styling voor `code`/`pre`/`.terminal-example` maar **nul regels** voor `<table>`/`<th>`/`<td>`. De tabel viel dus terug op browser-defaults: `border-collapse: separate` én — de echte boosdoener — `vertical-align: baseline`. Zodra een kolom-1-cel met `<code>` afbrak over twee regels (`ip.addr == 192.168.1.10`, en `dns` → 2-regelige beschrijving), lijnde de rechterkolom uit op de baseline van de afgebroken code-regel → rijen uit sync.
+- **Fix:** Scoped blok in `styles/blog.css` (vóór `.terminal-example`): `.blog-post-content table` (`width:100%`, `border-collapse:collapse`, marge) + `.blog-post-content th,td` (`padding`, `text-align:left`, **`vertical-align:top`** = kern-fix, `border-bottom`) + `.blog-post-content th` (accent-kleur + dikkere onderrand). Patroon gespiegeld uit `styles/legal.css` (regels 73-91), maar met blog-CSS-variabelen (`--spacing-*`, `--color-border`, `--color-ui-primary`) → thema-aware zonder aparte light-override. Geen HTML aangeraakt.
+- **Scope-bonus:** omdat de oorzaak een *ontbrekende* regel was (geen verkeerde override), repareert één cascade-blok alle 4 blog-tabellen tegelijk: wireshark (5 rijen), nmap (6), hashcat (5), wachtwoord-beveiliging (7).
+- **Verificatie (Playwright MCP, lokale `python3 -m http.server`):** per rij `getBoundingClientRect().top` van cel-1 vs cel-2 vergeleken → alle rijen `filterTop == descTop` op alle 4 pagina's. Computed `border-collapse: collapse` + `vertical-align: top` bevestigd. Dark + light screenshots OK (`.playwright-mcp/wireshark-table-{dark,light}.png`). Mobiel 375px: geen horizontale overflow (`scrollWidth 360 == clientWidth 360`), rijen uitgelijnd. De console-`403` van AdSense op localhost is bestaand/ongerelateerd.
+
+**Commits:** `4368bb4` (fix(blog): tabel-uitlijning) + deze /summary doc-sync.
+
+**Learnings:**
+- Een nette HTML-`<table>` lijnt niet vanzelf uit: zonder eigen CSS valt 'ie terug op `vertical-align: baseline`, wat bij multi-line cellen de rij-uitlijning breekt. `blog.css` had nooit tabel-styling — een latente bug die pas zichtbaar werd toen een filter-cel afbrak.
+- Uitlijning *meten* (`getBoundingClientRect().top` cel-1 vs cel-2) bewijst de fix harder dan een screenshot beoordelen — `filterTop == descTop` is een binaire pass/fail, ook over dark/light/375px.
+- Fix op cascade-niveau wanneer de oorzaak een ontbrekende regel is: één scoped `.blog-post-content table`-blok repareerde 4 pagina's i.p.v. symptoom-per-pagina.
+- Bewezen patroon hergebruiken (`legal.css` tabel-styling) maar met de doel-context z'n eigen CSS-variabelen → thema-aware "gratis", conform architecture-patterns.md §1 (CSS Variables First).
+
+**Next steps:** Geen open punten. Bulk-rotatie 155-159 in CLAUDE.md blijft apart gedeferd.
+
+**Metrics delta:** `styles/` ~377→378 KB unminified (+~0,7 KB), binnen Check 5 ±5%-tolerantie. Bundle-budget (Terminal Core <400 KB) ongewijzigd — blog.css zit niet in de terminal-runtime-graaf. Tests ongewijzigd (23 spec files / ~197 per project).
+
+---
+
 ## Sessie 167: Doc-drift fix M9 — esbuild post-launch-blok uit milestone-sectie (15 jun 2026)
 
 **Mission:** Losstaande doc-drift opruimen (geen site-code). `scripts/validate-docs.sh --deep` Check 6 faalde op M9: de milestone-tabel zegt `19/19` (100%), maar de M9-sectie telt via `[x]+[ ]` ground-truth `19/24` (79%). Plan-mode: reproduceren → bron lezen → bewuste (a)/(b)-beslissing met aanbeveling vóór edit.
