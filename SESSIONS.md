@@ -8,7 +8,11 @@
 
 ## 📂 Session Archives
 
-### [Current Sessions (88-160)](docs/sessions/current.md) - Full Detail
+> **Rotatie/archivering-conventie:** zie [`docs/sessions/README.md`](docs/sessions/README.md)
+> (range-naamgeving `archive-sNNN-sMMM.md`; legacy `archive-q*`-namen zijn bevroren + fout gelabeld).
+> `current.md` houdt momenteel Sessie 81-170 (backlog) — eenmalige catch-up gepland Sessie 175.
+
+### [Current Sessions (81-170)](docs/sessions/current.md) - Full Detail
 **Sessies:** 160, 159, 158, 157, 156, 155, 154, 153, 152, 151, 150, 149, 148, 147, 146, 145, 144, 143, 142, 141, 140, 139, 138, 137, 136, 135, 134, 133, 132, 131, 130, 129, 128, 127, 126, 125, 124, 123, 122, 121, 120, 119, 118, 117, 116, 115, 114, 113, 112, 111, 110, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88
 **Period:** 26 december 2025 - 12 juni 2026
 **Topics:**

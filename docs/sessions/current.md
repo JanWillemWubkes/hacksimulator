@@ -28,7 +28,7 @@
 
 **Next steps:**
 - Optioneel: cache-bust `?v=X` normaliseren (apart, mét E2E-verificatie) — niet gebundeld in opruiming.
-- Bulk-rotatie session-logs blijft GEDEFERD (zie onder) — archief-bestemmingsconventie nog te bevestigen.
+- Session-log-conventie vastgelegd in NEW `docs/sessions/README.md` (range-naamgeving `archive-sNNN-sMMM.md`; legacy `archive-q*` bevroren want fout gelabeld met 2025-content). SESSIONS.md-index gecorrigeerd (stale "88-160" → "81-170"). **Sessie 175 = eenmalige catch-up** van de backlog (Sessie 81-164 → range-archieven). Deferral-blokkade (ontbrekende bestemming) opgelost.
 
 **Metrics delta:** Bundle runtime onveranderd (geen `src/`/`styles/`-wijziging); test-suite onveranderd (197 tests / 23 spec files); git-tree −632 KB binaries (PDF's untracked). validate-docs fast + `--deep` exit 0.
 

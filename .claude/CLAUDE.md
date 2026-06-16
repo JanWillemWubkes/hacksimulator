@@ -155,7 +155,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Fix in de canonieke bron (`.typ`) + artefact herbouwen + output verifiëren (`pdftotext`/`pdfinfo`) — een fix is pas klaar als de PDF die de koper downloadt klopt; rebuild-only timestamp-ruis terugdraaien houdt de diff eerlijk.
 - Eerlijk deferren boven blind protocol — current.md bulk-rotatie 155-159 gedefererd wegens dubbelzinnige archief-bestemming (niet door validate-docs gedekt); risico > baat vóór commit. Volledig: `docs/sessions/current.md` Sessie 165.
 
-**Rotation:** Top-6 huidig: 165-166-167-168-169-170 (Sessie 164 → `docs/sessions/current.md` via 1-in-1-out). Bulk-rotatie 155-159 BLIJFT GEDEFERD — archief-bestemmingsconventie dubbelzinnig (recent.md t/m 149 oplopend; archive-q* 2024), bevestigen vóór uitvoeren (Sessie 170 = aangewezen bulk-punt maar overgeslagen: grote-bestand-surgery + ambigue bestemming, conform documentatie-deferral, risico > baat zonder bevestiging). Volgende bulk-rotation Sessie 175. Pre-Sessie 162 historie → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 165-166-167-168-169-170 (Sessie 164 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie nu vastgelegd (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. Bulk-rotatie current.md-entries was gedeferd t/m 169 (ontbrekende bestemming = nu opgelost). **Sessie 175 = eenmalige catch-up:** archiveer current.md Sessie 81-164 → range-archieven (voorstel `archive-s081-s120.md` + `archive-s121-s164.md`), houd 165+ in current.md, corrigeer SESSIONS.md-index; daarna steady-state per README. Pre-Sessie 162 historie → `docs/sessions/current.md`.
 
 ---
 
