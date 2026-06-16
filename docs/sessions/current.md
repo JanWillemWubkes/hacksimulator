@@ -18,7 +18,7 @@
   - NEW `docs/architecture-review.md` (~1 pagina): verdict + by-design-overzicht + product-PDF artifact-flow + "bewust niet gedaan".
 - **Cache-bust-analyse (read-only, niet uitgevoerd):** 9 inconsistente `?v=X`-schema's over 23 HTML-bestanden; normaliseren raakt live browsercaching (`max-age=604800`), fout = lokaal onzichtbaar + treft terugkerende bezoekers tot 7 dagen; echte automatisering vereist build-stap (botst "vanilla, no build"). Apart te behandelen indien gewenst.
 
-**Commits:** `480a227` (chore(repo): untrack herbouwbare product-PDF's + structuurreview) + deze /summary doc-sync.
+**Commits:** `480a227` (chore(repo): untrack herbouwbare product-PDF's + structuurreview) + `2034a30` (/summary doc-sync) + `279bddb` (docs(sessions): session-log rotatie-conventie vastgelegd — deblokkeert bulk-rotatie; vervolgvraag binnen dezelfde sessie).
 
 **Learnings:**
 - **De PDF-"duplicaat" was geen bug maar een gedocumenteerde bron→publiceer-pijplijn** (`.typ` → `docs/products/*.pdf` build → kopie naar `assets/samples/`). `cmp` bevestigde byte-identiek. De juiste fix is build-output untracken, niet één van de twee verwijderen.
