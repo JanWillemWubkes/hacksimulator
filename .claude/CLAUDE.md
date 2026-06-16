@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 168)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 169)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 169: GSC-indexeringsanalyse + SEO-fix niet-geïndexeerde pagina's (16 jun 2026)
+⚠️ **Never:**
+- Een GSC "niet-geïndexeerd"-melding als bug behandelen zonder de bron-kolom te lezen — "Website"-bron (redirect/canonical) = jouw config en vaak gewenst gedrag; "Google-systemen" (gevonden/gecrawld niet geïndexeerd) = crawl-budget/autoriteit/tijd, niet patchbaar in code. 17 van 19 meldingen waren benign of niet-fixbaar; slechts 2 echte zelf-veroorzaakte fouten.
+- Indexering-fixes plannen op de GSC-aantallen alleen — de screenshots tonen tellingen, niet URL's. Pas de exacte URL-lijsten (gebruiker klikt rij → "Voorbeelden") onthulden het patroon (extensieloze duplicaten + relatieve `index.html`-links) dat op educated guesses gemist was.
+- Interne link-depth als silver bullet voor "niet geïndexeerd" verkopen — `cybersecurity-tools` had 9 inbound related-card-links en zat tóch vast. (En: eerste inbound-telling was fout doordat 'ie alleen absolute `/blog/`-links ving, niet relatieve related-cards — corrigeer de meting vóór de conclusie.)
+- Cargo-cult-SEO toevoegen onder de vlag "grondig" — expliciete `<meta name="robots" content="index,follow">` doet niets (default is al index,follow); bewust uit scope ondanks "volledige sweep"-verzoek.
+
+✅ **Always:**
+- Relatieve `href="index.html"` in een footer = stille duplicaat-fabriek op Netlify — `/foo.html` wordt óók op `/foo` (200) geserveerd ongeacht `pretty_urls=false`, en `index.html` → `/blog/index.html` naast canonical `/blog/`. Link naar de canonical (`/blog/`, `/`) zodat Google geen duplicaat ontdekt.
+- Per-URL diagnose tegen de echte GSC-lijst = scheidslijn echte fout vs. benign (3 redirect-varianten + 1 alt-canonical = werkend; extensieloze URL's = historisch, canonical consolideert vanzelf).
+- Eerlijk de verwachting kalibreren: code-fixes ruimen zelf-veroorzaakte ruis op en geven een nudge (verse `lastmod` op gewijzigde pagina's, homepage-link als hoogste-autoriteit signaal), maar de dominante hefboom voor een jong domein is off-page (backlinks + tijd) — geen sweep forceert indexering.
+- Browser-onafhankelijk verifiëren wat meetbaar is: XML-validatie (25 URLs), nul resterende duplicaat-links repo-breed, link-resolutie, `validate-docs.sh` exit 0. Volledig: `docs/sessions/current.md` Sessie 169.
+
 ### Sessie 168: Blog-tabel-uitlijning fix (Filter ↔ beschrijving) (15 jun 2026)
 ⚠️ **Never:**
 - Aannemen dat een nette HTML-`<table>` vanzelf uitlijnt — zonder eigen CSS valt 'ie terug op browser-default `vertical-align: baseline`; bij een afgebroken (multi-line) cel lijnt de buurcel uit op de baseline van de laatste regel → rijen uit sync. `styles/blog.css` had nul tabel-regels (latente bug, pas zichtbaar toen een filter-cel afbrak).
@@ -142,18 +155,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Juridische claims tegen de wettekst checken — art. 138ab: kale computervredebreuk max 2 jaar (lid 1); 4 jaar (lid 2) pas bij gegevens overnemen/aftappen of binnendringen via openbaar telecomnet, niet "voorbedachte rade".
 - Grote docs (TASKS.md/current.md >25k tokens) overschrijden de Read/Edit-tool-limiet → doc-sync via geverifieerd Python-script met occurrence-asserts. Volledig: `docs/sessions/current.md` Sessie 164.
 
-### Sessie 163: nmap-profiel bug-report fix + bug-klasse-audit + cat.js-hardening (14 jun 2026)
-⚠️ **Never:**
-- Branch-selectie op gebruiker-input via ruime `target.includes('192.168.1.1')` — substring matcht supersets (`192.168.1.100` bevat `192.168.1.1`) → verkeerd profiel (router DNS 53 i.p.v. webserver SSH 22). Exacte/segment-match voor specifieke hosts; reserveer `.includes()` voor bewuste categorie-heuristiek.
-- Een output↔uitleg-mismatch fixen door de uitleg-tekst aan te passen — de bron-output was fout, de didactische tekst klopte al. Fix de bron, niet de uitleg (omgekeerde Sessie 161/162 "doc-claim vs bron-tool").
-- Audit-agent-"bugs" als waar aannemen — 2/2 kandidaten (`ping.js`/`cat.js`) waren vals alarm; de kwetsbare tak was onbereikbaar (whitelist-afgeschermd). Verifieer reachability tegen werkende code (generaliseert Sessie 160-les).
-
-✅ **Always:**
-- Reachability als criterium dat echte bugs van valse alarmen scheidt — alleen nmap was raakbaar met geldige, gedocumenteerde input (`192.168.1.100` = tutorial-doelwit + man-page-voorbeeld). Statische `.includes()`-scan vindt alle drie; reachability isoleert de echte.
-- Hardenen waar de input-ruimte open is, niet waar 'ie gesloten/bewust ruim is — `cat.js` (groeiende VFS) ankeren op `resolvedPath`; `ping.js` (gesloten whitelist) + nmap-heuristiek (feature-contract) met rust. Voorkomt over-engineering (Sessie 159 minimal-scope).
-- `?v=`-cache-busting is architectonisch begrensd tot entry-bestanden bij een ES-module-graaf — imports zonder versie-token + 1-week `/src/**/*.js`-cache laten diepe modules stale. Pre-launch onschadelijk, post-launch echte gap → esbuild content-hash als NEW M9-item. Volledig: `docs/sessions/current.md` Sessie 163.
-
-**Rotation:** Top-6 huidig: 163-164-165-166-167-168 (Sessie 162 → `docs/sessions/current.md` via 1-in-1-out). Bulk-rotatie 155-159 GEDEFERD — archief-bestemmingsconventie dubbelzinnig (recent.md t/m 149 oplopend; archive-q* 2024), bevestigen vóór uitvoeren. Volgende bulk-rotation Sessie 170. Pre-Sessie 162 historie → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 164-165-166-167-168-169 (Sessie 163 → `docs/sessions/current.md` via 1-in-1-out). Bulk-rotatie 155-159 GEDEFERD — archief-bestemmingsconventie dubbelzinnig (recent.md t/m 149 oplopend; archive-q* 2024), bevestigen vóór uitvoeren. Volgende bulk-rotation Sessie 170. Pre-Sessie 162 historie → `docs/sessions/current.md`.
 
 ---
 
@@ -202,7 +204,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 168
+**Sessie counter:** 169
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -254,6 +256,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 15 jun 2026 (Sessie 168 — blog-tabel-uitlijning fix: scoped `.blog-post-content table/th/td`-blok in `styles/blog.css` met `vertical-align: top` als kern-fix (browser-default `baseline` trok rijen uit sync bij afgebroken code-cellen) + `border-collapse`/padding/rij-randen, thema-aware via blog-CSS-variabelen. Repareert alle 4 blog-tabellen; browser-geverifieerd `filterTop == descTop` in dark/light/375px. Commit `4368bb4`. Volledig: `docs/sessions/current.md`)
-**Version:** 5.42 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
+**Last updated:** 16 jun 2026 (Sessie 169 — GSC-indexeringsanalyse + SEO-fix: 2 duplicaat-bronnen weg (14 blog-footers `href="index.html"`→`/blog/`, welkom-body `../index.html`→`/`), homepage blog-links 3→8 crawl-nudge, sitemap `lastmod` 7 URLs→2026-06-15; rest benign. Commit `cce7dce`. Volledig: `docs/sessions/current.md`)
+**Version:** 5.43 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
 

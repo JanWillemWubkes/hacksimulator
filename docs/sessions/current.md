@@ -4,6 +4,45 @@
 
 ---
 
+## Sessie 169: GSC-indexeringsanalyse + SEO-fix (niet-geïndexeerde pagina's) (16 jun 2026)
+
+**Mission:** Gebruiker deelde Google Search Console-screenshots ("Waarom pagina's niet worden geïndexeerd": 3 omleiding + 1 alt-canonical + 8 gevonden + 7 gecrawld = 19 pagina's). Analyseren wat echt kapot is vs. benign, de fixbare oorzaken oplossen, deployen en GSC-vervolgstappen aanreiken.
+
+**Work done:**
+- **Plan-mode diagnose (read-only):** 2 Explore-agents brachten alle SEO-config + 30 HTML-pagina's in kaart. Conclusie vooraf: SEO-fundament solide (canonicals overal, complete sitemap, correcte robots.txt, geen duplicate-pagina's). Geen bug op config-niveau.
+- **Scope-besluit:** "slimme sweep" aanbevolen (optie 3 minus expliciete `robots`-meta op alle pagina's = cargo-cult; default is al index,follow). Gebruiker leverde de **exacte GSC-URL-lijsten** → per-URL diagnose i.p.v. gokwerk.
+- **Per-URL diagnose (de kern):**
+  - *Pagina met omleiding (3):* `http://www.`, `https://www.`, `http://` homepage-varianten → 301's werken correct, **benign**.
+  - *Alt-canonical (1):* `/index.html` → canonical `/`. **Bron achterhaald:** `welkom.html` body linkte via `../index.html`.
+  - *Gecrawld, niet geïndexeerd (7):* o.a. `/blog/index.html` (**bron: alle 14 blog-footers `href="index.html"`**) + extensieloze URL's (`/terminal`, `/blog/welkom`, `/blog/terminal-basics`, `/blog/wat-is-ethisch-hacken`, `/assets/legal/privacy`) = historisch (staan nergens meer in code), consolideren via canonical.
+  - *Gevonden, niet geïndexeerd (8):* 5 blogposts + gidsen/sample-pentest/woordenlijst = crawl-budget/autoriteit voor jong domein.
+- **Fixes (commit `cce7dce`, 15 files):**
+  - `sed` over `blog/*.html`: 14 footer-links `href="index.html"` → `href="/blog/"` (verwijdert `/blog/index.html`-duplicaat-bron).
+  - `welkom.html` body: `../index.html` → `/` (verwijdert `/index.html`-duplicaat-bron).
+  - `index.html`: homepage blog-links 3 → 8 (cybersecurity-tools, wachtwoord-beveiliging, sql-injection-uitgelegd, social-engineering, linux-bestandssysteem toegevoegd; `.blog-links-list` is `flex-wrap` → wrapt netjes).
+  - `sitemap.xml`: `lastmod` → 2026-06-15 voor homepage + 6 vastzittende posts (accuraat: vandaag gewijzigd; nudgt recrawl).
+- **Verificatie:** Python XML-parse (xmllint ontbreekt) = 25 URLs valid; alle nieuwe links resolven naar bestaande bestanden; nul resterende `index.html`-links repo-breed; `validate-docs.sh` exit 0 (incl. Check 6 sitemap↔blog lastmod≥datePublished). Gepusht naar `main` → Netlify deploy.
+- **GSC-vervolgstappen aangereikt:** sitemap opnieuw indienen (ná deploy-verificatie van live `lastmod`), 9 prioriteit-1-URL's voor "Indexering aanvragen" + 5 prioriteit-2-URL's (eerst inspecteren, want canonieke `.html`-versies mogelijk al geïndexeerd).
+
+**Commits:** `cce7dce` (fix(seo): duplicaat-URL-bronnen + recrawl-nudge) + deze /summary doc-sync.
+
+**Learnings:**
+- **GSC-bron-kolom scheidt fixbaar van niet-fixbaar:** "Website"-bron (redirect/canonical/noindex) = jouw config; "Google-systemen" (gevonden/gecrawld niet geïndexeerd) = crawl-budget/autoriteit/tijd, niet patchbaar in code. Eerlijk blijven hierover voorkwam over-promising.
+- **Exacte URL's > educated guesses:** de screenshots toonden alleen aantallen. Pas de echte lijsten onthulden het patroon (extensieloze duplicaten + `index.html`-links) dat ik op aannames had gemist. De 30 sec die de gebruiker aan kopiëren besteedde, bespaarde een diff die het echte probleem miste.
+- **Interne links zijn hier een marginale nudge, geen oplossing:** `cybersecurity-tools` had 9 inbound related-card-links én zat tóch in "gevonden, niet geïndexeerd" → falsificeert link-depth als silver bullet. Mijn eerste inbound-telling was bovendien fout (ving alleen absolute `/blog/`-links, niet relatieve related-cards) — gecorrigeerd vóór ik er conclusies aan verbond.
+- **Relatieve `index.html`-links = stille duplicaat-fabriek:** Netlify serveert `/foo.html` óók op `/foo` (200) ongeacht `pretty_urls=false`; een `href="index.html"` in een footer voedt Google een `/blog/index.html` naast de canonical `/blog/`. Canonical lost het op, maar de bron weghalen is netter en stopt crawl-budget-verspilling.
+- **Cargo-cult vermijden:** expliciete `<meta name="robots" content="index,follow">` toevoegen doet niets (default = index,follow) — bewust uit scope gehouden ondanks "volledige sweep"-verzoek; correctheid boven schijn-grondigheid.
+
+**Next steps (handmatig, gebruiker in GSC — geen code):**
+- [ ] Verifiëren dat live `sitemap.xml` `2026-06-15` toont, dan sitemap opnieuw indienen.
+- [ ] "Indexering aanvragen" voor 9 prioriteit-1-URL's (gidsen/sample-pentest/woordenlijst + 5 blogposts + ethisch-hacker-worden); prioriteit-2 eerst inspecteren.
+- [ ] `/index.html`-melding in GSC "Oplossing valideren" (bron-link verwijderd).
+- [ ] Over weken: duplicaat-meldingen horen te verdwijnen; gevonden/gecrawld-niet-geïndexeerd hangt af van backlinks + tijd.
+
+**Metrics delta:** `index.html` +5 regels, 13 blog-footers + 1 welkom-body link, sitemap 7× lastmod. Geen runtime/bundle-impact (blog + index buiten Terminal Core budget). Tests ongewijzigd (23 spec files / 172 test()-decls / ~197 runs).
+
+---
+
 ## Sessie 168: Blog-tabel-uitlijning fix (Filter ↔ beschrijving) (15 jun 2026)
 
 **Mission:** Door gebruiker gemelde visuele bug: in de blog-tabellen (screenshot Wireshark-gids) liepen de kolommen "Filter" en "Wat laat het zien?" per rij niet gelijk. Oorzaak achterhalen en oplossen, daarna committen + doc-sync.
