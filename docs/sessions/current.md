@@ -4,6 +4,38 @@
 
 ---
 
+## Sessie 171: Logo-herontwerp H-monogram + asset-keten + brand-kit (16 jun 2026)
+
+**Mission:** Gebruiker vroeg het bestaande logo te "vernieuwen/verbeteren/perfectioneren". Het oude logo was een generieke terminal-prompt `>_` (HTB-groene tegel) — technisch netjes maar het meest voorkomende dev-tool-symbool, nul onderscheidend vermogen. Doel: een uniek, ownable, op alle web-formaten goed werkend logo ontwerpen en volledig doorvoeren.
+
+**Work done:**
+- **Ontwerp-proces (render-en-meet via Playwright):** 3 richtingen → gekozen H-monogram → 4 verfijningen → V2 "H op een command-line-balk" gewonnen. Twee kandidaten afgeschoten ná browser-render (chevron-crossbar las als "skip/next-track"-mediaknop; losse cursor-block las als een punt → afkorting). Elk concept gerenderd op 512/64/32/**16px** + licht/donker/mono om de favicon-bottleneck te toetsen. Geen rasterizer geïnstalleerd (`rsvg`/`inkscape`/`cairosvg` ontbraken) → SVG→browser-canvas→PNG.
+- **Nieuw logo:** H-monogram (de letter H opgebouwd uit terminal-primitieven, staand op een `_`-balk). Eén silhouet, twee betekenissen (naam + terminal). 4 rechthoeken → robuust op 16px.
+- **Favicon-keten vervangen + alle inline-kopieën:** `favicon.svg` (bron 32-grid) + `navbar.js` (2×) + `footer.js` (inverted glyph zónder tegel, `viewBox 6 6 20 20`, neon-groen op het donkere frame) + `docs/products/logo.svg` (PDF-cover). PNG's pixel-exact gerenderd: `favicon-96` (afgeronde tegel), `apple-touch` (vol-vlak), `web-app-manifest-192/512` (**vol-vlak maskable** — was incorrect afgeronde transparante tegel), `favicon.ico` (16/32/48 PNG-payloads, met Python struct).
+- **Brand-kit NEW `assets/brand/`:** `logo.svg` (tegel) + `logo-on-dark.svg` + `logo-mono-black/white.svg` + PNG-exports 256/512/1024 + `README.md` (gebruik per context + merkkleuren `#9fef00`/`#0d1117`/`#c9d1d9`). Alle 6 varianten visueel geverifieerd op hun bedoelde achtergrond.
+- **Social-kaart `assets/og-image.png`:** getrouw herbouwd (terminal-mockup nmap-output) mét het nieuwe H-glyph + subtiele groene glow; browser-render exact 1200×630 (matcht og:image:width/height).
+- **og:image cache-bust:** `?v=2` op og:image + twitter:image — **60 referenties over 25 pagina's** (`assets/og-image.png"` → `?v=2"`). Reden: `/assets/* immutable 1jr` + social-scraper-cache; zonder URL-wijziging blijft de oude kaart hangen.
+- **Gumroad-PDF's herbouwd (typst 0.13.1):** 3 betaald + sample; logo op cover geverifieerd via PDF-pagina 1. Geserveerde lead-magnet `assets/samples/pentest-playbook-sample.pdf` bijgewerkt (md5 bevestigd).
+- **Build-DRY:** `build-pdfs.sh` kopieert het logo nu uit canonieke `assets/brand/logo.svg`; `docs/products/logo.svg` gitignored + `git rm --cached` (build-managed). End-to-end getest: logo.svg verwijderd → build regenereerde 'm (md5 identiek) → 4 PDF's compileerden.
+
+**Commits:** deze sessie — `feat(brand): nieuw H-monogram logo door volledige asset-keten + brand-kit + og-kaart + PDF-rebuild + og:image cache-bust + build-DRY` (hash in git log). 3 betaalde PDF's = handmatige Gumroad-upload (buiten repo).
+
+**Learnings:**
+- **Render-en-meet is onmisbaar bij ontwerp:** twee kandidaten leken in het hoofd prima maar faalden zichtbaar pas in de browser (verkeerde associatie: skip-knop / afkorting-punt). Een logo bestaat op het netvlies, niet in je hoofd.
+- **Cache maskeert verse code → vals-negatief:** de eerste navbar-verificatie toonde nog `>_` doordat de Python-testserver geen `Cache-Control` stuurt en de browser de oude ES-module cachete; de live DOM uitlezen + no-cache server op verse origin bewees dat de edit klopte. (= troubleshooting #2 in de praktijk.)
+- **Cache-bust is per-asset, niet alles-of-niets:** alleen waar `immutable` + gelijkblijvende-URL samenvallen (og:image) is `?v=2` nodig; favicons (root, revalideren) niet; JS-imports niet (≤7-dagen cosmetisch verlies, ES-module-query is invasief + botst "vanilla, no build").
+- **"Wie host het bestand" bepaalt de update-route:** site-assets (favicon, og-image, sample) verversen via deploy; Gumroad-PDF's zijn een extern eilandje met eigen kopie → handmatige re-upload. De sample staat byte-identiek in `docs/products/` (build-output, gitignored) én `assets/samples/` (geserveerd, getrackt) = de gedocumenteerde bron→build→publiceer-flow, geen bug.
+- **Maskable PWA-iconen horen vol-vlak:** `purpose:"maskable"` betekent dat de OS zelf maskt; transparante hoeken geven artefacten. Glyph binnen de safe-zone, achtergrond tot de rand.
+- **DRY via build-stap > 3e getrackte kopie:** het logo zat op 3 plekken in git; door `build-pdfs.sh` het uit de canonieke bron te laten kopiëren (en `docs/products/logo.svg` te gitignoren) is er nog 1 bron + 1 favicon, consistent met de PDF-artifact-flow.
+
+**Next steps:**
+- **Handmatig (Heisenberg):** 3 betaalde PDF's opnieuw uploaden naar Gumroad (`juridische-gids.pdf`, `pentest-playbook.pdf`, `leerplan.pdf`).
+- Na deploy optioneel social-preview re-scrape forceren (Facebook Sharing Debugger / LinkedIn Post Inspector) als oude kaarten blijven hangen.
+
+**Metrics delta:** `assets/` ~695 KB (gegroeid door `assets/brand/` PNG-exports + herbouwde og-image). Runtime-bundle `src/` gedrag ongewijzigd (navbar/footer SVG-swap, verwaarloosbare grootte-delta). Tests onveranderd: 23 spec-files / 172 test-cases. Geen css/js/_headers/netlify-gedragswijziging.
+
+---
+
 ## Sessie 170: Structuuranalyse projectopbouw + veilige repo-opruiming (16 jun 2026)
 
 **Mission:** Gebruiker vroeg de bestands-/mapstructuur te analyseren ("is dit goed of kunnen we verbeteren?") met als harde randvoorwaarde dat de functionaliteit volledig intact blijft. Beoordelen, en alleen veilige verbeteringen doorvoeren.

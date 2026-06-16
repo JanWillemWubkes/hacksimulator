@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 170)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 171)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 171: Logo-herontwerp H-monogram + asset-keten + brand-kit (16 jun 2026)
+⚠️ **Never:**
+- Een logo "vervangen" zonder álle inline-kopieën te scannen — hetzelfde glyph zat in `favicon.svg` + `navbar.js` (2×) + `footer.js` + `docs/products/logo.svg`; een gemiste kopie geeft een afwijkend logo. Repo-brede sweep op het oude pad vóór je "klaar" claimt.
+- Een logo-edit "verifiëren" op een gecachete testserver — Python `http.server` stuurt geen `Cache-Control`, dus de browser draaide de oude ES-module → vals-negatief (leek alsof de edit niet werkte). Verifieer onder no-cache / verse origin.
+- Maskable PWA-iconen als afgeronde transparante tegel laten — `purpose:"maskable"` betekent dat de OS zelf maskt; transparante hoeken geven rare randen. Vol-vlak renderen, glyph binnen de safe-zone.
+- Een nieuw ontwerp alléén in je hoofd beoordelen — twee kandidaten (chevron-crossbar = "skip-knop", losse block = "punt") faalden pas zichtbaar in de browser-render. Logo's bestaan op het netvlies: render-en-meet.
+
+✅ **Always:**
+- Render-en-meet bij ontwerp: SVG → browser-canvas → PNG op 512/32/**16px**, beoordeel visueel. Zonder rasterizer (`rsvg`/`inkscape` ontbraken) deed Playwright canvas→PNG het pixel-exact, inclusief de favicon.ico (PNG-payloads).
+- Cache-bust alléén waar `immutable` + gelijkblijvende-URL samenvallen: og:image (`/assets/* immutable 1jr` + social-scraper-cache) kreeg `?v=2`; favicons (root, revalideren) niet; JS-imports niet (≤7-dagen, cosmetisch, ES-module-query invasief). Per-asset, niet alles-of-niets.
+- "Wie host het bestand" bepaalt de update-route: site-assets verversen via deploy; Gumroad-PDF's zijn een extern eilandje → handmatige re-upload; sample (lead-magnet) = site-link, geen Brevo-actie.
+- DRY via een build-stap i.p.v. een 3e getrackte kopie: `build-pdfs.sh` kopieert het logo uit canonieke `assets/brand/logo.svg`, `docs/products/logo.svg` gitignored (build-managed) — consistent met de PDF-artifact-flow (Sessie 170). Volledig: `docs/sessions/current.md` Sessie 171.
+
 ### Sessie 170: Structuuranalyse projectopbouw + veilige repo-opruiming (16 jun 2026)
 ⚠️ **Never:**
 - Een module "orphan/verwijderbaar" noemen zonder álle consumers te scannen — orphan-grep over `src/` alleen miste `blog/`-HTML → vals alarm op `blog-theme.js` (laadt in alle 10 blogpagina's). Verifieer breed vóór je "weg ermee" claimt; dit had anders een echte breuk gegeven.
@@ -143,19 +156,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Veilige fixes eerst, de risicovolle (CSP) als laatste met volledige verificatie als gate (nul console-violations per pagina-archetype + E2E-baseline-vergelijking).
 - Bij her-verzoek tot veiligheidscheck vóór launch een eerder advies durven herroepen als verificatie risico toont — correctheid boven consistentie ([[feedback_verify_before_launch_critical]]). Volledig: `docs/sessions/current.md` Sessie 166.
 
-### Sessie 165: Kwaliteits-/feitencontrole betaalde Gumroad-producten (14 jun 2026)
-⚠️ **Never:**
-- Een verdacht feit in een betaald product "fixen" vóór eigen bronverificatie — élk verdacht juridisch punt + de OWASP-2025-volgorde bleek vals alarm; "20 april 2016" léék fout maar is de officiële ingangsdatum (maxius.nl), eJPT→INE was correcter dan de zoek-snippet ("OffSec"). Blind volgen had correcte content kapot-gefixt (generaliseert Sessie 164 naar betaalde producten).
-- Verkoopcopy-cijfers (pagina's/getallen) baseren op de draft of een schatting — de listings beloofden "~75 pagina's", de gebouwde PDF's leveren 47 (playbook 84% over). Tel tegen het artefact dat de koper krijgt (`pdfinfo`). Natelbaar = betrapbaar.
-- Een onverifieerbare specifieke claim laten staan of gokken — geen ECLI verzonnen voor de Gelderland-zaak (niet te bevestigen → geverifieerde news-URL); zaak-2-"2014" zonder bron → tot rechtsprincipe genericeerd.
-
-✅ **Always:**
-- Eigen WebSearch/WebFetch-bronverificatie als scheidslijn echte fout vs. vals alarm — bevestigde 3 echte issues (pagina-claims, Krol-feitfout 'gemeenteraadslid'/'geanonimiseerde', stale MailerLite) tussen een grote meerderheid correcte feiten.
-- Belofte-vs-inhoud als eerste verdachte bij "met zorg gecontroleerde" content — de feiten waren sterk; de zwakte zat in de marketing-cijfers. Nieuwe memory `feedback_verify_claims_against_artifact`.
-- Fix in de canonieke bron (`.typ`) + artefact herbouwen + output verifiëren (`pdftotext`/`pdfinfo`) — een fix is pas klaar als de PDF die de koper downloadt klopt; rebuild-only timestamp-ruis terugdraaien houdt de diff eerlijk.
-- Eerlijk deferren boven blind protocol — current.md bulk-rotatie 155-159 gedefererd wegens dubbelzinnige archief-bestemming (niet door validate-docs gedekt); risico > baat vóór commit. Volledig: `docs/sessions/current.md` Sessie 165.
-
-**Rotation:** Top-6 huidig: 165-166-167-168-169-170 (Sessie 164 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie nu vastgelegd (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. Bulk-rotatie current.md-entries was gedeferd t/m 169 (ontbrekende bestemming = nu opgelost). **Sessie 175 = eenmalige catch-up:** archiveer current.md Sessie 81-164 → range-archieven (voorstel `archive-s081-s120.md` + `archive-s121-s164.md`), houd 165+ in current.md, corrigeer SESSIONS.md-index; daarna steady-state per README. Pre-Sessie 162 historie → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 166-167-168-169-170-171 (Sessie 165 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie nu vastgelegd (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. Bulk-rotatie current.md-entries was gedeferd t/m 169 (ontbrekende bestemming = nu opgelost). **Sessie 175 = eenmalige catch-up:** archiveer current.md Sessie 81-164 → range-archieven (voorstel `archive-s081-s120.md` + `archive-s121-s164.md`), houd 165+ in current.md, corrigeer SESSIONS.md-index; daarna steady-state per README. Pre-Sessie 162 historie → `docs/sessions/current.md`.
 
 ---
 
@@ -204,7 +205,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 170
+**Sessie counter:** 171
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -256,6 +257,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 16 jun 2026 (Sessie 170 — structuuranalyse + veilige repo-opruiming: verdict = goed georganiseerd; `docs/products/*.pdf` (~632 KB herbouwbare build-output) uit git, `.typ`-bron + geserveerde `assets/samples/` intact; provenance-header `build-pdfs.sh`; NEW `docs/architecture-review.md`. Nul runtime-impact. Commit `480a227`. Volledig: `docs/sessions/current.md`)
-**Version:** 5.44 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
+**Last updated:** 16 jun 2026 (Sessie 171 — logo-herontwerp: generieke `>_` → eigen H-monogram (H op command-line-balk) door de hele asset-keten (favicon SVG/PNG/ICO + navbar/footer inverted + PWA maskable) + NEW `assets/brand/` kit + social-kaart herbouwd mét logo + og:image `?v=2` cache-bust + Gumroad-PDF's/sample herbouwd + build-DRY logo-sync. Volledig: `docs/sessions/current.md`)
+**Version:** 5.45 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
 

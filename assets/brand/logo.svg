@@ -1,11 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- Groene achtergrond met afgeronde hoeken -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="HackSimulator.nl logo">
+  <!-- Primair logo: groene tegel + H-monogram op command-line-balk -->
   <rect width="32" height="32" rx="6.5" fill="#9fef00"/>
-  <!-- H-monogram (Hack) opgebouwd uit terminal-primitieven -->
-  <!-- Linkerpoot (dik = cursor-block) + rechterpoot + crossbar = de H -->
   <rect x="10" y="7.5" width="3" height="11.5" rx="0.8" fill="#0d1117"/>
   <rect x="19" y="7.5" width="3" height="11.5" rx="0.8" fill="#0d1117"/>
   <rect x="10" y="11.75" width="12" height="3" rx="0.8" fill="#0d1117"/>
-  <!-- Underscore = command-line/prompt-balk waar de H op staat -->
   <rect x="9" y="22" width="14" height="2.5" rx="1.25" fill="#0d1117"/>
 </svg>

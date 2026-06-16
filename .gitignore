@@ -13,6 +13,8 @@ build/
 # Reproduceerbare product-PDF's (build-output van build-pdfs.sh uit .typ-bronnen)
 # Bron blijft getrackt: docs/products/*.typ | Geserveerde lead-magnet: assets/samples/*.pdf
 docs/products/*.pdf
+# Logo wordt door build-pdfs.sh gekopieerd uit de canonieke bron assets/brand/logo.svg
+docs/products/logo.svg
 
 # OS files
 .DS_Store

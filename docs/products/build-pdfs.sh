@@ -38,6 +38,12 @@ fi
 echo "=== HackSimulator PDF Builder ==="
 echo ""
 
+# Logo: kopieer de canonieke brand-SVG naar de build-dir.
+# Single source of truth = assets/brand/logo.svg; docs/products/logo.svg is
+# build-managed (gitignored) zodat het logo niet op meerdere plekken hoeft te syncen.
+echo "[*] Logo synchroniseren uit assets/brand/logo.svg"
+cp ../../assets/brand/logo.svg logo.svg
+
 # Compileer alle guides + sample
 for file in juridische-gids.typ pentest-playbook.typ leerplan.typ pentest-playbook-sample.typ; do
     name="${file%.typ}"

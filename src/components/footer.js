@@ -30,10 +30,11 @@ function getMarketingFooter(options = {}) {
     <div class="footer-content">
       <div class="footer-brand">
         <a href="${basePath}" class="footer-logo">
-          <svg class="brand-icon" width="24" height="24" viewBox="0 0 32 32" aria-hidden="true">
-            <rect width="32" height="32" rx="6" fill="#9fef00"/>
-            <path d="M8 22 L16 16 L8 10" stroke="#0d1117" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            <path d="M18 22 L26 22" stroke="#0d1117" stroke-width="2.5" stroke-linecap="round"/>
+          <svg class="brand-icon" width="24" height="24" viewBox="6 6 20 20" aria-hidden="true">
+            <rect x="10" y="7.5" width="3" height="11.5" rx="0.8" fill="#9fef00"/>
+            <rect x="19" y="7.5" width="3" height="11.5" rx="0.8" fill="#9fef00"/>
+            <rect x="10" y="11.75" width="12" height="3" rx="0.8" fill="#9fef00"/>
+            <rect x="9" y="22" width="14" height="2.5" rx="1.25" fill="#9fef00"/>
           </svg>
           <span>HackSimulator<span class="brand-accent">.nl</span></span>
         </a>
