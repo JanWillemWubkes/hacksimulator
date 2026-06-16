@@ -4,6 +4,36 @@
 
 ---
 
+## Sessie 170: Structuuranalyse projectopbouw + veilige repo-opruiming (16 jun 2026)
+
+**Mission:** Gebruiker vroeg de bestands-/mapstructuur te analyseren ("is dit goed of kunnen we verbeteren?") met als harde randvoorwaarde dat de functionaliteit volledig intact blijft. Beoordelen, en alleen veilige verbeteringen doorvoeren.
+
+**Work done:**
+- **Plan-mode verkenning (read-only):** structuur in kaart gebracht — top-level dirs + groottes, file-type-distributie (609 files excl. git/node_modules), git-tracked overzicht, `src/`-tree per subdir, grootste JS-files, orphan-heuristiek, JS-laad-mechanisme (entry points), `docs/`-tree, alle HTML-pagina's, cruft-hunt.
+- **Verdict: structureel goed georganiseerd.** Geverifieerd: schone domein-indeling `src/` (`commands/{filesystem,network,security,system,special}`, `core`, `ui`, `filesystem`, `gamification`, `tutorial`, `utils`, `analytics`); **nul echte weesmodules** (`blog-theme.js` léék orphan vanuit `src/` maar wordt door alle 10 blogpagina's geladen); geen getrackte backups/cruft; artifact-dirs (`test-results/`, `playwright-report/`, `.playwright-mcp/`) correct gitignored; docs goed beheerd (afgeronde plannen al in `archive/`, levende docs gelinkt vanuit trackers).
+- **"By-design", niet aangeraakt:** 9 root-HTML's (= schone Netlify-URLs; verplaatsen breekt prod-URLs+SEO+links), `commands/index.html` (route-pagina `/commands/`, geen code-duplicaat), twee script-laad-conventies (`type="module"` vs. globale `defer` — globals op `window`, uniformeren hoog risico), `assets/legal/*.html` (geserveerde URLs), `SESSIONS.md`+`docs/sessions/` (bewust roterend logsysteem).
+- **Veilige acties (commit `480a227`, 7 files, nul js/css/html/_headers/netlify-wijziging):**
+  - `docs/products/*.pdf` (5 bestanden, ~632 KB) uit git via `.gitignore`-regel `docs/products/*.pdf` + `git rm --cached` — reproduceerbare build-output uit `.typ` (via `build-pdfs.sh`). Bestanden blijven op schijf; `.typ`-bronnen + geserveerde lead-magnet `assets/samples/pentest-playbook-sample.pdf` (gelinkt vanuit welkomstmail) blijven getrackt.
+  - Provenance-header in `docs/products/build-pdfs.sh` (bron→build→publiceer-flow expliciet).
+  - NEW `docs/architecture-review.md` (~1 pagina): verdict + by-design-overzicht + product-PDF artifact-flow + "bewust niet gedaan".
+- **Cache-bust-analyse (read-only, niet uitgevoerd):** 9 inconsistente `?v=X`-schema's over 23 HTML-bestanden; normaliseren raakt live browsercaching (`max-age=604800`), fout = lokaal onzichtbaar + treft terugkerende bezoekers tot 7 dagen; echte automatisering vereist build-stap (botst "vanilla, no build"). Apart te behandelen indien gewenst.
+
+**Commits:** `480a227` (chore(repo): untrack herbouwbare product-PDF's + structuurreview) + deze /summary doc-sync.
+
+**Learnings:**
+- **De PDF-"duplicaat" was geen bug maar een gedocumenteerde bron→publiceer-pijplijn** (`.typ` → `docs/products/*.pdf` build → kopie naar `assets/samples/`). `cmp` bevestigde byte-identiek. De juiste fix is build-output untracken, niet één van de twee verwijderen.
+- **"Opruimen onder de vlag grondig" durven weigeren:** de in plan-mode goedgekeurde doc-verplaatsing (afgeronde plan-docs → `archive/`) tijdens uitvoering laten vallen toen bleek dat de inbound refs historische log-narratie zijn in `current.md` (een door `validate-docs.sh` bewaakt bestand) en één doc nog "pending" was. Cosmetische winst (1 map dieper) < kosten (gated historisch log editen). Generaliseert de Sessie-169-learning naar de eigen workflow.
+- **Orphan-heuristiek moet álle consumers scannen:** eerste sweep miste `blog/`-HTML → vals "orphan"-alarm op `blog-theme.js`. Verifieer vóór je "verwijderbaar" claimt — exact het patroon dat een echte breuk had veroorzaakt.
+- **Plan-mode AskUserQuestion bij scope-keuze + risico-asymmetrie:** scope (veilig vs. rapport vs. diepere refactor) is gebruikers-territorium; cache-bust-risico expliciet uitgelegd vóór de keuze i.p.v. mechanisch uitvoeren.
+
+**Next steps:**
+- Optioneel: cache-bust `?v=X` normaliseren (apart, mét E2E-verificatie) — niet gebundeld in opruiming.
+- Bulk-rotatie session-logs blijft GEDEFERD (zie onder) — archief-bestemmingsconventie nog te bevestigen.
+
+**Metrics delta:** Bundle runtime onveranderd (geen `src/`/`styles/`-wijziging); test-suite onveranderd (197 tests / 23 spec files); git-tree −632 KB binaries (PDF's untracked). validate-docs fast + `--deep` exit 0.
+
+---
+
 ## Sessie 169: GSC-indexeringsanalyse + SEO-fix (niet-geïndexeerde pagina's) (16 jun 2026)
 
 **Mission:** Gebruiker deelde Google Search Console-screenshots ("Waarom pagina's niet worden geïndexeerd": 3 omleiding + 1 alt-canonical + 8 gevonden + 7 gecrawld = 19 pagina's). Analyseren wat echt kapot is vs. benign, de fixbare oorzaken oplossen, deployen en GSC-vervolgstappen aanreiken.

@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 169)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 170)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 170: Structuuranalyse projectopbouw + veilige repo-opruiming (16 jun 2026)
+⚠️ **Never:**
+- Een module "orphan/verwijderbaar" noemen zonder álle consumers te scannen — orphan-grep over `src/` alleen miste `blog/`-HTML → vals alarm op `blog-theme.js` (laadt in alle 10 blogpagina's). Verifieer breed vóór je "weg ermee" claimt; dit had anders een echte breuk gegeven.
+- Schijnbare "rommel" verplaatsen/hernoemen zonder de functionele reden te checken — 9 root-HTML's = schone Netlify-URLs, `commands/index.html` = route-pagina, `assets/legal/*.html` = geserveerde URLs; elke move breekt prod-URLs+SEO+links (de fout die Sessie 169 net repareerde).
+- Een in plan-mode goedgekeurde opruimstap mechanisch uitvoeren als verificatie 'm net-negatief blijkt — de doc-→`archive/`-verplaatsing liet ik vallen toen bleek dat inbound refs historische log-narratie zijn in gated `current.md` + één doc nog "pending"; cosmetische winst < kosten van een gated historisch log editen. Generaliseert de Sessie-169 "geen cargo-cult-opruimen onder de vlag grondig"-les naar de eigen workflow.
+- Een byte-identiek bestand in twee paden meteen als bug-duplicaat behandelen — `pentest-playbook-sample.pdf` in `docs/products/` én `assets/samples/` is de gedocumenteerde bron→build→publiceer-flow (`build-pdfs.sh`), geen fout; juiste fix = build-output untracken, niet één kopie deleten.
+
+✅ **Always:**
+- Build-artifacts uit git, bron + geserveerde kopie erin — `docs/products/*.pdf` (~632 KB, herbouwbaar uit `.typ`) gegitignored + `git rm --cached`; `.typ`-bronnen en geserveerde lead-magnet `assets/samples/` blijven getrackt. Provenance-header in het build-script maakt de flow expliciet.
+- Risico-asymmetrie expliciet maken vóór een scope-keuze — cache-bust `?v=X` normaliseren raakt live browsercaching (`max-age=604800`): fout is lokaal onzichtbaar + treft terugkerende bezoekers tot 7 dagen, en echte automatisering vereist een build-stap (botst "vanilla, no build"). Daarom apart, niet in een opruim-pass.
+- "Functionaliteit intact" bewijzen via wat NIET wijzigde — nul `.js`/`.css`/`.html`/`_headers`/`netlify.toml`-diff ⇒ site-gedrag + alle URLs per definitie identiek; `validate-docs.sh` fast + `--deep` exit 0 als gate. Volledig: `docs/sessions/current.md` Sessie 170.
+
 ### Sessie 169: GSC-indexeringsanalyse + SEO-fix niet-geïndexeerde pagina's (16 jun 2026)
 ⚠️ **Never:**
 - Een GSC "niet-geïndexeerd"-melding als bug behandelen zonder de bron-kolom te lezen — "Website"-bron (redirect/canonical) = jouw config en vaak gewenst gedrag; "Google-systemen" (gevonden/gecrawld niet geïndexeerd) = crawl-budget/autoriteit/tijd, niet patchbaar in code. 17 van 19 meldingen waren benign of niet-fixbaar; slechts 2 echte zelf-veroorzaakte fouten.
@@ -143,19 +155,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Fix in de canonieke bron (`.typ`) + artefact herbouwen + output verifiëren (`pdftotext`/`pdfinfo`) — een fix is pas klaar als de PDF die de koper downloadt klopt; rebuild-only timestamp-ruis terugdraaien houdt de diff eerlijk.
 - Eerlijk deferren boven blind protocol — current.md bulk-rotatie 155-159 gedefererd wegens dubbelzinnige archief-bestemming (niet door validate-docs gedekt); risico > baat vóór commit. Volledig: `docs/sessions/current.md` Sessie 165.
 
-### Sessie 164: Blog feitencontrole — bronverificatie ontkracht 6/7 agent-vals-alarmen + OWASP 2025-kader (14 jun 2026)
-⚠️ **Never:**
-- Audit-agent-"verdachte feiten" als fout aannemen — 6 van 7 (Heartland/Yahoo/TalkTalk/Metasploit/backdoor/Twitter) waren vals alarm; eigen WebSearch-verificatie redde correcte feiten van een onterechte "fix". De énige echte fout (Sony PSN als SQLi) kwam pas via verificatie boven, niet uit een agent-rapport.
-- Een tijdgevoelige claim ("2021 = meest recente OWASP Top 10") onverifieerd laten staan — de 2025-editie was al definitief (7 jan 2026). Verouderd-maar-eerlijk-gelabeld ≠ fout, maar de claim "meest recente" wás fout.
-- Onbronbare ronde statistieken laten staan ("70% vaker", "45-60%", "80% begint met social engineering") — herformuleren/ankeren aan een documenteerbare bron of kwalitatief maken (memory `feedback_tone_no_hype`).
-
-✅ **Always:**
-- Eigen bronverificatie boven agent-gezag — reachability/bron-check scheidt echte fouten van plausibele ruis (Sessie 160/163-discipline, nu op educatieve/marketing-content).
-- Liever een feit weglaten dan onzeker claimen — SSRF-fusiebestemming in OWASP 2025 niet met zekerheid uit de bron → weggelaten i.p.v. gegokt.
-- Juridische claims tegen de wettekst checken — art. 138ab: kale computervredebreuk max 2 jaar (lid 1); 4 jaar (lid 2) pas bij gegevens overnemen/aftappen of binnendringen via openbaar telecomnet, niet "voorbedachte rade".
-- Grote docs (TASKS.md/current.md >25k tokens) overschrijden de Read/Edit-tool-limiet → doc-sync via geverifieerd Python-script met occurrence-asserts. Volledig: `docs/sessions/current.md` Sessie 164.
-
-**Rotation:** Top-6 huidig: 164-165-166-167-168-169 (Sessie 163 → `docs/sessions/current.md` via 1-in-1-out). Bulk-rotatie 155-159 GEDEFERD — archief-bestemmingsconventie dubbelzinnig (recent.md t/m 149 oplopend; archive-q* 2024), bevestigen vóór uitvoeren. Volgende bulk-rotation Sessie 170. Pre-Sessie 162 historie → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 165-166-167-168-169-170 (Sessie 164 → `docs/sessions/current.md` via 1-in-1-out). Bulk-rotatie 155-159 BLIJFT GEDEFERD — archief-bestemmingsconventie dubbelzinnig (recent.md t/m 149 oplopend; archive-q* 2024), bevestigen vóór uitvoeren (Sessie 170 = aangewezen bulk-punt maar overgeslagen: grote-bestand-surgery + ambigue bestemming, conform documentatie-deferral, risico > baat zonder bevestiging). Volgende bulk-rotation Sessie 175. Pre-Sessie 162 historie → `docs/sessions/current.md`.
 
 ---
 
@@ -204,7 +204,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 169
+**Sessie counter:** 170
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -256,6 +256,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 16 jun 2026 (Sessie 169 — GSC-indexeringsanalyse + SEO-fix: 2 duplicaat-bronnen weg (14 blog-footers `href="index.html"`→`/blog/`, welkom-body `../index.html`→`/`), homepage blog-links 3→8 crawl-nudge, sitemap `lastmod` 7 URLs→2026-06-15; rest benign. Commit `cce7dce`. Volledig: `docs/sessions/current.md`)
-**Version:** 5.43 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
+**Last updated:** 16 jun 2026 (Sessie 170 — structuuranalyse + veilige repo-opruiming: verdict = goed georganiseerd; `docs/products/*.pdf` (~632 KB herbouwbare build-output) uit git, `.typ`-bron + geserveerde `assets/samples/` intact; provenance-header `build-pdfs.sh`; NEW `docs/architecture-review.md`. Nul runtime-impact. Commit `480a227`. Volledig: `docs/sessions/current.md`)
+**Version:** 5.44 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
 
