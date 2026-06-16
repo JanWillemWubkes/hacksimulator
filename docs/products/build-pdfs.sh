@@ -1,5 +1,12 @@
 #!/bin/bash
 # HackSimulator.nl — PDF Build Script
+#
+# Provenance / artifact-flow:
+#   bron      : docs/products/*.typ  (getrackt in git — single source of truth)
+#   build     : docs/products/*.pdf  (output van dit script; NIET getrackt — zie .gitignore)
+#   geserveerd: assets/samples/pentest-playbook-sample.pdf  (lead-magnet, wél getrackt)
+# De volledige product-PDF's worden naar Gumroad geupload; de *.pdf hier zijn herbouwbaar.
+#
 # Vereist: typst (https://github.com/typst/typst)
 #
 # Installatie:
