@@ -34,7 +34,7 @@
 **Actieve Mijlpalen:** M5.5 Monetization (deliverability + lead-magnet polish) + M6 Tutorial System (last 3 taken) + Blog content-SEO (post-Sessie 138 hub-clustering)
 **Current Status:** ✅ LIVE — Playwright E2E: **197 tests, 23 spec files** (Chromium, Firefox, WebKit) | AdSense + Ko-fi + Brevo (deliverability getuned) + Gumroad v1.0 + Lead magnet live
 **Bundle (geverifieerd 29 mei 2026, Sessie 144):**
-- **Site totaal:** ~2160 KB unminified | src/ 613 KB | styles/ 262 KB | blog/ 360 KB (12 files: 10 posts + index + welkom) | assets/ 925 KB (+240 KB Sessie 172: 3 per-gids covers) | HTML ~150 KB
+- **Site totaal:** ~2240 KB unminified | src/ 613 KB | styles/ 262 KB | blog/ 360 KB (12 files: 10 posts + index + welkom) | assets/ 1001 KB (+316 KB Sessie 172: 3 per-gids + 1 bundel cover) | HTML ~150 KB
 - **Terminal Core (runtime van terminal.html, gemeten Sessie 141 via BFS module-graph):** **~781 KB unminified** | HTML 19 KB + CSS 160 KB (6 files) + JS 601 KB (99 module-graph files). Geschatte minified ~547 KB. **⚠️ ~37% boven 400 KB budget zelfs minified** — zie #24 (heroverwegen post-implementatie)
 - **Lighthouse on-wire ná Pad C1+C2 (Sessie 144, productie):**
   - `/terminal.html`: **Mobile 49→59/100 (+10), Desktop 77→94/100 (+17)** | Total 626→375 KB (-251) | 3rd-party 353→101 KB (-252) | **AdSense 252 KB / 420 ms → 0/0** | LCP mobile 7716→4265 ms (-3451) | TBT mobile 1087→985 ms
@@ -43,7 +43,7 @@
 - **Playwright:** 23 spec files, 197 tests per browser-project (`npx playwright test --list --project=chromium`, geverifieerd Sessie 160; Sessie 156 added `tutorial-gestures.spec.js`)
 
 <!-- VALIDATE-BUNDLE-START Sessie 157 — ground-truth target voor scripts/validate-docs.sh --deep -->
-<!-- src=615 styles=378 blog=413 assets=925 (KB unminified, du -sb / 1024 basis; assets +240 KB Sessie 172: 3 per-gids covers) -->
+<!-- src=615 styles=378 blog=413 assets=1001 (KB unminified, du -sb / 1024 basis; assets +316 KB Sessie 172: 3 per-gids + 1 bundel cover) -->
 <!-- VALIDATE-BUNDLE-END -->
 
 **Volgende Stappen:**

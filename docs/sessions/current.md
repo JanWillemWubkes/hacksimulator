@@ -21,6 +21,7 @@
 - **Rasterizer-pivot:** Playwright/chromium (Sessie 171-patroon) faalde — `npx playwright install chromium` gaf 403 "Host not in allowlist: cdn.playwright.dev" (egress-policy). Overgestapt op `@resvg/resvg-js` (prebuilt Rust SVG→PNG, geen browser-download). Layout handmatig in SVG (resvg auto-wrapt geen tekst); systeemfonts Liberation Sans (titel/wordmark) + DejaVu Sans Mono (eyebrow/footer). `@resvg/resvg-js` → `devDependencies` (build-only, naast gifenc/pngjs).
 - **Render-en-meet:** alle 3 covers visueel geverifieerd (Read image) — langste titel + langste eyebrow passen binnen het frame.
 - **`image`-velden gekoppeld** aan de eigen covers; beide JSON-LD-blokken (CollectionPage + BreadcrumbList) parsen valide via Python `json.loads`.
+- **Follow-up (gebruiker vroeg ernaar): bundel als 4e Product toegevoegd.** De bundel (`emzjvj`, "HackSimulator Starter Kit", €10) zat nog niet in de markup terwijl het de primaire CTA is. Toegevoegd als `position: 4` met dezelfde eerlijke velden + eigen cover `assets/products/bundel-starter-kit.png` (eigen footer "3 PDF-gidsen · ~75 pagina's · vanaf €10"). Schema nu 4 producten, allen valide.
 
 **Commits:**
 - `d67d3af` — `fix(seo): los GSC merchant-listing velden op in gidsen.html Product schema`

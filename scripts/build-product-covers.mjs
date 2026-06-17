@@ -34,6 +34,7 @@ const GUIDES = [
   { slug: 'ethisch-hacken-wet',      eyebrow: 'GIDS · WET & ETHIEK',     title: ['Ethisch Hacken', '& Nederlandse Wet'] },
   { slug: 'eerste-pentest-playbook', eyebrow: 'GIDS · PENTEST PLAYBOOK', title: ['Je Eerste Pentest:', 'Stap-voor-Stap Playbook'] },
   { slug: 'ctf-leerplan',            eyebrow: 'GIDS · LEERPLAN',         title: ['Van Nul naar CTF:', '12-Weken Leerplan'] },
+  { slug: 'bundel-starter-kit',      eyebrow: 'BUNDEL · ALLE 3 GIDSEN',  title: ['HackSimulator', 'Starter Kit'], foot: '3 PDF-gidsen · ~75 pagina’s · vanaf €10' },
 ];
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -55,7 +56,7 @@ function svg(g) {
   const chipX = 84, chipY = 232, chipH = 44;
   const chipW = Math.round(eyebrow.length * 13.2 + 40); // mono ~0.6em @22px
   const [l1, l2] = g.title.map(esc);
-  const foot = 'PDF-gids · Nederlands · vanaf €5';
+  const foot = g.foot || 'PDF-gids · Nederlands · vanaf €5';
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
   <rect width="${W}" height="${H}" fill="${DARK}"/>
