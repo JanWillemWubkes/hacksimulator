@@ -707,6 +707,13 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
 - [ ] **Feedback Save Logic** - Backend/email integratie voor feedback
 - [ ] **Command-Level Feedback** - Thumbs up/down per command (FR7.3 deferred)
 
+### 🔵 OPEN (geblokkeerd op echte data): Product `aggregateRating` + `review` markup (Sessie 173)
+**Motief:** GSC meldt 2× **niet-kritieke** suggestie op `gidsen.html` Product-fragmenten — ontbrekende velden `aggregateRating` en `review`. Vullen geeft sterretjes in Google + rijkere snippets.
+- **HARDE VOORWAARDE — niet eerder uitvoeren:** alleen toevoegen met **echte** klantbeoordelingen. Fake/verzonnen ratings = Google-beleidsschending → risico op handmatige actie (verlies álle rich results) + botst met de "geen verzonnen schema-data / geen cargo-cult-SEO"-lijn (Sessie 169/172, merchant-listing-fix Sessie 172). Tot die tijd is **niets doen de correcte actie** — de waarschuwing is niet-kritiek en blokkeert niets.
+- [ ] Reviewbron regelen: Gumroad-reviews exporteren OF eigen feedbackformulier per gids
+- [ ] Bij ≥1 echte review: `aggregateRating` (echt gemiddelde + `reviewCount`) + individuele `review`-objecten per Product in `gidsen.html`
+- [ ] JSON-LD valideren (Python `json.loads` over alle blokken) + Rich Results Test 0 fouten, dan pas live + GSC "valideren"
+
 ### Commands & Features
 - [ ] **Continue Command** - Expliciete sessie restore (localStorage doet dit al automatisch)
 - [x] **Tutorial Command** - Guided scenarios (recon, webvuln, privesc) ✅ Gebouwd in M6 (Sessie 103-104)
