@@ -55,7 +55,7 @@ function svg(g) {
   const chipX = 84, chipY = 232, chipH = 44;
   const chipW = Math.round(eyebrow.length * 13.2 + 40); // mono ~0.6em @22px
   const [l1, l2] = g.title.map(esc);
-  const foot = 'PDF-gids · Nederlands · pay what you want';
+  const foot = 'PDF-gids · Nederlands · vanaf €5';
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
   <rect width="${W}" height="${H}" fill="${DARK}"/>
