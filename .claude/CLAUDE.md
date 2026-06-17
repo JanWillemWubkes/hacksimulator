@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 171)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 172)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 172: GSC Verkopersvermeldingen (merchant-listing) fix + per-gids covers (17 jun 2026)
+⚠️ **Never:**
+- Merchant-listing-velden voor een digitaal product "oplossen" met verzonnen data — een eigen PDF heeft geen `gtin`; `brand` is de juiste algemene ID. Verzin geen fysiek-winkel-velden (Sessie-169-lijn: geen cargo-cult-SEO).
+- `shippingRate: 0` lezen/uitleggen als "gratis product" — schema scheidt `price` (blijft 5.00) van verzendkosten (0). De markup zegt "€5, €0 verzendkosten", niet "gratis". De gebruiker vroeg hier terecht op door.
+- Kaal "pay what you want" gebruiken wanneer er een minimumprijs geldt — Gumroad PWYW heeft een vloer (€5/gids, €10/bundel); zonder de vloer suggereert het €0. Noem altijd het minimum ("vanaf €5 (pay what you want)"). Stond in mijn cover-footer én 2 hero-plekken; lijn nieuwe copy uit op het al-accurate prijskaartje-patroon.
+- Aannemen dat de Sessie-171 rasterizer-route (Playwright/chromium) nog werkt — `cdn.playwright.dev` staat niet in de egress-allowlist → `npx playwright install chromium` geeft 403. Ken een browserloos alternatief vóór je erop leunt.
+
+✅ **Always:**
+- Digitale-download merchant-velden eerlijk invullen: `hasMerchantReturnPolicy` = `MerchantReturnNotPermitted` (NL, herroepingsrecht vervalt bij download, art. 6:230p BW) + `shippingDetails` €0/0-dagen (instant) + `brand` als identifier. Accuraat én lost GSC op.
+- Browserloze rasterizer (`@resvg/resvg-js`, prebuilt Rust via npm-registry) wanneer egress chromium blokkeert — trade-off: resvg auto-wrapt geen tekst, dus regel-layout handmatig in de SVG plaatsen. `package-lock.json` is hier gitignored → build-dep handmatig in `package.json` devDependencies.
+- Render-en-meet ook bij gegenereerde covers: elke PNG visueel inspecteren (langste titel/eyebrow binnen het frame, footer-claim feitelijk juist) vóór je 'm koppelt.
+- JSON-LD na elke edit valideren (Python `json.loads` over álle `application/ld+json`-blokken) — een kritieke `image`-fix telt pas na deploy + GSC "Validatie van fix valideren". Volledig: `docs/sessions/current.md` Sessie 172.
+
 ### Sessie 171: Logo-herontwerp H-monogram + asset-keten + brand-kit (16 jun 2026)
 ⚠️ **Never:**
 - Een logo "vervangen" zonder álle inline-kopieën te scannen — hetzelfde glyph zat in `favicon.svg` + `navbar.js` (2×) + `footer.js` + `docs/products/logo.svg`; een gemiste kopie geeft een afwijkend logo. Repo-brede sweep op het oude pad vóór je "klaar" claimt.
@@ -144,19 +157,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Cosmetische witregel-controle ná een geautomatiseerde markdown-move — een cut neemt de sectie-scheider mee (ontbrekende leegregel), een paste verdubbelt er een; occurrence-asserts zien dat niet.
 - `--deep` exit 0 als harde gate ná de fix (M9 `OK 19/19` + `OK 100%`). Volledig: `docs/sessions/current.md` Sessie 167.
 
-### Sessie 166: Pre-launch security-audit + CSP-hardening (14 jun 2026)
-⚠️ **Never:**
-- CSP `script-src` `'unsafe-inline'` wegwerken via hashes op een host die HTML minificeert — Netlify `build.processing.html minify` verandert de bytes → SHA-256 breekt. Externaliseer inline scripts naar `/src/*.js` (bestaand `init-theme.js`-patroon); nonce/Edge-Function schendt "no backend".
-- Een geëxternaliseerd consent-default-blok los/async laden naast een async AdSense-tag — race: AdSense kan vóór de `denied`-defaults draaien (ads zonder toestemming). Injecteer AdSense ná de defaults vanuit consent-default.js; verifieer in `dataLayer`.
-- Een agent-bevinding of een "rode" E2E-test als waar/jouw-schuld aannemen zonder bron- resp. schone-baseline-verificatie — privacy-agent claimde vals "geen unsafe-inline in script-src"; 2/3 testfailures faalden óók zonder de diff (pre-existing), 1 was flaky (`git stash` + rerun scheidt regressie van ruis).
-
-✅ **Always:**
-- Launch-kritische CSP browser-verifiëren onder de échte header (lokale server die `netlify.toml`-CSP injecteert) — een gewone static server stuurt geen CSP, dus violations blijven onzichtbaar; zo kwamen 2 pre-existing gaten boven (frame-src/img-src `adtrafficquality` = geblokkeerde AdSense fraud-beacons, F6).
-- `gtag` als globale binding houden bij externalisatie — consent.js/init-analytics.js roepen 'm als kale identifier; een IIFE-wrapper breekt de consent-update stil.
-- Veilige fixes eerst, de risicovolle (CSP) als laatste met volledige verificatie als gate (nul console-violations per pagina-archetype + E2E-baseline-vergelijking).
-- Bij her-verzoek tot veiligheidscheck vóór launch een eerder advies durven herroepen als verificatie risico toont — correctheid boven consistentie ([[feedback_verify_before_launch_critical]]). Volledig: `docs/sessions/current.md` Sessie 166.
-
-**Rotation:** Top-6 huidig: 166-167-168-169-170-171 (Sessie 165 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie nu vastgelegd (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. Bulk-rotatie current.md-entries was gedeferd t/m 169 (ontbrekende bestemming = nu opgelost). **Sessie 175 = eenmalige catch-up:** archiveer current.md Sessie 81-164 → range-archieven (voorstel `archive-s081-s120.md` + `archive-s121-s164.md`), houd 165+ in current.md, corrigeer SESSIONS.md-index; daarna steady-state per README. Pre-Sessie 162 historie → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 167-168-169-170-171-172 (Sessie 165 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie nu vastgelegd (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. Bulk-rotatie current.md-entries was gedeferd t/m 169 (ontbrekende bestemming = nu opgelost). **Sessie 175 = eenmalige catch-up:** archiveer current.md Sessie 81-164 → range-archieven (voorstel `archive-s081-s120.md` + `archive-s121-s164.md`), houd 165+ in current.md, corrigeer SESSIONS.md-index; daarna steady-state per README. Pre-Sessie 162 historie → `docs/sessions/current.md`.
 
 ---
 
@@ -205,7 +206,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 171
+**Sessie counter:** 172
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -257,6 +258,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 16 jun 2026 (Sessie 171 — logo-herontwerp: generieke `>_` → eigen H-monogram (H op command-line-balk) door de hele asset-keten (favicon SVG/PNG/ICO + navbar/footer inverted + PWA maskable) + NEW `assets/brand/` kit + social-kaart herbouwd mét logo + og:image `?v=2` cache-bust + Gumroad-PDF's/sample herbouwd + build-DRY logo-sync. Volledig: `docs/sessions/current.md`)
-**Version:** 5.45 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
+**Last updated:** 17 jun 2026 (Sessie 172 — GSC "Verkopersvermeldingen"-fix `gidsen.html` Product-markup: 4 velden eerlijk per digitaal product + NEW per-gids covers via `scripts/build-product-covers.mjs` (resvg) + "pay what you want"→"vanaf €5/€10". Volledig: `docs/sessions/current.md`)
+**Version:** 5.46 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
 

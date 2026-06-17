@@ -4,6 +4,46 @@
 
 ---
 
+## Sessie 172: GSC "Verkopersvermeldingen" merchant-listing fix + per-gids covers (17 jun 2026)
+
+**Mission:** Google Search Console meldde 4 problemen onder "Gestructureerde gegevens voor Verkopersvermeldingen" (merchant listings) op `hacksimulator.nl` — 1 kritiek (ontbrekend veld `image`) + 3 niet-kritiek (`hasMerchantReturnPolicy` in offers, geen algemene ID zoals gtin/merk, `shippingDetails` in offers). Doel: de Product-markup valide maken zónder misleidende data.
+
+**Work done:**
+- **Bron gelokaliseerd:** de enige `Product`-markup zat in `gidsen.html` (JSON-LD `CollectionPage` → `ItemList` met 3 Gumroad-gidsen). De `offers` hadden alleen `price`/`priceCurrency`/`availability`.
+- **4 velden per product eerlijk ingevuld (digitaal download-product):**
+  - `image` (kritiek): aanvankelijk gedeelde `og-image.png`, daarna vervangen door eigen cover per gids (zie hieronder).
+  - `brand`: `{"@type":"Brand","name":"HackSimulator.nl"}` — eigen producten, lost de "algemene ID"-suggestie op (een eigen PDF heeft geen gtin; `brand` is de juiste identifier).
+  - `hasMerchantReturnPolicy`: `MerchantReturnPolicy` met `applicableCountry: NL` + `returnPolicyCategory: MerchantReturnNotPermitted` — accuraat: bij directe digitale download vervalt het herroepingsrecht (art. 6:230p BW).
+  - `shippingDetails`: `OfferShippingDetails`, `shippingRate` €0, `deliveryTime` handling+transit 0 dagen — instant download, géén verzendkosten. **NIET** "gratis product": `price` blijft `5.00`; verzendkosten ≠ prijs (gebruiker vroeg hierop door — terecht, maar correct).
+  - Tevens `offers.url` toegevoegd (Gumroad-link per product).
+- **Verbeterpunt (gebruiker vroeg dit expliciet mee te nemen): losse cover-image per gids.** Geen per-product covers aanwezig (alleen `og-image.png` + brand-logo's). NEW `scripts/build-product-covers.mjs` rendert 3 covers (1200×630 @2x) → `assets/products/{ethisch-hacken-wet,eerste-pentest-playbook,ctf-leerplan}.png`. On-brand: H-monogram (groen-op-donker), wordmark met groene `.nl`, eyebrow-chip, witte titel (2 regels), neon-balk, mono-footer "PDF-gids · Nederlands · vanaf €5" + groene cursor. Merkkleuren uit `assets/brand/README.md`.
+- **Correctie na review (gebruiker): "pay what you want" zonder minimum is misleidend.** De gidsen hebben een vloer (€5 per gids, €10 bundel; Gumroad name-your-price-met-minimum). Cover-footer gewijzigd "pay what you want" → "vanaf €5" (3 covers her-gerenderd). Tevens 2 kale plekken in `gidsen.html` (hero-subtitle + bundel `gids-price-sub`) uitgelijnd op het al-accurate patroon van de prijskaartjes ("vanaf €X (pay what you want)").
+- **Rasterizer-pivot:** Playwright/chromium (Sessie 171-patroon) faalde — `npx playwright install chromium` gaf 403 "Host not in allowlist: cdn.playwright.dev" (egress-policy). Overgestapt op `@resvg/resvg-js` (prebuilt Rust SVG→PNG, geen browser-download). Layout handmatig in SVG (resvg auto-wrapt geen tekst); systeemfonts Liberation Sans (titel/wordmark) + DejaVu Sans Mono (eyebrow/footer). `@resvg/resvg-js` → `devDependencies` (build-only, naast gifenc/pngjs).
+- **Render-en-meet:** alle 3 covers visueel geverifieerd (Read image) — langste titel + langste eyebrow passen binnen het frame.
+- **`image`-velden gekoppeld** aan de eigen covers; beide JSON-LD-blokken (CollectionPage + BreadcrumbList) parsen valide via Python `json.loads`.
+
+**Commits:**
+- `d67d3af` — `fix(seo): los GSC merchant-listing velden op in gidsen.html Product schema`
+- `672c32e` — `feat(seo): losse cover-images per gids voor Product-markup`
+- `21567d0` — `fix(seo): cover-footer 'pay what you want' -> 'vanaf €5' (minimum klopt)`
+- `00efe59` — `fix(copy): kale 'pay what you want' op gidsen.html krijgt minimum erbij`
+
+**Learnings:**
+- **Merchant-listing-velden voor een digitaal product zijn eerlijk in te vullen — geen cargo-cult nodig.** `MerchantReturnNotPermitted` (NL, herroepingsrecht vervalt bij download) en `shippingDetails` €0/0-dagen (instant download) zijn feitelijk juist; géén verzonnen gtin (een eigen PDF heeft er geen — `brand` is de correcte identifier). Dit volgt de Sessie-169-lijn "geen cargo-cult-SEO".
+- **`shippingRate: 0` ≠ "gratis product".** Schema scheidt `price` (5.00, blijft staan) van verzendkosten (0). De gebruiker vroeg hier scherp op door; de markup zegt "€5, €0 verzendkosten", niet "gratis". Belangrijk om dit expliciet te kunnen uitleggen.
+- **"Pay what you want" zonder genoemd minimum is misleidend wanneer er een vloer is.** Gumroad PWYW heeft een minimumprijs (€5/gids, €10/bundel); kale PWYW suggereert €0. Altijd de vloer noemen ("vanaf €5 (pay what you want)"). De gebruiker ving dit in mijn cover-footer; het stond ook in 2 hero-plekken. Lijn nieuwe copy uit op het al-accurate prijskaartje-patroon i.p.v. een eigen kale variant introduceren.
+- **Egress-policy breekt de bestaande rasterizer-route — ken een browserloos alternatief.** `cdn.playwright.dev` staat niet in de allowlist → chromium niet te downloaden. `@resvg/resvg-js` (prebuilt native, via npm-registry die wél bereikbaar is) rasteriseert SVG→PNG zonder browser. Trade-off: resvg auto-wrapt geen tekst → handmatige regel-layout in de SVG.
+- **`package-lock.json` is gitignored in deze repo** → een build-dependency toevoegen vergt een handmatige `devDependencies`-entry in `package.json` voor reproduceerbaarheid (de lockfile draagt 'm niet mee).
+- **De kritieke `image`-fix telt pas na deploy + GSC re-crawl** → handmatige actie "Validatie van fix valideren" in GSC.
+
+**Next steps:**
+- Handmatig (Heisenberg): na Netlify-deploy in GSC bij de melding "Validatie van fix valideren" klikken.
+- Optioneel later: de bundel (`emzjvj`) heeft nog géén Product-markup (alleen de 3 losse gidsen). Bewust buiten scope — GSC flagde alleen de bestaande 3.
+
+**Metrics delta:** `assets/` +~255 KB (3 covers ~85 KB elk; SEO/content-pijler, budgetloos — buiten Terminal Core <400 KB). `gidsen.html` +~2,9 KB JSON-LD. Terminal Core runtime onveranderd (geen `src/`/`styles/`-wijziging). E2E specs 23 / 172 tests (ground-truth, ongewijzigd).
+
+---
+
 ## Sessie 171: Logo-herontwerp H-monogram + asset-keten + brand-kit (16 jun 2026)
 
 **Mission:** Gebruiker vroeg het bestaande logo te "vernieuwen/verbeteren/perfectioneren". Het oude logo was een generieke terminal-prompt `>_` (HTB-groene tegel) — technisch netjes maar het meest voorkomende dev-tool-symbool, nul onderscheidend vermogen. Doel: een uniek, ownable, op alle web-formaten goed werkend logo ontwerpen en volledig doorvoeren.
