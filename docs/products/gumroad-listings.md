@@ -6,19 +6,16 @@
 
 ## Pricing Strategie
 
-| Product | Aanbevolen prijs | Alternatief (PWYW) |
-|---------|-----------------|-------------------|
-| Juridische Gids | €4,99 | €0+ (lead magnet) |
-| Pentest Playbook | €4,99 | €0+ (lead magnet) |
-| 12-Weken Leerplan | €4,99 | €0+ (lead magnet) |
-| **Bundel (alle 3)** | **€9,99** | €0+ |
+| Product | PWYW-minimum (vloer) | Suggestie op Gumroad |
+|---------|----------------------|----------------------|
+| Juridische Gids | €5 | €5+ |
+| Pentest Playbook | €5 | €5+ |
+| 12-Weken Leerplan | €5 | €5+ |
+| **Bundel (alle 3)** | **€10** | **€10+** |
 
-**Aanbeveling:** Start met **PWYW (€0 minimum)**. Redenen:
-- Bij <500 bezoekers/maand is email-capture waardevoller dan €4,99 per verkoop
-- Gratis downloads = meer bereik = meer newsletter subscribers
-- Gumroad vraagt email bij elke download — automatische lead capture
-- Je kunt later altijd een minimum instellen als traffic groeit
-- Het monetization plan bevestigt dit: "€0 minimum → werkt als lead magnet"
+**Aanbeveling:** **Pay-what-you-want met minimum €5 per gids / €10 bundel** (de getoonde "vanaf €5/€10" op de site).
+
+> **Strategie-noot:** het oorspronkelijke plan was een €0-minimum (gidsen als lead magnet). Dat is verlaten — een vloer werkt beter, én de **gratis Sample Pentest** (9 pagina's, e-mail-capture) vervult de lead-magnet-rol al. Zo is de funnel schoon gescheiden: gratis sample = bereik + e-mailadressen, betaalde gidsen = inkomsten. Noem daarom altijd het minimum ("vanaf €5"), nooit kaal "pay what you want".
 
 ---
 
@@ -318,8 +315,8 @@ Of download alle 3 als bundel: [GUMROAD_URL_BUNDEL]
 3. Vul in:
    - **Name:** Copy-paste de titel uit dit bestand
    - **Description:** Copy-paste de lange beschrijving
-   - **Price:** Kies "Pay what you want" en zet minimum op $0 (of €0)
-   - **Suggested price:** $5 (Gumroad toont dit als suggestie)
+   - **Price:** Kies "Pay what you want" en zet minimum op €5 (bundel: €10)
+   - **Suggested price:** €5 (bundel: €10) — Gumroad toont dit als suggestie
    - **Cover image:** Maak in Canva een thumbnail (1280x720px) met de kleuren uit dit bestand
    - **File:** Upload de PDF
 4. Onder "More options":
@@ -358,7 +355,7 @@ Gumroad heeft geen directe Brevo integratie. Opties:
 - **Later:** Als volume groeit, overweeg Zapier betaald of Make.com
 
 ### Stap 6: Testen
-1. Koop je eigen product met €0 (PWYW) om de flow te testen
+1. Koop je eigen product met het minimum (€5) om de flow te testen
 2. Check: krijg je de PDF? Staat de email in Gumroad?
 3. Deel de link met 2-3 vrienden voor feedback
 
@@ -370,7 +367,7 @@ Gumroad heeft geen directe Brevo integratie. Opties:
 - [ ] PDF's gemaakt van alle 3 drafts (Canva/Google Docs)
 - [ ] Producten aangemaakt op Gumroad (titel + beschrijving + PDF + tags)
 - [ ] Bundle aangemaakt
-- [ ] Testbestelling gedaan (zelf kopen met €0)
+- [ ] Testbestelling gedaan (zelf kopen met het minimum €5)
 - [ ] Gumroad URLs genoteerd
 - [ ] CTA's op site plaatsen (volgende sessie, met werkende URLs)
 - [ ] Welkomstmail updaten met Gumroad links (volgende sessie)
