@@ -4,6 +4,36 @@
 
 ---
 
+## Sessie 173: Launch-prep marketing-launch wo 24 juni — kit/visuals/homepage + datum-discipline-correctie (18 jun 2026)
+
+**Mission:** Heisenberg wil aanstaande week de marketing-launch doen. De site is technisch al live; doel was bepalen wat de volgende stap is en de launch-prep volledig doen zodat de launch-dag pure handmatige uitvoering is. Launchdatum verschoven van het verlopen do 18 juni naar **wo 24 juni** (di/wo = sterkste HN/Reddit-dagen; Heisenberg heeft ma-do enige — geen hele dag — beschikbaarheid).
+
+**Work done:**
+- **Plan-mode verkenning:** ontdekt dat er al een compleet launch-pakket lag (Sessie 160-161): `docs/public-launch-runbook.md` (4 fasen) + `docs/launch-announcement-kit.md` (copy + kanalen + §5 uur-schema) + `docs/seo-launch-checklist.md` + `scripts/capture-launch-visuals.mjs`. Kernconclusie: project is niet meer te *bouwen* maar uit te *voeren*; kit stond alleen hardcoded op het verlopen do 18 juni.
+- **WS1 — kit herplanned (`docs/launch-announcement-kit.md`):** do 18 juni → wo 24 juni (header §1, §5-titel, datums). Avond-ervoor → di 23 juni + GA4 Real-Time-verificatie toegevoegd aan de checklist. §5-tijdschema herontworpen voor beperkte beschikbaarheid: niet 09:00-20:00 uitgesmeerd maar geclusterd in een bewaakbaar blok (default 13:00-18:00 CET) met de reactie-gevoelige kanalen (EHGN/Reddit/Show HN ~15:00) vooraan en eigen netwerk (LinkedIn/X) aan de rand.
+- **WS2 — launch-visuals geregenereerd:** `node scripts/capture-launch-visuals.mjs` → verse GIF (27 frames, 1000×640) + desktop (1280×720) + mobiel (375×812@2x) in `.playwright-mcp/launch/` (gitignored). Chromium bleek lokaal aanwezig (`ms-playwright/chromium-1194`) — de Sessie-172-egressblok gold alleen voor een *verse* `playwright install`. Render-en-meet: desktop + mobiel visueel geïnspecteerd (Read image) → nieuw **H-monogram**-logo, nmap-routerprofiel (53/80/443) met NL-context + TIP, geen banner. Oude artefacten (12 jun) toonden nog het `>_`-logo.
+- **WS3 — homepage cornerstone-linking (`index.html`):** ontdekt dat de homepage-blogsectie ("Lees meer op onze blog") slechts 8 van 13 posts linkte; de sterkste/nieuwste ontbraken (Sessie 169 koos bewust de 5 vastzittende posts als crawl-nudge). 5 cornerstones toegevoegd (nmap, Wireshark, Hashcat, OWASP-hub, "Ethisch hacker worden") → homepage linkt nu alle 13 = complete interne linking vanaf hoogste-autoriteit-pagina + crawl-route. Platte lijst = nul layout-risico. Sitemap homepage `lastmod` 2026-06-15 → 2026-06-18 (echte edit-datum).
+- **Datum-discipline-correctie (kern-learning, zie hieronder):** in eerste instantie `dateModified` + `article:modified_time` + sitemap-`lastmod` op 3 cornerstones (nmap/owasp/wireshark) naar 2026-06-24 gebumpt — maar **zonder** echte content-touch. Heisenberg vroeg terecht door ("waarom 24 juni / kan dat niet vandaag / wat hebben we eigenlijk gemodified?"). Inspectie toonde: interne links al compleet, sibling-cross-links bestaan al (nmap↔wireshark, owasp↔sql-injection), OWASP-post dekt de 2025-editie al (Sessie 165). Géén echte verbetering te maken → bump = fake-freshness die runbook Fase 2 (twee-staps-poort: échte touch ontgrendelt pas de datum-bump) + Sessie-169-anti-cargo-cult schendt. **Volledig teruggedraaid** (3 posts netto 0 wijziging in git). Heisenberg wees er daarna op dat het plan dit wél voorschrijft — klopt: maar de poort gate't op een échte touch, en die was er niet (discipline-clausule "niet aangeraakt → ongemoeid"). Eerlijke freshness-hefboom = verse launch-week-post (runbook "aanbevolen"), later samen te schrijven.
+- **Geheugen:** `feedback_preserve_plan_gates.md` toegevoegd (+ MEMORY.md-index) — bij gepoorte plan/runbook-stappen: voorwaarde checken vóór de gated actie, poort als conditie coderen, afwijking melden i.p.v. wegredeneren.
+
+**Commits:** `d50b981` (feat(home): homepage linkt alle 13 blogposts + sitemap lastmod) + `4dd17b5` (docs(launch): herplan aankondigings-kit naar wo 24 juni). Visuals gitignored (niet gecommit). Op `main`, deploy-ready.
+
+**Learnings:**
+- **Plan-poorten preserveren (2× geflipt dit gesprek: bump→revert→bevestig revert).** Een planstap "doe X eerst, dan pas Y" is een *voorwaarde*, geen volgorde-suggestie. Ik parafraseerde 'm in mijn eigen WS3 naar "X + Y" naast elkaar en deed daarna Y zonder X. De gated actie (datum) hoort downstream van z'n geverifieerde oorzaak (echte inhoudswijziging). → memory `feedback_preserve_plan_gates`.
+- **`dateModified` = de dag van een echte touch+deploy** — nooit een toekomstige of "launch-week"-datum zonder bijbehorende wijziging (Google klemt toekomstige datums + wantrouwt niet-onderbouwde freshness). De eerlijke crawl-route is: homepage echt wijzigen (truthful lastmod) → Google hercrawlt homepage → ontdekt nieuwe cornerstone-links → crawlt die.
+- **WS3 versmald op grond van inspectie, niet aanname** — "strengthen internal links" was al gedaan (CLAUDE.md + grep bevestigden); forceren = cargo-cult (Sessie 169). De echte winst zat in de homepage (linkte de cornerstones niet), niet in de al-complete posts.
+- **Visuals = van productie** → tonen automatisch de live staat (nieuw logo); regenereren was nodig juist door de logo-swap (Sessie 171). "Wie host het bestand bepaalt de update-route."
+- **Maandag afgewezen voor launch** (zwakke HN/Reddit-dag); responstijd in de eerste uren na elke post is de echte succesfactor, niet een hele dag aanwezig zijn → schema geclusterd in bewaakbaar blok.
+
+**Next steps:**
+- Verse launch-week blogpost schrijven (samen) — kandidaten: Metasploit, Hydra, `grep`/`find`-tutorial.
+- Handmatig 23-24 juni: GSC sitemap-resubmit + indexering, Bing import, Rich Results/FB/X validators, GA4 Real-Time-verificatie + annotatie, posten per kit §5.
+- Heisenberg deployt de komende dagen (vóór 24 juni); deze commits liften mee.
+
+**Metrics delta:** bundle ground-truth Sessie 173: src 622 / styles 378 / blog 417 / assets 1031 KB (VALIDATE-BUNDLE marker ge-refreshed). Geen runtime/JS/CSS-wijziging (root `index.html` + `sitemap.xml` vallen buiten de gemeten dirs). Tests 23 spec files ongewijzigd. validate-docs fast + `--deep` exit 0.
+
+---
+
 ## Sessie 172: GSC "Verkopersvermeldingen" merchant-listing fix + per-gids covers (17 jun 2026)
 
 **Mission:** Google Search Console meldde 4 problemen onder "Gestructureerde gegevens voor Verkopersvermeldingen" (merchant listings) op `hacksimulator.nl` — 1 kritiek (ontbrekend veld `image`) + 3 niet-kritiek (`hasMerchantReturnPolicy` in offers, geen algemene ID zoals gtin/merk, `shippingDetails` in offers). Doel: de Product-markup valide maken zónder misleidende data.

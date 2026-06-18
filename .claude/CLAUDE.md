@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 172)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 173)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 173: Launch-prep marketing-launch wo 24 juni — kit/visuals/homepage + datum-discipline (18 jun 2026)
+⚠️ **Never:**
+- Een gated planstap ("échte content-touch ontgrendelt pas de datum-bump", runbook Fase 2) als losse stap uitvoeren — ik bumpte `dateModified`/`article:modified_time`/`lastmod` op 3 cornerstones zónder inhoudswijziging = fake-freshness; moest volledig terugdraaien (2× flip in één gesprek). Een "doe X eerst, dan Y"-regel is een voorwaarde, geen volgorde-suggestie.
+- `dateModified`/`lastmod` op een toekomstige of "launch-week"-datum zetten zonder bijbehorende wijziging — Google klemt toekomstige datums en wantrouwt niet-onderbouwde freshness. De datum = de dag van de echte touch+deploy.
+- "Interne links versterken" als verplichte launch-touch forceren terwijl ze al compleet zijn — sibling-cross-links (nmap↔wireshark, owasp↔sql-injection) + OWASP-2025-dekking bestonden al; extra toevoegen = cargo-cult (Sessie 169 herbevestigd).
+- Aannemen dat een visual-generator faalt door egress — chromium stond lokaal (`ms-playwright/chromium-1194`); de Sessie-172-blok gold alleen voor een verse `playwright install`. Verifieer vóór je erop leunt.
+
+✅ **Always:**
+- Bij werk gestuurd door een bestaand plan/runbook: de exacte stappen (volgorde + discipline-clausules) verbatim citeren vóór je edit; poorten als voorwaarde coderen, niet als losse stap. → memory `feedback_preserve_plan_gates`.
+- De echte freshness/crawl-hefboom = een truthful wijziging op de hoogste-autoriteit-pagina (homepage linkt nu alle 13 posts → hercrawl → ontdekt cornerstones) + een verse post — niet gebumpte datums op al-complete pagina's.
+- WS-scope versmallen op grond van inspectie, niet aanname; en bij doorvragen van Heisenberg de eigen eerdere actie eerlijk herroepen (bump→revert) i.p.v. verdedigen.
+- Launch-dag kiezen op responstijd-capaciteit, niet alleen day-of-week: di/wo sterkste HN/Reddit-dagen, schema geclusterd in het bewaakbare blok zodat je de eerste uren na elke post kunt reageren. Volledig: `docs/sessions/current.md` Sessie 173.
+
 ### Sessie 172: GSC Verkopersvermeldingen (merchant-listing) fix + per-gids covers (17 jun 2026)
 ⚠️ **Never:**
 - Merchant-listing-velden voor een digitaal product "oplossen" met verzonnen data — een eigen PDF heeft geen `gtin`; `brand` is de juiste algemene ID. Verzin geen fysiek-winkel-velden (Sessie-169-lijn: geen cargo-cult-SEO).
@@ -145,19 +158,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - `vertical-align: top` op `th,td` als kern-fix tegen baseline-drift bij wrappende cellen; `border-collapse: collapse` + rij-randen voor leesbaarheid.
 - Bewezen patroon hergebruiken (`legal.css` tabel-styling) maar met de doel-context z'n eigen CSS-variabelen (`--spacing-*`/`--color-*`) → thema-aware "gratis", conform architecture-patterns.md §1. Volledig: `docs/sessions/current.md` Sessie 168.
 
-### Sessie 167: Doc-drift fix M9 — esbuild post-launch-blok uit milestone-sectie (15 jun 2026)
-⚠️ **Never:**
-- Een sectie↔tabel-drift "fixen" door de tabelcijfers te herschrijven — de echte fix is fysieke *verplaatsing* over een h2-grens. Check 6's awk-range is h2-emoji-anchored (`/^## 🧹 M9:/,/^## 🎓 M6:/`), dus een h3-subsectie erft de milestone-checkbox-telling van z'n omhullende h2; 5 `[ ]` binnen M9 → 19/24 i.p.v. 19/19.
-- Topisch verwante toekomst-scope onder een afgeronde milestone-h3 parkeren — esbuild (Sessie 162, post-launch, raakt PRD §13 red line) zat onder M9 (bundle/cache-sprint, ✅ Voltooid Sessie 110). Verwantschap ≠ sprint-lidmaatschap; het heropende M9 vals in `--deep`.
-- Vertrouwen dat de pre-commit-gate (fast-mode) sectie-drift vangt — fast-mode telt geen sectie-checkboxes; alleen `--deep` doet dat. Een drift die fast passeert maar `--deep` faalt, kwam binnen via checkbox-telling (het gat dat Sessie 158 #23.1 dichtte).
-
-✅ **Always:**
-- Bij een (a)/(b)-scope-beslissing over milestone-toewijzing: bron-onderbouwing eerst (Status, `Total Tasks`-footer, sub-sectie-som, "geen pre-launch werk"-labels, tag-sessie) en de keuze met aanbeveling via AskUserQuestion vóór de edit — milestone-membership is scope-territorium (Heisenberg).
-- Blok-verplaatsing in grote docs (>25k tokens) via Python met occurrence-asserts: h3-uniciteit, behoud `[ ]`-count in blok, ná-move M9-range 0 `[ ]`/19 `[x]`, h3 buiten range, totaal-`[ ]` ongewijzigd. Asserts bewaken semantiek, niet witruimte.
-- Cosmetische witregel-controle ná een geautomatiseerde markdown-move — een cut neemt de sectie-scheider mee (ontbrekende leegregel), een paste verdubbelt er een; occurrence-asserts zien dat niet.
-- `--deep` exit 0 als harde gate ná de fix (M9 `OK 19/19` + `OK 100%`). Volledig: `docs/sessions/current.md` Sessie 167.
-
-**Rotation:** Top-6 huidig: 167-168-169-170-171-172 (Sessie 165 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie nu vastgelegd (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. Bulk-rotatie current.md-entries was gedeferd t/m 169 (ontbrekende bestemming = nu opgelost). **Sessie 175 = eenmalige catch-up:** archiveer current.md Sessie 81-164 → range-archieven (voorstel `archive-s081-s120.md` + `archive-s121-s164.md`), houd 165+ in current.md, corrigeer SESSIONS.md-index; daarna steady-state per README. Pre-Sessie 162 historie → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 168-169-170-171-172-173 (Sessie 167 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie nu vastgelegd (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. Bulk-rotatie current.md-entries was gedeferd t/m 169 (ontbrekende bestemming = nu opgelost). **Sessie 175 = eenmalige catch-up:** archiveer current.md Sessie 81-164 → range-archieven (voorstel `archive-s081-s120.md` + `archive-s121-s164.md`), houd 165+ in current.md, corrigeer SESSIONS.md-index; daarna steady-state per README. Pre-Sessie 162 historie → `docs/sessions/current.md`.
 
 ---
 
@@ -206,7 +207,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 172
+**Sessie counter:** 173
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -258,6 +259,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 17 jun 2026 (Sessie 172 — GSC "Verkopersvermeldingen"-fix `gidsen.html` Product-markup: 4 velden eerlijk per digitaal product + NEW per-gids covers via `scripts/build-product-covers.mjs` (resvg) + "pay what you want"→"vanaf €5/€10". Volledig: `docs/sessions/current.md`)
-**Version:** 5.46 (volledige version-historie + per-sessie scope-notes: `docs/sessions/current.md`)
+**Last updated:** 18 jun 2026 (Sessie 173 — launch-prep wo 24 juni: kit herplanned + visuals geregenereerd (nieuw H-monogram) + homepage linkt nu alle 13 blogposts (5 cornerstones) → crawl-route + sitemap homepage lastmod→18 jun; fake-freshness dateModified-bump op 3 al-complete cornerstones teruggedraaid (runbook Fase 2-poort) + memory feedback_preserve_plan_gates. Volledig: `docs/sessions/current.md`)
+**Version:** 5.47 (Sessie 173 — launch-prep + datum-discipline-correctie; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
