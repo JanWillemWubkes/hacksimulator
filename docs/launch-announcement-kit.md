@@ -1,6 +1,6 @@
 # Launch-aankondigings-kit — HackSimulator.nl
 
-**Doel:** plak-klare aankondiging voor de publieke launch op **donderdag 18 juni 2026**.
+**Doel:** plak-klare aankondiging voor de publieke launch op **woensdag 24 juni 2026**.
 Hoort bij `docs/public-launch-runbook.md` **Fase 4 — Aankondiging & eerste backlinks**.
 
 **Productie-URL:** https://hacksimulator.nl/ · **Terminal:** https://hacksimulator.nl/terminal.html
@@ -167,34 +167,44 @@ router-profiel teruggeeft en dat er geen banner in beeld staat.
 
 ---
 
-## 5. Launch-dag volgorde — donderdag 18 juni 2026
+## 5. Launch-dag volgorde — woensdag 24 juni 2026
 
-**Principe:** gespreid, niet alles tegelijk. **Communities/value-first eerst**, socials
-daarna. Post alleen waar je die dag ook kunt **reageren** — op HN en in communities is
-binnen-een-uur antwoorden belangrijker dan het bericht zelf.
+**Principe:** gespreid, niet alles tegelijk. Dit schema is bewust **geclusterd in één
+bewaakbaar middag-/avondblok** (zie hieronder) omdat je niet de hele dag beschikbaar bent —
+dat is prima, zolang je binnen je blok kunt reageren. **De reactie-gevoelige kanalen (EHGN,
+Reddit, Show HN) gaan vóóraan in het blok** zodat je de cruciale eerste uren ná elke post
+bewaakt; je eigen netwerk (LinkedIn/X — lage onderhoudslast) zet je aan de rand of 's avonds
+met een paar losse checks. Op HN en in communities is binnen-een-uur antwoorden belangrijker
+dan het bericht zelf.
 
-### Vooraf — woensdag 17 juni (avond)
+### Vooraf — dinsdag 23 juni (avond)
 - [ ] Runbook Fase 3 afgerond? (GSC: sitemap (her)submit, indexering top-pagina's aangevraagd)
 - [ ] GIF + statische screenshot + mobiele screenshot klaar
 - [ ] Alle links in de copy getest (terminal, homepage, 1 cornerstone-blogpost)
 - [ ] `site:hacksimulator.nl` nulmeting genoteerd (voor/na-vergelijking)
+- [ ] GA4 Real-Time geverifieerd (anders meet je de launch-impact niet)
 
-### Donderdag 18 juni — tijdschema (CET)
+### Woensdag 24 juni — tijdschema (CET)
+
+> **Aanname:** bewaakbaar blok **13:00–18:00 CET**. Verschuif het hele blok als jouw woensdag
+> anders ligt — alleen het **Show HN-slot (~15:00 CET = ochtend VS)** is qua bereik datum-/
+> tijd-gevoelig; houd dat zo dicht mogelijk bij 15:00 en zorg dat je er ~2-3 uur na kunt reageren.
 
 | Tijd | Kanaal | Copy | Waarom dit slot |
 |------|--------|------|-----------------|
-| **09:00** | EHGN Discord | B (ingekort, NL) | NL-doelgroep, jij bent de hele dag bereikbaar voor reacties. Warme start. |
-| **12:00** | Reddit (best-fit sub / project-thread) | B/aangepast (EN of NL) | Middag-activiteit; value-first post, daarna in de comments blijven. |
-| **15:00** | **Hacker News — Show HN** | TP (Engels, kaal) | ~15:00 CET = ochtend VS → vangt de Amerikaanse ochtendpiek. Reageer actief op elke comment. |
-| **17:00** | LinkedIn | C (understated) | Eind werkdag, zakelijk publiek nog actief. |
-| **20:00** | X / Mastodon / Bluesky | A (+ GIF) | Avond-engagement hoger; korte post met visual. |
+| **13:00** | EHGN Discord | B (ingekort, NL) | NL-doelgroep, warme start. Posten zodra je blok begint, dan meteen bereikbaar. |
+| **13:30** | Reddit (best-fit sub / project-thread) | B/aangepast (EN of NL) | Vroeg in je blok → je vangt de eerste comments terwijl je actief bent. |
+| **15:00** | **Hacker News — Show HN** | TP (Engels, kaal) | ~15:00 CET = ochtend VS → Amerikaanse ochtendpiek. Dé reactie-kritische post: blijf t/m ~18:00 actief reageren. |
+| **17:00** | LinkedIn | C (understated) | Eind werkdag, zakelijk publiek nog actief; eigen netwerk = lage onderhoudslast. |
+| **vanaf 18:00 (losse checks)** | X / Mastodon / Bluesky | A (+ GIF) | Avond-engagement hoger; korte post met visual, periodiek checken volstaat. |
 
 - **Tweakers / extra Reddit security-subs:** alleen als je account-historie + een echte
   value-angle hebt. Anders bewust uitstellen — een promo-flag op launch-dag kost meer dan
   het oplevert.
 - **Newsletter-broadcast:** alleen als het subscriber-aantal het waard is (runbook Fase 4).
-- **De hele dag:** reageer dezelfde dag op elke comment/vraag. Engagement is de hefboom,
-  niet het zendmoment.
+- **Binnen je blok:** reageer zo snel mogelijk op elke comment/vraag — vooral op HN in het
+  eerste uur. Engagement is de hefboom, niet het zendmoment. Kun je een kanaal die dag níét
+  bewaken, post het dan niet (of stel het uit tot een dag dat je er wél bent).
 
 ### Na ~1–2 weken (runbook Fase 4 slot)
 - [ ] `site:hacksimulator.nl` + GSC Coverage opnieuw meten, vergelijken met de nulmeting.
