@@ -101,11 +101,11 @@ hacksimulator/
 ## 📸 Screenshots
 
 ### Dark Mode (Default)
-![HackSimulator - Dark Mode](assets/screenshots/dark-mode.png?v=2)
+![HackSimulator - Dark Mode](assets/screenshots/dark-mode.png?v=3)
 *Terminal interface met educatieve tooltips en authentic command output*
 
 ### Light Mode
-![HackSimulator - Light Mode](assets/screenshots/light-mode.png?v=2)
+![HackSimulator - Light Mode](assets/screenshots/light-mode.png?v=3)
 *Volledig responsive design met toegankelijke kleurcontrasten*
 
 ## 💻 Tech Stack
