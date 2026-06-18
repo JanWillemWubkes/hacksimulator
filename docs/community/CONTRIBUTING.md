@@ -375,9 +375,9 @@ Als je nieuwe features toevoegt, overweeg dan om Playwright tests toe te voegen.
 
 We hebben uitgebreide documentatie in `docs/`:
 
-- `docs/prd.md` - Product Requirements Document (v1.4)
+- `docs/prd.md` - Product Requirements Document (v1.8)
 - `docs/commands-list.md` - Command specifications
-- `docs/STYLEGUIDE.md` - CSS design system & component library (v1.0)
+- `docs/style-guide.md` - CSS design system & component library (v1.5)
 - `PLANNING.md` - Project planning & milestones
 - `TASKS.md` - Task tracking
 - `SESSIONS.md` - Development session logs

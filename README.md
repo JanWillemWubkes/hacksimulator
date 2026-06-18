@@ -25,8 +25,8 @@ HackSimulator.nl is live op [hacksimulator.nl](https://hacksimulator.nl/) en in 
 | ✅ **Live** | Custom domain (hacksimulator.nl) |
 | ✅ **Live** | Guided tutorials & learning paths |
 | ✅ **Live** | 15 challenges in 3 moeilijkheidsniveaus |
-| ✅ **Live** | Gamification: 21 badges, achievements, leaderboard |
-| ✅ **Live** | 10 blog posts met 105+ jargon explanations |
+| ✅ **Live** | Gamification: 20+ badges, achievements, leaderboard |
+| ✅ **Live** | 12+ blog posts met 100+ jargon explanations |
 
 **Contributions welcome!** See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
@@ -38,7 +38,7 @@ HackSimulator.nl is live op [hacksimulator.nl](https://hacksimulator.nl/) en in 
 **Doelgroep:** Nederlandse beginners zonder technische achtergrond - studenten, career switchers en enthousiastelingen
 
 **Performance:**
-- Terminal Core: ~340 KB (binnen 400 KB budget)
+- Terminal Core: binnen 400 KB budget
 - Load Time: < 3s LCP target
 - WCAG AAA compliant
 
@@ -95,7 +95,7 @@ hacksimulator/
 ├── docs/                # Documentation
 │   ├── prd.md          # Product Requirements
 │   └── commands-list.md # Command specs
-└── tests/              # Playwright E2E tests (161 tests, 21 files)
+└── tests/              # Playwright E2E tests (23 spec files - Chromium, Firefox, WebKit)
 ```
 
 ## 📸 Screenshots
@@ -113,7 +113,7 @@ hacksimulator/
 - **Frontend:** Vanilla JavaScript ES6+
 - **Styling:** Vanilla CSS (no frameworks!)
 - **Storage:** localStorage (5MB)
-- **Analytics:** Google Analytics 4 (MVP) → Plausible (post-MVP)
+- **Analytics:** Google Analytics 4 + Google AdSense, met eigen consent-banner (Consent Mode v2)
 - **Hosting:** Netlify (recommended)
 
 ### Why Vanilla?
@@ -269,7 +269,7 @@ netlify deploy --prod
 
 ### Fase 3: Gamification ✅
 - [x] 15 challenges in 3 moeilijkheidsniveaus
-- [x] 21 badges (common → legendary)
+- [x] 20+ badges (common → legendary)
 - [x] Certificates & leaderboard
 - [x] Achievement system
 
@@ -321,5 +321,4 @@ Copyright (c) 2025 HackSimulator.nl
 
 **Built with ❤️ for Dutch cybersecurity learners**
 
-**Last Updated:** 25 maart 2026
 **Status:** ✅ Live on Netlify
