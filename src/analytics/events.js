@@ -168,6 +168,18 @@ const analyticsEvents = {
   },
 
   /**
+   * Track lead magnet PDF download click (same-origin download na signup of op de download-pagina)
+   * @param {string} sampleId - Sample identifier (pentest, future: juridisch, leerplan)
+   * @param {string} location - Page context (sample_success_panel, sample_download_page, etc.)
+   */
+  leadMagnetDownload(sampleId, location) {
+    analyticsTracker.trackEvent('lead_magnet_download', {
+      sample_id: sampleId,
+      location: location
+    });
+  },
+
+  /**
    * Track lead magnet CTA click (sample-promo links on blog/gidsen)
    * @param {string} magnetId - Lead magnet identifier (pentest_sample, future: juridisch_sample)
    * @param {string} location - Page context (blog_nmap_top, blog_cybertools_mid, gidsen_sample_secondary)

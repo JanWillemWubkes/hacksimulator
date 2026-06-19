@@ -48,10 +48,15 @@
   Cache-Control: public, max-age=3600, must-revalidate
 
 # =============================================================================
-# Sample downloads: force download (mobile webviews kunnen PDF niet inline)
+# Sample downloads: serveer INLINE (niet als attachment).
+# Reden: iOS in-app webviews (Gmail/Outlook-app, WKWebView) kunnen een
+# geforceerde download vaak NIET afhandelen -> foutmelding, maar renderen een
+# PDF wel inline. attachment forceren brak dus juist de webviews die inline
+# wel aankunnen. filename geeft de juiste naam wanneer de browser toch
+# downloadt (bv. Android Chrome downloadt PDF's altijd).
 # =============================================================================
 /assets/samples/*
-  Content-Disposition: attachment
+  Content-Disposition: inline; filename="pentest-playbook-sample.pdf"
   Cache-Control: public, max-age=31536000, immutable
 
 # =============================================================================

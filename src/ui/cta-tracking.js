@@ -1,12 +1,14 @@
 /**
  * CTA Click Tracking - HackSimulator.nl
  *
- * Delegated click listener for CTA tracking. Two branches:
+ * Delegated click listener for CTA tracking. Three branches:
  *  - `[data-product-id]` → fires GA4 `product_cta_click` (paid Gumroad CTAs)
+ *  - `[data-lead-download]` → fires GA4 `lead_magnet_download` (same-origin PDF download)
  *  - `[data-lead-magnet]` → fires GA4 `lead_magnet_cta_click` (free sample CTAs)
  *
  * Markup contracts:
  *   <a href="..." data-product-id="<gumroad_id>" data-cta-location="<context>">
+ *   <a href="..." data-lead-download="<sample_id>" data-cta-location="<context>">
  *   <a href="..." data-lead-magnet="<magnet_id>" data-cta-location="<context>">
  *
  * Uses `closest()` so nested elements (icons, spans inside <a>) still resolve.
@@ -23,6 +25,15 @@ document.addEventListener('click', (e) => {
       productCta.dataset.productId,
       productCta.dataset.ctaLocation || 'unknown',
       productCta.textContent.trim().slice(0, 80)
+    );
+    return;
+  }
+
+  const downloadCta = e.target.closest('[data-lead-download]');
+  if (downloadCta) {
+    events.leadMagnetDownload(
+      downloadCta.dataset.leadDownload,
+      downloadCta.dataset.ctaLocation || 'unknown'
     );
     return;
   }

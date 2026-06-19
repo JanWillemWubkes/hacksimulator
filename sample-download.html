@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Post-conversie download-pagina: niet indexeren (geen SEO-waarde, voorkomt thin-page) -->
+  <meta name="robots" content="noindex, follow">
+
+  <title>Je Pentest Sample staat klaar | HackSimulator.nl</title>
+  <meta name="description" content="Download je gratis sample van het Pentest Playbook. Fase 0 reconnaissance + begin Fase 1, in het Nederlands.">
+  <meta name="author" content="HackSimulator.nl">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#0d1117">
+
+  <!-- Critical Font Preloads (self-hosted, SIL OFL 1.1) -->
+  <link rel="preload" href="/styles/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles/main.css?v=150">
+  <link rel="stylesheet" href="styles/landing.css?v=116">
+  <link rel="stylesheet" href="styles/pages.css?v=132">
+  <link rel="stylesheet" href="styles/mobile.css?v=115" media="screen and (max-width: 768px)">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
+
+  <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
+  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
+</head>
+<body class="landing-page">
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
+
+  <!-- Navigation (Component Injection) -->
+  <div id="navbar-placeholder">
+    <noscript>
+      <nav class="noscript-nav" role="navigation">
+        <a href="/">HackSimulator.nl</a>
+        <a href="/terminal.html">Start Simulator</a>
+        <a href="/blog/">Blog</a>
+        <a href="/commands/">Commands</a>
+        <a href="/gidsen.html">Gidsen</a>
+        <a href="/woordenlijst.html">Woordenlijst</a>
+        <a href="/over-ons.html">Over Ons</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+    </noscript>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main-content">
+
+    <!-- Hero: download links, cover rechts -->
+    <section class="sample-hero">
+      <div class="sample-hero-content">
+
+        <div class="sample-hero-text">
+          <span class="eyebrow-badge">Gratis Sample</span>
+          <h1>Je sample staat klaar</h1>
+          <p class="hero-subtitle">
+            Bedankt! Hieronder download je de 9 pagina's uit het Pentest Playbook &mdash;
+            Fase 0 reconnaissance en het begin van Fase 1. We hebben 'm ook naar je gemaild.
+          </p>
+
+          <!-- Same-origin download: geen Brevo-tracking, werkt op elk apparaat -->
+          <a href="/assets/samples/pentest-playbook-sample.pdf" download target="_blank" rel="noopener" class="btn-cta btn-cta-hero" data-lead-download="pentest" data-cta-location="sample_download_page">
+            Download de PDF
+            <svg class="btn-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+          </a>
+          <p style="margin-top: var(--spacing-sm); font-size: 0.9rem; opacity: 0.75;">
+            9 pagina's &middot; PDF &middot; ~90 KB &middot; geen login nodig
+          </p>
+        </div>
+
+        <div class="sample-hero-text" style="text-align: center;">
+          <img src="/assets/products/eerste-pentest-playbook.png" alt="Cover van het Pentest Playbook"
+               loading="lazy" style="max-width: 260px; width: 100%; height: auto; border-radius: var(--border-radius-modal); box-shadow: 0 8px 30px rgba(0,0,0,0.25);">
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Cross-sell: volledige Gumroad gids -->
+    <section class="page-section">
+      <h2>Klaar voor de volgende fase?</h2>
+      <p style="text-align: center; max-width: 600px; margin: 0 auto 2rem;">
+        Het sample stopt waar het echte werk begint: <strong>Fase 2 (Scanning &amp; Enumeration)</strong>.
+        Het volledige Playbook bevat alle fasen, beslisbomen en command-templates &mdash;
+        <strong>pay-what-you-want vanaf &euro;5</strong>.
+      </p>
+      <div style="text-align: center;">
+        <a href="https://hacksimulator.gumroad.com/l/wmvpx" class="btn-cta" target="_blank" rel="noopener noreferrer" data-product-id="wmvpx" data-cta-location="sample_download_crosssell">
+          Bekijk het volledige Playbook
+          <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- Oefen direct in de terminal -->
+    <section class="page-section">
+      <h2>Oefen de commands direct</h2>
+      <p style="text-align: center; max-width: 600px; margin: 0 auto 2rem;">
+        Het sample noemt <code>ping</code>, <code>whois</code> en <code>traceroute</code>.
+        Oefen ze gratis in de browser &mdash; geen installatie nodig.
+      </p>
+      <div style="text-align: center;">
+        <a href="/terminal.html" class="btn-cta-secondary">
+          Start de HackSimulator terminal
+          <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer (Component Injection) -->
+  <div id="footer-placeholder">
+    <noscript>
+      <footer class="noscript-footer">
+        <p>&copy; 2026 HackSimulator.nl</p>
+        <nav>
+          <a href="/assets/legal/privacy.html">Privacy</a>
+          <a href="/assets/legal/terms.html">Voorwaarden</a>
+          <a href="/assets/legal/cookies.html">Cookies</a>
+          <a href="/over-ons.html">Over Ons</a>
+          <a href="/contact.html">Contact</a>
+        </nav>
+      </footer>
+    </noscript>
+  </div>
+
+  <!-- Theme Initialization (prevents flash) -->
+  <script src="/src/init-theme.js"></script>
+
+  <!-- Component Injection (navbar/footer + cta-tracking) -->
+  <script src="/src/init-components.js" type="module"></script>
+
+  <!-- Analytics & Consent -->
+  <script src="/src/init-analytics.js" type="module"></script>
+</body>
+</html>

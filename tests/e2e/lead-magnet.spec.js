@@ -145,6 +145,11 @@ test.describe('Lead Magnet — Sample Pentest', () => {
     // Wacht tot success panel zichtbaar wordt (brevo-submit.js → MutationObserver tick)
     await expect(page.locator('#success-message')).toBeVisible();
 
+    // Same-origin download-knop verschijnt in het panel (omzeilt Brevo's tracking-404 op mobiel)
+    const downloadCta = page.locator('#success-message a[data-lead-download="pentest"]');
+    await expect(downloadCta).toBeVisible();
+    await expect(downloadCta).toHaveAttribute('href', '/assets/samples/pentest-playbook-sample.pdf');
+
     const calls = await page.evaluate(() => window.__gtagCalls);
     const newsletterEvent = calls.find(c => c[0] === 'event' && c[1] === 'newsletter_signup');
     const leadMagnetEvent = calls.find(c => c[0] === 'event' && c[1] === 'lead_magnet_signup');
@@ -184,6 +189,71 @@ test.describe('Lead Magnet — Sample Pentest', () => {
     expect(response.ok()).toBe(true);
     const xml = await response.text();
     expect(xml).toContain('https://hacksimulator.nl/sample-pentest.html');
+  });
+
+  test('sample-download pagina rendert download-knop + cross-sell + noindex', async ({ page }) => {
+    await page.goto('/sample-download.html');
+
+    await expect(page.locator('h1')).toContainText('sample staat klaar');
+
+    // Same-origin download-knop (geen Brevo-link → werkt op mobiel)
+    const downloadCta = page.locator('a[data-lead-download="pentest"]');
+    await expect(downloadCta).toBeVisible();
+    await expect(downloadCta).toHaveAttribute('href', '/assets/samples/pentest-playbook-sample.pdf');
+
+    // Cross-sell naar het volledige Playbook (Gumroad)
+    const crossSell = page.locator('a[data-product-id="wmvpx"]');
+    await expect(crossSell).toBeVisible();
+    await expect(crossSell).toHaveAttribute('href', /gumroad\.com\/l\/wmvpx/);
+
+    // Post-conversie pagina: noindex
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+  });
+
+  test('sample-download zit NIET in sitemap (noindex post-conversie pagina)', async ({ request }) => {
+    const response = await request.get('/sitemap.xml');
+    const xml = await response.text();
+    expect(xml).not.toContain('sample-download');
+  });
+
+  test('download-knop firet lead_magnet_download event', async ({ page }) => {
+    await page.goto('/');
+    await page.evaluate(() => {
+      localStorage.setItem('hacksim_analytics_consent', 'true');
+    });
+
+    await page.route(/sibforms\.com\/serve\//, (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: true, message: 'Gelukt!' })
+      });
+    });
+
+    await page.goto('/sample-pentest.html');
+    await page.evaluate(() => {
+      window.__gtagCalls = [];
+      window.gtag = (...args) => window.__gtagCalls.push(args);
+    });
+
+    await page.locator('#EMAIL').fill('dl-test@hacksimulator.nl');
+    await page.locator('#sib-form button[type="submit"]').click();
+    await expect(page.locator('#success-message')).toBeVisible();
+
+    // Voorkom echte download/navigatie; delegated listener (document, bubble) vuurt nog steeds
+    await page.evaluate(() => {
+      document.querySelector('a[data-lead-download]')
+        .addEventListener('click', e => e.preventDefault(), { capture: true });
+    });
+    await page.locator('#success-message a[data-lead-download="pentest"]').click();
+
+    const calls = await page.evaluate(() => window.__gtagCalls);
+    const dlEvent = calls.find(c => c[0] === 'event' && c[1] === 'lead_magnet_download');
+    expect(dlEvent).toBeDefined();
+    expect(dlEvent[2]).toMatchObject({
+      sample_id: 'pentest',
+      location: 'sample_success_panel'
+    });
   });
 
 });
