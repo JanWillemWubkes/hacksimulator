@@ -57,7 +57,7 @@
 # =============================================================================
 /assets/samples/*
   Content-Disposition: inline; filename="pentest-playbook-sample.pdf"
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=3600, must-revalidate
 
 # =============================================================================
 # AdSense verification: Short cache (Google re-crawls regularly)

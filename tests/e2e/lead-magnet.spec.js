@@ -148,7 +148,7 @@ test.describe('Lead Magnet — Sample Pentest', () => {
     // Same-origin download-knop verschijnt in het panel (omzeilt Brevo's tracking-404 op mobiel)
     const downloadCta = page.locator('#success-message a[data-lead-download="pentest"]');
     await expect(downloadCta).toBeVisible();
-    await expect(downloadCta).toHaveAttribute('href', '/assets/samples/pentest-playbook-sample.pdf');
+    await expect(downloadCta).toHaveAttribute('href', '/assets/samples/pentest-playbook-sample.pdf?v=2');
 
     const calls = await page.evaluate(() => window.__gtagCalls);
     const newsletterEvent = calls.find(c => c[0] === 'event' && c[1] === 'newsletter_signup');
@@ -199,7 +199,7 @@ test.describe('Lead Magnet — Sample Pentest', () => {
     // Same-origin download-knop (geen Brevo-link → werkt op mobiel)
     const downloadCta = page.locator('a[data-lead-download="pentest"]');
     await expect(downloadCta).toBeVisible();
-    await expect(downloadCta).toHaveAttribute('href', '/assets/samples/pentest-playbook-sample.pdf');
+    await expect(downloadCta).toHaveAttribute('href', '/assets/samples/pentest-playbook-sample.pdf?v=2');
 
     // Cross-sell naar het volledige Playbook (Gumroad)
     const crossSell = page.locator('a[data-product-id="wmvpx"]');
