@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 173)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 174)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 174: Mobiele PDF-download fix — sample-pentest lead magnet (19 jun 2026)
+⚠️ **Never:**
+- Een codebase-comment als oorzaak-diagnose vertrouwen — `_headers` zei "force download want webviews kunnen PDF niet inline", maar de échte bug was een Brevo click-tracking-prefetch-404 (aparte laag). Lees de sessie-historie (Sessie 134 had dit al exact gediagnosticeerd) vóór je een oorzaak aanneemt.
+- Een `_headers`/repo-tweak presenteren als "de fix" voor de 404 — die ontstaat op Brevo's server (`r.sendibm1.com/?i=<token>`, eenmalig token door Gmail-mobiel-prefetch geconsumeerd) vóór het request ons bereikt → niet in-repo fixbaar. Doen alsof = misleidend.
+- `Content-Disposition: attachment` forceren voor "mobiele webviews" — omgekeerd: iOS WKWebview (Gmail/Outlook-app) rendert een PDF wél inline maar kan een geforceerde download vaak níet afhandelen → foutmelding. attachment brak precies de webviews die inline aankonden.
+- De Brevo success-span gebruiken voor een persistente CTA, of "we hebben 'm gemaild" claimen onder double opt-in — `brevo-submit.js` overschrijft de span met `json.message`, en de PDF-mail komt pas ná bevestiging (de gebruiker vroeg hier terecht op door).
+
+✅ **Always:**
+- Bij een niet-in-repo-fixbare laag: bouw een betrouwbaar pad dat het kapotte mechanisme omzeilt (same-origin download-knop in `#success-message` + noindex `sample-download.html`) i.p.v. doen alsof je het repareert. Eerlijk scheiden: site-fix = gegarandeerd, Brevo-404-fix = best-effort.
+- Ungate wat toch al publiek is — de PDF-URL is een raadbaar statisch bestand, dus de email-"gate" bood nooit echte bescherming; on-site ungated leveren wint voor de bezoeker. Maar nieuwsbrief-consent apart double-opt-in houden beschermt de deliverability-investering (Sessies 134-136).
+- CSP-bewust toevoegen zonder cache-bump-sweep: inline-style mét CSS-variabele (`style-src 'unsafe-inline'` toegestaan) i.p.v. `landing.css` editen + `?v=` op alle pagina's bumpen; nieuwe tracking via een delegated `data-*`-branch in `cta-tracking.js` (geen inline JS).
+- Playwright-versie pinnen op de provisioned browser-build (`@playwright/test@1.56.0` ↔ `chromium-1194`, `--no-save`) + lokale statische server + `BASE_URL=localhost` om tegen niet-gedeployde wijzigingen te testen (config wijst standaard naar productie). Volledig: `docs/sessions/current.md` Sessie 174.
+
 ### Sessie 173: Launch-prep marketing-launch wo 24 juni — kit/visuals/homepage + datum-discipline (18 jun 2026)
 ⚠️ **Never:**
 - Een gated planstap ("échte content-touch ontgrendelt pas de datum-bump", runbook Fase 2) als losse stap uitvoeren — ik bumpte `dateModified`/`article:modified_time`/`lastmod` op 3 cornerstones zónder inhoudswijziging = fake-freshness; moest volledig terugdraaien (2× flip in één gesprek). Een "doe X eerst, dan Y"-regel is een voorwaarde, geen volgorde-suggestie.
@@ -148,17 +161,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Eerlijk de verwachting kalibreren: code-fixes ruimen zelf-veroorzaakte ruis op en geven een nudge (verse `lastmod` op gewijzigde pagina's, homepage-link als hoogste-autoriteit signaal), maar de dominante hefboom voor een jong domein is off-page (backlinks + tijd) — geen sweep forceert indexering.
 - Browser-onafhankelijk verifiëren wat meetbaar is: XML-validatie (25 URLs), nul resterende duplicaat-links repo-breed, link-resolutie, `validate-docs.sh` exit 0. Volledig: `docs/sessions/current.md` Sessie 169.
 
-### Sessie 168: Blog-tabel-uitlijning fix (Filter ↔ beschrijving) (15 jun 2026)
-⚠️ **Never:**
-- Aannemen dat een nette HTML-`<table>` vanzelf uitlijnt — zonder eigen CSS valt 'ie terug op browser-default `vertical-align: baseline`; bij een afgebroken (multi-line) cel lijnt de buurcel uit op de baseline van de laatste regel → rijen uit sync. `styles/blog.css` had nul tabel-regels (latente bug, pas zichtbaar toen een filter-cel afbrak).
-- Een uitlijn-fix "verifiëren" op het oog via screenshot — meet het: `getBoundingClientRect().top` cel-1 vs cel-2 per rij (`filterTop == descTop`) is binair pass/fail, ook over dark/light/375px.
-
-✅ **Always:**
-- Fix op cascade-niveau wanneer de oorzaak een *ontbrekende* regel is, niet een verkeerde override — één scoped `.blog-post-content table/th/td`-blok repareerde alle 4 blog-tabellen (wireshark/nmap/hashcat/wachtwoord-beveiliging) tegelijk i.p.v. symptoom-per-pagina.
-- `vertical-align: top` op `th,td` als kern-fix tegen baseline-drift bij wrappende cellen; `border-collapse: collapse` + rij-randen voor leesbaarheid.
-- Bewezen patroon hergebruiken (`legal.css` tabel-styling) maar met de doel-context z'n eigen CSS-variabelen (`--spacing-*`/`--color-*`) → thema-aware "gratis", conform architecture-patterns.md §1. Volledig: `docs/sessions/current.md` Sessie 168.
-
-**Rotation:** Top-6 huidig: 168-169-170-171-172-173 (Sessie 167 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie nu vastgelegd (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. Bulk-rotatie current.md-entries was gedeferd t/m 169 (ontbrekende bestemming = nu opgelost). **Sessie 175 = eenmalige catch-up:** archiveer current.md Sessie 81-164 → range-archieven (voorstel `archive-s081-s120.md` + `archive-s121-s164.md`), houd 165+ in current.md, corrigeer SESSIONS.md-index; daarna steady-state per README. Pre-Sessie 162 historie → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 169-170-171-172-173-174 (Sessie 168 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie nu vastgelegd (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. Bulk-rotatie current.md-entries was gedeferd t/m 169 (ontbrekende bestemming = nu opgelost). **Sessie 175 = eenmalige catch-up:** archiveer current.md Sessie 81-164 → range-archieven (voorstel `archive-s081-s120.md` + `archive-s121-s164.md`), houd 165+ in current.md, corrigeer SESSIONS.md-index; daarna steady-state per README. Pre-Sessie 162 historie → `docs/sessions/current.md`.
 
 ---
 
@@ -207,7 +210,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 173
+**Sessie counter:** 174
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -259,6 +262,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 18 jun 2026 (Sessie 173 — launch-prep wo 24 juni: kit herplanned + visuals geregenereerd (nieuw H-monogram) + homepage linkt nu alle 13 blogposts (5 cornerstones) → crawl-route + sitemap homepage lastmod→18 jun; fake-freshness dateModified-bump op 3 al-complete cornerstones teruggedraaid (runbook Fase 2-poort) + memory feedback_preserve_plan_gates. Volledig: `docs/sessions/current.md`)
-**Version:** 5.47 (Sessie 173 — launch-prep + datum-discipline-correctie; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 19 jun 2026 (Sessie 174 — mobiele PDF-download fix sample-pentest: welkomstmail-knop 404't op mobiel via Brevo's tracking-prefetch (niet repo-fixbaar); fix = same-origin downloadpad dat Brevo omzeilt (_headers attachment→inline, download-knop in #success-message, noindex sample-download.html, GA4 download-event), double opt-in behouden. Volledig: `docs/sessions/current.md`)
+**Version:** 5.48 (Sessie 174 — mobiele PDF-download fix sample-pentest: same-origin downloadpad omzeilt Brevo-tracking-404; volledige historie: `docs/sessions/current.md` + TASKS.md)
 

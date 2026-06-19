@@ -4,6 +4,49 @@
 
 ---
 
+## Sessie 174: Mobiele PDF-download fix — sample-pentest lead magnet (19 jun 2026)
+
+**Mission:** Heisenberg meldde dat de pentest-sample PDF-download op mobiel een foutmelding geeft — een al langer bekende, eerder geparkeerde bug. Doel: de beste fix voor de bezoeker, ongeacht moeite, inclusief het echt aanpakken van de Brevo-kant.
+
+**Diagnose (cold-start research, plan-mode):**
+- De PDF wordt niet direct vanaf de site gedownload. Flow: email op `sample-pentest.html` → double opt-in → welkomstmail met "Download Sample (PDF) ↓"-knop → `/assets/samples/pentest-playbook-sample.pdf`.
+- Grep + sessie-logs onthulden de echte root cause, al gedocumenteerd in **Sessie 134** (`current.md` regels 3416-3504): Brevo wrapt de PDF-link in een click-tracking-redirect `r.sendibm1.com/?u=…&i=<token>`; het token is **eenmalig consumeerbaar**; Gmail-mobiel's security-prefetch consumeert het token vóór de gebruiker klikt → bij de echte klik **404** (~5-10% mobiele klikken). Unsubscribe/mirror-links werken wél (idempotente endpoints) — daarom faalt alleen de PDF-link.
+- **Kernpunt:** de 404 ontstaat op Brevo's server vóór het request hacksimulator.nl bereikt → **geen repo-wijziging kan die redirect repareren**. Sessie 134 probeerde per-link/globale tracking-toggle (niet in Free/Starter-tier) + Button-block-split (404 bleef) → geparkeerd als "tier-limitatie".
+- Apart ontdekt: `_headers` forceerde `Content-Disposition: attachment` op `/assets/samples/*` met comment "mobile webviews kunnen PDF niet inline" — **omgekeerd mentaal model**: iOS WKWebviews (Gmail/Outlook-app) kunnen een geforceerde download juist níet afhandelen, maar renderen een PDF inline wél.
+
+**Strategie:** een betrouwbaar same-origin downloadpad bouwen dat Brevo's tracking volledig omzeilt (gegarandeerd, in onze hand), én de Brevo-kant zo goed mogelijk aanpakken (best-effort, tier-/support-afhankelijk → vervolgwerk Heisenberg).
+
+**Work done:**
+- `_headers`: `/assets/samples/*` `Content-Disposition: attachment` → `inline; filename="pentest-playbook-sample.pdf"` + comment gecorrigeerd.
+- `sample-pentest.html`: download-CTA als **apart element** binnen `#success-message` (niet de tekst-span, want `brevo-submit.js` overschrijft die met Brevo's `json.message`). Directe same-origin `href="/assets/samples/pentest-playbook-sample.pdf"` met `download` + `target="_blank"` + `data-lead-download="pentest"`. Inline-style met CSS-variabele (consistent met bestaande inline-styles; CSP staat `style-src 'unsafe-inline'` toe → géén landing.css cache-bump-sweep nodig). Success-copy gecorrigeerd: noemt directe download + bevestigen-voor-nieuwsbrief, claimt niet onterecht 'al gemaild' (met double opt-in komt de PDF-mail pas ná bevestiging; wat direct verstuurd wordt is de bevestigingsmail).
+- NEW `sample-download.html`: verzorgde `noindex` download/bedankt-pagina (clone landing-structuur, hergebruik navbar/footer-injectie + `landing.css`/`pages.css`). Same-origin download-knop + cover-thumbnail (`assets/products/eerste-pentest-playbook.png`) + cross-sell Gumroad `wmvpx` + terminal-CTA. **Niet** in `sitemap.xml`. Bestemming voor de welkomstmail-knop (één centrale downloadplek, twee ingangen).
+- `src/analytics/events.js`: `leadMagnetDownload(sampleId, location)` helper (consistent met `leadMagnetSignup`).
+- `src/ui/cta-tracking.js`: derde branch `[data-lead-download]` → `leadMagnetDownload` (CSP-safe, geen inline JS).
+- `tests/e2e/lead-magnet.spec.js`: +4 tests (download-CTA zichtbaar + correcte href na mocked success; `sample-download.html` rendert + cross-sell + noindex; sitemap-exclusie; `lead_magnet_download`-event).
+
+**Verificatie:** lokaal `@playwright/test@1.56.0` gepind (`--no-save`; matchte de provisioned `chromium-1194` — 1.55.0 wilde build 1187, ^1.56.1 wilde 1228) + statische server (`python3 -m http.server`) + `BASE_URL=localhost` → **10/10 lead-magnet E2E groen op chromium**. WebKit-download egress-geblokkeerd (`cdn.playwright.dev` 403) → iOS = handmatige real-device-check. Visueel geverifieerd (desktop + mobiel screenshot van `sample-download.html`). `validate-docs.sh` exit 0.
+
+**Product-beslissing — double opt-in blijft AAN:** door de on-site instant download zijn "PDF krijgen" (nu meteen op de site) en "nieuwsbrief activeren" (nog steeds via double opt-in bevestiging) **losgekoppeld**. Niet overschakelen naar single opt-in (zou de deliverability-investering Sessies 134-136 — SPF/DKIM/DMARC, mail-tester 8.3+, Postmaster — ondermijnen via onbevestigde/typefout-adressen). De on-site download dekt het bezoekersprobleem al; double opt-in kost daardoor niets meer.
+
+**Commits:** `8f2ce68` (fix: same-origin downloadpad + `_headers` + `sample-download.html` + events/tracking/tests) + `fb397ca` (success-copy aligned op behoud double opt-in). Branch `claude/focused-tesla-0grpev` → gemerged naar `main` (deze sessie).
+
+**Learnings:**
+- **De "foutmelding" was niet wat de codebase-comment suggereerde.** `_headers` zei "force download want webviews kunnen niet inline"; de échte bug is een Brevo-tracking-prefetch-404 — een aparte laag. Twee gestapelde issues niet verwarren: lees de sessie-historie (Sessie 134 had dit al exact gediagnosticeerd) vóór je een oorzaak aanneemt.
+- **Sommige bugs zijn niet in-repo fixbaar.** De 404 zit op Brevo's infra (`r.sendibm1.com`) vóór het request ons bereikt. Eerlijk zijn dat een `_headers`-tweak dit NIET oplost (zou misleidend zijn); de juiste fix = een betrouwbaar pad bouwen dat het kapotte mechanisme omzeilt, niet doen alsof je het kapotte ding repareert.
+- **`Content-Disposition: attachment` is omgekeerd voor iOS in-app webviews** — WKWebView rendert een 90 KB PDF wél inline maar kan een geforceerde download vaak níet afhandelen (vereist host-app download-delegate). Forceren brak precies de webviews die inline aankonden. `inline` = universeel veiliger + maakt embedding mogelijk.
+- **Brevo overschrijft de success-span met `json.message`** → een persistente download-CTA moet een apart element in het panel zijn, niet de span. En de copy moet kloppen onder double opt-in (PDF-mail komt pas ná bevestiging — niet "al gemaild" claimen; de gebruiker vroeg hier terecht op door).
+- **De PDF-URL is sowieso publiek/raadbaar** → de email-"gate" bood nooit echte bescherming; on-site ungated leveren kost geen security en wint enorm voor de bezoeker. Maar nieuwsbrief-consent apart double-opt-in houden beschermt de deliverability-investering.
+- **Playwright-versie ↔ browser-build pinnen** — provisioned `chromium-1194` vereiste `@playwright/test@1.56.0`; `--no-save` zodat `package.json` (^1.56.1) ongemoeid bleef. Egress: npm-registry open, browser-CDN (`cdn.playwright.dev`) geblokkeerd (consistent met Sessie 172).
+
+**Next steps (Heisenberg, Brevo-dashboard — best-effort, los van deze deploy):**
+- Houd "Double confirmation email" AAN. Wijzig de Brevo Success message naar: "Gelukt! Je sample staat hieronder klaar. We hebben je ook een mail gestuurd — bevestig daarin je inschrijving voor onze maandelijkse tips." Mailknop-URL → `/sample-download.html`.
+- Brevo-404 zelf: (1) her-check op een click-tracking-toggle (UI/tiers >1 jaar gewijzigd sinds Sessie 134); (2) geen toggle → support-ticket (tekst in `.claude/plans/lead-magnet-followup.md` regels 112-148); (3) tier-gated → kies bijlage (PDF in de mail, gratis/definitief), accepteer de minor-404 (site dekt het hoofdpad), of tier-upgrade. Custom tracking-subdomein lost dit waarschijnlijk NIET op (zelfde tokenmechanisme).
+- iOS real-device-check van de download (WebKit lokaal niet testbaar).
+
+**Metrics delta:** +1 pagina (`sample-download.html`, noindex, niet in sitemap). src/ ~622→623 KB (events.js + cta-tracking.js, +~0,6 KB). lead-magnet.spec.js +4 tests. Geen Terminal Core-runtime-impact (sample-pages buiten budget).
+
+---
+
 ## Sessie 173: Launch-prep marketing-launch wo 24 juni — kit/visuals/homepage + datum-discipline-correctie (18 jun 2026)
 
 **Mission:** Heisenberg wil aanstaande week de marketing-launch doen. De site is technisch al live; doel was bepalen wat de volgende stap is en de launch-prep volledig doen zodat de launch-dag pure handmatige uitvoering is. Launchdatum verschoven van het verlopen do 18 juni naar **wo 24 juni** (di/wo = sterkste HN/Reddit-dagen; Heisenberg heeft ma-do enige — geen hele dag — beschikbaarheid).
