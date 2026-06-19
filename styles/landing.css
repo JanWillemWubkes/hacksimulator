@@ -1046,7 +1046,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-sm) var(--spacing-md);  /* rij 8px / kolom 16px */
 }
 
 .blog-link {
@@ -1055,11 +1055,21 @@
   font-weight: var(--font-weight-medium);
   color: var(--color-text);
   text-decoration: none;
-  transition: color var(--transition-fast);
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;                 /* pill */
+  background: rgba(22, 27, 34, 0.3);    /* zelfde overlay als .how-step */
+  transition: color var(--transition-fast),
+              border-color var(--transition-fast),
+              background var(--transition-fast),
+              transform var(--transition-fast);
 }
 
 .blog-link:hover {
   color: var(--color-cta-primary);
+  border-color: var(--color-cta-primary);
+  background: var(--color-prompt-bg-light);  /* rgba(159,239,0,0.1) lime-tint */
+  transform: translateY(-2px);
 }
 
 .blog-link:focus-visible {
@@ -1543,9 +1553,10 @@ html {
     font-size: clamp(2rem, 10vw, 3rem);
   }
 
-  /* Blog Links */
+  /* Blog Links — chips blijven wrappen, geen verticale tekstkolom */
   .blog-links-list {
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: center;
     gap: var(--spacing-sm);
   }
 
@@ -1658,6 +1669,7 @@ html {
 [data-theme="light"] .feature-card,
 [data-theme="light"] .leerpad-card,
 [data-theme="light"] .how-step,
+[data-theme="light"] .blog-link,
 [data-theme="light"] .result-item {
   background: #ffffff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
