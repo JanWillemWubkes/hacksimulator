@@ -272,6 +272,7 @@ function initThemeToggle() {
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
       updateThemeToggleUI(newTheme);
+      toggle.blur(); // Voorkom dat mobiel toetsenbord opent (zelfde patroon als help-dropdown)
     });
   });
 }

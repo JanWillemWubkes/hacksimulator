@@ -98,7 +98,8 @@ class InputHandler {
       if (clickedElement.closest('.modal.active') ||
           clickedElement.closest('.faq-item') ||
           clickedElement.closest('.navbar-dropdown') ||
-          clickedElement.closest('.navbar-toggle')) {
+          clickedElement.closest('.navbar-toggle') ||
+          clickedElement.closest('.theme-toggle')) {
         return;
       }
 
