@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 175)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 176)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 176: Mobiele audit + 5 fixes — tabel-overflow, CSP/consent-gap, emoji, tap-targets, scroll-hint (21 jun 2026)
+⚠️ **Never:**
+- Een tap-target-"fix" bouwen op een ongemeten aanname — ik claimde de blog-filterknoppen ~20px (mobiel) en bumpte ze; meting ná implementatie toonde 27px/42px = al ≥24px AA → onnodig, en mijn `inline-flex` voegde een display-neveneffect toe. Teruggedraaid. "Meten wint van oogwerk" geldt óók over je eigen premisse: meet vóór je fixt. → geheugen-lijn met `feedback_verify_claims_against_artifact`.
+- Een CSP-console-error als cosmetisch afdoen — de geblokkeerde inline-`<script>` op blogpagina's bleek de Consent Mode v2 defaults: `gtag` undefined, `dataLayer` leeg, AdSense laadde zónder `denied`-defaults = echte GDPR-gap op de hoogste-organische-traffic-pagina's. Meet de runtime (dataLayer/gtag-type) vóór je "onschuldig" concludeert.
+- Aannemen dat een eerdere migratie compleet was — de Sessie-166 inline-script-externalisatie miste de hele `blog/`-map (11 pagina's om, 14 vergeten). Een repo-brede grep (`consent-default.js` vs inline `gtag`) legde de split bloot; vertrouw niet op "dit is overal gedaan".
+- Een mobiele scroll-defect "op het oog" diagnosticeren — de scroll-hint leek "achter de balk", maar `--z-terminal:1` < hint `z-index:2` betekent dat hij technisch erbóven ligt; de echte oorzaak was een collisie met de naar 2 rijen (gemeten 109px) wrappende quick-command-balk. Meten wijst de zone aan, niet de z-index-intuïtie.
+✅ **Always:**
+- Render-en-meet op een `no-store`-server: `scrollWidth` vs `innerWidth` + `getBoundingClientRect`-hoogtes op 375px vóór/ná, dark+light, plus desktop-regressie. Brede tabellen (blog+legal) afgekapt/pagina-overflow → tabel zelf scroll-container (`display:block; overflow-x:auto`) in `@media≤768px` (patroon van `.blog-post-content pre`).
+- Niet-in-repo-vergelijkbare claims bewijzen met productie-vs-lokaal runtime-diff: blog vóór (`gtag:undefined`, dataLayer leeg) vs homepage (`gtag:function`, default aanwezig) → fix = extern `consent-default.js` (zet defaults én injecteert AdSense daarná, race-veilig). Lokaal ná: 0 CSP-fouten over 7 pagina's.
+- Cache-blast-radius sturen de fix-locatie: scroll-hint-regel in `terminal-education.css` (1 consumer = `terminal.html`) i.p.v. site-brede `mobile.css` → 1 cache-bump i.p.v. ~25. En per-bestand committen wanneer cache-bumps verweven zijn met content (hunk-splitting/`git add -p` niet beschikbaar) — zelfde eindtree, leesbare history.
+- Bulk-tekstvervanging afdekken met een eind-assertie: het emoji-script faalde hard op een niet-geïnventariseerde 🎓 (0-emoji-over-check, pijlen/✓✗ uitgezonderd). Contextregels: decoratieve markers weg, `<td>`-emoji weg met behoud Ja/Nee, lijst-`✅/❌` → `[✓]`/`[✗]`. Volledig: `docs/sessions/current.md` Sessie 176.
+
 ### Sessie 175: Layout-fixes sample-pentest — chevron/success-state/card-uitlijning (21 jun 2026)
 ⚠️ **Never:**
 - `!important` voorstellen om externe CSS (Brevo `sib-styles.css`) te overschrijven zonder te checken of die regel zélf `!important` gebruikt — curl onthulde `.sib-form-message-panel` (0,1,0) zónder `!important`, dus onze scopes (0,2,0 / 1,1,0) wonnen puur op specificiteit. Heisenberg vroeg terecht om de schonere route. → geheugen `feedback_avoid_important_css`.
@@ -149,19 +161,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - "Wie host het bestand" bepaalt de update-route: site-assets verversen via deploy; Gumroad-PDF's zijn een extern eilandje → handmatige re-upload; sample (lead-magnet) = site-link, geen Brevo-actie.
 - DRY via een build-stap i.p.v. een 3e getrackte kopie: `build-pdfs.sh` kopieert het logo uit canonieke `assets/brand/logo.svg`, `docs/products/logo.svg` gitignored (build-managed) — consistent met de PDF-artifact-flow (Sessie 170). Volledig: `docs/sessions/current.md` Sessie 171.
 
-### Sessie 170: Structuuranalyse projectopbouw + veilige repo-opruiming (16 jun 2026)
-⚠️ **Never:**
-- Een module "orphan/verwijderbaar" noemen zonder álle consumers te scannen — orphan-grep over `src/` alleen miste `blog/`-HTML → vals alarm op `blog-theme.js` (laadt in alle 10 blogpagina's). Verifieer breed vóór je "weg ermee" claimt; dit had anders een echte breuk gegeven.
-- Schijnbare "rommel" verplaatsen/hernoemen zonder de functionele reden te checken — 9 root-HTML's = schone Netlify-URLs, `commands/index.html` = route-pagina, `assets/legal/*.html` = geserveerde URLs; elke move breekt prod-URLs+SEO+links (de fout die Sessie 169 net repareerde).
-- Een in plan-mode goedgekeurde opruimstap mechanisch uitvoeren als verificatie 'm net-negatief blijkt — de doc-→`archive/`-verplaatsing liet ik vallen toen bleek dat inbound refs historische log-narratie zijn in gated `current.md` + één doc nog "pending"; cosmetische winst < kosten van een gated historisch log editen. Generaliseert de Sessie-169 "geen cargo-cult-opruimen onder de vlag grondig"-les naar de eigen workflow.
-- Een byte-identiek bestand in twee paden meteen als bug-duplicaat behandelen — `pentest-playbook-sample.pdf` in `docs/products/` én `assets/samples/` is de gedocumenteerde bron→build→publiceer-flow (`build-pdfs.sh`), geen fout; juiste fix = build-output untracken, niet één kopie deleten.
-
-✅ **Always:**
-- Build-artifacts uit git, bron + geserveerde kopie erin — `docs/products/*.pdf` (~632 KB, herbouwbaar uit `.typ`) gegitignored + `git rm --cached`; `.typ`-bronnen en geserveerde lead-magnet `assets/samples/` blijven getrackt. Provenance-header in het build-script maakt de flow expliciet.
-- Risico-asymmetrie expliciet maken vóór een scope-keuze — cache-bust `?v=X` normaliseren raakt live browsercaching (`max-age=604800`): fout is lokaal onzichtbaar + treft terugkerende bezoekers tot 7 dagen, en echte automatisering vereist een build-stap (botst "vanilla, no build"). Daarom apart, niet in een opruim-pass.
-- "Functionaliteit intact" bewijzen via wat NIET wijzigde — nul `.js`/`.css`/`.html`/`_headers`/`netlify.toml`-diff ⇒ site-gedrag + alle URLs per definitie identiek; `validate-docs.sh` fast + `--deep` exit 0 als gate. Volledig: `docs/sessions/current.md` Sessie 170.
-
-**Rotation:** Top-6 huidig: 170-171-172-173-174-175 (Sessie 169 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Eenmalige catch-up nog NIET uitgevoerd (gedeferd in Sessie 175):** archiveer current.md Sessie 81-164 → range-archieven (`archive-s081-s120.md` + `archive-s121-s164.md`), houd 165+ in current.md, corrigeer SESSIONS.md-index + standaard `N%5`-rotatie (165-169). Grote, risicovolle operatie → aparte sessie waard. Pre-Sessie 162 historie → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 171-172-173-174-175-176 (Sessie 170 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Eenmalige catch-up nog NIET uitgevoerd (gedeferd in Sessie 175):** archiveer current.md Sessie 81-164 → range-archieven (`archive-s081-s120.md` + `archive-s121-s164.md`), houd 165+ in current.md, corrigeer SESSIONS.md-index + standaard `N%5`-rotatie (165-169). Grote, risicovolle operatie → aparte sessie waard. Pre-Sessie 162 historie → `docs/sessions/current.md`.
 
 ---
 
@@ -210,7 +210,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 175
+**Sessie counter:** 176
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -262,6 +262,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 21 jun 2026 (Sessie 175 — layout-fixes sample-pentest.html: chevron-uitlijning (.arrow-glyph vertical-align + .phase-arrow geconsolideerd), success-state vervangt formulier met huisstijl-paneel zonder nieuwe !important (specificiteit wint van Brevo), card-body's uitgelijnd via opt-in min-height:2lh gegate op 3-koloms. Volledig: `docs/sessions/current.md`)
-**Version:** 5.49 (Sessie 175 — layout-fixes sample-pentest: chevron/success-state/card-uitlijning, specificiteit boven !important; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 21 jun 2026 (Sessie 176 — mobiele audit + 5 fixes: tabel-scroll blog/legal, CSP-geblokkeerde Consent Mode v2 defaults op 14 blogpagina's → extern consent-default.js (GDPR-gap), emoji-cleanup legal → ASCII, contact-inputs 44px + pages.css-cache-normalisatie, terminal scroll-hint mobiel verborgen; filterknoppen-tap-target teruggedraaid na meting. Volledig: `docs/sessions/current.md`)
+**Version:** 5.50 (Sessie 176 — mobiele audit + 5 fixes; CSP/consent-gap blog = kern; volledige historie: `docs/sessions/current.md` + TASKS.md)
 

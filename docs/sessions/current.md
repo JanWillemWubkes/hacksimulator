@@ -4,6 +4,47 @@
 
 ---
 
+## Sessie 176: Mobiele audit + 5 fixes — tabel-overflow, CSP/consent-gap, emoji-cleanup, tap-targets, scroll-hint (21 jun 2026)
+
+**Mission:** Heisenberg vroeg een audit of de mobiele weergaves ongewenste afwijkingen vertonen (hoofdpubliek laptop/pc, mobiel secundair). Gemeten op 375px-viewport (`getBoundingClientRect`/`scrollWidth`, niet op het oog) tegen productie. Eindoordeel: mobiel grotendeels gezond; 1 echt layout-defect + enkele kleinere punten. Daarna in vervolgvragen uitgebreid naar CSP-onderzoek, emoji-cleanup, tap-targets en de scroll-hint.
+
+**Fix 1 — brede tabellen afgekapt/pagina-overflow (blog + legal):**
+- Eén grondoorzaak: `.blog-post-content table` (`blog.css:478`) en `body.legal-page table` (`legal.css:73`) hadden `width:100%` + default `table-layout:auto` zónder scroll-container → bij 4 koloms tekst groeit de tabel buiten de viewport (tot 574px @375px). Blog maskeerde dit met `.blog-container overflow-x:hidden` → kolom afgekapt; legal had die net-niet → hele pagina scrollde horizontaal (`scrollWidth` 594).
+- Fix: in de bestaande `@media (max-width:768px)`-blokken de tabel zelf een scroll-container maken (`display:block; overflow-x:auto; -webkit-overflow-scrolling:touch; max-width:100%`) — zelfde patroon als `.blog-post-content pre`. Geverifieerd: pagina-overflow weg (594→360), tabel scrollt binnen eigen box, afgekapte kolom weer leesbaar (dark+light). Desktop ongemoeid (`display:table` op ≥769px).
+
+**Fix 2 — CSP blokkeerde Consent Mode v2 defaults op alle 14 blogpagina's (GDPR-gap):**
+- Het inline consent-default `<script>` werd door de CSP (`script-src 'self'`, geen unsafe-inline) geblokkeerd → `gtag` undefined, `dataLayer` leeg, maar de losse `adsbygoogle.js` (CSP-toegestaan) laadde **wel** → AdSense laadde zonder de `denied`-defaults. De 11 niet-blog-pagina's gebruikten al het geëxternaliseerde `consent-default.js` (Sessie 166); de `blog/`-map was bij die migratie gemist.
+- Runtime-bewijs: productie-blog vóór = `gtag:undefined`, `dataLayer.length:0`, `consentDefault:false`, AdSense in DOM; homepage = `gtag:function`, default met alle `denied`+`wait_for_update:500`. `init-analytics.js` vangt het niet op (zet alleen een consent-*update*, en alleen als `gtag` bestaat).
+- Fix: inline-block + losse adsbygoogle-tag vervangen door `<script src="/src/analytics/consent-default.js" data-cookieconsent="ignore" data-adsense="ca-pub-6345664385525701">` (dat zet defaults én injecteert AdSense daarná — race-veilig). Python-vervangscript met regex + dry-run + per-bestand assertie (exact 1 match). Geverifieerd: 0 CSP-fouten over 7 pagina's, gtag=function, default aanwezig.
+
+**Fix 3 — emoji-cleanup 3 legal-pagina's:**
+- Legal gebruikte ~18-22 emoji's elk (rest van de site emoji-vrij; brand-regel = ASCII brackets only). Heisenberg koos: alles weg, ✅/❌ → tekst.
+- Script met contextregels: decoratieve sectie-markers (📌🔒📢🔮🚫⚠️⚖️🎓) verwijderd; ✅/❌ in `<td>` → emoji weg, Ja/Nee behouden; ✅/❌ in lijst-items → `[✓]`/`[✗]`; trailing emoji in `<h3>` weg; functionele pijlen (→←↑↓) behouden. Eind-assertie ving 🎓 (niet pre-geïnventariseerd) → toegevoegd. 0 emoji over op alle 3, dark+light geverifieerd.
+
+**Fix 4 — contact-form tap-targets 38→44px:**
+- `.form-group input/textarea/select` (`pages.css:325`) was ~38px (alleen padding) → `min-height:44px` (WCAG 2.5.5 AAA). Homepage-newsletter had al `height:44px`. Cache-bump `pages.css?v=133` — normaliseerde meteen bestaande drift (2 bestanden op `v=114`, 6 op `v=132`).
+- **Teruggedraaid (meedogenloos-eerlijk):** de blog-filterknoppen-fix. Heisenberg koos "filterknoppen naar AA-24px", maar ná implementatie tonen metingen dat ze al 27px (mobiel) / 42px (desktop) zijn — ruim boven het 24px AA-minimum. Mijn `inline-flex` had bovendien geen effect op de hoogte (al display:block). Fix repareerde niets → teruggedraaid. Premisse ("~20px") was een ongemeten aanname; "meten wint van oogwerk" beet terug.
+
+**Fix 5 — terminal scroll-hint collisie:**
+- `.scroll-hint` ("Scroll voor meer info", `position:fixed; bottom:4.5rem; z-index:2`, buiten `<main>`) botste op mobiel met de `.mobile-quick-commands`-balk, die naar 2 rijen wrapt (gemeten 109px) en dezelfde onderste zone bezet. Op desktop bestaat de balk niet (`display:none`) → daar correct.
+- Fix: `@media (max-width:768px){ .scroll-hint{ display:none } }` in `terminal-education.css` (waar de hint woont; dat bestand wordt alleen door `terminal.html` geladen → kleinste cache-blast-radius). Cache-bump `terminal-education.css?v=115`. Geen JS-wijziging (IntersectionObserver in `faq.js`/`terminal.js` draait foutloos door). Geverifieerd: mobiel `display:none`/balk zichtbaar, desktop `display:flex`/bottom 81px.
+
+**Commits:** `c41e317` (fix mobile: tabel + scroll-hint) + `5dae5ca` (fix blog: consent extern, 14 posts) + `f4c70be` (style legal: emoji's → ASCII) + `ea1c5ea` (fix a11y: form-inputs 44px + pages.css-normalisatie). 30 bestanden, +134/−284. Cache-bumps `blog.css?v=116`/`legal.css?v=3` reizen mee in de consent- resp. emoji-commit (per-bestand gegroepeerd want hunk-splitting niet mogelijk in deze omgeving).
+
+**Learnings:**
+- **Meten wint van oogwerk — ook over je eigen aannames:** de filterknoppen-"fix" was gebaseerd op een ongemeten "~20px"-aanname; meting toonde ze al AA-conform → teruggedraaid. Implementeer-dan-meet ontmaskerde het.
+- **Console-error ≠ cosmetisch:** de CSP-melding leek een losse console-regel maar bleek een echte GDPR/Consent-Mode-gap op de hoogste-organische-traffic-pagina's. Runtime-meten (dataLayer + gtag-type) op productie vóór én lokaal ná = sluitend bewijs.
+- **Voltooi migraties volledig:** de Sessie-166 inline-script-externalisatie miste `blog/`; een repo-brede grep (consent-default.js vs inline gtag) legde de 11-vs-14-split bloot.
+- **Cache-blast-radius bepaalt de fix-locatie:** scroll-hint-regel in `terminal-education.css` (1 consumer) i.p.v. `mobile.css` (site-breed) → één cache-bump i.p.v. ~25.
+- **Per-bestand committen wanneer hunks verweven zijn:** cache-bumps zaten in dezelfde HTML's als content-changes; `git add -p` is interactief (niet beschikbaar) → per-bestand groeperen geeft dezelfde eindtree met leesbare history.
+- **Scope-validatie via assertie:** het emoji-script faalde hard op 🎓 (niet geïnventariseerd) — de eind-assertie (0 emoji over, excl. pijlen/✓✗) was het vangnet.
+
+**Next steps:** Brevo click-tracking-404 op mobiele PDF-download blijft best-effort (Sessie 174). De catch-up-archivering current.md Sessie 81-164 → range-archieven (gedeferd Sessie 175) blijft openstaan.
+
+**Metrics delta:** styles/ 378→384 KB (+6, tabel/a11y-CSS), blog/ 417→412 KB (−5, inline-consent-scripts verwijderd uit 14 posts), src/ 623 KB onveranderd, assets/ 1031 KB onveranderd. Geen test-count-wijziging (23 spec files). `validate-docs.sh` exit 0.
+
+---
+
 ## Sessie 175: Layout-fixes sample-pentest.html — chevron, success-state, card-uitlijning (21 jun 2026)
 
 **Mission:** Heisenberg meldde meerdere layout-problemen op `sample-pentest.html` en wilde ze 1-voor-1 aanpakken. Drie problemen opgelost, elk gecommit, daarna gepusht.
