@@ -35,16 +35,17 @@ Bij elke `/summary` waar `N % 5 == 0`:
 Knip-techniek voor grote bestanden (>25k tokens) zoals `current.md`: Python met
 occurrence-asserts (entry-count behouden, geen dubbele scheiders) — zie Sessie 164/167-learnings.
 
-## Openstaande backlog (Sessie 170)
+## Catch-up backlog — OPGELOST (Sessie 176)
 
-`current.md` houdt feitelijk **Sessie 81-170** (~568 KB); `SESSIONS.md` claimt stale "88-160".
-De 5-per-keer-regel haalt deze backlog nooit in. **Eenmalige catch-up bij volgende rotatie
-(Sessie 175):** archiveer Sessie 81-164 naar range-archieven (voorstel-split:
-`archive-s081-s120.md` + `archive-s121-s164.md`), houd 165+ in `current.md`, corrigeer de
-`SESSIONS.md`-index. Daarna draait de steady-state-regel schoon.
+De eenmalige catch-up is uitgevoerd (na Sessie 176, met de occurrence-assert-techniek):
+Sessie 81-164 zijn geknipt uit `current.md` naar `archive-s081-s120.md` (31 entries) en
+`archive-s121-s164.md` (47 entries); `current.md` houdt nu het rolling window **165-176**
+(12 entries, ~64 KB) en de `SESSIONS.md`-index is gecorrigeerd. Vanaf hier draait de
+steady-state `N%5`-regel hierboven schoon — geen backlog meer.
 
-> Niet uitvoeren als losse housekeeping zonder dat het in een sessie past — het is grote-bestand-
-> surgery; doe het mét de occurrence-assert-techniek en de `validate-docs.sh`-gate.
+> De knip was byte-voor-byte geverifieerd (`prefix+keep+mid+old == origineel`, 609.005 bytes;
+> header-tellingen 12/47/31 = 90). De duplicaat-genummerde entries (Sessie 160 ×3, Sessie 141 ×2)
+> zitten volledig in `archive-s121-s164.md`.
 
 ## Overlap-notitie
 
