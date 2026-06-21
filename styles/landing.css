@@ -891,6 +891,16 @@
   margin: 0;
 }
 
+/* Opt-in (sample-pentest): in de 3-koloms-rij de titels op gelijke hoogte van
+   2 tekstregels (2lh) zodat de body's uitlijnen ook als een titel maar 1 regel
+   is (bv. 'Beslisboom Fase 0 -> 1'). Alleen >1024px, want daaronder staan de
+   cards niet in een gedeelde rij (card 3 spant full-width). */
+@media (min-width: 1025px) {
+  .feature-cards--equal-title .feature-card h3 {
+    min-height: 2lh;
+  }
+}
+
 .feature-card code {
   font-family: var(--font-terminal);
   font-size: 0.85rem;
