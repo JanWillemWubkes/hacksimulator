@@ -316,6 +316,61 @@
   background: var(--eyebrow-bg);
 }
 
+/* Lead magnet card (homepage) — .gids-bundle uit pages.css wordt hier niet geladen */
+/* dubbele class: wint van .landing-section's padding-shorthand (gelijke specificity → bronvolgorde) */
+.landing-section.lead-magnet {
+  padding-bottom: var(--spacing-2xl, 48px); /* gat naar final-cta inkorten */
+}
+
+.lead-magnet-card {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+  background: rgba(22, 27, 34, 0.3);
+  border: 1px solid rgba(159, 239, 0, 0.3);
+  border-radius: 16px;
+  padding: var(--spacing-xl) calc(var(--spacing-xl) * 1.5);
+  transition: border-color var(--transition-normal), transform var(--transition-normal);
+}
+
+.lead-magnet-card:hover {
+  border-color: var(--color-cta-primary);
+  transform: translateY(-4px);
+}
+
+[data-theme="light"] .lead-magnet-card {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: var(--color-border);
+}
+
+.lead-magnet-card .eyebrow-badge {
+  margin-bottom: var(--spacing-md);
+}
+
+.lead-magnet-card h2 {
+  margin: 0 0 var(--spacing-sm) 0; /* .landing-section h2 doet al center+size */
+  text-wrap: balance; /* gelijkere regellengtes */
+}
+
+.lead-magnet-card p {
+  font-size: 1rem;
+  color: var(--color-text-dim);
+  line-height: 1.6;
+  max-width: 560px;
+  margin: 0 auto var(--spacing-lg);
+  text-wrap: balance; /* gelijkere regellengtes i.p.v. 1 volle + 1 korte regel */
+}
+
+/* "Fase 0 -> 1" als onbreekbaar blok zodat het niet over 2 regels splitst */
+.lead-magnet-card .phase-flow {
+  white-space: nowrap;
+}
+
+/* pijl optisch centreren met de cijfers (glyph zit op x-hoogte-as, cijfers op kaphoogte) */
+.lead-magnet-card .phase-arrow {
+  vertical-align: 0.2em; /* gemeten: cijfer-ink-center 0.37em vs pijl-center 0.17em */
+}
+
 /* Hero Headline */
 .hero h1 {
   font-size: var(--font-size-display);
@@ -1418,6 +1473,10 @@ html {
 
   .eyebrow-badge {
     font-size: 0.65rem;
+  }
+
+  .lead-magnet-card {
+    padding: var(--spacing-lg) var(--spacing-md);
   }
 
   .hero-terminal {
