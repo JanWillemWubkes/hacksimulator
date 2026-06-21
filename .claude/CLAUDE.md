@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 174)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 175)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 175: Layout-fixes sample-pentest — chevron/success-state/card-uitlijning (21 jun 2026)
+⚠️ **Never:**
+- `!important` voorstellen om externe CSS (Brevo `sib-styles.css`) te overschrijven zonder te checken of die regel zélf `!important` gebruikt — curl onthulde `.sib-form-message-panel` (0,1,0) zónder `!important`, dus onze scopes (0,2,0 / 1,1,0) wonnen puur op specificiteit. Heisenberg vroeg terecht om de schonere route. → geheugen `feedback_avoid_important_css`.
+- Een layout-misalignment op het oog diagnosticeren — ik zag "card-titel 3 staat lager", maar meting (`getBoundingClientRect`) toonde: titels zijn top-uitgelijnd (`top:861`), de échte afwijking zat in de *body* (900 vs 923) door een 1-regelige titel. Meten wijst de oorzaak aan, het oog niet.
+- Een gedeelde module wijzigen zonder de blast-radius te scheiden — `brevo-submit.js` draait op homepage én sample; de form-hide hield ik generiek (verbetering overal), de titel/intro-verberging sample-specifiek (`.newsletter-submitted` + opt-in class). Beide pagina's apart geverifieerd.
+- Een CSS/JS-fix "verifiëren" op een Python `http.server` — die stuurt geen cache-headers → de browser draaide de oude gecachete ES-module (vals-negatief, Sessie-171-valkuil). Pas met een `Cache-Control: no-store`-server + verse E2E-browser bleek de fix te werken.
+
+✅ **Always:**
+- Externe-CSS-override = specificiteit boven `!important`: reken de specificiteit expliciet uit (`#id` of extra class) en haal desnoods de echte stylesheet op om te bevestigen dat het volstaat. `2lh` voor "reserveer 2 tekstregels" (geen line-height-giswerk; Baseline 2023).
+- Scope CSS-fixes dubbel waar gepast: een opt-in modifier-class (`.feature-cards--equal-title` raakt index/gidsen/over-ons niet) + een `@media (min-width:1025px)`-gate (geen witruimte zodra cards niet in één rij staan). Ongescopet had "alles uitgelijnd" 3 pagina's + mobiel ongevraagd geraakt.
+- Success-state = formulier vervángen, niet aanvullen: bij succes het form verbergen i.p.v. het paneel erbovenop tonen (anders dubbele kaarthoogte + verweesde CTA). De bevestiging wordt de hele kaart.
+- Render-en-meet als bewijs: `getBoundingClientRect` vóór én na (body's 900→923, allemaal gelijk), plus screenshots in dark+light+mobiel + de E2E-test met Brevo-mock (geen echt contact) in een verse browser als definitieve proof. Volledig: `docs/sessions/current.md` Sessie 175.
+
 ### Sessie 174: Mobiele PDF-download fix — sample-pentest lead magnet (19 jun 2026)
 ⚠️ **Never:**
 - Een codebase-comment als oorzaak-diagnose vertrouwen — `_headers` zei "force download want webviews kunnen PDF niet inline", maar de échte bug was een Brevo click-tracking-prefetch-404 (aparte laag). Lees de sessie-historie (Sessie 134 had dit al exact gediagnosticeerd) vóór je een oorzaak aanneemt.
@@ -148,20 +161,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Risico-asymmetrie expliciet maken vóór een scope-keuze — cache-bust `?v=X` normaliseren raakt live browsercaching (`max-age=604800`): fout is lokaal onzichtbaar + treft terugkerende bezoekers tot 7 dagen, en echte automatisering vereist een build-stap (botst "vanilla, no build"). Daarom apart, niet in een opruim-pass.
 - "Functionaliteit intact" bewijzen via wat NIET wijzigde — nul `.js`/`.css`/`.html`/`_headers`/`netlify.toml`-diff ⇒ site-gedrag + alle URLs per definitie identiek; `validate-docs.sh` fast + `--deep` exit 0 als gate. Volledig: `docs/sessions/current.md` Sessie 170.
 
-### Sessie 169: GSC-indexeringsanalyse + SEO-fix niet-geïndexeerde pagina's (16 jun 2026)
-⚠️ **Never:**
-- Een GSC "niet-geïndexeerd"-melding als bug behandelen zonder de bron-kolom te lezen — "Website"-bron (redirect/canonical) = jouw config en vaak gewenst gedrag; "Google-systemen" (gevonden/gecrawld niet geïndexeerd) = crawl-budget/autoriteit/tijd, niet patchbaar in code. 17 van 19 meldingen waren benign of niet-fixbaar; slechts 2 echte zelf-veroorzaakte fouten.
-- Indexering-fixes plannen op de GSC-aantallen alleen — de screenshots tonen tellingen, niet URL's. Pas de exacte URL-lijsten (gebruiker klikt rij → "Voorbeelden") onthulden het patroon (extensieloze duplicaten + relatieve `index.html`-links) dat op educated guesses gemist was.
-- Interne link-depth als silver bullet voor "niet geïndexeerd" verkopen — `cybersecurity-tools` had 9 inbound related-card-links en zat tóch vast. (En: eerste inbound-telling was fout doordat 'ie alleen absolute `/blog/`-links ving, niet relatieve related-cards — corrigeer de meting vóór de conclusie.)
-- Cargo-cult-SEO toevoegen onder de vlag "grondig" — expliciete `<meta name="robots" content="index,follow">` doet niets (default is al index,follow); bewust uit scope ondanks "volledige sweep"-verzoek.
-
-✅ **Always:**
-- Relatieve `href="index.html"` in een footer = stille duplicaat-fabriek op Netlify — `/foo.html` wordt óók op `/foo` (200) geserveerd ongeacht `pretty_urls=false`, en `index.html` → `/blog/index.html` naast canonical `/blog/`. Link naar de canonical (`/blog/`, `/`) zodat Google geen duplicaat ontdekt.
-- Per-URL diagnose tegen de echte GSC-lijst = scheidslijn echte fout vs. benign (3 redirect-varianten + 1 alt-canonical = werkend; extensieloze URL's = historisch, canonical consolideert vanzelf).
-- Eerlijk de verwachting kalibreren: code-fixes ruimen zelf-veroorzaakte ruis op en geven een nudge (verse `lastmod` op gewijzigde pagina's, homepage-link als hoogste-autoriteit signaal), maar de dominante hefboom voor een jong domein is off-page (backlinks + tijd) — geen sweep forceert indexering.
-- Browser-onafhankelijk verifiëren wat meetbaar is: XML-validatie (25 URLs), nul resterende duplicaat-links repo-breed, link-resolutie, `validate-docs.sh` exit 0. Volledig: `docs/sessions/current.md` Sessie 169.
-
-**Rotation:** Top-6 huidig: 169-170-171-172-173-174 (Sessie 168 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie nu vastgelegd (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. Bulk-rotatie current.md-entries was gedeferd t/m 169 (ontbrekende bestemming = nu opgelost). **Sessie 175 = eenmalige catch-up:** archiveer current.md Sessie 81-164 → range-archieven (voorstel `archive-s081-s120.md` + `archive-s121-s164.md`), houd 165+ in current.md, corrigeer SESSIONS.md-index; daarna steady-state per README. Pre-Sessie 162 historie → `docs/sessions/current.md`.
+**Rotation:** Top-6 huidig: 170-171-172-173-174-175 (Sessie 169 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Eenmalige catch-up nog NIET uitgevoerd (gedeferd in Sessie 175):** archiveer current.md Sessie 81-164 → range-archieven (`archive-s081-s120.md` + `archive-s121-s164.md`), houd 165+ in current.md, corrigeer SESSIONS.md-index + standaard `N%5`-rotatie (165-169). Grote, risicovolle operatie → aparte sessie waard. Pre-Sessie 162 historie → `docs/sessions/current.md`.
 
 ---
 
@@ -210,7 +210,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 174
+**Sessie counter:** 175
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -262,6 +262,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 19 jun 2026 (Sessie 174 — mobiele PDF-download fix sample-pentest: welkomstmail-knop 404't op mobiel via Brevo's tracking-prefetch (niet repo-fixbaar); fix = same-origin downloadpad dat Brevo omzeilt (_headers attachment→inline, download-knop in #success-message, noindex sample-download.html, GA4 download-event), double opt-in behouden. Volledig: `docs/sessions/current.md`)
-**Version:** 5.48 (Sessie 174 — mobiele PDF-download fix sample-pentest: same-origin downloadpad omzeilt Brevo-tracking-404; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 21 jun 2026 (Sessie 175 — layout-fixes sample-pentest.html: chevron-uitlijning (.arrow-glyph vertical-align + .phase-arrow geconsolideerd), success-state vervangt formulier met huisstijl-paneel zonder nieuwe !important (specificiteit wint van Brevo), card-body's uitgelijnd via opt-in min-height:2lh gegate op 3-koloms. Volledig: `docs/sessions/current.md`)
+**Version:** 5.49 (Sessie 175 — layout-fixes sample-pentest: chevron/success-state/card-uitlijning, specificiteit boven !important; volledige historie: `docs/sessions/current.md` + TASKS.md)
 

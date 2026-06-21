@@ -4,6 +4,38 @@
 
 ---
 
+## Sessie 175: Layout-fixes sample-pentest.html — chevron, success-state, card-uitlijning (21 jun 2026)
+
+**Mission:** Heisenberg meldde meerdere layout-problemen op `sample-pentest.html` en wilde ze 1-voor-1 aanpakken. Drie problemen opgelost, elk gecommit, daarna gepusht.
+
+**Probleem 1 — chevron `Fase 0 → 1` te laag (2 plekken):**
+- `.arrow-glyph` gebruikte `position: relative; top: 1px` (duwde de pijl omláág). Vervangen door `vertical-align: 0.2em` — schaalt met font-grootte, werkt op zowel hero-`<li>` als card-`<h3>`. Identiek aan de eerdere homepage-fix `.phase-arrow`.
+- Homepage `.phase-arrow` geconsolideerd naar dezelfde canonieke `.arrow-glyph` (DRY): `.phase-arrow`-regel verwijderd uit `landing.css`, `index.html:669` class omgezet. `.phase-flow` (nowrap-wrapper, homepage-specifiek) behouden — apart concern.
+
+**Probleem 2 — success-state brak de layout:**
+- Oorzaak: `brevo-submit.js` toonde bij succes het paneel maar verborg het formulier níet → kaart droeg dubbele content (titel+intro+succes-box+download-knop+invoerveld+verweesde CTA+privacy) → explodeerde in hoogte; de achtergebleven "Stuur mijn sample"-knop oogde verweesd. De harde rand kwam uit Brevo's externe `sib-styles.css`.
+- `brevo-submit.js`: bij succes `form.style.display='none'` + `.newsletter-submitted` op de `.homepage-newsletter`-kaart (generiek, werkt homepage + sample). Bevestiging vervángt nu het formulier.
+- `main.css`: paneel-styling (padding, box-shadow none) + success/error-tint (groen/rood via `color-mix`) + icoonkleur. **0× nieuwe `!important`** — Brevo's `.sib-form-message-panel` (0,1,0) heeft zelf geen `!important`, dus onze scopes `.homepage-newsletter .sib-form-message-panel` (0,2,0) en `#success-message` (1,1,0) winnen op specificiteit. (Eerste plan gebruikte `!important`; Heisenberg vroeg om een schonere oplossing → curl van Brevo's CSS bevestigde dat specificiteit volstaat.)
+- `landing.css`: sample-kaart verbergt stale titel+intro bij succes; download-knop full-width; btn-cta-tekstkleur hersteld (Brevo's `.sib-form-container a` (0,1,1) kleurde 'm blauw+underline → onze `.sample-success-download .btn-cta` (0,2,0) wint).
+- `lead-magnet.spec.js`: success-test uitgebreid met `#sib-form` hidden + `#sample-form` heeft `.newsletter-submitted`.
+
+**Probleem 3 — card-body's niet uitgelijnd (3-koloms rij):**
+- Meting: titels top-uitgelijnd (alle `top:861`) maar card 3 ("Beslisboom Fase 0 → 1") heeft 1-regelige titel → body begon 23px hoger (900 vs 923) dan card 1+2 (2-regelig).
+- Fix: opt-in `.feature-cards--equal-title` op de `.feature-cards`-div (raakt index/gidsen/over-ons niet, die delen `.feature-card`) + `@media (min-width:1025px) { .feature-cards--equal-title .feature-card h3 { min-height: 2lh } }`. `2lh` = exact 2 tekstregels (geen line-height-giswerk). Gegate op de 3-koloms-breakpoint → geen witruimte zodra de cards stacken (≤1024px = 2-kolom met card 3 full-width, ≤768px = 1-kolom).
+- Na fix gemeten: alle drie body's `top:923`, h3-hoogtes 54px gelijk. Bij 1000px (2-kolom): min-height niet actief (27/32px natuurlijk) = correct gescoped.
+
+**Commits:** `6f5e27a` (probleem 1+2) + `0a64369` (probleem 3). Gepusht naar `main` (`33f239f..0a64369`, incl. eerder lokaal-only `57a8379`). Cache-bumps: `main.css` v150→151, `landing.css` v118→119→120→121 (cumulatief).
+
+**Verificatie:** Playwright met fetch/route-mock voor Brevo (geen echt contact) + no-cache server (Python `http.server` cachte de oude ES-module → Sessie-171-valkuil; opgelost met `Cache-Control: no-store`-server). E2E `lead-magnet.spec.js` 10/10 groen in verse browser (echte module). Render-en-meet + screenshots: sample success, homepage success (dark), error-state (rood, form blijft voor retry), light-theme success, card-uitlijning. `validate-docs.sh` exit 0 (pre-commit hooks groen bij beide commits).
+
+**Learnings:** zie `.claude/CLAUDE.md` Sessie 175. Kern: meten vóór concluderen (chevron-richting; card-body i.p.v. titel); specificiteit boven `!important` (geheugen `feedback_avoid_important_css`); gedeelde-JS blast-radius bewust scheiden (generieke form-hide + sample-specifieke cosmetiek).
+
+**Next steps / deferred:**
+- **Rotation/catch-up niet uitgevoerd:** Sessie 175 was in CLAUDE.md gemarkeerd als eenmalige current.md-archivering (Sessie 81-164 → range-archieven) + standaard `N%5` rotatie (archiveer 165-169). Bewust gedeferd — grote, risicovolle operatie, niet gevraagd deze sessie. Aparte sessie waard.
+- Brevo-404 best-effort vervolgwerk (uit Sessie 174) blijft open.
+
+---
+
 ## Sessie 174: Mobiele PDF-download fix — sample-pentest lead magnet (19 jun 2026)
 
 **Mission:** Heisenberg meldde dat de pentest-sample PDF-download op mobiel een foutmelding geeft — een al langer bekende, eerder geparkeerde bug. Doel: de beste fix voor de bezoeker, ongeacht moeite, inclusief het echt aanpakken van de Brevo-kant.
