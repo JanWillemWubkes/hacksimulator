@@ -326,6 +326,7 @@
 .form-group textarea,
 .form-group select {
   width: 100%;
+  min-height: 44px;  /* WCAG 2.5.5 (AAA) tap-target — was ~38px via padding alleen */
   padding: var(--spacing-sm) var(--spacing-md);
   font-family: var(--font-body);
   font-size: 1rem;
