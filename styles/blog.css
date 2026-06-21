@@ -828,6 +828,15 @@ a[href='#all'].category-btn {
     padding-right: var(--spacing-md);
     min-height: auto;
   }
+  /* Brede datatabellen scrollbaar maken binnen hun eigen box i.p.v. afgekapt
+     door .blog-container { overflow-x: hidden } hierboven. Zelfde patroon als
+     .blog-post-content pre (overflow-x: auto). */
+  .blog-post-content table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;  /* iOS momentum-scroll, consistent met mobile.css */
+    max-width: 100%;
+  }
   .blog-post-card {
     max-width: 100%;
     overflow: hidden;

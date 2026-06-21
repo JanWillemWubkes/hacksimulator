@@ -137,3 +137,15 @@ body.legal-page .legal-footer {
   color: var(--color-text-dim);
   font-size: 0.9em;
 }
+
+/* ==================== Mobile ==================== */
+@media (max-width: 768px) {
+  /* Brede tabellen (tot 4 koloms) scrollbaar maken binnen hun eigen box i.p.v.
+     de hele pagina horizontaal te laten scrollen op smalle viewports. */
+  body.legal-page table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+}

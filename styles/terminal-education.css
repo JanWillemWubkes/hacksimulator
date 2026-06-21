@@ -29,6 +29,16 @@
   opacity: 0;
 }
 
+/* Mobiel: de quick-command-balk (#mobile-quick-commands) is de onderste affordance en
+   wrapt naar 2 rijen; de fixed scroll-hint op bottom:4.5rem zou daarmee colliden.
+   Verbergen i.p.v. herpositioneren — de balkhoogte varieert met wrap + safe-area, dus
+   een vaste bottom-offset is fragiel. */
+@media (max-width: 768px) {
+  .scroll-hint {
+    display: none;
+  }
+}
+
 .scroll-hint svg {
   animation: scrollBounce 2s ease-in-out infinite;
 }
