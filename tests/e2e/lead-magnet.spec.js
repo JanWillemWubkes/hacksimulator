@@ -145,6 +145,11 @@ test.describe('Lead Magnet — Sample Pentest', () => {
     // Wacht tot success panel zichtbaar wordt (brevo-submit.js → MutationObserver tick)
     await expect(page.locator('#success-message')).toBeVisible();
 
+    // Na succes vervangt de bevestiging het formulier: velden + knop verborgen,
+    // kaart krijgt .newsletter-submitted (verbergt stale titel/intro via CSS).
+    await expect(page.locator('#sib-form')).toBeHidden();
+    await expect(page.locator('#sample-form')).toHaveClass(/newsletter-submitted/);
+
     // Same-origin download-knop verschijnt in het panel (omzeilt Brevo's tracking-404 op mobiel)
     const downloadCta = page.locator('#success-message a[data-lead-download="pentest"]');
     await expect(downloadCta).toBeVisible();

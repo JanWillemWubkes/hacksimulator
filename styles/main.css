@@ -2066,7 +2066,24 @@ abbr.jargon {
   font-size: 0.9rem !important;
   margin: 0 auto var(--spacing-md) auto;
   border-radius: var(--border-radius-modal) !important;
+  /* Brevo's .sib-form-message-panel (0,1,0) heeft geen !important, dus deze
+     scope (0,2,0) wint zonder forcering: ruimer ademen + geen harde Brevo-look */
+  padding: var(--spacing-md);
+  box-shadow: none;
 }
+/* Status-tint per paneel. #id geeft (1,1,0) en wint ruim van Brevo (0,1,0).
+   Tekstkleur blijft --color-text voor leesbaarheid; rand + achtergrond getint. */
+.homepage-newsletter #success-message {
+  background: color-mix(in srgb, var(--color-success) 8%, transparent);
+  border-color: color-mix(in srgb, var(--color-success) 40%, transparent);
+}
+.homepage-newsletter #error-message {
+  background: color-mix(in srgb, var(--color-error) 8%, transparent);
+  border-color: color-mix(in srgb, var(--color-error) 40%, transparent);
+}
+/* Icoon volgt de statuskleur. (1,1,0)+ wint van Brevo's .sib-..__text .sib-icon (0,2,0) */
+.homepage-newsletter #success-message .sib-icon { fill: var(--color-success); }
+.homepage-newsletter #error-message .sib-icon { fill: var(--color-error); }
 .homepage-newsletter .entry__error {
   font-family: var(--font-body) !important;
   font-size: 0.85rem !important;

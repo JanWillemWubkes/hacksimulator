@@ -365,11 +365,8 @@
 .lead-magnet-card .phase-flow {
   white-space: nowrap;
 }
-
-/* pijl optisch centreren met de cijfers (glyph zit op x-hoogte-as, cijfers op kaphoogte) */
-.lead-magnet-card .phase-arrow {
-  vertical-align: 0.2em; /* gemeten: cijfer-ink-center 0.37em vs pijl-center 0.17em */
-}
+/* De pijl-nudge zelf staat in de canonieke .arrow-glyph-regel (zie onder),
+   gedeeld door homepage + sample-pagina. */
 
 /* Hero Headline */
 .hero h1 {
@@ -1792,11 +1789,12 @@ html {
   width: 100%;
 }
 
-/* Inline arrow nudge: U+2192 sits on math-axis, looks high relative to digits */
+/* Canonieke inline arrow-nudge (homepage + sample-pagina).
+   U+2192 zit op de math-as (x-hoogte), de cijfers op kaphoogte; vertical-align in em
+   centreert de pijl optisch met de cijfers op elke font-grootte (hero-li + card-h3 +
+   homepage-paragraaf). Gemeten: cijfer-ink-center 0.37em vs pijl-center 0.17em. */
 .arrow-glyph {
-  display: inline-block;
-  position: relative;
-  top: 1px;
+  vertical-align: 0.2em;
 }
 
 .sample-hero-text {
@@ -1882,6 +1880,21 @@ html {
 .sample-hero-form.homepage-newsletter .newsletter-button {
   width: 100%;
   margin-bottom: 0;
+}
+
+/* Na succes (JS zet .newsletter-submitted op de kaart): de bevestiging neemt
+   de kaart over. Verberg de nu-stale titel + intro; "Gelukt!" spreekt voor zich. */
+.sample-hero-form.newsletter-submitted > .newsletter-content > h3,
+.sample-hero-form.newsletter-submitted > .newsletter-content > p:not(.newsletter-privacy) {
+  display: none;
+}
+/* Download-knop full-width binnen het paneel = strakke kaart-afsluiter.
+   Brevo's .sib-form-container a (0,1,1) kleurt links blauw+underline; deze
+   scope (0,2,0) wint zonder !important en herstelt de btn-cta-look. */
+.sample-success-download .btn-cta {
+  width: 100%;
+  color: var(--color-cta-text);
+  text-decoration: none;
 }
 
 @media (max-width: 768px) {

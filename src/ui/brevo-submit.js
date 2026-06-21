@@ -44,6 +44,12 @@ document.addEventListener('submit', async (e) => {
         successPanel.style.display = 'block';
         successPanel.classList.add(ACTIVE_CLASS);
       }
+      // Vervang het formulier door de bevestiging: verberg de velden + knop
+      // (anders blijft de verweesde CTA staan en groeit de kaart dubbel).
+      // Inline display = bulletproof, geen specificiteitsstrijd met Brevo's CSS.
+      form.style.display = 'none';
+      const card = form.closest('.homepage-newsletter');
+      if (card) card.classList.add('newsletter-submitted');
       form.reset();
     } else {
       if (json.message && errorPanel) {
