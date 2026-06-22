@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 176)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 177)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 177: Terminal voltooid-markers [X]→[✓] — systemische rode-checkbox-botsing op mobiel (22 jun 2026)
+⚠️ **Never:**
+- Een content-token gebruiken dat toevallig een renderer-marker is — `[X]` als "afgevinkt"-vinkje botst met de error-marker (`renderer.js:101`: regel die na trim met `[X]` begint → rood). Op mobiel zichtbaar rood + doorlek naar ingesprongen regels (≥3 spaties = continuation-line erft de kleur erboven); desktop verbergt het via het `│`-kader. Gebruik `[✓]` (success/groen) voor voltooid, nooit `[X]`.
+- Een globale `[X]→[✓]`-replace draaien zonder inventaris — `[X]` heeft 3 betekenissen: voltooid-checkbox (de bug), échte fout ("Onbekende challenge/scenario"), én "NOOIT doen"-lijsten in security/netwerk-man-pages. Bij die laatste twee is rood juist; blind vervangen had de waarschuwing omgekeerd ("`[✓] password`").
+- "Het is rood" claimen zonder de voltooide staat te triggeren — de eerste mobiele probe toonde 0 rood omdat niets afgevinkt was; pas ná `challenge status` met 1 met-requirement werd het rood gemeten. Trigger de staat die de bug toont, meet niet de lege staat.
+
+✅ **Always:**
+- Renderkleur verifiëren via class + `getComputedStyle().color` op een no-store server (Python `http.server` cachet ES-modules → vals-negatief). Gemeten: `[✓]`=`#3fb950`(dark)/`#008844`(light), `[ ]`=normal/wit, fouten nog `error`/rood, regels ónder een groene regel wit (doorlek weg).
+- `[✓]` is 3 chars = 1 monospace-cel → desktop-box-uitlijning blijft pixel-exact (`allSame` len 69 + screenshot bevestigd); daarom het symbool overal gelijktrekken i.p.v. mobiel/desktop splitten.
+- Eén renderer-conventie = systemische bug: dezelfde `[X]`-checkbox zat in 6 voortgangsweergaven (leerpad/challenge/achievements/tutorial/next). Repo-brede `grep "'\[X\]'"` + categoriseren vóór je "klaar" claimt.
+- In een legenda (uitleg, geen status) de glyph **achteraan** zetten (`Voltooid   [✓]`) → geen marker-match aan regelbegin → neutraal wit, geen doorgeërfde kleur. Volledig: `docs/sessions/current.md` Sessie 177.
+
 ### Sessie 176: Mobiele audit + 5 fixes — tabel-overflow, CSP/consent-gap, emoji, tap-targets, scroll-hint (21 jun 2026)
 ⚠️ **Never:**
 - Een tap-target-"fix" bouwen op een ongemeten aanname — ik claimde de blog-filterknoppen ~20px (mobiel) en bumpte ze; meting ná implementatie toonde 27px/42px = al ≥24px AA → onnodig, en mijn `inline-flex` voegde een display-neveneffect toe. Teruggedraaid. "Meten wint van oogwerk" geldt óók over je eigen premisse: meet vóór je fixt. → geheugen-lijn met `feedback_verify_claims_against_artifact`.
@@ -148,20 +160,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Render-en-meet ook bij gegenereerde covers: elke PNG visueel inspecteren (langste titel/eyebrow binnen het frame, footer-claim feitelijk juist) vóór je 'm koppelt.
 - JSON-LD na elke edit valideren (Python `json.loads` over álle `application/ld+json`-blokken) — een kritieke `image`-fix telt pas na deploy + GSC "Validatie van fix valideren". Volledig: `docs/sessions/current.md` Sessie 172.
 
-### Sessie 171: Logo-herontwerp H-monogram + asset-keten + brand-kit (16 jun 2026)
-⚠️ **Never:**
-- Een logo "vervangen" zonder álle inline-kopieën te scannen — hetzelfde glyph zat in `favicon.svg` + `navbar.js` (2×) + `footer.js` + `docs/products/logo.svg`; een gemiste kopie geeft een afwijkend logo. Repo-brede sweep op het oude pad vóór je "klaar" claimt.
-- Een logo-edit "verifiëren" op een gecachete testserver — Python `http.server` stuurt geen `Cache-Control`, dus de browser draaide de oude ES-module → vals-negatief (leek alsof de edit niet werkte). Verifieer onder no-cache / verse origin.
-- Maskable PWA-iconen als afgeronde transparante tegel laten — `purpose:"maskable"` betekent dat de OS zelf maskt; transparante hoeken geven rare randen. Vol-vlak renderen, glyph binnen de safe-zone.
-- Een nieuw ontwerp alléén in je hoofd beoordelen — twee kandidaten (chevron-crossbar = "skip-knop", losse block = "punt") faalden pas zichtbaar in de browser-render. Logo's bestaan op het netvlies: render-en-meet.
-
-✅ **Always:**
-- Render-en-meet bij ontwerp: SVG → browser-canvas → PNG op 512/32/**16px**, beoordeel visueel. Zonder rasterizer (`rsvg`/`inkscape` ontbraken) deed Playwright canvas→PNG het pixel-exact, inclusief de favicon.ico (PNG-payloads).
-- Cache-bust alléén waar `immutable` + gelijkblijvende-URL samenvallen: og:image (`/assets/* immutable 1jr` + social-scraper-cache) kreeg `?v=2`; favicons (root, revalideren) niet; JS-imports niet (≤7-dagen, cosmetisch, ES-module-query invasief). Per-asset, niet alles-of-niets.
-- "Wie host het bestand" bepaalt de update-route: site-assets verversen via deploy; Gumroad-PDF's zijn een extern eilandje → handmatige re-upload; sample (lead-magnet) = site-link, geen Brevo-actie.
-- DRY via een build-stap i.p.v. een 3e getrackte kopie: `build-pdfs.sh` kopieert het logo uit canonieke `assets/brand/logo.svg`, `docs/products/logo.svg` gitignored (build-managed) — consistent met de PDF-artifact-flow (Sessie 170). Volledig: `docs/sessions/current.md` Sessie 171.
-
-**Rotation:** Top-6 huidig: 171-172-173-174-175-176 (Sessie 170 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Eenmalige catch-up UITGEVOERD (na Sessie 176):** current.md Sessie 81-164 geknipt naar `archive-s081-s120.md` (31 entries) + `archive-s121-s164.md` (47 entries); current.md houdt nu het rolling window 165-176 (12 entries). SESSIONS.md-index gecorrigeerd; backlog opgeheven → standaard `N%5`-rotatie draait schoon. Historie 81-164 → de range-archieven; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 172-173-174-175-176-177 (Sessie 170 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Eenmalige catch-up UITGEVOERD (na Sessie 176):** current.md Sessie 81-164 geknipt naar `archive-s081-s120.md` (31 entries) + `archive-s121-s164.md` (47 entries); current.md houdt nu het rolling window 165-177 (13 entries; volgende bulk-rotatie Sessie 180 → archiveer 170-174). SESSIONS.md-index gecorrigeerd; backlog opgeheven → standaard `N%5`-rotatie draait schoon. Historie 81-164 → de range-archieven; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -210,7 +209,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 176
+**Sessie counter:** 177
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -262,6 +261,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 21 jun 2026 (Sessie 176 — mobiele audit + 5 fixes: tabel-scroll blog/legal, CSP-geblokkeerde Consent Mode v2 defaults op 14 blogpagina's → extern consent-default.js (GDPR-gap), emoji-cleanup legal → ASCII, contact-inputs 44px + pages.css-cache-normalisatie, terminal scroll-hint mobiel verborgen; filterknoppen-tap-target teruggedraaid na meting. Volledig: `docs/sessions/current.md`)
-**Version:** 5.50 (Sessie 176 — mobiele audit + 5 fixes; CSP/consent-gap blog = kern; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 22 jun 2026 (Sessie 177 — terminal voltooid-markers [X]→[✓]: renderer kleurt op 1e teken → [X] als afgevink-vinkje gaf rode checkboxes op mobiel + doorlek; gemigreerd naar [✓] in 6 voortgangsweergaven (leerpad/challenge/achievements/tutorial/next) + leerpad-inspringing 4→2 + man-page-legenda glyph achteraan. Échte fouten + man-page-"NOOIT doen"-lijsten bewust rood. Volledig: `docs/sessions/current.md`)
+**Version:** 5.51 (Sessie 177 — terminal voltooid-markers [X]→[✓], rode-checkbox-botsing op mobiel systemisch gefixt; volledige historie: `docs/sessions/current.md` + TASKS.md)
 

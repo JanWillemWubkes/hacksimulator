@@ -4,6 +4,48 @@
 
 ---
 
+## Sessie 177: Terminal voltooid-markers `[X]`→`[✓]` — systemische rode-checkbox-botsing op mobiel (22 jun 2026)
+
+**Mission:** Heisenberg zag in de terminal dat `leerpad` op mobiel sommige commands rood toonde en andere wit, terwijl op laptop alles wit is — "net alsof er iets fout is". Analyse → fix → in vervolgvragen uitgebreid naar de man-page en daarna naar de hele gamification/voortgang-stack.
+
+**Oorzaak (twee samenwerkende mechanismen in `src/ui/renderer.js`):**
+- **Marker-botsing** (`renderer.js:101`): elke regel die na trim met `[X]` begint wordt als `error` geclassificeerd → rood. `leerpad` (en bijna elke voortgangsweergave) gebruikte `[X]` als "afgevinkt"-vinkje → voltooide items rood.
+- **Kleur-doorlek** (`renderer.js:497-506`): een regel met ≥3 spaties inspringing zónder eigen marker is een *continuation line* en erft de kleur van de regel erboven. Mobiele rijen sprongen 4 spaties in → het rood van een voltooid item lekte door naar de niet-voltooide `[ ]`-regels eronder.
+- **Waarom alleen mobiel:** desktop tekent een ASCII-kader; elke regel begint met `│` (geen marker, 0 inspringing) → alles wit. Het kader schermt de inhoud toevallig af.
+
+**Work done:**
+- **Leerpad (`leerpad.js`):** mobiel `[X]`→`[✓]` (success/groen) op fase-kop + command-rij; command-inspringing 4→2 spaties zodat niet-voltooide regels onder de continuation-drempel vallen (geen doorlek). Desktop-box ook `[X]`→`[✓]` voor symbool-consistentie (in het kader → blijft wit; `[✓]` is 3 chars = uitlijning pixel-exact). Man-page-legenda herschreven met de glyph **achteraan** (`Voltooid   [✓]`) i.p.v. vooraan → geen marker-match → neutraal wit (geen rood, geen doorgeërfd groen op de "niet voltooid"-regel).
+- **Gamification/voortgang (na scope-akkoord "alles, zoals leerpad"):** `[X]`→`[✓]` voor voltooid/unlocked in `challenge-renderer.js` (lijst + renderProgress), `badge-manager.js` (box + mobiel), `tutorial.js` (box + mobiel), `challenge.js` (status-tekst), `next.js` (transitie + completion `[X] … afgerond/voltooid!` — gebruikte z'n sub-regels al met `[✓]`, was intern inconsistent).
+- **Tests:** `responsive-ascii-boxes.spec.js` leerpad mobiel+desktop → `[✓]` verwacht, `[X]` verboden. Overige specs (`tutorial.spec.js` accepteert al `[X]` OF `✓`; `gamification.spec.js` toetst geen marker) onaangeroerd.
+- **Geheugen:** `reference_renderer_marker_collision.md` toegevoegd (+ MEMORY.md-pointer).
+
+**Cruciaal onderscheid (uit volledige `[X]`-inventaris vóór edits):** drie categorieën, niet twee.
+- **A. Voltooid-checkbox** (de bug → `[✓]`): de 6 oppervlakken hierboven.
+- **B. Échte foutmelding** (rood correct, niet aangeraakt): `[X] Onbekende challenge` (challenge-manager:112), `[X] Onbekend scenario` (tutorial.js:180), certificates:133/143.
+- **C. "NOOIT doen"-lijsten in security/netwerk-man-pages** (rood correct, niet aangeraakt): hydra/sqlmap/nmap/hashcat/cat/rm/ping/netstat/whois/ifconfig/traceroute/metasploit/nikto — `[X] password, admin, 123456` enz. Hier is rood een rood kruis = "niet doen"; een blinde `[X]→[✓]` had de waarschuwing **omgekeerd** ("`[✓] password`"). Daarom eerst inventariseren, niet globaal vervangen.
+
+**Verificatie (render-en-meet, no-store Node-server tegen ES-module-cache-vals-negatief):**
+- Leerpad mobiel **dark** (`[✓]`=`#3fb950` groen) + **light** (`#008844`), niet-voltooid `terminal-output-normal`, `anyRed:0`, regels ónder een groene regel wit (doorlek weg).
+- Leerpad desktop 1440px: box `allSame`-uitgelijnd (len 69), voltooide rij wit (afgeschermd), `[X]` weg, 0 rood — `[✓]` rendert als 1 monospace-cel (screenshot bevestigd).
+- `challenge status` na 1 afgevinkt doel: `[✓] Check je gebruikersnaam` = `success` (groen — was eerder gemeten `error`/rood), `[ ]` = wit.
+- `achievements` met unlocked badge: `[✓] First Steps` groen, locked badges wit.
+- Regressie: `tutorial start <bestaat-niet>` → `[X] Onbekend scenario` = `error`/rood (categorie B intact). Desktop achievements- + tutorial-box: `allSame`, len 69, 0 rood.
+
+**Commits:** `af91ff8` — "fix(terminal): voltooid-markers [X]->[✓] — verhelp rode checkboxes op mobiel" (7 files: leerpad/challenge/next/tutorial/badge-manager/challenge-renderer + responsive-ascii-boxes.spec.js). Gepusht naar `main`.
+
+**Learnings:**
+- De renderer kleurt puur op het **eerste teken** van een regel; content-tokens die toevallig markers zijn (`[X]`) botsen. Eén conventie, zes vindplaatsen — de bug was systemisch, niet leerpad-specifiek.
+- **Meten vóór claimen:** de eerste mobiele probe toonde 0 rood omdat niets voltooid was; pas ná het triggeren van een afgevinkt item (`challenge status` met 1 met-requirement) werd het rood zichtbaar/gemeten. Aanname "het is rood" ≠ bewijs.
+- **Inventariseer vóór bulk-replace:** de categorie-C "NOOIT doen"-`[X]` lijken identiek maar dragen de tegenovergestelde betekenis. Een sed-brede replace was hier destructief geweest.
+- `[✓]` is 3 chars en 1 monospace-cel → desktop-box-uitlijning blijft pixel-exact; geen reden om desktop op `[X]` te houden (symbool nu overal gelijk).
+- **Geen CI:** `.github/workflows` bestaat niet en Netlify draait alleen een echo-build; de Playwright-suite test bewust de **live productie**-site en draait enkel handmatig → de browser-verificatie hier (no-store, computed-style) is het eigenlijke bewijs; de suite valideert pas ná deploy.
+
+**Next steps (open):** categorie C (man-page "NOOIT doen"-`[X]`) staat bewust nog op rood — desgewenst later naar `[✗]` voor projectconventie-consistentie (geen functioneel defect). Na Netlify-deploy: `npx playwright test responsive-ascii-boxes.spec.js` tegen productie als regressie-vangnet.
+
+**Metrics delta:** geen test- of bundle-impact van betekenis — alleen asserties gewijzigd (geen specs toegevoegd; blijft 23 files / 197 tests per browser-project) en enkele `[✓]`-tekens in src JS (sub-KB). Ground-truth `du -sb`: src ~624 KB / styles ~384 KB / blog ~413 KB / assets ~1030 KB.
+
+---
+
 ## Sessie 176: Mobiele audit + 5 fixes — tabel-overflow, CSP/consent-gap, emoji-cleanup, tap-targets, scroll-hint (21 jun 2026)
 
 **Mission:** Heisenberg vroeg een audit of de mobiele weergaves ongewenste afwijkingen vertonen (hoofdpubliek laptop/pc, mobiel secundair). Gemeten op 375px-viewport (`getBoundingClientRect`/`scrollWidth`, niet op het oog) tegen productie. Eindoordeel: mobiel grotendeels gezond; 1 echt layout-defect + enkele kleinere punten. Daarna in vervolgvragen uitgebreid naar CSP-onderzoek, emoji-cleanup, tap-targets en de scroll-hint.
