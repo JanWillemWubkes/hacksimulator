@@ -157,7 +157,7 @@ function renderStatus() {
 
   output += 'Doelen:\n';
   status.progress.forEach(function(p) {
-    var icon = p.met ? '[X]' : '[ ]';
+    var icon = p.met ? '[✓]' : '[ ]';
     output += '  ' + icon + ' ' + p.description + '\n';
   });
 

@@ -314,7 +314,7 @@ test.describe('Cross-Browser ASCII Box Rendering', () => {
 // ─────────────────────────────────────────────────
 
 test.describe('Mobile/Desktop Hybrid UI (ASCII Checkbox Fix)', () => {
-  test('Mobile: ASCII checkboxes instead of Unicode', async ({ page }) => {
+  test('Mobile: completed = [✓] (green), incomplete = [ ] (white)', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE
     await page.goto('https://hacksimulator.nl/terminal.html');
     await acceptLegalModal(page);
@@ -329,13 +329,12 @@ test.describe('Mobile/Desktop Hybrid UI (ASCII Checkbox Fix)', () => {
     // Extract leerpad section (after "LEERPAD:" header)
     const leerpadSection = output.substring(output.indexOf('LEERPAD'));
 
-    // Verify ASCII checkboxes present (help should be [X] now)
-    expect(leerpadSection).toContain('[X]'); // Completed checkbox (ASCII)
-    expect(leerpadSection).toContain('[ ]'); // Incomplete checkbox (ASCII)
-
-    // Verify NO Unicode checkboxes in leerpad section
-    // (welcome message has ✓ but leerpad should use [X])
-    expect(leerpadSection).not.toContain('✓'); // No Unicode check mark
+    // Mobile uses [✓] for completed (renderer maps to success/green) and [ ] for incomplete.
+    // The old [X] marker collided with the error marker (renderer.js) → showed red. See Sessie 82
+    // for the original ASCII-only decision; the green check mark is the deliberate replacement.
+    expect(leerpadSection).toContain('[✓]'); // Completed checkbox (help should be done now)
+    expect(leerpadSection).toContain('[ ]'); // Incomplete checkbox
+    expect(leerpadSection).not.toContain('[X]'); // No error-colliding marker
     expect(leerpadSection).not.toContain('○'); // No Unicode circle
   });
 
@@ -344,7 +343,7 @@ test.describe('Mobile/Desktop Hybrid UI (ASCII Checkbox Fix)', () => {
     await page.goto('https://hacksimulator.nl/terminal.html');
     await acceptLegalModal(page);
 
-    // Execute help first to get progress for [X] checkbox
+    // Execute help first to get progress for [✓] checkbox
     await executeCommand(page, 'help');
     await executeCommand(page, 'leerpad');
 
@@ -361,11 +360,12 @@ test.describe('Mobile/Desktop Hybrid UI (ASCII Checkbox Fix)', () => {
     expect(leerpadSection).toContain('─');
     expect(leerpadSection).toContain('╯');
 
-    // Verify ASCII checkboxes (not Unicode) in leerpad section
-    expect(leerpadSection).toContain('[X]');
+    // Completed checkbox uses [✓] (consistent with mobile + man-page); inside the box it
+    // renders white (shielded), so no red. The old [X] collided with the renderer error marker.
+    expect(leerpadSection).toContain('[✓]');
     expect(leerpadSection).toContain('[ ]');
-    expect(leerpadSection).not.toContain('✓');
-    expect(leerpadSection).not.toContain('○');
+    expect(leerpadSection).not.toContain('[X]'); // No error-colliding marker
+    expect(leerpadSection).not.toContain('○');   // No Unicode circle
   });
 
   test('Mobile: Simplified list format (readable on small screens)', async ({ page }) => {
@@ -374,7 +374,7 @@ test.describe('Mobile/Desktop Hybrid UI (ASCII Checkbox Fix)', () => {
     await acceptLegalModal(page);
     await closeMobileMenu(page);
 
-    // Execute help first to get [X] progress
+    // Execute help first to get [✓] progress
     await executeCommand(page, 'help');
     await executeCommand(page, 'leerpad');
 
@@ -385,8 +385,8 @@ test.describe('Mobile/Desktop Hybrid UI (ASCII Checkbox Fix)', () => {
     expect(output).toContain('FASE 2'); // Phase 2 header present
 
     // Verify command formatting — help should be completed after executing it
-    expect(output).toContain('[X] help'); // Completed command
-    expect(output).toContain('[ ] mkdir'); // Incomplete command
+    expect(output).toContain('[✓] help'); // Completed command (green)
+    expect(output).toContain('[ ] mkdir'); // Incomplete command (white)
   });
 
   test('Cross-viewport: No horizontal scroll on any viewport', async ({ page }) => {

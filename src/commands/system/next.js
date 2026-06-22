@@ -369,7 +369,7 @@ function detectTransition(triedSet) {
 function buildTransitionBox(transition) {
   if (isMobileView()) {
     var out = '\n**' + transition.fromLabel + '**\n\n';
-    out += '[X] ' + transition.summary + ' afgerond!\n\n';
+    out += '[✓] ' + transition.summary + ' afgerond!\n\n';
     out += 'Je kunt nu:\n';
     for (var i = 0; i < transition.skills.length; i++) {
       out += '  [✓] ' + transition.skills[i] + '\n';
@@ -392,7 +392,7 @@ function buildTransitionBox(transition) {
   lines.push(B.dividerLeft + B.horizontal.repeat(inner) + B.dividerRight);
 
   // Summary
-  var summaryLine = '  [X] ' + transition.summary + ' afgerond!';
+  var summaryLine = '  [✓] ' + transition.summary + ' afgerond!';
   lines.push(B.vertical + summaryLine.padEnd(inner) + B.vertical);
   lines.push(B.vertical + ' '.repeat(inner) + B.vertical);
 
@@ -497,7 +497,7 @@ function buildMobileOutput(stage) {
 
 function buildCompletionMessage() {
   var summaryLines = [
-    '[X] Alle fases, missies en challenges voltooid!',
+    '[✓] Alle fases, missies en challenges voltooid!',
     '',
     'Je hebt geleerd:',
     '  [✓] Terminal navigatie en bestandsbeheer',

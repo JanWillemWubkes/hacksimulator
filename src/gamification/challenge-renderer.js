@@ -64,7 +64,7 @@ var challengeRenderer = {
     });
 
     sorted.forEach(function(c) {
-      var checkbox = c.completed ? '[X]' : '[ ]';
+      var checkbox = c.completed ? '[✓]' : '[ ]';
       var diffLabel = c.difficulty.toUpperCase();
       var pts = c.points + ' pts';
       var titleLine = '  ' + checkbox + ' ' + smartTruncate(c.title, inner - 22) +
@@ -95,7 +95,7 @@ var challengeRenderer = {
     var out = '\n**CHALLENGES**\n\n';
 
     challenges.forEach(function(c) {
-      var checkbox = c.completed ? '[X]' : '[ ]';
+      var checkbox = c.completed ? '[✓]' : '[ ]';
       out += checkbox + ' **' + c.title + '**\n';
       out += '    ' + c.difficulty.toUpperCase() + ' | ' + c.points + ' punten\n';
       out += '    ' + c.description + '\n\n';
@@ -192,7 +192,7 @@ var challengeRenderer = {
     var out = '[?] Challenge voortgang: ' + completed + '/' + total + ' doelen\n';
 
     progress.forEach(function(p) {
-      var icon = p.met ? '[X]' : '[ ]';
+      var icon = p.met ? '[✓]' : '[ ]';
       out += '  ' + icon + ' ' + p.description + '\n';
     });
 

@@ -87,8 +87,10 @@ function buildBoxOutput(triedSet, width) {
     var stats = getPhaseStats(phase, triedSet);
     var done = stats.completed === stats.total;
 
-    // Phase header: │  [X] FASE 1: TERMINAL BASICS (3/7)  │
-    var checkbox = done ? '[X]' : '[ ]';
+    // Phase header: │  [✓] FASE 1: TERMINAL BASICS (3/7)  │
+    // [✓] (3 chars, zelfde breedte als [X]) = voltooid. In het kader afgeschermd → wit;
+    // symbool gelijk aan de mobiele weergave en de man-page-legenda.
+    var checkbox = done ? '[✓]' : '[ ]';
     var phaseText = '  ' + checkbox + ' ' + phase.phase + ' (' + stats.completed + '/' + stats.total + ')';
     var phasePad = inner - phaseText.length;
     lines.push(B.vertical + phaseText + ' '.repeat(Math.max(0, phasePad)) + B.vertical);
@@ -104,7 +106,7 @@ function buildBoxOutput(triedSet, width) {
       // Command rows
       phase.commands.forEach(function(cmd) {
         var tried = isTried(cmd.name, triedSet);
-        var cb = tried ? '[X]' : '[ ]';
+        var cb = tried ? '[✓]' : '[ ]';
         var descMaxLen = inner - 6 - 3 - 1 - 13 - 2;
         var rowText = '      ' + cb + ' ' + cmd.name.padEnd(13) + '- ' + smartTruncate(cmd.description, descMaxLen);
         var rowPad = inner - rowText.length;
@@ -139,16 +141,19 @@ function buildMobileOutput(triedSet) {
   phases.forEach(function(phase, idx) {
     var stats = getPhaseStats(phase, triedSet);
     var done = stats.completed === stats.total;
-    var checkbox = done ? '[X]' : '[ ]';
+    // Voltooid = [✓] (renderer mapt naar success/groen). Niet-voltooid = [ ] (geen marker → wit).
+    // Command-rijen springen 2 spaties in (NIET ≥3): zo zijn niet-voltooide regels geen
+    // continuation-line en erven ze geen kleur van een groene regel erboven (zie renderer.js:497).
+    var checkbox = done ? '[✓]' : '[ ]';
     out += checkbox + ' **' + phase.phase + '** (' + stats.completed + '/' + stats.total + ')\n';
 
     if (idx === 3 && !allUnlocked) {
-      out += '    [!] Voltooi eerst alle Fase 3 commands\n';
+      out += '  [!] Voltooi eerst alle Fase 3 commands\n';
     } else {
       phase.commands.forEach(function(cmd) {
         var tried = isTried(cmd.name, triedSet);
-        var cb = tried ? '[X]' : '[ ]';
-        out += '    ' + cb + ' ' + cmd.name + ' - ' + cmd.description + '\n';
+        var cb = tried ? '[✓]' : '[ ]';
+        out += '  ' + cb + ' ' + cmd.name + ' - ' + cmd.description + '\n';
       });
     }
 
@@ -184,5 +189,5 @@ export default {
     return output;
   },
 
-  manPage: "\nNAAM\n    leerpad - toon leerpad met voortgang\n\nSYNOPSIS\n    leerpad\n\nBESCHRIJVING\n    Toont je leerpad als ethical hacker in 4 fases. Elke command\n    die je correct uitvoert wordt automatisch afgevinkt, zodat je\n    je voortgang kunt volgen.\n\n    FASE 1: TERMINAL BASICS\n        Leer de basis terminal commands. Begin hier als je nieuw bent.\n        Commands: help, ls, cd, pwd, cat, whoami, history\n\n    FASE 2: FILE MANIPULATION\n        Leer bestanden en directories maken en verwijderen.\n        Commands: mkdir, touch, rm\n\n    FASE 3: RECONNAISSANCE\n        Leer netwerk scanning en informatie verzamelen.\n        Commands: ping, nmap, ifconfig, netstat\n\n    FASE 4: SECURITY TOOLS\n        Geavanceerde security testing tools. Let op: educatief gebruik!\n        Commands: hashcat, hydra, sqlmap, metasploit, nikto\n\n        [!] Deze fase is vergrendeld totdat je Fase 3 hebt voltooid.\n\nVOORTGANG TRACKING\n    Je voortgang wordt automatisch opgeslagen in je browser.\n\n    Symbolen:\n        [X] Fase voltooid\n        [ ] Fase niet voltooid\n        [X] command   Command uitgeprobeerd\n        [ ] command   Command nog niet geprobeerd\n\nVOORBEELDEN\n    leerpad\n        Bekijk je huidige voortgang\n\n    help\n        Zie alle beschikbare commands\n\n    man nmap\n        Leer hoe een specifiek command werkt\n\nTIPS\n    • Begin met Fase 1 als je nieuw bent\n    • Type 'help' om alle commands te zien\n    • Commands worden alleen afgevinkt bij correct gebruik (met argumenten)\n    • Fase 4 wordt ontgrendeld na voltooiing van Fase 3\n\n    [HACKSIM] Dit command is uniek voor HackSimulator.\n       Het bestaat niet in standaard Linux.\n\n    [+] In real Linux:\n       Er is geen leerpad command. Ethisch hacken leer je via\n       certificeringen (CEH, OSCP) en CTF.\n\nGERELATEERDE COMMANDO'S\n    help (alle commands), man (gedetailleerde uitleg)\n".trim()
+  manPage: "\nNAAM\n    leerpad - toon leerpad met voortgang\n\nSYNOPSIS\n    leerpad\n\nBESCHRIJVING\n    Toont je leerpad als ethical hacker in 4 fases. Elke command\n    die je correct uitvoert wordt automatisch afgevinkt, zodat je\n    je voortgang kunt volgen.\n\n    FASE 1: TERMINAL BASICS\n        Leer de basis terminal commands. Begin hier als je nieuw bent.\n        Commands: help, ls, cd, pwd, cat, whoami, history\n\n    FASE 2: FILE MANIPULATION\n        Leer bestanden en directories maken en verwijderen.\n        Commands: mkdir, touch, rm\n\n    FASE 3: RECONNAISSANCE\n        Leer netwerk scanning en informatie verzamelen.\n        Commands: ping, nmap, ifconfig, netstat\n\n    FASE 4: SECURITY TOOLS\n        Geavanceerde security testing tools. Let op: educatief gebruik!\n        Commands: hashcat, hydra, sqlmap, metasploit, nikto\n\n        [!] Deze fase is vergrendeld totdat je Fase 3 hebt voltooid.\n\nVOORTGANG TRACKING\n    Je voortgang wordt automatisch opgeslagen in je browser.\n\n    Symbolen:\n        Voltooid        [✓]   (fase of command afgevinkt)\n        Niet voltooid   [ ]   (nog te doen)\n\nVOORBEELDEN\n    leerpad\n        Bekijk je huidige voortgang\n\n    help\n        Zie alle beschikbare commands\n\n    man nmap\n        Leer hoe een specifiek command werkt\n\nTIPS\n    • Begin met Fase 1 als je nieuw bent\n    • Type 'help' om alle commands te zien\n    • Commands worden alleen afgevinkt bij correct gebruik (met argumenten)\n    • Fase 4 wordt ontgrendeld na voltooiing van Fase 3\n\n    [HACKSIM] Dit command is uniek voor HackSimulator.\n       Het bestaat niet in standaard Linux.\n\n    [+] In real Linux:\n       Er is geen leerpad command. Ethisch hacken leer je via\n       certificeringen (CEH, OSCP) en CTF.\n\nGERELATEERDE COMMANDO'S\n    help (alle commands), man (gedetailleerde uitleg)\n".trim()
 };

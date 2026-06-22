@@ -54,7 +54,7 @@ function renderList() {
 
   scenarios.forEach(function(s) {
     var completed = tutorialManager.isScenarioCompleted(s.id);
-    var checkbox = completed ? '[X]' : '[ ]';
+    var checkbox = completed ? '[✓]' : '[ ]';
     var titleLine = '  ' + checkbox + ' ' + smartTruncate(s.title, inner - 8);
     lines.push(buildLine(titleLine, width));
 
@@ -83,7 +83,7 @@ function renderListMobile(scenarios) {
 
   scenarios.forEach(function(s) {
     var completed = tutorialManager.isScenarioCompleted(s.id);
-    var checkbox = completed ? '[X]' : '[ ]';
+    var checkbox = completed ? '[✓]' : '[ ]';
     out += checkbox + ' **' + s.title + '**\n';
     out += '    Niveau: ' + s.difficulty + ' | Stappen: ' + s.stepCount + '\n';
     out += '    ' + s.description + '\n\n';

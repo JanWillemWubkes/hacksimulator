@@ -225,7 +225,7 @@ export default new class BadgeManager {
         lines.push(buildLine(rarityLabel, width));
       }
 
-      var status = badge.unlocked ? '[X]' : '[ ]';
+      var status = badge.unlocked ? '[✓]' : '[ ]';
       var displayTitle = badge.unlocked ? badge.title : '???';
       var badgeLine = '  ' + status + ' ' + badge.icon + ' ' + displayTitle;
 
@@ -265,7 +265,7 @@ export default new class BadgeManager {
         out += '-- ' + RARITY_LABELS[currentRarity] + ' --\n';
       }
 
-      var status = badge.unlocked ? '[X]' : '[ ]';
+      var status = badge.unlocked ? '[✓]' : '[ ]';
       var displayTitle = badge.unlocked ? badge.title : '???';
       out += status + ' ' + badge.icon + ' ' + displayTitle + '\n';
 
