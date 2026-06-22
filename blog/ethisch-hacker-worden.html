@@ -188,10 +188,10 @@
           <div class="output">
 Starting Nmap scan...
 PORT     STATE   SERVICE
-22/tcp   OPEN    SSH       ← Secure Shell (remote toegang)
-80/tcp   OPEN    HTTP      ← Webserver (onversleuteld!)
-443/tcp  OPEN    HTTPS     ← Versleutelde webserver
-3306/tcp OPEN    MySQL     ← Database (publiek bereikbaar!)
+22/tcp   OPEN    SSH       <span class="arrow-glyph">←</span> Secure Shell (remote toegang)
+80/tcp   OPEN    HTTP      <span class="arrow-glyph">←</span> Webserver (onversleuteld!)
+443/tcp  OPEN    HTTPS     <span class="arrow-glyph">←</span> Versleutelde webserver
+3306/tcp OPEN    MySQL     <span class="arrow-glyph">←</span> Database (publiek bereikbaar!)
 
 [TIP] Open database poort = potentieel risico. Check firewall regels!
           </div>
@@ -323,9 +323,9 @@ PORT     STATE   SERVICE
         <div class="terminal-example">
           <div class="prompt">$ find / -name "*.conf" -readable 2>/dev/null</div>
           <div class="output">
-/etc/ssh/sshd_config          ← SSH server configuratie
-/etc/nginx/nginx.conf         ← Webserver configuratie
-/etc/mysql/my.cnf             ← Database configuratie
+/etc/ssh/sshd_config          <span class="arrow-glyph">←</span> SSH server configuratie
+/etc/nginx/nginx.conf         <span class="arrow-glyph">←</span> Webserver configuratie
+/etc/mysql/my.cnf             <span class="arrow-glyph">←</span> Database configuratie
 
 [TIP] Configuratiebestanden bevatten vaak gevoelige info. Check permissies!
           </div>

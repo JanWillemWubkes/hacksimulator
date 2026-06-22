@@ -270,12 +270,12 @@
           <div class="prompt">$ sqlmap -u "https://target.com/product?id=1" --batch</div>
           <div class="output">
 [INFO] testing connection to the target URL
-[INFO] heuristic test shows that GET parameter 'id'    ← Parameter is kwetsbaar
+[INFO] heuristic test shows that GET parameter 'id'    <span class="arrow-glyph">←</span> Parameter is kwetsbaar
        might be injectable (possible DBMS: 'MySQL')
 
-[CRITICAL] Parameter 'id' is vulnerable                ← Bevestigd: SQL injection mogelijk
+[CRITICAL] Parameter 'id' is vulnerable                <span class="arrow-glyph">←</span> Bevestigd: SQL injection mogelijk
 [INFO] back-end DBMS: MySQL 5.7
-[INFO] retrieved: users, products, orders              ← Aanvaller leest tabellen
+[INFO] retrieved: users, products, orders              <span class="arrow-glyph">←</span> Aanvaller leest tabellen
 
 [TIP] Voorkom dit met prepared statements + ORM. Nooit user-input concatenaten in SQL!
           </div>
@@ -426,10 +426,10 @@
           <div class="output">
 - Nikto v2.5.0
 + Target: https://target.com
-+ Server: Apache/2.4.41 (Ubuntu)             ← Versie-info gelekt (A05)
-+ /admin/: Admin panel detected               ← Mogelijke A01 indien open
-+ X-Frame-Options: missing                    ← Misconfig (A05)
-+ Cookies set without HttpOnly flag           ← Session-risico (A02/A07)
++ Server: Apache/2.4.41 (Ubuntu)             <span class="arrow-glyph">←</span> Versie-info gelekt (A05)
++ /admin/: Admin panel detected               <span class="arrow-glyph">←</span> Mogelijke A01 indien open
++ X-Frame-Options: missing                    <span class="arrow-glyph">←</span> Misconfig (A05)
++ Cookies set without HttpOnly flag           <span class="arrow-glyph">←</span> Session-risico (A02/A07)
 
 [TIP] nikto detecteert vooral A05-issues. Combineer met Burp voor diepere tests.
           </div>
