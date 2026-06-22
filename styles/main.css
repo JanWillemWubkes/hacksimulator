@@ -1437,7 +1437,7 @@ a.footer-donate:focus-visible {
   color: var(--color-navbar-dropdown-icon); /* Cyan like + icon */
   display: inline; /* Ensure arrow stays inline with text - prevents wrapping */
   margin-right: 6px;
-  vertical-align: baseline; /* Align with text baseline - no floating */
+  vertical-align: 0.1em; /* Gemeten: → (U+2192) ink-center 0.1em onder de label-tekst → optisch centreren (em-based, font-size-agnostisch) */
   transition: content 0s; /* Instant icon change (no fade) */
 }
 
@@ -1451,6 +1451,7 @@ a.footer-donate:focus-visible {
 
 .dropdown-menu a:hover::before {
   content: '► '; /* Filled arrow on hover - visual feedback */
+  vertical-align: 0; /* ► (U+25BA) zit van nature al gecentreerd (gemeten -0.02em); reset de 0.1em-nudge van de → zodat de hover-pijl niet te hoog springt */
 }
 
 /* Navbar Actions (Icons: Search, GitHub, Theme Toggle) */
