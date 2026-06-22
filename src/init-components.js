@@ -12,8 +12,12 @@
  * - / or /index.html, /over-ons.html, /contact.html, /woordenlijst.html -> 'marketing' navbar
  */
 
-import { injectNavbar } from '/src/components/navbar.js';
-import { injectFooter } from '/src/components/footer.js';
+// ?v= cache-bust: Netlify edge serveerde een stale navbar.js (oud logo) bij
+// normale module-imports ondanks nieuwe origin-versie (cache-status: fwd=stale).
+// Versie-query forceert een nieuwe cache-key -> gegarandeerd verse logo-code.
+// Bump dit nummer bij elke logo/markup-wijziging in navbar.js of footer.js.
+import { injectNavbar } from '/src/components/navbar.js?v=2';
+import { injectFooter } from '/src/components/footer.js?v=2';
 import '/src/ui/cta-tracking.js';
 import '/src/ui/newsletter-tracking.js';
 import '/src/ui/brevo-submit.js';
