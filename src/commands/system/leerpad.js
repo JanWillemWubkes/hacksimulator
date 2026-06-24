@@ -145,7 +145,11 @@ function buildMobileOutput(triedSet) {
     // Command-rijen springen 2 spaties in (NIET ≥3): zo zijn niet-voltooide regels geen
     // continuation-line en erven ze geen kleur van een groene regel erboven (zie renderer.js:497).
     var checkbox = done ? '[✓]' : '[ ]';
-    out += checkbox + ' **' + phase.phase + '** (' + stats.completed + '/' + stats.total + ')\n';
+    // Vinkje + count BINNEN de bold: mobile.css geeft strong display:block, dus alles
+    // wat buiten **..** op deze regel staat zou op een eigen regel "zweven" (los vinkje
+    // zonder command). Binnen de bold = één schone block-heading; [✓] wordt groen via
+    // de .marker-success span (renderer._formatText).
+    out += '**' + checkbox + ' ' + phase.phase + ' (' + stats.completed + '/' + stats.total + ')**\n';
 
     if (idx === 3 && !allUnlocked) {
       out += '  [!] Voltooi eerst alle Fase 3 commands\n';

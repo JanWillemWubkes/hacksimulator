@@ -84,7 +84,8 @@ function renderListMobile(scenarios) {
   scenarios.forEach(function(s) {
     var completed = tutorialManager.isScenarioCompleted(s.id);
     var checkbox = completed ? '[✓]' : '[ ]';
-    out += checkbox + ' **' + s.title + '**\n';
+    // Vinkje BINNEN de bold (mobile.css strong=display:block zou een los vinkje laten zweven).
+    out += '**' + checkbox + ' ' + s.title + '**\n';
     out += '    Niveau: ' + s.difficulty + ' | Stappen: ' + s.stepCount + '\n';
     out += '    ' + s.description + '\n\n';
   });

@@ -430,6 +430,12 @@ class Renderer {
     // Format markdown bold (mobile headers) - **text** → <strong>text</strong>
     formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
+    // Inline-kleur het voltooid-vinkje groen, óók binnen de box (waar de regel-div
+    // wit blijft omdat hij met │ begint) en binnen een **heading** (na de bold-replace
+    // zodat de span correct nest; .terminal-output .marker-success (0,2,0) wint van
+    // .terminal-output strong (0,1,1), dus groen overschrijft de lime heading-kleur).
+    formatted = formatted.replace(/\[✓\]/g, '<span class="marker-success">[✓]</span>');
+
     // Note: Emoji formatting removed - we now use ASCII brackets [?] [!] [✓] [X]
     // Icon wrapping handled by semantic line detection above (lines 68-87)
 

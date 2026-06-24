@@ -96,7 +96,8 @@ var challengeRenderer = {
 
     challenges.forEach(function(c) {
       var checkbox = c.completed ? '[✓]' : '[ ]';
-      out += checkbox + ' **' + c.title + '**\n';
+      // Vinkje BINNEN de bold (mobile.css strong=display:block zou een los vinkje laten zweven).
+      out += '**' + checkbox + ' ' + c.title + '**\n';
       out += '    ' + c.difficulty.toUpperCase() + ' | ' + c.points + ' punten\n';
       out += '    ' + c.description + '\n\n';
     });
