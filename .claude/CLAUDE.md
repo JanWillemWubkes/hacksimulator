@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 177)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 178)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 178: Homepage lead-magnet — sectie-reorder + glow-fix + copy-perfectionering (24 jun 2026)
+⚠️ **Never:**
+- Een sectie verplaatsen zonder rand-afhankelijke effecten na te lopen — de `.final-cta`-glow zat verankerd op `at 50% 100%` (onderrand) om in de aangrenzende band over te lopen; de lead-magnet ertussen schuiven liet hem hard afgekapt "uit het niets" zweven. Gradients/borders op sectiegrenzen kunnen stil breken bij elke DOM-herschikking.
+- Lead-magnet/sample-copy "mooier" maken op gevoel — de oude subtekst noemde echte features ("beslisboom") maar in onverklaard jargon (Fase 0 / reconnaissance) dat een nieuwe bezoeker niet kan plaatsen. Verifieer copy tegen de échte PDF-inhoud, niet tegen de oude tekst (product-kwaliteitsregel).
+- Een "Direct beginnen?"-kop op een email-gated PDF terwijl de écht directe actie (terminal, geen account) eronder staat — belofte-inversie t.o.v. werkelijke frictie, leest als bait-and-switch en botst met de nuchtere/eerlijke toon.
+
+✅ **Always:**
+- Bij een staart-herschikking: primaire conversie krijgt het climax-moment (terminal-CTA direct na de FAQ-payoff "Hoe begin ik?"), secundaire email-asks (PDF + nieuwsbrief) clusteren in de tail.
+- Rand-afhankelijke effecten chirurgisch scopen met `:has(+ .lead-magnet)` → alleen de gebroken homepage-case raken, de 4 andere `final-cta`-pagina's (over-ons/woordenlijst/commands/contact) met rust laten.
+- HTML-only tekstwijzigingen hebben géén `?v=`-cache-bump nodig (anders dan CSS/JS); een CSS-comment-only edit evenmin (geen render-effect). Bump alleen waar gerenderde output verandert, en dan minimaal (alleen `index.html` voor een homepage-only regel).
+- Copy de-jargonen door termen te vertalen naar concrete stappen (toestemming, scope, doelwit verkennen) + het "waarom" (de stap die beginners overslaan), feitelijk gedekt door de sample. Volledig: `docs/sessions/current.md` Sessie 178.
+
 ### Sessie 177: Terminal voltooid-markers [X]→[✓] — systemische rode-checkbox-botsing op mobiel (22 jun 2026)
 ⚠️ **Never:**
 - Een content-token gebruiken dat toevallig een renderer-marker is — `[X]` als "afgevinkt"-vinkje botst met de error-marker (`renderer.js:101`: regel die na trim met `[X]` begint → rood). Op mobiel zichtbaar rood + doorlek naar ingesprongen regels (≥3 spaties = continuation-line erft de kleur erboven); desktop verbergt het via het `│`-kader. Gebruik `[✓]` (success/groen) voor voltooid, nooit `[X]`.
@@ -147,20 +159,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - WS-scope versmallen op grond van inspectie, niet aanname; en bij doorvragen van Heisenberg de eigen eerdere actie eerlijk herroepen (bump→revert) i.p.v. verdedigen.
 - Launch-dag kiezen op responstijd-capaciteit, niet alleen day-of-week: di/wo sterkste HN/Reddit-dagen, schema geclusterd in het bewaakbare blok zodat je de eerste uren na elke post kunt reageren. Volledig: `docs/sessions/current.md` Sessie 173.
 
-### Sessie 172: GSC Verkopersvermeldingen (merchant-listing) fix + per-gids covers (17 jun 2026)
-⚠️ **Never:**
-- Merchant-listing-velden voor een digitaal product "oplossen" met verzonnen data — een eigen PDF heeft geen `gtin`; `brand` is de juiste algemene ID. Verzin geen fysiek-winkel-velden (Sessie-169-lijn: geen cargo-cult-SEO).
-- `shippingRate: 0` lezen/uitleggen als "gratis product" — schema scheidt `price` (blijft 5.00) van verzendkosten (0). De markup zegt "€5, €0 verzendkosten", niet "gratis". De gebruiker vroeg hier terecht op door.
-- Kaal "pay what you want" gebruiken wanneer er een minimumprijs geldt — Gumroad PWYW heeft een vloer (€5/gids, €10/bundel); zonder de vloer suggereert het €0. Noem altijd het minimum ("vanaf €5 (pay what you want)"). Stond in mijn cover-footer én 2 hero-plekken; lijn nieuwe copy uit op het al-accurate prijskaartje-patroon.
-- Aannemen dat de Sessie-171 rasterizer-route (Playwright/chromium) nog werkt — `cdn.playwright.dev` staat niet in de egress-allowlist → `npx playwright install chromium` geeft 403. Ken een browserloos alternatief vóór je erop leunt.
-
-✅ **Always:**
-- Digitale-download merchant-velden eerlijk invullen: `hasMerchantReturnPolicy` = `MerchantReturnNotPermitted` (NL, herroepingsrecht vervalt bij download, art. 6:230p BW) + `shippingDetails` €0/0-dagen (instant) + `brand` als identifier. Accuraat én lost GSC op.
-- Browserloze rasterizer (`@resvg/resvg-js`, prebuilt Rust via npm-registry) wanneer egress chromium blokkeert — trade-off: resvg auto-wrapt geen tekst, dus regel-layout handmatig in de SVG plaatsen. `package-lock.json` is hier gitignored → build-dep handmatig in `package.json` devDependencies.
-- Render-en-meet ook bij gegenereerde covers: elke PNG visueel inspecteren (langste titel/eyebrow binnen het frame, footer-claim feitelijk juist) vóór je 'm koppelt.
-- JSON-LD na elke edit valideren (Python `json.loads` over álle `application/ld+json`-blokken) — een kritieke `image`-fix telt pas na deploy + GSC "Validatie van fix valideren". Volledig: `docs/sessions/current.md` Sessie 172.
-
-**Rotation:** Top-6 huidig: 172-173-174-175-176-177 (Sessie 170 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Eenmalige catch-up UITGEVOERD (na Sessie 176):** current.md Sessie 81-164 geknipt naar `archive-s081-s120.md` (31 entries) + `archive-s121-s164.md` (47 entries); current.md houdt nu het rolling window 165-177 (13 entries; volgende bulk-rotatie Sessie 180 → archiveer 170-174). SESSIONS.md-index gecorrigeerd; backlog opgeheven → standaard `N%5`-rotatie draait schoon. Historie 81-164 → de range-archieven; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 173-174-175-176-177-178 (Sessie 172 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Eenmalige catch-up UITGEVOERD (na Sessie 176):** current.md Sessie 81-164 geknipt naar `archive-s081-s120.md` (31 entries) + `archive-s121-s164.md` (47 entries); current.md houdt nu het rolling window 165-178 (14 entries; volgende bulk-rotatie Sessie 180 → archiveer 170-174). SESSIONS.md-index gecorrigeerd; backlog opgeheven → standaard `N%5`-rotatie draait schoon. Historie 81-164 → de range-archieven; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -209,7 +208,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 177
+**Sessie counter:** 178
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -261,6 +260,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 22 jun 2026 (Sessie 177 — terminal voltooid-markers [X]→[✓]: renderer kleurt op 1e teken → [X] als afgevink-vinkje gaf rode checkboxes op mobiel + doorlek; gemigreerd naar [✓] in 6 voortgangsweergaven (leerpad/challenge/achievements/tutorial/next) + leerpad-inspringing 4→2 + man-page-legenda glyph achteraan. Échte fouten + man-page-"NOOIT doen"-lijsten bewust rood. Volledig: `docs/sessions/current.md`)
-**Version:** 5.51 (Sessie 177 — terminal voltooid-markers [X]→[✓], rode-checkbox-botsing op mobiel systemisch gefixt; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 24 jun 2026 (Sessie 178 — homepage lead-magnet: sectie-reorder (lead-magnet ná finale CTA → terminal-CTA krijgt climax na FAQ-payoff) + `final-cta`-glow van zwevende onderrand-glow naar zelfstandige ambient-halo via homepage-gescopete `:has(+ .lead-magnet)` + copy-perfectionering (vloeiende titel "Zo begint een echte pentest" + de-jargon subtekst, geverifieerd tegen echte PDF-inhoud) op 3 teasers. Volledig: `docs/sessions/current.md`)
+**Version:** 5.52 (Sessie 178 — homepage lead-magnet reorder + glow-fix + copy-perfectionering; volledige historie: `docs/sessions/current.md` + TASKS.md)
 

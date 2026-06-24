@@ -4,6 +4,44 @@
 
 ---
 
+## Sessie 178: Homepage lead-magnet — UX-reorder + glow-fix + copy-perfectionering (24 jun 2026)
+
+**Mission:** Heisenberg zag onderaan de homepage twee vragen pal na elkaar — "Direct beginnen?" (lead-magnet, download een PDF) en "Klaar om te beginnen?" (finale CTA, start de terminal) — en vond dat verwarrend. Analyse → reorder + reframe; in vervolgvragen uitgebreid naar een glow-regressie en daarna naar copy-perfectionering.
+
+**Probleem (diagnose):**
+- **Woord-botsing:** twee bijna identieke "beginnen?"-vragen achter elkaar met verschillende antwoorden (PDF downloaden vs. terminal openen).
+- **Belofte-inversie:** "Direct beginnen?" hing aan het traagste, meest-gated pad (formulier → email → double opt-in → PDF), terwijl het écht directe pad (terminal, geen account) er net onder stond = leest als bait-and-switch.
+- **Conversie-prioriteit omgekeerd:** secundaire email-ask (PDF) vóór de primaire terminal-CTA; nieuwsbrief (derde email-ask) erna.
+
+**Work done (3 commits):**
+- **Fix 1 — reorder (`index.html`):** lead-magnet-strip verplaatst van vóór naar ná de finale-CTA-sectie. Nieuwe staart: FAQ ("Hoe begin ik?") → finale CTA ("Klaar om te beginnen?" → Start de Terminal) → lead-magnet (PDF) → nieuwsbrief. Terminal-CTA krijgt het climax-moment direct na de FAQ-payoff; PDF + nieuwsbrief clusteren als secundaire email-staart. Tracking-attributen (`data-lead-magnet`/`data-cta-location`) intact (attribuut-gebaseerd, positie-onafhankelijk).
+- **Fix 2 — glow (`styles/landing.css`):** de `final-cta`-glow zat verankerd op `at 50% 100%` (onderrand) en leunde op de aangrenzende band om in over te lopen (nieuwsbrief op homepage, footer op de 4 andere final-cta-pagina's). Na de reorder volgde een transparante lead-magnet-sectie → de glow werd hard afgekapt en zweefde "uit het niets". Fix: homepage-gescopete override `.final-cta:has(+ .lead-magnet)` → zelfstandige ambient-halo (`radial-gradient(ellipse 42% 58% at 50% 44%, var(--final-cta-glow) 0%, transparent 72%)`) die naar alle randen uitvaagt. De 4 andere pagina's matchen `:has` niet → houden de naad-uplight. `landing.css?v=121`→`122` op **alleen** `index.html` (de regel rendert nergens anders).
+- **Fix 3 — copy (3 teasers):** titel "Pak de gratis Pentest Playbook-sample" (stroef + dubbelt de badge) → **"Zo begint een echte pentest"** (hook). Subtekst "Krijg de Fase 0 reconnaissance-checklist + beslisboom Fase 0 → 1" (jargon) → gewone taal: "hoe je een pentest voorbereidt — toestemming, scope en de juridische check — en je doelwit verkent vóór de eerste aanval. Precies de stap die beginners overslaan." Zelfde de-jargon op `over-ons.html` + `gidsen.html` (pagina-specifieke kopjes "Wil je zien wat ik bouw?"/"Nog niet overtuigd?" behouden). `index.html` `.phase-flow`/`.arrow-glyph`-span vervalt.
+
+**Copy-verificatie tegen artefact (product-kwaliteitsregel):** twee Explore-agenten — één voor de site-brede copy-inventaris (~55 plaatsen; teaser-groep = homepage + over-ons + gidsen; `sample-pentest.html`-hero al goed; ~10 blog-vermeldingen bewust contextueel), één voor de echte PDF-inhoud (`pdfinfo`/`pdftotext`): sample = 9 pag., Fase 0 (toestemmingsdocument, scope, juridische check) + Fase 1 reconnaissance (whois/dig/OSINT + licht actief). Géén scanning/exploitation/rapportage (= betaald 19-pagina Playbook). Copy claimt dus niets buiten de sample.
+
+**Niet aangeraakt:** `sample-pentest.html` (hero al goed), blog-inline-vermeldingen (contextueel), meta/SEO-tags, nieuwsbrief-mail.
+
+**Verificatie (render-en-meet, no-store server tegen ES-module-cache-vals-negatief):**
+- Reorder: DOM-volgorde FAQ→finale CTA→lead-magnet→nieuwsbrief bevestigd; dark+light+mobiel 375px, geen horizontale overflow (scrollWidth 360 ≤ 375); lead-magnet→nieuwsbrief-spacing gebalanceerd (Wijziging-3 CSS niet nodig).
+- Glow: ambient-halo grondt netjes in dark+light+mobiel, geen harde rand; `:has(+ .lead-magnet)` matcht alleen homepage (bevestigd via `el.matches()`).
+- Copy: titel/subtekst exact, "vóór" (`&oacute;&oacute;r`) rendert correct, geen "Fase 0 → 1"/`arrow-glyph`-resten, badge + knop intact; over-ons + gidsen nieuwe paragraaf onder behouden kop.
+
+**Commits:** `26b6f52` (reorder + titel-reframe, 2 files), `91aab72` (glow-fix `final-cta` + `?v=122`, 2 files), `deab754` (copy de-jargon 3 teasers, 3 files). Alle gepusht naar `main`.
+
+**Learnings:**
+- **Sectie-reorder kan een naad-afhankelijk visueel effect stil breken.** De glow leek standalone maar was ontworpen om in de band eronder over te lopen (`at 50% 100%`, hard-clipped). Bij elke DOM-herschikking: gradients/borders op sectiegrenzen nalopen.
+- **Verankerde gradients zijn reorder-veilig, naad-uplights niet.** De fix maakt de glow zelfstandig (centered halo, uitvaag vóór alle randen) i.p.v. afhankelijk van de buur.
+- **Scoping > herontwerp.** `:has(+ .lead-magnet)` raakte exact de ene gebroken case en liet 4 gezonde pagina's met rust — geen body-class of JS-detectie nodig.
+- **`?v=`-bumps zijn voor gedragswijziging, niet voor bestandswijziging.** HTML-only tekstedits en een CSS-comment-only edit hebben geen render-effect → geen bump; de glow-regel (homepage-only) bumpte alleen index.html.
+- **Copy verifiëren tegen het artefact, niet tegen de oude tekst.** De oude subtekst noemde echte features maar in jargon; de PDF-inhoud leverde de eerlijke, begrijpelijke verkoopargumenten (toestemming/scope/juridische check) die "Fase 0" verborg.
+
+**Next steps:** geen open punten uit deze sessie. (Bestaande backlog ongewijzigd — zie TASKS.md.)
+
+**Metrics delta:** geen test-toevoeging (197 tests / 23 specs ongewijzigd; copy/layout-werk). Bundle ground-truth Sessie 178: src 625 KB / styles 385 KB (+1 KB `final-cta`-glow override) / blog 413 KB / assets 1031 KB. HTML-copy-edits vallen buiten de gemeten dirs.
+
+---
+
 ## Sessie 177: Terminal voltooid-markers `[X]`→`[✓]` — systemische rode-checkbox-botsing op mobiel (22 jun 2026)
 
 **Mission:** Heisenberg zag in de terminal dat `leerpad` op mobiel sommige commands rood toonde en andere wit, terwijl op laptop alles wit is — "net alsof er iets fout is". Analyse → fix → in vervolgvragen uitgebreid naar de man-page en daarna naar de hele gamification/voortgang-stack.
