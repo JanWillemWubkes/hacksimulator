@@ -319,7 +319,7 @@
 /* Lead magnet card (homepage) — .gids-bundle uit pages.css wordt hier niet geladen */
 /* dubbele class: wint van .landing-section's padding-shorthand (gelijke specificity → bronvolgorde) */
 .landing-section.lead-magnet {
-  padding-bottom: var(--spacing-2xl, 48px); /* gat naar final-cta inkorten */
+  padding-bottom: var(--spacing-2xl, 48px); /* gat naar nieuwsbrief-band inkorten (i.p.v. default 96px) */
 }
 
 .lead-magnet-card {
