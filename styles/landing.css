@@ -1197,6 +1197,18 @@
   position: relative;
 }
 
+/* Homepage: de lead-magnet volgt nu op de final-cta i.p.v. de nieuwsbrief-band.
+   De onderrand-glow (at 50% 100%) verwacht een aangrenzende band om in over te
+   lopen; zonder die naad zweeft hij hard afgekapt "uit het niets". Hier daarom
+   een zelfstandige ambient-halo achter de CTA die naar alle randen uitvaagt.
+   :has(+ .lead-magnet) raakt alleen de homepage; de 4 andere final-cta-pagina's
+   (over-ons/woordenlijst/commands/contact) houden de naad-uplight. */
+.final-cta:has(+ .lead-magnet) {
+  background:
+    radial-gradient(ellipse 42% 58% at 50% 44%, var(--final-cta-glow) 0%, transparent 72%),
+    var(--color-bg);
+}
+
 .final-cta-content {
   max-width: 600px;
   margin: 0 auto;
