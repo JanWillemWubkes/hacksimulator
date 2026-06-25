@@ -2,15 +2,42 @@
 /* Styling voor de statische command reference pagina */
 /* Hergebruikt variabelen uit main.css en patronen uit pages.css */
 
-/* ==================== Category Navigation ==================== */
+/* ==================== Local tokens ==================== */
+/* Z-index voor de sticky sub-navigatie: onder de navbar (--z-navbar: 50),
+   boven de paginacontent. Lokaal gehouden zodat alleen commands.css hoeft
+   te bumpen (geen site-brede main.css-bump). */
+:root {
+  --z-sticky-subnav: 40;
+}
+
+/* Anchor-sprongen moeten ónder navbar + sticky filter-balk landen, anders
+   verdwijnt de categorie-<h2> achter de balk. Gescoped via :has() zodat
+   uitsluitend de commands-pagina geraakt wordt (body-class 'landing-page'
+   is gedeeld en daarom ongeschikt). */
+html:has(.commands-category-nav-sticky) {
+  scroll-padding-top: calc(var(--navbar-height) + 64px);
+}
+
+/* ==================== Category Navigation (sticky filter-balk) ==================== */
+.commands-category-nav-sticky {
+  position: sticky;
+  top: var(--navbar-height);
+  z-index: var(--z-sticky-subnav);
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-sm) var(--landing-padding-desktop);
+  background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-border);
+}
+
 .commands-category-nav {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-sm);
   justify-content: center;
-  padding: var(--spacing-md) 0;
-  margin-bottom: var(--spacing-xl);
-  border-bottom: 1px solid var(--color-border);
+  max-width: var(--landing-max-width);
+  margin: 0 auto;
 }
 
 .commands-category-nav a {
@@ -25,9 +52,16 @@
   transition: all var(--transition-fast);
 }
 
-.commands-category-nav a:hover {
+.commands-category-nav a:hover,
+.commands-category-nav a.active {
   border-color: var(--color-cta-primary);
   color: var(--color-cta-primary);
+}
+
+/* Actieve categorie krijgt een subtiele vulling zodat de "filter"-staat
+   ook zonder hover duidelijk afsteekt tegen de overige knoppen. */
+.commands-category-nav a.active {
+  background-color: color-mix(in srgb, var(--color-cta-primary) 12%, transparent);
 }
 
 /* ==================== Category Sections ==================== */
@@ -224,13 +258,30 @@
     padding: var(--spacing-md);
   }
 
+  /* Compacte sticky balk op mobiel: één rij die horizontaal scrollt i.p.v.
+     naar 2 rijen wrappen (zou onder de 60px-navbar te veel hoogte kosten). */
+  .commands-category-nav-sticky {
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+
   .commands-category-nav {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
     gap: var(--spacing-xs);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .commands-category-nav::-webkit-scrollbar {
+    display: none; /* WebKit/Blink */
   }
 
   .commands-category-nav a {
+    flex: 0 0 auto;
     font-size: 0.8rem;
-    padding: 5px 10px;
+    padding: 6px 12px;
   }
 
   .command-card {

@@ -50,7 +50,7 @@
   <link rel="stylesheet" href="../styles/main.css?v=151">
   <link rel="stylesheet" href="../styles/landing.css?v=121">
   <link rel="stylesheet" href="../styles/pages.css?v=133">
-  <link rel="stylesheet" href="../styles/commands.css?v=114">
+  <link rel="stylesheet" href="../styles/commands.css?v=115">
   <link rel="stylesheet" href="../styles/mobile.css?v=115" media="screen and (max-width: 768px)">
 
   <!-- Google AdSense -->
@@ -196,8 +196,8 @@
       </div>
     </section>
 
-    <!-- Category Jump Links -->
-    <section class="page-section">
+    <!-- Category Jump Links (sticky filter-balk: blijft bereikbaar tijdens scrollen) -->
+    <div class="commands-category-nav-sticky">
       <nav class="commands-category-nav" aria-label="Ga naar categorie">
         <a href="#filesystem">Filesystem</a>
         <a href="#network">Network</a>
@@ -205,7 +205,7 @@
         <a href="#system">System</a>
         <a href="#hacksimulator">HackSimulator</a>
       </nav>
-    </section>
+    </div>
 
     <!-- ==================== FILESYSTEM COMMANDS ==================== -->
     <section id="filesystem" class="page-section commands-category">
@@ -979,5 +979,8 @@ Gebruik het ping commando met een IP-adres.</div>
 
   <!-- Analytics & Consent (external for CSP compliance) -->
   <script src="/src/init-analytics.js" type="module"></script>
+
+  <!-- Scroll-spy: markeert actieve categorie in de sticky filter-balk -->
+  <script src="/src/ui/commands-scrollspy.js?v=1" type="module"></script>
 </body>
 </html>
