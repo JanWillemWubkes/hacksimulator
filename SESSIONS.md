@@ -10,16 +10,24 @@
 
 > **Rotatie/archivering-conventie:** zie [`docs/sessions/README.md`](docs/sessions/README.md)
 > (range-naamgeving `archive-sNNN-sMMM.md`; legacy `archive-q*`-namen zijn bevroren + fout gelabeld).
-> `current.md` houdt het rolling window Sessie 165-176; ouder is geroteerd naar de range-archieven hieronder.
+> `current.md` houdt het rolling window Sessie 170-180; ouder is geroteerd naar de range-archieven hieronder.
 
-### [Current Sessions (165-176)](docs/sessions/current.md) - Full Detail
-**Sessies:** 176, 175, 174, 173, 172, 171, 170, 169, 168, 167, 166, 165
-**Period:** 14 - 21 juni 2026
+### [Current Sessions (170-180)](docs/sessions/current.md) - Full Detail
+**Sessies:** 180, 179, 178, 177, 176, 175, 174, 173, 172, 171, 170
+**Period:** 16 - 25 juni 2026
 **Topics:**
-- Mobiele audit + 5 fixes: tabel-scroll blog/legal, CSP-geblokkeerde Consent Mode v2 defaults → extern `consent-default.js`, emoji-cleanup, tap-targets, scroll-hint (Sessie 176)
-- Layout-fixes sample-pentest, mobiele PDF-download fix, launch-prep marketing-launch + datum-discipline (Sessie 173-175)
+- Blog-auteurschap → merk (Organization); persoonsnaam alleen op over-ons (Sessie 180)
+- Klantgerichte copy: footer-tagline + hero-subtitle + "authentiek"-sweep, homepage lead-magnet reorder + glow-fix (Sessie 178-179)
+- Terminal voltooid-markers `[X]`→`[✓]`, mobiele audit + 5 fixes (tabel-scroll/CSP-consent/emoji/tap-targets) (Sessie 176-177)
+- Layout-fixes sample-pentest, mobiele PDF-download fix, launch-prep + datum-discipline (Sessie 173-175)
 - GSC merchant-listing fix + per-gids covers, logo-herontwerp H-monogram + brand-kit, structuuranalyse + repo-opruiming (Sessie 170-172)
-- GSC-indexeringsanalyse + SEO-fix, blog-tabel-uitlijning, doc-drift M9, pre-launch security-audit + CSP-hardening, factcheck Gumroad-producten (Sessie 165-169)
+
+---
+
+### [Archief Sessie 165-169](docs/sessions/archive-s165-s169.md) - Full Detail (geroteerd)
+**Sessies:** 169 → 165 (nieuwste-eerst)
+**Period:** 14 - 16 juni 2026
+**Topics:** GSC-indexeringsanalyse + SEO-fix, blog-tabel-uitlijning, doc-drift M9, pre-launch security-audit + CSP-hardening, factcheck Gumroad-producten
 
 ---
 
@@ -126,7 +134,7 @@
 
 **Total Sessions:** 176 (as of 21 juni 2026)
 **Current Session:** 176 (Mobiele audit + 5 fixes)
-**Sessions with full documentation:** 81-176 (current.md 165-176 + range-archieven 121-164 & 81-120)
+**Sessions with full documentation:** 81-180 (current.md 170-180 + range-archieven 165-169, 121-164 & 81-120)
 **Sessions compressed:** 2-77 (various compression levels)
 
 **Structure rationale:**
@@ -168,11 +176,12 @@
 
 ---
 
-**Last updated:** 21 juni 2026 (Sessie 176 — sessie-log catch-up: 81-164 geroteerd naar range-archieven, index gesynct)
+**Last updated:** 25 juni 2026 (Sessie 180 — bulk-rotatie: 165-169 geroteerd naar `archive-s165-s169.md`, current.md → window 170-180, index gesynct)
 **Next update:** bij volgende `N%5`-rotatie (steady-state per `docs/sessions/README.md`)
 
 **Recent updates:**
 - Sessie 176: Eenmalige catch-up archivering — current.md 81-176 → current.md (165-176) + `archive-s121-s164.md` + `archive-s081-s120.md`; index hierboven gecorrigeerd
+- Sessie 180: Steady-state `N%5`-rotatie — 165-169 (staart) geknipt naar `archive-s165-s169.md` (byte-geverifieerd), current.md window 170-180 (11 entries)
 - Sessie 133: Plan B Sessie 2 + post-deploy Brevo silent panel-toggle fix — custom `brevo-submit.js` handler
 - Sessie 132: Brevo Dashboard Setup voor Lead Magnet — Form-submitted Pivot
 - Sessie 131: CTA Click Tracking (GA4 Attribution Layer) + Plan Files B/C/D

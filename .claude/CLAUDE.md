@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 179)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 180)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 180: Blog-auteurschap → merk (Organization); persoonsnaam alleen op over-ons (25 jun 2026)
+⚠️ **Never:**
+- Je juridische naam als schema-`author` (Person + `sameAs`) op elke geïndexeerde blogpost zetten tenzij persoonlijk merk een *expliciet* doel is — dat is het SEO-versterkte, permanente, "eerste-wat-iemand-vindt"-oppervlak; productpromotie vereist het niet. De naam hoort op 1 about-pagina, niet als broadcast over 13 posts.
+- Uitvoeren op een premisse die de gebruiker niet bevestigd heeft — de eerste richting (naam *versterken* met byline-link/jobTitle/sameAs) was coherent met "bekendheid onder eigen naam", maar het echte doel was productpromotie; toen viel de rechtvaardiging weg. Verifieer het doel vóór je bouwt (en durf binnen één sessie terug te draaien).
+- "Volledig anoniem" als veiligheid verkopen zonder dreigingsmodel — schijnveiligheid zolang de GitHub-repo-URL de naam draagt + de eigenaar zelf onder eigen naam promoot. De-identificeer het oppervlak dat telt (13× schema-auteur), niet het onschuldige (about-pagina).
+
+✅ **Always:**
+- Merk-auteurschap = JSON-LD `author` → `Organization` (== publisher) + `article:author` meta → merk + zichtbare byline weg; de `:not(:last-child):after`-pipe-separators herschikken vanzelf → geen CSS/cache-bump nodig (inline HTML/JSON-LD).
+- Scripted sweep met literal block-match + per-bestand `count==1`-assert + eind-assertie + echte JSON-LD-parser (`json.loads`) — geen blinde global replace.
+- Behoud één eerlijk menselijk gezicht (about-pagina met naam + LinkedIn + founder-schema) als vertrouwensanker voor een site die producten verkoopt — E-E-A-T ≠ juridische naam, maar een consistente aanspreekbare entiteit helpt.
+- Privacy-edits checken tegen juridische identificatie: `privacy.html` noemde de naam al niet ("beheerd door een individuele ontwikkelaar") → geen GDPR-conflict, niet aanraken. Volledig: `docs/sessions/current.md` Sessie 180.
+
 ### Sessie 179: Klantgerichte copy-perfectionering — footer/hero/"authentiek"-sweep (25 jun 2026)
 ⚠️ **Never:**
 - Toegankelijkheid framen met een demografisch label ("voor absolute beginners", "studenten en overstappers") — dat zet een *plafond* i.p.v. een vloer: het sluit de enthousiasteling/hobbyist uit en leest als "alleen voor newbies". De footer was zelfs smaller dan de hero. Frame de *instap* ("van je eerste command tot..."), niet het publiek.
@@ -145,20 +157,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Success-state = formulier vervángen, niet aanvullen: bij succes het form verbergen i.p.v. het paneel erbovenop tonen (anders dubbele kaarthoogte + verweesde CTA). De bevestiging wordt de hele kaart.
 - Render-en-meet als bewijs: `getBoundingClientRect` vóór én na (body's 900→923, allemaal gelijk), plus screenshots in dark+light+mobiel + de E2E-test met Brevo-mock (geen echt contact) in een verse browser als definitieve proof. Volledig: `docs/sessions/current.md` Sessie 175.
 
-### Sessie 174: Mobiele PDF-download fix — sample-pentest lead magnet (19 jun 2026)
-⚠️ **Never:**
-- Een codebase-comment als oorzaak-diagnose vertrouwen — `_headers` zei "force download want webviews kunnen PDF niet inline", maar de échte bug was een Brevo click-tracking-prefetch-404 (aparte laag). Lees de sessie-historie (Sessie 134 had dit al exact gediagnosticeerd) vóór je een oorzaak aanneemt.
-- Een `_headers`/repo-tweak presenteren als "de fix" voor de 404 — die ontstaat op Brevo's server (`r.sendibm1.com/?i=<token>`, eenmalig token door Gmail-mobiel-prefetch geconsumeerd) vóór het request ons bereikt → niet in-repo fixbaar. Doen alsof = misleidend.
-- `Content-Disposition: attachment` forceren voor "mobiele webviews" — omgekeerd: iOS WKWebview (Gmail/Outlook-app) rendert een PDF wél inline maar kan een geforceerde download vaak níet afhandelen → foutmelding. attachment brak precies de webviews die inline aankonden.
-- De Brevo success-span gebruiken voor een persistente CTA, of "we hebben 'm gemaild" claimen onder double opt-in — `brevo-submit.js` overschrijft de span met `json.message`, en de PDF-mail komt pas ná bevestiging (de gebruiker vroeg hier terecht op door).
-
-✅ **Always:**
-- Bij een niet-in-repo-fixbare laag: bouw een betrouwbaar pad dat het kapotte mechanisme omzeilt (same-origin download-knop in `#success-message` + noindex `sample-download.html`) i.p.v. doen alsof je het repareert. Eerlijk scheiden: site-fix = gegarandeerd, Brevo-404-fix = best-effort.
-- Ungate wat toch al publiek is — de PDF-URL is een raadbaar statisch bestand, dus de email-"gate" bood nooit echte bescherming; on-site ungated leveren wint voor de bezoeker. Maar nieuwsbrief-consent apart double-opt-in houden beschermt de deliverability-investering (Sessies 134-136).
-- CSP-bewust toevoegen zonder cache-bump-sweep: inline-style mét CSS-variabele (`style-src 'unsafe-inline'` toegestaan) i.p.v. `landing.css` editen + `?v=` op alle pagina's bumpen; nieuwe tracking via een delegated `data-*`-branch in `cta-tracking.js` (geen inline JS).
-- Playwright-versie pinnen op de provisioned browser-build (`@playwright/test@1.56.0` ↔ `chromium-1194`, `--no-save`) + lokale statische server + `BASE_URL=localhost` om tegen niet-gedeployde wijzigingen te testen (config wijst standaard naar productie). Volledig: `docs/sessions/current.md` Sessie 174.
-
-**Rotation:** Top-6 huidig: 174-175-176-177-178-179 (Sessie 173 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Eenmalige catch-up UITGEVOERD (na Sessie 176):** current.md Sessie 81-164 geknipt naar `archive-s081-s120.md` (31 entries) + `archive-s121-s164.md` (47 entries); current.md houdt nu het rolling window 165-178 (14 entries; volgende bulk-rotatie Sessie 180 → archiveer 170-174). SESSIONS.md-index gecorrigeerd; backlog opgeheven → standaard `N%5`-rotatie draait schoon. Historie 81-164 → de range-archieven; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 175-176-177-178-179-180 (Sessie 174 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 180 UITGEVOERD:** current.md staart Sessie 165-169 geknipt naar `archive-s165-s169.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 170-180 (11 entries; volgende bulk-rotatie Sessie 185 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-164 → `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -207,7 +206,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 179
+**Sessie counter:** 180
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -259,6 +258,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 25 jun 2026 (Sessie 179 — klantgerichte copy: footer-tagline "absolute beginners" → traject-framing, hero-subtitle herschreven (demografisch label + onware veiligheidsclaim → "veilige simulatie ... zonder echte gevolgen"; H1 ongewijzigd), "authentieke commands" → "commands uit de praktijk" op 9 user-facing plekken. Volledig: `docs/sessions/current.md`)
-**Version:** 5.53 (Sessie 179 — klantgerichte copy-perfectionering: footer-tagline + hero-subtitle + "authentiek"-sweep; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 25 jun 2026 (Sessie 180 — blog-auteurschap terug naar merk: JSON-LD author Person→Organization + article:author→merk + zichtbare byline verwijderd op 13 posts; persoonsnaam alleen nog op over-ons (founder-schema + LinkedIn behouden als vertrouwensanker). Bulk-rotatie 165-169 → archive-s165-s169.md. Volledig: `docs/sessions/current.md`)
+**Version:** 5.54 (Sessie 180 — blog → merk-auteurschap (Organization); persoonsnaam alleen op over-ons; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
