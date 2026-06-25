@@ -4,6 +4,30 @@
 
 ---
 
+## Sessie 179: Klantgerichte copy-perfectionering — footer-tagline + hero-subtitle + "authentiek"-sweep (25 jun 2026)
+
+**Mission:** Heisenberg vond de footer-regel "voor absolute beginners" te kort door de bocht (de site is óók voor enthousiastelingen). Analyse → herschrijven; in vervolgvragen uitgebreid naar de hero-subtitle en daarna een repo-brede consistentie-sweep van het afgekeurde woord "authentieke commands".
+
+**Work done:**
+- **Footer-tagline** (`src/components/footer.js`): "perfect voor absolute beginners" → "van je eerste command tot security tools". Cache-bump `init-components.js?v=2`→`v=3` + `footer.js?v=2`→`v=3`-import, gepropageerd naar 24 HTML-pagina's (footer wordt via `injectFooter()` dynamisch geïnjecteerd → twee cache-lagen). Commit `0b67fec` (21 files).
+- **Hero-subtitle** (`index.html`): "Voor Nederlandse studenten en overstappers die cybersecurity willen leren zonder hun PC te riskeren. 40+ authentieke commands, direct in je browser." → "Oefen ethisch hacken met 40+ commands uit de praktijk en Nederlandse uitleg — in een veilige simulatie waar je alles kunt uitproberen zonder echte gevolgen." H1 bewust ongewijzigd (SEO-alignment met `<title>`/OG).
+- **"authentieke commands" → "commands uit de praktijk"** op alle 9 user-facing plekken: og/twitter-meta (`index.html` + `terminal.html`), feature-card-h3 + stat-label (`index.html`), 3 blogposts (`blog/index.html`, `blog/ethisch-hacker-worden.html`, `blog/welkom.html`). Hero + authentiek samen in commit `8a81de8` (5 content-files). Beide commits gepusht naar `main`.
+- Geen cache-bump op de content-edits (HTML-only tekst); footer-edit wél (gerenderde JS-output).
+
+**Bewust ongemoeid:** `blog/welkom.html:180` "Authentieke ervaring" (andere betekenis — beleving voelt echt, verdedigbaar) · `terminal.html:293` "studenten, overstappers en iedereen die nieuwsgierig is" (al inclusief, geen plafond) · interne docs (PLANNING/README/style-guide/sessions/prd) historisch/niet-user-facing.
+
+**Learnings:**
+- **Toegankelijkheid = vloer, geen plafond.** Demografische labels ("absolute beginners", "studenten en overstappers") bakenen het publiek af en sluiten enthousiastelingen uit. Frame de *instap* ("van je eerste command tot...") i.p.v. het *publiek* — sluit niemand uit en is feitelijk waar (ls/cd → security tools). De footer was zelfs smaller dan de hero, dus verbreden vergrootte de consistentie.
+- **Een geruststelling moet letterlijk waar zijn.** Eerste concept-veiligheidsclaim "los van je eigen computer en het echte internet" was onwaar — de simulator draait op de machine van de gebruiker via internet. De échte veiligheid zit in de *gesimuleerde uitvoering* (echte command-syntax, nagebootste resultaten) → "zonder echte gevolgen". Verifieer copy tegen de fysieke werkelijkheid, niet tegen wat lekker klinkt (product-kwaliteitsregel).
+- **Homonym-valkuil bij replace.** "authentiek" droeg twee claims: "authentieke *commands*" (afgekeurd) vs "authentieke *ervaring*/voelt authentiek" (legitiem 80/20-principe). Eerst inventariseren + per-treffer op betekenis categoriseren, dán pas vervangen — een blinde sweep had de legitieme variant gesloopt (zelfde discipline als de Sessie-177 `[X]`-marker-bug).
+- **Word-craft:** "echte commands" zou met "zonder echte gevolgen" twee keer "echt" opleveren → "commands uit de praktijk" lost de dubbeling op én is eerlijker dan "authentiek".
+
+**Next steps:** geen open items. Eventueel later: `<meta name="description">`-regel (`index.html:6`) zegt nog "voor beginners" — buiten scope gehouden (SEO-relevant, niet de afgekeurde tekst).
+
+**Metrics delta:** verwaarloosbaar (HTML/JS-tekstedits, ~37 regels over 26 bestanden). Geen test-wijzigingen. Geheugen `feedback_audience_floor_not_ceiling` toegevoegd.
+
+---
+
 ## Sessie 178: Homepage lead-magnet — UX-reorder + glow-fix + copy-perfectionering (24 jun 2026)
 
 **Mission:** Heisenberg zag onderaan de homepage twee vragen pal na elkaar — "Direct beginnen?" (lead-magnet, download een PDF) en "Klaar om te beginnen?" (finale CTA, start de terminal) — en vond dat verwarrend. Analyse → reorder + reframe; in vervolgvragen uitgebreid naar een glow-regressie en daarna naar copy-perfectionering.

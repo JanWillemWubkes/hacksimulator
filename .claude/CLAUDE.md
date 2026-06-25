@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 178)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 179)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 179: Klantgerichte copy-perfectionering — footer/hero/"authentiek"-sweep (25 jun 2026)
+⚠️ **Never:**
+- Toegankelijkheid framen met een demografisch label ("voor absolute beginners", "studenten en overstappers") — dat zet een *plafond* i.p.v. een vloer: het sluit de enthousiasteling/hobbyist uit en leest als "alleen voor newbies". De footer was zelfs smaller dan de hero. Frame de *instap* ("van je eerste command tot..."), niet het publiek.
+- Een geruststelling schrijven die fysiek onwaar is — "los van je eigen computer en het echte internet" klopt niet (de simulator draait op de machine van de gebruiker, via internet). De veiligheid zit in de *gesimuleerde uitvoering*, niet in isolatie. Verifieer copy tegen de werkelijkheid, niet tegen wat lekker klinkt (product-kwaliteitsregel).
+- Een woord blind repo-breed vervangen — "authentiek" droeg twee claims ("authentieke *commands*" afgekeurd vs "authentieke *ervaring*" legitiem); een sed-replace had de legitieme variant gesloopt (zelfde homonym-valkuil als de Sessie-177 `[X]`-marker).
+
+✅ **Always:**
+- Bij een copy-fix die elders kan voorkomen: eerst grep-inventariseren + per-treffer op betekenis categoriseren, dán vervangen — sluit af met een eind-assertie (0 user-facing treffers; alleen de bewust-behouden variant blijft).
+- H1/`<title>`/OG met rust laten bij subtitle-werk — die dragen de SEO-alignment; perfectioneer de subtitle eromheen.
+- Cache-bump alleen waar gerenderde output verandert: een dynamisch geïnjecteerde footer (JS) heeft 2 cache-lagen nodig (de import in `init-components.js` + de `<script>`-tag in 24 pagina's); HTML-only tekstedits géén bump.
+- Render-en-meet als bewijs ook voor "triviale" tekst: no-store server + DOM-check (meta-content + zichtbare elementen) in dark/light/mobiel. Geheugen `feedback_audience_floor_not_ceiling`. Volledig: `docs/sessions/current.md` Sessie 179.
+
 ### Sessie 178: Homepage lead-magnet — sectie-reorder + glow-fix + copy-perfectionering (24 jun 2026)
 ⚠️ **Never:**
 - Een sectie verplaatsen zonder rand-afhankelijke effecten na te lopen — de `.final-cta`-glow zat verankerd op `at 50% 100%` (onderrand) om in de aangrenzende band over te lopen; de lead-magnet ertussen schuiven liet hem hard afgekapt "uit het niets" zweven. Gradients/borders op sectiegrenzen kunnen stil breken bij elke DOM-herschikking.
@@ -146,20 +158,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - CSP-bewust toevoegen zonder cache-bump-sweep: inline-style mét CSS-variabele (`style-src 'unsafe-inline'` toegestaan) i.p.v. `landing.css` editen + `?v=` op alle pagina's bumpen; nieuwe tracking via een delegated `data-*`-branch in `cta-tracking.js` (geen inline JS).
 - Playwright-versie pinnen op de provisioned browser-build (`@playwright/test@1.56.0` ↔ `chromium-1194`, `--no-save`) + lokale statische server + `BASE_URL=localhost` om tegen niet-gedeployde wijzigingen te testen (config wijst standaard naar productie). Volledig: `docs/sessions/current.md` Sessie 174.
 
-### Sessie 173: Launch-prep marketing-launch wo 24 juni — kit/visuals/homepage + datum-discipline (18 jun 2026)
-⚠️ **Never:**
-- Een gated planstap ("échte content-touch ontgrendelt pas de datum-bump", runbook Fase 2) als losse stap uitvoeren — ik bumpte `dateModified`/`article:modified_time`/`lastmod` op 3 cornerstones zónder inhoudswijziging = fake-freshness; moest volledig terugdraaien (2× flip in één gesprek). Een "doe X eerst, dan Y"-regel is een voorwaarde, geen volgorde-suggestie.
-- `dateModified`/`lastmod` op een toekomstige of "launch-week"-datum zetten zonder bijbehorende wijziging — Google klemt toekomstige datums en wantrouwt niet-onderbouwde freshness. De datum = de dag van de echte touch+deploy.
-- "Interne links versterken" als verplichte launch-touch forceren terwijl ze al compleet zijn — sibling-cross-links (nmap↔wireshark, owasp↔sql-injection) + OWASP-2025-dekking bestonden al; extra toevoegen = cargo-cult (Sessie 169 herbevestigd).
-- Aannemen dat een visual-generator faalt door egress — chromium stond lokaal (`ms-playwright/chromium-1194`); de Sessie-172-blok gold alleen voor een verse `playwright install`. Verifieer vóór je erop leunt.
-
-✅ **Always:**
-- Bij werk gestuurd door een bestaand plan/runbook: de exacte stappen (volgorde + discipline-clausules) verbatim citeren vóór je edit; poorten als voorwaarde coderen, niet als losse stap. → memory `feedback_preserve_plan_gates`.
-- De echte freshness/crawl-hefboom = een truthful wijziging op de hoogste-autoriteit-pagina (homepage linkt nu alle 13 posts → hercrawl → ontdekt cornerstones) + een verse post — niet gebumpte datums op al-complete pagina's.
-- WS-scope versmallen op grond van inspectie, niet aanname; en bij doorvragen van Heisenberg de eigen eerdere actie eerlijk herroepen (bump→revert) i.p.v. verdedigen.
-- Launch-dag kiezen op responstijd-capaciteit, niet alleen day-of-week: di/wo sterkste HN/Reddit-dagen, schema geclusterd in het bewaakbare blok zodat je de eerste uren na elke post kunt reageren. Volledig: `docs/sessions/current.md` Sessie 173.
-
-**Rotation:** Top-6 huidig: 173-174-175-176-177-178 (Sessie 172 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Eenmalige catch-up UITGEVOERD (na Sessie 176):** current.md Sessie 81-164 geknipt naar `archive-s081-s120.md` (31 entries) + `archive-s121-s164.md` (47 entries); current.md houdt nu het rolling window 165-178 (14 entries; volgende bulk-rotatie Sessie 180 → archiveer 170-174). SESSIONS.md-index gecorrigeerd; backlog opgeheven → standaard `N%5`-rotatie draait schoon. Historie 81-164 → de range-archieven; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 174-175-176-177-178-179 (Sessie 173 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Eenmalige catch-up UITGEVOERD (na Sessie 176):** current.md Sessie 81-164 geknipt naar `archive-s081-s120.md` (31 entries) + `archive-s121-s164.md` (47 entries); current.md houdt nu het rolling window 165-178 (14 entries; volgende bulk-rotatie Sessie 180 → archiveer 170-174). SESSIONS.md-index gecorrigeerd; backlog opgeheven → standaard `N%5`-rotatie draait schoon. Historie 81-164 → de range-archieven; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -208,7 +207,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 178
+**Sessie counter:** 179
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -260,6 +259,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 24 jun 2026 (Sessie 178 — homepage lead-magnet: sectie-reorder (lead-magnet ná finale CTA → terminal-CTA krijgt climax na FAQ-payoff) + `final-cta`-glow van zwevende onderrand-glow naar zelfstandige ambient-halo via homepage-gescopete `:has(+ .lead-magnet)` + copy-perfectionering (vloeiende titel "Zo begint een echte pentest" + de-jargon subtekst, geverifieerd tegen echte PDF-inhoud) op 3 teasers. Volledig: `docs/sessions/current.md`)
-**Version:** 5.52 (Sessie 178 — homepage lead-magnet reorder + glow-fix + copy-perfectionering; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 25 jun 2026 (Sessie 179 — klantgerichte copy: footer-tagline "absolute beginners" → traject-framing, hero-subtitle herschreven (demografisch label + onware veiligheidsclaim → "veilige simulatie ... zonder echte gevolgen"; H1 ongewijzigd), "authentieke commands" → "commands uit de praktijk" op 9 user-facing plekken. Volledig: `docs/sessions/current.md`)
+**Version:** 5.53 (Sessie 179 — klantgerichte copy-perfectionering: footer-tagline + hero-subtitle + "authentiek"-sweep; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
