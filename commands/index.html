@@ -50,7 +50,7 @@
   <link rel="stylesheet" href="../styles/main.css?v=151">
   <link rel="stylesheet" href="../styles/landing.css?v=121">
   <link rel="stylesheet" href="../styles/pages.css?v=133">
-  <link rel="stylesheet" href="../styles/commands.css?v=115">
+  <link rel="stylesheet" href="../styles/commands.css?v=116">
   <link rel="stylesheet" href="../styles/mobile.css?v=115" media="screen and (max-width: 768px)">
 
   <!-- Google AdSense -->
@@ -196,16 +196,33 @@
       </div>
     </section>
 
-    <!-- Category Jump Links (sticky filter-balk: blijft bereikbaar tijdens scrollen) -->
+    <!-- Sticky filterbalk: live zoekveld dat command-cards filtert + categorie-chips
+         met scroll-spy. Werkt zonder JS als gewone sprongnav (chips zijn anchors);
+         het zoekveld krijgt pas betekenis zodra commands-filter.js laadt. -->
     <div class="commands-category-nav-sticky">
-      <nav class="commands-category-nav" aria-label="Ga naar categorie">
-        <a href="#filesystem">Filesystem</a>
-        <a href="#network">Network</a>
-        <a href="#security">Security</a>
-        <a href="#system">System</a>
-        <a href="#hacksimulator">HackSimulator</a>
-      </nav>
+      <div class="commands-filter-inner">
+        <label class="commands-search">
+          <span class="visually-hidden">Zoek een command</span>
+          <input type="search" id="commands-search" placeholder="Zoek een command of taak..."
+                 autocomplete="off" autocapitalize="off" spellcheck="false"
+                 aria-describedby="commands-search-count" enterkeyhint="search">
+        </label>
+        <nav class="commands-category-nav" aria-label="Ga naar categorie">
+          <a href="#filesystem">Filesystem</a>
+          <a href="#network">Network</a>
+          <a href="#security">Security</a>
+          <a href="#system">System</a>
+          <a href="#hacksimulator">HackSimulator</a>
+        </nav>
+      </div>
+      <p id="commands-search-count" class="commands-search-count" role="status" aria-live="polite"></p>
     </div>
+
+    <!-- Lege-staat: alleen zichtbaar als een zoekopdracht 0 commands oplevert -->
+    <p class="commands-no-results" hidden>
+      Geen commands gevonden voor "<span class="commands-no-results-query"></span>".
+      Probeer een andere zoekterm of <button type="button" class="commands-clear">wis het zoekveld</button>.
+    </p>
 
     <!-- ==================== FILESYSTEM COMMANDS ==================== -->
     <section id="filesystem" class="page-section commands-category">
@@ -981,6 +998,6 @@ Gebruik het ping commando met een IP-adres.</div>
   <script src="/src/init-analytics.js" type="module"></script>
 
   <!-- Scroll-spy: markeert actieve categorie in de sticky filter-balk -->
-  <script src="/src/ui/commands-scrollspy.js?v=1" type="module"></script>
+  <script src="/src/ui/commands-filter.js?v=1" type="module"></script>
 </body>
 </html>

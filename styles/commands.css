@@ -15,7 +15,7 @@
    uitsluitend de commands-pagina geraakt wordt (body-class 'landing-page'
    is gedeeld en daarom ongeschikt). */
 html:has(.commands-category-nav-sticky) {
-  scroll-padding-top: calc(var(--navbar-height) + 64px);
+  scroll-padding-top: calc(var(--navbar-height) + 112px);
 }
 
 /* ==================== Category Navigation (sticky filter-balk) ==================== */
@@ -58,10 +58,100 @@ html:has(.commands-category-nav-sticky) {
   color: var(--color-cta-primary);
 }
 
-/* Actieve categorie krijgt een subtiele vulling zodat de "filter"-staat
+/* Actieve categorie krijgt een subtiele vulling zodat de filter-staat
    ook zonder hover duidelijk afsteekt tegen de overige knoppen. */
 .commands-category-nav a.active {
   background-color: color-mix(in srgb, var(--color-cta-primary) 12%, transparent);
+}
+
+/* ==================== Live zoekfilter ==================== */
+/* Toegankelijk-verborgen label (geen sr-only/visually-hidden helper in de
+   gedeelde stylesheets aanwezig, dus lokaal gedefinieerd). */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Zoekveld boven de chips, beide binnen één gecentreerde kolom. */
+.commands-filter-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  max-width: var(--landing-max-width);
+  margin: 0 auto;
+}
+
+.commands-search {
+  display: block;
+}
+
+.commands-search input {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-terminal);
+  font-size: 0.95rem;
+  color: var(--color-text);
+  background-color: color-mix(in srgb, var(--color-bg) 60%, transparent);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-button);
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.commands-search input::placeholder {
+  color: var(--color-text-dim);
+  opacity: 0.8;
+}
+
+.commands-search input:focus {
+  outline: none;
+  border-color: var(--color-cta-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-cta-primary) 18%, transparent);
+}
+
+[data-theme="light"] .commands-search input {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+/* Resultaat-teller (verbergt zichzelf als leeg → geen layout-shift). */
+.commands-search-count {
+  margin: var(--spacing-xs) 0 0 0;
+  text-align: center;
+  font-family: var(--font-terminal);
+  font-size: 0.8rem;
+  color: var(--color-text-dim);
+}
+
+.commands-search-count:empty {
+  display: none;
+}
+
+/* Lege-staat. */
+.commands-no-results {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-text-dim);
+  text-align: center;
+  max-width: 700px;
+  margin: var(--spacing-xl) auto;
+}
+
+.commands-clear {
+  font-family: var(--font-terminal);
+  font-size: inherit;
+  color: var(--color-cta-primary);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 /* ==================== Category Sections ==================== */
@@ -272,6 +362,11 @@ html:has(.commands-category-nav-sticky) {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none; /* Firefox */
+    /* De nav is nu een flex-item in .commands-filter-inner; auto-marges zouden de
+       stretch uitschakelen waardoor de nav op z'n inhoud sized i.p.v. te klemmen
+       (overflow-x grijpt dan niet). Reset marge + min-width zodat hij scrollt. */
+    margin: 0;
+    min-width: 0;
   }
 
   .commands-category-nav::-webkit-scrollbar {
