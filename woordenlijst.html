@@ -92,9 +92,21 @@
       font-size: 1.3rem;
       font-weight: var(--font-weight-bold);
       color: var(--color-cta-primary);
-      margin: 0 0 var(--spacing-md) 0;
+      margin: 0 0 var(--spacing-sm) 0;
       padding-bottom: var(--spacing-xs);
       border-bottom: 2px solid rgba(159, 239, 0, 0.3);
+    }
+
+    /* Korte oriëntatie-intro per categorie. Links-uitgelijnd (sluit aan op de
+       links-uitgelijnde <h3>, niet de gecentreerde commands-stijl); leesbare
+       regellengte i.p.v. de volle sectiebreedte. */
+    .glossary-category-intro {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--color-text-dim);
+      line-height: 1.6;
+      max-width: 75ch;
+      margin: 0 0 var(--spacing-md) 0;
     }
 
     .glossary-grid {
@@ -430,6 +442,7 @@
     <!-- ===== BASIS TERMEN ===== -->
     <section class="page-section glossary-category" id="basis">
       <h3>Basis Termen</h3>
+      <p class="glossary-category-intro">De bouwstenen van de terminal: shells, bestandsrechten, mappen en commando's die je bij je eerste stappen tegenkomt.</p>
       <dl class="glossary-grid">
         <div class="glossary-term">
           <dt><span class="term-en">CLI</span> (Command Line Interface)</dt>
@@ -477,6 +490,7 @@
     <!-- ===== NETWERK TERMEN ===== -->
     <section class="page-section glossary-category" id="netwerk">
       <h3>Netwerk</h3>
+      <p class="glossary-category-intro">Hoe computers met elkaar praten — van IP-adressen en poorten tot firewalls, VPN's en SSH. De basis om netwerkverkeer en aanvallen daarop te begrijpen.</p>
       <dl class="glossary-grid">
         <div class="glossary-term">
           <dt><span class="term-en">IP-adres</span> (Internet Protocol)</dt>
@@ -534,6 +548,7 @@
     <!-- ===== SECURITY TERMEN ===== -->
     <section class="page-section glossary-category" id="security">
       <h3>Security</h3>
+      <p class="glossary-category-intro">De aanvalskant én de verdediging: van kwetsbaarheden, exploits en malware tot versleuteling en de technieken waarmee systemen worden getest.</p>
       <dl class="glossary-grid">
         <div class="glossary-term">
           <dt><span class="term-en">Ethical Hacking</span> (Ethisch Hacken)</dt>
@@ -613,6 +628,7 @@
     <!-- ===== TOOLS ===== -->
     <section class="page-section glossary-category" id="tools">
       <h3>Tools en Frameworks</h3>
+      <p class="glossary-category-intro">De bekende gereedschappen uit de praktijk — scanners, wachtwoord-crackers en frameworks die zowel security-professionals als aanvallers gebruiken.</p>
       <dl class="glossary-grid">
         <div class="glossary-term">
           <dt><span class="term-en">Nmap</span> (Network Mapper)</dt>
@@ -671,6 +687,7 @@
     <!-- ===== METHODOLOGIE ===== -->
     <section class="page-section glossary-category" id="methodologie">
       <h3>Methodologie en Concepten</h3>
+      <p class="glossary-category-intro">Hoe een ethische hacker te werk gaat: de fases, classificaties en concepten achter een professionele pentest.</p>
       <dl class="glossary-grid">
         <div class="glossary-term">
           <dt><span class="term-en">Penetration Testing</span> (Pentest)</dt>
