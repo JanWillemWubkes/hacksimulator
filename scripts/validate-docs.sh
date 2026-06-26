@@ -355,6 +355,45 @@ if [ "$DEEP_MODE" = "1" ]; then
   fi
 
   # ----------------------------------------------------------
+  # Check 6c: User-facing stat-grid floor-asserties (gidsen.html) — drift-bestendig
+  # ----------------------------------------------------------
+  # Bezoeker-zichtbare content-tellingen staan als open FLOORS ("12+", "40+", "50+"),
+  # nooit als exact getal — zo verouderen ze netjes bij groei (content wordt alleen
+  # toegevoegd). Deze check assert per floor: geclaimde_floor <= echte_telling.
+  # Faalt ALLEEN bij overclaim (site claimt meer dan er is) of als de floor gênant
+  # laag is geworden t.o.v. de drempel; klaagt NOOIT bij gezonde groei.
+  echo ""
+  echo "Check 6c: User-facing stat-grid floors (--deep, gidsen.html + woordenlijst.html)"
+
+  # Ground-truth tellingen (filesystem/source, niet hardcoded)
+  cmd_count=$(grep -cE '\.register\(' src/main.js 2>/dev/null)
+  term_count=$(grep -c '<dt' woordenlijst.html 2>/dev/null)
+
+  # Floor-extractie: pak het getal in <span class="gids-stat-value">N+</span> dat
+  # vlak vóór het bijbehorende -label staat.
+  blog_floor=$(grep -B1 'gids-stat-label">Blog posts<' gidsen.html | grep -oE 'gids-stat-value">[0-9]+' | grep -oE '[0-9]+$')
+  cmd_floor=$(grep -B1 'gids-stat-label">Commands<' gidsen.html | grep -oE 'gids-stat-value">[0-9]+' | grep -oE '[0-9]+$')
+  term_floor=$(grep -oE '[0-9]+\+ Cybersecurity Termen' woordenlijst.html | grep -oE '^[0-9]+' | head -1)
+
+  # assert_floor <naam> <floor> <ground-truth>
+  assert_floor() {
+    local name="$1" floor="$2" truth="$3"
+    if [ -z "$floor" ]; then
+      fail "Floor '$name': geen getal gevonden (HTML-structuur gewijzigd?)"
+    elif [ -z "$truth" ] || [ "$truth" -eq 0 ] 2>/dev/null; then
+      fail "Floor '$name': ground-truth telling leeg/0 (telbron gewijzigd?)"
+    elif [ "$floor" -le "$truth" ]; then
+      pass "Floor '$name': ${floor}+ <= werkelijk ${truth}"
+    else
+      fail "Floor '$name': geclaimd ${floor}+ > werkelijk ${truth} (OVERCLAIM — verlaag de floor of voeg content toe)"
+    fi
+  }
+
+  assert_floor "gidsen Blog posts" "$blog_floor" "$blog_count"
+  assert_floor "gidsen Commands"   "$cmd_floor"  "$cmd_count"
+  assert_floor "woordenlijst Termen" "$term_floor" "$term_count"
+
+  # ----------------------------------------------------------
   # Check 7: Cross-doc Versie consistency (CLAUDE.md ↔ TASKS.md)
   # ----------------------------------------------------------
   check_start "Cross-doc Versie consistency (--deep)"
