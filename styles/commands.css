@@ -24,7 +24,10 @@ html:has(.commands-category-nav-sticky) {
   top: var(--navbar-height);
   z-index: var(--z-sticky-subnav);
   margin-bottom: var(--spacing-xl);
-  padding: var(--spacing-sm) var(--landing-padding-desktop);
+  /* Alleen verticale padding hier; de horizontale goot zit op .commands-filter-inner
+     zodat de inner-box exact gelijkloopt met .page-section (zelfde max-width + padding).
+     Achtergrond/blur/border blijven full-bleed over de hele viewport. */
+  padding: var(--spacing-sm) 0;
   background: color-mix(in srgb, var(--color-bg) 88%, transparent);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -79,13 +82,17 @@ html:has(.commands-category-nav-sticky) {
   border: 0;
 }
 
-/* Zoekveld boven de chips, beide binnen één gecentreerde kolom. */
+/* Zoekveld boven de chips, beide binnen één gecentreerde kolom. Zelfde box-model
+   als .page-section (max-width + margin auto + horizontale padding) zodat het zoekveld
+   exact even breed uitlijnt met de cards eronder, ook op viewports > max-width. */
 .commands-filter-inner {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
   max-width: var(--landing-max-width);
   margin: 0 auto;
+  padding-left: var(--landing-padding-desktop);
+  padding-right: var(--landing-padding-desktop);
 }
 
 .commands-search {
@@ -348,9 +355,9 @@ html:has(.commands-category-nav-sticky) {
     padding: var(--spacing-md);
   }
 
-  /* Compacte sticky balk op mobiel: één rij die horizontaal scrollt i.p.v.
-     naar 2 rijen wrappen (zou onder de 60px-navbar te veel hoogte kosten). */
-  .commands-category-nav-sticky {
+  /* Mobiele goot op de inner (16px = .page-section mobiel), niet op de full-bleed
+     buitenkant — zo blijft de balk-inner even breed uitgelijnd met de cards. */
+  .commands-filter-inner {
     padding-left: var(--spacing-md);
     padding-right: var(--spacing-md);
   }

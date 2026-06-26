@@ -200,19 +200,26 @@
       /* Onder de navbar (--z-navbar: 50), boven de paginacontent. */
       z-index: 40;
       margin-bottom: var(--spacing-xl);
-      padding: var(--spacing-sm) var(--landing-padding-desktop);
+      /* Alleen verticale padding hier; de horizontale goot zit op .glossary-filter-inner
+         zodat de inner-box exact gelijkloopt met .page-section. Achtergrond/blur/border
+         blijven full-bleed over de hele viewport. */
+      padding: var(--spacing-sm) 0;
       background: color-mix(in srgb, var(--color-bg) 88%, transparent);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--color-border);
     }
 
+    /* Zelfde box-model als .page-section (max-width + margin auto + horizontale padding)
+       zodat het zoekveld even breed uitlijnt met de termkaarten eronder, ook > max-width. */
     .glossary-filter-inner {
       display: flex;
       flex-direction: column;
       gap: var(--spacing-sm);
       max-width: var(--landing-max-width);
       margin: 0 auto;
+      padding-left: var(--landing-padding-desktop);
+      padding-right: var(--landing-padding-desktop);
     }
 
     /* Zoekveld */
@@ -316,6 +323,13 @@
     /* Mobiel: zoekveld blijft full-width; chips horizontaal scrollbaar i.p.v.
        wrappen (patroon van styles/commands.css). */
     @media (max-width: 768px) {
+      /* Mobiele goot op de inner (16px = .page-section mobiel), niet op de full-bleed
+         buitenkant — zo blijft de balk-inner even breed uitgelijnd met de termkaarten. */
+      .glossary-filter-inner {
+        padding-left: var(--spacing-md);
+        padding-right: var(--spacing-md);
+      }
+
       .glossary-category-nav {
         flex-wrap: nowrap;
         justify-content: flex-start;
