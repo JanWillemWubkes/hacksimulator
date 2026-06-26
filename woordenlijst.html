@@ -171,6 +171,169 @@
         grid-template-columns: 1fr;
       }
     }
+
+    /* ==================== Sticky zoekfilter + categorie-chips ==================== */
+    /* Toegankelijk-verborgen label (geen sr-only/visually-hidden helper in de
+       gedeelde stylesheets aanwezig, dus lokaal gedefinieerd). */
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Anchor-sprongen moeten onder navbar + sticky balk landen, anders verdwijnt
+       de categorie-<h3> erachter. Gescoped via :has() zodat alleen deze pagina
+       geraakt wordt. Waarde = navbar (60px) + balkhoogte zonder zichtbare teller. */
+    html:has(.glossary-filter-sticky) {
+      scroll-padding-top: calc(var(--navbar-height) + 104px);
+    }
+
+    .glossary-filter-sticky {
+      position: sticky;
+      top: var(--navbar-height);
+      /* Onder de navbar (--z-navbar: 50), boven de paginacontent. */
+      z-index: 40;
+      margin-bottom: var(--spacing-xl);
+      padding: var(--spacing-sm) var(--landing-padding-desktop);
+      background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .glossary-filter-inner {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+      max-width: var(--landing-max-width);
+      margin: 0 auto;
+    }
+
+    /* Zoekveld */
+    .glossary-search {
+      display: block;
+    }
+
+    .glossary-search input {
+      width: 100%;
+      box-sizing: border-box;
+      font-family: var(--font-terminal);
+      font-size: 0.95rem;
+      color: var(--color-text);
+      background-color: color-mix(in srgb, var(--color-bg) 60%, transparent);
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius-button);
+      padding: var(--spacing-sm) var(--spacing-md);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .glossary-search input::placeholder {
+      color: var(--color-text-dim);
+      opacity: 0.8;
+    }
+
+    .glossary-search input:focus {
+      outline: none;
+      border-color: var(--color-cta-primary);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-cta-primary) 18%, transparent);
+    }
+
+    /* Categorie-chips (patroon overgenomen van styles/commands.css) */
+    .glossary-category-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-sm);
+      justify-content: center;
+    }
+
+    .glossary-category-nav a {
+      background-color: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius-button);
+      color: var(--color-text-dim);
+      font-family: var(--font-terminal);
+      font-size: 0.85rem;
+      padding: var(--spacing-xs) var(--spacing-md);
+      text-decoration: none;
+      transition: all var(--transition-fast);
+    }
+
+    .glossary-category-nav a:hover,
+    .glossary-category-nav a.active {
+      border-color: var(--color-cta-primary);
+      color: var(--color-cta-primary);
+    }
+
+    .glossary-category-nav a.active {
+      background-color: color-mix(in srgb, var(--color-cta-primary) 12%, transparent);
+    }
+
+    /* Resultaat-teller (verbergt zichzelf als leeg → geen layout-shift) */
+    .glossary-search-count {
+      margin: 0;
+      text-align: center;
+      font-family: var(--font-terminal);
+      font-size: 0.8rem;
+      color: var(--color-text-dim);
+    }
+
+    .glossary-search-count:empty {
+      display: none;
+    }
+
+    /* Lege-staat */
+    .glossary-no-results {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      color: var(--color-text-dim);
+      text-align: center;
+      max-width: 700px;
+      margin: var(--spacing-xl) auto;
+    }
+
+    .glossary-clear {
+      font-family: var(--font-terminal);
+      font-size: inherit;
+      color: var(--color-cta-primary);
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* Light theme: chip-achtergrond zachter, zoekveld leesbaar */
+    [data-theme="light"] .glossary-search input {
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Mobiel: zoekveld blijft full-width; chips horizontaal scrollbaar i.p.v.
+       wrappen (patroon van styles/commands.css). */
+    @media (max-width: 768px) {
+      .glossary-category-nav {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        gap: var(--spacing-xs);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+
+      .glossary-category-nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .glossary-category-nav a {
+        flex: 0 0 auto;
+        font-size: 0.8rem;
+      }
+    }
   </style>
   <!-- BreadcrumbList Structured Data -->
   <script type="application/ld+json">
@@ -219,7 +382,35 @@
 
     <p class="glossary-intro">
       Deze woordenlijst bevat de belangrijkste termen die je tegenkomt bij het leren van cybersecurity en ethisch hacken.
-      Elke term wordt uitgelegd in het Nederlands met praktische context. Gebruik <kbd>Ctrl+F</kbd> om snel te zoeken.
+      Elke term wordt uitgelegd in het Nederlands met praktische context. Typ in het zoekveld om direct te filteren.
+    </p>
+
+    <!-- Sticky filterbalk: live zoekveld dat termen filtert + categorie-chips met
+         scroll-spy. Werkt zonder JS als gewone sprongnav (chips zijn anchors); het
+         zoekveld krijgt pas betekenis zodra glossary-filter.js laadt. -->
+    <div class="glossary-filter-sticky">
+      <div class="glossary-filter-inner">
+        <label class="glossary-search">
+          <span class="visually-hidden">Zoek in de woordenlijst</span>
+          <input type="search" id="glossary-search" placeholder="Zoek een term of begrip..."
+                 autocomplete="off" autocapitalize="off" spellcheck="false"
+                 aria-describedby="glossary-search-count" enterkeyhint="search">
+        </label>
+        <nav class="glossary-category-nav" aria-label="Ga naar categorie">
+          <a href="#basis">Basis</a>
+          <a href="#netwerk">Netwerk</a>
+          <a href="#security">Security</a>
+          <a href="#tools">Tools</a>
+          <a href="#methodologie">Methodologie</a>
+        </nav>
+      </div>
+      <p id="glossary-search-count" class="glossary-search-count" role="status" aria-live="polite"></p>
+    </div>
+
+    <!-- Lege-staat: alleen zichtbaar als een zoekopdracht 0 termen oplevert -->
+    <p class="glossary-no-results" hidden>
+      Geen termen gevonden voor "<span class="glossary-no-results-query"></span>".
+      Probeer een andere zoekterm of <button type="button" class="glossary-clear">wis het zoekveld</button>.
     </p>
 
     <!-- ===== BASIS TERMEN ===== -->
@@ -545,5 +736,8 @@
 
   <!-- Analytics & Consent -->
   <script src="/src/init-analytics.js" type="module"></script>
+
+  <!-- Live zoekfilter + scroll-spy voor de woordenlijst -->
+  <script src="/src/ui/glossary-filter.js?v=1" type="module"></script>
 </body>
 </html>
