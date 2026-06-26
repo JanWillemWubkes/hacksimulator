@@ -837,6 +837,49 @@ a[href='#all'].category-btn {
     -webkit-overflow-scrolling: touch;  /* iOS momentum-scroll, consistent met mobile.css */
     max-width: 100%;
   }
+  /* Stacked-card tabel (opt-in via .blog-table--stacked). Elke rij wordt een kaart;
+     elke cel toont zijn kolomnaam via data-label + ::before. Voorkomt dat de laatste
+     kolom (Security risico) off-screen verdwijnt op mobiel. */
+  .blog-post-content table.blog-table--stacked {
+    display: block;
+    width: 100%;
+    overflow-x: visible;          /* override scroll-fallback hierboven */
+  }
+  .blog-post-content table.blog-table--stacked thead {
+    /* visueel verbergen MAAR in DOM houden voor screenreaders (geen display:none) */
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .blog-post-content table.blog-table--stacked tbody,
+  .blog-post-content table.blog-table--stacked tr,
+  .blog-post-content table.blog-table--stacked td {
+    display: block;
+    width: 100%;
+  }
+  .blog-post-content table.blog-table--stacked tr {
+    margin: 0 0 var(--spacing-md) 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-button);
+    padding: var(--spacing-xs) 0;
+  }
+  .blog-post-content table.blog-table--stacked td {
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--spacing-xs) var(--spacing-md);
+  }
+  .blog-post-content table.blog-table--stacked tr td:last-child {
+    border-bottom: none;
+  }
+  .blog-post-content table.blog-table--stacked td::before {
+    content: attr(data-label);
+    display: block;
+    color: var(--color-ui-primary);   /* zelfde accent als th op desktop (blog.css th-regel) */
+    font-weight: bold;
+    margin-bottom: var(--spacing-xs);
+  }
   .blog-post-card {
     max-width: 100%;
     overflow: hidden;

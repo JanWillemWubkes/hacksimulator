@@ -50,7 +50,7 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="../styles/main.css?v=151">
   <link rel="stylesheet" href="../styles/landing.css?v=121">
-  <link rel="stylesheet" href="../styles/blog.css?v=116">
+  <link rel="stylesheet" href="../styles/blog.css?v=117">
   <link rel="stylesheet" href="../styles/mobile.css?v=115" media="screen and (max-width: 768px)">
 
   <!-- Google AdSense -->
@@ -288,51 +288,51 @@ PORT     STATE    SERVICE
           Hier zijn de poorten die je als beginner moet kennen:
         </p>
 
-        <table>
+        <table class="blog-table--stacked" role="table">
           <thead>
             <tr>
-              <th>Poort</th>
-              <th>Service</th>
-              <th>Wat doet het?</th>
-              <th>Security risico</th>
+              <th scope="col">Poort</th>
+              <th scope="col">Service</th>
+              <th scope="col">Wat doet het?</th>
+              <th scope="col">Security risico</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>21</strong></td>
-              <td><abbr class="jargon" title="File Transfer Protocol: protocol voor het overzetten van bestanden, vaak onversleuteld" tabindex="0">FTP</abbr></td>
-              <td>Bestandsoverdracht</td>
-              <td>Vaak onversleuteld - wachtwoorden in platte tekst!</td>
+              <td data-label="Poort"><strong>21</strong></td>
+              <td data-label="Service"><abbr class="jargon" title="File Transfer Protocol: protocol voor het overzetten van bestanden, vaak onversleuteld" tabindex="0">FTP</abbr></td>
+              <td data-label="Wat doet het?">Bestandsoverdracht</td>
+              <td data-label="Security risico">Vaak onversleuteld - wachtwoorden in platte tekst!</td>
             </tr>
             <tr>
-              <td><strong>22</strong></td>
-              <td><abbr class="jargon" title="Secure Shell: versleuteld protocol voor veilige remote toegang tot servers" tabindex="0">SSH</abbr></td>
-              <td>Veilige remote toegang</td>
-              <td>Brute force aanvallen als wachtwoord zwak is</td>
+              <td data-label="Poort"><strong>22</strong></td>
+              <td data-label="Service"><abbr class="jargon" title="Secure Shell: versleuteld protocol voor veilige remote toegang tot servers" tabindex="0">SSH</abbr></td>
+              <td data-label="Wat doet het?">Veilige remote toegang</td>
+              <td data-label="Security risico">Brute force aanvallen als wachtwoord zwak is</td>
             </tr>
             <tr>
-              <td><strong>25</strong></td>
-              <td><abbr class="jargon" title="Simple Mail Transfer Protocol: protocol voor het verzenden van e-mail" tabindex="0">SMTP</abbr></td>
-              <td>E-mail verzenden</td>
-              <td>Open relay = spam doorsturen mogelijk</td>
+              <td data-label="Poort"><strong>25</strong></td>
+              <td data-label="Service"><abbr class="jargon" title="Simple Mail Transfer Protocol: protocol voor het verzenden van e-mail" tabindex="0">SMTP</abbr></td>
+              <td data-label="Wat doet het?">E-mail verzenden</td>
+              <td data-label="Security risico">Open relay = spam doorsturen mogelijk</td>
             </tr>
             <tr>
-              <td><strong>80</strong></td>
-              <td>HTTP</td>
-              <td>Webverkeer (onversleuteld)</td>
-              <td>Alle data leesbaar voor aanvallers op het netwerk</td>
+              <td data-label="Poort"><strong>80</strong></td>
+              <td data-label="Service">HTTP</td>
+              <td data-label="Wat doet het?">Webverkeer (onversleuteld)</td>
+              <td data-label="Security risico">Alle data leesbaar voor aanvallers op het netwerk</td>
             </tr>
             <tr>
-              <td><strong>443</strong></td>
-              <td>HTTPS</td>
-              <td>Webverkeer (versleuteld)</td>
-              <td>Veiliger, maar webapplicatie zelf kan nog kwetsbaar zijn</td>
+              <td data-label="Poort"><strong>443</strong></td>
+              <td data-label="Service">HTTPS</td>
+              <td data-label="Wat doet het?">Webverkeer (versleuteld)</td>
+              <td data-label="Security risico">Veiliger, maar webapplicatie zelf kan nog kwetsbaar zijn</td>
             </tr>
             <tr>
-              <td><strong>3306</strong></td>
-              <td><abbr class="jargon" title="MySQL: populair open-source relationeel databasebeheersysteem" tabindex="0">MySQL</abbr></td>
-              <td>Database</td>
-              <td>Extern bereikbaar = enorm risico als wachtwoord zwak is</td>
+              <td data-label="Poort"><strong>3306</strong></td>
+              <td data-label="Service"><abbr class="jargon" title="MySQL: populair open-source relationeel databasebeheersysteem" tabindex="0">MySQL</abbr></td>
+              <td data-label="Wat doet het?">Database</td>
+              <td data-label="Security risico">Extern bereikbaar = enorm risico als wachtwoord zwak is</td>
             </tr>
           </tbody>
         </table>

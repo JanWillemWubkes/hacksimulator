@@ -50,7 +50,7 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="../styles/main.css?v=151">
   <link rel="stylesheet" href="../styles/landing.css?v=121">
-  <link rel="stylesheet" href="../styles/blog.css?v=116">
+  <link rel="stylesheet" href="../styles/blog.css?v=117">
   <link rel="stylesheet" href="../styles/mobile.css?v=115" media="screen and (max-width: 768px)">
 
   <!-- Google AdSense -->
@@ -237,33 +237,33 @@
           Met display filters laat je alleen zien wat relevant is. Een paar voorbeelden die je dagelijks gebruikt:
         </p>
 
-        <table>
+        <table class="blog-table--stacked" role="table">
           <thead>
             <tr>
-              <th>Filter</th>
-              <th>Wat laat het zien?</th>
+              <th scope="col">Filter</th>
+              <th scope="col">Wat laat het zien?</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><code>ip.addr == 192.168.1.10</code></td>
-              <td>Al het verkeer van/naar dit IP-adres</td>
+              <td data-label="Filter"><code>ip.addr == 192.168.1.10</code></td>
+              <td data-label="Wat laat het zien?">Al het verkeer van/naar dit IP-adres</td>
             </tr>
             <tr>
-              <td><code>http</code></td>
-              <td>Alleen onversleuteld webverkeer</td>
+              <td data-label="Filter"><code>http</code></td>
+              <td data-label="Wat laat het zien?">Alleen onversleuteld webverkeer</td>
             </tr>
             <tr>
-              <td><code>dns</code></td>
-              <td>Alleen DNS-verzoeken ("welke domeinen worden opgezocht?")</td>
+              <td data-label="Filter"><code>dns</code></td>
+              <td data-label="Wat laat het zien?">Alleen DNS-verzoeken ("welke domeinen worden opgezocht?")</td>
             </tr>
             <tr>
-              <td><code>tcp.port == 22</code></td>
-              <td>SSH-verkeer (poort 22)</td>
+              <td data-label="Filter"><code>tcp.port == 22</code></td>
+              <td data-label="Wat laat het zien?">SSH-verkeer (poort 22)</td>
             </tr>
             <tr>
-              <td><code>tcp.flags.syn == 1</code></td>
-              <td>Verbindingspogingen — handig om poortscans te spotten</td>
+              <td data-label="Filter"><code>tcp.flags.syn == 1</code></td>
+              <td data-label="Wat laat het zien?">Verbindingspogingen — handig om poortscans te spotten</td>
             </tr>
           </tbody>
         </table>
