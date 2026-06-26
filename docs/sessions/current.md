@@ -4,6 +4,33 @@
 
 ---
 
+## Sessie 181: Content-getallen drift-bestendig + blog-table-stacked + over-ons-copy (26 jun 2026)
+
+**Mission:** Bezoeker-zichtbare harde getallen die met de content meegroeien (aantal blogs/commands) drift-bestendig maken; plus twee voorafgaande UX/copy-fixes uit dezelfde sessie-cyclus vastleggen.
+
+**Work done:**
+- **Drift-fix (commit `ea379a2`, 3 files, +43/-4):**
+  - `gidsen.html` stat-grid: `10` Blog posts → `12+`, `41` Commands → `40+` (open floors i.p.v. exacte tellingen; sluit aan op de bestaande `105+`/`50+`/`40+`-conventie elders op de site). Pure HTML-tekst → geen cache-bump.
+  - `PLANNING.md`: twee stale `10 posts` → `12` (canonieke telling = `blog/*.html` minus index+welkom == TASKS.md-SSOT 12/12 + validate-docs Check 6b).
+  - `scripts/validate-docs.sh`: NEW `--deep` Check 6c — floor-asserties `geclaimd ≤ ground-truth` voor gidsen Blog posts (vs filesystem `blog_count`), gidsen Commands (vs `grep -c '\.register(' src/main.js` = 41) en woordenlijst Termen (vs `<dt>`-count = 56). Robuust: nooit vals alarm bij groei; negatief getest (99+ → exit 1).
+  - **Bewust ongemoeid (geverifieerd correct):** CLAUDE.md "12 posts" (canoniek) en JSON-LD `numberOfItems:39` (== 39 zichtbare command-rijen; "40+" = totaal 41). De inventaris-subagent vlagde beide als bug — beide vals-positief.
+- **Blog-table-stacked (commits `3530e07` + `a9006e3`):** de 4 brede blog-datatabellen (nmap/hashcat/wachtwoord/wireshark) van Sessie-176 `overflow-x:auto`-scroll → opt-in `.blog-table--stacked` (rij = gelabelde kaart via `data-label`+`::before` op `@media≤768px`; thead clip-verborgen, `role="table"`+`scope="col"` voor a11y). `blog.css?v=116→117` op 14 blogpagina's. Conventie vastgelegd in `.claude/rules/architecture-patterns.md`.
+- **Over-ons-copy (commit `83c130d`):** hero-subtitle "Daarom bouwen we" → "Daarom is HackSimulator.nl een..." (doorlopende "bezig"-tijd ondermijnde een live product); sample-CTA-kop "Wil je zien wat ik bouw?" → "Zo bereid je je eerste pentest voor" (kop↔payload-mismatch weg); meta "bouwen" → "bestaat". Inline HTML, geen cache-bump. "bouwde ik" (voltooid founder-verhaal) bewust behouden.
+
+**Commits:** `83c130d` (over-ons copy) · `3530e07` (blog-table stacked) · `a9006e3` (rule-doc) · `ea379a2` (drift-fix). Alle op `main`, gepusht.
+
+**Learnings:**
+- **Floors verouderen netjes, exacte getallen niet.** Het echte probleem was niet "te veel getallen" — de site gebruikte al grotendeels floors. Drift zat in de paar plekken met exacte tellingen voor groeiende content. Een floor is waar zolang `geclaimd ≤ werkelijk`; bij groei (content alleen toegevoegd) blijft hij waar.
+- **Verifieer drift-claims tegen de canonieke definitie, niet tegen een oppervlakkige telling.** De inventaris-subagent gaf 2 vals-positieven (CLAUDE "12"→"13", JSON-LD 39→41); beide "fixes" hadden drift/inconsistentie geïntroduceerd. Canonieke telbron = `validate-docs.sh` Check 6b + TASKS.md-SSOT (12).
+- **Floor-assertie maakt de forcing function triviaal én robuust.** `geclaimd ≤ ground-truth` geeft nooit vals alarm bij groei — alleen bij overclaim. De alternatief-valkuil (exact-match-validator over elk cijfer) zou het onderhoudsprobleem terugbrengen.
+- **Render-en-meet ook voor 2-teken-tekstedits:** mobiel 360px gemeten — `12+/40+/22/105+`, geen overflow, niets afgekapt; screenshot bevestigd. `+`-suffix-rendering was al bewezen door de bestaande `105+`.
+
+**Metrics delta:** drift-commit +43/-4 (3 files), bundle-impact ≈ 0; blog-table +43 regels `blog.css`. E2E ongewijzigd (23 spec files / 197 tests via `--list`; geen tests toegevoegd of geraakt).
+
+**Next steps:** Geen open items uit deze sessie. Buiten scope gehouden (eerlijk benoemd): test-/CSS-var-/bundle-getallen in docs (live metrics → TASKS.md-flow); vaste artefacten (PDF-pagina's/badges/skill-levels, laag drift-risico).
+
+---
+
 ## Sessie 180: Blog-auteurschap → merk (Organization); persoonsnaam alleen op over-ons (25 jun 2026)
 
 **Mission:** Strategische vraag van Heisenberg — is het verstandig dat zijn volledige juridische naam als auteur op alle 13 blogposts staat? Analyse als expert, dan uitvoeren.

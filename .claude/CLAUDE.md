@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 180)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 181)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 181: Content-getallen drift-bestendig — floors i.p.v. exacte tellingen + floor-assertie (26 jun 2026)
+⚠️ **Never:**
+- Een exact getal hardcoden voor content die groeit (blogposts, commands) in bezoeker-copy — `gidsen.html` "10 Blog posts" was al fout (13 zichtbaar) en "41 Commands" drift bij elke nieuwe command. Exacte getallen verouderen bij élke wijziging; open floors (`40+`/`50+`/`105+`) blijven waar bij groei.
+- Een drift-"fix" doorvoeren op de oppervlakkige inventaris zonder tegen de canonieke definitie te toetsen — de subagent vlagde CLAUDE.md "12 posts" als fout ("zou 13") én JSON-LD `numberOfItems:39` als bug; beide waren correct (validate-docs telt canoniek 12 excl. index+welkom; 39 == de zichtbare itemlijst, "40+" = totaal). Blind "fixen" had juist drift/inconsistentie geïntroduceerd.
+- Een grep-elk-cijfer-exact-validator bouwen — dat geeft vals alarm bij élke gezonde content-toevoeging = het onderhoudsprobleem terug in een andere vorm.
+
+✅ **Always:**
+- Drift-gevoelige bezoeker-tellingen als open floor (`12+`) schrijven, nooit exact; een floor bumpt alleen bij een marketing-drempel (≈ nooit), niet bij elke post.
+- Floor-asserties als forcing function: `geclaimd ≤ ground-truth` (filesystem/source-telling, niet hardcoded) — klaagt nóóit bij groei, faalt alleen bij overclaim. Negatief getest (99+ → exit 1). Geïmplementeerd als validate-docs `--deep` Check 6c.
+- Onderscheid drift-klassen: groeiende content-counts (floor + assertie) vs. vaste artefacten (PDF-pagina's/badges/skill-levels — laag risico, met rust) vs. live metrics (tests/bundle → al naar TASKS.md gedelegeerd). Niet alles is hetzelfde probleem.
+- Brede blogtabellen → opt-in `.blog-table--stacked` (rij = gelabelde kaart via `data-label`+`::before` op mobiel), NIET horizontale `overflow-x:auto`-scroll (verstopt de waardevolste kolom). Volledig: `docs/sessions/current.md` Sessie 181.
+
 ### Sessie 180: Blog-auteurschap → merk (Organization); persoonsnaam alleen op over-ons (25 jun 2026)
 ⚠️ **Never:**
 - Je juridische naam als schema-`author` (Person + `sameAs`) op elke geïndexeerde blogpost zetten tenzij persoonlijk merk een *expliciet* doel is — dat is het SEO-versterkte, permanente, "eerste-wat-iemand-vindt"-oppervlak; productpromotie vereist het niet. De naam hoort op 1 about-pagina, niet als broadcast over 13 posts.
@@ -144,20 +156,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Cache-blast-radius sturen de fix-locatie: scroll-hint-regel in `terminal-education.css` (1 consumer = `terminal.html`) i.p.v. site-brede `mobile.css` → 1 cache-bump i.p.v. ~25. En per-bestand committen wanneer cache-bumps verweven zijn met content (hunk-splitting/`git add -p` niet beschikbaar) — zelfde eindtree, leesbare history.
 - Bulk-tekstvervanging afdekken met een eind-assertie: het emoji-script faalde hard op een niet-geïnventariseerde 🎓 (0-emoji-over-check, pijlen/✓✗ uitgezonderd). Contextregels: decoratieve markers weg, `<td>`-emoji weg met behoud Ja/Nee, lijst-`✅/❌` → `[✓]`/`[✗]`. Volledig: `docs/sessions/current.md` Sessie 176.
 
-### Sessie 175: Layout-fixes sample-pentest — chevron/success-state/card-uitlijning (21 jun 2026)
-⚠️ **Never:**
-- `!important` voorstellen om externe CSS (Brevo `sib-styles.css`) te overschrijven zonder te checken of die regel zélf `!important` gebruikt — curl onthulde `.sib-form-message-panel` (0,1,0) zónder `!important`, dus onze scopes (0,2,0 / 1,1,0) wonnen puur op specificiteit. Heisenberg vroeg terecht om de schonere route. → geheugen `feedback_avoid_important_css`.
-- Een layout-misalignment op het oog diagnosticeren — ik zag "card-titel 3 staat lager", maar meting (`getBoundingClientRect`) toonde: titels zijn top-uitgelijnd (`top:861`), de échte afwijking zat in de *body* (900 vs 923) door een 1-regelige titel. Meten wijst de oorzaak aan, het oog niet.
-- Een gedeelde module wijzigen zonder de blast-radius te scheiden — `brevo-submit.js` draait op homepage én sample; de form-hide hield ik generiek (verbetering overal), de titel/intro-verberging sample-specifiek (`.newsletter-submitted` + opt-in class). Beide pagina's apart geverifieerd.
-- Een CSS/JS-fix "verifiëren" op een Python `http.server` — die stuurt geen cache-headers → de browser draaide de oude gecachete ES-module (vals-negatief, Sessie-171-valkuil). Pas met een `Cache-Control: no-store`-server + verse E2E-browser bleek de fix te werken.
-
-✅ **Always:**
-- Externe-CSS-override = specificiteit boven `!important`: reken de specificiteit expliciet uit (`#id` of extra class) en haal desnoods de echte stylesheet op om te bevestigen dat het volstaat. `2lh` voor "reserveer 2 tekstregels" (geen line-height-giswerk; Baseline 2023).
-- Scope CSS-fixes dubbel waar gepast: een opt-in modifier-class (`.feature-cards--equal-title` raakt index/gidsen/over-ons niet) + een `@media (min-width:1025px)`-gate (geen witruimte zodra cards niet in één rij staan). Ongescopet had "alles uitgelijnd" 3 pagina's + mobiel ongevraagd geraakt.
-- Success-state = formulier vervángen, niet aanvullen: bij succes het form verbergen i.p.v. het paneel erbovenop tonen (anders dubbele kaarthoogte + verweesde CTA). De bevestiging wordt de hele kaart.
-- Render-en-meet als bewijs: `getBoundingClientRect` vóór én na (body's 900→923, allemaal gelijk), plus screenshots in dark+light+mobiel + de E2E-test met Brevo-mock (geen echt contact) in een verse browser als definitieve proof. Volledig: `docs/sessions/current.md` Sessie 175.
-
-**Rotation:** Top-6 huidig: 175-176-177-178-179-180 (Sessie 174 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 180 UITGEVOERD:** current.md staart Sessie 165-169 geknipt naar `archive-s165-s169.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 170-180 (11 entries; volgende bulk-rotatie Sessie 185 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-164 → `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 176-177-178-179-180-181 (Sessie 175 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 180 UITGEVOERD:** current.md staart Sessie 165-169 geknipt naar `archive-s165-s169.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 170-181 (12 entries; volgende bulk-rotatie Sessie 185 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-164 → `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -206,7 +205,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 180
+**Sessie counter:** 181
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -258,6 +257,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 25 jun 2026 (Sessie 180 — blog-auteurschap terug naar merk: JSON-LD author Person→Organization + article:author→merk + zichtbare byline verwijderd op 13 posts; persoonsnaam alleen nog op over-ons (founder-schema + LinkedIn behouden als vertrouwensanker). Bulk-rotatie 165-169 → archive-s165-s169.md. Volledig: `docs/sessions/current.md`)
-**Version:** 5.54 (Sessie 180 — blog → merk-auteurschap (Organization); persoonsnaam alleen op over-ons; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 26 jun 2026 (Sessie 181 — content-getallen drift-bestendig: gidsen-stats "10"/"41" → floors "12+"/"40+" + PLANNING "10 posts"→12 + validate-docs `--deep` Check 6c floor-assertie; CLAUDE "12 posts" + JSON-LD 39 bewust ongemoeid (canoniek correct). Incl. blog-table-stacked + over-ons-copy. Volledig: `docs/sessions/current.md`)
+**Version:** 5.55 (Sessie 181 — content-tellingen drift-bestendig (floors + floor-assertie); volledige historie: `docs/sessions/current.md` + TASKS.md)
 
