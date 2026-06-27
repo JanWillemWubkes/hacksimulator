@@ -4,6 +4,31 @@
 
 ---
 
+## Sessie 182: Live zoekfilter + design-uitlijning woordenlijst ↔ commands (27 jun 2026)
+
+**Mission:** De twee naslagpagina's (`commands/index.html` + `woordenlijst.html`) tot één coherente, doorzoekbare set maken: echte zoekfilter, uitgelijnde sticky balk, en gedeelde categorie-stijl.
+
+**Work done:**
+- **Gedeelde filter-module (commit `aa5cad1` + `24d2bc0`):** NEW `src/ui/term-filter.js` — herbruikbare live-filter + scroll-spy, config-gedreven (`sectionSel`/`itemSel`/`navSel`/`inputSel`/… + `itemNoun` voor de teller-tekst). Twee dunne wrappers: `glossary-filter.js` (herschreven van self-contained → import) en `commands-filter.js` (vervangt het **verwijderde** `commands-scrollspy.js` — scroll-spy zit nu in de kern).
+- **Woordenlijst-zoekfilter (`aa5cad1`):** sticky balk met zoekveld dat `.glossary-term`-kaarten live filtert op `textContent` (term + definitie → "wachtwoord" vindt *Brute Force*), lege categorieën meeverbergt, teller ("X van 56 termen") + lege-staat met wis-knop. "Ctrl+F"-tip in de intro vervangen. Inline CSS → geen cache-bump.
+- **Commands-backport (`24d2bc0`):** zoekveld + teller + lege-staat in de bestaande sticky "filter-balk" (nu eindelijk een echt filter); `commands.css?v=116`. Mobiele nav-fix: `margin:0; min-width:0` zodat de chips-`overflow-x:auto` aangrijpt i.p.v. de pagina te verbreden.
+- **Sticky-balk uitlijning (`3af5f53`):** balk-inner kreeg identiek box-model als `.page-section` (horizontale padding van de full-bleed-buitenkant → inner, behoud `max-width` + `margin:0 auto`) → zoekveld en cards vallen op élke breedte samen (gemeten `delta 0` op 1600/1280/375px; was 32px scheef >1400px + 4px mobiel-goot). `commands.css?v=117`.
+- **Categorie-intro's woordenlijst (`5e3c5e6`):** 5× korte oriëntatie-zin (`.glossary-category-intro`, links-uitgelijnd, max-width 75ch), elke zin getoetst tegen de echte term-lijst van die categorie. Staan binnen `.glossary-category` → verbergen gratis mee met een lege categorie.
+- **Commands-koppen → woordenlijst-stijl (`9795c58`):** `.commands-category h2` van gecentreerd/wit → links/groen/`font-heading 1.3rem` + groene onderlijn-divider (+ `[data-theme="light"]`-override naar de licht-groene variant); intro `.commands-category > p` → links/75ch i.p.v. gecentreerd/700px. `commands.css?v=118`. Card-chrome + hero's bewust ongemoeid.
+
+**Commits:** `aa5cad1` (woordenlijst filter + term-filter) · `24d2bc0` (commands backport) · `3af5f53` (balk-uitlijning) · `5e3c5e6` (categorie-intro's) · `9795c58` (commands-koppen). Alle op `main`, gepusht.
+
+**Learnings:**
+- **Flexbox auto-margin overflow-val:** `margin: 0 auto` op een flex-item schakelt `align-items: stretch` uit → het kind sized op z'n min/max-content i.p.v. te klemmen, waardoor `overflow-x:auto` niet aangrijpt en de pagina verbreedt (gemeten: commands-nav 484px duwde de 375px-viewport naar 496px). De fout zat in een geërfde desktop-regel die pas giftig werd ná het herparenten in een flex-kolom. Fix: `margin:0; min-width:0` op het flex-item.
+- **`max-width` mét vs zónder padding geeft verschillende content-randen.** De balk-inner (max-width 1400, padding op de buitenkant) reikte tot 1400; `.page-section` (zelfde max-width, 32px padding binnenin) tot 1336 → 32px scheef zodra de viewport > max-width. Twee elementen met *identiek* box-model kunnen niet meer uiteenlopen. CSS lezen ("beide 1400") is niet genoeg — reken het box-model per rand uit.
+- **Cargo-cult-consistentie = vorm kopiëren ≠ intentie.** Twee keer dezelfde redenering, twee kanten op: de woordenlijst nam de *gecentreerde* commands-intro NIET over (links past beter bij een lookup-pagina); de commands-kop nam juist de *links-uitgelijnde* glossary-stijl wél over. De juiste consistentie zit in wat de pagina's gemeen hebben (scanbare naslag), niet in de opmaak.
+- **Herbruikbaar = kern-module + dunne per-pagina wrappers.** Door de filter-logica config-gedreven te maken (selectors + `itemNoun`) werd de tweede consument (commands) een mechanische kopie i.p.v. ~150 regels duplicatie.
+- **Meet de échte staat, niet een test-artefact.** De scroll-spy "faalde" eerst (las "Netwerk" bij Security) — oorzaak was `scroll-behavior: smooth` waardoor de IntersectionObserver tussenposities van de lopende animatie las, niet de code. Instant-scroll via berekende posities bewees correct gedrag. Bijna onterecht aan de code toegeschreven.
+
+**Metrics delta:** src/ → 646 KB (3 nieuwe JS-modules term-filter/glossary-filter/commands-filter; -1 commands-scrollspy). styles/ → 401 KB (commands.css +~3 KB). E2E ongewijzigd (23 spec files; geen tests geraakt — UI-polish, niet command-gedrag). Cache-bumps: `commands.css` 115→118 (3 bumps over de sessie); woordenlijst inline → geen bump.
+
+**Next steps:** Optioneel card-chrome harmoniseren (radius 12 vs 16px, hover lift+neutrale rand vs groene rand) — bewust uitgesteld, lage zichtbare winst; cards zijn in rust al ~90% gelijk.
+
 ## Sessie 181: Content-getallen drift-bestendig + blog-table-stacked + over-ons-copy (26 jun 2026)
 
 **Mission:** Bezoeker-zichtbare harde getallen die met de content meegroeien (aantal blogs/commands) drift-bestendig maken; plus twee voorafgaande UX/copy-fixes uit dezelfde sessie-cyclus vastleggen.

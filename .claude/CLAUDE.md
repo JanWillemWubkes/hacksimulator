@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 181)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 182)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 182: Live zoekfilter + design-uitlijning woordenlijst ↔ commands (27 jun 2026)
+⚠️ **Never:**
+- Verwachten dat een flex-item met `margin: 0 auto` + `overflow-x:auto` klemt — de auto-marge schakelt `align-items: stretch` uit, dus het kind sized op z'n inhoud i.p.v. de container en `overflow-x` grijpt niet → pagina-overflow (gemeten: een nav van 484px duwde de 375px-viewport naar 496px). De regel werd pas giftig ná het herparenten in een flex-kolom. Reset met `margin:0; min-width:0`.
+- Een gedeelde `max-width` lezen als "even breed" — `max-width` op een padding-loos element vs op een gepadde `.page-section` geeft 32px verschillende content-randen zodra de viewport > max-width. CSS lezen ("beide 1400") is niet genoeg; reken het box-model per rand uit.
+- Vorm-consistentie najagen zonder de intentie te checken (cargo-cult) — de gecentreerde commands-intro klakkeloos op de woordenlijst plakken zou botsen met de links-uitgelijnde glossary-kop. Beide zijn scanbare naslag → links wint; kies per element de behandeling die past bij wat de pagina's gemeen hebben.
+- Een "kapotte" feature aan de code toeschrijven vóór je de test zelf wantrouwt — de scroll-spy las "Netwerk" bij Security door `scroll-behavior: smooth` (IO las tussenposities van de animatie), niet door een bug. Instant-scroll bewees correct gedrag.
+
+✅ **Always:**
+- Een flex-item dat moet scrollen krijgt `margin:0; min-width:0` zodat `overflow-x:auto` aangrijpt i.p.v. de pagina te verbreden.
+- Een sticky-balk-inner hetzelfde box-model geven als de content eronder (`.page-section`: `max-width` + `margin:0 auto` + zelfde padding-tokens, 32px desktop / 16px mobiel) → randen vallen op élke breedte samen; full-bleed achtergrond/blur/border blijven op de buitenkant.
+- Herbruikbare UI-logica = kern-module + dunne per-pagina wrappers (config-selectors + label-noun) → de tweede consument wordt een mechanische kopie, geen duplicatie. Hier: `term-filter.js` ← `glossary-filter.js` / `commands-filter.js`.
+- Meet de échte staat, niet een test-artefact: instant-scroll i.p.v. `scrollIntoView()` (smooth) om de IntersectionObserver-staat zuiver te triggeren. Render-en-meet op no-store server, dark+light+mobiel+breed (>max-width), `getBoundingClientRect`-delta == 0. Volledig: `docs/sessions/current.md` Sessie 182.
+
 ### Sessie 181: Content-getallen drift-bestendig — floors i.p.v. exacte tellingen + floor-assertie (26 jun 2026)
 ⚠️ **Never:**
 - Een exact getal hardcoden voor content die groeit (blogposts, commands) in bezoeker-copy — `gidsen.html` "10 Blog posts" was al fout (13 zichtbaar) en "41 Commands" drift bij elke nieuwe command. Exacte getallen verouderen bij élke wijziging; open floors (`40+`/`50+`/`105+`) blijven waar bij groei.
@@ -144,19 +157,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Eén renderer-conventie = systemische bug: dezelfde `[X]`-checkbox zat in 6 voortgangsweergaven (leerpad/challenge/achievements/tutorial/next). Repo-brede `grep "'\[X\]'"` + categoriseren vóór je "klaar" claimt.
 - In een legenda (uitleg, geen status) de glyph **achteraan** zetten (`Voltooid   [✓]`) → geen marker-match aan regelbegin → neutraal wit, geen doorgeërfde kleur. Volledig: `docs/sessions/current.md` Sessie 177.
 
-### Sessie 176: Mobiele audit + 5 fixes — tabel-overflow, CSP/consent-gap, emoji, tap-targets, scroll-hint (21 jun 2026)
-⚠️ **Never:**
-- Een tap-target-"fix" bouwen op een ongemeten aanname — ik claimde de blog-filterknoppen ~20px (mobiel) en bumpte ze; meting ná implementatie toonde 27px/42px = al ≥24px AA → onnodig, en mijn `inline-flex` voegde een display-neveneffect toe. Teruggedraaid. "Meten wint van oogwerk" geldt óók over je eigen premisse: meet vóór je fixt. → geheugen-lijn met `feedback_verify_claims_against_artifact`.
-- Een CSP-console-error als cosmetisch afdoen — de geblokkeerde inline-`<script>` op blogpagina's bleek de Consent Mode v2 defaults: `gtag` undefined, `dataLayer` leeg, AdSense laadde zónder `denied`-defaults = echte GDPR-gap op de hoogste-organische-traffic-pagina's. Meet de runtime (dataLayer/gtag-type) vóór je "onschuldig" concludeert.
-- Aannemen dat een eerdere migratie compleet was — de Sessie-166 inline-script-externalisatie miste de hele `blog/`-map (11 pagina's om, 14 vergeten). Een repo-brede grep (`consent-default.js` vs inline `gtag`) legde de split bloot; vertrouw niet op "dit is overal gedaan".
-- Een mobiele scroll-defect "op het oog" diagnosticeren — de scroll-hint leek "achter de balk", maar `--z-terminal:1` < hint `z-index:2` betekent dat hij technisch erbóven ligt; de echte oorzaak was een collisie met de naar 2 rijen (gemeten 109px) wrappende quick-command-balk. Meten wijst de zone aan, niet de z-index-intuïtie.
-✅ **Always:**
-- Render-en-meet op een `no-store`-server: `scrollWidth` vs `innerWidth` + `getBoundingClientRect`-hoogtes op 375px vóór/ná, dark+light, plus desktop-regressie. Brede tabellen (blog+legal) afgekapt/pagina-overflow → tabel zelf scroll-container (`display:block; overflow-x:auto`) in `@media≤768px` (patroon van `.blog-post-content pre`).
-- Niet-in-repo-vergelijkbare claims bewijzen met productie-vs-lokaal runtime-diff: blog vóór (`gtag:undefined`, dataLayer leeg) vs homepage (`gtag:function`, default aanwezig) → fix = extern `consent-default.js` (zet defaults én injecteert AdSense daarná, race-veilig). Lokaal ná: 0 CSP-fouten over 7 pagina's.
-- Cache-blast-radius sturen de fix-locatie: scroll-hint-regel in `terminal-education.css` (1 consumer = `terminal.html`) i.p.v. site-brede `mobile.css` → 1 cache-bump i.p.v. ~25. En per-bestand committen wanneer cache-bumps verweven zijn met content (hunk-splitting/`git add -p` niet beschikbaar) — zelfde eindtree, leesbare history.
-- Bulk-tekstvervanging afdekken met een eind-assertie: het emoji-script faalde hard op een niet-geïnventariseerde 🎓 (0-emoji-over-check, pijlen/✓✗ uitgezonderd). Contextregels: decoratieve markers weg, `<td>`-emoji weg met behoud Ja/Nee, lijst-`✅/❌` → `[✓]`/`[✗]`. Volledig: `docs/sessions/current.md` Sessie 176.
-
-**Rotation:** Top-6 huidig: 176-177-178-179-180-181 (Sessie 175 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 180 UITGEVOERD:** current.md staart Sessie 165-169 geknipt naar `archive-s165-s169.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 170-181 (12 entries; volgende bulk-rotatie Sessie 185 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-164 → `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 177-178-179-180-181-182 (Sessie 176 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 180 UITGEVOERD:** current.md staart Sessie 165-169 geknipt naar `archive-s165-s169.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 170-182 (13 entries; volgende bulk-rotatie Sessie 185 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-164 → `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -205,7 +206,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 181
+**Sessie counter:** 182
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -257,6 +258,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 26 jun 2026 (Sessie 181 — content-getallen drift-bestendig: gidsen-stats "10"/"41" → floors "12+"/"40+" + PLANNING "10 posts"→12 + validate-docs `--deep` Check 6c floor-assertie; CLAUDE "12 posts" + JSON-LD 39 bewust ongemoeid (canoniek correct). Incl. blog-table-stacked + over-ons-copy. Volledig: `docs/sessions/current.md`)
-**Version:** 5.55 (Sessie 181 — content-tellingen drift-bestendig (floors + floor-assertie); volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 27 jun 2026 (Sessie 182 — live zoekfilter op woordenlijst + commands via gedeelde `term-filter.js`; sticky-balk uitgelijnd op `.page-section`-box-model; woordenlijst categorie-intro's; commands-koppen → woordenlijst-stijl (links/groen/divider). 5 commits. Volledig: `docs/sessions/current.md`)
+**Version:** 5.56 (Sessie 182 — gedeelde zoekfilter + design-uitlijning naslagpagina's; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
