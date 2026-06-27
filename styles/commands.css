@@ -166,21 +166,33 @@ html:has(.commands-category-nav-sticky) {
   margin-bottom: var(--spacing-xl);
 }
 
+/* Categorie-kop in dezelfde behandeling als de woordenlijst (.glossary-category h3):
+   links-uitgelijnd, groen, met groene onderlijn-divider. Sterker voor een scanbare
+   naslagpagina dan een gecentreerde witte titel + matched set met de woordenlijst. */
 .commands-category h2 {
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-cta-primary);
+  text-align: left;
   margin: 0 0 var(--spacing-sm) 0;
-  text-align: center;
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 2px solid rgba(159, 239, 0, 0.3);
 }
 
+[data-theme="light"] .commands-category h2 {
+  border-bottom-color: rgba(22, 163, 74, 0.3);
+}
+
+/* Intro links-uitgelijnd, leesbare regellengte — spiegelt .glossary-category-intro. */
 .commands-category > p {
   font-family: var(--font-body);
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--color-text-dim);
   line-height: 1.6;
-  margin: 0 auto var(--spacing-lg) auto;
-  max-width: 700px;
-  text-align: center;
+  margin: 0 0 var(--spacing-md) 0;
+  max-width: 75ch;
+  text-align: left;
 }
 
 /* ==================== Command Cards Grid ==================== */
