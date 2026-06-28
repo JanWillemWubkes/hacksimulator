@@ -207,7 +207,7 @@ a[href='#all'].category-btn {
   gap: var(--spacing-xl);
 }
 .blog-post-card {
-  background-color: var(--color-bg-terminal);
+  background-color: var(--color-bg-modal);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-modal);
   box-shadow: var(--shadow-elevation-1);
@@ -564,7 +564,7 @@ a[href='#all'].category-btn {
   color: var(--color-text);
 }
 .blog-cta {
-  background-color: var(--color-bg-terminal);
+  background-color: var(--color-bg-modal);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-button);
   margin: var(--spacing-xl) 0;
@@ -937,7 +937,7 @@ a[href='#all'].category-btn {
 
 .related-card {
   display: block;
-  background-color: var(--color-bg-terminal);
+  background-color: var(--color-bg-modal);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-button);
   padding: var(--spacing-lg);
@@ -999,7 +999,7 @@ a[href='#all'].category-btn {
 
 /* ==================== Blog Support Banner ==================== */
 .blog-support-banner {
-  background-color: var(--color-bg-terminal);
+  background-color: var(--color-bg-modal);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-button);
   margin: var(--spacing-xl) 0;
