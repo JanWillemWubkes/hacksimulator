@@ -1060,9 +1060,9 @@ a[href='#all'].category-btn {
 /* ==================== Newsletter Signup (Blog) ==================== */
 .newsletter-signup {
   background-color: var(--color-bg-modal);
-  border: 2px solid rgba(159, 239, 0, 0.35);
+  border: 2px solid var(--color-border);
   border-radius: var(--border-radius-button);
-  box-shadow: var(--shadow-elevation-2), 0 0 24px rgba(159, 239, 0, 0.08);
+  box-shadow: var(--shadow-elevation-2);
   margin: var(--spacing-xl) auto;
   max-width: 720px;
   padding: var(--spacing-xl);
@@ -1085,8 +1085,6 @@ a[href='#all'].category-btn {
 }
 [data-theme='light'] .newsletter-signup {
   background-color: var(--color-bg-modal);
-  border-color: rgba(22, 163, 74, 0.35);
-  box-shadow: var(--shadow-elevation-2), 0 0 24px rgba(22, 163, 74, 0.06);
 }
 .newsletter-form {
   display: flex;
