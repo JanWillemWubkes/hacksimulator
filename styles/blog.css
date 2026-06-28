@@ -566,10 +566,11 @@ a[href='#all'].category-btn {
 .blog-cta {
   background-color: var(--color-bg-modal);
   border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-ui-primary);
   border-radius: var(--border-radius-button);
   margin: var(--spacing-xl) 0;
   padding: var(--spacing-xl);
-  text-align: center;
+  text-align: left;
   transition: border-color var(--transition-fast);
 }
 .blog-cta:hover {
@@ -592,6 +593,7 @@ a[href='#all'].category-btn {
 [data-theme='light'] .blog-cta {
   background-color: var(--color-bg-modal);
   border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-link);
 }
 [data-theme='light'] .blog-cta:hover {
   border-color: var(--color-link);
@@ -637,16 +639,10 @@ a[href='#all'].category-btn {
   transform: translateX(4px) rotate(45deg);
 }
 
-/* Product CTA variant (Gumroad downloads) — visually distinct from Simulator CTA */
-.blog-cta-product {
-  border-left: 3px solid var(--color-ui-primary);
-  text-align: left;
-}
+/* Product CTA variant (Gumroad downloads) — kleinere h3 voor langere titels.
+   Uitlijning + accent-linkerrand zijn nu gedeeld met de base .blog-cta. */
 .blog-cta-product h3 {
   font-size: 1.4rem;
-}
-[data-theme='light'] .blog-cta-product {
-  border-left-color: var(--color-link);
 }
 
 .blog-post-footer {
