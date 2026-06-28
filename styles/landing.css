@@ -1811,6 +1811,22 @@ html {
   width: 100%;
 }
 
+/* Lead-magnet hero (sample-pentest): grid i.p.v. flex zodat de value-bullets
+   op desktop links-onder de pitch staan en op mobiel ONDER het formulier.
+   Gescoped op --lead zodat sample-download (tekst + cover) op flex blijft. */
+.sample-hero-content--lead {
+  display: grid;
+  grid-template-columns: 1fr 440px;
+  grid-template-areas:
+    "text form"
+    "bullets form";
+  column-gap: 64px;
+  row-gap: 0;
+  align-items: start;
+}
+.sample-hero-content--lead .sample-hero-text    { grid-area: text; }
+.sample-hero-content--lead .sample-hero-bullets { grid-area: bullets; }
+
 /* Canonieke inline arrow-nudge (homepage + sample-pagina).
    U+2192 zit op de math-as (x-hoogte), de cijfers op kaphoogte; vertical-align in em
    centreert de pijl optisch met de cijfers op elke font-grootte (hero-li + card-h3 +
@@ -1867,11 +1883,27 @@ html {
 
 /* Right column form-card: overrides .homepage-newsletter full-bleed defaults */
 .sample-hero-form.homepage-newsletter {
-  flex: 0 0 440px;
+  grid-area: form;
+  align-self: start;
   padding: var(--spacing-lg);
-  border: 1px solid var(--color-border);
+  background: var(--color-bg-modal);
+  border: 1px solid rgba(159, 239, 0, 0.35);
   border-radius: var(--border-radius-modal);
+  box-shadow: var(--shadow-elevation-2), 0 0 24px rgba(159, 239, 0, 0.08);
   text-align: left;
+}
+
+/* Light: zachtere groene accent (Tailwind green i.p.v. neon) */
+[data-theme="light"] .sample-hero-form.homepage-newsletter {
+  border-color: rgba(22, 163, 74, 0.35);
+  box-shadow: var(--shadow-elevation-2), 0 0 24px rgba(22, 163, 74, 0.06);
+}
+
+/* Zichtbaar e-maillabel boven het veld (affordance + a11y) */
+.sample-hero-form .newsletter-label {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--color-text);
 }
 
 .sample-hero-form.homepage-newsletter .newsletter-content {
@@ -1928,9 +1960,14 @@ html {
     gap: var(--spacing-xl);
     align-items: stretch;
   }
-  .sample-hero-form.homepage-newsletter {
-    flex: 1 1 auto;
-    width: 100%;
+  /* Lead-magnet: 1 kolom, formulier vóór de bullets */
+  .sample-hero-content--lead {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "text"
+      "form"
+      "bullets";
+    row-gap: var(--spacing-xl);
   }
   .sample-hero-text h1 {
     font-size: clamp(1.75rem, 7vw, 2.25rem);
