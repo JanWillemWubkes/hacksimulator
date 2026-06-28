@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 183)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 184)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 184: Blog in-content CTA-boxen geünificeerd — outlier naar de heersende vocabulaire (28 jun 2026)
+⚠️ **Never:**
+- Een "het is intentioneel"-claim laten staan als de gebruiker 'm aanvecht, zonder te hertoetsen — het promo-vs-navigatie-onderscheid via *vorm* (gecentreerde `.blog-cta` vs links `.blog-cta-product`) voegde visuele ruis toe voor marginaal nut; copy/knoplabel droegen het al. De gecentreerde kaart bleek de énige outlier op de blog-brede links+linkerrand-accent aside-taal (tip/warning/info + product).
+- Een accent bouwen op `--color-ui-primary` zónder light-override — die var flipt van *tint*: blauw (#58a6ff dark) → groen (#0db34f light); zonder `[data-theme=light]`-override lekt groen het blog-palet in (`feedback_blog_palette_no_green`).
+- CTA-boxen tellen met `grep "blog-cta"` — overtelt door de `.blog-cta-button`-substring (gaf "5 plain" terwijl de DOM 1 plain + 2 product had); tel containers met een `:not(...)`-DOM-query.
+- Same-tick `getComputedStyle` lezen ná `setAttribute('data-theme',…)` — gaf stale kleur (#58a6ff i.p.v. #0969da); een verse lezing ná de style-recalc is nodig.
+
+✅ **Always:**
+- Bij inconsistentie N-1 vs 1: trek de outlier naar de meerderheid, niet andersom — identificeer eerst de heersende vocabulaire (hier de links+linkerrand-accent aside-taal), dán welke kant convergeert.
+- Gecentreerde meerregelige bodytekst = leesbaarheids-antipatroon; links uitlijnen lost leesbaarheid én consistentie samen op.
+- Een variant-klasse die enkel van de base afwijkt collapse't tot bijna niets als je besluit dat de base de variant wórdt — `.blog-cta-product` 3 regels → 1; netto CSS kromp. Product/lead-magnet-kaarten bleven ongewijzigd, alleen de plain CTA convergeerde.
+- Render-en-meet als bewijs: `getComputedStyle` plain==product (text-align/border-left), light-accent `#0969da` blauw (géén groen), 0 overflow 375px, cross-check 2e post. Geheugen `feedback_blog_cta_unified`. Volledig: `docs/sessions/current.md` Sessie 184.
+
 ### Sessie 183: Lead-magnet conversie/UX + dark-mode zichtbaarheid + copy-feitencontrole (28 jun 2026)
 ⚠️ **Never:**
 - Een main-site-treatment (groene accent) klakkeloos op de blog plakken — de blog heeft een eigen palet (blauw, géén groen); "consistent maken" werd juist inconsistent. Cargo-cult: vorm kopiëren ≠ context checken. Geheugen `feedback_blog_palette_no_green`.
@@ -146,19 +159,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Cache-bump alleen waar gerenderde output verandert: een dynamisch geïnjecteerde footer (JS) heeft 2 cache-lagen nodig (de import in `init-components.js` + de `<script>`-tag in 24 pagina's); HTML-only tekstedits géén bump.
 - Render-en-meet als bewijs ook voor "triviale" tekst: no-store server + DOM-check (meta-content + zichtbare elementen) in dark/light/mobiel. Geheugen `feedback_audience_floor_not_ceiling`. Volledig: `docs/sessions/current.md` Sessie 179.
 
-### Sessie 178: Homepage lead-magnet — sectie-reorder + glow-fix + copy-perfectionering (24 jun 2026)
-⚠️ **Never:**
-- Een sectie verplaatsen zonder rand-afhankelijke effecten na te lopen — de `.final-cta`-glow zat verankerd op `at 50% 100%` (onderrand) om in de aangrenzende band over te lopen; de lead-magnet ertussen schuiven liet hem hard afgekapt "uit het niets" zweven. Gradients/borders op sectiegrenzen kunnen stil breken bij elke DOM-herschikking.
-- Lead-magnet/sample-copy "mooier" maken op gevoel — de oude subtekst noemde echte features ("beslisboom") maar in onverklaard jargon (Fase 0 / reconnaissance) dat een nieuwe bezoeker niet kan plaatsen. Verifieer copy tegen de échte PDF-inhoud, niet tegen de oude tekst (product-kwaliteitsregel).
-- Een "Direct beginnen?"-kop op een email-gated PDF terwijl de écht directe actie (terminal, geen account) eronder staat — belofte-inversie t.o.v. werkelijke frictie, leest als bait-and-switch en botst met de nuchtere/eerlijke toon.
-
-✅ **Always:**
-- Bij een staart-herschikking: primaire conversie krijgt het climax-moment (terminal-CTA direct na de FAQ-payoff "Hoe begin ik?"), secundaire email-asks (PDF + nieuwsbrief) clusteren in de tail.
-- Rand-afhankelijke effecten chirurgisch scopen met `:has(+ .lead-magnet)` → alleen de gebroken homepage-case raken, de 4 andere `final-cta`-pagina's (over-ons/woordenlijst/commands/contact) met rust laten.
-- HTML-only tekstwijzigingen hebben géén `?v=`-cache-bump nodig (anders dan CSS/JS); een CSS-comment-only edit evenmin (geen render-effect). Bump alleen waar gerenderde output verandert, en dan minimaal (alleen `index.html` voor een homepage-only regel).
-- Copy de-jargonen door termen te vertalen naar concrete stappen (toestemming, scope, doelwit verkennen) + het "waarom" (de stap die beginners overslaan), feitelijk gedekt door de sample. Volledig: `docs/sessions/current.md` Sessie 178.
-
-**Rotation:** Top-6 huidig: 178-179-180-181-182-183 (Sessie 176 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 180 UITGEVOERD:** current.md staart Sessie 165-169 geknipt naar `archive-s165-s169.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 170-183 (14 entries; volgende bulk-rotatie Sessie 185 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-164 → `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 179-180-181-182-183-184 (Sessie 178 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 180 UITGEVOERD:** current.md staart Sessie 165-169 geknipt naar `archive-s165-s169.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 170-183 (14 entries; volgende bulk-rotatie Sessie 185 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-164 → `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -207,7 +208,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 183
+**Sessie counter:** 184
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -259,6 +260,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 28 jun 2026 (Sessie 183 — lead-magnet conversie/UX: signup-kaart zichtbaar (oppervlak-contrast #161b22 + elevatie + label + mobiele grid-reorder); dark-surface-audit (homepage-band + blog-kaarten gelift, blog-palet groen→neutraal); copy-feitencontrole tegen sample- + 19p-PDF (belofte-inversie, mislabels, cross-sell-claims). 8 commits. Volledig: `docs/sessions/current.md`)
-**Version:** 5.57 (Sessie 183 — lead-magnet conversie/UX + dark-mode zichtbaarheid + copy-feitencontrole; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 28 jun 2026 (Sessie 184 — blog in-content CTA-boxen geünificeerd: gecentreerde `.blog-cta` (de enige outlier op de blog-brede links+linkerrand-accent aside-taal) → links uitgelijnd + blauwe accent-stripe, gelijk aan de product-kaarten; light-override want `--color-ui-primary` is groen in light; `.blog-cta-product` geslankt. Cache-bump blog.css v=121 (14 pagina's). 1 commit `97b1c8a`. Volledig: `docs/sessions/current.md`)
+**Version:** 5.58 (Sessie 184 — blog in-content CTA-boxen visueel geünificeerd; volledige historie: `docs/sessions/current.md` + TASKS.md)
 

@@ -4,6 +4,39 @@
 
 ---
 
+## Sessie 184: Blog in-content CTA-boxen visueel geünificeerd (28 jun 2026)
+
+**Mission:** De twee verschillend gestylede CTA-"boxen" in blogposts (gecentreerd met volledige rand vs. links uitgelijnd met blauwe linkerrand) uniform maken — Heisenberg vond de inconsistentie lelijk en ik had die eerder als "bewuste keuze" verdedigd. Heroverweging + correctie als design/UX/conversie-expert.
+
+**Diagnose (de "intentioneel"-claim hield geen stand):**
+- De blog heeft één consistente inline-aside-taal: **links uitgelijnd + linkerrand-accent** (`.blog-tip` groen, `.blog-warning` amber, `.blog-info` groen-check, én de product/lead-magnet-kaart `.blog-cta-product` blauw). De gecentreerde, volledige-rand `.blog-cta` was de **enige uitzondering** in het hele blog-content-systeem — dus niet de "linkse" boxen waren afwijkers, maar de gecentreerde.
+- Gecentreerde meerregelige bodytekst (de plain CTA-paragraaf wrapt 3 regels) is een leesbaarheids-antipatroon.
+- Het promo-vs-navigatie-onderscheid via *vorm* voegde visuele ruis toe voor marginaal nut; copy + knoplabel dragen dat onderscheid al.
+- Telling-correctie: de eerdere "5 plain + 2 product per post" was opgeblazen doordat `grep "blog-cta"` ook `.blog-cta-button` telt; de echte DOM heeft per post ~1 plain navigatie-CTA + 2 product-kaarten.
+
+**Work done (`97b1c8a`, alleen `styles/blog.css` + 14× cache-bump):**
+- `.blog-cta`: `text-align: center` → `left`; `border-left: 3px solid var(--color-ui-primary)` toegevoegd (blauw in dark).
+- `[data-theme='light'] .blog-cta`: dat blok herzet `border: 1px` (zou de accent in light naar grijs terugzetten) → `border-left: 3px solid var(--color-link)` toegevoegd. **Kritiek:** `--color-ui-primary` is blauw in dark (#58a6ff) maar **groen** in light (#0db34f) — zonder deze override zou de accent in light groen worden = palet-schending. Spiegelt de bestaande product-kaart-override.
+- `.blog-cta-product`: uitlijning + accent zijn nu in de base → geslankt tot enkel `h3 { font-size: 1.4rem }` (kleinere h3 voor langere producttitels); redundante `border-left`/`text-align`/light-override verwijderd. Netto −4 regels CSS. Product/lead-magnet-kaarten blijven visueel ongewijzigd; alleen de plain navigatie-CTA convergeert op hen.
+- Cache-bump `blog.css?v=120 → ?v=121` over alle 14 blog-HTML-bestanden (scripted, 14× vervangen / 0× rest).
+
+**Verificatie (render-en-meet, no-store server):** dark + light + mobiel 375px. `getComputedStyle`: plain == product (beide `text-align:left`, `border-left 3px`, dark `#58a6ff`). Light-accent settelt op `#0969da` (blauw, géén groen) + drie-zijde hairline `#e0e0e0`. Geen horizontale overflow (`scrollWidth` 360 ≤ 375). Cross-check `wachtwoord-beveiliging.html`: alle 3 CTA's uniform. Visueel bevestigd in 3 screenshots.
+
+**Commits:** `97b1c8a` (feat(blog): unificeer in-content CTA-boxen), op `main`, gepusht.
+
+**Learnings:**
+- **Cargo-cult-consistentie, omgekeerd toegepast:** bij een inconsistentie tussen N-1 elementen en 1 outlier is de fix meestal de outlier naar de meerderheid trekken, niet andersom. De gecentreerde CTA leek "de standaard" maar was de uitzondering op de blog-brede aside-taal. Identificeer de heersende vocabulaire vóór je kiest welke kant convergeert.
+- **CSS-variabelen kunnen themisch van *tint* wisselen, niet alleen van helderheid.** `--color-ui-primary` flipt blauw→groen tussen dark en light. Elke accent die die var gebruikt, heeft een light-override nodig of lekt groen het blog-palet in (`feedback_blog_palette_no_green`). De product-kaart had dit al opgelost; ik moest die oplossing generaliseren.
+- **Een "variant"-klasse die alleen bestaat om van de base te verschillen, collapse't als je besluit dat de base de variant moet wórden.** `.blog-cta-product` kromp van 3 regels naar 1. Netto werd de CSS kleiner, niet groter.
+- **Same-tick `getComputedStyle` ná een `setAttribute('data-theme',…)` gaf een stale kleur** (`#58a6ff` i.p.v. `#0969da`); een verse lezing ná de style-recalc gaf de juiste waarde. Meet theme-toggles altijd ná recalc, anders jaag je op een spookbug.
+- **Telmethode-valkuil:** `grep "blog-cta"` overtelt door de `.blog-cta-button`-substring. Tel containers met een `:not(...)`-DOM-query, niet met een substring-grep.
+
+**Next steps:** Geen openstaande items uit deze sessie. De `.blog-cta`-knop staat nu links (volgt de uitlijning) — consistent met de product-kaarten; geen verdere actie.
+
+**Metrics delta:** `styles/blog.css` netto −4 regels (geünificeerd); geen runtime-bundle-impact (blog = SEO/content-pijler, budgetloos). Tests/bundle ongewijzigd t.o.v. Sessie 183.
+
+---
+
 ## Sessie 183: Lead-magnet conversie/UX + dark-mode zichtbaarheid + copy-feitencontrole (28 jun 2026)
 
 **Mission:** De sample-pentest lead-magnet en de nieuwsbrief-oppervlakken verbeteren: copy kloppend met de echte PDF's, het signup-formulier zichtbaar maken als conversiepaneel, en het systemische "dark-surface == pagina"-euvel site-breed opruimen — palet-conform.
