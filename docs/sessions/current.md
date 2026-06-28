@@ -4,6 +4,33 @@
 
 ---
 
+## Sessie 183: Lead-magnet conversie/UX + dark-mode zichtbaarheid + copy-feitencontrole (28 jun 2026)
+
+**Mission:** De sample-pentest lead-magnet en de nieuwsbrief-oppervlakken verbeteren: copy kloppend met de echte PDF's, het signup-formulier zichtbaar maken als conversiepaneel, en het systemische "dark-surface == pagina"-euvel site-breed opruimen — palet-conform.
+
+**Work done:**
+- **sample-pentest copy (`c6b1247`/`82c77a8`/`90463c4`):** belofte-inversie weg — hero/form-intro "direct in je inbox" → "meteen te downloaden" (de instant on-page-download is het écht directe pad; de inbox is dubbel-opt-in-gepoort) + 6 blog-CTA's. Feitfouten in de 3 "Wat zit er in deze sample?"-kaarten + hero-bullets, getoetst tegen de echte 9-pagina sample-PDF: "Fase 0: Reconnaissance" → Fase 0 = Voorbereiding (reconnaissance is Fase 1); "nmap-vlaggen cheatsheet" bestaat niet (echte commands whois/dig/ping/traceroute); "beslisboom Fase 0→1" bestaat niet → "De 6 fasen van een pentest". De-jargon OSINT/reconnaissance → NL "verkenning" (matcht `woordenlijst.html:697`-gloss). Kaart-iconen op betekenis: schild=toestemming, magnifier=verkennen, list=stappenplan (eerst layers → botste met over-ons "Overweldigend"). 12 blog-CTA's + meta/og/JSON-LD "Fase 0 reconnaissance"-mislabel gecorrigeerd.
+- **cross-sell tegen volledige 19-pagina Playbook-PDF (`f73ec50`):** "command-templates" bestond niet → "een rapport-template en een overzicht van alle commands" (gids heeft finding/rapport-template p14-16 + commands-snelreferentie p17-18); "beslisbomen" mv → 1 (p8); "Sla het formulier over" geschrapt — élke frictie-framing onjuist want de Gumroad-aankoop vraagt óók e-mail → value-led; "snelreferentie" → "overzicht" (beter NL). Zelfde fix op `sample-download.html`.
+- **conversie/UX signup-kaart (`f6efd46`):** kaart in dark onzichtbaar — bg `var(--color-bg-terminal)` #0d1117 == pagina, 1px hairline, geen schaduw; input+kaart+pagina 3× dezelfde kleur. Fix: `background: var(--color-bg-modal)` (#161b22) + `box-shadow: var(--shadow-elevation-2)` + groene accent-rand/gloed (sample = main-site, groen mag) → kaart popt, donkere input popt vanzelf. Zichtbaar `<label>E-mailadres`. Hero `flex`→CSS-grid (named areas), gescoped op nieuwe `.sample-hero-content--lead`-modifier (want `.sample-hero-content` wordt gedeeld met `sample-download` tekst+cover) → mobiel komt het formulier nu vóór de bullets; `landing.css?v=122`.
+- **dark-surface-audit + nieuwsbrief-oppervlakken (`6dac1bc`/`6024594`/`05b6500`):** grep-script vond het patroon "light gefixt, dark vergeten" (`[data-theme=light]` met elevated bg vs dark-basis = pagina). Homepage-band `.homepage-newsletter` (`main.css?v=152`, alleen contrast-bg #161b22; full-bleed → geen kaart-rand) + blog-`.newsletter-signup`-kaart. **Palet-correctie:** eerst per ongeluk groene sample-treatment op de blog-kaart → teruggedraaid naar neutraal (blog gebruikt blauw, géén groen; geheugen `feedback_blog_palette_no_green`). 4 blog-informatiekaarten (`.blog-post-card`/`.blog-cta`/`.related-card`/`.blog-support-banner`) gelift naar `--color-bg-modal` — hun `--shadow-elevation-1` is een zwarte schaduw die op #0d1117 onzichtbaar is, dus de bedoelde elevatie rendert niet in dark; oppervlak-contrast herstelt 'm. `blog.css?v=120` over alle 14 blog-pagina's (sed-bump). Modals bewust gelaten (zweven boven dim-overlay); terminal/pre/input/terminal-education = intentioneel.
+
+**Commits:** `c6b1247` (belofte-inversie) · `82c77a8` (feitfouten kaarten + de-jargon) · `90463c4` (kaart-3 icoon layers→list) · `f73ec50` (cross-sell claims vs 19p-PDF) · `f6efd46` (signup conversiepaneel) · `6dac1bc` (homepage-band + blog-kaart zichtbaar) · `6024594` (blog-kaart de-greened) · `05b6500` (4 blog-info-kaarten gelift). Alle op `main`, gepusht.
+
+**Learnings:**
+- **Belofte-inversie:** copy moet de écht directe actie vooropstellen (instant on-page download), niet het gevoelsmatig-directe-maar-gepoorte pad (inbox/dubbel-opt-in). Zelfde anti-pattern als Sessie 178.
+- **Als copy zich blijft verzetten tegen correctheid, ligt het een laag dieper.** Drie iteraties op dezelfde cross-sell-zin (wachtmail→wachten→formulier) liepen telkens vast op onnauwkeurigheid — signaal dat de *premisse* onwaar was (gratis sample = obstakel, terwijl het alternatief óók e-mail vraagt). Laat de frictie-framing los, leid met waarde.
+- **Kloppende copy vereist het artefact lezen, niet oude copy herschrijven.** 3× bleek een mooie zin feitelijk onjuist tot ik de sample- + 19-pagina-PDF zelf las.
+- **Elevatie in dark mode = lichter oppervlak, niet schaduw.** `--shadow-elevation-1` (zwart, 40%) is op een #0d1117-pagina vrijwel onzichtbaar. De audit-tabel zei "heeft border+schaduw → ok"; je moet narekenen of die schaduw zíchtbaar is. Lichter oppervlak (`--color-bg-modal`) is het enige middel dat in dark werkt.
+- **Grep wie een gedeelde klasse gebruikt vóór je 'm herschrijft.** `.sample-hero-content` (flex→grid) bleek gedeeld met `sample-download` (tekst+cover) → grid had die pagina gesloopt; scope op een `--lead`-modifier.
+- **De blog heeft een eigen palet** (blauw, geen groen); main-site gebruikt groen. Een main-site-treatment hergebruiken op de blog = kleur-check vooraf, anders maakt "consistent maken" juist inconsistent (cargo-cult). Geheugen `feedback_blog_palette_no_green`.
+- **Niet elke "dark == pagina"-treffer is een bug:** modals zweven boven een dim-overlay (de modal is juist lichter dan z'n verdonkerde omgeving); terminal/pre/input zijn intentioneel pagina-donker. Context (schaduw zichtbaar? overlay aanwezig?) bepaalt of het een gap is.
+
+**Next steps:** Modals (legal/feedback/command-search) optioneel liften naar oppervlak-contrast (laag-prioriteit, overlay dekt het al). Blog-knop blauw vs homepage-nieuwsbrief-knop groen — pre-existerende CTA-kleur-quirk, niet aangeraakt.
+
+**Metrics delta:** styles/ 385→392 KB (landing.css grid/elevatie + blog.css edits), src/ ongewijzigd (geen JS), blog/ ~413. Geen tests geraakt (UI/copy/CSS-polish). Cache-bumps: landing.css 121→122, main.css 151→152 (index), blog.css 117/119→120 (14 blog-pagina's). Nieuw geheugen `feedback_blog_palette_no_green`.
+
+---
+
 ## Sessie 182: Live zoekfilter + design-uitlijning woordenlijst ↔ commands (27 jun 2026)
 
 **Mission:** De twee naslagpagina's (`commands/index.html` + `woordenlijst.html`) tot één coherente, doorzoekbare set maken: echte zoekfilter, uitgelijnde sticky balk, en gedeelde categorie-stijl.

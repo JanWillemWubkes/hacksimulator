@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 182)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 183)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 183: Lead-magnet conversie/UX + dark-mode zichtbaarheid + copy-feitencontrole (28 jun 2026)
+⚠️ **Never:**
+- Een main-site-treatment (groene accent) klakkeloos op de blog plakken — de blog heeft een eigen palet (blauw, géén groen); "consistent maken" werd juist inconsistent. Cargo-cult: vorm kopiëren ≠ context checken. Geheugen `feedback_blog_palette_no_green`.
+- Lead-magnet/cross-sell-copy "kloppend" maken tegen de oude tekst i.p.v. het echte artefact — 3× bleek een mooie zin feitelijk onjuist (Fase 0 = voorbereiding ≠ reconnaissance, géén nmap-cheatsheet, "command-templates" bestaat niet) tot ik de sample- + 19-pagina-PDF zelf las.
+- Een element "heeft border + schaduw → ok" concluderen zónder te checken of die schaduw zíchtbaar is — `--shadow-elevation-1` is zwart-op-#0d1117 = onzichtbaar in dark; de kaarten leunden de facto op alleen een hairline.
+- Een gedeelde klasse (`.sample-hero-content`) flex→grid herschrijven zonder te grep'en wie 'm nog meer gebruikt — `sample-download` deelt 'm (tekst+cover) en was gesloopt; scope op een `--lead`-modifier.
+
+✅ **Always:**
+- Elevatie in dark mode = lichter oppervlak (`--color-bg-modal` #161b22), niet schaduw — schaduwen werken niet op bijna-zwarte bg. "light gefixt, dark vergeten" is systemisch: grep `[data-theme=light]` met elevated bg vs dark-basis = pagina.
+- Belofte-inversie vermijden: copy zet de écht directe actie voorop (instant on-page download), niet het gevoelsmatig-directe-maar-gepoorte pad (inbox/dubbel-opt-in).
+- Als dezelfde copy zich blijft verzetten tegen correctheid (wachtmail→wachten→formulier), ligt het een laag dieper — hier een onware premisse (gratis sample = obstakel terwijl Gumroad óók e-mail vraagt); laat frictie-framing los, leid met waarde.
+- De-jargon via de NL-gloss uit de eigen woordenlijst ("verkenning" voor reconnaissance) → site-brede consistentie gratis. Niet elke "dark == pagina" is een bug: modals (dim-overlay) + terminal/input zijn intentioneel. Volledig: `docs/sessions/current.md` Sessie 183.
+
 ### Sessie 182: Live zoekfilter + design-uitlijning woordenlijst ↔ commands (27 jun 2026)
 ⚠️ **Never:**
 - Verwachten dat een flex-item met `margin: 0 auto` + `overflow-x:auto` klemt — de auto-marge schakelt `align-items: stretch` uit, dus het kind sized op z'n inhoud i.p.v. de container en `overflow-x` grijpt niet → pagina-overflow (gemeten: een nav van 484px duwde de 375px-viewport naar 496px). De regel werd pas giftig ná het herparenten in een flex-kolom. Reset met `margin:0; min-width:0`.
@@ -145,19 +158,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - HTML-only tekstwijzigingen hebben géén `?v=`-cache-bump nodig (anders dan CSS/JS); een CSS-comment-only edit evenmin (geen render-effect). Bump alleen waar gerenderde output verandert, en dan minimaal (alleen `index.html` voor een homepage-only regel).
 - Copy de-jargonen door termen te vertalen naar concrete stappen (toestemming, scope, doelwit verkennen) + het "waarom" (de stap die beginners overslaan), feitelijk gedekt door de sample. Volledig: `docs/sessions/current.md` Sessie 178.
 
-### Sessie 177: Terminal voltooid-markers [X]→[✓] — systemische rode-checkbox-botsing op mobiel (22 jun 2026)
-⚠️ **Never:**
-- Een content-token gebruiken dat toevallig een renderer-marker is — `[X]` als "afgevinkt"-vinkje botst met de error-marker (`renderer.js:101`: regel die na trim met `[X]` begint → rood). Op mobiel zichtbaar rood + doorlek naar ingesprongen regels (≥3 spaties = continuation-line erft de kleur erboven); desktop verbergt het via het `│`-kader. Gebruik `[✓]` (success/groen) voor voltooid, nooit `[X]`.
-- Een globale `[X]→[✓]`-replace draaien zonder inventaris — `[X]` heeft 3 betekenissen: voltooid-checkbox (de bug), échte fout ("Onbekende challenge/scenario"), én "NOOIT doen"-lijsten in security/netwerk-man-pages. Bij die laatste twee is rood juist; blind vervangen had de waarschuwing omgekeerd ("`[✓] password`").
-- "Het is rood" claimen zonder de voltooide staat te triggeren — de eerste mobiele probe toonde 0 rood omdat niets afgevinkt was; pas ná `challenge status` met 1 met-requirement werd het rood gemeten. Trigger de staat die de bug toont, meet niet de lege staat.
-
-✅ **Always:**
-- Renderkleur verifiëren via class + `getComputedStyle().color` op een no-store server (Python `http.server` cachet ES-modules → vals-negatief). Gemeten: `[✓]`=`#3fb950`(dark)/`#008844`(light), `[ ]`=normal/wit, fouten nog `error`/rood, regels ónder een groene regel wit (doorlek weg).
-- `[✓]` is 3 chars = 1 monospace-cel → desktop-box-uitlijning blijft pixel-exact (`allSame` len 69 + screenshot bevestigd); daarom het symbool overal gelijktrekken i.p.v. mobiel/desktop splitten.
-- Eén renderer-conventie = systemische bug: dezelfde `[X]`-checkbox zat in 6 voortgangsweergaven (leerpad/challenge/achievements/tutorial/next). Repo-brede `grep "'\[X\]'"` + categoriseren vóór je "klaar" claimt.
-- In een legenda (uitleg, geen status) de glyph **achteraan** zetten (`Voltooid   [✓]`) → geen marker-match aan regelbegin → neutraal wit, geen doorgeërfde kleur. Volledig: `docs/sessions/current.md` Sessie 177.
-
-**Rotation:** Top-6 huidig: 177-178-179-180-181-182 (Sessie 176 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 180 UITGEVOERD:** current.md staart Sessie 165-169 geknipt naar `archive-s165-s169.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 170-182 (13 entries; volgende bulk-rotatie Sessie 185 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-164 → `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 178-179-180-181-182-183 (Sessie 176 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 180 UITGEVOERD:** current.md staart Sessie 165-169 geknipt naar `archive-s165-s169.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 170-183 (14 entries; volgende bulk-rotatie Sessie 185 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-164 → `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -206,7 +207,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 182
+**Sessie counter:** 183
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -258,6 +259,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 27 jun 2026 (Sessie 182 — live zoekfilter op woordenlijst + commands via gedeelde `term-filter.js`; sticky-balk uitgelijnd op `.page-section`-box-model; woordenlijst categorie-intro's; commands-koppen → woordenlijst-stijl (links/groen/divider). 5 commits. Volledig: `docs/sessions/current.md`)
-**Version:** 5.56 (Sessie 182 — gedeelde zoekfilter + design-uitlijning naslagpagina's; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 28 jun 2026 (Sessie 183 — lead-magnet conversie/UX: signup-kaart zichtbaar (oppervlak-contrast #161b22 + elevatie + label + mobiele grid-reorder); dark-surface-audit (homepage-band + blog-kaarten gelift, blog-palet groen→neutraal); copy-feitencontrole tegen sample- + 19p-PDF (belofte-inversie, mislabels, cross-sell-claims). 8 commits. Volledig: `docs/sessions/current.md`)
+**Version:** 5.57 (Sessie 183 — lead-magnet conversie/UX + dark-mode zichtbaarheid + copy-feitencontrole; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
