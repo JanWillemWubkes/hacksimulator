@@ -1871,7 +1871,7 @@ abbr.jargon {
 
 /* ==================== Newsletter Signup (Homepage) ==================== */
 .homepage-newsletter {
-  background-color: var(--color-bg-terminal);
+  background-color: var(--color-bg-modal);
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
   padding: 96px var(--landing-padding-desktop);
