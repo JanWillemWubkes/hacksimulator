@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 184)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 185)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,17 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 185: Leerpad-sectie homepage — 3 nep-deuren → echt leerpad (lezen → oefenen) (29 jun 2026)
+⚠️ **Never:**
+- Drie CTA's met verschillende labels naar dezelfde bestemming laten wijzen — dat is een gebroken affordance: de leerpad-knoppen (`Start`/`Verken`/`Beheers Leerpad`) gingen allemaal naar `/terminal.html`; "Leerpad" beloofde gestuurde progressie die niet bestond, en dupliceerde de 4 andere terminal-CTA's op de pagina. Drie deuren, één kamer.
+- "Interactiever = beter" cargo-culten op een sectie waarvan het gebrek "geen content-bestemmingen" is — deep-linken-naar-tutorials voelde ambitieuzer (raakt code) maar loste het verkeerde probleem op én brak op de BEGINNER-kaart (geen fundamentals-tutorial ls/cd/cat → kerndoelgroep kan nergens heen). Code raken ≠ probleem raken.
+- Een dark-mode-kleur "kapot" verklaren op basis van een **same-tick `getComputedStyle` ná `setAttribute('data-theme',…)`** — dat gaf stale `#444444` (light-waarde) i.p.v. de echte `#8b949e`; bijna een onterechte "onleesbaar in dark"-fix.
+
+✅ **Always:**
+- Bij N-identiek vs. 1-echt-verschil: maak de N identiek + eerlijk en verplaats de differentiatie naar de as die wél verschilt — hier 3× uniform "Oefen in de terminal" + een per-niveau `.leerpad-learn-link` "Lees eerst"-blogpost (theorie → oefenen). De sectie linkt nu naar bestaande eigen content (terminal-basics/nmap/sql-injection) i.p.v. alles naar de terminal te funnelen.
+- Card-CTA-paren onderaan uitlijnen via een `.leerpad-cta-group` met `margin-top:auto` (i.c.m. `p{flex-grow:1}`) → groep-tops gelijk over kaarten met ongelijke beschrijvingslengtes (gemeten 3×==4058px).
+- De meet-asymmetrie als tell lezen: `--color-cta-primary` flipte wél bij de theme-toggle, `--color-text-dim` niet → wantrouw de meting, lees vers in een aparte tick. **Render-en-meet werkt alleen als je óók je meetinstrument wantrouwt.** (`--color-text-dim` is `#8b949e` op `:root`/dark, `#444444` onder `[data-theme=light]`; géén `[data-theme=dark]`-blok.) Volledig: `docs/sessions/current.md` Sessie 185.
+
 ### Sessie 184: Blog in-content CTA-boxen geünificeerd — outlier naar de heersende vocabulaire (28 jun 2026)
 ⚠️ **Never:**
 - Een "het is intentioneel"-claim laten staan als de gebruiker 'm aanvecht, zonder te hertoetsen — het promo-vs-navigatie-onderscheid via *vorm* (gecentreerde `.blog-cta` vs links `.blog-cta-product`) voegde visuele ruis toe voor marginaal nut; copy/knoplabel droegen het al. De gecentreerde kaart bleek de énige outlier op de blog-brede links+linkerrand-accent aside-taal (tip/warning/info + product).
@@ -147,19 +158,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Behoud één eerlijk menselijk gezicht (about-pagina met naam + LinkedIn + founder-schema) als vertrouwensanker voor een site die producten verkoopt — E-E-A-T ≠ juridische naam, maar een consistente aanspreekbare entiteit helpt.
 - Privacy-edits checken tegen juridische identificatie: `privacy.html` noemde de naam al niet ("beheerd door een individuele ontwikkelaar") → geen GDPR-conflict, niet aanraken. Volledig: `docs/sessions/current.md` Sessie 180.
 
-### Sessie 179: Klantgerichte copy-perfectionering — footer/hero/"authentiek"-sweep (25 jun 2026)
-⚠️ **Never:**
-- Toegankelijkheid framen met een demografisch label ("voor absolute beginners", "studenten en overstappers") — dat zet een *plafond* i.p.v. een vloer: het sluit de enthousiasteling/hobbyist uit en leest als "alleen voor newbies". De footer was zelfs smaller dan de hero. Frame de *instap* ("van je eerste command tot..."), niet het publiek.
-- Een geruststelling schrijven die fysiek onwaar is — "los van je eigen computer en het echte internet" klopt niet (de simulator draait op de machine van de gebruiker, via internet). De veiligheid zit in de *gesimuleerde uitvoering*, niet in isolatie. Verifieer copy tegen de werkelijkheid, niet tegen wat lekker klinkt (product-kwaliteitsregel).
-- Een woord blind repo-breed vervangen — "authentiek" droeg twee claims ("authentieke *commands*" afgekeurd vs "authentieke *ervaring*" legitiem); een sed-replace had de legitieme variant gesloopt (zelfde homonym-valkuil als de Sessie-177 `[X]`-marker).
-
-✅ **Always:**
-- Bij een copy-fix die elders kan voorkomen: eerst grep-inventariseren + per-treffer op betekenis categoriseren, dán vervangen — sluit af met een eind-assertie (0 user-facing treffers; alleen de bewust-behouden variant blijft).
-- H1/`<title>`/OG met rust laten bij subtitle-werk — die dragen de SEO-alignment; perfectioneer de subtitle eromheen.
-- Cache-bump alleen waar gerenderde output verandert: een dynamisch geïnjecteerde footer (JS) heeft 2 cache-lagen nodig (de import in `init-components.js` + de `<script>`-tag in 24 pagina's); HTML-only tekstedits géén bump.
-- Render-en-meet als bewijs ook voor "triviale" tekst: no-store server + DOM-check (meta-content + zichtbare elementen) in dark/light/mobiel. Geheugen `feedback_audience_floor_not_ceiling`. Volledig: `docs/sessions/current.md` Sessie 179.
-
-**Rotation:** Top-6 huidig: 179-180-181-182-183-184 (Sessie 178 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 180 UITGEVOERD:** current.md staart Sessie 165-169 geknipt naar `archive-s165-s169.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 170-183 (14 entries; volgende bulk-rotatie Sessie 185 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-164 → `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 180-181-182-183-184-185 (Sessie 179 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 185 UITGEVOERD:** current.md staart Sessie 170-174 geknipt naar `archive-s170-s174.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 175-185 (11 entries; volgende bulk-rotatie Sessie 190 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-169 → `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -208,7 +207,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 184
+**Sessie counter:** 185
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -260,6 +259,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 28 jun 2026 (Sessie 184 — blog in-content CTA-boxen geünificeerd: gecentreerde `.blog-cta` (de enige outlier op de blog-brede links+linkerrand-accent aside-taal) → links uitgelijnd + blauwe accent-stripe, gelijk aan de product-kaarten; light-override want `--color-ui-primary` is groen in light; `.blog-cta-product` geslankt. Cache-bump blog.css v=121 (14 pagina's). 1 commit `97b1c8a`. Volledig: `docs/sessions/current.md`)
-**Version:** 5.58 (Sessie 184 — blog in-content CTA-boxen visueel geünificeerd; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 29 jun 2026 (Sessie 185 — leerpad-sectie homepage: 3 knoppen naar dezelfde `/terminal.html` → mini-leerlijn (lezen → oefenen) met per-niveau `.leerpad-learn-link` "Lees eerst"-blogposts + uniform eerlijk knoplabel "Oefen in de terminal"; `.leerpad-cta-group` `margin-top:auto` lijnt CTA-paren uit; cache-bump landing.css v=124. 2 commits `c49c1de`+`9c8cfc6`. Bulk-rotatie 170-174 → `archive-s170-s174.md`. Volledig: `docs/sessions/current.md`)
+**Version:** 5.59 (Sessie 185 — leerpad-sectie homepage van nep-pad naar echte lezen→oefenen-leerlijn; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
