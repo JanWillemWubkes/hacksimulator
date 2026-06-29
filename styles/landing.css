@@ -1310,6 +1310,10 @@ html {
   margin-top: var(--spacing-xl);
 }
 
+.how-it-works-cta {
+  margin-top: var(--spacing-xl);
+}
+
 .how-step {
   position: relative;
   background: rgba(22, 27, 34, 0.3);
