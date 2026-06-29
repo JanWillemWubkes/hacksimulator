@@ -4,6 +4,52 @@
 
 ---
 
+## Sessie 186: Stap 0 ontwerpbeslissing — leerpad-niveaus → tutorial-scenario's (29 jun 2026)
+
+**Mission:** Stap 0 van het backlog-item "Leerpad deep-link naar in-app tutorials" (vervolg op Sessie 185). Een ontwerpbeslissing, géén implementatie: een vastgelegde, beargumenteerde mapping van de 3 homepage-niveaus (BEGINNER/GEVORDERD/EXPERT) naar tutorial-scenario's, waarop Fase B later bouwt. Geen code/tutorial gebouwd.
+
+**Aanpak (plan-mode):** Twee parallelle Explore-agents lazen (1) de échte scenario-inhoud — `tutorial-manager.js` + alle 4 scenario-bestanden, volledige stappenlijsten + commando's, níét alleen de labels — en (2) de homepage-leerpad-badges + het backlog-item + de Sessie 185-context. Cruciaal: de her-tiering rust op de werkelijke stap-inhoud en op de badge-*beschrijvingen*, niet op de historisch gegroeide `difficulty`-labels.
+
+**Vastgestelde feiten (Explore):**
+- 4 scenario's (`difficulty` in `src/tutorial/scenarios/<id>.js`, registratie `src/core/terminal.js:82-86`): recon (`Beginner`, ping→nmap→whois→traceroute), webvuln (`Beginner`, nmap→nikto→sqlmap→cat config), privesc (`Beginner`, cat passwd→ls log→cat auth.log→cat bash_history), exploitation (`Gevorderd`, nmap→hydra→metasploit→cat shadow→hashcat).
+- Interne label-vocabulaire = alleen `Beginner`/`Gevorderd` (géén `Expert`). Géén fundamentals-scenario (ls/cd/pwd/cat). Géén URL-param-parsing in `main.js` (= Fase A, bestaat niet).
+
+**Beslissings-tabel:**
+
+| Niveau | Deep-link-doel (Fase A) | Ook in tier | Labelwijziging |
+|---|---|---|---|
+| BEGINNER | **fundamentals** (NIEUW) | — | nieuw `Beginner` |
+| GEVORDERD | **recon** | privesc | recon + privesc: `Beginner→Gevorderd` |
+| EXPERT | **exploitation** | webvuln | exploitation `Gevorderd→Expert`; webvuln `Beginner→Expert` |
+
+**Rationale:** (1) Badge = contract; de badge-*beschrijving* is de maatstaf, niet de chips — chips zijn nergens een letterlijke inhoudsopgave (recon leert géén van zijn netcat/wireshark/hashcat-chips). (2) BEGINNER = "kun je überhaupt een terminal gebruiken" (géén security) → alles schuift één tier op (recon van Beginner naar Gevorderd). (3) Inhoud/skill bepaalt de tier, niet de commando-syntaxis (privesc = alleen cat/ls maar log-/credential-analyse → Gevorderd). (4) **webvuln → EXPERT:** sqlmap is dé headline-EXPERT-tool; een tier lager = EXPERT-tool in GEVORDERD-scenario = promise/payoff-leugen naar binnen verplaatst. (5) GEVORDERD-doel = recon (beschrijving "netwerken/scan poorten"), privesc secundair. (6) EXPERT-doel = exploitation (5-staps-vlaggenschip, dekt 2/3 EXPERT-chips), webvuln secundair.
+
+**Twee expert-calls (gebruiker vroeg "wat raad jij aan, brutaal eerlijk" i.p.v. te kiezen):**
+- **webvuln → EXPERT** (niet GEVORDERD). "Voelt intermediate" komt door sqlmap's tik-gemak (point-and-shoot), maar tik-gemak ≠ tier. Bijvangst: zo zijn álle EXPERT-badge-chips gedekt binnen de EXPERT-tier (metasploit+hydra in exploitation, sqlmap in webvuln).
+- **fundamentals = navigatie + bestandsbeheer** (ls/cd/pwd/cat/mkdir/touch/rm, ~5 gegroepeerde stappen), **NIET** de volle 9 badge-chips. "Volledige badge-match" klinkt principieel maar houdt BEGINNER aan een striktere standaard dan GEVORDERD/EXPERT, waar de chips toegegeven illustratief zijn. De belofte-*zin* ("navigeren door mappen, bestanden lezen, en je eerste bestanden aanmaken en verwijderen") noemt whoami/history niet — die zitten alleen in de chips. Match de zin → optie 2.
+
+**Spec NIEUW fundamentals-scenario (input Fase B):** id `fundamentals`, difficulty `Beginner`. ~5 gegroepeerde stappen: (1) `pwd`+`ls` oriëntatie, (2) `cd <map>`(+`ls`), (3) `cat <bestand>`, (4) `mkdir`+`touch`, (5) `rm`. Verhaaltje = security-bridge ("eerste dag als junior pentester; eerst je weg vinden op het systeem"), voltooiing bridge't naar recon. Volgt bestaande scenario-structuur (`command`/`mustHaveArgs`/3-tier `hints`/`[~]`-feedback, 80/20 NL).
+
+**Labelwijzigingen (input Fase B):** `difficulty`-property in scenario-bestanden — recon Beginner→Gevorderd · privesc Beginner→Gevorderd · webvuln Beginner→Expert · exploitation Gevorderd→Expert · NIEUW fundamentals.js Beginner. **Aandachtspunt:** label-vocabulaire kent nu alleen `Beginner`/`Gevorderd` → controleer in `src/tutorial/tutorial-renderer.js` (en waar `difficulty` getoond/gestyled wordt) of een nieuwe `Expert`-waarde een badge-/kleur-variant nodig heeft. Dit is de verborgen taak die Stap 0 blootlegt: zonder ontwerpstap zou Fase B de strings omzetten en pas bij visuele test ontdekken dat de UI geen `Expert`-badge rendert.
+
+**Deep-link-mapping (input Fase A):** BEGINNER-knop → `?tutorial=fundamentals` · GEVORDERD-knop → `?tutorial=recon` · EXPERT-knop → `?tutorial=exploitation`.
+
+**Work done:** TASKS.md backlog-item — Stap 0 afgevinkt `[x]` + uitgewerkt sub-blok (tabel + 6 rationale-punten + fundamentals-spec + labelwijzigingen + deep-link-mapping). Fase B/A blijven `[ ]`. Doc-sync (TASKS header/footer/sprint/versie, current.md, CLAUDE.md learnings + counter + footer).
+
+**Commits:** geen (doc-only sessie, nog niet gecommit op moment van /summary).
+
+**Learnings:**
+- **De badge-*beschrijving*, niet de chips, is de maatstaf voor tier-toewijzing.** Chips zijn overal illustratief (recon = GEVORDERD-doel maar leert géén van zijn chips). Wie fundamentals aan alle 9 chips bindt, hanteert inconsistente standaarden tussen tiers.
+- **Inhoud/skill overstemt commando-syntaxis-moeilijkheid.** privesc (alleen cat/ls) is GEVORDERD om wat het léért, niet om hoe makkelijk het tikt — net zoals webvuln EXPERT is ondanks point-and-shoot sqlmap.
+- **Stap 0's grootste waarde is niet de tabel maar de blootgelegde verborgen taak:** de her-tiering introduceert een derde label-waarde (`Expert`) die de codebase nog niet kent → Fase B moet de renderer checken. "B vóór A, Stap 0 vóór B" is daarom dwingend, niet ceremonieel.
+- **Bij "wat raad jij aan, brutaal eerlijk" i.p.v. een keuze: beslis als expert met onderbouwing** (memory `feedback_expert_decisions`) — beide AskUserQuestion-vragen werden zo teruggekaatst en als expert beslist.
+
+**Next steps (open):** Fase B (NEW fundamentals-scenario bouwen volgens spec + 4 labelwijzigingen + `tutorial-renderer.js` Expert-badge-check), daarna Fase A (URLSearchParams in `main.js` + 3 knoppen → `?tutorial=...` + cache-bump + E2E).
+
+**Metrics delta:** geen (doc-only; bundle/tests ongewijzigd t.o.v. Sessie 185 — 23 E2E spec files, 175 `test()`-cases).
+
+---
+
 ## Sessie 185: Leerpad-sectie homepage — van 3 nep-deuren naar een echt leerpad (29 jun 2026)
 
 **Mission:** De homepage-leerpad-sectie (`#leerpad`, 3 kaarten BEGINNER/GEVORDERD/EXPERT) linkte met alle 3 de knoppen naar dezelfde `/terminal.html` — onbevredigend voor de bezoeker. Analyseren + perfectioneren, brutaal eerlijk.

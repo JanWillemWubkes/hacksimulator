@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 185)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 186)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 186: Stap 0 ontwerpbeslissing — leerpad-niveaus → tutorial-scenario's (doc-only) (29 jun 2026)
+⚠️ **Never:**
+- Een scenario in een tier plaatsen op basis van zijn commando-syntaxis i.p.v. de geleerde skill — privesc gebruikt alleen `cat`/`ls` (beginner-commando's) maar leert log-/credential-analyse op een gehackt systeem → GEVORDERD. Tik-gemak ≠ tier (zelfde reden webvuln EXPERT is ondanks point-and-shoot sqlmap).
+- De badge-*chips* lezen als een letterlijke scenario-inhoudsopgave — ze zijn overal illustratief (recon is het GEVORDERD-doel maar leert géén van zijn netcat/wireshark/hashcat-chips). Wie fundamentals aan alle 9 BEGINNER-chips bindt, hanteert een striktere standaard voor BEGINNER dan voor GEVORDERD/EXPERT.
+- Een EXPERT-tool één tier lager parkeren omdat het scenario "intermediate voelt" — sqlmap in een GEVORDERD-webvuln zou de promise/payoff-leugen (badge belooft "SQL injection testing") naar binnen verplaatsen. Precies wat de hele taak uitroeit.
+
+✅ **Always:**
+- Toets tier-toewijzing aan de badge-*beschrijvingszin*, niet de chips — BEGINNER-zin ("navigeren, lezen, aanmaken, verwijderen") noemt whoami/history niet → fundamentals = navigatie+bestandsbeheer (ls/cd/pwd/cat/mkdir/touch/rm), niet alle 9 chips.
+- Lees de échte scenario-inhoud (stappen + commando's) vóór een her-tiering, niet de historisch gegroeide `difficulty`-labels — die zijn juist de mismatch die je repareert.
+- Zoek in een ontwerpstap de verborgen vervolgtaak: de her-tiering introduceert een derde label-waarde (`Expert`) die de codebase nog niet kent → Fase B moet `tutorial-renderer.js` checken op een ontbrekende badge-variant. Dát maakt "Stap 0 vóór B vóór A" dwingend i.p.v. ceremonieel.
+- Bij "wat raad jij aan, brutaal eerlijk" i.p.v. een keuze: beslis als expert met onderbouwing, kaats niet terug (memory `feedback_expert_decisions`). Volledig: `docs/sessions/current.md` Sessie 186.
+
 ### Sessie 185: Leerpad-sectie homepage — 3 nep-deuren → echt leerpad (lezen → oefenen) (29 jun 2026)
 ⚠️ **Never:**
 - Drie CTA's met verschillende labels naar dezelfde bestemming laten wijzen — dat is een gebroken affordance: de leerpad-knoppen (`Start`/`Verken`/`Beheers Leerpad`) gingen allemaal naar `/terminal.html`; "Leerpad" beloofde gestuurde progressie die niet bestond, en dupliceerde de 4 andere terminal-CTA's op de pagina. Drie deuren, één kamer.
@@ -146,19 +158,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Onderscheid drift-klassen: groeiende content-counts (floor + assertie) vs. vaste artefacten (PDF-pagina's/badges/skill-levels — laag risico, met rust) vs. live metrics (tests/bundle → al naar TASKS.md gedelegeerd). Niet alles is hetzelfde probleem.
 - Brede blogtabellen → opt-in `.blog-table--stacked` (rij = gelabelde kaart via `data-label`+`::before` op mobiel), NIET horizontale `overflow-x:auto`-scroll (verstopt de waardevolste kolom). Volledig: `docs/sessions/current.md` Sessie 181.
 
-### Sessie 180: Blog-auteurschap → merk (Organization); persoonsnaam alleen op over-ons (25 jun 2026)
-⚠️ **Never:**
-- Je juridische naam als schema-`author` (Person + `sameAs`) op elke geïndexeerde blogpost zetten tenzij persoonlijk merk een *expliciet* doel is — dat is het SEO-versterkte, permanente, "eerste-wat-iemand-vindt"-oppervlak; productpromotie vereist het niet. De naam hoort op 1 about-pagina, niet als broadcast over 13 posts.
-- Uitvoeren op een premisse die de gebruiker niet bevestigd heeft — de eerste richting (naam *versterken* met byline-link/jobTitle/sameAs) was coherent met "bekendheid onder eigen naam", maar het echte doel was productpromotie; toen viel de rechtvaardiging weg. Verifieer het doel vóór je bouwt (en durf binnen één sessie terug te draaien).
-- "Volledig anoniem" als veiligheid verkopen zonder dreigingsmodel — schijnveiligheid zolang de GitHub-repo-URL de naam draagt + de eigenaar zelf onder eigen naam promoot. De-identificeer het oppervlak dat telt (13× schema-auteur), niet het onschuldige (about-pagina).
-
-✅ **Always:**
-- Merk-auteurschap = JSON-LD `author` → `Organization` (== publisher) + `article:author` meta → merk + zichtbare byline weg; de `:not(:last-child):after`-pipe-separators herschikken vanzelf → geen CSS/cache-bump nodig (inline HTML/JSON-LD).
-- Scripted sweep met literal block-match + per-bestand `count==1`-assert + eind-assertie + echte JSON-LD-parser (`json.loads`) — geen blinde global replace.
-- Behoud één eerlijk menselijk gezicht (about-pagina met naam + LinkedIn + founder-schema) als vertrouwensanker voor een site die producten verkoopt — E-E-A-T ≠ juridische naam, maar een consistente aanspreekbare entiteit helpt.
-- Privacy-edits checken tegen juridische identificatie: `privacy.html` noemde de naam al niet ("beheerd door een individuele ontwikkelaar") → geen GDPR-conflict, niet aanraken. Volledig: `docs/sessions/current.md` Sessie 180.
-
-**Rotation:** Top-6 huidig: 180-181-182-183-184-185 (Sessie 179 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 185 UITGEVOERD:** current.md staart Sessie 170-174 geknipt naar `archive-s170-s174.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 175-185 (11 entries; volgende bulk-rotatie Sessie 190 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-169 → `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 181-182-183-184-185-186 (Sessie 180 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 185 UITGEVOERD:** current.md staart Sessie 170-174 geknipt naar `archive-s170-s174.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 175-185 (11 entries; volgende bulk-rotatie Sessie 190 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-169 → `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -207,7 +207,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 185
+**Sessie counter:** 186
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -259,6 +259,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 29 jun 2026 (Sessie 185 — leerpad-sectie homepage: 3 knoppen naar dezelfde `/terminal.html` → mini-leerlijn (lezen → oefenen) met per-niveau `.leerpad-learn-link` "Lees eerst"-blogposts + uniform eerlijk knoplabel "Oefen in de terminal"; `.leerpad-cta-group` `margin-top:auto` lijnt CTA-paren uit; cache-bump landing.css v=124. 2 commits `c49c1de`+`9c8cfc6`. Bulk-rotatie 170-174 → `archive-s170-s174.md`. Volledig: `docs/sessions/current.md`)
-**Version:** 5.59 (Sessie 185 — leerpad-sectie homepage van nep-pad naar echte lezen→oefenen-leerlijn; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 29 jun 2026 (Sessie 186 — Stap 0 ontwerpbeslissing "Leerpad deep-link naar in-app tutorials" (doc-only, geen code): niveau→scenario→labelwijziging vastgelegd als sub-blok onder het backlog-item + Stap 0 afgevinkt. BEGINNER→NEW `fundamentals`; GEVORDERD→recon+privesc (`→Gevorderd`); EXPERT→exploitation+webvuln (`→Expert`). Expert-calls: webvuln→EXPERT, fundamentals=navigatie+bestandsbeheer. Volledig: `docs/sessions/current.md`)
+**Version:** 5.60 (Sessie 186 — Stap 0 leerpad-niveaus → tutorial-scenario-mapping vastgelegd; doc-only; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
