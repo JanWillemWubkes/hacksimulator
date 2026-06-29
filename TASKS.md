@@ -725,6 +725,10 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
 - [ ] **Continue Command** - Expliciete sessie restore (localStorage doet dit al automatisch)
 - [x] **Tutorial Command** - Guided scenarios (recon, webvuln, privesc) ✅ Gebouwd in M6 (Sessie 103-104)
 - [ ] **Challenge System** - Voortgang tracking en certificaten
+- [ ] **Leerpad deep-link naar in-app tutorials** (vervolg op Sessie 185 — leerpad-content-verrijking). Doel: de homepage-leerpad-knoppen ("Oefen in de terminal") laten dóórlinken naar een passende begeleide tutorial i.p.v. de kale terminal. **Volgorde is dwingend — B (fundament) vóór A (afwerking); A zonder B = deep-link naar een verkeerd-gelabelde/ontbrekende bestemming = de promise/payoff-leugen naar binnen verplaatst:**
+  - [ ] **Stap 0 — ontwerpbeslissing (~20 min):** definieer de 3 niveaus (BEGINNER/GEVORDERD/EXPERT) en welk scenario bij elk hoort; bevestig dat een nieuw fundamentals-scenario nodig is. Stuurt B + A.
+  - [ ] **Fase B — tutorials op orde (het echte werk):** (1) NEW fundamentals-scenario (`ls`/`cd`/`pwd`/`cat`) voor de BEGINNER-kaart — bestaat nu NIET (huidige scenario's starten allemaal op recon/nmap-niveau); (2) niveaulabels in `src/core/terminal.js` / `tutorial-manager.js` laten kloppen met de badges — nu heten `recon`/`webvuln`/`privesc` allemaal "Beginner" en alleen `exploitation` "Gevorderd"; geen "Expert"-scenario. Heeft op zichzelf al waarde (bezoeker kan `tutorial` typen) óók zonder A.
+  - [ ] **Fase A — deep-link-plumbing (mechanische afwerking):** `main.js` URL-params laten lezen (`?tutorial=<id>`) → auto-start het scenario op load (bestaat nu NIET — geverifieerd Sessie 185, terminal leest geen `window.location.search`); daarna de 3 leerpad-knoppen + evt. blog/commands-instappunten naar de juiste `?tutorial=...` laten wijzen. Cache-bump `main.js` + E2E-dekking voor de deep-link-load.
 
 ### Analytics Migration
 - [ ] **Plausible Analytics** - Migratie van GA4 naar Plausible (bij 10k+ visitors)
