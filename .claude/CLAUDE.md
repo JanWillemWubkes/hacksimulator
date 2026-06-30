@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 186)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 187)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 187: Fase B uitgevoerd — tutorials op orde (badge == bestemming) (30 jun 2026)
+⚠️ **Never:**
+- De gespecde "verborgen taak" blind uitvoeren — Stap 0 vermoedde een `Expert`-badge in `tutorial-renderer.js`; exploratie toonde dat difficulty overal platte tekst is (renderer/lijst/certificaat), géén difficulty-gestuurde CSS in de terminal → een badge bouwen = cargo-cult. De échte doorwerking zat een laag dieper (funnel). De spec wijst de richting, niet altijd de plek.
+- Een stage toevoegen aan een high-water-mark-funnel zónder álle index-koppelingen mee te hernummeren — `next.js` codeert de indices op 3 plekken: `stageBuilders[]`, `hasAnyProgress`-switch, én de makkelijk te missen `buildSkippedHint`-drempels (`>0/1/3`). Die laatste vergeten = stille "nog X commando's over"-bug die geen test vangt.
+- `fundamentals` aan `tutorialOrder` (de overige-missies-catch-all ná fase 3) prependen — zou een gevorderde gebruiker die fundamentals oversloeg later achterwaarts "doe fundamentals" tonen. Een eigen stage-0 + high-water dekt het correct.
+- Een `du`-meting in NL-locale vertrouwen: `du -sb | awk '{print $1/1024}'` printte "640,823 KB" (komma = decimaal) → leek 640 MB, was 640.8 KB. `du -sh` (956K) was de sanity-check.
+
+✅ **Always:**
+- Bij spec-vs-engine-conflict de keuze surfacen i.p.v. stil afwijken — de engine valideert per commando, de spec wou "~5 gegroepeerd"; 7-single dwingt elke badge-belofte-skill af maar wijkt af → AskUserQuestion met previews, niet eenzijdig kiezen of klakkeloos volgen.
+- Validators asymmetrisch per commando-type: kijk-commando's (pwd/ls/cat) toetsen op *afwezigheid* van error-patronen, maak/wis-commando's (mkdir/touch/rm) op *aanwezigheid* van de succes-marker (`aangemaakt`/`verwijderd`) → één check vangt alle faal-redenen (geen arg, bestaat al, geen rechten).
+- Tutorial-stappen tegen de echte VFS (`structure.js`) coheren: `cd documents` → `cat scan-results.txt` bestaat dáár → mkdir/touch/rm in die schrijfbare map. De tutorial blokkeert commando's niet, dus ze muteren de echte context — stappen moeten op de werkelijke cwd-staat kloppen.
+- "Geen badge nodig" als geverifieerde NIET-wijziging vastleggen, met de meting als bewijs (difficulty-tekst gemeten dark `#c9d1d9`/light `#0a0a0a`, 0 elementen buiten 375px). Volledig: `docs/sessions/current.md` Sessie 187.
+
 ### Sessie 186: Stap 0 ontwerpbeslissing — leerpad-niveaus → tutorial-scenario's (doc-only) (29 jun 2026)
 ⚠️ **Never:**
 - Een scenario in een tier plaatsen op basis van zijn commando-syntaxis i.p.v. de geleerde skill — privesc gebruikt alleen `cat`/`ls` (beginner-commando's) maar leert log-/credential-analyse op een gehackt systeem → GEVORDERD. Tik-gemak ≠ tier (zelfde reden webvuln EXPERT is ondanks point-and-shoot sqlmap).
@@ -146,19 +159,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Herbruikbare UI-logica = kern-module + dunne per-pagina wrappers (config-selectors + label-noun) → de tweede consument wordt een mechanische kopie, geen duplicatie. Hier: `term-filter.js` ← `glossary-filter.js` / `commands-filter.js`.
 - Meet de échte staat, niet een test-artefact: instant-scroll i.p.v. `scrollIntoView()` (smooth) om de IntersectionObserver-staat zuiver te triggeren. Render-en-meet op no-store server, dark+light+mobiel+breed (>max-width), `getBoundingClientRect`-delta == 0. Volledig: `docs/sessions/current.md` Sessie 182.
 
-### Sessie 181: Content-getallen drift-bestendig — floors i.p.v. exacte tellingen + floor-assertie (26 jun 2026)
-⚠️ **Never:**
-- Een exact getal hardcoden voor content die groeit (blogposts, commands) in bezoeker-copy — `gidsen.html` "10 Blog posts" was al fout (13 zichtbaar) en "41 Commands" drift bij elke nieuwe command. Exacte getallen verouderen bij élke wijziging; open floors (`40+`/`50+`/`105+`) blijven waar bij groei.
-- Een drift-"fix" doorvoeren op de oppervlakkige inventaris zonder tegen de canonieke definitie te toetsen — de subagent vlagde CLAUDE.md "12 posts" als fout ("zou 13") én JSON-LD `numberOfItems:39` als bug; beide waren correct (validate-docs telt canoniek 12 excl. index+welkom; 39 == de zichtbare itemlijst, "40+" = totaal). Blind "fixen" had juist drift/inconsistentie geïntroduceerd.
-- Een grep-elk-cijfer-exact-validator bouwen — dat geeft vals alarm bij élke gezonde content-toevoeging = het onderhoudsprobleem terug in een andere vorm.
-
-✅ **Always:**
-- Drift-gevoelige bezoeker-tellingen als open floor (`12+`) schrijven, nooit exact; een floor bumpt alleen bij een marketing-drempel (≈ nooit), niet bij elke post.
-- Floor-asserties als forcing function: `geclaimd ≤ ground-truth` (filesystem/source-telling, niet hardcoded) — klaagt nóóit bij groei, faalt alleen bij overclaim. Negatief getest (99+ → exit 1). Geïmplementeerd als validate-docs `--deep` Check 6c.
-- Onderscheid drift-klassen: groeiende content-counts (floor + assertie) vs. vaste artefacten (PDF-pagina's/badges/skill-levels — laag risico, met rust) vs. live metrics (tests/bundle → al naar TASKS.md gedelegeerd). Niet alles is hetzelfde probleem.
-- Brede blogtabellen → opt-in `.blog-table--stacked` (rij = gelabelde kaart via `data-label`+`::before` op mobiel), NIET horizontale `overflow-x:auto`-scroll (verstopt de waardevolste kolom). Volledig: `docs/sessions/current.md` Sessie 181.
-
-**Rotation:** Top-6 huidig: 181-182-183-184-185-186 (Sessie 180 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 185 UITGEVOERD:** current.md staart Sessie 170-174 geknipt naar `archive-s170-s174.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 175-185 (11 entries; volgende bulk-rotatie Sessie 190 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-169 → `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 182-183-184-185-186-187 (Sessie 181 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 185 UITGEVOERD:** current.md staart Sessie 170-174 geknipt naar `archive-s170-s174.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 175-187 (13 entries; volgende bulk-rotatie Sessie 190 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-169 → `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -207,7 +208,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 186
+**Sessie counter:** 187
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -259,6 +260,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 29 jun 2026 (Sessie 186 — Stap 0 ontwerpbeslissing "Leerpad deep-link naar in-app tutorials" (doc-only, geen code): niveau→scenario→labelwijziging vastgelegd als sub-blok onder het backlog-item + Stap 0 afgevinkt. BEGINNER→NEW `fundamentals`; GEVORDERD→recon+privesc (`→Gevorderd`); EXPERT→exploitation+webvuln (`→Expert`). Expert-calls: webvuln→EXPERT, fundamentals=navigatie+bestandsbeheer. Volledig: `docs/sessions/current.md`)
-**Version:** 5.60 (Sessie 186 — Stap 0 leerpad-niveaus → tutorial-scenario-mapping vastgelegd; doc-only; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 30 jun 2026 (Sessie 187 — Fase B uitgevoerd: NEW `fundamentals.js` (Beginner, 7 stappen) + 4 her-tiering-labels (recon/privesc→Gevorderd, webvuln/exploitation→Expert) + funnel-doorwerking (`next.js` stage 0, `dashboard`/`certificate`/manpage). Expert-badge bleek niet nodig (difficulty = platte tekst). E2E 7 tests cross-browser groen. Commit `3ac65aa`. Volledig: `docs/sessions/current.md`)
+**Version:** 5.61 (Sessie 187 — Fase B: fundamentals-scenario + her-tiering difficulty-labels; volledige historie: `docs/sessions/current.md` + TASKS.md)
 

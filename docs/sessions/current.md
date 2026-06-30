@@ -4,6 +4,37 @@
 
 ---
 
+## Sessie 187: Fase B — tutorials op orde (badge == bestemming) (30 jun 2026)
+
+**Mission:** Fase B van het backlog-item "Leerpad deep-link naar in-app tutorials" uitvoeren (vervolg op Sessie 186 Stap 0): de niveau→scenario→labelwijziging-mapping wáármaken in code zodat de difficulty die de gebruiker ziet de échte skill weerspiegelt en er een BEGINNER-bestemming (fundamentals) bestaat. B vóór A (dwingend). Code-werk, direct op `main`.
+
+**Aanpak (plan-mode):** Eigen exploratie (geen subagents) — alle 4 scenario-bestanden, `tutorial-renderer.js`, `tutorial-manager.js`, `next.js`, `leerpad.js`, `dashboard.js`, `certificate.js`, de filesystem-commando's (mkdir/touch/rm/cd/cat/ls/pwd) + de VFS-default (`structure.js`). Eén structuurkeuze via AskUserQuestion voorgelegd (engine valideert per commando → spec's "~5 gegroepeerd" botst); user koos **7 stappen, 1 commando elk**.
+
+**Work done (commit `3ac65aa`, 11 files, +411/−24):**
+- **NEW `src/tutorial/scenarios/fundamentals.js`** (Beginner, 7 stappen pwd→ls→cd→cat→mkdir→touch→rm). Validators asymmetrisch: kijk-commando's (pwd/ls/cat) toetsen op *afwezigheid* van error-patronen; maak/wis-commando's (mkdir/touch/rm) op *aanwezigheid* van de succes-marker (`aangemaakt`/`verwijderd`) → één check vangt alle faal-redenen. VFS-coherent geverifieerd tegen `structure.js`: cwd `/home/hacker` → `cd documents` → `cat scan-results.txt` bestaat daar → mkdir/touch/rm in die schrijfbare map. Security-bridge briefing, completion bridge't naar recon.
+- **Registratie** `terminal.js`: fundamentals als **eerste** (Beginner bovenaan de `tutorial`-lijst).
+- **4 her-tiering-labels:** recon/privesc `Beginner→Gevorderd`, webvuln/exploitation `→Expert`.
+- **Verborgen taak bleek anders dan de Stap 0-spec aannam:** `tutorial-renderer.js` heeft GÉÉN Expert-badge nodig. Difficulty wordt overal als platte tekst gerenderd (renderer r.61/85, tutorial-lijst r.61/89, certificate r.88/122); er is geen difficulty-gestuurde badge/kleur-CSS in de terminal (de `.level-badge`/`.command-level-*` horen bij homepage/commands-pagina). `Expert` rendert correct als tekst. Een badge bouwen = cargo-cult. Vastgelegd als geverifieerde NIET-wijziging.
+- **De échte doorwerking zat in de funnel:** `next.js` — `buildFundamentalsTutorialStage()` als stage 0 (vóór de phase-1-grind); high-water-mark `hasAnyProgress` +1 hernummerd; **ook de subtiele `buildSkippedHint`-drempels** `0/1/3 → 1/2/4` (verborgen koppeling die de renummering blootlegt). `dashboard.js` `getNextStep` spiegelt (fundamentals-suggestie bovenaan, gegate op zero-progress). `certificate.js` `getDiscipline` + `tutorial.js` manpage (fundamentals + ontbrekende exploitation aangevuld, begin-tip → fundamentals).
+- **Plan-afwijking voor correctheid:** bewust GEEN `fundamentals` in `tutorialOrder` (de overige-missies-catch-all ná fase 3) — zou een gevorderde gebruiker die fundamentals oversloeg later achterwaarts "doe fundamentals" tonen. Stage 0 + high-water dekt het correct.
+- **E2E NEW `tests/e2e/fundamentals.spec.js`** (7 tests: briefing/Beginner, stap-advance, volledige 7-staps-completion, wrong-arg differentiated, lijst-fundamentals-first, her-tiering Gevorderd/Expert-assert, funnel fundamentals-suggestie).
+
+**Verificatie:** fundamentals.spec 7/7 op chromium + 14/14 cross-browser (firefox+webkit); tutorial.spec 19/19 (geen regressie van difficulty-changes); dashboard.spec 8/8; **volledige chromium-suite groen** (186 passed, 5 skipped, 12 pre-existing flaky op retry, 0 failures). Render-en-meet (no-store server, Playwright MCP): difficulty-tekstkleur gemeten dark `rgb(201,209,217)` / light `rgb(10,10,10)` = standaard leesbare terminal-tekst (bewijst "geen badge nodig"); her-tiering exact gemeten (fundamentals=Beginner/7 · recon+privesc=Gevorderd · webvuln+exploitation=Expert, registratie-volgorde); 375px: 0 elementen buiten viewport. Screenshots dark/light/mobiel in `.playwright-mcp/`. validate-docs exit 0.
+
+**Commits:** `3ac65aa` (feat(tutorial): fundamentals-scenario + her-tiering difficulty-labels (Fase B)), op `main`. **Nog niet gepusht** (push = Netlify-deploy; afwachten op go van Heisenberg).
+
+**Learnings:**
+- **De gespecde "verborgen taak" was de verkeerde verborgen taak.** Stap 0 vermoedde een Expert-badge in de renderer; exploratie toonde dat difficulty overal platte tekst is → geen badge nodig. De échte doorwerking zat een laag dieper in de progressie-funnel (`next.js` high-water + `buildSkippedHint`, `dashboard.js`-spiegel). Lees de code vóór je de gespecde taak uitvoert; de spec wijst de goede ríchting maar niet altijd de goede plek.
+- **Renummeren legt verborgen index-koppelingen bloot.** Eén nieuwe stage op index 0 verschoof drie plekken: `stageBuilders[]`, `hasAnyProgress`-switch, én de makkelijk te missen `buildSkippedHint`-drempels (`>0/1/3`). Die laatste vergeten = een stille "nog X commando's over"-bug die geen test vangt.
+- **Meet-instrument wantrouwen, deel 2 (locale-editie):** `du -sb src/ | awk '{print $1/1024}'` printte "640,823 KB" → leek 640 MB. NL-locale gebruikt komma als decimaalteken → het was 640.8 KB. `du -sh` (956K) was de sanity-check. Niet alleen theme-toggles, ook locale kan je meting vervalsen.
+- **Bij spec-vs-engine-conflict: surface de keuze, beslis niet stilletjes af te wijken.** De spec zei "~5 gegroepeerd", de engine valideert per commando. 7-single is robuuster (dwingt elke skill af) maar wijkt af van de letterlijke spec → AskUserQuestion met previews i.p.v. eenzijdig kiezen of klakkeloos volgen.
+
+**Next steps (open):** Fase A — deep-link-plumbing: `main.js` `?tutorial=<id>` laten lezen + auto-start; 3 leerpad-knoppen → `?tutorial=fundamentals/recon/exploitation`; cache-bump + E2E. Push Sessie 187 naar `main` (deploy) na go.
+
+**Metrics delta:** src/ +8,2 KB (`fundamentals.js`); tests 197→**207** per browser-project (24 spec files, +`fundamentals.spec.js`). Geen runtime-/budget-impact buiten het scenario (Terminal Core ruim <400 KB).
+
+---
+
 ## Sessie 186: Stap 0 ontwerpbeslissing — leerpad-niveaus → tutorial-scenario's (29 jun 2026)
 
 **Mission:** Stap 0 van het backlog-item "Leerpad deep-link naar in-app tutorials" (vervolg op Sessie 185). Een ontwerpbeslissing, géén implementatie: een vastgelegde, beargumenteerde mapping van de 3 homepage-niveaus (BEGINNER/GEVORDERD/EXPERT) naar tutorial-scenario's, waarop Fase B later bouwt. Geen code/tutorial gebouwd.
