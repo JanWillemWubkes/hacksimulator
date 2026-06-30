@@ -53,6 +53,21 @@ const phases = [
   }
 ];
 
+// Eén canonieke ladder (Beginner/Gevorderd/Expert) — dezelfde taal als de homepage
+// en het tutorial-systeem. De 4 fases worden gegroepeerd onder de 3 niveaus, elk met
+// een brug naar de bijbehorende begeleide missie (oefenen ↔ tutorial = twee views).
+// EXPERT (Fase 4) blijft vergrendeld tot GEVORDERD (Fase 3) compleet is.
+const tiers = [
+  { name: "BEGINNER",  phases: [phases[0], phases[1]], tutorial: "fundamentals" },
+  { name: "GEVORDERD", phases: [phases[2]],            tutorial: "recon" },
+  { name: "EXPERT",    phases: [phases[3]],            tutorial: "exploitation" }
+];
+
+function isExpertUnlocked(triedSet) {
+  var s = getPhaseStats(phases[2], triedSet); // GEVORDERD = Fase 3
+  return s.completed === s.total;
+}
+
 function isTried(name, triedSet) {
   return triedSet.has(name);
 }
@@ -81,52 +96,50 @@ function buildBoxOutput(triedSet, width) {
 
   lines.push(buildEmptyLine(width));
 
-  var allUnlocked = true;
+  // Boxed content line, links uitgelijnd + gepad tot de binnenbreedte (kader = wit;
+  // markers binnenin worden niet door de renderer gekleurd want regel begint met │).
+  var pushLine = function(text) {
+    lines.push(B.vertical + text + ' '.repeat(Math.max(0, inner - text.length)) + B.vertical);
+  };
 
-  phases.forEach(function(phase, idx) {
-    var stats = getPhaseStats(phase, triedSet);
-    var done = stats.completed === stats.total;
+  var expertUnlocked = isExpertUnlocked(triedSet);
 
-    // Phase header: │  [✓] FASE 1: TERMINAL BASICS (3/7)  │
-    // [✓] (3 chars, zelfde breedte als [X]) = voltooid. In het kader afgeschermd → wit;
-    // symbool gelijk aan de mobiele weergave en de man-page-legenda.
-    var checkbox = done ? '[✓]' : '[ ]';
-    var phaseText = '  ' + checkbox + ' ' + phase.phase + ' (' + stats.completed + '/' + stats.total + ')';
-    var phasePad = inner - phaseText.length;
-    lines.push(B.vertical + phaseText + ' '.repeat(Math.max(0, phasePad)) + B.vertical);
+  tiers.forEach(function(tier, tIdx) {
+    // Niveau-kop (geen checkbox = visueel onderscheiden van de fase-koppen eronder)
+    pushLine('  ' + tier.name);
 
-    // Phase 4 locked unless phase 3 completed
-    if (idx === 3 && !allUnlocked) {
-      var prevStats = getPhaseStats(phases[2], triedSet);
-      var remaining = prevStats.total - prevStats.completed;
-      var lockText = '      [!] Nog ' + remaining + ' Fase 3 command' + (remaining === 1 ? '' : 's') + ' te gaan';
-      var lockPad = inner - lockText.length;
-      lines.push(B.vertical + lockText + ' '.repeat(Math.max(0, lockPad)) + B.vertical);
+    var locked = (tier.name === 'EXPERT' && !expertUnlocked);
+    if (locked) {
+      var prev = getPhaseStats(phases[2], triedSet);
+      var rem = prev.total - prev.completed;
+      pushLine('    [!] Vergrendeld - voltooi eerst Gevorderd (nog ' + rem + ' commando' + (rem === 1 ? '' : "'s") + ')');
     } else {
-      // Command rows
-      phase.commands.forEach(function(cmd) {
-        var tried = isTried(cmd.name, triedSet);
-        var cb = tried ? '[✓]' : '[ ]';
-        var descMaxLen = inner - 6 - 3 - 1 - 13 - 2;
-        var rowText = '      ' + cb + ' ' + cmd.name.padEnd(13) + '- ' + smartTruncate(cmd.description, descMaxLen);
-        var rowPad = inner - rowText.length;
-        lines.push(B.vertical + rowText + ' '.repeat(Math.max(0, rowPad)) + B.vertical);
+      tier.phases.forEach(function(phase) {
+        var stats = getPhaseStats(phase, triedSet);
+        var done = stats.completed === stats.total;
+        var checkbox = done ? '[✓]' : '[ ]';
+        pushLine('    ' + checkbox + ' ' + phase.phase + ' (' + stats.completed + '/' + stats.total + ')');
+
+        phase.commands.forEach(function(cmd) {
+          var cb = isTried(cmd.name, triedSet) ? '[✓]' : '[ ]';
+          var descMaxLen = inner - 8 - 3 - 1 - 13 - 2;
+          pushLine('        ' + cb + ' ' + cmd.name.padEnd(13) + '- ' + smartTruncate(cmd.description, descMaxLen));
+        });
       });
+      // Brug naar de begeleide missie van dit niveau (oefenen ↔ tutorial)
+      pushLine('    [→] Begeleide missie: tutorial ' + tier.tutorial);
     }
 
-    if (idx < phases.length - 1) {
+    if (tIdx < tiers.length - 1) {
       lines.push(buildEmptyLine(width));
     }
-
-    allUnlocked = done;
   });
 
   lines.push(buildEmptyLine(width));
 
   // TIP inside box
   lines.push(B.dividerLeft + B.horizontal.repeat(inner) + B.dividerRight);
-  var tipText = "  [?] Type 'next' voor je volgende stap";
-  lines.push(B.vertical + tipText.padEnd(inner) + B.vertical);
+  pushLine("  [?] Type 'next' voor je volgende stap");
 
   // Footer
   lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
@@ -136,33 +149,38 @@ function buildBoxOutput(triedSet, width) {
 
 function buildMobileOutput(triedSet) {
   var out = '\n**LEERPAD: ETHICAL HACKER**\n\n';
-  var allUnlocked = true;
+  var expertUnlocked = isExpertUnlocked(triedSet);
 
-  phases.forEach(function(phase, idx) {
-    var stats = getPhaseStats(phase, triedSet);
-    var done = stats.completed === stats.total;
-    // Voltooid = [✓] (renderer mapt naar success/groen). Niet-voltooid = [ ] (geen marker → wit).
-    // Command-rijen springen 2 spaties in (NIET ≥3): zo zijn niet-voltooide regels geen
-    // continuation-line en erven ze geen kleur van een groene regel erboven (zie renderer.js:497).
-    var checkbox = done ? '[✓]' : '[ ]';
-    // Vinkje + count BINNEN de bold: mobile.css geeft strong display:block, dus alles
-    // wat buiten **..** op deze regel staat zou op een eigen regel "zweven" (los vinkje
-    // zonder command). Binnen de bold = één schone block-heading; [✓] wordt groen via
-    // de .marker-success span (renderer._formatText).
-    out += '**' + checkbox + ' ' + phase.phase + ' (' + stats.completed + '/' + stats.total + ')**\n';
+  tiers.forEach(function(tier) {
+    // Niveau-kop als eigen bold block-heading
+    out += '**' + tier.name + '**\n';
 
-    if (idx === 3 && !allUnlocked) {
-      out += '  [!] Voltooi eerst alle Fase 3 commands\n';
+    var locked = (tier.name === 'EXPERT' && !expertUnlocked);
+    if (locked) {
+      out += '  [!] Vergrendeld - voltooi eerst Gevorderd\n';
     } else {
-      phase.commands.forEach(function(cmd) {
-        var tried = isTried(cmd.name, triedSet);
-        var cb = tried ? '[✓]' : '[ ]';
-        out += '  ' + cb + ' ' + cmd.name + ' - ' + cmd.description + '\n';
+      tier.phases.forEach(function(phase) {
+        var stats = getPhaseStats(phase, triedSet);
+        var done = stats.completed === stats.total;
+        // Voltooid = [✓] (renderer → success/groen). Niet-voltooid = [ ] (geen marker → wit).
+        // Vinkje + count BINNEN de bold: mobile.css geeft strong display:block, dus alles
+        // buiten **..** zou op een eigen regel "zweven"; binnen de bold = schone heading,
+        // [✓] wordt groen via de .marker-success span (renderer._formatText).
+        var checkbox = done ? '[✓]' : '[ ]';
+        out += '**' + checkbox + ' ' + phase.phase + ' (' + stats.completed + '/' + stats.total + ')**\n';
+
+        // Command-rijen springen 2 spaties in (NIET ≥3): zo zijn niet-voltooide regels geen
+        // continuation-line en erven ze geen kleur van een groene regel erboven (renderer.js).
+        phase.commands.forEach(function(cmd) {
+          var cb = isTried(cmd.name, triedSet) ? '[✓]' : '[ ]';
+          out += '  ' + cb + ' ' + cmd.name + ' - ' + cmd.description + '\n';
+        });
       });
+      // Brug naar de begeleide missie ([→] → renderer kleurt info/cyaan na trim)
+      out += '  [→] Begeleide missie: tutorial ' + tier.tutorial + '\n';
     }
 
     out += '\n';
-    allUnlocked = done;
   });
 
   out += "[?] Type 'next' voor je volgende stap\n";
@@ -193,5 +211,5 @@ export default {
     return output;
   },
 
-  manPage: "\nNAAM\n    leerpad - toon leerpad met voortgang\n\nSYNOPSIS\n    leerpad\n\nBESCHRIJVING\n    Toont je leerpad als ethical hacker in 4 fases. Elke command\n    die je correct uitvoert wordt automatisch afgevinkt, zodat je\n    je voortgang kunt volgen.\n\n    FASE 1: TERMINAL BASICS\n        Leer de basis terminal commands. Begin hier als je nieuw bent.\n        Commands: help, ls, cd, pwd, cat, whoami, history\n\n    FASE 2: FILE MANIPULATION\n        Leer bestanden en directories maken en verwijderen.\n        Commands: mkdir, touch, rm\n\n    FASE 3: RECONNAISSANCE\n        Leer netwerk scanning en informatie verzamelen.\n        Commands: ping, nmap, ifconfig, netstat\n\n    FASE 4: SECURITY TOOLS\n        Geavanceerde security testing tools. Let op: educatief gebruik!\n        Commands: hashcat, hydra, sqlmap, metasploit, nikto\n\n        [!] Deze fase is vergrendeld totdat je Fase 3 hebt voltooid.\n\nVOORTGANG TRACKING\n    Je voortgang wordt automatisch opgeslagen in je browser.\n\n    Symbolen:\n        Voltooid        [✓]   (fase of command afgevinkt)\n        Niet voltooid   [ ]   (nog te doen)\n\nVOORBEELDEN\n    leerpad\n        Bekijk je huidige voortgang\n\n    help\n        Zie alle beschikbare commands\n\n    man nmap\n        Leer hoe een specifiek command werkt\n\nTIPS\n    • Begin met Fase 1 als je nieuw bent\n    • Type 'help' om alle commands te zien\n    • Commands worden alleen afgevinkt bij correct gebruik (met argumenten)\n    • Fase 4 wordt ontgrendeld na voltooiing van Fase 3\n\n    [HACKSIM] Dit command is uniek voor HackSimulator.\n       Het bestaat niet in standaard Linux.\n\n    [+] In real Linux:\n       Er is geen leerpad command. Ethisch hacken leer je via\n       certificeringen (CEH, OSCP) en CTF.\n\nGERELATEERDE COMMANDO'S\n    help (alle commands), man (gedetailleerde uitleg)\n".trim()
+  manPage: "\nNAAM\n    leerpad - toon leerpad met voortgang\n\nSYNOPSIS\n    leerpad\n\nBESCHRIJVING\n    Toont je leerpad als ethical hacker in 3 niveaus (Beginner,\n    Gevorderd, Expert), opgebouwd uit 4 fases. Elke command die je\n    correct uitvoert wordt automatisch afgevinkt. Bij elk niveau hoort\n    een begeleide missie (zie 'tutorial') die dezelfde stof stap voor\n    stap leert - oefenen en missie zijn twee views op hetzelfde niveau.\n\n    BEGINNER (Fase 1+2)   -> begeleide missie: tutorial fundamentals\n    GEVORDERD (Fase 3)    -> begeleide missie: tutorial recon\n    EXPERT (Fase 4)       -> begeleide missie: tutorial exploitation\n\n    FASE 1: TERMINAL BASICS\n        Leer de basis terminal commands. Begin hier als je nieuw bent.\n        Commands: help, ls, cd, pwd, cat, whoami, history\n\n    FASE 2: FILE MANIPULATION\n        Leer bestanden en directories maken en verwijderen.\n        Commands: mkdir, touch, rm\n\n    FASE 3: RECONNAISSANCE\n        Leer netwerk scanning en informatie verzamelen.\n        Commands: ping, nmap, ifconfig, netstat\n\n    FASE 4: SECURITY TOOLS\n        Geavanceerde security testing tools. Let op: educatief gebruik!\n        Commands: hashcat, hydra, sqlmap, metasploit, nikto\n\n        [!] Deze fase is vergrendeld totdat je Fase 3 hebt voltooid.\n\nVOORTGANG TRACKING\n    Je voortgang wordt automatisch opgeslagen in je browser.\n\n    Symbolen:\n        Voltooid        [✓]   (fase of command afgevinkt)\n        Niet voltooid   [ ]   (nog te doen)\n\nVOORBEELDEN\n    leerpad\n        Bekijk je huidige voortgang\n\n    help\n        Zie alle beschikbare commands\n\n    man nmap\n        Leer hoe een specifiek command werkt\n\nTIPS\n    • Begin met 'tutorial fundamentals' als je nieuw bent\n    • Type 'help' om alle commands te zien\n    • Commands worden alleen afgevinkt bij correct gebruik (met argumenten)\n    • Fase 4 wordt ontgrendeld na voltooiing van Fase 3\n\n    [HACKSIM] Dit command is uniek voor HackSimulator.\n       Het bestaat niet in standaard Linux.\n\n    [+] In real Linux:\n       Er is geen leerpad command. Ethisch hacken leer je via\n       certificeringen (CEH, OSCP) en CTF.\n\nGERELATEERDE COMMANDO'S\n    tutorial (begeleide missies per niveau), next (je volgende stap),\n    challenge (test jezelf), help (alle commands), man (uitleg)\n".trim()
 };

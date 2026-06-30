@@ -7,6 +7,7 @@
 import progressStore from '../../gamification/progress-store.js';
 import challengeManager from '../../gamification/challenge-manager.js';
 import badgeManager from '../../gamification/badge-manager.js';
+import { difficultyLabel } from '../../gamification/challenge-renderer.js';
 import onboarding from '../../ui/onboarding.js';
 import tutorialManager from '../../tutorial/tutorial-manager.js';
 import {
@@ -142,7 +143,7 @@ function getNextStep(challengeData, badgeSummary) {
     var d = difficulties[i];
     var group = cd.byDifficulty[d];
     if (group && group.done < group.total) {
-      return 'Volgende: probeer een ' + d.toUpperCase() + ' challenge (' + group.done + '/' + group.total + ' voltooid).';
+      return 'Volgende: probeer een ' + difficultyLabel(d) + ' challenge (' + group.done + '/' + group.total + ' voltooid).';
     }
   }
 
@@ -167,12 +168,11 @@ function renderChallengesSection(lines, width, cd) {
 
   var barWidth = 10;
   var difficulties = ['easy', 'medium', 'hard'];
-  var labels = { easy: 'EASY  ', medium: 'MEDIUM', hard: 'HARD  ' };
 
   difficulties.forEach(function(d) {
     var group = cd.byDifficulty[d];
     var bar = progressBar(group.done, group.total, barWidth);
-    lines.push(buildLine('  ' + labels[d] + '  ' + bar, width));
+    lines.push(buildLine('  ' + difficultyLabel(d).padEnd(9) + '  ' + bar, width));
   });
 
   lines.push(buildEmptyLine(width));
@@ -260,7 +260,7 @@ function renderFullMobile() {
   var difficulties = ['easy', 'medium', 'hard'];
   difficulties.forEach(function(d) {
     var group = cd.byDifficulty[d];
-    out += d.toUpperCase() + ': ' + group.done + '/' + group.total + '\n';
+    out += difficultyLabel(d) + ': ' + group.done + '/' + group.total + '\n';
   });
   out += 'Totaal: ' + cd.totalDone + '/' + cd.totalAll + '\n\n';
 
@@ -339,7 +339,7 @@ function renderChallenges() {
     var difficulties = ['easy', 'medium', 'hard'];
     difficulties.forEach(function(d) {
       var group = cd.byDifficulty[d];
-      out += d.toUpperCase() + ': ' + group.done + '/' + group.total + '\n';
+      out += difficultyLabel(d) + ': ' + group.done + '/' + group.total + '\n';
     });
     out += '\nTotaal: ' + cd.totalDone + '/' + cd.totalAll + '\n';
     out += '\n[TIP] Type \'challenge\' om een challenge te starten.';

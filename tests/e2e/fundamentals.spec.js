@@ -159,4 +159,45 @@ test.describe('Fundamentals Tutorial + Re-tiering', () => {
     // Funnel stage 0 = fundamentals tutorial (before the phase-1 command grind)
     await expect(output).toContainText('tutorial fundamentals', { timeout: 5000 });
   });
+
+  // ----------------------------------------
+  // Group 4: Eén ladder — leerpad tiers + missie-bruggen + challenge NL
+  // ----------------------------------------
+
+  test('leerpad groups phases under the 3 tiers and bridges to the missions', async ({ page }) => {
+    await typeCommand(page, 'leerpad');
+    const output = page.locator('#terminal-output');
+
+    // Dezelfde 3-niveau-taal als homepage + tutorial
+    await expect(output).toContainText('BEGINNER', { timeout: 5000 });
+    await expect(output).toContainText('GEVORDERD', { timeout: 2000 });
+    await expect(output).toContainText('EXPERT', { timeout: 2000 });
+    // Fase-namen behouden (informatiever dan kale tiers)
+    await expect(output).toContainText('FASE 1: TERMINAL BASICS', { timeout: 2000 });
+    // Brug van oefenen (leerpad) naar de begeleide missie (tutorial)
+    await expect(output).toContainText('Begeleide missie: tutorial fundamentals', { timeout: 2000 });
+    await expect(output).toContainText('Begeleide missie: tutorial recon', { timeout: 2000 });
+  });
+
+  test('challenge difficulty labels are Dutch (UI=NL), not English', async ({ page }) => {
+    await typeCommand(page, 'challenge');
+    const output = page.locator('#terminal-output');
+
+    await expect(output).toContainText('CHALLENGES', { timeout: 5000 });
+    await expect(output).toContainText('MAKKELIJK', { timeout: 2000 });
+    await expect(output).toContainText('GEMIDDELD', { timeout: 2000 });
+    await expect(output).toContainText('MOEILIJK', { timeout: 2000 });
+  });
+
+  test('homepage leerpad chips contain no fictional commands', async ({ page }) => {
+    await page.goto('/index.html');
+    const section = page.locator('#leerpad');
+    await expect(section).toBeVisible({ timeout: 5000 });
+    const chips = (await section.locator('.leerpad-cmd-line').allInnerTexts()).join(' ');
+    // netcat/wireshark bestaan niet als commando in de simulator
+    expect(chips).not.toMatch(/netcat|wireshark/i);
+    // echte commando's op de juiste tier
+    expect(chips).toContain('netstat');
+    expect(chips).toContain('nikto');
+  });
 });

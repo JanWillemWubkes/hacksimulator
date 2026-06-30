@@ -6,6 +6,7 @@
 
 import progressStore from '../../gamification/progress-store.js';
 import challengeManager from '../../gamification/challenge-manager.js';
+import { difficultyLabel } from '../../gamification/challenge-renderer.js';
 import {
   generateChallengeCertificate,
   downloadCertificate,
@@ -86,9 +87,9 @@ export default {
     "    tonen je rang, moeilijkheidsgraad, en het aantal pogingen.\n" +
     "\n" +
     "    CERTIFICAAT NIVEAUS\n" +
-    "        EASY     Certificaat van Voltooiing   (Hacker Apprentice)\n" +
-    "        MEDIUM   Certificaat van Bekwaamheid  (Hacker Specialist)\n" +
-    "        HARD     Certificaat van Meesterschap (Hacker Elite)\n" +
+    "        MAKKELIJK   Certificaat van Voltooiing   (Hacker Apprentice)\n" +
+    "        GEMIDDELD   Certificaat van Bekwaamheid  (Hacker Specialist)\n" +
+    "        MOEILIJK    Certificaat van Meesterschap (Hacker Elite)\n" +
     "\n" +
     "    Certificaten worden automatisch opgeslagen zodra je een challenge\n" +
     "    voltooit. Je kunt ze altijd opnieuw bekijken, downloaden of kopieren.\n" +
@@ -192,7 +193,7 @@ function renderCertificateList() {
     var certData = allCerts[id];
     var template = CERT_TEMPLATES[challenge.difficulty] || CERT_TEMPLATES.easy;
     var title = smartTruncate(challenge.title, inner - 20);
-    var diff = challenge.difficulty.toUpperCase();
+    var diff = difficultyLabel(challenge.difficulty);
 
     lines.push(buildLine('  [✓] ' + title + '  [' + diff + ']', width));
     lines.push(buildLine('      Rang: ' + template.rank + ' | ' + challenge.points + ' pts', width));
@@ -218,7 +219,7 @@ function renderListMobile(allCerts, certIds) {
 
     var template = CERT_TEMPLATES[challenge.difficulty] || CERT_TEMPLATES.easy;
     out += '[✓] **' + challenge.title + '**\n';
-    out += '    ' + challenge.difficulty.toUpperCase() + ' | ' + template.rank + '\n\n';
+    out += '    ' + difficultyLabel(challenge.difficulty) + ' | ' + template.rank + '\n\n';
   });
 
   out += '[?] Bekijk: certificates <id>\n';

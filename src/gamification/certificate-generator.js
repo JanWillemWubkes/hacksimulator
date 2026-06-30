@@ -13,6 +13,7 @@ import {
 } from '../utils/box-utils.js';
 
 import { CERT_TEMPLATES, DISCIPLINES } from './certificate-templates.js';
+import { difficultyLabel } from './challenge-renderer.js';
 
 var B = BOX_CHARS;
 
@@ -95,7 +96,7 @@ export function generateChallengeCertificate(challenge, stats) {
 
   // Challenge info
   lines.push(buildLine('  Challenge:    ' + challenge.title, width));
-  lines.push(buildLine('  Moeilijkheid: ' + challenge.difficulty.toUpperCase() + ' | ' + challenge.points + ' punten', width));
+  lines.push(buildLine('  Moeilijkheid: ' + difficultyLabel(challenge.difficulty) + ' | ' + challenge.points + ' punten', width));
   lines.push(buildLine('  Rang:         ' + template.rank, width));
   lines.push(buildLine('  Pogingen:     ' + (stats.attempts || '?'), width));
   lines.push(buildLine('  Datum:        ' + formatDate(stats.earnedAt), width));
@@ -132,7 +133,7 @@ function generateCertificateMobile(challenge, stats) {
   out += template.decoration + '\n\n';
   out += 'HACKSIMULATOR.NL\n\n';
   out += 'Challenge:    ' + challenge.title + '\n';
-  out += 'Moeilijkheid: ' + challenge.difficulty.toUpperCase() + ' | ' + challenge.points + ' punten\n';
+  out += 'Moeilijkheid: ' + difficultyLabel(challenge.difficulty) + ' | ' + challenge.points + ' punten\n';
   out += 'Rang:         ' + template.rank + '\n';
   out += 'Pogingen:     ' + (stats.attempts || '?') + '\n';
   out += 'Datum:        ' + formatDate(stats.earnedAt) + '\n\n';

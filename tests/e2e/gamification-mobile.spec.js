@@ -67,7 +67,7 @@ test.describe('Gamification Mobile', () => {
     await typeCommand(page, 'challenge');
     const output = page.locator('#terminal-output');
     await expect(output).toContainText('CHALLENGES', { timeout: 5000 });
-    await expect(output).toContainText('EASY', { timeout: 2000 });
+    await expect(output).toContainText('MAKKELIJK', { timeout: 2000 });
     await expect(output).toContainText('network-scout', { timeout: 2000 });
   });
 

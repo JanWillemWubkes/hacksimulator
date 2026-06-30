@@ -5,6 +5,7 @@
  */
 
 import challengeManager from '../../gamification/challenge-manager.js';
+import { difficultyLabel } from '../../gamification/challenge-renderer.js';
 
 export default {
   name: 'challenge',
@@ -152,7 +153,7 @@ function renderStatus() {
   }
 
   var output = '[?] Actieve challenge: ' + status.challengeTitle + '\n';
-  output += '[?] Moeilijkheid: ' + status.difficulty.toUpperCase() + ' | Punten: ' + status.points + '\n';
+  output += '[?] Moeilijkheid: ' + difficultyLabel(status.difficulty) + ' | Punten: ' + status.points + '\n';
   output += '[?] Pogingen: ' + status.attempts + '\n\n';
 
   output += 'Doelen:\n';

@@ -96,9 +96,9 @@ test.describe('Dashboard Command', () => {
     await typeCommand(page, 'dashboard challenges');
     const output = page.locator('#terminal-output');
     await expect(output).toContainText('CHALLENGE VOORTGANG', { timeout: 5000 });
-    await expect(output).toContainText('EASY', { timeout: 2000 });
-    await expect(output).toContainText('MEDIUM', { timeout: 2000 });
-    await expect(output).toContainText('HARD', { timeout: 2000 });
+    await expect(output).toContainText('MAKKELIJK', { timeout: 2000 });
+    await expect(output).toContainText('GEMIDDELD', { timeout: 2000 });
+    await expect(output).toContainText('MOEILIJK', { timeout: 2000 });
   });
 
   // ----------------------------------------

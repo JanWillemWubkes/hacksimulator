@@ -15,6 +15,13 @@ import {
 
 var B = BOX_CHARS;
 
+// Difficulty-labels in de huistaal (UI=NL). De interne keys (easy/medium/hard) blijven
+// ongemoeid voor sortering/opslag; alleen de getoonde tekst wordt vertaald.
+var DIFFICULTY_NL = { easy: 'MAKKELIJK', medium: 'GEMIDDELD', hard: 'MOEILIJK' };
+export function difficultyLabel(difficulty) {
+  return DIFFICULTY_NL[difficulty] || String(difficulty).toUpperCase();
+}
+
 function buildLine(text, width) {
   var inner = width - 2;
   var pad = inner - text.length;
@@ -65,7 +72,7 @@ var challengeRenderer = {
 
     sorted.forEach(function(c) {
       var checkbox = c.completed ? '[✓]' : '[ ]';
-      var diffLabel = c.difficulty.toUpperCase();
+      var diffLabel = difficultyLabel(c.difficulty);
       var pts = c.points + ' pts';
       var titleLine = '  ' + checkbox + ' ' + smartTruncate(c.title, inner - 22) +
                       '  [' + diffLabel + '] ' + pts;
@@ -98,7 +105,7 @@ var challengeRenderer = {
       var checkbox = c.completed ? '[✓]' : '[ ]';
       // Vinkje BINNEN de bold (mobile.css strong=display:block zou een los vinkje laten zweven).
       out += '**' + checkbox + ' ' + c.title + '**\n';
-      out += '    ' + c.difficulty.toUpperCase() + ' | ' + c.points + ' punten\n';
+      out += '    ' + difficultyLabel(c.difficulty) + ' | ' + c.points + ' punten\n';
       out += '    ' + c.description + '\n\n';
     });
 
@@ -129,7 +136,7 @@ var challengeRenderer = {
 
     lines.push(buildEmptyLine(width));
     lines.push(buildLine('  Challenge: ' + smartTruncate(challenge.title, inner - 14), width));
-    lines.push(buildLine('  Moeilijkheid: ' + challenge.difficulty.toUpperCase() + ' | Punten: ' + challenge.points, width));
+    lines.push(buildLine('  Moeilijkheid: ' + difficultyLabel(challenge.difficulty) + ' | Punten: ' + challenge.points, width));
     lines.push(buildEmptyLine(width));
 
     lines.push(buildDivider(width));
@@ -167,7 +174,7 @@ var challengeRenderer = {
   _renderBriefingMobile: function(challenge) {
     var out = '\n**MISSION BRIEFING**\n\n';
     out += '**' + challenge.title + '**\n';
-    out += challenge.difficulty.toUpperCase() + ' | ' + challenge.points + ' punten\n\n';
+    out += difficultyLabel(challenge.difficulty) + ' | ' + challenge.points + ' punten\n\n';
     out += challenge.description + '\n\n';
     out += '**DOELEN:**\n';
 

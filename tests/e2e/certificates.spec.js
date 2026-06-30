@@ -121,7 +121,7 @@ test.describe('Certificate System', () => {
     await typeCommand(page, 'certificates');
     const output = page.locator('#terminal-output');
     await expect(output).toContainText('Network Scout', { timeout: 5000 });
-    await expect(output).toContainText('EASY', { timeout: 2000 });
+    await expect(output).toContainText('MAKKELIJK', { timeout: 2000 });
 
     // View full certificate
     await typeCommand(page, 'certificates network-scout');

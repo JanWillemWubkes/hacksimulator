@@ -52,9 +52,9 @@ test.describe('Challenge System', () => {
     await typeCommand(page, 'challenge');
     const output = page.locator('#terminal-output');
     await expect(output).toContainText('CHALLENGES', { timeout: 5000 });
-    await expect(output).toContainText('EASY', { timeout: 2000 });
-    await expect(output).toContainText('MEDIUM', { timeout: 2000 });
-    await expect(output).toContainText('HARD', { timeout: 2000 });
+    await expect(output).toContainText('MAKKELIJK', { timeout: 2000 });
+    await expect(output).toContainText('GEMIDDELD', { timeout: 2000 });
+    await expect(output).toContainText('MOEILIJK', { timeout: 2000 });
     await expect(output).toContainText('network-scout', { timeout: 2000 });
     await expect(output).toContainText('identity-check', { timeout: 2000 });
   });
@@ -69,7 +69,7 @@ test.describe('Challenge System', () => {
     const output = page.locator('#terminal-output');
     await expect(output).toContainText('MISSION BRIEFING', { timeout: 10000 });
     await expect(output).toContainText('Identity Check', { timeout: 2000 });
-    await expect(output).toContainText('EASY', { timeout: 2000 });
+    await expect(output).toContainText('MAKKELIJK', { timeout: 2000 });
     // Briefing shows requirement descriptions, not command names
     await expect(output).toContainText('Check je gebruikersnaam', { timeout: 2000 });
     await expect(output).toContainText('Bekijk netwerkinterfaces', { timeout: 2000 });
@@ -224,7 +224,7 @@ test.describe('Badge System', () => {
     await expect(output).toContainText('RARE', { timeout: 2000 });
     await expect(output).toContainText('EPIC', { timeout: 2000 });
     await expect(output).toContainText('LEGENDARY', { timeout: 2000 });
-    await expect(output).toContainText('21', { timeout: 2000 }); // total badge count
+    await expect(output).toContainText('22', { timeout: 2000 }); // total badge count (badge-definitions.js)
   });
 
   // ----------------------------------------

@@ -172,7 +172,7 @@ function buildChallengeStage(difficulty) {
     }
   }
   if (!nextChallenge) return null;
-  var diffLabels = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
+  var diffLabels = { easy: 'Makkelijk', medium: 'Gemiddeld', hard: 'Moeilijk' };
   return {
     phase: 'Challenge: ' + diffLabels[difficulty],
     progress: countCompleted(challenges, difficulty) + '/' + countTotal(challenges, difficulty),
@@ -620,8 +620,8 @@ export default {
     "        4. Tutorial Recon         Begeleide reconnaissance missie\n" +
     "        5. Network Scanning       ping, nmap, ifconfig, netstat\n" +
     "        6. Tutorials              Overige begeleide missies\n" +
-    "        7. Easy Challenges        Zelfstandige opdrachten\n" +
-    "        8. Medium/Hard            Moeilijkere challenges\n" +
+    "        7. Makkelijke challenges  Zelfstandige opdrachten\n" +
+    "        8. Gemiddeld/Moeilijk     Moeilijkere challenges\n" +
     "        9. Voltooid               Alles afgerond!\n" +
     "\n" +
     "    Elke suggestie bevat een korte uitleg waarom die stap\n" +
