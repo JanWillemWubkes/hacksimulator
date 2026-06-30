@@ -13,7 +13,7 @@ var privescScenario = {
   id: 'privesc',
   title: 'Privilege Escalation: Linux Server Analyse',
   description: 'Leer een gehackt Linux systeem onderzoeken en wachtwoorden opsporen.',
-  difficulty: 'Beginner',
+  difficulty: 'Gevorderd',
 
   briefing:
     'Je hebt toegang gekregen tot een Linux server als gewone gebruiker. ' +

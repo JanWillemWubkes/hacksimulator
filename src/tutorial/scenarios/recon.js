@@ -12,7 +12,7 @@ var reconScenario = {
   id: 'recon',
   title: 'Reconnaissance: SecureCorp Pentest',
   description: 'Leer de basis van reconnaissance - de eerste stap van elke pentest.',
-  difficulty: 'Beginner',
+  difficulty: 'Gevorderd',
 
   briefing:
     'Je bent ingehuurd als ethical hacker om het netwerk van ' +

@@ -110,6 +110,17 @@ function buildPhase2Stage(triedSet) {
   };
 }
 
+function buildFundamentalsTutorialStage() {
+  if (tutorialManager.isScenarioCompleted('fundamentals')) return null;
+  return {
+    phase: 'Missie: Fundamentals',
+    progress: 'niet gestart',
+    command: null,
+    tip: 'Begin met de fundamentals missie: leer stap voor stap navigeren, bestanden lezen en je eerste bestanden aanmaken. Dit is de basis voor alles wat daarna komt.',
+    suggestion: "Type 'tutorial fundamentals'"
+  };
+}
+
 function buildReconTutorialStage() {
   if (tutorialManager.isScenarioCompleted('recon')) return null;
   return {
@@ -177,14 +188,15 @@ function buildChallengeStage(difficulty) {
  */
 function hasAnyProgress(stageIndex, triedSet) {
   switch (stageIndex) {
-    case 0: return countTried(phase1Commands, triedSet) > 0;
-    case 1: return countTried(phase2Commands, triedSet) > 0;
-    case 2: return tutorialManager.isScenarioCompleted('recon');
-    case 3: return countTried(phase3Commands, triedSet) > 0;
-    case 4: return tutorialManager.isScenarioCompleted('webvuln') || tutorialManager.isScenarioCompleted('privesc') || tutorialManager.isScenarioCompleted('exploitation');
-    case 5: return countCompleted(challengeManager.listChallenges(), 'easy') > 0;
-    case 6: return countCompleted(challengeManager.listChallenges(), 'medium') > 0;
-    case 7: return countCompleted(challengeManager.listChallenges(), 'hard') > 0;
+    case 0: return tutorialManager.isScenarioCompleted('fundamentals');
+    case 1: return countTried(phase1Commands, triedSet) > 0;
+    case 2: return countTried(phase2Commands, triedSet) > 0;
+    case 3: return tutorialManager.isScenarioCompleted('recon');
+    case 4: return countTried(phase3Commands, triedSet) > 0;
+    case 5: return tutorialManager.isScenarioCompleted('webvuln') || tutorialManager.isScenarioCompleted('privesc') || tutorialManager.isScenarioCompleted('exploitation');
+    case 6: return countCompleted(challengeManager.listChallenges(), 'easy') > 0;
+    case 7: return countCompleted(challengeManager.listChallenges(), 'medium') > 0;
+    case 8: return countCompleted(challengeManager.listChallenges(), 'hard') > 0;
     default: return false;
   }
 }
@@ -195,15 +207,15 @@ function hasAnyProgress(stageIndex, triedSet) {
  */
 function buildSkippedHint(startFrom, triedSet) {
   var gaps = [];
-  if (startFrom > 0 && findNextUntried(phase1Commands, triedSet)) {
+  if (startFrom > 1 && findNextUntried(phase1Commands, triedSet)) {
     var remaining = phase1Commands.length - countTried(phase1Commands, triedSet);
     gaps.push(remaining + ' Terminal Basics');
   }
-  if (startFrom > 1 && findNextUntried(phase2Commands, triedSet)) {
+  if (startFrom > 2 && findNextUntried(phase2Commands, triedSet)) {
     var remaining2 = phase2Commands.length - countTried(phase2Commands, triedSet);
     gaps.push(remaining2 + ' File Manipulation');
   }
-  if (startFrom > 3 && findNextUntried(phase3Commands, triedSet)) {
+  if (startFrom > 4 && findNextUntried(phase3Commands, triedSet)) {
     var remaining3 = phase3Commands.length - countTried(phase3Commands, triedSet);
     gaps.push(remaining3 + ' Reconnaissance');
   }
@@ -218,6 +230,7 @@ function buildSkippedHint(startFrom, triedSet) {
 function detectStage(triedSet) {
   // All stage builders in order
   var stageBuilders = [
+    buildFundamentalsTutorialStage,
     function() { return buildPhase1Stage(triedSet); },
     function() { return buildPhase2Stage(triedSet); },
     buildReconTutorialStage,
@@ -601,14 +614,15 @@ export default {
     "    tutorials en challenges je al hebt voltooid.\n" +
     "\n" +
     "    STAGES\n" +
-    "        1. Terminal Basics     ls, cd, pwd, cat, whoami, history\n" +
-    "        2. File Manipulation   mkdir, touch, rm, cp, mv, echo\n" +
-    "        3. Tutorial Recon      Begeleide reconnaissance missie\n" +
-    "        4. Network Scanning    ping, nmap, ifconfig, netstat\n" +
-    "        5. Tutorials           Overige begeleide missies\n" +
-    "        6. Easy Challenges     Zelfstandige opdrachten\n" +
-    "        7. Medium/Hard         Moeilijkere challenges\n" +
-    "        8. Voltooid            Alles afgerond!\n" +
+    "        1. Tutorial Fundamentals  Begeleide terminal-basis missie\n" +
+    "        2. Terminal Basics        ls, cd, pwd, cat, whoami, history\n" +
+    "        3. File Manipulation      mkdir, touch, rm, cp, mv, echo\n" +
+    "        4. Tutorial Recon         Begeleide reconnaissance missie\n" +
+    "        5. Network Scanning       ping, nmap, ifconfig, netstat\n" +
+    "        6. Tutorials              Overige begeleide missies\n" +
+    "        7. Easy Challenges        Zelfstandige opdrachten\n" +
+    "        8. Medium/Hard            Moeilijkere challenges\n" +
+    "        9. Voltooid               Alles afgerond!\n" +
     "\n" +
     "    Elke suggestie bevat een korte uitleg waarom die stap\n" +
     "    belangrijk is voor je ontwikkeling als ethical hacker.\n" +

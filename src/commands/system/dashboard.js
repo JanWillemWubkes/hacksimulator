@@ -102,6 +102,12 @@ function getNextStep(challengeData, badgeSummary) {
   // Check onboarding phases first (same logic as next.js)
   var triedSet = new Set(onboarding.getCommandsTried());
 
+  // Brand-new user (geen commando-voortgang): begeleide fundamentals-missie eerst.
+  // Spiegelt next.js stage 0 (high-water verbergt 'm zodra er commando-voortgang is).
+  if (triedSet.size === 0 && !tutorialManager.isScenarioCompleted('fundamentals')) {
+    return "Volgende: start de fundamentals tutorial (type 'tutorial fundamentals').";
+  }
+
   var done1 = countTriedInPhase(phase1Commands, triedSet);
   if (done1 < phase1Commands.length) {
     return "Volgende: Fase 1 voltooien (" + done1 + "/" + phase1Commands.length + " commands geleerd). Type 'next'.";

@@ -128,6 +128,7 @@ function generateCertificateMobile(scenario, stats) {
 
 function getDiscipline(scenarioId) {
   var disciplines = {
+    'fundamentals': 'terminal-navigatie en bestandsbeheer',
     'recon': 'reconnaissance en netwerk verkenning',
     'webvuln': 'web applicatie security testing',
     'privesc': 'systeem analyse en credential discovery'

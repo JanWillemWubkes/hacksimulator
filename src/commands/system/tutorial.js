@@ -235,6 +235,9 @@ export default {
     "    herlaadt, kun je verder waar je gebleven was.\n" +
     "\n" +
     "BESCHIKBARE SCENARIO'S\n" +
+    "    fundamentals  Fundamentals: Eerste dag als pentester (7 stappen)\n" +
+    "                  Leer de basis: navigeren, lezen, aanmaken, verwijderen\n" +
+    "\n" +
     "    recon    Reconnaissance: SecureCorp Pentest (4 stappen)\n" +
     "             Leer netwerk verkenning met ping, nmap, whois, traceroute\n" +
     "\n" +
@@ -243,6 +246,9 @@ export default {
     "\n" +
     "    privesc  Privilege Escalation: Linux Server Analyse (4 stappen)\n" +
     "             Leer systeem analyse met cat, ls, en log bestanden\n" +
+    "\n" +
+    "    exploitation  Exploitation: Server Compromise (5 stappen)\n" +
+    "                  Leer aanvallen met hydra, metasploit, hashcat\n" +
     "\n" +
     "VOORBEELDEN\n" +
     "    tutorial\n" +
@@ -258,7 +264,7 @@ export default {
     "        Sla de huidige stap over (je mist de uitleg)\n" +
     "\n" +
     "TIPS\n" +
-    "    - Begin met 'tutorial recon' als je nieuw bent\n" +
+    "    - Begin met 'tutorial fundamentals' als je nieuw bent\n" +
     "    - Lees de mission briefing goed door voor context\n" +
     "    - Gebruik 'man <command>' als je niet weet hoe een tool werkt\n" +
     "    - De tutorial blokkeert geen commands - je kunt altijd alles typen\n" +

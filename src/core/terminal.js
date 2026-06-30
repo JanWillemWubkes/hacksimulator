@@ -16,6 +16,7 @@ import onboarding from '../ui/onboarding.js';
 import analyticsEvents from '../analytics/events.js';
 import tutorialManager from '../tutorial/tutorial-manager.js';
 import tutorialRenderer from '../tutorial/tutorial-renderer.js';
+import fundamentalsScenario from '../tutorial/scenarios/fundamentals.js';
 import reconScenario from '../tutorial/scenarios/recon.js';
 import webvulnScenario from '../tutorial/scenarios/webvuln.js';
 import privescScenario from '../tutorial/scenarios/privesc.js';
@@ -80,6 +81,7 @@ class Terminal {
 
     // Initialize tutorial system
     tutorialManager.setRenderer(tutorialRenderer);
+    tutorialManager.register(fundamentalsScenario);
     tutorialManager.register(reconScenario);
     tutorialManager.register(webvulnScenario);
     tutorialManager.register(privescScenario);

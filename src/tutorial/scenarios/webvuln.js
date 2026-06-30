@@ -13,7 +13,7 @@ var webvulnScenario = {
   id: 'webvuln',
   title: 'Web Vulnerabilities: E-commerce Audit',
   description: 'Leer web applicatie kwetsbaarheden vinden met scanning tools.',
-  difficulty: 'Beginner',
+  difficulty: 'Expert',
 
   briefing:
     'Een e-commerce bedrijf heeft je gevraagd hun webshop te testen ' +
