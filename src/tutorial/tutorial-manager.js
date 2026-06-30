@@ -35,6 +35,9 @@ export default new class TutorialManager {
     this.attempts = 0;
     this.hintCounts = {};
     this._renderer = null;
+    // One-shot bron-label voor de eerstvolgende start() (bv. 'homepage-leerpad').
+    // Wordt door start() gelezen + gewist zodat een latere handmatige start 'm niet erft.
+    this._nextStartSource = null;
   }
 
   /**
@@ -42,6 +45,14 @@ export default new class TutorialManager {
    */
   setRenderer(renderer) {
     this._renderer = renderer;
+  }
+
+  /**
+   * Markeer de bron voor de eerstvolgende start() (one-shot, auto-clear in start()).
+   * Gebruikt door deep-link auto-start om analytics-source mee te geven zonder dubbeltelling.
+   */
+  setNextStartSource(src) {
+    this._nextStartSource = src;
   }
 
   // --- Scenario Registry ---
@@ -117,7 +128,10 @@ export default new class TutorialManager {
     this.state = STATES.STEP_ACTIVE;
     this._save();
 
-    analyticsEvents.tutorialEvent('started', scenarioId);
+    // One-shot source (bv. deep-link) meegeven aan het bestaande event; daarna wissen.
+    var src = this._nextStartSource;
+    this._nextStartSource = null;
+    analyticsEvents.tutorialEvent('started', scenarioId, src ? { source: src } : {});
 
     // Render briefing + first step objective
     var output = this._renderer.renderBriefing(scenario);

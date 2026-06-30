@@ -4,6 +4,8 @@
  */
 
 import terminal from './core/terminal.js';
+import tutorialManager from './tutorial/tutorial-manager.js';
+import input from './ui/input.js';
 import legalManager from './ui/legal.js';
 import onboardingManager from './ui/onboarding.js';
 import feedbackManager from './ui/feedback.js';
@@ -126,6 +128,78 @@ function registerCommands() {
 }
 
 /**
+ * Deep-link: lees ?tutorial=<id> uit de URL en geef een geldig scenario-id terug.
+ * Validatie tegen de geregistreerde scenario's (single source of truth) — een
+ * onbekende/typo-waarde geeft null → stille no-op (gewone terminal).
+ * @returns {string|null}
+ */
+function getDeepLinkTutorialId() {
+  try {
+    const raw = (new URLSearchParams(window.location.search).get('tutorial') || '')
+      .toLowerCase()
+      .trim();
+    if (!raw) return null;
+    return tutorialManager.getScenario(raw) ? raw : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
+ * Zet de cursor klaar en scroll de briefing in beeld zodat die de held is.
+ * @private
+ */
+function _focusBriefing() {
+  // Na de execute-microtask plannen zodat de briefing eerst gerenderd is.
+  Promise.resolve().then(() => {
+    const outputElement = terminal.getOutputElement && terminal.getOutputElement();
+    if (outputElement) {
+      outputElement.scrollTop = outputElement.scrollHeight;
+    }
+    input.focus();
+  });
+}
+
+/**
+ * Voer de deep-link-tutorial uit. Resume-vs-deeplink:
+ *  - geen actieve tutorial → start de target
+ *  - actief == target → niet herstarten (zou progress resetten); enkel focus/scroll
+ *  - actief != target → expliciete klik wint: exit() (slaat progress op) + start target
+ * @param {string} id
+ */
+function autoStartDeepLink(id) {
+  if (tutorialManager.isActive()) {
+    const active = tutorialManager.getState();
+    if (active && active.scenarioId === id) {
+      // Zelfde tutorial al hervat — voortzetten, niet herstarten.
+      _focusBriefing();
+      return;
+    }
+    // Andere tutorial actief — verse intentie wint; exit slaat progress op (geen render).
+    tutorialManager.exit();
+  }
+
+  tutorialManager.setNextStartSource('homepage-leerpad');
+  terminal.execute('tutorial ' + id);
+  _focusBriefing();
+}
+
+/**
+ * Plan de auto-start zó dat de briefing nooit in dode input of midden in de
+ * typewriter valt: eerste bezoek wacht op 'typewriter-done', terugkerend vuurt direct.
+ * In beide gevallen +250ms zodat de resume(100ms)/badge(200ms)-timeouts eerst landen.
+ * @param {string} id
+ */
+function scheduleDeepLink(id) {
+  const fire = () => setTimeout(() => autoStartDeepLink(id), 250);
+  if (onboardingManager.isFirstTimeVisitor()) {
+    document.addEventListener('typewriter-done', fire, { once: true });
+  } else {
+    fire();
+  }
+}
+
+/**
  * Initialize the application
  */
 function init() {
@@ -199,11 +273,22 @@ function initialize() {
     // Initialize feedback system
     feedbackManager.init();
 
+    // Deep-link: ?tutorial=<id> → auto-start de bijbehorende begeleide missie.
+    // URL meteen opschonen zodat een refresh (ook tijdens de typewriter) niet herstart.
+    const deepLinkId = getDeepLinkTutorialId();
+    if (deepLinkId) {
+      history.replaceState({}, '', '/terminal.html');
+    }
+
     // If legal modal needed: show it and trigger welcome after acceptance
     if (needsLegal) {
       document.addEventListener('legal-accepted', () => {
         terminal.renderWelcome();
+        if (deepLinkId) scheduleDeepLink(deepLinkId);
       }, { once: true });
+    } else if (deepLinkId) {
+      // Welcome is al synchroon gerenderd in terminal.init() → plan de auto-start.
+      scheduleDeepLink(deepLinkId);
     }
 
     // Check and show legal modal if needed (must accept before using)
