@@ -4,6 +4,44 @@
 
 ---
 
+## Sessie 189: Fase A — leerpad deep-link → in-app tutorial-landing (30 jun 2026)
+
+**Mission:** Sluit de 4-sessie-boog "Leerpad deep-link naar in-app tutorials" (Stap 0 Sessie 186 → Fase B Sessie 187 → ladder Sessie 188). Fase A = deep-link-plumbing + een **perfecte landing**: een bezoeker die op een homepage-leerpad-knop klikt landt direct in een leesbare MISSION BRIEFING van de juiste missie, cursor klaar — niet onder een welkomstbanner, niet in dode input, niet midden in de typewriter. De lat lag expliciet op de landing, niet de plumbing.
+
+**Push-besluit (vooraf gevraagd, advies gegeven):** eerst Fase A afmaken + lokaal committen, dán de 4 onuitgepushte Sessie 185-188-commits (`3ac65aa`/`830b9a1`/`aebcca3`/`9a958c8`) + Fase A in **één** deploy pushen ná akkoord. Onderbouwing: de 4 commits zijn al-geverifieerd docs/leerpad-werk (geen haast), Fase A raakt `terminal.html`/`main.js` (los pushen = 2 deploys zonder winst), en ladder (Sessie 188) + deep-link (Sessie 189) zijn dezelfde feature-boog → samen één coherente live-staat.
+
+**Work done (4 codebestanden + 1 spec):**
+- **`src/main.js` — deep-link-handler + sequencer.** `getDeepLinkTutorialId()` leest `?tutorial=<id>`, valideert tegen `tutorialManager.getScenario(id)` (single source of truth; onbekend/typo → `null` = stille no-op). Bij valide id: `history.replaceState({}, '', '/terminal.html')` direct op load (refresh tijdens de ~3s typewriter herstart niet; latere refresh laat resume het overnemen). `scheduleDeepLink(id)`: eerste bezoek → wacht op `typewriter-done`-event + 250 ms (ruimt de 100ms-resume / 200ms-badge-timeouts op); terugkerend → `fire()` direct. `autoStartDeepLink(id)`: resume-vs-deeplink non-destructief — geen actief → start; actief==target → níét herstarten (zou progress naar stap 0 resetten), enkel focus/scroll; actief!=target → `tutorialManager.exit()` (slaat progress op, géén render om verwarring te vermijden) + start target. Auto-start via `terminal.execute('tutorial <id>')` (Sessie-156-registry-pad: command-echo + history + laat `markFirstVisitComplete()` eerlijk flippen). `_focusBriefing()`: `Promise.resolve().then(...)` ná de execute-microtask → scroll output naar bottom + `input.focus()`. Inhaken in `initialize()`: deepLinkId vóór de needlegal-tak; legal-pad breidt de bestaande `legal-accepted`-listener uit, non-legal-pad roept `scheduleDeepLink` direct.
+- **`src/tutorial/tutorial-manager.js` — source-aware start (one-shot).** `start()` vuurde al `tutorialEvent('started', id)` zónder source; een tweede call vanuit de deep-link zou dubbeltellen. Opgelost met `_nextStartSource`-veld + `setNextStartSource(src)`; `start()` leest+wist het en geeft het mee aan zijn bestaande event (`{ source } || {}`). Auto-clear → een latere handmatige `tutorial recon` erft de source niet.
+- **`index.html` — 3 leerpad-knoppen.** Alleen `.leerpad-btn` (niet de `.leerpad-learn-link`): href `/terminal.html` → `?tutorial=fundamentals/recon/exploitation`; label "Oefen in de terminal" → "Start de Beginner/Gevorderd/Expert-missie". Reflecteert de bestemming (3 verschillende missies) → vermijdt de Sessie-185-affordance-mismatch (3 identieke labels → zelfde plek).
+- **`terminal.html` — cache-bump.** `main.js?v=164-marker-green` → `?v=189-deeplink` op beide refs (modulepreload + script).
+- **NEW `tests/e2e/leerpad-deeplink.spec.js`** (5 tests): 3 niveaus happy-path (MISSION BRIEFING + `Niveau: <Beginner/Gevorderd/Expert>` + scenario-marker + `Stap 1/` + input enabled+focused + URL gestript) + onbekende-id no-op (geen briefing, URL ongemoeid) + gewone terminal (geen auto-start).
+
+**Ontwerp-beslissingen (expert, anti-gold-plating):**
+- **Welcome NIET gecondenseerd/overgeslagen bij een deep-link.** De briefing wordt de held via scroll-to-bottom + input-focus, niet door de welcome-render te herschrijven. Reden: de welcome is het meest fragiele, zorgvuldig-gesequencede boot-pad (typewriter + legal + first-visit-flag); daar conditioneel in snijden = hoog risico voor marginale winst. Na auto-scroll staat briefing+objective+cursor onderaan in beeld; de korte welcome scrollt boven de vouw. **Bewust NIET gedaan:** welcome-suppressie-tak, een aparte "deep-link welcome"-variant, landingsanimaties, blog/commands deep-linken, resume-instellingen-UI.
+
+**Verificatie:**
+- **E2E:** `leerpad-deeplink.spec.js` 5/5 groen tegen lokale server. Volledige chromium-suite: **203 passed**, 5 flaky (groen op retry), 5 skipped, **2 failed** (`cross-browser.spec.js:285` footer-links + `lead-magnet.spec.js:8` sample-pentest-landing). Beide failures bevestigd **óók rood tegen productie** (`baseURL` default) → pre-existing, niet in door Fase A geraakte bestanden, géén regressie.
+- **Render-en-meet** (Playwright MCP, lokale `python3 -m http.server`, dark/light/375px): fundamentals dark/light desktop + recon 375px. Gemeten: `inputDisabled:false`, `inputFocused:true` (activeEl `terminal-input`), output naar bottom gescrold (briefing+objective+cursor in beeld), `urlSearch:''`, **doc horizontal overflow 0px** desktop. Op 375px een 10px-overflow van `MAIN#terminal-container` (left 10, width 360, right 370 op docW 360) — **identiek bevestigd op een gewone `/terminal.html` zonder deep-link** = pre-existing page-shell-layout, niet door Fase A geïntroduceerd; de mobiele markdown-briefing wrapt schoon zonder content-clipping. Screenshots `.playwright-mcp/deeplink-{fundamentals-dark,fundamentals-light,recon-375}.png`.
+- **validate-docs:** exit 0 (verwacht na deze /summary).
+
+**Kritieke vondst tijdens verificatie:** de happy-path-tests faalden eerst — bleek dat `playwright.config.js` `baseURL` op **productie** (`https://hacksimulator.nl`) heeft staan met `webServer` uitgecommentarieerd. Zonder `BASE_URL` test je dus de live site (geen deep-link-code) i.p.v. je werkkopie; de no-op-tests "slaagden" toevallig (prod toont sowieso geen briefing). Fix: lokale statische server starten + `BASE_URL=http://127.0.0.1:8099` zetten. Een groene/rode test betekent niets als je niet weet waartégen hij draait.
+
+**Commits:** Fase A lokaal op `main` (nog te committen na deze /summary). **Nog niet gepusht** — bundelt met de 4 Sessie 185-188-commits in één deploy ná go.
+
+**Learnings:**
+- **`markFirstVisitComplete()` flipt op de eerste `terminal.execute()`** (terminal.js:297), niet in de welcome-render. Auto-start via het registry-pad (`terminal.execute('tutorial <id>')`) wint daarom op drie assen tegelijk: command-echo/transparantie (Sessie 156), history-trail én een eerlijke first-visit-flag. Een directe `tutorialManager.start()` had alle drie gemist.
+- **`start()` vuurde al `tutorialEvent('started')` zonder source** → een tweede analytics-call zou dubbeltellen. De nette oplossing is de source *vooraf* in de manager prikken (one-shot veld dat `start()` leest+wist), niet een tweede event vanuit de deep-link.
+- **baseURL-valkuil:** `playwright.config.js` test default tegen productie. Lokale verificatie vereist een eigen statische server + `BASE_URL`. Render-en-meet en E2E zijn waardeloos als je het doelwit niet kent.
+- **Overflow eerlijk toeschrijven:** de 10px op 375px wás er al zonder de feature (gemeten op een kale terminal). Een meting die je niet baselinet kan een pre-existing eigenaardigheid ten onrechte aan je wijziging hangen (of omgekeerd verbergen). Anti-gold-plating: niet "fixen" wat niet van mij is en buiten scope valt.
+- **Resume-vs-deeplink: deep-link wint, maar non-destructief.** Een expliciete klik is verse intentie en mag een stale auto-resume overrulen — maar zonder progress te vernietigen: `exit()` slaat op vóór de nieuwe start, en een deep-link naar de reeds-actieve missie herstart níét (geen reset naar stap 0).
+
+**Next steps:** push (4 + Fase A) ná go van Heisenberg. Geen openstaande Fase-items meer in de "Leerpad deep-link"-boog. Optionele toekomst (buiten scope, niet ingepland): blog/commands deep-link-instappunten; analytics-dashboard-segment op `source:homepage-leerpad`.
+
+**Metrics delta:** spec files 24→25, tests 215 (was 210). src/ 631→646 KB (sinds Sessie 185-marker; +deep-link-handler ~3KB, rest = Sessie 187-188-code). Geen styles/blog/assets-delta.
+
+---
+
 ## Sessie 188: Eén coherente leerpad-ladder — progressie-oppervlakken uniform (30 jun 2026)
 
 **Mission:** Vraag van Heisenberg: "komt de tutorial-indeling overeen met het leerpad-commando in de simulator?" Antwoord (brutaal eerlijk): structureel niet — en de analyse legde een groter UX-probleem bloot. Opdracht: "analyseer als expert wat echt het beste is voor de UX, tijd speelt geen rol."

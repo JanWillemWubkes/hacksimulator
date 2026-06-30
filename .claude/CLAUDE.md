@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 188)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 189)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 189: Fase A — leerpad deep-link → in-app tutorial-landing (30 jun 2026)
+⚠️ **Never:**
+- Een E2E/Playwright-run vertrouwen zonder te weten waartégen hij draait — `playwright.config.js` heeft `baseURL` op **productie** (`https://hacksimulator.nl`) met `webServer` uitgecommentarieerd; zonder `BASE_URL` test je de live site (géén werkkopie-code). De happy-path faalde, de no-op-tests "slaagden" toevallig. Lokale verificatie = eigen statische server + `BASE_URL=http://127.0.0.1:<port>`.
+- Een tweede `tutorialEvent('started')` vuren vanuit de deep-link — `start()` (tutorial-manager.js) vuurt 'm al zónder source → dubbeltelling. Thread de source *vooraf* via een one-shot veld dat `start()` leest+wist (`setNextStartSource`), geen tweede event.
+- Een overflow/meting aan je wijziging toeschrijven zonder baseline — de 10px op 375px wás er al op een kale `/terminal.html` zonder deep-link (`#terminal-container` left 10/width 360 op docW 360 = page-shell). Meet de feature-loze staat vóór je iets "fixt" (anti-gold-plating: niet repareren wat buiten scope valt).
+- De fragiele welcome-boot herschrijven om de briefing "held" te maken — typewriter + legal + first-visit-flag zijn zorgvuldig gesequencet; conditioneel snijden = hoog risico, marginale winst. Scroll-to-bottom + input-focus maakt de briefing al de held (welcome scrollt boven de vouw).
+
+✅ **Always:**
+- Auto-start een UI-getriggerd commando via het registry-pad (`terminal.execute('tutorial <id>')`, Sessie-156-precedent) — dat wint op drie assen: command-echo/transparantie, history-trail én een eerlijke `markFirstVisitComplete()` (die flipt op de eerste `execute()`, niet in de welcome-render). Een directe `start()` mist alle drie.
+- Deep-link gesequencet timen zodat de briefing nooit in dode input of midden in de typewriter valt: eerste bezoek → wacht op `typewriter-done` + 250ms (ruimt resume/badge-timeouts op); terugkerend → direct.
+- Resume-vs-deeplink non-destructief: deep-link (verse klik) wint van stale auto-resume, maar `exit()` slaat progress op vóór de nieuwe start, en deep-link == reeds-actieve missie herstart níét (geen reset naar stap 0).
+- Validatie tegen de single source of truth (`tutorialManager.getScenario(id)`), niet een hardcoded id-lijst; onbekend → stille no-op + URL ongemoeid. URL bij een valide id direct strippen via `history.replaceState` zodat refresh niet herstart. Volledig: `docs/sessions/current.md` Sessie 189.
+
 ### Sessie 188: Eén coherente leerpad-ladder — progressie-oppervlakken uniform (30 jun 2026)
 ⚠️ **Never:**
 - Alleen de letterlijke vraag beantwoorden als het echte probleem systemisch is — "komt tutorial overeen met leerpad?" verborg drie difficulty-vocabulaires (Beginner/Gevorderd/Expert vs Fase 1-4 vs EASY/MEDIUM/HARD) over vier oppervlakken zonder onderlinge koppeling. Expert-analyse = herkader naar het systeem.
@@ -146,20 +159,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Een variant-klasse die enkel van de base afwijkt collapse't tot bijna niets als je besluit dat de base de variant wórdt — `.blog-cta-product` 3 regels → 1; netto CSS kromp. Product/lead-magnet-kaarten bleven ongewijzigd, alleen de plain CTA convergeerde.
 - Render-en-meet als bewijs: `getComputedStyle` plain==product (text-align/border-left), light-accent `#0969da` blauw (géén groen), 0 overflow 375px, cross-check 2e post. Geheugen `feedback_blog_cta_unified`. Volledig: `docs/sessions/current.md` Sessie 184.
 
-### Sessie 183: Lead-magnet conversie/UX + dark-mode zichtbaarheid + copy-feitencontrole (28 jun 2026)
-⚠️ **Never:**
-- Een main-site-treatment (groene accent) klakkeloos op de blog plakken — de blog heeft een eigen palet (blauw, géén groen); "consistent maken" werd juist inconsistent. Cargo-cult: vorm kopiëren ≠ context checken. Geheugen `feedback_blog_palette_no_green`.
-- Lead-magnet/cross-sell-copy "kloppend" maken tegen de oude tekst i.p.v. het echte artefact — 3× bleek een mooie zin feitelijk onjuist (Fase 0 = voorbereiding ≠ reconnaissance, géén nmap-cheatsheet, "command-templates" bestaat niet) tot ik de sample- + 19-pagina-PDF zelf las.
-- Een element "heeft border + schaduw → ok" concluderen zónder te checken of die schaduw zíchtbaar is — `--shadow-elevation-1` is zwart-op-#0d1117 = onzichtbaar in dark; de kaarten leunden de facto op alleen een hairline.
-- Een gedeelde klasse (`.sample-hero-content`) flex→grid herschrijven zonder te grep'en wie 'm nog meer gebruikt — `sample-download` deelt 'm (tekst+cover) en was gesloopt; scope op een `--lead`-modifier.
-
-✅ **Always:**
-- Elevatie in dark mode = lichter oppervlak (`--color-bg-modal` #161b22), niet schaduw — schaduwen werken niet op bijna-zwarte bg. "light gefixt, dark vergeten" is systemisch: grep `[data-theme=light]` met elevated bg vs dark-basis = pagina.
-- Belofte-inversie vermijden: copy zet de écht directe actie voorop (instant on-page download), niet het gevoelsmatig-directe-maar-gepoorte pad (inbox/dubbel-opt-in).
-- Als dezelfde copy zich blijft verzetten tegen correctheid (wachtmail→wachten→formulier), ligt het een laag dieper — hier een onware premisse (gratis sample = obstakel terwijl Gumroad óók e-mail vraagt); laat frictie-framing los, leid met waarde.
-- De-jargon via de NL-gloss uit de eigen woordenlijst ("verkenning" voor reconnaissance) → site-brede consistentie gratis. Niet elke "dark == pagina" is een bug: modals (dim-overlay) + terminal/input zijn intentioneel. Volledig: `docs/sessions/current.md` Sessie 183.
-
-**Rotation:** Top-6 huidig: 183-184-185-186-187-188 (Sessie 182 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 185 UITGEVOERD:** current.md staart Sessie 170-174 geknipt naar `archive-s170-s174.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 175-188 (14 entries; volgende bulk-rotatie Sessie 190 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-169 → `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 184-185-186-187-188-189 (Sessie 183 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 185 UITGEVOERD:** current.md staart Sessie 170-174 geknipt naar `archive-s170-s174.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 175-188 (14 entries; volgende bulk-rotatie Sessie 190 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-169 → `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -208,7 +208,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 188
+**Sessie counter:** 189
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -260,6 +260,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 30 jun 2026 (Sessie 188 — Eén coherente leerpad-ladder: leerpad-commando groepeert 4 fases onder 3 niveaus + missie-bruggen naar de tutorials; homepage-chips kloppend (netcat/wireshark weg, hashcat→Expert); challenge-difficulty overal NL via gedeelde `difficultyLabel()` in 6 plekken (UI=NL-bug). Volledige chromium-suite groen (188 passed). Commit `aebcca3`. Volledig: `docs/sessions/current.md`)
-**Version:** 5.62 (Sessie 188 — Eén leerpad-ladder: leerpad-tiers + missie-bruggen + challenge-NL; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 30 jun 2026 (Sessie 189 — Fase A: leerpad deep-link → in-app tutorial-landing. `main.js` leest `?tutorial=<id>` + gesequencete auto-start (briefing = held: scroll+focus); 3 knoppen → `?tutorial=fundamentals/recon/exploitation`; cache-bump `main.js?v=189-deeplink`. NEW `leerpad-deeplink.spec.js` 5/5; chromium 203 passed. Sluit de boog Stap 0+B+A. Volledig: `docs/sessions/current.md`)
+**Version:** 5.63 (Sessie 189 — Fase A leerpad deep-link → tutorial-landing: query-handler + gesequencete auto-start + non-destructieve resume-vs-deeplink; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
