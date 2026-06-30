@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 187)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 188)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 188: Eén coherente leerpad-ladder — progressie-oppervlakken uniform (30 jun 2026)
+⚠️ **Never:**
+- Alleen de letterlijke vraag beantwoorden als het echte probleem systemisch is — "komt tutorial overeen met leerpad?" verborg drie difficulty-vocabulaires (Beginner/Gevorderd/Expert vs Fase 1-4 vs EASY/MEDIUM/HARD) over vier oppervlakken zonder onderlinge koppeling. Expert-analyse = herkader naar het systeem.
+- Systemen samenvoegen om "consistent" te zijn — leerpad (oefen-checklist) / tutorial (begeleide missie) / challenge (zelftest) hebben elk een functie; mergen = verlies. De fix is gedeelde taal + koppeling, niet minder systemen.
+- Aannemen dat één difficulty-label-fix het hele oppervlak dekt — de labels zaten verspreid over **6 bestanden** (challenge-renderer/challenge/dashboard/next/certificate-generator/certificates); cert-lijst + cert-generator waren aparte codepaden die de eerste fix miste. Eén gedeelde helper + de hele keten najagen.
+- Een "pre-existing" groene test vertrouwen zonder de aanname te checken — de badge-count `21`-test slaagde in de volle suite via geleakte unlock-state ("21/22") maar faalde geïsoleerd; de echte telling is 22. Count-asserties horen ground-truth te volgen, niet geleakte state.
+
+✅ **Always:**
+- Bij "wat is het beste voor UX, wees eerlijk": grondige analyse + besluit + "wat ik bewust NIET doe" (anti-gold-plating), geen keuzemenu ([[feedback_expert_ux_analysis]]).
+- Eén canonieke ladder (3 niveaus) waar alles op uitlijnt, met per niveau de lus lees→missie→oefen→test; outliers (leerpad 4-fasen, challenge Engels) convergeren naar de heersende vocabulaire, fase-namen behouden (informatiever) door ze te gróéperen i.p.v. te vervangen.
+- De twee belangrijkste leertools expliciet aan elkaar koppelen — `leerpad` (oefenen) toont nu per niveau `[→] Begeleide missie: tutorial <id>` zodat oefenen ↔ begeleide missie als twee views op hetzelfde niveau leesbaar zijn.
+- Engelse difficulty-labels in een NL-UI zijn een bug, geen smaak ([[feedback_nl_copy_dejargon]]): EASY/MEDIUM/HARD → Makkelijk/Gemiddeld/Moeilijk via één `difficultyLabel()`; interne keys (easy/medium/hard) ongemoeid voor sortering/opslag. Volledig: `docs/sessions/current.md` Sessie 188.
+
 ### Sessie 187: Fase B uitgevoerd — tutorials op orde (badge == bestemming) (30 jun 2026)
 ⚠️ **Never:**
 - De gespecde "verborgen taak" blind uitvoeren — Stap 0 vermoedde een `Expert`-badge in `tutorial-renderer.js`; exploratie toonde dat difficulty overal platte tekst is (renderer/lijst/certificaat), géén difficulty-gestuurde CSS in de terminal → een badge bouwen = cargo-cult. De échte doorwerking zat een laag dieper (funnel). De spec wijst de richting, niet altijd de plek.
@@ -146,20 +159,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Als dezelfde copy zich blijft verzetten tegen correctheid (wachtmail→wachten→formulier), ligt het een laag dieper — hier een onware premisse (gratis sample = obstakel terwijl Gumroad óók e-mail vraagt); laat frictie-framing los, leid met waarde.
 - De-jargon via de NL-gloss uit de eigen woordenlijst ("verkenning" voor reconnaissance) → site-brede consistentie gratis. Niet elke "dark == pagina" is een bug: modals (dim-overlay) + terminal/input zijn intentioneel. Volledig: `docs/sessions/current.md` Sessie 183.
 
-### Sessie 182: Live zoekfilter + design-uitlijning woordenlijst ↔ commands (27 jun 2026)
-⚠️ **Never:**
-- Verwachten dat een flex-item met `margin: 0 auto` + `overflow-x:auto` klemt — de auto-marge schakelt `align-items: stretch` uit, dus het kind sized op z'n inhoud i.p.v. de container en `overflow-x` grijpt niet → pagina-overflow (gemeten: een nav van 484px duwde de 375px-viewport naar 496px). De regel werd pas giftig ná het herparenten in een flex-kolom. Reset met `margin:0; min-width:0`.
-- Een gedeelde `max-width` lezen als "even breed" — `max-width` op een padding-loos element vs op een gepadde `.page-section` geeft 32px verschillende content-randen zodra de viewport > max-width. CSS lezen ("beide 1400") is niet genoeg; reken het box-model per rand uit.
-- Vorm-consistentie najagen zonder de intentie te checken (cargo-cult) — de gecentreerde commands-intro klakkeloos op de woordenlijst plakken zou botsen met de links-uitgelijnde glossary-kop. Beide zijn scanbare naslag → links wint; kies per element de behandeling die past bij wat de pagina's gemeen hebben.
-- Een "kapotte" feature aan de code toeschrijven vóór je de test zelf wantrouwt — de scroll-spy las "Netwerk" bij Security door `scroll-behavior: smooth` (IO las tussenposities van de animatie), niet door een bug. Instant-scroll bewees correct gedrag.
-
-✅ **Always:**
-- Een flex-item dat moet scrollen krijgt `margin:0; min-width:0` zodat `overflow-x:auto` aangrijpt i.p.v. de pagina te verbreden.
-- Een sticky-balk-inner hetzelfde box-model geven als de content eronder (`.page-section`: `max-width` + `margin:0 auto` + zelfde padding-tokens, 32px desktop / 16px mobiel) → randen vallen op élke breedte samen; full-bleed achtergrond/blur/border blijven op de buitenkant.
-- Herbruikbare UI-logica = kern-module + dunne per-pagina wrappers (config-selectors + label-noun) → de tweede consument wordt een mechanische kopie, geen duplicatie. Hier: `term-filter.js` ← `glossary-filter.js` / `commands-filter.js`.
-- Meet de échte staat, niet een test-artefact: instant-scroll i.p.v. `scrollIntoView()` (smooth) om de IntersectionObserver-staat zuiver te triggeren. Render-en-meet op no-store server, dark+light+mobiel+breed (>max-width), `getBoundingClientRect`-delta == 0. Volledig: `docs/sessions/current.md` Sessie 182.
-
-**Rotation:** Top-6 huidig: 182-183-184-185-186-187 (Sessie 181 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 185 UITGEVOERD:** current.md staart Sessie 170-174 geknipt naar `archive-s170-s174.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 175-187 (13 entries; volgende bulk-rotatie Sessie 190 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-169 → `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 183-184-185-186-187-188 (Sessie 182 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 185 UITGEVOERD:** current.md staart Sessie 170-174 geknipt naar `archive-s170-s174.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 175-188 (14 entries; volgende bulk-rotatie Sessie 190 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-169 → `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -208,7 +208,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 187
+**Sessie counter:** 188
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -260,6 +260,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 30 jun 2026 (Sessie 187 — Fase B uitgevoerd: NEW `fundamentals.js` (Beginner, 7 stappen) + 4 her-tiering-labels (recon/privesc→Gevorderd, webvuln/exploitation→Expert) + funnel-doorwerking (`next.js` stage 0, `dashboard`/`certificate`/manpage). Expert-badge bleek niet nodig (difficulty = platte tekst). E2E 7 tests cross-browser groen. Commit `3ac65aa`. Volledig: `docs/sessions/current.md`)
-**Version:** 5.61 (Sessie 187 — Fase B: fundamentals-scenario + her-tiering difficulty-labels; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 30 jun 2026 (Sessie 188 — Eén coherente leerpad-ladder: leerpad-commando groepeert 4 fases onder 3 niveaus + missie-bruggen naar de tutorials; homepage-chips kloppend (netcat/wireshark weg, hashcat→Expert); challenge-difficulty overal NL via gedeelde `difficultyLabel()` in 6 plekken (UI=NL-bug). Volledige chromium-suite groen (188 passed). Commit `aebcca3`. Volledig: `docs/sessions/current.md`)
+**Version:** 5.62 (Sessie 188 — Eén leerpad-ladder: leerpad-tiers + missie-bruggen + challenge-NL; volledige historie: `docs/sessions/current.md` + TASKS.md)
 

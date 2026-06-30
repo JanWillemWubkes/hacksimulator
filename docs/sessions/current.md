@@ -4,6 +4,36 @@
 
 ---
 
+## Sessie 188: Eén coherente leerpad-ladder — progressie-oppervlakken uniform (30 jun 2026)
+
+**Mission:** Vraag van Heisenberg: "komt de tutorial-indeling overeen met het leerpad-commando in de simulator?" Antwoord (brutaal eerlijk): structureel niet — en de analyse legde een groter UX-probleem bloot. Opdracht: "analyseer als expert wat echt het beste is voor de UX, tijd speelt geen rol."
+
+**Diagnose (de echte bevinding):** drie vocabulaires voor "hoe moeilijk" over vier leeroppervlakken — homepage `#leerpad` + `tutorial` = Beginner/Gevorderd/Expert (NL); `leerpad`-commando = Fase 1-4 (categorienamen); `challenge` = EASY/MEDIUM/HARD (Engels — schendt UI=NL). Bovendien verwezen `leerpad` (oefenen) en `tutorial` (begeleide missies) nergens naar elkaar, en `privesc` (Gevorderd) gebruikt Fase-1-commando's maar past in geen leerpad-fase. Een leerling kon geen mentaal model van "het pad" vormen.
+
+**Expert-besluit (geen keuzemenu, [[feedback_expert_ux_analysis]]):** niet samenvoegen (elk oppervlak heeft een functie) — wél één canonieke 3-niveau-ladder waar alles op uitlijnt, met per niveau de lus **Lees → Doe de missie → Oefen vrij → Test jezelf**. De 3-niveau-taal is al de homepage/tutorial-standaard; leerpad (4 fases) en challenge (Engels) zijn de outliers die convergeren.
+
+**Work done (commit `aebcca3`, 13 files):**
+- **Fase 1 — `leerpad.js` wordt de unifiërende kaart:** de 4 fases gegroepeerd onder 3 niveau-koppen (BEGINNER = Fase 1+2, GEVORDERD = Fase 3, EXPERT = Fase 4) via een nieuwe `tiers`-structuur + `isExpertUnlocked()`. Per niveau een brug `[→] Begeleide missie: tutorial <id>` (fundamentals/recon/exploitation). Fase-namen (informatiever dan kale tiers), command-afvink-tracking en de EXPERT-lock behouden. `buildBoxOutput` + `buildMobileOutput` + manPage herschreven. Desktop-indent: tier 2 / fase 4 / command 8.
+- **Fase 3 — homepage-chips kloppend (`index.html`):** GEVORDERD `nmap/netcat/wireshark/hashcat` → `ping/nmap/ifconfig/netstat` (netcat/wireshark bestaan niet als commando; hashcat is Fase 4); EXPERT `metasploit,hydra / sqlmap,nikto / hashcat` (dekt exact Fase 4); BEGINNER ongewijzigd. Beschrijvings-tweaks (geen wireshark-belofte "analyseer verkeer" meer).
+- **Fase 2 — challenge-difficulty overal NL:** één gedeelde `difficultyLabel()` (export uit `challenge-renderer.js`) → EASY/MEDIUM/HARD → Makkelijk/Gemiddeld/Moeilijk in **6 bestanden** (challenge-renderer, challenge, dashboard, next (`diffLabels`), certificate-generator, certificates). Interne keys (easy/medium/hard) ongemoeid.
+- **E2E:** 3 nieuwe asserts in `fundamentals.spec.js` (leerpad-ladder + missie-brug; challenge NL; homepage geen fictieve commando's). EASY/MEDIUM/HARD-asserts in gamification/gamification-mobile/dashboard/certificates → NL. Stale badge-count `21`→`22` gecorrigeerd (badge-definitions.js heeft 22; oude test leunde op geleakte unlock-state — order-afhankelijk).
+
+**Verificatie:** volledige chromium-suite groen (188 passed, 5 skipped, pre-existing flaky op retry, 0 failures) + `fundamentals.spec.js` cross-browser (firefox+webkit, 20 passed). Render-en-meet (no-store + Playwright MCP, dark/light/375px): leerpad mobiel + desktop (alle box-regels exact 69 breed = pixel-uitgelijnd), tier-koppen + missie-bruggen + EXPERT-lock correct, challenge NL-labels gemeten (hasNL true / hasEN false), homepage 18 chips alle echt (0 fictie). validate-docs exit 0.
+
+**Commits:** `aebcca3` (feat(leerpad): één coherente ladder), op `main`. **Nog niet gepusht** (push = Netlify-deploy; wacht op go van Heisenberg).
+
+**Learnings:**
+- **Het echte probleem was groter dan de vraag.** "Komt tutorial overeen met leerpad?" → de werkelijke debt was drie difficulty-vocabulaires over vier oppervlakken zonder onderlinge koppeling. Expert-analyse = de vraag herkaderen naar het systemische probleem, niet alleen het letterlijke punt beantwoorden.
+- **Uniform maken ≠ samenvoegen.** leerpad/tutorial/challenge hebben elk een functie; de fix is gedeelde taal + expliciete koppeling, niet minder systemen. De 4 fase-namen behouden (informatiever) en gróéperen onder 3 niveaus geeft best-of-both.
+- **Difficulty-labels zaten verspreid over 6 bestanden** — gevonden door test-failures te volgen (certificaten-lijst + cert-generator waren aparte codepaden die de eerste fix miste). Eén gedeelde helper voorkomt herhaling van dit lek. Thoroughness (de hele keten najagen) betaalde.
+- **Een "pre-existing" test-failure kan order-afhankelijkheid maskeren.** De badge-count `21`-test slaagde in de volle suite (geleakte unlock-state toonde "21/22") maar faalde geïsoleerd; de echte telling is 22. Een count-assertie hoort de ground-truth te volgen, niet geleakte state.
+
+**Next steps (open):** Fase A — deep-link homepage-knoppen → `?tutorial=fundamentals/recon/exploitation` (`main.js` URLSearchParams + cache-bump + E2E). Push Sessie 187+188 naar `main` (deploy) na go.
+
+**Metrics delta:** src/ +~2 KB (leerpad/challenge); tests 207→**210** per browser-project (24 spec files, +3 asserts in fundamentals.spec.js). Geen runtime-budget-impact (Terminal Core ruim <400 KB).
+
+---
+
 ## Sessie 187: Fase B — tutorials op orde (badge == bestemming) (30 jun 2026)
 
 **Mission:** Fase B van het backlog-item "Leerpad deep-link naar in-app tutorials" uitvoeren (vervolg op Sessie 186 Stap 0): de niveau→scenario→labelwijziging-mapping wáármaken in code zodat de difficulty die de gebruiker ziet de échte skill weerspiegelt en er een BEGINNER-bestemming (fundamentals) bestaat. B vóór A (dwingend). Code-werk, direct op `main`.
