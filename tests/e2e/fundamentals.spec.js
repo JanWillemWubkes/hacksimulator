@@ -106,6 +106,13 @@ test.describe('Fundamentals Tutorial + Re-tiering', () => {
     const output = page.locator('#terminal-output');
     await expect(output).toContainText('MISSIE VOLTOOID', { timeout: 5000 });
     await expect(output).toContainText('Goed gedaan', { timeout: 2000 });
+
+    // Regression (Sessie 190): on the tutorial's final command the onboarding
+    // "Type 'next'" nudge must NOT leak next to the completion follow-up — the
+    // isActive() guard is captured pre-mutation, so this appears exactly once.
+    await expect(
+      output.locator('.terminal-line', { hasText: "Type 'next' voor je volgende stap" })
+    ).toHaveCount(1);
   });
 
   test('wrong argument gives differentiated (not "wrong command") feedback', async ({ page }) => {

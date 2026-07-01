@@ -194,6 +194,13 @@ class Renderer {
    * @param {string} [completion.followUp] - Follow-up text lines
    */
   renderCompletionBlock(output, celebrationTitle, completion) {
+    // Capture the last command echo BEFORE appending the (tall) completion block,
+    // so we can anchor the scroll on the user's command instead of pinning to the
+    // bottom of a block that is often taller than the viewport (which would hide
+    // the just-run command's output — the whole point of the completion moment).
+    var inputs = this.outputElement.querySelectorAll('.terminal-line.terminal-input');
+    var anchorLine = inputs.length ? inputs[inputs.length - 1] : null;
+
     // Render step feedback as normal output
     if (output) {
       this.renderOutput(output, 'success');
@@ -230,7 +237,14 @@ class Renderer {
     }
 
     this._trimOutput();
-    this._scrollToBottom();
+    // Anchor the command echo to the top of the viewport (reading order:
+    // command -> output -> [✓] Correct! -> mission -> certificate -> follow-up).
+    // Fallback to bottom-scroll if no command echo is present.
+    if (anchorLine) {
+      this._scrollLineToTop(anchorLine);
+    } else {
+      this._scrollToBottom();
+    }
 
     // Sequential reveal animation
     this._revealCelebration(celebrationTitle);
@@ -241,7 +255,6 @@ class Renderer {
    * Respects prefers-reduced-motion.
    */
   _revealCelebration(celebrationTitle) {
-    var self = this;
     var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     var mission = this.outputElement.querySelector('.terminal-completion-mission:last-of-type');
@@ -253,7 +266,8 @@ class Renderer {
       if (cert) { cert.style.opacity = '1'; cert.classList.add('celebration-visible'); }
       if (followUp) followUp.style.opacity = '1';
       if (celebrationTitle) showCelebrationBanner(celebrationTitle);
-      self._scrollToBottom();
+      // No scroll: reveal only changes opacity (no layout change) — keep the
+      // command-echo anchor set by renderCompletionBlock.
       return;
     }
 
@@ -267,15 +281,15 @@ class Renderer {
       if (cert) {
         cert.style.opacity = '1';
         cert.classList.add('celebration-visible');
-        self._scrollToBottom();
       }
     }, 800);
 
     // Step 3: Follow-up text + banner after 1500ms
+    // No re-scroll: opacity-only reveal keeps the command-echo anchor in place,
+    // so the user's last command output stays visible above the celebration.
     setTimeout(function() {
       if (followUp) followUp.style.opacity = '1';
       if (celebrationTitle) showCelebrationBanner(celebrationTitle);
-      self._scrollToBottom();
     }, 1500);
   }
 
@@ -461,6 +475,20 @@ class Renderer {
       // Scroll the output element itself (not parent)
       this.outputElement.scrollTop = this.outputElement.scrollHeight;
     }
+  }
+
+  /**
+   * Scroll a given line to the top of the output viewport.
+   * Uses the getBoundingClientRect delta so it scrolls the output element only
+   * (never the navbar/page), consistent with _scrollToBottom.
+   * @param {HTMLElement} line - Line element to bring to the top
+   * @private
+   */
+  _scrollLineToTop(line) {
+    if (!this.outputElement || !line) return;
+    var delta = line.getBoundingClientRect().top
+              - this.outputElement.getBoundingClientRect().top;
+    this.outputElement.scrollTop += delta;
   }
 
   /**

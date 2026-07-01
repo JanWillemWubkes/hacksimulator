@@ -264,6 +264,10 @@ class Terminal {
       let tutorialWasCorrect = false;
       const isTutorialRelevant = tutorialManager.isActive() &&
           !['tutorial', 'help', 'man', 'clear', 'history', 'leerpad', 'shortcuts', 'next', 'hint', 'reset'].includes(parsed.command);
+      // Capture BEFORE handleCommand() runs: completing the final step flips the
+      // tutorial to IDLE in this same tick, so a post-mutation isActive() check
+      // would go stale and leak a duplicate onboarding "Type 'next'" hint.
+      const tutorialActiveAtStart = tutorialManager.isActive();
 
       if (isTutorialRelevant) {
         const stepBefore = tutorialManager.currentStep;
@@ -310,8 +314,10 @@ class Terminal {
       let onboardingHint = null;
       if (this._shouldTrackCommand(parsed.command, parsed.args, output)) {
         onboardingHint = onboarding.recordCommand(parsed.command);
-        // Suppress "Type 'next'" hints during active tutorials/challenges
-        if (onboardingHint && (tutorialManager.isActive() || challengeManager.isActive())) {
+        // Suppress "Type 'next'" hints during active tutorials/challenges.
+        // Use the pre-mutation tutorial state so a just-completed tutorial (now IDLE)
+        // still suppresses the onboarding nudge on its final command.
+        if (onboardingHint && (tutorialActiveAtStart || challengeManager.isActive())) {
           onboardingHint = null;
         }
         if (onboardingHint) {
@@ -327,7 +333,7 @@ class Terminal {
 
       // Beginner follow-up tip (only outside tutorials/challenges)
       // Skip if recordCommand already showed a hint (prevents duplicate "Type 'next'" messages)
-      if (!onboardingHint && !tutorialManager.isActive() && !challengeManager.isActive()) {
+      if (!onboardingHint && !tutorialActiveAtStart && !challengeManager.isActive()) {
         const followUp = onboarding.getFollowUpTip(parsed.command);
         if (followUp) renderer.renderInfo(followUp);
       }
