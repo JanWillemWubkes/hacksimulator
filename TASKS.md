@@ -708,6 +708,7 @@ Deze features zijn **buiten MVP scope** en worden in Fase 2 geïmplementeerd:
 - [ ] **Quick Commands UI** - Moved to Phase A.5 (deferred until mobile UX fixes)
 - [ ] **Mobile Gestures** - Swipe/long-press navigatie (needs real device testing)
 - [ ] **Persistent Help Hint** - Rechts onderin, verdwijnt na 5 commands
+- [ ] **Terminal 10px horizontale overflow op mobiel (375px)** — pre-existing, laag-impact cosmetisch (ontdekt tijdens Sessie 189 render-en-meet, NIET van de deep-link: bewezen identiek op een kale `/terminal.html`). `MAIN#terminal-container` meet left 10 / width 360 → right 370 op `docW` 360 → de pagina kan ~10px horizontaal wiebelen op mobiel. Geen content-clipping (tekst wrapt schoon). Fix = de 10px links-offset op `#terminal-container` @375px opsporen (padding/margin op container of een wrapper) en de breedte binnen de viewport houden. Verifieer met `document.documentElement.scrollWidth - clientWidth == 0` op 375px, dark+light, zonder regressie op desktop.
 
 ### Feedback & Analytics
 - [ ] **Exit Intent Detection** - Survey na 2+ min sessie (FR7.2 deferred)
