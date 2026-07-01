@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 189)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 190)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 190: Bugfix tutorial/challenge-completion — laatste output zichtbaar + één "next" (01 jul 2026)
+⚠️ **Never:**
+- De klacht "ik zie de output niet" lezen als "output ontbreekt" — hij was er wél, maar wérd weggescrold. `renderCompletionBlock` pint de viewport op de bodem van een blok hoger dan de viewport, en `_revealCelebration` her-scrolt nóg 2× op timer (800/1500ms). Opacity:0-zones nemen al layout-hoogte in → `scrollHeight` is toch al maximaal. Diagnose = scroll-timing, geen render-gat.
+- Een `isActive()`-guard lezen ná een mutatie in dezelfde tick — `handleCommand()` zet de tutorial op IDLE, waarna de onboarding-guards `isActive()` als `false` lazen en de "Type 'next'"-nudge lekte náást de completion-follow-up. Leg de staat vast vóór de mutatie.
+- Een groene/rode Playwright-run vertrouwen zonder te weten wát hij draaide — warme HTTP-cache serveerde oude modules (tell: `scrollTop == scrollHeight−clientHeight` + `nextCount:2`), en een run waarin de deep-link-auto-start nog niet actief was liet commando's als gewone commando's lopen. Schone origin/poort + deterministische start + per-stap-polling.
+- Een meet-artefact voor een bug aanzien — `find(/Correct/i)` pakte de "Correct!" van stáp 1 (ver weggescrold) → leek "niet zichtbaar" terwijl de echte asserts groen waren. Wantrouw je meetinstrument, niet alleen de code.
+
+✅ **Always:**
+- Scroll-anker op de betekenisvolle regel, niet blind naar de bodem — verleg naar de laatste commando-echo (`_scrollLineToTop` via `getBoundingClientRect`-delta, binnen het output-element) zodat leesvolgorde commando → output → `[✓] Correct!` → celebratie ontstaat; de gebruiker ziet direct het resultaat van zijn laatste actie.
+- Zoek waar een bug nóg meer speelt vóór je fixt — tutorial én challenge delen `renderCompletionBlock`, dus één scroll-fix dekt beide; de dubbele-next was tutorial-only (challenge wordt ná de guards afgehandeld). Eén fix, juiste dekking.
+- Opacity-reveal wijzigt geen layout → geen her-scroll nodig; schrap de overbodige timer-`_scrollToBottom`-calls i.p.v. ertegen te vechten. Minder code, stabieler anker.
+- Anti-gold-plating in tests: leg alleen de deterministische kern vast (exact 1× "next" via `toHaveCount(1)`), niet de brosse scroll-positie (die handmatig via Playwright bevestigd). De fragiele welcome/celebratie-sequencing niet herschrijven — enkel anker + overbodige her-scrolls aanraken. Volledig: `docs/sessions/current.md` Sessie 190.
+
 ### Sessie 189: Fase A — leerpad deep-link → in-app tutorial-landing (30 jun 2026)
 ⚠️ **Never:**
 - Een E2E/Playwright-run vertrouwen zonder te weten waartégen hij draait — `playwright.config.js` heeft `baseURL` op **productie** (`https://hacksimulator.nl`) met `webServer` uitgecommentarieerd; zonder `BASE_URL` test je de live site (géén werkkopie-code). De happy-path faalde, de no-op-tests "slaagden" toevallig. Lokale verificatie = eigen statische server + `BASE_URL=http://127.0.0.1:<port>`.
@@ -146,20 +159,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Card-CTA-paren onderaan uitlijnen via een `.leerpad-cta-group` met `margin-top:auto` (i.c.m. `p{flex-grow:1}`) → groep-tops gelijk over kaarten met ongelijke beschrijvingslengtes (gemeten 3×==4058px).
 - De meet-asymmetrie als tell lezen: `--color-cta-primary` flipte wél bij de theme-toggle, `--color-text-dim` niet → wantrouw de meting, lees vers in een aparte tick. **Render-en-meet werkt alleen als je óók je meetinstrument wantrouwt.** (`--color-text-dim` is `#8b949e` op `:root`/dark, `#444444` onder `[data-theme=light]`; géén `[data-theme=dark]`-blok.) Volledig: `docs/sessions/current.md` Sessie 185.
 
-### Sessie 184: Blog in-content CTA-boxen geünificeerd — outlier naar de heersende vocabulaire (28 jun 2026)
-⚠️ **Never:**
-- Een "het is intentioneel"-claim laten staan als de gebruiker 'm aanvecht, zonder te hertoetsen — het promo-vs-navigatie-onderscheid via *vorm* (gecentreerde `.blog-cta` vs links `.blog-cta-product`) voegde visuele ruis toe voor marginaal nut; copy/knoplabel droegen het al. De gecentreerde kaart bleek de énige outlier op de blog-brede links+linkerrand-accent aside-taal (tip/warning/info + product).
-- Een accent bouwen op `--color-ui-primary` zónder light-override — die var flipt van *tint*: blauw (#58a6ff dark) → groen (#0db34f light); zonder `[data-theme=light]`-override lekt groen het blog-palet in (`feedback_blog_palette_no_green`).
-- CTA-boxen tellen met `grep "blog-cta"` — overtelt door de `.blog-cta-button`-substring (gaf "5 plain" terwijl de DOM 1 plain + 2 product had); tel containers met een `:not(...)`-DOM-query.
-- Same-tick `getComputedStyle` lezen ná `setAttribute('data-theme',…)` — gaf stale kleur (#58a6ff i.p.v. #0969da); een verse lezing ná de style-recalc is nodig.
-
-✅ **Always:**
-- Bij inconsistentie N-1 vs 1: trek de outlier naar de meerderheid, niet andersom — identificeer eerst de heersende vocabulaire (hier de links+linkerrand-accent aside-taal), dán welke kant convergeert.
-- Gecentreerde meerregelige bodytekst = leesbaarheids-antipatroon; links uitlijnen lost leesbaarheid én consistentie samen op.
-- Een variant-klasse die enkel van de base afwijkt collapse't tot bijna niets als je besluit dat de base de variant wórdt — `.blog-cta-product` 3 regels → 1; netto CSS kromp. Product/lead-magnet-kaarten bleven ongewijzigd, alleen de plain CTA convergeerde.
-- Render-en-meet als bewijs: `getComputedStyle` plain==product (text-align/border-left), light-accent `#0969da` blauw (géén groen), 0 overflow 375px, cross-check 2e post. Geheugen `feedback_blog_cta_unified`. Volledig: `docs/sessions/current.md` Sessie 184.
-
-**Rotation:** Top-6 huidig: 184-185-186-187-188-189 (Sessie 183 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 185 UITGEVOERD:** current.md staart Sessie 170-174 geknipt naar `archive-s170-s174.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 175-188 (14 entries; volgende bulk-rotatie Sessie 190 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-169 → `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 185-186-187-188-189-190 (Sessie 184 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 190 UITGEVOERD:** current.md staart Sessie 175-179 geknipt naar `archive-s175-s179.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 180-190 (11 entries; volgende bulk-rotatie Sessie 195 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-174 → `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -208,7 +208,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 189
+**Sessie counter:** 190
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -260,6 +260,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 30 jun 2026 (Sessie 189 — Fase A: leerpad deep-link → in-app tutorial-landing. `main.js` leest `?tutorial=<id>` + gesequencete auto-start (briefing = held: scroll+focus); 3 knoppen → `?tutorial=fundamentals/recon/exploitation`; cache-bump `main.js?v=189-deeplink`. NEW `leerpad-deeplink.spec.js` 5/5; chromium-suite 0 failures (2 stale tests meegefixt). Sluit de boog Stap 0+B+A. Volledig: `docs/sessions/current.md`)
-**Version:** 5.63 (Sessie 189 — Fase A leerpad deep-link → tutorial-landing: query-handler + gesequencete auto-start + non-destructieve resume-vs-deeplink; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 01 jul 2026 (Sessie 190 — Bugfix tutorial/challenge-completion: laatste commando-output zichtbaar via scroll-anker op de commando-echo (`_scrollLineToTop`, was bodem-pin) + 3 timer-her-scrolls geschrapt; dubbele "Type 'next'" gedicht via pre-mutation `tutorialActiveAtStart`-guard. Gedeelde `renderCompletionBlock` → dekt tutorial én challenge. Cache-bump `main.js?v=190-completion-scroll`. 43/43 chromium groen. Volledig: `docs/sessions/current.md`)
+**Version:** 5.64 (Sessie 190 — completion-scroll-anker + dubbele-"next"-fix in renderer.js/terminal.js; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
