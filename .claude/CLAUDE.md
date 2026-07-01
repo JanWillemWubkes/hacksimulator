@@ -260,6 +260,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 30 jun 2026 (Sessie 189 — Fase A: leerpad deep-link → in-app tutorial-landing. `main.js` leest `?tutorial=<id>` + gesequencete auto-start (briefing = held: scroll+focus); 3 knoppen → `?tutorial=fundamentals/recon/exploitation`; cache-bump `main.js?v=189-deeplink`. NEW `leerpad-deeplink.spec.js` 5/5; chromium 203 passed. Sluit de boog Stap 0+B+A. Volledig: `docs/sessions/current.md`)
+**Last updated:** 30 jun 2026 (Sessie 189 — Fase A: leerpad deep-link → in-app tutorial-landing. `main.js` leest `?tutorial=<id>` + gesequencete auto-start (briefing = held: scroll+focus); 3 knoppen → `?tutorial=fundamentals/recon/exploitation`; cache-bump `main.js?v=189-deeplink`. NEW `leerpad-deeplink.spec.js` 5/5; chromium-suite 0 failures (2 stale tests meegefixt). Sluit de boog Stap 0+B+A. Volledig: `docs/sessions/current.md`)
 **Version:** 5.63 (Sessie 189 — Fase A leerpad deep-link → tutorial-landing: query-handler + gesequencete auto-start + non-destructieve resume-vs-deeplink; volledige historie: `docs/sessions/current.md` + TASKS.md)
 

@@ -15,9 +15,9 @@ test.describe('Lead Magnet — Sample Pentest', () => {
     // Preview cards (3 stuks)
     const cards = page.locator('section.page-section .feature-card');
     await expect(cards).toHaveCount(3);
-    await expect(cards.nth(0)).toContainText('Reconnaissance');
-    await expect(cards.nth(1)).toContainText('Command-cheatsheet');
-    await expect(cards.nth(2)).toContainText('Beslisboom');
+    await expect(cards.nth(0)).toContainText('Voorbereiding');
+    await expect(cards.nth(1)).toContainText('verkennen');
+    await expect(cards.nth(2)).toContainText('6 fasen');
 
     // Brevo form aanwezig met juiste action en email input
     const form = page.locator('#sib-form');

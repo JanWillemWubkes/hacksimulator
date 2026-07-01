@@ -305,9 +305,11 @@ test.describe('Cross-Browser Compatibility Tests', () => {
     await expect(termsLink).toBeVisible();
     await expect(cookiesLink).toBeVisible();
 
-    // Check links have correct attributes
-    await expect(privacyLink).toHaveAttribute('rel', 'noopener noreferrer');
-    await expect(privacyLink).toHaveAttribute('target', '_blank');
+    // Check links point to the legal pages (footer opens legal same-tab;
+    // only the legal modal + consent banner open legal in a new tab).
+    await expect(privacyLink).toHaveAttribute('href', /assets\/legal\/privacy\.html$/);
+    await expect(termsLink).toHaveAttribute('href', /assets\/legal\/terms\.html$/);
+    await expect(cookiesLink).toHaveAttribute('href', /assets\/legal\/cookies\.html$/);
   });
 
 });
