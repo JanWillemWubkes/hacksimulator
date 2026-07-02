@@ -172,8 +172,8 @@ var tutorialRenderer = {
 
     var followUp = '[✓] Goed gedaan! Je hebt de ' + scenario.title + ' missie afgerond.';
     followUp += '\n[✓] Certificaat gekopieerd naar je klembord!';
-    followUp += '\n[?] Type \'tutorial\' om meer scenario\'s te zien.';
-    followUp += "\n[→] Type 'next' voor je volgende stap";
+    followUp += "\n[→] Typ 'next' en ik wijs je naar je volgende missie.";
+    followUp += '\n[?] Of typ \'tutorial\' om alle missies te bekijken.';
 
     return {
       missionBox: missionBox,
@@ -195,8 +195,8 @@ var tutorialRenderer = {
 
     var followUp = '[✓] Goed gedaan! Je hebt de missie afgerond.\n';
     followUp += '[✓] Certificaat gekopieerd naar je klembord!\n';
-    followUp += '[?] Type \'tutorial\' om meer scenario\'s te zien.\n';
-    followUp += "[→] Type 'next' voor je volgende stap";
+    followUp += "[→] Typ 'next' en ik wijs je naar je volgende missie.\n";
+    followUp += '[?] Of typ \'tutorial\' om alle missies te bekijken.';
 
     return {
       missionBox: missionBox,

@@ -32,8 +32,7 @@ var fundamentalsScenario = {
     'Je beheerst nu de fundamenten: navigeren (pwd, ls, cd), lezen (cat) ' +
     'en aanmaken/verwijderen (mkdir, touch, rm). Dit zijn de basis-skills ' +
     'voor elk systeem. Nu je je weg kent op een machine, ben je klaar voor ' +
-    'je eerste echte verkenning. Type \'tutorial recon\' om je eerste ' +
-    'pentest-missie te starten.',
+    'je eerste echte verkenning.',
 
   steps: [
     {

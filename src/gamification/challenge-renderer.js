@@ -241,9 +241,8 @@ var challengeRenderer = {
     var completionBox = lines.join('\n');
 
     var followUp = '[✓] Goed gedaan! Je hebt deze challenge succesvol afgerond.';
-    followUp += '\n[?] Type \'challenge\' voor meer challenges.';
-    followUp += '\n[?] Type \'dashboard\' voor je totale voortgang.';
-    followUp += "\n[→] Type 'next' voor je volgende stap";
+    followUp += "\n[→] Typ 'next' en ik wijs je naar je volgende uitdaging.";
+    followUp += '\n[?] Of typ \'challenge\' voor alle challenges, of \'dashboard\' voor je voortgang.';
 
     return {
       completionBox: completionBox,
@@ -258,8 +257,8 @@ var challengeRenderer = {
     completionBox += 'Pogingen: ' + attempts;
 
     var followUp = '[✓] Goed gedaan!\n';
-    followUp += '[?] Type \'challenge\' voor meer challenges.\n';
-    followUp += "[→] Type 'next' voor je volgende stap";
+    followUp += "[→] Typ 'next' en ik wijs je naar je volgende uitdaging.\n";
+    followUp += '[?] Of typ \'challenge\' voor alle challenges.';
 
     return {
       completionBox: completionBox,

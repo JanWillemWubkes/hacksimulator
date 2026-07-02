@@ -107,12 +107,16 @@ test.describe('Fundamentals Tutorial + Re-tiering', () => {
     await expect(output).toContainText('MISSIE VOLTOOID', { timeout: 5000 });
     await expect(output).toContainText('Goed gedaan', { timeout: 2000 });
 
-    // Regression (Sessie 190): on the tutorial's final command the onboarding
-    // "Type 'next'" nudge must NOT leak next to the completion follow-up — the
-    // isActive() guard is captured pre-mutation, so this appears exactly once.
+    // Regression (Sessie 190/191): on the tutorial's final command the onboarding
+    // "Type 'next'" nudge must NOT leak next to the completion follow-up. The
+    // completion CTA (Sessie 191 copy) appears exactly once, and the old onboarding
+    // nudge string must be absent entirely — proving no duplicate "next" prompt.
     await expect(
-      output.locator('.terminal-line', { hasText: "Type 'next' voor je volgende stap" })
+      output.locator('.terminal-line', { hasText: "Typ 'next' en ik wijs je naar je volgende missie" })
     ).toHaveCount(1);
+    await expect(
+      output.locator('.terminal-line', { hasText: "voor je volgende stap" })
+    ).toHaveCount(0);
   });
 
   test('wrong argument gives differentiated (not "wrong command") feedback', async ({ page }) => {
