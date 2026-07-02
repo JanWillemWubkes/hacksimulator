@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 191)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 192)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,18 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 192: Tutorial-voltooiing past in beeld — next-step CTA altijd zichtbaar (02 jul 2026)
+⚠️ **Never:**
+- Een "fix" accepteren die een klacht *verplaatst* i.p.v. oplost — Sessie 190 (output verborgen) en Sessie 192 (CTA verborgen) zijn dezelfde bug van twee kanten: een completion-blok van ~43 regels/~1300px in een ~830px viewport (1,6×), waarvan je maar één uiteinde kunt tonen. Een top-anker fixt de ene kant en breekt de andere; de wip blijft.
+- Een groot inline-artefact laten staan dat de enige actie-instructie onder de vouw duwt — de 20-regelige `CERTIFICAAT`-box zat tússen de `MISSIE VOLTOOID`-box en de next-step CTA; voor een beginner is de CTA het belangrijkste, niet een ASCII-trofee die hij toch al op het klembord heeft.
+- Op "ziet er goed uit" vertrouwen voor een viewport-klacht — alleen `getBoundingClientRect` op de échte schermmaat (1920×1080: `echoInView`/`ctaInView`) bewijst dat beide uiteinden nu passen. Een DOM-aanwezigheids-assert (`toHaveCount(1)`) zegt niets over zichtbaarheid.
+
+✅ **Always:**
+- Bij een blok groter dan de viewport: maak het blok kleiner dan de viewport i.p.v. eindeloos aan het scroll-anker te sleutelen — dán vervalt de trade-off en zijn beide eisen (output-zichtbaar én CTA-zichtbaar) met één `_scrollToBottom` te vervullen. De duurzame fix zit in de hoogte, niet in de anker-keuze.
+- Redundantie eerst verifiëren, dán schrappen — de inline-cert kon weg omdat dezelfde inhoud al op het klembord stond én via `tutorial cert` opvraagbaar was (post-completion IDLE-pad in `tutorial.js` eerst gecheckt). Feature behouden, alleen de dubbele/schadelijke weergave weg (anti-gold-plating).
+- Meet in regels/pixels om de wig te vinden — command→CTA in lijnen tellen (~43) tegen viewport (~830px) wees direct de ~20-regelige cert aan als de oorzaak; scherm-echte meting bevestigde de fix objectief.
+- Scope tot waar het speelt — challenges hebben géén inline cert (`challenge-renderer.js` levert geen `certificate`-veld; blok past al), dus tutorial-only fixen. Volledig: `docs/sessions/current.md` Sessie 192.
+
 ### Sessie 191: UX-fix voltooiingsscherm — één heldere "wat nu?"-CTA (02 jul 2026)
 ⚠️ **Never:**
 - `[→] Type 'next' voor je volgende stap` op een voltooiingsblok laten staan — bij een afgeronde missie bestaat er geen "volgende stap" (de stappen zijn klaar) en `next` is de globale begeleidings-funnel, geen stap-advancer. Erger: "stap" botst met de "Stap 1/4" van de volgende missie die er direct onder verschijnt. Een mislabel dat op het emotionele hoogtepunt verwart.
@@ -149,19 +161,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Tutorial-stappen tegen de echte VFS (`structure.js`) coheren: `cd documents` → `cat scan-results.txt` bestaat dáár → mkdir/touch/rm in die schrijfbare map. De tutorial blokkeert commando's niet, dus ze muteren de echte context — stappen moeten op de werkelijke cwd-staat kloppen.
 - "Geen badge nodig" als geverifieerde NIET-wijziging vastleggen, met de meting als bewijs (difficulty-tekst gemeten dark `#c9d1d9`/light `#0a0a0a`, 0 elementen buiten 375px). Volledig: `docs/sessions/current.md` Sessie 187.
 
-### Sessie 186: Stap 0 ontwerpbeslissing — leerpad-niveaus → tutorial-scenario's (doc-only) (29 jun 2026)
-⚠️ **Never:**
-- Een scenario in een tier plaatsen op basis van zijn commando-syntaxis i.p.v. de geleerde skill — privesc gebruikt alleen `cat`/`ls` (beginner-commando's) maar leert log-/credential-analyse op een gehackt systeem → GEVORDERD. Tik-gemak ≠ tier (zelfde reden webvuln EXPERT is ondanks point-and-shoot sqlmap).
-- De badge-*chips* lezen als een letterlijke scenario-inhoudsopgave — ze zijn overal illustratief (recon is het GEVORDERD-doel maar leert géén van zijn netcat/wireshark/hashcat-chips). Wie fundamentals aan alle 9 BEGINNER-chips bindt, hanteert een striktere standaard voor BEGINNER dan voor GEVORDERD/EXPERT.
-- Een EXPERT-tool één tier lager parkeren omdat het scenario "intermediate voelt" — sqlmap in een GEVORDERD-webvuln zou de promise/payoff-leugen (badge belooft "SQL injection testing") naar binnen verplaatsen. Precies wat de hele taak uitroeit.
-
-✅ **Always:**
-- Toets tier-toewijzing aan de badge-*beschrijvingszin*, niet de chips — BEGINNER-zin ("navigeren, lezen, aanmaken, verwijderen") noemt whoami/history niet → fundamentals = navigatie+bestandsbeheer (ls/cd/pwd/cat/mkdir/touch/rm), niet alle 9 chips.
-- Lees de échte scenario-inhoud (stappen + commando's) vóór een her-tiering, niet de historisch gegroeide `difficulty`-labels — die zijn juist de mismatch die je repareert.
-- Zoek in een ontwerpstap de verborgen vervolgtaak: de her-tiering introduceert een derde label-waarde (`Expert`) die de codebase nog niet kent → Fase B moet `tutorial-renderer.js` checken op een ontbrekende badge-variant. Dát maakt "Stap 0 vóór B vóór A" dwingend i.p.v. ceremonieel.
-- Bij "wat raad jij aan, brutaal eerlijk" i.p.v. een keuze: beslis als expert met onderbouwing, kaats niet terug (memory `feedback_expert_decisions`). Volledig: `docs/sessions/current.md` Sessie 186.
-
-**Rotation:** Top-6 huidig: 186-187-188-189-190-191 (Sessie 185 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 190 UITGEVOERD:** current.md staart Sessie 175-179 geknipt naar `archive-s175-s179.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 180-190 (11 entries; volgende bulk-rotatie Sessie 195 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-174 → `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 187-188-189-190-191-192 (Sessie 186 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 190 UITGEVOERD:** current.md staart Sessie 175-179 geknipt naar `archive-s175-s179.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 180-190 (11 entries; volgende bulk-rotatie Sessie 195 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-174 → `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -210,7 +210,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 191
+**Sessie counter:** 192
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -262,6 +262,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 02 jul 2026 (Sessie 191 — UX-fix voltooiingsscherm: mislabel "Type 'next' voor je volgende stap" + drievoudige CTA weg. Eén primaire `next`-CTA + secundaire browse-regel op 4 completion-renderers (tutorial+challenge, desktop+mobile); `fundamentals.js`-box stopt met hardcoded `tutorial recon`. Cache-bump `main.js?v=191-completion-cta`. 65 e2e chromium groen. Volledig: `docs/sessions/current.md`)
-**Version:** 5.65 (Sessie 191 — completion-CTA-copy: één `next`-router i.p.v. mislabel + triple-CTA, in tutorial-/challenge-renderer.js + fundamentals.js; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 02 jul 2026 (Sessie 192 — Tutorial-voltooiing past in beeld: inline-certificaat (~20 regels) uit auto-voltooiing (blok 1,6× viewport verborg de next-step CTA onder de vouw). Blok krimpt en past nu → scroll-anker `_scrollLineToTop`→`_scrollToBottom`; cert blijft op klembord + `tutorial cert`. Gemeten 1920×1080: echo + CTA beide zichtbaar. Cache-bump `main.js?v=192-completion-fit`. 61 e2e chromium groen. Volledig: `docs/sessions/current.md`)
+**Version:** 5.66 (Sessie 192 — inline-cert weg uit tutorial-completion → blok past viewport → CTA altijd zichtbaar; scroll-anker terug naar bodem, dode helper opgeruimd; volledige historie: `docs/sessions/current.md` + TASKS.md)
 

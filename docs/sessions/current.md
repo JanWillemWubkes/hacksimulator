@@ -4,6 +4,37 @@
 
 ---
 
+## Sessie 192: Tutorial-voltooiing past in beeld — next-step CTA altijd zichtbaar (02 jul 2026)
+
+**Mission:** Heisenberg meldde met 2 screenshots: na het afronden van Fundamentals zie je de `MISSIE VOLTOOID`-box, maar **niet** de vervolgstap-CTA (`Typ 'next' ...` / `Of typ 'tutorial' ...`). Die staat onder de vouw; je moet zelf naar beneden scrollen om te weten wat je nu moet doen. Voor een beginner een verwarrend doodlopend eind. Analyseren + perfectioneren, brutaal eerlijk.
+
+**Diagnose (plan-mode, directe code-lezing van de bekende completion-keten):** het is de directe consequentie van Sessie 190's scroll-anker, en het verdiende eerlijkheid. Het voltooiingsblok is **~43 regels / ~1300px**, de viewport **~830px** (1080-scherm) = 1,6×. Van boven→onder: commando-echo → stap-feedback (~6) → `MISSIE VOLTOOID`-box (~13) → **`CERTIFICAAT VAN VOLTOOIING`-box (~20)** → follow-up CTA (4). Sessie 190 verankerde de commando-echo aan de **bovenkant** (om "ik zie mijn output niet" te fixen) → de **onderkant** (de CTA) belandt ~470px onder de vouw. Een blok van 1,6× de viewport kan onmogelijk beide uiteinden tonen; de 20-regelige inline-certificaat-box is de wig die box en CTA uit elkaar duwt. **Sessies 190 en 191 zaten op tegenovergestelde uiteinden van deze wip zonder hem te benoemen.**
+
+**Besluit (brutaal eerlijk, expert-call — `feedback_expert_ux_analysis`):** de inline-certificaat-box is volledig redundant — het certificaat staat al op het klembord (`copyCertificateToClipboard`) én is on-demand op te vragen met `tutorial cert` (geverifieerd: `tutorial.js` leest `completedScenarios`, werkt ná voltooiing wanneer de tutorial IDLE is). Een beginner heeft geen 20-regelige ASCII-muur nodig; de `MISSIE VOLTOOID`-box + "Goed gedaan!" belonen al. Verwijder de inline-cert → blok krimpt naar ~23 regels/~750px → *past* → beide eisen (Sessie 190 output-zichtbaar + deze CTA-zichtbaar) worden met één `_scrollToBottom` vervuld. Challenges hebben dit niet (`challenge-renderer.js` levert geen `certificate`-veld; blok ~11 regels past al) → tutorial-specifiek.
+
+**Work done (3 code + 1 test):**
+- **`src/tutorial/tutorial-renderer.js`** — `renderCompletion` (desktop) + `_renderCompletionMobile`: `certificate: cert` uit het return-object (renderer slaat Zone 2 over via de `if (completion.certificate)`-guard). `generateCertificate()` + `copyCertificateToClipboard()` behouden (klembord blijft). Follow-up regel 2: `[✓] Certificaat gekopieerd naar je klembord!` → `[✓] Certificaat op je klembord — typ 'tutorial cert' om het te bekijken.`
+- **`src/ui/renderer.js`** — `renderCompletionBlock`: scroll-anker `_scrollLineToTop(anchorLine)` → `_scrollToBottom()`; de nu-dode `anchorLine`-capture + de ongebruikte `_scrollLineToTop`-helper verwijderd (−14 regels). `_revealCelebration` ongewijzigd (opacity-only reveal wijzigt geen layout → geen her-scroll). Zone 2-render-code blijft staan (defensief; nooit meer getriggerd want niemand levert nog `certificate`).
+- **`terminal.html`** — cache-bump `main.js?v=191-completion-cta` → `?v=192-completion-fit` (modulepreload + script).
+- **`tests/e2e/fundamentals.spec.js`** — completion-test: `output` bevat **geen** `CERTIFICAAT VAN VOLTOOIING`; de nieuwe follow-up-pointer-regel `toHaveCount(1)`; ná voltooiing `tutorial cert` → toont het certificaat nog steeds.
+
+**Verificatie (lokaal tegen werkkopie, NIET productie — Sessie-189-leerpunt `BASE_URL`):**
+- **Render-en-meet (Playwright, throwaway script, `getBoundingClientRect`):** 1920×1080 (het gemelde scherm) → `echoInView:true` + `ctaInView:true` + `certPresent:false` + box zichtbaar = commando-output ÉN CTA beide in beeld, wig weg. 1280×800 (klein) → `ctaInView:true` maar `echoInView:false` (echo scrollt weg) = juiste prioriteit op een te klein scherm (CTA wint).
+- **E2E:** 61 chromium groen — `fundamentals` 10/10 (incl. de aangepaste completion-test) + `tutorial + tutorial-mobile + gamification + certificates` 51/51 (incl. `tutorial cert after completion shows certificate` = cert-feature intact).
+
+**Learnings:**
+- **Benoem de wip.** Sessie 190 (output verborgen) en Sessie 192 (CTA verborgen) zijn dezelfde bug van twee kanten: een blok groter dan de viewport waarvan je maar één uiteinde kunt tonen. De duurzame fix is niet nóg een anker-keuze maar het blok kleiner maken dan de viewport; dán vervalt de trade-off. Wantrouw een "fix" die een klacht verplaatst i.p.v. oplost.
+- **Meet in regels/pixels, niet in gevoel.** Command→CTA in lijnen tellen (~43) tegen de viewport (~830px) maakte meteen duidelijk dát het niet paste en wélke ~20 regels (de cert) de wig waren. `getBoundingClientRect`-meting op de échte schermmaat (1920×1080) bevestigde de fix objectief i.p.v. "ziet er goed uit".
+- **Redundantie is licentie om te schrappen.** De inline-cert kon weg juist omdat dezelfde inhoud al op het klembord stond én via `tutorial cert` opvraagbaar was — eerst die twee paden geverifieerd (post-completion IDLE-pad in `tutorial.js`), pas daarna geschrapt. Anti-gold-plating: feature behouden, alleen de dubbele/schadelijke weergave weg.
+
+**Next steps:** geen open items uit deze sessie. Completion-moment is nu over 3 sessies (190/191/192) uitgehard: output zichtbaar, één heldere CTA, CTA in beeld.
+
+**Metrics delta:** src 648→647 KB (−1 KB: cert-veld + dode helper weg). Tests 25 files/188 ongewijzigd (asserts toegevoegd aan bestaande test). Netto −14 regels code.
+
+**Commit:** `24dc7ec` (`fix(completion): tutorial-voltooiing past in beeld — next-step CTA zichtbaar`), gepusht naar `main` (`2225d7a..24dc7ec`).
+
+---
+
 ## Sessie 191: UX-fix voltooiingsscherm — één heldere "wat nu?"-CTA (02 jul 2026)
 
 **Mission:** Heisenberg meldde met screenshot: na het afronden van een tutorial staat er bovenaan "typ next" en verder onderaan al de volgende opdracht (in dit geval "gebruik ping"). Dat is dubbelop. Opdracht: analyseren, achterhalen of het vaker voorkomt, en perfectioneren zodat er geen verwarring ontstaat. Brutaal eerlijk.
