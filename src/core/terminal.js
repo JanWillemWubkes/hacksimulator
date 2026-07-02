@@ -499,6 +499,8 @@ class Terminal {
       'mkdir': 1,     // mkdir <directory>
       'touch': 1,     // touch <file>
       'rm': 1,        // rm <file>
+      'cp': 2,        // cp <source> <destination>
+      'mv': 2,        // mv <source> <destination>
       'hashcat': 1,   // hashcat <hash>
       'hydra': 1,     // hydra <target>
       'sqlmap': 1,    // sqlmap <url>
@@ -511,6 +513,24 @@ class Terminal {
       return true;
     }
 
+    // Output error markers — a command that failed should not count as tried
+    const hasError =
+      output && (
+        output.includes('Usage:') ||
+        output.startsWith('Error:') ||
+        output.includes('Name or service not known') ||
+        output.includes('No whois data found') ||
+        output.includes('No such file or directory') ||
+        output.includes('cannot stat') ||
+        output.includes('Not a directory') ||
+        output.includes('invalid URL format') ||
+        output.includes('missing host operand') ||
+        output.includes('missing target operand') ||
+        output.includes('missing URL argument') ||
+        output.includes('missing destination operand') ||
+        output.includes('missing domain operand')
+      );
+
     // If command requires args, validate
     if (REQUIRES_ARGS[commandName]) {
       const requiredArgs = REQUIRES_ARGS[commandName];
@@ -520,28 +540,12 @@ class Terminal {
         return false;
       }
 
-      // Args provided - check if output indicates an error
-      const hasError =
-        output && (
-          output.includes('Usage:') ||
-          output.startsWith('Error:') ||
-          output.includes('Name or service not known') ||
-          output.includes('No whois data found') ||
-          output.includes('No such file or directory') ||
-          output.includes('invalid URL format') ||
-          output.includes('missing host operand') ||
-          output.includes('missing target operand') ||
-          output.includes('missing URL argument') ||
-          output.includes('missing destination operand') ||
-          output.includes('missing domain operand')
-        );
-
       // Track only if command executed successfully
       return !hasError;
     }
 
-    // Unknown command - conservative: track if has args
-    return args.length > 0;
+    // Unknown command - conservative: track if has args and no error output
+    return args.length > 0 && !hasError;
   }
 }
 

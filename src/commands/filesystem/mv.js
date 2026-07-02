@@ -39,7 +39,7 @@ export default {
 
     // Require two arguments
     if (args.length < 2) {
-      return `mv: missing ${args.length === 0 ? 'file operand' : 'destination file operand'}\n\n[?] TIP: Gebruik 'mv <bron> <doel>' om een bestand te verplaatsen of hernoemen. Bijvoorbeeld: mv old.txt new.txt`;
+      return `mv: missing ${args.length === 0 ? 'file operand' : 'destination file operand'}\n\n[?] TIP: Gebruik 'mv <bron> <doel>' om een bestand te verplaatsen of hernoemen. Bijvoorbeeld: mv ~/kopie.txt ~/archief.txt`;
     }
 
     const source = args[0];

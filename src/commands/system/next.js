@@ -31,13 +31,13 @@ var commandTips = {
   ls:       'Bekijk bestanden in de huidige map - het eerste commando dat elke hacker leert',
   cd:       'Navigeer naar andere mappen - essentieel voor het verkennen van een systeem',
   pwd:      'Toon je huidige locatie - weet altijd waar je bent in het bestandssysteem',
-  cat:      "Lees de inhoud van bestanden - probeer 'cat README.txt' (let op: hoofd/kleine letters maken uit!)",
+  cat:      "Lees de inhoud van bestanden - probeer 'cat ~/README.txt' (let op: hoofd/kleine letters maken uit!)",
   whoami:   'Check met welk account je bent ingelogd - ben je een gewone gebruiker of heb je admin-rechten?',
   history:  'Bekijk eerder uitgevoerde commands - soms laten andere gebruikers sporen achter',
   mkdir:    'Maak een nieuwe map aan - organiseer je tools en bevindingen',
   touch:    'Maak een nieuw bestand aan - handig voor notities en scripts',
   rm:       'Verwijder bestanden - leer hoe bestanden permanent verdwijnen',
-  cp:       'Kopieer bestanden - maak backups voordat je iets aanpast',
+  cp:       'Kopieer bestanden - maak backups voordat je iets aanpast (~ = je home-map)',
   mv:       'Verplaats of hernoem bestanden - organiseer je bevindingen',
   echo:     'Toon tekst in de terminal - de basis van shell scripting',
   ping:     'Test of een server bereikbaar is - de eerste stap van network reconnaissance',
@@ -47,12 +47,14 @@ var commandTips = {
 };
 
 // Per-command voorbeeld suggesties (voorkomt naam-conflicten tussen stappen)
+// Targets geverifieerd tegen structure.js; ~-paden zodat de suggestie uit
+// elke cwd werkt (fundamentals laat de gebruiker achter in ~/documents)
 var commandExamples = {
   mkdir: 'mkdir projecten',
   touch: 'touch notities.txt',
   rm:    'rm notities.txt',
-  cp:    'cp notes.txt backup.txt',
-  mv:    'mv old.txt new.txt',
+  cp:    'cp ~/notes.txt ~/kopie.txt',
+  mv:    'mv ~/kopie.txt ~/archief.txt',
   echo:  'echo "hello world"'
 };
 
@@ -90,9 +92,9 @@ function buildPhase1Stage(triedSet) {
     command: next,
     tip: commandTips[next] || '',
     suggestion: next === 'cat'
-      ? "Type 'cat README.txt'"
+      ? "Type 'cat ~/README.txt'"
       : next === 'cd'
-        ? "Type 'cd documents'"
+        ? "Type 'cd ~/documents'"
         : "Type '" + next + "'"
   };
 }

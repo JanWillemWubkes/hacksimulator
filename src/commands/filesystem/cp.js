@@ -30,7 +30,7 @@ export default {
 
     // Require two arguments
     if (args.length < 2) {
-      return `cp: missing ${args.length === 0 ? 'file operand' : 'destination file operand'}\n\n[?] TIP: Gebruik 'cp <bron> <doel>' om een bestand te kopiëren. Bijvoorbeeld: cp file.txt backup.txt`;
+      return `cp: missing ${args.length === 0 ? 'file operand' : 'destination file operand'}\n\n[?] TIP: Gebruik 'cp <bron> <doel>' om een bestand te kopiëren. Bijvoorbeeld: cp ~/notes.txt ~/kopie.txt`;
     }
 
     const source = args[0];
