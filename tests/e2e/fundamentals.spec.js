@@ -117,6 +117,18 @@ test.describe('Fundamentals Tutorial + Re-tiering', () => {
     await expect(
       output.locator('.terminal-line', { hasText: "voor je volgende stap" })
     ).toHaveCount(0);
+
+    // Sessie 192: the ~20-line certificate is NOT auto-rendered in the completion
+    // block (it buried the next-step CTA below the fold). It stays on the clipboard
+    // and is viewable on demand. The follow-up points there instead.
+    await expect(output).not.toContainText('CERTIFICAAT VAN VOLTOOIING');
+    await expect(
+      output.locator('.terminal-line', { hasText: "typ 'tutorial cert' om het te bekijken" })
+    ).toHaveCount(1);
+
+    // ...and 'tutorial cert' still shows the full certificate on demand.
+    await typeCommand(page, 'tutorial cert');
+    await expect(output).toContainText('CERTIFICAAT VAN VOLTOOIING', { timeout: 5000 });
   });
 
   test('wrong argument gives differentiated (not "wrong command") feedback', async ({ page }) => {

@@ -171,13 +171,12 @@ var tutorialRenderer = {
     copyCertificateToClipboard(cert);
 
     var followUp = '[✓] Goed gedaan! Je hebt de ' + scenario.title + ' missie afgerond.';
-    followUp += '\n[✓] Certificaat gekopieerd naar je klembord!';
+    followUp += "\n[✓] Certificaat op je klembord — typ 'tutorial cert' om het te bekijken.";
     followUp += "\n[→] Typ 'next' en ik wijs je naar je volgende missie.";
     followUp += '\n[?] Of typ \'tutorial\' om alle missies te bekijken.';
 
     return {
       missionBox: missionBox,
-      certificate: cert,
       followUp: followUp
     };
   },
@@ -194,13 +193,12 @@ var tutorialRenderer = {
     copyCertificateToClipboard(cert);
 
     var followUp = '[✓] Goed gedaan! Je hebt de missie afgerond.\n';
-    followUp += '[✓] Certificaat gekopieerd naar je klembord!\n';
+    followUp += "[✓] Certificaat op je klembord — typ 'tutorial cert' om het te bekijken.\n";
     followUp += "[→] Typ 'next' en ik wijs je naar je volgende missie.\n";
     followUp += '[?] Of typ \'tutorial\' om alle missies te bekijken.';
 
     return {
       missionBox: missionBox,
-      certificate: cert,
       followUp: followUp
     };
   }

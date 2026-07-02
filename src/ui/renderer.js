@@ -194,13 +194,6 @@ class Renderer {
    * @param {string} [completion.followUp] - Follow-up text lines
    */
   renderCompletionBlock(output, celebrationTitle, completion) {
-    // Capture the last command echo BEFORE appending the (tall) completion block,
-    // so we can anchor the scroll on the user's command instead of pinning to the
-    // bottom of a block that is often taller than the viewport (which would hide
-    // the just-run command's output — the whole point of the completion moment).
-    var inputs = this.outputElement.querySelectorAll('.terminal-line.terminal-input');
-    var anchorLine = inputs.length ? inputs[inputs.length - 1] : null;
-
     // Render step feedback as normal output
     if (output) {
       this.renderOutput(output, 'success');
@@ -237,14 +230,11 @@ class Renderer {
     }
 
     this._trimOutput();
-    // Anchor the command echo to the top of the viewport (reading order:
-    // command -> output -> [✓] Correct! -> mission -> certificate -> follow-up).
-    // Fallback to bottom-scroll if no command echo is present.
-    if (anchorLine) {
-      this._scrollLineToTop(anchorLine);
-    } else {
-      this._scrollToBottom();
-    }
+    // Scroll to the bottom so the follow-up CTA (the next-step instruction) is
+    // always the last thing in view. The block now fits the viewport (the tall
+    // inline certificate was removed), so this keeps the command + its output
+    // visible above the celebration too — both ends fit without a top-anchor.
+    this._scrollToBottom();
 
     // Sequential reveal animation
     this._revealCelebration(celebrationTitle);
@@ -475,20 +465,6 @@ class Renderer {
       // Scroll the output element itself (not parent)
       this.outputElement.scrollTop = this.outputElement.scrollHeight;
     }
-  }
-
-  /**
-   * Scroll a given line to the top of the output viewport.
-   * Uses the getBoundingClientRect delta so it scrolls the output element only
-   * (never the navbar/page), consistent with _scrollToBottom.
-   * @param {HTMLElement} line - Line element to bring to the top
-   * @private
-   */
-  _scrollLineToTop(line) {
-    if (!this.outputElement || !line) return;
-    var delta = line.getBoundingClientRect().top
-              - this.outputElement.getBoundingClientRect().top;
-    this.outputElement.scrollTop += delta;
   }
 
   /**
