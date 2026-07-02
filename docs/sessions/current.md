@@ -4,6 +4,40 @@
 
 ---
 
+## Sessie 191: UX-fix voltooiingsscherm — één heldere "wat nu?"-CTA (02 jul 2026)
+
+**Mission:** Heisenberg meldde met screenshot: na het afronden van een tutorial staat er bovenaan "typ next" en verder onderaan al de volgende opdracht (in dit geval "gebruik ping"). Dat is dubbelop. Opdracht: analyseren, achterhalen of het vaker voorkomt, en perfectioneren zodat er geen verwarring ontstaat. Brutaal eerlijk.
+
+**Diagnose (plan-mode, 2 Explore-agents parallel + eigen code-lezing):** het voltooiingsblok is een informatie-architectuur-bug, geen smaakkwestie.
+1. **Mislabel (systemisch).** De regel `[→] Type 'next' voor je volgende stap` staat hardcoded op **4 plekken** — `tutorial-renderer.js` desktop (176) + mobile (199), `challenge-renderer.js` desktop (246) + mobile (262). Hij is overal fout op een voltooiingsblok: er is geen "volgende stap" (de stappen zijn klaar), en `next` (`src/commands/system/next.js`) is de globale begeleidings-funnel — géén stap-advancer. Het woord "stap" botst bovendien met de "Stap 1/4" van de volgende missie die er direct onder verschijnt zodra je `tutorial recon` typt (de exacte visuele botsing op de screenshot).
+2. **Drievoudige CTA (lokaal).** Audit van alle 5 scenario's: alleen `fundamentals.js` sluit z'n `completionMessage` af met een hardcoded `Type 'tutorial recon'`. De andere 4 (recon/webvuln/privesc/exploitation) eindigen met een thematische afronding zonder commando. Dus na Fundamentals krijgt een beginner **drie** concurrerende "doe dit nu"-commando's: `tutorial recon` (box) + `tutorial` (menu) + `next`. Fundamentals is de outlier, niet de regel.
+
+**Ontwerpbesluit (expert-call, geen keuzemenu — `feedback_expert_ux_analysis`):** `next` is precies gebouwd om dé enkele "wat nu?"-router te zijn (context-aware, high-water-mark, stuurt nooit terug). Dus: route elke voltooiing via één primaire `next`-CTA, demoot het bladermenu tot een duidelijk secundaire "Of"-regel, en laat de box geen specifiek commando meer voorschrijven dat `next` toch al dupliceert.
+
+**Work done (4 code + 1 test):**
+- **`src/tutorial/tutorial-renderer.js`** — desktop + mobile `followUp`: `[→] Typ 'next' en ik wijs je naar je volgende missie.` + `[?] Of typ 'tutorial' om alle missies te bekijken.` (was 2 losse CTA-regels met de "stap"-mislabel). `Type`→`Typ`.
+- **`src/gamification/challenge-renderer.js`** — desktop + mobile `followUp`: `[→] Typ 'next' en ik wijs je naar je volgende uitdaging.` + secundaire `Of typ 'challenge'...`-regel (desktop ook `dashboard`). Zelfde mislabel-fix voor consistentie.
+- **`src/tutorial/scenarios/fundamentals.js`** — laatste zin `Type 'tutorial recon' om je eerste pentest-missie te starten.` geschrapt uit `completionMessage`; eindigt nu op "...klaar voor je eerste echte verkenning." Routering naar recon blijft intact via `next` → `buildReconTutorialStage`.
+- **`terminal.html`** — cache-bump `main.js?v=190-completion-scroll` → `?v=191-completion-cta` (modulepreload + script).
+- **`tests/e2e/fundamentals.spec.js`** — de Sessie-190-regressie-assertie gesplitst + versterkt: de nieuwe completion-CTA (`Typ 'next' en ik wijs je naar je volgende missie`) `toHaveCount(1)` **én** de oude onboarding-nudge-string (`voor je volgende stap`) `toHaveCount(0)`. Strakkere garantie tegen een dubbele "next"-prompt dan het originele single-count-op-één-string.
+
+**Bewust NIET (anti-gold-plating):**
+- De fragiele completion-scroll/reveal-sequencing (Sessie 190) ongemoeid — alleen tekst-inhoud van `followUp`/`completionMessage`.
+- Geen auto-advance naar de volgende tutorial gebouwd; `next` blijft de transparante, handmatige funnel.
+- De overige 4 scenario-`completionMessage`s niet herschreven (sluiten al schoon af).
+- De bredere `Type 'next' voor je volgende stap`-hits in `onboarding.js`/`leerpad.js` niet aangeraakt — dat is de first-visit-nudge/leerpad-view, waar `next` mid-flow wél de eerstvolgende stap is; niet dezelfde mislabel.
+
+**Verificatie (lokaal tegen werkkopie, NIET productie):** `BASE_URL=http://127.0.0.1:8899` (config `baseURL` staat op productie — Sessie-189-leerpunt). **65 e2e groen chromium:** `fundamentals.spec.js` 10/10 (incl. de volledige 7-staps completion-flow + de nieuwe split-assertie), `tutorial + tutorial-mobile + gamification` 45/45. Geen enkele test assert de challenge-`followUp`-strings → geen breakage daar. validate-docs exit 0 vóór start (drift-vrij).
+
+**Learnings:**
+- **Grep breder dan de klacht vóór je fixt.** De ene screenshot toonde 1 plek; grep toonde de mislabel op 4 completion-renderers + tientallen onboarding-hits. De juiste scope was de 4 completion-plekken (echte mislabel) — niet de onboarding-hits (daar is `next` wél de volgende stap). "Komt het vaker voor?" letterlijk beantwoorden voorkomt zowel under- als over-reach.
+- **Audit alle peers vóór je de outlier fixt.** Pas na het lezen van alle 5 `completionMessage`s bleek dat Fundamentals de enige is met een hardcoded commando — dus de fix is "breng de outlier in lijn", niet "herschrijf alle scenario's".
+- **Een string-wijziging kan een regressietest sterker maken.** Doordat de nieuwe CTA een andere string is dan de (gesuppresste) onboarding-nudge, kon de count-1-assertie gesplitst worden in "nieuwe CTA 1× ÉN oude string 0×" — een strengere garantie dan voorheen.
+
+**Commit:** `20578a6` (`fix(completion): één heldere 'wat nu?'-CTA — mislabel + triple-CTA weg`), gepusht naar `main` (`79a41b2..20578a6`).
+
+---
+
 ## Sessie 190: Bugfix tutorial/challenge-completion — laatste output zichtbaar + één "next" (01 jul 2026)
 
 **Mission:** Heisenberg meldde met screenshot: na het afronden van de (Fundamentals-)tutorial zie je de output van je **laatste commando niet** — de terminal scrolt direct door naar de completion-melding onderaan. Opdracht: analyseren, achterhalen waar het nóg meer speelt, en perfectioneren. Brutaal eerlijk.

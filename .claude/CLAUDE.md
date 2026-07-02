@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 190)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 191)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 191: UX-fix voltooiingsscherm — één heldere "wat nu?"-CTA (02 jul 2026)
+⚠️ **Never:**
+- `[→] Type 'next' voor je volgende stap` op een voltooiingsblok laten staan — bij een afgeronde missie bestaat er geen "volgende stap" (de stappen zijn klaar) en `next` is de globale begeleidings-funnel, geen stap-advancer. Erger: "stap" botst met de "Stap 1/4" van de volgende missie die er direct onder verschijnt. Een mislabel dat op het emotionele hoogtepunt verwart.
+- Drie concurrerende "doe dit nu"-CTA's op één voltooiingsscherm dumpen — na Fundamentals stonden `tutorial recon` (box) + `tutorial` (menu) + `next` naast elkaar. `next` is juist gebouwd als de énkele context-aware router; een box die een specifiek commando voorschrijft dupliceert wat `next` toch al zegt.
+- De klacht letterlijk op één plek fixen zonder te grep'en waar-nog — de mislabel zat op **4 completion-renderers** (tutorial+challenge, desktop+mobile), niet alleen de tutorial op de screenshot. Omgekeerd: de tientallen `onboarding.js`/`leerpad.js`-hits van dezelfde string NIET meeslepen — dáár is `next` mid-flow wél de eerstvolgende stap; geen mislabel.
+- De outlier fixen vóór je alle peers hebt gelezen — pas na het lezen van álle 5 scenario-`completionMessage`s bleek dat alleen `fundamentals.js` een commando hardcodeert; de andere 4 sluiten al schoon af. De fix is "breng de outlier in lijn", niet "herschrijf alles".
+
+✅ **Always:**
+- Route elke voltooiing via één primaire CTA (`next`, correct verwoord: "ik wijs je naar je volgende missie/uitdaging") + het bladermenu als duidelijk secundaire "Of typ..."-regel. Eén heldere volgende actie op het beloningsmoment, geen keuzeverlamming.
+- Bij "wat is het beste, brutaal eerlijk": beslis als expert met onderbouwing + "wat ik bewust NIET doe" (scroll-sequencing ongemoeid, geen auto-advance, peers ongemoeid), geen keuzemenu (`feedback_expert_ux_analysis`).
+- Engelse imperatief in NL-UI is een bug: `Type`→`Typ` (`feedback_nl_copy_dejargon`), consistent met `renderObjective`/`next.js`.
+- Een string-wijziging kan een regressietest sterker maken: omdat de nieuwe CTA een ándere string is dan de gesuppresste onboarding-nudge, splitste de Sessie-190 count-1-assertie naar "nieuwe CTA 1× ÉN oude string 0×" — strengere dubbele-prompt-garantie. Volledig: `docs/sessions/current.md` Sessie 191.
+
 ### Sessie 190: Bugfix tutorial/challenge-completion — laatste output zichtbaar + één "next" (01 jul 2026)
 ⚠️ **Never:**
 - De klacht "ik zie de output niet" lezen als "output ontbreekt" — hij was er wél, maar wérd weggescrold. `renderCompletionBlock` pint de viewport op de bodem van een blok hoger dan de viewport, en `_revealCelebration` her-scrolt nóg 2× op timer (800/1500ms). Opacity:0-zones nemen al layout-hoogte in → `scrollHeight` is toch al maximaal. Diagnose = scroll-timing, geen render-gat.
@@ -148,18 +161,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Zoek in een ontwerpstap de verborgen vervolgtaak: de her-tiering introduceert een derde label-waarde (`Expert`) die de codebase nog niet kent → Fase B moet `tutorial-renderer.js` checken op een ontbrekende badge-variant. Dát maakt "Stap 0 vóór B vóór A" dwingend i.p.v. ceremonieel.
 - Bij "wat raad jij aan, brutaal eerlijk" i.p.v. een keuze: beslis als expert met onderbouwing, kaats niet terug (memory `feedback_expert_decisions`). Volledig: `docs/sessions/current.md` Sessie 186.
 
-### Sessie 185: Leerpad-sectie homepage — 3 nep-deuren → echt leerpad (lezen → oefenen) (29 jun 2026)
-⚠️ **Never:**
-- Drie CTA's met verschillende labels naar dezelfde bestemming laten wijzen — dat is een gebroken affordance: de leerpad-knoppen (`Start`/`Verken`/`Beheers Leerpad`) gingen allemaal naar `/terminal.html`; "Leerpad" beloofde gestuurde progressie die niet bestond, en dupliceerde de 4 andere terminal-CTA's op de pagina. Drie deuren, één kamer.
-- "Interactiever = beter" cargo-culten op een sectie waarvan het gebrek "geen content-bestemmingen" is — deep-linken-naar-tutorials voelde ambitieuzer (raakt code) maar loste het verkeerde probleem op én brak op de BEGINNER-kaart (geen fundamentals-tutorial ls/cd/cat → kerndoelgroep kan nergens heen). Code raken ≠ probleem raken.
-- Een dark-mode-kleur "kapot" verklaren op basis van een **same-tick `getComputedStyle` ná `setAttribute('data-theme',…)`** — dat gaf stale `#444444` (light-waarde) i.p.v. de echte `#8b949e`; bijna een onterechte "onleesbaar in dark"-fix.
-
-✅ **Always:**
-- Bij N-identiek vs. 1-echt-verschil: maak de N identiek + eerlijk en verplaats de differentiatie naar de as die wél verschilt — hier 3× uniform "Oefen in de terminal" + een per-niveau `.leerpad-learn-link` "Lees eerst"-blogpost (theorie → oefenen). De sectie linkt nu naar bestaande eigen content (terminal-basics/nmap/sql-injection) i.p.v. alles naar de terminal te funnelen.
-- Card-CTA-paren onderaan uitlijnen via een `.leerpad-cta-group` met `margin-top:auto` (i.c.m. `p{flex-grow:1}`) → groep-tops gelijk over kaarten met ongelijke beschrijvingslengtes (gemeten 3×==4058px).
-- De meet-asymmetrie als tell lezen: `--color-cta-primary` flipte wél bij de theme-toggle, `--color-text-dim` niet → wantrouw de meting, lees vers in een aparte tick. **Render-en-meet werkt alleen als je óók je meetinstrument wantrouwt.** (`--color-text-dim` is `#8b949e` op `:root`/dark, `#444444` onder `[data-theme=light]`; géén `[data-theme=dark]`-blok.) Volledig: `docs/sessions/current.md` Sessie 185.
-
-**Rotation:** Top-6 huidig: 185-186-187-188-189-190 (Sessie 184 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 190 UITGEVOERD:** current.md staart Sessie 175-179 geknipt naar `archive-s175-s179.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 180-190 (11 entries; volgende bulk-rotatie Sessie 195 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-174 → `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 186-187-188-189-190-191 (Sessie 185 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 190 UITGEVOERD:** current.md staart Sessie 175-179 geknipt naar `archive-s175-s179.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 180-190 (11 entries; volgende bulk-rotatie Sessie 195 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-174 → `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -208,7 +210,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 190
+**Sessie counter:** 191
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -260,6 +262,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 01 jul 2026 (Sessie 190 — Bugfix tutorial/challenge-completion: laatste commando-output zichtbaar via scroll-anker op de commando-echo (`_scrollLineToTop`, was bodem-pin) + 3 timer-her-scrolls geschrapt; dubbele "Type 'next'" gedicht via pre-mutation `tutorialActiveAtStart`-guard. Gedeelde `renderCompletionBlock` → dekt tutorial én challenge. Cache-bump `main.js?v=190-completion-scroll`. 43/43 chromium groen. Volledig: `docs/sessions/current.md`)
-**Version:** 5.64 (Sessie 190 — completion-scroll-anker + dubbele-"next"-fix in renderer.js/terminal.js; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 02 jul 2026 (Sessie 191 — UX-fix voltooiingsscherm: mislabel "Type 'next' voor je volgende stap" + drievoudige CTA weg. Eén primaire `next`-CTA + secundaire browse-regel op 4 completion-renderers (tutorial+challenge, desktop+mobile); `fundamentals.js`-box stopt met hardcoded `tutorial recon`. Cache-bump `main.js?v=191-completion-cta`. 65 e2e chromium groen. Volledig: `docs/sessions/current.md`)
+**Version:** 5.65 (Sessie 191 — completion-CTA-copy: één `next`-router i.p.v. mislabel + triple-CTA, in tutorial-/challenge-renderer.js + fundamentals.js; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
