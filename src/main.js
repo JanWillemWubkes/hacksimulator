@@ -5,6 +5,7 @@
 
 import terminal from './core/terminal.js';
 import tutorialManager from './tutorial/tutorial-manager.js';
+import renderer from './ui/renderer.js';
 import input from './ui/input.js';
 import legalManager from './ui/legal.js';
 import onboardingManager from './ui/onboarding.js';
@@ -128,20 +129,18 @@ function registerCommands() {
 }
 
 /**
- * Deep-link: lees ?tutorial=<id> uit de URL en geef een geldig scenario-id terug.
- * Validatie tegen de geregistreerde scenario's (single source of truth) — een
- * onbekende/typo-waarde geeft null → stille no-op (gewone terminal).
- * @returns {string|null}
+ * Deep-link: lees de rauwe ?tutorial=<id>-param (nog niet gevalideerd).
+ * Validatie tegen de geregistreerde scenario's gebeurt in terminal.init() —
+ * die draait vóór de welcome-render, zodat de CTA de pending missie kent.
+ * @returns {string} lege string als er geen param is
  */
-function getDeepLinkTutorialId() {
+function getRawDeepLinkParam() {
   try {
-    const raw = (new URLSearchParams(window.location.search).get('tutorial') || '')
+    return (new URLSearchParams(window.location.search).get('tutorial') || '')
       .toLowerCase()
       .trim();
-    if (!raw) return null;
-    return tutorialManager.getScenario(raw) ? raw : null;
   } catch (e) {
-    return null;
+    return '';
   }
 }
 
@@ -169,13 +168,16 @@ function _focusBriefing() {
  */
 function autoStartDeepLink(id) {
   if (tutorialManager.isActive()) {
-    const active = tutorialManager.getState();
+    const active = tutorialManager.getStatus();
     if (active && active.scenarioId === id) {
       // Zelfde tutorial al hervat — voortzetten, niet herstarten.
       _focusBriefing();
       return;
     }
-    // Andere tutorial actief — verse intentie wint; exit slaat progress op (geen render).
+    // Andere tutorial actief — verse intentie wint. Toon één transparante regel zodat
+    // de gebruiker ziet dat de vorige missie stopt/opslaat vóór de nieuwe briefing.
+    renderer.renderInfo('[~] Vorige missie opgeslagen: ' + active.scenarioTitle +
+      ' (stap ' + (active.currentStep + 1) + '/' + active.totalSteps + ')');
     tutorialManager.exit();
   }
 
@@ -244,11 +246,16 @@ function initialize() {
     // Check if legal modal needs to be shown (defer welcome animation)
     const needsLegal = !legalManager.hasAcceptedLegal();
 
+    // Deep-link: rauwe ?tutorial=-param vóór init lezen en meegeven, zodat de welcome-
+    // render (die ín init draait) de pending missie kent en de "Type 'next'"-CTA aanpast.
+    const rawDeepLink = getRawDeepLinkParam();
+
     // Initialize terminal (defer welcome if legal modal will be shown)
     terminal.init({
       outputElement,
       inputElement,
-      deferWelcome: needsLegal
+      deferWelcome: needsLegal,
+      deepLinkId: rawDeepLink
     });
 
     // Initialize tutorial gesture handler (long-press hint, mobile only-relevant)
@@ -274,8 +281,10 @@ function initialize() {
     feedbackManager.init();
 
     // Deep-link: ?tutorial=<id> → auto-start de bijbehorende begeleide missie.
-    // URL meteen opschonen zodat een refresh (ook tijdens de typewriter) niet herstart.
-    const deepLinkId = getDeepLinkTutorialId();
+    // terminal.init() heeft de rauwe id al gevalideerd tegen de scenario's; een
+    // ongeldige waarde geeft null → stille no-op (URL blijft ongemoeid).
+    // Bij een geldige id de URL opschonen zodat een refresh niet herstart.
+    const deepLinkId = terminal.getPendingDeepLink();
     if (deepLinkId) {
       history.replaceState({}, '', '/terminal.html');
     }

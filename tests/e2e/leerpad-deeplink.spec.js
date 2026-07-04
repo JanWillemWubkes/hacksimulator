@@ -103,3 +103,79 @@ test.describe('Leerpad deep-link auto-start', () => {
     await expect(output).not.toContainText('MISSION BRIEFING');
   });
 });
+
+// --- Fase 1: coherentie tussen welcome-CTA, resume en deep-link (Sessie 193+) ---
+
+async function typeCommand(page, command) {
+  const input = page.locator('#terminal-input');
+  await input.fill(command);
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(500);
+}
+
+test.describe('Deep-link / welcome-coherentie', () => {
+
+  test('first-visit deep-link: geen concurrerende "next"-CTA, geen simulator-hint-leak, neutrale placeholder', async ({ page, context }) => {
+    await bootDeepLink(page, context, '/terminal.html?tutorial=fundamentals');
+
+    const output = page.locator('#terminal-output');
+
+    // Briefing komt op; de welcome-CTA is vervangen door de gedempte "geladen"-regel.
+    await expect(output).toContainText('MISSION BRIEFING', { timeout: 15000 });
+    await expect(output).toContainText('Je missie wordt geladen', { timeout: 3000 });
+
+    // Geen tweede "wat nu?"-instructie: de "Typ 'next'"-welcome-CTA hoort weg te zijn.
+    await expect(output).not.toContainText("Typ 'next' om te beginnen");
+    // De simulator-command-hint mag niet onder de briefing lekken.
+    await expect(output).not.toContainText('is een HackSimulator command');
+
+    // Na de auto-start staat de placeholder op de neutrale variant, niet meer op "next".
+    const input = page.locator('#terminal-input');
+    await expect(input).toHaveAttribute('placeholder', 'Typ een command...');
+  });
+
+  test('deep-link naar ándere missie: geen stale hervat-tekst, wel transparante wissel', async ({ page, context }) => {
+    // Start recon en zet één stap → recon staat op stap 2/4 in opslag.
+    await bootDeepLink(page, context, '/terminal.html?tutorial=recon');
+    const output = page.locator('#terminal-output');
+    await expect(output).toContainText('MISSION BRIEFING', { timeout: 15000 });
+    await typeCommand(page, 'ping 192.168.1.100');
+    await expect(output).toContainText('Stap 2/4', { timeout: 3000 });
+
+    // Nu deep-linken naar fundamentals (terugkerende bezoeker met opgeslagen recon-voortgang).
+    await page.goto('/terminal.html?tutorial=fundamentals');
+    await acceptLegalModal(page);
+
+    await expect(output).toContainText('MISSION BRIEFING', { timeout: 15000 });
+    // De stale recon-hervat-melding mag NIET boven de nieuwe briefing staan.
+    await expect(output).not.toContainText('Tutorial hervat');
+    // Wel een transparante "vorige missie opgeslagen"-regel.
+    await expect(output).toContainText('Vorige missie opgeslagen', { timeout: 3000 });
+    // En de fundamentals-briefing zelf.
+    await expect(output).toContainText('Eerste dag als pentester', { timeout: 3000 });
+  });
+
+  test('deep-link naar zélfde actieve missie: hervat zonder herstart (bug C)', async ({ page, context }) => {
+    await bootDeepLink(page, context, '/terminal.html?tutorial=fundamentals');
+    const output = page.locator('#terminal-output');
+    await expect(output).toContainText('MISSION BRIEFING', { timeout: 15000 });
+    await typeCommand(page, 'pwd');
+    await expect(output).toContainText('Stap 2/7', { timeout: 3000 });
+
+    // Deep-link opnieuw naar fundamentals — mag NIET herstarten naar stap 0.
+    await page.goto('/terminal.html?tutorial=fundamentals');
+    await acceptLegalModal(page);
+
+    // Hervat-melding op stap 2/7, geen nieuwe briefing.
+    await expect(output).toContainText('Tutorial hervat', { timeout: 15000 });
+    await expect(output).toContainText('stap 2/7', { timeout: 3000 });
+    await expect(output).not.toContainText('MISSION BRIEFING');
+
+    // Bewijs dat de voortgang niet gereset is: opslag houdt currentStep === 1 (stap 2/7).
+    const savedStep = await page.evaluate(() => {
+      const raw = localStorage.getItem('hacksim_tutorial_progress');
+      return raw ? JSON.parse(raw).currentStep : null;
+    });
+    expect(savedStep).toBe(1);
+  });
+});

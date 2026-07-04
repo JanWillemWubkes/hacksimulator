@@ -165,18 +165,35 @@ class Onboarding {
    * @param {Object|null} stats - Progress stats from progressStore
    * @returns {string}
    */
-  getWelcomeMessage(stats = null) {
+  getWelcomeMessage(stats = null, ctaMode = 'default') {
     if (!this.isFirstVisit) {
-      return this._getReturningVisitorWelcome(stats);
+      return this._getReturningVisitorWelcome(stats, ctaMode);
     }
-    return this._getFirstTimeWelcome();
+    return this._getFirstTimeWelcome(ctaMode);
+  }
+
+  /**
+   * Slot-CTA van de welcome, afgestemd op de tutorial-staat.
+   * - 'default'  → nodig uit tot 'next' (verse bezoeker of geen actieve missie)
+   * - 'deeplink' → een deep-link-missie start zo meteen; overbrug de gap gedempt
+   * - 'suppress' → een tutorial is/wordt actief; de missie zegt zelf wat te doen
+   * @private
+   * @returns {string|null} de CTA-regel (incl. inspringing) of null bij 'suppress'
+   */
+  _getWelcomeCta(ctaMode, returning) {
+    if (ctaMode === 'deeplink') return "  [~] Je missie wordt geladen...";
+    if (ctaMode === 'suppress') return null;
+    return returning
+      ? "  [→] Typ 'next' voor je volgende stap"
+      : "  [→] Typ 'next' om te beginnen";
   }
 
   /**
    * First-time visitor welcome (rendered with typewriter effect)
    * @private
    */
-  _getFirstTimeWelcome() {
+  _getFirstTimeWelcome(ctaMode = 'default') {
+    const cta = this._getWelcomeCta(ctaMode, false);
     return `[✓] Connecting to hacksim.lab... OK
 [~] Authorized access only. All activity is logged.
 
@@ -190,9 +207,7 @@ Welkom, hacker. Sessie gestart.
   → FASE 1: Terminal basics     ('ls', 'cd', 'pwd')
   → FASE 2: File manipulation   ('mkdir', 'touch', 'rm')
   → FASE 3: Network scanning    ('ping', 'nmap')
-  → FASE 4: Security tools      ('hashcat', 'hydra')
-
-  [→] Type 'next' om te beginnen`;
+  → FASE 4: Security tools      ('hashcat', 'hydra')${cta ? '\n\n' + cta : ''}`;
   }
 
   /**
@@ -200,9 +215,10 @@ Welkom, hacker. Sessie gestart.
    * @private
    * @param {Object|null} stats - Progress stats from progressStore
    */
-  _getReturningVisitorWelcome(stats) {
+  _getReturningVisitorWelcome(stats, ctaMode = 'default') {
     const greeting = this._getTimeGreeting();
     const commandCount = this.commandsTried.length;
+    const cta = this._getWelcomeCta(ctaMode, true);
 
     let statsLine = '';
     if (stats && (stats.completedChallenges.length > 0 || stats.badges.length > 0 || commandCount > 0)) {
@@ -216,8 +232,7 @@ Welkom, hacker. Sessie gestart.
     return `[✓] Connecting to hacksim.lab... OK
 
 ${greeting}, hacker.
-${statsLine}
-  [→] Type 'next' voor je volgende stap`;
+${statsLine}${cta ? '\n' + cta : ''}`;
   }
 
   /**

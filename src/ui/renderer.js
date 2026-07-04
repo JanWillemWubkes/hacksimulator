@@ -365,9 +365,9 @@ class Renderer {
    * @param {Object} onboarding - Onboarding instance (optional for backward compatibility)
    * @param {Object|null} stats - Progress stats from progressStore
    */
-  renderWelcome(onboarding = null, stats = null) {
+  renderWelcome(onboarding = null, stats = null, ctaMode = 'default') {
     if (onboarding) {
-      const welcome = onboarding.getWelcomeMessage(stats);
+      const welcome = onboarding.getWelcomeMessage(stats, ctaMode);
       if (onboarding.isFirstTimeVisitor()) {
         this._renderTypewriter(welcome);
       } else {

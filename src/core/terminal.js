@@ -88,6 +88,13 @@ class Terminal {
     tutorialManager.register(exploitationScenario);
     tutorialManager.resume();
 
+    // Deep-link: valideer de rauwe ?tutorial=-id nu de scenario's geregistreerd zijn.
+    // Ongeldig/afwezig → null (stille no-op). De welcome-render hieronder leest dit
+    // zodat een pending missie-start de "Type 'next'"-CTA niet laat concurreren.
+    this._deepLinkId = (options.deepLinkId && tutorialManager.getScenario(options.deepLinkId))
+      ? options.deepLinkId
+      : null;
+
     // Initialize challenge system
     challengeManager.setRenderer(challengeRenderer);
     easyChallenges.forEach(function(challenge) {
@@ -122,12 +129,27 @@ class Terminal {
   }
 
   /**
+   * Geldig deep-link-scenario-id dat bij boot uit ?tutorial= is gehaald (of null).
+   * main.js gebruikt dit voor URL-opschoning + het plannen van de auto-start.
+   * @returns {string|null}
+   */
+  getPendingDeepLink() {
+    return this._deepLinkId || null;
+  }
+
+  /**
    * Render welcome message, tutorial resume, and session badge notifications
    * @private
    */
   _renderWelcomeSequence() {
     var sessionBadges = badgeManager.checkUnlocks('session');
     const stats = progressStore.getStats();
+
+    // Coördineer welcome-CTA met de tutorial-staat zodat er nooit twee "wat nu?"-
+    // instructies concurreren (deep-link-briefing of hervatte stap vs. "Type 'next'").
+    const status = tutorialManager.isActive() ? tutorialManager.getStatus() : null;
+    const deepLinkSwitches = !!(this._deepLinkId && (!status || status.scenarioId !== this._deepLinkId));
+    const ctaMode = deepLinkSwitches ? 'deeplink' : (status ? 'suppress' : 'default');
 
     // Disable input during typewriter effect (first visit only)
     if (onboarding.isFirstTimeVisitor()) {
@@ -137,10 +159,17 @@ class Terminal {
       }, { once: true });
     }
 
-    renderer.renderWelcome(onboarding, stats);
+    renderer.renderWelcome(onboarding, stats, ctaMode);
 
-    // Show tutorial resume message if applicable
-    const resumeMsg = tutorialManager.getResumeMessage();
+    // Bij een actieve tutorial op boot past de neutrale placeholder beter dan "Type 'next'".
+    if (status) {
+      var termInput = document.getElementById('terminal-input');
+      if (termInput) termInput.placeholder = 'Typ een command...';
+    }
+
+    // Show tutorial resume message if applicable — maar niet als een deep-link zo meteen
+    // naar een ándere missie wisselt (dan zou de stale hervat-tekst boven de nieuwe briefing blijven staan).
+    const resumeMsg = deepLinkSwitches ? null : tutorialManager.getResumeMessage();
     if (resumeMsg) {
       setTimeout(() => renderer.renderInfo(resumeMsg), 100);
     }
@@ -304,8 +333,10 @@ class Terminal {
       var scrollHint = document.querySelector('.scroll-hint');
       if (scrollHint) scrollHint.classList.add('hidden');
 
-      // Update placeholder after first command (stop nudging 'next')
-      if (onboarding.commandCount >= 1) {
+      // Update placeholder after first command (stop nudging 'next').
+      // Ook direct flippen zodra een tutorial/challenge actief is: de auto-gestarte
+      // 'tutorial <id>' draait vóór recordCommand, dus commandCount is dan nog 0.
+      if (tutorialActiveAtStart || challengeManager.isActive() || onboarding.commandCount >= 1) {
         var termInput = document.getElementById('terminal-input');
         if (termInput) termInput.placeholder = 'Typ een command...';
       }
@@ -325,10 +356,14 @@ class Terminal {
         }
       }
 
-      // Show "no news is good news" filesystem hint (one-time)
-      const filesystemHint = onboarding.getFilesystemHint(parsed.command);
-      if (filesystemHint) {
-        renderer.renderInfo(filesystemHint);
+      // Show "no news is good news" filesystem hint (one-time).
+      // Onderdruk tijdens een actieve tutorial/challenge: de one-time-flag blijft dan
+      // ongeconsumeerd, dus de hint vuurt alsnog bij het eerste gebruik búiten een missie.
+      if (!tutorialActiveAtStart && !challengeManager.isActive()) {
+        const filesystemHint = onboarding.getFilesystemHint(parsed.command);
+        if (filesystemHint) {
+          renderer.renderInfo(filesystemHint);
+        }
       }
 
       // Beginner follow-up tip (only outside tutorials/challenges)
@@ -338,9 +373,12 @@ class Terminal {
         if (followUp) renderer.renderInfo(followUp);
       }
 
-      // One-time simulator command hint
-      const simulatorHint = onboarding.getSimulatorCommandHint(parsed.command);
-      if (simulatorHint) renderer.renderInfo(simulatorHint);
+      // One-time simulator command hint — niet mid-missie (zou als losse educatieve
+      // regel direct onder de briefing/stap-instructie landen). Flag blijft bewaard.
+      if (!tutorialActiveAtStart && !challengeManager.isActive()) {
+        const simulatorHint = onboarding.getSimulatorCommandHint(parsed.command);
+        if (simulatorHint) renderer.renderInfo(simulatorHint);
+      }
 
       // Tutorial system: handled above (pre-validation for correct output order)
 
