@@ -6,6 +6,18 @@
 
 import challengeManager from '../../gamification/challenge-manager.js';
 import { difficultyLabel } from '../../gamification/challenge-renderer.js';
+import tutorialManager from '../../tutorial/tutorial-manager.js';
+
+// Weiger een challenge-start zolang er een tutorial loopt: twee begeleide systemen
+// tegelijk verwart, en de challenge zou de tutorial-commando's als foute pogingen tellen.
+function _blockedByTutorial() {
+  if (tutorialManager.isActive()) {
+    var status = tutorialManager.getStatus();
+    return '[!] Je bent nog bezig met een tutorial: ' + status.scenarioTitle + '\n\n' +
+           '[?] Typ \'tutorial exit\' om die eerst af te sluiten (voortgang wordt bewaard).';
+  }
+  return null;
+}
 
 export default {
   name: 'challenge',
@@ -29,6 +41,8 @@ export default {
         return '[?] Gebruik: challenge start <challenge-id>\n\n' +
                '[?] Type \'challenge\' om beschikbare challenges te zien.';
       }
+      var blocked = _blockedByTutorial();
+      if (blocked) return blocked;
       return challengeManager.start(challengeId);
     }
 
@@ -67,6 +81,8 @@ export default {
     // Maybe user typed challenge ID directly: challenge network-scout
     var challenge = challengeManager.getChallenge(sub);
     if (challenge) {
+      var blockedDirect = _blockedByTutorial();
+      if (blockedDirect) return blockedDirect;
       return challengeManager.start(sub);
     }
 

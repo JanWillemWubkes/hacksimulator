@@ -457,4 +457,65 @@ test.describe('Tutorial System', () => {
     await expect(output).toContainText('Hint', { timeout: 5000 });
   });
 
+  // ----------------------------------------
+  // Group 9: State-eerlijkheid (Sessie 193+ — bugs D/E/H)
+  // ----------------------------------------
+
+  test('exit bewaart voortgang: tutorial <id> hervat op de juiste stap (bug D)', async ({ page }) => {
+    // Start recon en zet één stap (stap 2/4).
+    await typeCommand(page, 'tutorial recon');
+    const output = page.locator('#terminal-output');
+    await expect(output).toContainText('MISSION BRIEFING', { timeout: 10000 });
+    await typeCommand(page, 'ping 192.168.1.100');
+    await expect(output).toContainText('Stap 2/4', { timeout: 5000 });
+
+    // Verlaat de tutorial — belofte: voortgang opgeslagen.
+    await typeCommand(page, 'tutorial exit');
+    await expect(output).toContainText('Voortgang', { timeout: 5000 });
+
+    // Reload — een gepauzeerde missie mag NIET automatisch hervatten.
+    await page.reload();
+    await expect(page.locator('#terminal-input')).toBeVisible({ timeout: 10000 });
+    await expect(output).not.toContainText('Tutorial hervat', { timeout: 3000 });
+
+    // Handmatig hervatten begint op de opgeslagen stap, niet op stap 0.
+    await typeCommand(page, 'tutorial recon');
+    await expect(output).toContainText('Voortgang hervat', { timeout: 5000 });
+    await expect(output).toContainText('Stap 2/4', { timeout: 5000 });
+  });
+
+  test('voltooide missie overleeft reload: cert blijft opvraagbaar (bug H)', async ({ page }) => {
+    // Seed een voltooide-maar-inactieve staat (goedkoper dan 7 stappen doorlopen).
+    await page.evaluate(() => {
+      localStorage.setItem('hacksim_tutorial_progress', JSON.stringify({
+        activeScenario: null,
+        currentStep: 0,
+        completedScenarios: ['fundamentals'],
+        attempts: 0,
+        active: false
+      }));
+    });
+    await page.reload();
+    await expect(page.locator('#terminal-input')).toBeVisible({ timeout: 10000 });
+
+    const output = page.locator('#terminal-output');
+    // Het certificaat is opvraagbaar (niet "nog geen scenario voltooid").
+    await typeCommand(page, 'tutorial cert');
+    await expect(output).not.toContainText('nog geen scenario voltooid', { timeout: 3000 });
+    await expect(output).toContainText('CERTIFICAAT', { timeout: 5000 });
+  });
+
+  test('challenge start tijdens actieve tutorial wordt geweigerd (bug E)', async ({ page }) => {
+    await typeCommand(page, 'tutorial recon');
+    const output = page.locator('#terminal-output');
+    await expect(output).toContainText('MISSION BRIEFING', { timeout: 10000 });
+
+    // Challenge starten mid-tutorial → nette weigering, geen challenge-briefing.
+    await typeCommand(page, 'challenge start network-scout');
+    await expect(output).toContainText('nog bezig met een tutorial', { timeout: 5000 });
+    await expect(output).not.toContainText('DOELEN:', { timeout: 2000 });
+    // Het challenge-commando mag NIET als foute tutorial-stap gelden.
+    await expect(output).not.toContainText('hoort niet bij deze stap');
+  });
+
 });

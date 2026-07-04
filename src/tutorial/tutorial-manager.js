@@ -122,8 +122,14 @@ export default new class TutorialManager {
       return '[!] Er is al een tutorial actief: ' + this.activeScenario.title + '\n\n[?] Type \'tutorial exit\' om de huidige tutorial te verlaten.';
     }
 
+    // Hervat gepauzeerde voortgang van dezelfde missie (via exit opgeslagen);
+    // anders verse start op stap 0.
+    var saved = this._load();
+    var resuming = !!(saved && saved.activeScenario === scenarioId && saved.active === false
+      && saved.currentStep > 0 && saved.currentStep < scenario.steps.length);
+
     this.activeScenario = scenario;
-    this.currentStep = 0;
+    this.currentStep = resuming ? saved.currentStep : 0;
     this.attempts = 0;
     this.state = STATES.STEP_ACTIVE;
     this._save();
@@ -133,10 +139,16 @@ export default new class TutorialManager {
     this._nextStartSource = null;
     analyticsEvents.tutorialEvent('started', scenarioId, src ? { source: src } : {});
 
-    // Render briefing + first step objective
+    // Render briefing + step objective (verse start = stap 0; hervat = opgeslagen stap)
     var output = this._renderer.renderBriefing(scenario);
     output += '\n\n';
-    output += this._renderer.renderObjective(scenario.steps[0], 0, scenario.steps.length);
+    if (resuming) {
+      output += '[✓] Voortgang hervat: je gaat verder bij stap ' +
+        (this.currentStep + 1) + '/' + scenario.steps.length + '.\n';
+      output += '[~] Opnieuw beginnen? Typ \'tutorial reset\' (wist alle tutorial-voortgang).\n\n';
+    }
+    output += this._renderer.renderObjective(
+      scenario.steps[this.currentStep], this.currentStep, scenario.steps.length);
     return output;
   }
 
@@ -236,19 +248,21 @@ export default new class TutorialManager {
       return '[?] Geen actieve tutorial.';
     }
 
-    var title = this.activeScenario.title;
-    var progress = (this.currentStep) + '/' + this.activeScenario.steps.length;
+    var scenario = this.activeScenario;
+    var pausedStep = this.currentStep;
+    var progress = pausedStep + '/' + scenario.steps.length;
 
-    analyticsEvents.tutorialEvent('abandoned', this.activeScenario.id, { lastStep: this.currentStep });
+    analyticsEvents.tutorialEvent('abandoned', scenario.id, { lastStep: pausedStep });
 
     this.state = STATES.IDLE;
     this.activeScenario = null;
     this.currentStep = 0;
     this.attempts = 0;
-    this._save();
+    // Voortgang echt bewaren (active:false) zodat de hervat-belofte hieronder klopt.
+    this._savePaused(scenario.id, pausedStep);
 
-    return '[✓] Tutorial verlaten: ' + title + '\n' +
-           '[?] Voortgang (' + progress + ') opgeslagen. Type \'tutorial start <id>\' om te hervatten.';
+    return '[✓] Tutorial verlaten: ' + scenario.title + '\n' +
+           '[?] Voortgang (' + progress + ') opgeslagen. Typ \'tutorial start ' + scenario.id + '\' om te hervatten.';
   }
 
   /**
@@ -256,14 +270,20 @@ export default new class TutorialManager {
    */
   resume() {
     var saved = this._load();
+    // completedScenarios ALTIJD herstellen, óók zonder actieve missie — anders raakt
+    // een voltooide missie na reload uit het geheugen en wist de eerstvolgende _save()
+    // hem permanent van schijf (funnel-regressie, "geen certificaat").
+    this.completedScenarios = (saved && saved.completedScenarios) || [];
+
     if (!saved || !saved.activeScenario) return false;
+    // Een via exit() gepauzeerde missie niet automatisch heractiveren.
+    if (saved.active === false) return false;
 
     var scenario = this.scenarios.get(saved.activeScenario);
     if (!scenario) return false;
 
     this.activeScenario = scenario;
     this.currentStep = saved.currentStep || 0;
-    this.completedScenarios = saved.completedScenarios || [];
     this.attempts = saved.attempts || 0;
     this.hintCounts = this._loadHints();
 
@@ -402,7 +422,27 @@ export default new class TutorialManager {
         activeScenario: this.activeScenario ? this.activeScenario.id : null,
         currentStep: this.currentStep,
         completedScenarios: this.completedScenarios,
-        attempts: this.attempts
+        attempts: this.attempts,
+        // active onderscheidt een lopende missie (auto-resume bij reload) van een
+        // gepauzeerde (via exit: wél bewaard, niet automatisch heractiveren).
+        active: this.isActive()
+      };
+      localStorage.setItem(STORAGE_KEY_PROGRESS, JSON.stringify(data));
+    } catch (e) {
+      console.warn('Could not save tutorial progress:', e);
+    }
+  }
+
+  // Bewaar de gepauzeerde voortgang van een verlaten missie (active:false) zodat
+  // 'tutorial <id>' hem echt hervat i.p.v. op stap 0 te herstarten.
+  _savePaused(scenarioId, step) {
+    try {
+      var data = {
+        activeScenario: scenarioId,
+        currentStep: step,
+        completedScenarios: this.completedScenarios,
+        attempts: 0,
+        active: false
       };
       localStorage.setItem(STORAGE_KEY_PROGRESS, JSON.stringify(data));
     } catch (e) {

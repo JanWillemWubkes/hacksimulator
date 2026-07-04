@@ -5,6 +5,7 @@
  */
 
 import tutorialManager from '../../tutorial/tutorial-manager.js';
+import challengeManager from '../../gamification/challenge-manager.js';
 import { generateCertificate, copyCertificateToClipboard } from '../../tutorial/certificate.js';
 import {
   BOX_CHARS,
@@ -15,6 +16,15 @@ import {
 } from '../../utils/box-utils.js';
 
 var B = BOX_CHARS;
+
+// Weiger een tutorial-start zolang er een challenge loopt (spiegel van challenge.js).
+function _blockedByChallenge() {
+  if (challengeManager.isActive()) {
+    return '[!] Je bent nog bezig met een challenge.\n\n' +
+           '[?] Typ \'challenge exit\' om die eerst af te sluiten.';
+  }
+  return null;
+}
 
 function buildLine(text, width) {
   var inner = width - 2;
@@ -139,6 +149,8 @@ export default {
         return '[?] Gebruik: tutorial start <scenario-id>\n\n' +
                '[?] Type \'tutorial\' om beschikbare scenario\'s te zien.';
       }
+      var blocked = _blockedByChallenge();
+      if (blocked) return blocked;
       return tutorialManager.start(scenarioId);
     }
 
@@ -195,6 +207,8 @@ export default {
     // Maybe user typed scenario ID directly: tutorial recon
     var scenario = tutorialManager.getScenario(sub);
     if (scenario) {
+      var blockedDirect = _blockedByChallenge();
+      if (blockedDirect) return blockedDirect;
       return tutorialManager.start(sub);
     }
 

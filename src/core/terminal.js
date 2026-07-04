@@ -292,7 +292,7 @@ class Terminal {
       let tutorialFeedback = null;
       let tutorialWasCorrect = false;
       const isTutorialRelevant = tutorialManager.isActive() &&
-          !['tutorial', 'help', 'man', 'clear', 'history', 'leerpad', 'shortcuts', 'next', 'hint', 'reset'].includes(parsed.command);
+          !['tutorial', 'challenge', 'help', 'man', 'clear', 'history', 'leerpad', 'shortcuts', 'next', 'hint', 'reset'].includes(parsed.command);
       // Capture BEFORE handleCommand() runs: completing the final step flips the
       // tutorial to IDLE in this same tick, so a post-mutation isActive() check
       // would go stale and leak a duplicate onboarding "Type 'next'" hint.
@@ -384,7 +384,7 @@ class Terminal {
 
       // Challenge system: check command against active challenge
       if (challengeManager.isActive() &&
-          !['challenge', 'help', 'man', 'clear', 'history', 'shortcuts'].includes(parsed.command)) {
+          !['challenge', 'tutorial', 'next', 'help', 'man', 'clear', 'history', 'shortcuts'].includes(parsed.command)) {
         const challengeFeedback = challengeManager.handleCommand(parsed.command, parsed.args, parsed.flags, this.context);
         if (challengeFeedback) {
           if (typeof challengeFeedback === 'object' && challengeFeedback.isCompletion) {
