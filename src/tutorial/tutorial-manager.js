@@ -420,8 +420,11 @@ export default new class TutorialManager {
 
   _markComplete() {
     if (this.activeScenario) {
-      analyticsEvents.tutorialEvent('completed', this.activeScenario.id);
+      // Alleen de éérste voltooiing telt voor analytics — een replay zou de
+      // completion-counts scheeftrekken (challenge-kant is al veilig: start()
+      // weigert voltooide challenges).
       if (this.completedScenarios.indexOf(this.activeScenario.id) === -1) {
+        analyticsEvents.tutorialEvent('completed', this.activeScenario.id);
         this.completedScenarios.push(this.activeScenario.id);
       }
     }
