@@ -4,6 +4,34 @@
 
 ---
 
+## Sessie 193: Volledige tutorial-flow-audit — 18 fixes (A–P) in 4 gefaseerde commits (03-05 jul 2026)
+
+**Mission:** Heisenberg meldde met 3 screenshots: (1) deep-link vanaf de homepage toonde "Typ 'next'" (welcome-CTA + placeholder) terwijl de auto-gestarte missie "gebruik pwd" zei; (2) deep-link naar een andere missie toonde eerst de hervat-tekst van de oude missie; (3) `[~] Typ 'hint'` vs `[?] Hint:` oogde inconsistent. Vervolgvraag: niet losse fixes, maar de héle flow perfect — alle routes en faalklassen in kaart. "Alles draait om de gebruikerservaring."
+
+**Aanpak:** 5 Explore-agents + Plan-agent (regelnummers zelf geverifieerd) over twee lagen — begeleiding (meldingen/CTA/state/markers) én omgeving (VFS-precondities/persistentie/sessies/mobile). Uitvoering in 4 fasen, elk apart gecommit + lokaal getest (`BASE_URL=http://127.0.0.1:8123`, NIET productie).
+
+**Antwoord op de hint-vraag:** `[~]` vs `[?]` is **bewust** (renderer.js:95-121: `[~]` dim = staande uitnodiging, `[?]` blauw = hint-inhoud). Hiërarchie behouden; probleem was dat 3 oppervlakken 3 markers gebruikten + nergens gedocumenteerd (style-guide claimde foutief `[TIP]`=cyaan).
+
+**Work done (4 commits):**
+- **Fase 1 — deep-link/welcome-coherentie (`c222597`, cache `v=194-deeplink-ux`):** deep-link-id vóór `terminal.init()` gelezen (rauw) + doorgegeven; terminal valideert ná scenario-registratie (`getPendingDeepLink()`). `_renderWelcomeSequence` bepaalt `ctaMode` (deeplink→"Je missie wordt geladen"; suppress bij actieve tutorial; default) + onderdrukt `getResumeMessage()` bij missie-wissel. `main.js` `getState()`→`getStatus()` (bug C: deep-link naar zélfde missie wiste voortgang). `getFilesystemHint`/`getSimulatorCommandHint` geguard (lekten onder briefing). Placeholder state-aware + Type→Typ.
+- **Fase 2 — state-eerlijkheid (`2d93dae`):** `resume()` hoist `completedScenarios` vóór early-return (bug H: voltooide missies + certificaat raakten permanent kwijt na reload). `_save()` krijgt `active`-veld; `exit()` bewaart gepauzeerde stap (`_savePaused`, active:false); `start()` hervat die stap ("Voortgang hervat"). Tutorial⇄challenge wederzijds geweigerd + exclusielijsten (`challenge`→tutorial-lijst, `tutorial`/`next`→challenge-lijst).
+- **Fase 3 — omgevings-robuustheid (`606f85c`, cache `v=195-env-robust`):** NEW `src/tutorial/scenario-setup.js` (`normalizeCwd`/`restoreFile`/`removeIfExists`) + `setup(vfs)` op alle 5 scenario's, aangeroepen in `start()` bij verse start (niet resume). Fixt F (mkdir-"File exists"-strand bij herhaalrun), G (cwd-drift breekt `cd documents`), M (gewiste read-targets, getrouw hersteld uit `initialFilesystem`). Plus: `clear` heroriënteert (`renderCurrentStep`); challenge persist + resume (`hacksim_active_challenge`); mobiele ls/nmap-knoppen verborgen via `body.mission-active` + tap-guard tijdens typewriter; exploitation shadow-stap eerlijk herschreven (permission-denied = leermoment); consent-writes in 5 tools gewrapt; sql-sleuth/attack-chain order-loks niet-lockend; multi-tool-master-hint `clear` verwijderd.
+- **Fase 4 — markers + Typ-sweep + docs (`ced455d`):** hint-markers geünificeerd (next/challenge-renderer/challenge-manager); `_stripTips` strippt ook `[TIP]`; ~90 `Type '`→`Typ '` over src/ (Python-sweep, incl. escaped `\'`-varianten); dode `getPersistentHint` verwijderd; style-guide marker→kleur-tabel + `[~]`/`[?]`-hiërarchie; command-checklist (j/n)→echte consent-model.
+
+**Tests:** 13 nieuwe deterministische asserts (deeplink coherentie ×3, D/E/H ×3, F/G idempotentie+cwd ×2, I clear, J persist, O order-recovery). next-funnel-regex bijgewerkt naar `[->] Typ '`. Volledige aangeraakte chromium-suite groen (deeplink 8, tutorial 38, fundamentals 12, gamification 16, next-funnel, cross-browser, tutorial-mobile 12). Browser-geverifieerd: deep-link toont "Je missie wordt geladen", 0 console-errors.
+
+**Learnings:**
+- **Een viewport-/timing-klacht is vaak een volgorde-probleem, niet een render-gat.** Bug A/B kwamen niet uit ontbrekende code maar uit dat de deep-link-id pas ná de welcome-render bekend was. De fix zit in *wanneer* je de staat kent (id vóór `init`), niet in nieuwe UI.
+- **Eén slot moet soms 3 toestanden coderen.** `activeScenario` alleen kon "gepauzeerd" niet van "nooit gestart" onderscheiden → een `active`-boolean lost bug D+H op zonder tweede opslag of migratie (oude saves = actief, backwards-compatibel).
+- **Bij output-vs-verhaal-conflict: buig het verhaal naar de wereld als de wereld pedagogisch juist is.** `/etc/shadow` restricted is correct + consistent met cat.js' eigen "restricted!"-tip → de tutorial-tekst werd eerlijk, geen globale VFS-mutatie die "shadow leesbaar" zou lekken.
+- **De duurzame omgevings-fix is een fixture, niet een validator-patch.** Eén `setup(vfs)` bij verse start neutraliseert F+G+M ineens; validators per stap najagen zou dweilen zijn.
+- **first-occurrence-index-vergelijking = permanente lock.** sql-sleuth/attack-chain werden onwinbaar bij één verkeerde-volgorde-poging; "geordende subsequence ergens in de log" behoudt de leerwaarde zonder te vergrendelen.
+- **Byte-sweeps missen escaped quotes.** `sed s/Type '/` matchte `Type \'next\'` niet (backslash-byte ertussen); een regex-sweep die `\\?['"]` toestaat ving alle ~90.
+
+**Next steps:** `/summary` doc-sync (deze). Geen open technische items uit de audit — bewust niet aangeraakt (met reden): multi-tab last-write-wins, localStorage-versioning, virtual-keyboard-gedrag.
+
+---
+
 ## Sessie 192: Tutorial-voltooiing past in beeld — next-step CTA altijd zichtbaar (02 jul 2026)
 
 **Mission:** Heisenberg meldde met 2 screenshots: na het afronden van Fundamentals zie je de `MISSIE VOLTOOID`-box, maar **niet** de vervolgstap-CTA (`Typ 'next' ...` / `Of typ 'tutorial' ...`). Die staat onder de vouw; je moet zelf naar beneden scrollen om te weten wat je nu moet doen. Voor een beginner een verwarrend doodlopend eind. Analyseren + perfectioneren, brutaal eerlijk.

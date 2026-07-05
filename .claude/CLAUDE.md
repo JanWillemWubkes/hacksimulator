@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 192)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 193)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,20 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 193: Volledige tutorial-flow-audit — begeleiding + state + omgeving (03-05 jul 2026)
+⚠️ **Never:**
+- Een viewport-/timing-klacht als een render-gat lezen — bug A/B ("Typ 'next'" naast "gebruik pwd"; stale hervat-tekst boven nieuwe briefing) kwamen niet uit ontbrekende code maar uit dat de deep-link-id pas ná de welcome-render bekend was. De fix zit in *wanneer* je de staat kent (id vóór `terminal.init`), niet in nieuwe UI.
+- Eén opslag-slot 3 toestanden laten coderen met te weinig velden — `activeScenario` alleen kon "gepauzeerd" niet van "nooit gestart" onderscheiden; `exit()` wiste daardoor de voortgang terwijl de melding "opgeslagen ... om te hervatten" beloofde. Een `active`-boolean lost het op (oude saves = actief = backwards-compatibel), geen tweede slot/migratie.
+- `resume()` laten early-returnen vóór het laden van `completedScenarios` — voltooide missies + `tutorial cert` raakten na één reload permanent kwijt (eerstvolgende `_save()` schreef `[]` naar disk). Laad afgeleide staat die je altijd nodig hebt vóór de guard.
+- first-occurrence-index-vergelijking gebruiken voor volgorde-eisen — sql-sleuth/attack-chain werden permanent onwinbaar bij één verkeerde-volgorde-poging. Monotone first-index = lock; gebruik "geordende subsequence ergens in de log".
+- Een byte-`sed` vertrouwen voor een string-sweep met quotes — `s/Type '/` miste `Type \'next\'` (backslash-byte ertussen). Een regex die `\\?['"]` toestaat ving alle ~90; verifieer met een na-grep.
+
+✅ **Always:**
+- Bij output-vs-verhaal-conflict het verhaal naar de wereld buigen als de wereld pedagogisch juist is — `/etc/shadow` "Permission denied" is correct + consistent met cat.js' eigen "restricted!"-tip; de tutorial-tekst werd eerlijk (permission-denied = leermoment) i.p.v. een globale VFS-mutatie die "shadow leesbaar" zou lekken.
+- De duurzame omgevings-fix is een fixture, niet een validator-patch — één `setup(vfs)`-hook per scenario (bij verse start, NIET resume) normaliseert cwd + ruimt run-artefacten op + herstelt gewiste read-targets getrouw uit `initialFilesystem`, en neutraliseert zo F+G+M ineens. Validators per stap najagen = dweilen.
+- Bij "maak de héle flow perfect": twee lagen auditen — begeleiding (CTA/state/markers) én omgeving (VFS/persistentie/sessies/mobile). De zwaarste bugs (permanent verlies, gegarandeerde herhaalrun-strand) zaten in de omgevingslaag, niet in de gemelde symptomen.
+- Marker-hiërarchie is bewust maar moet gedocumenteerd + consistent: `[~]` dim = staande uitnodiging, `[?]` blauw = hint-inhoud. Trek outliers gelijk ([[feedback_nl_copy_dejargon]] geldt ook voor markers) en leg de renderer-waarheid vast (`[TIP]` heeft géén branch → is NIET cyaan). Volledig: `docs/sessions/current.md` Sessie 193.
+
 ### Sessie 192: Tutorial-voltooiing past in beeld — next-step CTA altijd zichtbaar (02 jul 2026)
 ⚠️ **Never:**
 - Een "fix" accepteren die een klacht *verplaatst* i.p.v. oplost — Sessie 190 (output verborgen) en Sessie 192 (CTA verborgen) zijn dezelfde bug van twee kanten: een completion-blok van ~43 regels/~1300px in een ~830px viewport (1,6×), waarvan je maar één uiteinde kunt tonen. Een top-anker fixt de ene kant en breekt de andere; de wip blijft.
@@ -148,20 +162,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - De twee belangrijkste leertools expliciet aan elkaar koppelen — `leerpad` (oefenen) toont nu per niveau `[→] Begeleide missie: tutorial <id>` zodat oefenen ↔ begeleide missie als twee views op hetzelfde niveau leesbaar zijn.
 - Engelse difficulty-labels in een NL-UI zijn een bug, geen smaak ([[feedback_nl_copy_dejargon]]): EASY/MEDIUM/HARD → Makkelijk/Gemiddeld/Moeilijk via één `difficultyLabel()`; interne keys (easy/medium/hard) ongemoeid voor sortering/opslag. Volledig: `docs/sessions/current.md` Sessie 188.
 
-### Sessie 187: Fase B uitgevoerd — tutorials op orde (badge == bestemming) (30 jun 2026)
-⚠️ **Never:**
-- De gespecde "verborgen taak" blind uitvoeren — Stap 0 vermoedde een `Expert`-badge in `tutorial-renderer.js`; exploratie toonde dat difficulty overal platte tekst is (renderer/lijst/certificaat), géén difficulty-gestuurde CSS in de terminal → een badge bouwen = cargo-cult. De échte doorwerking zat een laag dieper (funnel). De spec wijst de richting, niet altijd de plek.
-- Een stage toevoegen aan een high-water-mark-funnel zónder álle index-koppelingen mee te hernummeren — `next.js` codeert de indices op 3 plekken: `stageBuilders[]`, `hasAnyProgress`-switch, én de makkelijk te missen `buildSkippedHint`-drempels (`>0/1/3`). Die laatste vergeten = stille "nog X commando's over"-bug die geen test vangt.
-- `fundamentals` aan `tutorialOrder` (de overige-missies-catch-all ná fase 3) prependen — zou een gevorderde gebruiker die fundamentals oversloeg later achterwaarts "doe fundamentals" tonen. Een eigen stage-0 + high-water dekt het correct.
-- Een `du`-meting in NL-locale vertrouwen: `du -sb | awk '{print $1/1024}'` printte "640,823 KB" (komma = decimaal) → leek 640 MB, was 640.8 KB. `du -sh` (956K) was de sanity-check.
-
-✅ **Always:**
-- Bij spec-vs-engine-conflict de keuze surfacen i.p.v. stil afwijken — de engine valideert per commando, de spec wou "~5 gegroepeerd"; 7-single dwingt elke badge-belofte-skill af maar wijkt af → AskUserQuestion met previews, niet eenzijdig kiezen of klakkeloos volgen.
-- Validators asymmetrisch per commando-type: kijk-commando's (pwd/ls/cat) toetsen op *afwezigheid* van error-patronen, maak/wis-commando's (mkdir/touch/rm) op *aanwezigheid* van de succes-marker (`aangemaakt`/`verwijderd`) → één check vangt alle faal-redenen (geen arg, bestaat al, geen rechten).
-- Tutorial-stappen tegen de echte VFS (`structure.js`) coheren: `cd documents` → `cat scan-results.txt` bestaat dáár → mkdir/touch/rm in die schrijfbare map. De tutorial blokkeert commando's niet, dus ze muteren de echte context — stappen moeten op de werkelijke cwd-staat kloppen.
-- "Geen badge nodig" als geverifieerde NIET-wijziging vastleggen, met de meting als bewijs (difficulty-tekst gemeten dark `#c9d1d9`/light `#0a0a0a`, 0 elementen buiten 375px). Volledig: `docs/sessions/current.md` Sessie 187.
-
-**Rotation:** Top-6 huidig: 187-188-189-190-191-192 (Sessie 186 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 190 UITGEVOERD:** current.md staart Sessie 175-179 geknipt naar `archive-s175-s179.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 180-190 (11 entries; volgende bulk-rotatie Sessie 195 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-174 → `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 188-189-190-191-192-193 (Sessie 186 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 190 UITGEVOERD:** current.md staart Sessie 175-179 geknipt naar `archive-s175-s179.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 180-190 (11 entries; volgende bulk-rotatie Sessie 195 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-174 → `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -210,7 +211,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 192
+**Sessie counter:** 193
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -262,6 +263,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 02 jul 2026 (Sessie 192 — Tutorial-voltooiing past in beeld: inline-certificaat (~20 regels) uit auto-voltooiing (blok 1,6× viewport verborg de next-step CTA onder de vouw). Blok krimpt en past nu → scroll-anker `_scrollLineToTop`→`_scrollToBottom`; cert blijft op klembord + `tutorial cert`. Gemeten 1920×1080: echo + CTA beide zichtbaar. Cache-bump `main.js?v=192-completion-fit`. 61 e2e chromium groen. Volledig: `docs/sessions/current.md`)
-**Version:** 5.66 (Sessie 192 — inline-cert weg uit tutorial-completion → blok past viewport → CTA altijd zichtbaar; scroll-anker terug naar bodem, dode helper opgeruimd; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 05 jul 2026 (Sessie 193 — volledige tutorial-flow-audit, 18 fixes A–P in 4 commits: deep-link/welcome-coherentie, state-eerlijkheid (completedScenarios-hoist + exit bewaart echt), omgevings-robuustheid (NEW scenario-setup.js VFS-fixture, challenge-persist, order-loks), marker-unificatie + Type→Typ sweep + docs. 13 e2e-asserts, suite groen. Cache `v=194`+`v=195`. Volledig: `docs/sessions/current.md`)
+**Version:** 5.67 (Sessie 193 — tutorial-flow geperfectioneerd over 4 fasen: begeleiding + state + omgeving + consistentie; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
