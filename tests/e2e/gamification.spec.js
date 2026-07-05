@@ -264,6 +264,10 @@ test.describe('Badge System', () => {
     await expect(output).toContainText('EPIC', { timeout: 2000 });
     await expect(output).toContainText('LEGENDARY', { timeout: 2000 });
     await expect(output).toContainText('22', { timeout: 2000 }); // total badge count (badge-definitions.js)
+
+    // [TIP]-regels renderen als info (cyaan), niet als ongekleurde tekst (Sessie 194)
+    const tipLine = output.locator('.terminal-line.terminal-output-info', { hasText: '[TIP]' });
+    await expect(tipLine.first()).toBeVisible({ timeout: 2000 });
   });
 
   // ----------------------------------------

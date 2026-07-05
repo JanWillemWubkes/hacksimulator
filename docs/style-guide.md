@@ -1420,16 +1420,16 @@ helper; houd ze synchroon). De feitelijke mapping:
 
 | Marker | Type | Kleur (dark → light) |
 |--------|------|----------------------|
-| `[?]`, `[→]`, kale `→` | info | blauw `#79c0ff` → `#0969da` |
+| `[?]`, `[→]`, `[TIP]`, kale `→` | info | blauw `#79c0ff` → `#0969da` |
 | `[!]` | warning | oranje `#d29922` → `#dd8800` |
 | `[✓]` | success | groen `#3fb950` → `#008844` |
 | `[X]` | error | rood `#f85149` → `#d60047` |
 | `[~]` | dim | grijs `#8b949e` → `#444444` |
-| `[TIP]` | **géén branch** | erft parent → normaal wit/zwart |
 
-⚠️ **Let op:** `[TIP]` heeft **geen** eigen renderer-branch en is dus NIET cyaan
-(oudere docs claimden dat onterecht). De "levende" tip-marker is `[?]`. Gebruik voor
-tip-/hint-inhoud `[?]`, niet `[TIP]`.
+**`[TIP]` vs `[?]` semantiek (beide info-blauw sinds Sessie 194):**
+- `[TIP]` = educatieve tip in command-output — het canonieke 80/20-patroon
+  (CLAUDE.md, tone-and-output.md, command-checklist.md).
+- `[?]` = hint-/vraag-inhoud of een verwijzing ("Typ 'man nmap' voor help").
 
 **`[~]` vs `[?]` hiërarchie (bewust):**
 - `[~]` (dim) = een stáánde, secundaire uitnodiging die de hoofdinstructie niet mag

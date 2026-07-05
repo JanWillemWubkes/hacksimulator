@@ -92,7 +92,7 @@ class Renderer {
       let lineType = type;
 
       // ASCII bracket detection (primary - terminal authentic)
-      if (trimmed.startsWith('[?]') || trimmed.startsWith('[→]')) {
+      if (trimmed.startsWith('[?]') || trimmed.startsWith('[→]') || trimmed.startsWith('[TIP]')) {
         lineType = 'info';      // Tips/Info/Educational → cyaan
       } else if (trimmed.startsWith('[!]')) {
         lineType = 'warning';   // Warnings/Legal → oranje
@@ -314,7 +314,7 @@ class Renderer {
       var line = document.createElement('div');
       var lineType = 'info';
 
-      if (trimmed.startsWith('[?]') || trimmed.startsWith('[→]')) {
+      if (trimmed.startsWith('[?]') || trimmed.startsWith('[→]') || trimmed.startsWith('[TIP]')) {
         lineType = 'info';
       } else if (trimmed.startsWith('[!]')) {
         lineType = 'warning';

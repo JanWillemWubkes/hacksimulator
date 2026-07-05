@@ -48,9 +48,16 @@
    - Minimum size: `min-width: 44px; min-height: 44px;` (WCAG AAA)
    - File: `styles/mobile.css`
 
+## Storage / Multi-tab
+
+10. **Twee tabs op terminal.html → voortgang/badges overschrijven elkaar:** laatste schrijver wint
+   - Root cause: geen `storage`-event-listener; `progress-store._cache` wordt één keer gelezen
+   - Status: **bewust geaccepteerd** (Sessie 194) — solo-leersim, zeldzaam scenario, geen corruptie (JSON blijft valide), zelfherstellend bij volgende actie. Reconcile-logica (merge-semantiek per key + cache-invalidatie + debounce-races) is de complexiteit niet waard
+   - Als het ooit wél nodig is: `storage`-listener + per-key merge (arrays unionen, counters max)
+
 ## Playwright / Testing
 
-10. **Playwright tests hangen na afloop (process stopt nooit):** `html` reporter start webserver die wacht op Ctrl+C
+11. **Playwright tests hangen na afloop (process stopt nooit):** `html` reporter start webserver die wacht op Ctrl+C
    - Root cause: `['html']` in `playwright.config.js` → `open: 'on-failure'` (default) start blocking server
    - Fix: `['html', { open: 'never' }]` — genereert report zonder server te starten
    - Bekijk report achteraf: `npx playwright show-report`
