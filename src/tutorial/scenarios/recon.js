@@ -8,11 +8,18 @@
  * doesn't contain error patterns (e.g. unknown host, missing data).
  */
 
+import { normalizeCwd } from '../scenario-setup.js';
+
 var reconScenario = {
   id: 'recon',
   title: 'Reconnaissance: SecureCorp Pentest',
   description: 'Leer de basis van reconnaissance - de eerste stap van elke pentest.',
   difficulty: 'Gevorderd',
+
+  // IP-/domein-gebaseerd; alleen cwd normaliseren voor consistentie.
+  setup: function(vfs) {
+    normalizeCwd(vfs);
+  },
 
   briefing:
     'Je bent ingehuurd als ethical hacker om het netwerk van ' +

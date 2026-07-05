@@ -106,6 +106,7 @@ class Terminal {
     hardChallenges.forEach(function(challenge) {
       challengeManager.register(challenge);
     });
+    challengeManager.resume();
 
     // Update streak on session start
     progressStore.updateStreak();
@@ -117,6 +118,9 @@ class Terminal {
     if (!options.deferWelcome) {
       this._renderWelcomeSequence();
     }
+
+    // Body-class direct in sync brengen (bv. resumed tutorial op boot).
+    this._updateMissionClass();
 
     this.isInitialized = true;
   }
@@ -135,6 +139,18 @@ class Terminal {
    */
   getPendingDeepLink() {
     return this._deepLinkId || null;
+  }
+
+  /**
+   * Sync body.mission-active met de tutorial/challenge-staat (CSS-gedreven UI,
+   * o.a. het verbergen van ls/nmap-snelknoppen op mobiel tijdens een missie).
+   * @private
+   */
+  _updateMissionClass() {
+    try {
+      var active = tutorialManager.isActive() || challengeManager.isActive();
+      document.body.classList.toggle('mission-active', active);
+    } catch (e) { /* body nog niet klaar — genegeerd */ }
   }
 
   /**
@@ -172,6 +188,13 @@ class Terminal {
     const resumeMsg = deepLinkSwitches ? null : tutorialManager.getResumeMessage();
     if (resumeMsg) {
       setTimeout(() => renderer.renderInfo(resumeMsg), 100);
+    } else {
+      // Anders: toon een eventuele challenge-hervat-melding (tutorial/challenge sluiten
+      // elkaar uit, dus hooguit één van beide is actief).
+      const challengeResume = challengeManager.getResumeMessage();
+      if (challengeResume) {
+        setTimeout(() => renderer.renderInfo(challengeResume), 100);
+      }
     }
 
     // Defer session badge notifications to after welcome message
@@ -395,6 +418,10 @@ class Terminal {
         }
       }
 
+      // Houd de body-class in sync met de missie-staat (mobiele snelknoppen ls/nmap
+      // worden dan via CSS verborgen tijdens een tutorial/challenge).
+      this._updateMissionClass();
+
       // Track command execution (analytics - NO ARGUMENTS!)
       analyticsEvents.commandExecuted(parsed.command, true);
 
@@ -430,8 +457,14 @@ class Terminal {
   clear() {
     renderer.clear();
 
-    // Subtiele hint voor beginners na clear (niet tijdens tutorial/challenge)
-    if (!tutorialManager.isActive() && !challengeManager.isActive()) {
+    // Na clear: heroriënteer i.p.v. de gebruiker met een leeg scherm achterlaten.
+    if (tutorialManager.isActive()) {
+      const objective = tutorialManager.renderCurrentStep();
+      if (objective) renderer.renderInfo(objective);
+    } else if (challengeManager.isActive()) {
+      renderer.renderInfo("[~] Challenge actief — typ 'challenge status' voor je voortgang.");
+    } else {
+      // Subtiele hint voor beginners na clear (alleen buiten een missie)
       const hint = onboarding.getPostClearHint();
       if (hint) {
         renderer.renderOutput(hint, 'info');

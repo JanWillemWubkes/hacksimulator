@@ -72,7 +72,9 @@ Voorbeelden van zwakke demo hashes:
 
     // User provided args but hasn't given consent yet - grant consent and proceed
     if (!hasConsent && args.length > 0) {
-      localStorage.setItem('security_tools_consent', 'true');
+      try {
+        localStorage.setItem('security_tools_consent', 'true');
+      } catch (e) { /* private mode / quota — consent niet-persistent, tool draait toch */ }
     }
 
     // Check if hash argument is provided

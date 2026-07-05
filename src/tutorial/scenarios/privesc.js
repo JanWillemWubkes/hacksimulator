@@ -9,11 +9,21 @@
  * doesn't contain error patterns (file not found, etc.).
  */
 
+import { normalizeCwd, restoreFile } from '../scenario-setup.js';
+
 var privescScenario = {
   id: 'privesc',
   title: 'Privilege Escalation: Linux Server Analyse',
   description: 'Leer een gehackt Linux systeem onderzoeken en wachtwoorden opsporen.',
   difficulty: 'Gevorderd',
+
+  // Verse start: cwd normaliseren + de drie lees-doelen herstellen indien gewist.
+  setup: function(vfs) {
+    normalizeCwd(vfs);
+    restoreFile(vfs, '/etc/passwd');
+    restoreFile(vfs, '/var/log/auth.log');
+    restoreFile(vfs, '/home/hacker/.bash_history');
+  },
 
   briefing:
     'Je hebt toegang gekregen tot een Linux server als gewone gebruiker. ' +

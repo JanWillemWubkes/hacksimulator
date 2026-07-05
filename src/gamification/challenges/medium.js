@@ -75,17 +75,19 @@ var mediumChallenges = [
       { command: 'sqlmap', minCount: 1, description: 'Exploiteer SQL injection met sqlmap' }
     ],
     validate: function(log) {
-      var niktoTime = -1;
-      var sqlmapTime = -1;
-      log.forEach(function(entry, index) {
-        if (entry.command === 'nikto' && entry.args.length > 0 && niktoTime === -1) {
-          niktoTime = index;
-        }
-        if (entry.command === 'sqlmap' && entry.args.length > 0 && sqlmapTime === -1) {
-          sqlmapTime = index;
-        }
-      });
-      return niktoTime >= 0 && sqlmapTime >= 0 && niktoTime < sqlmapTime;
+      // "Scan vóór aanval": zoek de eerste nikto-scan, en accepteer een sqlmap die
+      // DAARNA komt. Geen first-occurrence-lock: een verkeerd-volgorde poging
+      // (sqlmap vóór nikto) vergrendelt de challenge niet — nog een scan+aanval
+      // herstelt het.
+      var firstNikto = -1;
+      for (var i = 0; i < log.length; i++) {
+        if (log[i].command === 'nikto' && log[i].args.length > 0) { firstNikto = i; break; }
+      }
+      if (firstNikto === -1) return false;
+      for (var j = firstNikto + 1; j < log.length; j++) {
+        if (log[j].command === 'sqlmap' && log[j].args.length > 0) return true;
+      }
+      return false;
     },
     tips: [
       'Je moet eerst scannen voordat je aanvalt. Gebruik \'nikto\' om kwetsbaarheden te vinden.',

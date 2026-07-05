@@ -8,6 +8,7 @@
  */
 
 import analyticsEvents from '../analytics/events.js';
+import vfs from '../filesystem/vfs.js';
 
 const STATES = {
   IDLE: 'IDLE',
@@ -127,6 +128,13 @@ export default new class TutorialManager {
     var saved = this._load();
     var resuming = !!(saved && saved.activeScenario === scenarioId && saved.active === false
       && saved.currentStep > 0 && saved.currentStep < scenario.steps.length);
+
+    // Verse start: normaliseer de VFS-wereld zodat de missie reproduceerbaar is
+    // (cwd terug naar home, artefacten van een vorige run weg, gewiste lees-doelen
+    // hersteld). NIET bij resume — daar is de VFS juist consistent met de stap.
+    if (!resuming && typeof scenario.setup === 'function') {
+      try { scenario.setup(vfs); } catch (e) { console.warn('Scenario setup failed:', e); }
+    }
 
     this.activeScenario = scenario;
     this.currentStep = resuming ? saved.currentStep : 0;
@@ -311,6 +319,16 @@ export default new class TutorialManager {
 
   isScenarioCompleted(scenarioId) {
     return this.completedScenarios.indexOf(scenarioId) !== -1;
+  }
+
+  /**
+   * Render de objective van de huidige stap (voor heroriëntatie, bv. na 'clear').
+   * @returns {string|null}
+   */
+  renderCurrentStep() {
+    if (!this.isActive()) return null;
+    var step = this.activeScenario.steps[this.currentStep];
+    return this._renderer.renderObjective(step, this.currentStep, this.activeScenario.steps.length);
   }
 
   // --- Hint System (public: hint command) ---

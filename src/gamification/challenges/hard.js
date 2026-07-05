@@ -102,7 +102,7 @@ var hardChallenges = [
     tips: [
       'Je moet 12 verschillende commands gebruiken. Denk aan alle categorieen: netwerk, bestanden, security.',
       'Netwerk: ping, nmap, traceroute, whois, netstat, ifconfig. Bestanden: ls, cat, cd, find, grep, pwd.',
-      'Security: nikto, sqlmap, hashcat, hydra. Systeem: whoami, date, echo, clear. Mix en match!'
+      'Security: nikto, sqlmap, hashcat, hydra. Systeem: whoami, date, echo. Mix en match!'
     ]
   },
   {
@@ -121,33 +121,23 @@ var hardChallenges = [
       { command: 'hashcat', minCount: 1, description: 'Fase 7: Credential cracking' }
     ],
     validate: function(log) {
-      var whoisTime = -1;
-      var nmapTime = -1;
-      var niktoTime = -1;
-      var sqlmapTime = -1;
+      // Zoek de geordende keten whois -> nmap -> nikto -> sqlmap als subsequence
+      // ergens in de log (geen first-occurrence-lock: een enkele verkeerd-volgorde
+      // poging vergrendelt de challenge niet, opnieuw in volgorde herstelt het).
+      var chain = ['whois', 'nmap', 'nikto', 'sqlmap'];
+      var chainIdx = 0;
       var hasFind = false;
       var hasCat = false;
       var hasHashcat = false;
-      log.forEach(function(entry, index) {
-        if (entry.command === 'whois' && entry.args.length > 0 && whoisTime === -1) {
-          whoisTime = index;
-        }
-        if (entry.command === 'nmap' && entry.args.length > 0 && nmapTime === -1) {
-          nmapTime = index;
-        }
-        if (entry.command === 'nikto' && entry.args.length > 0 && niktoTime === -1) {
-          niktoTime = index;
-        }
-        if (entry.command === 'sqlmap' && entry.args.length > 0 && sqlmapTime === -1) {
-          sqlmapTime = index;
+      log.forEach(function(entry) {
+        if (entry.args.length > 0 && chainIdx < chain.length && entry.command === chain[chainIdx]) {
+          chainIdx++;
         }
         if (entry.command === 'find' && entry.args.length > 0) hasFind = true;
         if (entry.command === 'cat' && entry.args.length > 0) hasCat = true;
         if (entry.command === 'hashcat' && entry.args.length > 0) hasHashcat = true;
       });
-      var orderedPhases = whoisTime >= 0 && nmapTime >= 0 && niktoTime >= 0 && sqlmapTime >= 0 &&
-        whoisTime < nmapTime && nmapTime < niktoTime && niktoTime < sqlmapTime;
-      return orderedPhases && hasFind && hasCat && hasHashcat;
+      return chainIdx === chain.length && hasFind && hasCat && hasHashcat;
     },
     tips: [
       'De eerste 4 stappen moeten in volgorde: whois, nmap, nikto, sqlmap. Daarna find, cat en hashcat.',

@@ -15,11 +15,22 @@
  * documents/ holds scan-results.txt and is writable.
  */
 
+import { normalizeCwd, restoreFile, removeIfExists } from '../scenario-setup.js';
+
 var fundamentalsScenario = {
   id: 'fundamentals',
   title: 'Fundamentals: Eerste dag als pentester',
   description: 'Leer de basis: navigeren, bestanden lezen, en je eerste bestanden aanmaken en verwijderen.',
   difficulty: 'Beginner',
+
+  // Verse start: cwd terug naar home (stap 3 'cd documents' is relatief), het
+  // mkdir-artefact van een vorige run weg (anders "File exists" op stap 5), en
+  // het lees-doel van stap 4 herstellen als het gewist is.
+  setup: function(vfs) {
+    normalizeCwd(vfs);
+    removeIfExists(vfs, '/home/hacker/documents/bevindingen', true);
+    restoreFile(vfs, '/home/hacker/documents/scan-results.txt');
+  },
 
   briefing:
     'Welkom bij je eerste dag als junior pentester bij SecureCorp. ' +

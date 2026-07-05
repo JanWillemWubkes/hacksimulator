@@ -223,4 +223,58 @@ test.describe('Fundamentals Tutorial + Re-tiering', () => {
     expect(chips).toContain('netstat');
     expect(chips).toContain('nikto');
   });
+
+  // ----------------------------------------
+  // Group: omgevings-robuustheid (Sessie 193+ — bugs F/G, scenario setup())
+  // ----------------------------------------
+
+  async function runAllSevenSteps(page) {
+    await typeCommand(page, 'pwd');
+    await typeCommand(page, 'ls');
+    await typeCommand(page, 'cd documents');
+    await typeCommand(page, 'cat scan-results.txt');
+    await typeCommand(page, 'mkdir bevindingen');
+    await typeCommand(page, 'touch notes.txt');
+    await typeCommand(page, 'rm notes.txt');
+  }
+
+  test('herhaalrun strandt niet: mkdir bevindingen slaagt opnieuw na een vorige run (bug F)', async ({ page }) => {
+    test.setTimeout(60000);
+    const output = page.locator('#terminal-output');
+
+    // Run 1: volledig doorlopen — laat documents/bevindingen in de VFS achter.
+    await typeCommand(page, 'tutorial fundamentals');
+    await expect(output).toContainText('MISSION BRIEFING', { timeout: 10000 });
+    await runAllSevenSteps(page);
+    await expect(output).toContainText('MISSIE VOLTOOID', { timeout: 5000 });
+
+    // Wis alleen de tutorial-state (VFS blijft, incl. bevindingen).
+    await typeCommand(page, 'tutorial reset');
+
+    // Run 2: setup() moet bevindingen opruimen zodat mkdir opnieuw "aangemaakt" geeft.
+    await typeCommand(page, 'tutorial fundamentals');
+    await expect(output).toContainText('MISSION BRIEFING', { timeout: 10000 });
+    await runAllSevenSteps(page);
+    await expect(output).toContainText('MISSIE VOLTOOID', { timeout: 5000 });
+    // Nooit de "File exists"-strand op de mkdir-stap.
+    await expect(output).not.toContainText('File exists');
+  });
+
+  test('cwd-drift breekt fundamentals niet: setup() normaliseert naar home (bug G)', async ({ page }) => {
+    const output = page.locator('#terminal-output');
+
+    // Drift: verplaats de cwd wég van home vóór de missie start.
+    await typeCommand(page, 'cd /var/log');
+
+    await typeCommand(page, 'tutorial fundamentals');
+    await expect(output).toContainText('MISSION BRIEFING', { timeout: 10000 });
+
+    // De relatief-pad-stappen (cd documents / cat) moeten nu gewoon slagen.
+    await typeCommand(page, 'pwd');
+    await typeCommand(page, 'ls');
+    await typeCommand(page, 'cd documents');
+    await typeCommand(page, 'cat scan-results.txt');
+    // Bereikt stap 5 zonder strand op stap 3/4.
+    await expect(output).toContainText('Stap 5/7', { timeout: 5000 });
+  });
 });

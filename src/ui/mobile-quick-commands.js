@@ -18,6 +18,10 @@
         var input = document.getElementById('terminal-input');
         if (!input) return;
 
+        // Negeer taps zolang de input disabled is (bv. tijdens de welcome-typewriter):
+        // anders lekt een commando midden in de welkomst-animatie.
+        if (input.disabled) return;
+
         // Set input value using native setter (works with all frameworks)
         var nativeInputValueSetter = Object.getOwnPropertyDescriptor(
             window.HTMLInputElement.prototype, 'value'

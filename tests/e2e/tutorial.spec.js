@@ -505,6 +505,16 @@ test.describe('Tutorial System', () => {
     await expect(output).toContainText('CERTIFICAAT', { timeout: 5000 });
   });
 
+  test('clear tijdens een tutorial heroriënteert: objective weer zichtbaar (bug I)', async ({ page }) => {
+    await typeCommand(page, 'tutorial recon');
+    const output = page.locator('#terminal-output');
+    await expect(output).toContainText('MISSION BRIEFING', { timeout: 10000 });
+
+    await typeCommand(page, 'clear');
+    // Na clear geen leeg scherm: de huidige stap wordt opnieuw getoond.
+    await expect(output).toContainText('Stap 1/4', { timeout: 5000 });
+  });
+
   test('challenge start tijdens actieve tutorial wordt geweigerd (bug E)', async ({ page }) => {
     await typeCommand(page, 'tutorial recon');
     const output = page.locator('#terminal-output');

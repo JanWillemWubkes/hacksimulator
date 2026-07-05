@@ -9,11 +9,19 @@
  * doesn't contain error patterns (invalid URL, missing files, etc.).
  */
 
+import { normalizeCwd, restoreFile } from '../scenario-setup.js';
+
 var webvulnScenario = {
   id: 'webvuln',
   title: 'Web Vulnerabilities: E-commerce Audit',
   description: 'Leer web applicatie kwetsbaarheden vinden met scanning tools.',
   difficulty: 'Expert',
+
+  // Verse start: cwd normaliseren + het lees-doel van stap 4 herstellen indien gewist.
+  setup: function(vfs) {
+    normalizeCwd(vfs);
+    restoreFile(vfs, '/var/www/html/config.php');
+  },
 
   briefing:
     'Een e-commerce bedrijf heeft je gevraagd hun webshop te testen ' +

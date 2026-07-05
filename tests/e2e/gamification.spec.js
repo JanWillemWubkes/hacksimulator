@@ -180,6 +180,45 @@ test.describe('Challenge System', () => {
     await expect(output).toContainText('al voltooid', { timeout: 5000 });
   });
 
+  // ----------------------------------------
+  // 10. sql-sleuth vergrendelt niet bij verkeerde volgorde (bug O)
+  // ----------------------------------------
+  test('sql-sleuth herstelt van verkeerde volgorde i.p.v. permanent te vergrendelen (bug O)', async ({ page }) => {
+    await typeCommand(page, 'challenge start sql-sleuth');
+    await expect(page.locator('#terminal-output')).toContainText('MISSION BRIEFING', { timeout: 5000 });
+
+    // Verkeerde volgorde: eerst aanvallen (sqlmap) vóór scannen (nikto).
+    await typeCommand(page, 'sqlmap http://target.com/login?id=1');
+    // Daarna alsnog correct: scannen, dan opnieuw aanvallen.
+    await typeCommand(page, 'nikto http://target.com');
+    await typeCommand(page, 'sqlmap http://target.com/login?id=1');
+
+    // De challenge is nu voltooid (geen permanente lock meer).
+    const output = page.locator('#terminal-output');
+    await expect(output).toContainText('VOLTOOID', { timeout: 5000 });
+  });
+
+  // ----------------------------------------
+  // 9. actieve challenge overleeft een reload (bug J)
+  // ----------------------------------------
+  test('actieve challenge wordt hervat na reload met behoud van voortgang (bug J)', async ({ page }) => {
+    await typeCommand(page, 'challenge start identity-check');
+    await expect(page.locator('#terminal-output')).toContainText('MISSION BRIEFING', { timeout: 5000 });
+
+    // Eén van de twee vereiste commando's uitvoeren (halve voortgang).
+    await typeCommand(page, 'whoami');
+
+    // Reload — de challenge mag niet stil verdampen.
+    await page.reload();
+    await acceptLegalModal(page);
+    const output = page.locator('#terminal-output');
+    await expect(output).toContainText('Challenge hervat', { timeout: 10000 });
+
+    // De voortgang (whoami afgevinkt) is bewaard, en afmaken met ifconfig voltooit hem.
+    await typeCommand(page, 'ifconfig');
+    await expect(output).toContainText('VOLTOOID', { timeout: 5000 });
+  });
+
 });
 
 // ========================================

@@ -18,6 +18,10 @@ const STATES = {
   COMPLETE: 'COMPLETE'
 };
 
+// De actieve challenge (id + pogingen) persisteren zodat een reload hem niet stil
+// laat verdampen. De command-log zelf zit al in de gamification-store.
+const STORAGE_KEY_ACTIVE = 'hacksim_active_challenge';
+
 const HINT_TIER_1 = 3;
 const HINT_TIER_2 = 6;
 const HINT_TIER_3 = 10;
@@ -126,10 +130,65 @@ export default new class ChallengeManager {
     this.state = STATES.ACTIVE;
     this.attempts = 0;
     progressStore.clearChallengeLog();
+    this._saveActive();
 
     analyticsEvents.gamificationEvent('challenge_started', challengeId);
 
     return this._renderer.renderBriefing(challenge);
+  }
+
+  // --- Persistentie van de actieve challenge ---
+
+  _saveActive() {
+    try {
+      if (this.isActive()) {
+        localStorage.setItem(STORAGE_KEY_ACTIVE, JSON.stringify({
+          id: this.activeChallenge.id,
+          attempts: this.attempts
+        }));
+      } else {
+        localStorage.removeItem(STORAGE_KEY_ACTIVE);
+      }
+    } catch (e) {
+      console.warn('Could not save active challenge:', e);
+    }
+  }
+
+  /**
+   * Herstel een lopende challenge na een page-reload (command-log zit al in de store).
+   * @returns {boolean} true als er een challenge is hervat.
+   */
+  resume() {
+    var raw;
+    try { raw = localStorage.getItem(STORAGE_KEY_ACTIVE); } catch (e) { return false; }
+    if (!raw) return false;
+
+    var saved;
+    try { saved = JSON.parse(raw); } catch (e) { return false; }
+    if (!saved || !saved.id) return false;
+
+    var challenge = this.challenges.get(saved.id);
+    var stats = progressStore.getStats();
+    // Onbekende of al voltooide challenge → slot opruimen, niet hervatten.
+    if (!challenge || stats.completedChallenges.indexOf(saved.id) !== -1) {
+      try { localStorage.removeItem(STORAGE_KEY_ACTIVE); } catch (e) { /* genegeerd */ }
+      return false;
+    }
+
+    this.activeChallenge = challenge;
+    this.state = STATES.ACTIVE;
+    this.attempts = saved.attempts || 0;
+    return true;
+  }
+
+  /**
+   * Melding na reload dat een challenge is hervat (voor de welcome-sequence).
+   * @returns {string|null}
+   */
+  getResumeMessage() {
+    if (!this.isActive()) return null;
+    return '[✓] Challenge hervat: ' + this.activeChallenge.title +
+           '\n[?] Typ \'challenge status\' voor je voortgang.';
   }
 
   /**
@@ -146,6 +205,7 @@ export default new class ChallengeManager {
 
     var log = progressStore.getChallengeLog();
     this.attempts++;
+    this._saveActive();
 
     // Check if challenge is complete
     var isComplete = challenge.validate(log, context);
@@ -189,6 +249,7 @@ export default new class ChallengeManager {
       this.activeChallenge = null;
       this.attempts = 0;
       progressStore.clearChallengeLog();
+      this._saveActive();
 
       return { output: null, isCompletion: true, title: completedTitle, completion: completion };
     }
@@ -247,6 +308,7 @@ export default new class ChallengeManager {
     this.activeChallenge = null;
     this.attempts = 0;
     progressStore.clearChallengeLog();
+    this._saveActive();
 
     return '[✓] Challenge verlaten: ' + title + '\n' +
            '[?] Je kunt de challenge later opnieuw starten.';
@@ -279,5 +341,6 @@ export default new class ChallengeManager {
     this.state = STATES.IDLE;
     this.activeChallenge = null;
     this.attempts = 0;
+    this._saveActive();
   }
 };
