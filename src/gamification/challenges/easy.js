@@ -54,7 +54,7 @@ var easyChallenges = [
     tips: [
       'Typ \'ls\' om te zien welke bestanden er zijn.',
       'Gebruik \'cat <bestandsnaam>\' om de inhoud van een bestand te lezen.',
-      'Probeer: ls en dan cat passwords.txt'
+      'Probeer: ls en dan cat notes.txt'
     ]
   },
   {
@@ -129,7 +129,7 @@ var easyChallenges = [
     tips: [
       'Gebruik \'find <zoekterm>\' om bestanden te vinden op het systeem.',
       'Gebruik \'grep <patroon> <bestand>\' om binnen bestanden te zoeken.',
-      'Probeer: find log en daarna grep error auth.log'
+      'Probeer: find log en daarna grep error /var/log/auth.log'
     ]
   }
 ];

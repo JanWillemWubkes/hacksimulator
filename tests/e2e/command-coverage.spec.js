@@ -152,4 +152,36 @@ test.describe('Command Coverage - Untested Commands', () => {
     await expect(output).toContainText('LISTEN', { timeout: 2000 });
   });
 
+  // ----------------------------------------
+  // 9. Consistentie-regressies (Sessie 195)
+  // ----------------------------------------
+
+  // Een gefaalde traceroute mag Fase 3 NIET afvinken. De tracking-guard
+  // (_shouldTrackCommand) moet 'Failed to resolve' als fout herkennen.
+  test('gefaalde traceroute wordt NIET afgevinkt in commandsTried', async ({ page }) => {
+    await typeCommand(page, 'traceroute onzinhost123');
+    const state = await page.evaluate(() => {
+      try { return JSON.parse(localStorage.getItem('hacksim_onboarding') || '{}'); }
+      catch { return {}; }
+    });
+    expect(state.commandsTried || []).not.toContain('traceroute');
+
+    // Geslaagde traceroute wordt wél afgevinkt (controle dat de guard niet te streng is)
+    await typeCommand(page, 'traceroute google.com');
+    const state2 = await page.evaluate(() => {
+      try { return JSON.parse(localStorage.getItem('hacksim_onboarding') || '{}'); }
+      catch { return {}; }
+    });
+    expect(state2.commandsTried).toContain('traceroute');
+  });
+
+  // hint is een simulator-only command → moet met '*' gemarkeerd worden in help.
+  test("help markeert simulator-only commands (hint) met *", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await typeCommand(page, 'help');
+    const text = await page.locator('#terminal-output').innerText();
+    // De renderer zet '*' direct vóór de commandonaam voor simulator-commands
+    expect(text).toMatch(/\*\s*hint/);
+  });
+
 });

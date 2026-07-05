@@ -120,7 +120,7 @@ var mediumChallenges = [
     tips: [
       'Gebruik \'find\' om bestanden te zoeken die wachtwoorden of hashes bevatten.',
       'Lees gevonden bestanden met \'cat\' en gebruik dan \'hashcat\' om hashes te kraken.',
-      'Probeer: find password, cat shadow.txt, hashcat -m 0 hash.txt'
+      'Probeer: find passwd, cat /etc/passwd, hashcat 5f4dcc3b5aa765d61d8327deb882cf99'
     ]
   },
   {

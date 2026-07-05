@@ -12,6 +12,8 @@
  * Rarity tiers: common(8), uncommon(6), rare(5), epic(2), legendary(1)
  */
 
+import { phaseCommandNames } from '../core/learning-path.js';
+
 var badges = [
   // --- COMMON (8) ---
   {
@@ -49,7 +51,7 @@ var badges = [
     rarity: 'common',
     trigger: 'command',
     check: function(stats) {
-      var netCmds = ['ping', 'nmap', 'ifconfig', 'netstat', 'whois', 'traceroute'];
+      var netCmds = phaseCommandNames(2); // Fase 3 = de network-categorie
       for (var i = 0; i < netCmds.length; i++) {
         if (stats.commandCounts[netCmds[i]]) return true;
       }

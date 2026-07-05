@@ -7,15 +7,12 @@ import {
   isMobileView,
   wordWrap
 } from "../../utils/box-utils.js";
-import onboarding from "../../ui/onboarding.js";
+import onboarding, { SIMULATOR_COMMANDS as SIMULATOR_COMMAND_LIST } from "../../ui/onboarding.js";
 import { phaseCommandNames } from "../../core/learning-path.js";
 
 const B = BOX_CHARS;
 
-const SIMULATOR_COMMANDS = new Set([
-  'next', 'leerpad', 'tutorial', 'challenge', 'dashboard',
-  'achievements', 'certificates', 'leaderboard', 'welcome'
-]);
+const SIMULATOR_COMMANDS = new Set(SIMULATOR_COMMAND_LIST);
 
 const categoryDescriptions = {
   system: "Deze tools helpen je de terminal te gebruiken en je huidige sessie te beheren.",

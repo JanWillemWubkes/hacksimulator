@@ -72,6 +72,10 @@ en verwijderen.
 [?] mkdir      - Maak een nieuwe map aan
 [?] touch      - Maak een nieuw bestand aan
 [?] rm         - Verwijder een bestand
+[?] cp         - Kopieer een bestand
+[?] mv         - Verplaats of hernoem een bestand
+[?] find       - Zoek bestanden op naam
+[?] grep       - Zoek tekst in bestanden
 
 [TIP] Maak een eigen map aan met 'mkdir projecten'
 om je werk te organiseren.`;

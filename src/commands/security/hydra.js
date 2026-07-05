@@ -357,7 +357,7 @@ COUNTERMEASURES DETECTION
        → ALERT: Possible brute force from 1.2.3.4
 
 GERELATEERDE COMMANDO'S
-    hashcat, metasploit, nmap, john (the ripper)
+    hashcat, metasploit, nmap, john (the ripper; niet in simulator)
 
 [TIP] Wil je weten wat legaal is en wat niet?
       Download de Juridische Gids op hacksimulator.nl/gidsen

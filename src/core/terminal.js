@@ -604,6 +604,7 @@ class Terminal {
         output.includes('Usage:') ||
         output.startsWith('Error:') ||
         output.includes('Name or service not known') ||
+        output.includes('Failed to resolve') ||
         output.includes('No whois data found') ||
         output.includes('No such file or directory') ||
         output.includes('cannot stat') ||

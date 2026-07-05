@@ -100,7 +100,7 @@ class HelpSystem {
 
 VOLLEDIGE HULP:
 
-1. Typ 'help' voor complete lijst van 30 commands
+1. Typ 'help' voor complete lijst van 41 commands
 2. Typ 'man <command>' voor gedetailleerde uitleg van elk command
 
 Bijvoorbeeld:

@@ -277,7 +277,7 @@ BESCHERMING ALS GEBRUIKER
        [X] Wachtwoorden opschrijven (behalve in password manager)
 
 GERELATEERDE COMMANDO'S
-    hydra (brute force), john (andere cracker), metasploit
+    hydra (brute force), metasploit, john (andere cracker; niet in simulator)
 
 [TIP] Wil je weten wat legaal is en wat niet?
       Download de Juridische Gids op hacksimulator.nl/gidsen

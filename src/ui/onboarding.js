@@ -9,6 +9,15 @@
 
 import { phaseCommandNames } from '../core/learning-path.js';
 
+// Commands die alleen in HackSimulator bestaan (niet in echt Linux) — single
+// source of truth: help.js markeert ze met '*', de eenmalige simulator-hint
+// (hieronder) leest dezelfde lijst. 'reset' hoort er NIET bij (echt Linux-command).
+export const SIMULATOR_COMMANDS = [
+  'next', 'leerpad', 'tutorial', 'challenge', 'dashboard',
+  'achievements', 'certificates', 'leaderboard', 'welcome',
+  'hint', 'shortcuts'
+];
+
 const STORAGE_KEY = 'hacksim_onboarding';
 
 // Legacy keys (for migration)
@@ -40,9 +49,7 @@ class Onboarding {
     this.FILESYSTEM_COMMANDS = ['cd', 'cp', 'mkdir', 'mv', 'rm', 'touch'];
 
     // Commands that only exist in HackSimulator (not in real Linux)
-    this.SIMULATOR_COMMANDS = ['next', 'leerpad', 'tutorial', 'challenge',
-                               'dashboard', 'achievements', 'certificates',
-                               'leaderboard', 'welcome'];
+    this.SIMULATOR_COMMANDS = SIMULATOR_COMMANDS;
 
     // Transient state for follow-up tips (per-session, not persisted)
     this._lastFollowUpCmd = null;

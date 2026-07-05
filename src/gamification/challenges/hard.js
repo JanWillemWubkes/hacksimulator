@@ -43,7 +43,7 @@ var hardChallenges = [
     tips: [
       'Begin met passieve recon: \'whois\' en \'ping\' om het doelwit te identificeren.',
       'Gebruik daarna \'traceroute\', \'nmap\' (op 2 verschillende doelwitten!), \'netstat\' en \'ifconfig\'.',
-      'Probeer: whois example.com, ping example.com, traceroute example.com, nmap 192.168.1.1, nmap 10.0.0.1, netstat, ifconfig'
+      'Probeer: whois example.com, ping google.com, traceroute google.com, nmap 192.168.1.1, nmap 10.0.0.1, netstat, ifconfig'
     ]
   },
   {
@@ -80,7 +80,7 @@ var hardChallenges = [
     tips: [
       'Begin met \'whoami\' om je rechten te checken. Verken daarna met \'ls\' en \'cd\'.',
       'Gebruik \'find\' om gevoelige bestanden te zoeken en \'cat\' + \'grep\' om credentials te vinden.',
-      'Probeer: whoami, ls, cd /etc, ls, cat passwd, find config, cat shadow.txt, grep password config.txt, cd /home'
+      'Probeer: whoami, ls, cd /etc, ls, cat passwd, find config, cat shadow, grep password /var/www/html/config.php, cd /home'
     ]
   },
   {
@@ -142,7 +142,7 @@ var hardChallenges = [
     tips: [
       'De eerste 4 stappen moeten in volgorde: whois, nmap, nikto, sqlmap. Daarna find, cat en hashcat.',
       'Dit zijn de pentest-stappen: Verkenning (whois) -> Scannen (nmap) -> Zwakke plekken (nikto) -> Inbreken (sqlmap).',
-      'Probeer: whois example.com, nmap example.com, nikto example.com, sqlmap example.com, find password, cat shadow.txt, hashcat -m 0 hash.txt'
+      'Probeer: whois example.com, nmap example.com, nikto example.com, sqlmap example.com, find passwd, cat /etc/passwd, hashcat 5f4dcc3b5aa765d61d8327deb882cf99'
     ]
   },
   {
@@ -179,7 +179,7 @@ var hardChallenges = [
     tips: [
       'Begin met \'whoami\' en \'date\' om je onderzoek te documenteren. Gebruik \'ls\' om mappen te inventariseren.',
       'Lees logbestanden met \'cat\' en zoek naar verdachte patronen met \'grep\'. Gebruik \'find\' voor verborgen bestanden.',
-      'Probeer: whoami, date, ls, ls /var/log, cat auth.log, cat syslog, cat access.log, grep error auth.log, grep root syslog, find hidden, find config'
+      'Probeer: whoami, date, ls, ls /var/log, cat /var/log/auth.log, cat /var/log/syslog, cat /etc/passwd, grep error /var/log/auth.log, grep root /var/log/syslog, find log, find config'
     ]
   }
 ];

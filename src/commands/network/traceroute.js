@@ -215,6 +215,6 @@ GEAVANCEERDE USE
     -q    → Aantal packets per hop (default 3)
 
 GERELATEERDE COMMANDO'S
-    ping, nmap, mtr (combines ping + traceroute)
+    ping, nmap, mtr (combineert ping + traceroute; niet in simulator)
 `.trim()
 };

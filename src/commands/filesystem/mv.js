@@ -136,6 +136,6 @@ EDUCATIEVE TIPS
        • mv kan niet tussen verschillende filesystems (dan wordt automatisch copy+delete)
 
 GERELATEERDE COMMANDO'S
-    cp, rm, ls, rename
+    cp, rm, ls, rename (niet in simulator)
 `.trim()
 };

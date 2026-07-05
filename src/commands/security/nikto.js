@@ -369,7 +369,7 @@ LEGAL USE
     Straf: Computer Fraud Act violations, civiele claims
 
 GERELATEERDE COMMANDO'S
-    nmap (port scanning), sqlmap (SQL injection), wpscan (WordPress)
+    nmap (port scanning), sqlmap (SQL injection), wpscan (WordPress; niet in simulator)
 
 [TIP] Wil je leren hoe je deze tools in een echte pentest gebruikt?
       Download het Pentest Playbook op hacksimulator.nl/gidsen
