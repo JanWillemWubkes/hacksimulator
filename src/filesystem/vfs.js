@@ -3,7 +3,7 @@
  * In-memory filesystem implementation for the terminal simulator
  */
 
-import { initialFilesystem, getInitialCwd } from './structure.js';
+import { initialFilesystem, getInitialCwd, INITIAL_FS_SIGNATURE } from './structure.js';
 
 class VirtualFilesystem {
   constructor() {
@@ -417,24 +417,39 @@ class VirtualFilesystem {
   serialize() {
     return JSON.stringify({
       fs: this.fs,
-      cwd: this.cwd
+      cwd: this.cwd,
+      // Signature van de initiële boom waarop deze save gebaseerd is —
+      // deserialize() weigert saves van een oudere structure.js-versie.
+      base: INITIAL_FS_SIGNATURE
     });
   }
 
   /**
    * Deserialize filesystem from JSON
    * @param {string} json - JSON string
+   * @returns {boolean} True als de save is hersteld; false als hij is
+   *   verworpen (stale schema of corrupt) en de boom vers is geïnitialiseerd
    */
   deserialize(json) {
     try {
       const data = JSON.parse(json);
+      // Save van vóór een structure.js-wijziging (of van vóór dit versieveld):
+      // verwerpen, zodat een deploy die de wereld wijzigt iedereen bereikt.
+      if (data.base !== INITIAL_FS_SIGNATURE) {
+        this.init();
+        return false;
+      }
       if (data.fs && data.cwd) {
         this.fs = data.fs;
         this.cwd = data.cwd;
+        return true;
       }
+      this.init();
+      return false;
     } catch (error) {
       console.error('Failed to deserialize filesystem:', error);
       this.init(); // Fallback to initial state
+      return false;
     }
   }
 }

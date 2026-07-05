@@ -10,6 +10,7 @@ import history from './history.js';
 import renderer from '../ui/renderer.js';
 import input from '../ui/input.js';
 import vfs from '../filesystem/vfs.js';
+import persistence from '../filesystem/persistence.js';
 import helpSystem from '../help/help-system.js';
 import fuzzy from '../utils/fuzzy.js';
 import onboarding from '../ui/onboarding.js';
@@ -181,6 +182,14 @@ class Terminal {
     if (status) {
       var termInput = document.getElementById('terminal-input');
       if (termInput) termInput.placeholder = 'Typ een command...';
+    }
+
+    // Eenmalige melding wanneer een stale save (oudere structure.js-versie) bij
+    // load is verworpen — anders lijken verdwenen eigen bestanden een bug.
+    if (persistence.consumeResetNotice()) {
+      setTimeout(() => renderer.renderInfo(
+        '[~] De oefenomgeving is bijgewerkt — je bestandssysteem is vernieuwd naar de nieuwste versie.'
+      ), 100);
     }
 
     // Show tutorial resume message if applicable — maar niet als een deep-link zo meteen

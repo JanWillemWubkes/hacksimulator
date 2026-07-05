@@ -211,3 +211,21 @@ define('MAIL_PASSWORD', 'email_pass_456');
 export function getInitialCwd() {
   return '/home/hacker';
 }
+
+/**
+ * Content-signature van de initiële boom (djb2 over de JSON-vorm).
+ * Elke wijziging aan initialFilesystem geeft automatisch een nieuwe signature —
+ * de persistentie-laag gebruikt dit om stale saves van vóór een deploy te
+ * herkennen en te vernieuwen (geen handmatige versie-bump die je kunt vergeten).
+ * Deterministisch: fase-content (README/notes) wordt bij lezen geïnjecteerd
+ * via dynamic-content.js en zit dus niet in deze boom.
+ */
+function djb2(str) {
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) + hash + str.charCodeAt(i)) >>> 0;
+  }
+  return hash.toString(36);
+}
+
+export const INITIAL_FS_SIGNATURE = djb2(JSON.stringify(initialFilesystem));

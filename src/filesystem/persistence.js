@@ -13,6 +13,9 @@ class FilesystemPersistence {
     this.storageKey = 'hacksim_filesystem';
     this.autoSave = true;
     this._saveTimeout = null;
+    // One-shot vlag: true wanneer een stale save (oudere structure.js-versie)
+    // is verworpen bij load — de welcome-sequence toont dan een notice.
+    this.wasReset = false;
   }
 
   /**
@@ -83,8 +86,14 @@ class FilesystemPersistence {
       const stored = localStorage.getItem(this.storageKey);
 
       if (stored) {
-        vfs.deserialize(stored);
-        return true;
+        const restored = vfs.deserialize(stored);
+        if (!restored) {
+          // Stale of corrupte save verworpen: key opruimen zodat dit niet
+          // elke boot herhaalt, en de notice-vlag zetten.
+          this.clear();
+          this.wasReset = true;
+        }
+        return restored;
       }
 
       return false;
@@ -92,6 +101,17 @@ class FilesystemPersistence {
       console.warn('[VFS] Failed to load filesystem:', error);
       return false;
     }
+  }
+
+  /**
+   * Consume the one-shot reset notice flag (true once after a stale save
+   * was discarded, then false).
+   * @returns {boolean}
+   */
+  consumeResetNotice() {
+    const flag = this.wasReset;
+    this.wasReset = false;
+    return flag;
   }
 
   /**
