@@ -247,7 +247,7 @@ function initialize() {
     const needsLegal = !legalManager.hasAcceptedLegal();
 
     // Deep-link: rauwe ?tutorial=-param vóór init lezen en meegeven, zodat de welcome-
-    // render (die ín init draait) de pending missie kent en de "Type 'next'"-CTA aanpast.
+    // render (die ín init draait) de pending missie kent en de "Typ 'next'"-CTA aanpast.
     const rawDeepLink = getRawDeepLinkParam();
 
     // Initialize terminal (defer welcome if legal modal will be shown)

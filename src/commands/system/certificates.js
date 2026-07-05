@@ -53,7 +53,7 @@ export default {
       var dlId = args.length > 1 ? args[1].toLowerCase() : '';
       if (!dlId) {
         return '[?] Gebruik: certificates download <challenge-id>\n\n' +
-               '[?] Type \'certificates\' om je certificaten te zien.';
+               '[?] Typ \'certificates\' om je certificaten te zien.';
       }
       return handleCertAction(dlId, 'download');
     }
@@ -63,7 +63,7 @@ export default {
       var cpId = args.length > 1 ? args[1].toLowerCase() : '';
       if (!cpId) {
         return '[?] Gebruik: certificates copy <challenge-id>\n\n' +
-               '[?] Type \'certificates\' om je certificaten te zien.';
+               '[?] Typ \'certificates\' om je certificaten te zien.';
       }
       return handleCertAction(cpId, 'copy');
     }
@@ -132,11 +132,11 @@ function handleCertAction(challengeId, action) {
     var challenge = challengeManager.getChallenge(challengeId);
     if (!challenge) {
       return '[X] Onbekende challenge: ' + challengeId + '\n\n' +
-             '[?] Type \'certificates\' om je verdiende certificaten te zien.\n' +
-             '[?] Type \'challenge\' om beschikbare challenges te zien.';
+             '[?] Typ \'certificates\' om je verdiende certificaten te zien.\n' +
+             '[?] Typ \'challenge\' om beschikbare challenges te zien.';
     }
     return '[?] Je hebt deze challenge nog niet voltooid: ' + challenge.title + '\n\n' +
-           '[TIP] Type \'challenge start ' + challengeId + '\' om de challenge te starten!';
+           '[TIP] Typ \'challenge start ' + challengeId + '\' om de challenge te starten!';
   }
 
   var challenge = challengeManager.getChallenge(challengeId);
@@ -154,8 +154,8 @@ function handleCertAction(challengeId, action) {
 
   // view
   var output = generateChallengeCertificate(challenge, certData);
-  output += '\n\n[TIP] Type \'certificates download ' + challengeId + '\' om te downloaden.';
-  output += '\n[TIP] Type \'certificates copy ' + challengeId + '\' om naar klembord te kopieren.';
+  output += '\n\n[TIP] Typ \'certificates download ' + challengeId + '\' om te downloaden.';
+  output += '\n[TIP] Typ \'certificates copy ' + challengeId + '\' om naar klembord te kopieren.';
   return output;
 }
 
@@ -166,7 +166,7 @@ function renderCertificateList() {
   if (certIds.length === 0) {
     return '[?] Je hebt nog geen certificaten verdiend.\n\n' +
            '[TIP] Voltooi challenges om certificaten te verdienen!\n' +
-           '[TIP] Type \'challenge\' om beschikbare challenges te zien.';
+           '[TIP] Typ \'challenge\' om beschikbare challenges te zien.';
   }
 
   if (isMobileView()) {

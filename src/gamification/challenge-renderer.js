@@ -164,9 +164,9 @@ var challengeRenderer = {
     lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
 
     var output = lines.join('\n');
-    output += '\n\n[TIP] Voer de juiste commando\'s uit om de doelen af te vinken.';
-    output += '\n[?] Type \'challenge hint\' als je vastloopt.';
-    output += '\n[?] Type \'challenge status\' om je voortgang te zien.';
+    output += '\n\n[?] Voer de juiste commando\'s uit om de doelen af te vinken.';
+    output += '\n[~] Typ \'challenge hint\' als je vastloopt.';
+    output += '\n[?] Typ \'challenge status\' om je voortgang te zien.';
 
     return output;
   },
@@ -184,8 +184,8 @@ var challengeRenderer = {
       out += '[ ] ' + (i + 1) + '. ' + desc + '\n';
     });
 
-    out += '\n[TIP] Voer commando\'s uit om doelen af te vinken.';
-    out += '\n[?] Type \'challenge hint\' als je vastloopt.';
+    out += '\n[?] Voer commando\'s uit om doelen af te vinken.';
+    out += '\n[~] Typ \'challenge hint\' als je vastloopt.';
 
     return out;
   },

@@ -68,16 +68,16 @@ function buildNextHint(stage) {
     var current = parseInt(parts[0], 10);
     var total = parseInt(parts[1], 10);
     if (current < total) {
-      return "Daarna: type 'next' voor stap " + (current + 1) + '/' + total;
+      return "Daarna: typ 'next' voor stap " + (current + 1) + '/' + total;
     }
-    return "Daarna: type 'next' voor volgende fase";
+    return "Daarna: typ 'next' voor volgende fase";
   }
   // Tutorials/challenges: don't suggest 'next' — the tutorial/challenge handles its own flow
   if (stage.suggestion && (stage.suggestion.indexOf('tutorial') !== -1 || stage.suggestion.indexOf('challenge') !== -1)) {
     return "De missie begeleidt je stap voor stap";
   }
   // Generic fallback
-  return "Daarna: type 'next' voor je volgende stap";
+  return "Daarna: typ 'next' voor je volgende stap";
 }
 
 // Stage builders — each returns a stage object if incomplete, null if complete
@@ -92,10 +92,10 @@ function buildPhase1Stage(triedSet) {
     command: next,
     tip: commandTips[next] || '',
     suggestion: next === 'cat'
-      ? "Type 'cat ~/README.txt'"
+      ? "Typ 'cat ~/README.txt'"
       : next === 'cd'
-        ? "Type 'cd ~/documents'"
-        : "Type '" + next + "'"
+        ? "Typ 'cd ~/documents'"
+        : "Typ '" + next + "'"
   };
 }
 
@@ -108,7 +108,7 @@ function buildPhase2Stage(triedSet) {
     progress: done + '/' + phase2Commands.length,
     command: next,
     tip: commandTips[next] || '',
-    suggestion: "Type '" + (commandExamples[next] || next + " test") + "'"
+    suggestion: "Typ '" + (commandExamples[next] || next + " test") + "'"
   };
 }
 
@@ -119,7 +119,7 @@ function buildFundamentalsTutorialStage() {
     progress: 'niet gestart',
     command: null,
     tip: 'Begin met de fundamentals missie: leer stap voor stap navigeren, bestanden lezen en je eerste bestanden aanmaken. Dit is de basis voor alles wat daarna komt.',
-    suggestion: "Type 'tutorial fundamentals'"
+    suggestion: "Typ 'tutorial fundamentals'"
   };
 }
 
@@ -130,7 +130,7 @@ function buildReconTutorialStage() {
     progress: 'niet gestart',
     command: null,
     tip: 'Voordat je netwerk tools gebruikt, leer je eerst reconnaissance in een begeleide missie. Dit is hoe echte pentesters beginnen.',
-    suggestion: "Type 'tutorial recon'"
+    suggestion: "Typ 'tutorial recon'"
   };
 }
 
@@ -143,7 +143,7 @@ function buildPhase3Stage(triedSet) {
     progress: done + '/' + phase3Commands.length,
     command: next,
     tip: commandTips[next] || '',
-    suggestion: "Type '" + next + (next === 'ping' || next === 'nmap' ? " 192.168.1.1'" : "'")
+    suggestion: "Typ '" + next + (next === 'ping' || next === 'nmap' ? " 192.168.1.1'" : "'")
   };
 }
 
@@ -157,7 +157,7 @@ function buildRemainingTutorialsStage() {
         progress: 'niet gestart',
         command: null,
         tip: 'Begeleide missies leren je echte hacking technieken stap voor stap',
-        suggestion: "Type 'tutorial " + id + "'"
+        suggestion: "Typ 'tutorial " + id + "'"
       };
     }
   }
@@ -180,7 +180,7 @@ function buildChallengeStage(difficulty) {
     progress: countCompleted(challenges, difficulty) + '/' + countTotal(challenges, difficulty),
     command: null,
     tip: nextChallenge.title + ' - test je skills zonder begeleiding',
-    suggestion: "Type 'challenge start " + nextChallenge.id + "'"
+    suggestion: "Typ 'challenge start " + nextChallenge.id + "'"
   };
 }
 
@@ -222,7 +222,7 @@ function buildSkippedHint(startFrom, triedSet) {
     gaps.push(remaining3 + ' Reconnaissance');
   }
   if (gaps.length === 0) return null;
-  return "[?] Tip: nog " + gaps.join(' en ') + " commands over. Type 'leerpad' voor overzicht.";
+  return "[?] Tip: nog " + gaps.join(' en ') + " commands over. Typ 'leerpad' voor overzicht.";
 }
 
 /**
@@ -349,7 +349,7 @@ var transitions = [
       'Netwerk interfaces begrijpen'
     ],
     nextPhase: 'Geavanceerde Missies',
-    bridge: "Reconnaissance gedaan! Tijd voor geavanceerde missies.\n\n[?] Type 'dashboard' voor je voortgang, 'leerpad' voor een overzicht."
+    bridge: "Reconnaissance gedaan! Tijd voor geavanceerde missies.\n\n[?] Typ 'dashboard' voor je voortgang, 'leerpad' voor een overzicht."
   }
 ];
 
@@ -390,7 +390,7 @@ function buildTransitionBox(transition) {
       out += '  [✓] ' + transition.skills[i] + '\n';
     }
     out += '\n' + transition.bridge + '\n\n';
-    out += "[→] Type 'next' om door te gaan\n";
+    out += "[→] Typ 'next' om door te gaan\n";
     return out;
   }
 
@@ -433,7 +433,7 @@ function buildTransitionBox(transition) {
   // Next hint
   lines.push(B.vertical + ' '.repeat(inner) + B.vertical);
   lines.push(B.dividerLeft + B.horizontal.repeat(inner) + B.dividerRight);
-  var hintLine = "  [→] Type 'next' om door te gaan";
+  var hintLine = "  [→] Typ 'next' om door te gaan";
   lines.push(B.vertical + hintLine.padEnd(inner) + B.vertical);
 
   lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
@@ -521,9 +521,9 @@ function buildCompletionMessage() {
     '  [✓] Privilege escalation technieken',
     '  [✓] Exploitation met Metasploit en Hydra',
     '',
-    "[?] Type 'certificates' voor je certificaat",
-    "[?] Type 'dashboard' voor je statistieken",
-    "[?] Type 'achievements' voor je badges",
+    "[?] Typ 'certificates' voor je certificaat",
+    "[?] Typ 'dashboard' voor je statistieken",
+    "[?] Typ 'achievements' voor je badges",
     '',
     'Volgende stap? Probeer echte CTF platforms:',
     '  TryHackMe.com | HackTheBox.com | OverTheWire.org'
@@ -568,13 +568,13 @@ export default {
       out += '[?] Je bent bezig met: ' + status.scenarioTitle + '\n';
       out += '[→] Stap ' + (status.currentStep + 1) + '/' + status.totalSteps + ': ' + step.title + '\n';
       out += '[?] ' + step.objective + '\n';
-      out += "\n[TIP] Typ 'hint' als je vastzit, of 'tutorial exit' om te stoppen.";
+      out += "\n[~] Typ 'hint' als je vastzit, of 'tutorial exit' om te stoppen.";
       return out;
     }
 
     // Check if challenge is active — redirect to challenge status
     if (challengeManager.isActive()) {
-      return "[?] Je bent bezig met een challenge.\n[TIP] Type 'challenge status' voor je voortgang.";
+      return "[?] Je bent bezig met een challenge.\n[?] Typ 'challenge status' voor je voortgang.";
     }
 
     var triedSet = new Set(onboarding.getCommandsTried());

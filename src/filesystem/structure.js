@@ -21,8 +21,8 @@ Dit is een veilige omgeving om ethisch hacken te leren.
 Alle activiteiten zijn gesimuleerd en beinvloeden geen echte systemen.
 
 BEGINNEN:
-- Type 'help' voor een lijst van beschikbare commands
-- Type 'man [command]' voor gedetailleerde informatie
+- Typ 'help' voor een lijst van beschikbare commands
+- Typ 'man [command]' voor gedetailleerde informatie
 - Gebruik pijltjestoetsen voor command geschiedenis
 
 HANDIGE COMMANDS:
@@ -32,7 +32,7 @@ HANDIGE COMMANDS:
 [?] pwd        - Waar ben ik nu?
 [?] whoami     - Met welk account ben ik ingelogd?
 
-[->] Type 'next' om te zien wat je volgende stap is.
+[->] Typ 'next' om te zien wat je volgende stap is.
 
 DISCLAIMER:
 Gebruik deze kennis alleen legaal en ethisch.

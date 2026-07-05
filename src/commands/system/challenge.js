@@ -39,7 +39,7 @@ export default {
       var challengeId = args.length > 1 ? args[1].toLowerCase() : '';
       if (!challengeId) {
         return '[?] Gebruik: challenge start <challenge-id>\n\n' +
-               '[?] Type \'challenge\' om beschikbare challenges te zien.';
+               '[?] Typ \'challenge\' om beschikbare challenges te zien.';
       }
       var blocked = _blockedByTutorial();
       if (blocked) return blocked;
@@ -69,7 +69,7 @@ export default {
                '[TIP] Het certificaten systeem heeft een eigen commando: \'certificates\'';
       }
       return '[?] Gebruik het \'certificates\' commando om je certificaten te bekijken.\n\n' +
-             '[TIP] Type \'certificates\' voor een overzicht van al je verdiende certificaten.';
+             '[TIP] Typ \'certificates\' voor een overzicht van al je verdiende certificaten.';
     }
 
     // challenge reset (hidden/debug)
@@ -88,7 +88,7 @@ export default {
 
     return '[?] Onbekend subcommando: ' + sub + '\n\n' +
            '[?] Gebruik: challenge [start <id>|status|hint|exit]\n' +
-           '[?] Type \'challenge\' voor beschikbare challenges.';
+           '[?] Typ \'challenge\' voor beschikbare challenges.';
   },
 
   manPage: (
@@ -162,10 +162,10 @@ function renderStatus() {
       return '[?] Geen actieve challenge.\n' +
              '[✓] Voltooide challenges: ' + status.completedCount + '\n' +
              '[✓] Totaal punten: ' + status.totalPoints + '\n\n' +
-             '[?] Type \'challenge\' om beschikbare challenges te zien.';
+             '[?] Typ \'challenge\' om beschikbare challenges te zien.';
     }
     return '[?] Geen actieve challenge.\n\n' +
-           '[?] Type \'challenge\' om te beginnen.';
+           '[?] Typ \'challenge\' om te beginnen.';
   }
 
   var output = '[?] Actieve challenge: ' + status.challengeTitle + '\n';

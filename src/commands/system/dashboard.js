@@ -106,26 +106,26 @@ function getNextStep(challengeData, badgeSummary) {
   // Brand-new user (geen commando-voortgang): begeleide fundamentals-missie eerst.
   // Spiegelt next.js stage 0 (high-water verbergt 'm zodra er commando-voortgang is).
   if (triedSet.size === 0 && !tutorialManager.isScenarioCompleted('fundamentals')) {
-    return "Volgende: start de fundamentals tutorial (type 'tutorial fundamentals').";
+    return "Volgende: start de fundamentals tutorial (typ 'tutorial fundamentals').";
   }
 
   var done1 = countTriedInPhase(phase1Commands, triedSet);
   if (done1 < phase1Commands.length) {
-    return "Volgende: Fase 1 voltooien (" + done1 + "/" + phase1Commands.length + " commands geleerd). Type 'next'.";
+    return "Volgende: Fase 1 voltooien (" + done1 + "/" + phase1Commands.length + " commands geleerd). Typ 'next'.";
   }
 
   var done2 = countTriedInPhase(phase2Commands, triedSet);
   if (done2 < phase2Commands.length) {
-    return "Volgende: Fase 2 voltooien (" + done2 + "/" + phase2Commands.length + " commands geleerd). Type 'next'.";
+    return "Volgende: Fase 2 voltooien (" + done2 + "/" + phase2Commands.length + " commands geleerd). Typ 'next'.";
   }
 
   if (!tutorialManager.isScenarioCompleted('recon')) {
-    return "Volgende: start de tutorial (type 'tutorial recon').";
+    return "Volgende: start de tutorial (typ 'tutorial recon').";
   }
 
   var done3 = countTriedInPhase(phase3Commands, triedSet);
   if (done3 < phase3Commands.length) {
-    return "Volgende: Fase 3 voltooien (" + done3 + "/" + phase3Commands.length + " commands geleerd). Type 'next'.";
+    return "Volgende: Fase 3 voltooien (" + done3 + "/" + phase3Commands.length + " commands geleerd). Typ 'next'.";
   }
 
   // Then check challenges (original logic)
@@ -147,7 +147,7 @@ function getNextStep(challengeData, badgeSummary) {
     }
   }
 
-  return 'Type \'challenge\' om beschikbare challenges te bekijken.';
+  return 'Typ \'challenge\' om beschikbare challenges te bekijken.';
 }
 
 // --- Desktop Rendering ---
@@ -232,7 +232,7 @@ function renderFullDesktop() {
   var inner = width - 2;
   lines.push(B.dividerLeft + B.horizontal.repeat(inner) + B.dividerRight);
   lines.push(buildLine("  [?] 'dashboard stats|badges|challenges' voor details", width));
-  lines.push(buildLine("  [?] Type 'next' voor een persoonlijke suggestie", width));
+  lines.push(buildLine("  [?] Typ 'next' voor een persoonlijke suggestie", width));
 
   // Footer
   lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
@@ -314,7 +314,7 @@ function renderBadges() {
         out += r.toUpperCase() + ': ' + data.unlocked + '/' + data.total + '\n';
       }
     });
-    out += '\n[TIP] Type \'achievements\' voor de volledige badge galerij.';
+    out += '\n[TIP] Typ \'achievements\' voor de volledige badge galerij.';
     return out;
   }
 
@@ -327,7 +327,7 @@ function renderBadges() {
   var inner = width - 2;
   lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
   var output = lines.join('\n');
-  output += '\n\n[TIP] Type \'achievements\' voor de volledige badge galerij.';
+  output += '\n\n[TIP] Typ \'achievements\' voor de volledige badge galerij.';
   return output;
 }
 
@@ -342,7 +342,7 @@ function renderChallenges() {
       out += difficultyLabel(d) + ': ' + group.done + '/' + group.total + '\n';
     });
     out += '\nTotaal: ' + cd.totalDone + '/' + cd.totalAll + '\n';
-    out += '\n[TIP] Type \'challenge\' om een challenge te starten.';
+    out += '\n[TIP] Typ \'challenge\' om een challenge te starten.';
     return out;
   }
 
@@ -355,7 +355,7 @@ function renderChallenges() {
   var inner = width - 2;
   lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
   var output = lines.join('\n');
-  output += '\n\n[TIP] Type \'challenge\' om een challenge te starten.';
+  output += '\n\n[TIP] Typ \'challenge\' om een challenge te starten.';
   return output;
 }
 
@@ -393,7 +393,7 @@ export default {
 
     return '[?] Onbekend subcommando: ' + sub + '\n\n' +
            '[?] Gebruik: dashboard [stats|badges|challenges]\n' +
-           '[TIP] Type \'dashboard\' voor een volledig overzicht.';
+           '[TIP] Typ \'dashboard\' voor een volledig overzicht.';
   },
 
   manPage: (

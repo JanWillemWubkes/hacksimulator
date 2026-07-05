@@ -54,7 +54,7 @@ class HelpSystem {
     if (suggestion) {
       return `[?] TIP: Bedoelde je misschien '${suggestion}'?`;
     }
-    return `[?] TIP: Type 'help' voor een lijst van beschikbare commands.`;
+    return `[?] TIP: Typ 'help' voor een lijst van beschikbare commands.`;
   }
 
   /**
@@ -100,8 +100,8 @@ class HelpSystem {
 
 VOLLEDIGE HULP:
 
-1. Type 'help' voor complete lijst van 30 commands
-2. Type 'man <command>' voor gedetailleerde uitleg van elk command
+1. Typ 'help' voor complete lijst van 30 commands
+2. Typ 'man <command>' voor gedetailleerde uitleg van elk command
 
 Bijvoorbeeld:
    man ls      → Uitleg over bestanden tonen
@@ -150,7 +150,7 @@ Bijvoorbeeld:
    Let op: Juridische warnings zijn van toepassing.`
     };
 
-    return categoryHelp[category] || 'Type "help" voor alle commands.';
+    return categoryHelp[category] || 'Typ "help" voor alle commands.';
   }
 
   /**
@@ -178,7 +178,7 @@ Bijvoorbeeld:
    help        → Alle commands
    man ls      → Uitleg over 'ls'
 
-Type 'help' om te beginnen!`;
+Typ 'help' om te beginnen!`;
   }
 
   /**

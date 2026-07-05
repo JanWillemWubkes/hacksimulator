@@ -113,17 +113,17 @@ export default new class ChallengeManager {
   start(challengeId) {
     var challenge = this.challenges.get(challengeId);
     if (!challenge) {
-      return '[X] Onbekende challenge: ' + challengeId + '\n\n[?] Type \'challenge\' om beschikbare challenges te zien.';
+      return '[X] Onbekende challenge: ' + challengeId + '\n\n[?] Typ \'challenge\' om beschikbare challenges te zien.';
     }
 
     if (this.isActive()) {
-      return '[!] Er is al een challenge actief: ' + this.activeChallenge.title + '\n\n[?] Type \'challenge exit\' om de huidige challenge te verlaten.';
+      return '[!] Er is al een challenge actief: ' + this.activeChallenge.title + '\n\n[?] Typ \'challenge exit\' om de huidige challenge te verlaten.';
     }
 
     // Check if already completed
     var stats = progressStore.getStats();
     if (stats.completedChallenges.indexOf(challengeId) !== -1) {
-      return '[✓] Je hebt deze challenge al voltooid!\n\n[?] Type \'challenge\' om andere challenges te zien.';
+      return '[✓] Je hebt deze challenge al voltooid!\n\n[?] Typ \'challenge\' om andere challenges te zien.';
     }
 
     this.activeChallenge = challenge;
@@ -229,7 +229,7 @@ export default new class ChallengeManager {
       var completion = this._renderer.renderCompletion(challenge, this.attempts);
 
       // Append certificate hint, badges, and support CTA to followUp
-      completion.followUp += '\n[TIP] Type \'certificates ' + challenge.id + '\' om je certificaat te bekijken.';
+      completion.followUp += '\n[TIP] Typ \'certificates ' + challenge.id + '\' om je certificaat te bekijken.';
 
       // Check for challenge-triggered badges
       var newBadges = badgeManager.checkUnlocks('challenge');
@@ -268,7 +268,7 @@ export default new class ChallengeManager {
    */
   getHint() {
     if (!this.isActive()) {
-      return '[?] Geen actieve challenge. Type \'challenge\' om te beginnen.';
+      return '[?] Geen actieve challenge. Typ \'challenge\' om te beginnen.';
     }
 
     var challenge = this.activeChallenge;
@@ -284,7 +284,7 @@ export default new class ChallengeManager {
     }
 
     if (tips[level]) {
-      return '[TIP] Hint ' + (level + 1) + '/' + tips.length + ': ' + tips[level];
+      return '[?] Hint (' + (level + 1) + '/' + tips.length + '): ' + tips[level];
     }
 
     return '[?] Geen verdere hints beschikbaar. Bekijk de challenge omschrijving nog eens.';

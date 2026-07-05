@@ -146,7 +146,7 @@ test.describe('Next funnel — elke suggestie is letterlijk uitvoerbaar', () => 
       // nogmaals 'next' — geen suggestie in deze iteratie, loop door
       if (newNextOutput.includes('VOLTOOID!')) continue;
 
-      const matches = [...newNextOutput.matchAll(/\[->\] Type '([^']+)'/g)];
+      const matches = [...newNextOutput.matchAll(/\[->\] Typ '([^']+)'/g)];
       expect(matches.length, `'next' toonde geen suggestie (iteratie ${i})`).toBeGreaterThan(0);
       const suggestion = matches[matches.length - 1][1];
 

@@ -1412,6 +1412,31 @@ const padding = width - header.length;  // Must be EXACT
 - Defense layers (bescherming measures)
 - Technical specifications
 
+### Marker → kleur (renderer-waarheid)
+
+De renderer kleurt elke regel op zijn **eerste marker** (`src/ui/renderer.js` — de
+mapping staat op TWEE plekken: het hoofd-`renderOutput`-pad én de `_renderLinesInto`-
+helper; houd ze synchroon). De feitelijke mapping:
+
+| Marker | Type | Kleur (dark → light) |
+|--------|------|----------------------|
+| `[?]`, `[→]`, kale `→` | info | blauw `#79c0ff` → `#0969da` |
+| `[!]` | warning | oranje `#d29922` → `#dd8800` |
+| `[✓]` | success | groen `#3fb950` → `#008844` |
+| `[X]` | error | rood `#f85149` → `#d60047` |
+| `[~]` | dim | grijs `#8b949e` → `#444444` |
+| `[TIP]` | **géén branch** | erft parent → normaal wit/zwart |
+
+⚠️ **Let op:** `[TIP]` heeft **geen** eigen renderer-branch en is dus NIET cyaan
+(oudere docs claimden dat onterecht). De "levende" tip-marker is `[?]`. Gebruik voor
+tip-/hint-inhoud `[?]`, niet `[TIP]`.
+
+**`[~]` vs `[?]` hiërarchie (bewust):**
+- `[~]` (dim) = een stáánde, secundaire uitnodiging die de hoofdinstructie niet mag
+  overschreeuwen — bv. `"[~] Typ 'hint' als je vastzit"`.
+- `[?]` (blauw) = prominente hint-/tip-ínhoud of een actie-pointer — bv.
+  `"[?] Hint (1/3): ..."`. Consistent in tutorial én challenge.
+
 ### List Formatting Patterns
 
 #### Informational Lists (Default Pattern)

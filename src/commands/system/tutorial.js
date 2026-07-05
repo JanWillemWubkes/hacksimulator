@@ -114,10 +114,10 @@ function renderStatus() {
     if (completedCount > 0) {
       return '[?] Geen actieve tutorial.\n' +
              '[✓] Voltooide scenario\'s: ' + completedCount + '\n\n' +
-             '[?] Type \'tutorial\' om beschikbare scenario\'s te zien.';
+             '[?] Typ \'tutorial\' om beschikbare scenario\'s te zien.';
     }
     return '[?] Geen actieve tutorial.\n\n' +
-           '[?] Type \'tutorial\' om beschikbare scenario\'s te zien.';
+           '[?] Typ \'tutorial\' om beschikbare scenario\'s te zien.';
   }
 
   var output = '[?] Actieve tutorial: ' + status.scenarioTitle + '\n';
@@ -147,7 +147,7 @@ export default {
       var scenarioId = args.length > 1 ? args[1].toLowerCase() : '';
       if (!scenarioId) {
         return '[?] Gebruik: tutorial start <scenario-id>\n\n' +
-               '[?] Type \'tutorial\' om beschikbare scenario\'s te zien.';
+               '[?] Typ \'tutorial\' om beschikbare scenario\'s te zien.';
       }
       var blocked = _blockedByChallenge();
       if (blocked) return blocked;
@@ -182,7 +182,7 @@ export default {
 
       if (!completed || completed.length === 0) {
         return '[?] Je hebt nog geen scenario voltooid.\n\n' +
-               '[?] Type \'tutorial\' om een scenario te starten.';
+               '[?] Typ \'tutorial\' om een scenario te starten.';
       }
 
       // Get the most recently completed scenario
@@ -214,7 +214,7 @@ export default {
 
     return '[?] Onbekend subcommando: ' + sub + '\n\n' +
            '[?] Gebruik: tutorial [start <id>|status|skip|exit|cert]\n' +
-           '[?] Type \'tutorial\' voor beschikbare scenario\'s.';
+           '[?] Typ \'tutorial\' voor beschikbare scenario\'s.';
   },
 
   manPage: (

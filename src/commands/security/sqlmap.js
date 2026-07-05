@@ -41,11 +41,11 @@ GEBRUIK:
 
 [?] OM DOOR TE GAAN:
 
-    Type 'sqlmap <url>' om te accepteren en door te gaan
+    Typ 'sqlmap <url>' om te accepteren en door te gaan
 
     Voorbeeld: sqlmap http://site.com/product?id=1
 
-[?] Je consent wordt opgeslagen. Type 'reset consent' om opnieuw
+[?] Je consent wordt opgeslagen. Typ 'reset consent' om opnieuw
       de waarschuwing te zien.`;
     }
 
@@ -68,7 +68,7 @@ GEBRUIK:
    • sqlmap http://demo-app.local/login
    • sqlmap http://test-site.com/search?q=test
 
-[?] Type 'man sqlmap' voor meer informatie.`;
+[?] Typ 'man sqlmap' voor meer informatie.`;
     }
 
     const url = args[0];

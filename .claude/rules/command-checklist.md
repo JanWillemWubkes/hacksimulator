@@ -22,10 +22,13 @@ Nieuwe command toevoegen? Volg deze 8 stappen:
 
 ## Security & Compliance
 
-4. **Warning (Offensive Tools)** - Juridische disclaimer + confirmatie
+4. **Warning (Offensive Tools)** - Juridische disclaimer + consent
    - Required for: hashcat, hydra, sqlmap, metasploit, nikto (security category)
    - Pattern: `[!] Let op: [tool] is een offensive tool. Gebruik ALLEEN met toestemming!`
-   - Confirmation: `Doorgaan? (j/n):` → if 'n' → cancel, if 'j' → proceed
+   - Consent-model (GEEN interactieve j/n-prompt): eerste aanroep **zonder args** toont
+     de waarschuwingsbox zonder tool-output; de gebruiker "accepteert" door het commando
+     **mét args** opnieuw te typen. Dat zet `localStorage['security_tools_consent']='true'`
+     (in try/catch — private mode mag de flow niet breken) en draait de tool in dezelfde call.
    - Files: All `src/commands/security/*.js`
 
 5. **Mobile Optimalisatie** - ≤40 chars output width voor 375px viewports

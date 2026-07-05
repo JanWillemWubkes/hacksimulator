@@ -289,7 +289,7 @@ ${statsLine}${cta ? '\n' + cta : ''}`;
                           'shortcuts', 'certificates', 'leaderboard', 'reset',
                           'welcome'];
     if (isNewCommand && !skipReminder.includes(commandName) && this.commandsTried.length <= 3) {
-      return "\n[→] Type 'next' voor je volgende stap";
+      return "\n[→] Typ 'next' voor je volgende stap";
     }
 
     return null;
@@ -311,22 +311,22 @@ ${statsLine}${cta ? '\n' + cta : ''}`;
   _getProgressiveHint() {
     if (this.commandCount === 1 && !this.hasShownEncouragement) {
       this.hasShownEncouragement = true;
-      return '\n[✓] Eerste opdracht voltooid!\n\n→ Type \'next\' voor je volgende stap';
+      return '\n[✓] Eerste opdracht voltooid!\n\n→ Typ \'next\' voor je volgende stap';
     }
 
     if (this.commandCount === 3 && !this.hasShownTabHint) {
       this.hasShownTabHint = true;
-      return '\n[✓] Pro tip: Gebruik Tab om commands snel in te typen\n\nProbeer het nu:\n→ Type "nm" en druk Tab      - Vult aan naar "nmap"\n→ Type "wh" en druk Tab 2x   - Cyclet door whoami, whois\n\n→ Type \'next\' voor je volgende stap';
+      return '\n[✓] Pro tip: Gebruik Tab om commands snel in te typen\n\nProbeer het nu:\n→ Typ "nm" en druk Tab      - Vult aan naar "nmap"\n→ Typ "wh" en druk Tab 2x   - Cyclet door whoami, whois\n\n→ Typ \'next\' voor je volgende stap';
     }
 
     if (this.commandCount === 5 && !this.hasShownTutorialSuggestion) {
       this.hasShownTutorialSuggestion = true;
-      return '\n[✓] 5 opdrachten voltooid - je bent onderweg!\n\n→ Type \'next\' om te zien wat je volgende stap is';
+      return '\n[✓] 5 opdrachten voltooid - je bent onderweg!\n\n→ Typ \'next\' om te zien wat je volgende stap is';
     }
 
     if (this.commandCount === 7 && !this.hasShownCtrlRHint) {
       this.hasShownCtrlRHint = true;
-      return '\n[✓] Pro tip: Gebruik Ctrl+R om door je geschiedenis te zoeken\n\nProbeer het nu:\n→ Druk Ctrl+R en type "ls"     - Vind vorige ls commands\n→ Druk Ctrl+R opnieuw          - Cycle door matches\n→ Enter om te accepteren       - Esc om te annuleren\n\nType \'shortcuts\' voor alle keyboard shortcuts.\n\n→ Type \'next\' voor je volgende stap';
+      return '\n[✓] Pro tip: Gebruik Ctrl+R om door je geschiedenis te zoeken\n\nProbeer het nu:\n→ Druk Ctrl+R en typ "ls"     - Vind vorige ls commands\n→ Druk Ctrl+R opnieuw          - Cycle door matches\n→ Enter om te accepteren       - Esc om te annuleren\n\nType \'shortcuts\' voor alle keyboard shortcuts.\n\n→ Typ \'next\' voor je volgende stap';
     }
 
     if (this.commandCount === 10 && !this.hasShownSecurityHint) {
@@ -335,10 +335,10 @@ ${statsLine}${cta ? '\n' + cta : ''}`;
       var networkCommands = ['ping', 'nmap', 'ifconfig', 'netstat'];
       var networkDone = networkCommands.filter(c => this.commandsTried.includes(c)).length;
       if (networkDone >= 2) {
-        return '\n[!] 10 opdrachten - tijd voor krachtigere tools\n\n[!] LET OP: De volgende tools zijn ALLEEN voor educatief gebruik.\n      In de echte wereld zijn ze illegaal zonder expliciete toestemming.\n\nKlaar? Type \'help security\' voor geavanceerde tools.';
+        return '\n[!] 10 opdrachten - tijd voor krachtigere tools\n\n[!] LET OP: De volgende tools zijn ALLEEN voor educatief gebruik.\n      In de echte wereld zijn ze illegaal zonder expliciete toestemming.\n\nKlaar? Typ \'help security\' voor geavanceerde tools.';
       }
       // Nog niet klaar voor security — toon generieke aanmoediging
-      return "\n[✓] 10 opdrachten voltooid - goed bezig!\n\n[→] Type 'next' om te zien wat je volgende stap is";
+      return "\n[✓] 10 opdrachten voltooid - goed bezig!\n\n[→] Typ 'next' om te zien wat je volgende stap is";
     }
 
     if (this.commandCount === 12 && !this.hasShownCtrlLHint) {
@@ -348,7 +348,7 @@ ${statsLine}${cta ? '\n' + cta : ''}`;
 
     if (this.commandCount === 15 && !this.hasShownDashboardHint) {
       this.hasShownDashboardHint = true;
-      return '\n[✓] 15 opdrachten voltooid!\n\n[?] Wist je dat? Type \'dashboard\' voor je voortgangsoverzicht\n    of \'leerpad\' om je hele leerpad te zien.';
+      return '\n[✓] 15 opdrachten voltooid!\n\n[?] Wist je dat? Typ \'dashboard\' voor je voortgangsoverzicht\n    of \'leerpad\' om je hele leerpad te zien.';
     }
 
     if (this.commandCount === 20 && !this.hasShownSupportHint) {
@@ -429,16 +429,16 @@ ${statsLine}${cta ? '\n' + cta : ''}`;
     if (this._lastFollowUpCmd === commandName) return null;
 
     const tips = {
-      ls:      "[→] Type 'next' voor je volgende stap",
-      cat:     "[→] Type 'next' voor je volgende stap",
-      cd:      "[→] Type 'next' voor je volgende stap",
-      mkdir:   "[→] Type 'next' voor je volgende stap",
-      touch:   "[→] Type 'next' voor je volgende stap",
-      rm:      "[→] Type 'next' voor je volgende stap",
-      pwd:     "[→] Type 'next' voor je volgende stap",
-      whoami:  "[→] Type 'next' voor je volgende stap",
-      history: "[→] Type 'next' voor je volgende stap",
-      help:    "[→] Type 'next' voor je volgende stap"
+      ls:      "[→] Typ 'next' voor je volgende stap",
+      cat:     "[→] Typ 'next' voor je volgende stap",
+      cd:      "[→] Typ 'next' voor je volgende stap",
+      mkdir:   "[→] Typ 'next' voor je volgende stap",
+      touch:   "[→] Typ 'next' voor je volgende stap",
+      rm:      "[→] Typ 'next' voor je volgende stap",
+      pwd:     "[→] Typ 'next' voor je volgende stap",
+      whoami:  "[→] Typ 'next' voor je volgende stap",
+      history: "[→] Typ 'next' voor je volgende stap",
+      help:    "[→] Typ 'next' voor je volgende stap"
     };
 
     var tip = tips[commandName];
@@ -469,27 +469,16 @@ ${statsLine}${cta ? '\n' + cta : ''}`;
   }
 
   /**
-   * Get hint for persistent display
-   * @returns {string|null}
-   */
-  getPersistentHint() {
-    if (this.commandCount >= 5) {
-      return null;
-    }
-    return 'Type "next" voor je volgende stap';
-  }
-
-  /**
    * Get post-clear hint based on user experience level.
    * Beginners get a nudge, advanced users get a clean screen.
    * @returns {string|null}
    */
   getPostClearHint() {
     if (this.commandCount < 5) {
-      return "[→] Type 'next' om te beginnen";
+      return "[→] Typ 'next' om te beginnen";
     }
     if (this.commandsTried.length < 15) {
-      return "[→] Type 'next' voor je volgende stap";
+      return "[→] Typ 'next' voor je volgende stap";
     }
     return null;
   }

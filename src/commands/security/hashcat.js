@@ -62,11 +62,11 @@ Voorbeelden van zwakke demo hashes:
 
 [?] OM DOOR TE GAAN:
 
-    Type 'hashcat <hash>' om te accepteren en door te gaan
+    Typ 'hashcat <hash>' om te accepteren en door te gaan
 
     Voorbeeld: hashcat 5f4dcc3b5aa765d61d8327deb882cf99
 
-[?] Je consent wordt opgeslagen. Type 'reset consent' om opnieuw
+[?] Je consent wordt opgeslagen. Typ 'reset consent' om opnieuw
       de waarschuwing te zien.`;
     }
 

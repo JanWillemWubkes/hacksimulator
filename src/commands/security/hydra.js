@@ -74,11 +74,11 @@ GEBRUIK:
 
 [?] OM DOOR TE GAAN:
 
-    Type 'hydra <target>' om te accepteren en door te gaan
+    Typ 'hydra <target>' om te accepteren en door te gaan
 
     Voorbeeld: hydra ssh://192.168.1.100
 
-[?] Je consent wordt opgeslagen. Type 'reset consent' om opnieuw
+[?] Je consent wordt opgeslagen. Typ 'reset consent' om opnieuw
       de waarschuwing te zien.`;
     }
 
@@ -101,7 +101,7 @@ GEBRUIK:
    • hydra ftp://192.168.1.50
    • hydra http://target.local/admin
 
-[?] Type 'man hydra' voor meer informatie.`;
+[?] Typ 'man hydra' voor meer informatie.`;
     }
 
     const target = args[0];

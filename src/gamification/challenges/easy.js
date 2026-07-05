@@ -52,7 +52,7 @@ var easyChallenges = [
       return hasLs && hasCat;
     },
     tips: [
-      'Type \'ls\' om te zien welke bestanden er zijn.',
+      'Typ \'ls\' om te zien welke bestanden er zijn.',
       'Gebruik \'cat <bestandsnaam>\' om de inhoud van een bestand te lezen.',
       'Probeer: ls en dan cat passwords.txt'
     ]
@@ -77,7 +77,7 @@ var easyChallenges = [
       return hasWhoami && hasIfconfig;
     },
     tips: [
-      'Type \'whoami\' om te zien als welke gebruiker je bent ingelogd.',
+      'Typ \'whoami\' om te zien als welke gebruiker je bent ingelogd.',
       'Gebruik \'ifconfig\' om je IP-adres en netwerkinterfaces te zien.',
       'Probeer: whoami en daarna ifconfig'
     ]

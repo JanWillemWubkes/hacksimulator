@@ -14,7 +14,7 @@ export default {
 
   execute: function() {
     if (!tutorialManager.isActive()) {
-      return '[?] Geen actieve tutorial. Type \'tutorial\' om een missie te starten, of \'help\' voor hulp.';
+      return '[?] Geen actieve tutorial. Typ \'tutorial\' om een missie te starten, of \'help\' voor hulp.';
     }
 
     var result = tutorialManager.getHint();
@@ -26,7 +26,7 @@ export default {
     var output = '[?] Hint (' + result.tier + '/' + result.maxTier + '): ' + result.text;
 
     if (result.tier < result.maxTier) {
-      output += '\n[?] Kom je er niet uit? Type \'hint\' opnieuw voor een specifiekere hint.';
+      output += '\n[?] Kom je er niet uit? Typ \'hint\' opnieuw voor een specifiekere hint.';
     }
 
     return output;

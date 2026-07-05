@@ -25,11 +25,11 @@ const categoryDescriptions = {
 };
 
 const categoryTips = {
-  system:     "[→] Start hier: type 'next' voor persoonlijke begeleiding",
+  system:     "[→] Start hier: typ 'next' voor persoonlijke begeleiding",
   filesystem: "[→] Probeer: 'ls' om bestanden te zien, dan 'cat README.txt' om te lezen",
   network:    "[→] Probeer: 'ping 192.168.1.1' om je eerste netwerkscan te doen",
-  security:   "[→] Belangrijk: begin eerst met 'man hashcat' om te leren wat een tool doet\n    Of type 'next' — die wijst je de juiste volgorde",
-  special:    "[→] Type 'reset' als je het bestandssysteem wilt herstellen"
+  security:   "[→] Belangrijk: begin eerst met 'man hashcat' om te leren wat een tool doet\n    Of typ 'next' — die wijst je de juiste volgorde",
+  special:    "[→] Typ 'reset' als je het bestandssysteem wilt herstellen"
 };
 
 function buildDivider(width) {
@@ -127,7 +127,7 @@ export default {
       if (args.length > 0) {
         var cat = args[0].toLowerCase();
         var cmds = reg.getByCategory(cat);
-        if (cmds.length === 0) return "Geen commands in '" + cat + "'.\n\n[?] Type 'help' voor alle categorieën.";
+        if (cmds.length === 0) return "Geen commands in '" + cat + "'.\n\n[?] Typ 'help' voor alle categorieën.";
         var out = '\n**' + cat.toUpperCase() + '** (' + cmds.length + ')\n\n';
         cmds.forEach(function(c) { out += '  ' + c.name + ' - ' + c.description + '\n'; });
         var tip = categoryTips[cat];
@@ -141,7 +141,7 @@ export default {
       visibleCats.forEach(function(c) { grouped[c] = reg.getByCategory(c); });
       var mobileResult = buildMobileHelp(grouped);
       if (hiddenCount > 0) {
-        mobileResult += '\n[?] Meer commands na meer voortgang.\n    Type "help <categorie>" voor specifiek.\n';
+        mobileResult += '\n[?] Meer commands na meer voortgang.\n    Typ "help <categorie>" voor specifiek.\n';
       }
       return mobileResult;
     }
@@ -152,7 +152,7 @@ export default {
     if (args.length > 0) {
       var cat = args[0].toLowerCase();
       var cmds = reg.getByCategory(cat);
-      if (cmds.length === 0) return "Geen commands gevonden in categorie '" + cat + "'.\n\n[?] TIP: Type 'help' voor alle categorieën.";
+      if (cmds.length === 0) return "Geen commands gevonden in categorie '" + cat + "'.\n\n[?] TIP: Typ 'help' voor alle categorieën.";
       var out = "Commands in categorie '" + cat + "':\n\n";
       out += buildCategoryBox(cat, cmds, width);
       var tip = categoryTips[cat];
@@ -183,7 +183,7 @@ export default {
     result += "\n\n[?] * = HackSimulator command (geen echt Linux-command)";
 
     if (hiddenCount > 0) {
-      result += "\n\n[?] Meer commands worden zichtbaar naarmate je vordert.\n    Type 'help <categorie>' om een specifieke categorie te bekijken.";
+      result += "\n\n[?] Meer commands worden zichtbaar naarmate je vordert.\n    Typ 'help <categorie>' om een specifieke categorie te bekijken.";
     }
 
     return result;
@@ -207,7 +207,7 @@ function buildMobileHelp(grouped) {
     }
   });
   out += '[?] * = HackSimulator command (geen echt Linux-command)\n';
-  out += '[?] Type "man <command>" voor uitleg\n';
+  out += '[?] Typ "man <command>" voor uitleg\n';
   out += '[!] Echte hackers beginnen met SYSTEM & FILESYSTEM basics\n';
   return out;
 }

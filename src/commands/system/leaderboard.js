@@ -86,7 +86,7 @@ function renderListDesktop() {
   lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
 
   var output = lines.join('\n');
-  output += '\n\n[TIP] Type \'leaderboard me\' voor je persoonlijke ranking details.';
+  output += '\n\n[TIP] Typ \'leaderboard me\' voor je persoonlijke ranking details.';
   return output;
 }
 
@@ -189,7 +189,7 @@ export default {
 
     return '[?] Onbekend subcommando: ' + sub + '\n\n' +
            '[?] Gebruik: leaderboard [me]\n' +
-           '[TIP] Type \'leaderboard\' voor de volledige ranglijst.';
+           '[TIP] Typ \'leaderboard\' voor de volledige ranglijst.';
   },
 
   manPage: (

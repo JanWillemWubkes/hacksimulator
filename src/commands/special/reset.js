@@ -40,7 +40,7 @@ OPTIES:
         return `[!] Geen security tools consent gevonden
 
 Je hebt nog geen consent gegeven voor offensive security tools.
-Type 'hydra', 'sqlmap', of 'nikto' om de waarschuwing te zien.`;
+Typ 'hydra', 'sqlmap', of 'nikto' om de waarschuwing te zien.`;
       }
 
       // Remove consent
@@ -66,7 +66,7 @@ GEBRUIK:
   reset consent      Reset security tools consent
   reset --help       Toon help
 
-Type 'reset --help' voor meer informatie.`;
+Typ 'reset --help' voor meer informatie.`;
     }
 
     // Default behavior: Reset filesystem (no args or explicit filesystem arg)

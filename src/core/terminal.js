@@ -90,7 +90,7 @@ class Terminal {
 
     // Deep-link: valideer de rauwe ?tutorial=-id nu de scenario's geregistreerd zijn.
     // Ongeldig/afwezig → null (stille no-op). De welcome-render hieronder leest dit
-    // zodat een pending missie-start de "Type 'next'"-CTA niet laat concurreren.
+    // zodat een pending missie-start de "Typ 'next'"-CTA niet laat concurreren.
     this._deepLinkId = (options.deepLinkId && tutorialManager.getScenario(options.deepLinkId))
       ? options.deepLinkId
       : null;
@@ -162,7 +162,7 @@ class Terminal {
     const stats = progressStore.getStats();
 
     // Coördineer welcome-CTA met de tutorial-staat zodat er nooit twee "wat nu?"-
-    // instructies concurreren (deep-link-briefing of hervatte stap vs. "Type 'next'").
+    // instructies concurreren (deep-link-briefing of hervatte stap vs. "Typ 'next'").
     const status = tutorialManager.isActive() ? tutorialManager.getStatus() : null;
     const deepLinkSwitches = !!(this._deepLinkId && (!status || status.scenarioId !== this._deepLinkId));
     const ctaMode = deepLinkSwitches ? 'deeplink' : (status ? 'suppress' : 'default');
@@ -177,7 +177,7 @@ class Terminal {
 
     renderer.renderWelcome(onboarding, stats, ctaMode);
 
-    // Bij een actieve tutorial op boot past de neutrale placeholder beter dan "Type 'next'".
+    // Bij een actieve tutorial op boot past de neutrale placeholder beter dan "Typ 'next'".
     if (status) {
       var termInput = document.getElementById('terminal-input');
       if (termInput) termInput.placeholder = 'Typ een command...';
@@ -318,7 +318,7 @@ class Terminal {
           !['tutorial', 'challenge', 'help', 'man', 'clear', 'history', 'leerpad', 'shortcuts', 'next', 'hint', 'reset'].includes(parsed.command);
       // Capture BEFORE handleCommand() runs: completing the final step flips the
       // tutorial to IDLE in this same tick, so a post-mutation isActive() check
-      // would go stale and leak a duplicate onboarding "Type 'next'" hint.
+      // would go stale and leak a duplicate onboarding "Typ 'next'" hint.
       const tutorialActiveAtStart = tutorialManager.isActive();
 
       if (isTutorialRelevant) {
@@ -368,7 +368,7 @@ class Terminal {
       let onboardingHint = null;
       if (this._shouldTrackCommand(parsed.command, parsed.args, output)) {
         onboardingHint = onboarding.recordCommand(parsed.command);
-        // Suppress "Type 'next'" hints during active tutorials/challenges.
+        // Suppress "Typ 'next'" hints during active tutorials/challenges.
         // Use the pre-mutation tutorial state so a just-completed tutorial (now IDLE)
         // still suppresses the onboarding nudge on its final command.
         if (onboardingHint && (tutorialActiveAtStart || challengeManager.isActive())) {
@@ -390,7 +390,7 @@ class Terminal {
       }
 
       // Beginner follow-up tip (only outside tutorials/challenges)
-      // Skip if recordCommand already showed a hint (prevents duplicate "Type 'next'" messages)
+      // Skip if recordCommand already showed a hint (prevents duplicate "Typ 'next'" messages)
       if (!onboardingHint && !tutorialActiveAtStart && !challengeManager.isActive()) {
         const followUp = onboarding.getFollowUpTip(parsed.command);
         if (followUp) renderer.renderInfo(followUp);
@@ -538,8 +538,13 @@ class Terminal {
    */
   _stripTips(output) {
     if (!output) return output;
+    // Tijdens een tutorial handelt het hint-systeem de begeleiding af; losse
+    // tip-regels ([?] TIP: en [TIP]) zouden de stap-instructie overschreeuwen.
     return output.split('\n')
-        .filter(function(line) { return !line.trim().startsWith('[?] TIP:'); })
+        .filter(function(line) {
+          var t = line.trim();
+          return !t.startsWith('[?] TIP:') && !t.startsWith('[TIP]');
+        })
         .join('\n')
         .replace(/\n{3,}/g, '\n\n')
         .replace(/\n+$/, '');

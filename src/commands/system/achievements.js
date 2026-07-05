@@ -32,7 +32,7 @@ export default {
       if (unlocked.length === 0) {
         return '[?] Je hebt nog geen badges verdiend.\n\n' +
                '[TIP] Voer commando\'s uit en voltooi challenges om badges te verdienen!\n' +
-               '[TIP] Type \'achievements\' om te zien welke badges beschikbaar zijn.';
+               '[TIP] Typ \'achievements\' om te zien welke badges beschikbaar zijn.';
       }
       return badgeManager.renderGallery(unlocked, 'VERDIENDE BADGES');
     }
@@ -62,7 +62,7 @@ export default {
 
     return '[?] Onbekend subcommando: ' + sub + '\n\n' +
            '[?] Gebruik: achievements [all|unlocked|rarity <level>]\n' +
-           '[TIP] Type \'achievements\' voor een overzicht van alle badges.';
+           '[TIP] Typ \'achievements\' voor een overzicht van alle badges.';
   },
 
   manPage: (

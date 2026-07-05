@@ -41,11 +41,11 @@ GEBRUIK:
 
 [?] OM DOOR TE GAAN:
 
-    Type 'nikto <url>' om te accepteren en door te gaan
+    Typ 'nikto <url>' om te accepteren en door te gaan
 
     Voorbeeld: nikto http://testsite.local
 
-[?] Je consent wordt opgeslagen. Type 'reset consent' om opnieuw
+[?] Je consent wordt opgeslagen. Typ 'reset consent' om opnieuw
       de waarschuwing te zien.`;
     }
 
@@ -68,7 +68,7 @@ GEBRUIK:
    • nikto http://vulnerable-app.com
    • nikto http://demo.example.org
 
-[?] Type 'man nikto' voor meer informatie.`;
+[?] Typ 'man nikto' voor meer informatie.`;
     }
 
     const url = args[0];

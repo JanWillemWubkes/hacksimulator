@@ -45,9 +45,9 @@ op een veilige manier.`;
 
 [?] OM DOOR TE GAAN:
 
-    Type 'metasploit' opnieuw om te accepteren en door te gaan
+    Typ 'metasploit' opnieuw om te accepteren en door te gaan
 
-[?] Je consent wordt opgeslagen. Type 'reset consent' om opnieuw
+[?] Je consent wordt opgeslagen. Typ 'reset consent' om opnieuw
       de waarschuwing te zien.`;
     }
 

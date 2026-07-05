@@ -116,11 +116,11 @@ export default new class TutorialManager {
   start(scenarioId) {
     var scenario = this.scenarios.get(scenarioId);
     if (!scenario) {
-      return '[X] Onbekend scenario: ' + scenarioId + '\n\n[?] Type \'tutorial\' om beschikbare scenario\'s te zien.';
+      return '[X] Onbekend scenario: ' + scenarioId + '\n\n[?] Typ \'tutorial\' om beschikbare scenario\'s te zien.';
     }
 
     if (this.isActive()) {
-      return '[!] Er is al een tutorial actief: ' + this.activeScenario.title + '\n\n[?] Type \'tutorial exit\' om de huidige tutorial te verlaten.';
+      return '[!] Er is al een tutorial actief: ' + this.activeScenario.title + '\n\n[?] Typ \'tutorial exit\' om de huidige tutorial te verlaten.';
     }
 
     // Hervat gepauzeerde voortgang van dezelfde missie (via exit opgeslagen);
@@ -217,7 +217,7 @@ export default new class TutorialManager {
    */
   skip() {
     if (!this.isActive()) {
-      return '[?] Geen actieve tutorial. Type \'tutorial\' om te beginnen.';
+      return '[?] Geen actieve tutorial. Typ \'tutorial\' om te beginnen.';
     }
 
     var step = this.activeScenario.steps[this.currentStep];
