@@ -202,6 +202,39 @@ test.describe('Fundamentals Tutorial + Re-tiering', () => {
     await expect(output).toContainText('Begeleide missie: tutorial recon', { timeout: 2000 });
   });
 
+  test('leerpad Fase 3 dekt alle recon-missie commands (whois/traceroute incluis)', async ({ page }) => {
+    await typeCommand(page, 'leerpad');
+    const output = page.locator('#terminal-output');
+
+    // tutorial recon leert ping/nmap/whois/traceroute — alle vier moeten een
+    // afvinkbare rij in het leerpad hebben (Sessie 195: whois ontbrak)
+    await expect(output).toContainText('whois', { timeout: 5000 });
+    await expect(output).toContainText('traceroute', { timeout: 2000 });
+    // Fase 2 kreeg find/grep erbij (echte leerbare filesystem-commands)
+    await expect(output).toContainText('find', { timeout: 2000 });
+    await expect(output).toContainText('grep', { timeout: 2000 });
+  });
+
+  test('EXPERT ontgrendelt na 4 recon-commands (recon-missie volstaat)', async ({ page }) => {
+    // Vers profiel: EXPERT vergrendeld
+    await typeCommand(page, 'leerpad');
+    await expect(page.locator('#terminal-output')).toContainText('Vergrendeld', { timeout: 5000 });
+
+    // Precies de 4 commands die tutorial recon leert (fase 3 telt er 6;
+    // drempel = 4, backwards-compatibel met het oude 4-command-fase-3)
+    await typeCommand(page, 'ping 192.168.1.1');
+    await typeCommand(page, 'nmap 192.168.1.1');
+    await typeCommand(page, 'whois google.com');
+    await typeCommand(page, 'traceroute google.com');
+
+    const before = await page.locator('#terminal-output').innerText();
+    await typeCommand(page, 'leerpad');
+    const after = (await page.locator('#terminal-output').innerText()).slice(before.length);
+
+    expect(after).not.toContain('Vergrendeld');
+    expect(after).toContain('hashcat');
+  });
+
   test('challenge difficulty labels are Dutch (UI=NL), not English', async ({ page }) => {
     await typeCommand(page, 'challenge');
     const output = page.locator('#terminal-output');
@@ -222,6 +255,9 @@ test.describe('Fundamentals Tutorial + Re-tiering', () => {
     // echte commando's op de juiste tier
     expect(chips).toContain('netstat');
     expect(chips).toContain('nikto');
+    // recon-missie-commands horen op de GEVORDERD-kaart (Sessie 195)
+    expect(chips).toContain('whois');
+    expect(chips).toContain('traceroute');
   });
 
   // ----------------------------------------

@@ -8,6 +8,7 @@ import {
   wordWrap
 } from "../../utils/box-utils.js";
 import onboarding from "../../ui/onboarding.js";
+import { phaseCommandNames } from "../../core/learning-path.js";
 
 const B = BOX_CHARS;
 
@@ -80,9 +81,9 @@ function buildCategoryBox(categoryName, commands, width) {
   return output;
 }
 
-// Phase command sets for progressive filtering (mirrors leerpad.js)
-var phase1and2Commands = ['help', 'ls', 'cd', 'pwd', 'cat', 'whoami', 'history', 'mkdir', 'touch', 'rm'];
-var phase3Commands = ['ping', 'nmap', 'ifconfig', 'netstat'];
+// Phase command sets for progressive filtering — single source of truth: learning-path.js
+var phase1and2Commands = phaseCommandNames(0).concat(phaseCommandNames(1));
+var phase3Commands = phaseCommandNames(2);
 
 /**
  * Determine which categories to show based on user progress.

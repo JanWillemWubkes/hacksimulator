@@ -92,7 +92,7 @@ test.describe('Responsive ASCII Box Layout', () => {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
 
         // Navigate to production site
-        await page.goto('https://hacksimulator.nl/terminal.html');
+        await page.goto('/terminal.html');
 
         // Accept legal modal
         await acceptLegalModal(page);
@@ -149,7 +149,7 @@ test.describe('Responsive ASCII Box Layout', () => {
 
   test('leerpad - Long descriptions truncate properly (iPhone SE)', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
     await acceptLegalModal(page);
     await closeMobileMenu(page);
 
@@ -171,7 +171,7 @@ test.describe('Responsive ASCII Box Layout', () => {
 
   test('help - Category boxes fit on small mobile', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
     await acceptLegalModal(page);
     await closeMobileMenu(page);
 
@@ -196,7 +196,7 @@ test.describe('Responsive ASCII Box Layout', () => {
 
   test('shortcuts - All shortcuts visible on mobile', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
     await acceptLegalModal(page);
     await closeMobileMenu(page);
 
@@ -223,7 +223,7 @@ test.describe('Responsive ASCII Box Layout', () => {
 
   test('leerpad - Desktop experience unchanged (56 chars)', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 }); // Desktop
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
     await acceptLegalModal(page);
 
     await executeCommand(page, 'leerpad');
@@ -245,7 +245,7 @@ test.describe('Responsive ASCII Box Layout', () => {
 
   test('help - Desktop shows full command descriptions', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 }); // Desktop
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
     await acceptLegalModal(page);
     await closeMobileMenu(page);
 
@@ -273,7 +273,7 @@ test.describe('Cross-Browser ASCII Box Rendering', () => {
 
     // Use desktop viewport — mobile uses simplified format without box chars
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
     await acceptLegalModal(page);
 
     await executeCommand(page, 'leerpad');
@@ -293,7 +293,7 @@ test.describe('Cross-Browser ASCII Box Rendering', () => {
     test.skip(browserName !== 'firefox', 'Firefox-only test');
 
     await page.setViewportSize({ width: 375, height: 667 });
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
     await acceptLegalModal(page);
     await closeMobileMenu(page);
 
@@ -316,7 +316,7 @@ test.describe('Cross-Browser ASCII Box Rendering', () => {
 test.describe('Mobile/Desktop Hybrid UI (ASCII Checkbox Fix)', () => {
   test('Mobile: completed = [✓] (green), incomplete = [ ] (white)', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
     await acceptLegalModal(page);
     await closeMobileMenu(page);
 
@@ -340,7 +340,7 @@ test.describe('Mobile/Desktop Hybrid UI (ASCII Checkbox Fix)', () => {
 
   test('Desktop: ASCII checkboxes with full ASCII boxes', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 }); // Desktop
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
     await acceptLegalModal(page);
 
     // Execute help first to get progress for [✓] checkbox
@@ -370,7 +370,7 @@ test.describe('Mobile/Desktop Hybrid UI (ASCII Checkbox Fix)', () => {
 
   test('Mobile: Simplified list format (readable on small screens)', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 }); // iPhone SE
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
     await acceptLegalModal(page);
     await closeMobileMenu(page);
 
@@ -398,7 +398,7 @@ test.describe('Mobile/Desktop Hybrid UI (ASCII Checkbox Fix)', () => {
 
     for (const viewport of viewports) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
-      await page.goto('https://hacksimulator.nl/terminal.html');
+      await page.goto('/terminal.html');
       await acceptLegalModal(page);
       if (viewport.width < 768) await closeMobileMenu(page);
 
@@ -421,7 +421,7 @@ test.describe('Mobile/Desktop Hybrid UI (ASCII Checkbox Fix)', () => {
 test.describe('Font Subset Loading', () => {
   test('should load box-drawing font subset', async ({ page }) => {
     // Navigate to homepage
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
     await acceptLegalModal(page);
 
     // Wait for font to load

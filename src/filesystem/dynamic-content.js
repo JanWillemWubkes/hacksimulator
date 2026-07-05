@@ -5,14 +5,25 @@
  */
 
 import onboarding from '../ui/onboarding.js';
+import { phaseCommandNames, PHASE3_UNLOCK_THRESHOLD } from '../core/learning-path.js';
 
-// Phase command sets (same as next.js)
-var phase1Commands = ['ls', 'cat', 'pwd', 'cd', 'whoami', 'history', 'help'];
-var phase2Commands = ['mkdir', 'touch', 'rm'];
-var phase3Commands = ['ping', 'nmap', 'ifconfig', 'netstat'];
+// Phase command sets — single source of truth: learning-path.js
+var phase1Commands = phaseCommandNames(0);
+var phase2Commands = phaseCommandNames(1);
+var phase3Commands = phaseCommandNames(2);
+
+function countTried(commands, tried) {
+  return commands.filter(function(cmd) { return tried.has(cmd); }).length;
+}
 
 /**
- * Detect current learning phase (1-4) based on commands tried
+ * Detect current learning phase (1-4) based on commands tried.
+ *
+ * Fase 2/3 gebruiken een drempel i.p.v. "alles geprobeerd": de fase-lijsten
+ * zijn gegroeid (fase 2 +find/grep, fase 3 +whois/traceroute) en een
+ * alles-vereiste zou bestaande gebruikers terug laten vallen naar eerdere
+ * README-content. Drempels = de oude lijstlengtes (3 resp. 4), dus wie eerder
+ * kwalificeerde, kwalificeert nog steeds.
  */
 function detectPhase() {
   var tried = new Set(onboarding.getCommandsTried());
@@ -20,11 +31,9 @@ function detectPhase() {
   var phase1Done = phase1Commands.every(function(cmd) { return tried.has(cmd); });
   if (!phase1Done) return 1;
 
-  var phase2Done = phase2Commands.every(function(cmd) { return tried.has(cmd); });
-  if (!phase2Done) return 2;
+  if (countTried(phase2Commands, tried) < 3) return 2;
 
-  var phase3Done = phase3Commands.every(function(cmd) { return tried.has(cmd); });
-  if (!phase3Done) return 3;
+  if (countTried(phase3Commands, tried) < PHASE3_UNLOCK_THRESHOLD) return 3;
 
   return 4;
 }

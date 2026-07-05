@@ -16,6 +16,7 @@ import {
   isMobileView,
   wordWrap
 } from '../../utils/box-utils.js';
+import { phaseCommandNames } from '../../core/learning-path.js';
 
 var B = BOX_CHARS;
 
@@ -86,10 +87,10 @@ function getChallengeData() {
   return { byDifficulty: byDifficulty, totalDone: totalDone, totalAll: totalAll };
 }
 
-// Phase definitions (mirrors next.js/leerpad.js)
-var phase1Commands = ['ls', 'cd', 'pwd', 'cat', 'whoami', 'history', 'help'];
-var phase2Commands = ['mkdir', 'touch', 'rm', 'cp', 'mv', 'echo'];
-var phase3Commands = ['ping', 'nmap', 'ifconfig', 'netstat'];
+// Phase definitions — single source of truth: learning-path.js
+var phase1Commands = phaseCommandNames(0);
+var phase2Commands = phaseCommandNames(1);
+var phase3Commands = phaseCommandNames(2);
 
 function countTriedInPhase(commands, triedSet) {
   var count = 0;

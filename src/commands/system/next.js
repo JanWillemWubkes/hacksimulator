@@ -14,14 +14,15 @@ import {
   isMobileView,
   wordWrap
 } from '../../utils/box-utils.js';
+import { phaseCommandNames } from '../../core/learning-path.js';
 
 var B = BOX_CHARS;
 
-// Phase definitions (mirrors leerpad.js)
-var phase1Commands = ['ls', 'cat', 'pwd', 'cd', 'whoami', 'history', 'help'];
-var phase2Commands = ['mkdir', 'touch', 'rm', 'cp', 'mv', 'echo'];
-var phase3Commands = ['ping', 'nmap', 'ifconfig', 'netstat'];
-var phase4Commands = ['hashcat', 'hydra', 'sqlmap', 'metasploit', 'nikto'];
+// Phase definitions — single source of truth: learning-path.js
+var phase1Commands = phaseCommandNames(0);
+var phase2Commands = phaseCommandNames(1);
+var phase3Commands = phaseCommandNames(2);
+var phase4Commands = phaseCommandNames(3);
 
 var tutorialOrder = ['recon', 'webvuln', 'privesc', 'exploitation'];
 
@@ -40,8 +41,12 @@ var commandTips = {
   cp:       'Kopieer bestanden - maak backups voordat je iets aanpast (~ = je home-map)',
   mv:       'Verplaats of hernoem bestanden - organiseer je bevindingen',
   echo:     'Toon tekst in de terminal - de basis van shell scripting',
+  find:     'Zoek bestanden op naam - zo vind je configs en wachtwoordbestanden',
+  grep:     'Zoek tekst ín bestanden - de snelste weg naar interessante regels',
   ping:     'Test of een server bereikbaar is - de eerste stap van network reconnaissance',
   nmap:     'Scan open poorten op een server - ontdek welke services draaien',
+  whois:    'Zoek op wie een domein geregistreerd heeft - publieke info over je doelwit',
+  traceroute: 'Volg de route van je verbinding - zie welke servers ertussen zitten',
   ifconfig: 'Bekijk je eigen netwerkinterfaces - ken je eigen IP-adres',
   netstat:  'Toon actieve netwerkverbindingen - wie praat met wie?'
 };
@@ -55,7 +60,13 @@ var commandExamples = {
   rm:    'rm notities.txt',
   cp:    'cp ~/notes.txt ~/kopie.txt',
   mv:    'mv ~/kopie.txt ~/archief.txt',
-  echo:  'echo "hello world"'
+  echo:  'echo "hello world"',
+  find:  'find passwd',
+  grep:  'grep root /etc/passwd',
+  ping:  'ping 192.168.1.1',
+  nmap:  'nmap 192.168.1.1',
+  whois: 'whois google.com',
+  traceroute: 'traceroute google.com'
 };
 
 /**
@@ -143,7 +154,7 @@ function buildPhase3Stage(triedSet) {
     progress: done + '/' + phase3Commands.length,
     command: next,
     tip: commandTips[next] || '',
-    suggestion: "Typ '" + next + (next === 'ping' || next === 'nmap' ? " 192.168.1.1'" : "'")
+    suggestion: "Typ '" + (commandExamples[next] || next) + "'"
   };
 }
 
@@ -617,10 +628,13 @@ export default {
     "\n" +
     "    STAGES\n" +
     "        1. Tutorial Fundamentals  Begeleide terminal-basis missie\n" +
-    "        2. Terminal Basics        ls, cd, pwd, cat, whoami, history\n" +
-    "        3. File Manipulation      mkdir, touch, rm, cp, mv, echo\n" +
+    "        2. Terminal Basics        help, ls, cd, pwd, cat, whoami,\n" +
+    "                                  history\n" +
+    "        3. File Manipulation      mkdir, touch, rm, cp, mv, echo,\n" +
+    "                                  find, grep\n" +
     "        4. Tutorial Recon         Begeleide reconnaissance missie\n" +
-    "        5. Network Scanning       ping, nmap, ifconfig, netstat\n" +
+    "        5. Network Scanning       ping, nmap, whois, traceroute,\n" +
+    "                                  ifconfig, netstat\n" +
     "        6. Tutorials              Overige begeleide missies\n" +
     "        7. Makkelijke challenges  Zelfstandige opdrachten\n" +
     "        8. Gemiddeld/Moeilijk     Moeilijkere challenges\n" +

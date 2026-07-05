@@ -7,6 +7,8 @@
  * `hacksim_onboarding` (previously 4 separate keys)
  */
 
+import { phaseCommandNames } from '../core/learning-path.js';
+
 const STORAGE_KEY = 'hacksim_onboarding';
 
 // Legacy keys (for migration)
@@ -332,7 +334,7 @@ ${statsLine}${cta ? '\n' + cta : ''}`;
     if (this.commandCount === 10 && !this.hasShownSecurityHint) {
       this.hasShownSecurityHint = true;
       // Check of security categorie zichtbaar is (vereist 2+ network commands)
-      var networkCommands = ['ping', 'nmap', 'ifconfig', 'netstat'];
+      var networkCommands = phaseCommandNames(2);
       var networkDone = networkCommands.filter(c => this.commandsTried.includes(c)).length;
       if (networkDone >= 2) {
         return '\n[!] 10 opdrachten - tijd voor krachtigere tools\n\n[!] LET OP: De volgende tools zijn ALLEEN voor educatief gebruik.\n      In de echte wereld zijn ze illegaal zonder expliciete toestemming.\n\nKlaar? Typ \'help security\' voor geavanceerde tools.';

@@ -137,7 +137,7 @@ test.describe('Next funnel — elke suggestie is letterlijk uitvoerbaar', () => 
     await typeCommand(page, 'cd ~/documents');
 
     const executed = [];
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 10; i++) {
       const beforeNext = (await getOutputText(page)).length;
       await typeCommand(page, 'next');
       const newNextOutput = (await getOutputText(page)).slice(beforeNext);
@@ -162,11 +162,14 @@ test.describe('Next funnel — elke suggestie is letterlijk uitvoerbaar', () => 
       executed.push(suggestion);
     }
 
-    // Verwachte keten: cp → mv → echo, daarna wijst de funnel naar de recon-missie
+    // Verwachte keten: cp → mv → echo → find → grep, daarna wijst de funnel
+    // naar de recon-missie (fase 2 = 8 commands, zie learning-path.js)
     expect(executed).toEqual([
       "cp ~/notes.txt ~/kopie.txt",
       "mv ~/kopie.txt ~/archief.txt",
-      'echo "hello world"'
+      'echo "hello world"',
+      'find passwd',
+      'grep root /etc/passwd'
     ]);
   });
 });

@@ -5,67 +5,14 @@ import {
   isMobileView
 } from "../../utils/box-utils.js";
 import onboarding from "../../ui/onboarding.js";
+import { phases, tiers, PHASE3_UNLOCK_THRESHOLD } from "../../core/learning-path.js";
 
 const B = BOX_CHARS;
 
-const phases = [
-  {
-    phase: "FASE 1: TERMINAL BASICS",
-    commands: [
-      { name: "help", description: "Commands ontdekken" },
-      { name: "ls", description: "Bestanden bekijken" },
-      { name: "cd", description: "Navigeren" },
-      { name: "pwd", description: "Huidige locatie" },
-      { name: "cat", description: "Bestanden lezen" },
-      { name: "whoami", description: "Je identiteit" },
-      { name: "history", description: "Command geschiedenis" }
-    ]
-  },
-  {
-    phase: "FASE 2: FILE MANIPULATION",
-    commands: [
-      { name: "mkdir", description: "Directory aanmaken" },
-      { name: "touch", description: "Bestand aanmaken" },
-      { name: "rm", description: "Bestanden verwijderen" },
-      { name: "cp", description: "Bestanden kopiëren" },
-      { name: "mv", description: "Bestanden verplaatsen" },
-      { name: "echo", description: "Tekst weergeven" }
-    ]
-  },
-  {
-    phase: "FASE 3: RECONNAISSANCE",
-    commands: [
-      { name: "ping", description: "Test verbinding" },
-      { name: "nmap", description: "Scan netwerk poorten" },
-      { name: "ifconfig", description: "Network interfaces" },
-      { name: "netstat", description: "Actieve verbindingen" }
-    ]
-  },
-  {
-    phase: "FASE 4: SECURITY TOOLS",
-    commands: [
-      { name: "hashcat", description: "Crack wachtwoorden" },
-      { name: "hydra", description: "Brute-force login" },
-      { name: "sqlmap", description: "SQL injection scanner" },
-      { name: "metasploit", description: "Exploit framework" },
-      { name: "nikto", description: "Web scanner" }
-    ]
-  }
-];
-
-// Eén canonieke ladder (Beginner/Gevorderd/Expert) — dezelfde taal als de homepage
-// en het tutorial-systeem. De 4 fases worden gegroepeerd onder de 3 niveaus, elk met
-// een brug naar de bijbehorende begeleide missie (oefenen ↔ tutorial = twee views).
-// EXPERT (Fase 4) blijft vergrendeld tot GEVORDERD (Fase 3) compleet is.
-const tiers = [
-  { name: "BEGINNER",  phases: [phases[0], phases[1]], tutorial: "fundamentals" },
-  { name: "GEVORDERD", phases: [phases[2]],            tutorial: "recon" },
-  { name: "EXPERT",    phases: [phases[3]],            tutorial: "exploitation" }
-];
-
+// EXPERT (Fase 4) ontgrendelt bij ≥4 Fase-3-commands (zie learning-path.js).
 function isExpertUnlocked(triedSet) {
   var s = getPhaseStats(phases[2], triedSet); // GEVORDERD = Fase 3
-  return s.completed === s.total;
+  return s.completed >= PHASE3_UNLOCK_THRESHOLD;
 }
 
 function isTried(name, triedSet) {
@@ -111,8 +58,8 @@ function buildBoxOutput(triedSet, width) {
     var locked = (tier.name === 'EXPERT' && !expertUnlocked);
     if (locked) {
       var prev = getPhaseStats(phases[2], triedSet);
-      var rem = prev.total - prev.completed;
-      pushLine('    [!] Vergrendeld - voltooi eerst Gevorderd (nog ' + rem + ' commando' + (rem === 1 ? '' : "'s") + ')');
+      var rem = Math.max(0, PHASE3_UNLOCK_THRESHOLD - prev.completed);
+      pushLine('    [!] Vergrendeld - probeer eerst ' + PHASE3_UNLOCK_THRESHOLD + ' recon-commando' + "'s" + ' (nog ' + rem + ')');
     } else {
       tier.phases.forEach(function(phase) {
         var stats = getPhaseStats(phase, triedSet);
@@ -157,7 +104,7 @@ function buildMobileOutput(triedSet) {
 
     var locked = (tier.name === 'EXPERT' && !expertUnlocked);
     if (locked) {
-      out += '  [!] Vergrendeld - voltooi eerst Gevorderd\n';
+      out += "  [!] Vergrendeld - probeer eerst " + PHASE3_UNLOCK_THRESHOLD + " recon-commando's\n";
     } else {
       tier.phases.forEach(function(phase) {
         var stats = getPhaseStats(phase, triedSet);
@@ -211,5 +158,5 @@ export default {
     return output;
   },
 
-  manPage: "\nNAAM\n    leerpad - toon leerpad met voortgang\n\nSYNOPSIS\n    leerpad\n\nBESCHRIJVING\n    Toont je leerpad als ethical hacker in 3 niveaus (Beginner,\n    Gevorderd, Expert), opgebouwd uit 4 fases. Elke command die je\n    correct uitvoert wordt automatisch afgevinkt. Bij elk niveau hoort\n    een begeleide missie (zie 'tutorial') die dezelfde stof stap voor\n    stap leert - oefenen en missie zijn twee views op hetzelfde niveau.\n\n    BEGINNER (Fase 1+2)   -> begeleide missie: tutorial fundamentals\n    GEVORDERD (Fase 3)    -> begeleide missie: tutorial recon\n    EXPERT (Fase 4)       -> begeleide missie: tutorial exploitation\n\n    FASE 1: TERMINAL BASICS\n        Leer de basis terminal commands. Begin hier als je nieuw bent.\n        Commands: help, ls, cd, pwd, cat, whoami, history\n\n    FASE 2: FILE MANIPULATION\n        Leer bestanden en directories maken en verwijderen.\n        Commands: mkdir, touch, rm\n\n    FASE 3: RECONNAISSANCE\n        Leer netwerk scanning en informatie verzamelen.\n        Commands: ping, nmap, ifconfig, netstat\n\n    FASE 4: SECURITY TOOLS\n        Geavanceerde security testing tools. Let op: educatief gebruik!\n        Commands: hashcat, hydra, sqlmap, metasploit, nikto\n\n        [!] Deze fase is vergrendeld totdat je Fase 3 hebt voltooid.\n\nVOORTGANG TRACKING\n    Je voortgang wordt automatisch opgeslagen in je browser.\n\n    Symbolen:\n        Voltooid        [✓]   (fase of command afgevinkt)\n        Niet voltooid   [ ]   (nog te doen)\n\nVOORBEELDEN\n    leerpad\n        Bekijk je huidige voortgang\n\n    help\n        Zie alle beschikbare commands\n\n    man nmap\n        Leer hoe een specifiek command werkt\n\nTIPS\n    • Begin met 'tutorial fundamentals' als je nieuw bent\n    • Typ 'help' om alle commands te zien\n    • Commands worden alleen afgevinkt bij correct gebruik (met argumenten)\n    • Fase 4 wordt ontgrendeld na voltooiing van Fase 3\n\n    [HACKSIM] Dit command is uniek voor HackSimulator.\n       Het bestaat niet in standaard Linux.\n\n    [+] In real Linux:\n       Er is geen leerpad command. Ethisch hacken leer je via\n       certificeringen (CEH, OSCP) en CTF.\n\nGERELATEERDE COMMANDO'S\n    tutorial (begeleide missies per niveau), next (je volgende stap),\n    challenge (test jezelf), help (alle commands), man (uitleg)\n".trim()
+  manPage: "\nNAAM\n    leerpad - toon leerpad met voortgang\n\nSYNOPSIS\n    leerpad\n\nBESCHRIJVING\n    Toont je leerpad als ethical hacker in 3 niveaus (Beginner,\n    Gevorderd, Expert), opgebouwd uit 4 fases. Elke command die je\n    correct uitvoert wordt automatisch afgevinkt. Bij elk niveau hoort\n    een begeleide missie (zie 'tutorial') die dezelfde stof stap voor\n    stap leert - oefenen en missie zijn twee views op hetzelfde niveau.\n\n    BEGINNER (Fase 1+2)   -> begeleide missie: tutorial fundamentals\n    GEVORDERD (Fase 3)    -> begeleide missie: tutorial recon\n    EXPERT (Fase 4)       -> begeleide missie: tutorial exploitation\n\n    FASE 1: TERMINAL BASICS\n        Leer de basis terminal commands. Begin hier als je nieuw bent.\n        Commands: help, ls, cd, pwd, cat, whoami, history\n\n    FASE 2: FILE MANIPULATION\n        Leer bestanden en directories maken en verwijderen.\n        Commands: mkdir, touch, rm, cp, mv, echo, find, grep\n\n    FASE 3: RECONNAISSANCE\n        Leer netwerk scanning en informatie verzamelen.\n        Commands: ping, nmap, whois, traceroute, ifconfig, netstat\n\n    FASE 4: SECURITY TOOLS\n        Geavanceerde security testing tools. Let op: educatief gebruik!\n        Commands: hashcat, hydra, sqlmap, metasploit, nikto\n\n        [!] Deze fase is vergrendeld totdat je 4 van de 6 Fase 3\n        commands hebt geprobeerd.\n\nVOORTGANG TRACKING\n    Je voortgang wordt automatisch opgeslagen in je browser.\n\n    Symbolen:\n        Voltooid        [✓]   (fase of command afgevinkt)\n        Niet voltooid   [ ]   (nog te doen)\n\nVOORBEELDEN\n    leerpad\n        Bekijk je huidige voortgang\n\n    help\n        Zie alle beschikbare commands\n\n    man nmap\n        Leer hoe een specifiek command werkt\n\nTIPS\n    • Begin met 'tutorial fundamentals' als je nieuw bent\n    • Typ 'help' om alle commands te zien\n    • Commands worden alleen afgevinkt bij correct gebruik (met argumenten)\n    • Fase 4 wordt ontgrendeld zodra je 4 Fase 3 commands hebt geprobeerd\n\n    [HACKSIM] Dit command is uniek voor HackSimulator.\n       Het bestaat niet in standaard Linux.\n\n    [+] In real Linux:\n       Er is geen leerpad command. Ethisch hacken leer je via\n       certificeringen (CEH, OSCP) en CTF.\n\nGERELATEERDE COMMANDO'S\n    tutorial (begeleide missies per niveau), next (je volgende stap),\n    challenge (test jezelf), help (alle commands), man (uitleg)\n".trim()
 };
