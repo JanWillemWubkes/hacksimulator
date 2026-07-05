@@ -4,6 +4,40 @@
 
 ---
 
+## Sessie 194: Uitgestelde Sessie-193-punten — 3 gebouwd, 4 document-and-accept (05 jul 2026)
+
+**Mission:** Sessie 193 liet 7 punten bewust buiten scope. Opdracht: lees de sessie-entry + de punten, beslis meedogenloos eerlijk per punt (bouwen vs document-and-accept) en voer uit. Heisenbergs eigen inschatting (analytics triviaal; VFS-persistentie hoogste prioriteit; #2/#6/#7 waarschijnlijk accepteren) bleek grotendeels juist — met twee correcties uit de verkenning.
+
+**Twee vondsten die de opdracht corrigeerden:**
+1. **De challenge-kant van de dubbele-analytics was al veilig** — `challenge-manager.js` `start()` weigert een voltooide challenge (r125-126) en `resume()` ruimt voltooide op (r173); replay-completion is daar onmogelijk. Alleen de tutorial-kant had de bug.
+2. **Docs spraken elkaar tegen over `[TIP]`** — de style-guide (Sessie 193) zei "gebruik `[?]`, niet `[TIP]`", maar CLAUDE.md/tone-and-output/command-checklist schrijven `[TIP]` voor als hét canonieke 80/20-patroon. De style-guide-notitie documenteerde renderer-*realiteit* (geen branch); die realiteit wás de bug.
+
+**Work done (3 commits, gepusht in één deploy `cb275f1..f276820`):**
+- **`380417e` fix(analytics):** `tutorialEvent('completed')` verplaatst binnen de bestaande `completedScenarios.indexOf === -1`-guard in `_markComplete()` — alleen de éérste voltooiing telt. Challenge ongewijzigd (vondst 1). Bewust géén e2e (analytics is consent-gated → brosse test voor een one-line guard).
+- **`8e7bbe6` feat(vfs): schema-signature op `hacksim_filesystem`.** Kern: **runtime djb2-hash over `JSON.stringify(initialFilesystem)`** (`INITIAL_FS_SIGNATURE` in structure.js) i.p.v. een handmatige versie-constante — elimineert de "vergeten te bumpen"-faalklasse volledig. Deterministisch omdat fase-content (README/notes) bij *lezen* wordt geïnjecteerd via `getDynamicContent()`, niet in de boom gebakken. `vfs.serialize()` draagt `base`; `deserialize()` verwerpt bij mismatch (init + return false); `persistence.load()` ruimt dan de stale key op + zet one-shot `wasReset`; `_renderWelcomeSequence` (terminal.js) toont eenmalig `[~] De oefenomgeving is bijgewerkt...` via het bestaande deferred-resume-patroon. Migratie-effect: bestaande bezoekers (save zonder `base`) krijgen éénmalig een verse boom — gewenst, brengt iedereen op de actuele wereld. **Bewust NIET:** versievelden op `hacksim_onboarding`/`_gamification`/`_tutorial_progress`/`_active_challenge` — `||default`-tolerantie + geen consument voor het veld = dood gewicht (YAGNI tot een echte veld-migratie). Cache-bump `v=196-vfs-version`. NEW `tests/e2e/vfs-versioning.spec.js` (3 tests: match→user-file overleeft reload zonder notice; stale seed→verse boom + notice + key opgeruimd; verse bezoeker→geen notice), 3/3 groen eerste run.
+- **`f276820` polish(renderer): `[TIP]` first-class info-marker.** Branch op **beide** mapping-plekken (`renderOutput` r95 + `_renderLinesInto` r317 — de style-guide zelf waarschuwde "houd ze synchroon"; de eerste patch miste de tweede) → alle 37 `[TIP]`-regels cyaan met 2 regels code, géén sweep (strings + security-warnings ongemoeid, `_stripTips` ongewijzigd, landing-demo's `<span class="tip">` is een eigen pad). Style-guide-tabel geharmoniseerd + `[TIP]`/`[?]`-semantiek vastgelegd. E2E-assert in gamification.spec.js (achievements-`[TIP]`-regel heeft `terminal-output-info`). Troubleshooting.md: multi-tab-item als bewust geaccepteerd.
+
+**Document-and-accept (4, met rationale):**
+- **#2 Multi-tab last-write-wins:** dagdeel bouw + blijvende reconcile-complexiteit (merge-semantiek per key, `_cache`-invalidatie mid-command, debounce-races) tegen een zeldzaam, zelfherstellend, corruptievrij scenario → accepteren; gedocumenteerd in `.claude/rules/troubleshooting.md` item 10.
+- **#5 Hint-tier-persistentie:** expliciete `hint`-tier valt na reload terug naar 1 — nauwelijks waarneembaar, zelfs verdedigbaar (heroriëntatie); de tier die ertoe doet (auto-hints op foute pogingen) persisteert al. Schema-wijziging van de hints-blob voor een onzichtbaar effect: niet doen.
+- **#6 Mobiel virtual-keyboard:** platform-afhankelijk, vereist echt toestel; speculatieve mitigaties op het fragiele boot-pad = regressierisico zonder verificatie. Oppakken bij device-repro.
+- **#7 Per-scenario-voortgangsmap:** single-slot volstaat; pas bij bewijs dat gebruikers missies jongleren.
+
+**Verificatie:** lokaal (verse poort 8321 + `BASE_URL`, NIET productie). NEW spec 3/3 + gamification/tutorial/fundamentals/leerpad-deeplink = 62 chromium groen. performance/debug-storage-specs hardcoden productie-URL's (testen lokale code per definitie niet; hun `hacksim_filesystem`-asserts zijn size-gebaseerd → `base`-veld raakt ze niet). Ground truth: 232 tests / 27 spec files (`--list`), src 666 KB.
+
+**Learnings:**
+- **Hash-als-versie werkt alleen dankzij de read-time-injectie-architectuur** — zou `dynamic-content.js` de boom muteren, dan verschilde de signature per gebruiker/fase en resette elke boot. Zelfde les als Sessie 193's fixture-principe: de duurzame fix zit in de bron van de staat.
+- **Verifieer de bug vóór je hem fixt — de helft bestond niet.** De "dubbele challenge-analytics" was onmogelijk (start() weigert voltooide challenges). Eén read van de manager voorkwam een overbodige guard + test.
+- **Een docs-conflict is een beslissing die niemand genomen heeft.** Style-guide vs CLAUDE.md over `[TIP]` bestond sinds Sessie 193 documenteerde wat de renderer dééd i.p.v. wat hij hóórde te doen. De fix (branch) maakt de canonieke docs waar met 2 regels; de sweep-richting had 37 strings + 3 regels-documenten + security-context geraakt.
+- **De style-guide's eigen waarschuwing ("mapping op TWEE plekken") ving mijn halve patch** — `renderOutput` gefixt, `_renderLinesInto` bijna gemist. Gedocumenteerde duplicatie lezen vóór je de "ene" plek patcht.
+- **YAGNI op versievelden:** een versie zonder migratielogica-consument is dood gewicht; `||default`-tolerantie dekt de JSON-state-keys tot een veld echt hernoemt.
+
+**Next steps:** geen open technische items. Toekomstig (buiten scope): #6 oppakken bij een echt-toestel-repro; #2 alleen bij bewijs van multi-tab-gebruik.
+
+**Metrics delta:** src 647→666 KB (+19: Sessie 193's 18 fixes + Sessie 194 signature/notice; Sessie 193 had de bundle-marker niet bijgewerkt). Tests 215→232 / 25→27 spec files (Sessie 193 +14 asserts/tests, Sessie 194 +3 vfs-versioning). Cache `v=196-vfs-version`.
+
+---
+
 ## Sessie 193: Volledige tutorial-flow-audit — 18 fixes (A–P) in 4 gefaseerde commits (03-05 jul 2026)
 
 **Mission:** Heisenberg meldde met 3 screenshots: (1) deep-link vanaf de homepage toonde "Typ 'next'" (welcome-CTA + placeholder) terwijl de auto-gestarte missie "gebruik pwd" zei; (2) deep-link naar een andere missie toonde eerst de hervat-tekst van de oude missie; (3) `[~] Typ 'hint'` vs `[?] Hint:` oogde inconsistent. Vervolgvraag: niet losse fixes, maar de héle flow perfect — alle routes en faalklassen in kaart. "Alles draait om de gebruikerservaring."

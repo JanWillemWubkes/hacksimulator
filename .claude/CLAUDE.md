@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 193)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 194)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 194: Uitgestelde punten — VFS-signature, analytics-guard, [TIP]-marker (05 jul 2026)
+⚠️ **Never:**
+- Een gemelde bug fixen zonder het codepad te verifiëren — de "dubbele challenge-analytics" bestond niet (`start()` weigert voltooide challenges, `resume()` ruimt ze op → replay onmogelijk); alleen de tutorial-kant had de bug. Eén read voorkwam een overbodige guard + test.
+- Een handmatige versie-constante kiezen waar een runtime content-hash kan — `INITIAL_FS_SIGNATURE` = djb2 over `JSON.stringify(initialFilesystem)` elimineert de "vergeten te bumpen"-faalklasse volledig. Werkt alléén omdat fase-content bij *lezen* wordt geïnjecteerd (dynamic-content.js), niet in de boom gebakken — anders reset elke boot.
+- Een gedocumenteerde duplicatie negeren bij het patchen — de renderer-marker-mapping staat op TWEE plekken (renderOutput + `_renderLinesInto`; de style-guide waarschuwt er zelf voor) en de eerste patch miste de tweede. Lees de eigen docs vóór je de "ene" plek fixt.
+- Versievelden toevoegen zonder migratielogica-consument — de 4 JSON-state-keys hebben `||default`-tolerantie; een versie die niemand leest is dood gewicht (YAGNI tot een veld echt hernoemt).
+
+✅ **Always:**
+- Een docs-conflict expliciet beslechten i.p.v. omzeilen — style-guide ("gebruik [?]") vs CLAUDE.md/tone-and-output ([TIP] = canoniek) bestond omdat Sessie 193 renderer-*realiteit* documenteerde i.p.v. het ontwerpideaal. De branch-fix (2 regels) maakt de canonieke docs waar; een sweep had 37 strings + security-warnings geraakt.
+- Bij een verworpen stale save: key opruimen + eenmalige gebruikersnotice — anders "reset" het elke boot opnieuw en lijken verdwenen eigen bestanden een bug (`persistence.wasReset` → `[~]`-melding via het bestaande deferred-resume-patroon).
+- Document-and-accept is een expliciete deliverable met rationale — multi-tab (dagdeel reconcile vs zeldzaam+zelfherstellend), hint-tier-reset (onzichtbaar), virtual-keyboard (needs device), voortgangsmap (single-slot volstaat) staan nu in troubleshooting.md/current.md; een bewust niet-gebouwde fix zonder vastgelegde reden wordt elke sessie opnieuw overwogen.
+- Specs die productie-URL's hardcoden (debug-storage, performance) bewijzen niets voor werkkopie-code — check het `goto`-doelwit vóór je een groene run meetelt. Volledig: `docs/sessions/current.md` Sessie 194.
+
 ### Sessie 193: Volledige tutorial-flow-audit — begeleiding + state + omgeving (03-05 jul 2026)
 ⚠️ **Never:**
 - Een viewport-/timing-klacht als een render-gat lezen — bug A/B ("Typ 'next'" naast "gebruik pwd"; stale hervat-tekst boven nieuwe briefing) kwamen niet uit ontbrekende code maar uit dat de deep-link-id pas ná de welcome-render bekend was. De fix zit in *wanneer* je de staat kent (id vóór `terminal.init`), niet in nieuwe UI.
@@ -149,20 +162,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Resume-vs-deeplink non-destructief: deep-link (verse klik) wint van stale auto-resume, maar `exit()` slaat progress op vóór de nieuwe start, en deep-link == reeds-actieve missie herstart níét (geen reset naar stap 0).
 - Validatie tegen de single source of truth (`tutorialManager.getScenario(id)`), niet een hardcoded id-lijst; onbekend → stille no-op + URL ongemoeid. URL bij een valide id direct strippen via `history.replaceState` zodat refresh niet herstart. Volledig: `docs/sessions/current.md` Sessie 189.
 
-### Sessie 188: Eén coherente leerpad-ladder — progressie-oppervlakken uniform (30 jun 2026)
-⚠️ **Never:**
-- Alleen de letterlijke vraag beantwoorden als het echte probleem systemisch is — "komt tutorial overeen met leerpad?" verborg drie difficulty-vocabulaires (Beginner/Gevorderd/Expert vs Fase 1-4 vs EASY/MEDIUM/HARD) over vier oppervlakken zonder onderlinge koppeling. Expert-analyse = herkader naar het systeem.
-- Systemen samenvoegen om "consistent" te zijn — leerpad (oefen-checklist) / tutorial (begeleide missie) / challenge (zelftest) hebben elk een functie; mergen = verlies. De fix is gedeelde taal + koppeling, niet minder systemen.
-- Aannemen dat één difficulty-label-fix het hele oppervlak dekt — de labels zaten verspreid over **6 bestanden** (challenge-renderer/challenge/dashboard/next/certificate-generator/certificates); cert-lijst + cert-generator waren aparte codepaden die de eerste fix miste. Eén gedeelde helper + de hele keten najagen.
-- Een "pre-existing" groene test vertrouwen zonder de aanname te checken — de badge-count `21`-test slaagde in de volle suite via geleakte unlock-state ("21/22") maar faalde geïsoleerd; de echte telling is 22. Count-asserties horen ground-truth te volgen, niet geleakte state.
-
-✅ **Always:**
-- Bij "wat is het beste voor UX, wees eerlijk": grondige analyse + besluit + "wat ik bewust NIET doe" (anti-gold-plating), geen keuzemenu ([[feedback_expert_ux_analysis]]).
-- Eén canonieke ladder (3 niveaus) waar alles op uitlijnt, met per niveau de lus lees→missie→oefen→test; outliers (leerpad 4-fasen, challenge Engels) convergeren naar de heersende vocabulaire, fase-namen behouden (informatiever) door ze te gróéperen i.p.v. te vervangen.
-- De twee belangrijkste leertools expliciet aan elkaar koppelen — `leerpad` (oefenen) toont nu per niveau `[→] Begeleide missie: tutorial <id>` zodat oefenen ↔ begeleide missie als twee views op hetzelfde niveau leesbaar zijn.
-- Engelse difficulty-labels in een NL-UI zijn een bug, geen smaak ([[feedback_nl_copy_dejargon]]): EASY/MEDIUM/HARD → Makkelijk/Gemiddeld/Moeilijk via één `difficultyLabel()`; interne keys (easy/medium/hard) ongemoeid voor sortering/opslag. Volledig: `docs/sessions/current.md` Sessie 188.
-
-**Rotation:** Top-6 huidig: 188-189-190-191-192-193 (Sessie 186 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 190 UITGEVOERD:** current.md staart Sessie 175-179 geknipt naar `archive-s175-s179.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 180-190 (11 entries; volgende bulk-rotatie Sessie 195 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-174 → `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 189-190-191-192-193-194 (Sessie 188 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 190 UITGEVOERD:** current.md staart Sessie 175-179 geknipt naar `archive-s175-s179.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 180-190 (11 entries; volgende bulk-rotatie Sessie 195 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-174 → `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -211,7 +211,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 193
+**Sessie counter:** 194
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -263,6 +263,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 05 jul 2026 (Sessie 193 — volledige tutorial-flow-audit, 18 fixes A–P in 4 commits: deep-link/welcome-coherentie, state-eerlijkheid (completedScenarios-hoist + exit bewaart echt), omgevings-robuustheid (NEW scenario-setup.js VFS-fixture, challenge-persist, order-loks), marker-unificatie + Type→Typ sweep + docs. 13 e2e-asserts, suite groen. Cache `v=194`+`v=195`. Volledig: `docs/sessions/current.md`)
-**Version:** 5.67 (Sessie 193 — tutorial-flow geperfectioneerd over 4 fasen: begeleiding + state + omgeving + consistentie; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 05 jul 2026 (Sessie 194 — uitgestelde 193-punten: VFS-schema-signature (runtime djb2-hash op hacksim_filesystem → deploys bereiken terugkerende bezoekers, NEW vfs-versioning.spec.js), analytics-guard replay (tutorial-only; challenge bleek al veilig), [TIP] first-class info-marker (2 renderer-plekken, docs-conflict beslecht); 4 punten document-and-accept met rationale. Cache `v=196`. Volledig: `docs/sessions/current.md`)
+**Version:** 5.68 (Sessie 194 — 3 uitgestelde punten gebouwd + 4 bewust geaccepteerd; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
