@@ -178,7 +178,8 @@ HackSimulator.nl gebruikt **twee font stacks** voor verschillende contexten:
 - **Mobile (<768px):** Simplified list UI without complex ASCII art
 
 **Checkbox Representation:**
-- ✅ ASCII: `[X]` (completed) / `[ ]` (incomplete) - 3 characters, perfectly monospace
+- ✅ ASCII: `[✓]` (completed → renderer kleurt groen) / `[ ]` (incomplete → wit) - monospace, mobielvriendelijk
+- ❌ NOOIT `[X]` voor voltooid: de renderer kleurt een regel die met `[X]` begint ROOD (= error). Zie de marker-kleurtabel verderop.
 - ❌ Unicode: `✓` / `○` (variable width, breaks alignment on mobile fallback fonts)
 
 **Implementation:**
@@ -193,9 +194,10 @@ export function isMobileView() {
 
 // leerpad.js
 execute() {
+  const triedSet = getTriedCommands();
   const output = isMobileView()
-    ? renderMobileView(triedCommands)  // Simplified list
-    : renderLearningPath(triedCommands); // Full ASCII boxes
+    ? buildMobileOutput(triedSet)          // Simplified list
+    : buildBoxOutput(triedSet, getResponsiveBoxWidth()); // Full ASCII boxes
 }
 ```
 

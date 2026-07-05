@@ -80,7 +80,7 @@
     "name": "HackSimulator.nl Terminal Commands",
     "description": "Alle 40+ educatieve terminal commands voor het leren van ethisch hacken",
     "url": "https://hacksimulator.nl/commands/",
-    "numberOfItems": 39,
+    "numberOfItems": 41,
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "ls", "description": "Toon bestanden en mappen in de huidige directory" },
       { "@type": "ListItem", "position": 2, "name": "cd", "description": "Navigeer naar een andere directory" },
@@ -120,7 +120,9 @@
       { "@type": "ListItem", "position": 36, "name": "certificates", "description": "Bekijk en download je certificaten (HackSimulator command)" },
       { "@type": "ListItem", "position": 37, "name": "leaderboard", "description": "Bekijk de ranglijst (HackSimulator command)" },
       { "@type": "ListItem", "position": 38, "name": "hint", "description": "Vraag een hint tijdens een missie (HackSimulator command)" },
-      { "@type": "ListItem", "position": 39, "name": "reset", "description": "Reset het virtuele filesystem (HackSimulator command)" }
+      { "@type": "ListItem", "position": 39, "name": "reset", "description": "Reset het virtuele filesystem (HackSimulator command)" },
+      { "@type": "ListItem", "position": 40, "name": "shortcuts", "description": "Toon alle terminal-sneltoetsen (HackSimulator command)" },
+      { "@type": "ListItem", "position": 41, "name": "welcome", "description": "Toon het welkomstscherm opnieuw (HackSimulator command)" }
     ]
   }
   </script>
@@ -190,7 +192,7 @@
           <span class="result-label">System</span>
         </div>
         <div class="result-item">
-          <span class="result-number">10</span>
+          <span class="result-number">12</span>
           <span class="result-label">HackSimulator</span>
         </div>
       </div>
@@ -948,6 +950,39 @@ Gebruik het ping commando met een IP-adres.</div>
 [*] Alle wijzigingen ongedaan gemaakt</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Veilig experimenteren, herstellen na fouten</p>
+        </div>
+
+        <!-- shortcuts -->
+        <div class="command-card" id="cmd-shortcuts">
+          <div class="command-card-header">
+            <code>shortcuts</code>
+            <span class="command-level command-level-simulator">HackSimulator</span>
+          </div>
+          <p>Toon alle sneltoetsen van de terminal — van Tab-aanvullen tot Ctrl+R zoeken in je geschiedenis.</p>
+          <div class="command-usage">shortcuts</div>
+          <div class="terminal-example">
+            <div class="prompt">$ shortcuts</div>
+            <div class="output">Tab       Vul command aan
+Ctrl+R    Zoek in geschiedenis
+Ctrl+L    Maak scherm leeg</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Sneller werken met toetsenbord-sneltoetsen</p>
+        </div>
+
+        <!-- welcome -->
+        <div class="command-card" id="cmd-welcome">
+          <div class="command-card-header">
+            <code>welcome</code>
+            <span class="command-level command-level-simulator">HackSimulator</span>
+          </div>
+          <p>Toon het welkomstscherm opnieuw, met een korte introductie en de eerste stappen om op weg te komen.</p>
+          <div class="command-usage">welcome</div>
+          <div class="terminal-example">
+            <div class="prompt">$ welcome</div>
+            <div class="output">Welkom bij HackSimulator!
+Typ 'next' voor je eerste stap.</div>
+          </div>
+          <p class="command-learn"><strong>Wat leer je:</strong> Je weg vinden in de simulator</p>
         </div>
 
       </div>

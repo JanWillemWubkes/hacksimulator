@@ -1521,7 +1521,10 @@ Bij nieuwe monetization feature:
 **4. Security Tools**
 - hashcat, hydra, sqlmap, metasploit, nikto
 
-**Totaal MVP: 30 commands**
+**5. HackSimulator-eigen Commando's (leerpad & gamification)**
+- next, tutorial, challenge, leerpad, dashboard, achievements, certificates, leaderboard, hint, shortcuts, welcome, reset
+
+**Totaal MVP: 41 commands** (7 systeem + 11 bestandssysteem + 6 netwerk + 5 security + 12 HackSimulator-eigen)
 
 *Voor gedetailleerde command specificaties, zie: commands-list.md*
 

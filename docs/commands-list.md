@@ -20,8 +20,8 @@
 
 | Command | Description | Example Output |
 |---------|-------------|----------------|
-| `tutorial` | Start guided learning scenarios | "Beschikbare scenario's: recon, webvuln, privesc" |
-| `leerpad` | Show learning path overview | "Module 1: Basis Linux Commands ✅" |
+| `tutorial` | Start guided learning scenarios | "Beschikbare scenario's: fundamentals, recon, webvuln, privesc, exploitation" |
+| `leerpad` | Show learning path overview | "BEGINNER → [ ] FASE 1: TERMINAL BASICS (0/7)" |
 | `hint` | Vraag een hint tijdens een tutorial | "Hint: gebruik 'ls' om bestanden te zien" |
 | `next` | Toon je volgende stap | "Volgende stap: probeer 'nmap 192.168.1.1'" |
 

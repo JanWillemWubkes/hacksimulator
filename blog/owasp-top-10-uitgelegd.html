@@ -388,7 +388,7 @@
 
         <p><strong>Concrete leer-volgorde voor de eerste 3 maanden:</strong></p>
         <ol>
-          <li><strong>Maand 1:</strong> Begrijp HTTP, GET/POST, cookies en sessies. Speel met <a href="/commands/#cmd-curl"><code>curl</code></a> om requests handmatig te bouwen. Lees de OWASP-pagina voor A03 en A07.</li>
+          <li><strong>Maand 1:</strong> Begrijp HTTP, GET/POST, cookies en sessies. Speel met <code>curl</code> (op een echt systeem) om requests handmatig te bouwen. Lees de OWASP-pagina voor A03 en A07.</li>
           <li><strong>Maand 2:</strong> Installeer <strong>DVWA</strong> (Damn Vulnerable Web App) of <strong>OWASP Juice Shop</strong> &mdash; bewust kwetsbare oefenapps. Werk A01 t/m A03 door, met video-walkthroughs erbij.</li>
           <li><strong>Maand 3:</strong> Maak een account op TryHackMe of HackTheBox en zoek "OWASP Top 10" leerpaden. Begin met begeleide rooms voordat je solo aan CTF's begint.</li>
         </ol>
@@ -435,8 +435,8 @@
         </div>
 
         <p>
-          In de <a href="../terminal.html">HackSimulator</a> kun je tools als <a href="/commands/#cmd-nikto"><code>nikto</code></a>,
-          <a href="/commands/#cmd-nmap"><code>nmap</code></a> en <a href="/commands/#cmd-curl"><code>curl</code></a> alvast risicovrij oefenen
+          In de <a href="../terminal.html">HackSimulator</a> kun je tools als <a href="/commands/#cmd-nikto"><code>nikto</code></a>
+          en <a href="/commands/#cmd-nmap"><code>nmap</code></a> alvast risicovrij oefenen
           voordat je naar echte test-omgevingen overstapt.
         </p>
 
@@ -470,7 +470,8 @@
         <div class="blog-cta">
           <h3>Klaar om met OWASP-tools aan de slag te gaan?</h3>
           <p>
-            Type <code>nikto</code>, <code>sqlmap</code> of <code>nmap</code> in de HackSimulator en zie hoe deze tools
+            Type een tool met een doelwit erachter - bijvoorbeeld <code>nikto http://testsite.nl</code>,
+            <code>sqlmap http://testsite.nl/?id=1</code> of <code>nmap 192.168.1.1</code> - in de HackSimulator en zie hoe deze tools
             OWASP-kwetsbaarheden in beeld brengen. Gebruik <code>man nikto</code> voor uitleg, of <code>leerpad</code> voor je voortgang.
           </p>
           <a href="../terminal.html" class="blog-cta-button">Start met oefenen</a>

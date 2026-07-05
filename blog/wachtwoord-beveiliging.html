@@ -586,14 +586,19 @@ Recovered........: 3/5 (60.00%)
         </p>
 
         <ul>
-          <li>Hoe je hashes identificeert (MD5, SHA-256, bcrypt)</li>
-          <li>Welke aanvalsmodus je kiest (brute force, dictionary, rule-based)</li>
+          <li>Hoe je hashes herkent (de simulator werkt met MD5 en SHA-256)</li>
           <li>Hoe je de output interpreteert</li>
           <li>Waarom sommige wachtwoorden in seconden vallen en andere nooit</li>
         </ul>
 
+        <p>
+          In de simulator geef je hashcat rechtstreeks een hash mee (<code>hashcat &lt;hash&gt;</code>). De echte
+          hashcat gebruikt daarnaast flags voor hash-type en aanvalsmodus, bijvoorbeeld <code>hashcat -m 0 -a 0
+          hash.txt wordlist.txt</code> &mdash; die flags zitten niet in de simulator, maar het idee is hetzelfde:
+        </p>
+
         <div class="terminal-example">
-          <div class="prompt">$ hashcat -m 0 -a 0 hash.txt wordlist.txt</div>
+          <div class="prompt">$ hashcat 5f4dcc3b5aa765d61d8327deb882cf99</div>
           <div class="output">Bezig met kraken...
 5f4dcc3b5aa765d61d8327deb882cf99:password
 
@@ -605,9 +610,9 @@ de woordenlijst. Gebruik langere, unieke wachtwoorden.
         <div class="blog-cta">
           <h3>Hoe snel valt jouw wachtwoord?</h3>
           <p>
-            Open de simulator en typ <code>hashcat</code> om zelf te ervaren hoe snel zwakke wachtwoorden gekraakt
-            worden. Je ziet live hoe brute force en dictionary attacks werken, en leert waarom lengte belangrijker
-            is dan complexiteit.
+            Open de simulator en typ eerst <code>hashcat</code> voor de introductie, daarna
+            <code>hashcat 5f4dcc3b5aa765d61d8327deb882cf99</code> om zelf te ervaren hoe snel een zwak wachtwoord
+            valt. Je leert waarom lengte belangrijker is dan complexiteit.
           </p>
           <a href="../terminal.html" class="blog-cta-button">Test wachtwoordsterkte</a>
         </div>
