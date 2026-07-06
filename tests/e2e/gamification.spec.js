@@ -214,9 +214,63 @@ test.describe('Challenge System', () => {
     const output = page.locator('#terminal-output');
     await expect(output).toContainText('Challenge hervat', { timeout: 10000 });
 
+    // Sessie 196 (D1): bij een hervatte challenge mag de welcome geen concurrerende
+    // "Typ 'next'"-CTA tonen (challenge-resume is de enige "wat nu?"-instructie),
+    // en de input-placeholder is neutraal i.p.v. de "Typ 'next'"-nudge.
+    await expect(output).not.toContainText("Typ 'next'");
+    await expect(page.locator('#terminal-input'))
+      .toHaveAttribute('placeholder', 'Typ een command...');
+
     // De voortgang (whoami afgevinkt) is bewaard, en afmaken met ifconfig voltooit hem.
     await typeCommand(page, 'ifconfig');
     await expect(output).toContainText('VOLTOOID', { timeout: 5000 });
+  });
+
+  // ----------------------------------------
+  // 11. challenge-voltooiing: exact één primaire next-CTA (spiegel van fundamentals.spec)
+  // ----------------------------------------
+  test('challenge-voltooiing toont exact één primaire next-CTA', async ({ page }) => {
+    await typeCommand(page, 'challenge start identity-check');
+    await expect(page.locator('#terminal-output')).toContainText('MISSION BRIEFING', { timeout: 5000 });
+
+    await typeCommand(page, 'whoami');
+    await typeCommand(page, 'ifconfig');
+
+    const output = page.locator('#terminal-output');
+    await expect(output).toContainText('VOLTOOID', { timeout: 5000 });
+
+    // Regression (Sessie 191/196): het voltooiingsblok routeert via één primaire
+    // CTA; de onboarding-nudge "voor je volgende stap" mag er niet naast lekken.
+    await expect(
+      output.locator('.terminal-line', { hasText: "Typ 'next' en ik wijs je naar je volgende uitdaging" })
+    ).toHaveCount(1);
+    await expect(
+      output.locator('.terminal-line', { hasText: 'voor je volgende stap' })
+    ).toHaveCount(0);
+  });
+
+  // ----------------------------------------
+  // 12. missie-commands verbruiken geen onboarding-hints (deferHints, D2)
+  // ----------------------------------------
+  test('commands tijdens een challenge verbruiken de one-time onboarding-tips niet', async ({ page }) => {
+    await typeCommand(page, 'challenge start identity-check');
+    await expect(page.locator('#terminal-output')).toContainText('MISSION BRIEFING', { timeout: 5000 });
+
+    // 3+ correct uitgevoerde commands tijdens de missie zouden vroeger de exacte
+    // count-drempels (1, 3) passeren en de Tab-tip-flag stil consumeren terwijl
+    // de hint onderdrukt werd — de gebruiker kreeg die tips dan nooit meer.
+    await typeCommand(page, 'ls');
+    await typeCommand(page, 'pwd');
+    await typeCommand(page, 'date');
+
+    const state = await page.evaluate(
+      () => JSON.parse(localStorage.getItem('hacksim_onboarding') || '{}')
+    );
+    expect(state.commandCount || 0).toBe(0);
+    expect(state.hasShownEncouragement || false).toBe(false);
+    expect(state.hasShownTabHint || false).toBe(false);
+    // commandsTried wél bijgewerkt: leerpad-vinkjes blijven mid-missie werken.
+    expect(state.commandsTried).toEqual(expect.arrayContaining(['ls', 'pwd']));
   });
 
 });

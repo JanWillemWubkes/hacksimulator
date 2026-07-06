@@ -162,11 +162,14 @@ class Terminal {
     var sessionBadges = badgeManager.checkUnlocks('session');
     const stats = progressStore.getStats();
 
-    // Coördineer welcome-CTA met de tutorial-staat zodat er nooit twee "wat nu?"-
-    // instructies concurreren (deep-link-briefing of hervatte stap vs. "Typ 'next'").
+    // Coördineer welcome-CTA met de missie-staat zodat er nooit twee "wat nu?"-
+    // instructies concurreren (deep-link-briefing, hervatte stap óf hervatte
+    // challenge vs. "Typ 'next'"). challengeManager.resume() draait in init()
+    // vóór deze render, dus isActive() is hier betrouwbaar.
     const status = tutorialManager.isActive() ? tutorialManager.getStatus() : null;
+    const challengeActive = challengeManager.isActive();
     const deepLinkSwitches = !!(this._deepLinkId && (!status || status.scenarioId !== this._deepLinkId));
-    const ctaMode = deepLinkSwitches ? 'deeplink' : (status ? 'suppress' : 'default');
+    const ctaMode = deepLinkSwitches ? 'deeplink' : ((status || challengeActive) ? 'suppress' : 'default');
 
     // Disable input during typewriter effect (first visit only)
     if (onboarding.isFirstTimeVisitor()) {
@@ -178,8 +181,9 @@ class Terminal {
 
     renderer.renderWelcome(onboarding, stats, ctaMode);
 
-    // Bij een actieve tutorial op boot past de neutrale placeholder beter dan "Typ 'next'".
-    if (status) {
+    // Bij een actieve missie (tutorial of challenge) op boot past de neutrale
+    // placeholder beter dan "Typ 'next'".
+    if (status || challengeActive) {
       var termInput = document.getElementById('terminal-input');
       if (termInput) termInput.placeholder = 'Typ een command...';
     }
@@ -376,13 +380,12 @@ class Terminal {
       // Only track command if it was used correctly (validation logic)
       let onboardingHint = null;
       if (this._shouldTrackCommand(parsed.command, parsed.args, output)) {
-        onboardingHint = onboarding.recordCommand(parsed.command);
-        // Suppress "Typ 'next'" hints during active tutorials/challenges.
-        // Use the pre-mutation tutorial state so a just-completed tutorial (now IDLE)
-        // still suppresses the onboarding nudge on its final command.
-        if (onboardingHint && (tutorialActiveAtStart || challengeManager.isActive())) {
-          onboardingHint = null;
-        }
+        // Tijdens een missie: wél leerpad-vinkjes, geen nudges — deferHints laat
+        // de count-drempels en one-time-flags (Tab-/Ctrl+R-tip) ongemoeid zodat
+        // die tips ná de missie alsnog vuren. Pre-mutation tutorial-state, zodat
+        // een net-voltooide tutorial (nu IDLE) z'n slot-command ook onderdrukt.
+        const deferHints = tutorialActiveAtStart || challengeManager.isActive();
+        onboardingHint = onboarding.recordCommand(parsed.command, { deferHints });
         if (onboardingHint) {
           renderer.renderInfo(onboardingHint);
         }

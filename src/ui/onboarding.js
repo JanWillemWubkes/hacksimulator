@@ -270,17 +270,27 @@ ${statsLine}${cta ? '\n' + cta : ''}`;
    * Record that a command was executed
    * Returns a hint message if appropriate
    * @param {string} commandName - Name of the command
+   * @param {{deferHints?: boolean}} [options] - deferHints: tijdens een actieve
+   *   missie wél commandsTried bijwerken (leerpad-vinkjes), maar commandCount en
+   *   de one-time progressive hints (Tab, Ctrl+R, ...) NIET aanraken. Anders
+   *   consumeert de missie de exacte count-drempels en flags terwijl de hint
+   *   wordt onderdrukt — en krijgt de gebruiker die tips daarna nooit meer.
    * @returns {string|null} Hint message or null
    */
-  recordCommand(commandName = null) {
-    this.commandCount++;
-
+  recordCommand(commandName = null, options = {}) {
     // Track individual command for leerpad
     let isNewCommand = false;
     if (commandName && !this.commandsTried.includes(commandName)) {
       this.commandsTried.push(commandName);
       isNewCommand = true;
     }
+
+    if (options.deferHints) {
+      if (isNewCommand) this._save();
+      return null;
+    }
+
+    this.commandCount++;
 
     // Get hint before saving (hint may update state)
     const hint = this._getProgressiveHint();
