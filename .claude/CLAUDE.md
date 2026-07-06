@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 195)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 196)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 196: CTA-consistentie-audit — "typ next" vs directe opdracht (06 jul 2026)
+⚠️ **Never:**
+- Een gemelde "inconsistentie" fixen vóór je hebt vastgesteld of het design is — tutorial-stappen (command-only, advance op `validate()`) en de vrije-verkenning-funnel ("Typ 'next'") zijn bewust gescheiden modi; de echte drift zat in de verpakking (copy/markers) en twee randgevallen, niet in de architectuur. Een architectuur-"fix" had het twee-modi-ontwerp gesloopt.
+- Een string-sweep als af beschouwen omdat een vorige sessie 'm deed — de Sessie-193 `Type '`-sweep miste 24 hint-strings in álle 5 scenario's (`'Type het commando'`/`'Type: <cmd>'` — geen quote na Type). Pas af na een patroon-brede na-grep (`\bType\b`) + jargon-triage, niet na de gemelde plekken.
+- Een hint "onderdrukken" door de output te nullen terwijl de state-mutatie doorloopt — `recordCommand` passeerde de exacte `===`-drempels en consumeerde one-time-flags mid-missie; de genulde Tab-/Ctrl+R-tips verdwenen daardoor permanent. Bevries de state aan de bron (`{deferHints}`), filter niet de output.
+- Synthetische `dispatchEvent(new KeyboardEvent(...))` vertrouwen voor render-en-meet — de command-handler vuurde niet en de "gevonden" CTA bleek een welcome-regel; echte `fill`+`press('Enter')` wel. Wantrouw je meetinstrument (vgl. Sessie 185/190).
+
+✅ **Always:**
+- Symmetrie-check tutorial⇄challenge op elke state-lezende plek — `ctaMode` keek alleen naar tutorialManager, dus een hervatte challenge kreeg twéé concurrerende boot-instructies (welcome-next-CTA + challenge-resume). Zelfde asymmetrie-klasse als Sessie 195's `hasError`; hier zelfs binnen één bestand (filesystem-hints wél geguard, progressive-hints niet).
+- Eén CTA-string = één marker — "Typ 'next' voor je volgende stap" had er 3 ([→]/kale →/[?]); de renderer kleurt ze toevallig gelijk, dus niemand zág de drift. Unificeer op de hiërarchie ([→]=actie) en laat lijst-bullets bewust kaal.
+- Een marker-swap in een padEnd-box meten, niet aannemen — `[?]`→`[→]` is 1 UTF-16-unit maar glyph-breedte verschilt per font; `getBoundingClientRect` op alle 38 boxregels (uniek: 1148px) bewees uitlijning objectief.
+- Mechanische sweeps vooraf de-risken: test-contract-grep (next-funnel.spec grept `/\[->\] Typ/` → next.js-boxen NIET aanraken), consumenten-check (`_stripTips` matcht beide TIP-vormen → dual-match als vangnet laten staan), colon-loze varianten. Bewust-NIET vastleggen: ASCII `[->]`, kale bullets, EN-vakjargon, `===`→`>=`. Volledig: `docs/sessions/current.md` Sessie 196.
+
 ### Sessie 195: Leerpad-consistentie + brede spook-command-nasweep (05-06 jul 2026)
 ⚠️ **Never:**
 - Een ontbrekend item op N plekken bijplakken terwijl de echte bug de duplicatie is — het leerpad miste `whois` omdat de faselijst op 5 plekken hardcoded stond en al gedivergeerd was van de recon-tutorial die whois wél leert. Fix = één bron (`src/core/learning-path.js`, `phaseCommandNames()`), niet 5 kopieën bijwerken. Zodra één plek wijzigt divergeert de rest geruisloos (geen error, alleen een gebruiker die z'n vinkje mist).
@@ -149,20 +162,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Engelse imperatief in NL-UI is een bug: `Type`→`Typ` (`feedback_nl_copy_dejargon`), consistent met `renderObjective`/`next.js`.
 - Een string-wijziging kan een regressietest sterker maken: omdat de nieuwe CTA een ándere string is dan de gesuppresste onboarding-nudge, splitste de Sessie-190 count-1-assertie naar "nieuwe CTA 1× ÉN oude string 0×" — strengere dubbele-prompt-garantie. Volledig: `docs/sessions/current.md` Sessie 191.
 
-### Sessie 190: Bugfix tutorial/challenge-completion — laatste output zichtbaar + één "next" (01 jul 2026)
-⚠️ **Never:**
-- De klacht "ik zie de output niet" lezen als "output ontbreekt" — hij was er wél, maar wérd weggescrold. `renderCompletionBlock` pint de viewport op de bodem van een blok hoger dan de viewport, en `_revealCelebration` her-scrolt nóg 2× op timer (800/1500ms). Opacity:0-zones nemen al layout-hoogte in → `scrollHeight` is toch al maximaal. Diagnose = scroll-timing, geen render-gat.
-- Een `isActive()`-guard lezen ná een mutatie in dezelfde tick — `handleCommand()` zet de tutorial op IDLE, waarna de onboarding-guards `isActive()` als `false` lazen en de "Type 'next'"-nudge lekte náást de completion-follow-up. Leg de staat vast vóór de mutatie.
-- Een groene/rode Playwright-run vertrouwen zonder te weten wát hij draaide — warme HTTP-cache serveerde oude modules (tell: `scrollTop == scrollHeight−clientHeight` + `nextCount:2`), en een run waarin de deep-link-auto-start nog niet actief was liet commando's als gewone commando's lopen. Schone origin/poort + deterministische start + per-stap-polling.
-- Een meet-artefact voor een bug aanzien — `find(/Correct/i)` pakte de "Correct!" van stáp 1 (ver weggescrold) → leek "niet zichtbaar" terwijl de echte asserts groen waren. Wantrouw je meetinstrument, niet alleen de code.
-
-✅ **Always:**
-- Scroll-anker op de betekenisvolle regel, niet blind naar de bodem — verleg naar de laatste commando-echo (`_scrollLineToTop` via `getBoundingClientRect`-delta, binnen het output-element) zodat leesvolgorde commando → output → `[✓] Correct!` → celebratie ontstaat; de gebruiker ziet direct het resultaat van zijn laatste actie.
-- Zoek waar een bug nóg meer speelt vóór je fixt — tutorial én challenge delen `renderCompletionBlock`, dus één scroll-fix dekt beide; de dubbele-next was tutorial-only (challenge wordt ná de guards afgehandeld). Eén fix, juiste dekking.
-- Opacity-reveal wijzigt geen layout → geen her-scroll nodig; schrap de overbodige timer-`_scrollToBottom`-calls i.p.v. ertegen te vechten. Minder code, stabieler anker.
-- Anti-gold-plating in tests: leg alleen de deterministische kern vast (exact 1× "next" via `toHaveCount(1)`), niet de brosse scroll-positie (die handmatig via Playwright bevestigd). De fragiele welcome/celebratie-sequencing niet herschrijven — enkel anker + overbodige her-scrolls aanraken. Volledig: `docs/sessions/current.md` Sessie 190.
-
-**Rotation:** Top-6 huidig: 190-191-192-193-194-195 (Sessie 189 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 195 UITGEVOERD:** current.md staart Sessie 180-184 geknipt naar `archive-s180-s184.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 185-195 (11 entries; volgende bulk-rotatie Sessie 200 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-179 → `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 191-192-193-194-195-196 (Sessie 190 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 195 UITGEVOERD:** current.md staart Sessie 180-184 geknipt naar `archive-s180-s184.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 185-195 (11 entries; volgende bulk-rotatie Sessie 200 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-179 → `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -211,7 +211,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 195
+**Sessie counter:** 196
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -263,6 +263,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 06 jul 2026 (Sessie 195 — leerpad-consistentie + brede spook-command-nasweep: NEW learning-path.js single-source (whois/traceroute/find/grep zichtbaar, 6 consumenten), EXPERT-unlock ≥4-van-6 backwards-compat, traceroute-tracking-bug, SIMULATOR_COMMANDS één bron (+hint/shortcuts), wireshark→traceroute + commands-pagina 39→41 + blog-spoken eerlijk, 20 audit-fixes. Cache `v=197`+`v=198`. Volledig: `docs/sessions/current.md`)
-**Version:** 5.69 (Sessie 195 — leerpad-fix + 20-punts consistentie-audit in 3 commits; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 06 jul 2026 (Sessie 196 — CTA-consistentie-audit: verdict bewust design (command-stappen vs 'next'-funnel, guards intact); gefixt: ~31 Type→Typ-restanten (o.a. hints in alle 5 scenario's), next-CTA overal [→], [?] TIP:→[TIP] 82×, welcome challenge-aware, recordCommand deferHints (one-time-tips niet meer verbruikt mid-missie); +2 tests, suite 0 failures. Cache `v=199`. Volledig: `docs/sessions/current.md`)
+**Version:** 5.70 (Sessie 196 — CTA-consistentie-audit + fixronde in 4 commits; volledige historie: `docs/sessions/current.md` + TASKS.md)
 

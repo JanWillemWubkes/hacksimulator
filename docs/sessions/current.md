@@ -4,6 +4,42 @@
 
 ---
 
+## Sessie 196: CTA-consistentie-audit — "typ next" vs directe opdracht (06 jul 2026)
+
+**Mission:** Gebruiker: "sommige tutorials zeggen dat je 'next' moet typen, andere geven direct een opdracht — bewust of bug? Ik wil de perfecte gebruikerservaring." Audit van de volledige begeleidingslaag + fixronde op alles wat niet klopte.
+
+**Auditverdict (2 Explore + 1 Plan-agent): bewust design, geen bug.**
+- Alle 40 tutorial-stappen (5 scenario's) schrijven een concreet commando voor en advancen *uitsluitend* op correct commando (`validate()` → true); er bestaat géén info-stap-type dat op 'next' advanced. `next` mid-tutorial herhaalt alleen de huidige stap (next.js:575-583) en staat in terminal.js' uitsluitlijst — kan een stap nooit afvinken.
+- "Typ 'next'" leeft uitsluitend in de vrije-verkenning-funnel: onboarding-nudges, welcome-CTA, voltooiingsschermen, fase-transitieboxen. De ervaren "inconsistentie" is het contrast tussen twee bewust gescheiden modi.
+- De Sessie 190/193-guards tegen kruisbesmetting (`tutorialActiveAtStart`, suppress-paden terminal.js:323-413) staan er aantoonbaar en dekken alle paden.
+
+**Wél gevonden en gefixt — 4 commits:**
+1. **`9532b0b` NL-copy-sweep:** ~31 Engelse "Type"-restanten → Typ. Grootste cluster: 24 hint-strings in álle 5 scenario's (`'Type het commando...'` + `'Type: <cmd>'`) — de Sessie-193 ~90-string-sweep matchte dat patroon niet. Verder: onboarding Ctrl+R-tip, reset.js, help-system.js, shortcuts.js-manpage (`Type Ctrl+R`→`Druk Ctrl+R`: toetsdruk ≠ typen), terminal.html edu-steps (2×) + search-placeholder `🔍 Type to search...`→`Zoek een command...` (NL + no-emoji-regel). Quote-unificatie double→single (onboarding/help/help-system).
+2. **`914677d` marker-unificatie:** dezelfde CTA-string "Typ 'next' voor je volgende stap" verscheen met 3 markers — `[→]` (onboarding basis), kale `→` (progressive hints), `[?]` (leerpad-box + mobiel, dashboard) → overal `[→]` = primaire actie-CTA. Instructie-bullets (`→ Typ 'nm' en druk Tab`) blijven bewust kale lijst-pijlen. renderer.js-fallback-welcome punt weg. Renderer kleurt →/[?]/[→] alle drie info → visueel no-op.
+3. **`43eeb58` `[?] TIP:` → `[TIP]`** (82 hits, 27 bestanden): dubbel-marker naast de canonieke Sessie-194-vorm. Vooraf geverifieerd: `_stripTips` matcht beide (dual-match blijft als vangnet, comment toegevoegd), beide vormen renderen info/cyaan, geen e2e-contract op `[?] TIP`, mobiel 3 chars korter. Geen multi-line-indent-gevallen.
+4. **`7fce8c5` twee gedragsbugs (D1+D2):**
+   - **D1 — welcome niet challenge-aware:** `ctaMode` (terminal.js `_renderWelcomeSequence`) keek alleen naar tutorialManager; een op boot hervatte challenge kreeg `[→] Typ 'next' voor je volgende stap` én +100ms `[✓] Challenge hervat ... typ 'challenge status'` = twee concurrerende instructies; placeholder bleef ook op de next-nudge staan. Fix: suppress + placeholder-flip óók op `challengeManager.isActive()` (veilig: `resume()` draait in `init()` vóór de welcome-render).
+   - **D2 — missies verbruikten one-time-tips:** `onboarding.recordCommand()` draaide vol mee tijdens missies (commandCount++, `_getProgressiveHint()` consumeert flags) terwijl terminal.js de geretourneerde hint nulde. Omdat de drempels `===`-exact zijn (1/3/5/7/...) én de flags one-time, verdwenen de Tab-/Ctrl+R-tips permanent voor wie z'n eerste commands in een missie deed. Fix: `recordCommand(cmd, { deferHints })` — bij missie wél `commandsTried` (leerpad-vinkjes, Sessie 195!) + save, géén count/hints; de nulling-guard in terminal.js vervalt. Bewust géén `===`→`>=`: copy-mismatch ("Eerste opdracht voltooid!" bij count 8) + cascade van opgespaarde hints.
+
+**Tests:** bug-J-reload-test uitgebreid (geen "Typ 'next'" in welcome + neutrale placeholder bij hervatte challenge) + NIEUW challenge-completion-CTA exact 1× / oude nudge 0× (spiegel van fundamentals.spec:114-119) + NIEUW deferHints-assert (commandCount 0 + flags falsy + commandsTried wél gevuld via localStorage-read). 27 specs / 238 tests.
+
+**Verificatie:** volledige chromium-suite **0 failures** (230 passed, 3 bekende flaky-op-retry: 2× tab-autocomplete + 1× long-press-gesture, 5 skipped; verse poort 8199 + BASE_URL). Na-greps: `\bType\b` alleen vakjargon/comments, `[?] TIP` alleen vangnet, kale `→ Typ 'next'` 0. Render-en-meet: leerpad-box 38 regels × exact 1148px na markerswap; 375px geen overflow, `[TIP]`/`[→]` info-kleur; D1 live (challenge-resume: 1 instructie + neutrale placeholder, screenshot `.playwright-mcp/d1-challenge-resume-welcome.png`). validate-docs exit 0. Cache-bump `v=199-cta-audit`.
+
+**Learnings:**
+- **Stel eerst vast of de gemelde "inconsistentie" design is** — de architectuur (command-stappen vs next-funnel) was correct; alleen de verpakking (copy/markers) en twee randgevallen waren drift. Een "fix" op de architectuur had het bewuste twee-modi-ontwerp gesloopt.
+- **Een string-sweep is pas af na een patroon-brede na-grep, niet na de gemelde plekken** — Sessie 193 verving ~90 `Type '`-strings maar miste `'Type het commando'` en `'Type: <cmd>'` (geen quote na Type). `grep -rn "\bType\b"` + handmatige jargon-triage ving alles.
+- **"Onderdrukken" ná een mutatie ≠ uitstellen** — de hint nullen liet de state-mutatie (count++, flags) gewoon doorgaan; bij exacte drempels + one-time-flags is dat permanent verlies. Bevries de state aan de bron (deferHints), filter niet de output.
+- **Symmetrie-check tutorial⇄challenge** — elke plek die tutorial-state leest hoort challenge-state ook te lezen; ctaMode was de zoveelste asymmetrie in deze klasse (vgl. traceroute/hasError Sessie 195). De filesystem-/simulator-hints waren wél al symmetrisch geguard, de progressive-hints niet — asymmetrie binnen één bestand.
+- **Meet een marker-swap in een padEnd-box** — `[?]`→`[→]` is beide 1 UTF-16-unit dus padEnd klopt, maar glyph-breedte kan per font verschillen; `getBoundingClientRect` op alle 38 boxregels (uniek: 1148px) bewees het objectief.
+- **Synthetische KeyboardEvents vuren de command-handler niet** — render-en-meet via `dispatchEvent(new KeyboardEvent(...))` deed niets (en de eerdere "gevonden" CTA bleek de welcome-regel); echte `fill`+`press('Enter')` wel. Wantrouw je meetinstrument (vgl. Sessie 185/190).
+- **Bewust NIET (met reden):** next.js ASCII `[->]`/`<-` (padEnd-uitlijning + `next-funnel.spec` grept `/\[->\] Typ/` als contract); kale `→`-lijst-bullets (opsommingsteken ≠ CTA — promotie verwatert de hiërarchie); EN-vakjargon in tool-output (`hash type`, `Database type` — 80/20); usage-syntax-vormen (`[?] Gebruik: challenge start <id>` = andere klasse dan actie-CTA); `===`→`>=`-drempelconversie (zie D2).
+
+**Next steps:** geen open bugs uit deze audit. Bekend maar geen blocker: 3 pre-existing flaky e2e-tests (autocomplete ×2, gesture — timing, groen op retry; kandidaat voor een test-hardening-sessie); Brevo mobiele-PDF-404 blijft handmatig Heisenberg-punt (Sessie 174).
+
+**Metrics delta:** bundle ongewijzigd (string-level edits, src 670 / styles 394 / blog 415 / assets 1031 KB); tests 236→238 (+2), specs 27; cache `v=198`→`v=199-cta-audit`.
+
+---
+
 ## Sessie 195: Leerpad-consistentie + brede spook-command-nasweep (05-06 jul 2026)
 
 **Mission:** Gebruiker meldde "leerpad toont niet alle commands — ik gebruikte whois maar zie 'm niet". Follow-up na de fix: "wat missen we nog?". Twee delen: (1) de leerpad-bug oplossen, (2) systematisch dezelfde bug-klasse door de hele codebase auditen.
