@@ -10,18 +10,25 @@
 
 > **Rotatie/archivering-conventie:** zie [`docs/sessions/README.md`](docs/sessions/README.md)
 > (range-naamgeving `archive-sNNN-sMMM.md`; legacy `archive-q*`-namen zijn bevroren + fout gelabeld).
-> `current.md` houdt het rolling window Sessie 180-190; ouder is geroteerd naar de range-archieven hieronder.
+> `current.md` houdt het rolling window Sessie 185-195; ouder is geroteerd naar de range-archieven hieronder.
 
-### [Current Sessions (180-190)](docs/sessions/current.md) - Full Detail
-**Sessies:** 190, 189, 188, 187, 186, 185, 184, 183, 182, 181, 180
-**Period:** 25 juni - 01 juli 2026
+### [Current Sessions (185-195)](docs/sessions/current.md) - Full Detail
+**Sessies:** 195, 194, 193, 192, 191, 190, 189, 188, 187, 186, 185
+**Period:** 29 juni - 06 juli 2026
 **Topics:**
-- Bugfix tutorial/challenge-completion: laatste commando-output zichtbaar (scroll-anker i.p.v. bodem-pin) + dubbele "Type 'next'" gedicht (stale-guard) (Sessie 190)
+- Leerpad-consistentie: whois/traceroute/find/grep zichtbaar via NEW `learning-path.js` single-source; brede spook-command-nasweep (wireshark→traceroute, commands-pagina 39→41, blog-claims eerlijk), traceroute-tracking-bug, 20 audit-fixes (Sessie 195)
+- Uitgestelde 193-punten: VFS-schema-signature + analytics-guard + [TIP]-marker; 4 document-and-accept (Sessie 194)
+- Volledige tutorial-flow-audit: 18 fixes (begeleiding + state + omgeving) in 4 commits (Sessie 193)
+- Tutorial/challenge-completion: output-zichtbaar + één "next" CTA + voltooiingsscherm past in beeld (Sessie 190-192)
 - Leerpad-boog: Stap 0 ontwerp → Fase B (fundamentals-scenario + her-tiering) → ladder-uniformering → Fase A deep-link naar in-app tutorial-landing (Sessie 186-189)
 - Leerpad-sectie homepage: 3 nep-deuren → mini-leerlijn met "Lees eerst"-links + eerlijke knoplabels (Sessie 185)
-- Blog in-content CTA-boxen geünificeerd, lead-magnet conversie/UX + dark-surface-audit (Sessie 183-184)
-- Live zoekfilter woordenlijst/commands, content-getallen drift-bestendig (floors + assertie) (Sessie 181-182)
-- Blog-auteurschap → merk (Organization) (Sessie 180)
+
+---
+
+### [Archief Sessie 180-184](docs/sessions/archive-s180-s184.md) - Full Detail (geroteerd)
+**Sessies:** 184 → 180 (nieuwste-eerst)
+**Period:** 25 - 28 juni 2026
+**Topics:** Blog in-content CTA-boxen geünificeerd, lead-magnet conversie/UX + dark-surface-audit, live zoekfilter woordenlijst/commands, content-getallen drift-bestendig (floors + assertie), blog-auteurschap → merk (Organization)
 
 ---
 
@@ -191,10 +198,11 @@
 
 ---
 
-**Last updated:** 01 juli 2026 (Sessie 190 — bulk-rotatie: 175-179 geroteerd naar `archive-s175-s179.md`, current.md → window 180-190, index gesynct)
+**Last updated:** 06 juli 2026 (Sessie 195 — bulk-rotatie: 180-184 geroteerd naar `archive-s180-s184.md`, current.md → window 185-195, index gesynct)
 **Next update:** bij volgende `N%5`-rotatie (steady-state per `docs/sessions/README.md`)
 
 **Recent updates:**
+- Sessie 195: Steady-state `N%5`-rotatie — 180-184 (staart) geknipt naar `archive-s180-s184.md` (5 entries, byte-geverifieerd), current.md window 185-195 (11 entries)
 - Sessie 190: Steady-state `N%5`-rotatie — 175-179 (staart) geknipt naar `archive-s175-s179.md` (5 entries, 182 regels), current.md window 180-190 (11 entries)
 - Sessie 185: Steady-state `N%5`-rotatie — 170-174 (staart) geknipt naar `archive-s170-s174.md` (byte-geverifieerd, 182 regels), current.md window 175-185 (11 entries)
 - Sessie 176: Eenmalige catch-up archivering — current.md 81-176 → current.md (165-176) + `archive-s121-s164.md` + `archive-s081-s120.md`; index hierboven gecorrigeerd

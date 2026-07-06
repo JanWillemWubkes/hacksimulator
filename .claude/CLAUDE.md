@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 194)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 195)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 195: Leerpad-consistentie + brede spook-command-nasweep (05-06 jul 2026)
+⚠️ **Never:**
+- Een ontbrekend item op N plekken bijplakken terwijl de echte bug de duplicatie is — het leerpad miste `whois` omdat de faselijst op 5 plekken hardcoded stond en al gedivergeerd was van de recon-tutorial die whois wél leert. Fix = één bron (`src/core/learning-path.js`, `phaseCommandNames()`), niet 5 kopieën bijwerken. Zodra één plek wijzigt divergeert de rest geruisloos (geen error, alleen een gebruiker die z'n vinkje mist).
+- Een audit-suggestie blind toepassen — de audit wilde feed.xml OWASP "2021"→"2025"; verificatie toonde 2021 = de officieel uitgebrachte editie (2025 nog concept) + blog-meta zegt bewust 2021 → suggestie fout, toepassen had een feitfout geïntroduceerd. Verifieer vóór je wijzigt ([[feedback_verify_before_launch_critical]]).
+- Een tracking-guard vertrouwen die niet symmetrisch is — `_shouldTrackCommand`'s `hasError`-markers dekten whois/ping's foutstrings maar niet traceroute's `Failed to resolve` → een gefaalde traceroute vinkte Fase 3 af. Zelfde asymmetrie-klasse als de leerpad-bug zelf.
+- Vak-idioom letterlijk vertalen als NL-copy — "hop voor hop" (traceroute-jargon) is geen Nederlands; "stap voor stap" wel (user-correctie). Check bij elke NL-frase: zou een niet-techneut dit zo zeggen? ([[feedback_nl_copy_dejargon]]).
+
+✅ **Always:**
+- Bij een groei van een gedeelde lijst: check backwards-compat van afgeleide drempels — Fase 3 groeide 4→6, dus "alles geprobeerd" zou bestaande EXPERT-unlockers her-vergrendelen. Drempel `≥4 van 6` (`PHASE3_UNLOCK_THRESHOLD`) houdt oude 4/4-users unlocked én laat recon-finishers direct door. dynamic-content README-fasedetectie kreeg dezelfde drempel-behandeling.
+- Content-oppervlakken tegen de echte command-lijst auditen, niet alleen de code — terminal.html prees `wireshark` aan (bestaat niet), commands/index.html toonde 39/41 (shortcuts+welcome ontbraken incl. JSON-LD), blogs beloofden ps/top/uname/curl/chmod-oefening. Spook-commands leven vooral in marketing/SEO-copy die niemand tegen de registry checkt.
+- Simulator-only markers uit één bron — `SIMULATOR_COMMANDS` stond 2× gedupliceerd (help.js + onboarding.js) en miste `hint`/`shortcuts`; named-export in onboarding.js + import in help.js. Een command dat zelf `[HACKSIM]` roept maar geen `*` krijgt in `help` is een tell.
+- Bewust-NIET met reden vastleggen — help-system categorie-lijsten registry-derived maken (nu correct, refactor te breed) + `hostname`/`uptime` in de stress-test (dekt command-not-found-pad). Volledig: `docs/sessions/current.md` Sessie 195.
+
 ### Sessie 194: Uitgestelde punten — VFS-signature, analytics-guard, [TIP]-marker (05 jul 2026)
 ⚠️ **Never:**
 - Een gemelde bug fixen zonder het codepad te verifiëren — de "dubbele challenge-analytics" bestond niet (`start()` weigert voltooide challenges, `resume()` ruimt ze op → replay onmogelijk); alleen de tutorial-kant had de bug. Eén read voorkwam een overbodige guard + test.
@@ -149,20 +162,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Opacity-reveal wijzigt geen layout → geen her-scroll nodig; schrap de overbodige timer-`_scrollToBottom`-calls i.p.v. ertegen te vechten. Minder code, stabieler anker.
 - Anti-gold-plating in tests: leg alleen de deterministische kern vast (exact 1× "next" via `toHaveCount(1)`), niet de brosse scroll-positie (die handmatig via Playwright bevestigd). De fragiele welcome/celebratie-sequencing niet herschrijven — enkel anker + overbodige her-scrolls aanraken. Volledig: `docs/sessions/current.md` Sessie 190.
 
-### Sessie 189: Fase A — leerpad deep-link → in-app tutorial-landing (30 jun 2026)
-⚠️ **Never:**
-- Een E2E/Playwright-run vertrouwen zonder te weten waartégen hij draait — `playwright.config.js` heeft `baseURL` op **productie** (`https://hacksimulator.nl`) met `webServer` uitgecommentarieerd; zonder `BASE_URL` test je de live site (géén werkkopie-code). De happy-path faalde, de no-op-tests "slaagden" toevallig. Lokale verificatie = eigen statische server + `BASE_URL=http://127.0.0.1:<port>`.
-- Een tweede `tutorialEvent('started')` vuren vanuit de deep-link — `start()` (tutorial-manager.js) vuurt 'm al zónder source → dubbeltelling. Thread de source *vooraf* via een one-shot veld dat `start()` leest+wist (`setNextStartSource`), geen tweede event.
-- Een overflow/meting aan je wijziging toeschrijven zonder baseline — de 10px op 375px wás er al op een kale `/terminal.html` zonder deep-link (`#terminal-container` left 10/width 360 op docW 360 = page-shell). Meet de feature-loze staat vóór je iets "fixt" (anti-gold-plating: niet repareren wat buiten scope valt).
-- De fragiele welcome-boot herschrijven om de briefing "held" te maken — typewriter + legal + first-visit-flag zijn zorgvuldig gesequencet; conditioneel snijden = hoog risico, marginale winst. Scroll-to-bottom + input-focus maakt de briefing al de held (welcome scrollt boven de vouw).
-
-✅ **Always:**
-- Auto-start een UI-getriggerd commando via het registry-pad (`terminal.execute('tutorial <id>')`, Sessie-156-precedent) — dat wint op drie assen: command-echo/transparantie, history-trail én een eerlijke `markFirstVisitComplete()` (die flipt op de eerste `execute()`, niet in de welcome-render). Een directe `start()` mist alle drie.
-- Deep-link gesequencet timen zodat de briefing nooit in dode input of midden in de typewriter valt: eerste bezoek → wacht op `typewriter-done` + 250ms (ruimt resume/badge-timeouts op); terugkerend → direct.
-- Resume-vs-deeplink non-destructief: deep-link (verse klik) wint van stale auto-resume, maar `exit()` slaat progress op vóór de nieuwe start, en deep-link == reeds-actieve missie herstart níét (geen reset naar stap 0).
-- Validatie tegen de single source of truth (`tutorialManager.getScenario(id)`), niet een hardcoded id-lijst; onbekend → stille no-op + URL ongemoeid. URL bij een valide id direct strippen via `history.replaceState` zodat refresh niet herstart. Volledig: `docs/sessions/current.md` Sessie 189.
-
-**Rotation:** Top-6 huidig: 189-190-191-192-193-194 (Sessie 188 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 190 UITGEVOERD:** current.md staart Sessie 175-179 geknipt naar `archive-s175-s179.md` (5 entries, byte-geverifieerd, 182 regels); current.md houdt nu het rolling window 180-190 (11 entries; volgende bulk-rotatie Sessie 195 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-174 → `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 190-191-192-193-194-195 (Sessie 189 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 195 UITGEVOERD:** current.md staart Sessie 180-184 geknipt naar `archive-s180-s184.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 185-195 (11 entries; volgende bulk-rotatie Sessie 200 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-179 → `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -211,7 +211,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 194
+**Sessie counter:** 195
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -263,6 +263,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 05 jul 2026 (Sessie 194 — uitgestelde 193-punten: VFS-schema-signature (runtime djb2-hash op hacksim_filesystem → deploys bereiken terugkerende bezoekers, NEW vfs-versioning.spec.js), analytics-guard replay (tutorial-only; challenge bleek al veilig), [TIP] first-class info-marker (2 renderer-plekken, docs-conflict beslecht); 4 punten document-and-accept met rationale. Cache `v=196`. Volledig: `docs/sessions/current.md`)
-**Version:** 5.68 (Sessie 194 — 3 uitgestelde punten gebouwd + 4 bewust geaccepteerd; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 06 jul 2026 (Sessie 195 — leerpad-consistentie + brede spook-command-nasweep: NEW learning-path.js single-source (whois/traceroute/find/grep zichtbaar, 6 consumenten), EXPERT-unlock ≥4-van-6 backwards-compat, traceroute-tracking-bug, SIMULATOR_COMMANDS één bron (+hint/shortcuts), wireshark→traceroute + commands-pagina 39→41 + blog-spoken eerlijk, 20 audit-fixes. Cache `v=197`+`v=198`. Volledig: `docs/sessions/current.md`)
+**Version:** 5.69 (Sessie 195 — leerpad-fix + 20-punts consistentie-audit in 3 commits; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
