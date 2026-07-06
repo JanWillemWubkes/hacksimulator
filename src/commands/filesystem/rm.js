@@ -39,7 +39,7 @@ export default {
 
     // Require file argument
     if (args.length === 0) {
-      return `rm: missing operand\n\n[?] TIP: Gebruik 'rm <bestand>' om een bestand te verwijderen. Gebruik 'rm -r <directory>' voor directories.`;
+      return `rm: missing operand\n\n[TIP] Gebruik 'rm <bestand>' om een bestand te verwijderen. Gebruik 'rm -r <directory>' voor directories.`;
     }
 
     const path = args[0];
@@ -47,7 +47,7 @@ export default {
 
     // Safety check: prevent deleting critical system directories
     if (isCriticalPath(path)) {
-      return `rm: cannot remove '${path}': Critical system directory\n\n[!] WAARSCHUWING: Dit is een kritieke system directory. In een echte omgeving zou dit je systeem onbruikbaar maken!\n\n[?] TIP: Gebruik 'reset' om het filesystem te resetten naar de beginwaarde.`;
+      return `rm: cannot remove '${path}': Critical system directory\n\n[!] WAARSCHUWING: Dit is een kritieke system directory. In een echte omgeving zou dit je systeem onbruikbaar maken!\n\n[TIP] Gebruik 'reset' om het filesystem te resetten naar de beginwaarde.`;
     }
 
     try {
@@ -57,15 +57,15 @@ export default {
     } catch (error) {
       // Educational error messages
       if (error.message.includes('No such file or directory')) {
-        return `rm: cannot remove '${path}': No such file or directory\n\n[?] TIP: Gebruik 'ls' om te zien welke bestanden beschikbaar zijn.`;
+        return `rm: cannot remove '${path}': No such file or directory\n\n[TIP] Gebruik 'ls' om te zien welke bestanden beschikbaar zijn.`;
       }
 
       if (error.message.includes('Directory not empty')) {
-        return `rm: cannot remove '${path}': Directory not empty\n\n[?] TIP: Gebruik 'rm -r ${path}' om een directory inclusief inhoud te verwijderen.\n\n[!] Let op: rm -r verwijdert recursief alles in de directory!`;
+        return `rm: cannot remove '${path}': Directory not empty\n\n[TIP] Gebruik 'rm -r ${path}' om een directory inclusief inhoud te verwijderen.\n\n[!] Let op: rm -r verwijdert recursief alles in de directory!`;
       }
 
       if (error.message.includes('Cannot delete root')) {
-        return `rm: cannot remove '/': Cannot delete root directory\n\n[!] WAARSCHUWING: Je probeert het hele filesystem te verwijderen!\n\n[?] TIP: Dit is een safety feature. Gebruik 'reset' als je opnieuw wilt beginnen.`;
+        return `rm: cannot remove '/': Cannot delete root directory\n\n[!] WAARSCHUWING: Je probeert het hele filesystem te verwijderen!\n\n[TIP] Dit is een safety feature. Gebruik 'reset' als je opnieuw wilt beginnen.`;
       }
 
       return `rm: ${error.message}`;

@@ -11,14 +11,14 @@ import { getDynamicContent } from '../../filesystem/dynamic-content.js';
  */
 function getPermissionTip(resolvedPath) {
   if (resolvedPath === '/etc/shadow') {
-    return `[!] BEVEILIGING: /etc/shadow bevat password hashes en is alleen toegankelijk voor root.\n\n[?] TIP: Probeer 'cat /etc/passwd' - dit bestand is wel leesbaar en toont gebruikers.`;
+    return `[!] BEVEILIGING: /etc/shadow bevat password hashes en is alleen toegankelijk voor root.\n\n[TIP] Probeer 'cat /etc/passwd' - dit bestand is wel leesbaar en toont gebruikers.`;
   }
 
   if (resolvedPath === '/root' || resolvedPath.startsWith('/root/')) {
-    return `[!] BEVEILIGING: De /root directory is alleen toegankelijk voor de root gebruiker.\n\n[?] TIP: Als normale gebruiker heb je toegang tot je eigen home directory (/home/hacker).`;
+    return `[!] BEVEILIGING: De /root directory is alleen toegankelijk voor de root gebruiker.\n\n[TIP] Als normale gebruiker heb je toegang tot je eigen home directory (/home/hacker).`;
   }
 
-  return `[!] BEVEILIGING: Dit bestand is beveiligd en niet toegankelijk.\n\n[?] TIP: In echte systemen zijn permissies cruciaal voor beveiliging.`;
+  return `[!] BEVEILIGING: Dit bestand is beveiligd en niet toegankelijk.\n\n[TIP] In echte systemen zijn permissies cruciaal voor beveiliging.`;
 }
 
 export default {
@@ -46,7 +46,7 @@ export default {
 
     // Require file argument
     if (args.length === 0) {
-      return `cat: missing file operand\n\n[?] TIP: Gebruik 'cat <bestand>' om een bestand te lezen. Bijvoorbeeld: cat README.txt`;
+      return `cat: missing file operand\n\n[TIP] Gebruik 'cat <bestand>' om een bestand te lezen. Bijvoorbeeld: cat README.txt`;
     }
 
     const path = args[0];
@@ -63,11 +63,11 @@ export default {
     } catch (error) {
       // Educational error messages based on error type
       if (error.message.includes('No such file')) {
-        return `cat: ${path}: No such file or directory\n\n[?] TIP: Gebruik 'ls' om te zien welke bestanden beschikbaar zijn.`;
+        return `cat: ${path}: No such file or directory\n\n[TIP] Gebruik 'ls' om te zien welke bestanden beschikbaar zijn.`;
       }
 
       if (error.message.includes('Is a directory')) {
-        return `cat: ${path}: Is a directory\n\n[?] TIP: cat werkt alleen op bestanden. Gebruik 'ls ${path}' om de inhoud van een directory te zien.`;
+        return `cat: ${path}: Is a directory\n\n[TIP] cat werkt alleen op bestanden. Gebruik 'ls ${path}' om de inhoud van een directory te zien.`;
       }
 
       if (error.message.includes('Permission denied')) {

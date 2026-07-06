@@ -39,7 +39,7 @@ export default {
 
     // Require two arguments
     if (args.length < 2) {
-      return `mv: missing ${args.length === 0 ? 'file operand' : 'destination file operand'}\n\n[?] TIP: Gebruik 'mv <bron> <doel>' om een bestand te verplaatsen of hernoemen. Bijvoorbeeld: mv ~/kopie.txt ~/archief.txt`;
+      return `mv: missing ${args.length === 0 ? 'file operand' : 'destination file operand'}\n\n[TIP] Gebruik 'mv <bron> <doel>' om een bestand te verplaatsen of hernoemen. Bijvoorbeeld: mv ~/kopie.txt ~/archief.txt`;
     }
 
     const source = args[0];
@@ -58,14 +58,14 @@ export default {
       // Educational error messages
       if (error.message.includes('No such file or directory')) {
         if (error.message.includes(source)) {
-          return `mv: cannot stat '${source}': No such file or directory\n\n[?] TIP: Het bronbestand bestaat niet. Gebruik 'ls' om te zien welke bestanden beschikbaar zijn.`;
+          return `mv: cannot stat '${source}': No such file or directory\n\n[TIP] Het bronbestand bestaat niet. Gebruik 'ls' om te zien welke bestanden beschikbaar zijn.`;
         } else {
-          return `mv: cannot move to '${destination}': No such file or directory\n\n[?] TIP: De doeldirectory bestaat niet. Maak deze eerst aan met 'mkdir'.`;
+          return `mv: cannot move to '${destination}': No such file or directory\n\n[TIP] De doeldirectory bestaat niet. Maak deze eerst aan met 'mkdir'.`;
         }
       }
 
       if (error.message.includes('Not a directory')) {
-        return `mv: cannot move to '${destination}': Not a directory\n\n[?] TIP: Een component in het doelpad is een bestand, geen directory.`;
+        return `mv: cannot move to '${destination}': Not a directory\n\n[TIP] Een component in het doelpad is een bestand, geen directory.`;
       }
 
       return `mv: ${error.message}`;

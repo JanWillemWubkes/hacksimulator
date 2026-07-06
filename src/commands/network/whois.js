@@ -62,7 +62,7 @@ export default {
   async execute(args, flags, context) {
     // Require domain argument
     if (args.length === 0) {
-      return `whois: missing domain operand\n\n[?] TIP: Gebruik 'whois <domain>' voor registratie info. Bijvoorbeeld: whois google.com`;
+      return `whois: missing domain operand\n\n[TIP] Gebruik 'whois <domain>' voor registratie info. Bijvoorbeeld: whois google.com`;
     }
 
     const domain = args[0];
@@ -71,7 +71,7 @@ export default {
     if (!whoisData) {
       return `No whois data found for ${domain}
 
-[?] TIP: Probeer bekende domains:
+[TIP] Probeer bekende domains:
    • google.com
    • github.com
    • securecorp.com
@@ -94,11 +94,11 @@ export default {
 
     // Educational tip based on domain
     if (domain.includes('.nl')) {
-      output += `\n[?] TIP: .nl domains worden beheerd door SIDN (Nederlandse registry).`;
+      output += `\n[TIP] .nl domains worden beheerd door SIDN (Nederlandse registry).`;
     } else if (domain === 'google.com' || domain === 'github.com') {
-      output += `\n[?] TIP: MarkMonitor is een premium registrar gebruikt door grote bedrijven.`;
+      output += `\n[TIP] MarkMonitor is een premium registrar gebruikt door grote bedrijven.`;
     } else {
-      output += `\n[?] TIP: Whois data is publiek - privacy protection kan je info verbergen.`;
+      output += `\n[TIP] Whois data is publiek - privacy protection kan je info verbergen.`;
     }
 
     return output;

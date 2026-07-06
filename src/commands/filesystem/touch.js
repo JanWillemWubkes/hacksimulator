@@ -14,7 +14,7 @@ export default {
 
     // Require file argument
     if (args.length === 0) {
-      return `touch: missing file operand\n\n[?] TIP: Gebruik 'touch <bestand>' om een leeg bestand aan te maken. Bijvoorbeeld: touch test.txt`;
+      return `touch: missing file operand\n\n[TIP] Gebruik 'touch <bestand>' om een leeg bestand aan te maken. Bijvoorbeeld: touch test.txt`;
     }
 
     const path = args[0];
@@ -26,15 +26,15 @@ export default {
     } catch (error) {
       // Educational error messages
       if (error.message.includes('No such directory')) {
-        return `touch: cannot touch '${path}': No such file or directory\n\n[?] TIP: De parent directory moet bestaan. Gebruik 'ls' om te zien welke directories er zijn.`;
+        return `touch: cannot touch '${path}': No such file or directory\n\n[TIP] De parent directory moet bestaan. Gebruik 'ls' om te zien welke directories er zijn.`;
       }
 
       if (error.message.includes('Is a directory')) {
-        return `touch: cannot touch '${path}': Is a directory\n\n[?] TIP: touch werkt alleen op bestanden. Een directory met deze naam bestaat al.`;
+        return `touch: cannot touch '${path}': Is a directory\n\n[TIP] touch werkt alleen op bestanden. Een directory met deze naam bestaat al.`;
       }
 
       if (error.message.includes('Not a directory')) {
-        return `touch: cannot touch '${path}': Not a directory\n\n[?] TIP: Een component in het pad is een bestand, geen directory.`;
+        return `touch: cannot touch '${path}': Not a directory\n\n[TIP] Een component in het pad is een bestand, geen directory.`;
       }
 
       return `touch: ${error.message}`;

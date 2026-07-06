@@ -49,7 +49,7 @@ function formatLongListing(entries) {
 
   // Add educational tip
   lines.push('');
-  lines.push('[?] TIP: De eerste kolom toont type (d=directory, -=file) en permissies.');
+  lines.push('[TIP] De eerste kolom toont type (d=directory, -=file) en permissies.');
 
   return lines.join('\n');
 }
@@ -104,11 +104,11 @@ export default {
     } catch (error) {
       // Educational error messages
       if (error.message.includes('No such directory')) {
-        return `ls: cannot access '${args[0]}': No such file or directory\n\n[?] TIP: Gebruik 'pwd' om te zien waar je bent, en 'cd' om van directory te veranderen.`;
+        return `ls: cannot access '${args[0]}': No such file or directory\n\n[TIP] Gebruik 'pwd' om te zien waar je bent, en 'cd' om van directory te veranderen.`;
       }
 
       if (error.message.includes('Not a directory')) {
-        return `ls: ${args[0]}: Not a directory\n\n[?] TIP: ls werkt alleen op directories. Gebruik 'cat ${args[0]}' om een bestand te lezen.`;
+        return `ls: ${args[0]}: Not a directory\n\n[TIP] ls werkt alleen op directories. Gebruik 'cat ${args[0]}' om een bestand te lezen.`;
       }
 
       return `ls: ${error.message}`;

@@ -90,7 +90,7 @@ export default {
   async execute(args, flags, context) {
     // Require target argument
     if (args.length === 0) {
-      return `nmap: missing target operand\n\n[?] TIP: Gebruik 'nmap <target>' om poorten te scannen. Bijvoorbeeld: nmap 192.168.1.100`;
+      return `nmap: missing target operand\n\n[TIP] Gebruik 'nmap <target>' om poorten te scannen. Bijvoorbeeld: nmap 192.168.1.100`;
     }
 
     const target = args[0];
@@ -103,7 +103,7 @@ export default {
     const isHostname = /^[a-zA-Z0-9]([a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}$/.test(target);
 
     if (!isIP && !isKnownHost && !isHostname) {
-      return `nmap: Failed to resolve '${target}'. Geen IP-adres of geldige hostname.\n\n[?] TIP: Gebruik een IP-adres (bijv. 192.168.1.100) of hostname (bijv. server.local).\nGebruik 'man nmap' voor meer voorbeelden.`;
+      return `nmap: Failed to resolve '${target}'. Geen IP-adres of geldige hostname.\n\n[TIP] Gebruik een IP-adres (bijv. 192.168.1.100) of hostname (bijv. server.local).\nGebruik 'man nmap' voor meer voorbeelden.`;
     }
 
     const scanResults = getPortScanResults(target);
@@ -157,13 +157,13 @@ export default {
 
     // Educational tips based on scan results
     if (openCount === 1 && scanResults.openPorts[0].port === 443) {
-      output += `\n\n[?] TIP: Deze server is goed beveiligd! Alleen HTTPS open = minimale attack surface.`;
+      output += `\n\n[TIP] Deze server is goed beveiligd! Alleen HTTPS open = minimale attack surface.`;
     } else if (openCount >= 5) {
-      output += `\n\n[?] TIP: Veel open poorten = meer ingangen voor aanvallers. Elke service kan beveiligingslekken hebben.`;
+      output += `\n\n[TIP] Veel open poorten = meer ingangen voor aanvallers. Elke service kan beveiligingslekken hebben.`;
     } else if (scanResults.openPorts.some(p => p.port === 22)) {
-      output += `\n\n[?] TIP: SSH (22) open = je kunt inloggen proberen. Probeer 'hydra' voor brute force (demo).`;
+      output += `\n\n[TIP] SSH (22) open = je kunt inloggen proberen. Probeer 'hydra' voor brute force (demo).`;
     } else {
-      output += `\n\n[?] TIP: Open poorten zijn entry points. Pentester checkt elke service op kwetsbaarheden.`;
+      output += `\n\n[TIP] Open poorten zijn entry points. Pentester checkt elke service op kwetsbaarheden.`;
     }
 
     // Security warning for databases
@@ -173,7 +173,7 @@ export default {
 
     // Educational tip for non-standard targets (hostnames that pass validation but aren't in our known list)
     if (!isIP && !isKnownHost) {
-      output += `\n\n[?] TIP: '${target}' is hier gesimuleerd. In de tutorial gebruik je specifieke IP-adressen zoals 192.168.1.100.`;
+      output += `\n\n[TIP] '${target}' is hier gesimuleerd. In de tutorial gebruik je specifieke IP-adressen zoals 192.168.1.100.`;
     }
 
     return output;

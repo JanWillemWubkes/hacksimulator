@@ -42,7 +42,7 @@ export default {
 
     // Require pattern argument
     if (args.length === 0) {
-      return `find: missing search pattern\n\n[?] TIP: Gebruik 'find <patroon>' om bestanden te zoeken. Bijvoorbeeld: find passwd`;
+      return `find: missing search pattern\n\n[TIP] Gebruik 'find <patroon>' om bestanden te zoeken. Bijvoorbeeld: find passwd`;
     }
 
     const pattern = args[0].toLowerCase();
@@ -52,7 +52,7 @@ export default {
       const results = searchFilesystem(vfs.fs['/'], '/', pattern);
 
       if (results.length === 0) {
-        return `find: no files matching '${args[0]}' found\n\n[?] TIP: De zoekterm is case-insensitive en zoekt in bestandsnamen.`;
+        return `find: no files matching '${args[0]}' found\n\n[TIP] De zoekterm is case-insensitive en zoekt in bestandsnamen.`;
       }
 
       // Format results

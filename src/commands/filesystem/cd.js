@@ -37,7 +37,7 @@ export default {
           const renderer = terminal.getRenderer();
           renderer.updatePrompt(vfs.getCwd());
         }
-        return 'Huidige map: ~ (home directory)\n\n[?] TIP: Gebruik \'ls\' om de inhoud te bekijken, of \'pwd\' om het volledige pad te zien.';
+        return 'Huidige map: ~ (home directory)\n\n[TIP] Gebruik \'ls\' om de inhoud te bekijken, of \'pwd\' om het volledige pad te zien.';
       } catch (error) {
         return `cd: ${error.message}`;
       }
@@ -57,11 +57,11 @@ export default {
     } catch (error) {
       // Educational error messages
       if (error.message.includes('No such directory')) {
-        return `cd: ${path}: No such file or directory\n\n[?] TIP: Gebruik 'ls' om te zien welke directories beschikbaar zijn, of 'pwd' om te zien waar je bent.`;
+        return `cd: ${path}: No such file or directory\n\n[TIP] Gebruik 'ls' om te zien welke directories beschikbaar zijn, of 'pwd' om te zien waar je bent.`;
       }
 
       if (error.message.includes('Not a directory')) {
-        return `cd: ${path}: Not a directory\n\n[?] TIP: Je kunt alleen naar directories navigeren, niet naar bestanden.`;
+        return `cd: ${path}: Not a directory\n\n[TIP] Je kunt alleen naar directories navigeren, niet naar bestanden.`;
       }
 
       if (error.message.includes('Permission denied')) {

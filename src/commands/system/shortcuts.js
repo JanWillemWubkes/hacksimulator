@@ -98,7 +98,7 @@ export default {
     lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
 
     lines.push('');
-    lines.push('[?] TIP: Deze shortcuts werken net als in echte Linux terminals!');
+    lines.push('[TIP] Deze shortcuts werken net als in echte Linux terminals!');
 
     return lines.join('\n');
   },

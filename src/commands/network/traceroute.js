@@ -45,7 +45,7 @@ export default {
   async execute(args, flags, context) {
     // Require destination argument
     if (args.length === 0) {
-      return `traceroute: missing destination operand\n\n[?] TIP: Gebruik 'traceroute <host>' om route te tracen. Bijvoorbeeld: traceroute google.com`;
+      return `traceroute: missing destination operand\n\n[TIP] Gebruik 'traceroute <host>' om route te tracen. Bijvoorbeeld: traceroute google.com`;
     }
 
     const destination = args[0];
@@ -56,7 +56,7 @@ export default {
     const isHostname = /^[a-zA-Z0-9]([a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}$/.test(destination);
 
     if (!isIP && !isKnownHost && !isHostname) {
-      return `traceroute: Failed to resolve '${destination}'. Geen IP-adres of geldige hostname.\n\n[?] TIP: Gebruik een IP-adres (bijv. 8.8.8.8) of hostname (bijv. google.com).\nGebruik 'man traceroute' voor meer voorbeelden.`;
+      return `traceroute: Failed to resolve '${destination}'. Geen IP-adres of geldige hostname.\n\n[TIP] Gebruik een IP-adres (bijv. 8.8.8.8) of hostname (bijv. google.com).\nGebruik 'man traceroute' voor meer voorbeelden.`;
     }
 
     const path = getTraceroutePath(destination);
@@ -79,12 +79,12 @@ export default {
 
     // Educational tips based on destination
     if (destination === 'localhost' || destination === '127.0.0.1') {
-      output += `\n[?] TIP: localhost = 0 hops, geen netwerk nodig (loopback interface).`;
+      output += `\n[TIP] localhost = 0 hops, geen netwerk nodig (loopback interface).`;
     } else if (path.some(h => h.ip === '*')) {
-      output += `\n[?] TIP: * betekent hop antwoordt niet (firewall, of ICMP blocked).`;
+      output += `\n[TIP] * betekent hop antwoordt niet (firewall, of ICMP blocked).`;
     } else {
       const hops = path.length;
-      output += `\n[?] TIP: ${hops} hops = aantal routers tussen jou en bestemming. Meer hops = langere route.`;
+      output += `\n[TIP] ${hops} hops = aantal routers tussen jou en bestemming. Meer hops = langere route.`;
     }
 
     return output;

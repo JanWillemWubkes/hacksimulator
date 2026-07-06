@@ -33,7 +33,7 @@ wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
         RX packets 8923  bytes 9234812 (9.2 MB)
         TX packets 7234  bytes 892341 (892.3 KB)
 
-[?] TIP: Belangrijke velden:
+[TIP] Belangrijke velden:
    • inet (IPv4) = Je IP adres op dit netwerk
    • netmask = Bepaalt welke IPs in je lokale netwerk zitten
    • ether (MAC) = Uniek hardware adres van je netwerkkaart

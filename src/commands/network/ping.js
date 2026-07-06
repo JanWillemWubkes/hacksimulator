@@ -31,7 +31,7 @@ export default {
   async execute(args, flags, context) {
     // Require host argument
     if (args.length === 0) {
-      return `ping: missing host operand\n\n[?] TIP: Gebruik 'ping <host>' om verbinding te testen. Bijvoorbeeld: ping 8.8.8.8`;
+      return `ping: missing host operand\n\n[TIP] Gebruik 'ping <host>' om verbinding te testen. Bijvoorbeeld: ping 8.8.8.8`;
     }
 
     const host = args[0];
@@ -39,7 +39,7 @@ export default {
 
     if (!hostInfo) {
       // Unknown host - educational response
-      return `ping: ${host}: Name or service not known\n\n[?] TIP: Host onbekend. Probeer bijv: ping 8.8.8.8 of ping 192.168.1.1`;
+      return `ping: ${host}: Name or service not known\n\n[TIP] Host onbekend. Probeer bijv: ping 8.8.8.8 of ping 192.168.1.1`;
     }
 
     // Build realistic ping output (80/20 principle)
@@ -69,13 +69,13 @@ export default {
 
     // Educational tip based on host type
     if (host === 'localhost' || host === '127.0.0.1') {
-      output += `\n\n[?] TIP: localhost (127.0.0.1) is altijd je eigen machine. 0ms response = geen netwerk nodig!`;
+      output += `\n\n[TIP] localhost (127.0.0.1) is altijd je eigen machine. 0ms response = geen netwerk nodig!`;
     } else if (host.includes('192.168')) {
-      output += `\n\n[?] TIP: 192.168.x.x zijn private IP adressen (lokaal netwerk). Lage ping = goede verbinding.`;
+      output += `\n\n[TIP] 192.168.x.x zijn private IP adressen (lokaal netwerk). Lage ping = goede verbinding.`;
     } else if (host.includes('8.8.8.8') || host.includes('1.1.1.1')) {
-      output += `\n\n[?] TIP: Publieke DNS servers zijn ideaal om internetverbinding te testen.`;
+      output += `\n\n[TIP] Publieke DNS servers zijn ideaal om internetverbinding te testen.`;
     } else {
-      output += `\n\n[?] TIP: Lage ping (<50ms) = goede verbinding. Hoge ping (>100ms) kan problemen veroorzaken.`;
+      output += `\n\n[TIP] Lage ping (<50ms) = goede verbinding. Hoge ping (>100ms) kan problemen veroorzaken.`;
     }
 
     return output;

@@ -14,7 +14,7 @@ export default {
 
     // Require pattern and file arguments
     if (args.length < 2) {
-      return `grep: ${args.length === 0 ? 'missing pattern' : 'missing file operand'}\n\n[?] TIP: Gebruik 'grep <patroon> <bestand>' om in een bestand te zoeken. Bijvoorbeeld: grep "root" /etc/passwd`;
+      return `grep: ${args.length === 0 ? 'missing pattern' : 'missing file operand'}\n\n[TIP] Gebruik 'grep <patroon> <bestand>' om in een bestand te zoeken. Bijvoorbeeld: grep "root" /etc/passwd`;
     }
 
     const pattern = args[0].toLowerCase();
@@ -36,7 +36,7 @@ export default {
       }
 
       if (matches.length === 0) {
-        return `grep: no matches found for '${args[0]}' in ${filePath}\n\n[?] TIP: grep zoekt case-insensitive naar tekst in bestanden.`;
+        return `grep: no matches found for '${args[0]}' in ${filePath}\n\n[TIP] grep zoekt case-insensitive naar tekst in bestanden.`;
       }
 
       // Format output
@@ -50,11 +50,11 @@ export default {
     } catch (error) {
       // Educational error messages
       if (error.message.includes('No such file')) {
-        return `grep: ${filePath}: No such file or directory\n\n[?] TIP: Gebruik 'find' om bestanden te zoeken, of 'ls' om te zien wat er in de directory staat.`;
+        return `grep: ${filePath}: No such file or directory\n\n[TIP] Gebruik 'find' om bestanden te zoeken, of 'ls' om te zien wat er in de directory staat.`;
       }
 
       if (error.message.includes('Is a directory')) {
-        return `grep: ${filePath}: Is a directory\n\n[?] TIP: grep werkt op bestanden, niet directories. Probeer: ls ${filePath}`;
+        return `grep: ${filePath}: Is a directory\n\n[TIP] grep werkt op bestanden, niet directories. Probeer: ls ${filePath}`;
       }
 
       if (error.message.includes('Permission denied')) {

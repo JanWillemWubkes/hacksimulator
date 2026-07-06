@@ -77,7 +77,7 @@ GEBRUIK:
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
       return `nikto: invalid URL format
 
-[?] TIP: URL moet http:// of https:// bevatten
+[TIP] URL moet http:// of https:// bevatten
         Bijvoorbeeld: nikto http://example.com`;
     }
 

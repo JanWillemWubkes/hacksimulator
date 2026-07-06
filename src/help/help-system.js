@@ -52,9 +52,9 @@ class HelpSystem {
    */
   _getTier1Help(command, suggestion) {
     if (suggestion) {
-      return `[?] TIP: Bedoelde je misschien '${suggestion}'?`;
+      return `[TIP] Bedoelde je misschien '${suggestion}'?`;
     }
-    return `[?] TIP: Typ 'help' voor een lijst van beschikbare commands.`;
+    return `[TIP] Typ 'help' voor een lijst van beschikbare commands.`;
   }
 
   /**

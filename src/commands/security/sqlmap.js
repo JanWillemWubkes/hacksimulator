@@ -77,7 +77,7 @@ GEBRUIK:
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
       return `sqlmap: invalid URL format
 
-[?] TIP: URL moet beginnen met http:// of https://
+[TIP] URL moet beginnen met http:// of https://
         Bijvoorbeeld: sqlmap http://site.com/page?id=1`;
     }
 
@@ -110,7 +110,7 @@ GEBRUIK:
 
 [✓] GOED NIEUWS: Deze URL lijkt niet kwetsbaar voor SQL injection!
 
-[?] TIP: Probeer een URL met query parameters:
+[TIP] Probeer een URL met query parameters:
    • http://vulnerable-site.com/product?id=1
    • http://demo-app.local/search?q=test`;
     }

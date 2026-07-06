@@ -27,7 +27,7 @@ Summary:
    4 listening ports
    3 established connections
 
-[?] TIP: LISTEN = server wacht op inkomende verbindingen
+[TIP] LISTEN = server wacht op inkomende verbindingen
         ESTABLISHED = actieve verbinding met remote host
         TIME_WAIT = verbinding wordt afgesloten`;
 

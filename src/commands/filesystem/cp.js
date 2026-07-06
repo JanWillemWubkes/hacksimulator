@@ -30,7 +30,7 @@ export default {
 
     // Require two arguments
     if (args.length < 2) {
-      return `cp: missing ${args.length === 0 ? 'file operand' : 'destination file operand'}\n\n[?] TIP: Gebruik 'cp <bron> <doel>' om een bestand te kopiëren. Bijvoorbeeld: cp ~/notes.txt ~/kopie.txt`;
+      return `cp: missing ${args.length === 0 ? 'file operand' : 'destination file operand'}\n\n[TIP] Gebruik 'cp <bron> <doel>' om een bestand te kopiëren. Bijvoorbeeld: cp ~/notes.txt ~/kopie.txt`;
     }
 
     const source = args[0];
@@ -44,14 +44,14 @@ export default {
       // Educational error messages
       if (error.message.includes('No such file or directory')) {
         if (error.message.includes(source)) {
-          return `cp: cannot stat '${source}': No such file or directory\n\n[?] TIP: De bronbestand bestaat niet. Gebruik 'ls' om te zien welke bestanden beschikbaar zijn.`;
+          return `cp: cannot stat '${source}': No such file or directory\n\n[TIP] De bronbestand bestaat niet. Gebruik 'ls' om te zien welke bestanden beschikbaar zijn.`;
         } else {
-          return `cp: cannot create '${destination}': No such file or directory\n\n[?] TIP: De doeldirectory bestaat niet. Maak deze eerst aan met 'mkdir'.`;
+          return `cp: cannot create '${destination}': No such file or directory\n\n[TIP] De doeldirectory bestaat niet. Maak deze eerst aan met 'mkdir'.`;
         }
       }
 
       if (error.message.includes('Not a directory')) {
-        return `cp: cannot create '${destination}': Not a directory\n\n[?] TIP: Een component in het doelpad is een bestand, geen directory.`;
+        return `cp: cannot create '${destination}': Not a directory\n\n[TIP] Een component in het doelpad is een bestand, geen directory.`;
       }
 
       return `cp: ${error.message}`;

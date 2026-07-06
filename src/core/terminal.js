@@ -338,7 +338,7 @@ class Terminal {
             || tutorialManager.getState() !== stateBefore);
       }
 
-      // Strip [?] TIP: lines during tutorials (hint system handles guidance)
+      // Strip [TIP] lines during tutorials (hint system handles guidance)
       const displayOutput = isTutorialRelevant ? this._stripTips(output) : output;
 
       // Universal order: command output first, then tutorial feedback
@@ -539,7 +539,7 @@ class Terminal {
   }
 
   /**
-   * Strip [?] TIP: lines from command output during active tutorials.
+   * Strip [TIP] lines from command output during active tutorials.
    * The tutorial hint system handles guidance, so command-level TIPs are redundant.
    * @private
    * @param {string} output - Command output
@@ -548,7 +548,8 @@ class Terminal {
   _stripTips(output) {
     if (!output) return output;
     // Tijdens een tutorial handelt het hint-systeem de begeleiding af; losse
-    // tip-regels ([?] TIP: en [TIP]) zouden de stap-instructie overschreeuwen.
+    // tip-regels zouden de stap-instructie overschreeuwen. [TIP] is canoniek;
+    // de '[?] TIP:'-match blijft als vangnet tegen regressies naar de oude vorm.
     return output.split('\n')
         .filter(function(line) {
           var t = line.trim();

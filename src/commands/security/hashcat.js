@@ -102,7 +102,7 @@ Analyzing hash: ${hash}
 [*] Detecting hash type...
 [!] Hash not found in demo database
 
-[?] TIP: Deze simulator heeft een beperkte database met ALLEEN zwakke passwords.
+[TIP] Deze simulator heeft een beperkte database met ALLEEN zwakke passwords.
         In de echte wereld gebruikt hashcat:
         • Wordlists (rockyou.txt = 14 miljoen wachtwoorden)
         • Brute force (alle combinaties proberen)

@@ -110,7 +110,7 @@ GEBRUIK:
     if (!target.startsWith('ssh://') && !target.startsWith('ftp://') && !target.startsWith('http://')) {
       return `hydra: invalid target format
 
-[?] TIP: Target moet protocol bevatten. Gebruik:
+[TIP] Target moet protocol bevatten. Gebruik:
    • ssh://192.168.1.100
    • ftp://192.168.1.50
    • http://target.local/admin`;
@@ -124,7 +124,7 @@ GEBRUIK:
 [INFO] Resolving target: ${target}
 [ERROR] Target not found in demo database
 
-[?] TIP: Deze simulator heeft beperkte demo targets:
+[TIP] Deze simulator heeft beperkte demo targets:
    • ssh://192.168.1.100 (SSH server met zwakke credentials)
    • ftp://192.168.1.50 (FTP server)
    • http://target.local/admin (Web admin panel)

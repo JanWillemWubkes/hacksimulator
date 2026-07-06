@@ -137,7 +137,7 @@ Oct 14 10:25:15 hacksim sshd[1235]: Failed password for root from 10.0.0.99 port
 Oct 14 10:25:18 hacksim sshd[1235]: Failed password for root from 10.0.0.99 port 22
 Oct 14 10:25:20 hacksim sshd[1235]: Connection closed by 10.0.0.99 [preauth]
 
-[?] TIP: Herhaalde login pogingen kunnen duiden op een brute force aanval!`
+[TIP] Herhaalde login pogingen kunnen duiden op een brute force aanval!`
               },
               'syslog': {
                 type: 'file',

@@ -150,7 +150,7 @@ export default {
     if (args.length > 0) {
       var cat = args[0].toLowerCase();
       var cmds = reg.getByCategory(cat);
-      if (cmds.length === 0) return "Geen commands gevonden in categorie '" + cat + "'.\n\n[?] TIP: Typ 'help' voor alle categorieën.";
+      if (cmds.length === 0) return "Geen commands gevonden in categorie '" + cat + "'.\n\n[TIP] Typ 'help' voor alle categorieën.";
       var out = "Commands in categorie '" + cat + "':\n\n";
       out += buildCategoryBox(cat, cmds, width);
       var tip = categoryTips[cat];
