@@ -233,7 +233,7 @@ function renderFullDesktop() {
   var inner = width - 2;
   lines.push(B.dividerLeft + B.horizontal.repeat(inner) + B.dividerRight);
   lines.push(buildLine("  [?] 'dashboard stats|badges|challenges' voor details", width));
-  lines.push(buildLine("  [?] Typ 'next' voor een persoonlijke suggestie", width));
+  lines.push(buildLine("  [→] Typ 'next' voor een persoonlijke suggestie", width));
 
   // Footer
   lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);

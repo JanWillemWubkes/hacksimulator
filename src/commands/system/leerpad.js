@@ -86,7 +86,7 @@ function buildBoxOutput(triedSet, width) {
 
   // TIP inside box
   lines.push(B.dividerLeft + B.horizontal.repeat(inner) + B.dividerRight);
-  pushLine("  [?] Typ 'next' voor je volgende stap");
+  pushLine("  [→] Typ 'next' voor je volgende stap");
 
   // Footer
   lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
@@ -130,7 +130,7 @@ function buildMobileOutput(triedSet) {
     out += '\n';
   });
 
-  out += "[?] Typ 'next' voor je volgende stap\n";
+  out += "[→] Typ 'next' voor je volgende stap\n";
   return out;
 }
 
