@@ -56,7 +56,7 @@ var reconScenario = {
       hints: [
         'Gebruik het ping commando met een IP-adres als argument.',
         'Probeer: ping <IP-adres> (bijv. ping 192.168.1.100)',
-        'Type: ping 192.168.1.100'
+        'Typ: ping 192.168.1.100'
       ]
     },
     {
@@ -78,7 +78,7 @@ var reconScenario = {
       hints: [
         'Gebruik nmap gevolgd door het IP-adres van het doelwit.',
         'Probeer: nmap <IP-adres> om poorten te scannen.',
-        'Type: nmap 192.168.1.100'
+        'Typ: nmap 192.168.1.100'
       ]
     },
     {
@@ -100,7 +100,7 @@ var reconScenario = {
       hints: [
         'Gebruik whois met een domeinnaam als argument.',
         'Probeer: whois <domeinnaam> (bijv. whois securecorp.com)',
-        'Type: whois securecorp.com'
+        'Typ: whois securecorp.com'
       ]
     },
     {
@@ -122,7 +122,7 @@ var reconScenario = {
       hints: [
         'Gebruik traceroute gevolgd door een IP-adres.',
         'Probeer: traceroute <IP-adres> om de route te volgen.',
-        'Type: traceroute 192.168.1.100'
+        'Typ: traceroute 192.168.1.100'
       ]
     }
   ]

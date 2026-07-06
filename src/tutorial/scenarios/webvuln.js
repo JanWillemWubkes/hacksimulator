@@ -55,7 +55,7 @@ var webvulnScenario = {
       hints: [
         'Gebruik nmap met de domeinnaam of het IP-adres als argument.',
         'Probeer: nmap target.com (of nmap <IP-adres>)',
-        'Type: nmap target.com'
+        'Typ: nmap target.com'
       ]
     },
     {
@@ -82,7 +82,7 @@ var webvulnScenario = {
       hints: [
         'Gebruik nikto met een URL als argument (begin met http://).',
         'Probeer: nikto http://target.com',
-        'Type: nikto http://target.com'
+        'Typ: nikto http://target.com'
       ]
     },
     {
@@ -110,7 +110,7 @@ var webvulnScenario = {
       hints: [
         'Gebruik sqlmap met een URL die een parameter bevat (bijv. ?id=1).',
         'De URL moet beginnen met http:// en een query parameter bevatten.',
-        'Type: sqlmap http://target.com/login?id=1'
+        'Typ: sqlmap http://target.com/login?id=1'
       ]
     },
     {
@@ -139,7 +139,7 @@ var webvulnScenario = {
       hints: [
         'Gebruik cat om een configuratiebestand te bekijken in /var/www/html/.',
         'Probeer: cat /var/www/html/config.php',
-        'Type: cat /var/www/html/config.php'
+        'Typ: cat /var/www/html/config.php'
       ]
     }
   ]

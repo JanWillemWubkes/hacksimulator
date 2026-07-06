@@ -53,7 +53,7 @@ De waarschuwing verschijnt opnieuw bij gebruik van:
   • sqlmap  - SQL injection testing tool
   • nikto   - Web server vulnerability scanner
 
-[?] Type een van deze commands om de educatieve waarschuwing
+[?] Typ een van deze commands om de educatieve waarschuwing
       opnieuw te lezen.`;
     }
 

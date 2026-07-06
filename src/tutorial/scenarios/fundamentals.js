@@ -61,9 +61,9 @@ var fundamentalsScenario = {
         '[~] Weten waar je bent is stap 1: zo maak je niet per ongeluk\n' +
         '      bestanden aan op de verkeerde plek.',
       hints: [
-        'Type het commando dat je huidige locatie toont.',
+        'Typ het commando dat je huidige locatie toont.',
         'Het commando bestaat uit 3 letters: p, w, d.',
-        'Type: pwd'
+        'Typ: pwd'
       ]
     },
     {
@@ -84,9 +84,9 @@ var fundamentalsScenario = {
         '[~] Hackers gebruiken ls constant om een onbekend systeem te\n' +
         '      verkennen: wat is er, en wat is interessant?',
       hints: [
-        'Type het commando dat bestanden in een map toont.',
+        'Typ het commando dat bestanden in een map toont.',
         'Het commando bestaat uit 2 letters: l, s.',
-        'Type: ls'
+        'Typ: ls'
       ]
     },
     {
@@ -108,7 +108,7 @@ var fundamentalsScenario = {
       hints: [
         'Gebruik cd gevolgd door de naam van de map.',
         'Probeer: cd <mapnaam> (de map heet documents).',
-        'Type: cd documents'
+        'Typ: cd documents'
       ]
     },
     {
@@ -134,7 +134,7 @@ var fundamentalsScenario = {
       hints: [
         'Gebruik cat gevolgd door de bestandsnaam.',
         'Probeer: cat <bestand> (let op hoofd- en kleine letters!).',
-        'Type: cat scan-results.txt'
+        'Typ: cat scan-results.txt'
       ]
     },
     {
@@ -155,7 +155,7 @@ var fundamentalsScenario = {
       hints: [
         'Gebruik mkdir gevolgd door een mapnaam naar keuze.',
         'Probeer: mkdir <naam> (bijv. mkdir bevindingen).',
-        'Type: mkdir bevindingen'
+        'Typ: mkdir bevindingen'
       ]
     },
     {
@@ -176,7 +176,7 @@ var fundamentalsScenario = {
       hints: [
         'Gebruik touch gevolgd door een bestandsnaam naar keuze.',
         'Probeer: touch <naam> (bijv. touch notes.txt).',
-        'Type: touch notes.txt'
+        'Typ: touch notes.txt'
       ]
     },
     {
@@ -197,7 +197,7 @@ var fundamentalsScenario = {
       hints: [
         'Gebruik rm gevolgd door de bestandsnaam.',
         'Probeer: rm <bestand> (het bestand dat je net aanmaakte).',
-        'Type: rm notes.txt'
+        'Typ: rm notes.txt'
       ]
     }
   ]

@@ -139,7 +139,7 @@ export default {
       visibleCats.forEach(function(c) { grouped[c] = reg.getByCategory(c); });
       var mobileResult = buildMobileHelp(grouped);
       if (hiddenCount > 0) {
-        mobileResult += '\n[?] Meer commands na meer voortgang.\n    Typ "help <categorie>" voor specifiek.\n';
+        mobileResult += "\n[?] Meer commands na meer voortgang.\n    Typ 'help <categorie>' voor specifiek.\n";
       }
       return mobileResult;
     }
@@ -175,7 +175,7 @@ export default {
     var tipText = '• next → Persoonlijke suggestie voor je volgende stap\n'
       + '• man <command> → Gedetailleerde uitleg van een tool\n'
       + '• ↑↓ keys → Navigeer door command geschiedenis\n'
-      + '• Tab → Autocomplete (bijv. "nm" + Tab → "nmap")\n'
+      + "• Tab → Autocomplete (bijv. 'nm' + Tab → 'nmap')\n"
       + '• shortcuts → Toon alle keyboard shortcuts';
     result += lightBoxText(tipText, 'TIP: NAVIGATIE & SHORTCUTS', width - 2);
     result += "\n\n[?] * = HackSimulator command (geen echt Linux-command)";
@@ -205,7 +205,7 @@ function buildMobileHelp(grouped) {
     }
   });
   out += '[?] * = HackSimulator command (geen echt Linux-command)\n';
-  out += '[?] Typ "man <command>" voor uitleg\n';
+  out += "[?] Typ 'man <command>' voor uitleg\n";
   out += '[!] Echte hackers beginnen met SYSTEM & FILESYSTEM basics\n';
   return out;
 }

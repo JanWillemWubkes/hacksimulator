@@ -325,7 +325,7 @@ ${statsLine}${cta ? '\n' + cta : ''}`;
 
     if (this.commandCount === 3 && !this.hasShownTabHint) {
       this.hasShownTabHint = true;
-      return '\n[✓] Pro tip: Gebruik Tab om commands snel in te typen\n\nProbeer het nu:\n→ Typ "nm" en druk Tab      - Vult aan naar "nmap"\n→ Typ "wh" en druk Tab 2x   - Cyclet door whoami, whois\n\n→ Typ \'next\' voor je volgende stap';
+      return '\n[✓] Pro tip: Gebruik Tab om commands snel in te typen\n\nProbeer het nu:\n→ Typ \'nm\' en druk Tab      - Vult aan naar \'nmap\'\n→ Typ \'wh\' en druk Tab 2x   - Cyclet door whoami, whois\n\n→ Typ \'next\' voor je volgende stap';
     }
 
     if (this.commandCount === 5 && !this.hasShownTutorialSuggestion) {
@@ -335,7 +335,7 @@ ${statsLine}${cta ? '\n' + cta : ''}`;
 
     if (this.commandCount === 7 && !this.hasShownCtrlRHint) {
       this.hasShownCtrlRHint = true;
-      return '\n[✓] Pro tip: Gebruik Ctrl+R om door je geschiedenis te zoeken\n\nProbeer het nu:\n→ Druk Ctrl+R en typ "ls"     - Vind vorige ls commands\n→ Druk Ctrl+R opnieuw          - Cycle door matches\n→ Enter om te accepteren       - Esc om te annuleren\n\nType \'shortcuts\' voor alle keyboard shortcuts.\n\n→ Typ \'next\' voor je volgende stap';
+      return '\n[✓] Pro tip: Gebruik Ctrl+R om door je geschiedenis te zoeken\n\nProbeer het nu:\n→ Druk Ctrl+R en typ \'ls\'     - Vind vorige ls commands\n→ Druk Ctrl+R opnieuw          - Cycle door matches\n→ Enter om te accepteren       - Esc om te annuleren\n\nTyp \'shortcuts\' voor alle keyboard shortcuts.\n\n→ Typ \'next\' voor je volgende stap';
     }
 
     if (this.commandCount === 10 && !this.hasShownSecurityHint) {

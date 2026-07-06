@@ -63,7 +63,7 @@ var privescScenario = {
       hints: [
         'Gebruik cat om het bestand /etc/passwd te bekijken.',
         'Het passwd bestand staat in de /etc/ directory.',
-        'Type: cat /etc/passwd'
+        'Typ: cat /etc/passwd'
       ]
     },
     {
@@ -88,7 +88,7 @@ var privescScenario = {
       hints: [
         'Gebruik ls om de inhoud van een directory te bekijken.',
         'De log bestanden staan in /var/log/ — gebruik ls /var/log',
-        'Type: ls /var/log'
+        'Typ: ls /var/log'
       ]
     },
     {
@@ -115,7 +115,7 @@ var privescScenario = {
       hints: [
         'Gebruik cat om een log bestand in /var/log/ te lezen.',
         'Het authenticatie log heet auth.log in de /var/log/ directory.',
-        'Type: cat /var/log/auth.log'
+        'Typ: cat /var/log/auth.log'
       ]
     },
     {
@@ -145,7 +145,7 @@ var privescScenario = {
       hints: [
         'De command history van een gebruiker staat in een verborgen bestand.',
         'Het bestand heet .bash_history in de home directory (~/).',
-        'Type: cat ~/.bash_history'
+        'Typ: cat ~/.bash_history'
       ]
     }
   ]

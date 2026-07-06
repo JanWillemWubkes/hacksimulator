@@ -115,7 +115,7 @@ Bijvoorbeeld:
    • ping <host>   → Test netwerk verbinding
    • help          → Alle commands met korte beschrijving
 
-[?] Zie ook: Type gewoon 'help' om te starten!`;
+[?] Zie ook: Typ gewoon 'help' om te starten!`;
   }
 
   /**
@@ -150,7 +150,7 @@ Bijvoorbeeld:
    Let op: Juridische warnings zijn van toepassing.`
     };
 
-    return categoryHelp[category] || 'Typ "help" voor alle commands.';
+    return categoryHelp[category] || "Typ 'help' voor alle commands.";
   }
 
   /**
