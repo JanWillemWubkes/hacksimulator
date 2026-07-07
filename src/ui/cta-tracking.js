@@ -5,6 +5,7 @@
  *  - `[data-product-id]` → fires GA4 `product_cta_click` (paid Gumroad CTAs)
  *  - `[data-lead-download]` → fires GA4 `lead_magnet_download` (same-origin PDF download)
  *  - `[data-lead-magnet]` → fires GA4 `lead_magnet_cta_click` (free sample CTAs)
+ *  - `[data-terminal-cta]` → fires GA4 `terminal_cta_click` (primaire "start terminal" CTAs; top-of-funnel)
  *
  * Markup contracts:
  *   <a href="..." data-product-id="<gumroad_id>" data-cta-location="<context>">
@@ -45,5 +46,11 @@ document.addEventListener('click', (e) => {
       magnetCta.dataset.ctaLocation || 'unknown',
       magnetCta.textContent.trim().slice(0, 80)
     );
+    return;
+  }
+
+  const terminalCta = e.target.closest('[data-terminal-cta]');
+  if (terminalCta) {
+    events.terminalCtaClick(terminalCta.dataset.terminalCta || 'unknown');
   }
 });

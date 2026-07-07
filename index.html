@@ -126,7 +126,7 @@
           </p>
 
           <div class="hero-cta-group">
-            <a href="/terminal.html" class="btn-cta btn-cta-hero">
+            <a href="/terminal.html" class="btn-cta btn-cta-hero" data-terminal-cta="hero">
               Start Nu
               <!-- Chevron Right Icon -->
               <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -426,7 +426,7 @@
           <p>Leer de fundamenten: navigeren door mappen, bestanden lezen, en je eerste bestanden aanmaken en verwijderen.</p>
           <div class="leerpad-cta-group">
             <a href="/blog/terminal-basics.html" class="leerpad-learn-link">Lees eerst: Terminal voor beginners -&gt;</a>
-            <a href="/terminal.html?tutorial=fundamentals" class="btn-cta-secondary leerpad-btn">Start de Beginner-missie</a>
+            <a href="/terminal.html?tutorial=fundamentals" class="btn-cta-secondary leerpad-btn" data-terminal-cta="leerpad_beginner">Start de Beginner-missie</a>
           </div>
         </div>
 
@@ -440,7 +440,7 @@
           <p>Ontdek netwerken: scan poorten, bekijk actieve verbindingen, en begrijp hoe een netwerk is opgebouwd.</p>
           <div class="leerpad-cta-group">
             <a href="/blog/nmap-beginnersgids.html" class="leerpad-learn-link">Lees eerst: Nmap-gids -&gt;</a>
-            <a href="/terminal.html?tutorial=recon" class="btn-cta-secondary leerpad-btn">Start de Gevorderd-missie</a>
+            <a href="/terminal.html?tutorial=recon" class="btn-cta-secondary leerpad-btn" data-terminal-cta="leerpad_gevorderd">Start de Gevorderd-missie</a>
           </div>
         </div>
 
@@ -454,7 +454,7 @@
           <p>Echte pentesting tools: exploit frameworks, SQL injection testing, brute force en password cracking.</p>
           <div class="leerpad-cta-group">
             <a href="/blog/sql-injection-uitgelegd.html" class="leerpad-learn-link">Lees eerst: SQL-injection -&gt;</a>
-            <a href="/terminal.html?tutorial=exploitation" class="btn-cta-secondary leerpad-btn">Start de Expert-missie</a>
+            <a href="/terminal.html?tutorial=exploitation" class="btn-cta-secondary leerpad-btn" data-terminal-cta="leerpad_expert">Start de Expert-missie</a>
           </div>
         </div>
       </div>
@@ -509,7 +509,7 @@
       </div>
 
       <div class="how-it-works-cta">
-        <a href="/terminal.html" class="btn-cta">
+        <a href="/terminal.html" class="btn-cta" data-terminal-cta="mid">
           Start de Simulator
           <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </a>
@@ -682,7 +682,7 @@
       <div class="final-cta-content">
         <h2>Klaar om te beginnen?</h2>
         <p>Geen account. Geen creditcard. Geen risico.</p>
-        <a href="/terminal.html" class="btn-cta btn-cta-hero">
+        <a href="/terminal.html" class="btn-cta btn-cta-hero" data-terminal-cta="final">
           Start de Terminal
           <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polyline points="9 18 15 12 9 6"></polyline>
@@ -801,7 +801,7 @@
   <script src="/src/init-theme.js"></script>
 
   <!-- Component Injection (external script for CSP compliance) -->
-  <script src="/src/init-components.js?v=3" type="module"></script>
+  <script src="/src/init-components.js?v=4" type="module"></script>
 
   <!-- Analytics & Consent (external for CSP compliance) -->
   <script src="/src/init-analytics.js" type="module"></script>

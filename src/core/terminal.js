@@ -437,6 +437,16 @@ class Terminal {
       // Track command execution (analytics - NO ARGUMENTS!)
       analyticsEvents.commandExecuted(parsed.command, true);
 
+      // Activation: de eerste succesvolle command in deze sessie (once-per-tab-sessie
+      // via sessionStorage zodat een reload het niet opnieuw telt). Drijft de
+      // launch-activation-rate (reikte terminal → deed iets).
+      try {
+        if (!sessionStorage.getItem('hacksim_activated')) {
+          sessionStorage.setItem('hacksim_activated', '1');
+          analyticsEvents.terminalActivated(parsed.command);
+        }
+      } catch (e) { /* private mode: activation niet-persistent, geen breuk */ }
+
       // Check for command-triggered badges
       var newBadges = badgeManager.checkUnlocks('command');
       newBadges.forEach(function(badge) {

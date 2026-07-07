@@ -194,6 +194,30 @@ const analyticsEvents = {
   },
 
   /**
+   * Track a click on a primary "start the terminal" CTA (top-of-funnel: bezoeker → product).
+   * Meet de homepage→terminal doorklik per plek zodat je de #1 conversie kunt lezen/A-B'en.
+   * @param {string} location - CTA-context (nav, hero, mid, final, leerpad_beginner, ...)
+   */
+  terminalCtaClick(location) {
+    analyticsTracker.trackEvent('terminal_cta_click', {
+      location: location
+    });
+  },
+
+  /**
+   * Track activation: de eerste succesvolle command in een sessie ("aha, dit werkt").
+   * De activation-rate (sessies met terminal_activated / terminal page_views) is dé
+   * engagement-metric voor de launch: reikten ze de terminal én deden ze iets.
+   * @param {string} firstCommand - Naam van de eerste command (NOOIT argumenten!)
+   */
+  terminalActivated(firstCommand) {
+    analyticsTracker.trackEvent('terminal_activated', {
+      command: firstCommand,
+      user_type: this.getUserType()
+    });
+  },
+
+  /**
    * Determine user type (first-time vs returning)
    * @returns {string} 'new' or 'returning'
    */
