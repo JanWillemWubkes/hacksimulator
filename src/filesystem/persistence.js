@@ -30,8 +30,15 @@ class FilesystemPersistence {
     // Listen for VFS mutations → debounced save
     vfs.onChange(() => this.scheduleSave());
 
-    // Flush pending saves before page unload
+    // Flush pending saves voor de pagina verdwijnt. beforeunload is onbetrouwbaar
+    // op mobiel (iOS Safari vuurt 'm vaak niet bij app-switch of scherm-lock);
+    // pagehide + visibilitychange(hidden) dekken die paden zodat verse VFS-mutaties
+    // niet in het 500ms-debounce-venster verloren gaan.
     window.addEventListener('beforeunload', () => this.flush());
+    window.addEventListener('pagehide', () => this.flush());
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') this.flush();
+    });
   }
 
   /**

@@ -14,8 +14,15 @@ export default new class ProgressStore {
     this._cache = null;
     this._saveTimeout = null;
 
-    // Flush pending saves before page unload
+    // Flush pending saves voor de pagina verdwijnt. beforeunload is onbetrouwbaar
+    // op mobiel (iOS Safari vuurt 'm vaak niet bij app-switch of scherm-lock);
+    // pagehide + visibilitychange(hidden) dekken die paden zodat een net-voltooide
+    // challenge/badge niet in het 500ms-debounce-venster verloren gaat.
     window.addEventListener('beforeunload', () => this.flush());
+    window.addEventListener('pagehide', () => this.flush());
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') this.flush();
+    });
   }
 
   /**
