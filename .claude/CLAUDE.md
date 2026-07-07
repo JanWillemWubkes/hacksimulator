@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 197)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 198)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 198: Launch-readiness — funnel-meetbaarheid + demand-validatie + value-prop (08 jul 2026)
+⚠️ **Never:**
+- Het fundamentele launch-gat als een feature lezen — na 197 sessies polish (+ M8-analytics op 2%) was de eerlijke diagnose: technisch launch-ready, strategisch ongevalideerd (nul extern signaal, geen succescriterium). Meer bouwen was niet het antwoord; extern bewijs + een meetbaar doel wel.
+- Value-prop/retentie live gokken vóór validatie — de hero herschrijven op eigen smaak is exact de onbewezen-aanname-fout die je aankaart. Lever de varianten + laat toetsen (WS2 5-sec-test); "alles aanpakken" = de haakjes klaarleggen, niet blind bouwen.
+- "Unverified" commits automatisch als verkeerde-auteur lezen — hier was auteur+committer al `noreply@anthropic.com`; de oorzaak was de ontbrekende SSH-handtekening met een lege 0-byte signing-key (draai als root, geen `claude`-key-toegang). Amend/rebase voegt geen handtekening toe en herschrijft gedeployde main-historie voor niets → niet forceren. Check `%G?` + de key vóór je iets herschrijft.
+- Een event-wrapper "dood" noemen zonder het call-pad te checken — `feedbackSubmitted` in events.js wordt nooit aangeroepen, maar feedback.js roept `tracker.trackEvent('feedback_submitted')` direct aan → wél bedraad, geen gat. Verifieer de directe-call-route.
+
+✅ **Always:**
+- Funnel-events bewijs je zónder productie-GA4 — de gtag-shim pusht naar `window.dataLayer` ook al is het externe GA4-script egress-geblokkeerd; consent pre-setten via Playwright `addInitScript` (JSON `{analytics:true}`, zelfde key voor consent.js én tracker.js) + dataLayer-`event`-tuples lezen = volledige funnel-verificatie in de sandbox.
+- Meet de conversie waar je 'm mist — de #1 launch-metric (homepage→terminal-doorklik) was onmeetbaar want de "start terminal"-CTA's hadden geen event; `data-terminal-cta="<locatie>"` + reuse van het bestaande delegated-click-patroon in cta-tracking.js meet 'm nu per plek. Activation (eerste command) once-per-sessie via `sessionStorage`-guard (survives reload; module-boolean her-vuurt per reload).
+- Leg vooraf vast wat succes is — `docs/launch-success-metrics.md` koppelt elke funnel-stap aan z'n event + streefgetallen als expliciete hypotheses (north-star = activation-rate) + de GA4-config; zonder dat is de launch een oninterpreteerbare spike.
+- Splits "wat ik bouw" van "wat inherent van de gebruiker is" — testers werven/sessies draaien, GA4-goals configureren en de finale copy/retentie-keuze zijn van Heisenberg; ik lever de code + protocollen + varianten die dat uitvoerbaar maken. Volledig: `docs/sessions/current.md` Sessie 198.
+
 ### Sessie 197: Laatste volledige simulator-bug-test + 2 fixes (07 jul 2026)
 ⚠️ **Never:**
 - Iets een bug noemen vóór je het tegen het codepad houdt — ~6 "vondsten" waren vals: heuristiek-matches op body-tekst (man-page mét "command not found" als voorbeeld; tool-output mét "waarschuwing"), een localStorage-lees op 350ms terwijl de progress-store 500ms-debouncet (leek dataverlies, was timing), scrollback-accumulatie in `innerText` (een eerdere `leerpad`-render bleef in beeld en matchte "Vergrendeld"/afgevinkte commands), en de by-design typewriter-tap-guard.
@@ -150,19 +163,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Bij "maak de héle flow perfect": twee lagen auditen — begeleiding (CTA/state/markers) én omgeving (VFS/persistentie/sessies/mobile). De zwaarste bugs (permanent verlies, gegarandeerde herhaalrun-strand) zaten in de omgevingslaag, niet in de gemelde symptomen.
 - Marker-hiërarchie is bewust maar moet gedocumenteerd + consistent: `[~]` dim = staande uitnodiging, `[?]` blauw = hint-inhoud. Trek outliers gelijk ([[feedback_nl_copy_dejargon]] geldt ook voor markers) en leg de renderer-waarheid vast (`[TIP]` heeft géén branch → is NIET cyaan). Volledig: `docs/sessions/current.md` Sessie 193.
 
-### Sessie 192: Tutorial-voltooiing past in beeld — next-step CTA altijd zichtbaar (02 jul 2026)
-⚠️ **Never:**
-- Een "fix" accepteren die een klacht *verplaatst* i.p.v. oplost — Sessie 190 (output verborgen) en Sessie 192 (CTA verborgen) zijn dezelfde bug van twee kanten: een completion-blok van ~43 regels/~1300px in een ~830px viewport (1,6×), waarvan je maar één uiteinde kunt tonen. Een top-anker fixt de ene kant en breekt de andere; de wip blijft.
-- Een groot inline-artefact laten staan dat de enige actie-instructie onder de vouw duwt — de 20-regelige `CERTIFICAAT`-box zat tússen de `MISSIE VOLTOOID`-box en de next-step CTA; voor een beginner is de CTA het belangrijkste, niet een ASCII-trofee die hij toch al op het klembord heeft.
-- Op "ziet er goed uit" vertrouwen voor een viewport-klacht — alleen `getBoundingClientRect` op de échte schermmaat (1920×1080: `echoInView`/`ctaInView`) bewijst dat beide uiteinden nu passen. Een DOM-aanwezigheids-assert (`toHaveCount(1)`) zegt niets over zichtbaarheid.
-
-✅ **Always:**
-- Bij een blok groter dan de viewport: maak het blok kleiner dan de viewport i.p.v. eindeloos aan het scroll-anker te sleutelen — dán vervalt de trade-off en zijn beide eisen (output-zichtbaar én CTA-zichtbaar) met één `_scrollToBottom` te vervullen. De duurzame fix zit in de hoogte, niet in de anker-keuze.
-- Redundantie eerst verifiëren, dán schrappen — de inline-cert kon weg omdat dezelfde inhoud al op het klembord stond én via `tutorial cert` opvraagbaar was (post-completion IDLE-pad in `tutorial.js` eerst gecheckt). Feature behouden, alleen de dubbele/schadelijke weergave weg (anti-gold-plating).
-- Meet in regels/pixels om de wig te vinden — command→CTA in lijnen tellen (~43) tegen viewport (~830px) wees direct de ~20-regelige cert aan als de oorzaak; scherm-echte meting bevestigde de fix objectief.
-- Scope tot waar het speelt — challenges hebben géén inline cert (`challenge-renderer.js` levert geen `certificate`-veld; blok past al), dus tutorial-only fixen. Volledig: `docs/sessions/current.md` Sessie 192.
-
-**Rotation:** Top-6 huidig: 192-193-194-195-196-197 (Sessie 191 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 195 UITGEVOERD:** current.md staart Sessie 180-184 geknipt naar `archive-s180-s184.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 185-195 (11 entries; volgende bulk-rotatie Sessie 200 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-179 → `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 193-194-195-196-197-198 (Sessie 192 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 195 UITGEVOERD:** current.md staart Sessie 180-184 geknipt naar `archive-s180-s184.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 185-195 (11 entries; volgende bulk-rotatie Sessie 200 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-179 → `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -211,7 +212,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 197
+**Sessie counter:** 198
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -263,6 +264,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 07 jul 2026 (Sessie 197 — Laatste simulator-bug-test: 8 browser-driving-passes. 1 echte bug (mobiele 10px overflow → `width:auto`, `mobile.css v=116`) + 1 robuustheidsfix (persistence-flush op pagehide+visibilitychange(hidden), `main.js v=200`, NEW persistence-flush.spec.js). Backlog item 42: prod-hardcoded specs → BASE_URL. Volledig: `docs/sessions/current.md`)
-**Version:** 5.71 (Sessie 197 — Laatste simulator-bug-test + 2 fixes in 3 commits; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 08 jul 2026 (Sessie 198 — Launch-readiness, 3 workstreams. WS1 (code live): funnel-audit + 2 launch-events (`terminal_cta_click` + `terminal_activated`), self-test 0 missing, NEW `launch-success-metrics.md`. WS2/WS3: NEW `demand-validation-protocol.md` + `value-prop-and-retention.md` (bewust niet live). Cache `main.js v=202`. Volledig: `docs/sessions/current.md`)
+**Version:** 5.72 (Sessie 198 — Launch-readiness 3 workstreams (funnel-code + 3 launch-docs) in 3 commits; volledige historie: `docs/sessions/current.md` + TASKS.md)
 

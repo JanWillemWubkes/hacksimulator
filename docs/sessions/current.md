@@ -4,6 +4,40 @@
 
 ---
 
+## Sessie 198: Launch-readiness — 3 workstreams (08 jul 2026)
+
+**Mission:** Gebruiker: "wat is iets fundamenteels dat we nog moeten doen voor de (uitgestelde) marketing-launch? Wees brutaal eerlijk." Analyse → gebruiker koos "alles aanpakken" (goedgekeurd plan, 3 workstreams).
+
+**Brutaal-eerlijke analyse (de kern):** het product is technisch launch-ready (live, SEO, legal/consent, monetization, funnel-events instrumented) maar strategisch **on**gevalideerd — gebouwd/getest door maker + AI, **nul extern signaal**, geen vooraf-gedefinieerd succescriterium, go-to-market onuitgevoerd. Het fundamentele gat is geen feature maar extern bewijs dat de launch landt + een meetbaar succescriterium. Extra eerlijke randvoorwaarden: NL-taalplafond (grootste megafoons zijn Engels) + zwakke retentie-haak.
+
+**WS1 — Launch meetklaar (code live):**
+- **Funnel-audit** (`events.js`/`tracker.js`/`consent.js`): `trackEvent` is consent-gated → `window.gtag('event',...)` → dataLayer (GA4-ID `G-7F792VS6CE`). Call-site-grep: de meeste events waren al bedraad (tutorial-lifecycle, challenge/badge, signups, product-CTA, command_executed). **2 launch-kritische gaten:** (a) geen tracking op de primaire homepage→terminal-CTA's (de #1 conversie onmeetbaar); (b) geen activation-signaal. `onboardingEvent`/`feedbackSubmitted`-wrappers bleken dood (feedback.js roept `tracker.trackEvent` direct aan — geen functioneel gat).
+- **Gebouwd:** NEW `terminalCtaClick`/`terminalActivated` in `events.js`; `data-terminal-cta="<locatie>"` op de 6 homepage-CTA's (hero/mid/final + 3 leerpad-deeplinks) + branch in `cta-tracking.js` (reuse delegated-click; cta-tracking laadt transitief via `init-components.js`); activation-hook in `terminal.js` naast `commandExecuted`, once-per-tab-sessie via `sessionStorage['hacksim_activated']`. Bewust géén nav-link (zat in `<noscript>` → kan met JS-vereiste analytics nooit vuren → dode attr verwijderd) + geen gedeelde geïnjecteerde navbar.
+- **Verificatie:** browser-self-test (`scratchpad/ws1-funnel-selftest.mjs`) met consent pre-set via `addInitScript` (JSON `{analytics:true}` = zelfde key voor consent.js én tracker.js), funnel gedreven, dataLayer-`event`-tuples opgevangen (de shim werkt óók al is het externe GA4-script egress-geblokkeerd). **Alle funnel-events vuren, 0 ontbrekend**, incl. de 6 CTA-locaties; activation exact 1× + 0× na reload (guard survives reload); 0 code-console-errors (alleen `ERR_TUNNEL` van het geblokkeerde GA4-script). 56 e2e groen (command-coverage/gamification/tutorial — kern-flow intact).
+- NEW `docs/launch-success-metrics.md`: funnel→event-mapping, streefgetallen als expliciete hypotheses (north-star = activation-rate), dag-1-minimum, GA4-config (key-events + funnel-exploration + custom dimensions + DebugView-check), read-order launch-dag.
+- Cache-bump `main.js v=201→202-funnel` (terminal) + `init-components.js v=3→4` (24 marketing-pagina's).
+
+**WS2 — Demand-validatie (doc):** NEW `docs/demand-validation-protocol.md` — uitvoerbaar cold-start-protocol: 5 taken (5-sec-positioneringstest → CTA-keuze → activation → missie → deel/terugkeer-intentie) met drop-off-checkpoints, 5 na-vragen, resultaten-template, recruiting voor NL-beginners (mijd HN/netsec — dat publiek vertekent het signaal). Uitvoering (werven + sessies) = Heisenberg.
+
+**WS3 — Value-prop + retentie (doc):** NEW `docs/value-prop-and-retention.md` — brutaal-eerlijke hero-audit (correct maar niet magnetisch: beschrijft WAT i.p.v. uitkomst, feature-lijst-subtitle, geen proof boven de vouw, generieke CTA) + 3 kandidaat-hero's (uitkomst / frictie-nul / doelgroep-spiegel) om te toetsen in de WS2-5-sec-test + retentie-opties gerangschikt (terugkeer-pull > e-mail > streak > content-cadans). **Bewust niet live gezet** — wacht op WS2-validatie.
+
+**Commits (alle ff-gemerged naar main `efdf958..23bbb1a`, gedeployed):** `4728c54` (WS1 funnel-code), `2b95854` (WS1+WS2 docs), `23bbb1a` (WS3 doc).
+
+**Stop-hook signing-noot:** commits tonen als "Unverified" — gediagnosticeerd: **niet** door e-mail (auteur+committer al `noreply@anthropic.com` op álle sessie-commits) maar door ontbrekende SSH-handtekening. `commit.gpgsign=true` + key-pad `/home/claude/.ssh/commit_signing_key.pub` bestaat maar is **0 bytes** (geen private key) + ik draai als `root` zonder toegang tot de `claude`-user-keys → niet ondertekenbaar in deze omgeving. Bewust niet geforceerd: amend/rebase voegt geen handtekening toe (geen key) én zou gedeployde main-historie herschrijven voor niets.
+
+**Learnings:**
+- **Het fundamentele launch-gat is zelden een feature — het is extern bewijs + een meetbaar succescriterium.** 197 sessies polish + M8-analytics op 2% is een tell: energie ging naar product, niet naar validatie/distributie. De brutaal-eerlijke diagnose (over-gepolijst, ongevalideerd) was waardevoller dan welke feature ook.
+- **Bouw WS3 (copy/retentie) niet vóór de validatie** — op eigen smaak de hero herschrijven = exact de onbewezen-aanname-fout die de analyse aankaartte. De 3 varianten leveren + laten toetsen is de integere vorm; "alles aanpakken" betekent de haakjes klaarleggen, niet blind bouwen.
+- **Funnel-events bewijs je zónder productie-GA4** — de gtag-shim pusht naar `window.dataLayer` ook al faalt het externe script (egress); consent pre-setten via `addInitScript` + dataLayer-`event`-tuples lezen = volledige funnel-verificatie in de sandbox.
+- **Activation hoort once-per-sessie, niet per command/page-load** — `sessionStorage`-guard (survives reload) voorkomt dubbeltelling; module-boolean zou per reload her-vuren.
+- **"Unverified" ≠ verkeerde auteur** — check `%G?` + de signing-key vóór je history herschrijft; een lege 0-byte key betekent dat geen enkele amend/rebase het oplost, dus niet forceren op gedeployde main.
+
+**Next steps:** WS2-sessies draaien (Heisenberg) → voedt WS3-keuze; GA4-goals configureren vóór launch; ná validatie hero-variant + retentie-v1 bouwen. TASKS.md items 43 (✅) / 44 / 45.
+
+**Metrics delta:** src 671→673 KB (funnel-code). Spec-bestanden 28 (ongewijzigd — WS1 geverifieerd via scratchpad-self-test, geen e2e-spec toegevoegd). 3 NEW docs in `docs/`. validate-docs exit 0.
+
+---
+
 ## Sessie 197: Laatste volledige simulator-bug-test + 2 fixes (07 jul 2026)
 
 **Mission:** Gebruiker: "ik wil de functies en flow in de simulator 1 laatste keer testen op bugs." Scope (via AskUserQuestion): **alléén de terminal-simulator** (`terminal.html`); beleid: **bevestigde bugs direct fixen** met regressietest, één eindrapport.
