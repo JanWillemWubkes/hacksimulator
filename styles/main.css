@@ -1526,9 +1526,14 @@ a.footer-donate:focus-visible {
   background-color: var(--color-toggle-hover);
 }
 
-/* Active toggle option - bright white text (VS Code pattern) */
+/* Active toggle option - gevulde pill (blauwe accent + witte tekst). De gevulde
+   achtergrond maakt de selectie in één oogopslag duidelijk, óók op het altijd-donkere
+   mobiele menu waar de pagina-flip achter het volledige overlay niet zichtbaar is.
+   De `all`-transition op .toggle-option laat de pill soepel in-/uitfaden bij het
+   wisselen (subtiele motion; uitgeschakeld bij prefers-reduced-motion hieronder). */
 .toggle-option.active {
   color: var(--color-toggle-text-active);
+  background-color: var(--color-button-bg);
 }
 
 /* Toggle Indicator - Filled block for active theme */
@@ -1541,10 +1546,12 @@ a.footer-donate:focus-visible {
   transition: opacity var(--transition-normal);
 }
 
-/* Active theme shows filled block */
+/* Active theme shows filled block - wit zodat het blokje zichtbaar blijft op de
+   blauwe active-pill (de default indicator-kleur is dezelfde blauwe --color-button-bg). */
 [data-theme="dark"] .toggle-option[data-theme="dark"] .toggle-indicator,
 [data-theme="light"] .toggle-option[data-theme="light"] .toggle-indicator {
   opacity: 1;
+  color: var(--color-toggle-text-active);
 }
 
 /* Inactive theme hides indicator */
