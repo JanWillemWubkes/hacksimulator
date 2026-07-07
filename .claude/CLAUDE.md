@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 196)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 197)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 197: Laatste volledige simulator-bug-test + 2 fixes (07 jul 2026)
+⚠️ **Never:**
+- Iets een bug noemen vóór je het tegen het codepad houdt — ~6 "vondsten" waren vals: heuristiek-matches op body-tekst (man-page mét "command not found" als voorbeeld; tool-output mét "waarschuwing"), een localStorage-lees op 350ms terwijl de progress-store 500ms-debouncet (leek dataverlies, was timing), scrollback-accumulatie in `innerText` (een eerdere `leerpad`-render bleef in beeld en matchte "Vergrendeld"/afgevinkte commands), en de by-design typewriter-tap-guard.
+- Je meetinstrument vertrouwen — Playwright's `fill()` forceert focus voorbij de FocusTrap, waardoor een commando "uitvoerde" met de legal-modal actief; het echt-gebruikerspad (typen zónder force-focus) bewees dat de terminal onbereikbaar is. Modal-protection was degelijk; de bug zat in mijn meting (vgl. Sessie 185/190/196).
+- Een mobiele overflow als scroll-/anker-probleem lezen — de 10px-offset (Sessie 189 als symptoom genoteerd) kwam uit `width:100%` + `margin:10px` sámen op `#terminal-container`; `body overflow-x:hidden` verbergt het (geen scrollbar, `window.scrollX`=0) maar clipt wél de rechter 10px content. Meet met `getBoundingClientRect` + `window.scrollX` of het gebruiker-zichtbaar is.
+- Een "laatste check" breed maken — scope niet uitbreiden naar entry-points/hele-site (deep-link al spec-gedekt, blog/consent net ~15 sessies geaudit); een oppervlakkige brede sweep verwatert een scherpe, begrepen eindstaat.
+
+✅ **Always:**
+- De duurzame mobiele fix zit in de breedte, niet in het anker — `width:auto` op de mobiele `#terminal-container` centreert symmetrisch (10px beide zijden) én elimineert de overflow in één regel; navbar (100% van de body) volgt vanzelf. Gemeten 375px 0 overflow, desktop ongewijzigd.
+- Persistence-flush hoort óók op `pagehide` + `visibilitychange(hidden)`, niet alleen `beforeunload` — dat laatste vuurt op mobiel vaak niet bij app-switch/scherm-lock, en `completeChallenge` schrijft via de 500ms-debounce → een net-voltooide challenge kan verloren (niet-zelfherstellend, anders dan multi-tab). 3 idempotente regels per store. Bewijs het venster (lees <500ms = leeg) én de fix (na de event = gevuld).
+- Backlog vastleggen i.p.v. half-blind fixen — de 10 prod-hardcoded specs (→ `BASE_URL`) niet omzetten vanuit een egress-geblokkeerde omgeving waar je ze niet tegen prod kunt verifiëren; performance/debug wijzen mogelijk bewust naar prod. Hoogste-waarde-move = smoketests van werkkopie-tests splitsen. Vastgelegd als TASKS.md item 42.
+- Systematisch het hele oppervlak driven met échte input — 8 passes (41 commands + man-pages, security-consent 5 tools, 5 tutorials + challenges end-to-end, gamification, core-input, welcome-state, mobile) vonden precies 1 echte bug; de brede dekking draagt de "0 open bugs"-conclusie. Volledig: `docs/sessions/current.md` Sessie 197.
+
 ### Sessie 196: CTA-consistentie-audit — "typ next" vs directe opdracht (06 jul 2026)
 ⚠️ **Never:**
 - Een gemelde "inconsistentie" fixen vóór je hebt vastgesteld of het design is — tutorial-stappen (command-only, advance op `validate()`) en de vrije-verkenning-funnel ("Typ 'next'") zijn bewust gescheiden modi; de echte drift zat in de verpakking (copy/markers) en twee randgevallen, niet in de architectuur. Een architectuur-"fix" had het twee-modi-ontwerp gesloopt.
@@ -149,20 +162,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Meet in regels/pixels om de wig te vinden — command→CTA in lijnen tellen (~43) tegen viewport (~830px) wees direct de ~20-regelige cert aan als de oorzaak; scherm-echte meting bevestigde de fix objectief.
 - Scope tot waar het speelt — challenges hebben géén inline cert (`challenge-renderer.js` levert geen `certificate`-veld; blok past al), dus tutorial-only fixen. Volledig: `docs/sessions/current.md` Sessie 192.
 
-### Sessie 191: UX-fix voltooiingsscherm — één heldere "wat nu?"-CTA (02 jul 2026)
-⚠️ **Never:**
-- `[→] Type 'next' voor je volgende stap` op een voltooiingsblok laten staan — bij een afgeronde missie bestaat er geen "volgende stap" (de stappen zijn klaar) en `next` is de globale begeleidings-funnel, geen stap-advancer. Erger: "stap" botst met de "Stap 1/4" van de volgende missie die er direct onder verschijnt. Een mislabel dat op het emotionele hoogtepunt verwart.
-- Drie concurrerende "doe dit nu"-CTA's op één voltooiingsscherm dumpen — na Fundamentals stonden `tutorial recon` (box) + `tutorial` (menu) + `next` naast elkaar. `next` is juist gebouwd als de énkele context-aware router; een box die een specifiek commando voorschrijft dupliceert wat `next` toch al zegt.
-- De klacht letterlijk op één plek fixen zonder te grep'en waar-nog — de mislabel zat op **4 completion-renderers** (tutorial+challenge, desktop+mobile), niet alleen de tutorial op de screenshot. Omgekeerd: de tientallen `onboarding.js`/`leerpad.js`-hits van dezelfde string NIET meeslepen — dáár is `next` mid-flow wél de eerstvolgende stap; geen mislabel.
-- De outlier fixen vóór je alle peers hebt gelezen — pas na het lezen van álle 5 scenario-`completionMessage`s bleek dat alleen `fundamentals.js` een commando hardcodeert; de andere 4 sluiten al schoon af. De fix is "breng de outlier in lijn", niet "herschrijf alles".
-
-✅ **Always:**
-- Route elke voltooiing via één primaire CTA (`next`, correct verwoord: "ik wijs je naar je volgende missie/uitdaging") + het bladermenu als duidelijk secundaire "Of typ..."-regel. Eén heldere volgende actie op het beloningsmoment, geen keuzeverlamming.
-- Bij "wat is het beste, brutaal eerlijk": beslis als expert met onderbouwing + "wat ik bewust NIET doe" (scroll-sequencing ongemoeid, geen auto-advance, peers ongemoeid), geen keuzemenu (`feedback_expert_ux_analysis`).
-- Engelse imperatief in NL-UI is een bug: `Type`→`Typ` (`feedback_nl_copy_dejargon`), consistent met `renderObjective`/`next.js`.
-- Een string-wijziging kan een regressietest sterker maken: omdat de nieuwe CTA een ándere string is dan de gesuppresste onboarding-nudge, splitste de Sessie-190 count-1-assertie naar "nieuwe CTA 1× ÉN oude string 0×" — strengere dubbele-prompt-garantie. Volledig: `docs/sessions/current.md` Sessie 191.
-
-**Rotation:** Top-6 huidig: 191-192-193-194-195-196 (Sessie 190 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 195 UITGEVOERD:** current.md staart Sessie 180-184 geknipt naar `archive-s180-s184.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 185-195 (11 entries; volgende bulk-rotatie Sessie 200 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-179 → `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 192-193-194-195-196-197 (Sessie 191 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 195 UITGEVOERD:** current.md staart Sessie 180-184 geknipt naar `archive-s180-s184.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 185-195 (11 entries; volgende bulk-rotatie Sessie 200 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-179 → `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -211,7 +211,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 196
+**Sessie counter:** 197
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -263,6 +263,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 06 jul 2026 (Sessie 196 — CTA-consistentie-audit: verdict bewust design (command-stappen vs 'next'-funnel, guards intact); gefixt: ~31 Type→Typ-restanten (o.a. hints in alle 5 scenario's), next-CTA overal [→], [?] TIP:→[TIP] 82×, welcome challenge-aware, recordCommand deferHints (one-time-tips niet meer verbruikt mid-missie); +2 tests, suite 0 failures. Cache `v=199`. Volledig: `docs/sessions/current.md`)
-**Version:** 5.70 (Sessie 196 — CTA-consistentie-audit + fixronde in 4 commits; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 07 jul 2026 (Sessie 197 — Laatste simulator-bug-test: 8 browser-driving-passes. 1 echte bug (mobiele 10px overflow → `width:auto`, `mobile.css v=116`) + 1 robuustheidsfix (persistence-flush op pagehide+visibilitychange(hidden), `main.js v=200`, NEW persistence-flush.spec.js). Backlog item 42: prod-hardcoded specs → BASE_URL. Volledig: `docs/sessions/current.md`)
+**Version:** 5.71 (Sessie 197 — Laatste simulator-bug-test + 2 fixes in 3 commits; volledige historie: `docs/sessions/current.md` + TASKS.md)
 

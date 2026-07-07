@@ -4,6 +4,43 @@
 
 ---
 
+## Sessie 197: Laatste volledige simulator-bug-test + 2 fixes (07 jul 2026)
+
+**Mission:** Gebruiker: "ik wil de functies en flow in de simulator 1 laatste keer testen op bugs." Scope (via AskUserQuestion): **alléén de terminal-simulator** (`terminal.html`); beleid: **bevestigde bugs direct fixen** met regressietest, één eindrapport.
+
+**Aanpak:** 8 systematische browser-driving-passes met een eigen Playwright-harness (`scratchpad/driver.mjs`) tegen de lokale werkkopie (verse poort 8237, `BASE_URL`). Echte `fill`+`press('Enter')`, nooit synthetische `dispatchEvent` (Sessie 196-les). Chromium via de voorgeïnstalleerde binary `/opt/pw-browsers/chromium-1194/chrome-linux/chrome` + `--no-sandbox` (Playwright 1.56 wilde build 1228 downloaden → override-config in de repo-root, niet gecommit).
+
+**Dekking (alles schoon tenzij vermeld):**
+- **1A Commands:** alle 41 commands (happy + error-paden) + 41 man-pages renderen + typo-fuzzy-suggestie + unknown-command-handling + nul console-errors.
+- **1B Security-consent:** alle 5 tools — bare call toont warning zonder tool-output, args zetten consent + draaien, consent gedeeld over tools, `reset consent` re-armt, metasploit's no-arg-variant (typ-opnieuw = accept) werkt.
+- **1C Tutorials:** alle 5 scenario's (fundamentals/recon/privesc/webvuln/exploitation) end-to-end voltooid + exit→resume op juiste stap + reload-mid-missie behoudt voortgang + herstart-na-voltooiing + cert-uitgifte + completion-CTA.
+- **1D Challenges:** easy/medium/hard end-to-end, order-gevoelige (sql-sleuth/attack-chain) locken niet bij verkeerde volgorde, reload-mid-challenge resumet en voltooit, status/list render, tutorial⇄challenge mutual exclusion.
+- **1E Gamification:** leerpad-vinkjes, hasError-guard (gefaalde traceroute vinkt níét af — Sessie 195-fix intact), EXPERT-unlock ≥4-van-6, dashboard/achievements/certificates/leaderboard/next/shortcuts render, next-funnel state-aware.
+- **1F Core/input:** VFS-mutaties (touch/mkdir/cp/mv) overleven reload, `reset` herstelt VFS + bewaart history, ↑↓-history-navigatie, Tab command- én fs-pad-autocomplete, Ctrl+R reverse-search, Ctrl+L, Ctrl+C. **Modal-protection/focus-trap expliciet geverifieerd degelijk.**
+- **1G Welcome-state:** vers → "Typ 'next'"-CTA; hervatte tutorial/challenge → suppress + neutrale placeholder + resume-notice.
+- **1H Mobile 375px:** quick-command-bar tap (na typewriter-enable), mission-hiding ls/nmap-knoppen, completion in beeld — **en de bug.**
+
+**Bug gevonden + gefixt — `3d7df13` mobiele 10px horizontale overflow:** `#terminal-container` erfde `width:100%` uit `styles/terminal.css` maar kreeg in de `@media (max-width:768px)`-regel van `styles/mobile.css` `margin:10px` → met `box-sizing:border-box` werd de rechterrand 385px op een 375-viewport. `body overflow-x:hidden` clipte het (geen zichtbare scrollbar, `window.scrollX` blijft 0) maar de terminal stond 10px uit het midden en de rechter 10px content werd afgekapt; de navbar (100% van de te brede body) rekte mee naar 385. Pre-existing (Sessie 189 noteerde de "10px offset" zonder de oorzaak te fixen). **Fix:** `width:auto` op de mobiele regel → blok past binnen de 10px-marges. Render-en-meet 375px: 0 doc-overflow over leerpad/help/man/achievements/challenge/shortcuts, container symmetrisch (left 10 / right 365), navbar 375. Desktop 1280 ongewijzigd, 0 console-errors. Cache-bump `mobile.css v=115→116` (24 HTML-refs). responsive-ascii-boxes + tutorial-mobile + gamification-mobile 53 groen.
+
+**Robuustheidsfix (na brutaal-eerlijk advies, gebruiker koos "alleen #1") — `9bd487b` persistence-flush:** `progress-store.js` + `persistence.js` flushten hun 500ms-debounce alleen op `beforeunload` — op mobiel (iOS Safari) vuurt dat vaak niet bij app-switch/scherm-lock. `completeChallenge()` schrijft via de debounce, dus een challenge voltooien + tab backgrounden binnen 500ms verloor de voltooiing (de gebruiker moet 'm opnieuw doen). **Fix:** naast `beforeunload` nu ook `pagehide` + `visibilitychange(hidden)` → `flush()` in beide stores (idempotent, geen dubbel-schrijf-risico). Bewezen: challenge voltooid + `<500ms` `visibilitychange(hidden)` → voltooiing staat in localStorage (stond er vlak ervoor, binnen het venster, aantoonbaar níét); idem VFS-mutatie. NEW `persistence-flush.spec.js` (2 tests). Cache-bump `main.js v=199→200-persist-flush`. vfs-versioning + gamification suites groen (23 passed).
+
+**Backlog vastgelegd — `d936e7d` TASKS.md item 42:** 10 spec-bestanden hardcoden productie-URL's i.p.v. `baseURL` (feedback, autocomplete-filesystem, css-variable-test, debug-console, debug-storage, feedback-onboarding-headers, modal-colors-simple, modal-headers, performance, responsive-breakpoints) → ~44 tests valideren nooit de werkkopie. Bewust uitgesteld: testinfra-schuld, geen gebruiker-bug, per-bestand-oordeel nodig (performance/debug wijzen mogelijk bewust naar prod). Hoogste-waarde-move = productie-smoketests van werkkopie-tests splitsen (apart project óf `test.skip`) i.p.v. blind URL-swappen.
+
+**Commits:** `3d7df13` (mobiele overflow), `9bd487b` (persistence-flush), `d936e7d` (backlog-noot), + `/summary`-doc-sync. Alle op branch `claude/test-simulator-bugs-9rhzt4`.
+
+**Learnings:**
+- **~6 vals-positieven onderzocht + verworpen vóór ik iets een bug noemde** — heuristiek-matches op body-tekst (man-page bevat "command not found" als voorbeeld; tool-output bevat "waarschuwing"), progress-store 500ms-debounce vs een localStorage-lees op 350ms (leek dataverlies, was timing), scrollback-accumulatie in `innerText` (een eerdere `leerpad`-render bleef in beeld en matchte "Vergrendeld"/afgevinkte commands), en de by-design typewriter-tap-guard (`if (input.disabled) return`). Elke "bug" eerst tegen het codepad houden (Sessie 194-les).
+- **Wantrouw je meetinstrument, niet alleen de code** — het eerste "modal-protection kapot"-signaal kwam doordat Playwright's `fill()` de focus voorbij de FocusTrap forceert (onbereikbaar voor een echte gebruiker); een echt-gebruikerspad (typen zonder force-focus) bewees dat de terminal onbereikbaar is met de legal-modal actief. Zelfde klasse als Sessie 185/190/196.
+- **De duurzame mobiele fix zit in de breedte, niet in het scroll-anker** — Sessie 189 noteerde de 10px offset als symptoom; de oorzaak was `width:100%` + `margin:10px` samen. `width:auto` centreert én elimineert de overflow in één regel. Meet met `getBoundingClientRect` + `window.scrollX` of het gebruiker-zichtbaar is voordat je 't een bug noemt.
+- **Persistence-flush op alleen `beforeunload` is een mobiele data-loss-klasse** — `pagehide` + `visibilitychange(hidden)` is het standaardpatroon; de fix is 3 regels per store, idempotent, en dicht een niet-zelfherstellende voltooiings-verlies (anders dan de bewust-geaccepteerde multi-tab-kwestie). Bewijs het venster (lees localStorage binnen 500ms = leeg) én de fix (na de event = gevuld).
+- **Scope bewust smal houden bij een "laatste check"** — niet uitbreiden naar entry-points/hele-site (deep-link al spec-gedekt, blog/consent net ~15 sessies geaudit); een brede oppervlakkige sweep verwatert een scherpe, begrepen eindstaat. De prod-hardcoded-specs als backlog vastleggen i.p.v. half-blind omzetten vanuit een egress-geblokkeerde omgeving.
+
+**Metrics delta:** src 670→671 KB (2 listeners + width:auto, netto ~0). Spec-bestanden 27→28 (+`persistence-flush.spec.js`), +2 tests. Geen bundle-budget-impact. validate-docs exit 0.
+
+**Next steps:** backlog item 42 (prod-hardcoded specs). Geen open simulator-bugs.
+
+---
+
 ## Sessie 196: CTA-consistentie-audit — "typ next" vs directe opdracht (06 jul 2026)
 
 **Mission:** Gebruiker: "sommige tutorials zeggen dat je 'next' moet typen, andere geven direct een opdracht — bewust of bug? Ik wil de perfecte gebruikerservaring." Audit van de volledige begeleidingslaag + fixronde op alles wat niet klopte.
