@@ -431,6 +431,12 @@ class Renderer {
     // Format inline arrows (← for Dutch explanations)
     formatted = formatted.replace(/←/g, '<span class="inline-arrow">←</span>');
 
+    // Til de → glyph naar de tekst-baseline: het font-fallback-glyph zit laag in de
+    // regel waardoor de pijl in [→] en → FASE-regels te ver naar beneden staat.
+    // Zelfde verticale correctie als ← maar zónder margin/kleur (→ is marker/bullet,
+    // niet een los inline-label; de kleur komt van de regel-lineType).
+    formatted = formatted.replace(/→/g, '<span class="marker-arrow">→</span>');
+
     // Format markdown bold (mobile headers) - **text** → <strong>text</strong>
     formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
