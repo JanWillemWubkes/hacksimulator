@@ -125,6 +125,11 @@
 
 45. [ ] **Launch-readiness WS3: value-prop + retentie beslissen/bouwen (Sessie 198)** — audit + 3 hero-varianten + retentie-opties klaar (`docs/value-prop-and-retention.md`), bewust nog niet live. **Open:** ná WS2-validatie de winnende hero-variant + retentie-optie kiezen → dán implementeren (triviale copy-wijziging + retentie-v1 in `src/gamification/`).
 
+46. [ ] **GA4-config afronden + launch-dag-handelingen (Sessie 199)** — uitvoering van item #43's "Open"-clausule via GA4 Realtime-verificatie. **Bug gevonden + gefixt (live op main, commit `9f241e8`):** `terminal.html` laadde als enige pagina niet `/src/init-analytics.js` → gtag initialiseerde daar nooit → `terminal_activated` (north-star) + `tutorial` werden aangeroepen maar nergens heen gestuurd. Eén regel toegevoegd; Realtime bevestigt nu alle terminal-events komen binnen. CSP (`netlify.toml /*`) staat google-domeinen al toe. **Gedaan in GA4:** `newsletter_signup` + `lead_magnet_signup` als key event gemarkeerd; custom dimensions `location` + `user_type` (Bereik=Gebeurtenis) aangemaakt. **⏳ NOG DOEN — getimede handelingen:**
+    - **[ ] `terminal_activated` als key event sterren** (Beheer → Gebeurtenissen → Recente gebeurtenissen → ster). Kon 10 jul nog niet: brandnieuw event, admin-tabel loopt ~24u achter. **Doen zodra 'ie in de lijst staat** — zonder ster telt de north-star niet als conversie.
+    - **[ ] Launch-dag: annotatie zetten** op het launch-moment (Beheer → Annotaties) voor een schone voor/na-lijn in de rapporten.
+    - [ ] Optioneel: `tutorial_completed` afgeleid event (Gebeurtenis maken, `event_name`=tutorial én `action`=completed) → sterren; en funnel-exploratie bouwen (`launch-success-metrics.md §4.2`) zodra er verkeer is.
+
 ---
 
 ## 📋 Mijlpalen & Taken
