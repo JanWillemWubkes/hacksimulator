@@ -34,6 +34,12 @@ const OUT_DIR = path.join(ROOT, '.playwright-mcp', 'launch');
 const BASE_URL = process.env.BASE_URL || 'https://hacksimulator.nl';
 const TERMINAL_URL = `${BASE_URL}/terminal.html`;
 
+// Optionele override voor omgevingen waar de Playwright-gedownloade chromium-revisie
+// ontbreekt maar een systeem-chromium beschikbaar is (bv. CHROMIUM_PATH=/opt/pw-browsers/chromium).
+const LAUNCH_OPTS = process.env.CHROMIUM_PATH
+  ? { executablePath: process.env.CHROMIUM_PATH }
+  : {};
+
 // localStorage-state voor een schone take (keys geverifieerd in src/ui/legal.js,
 // src/ui/onboarding.js, src/analytics/consent.js).
 const CLEAN_STATE = `
@@ -94,7 +100,9 @@ async function runScenario(page, input, onFrame) {
 
 /** GIF-capture: vaste viewport-dimensies (GIF vereist constante frame-grootte). */
 async function captureGif(browser) {
-  const width = 1000, height = 640;
+  // 720 hoog: op 640 viel de [TIP]-regel (kern van het scenario, kit §4) half achter
+  // de input-balk; op 720 past de volledige nmap-output + next-CTA in beeld.
+  const width = 1000, height = 720;
   const context = await browser.newContext({
     viewport: { width, height },
     deviceScaleFactor: 1,
@@ -142,7 +150,7 @@ async function captureGif(browser) {
 
 /** Statische screenshot in een eigen context (desktop of mobiel). */
 async function captureStatic({ name, width, height, scale }) {
-  const browser = await chromium.launch();
+  const browser = await chromium.launch(LAUNCH_OPTS);
   const context = await browser.newContext({
     viewport: { width, height },
     deviceScaleFactor: scale,
@@ -165,7 +173,7 @@ async function main() {
   mkdirSync(OUT_DIR, { recursive: true });
   console.log(`Bron: ${TERMINAL_URL}`);
 
-  const browser = await chromium.launch();
+  const browser = await chromium.launch(LAUNCH_OPTS);
   await captureGif(browser);
   await browser.close();
 

@@ -1,6 +1,8 @@
 # Launch-aankondigings-kit — HackSimulator.nl
 
-**Doel:** plak-klare aankondiging voor de publieke launch op **woensdag 24 juni 2026**.
+**Doel:** plak-klare aankondiging voor de publieke launch. **Datum nog te kiezen** — ná de
+demand-validatie (TASKS.md item #44, `docs/demand-validation-protocol.md`); kies bij voorkeur
+een **woensdag** (sterke HN/Reddit-dag, vastgelegd Sessie 173).
 Hoort bij `docs/public-launch-runbook.md` **Fase 4 — Aankondiging & eerste backlinks**.
 
 **Productie-URL:** https://hacksimulator.nl/ · **Terminal:** https://hacksimulator.nl/terminal.html
@@ -33,11 +35,13 @@ Elke copy-variant hieronder put **alleen** uit deze lijst. Niets daarbuiten clai
 | Geen installatie, draait in de browser | ✅ |
 | Nederlands: uitleg, tips, foutmeldingen (commando's zelf blijven Engels — dat is echt) | ✅ |
 | Veilige sandbox, lokaal in je browser, geen externe verbindingen → legaal | ✅ (FAQ-beeld: "vluchtsimulator — leren vliegen zonder het vliegveld te verlaten") |
-| 3 niveaus (beginner → intermediate → advanced), man pages, "80/20 realisme" | ✅ |
-| 11 blogposts op `/blog/` | ✅ |
+| 3 niveaus (Beginner → Gevorderd → Expert, NL-labels sinds Sessie 187/188), man pages, "80/20 realisme" | ✅ |
+| 12 blogposts op `/blog/` | ✅ (her-geteld: 14 html-files − index − welkom) |
 
 **NIET claimen (anti-overdrijving):**
-- ❌ `netcat` / `wireshark` — staan op de homepage-leerpad maar bestaan **niet** als commando.
+- ❌ `netcat` / `wireshark` — bestaan **niet** als commando (de homepage-leerpad-vermelding is
+  in Sessie 188/195 al opgeschoond; alleen de wireshark-*blogpost* bestaat — die mag je als
+  content noemen, niet als simulator-commando).
 - ❌ "Certificaat" als diploma/credential — het `certificates`-commando maakt een
   completion-certificaat, géén erkend diploma (de FAQ zegt dit expliciet).
 
@@ -134,8 +138,9 @@ die bewijst in één oogopslag de drie kernclaims: *echt, Nederlands, educatief*
 1. Open https://hacksimulator.nl/terminal.html
 2. Typ `help` → toont de command-lijst (laat de breedte/echtheid zien)
 3. Typ `nmap 192.168.1.1` → toont open poorten **mét** `← Nederlandse context` per poort
-   en een `[?] TIP`-regel met educatieve duiding (dit doelwit = router-profiel: 53/DNS,
-   80/HTTP, 443/HTTPS).
+   en een `[TIP]`-regel met educatieve duiding (dit doelwit = router-profiel: 53/DNS,
+   80/HTTP, 443/HTTPS). Sinds Sessie 194/196 is `[TIP]` de canonieke marker en rendert
+   die cyaan — check bij re-capture dat de tip-regel gekleurd in beeld staat.
 
 Waarom dit scenario: de `nmap`-output is visueel het sterkst (poorten "lichten op") én laat
 direct het 80/20-patroon zien — Engelse output + Nederlandse uitleg + tip. Dat is precies het
@@ -158,7 +163,7 @@ meest "terminal". Houd de GIF strak: één vloeiende take, geen muis-gedoe in be
 
 **Gegenereerde artefacten** (reproduceerbaar via `node scripts/capture-launch-visuals.mjs`,
 output in `.playwright-mcp/launch/` — gitignored, dus kopieer ze eruit vóór upload):
-- `terminal-help-nmap.gif` — 1000×640, loopend, ~9,5 s, ~1,3 MB (rustig tempo, goed te volgen; ruim onder de X/Bluesky-limiet).
+- `terminal-help-nmap.gif` — 1000×720, loopend, ~9,5 s, ~1,4 MB (rustig tempo, goed te volgen; ruim onder de X/Bluesky-limiet). Hoogte 640→720 bij de her-capture van 14 jul 2026: op 640 viel de `[TIP]`-regel half achter de input-balk.
 - `terminal-desktop.png` — 1280×720, statische fallback.
 - `terminal-mobile-375.png` — 375×812 @2x (750×1624 px), toegankelijkheids-hook.
 Het script zet legal-modal/onboarding/consent vooraf weg via `localStorage` voor een schone
@@ -167,7 +172,7 @@ router-profiel teruggeeft en dat er geen banner in beeld staat.
 
 ---
 
-## 5. Launch-dag volgorde — woensdag 24 juni 2026
+## 5. Launch-dag volgorde (relatief schema — D-1 / launch-dag / D+14)
 
 **Principe:** gespreid, niet alles tegelijk. Dit schema is bewust **geclusterd in één
 bewaakbaar middag-/avondblok** (zie hieronder) omdat je niet de hele dag beschikbaar bent —
@@ -177,18 +182,22 @@ bewaakt; je eigen netwerk (LinkedIn/X — lage onderhoudslast) zet je aan de ran
 met een paar losse checks. Op HN en in communities is binnen-een-uur antwoorden belangrijker
 dan het bericht zelf.
 
-### Vooraf — dinsdag 23 juni (avond)
+### Vooraf — D-1 (avond vóór launch-dag)
 - [ ] Runbook Fase 3 afgerond? (GSC: sitemap (her)submit, indexering top-pagina's aangevraagd)
 - [ ] GIF + statische screenshot + mobiele screenshot klaar
 - [ ] Alle links in de copy getest (terminal, homepage, 1 cornerstone-blogpost)
 - [ ] `site:hacksimulator.nl` nulmeting genoteerd (voor/na-vergelijking)
-- [ ] GA4 Real-Time geverifieerd (anders meet je de launch-impact niet)
+- [ ] GA4 DebugView-check: funnel één keer doorlopen, elk event landt in de property
+      (stappen: `docs/launch-success-metrics.md` §4; read-order launch-dag: §6)
 
-### Woensdag 24 juni — tijdschema (CET)
+### Launch-dag — tijdschema (CET)
 
-> **Aanname:** bewaakbaar blok **13:00–18:00 CET**. Verschuif het hele blok als jouw woensdag
+> **Aanname:** bewaakbaar blok **13:00–18:00 CET**. Verschuif het hele blok als jouw launch-dag
 > anders ligt — alleen het **Show HN-slot (~15:00 CET = ochtend VS)** is qua bereik datum-/
 > tijd-gevoelig; houd dat zo dicht mogelijk bij 15:00 en zorg dat je er ~2-3 uur na kunt reageren.
+
+- [ ] **Vóór de eerste post:** GA4 **launch-annotatie** zetten (Beheer → Annotaties) voor een
+      schone voor/na-lijn in de rapporten (open punt TASKS.md item #46).
 
 | Tijd | Kanaal | Copy | Waarom dit slot |
 |------|--------|------|-----------------|
@@ -215,3 +224,9 @@ dan het bericht zelf.
 *Opgesteld Sessie 161 (11 juni 2026). Feiten geverifieerd tegen `index.html`,
 `docs/commands-list.md`, `src/commands/*`. Kanaal-etiquette via web-research; exacte
 sidebar-regels per community altijd op het moment van posten checken.*
+
+*Her-geverifieerd 14 juli 2026 (na uitstel van de oorspronkelijke 24-juni-datum): schema
+datum-agnostisch gemaakt (D-1 / launch-dag / D+14 — nieuwe datum kiezen ná de
+demand-validatie, item #44), feiten geactualiseerd (12 blogposts, NL-niveau-labels,
+`[TIP]`-marker, leerpad-opschoning Sessie 188/195) en de D-1-checklist gekoppeld aan
+`docs/launch-success-metrics.md`.*
