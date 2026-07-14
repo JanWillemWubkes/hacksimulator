@@ -20,7 +20,7 @@ test.describe('Debug - Console & Persistence', () => {
       console.log(`[Browser ERROR] ${error.message}`);
     });
 
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
 
     const legalModal = page.locator('#legal-modal');
     await expect(legalModal).toBeVisible({ timeout: 5000 });

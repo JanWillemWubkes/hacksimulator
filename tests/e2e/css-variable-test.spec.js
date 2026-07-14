@@ -7,7 +7,7 @@ import { test, expect } from './fixtures.js';
 
 test.describe('CSS Variable Test - Modal Header Color', () => {
   test('CSS variable --color-modal-header should be defined and non-empty', async ({ page }) => {
-    await page.goto('https://hacksimulator.nl/terminal.html', { waitUntil: 'networkidle' });
+    await page.goto('/terminal.html', { waitUntil: 'networkidle' });
 
     // Get CSS variable value - should be defined regardless of theme
     const cssVarValue = await page.evaluate(() => {
@@ -20,7 +20,7 @@ test.describe('CSS Variable Test - Modal Header Color', () => {
   });
 
   test('Legal modal header should use --color-modal-header value', async ({ page }) => {
-    await page.goto('https://hacksimulator.nl/terminal.html', { waitUntil: 'networkidle' });
+    await page.goto('/terminal.html', { waitUntil: 'networkidle' });
 
     // Wait for legal modal (dynamically created by legal.js)
     const legalModal = page.locator('#legal-modal');
@@ -46,7 +46,7 @@ test.describe('CSS Variable Test - Modal Header Color', () => {
   });
 
   test('Feedback modal header should use --color-modal-header value', async ({ page }) => {
-    await page.goto('https://hacksimulator.nl/terminal.html', { waitUntil: 'networkidle' });
+    await page.goto('/terminal.html', { waitUntil: 'networkidle' });
 
     // Accept legal modal first
     const legalModal = page.locator('#legal-modal');

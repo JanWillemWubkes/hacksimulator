@@ -12,7 +12,7 @@
 
 import { test, expect } from './fixtures.js';
 
-const PRODUCTION_URL = 'https://hacksimulator.nl/terminal.html';
+const TERMINAL_URL = '/terminal.html';
 
 // Helper function to accept legal modal (first-time visitor)
 async function acceptLegalModal(page) {
@@ -35,7 +35,7 @@ async function acceptLegalModal(page) {
 test.describe('Responsive Breakpoints - Week 1+2 Fixes', () => {
 
   test('Tablet breakpoint exclusivity - no overlap at 1024px boundary', async ({ page }) => {
-    await page.goto(PRODUCTION_URL);
+    await page.goto(TERMINAL_URL);
 
     // Test 1: 768px = Mobile (hamburger visible)
     await page.setViewportSize({ width: 768, height: 1024 });
@@ -69,7 +69,7 @@ test.describe('Responsive Breakpoints - Week 1+2 Fixes', () => {
 
   // Skip: viewport resize during test causes click timeouts (Playwright limitation)
   test.skip('Widescreen modal scaling - 720px at 1400px+', async ({ page }) => {
-    await page.goto(PRODUCTION_URL);
+    await page.goto(TERMINAL_URL);
     await acceptLegalModal(page);
 
     // Test 1: 1399px = Desktop default (600px modal)
@@ -114,7 +114,7 @@ test.describe('Responsive Breakpoints - Week 1+2 Fixes', () => {
 
   // Skip: dropdown menu CSS visibility on mobile is inconsistent across browsers
   test.skip('Mobile dropdown visual hierarchy - border-top separator', async ({ page }) => {
-    await page.goto(PRODUCTION_URL);
+    await page.goto(TERMINAL_URL);
     await acceptLegalModal(page);
 
     // Set mobile viewport
@@ -156,7 +156,7 @@ test.describe('Responsive Breakpoints - Week 1+2 Fixes', () => {
   });
 
   test('iOS dvh support - mobile search modal fills viewport', async ({ page }) => {
-    await page.goto(PRODUCTION_URL);
+    await page.goto(TERMINAL_URL);
     await acceptLegalModal(page);
 
     // Set mobile viewport (iPhone SE)
@@ -192,7 +192,7 @@ test.describe('Responsive Breakpoints - Week 1+2 Fixes', () => {
   });
 
   test('Responsive navbar layout - mobile vs desktop', async ({ page }) => {
-    await page.goto(PRODUCTION_URL);
+    await page.goto(TERMINAL_URL);
 
     // Test 1: Mobile layout (375px)
     await page.setViewportSize({ width: 375, height: 667 });

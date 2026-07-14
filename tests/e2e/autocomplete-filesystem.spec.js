@@ -11,7 +11,7 @@ import { test, expect } from './fixtures.js';
 test.describe('Tab Autocomplete - Filesystem Commands', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the application
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
 
     // Wait for terminal to be ready
     await page.waitForSelector('#terminal-input');

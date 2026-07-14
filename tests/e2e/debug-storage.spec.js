@@ -8,7 +8,7 @@ test.describe('Debug - localStorage & VFS', () => {
 
   test('Debug: Check localStorage after file creation', async ({ page }) => {
     // Go to site
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
 
     // Accept legal modal
     const legalModal = page.locator('#legal-modal');
@@ -101,7 +101,7 @@ test.describe('Debug - localStorage & VFS', () => {
   });
 
   test('Debug: Check autosave setting', async ({ page }) => {
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
 
     const legalModal = page.locator('#legal-modal');
     await expect(legalModal).toBeVisible({ timeout: 5000 });

@@ -7,7 +7,7 @@ import { test, expect } from './fixtures.js';
 
 test.describe('Feedback & Onboarding Modal Headers', () => {
   test('Feedback modal header should be white (via localStorage manipulation)', async ({ page }) => {
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
 
     // Set localStorage to bypass legal modal
     await page.evaluate(() => {
@@ -34,7 +34,7 @@ test.describe('Feedback & Onboarding Modal Headers', () => {
   });
 
   test('Legal modal header should be white', async ({ page }) => {
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
 
     // Clear localStorage to trigger fresh visit flow
     await page.evaluate(() => {

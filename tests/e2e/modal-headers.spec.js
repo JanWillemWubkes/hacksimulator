@@ -8,7 +8,7 @@ import { test, expect } from './fixtures.js';
 test.describe('Modal Headers Styling', () => {
   test.beforeEach(async ({ page }) => {
     // Clear localStorage to ensure fresh visit flow
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
     await page.evaluate(() => localStorage.clear());
     await page.reload();
   });

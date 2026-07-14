@@ -7,7 +7,7 @@ import { test, expect } from './fixtures.js';
 
 test.describe('Modal Header Colors - Simple Test', () => {
   test('Feedback modal header should be white (#ffffff)', async ({ page }) => {
-    await page.goto('https://hacksimulator.nl/terminal.html', { waitUntil: 'networkidle' });
+    await page.goto('/terminal.html', { waitUntil: 'networkidle' });
 
     // Set localStorage to bypass legal modal
     await page.evaluate(() => {

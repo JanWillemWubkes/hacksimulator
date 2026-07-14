@@ -1,7 +1,7 @@
 // Performance Test Suite - HackSimulator.nl
 // Created: 2025-12-18
 // Purpose: M5 Performance Testing - Bundle size, load time, TTI, localStorage quota, memory leaks
-// Test URL: https://hacksimulator.nl/terminal.html
+// Test URL: /terminal.html tegen Playwright baseURL (default productie; override via BASE_URL env)
 
 import { test, expect } from './fixtures.js';
 import fs from 'fs';
@@ -176,7 +176,7 @@ test.describe('Performance Tests - Load Time & TTI', () => {
     // Measure load time
     const startTime = Date.now();
 
-    await page.goto('https://hacksimulator.nl/terminal.html', {
+    await page.goto('/terminal.html', {
       waitUntil: 'networkidle',
     });
 
@@ -260,7 +260,7 @@ test.describe('Performance Tests - Load Time & TTI', () => {
 
     const startTime = Date.now();
 
-    await page.goto('https://hacksimulator.nl/terminal.html', {
+    await page.goto('/terminal.html', {
       waitUntil: 'networkidle',
     });
 
@@ -300,7 +300,7 @@ test.describe('Performance Tests - Load Time & TTI', () => {
   test('ES6 module cascade < 1s', async ({ page, browserName }) => {
     test.skip(browserName !== 'chromium', 'Resource timing test - Chromium preferred');
 
-    await page.goto('https://hacksimulator.nl/terminal.html', {
+    await page.goto('/terminal.html', {
       waitUntil: 'networkidle',
     });
 
@@ -362,7 +362,7 @@ test.describe('Performance Tests - localStorage Quota', () => {
 
     test.setTimeout(60000); // Increase timeout to 60s (creating 1000 dirs takes time)
 
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
     await acceptLegalModal(page);
     await page.waitForTimeout(500);
 
@@ -445,7 +445,7 @@ test.describe('Performance Tests - localStorage Quota', () => {
   });
 
   test('VFS growth rate is linear (no memory leaks in storage)', async ({ page }) => {
-    await page.goto('https://hacksimulator.nl/terminal.html');
+    await page.goto('/terminal.html');
     await acceptLegalModal(page);
     await page.waitForTimeout(500);
 

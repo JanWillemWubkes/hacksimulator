@@ -3,7 +3,7 @@
 
 import { test, expect } from './fixtures.js';
 
-const TEST_URL = 'https://hacksimulator.nl/terminal.html';
+const TEST_URL = '/terminal.html';
 
 test.describe('Feedback System', () => {
   test.beforeEach(async ({ page }) => {
