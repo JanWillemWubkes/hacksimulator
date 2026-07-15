@@ -46,13 +46,13 @@ Nieuwe command toevoegen? Volg deze 8 stappen:
 
 7. **Testing** - Manual + automated coverage
    - Manual: Happy path + error cases + edge cases
-   - Automated: Playwright E2E tests (`tests/e2e/` - 13 suites, 78 tests)
+   - Automated: Playwright E2E tests (`tests/e2e/` - 28 suites, 240 tests)
    - Cross-browser: Chrome, Firefox passing (Safari deferred)
    - Mobile: Real device test on iOS/Android
 
-8. **Bundle Impact** - Measure KB increase, stay <500KB total
+8. **Bundle Impact** - Measure KB increase, respect budget (Terminal Core <400KB / site totaal <1000KB)
    - Before/after: Measure increase → should be <10KB per command
-   - Warning: Bundle currently exceeds 500KB budget - optimize before adding commands
+   - Warning: Terminal Core currently exceeds the <400KB target (~547KB minified) - optimize before adding commands
 
 → **Testing protocol:** `docs/testing/manual-protocol.md`
 → **E2E tests:** `tests/e2e/` directory

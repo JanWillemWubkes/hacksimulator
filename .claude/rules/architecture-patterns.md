@@ -21,7 +21,7 @@ Always use CSS variables for colors, spacing, typography.
 ```
 
 **Why:** Theme switching, design system consistency, single source of truth
-**Files:** `styles/main.css` (165 variables), Style Guide v1.5
+**Files:** `styles/main.css` (182 variables), Style Guide v1.5
 
 ---
 

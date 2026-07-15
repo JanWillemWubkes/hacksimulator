@@ -2,7 +2,7 @@
 
 ## Build & Performance
 
-1. **Bundle >500KB:** Check imports | Minify JS/CSS | Tree-shake | Remove unused code
+1. **Bundle over budget (Terminal Core >400KB / site >1000KB):** Check imports | Minify JS/CSS | Tree-shake | Remove unused code
    - Measure: `du -sb styles/*.css src/ *.html | awk '{sum+=$1} END {print sum/1024 "KB"}'`
    - Exclude backup files (*.backup*) from measurements
 
