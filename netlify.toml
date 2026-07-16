@@ -42,18 +42,18 @@
   status = 301
   force = true
 
-# Force HTTPS
-# [[redirects]]
-#   from = "http://hacksimulator.nl/*"
-#   to = "https://hacksimulator.nl/:splat"
-#   status = 301
-#   force = true
+# Force HTTPS (single-hop 301 naar apex-https voor de http-varianten)
+[[redirects]]
+  from = "http://hacksimulator.nl/*"
+  to = "https://hacksimulator.nl/:splat"
+  status = 301
+  force = true
 
-# [[redirects]]
-#   from = "http://www.hacksimulator.nl/*"
-#   to = "https://hacksimulator.nl/:splat"
-#   status = 301
-#   force = true
+[[redirects]]
+  from = "http://www.hacksimulator.nl/*"
+  to = "https://hacksimulator.nl/:splat"
+  status = 301
+  force = true
 
 # Optional: Redirect old Netlify subdomain to custom domain
 [[redirects]]
