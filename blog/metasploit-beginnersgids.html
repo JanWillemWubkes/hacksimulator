@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>Metasploit voor Beginners: Wat het Is en Hoe het Werkt | HackSimulator.nl</title>
+  <meta name="description" content="Leer wat Metasploit is: het bekendste penetration testing framework. Nederlandse beginnersgids over exploits, payloads en de exploit-workflow — inclusief ethische en juridische grenzen.">
+  <meta name="keywords" content="metasploit tutorial, metasploit uitleg, exploit framework, penetration testing, ethisch hacken, eternalblue, meterpreter, cybersecurity beginners">
+  <meta name="author" content="HackSimulator.nl">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://hacksimulator.nl/blog/metasploit-beginnersgids.html">
+  <meta property="og:title" content="Metasploit voor Beginners: Wat het Is en Hoe het Werkt | HackSimulator.nl">
+  <meta property="og:description" content="Leer wat Metasploit is en hoe het exploit-framework werkt: exploits, payloads en de workflow van een pentester — met de ethische grenzen erbij.">
+  <meta property="article:published_time" content="2026-07-22">
+  <meta property="article:author" content="HackSimulator.nl">
+  <meta property="article:section" content="Tools">
+  <meta property="og:locale" content="nl_NL">
+  <meta property="og:site_name" content="HackSimulator.nl">
+  <meta property="og:image" content="https://hacksimulator.nl/assets/og-image.png?v=2">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://hacksimulator.nl/assets/og-image.png?v=2">
+
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="HackSimulator.nl Blog" href="/feed.xml">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://hacksimulator.nl/blog/metasploit-beginnersgids.html">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#0d1117">
+
+
+  <!-- Critical Font Preloads (self-hosted, SIL OFL 1.1) -->
+  <link rel="preload" href="/styles/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../styles/main.css?v=153">
+  <link rel="stylesheet" href="../styles/landing.css?v=121">
+  <link rel="stylesheet" href="../styles/blog.css?v=122">
+  <link rel="stylesheet" href="../styles/mobile.css?v=116" media="screen and (max-width: 768px)">
+
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
+
+  <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
+  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore" data-adsense="ca-pub-6345664385525701"></script>
+
+  <!-- Structured Data - JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Metasploit voor Beginners: Wat het Is en Hoe het Werkt",
+    "description": "Leer wat Metasploit is: het bekendste penetration testing framework. Uitleg over exploits, payloads en de exploit-workflow, met de ethische en juridische grenzen.",
+    "datePublished": "2026-07-22",
+    "dateModified": "2026-07-22",
+    "author": {
+      "@type": "Organization",
+      "name": "HackSimulator.nl",
+      "url": "https://hacksimulator.nl/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "HackSimulator.nl",
+      "url": "https://hacksimulator.nl/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://hacksimulator.nl/blog/metasploit-beginnersgids.html"
+    },
+    "inLanguage": "nl-NL",
+    "keywords": "metasploit, exploit framework, penetration testing, ethisch hacken, payload, meterpreter",
+    "wordCount": 2100,
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://hacksimulator.nl/assets/og-image.png?v=2",
+      "width": 1200,
+      "height": 630
+    }
+  }
+  </script>
+  <!-- BreadcrumbList Structured Data (Sessie 139) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://hacksimulator.nl/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://hacksimulator.nl/blog/" },
+      { "@type": "ListItem", "position": 3, "name": "Metasploit voor Beginners: Wat het Is en Hoe het Werkt", "item": "https://hacksimulator.nl/blog/metasploit-beginnersgids.html" }
+    ]
+  }
+  </script>
+
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
+
+  <!-- Navigation (Component Injection) -->
+  <div id="navbar-placeholder">
+    <noscript>
+      <nav class="noscript-nav" role="navigation">
+        <a href="../">HackSimulator.nl</a>
+        <a href="../terminal.html">Start Simulator</a>
+        <a href="../blog/">Blog</a>
+        <a href="../commands/">Commands</a>
+        <a href="../gidsen.html">Gidsen</a>
+        <a href="../woordenlijst.html">Woordenlijst</a>
+        <a href="../over-ons.html">Over Ons</a>
+        <a href="../contact.html">Contact</a>
+      </nav>
+    </noscript>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main-content" class="blog-container">
+    <!-- Breadcrumb (Sessie 139) -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li aria-current="page">Metasploit voor Beginners</li>
+      </ol>
+    </nav>
+    <article class="blog-post">
+      <!-- Post Header -->
+      <header class="blog-post-header">
+        <h1 class="blog-post-title">Metasploit voor Beginners: Wat het Is en Hoe het Werkt</h1>
+        <div class="blog-post-meta">
+          <time datetime="2026-07-22">22 juli 2026</time>
+          <span>10 min</span>
+          <span class="category-badge">Tools</span>
+        </div>
+      </header>
+
+      <!-- Post Content -->
+      <div class="blog-post-content">
+        <p>
+          Je hebt met <a href="nmap-beginnersgids.html">nmap</a> een netwerk gescand en een open poort gevonden met verouderde software erop.
+          Je weet nu dat er een kwetsbaarheid is. Maar hoe zet je die kennis om in daadwerkelijke toegang? Dat is precies waar
+          <abbr class="jargon" title="Metasploit Framework: het meest gebruikte open-source platform voor penetration testing, met duizenden kant-en-klare exploits" tabindex="0"><strong>Metasploit</strong></abbr>
+          om de hoek komt kijken. Het is het bekendste <strong>exploit-framework</strong> ter wereld, en in deze gids leer je wat het is,
+          hoe de onderdelen samenwerken, en — net zo belangrijk — waar de juridische grens ligt.
+        </p>
+
+        <!-- Lead Magnet CTA: gratis Pentest Playbook sample (top placement, hoogste intent) -->
+        <div class="blog-cta blog-cta-product">
+          <h3>Gratis: 9 pagina's uit het Pentest Playbook</h3>
+          <p>Exploitation komt pas ná goede voorbereiding. Download Fase 0 en 1: toestemming regelen en het doelwit verkennen. Geen account, alleen je email.</p>
+          <a href="/sample-pentest.html" class="blog-cta-button" data-lead-magnet="pentest_sample" data-cta-location="blog_metasploit_top">Download de gratis sample</a>
+        </div>
+
+        <h2>Wat is Metasploit?</h2>
+        <p>
+          Metasploit is een <strong>framework</strong>: een verzameling tools die samen het hele proces van kwetsbaarheden testen
+          automatiseren. Het is gratis en open-source, wordt onderhouden door beveiligingsbedrijf Rapid7, en bevat meer dan
+          <strong>2300 kant-en-klare exploits</strong> voor bekende kwetsbaarheden. Een
+          <abbr class="jargon" title="Exploit: code die misbruik maakt van een specifieke kwetsbaarheid om ergens binnen te komen of iets te forceren" tabindex="0"><strong>exploit</strong></abbr>
+          is code die misbruik maakt van een concrete zwakte in software.
+        </p>
+        <p>
+          Het is verreweg het meest gebruikte penetration testing platform ter wereld. Waar je vroeger voor elke kwetsbaarheid
+          zelf exploit-code moest schrijven, biedt Metasploit een bibliotheek waarin je een exploit uitkiest, een paar instellingen
+          invult, en 'm afvuurt. Dat maakt het krachtig — en precies daarom is verantwoord gebruik zo belangrijk.
+        </p>
+
+        <div class="blog-info">
+          Metasploit zelf downloaden en in een eigen oefenomgeving gebruiken is volledig legaal. Het wordt pas strafbaar wanneer je het
+          <strong>zonder toestemming</strong> op systemen van anderen richt. Verderop lees je precies waar die grens ligt.
+        </div>
+
+        <h2>Waarom een Framework, en niet Losse Tools?</h2>
+        <p>
+          Zonder een framework zou een pentester voor elke stap een aparte tool en losse scripts nodig hebben: één voor het scannen,
+          één voor het exploiteren, één voor wat je daarná doet. Metasploit brengt dat allemaal onder één dak, met een consistente
+          manier van werken. Je kiest een module, bekijkt de opties, stelt het doelwit in en voert uit — voor elke exploit hetzelfde
+          patroon. Die uniformiteit is de echte waarde: je hoeft niet 2300 losse tools te leren, maar één werkwijze.
+        </p>
+
+        <h2>De Bouwstenen van Metasploit</h2>
+        <p>
+          Om Metasploit te begrijpen, moet je vier soorten modules kennen. Samen vormen ze de gereedschapskist:
+        </p>
+        <ul>
+          <li>
+            <strong>Exploits</strong> — Code die een specifieke kwetsbaarheid uitbuit om ergens binnen te komen. Dit is de "sleutel"
+            die op één specifiek "slot" (kwetsbaarheid) past.
+          </li>
+          <li>
+            <strong><abbr class="jargon" title="Payload: de code die wordt uitgevoerd nadat een exploit is geslaagd — bepaalt wat de aanvaller vervolgens kan doen" tabindex="0">Payloads</abbr></strong>
+            — De code die draait <em>nadat</em> een exploit is geslaagd. De exploit opent de deur; de payload bepaalt wat je binnen doet
+            (bijvoorbeeld een verbinding terug opzetten).
+          </li>
+          <li>
+            <strong>Auxiliary modules</strong> — Hulpmiddelen die niet exploiteren maar ondersteunen: scanners, fuzzers en
+            informatie-verzamelaars.
+          </li>
+          <li>
+            <strong>Encoders</strong> — Verhullen de payload zodat
+            <abbr class="jargon" title="Antivirus: software die bekende kwaadaardige code herkent en blokkeert op basis van patronen" tabindex="0">antivirussoftware</abbr>
+            het niet direct herkent. In een geautoriseerde test gebruik je dit om te testen of de verdediging standhoudt.
+          </li>
+        </ul>
+        <p>
+          Er is nog een vijfde categorie die je vaak hoort: <strong>post-exploitation</strong> modules. Dat is alles wat je doet
+          <em>nadat</em> je toegang hebt — informatie verzamelen, rechten verhogen, of je positie behouden.
+        </p>
+
+        <h2>De Exploit-Workflow: Zo Werkt een Pentester</h2>
+        <p>
+          Exploitation is geen losse actie maar een keten van stappen. Metasploit volgt een vaste volgorde die je overal in
+          penetration testing terugziet:
+        </p>
+        <ol>
+          <li><strong>Reconnaissance</strong> — Het doelwit verkennen met tools als nmap: welke systemen, poorten en services zijn er?</li>
+          <li><strong>Kwetsbaarheid identificeren</strong> — Welke gevonden software heeft een bekende zwakte?</li>
+          <li><strong>Exploit kiezen</strong> — De juiste module zoeken in de Metasploit-database die bij die kwetsbaarheid past.</li>
+          <li><strong>Payload instellen</strong> — Bepalen wat er ná de exploit moet gebeuren (bijvoorbeeld een reverse shell).</li>
+          <li><strong>Exploitation</strong> — De exploit uitvoeren tegen het doelwit.</li>
+          <li><strong>Post-exploitation</strong> — Wat je met de toegang doet: rechten verhogen, informatie verzamelen.</li>
+          <li><strong>Lateral movement</strong> — Vanaf het gekraakte systeem doorstoten naar andere systemen in het netwerk.</li>
+        </ol>
+
+        <div class="blog-tip">
+          Zie je stap 1? Exploitation begint bij <strong>verkenning</strong>, niet bij de aanval. Zonder goede reconnaissance weet je
+          niet welke exploit je nodig hebt. Daarom is de <a href="nmap-beginnersgids.html">nmap-gids</a> een logische voorbereiding
+          op dit onderwerp.
+        </div>
+
+        <h3>Een Exploit in de Praktijk</h3>
+        <p>
+          Zo ziet een exploit-sessie er versimpeld uit in de Metasploit-console. In dit voorbeeld gebruiken we de beroemde
+          <strong>EternalBlue</strong>-exploit tegen een verouderd Windows-systeem:
+        </p>
+        <div class="terminal-example">
+          <div class="prompt">msf6 > use exploit/windows/smb/ms17_010_eternalblue</div>
+          <div class="output">msf6 > set RHOSTS 192.168.1.100   <- doelwit instellen
+RHOSTS => 192.168.1.100
+
+msf6 > exploit                    <- exploit afvuren
+
+[*] Started reverse TCP handler
+[*] Target OS: Windows 7 Professional
+[+] Host is vulnerable to MS17-010!  <- kwetsbaarheid bevestigd
+
+[TIP] Je stelt bij elke exploit dezelfde soort opties in:
+      een doelwit (RHOSTS) en een payload. Daarna 'exploit'.</div>
+        </div>
+
+        <div class="blog-tip">
+          In de <a href="/commands/#cmd-metasploit">HackSimulator.nl terminal</a> kun je het <code>metasploit</code> command veilig
+          uitproberen. Het toont een educatieve demonstratie van precies deze workflow — zonder dat er ook maar iets echt gebeurt.
+        </div>
+
+        <h2>Payloads: Wat Gebeurt er Na de Exploit?</h2>
+        <p>
+          De exploit opent de deur, maar de <strong>payload</strong> bepaalt wat er dan gebeurt. Er zijn drie types die je als
+          beginner moet kennen:
+        </p>
+        <ul>
+          <li>
+            <strong>Reverse shell</strong> — Het slachtoffer maakt verbinding <em>naar</em> de aanvaller. Dit is het meest gebruikte
+            type, omdat uitgaand verkeer vaak wél door de firewall mag (inkomend verkeer meestal niet).
+          </li>
+          <li>
+            <strong>Bind shell</strong> — Omgekeerd: de aanvaller verbindt <em>naar</em> het slachtoffer. Dat vereist een open poort
+            op het doelwit en is makkelijker te blokkeren.
+          </li>
+          <li>
+            <strong><abbr class="jargon" title="Meterpreter: een geavanceerde Metasploit-payload die in het geheugen draait en veel extra functies biedt na toegang" tabindex="0">Meterpreter</abbr></strong>
+            — Een geavanceerde payload die speciaal bij Metasploit hoort. Het draait in het geheugen (schrijft niets naar schijf),
+            communiceert versleuteld en biedt kant-en-klare functies voor ná de exploit.
+          </li>
+        </ul>
+
+        <div class="blog-info">
+          Een <abbr class="jargon" title="Shell: een tekstuele opdrachtregel-toegang tot een systeem, waarmee je commando's kunt uitvoeren" tabindex="0"><strong>shell</strong></abbr>
+          is simpelweg opdrachtregel-toegang tot een systeem — dezelfde soort terminal die je in HackSimulator.nl gebruikt, maar dan op
+          de machine van het doelwit. Wie een shell heeft, kan commando's uitvoeren op dat systeem.
+        </div>
+
+        <!-- AdSense In-Article -->
+        <div class="ad-container ad-unit ad-in-article" style="display: none;">
+          <p class="ad-disclaimer">Advertisement</p>
+          <ins class="adsbygoogle"
+               style="display:block; text-align:center;"
+               data-ad-layout="in-article"
+               data-ad-format="fluid"
+               data-ad-client="ca-pub-6345664385525701"
+               data-ad-slot="5971972080"></ins>
+        </div>
+
+        <h2>Beroemde Exploits in Metasploit</h2>
+        <p>
+          De kracht van Metasploit zit in zijn database van bekende kwetsbaarheden. Een paar hebben geschiedenis geschreven:
+        </p>
+
+        <table class="blog-table--stacked" role="table">
+          <thead>
+            <tr>
+              <th scope="col">Exploit</th>
+              <th scope="col">Kwetsbaarheid</th>
+              <th scope="col">Bekend van</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Exploit"><strong>EternalBlue</strong></td>
+              <td data-label="Kwetsbaarheid">MS17-010 (Windows SMB)</td>
+              <td data-label="Bekend van">De WannaCry-ransomware (2017), infecteerde wereldwijd honderdduizenden computers</td>
+            </tr>
+            <tr>
+              <td data-label="Exploit"><strong>BlueKeep</strong></td>
+              <td data-label="Kwetsbaarheid"><abbr class="jargon" title="Common Vulnerabilities and Exposures: uniek ID-nummer voor een geregistreerde kwetsbaarheid" tabindex="0">CVE</abbr>-2019-0708 (Windows RDP)</td>
+              <td data-label="Bekend van">Kon zich automatisch verspreiden zonder inloggegevens; miljoenen kwetsbare systemen</td>
+            </tr>
+            <tr>
+              <td data-label="Exploit"><strong>Log4Shell</strong></td>
+              <td data-label="Kwetsbaarheid">CVE-2021-44228 (Java Log4j)</td>
+              <td data-label="Bekend van">Kreeg de maximale risicoscore 10.0; trof miljoenen applicaties tegelijk</td>
+            </tr>
+            <tr>
+              <td data-label="Exploit"><strong>Shellshock</strong></td>
+              <td data-label="Kwetsbaarheid">CVE-2014-6271 (Bash)</td>
+              <td data-label="Bekend van">Kwetsbaarheid in de Linux-shell die commando-injectie mogelijk maakte</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>Het Belangrijkste Leermoment</h2>
+        <p>
+          Als je één ding onthoudt uit deze gids, laat het dit zijn: <strong>de meeste exploits in Metasploit zijn voor oude
+          kwetsbaarheden waarvoor allang een patch bestaat.</strong> Organisaties worden zelden gehackt door een gloednieuwe,
+          onbekende zwakte — ze worden gehackt omdat ze niet op tijd updaten.
+        </p>
+        <p>
+          Het schoolvoorbeeld is WannaCry. De <abbr class="jargon" title="Patch: een software-update die een kwetsbaarheid of fout herstelt" tabindex="0">patch</abbr>
+          voor de EternalBlue-kwetsbaarheid was al <strong>maanden</strong> beschikbaar toen de ransomware in 2017 toesloeg. De
+          slachtoffers hadden simpelweg niet geüpdatet. Dat inzicht is precies waarom verdedigers Metasploit óók gebruiken: om te
+          testen welke bekende gaten nog openstaan, vóórdat een aanvaller ze vindt.
+        </p>
+
+        <div class="blog-tip">
+          Voor een verdediger is de les glashelder: <strong>tijdig patchen verslaat bijna elke exploit</strong>. Een systeem dat
+          up-to-date is, is immuun voor het overgrote deel van wat er in Metasploit zit.
+        </div>
+
+        <h2>Hoe Bescherm je je Hiertegen?</h2>
+        <p>
+          Metasploit begrijpen maakt je een betere verdediger. Dit zijn de belangrijkste maatregelen:
+        </p>
+        <ul>
+          <li>
+            <strong>Patchmanagement</strong> — Update systemen regelmatig en snel. Kritieke kwetsbaarheden verdienen prioriteit.
+            Dit is verreweg de effectiefste maatregel.
+          </li>
+          <li>
+            <strong>Aanvalsoppervlak verkleinen</strong> — Zet services die je niet nodig hebt uit (zoals SMB of Remote Desktop),
+            en gebruik firewallregels die standaard alles blokkeren.
+          </li>
+          <li>
+            <strong>Netwerksegmentatie</strong> — Deel je netwerk op in zones, zodat een aanvaller die één systeem kraakt niet
+            vrij kan doorbewegen (dat voorkomt de "lateral movement" uit de workflow).
+          </li>
+          <li>
+            <strong>Detectie</strong> — Systemen als
+            <abbr class="jargon" title="Intrusion Detection/Prevention System: bewaakt netwerkverkeer en detecteert of blokkeert inbraakpogingen" tabindex="0">IDS/IPS</abbr>
+            herkennen inbraakpogingen en slaan alarm of blokkeren ze.
+          </li>
+        </ul>
+
+        <!-- AdSense In-Article 2 -->
+        <div class="ad-container ad-unit ad-in-article" style="display: none;">
+          <p class="ad-disclaimer">Advertisement</p>
+          <ins class="adsbygoogle"
+               style="display:block; text-align:center;"
+               data-ad-layout="in-article"
+               data-ad-format="fluid"
+               data-ad-client="ca-pub-6345664385525701"
+               data-ad-slot="5270665903"></ins>
+        </div>
+
+        <h2>Ethische en Juridische Overwegingen</h2>
+        <p>
+          Dit is het belangrijkste deel van dit artikel. Metasploit is een offensieve tool, en die kracht brengt verantwoordelijkheid mee.
+        </p>
+
+        <div class="blog-warning">
+          <strong>Gebruik Metasploit alleen op systemen waarvoor je expliciete, schriftelijke toestemming hebt!</strong>
+          Ongeautoriseerd binnendringen van een geautomatiseerd werk is in Nederland strafbaar onder artikel 138ab van het Wetboek
+          van Strafrecht (computervredebreuk). Het maakt daarbij niet uit of je iets beschadigt — alleen al de ongeautoriseerde
+          toegang is een misdrijf.
+        </div>
+
+        <p>
+          De gouden regels voor ethisch gebruik:
+        </p>
+        <ol>
+          <li>
+            <strong>Altijd schriftelijke toestemming</strong> — Een contract of
+            <abbr class="jargon" title="Scope: het document dat exact vastlegt welke systemen je mag testen, wanneer en met welke methoden" tabindex="0">scope-document</abbr>
+            dat vastlegt welke systemen je mag testen.
+          </li>
+          <li>
+            <strong>Blijf binnen de scope</strong> — Toestemming voor één systeem is geen toestemming voor het netwerk ernaast.
+          </li>
+          <li>
+            <strong>Oefen in een eigen lab</strong> — Gebruik virtuele machines, bewust-kwetsbare oefensystemen, of een simulator
+            zoals HackSimulator.nl.
+          </li>
+          <li>
+            <strong>Documenteer alles</strong> — Log wat je deed, wanneer en met welk resultaat. Dat beschermt jou én je opdrachtgever.
+          </li>
+        </ol>
+
+        <!-- Gumroad CTA: Pentest Playbook (contextual placement na ethische overwegingen) -->
+        <div class="blog-cta blog-cta-product">
+          <h3>Wil je een echte pentest leren uitvoeren?</h3>
+          <p>Download het Pentest Playbook — van reconnaissance tot rapportage, met een beslisboom bij elke stap.</p>
+          <a href="https://hacksimulator.gumroad.com/l/wmvpx" class="blog-cta-button" target="_blank" rel="noopener noreferrer" data-product-id="wmvpx" data-cta-location="blog_metasploit">Download het Playbook</a>
+        </div>
+
+        <h2>Veelgemaakte Fouten door Beginners</h2>
+        <ul>
+          <li>
+            <strong>Meteen willen exploiteren</strong> — Zonder goede reconnaissance kies je de verkeerde exploit. Verkenning eerst,
+            altijd.
+          </li>
+          <li>
+            <strong>Oefenen op systemen van anderen</strong> — "Ik wilde het alleen even proberen" is geen geldige verdediging.
+            Gebruik legale oefenomgevingen.
+          </li>
+          <li>
+            <strong>Denken dat exploits magie zijn</strong> — Een exploit werkt alleen als het doelwit die specifieke, niet-gepatchte
+            kwetsbaarheid heeft. Tegen een up-to-date systeem doe je niets.
+          </li>
+          <li>
+            <strong>Post-exploitation onderschatten</strong> — Binnenkomen is vaak makkelijker dan onopgemerkt blijven. In een echte
+            pentest is het rapport belangrijker dan de "hack" zelf.
+          </li>
+        </ul>
+
+        <h2>Oefenen in HackSimulator.nl</h2>
+        <div class="blog-cta">
+          <h3>Probeer het metasploit command</h3>
+          <p>
+            Open de simulator en typ <code>metasploit</code> om een veilige, educatieve demonstratie van het framework te zien —
+            inclusief de exploit-workflow en een uitleg per stap. Typ <code>man metasploit</code> voor de volledige Nederlandstalige
+            handleiding. Er gebeurt niets echts: alles is gesimuleerd.
+          </p>
+          <a href="../terminal.html" class="blog-cta-button">Start de simulator</a>
+        </div>
+
+        <h2>Legale Oefenomgevingen</h2>
+        <p>
+          Wil je verder dan de simulator? Deze platforms zijn speciaal gemaakt om exploitation legaal te oefenen:
+        </p>
+        <ul>
+          <li><strong>Metasploitable</strong> — Een bewust kwetsbare virtuele machine, gemaakt om Metasploit op te oefenen.</li>
+          <li><strong><a href="https://www.hackthebox.eu" target="_blank" rel="noopener noreferrer">HackTheBox</a></strong> en
+            <strong><a href="https://tryhackme.com" target="_blank" rel="noopener noreferrer">TryHackMe</a></strong> — Online labs met begeleide leerpaden.</li>
+          <li><strong>VulnHub</strong> — Downloadbare kwetsbare machines voor je eigen lab.</li>
+          <li><strong>DVWA</strong> (Damn Vulnerable Web Application) — Een oefen-webapplicatie vol ingebouwde kwetsbaarheden.</li>
+        </ul>
+
+        <h2>Samenvatting</h2>
+        <p>
+          Metasploit is het bekendste exploit-framework en met de basis uit dit artikel begrijp je nu:
+        </p>
+        <ul>
+          <li>Wat een framework is en waarom het het exploit-proces automatiseert</li>
+          <li>De vier bouwstenen: exploits, payloads, auxiliary modules en encoders</li>
+          <li>De exploit-workflow van reconnaissance tot lateral movement</li>
+          <li>Het verschil tussen reverse shell, bind shell en meterpreter</li>
+          <li>Waarom tijdig patchen de meeste exploits verslaat</li>
+          <li>Waar de juridische grens ligt en hoe je ethisch oefent</li>
+        </ul>
+        <p>
+          De volgende stap? Oefen met het <a href="/commands/#cmd-metasploit">metasploit command</a> in de simulator, fris je
+          <a href="nmap-beginnersgids.html">nmap-kennis</a> op (exploitation begint bij verkenning), en bekijk hoe een concrete
+          aanval eruitziet in onze <a href="sql-injection-uitgelegd.html">SQL injection-gids</a>. Wil je het grotere plaatje van
+          webkwetsbaarheden? Lees dan de <a href="owasp-top-10-uitgelegd.html">OWASP Top 10</a>.
+        </p>
+
+        <h2>Nuttige Resources</h2>
+        <ul>
+          <li><strong>Officieel:</strong> <a href="https://www.metasploit.com" target="_blank" rel="noopener noreferrer">metasploit.com</a> - Documentatie en downloads</li>
+          <li><strong>Oefenomgevingen:</strong> <a href="https://www.hackthebox.eu" target="_blank" rel="noopener noreferrer">HackTheBox</a>,
+            <a href="https://tryhackme.com" target="_blank" rel="noopener noreferrer">TryHackMe</a> - Legale labs om je skills te oefenen</li>
+          <li><strong>CVE Database:</strong> <a href="https://cve.mitre.org" target="_blank" rel="noopener noreferrer">cve.mitre.org</a> - Zoek kwetsbaarheden op software en versie</li>
+          <li><strong>Simulator:</strong> <a href="/commands/#cmd-metasploit">Metasploit in HackSimulator.nl</a> - Oefen veilig in je browser</li>
+        </ul>
+
+      </div>
+
+      <!-- Support Banner -->
+      <div class="blog-support-banner">
+        <h3>Vond je dit artikel nuttig?</h3>
+        <p>HackSimulator.nl is een onafhankelijk project &mdash; gebouwd door &#233;&#233;n developer. Met een koffie help je de simulator gratis houden voor iedereen.</p>
+        <div class="blog-support-actions">
+          <a href="https://ko-fi.com/hacksimulator" class="blog-cta-button" target="_blank" rel="noopener noreferrer">Steun met een koffie</a>
+          <a href="../#newsletter" class="blog-support-link">Of schrijf je in voor updates</a>
+        </div>
+      </div>
+
+      <!-- Related Articles -->
+      <section class="related-articles">
+        <h2>Verder Lezen</h2>
+        <div class="related-grid">
+          <a href="nmap-beginnersgids.html" class="related-card">
+            <span class="related-category">Tools</span>
+            <h3>Netwerk Scanning met Nmap</h3>
+            <p>Exploitation begint bij verkenning - leer open poorten en services vinden met de #1 scan-tool.</p>
+            <span class="related-meta">8 min leestijd</span>
+          </a>
+          <a href="sql-injection-uitgelegd.html" class="related-card">
+            <span class="related-category">Gevorderden</span>
+            <h3>SQL Injection Uitgelegd</h3>
+            <p>Een concrete aanvalstechniek van dichtbij - hoe database-queries worden misbruikt en beschermd.</p>
+            <span class="related-meta">9 min leestijd</span>
+          </a>
+          <a href="owasp-top-10-uitgelegd.html" class="related-card">
+            <span class="related-category">Concepten</span>
+            <h3>OWASP Top 10 Uitgelegd</h3>
+            <p>De tien gevaarlijkste webapplicatie-kwetsbaarheden - het grotere plaatje achter exploitation.</p>
+            <span class="related-meta">11 min leestijd</span>
+          </a>
+          <a href="cybersecurity-tools.html" class="related-card">
+            <span class="related-category">Bronnen</span>
+            <h3>5 Essenti&euml;le Security Tools</h3>
+            <p>De must-know tools voor elke beginnende ethisch hacker, van nmap tot Metasploit.</p>
+            <span class="related-meta">7 min leestijd</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Post Footer -->
+      <footer class="blog-post-footer">
+        <p>Vragen of feedback? Laat het ons weten op <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+        <p><a href="/blog/">&larr; Terug naar blog overzicht</a></p>
+      </footer>
+    </article>
+  </main>
+
+  <!-- AdSense Footer Banner (M5.5 Blog Monetization) -->
+  <div id="adsense-footer" class="ad-container ad-unit" style="display: none;">
+      <p class="ad-disclaimer">Advertisement</p>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-6345664385525701"
+           data-ad-slot="1674341955"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+  </div>
+
+  <!-- Footer (Component Injection) -->
+  <div id="footer-placeholder">
+    <noscript>
+      <footer class="noscript-footer">
+        <p>&copy; 2026 HackSimulator.nl</p>
+        <nav>
+          <a href="../assets/legal/privacy.html">Privacy</a>
+          <a href="../assets/legal/terms.html">Voorwaarden</a>
+          <a href="../assets/legal/cookies.html">Cookies</a>
+          <a href="../over-ons.html">Over Ons</a>
+          <a href="../contact.html">Contact</a>
+        </nav>
+      </footer>
+    </noscript>
+  </div>
+
+  <!-- Theme Initialization (prevents flash) - external for CSP compliance -->
+  <script src="/src/init-theme.js"></script>
+
+  <!-- Component Injection (external script for CSP compliance) -->
+  <script src="/src/init-components.js?v=4" type="module"></script>
+
+  <!-- Analytics & Consent (external for CSP compliance) -->
+  <script src="/src/init-analytics.js" type="module"></script>
+
+  <!-- Reading Progress (blog-specific) -->
+  <script src="../src/ui/blog-theme.js" type="module"></script>
+</body>
+</html>

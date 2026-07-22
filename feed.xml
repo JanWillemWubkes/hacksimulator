@@ -9,7 +9,16 @@
     <atom:link href="https://hacksimulator.nl/feed.xml" rel="self" type="application/rss+xml"/>
     <language>nl-NL</language>
     <managingEditor>contact@hacksimulator.nl (HackSimulator.nl)</managingEditor>
-    <lastBuildDate>Fri, 12 Jun 2026 12:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 22 Jul 2026 12:00:00 +0200</lastBuildDate>
+
+    <item>
+      <title>Metasploit voor Beginners: Wat het Is en Hoe het Werkt</title>
+      <description>Leer wat Metasploit is: het bekendste penetration testing framework. Nederlandse beginnersgids over exploits, payloads en de exploit-workflow, met de ethische en juridische grenzen erbij.</description>
+      <link>https://hacksimulator.nl/blog/metasploit-beginnersgids.html</link>
+      <guid isPermaLink="true">https://hacksimulator.nl/blog/metasploit-beginnersgids.html</guid>
+      <pubDate>Wed, 22 Jul 2026 10:00:00 +0200</pubDate>
+      <category>Tools</category>
+    </item>
 
     <item>
       <title>Wireshark Tutorial: Netwerkverkeer Analyseren voor Beginners</title>
