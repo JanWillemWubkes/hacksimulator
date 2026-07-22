@@ -26,7 +26,7 @@
 | M7: Gamification | ✅ Voltooid | 47/47 | 100% | ✅ Phase 1-7 complete (framework, content, badges, certs, dashboard, leaderboard, testing) |
 | M8: Analytics & Scaling | ⏭️ Gepland | 1/37 | 2% | (Sessie 157 --deep zelf-test ground-truth fix: was 0/40 stale; section heeft 1 [x] + 36 [ ]) |
 | M9: Refactor Sprint | ✅ Voltooid | 19/19 | 100% | ✅ Cache + bundle + code quality + docs sync + performance + test coverage + localStorage opt |
-| **Blog (content-pijler)** | ✅ Live | 12/12 posts | 100% | ✅ 105+ jargon-explanations + JSON-LD schema + internal cross-linking + unified marketing nav + breadcrumbs + merk-auteurschap (JSON-LD Organization, zichtbare byline verwijderd Sessie 180; persoonsnaam op over-ons) (Sessies 122-125 + 138-139 + 160: Wireshark + Hashcat posts) |
+| **Blog (content-pijler)** | ✅ Live | 13/13 posts | 100% | ✅ 105+ jargon-explanations + JSON-LD schema + internal cross-linking + unified marketing nav + breadcrumbs + merk-auteurschap (JSON-LD Organization, zichtbare byline verwijderd Sessie 180; persoonsnaam op over-ons) (Sessies 122-125 + 138-139 + 160: Wireshark + Hashcat posts; Sessie 199: Metasploit launch-week-post) |
 
 ---
 
@@ -44,7 +44,7 @@
 - **Playwright:** 28 spec files, 240 tests per browser-project (Sessie 197 added +2 in NEW `persistence-flush.spec.js`: flush-on-`visibilitychange(hidden)` bewaart challenge-voltooiing + VFS-mutatie binnen het 500ms-debounce-venster. Chromium-baseline Sessie 197 tegen lokale werkkopie: 184 werkkopie-specs groen vóór+na de fixes; 49 "failures" = 10 prod-hardcoded specs (egress `000`) + 5 tutorial-gestures (iPhone-13-device-emulatie-harnasartefact) — géén werkkopie-regressie. Sessie 196 added +2 in gamification.spec; Sessie 195 added +4)
 
 <!-- VALIDATE-BUNDLE-START Sessie 157 — ground-truth target voor scripts/validate-docs.sh --deep -->
-<!-- src=673 styles=395 blog=415 assets=1031 (KB unminified, du -sb / 1024 basis; Sessie 198 ground-truth meting — src +2 KB t.o.v. Sessie 197: analytics-funnel-events (terminal_cta_click + terminal_activated) in events.js/terminal.js/cta-tracking.js, netto klein) -->
+<!-- src=673 styles=394 blog=447 assets=1030 (KB unminified, du -sb / 1024 basis; Sessie 199 ground-truth meting — blog +32 KB t.o.v. Sessie 198: NEW metasploit-beginnersgids.html launch-week-post) -->
 <!-- VALIDATE-BUNDLE-END -->
 
 **Volgende Stappen:**
