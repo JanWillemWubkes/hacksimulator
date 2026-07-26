@@ -206,7 +206,7 @@ test.describe('Responsive ASCII Box Layout', () => {
     const text = await output.innerText();
 
     // Verify all shortcut categories are present
-    expect(text).toContain('NAVIGATION');
+    expect(text).toContain('NAVIGATIE');
     expect(text).toContain('ZOEKEN');
     expect(text).toContain('TERMINAL');
 

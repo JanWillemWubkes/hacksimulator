@@ -475,7 +475,7 @@ function buildDesktopBox(stage, width) {
   lines.push(B.vertical + ' '.repeat(inner) + B.vertical);
 
   // Suggestion (word-wrapped)
-  var suggestionLines = wordWrap('[->] ' + stage.suggestion, inner - 4);
+  var suggestionLines = wordWrap('[→] ' + stage.suggestion, inner - 4);
   suggestionLines.forEach(function(line) {
     lines.push(B.vertical + ('  ' + line).padEnd(inner) + B.vertical);
   });
@@ -483,9 +483,9 @@ function buildDesktopBox(stage, width) {
   // Empty line
   lines.push(B.vertical + ' '.repeat(inner) + B.vertical);
 
-  // Tip (word-wrapped with <- prefix)
+  // Tip (word-wrapped with [TIP] prefix)
   if (stage.tip) {
-    var tipLines = wordWrap('<- ' + stage.tip, inner - 4);
+    var tipLines = wordWrap('[TIP] ' + stage.tip, inner - 4);
     tipLines.forEach(function(line) {
       lines.push(B.vertical + ('  ' + line).padEnd(inner) + B.vertical);
     });
@@ -510,9 +510,9 @@ function buildDesktopBox(stage, width) {
 function buildMobileOutput(stage) {
   var out = '\n**VOLGENDE STAP**\n\n';
   out += stage.phase + ' (' + stage.progress + ')\n\n';
-  out += '[->] ' + stage.suggestion + '\n\n';
+  out += '[→] ' + stage.suggestion + '\n\n';
   if (stage.tip) {
-    out += '<- ' + stage.tip + '\n\n';
+    out += '[TIP] ' + stage.tip + '\n\n';
   }
   out += buildNextHint(stage) + '\n';
   if (stage.skippedHint) {
@@ -523,21 +523,23 @@ function buildMobileOutput(stage) {
 
 function buildCompletionMessage() {
   var summaryLines = [
-    '[✓] Alle fases, missies en challenges voltooid!',
+    '[✓] Fases, missies en challenges klaar!',
     '',
     'Je hebt geleerd:',
-    '  [✓] Terminal navigatie en bestandsbeheer',
-    '  [✓] Network reconnaissance en port scanning',
-    '  [✓] Password cracking, brute force en SQL injection',
-    '  [✓] Privilege escalation technieken',
-    '  [✓] Exploitation met Metasploit en Hydra',
+    '  [✓] Terminal- en bestandsbeheer',
+    '  [✓] Netwerk-recon en poortscans',
+    '  [✓] Password cracking en SQL-injectie',
+    '  [✓] Privilege escalation',
+    '  [✓] Exploitation (Metasploit, Hydra)',
     '',
     "[?] Typ 'certificates' voor je certificaat",
     "[?] Typ 'dashboard' voor je statistieken",
     "[?] Typ 'achievements' voor je badges",
     '',
-    'Volgende stap? Probeer echte CTF platforms:',
-    '  TryHackMe.com | HackTheBox.com | OverTheWire.org'
+    'Volgende stap? Echte CTF-platforms:',
+    '  TryHackMe.com',
+    '  HackTheBox.com',
+    '  OverTheWire.org'
   ];
 
   if (isMobileView()) {

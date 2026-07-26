@@ -213,10 +213,10 @@ Welkom, hacker. Sessie gestart.
 
   [!] Begin met de basics:
 
-  → FASE 1: Terminal basics     ('ls', 'cd', 'pwd')
-  → FASE 2: File manipulation   ('mkdir', 'touch', 'rm')
-  → FASE 3: Network scanning    ('ping', 'nmap')
-  → FASE 4: Security tools      ('hashcat', 'hydra')${cta ? '\n\n' + cta : ''}`;
+  → FASE 1: Terminal basics (ls)
+  → FASE 2: File manipulation (mkdir)
+  → FASE 3: Network scanning (nmap)
+  → FASE 4: Security tools (hashcat)${cta ? '\n\n' + cta : ''}`;
   }
 
   /**

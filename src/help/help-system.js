@@ -3,6 +3,8 @@
  * Progressive help based on user behavior
  */
 
+import registry from '../core/registry.js';
+
 class HelpSystem {
   constructor() {
     // Track user errors for progressive hints
@@ -100,7 +102,7 @@ class HelpSystem {
 
 VOLLEDIGE HULP:
 
-1. Typ 'help' voor complete lijst van 41 commands
+1. Typ 'help' voor complete lijst van ${registry.list().length} commands
 2. Typ 'man <command>' voor gedetailleerde uitleg van elk command
 
 Bijvoorbeeld:
