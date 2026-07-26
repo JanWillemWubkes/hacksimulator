@@ -16,15 +16,21 @@ export default {
     // Check if user has given consent for security tools
     const hasConsent = localStorage.getItem('security_tools_consent') === 'true';
 
-    // Show warning on first use (no consent + no args)
-    if (!hasConsent && args.length === 0) {
+    // Waarschuwing bij eerste gebruik — box eerst, ALTIJD (ook mét args). De eerste
+    // aanroep toont de waarschuwing + zet consent; de tweede aanroep draait de tool.
+    // Zo kan de waarschuwing niet omzeild worden door direct 'sqlmap <url>' te typen.
+    if (!hasConsent) {
+      try {
+        localStorage.setItem('security_tools_consent', 'true');
+      } catch (e) { /* private mode / quota — consent niet-persistent, tool draait bij 2e call */ }
+
       const warningContent = `SQLMAP - Automatic SQL Injection Tool
 
 JURIDISCHE WAARSCHUWING:
 SQL injection testing zonder toestemming is ILLEGAAL.
 Ongeautoriseerde toegang tot databases = strafbaar feit.
 
-  Straf: Tot 6 jaar + civiele aansprakelijkheid
+  Strafbaar: computervredebreuk (art. 138ab Sr)
 
 EDUCATIEF GEBRUIK:
 Deze simulator demonstreert SQL injection concepten veilig.
@@ -41,19 +47,12 @@ GEBRUIK:
 
 [?] OM DOOR TE GAAN:
 
-    Typ 'sqlmap <url>' om te accepteren en door te gaan
+    Typ 'sqlmap <url>' opnieuw om te accepteren en door te gaan
 
     Voorbeeld: sqlmap http://site.com/product?id=1
 
 [?] Je consent wordt opgeslagen. Typ 'reset consent' om opnieuw
       de waarschuwing te zien.`;
-    }
-
-    // User provided args but hasn't given consent yet - grant consent and proceed
-    if (!hasConsent && args.length > 0) {
-      try {
-        localStorage.setItem('security_tools_consent', 'true');
-      } catch (e) { /* private mode / quota — consent niet-persistent, tool draait toch */ }
     }
 
     // Check if URL argument is provided
@@ -160,7 +159,7 @@ Gevolg: Alle producten worden getoond (niet alleen id=1)
    ' UNION SELECT username, password FROM users --
    → Haalt gebruikersnamen en wachtwoorden op!
 
-[ > ] WAT EEN AANVALLER KAN DOEN:
+[?] WAT EEN AANVALLER KAN DOEN:
    • Database structuur ophalen (tables, columns)
    • Data lezen (credentials, persoonlijke info)
    • Data wijzigen/verwijderen (DELETE, UPDATE)
@@ -168,7 +167,7 @@ Gevolg: Alle producten worden getoond (niet alleen id=1)
    • OS commands uitvoeren (met xp_cmdshell op SQL Server)
    • Volledige server compromise
 
-[***]  BESCHERMING (voor developers):
+[###] BESCHERMING (voor developers):
     - Prepared statements / parameterized queries (ALTIJD!)
     - Input validation (whitelist approach)
     - Escape special characters (last resort)
@@ -349,7 +348,7 @@ COMMON MISTAKES
        → Bots scannen continu het internet
 
 JURIDISCHE CONTEXT
-    [!]  Computer Fraud & Abuse Act / Computercriminaliteit wet:
+    [!] Nederlandse wet (computervredebreuk, art. 138ab Sr):
 
     **Illegaal:**
        [X] SQL injection op sites zonder toestemming
@@ -363,7 +362,7 @@ JURIDISCHE CONTEXT
        [✓] Eigen applicaties testen
        [✓] Geautoriseerde security research
 
-    Straf: Tot 6 jaar gevangenis + boetes + civiele claims
+    In Nederland strafbaar als computervredebreuk (art. 138ab Sr).
 
 GERELATEERDE COMMANDO'S
     nmap, nikto, metasploit, hydra, burp (niet in simulator)

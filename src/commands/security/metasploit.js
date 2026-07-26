@@ -23,7 +23,7 @@ JURIDISCHE WAARSCHUWING:
 Metasploit is ALLEEN LEGAAL met expliciete schriftelijke
 toestemming. Ongeautoriseerd gebruik = strafbaar feit.
 
-  Straf: Tot 6 jaar gevangenisstraf
+  Strafbaar: computervredebreuk (art. 138ab Sr)
 
 WAT IS METASPLOIT?
 Het meest gebruikte penetration testing framework ter wereld.

@@ -35,8 +35,14 @@ export default {
     // Check if user has given consent for security tools
     const hasConsent = localStorage.getItem('security_tools_consent') === 'true';
 
-    // Show warning on first use (no consent + no args)
-    if (!hasConsent && args.length === 0) {
+    // Waarschuwing bij eerste gebruik — box eerst, ALTIJD (ook mét args). De eerste
+    // aanroep toont de waarschuwing + zet consent; de tweede aanroep draait de tool.
+    // Zo kan de waarschuwing niet omzeild worden door direct 'hashcat <hash>' te typen.
+    if (!hasConsent) {
+      try {
+        localStorage.setItem('security_tools_consent', 'true');
+      } catch (e) { /* private mode / quota — consent niet-persistent, tool draait bij 2e call */ }
+
       const warningContent = `HASHCAT - Advanced Password Recovery Tool
 
 JURIDISCHE WAARSCHUWING:
@@ -62,19 +68,12 @@ Voorbeelden van zwakke demo hashes:
 
 [?] OM DOOR TE GAAN:
 
-    Typ 'hashcat <hash>' om te accepteren en door te gaan
+    Typ 'hashcat <hash>' opnieuw om te accepteren en door te gaan
 
     Voorbeeld: hashcat 5f4dcc3b5aa765d61d8327deb882cf99
 
 [?] Je consent wordt opgeslagen. Typ 'reset consent' om opnieuw
       de waarschuwing te zien.`;
-    }
-
-    // User provided args but hasn't given consent yet - grant consent and proceed
-    if (!hasConsent && args.length > 0) {
-      try {
-        localStorage.setItem('security_tools_consent', 'true');
-      } catch (e) { /* private mode / quota — consent niet-persistent, tool draait toch */ }
     }
 
     // Check if hash argument is provided
@@ -129,9 +128,7 @@ Hash.Type........: ${type}
 Time.Started.....: ${new Date().toLocaleString('nl-NL')}
 Speed.#1.........: ${(1000 / time).toFixed(0)} MH/s  ← Miljoen hashes per seconde
 
-${'.'.repeat(50)}
-
-[+] HASH CRACKED!
+[✓] HASH CRACKED!
 
 Hash: ${hash}
 Password: ${password}
@@ -232,7 +229,7 @@ JURIDISCHE WAARSCHUWING
        [X] Credential stuffing attacks
        [X] Verkopen van gekraakte accounts
 
-    Straf: Tot 6 jaar gevangenisstraf (Computercriminaliteit wet)
+    In Nederland strafbaar als computervredebreuk (art. 138ab Sr).
 
 REAL-WORLD BREACHES
     [*] Grote data breaches met gekraakte hashes:

@@ -49,15 +49,21 @@ export default {
     // Check if user has given consent for security tools
     const hasConsent = localStorage.getItem('security_tools_consent') === 'true';
 
-    // Show warning on first use (no consent + no args)
-    if (!hasConsent && args.length === 0) {
+    // Waarschuwing bij eerste gebruik — box eerst, ALTIJD (ook mét args). De eerste
+    // aanroep toont de waarschuwing + zet consent; de tweede aanroep draait de tool.
+    // Zo kan de waarschuwing niet omzeild worden door direct 'hydra <target>' te typen.
+    if (!hasConsent) {
+      try {
+        localStorage.setItem('security_tools_consent', 'true');
+      } catch (e) { /* private mode / quota — consent niet-persistent, tool draait bij 2e call */ }
+
       const warningContent = `HYDRA - Network Logon Brute Force Tool
 
 JURIDISCHE WAARSCHUWING:
 Brute force aanvallen zonder toestemming zijn ILLEGAAL.
 Dit is een strafbaar feit onder de Computercriminaliteit wet.
 
-  Straf: Tot 6 jaar gevangenisstraf
+  Strafbaar: computervredebreuk (art. 138ab Sr)
 
 EDUCATIEF GEBRUIK:
 Deze simulator demonstreert brute force concepten veilig.
@@ -74,19 +80,12 @@ GEBRUIK:
 
 [?] OM DOOR TE GAAN:
 
-    Typ 'hydra <target>' om te accepteren en door te gaan
+    Typ 'hydra <target>' opnieuw om te accepteren en door te gaan
 
     Voorbeeld: hydra ssh://192.168.1.100
 
 [?] Je consent wordt opgeslagen. Typ 'reset consent' om opnieuw
       de waarschuwing te zien.`;
-    }
-
-    // User provided args but hasn't given consent yet - grant consent and proceed
-    if (!hasConsent && args.length > 0) {
-      try {
-        localStorage.setItem('security_tools_consent', 'true');
-      } catch (e) { /* private mode / quota — consent niet-persistent, tool draait toch */ }
     }
 
     // Check if target argument is provided
@@ -155,7 +154,7 @@ Brute forcing credentials...
 [ATTEMPT] [${service}] host: ${target} login: root password: toor
 [ATTEMPT] [${service}] host: ${target} login: root password: password
 [ATTEMPT] [${service}] host: ${target} login: admin password: 12345
-${'.'.repeat(40)}
+   ... (${attempts - 3} pogingen overgeslagen) ...
 [ATTEMPT] [${service}] host: ${target} login: ${foundCred.user} password: ${foundCred.pass}
 
 [${port}][${service}] host: ${target}
@@ -174,7 +173,7 @@ ${'.'.repeat(40)}
 4. **Default credentials**: Veel devices komen met admin:admin
 5. **Snelheid**: Hydra probeert 16 passwords per seconde (of meer)
 
-[***]  BESCHERMING:
+[###] BESCHERMING:
    [✓] Sterke, unieke wachtwoorden (min 16 karakters)
    [✓] Rate limiting (max 3 pogingen per 5 minuten)
    [✓] Account lockout (na 5 foute pogingen)
@@ -268,7 +267,7 @@ REAL-WORLD USE CASES
        • Botnet spreiding
        • Account takeovers
 
-    Straf: Tot 6 jaar gevangenisstraf + hoge boetes
+    In Nederland strafbaar als computervredebreuk (art. 138ab Sr).
 
 FAMOUS EXAMPLES
     [*] IoT Botnet Attacks:

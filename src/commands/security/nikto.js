@@ -16,15 +16,21 @@ export default {
     // Check if user has given consent for security tools
     const hasConsent = localStorage.getItem('security_tools_consent') === 'true';
 
-    // Show warning on first use (no consent + no args)
-    if (!hasConsent && args.length === 0) {
+    // Waarschuwing bij eerste gebruik — box eerst, ALTIJD (ook mét args). De eerste
+    // aanroep toont de waarschuwing + zet consent; de tweede aanroep draait de tool.
+    // Zo kan de waarschuwing niet omzeild worden door direct 'nikto <url>' te typen.
+    if (!hasConsent) {
+      try {
+        localStorage.setItem('security_tools_consent', 'true');
+      } catch (e) { /* private mode / quota — consent niet-persistent, tool draait bij 2e call */ }
+
       const warningContent = `NIKTO - Web Server Vulnerability Scanner
 
 JURIDISCHE WAARSCHUWING:
 Scannen van websites zonder toestemming is ILLEGAAL.
-Dit wordt gezien als unauthorized access attempt.
+Dit geldt als een poging tot ongeautoriseerde toegang.
 
-  Straf: Computercriminaliteit wet + civiele claims
+  Strafbaar: computervredebreuk (art. 138ab Sr)
 
 EDUCATIEF GEBRUIK:
 Deze simulator demonstreert web vulnerability scanning veilig.
@@ -41,19 +47,12 @@ GEBRUIK:
 
 [?] OM DOOR TE GAAN:
 
-    Typ 'nikto <url>' om te accepteren en door te gaan
+    Typ 'nikto <url>' opnieuw om te accepteren en door te gaan
 
     Voorbeeld: nikto http://testsite.local
 
 [?] Je consent wordt opgeslagen. Typ 'reset consent' om opnieuw
       de waarschuwing te zien.`;
-    }
-
-    // User provided args but hasn't given consent yet - grant consent and proceed
-    if (!hasConsent && args.length > 0) {
-      try {
-        localStorage.setItem('security_tools_consent', 'true');
-      } catch (e) { /* private mode / quota — consent niet-persistent, tool draait toch */ }
     }
 
     // Check if URL argument is provided
@@ -84,14 +83,10 @@ GEBRUIK:
     // Simulate nikto scan
     const hostname = url.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
 
-    const output = `- Nikto v2.5.0
----------------------------------------------------------------------------
-+ Target IP:          192.168.1.100
+    const output = `- Nikto v2.5.0+ Target IP:          192.168.1.100
 + Target Hostname:    ${hostname}
 + Target Port:        80
-+ Start Time:         ${new Date().toLocaleString('nl-NL')}
----------------------------------------------------------------------------
-+ Server: Apache/2.4.41 (Ubuntu)  ← Server fingerprinting
++ Start Time:         ${new Date().toLocaleString('nl-NL')}+ Server: Apache/2.4.41 (Ubuntu)  ← Server fingerprinting
 + The anti-clickjacking X-Frame-Options header is not present  ← Security header missing
 + The X-Content-Type-Options header is not set  ← Security header missing
 + No CGI Directories found (use '-C all' to force check all possible dirs)
@@ -104,7 +99,7 @@ GEBRUIK:
 + /.git/: Git repository found  ← Source code exposure!
 + /server-status: Apache server-status enabled  ← Server info disclosure
 
-[ > ] GEVONDEN KWETSBAARHEDEN: 11
+[?] GEVONDEN KWETSBAARHEDEN: 11
 
 [!]  KRITIEKE BEVINDINGEN:
 
@@ -135,9 +130,7 @@ GEBRUIK:
    → Makkelijkere client-side attacks
 
 + 11 vulnerabilities found
-+ End Time: ${new Date().toLocaleString('nl-NL')} (scan took 32 seconds)
----------------------------------------------------------------------------
-+ 1 host(s) tested
++ End Time: ${new Date().toLocaleString('nl-NL')} (scan took 32 seconds)+ 1 host(s) tested
 
 [?] LEERMOMENT: Web Security Headers
 
@@ -147,7 +140,7 @@ GEBRUIK:
    Content-Security-Policy → Voorkomt XSS attacks
    Strict-Transport-Security → Forces HTTPS
 
-[***]  REMEDIATIE STAPPEN:
+[###] REMEDIATIE STAPPEN:
 
 1. **Verwijder development files:**
    rm /var/www/html/phpinfo.php
@@ -366,7 +359,7 @@ LEGAL USE
        • Concurrenten scannen
        • Zonder expliciete toestemming
 
-    Straf: Computer Fraud Act violations, civiele claims
+    In Nederland strafbaar als computervredebreuk (art. 138ab Sr).
 
 GERELATEERDE COMMANDO'S
     nmap (port scanning), sqlmap (SQL injection), wpscan (WordPress; niet in simulator)
