@@ -92,7 +92,7 @@ export default {
     "        MOEILIJK    Certificaat van Meesterschap (Hacker Elite)\n" +
     "\n" +
     "    Certificaten worden automatisch opgeslagen zodra je een challenge\n" +
-    "    voltooit. Je kunt ze altijd opnieuw bekijken, downloaden of kopieren.\n" +
+    "    voltooit. Je kunt ze altijd opnieuw bekijken, downloaden of kopiëren.\n" +
     "\n" +
     "VOORBEELDEN\n" +
     "    certificates\n" +
@@ -155,7 +155,7 @@ function handleCertAction(challengeId, action) {
   // view
   var output = generateChallengeCertificate(challenge, certData);
   output += '\n\n[TIP] Typ \'certificates download ' + challengeId + '\' om te downloaden.';
-  output += '\n[TIP] Typ \'certificates copy ' + challengeId + '\' om naar klembord te kopieren.';
+  output += '\n[TIP] Typ \'certificates copy ' + challengeId + '\' om naar klembord te kopiëren.';
   return output;
 }
 

@@ -157,7 +157,7 @@ export default {
 
     // Educational tips based on scan results
     if (openCount === 1 && scanResults.openPorts[0].port === 443) {
-      output += `\n\n[TIP] Deze server is goed beveiligd! Alleen HTTPS open = minimale attack surface.`;
+      output += `\n\n[TIP] Deze server is goed beveiligd! Alleen HTTPS open = minimaal aanvalsoppervlak.`;
     } else if (openCount >= 5) {
       output += `\n\n[TIP] Veel open poorten = meer ingangen voor aanvallers. Elke service kan beveiligingslekken hebben.`;
     } else if (scanResults.openPorts.some(p => p.port === 22)) {
@@ -231,7 +231,7 @@ EDUCATIEVE TIPS
        • 8080 → HTTP alternate (development servers)
 
     [###]  Security interpretatie:
-       • Weinig open poorten (1-3) = Goed! Minimale attack surface
+       • Weinig open poorten (1-3) = Goed! Minimaal aanvalsoppervlak
        • Veel open poorten (>10) = Slecht! Meer ingangen voor aanvallers
        • Database poorten open = RISICO! Zouden restricted moeten zijn
        • Filtered poorten = Firewall aanwezig (goed teken)

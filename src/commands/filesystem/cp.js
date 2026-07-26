@@ -44,7 +44,7 @@ export default {
       // Educational error messages
       if (error.message.includes('No such file or directory')) {
         if (error.message.includes(source)) {
-          return `cp: cannot stat '${source}': No such file or directory\n\n[TIP] De bronbestand bestaat niet. Gebruik 'ls' om te zien welke bestanden beschikbaar zijn.`;
+          return `cp: cannot stat '${source}': No such file or directory\n\n[TIP] Het bronbestand bestaat niet. Gebruik 'ls' om te zien welke bestanden beschikbaar zijn.`;
         } else {
           return `cp: cannot create '${destination}': No such file or directory\n\n[TIP] De doeldirectory bestaat niet. Maak deze eerst aan met 'mkdir'.`;
         }
