@@ -4,6 +4,38 @@
 
 ---
 
+## Sessie 199: Marketing-launch uitvoeren — verse launch-week-post + launch-beslissing (22-26 jul 2026)
+
+**Mission:** Gebruiker: "ik wil de marketing launch uitvoeren; zeg me precies wat te doen en of ik nu kan launchen of dat er eerst iets moet gebeuren." Diagnose: technisch launch-ready, alles voorbereid (Sessie 161-198: funnel-events live, GA4 grotendeels geconfigureerd, aankondigings-kit + visuals her-geverifieerd, copy plak-klaar). Enige echte bouw-blocker = de verse launch-week-blogpost die het runbook aanbeveelt.
+
+**Besluit (Heisenberg, via AskUserQuestion):** demand-validatie (item #44, 5-10 testsessies) **bewust overslaan → direct launchen**, mét de verse blogpost. Launch-datum: te kort dag voor vandaag (post + prep eerst) → **doel wo 29 juli 2026** (woensdag = beste HN/Reddit-dag, kit §5).
+
+**Datum-verificatie-correctie:** in het eerste plan noemde ik "wo 23 jul (morgen)" terwijl 22 jul zélf al woensdag was — Heisenberg corrigeerde. Weekdag met `date -d` geverifieerd. Geheugen `feedback_verify_calendar_dates` toegevoegd.
+
+**Deel A — gebouwd (code/content, live op main):**
+- **NEW `blog/metasploit-beginnersgids.html`** (~2100 woorden, 10 min, categorie Tools) — verse launch-week-post = freshness-hefboom (runbook Fase 2; vorige nieuwste was 26 mei). Beginnersgids: wat is een exploit-framework, de 4 bouwstenen (exploits/payloads/auxiliary/encoders) + post-exploitation, de 7-staps exploit-workflow (recon→lateral movement), payloads (reverse/bind shell + meterpreter), beroemde exploits (EternalBlue/WannaCry + BlueKeep/Log4Shell/Shellshock, tabel), het patch-leermoment (WannaCry-patch was maanden beschikbaar), verdediging, juridische grens (art. 138ab Sr, gemirrord van bestaande posts — géén eigen strafmaat-getal geclaimd). Gemodelleerd op `nmap-beginnersgids.html`: JSON-LD Article (Organization-auteur) + BreadcrumbList, breadcrumbs, blauw blog-palet (geen groen), consent-model-CTA's, lead-magnet + Gumroad + practice-CTA. Feiten alleen uit `metasploit.js` + de geverifieerde-feitenlijst in `launch-announcement-kit.md` §1. `datePublished` 22 jul = echte deploy-dag (geen future-dating op 29 jul → slecht voor SEO + botst met datum-discipline).
+- **Ingehaakt:** blog-index (nieuwste boven), `feed.xml` (RSS-item newest-first + `lastBuildDate` → 22 jul; Check 9b RSS-count = blog/*.html minus index), `sitemap.xml` (entry, lastmod >= datePublished; Check 9a), homepage-bloglinks-lijst.
+- **Cornerstone-touch (runbook Fase 2, echte content-verbetering rechtvaardigt datum-bump):** natuurlijke interne links naar de nieuwe gids vanaf `cybersecurity-tools.html` (had al een Metasploit-sectie) + `nmap-beginnersgids.html` (recon→exploitation = pedagogisch logische volgende stap). Beide: `article:modified_time` toegevoegd + JSON-LD `dateModified` + sitemap `lastmod` eerlijk naar 22 jul; homepage-lastmod mee (blog-link toegevoegd).
+- **NEW `docs/launch-checklist.md`** — één blijvende, vindbare stap-voor-stap to-do (Blok 1 deze week / Blok 2 D-1 28 jul / Blok 3 launch-dag 29 jul / D+14) met vinkvakjes + verwijzingen naar announcement-kit/success-metrics/runbook. Reden: de volledige stappenlijst stond alleen in het ephemere plan-bestand + verspreid over docs; Heisenberg vroeg expliciet "hoe vind ik de stappen terug?".
+- **Admin/besluit gelogd in TASKS.md:** #44 → BEWUST OVERGESLAGEN (poort niet weggeredeneerd, als afwijking genoteerd; launch-data vervangt validatiesignaal), #45 (value-prop/retentie) draait nu op echte launch-data i.p.v. validatie-sessies, launch-uitvoering-item gedateerd (29 jul, D-1/dag/D+14) + wijst als eerste naar de checklist.
+
+**Verificatie:** validate-blogs 15/15, validate-docs `--deep` 9/9 (na sync van blog-count 12/12→13/13 + bundle-marker blog 415→447 KB), feed.xml + sitemap.xml well-formed XML (python parse), render-en-meet lokaal (dark/light/375px): 0 horizontale overflow (scrollWidth 360≤375), navbar/footer/consent-banner correct geïnjecteerd, breadcrumb aanwezig, alle 7 interne links resolven 200. Screenshots dark-mobiel + light-desktop.
+
+**Commits (gepusht naar `main`):** `f6894b1` (blogpost + wiring + cornerstone-links), `4245ec9` (blog-count + bundle-marker sync), `7f65d94` (launch-beslissing #44/#45), `d45631d` (launch-checklist.md) + deze /summary doc-sync.
+
+**Learnings:**
+- **Filesystem-ground-truth-validatie dwingt afgeleide administratie mee te bewegen.** Een blogpost toevoegen trekt automatisch 3 checks uit sync: Check 6b (blog-count in TASKS-tabel), Check 9b (RSS-item-count == blog/*.html minus index), Check 9a (sitemap lastmod >= datePublished) + Check 5 (bundle blog KB ±5%). Drift-bestendig ontwerp = nieuwe content valt nooit stil buiten beeld, maar je moet de tabel/feed/sitemap/marker expliciet bijwerken. Ken die koppeling vóór je een post toevoegt.
+- **datePublished = echte deploy-dag, niet de launch-dag.** Een post nu (22 jul) live zetten met datum 29 jul = future-dating → Google wantrouwt het + botst met "nooit datums faken". 22 jul is eerlijk én op de launch (29 jul) veruit de verste post = precies de freshness die het runbook wil.
+- **Juridische claims mirroren, niet zelf verzinnen.** `metasploit.js` noemt "6 jaar" (warning) én "Federal Computer Fraud Act, 10 jaar" (US, manPage) — beide ongeschikt voor NL-copy. De 8 bestaande blogposts citeren art. 138ab Sr zónder strafmaat-getal; die framing gemirrord ([[feedback_verify_claims_against_artifact]]).
+- **Cornerstone-touch: doe de niet-datumgevoelige waarde nu, laat de rest voor launch-dag.** De echte SEO-winst (interne links naar de nieuwe post vanaf posts die 'm natuurlijk noemen) kan meteen; de bredere Fase-2 date-align blijft Heisenberg's launch-dag-taak. Twee posten getoucht met eerlijke 22-jul-datums i.p.v. de hele cornerstone-set nu forceren (proportionele inspanning, [[feedback_proportional_effort_hobby]]).
+- **Stappen die de gebruiker moet uitvoeren horen in een blijvend repo-bestand, niet alleen in het plan-bestand.** Het plan in `~/.claude/plans/` is sessie-scoped en kan opschonen; `docs/launch-checklist.md` is de duurzame single-source.
+
+**Metrics delta:** blog/ 415→447 KB (+32, nieuwe post) | blogposts 12→13 | RSS-items 13→14 | src/styles/assets ongewijzigd (673/394/1030 KB) | 28 spec files / 213 tests ongewijzigd (geen code-wijziging, alleen content/docs) | 5 commits.
+
+**Next steps (open, Heisenberg):** `docs/launch-checklist.md` afwerken → launch wo 29 juli. Ná launch: item #45 (value-prop/retentie) beslissen op de echte funnel-data. Item #46 open GA4-launch-dag-handelingen (annotatie).
+
+---
+
 ## Sessie 198: Launch-readiness — 3 workstreams (08 jul 2026)
 
 **Mission:** Gebruiker: "wat is iets fundamenteels dat we nog moeten doen voor de (uitgestelde) marketing-launch? Wees brutaal eerlijk." Analyse → gebruiker koos "alles aanpakken" (goedgekeurd plan, 3 workstreams).

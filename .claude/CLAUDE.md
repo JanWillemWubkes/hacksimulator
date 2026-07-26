@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 198)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 199)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 199: Marketing-launch uitvoeren — verse launch-week-post + launch-beslissing (22-26 jul 2026)
+⚠️ **Never:**
+- Een blogpost toevoegen zonder de afgeleide administratie mee te bewegen — filesystem-ground-truth-validatie trekt automatisch 4 checks uit sync: blog-count in de TASKS-tabel (6b), RSS-item-count == `blog/*.html` minus index (9b), sitemap `lastmod >= datePublished` (9a) en bundle blog KB ±5% (5). Drift-bestendig = nieuwe content valt nooit stil buiten beeld, maar je moet tabel/feed/sitemap/marker expliciet bijwerken.
+- Een verse post future-daten op de launch-dag — live zetten op 22 jul met `datePublished` 29 jul = Google wantrouwt future-dated artikelen + botst met de "nooit datums faken"-discipline. De echte deploy-dag (22 jul) is eerlijk én op de launch (29 jul) veruit de verste post = precies de freshness die het runbook wil.
+- Een juridische strafmaat zelf verzinnen — `metasploit.js` noemt "6 jaar" (warning) + "Federal Computer Fraud Act, 10 jaar" (US, manPage), beide ongeschikt voor NL-blogcopy. De 8 bestaande posts citeren art. 138ab Sr zónder getal; die framing mirroren ([[feedback_verify_claims_against_artifact]]).
+- Een weekdag/datum uit het hoofd claimen — ik noemde "wo 23 jul (morgen)" terwijl 22 jul zélf woensdag was. Altijd `date -d YYYY-MM-DD +%A` vóór een planning ([[feedback_verify_calendar_dates]]).
+
+✅ **Always:**
+- De niet-datumgevoelige cornerstone-waarde nu doen, de rest voor launch-dag — interne links naar de nieuwe post vanaf posts die 'm natuurlijk noemen (cybersecurity-tools had al een Metasploit-sectie; nmap = recon→exploitation) geeft meteen SEO-winst; de bredere Fase-2 date-align blijft Heisenberg's launch-dag-taak. Twee posten getoucht met eerlijke datums i.p.v. de hele set forceren ([[feedback_proportional_effort_hobby]]).
+- Een gepoorte beslissing als afwijking loggen, niet wegredeneren — demand-validatie (#44) bewust overgeslagen op Heisenberg's keuze; in TASKS.md gemarkeerd als expliciete afwijking (launch-data vervangt het validatiesignaal) i.p.v. de poort stil te laten vallen ([[feedback_preserve_plan_gates]]).
+- Stappen die de gebruiker moet uitvoeren horen in een blijvend repo-bestand — het plan in `~/.claude/plans/` is sessie-scoped en kan opschonen; NEW `docs/launch-checklist.md` is de duurzame single-source (Heisenberg vroeg letterlijk "hoe vind ik de stappen terug?").
+- Een nieuwe blogpost modelleren op een bestaande (nmap) — erft automatisch alle conventies (JSON-LD Organization-auteur, breadcrumbs + BreadcrumbList, consent-model-CTA's, blauw palet, div-balans) → validate-blogs 15/15 in één keer. Volledig: `docs/sessions/current.md` Sessie 199.
+
 ### Sessie 198: Launch-readiness — funnel-meetbaarheid + demand-validatie + value-prop (08 jul 2026)
 ⚠️ **Never:**
 - Het fundamentele launch-gat als een feature lezen — na 197 sessies polish (+ M8-analytics op 2%) was de eerlijke diagnose: technisch launch-ready, strategisch ongevalideerd (nul extern signaal, geen succescriterium). Meer bouwen was niet het antwoord; extern bewijs + een meetbaar doel wel.
@@ -149,21 +162,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Document-and-accept is een expliciete deliverable met rationale — multi-tab (dagdeel reconcile vs zeldzaam+zelfherstellend), hint-tier-reset (onzichtbaar), virtual-keyboard (needs device), voortgangsmap (single-slot volstaat) staan nu in troubleshooting.md/current.md; een bewust niet-gebouwde fix zonder vastgelegde reden wordt elke sessie opnieuw overwogen.
 - Specs die productie-URL's hardcoden (debug-storage, performance) bewijzen niets voor werkkopie-code — check het `goto`-doelwit vóór je een groene run meetelt. Volledig: `docs/sessions/current.md` Sessie 194.
 
-### Sessie 193: Volledige tutorial-flow-audit — begeleiding + state + omgeving (03-05 jul 2026)
-⚠️ **Never:**
-- Een viewport-/timing-klacht als een render-gat lezen — bug A/B ("Typ 'next'" naast "gebruik pwd"; stale hervat-tekst boven nieuwe briefing) kwamen niet uit ontbrekende code maar uit dat de deep-link-id pas ná de welcome-render bekend was. De fix zit in *wanneer* je de staat kent (id vóór `terminal.init`), niet in nieuwe UI.
-- Eén opslag-slot 3 toestanden laten coderen met te weinig velden — `activeScenario` alleen kon "gepauzeerd" niet van "nooit gestart" onderscheiden; `exit()` wiste daardoor de voortgang terwijl de melding "opgeslagen ... om te hervatten" beloofde. Een `active`-boolean lost het op (oude saves = actief = backwards-compatibel), geen tweede slot/migratie.
-- `resume()` laten early-returnen vóór het laden van `completedScenarios` — voltooide missies + `tutorial cert` raakten na één reload permanent kwijt (eerstvolgende `_save()` schreef `[]` naar disk). Laad afgeleide staat die je altijd nodig hebt vóór de guard.
-- first-occurrence-index-vergelijking gebruiken voor volgorde-eisen — sql-sleuth/attack-chain werden permanent onwinbaar bij één verkeerde-volgorde-poging. Monotone first-index = lock; gebruik "geordende subsequence ergens in de log".
-- Een byte-`sed` vertrouwen voor een string-sweep met quotes — `s/Type '/` miste `Type \'next\'` (backslash-byte ertussen). Een regex die `\\?['"]` toestaat ving alle ~90; verifieer met een na-grep.
-
-✅ **Always:**
-- Bij output-vs-verhaal-conflict het verhaal naar de wereld buigen als de wereld pedagogisch juist is — `/etc/shadow` "Permission denied" is correct + consistent met cat.js' eigen "restricted!"-tip; de tutorial-tekst werd eerlijk (permission-denied = leermoment) i.p.v. een globale VFS-mutatie die "shadow leesbaar" zou lekken.
-- De duurzame omgevings-fix is een fixture, niet een validator-patch — één `setup(vfs)`-hook per scenario (bij verse start, NIET resume) normaliseert cwd + ruimt run-artefacten op + herstelt gewiste read-targets getrouw uit `initialFilesystem`, en neutraliseert zo F+G+M ineens. Validators per stap najagen = dweilen.
-- Bij "maak de héle flow perfect": twee lagen auditen — begeleiding (CTA/state/markers) én omgeving (VFS/persistentie/sessies/mobile). De zwaarste bugs (permanent verlies, gegarandeerde herhaalrun-strand) zaten in de omgevingslaag, niet in de gemelde symptomen.
-- Marker-hiërarchie is bewust maar moet gedocumenteerd + consistent: `[~]` dim = staande uitnodiging, `[?]` blauw = hint-inhoud. Trek outliers gelijk ([[feedback_nl_copy_dejargon]] geldt ook voor markers) en leg de renderer-waarheid vast (`[TIP]` heeft géén branch → is NIET cyaan). Volledig: `docs/sessions/current.md` Sessie 193.
-
-**Rotation:** Top-6 huidig: 193-194-195-196-197-198 (Sessie 192 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 195 UITGEVOERD:** current.md staart Sessie 180-184 geknipt naar `archive-s180-s184.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 185-195 (11 entries; volgende bulk-rotatie Sessie 200 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-179 → `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 194-195-196-197-198-199 (Sessie 193 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 195 UITGEVOERD:** current.md staart Sessie 180-184 geknipt naar `archive-s180-s184.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 185-195 (11 entries; volgende bulk-rotatie Sessie 200 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-179 → `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -212,7 +211,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 198
+**Sessie counter:** 199
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -264,6 +263,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 08 jul 2026 (Sessie 198 — Launch-readiness, 3 workstreams. WS1 (code live): funnel-audit + 2 launch-events (`terminal_cta_click` + `terminal_activated`), self-test 0 missing, NEW `launch-success-metrics.md`. WS2/WS3: NEW `demand-validation-protocol.md` + `value-prop-and-retention.md` (bewust niet live). Cache `main.js v=202`. Volledig: `docs/sessions/current.md`)
-**Version:** 5.72 (Sessie 198 — Launch-readiness 3 workstreams (funnel-code + 3 launch-docs) in 3 commits; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 26 jul 2026 (Sessie 199 — Marketing-launch uitvoeren. Verse launch-week-post NEW `blog/metasploit-beginnersgids.html` + ingehaakt (blog-index/feed/sitemap/homepage) + cornerstone-cross-links (cybersecurity-tools + nmap) + NEW `docs/launch-checklist.md`. Besluit: demand-validatie #44 bewust overgeslagen → direct launchen, doel wo 29 juli. 5 commits gepusht. Volledig: `docs/sessions/current.md`)
+**Version:** 5.73 (Sessie 199 — Marketing-launch: verse Metasploit-launch-week-post + cornerstone-links + launch-checklist + launch-beslissing (#44 overgeslagen); volledige historie: `docs/sessions/current.md` + TASKS.md)
 
