@@ -51,102 +51,59 @@ op een veilige manier.`;
       de waarschuwing te zien.`;
     }
 
-    // Metasploit simulation - interactive framework intro
-    const output = `${warningBox}
+    // Metasploit simulation - lean, beginner-friendly framework intro.
+    // Geen herhaalde warningBox (consent-flow toonde 'm al), geen %%%%-ASCII-art.
+    // Alleen canonieke markers zodat de renderer consistent kleurt (zie src/ui/renderer.js).
+    const output = `[!] metasploit is een offensive tool — gebruik het ALLEEN op
+    systemen waar je schriftelijk toestemming voor hebt.
 
+metasploit v6.3.4-dev
+2344 exploits - 1377 payloads - 423 post-modules
 
-                                   ____________
- [%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| $a,        |%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%]
- [%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| $S\`?a,     |%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%]
- [%%%%%%%%%%%%%%%%%%%%__%%%%%%%%%%|       \`?a, |%%%%%%%%__%%%%%%%%%__%%__ %%%%]
- [_ %%%%%%%%%%%%%%%%%%| |%%%%%%%%%|            |%%%%%%| |%%%%%%%%%%| |  | %%%%]
- [%%\\_%%%%%%%%%%%%%%%%%%_/________\\_________/%%%%%__/_/%%%%% ___/%%_/   %%%%]
- [%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |%%%%%%   /%%%%%%%%%%]
- [\`%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%____|__%%_____/%%%%%%%%%%%]
-   \`^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[?] WAT IS METASPLOIT?
 
-       =[ metasploit v6.3.4-dev                          ]
-+ -- --=[ 2344 exploits - 1234 auxiliary - 423 post       ]
-+ -- --=[ 1377 payloads - 46 encoders - 11 nops          ]
-+ -- --=[ 9 evasion                                       ]
+Het meest gebruikte inbraak-testframework ter wereld: een
+gereedschapskist vol kant-en-klare exploits (aanvalscode)
+voor bekende kwetsbaarheden.
 
-[?] EDUCATIEVE DEMONSTRATIE:
+   exploit   ← code die een gat in software uitbuit
+   payload   ← wat er draait NA een geslaagde exploit
+   post      ← acties NA toegang (screenshots, wachtwoorden)
 
-msf6 > use exploit/windows/smb/ms17_010_eternalblue  ← WannaCry exploit
-msf6 exploit(ms17_010_eternalblue) > show options
+[?] ZO WERKT EEN AANVAL — STAP VOOR STAP
 
-Module options (exploit/windows/smb/ms17_010_eternalblue):
+**Stap 1 — Kies een exploit**
+   msf6 > use exploit/windows/smb/ms17_010_eternalblue
+   ← EternalBlue: het gat achter de WannaCry-gijzelsoftware (2017)
 
-   Name           Current Setting  Required  Description
-   ----           ---------------  --------  -----------
-   RHOSTS                          yes       Target IP(s)
-   RPORT          445              yes       SMB port
-   SMBPass                         no        SMB password
-   SMBUser                         no        SMB username
+**Stap 2 — Wijs het doel aan**
+   msf6 > set RHOSTS 192.168.1.100
+   ← RHOSTS = het IP-adres van het doelsysteem
 
-msf6 exploit(ms17_010_eternalblue) > set RHOSTS 192.168.1.100
-RHOSTS => 192.168.1.100
+**Stap 3 — Voer de exploit uit**
+   msf6 > exploit
+   [*] Verbinden met 192.168.1.100 via poort 445 (SMB)...
+   [+] Doel is KWETSBAAR voor MS17-010!
+   ← het gat is bevestigd — hier stopt de simulatie
 
-msf6 exploit(ms17_010_eternalblue) > exploit
+[!] SIMULATIE GESTOPT — dit is een veilig, nagemaakt voorbeeld.
+    In een echte (toegestane) pentest zou hierna volledige
+    toegang tot het systeem volgen. Dat doen we hier bewust niet.
 
-[*] Started reverse TCP handler on 192.168.1.50:4444
-[*] 192.168.1.100:445 - Connecting to target for exploitation
-[*] 192.168.1.100:445 - Target OS: Windows 7 Professional 7601 SP1
-[+] 192.168.1.100:445 - Host is vulnerable to MS17-010!  ← Kwetsbaarheid gevonden
+[?] DE BELANGRIJKSTE LES
 
-[!]  SIMULATIE GESTOPT - Dit is een educatief voorbeeld.
+De meeste exploits in Metasploit zijn voor OUDE gaten waar
+allang een update voor bestaat. Organisaties worden gehackt
+omdat ze niet updaten — niet door geheime 0-days.
 
-In een echte (geautoriseerde) pentest zou dit:
-   1. De kwetsbaarheid exploiteren
-   2. Een reverse shell openen  ← verbinding terug naar de aanvaller
-   3. Volledige systeemtoegang geven
-   4. Meer rechten krijgen (privilege escalation)
+   WannaCry (2017): de update was al MAANDEN beschikbaar.
+   De slachtoffers hadden simpelweg niet geupdatet.
 
-[ > ] METASPLOIT CAPABILITIES:
-   • 2300+ exploits (kwetsbaarheden uitbuiten)
-   • 1300+ payloads (code die na exploit draait)
-   • Auxiliary modules (scanners, fuzzers)
-   • Post-exploitation  ← wat je doet NA toegang: toetsaanslagen opnemen, screenshots, etc.
-   • Evasion  ← antivirussoftware omzeilen
-   • Encoders  ← code verhullen zodat antivirus het niet herkent
+[TIP] Zo bescherm je je: update systemen op tijd, zet ongebruikte
+      diensten uit (SMB, RDP) en gebruik een firewall.
 
-[ = ] FAMOUS EXPLOITS IN METASPLOIT:
-   • EternalBlue (MS17-010) - WannaCry ransomware gebruikt dit
-   • BlueKeep (CVE-2019-0708) - Windows RDP kwetsbaarheid
-   • Log4Shell (CVE-2021-44228) - Java logging kwetsbaarheid
-   • Shellshock (CVE-2014-6271) - Bash command injection
-
-[***]  BESCHERMING:
-    - Patch management (update systemen REGELMATIG!)
-    - Vulnerability scanning (detect voor exploit)
-    - Netwerk opdelen in zones  ← voorkomt dat aanvaller vrij rondbeweegt
-    - IDS/IPS  ← systemen die inbraakpogingen detecteren en blokkeren
-    - Firewall rules  ← zo min mogelijk toegankelijk van buitenaf
-    - Disable unnecessary services (SMB, RDP als niet nodig)
-
-[?] LEERMOMENT:
-    De meeste exploits in Metasploit zijn voor OUDE kwetsbaarheden
-    met publieke patches. Organisaties worden gehackt omdat ze
-    NIET updaten, niet door 0-days.
-
-    WannaCry (2017): Patch was beschikbaar MAANDEN voor aanval.
-    Slachtoffers hadden gewoon niet gepatched.
-
-[!]  ETHISCH GEBRUIK:
-    [✓] Eigen lab (VMs, virtuele netwerken)
-    [✓] Penetration testing contract (schriftelijk!)
-    [✓] Bug bounty programs (authorized scope)
-    [✓] CTF competitions (Capture The Flag)
-    [✓] Security training/certificeringen
-
-    [X] Ongeautoriseerde systemen scannen/exploiteren
-    [X] Stolen credentials gebruiken
-    [X] Malware development voor kwaadaardig gebruik
-
-msf6 > exit
-
-[*] Metasploit simulation ended
-`.trim();
+[→] Meer weten? Typ 'man metasploit' voor exploits, payloads,
+    verdediging en legale oefenomgevingen.`.trim();
 
     return output;
   },
@@ -250,7 +207,7 @@ REAL-WORLD USE CASES
        • Botnet creation
        • Corporate espionage
 
-    Straf: Tot 10 jaar gevangenis (Federal Computer Fraud Act)
+    In Nederland strafbaar als computervredebreuk (art. 138ab Sr).
 
 DEFENSE STRATEGIES
 [###] Patch Management (KRITIEK!):
