@@ -10,7 +10,7 @@
 
 > **Rotatie/archivering-conventie:** zie [`docs/sessions/README.md`](docs/sessions/README.md)
 > (range-naamgeving `archive-sNNN-sMMM.md`; legacy `archive-q*`-namen zijn bevroren + fout gelabeld).
-> `current.md` houdt het rolling window Sessie 185-195; ouder is geroteerd naar de range-archieven hieronder.
+> `current.md` houdt het rolling window Sessie 190-200; ouder is geroteerd naar de range-archieven hieronder.
 
 ### [Current Sessions (185-195)](docs/sessions/current.md) - Full Detail
 **Sessies:** 195, 194, 193, 192, 191, 190, 189, 188, 187, 186, 185
@@ -22,6 +22,13 @@
 - Tutorial/challenge-completion: output-zichtbaar + één "next" CTA + voltooiingsscherm past in beeld (Sessie 190-192)
 - Leerpad-boog: Stap 0 ontwerp → Fase B (fundamentals-scenario + her-tiering) → ladder-uniformering → Fase A deep-link naar in-app tutorial-landing (Sessie 186-189)
 - Leerpad-sectie homepage: 3 nep-deuren → mini-leerlijn met "Lees eerst"-links + eerlijke knoplabels (Sessie 185)
+
+---
+
+### [Archief Sessie 185-189](docs/sessions/archive-s185-s189.md) - Full Detail (geroteerd)
+**Sessies:** 189 → 185 (nieuwste-eerst)
+**Period:** 29 - 30 juni 2026
+**Topics:** Leerpad-sectie homepage (3 nep-deuren → echt leerpad), Stap 0 ontwerpbeslissing leerpad-niveaus → tutorial-scenario's, Fase B tutorials op orde (fundamentals-scenario + her-tiering), coherente leerpad-ladder, Fase A leerpad deep-link → in-app tutorial-landing
 
 ---
 
@@ -156,7 +163,7 @@
 
 **Total Sessions:** 190 (as of 01 juli 2026)
 **Current Session:** 190 (Bugfix tutorial/challenge-completion — laatste output zichtbaar + één "next")
-**Sessions with full documentation:** 81-190 (current.md 180-190 + range-archieven 175-179, 170-174, 165-169, 121-164 & 81-120)
+**Sessions with full documentation:** 81-200 (current.md 190-200 + range-archieven 185-189, 180-184, 175-179, 170-174, 165-169, 121-164 & 81-120)
 **Sessions compressed:** 2-77 (various compression levels)
 
 **Structure rationale:**
@@ -198,10 +205,11 @@
 
 ---
 
-**Last updated:** 06 juli 2026 (Sessie 195 — bulk-rotatie: 180-184 geroteerd naar `archive-s180-s184.md`, current.md → window 185-195, index gesynct)
+**Last updated:** 26 juli 2026 (Sessie 200 — bulk-rotatie: 185-189 geroteerd naar `archive-s185-s189.md`, current.md → window 190-200, index gesynct)
 **Next update:** bij volgende `N%5`-rotatie (steady-state per `docs/sessions/README.md`)
 
 **Recent updates:**
+- Sessie 200: Steady-state `N%5`-rotatie — 185-189 (staart) geknipt naar `archive-s185-s189.md` (5 entries, 179 regels), current.md window 190-200 (11 entries)
 - Sessie 195: Steady-state `N%5`-rotatie — 180-184 (staart) geknipt naar `archive-s180-s184.md` (5 entries, byte-geverifieerd), current.md window 185-195 (11 entries)
 - Sessie 190: Steady-state `N%5`-rotatie — 175-179 (staart) geknipt naar `archive-s175-s179.md` (5 entries, 182 regels), current.md window 180-190 (11 entries)
 - Sessie 185: Steady-state `N%5`-rotatie — 170-174 (staart) geknipt naar `archive-s170-s174.md` (byte-geverifieerd, 182 regels), current.md window 175-185 (11 entries)

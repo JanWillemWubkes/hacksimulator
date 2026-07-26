@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 199)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 200)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,17 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 200: Command-output-audit (item #47) afgerond — Fase 3 triviale correctheid-nits (26 jul 2026)
+⚠️ **Never:**
+- Een string-fix via de volle UI verifiëren als een directe module-import het codepad exact raakt — de typewriter, consent-modal en FocusTrap staan tussen jou en de `execute()`-output. `import()` van de command-module in de browser + een stub (`vfs.copy` die "No such file" gooit) of een passende target (`nmap` op `secure-*` → de 443-only-tak) draait de échte tak zonder ceremonie. Meet het gedrag, niet de scherm-heuristiek ([[reference_renderer_marker_collision]]).
+- Een `replace_all` afvuren zonder de reikwijdte vooraf te bewijzen — een `grep -rn "kopieren" src/` toonde exact 2 treffers, beide in `certificates.js`, dus file-scoped replace-all kon niet over-reachen. Zonder die grep is het een gok.
+- Werk claimen dat een andere context deed — Fase 1+2 + de metasploit-cleanup landden in eerdere same-day commits (`f65c93d`/`0a256ad`/`f56d886`); deze conversatie deed alleen Fase 3. In het sessielog staan de andere fases als committed context, niet als geclaimd werk (protocol: her-leid niet wat de git-historie al vastlegt).
+
+✅ **Always:**
+- Onvertaalde vakterm uniformeren op de glosse die de eigen manPage al gebruikt — `nmap:220` glosst "attack surface mapping" al met "aanvalsoppervlak"; de 2 losse "attack surface"-regels trekken daarheen (onzijdig "minimaal", niet "minimale"). Het slecht-geval ("meer ingangen voor aanvallers", `:162`/`:235`) blijft z'n eigen register houden — niet mee-uniformeren.
+- Een interne inconsistentie tussen sibling-commands sluiten, niet één kant willekeurig kiezen — `cp.js` "De bronbestand" week af van `mv.js` "Het bronbestand" (onzijdig correct); de bestaande correcte kant is de norm.
+- De diff tegen de intentie houden — `git diff` toonde exact 5 regels in/uit, precies de 4 doelen, met de bewust-ontziene code-comment (`:53`) en slecht-geval-regels ongemoeid; geen collateral.
+
 ### Sessie 199: Marketing-launch uitvoeren — verse launch-week-post + launch-beslissing (22-26 jul 2026)
 ⚠️ **Never:**
 - Een blogpost toevoegen zonder de afgeleide administratie mee te bewegen — filesystem-ground-truth-validatie trekt automatisch 4 checks uit sync: blog-count in de TASKS-tabel (6b), RSS-item-count == `blog/*.html` minus index (9b), sitemap `lastmod >= datePublished` (9a) en bundle blog KB ±5% (5). Drift-bestendig = nieuwe content valt nooit stil buiten beeld, maar je moet tabel/feed/sitemap/marker expliciet bijwerken.
@@ -149,20 +160,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Simulator-only markers uit één bron — `SIMULATOR_COMMANDS` stond 2× gedupliceerd (help.js + onboarding.js) en miste `hint`/`shortcuts`; named-export in onboarding.js + import in help.js. Een command dat zelf `[HACKSIM]` roept maar geen `*` krijgt in `help` is een tell.
 - Bewust-NIET met reden vastleggen — help-system categorie-lijsten registry-derived maken (nu correct, refactor te breed) + `hostname`/`uptime` in de stress-test (dekt command-not-found-pad). Volledig: `docs/sessions/current.md` Sessie 195.
 
-### Sessie 194: Uitgestelde punten — VFS-signature, analytics-guard, [TIP]-marker (05 jul 2026)
-⚠️ **Never:**
-- Een gemelde bug fixen zonder het codepad te verifiëren — de "dubbele challenge-analytics" bestond niet (`start()` weigert voltooide challenges, `resume()` ruimt ze op → replay onmogelijk); alleen de tutorial-kant had de bug. Eén read voorkwam een overbodige guard + test.
-- Een handmatige versie-constante kiezen waar een runtime content-hash kan — `INITIAL_FS_SIGNATURE` = djb2 over `JSON.stringify(initialFilesystem)` elimineert de "vergeten te bumpen"-faalklasse volledig. Werkt alléén omdat fase-content bij *lezen* wordt geïnjecteerd (dynamic-content.js), niet in de boom gebakken — anders reset elke boot.
-- Een gedocumenteerde duplicatie negeren bij het patchen — de renderer-marker-mapping staat op TWEE plekken (renderOutput + `_renderLinesInto`; de style-guide waarschuwt er zelf voor) en de eerste patch miste de tweede. Lees de eigen docs vóór je de "ene" plek fixt.
-- Versievelden toevoegen zonder migratielogica-consument — de 4 JSON-state-keys hebben `||default`-tolerantie; een versie die niemand leest is dood gewicht (YAGNI tot een veld echt hernoemt).
-
-✅ **Always:**
-- Een docs-conflict expliciet beslechten i.p.v. omzeilen — style-guide ("gebruik [?]") vs CLAUDE.md/tone-and-output ([TIP] = canoniek) bestond omdat Sessie 193 renderer-*realiteit* documenteerde i.p.v. het ontwerpideaal. De branch-fix (2 regels) maakt de canonieke docs waar; een sweep had 37 strings + security-warnings geraakt.
-- Bij een verworpen stale save: key opruimen + eenmalige gebruikersnotice — anders "reset" het elke boot opnieuw en lijken verdwenen eigen bestanden een bug (`persistence.wasReset` → `[~]`-melding via het bestaande deferred-resume-patroon).
-- Document-and-accept is een expliciete deliverable met rationale — multi-tab (dagdeel reconcile vs zeldzaam+zelfherstellend), hint-tier-reset (onzichtbaar), virtual-keyboard (needs device), voortgangsmap (single-slot volstaat) staan nu in troubleshooting.md/current.md; een bewust niet-gebouwde fix zonder vastgelegde reden wordt elke sessie opnieuw overwogen.
-- Specs die productie-URL's hardcoden (debug-storage, performance) bewijzen niets voor werkkopie-code — check het `goto`-doelwit vóór je een groene run meetelt. Volledig: `docs/sessions/current.md` Sessie 194.
-
-**Rotation:** Top-6 huidig: 194-195-196-197-198-199 (Sessie 193 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 195 UITGEVOERD:** current.md staart Sessie 180-184 geknipt naar `archive-s180-s184.md` (5 entries, byte-geverifieerd); current.md houdt nu het rolling window 185-195 (11 entries; volgende bulk-rotatie Sessie 200 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-179 → `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 195-196-197-198-199-200 (Sessie 194 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 200 UITGEVOERD:** current.md staart Sessie 185-189 geknipt naar `archive-s185-s189.md` (5 entries, 179 regels); current.md houdt nu het rolling window 190-200 (11 entries; volgende bulk-rotatie Sessie 205 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-184 → `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -211,7 +209,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 199
+**Sessie counter:** 200
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -263,6 +261,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 26 jul 2026 (Sessie 199 — Marketing-launch uitvoeren. Verse launch-week-post NEW `blog/metasploit-beginnersgids.html` + ingehaakt (blog-index/feed/sitemap/homepage) + cornerstone-cross-links (cybersecurity-tools + nmap) + NEW `docs/launch-checklist.md`. Besluit: demand-validatie #44 bewust overgeslagen → direct launchen, doel wo 29 juli. 5 commits gepusht. Volledig: `docs/sessions/current.md`)
-**Version:** 5.73 (Sessie 199 — Marketing-launch: verse Metasploit-launch-week-post + cornerstone-links + launch-checklist + launch-beslissing (#44 overgeslagen); volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 26 jul 2026 (Sessie 200 — Command-output-audit (item #47) afgerond met Fase 3 triviale correctheid-nits (commit `e31075b`, gepusht): `cp.js` "De→Het bronbestand", `certificates.js` "kopieren→kopiëren", `nmap.js` "attack surface→aanvalsoppervlak". Browser-geverifieerd via directe module-import. Item #47 volledig gesloten (Fase 1+2 landden eerder same-day). Bulk-rotatie 185-189 → `archive-s185-s189.md`. Volledig: `docs/sessions/current.md`)
+**Version:** 5.74 (Sessie 200 — Command-output-audit item #47 afgerond: Fase 3 correctheid-nits (cp/certificates/nmap), 1 commit gepusht; item volledig gesloten; bulk-rotatie 185-189 gearchiveerd; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
