@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- SEO Meta Tags -->
-  <title>SQL Injection Uitgelegd voor Beginners | HackSimulator.nl</title>
+  <title>SQL injection uitgelegd voor beginners | HackSimulator.nl</title>
   <meta name="description" content="Leer wat SQL injection is, hoe het werkt en hoe je websites hiertegen beschermt. Begrijpelijke Nederlandse uitleg met voorbeelden voor beginners.">
   <meta name="keywords" content="sql injection, sqlmap, webbeveiliging, database hacking, cybersecurity beginners, ethical hacking">
   <meta name="author" content="HackSimulator.nl">
@@ -13,7 +13,7 @@
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://hacksimulator.nl/blog/sql-injection-uitgelegd.html">
-  <meta property="og:title" content="SQL Injection Uitgelegd voor Beginners | HackSimulator.nl">
+  <meta property="og:title" content="SQL injection uitgelegd voor beginners | HackSimulator.nl">
   <meta property="og:description" content="Leer wat SQL injection is en hoe je websites hiertegen beschermt.">
   <meta property="article:published_time" content="2026-03-10">
   <meta property="article:author" content="HackSimulator.nl">
@@ -64,7 +64,7 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "SQL Injection Uitgelegd voor Beginners",
+    "headline": "SQL injection uitgelegd voor beginners",
     "description": "Leer wat SQL injection is, hoe het werkt en hoe je websites hiertegen beschermt.",
     "datePublished": "2026-03-10",
     "dateModified": "2026-03-10",
@@ -101,7 +101,7 @@
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://hacksimulator.nl/" },
       { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://hacksimulator.nl/blog/" },
-      { "@type": "ListItem", "position": 3, "name": "SQL Injection Uitgelegd voor Beginners", "item": "https://hacksimulator.nl/blog/sql-injection-uitgelegd.html" }
+      { "@type": "ListItem", "position": 3, "name": "SQL injection uitgelegd voor beginners", "item": "https://hacksimulator.nl/blog/sql-injection-uitgelegd.html" }
     ]
   }
   </script>
@@ -137,13 +137,13 @@
       <ol>
         <li><a href="/">Home</a></li>
         <li><a href="/blog/">Blog</a></li>
-        <li aria-current="page">SQL Injection Uitgelegd voor Beginners</li>
+        <li aria-current="page">SQL injection uitgelegd voor beginners</li>
       </ol>
     </nav>
     <article class="blog-post">
       <!-- Post Header -->
       <header class="blog-post-header">
-        <h1 class="blog-post-title">SQL Injection Uitgelegd voor Beginners</h1>
+        <h1 class="blog-post-title">SQL injection uitgelegd voor beginners</h1>
         <div class="blog-post-meta">
           <time datetime="2026-03-10">10 maart 2026</time>
           <span>9 min</span>
@@ -192,7 +192,7 @@ WHERE naam = 'jan' AND wachtwoord = 'geheim123';</code></pre>
           van je favoriete webshop tot je bank en sociale media.
         </div>
 
-        <h2>Wat is SQL Injection?</h2>
+        <h2>Wat is SQL injection?</h2>
         <p>
           <abbr class="jargon" title="Een aanvalstechniek waarbij een hacker kwaadaardige SQL-code invoert via een invoerveld om de database te manipuleren" tabindex="0"><strong>SQL injection</strong></abbr> (vaak afgekort als SQLi) is een aanvalstechniek
           waarbij een aanvaller kwaadaardige SQL-code "injecteert" via een invoerveld op een website. In plaats van een normale
@@ -204,12 +204,12 @@ WHERE naam = 'jan' AND wachtwoord = 'geheim123';</code></pre>
           ingevoerd. Het behandelt alles als geldige instructies.
         </p>
 
-        <h2>Hoe Werkt SQL Injection? Een Praktijkvoorbeeld</h2>
+        <h2>Hoe werkt SQL injection? Een praktijkvoorbeeld</h2>
         <p>
           Laten we het concreet maken met een klassiek voorbeeld: het omzeilen van een loginpagina.
         </p>
 
-        <h3>De Normale Situatie</h3>
+        <h3>De normale situatie</h3>
         <p>
           Stel, een website heeft een inlogformulier. De code achter dat formulier bouwt een SQL-query als volgt op:
         </p>
@@ -224,7 +224,7 @@ WHERE naam = 'jan' AND wachtwoord = 'geheim123';</code></pre>
 
         <p>Prima. Maar wat als iemand iets anders invult?</p>
 
-        <h3>De Aanval</h3>
+        <h3>De aanval</h3>
         <p>
           Een aanvaller typt het volgende als gebruikersnaam:
         </p>
@@ -279,12 +279,12 @@ WHERE naam = '' OR '1'='1' AND wachtwoord = '';</code></pre>
                data-ad-slot="5971972080"></ins>
         </div>
 
-        <h2>Soorten SQL Injection</h2>
+        <h2>Soorten SQL injection</h2>
         <p>
           Niet alle SQL injection-aanvallen werken hetzelfde. Security professionals onderscheiden drie hoofdcategorieën:
         </p>
 
-        <h3>1. In-Band SQLi (Klassiek)</h3>
+        <h3>1. In-band SQLi (klassiek)</h3>
         <p>
           Dit is de meest directe vorm. De aanvaller stuurt een kwaadaardige query en ziet het resultaat direct op de webpagina.
           Het voorbeeld hierboven met <code>' OR '1'='1</code> is een typisch in-band voorbeeld. De twee meest voorkomende
@@ -304,7 +304,7 @@ WHERE naam = '' OR '1'='1' AND wachtwoord = '';</code></pre>
           seconden langer laadt, was het antwoord "ja".
         </p>
 
-        <h3>3. Out-of-Band SQLi</h3>
+        <h3>3. Out-of-band SQLi</h3>
         <p>
           De zeldzaamste vorm. Hierbij stuurt de database de gestolen data naar een externe server van de aanvaller, bijvoorbeeld
           via een <abbr class="jargon" title="Domain Name System: het systeem dat domeinnamen vertaalt naar IP-adressen" tabindex="0"><strong>DNS</strong></abbr>-verzoek.
@@ -316,7 +316,7 @@ WHERE naam = '' OR '1'='1' AND wachtwoord = '';</code></pre>
           Blind en out-of-band SQLi zijn voor gevorderde toepassingen.
         </div>
 
-        <h2>De Impact: Waarom SQL Injection zo Gevaarlijk is</h2>
+        <h2>De impact: waarom SQL injection zo gevaarlijk is</h2>
         <p>
           SQL injection is niet zomaar een theoretisch probleem. Enkele van de grootste datalekken in de geschiedenis zijn veroorzaakt
           door SQL injection:
@@ -343,7 +343,7 @@ WHERE naam = '' OR '1'='1' AND wachtwoord = '';</code></pre>
           wijdverspreid het probleem is.
         </div>
 
-        <h2>SQLmap: Automatische Detectie</h2>
+        <h2>Sqlmap: automatische detectie</h2>
         <p>
           <abbr class="jargon" title="Een open-source penetration testing tool die het detecteren en exploiteren van SQL injection-kwetsbaarheden automatiseert" tabindex="0"><strong>SQLmap</strong></abbr> is een
           van de meest gebruikte tools door ethisch hackers om SQL injection-kwetsbaarheden automatisch op te sporen en te testen.
@@ -431,13 +431,13 @@ Parameter: id (GET)
                data-ad-slot="5270665903"></ins>
         </div>
 
-        <h2>Hoe Bescherm je je Tegen SQL Injection?</h2>
+        <h2>Hoe bescherm je je tegen SQL injection?</h2>
         <p>
           Nu je weet hoe SQL injection werkt, is de volgende vraag: hoe voorkom je het? Gelukkig zijn er bewezen technieken
           die SQL injection vrijwel volledig elimineren.
         </p>
 
-        <h3>1. Prepared Statements (Parameterized Queries)</h3>
+        <h3>1. Prepared statements (parameterized queries)</h3>
         <p>
           Dit is de <strong>gouden standaard</strong> en verreweg de belangrijkste maatregel.
           <abbr class="jargon" title="Een manier om SQL-queries op te bouwen waarbij gebruikersinvoer als data wordt behandeld, niet als code" tabindex="0"><strong>Prepared statements</strong></abbr>
@@ -465,7 +465,7 @@ execute(query, [invoer]);</code></pre>
           Er is geen excuus om ze niet te gebruiken.
         </div>
 
-        <h3>2. Input Validatie</h3>
+        <h3>2. Input validatie</h3>
         <p>
           Controleer <strong>altijd</strong> wat een gebruiker invoert voordat je het verwerkt:
         </p>
@@ -481,7 +481,7 @@ execute(query, [invoer]);</code></pre>
           Prepared statements zijn je eerste verdedigingslinie. Input validatie is je tweede. Gebruik altijd beide.
         </div>
 
-        <h3>3. Web Application Firewall (WAF)</h3>
+        <h3>3. Web application firewall (WAF)</h3>
         <p>
           Een <abbr class="jargon" title="Web Application Firewall: een beveiligingslaag die verkeer naar een webapplicatie filtert en bekende aanvalspatronen blokkeert" tabindex="0"><strong>WAF</strong></abbr>
           is een beveiligingslaag die al het verkeer naar je website filtert. Een WAF herkent bekende SQL injection-patronen
@@ -493,14 +493,14 @@ execute(query, [invoer]);</code></pre>
           <abbr class="jargon" title="Het aanpassen van een aanval zodat beveiligingsfilters de kwaadaardige code niet herkennen" tabindex="0"><strong>obfuscation</strong></abbr>-technieken.
         </p>
 
-        <h3>4. Least Privilege Principe</h3>
+        <h3>4. Least privilege principe</h3>
         <p>
           Geef de database-gebruiker die je website gebruikt <strong>zo min mogelijk rechten</strong>. Als je website alleen
           gegevens hoeft te lezen, geef dan alleen leesrechten. Als een aanvaller er toch doorheen komt, kan hij dan in ieder
           geval geen data verwijderen of de hele server overnemen.
         </p>
 
-        <h3>5. Error Handling</h3>
+        <h3>5. Error handling</h3>
         <p>
           Toon <strong>nooit</strong> gedetailleerde database-foutmeldingen aan gebruikers. Een foutmelding als
           "MySQL error: column 'password' not found in table 'users'" geeft een aanvaller gratis informatie over je
@@ -519,7 +519,7 @@ execute(query, [invoer]);</code></pre>
           <a href="https://hacksimulator.gumroad.com/l/wmvpx" class="blog-cta-button" target="_blank" rel="noopener noreferrer" data-product-id="wmvpx" data-cta-location="blog_sql_injection">Download het Playbook</a>
         </div>
 
-        <h2>Ethische Overwegingen</h2>
+        <h2>Ethische overwegingen</h2>
         <p>
           SQL injection testen is een belangrijk onderdeel van ethisch hacken en
           <abbr class="jargon" title="Penetration testing: het geautoriseerd testen van systemen op beveiligingskwetsbaarheden door ze te proberen te hacken" tabindex="0"><strong>pentesting</strong></abbr>.
@@ -589,17 +589,17 @@ execute(query, [invoer]);</code></pre>
 
       <!-- Related Articles -->
       <section class="related-articles">
-        <h2>Verder Lezen</h2>
+        <h2>Verder lezen</h2>
         <div class="related-grid">
           <a href="wat-is-ethisch-hacken.html" class="related-card">
             <span class="related-category">Concepten</span>
-            <h3>Wat is Ethisch Hacken?</h3>
+            <h3>Wat is ethisch hacken?</h3>
             <p>White hat vs black hat - leer het verschil en ontdek carrièremogelijkheden in cybersecurity.</p>
             <span class="related-meta">8 min leestijd</span>
           </a>
           <a href="nmap-beginnersgids.html" class="related-card">
             <span class="related-category">Tools</span>
-            <h3>Netwerk Scanning met Nmap</h3>
+            <h3>Netwerk scanning met Nmap</h3>
             <p>Reconnaissance is stap 1 - leer netwerken scannen voordat je kwetsbaarheden zoekt.</p>
             <span class="related-meta">8 min leestijd</span>
           </a>
@@ -611,7 +611,7 @@ execute(query, [invoer]);</code></pre>
           </a>
           <a href="cybersecurity-tools.html" class="related-card">
             <span class="related-category">Tools</span>
-            <h3>5 Essenti&euml;le Security Tools</h3>
+            <h3>5 essenti&euml;le security tools</h3>
             <p>De must-know tools voor elke beginnende ethisch hacker.</p>
             <span class="related-meta">8 min leestijd</span>
           </a>

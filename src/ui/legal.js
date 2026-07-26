@@ -53,7 +53,7 @@ const LegalManager = {
         <!-- Header with warning icon -->
         <div class="legal-modal-header">
           <div class="legal-warning-icon">[!]</div>
-          <h2 id="legal-title">Juridische Kennisgeving</h2>
+          <h2 id="legal-title">Juridische kennisgeving</h2>
         </div>
 
         <!-- Scrollable body content -->
