@@ -54,12 +54,12 @@ var privescScenario = {
       },
       feedback:
         '[~] /etc/passwd is leesbaar voor alle gebruikers en bevat:\n' +
-        '      gebruikersnaam:wachtwoord:UID:GID:info:homedir:shell\n' +
+        '    gebruikersnaam:wachtwoord:UID:GID:info:homedir:shell\n' +
         '[~] Let op de shell kolom: /bin/bash = kan inloggen,\n' +
-        '      /usr/sbin/nologin = service account (kan niet inloggen).\n' +
+        '    /usr/sbin/nologin = service account (kan niet inloggen).\n' +
         '[~] De echte wachtwoorden (versleuteld) staan in /etc/shadow (alleen root).\n' +
         '[~] Gebruikers met UID 0 hebben beheerders-rechten — check of er\n' +
-        '      onverwachte accounts zijn met UID 0!',
+        '    onverwachte accounts zijn met UID 0!',
       hints: [
         'Gebruik cat om het bestand /etc/passwd te bekijken.',
         'Het passwd bestand staat in de /etc/ directory.',
@@ -80,11 +80,11 @@ var privescScenario = {
       feedback:
         '[~] /var/log/ bevat alle systeem logbestanden op Linux.\n' +
         '[~] Belangrijke logs voor security analyse:\n' +
-        '      auth.log  — authenticatie pogingen (SSH, sudo, login)\n' +
-        '      syslog    — algemene systeem events en kernel berichten\n' +
-        '      kern.log  — kernel berichten (firewall, hardware)\n' +
+        '    auth.log  — authenticatie pogingen (SSH, sudo, login)\n' +
+        '    syslog    — algemene systeem events en kernel berichten\n' +
+        '    kern.log  — kernel berichten (firewall, hardware)\n' +
         '[~] Log analyse is essentieel bij incident response: het vertelt\n' +
-        '      je wie, wat, wanneer, en vanaf waar.',
+        '    je wie, wat, wanneer, en vanaf waar.',
       hints: [
         'Gebruik ls om de inhoud van een directory te bekijken.',
         'De log bestanden staan in /var/log/ — gebruik ls /var/log',
@@ -105,13 +105,13 @@ var privescScenario = {
       },
       feedback:
         '[~] In de auth.log zie je 3 mislukte root login pogingen vanaf\n' +
-        '      IP 10.0.0.99 — dit is een typisch brute force patroon!\n' +
+        '    IP 10.0.0.99 — dit is een typisch brute force patroon!\n' +
         '[~] Red flags in auth.log:\n' +
-        '      - Meerdere "Failed password" van hetzelfde IP\n' +
-        '      - Login pogingen op root account (moet uitgeschakeld zijn)\n' +
-        '      - Onbekende IP-adressen in je netwerk\n' +
+        '    - Meerdere "Failed password" van hetzelfde IP\n' +
+        '    - Login pogingen op root account (moet uitgeschakeld zijn)\n' +
+        '    - Onbekende IP-adressen in je netwerk\n' +
         '[~] Tegenmaatregelen: fail2ban (blokkeert IP na te veel pogingen),\n' +
-        '      SSH key login (wachtwoorden uitschakelen), port knocking.',
+        '    SSH key login (wachtwoorden uitschakelen), port knocking.',
       hints: [
         'Gebruik cat om een log bestand in /var/log/ te lezen.',
         'Het authenticatie log heet auth.log in de /var/log/ directory.',
@@ -132,16 +132,16 @@ var privescScenario = {
       },
       feedback:
         '[~] In de bash_history vind je: mysql -u root -pSecretPass123!\n' +
-        '      Dit is een GROOT beveiligingsrisico!\n' +
+        '    Dit is een GROOT beveiligingsrisico!\n' +
         '[~] Waarom is dit gevaarlijk?\n' +
-        '      - Wachtwoorden in plain text in command history\n' +
-        '      - Iedereen met leestoegang ziet deze credentials\n' +
-        '      - Hetzelfde wachtwoord wordt vaak hergebruikt\n' +
+        '    - Wachtwoorden in plain text in command history\n' +
+        '    - Iedereen met leestoegang ziet deze credentials\n' +
+        '    - Hetzelfde wachtwoord wordt vaak hergebruikt\n' +
         '[~] Bescherming:\n' +
-        '      - Gebruik environment variables voor wachtwoorden\n' +
-        '      - Configureer HISTIGNORE voor gevoelige commands\n' +
-        '      - Gebruik een password manager\n' +
-        '      - Roteer credentials regelmatig',
+        '    - Gebruik environment variables voor wachtwoorden\n' +
+        '    - Configureer HISTIGNORE voor gevoelige commands\n' +
+        '    - Gebruik een password manager\n' +
+        '    - Roteer credentials regelmatig',
       hints: [
         'De command history van een gebruiker staat in een verborgen bestand.',
         'Het bestand heet .bash_history in de home directory (~/).',

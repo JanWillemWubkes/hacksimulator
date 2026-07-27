@@ -52,7 +52,7 @@ var reconScenario = {
         '[~] Ping stuurt ICMP Echo Request pakketjes naar het doelwit.\n' +
         '[~] Als je antwoord krijgt, weet je dat het systeem online is.\n' +
         '[~] Dit is altijd stap 1: controleer of je doelwit bereikbaar is\n' +
-        '      voordat je verder gaat met scanning.',
+        '    voordat je verder gaat met scanning.',
       hints: [
         'Gebruik het ping commando met een IP-adres als argument.',
         'Probeer: ping <IP-adres> (bijv. ping 192.168.1.100)',
@@ -74,7 +74,7 @@ var reconScenario = {
         '[~] Nmap is DE standaard port scanner voor pentesters.\n' +
         '[~] Open poorten onthullen welke services draaien op het systeem.\n' +
         '[~] Elke open poort is een potentiele ingang. SSH (22), HTTP (80)\n' +
-        '      en HTTPS (443) zijn de meest voorkomende.',
+        '    en HTTPS (443) zijn de meest voorkomende.',
       hints: [
         'Gebruik nmap gevolgd door het IP-adres van het doelwit.',
         'Probeer: nmap <IP-adres> om poorten te scannen.',
@@ -96,7 +96,7 @@ var reconScenario = {
         '[~] WHOIS toont publieke info over wie een website heeft geregistreerd.\n' +
         '[~] Je ziet hier: eigenaar, aanmaakdatum, en welke servers het domain beheren.\n' +
         '[~] Handig voor hackers: namen en e-mailadressen kun je gebruiken\n' +
-        '      om gerichte phishing-mails te sturen (social engineering).',
+        '    om gerichte phishing-mails te sturen (social engineering).',
       hints: [
         'Gebruik whois met een domeinnaam als argument.',
         'Probeer: whois <domeinnaam> (bijv. whois securecorp.com)',
@@ -118,7 +118,7 @@ var reconScenario = {
         '[~] Traceroute toont elke hop (router) tussen jou en het doelwit.\n' +
         '[~] Dit onthult de netwerkinfrastructuur en mogelijke firewalls.\n' +
         '[~] Hops met hoge vertraging of timeouts (*) kunnen wijzen op\n' +
-        '      beveiligingsmaatregelen zoals een firewall die verkeer filtert.',
+        '    beveiligingsmaatregelen zoals een firewall die verkeer filtert.',
       hints: [
         'Gebruik traceroute gevolgd door een IP-adres.',
         'Probeer: traceroute <IP-adres> om de route te volgen.',
