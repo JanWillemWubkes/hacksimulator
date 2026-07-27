@@ -4,6 +4,22 @@
 
 ---
 
+## Follow-up (27 jul 2026): Tutorial continuation-inspringing 6→4 spaties
+
+**Mission:** Gebruiker (screenshot terminal, fundamentals-tutorial): "de inspringing die je ziet — is die bewust?" De vervolgregels van `[~]`/`[!]`-feedback sprongen 6 spaties in, 2 tekens voorbij de 4-brede marker.
+
+**Diagnose:** Bewust (hand-authored hanging indent), maar dubbel functioneel én net niet strak: (1) visueel hangend onder de tip; (2) **load-bearing** — de renderer (`src/ui/renderer.js:513` `isContinuationLine`) kleurt vervolgregels met `≥3` leidende spaties door met de kleur van de marker-regel (`lastSemanticType`). 6 spaties lijnde echter niet uit onder de marker-tekst (kolom 4), maar 2 tekens ernaast.
+
+**Fix (commit `6423f0c`, gepusht):** Uniform 6→4 spaties over alle 5 scenario-bestanden (64 continuations), zodat elke vervolgregel — doorgelopen zin, opsomming, genummerde lijst, codeblok — exact uitlijnt onder de marker-tekst. 4 blijft ruim boven de `≥3`-drempel, dus kleur-inheritance intact.
+
+**Verificatie:** scope vooraf bewezen (geen `[TIP]`-6-brede ouders; alle 64 exact 6 spaties) → één transform i.p.v. 64 oordelen; 64 inserts/64 deletes + `git diff -w` leeg (puur whitespace); idempotent (2e pass = 0); `node --check` alle 5 modules OK; kleur-drempel geverifieerd met exacte renderer-logica; `mobile.css` leest `data-indent` generiek (`calc(...*1ch)`) → mobiele hanging indent volgt automatisch.
+
+**Learning:** de ondergrens (4, boven de `≥3`-drempel) was net zo belangrijk als de bovengrens (uitlijnen op de 4-brede marker) — naar 2 spaties zou alle 64 continuations stilletjes hun dim-kleur hebben gekost. De inspringing is een renderer-signaal, geen kosmetiek.
+
+**Scope-noot:** lichte log-entry op verzoek — geen sessie-teller-ophoging (blijft 201), geen CLAUDE.md-rotatie, geen TASKS.md-wijziging. Git-historie (`6423f0c`) is zelf-documenterend.
+
+---
+
 ## Sessie 201: Koppen sitebreed naar Nederlands zinskapitaal i.p.v. Engelse Title Case (26 jul 2026)
 
 **Mission:** Gebruiker (screenshot van `blog/metasploit-beginnersgids.html`): "sommige woorden in de titel beginnen met hoofdletters, andere niet — kan je dit analyseren en perfectioneren?" Diagnose: de site gebruikte Engelse Title Case (elk inhoudswoord een hoofdletter), én inconsistent toegepast ("Payloads: Wat Gebeurt er Na de Exploit?" — "er" klein). Correct voor het Nederlands = zinskapitaal (alleen 1e woord + eigennamen). Scope-keuze Heisenberg: hele site + zuiver zinskapitaal (ook Engelse vaktermen klein tenzij eigennaam).
