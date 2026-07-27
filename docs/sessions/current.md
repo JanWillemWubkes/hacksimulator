@@ -4,6 +4,38 @@
 
 ---
 
+## Sessie 201: Koppen sitebreed naar Nederlands zinskapitaal i.p.v. Engelse Title Case (26 jul 2026)
+
+**Mission:** Gebruiker (screenshot van `blog/metasploit-beginnersgids.html`): "sommige woorden in de titel beginnen met hoofdletters, andere niet — kan je dit analyseren en perfectioneren?" Diagnose: de site gebruikte Engelse Title Case (elk inhoudswoord een hoofdletter), én inconsistent toegepast ("Payloads: Wat Gebeurt er Na de Exploit?" — "er" klein). Correct voor het Nederlands = zinskapitaal (alleen 1e woord + eigennamen). Scope-keuze Heisenberg: hele site + zuiver zinskapitaal (ook Engelse vaktermen klein tenzij eigennaam).
+
+**Aanpak:** 2 Explore-audits (blogs + niet-blogs) telden ~340 Title-Case-koppen. Omdat de omzetting oordeelsgevoelig is (eigennamen-whitelist per kop) maar mechanisch van omvang, koos ik voor één zorgvuldig Python-script (`sentence_case.py`, scratchpad) + grondige dry-run-review per bestand, i.p.v. ~340 handmatige edits. Het script raakt alleen kop-contexten: `<title>`, og/twitter:title, JSON-LD `headline`/breadcrumb-`name`, `<h1-4>` (incl. genest `<a>`/`<abbr>`), zichtbare breadcrumb `<li aria-current>`.
+
+**Work done (commit `65c5f18`, 27 bestanden, 518/518 gebalanceerde regel-vervangingen):**
+- **15 blogs** incl. `blog/index.html`-kaarten (in lockstep met elke artikeltitel).
+- **8 hoofdpagina's:** index, terminal, gidsen, over-ons, woordenlijst, contact, 404, commands/index.
+- **3 juridische pagina's:** cookies, privacy, terms (~102 koppen).
+- **1 JS-modalkop:** `src/ui/legal.js:56` "Juridische Kennisgeving" → "Juridische kennisgeving" (handmatig).
+- **+typofix:** `terms.html:301` "Scheibaarheid" → "Scheidbaarheid" (severability-clausule; bevestigd door de paragraaftekst).
+- **Titel-cluster (7 plekken per blog-artikel):** `<title>`, og:title, twitter:title, JSON-LD `headline`, BreadcrumbList `name` (pos 3), `<h1>`, en de kaart in `blog/index.html` — allen synchroon zodat gestructureerde data niet van de zichtbare kop divergeert.
+
+**Transformatie-regels (in het script gecodeerd):** eerste woord + eigennamen hoofdletter; na `:` klein (NL-conventie); na `?`/`!`/`.`-met-spatie = nieuwe zin (hoofdletter); afkortingen ("vs."/"art.") starten géén valse zin; sectienummers met punt ("2.1"/"1.") kapitaliseren het volgende woord, kardinale getallen ("5 essentiële") niet; hyphen-bewust (IT-kennis, in-band); `<code>`-inhoud letterlijk (nmap-vlag `-sV`). Whitelist behoudt: merken (Metasploit/Nmap/Wireshark/OWASP **Top 10**), nationaliteitsadjectieven (Nederlandse/Engelse — NL houdt hoofdletter), landen (Nederland), camelCase-API's (localStorage/sessionStorage), acroniemen (TCP/WAF/GDPR/SMS/SQL/CTF), juridische afk. (Sr, III), toets-notatie (Ctrl+C). Post-fixes voor meerwoord-productnamen (Pentest Playbook, Starter Kit, Google Analytics/AdSense, Plausible Analytics). Bewust overgeslagen (skip): OWASP-categorieën A01–A10, certificeringsnamen (CEH/OSCP/eJPT-expansies), CompTIA/PenTest+, en enkelvoudige lowercase-command-koppen (`<h2>nmap</h2>` op de commands-pagina).
+
+**Learnings:**
+- **Script > handwerk voor bulk-transform-met-whitelist — mits masking.** Twee bugs doken pas op de niet-blog-pagina's op: (1) `woordenlijst.html` heeft letterlijk `<h3>` in een CSS-comment ("de categorie-`<h3>` erachter") → de `<h[1-4]>`-regex liep zonder sluit-tag door tot de échte `</h1>` en verminkte het hele style-blok + de JSON-LD; (2) `commands/index.html` heeft command-namen als koppen (`<h2>nmap</h2>`). Fix: `<style>`/`<script>` maskeren vóór de heading-regex draait (JSON-LD apart met string-patronen verwerken), plus enkel-lowercase-woord-koppen skippen. Blogs misten dit omdat ze geen inline-`<style>` hadden — de gevaarlijkste bug verstopt zich in de bestandsklasse die je het laatst test.
+- **Iteratieve dry-run-review is de kern van de methode.** Elke batch onthulde randgevallen die een blinde `sed` zou hebben gemist: "Nederland"→"nederland" (landennaam), "IT-kennis"→"it-kennis" (acroniem-in-compound), "vs."→valse-zin-grens, "-sV"→"-sv" (code-inhoud), "5 Essentiële" (getal-first), "localStorage"→"localstorage". Elk gefixt vóór het schrijven.
+- **Idempotentie als verificatie.** Tweede pass over alle 26 bestanden = 0 wijzigingen → bewijst consistentie én dat niets is gemist. Aangevuld met `git diff` collateral-scan (leeg), browser-render van de gemelde pagina, en de pre-commit blog-JSON-LD/tag-balans-hook (groen).
+- **518 inserts / 518 deletes = puur tekst-casing, 0 structuur** — een sterke integriteitsindicator bij een grote diff.
+
+**Bewuste keuzes (aan Heisenberg gemeld):** "Filesystem commands" e.d. (welkom-blog + commands-pagina) óók kleingeschreven — consistenter met zuiver zinskapitaal dan de "niet aanraken"-noot uit mijn plan. "Probeer het Metasploit command" kreeg merk-hoofdletter (was lowercase command); aangeboden om terug te draaien indien gewenst.
+
+**Commit (gepusht naar `main`):** `65c5f18` (style(koppen): sitebreed Nederlands zinskapitaal i.p.v. Engelse Title Case).
+
+**Metrics delta:** ~0 KB net (tekst-casing, geen byte-significante wijziging; blog-KB-marker binnen tolerantie, validate-docs Check 6 groen) | 28 spec files / 213 tests ongewijzigd (geen test-wijziging; geen runtime-gedrag geraakt) | 1 commit. NEW memory `feedback_dutch_sentence_case_headings`.
+
+**Next steps (open, Heisenberg):** ongewijzigd t.o.v. Sessie 199-200 — `docs/launch-checklist.md` afwerken → launch wo 29 juli; ná launch item #45 (value-prop/retentie) op echte funnel-data; item #46 GA4-launch-dag-handelingen. Optioneel: "Probeer het Metasploit command" terug naar lowercase indien gewenst.
+
+---
+
 ## Sessie 200: Command-output-audit (item #47) afgerond — Fase 3 triviale correctheid-nits (26 jul 2026)
 
 **Mission:** Gebruiker: "voer Fase 3 uit: drie triviale correctheid-nits, in één commit naar main." Fase 3 is het laatste blok van item #47 (command-output-audit), dat eerder op 26 jul in losse werkblokken liep. Deze conversatie deed uitsluitend Fase 3 + de /summary.

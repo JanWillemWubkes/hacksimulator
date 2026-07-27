@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 200)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 201)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 201: Koppen sitebreed naar Nederlands zinskapitaal i.p.v. Engelse Title Case (26 jul 2026)
+⚠️ **Never:**
+- Een heading-regex over de hele file laten lopen zonder `<style>`/`<script>` te maskeren — `woordenlijst.html` heeft letterlijk `<h3>` in een CSS-comment ("de categorie-`<h3>` erachter"); zonder sluit-tag liep `<h[1-4]>.*?</h[1-4]>` door tot de échte `</h1>` en verminkte het style-blok + de JSON-LD. Maskeer literal-blokken eerst; verwerk JSON-LD (`headline`/`name`) met eigen string-patronen. De gevaarlijkste bug zit in de bestandsklasse die je het laatst test (blogs hadden geen inline-`<style>`, dus dit dook pas op de hoofdpagina's op).
+- Een bulk-tekst-transform blind toepassen zonder per-batch dry-run-review — elke batch onthulde een randgeval dat een `sed` had gesloopt: "Nederland"→"nederland" (landennaam mist in whitelist), "IT-kennis"→"it-kennis" (acroniem-in-compound → hyphen-bewust casen), "vs."→valse zin-grens (afkorting-punt), "-sV"→"-sv" (nmap-vlag in `<code>` → code-inhoud letterlijk laten), "5 Essentiële" (getal-first mag volgend woord niet kapitaliseren). Dry-run print + eigen ogen vóór het schrijven.
+- Command-namen als kop kapitaliseren — op `commands/index.html` zijn de koppen de command-namen zelf (`<h2>nmap</h2>`); die tik je letterlijk, dus klein houden. Skip enkel-lowercase-woord-koppen; whitelist commands (pwd/ls/…) als lowercase + nooit-forceren zodat ze ook aan het regelbegin klein blijven.
+- Een titelwijziging in de zichtbare `<h1>` doen zonder de afgeleide cluster — per blog-artikel leeft de titel op 7 plekken (`<title>`, og, twitter, JSON-LD `headline`, breadcrumb `name`, `<h1>`, blog-index-kaart); alleen de `<h1>` fixen laat de gestructureerde data divergeren. Beweeg ze in lockstep (zelfde bronstring → zelfde output).
+
+✅ **Always:**
+- Nederlands zinskapitaal in koppen: 1e woord + eigennamen hoofdletter, de rest klein — óók Engelse vaktermen ("brute force"/"social engineering") tenzij echte eigennaam ([[feedback_dutch_sentence_case_headings]]). Behoud: merken (Metasploit/Nmap/OWASP Top 10), nationaliteitsadjectieven (Nederlandse/Engelse), camelCase-API's (localStorage), acroniemen, officiële namen (OWASP-categorieën, certificeringen). Na `:` klein; na `?`/`!`/`.`-met-spatie nieuwe zin; sectienummer "2.1" kapitaliseert het volgende woord, kardinaal "5 tools" niet.
+- Idempotentie als verificatie van een bulk-transform — tweede pass = 0 wijzigingen bewijst consistentie én dat niets is gemist. Aangevuld met `git diff` collateral-scan (leeg = alleen koppen geraakt), browser-render van de gemelde pagina, en de pre-commit blog-JSON-LD/tag-balans-hook.
+- 518 inserts / 518 deletes bij een grote diff = een sterke tell dat het puur tekst-casing is, 0 structuur — precies wat een hoofdletter-pass hoort te produceren.
+- Script > handwerk zodra een taak mechanisch-van-omvang maar oordeelsgevoelig is (~340 koppen, whitelist per kop) — één zorgvuldig script + één centrale diff-review verslaat 340 losse edits, dwingt consistentie af (Nederlandse/Engelse behouden hun hoofdletter terwijl "brute force" klein wordt) en geeft één controlepunt. Mits de review grondig is ([[feedback_proportional_effort_hobby]]).
+
 ### Sessie 200: Command-output-audit (item #47) afgerond — Fase 3 triviale correctheid-nits (26 jul 2026)
 ⚠️ **Never:**
 - Een string-fix via de volle UI verifiëren als een directe module-import het codepad exact raakt — de typewriter, consent-modal en FocusTrap staan tussen jou en de `execute()`-output. `import()` van de command-module in de browser + een stub (`vfs.copy` die "No such file" gooit) of een passende target (`nmap` op `secure-*` → de 443-only-tak) draait de échte tak zonder ceremonie. Meet het gedrag, niet de scherm-heuristiek ([[reference_renderer_marker_collision]]).
@@ -147,20 +160,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Een marker-swap in een padEnd-box meten, niet aannemen — `[?]`→`[→]` is 1 UTF-16-unit maar glyph-breedte verschilt per font; `getBoundingClientRect` op alle 38 boxregels (uniek: 1148px) bewees uitlijning objectief.
 - Mechanische sweeps vooraf de-risken: test-contract-grep (next-funnel.spec grept `/\[->\] Typ/` → next.js-boxen NIET aanraken), consumenten-check (`_stripTips` matcht beide TIP-vormen → dual-match als vangnet laten staan), colon-loze varianten. Bewust-NIET vastleggen: ASCII `[->]`, kale bullets, EN-vakjargon, `===`→`>=`. Volledig: `docs/sessions/current.md` Sessie 196.
 
-### Sessie 195: Leerpad-consistentie + brede spook-command-nasweep (05-06 jul 2026)
-⚠️ **Never:**
-- Een ontbrekend item op N plekken bijplakken terwijl de echte bug de duplicatie is — het leerpad miste `whois` omdat de faselijst op 5 plekken hardcoded stond en al gedivergeerd was van de recon-tutorial die whois wél leert. Fix = één bron (`src/core/learning-path.js`, `phaseCommandNames()`), niet 5 kopieën bijwerken. Zodra één plek wijzigt divergeert de rest geruisloos (geen error, alleen een gebruiker die z'n vinkje mist).
-- Een audit-suggestie blind toepassen — de audit wilde feed.xml OWASP "2021"→"2025"; verificatie toonde 2021 = de officieel uitgebrachte editie (2025 nog concept) + blog-meta zegt bewust 2021 → suggestie fout, toepassen had een feitfout geïntroduceerd. Verifieer vóór je wijzigt ([[feedback_verify_before_launch_critical]]).
-- Een tracking-guard vertrouwen die niet symmetrisch is — `_shouldTrackCommand`'s `hasError`-markers dekten whois/ping's foutstrings maar niet traceroute's `Failed to resolve` → een gefaalde traceroute vinkte Fase 3 af. Zelfde asymmetrie-klasse als de leerpad-bug zelf.
-- Vak-idioom letterlijk vertalen als NL-copy — "hop voor hop" (traceroute-jargon) is geen Nederlands; "stap voor stap" wel (user-correctie). Check bij elke NL-frase: zou een niet-techneut dit zo zeggen? ([[feedback_nl_copy_dejargon]]).
-
-✅ **Always:**
-- Bij een groei van een gedeelde lijst: check backwards-compat van afgeleide drempels — Fase 3 groeide 4→6, dus "alles geprobeerd" zou bestaande EXPERT-unlockers her-vergrendelen. Drempel `≥4 van 6` (`PHASE3_UNLOCK_THRESHOLD`) houdt oude 4/4-users unlocked én laat recon-finishers direct door. dynamic-content README-fasedetectie kreeg dezelfde drempel-behandeling.
-- Content-oppervlakken tegen de echte command-lijst auditen, niet alleen de code — terminal.html prees `wireshark` aan (bestaat niet), commands/index.html toonde 39/41 (shortcuts+welcome ontbraken incl. JSON-LD), blogs beloofden ps/top/uname/curl/chmod-oefening. Spook-commands leven vooral in marketing/SEO-copy die niemand tegen de registry checkt.
-- Simulator-only markers uit één bron — `SIMULATOR_COMMANDS` stond 2× gedupliceerd (help.js + onboarding.js) en miste `hint`/`shortcuts`; named-export in onboarding.js + import in help.js. Een command dat zelf `[HACKSIM]` roept maar geen `*` krijgt in `help` is een tell.
-- Bewust-NIET met reden vastleggen — help-system categorie-lijsten registry-derived maken (nu correct, refactor te breed) + `hostname`/`uptime` in de stress-test (dekt command-not-found-pad). Volledig: `docs/sessions/current.md` Sessie 195.
-
-**Rotation:** Top-6 huidig: 195-196-197-198-199-200 (Sessie 194 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 200 UITGEVOERD:** current.md staart Sessie 185-189 geknipt naar `archive-s185-s189.md` (5 entries, 179 regels); current.md houdt nu het rolling window 190-200 (11 entries; volgende bulk-rotatie Sessie 205 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-184 → `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 196-197-198-199-200-201 (Sessie 195 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 200 UITGEVOERD:** current.md staart Sessie 185-189 geknipt naar `archive-s185-s189.md` (5 entries, 179 regels); current.md houdt nu het rolling window 190-200 (11 entries; volgende bulk-rotatie Sessie 205 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-184 → `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -209,7 +209,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 200
+**Sessie counter:** 201
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -261,6 +261,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 26 jul 2026 (Sessie 200 — Command-output-audit (item #47) afgerond met Fase 3 triviale correctheid-nits (commit `e31075b`, gepusht): `cp.js` "De→Het bronbestand", `certificates.js` "kopieren→kopiëren", `nmap.js` "attack surface→aanvalsoppervlak". Browser-geverifieerd via directe module-import. Item #47 volledig gesloten (Fase 1+2 landden eerder same-day). Bulk-rotatie 185-189 → `archive-s185-s189.md`. Volledig: `docs/sessions/current.md`)
-**Version:** 5.74 (Sessie 200 — Command-output-audit item #47 afgerond: Fase 3 correctheid-nits (cp/certificates/nmap), 1 commit gepusht; item volledig gesloten; bulk-rotatie 185-189 gearchiveerd; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 26 jul 2026 (Sessie 201 — Koppen sitebreed van Engelse Title Case naar Nederlands zinskapitaal (commit `65c5f18`, gepusht): ~340 koppen/27 bestanden via Python-transform (whitelist + zin-grens), lockstep titel-cluster per blog, `<style>`/`<script>`-masking tegen CSS-comment-`<h3>`, +typofix Scheidbaarheid, idempotentie-geverifieerd. Volledig: `docs/sessions/current.md`)
+**Version:** 5.75 (Sessie 201 — Koppen sitebreed naar Nederlands zinskapitaal i.p.v. Engelse Title Case: ~340 koppen/27 bestanden via Python-transform (whitelist + zin-grens), lockstep titel-cluster, `<style>`/`<script>`-masking, +typofix Scheidbaarheid, 1 commit `65c5f18` gepusht; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
