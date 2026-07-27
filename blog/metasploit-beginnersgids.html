@@ -171,13 +171,13 @@
         <h2>Wat is Metasploit?</h2>
         <p>
           Metasploit is een <strong>framework</strong>: een verzameling tools die samen het hele proces van kwetsbaarheden testen
-          automatiseren. Het is gratis en open-source, wordt onderhouden door beveiligingsbedrijf Rapid7, en bevat meer dan
+          automatiseren. Het is gratis en <abbr class="jargon" title="Open-source: software waarvan de broncode vrij beschikbaar is, zodat iedereen hem kan bekijken, gebruiken en verbeteren" tabindex="0">open-source</abbr>, wordt onderhouden door beveiligingsbedrijf Rapid7, en bevat meer dan
           <strong>2300 kant-en-klare exploits</strong> voor bekende kwetsbaarheden. Een
           <abbr class="jargon" title="Exploit: code die misbruik maakt van een specifieke kwetsbaarheid om ergens binnen te komen of iets te forceren" tabindex="0"><strong>exploit</strong></abbr>
           is code die misbruik maakt van een concrete zwakte in software.
         </p>
         <p>
-          Het is verreweg het meest gebruikte penetration testing platform ter wereld. Waar je vroeger voor elke kwetsbaarheid
+          Het is verreweg het meest gebruikte <abbr class="jargon" title="Penetration testing: het met toestemming en gecontroleerd aanvallen van een systeem om zwakke plekken te vinden voordat kwaadwillenden dat doen" tabindex="0">penetration testing</abbr> platform ter wereld. Waar je vroeger voor elke kwetsbaarheid
           zelf exploit-code moest schrijven, biedt Metasploit een bibliotheek waarin je een exploit uitkiest, een paar instellingen
           invult, en 'm afvuurt. Dat maakt het krachtig — en precies daarom is verantwoord gebruik zo belangrijk.
         </p>
@@ -210,7 +210,8 @@
             (bijvoorbeeld een verbinding terug opzetten).
           </li>
           <li>
-            <strong>Auxiliary modules</strong> — Hulpmiddelen die niet exploiteren maar ondersteunen: scanners, fuzzers en
+            <strong>Auxiliary modules</strong> — Hulpmiddelen die niet exploiteren maar ondersteunen: scanners,
+            <abbr class="jargon" title="Fuzzer: een tool die een programma bestookt met grote hoeveelheden willekeurige of ongeldige invoer om crashes en kwetsbaarheden bloot te leggen" tabindex="0">fuzzers</abbr> en
             informatie-verzamelaars.
           </li>
           <li>
@@ -230,13 +231,13 @@
           penetration testing terugziet:
         </p>
         <ol>
-          <li><strong>Reconnaissance</strong> — Het doelwit verkennen met tools als nmap: welke systemen, poorten en services zijn er?</li>
+          <li><strong><abbr class="jargon" title="Reconnaissance: de verkenningsfase waarin je zoveel mogelijk informatie over het doelwit verzamelt voordat je aanvalt" tabindex="0">Reconnaissance</abbr></strong> — Het doelwit verkennen met tools als nmap: welke systemen, poorten en services zijn er?</li>
           <li><strong>Kwetsbaarheid identificeren</strong> — Welke gevonden software heeft een bekende zwakte?</li>
           <li><strong>Exploit kiezen</strong> — De juiste module zoeken in de Metasploit-database die bij die kwetsbaarheid past.</li>
-          <li><strong>Payload instellen</strong> — Bepalen wat er ná de exploit moet gebeuren (bijvoorbeeld een reverse shell).</li>
+          <li><strong>Payload instellen</strong> — Bepalen wat er ná de exploit moet gebeuren (bijvoorbeeld een <abbr class="jargon" title="Reverse shell: een verbinding waarbij het gehackte systeem zelf contact maakt met de aanvaller, wat vaak lukt omdat uitgaand verkeer meestal wel door de firewall mag" tabindex="0">reverse shell</abbr>).</li>
           <li><strong>Exploitation</strong> — De exploit uitvoeren tegen het doelwit.</li>
           <li><strong>Post-exploitation</strong> — Wat je met de toegang doet: rechten verhogen, informatie verzamelen.</li>
-          <li><strong>Lateral movement</strong> — Vanaf het gekraakte systeem doorstoten naar andere systemen in het netwerk.</li>
+          <li><strong><abbr class="jargon" title="Lateral movement: je zijwaarts door het netwerk bewegen, van het ene gekraakte systeem naar het volgende" tabindex="0">Lateral movement</abbr></strong> — Vanaf het gekraakte systeem doorstoten naar andere systemen in het netwerk.</li>
         </ol>
 
         <div class="blog-tip">
@@ -324,12 +325,12 @@ msf6 > exploit                    <- exploit afvuren
           <tbody>
             <tr>
               <td data-label="Exploit"><strong>EternalBlue</strong></td>
-              <td data-label="Kwetsbaarheid">MS17-010 (Windows SMB)</td>
-              <td data-label="Bekend van">De WannaCry-ransomware (2017), infecteerde wereldwijd honderdduizenden computers</td>
+              <td data-label="Kwetsbaarheid">MS17-010 (Windows <abbr class="jargon" title="Server Message Block: het Windows-protocol voor het delen van bestanden en printers in een netwerk" tabindex="0">SMB</abbr>)</td>
+              <td data-label="Bekend van">De WannaCry-<abbr class="jargon" title="Ransomware: kwaadaardige software die je bestanden versleutelt en losgeld eist om ze weer vrij te geven" tabindex="0">ransomware</abbr> (2017), infecteerde wereldwijd honderdduizenden computers</td>
             </tr>
             <tr>
               <td data-label="Exploit"><strong>BlueKeep</strong></td>
-              <td data-label="Kwetsbaarheid"><abbr class="jargon" title="Common Vulnerabilities and Exposures: uniek ID-nummer voor een geregistreerde kwetsbaarheid" tabindex="0">CVE</abbr>-2019-0708 (Windows RDP)</td>
+              <td data-label="Kwetsbaarheid"><abbr class="jargon" title="Common Vulnerabilities and Exposures: uniek ID-nummer voor een geregistreerde kwetsbaarheid" tabindex="0">CVE</abbr>-2019-0708 (Windows <abbr class="jargon" title="Remote Desktop Protocol: Windows-protocol waarmee je een computer op afstand overneemt via een grafisch bureaublad" tabindex="0">RDP</abbr>)</td>
               <td data-label="Bekend van">Kon zich automatisch verspreiden zonder inloggegevens; miljoenen kwetsbare systemen</td>
             </tr>
             <tr>
