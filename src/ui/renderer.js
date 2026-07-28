@@ -131,8 +131,11 @@ class Renderer {
       // Reuses isContinuationLine() detection, adds data attribute for mobile.css
       // See Sessie 84/85: Mobile Continuation Line Wrapping Fix
       if (isContinuationLine(lineText)) {
-        const leadingSpaces = getLeadingSpaces(lineText);
-        line.dataset.indent = leadingSpaces; // CSS uses this via attr(data-indent)
+        line.dataset.indent = getLeadingSpaces(lineText); // CSS uses this via attr(data-indent)
+      } else {
+        // Licht-ingesprongen marker-regel (1-2 spaties): hang de wrap onder de tekst
+        const hang = getMarkerHangIndent(lineText);
+        if (hang !== null) line.dataset.indent = hang;
       }
 
       // Process special formatting
@@ -337,8 +340,11 @@ class Renderer {
       line.className = 'terminal-line terminal-output terminal-output-' + lineType;
 
       if (isContinuationLine(lineText)) {
-        var leadingSpaces = getLeadingSpaces(lineText);
-        line.dataset.indent = leadingSpaces;
+        line.dataset.indent = getLeadingSpaces(lineText);
+      } else {
+        // Licht-ingesprongen marker-regel (1-2 spaties): hang de wrap onder de tekst
+        var hang = getMarkerHangIndent(lineText);
+        if (hang !== null) line.dataset.indent = hang;
       }
 
       var formattedContent = self._formatText(lineText);
@@ -533,6 +539,27 @@ function getLeadingSpaces(lineText) {
   // Normalize tabs to 4 spaces (same as isContinuationLine)
   const normalized = lineText.replace(/\t/g, '    ');
   return normalized.match(/^(\s*)/)[1].length;
+}
+
+/**
+ * Hanging-indent voor een licht-ingesprongen marker-regel (1-2 leidende spaties).
+ * Zulke regels vallen NÉT onder de isContinuationLine-drempel (>=3), dus zonder dit
+ * kreeg bv. de welkomst-CTA "  [->] Typ 'next'..." geen data-indent en brak de wrap
+ * op mobiel terug naar kolom 0 — links van de marker zelf.
+ *
+ * We lijnen de wrap uit onder de BERICHTTEKST (na "[marker] "), niet onder de "[".
+ * Alleen 1-2 spaties: 0 = command-output-marker op kolom 0 (leest prima, ongemoeid);
+ * >=3 = houdt zijn bestaande isContinuationLine-gedrag (security-output ongemoeid).
+ * @private
+ * @param {string} lineText - Raw line text with spacing
+ * @returns {number|null} Kolom waar de berichttekst begint, of null bij geen match
+ */
+function getMarkerHangIndent(lineText) {
+  // Normalize tabs to 4 spaces (same as the other helpers)
+  const normalized = lineText.replace(/\t/g, '    ');
+  const match = normalized.match(/^( {1,2})(\[[^\]]{1,4}\]|→)\s/);
+  if (!match) return null;
+  return match[1].length + match[2].length + 1; // leading + marker + de scheidingsspatie
 }
 
 // Export as singleton
