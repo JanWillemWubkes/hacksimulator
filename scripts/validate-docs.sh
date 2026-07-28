@@ -373,7 +373,8 @@ if [ "$DEEP_MODE" = "1" ]; then
   # vlak vóór het bijbehorende -label staat.
   blog_floor=$(grep -B1 'gids-stat-label">Blog posts<' gidsen.html | grep -oE 'gids-stat-value">[0-9]+' | grep -oE '[0-9]+$')
   cmd_floor=$(grep -B1 'gids-stat-label">Commands<' gidsen.html | grep -oE 'gids-stat-value">[0-9]+' | grep -oE '[0-9]+$')
-  term_floor=$(grep -oE '[0-9]+\+ Cybersecurity Termen' woordenlijst.html | grep -oE '^[0-9]+' | head -1)
+  # -i: sinds Sessie 201 zinskapitaal ("50+ cybersecurity termen"), niet meer Title Case
+  term_floor=$(grep -oiE '[0-9]+\+ Cybersecurity Termen' woordenlijst.html | grep -oE '^[0-9]+' | head -1)
 
   # assert_floor <naam> <floor> <ground-truth>
   assert_floor() {

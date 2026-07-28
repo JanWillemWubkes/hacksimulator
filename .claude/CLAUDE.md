@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 201)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 202)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 202: Mobiele kolom-uitlijning + box-truncatie in terminal-output (28 jul 2026)
+⚠️ **Never:**
+- Een gemelde layout-bug fixen zonder de gedeelde util erachter te checken — de reset-menu-collapse was één symptoom; de hoogste-waarde-bug (`asciiBox.wrap()` kápte *waarschuwingstekst* af met `...` in álle 5 SECURITY WARNING-boxen op mobiel) zat in de util die de gemelde commands voeden, niet in de gemelde output. Grep de callers (`boxText`/`lightBoxText`) vóór je concludeert dat het één command is.
+- Een fix in de draaiende app verifiëren als de module relatief-geïmporteerd is zónder `?v=` — geen build-stap + `asciiBox.js` zonder cache-bust → de browser serveerde de oude versie (in-app render toonde nog `...`). `import('/src/…?cb='+Date.now())` in `browser_evaluate` raakt het bestand-op-schijf en draait het échte codepad (Sessie 200-techniek).
+- Elke regel in een box blind woord-wrappen — `wordWrap` collapse't leidende + uitlijn-spaties, wat desktop-inspringing sloopt. Alléén regels die de breedte *overschrijden* herwrappen; passende regels verbatim → geen desktop-regressie.
+- Een twee-koloms-menu "redden" met alleen hanging-indent — `data-indent` lijnt continuatie uit, maar de beschrijving blijft als sibling-item lezen (precies de screenshot). Echte fix = stapelen met diepere indent + blank-line-groepering.
+
+✅ **Always:**
+- Onderscheid "echt kapot" van "degradeert acceptabel" — reset-menu (twee zware kolommen) = kapot; `label ← glosse` met ≥3 leidende spaties wordt al door de hanging-indent gered → ongemoeid (`metasploit`/`hydra`). Proportioneel, geen sweep-om-de-sweep ([[feedback_proportional_effort_hobby]]).
+- Een crash-footgun fixen óók als 'ie onbereikbaar is, mits goedkoop — box-titel-`RangeError` (`horizontal.repeat(negatief)` bij titel > boxbreedte) is prod-onbereikbaar (man/help vertakken op `isMobileView()` → desktop-only), maar 1 regel `label.slice(0, width)` zet crash → graceful. Crash ≫ cosmetisch.
+- Beslis als expert i.p.v. optiemenu bij techniek — systemische renderer-reflow-heuristiek verworpen (ASCII-art/code-blokken/authentieke tool-output hebben óók multi-spaties die je niet mag herschikken; Sessie 196: bevries aan de bron, filter niet de output) → gerichte per-output-fixes. Scope-omvang wél aan Heisenberg gevraagd (dat is een product-keuze) ([[feedback_expert_decisions]]).
+- Meet mobiel objectief — Playwright 375px: `overflowCount` via `scrollWidth>clientWidth`, page-scroll via `scrollX`/`bodyScrollW`, box-randuitlijning via `[...new Set(rows.map(r=>r.length))]` (alle regels exact `width+2`). Niet op het oog.
+
 ### Sessie 201: Koppen sitebreed naar Nederlands zinskapitaal i.p.v. Engelse Title Case (26 jul 2026)
 ⚠️ **Never:**
 - Een heading-regex over de hele file laten lopen zonder `<style>`/`<script>` te maskeren — `woordenlijst.html` heeft letterlijk `<h3>` in een CSS-comment ("de categorie-`<h3>` erachter"); zonder sluit-tag liep `<h[1-4]>.*?</h[1-4]>` door tot de échte `</h1>` en verminkte het style-blok + de JSON-LD. Maskeer literal-blokken eerst; verwerk JSON-LD (`headline`/`name`) met eigen string-patronen. De gevaarlijkste bug zit in de bestandsklasse die je het laatst test (blogs hadden geen inline-`<style>`, dus dit dook pas op de hoofdpagina's op).
@@ -147,20 +160,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Backlog vastleggen i.p.v. half-blind fixen — de 10 prod-hardcoded specs (→ `BASE_URL`) niet omzetten vanuit een egress-geblokkeerde omgeving waar je ze niet tegen prod kunt verifiëren; performance/debug wijzen mogelijk bewust naar prod. Hoogste-waarde-move = smoketests van werkkopie-tests splitsen. Vastgelegd als TASKS.md item 42.
 - Systematisch het hele oppervlak driven met échte input — 8 passes (41 commands + man-pages, security-consent 5 tools, 5 tutorials + challenges end-to-end, gamification, core-input, welcome-state, mobile) vonden precies 1 echte bug; de brede dekking draagt de "0 open bugs"-conclusie. Volledig: `docs/sessions/current.md` Sessie 197.
 
-### Sessie 196: CTA-consistentie-audit — "typ next" vs directe opdracht (06 jul 2026)
-⚠️ **Never:**
-- Een gemelde "inconsistentie" fixen vóór je hebt vastgesteld of het design is — tutorial-stappen (command-only, advance op `validate()`) en de vrije-verkenning-funnel ("Typ 'next'") zijn bewust gescheiden modi; de echte drift zat in de verpakking (copy/markers) en twee randgevallen, niet in de architectuur. Een architectuur-"fix" had het twee-modi-ontwerp gesloopt.
-- Een string-sweep als af beschouwen omdat een vorige sessie 'm deed — de Sessie-193 `Type '`-sweep miste 24 hint-strings in álle 5 scenario's (`'Type het commando'`/`'Type: <cmd>'` — geen quote na Type). Pas af na een patroon-brede na-grep (`\bType\b`) + jargon-triage, niet na de gemelde plekken.
-- Een hint "onderdrukken" door de output te nullen terwijl de state-mutatie doorloopt — `recordCommand` passeerde de exacte `===`-drempels en consumeerde one-time-flags mid-missie; de genulde Tab-/Ctrl+R-tips verdwenen daardoor permanent. Bevries de state aan de bron (`{deferHints}`), filter niet de output.
-- Synthetische `dispatchEvent(new KeyboardEvent(...))` vertrouwen voor render-en-meet — de command-handler vuurde niet en de "gevonden" CTA bleek een welcome-regel; echte `fill`+`press('Enter')` wel. Wantrouw je meetinstrument (vgl. Sessie 185/190).
-
-✅ **Always:**
-- Symmetrie-check tutorial⇄challenge op elke state-lezende plek — `ctaMode` keek alleen naar tutorialManager, dus een hervatte challenge kreeg twéé concurrerende boot-instructies (welcome-next-CTA + challenge-resume). Zelfde asymmetrie-klasse als Sessie 195's `hasError`; hier zelfs binnen één bestand (filesystem-hints wél geguard, progressive-hints niet).
-- Eén CTA-string = één marker — "Typ 'next' voor je volgende stap" had er 3 ([→]/kale →/[?]); de renderer kleurt ze toevallig gelijk, dus niemand zág de drift. Unificeer op de hiërarchie ([→]=actie) en laat lijst-bullets bewust kaal.
-- Een marker-swap in een padEnd-box meten, niet aannemen — `[?]`→`[→]` is 1 UTF-16-unit maar glyph-breedte verschilt per font; `getBoundingClientRect` op alle 38 boxregels (uniek: 1148px) bewees uitlijning objectief.
-- Mechanische sweeps vooraf de-risken: test-contract-grep (next-funnel.spec grept `/\[->\] Typ/` → next.js-boxen NIET aanraken), consumenten-check (`_stripTips` matcht beide TIP-vormen → dual-match als vangnet laten staan), colon-loze varianten. Bewust-NIET vastleggen: ASCII `[->]`, kale bullets, EN-vakjargon, `===`→`>=`. Volledig: `docs/sessions/current.md` Sessie 196.
-
-**Rotation:** Top-6 huidig: 196-197-198-199-200-201 (Sessie 195 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 200 UITGEVOERD:** current.md staart Sessie 185-189 geknipt naar `archive-s185-s189.md` (5 entries, 179 regels); current.md houdt nu het rolling window 190-200 (11 entries; volgende bulk-rotatie Sessie 205 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-184 → `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 197-198-199-200-201-202 (Sessie 196 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 200 UITGEVOERD:** current.md staart Sessie 185-189 geknipt naar `archive-s185-s189.md` (5 entries, 179 regels); current.md houdt nu het rolling window 190-200 (11 entries; volgende bulk-rotatie Sessie 205 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-184 → `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -209,7 +209,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 201
+**Sessie counter:** 202
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -261,6 +261,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 26 jul 2026 (Sessie 201 — Koppen sitebreed van Engelse Title Case naar Nederlands zinskapitaal (commit `65c5f18`, gepusht): ~340 koppen/27 bestanden via Python-transform (whitelist + zin-grens), lockstep titel-cluster per blog, `<style>`/`<script>`-masking tegen CSS-comment-`<h3>`, +typofix Scheidbaarheid, idempotentie-geverifieerd. Volledig: `docs/sessions/current.md`)
-**Version:** 5.75 (Sessie 201 — Koppen sitebreed naar Nederlands zinskapitaal i.p.v. Engelse Title Case: ~340 koppen/27 bestanden via Python-transform (whitelist + zin-grens), lockstep titel-cluster, `<style>`/`<script>`-masking, +typofix Scheidbaarheid, 1 commit `65c5f18` gepusht; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 28 jul 2026 (Sessie 202 — Mobiele kolom-uitlijning + box-truncatie in terminal-output (commit `fe27a17`, gepusht): reset-menu + nikto-headers gestapeld (+2 `\n`-plak-bugs), hashcat ←-glosse op eigen regel, `asciiBox.wrap()` woord-wrapt i.p.v. afkappen (5 SECURITY WARNING-boxen kápten tekst af op mobiel), box-titel-RangeError afgevangen. Man-pages buiten scope. Volledig: `docs/sessions/current.md`)
+**Version:** 5.76 (Sessie 202 — Mobiele kolom-uitlijning + box-truncatie: reset-menu/nikto-headers gestapeld (+2 `\n`-bugs), hashcat-glosse eigen regel, `asciiBox.wrap()` wrapt i.p.v. afkappen (5 warning-boxen), box-titel-crash-guard; 1 commit `fe27a17` gepusht; volledige historie: `docs/sessions/current.md` + TASKS.md)
 

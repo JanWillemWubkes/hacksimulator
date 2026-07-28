@@ -4,6 +4,35 @@
 
 ---
 
+## Sessie 202: Mobiele kolom-uitlijning + box-truncatie in terminal-output (28 jul 2026)
+
+**Mission:** Gebruiker (screenshot terminal, 375px): het `reset`-tutorial-exit-menu ("[→] Wat wil je doen?" met commando + beschrijving) brak lelijk af — de twee kolommen vielen onder elkaar zodat elke beschrijving als een los menu-item las. Verzoek: "analyseer hoe en waar dit voorkomt site wide. ik wil dit perfect hebben." Scope-keuze Heisenberg: **alle live output** (reset-menu + security-tool-uitvoer); **man-pages buiten scope** (referentie achter expliciet `man`, traditioneel breed).
+
+**Root cause:** `#terminal-output` gebruikt `white-space: pre-wrap` (`styles/terminal.css`). Regels breder dan de viewport (~30 tekens op mobiel; `getResponsiveBoxWidth()` klemt op min. 30) breken af op hun interne spaties → elke fixed-width twee-koloms-tabel (`kolom1` + opvul-spaties + `kolom2`) klapt in elkaar. De bestaande `data-indent` hanging-indent (`renderer.js` → `mobile.css`) redt alléén *continuatie*-regels, niet een twee-koloms-layout. De codebase had het juiste patroon al: commando's die `box-utils.js` gebruiken vertakken op `isMobileView()` en renderen gestapeld (`next.js` `buildMobileBox`/`buildDesktopBox`, `tutorial.js`, `dashboard.js`, `leaderboard.js` `renderListMobile`). De kapotte output omzeilde die helpers met hardcoded opvul-spaties.
+
+**Work done (commit `fe27a17`, 4 bestanden, gepusht naar `main`):**
+- **`reset.js`** (de screenshot): twee-koloms-menu → gestapeld (commando op eigen regel, beschrijving 2 spaties dieper eronder, lege regel tussen groepen). Bewust géén per-regel `→`-marker: `    → tutorial start exploitation` = 33 tekens en overschreed de ~30-char mobiele breedte; zonder arrow = 31 en het commando overleeft (of wrapt netjes met hanging-indent). Leest goed op mobiel én desktop → geen `isMobileView()`-vertakking nodig.
+- **`nikto.js`**: "Ontbrekende headers"-tabel gestapeld (`header` + ingesprongen `→ beschrijving`); "Forces HTTPS"→"Dwingt HTTPS af" (de-Dunglish, rest van de tabel was al NL). **+ 2 echte bugs**: `+ Start Time: …}+ Server:` en `…seconds)+ 1 host(s)` plakten twee output-regels aaneen zónder `\n`.
+- **`hashcat.js`**: 2 lange kolom-0-regels met `←`-glosse (`[*] Detecting hash type… ← …`, `Speed.#1…: X MH/s ← …`) → glosse op eigen ingesprongen regel; de basis-statusregels passen nu.
+- **`asciiBox.js`** (de échte reikwijdte-vondst): box-`wrap()` in beide varianten (zwaar + licht) **woord-wrapt** te brede regels via de bestaande `wordWrap()` i.p.v. af te kappen met `...`. De 5 SECURITY WARNING-boxen (`boxText(warningContent, 'SECURITY WARNING')` in metasploit/nikto/sqlmap/hydra/hashcat) kápten waarschuwings-/gebruikstekst af op mobiel — niet alleen hydra's `(SSH brute force)`. Cruciaal: alléén regels die de breedte *overschrijden* worden geherwrapt; passende regels blijven verbatim → desktop-rendering + bewuste inspringing ongewijzigd. Sluit de in TASKS #47 Fase 1c gevlagde "mobiele legal-box-truncatie".
+- **Box-titel-guard**: `label.slice(0, width)` als de titel breder is dan de box → geen `RangeError` meer bij `horizontal.repeat(negatief)`. Latent (onbereikbaar in prod: beide titel-callers `man.js`/`help.js` vertakken op `isMobileView()` naar platte tekst; op desktop is de box breed), maar een crash ≫ cosmetisch, dus goedkope guard.
+- **Bewust ongemoeid**: `metasploit.js:69-71` + `hydra.js:161-162` `label ← glosse`-regels beginnen al met ≥3 spaties → hanging-indent grijpt al aan (degraderen acceptabel). Authentieke nikto-scan-regels (`+ label: value`) blijven voor 80/20-realisme.
+
+**Learnings:**
+- De screenshot was één symptoom van een klasse: fixed-width kolommen vs `pre-wrap`. De hoogste-waarde-vondst (box-truncatie die *waarschuwingstekst* wegkapt) zat níét in de gemelde output maar in de gedeelde `asciiBox`-util die de gemelde security-tools voeden — breed kijken loonde.
+- **Verificatie-techniek voor een cache-geblokkeerde module:** er is geen build-stap en `asciiBox.js` wordt relatief geïmporteerd zónder `?v=`, dus de browser serveerde de gecachte oude versie (in-app render toonde nog `...`). Oplossing: `import('/src/utils/asciiBox.js?cb=' + Date.now())` in `browser_evaluate` → draait de échte `boxText()`/`wordWrap()` op het bestand-op-schijf. Bewees: geen ellipsis, alle regels exact `width+2` (randen uitgelijnd), content behouden, desktop verbatim, titel-guard crasht niet. (Sessie 200-techniek: meet het codepad direct, niet via de UI-heuristiek.)
+- **Beslissing als expert i.p.v. optiemenu:** systemische renderer-reflow-heuristiek verworpen (ASCII-art/code-blokken/authentieke tool-output hebben óók multi-spaties die je niet mag herschikken; Sessie 196: "bevries de state aan de bron, filter niet de output") → gerichte per-output-fixes. De box-titel-crash wél gefixt ondanks onbereikbaarheid, want de kosten-baten (2 regels vs crash-footgun) is duidelijk.
+
+**Verificatie:** Playwright echte `fill`+`Enter` op 375px + desktop 1280px; `overflowCount: 0` over de hele output, geen horizontale page-scroll; reset-menu + nikto + hashcat schoon; desktop geen regressie; `git diff` collateral-scan: 4 bestanden, alleen bedoelde output-strings, geen man-pages/logica. Screenshots `.playwright-mcp/reset-menu-{mobile,desktop}-fixed.png`.
+
+**Deploy-noot:** live na het gebruikelijke ~1u Netlify-cachevenster (sub-modules relatief geïmporteerd zonder `?v=`; een `?v=`-bump op `main.js` bust ze niet). Direct live = Netlify "Clear cache and deploy site".
+
+**Next steps:** geen open items uit deze sessie. (Optioneel toekomstig: een `?v=`-strategie voor sub-modules zodat sub-module-fixes niet ~1u op de cache wachten — pre-existing deploy-karakteristiek, geen bug.)
+
+**Metrics delta:** 4 bestanden, +51/-22 regels; geen test-count-wijziging (28 spec files / 213 test-defs); bundle-KB-delta verwaarloosbaar (tekst-in-template-literals).
+
+---
+
 ## Follow-up (27 jul 2026): Tutorial continuation-inspringing 6→4 spaties
 
 **Mission:** Gebruiker (screenshot terminal, fundamentals-tutorial): "de inspringing die je ziet — is die bewust?" De vervolgregels van `[~]`/`[!]`-feedback sprongen 6 spaties in, 2 tekens voorbij de 4-brede marker.
