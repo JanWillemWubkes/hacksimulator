@@ -118,7 +118,8 @@ Analyzing hash: ${hash}
 
 Analyzing hash: ${hash}
 
-[*] Detecting hash type... ${type} detected  ← Hash algoritme identificatie
+[*] Detecting hash type... ${type} detected
+    ← Hash algoritme identificatie
 [*] Loading wordlist... rockyou.txt (14,344,391 words)
 [*] Starting attack...
 
@@ -126,7 +127,8 @@ Session..........: hashcat
 Status...........: Running
 Hash.Type........: ${type}
 Time.Started.....: ${new Date().toLocaleString('nl-NL')}
-Speed.#1.........: ${(1000 / time).toFixed(0)} MH/s  ← Miljoen hashes per seconde
+Speed.#1.........: ${(1000 / time).toFixed(0)} MH/s
+    ← Miljoen hashes per seconde
 
 [✓] HASH CRACKED!
 

@@ -105,9 +105,12 @@ Typ 'reset --help' voor meer informatie.`;
       if (tutorialInfo) {
         output += `\n\n[✓] Actieve tutorial verlaten (${tutorialInfo.id} - stap ${tutorialInfo.step}/${tutorialInfo.total}).`;
         output += `\n\n[→] Wat wil je doen?`;
-        output += `\n    tutorial start ${tutorialInfo.id}   Hervat waar je was`;
-        output += `\n    tutorial               Bekijk alle tutorials`;
-        output += `\n    next                   Ontdek andere opties`;
+        output += `\n\n    tutorial start ${tutorialInfo.id}`;
+        output += `\n      Hervat waar je was`;
+        output += `\n\n    tutorial`;
+        output += `\n      Bekijk alle tutorials`;
+        output += `\n\n    next`;
+        output += `\n      Ontdek andere opties`;
       }
 
       return output;

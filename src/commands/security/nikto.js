@@ -86,7 +86,8 @@ GEBRUIK:
     const output = `- Nikto v2.5.0+ Target IP:          192.168.1.100
 + Target Hostname:    ${hostname}
 + Target Port:        80
-+ Start Time:         ${new Date().toLocaleString('nl-NL')}+ Server: Apache/2.4.41 (Ubuntu)  ← Server fingerprinting
++ Start Time:         ${new Date().toLocaleString('nl-NL')}
++ Server: Apache/2.4.41 (Ubuntu)  ← Server fingerprinting
 + The anti-clickjacking X-Frame-Options header is not present  ← Security header missing
 + The X-Content-Type-Options header is not set  ← Security header missing
 + No CGI Directories found (use '-C all' to force check all possible dirs)
@@ -130,15 +131,20 @@ GEBRUIK:
    → Makkelijkere client-side attacks
 
 + 11 vulnerabilities found
-+ End Time: ${new Date().toLocaleString('nl-NL')} (scan took 32 seconds)+ 1 host(s) tested
++ End Time: ${new Date().toLocaleString('nl-NL')} (scan took 32 seconds)
++ 1 host(s) tested
 
 [?] LEERMOMENT: Web Security Headers
 
 **Ontbrekende headers:**
-   X-Frame-Options         → Voorkomt clickjacking
-   X-Content-Type-Options  → Voorkomt MIME type sniffing
-   Content-Security-Policy → Voorkomt XSS attacks
-   Strict-Transport-Security → Forces HTTPS
+   X-Frame-Options
+      → Voorkomt clickjacking
+   X-Content-Type-Options
+      → Voorkomt MIME type sniffing
+   Content-Security-Policy
+      → Voorkomt XSS attacks
+   Strict-Transport-Security
+      → Dwingt HTTPS af
 
 [###] REMEDIATIE STAPPEN:
 

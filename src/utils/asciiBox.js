@@ -1,4 +1,4 @@
-import { getResponsiveBoxWidth } from "./box-utils.js";
+import { getResponsiveBoxWidth, wordWrap } from "./box-utils.js";
 
 function createBox(title, width) {
   if (title === undefined) title = null;
@@ -14,6 +14,9 @@ function createBox(title, width) {
     top: (function() {
       if (!title) return chars.topLeft + chars.horizontal.repeat(width) + chars.topRight;
       var label = '  ' + title.toUpperCase() + '  ';
+      // Smal scherm: titel breder dan de box → afkappen zodat repeat() geen
+      // negatieve count krijgt (anders RangeError). Randbreedte blijft width+2.
+      if (label.length > width) label = label.slice(0, width);
       var remaining = width - label.length;
       var left = Math.floor(remaining / 2);
       var right = remaining - left;
@@ -21,11 +24,20 @@ function createBox(title, width) {
     })(),
     bottom: chars.bottomLeft + chars.horizontal.repeat(width) + chars.bottomRight,
     wrap: function(text) {
-      return text.split('\n').map(function(line) {
-        var truncated = line.length > width ? line.slice(0, width - 3) + '...' : line;
-        var padded = truncated.padEnd(width, ' ');
-        return chars.vertical + padded + chars.vertical;
-      }).join('\n');
+      var rows = [];
+      text.split('\n').forEach(function(line) {
+        if (line.length <= width) {
+          // Past al: verbatim laten (behoudt inspringing/uitlijning, incl. desktop)
+          rows.push(chars.vertical + line.padEnd(width, ' ') + chars.vertical);
+        } else {
+          // Te breed: woord-wrappen i.p.v. afkappen, zodat geen (waarschuwings)tekst
+          // wegvalt op smalle schermen (bv. de SECURITY WARNING-box op mobiel).
+          wordWrap(line, width).forEach(function(w) {
+            rows.push(chars.vertical + w.padEnd(width, ' ') + chars.vertical);
+          });
+        }
+      });
+      return rows.join('\n');
     }
   };
 }
@@ -57,6 +69,9 @@ function createLightBox(title, width) {
     top: (function() {
       if (!title) return chars.topLeft + chars.horizontal.repeat(width) + chars.topRight;
       var label = '  ' + title.toUpperCase() + '  ';
+      // Smal scherm: titel breder dan de box → afkappen zodat repeat() geen
+      // negatieve count krijgt (anders RangeError). Randbreedte blijft width+2.
+      if (label.length > width) label = label.slice(0, width);
       var remaining = width - label.length;
       var left = Math.floor(remaining / 2);
       var right = remaining - left;
@@ -64,11 +79,20 @@ function createLightBox(title, width) {
     })(),
     bottom: chars.bottomLeft + chars.horizontal.repeat(width) + chars.bottomRight,
     wrap: function(text) {
-      return text.split('\n').map(function(line) {
-        var truncated = line.length > width ? line.slice(0, width - 3) + '...' : line;
-        var padded = truncated.padEnd(width, ' ');
-        return chars.vertical + padded + chars.vertical;
-      }).join('\n');
+      var rows = [];
+      text.split('\n').forEach(function(line) {
+        if (line.length <= width) {
+          // Past al: verbatim laten (behoudt inspringing/uitlijning, incl. desktop)
+          rows.push(chars.vertical + line.padEnd(width, ' ') + chars.vertical);
+        } else {
+          // Te breed: woord-wrappen i.p.v. afkappen, zodat geen (waarschuwings)tekst
+          // wegvalt op smalle schermen (bv. de SECURITY WARNING-box op mobiel).
+          wordWrap(line, width).forEach(function(w) {
+            rows.push(chars.vertical + w.padEnd(width, ' ') + chars.vertical);
+          });
+        }
+      });
+      return rows.join('\n');
     }
   };
 }
