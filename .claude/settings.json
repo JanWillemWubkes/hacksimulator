@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import sys,json,subprocess; d=json.load(sys.stdin); p=d.get('tool_input',{}).get('file_path',''); sys.exit(subprocess.call(['./scripts/validate-blogs.sh']) if ('/blog/' in p and p.endswith('.html')) else 0)\""
+          }
+        ]
+      }
+    ]
+  }
+}
