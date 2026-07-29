@@ -48,7 +48,7 @@ op een veilige manier.`;
     Typ 'metasploit' opnieuw om te accepteren en door te gaan
 
 [?] Je consent wordt opgeslagen. Typ 'reset consent' om opnieuw
-      de waarschuwing te zien.`;
+    de waarschuwing te zien.`;
     }
 
     // Metasploit simulation - lean, beginner-friendly framework intro.
