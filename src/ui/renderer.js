@@ -127,16 +127,10 @@ class Renderer {
 
       line.className = `terminal-line terminal-output terminal-output-${lineType}`;
 
-      // Detect continuation lines and store indent level for CSS hanging indent (mobile)
-      // Reuses isContinuationLine() detection, adds data attribute for mobile.css
-      // See Sessie 84/85: Mobile Continuation Line Wrapping Fix
-      if (isContinuationLine(lineText)) {
-        line.dataset.indent = getLeadingSpaces(lineText); // CSS uses this via attr(data-indent)
-      } else {
-        // Licht-ingesprongen marker-regel (1-2 spaties): hang de wrap onder de tekst
-        const hang = getMarkerHangIndent(lineText);
-        if (hang !== null) line.dataset.indent = hang;
-      }
+      // Store indent level for CSS hanging indent (mobile) — houdt wrappende
+      // marker/ingesprongen regels uitgelijnd. Zie Sessie 84/85 + getLineIndent().
+      const indent = getLineIndent(lineText);
+      if (indent !== null) line.dataset.indent = indent; // mobile.css: attr → padding-left/text-indent
 
       // Process special formatting
       const formattedContent = this._formatText(lineText);
@@ -339,13 +333,8 @@ class Renderer {
 
       line.className = 'terminal-line terminal-output terminal-output-' + lineType;
 
-      if (isContinuationLine(lineText)) {
-        line.dataset.indent = getLeadingSpaces(lineText);
-      } else {
-        // Licht-ingesprongen marker-regel (1-2 spaties): hang de wrap onder de tekst
-        var hang = getMarkerHangIndent(lineText);
-        if (hang !== null) line.dataset.indent = hang;
-      }
+      var indent = getLineIndent(lineText);
+      if (indent !== null) line.dataset.indent = indent;
 
       var formattedContent = self._formatText(lineText);
       line.innerHTML = formattedContent;
@@ -560,9 +549,33 @@ function getLeadingSpaces(lineText) {
 function getMarkerHangIndent(lineText) {
   // Normalize tabs to 4 spaces (same as the other helpers)
   const normalized = lineText.replace(/\t/g, '    ');
-  const match = normalized.match(/^( {0,2})(\[[^\]]{1,4}\]|→)\s/);
+  // Optionele leidende '**' (markdown-bold) wordt in de render gestript (→ <strong>),
+  // dus tel 'm niet mee voor de offset — zo hangt ook een vetgedrukte marker-kop
+  // (bv. "**[ ] FASE 1: ...**" in leerpad/tutorial/challenge) onder de tekst.
+  const match = normalized.match(/^( {0,2})(?:\*\*)?(\[[^\]]{1,4}\]|→)\s/);
   if (!match) return null;
   return match[1].length + match[2].length + 1; // leading + marker + de scheidingsspatie
+}
+
+/**
+ * Bepaal de hanging-indent-kolom (data-indent) voor één regel op mobiel, of null.
+ * Gedeeld door beide render-paden (renderOutput + de mission/completion-render) zodat
+ * ze niet uit sync lopen. Drie gevallen, in volgorde:
+ *   1. >=3 leidende spaties  → continuation-regel, hang op de eigen inspringing;
+ *   2. 0-2 spaties + marker   → hang onder de berichttekst na "[marker] ";
+ *   3. 1-2 spaties, geen marker → licht-ingesprongen lijstitem (bv. help/shortcuts
+ *      "  cd - ...") → hang de wrap onder de itemtekst i.p.v. terug naar kolom 0.
+ * Regels zonder inspringing/marker (gewone alinea's) → null (wrap naar kolom 0 = prima).
+ * @private
+ * @param {string} lineText
+ * @returns {number|null}
+ */
+function getLineIndent(lineText) {
+  if (isContinuationLine(lineText)) return getLeadingSpaces(lineText);
+  const hang = getMarkerHangIndent(lineText);
+  if (hang !== null) return hang;
+  const lead = getLeadingSpaces(lineText);
+  return lead >= 1 ? lead : null;
 }
 
 // Export as singleton
