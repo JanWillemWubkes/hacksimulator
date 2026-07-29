@@ -7,7 +7,9 @@
 #   3. HTML tag-balans: <div> count == </div> count (Sessie 138-learning)
 #   4. Breadcrumb <nav class="breadcrumb"> aanwezig (Sessie 139 unified nav)
 #   5. BreadcrumbList JSON-LD aanwezig (Sessie 139 SEO rich-results)
+#   6. twitter:title + twitter:description aanwezig (og<->twitter card-pariteit, SEO)
 # Checks 4+5 worden geskipped voor blog/index.html (hub-pagina, geen breadcrumb nodig).
+# Check 6 geldt voor alle posts incl. index (elke pagina heeft een social-preview).
 #
 # Replaces pre-Sessie-131 GDPR-script-checks (4 aparte consent-scripts
 # vervangen door 1 gebundelde init-analytics.js).
@@ -82,6 +84,18 @@ validate_blog() {
       issues+="    [FAIL] MISSING: BreadcrumbList JSON-LD schema\n"
       errors=$((errors + 1))
     fi
+  fi
+
+  # Check 6: og <-> twitter card-pariteit (SEO — expliciete social-preview titel/omschrijving)
+  # twitter:card + twitter:image alleen laat title/desc terugvallen op og; expliciet is beter.
+  # Bron = dezelfde string als og:title/og:description (titel-lockstep, blog-post skill).
+  if ! grep -q 'name="twitter:title"' "$file"; then
+    issues+="    [FAIL] MISSING: twitter:title (spiegel van og:title — zie blog-post skill lockstep)\n"
+    errors=$((errors + 1))
+  fi
+  if ! grep -q 'name="twitter:description"' "$file"; then
+    issues+="    [FAIL] MISSING: twitter:description (spiegel van og:description)\n"
+    errors=$((errors + 1))
   fi
 
   # Report per file

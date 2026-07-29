@@ -13,7 +13,7 @@
 **Language:** UI=NL | Commands=EN | Help/Errors=NL
 
 **URLs:** [Production](https://hacksimulator.nl/) | [GitHub](https://github.com/JanWillemWubkes/hacksimulator)
-**Blog:** 12 posts live at `/blog/` (105+ inline jargon explanations) | JSON-LD schema + internal cross-linking compleet (Sessie 125; +2 posts Sessie 160)
+**Blog:** 14 posts live at `/blog/` (105+ inline jargon explanations) | JSON-LD schema + internal cross-linking compleet (Sessie 125; +2 posts Sessie 160)
 **Contact:** contact@hacksimulator.nl (Gmail forwarding)
 
 **Performance:** Playwright E2E ~240 tests / 28 spec files (Chromium, Firefox, WebKit) | WCAG AAA | 182+27 CSS variables (main.css + landing.css)

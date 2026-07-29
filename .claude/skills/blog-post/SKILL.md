@@ -34,6 +34,10 @@ De titel leeft op 7 plekken. Kies één bronstring en zet 'm consistent (zelfde 
 
 Alleen de `<h1>` fixen = gestructureerde data divergeert. Beweeg ze samen.
 
+**Descriptions parallel:** `<meta name="twitter:description">` spiegelt `<meta property="og:description">`
+verbatim (net als twitter:title ↔ og:title hierboven). `validate-blogs.sh` Check 6 dwingt af dat
+beide twitter-tags aanwezig zijn.
+
 ## Stap 3 — NL-zinskapitaal in de kop
 Eerste woord + eigennamen hoofdletter, de rest klein — óók Engelse vaktermen ("brute force",
 "social engineering") tenzij echte eigennaam. Behoud: merken (Metasploit/Nmap/OWASP Top 10),
