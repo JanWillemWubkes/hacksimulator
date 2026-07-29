@@ -1,63 +1,106 @@
-# SEO Launch Checklist — Acties voor Heisenberg
+# SEO-playbook — off-page acties voor Heisenberg
 
-**Aangemaakt:** 12 juni 2026 (Sessie 160 — SEO launch-perfectie)
-**Context:** Marketing-launch over ~6 dagen. Alle on-page/technische SEO-fixes zitten in de codebase
-(zie commit-historie branch `claude/exciting-rubin-0p9r8t`). Dit document bevat de acties die
-**buiten de repo** moeten gebeuren — handmatig, met accounts waar alleen jij bij kunt.
+**Aangemaakt:** 12 juni 2026 (Sessie 160) · **Herzien:** 28 juli 2026 (Sessie 203 — na launch;
+levend playbook i.p.v. pre-launch-checklist)
+
+**Context:** De site is live. Alle **on-page/technische** SEO zit in de codebase en wordt
+drift-bestendig bewaakt door `scripts/validate-blogs.sh` + `scripts/validate-docs.sh --deep`
+(sitemap↔feed↔posts-sync) en de `seo-auditor`-agent (oordeels-laag). Dit document bevat het werk dat
+**buiten de repo** gebeurt — handmatig, met accounts waar alleen jij bij kunt. Code beweegt de
+grootste rankingfactor (autoriteit/backlinks) niet; dat doe jij hier.
+
+**Huidige stand:** 14 blogposts, 26 sitemap-URL's. Oudste post 8 nov 2025, nieuwste
+(Metasploit) 22 jul 2026.
 
 ---
 
-## 1. Direct na deploy (dag 1) — ~30 min
+## 1. Eenmalig na (her)deploy — ~30 min
 
-### Google Search Console (al geverifieerd via DNS)
+### Google Search Console (geverifieerd via DNS)
 - [ ] Sitemap opnieuw indienen: GSC → Sitemaps → `https://hacksimulator.nl/sitemap.xml`
-      (er staan 2 nieuwe blogposts + bijgewerkte lastmod-datums in)
-- [ ] URL-inspectie + "Indexering aanvragen" voor:
-  - `https://hacksimulator.nl/blog/wireshark-beginnersgids.html`
-  - `https://hacksimulator.nl/blog/hashcat-wachtwoorden-kraken.html`
-  - `https://hacksimulator.nl/terminal.html` (nieuwe title/description/FAQ-schema)
+      (de `<lastmod>`-datums zijn 28 jul rechtgetrokken naar de echte git-wijzigingsdatums —
+      resubmit triggert herbezoek van de bijgewerkte pagina's).
+- [ ] URL-inspectie + "Indexering aanvragen" voor de nieuwste/gewijzigde pagina's:
+  - `https://hacksimulator.nl/blog/metasploit-beginnersgids.html`
+  - `https://hacksimulator.nl/terminal.html` (FAQ-schema)
+  - Elke nieuwe post die je sindsdien publiceert.
 
-### Bing Webmaster Tools (nog niet ingericht — ~10 min)
-- [ ] Ga naar https://www.bing.com/webmasters
-- [ ] Kies **"Import from Google Search Console"** — neemt site + sitemap automatisch over
-- [ ] Waarom: Bing voedt ook DuckDuckGo en Ecosia; samen ~5-10% van NL-zoekverkeer, vrijwel gratis erbij
+### Bing Webmaster Tools (~10 min, eenmalig)
+- [ ] https://www.bing.com/webmasters → **"Import from Google Search Console"** (neemt site + sitemap over).
+- [ ] Waarom: Bing voedt ook DuckDuckGo en Ecosia — samen ~5-10% van NL-zoekverkeer, vrijwel gratis erbij.
 
-## 2. Validatie na deploy (dag 1-2) — ~20 min
-
-- [ ] **Rich Results Test** (https://search.google.com/test/rich-results) op:
-  - `terminal.html` → moet FAQPage tonen (4 vragen)
-  - een blogpost → moet Article + BreadcrumbList tonen
-- [ ] **Facebook Sharing Debugger** (https://developers.facebook.com/tools/debug/):
-      plak homepage + 1 blogpost URL, klik "Scrape Again" zodat de nieuwe og-tags gecachet worden
-- [ ] **Twitter/X Card Validator**: deel-preview checken van 1 blogpost (alle posts hebben nu
-      `summary_large_image` cards)
-- [ ] Test de 404-pagina: bezoek `https://hacksimulator.nl/bestaat-niet` → moet de nieuwe
-      branded 404 tonen (niet de kale Netlify-default)
-
-## 3. Launch-dag promotie (backlinks = grootste ontbrekende rankingfactor)
-
-Suggesties, in volgorde van verwachte impact voor NL-publiek:
-- [ ] **Tweakers.net** — forum-post of .plan; technisch NL-publiek, sterke backlink
-- [ ] **Security.NL** — nieuws-tip insturen over gratis NL leerplatform
-- [ ] **Reddit** — r/thenetherlands (showcase-vrijdag), r/cybersecurity, r/netsec (Engels: focus op
-      "Dutch-language learning platform" angle)
-- [ ] **LinkedIn** — persoonlijke post + relevante NL cybersecurity-groepen
-- [ ] **Hacker News** — "Show HN: Browser-based terminal for learning ethical hacking (Dutch)"
-- [ ] **NL-onderwijs**: ROC's/HBO's met cybersecurity-opleidingen mailen (docenten zoeken gratis NL lesmateriaal)
-
-## 4. Eerste 2 weken na launch
-
-- [ ] GSC → Prestaties: check welke zoektermen impressies krijgen; titels/descriptions bijsturen
-      op pagina's met veel impressies maar lage CTR
-- [ ] GSC → Indexering: check of alle 25 sitemap-URL's geïndexeerd raken
-- [ ] HaveIBeenPwned-achtige linkbuilding-kansen: woordenlijst (`/woordenlijst.html`) is linkbaar
-      als naslagwerk — vermeld hem actief in posts/comments
-- [ ] Overweeg 1 nieuwe blogpost per 2 weken (volgende kandidaten met zoekvolume en nog géén dekking:
-      Metasploit, Hydra, `grep`/`find` tutorial, Netcat)
+### Validatie van de rich results (~15 min)
+- [ ] **Rich Results Test** (https://search.google.com/test/rich-results):
+      `terminal.html` → FAQPage (4 vragen); een blogpost → Article + BreadcrumbList.
+- [ ] **Facebook Sharing Debugger** (https://developers.facebook.com/tools/debug/): homepage + 1 post,
+      "Scrape Again" zodat de OG-tags opnieuw gecachet worden.
+- [ ] **Twitter/X Card Validator**: 1 post — sinds 28 jul hebben álle posts expliciete
+      `twitter:title` + `twitter:description` (spiegelen og), dus de preview toont nu de juiste tekst
+      i.p.v. een og-fallback.
+- [ ] 404-test: bezoek `https://hacksimulator.nl/bestaat-niet` → branded 404.
 
 ---
 
-**On-page status (in de repo, ter referentie):** canonicals compleet incl. terminal + legal pages,
-twitter cards site-breed, og:image-dimensies overal, FAQPage-schema op terminal.html, BreadcrumbList
-op alle pagina's, author-bylines + Person-schema op alle 13 posts, 404.html, RSS-feed actueel +
-zichtbaar gelinkt, sitemap 25 URL's.
+## 2. Backlinks — de grootste ontbrekende rankingfactor
+
+On-page is af; autoriteit niet. Backlinks vanaf relevante NL-sites zijn de #1 hefboom. Werk de
+lijst af in volgorde van verwachte impact; vink af en noteer de datum + resultaat.
+
+| Doel | Kanaal / hoe | Angle | Status |
+|---|---|---|---|
+| **Tweakers.net** | Forum (Nettech/Security) of .plan | Gratis NL-terminal om ethisch hacken te oefenen — technisch publiek | [ ] |
+| **Security.NL** | Nieuws-tip insturen (redactie) | "Gratis Nederlandstalig leerplatform voor ethisch hacken" | [ ] |
+| **Reddit r/thenetherlands** | Showcase-vrijdag | NL-hoek, geen harde promo | [ ] |
+| **Reddit r/cybersecurity / r/netsec** | Post (Engels) | "Dutch-language learning platform" — nicheangle | [ ] |
+| **Hacker News** | Show HN | "Show HN: Browser-based terminal for learning ethical hacking (Dutch)" | [ ] |
+| **LinkedIn** | Persoonlijke post + NL cybersecurity-groepen | Verhaal achter het project; nuchter, geen hype | [ ] |
+| **NL-onderwijs (ROC/HBO)** | Docenten cybersecurity mailen | Gratis NL-lesmateriaal — `woordenlijst.html` + terminal als oefenomgeving | [ ] |
+| **Woordenlijst als naslag** | In posts/comments actief noemen | `/woordenlijst.html` is linkbaar als referentie (HaveIBeenPwned-achtige naslag-hoek) | [ ] |
+
+**Toon:** nuchter en eerlijk, geen LinkedIn-theater — liever weglaten dan opkloppen. Elke plaatsing
+= één natuurlijke link, niet spammen.
+
+---
+
+## 3. Meetlus — elke ~2 weken (GSC)
+
+Zonder meten is elke SEO-actie een gok. Vaste ronde:
+
+- [ ] **GSC → Prestaties**: welke zoektermen krijgen impressies? Noteer pagina's met **veel impressies
+      + lage CTR** → title/`meta description` daar bijsturen (dat is de goedkoopste CTR-winst).
+      Let op: title-bijstelling raakt de **titel-lockstep op 7 plekken** (zie `blog-post` skill) —
+      beweeg ze samen, niet alleen de `<h1>`.
+- [ ] **GSC → Indexering**: raken alle 26 sitemap-URL's geïndexeerd? Niet-geïndexeerde pagina's
+      inspecteren (reden + "Indexering aanvragen").
+- [ ] **Positie-drift**: posts die van pagina 2 naar pagina 1 kruipen (of terugzakken) → daar loont
+      een interne-link-boost of een contentupdate.
+
+**Titel-lengtes om in de gaten te houden** (soft — SERP kapt ~60 tekens af; bijsturen alléén als GSC
+lage CTR toont, niet blind): homepage (74), terminal (74), commands (67), woordenlijst (68),
+hashcat-post (75), wireshark-post (79), metasploit-post (73), cybersecurity-tools-post (66).
+De `seo-auditor`-agent print deze lijst opnieuw op verzoek.
+
+---
+
+## 4. Content-cadans — ~1 nieuwe post per 2 weken
+
+Nieuwe long-form posts = nieuwe indexeerbare pagina's + interne-link-ankers. Gebruik de `blog-post`
+skill (bewaakt de lockstep + de 4 afgeleide admin-items). Kandidaten met zoekvolume en nog géén dekking:
+
+- [ ] **Hydra** (login brute-forcing) — sluit aan op de security-tools-reeks.
+- [ ] **`grep` / `find`** tutorial — hoog zoekvolume, past bij `terminal-basics` + `linux-bestandssysteem`.
+- [ ] **Netcat** — "Swiss army knife", natuurlijke recon→exploitation-brug vanaf de nmap-post.
+
+Bij elke nieuwe post: link 'm meteen vanaf de posts die 'm natuurlijk noemen (interne-link-winst
+is direct), en draai de `seo-auditor` op link-kansen/orphans.
+
+---
+
+## Referentie — on-page status (in de repo)
+
+Canonicals compleet (incl. terminal + legal); **Twitter cards site-breed mét expliciete
+title/description** (28 jul); og:image-dimensies overal; FAQPage-schema op `terminal.html`;
+BreadcrumbList op alle posts; author-bylines + Person-schema; branded `404.html`; RSS-feed actueel +
+zichtbaar gelinkt; **sitemap 26 URL's met git-accurate `lastmod`** (28 jul rechtgetrokken).
+Bewaakt door `validate-blogs.sh` (Check 1-6), `validate-docs.sh --deep` (Check 9) en de
+`seo-auditor`-agent.
