@@ -70,6 +70,67 @@ test.describe('Mobile alignment — geen box-drawing in command-output (375px)',
   });
 });
 
+test.describe('Mobile alignment — wrappende regels hangen (geen kolom-0 raggedness)', () => {
+  test('marker- en licht-ingesprongen regels hangen bij wrap op mobiel', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/terminal.html');
+    await page.waitForLoadState('networkidle');
+
+    const result = await page.evaluate(async () => {
+      const reg = (await import('/src/core/registry.js')).default;
+      const term = (await import('/src/core/terminal.js')).default;
+      const renderer = (await import('/src/ui/renderer.js')).default;
+      const outEl = document.getElementById('terminal-output');
+      renderer.init(outEl);
+
+      // Alleen de hang-indent-KLASSE bewaken: marker-regels (evt. na leidende **) en
+      // regels met 1-2 leidende spaties. Die horen bij wrap onder hun tekst te hangen
+      // (padding-left > 0). Diep-ingesprongen desktop-tabellen in man-bodies (>=3 spaties,
+      // bv. de man-next STAGES-tabel op kolom 34) vallen bewust buiten deze scope.
+      const MARKER = /^( {0,2})(?:\*\*)?(\[[^\]]{1,4}\]|→)\s/;
+      const shouldHang = (raw) => {
+        if (MARKER.test(raw)) return true;
+        const lead = raw.match(/^( *)/)[1].length;
+        return lead >= 1 && lead <= 2 && raw.trim().length > 0;
+      };
+
+      const offenders = [];
+      const names = reg.list();
+      for (const name of names) {
+        try { localStorage.removeItem('security_tools_consent'); } catch (e) { /* private mode */ }
+        for (const [label, args] of [[name, []], ['man ' + name, ['man', name].slice(1)]]) {
+          const isMan = label.startsWith('man ');
+          const handler = reg.get(name);
+          if (isMan && (!handler || !handler.manPage)) continue;
+          const out = isMan
+            ? await reg.execute('man', [name], {}, term.context)
+            : await reg.execute(name, [], {}, term.context);
+          if (typeof out !== 'string') continue;
+
+          outEl.innerHTML = '';
+          renderer.renderOutput(out, 'normal');
+          const lineH = parseFloat(getComputedStyle(outEl).lineHeight) || 20;
+          for (const el of outEl.querySelectorAll('.terminal-line')) {
+            const raw = el.textContent || '';
+            if (!shouldHang(raw)) continue;
+            const wraps = el.offsetHeight > lineH * 1.4;
+            if (!wraps) continue;
+            const pl = parseFloat(getComputedStyle(el).paddingLeft) || 0;
+            if (pl < 1) offenders.push(label + ': ' + JSON.stringify(raw.trim().slice(0, 40)));
+          }
+        }
+      }
+      return { count: names.length, offenders };
+    });
+
+    expect(result.count, 'registry niet geladen — spec zou vals-groen zijn').toBeGreaterThan(30);
+    expect(
+      result.offenders,
+      `wrappende marker/ingesprongen regels zonder hang-indent:\n${result.offenders.join('\n')}`
+    ).toEqual([]);
+  });
+});
+
 test.describe('Desktop regressie — ASCII-box blijft intact (1280px)', () => {
   test('boxText() rendert nog steeds een box-drawing rand op desktop', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 720 });
