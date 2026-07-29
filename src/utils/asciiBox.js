@@ -1,4 +1,4 @@
-import { getResponsiveBoxWidth, wordWrap } from "./box-utils.js";
+import { getResponsiveBoxWidth, wordWrap, isMobileView } from "./box-utils.js";
 
 function createBox(title, width) {
   if (title === undefined) title = null;
@@ -45,6 +45,13 @@ function createBox(title, width) {
 export function boxText(text, title, width) {
   if (title === undefined) title = null;
   if (width === undefined) width = getResponsiveBoxWidth();
+  // Mobiel: geen box-drawing (Sessie 82) — de subset-glyphs (JetBrains Mono Box)
+  // renderen op Android breder dan de latin-tekst, waardoor de rand niet uitlijnt
+  // met de body en over de containerbreedte breekt. Borderless markdown-header
+  // (zelfde conventie als man.js op mobiel) → alleen latin-glyphs → lijnt uit.
+  if (isMobileView()) {
+    return (title ? '**' + title.toUpperCase() + '**\n\n' : '') + text;
+  }
   var box = createBox(title, width);
   return box.top + '\n' + box.wrap(text) + '\n' + box.bottom;
 }
