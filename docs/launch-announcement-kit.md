@@ -34,9 +34,9 @@ Elke copy-variant hieronder put **alleen** uit deze lijst. Niets daarbuiten clai
 | 100% gratis, geen account/registratie | ✅ |
 | Geen installatie, draait in de browser | ✅ |
 | Nederlands: uitleg, tips, foutmeldingen (commando's zelf blijven Engels — dat is echt) | ✅ |
-| Veilige sandbox, lokaal in je browser, geen externe verbindingen → legaal | ✅ (FAQ-beeld: "vluchtsimulator — leren vliegen zonder het vliegveld te verlaten") |
+| Veilige sandbox: de aanvallen zijn gesimuleerd, er worden geen echte systemen benaderd → legaal | ✅ (FAQ-beeld: "vluchtsimulator — leren vliegen zonder het vliegveld te verlaten"). Let op: scope de claim op de *simulatie/commands*, niet op de pagina — die laadt wél analytics/ads/fonts. |
 | 3 niveaus (Beginner → Gevorderd → Expert, NL-labels sinds Sessie 187/188), man pages, "80/20 realisme" | ✅ |
-| 12 blogposts op `/blog/` | ✅ (her-geteld: 14 html-files − index − welkom) |
+| 12+ blogposts op `/blog/` | ✅ (her-geteld 29 jul 2026: 15 html-files − index − welkom = 13). Gebruik "12+", nooit een exact getal dat een lezer kan natellen. |
 
 **NIET claimen (anti-overdrijving):**
 - ❌ `netcat` / `wireshark` — bestaan **niet** als commando (de homepage-leerpad-vermelding is
@@ -73,7 +73,7 @@ Elke copy-variant hieronder put **alleen** uit deze lijst. Niets daarbuiten clai
 >
 > - 40+ commando's — van `ls`/`cd` tot `nmap`, `sqlmap` en `hashcat`
 > - Nederlandse uitleg, tips en foutmeldingen (de commando's zelf blijven Engels)
-> - Veilige sandbox: alles is gesimuleerd, er gaan geen verbindingen naar buiten
+> - Veilige sandbox: de aanvallen zijn gesimuleerd, er worden geen echte systemen benaderd
 > - Geen installatie, geen account — open de pagina en begin
 > - Drie niveaus, van je eerste command tot pentesting-tools
 >
@@ -114,7 +114,7 @@ Legenda: **CP** = copy-paste OK (variant A/C) · **TP** = toegesneden post verei
 | Kanaal | Format dat werkt | Etiquette / regels | Post |
 |--------|------------------|--------------------|------|
 | **EHGN — Ethical Hacker Groep Nederland** (Discord, 2.130+ leden, NL, gratis/beginners) | Korte intro in het juiste kanaal (bijv. #projects/#share), NL, beschikbaar voor vragen | Eerst even meedoen/voorstellen, niet kaal droppen. Perfecte doelgroep-match. | **TP** (variant B, ingekort) |
-| **Hacker News — Show HN** | Titel: `Show HN: HackSimulator – browser terminal to learn ethical hacking (Dutch)`. Korte, feitelijke tekst in het comment. | Engels. Show HN mag want het is uittebproberen. **Drop alle marketing-taal** (instant turnoff). Géén company-username, géén booster-comments van vrienden. Reageer zelf actief op comments. | **TP** (Engels, kaal-feitelijk) |
+| **Hacker News — Show HN** | Titel: `Show HN: HackSimulator – browser terminal to learn ethical hacking (Dutch)`. Korte, feitelijke tekst in het comment. | Engels. Show HN mag want het is uit te proberen. **Drop alle marketing-taal** (instant turnoff). Géén company-username, géén booster-comments van vrienden. Reageer zelf actief op comments. | **TP** (Engels, kaal-feitelijk) |
 | **Reddit — r/SideProject, r/learnprogramming (feedback-thread), r/InternetIsBeautiful** | Value-first post of designated thread; vertel wat het is + vraag feedback | Lees sidebar. Sommige subs verbieden self-promo volledig; gebruik project-/feedback-threads waar die bestaan. | **TP** (Engels) |
 | **Reddit — r/cybersecurity, r/ethicalhacking, r/hacking** | Educatieve insteek, geen kale linkdrop | Strikt op self-promo. Werkt alleen met genuine participation-historie; anders overslaan of eerst opbouwen. | **TP** (Engels, voorzichtig) |
 | **Reddit NL — r/thenetherlands, r/Netherlands** | NL-talige post, eerlijk "ik heb dit gemaakt" | r/thenetherlands is streng op zelfpromo; check sidebar. NL-doelgroep is wel waardevol. | **TP** (NL) |
@@ -227,6 +227,6 @@ sidebar-regels per community altijd op het moment van posten checken.*
 
 *Her-geverifieerd 14 juli 2026 (na uitstel van de oorspronkelijke 24-juni-datum): schema
 datum-agnostisch gemaakt (D-1 / launch-dag / D+14 — nieuwe datum kiezen ná de
-demand-validatie, item #44), feiten geactualiseerd (12 blogposts, NL-niveau-labels,
+demand-validatie, item #44), feiten geactualiseerd (12+ blogposts, NL-niveau-labels,
 `[TIP]`-marker, leerpad-opschoning Sessie 188/195) en de D-1-checklist gekoppeld aan
 `docs/launch-success-metrics.md`.*
