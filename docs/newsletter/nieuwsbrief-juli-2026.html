@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="nl" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark">
+<title>Nieuwsbrief Juli 2026 — HackSimulator</title>
+<!--[if mso]>
+<xml>
+<o:OfficeDocumentSettings>
+<o:PixelsPerInch>96</o:PixelsPerInch>
+</o:OfficeDocumentSettings>
+</xml>
+<![endif]-->
+<style>
+:root { color-scheme: light dark; }
+/* Dark mode: behoud onze eigen kleuren */
+@media (prefers-color-scheme: dark) {
+  .body-bg { background-color: #0d1117 !important; }
+  .content-bg { background-color: #161b22 !important; }
+  .header-bg { background-color: #9fef00 !important; }
+  .header-text { color: #0d1117 !important; }
+  .heading-text { color: #c9d1d9 !important; }
+  .body-text { color: #8b949e !important; }
+  .link-text { color: #79c0ff !important; }
+  .code-bg { background-color: #0d1117 !important; color: #9fef00 !important; }
+  .btn-bg { background-color: #9fef00 !important; }
+  .btn-text { color: #0d1117 !important; }
+}
+/* Gmail dark mode prevention */
+u + .body { background-color: #0d1117 !important; }
+u + .body .header-bg { background-color: #9fef00 !important; }
+u + .body .header-text { color: #0d1117 !important; }
+u + .body .btn-bg { background-color: #9fef00 !important; }
+u + .body .btn-text { color: #0d1117 !important; }
+u + .body .content-bg { background-color: #161b22 !important; }
+u + .body .heading-text { color: #c9d1d9 !important; }
+u + .body .body-text { color: #8b949e !important; }
+u + .body .link-text { color: #79c0ff !important; }
+u + .body .code-bg { background-color: #0d1117 !important; color: #9fef00 !important; }
+/* Outlook.com / dark mode overrides */
+[data-ogsc] .heading-text { color: #c9d1d9 !important; }
+[data-ogsc] .body-text { color: #8b949e !important; }
+[data-ogsc] .header-bg { background-color: #9fef00 !important; }
+[data-ogsc] .header-text { color: #0d1117 !important; }
+[data-ogsc] .btn-bg { background-color: #9fef00 !important; }
+[data-ogsc] .btn-text { color: #0d1117 !important; }
+[data-ogsc] .link-text { color: #79c0ff !important; }
+[data-ogsc] .code-bg { background-color: #0d1117 !important; color: #9fef00 !important; }
+[data-ogsc] .content-bg { background-color: #161b22 !important; }
+/* Responsive: betere mobiele weergave */
+@media screen and (max-width: 600px) {
+  .mobile-padding td { padding-left: 16px !important; padding-right: 16px !important; }
+  .mobile-full { width: 100% !important; }
+  h1 span { font-size: 20px !important; }
+  h2 span { font-size: 16px !important; }
+  .btn-bg { padding: 14px 24px !important; }
+  .mobile-header { padding: 16px 16px !important; }
+  .code-bg { font-size: 12px !important; padding: 12px 14px !important; }
+  .tip-title span { font-size: 20px !important; }
+}
+</style>
+</head>
+<body class="body" style="margin:0;padding:0;background-color:#0d1117;font-family:'Courier New',Courier,monospace;color-scheme:light dark;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-line-height-rule:exactly;">
+<div style="display:none;font-size:1px;color:#0d1117;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+Waarom een gestolen database met "versleutelde" wachtwoorden soms binnen seconden op straat ligt.&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;
+</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="body-bg" style="background-color:#0d1117;">
+<tr><td align="center" style="padding:24px 16px;background-color:#0d1117;" class="body-bg">
+<!--[if mso]>
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" align="center"><tr><td>
+<![endif]-->
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" class="content-bg mobile-full" style="max-width:600px;width:100%;background-color:#161b22;border-radius:8px;overflow:hidden;">
+
+<!-- Terminal Header Bar -->
+<tr><td class="header-bg mobile-header" style="background-color:#9fef00;padding:20px 32px;">
+<p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:13px;line-height:1.8;">
+<span class="header-text" style="color:#0d1117;">$ cat nieuwsbrief-juli-2026.txt</span><br>
+<span class="header-text" style="color:#0d1117;">&gt; Loading...</span><br>
+<span class="header-text" style="color:#0d1117;">&gt; <strong>Nieuwsbrief geladen.</strong> Veel leesplezier!</span>
+</p>
+</td></tr>
+
+<!-- Intro -->
+<tr><td class="content-bg mobile-padding" style="padding:28px 32px 0 32px;background-color:#161b22;">
+<h1 style="margin:0 0 16px 0;font-family:'Courier New',Courier,monospace;font-size:22px;line-height:1.4;">
+<span class="heading-text" style="color:#c9d1d9;">Welkom bij je maandelijkse dosis cybersecurity.</span>
+</h1>
+<p style="margin:0 0 16px 0;font-family:'Courier New',Courier,monospace;font-size:15px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">Grote maand: HackSimulator is deze maand offici&euml;el gelanceerd. Bedankt dat je erbij bent. Deze editie duiken we in een vraag die iedereen aangaat: hoe kraakt een hacker eigenlijk een wachtwoord &mdash; en hoe zorg je dat die van jou niet aan de beurt is?</span>
+</p>
+
+<!-- Divider -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-top:1px solid #30363d;padding:24px 0 0 0;background-color:#161b22;" class="content-bg"></td></tr></table>
+
+<!-- Tip van de Maand -->
+<h2 style="margin:0 0 4px 0;font-family:'Courier New',Courier,monospace;font-size:13px;line-height:1.4;text-transform:uppercase;letter-spacing:1px;">
+<span class="body-text" style="color:#8b949e;">Tip van de maand</span>
+</h2>
+<h2 class="tip-title" style="margin:0 0 16px 0;font-family:'Courier New',Courier,monospace;font-size:22px;line-height:1.4;">
+<span class="heading-text" style="color:#c9d1d9;">Hoe kraakt een hacker een wachtwoord?</span>
+</h2>
+<p style="margin:0 0 16px 0;font-family:'Courier New',Courier,monospace;font-size:15px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">Een goed gebouwde website slaat je wachtwoord nooit letterlijk op. In plaats daarvan bewaart hij een <strong>hash</strong>: een onomkeerbaar rekenresultaat. "password" wordt bijvoorbeeld altijd </span><code class="code-bg" style="background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;">5f4dcc3b...cf99</code><span class="body-text" style="color:#8b949e;">. Je kunt daar niet uit terugrekenen wat het wachtwoord was.</span>
+</p>
+
+<p style="margin:0 0 16px 0;font-family:'Courier New',Courier,monospace;font-size:15px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">Hoe kraakt een tool als <strong>hashcat</strong> het dan toch? Simpel: het rekent niet terug, het <em>raadt vooruit</em>. Het pakt een lijst met miljoenen veelgebruikte wachtwoorden, hasht ze allemaal, en kijkt welke hash overeenkomt. Zo ziet dat eruit:</span>
+</p>
+
+<!-- Code Block -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px 0;">
+<tr><td class="code-bg" style="background-color:#0d1117;color:#9fef00;padding:16px 20px;border-radius:6px;font-family:'Courier New',Courier,monospace;font-size:13px;line-height:1.8;word-break:break-all;overflow-wrap:break-word;">
+$ hashcat -m 0 hashes.txt wordlist.txt<br>
+<br>
+5f4dcc3b...cf99:password<br>
+e10adc39...883e:123456<br>
+b7e2f1a9...4c8d  &larr; niet gekraakt<br>
+<br>
+Recovered: 2/3 hashes (66%)<br>
+Time.....: 4 seconden
+</td></tr>
+</table>
+
+<p style="margin:0 0 16px 0;font-family:'Courier New',Courier,monospace;font-size:15px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">Twee van de drie wachtwoorden vielen in seconden &mdash; want "password" en "123456" staan boven aan elke lijst. Het derde wachtwoord hield stand: dat was lang, willekeurig en stond in geen enkele woordenlijst.</span>
+</p>
+
+<p style="margin:0 0 16px 0;font-family:'Courier New',Courier,monospace;font-size:15px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">Dat is meteen de les: <strong>lengte en onvoorspelbaarheid</strong> verslaan een kraaktool, niet een hoofdletter of een uitroepteken erachter. Een wachtwoordmanager met lange, unieke wachtwoorden maakt deze aanval kansloos.</span>
+</p>
+
+<p style="margin:0 0 24px 0;font-family:'Courier New',Courier,monospace;font-size:15px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;"><strong>Probeer het zelf:</strong> Open de simulator en typ </span><code class="code-bg" style="background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;">hashcat</code><span class="body-text" style="color:#8b949e;">. Je ziet stap voor stap hoe het kraken werkt &mdash; veilig, in een oefenomgeving, zonder echte data.</span>
+</p>
+
+<!-- CTA Button -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+<tr><td align="center" style="padding:8px 0 24px 0;mso-padding-alt:8px 0 24px 0;background-color:#161b22;" class="content-bg">
+<!--[if mso]>
+<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://hacksimulator.nl/terminal.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=juli-2026" style="height:48px;v-text-anchor:middle;width:250px;" arcsize="13%" fillcolor="#9fef00" stroke="f">
+<w:anchorlock/>
+<center style="color:#0d1117;font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:bold;">Open de simulator →</center>
+</v:roundrect>
+<![endif]-->
+<!--[if !mso]><!-->
+<a href="https://hacksimulator.nl/terminal.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=juli-2026" target="_blank" class="btn-bg" style="display:inline-block;background-color:#9fef00;font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:bold;text-decoration:none;text-align:center;padding:14px 32px;border-radius:6px;">
+<span class="btn-text" style="color:#0d1117;">Open de simulator →</span>
+</a>
+<!--<![endif]-->
+</td></tr>
+</table>
+
+<!-- Divider -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-top:1px solid #30363d;padding:24px 0 0 0;background-color:#161b22;" class="content-bg"></td></tr></table>
+
+<!-- Wat is er nieuw? -->
+<h2 style="margin:0 0 12px 0;font-family:'Courier New',Courier,monospace;font-size:18px;line-height:1.4;">
+<span class="heading-text" style="color:#c9d1d9;">Wat is er nieuw?</span>
+</h2>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px 0;">
+<tr><td class="content-bg" style="padding:0 0 0 20px;background-color:#161b22;font-family:'Courier New',Courier,monospace;font-size:15px;line-height:2;">
+<span class="body-text" style="color:#8b949e;">→ <strong>HackSimulator is offici&euml;el gelanceerd!</strong> Na maanden bouwen staat de simulator live &mdash; 41 commando's, leerpaden en uitdagingen. Deel 'm gerust met wie ook wil leren.</span><br>
+<span class="body-text" style="color:#8b949e;">→ Nieuw op het blog: </span><a href="https://hacksimulator.nl/blog/metasploit-beginnersgids.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=juli-2026" class="link-text" style="color:#79c0ff;text-decoration:none;">Metasploit voor beginners</a><span class="body-text" style="color:#8b949e;"> &mdash; wat het is, hoe het werkt en waar de juridische grens ligt.</span>
+</td></tr>
+</table>
+
+<!-- Divider -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-top:1px solid #30363d;padding:24px 0 0 0;background-color:#161b22;" class="content-bg"></td></tr></table>
+
+<!-- Aanbeveling -->
+<h2 style="margin:0 0 12px 0;font-family:'Courier New',Courier,monospace;font-size:18px;line-height:1.4;">
+<span class="heading-text" style="color:#c9d1d9;">Misschien handig</span>
+</h2>
+<p style="margin:0 0 20px 0;font-family:'Courier New',Courier,monospace;font-size:15px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">Wil je een echte pentest zien beginnen? Download de <strong>gratis Sample Pentest</strong> &mdash; 9 pagina's over de stap die beginners overslaan: toestemming regelen en het doelwit verkennen. Geen account, alleen je email.</span>
+</p>
+
+<!-- CTA Button (gratis sample) -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+<tr><td align="center" style="padding:0 0 20px 0;mso-padding-alt:0 0 20px 0;background-color:#161b22;" class="content-bg">
+<!--[if mso]>
+<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://hacksimulator.nl/sample-pentest.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=juli-2026" style="height:48px;v-text-anchor:middle;width:280px;" arcsize="13%" fillcolor="#9fef00" stroke="f">
+<w:anchorlock/>
+<center style="color:#0d1117;font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:bold;">Download gratis sample →</center>
+</v:roundrect>
+<![endif]-->
+<!--[if !mso]><!-->
+<a href="https://hacksimulator.nl/sample-pentest.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=juli-2026" target="_blank" class="btn-bg" style="display:inline-block;background-color:#9fef00;font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:bold;text-decoration:none;text-align:center;padding:14px 32px;border-radius:6px;">
+<span class="btn-text" style="color:#0d1117;">Download gratis sample →</span>
+</a>
+<!--<![endif]-->
+</td></tr>
+</table>
+
+<p style="margin:0 0 8px 0;font-family:'Courier New',Courier,monospace;font-size:14px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">Wil je verder? Er zijn ook drie betaalde gidsen (wet, pentest-playbook en een 12-weken leerplan) &mdash; </span><a href="https://hacksimulator.nl/gidsen.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=juli-2026" class="link-text" style="color:#79c0ff;text-decoration:none;">bekijk de gidsen →</a>
+</p>
+
+</td></tr>
+
+<!-- Footer -->
+<tr><td class="content-bg" style="padding:24px 32px 0 32px;background-color:#161b22;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-top:1px solid #30363d;background-color:#161b22;" class="content-bg"></td></tr></table>
+</td></tr>
+<tr><td class="content-bg" style="padding:24px 32px;background-color:#161b22;">
+<p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:13px;line-height:1.6;text-align:center;">
+<strong><span class="heading-text" style="color:#c9d1d9;">HackSimulator.nl</span></strong> <span class="body-text" style="color:#8b949e;">&mdash; Leer ethisch hacken in je browser</span><br><br>
+<span class="body-text" style="color:#8b949e;">Je ontvangt deze mail omdat je bent aangemeld voor de HackSimulator nieuwsbrief.</span><br>
+<a href="{{ unsubscribe }}" class="link-text" style="color:#79c0ff;text-decoration:none;">Uitschrijven</a> <span class="body-text" style="color:#8b949e;">&middot;</span> <a href="https://hacksimulator.nl/privacy.html" class="link-text" style="color:#79c0ff;text-decoration:none;">Privacybeleid</a> <span class="body-text" style="color:#8b949e;">&middot;</span> <a href="{{ mirror }}" class="link-text" style="color:#79c0ff;text-decoration:none;">Bekijk in browser</a>
+</p>
+</td></tr>
+
+</table>
+<!--[if mso]>
+</td></tr></table>
+<![endif]-->
+</td></tr>
+</table>
+</body>
+</html>
