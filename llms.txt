@@ -1,0 +1,37 @@
+# HackSimulator.nl
+
+> Gratis Nederlandstalige browser-based terminal-simulator om veilig en legaal ethisch hacken te leren: 40+ echte hacking-commands (nmap, hashcat, sqlmap, metasploit), een virtueel bestandssysteem, tutorials en challenges — zonder installatie of registratie.
+
+HackSimulator.nl is bedoeld voor Nederlandse beginners in cybersecurity. Alles draait client-side in de browser in een gesimuleerde omgeving; er wordt niets echts gescand of aangevallen. Naast de simulator biedt de site een woordenlijst met 56 cybersecurity-termen, een commands-overzicht met uitleg per command, en een blog met Nederlandstalige beginnersgidsen over ethisch hacken.
+
+Note for non-Dutch readers: HackSimulator.nl is a free Dutch-language browser-based terminal simulator for learning ethical hacking safely and legally. All content is in Dutch, aimed at beginners.
+
+## Kernpagina's
+
+- [Terminal-simulator](https://hacksimulator.nl/terminal.html): De simulator zelf — 40+ commands, virtueel bestandssysteem, tutorials en challenges, volledig in de browser
+- [Woordenlijst](https://hacksimulator.nl/woordenlijst.html): 56 cybersecurity-termen in het Nederlands uitgelegd, van brute force tot zero-day
+- [Alle commands](https://hacksimulator.nl/commands/): Overzicht van alle 40+ terminal-commands met Nederlandse uitleg, voorbeelden en tips
+- [Gidsen](https://hacksimulator.nl/gidsen.html): Nederlandstalige PDF-gidsen over ethisch hacken — van de wet en ethiek tot je eerste pentest
+- [Homepage](https://hacksimulator.nl/): Introductie, veelgestelde vragen en leerpad-overzicht
+
+## Blog
+
+- [Wat is ethisch hacken?](https://hacksimulator.nl/blog/wat-is-ethisch-hacken.html): Het verschil tussen white hat, black hat en grey hat, plus carrièremogelijkheden en juridische grenzen
+- [Hoe word je ethisch hacker?](https://hacksimulator.nl/blog/ethisch-hacker-worden.html): Stappenplan van beginner tot gecertificeerd pentester, met certificeringen en salarisverwachtingen
+- [Terminal commands voor beginners](https://hacksimulator.nl/blog/terminal-basics.html): ls, cd, cat en chmod stap voor stap uitgelegd
+- [Linux bestandssysteem](https://hacksimulator.nl/blog/linux-bestandssysteem.html): /etc, /var en permissies lezen — waar configuraties en logs staan bij een pentest
+- [5 essentiële tools voor cybersecurity beginners](https://hacksimulator.nl/blog/cybersecurity-tools.html): Nmap, Wireshark, Hashcat, Metasploit en SQLmap met uitleg en oefenvoorbeelden
+- [Netwerk scanning met Nmap](https://hacksimulator.nl/blog/nmap-beginnersgids.html): Open poorten, services en kwetsbaarheden ontdekken — beginnersgids
+- [Wireshark tutorial](https://hacksimulator.nl/blog/wireshark-beginnersgids.html): Netwerkverkeer analyseren — packet sniffing, filters en verdacht verkeer herkennen
+- [Metasploit voor beginners](https://hacksimulator.nl/blog/metasploit-beginnersgids.html): Exploits, payloads en de exploit-workflow, inclusief ethische en juridische grenzen
+- [Hashcat uitgelegd](https://hacksimulator.nl/blog/hashcat-wachtwoorden-kraken.html): Hoe wachtwoord-hashes gekraakt worden met dictionary attacks, brute force en GPU-kracht
+- [Wachtwoordbeveiliging](https://hacksimulator.nl/blog/wachtwoord-beveiliging.html): Hoe hackers wachtwoorden kraken en hoe je een wachtwoord maakt dat standhoudt
+- [SQL injection uitgelegd](https://hacksimulator.nl/blog/sql-injection-uitgelegd.html): Wat SQL injection is, hoe het werkt en hoe je websites beschermt
+- [OWASP Top 10 uitgelegd](https://hacksimulator.nl/blog/owasp-top-10-uitgelegd.html): De 10 belangrijkste webapplicatie-kwetsbaarheden met voorbeelden en tips
+- [Social engineering](https://hacksimulator.nl/blog/social-engineering.html): Phishing, pretexting en baiting doorzien — de menselijke kant van cybersecurity
+- [Welkom bij HackSimulator.nl](https://hacksimulator.nl/blog/welkom.html): Introductie van het platform en wat je er kunt leren
+
+## Over
+
+- [Over ons](https://hacksimulator.nl/over-ons.html): Missie — ethisch hacken toegankelijk maken voor Nederlandse beginners
+- [Contact](https://hacksimulator.nl/contact.html): Vragen, bugmeldingen of samenwerking — contact@hacksimulator.nl

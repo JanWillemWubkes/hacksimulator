@@ -95,6 +95,49 @@
     }
   }
   </script>
+  <!-- HowTo Structured Data (stappen in lockstep met zichtbare <ol> "Aan de slag") -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Aan de slag: je eerste capture in 5 stappen",
+    "description": "Je eerste netwerkcapture maken met Wireshark, van download tot het openvouwen van je eerste pakket.",
+    "inLanguage": "nl",
+    "totalTime": "PT10M",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "position": 1,
+        "name": "Download Wireshark",
+        "text": "Download Wireshark van wireshark.org (Windows, macOS, Linux)"
+      },
+      {
+        "@type": "HowToStep",
+        "position": 2,
+        "name": "Kies je netwerkinterface",
+        "text": "Kies je netwerkinterface - meestal je wifi-adapter; het grafiekje ernaast toont live activiteit"
+      },
+      {
+        "@type": "HowToStep",
+        "position": 3,
+        "name": "Start de capture",
+        "text": "Start de capture en open een paar websites in je browser"
+      },
+      {
+        "@type": "HowToStep",
+        "position": 4,
+        "name": "Stop na een minuut",
+        "text": "Stop na een minuut en filter op dns - je ziet elk domein dat je computer heeft opgezocht"
+      },
+      {
+        "@type": "HowToStep",
+        "position": 5,
+        "name": "Klik een pakket aan",
+        "text": "Klik een pakket aan en vouw de lagen open in het details-paneel - daar is je matroesjka-pop"
+      }
+    ]
+  }
+  </script>
   <!-- BreadcrumbList Structured Data -->
   <script type="application/ld+json">
   {

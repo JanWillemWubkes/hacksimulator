@@ -95,6 +95,60 @@
     }
   }
   </script>
+  <!-- HowTo Structured Data (stappen in lockstep met zichtbare <ol> exploit-workflow) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "De exploit-workflow: zo werkt een pentester",
+    "description": "De vaste keten van stappen die een pentester met Metasploit doorloopt, van reconnaissance tot lateral movement.",
+    "inLanguage": "nl",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "position": 1,
+        "name": "Reconnaissance",
+        "text": "Het doelwit verkennen met tools als nmap: welke systemen, poorten en services zijn er?"
+      },
+      {
+        "@type": "HowToStep",
+        "position": 2,
+        "name": "Kwetsbaarheid identificeren",
+        "text": "Welke gevonden software heeft een bekende zwakte?"
+      },
+      {
+        "@type": "HowToStep",
+        "position": 3,
+        "name": "Exploit kiezen",
+        "text": "De juiste module zoeken in de Metasploit-database die bij die kwetsbaarheid past."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 4,
+        "name": "Payload instellen",
+        "text": "Bepalen wat er na de exploit moet gebeuren (bijvoorbeeld een reverse shell)."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 5,
+        "name": "Exploitation",
+        "text": "De exploit uitvoeren tegen het doelwit."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 6,
+        "name": "Post-exploitation",
+        "text": "Wat je met de toegang doet: rechten verhogen, informatie verzamelen."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 7,
+        "name": "Lateral movement",
+        "text": "Vanaf het gekraakte systeem doorstoten naar andere systemen in het netwerk."
+      }
+    ]
+  }
+  </script>
   <!-- BreadcrumbList Structured Data (Sessie 139) -->
   <script type="application/ld+json">
   {

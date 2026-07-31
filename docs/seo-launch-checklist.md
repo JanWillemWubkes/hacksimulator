@@ -96,6 +96,40 @@ is direct), en draai de `seo-auditor` op link-kansen/orphans.
 
 ---
 
+## 5. GEO/AEO — vindbaarheid in AI-zoekmachines (ChatGPT, Perplexity, AI Overviews)
+
+**Al in de repo geregeld (31 jul 2026):** `llms.txt` (site-overzicht voor LLM's, alle 20 URL's
+geverifieerd), expliciete AI-crawler-stanzas in `robots.txt` (GPTBot, OAI-SearchBot, ClaudeBot,
+PerplexityBot, Google-Extended e.a. — alles open behalve interne dirs), FAQPage-schema op
+`index.html` (8 zichtbare Q&A's), WebApplication-schema op `terminal.html`, DefinedTermSet
+compleet op `woordenlijst.html` (56/56 termen, lockstep bewaakt door `validate-docs.sh --deep`),
+HowTo-schema op de wireshark- en metasploit-gids.
+
+**Hoe AI-zoekmachines bronnen kiezen (stand juli 2026):** Google AI Overviews citeert in ~97%
+uit de organische top-20 — klassieke SEO (secties 1-4 hierboven) blijft dus het fundament.
+ChatGPT-retrieval draait op **Bing**; Perplexity weegt **freshness** het zwaarst (~40%) en leunt
+sterk op Reddit; Claude citeert gestructureerde pagina's (lijsten, Q&A) aantoonbaar vaker.
+
+**Acties voor Heisenberg:**
+
+- [ ] **Bing Webmaster Tools** — als sectie 1 nog niet gedaan is: nu doen. Dit is voor
+  ChatGPT-vindbaarheid belangrijker dan Google. Sitemap opnieuw indienen na deze deploy.
+- [ ] **Herindexering aanvragen** na deploy: GSC URL-inspectie op `index.html`,
+  `woordenlijst.html`, de wireshark- en metasploit-gids; zelfde in Bing.
+- [ ] **Freshness-cadans**: de bestaande ~1 post/2 weken (sectie 4) is precies wat Perplexity
+  beloont. Bij een inhoudelijke update van een bestaande post: `dateModified` in de JSON-LD
+  en sitemap-`lastmod` mee laten bewegen (gebeurt al via de bestaande scripts).
+- [ ] **Externe vermeldingen** — AI-modellen citeren wat elders genoemd wordt. Nuchter en
+  eerlijk (geen spam, geen hype): een post op r/cybersecurity_nl / Tweakers-forum /
+  security.nl waar het écht past ("gratis NL-oefenterminal voor beginners"), en de
+  bestaande backlink-acties uit sectie 2. Wikipedia-NL alleen als er ooit een natuurlijke
+  plek is (bijv. externe-links-sectie "ethisch hacken") — niet forceren.
+- [ ] **Controle na ~1 maand**: vraag ChatGPT/Perplexity/Claude zelf "hoe kan ik veilig
+  ethisch hacken leren in het Nederlands?" en kijk of HackSimulator genoemd/geciteerd wordt.
+  GSC → Verschijning → "AI-overzichten" (indien beschikbaar) voor Google-kant.
+
+---
+
 ## Referentie — on-page status (in de repo)
 
 Canonicals compleet (incl. terminal + legal); **Twitter cards site-breed mét expliciete

@@ -394,6 +394,15 @@ if [ "$DEEP_MODE" = "1" ]; then
   assert_floor "gidsen Commands"   "$cmd_floor"  "$cmd_count"
   assert_floor "woordenlijst Termen" "$term_floor" "$term_count"
 
+  # DefinedTerm-lockstep (GEO): elke zichtbare <dt>-term moet een DefinedTerm-entry
+  # in de JSON-LD hebben — exact gelijk, anders drift tussen schema en content.
+  definedterm_count=$(grep -c '"@type": "DefinedTerm"' woordenlijst.html 2>/dev/null)
+  if [ "$definedterm_count" -eq "$term_count" ] 2>/dev/null; then
+    pass "woordenlijst DefinedTerm-lockstep: JSON-LD ${definedterm_count} == zichtbaar ${term_count}"
+  else
+    fail "woordenlijst DefinedTerm-lockstep: JSON-LD ${definedterm_count} != zichtbaar ${term_count} (hergenereer hasDefinedTerm-array bij term-wijziging)"
+  fi
+
   # ----------------------------------------------------------
   # Check 7: Cross-doc Versie consistency (CLAUDE.md ↔ TASKS.md)
   # ----------------------------------------------------------
