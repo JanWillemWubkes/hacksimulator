@@ -3,6 +3,9 @@ import { getResponsiveBoxWidth, wordWrap, isMobileView } from "./box-utils.js";
 function createBox(title, width) {
   if (title === undefined) title = null;
   if (width === undefined) width = getResponsiveBoxWidth();
+  // width = TOTALE regelbreedte incl. beide randen (zelfde contract als de
+  // handgerolde boxen in next.js/dashboard.js: inner = width - 2).
+  var inner = width - 2;
 
   var chars = {
     topLeft: "┏", topRight: "┓",
@@ -12,28 +15,28 @@ function createBox(title, width) {
 
   return {
     top: (function() {
-      if (!title) return chars.topLeft + chars.horizontal.repeat(width) + chars.topRight;
+      if (!title) return chars.topLeft + chars.horizontal.repeat(inner) + chars.topRight;
       var label = '  ' + title.toUpperCase() + '  ';
       // Smal scherm: titel breder dan de box → afkappen zodat repeat() geen
-      // negatieve count krijgt (anders RangeError). Randbreedte blijft width+2.
-      if (label.length > width) label = label.slice(0, width);
-      var remaining = width - label.length;
+      // negatieve count krijgt (anders RangeError).
+      if (label.length > inner) label = label.slice(0, inner);
+      var remaining = inner - label.length;
       var left = Math.floor(remaining / 2);
       var right = remaining - left;
       return chars.topLeft + chars.horizontal.repeat(left) + label + chars.horizontal.repeat(right) + chars.topRight;
     })(),
-    bottom: chars.bottomLeft + chars.horizontal.repeat(width) + chars.bottomRight,
+    bottom: chars.bottomLeft + chars.horizontal.repeat(inner) + chars.bottomRight,
     wrap: function(text) {
       var rows = [];
       text.split('\n').forEach(function(line) {
-        if (line.length <= width) {
+        if (line.length <= inner) {
           // Past al: verbatim laten (behoudt inspringing/uitlijning, incl. desktop)
-          rows.push(chars.vertical + line.padEnd(width, ' ') + chars.vertical);
+          rows.push(chars.vertical + line.padEnd(inner, ' ') + chars.vertical);
         } else {
           // Te breed: woord-wrappen i.p.v. afkappen, zodat geen (waarschuwings)tekst
           // wegvalt op smalle schermen (bv. de SECURITY WARNING-box op mobiel).
-          wordWrap(line, width).forEach(function(w) {
-            rows.push(chars.vertical + w.padEnd(width, ' ') + chars.vertical);
+          wordWrap(line, inner).forEach(function(w) {
+            rows.push(chars.vertical + w.padEnd(inner, ' ') + chars.vertical);
           });
         }
       });
@@ -65,6 +68,9 @@ export function boxHeader(title, width) {
 function createLightBox(title, width) {
   if (title === undefined) title = null;
   if (width === undefined) width = getResponsiveBoxWidth();
+  // width = TOTALE regelbreedte incl. beide randen (zelfde contract als de
+  // handgerolde boxen in next.js/dashboard.js: inner = width - 2).
+  var inner = width - 2;
 
   var chars = {
     topLeft: "╭", topRight: "╮",
@@ -74,28 +80,28 @@ function createLightBox(title, width) {
 
   return {
     top: (function() {
-      if (!title) return chars.topLeft + chars.horizontal.repeat(width) + chars.topRight;
+      if (!title) return chars.topLeft + chars.horizontal.repeat(inner) + chars.topRight;
       var label = '  ' + title.toUpperCase() + '  ';
       // Smal scherm: titel breder dan de box → afkappen zodat repeat() geen
-      // negatieve count krijgt (anders RangeError). Randbreedte blijft width+2.
-      if (label.length > width) label = label.slice(0, width);
-      var remaining = width - label.length;
+      // negatieve count krijgt (anders RangeError).
+      if (label.length > inner) label = label.slice(0, inner);
+      var remaining = inner - label.length;
       var left = Math.floor(remaining / 2);
       var right = remaining - left;
       return chars.topLeft + chars.horizontal.repeat(left) + label + chars.horizontal.repeat(right) + chars.topRight;
     })(),
-    bottom: chars.bottomLeft + chars.horizontal.repeat(width) + chars.bottomRight,
+    bottom: chars.bottomLeft + chars.horizontal.repeat(inner) + chars.bottomRight,
     wrap: function(text) {
       var rows = [];
       text.split('\n').forEach(function(line) {
-        if (line.length <= width) {
+        if (line.length <= inner) {
           // Past al: verbatim laten (behoudt inspringing/uitlijning, incl. desktop)
-          rows.push(chars.vertical + line.padEnd(width, ' ') + chars.vertical);
+          rows.push(chars.vertical + line.padEnd(inner, ' ') + chars.vertical);
         } else {
           // Te breed: woord-wrappen i.p.v. afkappen, zodat geen (waarschuwings)tekst
           // wegvalt op smalle schermen (bv. de SECURITY WARNING-box op mobiel).
-          wordWrap(line, width).forEach(function(w) {
-            rows.push(chars.vertical + w.padEnd(width, ' ') + chars.vertical);
+          wordWrap(line, inner).forEach(function(w) {
+            rows.push(chars.vertical + w.padEnd(inner, ' ') + chars.vertical);
           });
         }
       });

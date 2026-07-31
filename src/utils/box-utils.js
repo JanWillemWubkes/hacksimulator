@@ -15,11 +15,19 @@ export const BOX_CHARS = {
 let _charWidthCache = null;
 let _charWidthCacheKey = '';
 
-function measureCharWidth() {
-  const container = document.getElementById('terminal-container');
-  if (!container) return 9.6; // safe fallback
+// Meet op #terminal-output, niet #terminal-container: de output heeft het échte
+// terminal-font (--font-terminal); de container erft Inter (--font-body), wat een
+// systematisch verkeerde 'M'-breedte gaf.
+function _measureTarget() {
+  return document.getElementById('terminal-output')
+    || document.getElementById('terminal-container');
+}
 
-  const style = getComputedStyle(container);
+function measureCharWidth() {
+  const target = _measureTarget();
+  if (!target) return 9.6; // safe fallback
+
+  const style = getComputedStyle(target);
   const fontSize = style.fontSize || '16px';
   const fontFamily = style.fontFamily || 'monospace';
   const cacheKey = fontSize + '|' + fontFamily;
@@ -31,8 +39,15 @@ function measureCharWidth() {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   ctx.font = fontSize + ' ' + fontFamily;
-  // Measure 'M' - reliable monospace reference character
-  const width = ctx.measureText('M').width;
+  // Max over latin 'M' én de border-glyphs: canvas respecteert @font-face
+  // unicode-range, dus dit meet de echte advance van de box-drawing-subset.
+  // Als die subset niet laadt (fallback-font met bredere glyphs) rekenen we
+  // met de breedste — precies de regressie die borders eerder liet wrappen.
+  const width = Math.max(
+    ctx.measureText('M').width,
+    ctx.measureText('─').width, // ─ (light box)
+    ctx.measureText('━').width  // ━ (heavy box, SECURITY WARNING)
+  );
 
   _charWidthCache = width;
   _charWidthCacheKey = cacheKey;
@@ -58,14 +73,17 @@ if (typeof document !== 'undefined') {
 
 /**
  * Calculate the maximum number of monospace characters that fit
- * in the terminal container, using pixel-accurate Canvas measurement.
- * Returns a value between 30 and 120.
+ * in the terminal output, using pixel-accurate Canvas measurement.
+ * Returned value is the TOTAL box width (borders included) — callers
+ * render inner content at (width - 2). Returns a value between 30 and 120.
  */
 export function getResponsiveBoxWidth() {
-  if (typeof window === 'undefined' || !document.getElementById('terminal-container')) return 48;
+  if (typeof window === 'undefined') return 48;
+  const container = _measureTarget();
+  if (!container) return 48;
 
-  const container = document.getElementById('terminal-container');
-  // clientWidth excludes scrollbar, unlike offsetWidth
+  // clientWidth excludes scrollbar, unlike offsetWidth — en op #terminal-output
+  // is dat de scrollbar die daadwerkelijk ruimte van de tekst afsnoept.
   const clientW = container.clientWidth;
   const style = getComputedStyle(container);
   const paddingLeft = parseFloat(style.paddingLeft) || 0;

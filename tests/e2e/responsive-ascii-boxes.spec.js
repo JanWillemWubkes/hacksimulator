@@ -1,13 +1,13 @@
 /**
  * Responsive ASCII Boxes E2E Tests
  * Verifies that ASCII box commands (help, shortcuts, leerpad) render correctly
- * on all viewports without horizontal scrolling or layout breakage
+ * on all viewports without box borders wrapping or layout breakage.
  *
- * Critical viewports:
- * - iPhone SE (375px): Minimum mobile target - must use 32-char boxes
- * - Mobile (480px): Standard mobile - should use 40-char boxes
- * - Tablet (768px): iPad/tablet - should use 48-char boxes
- * - Desktop (1440px): Standard desktop - should use 56-char boxes
+ * Box widths are pixel-measured at runtime (getResponsiveBoxWidth), not fixed
+ * per breakpoint. The critical detector is measureBoxLineWraps(): #terminal-output
+ * has overflow-x:hidden + pre-wrap, so an over-wide box line WRAPS (broken border)
+ * but never scrolls — scrollWidth <= clientWidth can therefore never fail and is
+ * useless as an assertion for this bug class.
  */
 
 import { test, expect } from './fixtures.js';
@@ -17,11 +17,15 @@ import { test, expect } from './fixtures.js';
 // ─────────────────────────────────────────────────
 
 const VIEWPORTS = [
-  { name: 'iPhone SE', width: 375, height: 667, expectedWidth: 32 },
-  { name: 'Mobile', width: 480, height: 800, expectedWidth: 40 },
-  { name: 'Tablet', width: 768, height: 1024, expectedWidth: 48 },
-  { name: 'Desktop', width: 1440, height: 900, expectedWidth: 56 }
+  { name: 'iPhone SE', width: 375, height: 667 },
+  { name: 'Mobile', width: 480, height: 800 },
+  { name: 'Tablet', width: 768, height: 1024 },
+  { name: 'Desktop', width: 1440, height: 900 }
 ];
+
+// Tussenliggende breedtes: niet-gemaximaliseerd venster / kleinere laptops.
+// Historisch de blinde vlek waar box-randen wrapten (issue screenshots 31 jul).
+const INTERMEDIATE_WIDTHS = [800, 900, 1024, 1100];
 
 const COMMANDS = ['help', 'shortcuts', 'leerpad'];
 
@@ -80,6 +84,42 @@ async function executeCommand(page, command) {
   await page.waitForTimeout(500); // Wait for command output rendering
 }
 
+/**
+ * Meet per .terminal-line of box-regels visueel wrappen of buiten de output
+ * steken. Alleen regels met box-drawing-glyphs (U+2500-257F) worden beoordeeld:
+ * die mogen nooit wrappen; gewone prozaregels mogen dat wel (pre-wrap).
+ *
+ * Detector: element-hoogte > 1.5× line-height = gewrapt (een echte wrap
+ * verdubbelt de hoogte). NB: rect-top-vergelijking of rects.length zijn GEEN
+ * betrouwbare indicatoren — inline spans (marker-arrow heeft vertical-align:
+ * 3.6px) verschuiven rects op dezelfde visuele regel (gemeten vals-positief).
+ */
+async function measureBoxLineWraps(page) {
+  return page.evaluate(() => {
+    const BOX_RE = /[─-╿]/;
+    const output = document.getElementById('terminal-output');
+    const outRect = output.getBoundingClientRect();
+    const clientWidth = output.clientWidth;
+    const wrapped = [];
+    let boxLineCount = 0;
+    for (const el of output.querySelectorAll('.terminal-line')) {
+      const text = el.textContent || '';
+      if (!BOX_RE.test(text)) continue;
+      boxLineCount++;
+      const elRect = el.getBoundingClientRect();
+      const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || 27;
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const rects = Array.from(range.getClientRects()).filter(r => r.width > 0);
+      const maxRight = rects.length ? Math.max(...rects.map(r => r.right)) : 0;
+      if (elRect.height > lineHeight * 1.5 || maxRight - outRect.left > clientWidth + 1) {
+        wrapped.push(text.slice(0, 60));
+      }
+    }
+    return { boxLineCount, wrapped };
+  });
+}
+
 // ─────────────────────────────────────────────────
 // Test Suites
 // ─────────────────────────────────────────────────
@@ -102,16 +142,13 @@ test.describe('Responsive ASCII Box Layout', () => {
       });
 
       COMMANDS.forEach(command => {
-        test(`${command} - No horizontal scroll`, async ({ page }) => {
+        test(`${command} - Box-regels wrappen niet`, async ({ page }) => {
           // Execute command
           await executeCommand(page, command);
 
-          // Verify no horizontal scroll
-          const terminalOutput = page.locator('#terminal-output');
-          const scrollWidth = await terminalOutput.evaluate(el => el.scrollWidth);
-          const clientWidth = await terminalOutput.evaluate(el => el.clientWidth);
-
-          expect(scrollWidth).toBeLessThanOrEqual(clientWidth);
+          // Geen enkele box-regel mag visueel wrappen of buiten de output steken
+          const { wrapped } = await measureBoxLineWraps(page);
+          expect(wrapped).toEqual([]);
         });
 
         test(`${command} - Box alignment verification`, async ({ page }) => {
@@ -177,14 +214,12 @@ test.describe('Responsive ASCII Box Layout', () => {
 
     await executeCommand(page, 'help');
 
-    // Verify no horizontal scroll (critical for mobile UX)
-    const terminalOutput = page.locator('#terminal-output');
-    const scrollWidth = await terminalOutput.evaluate(el => el.scrollWidth);
-    const clientWidth = await terminalOutput.evaluate(el => el.clientWidth);
-
-    expect(scrollWidth).toBeLessThanOrEqual(clientWidth);
+    // Geen box-regel mag wrappen (critical for mobile UX)
+    const { wrapped } = await measureBoxLineWraps(page);
+    expect(wrapped).toEqual([]);
 
     // Verify visible category headers (progressive help shows starter categories for new users)
+    const terminalOutput = page.locator('#terminal-output');
     const output = await terminalOutput.innerText();
     expect(output).toContain('SYSTEM');
     expect(output).toContain('FILESYSTEM');
@@ -261,6 +296,37 @@ test.describe('Responsive ASCII Box Layout', () => {
     // Allow minimal truncation (0-2 instances) for very long descriptions
     expect(truncationCount).toBeLessThanOrEqual(2);
   });
+});
+
+// ─────────────────────────────────────────────────
+// Tussenliggende breedtes (niet-gemaximaliseerd venster)
+// ─────────────────────────────────────────────────
+
+test.describe('Tussenliggende breedtes - box-randen wrappen niet', () => {
+  for (const width of INTERMEDIATE_WIDTHS) {
+    test(`boxen passen @ ${width}px (met zichtbare scrollbar)`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 700 });
+      await page.goto('/terminal.html');
+      await acceptLegalModal(page);
+      await closeMobileMenu(page);
+
+      // Vul de terminal zodat de verticale scrollbar er staat vóór de te
+      // meten boxen renderen (scrollbar-gutter:stable houdt clientWidth
+      // gelijk, maar zo dekt de test het echte worst-case-scenario).
+      await executeCommand(page, 'help');
+      await executeCommand(page, 'shortcuts');
+
+      // Boxen renderen ná de vulling: bestaande output reflowt bewust niet
+      // bij resize (net als een echte terminal), dus meet alleen verse output.
+      await executeCommand(page, 'next');      // handgerolde box + ←-glosses
+      await executeCommand(page, 'man nmap');  // boxHeader met heavy glyphs (━)
+      await executeCommand(page, 'help');      // lightBox (─)
+
+      const { boxLineCount, wrapped } = await measureBoxLineWraps(page);
+      expect(boxLineCount).toBeGreaterThan(0); // detector mag niet vacuüm slagen
+      expect(wrapped).toEqual([]);
+    });
+  }
 });
 
 // ─────────────────────────────────────────────────
@@ -404,12 +470,9 @@ test.describe('Mobile/Desktop Hybrid UI (ASCII Checkbox Fix)', () => {
 
       await executeCommand(page, 'leerpad');
 
-      // Verify no horizontal scroll (critical for mobile UX)
-      const terminalOutput = page.locator('#terminal-output');
-      const scrollWidth = await terminalOutput.evaluate(el => el.scrollWidth);
-      const clientWidth = await terminalOutput.evaluate(el => el.clientWidth);
-
-      expect(scrollWidth).toBeLessThanOrEqual(clientWidth);
+      // Geen box-regel mag wrappen (critical for mobile UX)
+      const { wrapped } = await measureBoxLineWraps(page);
+      expect(wrapped).toEqual([]);
     }
   });
 });
@@ -430,12 +493,21 @@ test.describe('Font Subset Loading', () => {
     // Execute command that uses boxes
     await executeCommand(page, 'leerpad');
 
-    // Verify font loaded using Font Loading API
-    const fontLoaded = await page.evaluate(() => {
-      return document.fonts.check('16px "JetBrains Mono Box"');
+    // Verify font loaded using Font Loading API.
+    // NB: fonts.check() geeft true óók als de FontFace status 'error' heeft
+    // (gemeten — zo bleef de corrupte inline embed 120 sessies onzichtbaar);
+    // fonts.load() + status-check faalt wél echt bij een kapotte font.
+    const fontStatus = await page.evaluate(async () => {
+      try {
+        const faces = await document.fonts.load('16px "JetBrains Mono Box"', '─');
+        return { count: faces.length, statuses: faces.map(f => f.status) };
+      } catch (e) {
+        return { count: 0, statuses: ['load-rejected: ' + e.message] };
+      }
     });
 
-    expect(fontLoaded).toBe(true);
+    expect(fontStatus.count).toBeGreaterThan(0);
+    expect(fontStatus.statuses).toEqual(['loaded']);
 
     // Verify box characters render correctly (not fallback to pipe |)
     const output = await page.locator('#terminal-output').innerText();

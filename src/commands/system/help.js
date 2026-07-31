@@ -171,13 +171,12 @@ export default {
       }
     });
 
-    // Tip box: pass (width - 2) as inner width so total matches category boxes
     var tipText = '• next → Persoonlijke suggestie voor je volgende stap\n'
       + '• man <command> → Gedetailleerde uitleg van een tool\n'
       + '• ↑↓ keys → Navigeer door command geschiedenis\n'
       + "• Tab → Autocomplete (bijv. 'nm' + Tab → 'nmap')\n"
       + '• shortcuts → Toon alle keyboard shortcuts';
-    result += lightBoxText(tipText, 'TIP: NAVIGATIE & SHORTCUTS', width - 2);
+    result += lightBoxText(tipText, 'TIP: NAVIGATIE & SHORTCUTS', width);
     result += "\n\n[?] * = HackSimulator command (geen echt Linux-command)";
 
     if (hiddenCount > 0) {

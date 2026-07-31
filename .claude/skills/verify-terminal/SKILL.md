@@ -48,10 +48,17 @@ return {
 ```
 
 Voor ASCII-box-randuitlijning: verzamel de output-regels en check dat álle box-regels exact even
-lang zijn (`width + 2` voor de randtekens):
+lang zijn (totaal == `width`, het contract van `getResponsiveBoxWidth()`; inner = `width - 2`):
 ```js
 const lens = [...new Set(rows.map(r => r.length))]; // moet lengte 1 hebben binnen één box
 ```
+
+Voor visuele wrap-detectie (box-rand breekt op het scherm): check per `.terminal-line`
+`el.getBoundingClientRect().height > 1.5 × line-height` — een echte wrap verdubbelt de hoogte.
+**Niet** rect-`top`-waarden of `rects.length` gebruiken: inline spans (`marker-arrow` heeft
+`vertical-align: 3.6px`) verschuiven rects op dezelfde visuele regel (gemeten vals-positief).
+`scrollWidth <= clientWidth` is óók onbruikbaar: `overflow-x:hidden` + `pre-wrap` op
+`#terminal-output` laat te brede regels wrappen, nooit scrollen.
 
 ## Wanneer wél de volle UI
 Typewriter-gedrag, consent-flow-transities, scroll-to-bottom, focus-herstel — dat zijn juist de
