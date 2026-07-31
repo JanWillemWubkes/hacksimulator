@@ -77,6 +77,9 @@ const analyticsTracker = {
    * Initialize Google Analytics 4
    */
   initGA4() {
+    // Guard: dubbele init (bv. consent heraccepteren) mag geen tweede script-tag injecteren
+    if (document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) return;
+
     // GA4 Measurement ID (placeholder - to be replaced with real ID)
     const GA_MEASUREMENT_ID = 'G-7F792VS6CE';
 
@@ -106,6 +109,9 @@ const analyticsTracker = {
    * Initialize Plausible Analytics (future migration)
    */
   initPlausible() {
+    // Guard: dubbele init mag geen tweede script-tag injecteren
+    if (document.querySelector('script[src*="plausible.io"]')) return;
+
     // Plausible is cookieless - no consent needed technically
     // But we still respect user choice
     const script = document.createElement('script');
