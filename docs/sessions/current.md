@@ -4,6 +4,37 @@
 
 ---
 
+## Sessie 203: GEO/AEO — vindbaarheid in AI-zoekmachines (31 jul 2026)
+
+**Mission:** Heisenberg: "Ik wil hoog in de AI zoekresultaten komen met dit project. Analyseer hoe ik dit moet doen en zorg dat dit gebeurt." Doel: HackSimulator.nl citeerbaar maken voor ChatGPT, Perplexity, Google AI Overviews en Claude (GEO/AEO).
+
+**Analyse (Explore-agent + webresearch juli 2026):** Klassieke SEO-basis sterk (canonicals, OG/Twitter-pariteit, BreadcrumbList, Article+Person op alle 14 posts, git-accurate sitemap), maar nul GEO-voorziening: geen llms.txt, geen AI-crawler-beleid, DefinedTermSet dekte 5 van 56 woordenlijst-termen, geen HowTo/WebApplication-schema. Onderzoek: llms.txt ~10% adoptie (nog onderscheidend, laag risico); AI Overviews citeert ~97% uit organische top-20 (bestaande SEO = fundament); ChatGPT-retrieval draait op Bing; Perplexity weegt freshness ~40% en leunt op Reddit; Claude citeert gestructureerde pagina's ~30% vaker.
+
+**Work done (commit `202c8eb`, 9 bestanden, gepusht + live geverifieerd):**
+- **NEW `llms.txt`** (llmstxt.org-spec): H1 + blockquote-missie + NL-alinea + korte EN-note, secties Kernpagina's/Blog (14 posts met 1-regel-beschrijving uit echte meta-descriptions)/Over. Alle 20 URL's tegen het filesystem geverifieerd. Netlify serveert root-`.txt` as-is.
+- **`robots.txt`**: expliciete AI-crawler-stanza (GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-Web, anthropic-ai, PerplexityBot, Perplexity-User, Google-Extended, CCBot, meta-externalagent, Applebot-Extended) als gedeelde multi-UA-groep. Cruciaal: een specifieke UA-stanza overschrijft de wildcard vólledig (RFC 9309) → de 4 Disallows (/node_modules/ /tests/ /playwright-report/ /docs/) herhaald in de AI-groep.
+- **`index.html` FAQPage JSON-LD**: de 8 FAQ-vragen stonden al zichtbaar op de homepage (regel 541+) zónder schema — goedkoopste grote win van de hele analyse. Antwoorden verbatim uit de zichtbare `<p>`'s, alleen HTML-tags gestript.
+- **`woordenlijst.html` DefinedTermSet 5→56**: scriptmatig gegenereerd (scratchpad-Python parseert `glossary-term`-blokken: `<dt>`-naam + `<dd>`-beschrijving, links/tags gestript) i.p.v. 56 objecten met de hand — geen typo's, herhaalbaar bij term-wijzigingen.
+- **`scripts/validate-docs.sh` DefinedTerm-lockstep-check** (naast bestaande `term_count` regel 370): `"@type": "DefinedTerm"`-count moet exact gelijk zijn aan zichtbare `<dt>`-count. Rood-op-mutant bewezen (55≠56 faalt), groen op echt bestand.
+- **`terminal.html` WebApplication-schema**: EducationalApplication, browser-based, gratis (price 0 EUR), isAccessibleForFree.
+- **HowTo-schema op 2 posts**: wireshark (5-staps "Aan de slag"-`<ol>`) + metasploit (7-staps exploit-workflow-`<ol>`), steps verbatim. nmap/hashcat/sql-injection bewust géén HowTo: hun lijsten zijn alternatieven/uitleg, geen stappen — fake-HowTo schaadt.
+- **`docs/seo-launch-checklist.md` NEW §5 GEO/AEO**: in-repo-status + platform-citatiegedrag + Heisenberg-acties (Bing Webmaster, herindexering GSC/Bing 4 pagina's, freshness-cadans, externe vermeldingen nuchter, ~1 mnd controle: AI-engines zelf vragen of HackSimulator geciteerd wordt).
+
+**Bewust geschrapt (proportionaliteit):** llms-full.txt (drift-gevoelig, marginale waarde bij 14 posts); aparte veelgestelde-vragen.html (nav/footer JS-injected met noscript-fallbacks in ~24 files — index-schema levert hetzelfde AEO-voordeel voor ~1/20e van de kosten, evt. fase 2); answer-first-herschrijvingen (steekproef: posts openen al met directe definities na "Wat is X?"-koppen).
+
+**Learnings:**
+- De goedkoopste GEO-win zat in bestaande zichtbare content zonder schema (homepage-FAQ) — audit eerst wat er ál staat vóór je nieuwe content plant. De Plan-agent-vondst "8 zichtbare FAQ's zonder FAQPage" herframede de hele scope (aparte FAQ-pagina → overbodig).
+- Schema-bij-zichtbare-content hoort verbatim + lockstep-bewaakt: FAQ-antwoorden letterlijk gekopieerd, DefinedTerm scriptmatig uit de markup gegenereerd, en de count-check in validate-docs.sh maakt drift onmogelijk. Zelfde discipline als de blog-titel-7-locaties-lockstep.
+- robots.txt-valkuil: een specifieke User-agent-groep erft níéts van de wildcard — wie alleen `Allow: /` in een AI-stanza zet, opent per ongeluk /docs/ voor die crawlers. Multi-UA-groep (12 agents, 1 regelset) is compact én RFC 9309-correct.
+- On-page GEO maakt je *citeerbaar*, niet *gekozen* — dat doen autoriteit en externe vermeldingen (Perplexity: Reddit ~47% van topcitaties). De eerlijke verwachting staat zo in checklist-§5; de zwaarste hefboom is een Heisenberg-actie, geen code.
+- Deploy-verificatie hoort bij "zorg dat dit gebeurt": eerste curl gaf 404 (Netlify nog bezig), achtergrond-recheck na 90s bewees llms.txt 200 + nieuwe robots.txt live.
+
+**Metrics delta:** blog 447→456 KB (+9: 2× HowTo-blok), src/styles ongewijzigd; geen nieuwe pagina's/tests; validate-docs.sh +1 deep-check (DefinedTerm-lockstep); bundle-marker geüpdatet naar Sessie 203-meting.
+
+**Next steps:** Heisenberg-acties in `docs/seo-launch-checklist.md` §5 (Bing Webmaster, herindexering, externe vermeldingen, controle na ~1 mnd). Evt. fase 2: dedicated FAQ-pagina als hub.
+
+---
+
 ## Sessie 202: Mobiele kolom-uitlijning + box-truncatie in terminal-output (28 jul 2026)
 
 **Mission:** Gebruiker (screenshot terminal, 375px): het `reset`-tutorial-exit-menu ("[→] Wat wil je doen?" met commando + beschrijving) brak lelijk af — de twee kolommen vielen onder elkaar zodat elke beschrijving als een los menu-item las. Verzoek: "analyseer hoe en waar dit voorkomt site wide. ik wil dit perfect hebben." Scope-keuze Heisenberg: **alle live output** (reset-menu + security-tool-uitvoer); **man-pages buiten scope** (referentie achter expliciet `man`, traditioneel breed).

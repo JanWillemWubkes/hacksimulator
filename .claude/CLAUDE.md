@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 202)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 203)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 203: GEO/AEO — vindbaarheid in AI-zoekmachines (31 jul 2026)
+⚠️ **Never:**
+- Nieuwe content plannen vóór je audit wat er ál zichtbaar staat zonder schema — de homepage had 8 zichtbare FAQ-vragen zónder FAQPage JSON-LD; die vondst maakte de geplande aparte FAQ-pagina overbodig (nav/footer JS-injected + noscript in ~24 files = 20× de kosten voor hetzelfde AEO-voordeel).
+- Een AI-crawler-stanza in robots.txt met alléén `Allow: /` — een specifieke User-agent-groep erft níéts van de wildcard (RFC 9309), dus zonder herhaalde Disallows open je per ongeluk /docs/ voor die crawlers. Multi-UA-groep (12 agents, 1 gedeelde regelset) is compact én correct.
+- HowTo-schema op niet-stapsgewijze content forceren — nmap/hashcat/sql-injection-lijsten zijn alternatieven/uitleg, geen stappen; alleen wireshark (5-staps) en metasploit (7-staps) hebben échte `<ol>`-workflows. Fake-HowTo schaadt de geloofwaardigheid van álle schema op de site.
+- 56 JSON-LD-objecten met de hand overtikken — scriptmatig genereren uit de zichtbare markup (glossary-term-blokken parsen) = geen typo's + herhaalbaar bij term-wijzigingen ([[feedback_proportional_effort_hobby]]: script > handwerk zodra mechanisch-van-omvang).
+
+✅ **Always:**
+- Schema-bij-zichtbare-content verbatim + lockstep-bewaakt — FAQ-antwoorden letterlijk uit de zichtbare `<p>`'s (alleen tags gestript), en de nieuwe DefinedTerm-count-check in `validate-docs.sh --deep` (JSON-LD == zichtbare `<dt>`-count, rood-op-mutant bewezen vóór vertrouwen). Zelfde discipline als de blog-titel-7-locaties-lockstep.
+- Eerlijk zijn over wat on-page GEO wél/niet doet — het maakt je *citeerbaar*, niet *gekozen*: AI Overviews citeert ~97% uit de organische top-20, Perplexity leunt op Reddit (~47%), ChatGPT-retrieval draait op Bing. De zwaarste hefboom (externe vermeldingen, Bing Webmaster) is een Heisenberg-actie en staat zo in checklist-§5, niet weggemoffeld achter de code-wins.
+- "Zorg dat dit gebeurt" eindigt bij live-verificatie, niet bij de push — eerste curl gaf 404 (Netlify nog bezig); achtergrond-recheck na 90s bewees llms.txt 200 + nieuwe robots.txt op productie.
+- llms.txt-URL's tegen het filesystem verifiëren vóór commit — elke link in het LLM-overzicht moet naar een bestaand bestand wijzen; 20/20 gecheckt met één grep-loop.
+
 ### Sessie 202: Mobiele kolom-uitlijning + box-truncatie in terminal-output (28 jul 2026)
 ⚠️ **Never:**
 - Een gemelde layout-bug fixen zonder de gedeelde util erachter te checken — de reset-menu-collapse was één symptoom; de hoogste-waarde-bug (`asciiBox.wrap()` kápte *waarschuwingstekst* af met `...` in álle 5 SECURITY WARNING-boxen op mobiel) zat in de util die de gemelde commands voeden, niet in de gemelde output. Grep de callers (`boxText`/`lightBoxText`) vóór je concludeert dat het één command is.
@@ -147,20 +160,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Leg vooraf vast wat succes is — `docs/launch-success-metrics.md` koppelt elke funnel-stap aan z'n event + streefgetallen als expliciete hypotheses (north-star = activation-rate) + de GA4-config; zonder dat is de launch een oninterpreteerbare spike.
 - Splits "wat ik bouw" van "wat inherent van de gebruiker is" — testers werven/sessies draaien, GA4-goals configureren en de finale copy/retentie-keuze zijn van Heisenberg; ik lever de code + protocollen + varianten die dat uitvoerbaar maken. Volledig: `docs/sessions/current.md` Sessie 198.
 
-### Sessie 197: Laatste volledige simulator-bug-test + 2 fixes (07 jul 2026)
-⚠️ **Never:**
-- Iets een bug noemen vóór je het tegen het codepad houdt — ~6 "vondsten" waren vals: heuristiek-matches op body-tekst (man-page mét "command not found" als voorbeeld; tool-output mét "waarschuwing"), een localStorage-lees op 350ms terwijl de progress-store 500ms-debouncet (leek dataverlies, was timing), scrollback-accumulatie in `innerText` (een eerdere `leerpad`-render bleef in beeld en matchte "Vergrendeld"/afgevinkte commands), en de by-design typewriter-tap-guard.
-- Je meetinstrument vertrouwen — Playwright's `fill()` forceert focus voorbij de FocusTrap, waardoor een commando "uitvoerde" met de legal-modal actief; het echt-gebruikerspad (typen zónder force-focus) bewees dat de terminal onbereikbaar is. Modal-protection was degelijk; de bug zat in mijn meting (vgl. Sessie 185/190/196).
-- Een mobiele overflow als scroll-/anker-probleem lezen — de 10px-offset (Sessie 189 als symptoom genoteerd) kwam uit `width:100%` + `margin:10px` sámen op `#terminal-container`; `body overflow-x:hidden` verbergt het (geen scrollbar, `window.scrollX`=0) maar clipt wél de rechter 10px content. Meet met `getBoundingClientRect` + `window.scrollX` of het gebruiker-zichtbaar is.
-- Een "laatste check" breed maken — scope niet uitbreiden naar entry-points/hele-site (deep-link al spec-gedekt, blog/consent net ~15 sessies geaudit); een oppervlakkige brede sweep verwatert een scherpe, begrepen eindstaat.
-
-✅ **Always:**
-- De duurzame mobiele fix zit in de breedte, niet in het anker — `width:auto` op de mobiele `#terminal-container` centreert symmetrisch (10px beide zijden) én elimineert de overflow in één regel; navbar (100% van de body) volgt vanzelf. Gemeten 375px 0 overflow, desktop ongewijzigd.
-- Persistence-flush hoort óók op `pagehide` + `visibilitychange(hidden)`, niet alleen `beforeunload` — dat laatste vuurt op mobiel vaak niet bij app-switch/scherm-lock, en `completeChallenge` schrijft via de 500ms-debounce → een net-voltooide challenge kan verloren (niet-zelfherstellend, anders dan multi-tab). 3 idempotente regels per store. Bewijs het venster (lees <500ms = leeg) én de fix (na de event = gevuld).
-- Backlog vastleggen i.p.v. half-blind fixen — de 10 prod-hardcoded specs (→ `BASE_URL`) niet omzetten vanuit een egress-geblokkeerde omgeving waar je ze niet tegen prod kunt verifiëren; performance/debug wijzen mogelijk bewust naar prod. Hoogste-waarde-move = smoketests van werkkopie-tests splitsen. Vastgelegd als TASKS.md item 42.
-- Systematisch het hele oppervlak driven met échte input — 8 passes (41 commands + man-pages, security-consent 5 tools, 5 tutorials + challenges end-to-end, gamification, core-input, welcome-state, mobile) vonden precies 1 echte bug; de brede dekking draagt de "0 open bugs"-conclusie. Volledig: `docs/sessions/current.md` Sessie 197.
-
-**Rotation:** Top-6 huidig: 197-198-199-200-201-202 (Sessie 196 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 200 UITGEVOERD:** current.md staart Sessie 185-189 geknipt naar `archive-s185-s189.md` (5 entries, 179 regels); current.md houdt nu het rolling window 190-200 (11 entries; volgende bulk-rotatie Sessie 205 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-184 → `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 198-199-200-201-202-203 (Sessie 197 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 200 UITGEVOERD:** current.md staart Sessie 185-189 geknipt naar `archive-s185-s189.md` (5 entries, 179 regels); current.md houdt nu het rolling window 190-200 (11 entries; volgende bulk-rotatie Sessie 205 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-184 → `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -209,7 +209,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 202
+**Sessie counter:** 203
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -263,6 +263,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 28 jul 2026 (Sessie 202 — Mobiele kolom-uitlijning + box-truncatie in terminal-output (commit `fe27a17`, gepusht): reset-menu + nikto-headers gestapeld (+2 `\n`-plak-bugs), hashcat ←-glosse op eigen regel, `asciiBox.wrap()` woord-wrapt i.p.v. afkappen (5 SECURITY WARNING-boxen kápten tekst af op mobiel), box-titel-RangeError afgevangen. Man-pages buiten scope. Volledig: `docs/sessions/current.md`)
-**Version:** 5.76 (Sessie 202 — Mobiele kolom-uitlijning + box-truncatie: reset-menu/nikto-headers gestapeld (+2 `\n`-bugs), hashcat-glosse eigen regel, `asciiBox.wrap()` wrapt i.p.v. afkappen (5 warning-boxen), box-titel-crash-guard; 1 commit `fe27a17` gepusht; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 31 jul 2026 (Sessie 203 — GEO/AEO: vindbaarheid in AI-zoekmachines (commit `202c8eb`, gepusht + live geverifieerd): NEW llms.txt + robots.txt AI-crawler-stanzas, FAQPage op index (8 zichtbare FAQ's), DefinedTermSet 5→56 + lockstep-check, WebApplication op terminal, HowTo op wireshark/metasploit, §5 GEO in seo-launch-checklist.md met Heisenberg-acties. Volledig: `docs/sessions/current.md`)
+**Version:** 5.77 (Sessie 203 — GEO/AEO: llms.txt + robots.txt AI-stanzas, FAQPage op index, DefinedTermSet 5→56 + lockstep-check, WebApplication op terminal, HowTo wireshark/metasploit, GEO-sectie in seo-launch-checklist; 1 commit `202c8eb` gepusht + live; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
