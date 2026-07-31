@@ -4,6 +4,33 @@
 
 ---
 
+## Sessie 204: Box-omlijning brak op tussenbreedtes — root-cause fix (31 jul 2026)
+
+**Mission:** Heisenberg meldde (2 foto-screenshots, herhaald aangekaart issue) dat de box-omlijning in de terminal nog steeds breekt op bepaalde schermen — de "VOLGENDE STAP"-box van `next` met wrappende randen en content door de rechterrand. Opdracht: perfecte analyse + fix-advies; plan goedgekeurd en uitgevoerd.
+
+**Work done:**
+- **Root cause 0 (dominant, nieuw ontdekt):** de inline base64-embed van 'JetBrains Mono Box' (box-glyphs U+2500-257F) in `styles/main.css:18` was **corrupt sinds Sessie 83** — exact 2 tekens afwijkend van het valide `styles/fonts/jetbrains-mono-box-subset.woff2` (b64-posities 154 en 6350), brotli-decompressie faalde, `FontFace.status === 'error'` (live op productie bevestigd vóór de fix). Alle box-glyphs renderden via OS-fallback-fonts met per-OS/per-glyph afwijkende advances (`━` ≠ `─` ≠ `M`); een borderregel is één ononderbroken glyph-run zonder breekpunten → wrapt als eerste, per machine anders. Verklaart retroactief het Sessie 81/82 Android-uitlijnprobleem (waarvoor `boxText()` mobiel borderless werd). Fix: herembed via `base64 -w0` van de disk-subset (600/1000-advance voor alle 128 glyphs — identiek aan JetBrains Mono latin).
+- **Contract-unificatie** `src/utils/asciiBox.js`: rendertte `width + 2` tekens totaal terwijl `getResponsiveBoxWidth()` een totale breedte teruggeeft en alle handgerolde boxen (`next.js`, `dashboard.js`, …) `inner = width - 2` doen → de 5 SECURITY WARNING-boxen + `man`-boxHeader waren 2 chars te breed (veiligheidsmarge opgegeten). Nu totaal == `width` in `createBox` + `createLightBox`; `help.js:180` handmatige `width - 2`-compensatie verwijderd.
+- **Meting op het juiste element** `src/utils/box-utils.js`: mat `#terminal-container` — dat erft **Inter** (`--font-body`, proportioneel!) terwijl de tekst in `#terminal-output` rendert (`--font-terminal`, mono), en de 12px webkit-scrollbar zat niet in de berekening. De Inter-M-mismeting *onderschatte* de capaciteit ~35% en redde brede desktops toevallig — maar instabiel per font-laadmoment. Nu: meet `#terminal-output` (juiste font + `clientWidth` excl. eigen scrollbar), `charWidth = max(measureText('M'), '─', '━')` (canvas respecteert unicode-range → meet de echte subset-advance; de max had déze hele bug gevangen).
+- **`scrollbar-gutter: stable`** op `#terminal-output` (`styles/terminal.css`): clientWidth gelijk vóór/ná verschijnen van de scrollbar.
+- **Test-gat gedicht** `tests/e2e/responsive-ascii-boxes.spec.js`: de `scrollWidth <= clientWidth`-assertie kon door `overflow-x:hidden` + `pre-wrap` nooit falen (structureel vals-groen) en `document.fonts.check()` geeft true óók bij status 'error' (gemeten — zo bleef de corrupte font 120 sessies onzichtbaar). Nu: wrap-detector per `.terminal-line` op **element-hoogte > 1.5× line-height** + max-right-check, NEW describe "Tussenliggende breedtes" @ 800/900/1024/1100 (terminal eerst vullen → scrollbar zichtbaar → commands vers renderen), font-assert via `fonts.load` + `status === 'loaded'`. Verouderde 32/40/48/56-char header-comment + ongebruikte `expectedWidth`-velden opgeruimd.
+- `?v=` bump: `main.css` 153→154 + `terminal.css` 117→118 over alle HTML-refs; `.claude/skills/verify-terminal/SKILL.md` bijgewerkt (width-contract + hoogte-gebaseerde wrap-detector).
+
+**Commits:** `418d0da` (35 files) — gepusht + Netlify-deploy live geverifieerd. **Committed context zelfde dag, andere conversatie (niet dit werk):** `69c7eb2` flakiness + bundle-limiet 1000→1050, `cb00326` tracker.js dubbele-init-guard.
+
+**Learnings:**
+- Twee corrupte tekens in een 6936-char base64-string = hele woff2 onbruikbaar (brotli is niet fout-tolerant), maar `@font-face` faalt stíl naar een visueel bijna-identieke fallback. Elke test die "renderen de box-tekens?" vroeg zag ze gewoon — alleen metrisch nét verkeerd. Verifieer font-embeds tegen het bronbestand (byte-diff) en assert `fonts.load`+status, nooit `fonts.check`.
+- Een accidentele mismeting kan een structurele bug maskeren: de Inter-M-onderschatting hield desktops toevallig binnen de marge. Fix-volgorde was daarom bindend: font → contract → meting; "correct" meten zonder de eerdere fixes had de boxen juist óp de rand gezet.
+- Wrap-detectie: rect-`top`-vergelijking én `rects.length` zijn beide vals-positief bij inline spans — `marker-arrow` heeft `vertical-align: .2em` (3.6px @ 18px) waardoor rects op één visuele regel verschillende tops hebben (gemeten: 11 vals-positieven). Element-hoogte > 1.5× line-height is immuun (echte wrap verdubbelt de hoogte). Rood-op-mutant bewezen (kunstmatig 30-chars-te-brede regel gevangen).
+- Resize-scenario gereproduceerd = vrijwel zeker de screenshots: output gerenderd @ 1440px wrapt 68/68 na versmalling naar 800px; vers command daarna: 0/12 wraps. Bewust geaccepteerd (echte terminals reflowen ook niet) — test-consequentie: na viewport-resize altijd het command opnieuw uitvoeren, nooit oude output meten.
+- Sessienummer-ambiguïteit: een eerdere zelfde-dag-conversatie labelde haar werk al "Sessie 204" in TASKS.md maar rondde `/summary` nooit af (geen current.md-entry, counter bleef 203). Beslist: deze sessie = 204, eerder werk als committed context gelogd (Sessie 200-protocol: niet claimen).
+
+**Next steps:** geen open items uit deze sessie. Bestaande open Heisenberg-acties (Postmaster re-check, GEO-checklist §5) ongewijzigd.
+
+**Metrics delta:** src/ 675→677 KB (+2 KB contract/meting-comments), styles/ 396 KB gelijk (font-b64 zelfde lengte, +25 bytes gutter), spec-files 28→29 (was al 29 door zelfde-dag-context), tests +4 (tussenbreedte-describe). Chromium-suite 242 passed / 5 skipped / 1 flaky (tutorial-gestures, ongerelateerd).
+
+---
+
 ## Sessie 203: GEO/AEO — vindbaarheid in AI-zoekmachines (31 jul 2026)
 
 **Mission:** Heisenberg: "Ik wil hoog in de AI zoekresultaten komen met dit project. Analyseer hoe ik dit moet doen en zorg dat dit gebeurt." Doel: HackSimulator.nl citeerbaar maken voor ChatGPT, Perplexity, Google AI Overviews en Claude (GEO/AEO).

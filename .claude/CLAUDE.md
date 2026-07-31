@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 203)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 204)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 204: Box-omlijning brak op tussenbreedtes — corrupte box-font + meetfouten (31 jul 2026)
+⚠️ **Never:**
+- `document.fonts.check()` als bewijs dat een font laadt — geeft true óók bij `FontFace.status === 'error'` (gemeten); zo bleef de corrupte inline 'JetBrains Mono Box'-embed **120 sessies** (sinds Sessie 83) onzichtbaar terwijl alle box-glyphs via OS-fallbacks met afwijkende advances renderden. Assert `fonts.load(...)` + `status === 'loaded'`.
+- `scrollWidth <= clientWidth` als overflow-assert op `#terminal-output` — `overflow-x:hidden` + `pre-wrap` laat te brede regels wrappen, nooit scrollen → de check kan structureel niet falen (vals-groen op precies deze bug-klasse).
+- Rect-`top`-vergelijking of `rects.length` als visuele wrap-detector — inline spans (`marker-arrow` heeft `vertical-align:.2em` = 3.6px) verschuiven rects op één visuele regel → 11 gemeten vals-positieven. Element-hoogte > 1.5× line-height is immuun (echte wrap verdubbelt de hoogte); rood-op-mutant bewezen.
+- Een meting "correct maken" vóór de bovenliggende bugs gefixt zijn — de Inter-op-container-mismeting *onderschatte* de kolomcapaciteit ~35% en redde brede desktops toevallig; eerst correct meten had de boxen juist óp de rand gezet. Fix-volgorde was bindend: font → breedte-contract → meting.
+
+✅ **Always:**
+- Font-embeds byte-diffen tegen het bronbestand — 2 corrupte b64-chars in 6936 maakten de hele woff2 onbruikbaar (brotli is niet fout-tolerant), maar `@font-face` faalt stíl naar een visueel bijna-identieke fallback; alleen de metriek verraadt het. Borderregels (één ononderbroken glyph-run zonder breekpunten) wrappen dan als eerste, per machine anders.
+- Meet op het element waar de tekst écht rendert — `#terminal-container` erft `--font-body` (Inter); `#terminal-output` heeft `--font-terminal` én `clientWidth` exclusief de eigen scrollbar. Plus `charWidth = max(measureText('M'), '─', '━')`: canvas respecteert `@font-face` unicode-range, dus dit meet de echte subset-advance — die max had deze hele bug gevangen.
+- Oude output die na venster-resize breekt = by-design (echte terminals reflowen ook niet; gereproduceerd: 68/68 wraps oud, 0/12 vers) — test-consequentie: na viewport-resize het command opnieuw uitvoeren, nooit oude output meten.
+- Sessienummer-ambiguïteit (eerdere zelfde-dag-context labelde "Sessie 204" in TASKS.md maar rondde `/summary` nooit af): nummer overnemen + dat werk als committed context loggen, niet claimen (Sessie 200-protocol) en niet hernummeren.
+
 ### Sessie 203: GEO/AEO — vindbaarheid in AI-zoekmachines (31 jul 2026)
 ⚠️ **Never:**
 - Nieuwe content plannen vóór je audit wat er ál zichtbaar staat zonder schema — de homepage had 8 zichtbare FAQ-vragen zónder FAQPage JSON-LD; die vondst maakte de geplande aparte FAQ-pagina overbodig (nav/footer JS-injected + noscript in ~24 files = 20× de kosten voor hetzelfde AEO-voordeel).
@@ -147,20 +160,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Stappen die de gebruiker moet uitvoeren horen in een blijvend repo-bestand — het plan in `~/.claude/plans/` is sessie-scoped en kan opschonen; NEW `docs/launch-checklist.md` is de duurzame single-source (Heisenberg vroeg letterlijk "hoe vind ik de stappen terug?").
 - Een nieuwe blogpost modelleren op een bestaande (nmap) — erft automatisch alle conventies (JSON-LD Organization-auteur, breadcrumbs + BreadcrumbList, consent-model-CTA's, blauw palet, div-balans) → validate-blogs 15/15 in één keer. Volledig: `docs/sessions/current.md` Sessie 199.
 
-### Sessie 198: Launch-readiness — funnel-meetbaarheid + demand-validatie + value-prop (08 jul 2026)
-⚠️ **Never:**
-- Het fundamentele launch-gat als een feature lezen — na 197 sessies polish (+ M8-analytics op 2%) was de eerlijke diagnose: technisch launch-ready, strategisch ongevalideerd (nul extern signaal, geen succescriterium). Meer bouwen was niet het antwoord; extern bewijs + een meetbaar doel wel.
-- Value-prop/retentie live gokken vóór validatie — de hero herschrijven op eigen smaak is exact de onbewezen-aanname-fout die je aankaart. Lever de varianten + laat toetsen (WS2 5-sec-test); "alles aanpakken" = de haakjes klaarleggen, niet blind bouwen.
-- "Unverified" commits automatisch als verkeerde-auteur lezen — hier was auteur+committer al `noreply@anthropic.com`; de oorzaak was de ontbrekende SSH-handtekening met een lege 0-byte signing-key (draai als root, geen `claude`-key-toegang). Amend/rebase voegt geen handtekening toe en herschrijft gedeployde main-historie voor niets → niet forceren. Check `%G?` + de key vóór je iets herschrijft.
-- Een event-wrapper "dood" noemen zonder het call-pad te checken — `feedbackSubmitted` in events.js wordt nooit aangeroepen, maar feedback.js roept `tracker.trackEvent('feedback_submitted')` direct aan → wél bedraad, geen gat. Verifieer de directe-call-route.
-
-✅ **Always:**
-- Funnel-events bewijs je zónder productie-GA4 — de gtag-shim pusht naar `window.dataLayer` ook al is het externe GA4-script egress-geblokkeerd; consent pre-setten via Playwright `addInitScript` (JSON `{analytics:true}`, zelfde key voor consent.js én tracker.js) + dataLayer-`event`-tuples lezen = volledige funnel-verificatie in de sandbox.
-- Meet de conversie waar je 'm mist — de #1 launch-metric (homepage→terminal-doorklik) was onmeetbaar want de "start terminal"-CTA's hadden geen event; `data-terminal-cta="<locatie>"` + reuse van het bestaande delegated-click-patroon in cta-tracking.js meet 'm nu per plek. Activation (eerste command) once-per-sessie via `sessionStorage`-guard (survives reload; module-boolean her-vuurt per reload).
-- Leg vooraf vast wat succes is — `docs/launch-success-metrics.md` koppelt elke funnel-stap aan z'n event + streefgetallen als expliciete hypotheses (north-star = activation-rate) + de GA4-config; zonder dat is de launch een oninterpreteerbare spike.
-- Splits "wat ik bouw" van "wat inherent van de gebruiker is" — testers werven/sessies draaien, GA4-goals configureren en de finale copy/retentie-keuze zijn van Heisenberg; ik lever de code + protocollen + varianten die dat uitvoerbaar maken. Volledig: `docs/sessions/current.md` Sessie 198.
-
-**Rotation:** Top-6 huidig: 198-199-200-201-202-203 (Sessie 197 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 200 UITGEVOERD:** current.md staart Sessie 185-189 geknipt naar `archive-s185-s189.md` (5 entries, 179 regels); current.md houdt nu het rolling window 190-200 (11 entries; volgende bulk-rotatie Sessie 205 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-184 → `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 199-200-201-202-203-204 (Sessie 198 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 200 UITGEVOERD:** current.md staart Sessie 185-189 geknipt naar `archive-s185-s189.md` (5 entries, 179 regels); current.md houdt nu het rolling window 190-200 (11 entries; volgende bulk-rotatie Sessie 205 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-184 → `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -209,7 +209,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 203
+**Sessie counter:** 204
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -263,6 +263,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 31 jul 2026 (Sessie 203 — GEO/AEO: vindbaarheid in AI-zoekmachines (commit `202c8eb`, gepusht + live geverifieerd): NEW llms.txt + robots.txt AI-crawler-stanzas, FAQPage op index (8 zichtbare FAQ's), DefinedTermSet 5→56 + lockstep-check, WebApplication op terminal, HowTo op wireshark/metasploit, §5 GEO in seo-launch-checklist.md met Heisenberg-acties. Volledig: `docs/sessions/current.md`)
-**Version:** 5.77 (Sessie 203 — GEO/AEO: llms.txt + robots.txt AI-stanzas, FAQPage op index, DefinedTermSet 5→56 + lockstep-check, WebApplication op terminal, HowTo wireshark/metasploit, GEO-sectie in seo-launch-checklist; 1 commit `202c8eb` gepusht + live; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 31 jul 2026 (Sessie 204 — Box-omlijning brak op tussenbreedtes: root-cause = corrupte inline 'JetBrains Mono Box'-embed (FontFace 'error' sinds Sessie 83) + asciiBox width+2-contract + Inter-mismeting op verkeerd element; commit `418d0da`, gepusht + font live 'loaded' geverifieerd. Volledig: `docs/sessions/current.md`)
+**Version:** 5.78 (Sessie 204 — box-omlijning root-cause fix: font-herembed + contract-unificatie + meting op #terminal-output + scrollbar-gutter + echte wrap-detector in e2e; 1 commit `418d0da` gepusht + live; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
