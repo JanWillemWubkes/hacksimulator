@@ -26,8 +26,8 @@ grootste rankingfactor (autoriteit/backlinks) niet; dat doe jij hier.
   - Elke nieuwe post die je sindsdien publiceert.
 
 ### Bing Webmaster Tools (~10 min, eenmalig)
-- [ ] https://www.bing.com/webmasters → **"Import from Google Search Console"** (neemt site + sitemap over).
-- [ ] Waarom: Bing voedt ook DuckDuckGo en Ecosia — samen ~5-10% van NL-zoekverkeer, vrijwel gratis erbij.
+- [x] https://www.bing.com/webmasters → **"Import from Google Search Console"** (neemt site + sitemap over). ✅ 31 jul 2026 — geïmporteerd via GSC-koppeling (Google-login), sitemap overgenomen.
+- [x] Waarom: Bing voedt ook DuckDuckGo en Ecosia — samen ~5-10% van NL-zoekverkeer, vrijwel gratis erbij.
 
 ### Validatie van de rich results (~15 min)
 - [ ] **Rich Results Test** (https://search.google.com/test/rich-results):
@@ -112,10 +112,14 @@ sterk op Reddit; Claude citeert gestructureerde pagina's (lijsten, Q&A) aantoonb
 
 **Acties voor Heisenberg:**
 
-- [ ] **Bing Webmaster Tools** — als sectie 1 nog niet gedaan is: nu doen. Dit is voor
+- [x] **Bing Webmaster Tools** — als sectie 1 nog niet gedaan is: nu doen. Dit is voor
   ChatGPT-vindbaarheid belangrijker dan Google. Sitemap opnieuw indienen na deze deploy.
+  ✅ 31 jul 2026 — account aangemaakt via GSC-import, sitemap ingediend.
 - [ ] **Herindexering aanvragen** na deploy: GSC URL-inspectie op `index.html`,
   `woordenlijst.html`, de wireshark- en metasploit-gids; zelfde in Bing.
+  (Bing-deel ✅ 31 jul 2026 via URL Submission — homepage, woordenlijst, wireshark- en
+  metasploit-gids. Nog open: `terminal.html` in Bing (WebApplication-schema, ontbrak in dit
+  lijstje) + het hele GSC-deel.)
 - [ ] **Freshness-cadans**: de bestaande ~1 post/2 weken (sectie 4) is precies wat Perplexity
   beloont. Bij een inhoudelijke update van een bestaande post: `dateModified` in de JSON-LD
   en sitemap-`lastmod` mee laten bewegen (gebeurt al via de bestaande scripts).
