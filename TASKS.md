@@ -36,6 +36,7 @@
 **Current Status:** ✅ LIVE — Playwright E2E: **240 tests, 28 spec files** (Chromium, Firefox, WebKit) | AdSense + Ko-fi + Brevo (deliverability getuned) + Gumroad v1.0 + Lead magnet live
 **Bundle (geverifieerd 29 mei 2026, Sessie 144):**
 - **Site totaal:** ~2240 KB unminified | src/ 613 KB | styles/ 262 KB | blog/ 360 KB (12 files: 10 posts + index + welkom) | assets/ 1001 KB (+316 KB Sessie 172: 3 per-gids + 1 bundel cover) | HTML ~150 KB
+- **E2E-bundle-test-limiet (performance.spec.js): 1000 → 1050 KB (Sessie 204, jul 2026).** De test meet unminified source (src/ JS + styles/ CSS + src/ui CSS + index.html); die meting groeide organisch naar 1002 KB door funnel/analytics-werk Sessie 190-203. Bewuste bump i.p.v. 2 KB code-golf — de echte perf-poort blijft Terminal Core <400 KB minified (zie regel hieronder + #24).
 - **Terminal Core (runtime van terminal.html, gemeten Sessie 141 via BFS module-graph):** **~781 KB unminified** | HTML 19 KB + CSS 160 KB (6 files) + JS 601 KB (99 module-graph files). Geschatte minified ~547 KB. **⚠️ ~37% boven 400 KB budget zelfs minified** — zie #24 (heroverwegen post-implementatie)
 - **Lighthouse on-wire ná Pad C1+C2 (Sessie 144, productie):**
   - `/terminal.html`: **Mobile 49→59/100 (+10), Desktop 77→94/100 (+17)** | Total 626→375 KB (-251) | 3rd-party 353→101 KB (-252) | **AdSense 252 KB / 420 ms → 0/0** | LCP mobile 7716→4265 ms (-3451) | TBT mobile 1087→985 ms

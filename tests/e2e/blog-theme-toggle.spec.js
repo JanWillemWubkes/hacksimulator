@@ -22,6 +22,20 @@ function toggleOption(page, theme) {
   return page.locator(`.toggle-option[data-theme="${theme}"]`).first();
 }
 
+// Helper: accept legal modal met echte wait (zelfde patroon als responsive-breakpoints.spec.js).
+// Een isVisible()-momentopname mist de modal als die onder load nét later verschijnt.
+async function acceptLegalModal(page) {
+  try {
+    await page.waitForSelector('#legal-modal.active', { timeout: 3000 });
+    const acceptButton = page.locator('#legal-accept-btn');
+    await acceptButton.waitFor({ state: 'visible', timeout: 2000 });
+    await acceptButton.click({ force: true });
+    await page.waitForSelector('#legal-modal.active', { state: 'hidden', timeout: 3000 });
+  } catch (e) {
+    // Legal modal niet aanwezig (terugkerende bezoeker) — doorgaan
+  }
+}
+
 test.describe('Blog Theme Toggle (CSP-Compliant)', () => {
 
   test.beforeEach(async ({ page, context }) => {
@@ -59,12 +73,7 @@ test.describe('Blog Theme Toggle (CSP-Compliant)', () => {
   test('Blog theme syncs with main app', async ({ page }) => {
     // Set theme on main app (need to accept legal modal first)
     await page.goto('/terminal.html');
-
-    const legalModal = page.locator('#legal-modal');
-    if (await legalModal.isVisible()) {
-      await page.click('#legal-accept-btn');
-      await expect(legalModal).toBeHidden();
-    }
+    await acceptLegalModal(page);
 
     // Set light theme on main app
     await themeToggle(page).click();
@@ -87,17 +96,19 @@ test.describe('Blog Theme Toggle (CSP-Compliant)', () => {
 
   test('Reading progress bar works on article pages', async ({ page }) => {
     await page.goto('/blog/welkom.html');
-    await page.waitForTimeout(500); // Wait for JS to initialize
 
     const progressBar = page.locator('.reading-progress');
     // Progress bar may be thin (2-3px) — check it exists in DOM rather than visibility
+    // (toBeAttached auto-retries, dus dit dekt ook het wachten op JS-init)
     await expect(progressBar).toBeAttached();
+
+    // De scroll-handler updatet el.style.width asynchroon (rAF-throttle);
+    // expect.poll retryt de meting i.p.v. te gokken met een fixed timeout.
+    const barWidth = () => progressBar.evaluate(el => parseFloat(el.style.width) || 0);
 
     // Initially at top
     await page.evaluate(() => window.scrollTo(0, 0));
-    await page.waitForTimeout(200);
-    const initialWidth = await progressBar.evaluate(el => parseFloat(el.style.width) || 0);
-    expect(initialWidth).toBeLessThan(10);
+    await expect.poll(barWidth).toBeLessThan(10);
 
     // Scroll to middle
     await page.evaluate(() => {
@@ -105,10 +116,8 @@ test.describe('Blog Theme Toggle (CSP-Compliant)', () => {
       const windowHeight = window.innerHeight;
       window.scrollTo(0, (scrollHeight - windowHeight) / 2);
     });
-    await page.waitForTimeout(200);
-    const midWidth = await progressBar.evaluate(el => parseFloat(el.style.width));
-    expect(midWidth).toBeGreaterThan(30);
-    expect(midWidth).toBeLessThan(70);
+    await expect.poll(barWidth).toBeGreaterThan(30);
+    expect(await barWidth()).toBeLessThan(70);
 
     // Scroll to bottom
     await page.evaluate(() => {
@@ -116,9 +125,7 @@ test.describe('Blog Theme Toggle (CSP-Compliant)', () => {
       const windowHeight = window.innerHeight;
       window.scrollTo(0, scrollHeight - windowHeight);
     });
-    await page.waitForTimeout(200);
-    const finalWidth = await progressBar.evaluate(el => parseFloat(el.style.width));
-    expect(finalWidth).toBeGreaterThan(90);
+    await expect.poll(barWidth).toBeGreaterThan(90);
   });
 
   test('Theme toggle works on all blog pages', async ({ page }) => {

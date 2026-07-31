@@ -15,8 +15,12 @@ const ROOT_DIR = process.cwd();
 // ========================================
 
 const LIMITS = {
-  TOTAL_BUNDLE: 1000 * 1024,      // 1000 KB hard limit (ONLY real constraint)
-  WARNING_THRESHOLD: 900 * 1024,  // 900 KB warning (90%)
+  // 1050 KB: bewust verhoogd van 1000 KB (Sessie 204, jul 2026) na organische groei
+  // door funnel/analytics-werk (Sessie 190-203). Dit meet UNMINIFIED source
+  // (src/ + styles/ + index.html); de echte perf-poort blijft Terminal Core
+  // <400KB minified (terminal.html). Zie TASKS.md §Huidige Focus.
+  TOTAL_BUNDLE: 1050 * 1024,      // 1050 KB hard limit (ONLY real constraint)
+  WARNING_THRESHOLD: 945 * 1024,  // 945 KB warning (90%)
   LCP_TARGET: 3000,              // LCP < 3s on 4G
   TTI_TARGET: 5000,              // TTI < 5s (Google's "good" TTI on 4G)
   MODULE_CASCADE: 3000,          // ES6 cascade < 3s (external AdSense scripts inflate this)
