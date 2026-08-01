@@ -413,6 +413,15 @@ class Renderer {
   }
 
   /**
+   * Publieke alias voor _formatText — gebruikt door box-reflow.js om
+   * herbouwde boxregels door dezelfde marker-formattering te halen
+   * (→/[✓]-spans, HTML-escaping) als de oorspronkelijke render.
+   */
+  formatText(text) {
+    return this._formatText(text);
+  }
+
+  /**
    * Format text with special markers
    * @private
    */

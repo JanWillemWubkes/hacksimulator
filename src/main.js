@@ -11,6 +11,7 @@ import legalManager from './ui/legal.js';
 import onboardingManager from './ui/onboarding.js';
 import feedbackManager from './ui/feedback.js';
 import tutorialGestures from './ui/tutorial-gestures.js';
+import { initBoxReflow } from './ui/box-reflow.js';
 import persistence from './filesystem/persistence.js';
 import { initTerminalNavbar } from './components/navbar-terminal.js';
 import analyticsTracker from './analytics/tracker.js';
@@ -260,6 +261,9 @@ function initialize() {
 
     // Initialize tutorial gesture handler (long-press hint, mobile only-relevant)
     tutorialGestures.init(terminal);
+
+    // Reflow bestaande ASCII-boxen bij venster-resize (shrink-only)
+    initBoxReflow(outputElement);
 
     // Initialize navigation menu
     initializeNavigation();

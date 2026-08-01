@@ -316,8 +316,9 @@ test.describe('Tussenliggende breedtes - box-randen wrappen niet', () => {
       await executeCommand(page, 'help');
       await executeCommand(page, 'shortcuts');
 
-      // Boxen renderen ná de vulling: bestaande output reflowt bewust niet
-      // bij resize (net als een echte terminal), dus meet alleen verse output.
+      // Boxen renderen ná de vulling zodat de scrollbar er al staat. (Bestaande
+      // output wordt sinds Sessie 205 bovendien shrink-only ge-reflowd bij een
+      // live resize — zie de 'Live resize reflow'-describe hieronder.)
       await executeCommand(page, 'next');      // handgerolde box + ←-glosses
       await executeCommand(page, 'man nmap');  // boxHeader met heavy glyphs (━)
       await executeCommand(page, 'help');      // lightBox (─)
@@ -327,6 +328,74 @@ test.describe('Tussenliggende breedtes - box-randen wrappen niet', () => {
       expect(wrapped).toEqual([]);
     });
   }
+});
+
+// ─────────────────────────────────────────────────
+// Live resize reflow (Sessie 205)
+// ─────────────────────────────────────────────────
+
+test.describe('Live resize reflow', () => {
+  test('bestaande boxen reflowen mee bij venster-versmalling', async ({ page }) => {
+    const pageErrors = [];
+    page.on('pageerror', (e) => pageErrors.push(String(e)));
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') pageErrors.push(msg.text());
+    });
+
+    await page.setViewportSize({ width: 1240, height: 900 });
+    await page.goto('/terminal.html');
+    await acceptLegalModal(page);
+    await closeMobileMenu(page);
+
+    // Render de drie box-varianten op volle breedte (~106 chars @ 1240)
+    await executeCommand(page, 'metasploit'); // heavy SECURITY WARNING (┏━┓)
+    await executeCommand(page, 'next');       // handgerolde box + dividers (╭├┤╯)
+    await executeCommand(page, 'man nmap');   // boxHeader (top+bottom, 0 content)
+    await executeCommand(page, 'help');       // lightBox + categorie-tabellen
+
+    // Expliciet onderaan beginnen (de auto-scroll doet dit al, maar de
+    // pin-assertie hieronder moet niet van timing afhangen).
+    await page.evaluate(() => {
+      const o = document.getElementById('terminal-output');
+      o.scrollTo({ top: o.scrollHeight, behavior: 'instant' });
+    });
+    await page.waitForTimeout(300);
+
+    // Het Heisenberg-scenario: venster live versmallen — óók onder de
+    // 768px-grens (640): een half-gesnapt desktopvenster valt daar onder,
+    // dus reflow mag daar niet op een mobiel-guard stranden.
+    for (const width of [900, 700, 640]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.waitForTimeout(700); // reflow-debounce (250ms) + marge
+
+      const { boxLineCount, wrapped } = await measureBoxLineWraps(page);
+      expect(boxLineCount, `boxLineCount @ ${width}px`).toBeGreaterThan(0);
+      expect(wrapped, `gewrapte boxregels @ ${width}px`).toEqual([]);
+
+      // De gebruiker stond onderaan en moet daar blijven: de reflow maakt de
+      // content hoger, dus zonder re-pin springt zijn kijkpositie weg. Bewaakt
+      // tevens de aanname dat scroll-events tijdens een resize genegeerd worden
+      // (browser-eigen correcties) — volgorde scroll/resize verschilt per engine.
+      const gepind = await page.evaluate(() => {
+        const o = document.getElementById('terminal-output');
+        return o.scrollTop + o.clientHeight >= o.scrollHeight - 40;
+      });
+      expect(gepind, `scroll blijft onderaan gepind @ ${width}px`).toBe(true);
+    }
+
+    // Groei-pad: terug naar breed — geen errors; oude boxen blijven smal
+    // maar intact (shrink-only), een vers command rendert wél op volle breedte.
+    await page.setViewportSize({ width: 1240, height: 900 });
+    await page.waitForTimeout(700);
+    const afterGrow = await measureBoxLineWraps(page);
+    expect(afterGrow.wrapped).toEqual([]);
+
+    await executeCommand(page, 'help');
+    const fresh = await measureBoxLineWraps(page);
+    expect(fresh.wrapped).toEqual([]);
+
+    expect(pageErrors, 'geen page/console-errors tijdens reflow').toEqual([]);
+  });
 });
 
 // ─────────────────────────────────────────────────
