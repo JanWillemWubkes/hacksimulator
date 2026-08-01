@@ -1,11 +1,12 @@
-# Maandelijks Newsletter Template — MailerLite
+# Maandelijks Newsletter Template — Brevo
 
 **Type:** Regular campaign (maandelijks)
-**Platform:** MailerLite (Account ID: 2228373)
-**Editor:** Custom HTML editor (vereist Advanced plan) of Rich Text editor
+**Platform:** Brevo (migratie van MailerLite: Sessie 165, juni 2026)
+**Editor:** **Import HTML** — NIET de drag-and-drop editor (die sloopt de dark-mode media
+queries en de Outlook-conditionals; zie `brevo-setup-sample-pentest.md`)
 **Verzenddag:** Eerste dinsdag van de maand (beste open rates voor B2C NL)
 **Verzendtijd:** 10:00 CET
-**Subscriber groep:** "Newsletter"
+**Lijst:** `hacksimulator-main`
 
 ---
 
@@ -106,6 +107,21 @@ Je ontvangt deze mail omdat je je hebt aangemeld via hacksimulator.nl.
 [Uitschrijven] · [Privacybeleid] · [Bekijk in browser]
 ```
 
+**Conventie (vastgelegd 01 aug 2026): één footer, in de HTML.** De uitschrijf- en mirror-link
+horen in deze gestileerde footerregel, binnen de donkere kaart — niet in een los Brevo-blok
+eronder. Zo blijft de mail één geheel in het HackSimulator-uiterlijk.
+
+- In de HTML: `<a href="{{ unsubscribe }}">` en `<a href="{{ mirror }}">` (Brevo-syntax,
+  spaties binnen de accolades)
+- In Brevo: géén extra native footer-blok onder de HTML toevoegen. Staat er al één, verwijder
+  hem. Weigert Brevo dat, dan eist hij zijn eigen blok en laat je het staan
+
+**Status 01 aug 2026: beide welkomst-automations volgen deze conventie.** Automation 1
+(`welkomstmail.html`) en automation 2 (`welkomstmail-sample-pentest.html`) hebben allebei de
+uitschrijf- en mirror-link in het HTML-blok staan; het losse Brevo-footerblok is bij beide
+verwijderd en de links zijn na de wijziging getest. De repo-bestanden en Brevo lopen dus
+gelijk — houd dat zo bij een volgende import.
+
 ---
 
 ## Design
@@ -123,15 +139,31 @@ Zelfde stijl als welkomstmail:
 ## Base CSS Block (kopieer naar elke nieuwe email)
 
 Het `<style>` blok in de `<head>` is identiek voor alle emails.
-Kopieer dit blok exact uit de meest recente nieuwsbrief (`nieuwsbrief-april-2026.html`).
+Kopieer dit blok exact uit de meest recente nieuwsbrief (`nieuwsbrief-juli-2026.html`).
 
 Het blok bevat:
-- `@media (prefers-color-scheme: dark)` — dark mode overrides (10 klassen)
-- `u + .body` — Gmail dark mode prevention (10 klassen)
-- `[data-ogsc]` — Outlook.com dark mode overrides (11 klassen)
+- `@media (prefers-color-scheme: dark)` — dark mode overrides (11 klassen)
+- `u + .body` — Gmail dark mode prevention (11 klassen)
+- `[data-ogsc]` — Outlook.com dark mode overrides (12 klassen)
 - `@media (max-width: 600px)` — responsive regels + mobiele header/code block
 
 **Wijzig deze klassen NIET per email.** Ze beschermen de HackSimulator kleuren tegen automatische dark mode inversie door email clients.
+
+### Twee code-klassen, nooit één
+
+- `.code-block` — het blok-codevenster (`<td>`), krijgt op mobiel `padding: 12px 14px`
+- `.code-inline` — een code-chip midden in een zin (`<code>`), krijgt op mobiel `padding: 1px 4px`
+
+Gebruik nooit dezelfde klasse voor beide. Verticale padding vergroot bij een inline element
+de regelhoogte niet, alleen het gekleurde vlak: met de blok-padding wordt een chip 38px hoog
+in een regel van 24px en snijdt hij door de regels erboven en eronder (Sessie 206).
+
+### Donkere tekst op de groene balk/knop
+
+De donkere tekstkleur staat altijd sámen met `background-color:#9fef00` op hetzelfde element
+(zowel inline als in de `.header-text`/`.btn-text` klasseregels). De Gmail-app herschrijft in
+dark mode losse tekstfragmenten zonder eigen achtergrond naar wit — een lokaal kloppend
+kleurenpaar voorkomt dat. Haal die achtergrond er niet af.
 
 ---
 
@@ -148,15 +180,24 @@ Het blok bevat:
 ## Checklist voor verzending
 
 - [ ] Onderwerpregel < 60 tekens
-- [ ] Preview tekst ingevuld (niet standaard MailerLite tekst)
+- [ ] Preview tekst ingevuld (de verborgen preheader-div bovenaan de HTML)
 - [ ] Alle links getest (terminal, blog, cheatsheet)
 - [ ] UTM parameters op alle links (`?utm_source=newsletter&utm_medium=email&utm_campaign=[maand]-[jaar]`)
-- [ ] Mobiel preview gecheckt in MailerLite
-- [ ] Uitschrijflink werkt (`{$unsubscribe}`)
+- [ ] Via **Import HTML** geplaatst, niet via de drag-and-drop editor
+- [ ] Mobiel preview gecheckt in Brevo
+- [ ] Uitschrijflink werkt (`{{ unsubscribe }}`) — echt aanklikken in de test-mail
+- [ ] Eén footer: de gestileerde regel in de HTML, géén los Brevo-blok eronder
 - [ ] Verzendtijd: 10:00 CET, eerste dinsdag
 - [ ] Test-email verstuurd naar eigen adres
+- [ ] Test-email geopend op telefoon in **dark mode** (Gmail-app) — donkere tekst op de
+      groene balk/knop, code-chips binnen hun regel
 
-### MailerLite variabelen
-- Uitschrijven: `{$unsubscribe}`
-- Bekijk in browser: `{$url}`
-- Voornaam: `{$name}` (optioneel)
+### Brevo variabelen
+- Uitschrijven: `{{ unsubscribe }}`
+- Bekijk in browser (mirror): `{{ mirror }}`
+- Voornaam: `{{ contact.FIRSTNAME }}` (optioneel)
+
+Let op de spaties binnen de accolades — dat is Brevo Template Language. De oude
+MailerLite-vorm (`{$unsubscribe}`, `{$url}`) wordt door Brevo **niet** vervangen en blijft
+letterlijk als href staan. De april-2026-nieuwsbrief in deze map draagt die oude syntax nog;
+dat is historisch correct (verstuurd vóór de migratie), geen model om van te kopiëren.
