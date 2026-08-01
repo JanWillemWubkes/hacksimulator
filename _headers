@@ -16,17 +16,26 @@
   Expires: 0
 
 # =============================================================================
-# CSS/JS: 1-week cache + versioning via ?v= query params
-# Netlify also invalidates CDN cache on each deploy
+# CSS/JS: 1-uurs cache + versioning via ?v= query params (Sessie 78-strategie)
+# Netlify also invalidates CDN cache on each deploy.
+#
+# LET OP (Sessie 205): alleen entry-points (main.css, main.js) dragen een ?v=;
+# de ~99 modules die main.js relatief importeert (renderer.js, box-utils.js, …)
+# hebben géén versie-query. Met een lange max-age blijven die na een deploy uit
+# browsercache komen — die is 'fresh', dus must-revalidate grijpt pas ná afloop.
+# Resultaat: een verse main.js naast oude submodules = cross-module-mismatch
+# (concreet: box-reflow.js riep een renderer-methode aan die in de gecachete
+# renderer.js nog niet bestond). 1 uur houdt deploys binnen bereik zonder per
+# page-load ~99 revalidaties uit te lokken.
 # =============================================================================
 /styles/*.css
-  Cache-Control: public, max-age=604800, must-revalidate
+  Cache-Control: public, max-age=3600, must-revalidate
 
 /src/*.js
-  Cache-Control: public, max-age=604800, must-revalidate
+  Cache-Control: public, max-age=3600, must-revalidate
 
 /src/**/*.js
-  Cache-Control: public, max-age=604800, must-revalidate
+  Cache-Control: public, max-age=3600, must-revalidate
 
 # =============================================================================
 # Assets: Long cache (images, fonts)

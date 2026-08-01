@@ -66,7 +66,11 @@ function parseBlocks(container) {
 }
 
 function setLine(el, text) {
-  el.innerHTML = renderer.formatText(text);
+  // Fallback op de private variant: bij een deploy kan de browser nog een
+  // gecachete renderer.js zonder de publieke alias serveren (submodules worden
+  // relatief geïmporteerd, dus de ?v=-bump op main.js bust ze niet).
+  const format = renderer.formatText || renderer._formatText;
+  el.innerHTML = format.call(renderer, text);
 }
 
 /** Herbouw één blok op de gegeven totale breedte (borders inbegrepen). */
