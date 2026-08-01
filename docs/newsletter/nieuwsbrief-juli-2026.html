@@ -20,34 +20,37 @@
   .body-bg { background-color: #0d1117 !important; }
   .content-bg { background-color: #161b22 !important; }
   .header-bg { background-color: #9fef00 !important; }
-  .header-text { color: #0d1117 !important; }
+  .header-text { background-color: #9fef00 !important; color: #0d1117 !important; }
   .heading-text { color: #c9d1d9 !important; }
   .body-text { color: #8b949e !important; }
   .link-text { color: #79c0ff !important; }
-  .code-bg { background-color: #0d1117 !important; color: #9fef00 !important; }
+  .code-block { background-color: #0d1117 !important; color: #9fef00 !important; }
+  .code-inline { background-color: #0d1117 !important; color: #9fef00 !important; }
   .btn-bg { background-color: #9fef00 !important; }
-  .btn-text { color: #0d1117 !important; }
+  .btn-text { background-color: #9fef00 !important; color: #0d1117 !important; }
 }
 /* Gmail dark mode prevention */
 u + .body { background-color: #0d1117 !important; }
 u + .body .header-bg { background-color: #9fef00 !important; }
-u + .body .header-text { color: #0d1117 !important; }
+u + .body .header-text { background-color: #9fef00 !important; color: #0d1117 !important; }
 u + .body .btn-bg { background-color: #9fef00 !important; }
-u + .body .btn-text { color: #0d1117 !important; }
+u + .body .btn-text { background-color: #9fef00 !important; color: #0d1117 !important; }
 u + .body .content-bg { background-color: #161b22 !important; }
 u + .body .heading-text { color: #c9d1d9 !important; }
 u + .body .body-text { color: #8b949e !important; }
 u + .body .link-text { color: #79c0ff !important; }
-u + .body .code-bg { background-color: #0d1117 !important; color: #9fef00 !important; }
+u + .body .code-block { background-color: #0d1117 !important; color: #9fef00 !important; }
+u + .body .code-inline { background-color: #0d1117 !important; color: #9fef00 !important; }
 /* Outlook.com / dark mode overrides */
 [data-ogsc] .heading-text { color: #c9d1d9 !important; }
 [data-ogsc] .body-text { color: #8b949e !important; }
 [data-ogsc] .header-bg { background-color: #9fef00 !important; }
-[data-ogsc] .header-text { color: #0d1117 !important; }
+[data-ogsc] .header-text { background-color: #9fef00 !important; color: #0d1117 !important; }
 [data-ogsc] .btn-bg { background-color: #9fef00 !important; }
-[data-ogsc] .btn-text { color: #0d1117 !important; }
+[data-ogsc] .btn-text { background-color: #9fef00 !important; color: #0d1117 !important; }
 [data-ogsc] .link-text { color: #79c0ff !important; }
-[data-ogsc] .code-bg { background-color: #0d1117 !important; color: #9fef00 !important; }
+[data-ogsc] .code-block { background-color: #0d1117 !important; color: #9fef00 !important; }
+[data-ogsc] .code-inline { background-color: #0d1117 !important; color: #9fef00 !important; }
 [data-ogsc] .content-bg { background-color: #161b22 !important; }
 /* Responsive: betere mobiele weergave */
 @media screen and (max-width: 600px) {
@@ -57,7 +60,8 @@ u + .body .code-bg { background-color: #0d1117 !important; color: #9fef00 !impor
   h2 span { font-size: 16px !important; }
   .btn-bg { padding: 14px 24px !important; }
   .mobile-header { padding: 16px 16px !important; }
-  .code-bg { font-size: 12px !important; padding: 12px 14px !important; }
+  .code-block { font-size: 12px !important; padding: 12px 14px !important; }
+  .code-inline { font-size: 13px !important; padding: 1px 4px !important; }
   .tip-title span { font-size: 20px !important; }
 }
 </style>
@@ -76,9 +80,9 @@ Waarom een gestolen database met "versleutelde" wachtwoorden soms binnen seconde
 <!-- Terminal Header Bar -->
 <tr><td class="header-bg mobile-header" style="background-color:#9fef00;padding:20px 32px;">
 <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:13px;line-height:1.8;">
-<span class="header-text" style="color:#0d1117;">$ cat nieuwsbrief-juli-2026.txt</span><br>
-<span class="header-text" style="color:#0d1117;">&gt; Loading...</span><br>
-<span class="header-text" style="color:#0d1117;">&gt; <strong>Nieuwsbrief geladen.</strong> Veel leesplezier!</span>
+<span class="header-text" style="background-color:#9fef00;color:#0d1117;">$ cat nieuwsbrief-juli-2026.txt</span><br>
+<span class="header-text" style="background-color:#9fef00;color:#0d1117;">&gt; Loading...</span><br>
+<span class="header-text" style="background-color:#9fef00;color:#0d1117;">&gt; <strong>Nieuwsbrief geladen.</strong> Veel leesplezier!</span>
 </p>
 </td></tr>
 
@@ -102,7 +106,7 @@ Waarom een gestolen database met "versleutelde" wachtwoorden soms binnen seconde
 <span class="heading-text" style="color:#c9d1d9;">Hoe kraakt een hacker een wachtwoord?</span>
 </h2>
 <p style="margin:0 0 16px 0;font-family:'Courier New',Courier,monospace;font-size:15px;line-height:1.6;">
-<span class="body-text" style="color:#8b949e;">Een goed gebouwde website slaat je wachtwoord nooit letterlijk op. In plaats daarvan bewaart hij een <strong>hash</strong>: een onomkeerbaar rekenresultaat. "password" wordt bijvoorbeeld altijd </span><code class="code-bg" style="background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;">5f4dcc3b...cf99</code><span class="body-text" style="color:#8b949e;">. Je kunt daar niet uit terugrekenen wat het wachtwoord was.</span>
+<span class="body-text" style="color:#8b949e;">Een goed gebouwde website slaat je wachtwoord nooit letterlijk op. In plaats daarvan bewaart hij een <strong>hash</strong>: een onomkeerbaar rekenresultaat. "password" wordt bijvoorbeeld altijd </span><code class="code-inline" style="background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;">5f4dcc3b...cf99</code><span class="body-text" style="color:#8b949e;">. Je kunt daar niet uit terugrekenen wat het wachtwoord was.</span>
 </p>
 
 <p style="margin:0 0 16px 0;font-family:'Courier New',Courier,monospace;font-size:15px;line-height:1.6;">
@@ -111,7 +115,7 @@ Waarom een gestolen database met "versleutelde" wachtwoorden soms binnen seconde
 
 <!-- Code Block -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px 0;">
-<tr><td class="code-bg" style="background-color:#0d1117;color:#9fef00;padding:16px 20px;border-radius:6px;font-family:'Courier New',Courier,monospace;font-size:13px;line-height:1.8;word-break:break-all;overflow-wrap:break-word;">
+<tr><td class="code-block" style="background-color:#0d1117;color:#9fef00;padding:16px 20px;border-radius:6px;font-family:'Courier New',Courier,monospace;font-size:13px;line-height:1.8;word-break:break-all;overflow-wrap:break-word;">
 $ hashcat -m 0 hashes.txt wordlist.txt<br>
 <br>
 5f4dcc3b...cf99:password<br>
@@ -132,7 +136,7 @@ Time.....: 4 seconden
 </p>
 
 <p style="margin:0 0 24px 0;font-family:'Courier New',Courier,monospace;font-size:15px;line-height:1.6;">
-<span class="body-text" style="color:#8b949e;"><strong>Probeer het zelf:</strong> Open de simulator en typ </span><code class="code-bg" style="background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;">hashcat</code><span class="body-text" style="color:#8b949e;">. Je ziet stap voor stap hoe het kraken werkt &mdash; veilig, in een oefenomgeving, zonder echte data.</span>
+<span class="body-text" style="color:#8b949e;"><strong>Probeer het zelf:</strong> Open de simulator en typ </span><code class="code-inline" style="background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;">hashcat</code><span class="body-text" style="color:#8b949e;">. Je ziet stap voor stap hoe het kraken werkt &mdash; veilig, in een oefenomgeving, zonder echte data.</span>
 </p>
 
 <!-- CTA Button -->
@@ -146,7 +150,7 @@ Time.....: 4 seconden
 <![endif]-->
 <!--[if !mso]><!-->
 <a href="https://hacksimulator.nl/terminal.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=juli-2026" target="_blank" class="btn-bg" style="display:inline-block;background-color:#9fef00;font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:bold;text-decoration:none;text-align:center;padding:14px 32px;border-radius:6px;">
-<span class="btn-text" style="color:#0d1117;">Open de simulator →</span>
+<span class="btn-text" style="background-color:#9fef00;color:#0d1117;">Open de simulator →</span>
 </a>
 <!--<![endif]-->
 </td></tr>
@@ -188,7 +192,7 @@ Time.....: 4 seconden
 <![endif]-->
 <!--[if !mso]><!-->
 <a href="https://hacksimulator.nl/sample-pentest.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=juli-2026" target="_blank" class="btn-bg" style="display:inline-block;background-color:#9fef00;font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:bold;text-decoration:none;text-align:center;padding:14px 32px;border-radius:6px;">
-<span class="btn-text" style="color:#0d1117;">Download gratis sample →</span>
+<span class="btn-text" style="background-color:#9fef00;color:#0d1117;">Download gratis sample →</span>
 </a>
 <!--<![endif]-->
 </td></tr>

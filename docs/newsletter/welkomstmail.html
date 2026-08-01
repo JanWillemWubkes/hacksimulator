@@ -20,20 +20,20 @@
   .body-bg { background-color: #0d1117 !important; }
   .content-bg { background-color: #161b22 !important; }
   .header-bg { background-color: #9fef00 !important; }
-  .header-text { color: #0d1117 !important; }
+  .header-text { background-color: #9fef00 !important; color: #0d1117 !important; }
   .heading-text { color: #c9d1d9 !important; }
   .body-text { color: #8b949e !important; }
   .link-text { color: #79c0ff !important; }
   .code-inline { background-color: #0d1117 !important; color: #9fef00 !important; }
   .btn-bg { background-color: #9fef00 !important; }
-  .btn-text { color: #0d1117 !important; }
+  .btn-text { background-color: #9fef00 !important; color: #0d1117 !important; }
 }
 /* Gmail dark mode prevention */
 u + .body { background-color: #0d1117 !important; }
 u + .body .header-bg { background-color: #9fef00 !important; }
-u + .body .header-text { color: #0d1117 !important; }
+u + .body .header-text { background-color: #9fef00 !important; color: #0d1117 !important; }
 u + .body .btn-bg { background-color: #9fef00 !important; }
-u + .body .btn-text { color: #0d1117 !important; }
+u + .body .btn-text { background-color: #9fef00 !important; color: #0d1117 !important; }
 u + .body .content-bg { background-color: #161b22 !important; }
 u + .body .heading-text { color: #c9d1d9 !important; }
 u + .body .body-text { color: #8b949e !important; }
@@ -43,9 +43,9 @@ u + .body .code-inline { background-color: #0d1117 !important; color: #9fef00 !i
 [data-ogsc] .heading-text { color: #c9d1d9 !important; }
 [data-ogsc] .body-text { color: #8b949e !important; }
 [data-ogsc] .header-bg { background-color: #9fef00 !important; }
-[data-ogsc] .header-text { color: #0d1117 !important; }
+[data-ogsc] .header-text { background-color: #9fef00 !important; color: #0d1117 !important; }
 [data-ogsc] .btn-bg { background-color: #9fef00 !important; }
-[data-ogsc] .btn-text { color: #0d1117 !important; }
+[data-ogsc] .btn-text { background-color: #9fef00 !important; color: #0d1117 !important; }
 [data-ogsc] .link-text { color: #79c0ff !important; }
 [data-ogsc] .code-inline { background-color: #0d1117 !important; color: #9fef00 !important; }
 [data-ogsc] .content-bg { background-color: #161b22 !important; }
@@ -75,9 +75,9 @@ Je hebt je aangemeld voor gratis cybersecurity tips. Dit is wat je kunt verwacht
 <!-- Terminal Header Bar -->
 <tr><td class="header-bg mobile-header" style="background-color:#9fef00;padding:20px 32px;">
 <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:13px;line-height:1.8;">
-<span class="header-text" style="color:#0d1117;">$ ./welkom.sh</span><br>
-<span class="header-text" style="color:#0d1117;">&gt; Verbinden met HackSimulator.nl...</span><br>
-<span class="header-text" style="color:#0d1117;">&gt; <strong>Verbinding succesvol.</strong> Welkom, hacker.</span>
+<span class="header-text" style="background-color:#9fef00;color:#0d1117;">$ ./welkom.sh</span><br>
+<span class="header-text" style="background-color:#9fef00;color:#0d1117;">&gt; Verbinden met HackSimulator.nl...</span><br>
+<span class="header-text" style="background-color:#9fef00;color:#0d1117;">&gt; <strong>Verbinding succesvol.</strong> Welkom, hacker.</span>
 </p>
 </td></tr>
 
@@ -119,7 +119,7 @@ Je hebt je aangemeld voor gratis cybersecurity tips. Dit is wat je kunt verwacht
 <![endif]-->
 <!--[if !mso]><!-->
 <a href="https://hacksimulator.nl/terminal.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=welcome" target="_blank" class="btn-bg" style="display:inline-block;background-color:#9fef00;font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:bold;text-decoration:none;text-align:center;padding:14px 32px;border-radius:6px;">
-<span class="btn-text" style="color:#0d1117;">Start de simulator →</span>
+<span class="btn-text" style="background-color:#9fef00;color:#0d1117;">Start de simulator →</span>
 </a>
 <!--<![endif]-->
 </td></tr>
@@ -155,7 +155,7 @@ Je hebt je aangemeld voor gratis cybersecurity tips. Dit is wat je kunt verwacht
 <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:13px;line-height:1.6;text-align:center;">
 <strong><span class="heading-text" style="color:#c9d1d9;">HackSimulator.nl</span></strong> <span class="body-text" style="color:#8b949e;">— Leer ethisch hacken in je browser</span><br><br>
 <span class="body-text" style="color:#8b949e;">Je ontvangt deze mail omdat je je hebt aangemeld via hacksimulator.nl.</span><br>
-<a href="{$unsubscribe}" class="link-text" style="color:#79c0ff;text-decoration:none;">Uitschrijven</a> <span class="body-text" style="color:#8b949e;">&middot;</span> <a href="https://hacksimulator.nl/privacy.html" class="link-text" style="color:#79c0ff;text-decoration:none;">Privacybeleid</a> <span class="body-text" style="color:#8b949e;">&middot;</span> <a href="{$url}" class="link-text" style="color:#79c0ff;text-decoration:none;">Bekijk in browser</a>
+<a href="{{ unsubscribe }}" class="link-text" style="color:#79c0ff;text-decoration:none;">Uitschrijven</a> <span class="body-text" style="color:#8b949e;">&middot;</span> <a href="https://hacksimulator.nl/privacy.html" class="link-text" style="color:#79c0ff;text-decoration:none;">Privacybeleid</a> <span class="body-text" style="color:#8b949e;">&middot;</span> <a href="{{ mirror }}" class="link-text" style="color:#79c0ff;text-decoration:none;">Bekijk in browser</a>
 </p>
 </td></tr>
 
