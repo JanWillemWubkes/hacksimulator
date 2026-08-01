@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 204)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 205)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,19 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 205: Box-reflow bij venster-resize + submodule-cache-val (01 aug 2026)
+⚠️ **Never:**
+- Een submodule-fix verifiëren tegen een warme browser — `?v=` zit alléén op de entry-points (`main.js`/`main.css`); de ~99 relatief geïmporteerde modules dragen er géén, dus een entry-bump bust ze niet en `must-revalidate` grijpt pas ná `max-age`. Dit kostte 3 valse diagnoses (fix stond op schijf, browser draaide oud) én verklaarde waarom de Sessie 204-fixes terugkerende bezoekers nooit bereikten (gemeten: gecachete `box-utils` 41 chars vs server 62). Verifieer met een **no-store server** of `import('…?cb='+Date.now())`.
+- Een `isMobileView()`-guard gebruiken om "desktop-only" gedrag af te bakenen — een half-gesnapt desktopvenster is 683/720px en valt ónder de 768-drempel, precies het gemelde scenario. Laat de datavorm de guard zijn (hier: de aanwezigheid van box-blokken; mobiel rendert borderless → parser vindt niets → no-op).
+- Defensieve heuristiek toevoegen zonder te bewijzen dát je 'm nodig hebt — mijn layout-wijziging-detectie bleek bij gericht uittesten overbodig (de `resizing`-vlag volstond in Chromium/Firefox/WebKit) en is geschrapt. Simpelste versie die werkt + een test die de aanname bewaakt ≫ permanente defensieve code.
+- `wordWrap()` op inhoud met inspringing loslaten — `split(' ')` eet leidende spaties, óók op part 0. Indent apart bewaren en elke part her-prefixen, zoals alle box-producers zelf al doen.
+
+✅ **Always:**
+- Reproduceer het gemelde scenario mét de oude code vóór je claimt dat je het oploste — het screenshot-scenario gaf 69 boxregels / 69 wraps op productie, en 0 wraps met de reflow. Daarmee was hard te beantwoorden dat dit géén dubbel werk was: Sessie 204 gaat over verse render, dit over reflow van bestaande output (disjunct). Bijvangst: de 204-fix maakte het symptoom zichtbaarder, want de oude Inter-mismeting maakte boxen ~35% te smal = toevallige speling.
+- "Live geverifieerd" moet het hele afhankelijkheidsoppervlak dekken, niet alleen het gewijzigde artefact — Sessie 204 checkte het font (CSS-entry mét `?v=` = vers) maar niet de JS-modules (stale). Halve verificatie leest als volledige.
+- Bij DOM-mutatie naast lopende animaties: muteer alleen child-regels, nooit de wrapper (`_revealCelebration` houdt referenties + opacity-state op `.terminal-completion-*`), en herstel scroll met `behavior:'instant'` — `animations.css` zet `scroll-behavior:smooth` op `#terminal-output`, wat elke `scrollTop`-toewijzing in een animatie van honderden ms verandert (vertroebelt ook je metingen).
+- Een "by design"-verklaring is een productkeuze, geen technische — Sessie 204 verklaarde niet-reflowen tot echte-terminal-gedrag; verdedigbaar, maar in een browser-leeromgeving weegt leesbaarheid bij venstermanipulatie zwaarder. Zulke keuzes horen bij Heisenberg ([[feedback_expert_decisions]] geldt voor techniek, niet voor scope).
+
 ### Sessie 204: Box-omlijning brak op tussenbreedtes — corrupte box-font + meetfouten (31 jul 2026)
 ⚠️ **Never:**
 - `document.fonts.check()` als bewijs dat een font laadt — geeft true óók bij `FontFace.status === 'error'` (gemeten); zo bleef de corrupte inline 'JetBrains Mono Box'-embed **120 sessies** (sinds Sessie 83) onzichtbaar terwijl alle box-glyphs via OS-fallbacks met afwijkende advances renderden. Assert `fonts.load(...)` + `status === 'loaded'`.
@@ -147,20 +160,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Een interne inconsistentie tussen sibling-commands sluiten, niet één kant willekeurig kiezen — `cp.js` "De bronbestand" week af van `mv.js` "Het bronbestand" (onzijdig correct); de bestaande correcte kant is de norm.
 - De diff tegen de intentie houden — `git diff` toonde exact 5 regels in/uit, precies de 4 doelen, met de bewust-ontziene code-comment (`:53`) en slecht-geval-regels ongemoeid; geen collateral.
 
-### Sessie 199: Marketing-launch uitvoeren — verse launch-week-post + launch-beslissing (22-26 jul 2026)
-⚠️ **Never:**
-- Een blogpost toevoegen zonder de afgeleide administratie mee te bewegen — filesystem-ground-truth-validatie trekt automatisch 4 checks uit sync: blog-count in de TASKS-tabel (6b), RSS-item-count == `blog/*.html` minus index (9b), sitemap `lastmod >= datePublished` (9a) en bundle blog KB ±5% (5). Drift-bestendig = nieuwe content valt nooit stil buiten beeld, maar je moet tabel/feed/sitemap/marker expliciet bijwerken.
-- Een verse post future-daten op de launch-dag — live zetten op 22 jul met `datePublished` 29 jul = Google wantrouwt future-dated artikelen + botst met de "nooit datums faken"-discipline. De echte deploy-dag (22 jul) is eerlijk én op de launch (29 jul) veruit de verste post = precies de freshness die het runbook wil.
-- Een juridische strafmaat zelf verzinnen — `metasploit.js` noemt "6 jaar" (warning) + "Federal Computer Fraud Act, 10 jaar" (US, manPage), beide ongeschikt voor NL-blogcopy. De 8 bestaande posts citeren art. 138ab Sr zónder getal; die framing mirroren ([[feedback_verify_claims_against_artifact]]).
-- Een weekdag/datum uit het hoofd claimen — ik noemde "wo 23 jul (morgen)" terwijl 22 jul zélf woensdag was. Altijd `date -d YYYY-MM-DD +%A` vóór een planning ([[feedback_verify_calendar_dates]]).
-
-✅ **Always:**
-- De niet-datumgevoelige cornerstone-waarde nu doen, de rest voor launch-dag — interne links naar de nieuwe post vanaf posts die 'm natuurlijk noemen (cybersecurity-tools had al een Metasploit-sectie; nmap = recon→exploitation) geeft meteen SEO-winst; de bredere Fase-2 date-align blijft Heisenberg's launch-dag-taak. Twee posten getoucht met eerlijke datums i.p.v. de hele set forceren ([[feedback_proportional_effort_hobby]]).
-- Een gepoorte beslissing als afwijking loggen, niet wegredeneren — demand-validatie (#44) bewust overgeslagen op Heisenberg's keuze; in TASKS.md gemarkeerd als expliciete afwijking (launch-data vervangt het validatiesignaal) i.p.v. de poort stil te laten vallen ([[feedback_preserve_plan_gates]]).
-- Stappen die de gebruiker moet uitvoeren horen in een blijvend repo-bestand — het plan in `~/.claude/plans/` is sessie-scoped en kan opschonen; NEW `docs/launch-checklist.md` is de duurzame single-source (Heisenberg vroeg letterlijk "hoe vind ik de stappen terug?").
-- Een nieuwe blogpost modelleren op een bestaande (nmap) — erft automatisch alle conventies (JSON-LD Organization-auteur, breadcrumbs + BreadcrumbList, consent-model-CTA's, blauw palet, div-balans) → validate-blogs 15/15 in één keer. Volledig: `docs/sessions/current.md` Sessie 199.
-
-**Rotation:** Top-6 huidig: 199-200-201-202-203-204 (Sessie 198 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 200 UITGEVOERD:** current.md staart Sessie 185-189 geknipt naar `archive-s185-s189.md` (5 entries, 179 regels); current.md houdt nu het rolling window 190-200 (11 entries; volgende bulk-rotatie Sessie 205 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-184 → `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 200-201-202-203-204-205 (Sessie 199 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 205 UITGEVOERD:** current.md staart Sessie 190-194 geknipt naar `archive-s190-s194.md` (5 entries); current.md houdt nu het rolling window 195-205 (11 entries; volgende bulk-rotatie Sessie 210 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-184 → `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -209,7 +209,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 204
+**Sessie counter:** 205
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -263,6 +263,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 31 jul 2026 (Sessie 204 — Box-omlijning brak op tussenbreedtes: root-cause = corrupte inline 'JetBrains Mono Box'-embed (FontFace 'error' sinds Sessie 83) + asciiBox width+2-contract + Inter-mismeting op verkeerd element; commit `418d0da`, gepusht + font live 'loaded' geverifieerd. Volledig: `docs/sessions/current.md`)
-**Version:** 5.78 (Sessie 204 — box-omlijning root-cause fix: font-herembed + contract-unificatie + meting op #terminal-output + scrollbar-gutter + echte wrap-detector in e2e; 1 commit `418d0da` gepusht + live; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 01 aug 2026 (Sessie 205 — Box-reflow bij venster-resize (NEW `src/ui/box-reflow.js`, shrink-only, geen mobiel-guard) + structurele submodule-cache-fix: `_headers` 7 dagen → 1 uur want `?v=` bust alleen entry-points, waardoor de Sessie 204-fixes terugkerende bezoekers nooit bereikten. 3 commits `017d872`/`875399d`/`b02d193`, gepusht + live geverifieerd. Volledig: `docs/sessions/current.md`)
+**Version:** 5.79 (Sessie 205 — box-reflow bij resize + submodule-cache-val gefixt (`max-age=3600` + `_formatText`-fallback + rules-notitie); 276 boxregels @640px = 0 wraps, suite 243 passed, reflow-test groen op 3 engines; volledige historie: `docs/sessions/current.md` + TASKS.md)
 

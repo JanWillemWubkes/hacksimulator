@@ -25,6 +25,13 @@
 
 ---
 
+### [Archief Sessie 190-194](docs/sessions/archive-s190-s194.md) - Full Detail (geroteerd)
+**Sessies:** 194 → 190 (nieuwste-eerst)
+**Period:** 1 - 5 juli 2026
+**Topics:** Tutorial/challenge-completion-UX (laatste output zichtbaar + één heldere "next"-CTA + voltooiingsscherm past in beeld), volledige tutorial-flow-audit (18 fixes A–P in 4 gefaseerde commits), uitgestelde 193-punten (VFS-schema-signature + analytics-guard + [TIP]-marker; 4× document-and-accept)
+
+---
+
 ### [Archief Sessie 185-189](docs/sessions/archive-s185-s189.md) - Full Detail (geroteerd)
 **Sessies:** 189 → 185 (nieuwste-eerst)
 **Period:** 29 - 30 juni 2026
@@ -205,10 +212,11 @@
 
 ---
 
-**Last updated:** 26 juli 2026 (Sessie 200 — bulk-rotatie: 185-189 geroteerd naar `archive-s185-s189.md`, current.md → window 190-200, index gesynct)
+**Last updated:** 01 augustus 2026 (Sessie 205 — bulk-rotatie: 190-194 geroteerd naar `archive-s190-s194.md`, current.md → window 195-205, index gesynct)
 **Next update:** bij volgende `N%5`-rotatie (steady-state per `docs/sessions/README.md`)
 
 **Recent updates:**
+- Sessie 205: Steady-state `N%5`-rotatie — 190-194 (staart) geknipt naar `archive-s190-s194.md` (5 entries), current.md window 195-205 (11 entries)
 - Sessie 200: Steady-state `N%5`-rotatie — 185-189 (staart) geknipt naar `archive-s185-s189.md` (5 entries, 179 regels), current.md window 190-200 (11 entries)
 - Sessie 195: Steady-state `N%5`-rotatie — 180-184 (staart) geknipt naar `archive-s180-s184.md` (5 entries, byte-geverifieerd), current.md window 185-195 (11 entries)
 - Sessie 190: Steady-state `N%5`-rotatie — 175-179 (staart) geknipt naar `archive-s175-s179.md` (5 entries, 182 regels), current.md window 180-190 (11 entries)
