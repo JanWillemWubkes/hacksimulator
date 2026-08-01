@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 205)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 206)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,21 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 206: Nieuwsbrief-mails mobiel — code-chip-overlap + witte tekst op groen (01 aug 2026)
+⚠️ **Never:**
+- Eén klasse geven aan blok-code (`<td>`) en inline code (`<code>`) — verticale padding vergroot bij een *inline* element de regelhoogte niet, alleen het gekleurde vlak. De mobiele blok-regel (`padding:12px 14px`) maakte de chip **38px hoog in een 24px regelbox** = 17px overlap met de buurregels (gemeten @375px). Splits `.code-block`/`.code-inline`; `welkomstmail.html` deed dit al goed, juli en april waren erop achtergebleven.
+- Vertrouwen op `!important` of `@media (prefers-color-scheme: dark)` om kleuren in de Gmail-app te beschermen — die app ondersteunt de media query níét (het halve `<style>`-blok is er dood) en herschrijft kleuren ná je CSS. Alleen de inline styles tellen, en zelfs die worden gecorrigeerd als een tekstfragment geen eigen achtergrond heeft.
+- Een gemeten afwijking meteen als bug behandelen — april's chip mat 41px in een 24px regel (leek dezelfde bug), maar `getClientRects()` gaf 2 fragmenten van 17px: hij wrapt over twee regels en `getBoundingClientRect()` geeft de union-box. Overlap 0. Fragmenten tellen vóór je fixt.
+- Adviseren dat je een verzonden Brevo-campagne opnieuw kunt importeren — verzonden campagnes zijn vergrendeld; alléén links, alléén ≤24u, en uitschrijf-/variabele-links zelfs daarbuiten. De mirror-pagina is een momentopname van het verzendmoment. (Ik gaf dit eerst fout; opgezocht en de stap geschrapt.)
+
+✅ **Always:**
+- Meet de baseline op de ónveranderde file vóór je fixt — 38px/17px overlap vooraf maakte "17px/overlap 0" achteraf pas betekenisvol. Zonder baseline weet je niet of je meting de bugklasse überhaupt kán detecteren (rood-op-mutant, [[feedback_verify_claims_against_artifact]]).
+- Cache-buster bij élke na-meting, ook bij een lokale `python3 -m http.server` — de eerste na-meting gaf identiek 38px omdat `td.code-block` niet eens in de DOM bestond. Derde sessie op rij (202/205/206) dat dit toeslaat.
+- Documentatie-opruimen serieus nemen als bug-jacht: de "MailerLite-syntax in de docs"-nit bleek `{$unsubscribe}`/`{$url}` in twee **live** welkomstmails — Brevo vervangt die niet, dus dode links. Correcte vorm `{{ unsubscribe }}`/`{{ mirror }}` opgezocht in de Brevo-docs, niet uit het hoofd ([[feedback_validate_tooling_assumptions]]).
+- Sluit de regressieketen, niet alleen het symptoom — `maandelijks-template.md` droeg je op het CSS-blok uit april te kopiëren, precies het bestand met de bug; zonder die pointer-fix erft elke volgende editie hem opnieuw.
+- Wees expliciet over wat je níét kunt bewijzen — issue 2 was hard meetbaar, issue 1 draait op Heisenberg's telefoon. Als mitigatie benoemd mét plan B (donkere balk + groene tekst), niet als "gefixt" geclaimd.
+- Archief-bestanden niet gladstrijken: april houdt de MailerLite-syntax (verstuurd vóór de migratie, Sessie 165) met een notitie dat het geen kopieermodel is. Historie corrigeren maakt een archief onbetrouwbaar.
+
 ### Sessie 205: Box-reflow bij venster-resize + submodule-cache-val (01 aug 2026)
 ⚠️ **Never:**
 - Een submodule-fix verifiëren tegen een warme browser — `?v=` zit alléén op de entry-points (`main.js`/`main.css`); de ~99 relatief geïmporteerde modules dragen er géén, dus een entry-bump bust ze niet en `must-revalidate` grijpt pas ná `max-age`. Dit kostte 3 valse diagnoses (fix stond op schijf, browser draaide oud) én verklaarde waarom de Sessie 204-fixes terugkerende bezoekers nooit bereikten (gemeten: gecachete `box-utils` 41 chars vs server 62). Verifieer met een **no-store server** of `import('…?cb='+Date.now())`.
@@ -149,18 +164,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - 518 inserts / 518 deletes bij een grote diff = een sterke tell dat het puur tekst-casing is, 0 structuur — precies wat een hoofdletter-pass hoort te produceren.
 - Script > handwerk zodra een taak mechanisch-van-omvang maar oordeelsgevoelig is (~340 koppen, whitelist per kop) — één zorgvuldig script + één centrale diff-review verslaat 340 losse edits, dwingt consistentie af (Nederlandse/Engelse behouden hun hoofdletter terwijl "brute force" klein wordt) en geeft één controlepunt. Mits de review grondig is ([[feedback_proportional_effort_hobby]]).
 
-### Sessie 200: Command-output-audit (item #47) afgerond — Fase 3 triviale correctheid-nits (26 jul 2026)
-⚠️ **Never:**
-- Een string-fix via de volle UI verifiëren als een directe module-import het codepad exact raakt — de typewriter, consent-modal en FocusTrap staan tussen jou en de `execute()`-output. `import()` van de command-module in de browser + een stub (`vfs.copy` die "No such file" gooit) of een passende target (`nmap` op `secure-*` → de 443-only-tak) draait de échte tak zonder ceremonie. Meet het gedrag, niet de scherm-heuristiek ([[reference_renderer_marker_collision]]).
-- Een `replace_all` afvuren zonder de reikwijdte vooraf te bewijzen — een `grep -rn "kopieren" src/` toonde exact 2 treffers, beide in `certificates.js`, dus file-scoped replace-all kon niet over-reachen. Zonder die grep is het een gok.
-- Werk claimen dat een andere context deed — Fase 1+2 + de metasploit-cleanup landden in eerdere same-day commits (`f65c93d`/`0a256ad`/`f56d886`); deze conversatie deed alleen Fase 3. In het sessielog staan de andere fases als committed context, niet als geclaimd werk (protocol: her-leid niet wat de git-historie al vastlegt).
-
-✅ **Always:**
-- Onvertaalde vakterm uniformeren op de glosse die de eigen manPage al gebruikt — `nmap:220` glosst "attack surface mapping" al met "aanvalsoppervlak"; de 2 losse "attack surface"-regels trekken daarheen (onzijdig "minimaal", niet "minimale"). Het slecht-geval ("meer ingangen voor aanvallers", `:162`/`:235`) blijft z'n eigen register houden — niet mee-uniformeren.
-- Een interne inconsistentie tussen sibling-commands sluiten, niet één kant willekeurig kiezen — `cp.js` "De bronbestand" week af van `mv.js` "Het bronbestand" (onzijdig correct); de bestaande correcte kant is de norm.
-- De diff tegen de intentie houden — `git diff` toonde exact 5 regels in/uit, precies de 4 doelen, met de bewust-ontziene code-comment (`:53`) en slecht-geval-regels ongemoeid; geen collateral.
-
-**Rotation:** Top-6 huidig: 200-201-202-203-204-205 (Sessie 199 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 205 UITGEVOERD:** current.md staart Sessie 190-194 geknipt naar `archive-s190-s194.md` (5 entries); current.md houdt nu het rolling window 195-205 (11 entries; volgende bulk-rotatie Sessie 210 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-184 → `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 201-202-203-204-205-206 (Sessie 200 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 205 UITGEVOERD:** current.md staart Sessie 190-194 geknipt naar `archive-s190-s194.md` (5 entries); current.md houdt nu het rolling window 195-206 (12 entries; volgende bulk-rotatie Sessie 210 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-184 → `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -209,7 +213,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 205
+**Sessie counter:** 206
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -263,6 +267,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 01 aug 2026 (Sessie 205 — Box-reflow bij venster-resize (NEW `src/ui/box-reflow.js`, shrink-only, geen mobiel-guard) + structurele submodule-cache-fix: `_headers` 7 dagen → 1 uur want `?v=` bust alleen entry-points, waardoor de Sessie 204-fixes terugkerende bezoekers nooit bereikten. 3 commits `017d872`/`875399d`/`b02d193`, gepusht + live geverifieerd. Volledig: `docs/sessions/current.md`)
-**Version:** 5.79 (Sessie 205 — box-reflow bij resize + submodule-cache-val gefixt (`max-age=3600` + `_formatText`-fallback + rules-notitie); 276 boxregels @640px = 0 wraps, suite 243 passed, reflow-test groen op 3 engines; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 01 aug 2026 (Sessie 206 — nieuwsbrief-/welkomstmails mobiel: `.code-bg` gesplitst in `.code-block`/`.code-inline` (inline padding maakte de chip 38px in een 24px regel = 17px overlap) + `background-color` gekoppeld aan `color` op één element tegen Gmail's dark-mode-herschrijving; bijvangst: MailerLite-syntax in 2 live welkomstmails → Brevo-tags. 2 commits `8045b29`/`14ea6b6`, gepusht. Volledig: `docs/sessions/current.md`)
+**Version:** 5.80 (Sessie 206 — code-chip-overlap + witte tekst op groen in e-mailtemplates gefixt, Brevo-conventies vastgelegd in `maandelijks-template.md`; gemeten @375px 38px→17px / overlap 17→0, desktop ongewijzigd; geen runtime-impact; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
