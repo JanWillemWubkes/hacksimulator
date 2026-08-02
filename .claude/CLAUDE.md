@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 206)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 207)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,23 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 207: Audit oude follow-up-lijstjes → gesnoeid op bezoekerswaarde (02 aug 2026)
+⚠️ **Never:**
+- "De infrastructuur staat er al" gebruiken als reden om een feature te bouwen — `getPhaseStats().percentage` (`leerpad.js:25`) is berekend en nooit gerenderd, wat verleidt tot "even gebruiken". Maar de bezoeker ziet fase-voortgang al in `leerpad` (`[✓] FASE 2 (3/8)` + vinkjes per command) én in `dashboard` ("Volgende: Fase 2 voltooien (3/8)"). Een derde weergave is ruis. **Dode code is geen opdracht.**
+- Een gemeld "gat" aannemen zonder de trigger-frequentie te checken — ik dacht dat fase-viering pull-based was en dus gemist werd, tot bleek dat `next` ná élk nieuw geleerd command wordt aangeboden (`onboarding.js:311`, `:451-460`, `renderer.js:374`). Eén grep bespaarde 4 overbodige badges bovenop de 22 bestaande.
+- Een defect dat je zélf tijdens onderzoek vindt parkeren als "meenemen of laten liggen — beide verdedigbaar". Dat is dezelfde hedge als een option-tree: het schuift een technisch oordeel terug naar Heisenberg. Zijn reactie was direct ("vergeet niet de bug mee te nemen"). Nul zichtbare impact ≠ geen bug — beoordeel op toekomstig risico ([[feedback_expert_decisions]]).
+- Bij een no-op-fix vertrouwen op "screenshots vóór/ná zijn identiek" — dat is óók waar als je niets deed. Alleen de mutant bewijst iets: `--color-border` op rood → navbar/footer wérden rood vóór de fix, en niet meer erná.
+- Alleen de foute cellen fixen in een tabel waarvan élke waarde gedrift is — dat levert een half-ware tabel op die er *geverifieerd* uitziet. Erger dan zowel niets doen als volledig herschrijven.
+- Een og:image @2x renderen als de post `og:image:width/height` 1200/630 draagt — dan liegen die tags. Het cover-script doet wél @2x, maar dat dient een ander doel (merchant listings).
+
+✅ **Always:**
+- Snoei ideeënlijstjes op **wat de bezoeker merkt**, niet op wat af is — van 11 items bleken er 4 klaar, 4 waardeloos en 3 de moeite waard, en 2 van die 3 stonden niet eens op de lijst. Leg verworpen items **mét reden** vast (TASKS.md #52), anders duiken ze over vijf sessies opnieuw op als "openstaand".
+- Bouw een versheids-assert ín de meting — mijn W4-na-meting las de CSSOM-regel uit en zag `var(--color-border)` + de nog-bestaande light-override staan: hard bewijs dat de browser oude CSS serveerde. Zonder die assert had ik "no-op bevestigd" gerapporteerd terwijl er niets geladen was.
+- Gebruik een **echte no-store server** i.p.v. steeds slimmere cache-busters — `import('…tutorial.js?cb=…')` faalde met "does not provide an export named 'downloadCertificate'" omdat `?cb=` de relatief geïmporteerde `certificate.js` niet bust. Vierde sessie op rij (202/205/206/207); `scratchpad/nostore-server.py` maakt er een eenmalig probleem van.
+- Laat een generator uit het artefact lezen i.p.v. uit een kopie — `build-blog-og-images.mjs` haalt titel (`<h1>`) en categorie (`og:article:section`) uit de post zelf, dus er ontstaat géén 8e lockstep-locatie naast de bestaande 7.
+- Nieuwe copy in de lengteband van de bestaande varianten brengen — mijn eerste FASE 4-transitie had skills van 44-57 tekens waar de bestaande 21-37 zijn, en een bridge van 146 tegen ~50. Meten tegen de siblings, niet tegen een absolute limiet.
+- Wees eerlijk over het plafond van een win: og:image is de enige externe-impact-win, maar Google gebruikt het níét in zoekresultaten. De waarde zit in gedeelde links + het feit dat elke volgende post zijn kaart nu gratis erft.
+
 ### Sessie 206: Nieuwsbrief-mails mobiel — code-chip-overlap + witte tekst op groen (01 aug 2026)
 ⚠️ **Never:**
 - Eén klasse geven aan blok-code (`<td>`) en inline code (`<code>`) — verticale padding vergroot bij een *inline* element de regelhoogte niet, alleen het gekleurde vlak. De mobiele blok-regel (`padding:12px 14px`) maakte de chip **38px hoog in een 24px regelbox** = 17px overlap met de buurregels (gemeten @375px). Splits `.code-block`/`.code-inline`; `welkomstmail.html` deed dit al goed, juli en april waren erop achtergebleven.
@@ -151,20 +168,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Beslis als expert i.p.v. optiemenu bij techniek — systemische renderer-reflow-heuristiek verworpen (ASCII-art/code-blokken/authentieke tool-output hebben óók multi-spaties die je niet mag herschikken; Sessie 196: bevries aan de bron, filter niet de output) → gerichte per-output-fixes. Scope-omvang wél aan Heisenberg gevraagd (dat is een product-keuze) ([[feedback_expert_decisions]]).
 - Meet mobiel objectief — Playwright 375px: `overflowCount` via `scrollWidth>clientWidth`, page-scroll via `scrollX`/`bodyScrollW`, box-randuitlijning via `[...new Set(rows.map(r=>r.length))]` (alle regels exact `width+2`). Niet op het oog.
 
-### Sessie 201: Koppen sitebreed naar Nederlands zinskapitaal i.p.v. Engelse Title Case (26 jul 2026)
-⚠️ **Never:**
-- Een heading-regex over de hele file laten lopen zonder `<style>`/`<script>` te maskeren — `woordenlijst.html` heeft letterlijk `<h3>` in een CSS-comment ("de categorie-`<h3>` erachter"); zonder sluit-tag liep `<h[1-4]>.*?</h[1-4]>` door tot de échte `</h1>` en verminkte het style-blok + de JSON-LD. Maskeer literal-blokken eerst; verwerk JSON-LD (`headline`/`name`) met eigen string-patronen. De gevaarlijkste bug zit in de bestandsklasse die je het laatst test (blogs hadden geen inline-`<style>`, dus dit dook pas op de hoofdpagina's op).
-- Een bulk-tekst-transform blind toepassen zonder per-batch dry-run-review — elke batch onthulde een randgeval dat een `sed` had gesloopt: "Nederland"→"nederland" (landennaam mist in whitelist), "IT-kennis"→"it-kennis" (acroniem-in-compound → hyphen-bewust casen), "vs."→valse zin-grens (afkorting-punt), "-sV"→"-sv" (nmap-vlag in `<code>` → code-inhoud letterlijk laten), "5 Essentiële" (getal-first mag volgend woord niet kapitaliseren). Dry-run print + eigen ogen vóór het schrijven.
-- Command-namen als kop kapitaliseren — op `commands/index.html` zijn de koppen de command-namen zelf (`<h2>nmap</h2>`); die tik je letterlijk, dus klein houden. Skip enkel-lowercase-woord-koppen; whitelist commands (pwd/ls/…) als lowercase + nooit-forceren zodat ze ook aan het regelbegin klein blijven.
-- Een titelwijziging in de zichtbare `<h1>` doen zonder de afgeleide cluster — per blog-artikel leeft de titel op 7 plekken (`<title>`, og, twitter, JSON-LD `headline`, breadcrumb `name`, `<h1>`, blog-index-kaart); alleen de `<h1>` fixen laat de gestructureerde data divergeren. Beweeg ze in lockstep (zelfde bronstring → zelfde output).
-
-✅ **Always:**
-- Nederlands zinskapitaal in koppen: 1e woord + eigennamen hoofdletter, de rest klein — óók Engelse vaktermen ("brute force"/"social engineering") tenzij echte eigennaam ([[feedback_dutch_sentence_case_headings]]). Behoud: merken (Metasploit/Nmap/OWASP Top 10), nationaliteitsadjectieven (Nederlandse/Engelse), camelCase-API's (localStorage), acroniemen, officiële namen (OWASP-categorieën, certificeringen). Na `:` klein; na `?`/`!`/`.`-met-spatie nieuwe zin; sectienummer "2.1" kapitaliseert het volgende woord, kardinaal "5 tools" niet.
-- Idempotentie als verificatie van een bulk-transform — tweede pass = 0 wijzigingen bewijst consistentie én dat niets is gemist. Aangevuld met `git diff` collateral-scan (leeg = alleen koppen geraakt), browser-render van de gemelde pagina, en de pre-commit blog-JSON-LD/tag-balans-hook.
-- 518 inserts / 518 deletes bij een grote diff = een sterke tell dat het puur tekst-casing is, 0 structuur — precies wat een hoofdletter-pass hoort te produceren.
-- Script > handwerk zodra een taak mechanisch-van-omvang maar oordeelsgevoelig is (~340 koppen, whitelist per kop) — één zorgvuldig script + één centrale diff-review verslaat 340 losse edits, dwingt consistentie af (Nederlandse/Engelse behouden hun hoofdletter terwijl "brute force" klein wordt) en geeft één controlepunt. Mits de review grondig is ([[feedback_proportional_effort_hobby]]).
-
-**Rotation:** Top-6 huidig: 201-202-203-204-205-206 (Sessie 200 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 205 UITGEVOERD:** current.md staart Sessie 190-194 geknipt naar `archive-s190-s194.md` (5 entries); current.md houdt nu het rolling window 195-206 (12 entries; volgende bulk-rotatie Sessie 210 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-184 → `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 202-203-204-205-206-207 (Sessie 201 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 205 UITGEVOERD:** current.md staart Sessie 190-194 geknipt naar `archive-s190-s194.md` (5 entries); current.md houdt nu het rolling window 195-206 (12 entries; volgende bulk-rotatie Sessie 210 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-184 → `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -213,7 +217,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 206
+**Sessie counter:** 207
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -267,6 +271,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 01 aug 2026 (Sessie 206 — nieuwsbrief-/welkomstmails mobiel: `.code-bg` gesplitst in `.code-block`/`.code-inline` (inline padding maakte de chip 38px in een 24px regel = 17px overlap) + `background-color` gekoppeld aan `color` op één element tegen Gmail's dark-mode-herschrijving; bijvangst: MailerLite-syntax in 2 live welkomstmails → Brevo-tags. 2 commits `8045b29`/`14ea6b6`, gepusht. Volledig: `docs/sessions/current.md`)
-**Version:** 5.80 (Sessie 206 — code-chip-overlap + witte tekst op groen in e-mailtemplates gefixt, Brevo-conventies vastgelegd in `maandelijks-template.md`; gemeten @375px 38px→17px / overlap 17→0, desktop ongewijzigd; geen runtime-impact; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 02 aug 2026 (Sessie 207 — audit van drie oude follow-up-lijstjes, gesnoeid op bezoekerswaarde: 4 al klaar, 4 verworpen mét reden (TASKS.md #52), 4 werkpakketten uitgevoerd — latente border-token-bug (navbar/footer aan het content-token, rood-op-mutant bewees de koppeling) + gedrifte style-guide-sectie, ontbrekende FASE 4-viering, `tutorial cert download`, en 14 eigen og:images via nieuw generatiescript. Volledig: `docs/sessions/current.md`)
+**Version:** 5.81 (Sessie 207 — oude follow-up-lijstjes geauditeerd en gesnoeid op bezoekerswaarde; W4 border-token-bug + gedrifte style-guide, W1 FASE 4-viering, W3 tutorial-cert-download, W2 14 per-post og:images via script; verworpen items met reden in TASKS.md #52; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
