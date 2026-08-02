@@ -75,7 +75,10 @@
   top: 0;
   z-index: var(--z-navbar);
   background: var(--color-bg-navbar);  /* #1a1a1a - Dark Frame Pattern, consistent met terminal */
-  border-bottom: 1px solid var(--color-border);
+  /* Dark-frame-token, NIET --color-border: die is theme-aware en bedient ~90 content-dividers.
+     Beide zijn in dark mode #30363d, dus een verwisseling valt niet op tot iemand de
+     dividerkleur bijstelt — en dan verschuift de chrome stilzwijgend mee (Sessie 207). */
+  border-bottom: 1px solid var(--color-border-dark-frame);
   height: var(--navbar-height);  /* Fixed height for unified navbar (Sessie 98 - was min-height) */
 }
 
@@ -1762,9 +1765,8 @@ html {
 /* ==================== Light Theme Overrides ==================== */
 /* Dark Frame Pattern: Navbar & Footer stay dark in both themes (VS Code, Stripe pattern) */
 
-[data-theme="light"] .landing-nav-wrapper {
-  border-bottom-color: var(--color-border-dark-frame);  /* Lichtere border voor contrast op lichte pagina */
-}
+/* .landing-nav-wrapper heeft hier geen border-override meer nodig: de basisregel gebruikt
+   sinds Sessie 207 zelf --color-border-dark-frame, in beide themes dezelfde waarde. */
 
 /* Cards - Clean White met Subtle Elevation (Stripe/Linear pattern) */
 [data-theme="light"] .trust-bar {

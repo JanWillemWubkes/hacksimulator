@@ -6,7 +6,7 @@
 
 import tutorialManager from '../../tutorial/tutorial-manager.js';
 import challengeManager from '../../gamification/challenge-manager.js';
-import { generateCertificate, copyCertificateToClipboard } from '../../tutorial/certificate.js';
+import { generateCertificate, copyCertificateToClipboard, downloadCertificate } from '../../tutorial/certificate.js';
 import {
   BOX_CHARS,
   getResponsiveBoxWidth,
@@ -132,7 +132,7 @@ export default {
   name: 'tutorial',
   description: 'Begeleide hacking scenario\'s',
   category: 'system',
-  usage: 'tutorial [start <id>|status|skip|exit|cert]',
+  usage: 'tutorial [start <id>|status|skip|exit|cert [download]]',
 
   execute: function(args) {
     var sub = args.length > 0 ? args[0].toLowerCase() : '';
@@ -176,7 +176,9 @@ export default {
     }
 
     // tutorial cert / certificaat — show + copy last completed certificate
+    // tutorial cert download — bewaar 'm als .txt (Sessie 207)
     if (sub === 'cert' || sub === 'certificaat') {
+      var wantsDownload = args.length > 1 && args[1].toLowerCase() === 'download';
       var status = tutorialManager.getStatus();
       var completed = status.completedScenarios;
 
@@ -199,9 +201,14 @@ export default {
       };
 
       var cert = generateCertificate(scenario, stats);
-      var copyMsg = copyCertificateToClipboard(cert);
 
-      return cert + '\n\n' + copyMsg;
+      if (wantsDownload) {
+        return cert + '\n\n' + downloadCertificate(cert, lastId);
+      }
+
+      var copyMsg = copyCertificateToClipboard(cert);
+      return cert + '\n\n' + copyMsg +
+             "\n[TIP] Wil je 'm bewaren? Typ 'tutorial cert download' voor een .txt-bestand.";
     }
 
     // Maybe user typed scenario ID directly: tutorial recon
@@ -213,7 +220,7 @@ export default {
     }
 
     return '[?] Onbekend subcommando: ' + sub + '\n\n' +
-           '[?] Gebruik: tutorial [start <id>|status|skip|exit|cert]\n' +
+           '[?] Gebruik: tutorial [start <id>|status|skip|exit|cert [download]]\n' +
            '[?] Typ \'tutorial\' voor beschikbare scenario\'s.';
   },
 
@@ -229,6 +236,7 @@ export default {
     "    tutorial skip                 Sla huidige stap over\n" +
     "    tutorial exit                 Verlaat tutorial (voortgang opgeslagen)\n" +
     "    tutorial cert                 Toon en kopieer je laatste certificaat\n" +
+    "    tutorial cert download        Bewaar je certificaat als .txt-bestand\n" +
     "    tutorial reset                Reset alle tutorial voortgang (debug)\n" +
     "\n" +
     "BESCHRIJVING\n" +
@@ -276,6 +284,9 @@ export default {
     "\n" +
     "    tutorial skip\n" +
     "        Sla de huidige stap over (je mist de uitleg)\n" +
+    "\n" +
+    "    tutorial cert download\n" +
+    "        Bewaar je laatste certificaat als .txt-bestand\n" +
     "\n" +
     "TIPS\n" +
     "    - Begin met 'tutorial fundamentals' als je nieuw bent\n" +

@@ -361,6 +361,26 @@ var transitions = [
     ],
     nextPhase: 'Geavanceerde Missies',
     bridge: "Reconnaissance gedaan! Tijd voor geavanceerde missies.\n\n[?] Typ 'dashboard' voor je voortgang, 'leerpad' voor een overzicht."
+  },
+  {
+    // Sluitstuk van het leerpad: FASE 4 is de laatste fase van de EXPERT-tier.
+    // Fases 1-3 hadden al een viering, deze ontbrak (Sessie 207).
+    id: 'phase4-challenges',
+    fromLabel: 'FASE 4 VOLTOOID!',
+    summary: 'Security Tools',
+    // Regellengtes bewust in de band van de andere transities (skills ~21-37,
+    // bridge ~46-54): op 375px rendert dit borderless en wrapt de CSS, dus
+    // langere regels ogen hier meteen rommeliger dan bij de vorige fases.
+    skills: [
+      'Wachtwoord-hashes kraken',
+      'Zwakke inloggegevens opsporen',
+      'Webapps scannen op kwetsbaarheden',
+      'Werken met een exploit-framework'
+    ],
+    nextPhase: 'Challenges',
+    // Eén alinea, geen \n\n: wordWrap() splitst op spaties en maakt van een
+    // ingesloten newline geen lege regel maar een raar woord.
+    bridge: 'Het hele leerpad staat op je naam! Bij challenges zoek je het zelf uit.'
   }
 ];
 
@@ -372,6 +392,7 @@ function detectTransition(triedSet) {
   var phase1Done = findNextUntried(phase1Commands, triedSet) === null;
   var phase2Done = findNextUntried(phase2Commands, triedSet) === null;
   var phase3Done = findNextUntried(phase3Commands, triedSet) === null;
+  var phase4Done = findNextUntried(phase4Commands, triedSet) === null;
 
   // Check transitions in ascending order (oldest unshown wins)
   if (phase1Done && !onboarding.hasShownTransition('phase1-phase2')) {
@@ -385,6 +406,9 @@ function detectTransition(triedSet) {
   }
   if (phase3Done && !onboarding.hasShownTransition('phase3-tutorials')) {
     return transitions[3];
+  }
+  if (phase4Done && !onboarding.hasShownTransition('phase4-challenges')) {
+    return transitions[4];
   }
   return null;
 }

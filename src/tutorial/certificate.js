@@ -137,15 +137,24 @@ function getDiscipline(scenarioId) {
 }
 
 /**
+ * Unicode box-drawing → ASCII. Buiten de terminal is er geen box-font, dus in een
+ * .txt of plakvenster zouden de randen als vraagtekens of misalignment landen.
+ * Gedeeld door copy én download (spiegelt generatePlainTextCertificate in
+ * gamification/certificate-generator.js).
+ */
+function toPlainText(certificateText) {
+  return certificateText.replace(/[╭╮╰╯│─├┤]/g, function(ch) {
+    var map = { '╭': '+', '╮': '+', '╰': '+', '╯': '+', '│': '|', '─': '-', '├': '+', '┤': '+' };
+    return map[ch] || ch;
+  });
+}
+
+/**
  * Copy certificate text to clipboard.
  * Returns a promise-like result message.
  */
 function copyCertificateToClipboard(certificateText) {
-  var plainText = certificateText
-    .replace(/[╭╮╰╯│─├┤]/g, function(ch) {
-      var map = { '╭': '+', '╮': '+', '╰': '+', '╯': '+', '│': '|', '─': '-', '├': '+', '┤': '+' };
-      return map[ch] || ch;
-    });
+  var plainText = toPlainText(certificateText);
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(plainText).then(function() {
@@ -174,4 +183,26 @@ function fallbackCopy(text) {
   document.body.removeChild(textarea);
 }
 
-export { generateCertificate, copyCertificateToClipboard };
+/**
+ * Download certificate as .txt file (Blob + createObjectURL pattern).
+ *
+ * Sessie 207: challenge-certificaten konden al gedownload worden
+ * (gamification/certificate-generator.js), tutorial-certificaten alleen gekopieerd.
+ * Zelfde artefact, dus nu ook dezelfde mogelijkheden.
+ */
+function downloadCertificate(certificateText, scenarioId) {
+  var text = toPlainText(certificateText);
+  var filename = 'hacksimulator-tutorial-' + scenarioId + '.txt';
+  var blob = new Blob([text], { type: 'text/plain' });
+  var url = URL.createObjectURL(blob);
+  var link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+  return '[✓] Certificaat gedownload als ' + filename;
+}
+
+export { generateCertificate, copyCertificateToClipboard, downloadCertificate };

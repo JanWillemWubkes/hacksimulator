@@ -119,6 +119,11 @@ All deprecated variable names remain as aliases until v2.0 stable release (April
 | `--featured-ribbon-start` | #e67e22 | #e67e22 | Ribbon gradient start (alias) |
 | `--featured-ribbon-end` | #d35400 | #d35400 | Ribbon gradient end (alias) |
 
+> **Status per Sessie 207:** alle vijf `--featured-*`-tokens zijn inmiddels uit `styles/`
+> verdwenen (0 treffers). De tabel hierboven blijft staan als verslag van wat Sessie 91
+> deed — dit document is een gedateerd migratielog, geen live referentie. Gebruik het niet
+> als bron voor bestaande variabelen.
+
 **Documentation Added:**
 - Style guide §Featured Content System (~176 lines)
 - Style guide §6.11 Blog Design Patterns (~925 lines)

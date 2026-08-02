@@ -2670,7 +2670,9 @@ Key Learnings: Max 9 entries, compress oldest
 #1565c0  Button hover state
 #0969da  Links base
 #1976d2  Link hover state (matches button)
-#d0d0d0  Borders
+#e0e0e0  Borders (--color-border)
+#d0d0d0  Form input borders (--color-border-input)
+#30363d  Navbar/footer separators (--color-border-dark-frame, gelijk in beide themes)
 #000000  Black text
 ```
 
@@ -7299,44 +7301,56 @@ All interactive elements have descriptive labels for screen readers.
 
 **CSS Variables:**
 ```css
---category-filter-height: 44px;              /* Touch-friendly minimum (WCAG AAA) */
---category-btn-padding: var(--spacing-sm) var(--spacing-md);  /* 8px 16px */
---category-btn-radius: var(--radius-full);   /* Pill shape (9999px) */
+--border-radius-button   /* Hoekafronding */
+--color-border           /* Rand in rusttoestand */
+--color-link             /* Rand + tekst bij hover */
+--color-button-bg        /* Achtergrond + rand in actieve staat */
+--color-button-text      /* Tekst in actieve staat */
 ```
 
 **State Styles:**
 
 | State | Background | Border | Text Color |
 |-------|-----------|--------|------------|
-| Default | `--color-bg-hover` | 1px transparent | `--color-text-dim` |
-| Hover | `--color-bg-hover` | 1px `--color-border-focus` | `--color-text` |
-| Active | `--color-link` | 1px `--color-link` | `--color-bg-dark` (inverted) |
-| Focus | `--color-bg-hover` | 2px `--color-border-focus` | `--color-text` |
+| Default | `transparent` | 1px `--color-border` | `--color-text-dim` |
+| Hover | `transparent` | 1px `--color-link` | `--color-link` |
+| Active (`.active` / `:target`) | `--color-button-bg` | 1px `--color-button-bg` | `--color-button-text` (+ bold) |
+| Focus | via globale `:focus-visible` | 2px outline `--color-info` | ongewijzigd |
 
-**Code Example:**
+**Code Example** — verbatim uit `styles/blog.css:115-137`:
 ```css
 .category-btn {
-  background-color: var(--color-bg-hover);
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-button);
   color: var(--color-text-dim);
-  border: 1px solid transparent;
-  border-radius: var(--category-btn-radius);
-  padding: var(--category-btn-padding);
-  min-height: 44px;  /* WCAG AAA touch target */
   cursor: pointer;
-  transition: var(--transition-normal);
+  font-family: var(--font-terminal);
+  font-size: 0.9rem;
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-decoration: none;
+  transition: all var(--transition-fast);
 }
 
 .category-btn:hover {
-  border-color: var(--color-border-focus);
-  color: var(--color-text);
+  border-color: var(--color-link);
+  color: var(--color-link);
 }
 
-.category-btn.active {
-  background-color: var(--color-link);
-  color: var(--color-bg-dark);
-  border-color: var(--color-link);
+/* Filteren draait op :target (CSS-only, geen JS) — vandaar de dubbele selector */
+.category-btn.active,
+.category-btn:target {
+  background-color: var(--color-button-bg);
+  border-color: var(--color-button-bg);
+  color: var(--color-button-text);
+  font-weight: var(--font-weight-bold);
 }
 ```
+
+> **Sessie 207 — deze sectie is tegen de CSS geverifieerd.** Ze beschreef eerder vijf
+> variabelen die niet bestaan (`--color-border-focus`, `--category-filter-height`,
+> `--category-btn-padding`, `--category-btn-radius`, `--radius-full`) plus state-waarden die
+> nergens op sloegen. Wijzigt `.category-btn`? Werk dit blok in dezelfde commit bij.
 
 **Mobile Behavior:**
 - Horizontal scroll container (`overflow-x: auto`)
@@ -8070,17 +8084,25 @@ document.addEventListener('keydown', (e) => {
 - Shift+Tab goes backward
 
 **Focus Management:**
+
+Er zijn géén per-component focus-regels voor blogkaarten of categorieknoppen. Alles loopt
+via één globale regel in `styles/animations.css`, die elk focusbaar element dekt:
+
 ```css
-.blog-card:focus-within {
-  outline: 2px solid var(--color-border-focus);
+:focus-visible {
+  outline: 2px solid var(--color-info);
   outline-offset: 2px;
+  transition: outline-offset var(--transition-fast);
 }
 
-.category-btn:focus {
-  outline: 2px solid var(--color-border-focus);
-  outline-offset: 2px;
+:focus-visible:active {
+  outline-offset: 0;
 }
 ```
+
+`:focus-visible` (niet `:focus`) is bewust: muisklikken krijgen géén ring, toetsenbord- en
+schermlezergebruikers wél. Voeg dus geen component-eigen focus-outline toe — dat levert
+alleen een dubbele ring op.
 
 **Testing Checklist:**
 
