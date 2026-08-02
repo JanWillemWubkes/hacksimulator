@@ -55,7 +55,25 @@ Drift-detectie in `validate-docs.sh --deep` trekt deze 4 uit sync als je ze verg
 weekdag/datum met `date -d YYYY-MM-DD +%A` vóór je iets plant. Juridische claims spiegelen op de
 bestaande posts (art. 138ab Sr zónder verzonnen strafmaat).
 
-## Stap 5 — Gate (verplicht, exit 0)
+## Stap 5 — Genereer de social share card
+Elke post heeft een eigen `og:image`; er is géén generieke terugval meer (Sessie 207). Draai:
+
+```bash
+node scripts/build-blog-og-images.mjs      # leest blog/*.html, schrijft assets/blog/<slug>.png
+```
+
+Het script leest titel (`<h1>`) en categorie (`og:article:section`) **uit de post zelf**, dus dit
+is bewust géén 8e lockstep-locatie — je hoeft niets over te tikken. Wel dit zetten in de post
+(3 plekken, allemaal dezelfde URL `https://hacksimulator.nl/assets/blog/<slug>.png?v=1`):
+`og:image`, `twitter:image` en JSON-LD `image.url`. De bestaande `og:image:width/height` (1200/630)
+blijven kloppen — het script rendert exact die maat, niet @2x.
+
+Wijzigt de titel later? Herdraai het script, anders toont de kaart de oude kop.
+
+**Controle:** `file assets/blog/<slug>.png` moet `1200 x 630` geven, en
+`grep -c 'assets/og-image.png' blog/<slug>.html` moet 0 zijn.
+
+## Stap 6 — Gate (verplicht, exit 0)
 ```bash
 ./scripts/validate-blogs.sh          # structuur: init-analytics, JSON-LD, div-balans, breadcrumb(s)
 ./scripts/validate-docs.sh --deep    # cross-doc + SEO-metadata sync (blog-count/RSS/sitemap/bundle)

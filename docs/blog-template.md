@@ -85,7 +85,7 @@ Plaats in `<head>`, mirror `blog/ethisch-hacker-worden.html` regel 70-101:
   "wordCount": <integer, meet via validate-blogs.sh>,
   "image": {
     "@type": "ImageObject",
-    "url": "https://hacksimulator.nl/assets/og-image.png",
+    "url": "https://hacksimulator.nl/assets/blog/<slug>.png?v=1",
     "width": 1200,
     "height": 630
   }
