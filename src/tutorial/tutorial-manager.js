@@ -32,6 +32,14 @@ export default new class TutorialManager {
     this.scenarios = new Map();
     this.activeScenario = null;
     this.currentStep = 0;
+    // Aantal stappen dat de gebruiker écht heeft opgelost. Losstaand van
+    // currentStep, want 'tutorial skip' schuift currentStep wél op maar mag
+    // niet als voltooid tellen (anders levert 7x skippen een vol certificaat).
+    this.stepsSolved = 0;
+    // Per voltooid scenario: hoeveel stappen er écht zijn opgelost. Nodig omdat
+    // 'tutorial cert' het certificaat later opnieuw opbouwt en anders opnieuw
+    // scenario.steps.length zou moeten aannemen (de bug uit Sessie 209).
+    this.stepsSolvedByScenario = {};
     this.completedScenarios = [];
     this.attempts = 0;
     this.hintCounts = {};
@@ -67,6 +75,21 @@ export default new class TutorialManager {
 
   getScenario(id) {
     return this.scenarios.get(id) || null;
+  }
+
+  /**
+   * Hoeveel stappen de gebruiker in dit scenario écht heeft opgelost (dus zonder
+   * de overgeslagen stappen). Valt terug op het scenario-totaal als er geen
+   * telling bekend is — dat is het geval bij opslag van vóór Sessie 209.
+   * @param {string} id
+   * @returns {number}
+   */
+  getSolvedSteps(id) {
+    if (Object.prototype.hasOwnProperty.call(this.stepsSolvedByScenario, id)) {
+      return this.stepsSolvedByScenario[id];
+    }
+    var scenario = this.getScenario(id);
+    return scenario ? scenario.steps.length : 0;
   }
 
   listScenarios() {
@@ -138,6 +161,7 @@ export default new class TutorialManager {
 
     this.activeScenario = scenario;
     this.currentStep = resuming ? saved.currentStep : 0;
+    this.stepsSolved = resuming ? (saved.stepsSolved || 0) : 0;
     this.attempts = 0;
     this.state = STATES.STEP_ACTIVE;
     this._save();
@@ -182,6 +206,7 @@ export default new class TutorialManager {
 
       // Advance to next step or complete
       this.currentStep++;
+      this.stepsSolved++;
       if (this.currentStep >= this.activeScenario.steps.length) {
         var completedTitle = this.activeScenario.title;
         this.state = STATES.COMPLETE;
@@ -282,6 +307,10 @@ export default new class TutorialManager {
     // een voltooide missie na reload uit het geheugen en wist de eerstvolgende _save()
     // hem permanent van schijf (funnel-regressie, "geen certificaat").
     this.completedScenarios = (saved && saved.completedScenarios) || [];
+    // Oude opslag (vóór Sessie 209) kent dit veld niet. Dan blijft de map leeg en
+    // valt 'tutorial cert' terug op het scenario-totaal — hetzelfde gedrag als
+    // voorheen, dus bestaande gebruikers verliezen hun certificaat niet.
+    this.stepsSolvedByScenario = (saved && saved.stepsSolvedByScenario) || {};
 
     if (!saved || !saved.activeScenario) return false;
     // Een via exit() gepauzeerde missie niet automatisch heractiveren.
@@ -413,7 +442,7 @@ export default new class TutorialManager {
   _renderCompletion() {
     var scenario = this.activeScenario;
     return this._renderer.renderCompletion(scenario, {
-      stepsCompleted: scenario.steps.length,
+      stepsCompleted: this.stepsSolved,
       totalSteps: scenario.steps.length
     });
   }
@@ -427,6 +456,10 @@ export default new class TutorialManager {
         analyticsEvents.tutorialEvent('completed', this.activeScenario.id);
         this.completedScenarios.push(this.activeScenario.id);
       }
+      // Beste run bewaren: een replay die méér stappen oplost mag het
+      // certificaat verbeteren, een luiere replay mag het niet verslechteren.
+      var prev = this.stepsSolvedByScenario[this.activeScenario.id] || 0;
+      this.stepsSolvedByScenario[this.activeScenario.id] = Math.max(prev, this.stepsSolved);
     }
     this.state = STATES.IDLE;
     this.activeScenario = null;
@@ -442,6 +475,8 @@ export default new class TutorialManager {
       var data = {
         activeScenario: this.activeScenario ? this.activeScenario.id : null,
         currentStep: this.currentStep,
+        stepsSolved: this.stepsSolved,
+        stepsSolvedByScenario: this.stepsSolvedByScenario,
         completedScenarios: this.completedScenarios,
         attempts: this.attempts,
         // active onderscheidt een lopende missie (auto-resume bij reload) van een
@@ -461,6 +496,8 @@ export default new class TutorialManager {
       var data = {
         activeScenario: scenarioId,
         currentStep: step,
+        stepsSolved: this.stepsSolved,
+        stepsSolvedByScenario: this.stepsSolvedByScenario,
         completedScenarios: this.completedScenarios,
         attempts: 0,
         active: false
@@ -507,6 +544,8 @@ export default new class TutorialManager {
     this.state = STATES.IDLE;
     this.activeScenario = null;
     this.currentStep = 0;
+    this.stepsSolved = 0;
+    this.stepsSolvedByScenario = {};
     this.completedScenarios = [];
     this.attempts = 0;
     this.hintCounts = {};

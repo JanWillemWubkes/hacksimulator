@@ -60,8 +60,10 @@ test.describe('Fundamentals Tutorial + Re-tiering', () => {
     // Beginner level + 7 steps
     await expect(output).toContainText('Niveau: Beginner', { timeout: 2000 });
     await expect(output).toContainText('Stappen: 7', { timeout: 2000 });
-    // First step objective mentions pwd
-    await expect(output).toContainText('pwd', { timeout: 2000 });
+    // Sinds Sessie 209 verklapt de opdracht het commando niet meer; ze beschrijft
+    // het doel. 'pwd' hoort pas in de hints te staan, niet in de opdrachttekst.
+    await expect(output).toContainText('in welke map je op dit moment staat', { timeout: 2000 });
+    await expect(output).not.toContainText('Gebruik pwd');
   });
 
   test('first correct command (pwd) advances to ls step', async ({ page }) => {

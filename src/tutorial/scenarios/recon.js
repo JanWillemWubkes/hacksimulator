@@ -36,7 +36,7 @@ var reconScenario = {
   steps: [
     {
       title: 'Test connectiviteit',
-      objective: 'Gebruik ping om te controleren of het doelwit (192.168.1.100) bereikbaar is.',
+      objective: 'Controleer of het doelwit 192.168.1.100 überhaupt bereikbaar is.',
       command: 'ping',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'ping') return false;
@@ -61,7 +61,7 @@ var reconScenario = {
     },
     {
       title: 'Scan open poorten',
-      objective: 'Gebruik nmap om de open poorten van 192.168.1.100 te ontdekken.',
+      objective: 'Ontdek welke poorten er openstaan op 192.168.1.100.',
       command: 'nmap',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'nmap') return false;
@@ -83,7 +83,7 @@ var reconScenario = {
     },
     {
       title: 'Verzamel domein informatie',
-      objective: 'Gebruik whois om informatie over securecorp.com op te zoeken.',
+      objective: 'Zoek uit wie er achter het domein securecorp.com zit.',
       command: 'whois',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'whois') return false;
@@ -105,7 +105,7 @@ var reconScenario = {
     },
     {
       title: 'Breng de route in kaart',
-      objective: 'Gebruik traceroute om het netwerkpad naar 192.168.1.100 te volgen.',
+      objective: 'Breng het netwerkpad naar 192.168.1.100 in kaart.',
       command: 'traceroute',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'traceroute') return false;

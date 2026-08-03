@@ -137,8 +137,12 @@ var tutorialRenderer = {
     var inner = width - 2;
     var lines = [];
 
+    // Met 'tutorial skip' kun je een missie doorlopen zonder een stap op te
+    // lossen. De box mag dan geen voltooiing of beheersing claimen (Sessie 209).
+    var fullySolved = stats.stepsCompleted >= stats.totalSteps;
+
     // Top border
-    var label = ' MISSIE VOLTOOID ';
+    var label = fullySolved ? ' MISSIE VOLTOOID ' : ' MISSIE DOORLOPEN ';
     var remaining = inner - label.length;
     var leftPad = Math.floor(remaining / 2);
     var rightPad = remaining - leftPad;
@@ -155,8 +159,17 @@ var tutorialRenderer = {
 
     lines.push(buildEmptyLine(width));
 
-    // Completion message
-    if (scenario.completionMessage) {
+    // Overgeslagen stappen expliciet benoemen, met de weg terug
+    if (!fullySolved) {
+      var skipped = stats.totalSteps - stats.stepsCompleted;
+      wordWrap(skipped + ' stap' + (skipped === 1 ? '' : 'pen') + ' overgeslagen. Typ ' +
+               "'tutorial start " + scenario.id + "' om ze alsnog te doen.", inner - 4)
+        .forEach(function(line) { lines.push(buildLine('  ' + line, width)); });
+      lines.push(buildEmptyLine(width));
+    }
+
+    // Completion message — claimt beheersing, dus alleen bij een echte voltooiing
+    if (scenario.completionMessage && fullySolved) {
       var msgLines = wordWrap(scenario.completionMessage, inner - 4);
       msgLines.forEach(function(line) {
         lines.push(buildLine('  ' + line, width));
@@ -170,7 +183,9 @@ var tutorialRenderer = {
     var cert = generateCertificate(scenario, stats);
     copyCertificateToClipboard(cert);
 
-    var followUp = '[✓] Goed gedaan! Je hebt de ' + scenario.title + ' missie afgerond.';
+    var followUp = fullySolved
+      ? '[✓] Goed gedaan! Je hebt de ' + scenario.title + ' missie afgerond.'
+      : '[!] Je hebt ' + scenario.title + ' doorlopen met overgeslagen stappen.';
     followUp += "\n[✓] Certificaat op je klembord — typ 'tutorial cert' om het te bekijken.";
     followUp += "\n[→] Typ 'next' en ik wijs je naar je volgende missie.";
     followUp += '\n[?] Of typ \'tutorial\' om alle missies te bekijken.';
@@ -182,10 +197,14 @@ var tutorialRenderer = {
   },
 
   _renderCompletionMobile: function(scenario, stats) {
-    var missionBox = '\n**MISSIE VOLTOOID**\n\n';
+    var fullySolved = stats.stepsCompleted >= stats.totalSteps;
+    var missionBox = fullySolved ? '\n**MISSIE VOLTOOID**\n\n' : '\n**MISSIE DOORLOPEN**\n\n';
     missionBox += scenario.title + '\n';
     missionBox += 'Stappen: ' + stats.stepsCompleted + '/' + stats.totalSteps + '\n\n';
-    if (scenario.completionMessage) {
+    if (!fullySolved) {
+      missionBox += (stats.totalSteps - stats.stepsCompleted) + ' stappen overgeslagen.\n\n';
+    }
+    if (scenario.completionMessage && fullySolved) {
       missionBox += scenario.completionMessage;
     }
 

@@ -48,7 +48,7 @@ var fundamentalsScenario = {
   steps: [
     {
       title: 'Waar ben je?',
-      objective: 'Gebruik pwd om te zien in welke map je nu staat.',
+      objective: 'Zoek uit in welke map je op dit moment staat.',
       command: 'pwd',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'pwd') return false;
@@ -68,7 +68,7 @@ var fundamentalsScenario = {
     },
     {
       title: 'Kijk rond',
-      objective: 'Gebruik ls om te zien welke bestanden en mappen er in je huidige map staan.',
+      objective: 'Kijk welke bestanden en mappen er in je huidige map staan.',
       command: 'ls',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'ls') return false;
@@ -91,7 +91,7 @@ var fundamentalsScenario = {
     },
     {
       title: 'Navigeer naar een map',
-      objective: 'Gebruik cd om naar de map \'documents\' te gaan.',
+      objective: 'Ga naar de map \'documents\'.',
       command: 'cd',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'cd') return false;
@@ -113,7 +113,7 @@ var fundamentalsScenario = {
     },
     {
       title: 'Lees een bestand',
-      objective: 'Gebruik cat om het bestand \'scan-results.txt\' te lezen.',
+      objective: 'Lees de inhoud van het bestand \'scan-results.txt\'.',
       command: 'cat',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'cat') return false;
@@ -139,7 +139,7 @@ var fundamentalsScenario = {
     },
     {
       title: 'Maak een map',
-      objective: 'Maak met mkdir een nieuwe map aan voor je bevindingen (bijv. bevindingen).',
+      objective: 'Maak een nieuwe map aan voor je bevindingen (bijv. bevindingen).',
       command: 'mkdir',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'mkdir') return false;
@@ -160,7 +160,7 @@ var fundamentalsScenario = {
     },
     {
       title: 'Maak een bestand',
-      objective: 'Maak met touch een nieuw bestand aan voor je notities (bijv. notes.txt).',
+      objective: 'Maak een nieuw bestand aan voor je notities (bijv. notes.txt).',
       command: 'touch',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'touch') return false;
@@ -181,7 +181,7 @@ var fundamentalsScenario = {
     },
     {
       title: 'Ruim op',
-      objective: 'Verwijder met rm het bestand dat je net hebt aangemaakt (bijv. notes.txt).',
+      objective: 'Verwijder het bestand dat je net hebt aangemaakt (bijv. notes.txt).',
       command: 'rm',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'rm') return false;

@@ -62,8 +62,12 @@ function generateCertificate(scenario, stats) {
   var inner = width - 2;
   var lines = [];
 
+  // Een missie kan ook doorlopen worden met 'tutorial skip'. Dan is er niets
+  // "voltooid" en mag het certificaat dat niet suggereren (Sessie 209).
+  var fullySolved = stats.stepsCompleted >= stats.totalSteps;
+
   // Top border with label
-  var label = ' CERTIFICAAT VAN VOLTOOIING ';
+  var label = fullySolved ? ' CERTIFICAAT VAN VOLTOOIING ' : ' CERTIFICAAT VAN DEELNAME ';
   var remaining = inner - label.length;
   var leftPad = Math.floor(remaining / 2);
   var rightPad = remaining - leftPad;
@@ -96,8 +100,12 @@ function generateCertificate(scenario, stats) {
   lines.push(buildEmptyLine(width));
 
   // Congratulations message
-  var msg = 'Je hebt deze missie succesvol afgerond en de basis van ' +
-            getDiscipline(scenario.id) + ' geleerd.';
+  var skipped = stats.totalSteps - stats.stepsCompleted;
+  var msg = fullySolved
+    ? 'Je hebt deze missie succesvol afgerond en de basis van ' +
+      getDiscipline(scenario.id) + ' geleerd.'
+    : 'Je hebt deze missie doorlopen, maar ' + skipped + ' van de ' + stats.totalSteps +
+      ' stappen overgeslagen. Doe ze alsnog voor een volledig certificaat.';
   var msgLines = wordWrap(msg, inner - 4);
   msgLines.forEach(function(line) {
     lines.push(buildLine('  ' + line, width));
@@ -124,7 +132,10 @@ function generateCertificate(scenario, stats) {
 }
 
 function generateCertificateMobile(scenario, stats) {
-  var out = '\n**CERTIFICAAT VAN VOLTOOIING**\n';
+  var fullySolved = stats.stepsCompleted >= stats.totalSteps;
+  var out = fullySolved
+    ? '\n**CERTIFICAAT VAN VOLTOOIING**\n'
+    : '\n**CERTIFICAAT VAN DEELNAME**\n';
   out += '*  *  *\n\n';
   out += 'HACKSIMULATOR.NL\n\n';
   out += 'Missie:  ' + scenario.title + '\n';
@@ -132,6 +143,9 @@ function generateCertificateMobile(scenario, stats) {
   out += 'Stappen: ' + stats.stepsCompleted + '/' + stats.totalSteps + '\n';
   out += 'Datum:   ' + formatDate() + '\n\n';
   out += '*  *  *\n';
+  if (!fullySolved) {
+    out += (stats.totalSteps - stats.stepsCompleted) + ' stappen overgeslagen.\n';
+  }
   out += CERT_DISCLAIMER + '\n';
   return out;
 }

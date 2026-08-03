@@ -39,7 +39,7 @@ var webvulnScenario = {
   steps: [
     {
       title: 'Identificeer de webserver',
-      objective: 'Gebruik nmap om de open poorten van target.com te scannen en de webserver te identificeren.',
+      objective: 'Scan target.com en achterhaal welke webserver er draait.',
       command: 'nmap',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'nmap') return false;
@@ -60,7 +60,7 @@ var webvulnScenario = {
     },
     {
       title: 'Scan op web kwetsbaarheden',
-      objective: 'Gebruik nikto om de website http://target.com te scannen op bekende kwetsbaarheden.',
+      objective: 'Scan http://target.com op bekende kwetsbaarheden.',
       command: 'nikto',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'nikto') return false;
@@ -87,7 +87,7 @@ var webvulnScenario = {
     },
     {
       title: 'Test op SQL injection',
-      objective: 'Gebruik sqlmap om de login pagina te testen: sqlmap http://target.com/login?id=1',
+      objective: 'Test de login-pagina http://target.com/login?id=1 op SQL injection.',
       command: 'sqlmap',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'sqlmap') return false;
@@ -115,7 +115,7 @@ var webvulnScenario = {
     },
     {
       title: 'Ontdek gevoelige configuratie',
-      objective: 'Bekijk het configuratiebestand: cat /var/www/html/config.php',
+      objective: 'Bekijk het configuratiebestand /var/www/html/config.php.',
       command: 'cat',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'cat') return false;

@@ -607,14 +607,13 @@ class Terminal {
       'nikto': 1      // nikto <target>
     };
 
-    // Always track if no args needed
-    if (NO_ARGS_NEEDED.includes(commandName)) {
-      return true;
-    }
-
-    // Output error markers — a command that failed should not count as tried
+    // Output error markers — a command that failed should not count as tried.
+    // typeof-guard is essentieel: bij een voltooide tutorial/challenge is `output`
+    // een object ({output, isCompletion, title, completion}), niet een string.
+    // Vóór Sessie 209 werd dat gemaskeerd doordat NO_ARGS_NEEDED hierboven al
+    // returnde — nu die commands hier langskomen, zou .includes() crashen.
     const hasError =
-      output && (
+      typeof output === 'string' && (
         output.includes('Usage:') ||
         output.startsWith('Error:') ||
         output.includes('Name or service not known') ||
@@ -630,6 +629,16 @@ class Terminal {
         output.includes('missing destination operand') ||
         output.includes('missing domain operand')
       );
+
+    // Commands zonder verplichte argumenten tellen zodra ze zónder fout draaien.
+    // Vóór Sessie 209 stond hier een onvoorwaardelijke `return true`, waardoor een
+    // mislukte `cd /bestaatniet` of `ls /bestaatookniet` tóch een vinkje opleverde —
+    // terwijl de man page belooft dat alleen correct gebruik wordt afgevinkt.
+    // Geverifieerd dat geen van de 14 commando's bij normaal gebruik een foutmarker
+    // in z'n output heeft (dus dit maakt ze niet onafvinkbaar).
+    if (NO_ARGS_NEEDED.includes(commandName)) {
+      return !hasError;
+    }
 
     // If command requires args, validate
     if (REQUIRES_ARGS[commandName]) {

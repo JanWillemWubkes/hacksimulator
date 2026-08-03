@@ -89,8 +89,12 @@ test.describe('Tutorial System', () => {
     await expect(output).toContainText('MISSION BRIEFING', { timeout: 10000 });
     await expect(output).toContainText('SecureCorp', { timeout: 2000 });
 
-    // Should show first step objective
-    await expect(output).toContainText('ping', { timeout: 2000 });
+    // Should show first step objective. Sinds Sessie 209 beschrijft de opdracht
+    // het DOEL zonder het commando te noemen - het antwoord zit achter de
+    // hint-ladder. Assert dus op het doelwit, en bewaak dat 'ping' er NIET staat.
+    await expect(output).toContainText('192.168.1.100', { timeout: 2000 });
+    await expect(output).toContainText('bereikbaar', { timeout: 2000 });
+    await expect(output).not.toContainText('Gebruik ping');
   });
 
   test('tutorial status during active tutorial shows progress', async ({ page }) => {

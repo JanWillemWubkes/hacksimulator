@@ -68,7 +68,7 @@ var privescScenario = {
     },
     {
       title: 'Verken de log bestanden',
-      objective: 'Gebruik ls om de inhoud van /var/log te bekijken en beschikbare logs te vinden.',
+      objective: 'Kijk welke logbestanden er in /var/log beschikbaar zijn.',
       command: 'ls',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'ls') return false;
@@ -93,7 +93,7 @@ var privescScenario = {
     },
     {
       title: 'Analyseer login pogingen',
-      objective: 'Bekijk auth.log voor verdachte login activiteit: cat /var/log/auth.log',
+      objective: 'Zoek in /var/log/auth.log naar verdachte inlogpogingen.',
       command: 'cat',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'cat') return false;
@@ -120,7 +120,7 @@ var privescScenario = {
     },
     {
       title: 'Vind gelekte credentials',
-      objective: 'Bekijk de command history voor gelekte wachtwoorden: cat ~/.bash_history',
+      objective: 'Doorzoek de command history (~/.bash_history) op gelekte wachtwoorden.',
       command: 'cat',
       validate: function(cmd, args, flags, context, output) {
         if (cmd !== 'cat') return false;

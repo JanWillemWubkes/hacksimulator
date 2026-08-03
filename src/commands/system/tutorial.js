@@ -195,8 +195,10 @@ export default {
         return '[X] Scenario niet gevonden: ' + lastId;
       }
 
+      // Niet scenario.steps.length aannemen: wie stappen oversloeg heeft er
+      // minder opgelost, en het certificaat hoort dat te laten zien (Sessie 209).
       var stats = {
-        stepsCompleted: scenario.steps.length,
+        stepsCompleted: tutorialManager.getSolvedSteps(lastId),
         totalSteps: scenario.steps.length
       };
 
