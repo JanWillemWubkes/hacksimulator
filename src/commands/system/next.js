@@ -563,7 +563,10 @@ function buildCompletionMessage() {
     'Volgende stap? Echte CTF-platforms:',
     '  TryHackMe.com',
     '  HackTheBox.com',
-    '  OverTheWire.org'
+    '  OverTheWire.org',
+    '',
+    'Van simulator naar echt werk:',
+    '  hacksimulator.nl/gidsen.html'
   ];
 
   if (isMobileView()) {

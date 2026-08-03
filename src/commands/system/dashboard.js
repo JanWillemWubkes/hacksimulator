@@ -136,7 +136,7 @@ function getNextStep(challengeData, badgeSummary) {
     if (badgeSummary.unlocked < badgeSummary.total) {
       return 'Alle challenges voltooid! Nog ' + (badgeSummary.total - badgeSummary.unlocked) + ' badges te unlocken.';
     }
-    return 'Alles voltooid! Je bent een echte Hacker Elite.';
+    return 'Alles voltooid! Verder met echte tools? Zie hacksimulator.nl/gidsen.html';
   }
 
   var difficulties = ['easy', 'medium', 'hard'];
