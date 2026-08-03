@@ -389,6 +389,12 @@ class Terminal {
         if (onboardingHint) {
           renderer.renderInfo(onboardingHint);
         }
+      } else if (this._hasErrorOutput(output) &&
+                 !tutorialActiveAtStart && !challengeManager.isActive()) {
+        // Bestaand command dat mislukte. Buiten missies (die hebben hun eigen
+        // hint-ladder) escaleren naar de man page na herhaald falen.
+        const usageTip = helpSystem.recordUsageError(parsed.command);
+        if (usageTip) renderer.renderInfo(usageTip);
       }
 
       // Show "no news is good news" filesystem hint (one-time).
@@ -582,6 +588,39 @@ class Terminal {
    * @param {string} output - Command output
    * @returns {boolean} True if command should be tracked
    */
+  /**
+   * Herkent aan de output of een command is mislukt (verkeerde of ontbrekende
+   * argumenten, doel niet gevonden, ...). Gedeeld door _shouldTrackCommand (geen
+   * vinkje bij een mislukking) en door de gebruiks-escalatie in execute() — één
+   * bron, zodat die twee niet uit elkaar kunnen lopen.
+   *
+   * De typeof-guard is essentieel: bij een voltooide tutorial/challenge is
+   * `output` een object ({output, isCompletion, title, completion}), geen string.
+   *
+   * @param {*} output
+   * @returns {boolean}
+   */
+  _hasErrorOutput(output) {
+    return typeof output === 'string' && (
+      output.includes('Usage:') ||
+      output.startsWith('Error:') ||
+      output.includes('Name or service not known') ||
+      output.includes('Failed to resolve') ||
+      output.includes('No whois data found') ||
+      output.includes('No such file or directory') ||
+      output.includes('cannot stat') ||
+      output.includes('Not a directory') ||
+      output.includes('invalid URL format') ||
+      output.includes('missing host operand') ||
+      output.includes('missing target operand') ||
+      output.includes('missing URL argument') ||
+      output.includes('missing destination operand') ||
+      output.includes('missing domain operand') ||
+      /^[a-z]+: missing /.test(output) ||
+      /^[a-z]+: invalid /.test(output)
+    );
+  }
+
   _shouldTrackCommand(commandName, args, output) {
     // Commands that work without any arguments
     const NO_ARGS_NEEDED = [
@@ -607,28 +646,7 @@ class Terminal {
       'nikto': 1      // nikto <target>
     };
 
-    // Output error markers — a command that failed should not count as tried.
-    // typeof-guard is essentieel: bij een voltooide tutorial/challenge is `output`
-    // een object ({output, isCompletion, title, completion}), niet een string.
-    // Vóór Sessie 209 werd dat gemaskeerd doordat NO_ARGS_NEEDED hierboven al
-    // returnde — nu die commands hier langskomen, zou .includes() crashen.
-    const hasError =
-      typeof output === 'string' && (
-        output.includes('Usage:') ||
-        output.startsWith('Error:') ||
-        output.includes('Name or service not known') ||
-        output.includes('Failed to resolve') ||
-        output.includes('No whois data found') ||
-        output.includes('No such file or directory') ||
-        output.includes('cannot stat') ||
-        output.includes('Not a directory') ||
-        output.includes('invalid URL format') ||
-        output.includes('missing host operand') ||
-        output.includes('missing target operand') ||
-        output.includes('missing URL argument') ||
-        output.includes('missing destination operand') ||
-        output.includes('missing domain operand')
-      );
+    const hasError = this._hasErrorOutput(output);
 
     // Commands zonder verplichte argumenten tellen zodra ze zónder fout draaien.
     // Vóór Sessie 209 stond hier een onvoorwaardelijke `return true`, waardoor een

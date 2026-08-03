@@ -26,6 +26,29 @@ class HelpSystem {
   }
 
   /**
+   * Escalatie voor een command dat wél bestaat maar blijft mislukken (verkeerde
+   * of ontbrekende argumenten). Het 3-traps systeem hieronder vuurt alleen bij
+   * een niet-bestaand command, dus wie 'nmap' zonder doel bleef typen kreeg
+   * nooit een duw richting de handleiding — dat was een spellingcontrole, geen
+   * didactiek (Sessie 209).
+   *
+   * Pas vanaf de derde poging: de eigen foutmelding van het command mag eerst
+   * z'n werk doen. Daarna elke derde keer, zodat het helpt zonder te zeuren.
+   *
+   * @param {string} command - Het bestaande command dat faalde
+   * @returns {string|null} Tip, of null als het nog te vroeg is
+   */
+  recordUsageError(command) {
+    const key = 'usage:' + command;
+    this.errorCount[key] = (this.errorCount[key] || 0) + 1;
+    this.lastError[key] = Date.now();
+
+    if (this.errorCount[key] % 3 !== 0) return null;
+
+    return `[?] Dit lukt nog niet. Typ 'man ${command}' voor de uitleg, de syntax en voorbeelden.`;
+  }
+
+  /**
    * Get help message based on error frequency (3-tier system)
    * @param {string} command - The command that failed
    * @param {string} suggestion - Similar command suggestion (Tier 1)
