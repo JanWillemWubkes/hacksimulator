@@ -71,8 +71,12 @@ De lezer kan de inhoud niet zelf beoordelen; dit is het minimum dat we wél kunn
 Zet in `.blog-post-meta`, ná de categorie-badge:
 
 ```html
-<span class="blog-fact-checked" title="Datum waarop de feitelijke beweringen in dit artikel voor het laatst zijn nagelopen">Feiten gecontroleerd: <time datetime="JJJJ-MM-DD">D maand JJJJ</time></span>
+<span class="blog-fact-checked" title="Datum waarop de feitelijke beweringen in dit artikel voor het laatst zijn nagelopen">Feiten gecontroleerd: <time datetime="JJJJ-MM-DD">D maand JJJJ</time> &middot; <a href="/over-ons.html#verantwoording">hoe ik dit controleer</a></span>
 ```
+
+De link naar `#verantwoording` is verplicht: zonder ingang is het redactiebeleid onvindbaar.
+Zet hem **ná** de `</time>` — de gate in `validate-blogs.sh` eist dat er tussen de span-tag en
+`<time` geen `<` staat, dus een link ervóór breekt de check.
 
 **Vul de échte datum in — de dag waarop je de claims daadwerkelijk hebt nagelopen.** Niet
 "vandaag" omdat het bestand vandaag is aangeraakt: dan is de regel op álle posts waardeloos.

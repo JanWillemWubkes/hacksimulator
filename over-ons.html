@@ -307,38 +307,51 @@
       <h2>Verantwoording: hoe betrouwbaar is deze inhoud?</h2>
       <div class="verantwoording-card">
       <p>
-        Een eerlijke vraag verdient een eerlijk antwoord, want je leert hier iets waarvan je
-        niet zelf kunt controleren of het klopt.
+        Je leert hier dingen die je zelf nog niet kunt controleren. Daarom staat hieronder wie
+        verantwoordelijk is voor de inhoud, wat er is nagekeken en wanneer, en wat niet.
       </p>
-      <h3>Hoe het gemaakt is</h3>
+      <h3>Wie verantwoordelijk is</h3>
       <p>
-        HackSimulator is gebouwd door één developer, met intensieve inzet van AI voor zowel de
-        code als de lesteksten. Ik ben geen gecertificeerd securityprofessional en doe ook niet
-        alsof. Wat ik wél doe: elke feitelijke bewering controleerbaar maken en fouten
-        corrigeren zodra ze gevonden worden.
+        Jan Willem Wubkes, enige maker van HackSimulator, bereikbaar via
+        <a href="mailto:contact@hacksimulator.nl">contact@hacksimulator.nl</a>. Ik ben geen
+        gecertificeerd securityprofessional en doe ook niet alsof. De code en de lesteksten zijn
+        geschreven met intensieve inzet van AI — dat gaat snel, maar levert fouten op die er
+        overtuigend uitzien. Dat is geen excuus vooraf; het is de reden dat de rest van deze
+        sectie bestaat.
       </p>
       <h3>Wat er gecontroleerd is</h3>
       <ul>
-        <li>De blogartikelen zijn nagelopen op feitelijke en juridische juistheid, met
-            bronvermelding bij de controleerbare claims.</li>
+        <li>Elke blogpost draagt bovenaan een <strong>datum van feitencontrole</strong>. Dat is
+            de laatste keer dat de beweringen in dat specifieke artikel zijn nagelopen — geen
+            sitebrede datum, maar per artikel.</li>
         <li>De betaalde gidsen zijn apart gecontroleerd, inclusief de wetsartikelen en
             rechtszaken waarnaar verwezen wordt.</li>
-        <li>Getallen die je op deze site ziet (aantal commands, blogposts, begrippen) worden
-            bij elke wijziging automatisch tegen de broncode gecontroleerd, zodat de site
-            nooit meer claimt dan er is.</li>
+        <li>Cijfers die snel verouderen, zoals de kraaksnelheid van hash-algoritmes, staan op
+            één plek in de broncode mét bron en gebruikte hardware. Een automatische controle
+            blokkeert een wijziging zodra twee plekken op de site een ander getal noemen.</li>
+        <li>Tellingen (aantal commands, blogposts, begrippen) worden bij elke wijziging
+            automatisch tegen de broncode gecontroleerd, zodat de site nooit meer claimt dan
+            er is.</li>
       </ul>
       <h3>Wat nog niet gecontroleerd is</h3>
+      <ul>
+        <li>De ingebouwde handleidingen (<code>man &lt;command&gt;</code>) en de woordenlijst
+            zijn nog niet door een onafhankelijke securityprofessional nagelezen.</li>
+        <li>De meeste artikelen verwijzen wel naar bronnen via links in de tekst, maar hebben
+            nog geen bronnenlijst onderaan. Dat wordt per artikel aangevuld.</li>
+      </ul>
       <p>
-        De ingebouwde handleidingen (<code>man &lt;command&gt;</code>) en de woordenlijst zijn
-        nog niet door een onafhankelijke securityprofessional nagelezen. Dat is de volgende stap:
-        er ligt een reviewpakket klaar met alle controleerbare beweringen op een rij. Zodra die
-        review is uitgevoerd, staat hier wie hem deed en wanneer.
+        Er ligt een reviewpakket klaar met alle controleerbare beweringen op een rij, bedoeld
+        voor een onafhankelijke securityprofessional. Zodra die review is uitgevoerd, staat hier
+        wie hem deed en wanneer.
       </p>
+      <h3>Fout gevonden?</h3>
       <p>
-        <strong>Fout gevonden?</strong> Laat het weten via
-        <a href="mailto:contact@hacksimulator.nl">contact@hacksimulator.nl</a> of open een issue
-        op <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.
-        Correcties zijn welkom en worden verwerkt — ook als ze ongemakkelijk zijn.
+        Meld het via <a href="mailto:contact@hacksimulator.nl">contact@hacksimulator.nl</a> of
+        open een issue op
+        <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.
+        Correcties worden verwerkt en de controledatum van dat artikel gaat mee omhoog, zodat je
+        kunt zien dat er iets is veranderd — ook als de correctie ongemakkelijk is.
       </p>
       <p class="verantwoording-note">
         <strong>Let op:</strong> alle output in de terminal is gesimuleerd en vereenvoudigd.
