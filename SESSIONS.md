@@ -10,12 +10,13 @@
 
 > **Rotatie/archivering-conventie:** zie [`docs/sessions/README.md`](docs/sessions/README.md)
 > (range-naamgeving `archive-sNNN-sMMM.md`; legacy `archive-q*`-namen zijn bevroren + fout gelabeld).
-> `current.md` houdt het rolling window Sessie 190-200; ouder is geroteerd naar de range-archieven hieronder.
+> `current.md` houdt het rolling window Sessie 195-208; ouder is geroteerd naar de range-archieven hieronder.
 
-### [Current Sessions (185-195)](docs/sessions/current.md) - Full Detail
-**Sessies:** 195, 194, 193, 192, 191, 190, 189, 188, 187, 186, 185
-**Period:** 29 juni - 06 juli 2026
+### [Current Sessions (195-208)](docs/sessions/current.md) - Full Detail
+**Sessies:** 208, 207, 206, 205, 204, 203, 202, 201, 200, 199, 198, 197, 196, 195
+**Period:** 29 juni - 03 augustus 2026
 **Topics:**
+- Advertenties volledig van de site (€0 opbrengst vs 251,7 KB third-party), kwaliteit aantoonbaar gemaakt (reviewpakket-generator, drift-checks, verantwoording, controledata) en blog→terminal meetbaar (Sessie 208)
 - Leerpad-consistentie: whois/traceroute/find/grep zichtbaar via NEW `learning-path.js` single-source; brede spook-command-nasweep (wireshark→traceroute, commands-pagina 39→41, blog-claims eerlijk), traceroute-tracking-bug, 20 audit-fixes (Sessie 195)
 - Uitgestelde 193-punten: VFS-schema-signature + analytics-guard + [TIP]-marker; 4 document-and-accept (Sessie 194)
 - Volledige tutorial-flow-audit: 18 fixes (begeleiding + state + omgeving) in 4 commits (Sessie 193)

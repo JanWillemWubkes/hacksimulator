@@ -50,16 +50,13 @@
   <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="../styles/main.css?v=154">
+  <link rel="stylesheet" href="../styles/main.css?v=208">
   <link rel="stylesheet" href="../styles/landing.css?v=121">
-  <link rel="stylesheet" href="../styles/blog.css?v=122">
+  <link rel="stylesheet" href="../styles/blog.css?v=208">
   <link rel="stylesheet" href="../styles/mobile.css?v=116" media="screen and (max-width: 768px)">
 
-  <!-- Google AdSense -->
-  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
-
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
-  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore" data-adsense="ca-pub-6345664385525701"></script>
+  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
 
   <!-- Structured Data - JSON-LD -->
   <script type="application/ld+json">
@@ -150,6 +147,7 @@
           <time datetime="2025-12-20">20 december 2025</time>
           <span>10 min</span>
           <span class="category-badge">Carrière</span>
+          <span class="blog-fact-checked" title="Datum waarop de feitelijke beweringen in dit artikel voor het laatst zijn nagelopen">Feiten gecontroleerd: <time datetime="2026-06-14">14 juni 2026</time></span>
         </div>
       </header>
 
@@ -249,7 +247,9 @@ PORT     STATE   SERVICE
         <h3>Operating systems (besturingssystemen)</h3>
         <p>
           Linux is het platform bij uitstek voor ethisch hackers. De meeste security tools draaien op Linux, en de meeste servers
-          die je zult testen draaien ook op Linux. Daarnaast moet je Windows goed kennen omdat het overgrote deel van bedrijfsomgevingen
+          die je zult testen draaien ook op Linux. Begin bij de mappenstructuur: onze uitleg over het
+          <a href="linux-bestandssysteem.html">Linux bestandssysteem</a> laat zien waar configuratiebestanden, logs en
+          wachtwoord-hashes wonen. Daarnaast moet je Windows goed kennen omdat het overgrote deel van bedrijfsomgevingen
           op Windows draait - denk aan Active Directory, PowerShell en Windows-specifieke kwetsbaarheden.
         </p>
 
@@ -284,17 +284,6 @@ PORT     STATE   SERVICE
           Begin niet met alle skills tegelijk. Focus eerst op networking en Linux basics - dat is je fundatie.
           Zonder die basis zijn geavanceerde tools als Metasploit en Burp Suite zinloos, omdat je niet begrijpt
           wat ze eigenlijk doen.
-        </div>
-
-        <!-- AdSense In-Article -->
-        <div class="ad-container ad-unit ad-in-article" style="display: none;">
-          <p class="ad-disclaimer">Advertisement</p>
-          <ins class="adsbygoogle"
-               style="display:block; text-align:center;"
-               data-ad-layout="in-article"
-               data-ad-format="fluid"
-               data-ad-client="ca-pub-6345664385525701"
-               data-ad-slot="5971972080"></ins>
         </div>
 
         <h2>Leerpad: van beginner tot professional</h2>
@@ -413,17 +402,6 @@ PORT     STATE   SERVICE
           Certificeringen zijn waardevol, maar niet allesbepalend. Werkgevers zoeken steeds vaker naar
           <strong>aantoonbare praktijkervaring</strong>: CTF-resultaten, bug bounty rapporten, GitHub-projecten
           of een eigen security blog. Combineer certificeringen met hands-on bewijs van je skills.
-        </div>
-
-        <!-- AdSense In-Article 2 -->
-        <div class="ad-container ad-unit ad-in-article" style="display: none;">
-          <p class="ad-disclaimer">Advertisement</p>
-          <ins class="adsbygoogle"
-               style="display:block; text-align:center;"
-               data-ad-layout="in-article"
-               data-ad-format="fluid"
-               data-ad-client="ca-pub-6345664385525701"
-               data-ad-slot="5270665903"></ins>
         </div>
 
         <h2>Salarissen en arbeidsmarkt in Nederland</h2>
@@ -561,7 +539,7 @@ PORT     STATE   SERVICE
             Type <code>next</code> voor persoonlijke begeleiding. Gebruik <code>leerpad</code> om je voortgang te
             bekijken, of spring direct naar <code>nmap</code> en <code>hashcat</code>. Jouw carrière in cybersecurity begint hier.
           </p>
-          <a href="../terminal.html" class="blog-cta-button">Start met hacken</a>
+          <a href="../terminal.html" class="blog-cta-button" data-terminal-cta="blog_ethisch-hacker-worden">Start met hacken</a>
         </div>
 
       </div>
@@ -614,17 +592,6 @@ PORT     STATE   SERVICE
       </footer>
     </article>
   </main>
-
-  <!-- AdSense Footer Banner (M5.5 Blog Monetization) -->
-  <div id="adsense-footer" class="ad-container ad-unit" style="display: none;">
-      <p class="ad-disclaimer">Advertisement</p>
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-6345664385525701"
-           data-ad-slot="1674341955"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-  </div>
 
   <!-- Footer (Component Injection) -->
   <div id="footer-placeholder">

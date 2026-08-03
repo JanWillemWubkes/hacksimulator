@@ -50,16 +50,13 @@
   <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="../styles/main.css?v=154">
+  <link rel="stylesheet" href="../styles/main.css?v=208">
   <link rel="stylesheet" href="../styles/landing.css?v=121">
-  <link rel="stylesheet" href="../styles/blog.css?v=122">
+  <link rel="stylesheet" href="../styles/blog.css?v=208">
   <link rel="stylesheet" href="../styles/mobile.css?v=116" media="screen and (max-width: 768px)">
 
-  <!-- Google AdSense -->
-  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
-
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
-  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore" data-adsense="ca-pub-6345664385525701"></script>
+  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
 
   <!-- Structured Data - JSON-LD -->
   <script type="application/ld+json">
@@ -150,6 +147,7 @@
           <time datetime="2025-11-10">10 november 2025</time>
           <span>8 min</span>
           <span class="category-badge">Concepten</span>
+          <span class="blog-fact-checked" title="Datum waarop de feitelijke beweringen in dit artikel voor het laatst zijn nagelopen">Feiten gecontroleerd: <time datetime="2026-06-14">14 juni 2026</time></span>
         </div>
       </header>
 
@@ -296,17 +294,6 @@ Host 192.168.1.10: OPEN ports 3306 (MySQL)
           zijn daarom net zo belangrijk als je technische skills!
         </div>
 
-        <!-- AdSense In-Article -->
-        <div class="ad-container ad-unit ad-in-article" style="display: none;">
-          <p class="ad-disclaimer">Advertisement</p>
-          <ins class="adsbygoogle"
-               style="display:block; text-align:center;"
-               data-ad-layout="in-article"
-               data-ad-format="fluid"
-               data-ad-client="ca-pub-6345664385525701"
-               data-ad-slot="5971972080"></ins>
-        </div>
-
         <h2>Juridische grenzen in Nederland</h2>
         <p>
           In Nederland is ethisch hacken legaal <strong>mits je toestemming hebt</strong>. Belangrijke wetten:
@@ -379,7 +366,7 @@ Host 192.168.1.10: OPEN ports 3306 (MySQL)
             Gebruik HackSimulator.nl om veilig te experimenteren met hacking tools. Probeer commands als <code>nmap</code>,
             <code>sqlmap</code> en <code>hashcat</code> zonder risico. Bouw je skills op in een veilige omgeving!
           </p>
-          <a href="../terminal.html" class="blog-cta-button">Start met hacken</a>
+          <a href="../terminal.html" class="blog-cta-button" data-terminal-cta="blog_wat-is-ethisch-hacken">Start met hacken</a>
         </div>
 
         <h2>Nuttige resources</h2>
@@ -445,17 +432,6 @@ Host 192.168.1.10: OPEN ports 3306 (MySQL)
       </footer>
     </article>
   </main>
-
-  <!-- AdSense Footer Banner (M5.5 Blog Monetization) -->
-  <div id="adsense-footer" class="ad-container ad-unit" style="display: none;">
-      <p class="ad-disclaimer">Advertisement</p>
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-6345664385525701"
-           data-ad-slot="1674341955"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-  </div>
 
   <!-- Footer (Component Injection) -->
   <div id="footer-placeholder">

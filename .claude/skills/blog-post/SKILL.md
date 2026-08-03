@@ -1,6 +1,6 @@
 ---
 name: blog-post
-description: Gebruik bij het toevoegen of bijwerken van een blogpost op HackSimulator (blog/*.html). Bewaakt de titel-lockstep over 7 locaties, de 4 afgeleide admin-items (blog-count, RSS, sitemap, bundle-KB) en draait de bestaande validatiescripts als gate. Trigger op "nieuwe blogpost", "blog toevoegen", "blog updaten".
+description: Gebruik bij het toevoegen of bijwerken van een blogpost op HackSimulator (blog/*.html). Bewaakt de titel-lockstep over 8 locaties, de 4 afgeleide admin-items (blog-count, RSS, sitemap, bundle-KB), de zichtbare verificatiedatum en draait de bestaande validatiescripts als gate. Trigger op "nieuwe blogpost", "blog toevoegen", "blog updaten".
 ---
 
 # Blogpost toevoegen / bijwerken
@@ -22,8 +22,8 @@ nmap-post). Zo erf je gratis alle conventies die `validate-blogs.sh` afdwingt:
 - `<nav class="breadcrumb">` + `"@type": "BreadcrumbList"` JSON-LD
 - consent-model-CTA's, blauw palet (**geen groen** — dat is main-site), gebalanceerde `<div>`-tags
 
-## Stap 2 — Titel-lockstep: één bronstring → 7 locaties
-De titel leeft op 7 plekken. Kies één bronstring en zet 'm consistent (zelfde bron → zelfde output):
+## Stap 2 — Titel-lockstep: één bronstring → 8 locaties
+De titel leeft op 8 plekken. Kies één bronstring en zet 'm consistent (zelfde bron → zelfde output):
 1. `<title>…| HackSimulator.nl</title>`
 2. `<meta property="og:title" …>`
 3. `<meta name="twitter:title" …>`
@@ -31,8 +31,15 @@ De titel leeft op 7 plekken. Kies één bronstring en zet 'm consistent (zelfde 
 5. BreadcrumbList `"name"` (position 3, de huidige pagina)
 6. `<h1 class="blog-post-title">…</h1>`
 7. De kaart op `blog/index.html` (blog-index)
+8. **`<title>` van het `<item>` in `feed.xml`** (Sessie 208 — deze ontbrak, waardoor alle 14
+   feed-titels in Title Case bleven staan na de sitebrede omzetting naar zinskapitaal)
 
 Alleen de `<h1>` fixen = gestructureerde data divergeert. Beweeg ze samen.
+
+> **Let op bij locatie 8:** de bron voor de RSS-titel is de **`<title>`-tag**, niet de `<h1>`.
+> Bij sommige posts is de `<h1>` bewust korter dan de SEO-titel (bijv. `wat-is-ethisch-hacken`);
+> syncen op `<h1>` zou de feed-titel dan onbedoeld inkorten. `validate-docs.sh --deep` check 9c
+> bewaakt dit (merk-suffix `| HackSimulator.nl` wordt afgestript).
 
 **Descriptions parallel:** `<meta name="twitter:description">` spiegelt `<meta property="og:description">`
 verbatim (net als twitter:title ↔ og:title hierboven). `validate-blogs.sh` Check 6 dwingt af dat
@@ -51,11 +58,28 @@ Drift-detectie in `validate-docs.sh --deep` trekt deze 4 uit sync als je ze verg
 3. **Sitemap-entry** in `sitemap.xml` met `lastmod >= datePublished` (check 9a).
 4. **Bundle blog-KB** in de VALIDATE-BUNDLE-marker in TASKS.md (check 5, ±5% tolerantie).
 
+**Volgorde op de hubpagina:** nieuwe kaart bovenaan in `blog/index.html` — de grid staat
+nieuwste-eerst en `validate-docs.sh --deep` check 9d faalt bij een oudere post boven een nieuwere.
+
 **Datums nooit faken of future-daten** (Sessie 199): `datePublished` = echte deploy-dag. Verifieer
 weekdag/datum met `date -d YYYY-MM-DD +%A` vóór je iets plant. Juridische claims spiegelen op de
 bestaande posts (art. 138ab Sr zónder verzonnen strafmaat).
 
-## Stap 5 — Genereer de social share card
+## Stap 5 — Zet de verificatiedatum (verplicht, gate in `validate-blogs.sh` check 7)
+Elke post draagt zichtbaar wannéér de feitelijke beweringen voor het laatst zijn nagelopen.
+De lezer kan de inhoud niet zelf beoordelen; dit is het minimum dat we wél kunnen bieden.
+Zet in `.blog-post-meta`, ná de categorie-badge:
+
+```html
+<span class="blog-fact-checked" title="Datum waarop de feitelijke beweringen in dit artikel voor het laatst zijn nagelopen">Feiten gecontroleerd: <time datetime="JJJJ-MM-DD">D maand JJJJ</time></span>
+```
+
+**Vul de échte datum in — de dag waarop je de claims daadwerkelijk hebt nagelopen.** Niet
+"vandaag" omdat het bestand vandaag is aangeraakt: dan is de regel op álle posts waardeloos.
+Elke harde numerieke claim (snelheden, CVSS-scores, percentages, jaartallen) krijgt een bron of
+verdwijnt — liever een feit weglaten dan een onzekere claim plaatsen (Sessie 164).
+
+## Stap 6 — Genereer de social share card
 Elke post heeft een eigen `og:image`; er is géén generieke terugval meer (Sessie 207). Draai:
 
 ```bash
@@ -73,7 +97,7 @@ Wijzigt de titel later? Herdraai het script, anders toont de kaart de oude kop.
 **Controle:** `file assets/blog/<slug>.png` moet `1200 x 630` geven, en
 `grep -c 'assets/og-image.png' blog/<slug>.html` moet 0 zijn.
 
-## Stap 6 — Gate (verplicht, exit 0)
+## Stap 7 — Gate (verplicht, exit 0)
 ```bash
 ./scripts/validate-blogs.sh          # structuur: init-analytics, JSON-LD, div-balans, breadcrumb(s)
 ./scripts/validate-docs.sh --deep    # cross-doc + SEO-metadata sync (blog-count/RSS/sitemap/bundle)

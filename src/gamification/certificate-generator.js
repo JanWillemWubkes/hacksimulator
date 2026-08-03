@@ -12,7 +12,7 @@ import {
   wordWrap
 } from '../utils/box-utils.js';
 
-import { CERT_TEMPLATES, DISCIPLINES } from './certificate-templates.js';
+import { CERT_TEMPLATES, DISCIPLINES, CERT_DISCLAIMER } from './certificate-templates.js';
 import { difficultyLabel } from './challenge-renderer.js';
 
 var B = BOX_CHARS;
@@ -117,6 +117,14 @@ export function generateChallengeCertificate(challenge, stats) {
   // Decoration bottom
   lines.push(buildLine(centerText(template.decoration, inner), width));
 
+  // Eerlijkheidsregel (zie CERT_DISCLAIMER). Wordt gewordwrapt omdat de box
+  // tot 30 tekens smal kan worden op een half-gesnapt venster — een vaste regel
+  // zou daar de rand doorbreken.
+  lines.push(buildEmptyLine(width));
+  wordWrap(CERT_DISCLAIMER, inner - 4).forEach(function(part) {
+    lines.push(buildLine(centerText(part, inner), width));
+  });
+
   lines.push(buildEmptyLine(width));
 
   // Bottom border
@@ -139,6 +147,7 @@ function generateCertificateMobile(challenge, stats) {
   out += 'Datum:        ' + formatDate(stats.earnedAt) + '\n\n';
   out += template.message + ' ' + discipline + ' beheerst.\n';
   out += template.decoration + '\n';
+  out += CERT_DISCLAIMER + '\n';
   return out;
 }
 

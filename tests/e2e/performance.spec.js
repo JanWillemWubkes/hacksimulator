@@ -23,7 +23,13 @@ const LIMITS = {
   WARNING_THRESHOLD: 945 * 1024,  // 945 KB warning (90%)
   LCP_TARGET: 3000,              // LCP < 3s on 4G
   TTI_TARGET: 5000,              // TTI < 5s (Google's "good" TTI on 4G)
-  MODULE_CASCADE: 3000,          // ES6 cascade < 3s (external AdSense scripts inflate this)
+  // ES6-modulecascade. Stond op 3000 ms omdat AdSense-scripts de cascade opblies;
+  // die zijn in Sessie 208 verwijderd. Lokaal (no-store server) daalde de mediaan op
+  // /terminal.html van 579 → 301 ms. 2500 ms is een voorzichtige aanscherping: de
+  // productiewaarde over 4G is hier niet te meten (uitgaand verkeer geblokkeerd).
+  // TODO: na de deploy tegen productie meten en verder aanscherpen richting de
+  // werkelijke waarde + ~30% marge.
+  MODULE_CASCADE: 2500,
 };
 
 // ========================================

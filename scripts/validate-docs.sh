@@ -7,7 +7,7 @@
 #      (Sessie 140 refinement: regex zoekt alleen canonieke markers — "Laatst bijgewerkt"
 #      / "Last updated" / "laatste" — om random "Sessie N" mentions in body te skippen)
 #   3. PRD-versie referentie identiek in CLAUDE.md en PLANNING.md
-#   4. Monetization-stack keywords aanwezig in alle 3 docs (AdSense, Ko-fi, Brevo, Gumroad, Lead magnet)
+#   4. Monetization-stack keywords aanwezig in alle 3 docs (Ko-fi, Brevo, Gumroad, Lead magnet)
 #
 # Doel: voorkom doc-drift die in Sessie 139 zichtbaar werd
 # (CLAUDE.md liep 14 sessies vooruit op PLANNING.md/TASKS.md).
@@ -187,8 +187,9 @@ fi
 check_start "Monetization-stack keyword coverage"
 
 # Keyword + acceptable variant patterns
+# Sessie 208: "AdSense" verwijderd — de advertentiestack is van de site gehaald.
+# De keyword-gate bewaakt de *actuele* stack; een verdwenen kanaal hoort er niet in.
 declare -A KEYWORDS=(
-  ["AdSense"]="AdSense"
   ["Ko-fi"]="Ko-fi"
   ["Brevo"]="Brevo"
   ["Gumroad"]="Gumroad"
@@ -404,6 +405,64 @@ if [ "$DEEP_MODE" = "1" ]; then
   fi
 
   # ----------------------------------------------------------
+  # Check 6d: In-app content-tellingen ↔ broncode (Sessie 208)
+  # ----------------------------------------------------------
+  # Check 6c dekte 3 van de 6 telbare content-types (blogposts, commands, termen).
+  # Badges, challenges en tutorial-scenario's stonden er niet in — en dáár was de
+  # drift dan ook: de `achievements`-man-page claimde 4 RARE badges terwijl
+  # badge-definitions.js er 5 definieert, en drie andere plekken noemden 20, 21 en 22.
+  # Anders dan 6c zijn dit EXACTE tellingen (geen "N+"-floors), dus exacte gelijkheid.
+  echo ""
+  echo "Check 6d: In-app content-tellingen ↔ broncode (--deep)"
+
+  BADGE_SRC="src/gamification/badge-definitions.js"
+  ACH_SRC="src/commands/system/achievements.js"
+
+  # assert_exact <naam> <geclaimd> <ground-truth> <hint>
+  assert_exact() {
+    local name="$1" claimed="$2" truth="$3" hint="$4"
+    if [ -z "$claimed" ]; then
+      fail "Telling '$name': geen getal gevonden (bronstructuur gewijzigd?) — $hint"
+    elif [ -z "$truth" ] || [ "$truth" -eq 0 ] 2>/dev/null; then
+      fail "Telling '$name': ground-truth leeg/0 (telbron gewijzigd?) — $hint"
+    elif [ "$claimed" -eq "$truth" ] 2>/dev/null; then
+      pass "Telling '$name': ${claimed} == broncode ${truth}"
+    else
+      fail "Telling '$name': geclaimd ${claimed} != broncode ${truth} — $hint"
+    fi
+  }
+
+  # Badges per zeldzaamheid: man-page-regel "[*] COMMON  ... (8 badges)" vs rarity-veld
+  for rarity in common uncommon rare epic legendary; do
+    RAR_UPPER=$(echo "$rarity" | tr '[:lower:]' '[:upper:]')
+    truth=$(grep -cE "rarity: *'${rarity}'" "$BADGE_SRC" 2>/dev/null)
+    claimed=$(grep -oE "${RAR_UPPER} +[^(]*\(([0-9]+) badges?\)" "$ACH_SRC" 2>/dev/null \
+              | grep -oE '\([0-9]+' | grep -oE '[0-9]+' | head -1)
+    assert_exact "achievements man-page ${RAR_UPPER}" "$claimed" "$truth" \
+      "werk de ZELDZAAMHEID-lijst in ${ACH_SRC} bij"
+  done
+
+  # Totaal badges: som van de rarity-velden moet gelijk zijn aan het aantal id-velden
+  badge_total=$(grep -cE "rarity: *'[a-z]+'" "$BADGE_SRC" 2>/dev/null)
+  badge_ids=$(grep -cE "^ *id: *'" "$BADGE_SRC" 2>/dev/null)
+  assert_exact "badge-definitions rarity-dekking" "$badge_total" "$badge_ids" \
+    "elke badge hoort exact één rarity-veld te hebben"
+
+  # Challenges: badge-beschrijvingen noemen "alle N challenges" — moet het echte aantal zijn
+  challenge_truth=$(grep -chE "^ *id: *'" src/gamification/challenges/*.js 2>/dev/null | paste -sd+ | bc)
+  challenge_claimed=$(grep -oE 'alle ([0-9]+) challenges' "$BADGE_SRC" 2>/dev/null \
+                      | grep -oE '[0-9]+' | head -1)
+  assert_exact "badge-tekst 'alle N challenges'" "$challenge_claimed" "$challenge_truth" \
+    "pas de badge-beschrijvingen in ${BADGE_SRC} aan"
+
+  # Tutorial-scenario's: bestandstelling vs de registratie-imports in terminal.js
+  # (daar worden de scenario's geregistreerd, niet in tutorial-manager.js)
+  scenario_files=$(ls src/tutorial/scenarios/*.js 2>/dev/null | wc -l | tr -d ' ')
+  scenario_registered=$(grep -cE "^import .* from '\.\./tutorial/scenarios/" src/core/terminal.js 2>/dev/null)
+  assert_exact "tutorial-scenario's geregistreerd" "$scenario_registered" "$scenario_files" \
+    "elk bestand in src/tutorial/scenarios/ hoort geïmporteerd te zijn in src/core/terminal.js"
+
+  # ----------------------------------------------------------
   # Check 7: Cross-doc Versie consistency (CLAUDE.md ↔ TASKS.md)
   # ----------------------------------------------------------
   check_start "Cross-doc Versie consistency (--deep)"
@@ -522,6 +581,62 @@ else
     fi
   done
   [ "$feed_ok" = "1" ] && pass "9b: elke blog-post-URL aanwezig in feed.xml"
+
+  # 9c: RSS-titel == <title> van de post (Sessie 208)
+  # De RSS-titel hoorde niet bij de 7 lockstep-locaties van de blog-post-skill.
+  # Gevolg: bij de sitebrede overgang naar Nederlands zinskapitaal (commit 65c5f18)
+  # bleven 14 van de 14 feed-titels in Engelse Title Case staan — stil, want niets
+  # controleerde het. Dit is de ontbrekende 8e locatie.
+  rss_title_ok=1
+  for f in blog/*.html; do
+    base=$(basename "$f")
+    [ "$base" = "index.html" ] && continue
+
+    page_title=$(sed -n 's/.*<title>\(.*\)<\/title>.*/\1/p' "$f" | head -1 \
+                 | sed 's/[[:space:]]*[|–-][[:space:]]*HackSimulator\.nl[[:space:]]*$//')
+    # De <item> van deze post: het blok tussen <item> en </item> dat de URL bevat.
+    feed_title=$(awk -v post="blog/${base}" '
+      /<item>/ { block = ""; inblock = 1 }
+      inblock  { block = block $0 "\n" }
+      /<\/item>/ { if (inblock && index(block, post)) { print block; exit } inblock = 0 }
+    ' "$FEED" | sed -n 's/.*<title>\(.*\)<\/title>.*/\1/p' | head -1)
+
+    if [ -z "$feed_title" ]; then
+      : # ontbrekende item is al door 9b gemeld
+    elif [ "$feed_title" != "$page_title" ]; then
+      fail "9c ${base}: feed-titel wijkt af van <title>
+        feed: ${feed_title}
+        post: ${page_title}"
+      rss_title_ok=0
+    fi
+  done
+  [ "$rss_title_ok" = "1" ] && pass "9c: elke RSS-titel gelijk aan de <title> van de post"
+
+  # 9d: blog/index.html toont de kaarten nieuwste-eerst (Sessie 208)
+  # De volgorde brak vanaf kaart 5 zonder dat iets het zag: een bezoeker kreeg
+  # een post uit december 2025 bóven een uit januari 2026.
+  order_ok=$(python3 - <<'PYEOF'
+import re, sys
+MONTHS = {'jan':1,'feb':2,'mrt':3,'apr':4,'mei':5,'jun':6,'jul':7,'aug':8,'sep':9,'okt':10,'nov':11,'dec':12}
+s = open('blog/index.html', encoding='utf-8').read()
+cards = re.findall(r'<article class="blog-post-card".*?</article>', s, re.S)
+dates = []
+for c in cards:
+    m = re.search(r'\[(\d{1,2}) ([a-z]{3}) (\d{4})\]', c)
+    if not m:
+        print('GEEN_DATUM'); sys.exit()
+    dates.append((int(m.group(3)), MONTHS[m.group(2)], int(m.group(1))))
+for i in range(len(dates) - 1):
+    if dates[i] < dates[i + 1]:
+        print(f'FOUT:{i+1}:{dates[i]}:{dates[i+1]}'); sys.exit()
+print(f'OK:{len(dates)}')
+PYEOF
+)
+  case "$order_ok" in
+    OK:*)        pass "9d: blog/index.html nieuwste-eerst gesorteerd (${order_ok#OK:} kaarten)" ;;
+    GEEN_DATUM)  fail "9d: blog-kaart zonder [d mmm jjjj]-datum (markup gewijzigd?)" ;;
+    *)           fail "9d: blog/index.html niet nieuwste-eerst — breuk bij kaart ${order_ok#FOUT:}" ;;
+  esac
 fi
 
 # ============================================================

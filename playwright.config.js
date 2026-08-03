@@ -44,7 +44,15 @@ export default defineConfig({
     actionTimeout: 10 * 1000,
 
     // Viewport size (desktop default)
-    viewport: { width: 1280, height: 720 }
+    viewport: { width: 1280, height: 720 },
+
+    // Optionele browser-override voor omgevingen waar de vooraf geïnstalleerde
+    // Chromium-build niet overeenkomt met de @playwright/test-versie in package.json
+    // (dan zoekt Playwright een chrome-headless-shell die er niet is).
+    // Zelfde patroon als scripts/capture-launch-visuals.mjs. Niet gezet = standaardgedrag.
+    ...(process.env.CHROMIUM_PATH
+      ? { launchOptions: { executablePath: process.env.CHROMIUM_PATH } }
+      : {})
   },
 
   // Configure projects for major browsers

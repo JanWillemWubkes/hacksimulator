@@ -98,6 +98,21 @@ validate_blog() {
     errors=$((errors + 1))
   fi
 
+  # Check 7: zichtbare verificatiedatum (Sessie 208)
+  # De lezer kan niet zelf beoordelen of de inhoud klopt. Het minste wat we kunnen
+  # bieden is WANNEER de beweringen voor het laatst zijn nagelopen. Zonder deze gate
+  # vergeet de volgende post het, en dan zegt de datum op de andere posts ook niets meer.
+  # Skip blog/index.html: de hub bevat geen eigen beweringen.
+  if [ "$(basename "$file")" != "index.html" ]; then
+    if ! grep -q 'class="blog-fact-checked"' "$file"; then
+      issues+="    [FAIL] MISSING: <span class=\"blog-fact-checked\"> met controledatum in .blog-post-meta\n"
+      errors=$((errors + 1))
+    elif ! grep -qE 'blog-fact-checked[^>]*>[^<]*<time datetime="[0-9]{4}-[0-9]{2}-[0-9]{2}">' "$file"; then
+      issues+="    [FAIL] blog-fact-checked zonder geldige <time datetime=\"JJJJ-MM-DD\">\n"
+      errors=$((errors + 1))
+    fi
+  fi
+
   # Report per file
   if [ $errors -eq 0 ]; then
     printf "  %-42s ${GREEN}[OK]${NC}\n" "$filename"

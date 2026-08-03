@@ -12,6 +12,8 @@ import {
   wordWrap
 } from '../utils/box-utils.js';
 
+import { CERT_DISCLAIMER } from '../gamification/certificate-templates.js';
+
 var B = BOX_CHARS;
 
 function buildLine(text, width) {
@@ -106,6 +108,13 @@ function generateCertificate(scenario, stats) {
   // Star decoration bottom
   lines.push(buildLine(centerText(stars, inner), width));
 
+  // Eerlijkheidsregel (zie CERT_DISCLAIMER in gamification/certificate-templates.js).
+  // Gewordwrapt omdat de box tot 30 tekens smal kan worden.
+  lines.push(buildEmptyLine(width));
+  wordWrap(CERT_DISCLAIMER, inner - 4).forEach(function(part) {
+    lines.push(buildLine(centerText(part, inner), width));
+  });
+
   lines.push(buildEmptyLine(width));
 
   // Bottom border
@@ -123,6 +132,7 @@ function generateCertificateMobile(scenario, stats) {
   out += 'Stappen: ' + stats.stepsCompleted + '/' + stats.totalSteps + '\n';
   out += 'Datum:   ' + formatDate() + '\n\n';
   out += '*  *  *\n';
+  out += CERT_DISCLAIMER + '\n';
   return out;
 }
 

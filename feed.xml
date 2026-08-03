@@ -12,7 +12,7 @@
     <lastBuildDate>Wed, 22 Jul 2026 12:00:00 +0200</lastBuildDate>
 
     <item>
-      <title>Metasploit voor Beginners: Wat het Is en Hoe het Werkt</title>
+      <title>Metasploit voor beginners: wat het is en hoe het werkt</title>
       <description>Leer wat Metasploit is: het bekendste penetration testing framework. Nederlandse beginnersgids over exploits, payloads en de exploit-workflow, met de ethische en juridische grenzen erbij.</description>
       <link>https://hacksimulator.nl/blog/metasploit-beginnersgids.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/metasploit-beginnersgids.html</guid>
@@ -21,7 +21,7 @@
     </item>
 
     <item>
-      <title>Wireshark Tutorial: Netwerkverkeer Analyseren voor Beginners</title>
+      <title>Wireshark tutorial: netwerkverkeer analyseren voor beginners</title>
       <description>Leer netwerkverkeer analyseren met Wireshark. Nederlandse beginnersgids over packet sniffing, display filters en het herkennen van verdacht verkeer op je netwerk.</description>
       <link>https://hacksimulator.nl/blog/wireshark-beginnersgids.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/wireshark-beginnersgids.html</guid>
@@ -30,7 +30,7 @@
     </item>
 
     <item>
-      <title>Hashcat Uitgelegd: Hoe Wachtwoord-Hashes Gekraakt Worden</title>
+      <title>Hashcat uitgelegd: hoe wachtwoord-hashes gekraakt worden</title>
       <description>Leer hoe hashcat wachtwoord-hashes kraakt met dictionary attacks, brute force en GPU-kracht. Nederlandse beginnersgids met veilige oefenvoorbeelden.</description>
       <link>https://hacksimulator.nl/blog/hashcat-wachtwoorden-kraken.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/hashcat-wachtwoorden-kraken.html</guid>
@@ -39,7 +39,7 @@
     </item>
 
     <item>
-      <title>OWASP Top 10 Uitgelegd voor Beginners</title>
+      <title>OWASP Top 10 uitgelegd voor beginners</title>
       <description>Wat is de OWASP Top 10? Complete Nederlandse uitleg van de 10 belangrijkste webapplicatie-kwetsbaarheden van 2021, met voorbeelden en praktische tips voor beginners.</description>
       <link>https://hacksimulator.nl/blog/owasp-top-10-uitgelegd.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/owasp-top-10-uitgelegd.html</guid>
@@ -48,7 +48,7 @@
     </item>
 
     <item>
-      <title>SQL Injection Uitgelegd voor Beginners</title>
+      <title>SQL injection uitgelegd voor beginners</title>
       <description>Leer wat SQL injection is, hoe het werkt en hoe je websites hiertegen beschermt. Begrijpelijke Nederlandse uitleg met voorbeelden.</description>
       <link>https://hacksimulator.nl/blog/sql-injection-uitgelegd.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/sql-injection-uitgelegd.html</guid>
@@ -57,7 +57,7 @@
     </item>
 
     <item>
-      <title>Wachtwoordbeveiliging: Hoe Hackers Kraken</title>
+      <title>Wachtwoordbeveiliging: hoe hackers kraken</title>
       <description>Leer hoe hackers wachtwoorden kraken met brute force, dictionary attacks en rainbow tables. Ontdek hoe je sterke wachtwoorden maakt en jezelf beschermt.</description>
       <link>https://hacksimulator.nl/blog/wachtwoord-beveiliging.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/wachtwoord-beveiliging.html</guid>
@@ -66,7 +66,7 @@
     </item>
 
     <item>
-      <title>Social Engineering: De Menselijke Factor</title>
+      <title>Social engineering: de menselijke factor</title>
       <description>Leer wat social engineering is en hoe aanvallers menselijke psychologie misbruiken. Ontdek phishing, pretexting, baiting en hoe je jezelf beschermt.</description>
       <link>https://hacksimulator.nl/blog/social-engineering.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/social-engineering.html</guid>
@@ -75,7 +75,7 @@
     </item>
 
     <item>
-      <title>Netwerk Scanning met Nmap: Beginnersgids</title>
+      <title>Netwerk scanning met Nmap: beginnersgids</title>
       <description>Leer hoe nmap werkt voor netwerk scanning. Ontdek open poorten, services en kwetsbaarheden met deze Nederlandse beginnersgids voor ethisch hacken.</description>
       <link>https://hacksimulator.nl/blog/nmap-beginnersgids.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/nmap-beginnersgids.html</guid>
@@ -84,7 +84,7 @@
     </item>
 
     <item>
-      <title>5 Essentiële Tools voor Cybersecurity Beginners</title>
+      <title>5 essentiële tools voor cybersecurity beginners</title>
       <description>Ontdek de 5 belangrijkste gratis cybersecurity tools voor beginners. Van nmap tot Wireshark - leer welke tools elke ethisch hacker moet kennen.</description>
       <link>https://hacksimulator.nl/blog/cybersecurity-tools.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/cybersecurity-tools.html</guid>
@@ -93,7 +93,7 @@
     </item>
 
     <item>
-      <title>Hoe Word je Ethisch Hacker? Complete Carrièregids</title>
+      <title>Hoe word je ethisch hacker? Carrièregids</title>
       <description>Complete gids om ethisch hacker te worden. Leer welke skills, certificeringen en stappen je nodig hebt voor een carrière in cybersecurity.</description>
       <link>https://hacksimulator.nl/blog/ethisch-hacker-worden.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/ethisch-hacker-worden.html</guid>
@@ -102,7 +102,7 @@
     </item>
 
     <item>
-      <title>Linux Bestandssysteem: Basis voor Hackers</title>
+      <title>Linux bestandssysteem: basis voor hackers</title>
       <description>Leer de basis van het Linux bestandssysteem. Van ls en cd tot chmod en permissies - essentieel voor elke beginnende hacker en systeembeheerder.</description>
       <link>https://hacksimulator.nl/blog/linux-bestandssysteem.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/linux-bestandssysteem.html</guid>
@@ -111,7 +111,7 @@
     </item>
 
     <item>
-      <title>Welkom bij HackSimulator.nl</title>
+      <title>Welkom bij HackSimulator.nl | ethisch hacken leren</title>
       <description>Ontdek HackSimulator.nl - een veilige browser-based terminal voor het leren van ethisch hacken. 40+ commands, virtual filesystem en educatieve tutorials voor beginners.</description>
       <link>https://hacksimulator.nl/blog/welkom.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/welkom.html</guid>
@@ -120,7 +120,7 @@
     </item>
 
     <item>
-      <title>Wat is Ethisch Hacken? White Hat vs Black Hat Uitgelegd</title>
+      <title>Wat is ethisch hacken? White hat vs black hat uitgelegd</title>
       <description>Leer het verschil tussen ethical hacking (white hat), malicious hacking (black hat) en grey hat. Ontdek carrièremogelijkheden in cybersecurity en de juridische grenzen.</description>
       <link>https://hacksimulator.nl/blog/wat-is-ethisch-hacken.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/wat-is-ethisch-hacken.html</guid>
@@ -129,7 +129,7 @@
     </item>
 
     <item>
-      <title>Terminal Commands voor Beginners</title>
+      <title>Terminal commands voor beginners | Linux command line leren</title>
       <description>Leer de basis van terminal commands: ls, cd, cat, chmod en meer. Begrijpelijke uitleg voor beginners die de command line willen leren gebruiken.</description>
       <link>https://hacksimulator.nl/blog/terminal-basics.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/terminal-basics.html</guid>

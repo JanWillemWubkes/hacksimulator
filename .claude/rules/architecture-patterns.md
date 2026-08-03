@@ -66,3 +66,25 @@ document.addEventListener('keydown', handleTerminalInput);
 - **Responsive Blog Tables:** brede `<table>` in blogcontent → opt-in class `.blog-table--stacked` (Sessie 181), NIET horizontale `overflow-x:auto`-scroll. Op `@media≤768px` wordt elke rij een gelabelde kaart via `data-label` op elke `<td>` + `::before`; voeg ook `role="table"` op de tabel + `scope="col"` op elke `<th>` toe (a11y: `<thead>` clip-verborgen, niet `display:none`). → `styles/blog.css`
 
 → **All 40+ patterns indexed:** docs/sessions/current.md
+
+---
+
+## 4. Third-party verwijderen: twee servers, niet één meting (Sessie 208)
+
+Bij het weghalen van een externe afhankelijkheid bewijst een nulmeting achteraf niets — "0 verzoeken"
+is óók de uitkomst van een kapotte meting. Zet de oude code ernaast:
+
+```bash
+git archive HEAD | tar -x -C /tmp/pre-change
+python3 scripts/nostore-server.py 8898 /tmp/pre-change &   # oud
+python3 scripts/nostore-server.py 8899 $(pwd) &            # nieuw
+```
+
+Draai daarna dezelfde meting tegen beide poorten. Bij de AdSense-verwijdering gaf dat
+**2 advertentieverzoeken + 3 ad-units vóór, 0 + 0 ná** — pas dáármee is de nulmeting bewijs.
+
+**Consent-state migreren = meestal niet nodig.** Laat het opgeslagen JSON-formaat intact en stop
+alleen met het schrijven van de verdwenen sleutel. `hasConsent('analytics')` blijft dan werken voor
+iedereen die al toestemming gaf: geen banner-herhaling, geen verloren keuzes. Verifieer wel álle
+toestandsvarianten live (vers / oude vorm / legacy-string / geweigerd) — "geen migratie nodig" is
+een aanname tot je het gemeten hebt.

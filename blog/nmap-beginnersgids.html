@@ -51,16 +51,13 @@
   <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="../styles/main.css?v=154">
+  <link rel="stylesheet" href="../styles/main.css?v=208">
   <link rel="stylesheet" href="../styles/landing.css?v=121">
-  <link rel="stylesheet" href="../styles/blog.css?v=122">
+  <link rel="stylesheet" href="../styles/blog.css?v=208">
   <link rel="stylesheet" href="../styles/mobile.css?v=116" media="screen and (max-width: 768px)">
 
-  <!-- Google AdSense -->
-  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
-
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
-  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore" data-adsense="ca-pub-6345664385525701"></script>
+  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
 
   <!-- Structured Data - JSON-LD -->
   <script type="application/ld+json">
@@ -151,6 +148,7 @@
           <time datetime="2026-01-25">25 januari 2026</time>
           <span>8 min</span>
           <span class="category-badge">Tools</span>
+          <span class="blog-fact-checked" title="Datum waarop de feitelijke beweringen in dit artikel voor het laatst zijn nagelopen">Feiten gecontroleerd: <time datetime="2026-06-14">14 juni 2026</time></span>
         </div>
       </header>
 
@@ -272,17 +270,6 @@ PORT     STATE    SERVICE
           In de praktijk gebruik je bijna altijd de SYN scan (<code>-sS</code>). Het is sneller, produceert minder
           netwerkverkeer, en laat minder sporen achter in de logs van het doelwit. Maar onthoud: bij een
           <em>geautoriseerde</em> pentest maakt stealth weinig uit - je hebt immers toestemming.
-        </div>
-
-        <!-- AdSense In-Article -->
-        <div class="ad-container ad-unit ad-in-article" style="display: none;">
-          <p class="ad-disclaimer">Advertisement</p>
-          <ins class="adsbygoogle"
-               style="display:block; text-align:center;"
-               data-ad-layout="in-article"
-               data-ad-format="fluid"
-               data-ad-client="ca-pub-6345664385525701"
-               data-ad-slot="5971972080"></ins>
         </div>
 
         <h2>Veelvoorkomende poorten en services</h2>
@@ -481,17 +468,6 @@ PORT     STATE  SERVICE
           misconfiguratie of zelfs een compromised systeem.
         </div>
 
-        <!-- AdSense In-Article 2 -->
-        <div class="ad-container ad-unit ad-in-article" style="display: none;">
-          <p class="ad-disclaimer">Advertisement</p>
-          <ins class="adsbygoogle"
-               style="display:block; text-align:center;"
-               data-ad-layout="in-article"
-               data-ad-format="fluid"
-               data-ad-client="ca-pub-6345664385525701"
-               data-ad-slot="5270665903"></ins>
-        </div>
-
         <h2>Ethische overwegingen</h2>
         <p>
           Dit is het belangrijkste deel van dit artikel. Nmap is een krachtige tool, en met kracht komt verantwoordelijkheid.
@@ -575,7 +551,7 @@ PORT     STATE  SERVICE
             poorten open staan, welke services draaien, en krijgt tips over wat je bevindingen betekenen. Typ
             <code>man nmap</code> voor de volledige Nederlandstalige handleiding.
           </p>
-          <a href="../terminal.html" class="blog-cta-button">Start met scannen</a>
+          <a href="../terminal.html" class="blog-cta-button" data-terminal-cta="blog_nmap-beginnersgids">Start met scannen</a>
         </div>
 
         <h2>Samenvatting</h2>
@@ -661,17 +637,6 @@ PORT     STATE  SERVICE
       </footer>
     </article>
   </main>
-
-  <!-- AdSense Footer Banner (M5.5 Blog Monetization) -->
-  <div id="adsense-footer" class="ad-container ad-unit" style="display: none;">
-      <p class="ad-disclaimer">Advertisement</p>
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-6345664385525701"
-           data-ad-slot="1674341955"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-  </div>
 
   <!-- Footer (Component Injection) -->
   <div id="footer-placeholder">

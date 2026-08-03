@@ -44,16 +44,13 @@
   <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="styles/main.css?v=154">
+  <link rel="stylesheet" href="styles/main.css?v=208">
   <link rel="stylesheet" href="styles/landing.css?v=121">
-  <link rel="stylesheet" href="styles/pages.css?v=133">
+  <link rel="stylesheet" href="styles/pages.css?v=208">
   <link rel="stylesheet" href="styles/mobile.css?v=116" media="screen and (max-width: 768px)">
 
-  <!-- Google AdSense -->
-  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
-
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
-  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore" data-adsense="ca-pub-6345664385525701"></script>
+  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
 
   <!-- Structured Data - JSON-LD -->
   <script type="application/ld+json">
@@ -305,6 +302,52 @@
       </div>
     </section>
 
+    <!-- Verantwoording: hoe de inhoud tot stand komt en hoe die gecontroleerd wordt -->
+    <section class="page-section" id="verantwoording">
+      <h2>Verantwoording: hoe betrouwbaar is deze inhoud?</h2>
+      <div class="verantwoording-card">
+      <p>
+        Een eerlijke vraag verdient een eerlijk antwoord, want je leert hier iets waarvan je
+        niet zelf kunt controleren of het klopt.
+      </p>
+      <h3>Hoe het gemaakt is</h3>
+      <p>
+        HackSimulator is gebouwd door één developer, met intensieve inzet van AI voor zowel de
+        code als de lesteksten. Ik ben geen gecertificeerd securityprofessional en doe ook niet
+        alsof. Wat ik wél doe: elke feitelijke bewering controleerbaar maken en fouten
+        corrigeren zodra ze gevonden worden.
+      </p>
+      <h3>Wat er gecontroleerd is</h3>
+      <ul>
+        <li>De blogartikelen zijn nagelopen op feitelijke en juridische juistheid, met
+            bronvermelding bij de controleerbare claims.</li>
+        <li>De betaalde gidsen zijn apart gecontroleerd, inclusief de wetsartikelen en
+            rechtszaken waarnaar verwezen wordt.</li>
+        <li>Getallen die je op deze site ziet (aantal commands, blogposts, begrippen) worden
+            bij elke wijziging automatisch tegen de broncode gecontroleerd, zodat de site
+            nooit meer claimt dan er is.</li>
+      </ul>
+      <h3>Wat nog niet gecontroleerd is</h3>
+      <p>
+        De ingebouwde handleidingen (<code>man &lt;command&gt;</code>) en de woordenlijst zijn
+        nog niet door een onafhankelijke securityprofessional nagelezen. Dat is de volgende stap:
+        er ligt een reviewpakket klaar met alle controleerbare beweringen op een rij. Zodra die
+        review is uitgevoerd, staat hier wie hem deed en wanneer.
+      </p>
+      <p>
+        <strong>Fout gevonden?</strong> Laat het weten via
+        <a href="mailto:contact@hacksimulator.nl">contact@hacksimulator.nl</a> of open een issue
+        op <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.
+        Correcties zijn welkom en worden verwerkt — ook als ze ongemakkelijk zijn.
+      </p>
+      <p class="verantwoording-note">
+        <strong>Let op:</strong> alle output in de terminal is gesimuleerd en vereenvoudigd.
+        Echte tools geven meer en andere informatie. HackSimulator is een startpunt, geen
+        vervanging voor erkende opleidingen of certificeringen.
+      </p>
+      </div>
+    </section>
+
     <!-- Lead Magnet CTA: gratis Pentest Playbook sample -->
     <section class="page-section">
       <div class="gids-bundle" style="background: var(--color-bg-card, transparent); text-align: center; max-width: 720px; margin: 0 auto;">
@@ -373,16 +416,6 @@
         </a>
       </div>
     </section>
-
-    <!-- AdSense Over Ons Display -->
-    <div class="ad-container ad-unit" style="display: none;">
-      <p class="ad-disclaimer">Advertisement</p>
-      <ins class="adsbygoogle" style="display:block"
-           data-ad-client="ca-pub-6345664385525701"
-           data-ad-slot="2155048406"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-    </div>
 
     <!-- Final CTA -->
     <section class="final-cta">

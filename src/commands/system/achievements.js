@@ -83,7 +83,7 @@ export default {
     "    ZELDZAAMHEID (RARITY)\n" +
     "        [*] COMMON      Basis milestones (8 badges)\n" +
     "        [+] UNCOMMON    Gevorderde milestones (6 badges)\n" +
-    "        [#] RARE        Uitdagende milestones (4 badges)\n" +
+    "        [#] RARE        Uitdagende milestones (5 badges)\n" +
     "        [!] EPIC        Indrukwekkende prestaties (2 badges)\n" +
     "        [S] LEGENDARY   Ultieme meesterschap (1 badge)\n" +
     "\n" +

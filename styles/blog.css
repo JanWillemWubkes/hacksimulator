@@ -362,6 +362,14 @@ a[href='#all'].category-btn {
   margin-left: var(--spacing-sm);
   margin-right: 0;
 }
+/* Verificatiedatum (Sessie 208): een vertrouwenssignaal, geen kop-informatie.
+   Bewust kleiner en gedempt zodat het de publicatiedatum niet beconcurreert. */
+.blog-fact-checked {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
 .blog-post-meta > :not(:first-child) {
   margin-left: var(--spacing-sm);
 }
@@ -1261,26 +1269,6 @@ a[href='#all'].category-btn {
 }
 .newsletter-signup .sib-form .input--hidden {
   display: none !important;
-}
-
-/* ==================== Blog Ad Placements ==================== */
-
-/* Blog index: ad inside .blog-posts-grid needs explicit sizing to prevent grid collapse */
-.blog-posts-grid > .ad-container {
-  min-height: 100px;
-  /* width: 100% nu in base .ad-container class (main.css) */
-}
-
-/* Blog footer ad: sits outside <main>, needs container width to match blog content */
-#adsense-footer {
-  max-width: 720px;
-  margin: var(--spacing-xl) auto;
-  min-height: 100px;
-}
-
-/* In-article ads */
-.ad-in-article {
-  margin: var(--spacing-xl) 0;
 }
 
 /* Override smooth-scroll uit landing.css op blog-pages.

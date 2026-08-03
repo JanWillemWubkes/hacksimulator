@@ -50,16 +50,13 @@
   <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="../styles/main.css?v=154">
+  <link rel="stylesheet" href="../styles/main.css?v=208">
   <link rel="stylesheet" href="../styles/landing.css?v=121">
-  <link rel="stylesheet" href="../styles/blog.css?v=122">
+  <link rel="stylesheet" href="../styles/blog.css?v=208">
   <link rel="stylesheet" href="../styles/mobile.css?v=116" media="screen and (max-width: 768px)">
 
-  <!-- Google AdSense -->
-  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
-
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
-  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore" data-adsense="ca-pub-6345664385525701"></script>
+  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
 
   <!-- Structured Data - JSON-LD -->
   <script type="application/ld+json">
@@ -150,6 +147,7 @@
           <time datetime="2026-02-24">24 februari 2026</time>
           <span>8 min</span>
           <span class="category-badge">Tools</span>
+          <span class="blog-fact-checked" title="Datum waarop de feitelijke beweringen in dit artikel voor het laatst zijn nagelopen">Feiten gecontroleerd: <time datetime="2026-06-14">14 juni 2026</time></span>
         </div>
       </header>
 
@@ -350,17 +348,6 @@ mensen wachtwoorden hergebruikt!</div>
           weggeeft.
         </p>
 
-        <!-- AdSense In-Article -->
-        <div class="ad-container ad-unit ad-in-article" style="display: none;">
-          <p class="ad-disclaimer">Advertisement</p>
-          <ins class="adsbygoogle"
-               style="display:block; text-align:center;"
-               data-ad-layout="in-article"
-               data-ad-format="fluid"
-               data-ad-client="ca-pub-6345664385525701"
-               data-ad-slot="5971972080"></ins>
-        </div>
-
         <h2>Hashcat: de koning van password cracking</h2>
         <p>
           <a href="/commands/#cmd-hashcat"><code>hashcat</code></a> is de meest gebruikte password cracking tool ter
@@ -461,17 +448,6 @@ Recovered........: 3/5 (60.00%)
           Merk op: het verschil tussen 8 en 12 tekens is niet een beetje - het is het verschil tussen <strong>uren</strong>
           en <strong>duizenden jaren</strong>. Elke extra teken vermenigvuldigt de kraaktijd enorm.
           Met bcrypt of Argon2 in plaats van MD5 worden bovenstaande tijden nog eens duizenden keren langer.
-        </div>
-
-        <!-- AdSense In-Article 2 -->
-        <div class="ad-container ad-unit ad-in-article" style="display: none;">
-          <p class="ad-disclaimer">Advertisement</p>
-          <ins class="adsbygoogle"
-               style="display:block; text-align:center;"
-               data-ad-layout="in-article"
-               data-ad-format="fluid"
-               data-ad-client="ca-pub-6345664385525701"
-               data-ad-slot="5270665903"></ins>
         </div>
 
         <h2>Hoe bescherm je jezelf?</h2>
@@ -616,7 +592,7 @@ de woordenlijst. Gebruik langere, unieke wachtwoorden.
             <code>hashcat 5f4dcc3b5aa765d61d8327deb882cf99</code> om zelf te ervaren hoe snel een zwak wachtwoord
             valt. Je leert waarom lengte belangrijker is dan complexiteit.
           </p>
-          <a href="../terminal.html" class="blog-cta-button">Test wachtwoordsterkte</a>
+          <a href="../terminal.html" class="blog-cta-button" data-terminal-cta="blog_wachtwoord-beveiliging">Test wachtwoordsterkte</a>
         </div>
 
         <h2>Samenvatting</h2>
@@ -680,17 +656,6 @@ de woordenlijst. Gebruik langere, unieke wachtwoorden.
       </footer>
     </article>
   </main>
-
-  <!-- AdSense Footer Banner (M5.5 Blog Monetization) -->
-  <div id="adsense-footer" class="ad-container ad-unit" style="display: none;">
-      <p class="ad-disclaimer">Advertisement</p>
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-6345664385525701"
-           data-ad-slot="1674341955"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-  </div>
 
   <!-- Footer (Component Injection) -->
   <div id="footer-placeholder">

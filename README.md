@@ -113,7 +113,7 @@ hacksimulator/
 - **Frontend:** Vanilla JavaScript ES6+
 - **Styling:** Vanilla CSS (no frameworks!)
 - **Storage:** localStorage (5MB)
-- **Analytics:** Google Analytics 4 + Google AdSense, met eigen consent-banner (Consent Mode v2)
+- **Analytics:** Google Analytics 4, met eigen consent-banner (Consent Mode v2). Geen advertenties.
 - **Hosting:** Netlify (recommended)
 
 ### Why Vanilla?

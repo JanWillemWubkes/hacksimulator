@@ -171,11 +171,10 @@ test.describe('Blog Theme Toggle (CSP-Compliant)', () => {
     const cspErrors = consoleErrors.filter(err =>
       (err.includes('Content Security Policy') ||
        err.includes('Refused to execute inline script')) &&
-      // Exclude third-party AdSense/Google CSP errors (not our code)
-      !err.includes('googlesyndication') &&
-      !err.includes('gstatic.com') &&
-      !err.includes('adtrafficquality') &&
-      !err.includes('doubleclick')
+      // Google Fonts is de enige overgebleven third-party op deze pagina's.
+      // De AdSense-uitzonderingen zijn met de advertenties verdwenen (Sessie 208) —
+      // ze weer toevoegen zou echte CSP-fouten maskeren.
+      !err.includes('gstatic.com')
     );
 
     expect(cspErrors).toHaveLength(0);

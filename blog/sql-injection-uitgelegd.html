@@ -50,16 +50,13 @@
   <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="../styles/main.css?v=154">
+  <link rel="stylesheet" href="../styles/main.css?v=208">
   <link rel="stylesheet" href="../styles/landing.css?v=121">
-  <link rel="stylesheet" href="../styles/blog.css?v=122">
+  <link rel="stylesheet" href="../styles/blog.css?v=208">
   <link rel="stylesheet" href="../styles/mobile.css?v=116" media="screen and (max-width: 768px)">
 
-  <!-- Google AdSense -->
-  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
-
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
-  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore" data-adsense="ca-pub-6345664385525701"></script>
+  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
 
   <!-- Structured Data - JSON-LD -->
   <script type="application/ld+json">
@@ -150,6 +147,7 @@
           <time datetime="2026-03-10">10 maart 2026</time>
           <span>9 min</span>
           <span class="category-badge">Gevorderden</span>
+          <span class="blog-fact-checked" title="Datum waarop de feitelijke beweringen in dit artikel voor het laatst zijn nagelopen">Feiten gecontroleerd: <time datetime="2026-06-14">14 juni 2026</time></span>
         </div>
       </header>
 
@@ -269,17 +267,6 @@ WHERE naam = '' OR '1'='1' AND wachtwoord = '';</code></pre>
           De <code>--</code> aan het einde is een SQL-commentaar dat de rest van de originele query negeert. Hiermee kan een
           aanvaller gevoelige informatie uit willekeurige tabellen opvragen.
         </p>
-
-        <!-- AdSense In-Article -->
-        <div class="ad-container ad-unit ad-in-article" style="display: none;">
-          <p class="ad-disclaimer">Advertisement</p>
-          <ins class="adsbygoogle"
-               style="display:block; text-align:center;"
-               data-ad-layout="in-article"
-               data-ad-format="fluid"
-               data-ad-client="ca-pub-6345664385525701"
-               data-ad-slot="5971972080"></ins>
-        </div>
 
         <h2>Soorten SQL injection</h2>
         <p>
@@ -422,17 +409,6 @@ Parameter: id (GET)
           </div>
         </div>
 
-        <!-- AdSense In-Article 2 -->
-        <div class="ad-container ad-unit ad-in-article" style="display: none;">
-          <p class="ad-disclaimer">Advertisement</p>
-          <ins class="adsbygoogle"
-               style="display:block; text-align:center;"
-               data-ad-layout="in-article"
-               data-ad-format="fluid"
-               data-ad-client="ca-pub-6345664385525701"
-               data-ad-slot="5270665903"></ins>
-        </div>
-
         <h2>Hoe bescherm je je tegen SQL injection?</h2>
         <p>
           Nu je weet hoe SQL injection werkt, is de volgende vraag: hoe voorkom je het? Gelukkig zijn er bewezen technieken
@@ -558,7 +534,7 @@ execute(query, [invoer]);</code></pre>
             om te zien hoe SQL injection detectie werkt. Je leert welke parameters kwetsbaar zijn, hoe je databases
             enumereert, en waarom prepared statements de oplossing zijn - allemaal veilig in je browser.
           </p>
-          <a href="../terminal.html" class="blog-cta-button">Start met sqlmap</a>
+          <a href="../terminal.html" class="blog-cta-button" data-terminal-cta="blog_sql-injection-uitgelegd">Start met sqlmap</a>
         </div>
 
         <h2>Samenvatting</h2>
@@ -575,6 +551,11 @@ execute(query, [invoer]);</code></pre>
           Als ethisch hacker is het je taak om deze kwetsbaarheden te vinden <strong>voordat</strong> criminelen dat doen.
           Tools als sqlmap maken dat proces efficient, maar vergeet nooit: alleen testen met toestemming, altijd verantwoord
           rapporteren, en nooit data misbruiken.
+        </p>
+        <p>
+          Een gevonden kwetsbaarheid is pas het halve verhaal. Wil je weten hoe pentesters zo'n vondst omzetten in een
+          aantoonbaar risico? Lees dan <a href="metasploit-beginnersgids.html">Metasploit voor beginners</a> &mdash; daar
+          zie je hoe een exploit-framework de stap van "gevonden" naar "aangetoond" maakt.
         </p>
 
       </div>
@@ -627,17 +608,6 @@ execute(query, [invoer]);</code></pre>
       </footer>
     </article>
   </main>
-
-  <!-- AdSense Footer Banner (M5.5 Blog Monetization) -->
-  <div id="adsense-footer" class="ad-container ad-unit" style="display: none;">
-      <p class="ad-disclaimer">Advertisement</p>
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-6345664385525701"
-           data-ad-slot="1674341955"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-  </div>
 
   <!-- Footer (Component Injection) -->
   <div id="footer-placeholder">

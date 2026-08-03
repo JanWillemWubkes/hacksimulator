@@ -9,6 +9,17 @@
  * Follows badge-definitions.js pattern: pure data, no logic.
  */
 
+/**
+ * Eerlijkheidsregel onder elk certificaat.
+ *
+ * De homepage-FAQ stelt expliciet dat HackSimulator geen officieel certificaat
+ * aanbiedt en geen vervanging is voor CEH/OSCP/Security+. Een downloadbaar
+ * "CERTIFICAAT VAN MEESTERSCHAP" zonder context spreekt dat tegen: allebei waar,
+ * samen misleidend. Deze regel houdt de beloning intact én de belofte eerlijk.
+ * Gedeeld door de challenge- en tutorial-certificaten, zodat de tekst niet drift.
+ */
+export var CERT_DISCLAIMER = 'Oefencertificaat uit een simulatie - geen erkende certificering.';
+
 export var CERT_TEMPLATES = {
   easy: {
     label: 'CERTIFICAAT VAN VOLTOOIING',

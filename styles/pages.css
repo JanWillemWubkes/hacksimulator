@@ -153,6 +153,65 @@
   margin-top: var(--spacing-sm);
 }
 
+/* ==================== Verantwoording Card ==================== */
+/* Zelfde kaart-taal als .developer-card, maar links uitgelijnd: dit is lopende
+   tekst met tussenkoppen en een opsomming, geen gecentreerd profielblok. */
+.verantwoording-card {
+  background: rgba(22, 27, 34, 0.3);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: var(--spacing-xl);
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.verantwoording-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: var(--spacing-lg) 0 var(--spacing-sm) 0;
+}
+
+.verantwoording-card h3:first-of-type {
+  margin-top: var(--spacing-md);
+}
+
+.verantwoording-card p,
+.verantwoording-card li {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-text-dim);
+  line-height: 1.7;
+}
+
+.verantwoording-card p {
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.verantwoording-card ul {
+  margin: 0 0 var(--spacing-md) 0;
+  padding-left: var(--spacing-lg);
+}
+
+.verantwoording-card li {
+  margin-bottom: var(--spacing-sm);
+}
+
+.verantwoording-card .verantwoording-note {
+  border-left: 3px solid var(--color-cta-primary);
+  padding: var(--spacing-sm) 0 var(--spacing-sm) var(--spacing-md);
+  margin: var(--spacing-lg) 0 0 0;
+  color: var(--color-text-dim);
+}
+
+@media (max-width: 768px) {
+  .verantwoording-card {
+    padding: var(--spacing-lg);
+  }
+}
+
 /* ==================== Developer Card ==================== */
 .developer-card {
   background: rgba(22, 27, 34, 0.3);
@@ -451,6 +510,51 @@
   border: 1px solid rgba(159, 239, 0, 0.2);
 }
 
+/* Gratis blog-achtergrond onder elke gids-kaart (Sessie 208).
+   De blog stuurde 14 links naar Gumroad; er kwam er één terug. Dit maakt het
+   tweerichtingsverkeer en geeft de onderlinkte posts interne linkwaarde. */
+.gids-related {
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.gids-related-label {
+  display: block;
+  font-family: var(--font-terminal);
+  font-size: 0.7rem;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-sm);
+}
+
+.gids-related ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.gids-related li {
+  margin-bottom: var(--spacing-xs);
+}
+
+.gids-related a {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-text-dim);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.gids-related a:hover,
+.gids-related a:focus-visible {
+  color: var(--color-cta-primary);
+  border-bottom-color: var(--color-cta-primary);
+}
+
 .gids-price {
   display: block;
   font-family: var(--font-terminal);
@@ -591,6 +695,7 @@
 [data-theme="light"] .contact-card,
 [data-theme="light"] .contact-form,
 [data-theme="light"] .developer-card,
+[data-theme="light"] .verantwoording-card,
 [data-theme="light"] .legal-link-card,
 [data-theme="light"] .faq-mini .faq-item,
 [data-theme="light"] .gids-bundle {

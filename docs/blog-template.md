@@ -37,7 +37,7 @@ Andere goede referenties:
 3. Canonical URL
 4. Favicons + manifest
 5. Stylesheets: `main.css`, `blog.css`, `mobile.css` (alle drie met `?v=NNN` versioning)
-6. Google AdSense + Consent Mode v2 defaults
+6. Consent Mode v2 defaults (`/src/analytics/consent-default.js`)
 7. **JSON-LD Article schema** — verplicht voor SEO
 8. **JSON-LD BreadcrumbList schema** — verplicht voor SEO rich-results (Sessie 139)
 

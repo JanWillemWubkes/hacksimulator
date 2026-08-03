@@ -50,16 +50,13 @@
   <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="../styles/main.css?v=154">
+  <link rel="stylesheet" href="../styles/main.css?v=208">
   <link rel="stylesheet" href="../styles/landing.css?v=121">
-  <link rel="stylesheet" href="../styles/blog.css?v=122">
+  <link rel="stylesheet" href="../styles/blog.css?v=208">
   <link rel="stylesheet" href="../styles/mobile.css?v=116" media="screen and (max-width: 768px)">
 
-  <!-- Google AdSense -->
-  <meta name="google-adsense-account" content="ca-pub-6345664385525701">
-
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
-  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore" data-adsense="ca-pub-6345664385525701"></script>
+  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
 
   <!-- Structured Data - JSON-LD -->
   <script type="application/ld+json">
@@ -150,6 +147,7 @@
           <time datetime="2026-05-26">26 mei 2026</time>
           <span>11 min</span>
           <span class="category-badge">Concepten</span>
+          <span class="blog-fact-checked" title="Datum waarop de feitelijke beweringen in dit artikel voor het laatst zijn nagelopen">Feiten gecontroleerd: <time datetime="2026-06-14">14 juni 2026</time></span>
         </div>
       </header>
 
@@ -370,17 +368,6 @@
           IAM-credentials op, daarmee val je het rest van de cloud-account aan. Capital One's 2019-breach (100 miljoen records) begon zo.
         </p>
 
-        <!-- AdSense In-Article -->
-        <div class="ad-container ad-unit ad-in-article" style="display: none;">
-          <p class="ad-disclaimer">Advertisement</p>
-          <ins class="adsbygoogle"
-               style="display:block; text-align:center;"
-               data-ad-layout="in-article"
-               data-ad-format="fluid"
-               data-ad-client="ca-pub-6345664385525701"
-               data-ad-slot="5971972080"></ins>
-        </div>
-
         <h2>Hoe gebruik je deze lijst als beginner?</h2>
         <p>
           Tien categorieën tegelijk leren is overweldigend. Een realistische aanpak: begin met A03 (Injection) en A07
@@ -418,6 +405,8 @@
           <li><strong>Burp Suite Community Edition</strong> &mdash; HTTP-proxy waarmee je requests onderschept en aanpast. Onmisbaar voor handmatig OWASP-testen. Zie ook onze gids over <a href="cybersecurity-tools.html">essentiële security-tools</a>.</li>
           <li><strong>OWASP ZAP</strong> &mdash; Open-source alternatief voor Burp, door OWASP zelf ontwikkeld. Goed voor automatische scans.</li>
           <li><strong>sqlmap</strong> &mdash; Automatiseert SQL injection-detectie en -exploitatie (zie <a href="sql-injection-uitgelegd.html">SQL injection uitgelegd</a>).</li>
+          <li><strong>Metasploit</strong> &mdash; Exploit-framework waarmee je een gevonden kwetsbaarheid daadwerkelijk uitbuit in een testomgeving (zie <a href="metasploit-beginnersgids.html">Metasploit voor beginners</a>).</li>
+          <li><strong>Wireshark</strong> &mdash; Toont het netwerkverkeer achter je requests, handig om te zien wat een applicatie echt verstuurt (zie <a href="wireshark-beginnersgids.html">Wireshark tutorial</a>).</li>
           <li><strong>DVWA / Juice Shop / WebGoat</strong> &mdash; Bewust kwetsbare oefen-applicaties, lokaal te draaien in Docker.</li>
           <li><strong>PortSwigger Web Security Academy</strong> &mdash; Gratis online labs per OWASP-categorie, gemaakt door de Burp Suite-bouwers.</li>
         </ul>
@@ -442,17 +431,6 @@
           voordat je naar echte test-omgevingen overstapt.
         </p>
 
-        <!-- AdSense In-Article 2 -->
-        <div class="ad-container ad-unit ad-in-article" style="display: none;">
-          <p class="ad-disclaimer">Advertisement</p>
-          <ins class="adsbygoogle"
-               style="display:block; text-align:center;"
-               data-ad-layout="in-article"
-               data-ad-format="fluid"
-               data-ad-client="ca-pub-6345664385525701"
-               data-ad-slot="5270665903"></ins>
-        </div>
-
         <h2>Volgende stappen</h2>
         <p>
           De OWASP Top 10 is geen eindpunt &mdash; het is je startpunt voor webapp-security. Als je dit document onder de knie hebt,
@@ -476,7 +454,7 @@
             <code>sqlmap http://testsite.nl/?id=1</code> of <code>nmap 192.168.1.1</code> - in de HackSimulator en zie hoe deze tools
             OWASP-kwetsbaarheden in beeld brengen. Gebruik <code>man nikto</code> voor uitleg, of <code>leerpad</code> voor je voortgang.
           </p>
-          <a href="../terminal.html" class="blog-cta-button">Start met oefenen</a>
+          <a href="../terminal.html" class="blog-cta-button" data-terminal-cta="blog_owasp-top-10-uitgelegd">Start met oefenen</a>
         </div>
 
       </div>
@@ -529,17 +507,6 @@
       </footer>
     </article>
   </main>
-
-  <!-- AdSense Footer Banner (M5.5 Blog Monetization) -->
-  <div id="adsense-footer" class="ad-container ad-unit" style="display: none;">
-      <p class="ad-disclaimer">Advertisement</p>
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-6345664385525701"
-           data-ad-slot="1674341955"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-  </div>
 
   <!-- Footer (Component Injection) -->
   <div id="footer-placeholder">

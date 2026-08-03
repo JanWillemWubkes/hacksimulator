@@ -1,14 +1,19 @@
 /**
  * Cookie Consent Manager (M5.5 GDPR Compliance)
  *
- * Manages user consent for analytics and advertising cookies.
- * Implements 3-tier consent: Necessary (always), Analytics (optional), Advertising (optional).
+ * Manages user consent for analytics cookies.
+ * Implements 2-tier consent: Necessary (always) en Analytics (optioneel).
  *
  * Key Features:
  * - Dynamic banner injection (works on index.html + blog pages)
  * - localStorage persistence for consent choices across pages
  * - sessionStorage banner cooldown (no consent spam within session)
  * - GDPR-compliant: No tracking before explicit consent
+ *
+ * De opgeslagen JSON houdt bewust het bestaande formaat aan
+ * ({necessary, analytics, ...}), zodat bezoekers die vóór de verwijdering van
+ * de advertenties toestemming gaven hun keuze behouden en de banner niet
+ * opnieuw zien. Een achtergebleven `advertising`-sleutel wordt genegeerd.
  */
 
 import tracker from './tracker.js';
@@ -54,7 +59,7 @@ const consentManager = {
    * Check if user has given consent for a specific category
    * Reads from localStorage where consent choices are persisted.
    *
-   * @param {string} category - 'necessary', 'analytics', or 'advertising'
+   * @param {string} category - 'necessary' of 'analytics'
    * @returns {boolean|null} True if consented, false if declined, null if no response yet
    */
   hasConsent(category = 'analytics') {
@@ -70,7 +75,6 @@ const consentManager = {
         const migratedConsent = {
           necessary: true,
           analytics: analytics,
-          advertising: false,
         };
         localStorage.setItem(CONSENT_KEY, JSON.stringify(migratedConsent));
         return category === 'necessary' || (category === 'analytics' && analytics);
@@ -125,32 +129,33 @@ const consentManager = {
     banner.setAttribute('aria-hidden', 'false');
 
     // Attach event listeners to buttons
-    const acceptAllBtn = document.getElementById('cookie-accept-all');
-    const acceptAnalyticsBtn = document.getElementById('cookie-accept-analytics');
+    this.attachBannerListeners();
+  },
+
+  /**
+   * Koppel de knop-listeners van de banner.
+   * Gedeeld door showBanner() en showConsentSettings() — beide injecteren
+   * dezelfde banner-HTML, dus de koppeling hoort op één plek te staan.
+   */
+  attachBannerListeners() {
+    const acceptBtn = document.getElementById('cookie-accept-analytics');
     const declineBtn = document.getElementById('cookie-decline');
 
-    if (acceptAllBtn) {
-      acceptAllBtn.addEventListener('click', () => this.acceptConsent('all'));
-    }
-    if (acceptAnalyticsBtn) {
-      acceptAnalyticsBtn.addEventListener('click', () => this.acceptConsent('analytics'));
+    if (acceptBtn) {
+      acceptBtn.addEventListener('click', () => this.acceptConsent());
     }
     if (declineBtn) {
       declineBtn.addEventListener('click', () => this.declineConsent());
     }
-
   },
 
   /**
-   * User accepted cookies (all or analytics-only)
-   *
-   * @param {string} level - 'all' or 'analytics'
+   * User accepted analytics cookies
    */
-  acceptConsent(level = 'all') {
+  acceptConsent() {
     const consent = {
       necessary: true,
-      analytics: level === 'all' || level === 'analytics',
-      advertising: level === 'all',
+      analytics: true,
     };
 
     // Save consent to localStorage
@@ -161,30 +166,11 @@ const consentManager = {
 
     // Update Google Consent Mode v2
     if (typeof gtag === 'function') {
-      if (consent.analytics) {
-        gtag('consent', 'update', { 'analytics_storage': 'granted' });
-      }
-      if (consent.advertising) {
-        gtag('consent', 'update', {
-          'ad_storage': 'granted',
-          'ad_user_data': 'granted',
-          'ad_personalization': 'granted',
-        });
-      }
+      gtag('consent', 'update', { 'analytics_storage': 'granted' });
     }
 
-    // Initialize analytics if consented
-    if (consent.analytics) {
-      tracker.init('ga4');
-      events.legalEvent('cookies_accepted_analytics');
-    }
-
-    // Load AdSense if advertising consented
-    if (consent.advertising) {
-      this.loadAdSense();
-      events.legalEvent('cookies_accepted_advertising');
-    }
-
+    tracker.init('ga4');
+    events.legalEvent('cookies_accepted_analytics');
   },
 
   /**
@@ -194,7 +180,6 @@ const consentManager = {
     const consent = {
       necessary: true,
       analytics: false,
-      advertising: false,
     };
 
     // Save decline to localStorage
@@ -203,39 +188,6 @@ const consentManager = {
     // Hide banner
     this.hideBanner();
 
-  },
-
-  /**
-   * Load Google AdSense scripts (only after advertising consent)
-   */
-  loadAdSense() {
-    const adUnits = document.querySelectorAll('.ad-unit');
-
-    if (adUnits.length === 0) return;
-
-    // Ensure Consent Mode v2 is updated when restoring consent on page load
-    if (typeof gtag === 'function') {
-      gtag('consent', 'update', {
-        'ad_storage': 'granted',
-        'ad_user_data': 'granted',
-        'ad_personalization': 'granted',
-      });
-    }
-
-    window.hasAdvertisingConsent = true;
-
-    // First: make all units visible so the browser can calculate layout
-    adUnits.forEach(unit => {
-      unit.style.display = 'block';
-    });
-
-    // Then: wait one frame for layout to flush before pushing to AdSense
-    // AdSense needs measurable container dimensions (width > 0, height > 0)
-    requestAnimationFrame(() => {
-      adUnits.forEach(() => {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      });
-    });
   },
 
   /**
@@ -274,19 +226,7 @@ const consentManager = {
       banner = document.getElementById('cookie-consent');
 
       // Re-attach event listeners (banner was just created)
-      const acceptAllBtn = document.getElementById('cookie-accept-all');
-      const acceptAnalyticsBtn = document.getElementById('cookie-accept-analytics');
-      const declineBtn = document.getElementById('cookie-decline');
-
-      if (acceptAllBtn) {
-        acceptAllBtn.addEventListener('click', () => this.acceptConsent('all'));
-      }
-      if (acceptAnalyticsBtn) {
-        acceptAnalyticsBtn.addEventListener('click', () => this.acceptConsent('analytics'));
-      }
-      if (declineBtn) {
-        declineBtn.addEventListener('click', () => this.declineConsent());
-      }
+      this.attachBannerListeners();
     }
 
     if (banner) {
