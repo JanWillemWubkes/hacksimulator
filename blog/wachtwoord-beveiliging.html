@@ -66,7 +66,7 @@
     "headline": "Wachtwoordbeveiliging: hoe hackers kraken",
     "description": "Leer hoe hackers wachtwoorden kraken met brute force, dictionary attacks en rainbow tables.",
     "datePublished": "2026-02-24",
-    "dateModified": "2026-02-24",
+    "dateModified": "2026-08-03",
     "author": {
       "@type": "Organization",
       "name": "HackSimulator.nl",
@@ -147,7 +147,7 @@
           <time datetime="2026-02-24">24 februari 2026</time>
           <span>8 min</span>
           <span class="category-badge">Tools</span>
-          <span class="blog-fact-checked" title="Datum waarop de feitelijke beweringen in dit artikel voor het laatst zijn nagelopen">Feiten gecontroleerd: <time datetime="2026-06-14">14 juni 2026</time></span>
+          <span class="blog-fact-checked" title="Datum waarop de feitelijke beweringen in dit artikel voor het laatst zijn nagelopen">Feiten gecontroleerd: <time datetime="2026-08-03">3 augustus 2026</time></span>
         </div>
       </header>
 
@@ -392,9 +392,9 @@ Recovered........: 3/5 (60.00%)
         <p>
           De kraaktijd hangt af van drie factoren: de <strong>lengte</strong> van het wachtwoord, de
           <strong>complexiteit</strong> (welke tekens), en het gebruikte <strong>hash-algoritme</strong>. Hieronder een
-          overzicht voor MD5-hashes op een moderne GPU (10 miljard hashes per seconde). Het zijn <strong>grove
-          schattingen</strong>: de werkelijke tijd hangt sterk af van je hardware en het hash-algoritme - reken ze als
-          ordegrootte, niet als exacte waarden:
+          overzicht voor MD5-hashes op een high-end videokaart (NVIDIA RTX 4090, ~164 miljard hashes per seconde).
+          De tijden gaan uit van de <strong>volledige zoekruimte</strong> - dus het slechtste geval voor de aanvaller;
+          gemiddeld is hij halverwege al klaar. Reken ze als ordegrootte, niet als exacte waarden:
         </p>
 
         <table class="blog-table--stacked" role="table">
@@ -414,39 +414,44 @@ Recovered........: 3/5 (60.00%)
             <tr>
               <td data-label="Wachtwoord">8 tekens, kleine + hoofdletters</td>
               <td data-label="Karakterset">a-z, A-Z (52)</td>
-              <td data-label="Kraaktijd (MD5)">~15 minuten</td>
+              <td data-label="Kraaktijd (MD5)">~5 minuten</td>
             </tr>
             <tr>
               <td data-label="Wachtwoord">8 tekens, letters + cijfers</td>
               <td data-label="Karakterset">a-z, A-Z, 0-9 (62)</td>
-              <td data-label="Kraaktijd (MD5)">~1 uur</td>
+              <td data-label="Kraaktijd (MD5)">~22 minuten</td>
             </tr>
             <tr>
               <td data-label="Wachtwoord">8 tekens, alles + speciale tekens</td>
               <td data-label="Karakterset">95 tekens</td>
-              <td data-label="Kraaktijd (MD5)">~19 uur</td>
+              <td data-label="Kraaktijd (MD5)">~11 uur</td>
             </tr>
             <tr>
               <td data-label="Wachtwoord">10 tekens, alles + speciale tekens</td>
               <td data-label="Karakterset">95 tekens</td>
-              <td data-label="Kraaktijd (MD5)">~7 maanden</td>
+              <td data-label="Kraaktijd (MD5)">~12 jaar</td>
             </tr>
             <tr>
               <td data-label="Wachtwoord">12 tekens, alles + speciale tekens</td>
               <td data-label="Karakterset">95 tekens</td>
-              <td data-label="Kraaktijd (MD5)">~6000 jaar</td>
+              <td data-label="Kraaktijd (MD5)">~104.000 jaar</td>
             </tr>
             <tr>
               <td data-label="Wachtwoord">16 tekens, alles + speciale tekens</td>
               <td data-label="Karakterset">95 tekens</td>
-              <td data-label="Kraaktijd (MD5)">~50 miljard jaar</td>
+              <td data-label="Kraaktijd (MD5)">~8,5 biljoen jaar</td>
             </tr>
           </tbody>
         </table>
+        <p class="blog-source-note">
+          Berekend als zoekruimte gedeeld door snelheid, met MD5 op één RTX 4090 (hashcat v6.2.6 benchmark,
+          ~164 miljard hashes/sec). Op een tragere kaart duurt alles evenredig langer; met bcrypt of Argon2
+          in plaats van MD5 duurt het miljoenen keren langer.
+        </p>
 
         <div class="blog-tip">
-          Merk op: het verschil tussen 8 en 12 tekens is niet een beetje - het is het verschil tussen <strong>uren</strong>
-          en <strong>duizenden jaren</strong>. Elke extra teken vermenigvuldigt de kraaktijd enorm.
+          Merk op: het verschil tussen 8 en 12 tekens is niet een beetje - het is het verschil tussen <strong>elf uur</strong>
+          en <strong>ruim honderdduizend jaar</strong>. Elk extra teken vermenigvuldigt de kraaktijd enorm.
           Met bcrypt of Argon2 in plaats van MD5 worden bovenstaande tijden nog eens duizenden keren langer.
         </div>
 

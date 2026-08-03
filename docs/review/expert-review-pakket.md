@@ -21,7 +21,7 @@ valt — een deels ingevulde lijst is oneindig veel waardevoller dan geen lijst.
 
 **Twee soorten inhoud, in volgorde van belang:**
 
-1. **172 beweringen uit de commando's** — de dichtste concentratie technische claims in
+1. **169 beweringen uit de commando's** — de dichtste concentratie technische claims in
    het product. Security-tools staan bovenaan. Elke regel is gelabeld: `output` = wat de leerling
    ziet als het commando draait, `handleiding` = wat `man <command>` toont.
 2. **56 begripsdefinities** uit de openbare woordenlijst — de pagina die het
@@ -34,30 +34,30 @@ valt — een deels ingevulde lijst is oneindig veel waardevoller dan geen lijst.
 
 ### Security-tools — hoogste prioriteit
 
+#### `hash-benchmarks` — <sub>src/commands/security/hash-benchmarks.js</sub>
+
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r39</sub> label: '~164 miljard/sec
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r44</sub> label: '~50 miljard/sec
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r49</sub> label: '~22 miljard/sec
+
 #### `hashcat` — <sub>src/commands/security/hashcat.js</sub>
 
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r49</sub> Password cracking is ALLEEN LEGAAL op systemen waar je
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r102</sub> [!] Hash not found in demo database
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r104</sub> [TIP] Deze simulator heeft een beperkte database met ALLEEN zwakke passwords.
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r106</sub> • Wordlists (rockyou.txt = 14 miljoen wachtwoorden)
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r109</sub> • GPU acceleration (miljarden hashes per seconde)
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r111</sub> [!]  Security tip: Gebruik sterke, unieke wachtwoorden!
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r131</sub> ← Miljoen hashes per seconde
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r146</sub> [!] BESCHERM JEZELF:
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r197</sub> • Computers zijn SNEL (miljarden pogingen per seconde)
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r199</sub> [!]  Hash types:
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r200</sub> • MD5 (insecure)     → 200 miljard hashes/sec (RTX 3090)
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r201</sub> • SHA1 (insecure)    → 100 miljard hashes/sec
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r202</sub> • SHA256 (ok)        → 50 miljard hashes/sec
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r203</sub> • bcrypt (secure)    → 100,000 hashes/sec ← Intentioneel traag!
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r204</sub> • Argon2 (secure)    → 10,000 hashes/sec ← Beste keuze
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r220</sub> [!]  ALLEEN LEGAAL met expliciete toestemming!
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r234</sub> In Nederland strafbaar als computervredebreuk (art. 138ab Sr).
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r238</sub> • LinkedIn (2012)    → 117 miljoen SHA1 hashes (geen salt)
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r239</sub> • Adobe (2013)       → 153 miljoen zwak encrypted passwords
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r240</sub> • RockYou (2009)     → 32 miljoen plaintext passwords
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r241</sub> • Collection #1      → 773 miljoen inloggegevens (hergebruikt op andere sites)
-- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r281</sub> [TIP] Wil je weten wat legaal is en wat niet?
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r50</sub> Password cracking is ALLEEN LEGAAL op systemen waar je
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r103</sub> [!] Hash not found in demo database
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r105</sub> [TIP] Deze simulator heeft een beperkte database met ALLEEN zwakke passwords.
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r107</sub> • Wordlists (rockyou.txt = 14 miljoen wachtwoorden)
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r110</sub> • GPU acceleration (miljarden hashes per seconde)
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r112</sub> [!]  Security tip: Gebruik sterke, unieke wachtwoorden!
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r132</sub> ← Miljoen hashes per seconde
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>output r147</sub> [!] BESCHERM JEZELF:
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r198</sub> • Computers zijn SNEL (miljarden pogingen per seconde)
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r227</sub> [!]  ALLEEN LEGAAL met expliciete toestemming!
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r241</sub> In Nederland strafbaar als computervredebreuk (art. 138ab Sr).
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r245</sub> • LinkedIn (2012)    → 117 miljoen SHA1 hashes (geen salt)
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r246</sub> • Adobe (2013)       → 153 miljoen zwak encrypted passwords
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r247</sub> • RockYou (2009)     → 32 miljoen plaintext passwords
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r248</sub> • Collection #1      → 773 miljoen inloggegevens (hergebruikt op andere sites)
+- [ ] klopt · [ ] klopt niet · [ ] te vaag — <sub>handleiding r288</sub> [TIP] Wil je weten wat legaal is en wat niet?
 
 #### `hydra` — <sub>src/commands/security/hydra.js</sub>
 

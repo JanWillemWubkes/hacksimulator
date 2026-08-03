@@ -462,6 +462,56 @@ if [ "$DEEP_MODE" = "1" ]; then
   assert_exact "tutorial-scenario's geregistreerd" "$scenario_registered" "$scenario_files" \
     "elk bestand in src/tutorial/scenarios/ hoort geïmporteerd te zijn in src/core/terminal.js"
 
+  # Check 6e: Hash-snelheden ↔ gedeelde constante (Sessie 209)
+  # ----------------------------------------------------------
+  # Vóór deze check noemde de site DRIE verschillende getallen voor dezelfde
+  # MD5-snelheid (man page 200 miljard, blog 200+, kraaktijd-tabel impliciet
+  # ~100/3000/28000) en waren ze allemaal 3-5x te hoog t.o.v. de gepubliceerde
+  # hashcat-benchmarks. Sinds Sessie 209 is hash-benchmarks.js de enige bron;
+  # de blogposts zijn statische HTML en kunnen niet importeren, dus deze check
+  # bewaakt dat ze de constante blijven volgen.
+  echo ""
+  echo "Check 6e: Hash-snelheden ↔ gedeelde constante (--deep)"
+
+  HASH_SRC="src/commands/security/hash-benchmarks.js"
+  HASHCAT_POST="blog/hashcat-wachtwoorden-kraken.html"
+
+  if [ ! -f "$HASH_SRC" ]; then
+    fail "Hash-benchmarks: ${HASH_SRC} ontbreekt — de bron van waarheid is weg"
+  else
+    # 1. Elk label uit HASH_SPEEDS moet verbatim in de hashcat-blogtabel staan
+    while IFS= read -r hs_label; do
+      [ -z "$hs_label" ] && continue
+      if grep -qF "$hs_label" "$HASHCAT_POST" 2>/dev/null; then
+        pass "Hash-snelheid '${hs_label}' staat in de blogtabel"
+      else
+        fail "Hash-snelheid '${hs_label}' uit ${HASH_SRC} ontbreekt in ${HASHCAT_POST} — werk de tabel bij"
+      fi
+    done < <(grep -oE "label: '[^']+'" "$HASH_SRC" | sed "s/^label: '//; s/'$//")
+
+    # 2. Het MD5-getal draagt de kraaktijd-tabel en de hub-samenvatting
+    MD5_FIG=$(grep -oE "label: '~?[0-9]+ miljard/sec'" "$HASH_SRC" | grep -oE '[0-9]+ miljard' | head -1)
+    if [ -z "$MD5_FIG" ]; then
+      fail "Hash-benchmarks: MD5-label niet te parsen uit ${HASH_SRC}"
+    else
+      for f in blog/wachtwoord-beveiliging.html blog/index.html; do
+        if grep -qF "$MD5_FIG" "$f" 2>/dev/null; then
+          pass "MD5-snelheid '${MD5_FIG}' consistent in $(basename "$f")"
+        else
+          fail "MD5-snelheid '${MD5_FIG}' ontbreekt in ${f} — kraaktijden/samenvatting lopen uit de pas"
+        fi
+      done
+    fi
+
+    # 3. De weerlegde cijfers mogen niet terugkeren (200 miljard was 3x te hoog)
+    STALE=$(grep -rlE '200\+? miljard' --include=*.html --include=*.js blog/ src/ 2>/dev/null || true)
+    if [ -n "$STALE" ]; then
+      fail "Weerlegd cijfer '200 miljard' staat terug in: ${STALE}"
+    else
+      pass "Weerlegde hash-cijfers (200 miljard) komen nergens meer voor"
+    fi
+  fi
+
   # ----------------------------------------------------------
   # Check 7: Cross-doc Versie consistency (CLAUDE.md ↔ TASKS.md)
   # ----------------------------------------------------------

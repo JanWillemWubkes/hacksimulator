@@ -370,6 +370,17 @@ a[href='#all'].category-btn {
   color: var(--color-text-muted);
 }
 
+/* Bronvermelding onder een tabel of cijferclaim. Alleen variabelen, geen
+   hardgecodeerde kleuren — dan klopt hij in beide thema's zonder override
+   (zie Sessie 44: een vaste rgba naast een variabele is de klassieke val). */
+.blog-source-note {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: calc(var(--spacing-sm) * -1);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.5;
+}
+
 .blog-post-meta > :not(:first-child) {
   margin-left: var(--spacing-sm);
 }

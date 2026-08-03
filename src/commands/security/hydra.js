@@ -171,7 +171,9 @@ Brute forcing credentials...
 2. **Geen rate limiting**: Server blokkeert niet na failed attempts
 3. **Geen account lockout**: Account blijft beschikbaar na 100+ fouten
 4. **Default credentials**: Veel devices komen met admin:admin
-5. **Snelheid**: Hydra probeert 16 passwords per seconde (of meer)
+5. **Parallellisme**: Hydra draait standaard 16 pogingen tegelijk (-t 16).
+   Hoeveel dat er per seconde worden hangt af van het netwerk en de dienst —
+   en juist daarom werkt rate limiting: het knijpt die kraan dicht.
 
 [###] BESCHERMING:
    [✓] Sterke, unieke wachtwoorden (min 16 karakters)

@@ -66,7 +66,7 @@
     "headline": "Hashcat uitgelegd: hoe wachtwoord-hashes gekraakt worden",
     "description": "Leer hoe hashcat wachtwoord-hashes kraakt met dictionary attacks, brute force en GPU-kracht. Nederlandse beginnersgids met veilige oefenvoorbeelden.",
     "datePublished": "2026-06-12",
-    "dateModified": "2026-06-12",
+    "dateModified": "2026-08-03",
     "author": {
       "@type": "Organization",
       "name": "HackSimulator.nl",
@@ -147,7 +147,7 @@
           <time datetime="2026-06-12">12 juni 2026</time>
           <span>8 min</span>
           <span class="category-badge">Tools</span>
-          <span class="blog-fact-checked" title="Datum waarop de feitelijke beweringen in dit artikel voor het laatst zijn nagelopen">Feiten gecontroleerd: <time datetime="2026-06-14">14 juni 2026</time></span>
+          <span class="blog-fact-checked" title="Datum waarop de feitelijke beweringen in dit artikel voor het laatst zijn nagelopen">Feiten gecontroleerd: <time datetime="2026-08-03">3 augustus 2026</time></span>
         </div>
       </header>
 
@@ -202,7 +202,7 @@
           Hashcat is een gratis, open-source password recovery tool die sinds 2009 wordt ontwikkeld. Het ondersteunt
           meer dan 350 hash-types en is berucht om zijn snelheid: door gebruik te maken van
           <abbr class="jargon" title="GPU: grafische processor die duizenden berekeningen tegelijk kan uitvoeren, ideaal voor hash-berekeningen" tabindex="0"><strong>GPU-acceleratie</strong></abbr>
-          kraakt een high-end videokaart (zoals een NVIDIA RTX 4090) ruim 200 miljard MD5-hashes <em>per seconde</em>. Goedkopere kaarten halen een fractie daarvan, maar zijn nog steeds verrassend snel.
+          kraakt een high-end videokaart (zoals een NVIDIA RTX 4090) ongeveer <strong>164 miljard</strong> MD5-hashes <em>per seconde</em>. Goedkopere kaarten halen een fractie daarvan, maar zijn nog steeds verrassend snel.
         </p>
         <p>
           Security professionals gebruiken hashcat voor legitieme doelen:
@@ -284,38 +284,43 @@ Time: 0.02s
           <thead>
             <tr>
               <th scope="col">Hash-type</th>
-              <th scope="col">Snelheid (high-end GPU)</th>
+              <th scope="col">Snelheid (RTX 4090)</th>
               <th scope="col">Oordeel</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td data-label="Hash-type"><strong>MD5</strong></td>
-              <td data-label="Snelheid (high-end GPU)">200+ miljard/sec</td>
+              <td data-label="Snelheid (RTX 4090)">~164 miljard/sec</td>
               <td data-label="Oordeel">Onveilig — nooit meer gebruiken</td>
             </tr>
             <tr>
               <td data-label="Hash-type"><strong>SHA1</strong></td>
-              <td data-label="Snelheid (high-end GPU)">100+ miljard/sec</td>
+              <td data-label="Snelheid (RTX 4090)">~50 miljard/sec</td>
               <td data-label="Oordeel">Onveilig — verouderd</td>
             </tr>
             <tr>
               <td data-label="Hash-type"><strong>SHA256</strong></td>
-              <td data-label="Snelheid (high-end GPU)">50+ miljard/sec</td>
+              <td data-label="Snelheid (RTX 4090)">~22 miljard/sec</td>
               <td data-label="Oordeel">Te snel voor wachtwoorden</td>
             </tr>
             <tr>
               <td data-label="Hash-type"><strong>bcrypt</strong></td>
-              <td data-label="Snelheid (high-end GPU)">~100.000/sec</td>
+              <td data-label="Snelheid (RTX 4090)">~184.000/sec (cost 5)</td>
               <td data-label="Oordeel">Goed — bewust traag gemaakt</td>
             </tr>
             <tr>
               <td data-label="Hash-type"><strong>Argon2</strong></td>
-              <td data-label="Snelheid (high-end GPU)">~10.000/sec</td>
+              <td data-label="Snelheid (RTX 4090)">hangt af van instellingen</td>
               <td data-label="Oordeel">Beste keuze voor nieuwe systemen</td>
             </tr>
           </tbody>
         </table>
+        <p class="blog-source-note">
+          Snelheden gemeten met hashcat v6.2.6 benchmark op één RTX 4090. Een snelheid zonder kaart erbij zegt niets —
+          vraag er altijd naar als iemand er een noemt. Argon2 krijgt bewust geen getal: dat hangt volledig af van de
+          ingestelde geheugen- en tijdparameters.
+        </p>
 
         <p>
           Zie je het patroon? Algoritmes als bcrypt en Argon2 zijn <em>expres traag</em>. Voor één login-poging merk

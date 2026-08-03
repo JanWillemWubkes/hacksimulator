@@ -5,6 +5,7 @@
  */
 
 import { boxText } from '../../utils/asciiBox.js';
+import { HASH_SPEEDS, BENCHMARK_GPU, BENCHMARK_SOURCE } from './hash-benchmarks.js';
 
 /**
  * Simulated hash database with weak passwords
@@ -139,7 +140,7 @@ Time: ${time}s
 [?] LEERMOMENT: Waarom werd dit gekraakt?
 
 1. **Zwak wachtwoord**: "${password}" staat in top 100 meest gebruikte wachtwoorden
-2. **${type} is snel**: Moderne GPU's kunnen ${type === 'MD5' ? '200+ miljard' : '50+ miljard'} ${type} hashes per seconde
+2. **${type} is snel**: Een ${BENCHMARK_GPU} haalt ${(HASH_SPEEDS[type] || HASH_SPEEDS.MD5).label} ${type}-hashes
 3. **Geen salt**: Hash heeft geen salt → rainbow tables werken
 4. **Wordlist match**: Stond in rockyou.txt wordlist
 
@@ -196,12 +197,18 @@ EDUCATIEVE CONTEXT
        • 80% van mensen hergebruikt wachtwoorden
        • Computers zijn SNEL (miljarden pogingen per seconde)
 
-    [!]  Hash types:
-       • MD5 (insecure)     → 200 miljard hashes/sec (RTX 3090)
-       • SHA1 (insecure)    → 100 miljard hashes/sec
-       • SHA256 (ok)        → 50 miljard hashes/sec
-       • bcrypt (secure)    → 100,000 hashes/sec ← Intentioneel traag!
-       • Argon2 (secure)    → 10,000 hashes/sec ← Beste keuze
+    [!]  Hash types (snelheid op een ${BENCHMARK_GPU}):
+       • MD5 (onveilig)   → ${HASH_SPEEDS.MD5.label}
+       • SHA1 (onveilig)  → ${HASH_SPEEDS.SHA1.label}
+       • SHA256 (matig)   → ${HASH_SPEEDS.SHA256.label}
+       • bcrypt (veilig)  → ${HASH_SPEEDS.bcrypt.label}
+         ← Expres traag gemaakt!
+       • Argon2 (veilig)  → ${HASH_SPEEDS.Argon2.label}
+         ← Beste keuze; snelheid is instelbaar
+
+       Bron: ${BENCHMARK_SOURCE}.
+       Een snelheid zonder kaart erbij zegt niets —
+       vraag er altijd naar als iemand er een noemt.
 
     [###]  Salting:
        Salt = random data toegevoegd aan wachtwoord voor hashing
