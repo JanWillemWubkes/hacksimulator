@@ -368,6 +368,6 @@ GERELATEERDE COMMANDO'S
     nmap, nikto, metasploit, hydra, burp (niet in simulator)
 
 [TIP] Wil je leren hoe je deze tools in een echte pentest gebruikt?
-      Download het Pentest Playbook op hacksimulator.nl/gidsen
+      Download het Pentest Playbook op hacksimulator.nl/gidsen.html
 `.trim()
 };

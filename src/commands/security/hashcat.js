@@ -286,6 +286,6 @@ GERELATEERDE COMMANDO'S
     hydra (brute force), metasploit, john (andere cracker; niet in simulator)
 
 [TIP] Wil je weten wat legaal is en wat niet?
-      Download de Juridische Gids op hacksimulator.nl/gidsen
+      Download de Juridische Gids op hacksimulator.nl/gidsen.html
 `.trim()
 };

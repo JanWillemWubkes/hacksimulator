@@ -271,6 +271,6 @@ GERELATEERDE COMMANDO'S
     nmap, hydra, sqlmap, nikto, hashcat
 
 [TIP] Wil je weten wat legaal is en wat niet?
-      Download de Juridische Gids op hacksimulator.nl/gidsen
+      Download de Juridische Gids op hacksimulator.nl/gidsen.html
 `.trim()
 };

@@ -289,6 +289,6 @@ GERELATEERDE COMMANDO'S
     ping, netstat, traceroute, nikto (web vulnerability scanner)
 
 [TIP] Wil je leren hoe je deze tools in een echte pentest gebruikt?
-      Download het Pentest Playbook op hacksimulator.nl/gidsen
+      Download het Pentest Playbook op hacksimulator.nl/gidsen.html
 `.trim()
 };

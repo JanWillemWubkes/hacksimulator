@@ -361,6 +361,6 @@ GERELATEERDE COMMANDO'S
     hashcat, metasploit, nmap, john (the ripper; niet in simulator)
 
 [TIP] Wil je weten wat legaal is en wat niet?
-      Download de Juridische Gids op hacksimulator.nl/gidsen
+      Download de Juridische Gids op hacksimulator.nl/gidsen.html
 `.trim()
 };
