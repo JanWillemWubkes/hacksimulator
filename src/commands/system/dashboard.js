@@ -112,12 +112,12 @@ function getNextStep(challengeData, badgeSummary) {
 
   var done1 = countTriedInPhase(phase1Commands, triedSet);
   if (done1 < phase1Commands.length) {
-    return "Volgende: Fase 1 voltooien (" + done1 + "/" + phase1Commands.length + " commands geleerd). Typ 'next'.";
+    return "Volgende: Fase 1 voltooien (" + done1 + "/" + phase1Commands.length + " commands geprobeerd). Typ 'next'.";
   }
 
   var done2 = countTriedInPhase(phase2Commands, triedSet);
   if (done2 < phase2Commands.length) {
-    return "Volgende: Fase 2 voltooien (" + done2 + "/" + phase2Commands.length + " commands geleerd). Typ 'next'.";
+    return "Volgende: Fase 2 voltooien (" + done2 + "/" + phase2Commands.length + " commands geprobeerd). Typ 'next'.";
   }
 
   if (!tutorialManager.isScenarioCompleted('recon')) {
@@ -126,7 +126,7 @@ function getNextStep(challengeData, badgeSummary) {
 
   var done3 = countTriedInPhase(phase3Commands, triedSet);
   if (done3 < phase3Commands.length) {
-    return "Volgende: Fase 3 voltooien (" + done3 + "/" + phase3Commands.length + " commands geleerd). Typ 'next'.";
+    return "Volgende: Fase 3 voltooien (" + done3 + "/" + phase3Commands.length + " commands geprobeerd). Typ 'next'.";
   }
 
   // Then check challenges (original logic)

@@ -2,6 +2,7 @@ import {
   BOX_CHARS,
   getResponsiveBoxWidth,
   smartTruncate,
+  wordWrap,
   isMobileView
 } from "../../utils/box-utils.js";
 import onboarding from "../../ui/onboarding.js";
@@ -87,6 +88,8 @@ function buildBoxOutput(triedSet, width) {
   // TIP inside box
   lines.push(B.dividerLeft + B.horizontal.repeat(inner) + B.dividerRight);
   pushLine("  [→] Typ 'next' voor je volgende stap");
+  wordWrap("[TIP] Een vinkje = uitgeprobeerd, niet beheerst. Typ 'man <command>' voor het waarom erachter.", inner - 4)
+    .forEach(function(part) { pushLine('  ' + part); });
 
   // Footer
   lines.push(B.bottomLeft + B.horizontal.repeat(inner) + B.bottomRight);
@@ -131,6 +134,8 @@ function buildMobileOutput(triedSet) {
   });
 
   out += "[→] Typ 'next' voor je volgende stap\n";
+  out += "[TIP] Vinkje = uitgeprobeerd,\n";
+  out += "      niet beheerst. Zie 'man'.\n";
   return out;
 }
 
