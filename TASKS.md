@@ -47,7 +47,7 @@
 - **Playwright:** 29 spec files, ~249 tests per browser-project (Sessie 205 added +1 "Live resize reflow"-test: render @1240 → live versmallen naar 900/700/640 → 0 wraps + scroll blijft gepind; groen op alle 3 engines. Sessie 204 added +4 tussenbreedte-tests 800/900/1024/1100 in responsive-ascii-boxes.spec.js + echte wrap-detector; Sessie 197 added +2 in NEW `persistence-flush.spec.js`: flush-on-`visibilitychange(hidden)` bewaart challenge-voltooiing + VFS-mutatie binnen het 500ms-debounce-venster. Chromium-baseline Sessie 197 tegen lokale werkkopie: 184 werkkopie-specs groen vóór+na de fixes; 49 "failures" = 10 prod-hardcoded specs (egress `000`) + 5 tutorial-gestures (iPhone-13-device-emulatie-harnasartefact) — géén werkkopie-regressie. Sessie 196 added +2 in gamification.spec; Sessie 195 added +4)
 
 <!-- VALIDATE-BUNDLE-START Sessie 157 — ground-truth target voor scripts/validate-docs.sh --deep -->
-<!-- src=686 styles=397 blog=443 assets=1551 (KB unminified, du -sb / 1024 basis; Sessie 208 ground-truth meting — blog -13 KB en src -2 KB door verwijdering van 44 advertentieblokken + de AdSense-laadcode; styles +1 KB door de verantwoording-kaart en gids-gerelateerde links) -->
+<!-- src=686 styles=397 blog=443 assets=1668 (KB unminified, du -sb / 1024 basis; Sessie 209 ground-truth meting — assets +117 KB door de nieuwe lead magnet assets/samples/juridische-gids-sample.pdf (6 pagina's, gebouwd uit docs/products/juridische-gids-sample.typ). assets/ is de budgetloze content-pijler; de runtime-bundel van terminal.html is ongewijzigd) -->
 <!-- VALIDATE-BUNDLE-END -->
 
 **Volgende Stappen:**

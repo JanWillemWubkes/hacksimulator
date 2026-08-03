@@ -4,7 +4,7 @@
 # Provenance / artifact-flow:
 #   bron      : docs/products/*.typ  (getrackt in git — single source of truth)
 #   build     : docs/products/*.pdf  (output van dit script; NIET getrackt — zie .gitignore)
-#   geserveerd: assets/samples/pentest-playbook-sample.pdf  (lead-magnet, wél getrackt)
+#   geserveerd: assets/samples/*-sample.pdf  (lead-magnets, wél getrackt)
 # De volledige product-PDF's worden naar Gumroad geupload; de *.pdf hier zijn herbouwbaar.
 #
 # Vereist: typst (https://github.com/typst/typst)
@@ -45,7 +45,7 @@ echo "[*] Logo synchroniseren uit assets/brand/logo.svg"
 cp ../../assets/brand/logo.svg logo.svg
 
 # Compileer alle guides + sample
-for file in juridische-gids.typ pentest-playbook.typ leerplan.typ pentest-playbook-sample.typ; do
+for file in juridische-gids.typ pentest-playbook.typ leerplan.typ pentest-playbook-sample.typ juridische-gids-sample.typ; do
     name="${file%.typ}"
     echo "[*] Compileer: $file → ${name}.pdf"
     typst compile "$file" "${name}.pdf"
@@ -56,4 +56,4 @@ echo "[OK] Alle PDF's gegenereerd:"
 ls -lh *.pdf 2>/dev/null
 echo ""
 echo "Upload de 3 betaalde PDF's naar Gumroad. Zie gumroad-listings.md voor instructies."
-echo "Kopieer pentest-playbook-sample.pdf naar assets/samples/ voor de lead magnet."
+echo "Kopieer de twee *-sample.pdf naar assets/samples/ voor de lead magnets."

@@ -519,6 +519,24 @@
   border-top: 1px solid var(--color-border);
 }
 
+/* Secundaire ingang naar het gratis sample, onder de koop-knop. Alleen
+   variabelen, zodat hij in beide thema's klopt zonder losse override. */
+.gids-sample-link {
+  margin: var(--spacing-sm) 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.gids-sample-link a {
+  color: var(--color-link);
+  text-decoration: underline;
+}
+
+.gids-sample-link a:hover,
+.gids-sample-link a:focus-visible {
+  color: var(--color-primary);
+}
+
 .gids-related-label {
   display: block;
   font-family: var(--font-terminal);
