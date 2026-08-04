@@ -195,7 +195,80 @@ Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site
 
 ---
 
-## Product 4: Bundle (alle 3)
+## Product 4: Je Eigen Hacklab
+
+> **Status: nog niet op Gumroad.** De PDF is gebouwd (`lab-opzetten.pdf`, 16 pagina's), maar er is
+> nog geen product aangemaakt en dus geen product-ID. Zolang dat er niet is staat deze gids
+> **bewust niet** op `gidsen.html` — een productkaart met een dode link is slechter dan geen kaart.
+> Zie "Wat er nog moet gebeuren" onderaan deze sectie.
+
+### Gumroad Titel
+```
+Je Eigen Hacklab: Van Simulator naar een Echte Kali-Omgeving
+```
+
+### Korte beschrijving (Gumroad summary, max ~150 tekens)
+```
+Elke gids begint met "start je Kali VM". Deze gids bouwt hem — veilig afgeschermd, met snapshots en een doelwit om legaal op te oefenen.
+```
+
+### Lange beschrijving (Gumroad productpagina)
+```
+Je hebt in een simulator geoefend. Je weet wat nmap doet. En dan begint elke cursus, gids en video met dezelfde zin: "start je Kali VM en verbind met de VPN" — alsof dat vanzelf spreekt.
+
+Deze gids maakt die stap. Aan het eind heb je een werkende oefenomgeving waarin je kunt scannen, exploiteren en dingen kapotmaken zonder dat iemand anders er last van heeft.
+
+Wat je leert:
+- Kali Linux in een virtuele machine, van download tot eerste login
+- Welke virtualisatiesoftware bij jouw computer past (inclusief Apple Silicon)
+- De netwerkmodus: het hoofdstuk dat ertoe doet. NAT, host-only en bridged — en waarom één verkeerde instelling je hele huis scant
+- Snapshots: waarom een fout je een klik kost in plaats van een avond
+- Een kwetsbaar doelwit opzetten om legaal op te oefenen
+- Verbinden met TryHackMe of HackTheBox via VPN
+- Van simulator naar lab: dezelfde commando's, maar wat er anders is aan echte output
+- Vijf problemen die je waarschijnlijk tegenkomt, met de oplossing
+
+Alle software in deze gids is gratis voor persoonlijk gebruik.
+
+~16 pagina's | PDF | Nederlands
+Met zorg samengesteld en gecontroleerd · augustus 2026.
+
+Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethisch hacken.
+```
+
+### Tags
+```
+kali linux, virtualbox, hacklab, pentesting lab, ethisch hacken, cybersecurity, tryhackme, hackthebox, VM, beginner, Nederlands
+```
+
+### Categorie
+```
+Education > Cybersecurity
+```
+
+### Thumbnail tekst (voor Canva)
+```
+Titel: Je Eigen Hacklab
+Subtitel: Van Simulator naar Echte Kali-Omgeving
+Branding: HackSimulator.nl
+Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site huisstijl
+```
+
+### Wat er nog moet gebeuren (Heisenberg)
+
+1. Maak het product aan op Gumroad met bovenstaande teksten en upload `lab-opzetten.pdf`.
+2. Zet de prijs op pay-what-you-want vanaf €5, gelijk aan de andere drie.
+3. Geef het product-ID door (het stukje na `/l/` in de URL). Dan komt de productkaart op
+   `gidsen.html`, met JSON-LD, tracking-attributen en een plek in de kaartvolgorde — dat is
+   ~10 minuten werk zodra het ID bekend is.
+4. **Beslissing die van jou is:** gaat deze gids in de bundel? De bundel heet nu "alle 3" en kost
+   €12. Vier gidsen erin voor dezelfde prijs maakt de bundel aantrekkelijker maar verlaagt de
+   opbrengst per gids; los verkopen houdt de bundel zoals hij is. Ik heb hier niets aan
+   veranderd — de bundeltekst gaat nog steeds over drie gidsen.
+
+---
+
+## Product 5: Bundle (alle 3)
 
 ### Gumroad Titel
 ```

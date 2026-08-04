@@ -45,7 +45,7 @@ echo "[*] Logo synchroniseren uit assets/brand/logo.svg"
 cp ../../assets/brand/logo.svg logo.svg
 
 # Compileer alle guides + sample
-for file in juridische-gids.typ pentest-playbook.typ leerplan.typ pentest-playbook-sample.typ juridische-gids-sample.typ; do
+for file in juridische-gids.typ pentest-playbook.typ leerplan.typ lab-opzetten.typ pentest-playbook-sample.typ juridische-gids-sample.typ; do
     name="${file%.typ}"
     echo "[*] Compileer: $file → ${name}.pdf"
     typst compile "$file" "${name}.pdf"
@@ -55,5 +55,5 @@ echo ""
 echo "[OK] Alle PDF's gegenereerd:"
 ls -lh *.pdf 2>/dev/null
 echo ""
-echo "Upload de 3 betaalde PDF's naar Gumroad. Zie gumroad-listings.md voor instructies."
+echo "Upload de 4 betaalde PDF's naar Gumroad. Zie gumroad-listings.md voor instructies."
 echo "Kopieer de twee *-sample.pdf naar assets/samples/ voor de lead magnets."
