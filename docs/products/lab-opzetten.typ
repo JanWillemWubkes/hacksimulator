@@ -15,11 +15,15 @@
 
 // ─────────────────────────────────────────────
 
+#outline(title: [Inhoud], depth: 2, indent: 1em)
+
+#pagebreak()
+
 = Over deze gids
 
 Je hebt in HackSimulator `nmap 192.168.1.100` getypt en een lijst met open poorten teruggekregen. Nette output, duidelijke uitleg. Maar die poorten bestonden niet. Er stond geen server. Er was geen netwerk.
 
-Dat is precies wat een simulator hoort te doen: je leert het *idee* zonder dat je iets kunt slopen. Maar op een gegeven moment wil je de echte tool op een echte machine loslaten --- en dan blijkt dat elke gids, cursus en YouTube-video begint met de zin *"start je Kali VM en verbind met de VPN"*, alsof dat vanzelf spreekt.
+Dat is precies wat een simulator hoort te doen: je leert het *idee* zonder dat je iets kunt slopen. Maar op een gegeven moment wil je de echte tool op een echte machine loslaten --- en dan blijkt dat elke gids, cursus en YouTube-video begint met de zin *"start je Kali VM en verbind met de VPN"*, alsof dat vanzelfsprekend is.
 
 Dat is de stap die deze gids maakt. Aan het eind heb je:
 
@@ -29,15 +33,31 @@ Dat is de stap die deze gids maakt. Aan het eind heb je:
 - Een kwetsbaar doelwit in je eigen lab om legaal op te oefenen
 - Een verbinding met TryHackMe of HackTheBox
 
-#letop[Deze gids gaat over het *bouwen* van een oefenomgeving. Wat je daarbinnen mag en wat daarbuiten strafbaar is, staat in de Juridische Gids. Hoofdstuk 4 hieronder raakt eraan, maar vervangt hem niet.]
+#letop[Deze gids gaat over het *bouwen* van een oefenomgeving. Wat je daarbinnen mag en wat daarbuiten strafbaar is, staat in de Juridische Gids. Het onderdeel _Stap 3: de netwerkmodus_ komt er zijdelings op terug, maar vervangt die gids niet.]
 
 == Voor wie dit is
 
 Je hebt de fases in HackSimulator doorlopen, of je bent bij week 5 van het 12-weken leerplan aanbeland. Je hoeft geen Linux te kennen --- dat leer je juist hierdoor. Wat je wél nodig hebt is geduld voor één avond installeren.
 
+== Zes woorden die je verderop tegenkomt
+
+Deze gids gebruikt een handvol termen die overal in de securitywereld terugkomen. Ze staan hier bij elkaar, zodat je verderop niet hoeft te stoppen om iets op te zoeken.
+
+/ Virtuele machine (VM): Een complete computer die als programma binnen je eigen computer draait, met een eigen besturingssysteem en eigen schijf. Je kunt hem aanzetten, gebruiken en weggooien zonder dat je echte computer er iets van merkt.
+
+/ Image: Eén groot bestand dat een complete, kant-en-klare virtuele machine bevat. Je downloadt het en je hebt meteen een werkende computer --- geen installatie nodig.
+
+/ ISO: Een bestand dat een installatie-schijf nabootst. Hiermee installeer je een besturingssysteem zelf, stap voor stap. Trager dan een image, maar je ziet wel wat er gebeurt.
+
+/ Terminal: Het tekstvenster waarin je commando's typt. Precies wat je in HackSimulator hebt geoefend --- alleen praat je nu tegen een echte computer.
+
+/ Snapshot: Een bewaarde momentopname van een virtuele machine. Ging er iets mis, dan zet je hem met één klik terug naar dat moment.
+
+/ Root: De hoofdgebruiker van een Linux-systeem, met alle rechten. Vergelijkbaar met "Administrator" op Windows. Met `sudo` vóór een commando voer je dat commando eenmalig als root uit.
+
 == Wat het kost
 
-Niets. Alle software in deze gids is gratis voor persoonlijk gebruik. De enige investering is schijfruimte en een avond.
+Niets. Alle software in deze gids is gratis voor persoonlijk gebruik. Je investeert alleen wat schijfruimte en een avond van je vrije tijd.
 
 // ─────────────────────────────────────────────
 
@@ -47,19 +67,21 @@ Je zou Kali als hoofdbesturingssysteem kunnen installeren, of de tools rechtstre
 
 == 1. Isolatie: je oefendoelwitten zijn met opzet kapot
 
-De machines waarop je oefent zijn expres lek. Metasploitable, de VulnHub-images, de kwetsbare machines op TryHackMe --- dat zijn systemen met bekende gaten erin. Als zo'n machine bij jouw bestanden kan, heb je een lek systeem naast je belastingaangifte gezet.
+De computers waarop je gaat oefenen zijn *expres slecht beveiligd*. Dat is het hele idee: ze zijn gemaakt om ingebroken te worden, zodat jij kunt leren hoe dat werkt. Je herkent ze aan namen als *Metasploitable* of *DVWA* --- kant-en-klare oefendoelwitten die je zelf downloadt --- of je gebruikt de oefenmachines die TryHackMe en HackTheBox voor je klaarzetten.
 
-Een VM met de juiste netwerkinstelling kan daar niet bij. Dat is geen theoretische voorzichtigheid: het is de reden dat professionals in gescheiden omgevingen werken.
+Zo'n machine hoort niet bij jouw bestanden te kunnen. Zet je hem verkeerd neer, dan staat er een systeem met bekende gaten erin naast je belastingaangifte en je vakantiefoto's. Een virtuele machine met de juiste netwerkinstelling kan daar simpelweg niet bij.
+
+Dat is geen overbodige voorzichtigheid: het is de reden dat professionals altijd in gescheiden omgevingen werken.
 
 == 2. Juridisch: één verkeerde netwerkinstelling scant je hele huis
 
 Dit is het onderdeel waar de meeste gidsen overheen stappen, en het is het gevaarlijkste. Zet je je VM in *bridged* modus, dan staat hij als volwaardig apparaat op je échte netwerk. Een `nmap 192.168.1.0/24` scant dan de telefoon van je huisgenoot, de printer van je hospita en het slimme slot van de buren.
 
-Dat is geen ramp op je eigen apparaten. Op die van iemand anders is het een scan zonder toestemming --- precies wat de Juridische Gids behandelt. Hoofdstuk 4 laat zien hoe je dat onmogelijk maakt in plaats van er alleen aan te denken.
+Dat is geen ramp op je eigen apparaten. Op die van iemand anders is het een scan zonder toestemming --- precies wat de Juridische Gids behandelt. Bij _Stap 3_ zie je hoe je dat onmogelijk maakt, in plaats van er alleen aan te moeten denken.
 
 == 3. Herstelbaarheid: fouten maken hoort erbij
 
-Je gaat je VM slopen. Je gaat een commando met `sudo rm -rf` op de verkeerde plek uitvoeren, een pakket installeren dat iets anders breekt, of een exploit draaien die het systeem onbruikbaar maakt.
+Je gaat je VM slopen. Je gaat een commando met `sudo rm -rf` op de verkeerde plek uitvoeren (dat verwijdert bestanden zonder te vragen), een pakket installeren dat iets anders breekt, of een *exploit* draaien --- een stukje code dat misbruik maakt van een fout in software --- dat het systeem onbruikbaar maakt.
 
 Met snapshots is dat een klik terug. Zonder snapshots is het opnieuw installeren. Dat verschil bepaalt of je durft te experimenteren --- en experimenteren ís het leren.
 
@@ -79,11 +101,13 @@ Met snapshots is dat een klik terug. Zonder snapshots is het opnieuw installeren
   [Processor], [64-bit, virtualisatie aan], [4 cores of meer],
 )
 
-Je geeft de VM een deel van je RAM. Bij 8 GB totaal is 3 tot 4 GB voor Kali werkbaar --- je computer houdt dan genoeg over. Bij 4 GB totaal wordt het zwaar: dan is Pwnbox of een tweedehands laptop een betere route dan een VM die constant staat te swappen.
+Je geeft de virtuele machine een deel van je werkgeheugen. Bij 8 GB totaal is 3 tot 4 GB voor Kali werkbaar --- je eigen computer houdt dan genoeg over.
+
+Bij 4 GB totaal wordt het zwaar. Je computer gaat dan *swappen*: hij heeft te weinig geheugen en begint stukken ervan op de veel tragere harde schijf te parkeren. Alles wordt daardoor stroperig. In dat geval is de browseromgeving van TryHackMe (Pwnbox) of een tweedehands laptop een prettigere route dan een virtuele machine die de hele tijd staat te zwoegen.
 
 == Virtualisatie inschakelen
 
-Zonder hardware-virtualisatie start je VM niet, of alleen tergend traag. Op de meeste computers staat het aan; op sommige moet je het in de BIOS/UEFI aanzetten. Het heet daar *Intel VT-x*, *AMD-V* of gewoon *Virtualization Technology*.
+Zonder hardware-virtualisatie start je VM niet, of alleen tergend traag. Op de meeste computers staat het aan; op sommige moet je het zelf inschakelen in de *BIOS* of *UEFI* --- het instellingenscherm dat verschijnt als je vlak na het aanzetten een toets indrukt (meestal `F2`, `Del` of `F10`; welke, zegt je computer op dat moment op het scherm). De instelling heet daar *Intel VT-x*, *AMD-V* of gewoon *Virtualization Technology*.
 
 Controleer het zo:
 
@@ -94,7 +118,7 @@ Controleer het zo:
   [Linux], [`grep -E --color 'vmx|svm' /proc/cpuinfo` --- krijg je gekleurde treffers, dan is het aanwezig.],
 )
 
-#warning[Op Windows kan Hyper-V of de Core-isolatie/Geheugenintegriteit-functie botsen met VirtualBox, waardoor VM's extreem traag worden of niet starten. Kom je dat tegen, dan is dat bijna altijd de oorzaak --- zie het hoofdstuk *Als het misgaat* achterin.]
+#warning[Op Windows kan Hyper-V of de Core-isolatie/Geheugenintegriteit-functie botsen met VirtualBox, waardoor VM's extreem traag worden of niet starten. Kom je dat tegen, dan is dat bijna altijd de oorzaak --- zie *Als het misgaat* achterin.]
 
 // ─────────────────────────────────────────────
 
@@ -144,42 +168,73 @@ Kali biedt vooraf geïnstalleerde VM-images aan. Je downloadt een bestand, impor
 + Ga naar #link("https://www.kali.org/get-kali/#kali-virtual-machines")[kali.org/get-kali] en kies *Virtual Machines*.
 + Download het image voor jouw hypervisor (VirtualBox of VMware) en jouw processor (x86-64 of ARM).
 + Het bestand is enkele gigabytes groot. Dit is een goed moment voor koffie.
-+ Pak het uit en dubbelklik het `.vbox`-bestand, of gebruik in VirtualBox *Bestand → Toevoegen*.
++ Pak het uitgepakte bestand uit en dubbelklik op het bestand dat eindigt op `.vbox`. VirtualBox opent dan met de machine er al in. Gebeurt er niets, start VirtualBox dan zelf en zoek in het menu de optie *Toevoegen* (Engels: *Add*); wijs daarmee hetzelfde `.vbox`-bestand aan.
 
 *Inloggegevens:* gebruikersnaam `kali`, wachtwoord `kali`. Verander dat wachtwoord meteen met `passwd`.
 
-#warning[Controleer de checksum van je download. Op de downloadpagina staat een SHA256-waarde; vergelijk die met wat je zelf berekent (`sha256sum bestand` op Linux/macOS, `Get-FileHash bestand` in PowerShell). Een besturingssysteem voor security-werk downloaden en dan niet controleren of het onderweg is aangepast, is een gek soort ironie.]
+=== Controleer of je download klopt
+
+Een download van enkele gigabytes kan onderweg beschadigd raken --- of, in het ergste geval, door iemand zijn vervangen. Daarom publiceert Kali bij elk bestand een *checksum*: een lange reeks tekens die je uit het bestand kunt berekenen. Verandert er ook maar één byte, dan komt er een compleet andere reeks uit.
+
+Je vergelijkt dus twee reeksen: die op de website, en die je zelf berekent.
+
++ Zoek op de downloadpagina van Kali de `SHA256`-waarde die bij jouw bestand hoort. Dat is een reeks van 64 tekens.
++ Bereken dezelfde waarde over je eigen bestand:
+  - *Windows:* open PowerShell (Startmenu, typ "PowerShell") en geef `Get-FileHash naam-van-het-bestand`
+  - *macOS of Linux:* open een terminal en geef `shasum -a 256 naam-van-het-bestand`
++ Vergelijk de twee. Ze horen letterlijk gelijk te zijn. In de praktijk hoef je niet alle 64 tekens na te lopen: komen de eerste zes en de laatste zes overeen, dan zit het goed.
+
+#warning[Komen ze *niet* overeen, gebruik het bestand dan niet. Download opnieuw, en blijft het afwijken, haal het dan van een andere internetverbinding. Uitgerekend bij een besturingssysteem voor beveiligingswerk wil je zeker weten dat je krijgt wat de makers hebben verstuurd.]
 
 == Route B: zelf installeren vanaf de ISO
 
-Wil je begrijpen hoe een Linux-installatie werkt --- ook nuttig --- download dan de *Installer*-ISO en maak zelf een nieuwe VM aan. Reken op 30 tot 60 minuten. De installatieprocedure is grotendeels "volgende, volgende, volgende"; bij *Partitioning* kies je *Guided --- use entire disk*, wat veilig is omdat "entire disk" hier de virtuele schijf betekent, niet die van je computer.
+Wil je begrijpen hoe een Linux-installatie werkt --- ook nuttig --- download dan de *Installer*-ISO en maak zelf een nieuwe VM aan. Reken op 30 tot 60 minuten. De installatieprocedure is grotendeels "volgende, volgende, volgende". Bij de stap *Partitioning* --- het indelen van de schijf --- kies je *Guided: use entire disk*. Dat klinkt eng, maar is veilig: "entire disk" betekent hier de virtuele schijf van je nieuwe VM, niet de schijf van je eigen computer.
 
 == Eerste start: de instellingen die ertoe doen
 
-Voor je de VM start, controleer je deze drie dingen (rechtsklik op de VM → *Instellingen*):
+Voor je de VM start, controleer je deze drie dingen. Selecteer de machine in de lijst en open *Instellingen* (het tandwiel-pictogram, of via het menu).
+
+#letop[Menunamen verschillen per versie en per taal van VirtualBox. Zoek daarom op wát je nodig hebt in plaats van op een exact klikpad --- de instellingen hieronder staan altijd onder een kopje dat lijkt op "Systeem" en "Netwerk".]
 
 #table(
   columns: (auto, 1fr, 1.4fr),
   [*Instelling*], [*Waarde*], [*Waarom*],
   [Systeem → Werkgeheugen], [3--4 GB], [Genoeg voor Kali, laat je computer werkbaar],
   [Systeem → Processor], [2 cores], [Meer helpt nauwelijks, minder is traag],
-  [Netwerk → Adapter 1], [NAT], [Voorlopig. Hoofdstuk 4 gaat hierover],
+  [Netwerk → Adapter 1], [NAT], [Voorlopig --- Stap 3 gaat hierover],
 )
 
-Start de VM. Bij de eerste keer inloggen doe je meteen:
+Start de VM en log in. Je ziet nu een bureaublad, net als op een gewone computer.
+
+*Open een terminal.* Dat is het venster waarin je commando's typt --- hetzelfde soort venster als in HackSimulator. In Kali kan dat op drie manieren:
+
+- Klik op het terminal-pictogram in de balk bovenaan (een zwart vierkantje)
+- Of druk op `Ctrl` + `Alt` + `T`
+- Of klik met de rechtermuisknop op het bureaublad en kies *Open Terminal Here*
+
+Typ daar deze twee commando's, één voor één, en druk na elk op Enter:
 
 ```
-passwd                    # verander het standaardwachtwoord
+passwd
+```
+
+Dit verandert je wachtwoord. Je wordt eerst om het huidige gevraagd (`kali`) en daarna twee keer om het nieuwe. *Je ziet niets terwijl je typt* --- geen sterretjes, geen bolletjes. Dat is normaal bij Linux-wachtwoorden; typ gewoon door en druk op Enter.
+
+```
 sudo apt update && sudo apt full-upgrade -y
 ```
 
-Dat laatste kan lang duren. Het is wel nodig: een Kali-image van een paar maanden oud mist beveiligingsupdates.
+Dit haalt de nieuwste updates op en installeert ze. Je wordt om je wachtwoord gevraagd (het nieuwe). Dit kan tien minuten tot een uur duren, afhankelijk van je internetverbinding --- laat het rustig lopen.
+
+Het is wel nodig: een Kali-image van een paar maanden oud mist beveiligings­updates die daarna zijn uitgekomen.
+
+#tip[Is de update klaar? Zet de VM dan uit en maak meteen een snapshot. Dit is het moment waarop je machine schoon en bijgewerkt is --- precies de staat waar je later naar terug wilt kunnen. Hoe dat werkt, staat bij _Stap 4_.]
 
 // ─────────────────────────────────────────────
 
-= Stap 3: De netwerkmodus — het hoofdstuk dat ertoe doet
+= Stap 3: De netwerkmodus — het onderdeel dat ertoe doet
 
-Als je één hoofdstuk goed leest, dan dit. De netwerkinstelling van je VM bepaalt wie je kunt bereiken --- en dus wie je per ongeluk kunt aanvallen.
+Als je één onderdeel van deze gids goed leest, dan dit. De netwerkinstelling van je VM bepaalt wie je kunt bereiken --- en dus wie je per ongeluk kunt aanvallen.
 
 == De vier modi
 
@@ -196,7 +251,9 @@ Als je één hoofdstuk goed leest, dan dit. De netwerkinstelling van je VM bepaa
 
 / NAT --- je standaard: Je VM kan naar buiten (updates, downloads, VPN), maar niemand kan bij hem. Voor gewoon werken en voor verbinden met TryHackMe of HackTheBox is dit de juiste keuze. Laat het hierop staan tenzij je een reden hebt om te wisselen.
 
-/ Host-only --- je oefenlab: Wil je een kwetsbaar doelwit lokaal draaien (Metasploitable, een VulnHub-image), zet dan *beide* VM's op host-only. Ze zien elkaar, jij ziet ze, en verder niemand. Geen internet --- en dat is precies de bedoeling: een expres-kwetsbare machine hoort niet online te staan.
+#letop[Kies je host-only en krijg je een foutmelding dat er geen netwerk beschikbaar is, dan bestaat er nog geen host-only-netwerk op je computer. Je maakt er één aan via de netwerkbeheerder van VirtualBox (te vinden onder *Bestand* of *Gereedschappen*, afhankelijk van je versie). Eén keer aanmaken volstaat; daarna kun je hem bij elke VM kiezen.]
+
+/ Host-only --- je oefenlab: Wil je een kwetsbaar doelwit op je eigen computer draaien (bijvoorbeeld Metasploitable, of een van de gratis oefenmachines van de site VulnHub), zet dan *beide* VM's op host-only. Ze zien elkaar, jij ziet ze, en verder niemand. Geen internet --- en dat is precies de bedoeling: een expres-kwetsbare machine hoort niet online te staan.
 
 / NAT Network --- als je toch internet nodig hebt: Compromis wanneer je doelwitten elkaar moeten zien én naar buiten moeten kunnen. Gebruik dit alleen als host-only echt niet volstaat.
 
@@ -231,7 +288,7 @@ Een snapshot is een bevroren moment van je hele VM: schijf, geheugen, instelling
 
 == Er nu één maken
 
-Met de VM uit: rechtsklik op de VM → *Snapshots* → *Maken*. Noem hem iets als `schoon-na-installatie`.
+Zet de VM eerst uit. Selecteer hem daarna in de lijst en zoek de optie *Snapshots* (soms staat die achter het pictogram met de drie streepjes naast de machinenaam). Klik daar op *Maken* of *Take*, en geef de snapshot een naam als `schoon-na-installatie`.
 
 Dat kost een paar seconden en het is de belangrijkste minuut van deze hele gids.
 
@@ -262,7 +319,9 @@ De klassieke keuze is *Metasploitable 2*: een Linux-machine die met opzet vol ga
 
 Opzetten:
 
-+ Download het image en importeer het in VirtualBox, net als bij Kali.
++ Download het bestand en pak het uit. Let op: Metasploitable wordt geleverd als een kále virtuele schijf (een bestand dat eindigt op `.vmdk`), niet als een kant-en-klare machine zoals Kali. Je moet er dus zelf een VM omheen maken.
++ Maak in VirtualBox een *nieuwe* machine aan. Kies als type Linux en als versie "Other Linux (64-bit)". Geef hem 1 GB geheugen; meer heeft hij niet nodig.
++ Kies bij de schijf niet "nieuwe schijf aanmaken" maar *bestaande schijf gebruiken*, en wijs het uitgepakte `.vmdk`-bestand aan.
 + *Zet de netwerkadapter op host-only.* Doe dit vóór de eerste start.
 + Doe hetzelfde bij je Kali-VM, zodat ze elkaar zien.
 + Start beide. Zoek in Kali het adres van je doelwit met `ip a` (voor je eigen reeks) en dan `nmap -sn 192.168.56.0/24` om te zien wie er nog meer in dat netwerk zit.
@@ -271,11 +330,13 @@ Opzetten:
 
 == Optie B: kwetsbare webapplicaties
 
-Wil je je op web richten, dan zijn *DVWA* (Damn Vulnerable Web Application) en *OWASP Juice Shop* lichter dan een hele VM. Beide draai je in een container of lokaal op je Kali-machine. Juice Shop is de modernere van de twee en heeft een ingebouwde scorekaart.
+Wil je je op websites richten in plaats van op hele systemen, dan zijn *DVWA* (Damn Vulnerable Web Application) en *OWASP Juice Shop* een lichter alternatief: het zijn opzettelijk lekke websites in plaats van complete computers.
+
+Je draait ze rechtstreeks op je Kali-machine, of in een *container* --- een soort mini-VM die alleen één programma draait en binnen seconden start. Juice Shop is de modernere van de twee en houdt zelf bij welke lekken je al gevonden hebt.
 
 == Optie C: online platforms
 
-TryHackMe en HackTheBox hosten de doelwitten voor je. Dat scheelt schijfruimte en opzetwerk, en de begeleiding is beter. Zie het volgende hoofdstuk.
+TryHackMe en HackTheBox hosten de doelwitten voor je. Dat scheelt schijfruimte en opzetwerk, en de begeleiding is beter. Zie Stap 6 hieronder.
 
 #tip[Begin bij optie C als je nog geen ervaring hebt --- de begeleide rooms van TryHackMe leren je meer dan een kale Metasploitable. Kom terug voor optie A zodra je zelf wilt rommelen zonder dat iemand meekijkt.]
 
@@ -316,7 +377,7 @@ Nu wordt het interessant. De commando's die je in HackSimulator hebt geoefend, w
   [*Command*], [*In de simulator*], [*In je lab*],
   [`nmap`], [Een nette lijst met poorten en uitleg], [Ook versies, OS-gissingen, gefilterde poorten en scans die minuten duren],
   [`whois`], [Overzichtelijke registratiegegevens], [Vaak afgeschermd door privacydiensten],
-  [`hydra`], [Vindt een zwak wachtwoord in de demo-database], [Loopt tegen rate limiting, lockouts en trage services aan],
+  [`hydra`], [Vindt een zwak wachtwoord in de demo-database], [Loopt vast op verdedigingen: servers die maar een paar pogingen per minuut toestaan, accounts die op slot gaan, en trage reacties],
   [`cat /etc/shadow`], [Toont voorbeeld-hashes], [Weigert, tenzij je root bent --- en dát is de les],
 )
 
@@ -368,7 +429,7 @@ Beide VM's moeten op *dezelfde* host-only-adapter staan. Controleer per VM: Inst
 
 == Het scherm is te klein of past niet
 
-Installeer de VirtualBox Guest Additions in de VM. Daarna schaalt het scherm mee met het venster en werkt kopiëren en plakken tussen host en VM.
+Installeer de *Guest Additions*: een klein pakket stuurprogramma's van VirtualBox dat je binnen de VM installeert. Daarna schaalt het scherm mee met het venster en kun je kopiëren en plakken tussen je eigen computer en de VM. Je vindt het in het menu van het VM-venster, onder *Apparaten* (Engels: *Devices*).
 
 // ─────────────────────────────────────────────
 
@@ -391,7 +452,9 @@ Loop dit af voor je aan je eerste oefening begint.
 
 = Tot slot
 
-Je hebt nu wat elke andere gids stilzwijgend aanneemt. Vanaf hier is de rem eraf: je kunt scannen, exploiteren, dingen kapotmaken en terugzetten, zonder dat iemand anders er last van heeft en zonder dat je iets illegaals doet.
+Je hebt nu precies datgene waar elke andere gids, cursus en video zonder uitleg mee begint: een werkende Kali-machine, afgeschermd van je eigen netwerk, met snapshots en een doelwit om op te oefenen.
+
+Vanaf hier is de rem eraf. Je kunt scannen, inbreken, dingen kapotmaken en terugzetten --- zonder dat iemand anders er last van heeft en zonder dat je iets illegaals doet.
 
 Die twee voorwaarden --- *niemand anders heeft er last van* en *je doet niets illegaals* --- zijn geen bijzaak. Ze zijn het verschil tussen iemand die security leert en iemand met een strafblad. Je lab is de plek waar je die twee cadeau krijgt.
 

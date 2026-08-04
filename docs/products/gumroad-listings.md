@@ -197,7 +197,7 @@ Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site
 
 ## Product 4: Je Eigen Hacklab
 
-> **Status: nog niet op Gumroad.** De PDF is gebouwd (`lab-opzetten.pdf`, 16 pagina's), maar er is
+> **Status: nog niet op Gumroad.** De PDF is gebouwd (`lab-opzetten.pdf`, 18 pagina's), maar er is
 > nog geen product aangemaakt en dus geen product-ID. Zolang dat er niet is staat deze gids
 > **bewust niet** op `gidsen.html` — een productkaart met een dode link is slechter dan geen kaart.
 > Zie "Wat er nog moet gebeuren" onderaan deze sectie.
@@ -230,7 +230,7 @@ Wat je leert:
 
 Alle software in deze gids is gratis voor persoonlijk gebruik.
 
-~16 pagina's | PDF | Nederlands
+~18 pagina's | PDF | Nederlands
 Met zorg samengesteld en gecontroleerd · augustus 2026.
 
 Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethisch hacken.
@@ -262,7 +262,7 @@ Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site
    `gidsen.html`, met JSON-LD, tracking-attributen en een plek in de kaartvolgorde — dat is
    ~10 minuten werk zodra het ID bekend is.
 4. **BESLIST:** deze gids gaat in de bundel. De bundel is bijgewerkt naar vier gidsen en
-   ~68 pagina's; de prijs blijft €10, waardoor de korting van €5 naar €10 gaat (€20 los).
+   ~70 pagina's; de prijs blijft €10, waardoor de korting van €5 naar €10 gaat (€20 los).
    De site is daar al op aangepast. **Volgorde-afhankelijkheid: voeg `lab-opzetten.pdf` toe aan
    het bundelproduct op Gumroad vóór de site live gaat**, anders belooft de site vier gidsen
    terwijl de bundel er drie levert.
@@ -294,10 +294,10 @@ Dit pakket bevat alle vier de HackSimulator-gidsen in een bundel:
 3. Van Nul naar CTF: 12-Weken Leerplan (~20 pagina's)
    Een gestructureerd pad van complete beginner naar je eerste Capture The Flag competitie. Met 27 toetsvragen en een antwoordsleutel.
 
-4. Je Eigen Hacklab (~16 pagina's)
+4. Je Eigen Hacklab (~18 pagina's)
    Van simulator naar een echte Kali-omgeving. Virtualisatie, de netwerkmodus die bepaalt of je per ongeluk je hele huis scant, snapshots en een doelwit om legaal op te oefenen.
 
-Samen: ~68 pagina's praktische kennis in het Nederlands.
+Samen: ~70 pagina's praktische kennis in het Nederlands.
 Geen voorkennis nodig. Met zorg samengesteld en gecontroleerd · april 2026.
 
 Waarom deze bundel?

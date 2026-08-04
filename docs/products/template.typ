@@ -101,7 +101,12 @@
   )
 
   // Typografie
-  set text(font: "Liberation Sans", size: 10.5pt, fill: luma(30))
+  // lang: "nl" is essentieel, niet cosmetisch: zonder deze regel past Typst
+  // ENGELSE afbreekpatronen toe op Nederlandse tekst. Gevolg: samenstellingen
+  // breken op de verkeerde plek ("beveiliging-supdates") of helemaal niet,
+  // wat in uitgevulde tekst witte rivieren geeft. Gold voor alle gidsen tot
+  // Sessie 209.
+  set text(font: "Liberation Sans", size: 10.5pt, fill: luma(30), lang: "nl")
   set par(leading: 0.7em, justify: true)
 
   // Headings
