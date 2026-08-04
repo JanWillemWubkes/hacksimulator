@@ -161,7 +161,15 @@ export default new class TutorialManager {
 
     this.activeScenario = scenario;
     this.currentStep = resuming ? saved.currentStep : 0;
-    this.stepsSolved = resuming ? (saved.stepsSolved || 0) : 0;
+    // Bij hervatten: neem de opgeslagen telling over. Opslag van vóór Sessie 209
+    // kent het veld niet — dan zou `|| 0` iemand die alles zelf oploste alsnog
+    // een deelname-certificaat geven. Voor die legacy-staat nemen we currentStep
+    // aan (het oude gedrag telde immers elke stap), dus in het voordeel van de
+    // gebruiker. `typeof` en niet `||`, want 0 is een geldige waarde: wie alles
+    // oversloeg en afsloot hoort op 0 te blijven.
+    this.stepsSolved = resuming
+      ? (typeof saved.stepsSolved === 'number' ? saved.stepsSolved : saved.currentStep)
+      : 0;
     this.attempts = 0;
     this.state = STATES.STEP_ACTIVE;
     this._save();
