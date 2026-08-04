@@ -29,10 +29,28 @@ Dit leerplan lost dat probleem op. Je krijgt *precies één ding per week* om te
 Elke week heeft:
 - *Doel:* Wat je aan het einde van de week kunt
 - *Activiteiten:* Wat je concreet doet
-- *Zelftest:* Vragen om te checken of je klaar bent voor de volgende week
 - *Tijdsindicatie:* Hoeveel uur je ongeveer kwijt bent
+- *Zelftest:* twee delen --- zie hieronder
 
-#tip[Dit is geen race. Als een week twee weken duurt, is dat prima. Het gaat om begrip, niet om snelheid.]
+== De zelftest: waarom hij anders werkt dan je gewend bent
+
+De meeste cursussen sluiten een hoofdstuk af met "begrijp je dit?". Daar kun je "ja" op antwoorden
+zonder het te begrijpen, en dat doet vrijwel iedereen --- niet uit oneerlijkheid, maar omdat
+*herkennen* precies hetzelfde voelt als *weten*. Pas als je iets moet uitleggen zonder de tekst
+erbij, merk je het verschil.
+
+Daarom bestaat de zelftest hier uit twee delen:
+
+/ Gedaan?: Vinkjes voor dingen die je feitelijk hebt gedaan --- drie rooms afgerond, Burp
+  geïnstalleerd. Daar is niets aan te interpreteren.
+/ Begrepen?: Open vragen met een echt antwoord. Je schrijft je antwoord *eerst op*, en kijkt
+  daarna pas in de antwoordsleutel achterin. Die volgorde is het hele punt: lees je het antwoord
+  eerst, dan test je niets meer.
+
+Het gaat om de kern, niet om de formulering. Heb je hetzelfde bedoeld in andere woorden, dan is het
+goed. Haal je de drempel niet, dan is dat geen falen maar informatie: die week is nog niet klaar.
+
+#tip[Dit is geen race. Als een week twee weken duurt, is dat prima. Het gaat om begrip, niet om snelheid. Een week overdoen kost je een paar uur; een gat in je fundering kost je later een maand.]
 
 // ─────────────────────────────────────────────
 
@@ -53,9 +71,17 @@ Elke week heeft:
 + Typ `leerpad` in HackSimulator om je voortgang te zien
 
 *Zelftest:*
+
+_Gedaan? Vink af:_
 - [ ] Kun je met `cd` en `ls` door mappen navigeren zonder te twijfelen?
 - [ ] Kun je een bestand aanmaken, kopiëren en verwijderen?
-- [ ] Weet je het verschil tussen een absoluut pad (`/home/user`) en een relatief pad (`../documents`)?
+
+_Begrepen? Beantwoord uit je hoofd en schrijf het op. Kijk pas daarna in de antwoordsleutel achterin._
++ Je staat in `/home/hacker/documents`. Met welk commando ga je één map omhoog, en met welk commando ga je in één keer naar de root van het systeem?
++ Je geeft `cat etc/passwd` en krijgt een foutmelding, terwijl `cat /etc/passwd` wél werkt. Waarom?
++ `rm notes.txt` zegt "No such file or directory". Noem twee commando's waarmee je uitzoekt wat er wél staat.
+
+#tip[Minstens 2 van de 3 in de kern goed? Door naar de volgende week. Minder? Herhaal deze week --- dat kost je nu een paar uur en anders straks een maand.]
 
 // ─────────────────────────────────────────────
 
@@ -81,9 +107,16 @@ Elke week heeft:
 )
 
 *Zelftest:*
+
+_Gedaan? Vink af:_
 - [ ] Kun je uitleggen wat een IP-adres is aan een vriend die niks van computers weet?
-- [ ] Weet je wat het verschil is tussen poort 80 (HTTP) en poort 443 (HTTPS)?
-- [ ] Begrijp je waarom `ping` de eerste stap is bij het testen van een verbinding?
+
+_Begrepen? Beantwoord uit je hoofd en schrijf het op. Kijk pas daarna in de antwoordsleutel achterin._
++ Een server antwoordt niet op `ping`, maar de website laadt gewoon. Geef één verklaring.
++ Welke poortnummers horen bij HTTP en HTTPS, en wat betekent dat verschil voor iemand die het netwerkverkeer meeleest?
++ Wat is het verschil tussen een adres als `192.168.1.10` en een publiek IP-adres?
+
+#tip[Minstens 2 van de 3 in de kern goed? Door naar de volgende week. Minder? Herhaal deze week --- dat kost je nu een paar uur en anders straks een maand.]
 
 // ─────────────────────────────────────────────
 
@@ -114,9 +147,16 @@ Elke week heeft:
 )
 
 *Zelftest:*
+
+_Gedaan? Vink af:_
 - [ ] Kun je in de Developer Tools zien welke requests je browser maakt naar een website?
-- [ ] Begrijp je waarom `' OR '1'='1` gevaarlijk is als invoer in een formulier?
-- [ ] Weet je het verschil tussen client-side (browser) en server-side (server) code?
+
+_Begrepen? Beantwoord uit je hoofd en schrijf het op. Kijk pas daarna in de antwoordsleutel achterin._
++ Je ziet in het Network-tabblad een response met statuscode 302. Wat betekent die code?
++ Waarom is `' OR '1'='1` gevaarlijk als invoer in een inlogformulier? Leg uit wat er met de database-query gebeurt.
++ Een formulier controleert met JavaScript of je wachtwoord lang genoeg is. Waarom is dat géén beveiliging?
+
+#tip[Minstens 2 van de 3 in de kern goed? Door naar de volgende week. Minder? Herhaal deze week --- dat kost je nu een paar uur en anders straks een maand.]
 
 // ─────────────────────────────────────────────
 
@@ -137,9 +177,13 @@ Elke week heeft:
 #warning[Een hele week voor ethiek? Ja. Omdat dit het verschil is tussen een carrière in cybersecurity en een strafblad. Elke professionele ethische hacker zal zeggen: "Begin met de regels, niet met de tools."]
 
 *Zelftest:*
-- [ ] Kun je in je eigen woorden uitleggen wanneer hacken wél en wanneer het niet mag?
-- [ ] Weet je wat je moet doen als je per ongeluk een kwetsbaarheid vindt?
-- [ ] Ken je het verschil tussen een pentest (met contract) en "even kijken of dat slot wel goed zit"?
+
+_Begrepen? Beantwoord uit je hoofd en schrijf het op. Kijk pas daarna in de antwoordsleutel achterin._
++ Noem de drie voorwaarden die het Openbaar Ministerie hanteert om hacken niet-wederrechtelijk te noemen.
++ Je vindt per ongeluk een open database met klantgegevens. Noem drie dingen die je vanaf dat moment níét meer mag doen.
++ Een klant zegt door de telefoon: "ga je gang, test onze server maar". Waarom is dat onvoldoende?
+
+#tip[Minstens 2 van de 3 in de kern goed? Door naar de volgende week. Minder? Herhaal deze week --- dat kost je nu een paar uur en anders straks een maand.]
 
 // ─────────────────────────────────────────────
 
@@ -163,9 +207,16 @@ Een platform met virtuele machines die je kunt hacken --- legaal. Je krijgt een 
 #tip[TryHackMe heeft een gratis tier. Je hebt geen betaald abonnement nodig voor de eerste weken.]
 
 *Zelftest:*
+
+_Gedaan? Vink af:_
 - [ ] Heb je minimaal 3 TryHackMe rooms afgerond?
 - [ ] Kun je verbinding maken met een TryHackMe machine (via browser of VPN)?
-- [ ] Voel je je comfortabel met het lezen van Engelse instructies?
+
+_Begrepen? Beantwoord uit je hoofd en schrijf het op. Kijk pas daarna in de antwoordsleutel achterin._
++ Waarom werk je op TryHackMe via een VPN of een browser-VM, in plaats van rechtstreeks vanaf je eigen laptop?
++ Je krijgt een doel-IP toegewezen dat begint met `10.10.`. Wat zegt dat over waar die machine staat?
+
+#tip[Minstens 2 van de 2 in de kern goed? Door naar de volgende week. Minder? Herhaal deze week --- dat kost je nu een paar uur en anders straks een maand.]
 
 // ─────────────────────────────────────────────
 
@@ -187,9 +238,13 @@ Een platform met virtuele machines die je kunt hacken --- legaal. Je krijgt een 
 In HackSimulator leer je WAT nmap doet. Op TryHackMe gebruik je nmap op echte systemen en zie je echte output --- inclusief onverwachte resultaten die je zelf moet interpreteren.
 
 *Zelftest:*
-- [ ] Kun je een nmap scan uitvoeren en de output interpreteren?
-- [ ] Weet je het verschil tussen een SYN scan (-sS) en een connect scan (-sT)?
-- [ ] Kun je op basis van open poorten bepalen welke stap je vervolgens neemt?
+
+_Begrepen? Beantwoord uit je hoofd en schrijf het op. Kijk pas daarna in de antwoordsleutel achterin._
++ Wat is het verschil tussen een SYN-scan (`-sS`) en een connect-scan (`-sT`)?
++ Nmap meldt een poort als `filtered` in plaats van `closed`. Wat is het verschil?
++ Je vindt poort 22 open op een doelwit van een klant. Welke vervolgstap mag je pas zetten als die expliciet in de opdracht staat?
+
+#tip[Minstens 2 van de 3 in de kern goed? Door naar de volgende week. Minder? Herhaal deze week --- dat kost je nu een paar uur en anders straks een maand.]
 
 // ─────────────────────────────────────────────
 
@@ -222,9 +277,16 @@ In HackSimulator leer je WAT nmap doet. Op TryHackMe gebruik je nmap op echte sy
 )
 
 *Zelftest:*
-- [ ] Kun je uitleggen wat SQL injection is en hoe je het voorkomt?
+
+_Gedaan? Vink af:_
 - [ ] Heb je Burp Suite geïnstalleerd en een HTTP request onderschept?
-- [ ] Ken je minimaal 5 van de OWASP Top 10 uit je hoofd?
+
+_Begrepen? Beantwoord uit je hoofd en schrijf het op. Kijk pas daarna in de antwoordsleutel achterin._
++ Wat doet de proxy van Burp Suite precies, technisch gezien?
++ Noem vijf categorieën uit de OWASP Top 10.
++ Wat is het verschil tussen reflected en stored XSS, en waarom is de tweede meestal ernstiger?
+
+#tip[Minstens 2 van de 3 in de kern goed? Door naar de volgende week. Minder? Herhaal deze week --- dat kost je nu een paar uur en anders straks een maand.]
 
 // ─────────────────────────────────────────────
 
@@ -253,9 +315,13 @@ In HackSimulator leer je WAT nmap doet. Op TryHackMe gebruik je nmap op echte sy
 )
 
 *Zelftest:*
-- [ ] Kun je het verschil uitleggen tussen een gewone gebruiker en root?
-- [ ] Weet je minimaal 3 manieren om privilege escalation te proberen?
-- [ ] Kun je een SUID-bestand vinden en uitleggen waarom het een risico kan zijn?
+
+_Begrepen? Beantwoord uit je hoofd en schrijf het op. Kijk pas daarna in de antwoordsleutel achterin._
++ Wat is een SUID-bestand, en waarom kan het een risico zijn?
++ Noem drie manieren waarop privilege escalation op Linux kan werken.
++ Waarom is `/etc/shadow` voor een aanvaller interessanter dan `/etc/passwd`?
+
+#tip[Minstens 2 van de 3 in de kern goed? Door naar de volgende week. Minder? Herhaal deze week --- dat kost je nu een paar uur en anders straks een maand.]
 
 // ─────────────────────────────────────────────
 
@@ -279,9 +345,15 @@ In HackSimulator leer je WAT nmap doet. Op TryHackMe gebruik je nmap op echte sy
 #tip[Begin ALTIJD met de challenges met de minste punten (= makkelijkst). Google is je vriend --- zoeken naar technieken is geen valsspelen, het is leren.]
 
 *Zelftest:*
+
+_Gedaan? Vink af:_
 - [ ] Heb je minimaal 5 picoCTF challenges opgelost?
-- [ ] Kun je een base64-gecodeerde string decoderen?
-- [ ] Heb je een flag gevonden door een webpagina's broncode te bekijken?
+
+_Begrepen? Beantwoord uit je hoofd en schrijf het op. Kijk pas daarna in de antwoordsleutel achterin._
++ Decodeer `aGFja2Vy`. Om welke codering gaat het, en wat staat er?
++ Noem drie plekken in een webpagina waar een flag kan staan zonder dat een bezoeker hem ziet.
+
+#tip[Minstens 2 van de 2 in de kern goed? Door naar de volgende week. Minder? Herhaal deze week --- dat kost je nu een paar uur en anders straks een maand.]
 
 // ─────────────────────────────────────────────
 
@@ -308,9 +380,16 @@ In HackSimulator leer je WAT nmap doet. Op TryHackMe gebruik je nmap op echte sy
 )
 
 *Zelftest:*
+
+_Gedaan? Vink af:_
 - [ ] Heb je minimaal 1 Starting Point machine volledig gehackt (user + root flag)?
-- [ ] Heb je de pentest-methodologie (recon → scan → exploit → post-exploit) toegepast?
-- [ ] Kun je je aanpak uitleggen aan iemand anders?
+- [ ] Heb je minimaal 3 HackTheBox machines afgerond?
+
+_Begrepen? Beantwoord uit je hoofd en schrijf het op. Kijk pas daarna in de antwoordsleutel achterin._
++ Wat is het verschil tussen de user-flag en de root-flag op een HackTheBox-machine?
++ De methodologie is recon → scan → exploit → post-exploit. Waarom is die laatste fase een aparte stap, en niet gewoon het einde van de exploit?
+
+#tip[Minstens 2 van de 2 in de kern goed? Door naar de volgende week. Minder? Herhaal deze week --- dat kost je nu een paar uur en anders straks een maand.]
 
 // ─────────────────────────────────────────────
 
@@ -335,9 +414,10 @@ In HackSimulator leer je WAT nmap doet. Op TryHackMe gebruik je nmap op echte sy
 )
 
 *Zelftest:*
-- [ ] Kun je benoemen wat je grootste zwakte is en hoe je eraan werkt?
-- [ ] Heb je minimaal 3 HackTheBox machines afgerond?
-- [ ] Durf je een "Easy" machine aan te pakken zonder walkthrough?
+
+_Reflectie --- hier is geen antwoordsleutel voor. Het punt is dat je het opschrijft._
++ Schrijf op: welk onderdeel gaat je het slechtst af, en welke concrete oefening ga je deze week doen om daaraan te werken? (Geen goed of fout — maar schrijf het echt op.)
++ Pak een challenge die je eerder oploste. Kun je nu, zonder notities, uitleggen wáárom je oplossing werkte?
 
 // ─────────────────────────────────────────────
 
@@ -359,9 +439,14 @@ In HackSimulator leer je WAT nmap doet. Op TryHackMe gebruik je nmap op echte sy
 #tip[Je lost waarschijnlijk 1-5 challenges op (van de 20-50). Dat is normaal en goed. Na afloop publiceren teams hun oplossingen ("writeups"). Lees ze allemaal --- dat is waar je het meeste leert.]
 
 *Zelftest:*
+
+_Gedaan? Vink af:_
 - [ ] Heb je meegedaan aan een CTF-event (of een vergelijkbare challenge)?
 - [ ] Heb je minimaal 1 flag gevonden?
 - [ ] Heb je na afloop writeups gelezen van challenges die je niet had opgelost?
+
+_Reflectie --- hier is geen antwoordsleutel voor. Het punt is dat je het opschrijft._
++ Kies één challenge die je niet opgelost kreeg. Wat was de stap die je miste — en had je die met meer tijd gevonden, of ontbrak er kennis? (Geen goed of fout, maar wees eerlijk: dit bepaalt wat je hierna leert.)
 
 // ─────────────────────────────────────────────
 
@@ -435,6 +520,74 @@ Nee. 12 weken is genoeg om een solide basis te leggen en te bepalen of dit iets 
 
 *"Wat als ik een week oversla?"*\
 Pak hem de week erna op. Dit leerplan is geen deadline --- het is een routekaart.
+
+// ─────────────────────────────────────────────
+
+= Antwoordsleutel
+
+Kijk hier pas ná het opschrijven van je eigen antwoord. Dat voelt omslachtig, maar het is precies
+waarom deze sleutel bestaat: als je eerst het antwoord leest, herkén je het --- en herkennen voelt
+hetzelfde als weten, terwijl het dat niet is.
+
+Het gaat om de *kern*, niet om de formulering. Heb je hetzelfde bedoeld met andere woorden, dan is
+het goed.
+
+== Week 1 --- De terminal
+
++ `cd ..` gaat één map omhoog (naar `/home/hacker`); `cd /` gaat naar de root van het systeem. Ook goed: `cd /home/hacker` --- dat is hetzelfde punt via een absoluut pad.
++ `/etc/passwd` is een *absoluut* pad: het begint bij de root en wijst altijd naar dezelfde plek. `etc/passwd` is *relatief*: het zoekt een map `etc` in je huidige map. Die bestaat daar niet, dus je krijgt een fout.
++ `ls` toont wat er in je huidige map staat, `pwd` toont waar je bent. Ook goed: `find` om verderop te zoeken. De kern: bij "bestaat niet" ga je eerst kíjken, niet raden.
+
+== Week 2 --- Netwerken
+
++ `ping` gebruikt ICMP, en veel firewalls blokkeren dat terwijl ze poort 80 en 443 gewoon openlaten. Geen antwoord op ping betekent dus níét dat de server offline is.
++ HTTP is poort 80, HTTPS is poort 443. Verkeer over 80 is onversleuteld en dus leesbaar voor wie op het netwerk meekijkt; 443 is versleuteld met TLS, waardoor een meelezer alleen ziet met wélke server je praat, niet wat er over en weer gaat.
++ `192.168.1.10` is een privé-adres: het is alleen binnen een lokaal netwerk routeerbaar en bestaat duizenden keren tegelijk op de wereld. Een publiek IP is uniek op internet en van buitenaf bereikbaar.
+
+== Week 3 --- Hoe websites werken
+
++ 302 is een *redirect*: de server zegt "wat je zoekt staat ergens anders" en geeft in de `Location`-header de nieuwe URL. Je browser volgt die automatisch, waardoor je in het Network-tabblad vaak twee requests achter elkaar ziet.
++ De invoer wordt in de SQL-query geplakt. De voorwaarde wordt dan iets als `WHERE naam = '' OR '1'='1'`. Omdat `'1'='1'` altijd waar is, is de hele voorwaarde altijd waar en geeft de query een rij terug --- zonder dat je het wachtwoord kent. De oorzaak is dat invoer als *code* wordt behandeld in plaats van als *data*; prepared statements lossen dat op.
++ Alles wat in de browser draait, draait op de computer van de gebruiker --- en die kan het uitzetten, aanpassen of het request rechtstreeks versturen. Client-side validatie is een gebruiksgemak-functie. De echte controle hoort op de server, want dat is de enige plek die de aanvaller niet beheert.
+
+== Week 4 --- Wet en ethiek
+
++ Zwaarwegend maatschappelijk belang, proportionaliteit en subsidiariteit. Let op: ook als je aan alle drie voldoet is dat géén garantie op immuniteit --- het OM kan alsnog vervolgen.
++ Niet verder doorzoeken dan nodig om het probleem aan te tonen; geen gegevens kopiëren of downloaden; niets wijzigen in het systeem; niet publiceren voordat het is opgelost. Juist dat "even verder kijken of het echt zo erg is" is wat mensen hun zaak kost.
++ Mondelinge toestemming is geen bewijs. Toestemming hoort schriftelijk, vooraf en concreet afgebakend te zijn: wélke systemen, in welke periode, met welke technieken. Zonder die afbakening is "ga je gang" juridisch waardeloos zodra er iets misgaat.
+
+== Week 5 --- TryHackMe
+
++ Je scheidt de oefenomgeving van je eigen netwerk en je eigen bestanden. Een VPN of browser-VM zorgt dat je alleen bij de machines kunt die daarvoor bedoeld zijn --- en dat een kwetsbare oefenmachine niet bij jóuw spullen kan.
++ `10.x.x.x` is een privé-bereik: die machine staat in het interne lab-netwerk waar je via de VPN aan hangt, niet ergens op het open internet.
+
+== Week 6 --- Nmap en scanning
+
++ Een SYN-scan (`-sS`) stuurt een SYN, wacht op het antwoord en maakt de handshake bewust níét af. Dat is sneller en valt minder op in logs, maar vraagt verhoogde rechten. Een connect-scan (`-sT`) laat het besturingssysteem een volledige verbinding opzetten: werkt zonder extra rechten, maar is trager en komt vaker in de logs terecht.
++ `closed` betekent dat de host actief antwoordde dat er niets luistert (een RST). `filtered` betekent dat er géén bruikbaar antwoord kwam --- meestal omdat een firewall het pakket laat vallen. Bij `closed` weet je iets over de host; bij `filtered` weet je vooral iets over wat ertussen zit.
++ Inloggen of het wachtwoord brute-forcen. Een open poort vinden mag binnen de scope; er daadwerkelijk op proberen binnen te komen is een aparte handeling die expliciet in de opdracht moet staan.
+
+== Week 7 --- Web security
+
++ Burp zet zichzelf als tussenstation tussen je browser en de server. Je browser stuurt zijn requests naar Burp, Burp houdt ze vast zodat jij ze kunt bekijken en aanpassen, en stuurt ze dan pas door. Voor HTTPS gebruikt Burp een eigen certificaat, dat je daarom in je browser moet vertrouwen.
++ Vijf uit de OWASP Top 10 (2021): Broken Access Control, Cryptographic Failures, Injection, Insecure Design, Security Misconfiguration, Vulnerable and Outdated Components, Identification and Authentication Failures, Software and Data Integrity Failures, Security Logging and Monitoring Failures, Server-Side Request Forgery.
++ Bij *reflected* XSS zit de kwaadaardige code in het request en komt hij in het antwoord terug --- het slachtoffer moet dus een geprepareerde link openen. Bij *stored* XSS staat de code opgeslagen op de server (in een reactie, profiel of bericht) en krijgt iedere bezoeker hem geserveerd. Stored is daarom meestal ernstiger: er is geen link nodig en het bereik is veel groter.
+
+== Week 8 --- Linux en privilege escalation
+
++ Een SUID-bestand draait met de rechten van de *eigenaar* in plaats van die van de gebruiker die het start. Staat SUID op een programma van root, dan draait dat programma als root --- ook als jij een gewone gebruiker bent. Zit er een fout in dat programma, of kun je het misbruiken om een shell te openen, dan heb je rootrechten.
++ Bijvoorbeeld: misbruik van SUID-binaries; te ruime `sudo`-rechten; een cron-job die een script draait waar jij in mag schrijven; een verouderde kernel met een bekende exploit; wachtwoorden of sleutels die in leesbare bestanden of in de history staan.
++ `/etc/passwd` bevat accountinformatie en is voor iedereen leesbaar, maar de wachtwoord-hashes staan er al lang niet meer in. Die staan in `/etc/shadow`, dat alleen root mag lezen. Kun je `/etc/shadow` lezen, dan heb je materiaal om offline te kraken --- en dan ben je meestal al root.
+
+== Week 9 --- CTF-challenges
+
++ Base64. `aGFja2Vy` decodeert naar `hacker`. Herkenningspunt: alleen letters, cijfers, `+` en `/`, vaak met `=` als opvulling aan het eind, en de lengte is een veelvoud van vier.
++ Bijvoorbeeld: in een HTML-comment; in de broncode van een JavaScript-bestand; in een verborgen formulierveld; in een HTTP-response-header; in `robots.txt` of een ander bestand dat niet vanaf de pagina gelinkt is.
+
+== Week 10 --- HackTheBox
+
++ De user-flag krijg je zodra je als gewone gebruiker binnen bent --- meestal via een kwetsbare dienst. De root-flag vraagt een extra stap: privilege escalation van die gebruiker naar root. Twee flags betekent dus twee verschillende soorten werk.
++ Post-exploitation beantwoordt de vraag waar het een opdrachtgever écht om gaat: wat kan een aanvaller hierna bereiken? Toegang houden, verder het netwerk in bewegen, bij welke data komen. Zonder die fase lever je "ik kwam binnen" op; mét die fase lever je een inschatting van de werkelijke schade --- en dat is wat een rapport waard maakt.
 
 // ─────────────────────────────────────────────
 

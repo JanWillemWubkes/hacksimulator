@@ -168,7 +168,7 @@ Inclusief:
 - Veelgestelde vragen ("Moet ik kunnen programmeren?" "Heb ik Kali Linux nodig?")
 - Alle bronnen en platforms per week
 
-~15 pagina's | PDF | Nederlands
+~20 pagina's | PDF | Nederlands
 Geen voorkennis nodig. 5-8 uur per week.
 Met zorg samengesteld en gecontroleerd · april 2026.
 
@@ -217,10 +217,10 @@ Dit pakket bevat alle drie de HackSimulator-gidsen in een bundel:
 2. Je Eerste Pentest: Stap-voor-Stap Playbook (~19 pagina's)
    De methodologie die professionals gebruiken. Van reconnaissance tot rapportage, met beslisbomen bij elke stap.
 
-3. Van Nul naar CTF: 12-Weken Leerplan (~15 pagina's)
+3. Van Nul naar CTF: 12-Weken Leerplan (~20 pagina's)
    Een gestructureerd pad van complete beginner naar je eerste Capture The Flag competitie.
 
-Samen: ~47 pagina's praktische kennis in het Nederlands.
+Samen: ~52 pagina's praktische kennis in het Nederlands.
 Geen voorkennis nodig. Met zorg samengesteld en gecontroleerd · april 2026.
 
 Waarom deze bundel?
