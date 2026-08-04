@@ -11,7 +11,7 @@
 | Juridische Gids | €5 | €5+ |
 | Pentest Playbook | €5 | €5+ |
 | 12-Weken Leerplan | €5 | €5+ |
-| **Bundel (alle 3)** | **€10** | **€10+** |
+| **Bundel (alle 4)** | **€10** | **€10+** |
 
 **Aanbeveling:** **Pay-what-you-want met minimum €5 per gids / €10 bundel** (de getoonde "vanaf €5/€10" op de site).
 
@@ -261,28 +261,29 @@ Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site
 3. Geef het product-ID door (het stukje na `/l/` in de URL). Dan komt de productkaart op
    `gidsen.html`, met JSON-LD, tracking-attributen en een plek in de kaartvolgorde — dat is
    ~10 minuten werk zodra het ID bekend is.
-4. **Beslissing die van jou is:** gaat deze gids in de bundel? De bundel heet nu "alle 3" en kost
-   €12. Vier gidsen erin voor dezelfde prijs maakt de bundel aantrekkelijker maar verlaagt de
-   opbrengst per gids; los verkopen houdt de bundel zoals hij is. Ik heb hier niets aan
-   veranderd — de bundeltekst gaat nog steeds over drie gidsen.
+4. **BESLIST:** deze gids gaat in de bundel. De bundel is bijgewerkt naar vier gidsen en
+   ~68 pagina's; de prijs blijft €10, waardoor de korting van €5 naar €10 gaat (€20 los).
+   De site is daar al op aangepast. **Volgorde-afhankelijkheid: voeg `lab-opzetten.pdf` toe aan
+   het bundelproduct op Gumroad vóór de site live gaat**, anders belooft de site vier gidsen
+   terwijl de bundel er drie levert.
 
 ---
 
-## Product 5: Bundle (alle 3)
+## Product 5: Bundle (alle 4)
 
 ### Gumroad Titel
 ```
-HackSimulator Starter Kit: 3 Gidsen voor Beginnende Ethische Hackers
+HackSimulator Starter Kit: 4 Gidsen voor Beginnende Ethische Hackers
 ```
 
 ### Korte beschrijving (max ~150 tekens)
 ```
-Alles wat je nodig hebt om te starten met ethisch hacken: de wet, de methodologie, en een 12-weken plan. 3 gidsen, 1 prijs.
+Alles wat je nodig hebt om te starten met ethisch hacken: de wet, je eigen oefenlab, de methodologie en een 12-weken plan. 4 gidsen, 1 prijs.
 ```
 
 ### Lange beschrijving
 ```
-Dit pakket bevat alle drie de HackSimulator-gidsen in een bundel:
+Dit pakket bevat alle vier de HackSimulator-gidsen in een bundel:
 
 1. Ethisch Hacken & Nederlandse Wet (~13 pagina's)
    Ken de regels voordat je begint. Nederlandse wetgeving, CVD, bug bounty's en echte rechtszaken.
@@ -291,9 +292,12 @@ Dit pakket bevat alle drie de HackSimulator-gidsen in een bundel:
    De methodologie die professionals gebruiken. Van reconnaissance tot rapportage, met beslisbomen bij elke stap.
 
 3. Van Nul naar CTF: 12-Weken Leerplan (~20 pagina's)
-   Een gestructureerd pad van complete beginner naar je eerste Capture The Flag competitie.
+   Een gestructureerd pad van complete beginner naar je eerste Capture The Flag competitie. Met 27 toetsvragen en een antwoordsleutel.
 
-Samen: ~52 pagina's praktische kennis in het Nederlands.
+4. Je Eigen Hacklab (~16 pagina's)
+   Van simulator naar een echte Kali-omgeving. Virtualisatie, de netwerkmodus die bepaalt of je per ongeluk je hele huis scant, snapshots en een doelwit om legaal op te oefenen.
+
+Samen: ~68 pagina's praktische kennis in het Nederlands.
 Geen voorkennis nodig. Met zorg samengesteld en gecontroleerd · april 2026.
 
 Waarom deze bundel?
@@ -363,7 +367,7 @@ Gratis gidsen voor beginners:
 - Ethisch Hacken & Nederlandse Wet — [GUMROAD_URL_JURIDISCH]
 - Je Eerste Pentest: Playbook — [GUMROAD_URL_PLAYBOOK]
 - 12-Weken Leerplan — [GUMROAD_URL_LEERPLAN]
-Of download alle 3 als bundel: [GUMROAD_URL_BUNDEL]
+Of download alle 4 als bundel: [GUMROAD_URL_BUNDEL]
 ```
 
 ### CTA 4: Landingspagina op hacksimulator.nl/gidsen
@@ -418,7 +422,7 @@ Of download alle 3 als bundel: [GUMROAD_URL_BUNDEL]
 
 ### Stap 4: Bundle aanmaken
 1. Maak een nieuw product aan op Gumroad
-2. Upload alle 3 PDF's als bijlagen bij hetzelfde product
+2. Upload alle 4 PDF's als bijlagen bij hetzelfde product
 3. Of: gebruik Gumroad's "Bundle" feature (als beschikbaar)
 
 ### Stap 5: Brevo koppeling (optioneel, later)
@@ -437,7 +441,7 @@ Gumroad heeft geen directe Brevo integratie. Opties:
 ## Checklist voor Launch
 
 - [ ] Gumroad account aangemaakt
-- [ ] PDF's gemaakt van alle 3 drafts (Canva/Google Docs)
+- [ ] PDF's gemaakt van alle 4 drafts (Canva/Google Docs)
 - [ ] Producten aangemaakt op Gumroad (titel + beschrijving + PDF + tags)
 - [ ] Bundle aangemaakt
 - [ ] Testbestelling gedaan (zelf kopen met het minimum €5)
