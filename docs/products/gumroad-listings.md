@@ -197,10 +197,8 @@ Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site
 
 ## Product 4: Je Eigen Hacklab
 
-> **Status: nog niet op Gumroad.** De PDF is gebouwd (`lab-opzetten.pdf`, 19 pagina's), maar er is
-> nog geen product aangemaakt en dus geen product-ID. Zolang dat er niet is staat deze gids
-> **bewust niet** op `gidsen.html` — een productkaart met een dode link is slechter dan geen kaart.
-> Zie "Wat er nog moet gebeuren" onderaan deze sectie.
+> **Product-ID: `ojort`** — URL: `https://hacksimulator.gumroad.com/l/ojort`
+> PDF: `lab-opzetten.pdf` (19 pagina's). Live op Gumroad en gelinkt vanuit `gidsen.html`.
 
 ### Gumroad Titel
 ```
