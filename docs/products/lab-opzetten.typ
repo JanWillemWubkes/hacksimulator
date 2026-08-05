@@ -153,7 +153,7 @@ Heb je een Mac met een M-processor, dan zit je op een ARM-processor in plaats va
 
 + Download VirtualBox van #link("https://www.virtualbox.org/wiki/Downloads")[virtualbox.org] --- kies het pakket voor jouw besturingssysteem.
 + Installeer het met de standaardinstellingen. Je netwerk valt tijdens de installatie even weg; dat hoort erbij, VirtualBox installeert dan zijn netwerkstuurprogramma's.
-+ Start VirtualBox. Je ziet een lege lijst met machines --- dat klopt.
++ Start VirtualBox. De eerste keer zie je een welkomstscherm of een lege lijst --- beide zijn normaal.
 
 // ─────────────────────────────────────────────
 
@@ -168,21 +168,36 @@ Kali biedt vooraf geïnstalleerde VM-images aan. Je downloadt een bestand, impor
 + Ga naar #link("https://www.kali.org/get-kali/#kali-virtual-machines")[kali.org/get-kali] en kies *Virtual Machines*.
 + Download het image voor jouw hypervisor (VirtualBox of VMware) en jouw processor (x86-64 of ARM).
 + Het bestand is enkele gigabytes groot. Dit is een goed moment voor koffie.
-+ Pak het uitgepakte bestand uit en dubbelklik op het bestand dat eindigt op `.vbox`. VirtualBox opent dan met de machine er al in. Gebeurt er niets, start VirtualBox dan zelf en zoek in het menu de optie *Toevoegen* (Engels: *Add*); wijs daarmee hetzelfde `.vbox`-bestand aan.
++ Pak het gedownloade bestand uit en dubbelklik op het bestand dat eindigt op `.vbox`. VirtualBox opent dan met de machine er al in. Gebeurt er niets, start VirtualBox dan zelf en zoek in het menu de optie *Toevoegen* (Engels: *Add*); wijs daarmee hetzelfde `.vbox`-bestand aan.
 
 *Inloggegevens:* gebruikersnaam `kali`, wachtwoord `kali`. Verander dat wachtwoord meteen met `passwd`.
 
 === Controleer of je download klopt
 
-Een download van enkele gigabytes kan onderweg beschadigd raken --- of, in het ergste geval, door iemand zijn vervangen. Daarom publiceert Kali bij elk bestand een *checksum*: een lange reeks tekens die je uit het bestand kunt berekenen. Verandert er ook maar één byte, dan komt er een compleet andere reeks uit.
+Een download van enkele gigabytes kan onderweg beschadigd raken --- of, in het ergste geval, door iemand zijn vervangen. Daarom publiceert Kali bij elk bestand een *checksum*: een lange reeks tekens die uit de inhoud van het bestand worden berekend. Verandert er ook maar één byte, dan komt er een compleet andere reeks uit.
 
-Je vergelijkt dus twee reeksen: die op de website, en die je zelf berekent.
+Het idee is simpel: je vergelijkt twee reeksen. De reeks die Kali op hun website zet, en de reeks die jij zelf uit je download berekent. Zijn ze gelijk, dan is je bestand intact.
 
-+ Zoek op de downloadpagina van Kali de `SHA256`-waarde die bij jouw bestand hoort. Dat is een reeks van 64 tekens.
-+ Bereken dezelfde waarde over je eigen bestand:
-  - *Windows:* open PowerShell (Startmenu, typ "PowerShell") en geef `Get-FileHash naam-van-het-bestand`
-  - *macOS of Linux:* open een terminal en geef `shasum -a 256 naam-van-het-bestand`
-+ Vergelijk de twee. Ze horen letterlijk gelijk te zijn. In de praktijk hoef je niet alle 64 tekens na te lopen: komen de eerste zes en de laatste zes overeen, dan zit het goed.
+*Welk bestand controleer je?* Het bestand dat je zojuist hebt gedownload --- het gecomprimeerde archief (eindigend op `.7z`). Dat is het bestand dat Kali's checksum bij hoort. Pak het dus *niet* eerst uit; controleer het archief zelf.
+
+Stap voor stap:
+
++ *Zoek de checksum op de website.* Ga terug naar de downloadpagina van Kali. Naast of onder de downloadlink staat een `SHA256`-waarde: een reeks van 64 tekens (letters en cijfers). Kopieer of noteer die.
+
++ *Open een terminal of PowerShell.*
+  - *Windows:* druk op het Startmenu, typ `PowerShell` en open het.
+  - *macOS of Linux:* open een terminal (Spotlight → Terminal, of `Ctrl`+`Alt`+`T`).
+
++ *Navigeer naar de map waar je download staat.* Dat is meestal je Downloads-map:
+  - *Windows (PowerShell):* `cd ~\Downloads`
+  - *macOS of Linux:* `cd ~/Downloads`
+
++ *Bereken de checksum.* Typ het commando met de bestandsnaam van je download erachter (gebruik Tab om de naam aan te vullen, zodat je niet alles hoeft over te typen):
+  - *Windows:* `Get-FileHash kali-linux-2026.2-virtualbox-amd64.7z`
+  - *macOS of Linux:* `shasum -a 256 kali-linux-2026.2-virtualbox-amd64.7z`
+  Vervang de bestandsnaam door de naam van jouw gedownloade bestand.
+
++ *Vergelijk de twee reeksen.* Ze horen letterlijk gelijk te zijn. In de praktijk hoef je niet alle 64 tekens na te lopen: komen de eerste zes en de laatste zes overeen, dan zit het goed.
 
 #warning[Komen ze *niet* overeen, gebruik het bestand dan niet. Download opnieuw, en blijft het afwijken, haal het dan van een andere internetverbinding. Uitgerekend bij een besturingssysteem voor beveiligingswerk wil je zeker weten dat je krijgt wat de makers hebben verstuurd.]
 
@@ -320,7 +335,7 @@ De klassieke keuze is *Metasploitable 2*: een Linux-machine die met opzet vol ga
 Opzetten:
 
 + Download het bestand en pak het uit. Let op: Metasploitable wordt geleverd als een kále virtuele schijf (een bestand dat eindigt op `.vmdk`), niet als een kant-en-klare machine zoals Kali. Je moet er dus zelf een VM omheen maken.
-+ Maak in VirtualBox een *nieuwe* machine aan. Kies als type Linux en als versie "Other Linux (64-bit)". Geef hem 1 GB geheugen; meer heeft hij niet nodig.
++ Maak in VirtualBox een *nieuwe* machine aan. Kies als type Linux en als versie "Ubuntu (32-bit)" of "Other Linux (32-bit)". Geef hem 1 GB geheugen; meer heeft hij niet nodig.
 + Kies bij de schijf niet "nieuwe schijf aanmaken" maar *bestaande schijf gebruiken*, en wijs het uitgepakte `.vmdk`-bestand aan.
 + *Zet de netwerkadapter op host-only.* Doe dit vóór de eerste start.
 + Doe hetzelfde bij je Kali-VM, zodat ze elkaar zien.

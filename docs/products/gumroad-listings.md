@@ -197,7 +197,7 @@ Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site
 
 ## Product 4: Je Eigen Hacklab
 
-> **Status: nog niet op Gumroad.** De PDF is gebouwd (`lab-opzetten.pdf`, 18 pagina's), maar er is
+> **Status: nog niet op Gumroad.** De PDF is gebouwd (`lab-opzetten.pdf`, 19 pagina's), maar er is
 > nog geen product aangemaakt en dus geen product-ID. Zolang dat er niet is staat deze gids
 > **bewust niet** op `gidsen.html` — een productkaart met een dode link is slechter dan geen kaart.
 > Zie "Wat er nog moet gebeuren" onderaan deze sectie.
@@ -230,7 +230,7 @@ Wat je leert:
 
 Alle software in deze gids is gratis voor persoonlijk gebruik.
 
-~18 pagina's | PDF | Nederlands
+~19 pagina's | PDF | Nederlands
 Met zorg samengesteld en gecontroleerd · augustus 2026.
 
 Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethisch hacken.
@@ -294,7 +294,7 @@ Dit pakket bevat alle vier de HackSimulator-gidsen in een bundel:
 3. Van Nul naar CTF: 12-Weken Leerplan (~20 pagina's)
    Een gestructureerd pad van complete beginner naar je eerste Capture The Flag competitie. Met 27 toetsvragen en een antwoordsleutel.
 
-4. Je Eigen Hacklab (~18 pagina's)
+4. Je Eigen Hacklab (~19 pagina's)
    Van simulator naar een echte Kali-omgeving. Virtualisatie, de netwerkmodus die bepaalt of je per ongeluk je hele huis scant, snapshots en een doelwit om legaal op te oefenen.
 
 Samen: ~70 pagina's praktische kennis in het Nederlands.
