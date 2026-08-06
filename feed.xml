@@ -9,7 +9,16 @@
     <atom:link href="https://hacksimulator.nl/feed.xml" rel="self" type="application/rss+xml"/>
     <language>nl-NL</language>
     <managingEditor>contact@hacksimulator.nl (HackSimulator.nl)</managingEditor>
-    <lastBuildDate>Wed, 22 Jul 2026 12:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 06 Aug 2026 12:00:00 +0200</lastBuildDate>
+
+    <item>
+      <title>Leren hacken: de complete beginnersgids</title>
+      <description>Hoe leer je hacken? Stap-voor-stap beginnersgids: van terminal basics tot je eerste scan. Gratis oefenen in de browser, geen voorkennis nodig.</description>
+      <link>https://hacksimulator.nl/blog/leren-hacken.html</link>
+      <guid isPermaLink="true">https://hacksimulator.nl/blog/leren-hacken.html</guid>
+      <pubDate>Thu, 06 Aug 2026 10:00:00 +0200</pubDate>
+      <category>Beginners</category>
+    </item>
 
     <item>
       <title>Metasploit voor beginners: wat het is en hoe het werkt</title>

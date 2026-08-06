@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>Leren hacken: de complete beginnersgids | HackSimulator.nl</title>
+  <meta name="description" content="Hoe leer je hacken? Stap-voor-stap beginnersgids: van terminal basics tot je eerste scan. Gratis oefenen in de browser, geen voorkennis nodig.">
+  <meta name="author" content="HackSimulator.nl">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://hacksimulator.nl/blog/leren-hacken.html">
+  <meta property="og:title" content="Leren hacken: de complete beginnersgids | HackSimulator.nl">
+  <meta property="og:description" content="Hoe leer je hacken? Stap-voor-stap beginnersgids: van terminal basics tot je eerste scan. Gratis oefenen in de browser, geen voorkennis nodig.">
+  <meta property="article:published_time" content="2026-08-06">
+  <meta property="article:author" content="HackSimulator.nl">
+  <meta property="article:section" content="Beginners">
+  <meta property="og:locale" content="nl_NL">
+  <meta property="og:site_name" content="HackSimulator.nl">
+  <meta property="og:image" content="https://hacksimulator.nl/assets/blog/leren-hacken.png?v=1">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Leren hacken: de complete beginnersgids | HackSimulator.nl">
+  <meta name="twitter:description" content="Hoe leer je hacken? Stap-voor-stap beginnersgids: van terminal basics tot je eerste scan. Gratis oefenen in de browser, geen voorkennis nodig.">
+  <meta name="twitter:image" content="https://hacksimulator.nl/assets/blog/leren-hacken.png?v=1">
+
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="HackSimulator.nl Blog" href="/feed.xml">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://hacksimulator.nl/blog/leren-hacken.html">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#0d1117">
+
+
+  <!-- Critical Font Preloads (self-hosted, SIL OFL 1.1) -->
+  <link rel="preload" href="/styles/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../styles/main.css?v=208">
+  <link rel="stylesheet" href="../styles/landing.css?v=121">
+  <link rel="stylesheet" href="../styles/blog.css?v=208">
+  <link rel="stylesheet" href="../styles/mobile.css?v=116" media="screen and (max-width: 768px)">
+
+  <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
+  <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
+
+  <!-- Structured Data - JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Leren hacken: de complete beginnersgids",
+    "description": "Stap-voor-stap beginnersgids voor hacken leren: van terminal basics tot je eerste scan.",
+    "datePublished": "2026-08-06",
+    "dateModified": "2026-08-06",
+    "author": {
+      "@type": "Organization",
+      "name": "HackSimulator.nl",
+      "url": "https://hacksimulator.nl/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "HackSimulator.nl",
+      "url": "https://hacksimulator.nl/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://hacksimulator.nl/blog/leren-hacken.html"
+    },
+    "inLanguage": "nl-NL",
+    "keywords": "leren hacken, hacken voor beginners, hacken leren, beginnen met hacken, hacking tutorial",
+    "wordCount": 1850,
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://hacksimulator.nl/assets/blog/leren-hacken.png?v=1",
+      "width": 1200,
+      "height": 630
+    }
+  }
+  </script>
+  <!-- BreadcrumbList Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://hacksimulator.nl/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://hacksimulator.nl/blog/" },
+      { "@type": "ListItem", "position": 3, "name": "Leren hacken: de complete beginnersgids", "item": "https://hacksimulator.nl/blog/leren-hacken.html" }
+    ]
+  }
+  </script>
+
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
+
+  <!-- Navigation (Component Injection) -->
+  <div id="navbar-placeholder">
+    <noscript>
+      <nav class="noscript-nav" role="navigation">
+        <a href="../">HackSimulator.nl</a>
+        <a href="../terminal.html">Start Simulator</a>
+        <a href="../blog/">Blog</a>
+        <a href="../commands/">Commands</a>
+        <a href="../gidsen.html">Gidsen</a>
+        <a href="../woordenlijst.html">Woordenlijst</a>
+        <a href="../over-ons.html">Over Ons</a>
+        <a href="../contact.html">Contact</a>
+      </nav>
+    </noscript>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main-content" class="blog-container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li aria-current="page">Leren hacken: de complete beginnersgids</li>
+      </ol>
+    </nav>
+    <article class="blog-post">
+      <!-- Post Header -->
+      <header class="blog-post-header">
+        <h1 class="blog-post-title">Leren hacken: de complete beginnersgids</h1>
+        <div class="blog-post-meta">
+          <time datetime="2026-08-06">6 augustus 2026</time>
+          <span>8 min</span>
+          <span class="category-badge">Beginners</span>
+          <span class="blog-fact-checked" title="Datum waarop de feitelijke beweringen in dit artikel voor het laatst zijn nagelopen">Feiten gecontroleerd: <time datetime="2026-08-06">6 augustus 2026</time> &middot; <a href="/over-ons.html#verantwoording">hoe ik dit controleer</a></span>
+        </div>
+      </header>
+
+      <!-- Post Content -->
+      <div class="blog-post-content">
+        <p>
+          Je wilt leren hacken. Misschien heb je een film gezien, een nieuwsbericht gelezen over een datalek,
+          of ben je gewoon nieuwsgierig hoe computers <em>echt</em> werken. Goed nieuws: hacken leren is
+          toegankelijker dan je denkt. Je hebt geen dure opleiding nodig, geen speciale hardware en geen
+          jarenlange ervaring. In deze gids laten we je stap voor stap zien hoe je vandaag nog kunt beginnen.
+        </p>
+
+        <div class="blog-warning">
+          Hacken zonder toestemming is strafbaar onder artikel 138ab van het Wetboek van Strafrecht. Oefen
+          uitsluitend op systemen waar je toestemming voor hebt: je eigen lab, oefenplatforms of de
+          <a href="../terminal.html">HackSimulator</a>. Meer over de juridische kant lees je in onze
+          <a href="wat-is-ethisch-hacken.html">uitleg over ethisch hacken</a>.
+        </div>
+
+        <h2>Wat is hacken eigenlijk?</h2>
+        <p>
+          Hacken betekent systemen onderzoeken om te begrijpen hoe ze werken — en waar ze kwetsbaar zijn.
+          <abbr class="jargon" title="Ethisch hacken: systemen testen op kwetsbaarheden met toestemming van de eigenaar, om de beveiliging te verbeteren" tabindex="0"><strong>Ethisch hackers</strong></abbr>
+          doen dit met toestemming: ze worden ingehuurd om zwakke plekken te vinden voordat criminelen dat
+          doen. Het is een van de snelst groeiende beroepen in tech, met salarissen van
+          €35.000 tot €100.000 per jaar. Maar zelfs als je er geen carrière van wilt maken: de kennis
+          die je opdoet maakt je digitaal weerbaarder.
+        </p>
+        <p>
+          Wil je meer weten over het verschil tussen ethisch en crimineel hacken? Lees onze
+          <a href="wat-is-ethisch-hacken.html">complete uitleg over ethisch hacken</a>.
+        </p>
+
+        <h2>Wat heb je nodig?</h2>
+        <p>
+          Minder dan je denkt:
+        </p>
+        <ul>
+          <li><strong>Een computer</strong> — Windows, Mac of Linux, maakt niet uit. Geen krachtige hardware nodig.</li>
+          <li><strong>Een browser</strong> — voor de <a href="../terminal.html">HackSimulator</a> en online platforms.</li>
+          <li><strong>Motivatie</strong> — bereidheid om te lezen, te oefenen en fouten te maken.</li>
+        </ul>
+        <p>
+          Geen programmeerervaring? Geen probleem. Je leert het onderweg. De meeste ethisch hackers zijn
+          begonnen zonder IT-achtergrond.
+        </p>
+
+        <h2>Stap 1: leer de terminal</h2>
+        <p>
+          De terminal (ook wel <abbr class="jargon" title="Command line interface: een tekstgebaseerde interface waarmee je commando's typt in plaats van te klikken" tabindex="0"><strong>command line</strong></abbr>
+          genoemd) is het belangrijkste gereedschap van een hacker. In plaats van klikken typ je commando's
+          om bestanden te bekijken, door mappen te navigeren en programma's te starten. Alle security tools
+          werken via de terminal.
+        </p>
+        <p>
+          De basis commando's die je eerst leert:
+        </p>
+
+        <div class="terminal-example">
+          <div class="prompt">$ ls</div>
+          <div class="output">
+documents/  passwords.txt  config.ini  notes/
+
+[TIP] ls toont bestanden en mappen in je huidige locatie
+          </div>
+        </div>
+
+        <ul>
+          <li><a href="/commands/#cmd-ls"><code>ls</code></a> — bestanden en mappen bekijken</li>
+          <li><a href="/commands/#cmd-cd"><code>cd</code></a> — naar een andere map navigeren</li>
+          <li><a href="/commands/#cmd-cat"><code>cat</code></a> — de inhoud van een bestand lezen</li>
+          <li><a href="/commands/#cmd-grep"><code>grep</code></a> — zoeken in bestanden</li>
+          <li><a href="/commands/#cmd-find"><code>find</code></a> — bestanden zoeken op naam</li>
+        </ul>
+
+        <div class="blog-tip">
+          Je kunt deze commando's nu meteen oefenen. Open de <a href="../terminal.html">HackSimulator</a>
+          en typ <code>next</code> — je krijgt een stap-voor-stap tutorial die je door de basics leidt.
+          Lees ook onze <a href="terminal-basics.html">uitgebreide terminal-gids</a>.
+        </div>
+
+        <!-- Gumroad CTA: 12-Weken Leerplan -->
+        <div class="blog-cta blog-cta-product">
+          <h3>Structuur nodig?</h3>
+          <p>Download het 12-Weken Leerplan — van complete beginner naar je eerste Capture The Flag.</p>
+          <a href="https://hacksimulator.gumroad.com/l/eogjdk" class="blog-cta-button" target="_blank" rel="noopener noreferrer" data-product-id="eogjdk" data-cta-location="blog_leren_hacken">Download het Leerplan</a>
+        </div>
+
+        <h2>Stap 2: begrijp hoe netwerken werken</h2>
+        <p>
+          Bijna elke hack gaat via een netwerk. Als je niet begrijpt hoe data van A naar B reist,
+          kun je niet begrijpen wat security tools eigenlijk doen. Je hoeft geen expert te worden,
+          maar deze concepten moet je kennen:
+        </p>
+        <ul>
+          <li><strong><abbr class="jargon" title="IP-adres: het unieke adres van een apparaat op een netwerk, vergelijkbaar met een huisadres" tabindex="0">IP-adressen</abbr></strong> — elk apparaat op een netwerk heeft er een</li>
+          <li><strong>Poorten</strong> — een IP-adres heeft duizenden poorten; elke service (web, e-mail, SSH) draait op een eigen poort</li>
+          <li><strong><abbr class="jargon" title="DNS: Domain Name System — vertaalt domeinnamen (zoals google.nl) naar IP-adressen" tabindex="0">DNS</abbr></strong> — vertaalt domeinnamen naar IP-adressen</li>
+          <li><strong><abbr class="jargon" title="TCP/IP: het fundament van internetcommunicatie — regelt hoe data in pakketjes wordt verstuurd en ontvangen" tabindex="0">TCP/IP</abbr></strong> — het protocol waarmee het internet werkt</li>
+        </ul>
+        <p>
+          Oefen met <a href="/commands/#cmd-ping"><code>ping</code></a> (controleer of een server bereikbaar is),
+          <a href="/commands/#cmd-traceroute"><code>traceroute</code></a> (volg de route van data door het netwerk) en
+          <a href="/commands/#cmd-netstat"><code>netstat</code></a> (bekijk actieve verbindingen).
+        </p>
+
+        <h2>Stap 3: installeer Linux</h2>
+        <p>
+          Linux is het platform van hackers. De meeste security tools draaien erop, en de meeste servers
+          die je ooit zult testen draaien er ook op. Je hoeft niet je hele computer om te gooien — begin
+          met een van deze opties:
+        </p>
+        <ul>
+          <li><strong>Virtual machine</strong> — installeer <a href="https://www.virtualbox.org" target="_blank" rel="noopener noreferrer">VirtualBox</a> (gratis) en draai Linux naast Windows/Mac</li>
+          <li><strong>WSL</strong> — Windows Subsystem for Linux geeft je een Linux terminal binnen Windows</li>
+          <li><strong>USB stick</strong> — start Linux vanaf een USB zonder je harde schijf aan te raken</li>
+        </ul>
+        <p>
+          Begin met <strong>Ubuntu</strong> (gebruiksvriendelijk) of ga direct naar <strong>Kali Linux</strong>
+          (voorgeïnstalleerde security tools). Ons artikel over het
+          <a href="linux-bestandssysteem.html">Linux bestandssysteem</a> helpt je de mappenstructuur begrijpen.
+        </p>
+
+        <h2>Stap 4: doe je eerste scan</h2>
+        <p>
+          Nu wordt het spannend. Met <a href="/commands/#cmd-nmap"><code>nmap</code></a> kun je netwerken
+          scannen om te ontdekken welke apparaten actief zijn, welke poorten openstaan en welke services
+          draaien. Dit is het eerste echte hacking-commando dat je leert.
+        </p>
+
+        <div class="terminal-example">
+          <div class="prompt">$ nmap 192.168.1.1</div>
+          <div class="output">
+Starting Nmap scan...
+PORT     STATE   SERVICE
+22/tcp   OPEN    SSH       <span class="arrow-glyph">←</span> Remote toegang
+80/tcp   OPEN    HTTP      <span class="arrow-glyph">←</span> Webserver (onversleuteld!)
+443/tcp  OPEN    HTTPS     <span class="arrow-glyph">←</span> Versleutelde webserver
+
+[TIP] Elke open poort is een potentiële ingang. Check of ze nodig zijn!
+          </div>
+        </div>
+
+        <p>
+          Meer weten? Onze <a href="nmap-beginnersgids.html">Nmap beginnersgids</a> legt scan-types,
+          vlaggen en interpretatie stap voor stap uit.
+        </p>
+
+        <h2>Stap 5: ontdek webkwetsbaarheden</h2>
+        <p>
+          De meeste kwetsbaarheden zitten tegenwoordig in webapplicaties. Twee van de belangrijkste
+          om te kennen:
+        </p>
+        <ul>
+          <li>
+            <strong><abbr class="jargon" title="SQL injection: een aanval waarbij kwaadaardige database-commando's worden ingevoegd via invoervelden op een website" tabindex="0">SQL injection</abbr></strong> —
+            database-commando's invoegen via een invoerveld op een website. Hiermee kun je soms
+            complete databases uitlezen. Lees onze <a href="sql-injection-uitgelegd.html">SQL injection uitleg</a>.
+          </li>
+          <li>
+            <strong><abbr class="jargon" title="Cross-Site Scripting: een aanval waarbij kwaadaardige scripts worden geïnjecteerd in websites die andere gebruikers bezoeken" tabindex="0">XSS (cross-site scripting)</abbr></strong> —
+            kwaadaardige scripts injecteren in een website zodat ze draaien in de browser van andere bezoekers.
+          </li>
+        </ul>
+        <p>
+          De <a href="owasp-top-10-uitgelegd.html">OWASP Top 10</a> is de standaardlijst van de
+          tien meest voorkomende webkwetsbaarheden — een must-read voor elke beginner.
+        </p>
+
+        <h2>Gratis platforms om te oefenen</h2>
+        <p>
+          Oefenen op echte systemen zonder toestemming is illegaal. Gelukkig zijn er platforms die
+          speciaal zijn gebouwd om veilig te hacken:
+        </p>
+        <ul>
+          <li>
+            <strong><a href="../terminal.html">HackSimulator.nl</a></strong> — oefen 40+ commando's
+            in je browser, met Nederlandse uitleg bij elke stap. Geen installatie nodig.
+          </li>
+          <li>
+            <strong><a href="https://tryhackme.com" target="_blank" rel="noopener noreferrer">TryHackMe</a></strong> —
+            begeleide leerpaden van beginner tot gevorderd. Het "Complete Beginner"-pad is gratis.
+          </li>
+          <li>
+            <strong><a href="https://overthewire.org/wargames/bandit/" target="_blank" rel="noopener noreferrer">OverTheWire Bandit</a></strong> —
+            gratis puzzels om Linux en de command line te leren via uitdagingen.
+          </li>
+          <li>
+            <strong><a href="https://www.hackthebox.eu" target="_blank" rel="noopener noreferrer">HackTheBox</a></strong> —
+            uitdagender: hack virtuele machines in een lab-omgeving.
+          </li>
+        </ul>
+        <p>
+          Begin met HackSimulator (terminal basics) of TryHackMe (gestructureerd leerpad), en ga
+          daarna naar HackTheBox als je klaar bent voor meer uitdaging.
+        </p>
+
+        <!-- Lead Magnet CTA -->
+        <div class="blog-cta blog-cta-product">
+          <h3>Klaar voor je eerste pentest?</h3>
+          <p>Krijg gratis 9 pagina's uit het Pentest Playbook: Fase 0 (voorbereiding &amp; toestemming) en Fase 1 (het doelwit verkennen). Meteen te downloaden.</p>
+          <a href="/sample-pentest.html" class="blog-cta-button" data-lead-magnet="pentest_sample" data-cta-location="blog_leren_hacken">Download de gratis sample</a>
+        </div>
+
+        <h2>Veelgemaakte fouten</h2>
+        <ul>
+          <li>
+            <strong>Meteen tools willen gebruiken zonder de basis</strong> — Metasploit starten
+            zonder te weten wat een poort is, is als autorijden zonder te weten wat een stoplicht is.
+            Investeer eerst in terminal- en netwerkkennis.
+          </li>
+          <li>
+            <strong>Alleen video's kijken</strong> — hacken leer je door te doen. Eén uur oefenen
+            in de terminal levert meer op dan vijf uur tutorials kijken.
+          </li>
+          <li>
+            <strong>Te veel tegelijk willen leren</strong> — focus op één onderwerp per week.
+            Terminal, dan netwerken, dan scanning. Niet alles tegelijk.
+          </li>
+          <li>
+            <strong>Opgeven na de eerste fout</strong> — fouten zijn het leerproces. De foutmelding
+            <em>is</em> de les. Lees 'm, begrijp 'm, probeer opnieuw.
+          </li>
+        </ul>
+
+        <h2>Veelgestelde vragen</h2>
+
+        <div class="blog-faq" itemscope itemtype="https://schema.org/FAQPage">
+
+          <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <summary itemprop="name">Is hacken leren legaal?</summary>
+            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text">Ja, hacken leren is volledig legaal. Je mag oefenen op je eigen systemen, op platforms als HackSimulator, TryHackMe en HackTheBox, en op systemen waar je schriftelijke toestemming voor hebt. Wat niet mag: systemen van anderen hacken zonder toestemming. Dat is strafbaar onder artikel 138ab van het Wetboek van Strafrecht.</p>
+            </div>
+          </details>
+
+          <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <summary itemprop="name">Hoe lang duurt het om hacken te leren?</summary>
+            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text">De terminal basics en eenvoudige scans kun je in een paar weken leren. Voor een brede basiskennis van netwerken, Linux en security tools reken je op 3-6 maanden bij een paar uur per week. Een professioneel niveau (inclusief certificeringen) kost 1-3 jaar. De sleutel is consistentie: liever elke dag 30 minuten dan een keer per week 5 uur.</p>
+            </div>
+          </details>
+
+          <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <summary itemprop="name">Heb je programmeerervaring nodig?</summary>
+            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text">Nee, niet om te beginnen. Je leert de terminal commando's en security tools eerst gebruiken, niet bouwen. Naarmate je vordert helpt basiskennis van Python en Bash bij het automatiseren van taken en begrijpen van exploits, maar dat leer je onderweg.</p>
+            </div>
+          </details>
+
+          <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <summary itemprop="name">Kun je hacken leren op je telefoon?</summary>
+            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text">Beperkt. De <a href="../terminal.html">HackSimulator</a> werkt op mobiel, dus je kunt terminal commando's oefenen. Maar voor serieus hacken heb je een laptop of desktop nodig — je werkt met meerdere vensters, virtual machines en tools die een groter scherm vereisen.</p>
+            </div>
+          </details>
+
+        </div>
+
+        <h2>De volgende stap</h2>
+        <p>
+          Je kent nu het pad: terminal, netwerken, Linux, scanning, webkwetsbaarheden. De vraag is
+          niet of je het kunt — de vraag is of je begint.
+        </p>
+        <p>
+          Wil je er een carrière van maken? Lees dan onze
+          <a href="ethisch-hacker-worden.html">complete gids om ethisch hacker te worden</a> — met
+          certificeringen, salarissen en een concreet stappenplan. Wil je eerst meer achtergrond?
+          Bekijk onze lijst van <a href="cybersecurity-tools.html">essentiële security tools</a>.
+        </p>
+
+        <div class="blog-cta">
+          <h3>Begin nu met hacken leren</h3>
+          <p>
+            Open de simulator en typ <code>next</code> voor een begeleide tutorial. Of spring direct naar
+            <code>nmap</code>, <code>hashcat</code> of <code>nikto</code> en ontdek hoe echte security tools
+            werken. Gratis, in je browser, zonder installatie.
+          </p>
+          <a href="../terminal.html" class="blog-cta-button" data-terminal-cta="blog_leren-hacken">Start met hacken</a>
+        </div>
+
+      </div>
+
+      <!-- Support Banner -->
+      <div class="blog-support-banner">
+        <h3>Vond je dit artikel nuttig?</h3>
+        <p>HackSimulator.nl is een onafhankelijk project &mdash; gebouwd door &#233;&#233;n developer. Met een koffie help je de simulator gratis houden voor iedereen.</p>
+        <div class="blog-support-actions">
+          <a href="https://ko-fi.com/hacksimulator" class="blog-cta-button" target="_blank" rel="noopener noreferrer">Steun met een koffie</a>
+          <a href="../#newsletter" class="blog-support-link">Of schrijf je in voor updates</a>
+        </div>
+      </div>
+
+      <!-- Related Articles -->
+      <section class="related-articles">
+        <h2>Verder lezen</h2>
+        <div class="related-grid">
+          <a href="terminal-basics.html" class="related-card">
+            <span class="related-category">Beginners</span>
+            <h3>Terminal commands voor beginners</h3>
+            <p>De basis van de command line: ls, cd, cat en meer - alles wat je moet weten om te starten.</p>
+            <span class="related-meta">6 min leestijd</span>
+          </a>
+          <a href="wat-is-ethisch-hacken.html" class="related-card">
+            <span class="related-category">Concepten</span>
+            <h3>Wat is ethisch hacken?</h3>
+            <p>White hat vs black hat - leer het verschil en ontdek de basis van ethical hacking.</p>
+            <span class="related-meta">8 min leestijd</span>
+          </a>
+          <a href="ethisch-hacker-worden.html" class="related-card">
+            <span class="related-category">Carri&egrave;re</span>
+            <h3>Hoe word je ethisch hacker?</h3>
+            <p>Van beginner tot pentester: het complete stappenplan met certificeringen en salarissen.</p>
+            <span class="related-meta">10 min leestijd</span>
+          </a>
+          <a href="nmap-beginnersgids.html" class="related-card">
+            <span class="related-category">Tools</span>
+            <h3>Nmap beginnersgids</h3>
+            <p>Leer netwerk scanning: open poorten vinden, services herkennen en kwetsbaarheden opsporen.</p>
+            <span class="related-meta">12 min leestijd</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Post Footer -->
+      <footer class="blog-post-footer">
+        <p>Vragen of feedback? Laat het ons weten op <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+        <p><a href="/blog/">&larr; Terug naar blog overzicht</a></p>
+      </footer>
+    </article>
+  </main>
+
+  <!-- Footer (Component Injection) -->
+  <div id="footer-placeholder">
+    <noscript>
+      <footer class="noscript-footer">
+        <p>&copy; 2026 HackSimulator.nl</p>
+        <nav>
+          <a href="../assets/legal/privacy.html">Privacy</a>
+          <a href="../assets/legal/terms.html">Voorwaarden</a>
+          <a href="../assets/legal/cookies.html">Cookies</a>
+          <a href="../over-ons.html">Over Ons</a>
+          <a href="../contact.html">Contact</a>
+        </nav>
+      </footer>
+    </noscript>
+  </div>
+
+  <!-- Theme Initialization (prevents flash) - external for CSP compliance -->
+  <script src="/src/init-theme.js"></script>
+
+  <!-- Component Injection (external script for CSP compliance) -->
+  <script src="/src/init-components.js?v=4" type="module"></script>
+
+  <!-- Analytics & Consent (external for CSP compliance) -->
+  <script src="/src/init-analytics.js" type="module"></script>
+
+  <!-- Reading Progress (blog-specific) -->
+  <script src="../src/ui/blog-theme.js" type="module"></script>
+</body>
+</html>

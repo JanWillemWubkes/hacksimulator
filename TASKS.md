@@ -29,7 +29,7 @@
 | M7: Gamification | ✅ Voltooid | 47/47 | 100% | ✅ Phase 1-7 complete (framework, content, badges, certs, dashboard, leaderboard, testing) |
 | M8: Analytics & Scaling | ⏭️ Gepland | 1/37 | 2% | (Sessie 157 --deep zelf-test ground-truth fix: was 0/40 stale; section heeft 1 [x] + 36 [ ]) |
 | M9: Refactor Sprint | ✅ Voltooid | 19/19 | 100% | ✅ Cache + bundle + code quality + docs sync + performance + test coverage + localStorage opt |
-| **Blog (content-pijler)** | ✅ Live | 13/13 posts | 100% | ✅ 105+ jargon-explanations + JSON-LD schema + internal cross-linking + unified marketing nav + breadcrumbs + merk-auteurschap (JSON-LD Organization, zichtbare byline verwijderd Sessie 180; persoonsnaam op over-ons) (Sessies 122-125 + 138-139 + 160: Wireshark + Hashcat posts; Sessie 199: Metasploit launch-week-post) |
+| **Blog (content-pijler)** | ✅ Live | 14/14 posts | 100% | ✅ 105+ jargon-explanations + JSON-LD schema + internal cross-linking + unified marketing nav + breadcrumbs + merk-auteurschap (JSON-LD Organization, zichtbare byline verwijderd Sessie 180; persoonsnaam op over-ons) (Sessies 122-125 + 138-139 + 160: Wireshark + Hashcat posts; Sessie 199: Metasploit; Sessie 210: leren-hacken) |
 
 ---
 
@@ -38,7 +38,7 @@
 **Actieve Mijlpalen:** M5.5 Monetization (deliverability + lead-magnet polish) + M6 Tutorial System (last 3 taken) + Blog content-SEO (post-Sessie 138 hub-clustering)
 **Current Status:** ✅ LIVE — Playwright E2E: **~243 passed / 5 skipped (Chromium-run tegen lokale no-store server), 30 spec files** (Chromium, Firefox, WebKit) | Ko-fi + Brevo (deliverability getuned) + Gumroad v1.0 + Lead magnet live | **advertenties volledig verwijderd (Sessie 208)**
 **Bundle (geverifieerd 29 mei 2026, Sessie 144):**
-- **Site totaal:** ~2240 KB unminified | src/ 613 KB | styles/ 262 KB | blog/ 360 KB (12 files: 10 posts + index + welkom) | assets/ 1001 KB (+316 KB Sessie 172: 3 per-gids + 1 bundel cover) | HTML ~150 KB
+- **Site totaal:** ~2240 KB unminified | src/ 613 KB | styles/ 262 KB | blog/ 473 KB (13 files: 11 posts + index + welkom) | assets/ 1001 KB (+316 KB Sessie 172: 3 per-gids + 1 bundel cover) | HTML ~150 KB
 - **E2E-bundle-test-limiet (performance.spec.js): 1000 → 1050 KB (Sessie 204, jul 2026).** De test meet unminified source (src/ JS + styles/ CSS + src/ui CSS + index.html); die meting groeide organisch naar 1002 KB door funnel/analytics-werk Sessie 190-203. Bewuste bump i.p.v. 2 KB code-golf — de echte perf-poort blijft Terminal Core <400 KB minified (zie regel hieronder + #24).
 - **Terminal Core (runtime van terminal.html, gemeten Sessie 141 via BFS module-graph):** **~781 KB unminified** | HTML 19 KB + CSS 160 KB (6 files) + JS 601 KB (99 module-graph files). Geschatte minified ~547 KB. **⚠️ ~37% boven 400 KB budget zelfs minified** — zie #24 (heroverwegen post-implementatie)
 - **Lighthouse on-wire ná Pad C1+C2 (Sessie 144, productie):**
@@ -48,7 +48,7 @@
 - **Playwright:** 30 spec files, ~243 tests per browser-project (Sessie 209 added +6 in NEW `w2-verification.spec.js`: skip-certificaat DEELNAME vs VOLTOOIING (×2), helpsysteem-escalatie (×2), localStorage-backward-compat (×2). Sessie 205 added +1 "Live resize reflow"-test: render @1240 → live versmallen naar 900/700/640 → 0 wraps + scroll blijft gepind; groen op alle 3 engines. Sessie 204 added +4 tussenbreedte-tests 800/900/1024/1100 in responsive-ascii-boxes.spec.js + echte wrap-detector; Sessie 197 added +2 in NEW `persistence-flush.spec.js`: flush-on-`visibilitychange(hidden)` bewaart challenge-voltooiing + VFS-mutatie binnen het 500ms-debounce-venster. Chromium-baseline Sessie 197 tegen lokale werkkopie: 184 werkkopie-specs groen vóór+na de fixes; 49 "failures" = 10 prod-hardcoded specs (egress `000`) + 5 tutorial-gestures (iPhone-13-device-emulatie-harnasartefact) — géén werkkopie-regressie. Sessie 196 added +2 in gamification.spec; Sessie 195 added +4)
 
 <!-- VALIDATE-BUNDLE-START Sessie 157 — ground-truth target voor scripts/validate-docs.sh --deep -->
-<!-- src=696 styles=398 blog=442 assets=1731 (KB unminified, du -sb / 1024 basis; Sessie 209 ground-truth meting) -->
+<!-- src=696 styles=398 blog=473 assets=1731 (KB unminified, du -sb / 1024 basis; Sessie 210 ground-truth meting) -->
 <!-- VALIDATE-BUNDLE-END -->
 
 **Volgende Stappen:**
