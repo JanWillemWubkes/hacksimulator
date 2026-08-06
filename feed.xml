@@ -75,8 +75,8 @@
     </item>
 
     <item>
-      <title>Netwerk scanning met Nmap: beginnersgids</title>
-      <description>Leer hoe nmap werkt voor netwerk scanning. Ontdek open poorten, services en kwetsbaarheden met deze Nederlandse beginnersgids voor ethisch hacken.</description>
+      <title>Wat is Nmap en hoe werkt het? Beginnersgids</title>
+      <description>Wat is Nmap en hoe gebruik je het? Leer netwerk scanning: open poorten vinden, services herkennen en kwetsbaarheden opsporen. Nederlandse handleiding met voorbeelden.</description>
       <link>https://hacksimulator.nl/blog/nmap-beginnersgids.html</link>
       <guid isPermaLink="true">https://hacksimulator.nl/blog/nmap-beginnersgids.html</guid>
       <pubDate>Sun, 25 Jan 2026 10:00:00 +0100</pubDate>
