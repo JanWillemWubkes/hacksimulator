@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 208)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 209)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,15 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 209: W2 browserverificatie — kwaliteitsronde bewezen in de browser (05 aug 2026)
+⚠️ **Never:**
+- Aannemen dat een codewijziging werkt omdat de logica klopt — de skip-certificaat-code was geschreven, gereviewed en gecommit zonder dat iemand 7× `tutorial skip` had getypt in een browser. Pas de Playwright-test bewees dat `stepsSolved` inderdaad op 0 bleef terwijl `currentStep` naar 7 ging.
+- Een pre-installed Chromium-pad raden — Playwright verwachtte `chromium_headless_shell-1234/…/chrome-headless-shell` maar de binary stond op `/opt/pw-browsers/chromium-1194/chrome-linux/chrome`. Alle 242 tests faalden tot `CHROMIUM_PATH` expliciet was gezet. Check het pad, gok het niet.
+
+✅ **Always:**
+- Schrijf tests die het volledige pad door de code bewijzen, niet alleen de eindtoestand — de W2-tests volgen elk het pad (input → manager → certificate/help-system → output) en asserteren op de zichtbare terminal-tekst, niet op interne state. Dat ving ook dat `_hasErrorOutput()` op string-output werkt (niet objecten) en dat de tutorial-guard in `terminal.js:392` de escalatie correct onderdrukt.
+- Behandel pre-existing test-failures als gedocumenteerde baseline — 7/249 failures die óók tegen productie reproduceren zijn geen regressie. Documenteer ze (5× device-emulatie, 1× resize-timing, 1× briefing-timing) zodat de volgende sessie ze niet opnieuw diagnosticeert.
+
 ### Sessie 208: Advertenties eruit, kwaliteit aantoonbaar, blog meetbaar (03 aug 2026)
 ⚠️ **Never:**
 - Een verwijdering "geverifieerd" noemen op basis van een nulmeting achteraf — "0 advertentieverzoeken" is óók waar op een kapotte meting. Pas de vergelijking mét de oude code bewees het: `git archive HEAD` naar `/tmp` + een tweede no-store server op een andere poort gaf **2 advertentieverzoeken + 3 units vóór, 0/0 ná**. Twee servers naast elkaar is de goedkoopste rood-op-mutant die er is bij een verwijdering.
@@ -159,20 +168,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Oude output die na venster-resize breekt = by-design (echte terminals reflowen ook niet; gereproduceerd: 68/68 wraps oud, 0/12 vers) — test-consequentie: na viewport-resize het command opnieuw uitvoeren, nooit oude output meten.
 - Sessienummer-ambiguïteit (eerdere zelfde-dag-context labelde "Sessie 204" in TASKS.md maar rondde `/summary` nooit af): nummer overnemen + dat werk als committed context loggen, niet claimen (Sessie 200-protocol) en niet hernummeren.
 
-### Sessie 203: GEO/AEO — vindbaarheid in AI-zoekmachines (31 jul 2026)
-⚠️ **Never:**
-- Nieuwe content plannen vóór je audit wat er ál zichtbaar staat zonder schema — de homepage had 8 zichtbare FAQ-vragen zónder FAQPage JSON-LD; die vondst maakte de geplande aparte FAQ-pagina overbodig (nav/footer JS-injected + noscript in ~24 files = 20× de kosten voor hetzelfde AEO-voordeel).
-- Een AI-crawler-stanza in robots.txt met alléén `Allow: /` — een specifieke User-agent-groep erft níéts van de wildcard (RFC 9309), dus zonder herhaalde Disallows open je per ongeluk /docs/ voor die crawlers. Multi-UA-groep (12 agents, 1 gedeelde regelset) is compact én correct.
-- HowTo-schema op niet-stapsgewijze content forceren — nmap/hashcat/sql-injection-lijsten zijn alternatieven/uitleg, geen stappen; alleen wireshark (5-staps) en metasploit (7-staps) hebben échte `<ol>`-workflows. Fake-HowTo schaadt de geloofwaardigheid van álle schema op de site.
-- 56 JSON-LD-objecten met de hand overtikken — scriptmatig genereren uit de zichtbare markup (glossary-term-blokken parsen) = geen typo's + herhaalbaar bij term-wijzigingen ([[feedback_proportional_effort_hobby]]: script > handwerk zodra mechanisch-van-omvang).
-
-✅ **Always:**
-- Schema-bij-zichtbare-content verbatim + lockstep-bewaakt — FAQ-antwoorden letterlijk uit de zichtbare `<p>`'s (alleen tags gestript), en de nieuwe DefinedTerm-count-check in `validate-docs.sh --deep` (JSON-LD == zichtbare `<dt>`-count, rood-op-mutant bewezen vóór vertrouwen). Zelfde discipline als de blog-titel-7-locaties-lockstep.
-- Eerlijk zijn over wat on-page GEO wél/niet doet — het maakt je *citeerbaar*, niet *gekozen*: AI Overviews citeert ~97% uit de organische top-20, Perplexity leunt op Reddit (~47%), ChatGPT-retrieval draait op Bing. De zwaarste hefboom (externe vermeldingen, Bing Webmaster) is een Heisenberg-actie en staat zo in checklist-§5, niet weggemoffeld achter de code-wins.
-- "Zorg dat dit gebeurt" eindigt bij live-verificatie, niet bij de push — eerste curl gaf 404 (Netlify nog bezig); achtergrond-recheck na 90s bewees llms.txt 200 + nieuwe robots.txt op productie.
-- llms.txt-URL's tegen het filesystem verifiëren vóór commit — elke link in het LLM-overzicht moet naar een bestaand bestand wijzen; 20/20 gecheckt met één grep-loop.
-
-**Rotation:** Top-6 huidig: 203-204-205-206-207-208 (Sessie 202 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 205 UITGEVOERD:** current.md staart Sessie 190-194 geknipt naar `archive-s190-s194.md` (5 entries); current.md houdt nu het rolling window 195-206 (12 entries; volgende bulk-rotatie Sessie 210 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-184 → `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 204-205-206-207-208-209 (Sessie 203 → `docs/sessions/current.md` via 1-in-1-out). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie Sessie 205 UITGEVOERD:** current.md staart Sessie 190-194 geknipt naar `archive-s190-s194.md` (5 entries); current.md houdt nu het rolling window 195-209 (15 entries; volgende bulk-rotatie Sessie 210 → archiveer oudste ~5). SESSIONS.md-index gesynct. Historie 81-184 → `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -221,7 +217,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 208
+**Sessie counter:** 209
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -276,6 +272,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 03 aug 2026 (Sessie 208 — AdSense volledig van de site (44 blokken/20 bestanden, CSP, legal-teksten, consent-banner 3→2 zonder migratie); kwaliteitsborging: reviewpakket-generator, Check 6d, #verantwoording, certificaat-disclaimer, controledatum op 14 posts, CI; blog meetbaar: data-terminal-cta 14×, RSS-titels + hubvolgorde hersteld mét checks. Volledig: `docs/sessions/current.md`)
-**Version:** 5.82 (Sessie 208 — advertenties verwijderd op gemeten kosten/baten; kwaliteit aantoonbaar via reviewpakket + drift-checks + verantwoording; blog→terminal meetbaar; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 05 aug 2026 (Sessie 209 — W2 browserverificatie: 6 Playwright-tests bewijzen skip-certificaat DEELNAME/VOLTOOIING, helpsysteem-escalatie, localStorage-backward-compat. Regressiecheck 237/249 groen. Volledig: `docs/sessions/current.md`)
+**Version:** 5.83 (Sessie 209 — W2 browserverificatie kwaliteitsronde: 6 tests bewijzen skip-cert/helpsysteem/localStorage-compat; volledige historie: `docs/sessions/current.md` + TASKS.md)
 
