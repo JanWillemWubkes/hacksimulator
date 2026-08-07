@@ -1314,6 +1314,25 @@ a.footer-donate:focus-visible {
   color: var(--color-navbar-link-hover);
 }
 
+/* Primaire CTA in het mobiele menu: neon, zoals de knop in de desktopbalk.
+   mobile.css probeert dit al met `.navbar-links .mobile-cta-link` (0,2,0), maar de
+   regel hierboven is (0,2,2) — gelijk aantal klassen, maar twee type-selectors (li, a)
+   geven de doorslag. De groene CTA heeft daardoor nooit gewerkt, op geen enkele
+   breedte. Deze selector is (0,3,2) en wint dus ongeacht laadvolgorde.
+   Staat bewust in main.css: die laadt onvoorwaardelijk, dus zowel het mobiele bereik
+   (mobile.css, <=768px) als de nav-inklapband in landing.css krijgen hem. De klasse
+   bestaat alleen in de mobiele-menu-markup, dus een ongepoorte regel is veilig.
+   Sessie 213 — relevanter geworden nu de band tot 1279px loopt: het menu is niet
+   langer alleen voor telefoons, maar voor elke laptop onder 1280px. */
+.navbar-links > li:not(.navbar-dropdown) > a.mobile-cta-link {
+  color: var(--color-cta-dark-frame);
+  font-weight: var(--font-weight-semibold);
+}
+
+.navbar-links > li:not(.navbar-dropdown) > a.mobile-cta-link:hover {
+  color: var(--color-cta-dark-frame-hover);
+}
+
 /* Navbar Dropdown */
 .navbar-dropdown {
   position: relative;

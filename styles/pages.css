@@ -85,9 +85,25 @@
   filter: none;
 }
 
-/* 4-kolom grid voor "Wat maakt ons anders?" */
-.features-4col {
-  grid-template-columns: repeat(4, 1fr);
+/* 4-kolom grid voor "Wat maakt ons anders?".
+   De media query is niet cosmetisch: media queries voegen géén specificiteit toe, en
+   pages.css laadt ná landing.css. Zonder begrenzing verslaat deze regel dus zowel
+   `@media (max-width:1024px) { repeat(2,1fr) }` als de mobiele 1fr-regel, en bleven de
+   kaarten tot 768px in vier kolommen van ~185px geperst (Sessie 213).
+   Onder 1025px nemen de basisregels het over: 2 kolommen op tablet, 1 op mobiel. */
+@media (min-width: 1025px) {
+  .features-4col {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* 2x2 grid voor de vier gidsen-kaarten. Ook hier geldt: alléén boven de mobiele
+   breuk, anders wint deze regel van `@media (max-width:768px) { 1fr }` in landing.css
+   en ontstaat er horizontale overflow op 375px. */
+@media (min-width: 769px) {
+  .feature-cards--2col {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* ==================== Contact Cards ==================== */
@@ -479,13 +495,28 @@
   margin: 0 0 var(--spacing-sm) 0;
 }
 
+/* De flexibele zone van de kaart. Dit is de ENIGE groeier, en dat is precies het punt:
+   prijs, koopknop en blog-links staan daardoor alle drie op een vaste afstand van de
+   kaartbodem, en kaarten in één grid-rij zijn even hoog. Gevolg: de CTA's lijnen uit
+   ongeacht welke kaart een sample-chip draagt.
+
+   Vóór Sessie 213 zat `flex: 1` op `.gids-card p` — en dat selecteerde óók
+   `p.gids-sample-link`. Twee flex-items deelden de rek (gemeten: 82px + 66px i.p.v.
+   één blok van 164px), waardoor de knop van de juridische gids 82px hoger stond dan
+   die van zijn buren én `margin-top: auto` hieronder een no-op was. */
+.gids-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .gids-card p {
   font-family: var(--font-body);
   font-size: 0.95rem;
   color: var(--color-text-dim);
   line-height: 1.6;
   margin: 0 0 var(--spacing-md) 0;
-  flex: 1;
 }
 
 .gids-card .btn-cta {
@@ -505,9 +536,11 @@
   border-radius: 4px;
   width: fit-content;
   margin-bottom: var(--spacing-md);
-  background: rgba(159, 239, 0, 0.1);
+  /* Thema-aware tokens i.p.v. hardgecodeerde lime: die bleef in light mode neon-groen
+     terwijl de rest van de pagina naar #16a34a schakelt (Sessie 44/208-patroon). */
+  background: var(--color-prompt-bg-light);
   color: var(--color-cta-primary);
-  border: 1px solid rgba(159, 239, 0, 0.2);
+  border: 1px solid var(--color-prompt-border-light);
 }
 
 /* Gratis blog-achtergrond onder elke gids-kaart (Sessie 208).
@@ -519,22 +552,41 @@
   border-top: 1px solid var(--color-border);
 }
 
-/* Secundaire ingang naar het gratis sample, onder de koop-knop. Alleen
-   variabelen, zodat hij in beide thema's klopt zonder losse override. */
+/* Gratis sample bij de gids: een "coupon" in de body-zone, boven de prijs.
+   Bewust géén tekstlinkje onder de knop meer — dat was blauw (het blog-palet) op een
+   productkaart met een groen accentsysteem, en het duwde de koopknop uit de rij.
+   Alleen variabelen, zodat hij in beide thema's klopt zonder losse override. */
 .gids-sample-link {
-  margin: var(--spacing-sm) 0 0;
-  text-align: center;
-  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-height: 44px; /* WCAG AAA tap target — mat 40px op 375px zonder deze regel */
+  padding: 10px 14px;
+  margin: 0 0 var(--spacing-md) 0;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  line-height: 1.3;
+  color: var(--color-cta-primary);
+  background: var(--color-prompt-bg-light);
+  border: 1px dashed var(--color-cta-primary);
+  border-radius: var(--border-radius-modal);
+  text-decoration: none;
+  transition: background var(--transition-fast), border-style var(--transition-fast);
 }
 
-.gids-sample-link a {
-  color: var(--color-link);
-  text-decoration: underline;
+.gids-sample-link svg {
+  flex-shrink: 0;
 }
 
-.gids-sample-link a:hover,
-.gids-sample-link a:focus-visible {
-  color: var(--color-primary);
+.gids-sample-link strong {
+  font-weight: var(--font-weight-semibold);
+}
+
+.gids-sample-link:hover,
+.gids-sample-link:focus-visible {
+  color: var(--color-cta-primary); /* overschrijf de generieke a:hover */
+  background: var(--color-prompt-bg-medium);
+  border-style: solid;
 }
 
 .gids-related-label {
@@ -656,6 +708,24 @@
   margin-top: var(--spacing-sm);
 }
 
+/* Afsluitende strook onder de gidsen: één regel naar gratis vervolg (blog + simulator).
+   Bewust geen kaart — de koop- en sample-CTA's staan boven, dit is een uitloop. */
+.gids-closing {
+  padding-top: 0;
+}
+
+.gids-closing p {
+  max-width: 600px;
+  margin: 0 auto;
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-text-dim);
+  text-align: center;
+}
+
 /* Social Proof Stats Strip */
 .gids-stats-section {
   padding-top: 0;
@@ -764,9 +834,8 @@
     grid-template-columns: 1fr;
   }
 
-  .features-4col {
-    grid-template-columns: 1fr;
-  }
+  /* .features-4col hoefde hier niet meer teruggezet te worden: die regel woont sinds
+     Sessie 213 in @media (min-width:1025px) en geldt hier dus sowieso niet. */
 
   .contact-form {
     padding: var(--spacing-lg);

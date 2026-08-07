@@ -21,7 +21,12 @@ class H(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *a):
         pass
 
-socketserver.TCPServer.allow_reuse_address = True
-with socketserver.TCPServer(("127.0.0.1", PORT), H) as httpd:
+# Threading is geen luxe: TCPServer handelt één request tegelijk af, en een Playwright-run
+# over drie browsers laadt tientallen assets parallel. De requests serialiseren dan tot
+# page.goto in zijn timeout loopt — wat zich voordoet als flaky tests i.p.v. als een trage
+# server (Sessie 213: 4 valse failures in Firefox/WebKit, allemaal timeouts, nul assertiefouten).
+socketserver.ThreadingTCPServer.allow_reuse_address = True
+socketserver.ThreadingTCPServer.daemon_threads = True
+with socketserver.ThreadingTCPServer(("127.0.0.1", PORT), H) as httpd:
     print(f"no-store server op http://127.0.0.1:{PORT} (root={ROOT})", flush=True)
     httpd.serve_forever()

@@ -43,9 +43,9 @@
   <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="styles/main.css?v=208">
-  <link rel="stylesheet" href="styles/landing.css?v=121">
-  <link rel="stylesheet" href="styles/pages.css?v=208">
+  <link rel="stylesheet" href="styles/main.css?v=209">
+  <link rel="stylesheet" href="styles/landing.css?v=129">
+  <link rel="stylesheet" href="styles/pages.css?v=209">
   <link rel="stylesheet" href="styles/mobile.css?v=116" media="screen and (max-width: 768px)">
 
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
@@ -428,7 +428,7 @@
     <!-- Losse gidsen (secundair) -->
     <section class="page-section">
       <h2>Liever &eacute;&eacute;n onderwerp?</h2>
-      <div class="feature-cards">
+      <div class="feature-cards feature-cards--2col">
 
         <!-- Card 1: Juridische Gids -->
         <div class="feature-card gids-card visible">
@@ -439,15 +439,18 @@
           </div>
           <span class="gids-badge">PDF | ~13 pagina's</span>
           <h3>Ethisch hacken & Nederlandse wet</h3>
-          <p>Wat mag wel, wat niet? Computervredebreuk, CVD, bug bounty's en echte rechtszaken uit Nederland.</p>
+          <div class="gids-card-body">
+            <p>Wat mag wel, wat niet? Computervredebreuk, CVD, bug bounty's en echte rechtszaken uit Nederland.</p>
+            <a href="/sample-juridisch.html" class="gids-sample-link" data-lead-magnet="juridisch_sample" data-cta-location="gidsen_juridisch_sample">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span><strong>Gratis sample</strong> &mdash; eerste 6 pagina's</span>
+            </a>
+          </div>
           <span class="gids-price">Vanaf &euro;5 (pay what you want)</span>
           <a href="https://hacksimulator.gumroad.com/l/yzdtfx" class="btn-cta" target="_blank" rel="noopener noreferrer" data-product-id="yzdtfx" data-cta-location="gidsen_juridisch">
             Bekijk op Gumroad
             <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
           </a>
-          <p class="gids-sample-link">
-            <a href="/sample-juridisch.html" data-lead-magnet="juridisch_sample" data-cta-location="gidsen_juridisch_sample">Eerst gratis inkijken? Download 6 pagina's</a>
-          </p>
           <div class="gids-related">
             <span class="gids-related-label">Gratis achtergrond bij deze gids:</span>
             <ul>
@@ -467,7 +470,13 @@
           </div>
           <span class="gids-badge">PDF | ~19 pagina's</span>
           <h3>Je eerste pentest: stap-voor-stap playbook</h3>
-          <p>Van reconnaissance tot rapportage. Met beslisbomen, templates en alle commands die je nodig hebt.</p>
+          <div class="gids-card-body">
+            <p>Van reconnaissance tot rapportage. Met beslisbomen, templates en alle commands die je nodig hebt.</p>
+            <a href="/sample-pentest.html" class="gids-sample-link" data-lead-magnet="pentest_sample" data-cta-location="gidsen_pentest_sample">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span><strong>Gratis sample</strong> &mdash; eerste 9 pagina's</span>
+            </a>
+          </div>
           <span class="gids-price">Vanaf &euro;5 (pay what you want)</span>
           <a href="https://hacksimulator.gumroad.com/l/wmvpx" class="btn-cta" target="_blank" rel="noopener noreferrer" data-product-id="wmvpx" data-cta-location="gidsen_playbook">
             Bekijk op Gumroad
@@ -492,7 +501,9 @@
           </div>
           <span class="gids-badge">PDF | ~21 pagina's</span>
           <h3>Van nul naar CTF: 12-weken leerplan</h3>
-          <p>Een gestructureerd pad van complete beginner naar je eerste Capture The Flag. Geen voorkennis nodig. Met 27 toetsvragen &eacute;n een antwoordsleutel, zodat je per week merkt of je het echt snapt &mdash; niet of je denkt dat je het snapt.</p>
+          <div class="gids-card-body">
+            <p>Een gestructureerd pad van complete beginner naar je eerste Capture The Flag. Geen voorkennis nodig. Met 27 toetsvragen &eacute;n een antwoordsleutel, zodat je per week merkt of je het echt snapt &mdash; niet of je denkt dat je het snapt.</p>
+          </div>
           <span class="gids-price">Vanaf &euro;5 (pay what you want)</span>
           <a href="https://hacksimulator.gumroad.com/l/eogjdk" class="btn-cta" target="_blank" rel="noopener noreferrer" data-product-id="eogjdk" data-cta-location="gidsen_leerplan">
             Bekijk op Gumroad
@@ -517,7 +528,9 @@
           </div>
           <span class="gids-badge">PDF | ~19 pagina's</span>
           <h3>Je eigen hacklab</h3>
-          <p>Elke gids begint met "start je Kali VM". Deze bouwt hem: virtualisatie, de netwerkmodus die bepaalt of je per ongeluk je hele huis scant, snapshots en een doelwit om legaal op te oefenen.</p>
+          <div class="gids-card-body">
+            <p>Elke gids begint met "start je Kali VM". Deze bouwt hem: virtualisatie, de netwerkmodus die bepaalt of je per ongeluk je hele huis scant, snapshots en een doelwit om legaal op te oefenen.</p>
+          </div>
           <span class="gids-price">Vanaf &euro;5 (pay what you want)</span>
           <a href="https://hacksimulator.gumroad.com/l/ojort" class="btn-cta" target="_blank" rel="noopener noreferrer" data-product-id="ojort" data-cta-location="gidsen_hacklab">
             Bekijk op Gumroad
@@ -536,23 +549,14 @@
       </div>
     </section>
 
-    <!-- Secundaire CTA: gratis sample voor wie nog niet klaar is voor betaalde gids -->
-    <section class="page-section gids-sample-cta">
-      <div class="gids-bundle" style="background: var(--color-bg-card, transparent);">
-        <span class="gids-badge">Gratis sample | 9 pagina's PDF</span>
-        <h3>Nog niet overtuigd?</h3>
-        <p>
-          Probeer de eerste 9 pagina's van het Pentest Playbook: hoe je je voorbereidt en je doelwit verkent v&oacute;&oacute;r de eerste aanval &mdash; de stap die beginners overslaan.
-          Geen account, alleen je email.
-        </p>
-        <a href="/sample-pentest.html" class="btn-cta" data-lead-magnet="pentest_sample" data-cta-location="gidsen_sample_secondary">
-          Download de gratis sample
-          <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-        </a>
-        <p style="margin-top: 1.5rem;">
-          Liever eerst gratis verder lezen? Bekijk onze <a href="/blog/ethisch-hacker-worden.html">complete carri&egrave;regids voor ethisch hackers</a> of oefen direct in de <a href="/terminal.html">terminal simulator</a>.
-        </p>
-      </div>
+    <!-- Afsluiting: gratis verder kijken.
+         De sample-CTA's staan sinds Sessie 213 op de gids-kaarten zelf, waar de
+         koopbeslissing valt. Hier stond het pentest-sample een tweede keer, in een kaart
+         die door een niet-bestaande --color-bg-card transparant uit de pagina viel. -->
+    <section class="page-section gids-closing">
+      <p>
+        Liever eerst gratis verder lezen? Bekijk onze <a href="/blog/ethisch-hacker-worden.html">complete carri&egrave;regids voor ethisch hackers</a> of oefen direct in de <a href="/terminal.html">terminal simulator</a>.
+      </p>
     </section>
 
   </main>

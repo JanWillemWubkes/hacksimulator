@@ -860,6 +860,7 @@
 .feature-card:nth-child(1) { transition-delay: 0ms; }
 .feature-card:nth-child(2) { transition-delay: 100ms; }
 .feature-card:nth-child(3) { transition-delay: 200ms; }
+.feature-card:nth-child(4) { transition-delay: 300ms; }
 
 .feature-card:hover {
   border-color: var(--color-prompt-border-medium);
@@ -1417,6 +1418,128 @@ html {
   display: none;
 }
 
+/* ==================== Nav-inklapband (Sessie 213) ====================
+   De marketing-navbar klapte pas onder 768px in, maar past daar lang niet. Gemeten op
+   productie: 161px horizontale overflow @1000px en 341px @820px — op élke
+   marketingpagina én op alle blogposts, want die gebruiken dezelfde navbar.
+
+   Waar de grens ligt, is twee keer binair gezocht:
+     - vanaf 1147px loopt er niets meer buiten de balk;
+     - maar pas vanaf 1264px (Chromium/Firefox) resp. 1266px (WebKit) breekt er ook
+       niets meer af. Daaronder "past" de nav alleen doordat "Over Ons" en
+       "Start Simulator" over twee regels vallen — lelijk, en scrollWidth ziet het niet.
+   De strengste meting wint, plus marge: de band loopt tot en met 1279px, zodat de
+   desktopnav pas vanaf de gangbare 1280px-laptopbreedte verschijnt. Niet-afbreken is
+   een aparte assertie in navbar-collapse.spec.js, want een scrollWidth-check
+   accepteert wrappen als "past" en had dit gemist.
+
+   Compacter maken was geen optie: zelfs met nul padding op de links, een kleinere gap
+   en een icoon-only schakelaar blijft nav-right ~545px, tegen 492px beschikbaar op
+   769px. De hamburger is in deze band dus noodzakelijk, geen voorkeur.
+
+   Waarom hier en niet in mobile.css: dat bestand is dubbel gepoort (link-media én
+   interne query, allebei 768px) en draagt terminal-specifieke regels die daar horen.
+   De terminal-navbar past wél in deze band (menu 738px @1000px) en blijft ongemoeid —
+   vandaar de scoping op .landing-nav-wrapper / #landing-mobile-menu.
+
+   De waarden hieronder zijn niet overgeschreven uit mobile.css maar overgenomen van
+   de gemeten effectieve stijlen op 700px, de directe buur van deze band. Bewust géén
+   `animation: slideDown`: die keyframes staan alleen in animations.css, die
+   marketingpagina's niet laden — ook onder 768px is dat vandaag al een no-op. */
+@media (max-width: 1279px) {
+  /* Desktop-onderdelen uit de balk; ze staan alle drie in het overlay-menu.
+     Specificiteit (0-2-0) verslaat main.css .theme-toggle { display: flex } (0-1-0),
+     dus hier is geen !important nodig — die stond er tot Sessie 213 wel. */
+  .landing-nav .nav-links,
+  .landing-nav .theme-toggle,
+  .landing-nav .btn-cta-nav {
+    display: none;
+  }
+
+  .landing-nav-wrapper .navbar-toggle {
+    display: flex;
+    width: 44px;
+    height: 44px;
+    padding: 14px 0;
+  }
+
+  #landing-mobile-menu {
+    position: fixed;
+    top: var(--navbar-height);
+    right: 0;
+    bottom: 0;
+    left: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: var(--spacing-lg);
+    background-color: #000;
+    overflow-y: auto;
+    z-index: 999;
+  }
+
+  #landing-mobile-menu.active {
+    display: flex;
+  }
+
+  #landing-mobile-menu .navbar-links {
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  #landing-mobile-menu .navbar-links li {
+    width: 100%;
+    border-bottom: 1px solid var(--color-border-dark-frame);
+  }
+
+  /* Bewust géén `color` hier. Deze selector is (1,1,1) en zou daarmee élke
+     kleurregel in main.css verslaan — inclusief die van .mobile-cta-link. De kleur
+     komt al onvoorwaardelijk uit main.css; hier alleen de layout van het overlay. */
+  #landing-mobile-menu .navbar-links a {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    text-align: left;
+  }
+
+  /* Bewust géén .mobile-cta-link-regel hier. mobile.css probeert die link groen te
+     maken, maar wordt daar al overruled door de generieke `.navbar-links a`-kleur —
+     onder 768px is "Start Simulator" dus wit-vet, niet neon. Deze band reproduceert
+     dat gedrag; een groene CTA is een aparte keuze die dan in beide ranges hoort. */
+
+  #landing-mobile-menu .navbar-actions {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    width: 100%;
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-border-dark-frame);
+  }
+
+  #landing-mobile-menu .theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2px;
+    width: 100%;
+    min-height: 44px;
+    padding: 0 4px;
+    font-size: 11px;
+    color: var(--color-navbar-link);
+    background-color: transparent;
+    border: 1px solid var(--color-border-dark-frame);
+    border-radius: var(--border-radius-button);
+  }
+
+  /* Achtergrond niet laten scrollen achter het overlay. Staat in mobile.css buiten
+     een media query, maar dat bestand is via zijn link-media al op 768px gepoort. */
+  body.mobile-menu-open {
+    overflow: hidden;
+  }
+}
+
 /* ==================== CTA Secondary Variant ==================== */
 .btn-cta-secondary {
   display: inline-flex;
@@ -1459,9 +1582,13 @@ html {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .feature-cards .feature-card:nth-child(3),
-  .leerpad-cards .leerpad-card:nth-child(3),
-  .how-it-works-steps .how-step:nth-child(3) {
+  /* Centreert de overgebleven kaart van een 3-kaart-grid op tablet (2 boven, 1 onder).
+     De `:last-child` is essentieel: zonder die eis vuurde deze regel óók op grids met
+     VIER kaarten en werd kaart 3 daar 500px breed in een spoor van 136px — dwars door
+     zijn eigen kolom heen (gemeten op over-ons.html @820px, Sessie 213). */
+  .feature-cards .feature-card:nth-child(3):last-child,
+  .leerpad-cards .leerpad-card:nth-child(3):last-child,
+  .how-it-works-steps .how-step:nth-child(3):last-child {
     grid-column: 1 / -1;
     max-width: 500px;
     margin: 0 auto;
@@ -1489,17 +1616,8 @@ html {
     padding: var(--spacing-sm) var(--landing-padding-mobile);
   }
 
-  /* Hide nav links on mobile, show hamburger */
-  .nav-links {
-    display: none;
-  }
-
-  /* Hide desktop theme toggle + CTA on mobile (now in mobile menu) */
-  /* Note: !important needed to override main.css .theme-toggle rule */
-  .landing-nav .theme-toggle,
-  .nav-right .btn-cta-nav {
-    display: none !important;
-  }
+  /* Nav-links, thema-schakelaar en CTA worden nu verborgen door de nav-inklapband
+     hierboven (@media max-width: 1179px), die deze hele breedte omvat. */
 
   .hero {
     padding: var(--spacing-lg) 0;

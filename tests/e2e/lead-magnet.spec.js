@@ -24,7 +24,9 @@ const SAMPLES = [
     pdf: '/assets/samples/pentest-playbook-sample.pdf?v=2',
     bestandsnaam: 'pentest-playbook-sample.pdf',
     downloadLocation: 'sample_success_panel',
-    formToken: /sibforms\.com\/serve\/MUIFACJ0/
+    formToken: /sibforms\.com\/serve\/MUIFACJ0/,
+    magnetId: 'pentest_sample',
+    gidsenLocation: 'gidsen_pentest_sample'
   },
   {
     id: 'juridisch',
@@ -36,7 +38,9 @@ const SAMPLES = [
     pdf: '/assets/samples/juridische-gids-sample.pdf?v=2',
     bestandsnaam: 'juridische-gids-sample.pdf',
     downloadLocation: 'sample_juridisch_success_panel',
-    formToken: /sibforms\.com\/serve\/MUIFAGIf/
+    formToken: /sibforms\.com\/serve\/MUIFAGIf/,
+    magnetId: 'juridisch_sample',
+    gidsenLocation: 'gidsen_juridisch_sample'
   }
 ];
 
@@ -274,17 +278,31 @@ test.describe('Lead Magnets — CTAs vanaf andere pagina\'s', () => {
     await expect(page.locator('h1')).toContainText('Pentest Playbook');
   });
 
-  test('CTA op gidsen.html navigeert naar /sample-juridisch.html', async ({ page }) => {
-    await page.goto('/gidsen.html');
+  // Elke betaalde gids met een gratis sample draagt die sample op zijn eigen kaart,
+  // waar de koopbeslissing valt. Tot Sessie 213 stond juridisch als tekstlinkje in de
+  // kaart en pentest alleen in een los blok onderaan — twee vormen voor één patroon.
+  for (const sample of SAMPLES) {
+    test(`sample-chip op gidsen.html navigeert naar ${sample.pad}`, async ({ page }) => {
+      await page.goto('/gidsen.html');
 
-    const cta = page.locator('a[data-lead-magnet="juridisch_sample"][data-cta-location="gidsen_juridisch_sample"]');
-    await expect(cta).toBeVisible();
-    await expect(cta).toHaveAttribute('href', '/sample-juridisch.html');
+      const chip = page.locator(
+        `a[data-lead-magnet="${sample.magnetId}"][data-cta-location="${sample.gidsenLocation}"]`
+      );
+      await expect(chip).toBeVisible();
+      await expect(chip).toHaveAttribute('href', sample.pad);
 
-    await cta.click();
-    await page.waitForURL(/sample-juridisch\.html$/);
-    await expect(page.locator('h1')).toContainText('juridische gids');
-  });
+      // De chip hoort ín een gids-kaart te staan, niet in een los blok eronder.
+      // Token-match, geen substring: `contains(@class,"gids-card")` matcht óók
+      // `gids-card-body` en telt dan twee voorouders.
+      await expect(
+        chip.locator('xpath=ancestor::div[contains(concat(" ", normalize-space(@class), " "), " gids-card ")]')
+      ).toHaveCount(1);
+
+      await chip.click();
+      await page.waitForURL(new RegExp(`${sample.id}\\.html$`));
+      await expect(page.locator('h1')).toContainText(sample.h1);
+    });
+  }
 
   test('CTA op cybersecurity-tools blog firet lead_magnet_cta_click event', async ({ page }) => {
     // Geef analytics consent vooraf zodat GA4 events daadwerkelijk worden gefired
