@@ -69,7 +69,49 @@ document.addEventListener('keydown', handleTerminalInput);
 
 ---
 
-## 4. Third-party verwijderen: twee servers, niet één meting (Sessie 208)
+## 4. Media queries voegen géén specificiteit toe (Sessie 213)
+
+Een `@media`-blok telt voor nul in de specificiteitsberekening. Bij twee gelijke selectoren
+wint dus puur de **laadvolgorde** — en `pages.css` laadt ná `landing.css`.
+
+```css
+/* landing.css */  @media (max-width: 768px) { .feature-cards { grid-template-columns: 1fr; } }
+/* pages.css   */  .features-4col { grid-template-columns: repeat(4, 1fr); }   /* wint óók op 375px */
+```
+
+Dat is precies hoe `over-ons.html` tot Sessie 213 vier kolommen van ~185px hield op tablet.
+Zelfde val bij een nieuwe grid-modifier: zonder query gaf die 6px horizontale overflow en
+kaarten van 173px op 375px.
+
+**Regel:** scope zulke overrides in **wederzijds uitsluitende ranges** (`≤768` naast `≥769`).
+Twee regels die nooit tegelijk gelden hoeven elkaar niet te verslaan — geen cascade-gevecht,
+geen `!important`. Voor de site-brede navbar-band, zie `PLANNING.md §Layout Principes`.
+
+---
+
+## 5. `flex: 1` hoort niet op een type-selector (Sessie 213)
+
+`.gids-card p { flex: 1 }` leest als "de beschrijving mag groeien", maar een type-selector
+kent geen intentie: hij matchte óók `p.gids-sample-link`. Twee flex-items met `flex-basis: 0`
+verdelen de vrije ruimte **gelijk**, dus de beschrijving kreeg 82px en het linkje 66px — samen
+exact de 164px die één `<p>` alleen zou krijgen. Gevolgen die als losse raadsels oogden:
+
+- `margin-top: auto` op de knop werd een **no-op** — `flex-grow` verdeelt de vrije ruimte
+  vóórdat auto-marges iets kunnen absorberen;
+- de eigen marge van het linkje landde nooit: `.gids-card p` is (0,1,1) en verslaat (0,1,0).
+
+**Patroon voor kaarten met uitgelijnde CTA's:** geef de kaart precies **één** groeier — een
+wrapper om de variabele inhoud (`.gids-card-body { flex: 1 }`). Alles daaronder staat dan op
+vaste afstand van de kaartbodem, en omdat grid-rijen even hoog zijn lijnen de knoppen uit
+**by construction** — ook als de ene kaart een extra element draagt en de andere niet.
+Bewaakt door de invariant `kaartbodem − CTA-bodem` in `tests/e2e/gidsen-layout.spec.js`.
+
+> Zulke bugs vind je niet door de CSS te lezen. Alleen `getComputedStyle` verraadt een
+> `flex-grow` die je nooit op dat element hebt gezet.
+
+---
+
+## 6. Third-party verwijderen: twee servers, niet één meting (Sessie 208)
 
 Bij het weghalen van een externe afhankelijkheid bewijst een nulmeting achteraf niets — "0 verzoeken"
 is óók de uitkomst van een kapotte meting. Zet de oude code ernaast:
