@@ -63,9 +63,24 @@
 # PDF wel inline. attachment forceren brak dus juist de webviews die inline
 # wel aankunnen. filename geeft de juiste naam wanneer de browser toch
 # downloadt (bv. Android Chrome downloadt PDF's altijd).
+#
+# LET OP (Sessie 212): een regel PER BESTAND, nooit een wildcard.
+# Hier stond `/assets/samples/*` met één harde filename. Dat klopte zolang de
+# map één PDF had, en werd stilzwijgend fout toen de juridische sample erbij
+# kwam: wie die downloadde kreeg de juiste inhoud onder de naam
+# pentest-playbook-sample.pdf. Geen 404, geen foutmelding - alleen een naam die
+# loog. Nieuwe sample toevoegen = hier een eigen blok bijzetten; Check 10 in
+# scripts/validate-docs.sh faalt als je dat vergeet.
+#
+# Cache-Control staat bewust in elk blok herhaald: zo hangt het niet af van hoe
+# Netlify headers van een minder specifieke regel (/assets/*) meemerged.
 # =============================================================================
-/assets/samples/*
+/assets/samples/pentest-playbook-sample.pdf
   Content-Disposition: inline; filename="pentest-playbook-sample.pdf"
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/assets/samples/juridische-gids-sample.pdf
+  Content-Disposition: inline; filename="juridische-gids-sample.pdf"
   Cache-Control: public, max-age=3600, must-revalidate
 
 # =============================================================================

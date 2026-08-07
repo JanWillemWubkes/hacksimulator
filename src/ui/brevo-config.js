@@ -8,7 +8,13 @@
  * Moet vóór die main.js draaien. Als klassiek script geladen op de plek van
  * het oude inline-blok gebeurt dat vanzelf (klassiek script tijdens parse,
  * vóór de defer-script main.js). Gebruikt op pagina's met een Brevo-formulier
- * (index.html, sample-pentest.html).
+ * (index.html, blog/index.html, sample-pentest.html, sample-juridisch.html).
+ *
+ * LET OP: dit dekt alleen de client-side validatiestrings. De bevestigings- en
+ * foutmelding die de bezoeker ná verzenden leest, komt uit Brevo's antwoord
+ * (json.message → brevo-submit.js:39-42) en staat per formulier ingesteld onder
+ * Contacts → Forms → <formulier> → Messages. Die staan daar in het Nederlands;
+ * een Engelse default daar lekt door naar de pagina.
  */
 
 window.REQUIRED_CODE_ERROR_MESSAGE = 'Selecteer een landcode';

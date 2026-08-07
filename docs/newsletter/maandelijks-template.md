@@ -122,6 +122,11 @@ uitschrijf- en mirror-link in het HTML-blok staan; het losse Brevo-footerblok is
 verwijderd en de links zijn na de wijziging getest. De repo-bestanden en Brevo lopen dus
 gelijk — houd dat zo bij een volgende import.
 
+**Aanvulling Sessie 212:** er komt een derde bij — `welkomstmail-sample-juridisch.html`. Die is
+gekopieerd van de pentest-variant en draagt dezelfde footer-conventie, maar staat pas in Brevo
+zodra `brevo-setup-sample-juridisch.md` is uitgevoerd. Controleer bij die import hetzelfde:
+geen extra native footer-blok.
+
 ---
 
 ## Design

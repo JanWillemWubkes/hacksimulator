@@ -45,6 +45,14 @@
 #           elke post-URL aanwezig in feed.xml (vangt ontbrekende post — OWASP ontbrak).
 #       Filesystem-ground-truth (zoals Check 6b): nieuwe posts tellen automatisch mee.
 #       ISO-datums (YYYY-MM-DD) vergelijken lexicaal correct via [[ "$a" < "$b" ]].
+#
+# Sessie 212 (lead-magnet-bugfix): Check 10 toegevoegd voor download-bestandsnamen.
+#   - Check 10: elke assets/samples/*.pdf heeft een exacte _headers-regel waarvan
+#       Content-Disposition filename="…" gelijk is aan zijn eigen basename.
+#       Bugklasse: `/assets/samples/*` droeg één harde filename="pentest-playbook-sample.pdf".
+#       Die regel klopte toen de map één PDF had, en werd stilzwijgend fout toen de
+#       juridische sample erbij kwam — geen 404, geen foutmelding, alleen een naam die
+#       loog. Filesystem-ground-truth: een derde sample telt automatisch mee.
 
 set -o pipefail
 
@@ -687,6 +695,75 @@ PYEOF
     GEEN_DATUM)  fail "9d: blog-kaart zonder [d mmm jjjj]-datum (markup gewijzigd?)" ;;
     *)           fail "9d: blog/index.html niet nieuwste-eerst — breuk bij kaart ${order_ok#FOUT:}" ;;
   esac
+fi
+
+# ============================================================
+# Check 10: sample-PDF's ↔ Content-Disposition filename in _headers (Sessie 212)
+#   Hard constraint — fast + --deep. Vangt de bug waarbij een bezoeker die de
+#   juridische sample downloadde een bestand kreeg dat pentest-playbook-sample.pdf
+#   heette: één wildcard-regel zette één harde filename voor de héle map.
+#   De check eist per PDF een exacte-pad-regel met zijn eigen naam, én verbiedt
+#   een wildcard met vaste filename — anders keert dezelfde bug terug bij sample 3.
+# ============================================================
+check_start "Sample-PDF's ↔ Content-Disposition filename in _headers"
+
+if [ ! -f "_headers" ]; then
+  fail "_headers niet gevonden (run vanuit project root)"
+elif [ ! -d "assets/samples" ]; then
+  fail "assets/samples/ niet gevonden (run vanuit project root)"
+else
+  headers_result=$(python3 - <<'PYEOF'
+import os, re
+
+SAMPLES = 'assets/samples'
+
+# _headers-formaat: regel zonder inspringing = pad, ingesprongen regels = headers daarvoor
+rules = []
+for line in open('_headers', encoding='utf-8'):
+    stripped = line.strip()
+    if not stripped or stripped.startswith('#'):
+        continue
+    if line[0].isspace():
+        if rules:
+            rules[-1][1].append(stripped)
+    else:
+        rules.append((stripped, []))
+
+problems = []
+pdfs = sorted(f for f in os.listdir(SAMPLES) if f.endswith('.pdf'))
+if not pdfs:
+    problems.append(f'geen PDF gevonden in {SAMPLES}/ — is de map leeg?')
+
+for pdf in pdfs:
+    path = f'/{SAMPLES}/{pdf}'
+    exact = [h for p, h in rules if p == path]
+    if not exact:
+        problems.append(f'{pdf}: geen exacte regel "{path}" in _headers')
+        continue
+    names = [m.group(1) for h in exact[0]
+             for m in [re.search(r'filename="([^"]+)"', h)] if m]
+    if not names:
+        problems.append(f'{pdf}: regel "{path}" zet geen Content-Disposition filename')
+    elif names[0] != pdf:
+        problems.append(f'{pdf}: filename="{names[0]}" — hoort filename="{pdf}" te zijn')
+
+# De bugklasse zelf: een wildcard die één vaste naam over de hele map legt
+for path, hdrs in rules:
+    if '*' in path and path.startswith('/assets/samples'):
+        for hdr in hdrs:
+            if 'filename="' in hdr:
+                problems.append(f'wildcard "{path}" zet een vaste filename — die geldt voor élke PDF in de map')
+
+print('OK' if not problems else '\n'.join(problems))
+PYEOF
+)
+  if [ "$headers_result" = "OK" ]; then
+    pass "10: elke sample-PDF heeft een exacte _headers-regel met zijn eigen bestandsnaam"
+  else
+    while IFS= read -r problem; do
+      [ -n "$problem" ] && fail "10: $problem"
+    done <<< "$headers_result"
+  fi
 fi
 
 # ============================================================
