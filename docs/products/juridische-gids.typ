@@ -5,8 +5,8 @@
 #show: hacksimulator-doc.with(
   title: "Ethisch Hacken & de Nederlandse Wet",
   subtitle: "Wat Mag Wel, Wat Mag Niet? — Een praktische gids voor (aankomende) ethische hackers in Nederland",
-  version: "1.0",
-  date: "april 2026",
+  version: "1.1",
+  date: "herzien juni 2026",
 )
 
 // ─────────────────────────────────────────────
@@ -337,6 +337,6 @@ Voordat je enige vorm van security testing uitvoert, loop deze checklist door:
   #v(6pt)
   #text(size: 9pt, fill: luma(140))[
     _Deze gids is geschreven voor HackSimulator.nl --- de gratis browser-based terminal simulator voor ethisch hacken._\
-    _Versie 1.0 · Met zorg samengesteld en gecontroleerd · april 2026_
+    _Versie 1.1 · Met zorg samengesteld en gecontroleerd · herzien juni 2026_
   ]
 ]

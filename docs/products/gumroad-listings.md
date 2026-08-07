@@ -1,6 +1,36 @@
 # Gumroad Product Listings — HackSimulator.nl
 
-**Doel:** Dit bestand bevat alles wat je nodig hebt om de 3 producten op Gumroad te zetten. Copy-paste de teksten direct naar Gumroad.
+**Doel:** Dit bestand is de brontekst voor de 4 gidsen + de bundel op Gumroad. Copy-paste de teksten direct naar Gumroad.
+
+## Producten in één oogopslag
+
+| # | Product | Gumroad-ID | PDF | Pagina's | Prijs |
+|---|---------|-----------|-----|----------|-------|
+| 1 | Ethisch Hacken & Nederlandse Wet | `yzdtfx` | `juridische-gids.pdf` | 13 | vanaf €5 |
+| 2 | Je Eerste Pentest: Playbook | `wmvpx` | `pentest-playbook.pdf` | 19 | vanaf €5 |
+| 3 | Van Nul naar CTF: 12-Weken Leerplan | `eogjdk` | `leerplan.pdf` | 21 | vanaf €5 |
+| 4 | Je Eigen Hacklab | `ojort` | `lab-opzetten.pdf` | 19 | vanaf €5 |
+| 5 | **Starter Kit (bundel, alle 4)** | `emzjvj` | alle 4 bovenstaande | **72** | **vanaf €10** |
+
+URL-vorm: `https://hacksimulator.gumroad.com/l/<ID>`. Alle vijf zijn live en gelinkt vanuit `gidsen.html`.
+
+**Paginatellingen zijn geteld uit de gebouwde PDF's** (`./build-pdfs.sh`, 7 aug 2026), niet geschat.
+
+Wijzigt een `.typ`-bron van omvang? Herbouwen, opnieuw tellen, en de claim op **zes** plekken
+meetrekken. In deze volgorde, want de laatste twee worden het vaakst vergeten:
+
+1. De tabel hierboven
+2. De productbeschrijving in dit bestand (`~N pagina's | PDF | Nederlands`)
+3. De bundeltelling in dit bestand (som van alle vier)
+4. `gidsen.html` — de kaart-badge (`PDF | ~N pagina's`)
+5. `gidsen.html` — de JSON-LD-beschrijving van de bundel
+6. `scripts/build-product-covers.mjs` — de voettekst op de bundel-cover, daarna het script draaien
+
+De bundeltelling ging in aug 2026 precies hierop mis: de lab-gids groeide van 18 naar 19 pagina's,
+plek 2 en 4 werden meegetrokken, maar 3 en 5 bleven op ~70 staan terwijl de cover (6) al 71 zei.
+
+**Lead magnets (gratis, op de site — niet op Gumroad):** `pentest-playbook-sample.pdf` (9 pagina's,
+via `/sample-pentest.html`) en `juridische-gids-sample.pdf` (6 pagina's, via `/sample-juridisch.html`).
 
 ---
 
@@ -11,15 +41,23 @@
 | Juridische Gids | €5 | €5+ |
 | Pentest Playbook | €5 | €5+ |
 | 12-Weken Leerplan | €5 | €5+ |
+| Je Eigen Hacklab | €5 | €5+ |
 | **Bundel (alle 4)** | **€10** | **€10+** |
 
-**Aanbeveling:** **Pay-what-you-want met minimum €5 per gids / €10 bundel** (de getoonde "vanaf €5/€10" op de site).
+**Aanbeveling:** **Pay-what-you-want met minimum €5 per gids / €10 bundel** (de getoonde "vanaf €5/€10" op de site). Los gekocht kosten de vier gidsen €20, dus de bundel bespaart €10.
 
-> **Strategie-noot:** het oorspronkelijke plan was een €0-minimum (gidsen als lead magnet). Dat is verlaten — een vloer werkt beter, én de **gratis Sample Pentest** (9 pagina's, e-mail-capture) vervult de lead-magnet-rol al. Zo is de funnel schoon gescheiden: gratis sample = bereik + e-mailadressen, betaalde gidsen = inkomsten. Noem daarom altijd het minimum ("vanaf €5"), nooit kaal "pay what you want".
+> **Strategie-noot:** het oorspronkelijke plan was een €0-minimum (gidsen als lead magnet). Dat is verlaten — een vloer werkt beter, én de twee **gratis samples** (Pentest 9 p., Juridisch 6 p., beide met e-mail-capture) vervullen de lead-magnet-rol al. Zo is de funnel schoon gescheiden: gratis samples = bereik + e-mailadressen, betaalde gidsen = inkomsten. Noem daarom altijd het minimum ("vanaf €5"), **nooit kaal "pay what you want" en nooit "gratis"** — de gidsen kosten geld.
 
 ---
 
 ## Product 1: Juridische Gids
+
+> **Product-ID: `yzdtfx`** — URL: `https://hacksimulator.gumroad.com/l/yzdtfx`
+> PDF: `juridische-gids.pdf` (13 pagina's) · Cover: `assets/products/ethisch-hacken-wet.png`
+> Gratis sample: `juridische-gids-sample.pdf` (6 pagina's) op `/sample-juridisch.html`.
+> **Versie 1.1 (juni 2026):** de Krol-zaak bevatte feitfouten (beroep, "geanonimiseerde"
+> dossiers, de manier van binnendringen) en zaak 2 was onverifieerbaar. Gecorrigeerd met
+> echte ECLI-bronnen. Wie vóór juni 2026 kocht, heeft de onjuiste versie.
 
 ### Gumroad Titel
 ```
@@ -49,7 +87,7 @@ Wat je leert:
 - Praktische 10-punten veiligheidscheck voordat je begint
 
 ~13 pagina's | PDF | Nederlands
-Met zorg samengesteld en gecontroleerd · april 2026.
+Met zorg samengesteld en gecontroleerd · herzien juni 2026.
 
 Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethisch hacken.
 ```
@@ -64,7 +102,7 @@ ethisch hacken, ethical hacking, cybersecurity, Nederlandse wet, computervredebr
 Education > Cybersecurity
 ```
 
-### Thumbnail tekst (voor Canva)
+### Cover (gegenereerd door `scripts/build-product-covers.mjs`)
 ```
 Titel: Ethisch Hacken & Nederlandse Wet
 Subtitel: Wat Mag Wel, Wat Mag Niet?
@@ -75,6 +113,10 @@ Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site
 ---
 
 ## Product 2: Pentest Playbook
+
+> **Product-ID: `wmvpx`** — URL: `https://hacksimulator.gumroad.com/l/wmvpx`
+> PDF: `pentest-playbook.pdf` (19 pagina's) · Cover: `assets/products/eerste-pentest-playbook.png`
+> Gratis sample: `pentest-playbook-sample.pdf` (9 pagina's) op `/sample-pentest.html`.
 
 ### Gumroad Titel
 ```
@@ -123,7 +165,7 @@ pentest, penetration testing, ethisch hacken, ethical hacking, cybersecurity, nm
 Education > Cybersecurity
 ```
 
-### Thumbnail tekst (voor Canva)
+### Cover (gegenereerd door `scripts/build-product-covers.mjs`)
 ```
 Titel: Je Eerste Pentest
 Subtitel: Stap-voor-Stap Playbook
@@ -135,6 +177,13 @@ Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site
 
 ## Product 3: 12-Weken Leerplan
 
+> **Product-ID: `eogjdk`** — URL: `https://hacksimulator.gumroad.com/l/eogjdk`
+> PDF: `leerplan.pdf` (21 pagina's) · Cover: `assets/products/ctf-leerplan.png`
+> **Versie 1.1 (aug 2026), twee wijzigingen:** (1) zelftests toetsen nu echt — 27 open vragen +
+> antwoordsleutel. (2) Feitcorrectie: de FAQ noemde tweemaal "TryHackMe's Pwnbox". Pwnbox is van
+> **HackTheBox** (gratis: eenmalig 2 uur ooit); TryHackMe's browser-VM heet **AttackBox** (gratis:
+> 1 uur per dag). Samen 15 → 21 pagina's.
+
 ### Gumroad Titel
 ```
 Van Nul naar CTF: 12-Weken Leerplan voor Ethisch Hacken
@@ -142,7 +191,7 @@ Van Nul naar CTF: 12-Weken Leerplan voor Ethisch Hacken
 
 ### Korte beschrijving (max ~150 tekens)
 ```
-Een gestructureerd pad van complete beginner naar je eerste Capture The Flag. 12 weken, 70-90 uur, geen voorkennis nodig.
+Van complete beginner naar je eerste Capture The Flag. 12 weken, 27 toetsvragen met antwoordsleutel, geen voorkennis nodig.
 ```
 
 ### Lange beschrijving
@@ -159,18 +208,32 @@ Het 12-weken programma:
 Elke week bevat:
 - Concreet doel (wat je aan het einde kunt)
 - Activiteiten (wat je doet)
-- Zelftest (ben je klaar voor de volgende week?)
 - Tijdsindicatie (hoeveel uur)
+- Zelftest in twee delen — zie hieronder
+
+De zelftest die je niet kunt bluffen:
+De meeste cursussen sluiten af met "begrijp je dit?". Daar antwoord je "ja" op zonder het te
+begrijpen, en dat doet vrijwel iedereen — niet uit oneerlijkheid, maar omdat herkennen precies
+hetzelfde voelt als weten. Daarom bestaat de zelftest hier uit twee delen:
+
+- "Gedaan?" — vinkjes voor wat je feitelijk hebt gedaan (drie rooms afgerond, Burp geïnstalleerd). Daar valt niets aan te interpreteren.
+- "Begrepen?" — 27 open vragen verdeeld over week 1 t/m 10, met een drempel per week. Je schrijft je antwoord eerst op en kijkt daarna pas in de antwoordsleutel achterin. Die volgorde is het hele punt.
+
+Week 11 en 12 zijn bewust reflectie zonder sleutel: daar bestaat geen goed antwoord dat ik voor je
+kan opschrijven.
 
 Inclusief:
+- Antwoordsleutel op alle 27 vragen, met "ook goed"-varianten waar die er zijn
 - Weekoverzicht op 1 pagina (tear-out referentie)
 - Certificeringsadvies (Security+, eJPT, OSCP, CEH) met beslisboom
 - Veelgestelde vragen ("Moet ik kunnen programmeren?" "Heb ik Kali Linux nodig?")
 - Alle bronnen en platforms per week
 
-~20 pagina's | PDF | Nederlands
+~21 pagina's | PDF | Nederlands
 Geen voorkennis nodig. 5-8 uur per week.
-Met zorg samengesteld en gecontroleerd · april 2026.
+Week 1 t/m 4 doe je volledig in je browser. Vanaf week 5 heb je een gratis TryHackMe-account
+nodig; vanaf week 10 werkt HackTheBox het prettigst vanaf je eigen virtuele machine.
+Met zorg samengesteld en gecontroleerd · herzien augustus 2026.
 
 Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethisch hacken.
 ```
@@ -185,7 +248,7 @@ ethisch hacken, ethical hacking, leerplan, beginner, CTF, capture the flag, cybe
 Education > Cybersecurity
 ```
 
-### Thumbnail tekst (voor Canva)
+### Cover (gegenereerd door `scripts/build-product-covers.mjs`)
 ```
 Titel: Van Nul naar CTF
 Subtitel: 12-Weken Leerplan
@@ -198,7 +261,8 @@ Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site
 ## Product 4: Je Eigen Hacklab
 
 > **Product-ID: `ojort`** — URL: `https://hacksimulator.gumroad.com/l/ojort`
-> PDF: `lab-opzetten.pdf` (19 pagina's). Live op Gumroad en gelinkt vanuit `gidsen.html`.
+> PDF: `lab-opzetten.pdf` (19 pagina's) · Cover: `assets/products/je-eigen-hacklab.png`
+> Live op Gumroad en gelinkt vanuit `gidsen.html`. Nieuwste gids (aug 2026).
 
 ### Gumroad Titel
 ```
@@ -244,7 +308,7 @@ kali linux, virtualbox, hacklab, pentesting lab, ethisch hacken, cybersecurity, 
 Education > Cybersecurity
 ```
 
-### Thumbnail tekst (voor Canva)
+### Cover (gegenereerd door `scripts/build-product-covers.mjs`)
 ```
 Titel: Je Eigen Hacklab
 Subtitel: Van Simulator naar Echte Kali-Omgeving
@@ -252,22 +316,23 @@ Branding: HackSimulator.nl
 Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site huisstijl
 ```
 
-### Wat er nog moet gebeuren (Heisenberg)
+### Status
 
-1. Maak het product aan op Gumroad met bovenstaande teksten en upload `lab-opzetten.pdf`.
-2. Zet de prijs op pay-what-you-want vanaf €5, gelijk aan de andere drie.
-3. Geef het product-ID door (het stukje na `/l/` in de URL). Dan komt de productkaart op
-   `gidsen.html`, met JSON-LD, tracking-attributen en een plek in de kaartvolgorde — dat is
-   ~10 minuten werk zodra het ID bekend is.
-4. **BESLIST:** deze gids gaat in de bundel. De bundel is bijgewerkt naar vier gidsen en
-   ~70 pagina's; de prijs blijft €10, waardoor de korting van €5 naar €10 gaat (€20 los).
-   De site is daar al op aangepast. **Volgorde-afhankelijkheid: voeg `lab-opzetten.pdf` toe aan
-   het bundelproduct op Gumroad vóór de site live gaat**, anders belooft de site vier gidsen
-   terwijl de bundel er drie levert.
+Afgerond: product aangemaakt (`ojort`), prijs op pay-what-you-want vanaf €5, productkaart +
+JSON-LD + tracking-attributen staan op `gidsen.html`, cover gegenereerd.
+
+**Nog open — en dit is een echte:** deze gids hoort óók in het bundelproduct (`emzjvj`). De site
+belooft al vier gidsen voor €10. Zolang `lab-opzetten.pdf` niet als vierde bestand aan het
+bundelproduct hangt, levert de bundel er drie en klopt de belofte niet. Zie de Gumroad-actielijst
+onderaan dit bestand.
 
 ---
 
 ## Product 5: Bundle (alle 4)
+
+> **Product-ID: `emzjvj`** — URL: `https://hacksimulator.gumroad.com/l/emzjvj`
+> Bevat: `juridische-gids.pdf` + `pentest-playbook.pdf` + `leerplan.pdf` + `lab-opzetten.pdf`
+> Cover: `assets/products/bundel-starter-kit.png` (gegenereerd door `scripts/build-product-covers.mjs`)
 
 ### Gumroad Titel
 ```
@@ -289,19 +354,19 @@ Dit pakket bevat alle vier de HackSimulator-gidsen in een bundel:
 2. Je Eerste Pentest: Stap-voor-Stap Playbook (~19 pagina's)
    De methodologie die professionals gebruiken. Van reconnaissance tot rapportage, met beslisbomen bij elke stap.
 
-3. Van Nul naar CTF: 12-Weken Leerplan (~20 pagina's)
-   Een gestructureerd pad van complete beginner naar je eerste Capture The Flag competitie. Met 27 toetsvragen en een antwoordsleutel.
+3. Van Nul naar CTF: 12-Weken Leerplan (~21 pagina's)
+   Een gestructureerd pad van complete beginner naar je eerste Capture The Flag competitie. Met 27 open toetsvragen en een antwoordsleutel, zodat je per week merkt of je het echt snapt.
 
 4. Je Eigen Hacklab (~19 pagina's)
    Van simulator naar een echte Kali-omgeving. Virtualisatie, de netwerkmodus die bepaalt of je per ongeluk je hele huis scant, snapshots en een doelwit om legaal op te oefenen.
 
-Samen: ~70 pagina's praktische kennis in het Nederlands.
-Geen voorkennis nodig. Met zorg samengesteld en gecontroleerd · april 2026.
+Samen: ~72 pagina's praktische kennis in het Nederlands.
+Geen voorkennis nodig. Met zorg samengesteld en gecontroleerd · laatst herzien augustus 2026.
 
 Waarom deze bundel?
-- De gidsen verwijzen naar elkaar (het leerplan gebruikt de beslisbomen uit het playbook, week 4 behandelt de juridische gids)
-- Samen vormen ze een compleet startpakket
-- Bundelkorting: goedkoper dan losse aankoop
+- De gidsen verwijzen naar elkaar: het leerplan gebruikt de beslisboom uit het playbook (week 6) en de juridische gids (week 4), en de hacklab-gids bouwt de omgeving waarin de andere drie zich afspelen
+- Samen vormen ze een compleet startpakket: de regels, de omgeving, de methode en het tempo
+- Los gekocht is dit €20 — als bundel vanaf €10
 
 Geschreven door HackSimulator.nl — de gratis browser-based terminal simulator voor ethisch hacken.
 ```
@@ -313,140 +378,126 @@ ethisch hacken, ethical hacking, bundel, beginner, cybersecurity, pentest, Neder
 
 ---
 
-## CTA Templates (met placeholder URLs)
+## CTA's: waar ze wonen
 
-### CTA 1: In blogposts (inline)
+> Deze sectie bevatte kant-en-klare CTA-blokken met placeholder-URL's en het woord "gratis".
+> Beide waren fout geworden: de URL's bestaan inmiddels écht, en de gidsen kosten €5.
+> De templates zijn hier weggehaald in plaats van gerepareerd — twee plekken die hetzelfde
+> beweren, driften uit elkaar. Er is er nu één per kanaal:
 
-**Na een nmap/security-gerelateerd blogpost:**
-```html
-<div class="blog-cta">
-  <strong>Wil je verder leren?</strong> Download het gratis
-  <a href="[GUMROAD_URL_PLAYBOOK]">Pentest Playbook</a> —
-  een stap-voor-stap werkboek voor je eerste pentest.
-</div>
+| Kanaal | Bron van waarheid |
+|--------|-------------------|
+| Blogposts (mid-content productkaart) | `docs/blog-template.md` §Gumroad product-CTA — inclusief de topic→product-mapping |
+| Terminal (`man`-pagina's, "en nu?"-moment) | `src/` — de gidsen zijn bereikbaar vanuit de terminal sinds commit `c930fe2` |
+| Nieuwsbrief | `docs/newsletter/` |
+| Productpagina | `gidsen.html` |
+
+**Woordkeus over alle kanalen:** "vanaf €5" of "vanaf €10". Nooit "gratis" — dat geldt alleen voor
+de twee samples en de simulator zelf. Nooit kaal "pay what you want" zonder het minimum erbij.
+
+### Nieuwsbrief-blok (nog wél hier, want geen ander thuis)
+
+**Toevoegen aan een nieuwsbrief-editie** (de live welkomstmails staan in `docs/newsletter/`):
 ```
-
-**Na een juridisch/ethiek-gerelateerd blogpost:**
-```html
-<div class="blog-cta">
-  <strong>Ken je de regels?</strong> Download de gratis
-  <a href="[GUMROAD_URL_JURIDISCH]">Juridische Gids</a> —
-  wat mag wel en wat niet bij ethisch hacken in Nederland.
-</div>
+Vier Nederlandse gidsen, pay what you want vanaf €5:
+- Ethisch Hacken & Nederlandse Wet — https://hacksimulator.gumroad.com/l/yzdtfx
+- Je Eerste Pentest: Playbook — https://hacksimulator.gumroad.com/l/wmvpx
+- Van Nul naar CTF: 12-Weken Leerplan — https://hacksimulator.gumroad.com/l/eogjdk
+- Je Eigen Hacklab — https://hacksimulator.gumroad.com/l/ojort
+Alle vier samen als bundel, vanaf €10: https://hacksimulator.gumroad.com/l/emzjvj
 ```
-
-**Generieke CTA (past overal):**
-```html
-<div class="blog-cta">
-  <strong>Net begonnen met ethisch hacken?</strong> Download het gratis
-  <a href="[GUMROAD_URL_LEERPLAN]">12-Weken Leerplan</a> —
-  van complete beginner naar je eerste CTF.
-</div>
-```
-
-### CTA 2: In de terminal (na man commands)
-
-**Na `man nmap`, `man nikto`, `man sqlmap` etc.:**
-```
-[TIP] Wil je leren hoe je deze tools in een echte pentest gebruikt?
-      Download het gratis Pentest Playbook op hacksimulator.nl/gidsen
-```
-
-**Na `man hydra`, `man hashcat`, `man metasploit`:**
-```
-[TIP] Wil je weten of dit legaal is? Lees de Juridische Gids op hacksimulator.nl/gidsen
-```
-
-### CTA 3: In de Brevo welkomstmail
-
-**Toevoegen aan bestaande welkomstmail:**
-```
-Gratis gidsen voor beginners:
-- Ethisch Hacken & Nederlandse Wet — [GUMROAD_URL_JURIDISCH]
-- Je Eerste Pentest: Playbook — [GUMROAD_URL_PLAYBOOK]
-- 12-Weken Leerplan — [GUMROAD_URL_LEERPLAN]
-Of download alle 4 als bundel: [GUMROAD_URL_BUNDEL]
-```
-
-### CTA 4: Landingspagina op hacksimulator.nl/gidsen
-
-**Toekomstige optie:** Een `/gidsen` pagina op de site met alle producten. Niet nodig voor launch, maar logische volgende stap.
+Hang er `?utm_source=newsletter&utm_medium=email&utm_campaign=<editie>` achter, zoals de
+bestaande welkomstmail doet.
 
 ---
 
-## Gumroad Setup Instructies
+## Onderhoud: het proces zoals het écht werkt
 
-### Stap 1: Account aanmaken
-1. Ga naar **gumroad.com** en klik "Start selling"
-2. Maak een account aan (email + wachtwoord, of Google login)
-3. Stel je profiel in:
-   - Naam: **HackSimulator.nl**
-   - Bio: "Browser-based terminal simulator voor ethisch hacken leren"
-   - Profielfoto: gebruik het HackSimulator logo/favicon
+De oorspronkelijke instructies hier beschreven Canva en Google Docs. Dat is achterhaald — de
+gidsen worden uit Typst-bronnen gebouwd en de covers uit een Node-script.
 
-### Stap 2: Eerste product uploaden
-1. Klik "New Product"
-2. Kies type: **Digital product**
-3. Vul in:
-   - **Name:** Copy-paste de titel uit dit bestand
-   - **Description:** Copy-paste de lange beschrijving
-   - **Price:** Kies "Pay what you want" en zet minimum op €5 (bundel: €10)
-   - **Suggested price:** €5 (bundel: €10) — Gumroad toont dit als suggestie
-   - **Cover image:** Maak in Canva een thumbnail (1280x720px) met de kleuren uit dit bestand
-   - **File:** Upload de PDF
-4. Onder "More options":
-   - Tags: copy-paste uit dit bestand
-   - Zet "Collect email addresses" AAN (standaard aan bij Gumroad)
+### Een gids wijzigen
 
-### Stap 3: PDF maken van de Markdown
-**Optie A — Canva (aanbevolen, visueel):**
-1. Maak een nieuw document (A4)
-2. Gebruik donkere achtergrond (#0d1117) + groene accenten (#9fef00)
-3. Monospace font voor code-blokken (Source Code Pro of Fira Code)
-4. Copy-paste de content per hoofdstuk
-5. Voeg een cover page toe
-6. Exporteer als PDF
+1. Bewerk de bron: `docs/products/<gids>.typ` (getrackt in git = single source of truth).
+   Gedeelde opmaak zit in `template.typ` — een wijziging daar raakt **alle vier** de gidsen.
+2. Herbouwen: `cd docs/products && ./build-pdfs.sh` (vereist `typst`).
+   De `.pdf`-bestanden zijn build-output en staan in `.gitignore`.
+3. **Tel de pagina's opnieuw** en trek de claim mee: de tabel bovenaan dit bestand, de
+   productbeschrijving, de bundeltelling, `gidsen.html` (kaart-badge + JSON-LD) en de
+   bundel-cover in `scripts/build-product-covers.mjs`.
+4. Upload de nieuwe PDF naar het losse product **én** naar het bundelproduct. Gumroad ziet die
+   twee als losstaande bestanden; één ervan bijwerken is de klassieke misser.
+5. Verandert er een sample-hoofdstuk? Kopieer de herbouwde `*-sample.pdf` naar `assets/samples/`,
+   anders serveert de site een oude versie.
 
-**Optie B — Google Docs (snelst):**
-1. Plak de Markdown in Google Docs
-2. Format headings, tabellen, code-blokken
-3. Exporteer als PDF
-4. Minder mooi, maar functioneel
+### Een cover wijzigen
 
-**Optie C — Markdown → PDF tool:**
-1. Gebruik een tool zoals md-to-pdf (npm), pandoc, of Typst
-2. Voordeel: consistent en herhaalbaar
-3. Nadeel: vereist technische setup
+`node scripts/build-product-covers.mjs` → `assets/products/*.png` (2400×1260). Titel, eyebrow en
+de bundel-voettekst staan in de `GUIDES`-array bovenin dat script.
 
-### Stap 4: Bundle aanmaken
-1. Maak een nieuw product aan op Gumroad
-2. Upload alle 4 PDF's als bijlagen bij hetzelfde product
-3. Of: gebruik Gumroad's "Bundle" feature (als beschikbaar)
+### Instellingen per product op Gumroad
 
-### Stap 5: Brevo koppeling (optioneel, later)
-Gumroad heeft geen directe Brevo integratie. Opties:
-- **Zapier (gratis tier):** Gumroad sale → Brevo subscriber
-- **Handmatig:** Exporteer Gumroad klanten-email → importeer in Brevo
-- **Later:** Als volume groeit, overweeg Zapier betaald of Make.com
+- Type: **Digital product**
+- Price: **Pay what you want**, minimum €5 (bundel €10), suggested gelijk aan het minimum
+- Cover: de PNG uit `assets/products/`
+- Tags: uit dit bestand
+- "Collect email addresses": **aan**
 
-### Stap 6: Testen
-1. Koop je eigen product met het minimum (€5) om de flow te testen
-2. Check: krijg je de PDF? Staat de email in Gumroad?
-3. Deel de link met 2-3 vrienden voor feedback
+### Brevo-koppeling (nog steeds niet gebouwd)
+
+Gumroad heeft geen directe Brevo-integratie. Opties: Zapier (gratis tier) voor
+`Gumroad sale → Brevo subscriber`, of handmatig exporteren/importeren. Bij het huidige volume is
+handmatig genoeg.
 
 ---
 
-## Checklist voor Launch
+## Actielijst Gumroad (openstaand, 7 aug 2026)
 
-- [ ] Gumroad account aangemaakt
-- [ ] PDF's gemaakt van alle 4 drafts (Canva/Google Docs)
-- [ ] Producten aangemaakt op Gumroad (titel + beschrijving + PDF + tags)
-- [ ] Bundle aangemaakt
-- [ ] Testbestelling gedaan (zelf kopen met het minimum €5)
-- [ ] Gumroad URLs genoteerd
-- [ ] CTA's op site plaatsen (volgende sessie, met werkende URLs)
-- [ ] Welkomstmail updaten met Gumroad links (volgende sessie)
+De launch-checklist is weg: alles daarop is af (account, vijf producten, bundel, testbestelling,
+URL's, CTA's op de site, welkomstmail). Wat hieronder staat is de drift die is ontstaan doordat de
+gidsen ná het aanmaken van de producten zijn gewijzigd. **Dit kan alleen in de Gumroad-interface;
+uit de repo is niet te zien of het al gedaan is.**
+
+**Afgerond op 7 aug 2026**
+
+- [x] Alle vier de PDF's opnieuw geüpload, zowel als los product als in bundel `emzjvj` —
+      daarmee zit `lab-opzetten.pdf` als vierde bestand in de bundel en klopt de belofte
+      "alle 4 gidsen" weer.
+- [x] Beschrijvingen en paginagetallen van alle vijf de producten bijgewerkt.
+- [x] Bundel-cover vervangen door `assets/products/bundel-starter-kit.png` ("~72 pagina's").
+
+De vier losse covers zijn níét gewijzigd: `build-product-covers.mjs` hertekent ze wel, maar alleen
+de bundel-voettekst veranderde. Op Gumroad hoeven ze dus niet opnieuw.
+
+**Nog open op Gumroad**
+
+- [ ] Alle vijf: controleer dat er nergens "gratis" staat en dat het minimum genoemd wordt.
+      Twee minuten werk; het is de enige claim die juridisch en qua verwachting scheef kan staan.
+
+**De site loopt nu áchter op Gumroad — committen + pushen**
+
+Sinds 7 aug 2026 is Gumroad de bijgewerkte kant en `hacksimulator.nl` de verouderde. Live
+gemeten op die datum: de bundelkaart zei ~70 pagina's (moet 72), de leerplan-badge ~20 (moet 21),
+de gratis juridische sample verwees naar "volledige Juridische Gids v1.0" (is v1.1), en de gratis
+pentest-sample brak nog `verwi-jzen` af met Engelse patronen. Pushen naar `main` deployt via
+Netlify en lost alle vier tegelijk op.
+
+**Bestaande kopers inlichten (aparte afweging)**
+
+- [ ] Wie `yzdtfx` vóór juni 2026 kocht, heeft de Krol-zaak met feitfouten. Wie `eogjdk` vóór
+      aug 2026 kocht, is naar een niet-bestaand "TryHackMe Pwnbox" verwezen. Een nieuw
+      geüpload bestand bereikt hen niet vanzelf: Gumroad stuurt bij het vervangen van een
+      bestand geen automatische mail meer, je verstuurt zelf een post via het Customers- of
+      Posts-scherm. **Niet geverifieerd bij de bron** — de Gumroad-helppagina's zitten achter
+      een login; controleer het in je eigen dashboard voor je hierop vertrouwt.
+
+**Versienummers: wanneer wel, wanneer niet**
+
+Ophogen bij een **feitcorrectie of een omvangswijziging** — dan verschilt wat twee kopers in
+handen hebben. Niet ophogen bij verduidelijking, opmaak of woordafbreking. Zo blijft een bump een
+signaal in plaats van ruis. Stand: juridisch **1.1**, playbook **1.0**, leerplan **1.1**,
+hacklab **1.0**.
 
 ---
 
-*Laatst bijgewerkt: 4 april 2026*
+*Laatst bijgewerkt: 7 augustus 2026 — paginatellingen geteld uit de gebouwde PDF's*

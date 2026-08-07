@@ -35,7 +35,7 @@ const GUIDES = [
   { slug: 'eerste-pentest-playbook', eyebrow: 'GIDS · PENTEST PLAYBOOK', title: ['Je Eerste Pentest:', 'Stap-voor-Stap Playbook'] },
   { slug: 'ctf-leerplan',            eyebrow: 'GIDS · LEERPLAN',         title: ['Van Nul naar CTF:', '12-Weken Leerplan'] },
   { slug: 'je-eigen-hacklab',       eyebrow: 'GIDS · HACKLAB',          title: ['Je Eigen', 'Hacklab'] },
-  { slug: 'bundel-starter-kit',      eyebrow: 'BUNDEL · ALLE 4 GIDSEN',  title: ['HackSimulator', 'Starter Kit'], foot: '4 PDF-gidsen · ~71 pagina’s · vanaf €10' },
+  { slug: 'bundel-starter-kit',      eyebrow: 'BUNDEL · ALLE 4 GIDSEN',  title: ['HackSimulator', 'Starter Kit'], foot: '4 PDF-gidsen · ~72 pagina’s · vanaf €10' },
 ];
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');

@@ -176,6 +176,7 @@ Plaats na een natuurlijke break in content (~50% door post, na een H2 die struct
 | Carrière, leerpad, structureel leren | 12-Weken Leerplan | `eogjdk` |
 | Recon, pentest-praktijk, checklist | Pentest Playbook | `wmvpx` |
 | Juridisch, wat-mag-wel-niet | Juridische Gids | `yzdtfx` |
+| Kali, VM's, tooling installeren, oefenomgeving | Je Eigen Hacklab | `ojort` |
 | Algemeen, instap, breed | Bundle | `emzjvj` |
 
 **Niet doen:** twee CTAs voor hetzelfde product. Pentest Playbook is alleen voor lead-magnet (gratis sample). Mid-CTA = ander product.

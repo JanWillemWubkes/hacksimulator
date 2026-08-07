@@ -5,8 +5,8 @@
 #show: hacksimulator-doc.with(
   title: "Van Nul naar CTF",
   subtitle: "12-Weken Leerplan voor Ethisch Hacken — Een gestructureerd pad van complete beginner naar je eerste Capture The Flag",
-  version: "1.0",
-  date: "april 2026",
+  version: "1.1",
+  date: "herzien augustus 2026",
 )
 
 // ─────────────────────────────────────────────
@@ -23,6 +23,11 @@ Dit leerplan lost dat probleem op. Je krijgt *precies één ding per week* om te
 - Een webbrowser (Chrome, Firefox of Edge)
 - 5-8 uur per week beschikbaar
 - Geen voorkennis --- we beginnen echt bij nul
+
+Week 1 tot en met 4 doe je volledig in je browser. Vanaf week 5 heb je een gratis
+TryHackMe-account nodig en werk je in hun AttackBox (1 uur per dag gratis) of vanaf een eigen
+virtuele machine. In week 10 stap je over op HackTheBox, en daar is een eigen machine in de
+praktijk de prettigste route --- de veelgestelde vragen achterin leggen uit waarom.
 
 == Hoe dit leerplan werkt
 
@@ -216,7 +221,7 @@ _Begrepen? Beantwoord uit je hoofd en schrijf het op. Kijk pas daarna in de antw
 + Waarom werk je op TryHackMe via een VPN of een browser-VM, in plaats van rechtstreeks vanaf je eigen laptop?
 + Je krijgt een doel-IP toegewezen dat begint met `10.10.`. Wat zegt dat over waar die machine staat?
 
-#tip[Minstens 2 van de 2 in de kern goed? Door naar de volgende week. Minder? Herhaal deze week --- dat kost je nu een paar uur en anders straks een maand.]
+#tip[Allebei in de kern goed? Door naar de volgende week. Minder? Herhaal deze week --- dat kost je nu een paar uur en anders straks een maand.]
 
 // ─────────────────────────────────────────────
 
@@ -353,7 +358,7 @@ _Begrepen? Beantwoord uit je hoofd en schrijf het op. Kijk pas daarna in de antw
 + Decodeer `aGFja2Vy`. Om welke codering gaat het, en wat staat er?
 + Noem drie plekken in een webpagina waar een flag kan staan zonder dat een bezoeker hem ziet.
 
-#tip[Minstens 2 van de 2 in de kern goed? Door naar de volgende week. Minder? Herhaal deze week --- dat kost je nu een paar uur en anders straks een maand.]
+#tip[Allebei in de kern goed? Door naar de volgende week. Minder? Herhaal deze week --- dat kost je nu een paar uur en anders straks een maand.]
 
 // ─────────────────────────────────────────────
 
@@ -364,6 +369,7 @@ _Begrepen? Beantwoord uit je hoofd en schrijf het op. Kijk pas daarna in de antw
 
 *Activiteiten:*
 + Maak een gratis account aan op *hackthebox.com*
++ Verbind met het lab via het OpenVPN-bestand dat HackTheBox je geeft
 + Start met *Starting Point* --- begeleide machines voor beginners
   - Tier 0: Basis connectiviteit en tools
   - Tier 1: Eerste exploitation-technieken
@@ -389,7 +395,7 @@ _Begrepen? Beantwoord uit je hoofd en schrijf het op. Kijk pas daarna in de antw
 + Wat is het verschil tussen de user-flag en de root-flag op een HackTheBox-machine?
 + De methodologie is recon → scan → exploit → post-exploit. Waarom is die laatste fase een aparte stap, en niet gewoon het einde van de exploit?
 
-#tip[Minstens 2 van de 2 in de kern goed? Door naar de volgende week. Minder? Herhaal deze week --- dat kost je nu een paar uur en anders straks een maand.]
+#tip[Allebei in de kern goed? Door naar de volgende week. Minder? Herhaal deze week --- dat kost je nu een paar uur en anders straks een maand.]
 
 // ─────────────────────────────────────────────
 
@@ -510,10 +516,10 @@ Een certificering bewijst aan werkgevers dat je vaardigheden hebt.
 Niet om te beginnen. Basiskennis van Python is handig vanaf week 7-8, maar geen vereiste.
 
 *"Heb ik Kali Linux nodig?"*\
-Niet voor de eerste 4 weken. Vanaf week 5 kun je TryHackMe's browser-based "Pwnbox" gebruiken.
+Niet voor de eerste 4 weken. Vanaf week 5 kun je TryHackMe's _AttackBox_ gebruiken: een kant-en-klare aanvalsmachine in je browser, gratis 1 uur per dag. Let op dat je die tijd moet spreiden --- één lange zaterdagmiddag lukt er niet mee. Vanaf week 10 (HackTheBox) verdient een eigen virtuele machine zich terug; zie de vraag hieronder.
 
 *"Kan ik dit met een Chromebook?"*\
-Ja, tot en met week 4. Vanaf week 5 heb je een browser nodig die TryHackMe's Pwnbox ondersteunt.
+Tot en met week 4 zonder meer. Vanaf week 5 werk je in TryHackMe's AttackBox in de browser (1 gratis uur per dag), dus ook dat lukt. Week 10 is het knelpunt: HackTheBox laat je via een OpenVPN-bestand vanaf je eigen machine verbinden, en hun browser-alternatief _Pwnbox_ geeft gratis accounts eenmalig 2 uur. Op een Chromebook kom je die week dus niet ver zonder een tweede computer.
 
 *"Is 12 weken genoeg om professioneel ethisch hacker te worden?"*\
 Nee. 12 weken is genoeg om een solide basis te leggen en te bepalen of dit iets voor je is. Een professionele ethische hacker heeft typisch 1-2 jaar ervaring + minimaal één certificering.
@@ -627,6 +633,6 @@ het goed.
   #v(6pt)
   #text(size: 9pt, fill: luma(140))[
     _Dit leerplan is geschreven voor HackSimulator.nl --- de gratis browser-based terminal simulator voor ethisch hacken._\
-    _Versie 1.0 · Met zorg samengesteld en gecontroleerd · april 2026_
+    _Versie 1.1 · Met zorg samengesteld en gecontroleerd · herzien augustus 2026_
   ]
 ]

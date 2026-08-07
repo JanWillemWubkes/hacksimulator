@@ -415,7 +415,7 @@ Dat is de stap die de simulator niet kon maken, en waar het echte werk begint.
 Met een werkend lab zijn de andere gidsen bruikbaar geworden:
 
 - Het *Pentest Playbook* neemt je mee door de zes fases, met dit lab als omgeving.
-- Het *12-weken leerplan* gebruikt vanaf week 5 precies deze opstelling.
+- Het *12-weken leerplan* kan vanaf week 5 in dit lab draaien, maar eist het niet.
 - De *Juridische Gids* legt uit waar de grens ligt zodra je buiten dit lab kijkt.
 
 // ─────────────────────────────────────────────

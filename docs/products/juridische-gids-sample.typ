@@ -178,6 +178,6 @@ Of bekijk alle gidsen op #link("https://hacksimulator.nl/gidsen.html")[hacksimul
   #v(6pt)
   #text(size: 9pt, fill: luma(140))[
     _Dit sample is gemaakt voor HackSimulator.nl --- de gratis browser-based terminal simulator voor ethisch hacken._\
-    _Sample versie 1.0 · Hoofdstuk 1 & 2 van volledige Juridische Gids v1.0 · augustus 2026_
+    _Sample versie 1.0 · Hoofdstuk 1 & 2 van volledige Juridische Gids v1.1 · augustus 2026_
   ]
 ]
