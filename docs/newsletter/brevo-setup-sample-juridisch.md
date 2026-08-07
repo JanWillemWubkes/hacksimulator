@@ -53,11 +53,16 @@ gedeelde mail met beide downloadknoppen, en dat is een scope-beslissing, geen te
 
 ## Stap 1 — Formulier aanmaken ✅ (gedaan 7 aug 2026)
 
-> **Niet overslaan bij een volgend sample: de Messages-stap is geen cosmetica.**
-> `src/ui/brevo-submit.js:39-42` zet `json.message` uit Brevo's antwoord in het success-panel
-> en **overschrijft daarmee de hardcoded Nederlandse paneltekst op de pagina**. Laat je de
-> Engelse defaults staan, dan leest je bezoeker "Your subscription has been successful." op
-> een verder Nederlandse pagina. Vul alle vier de strings in het Nederlands.
+> **De Messages-stap is geen cosmetica — de "Success message" is wat je bezoeker leest.**
+> `src/ui/brevo-submit.js:39-42` zet `json.message` uit Brevo's antwoord in het success-panel en
+> overschrijft daarmee de hardcoded tekst in de HTML. Bij een echte inschrijving geverifieerd
+> (7 aug 2026): het panel toonde de string uit Brevo, niet die uit `sample-juridisch.html:148`.
+> Laat je hier het Engelse default staan, dan leest je bezoeker dat op een Nederlandse pagina.
+>
+> De andere drie zijn minder kritisch: bij leeg EMAIL, een ongeldig formaat en een gevulde
+> honeypot antwoordt Brevo `{"success":true}` **zonder** message, en blijft de HTML-tekst staan.
+> Vul ze toch in het Nederlands in — het kost niets en dekt de gevallen die we niet gemeten
+> hebben. De HTML-tekst is het vangnet, niet de hoofdcopy.
 >
 > **En zet reCAPTCHA niet aan.** Drie redenen: `brevo-submit.js` doet de POST zelf en stuurt
 > geen captcha-token mee; de CSP (`netlify.toml:127`) staat `google.com/recaptcha` niet toe als

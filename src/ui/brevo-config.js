@@ -10,11 +10,21 @@
  * vóór de defer-script main.js). Gebruikt op pagina's met een Brevo-formulier
  * (index.html, blog/index.html, sample-pentest.html, sample-juridisch.html).
  *
- * LET OP: dit dekt alleen de client-side validatiestrings. De bevestigings- en
- * foutmelding die de bezoeker ná verzenden leest, komt uit Brevo's antwoord
- * (json.message → brevo-submit.js:39-42) en staat per formulier ingesteld onder
- * Contacts → Forms → <formulier> → Messages. Die staan daar in het Nederlands;
- * een Engelse default daar lekt door naar de pagina.
+ * LET OP: dit dekt alleen de client-side validatiestrings van Brevo's main.js.
+ * De tekst die de bezoeker ná verzenden leest komt uit twee bronnen, en
+ * brevo-submit.js:39-42 / :55-58 laten Brevo's `json.message` de hardcoded
+ * paneltekst in de HTML overschrijven.
+ *
+ * Gemeten (Sessie 212, live endpoint + echte inschrijving):
+ *   - gelukte inzending, geldig adres -> message = de "Success message" die
+ *     onder Contacts > Forms > <form> > Messages staat. Die WINT van de HTML;
+ *     de paneltekst in de pagina is dan niet wat de bezoeker leest.
+ *   - leeg EMAIL / ongeldig formaat / gevulde honeypot -> {"success":true}
+ *     zonder message; dan blijft de HTML-tekst staan.
+ *   - kapotte payload -> message is een onvertaalde interne string.
+ *
+ * Gevolg: zet de bevestigingscopy die ertoe doet in Brevo's Messages-stap, en
+ * houd de HTML-tekst als vangnet voor de message-loze paden.
  */
 
 window.REQUIRED_CODE_ERROR_MESSAGE = 'Selecteer een landcode';
