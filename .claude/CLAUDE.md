@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 209)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 211)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -217,7 +217,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Every 5 sessions, archive sessies N-10..N-6 from CLAUDE.md learnings (last bulk: Sessie 145 archived 135-139, Sessie 146 1-in-1-out archived Sessie 140 → current.md, next bulk: Sessie 150)
-**Sessie counter:** 209
+**Sessie counter:** 211
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -272,6 +272,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 05 aug 2026 (Sessie 209 — W2 browserverificatie: 6 Playwright-tests bewijzen skip-certificaat DEELNAME/VOLTOOIING, helpsysteem-escalatie, localStorage-backward-compat. Regressiecheck 237/249 groen. Volledig: `docs/sessions/current.md`)
-**Version:** 5.83 (Sessie 209 — W2 browserverificatie kwaliteitsronde: 6 tests bewijzen skip-cert/helpsysteem/localStorage-compat; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 06 aug 2026 (Sessie 211 — interne links naar leren-hacken.html vanuit 5 blogposts + homepage, achterstallige /summary Sessie 210, bulk-rotatie 195-199. Volledig: `docs/sessions/current.md`)
+**Version:** 5.85 (Sessie 211 — interne links + /summary 210+211 + bulk-rotatie; volledige historie: `docs/sessions/current.md` + TASKS.md)
 

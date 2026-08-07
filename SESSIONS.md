@@ -10,19 +10,26 @@
 
 > **Rotatie/archivering-conventie:** zie [`docs/sessions/README.md`](docs/sessions/README.md)
 > (range-naamgeving `archive-sNNN-sMMM.md`; legacy `archive-q*`-namen zijn bevroren + fout gelabeld).
-> `current.md` houdt het rolling window Sessie 195-208; ouder is geroteerd naar de range-archieven hieronder.
+> `current.md` houdt het rolling window Sessie 200-211; ouder is geroteerd naar de range-archieven hieronder.
 
-### [Current Sessions (195-208)](docs/sessions/current.md) - Full Detail
-**Sessies:** 208, 207, 206, 205, 204, 203, 202, 201, 200, 199, 198, 197, 196, 195
-**Period:** 29 juni - 03 augustus 2026
+### [Current Sessions (200-211)](docs/sessions/current.md) - Full Detail
+**Sessies:** 211, 210, 209, 208, 207, 206, 205, 204, 203, 202, 201, 200
+**Period:** 29 juni - 06 augustus 2026
 **Topics:**
+- Interne links naar `leren-hacken.html` vanuit 5 blogposts + homepage, achterstallige /summary Sessie 210, bulk-rotatie 195-199 (Sessie 211)
+- SEO-optimalisaties op zoekdata + nieuwe blogpost `leren-hacken.html` (~2500 woorden beginnersgids), titel/meta-optimalisaties op 3 bestaande pagina's (Sessie 210)
+- W2 browserverificatie: 6 Playwright-tests bewijzen skip-certificaat/helpsysteem-escalatie/localStorage-backward-compat (Sessie 209)
 - Advertenties volledig van de site (€0 opbrengst vs 251,7 KB third-party), kwaliteit aantoonbaar gemaakt (reviewpakket-generator, drift-checks, verantwoording, controledata) en blog→terminal meetbaar (Sessie 208)
-- Leerpad-consistentie: whois/traceroute/find/grep zichtbaar via NEW `learning-path.js` single-source; brede spook-command-nasweep (wireshark→traceroute, commands-pagina 39→41, blog-claims eerlijk), traceroute-tracking-bug, 20 audit-fixes (Sessie 195)
-- Uitgestelde 193-punten: VFS-schema-signature + analytics-guard + [TIP]-marker; 4 document-and-accept (Sessie 194)
-- Volledige tutorial-flow-audit: 18 fixes (begeleiding + state + omgeving) in 4 commits (Sessie 193)
-- Tutorial/challenge-completion: output-zichtbaar + één "next" CTA + voltooiingsscherm past in beeld (Sessie 190-192)
-- Leerpad-boog: Stap 0 ontwerp → Fase B (fundamentals-scenario + her-tiering) → ladder-uniformering → Fase A deep-link naar in-app tutorial-landing (Sessie 186-189)
-- Leerpad-sectie homepage: 3 nep-deuren → mini-leerlijn met "Lees eerst"-links + eerlijke knoplabels (Sessie 185)
+- Box-reflow bij venster-resize + submodule-cache-val (Sessie 205)
+- Box-omlijning brak op tussenbreedtes — corrupte box-font + meetfouten (Sessie 204)
+- Audit oude follow-up-lijstjes → gesnoeid op bezoekerswaarde (Sessie 207)
+
+---
+
+### [Archief Sessie 195-199](docs/sessions/archive-s195-s199.md) - Full Detail (geroteerd)
+**Sessies:** 199 → 195 (nieuwste-eerst)
+**Period:** 22 - 29 juli 2026
+**Topics:** Marketing-launch uitvoeren (verse metasploit-blogpost + launch-beslissing + checklist), launch-prep-communicatie-audit, leerpad-consistentie (whois/traceroute/find/grep zichtbaar, spook-command-nasweep, traceroute-tracking-bug, 20 audit-fixes)
 
 ---
 
