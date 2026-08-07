@@ -451,45 +451,39 @@ handmatig genoeg.
 
 ---
 
-## Actielijst Gumroad (openstaand, 7 aug 2026)
+## Stand van zaken: afgerond op 7 aug 2026
 
-De launch-checklist is weg: alles daarop is af (account, vijf producten, bundel, testbestelling,
-URL's, CTA's op de site, welkomstmail). Wat hieronder staat is de drift die is ontstaan doordat de
-gidsen ná het aanmaken van de producten zijn gewijzigd. **Dit kan alleen in de Gumroad-interface;
-uit de repo is niet te zien of het al gedaan is.**
+Er staat niets open. Deze sectie legt vast wát er gedaan is en — belangrijker — wat er bewust
+**niet** is gedaan, zodat dat niet over een paar sessies opnieuw als openstaand punt opduikt.
 
-**Afgerond op 7 aug 2026**
+**Op Gumroad**
 
 - [x] Alle vier de PDF's opnieuw geüpload, zowel als los product als in bundel `emzjvj` —
       daarmee zit `lab-opzetten.pdf` als vierde bestand in de bundel en klopt de belofte
       "alle 4 gidsen" weer.
 - [x] Beschrijvingen en paginagetallen van alle vijf de producten bijgewerkt.
 - [x] Bundel-cover vervangen door `assets/products/bundel-starter-kit.png` ("~72 pagina's").
+- [x] Gecontroleerd dat er nergens "gratis" staat bij de betaalde producten.
 
 De vier losse covers zijn níét gewijzigd: `build-product-covers.mjs` hertekent ze wel, maar alleen
 de bundel-voettekst veranderde. Op Gumroad hoeven ze dus niet opnieuw.
 
-**Nog open op Gumroad**
+**Op de site** — commit `db7d7de`, live geverifieerd na deploy: bundelkaart en JSON-LD op
+~72 pagina's, leerplan-badge op ~21, de gratis juridische sample verwijst naar v1.1, en de gratis
+pentest-sample breekt weer met Nederlandse patronen af (`verwij-zen` i.p.v. `verwi-jzen`).
 
-- [ ] Alle vijf: controleer dat er nergens "gratis" staat en dat het minimum genoemd wordt.
-      Twee minuten werk; het is de enige claim die juridisch en qua verwachting scheef kan staan.
+**Bewust niet gedaan: bestaande kopers inlichten**
 
-**De site loopt nu áchter op Gumroad — committen + pushen**
+Er is tot nu toe **één koper** (eerst het playbook los, daarna de oude bundel van drie gidsen).
+Hij heeft dus de Pwnbox-fout in het leerplan gehad, en mogelijk de Krol-fout. Besloten om hem
+niet te mailen — Heisenberg's afweging, 7 aug 2026.
 
-Sinds 7 aug 2026 is Gumroad de bijgewerkte kant en `hacksimulator.nl` de verouderde. Live
-gemeten op die datum: de bundelkaart zei ~70 pagina's (moet 72), de leerplan-badge ~20 (moet 21),
-de gratis juridische sample verwees naar "volledige Juridische Gids v1.0" (is v1.1), en de gratis
-pentest-sample brak nog `verwi-jzen` af met Engelse patronen. Pushen naar `main` deployt via
-Netlify en lost alle vier tegelijk op.
-
-**Bestaande kopers inlichten (aparte afweging)**
-
-- [ ] Wie `yzdtfx` vóór juni 2026 kocht, heeft de Krol-zaak met feitfouten. Wie `eogjdk` vóór
-      aug 2026 kocht, is naar een niet-bestaand "TryHackMe Pwnbox" verwezen. Een nieuw
-      geüpload bestand bereikt hen niet vanzelf: Gumroad stuurt bij het vervangen van een
-      bestand geen automatische mail meer, je verstuurt zelf een post via het Customers- of
-      Posts-scherm. **Niet geverifieerd bij de bron** — de Gumroad-helppagina's zitten achter
-      een login; controleer het in je eigen dashboard voor je hierop vertrouwt.
+Wat daarbij hoort te blijven staan voor een volgende keer: omdat de bestanden in het bestaande
+product zijn vervángen en niet in een nieuw product zijn gezet, halen bestaande kopers via hun
+oorspronkelijke downloadlink of Gumroad-bibliotheek automatisch de actuele versie op. Zij krijgen
+de correcties dus hoe dan ook, alleen zonder dat iemand ze erop wijst. **Niet geverifieerd bij de
+bron** — de Gumroad-helppagina's zitten achter een login; te bewijzen met je eigen
+testbestelling-link (staan er vier PDF's in de bundel, dan klopt het).
 
 **Versienummers: wanneer wel, wanneer niet**
 
