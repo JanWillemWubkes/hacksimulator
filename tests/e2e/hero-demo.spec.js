@@ -403,3 +403,296 @@ test.describe('Hero-terminal zonder JavaScript', () => {
     expect(staat.heeftTekst, 'lege terminal zonder JS').toBe(true);
   });
 });
+
+// ============================================================================
+// Sessie 215 — vormgeving van het venster: uitlijning, focustoestand, uitnodiging
+//
+// Nulmeting vóór deze wijziging (productie, 1830×1000):
+//   tekstkolom 140→568 · terminal 194→662 — 54px te laag begonnen én 94px onder de
+//   tekstkolom uit. Oorzaak: `margin-top: 3rem`, een handmatige centrering uit de tijd
+//   dat het venster 313px hoog was; Sessie 214 hing er 152px demobalk onder.
+//   Focusrand: `outline: 2px solid var(--color-info)` — systeemblauw om een zwarte
+//   terminal, en `:focus-within` vuurt óók bij een muisklik.
+//   Cursor: `_` stond 317px van de linkerrand van het veld terwijl de tekst 155px
+//   breed was — `flex: 1` op het <input> at de hele regel.
+// ============================================================================
+
+const PROMPT_GROEN = 'rgb(159, 239, 0)';
+
+test.describe('Hero-terminal — uitlijning naast de tekst', () => {
+  test.use({ viewport: DESKTOP });
+
+  test('de twee kolommen delen hun optische midden', async ({ page }) => {
+    await page.goto('/index.html');
+
+    const m = await page.evaluate(() => {
+      const mid = (sel) => {
+        const b = document.querySelector(sel).getBoundingClientRect();
+        return (b.top + b.bottom) / 2;
+      };
+      return {
+        verschil: Math.abs(mid('.hero-text') - mid('.hero-terminal-col')),
+        marginTop: getComputedStyle(document.querySelector('.hero-terminal')).marginTop,
+        alignItems: getComputedStyle(document.querySelector('.hero-content')).alignItems
+      };
+    });
+
+    // De invariant, niet de getallen: de kolommen mogen van hoogte veranderen (een
+    // extra chiprij, langere copy) zonder dat iemand een marge hoeft bij te stellen.
+    expect(m.verschil, 'kolommen staan niet op hetzelfde optische midden').toBeLessThanOrEqual(2);
+    // Het magische getal mag niet terugkeren: dát was de bug.
+    expect(m.marginTop, 'handmatige marge terug op .hero-terminal').toBe('0px');
+    expect(m.alignItems).toBe('center');
+  });
+
+  test('@375px staat de kop bóven de terminal', async ({ page }) => {
+    await page.setViewportSize(MOBIEL);
+    await page.goto('/index.html');
+
+    // De wrapper uit Sessie 215 is het directe kind van de kolom-flexbox. Zonder een
+    // eigen `order: 2` erft hij de default 0 en landt hij vóór .hero-text (order: 1) —
+    // gemeten toen dat gebeurde: terminal op y=76, kop op y=593.
+    const y = await page.evaluate(() => ({
+      tekst: document.querySelector('.hero-text').getBoundingClientRect().top,
+      kolom: document.querySelector('.hero-terminal-col').getBoundingClientRect().top
+    }));
+    expect(y.tekst, 'de terminal staat boven de headline').toBeLessThan(y.kolom);
+  });
+});
+
+test.describe('Hero-terminal — focustoestand', () => {
+  test.use({ viewport: DESKTOP });
+
+  // Beide thema's, want de focusregel en `[data-theme="light"] .hero-terminal` zetten
+  // allebei box-shadow en zijn even specifiek (0,2,0). Bij gelijkspel wint bronvolgorde:
+  // staat de focusregel vóór het light-blok, dan verdwijnt de gloed alleen in light mode.
+  for (const thema of ['dark', 'light']) {
+    test(`het venster gaat groen aan bij focus (${thema})`, async ({ page }) => {
+      await page.goto('/index.html');
+      await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), thema);
+
+      await page.locator('#typing-target').click();
+
+      const stijl = await page.evaluate(() => {
+        const cs = getComputedStyle(document.querySelector('.hero-terminal'));
+        return {
+          outlineColor: cs.outlineColor,
+          borderColor: cs.borderColor,
+          boxShadow: cs.boxShadow,
+          dot: getComputedStyle(document.querySelector('.hero-terminal .dot.green')).boxShadow
+        };
+      });
+
+      expect(stijl.borderColor, 'rand niet in het promptgroen').toBe(PROMPT_GROEN);
+      expect(stijl.boxShadow, 'geen groene gloed om het venster').toContain('159, 239, 0');
+      expect(stijl.dot, 'het groene vensterbolletje licht niet op').not.toBe('none');
+      // De outline blijft bestaan (vangnet voor forced-colors) maar mag niets tekenen:
+      // een zichtbare blauwe systeemrand is precies wat hier weg moest.
+      expect(stijl.outlineColor).toBe('rgba(0, 0, 0, 0)');
+    });
+  }
+});
+
+test.describe('Hero-terminal — de uitnodiging om te typen', () => {
+  test.use({ viewport: DESKTOP });
+
+  test('de hint staat er in rust en verdwijnt ná overname, zonder sprong', async ({ page }) => {
+    await page.goto('/index.html');
+
+    const hint = page.locator('.hero-terminal-hint');
+    await expect(hint).toBeVisible();
+    expect((await hint.textContent()).trim().length, 'lege hint').toBeGreaterThan(10);
+
+    const voor = await page.evaluate(
+      () => document.querySelector('.hero-terminal-col').getBoundingClientRect().height
+    );
+
+    await neemOver(page);
+
+    const na = await page.evaluate(() => ({
+      hoogte: document.querySelector('.hero-terminal-col').getBoundingClientRect().height,
+      zichtbaar: getComputedStyle(document.querySelector('.hero-terminal-hint')).visibility
+    }));
+
+    expect(na.zichtbaar, 'hint blijft staan nadat hij is aangenomen').toBe('hidden');
+    // `visibility` en niet `display: none`: anders krimpt de kolom en verspringt het
+    // venster onder de muis van wie er net op klikte (gemeten: 29px / ~15px sprong).
+    expect(na.hoogte, 'de kolom krimpt — het venster verspringt bij de klik').toBe(voor);
+  });
+
+  // 769 is de smalste breedte waarop de twee kolommen naast elkaar staan; daar is de
+  // terminalkolom nog maar 314px (gemeten) en wrapt de hint naar twee regels. Dat is
+  // cosmetisch en pre-existing krap — wat wél moet gelden is: de hint staat er, blijft
+  // binnen zijn kolom en veroorzaakt geen horizontale overflow.
+  for (const breedte of [769, 1280]) {
+    test(`@${breedte}px staat de hint binnen zijn kolom`, async ({ page }) => {
+      await page.setViewportSize({ width: breedte, height: 800 });
+      await page.goto('/index.html');
+
+      const m = await page.evaluate(() => {
+        const el = document.querySelector('.hero-terminal-hint');
+        const kolom = document.querySelector('.hero-terminal-col').getBoundingClientRect();
+        return {
+          zichtbaar: getComputedStyle(el).display !== 'none',
+          regels: Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight)),
+          buitenKolom: Math.round(el.getBoundingClientRect().right - kolom.right),
+          paginaOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+        };
+      });
+
+      expect(m.zichtbaar, 'de hint valt weg op een desktopbreedte').toBe(true);
+      expect(m.buitenKolom, 'de hint steekt buiten zijn kolom').toBeLessThanOrEqual(0);
+      expect(m.paginaOverflow, 'horizontale overflow op de pagina').toBeLessThanOrEqual(0);
+      // Op de gangbare breedte hoort hij op één regel; op 769 mag hij breken.
+      if (breedte >= 1280) expect(m.regels, 'de hint wrapt op desktop').toBe(1);
+      else expect(m.regels).toBeLessThanOrEqual(2);
+    });
+  }
+
+  // `.mobile-cta-bar` staat `position: fixed` onderaan (alleen op index.html, ≤1279px) en
+  // dekt bij scrollpositie 0 af wat daar toevallig ligt. Gemeten over zes telefoonmaten,
+  // met consent gezet zodat dit de balk meet en niet de cookiebanner — en telkens tegen
+  // `git archive HEAD` op een tweede server, zodat "pre-existing" een meting is en geen
+  // aanname. Oud en nieuw gaven een byte-identieke uitkomst:
+  //
+  //   375×812 · 412×915 · 768×1024 → geen chip bedekt
+  //   360×800 · 390×844            → `whoami`, `pwd`, `help` bedekt door de balk
+  //
+  // Die tweede regel is een pre-existing conditie sinds de chips bestaan (Sessie 214),
+  // niet iets van deze wijziging. Bewust niet opgelost: de balk is bij scrollpositie 0
+  // aantoonbaar overbodig (de hero-CTA staat op élke gemeten maat in beeld), dus de
+  // principiële fix is hem daar verbergen — en dat maakt een conversie-kritische
+  // eigenschap tijdsafhankelijk én breekt de synchrone scroll-guard in
+  // homepage-conversion.spec.js. Dat is een eigen afweging, geen bijvangst.
+  //
+  // Deze test bewaakt dus twee dingen: dat de hint de chips niet verder omlaag duwt, en
+  // dat de bedekking niet groeit voorbij de vastgelegde baseline.
+  const BASELINE_BEDEKT = {
+    '375x812': [],
+    '390x844': ['whoami', 'pwd', 'help']
+  };
+
+  for (const [maat, baseline] of Object.entries(BASELINE_BEDEKT)) {
+    const [width, height] = maat.split('x').map(Number);
+
+    test(`@${maat} blijft de chipbedekking op de vastgelegde baseline`, async ({ page }) => {
+      await page.addInitScript(() => {
+        localStorage.setItem(
+          'hacksim_analytics_consent',
+          JSON.stringify({ necessary: true, analytics: true })
+        );
+      });
+      await page.setViewportSize({ width, height });
+      await page.goto('/index.html');
+
+      const meting = await page.evaluate(() => {
+        const bar = document.querySelector('.mobile-cta-bar');
+        return {
+          hintZichtbaar:
+            getComputedStyle(document.querySelector('.hero-terminal-hint')).display !== 'none',
+          barTop: bar ? Math.round(bar.getBoundingClientRect().top) : null,
+          chips: [...document.querySelectorAll('.hero-chip')].map((c) => {
+            const b = c.getBoundingClientRect();
+            const midY = b.top + b.height / 2;
+            const raak = document.elementFromPoint(b.left + b.width / 2, midY);
+            return {
+              cmd: c.dataset.command,
+              midden: Math.round(midY),
+              // Alleen meetbaar als het midden ín beeld ligt; daaronder zegt
+              // elementFromPoint niets (het geeft null) en is er niets om te bedekken.
+              meetbaar: midY > 0 && midY < window.innerHeight,
+              raakbaar: raak === c || c.contains(raak),
+              door: raak ? `${raak.tagName}.${raak.className}` : 'buiten viewport'
+            };
+          })
+        };
+      });
+
+      // De hint kost 30px; die duwden de tweede rij op 375×812 van midden-736 naar
+      // midden-764 terwijl de balk vanaf y=747 vastzit — dan navigeert een tik op
+      // `whoami` wég in plaats van het command te draaien.
+      expect(meting.hintZichtbaar, 'de hint staat op mobiel en duwt de chips omlaag').toBe(false);
+
+      const bedekt = meting.chips.filter((c) => c.meetbaar && !c.raakbaar);
+      const nieuw = bedekt
+        .filter((c) => !baseline.includes(c.cmd))
+        .map((c) => `${c.cmd} (midden ${c.midden}, balk vanaf ${meting.barTop}) → ${c.door}`);
+
+      expect(nieuw, `nieuw bedekt t.o.v. baseline: ${nieuw.join(' | ')}`).toEqual([]);
+    });
+  }
+});
+
+test.describe('Hero-terminal — de cursor staat bij de tekst', () => {
+  test.use({ viewport: DESKTOP });
+
+  test('de knipperende cursor volgt de auto-demo in plaats van de rechterrand', async ({ page }) => {
+    await page.goto('/index.html');
+
+    // Eén synchrone meting: waarde, breedte en cursorpositie worden in dezelfde tick
+    // gelezen, dus er zit geen aanslag van de auto-demo tussen. Werkt ook als het veld
+    // net leeg is (dan hoort de cursor pal achter de prompt te staan) — de oude code
+    // gaf in béíde gevallen ~317px.
+    const m = await page.evaluate(() => {
+      const input = document.getElementById('typing-target');
+      const cursor = document.querySelector('.terminal-input-line .cursor');
+      const cs = getComputedStyle(input);
+      const ctx = document.createElement('canvas').getContext('2d');
+      ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+      const tekstEind = input.getBoundingClientRect().left + ctx.measureText(input.value).width;
+      return {
+        waarde: input.value,
+        flexGrow: cs.flexGrow,
+        gat: cursor.getBoundingClientRect().left - tekstEind
+      };
+    });
+
+    // Eén teken marge (~10px bij 0.9rem JetBrains Mono) plus subpixelruis.
+    expect(m.flexGrow, 'het veld groeit weer over de hele regel in rust').toBe('0');
+    expect(m.gat, `cursor staat ${Math.round(m.gat)}px van "${m.waarde}"`).toBeLessThan(24);
+    expect(m.gat, 'cursor staat vóór de tekst').toBeGreaterThan(-2);
+  });
+
+  test('de hele promptregel neemt over, niet alleen het veld van één teken', async ({ page }) => {
+    await page.goto('/index.html');
+
+    // Regressie die de cursor-fix zelf introduceerde: in rust is #typing-target nog maar
+    // ~10px breed. Wie rechts naast de prompt klikt — de hele lege rechterhelft van de
+    // regel — raakte het veld daarmee niet meer. WebKit miste het in de testrun zelfs
+    // met een gerichte klik.
+    const doel = await page.evaluate(() => {
+      const regel = document.querySelector('.terminal-input-line').getBoundingClientRect();
+      return { x: regel.right - 24, y: regel.top + regel.height / 2 };
+    });
+    await page.mouse.click(doel.x, doel.y);
+
+    await expect(page.locator('.terminal-body')).toHaveClass(/is-live/);
+    await expect(page.locator('#typing-target')).toBeFocused();
+
+    // En de bezoeker kan er meteen in typen.
+    await page.keyboard.type('whoami');
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#hero-demo')).toContainText('hacker');
+  });
+
+  test('bij overname krijgt het veld de hele regel terug', async ({ page }) => {
+    await page.goto('/index.html');
+    await neemOver(page);
+
+    const m = await page.evaluate(() => {
+      const input = document.getElementById('typing-target');
+      return {
+        flexGrow: getComputedStyle(input).flexGrow,
+        inlineBreedte: input.style.width,
+        breedte: input.getBoundingClientRect().width
+      };
+    });
+
+    // De auto-demo zette een inline breedte per aanslag; inline verslaat de stylesheet,
+    // dus zonder de wisser in neemOver() blijft het veld één teken breed en ziet de
+    // bezoeker zijn eigen command niet.
+    expect(m.inlineBreedte, 'inline breedte van de auto-demo niet gewist').toBe('');
+    expect(m.flexGrow).toBe('1');
+    expect(m.breedte, 'veld is te smal om in te typen').toBeGreaterThan(100);
+  });
+});

@@ -44,11 +44,11 @@
 
   <!-- Preload Critical Resources (Sessie 144 fetchpriority hints) -->
   <link rel="preload" href="styles/main.css?v=212" as="style" fetchpriority="high">
-  <link rel="preload" href="styles/landing.css?v=141" as="style" fetchpriority="high">
+  <link rel="preload" href="styles/landing.css?v=142" as="style" fetchpriority="high">
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="styles/main.css?v=212">
-  <link rel="stylesheet" href="styles/landing.css?v=141">
+  <link rel="stylesheet" href="styles/landing.css?v=142">
   <link rel="stylesheet" href="styles/mobile.css?v=116" media="screen and (max-width: 768px)">
   <!-- Brevo Forms (newsletter signup) -->
   <link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
@@ -224,53 +224,70 @@
              bezoeker dan een niet-bewerkbaar veld (eerlijk) in plaats van een veld dat
              belooft te werken en niets doet. hero-repl.js haalt readonly weg zodra de
              bezoeker het veld aanraakt — dat houdt het mobiele toetsenbord ook dicht
-             tijdens de auto-demo. -->
-        <div class="hero-terminal" role="group" aria-label="Terminal demonstratie">
-          <div class="terminal-header">
-            <span class="dot red"></span>
-            <span class="dot yellow"></span>
-            <span class="dot green"></span>
-            <span class="terminal-title">❯ hacker@hacksim: ~</span>
-          </div>
-          <!-- aria-live blijft "off" zolang de auto-demo loopt; hero-repl.js zet hem op
-               "polite" bij overname. Anders leest een schermlezer de eindeloze lus voor. -->
-          <div class="terminal-body" id="hero-demo" role="log" aria-live="off">
-            <!-- Auto-typing content injected by JavaScript -->
-            <noscript>
-              <div class="terminal-line prompt">hacker@hacksim:~$ ls</div>
-              <div class="terminal-line output">documents/  notes.txt  README.txt</div>
-              <div class="terminal-line prompt">hacker@hacksim:~$ whoami</div>
-              <div class="terminal-line output">hacker</div>
-            </noscript>
-          </div>
-          <div class="terminal-input-line">
-            <label class="hero-input-label" for="typing-target">Typ een command in de demo</label>
-            <span aria-hidden="true">hacker@hacksim:~$</span>
-            <input id="typing-target" class="hero-input" type="text" readonly
-                   autocomplete="off" autocapitalize="off" autocorrect="off"
-                   spellcheck="false" inputmode="text" enterkeyhint="go"
-                   aria-describedby="hero-demo-uitleg">
-            <span class="cursor" aria-hidden="true">_</span>
-          </div>
+             tijdens de auto-demo.
 
-          <!-- Zes tikbare suggesties, binnen het venster zoals #mobile-quick-commands dat
-               op terminal.html doet. Ze zijn tegelijk de begeleiding (de eerstvolgende is
-               gemarkeerd), de eerlijke grens van de demo (je ziet dat het er zes zijn) en
-               de mobiele affordance (op 375px is tikken goedkoper dan typen).
-               NB: geen .btn-cta-klasse en geen link naar /terminal.html — dat zou het
-               sitebrede "één label per primaire CTA"-contract breken. -->
-          <div class="hero-demo-bar">
-            <div class="hero-chips" id="hero-chips">
-              <button type="button" class="hero-chip" data-command="ls">ls</button>
-              <button type="button" class="hero-chip" data-command="cat notes.txt">cat notes.txt</button>
-              <button type="button" class="hero-chip" data-command="nmap 192.168.1.1">nmap 192.168.1.1</button>
-              <button type="button" class="hero-chip" data-command="whoami">whoami</button>
-              <button type="button" class="hero-chip" data-command="pwd">pwd</button>
-              <button type="button" class="hero-chip" data-command="help">help</button>
+             De wrapper bestaat omdat .hero-content precies twee kolommen telt: een
+             derde kind zou een derde kolom worden. De hint hoort búíten het venster —
+             binnenin zou hij als vensterchroom lezen in plaats van als aanwijzing. -->
+        <div class="hero-terminal-col">
+          <!-- De affordance bestond al (zes tikbare chips); wat ontbrak was de zin die
+               zegt dat het venster leeft. De enige copy in de buurt was de disclaimer
+               onderaan ("Proefversie met zes commands") — het laatste wat je leest, en
+               geframed als beperking. Deze regel benoemt de aanname die de bezoeker
+               maakt (dit is een screenshot) en wordt drie regels lager begrensd.
+               Woorden in --color-text, niet in het CTA-groen: dat groen meet 3,10:1 op
+               de lichte achtergrond en zakt daarmee door AA. -->
+          <p class="hero-terminal-hint">
+            <span class="hint-arrow" aria-hidden="true">↓</span>
+            Deze terminal werkt echt — typ maar
+          </p>
+          <div class="hero-terminal" role="group" aria-label="Terminal demonstratie">
+            <div class="terminal-header">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+              <span class="terminal-title">❯ hacker@hacksim: ~</span>
             </div>
-            <p class="hero-demo-uitleg" id="hero-demo-uitleg">
-              Proefversie met zes commands. De volledige simulator heeft er 40+ en een leerpad.
-            </p>
+            <!-- aria-live blijft "off" zolang de auto-demo loopt; hero-repl.js zet hem op
+                 "polite" bij overname. Anders leest een schermlezer de eindeloze lus voor. -->
+            <div class="terminal-body" id="hero-demo" role="log" aria-live="off">
+              <!-- Auto-typing content injected by JavaScript -->
+              <noscript>
+                <div class="terminal-line prompt">hacker@hacksim:~$ ls</div>
+                <div class="terminal-line output">documents/  notes.txt  README.txt</div>
+                <div class="terminal-line prompt">hacker@hacksim:~$ whoami</div>
+                <div class="terminal-line output">hacker</div>
+              </noscript>
+            </div>
+            <div class="terminal-input-line">
+              <label class="hero-input-label" for="typing-target">Typ een command in de demo</label>
+              <span aria-hidden="true">hacker@hacksim:~$</span>
+              <input id="typing-target" class="hero-input" type="text" readonly
+                     autocomplete="off" autocapitalize="off" autocorrect="off"
+                     spellcheck="false" inputmode="text" enterkeyhint="go"
+                     aria-describedby="hero-demo-uitleg">
+              <span class="cursor" aria-hidden="true">_</span>
+            </div>
+
+            <!-- Zes tikbare suggesties, binnen het venster zoals #mobile-quick-commands dat
+                 op terminal.html doet. Ze zijn tegelijk de begeleiding (de eerstvolgende is
+                 gemarkeerd), de eerlijke grens van de demo (je ziet dat het er zes zijn) en
+                 de mobiele affordance (op 375px is tikken goedkoper dan typen).
+                 NB: geen .btn-cta-klasse en geen link naar /terminal.html — dat zou het
+                 sitebrede "één label per primaire CTA"-contract breken. -->
+            <div class="hero-demo-bar">
+              <div class="hero-chips" id="hero-chips">
+                <button type="button" class="hero-chip" data-command="ls">ls</button>
+                <button type="button" class="hero-chip" data-command="cat notes.txt">cat notes.txt</button>
+                <button type="button" class="hero-chip" data-command="nmap 192.168.1.1">nmap 192.168.1.1</button>
+                <button type="button" class="hero-chip" data-command="whoami">whoami</button>
+                <button type="button" class="hero-chip" data-command="pwd">pwd</button>
+                <button type="button" class="hero-chip" data-command="help">help</button>
+              </div>
+              <p class="hero-demo-uitleg" id="hero-demo-uitleg">
+                Proefversie met zes commands. De volledige simulator heeft er 40+ en een leerpad.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -950,11 +967,11 @@
   </div>
 
   <!-- Hero Terminal Animation -->
-  <script src="src/ui/landing-demo.js" defer></script>
+  <script src="src/ui/landing-demo.js?v=1" defer></script>
 
   <!-- Interactieve hero-REPL (extern bestand: script-src heeft geen 'unsafe-inline',
        netlify.toml:127). Draait ná landing-demo.js, want die publiceert window.landingDemo. -->
-  <script src="/src/ui/hero-repl.js?v=1" type="module"></script>
+  <script src="/src/ui/hero-repl.js?v=2" type="module"></script>
 
   <!-- FAQ Accordion -->
   <script src="src/ui/faq.js" defer></script>

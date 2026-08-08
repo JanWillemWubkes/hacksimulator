@@ -83,11 +83,20 @@
   /**
    * Schrijft getypte tekst naar het invoerelement. Sinds Sessie 214 is `#typing-target`
    * een <input>; `textContent` doet daar niets zichtbaars.
+   *
+   * De breedte gaat mee (Sessie 215). Een <input> heeft geen intrinsieke contentbreedte,
+   * dus met `flex: 1` at het veld de hele regel en stond de decoratieve `_` 162px van
+   * zijn eigen tekst af. `ch` is hier exact: --font-terminal resolvet naar JetBrains
+   * Mono. Eén teken extra = de plek waar de cursor hoort te staan.
    */
   function setTyped(el, text) {
     if (!el) return;
-    if ('value' in el) el.value = text;
-    else el.textContent = text;
+    if ('value' in el) {
+      el.value = text;
+      el.style.width = (text.length + 1) + 'ch';
+    } else {
+      el.textContent = text;
+    }
   }
 
   // ==================== Initialization ====================

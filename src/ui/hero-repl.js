@@ -22,6 +22,7 @@ const outputEl = document.getElementById('hero-demo');
 const inputEl = document.getElementById('typing-target');
 const bodyEl = document.querySelector('.hero-terminal .terminal-body');
 const chipsEl = document.getElementById('hero-chips');
+const kolomEl = document.querySelector('.hero-terminal-col');
 
 // Op elke andere pagina bestaan deze elementen niet — stil stoppen.
 if (outputEl && inputEl && bodyEl) {
@@ -294,6 +295,14 @@ function initHeroRepl() {
     inputEl.value = '';
     inputEl.placeholder = 'typ een command…';
 
+    // De uitnodiging boven het venster is opgebruikt zodra hij is aangenomen.
+    if (kolomEl) kolomEl.classList.add('is-taken');
+
+    // De auto-demo zette een inline breedte per aanslag (zie landing-demo.js setTyped).
+    // Inline verslaat de stylesheet, dus zonder dit blijft het veld één teken breed en
+    // kan de bezoeker zijn eigen command niet zien.
+    inputEl.style.width = '';
+
     // Expliciet focussen: Firefox focust het veld niet vanzelf, omdat het op het moment
     // van de mousedown nog `readonly` was (gemeten: document.activeElement bleef BODY).
     // Zonder deze regel klikt een Firefox-bezoeker de terminal aan, ziet hem live gaan,
@@ -360,6 +369,20 @@ function initHeroRepl() {
   ['pointerdown', 'focus', 'keydown'].forEach((type) => {
     inputEl.addEventListener(type, neemOver);
   });
+
+  // De hele promptregel is het tikdoel, niet alleen het veld. In rust is dat veld sinds
+  // Sessie 215 nog maar één teken breed (zodat de cursor bij de tekst staat), en een
+  // tikdoel van 10px is er geen — WebKit miste hem zelfs in de testrun. Zo werkt het ook
+  // in een echte terminal: klikken in het venster zet je op de prompt.
+  const promptRegel = document.querySelector('.hero-terminal .terminal-input-line');
+  if (promptRegel) {
+    promptRegel.addEventListener('pointerdown', (e) => {
+      if (e.target === inputEl) return;   // het veld regelt zichzelf al
+      e.preventDefault();                 // anders verliest het veld de focus weer
+      neemOver();
+      inputEl.focus();
+    });
+  }
 
   inputEl.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter') return;
