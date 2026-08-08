@@ -525,6 +525,22 @@
   color: var(--color-cta-primary);
 }
 
+/* Markerkleuren voor de interactieve demo (Sessie 214), het hero-equivalent van de
+   ladder in ui/renderer.js:95-121. Vaste kleuren i.p.v. de theme-variabelen: de
+   terminal is in beide thema's zwart, dus een theme-afhankelijke waarde zou hier de
+   verkeerde kant op schuiven (Dark Frame, Sessie 44). */
+.terminal-line .dim {
+  color: var(--terminal-demo-text-dim);
+}
+
+.terminal-line .warn {
+  color: #d29922;
+}
+
+.terminal-line .err {
+  color: #f85149;
+}
+
 /* Typing Cursor */
 .cursor {
   color: var(--terminal-demo-text);
@@ -554,6 +570,24 @@
   pointer-events: none;
 }
 
+/* Interactieve modus (Sessie 214): pas actief nadat de bezoeker de demo overneemt.
+   `display: block` en niet flex-end + scroll — dat combineert slecht: in Chrome en
+   Firefox raakt de bovenkant van de inhoud dan onbereikbaar geclipt. De scrollpositie
+   wordt in JS gepind (body.scrollTop = body.scrollHeight). */
+.terminal-body.is-live {
+  display: block;
+  overflow-y: auto;
+  overscroll-behavior: contain;   /* scroll ketent niet door naar de pagina */
+  scrollbar-width: thin;
+}
+
+/* De fade-mask is `position: absolute` binnen .terminal-body en zou dus meescrollen
+   met de inhoud in plaats van bovenaan te blijven plakken. In live-modus uit. */
+.terminal-body.is-live::before {
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
 /* Terminal Input Area */
 .terminal-input-line {
   display: flex;
@@ -565,6 +599,115 @@
   font-family: var(--font-terminal);
   font-size: 0.9rem;
   border-top: 1px solid var(--color-border);
+}
+
+/* Visueel verborgen, wél voor schermlezers — huisrecept uit blog.css:864-871.
+   Géén display:none: dan verdwijnt het label ook uit de toegankelijkheidsboom. */
+.hero-input-label {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.hero-input {
+  flex: 1;
+  min-width: 0;                   /* zonder dit duwt een lang command de prompt weg */
+  background: none;
+  border: 0;
+  padding: 0;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: var(--terminal-demo-text);
+  caret-color: var(--terminal-demo-prompt);
+}
+
+.hero-input::placeholder {
+  color: var(--terminal-demo-text-dim);
+  opacity: 1;                     /* Firefox verlaagt dit standaard naar .54 */
+}
+
+/* Focusring op het venster, niet op het kale veld: het veld heeft geen eigen rand,
+   dus een outline eromheen zweeft los in het zwart. */
+.hero-terminal:focus-within {
+  outline: 2px solid var(--color-info);
+  outline-offset: 2px;
+}
+
+/* De cursor is decoratief zodra er een echte caret staat te knipperen. */
+.terminal-body.is-live ~ .terminal-input-line .cursor {
+  display: none;
+}
+
+/* ==================== Hero Demo — suggestiechips ==================== */
+/* Zit binnen .hero-terminal: .hero-content is een flex-rij met exact twee kolommen
+   (.hero-text + .hero-terminal), dus een derde kind zou er een derde kolom van maken. */
+.hero-demo-bar {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: #000;               /* vast donker, net als .terminal-input-line */
+  border-top: 1px solid var(--color-border);
+}
+
+.hero-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+/* Recept overgenomen van .quick-cmd-btn (styles/mobile.css) — dat is de bewezen
+   tikdoelmaat in dit project. 44px is een testconditie (WCAG AAA + de
+   tikdoel-assertie in homepage-conversion.spec.js), geen cosmetiek. */
+.hero-chip {
+  min-height: 44px;
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: transparent;
+  /* Theme-agnostisch: de terminal is in beide thema's zwart, dus een
+     theme-afhankelijke kleur zou in light mode onzichtbaar worden (Sessie 44). */
+  color: var(--terminal-demo-prompt);
+  border: 1px solid var(--terminal-demo-border);
+  border-radius: var(--border-radius-button);
+  font-family: var(--font-terminal);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hero-chip:hover,
+.hero-chip:focus-visible {
+  background: rgba(159, 239, 0, 0.1);
+  border-color: var(--terminal-demo-prompt);
+}
+
+/* De begeleiding: de eerstvolgende suggestie is gemarkeerd en schuift op na gebruik. */
+.hero-chip.is-next {
+  border-color: var(--terminal-demo-prompt);
+  box-shadow: 0 0 0 1px var(--terminal-demo-prompt) inset;
+}
+
+.hero-chip.is-done {
+  color: var(--terminal-demo-text-dim);
+  border-color: var(--color-border);
+}
+
+/* Theme-agnostisch dim: staat op een vaste zwarte balk, dus --color-text-dim zou in
+   light mode de verkeerde kant op gaan (Dark Frame-patroon, Sessie 44). */
+.hero-demo-uitleg {
+  margin: var(--spacing-sm) 0 0;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: var(--terminal-demo-text-dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-chip,
+  .terminal-body.is-live::before {
+    transition: none;
+  }
 }
 
 /* ==================== Landing Sections Base ==================== */
@@ -1744,6 +1887,18 @@ html {
     border-radius: var(--border-radius-button);
     max-width: 100%;
     margin-top: 0;
+  }
+
+  /* Smallere balk: op 375px is de horizontale ruimte de schaarste, niet de verticale.
+     De chips zijn hier de primaire affordance — typen kost een toetsenbord dat het
+     halve scherm inneemt. */
+  .hero-demo-bar {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .hero-chip {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.75rem;
   }
 
   .hero h1 {

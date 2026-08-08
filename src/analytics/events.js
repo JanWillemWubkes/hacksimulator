@@ -218,6 +218,31 @@ const analyticsEvents = {
   },
 
   /**
+   * Track dat de bezoeker de hero-demo op de homepage heeft overgenomen (Sessie 214).
+   * Eén keer per sessie, bij de eerste aanraking van het invoerveld of een suggestiechip.
+   *
+   * Dit is de enige manier om te weten of de interactieve hero rendeert: segmenteer
+   * `terminal_cta_click{location:hero}` op sessies mét dit event. Zonder die twee
+   * naast elkaar is "de hero-demo verhoogt de doorklik" een gevoel, geen meting.
+   */
+  heroDemoStarted() {
+    analyticsTracker.trackEvent('hero_demo_started', {
+      user_type: this.getUserType()
+    });
+  },
+
+  /**
+   * Track welke commands in de hero-demo worden geprobeerd — dat vertelt welke van de
+   * zes de bezoeker daadwerkelijk trekt, en dus welke suggestie vooraan hoort.
+   * @param {string} command - ALLEEN de commandonaam, NOOIT argumenten (PRD §13)
+   */
+  heroDemoCommand(command) {
+    analyticsTracker.trackEvent('hero_demo_command', {
+      command: command
+    });
+  },
+
+  /**
    * Determine user type (first-time vs returning)
    * @returns {string} 'new' or 'returning'
    */

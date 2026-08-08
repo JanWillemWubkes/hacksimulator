@@ -22,40 +22,43 @@
     maxVisibleLines: 8,    // Maximum lines visible at once (prevents overflow)
   };
 
-  // ==================== Demo Sequence (from plan) ====================
+  // ==================== Demo Sequence ====================
+  // Sessie 214: deze uitvoer was met de hand geschreven en week af van de engine —
+  // `whoami` gaf "user" (echt: "hacker", core/terminal.js:45) en `ls` toonde
+  // passwords.txt en notes.md, die geen van beide in de VFS bestaan
+  // (filesystem/structure.js:7-206). Op een site die "aantoonbaar" als kwaliteitsclaim
+  // voert is een demo met verzonnen bestanden een geloofwaardigheidslek. Nu afgeleid
+  // uit de bron; `nmap 192.168.1.1` treft het router-profiel (network/nmap.js:32-39).
   const DEMO_COMMANDS = [
-    {
-      command: 'help',
-      output: [
-        '<span class="tip">[TIP] Start met deze basis commands:</span>',
-        '  ls    - Toon bestanden',
-        '  nmap  - Scan netwerk',
-        '  whoami - Check huidige user'
-      ]
-    },
     {
       command: 'ls',
       output: [
-        'documents/',
-        'passwords.txt',
-        'notes.md',
-        '<span class="tip">[TIP] Gebruik cat om bestanden te lezen</span>'
-      ]
-    },
-    {
-      command: 'nmap 192.168.1.1',
-      output: [
-        'PORT    STATE   SERVICE',
-        '22/tcp  <span class="highlight">OPEN</span>    SSH',
-        '80/tcp  <span class="highlight">OPEN</span>    HTTP',
-        '<span class="tip">[TIP] Open poorten = potentiele toegang</span>'
+        'documents/  notes.txt  README.txt',
+        '<span class="tip">[TIP] Lees er een met: cat notes.txt</span>'
       ]
     },
     {
       command: 'whoami',
       output: [
-        'user',
-        '<span class="tip">[TIP] Ken je systeem, ken je rechten</span>'
+        'hacker',
+        '<span class="tip">[TIP] Geen root — dat scheelt ongelukken</span>'
+      ]
+    },
+    {
+      command: 'nmap 192.168.1.1',
+      output: [
+        'PORT     STATE  SERVICE',
+        '53/tcp   <span class="highlight">OPEN</span>   DNS    ← naamserver',
+        '80/tcp   <span class="highlight">OPEN</span>   HTTP   ← onversleuteld',
+        '443/tcp  <span class="highlight">OPEN</span>   HTTPS  ← versleuteld',
+        '<span class="tip">[TIP] Open poorten zijn ingangen</span>'
+      ]
+    },
+    {
+      command: 'pwd',
+      output: [
+        '/home/hacker',
+        '<span class="tip">[TIP] ~ is korter voor /home/hacker</span>'
       ]
     }
   ];
@@ -65,6 +68,27 @@
   let typingTargetEl = null;
   let cursorEl = null;
   let isRunning = false;
+
+  // Generatieteller. `isRunning = false` breekt de lopende await-keten NIET af: elke
+  // opgeschorte `delay()` komt gewoon terug en loopt verder langs zijn poorten. Zette
+  // iets `isRunning` intussen weer op true (de visibilitychange-handler deed dat), dan
+  // liepen er twee lussen in dezelfde DOM. Een lus die niet meer de huidige generatie
+  // is, stopt onherroepelijk.
+  let generatie = 0;
+
+  // Zodra de bezoeker zelf typt is de auto-demo definitief klaar. Zonder deze vlag
+  // herstartte hij bij elke tabwissel over de sessie van de bezoeker heen.
+  let overgedragen = false;
+
+  /**
+   * Schrijft getypte tekst naar het invoerelement. Sinds Sessie 214 is `#typing-target`
+   * een <input>; `textContent` doet daar niets zichtbaars.
+   */
+  function setTyped(el, text) {
+    if (!el) return;
+    if ('value' in el) el.value = text;
+    else el.textContent = text;
+  }
 
   // ==================== Initialization ====================
   function init() {
@@ -99,9 +123,7 @@
 
     outputEl.innerHTML = html;
 
-    if (typingTargetEl) {
-      typingTargetEl.textContent = '';
-    }
+    setTyped(typingTargetEl, '');
     if (cursorEl) {
       cursorEl.style.display = 'none';
     }
@@ -109,23 +131,24 @@
 
   // ==================== Animation Loop ====================
   async function startAnimation() {
-    if (isRunning) return;
+    if (isRunning || overgedragen) return;
     isRunning = true;
+    const gen = ++generatie;
 
-    while (isRunning) {
+    while (isRunning && gen === generatie) {
       // Clear output area
       outputEl.innerHTML = '';
 
       // Run through each command
       for (const item of DEMO_COMMANDS) {
-        if (!isRunning) break;
+        if (!isRunning || gen !== generatie) break;
 
         // Type the command
-        await typeCommand(item.command);
+        await typeCommand(item.command, gen);
         await delay(CONFIG.outputDelay);
 
         // Show the output
-        await showOutput(item.command, item.output);
+        await showOutput(item.command, item.output, gen);
         await delay(CONFIG.commandPause);
       }
 
@@ -135,16 +158,16 @@
   }
 
   // ==================== Type Command ====================
-  async function typeCommand(command) {
+  async function typeCommand(command, gen) {
     if (!typingTargetEl) return;
 
     // Clear previous typing
-    typingTargetEl.textContent = '';
+    setTyped(typingTargetEl, '');
 
     // Type each character
     for (let i = 0; i < command.length; i++) {
-      if (!isRunning) return;
-      typingTargetEl.textContent += command[i];
+      if (!isRunning || gen !== generatie) return;
+      setTyped(typingTargetEl, command.slice(0, i + 1));
       await delay(CONFIG.typeSpeed + Math.random() * CONFIG.typeVariance);
     }
 
@@ -152,12 +175,12 @@
     await delay(200);
 
     // Clear the input (command "executed")
-    typingTargetEl.textContent = '';
+    if (gen === generatie) setTyped(typingTargetEl, '');
   }
 
   // ==================== Show Output ====================
-  async function showOutput(command, lines) {
-    if (!outputEl) return;
+  async function showOutput(command, lines, gen) {
+    if (!outputEl || gen !== generatie) return;
 
     // Add the prompt line (shows what was typed)
     const promptLine = document.createElement('div');
@@ -170,7 +193,7 @@
 
     // Add each output line with slight delay
     for (const line of lines) {
-      if (!isRunning) return;
+      if (!isRunning || gen !== generatie) return;
 
       const outputLine = document.createElement('div');
       outputLine.className = 'terminal-line output';
@@ -210,6 +233,17 @@
   // ==================== Cleanup ====================
   function stop() {
     isRunning = false;
+    generatie++;   // maakt elke nog lopende lus onherroepelijk ongeldig
+  }
+
+  /**
+   * De bezoeker neemt de terminal over. Onomkeerbaar: de auto-demo is een lokmiddel,
+   * geen achtergrondproces dat over iemands sessie heen mag schrijven.
+   */
+  function handOff() {
+    overgedragen = true;
+    stop();
+    setTyped(typingTargetEl, '');
   }
 
   // ==================== Page Visibility Handling ====================
@@ -217,7 +251,7 @@
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       stop();
-    } else if (!isRunning && outputEl) {
+    } else if (!isRunning && !overgedragen && outputEl) {
       startAnimation();
     }
   });
@@ -229,8 +263,13 @@
     init();
   }
 
-  // Expose for potential external control
-  window.landingDemo = { stop };
+  // Expose for potential external control. `handOff` wordt door hero-repl.js gebruikt
+  // zodra de bezoeker zelf typt of een suggestiechip tikt.
+  window.landingDemo = {
+    stop,
+    handOff,
+    isHandedOff: () => overgedragen
+  };
 
   // ==================== Scroll Animations ====================
   // Intersection Observer for all animated elements (cards, results, etc.)

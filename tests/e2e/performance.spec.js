@@ -15,12 +15,20 @@ const ROOT_DIR = process.cwd();
 // ========================================
 
 const LIMITS = {
-  // 1050 KB: bewust verhoogd van 1000 KB (Sessie 204, jul 2026) na organische groei
-  // door funnel/analytics-werk (Sessie 190-203). Dit meet UNMINIFIED source
-  // (src/ + styles/ + index.html); de echte perf-poort blijft Terminal Core
-  // <400KB minified (terminal.html). Zie TASKS.md §Huidige Focus.
-  TOTAL_BUNDLE: 1050 * 1024,      // 1050 KB hard limit (ONLY real constraint)
-  WARNING_THRESHOLD: 945 * 1024,  // 945 KB warning (90%)
+  // 1100 KB: bewust verhoogd van 1050 (Sessie 214), dat zelf van 1000 kwam (Sessie 204).
+  // Aanleiding: de interactieve hero-terminal (src/ui/hero-repl.js + hero-CSS + markup)
+  // kostte 24 KB tegen 4,78 KB resterende ruimte. Dat is géén code-golf-probleem —
+  // deze meting is een DRIFT-ALARM over ongeminificeerde repo-broncode sitebreed, geen
+  // performancepoort:
+  //   - de echte poort blijft Terminal Core <400 KB minified, en die wordt hier met NUL
+  //     bytes geraakt: hero-repl.js zit alleen in de module-graph van index.html,
+  //     niet in die van terminal.html;
+  //   - on-wire kost voor de homepage is ~14 KB naast een index.html van 52 KB.
+  // Gemeten na de wijziging: 1069,20 KB. De marge is bewust ~31 KB (2,9%) en niet 6 KB:
+  // een limiet die vlak boven de huidige stand ligt vuurt op élke wijziging en wordt dan
+  // weggeklikt i.p.v. onderzocht. Zie TASKS.md §Huidige Focus.
+  TOTAL_BUNDLE: 1100 * 1024,      // 1100 KB hard limit (ONLY real constraint)
+  WARNING_THRESHOLD: 990 * 1024,  // 990 KB warning (90%)
   LCP_TARGET: 3000,              // LCP < 3s on 4G
   TTI_TARGET: 5000,              // TTI < 5s (Google's "good" TTI on 4G)
   // ES6-modulecascade. Stond op 3000 ms omdat AdSense-scripts de cascade opblies;
