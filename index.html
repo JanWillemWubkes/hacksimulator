@@ -43,15 +43,27 @@
   <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Preload Critical Resources (Sessie 144 fetchpriority hints) -->
-  <link rel="preload" href="styles/main.css?v=209" as="style" fetchpriority="high">
-  <link rel="preload" href="styles/landing.css?v=129" as="style" fetchpriority="high">
+  <link rel="preload" href="styles/main.css?v=212" as="style" fetchpriority="high">
+  <link rel="preload" href="styles/landing.css?v=139" as="style" fetchpriority="high">
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="styles/main.css?v=209">
-  <link rel="stylesheet" href="styles/landing.css?v=129">
+  <link rel="stylesheet" href="styles/main.css?v=212">
+  <link rel="stylesheet" href="styles/landing.css?v=139">
   <link rel="stylesheet" href="styles/mobile.css?v=116" media="screen and (max-width: 768px)">
   <!-- Brevo Forms (newsletter signup) -->
   <link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
+
+  <!-- No-JS vangnet: .animate-on-scroll staat op opacity:0 en wordt alleen door
+       landing-demo.js zichtbaar gemaakt. Zonder dit blok zijn 16 contentblokken leeg
+       als de scriptlading faalt — alle pijnpunten, feature-kaarten, cijfers,
+       leerpad-kaarten en stappen. prefers-reduced-motion was al afgevangen
+       (landing.css), no-JS niet. Inline <style> mag: CSP style-src heeft
+       'unsafe-inline' (netlify.toml). -->
+  <noscript>
+    <style>
+      .animate-on-scroll { opacity: 1; transform: none; filter: none; }
+    </style>
+  </noscript>
 
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
   <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
@@ -149,7 +161,7 @@
         "name": "Hoe begin ik?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Simpel: klik op \"Start de Terminal\" en type next — de simulator begeleidt je stap voor stap, van basis commands tot security tools. Je hoeft niks te installeren, geen account aan te maken, en je kunt direct starten — zelfs op je telefoon."
+          "text": "Simpel: klik op \"Start de simulator\" en typ next — de simulator begeleidt je stap voor stap, van basis commands tot security tools. Je hoeft niks te installeren, geen account aan te maken, en je kunt direct starten — zelfs op je telefoon."
         }
       }
     ]
@@ -165,7 +177,7 @@
     <noscript>
       <nav class="noscript-nav" role="navigation">
         <a href="/">HackSimulator.nl</a>
-        <a href="/terminal.html">Start Simulator</a>
+        <a href="/terminal.html">Start de simulator</a>
         <a href="/blog/">Blog</a>
         <a href="/commands/">Commands</a>
         <a href="/woordenlijst.html">Woordenlijst</a>
@@ -188,14 +200,16 @@
 
           <h1>Leer ethisch hacken in een <span class="text-underline">veilige Nederlandse</span> terminal</h1>
 
+          <!-- Zei drie dingen die de <h1> er direct boven al zegt ("ethisch hacken",
+               "veilig", "Nederlands"). Nu alleen wat de kop níét vertelt. -->
           <p class="hero-subtitle">
-            Oefen ethisch hacken met 40+ commands uit de praktijk en Nederlandse
-            uitleg — in een veilige simulatie waar je alles kunt uitproberen zonder echte gevolgen.
+            40+ commands uit de praktijk, met uitleg in gewoon Nederlands. Je kunt alles
+            uitproberen zonder echte gevolgen.
           </p>
 
           <div class="hero-cta-group">
             <a href="/terminal.html" class="btn-cta btn-cta-hero" data-terminal-cta="hero">
-              Start Nu
+              Start de simulator
               <!-- Chevron Right Icon -->
               <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polyline points="9 18 15 12 9 6"></polyline>
@@ -256,11 +270,12 @@
           <span class="badge-text">100% gratis</span>
         </div>
         <div class="trust-badge">
-          <!-- Zap Icon -->
+          <!-- EyeOff Icon -->
           <svg class="badge-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+            <line x1="1" y1="1" x2="23" y2="23"></line>
           </svg>
-          <span class="badge-text">Direct starten</span>
+          <span class="badge-text">Geen advertenties</span>
         </div>
         <div class="trust-badge">
           <!-- Shield Icon -->
@@ -324,10 +339,16 @@
     <!-- ===== SOLUTION SECTION (Green Banner) ===== -->
     <section class="solution-section">
       <div class="solution-content">
+        <!-- Stap 4 van de trechter (docs/landing-page-plan.md): de wending na de drie
+             pijnpunten. De oude tekst herhaalde de hero-subtitel bijna woordelijk plus
+             drie bezwaren die elders al 7× langskomen; deze versie beantwoordt de drie
+             pijnpunten uit de vorige sectie en voegt één ding toe dat nergens anders
+             staat: je hoeft niet voorzichtig te zijn. -->
         <h2>De oplossing: HackSimulator.nl</h2>
         <p class="solution-description">
-          Een browser-based terminal simulator speciaal ontworpen voor Nederlandse beginners.
-          Geen installatie, geen risico's, geen verplichte registratie. Open je browser en begin direct met leren.
+          Alle drie die drempels verdwijnen zodra de terminal gewoon in je browser draait
+          en Nederlands terugpraat. Je kunt er niets stukmaken, want er zit geen echt
+          systeem achter &mdash; dus je hoeft niet voorzichtig te doen.
         </p>
       </div>
     </section>
@@ -454,28 +475,99 @@
       </div>
     </section>
 
-    <!-- ===== RESULTS SECTION ===== -->
+    <!-- ===== RESULTS SECTION =====
+         Stap 6 van de trechter in docs/landing-page-plan.md. Die stap droeg oorspronkelijk
+         "1.200+ actieve gebruikers" — een placeholder die er terecht nooit is gekomen. Wat
+         overbleef (40+ / 100% / 0 / 3) herhaalde alleen de trust-bar 2000px hoger, terwijl
+         de kop tractie belooft. Nu gevuld met wat wél waar én natelbaar is, en elk cijfer
+         linkt naar de plek waar je het kunt controleren.
+         Alle getallen zijn open floors (zie validate-docs.sh assert_floor): ze blijven waar
+         bij groei, dus een nieuw command of artikel vraagt hier geen aanpassing. -->
     <section id="results" class="landing-section results-section">
       <h2>HackSimulator in cijfers</h2>
+      <p class="section-subtitle">Geen beloftes — dit kun je allemaal zelf nakijken.</p>
 
       <div class="results-grid">
-        <div class="result-item animate-on-scroll">
+        <a href="/commands/" class="result-item animate-on-scroll">
           <span class="result-number">40+</span>
-          <span class="result-label">Commands uit de praktijk</span>
-        </div>
-        <div class="result-item animate-on-scroll">
-          <span class="result-number">100%</span>
-          <span class="result-label">Gratis, geen verborgen kosten</span>
-        </div>
-        <div class="result-item animate-on-scroll">
-          <span class="result-number">0</span>
-          <span class="result-label">Minuten installatie</span>
-        </div>
-        <div class="result-item animate-on-scroll">
+          <span class="result-label">Commands, elk met een man-pagina</span>
+        </a>
+        <a href="/terminal.html" class="result-item animate-on-scroll">
           <span class="result-number">3</span>
-          <span class="result-label">Niveaus</span>
+          <span class="result-label">Missies, van beginner tot expert</span>
+        </a>
+        <a href="/over-ons.html#verantwoording" class="result-item animate-on-scroll">
+          <span class="result-number">10+</span>
+          <span class="result-label">Artikelen met bron en controledatum</span>
+        </a>
+        <a href="/woordenlijst.html" class="result-item animate-on-scroll">
+          <span class="result-number">50+</span>
+          <span class="result-label">Begrippen in de woordenlijst</span>
+        </a>
+      </div>
+
+      <p class="results-verify">
+        De volledige broncode staat op
+        <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>,
+        dus je hoeft niets van dit alles op mijn woord aan te nemen.
+      </p>
+    </section>
+
+    <!-- ===== HOE HET WERKT SECTION ===== -->
+    <section class="landing-section how-it-works-section">
+      <h2>Hoe het werkt</h2>
+      <p class="section-subtitle">In 3 stappen van beginner naar hacker.</p>
+
+      <div class="how-it-works-steps">
+        <div class="how-step animate-on-scroll">
+          <div class="step-number">1</div>
+          <div class="step-icon">
+            <!-- Globe/Browser Icon -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+          </div>
+          <h3>Open je browser</h3>
+          <p>Klik op "Start de simulator" en je terminal draait &mdash; in het tabblad waar je nu al zit.</p>
+        </div>
+
+        <div class="how-step animate-on-scroll">
+          <div class="step-number">2</div>
+          <div class="step-icon">
+            <!-- Terminal Icon -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="4 17 10 11 4 5"></polyline>
+              <line x1="12" y1="19" x2="20" y2="19"></line>
+            </svg>
+          </div>
+          <h3>Typ commands</h3>
+          <p>Van <code>ls</code> tot <code>nmap</code>: alles werkt zoals in een echte terminal, inclusief je typfouten.</p>
+        </div>
+
+        <div class="how-step animate-on-scroll">
+          <div class="step-number">3</div>
+          <div class="step-icon">
+            <!-- Lightbulb Icon -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="9" y1="18" x2="15" y2="18"></line>
+              <line x1="10" y1="22" x2="14" y2="22"></line>
+              <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path>
+            </svg>
+          </div>
+          <h3>Leer door te doen</h3>
+          <p>Elke command geeft Nederlandse uitleg en educatieve tips. Je leert niet alleen het "wat", maar ook het "waarom".</p>
         </div>
       </div>
+
+      <div class="how-it-works-cta">
+        <a href="/terminal.html" class="btn-cta" data-terminal-cta="mid">
+          Start de simulator
+          <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+      </div>
+
     </section>
 
     <!-- ===== LEERPAD SECTION ===== -->
@@ -528,80 +620,23 @@
       </div>
     </section>
 
-    <!-- ===== HOE HET WERKT SECTION ===== -->
-    <section class="landing-section how-it-works-section">
-      <h2>Hoe het werkt</h2>
-      <p class="section-subtitle">In 3 stappen van beginner naar hacker — zonder iets te installeren.</p>
-
-      <div class="how-it-works-steps">
-        <div class="how-step animate-on-scroll">
-          <div class="step-number">1</div>
-          <div class="step-icon">
-            <!-- Globe/Browser Icon -->
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="2" y1="12" x2="22" y2="12"></line>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-            </svg>
-          </div>
-          <h3>Open je browser</h3>
-          <p>Geen downloads, geen installatie, geen account. Klik op "Start Simulator" en je terminal is klaar.</p>
-        </div>
-
-        <div class="how-step animate-on-scroll">
-          <div class="step-number">2</div>
-          <div class="step-icon">
-            <!-- Terminal Icon -->
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="4 17 10 11 4 5"></polyline>
-              <line x1="12" y1="19" x2="20" y2="19"></line>
-            </svg>
-          </div>
-          <h3>Typ commands</h3>
-          <p>Oefen met 40+ echte terminal commands in een veilige sandbox. Van <code>ls</code> tot <code>nmap</code> — alles werkt zoals het hoort.</p>
-        </div>
-
-        <div class="how-step animate-on-scroll">
-          <div class="step-number">3</div>
-          <div class="step-icon">
-            <!-- Lightbulb Icon -->
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <line x1="9" y1="18" x2="15" y2="18"></line>
-              <line x1="10" y1="22" x2="14" y2="22"></line>
-              <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path>
-            </svg>
-          </div>
-          <h3>Leer door te doen</h3>
-          <p>Elke command geeft Nederlandse uitleg en educatieve tips. Je leert niet alleen het "wat", maar ook het "waarom".</p>
-        </div>
-      </div>
-
-      <div class="how-it-works-cta">
-        <a href="/terminal.html" class="btn-cta" data-terminal-cta="mid">
-          Start de Simulator
-          <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </a>
-      </div>
-
-      <!-- Blog Links -->
+    <!-- ===== BLOG LINKS =====
+         Terug naar de drie previews die docs/landing-page-plan.md §8 specificeerde. De
+         lijst was in Sessie 173 naar 14 gegroeid om SEO-redenen en werd daarmee de
+         grootste bundel uitgaande links op de pagina, pal onder de mid-CTA. De andere
+         elf blijven bereikbaar via /blog/ (die linkt alle 15) en via 3-13 onderlinge
+         links per post — er raakt dus niets verweesd (gemeten). De drie hier vormen de
+         boog wat → hoe → waarheen, en hun labels zijn de échte <h1> van de post
+         (bewaakt door validate-docs.sh Check 11 + homepage-conversion.spec.js). -->
+    <section class="landing-section blog-links-section">
       <div class="blog-links">
-        <p class="blog-links-title">Lees meer op onze blog</p>
+        <p class="blog-links-title">Lees meer op de blog</p>
         <div class="blog-links-list">
-          <a href="/blog/welkom.html" class="blog-link">Welkom bij HackSimulator.nl</a>
-          <a href="/blog/wat-is-ethisch-hacken.html" class="blog-link">Wat is Ethisch Hacken?</a>
-          <a href="/blog/terminal-basics.html" class="blog-link">Terminal Basics voor Beginners</a>
-          <a href="/blog/cybersecurity-tools.html" class="blog-link">Cybersecurity Tools voor Beginners</a>
-          <a href="/blog/wachtwoord-beveiliging.html" class="blog-link">Wachtwoordbeveiliging</a>
-          <a href="/blog/sql-injection-uitgelegd.html" class="blog-link">SQL Injection Uitgelegd</a>
-          <a href="/blog/social-engineering.html" class="blog-link">Social Engineering</a>
-          <a href="/blog/linux-bestandssysteem.html" class="blog-link">Linux Bestandssysteem</a>
-          <a href="/blog/nmap-beginnersgids.html" class="blog-link">Netwerk Scanning met Nmap</a>
-          <a href="/blog/wireshark-beginnersgids.html" class="blog-link">Wireshark voor Beginners</a>
-          <a href="/blog/hashcat-wachtwoorden-kraken.html" class="blog-link">Wachtwoorden Kraken met Hashcat</a>
-          <a href="/blog/metasploit-beginnersgids.html" class="blog-link">Metasploit voor Beginners</a>
-          <a href="/blog/owasp-top-10-uitgelegd.html" class="blog-link">OWASP Top 10 Uitgelegd</a>
-          <a href="/blog/ethisch-hacker-worden.html" class="blog-link">Hoe Word je Ethisch Hacker?</a>
+          <a href="/blog/wat-is-ethisch-hacken.html" class="blog-link">Wat is ethisch hacken?</a>
+          <a href="/blog/leren-hacken.html" class="blog-link">Leren hacken: de complete beginnersgids</a>
+          <a href="/blog/ethisch-hacker-worden.html" class="blog-link">Hoe word je ethisch hacker?</a>
         </div>
+        <p class="blog-links-more"><a href="/blog/">Alle artikelen &rarr;</a></p>
       </div>
     </section>
 
@@ -610,12 +645,14 @@
       <h2>Veelgestelde vragen</h2>
       <div class="faq-grid">
         <div class="faq-item">
-          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-1">
-            <h3>Wat is ethisch hacken?</h3>
-            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
+          <h3 class="faq-heading">
+            <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-1">
+              <span class="faq-question-text">Wat is ethisch hacken?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </h3>
           <div class="faq-answer" id="faq-1">
             <p>
               Ethisch hacken (ook wel "white hat hacking" genoemd) is het geautoriseerd testen van computersystemen
@@ -627,12 +664,14 @@
         </div>
 
         <div class="faq-item">
-          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-2">
-            <h3>Is HackSimulator legaal?</h3>
-            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
+          <h3 class="faq-heading">
+            <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-2">
+              <span class="faq-question-text">Is HackSimulator legaal?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </h3>
           <div class="faq-answer" id="faq-2">
             <p>
               Ja, absoluut. HackSimulator.nl is een volledig gesimuleerde omgeving die lokaal in je browser draait.
@@ -644,12 +683,14 @@
         </div>
 
         <div class="faq-item">
-          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-3">
-            <h3>Heb ik programmeerervaring nodig?</h3>
-            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
+          <h3 class="faq-heading">
+            <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-3">
+              <span class="faq-question-text">Heb ik programmeerervaring nodig?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </h3>
           <div class="faq-answer" id="faq-3">
             <p>
               Nee, je hebt geen programmeerervaring nodig om te beginnen. HackSimulator.nl is speciaal ontworpen
@@ -661,12 +702,14 @@
         </div>
 
         <div class="faq-item">
-          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-4">
-            <h3>Wat leer ik met de terminal simulator?</h3>
-            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
+          <h3 class="faq-heading">
+            <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-4">
+              <span class="faq-question-text">Wat leer ik met de terminal simulator?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </h3>
           <div class="faq-answer" id="faq-4">
             <p>
               Je leert de basis van Linux terminal navigatie, bestandsbeheer, netwerk scanning met tools als
@@ -678,12 +721,14 @@
         </div>
 
         <div class="faq-item">
-          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-5">
-            <h3>Hoe verschilt dit van echte hacking tools?</h3>
-            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
+          <h3 class="faq-heading">
+            <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-5">
+              <span class="faq-question-text">Hoe verschilt dit van echte hacking tools?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </h3>
           <div class="faq-answer" id="faq-5">
             <p>
               De commands in HackSimulator geven gesimuleerde output die educatief is ontworpen. Echte tools zoals
@@ -695,12 +740,14 @@
         </div>
 
         <div class="faq-item">
-          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-6">
-            <h3>Kan ik een certificaat krijgen?</h3>
-            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
+          <h3 class="faq-heading">
+            <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-6">
+              <span class="faq-question-text">Kan ik een certificaat krijgen?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </h3>
           <div class="faq-answer" id="faq-6">
             <p>
               Op dit moment bieden we geen officieel certificaat aan. HackSimulator.nl is bedoeld als startpunt
@@ -712,12 +759,14 @@
         </div>
 
         <div class="faq-item">
-          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-7">
-            <h3>Is mijn data veilig?</h3>
-            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
+          <h3 class="faq-heading">
+            <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-7">
+              <span class="faq-question-text">Is mijn data veilig?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </h3>
           <div class="faq-answer" id="faq-7">
             <p>
               Ja. HackSimulator.nl verzamelt minimale gegevens: alleen anonieme analytics (als je toestemming geeft)
@@ -729,15 +778,17 @@
         </div>
 
         <div class="faq-item">
-          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-8">
-            <h3>Hoe begin ik?</h3>
-            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </button>
+          <h3 class="faq-heading">
+            <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-8">
+              <span class="faq-question-text">Hoe begin ik?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+          </h3>
           <div class="faq-answer" id="faq-8">
             <p>
-              Simpel: klik op "Start de Terminal" en type <code>next</code> — de simulator begeleidt je
+              Simpel: klik op "Start de simulator" en typ <code>next</code> — de simulator begeleidt je
               stap voor stap, van basis commands tot security tools. Je hoeft niks te installeren, geen
               account aan te maken, en je kunt direct starten — zelfs op je telefoon.
             </p>
@@ -752,7 +803,7 @@
         <h2>Klaar om te beginnen?</h2>
         <p>Geen account. Geen creditcard. Geen risico.</p>
         <a href="/terminal.html" class="btn-cta btn-cta-hero" data-terminal-cta="final">
-          Start de Terminal
+          Start de simulator
           <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
@@ -787,7 +838,7 @@
   <!-- Newsletter Signup (Brevo) -->
   <section class="homepage-newsletter" id="newsletter" data-newsletter-location="homepage">
     <div class="newsletter-content">
-      <h3>Gratis cybersecurity tips</h3>
+      <h2>Gratis cybersecurity tips</h2>
       <p>Ontvang maandelijks tips over ethisch hacken, nieuwe tutorials en cybersecurity nieuws. Geen spam, altijd opzegbaar.</p>
       <div class="sib-form">
         <div id="sib-form-container" class="sib-form-container">
@@ -836,6 +887,20 @@
       <p class="newsletter-or-support">Of <a href="https://ko-fi.com/hacksimulator" target="_blank" rel="noopener noreferrer">steun het project met een koffie</a></p>
     </div>
   </section>
+
+  <!-- ===== MOBIELE STICKY CTA =====
+       Op mobiel droeg de balk bovenaan alleen logo + hamburger, waardoor er 4179px
+       (5,1 schermen) tussen de hero-CTA en de eerstvolgende knop zat — de hele
+       overtuigingsboog was onklikbaar. In de navbar paste het niet: op 375px is er
+       112px vrij naast de merknaam en het label heeft er 150px nodig. Onderaan is er
+       wél ruimte voor het volledige label, en het is met de duim bereikbaar.
+       Zichtbaar t/m 768px; zie landing.css. -->
+  <div class="mobile-cta-bar">
+    <a href="/terminal.html" class="btn-cta" data-terminal-cta="sticky_mobile">
+      Start de simulator
+      <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </a>
+  </div>
 
   <!-- ===== FOOTER (Component Injection) ===== -->
   <div id="footer-placeholder">

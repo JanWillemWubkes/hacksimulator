@@ -43,8 +43,8 @@
   <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="styles/main.css?v=209">
-  <link rel="stylesheet" href="styles/landing.css?v=129">
+  <link rel="stylesheet" href="styles/main.css?v=212">
+  <link rel="stylesheet" href="styles/landing.css?v=139">
   <link rel="stylesheet" href="styles/pages.css?v=209">
   <link rel="stylesheet" href="styles/mobile.css?v=116" media="screen and (max-width: 768px)">
 
@@ -96,7 +96,7 @@
     <noscript>
       <nav class="noscript-nav" role="navigation">
         <a href="/">HackSimulator.nl</a>
-        <a href="/terminal.html">Start Simulator</a>
+        <a href="/terminal.html">Start de simulator</a>
         <a href="/blog/">Blog</a>
         <a href="/commands/">Commands</a>
         <a href="/woordenlijst.html">Woordenlijst</a>
@@ -217,48 +217,56 @@
       <h2>Veelgestelde vragen</h2>
       <div class="faq-mini">
         <div class="faq-item">
-          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-contact-1">
-            <h3>Ik heb een bug gevonden, waar kan ik dit melden?</h3>
-            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"/>
-            </svg>
-          </button>
+          <h3 class="faq-heading">
+            <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-contact-1">
+              <span class="faq-question-text">Ik heb een bug gevonden, waar kan ik dit melden?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+          </h3>
           <div class="faq-answer" id="faq-contact-1">
             <p>De beste manier is via <a href="https://github.com/JanWillemWubkes/hacksimulator/issues" target="_blank" rel="noopener noreferrer">GitHub Issues</a>.
             Beschrijf wat je deed, wat je verwachtte, en wat er daadwerkelijk gebeurde. Screenshots helpen enorm!</p>
           </div>
         </div>
         <div class="faq-item">
-          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-contact-2">
-            <h3>Kan ik bijdragen aan het project?</h3>
-            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"/>
-            </svg>
-          </button>
+          <h3 class="faq-heading">
+            <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-contact-2">
+              <span class="faq-question-text">Kan ik bijdragen aan het project?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+          </h3>
           <div class="faq-answer" id="faq-contact-2">
             <p>Absoluut! HackSimulator is open source. Check de <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub repository</a>
             voor de broncode. Pull requests zijn welkom!</p>
           </div>
         </div>
         <div class="faq-item">
-          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-contact-3">
-            <h3>Is de simulator echt veilig om te gebruiken?</h3>
-            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"/>
-            </svg>
-          </button>
+          <h3 class="faq-heading">
+            <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-contact-3">
+              <span class="faq-question-text">Is de simulator echt veilig om te gebruiken?</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+          </h3>
           <div class="faq-answer" id="faq-contact-3">
             <p>Ja! Alles draait lokaal in je browser. Er wordt geen data naar externe servers gestuurd en je kunt
             onmogelijk echte systemen aanvallen. Lees meer op onze <a href="over-ons.html">Over Ons</a> pagina.</p>
           </div>
         </div>
         <div class="faq-item">
-          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-contact-4">
-            <h3>Ik heb een idee voor een nieuwe feature!</h3>
-            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="6 9 12 15 18 9"/>
-            </svg>
-          </button>
+          <h3 class="faq-heading">
+            <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-contact-4">
+              <span class="faq-question-text">Ik heb een idee voor een nieuwe feature!</span>
+              <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+          </h3>
           <div class="faq-answer" id="faq-contact-4">
             <p>Geweldig! Stuur een email naar <a href="mailto:contact@hacksimulator.nl?subject=Feature%20idee">contact@hacksimulator.nl</a>
             of open een <a href="https://github.com/JanWillemWubkes/hacksimulator/issues" target="_blank" rel="noopener noreferrer">GitHub Issue</a> met het label "enhancement".</p>
@@ -273,7 +281,7 @@
         <h2>Direct aan de slag?</h2>
         <p>Start direct met leren.</p>
         <a href="/terminal.html" class="btn-cta btn-cta-hero">
-          Start Simulator
+          Start de simulator
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <polyline points="9 18 15 12 9 6"/>
           </svg>

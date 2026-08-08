@@ -164,6 +164,17 @@
   gap: var(--spacing-md);
 }
 
+/* Sessie 214: het CTA-label ging van "Start Simulator" naar "Start de simulator" (één
+   naam voor één actie, sitebreed). Dat maakt de knop ~20px breder, en op precies 1280px
+   — de breedte waarop de desktopnav volgens Sessie 213 hoort te verschijnen — kwam de
+   balk daardoor 5px tekort: brand 198 + nav-right 1023 = 1221 tegen 1216 beschikbaar,
+   met afbrekende labels als gevolg. 3px van elk van de vier link-gaps levert 12px op,
+   ruim genoeg, en is diffuser dan de ruimte rond de knop weghalen. De inklapgrens zelf
+   blijft op 1279px: die is bewust op de gangbare 1280px-laptop gekozen. */
+.landing-nav .nav-links {
+  gap: calc(var(--spacing-lg) - 3px);
+}
+
 /* Theme Toggle - Unified styling (Sessie 97 uniformity) */
 .landing-nav .theme-toggle {
   font-size: var(--navbar-toggle-size, 13px);
@@ -937,7 +948,12 @@
   padding: 0 var(--landing-padding-desktop);
 }
 
+/* De tegels zijn sinds Sessie 214 links naar de plek waar je het cijfer kunt
+   controleren; vandaar het resetten van de link-eigenschappen. */
 .result-item {
+  display: block;
+  text-decoration: none;
+  color: inherit;
   text-align: center;
   border: 1px solid var(--color-border);
   border-radius: 16px;
@@ -954,6 +970,42 @@
   opacity: 1;
   transform: translateY(0);
   filter: blur(0);
+}
+
+a.result-item:hover {
+  border-color: var(--color-cta-primary);
+  background: var(--color-prompt-bg-light);
+}
+
+a.result-item:focus-visible {
+  outline: 2px solid var(--color-info);
+  outline-offset: 2px;
+}
+
+/* Verifieerbaarheidsregel onder het raster: de eerlijke vervanger van de testimonials
+   die stap 8 van het oorspronkelijke plan nooit heeft gekregen. */
+.results-verify {
+  max-width: var(--landing-max-width);
+  margin: var(--spacing-lg) auto 0;
+  padding: 0 var(--landing-padding-desktop);
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--color-text-dim);
+}
+
+/* Zonder deze regel valt de link terug op het blauw van de browser-default, en dat is
+   op de hoofdsite een outlier: in-content links hier zijn lime (zie .faq-answer a).
+   Blauw is het blog-accent (zie styles/blog.css) — bewust niet hergebruikt. */
+.results-verify a {
+  color: var(--color-cta-primary);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--transition-fast);
+}
+
+.results-verify a:hover,
+.results-verify a:focus-visible {
+  border-bottom-color: var(--color-cta-primary);
 }
 
 .result-item:nth-child(1) { transition-delay: 0ms; }
@@ -1088,9 +1140,12 @@
   flex-grow: 1;
 }
 
-/* Leerpad CTA Button */
+/* Leerpad CTA Button.
+   Bewust géén padding hier: alle drie de knoppen dragen ook .btn-cta-secondary, en die
+   regel staat verderop in dit bestand. Bij gelijke specificiteit (0,1,0) wint de laatste,
+   dus een padding hier is dode code — dat was hij al. Het aanwijsdoel (44px) is daarom
+   op het component gezet, waar het alle vier de secundaire knoppen dekt. */
 .leerpad-btn {
-  padding: 10px 20px;
   font-size: 0.875rem;
   border-radius: 10px;
   width: fit-content;
@@ -1113,6 +1168,11 @@
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: color var(--transition-fast), border-color var(--transition-fast);
+  /* 20px tekst → 44px aanwijsdoel (WCAG 2.5.5). De negatieve marge heft de padding
+     visueel weer op, zodat alleen het doel groeit en de kaartlayout niet verschuift.
+     Deze link staat niet in een lopende zin, dus de inline-uitzondering geldt niet. */
+  padding: 12px 0;
+  margin: -12px 0;
 }
 
 .leerpad-learn-link:hover,
@@ -1140,13 +1200,40 @@
   gap: var(--spacing-sm) var(--spacing-md);  /* rij 8px / kolom 16px */
 }
 
+.blog-links-more {
+  margin-top: var(--spacing-md);
+  font-size: 0.9rem;
+}
+
+.blog-links-more a {
+  color: var(--color-text-dim);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+  /* 44px aanwijsdoel zonder de regel visueel te verschuiven (WCAG 2.5.5). */
+  display: inline-block;
+  padding: 12px 0;
+  margin: -12px 0;
+}
+
+.blog-links-more a:hover,
+.blog-links-more a:focus-visible {
+  color: var(--color-cta-primary);
+  border-bottom-color: var(--color-cta-primary);
+}
+
 .blog-link {
   font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: var(--font-weight-medium);
   color: var(--color-text);
   text-decoration: none;
-  padding: 0.4rem 0.85rem;
+  padding: 0.65rem 1rem;
+  /* Aanwijsdoel WCAG 2.5.5 (was 36px). Padding alléén is te krap: bij gelijke padding
+     en line-height rekent WebKit de regelbox anders af (gemeten 43,78px tegen 44,39px
+     in Chromium/Firefox). Een harde ondergrens haalt die engine-afhankelijkheid weg. */
+  min-height: 44px;
+  box-sizing: border-box;
   border: 1px solid var(--color-border);
   border-radius: 999px;                 /* pill */
   background: rgba(22, 27, 34, 0.3);    /* zelfde overlay als .how-step */
@@ -1545,7 +1632,11 @@ html {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
-  padding: 10px 20px;
+  padding: 11px 20px;
+  /* Aanwijsdoel WCAG 2.5.5 (was 42px). Kwam in WebKit op exact 44,0px uit — één
+     afrondingsverschil van te krap, dus ondergrens erbij (zie .blog-link). */
+  min-height: 44px;
+  box-sizing: border-box;
   font-family: var(--font-heading);
   font-size: 0.85rem;
   font-weight: var(--font-weight-semibold);
@@ -2120,5 +2211,62 @@ html {
   }
   .sample-hero-text h1 {
     font-size: clamp(1.75rem, 7vw, 2.25rem);
+  }
+}
+
+/* ==================== Mobiele sticky CTA (Sessie 214) ====================
+   Waarom: op mobiel lag er 4179px (5,1 schermen) tussen de hero-CTA en de
+   eerstvolgende knop — de sticky balk bovenaan draagt daar alleen logo + hamburger,
+   want .btn-cta-nav staat in de 1279px-inklapband op display:none.
+
+   Waarom onderaan en niet in de balk: gemeten op 375px is er 112px vrij naast de
+   merknaam (179px) en de hamburger (44px), terwijl "Start de simulator" er 150px
+   nodig heeft. Een afgekort label zou een tweede naam voor dezelfde actie opleveren;
+   onderaan past het volledige label wél, en het is duimbereikbaar.
+
+   De grens is exact die van de navbar-inklapband (Sessie 213), niet 768px: overal
+   waar .btn-cta-nav verdwijnt neemt deze balk het over. Eén invariant, geen gat in
+   de band 769–1279px. Wederzijds uitsluitende ranges, dus geen cascade-gevecht. */
+@media (max-width: 1279px) {
+  .mobile-cta-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /* Onder het overlay-menu (999) en de cookiebanner (2000): consent gaat voor. */
+    z-index: 40;
+    display: flex;
+    justify-content: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    padding-bottom: calc(var(--spacing-sm) + env(safe-area-inset-bottom, 0px));
+    background-color: rgba(13, 17, 23, 0.92);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid var(--color-border-dark-frame);
+  }
+
+  .mobile-cta-bar .btn-cta {
+    width: 100%;
+    max-width: 420px;   /* op tablet geen knop van 1200px breed */
+    justify-content: center;
+  }
+
+  /* Het overlay-menu dekt de balk al af, maar expliciet verbergen voorkomt dat hij
+     door de blur heen schemert. Klasse wordt al gezet door navbar.js — geen nieuwe JS. */
+  body.mobile-menu-open .mobile-cta-bar {
+    display: none;
+  }
+
+  /* De balk mag niets afdekken: reserveer zijn hoogte onder aan de pagina.
+     Gemeten 65px (knop 48 + padding 2×8 + rand 1); 76px geeft marge, zodat dit niet
+     opnieuw 1px tekortschiet zodra de knop of de padding verandert. */
+  body.landing-page {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* Vanaf 1280px staat de CTA weer in de navbar; de balk bestaat daar niet. */
+@media (min-width: 1280px) {
+  .mobile-cta-bar {
+    display: none;
   }
 }

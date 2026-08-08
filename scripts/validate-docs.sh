@@ -99,6 +99,13 @@ pass() {
   echo -e "  ${GREEN}[OK]${NC}   $1"
 }
 
+# Signaleert zonder te falen. Bestaat voor de verouderde-floor-melding (Sessie 214):
+# een floor die ver onder de werkelijkheid ligt is niet fout — je verkoopt jezelf
+# alleen tekort — dus dat mag de build niet breken, maar moet je wél zien.
+warn() {
+  echo -e "  ${YELLOW}[LET OP]${NC} $1"
+}
+
 check_start() {
   CHECK_COUNT=$((CHECK_COUNT + 1))
   echo ""
@@ -392,16 +399,45 @@ if [ "$DEEP_MODE" = "1" ]; then
       fail "Floor '$name': geen getal gevonden (HTML-structuur gewijzigd?)"
     elif [ -z "$truth" ] || [ "$truth" -eq 0 ] 2>/dev/null; then
       fail "Floor '$name': ground-truth telling leeg/0 (telbron gewijzigd?)"
-    elif [ "$floor" -le "$truth" ]; then
-      pass "Floor '$name': ${floor}+ <= werkelijk ${truth}"
-    else
+    elif [ "$floor" -gt "$truth" ]; then
       fail "Floor '$name': geclaimd ${floor}+ > werkelijk ${truth} (OVERCLAIM — verlaag de floor of voeg content toe)"
+    elif [ $((truth - floor)) -ge 10 ]; then
+      # De check was tot Sessie 214 eenzijdig: hij faalde alleen bij overclaim, dus een
+      # floor van 5 bleef eeuwig groen en verouderen was structureel onzichtbaar. Deze
+      # tak maakt onderclaimen zichtbaar zonder de build te breken — eerlijk zijn mag
+      # nooit rood worden. Drempel 10 = de afrondstap van de floors zelf.
+      warn "Floor '$name': ${floor}+ terwijl er ${truth} zijn — tijd om de floor op te hogen"
+    else
+      pass "Floor '$name': ${floor}+ <= werkelijk ${truth}"
     fi
   }
 
   assert_floor "gidsen Blog posts" "$blog_floor" "$blog_count"
   assert_floor "gidsen Commands"   "$cmd_floor"  "$cmd_count"
   assert_floor "woordenlijst Termen" "$term_floor" "$term_count"
+
+  # --- Sessie 214: dekking uitgebreid van 3 naar alle groeiende claims -------------
+  # De check dekte hiervoor alleen gidsen.html + woordenlijst.html, terwijl "40+
+  # commands" op 16 plekken in 7 bestanden stond en nergens werd bewaakt. Hieronder
+  # per claim-soort de HOOGSTE floor die érgens op de site staat: zakt de werkelijke
+  # telling daaronder, dan is minstens één pagina aan het overclaimen. Een nieuw
+  # bestand met dezelfde claim telt automatisch mee — geen lijst om bij te werken.
+  hoogste_floor() {
+    grep -rhoiE "$1" --include=*.html . \
+      --exclude-dir=node_modules --exclude-dir=.playwright-mcp --exclude-dir=test-results 2>/dev/null \
+      | grep -oE '[0-9]+' | sort -n | tail -1
+  }
+
+  cmd_floor_site=$(hoogste_floor '[0-9]+\+ ?(echte )?(terminal )?commands')
+  assert_floor "site-breed 'N+ commands'" "$cmd_floor_site" "$cmd_count"
+
+  # Homepage-cijfertegels (#results, Sessie 214). Ze linken elk naar de plek waar de
+  # bezoeker het na kan tellen, dus overclaimen is hier direct betrapbaar.
+  # -B1: nummer en label staan op opeenvolgende regels, net als bij gidsen.html.
+  home_art_floor=$(grep -B1 'result-label">Artikelen' index.html | grep -oE 'result-number">[0-9]+' | grep -oE '[0-9]+$')
+  home_term_floor=$(grep -B1 'result-label">Begrippen' index.html | grep -oE 'result-number">[0-9]+' | grep -oE '[0-9]+$')
+  assert_floor "homepage Artikelen"  "$home_art_floor"  "$blog_count"
+  assert_floor "homepage Begrippen"  "$home_term_floor" "$term_count"
 
   # DefinedTerm-lockstep (GEO): elke zichtbare <dt>-term moet een DefinedTerm-entry
   # in de JSON-LD hebben — exact gelijk, anders drift tussen schema en content.
@@ -768,6 +804,107 @@ fi
 
 # ============================================================
 # Summary
+# ============================================================
+# Check 11: homepage-bloglabels ↔ echte <h1> van de doelpost (Sessie 214)
+#   Hard constraint — fast + --deep. De labels in .blog-links-list waren letterlijk
+#   overgetikt uit docs/landing-page-plan.md (jan 2026) en zijn nooit meegegaan in de
+#   zinskapitaal-omzetting (Sessie 201) of de lockstep-ronde (Sessie 208): 10 van de 14
+#   stonden nog in Engelse Title Case en 4 noemden een andere titel dan de post zelf
+#   ("Terminal Basics voor Beginners" op een post die "Terminal commands voor
+#   beginners" heet). Een 9e drift-locatie dus, die niemand bewaakte.
+#   Een label mag korter zijn dan de <h1> — die draagt soms een SEO-staart als
+#   ": complete carrièregids" — maar moet er wel mee beginnen.
+# ============================================================
+check_start "Homepage-bloglabels ↔ <h1> van de doelpost"
+
+bloglabel_result=$(python3 - <<'PYEOF'
+import re, os, html
+
+src = open('index.html', encoding='utf-8').read()
+links = re.findall(r'<a href="(/blog/[a-z0-9-]+\.html)"[^>]*class="[^"]*\bblog-link\b[^"]*"[^>]*>(.*?)</a>',
+                   src, re.S)
+
+problems = []
+if not links:
+    problems.append('geen <a class="blog-link"> gevonden in index.html (markup gewijzigd?)')
+
+for href, label in links:
+    label = html.unescape(re.sub(r'<[^>]+>', '', label)).strip()
+    pad = href.lstrip('/')
+    if not os.path.exists(pad):
+        problems.append(f'{href}: doelbestand bestaat niet')
+        continue
+    post = open(pad, encoding='utf-8').read()
+    m = re.search(r'<h1[^>]*>(.*?)</h1>', post, re.S)
+    if not m:
+        problems.append(f'{href}: geen <h1> in de post')
+        continue
+    titel = html.unescape(re.sub(r'<[^>]+>', '', m.group(1)))
+    titel = re.sub(r'\s+', ' ', titel).strip()
+    # Hoofdlettergevoelig vergelijken. Met .lower() aan beide kanten slaagde de check
+    # nog op "Wat is Ethisch Hacken?" tegen een post die "Wat is ethisch hacken?" heet —
+    # en precies die Engelse Title Case was 10 van de 14 oorspronkelijke afwijkingen,
+    # de hele reden dat Sessie 201 sitebreed naar zinskapitaal ging. Betrapt door de
+    # mutant; de eerste versie van deze check was er blind voor.
+    if not titel.startswith(label):
+        problems.append(f'{href}: label "{label}" != titel "{titel}"')
+
+print('OK' if not problems else '\n'.join(problems))
+PYEOF
+)
+if [ "$bloglabel_result" = "OK" ]; then
+  pass "Elk .blog-link-label komt overeen met de <h1> van zijn doelpost"
+else
+  while IFS= read -r regel; do fail "11: $regel"; done <<< "$bloglabel_result"
+fi
+
+# ============================================================
+# Check 12: geclaimde PDF-paginatellingen ↔ de echte PDF (Sessie 214)
+#   Hard constraint — fast + --deep. "N pagina's" staat op 42 plekken op de site en
+#   werd nergens tegen het artefact gecontroleerd, terwijl juist die klasse in Sessie
+#   165 al een keer fout bleek (pagina-claims tegen de echte PDF-telling). Dit is
+#   géén floor: een paginatelling is geen groeiende inventaris maar een eigenschap
+#   van een bestand, dus hij hoort exact te zijn en uitleesbaar uit het artefact.
+#   Vereist pdfinfo (poppler-utils); zonder dat wordt de check overgeslagen.
+# ============================================================
+check_start "Geclaimde PDF-paginatellingen ↔ echte PDF"
+
+if ! command -v pdfinfo >/dev/null 2>&1; then
+  pass "12: overgeslagen — pdfinfo niet beschikbaar (poppler-utils)"
+else
+  pdf_problems=""
+  for landing in sample-pentest.html sample-juridisch.html; do
+    [ -f "$landing" ] || { pdf_problems+="${landing}: bestaat niet"$'\n'; continue; }
+    pdf=$(grep -oE 'assets/samples/[a-z0-9-]+\.pdf' "$landing" | sort -u | head -1)
+    if [ -z "$pdf" ]; then
+      pdf_problems+="${landing}: verwijst naar geen enkele assets/samples/*.pdf"$'\n'; continue
+    fi
+    [ -f "$pdf" ] || { pdf_problems+="${landing}: ${pdf} bestaat niet"$'\n'; continue; }
+    echt=$(pdfinfo "$pdf" 2>/dev/null | awk '/^Pages:/{print $2}')
+    # De dominante claim: de sample-omvang wordt meerdere keren genoemd, de betaalde
+    # gids ernaast één keer. De vaakst geclaimde telling hoort die van de sample te zijn.
+    dominant=$(grep -oE "[0-9]+ pagina" "$landing" | grep -oE '^[0-9]+' | sort | uniq -c | sort -rn | head -1 | awk '{print $2}')
+    if [ -z "$echt" ]; then
+      pdf_problems+="${pdf}: pdfinfo gaf geen paginatelling"$'\n'
+    elif [ "$dominant" != "$echt" ]; then
+      pdf_problems+="${landing}: claimt ${dominant} pagina's, ${pdf} heeft er ${echt}"$'\n'
+    fi
+  done
+
+  # De teaser op de homepage noemt dezelfde sample; die moet meebewegen.
+  pentest_echt=$(pdfinfo assets/samples/pentest-playbook-sample.pdf 2>/dev/null | awk '/^Pages:/{print $2}')
+  home_claim=$(grep -oE "Gratis sample \| [0-9]+ pagina" index.html | grep -oE '[0-9]+')
+  if [ -n "$pentest_echt" ] && [ -n "$home_claim" ] && [ "$home_claim" != "$pentest_echt" ]; then
+    pdf_problems+="index.html: lead-magnet-badge claimt ${home_claim} pagina's, de PDF heeft er ${pentest_echt}"$'\n'
+  fi
+
+  if [ -z "$pdf_problems" ]; then
+    pass "Elke sample-pagina claimt de echte paginatelling van zijn PDF"
+  else
+    while IFS= read -r regel; do [ -n "$regel" ] && fail "12: $regel"; done <<< "$pdf_problems"
+  fi
+fi
+
 # ============================================================
 echo ""
 echo "=========================================="

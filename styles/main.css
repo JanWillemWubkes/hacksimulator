@@ -1099,6 +1099,13 @@ button {
 .footer-social a {
   color: #8b949e;
   transition: color var(--transition-fast);
+  /* Het icoon is 20px; zonder dit was het aanwijsdoel 26px (WCAG 2.5.5 vraagt 44px).
+     Inline-flex + centreren houdt het icoon optisch op zijn plek; het doel groeit eromheen. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .footer-social a:hover {
@@ -1109,7 +1116,7 @@ button {
 /* Donate button - Subtle accent in footer-bottom */
 a.footer-donate {
   align-self: center;
-  padding: 7px 16px;
+  padding: 11px 16px;   /* 44px hoog: WCAG 2.5.5 aanwijsdoel (was 36px) */
   font-family: var(--font-heading);
   font-size: 0.85rem;
   font-weight: 600;
@@ -1752,6 +1759,10 @@ abbr.jargon {
   justify-content: space-between;
   width: 100%;
   padding: var(--spacing-md) var(--spacing-lg);
+  /* Kwam op mobiel precies op 44,0px uit — maar via `line-height: normal`, dus de hoogte
+     hing aan de fontmetriek. Gemeten: 44px met de webfont geladen, 43px met de fallback.
+     Een harde ondergrens haalt die afhankelijkheid weg; visueel verandert er niets. */
+  min-height: 44px;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -1759,7 +1770,14 @@ abbr.jargon {
   gap: var(--spacing-md);
 }
 
-.faq-question h3 {
+/* De heading zit óm de knop (WAI-ARIA accordion-pattern): <button> heeft phrasing
+   content als contentmodel, dus een <h3> hoorde er niet in. De klasse bleef op de
+   knop staan zodat alle regels hieronder en faq.js ongewijzigd blijven werken. */
+.faq-heading {
+  margin: 0;
+}
+
+.faq-question .faq-question-text {
   font-family: var(--font-heading);
   font-size: 1rem;
   font-weight: var(--font-weight-semibold);
@@ -1768,7 +1786,7 @@ abbr.jargon {
   flex: 1;
 }
 
-.faq-question:hover h3 {
+.faq-question:hover .faq-question-text {
   color: var(--color-cta-primary);
 }
 
@@ -1841,7 +1859,7 @@ abbr.jargon {
     padding: var(--spacing-sm) var(--spacing-md);
   }
 
-  .faq-question h3 {
+  .faq-question .faq-question-text {
     font-size: 0.95rem;
   }
 
@@ -1870,6 +1888,9 @@ abbr.jargon {
   max-width: 600px;
   margin: 0 auto;
 }
+/* h2 op index.html (zelfstandige sectie, gelijk aan elke andere sectiekop), h3 op de
+   sample-pagina's waar het blok ín een hero staat en dus een niveau lager hoort. */
+.homepage-newsletter h2,
 .homepage-newsletter h3 {
   color: var(--color-text);
   font-family: var(--font-heading);

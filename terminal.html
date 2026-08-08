@@ -127,12 +127,12 @@
     <link rel="preload" href="/styles/fonts/jetbrainsmono-latin.woff2" as="font" type="font/woff2" crossorigin>
 
     <!-- Preload Critical Resources (M5 Performance Optimization + Sessie 144 fetchpriority hints) -->
-    <link rel="preload" href="styles/main.css?v=209" as="style" fetchpriority="high">
+    <link rel="preload" href="styles/main.css?v=212" as="style" fetchpriority="high">
     <link rel="preload" href="styles/terminal.css?v=118" as="style" fetchpriority="high">
     <link rel="modulepreload" href="src/main.js?v=208-ads-removed" fetchpriority="high">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles/main.css?v=209">
+    <link rel="stylesheet" href="styles/main.css?v=212">
     <link rel="stylesheet" href="styles/terminal.css?v=118">
     <!-- Mobile CSS: non-blocking on desktop via media query -->
     <link rel="stylesheet" href="styles/mobile.css?v=116" media="screen and (max-width: 768px)">
@@ -164,7 +164,7 @@
             <nav id="navbar" role="navigation" aria-label="Main navigation">
                 <div class="navbar-content">
                     <a href="/" class="navbar-brand">HackSimulator.nl</a>
-                    <a href="/terminal.html">Start Simulator</a>
+                    <a href="/terminal.html">Start de simulator</a>
                     <a href="/blog/">Blog</a>
                     <a href="/commands/">Commands</a>
                     <a href="/woordenlijst.html">Woordenlijst</a>
@@ -384,37 +384,45 @@
           <h3>Veelgestelde vragen</h3>
           <div class="terminal-edu-faq">
             <div class="faq-item">
-              <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-terminal-1">
-                <h3>Is HackSimulator veilig om te gebruiken?</h3>
-                <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-              </button>
+              <h3 class="faq-heading">
+                <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-terminal-1">
+                  <span class="faq-question-text">Is HackSimulator veilig om te gebruiken?</span>
+                  <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+              </h3>
               <div class="faq-answer" id="faq-terminal-1">
                 <p>Ja, volledig. Alles draait lokaal in je browser. Er worden geen verbindingen gemaakt met externe servers en je kunt onmogelijk echte systemen aanvallen. Het is vergelijkbaar met een vluchtsimulator: je leert zonder risico.</p>
               </div>
             </div>
             <div class="faq-item">
-              <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-terminal-2">
-                <h3>Heb ik ervaring nodig om te beginnen?</h3>
-                <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-              </button>
+              <h3 class="faq-heading">
+                <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-terminal-2">
+                  <span class="faq-question-text">Heb ik ervaring nodig om te beginnen?</span>
+                  <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+              </h3>
               <div class="faq-answer" id="faq-terminal-2">
                 <p>Nee. HackSimulator is speciaal ontworpen voor absolute beginners. We beginnen met basis commands zoals <code>ls</code> en <code>cd</code>, en bouwen stap voor stap op naar security tools. Alle uitleg is in het Nederlands.</p>
               </div>
             </div>
             <div class="faq-item">
-              <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-terminal-3">
-                <h3>Wat is het verschil met echte hacking tools?</h3>
-                <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-              </button>
+              <h3 class="faq-heading">
+                <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-terminal-3">
+                  <span class="faq-question-text">Wat is het verschil met echte hacking tools?</span>
+                  <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+              </h3>
               <div class="faq-answer" id="faq-terminal-3">
                 <p>De commands geven gesimuleerde, educatieve output. Echte tools zoals Nmap produceren meer technische details en vereisen een echte netwerkomgeving. Onze "80/20 realisme" aanpak betekent dat je 80% van de concepten leert met 20% van de complexiteit.</p>
               </div>
             </div>
             <div class="faq-item">
-              <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-terminal-4">
-                <h3>Is ethisch hacken legaal?</h3>
-                <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-              </button>
+              <h3 class="faq-heading">
+                <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-terminal-4">
+                  <span class="faq-question-text">Is ethisch hacken legaal?</span>
+                  <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+              </h3>
               <div class="faq-answer" id="faq-terminal-4">
                 <p>Ja, ethisch hacken (white hat hacking) is het geautoriseerd testen van systemen op beveiligingslekken. Ethische hackers werken met toestemming van de systeemeigenaar. Het is een legitieme en gevraagde vaardigheid in de cybersecurity-industrie.</p>
               </div>

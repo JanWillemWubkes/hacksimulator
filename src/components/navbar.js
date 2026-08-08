@@ -68,7 +68,7 @@ function getMarketingNavbar(options = {}) {
         </button>
 
         <!-- Primary CTA (desktop only - hidden on mobile) -->
-        <a href="/terminal.html" class="btn-cta btn-cta-nav">Start Simulator</a>
+        <a href="/terminal.html" class="btn-cta btn-cta-nav">Start de simulator</a>
       </div>
     </nav>
   </div>
@@ -76,7 +76,7 @@ function getMarketingNavbar(options = {}) {
   <!-- Mobile Menu Overlay (terminal-style: opaque black, slideDown, border separators) -->
   <div id="landing-mobile-menu" class="navbar-menu">
     <ul class="navbar-links">
-      <li><a href="/terminal.html" class="mobile-cta-link">Start Simulator</a></li>${landingAnchors}
+      <li><a href="/terminal.html" class="mobile-cta-link">Start de simulator</a></li>${landingAnchors}
       <li><a href="/blog/"${activeAttr('blog')}>Blog</a></li>
       <li><a href="/commands/"${activeAttr('commands')}>Commands</a></li>
       <li><a href="/gidsen.html"${activeAttr('gidsen')}>Gidsen</a></li>
@@ -220,7 +220,7 @@ function getBlogNavbar(options = {}) {
             <span class="toggle-indicator">█</span> LIGHT
           </span>
         </button>
-        <a href="${basePath}terminal.html" class="btn-cta btn-cta-nav">Start Simulator</a>
+        <a href="${basePath}terminal.html" class="btn-cta btn-cta-nav">Start de simulator</a>
       </div>
     </div>
   </nav>
@@ -228,7 +228,7 @@ function getBlogNavbar(options = {}) {
   <!-- Blog Mobile Menu Overlay (terminal-style: opaque black, slideDown, border separators) -->
   <div id="blog-mobile-menu" class="navbar-menu">
     <ul class="navbar-links">
-      <li><a href="${basePath}terminal.html" class="mobile-cta-link">Start Simulator</a></li>
+      <li><a href="${basePath}terminal.html" class="mobile-cta-link">Start de simulator</a></li>
       ${showBlogLink ? `<li><a href="${basePath}blog/">Blog</a></li>` : ''}
       <li><a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a></li>
     </ul>
