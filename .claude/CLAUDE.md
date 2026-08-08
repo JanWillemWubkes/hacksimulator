@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 213)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 214)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,26 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 214: Interactieve hero-terminal — en een demo die over drie van de vier commands loog (08 aug 2026)
+⚠️ **Never:**
+- Een demo laten staan die afwijkt van de engine. De hero gaf `whoami` → `user` (echt: `hacker`), `ls` → `passwords.txt`/`notes.md` (bestaan niet in de VFS) en `nmap 192.168.1.1` → poort 22 i.p.v. het router-profiel 53/80/443. Op een site die "aantoonbaar" als kwaliteitsclaim voert is dat geen cosmetiek maar een geloofwaardigheidslek — en het stond er sinds de bouw van de landingspagina.
+- `innerText()` ná een animatielus lezen om te bewijzen wát die lus toonde. `trimOldLines()` knipt de oudste regels weg, dus de meting kán het bewijs niet bevatten. Mijn test was daardoor **groen op de kapotte pagina**, mede omdat hij `hacker` zocht en dat gewoon in de promptregel `hacker@hacksim:~$` staat. Twee blinde vlekken die elkaar dekten. Een `MutationObserver` via `addInitScript()` vangt wél alles.
+- `RESPONSES[naam]` gebruiken als de sleutel van de bezoeker komt. `constructor`, `toString`, `__proto__` en `hasOwnProperty` zijn allemaal truthy op een object-literal; één getypt woord blokkeerde de hele REPL op `undefined.slice()`. `Object.hasOwn` is de fix — en meld het origineel terug, niet de kleingemaakte vorm (`toString` → `tostring` verwart).
+- Aannemen dat een browser een `readonly` veld focust als je die vlag tijdens `pointerdown` weghaalt. Firefox beslist focusbaarheid bij mousedown: `document.activeElement` bleef `BODY`, dus de bezoeker zag de terminal live gaan en zijn toetsaanslagen verdwenen. **Alleen de driemotorenrun ving dit** — op Chromium is het onzichtbaar.
+- `flex-direction: column; justify-content: flex-end` combineren met `overflow-y: auto`. Chrome en Firefox clippen de bovenkant van de inhoud dan onbereikbaar weg. `display: block` + `scrollTop = scrollHeight` doet hetzelfde zonder de val.
+- Een klasse op de regel zetten terwijl de CSS descendant-selectors gebruikt. `.terminal-line .tip` matcht niet op `<div class="terminal-line output tip">`; de markers renderden wit in plaats van groen. Kleuring hoort in een `<span>` bínnen de regel.
+- Een teller gebruiken die meer verzamelt dan je bedoelt. De afrondboodschap hing aan `gedaan.size`, en `gedaan` bevat élke invoer — zes willekeurige woorden riepen de CTA op, en daarna elk volgend command opnieuw.
+
+✅ **Always:**
+- Los een "geleid of vrij"-vraag op door te kijken wat de dúre helft is. De REPL-machinerie is het werk; begeleiding erbovenop is ~30 regels. "Geleid" als *vervanging* zou een click-through zonder invoer opleveren — precies de belofte die de subtitel drie regels hoger doet. Eén affordance die begeleiding, eerlijke grens én mobiele bediening tegelijk is (zes chips) verslaat twee systemen naast elkaar.
+- Bewijs een fix met de mutant, ook als de test al groen is. Drie van de vijf bugs deze sessie zijn zo geverifieerd: oude code terug → test weer rood. Zonder die stap weet je niet of je assertie de bug kán zien.
+- Kies een budgetgrens op bruikbaarheid, niet op "net genoeg". Mijn eerste bump (1075) liet 5,8 KB over — even krap als waar ik begon. Een limiet die op élke wijziging vuurt wordt weggeklikt in plaats van onderzocht; ~3% marge houdt hem een alarm. En zeg erbij wát het meet: dit is ongeminificeerde broncode sitebreed, geen perf-poort (Terminal Core wordt met nul bytes geraakt).
+- Meet mobiele breedte op twee manieren, want de ene is blind voor de andere: tekentelling ≤40 op regels die jíj schrijft, plus geometrische overflow tegen `clientWidth` voor álle regels. Letterlijke bestandsinhoud valt buiten de tekentelling — die hoort te wrappen, en inkorten zou het bestand vervalsen.
+- Omhul analytics-aanroepen naar een net uitgebreide gedeelde module. Relatief geïmporteerde submodules dragen geen `?v=`, dus een terugkerende bezoeker kan tot `max-age` een oude `events.js` krijgen; zonder guard is dat een `TypeError` na elk command.
+- Check het browserpad in plaats van het te gokken — de Sessie 209-les geldt nog steeds, maar andersom: hier stonden ze gewoon op de standaardlocatie en was `CHROMIUM_PATH` helemaal niet nodig. Mijn gok liet alle 30 tests falen.
+- Wees expliciet over wat je níét kunt bewijzen: of de hero-demo de doorklik verhoogt, weet je pas als `terminal_cta_click{location:hero}` te segmenteren is op sessies mét `hero_demo_started`. Tot dan is het een hypothese, geen resultaat.
+
+
 ### Sessie 213: Gidsen-grid, CTA-uitlijning en een navbar die site-breed 500px te breed was (07 aug 2026)
 ⚠️ **Never:**
 - `flex: 1` op een type-selector zetten. `.gids-card p { flex: 1 }` selecteerde óók `p.gids-sample-link`, dus twee flex-items met `flex-basis: 0` deelden de rek (gemeten: 82px + 66px = precies de 164px van een kaart-zonder-sample min de extra marge). Twee vervolgeffecten die als los raadsel oogden: `margin-top: auto` op de knop werd een no-op (flex-grow verdeelt vóór auto-marges) en de eigen marge van de sample-link landde nooit ((0,1,1) verslaat (0,1,0)). **Zulke bugs vind je niet door de CSS te lezen — alleen `getComputedStyle` verraadt een `flex-grow` die je nooit hebt gezet.**
@@ -158,22 +178,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Nieuwe copy in de lengteband van de bestaande varianten brengen — mijn eerste FASE 4-transitie had skills van 44-57 tekens waar de bestaande 21-37 zijn, en een bridge van 146 tegen ~50. Meten tegen de siblings, niet tegen een absolute limiet.
 - Wees eerlijk over het plafond van een win: og:image is de enige externe-impact-win, maar Google gebruikt het níét in zoekresultaten. De waarde zit in gedeelde links + het feit dat elke volgende post zijn kaart nu gratis erft.
 
-### Sessie 206: Nieuwsbrief-mails mobiel — code-chip-overlap + witte tekst op groen (01 aug 2026)
-⚠️ **Never:**
-- Eén klasse geven aan blok-code (`<td>`) en inline code (`<code>`) — verticale padding vergroot bij een *inline* element de regelhoogte niet, alleen het gekleurde vlak. De mobiele blok-regel (`padding:12px 14px`) maakte de chip **38px hoog in een 24px regelbox** = 17px overlap met de buurregels (gemeten @375px). Splits `.code-block`/`.code-inline`; `welkomstmail.html` deed dit al goed, juli en april waren erop achtergebleven.
-- Vertrouwen op `!important` of `@media (prefers-color-scheme: dark)` om kleuren in de Gmail-app te beschermen — die app ondersteunt de media query níét (het halve `<style>`-blok is er dood) en herschrijft kleuren ná je CSS. Alleen de inline styles tellen, en zelfs die worden gecorrigeerd als een tekstfragment geen eigen achtergrond heeft.
-- Een gemeten afwijking meteen als bug behandelen — april's chip mat 41px in een 24px regel (leek dezelfde bug), maar `getClientRects()` gaf 2 fragmenten van 17px: hij wrapt over twee regels en `getBoundingClientRect()` geeft de union-box. Overlap 0. Fragmenten tellen vóór je fixt.
-- Adviseren dat je een verzonden Brevo-campagne opnieuw kunt importeren — verzonden campagnes zijn vergrendeld; alléén links, alléén ≤24u, en uitschrijf-/variabele-links zelfs daarbuiten. De mirror-pagina is een momentopname van het verzendmoment. (Ik gaf dit eerst fout; opgezocht en de stap geschrapt.)
-
-✅ **Always:**
-- Meet de baseline op de ónveranderde file vóór je fixt — 38px/17px overlap vooraf maakte "17px/overlap 0" achteraf pas betekenisvol. Zonder baseline weet je niet of je meting de bugklasse überhaupt kán detecteren (rood-op-mutant, [[feedback_verify_claims_against_artifact]]).
-- Cache-buster bij élke na-meting, ook bij een lokale `python3 -m http.server` — de eerste na-meting gaf identiek 38px omdat `td.code-block` niet eens in de DOM bestond. Derde sessie op rij (202/205/206) dat dit toeslaat.
-- Documentatie-opruimen serieus nemen als bug-jacht: de "MailerLite-syntax in de docs"-nit bleek `{$unsubscribe}`/`{$url}` in twee **live** welkomstmails — Brevo vervangt die niet, dus dode links. Correcte vorm `{{ unsubscribe }}`/`{{ mirror }}` opgezocht in de Brevo-docs, niet uit het hoofd ([[feedback_validate_tooling_assumptions]]).
-- Sluit de regressieketen, niet alleen het symptoom — `maandelijks-template.md` droeg je op het CSS-blok uit april te kopiëren, precies het bestand met de bug; zonder die pointer-fix erft elke volgende editie hem opnieuw.
-- Wees expliciet over wat je níét kunt bewijzen — issue 2 was hard meetbaar, issue 1 draait op Heisenberg's telefoon. Als mitigatie benoemd mét plan B (donkere balk + groene tekst), niet als "gefixt" geclaimd.
-- Archief-bestanden niet gladstrijken: april houdt de MailerLite-syntax (verstuurd vóór de migratie, Sessie 165) met een notitie dat het geen kopieermodel is. Historie corrigeren maakt een archief onbetrouwbaar.
-
-**Rotation:** Top-6 huidig: 206-207-208-209-212-213 (Sessie 205 → `docs/sessions/current.md` via 1-in-1-out, Sessie 213). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 211 (195-199 → `archive-s195-s199.md`); current.md houdt nu het rolling window 200-213 (14 entries). Volgende bulk-rotatie Sessie 215 → archiveer 205-209. SESSIONS.md-index gesynct. Historie 81-199 → `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 207-208-209-212-213-214 (Sessie 206 → `docs/sessions/current.md` via 1-in-1-out, Sessie 214). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 211 (195-199 → `archive-s195-s199.md`); current.md houdt nu het rolling window 200-214 (15 entries). Volgende bulk-rotatie Sessie 215 → archiveer 205-209. SESSIONS.md-index gesynct. Historie 81-199 → `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -222,7 +227,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Bij elke sessie 1-in-1-out op de CLAUDE.md-learnings (top-6 vast). Bulk-rotatie van `current.md` bij `N % 5 == 0`: archiveer de oudste ~5 entries naar `archive-sNNN-sMMM.md`. Laatste bulk: Sessie 211 (195-199). **Volgende bulk: Sessie 215** (archiveer 205-209). Actuele stand: zie de **Rotation**-regel onder §Recent Critical Learnings.
-**Sessie counter:** 213
+**Sessie counter:** 214
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -277,6 +282,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 07 aug 2026 (Sessie 213 — gidsen 2×2-grid + CTA-uitlijning structureel opgelost (`.gids-card p { flex: 1 }` matchte óók de sample-link, twee groeiers deelden de rek) + beide gratis samples op hun eigen kaart + site-brede navbar-inklapband tot 1279px. Volledig: `docs/sessions/current.md`)
-**Version:** 5.87 (Sessie 213 — gidsen-grid + CTA-uitlijning + navbar-inklapband + threaded no-store server; volledige historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 08 aug 2026 (Sessie 214 — interactieve hero-terminal op index.html: vrije mini-REPL met zes commands + tikbare suggestiechips, en de auto-demo die over `whoami`/`ls`/`nmap` loog rechtgezet tegen de bron. Volledig: `docs/sessions/current.md`)
+**Version:** 5.88 (Sessie 214 — hero-REPL + homepage-trechter; 5 bugs, 3 met mutant bewezen; bundlelimiet 1050 → 1100 KB; volledige historie: `docs/sessions/current.md` + TASKS.md)
 

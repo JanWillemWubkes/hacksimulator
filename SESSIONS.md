@@ -10,12 +10,13 @@
 
 > **Rotatie/archivering-conventie:** zie [`docs/sessions/README.md`](docs/sessions/README.md)
 > (range-naamgeving `archive-sNNN-sMMM.md`; legacy `archive-q*`-namen zijn bevroren + fout gelabeld).
-> `current.md` houdt het rolling window Sessie 200-213; ouder is geroteerd naar de range-archieven hieronder.
+> `current.md` houdt het rolling window Sessie 200-214; ouder is geroteerd naar de range-archieven hieronder.
 
-### [Current Sessions (200-213)](docs/sessions/current.md) - Full Detail
+### [Current Sessions (200-214)](docs/sessions/current.md) - Full Detail
 **Sessies:** 213, 212, 211, 210, 209, 208, 207, 206, 205, 204, 203, 202, 201, 200
 **Period:** 29 juni - 07 augustus 2026
 **Topics:**
+- Interactieve hero-terminal op `index.html`: vrije mini-REPL (`help`/`ls`/`cat`/`nmap`/`whoami`/`pwd`) met zes tikbare suggestiechips die tegelijk begeleiding, de eerlijke grens van de demo én de mobiele affordance zijn; de auto-demo loog over `whoami`, `ls` én `nmap` en is tegen de bron rechtgezet. Vijf bugs (2 bestaand in `landing-demo.js`, 3 tijdens de bouw — alle drie met een mutant bewezen). Plus de homepage-trechter: CTA-gat van 4179px gedicht, één CTA-label site-breed, 20 tikdoelen <44px → 0, 16 blokken leeg zonder JS. Bundlelimiet 1050 → 1100 KB (Sessie 214)
 - Gidsen-grid 2×2 + CTA-uitlijning structureel opgelost (`.gids-card p { flex: 1 }` selecteerde óók de sample-link, twee groeiers deelden de rek) + beide gratis samples als coupon-chip op hun eigen kaart; `:nth-child(3):last-child` fixte gidsen én over-ons; **site-brede navbar-inklapband tot 1279px** (341px overflow @820px op elke marketingpagina en blogpost); `.mobile-cta-link` op specificiteit gefixt; threaded no-store server (Sessie 213)
 - Lead magnets: de juridische sample leverde de pentest-bestandsnaam (`_headers`-wildcard met vaste `filename`) én de pentest-welkomstmail (één gedeeld Brevo-formulier bij een *Form submitted*-trigger); eigen formulier + automation + welkomstmail, NEW Check 10, E2E geparametriseerd over beide samples, `type="email"` op alle vier de formulieren (Sessie 212)
 - Interne links naar `leren-hacken.html` vanuit 5 blogposts + homepage, achterstallige /summary Sessie 210, bulk-rotatie 195-199 (Sessie 211)

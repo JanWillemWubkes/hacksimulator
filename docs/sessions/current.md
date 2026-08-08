@@ -4,6 +4,132 @@
 
 ---
 
+## Sessie 214: De hero-terminal doet nu iets — en de demo die er stond, loog over drie van de vier commands (08 aug 2026)
+
+**Mission:** Twee rondes op de homepage. (A) De 9-staps conversietrechter uit `docs/landing-page-plan.md` tegen `index.html` leggen en de holle stappen vullen. (B) De hero-terminal interactief maken: hij toonde prompt, knipperende cursor en auto-typende commands — de sterkste interactie-uitnodiging op de pagina — en deed niets.
+
+**Commits:** `0f2a306` (trechter) · `810f082` (hero-terminal)
+
+---
+
+### Ronde A — homepage-trechter (commit `0f2a306`)
+
+Drie van de negen trechterstappen leunden op placeholders die terecht nooit geplaatst zijn ("1.200+ gebruikers" 2×, drie testimonials met naam en foto). De stappen eromheen zijn nooit opnieuw gevuld, dus stap 6 herhaalde alleen de trust-bar 2000px hoger en van stap 8 bleef alleen de bijlage over.
+
+- **#results** 40+/100%/0/3 → vier tegels die elk linken naar de plek waar je het kunt natellen (`/commands/`, `/terminal.html`, `over-ons#verantwoording`, `/woordenlijst.html`). `over-ons#verantwoording` was 0× gelinkt.
+- **CTA-woestijn 4179px (5,1 schermen)** tussen hero-CTA (y=303) en de eerstvolgende knop (y=4462) → `.mobile-cta-bar`, zelfde grens als de navbar-inklapband (1279px). In de navbar paste geen CTA: op 375px is er 112px vrij naast de merknaam (179px) en het label heeft 150px nodig.
+- **Eén naam voor één actie**, site-breed 28 bestanden: 4 labels → "Start de simulator". Vijf lockstep-locaties, niet vier — de FAQ citeert het label letterlijk in zichtbare tekst én in de FAQPage-JSON-LD.
+- **16 contentblokken leeg zonder JS** (`.animate-on-scroll` op `opacity:0`, alleen `landing-demo.js` zet `.visible`) → noscript-`<style>` in de head.
+- **20 tikdoelen <44px → 0.** De leerpad-knop bleek een componentdefect: `.btn-cta-secondary` staat later in `landing.css` dan `.leerpad-btn` en won op laadvolgorde, dus de padding daar was al dode code.
+- `validate-docs.sh` 10 → 12 checks. NEW `homepage-conversion.spec.js` (10 tests).
+
+---
+
+### Ronde B — interactieve hero-terminal (commit `810f082`)
+
+**Nulmeting:** `#typing-target` was een `<span>`, `.hero-terminal` had **nul** tabbare elementen, geen input, geen contenteditable. `src/ui/landing-demo.js` typte een lus van vier canned commands.
+
+#### De beslissing vooraf: geleid **óp** vrij, niet geleid **in plaats van** vrij
+
+De vraag was of de hero een vrije mini-REPL wordt of een geleide demo, met als aanname dat geleid goedkoper is. Die aanname klopt alleen als "geleid" een scripted click-through zonder invoer betekent — en dat botst frontaal met wat de subtitel drie regels hoger belooft ("je kunt alles uitproberen"). De dure helft is de REPL-machinerie (input, echo, render, scroll, mobiel, a11y); de geleide laag is daarbovenop ~30 regels.
+
+Gekozen: vrije REPL met de begeleiding als **zes tikbare chips**, die drie dingen tegelijk doen en daarom één systeem zijn in plaats van twee:
+1. begeleiding — de eerstvolgende suggestie is gemarkeerd en schuift op na gebruik;
+2. eerlijkheid — je *ziet* de grens van de demo: zes chips, meer is er niet;
+3. mobiel — op 375px is typen duur (toetsenbord neemt het halve scherm), tikken niet.
+
+#### De demo loog over drie van de vier commands
+
+| hero toonde | engine geeft | bron |
+|---|---|---|
+| `whoami` → `user` | `hacker` | `core/terminal.js:45` |
+| `ls` → `passwords.txt`, `notes.md` | `documents/  notes.txt  README.txt` | `filesystem/structure.js:7-206` |
+| `nmap 192.168.1.1` → 22/SSH, 80/HTTP | 53/DNS, 80/HTTP, 443/HTTPS (router-profiel) | `network/nmap.js:32-39,67-69` |
+
+Dat zat er sinds de bouw van de landingspagina in. Meegenomen omdat de responsemap toch herschreven werd — inclusief de `<noscript>`-fallback en de auto-lus. Op een site die "aantoonbaar" als kwaliteitsclaim voert is een demo met niet-bestaande bestanden een geloofwaardigheidslek, geen cosmetisch detail.
+
+#### Vijf bugs — twee bestonden al, drie ontstonden tijdens de bouw
+
+**A. Dubbele lus (bestond al).** `stop()` (`landing-demo.js:211`) zette alleen een boolean; de lopende `await delay()`-keten wordt niet afgebroken. De `visibilitychange`-handler riep bij terugkeer `startAnimation()` aan, waarna de *oude* opgeschorte lus verderliep langs zijn `if (!isRunning)`-poorten: twee lussen die in dezelfde DOM schrijven. → generatieteller; een lus die niet meer de huidige generatie is stopt onherroepelijk.
+
+**B. Herstart over de bezoeker heen (bestond al).** Diezelfde handler herstartte de auto-demo ook ná overname — tabwissel wiste de sessie van de bezoeker. → `handOff()`, onomkeerbaar.
+
+**C. Firefox focust geen readonly veld.** Gemeten: na `click()` bleef `document.activeElement` op `BODY`. Firefox beslist focusbaarheid bij mousedown, en toen was het veld nog `readonly`. Zonder expliciete `.focus()` klikt een Firefox-bezoeker de terminal aan, ziet hem live gaan, en verdwijnen zijn toetsaanslagen. **Alleen de driemotorenrun ving dit; op Chromium is het onzichtbaar.**
+
+**D. Prototype-sleutels blokkeerden de REPL.** `RESPONSES[naam]` is truthy voor élke `Object.prototype`-sleutel. Wie `constructor`, `toString`, `__proto__` of `hasOwnProperty` typte liet `kies()` stuklopen op `undefined.slice()` — één woord en de demo stond stil. → `Object.hasOwn`. Bij het repareren bleek een tweede laag: `naam` was kleingemaakt, dus de foutmelding gaf `tostring` terug. Nu wordt het origineel teruggemeld.
+
+**E. Afrondboodschap op de verkeerde teller.** Hij telde `gedaan.size`, en `gedaan` verzamelt élke invoer — zes willekeurige woorden riepen de CTA op, en daarna elk volgend command opnieuw. → `SUGGESTIES.every()` plus een eenmalig-vlag.
+
+C, D en E zijn met een mutant bewezen: oude code terug → test weer rood.
+
+#### De valse groene test
+
+Mijn eerste versie van "de auto-demo toont wat de echte engine ook toont" was **groen op de ongewijzigde pagina**. Twee blinde vlekken die elkaar dekten:
+- `innerText()` ná de lus meet een venster waar `trimOldLines()` (max 8 regels) de bewijsregels al uit heeft geknipt;
+- de assertie zocht `hacker`, en dat staat gewoon in de promptregel `hacker@hacksim:~$`.
+
+Vervangen door een `MutationObserver` via `page.addInitScript()` die álles opvangt wat de lus ooit schreef, plus een assertie op de regel *ná* de `$ whoami`-echo. Toen pas rood.
+
+#### Implementatie-keuzes
+
+- **Geen import van de echte engine.** Terminal Core zit ~37% boven het 400 KB-budget. Enige gedeelde code: `findClosestCommand` uit `src/utils/fuzzy.js` — bestond al (1716 bytes), levert tier-1-gedrag identiek aan `help-system.js:78-83` ("Bedoelde je 'nmap'?"), kost nul nieuwe repo-bytes.
+- **Chips *binnen* `.hero-terminal`.** `.hero-content` is een flex-rij met exact twee kolommen; een derde kind maakte er een derde kolom van. Binnen het venster volgt het bovendien het bestaande `#mobile-quick-commands`-patroon van `terminal.html`, inclusief de 44px-tikdoelmaat (testconditie, geen cosmetiek).
+- **`.terminal-body` blijft 235px/200px met interne scroll** — vaste hoogte + overflow = nul layoutverschuiving in de hero. In live-modus `display: block` en **niet** flex-end + scroll: die combinatie clipt de bovenkant onbereikbaar weg in Chrome en Firefox. De fade-mask (`::before`, `position: absolute`) zou meescrollen met de inhoud en gaat daarom uit.
+- **Markerkleuring in een `<span>` binnen de regel**, niet als klasse op de regel: de hero-CSS gebruikt descendant-selectors (`.terminal-line .tip`). Eerste versie was daardoor wit in plaats van groen.
+- **`{breed, smal}`-paren per response**, gekozen op `innerWidth < 768` — precies zoals de engine dat doet via `isMobileView()`. De nmap-tabel is in het origineel 60-77 tekens breed.
+- **Altijd `textContent`**, nooit `innerHTML`: de invoer komt van de bezoeker.
+- **Statisch `<input readonly>` in de HTML**, niet door JS aangemaakt: zonder JS ziet de bezoeker een niet-bewerkbaar veld (eerlijk) in plaats van een veld dat belooft te werken. Houdt bovendien het mobiele toetsenbord dicht tijdens de auto-demo.
+- **`role="log"` + `aria-live="off"`** tijdens de lus, `"polite"` pas bij overname — anders leest een schermlezer de eindeloze lus voor. Geen autofocus.
+
+#### Analytics
+
+`hero_demo_started` (eenmalig) en `hero_demo_command` (alléén de commandonaam). Via `events.js`, dus de consent-poort en de privacy-guard in `tracker.js:146` komen gratis mee. De aanroepen lopen door een `meld()`-wrapper: `events.js` is deze sessie uitgebreid maar relatief geïmporteerde submodules dragen geen `?v=`, dus een terugkerende bezoeker kan tot `max-age` (3600s) een oude `events.js` uit cache krijgen — zonder wrapper een `TypeError` na elk command.
+
+Pas als `terminal_cta_click{location:hero}` te segmenteren is op sessies mét `hero_demo_started`, weet je of dit rendeert. Tot dan is "de hero-demo verhoogt de doorklik" een hypothese.
+
+#### Bundlelimiet 1050 → 1100 KB
+
+De wijziging kost 24 KB tegen **4,78 KB** resterende ruimte. Twee keer een oordeel:
+1. **Verhogen, niet code-golfen.** Deze meting is een driftalarm over ongeminificeerde broncode sitebreed, geen perf-poort: de echte poort blijft Terminal Core <400 KB minified, en die wordt met **nul** bytes geraakt — `hero-repl.js` zit alleen in de module-graph van `index.html`. Precedent en formulering staan al in TASKS.md (Sessie 204, 1000 → 1050).
+2. **1100 en niet 1075.** Mijn eerste bump was op een projectie van ~12 KB gebaseerd; het werd 24 KB, wat 5,8 KB marge zou laten — net zo krap als waar ik begon. Een limiet die vlak boven de huidige stand ligt vuurt op élke wijziging en wordt dan weggeklikt in plaats van onderzocht. Nu ~31 KB (2,9%).
+
+---
+
+### Verificatie
+
+- **NEW `tests/e2e/hero-demo.spec.js`** — 13 tests, **39/39** over Chromium/Firefox/WebKit. Elke assertie eerst rood gedraaid tegen de ongewijzigde pagina.
+- Mobiel op **twee** maten gemeten, want de ene is blind voor de andere: tekentelling ≤40 op authored regels + geometrische overflow tegen `clientWidth` voor álle regels. `cat` valt buiten de tekentelling — dat is letterlijke bestandsinhoud uit de VFS en die hoort te wrappen; inkorten zou het bestand vervalsen.
+- **Regressie: 111 passed / 0 failed / 9 skipped** (`hero-demo` + `homepage-conversion` + `performance` + `navbar-collapse`). De 9 skips zijn de by-design browserspecifieke tests in `performance.spec.js` (2+2+2+3), geen van deze wijziging.
+- `validate-docs.sh --deep`: exit 0, 12 checks. CI groen op beide commits.
+- Visueel op 375/768/1280px in licht én donker, vóór en ná overname, met een **versheids-assert** in elke meting (`chip min-height == 44px`) zodat een oude CSS-lading zich niet als "ziet er goed uit" kan voordoen.
+- Meetserver geverifieerd op zijn `Cache-Control`-header, niet op de statuscode. Chromium-pad **niet** geraden: `~/.cache/ms-playwright` was de standaardlocatie, dus `CHROMIUM_PATH` was helemaal niet nodig — mijn eerste gok (`/opt/pw-browsers/…`) liet alle 30 tests falen op "executable doesn't exist".
+
+### Metrics delta
+
+| | vóór | ná |
+|---|---|---|
+| Bundle (performance.spec meting) | 1045,22 KB | 1069,20 KB (limiet 1050 → 1100) |
+| `src/` | 698 KB | 714 KB |
+| `styles/` | 407 KB | 419 KB |
+| Spec files / `test()`-declaraties | 32 / 243 | 34 / 264 |
+| Tabbare elementen in `.hero-terminal` | 0 | 7 (invoer + 6 chips) |
+| `landing.css` cache-versie | v139 | v141 |
+
+### Niet gedaan, met reden
+
+- **Geen commandogeschiedenis (pijltje-omhoog).** Buiten de gevraagde scope; toevoegen zonder vraag is scope creep. Wel de meest verwachte terminal-affordance ná Enter — kandidaat voor een volgende ronde.
+- **De Engelse `←`-annotaties in de échte nmap-engine** (`network/nmap.js:132-144`) blijven staan. CLAUDE.md schrijft Nederlandse inline context voor, dus die drift bestáát — maar repareren hoort in een eigen wijziging, niet verstopt in deze. De hero-demo gebruikt wél Nederlands.
+- **Geen opslag van de demo-sessie.** Een lokmiddel dat je voortgang onthoudt suggereert dat het de simulator is.
+- **Geen tweede CTA-knop in de terminal.** Zou `homepage-conversion.spec.js:183` breken ("alle primaire CTA's dragen hetzelfde label") en de tikdoel-assertie op :238.
+
+### Next steps
+
+- Over ~2-4 weken GA4 lezen: verhoogt `hero_demo_started` de `terminal_cta_click{location:hero}`-ratio? Dat is de enige manier om te weten of deze investering rendeert.
+- Overweeg commandogeschiedenis in de hero-REPL als de data laat dat bezoekers meer dan 2-3 commands typen.
+- `nmap.js` inline-context naar Nederlands (eigen wijziging).
+
+---
+
 ## Sessie 213: Gidsen-grid, CTA-uitlijning en een navbar die site-breed 500px te breed was (07 aug 2026)
 
 **Mission:** Heisenberg meldde vier dingen op `/gidsen.html`: de pagina oogt niet mooi, de 4e gids staat alleen onderaan, het pentest-sample ontbreekt terwijl het bestaat, en de CTA-knoppen liggen niet op één lijn. Vraag was expliciet om grondige UX-/design-analyse. Onderzoek bracht een vijfde, grotere bug boven die niets met gidsen te maken had.

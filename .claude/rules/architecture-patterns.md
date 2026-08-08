@@ -130,3 +130,52 @@ alleen met het schrijven van de verdwenen sleutel. `hasConsent('analytics')` bli
 iedereen die al toestemming gaf: geen banner-herhaling, geen verloren keuzes. Verifieer wel álle
 toestandsvarianten live (vers / oude vorm / legacy-string / geweigerd) — "geen migratie nodig" is
 een aanname tot je het gemeten hebt.
+
+---
+
+## 7. Gebruikersinvoer nooit rechtstreeks als object-sleutel (Sessie 214)
+
+`RESPONSES[naam]` leest als "kennen we dit command?", maar een object-literal erft
+`Object.prototype`. `constructor`, `toString`, `__proto__` en `hasOwnProperty` zijn
+allemaal **truthy** — en leveren geen response-object op:
+
+```js
+// FOUT: 'constructor' typen levert de Object-constructor, daarna undefined.slice()
+if (RESPONSES[naam]) return kies(RESPONSES[naam]);
+
+// GOED
+if (Object.hasOwn(RESPONSES, naam)) return kies(RESPONSES[naam]);
+```
+
+In de hero-REPL blokkeerde dat de hele demo op één getypt woord. Geldt overal waar een
+lookup-map met bezoekersinvoer wordt geïndexeerd — de command-registry, filesystem-paden,
+scenario-id's. Alternatief: `Object.create(null)` of een `Map`.
+
+Tweede laag die er bij hoort: meld het **origineel** terug, niet de genormaliseerde vorm.
+`naam.toLowerCase()` maakte van `toString` de foutmelding `Command not found: tostring` —
+technisch waar, voor de bezoeker verwarrend.
+
+---
+
+## 8. `flex-end` en `overflow-y: auto` gaan niet samen (Sessie 214)
+
+Een terminal-achtig venster dat nieuwe regels onderaan toevoegt, wil `justify-content:
+flex-end`. Zodra je datzelfde element scrollbaar maakt, **clippen Chrome en Firefox de
+bovenkant van de inhoud onbereikbaar weg**: je kunt niet terugscrollen naar wat eruit liep.
+
+```css
+/* idle: vaste hoogte, geen scroll, nieuwe regels duwen oude omhoog */
+.terminal-body { height: 235px; overflow: hidden; display: flex;
+                 flex-direction: column; justify-content: flex-end; }
+
+/* live: scrollbaar — display:block, en pin in JS */
+.terminal-body.is-live { display: block; overflow-y: auto; overscroll-behavior: contain; }
+```
+```js
+bodyEl.scrollTop = bodyEl.scrollHeight;   // ná elke append
+```
+
+Let ook op een `::before`-fade-mask: die is `position: absolute` binnen het element en
+scrollt dus mét de inhoud mee in plaats van bovenaan te blijven plakken — zet hem uit in
+live-modus. Bewaakt door "eerdere uitvoer blijft terugscrollbaar" in
+`tests/e2e/hero-demo.spec.js`; die test gaat rood zodra je `display: flex` terugzet.
