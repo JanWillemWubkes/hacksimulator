@@ -15,7 +15,20 @@ const ROOT_DIR = process.cwd();
 // ========================================
 
 const LIMITS = {
-  // 1100 KB: bewust verhoogd van 1050 (Sessie 214), dat zelf van 1000 kwam (Sessie 204).
+  // 1120 KB (Sessie 217): verhoogd van 1100, dat van 1050 kwam (Sessie 214) en zelf van
+  // 1000 (Sessie 204). Gemeten stand vóór de bump: 1084,92 KB — 15,08 KB vrij (1,37%).
+  // De aanleiding was NIET dat er iets niet paste: de drie fixes van Sessie 217 kosten
+  // samen ~0,3 KB (de terminal-overflow kostte nul bronbytes, want die was al gefixt).
+  // De grens ging omhoog omdat 1,37% marge betekent dat het alarm op de eerstvolgende
+  // niet-triviale wijziging vuurt, en een alarm dat altijd afgaat wordt weggeklikt in
+  // plaats van onderzocht — hetzelfde argument als in Sessie 214. ~3% marge (35 KB).
+  //
+  // ⚠️ Dit is de derde bump in 14 sessies. Nog een keer ophogen zonder discussie maakt er
+  // een ratel van in plaats van een grens; kijk dan eerst of dit nog het juiste getal is
+  // om te meten (de teller telt ongeminificeerde broncode + alleen index.html — niet
+  // terminal.html, niet blog/).
+  //
+  // Historische context bij de vorige bump (Sessie 214):
   // Aanleiding: de interactieve hero-terminal (src/ui/hero-repl.js + hero-CSS + markup)
   // kostte 24 KB tegen 4,78 KB resterende ruimte. Dat is géén code-golf-probleem —
   // deze meting is een DRIFT-ALARM over ongeminificeerde repo-broncode sitebreed, geen
@@ -27,8 +40,8 @@ const LIMITS = {
   // Gemeten na de wijziging: 1069,20 KB. De marge is bewust ~31 KB (2,9%) en niet 6 KB:
   // een limiet die vlak boven de huidige stand ligt vuurt op élke wijziging en wordt dan
   // weggeklikt i.p.v. onderzocht. Zie TASKS.md §Huidige Focus.
-  TOTAL_BUNDLE: 1100 * 1024,      // 1100 KB hard limit (ONLY real constraint)
-  WARNING_THRESHOLD: 990 * 1024,  // 990 KB warning (90%)
+  TOTAL_BUNDLE: 1120 * 1024,       // 1120 KB hard limit (ONLY real constraint)
+  WARNING_THRESHOLD: 1008 * 1024,  // 1008 KB warning (90%)
   LCP_TARGET: 3000,              // LCP < 3s on 4G
   TTI_TARGET: 5000,              // TTI < 5s (Google's "good" TTI on 4G)
   // ES6-modulecascade. Stond op 3000 ms omdat AdSense-scripts de cascade opblies;
@@ -112,7 +125,9 @@ function calculateSize(dir, pattern) {
 
 test.describe('Performance Tests - Bundle Size', () => {
 
-  test('Bundle size < 1000KB (hard limit)', async () => {
+  // Naam interpoleert de constante: hij stond op "1000KB" terwijl de limiet al twee keer
+  // was opgehoogd (1050, 1100). Een testnaam die zijn eigen grens noemt rot stilzwijgend.
+  test(`Bundle size < ${LIMITS.TOTAL_BUNDLE / 1024} KB (hard limit)`, async () => {
     // Calculate sizes for production files
     const jsResult = calculateSize(path.join(ROOT_DIR, 'src'), /\.js$/);
     const cssMainResult = calculateSize(path.join(ROOT_DIR, 'styles'), /\.css$/);

@@ -27,6 +27,9 @@
   /* Eyebrow Badge - Theme-aware */
   --eyebrow-border: var(--color-prompt-border-light);
   --eyebrow-bg: var(--color-prompt-bg-subtle);
+  /* Op het donkere vlak haalt het merkgroen 12,26:1 tegen de eigen achtergrond
+     rgb(20,28,22) — ruim boven AAA, dus hier blijft het staan. Zie het light-blok. */
+  --eyebrow-text: var(--color-cta-primary);
 
   /* Glow Effects - Theme-aware */
   --hero-glow: rgba(160, 240, 0, 0.08);
@@ -51,6 +54,16 @@
   /* Eyebrow Badge - Higher opacity for visibility on light */
   --eyebrow-border: rgba(22, 163, 74, 0.4);
   --eyebrow-bg: rgba(22, 163, 74, 0.08);
+  /* Geen merkgroen op licht (Sessie 217). De badge heeft een EIGEN achtergrond, dus de
+     paginakleur is hier de verkeerde referentie: `--eyebrow-bg` over `#f8f8f8` composite
+     naar rgb(230,241,234), en `#16a34a` haalt daartegen 2,85:1 — 2,74:1 op de hero, waar
+     de radial glow een derde alpha-laag toevoegt. Dat is onder AA (4,5), laat staan de
+     AAA (7) die dit project voert. De eerdere notitie in architecture-patterns.md §10
+     noemde 3,10:1; dat is dezelfde kleur tegen de PAGINA gemeten, en dus te gunstig.
+     Gemeten font-size is 13,5px (desktop) / 10,4px (≤768px) — normale tekst, geen
+     large-text-uitzondering. `--color-text` geeft 17,12:1; rand en tint blijven groen,
+     dus de badge blijft herkenbaar. Bewaakt door tests/e2e/eyebrow-contrast.spec.js. */
+  --eyebrow-text: var(--color-text);
 
   /* Glow Effects - Much subtler on light backgrounds */
   --hero-glow: rgba(22, 163, 74, 0.04);
@@ -337,7 +350,7 @@
   font-family: var(--font-terminal);
   font-size: 0.75rem;
   font-weight: var(--font-weight-medium);
-  color: var(--color-cta-primary);
+  color: var(--eyebrow-text);
   letter-spacing: 0.5px;
   padding: var(--spacing-xs) var(--spacing-md);
   border: 1px solid var(--eyebrow-border);
@@ -2572,8 +2585,23 @@ html {
      reserve meebewegen met `data-state`, dan verandert de documenthoogte bij elke toggle.
      Dat verschuift de scrollpositie, wat de balk opnieuw laat beoordelen — een
      terugkoppellus die onder de duim van de bezoeker gaat stuiteren. Een verborgen balk
-     dekt niets af, dus de reserve is dan hooguit ongebruikte ruimte. */
-  body.landing-page {
+     dekt niets af, dus de reserve is dan hooguit ongebruikte ruimte.
+
+     De reserve staat op de FOOTER en niet op de body (Sessie 217). Op de body werd hij
+     geverfd met `--color-bg`, en dat is in light mode `#f8f8f8` tegen een footer van
+     `#1a1a1a`: 16,39:1, dus een onmiskenbare witte strook onder de donkere footer.
+     Gemeten op 390x844 in light mode: 76px op de negen landingspagina's zónder balk, én
+     11px op index.html (de reserve is 76, de balk 65 — die slack is precies wat er
+     overblijft op maximale scroll). In dark mode is het 1,04:1 en dus onzichtbaar; het is
+     een light-only defect, maar wel op alle tien de pagina's.
+
+     `:has()` staat op de AANWEZIGHEID van de balk, niet op `data-state`. Dat is statisch:
+     gemeten documenthoogte 9481 / 9481 / 9481 over zichtbaar → verborgen → zichtbaar, dus
+     de terugkoppellus hierboven blijft uitgesloten. Specificiteit (0,3,1) verslaat
+     `.landing-footer` (0,1,0) uit mobile.css ongeacht laadvolgorde — geen !important, en
+     `env(safe-area-inset-bottom)` wordt daardoor nog maar één keer geteld in plaats van
+     twee. Bewaakt door tests/e2e/footer-reserve.spec.js. */
+  body.landing-page:has(.mobile-cta-bar) .landing-footer {
     padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
   }
 }

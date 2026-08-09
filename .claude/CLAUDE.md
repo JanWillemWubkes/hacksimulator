@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 216)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 217)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -83,6 +83,23 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ---
 
 ## Recent Critical Learnings
+
+### Sessie 217: Vier pre-existing punten opgeruimd — en drie van de vier vastgelegde metingen klopten niet (09 aug 2026)
+⚠️ **Never:**
+- Contrast meten tegen de **paginakleur** terwijl het element een eigen achtergrond heeft. `getComputedStyle(el).backgroundColor` gaf `rgba(22,163,74,0.08)` — geen kleur waar je tegen kúnt meten — en de notitie greep daarom naar `--color-bg`. Dat mat de laag ónder de verf: 3,10:1 genoteerd, **2,85:1** echt (2,74 op de hero, waar een radial glow laag drie is). De fout was niet alleen fout maar **te gunstig** — de badge zakte van "onder AAA" naar onder **AA**. Composite de ancestor-keten tot de eerste laag met `alpha === 1`.
+- Een open item laten staan zonder test die kan melden dat hij is opgelost. De terminal-overflow van Sessie 189 was op **07 jul** gefixt door commit `3d7df13`, wiens titel de bug letterlijk noemt — en stond vijf sessies later nog open, omdat er site-breed geen horizontale-overflow-assertie op `/terminal.html` bestond. Een notitie meldt niets terug; ook niet dat hij achterhaald is.
+- Een IO-gestuurde `data-state` aflezen na 2 rAF. De callback heeft dan nog niet gevuurd, dus je leest de staat van de **vorige** scrollpositie. Mijn eerste meting rapporteerde daardoor `verborgen` op maximale scroll (de staat van y=0) en overdreef de bug. 300ms settle geeft de echte waarde. Zelfde faalklasse als de smooth-scroll-val van Sessie 216: het zichtbare gedrag is asynchroon, de meting synchroon.
+- `Math.round()` op een geometrieverschil dat uit fractionele layout komt. Documenthoogtes zijn fractioneel (body 1308,5px) terwijl `scrollHeight` naar boven afrondt, dus scrollen naar de bodem schiet tot 1px door — `Math.round(0.5)` maakte daar een valse faler van op `/404.html`. Meet exact en zet de drempel op wat zichtbaar is.
+- Een testnaam een grens laten noemen die elders als constante staat. `Bundle size < 1000KB` stond er nog terwijl de limiet al 1050 en toen 1100 was — dezelfde staleness als de notities die deze sessie opruimde. Interpoleer de constante in de naam.
+- Een budgetgrens ophogen zonder te tellen hoe vaak dat al gebeurde. 1000 → 1050 → 1100 → 1120 is **drie bumps in 14 sessies**; zonder die telling erbij is de volgende bump vanzelfsprekend en is het geen grens meer.
+
+✅ **Always:**
+- Meet vóór je plant wanneer de opdracht "deze meting klopt misschien niet" zegt. Drie van de vier vastgelegde metingen bleken onjuist, en twee daarvan veranderden het plan: (a) raakte 10 pagina's i.p.v. 9, (c) was helemaal geen bug meer. Was ik met de notities gaan bouwen, dan had ik een gefixte bug "gefixt" en een strook op index.html laten staan.
+- Zeg het hardop als een vermoeden in de **omgekeerde richting** uitkomt. Heisenberg verwachtte dat de badge het bij goed meten wél zou halen; hij haalt zelfs AA niet. De diagnose klopte, de conclusie niet — dat onderscheid is de helft van het antwoord.
+- Los "verkeerd geverfde ruimte" op door de ruimte te **verplaatsen**, niet weg te halen. De reserve moest blijven bestaan (weghalen = balk dekt content af) én onvoorwaardelijk blijven (conditioneel = documenthoogte wisselt per toggle → terugkoppellus). In de dónkere footer zetten maakt beide waar en verft hem meteen goed; `:has()` op elementaanwezigheid is statisch, gemeten als 9481/9481/9481 over drie toggles.
+- Loop de **overlevers** van een mutant na, niet alleen de falers. 12 rood / 2 groen zegt niets tot je weet waaróm die 2 groen zijn: `@1280px` valt buiten de `≤1279px`-band en de terugkoppellus-test bewaakt een andere eigenschap. Beide horen groen te zijn — anders had ik een blinde assertie gehad.
+- Kies de mutant die de oorspronkelijke meting **reproduceert**. `width: auto` weghalen gaf letterlijk `left 10 / width 360 / right 370 bij clientWidth 360` — cijfer voor cijfer de notitie uit Sessie 189. Daarmee is in één stap bewezen dat de bug echt was, dat hij weg is, en dat de nieuwe assertie hem zou zien.
+- Gebruik `grep -F` bij het tellen van `[chromium]`-achtige labels. De haken zijn anders een karakterklasse — de meetfout die Sessie 216 zichzelf moest corrigeren.
 
 ### Sessie 216: De CTA-balk verscheen waar hij niets toevoegde — en de guard die dat bewaakte, scrollde nooit (09 aug 2026)
 ⚠️ **Never:**
@@ -173,16 +190,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Vraag het de gebruiker wanneer hij de discriminator in twee seconden kan leveren. Welke tekst het bevestigingspaneel toont, kon alleen een echte inschrijving beantwoorden — en Heisenberg had de flow net doorlopen. De twee kandidaat-teksten liepen na "klaar." uiteen; dat had mijn eerste vraag moeten zijn, niet mijn derde.
 - Maak bij een browserverschil **beide kanten** correct in plaats van uit te zoeken wie wint. `download="<naam>.pdf"` én `Content-Disposition: filename` dragen nu dezelfde naam, dus de fix draagt geen browser-specifieke aanname. Zelfde reflex bij Netlify's header-merge: `Cache-Control` in elk exact blok herhaald i.p.v. hopen dat de wildcard-waarde meekomt (ná deploy bevestigd).
 
-### Sessie 209: W2 browserverificatie — kwaliteitsronde bewezen in de browser (05 aug 2026)
-⚠️ **Never:**
-- Aannemen dat een codewijziging werkt omdat de logica klopt — de skip-certificaat-code was geschreven, gereviewed en gecommit zonder dat iemand 7× `tutorial skip` had getypt in een browser. Pas de Playwright-test bewees dat `stepsSolved` inderdaad op 0 bleef terwijl `currentStep` naar 7 ging.
-- Een pre-installed Chromium-pad raden — Playwright verwachtte `chromium_headless_shell-1234/…/chrome-headless-shell` maar de binary stond op `/opt/pw-browsers/chromium-1194/chrome-linux/chrome`. Alle 242 tests faalden tot `CHROMIUM_PATH` expliciet was gezet. Check het pad, gok het niet.
-
-✅ **Always:**
-- Schrijf tests die het volledige pad door de code bewijzen, niet alleen de eindtoestand — de W2-tests volgen elk het pad (input → manager → certificate/help-system → output) en asserteren op de zichtbare terminal-tekst, niet op interne state. Dat ving ook dat `_hasErrorOutput()` op string-output werkt (niet objecten) en dat de tutorial-guard in `terminal.js:392` de escalatie correct onderdrukt.
-- Behandel pre-existing test-failures als gedocumenteerde baseline — 7/249 failures die óók tegen productie reproduceren zijn geen regressie. Documenteer ze (5× device-emulatie, 1× resize-timing, 1× briefing-timing) zodat de volgende sessie ze niet opnieuw diagnosticeert.
-
-**Rotation:** Top-6 huidig: 209-212-213-214-215-216 (Sessie 208 → `docs/sessions/current.md` via 1-in-1-out, Sessie 216). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 215 (200-204 → `archive-s200-s204.md`); current.md houdt nu het rolling window 205-216 (12 entries). **Volgende bulk-rotatie Sessie 220 → archiveer de staart (205-209).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10") — de eerdere notitie hier gaf bij Sessie 215 "205-209", wat 200-204 als ouder blok had laten staan én een gat in de archiefreeks gemaakt. SESSIONS.md-index gesynct. Historie 81-204 → `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 212-213-214-215-216-217 (Sessie 209 → `docs/sessions/current.md` via 1-in-1-out, Sessie 217). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 215 (200-204 → `archive-s200-s204.md`); current.md houdt nu het rolling window 205-217 (13 entries). **Volgende bulk-rotatie Sessie 220 → archiveer de staart (205-209).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10") — de eerdere notitie hier gaf bij Sessie 215 "205-209", wat 200-204 als ouder blok had laten staan én een gat in de archiefreeks gemaakt. SESSIONS.md-index gesynct. Historie 81-204 → `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -231,7 +239,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Bij elke sessie 1-in-1-out op de CLAUDE.md-learnings (top-6 vast). Bulk-rotatie van `current.md` bij `N % 5 == 0`: archiveer **de staart** — de oudste ~5 entries — naar `archive-sNNN-sMMM.md`. Laatste bulk: Sessie 215 (200-204). **Volgende bulk: Sessie 220** (staart = 205-209). Actuele stand: zie de **Rotation**-regel onder §Recent Critical Learnings.
-**Sessie counter:** 216
+**Sessie counter:** 217
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -286,6 +294,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 09 aug 2026 (Sessie 216 — mobiele CTA-balk stapt opzij zodra het midden van een primaire CTA vrij ligt; conversie-guard herschreven omdat hij nooit scrollde en bounding boxes voor zichtbaarheid aanzag. Volledig: `docs/sessions/current.md`)
-**Version:** 5.90 (Sessie 216 — CTA-balk-zichtbaarheidsregel + guard-herschrijving; oude guard 3× groen / nieuwe 3× rood op dezelfde mutant; 1 zelf-geintroduceerde bug zelf gevangen; 5 nieuwe asserties, alle met mutant bewezen; historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 09 aug 2026 (Sessie 217 — vier pre-existing punten opgeruimd; drie van de vier vastgelegde metingen klopten niet: de 76px-strook raakt 10 pagina's i.p.v. 9, het badge-contrast is 2,85:1 i.p.v. de genoteerde 3,10:1 (dus onder AA), en de terminal-overflow was al gefixt op 07 jul. Volledig: `docs/sessions/current.md`)
+**Version:** 5.91 (Sessie 217 — pre-existing-opruiming: reserve naar de donkere footer, `--eyebrow-text`-token, terminal-overflow-item gesloten met de test die ontbrak, budget expliciet naar 1120 KB; 3 mutanten tweezijdig bewezen incl. de overlevers nagelopen; historie: `docs/sessions/current.md` + TASKS.md)
 

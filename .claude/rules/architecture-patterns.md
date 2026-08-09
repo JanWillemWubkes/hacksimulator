@@ -210,20 +210,50 @@ Bewaakt door "het venster gaat groen aan bij focus (dark|light)" in
 
 ---
 
-## 10. Kleur volgt de achtergrond, niet het merk (Sessie 215)
+## 10. Kleur volgt de achtergrond, niet het merk (Sessie 215, aangescherpt Sessie 217)
 
 `--color-cta-primary` is het merkgroen en werkt overal waar het op de zwarte terminal
-staat (~17:1). Op de **lichte paginaachtergrond** meet datzelfde token **3,10:1** bij
-14,4px — onder WCAG AA (4.5:1), laat staan de AAA die dit project voert.
+staat (~17:1). Op de **lichte paginaachtergrond** meet datzelfde token **3,10:1** — onder
+WCAG AA (4.5:1), laat staan de AAA die dit project voert.
 
 **Regel:** vóór je een merkkleur op tekst zet, kijk op wélke achtergrond die tekst landt.
 Binnen een Dark-Frame-element (terminal, navbar, footer) is merkgroen prima; daarbuiten
 hoort de tekst `var(--color-text)` te zijn en mag hooguit een decoratief glyph
 (`aria-hidden`) de merkkleur dragen.
 
-> Bestaand voorbeeld dat hier nog niet aan voldoet: `.eyebrow-badge` gebruikt
-> `--color-cta-primary` op 0.75rem op de lichte achtergrond. Pre-existing, apart van
-> Sessie 215 vastgelegd.
+### "Welke achtergrond" is de EFFECTIEVE achtergrond, niet de pagina (Sessie 217)
+
+`.eyebrow-badge` stond hier als "voldoet nog niet, 3,10:1". Die waarde was fout, en op de
+gevaarlijke manier: **te gunstig**. De badge heeft een eigen `background: var(--eyebrow-bg)`,
+en dat is een rgba. De tekst ligt dus op de compositie van badge-achtergrond over
+paginakleur, niet op de paginakleur zelf:
+
+```
+light   #16a34a op rgb(230,241,234)    2,85:1   ← de echte waarde: onder AA
+light   op de hero (radial glow erbij) 2,74:1   ← een derde alpha-laag
+dark    #9fef00 op rgb(20,28,22)      12,26:1   ← ruim boven AAA
+```
+
+De 3,10:1 reproduceert exact tegen `--color-bg`. Dat is precies de valstrik:
+`getComputedStyle(el).backgroundColor` geeft `rgba(22,163,74,0.08)` terug — geen kleur waar
+je tegen kúnt meten — en wie dan naar de paginakleur grijpt, meet de laag ónder de verf.
+
+**Meet zo:** loop de ancestor-keten omhoog en composite elke `backgroundColor` tot de eerste
+laag met `alpha === 1`. Uitgeschreven in `tests/e2e/eyebrow-contrast.spec.js` (`effBg()`).
+
+Twee dingen die hierbij horen:
+
+- **Test beide thema's.** De mutant voor deze fix (kleur terug naar `--color-cta-primary`)
+  is **licht rood, donker groen** — 10 pagina's rood in light, allemaal met exact 2,85:1,
+  terwijl dark op 12,26:1 blijft staan. Eén thema testen had de bug doorgelaten. Zelfde les
+  als §9.
+- **Controleer de font-size die je noteert.** De oude notitie zei 14,4px; gemeten is het
+  13,5px op desktop en 10,4px onder 768px (`--font-size-base` zakt daar naar 16px én de
+  badge zelf naar `0.65rem`). Beide zijn normale tekst, dus de lat is 4,5 / 7 — er was geen
+  large-text-uitzondering om op te leunen.
+
+Opgelost met een `--eyebrow-text`-token naast de bestaande `--eyebrow-bg`/`--eyebrow-border`:
+merkgroen in dark, `--color-text` in light (17,12:1).
 
 ---
 

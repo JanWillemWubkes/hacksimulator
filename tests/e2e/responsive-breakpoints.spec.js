@@ -226,3 +226,92 @@ test.describe('Responsive Breakpoints - Week 1+2 Fixes', () => {
   });
 
 });
+
+/**
+ * Horizontale overflow op /terminal.html (regressietest, Sessie 217)
+ *
+ * Sessie 189 legde vast: "MAIN#terminal-container meet left 10 / width 360 -> right 370
+ * bij docW 360, dus de pagina kan ~10px horizontaal wiebelen op mobiel." Dat item bleef
+ * daarna zeven sessies open staan — terwijl het al op 2026-07-07 was opgelost door commit
+ * 3d7df13 ("fix(mobile): terminal-container 10px horizontale overflow op ≤768px"), die
+ * `width: auto` toevoegde aan de ≤768px-regel in styles/mobile.css.
+ *
+ * Het item kon zo lang blijven staan omdat er site-breed geen enkele horizontale-overflow-
+ * assertie op /terminal.html bestond: een notitie meldt niet terug dat hij niet meer klopt.
+ * Deze test doet dat wel.
+ *
+ * Waarom de meting op de DOCUMENT-breedte zit en niet op de terminal-inhoud: het is
+ * `#terminal-container` zélf dat te breed werd (marge 10px + `width: 100%`). De inhoud kan
+ * dit niet veroorzaken — `#terminal-container` draagt `overflow: hidden` en
+ * `#terminal-output` heeft `overflow-x: hidden`, dus daarbinnen wordt alles geclipt. Dat is
+ * ook waarom responsive-ascii-boxes.spec.js `scrollWidth <= clientWidth` daar nutteloos
+ * noemt: voor de INHOUD is die assertie blind, voor de CONTAINER is hij precies goed.
+ *
+ * Mutant die deze test rood maakt: haal `width: auto` uit
+ * `styles/mobile.css` → `@media (max-width:768px) { #terminal-container { ... } }`.
+ * Gemeten met die mutant op 375px: clientWidth 360, scrollWidth 370, container
+ * left 10 / width 360 / right 370 — cijfer voor cijfer de notitie uit Sessie 189.
+ */
+test.describe('Terminal — geen horizontale overflow op telefoonmaten', () => {
+
+  // 320 is de smalste maat die dit project nog bedient; 768 is de bovenrand van de
+  // mobile.css-band. Beide thema's, want een themawissel kan achtergrond- en randbreedtes
+  // veranderen — gemeten identiek, maar dat is een uitkomst en geen aanname.
+  for (const breedte of [320, 360, 375, 390, 414, 768]) {
+    test(`@${breedte}px past de terminal binnen de viewport (dark + light)`, async ({ page }) => {
+      await page.setViewportSize({ width: breedte, height: 800 });
+      await page.goto(TERMINAL_URL);
+
+      for (const thema of ['dark', 'light']) {
+        const meting = await page.evaluate(async (t) => {
+          document.documentElement.setAttribute('data-theme', t);
+          await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+          const de = document.documentElement;
+          const tc = document.getElementById('terminal-container');
+          const r = tc.getBoundingClientRect();
+
+          // Welk element steekt er precies uit? Zonder deze lijst is een faler een raadsel.
+          const buiten = [];
+          document.querySelectorAll('body *').forEach((el) => {
+            const b = el.getBoundingClientRect();
+            if (b.width === 0 || b.height === 0) return;
+            if (b.right > de.clientWidth + 0.5) {
+              buiten.push(
+                `${el.tagName}${el.id ? '#' + el.id : ''}` +
+                  `.${(el.className || '').toString().split(' ')[0]} → right ${Math.round(b.right)}`
+              );
+            }
+          });
+
+          return {
+            overflow: de.scrollWidth - de.clientWidth,
+            clientWidth: de.clientWidth,
+            scrollWidth: de.scrollWidth,
+            container: {
+              left: Math.round(r.left),
+              width: Math.round(r.width),
+              right: Math.round(r.right),
+            },
+            buiten: buiten.slice(0, 5),
+          };
+        }, thema);
+
+        expect(
+          meting.overflow,
+          `@${breedte}px (${thema}): ${meting.overflow}px horizontale overflow. ` +
+            `container left ${meting.container.left} / width ${meting.container.width} / ` +
+            `right ${meting.container.right} bij clientWidth ${meting.clientWidth}. ` +
+            `Buiten beeld: ${meting.buiten.length ? meting.buiten.join(', ') : '(niets)'}`
+        ).toBeLessThanOrEqual(0);
+
+        expect(
+          meting.container.right,
+          `@${breedte}px (${thema}): #terminal-container loopt tot ${meting.container.right} ` +
+            `terwijl de viewport ${meting.clientWidth} breed is — de 10px marge wordt niet ` +
+            `van de breedte afgetrokken (zie width:auto in mobile.css).`
+        ).toBeLessThanOrEqual(meting.clientWidth);
+      }
+    });
+  }
+});

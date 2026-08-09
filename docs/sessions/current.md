@@ -4,6 +4,118 @@
 
 ---
 
+## Sessie 217: Vier pre-existing punten opgeruimd — en drie van de vier vastgelegde metingen klopten niet (09 aug 2026)
+
+**Mission:** Vier dingen stonden in de repo als "gemeten, gedocumenteerd, nooit gefixt" — één sinds Sessie 189. Heisenberg vroeg ze af te handelen, met de expliciete opdracht om te zeggen wanneer een vastgelegde meting níét klopt in plaats van hem over te nemen. Bij twee punten was "dit is geen bug" een geldige uitkomst, mits gemeten.
+
+**Commits:** *(zie TASKS.md §Sprint)*
+
+### De uitkomst in één tabel
+
+| Punt | De notitie zei | De meting zegt |
+|---|---|---|
+| (a) 76px reserve | 9 pagina's, zichtbaarheid onbekend | **Bug** — 16,39:1 seam in light; index.html doet mee met 11px → **10 pagina's** |
+| (b) Badge-contrast | 3,10:1 bij 14,4px, "voldoet nog niet" | **Bug, en de notitie was te gúnstig** — 2,85:1 (2,74 op de hero) bij 13,5/10,4px; light-only |
+| (c) Terminal-overflow | open sinds Sessie 189 | **Geen bug** — al gefixt op 07 jul door commit `3d7df13` |
+| (d) Budget 1100 KB | 1,4% marge | Bevestigd; fixes kosten ~2 KB, dus het was puur een beleidsvraag |
+
+Heisenberg wantrouwde de metingen van (a) en (b). Bij (b) klopte dat wantrouwen in de diagnose maar niet in de richting: de badge haalt AAA niet, hij haalt zelfs **AA** niet. De "geen bug"-uitkomst kwam bij (c) vandaan.
+
+### (a) De reserve was zichtbaar, en op één pagina meer dan genoteerd
+
+`body.landing-page { padding-bottom: 76px }` wordt geverfd met de **body**-achtergrond. In light is dat `#f8f8f8` tegen een footer van `#1a1a1a` — 16,39:1, een onmiskenbare witte strook onder de donkere footer. In dark 1,04:1 en dus onzichtbaar; het is een light-only defect. Screenshot van `/over-ons.html` @390x844 bevestigt het visueel.
+
+Nieuw t.o.v. de notitie: **index.html heeft hem ook.** De reserve is 76px en de balk 65px — die 11px slack is precies wat er op maximale scroll overblijft. Dus 76px op negen pagina's plus 11px op de tiende.
+
+**Zelfcorrectie tijdens het meten.** Mijn eerste aflezing gaf `balkState: verborgen` op maximale scroll, wat de strook veel groter zou maken. Dat was een stale read: na 2 rAF had de IntersectionObserver-callback nog niet gevuurd, dus ik las de staat van `y=0` af. Met 300ms settle staat de balk daar `zichtbaar`. Die settle staat nu in de test.
+
+**Fix: de reserve verhuist naar de footer** in plaats van te verdwijnen. De footer is donker in beide thema's, dus de ruimte wordt donker geverfd; met `:has(.mobile-cta-bar)` krijgen balkloze pagina's hem helemaal niet. Dat lost beide gevallen met één regel op.
+
+De reden dat de reserve op de body stond, was dat hij **onvoorwaardelijk** moest zijn: beweegt hij mee met `data-state`, dan verandert de documenthoogte bij elke toggle → scrollsprong → herbeoordeling → terugkoppellus. `:has()` op de *aanwezigheid* van het element is statisch, maar dat is een bewering tot je hem meet — gemeten documenthoogte **9481 / 9481 / 9481** over `zichtbaar → verborgen → zichtbaar`. Staat nu als eigen test.
+
+Specificiteit (0,3,1) verslaat `.landing-footer` (0,1,0) uit mobile.css ongeacht laadvolgorde, dus geen `!important`. Bijvangst: `env(safe-area-inset-bottom)` werd dubbel geteld (body-padding + footer-padding) en nu één keer.
+
+### (b) De contrastmeting was tegen de verkeerde achtergrond — en te gunstig
+
+`.eyebrow-badge` heeft een **eigen** `background: var(--eyebrow-bg)`, en dat is een rgba. De tekst ligt dus op de compositie van badge-achtergrond over paginakleur:
+
+```
+light            #16a34a op rgb(230,241,234)    2,85:1   ← de echte waarde: onder AA
+light op de hero (radial glow = laag drie)      2,74:1
+dark             #9fef00 op rgb(20,28,22)      12,26:1   ← ruim boven AAA
+vs paginabg      #16a34a op #f8f8f8             3,10:1   ← reproduceert de notitie exact
+```
+
+Dat de 3,10:1 exact reproduceert tegen `--color-bg` is het bewijs voor de diagnose. De valstrik: `getComputedStyle(el).backgroundColor` geeft `rgba(22,163,74,0.08)` — geen kleur waar je tegen kúnt meten — en wie dan naar de paginakleur grijpt, meet de laag ónder de verf.
+
+Ook de genoteerde font-size klopte niet: 14,4px zou `0.8rem × 18px` zijn. Gemeten is het **13,5px** (desktop) en **10,4px** onder 768px, waar `--font-size-base` naar 16px zakt én de badge zelf naar `0.65rem`. Beide zijn normale tekst, dus er was geen large-text-uitzondering om op te leunen.
+
+**Fix:** `--eyebrow-text`-token naast de bestaande `--eyebrow-bg`/`--eyebrow-border` — merkgroen in dark (12,26:1), `--color-text` in light (17,12:1). Eén token, tien badges op negen pagina's erven mee. Rand en tint blijven groen, dus de badge blijft herkenbaar.
+
+`#14532d` (green-900, 7,87:1) was het alternatief dat het merkgroen behoudt; afgewezen op marge — 12% boven AAA zakt eronder zodra iemand de alpha van `--eyebrow-bg` aanraakt, en dit project heeft net laten zien hoe stilzwijgend zo'n getal rot.
+
+### (c) Al gefixt op 7 juli; de notitie was een maand stale
+
+Verse meting op `/terminal.html` @375px (`clientWidth` 360 door een 15px scrollbar): container left 10 / **width 340** / right 350 → **overflow 0**. Idem over 320/360/375/390/414/768 in dark én light.
+
+`git log` op `styles/mobile.css` wijst de fix aan: commit **`3d7df13` (2026-07-07)**, titel letterlijk *"fix(mobile): terminal-container 10px horizontale overflow op ≤768px"*, die `width: auto` toevoegde. De melding is van 30 juni; de fix kwam een week later en het item bleef daarna nog vijf sessies open staan.
+
+De schijnbare tegenstrijdigheid in de notitie ("375px" in de titel, `docW 360` in de meting) is dezelfde meting vóór en ná aftrek van de scrollbar.
+
+**Waarom het zo lang bleef staan:** er was site-breed geen enkele horizontale-overflow-assertie op `/terminal.html`. Een notitie meldt niet terug dat hij niet meer klopt. Dat gat is nu gedicht.
+
+### (d) Budget: expliciet besloten, niet als bijvangst
+
+Gemeten vóór de fixes: 1084,92 KB / 1100 KB — 15,08 KB vrij (1,37%). De fixes kosten samen ~2 KB (punt (c) kost nul bronbytes), dus ze pasten. De vraag was beleid, en die is expliciet beantwoord: **1120 KB**, 32,95 KB vrij (2,94%) — hetzelfde ~3%-argument als Sessie 214, die bij 1069,20 KB naar 1100 ging.
+
+Bij de bump staat nu een waarschuwing: dit is de **derde bump in 14 sessies**. Nog een keer zonder discussie maakt er een ratel van in plaats van een grens.
+
+Bijvangst: de testnaam luidde `Bundle size < 1000KB` terwijl de limiet al twee keer was opgehoogd — precies dezelfde staleness als de notities die deze sessie opruimde. De naam interpoleert nu de constante.
+
+### Tests — alle drie tweezijdig bewezen
+
+| Mutant | Uitkomst |
+|---|---|
+| Reserve terug op de body | **12 rood / 2 groen** — en die 2 zijn groen om principiële redenen |
+| Badge-kleur terug naar `--color-cta-primary` | **10 rood, allemaal in light**, allemaal exact 2,85:1 |
+| `width: auto` weg uit mobile.css | **6 rood**, elk met `MAIN#terminal-container` benoemd |
+
+De twee overlevers van mutant 1 zijn nagelopen in plaats van weggeredeneerd: `@1280px` valt buiten de `≤1279px`-band waar de reserve leeft, en de terugkoppellus-test bewaakt een andere eigenschap (de oude code was óók onvoorwaardelijk). Beide horen groen te zijn.
+
+Mutant 3 gaf op 360px letterlijk `container left 10 / width 360 / right 370 bij clientWidth 360, overflow 10` — **cijfer voor cijfer de notitie uit Sessie 189**. Dat is meteen het bewijs dat de assertie die er had moeten staan de bug wél had gezien.
+
+Mutant 2 is licht rood en donker groen: één thema testen had de bug doorgelaten. Zelfde les als §9 van de rules.
+
+**Eén valse faler onderweg, en waarom hij vals was.** `/404.html` gaf 1px onbedekte ruimte. Doorgemeten: de documenthoogte is fractioneel (body 1308,5px) terwijl `scrollHeight` naar boven afrondt, dus scrollen naar de bodem schiet tot 1px door. `Math.round(0.5)` maakte daar 1 van. De assertie meet nu exact en eist `< 1`; een echte regressie is 76 of 11 en komt daar niet bij in de buurt.
+
+### Verificatie
+
+Volle suite tegen `nostore-server.py`: chromium **343✓/2✘**, firefox **341✓/2✘**. WebKit is na 85✓/0✘ afgekapt — zijn resterende wachtrij betrof vrijwel geheel `/terminal.html`, en dat bestand is ongewijzigd én laadt noch `landing.css` noch een van de tien aangepaste HTML-bestanden. In plaats daarvan gericht gedraaid wat de diff wél raakt: **88✓/0✘ op webkit** over `footer-reserve`, `homepage-conversion`, `hero-demo`, `gidsen-layout`, `navbar-collapse` en `lead-magnet`.
+
+De twee falers per motor zijn `tutorial-mobile.spec.js:65` (chromium + firefox) en `responsive-ascii-boxes.spec.js:427` (firefox) — precies de bekende lijst. Geïsoleerd tegen `git archive HEAD` op poort 8898 gaven oud en nieuw **byte-identiek 101✓/3✘, met dezelfde testnummers 43/89/96**. Daarmee is "pre-existing" een meting.
+
+**Twee rapportagefouten van mezelf, beide gecorrigeerd:**
+
+1. Ik meldde twee `gamification`-falers als "onverklaard". Ze waren **flaky onder belasting**: de chromium-retries slaagden (`✓ 133`, `✓ 134`) en op firefox slaagden ze meteen. Ik telde `✘`-regels in plaats van uitkomsten — een `✘` is een mislukte póging, niet per se een mislukte test. De eindregel (`N failed` / `N flaky`) is de waarheid.
+2. Mijn eerste `sed`-vervanging van de `**Last updated:**`-regel in CLAUDE.md raakte het **sjabloonvoorbeeld** in de `/summary`-sectie in plaats van de echte footer, omdat dat voorbeeld eerder in het bestand staat en het patroon niet aan regelbegin was verankerd. Teruggezet en beide regels gecontroleerd.
+
+### Metrics
+
+- **Bundel:** 1087,05 KB / **1120** KB — 32,95 KB vrij (2,94%)
+- **Spec-bestanden:** 34 → **36** (`footer-reserve.spec.js`, `eyebrow-contrast.spec.js` nieuw)
+- **Nieuwe asserties:** 3 testgroepen, elk met mutant bewezen
+- **Aangeraakte bestanden:** `styles/landing.css`, 10× HTML (`?v=144`), `tests/e2e/performance.spec.js`, `tests/e2e/responsive-breakpoints.spec.js`, `.claude/rules/architecture-patterns.md`, `TASKS.md`
+
+### Learnings
+
+Zie `.claude/CLAUDE.md` §Recent Critical Learnings.
+
+### Volgende stappen
+
+- De optionele vijfde taak is **niet** gedaan: de baseline-testfalers staan nog Chromium-only vastgelegd terwijl een driemotorenrun er andere geeft. Behandel "deze test meet iets dat headless niet kán" daar als geldige uitkomst → expliciete `test.skip()` mét reden, niet opnieuw een baseline-notitie.
+
+---
+
 ## Sessie 216: De CTA-balk verscheen waar hij niets toevoegde — en de guard die dat bewaakte, scrollde nooit (09 aug 2026)
 
 **Mission:** Sessie 215 legde vast dat `.mobile-cta-bar` bij scrollpositie 0 overbodig is én chips afdekt, maar loste het niet op: de fix zou de conversiegarantie tijdsafhankelijk maken en de synchrone scroll-guard in `homepage-conversion.spec.js` breken. Heisenberg vroeg om dat alsnog uit te zoeken, te beslissen tussen IntersectionObserver en `position: sticky`, en te bouwen — met de guard minstens zo streng als hij was.
@@ -820,3 +932,16 @@ Geen vierde gids (bottleneck is verkeer, niet aanbod). Geen docenten-pagina of c
 - Laat een generator uit het artefact lezen i.p.v. uit een kopie — `build-blog-og-images.mjs` haalt titel (`<h1>`) en categorie (`og:article:section`) uit de post zelf, dus er ontstaat géén 8e lockstep-locatie naast de bestaande 7.
 - Nieuwe copy in de lengteband van de bestaande varianten brengen — mijn eerste FASE 4-transitie had skills van 44-57 tekens waar de bestaande 21-37 zijn, en een bridge van 146 tegen ~50. Meten tegen de siblings, niet tegen een absolute limiet.
 - Wees eerlijk over het plafond van een win: og:image is de enige externe-impact-win, maar Google gebruikt het níét in zoekresultaten. De waarde zit in gedeelde links + het feit dat elke volgende post zijn kaart nu gratis erft.
+
+---
+
+## Sessie 209 — learnings (geroteerd uit CLAUDE.md, Sessie 217)
+
+### Sessie 209: W2 browserverificatie — kwaliteitsronde bewezen in de browser (05 aug 2026)
+⚠️ **Never:**
+- Aannemen dat een codewijziging werkt omdat de logica klopt — de skip-certificaat-code was geschreven, gereviewed en gecommit zonder dat iemand 7× `tutorial skip` had getypt in een browser. Pas de Playwright-test bewees dat `stepsSolved` inderdaad op 0 bleef terwijl `currentStep` naar 7 ging.
+- Een pre-installed Chromium-pad raden — Playwright verwachtte `chromium_headless_shell-1234/…/chrome-headless-shell` maar de binary stond op `/opt/pw-browsers/chromium-1194/chrome-linux/chrome`. Alle 242 tests faalden tot `CHROMIUM_PATH` expliciet was gezet. Check het pad, gok het niet.
+
+✅ **Always:**
+- Schrijf tests die het volledige pad door de code bewijzen, niet alleen de eindtoestand — de W2-tests volgen elk het pad (input → manager → certificate/help-system → output) en asserteren op de zichtbare terminal-tekst, niet op interne state. Dat ving ook dat `_hasErrorOutput()` op string-output werkt (niet objecten) en dat de tutorial-guard in `terminal.js:392` de escalatie correct onderdrukt.
+- Behandel pre-existing test-failures als gedocumenteerde baseline — 7/249 failures die óók tegen productie reproduceren zijn geen regressie. Documenteer ze (5× device-emulatie, 1× resize-timing, 1× briefing-timing) zodat de volgende sessie ze niet opnieuw diagnosticeert. **Nuance uit Sessie 216/217:** die lijst is Chromium-only opgenomen en dus onvolledig; een driemotorenrun geeft andere falers. Leg een baseline per motor vast, of geef een test die headless niet kán halen een expliciete `test.skip()` mét reden.
