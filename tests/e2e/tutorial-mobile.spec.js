@@ -62,13 +62,38 @@ test.describe('Tutorial Mobile', () => {
     await expect(output).toContainText('tutorial start', { timeout: 2000 });
   });
 
+  // Deze test asserteerde tot Sessie 217 dat de briefing het woord 'ping' bevat. Dat is
+  // sinds commit c031d9d (03 aug 2026, "Terminal eerlijk maken") bewust niet meer zo: alle
+  // vier de objectives zijn toen herschreven zodat ze het commando NIET verklappen —
+  //   was: 'Gebruik ping om te controleren of het doelwit (192.168.1.100) bereikbaar is.'
+  //   nu:  'Controleer of het doelwit 192.168.1.100 überhaupt bereikbaar is.'
+  // De leerling moet zelf bedenken dat connectiviteit testen = ping; daar is `hint` voor.
+  //
+  // De faler die daaruit volgde is in Sessie 209 gecatalogiseerd als "briefing render
+  // timing" en bleef daarna acht sessies als baseline-notitie staan. Het was geen timing en
+  // geen omgevingsartefact: gemeten faalt hij in chromium, firefox én webkit, op 375px én
+  // 1440px, en 'MISSION BRIEFING' + 'SecureCorp' komen wél door. Alleen 'ping' niet — omdat
+  // het er niet hoort te staan.
+  //
+  // De assertie bewaakt nu de pedagogische invariant zelf: de briefing toont de opdracht,
+  // en verklapt het commando niet.
   test('recon mission briefing renders on mobile', async ({ page }) => {
     await typeCommand(page, 'tutorial recon');
     const output = page.locator('#terminal-output');
 
     await expect(output).toContainText('MISSION BRIEFING', { timeout: 5000 });
     await expect(output).toContainText('SecureCorp', { timeout: 2000 });
-    await expect(output).toContainText('ping', { timeout: 2000 });
+    await expect(output).toContainText('Test connectiviteit', { timeout: 2000 });
+    await expect(output).toContainText('192.168.1.100', { timeout: 2000 });
+
+    // De briefing mag het antwoord niet weggeven. Zou iemand een objective terugzetten naar
+    // "Gebruik ping om ...", dan gaat deze test rood — en dat is de bedoeling.
+    const tekst = await output.innerText();
+    const briefing = tekst.slice(tekst.indexOf('MISSION BRIEFING'));
+    expect(
+      briefing,
+      `de briefing noemt het op te lossen commando letterlijk; dat verklapt de opdracht:\n${briefing}`
+    ).not.toMatch(/\bping\b/);
   });
 
   test('full recon scenario completion on mobile', async ({ page }) => {

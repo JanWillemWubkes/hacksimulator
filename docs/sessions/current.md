@@ -110,9 +110,32 @@ De twee falers per motor zijn `tutorial-mobile.spec.js:65` (chromium + firefox) 
 
 Zie `.claude/CLAUDE.md` §Recent Critical Learnings.
 
+### De baseline per motor — er is er geen meer
+
+De optionele vijfde taak alsnog gedaan. Uitkomst: **de vastgelegde baseline klopte op geen enkel punt, en na afloop is hij leeg.**
+
+| Vastgelegd (Sessie 209 / startprompt) | Gemeten in Sessie 217 |
+|---|---|
+| 5× `tutorial-gestures` — "geen echte touch in headless" | **5× groen** op chromium én firefox. Verdwenen. |
+| 1× `tutorial-mobile:65` — "briefing render timing" | Faalt in **alle drie** de motoren, maar niet door timing |
+| 1× `responsive-ascii-boxes` — "live resize timing" | Faalt op firefox, maar niet door timing |
+| `responsive-breakpoints:194` — firefox + webkit | Groen op chromium/firefox, **flaky op webkit** (3/12) |
+| `autocomplete-filesystem:88` — firefox flaky | Groen |
+| *(niet vastgelegd)* | `feedback:207` + `:233` — **structureel rood op webkit** |
+
+**Geen van de falers was een omgevingsartefact.** De opdracht noemde "deze test meet iets dat headless niet kán" als geldige uitkomst; die categorie kwam niet één keer voor. Alle vier waren fouten in de test zelf:
+
+1. **`tutorial-mobile:65`** verwachtte het woord `ping` in de briefing. Commit `c031d9d` (03 aug, "Terminal eerlijk maken") herschreef juist alle vier de objectives om het commando **niet** te verklappen — `'Gebruik ping om te controleren of ...'` werd `'Controleer of het doelwit 192.168.1.100 überhaupt bereikbaar is.'`. Twee dagen later noemde Sessie 209 de faler "briefing render timing". De assertie bewaakt nu de pedagogische invariant zelf: de briefing toont de opdracht en verklapt het commando niet. Mutant = de productwijziging terugdraaien → rood.
+2. **`responsive-ascii-boxes:427`** zette viewport 375px en verwachtte box-tekens, terwijl zijn eigen Chromium-zuster drie regels hoger schrijft dat mobiel bewust zonder box-tekens rendert. Gemeten met `leerpad`: **0/6 op 375px, 6/6 op 1440px, in beide motoren**. Nu dezelfde desktop-viewport als die zuster. Mutant = viewport terug naar 375 → rood.
+3. **`feedback:207` + `:233`** wachtten met een vaste `waitForTimeout(2500)` op een modal die zichzelf pas ná een eigen `setTimeout` van 2000ms sluit, herstelt én opnieuw koppelt (`src/ui/feedback.js:277`) — **500ms marge voor drie stappen**. Hield stand op chromium/firefox, liep op webkit in de testtimeout van 30s (gemeten 32-36s). Vervangen door een conditie-wacht; **0/2 → 8/8 groen**.
+4. **`responsive-breakpoints:194`** deed `goto` op 1280px en resizede daarna naar 375px, terwijl `mobile.css` in terminal.html achter `media="screen and (max-width: 768px)"` hangt en dus pas ná die resize hoeft te laden — plus de navbar wordt geïnjecteerd, dus `.navbar-toggle` bestond soms nog niet. Viewport nu vóór de navigatie. **3/12 → 8/8 groen.**
+
+**Meetfout van mezelf, hardop gecorrigeerd.** Ik mat `responsive-breakpoints:194` als "nieuw 0/6 rood, oud 3/6 groen" en noemde dat een mogelijke regressie van mij. Dat kon niet: ik had `/tmp/pre-change` ná de commit aangemaakt, dus poort 8898 serveerde mijn eigen commit. `md5sum` over `terminal.html`, `terminal.css`, `mobile.css`, `main.css` en `main.js` gaf **identiek** — er wás geen codeverschil om aan toe te schrijven. Een oud/nieuw-vergelijking is alleen bewijs als de twee kanten aantoonbaar verschillen.
+
 ### Volgende stappen
 
-- De optionele vijfde taak is **niet** gedaan: de baseline-testfalers staan nog Chromium-only vastgelegd terwijl een driemotorenrun er andere geeft. Behandel "deze test meet iets dat headless niet kán" daar als geldige uitkomst → expliciete `test.skip()` mét reden, niet opnieuw een baseline-notitie.
+- De optionele vijfde taak is alsnog gedaan (zie de sectie hierboven). **Er is geen baseline van bekende falers meer** — alle vier bleken fouten in de test zelf en zijn gerepareerd, geen enkele was een omgevingsartefact. Voeg er dus ook geen nieuwe notitie toe: gaat er iets rood, dan is dat vanaf nu een echt signaal.
+- De volle driemotorensuite is deze sessie niet in één keer uitgedraaid. Chromium en firefox wel (343✓ resp. 341✓), webkit apart (350 tests). Bij een volgende volledige run hoort de uitkomst **nul** falers te zijn; is dat niet zo, behandel het als regressie en niet als "bekend".
 
 ---
 

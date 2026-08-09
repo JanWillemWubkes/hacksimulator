@@ -5,6 +5,27 @@ import { test, expect } from './fixtures.js';
 
 const TEST_URL = '/terminal.html';
 
+/**
+ * Wacht tot het bedank-scherm weg is en het formulier weer bruikbaar is (Sessie 217).
+ *
+ * `_showSuccess()` in src/ui/feedback.js:277 zet een EIGEN `setTimeout` van 2000ms, en pas
+ * daarna wordt de inhoud hersteld, de modal gesloten en worden de handlers opnieuw gekoppeld.
+ * De tests wachtten daar met een vaste `waitForTimeout(2500)` op — 500ms marge voor drie
+ * stappen. Dat hield stand op Chromium en Firefox, maar viel op WebKit headless structureel
+ * om: `feedback.spec.js:207` en `:233` liepen in hun testtimeout van 30s (gemeten 32-36s).
+ *
+ * Dit is nadrukkelijk GEEN "headless kan dit niet meten" — het is een vaste wachttijd die te
+ * krap staat over de eigen timer van het product. Wachten op de conditie is motor-
+ * onafhankelijk en heeft helemaal geen marge nodig.
+ *
+ * Alleen gebruikt waar een test ná het inzenden opnieuw met de modal interacteert; de
+ * enkelvoudige inzendingen (regel ~123 en ~148) racen nergens mee en blijven ongemoeid.
+ */
+async function wachtTotFormulierTerug(page) {
+  await expect(page.locator('#feedback-modal')).not.toHaveClass(/active/, { timeout: 15000 });
+  await expect(page.locator('#feedback-submit')).toBeAttached({ timeout: 15000 });
+}
+
 test.describe('Feedback System', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to test page
@@ -209,14 +230,14 @@ test.describe('Feedback System', () => {
     await page.click('#footer-feedback-link');
     await page.locator('.rating-stars .star').nth(4).click();
     await page.click('#feedback-submit');
-    await page.waitForTimeout(2500);
+    await wachtTotFormulierTerug(page);
 
     // Submit second feedback
     await page.click('#footer-feedback-link');
     await page.locator('.rating-stars .star').nth(2).click();
     await page.locator('#feedback-comment').fill('Second feedback');
     await page.click('#feedback-submit');
-    await page.waitForTimeout(2500);
+    await wachtTotFormulierTerug(page);
 
     // Verify both entries in localStorage
     const feedbackData = await page.evaluate(() => {
@@ -243,7 +264,7 @@ test.describe('Feedback System', () => {
       }
 
       await page.click('#feedback-submit');
-      await page.waitForTimeout(2500);
+      await wachtTotFormulierTerug(page);
     }
 
     // Get stats via console
@@ -265,7 +286,7 @@ test.describe('Feedback System', () => {
     await page.locator('.rating-stars .star').nth(3).click();
     await page.locator('#feedback-comment').fill('Test comment');
     await page.click('#feedback-submit');
-    await page.waitForTimeout(2500);
+    await wachtTotFormulierTerug(page);
 
     // Open modal again
     await page.click('#footer-feedback-link');

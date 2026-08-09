@@ -191,15 +191,29 @@ test.describe('Responsive Breakpoints - Week 1+2 Fixes', () => {
     expect(modalDimensions.height).toBe(667); // Exact viewport height
   });
 
+  // Twee races zaten hier tot Sessie 217 in, en samen maakten ze deze test flaky op WebKit
+  // (gemeten 3 groen / 9 rood over twaalf geïsoleerde runs, terwijl chromium en firefox hem
+  // in de volle suite gewoon haalden):
+  //
+  //   1. `goto` gebeurde op de config-viewport van 1280px, en pas dáárna werd naar 375px
+  //      geresized. `styles/mobile.css` hangt in terminal.html achter
+  //      `media="screen and (max-width: 768px)"`, dus bij het laden matcht hij niet en wordt
+  //      hij gedeprioriteerd. Direct na de resize is hij er nog niet, en dan is de hamburger
+  //      niet zichtbaar. Een echte telefoon laadt mét een smalle viewport — zo hoort de test
+  //      dat ook te doen.
+  //   2. De navbar wordt door `init-components.js` geïnjecteerd, dus `.navbar-toggle` bestaat
+  //      vlak na `goto` nog helemaal niet.
+  //
+  // Beide zijn opgelost door de viewport vóór de navigatie te zetten en op de injectie te
+  // wachten. De desktop-helft mag wél resizen: main.css hangt niet achter een media-attribuut.
   test('Responsive navbar layout - mobile vs desktop', async ({ page }) => {
+    // Test 1: Mobile layout (375px) — viewport VÓÓR goto
+    await page.setViewportSize({ width: 375, height: 667 });
     await page.goto(TERMINAL_URL);
 
-    // Test 1: Mobile layout (375px)
-    await page.setViewportSize({ width: 375, height: 667 });
-
-    // Verify hamburger is visible
+    // Verify hamburger is visible (wacht op de component-injectie)
     const hamburgerMobile = page.locator('.navbar-toggle');
-    await expect(hamburgerMobile).toBeVisible();
+    await expect(hamburgerMobile).toBeVisible({ timeout: 10000 });
 
     // Verify navigation links are hidden by default
     const navMenuMobile = page.locator('.navbar-menu');

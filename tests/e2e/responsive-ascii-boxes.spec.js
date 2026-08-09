@@ -424,13 +424,25 @@ test.describe('Cross-Browser ASCII Box Rendering', () => {
     expect(output).toContain('│');
   });
 
+  // Deze test stond tot Sessie 217 op een viewport van 375px en verwachtte daar box-tekens.
+  // Dat is het tegenovergestelde van het bedoelde gedrag: mobiel rendert bewust zonder
+  // box-tekens (Sessie 83, "Mobile Minimalist Rendering"), precies zoals de Chromium-variant
+  // hierboven in zijn eigen commentaar zegt. Gemeten met `leerpad`:
+  //
+  //   firefox  @375x667  → 0/6 box-tekens        chromium @375x667  → 0/6
+  //   firefox  @1440x900 → 6/6 box-tekens        chromium @1440x900 → 6/6
+  //
+  // De faler die daaruit volgde stond sinds Sessie 209 als baseline genoteerd ("live resize
+  // timing"). Het was geen timing: de test mat op een breedte waar niemand box-tekens tekent.
+  // Nu dezelfde desktop-viewport als zijn Chromium-zuster, waarmee hij meet wat hij beweert
+  // te meten — dat Firefox identieke Unicode-ondersteuning heeft.
   test('Box characters render correctly (Firefox)', async ({ page, browserName }) => {
     test.skip(browserName !== 'firefox', 'Firefox-only test');
 
-    await page.setViewportSize({ width: 375, height: 667 });
+    // Desktop viewport — mobiel gebruikt het vereenvoudigde formaat zonder box-tekens
+    await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/terminal.html');
     await acceptLegalModal(page);
-    await closeMobileMenu(page);
 
     await executeCommand(page, 'leerpad');
 
