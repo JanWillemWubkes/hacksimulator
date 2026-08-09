@@ -550,32 +550,34 @@ test.describe('Hero-terminal — de uitnodiging om te typen', () => {
   }
 
   // `.mobile-cta-bar` staat `position: fixed` onderaan (alleen op index.html, ≤1279px) en
-  // dekt bij scrollpositie 0 af wat daar toevallig ligt. Gemeten over zes telefoonmaten,
-  // met consent gezet zodat dit de balk meet en niet de cookiebanner — en telkens tegen
-  // `git archive HEAD` op een tweede server, zodat "pre-existing" een meting is en geen
-  // aanname. Oud en nieuw gaven een byte-identieke uitkomst:
+  // dekte bij scrollpositie 0 af wat daar toevallig lag. Gemeten over zes telefoonmaten in
+  // Sessie 215, met consent gezet zodat dit de balk meet en niet de cookiebanner — en tegen
+  // `git archive HEAD` op een tweede server, zodat "pre-existing" een meting was en geen
+  // aanname. Oud en nieuw gaven toen een byte-identieke uitkomst:
   //
   //   375×812 · 412×915 · 768×1024 → geen chip bedekt
   //   360×800 · 390×844            → `whoami`, `pwd`, `help` bedekt door de balk
   //
-  // Die tweede regel is een pre-existing conditie sinds de chips bestaan (Sessie 214),
-  // niet iets van deze wijziging. Bewust niet opgelost: de balk is bij scrollpositie 0
-  // aantoonbaar overbodig (de hero-CTA staat op élke gemeten maat in beeld), dus de
-  // principiële fix is hem daar verbergen — en dat maakt een conversie-kritische
-  // eigenschap tijdsafhankelijk én breekt de synchrone scroll-guard in
-  // homepage-conversion.spec.js. Dat is een eigen afweging, geen bijvangst.
+  // Die tweede regel stond hier als BASELINE vastgelegd in plaats van als notitie, precies
+  // zodat hij zou terugmelden wanneer de balk gefixt werd. Dat moment is Sessie 216: de balk
+  // stapt nu opzij zodra het midden van een primaire CTA vrij in beeld ligt, en bij
+  // scrollpositie 0 is dat op élke gemeten maat de hero-CTA. Alle drie de lijsten staan
+  // daarom op `[]` — de test is van "de bedekking groeit niet" een regressiewacht geworden
+  // op "er wordt niets bedekt". 360×800 is erbij gezet; die maat stond in het commentaar
+  // maar niet in de map, dus de conditie werd daar niet bewaakt.
   //
-  // Deze test bewaakt dus twee dingen: dat de hint de chips niet verder omlaag duwt, en
-  // dat de bedekking niet groeit voorbij de vastgelegde baseline.
+  // Deze test bewaakt dus twee dingen: dat de hint de chips niet verder omlaag duwt, en dat
+  // geen enkele chip door de balk (of iets anders) wordt afgedekt.
   const BASELINE_BEDEKT = {
+    '360x800': [],
     '375x812': [],
-    '390x844': ['whoami', 'pwd', 'help']
+    '390x844': []
   };
 
   for (const [maat, baseline] of Object.entries(BASELINE_BEDEKT)) {
     const [width, height] = maat.split('x').map(Number);
 
-    test(`@${maat} blijft de chipbedekking op de vastgelegde baseline`, async ({ page }) => {
+    test(`@${maat} dekt niets de suggestiechips af`, async ({ page }) => {
       await page.addInitScript(() => {
         localStorage.setItem(
           'hacksim_analytics_consent',
@@ -585,11 +587,17 @@ test.describe('Hero-terminal — de uitnodiging om te typen', () => {
       await page.setViewportSize({ width, height });
       await page.goto('/index.html');
 
+      // De balk beslist pas zodra landing-demo.js heeft gedraaid; `data-state` bewijst dat.
+      // Zonder deze wacht meet je de CSS-default (zichtbaar) en is de test groen om de
+      // verkeerde reden — of rood op een pagina die niets mankeert.
+      await page.waitForFunction(() => document.querySelector('.mobile-cta-bar[data-state]'));
+
       const meting = await page.evaluate(() => {
         const bar = document.querySelector('.mobile-cta-bar');
         return {
           hintZichtbaar:
             getComputedStyle(document.querySelector('.hero-terminal-hint')).display !== 'none',
+          barState: bar ? bar.dataset.state : null,
           barTop: bar ? Math.round(bar.getBoundingClientRect().top) : null,
           chips: [...document.querySelectorAll('.hero-chip')].map((c) => {
             const b = c.getBoundingClientRect();
@@ -609,16 +617,23 @@ test.describe('Hero-terminal — de uitnodiging om te typen', () => {
       });
 
       // De hint kost 30px; die duwden de tweede rij op 375×812 van midden-736 naar
-      // midden-764 terwijl de balk vanaf y=747 vastzit — dan navigeert een tik op
-      // `whoami` wég in plaats van het command te draaien.
+      // midden-764 terwijl de balk vanaf y=747 vastzat — dan navigeerde een tik op
+      // `whoami` wég in plaats van het command te draaien. De balk stapt nu weliswaar
+      // opzij bij scrollpositie 0, maar de hint lost een *desktop*-probleem op (met een
+      // muis lijkt het venster een plaatje); op een telefoon staan er zes knoppen onder
+      // de prompt. Blijft dus uit — bewust, niet bij gebrek aan ruimte.
       expect(meting.hintZichtbaar, 'de hint staat op mobiel en duwt de chips omlaag').toBe(false);
+
+      // Het directe bewijs van de fix: bij scrollpositie 0 staat de hero-CTA in beeld, dus
+      // hoort de balk weg te zijn.
+      expect(meting.barState, 'de balk staat aan terwijl de hero-CTA in beeld is').toBe('verborgen');
 
       const bedekt = meting.chips.filter((c) => c.meetbaar && !c.raakbaar);
       const nieuw = bedekt
         .filter((c) => !baseline.includes(c.cmd))
         .map((c) => `${c.cmd} (midden ${c.midden}, balk vanaf ${meting.barTop}) → ${c.door}`);
 
-      expect(nieuw, `nieuw bedekt t.o.v. baseline: ${nieuw.join(' | ')}`).toEqual([]);
+      expect(nieuw, `bedekte chips: ${nieuw.join(' | ')}`).toEqual([]);
     });
   }
 });

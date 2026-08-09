@@ -44,11 +44,11 @@
 
   <!-- Preload Critical Resources (Sessie 144 fetchpriority hints) -->
   <link rel="preload" href="styles/main.css?v=212" as="style" fetchpriority="high">
-  <link rel="preload" href="styles/landing.css?v=142" as="style" fetchpriority="high">
+  <link rel="preload" href="styles/landing.css?v=143" as="style" fetchpriority="high">
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="styles/main.css?v=212">
-  <link rel="stylesheet" href="styles/landing.css?v=142">
+  <link rel="stylesheet" href="styles/landing.css?v=143">
   <link rel="stylesheet" href="styles/mobile.css?v=116" media="screen and (max-width: 768px)">
   <!-- Brevo Forms (newsletter signup) -->
   <link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
@@ -942,7 +942,11 @@
        overtuigingsboog was onklikbaar. In de navbar paste het niet: op 375px is er
        112px vrij naast de merknaam en het label heeft er 150px nodig. Onderaan is er
        wél ruimte voor het volledige label, en het is met de duim bereikbaar.
-       Zichtbaar t/m 768px; zie landing.css. -->
+       Zichtbaar t/m 1279px — exact de band waarin .btn-cta-nav inklapt; zie landing.css.
+
+       Sessie 216: hij staat in vóór de primaire CTA en stapt opzij zodra het midden van
+       een echte "Start de simulator" vrij in beeld ligt. landing-demo.js zet daarvoor
+       `data-state`; zonder JS blijft hij zichtbaar. -->
   <div class="mobile-cta-bar">
     <a href="/terminal.html" class="btn-cta" data-terminal-cta="sticky_mobile">
       Start de simulator
@@ -967,7 +971,7 @@
   </div>
 
   <!-- Hero Terminal Animation -->
-  <script src="src/ui/landing-demo.js?v=1" defer></script>
+  <script src="src/ui/landing-demo.js?v=2" defer></script>
 
   <!-- Interactieve hero-REPL (extern bestand: script-src heeft geen 'unsafe-inline',
        netlify.toml:127). Draait ná landing-demo.js, want die publiceert window.landingDemo. -->

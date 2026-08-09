@@ -2520,9 +2520,39 @@ html {
     background-color: rgba(13, 17, 23, 0.92);
     backdrop-filter: blur(8px);
     border-top: 1px solid var(--color-border-dark-frame);
+    transition: opacity var(--transition-fast) ease;
   }
 
+  /* De balk stapt opzij zodra het midden van een primaire CTA vrij ligt (Sessie 216).
+     landing-demo.js zet `data-state`; zonder JS blijft de default staan en gedraagt de
+     pagina zich als voorheen.
+
+     `visibility` en niet `display`: de box blijft meetbaar, en daar leunt de JS-regel op
+     (die leest de balkrand uit de balk zelf i.p.v. een constante te dragen). `opacity: 0`
+     alléén zou een onzichtbaar tikdoel opleveren — visibility haalt hem uit de tabvolgorde,
+     de toegankelijkheidsboom én hit-testing.
+
+     Verbergen is direct (visibility staat bewust niet in de transition), verschijnen fadet.
+     Let op: dat geldt alleen dankzij de transition-property-regel hieronder — zonder die
+     regel loopt de knop achter op de balk en is "direct" een halve waarheid.
+
+     (0,2,0) verslaat .mobile-cta-bar (0,1,0) en staat in hetzelfde blok — geen
+     cascade-gevecht, geen !important. */
+  .mobile-cta-bar[data-state="verborgen"] {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  /* Zonder deze regel loopt de knop ~150ms achter op zijn eigen balk. De basisregel van
+     `.btn-cta` draagt `transition: all`, en de knop erft `visibility` van de balk — met
+     `all` loopt die overerving als transitie mee. Gemeten op 390x844: na het omklappen meldt de balk
+     `hidden` terwijl de knop nog `visible` is (onzichtbaar tikdoel dat wél reageert), en
+     andersom een zichtbare balk waar een tik niets doet. Na 400ms lopen ze weer gelijk.
+     Alleen opacity mag hier bewegen; hover-transities zijn op een balk die alleen onder
+     1280px bestaat toch geen aanwinst. Bewaakt door "de knop klapt mee met zijn balk" in
+     tests/e2e/homepage-conversion.spec.js. */
   .mobile-cta-bar .btn-cta {
+    transition-property: opacity;
     width: 100%;
     max-width: 420px;   /* op tablet geen knop van 1200px breed */
     justify-content: center;
@@ -2536,9 +2566,23 @@ html {
 
   /* De balk mag niets afdekken: reserveer zijn hoogte onder aan de pagina.
      Gemeten 65px (knop 48 + padding 2×8 + rand 1); 76px geeft marge, zodat dit niet
-     opnieuw 1px tekortschiet zodra de knop of de padding verandert. */
+     opnieuw 1px tekortschiet zodra de knop of de padding verandert.
+
+     Bewust ONVOORWAARDELIJK, ook wanneer de balk verborgen is (Sessie 216): zou deze
+     reserve meebewegen met `data-state`, dan verandert de documenthoogte bij elke toggle.
+     Dat verschuift de scrollpositie, wat de balk opnieuw laat beoordelen — een
+     terugkoppellus die onder de duim van de bezoeker gaat stuiteren. Een verborgen balk
+     dekt niets af, dus de reserve is dan hooguit ongebruikte ruimte. */
   body.landing-page {
     padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* Los blok i.p.v. genest in de band hierboven: geneste @media vraagt CSS Nesting, en dat
+   is de enige regel hier die daarvan zou afhangen. */
+@media (prefers-reduced-motion: reduce) {
+  .mobile-cta-bar {
+    transition: none;
   }
 }
 
