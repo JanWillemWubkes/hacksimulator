@@ -46,7 +46,6 @@
   function initEduScrollAnimations() {
     const selectors = [
       '.edu-command-card',
-      '.edu-step',
       '.terminal-edu-faq .faq-item',
       '.terminal-edu-blog-links a'
     ];

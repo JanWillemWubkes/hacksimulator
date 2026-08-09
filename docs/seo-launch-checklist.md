@@ -32,6 +32,10 @@ grootste rankingfactor (autoriteit/backlinks) niet; dat doe jij hier.
 ### Validatie van de rich results (~15 min)
 - [ ] **Rich Results Test** (https://search.google.com/test/rich-results):
       `terminal.html` → FAQPage (4 vragen); een blogpost → Article + BreadcrumbList.
+      ⚠️ Verwacht géén FAQ-*rich result* in de zoekresultaten: Google beperkte die in
+      augustus 2023 tot gezaghebbende overheids- en gezondheidssites. Het schema blijft
+      geldig en valideert, maar de waarde zit in de inhoud, niet in een snippet — reken
+      die dus niet mee als opbrengst van de strook onder de terminal.
 - [ ] **Facebook Sharing Debugger** (https://developers.facebook.com/tools/debug/): homepage + 1 post,
       "Scrape Again" zodat de OG-tags opnieuw gecachet worden.
 - [ ] **Twitter/X Card Validator**: 1 post — sinds 28 jul hebben álle posts expliciete

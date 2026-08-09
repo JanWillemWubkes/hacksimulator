@@ -243,6 +243,25 @@ const analyticsEvents = {
   },
 
   /**
+   * Track dat de bezoeker de educatiestrook ónder de terminal bereikt (Sessie 218).
+   * Eén keer per paginaweergave, zodra het midden van de strook in beeld komt.
+   *
+   * Die strook is in maart 2026 gebouwd om AdSense van crawlbare tekst te voorzien
+   * (commit 1cc04ff) en heeft sindsdien nooit een meting gehad — er bestond geen enkel
+   * scroll-event op de site. Deel dit door de `page_view` op /terminal.html en je hebt
+   * de doorscroll-rate: het cijfer dat bepaalt of die strook mag blijven, krimpen of
+   * groeien. Tot dat cijfer er is, is elke uitspraak erover een gevoel.
+   *
+   * NB: `.scroll-hint` staat op `display: none` onder 768px, dus verwacht een lagere
+   * rate op mobiel — dat is een bekend gat, geen meetfout.
+   */
+  eduSectionReached() {
+    analyticsTracker.trackEvent('edu_section_reached', {
+      user_type: this.getUserType()
+    });
+  },
+
+  /**
    * Determine user type (first-time vs returning)
    * @returns {string} 'new' or 'returning'
    */

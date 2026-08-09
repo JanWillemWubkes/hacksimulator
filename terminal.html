@@ -35,7 +35,7 @@
     {
       "@context": "https://schema.org",
       "@type": "WebPage",
-      "name": "Terminal Simulator - Ethisch Hacken Leren in je Browser",
+      "name": "Leer ethisch hacken in de browser",
       "description": "Browser-based terminal simulator met 40+ echte hacking commands. Oefen nmap, hashcat en sqlmap in een veilige virtuele omgeving.",
       "url": "https://hacksimulator.nl/terminal.html",
       "inLanguage": "nl",
@@ -136,8 +136,8 @@
     <link rel="stylesheet" href="styles/terminal.css?v=118">
     <!-- Mobile CSS: non-blocking on desktop via media query -->
     <link rel="stylesheet" href="styles/mobile.css?v=116" media="screen and (max-width: 768px)">
-    <!-- Educational Content CSS (SEO content below terminal) -->
-    <link rel="stylesheet" href="styles/terminal-education.css?v=115">
+    <!-- CSS voor de educatiestrook onder de terminal -->
+    <link rel="stylesheet" href="styles/terminal-education.css?v=218">
     <!-- Animations CSS: critical inline (a11y + modal) + non-critical deferred -->
     <style>
       :focus-visible{outline:2px solid var(--color-info);outline-offset:2px;transition:outline-offset var(--transition-fast)}:focus-visible:active{outline-offset:0}
@@ -149,6 +149,16 @@
     <link id="animations-css" rel="stylesheet" href="styles/animations.css?v=144" media="print">
     <script src="/src/load-animations-css.js"></script>
     <noscript><link rel="stylesheet" href="styles/animations.css?v=144"></noscript>
+    <!-- Zonder JS voegt de IntersectionObserver in src/ui/faq.js nooit `.visible` toe en
+         blijft de hele educatiestrook op opacity 0 staan — inclusief al zijn links.
+         Zelfde vangnet als index.html voor `.animate-on-scroll`. -->
+    <noscript>
+      <style>
+        .edu-command-card,
+        .terminal-edu-faq .faq-item,
+        .terminal-edu-blog-links a { opacity: 1; transform: none; filter: none; }
+      </style>
+    </noscript>
     <link rel="stylesheet" href="styles/command-search-modal.css?v=114">
 
     <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
@@ -299,89 +309,68 @@
       </svg>
     </div>
 
-    <!-- Educational Content (SEO: indexable text for Google crawlers) -->
-    <section class="terminal-education" aria-label="Leer ethisch hacken">
+    <!-- Educatieve content onder de terminal.
+         Ontstaan als AdSense-vulling (commit 1cc04ff, "fully crawlable by AdSense").
+         Advertenties zijn in Sessie 208 verwijderd; wat overblijft moet twee dingen doen:
+         de <h1> van deze pagina dragen en doorverwijzen. Alles wat de terminal zélf al
+         zegt (de "Zo begin je"-stappen dubbelden `next` en `leerpad`) hoort hier niet. -->
+    <section class="terminal-education" aria-label="Over HackSimulator">
       <div class="terminal-edu-inner">
 
-        <!-- Intro -->
+        <!-- Intro — draagt de enige <h1> van terminal.html.
+             Blijft in lockstep met JSON-LD WebPage.name; bewaakt in terminal-seo.spec.js. -->
         <div class="terminal-edu-section">
-          <h2>Leer ethisch hacken in de browser</h2>
+          <h1>Leer ethisch hacken in de browser</h1>
           <p>
-            HackSimulator.nl is een gratis, Nederlandstalige terminal simulator waarmee je veilig leert hoe
-            cybersecurity professionals werken. Alle commands draaien lokaal in je browser — er worden geen
-            verbindingen gemaakt met externe servers. Je kunt onmogelijk per ongeluk echte systemen aanvallen.
-            Perfect voor studenten, overstappers en iedereen die nieuwsgierig is naar ethisch hacken.
+            HackSimulator.nl is een gratis, Nederlandstalige terminal simulator. Alle commands
+            draaien lokaal in je browser — er worden geen verbindingen gemaakt met externe
+            servers, dus je kunt onmogelijk per ongeluk echte systemen aanvallen.
           </p>
         </div>
 
-        <!-- Populaire Commands -->
+        <!-- Populaire Commands — elke kaart linkt naar zijn uitleg op /commands/ -->
         <div class="terminal-edu-section">
-          <h3>Populaire commands</h3>
+          <h2>Populaire commands</h2>
           <div class="terminal-edu-commands">
-            <div class="edu-command-card">
+            <a class="edu-command-card" href="/commands/#cmd-nmap">
               <code>nmap</code>
               <span class="edu-cmd-category">Netwerk</span>
-              <p>Scan netwerken en ontdek open poorten. De meest gebruikte tool voor network reconnaissance.</p>
-            </div>
-            <div class="edu-command-card">
+              <p>Scan netwerken en ontdek welke poorten openstaan.</p>
+            </a>
+            <a class="edu-command-card" href="/commands/#cmd-ls">
               <code>ls</code>
               <span class="edu-cmd-category">Basis</span>
-              <p>Bekijk bestanden en mappen in de huidige directory. Het startpunt van elke terminal sessie.</p>
-            </div>
-            <div class="edu-command-card">
+              <p>Bekijk welke bestanden en mappen er zijn.</p>
+            </a>
+            <a class="edu-command-card" href="/commands/#cmd-hashcat">
               <code>hashcat</code>
               <span class="edu-cmd-category">Security</span>
-              <p>Analyseer wachtwoord hashes en leer waarom sterke wachtwoorden essentieel zijn.</p>
-            </div>
-            <div class="edu-command-card">
+              <p>Analyseer wachtwoord-hashes en zie waarom lengte telt.</p>
+            </a>
+            <a class="edu-command-card" href="/commands/#cmd-grep">
               <code>grep</code>
               <span class="edu-cmd-category">Basis</span>
-              <p>Doorzoek bestanden op specifieke tekst. Onmisbaar voor log analyse en forensisch onderzoek.</p>
-            </div>
-            <div class="edu-command-card">
+              <p>Doorzoek bestanden op een specifiek stuk tekst.</p>
+            </a>
+            <a class="edu-command-card" href="/commands/#cmd-sqlmap">
               <code>sqlmap</code>
               <span class="edu-cmd-category">Security</span>
-              <p>Test websites op SQL injection kwetsbaarheden. Leer hoe databases aangevallen en beschermd worden.</p>
-            </div>
-            <div class="edu-command-card">
+              <p>Test een website op SQL-injectie.</p>
+            </a>
+            <a class="edu-command-card" href="/commands/#cmd-traceroute">
               <code>traceroute</code>
               <span class="edu-cmd-category">Netwerk</span>
-              <p>Volg stap voor stap de route die data aflegt over het internet.</p>
-            </div>
+              <p>Volg de route die je data over het internet aflegt.</p>
+            </a>
           </div>
-        </div>
-
-        <!-- Zo Begin Je -->
-        <div class="terminal-edu-section">
-          <h3>Zo begin je</h3>
-          <div class="terminal-edu-steps">
-            <div class="edu-step">
-              <span class="edu-step-num">1</span>
-              <div>
-                <strong>Typ <code>next</code></strong>
-                <p>Krijg een persoonlijke suggestie voor je eerstvolgende stap — afgestemd op jouw voortgang.</p>
-              </div>
-            </div>
-            <div class="edu-step">
-              <span class="edu-step-num">2</span>
-              <div>
-                <strong>Leer de basis: <code>ls</code>, <code>cd</code>, <code>pwd</code>, <code>cat</code></strong>
-                <p>Ontdek het bestandssysteem — navigeer door mappen, lees bestanden en leer je weg vinden.</p>
-              </div>
-            </div>
-            <div class="edu-step">
-              <span class="edu-step-num">3</span>
-              <div>
-                <strong>Volg het pad naar security tools</strong>
-                <p>Typ <code>leerpad</code> om je voortgang te bekijken en stap voor stap naar tools als <code>nmap</code> toe te werken.</p>
-              </div>
-            </div>
-          </div>
+          <p class="terminal-edu-cta">
+            <a href="/commands/">Bekijk alle 40+ commands</a>
+          </p>
         </div>
 
         <!-- FAQ -->
         <div class="terminal-edu-section">
-          <h3>Veelgestelde vragen</h3>
+          <h2>Veelgestelde vragen</h2>
           <div class="terminal-edu-faq">
             <div class="faq-item">
               <h3 class="faq-heading">
@@ -430,13 +419,17 @@
           </div>
         </div>
 
-        <!-- Blog Links -->
+        <!-- Verder lezen — de enige uitgang van deze pagina naar de rest van de site.
+             Labels zijn de <h1> van hun doelpagina; bewaakt in terminal-seo.spec.js,
+             want alle drie de oude bloglabels waren stilzwijgend verouderd. -->
         <div class="terminal-edu-section">
-          <h3>Lees meer op onze blog</h3>
+          <h2>Verder lezen</h2>
           <div class="terminal-edu-blog-links">
-            <a href="/blog/wat-is-ethisch-hacken.html">Wat is Ethisch Hacken? - Alles wat je moet weten</a>
-            <a href="/blog/terminal-basics.html">Terminal Basics voor Beginners</a>
-            <a href="/blog/nmap-beginnersgids.html">Nmap Beginnersgids - Netwerk Scanning Uitgelegd</a>
+            <a href="/blog/wat-is-ethisch-hacken.html">Wat is ethisch hacken?</a>
+            <a href="/blog/terminal-basics.html">Terminal commands voor beginners</a>
+            <a href="/blog/nmap-beginnersgids.html">Netwerk scanning met Nmap: beginnersgids</a>
+            <a href="/woordenlijst.html">50+ cybersecurity termen uitgelegd</a>
+            <a href="/gidsen.html">Leer ethisch hacken met onze gidsen</a>
           </div>
         </div>
 
@@ -473,6 +466,8 @@
     <script src="src/ui/command-search-modal.js?v=35-search-modal" defer></script>
     <script src="src/ui/mobile-quick-commands.js?v=101-quick-commands" defer></script>
     <script src="src/ui/faq.js" defer></script>
+    <!-- Meet de doorscroll-rate naar de educatiestrook (Sessie 218) -->
+    <script src="src/ui/edu-visibility-tracking.js?v=218" type="module"></script>
     <script src="src/main.js?v=208-ads-removed" type="module"></script>
 </body>
 </html>
