@@ -98,6 +98,7 @@
   --color-bg-terminal: #0d1117;     /* Same as body - unified dark */
   --color-bg-modal: #161b22;        /* Modals/overlays - secondary background */
   --color-bg-hover: #21262d;        /* Hover states - tertiary background */
+  --color-bg-alt: #080b0f;          /* Sectieband - een verdieping ONDER --color-bg (zie .section-band) */
 
   /* Color Hierarchy - Hybrid: HTB Neon Prompt + GitHub Base */
   --color-prompt: #9fef00;          /* HTB Neon Lime - terminal prompt (exciting hacker vibe) */
@@ -270,6 +271,7 @@
   --color-bg-terminal: #ffffff;     /* Pure white terminal - pops from background */
   --color-bg-modal: #ffffff;        /* White modal backgrounds - clean aesthetic */
   --color-bg-hover: #ebebeb;        /* Very light hover states */
+  --color-bg-alt: #eceef0;          /* Sectieband - donkerder dan de pagina, zodat #fff kaarten erbovenop blijven */
 
   /* Vignette Background - Light mode variant (clean white fade) */
   --vignette-center: rgba(255, 255, 255, 1);   /* Pure white center - clean aesthetic */
@@ -2001,9 +2003,10 @@ abbr.jargon {
 .homepage-newsletter .newsletter-privacy a:hover {
   color: var(--color-cta-primary);
 }
-[data-theme="light"] .homepage-newsletter {
-  background-color: var(--color-bg-modal);
-}
+/* [data-theme="light"] .homepage-newsletter is vervallen: het herhaalde exact de basisregel
+   hierboven (--color-bg-modal is zelf al thema-afhankelijk), maar deed dat op (0,2,0) en
+   versloeg daarmee .section-band op de homepage. De sample-pagina's houden hun eigen verf
+   via .sample-hero-form.homepage-newsletter (landing.css). */
 .newsletter-or-support {
   margin-top: var(--spacing-sm);
   font-family: var(--font-heading);

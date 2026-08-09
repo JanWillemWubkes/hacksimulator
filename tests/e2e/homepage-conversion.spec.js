@@ -371,3 +371,143 @@ test.describe('Homepage zonder JavaScript', () => {
     expect(onzichtbaar, `${onzichtbaar} blokken onzichtbaar zonder JS`).toBe(0);
   });
 });
+
+// ==================== Sectieritme (Sessie 219) ====================
+//
+// Nulmeting vóór de wijziging: onder "HackSimulator in cijfers" liepen how-it-works,
+// leerpad, blog-links en faq met één en dezelfde achtergrond door — 2390px @1440 en
+// 3078px @375, oftewel 3,8 schermen die als één blok lezen. Boven cijfers was de
+// langste zo'n reeks 1023/1329px (1,6 scherm).
+//
+// Twee bugs die bij het meten boven kwamen en die deze asserties bewaken:
+//   1. `[data-theme="light"] .results-section` was rgba(248,248,248,0.8) over een
+//      #f8f8f8 pagina → composit naar exact rgb(248,248,248), verschil [0,0,0]. De
+//      band was in light mode onzichtbaar; alleen de haarlijnen droegen hem.
+//   2. De nieuwsbrief-band was #161b22, en de kaarten zijn rgba(22,27,34,α) — tinten
+//      van diezelfde kleur. Een kaart op die band composit naar de bándkleur (Δ0).
+//      Daarom gaat een band in beide thema's ONDER --color-bg, niet erboven.
+//
+// De kaart-Δ-assertie is degene die bug 2 zou hebben gevangen; zonder haar is
+// "de band is zichtbaarder" waar én zijn de kaarten erop verdwenen.
+
+const VIEWPORTS = [{ width: 1440, height: 900 }, MOBIEL];
+const THEMAS = ['dark', 'light'];
+
+// Een oppervlak-reeks mag niet langer worden dan ~1,4 scherm. Dat is ruimer dan de
+// gemeten 1,05/1,12 (marge voor groeiende content) en strenger dan de 1,6 die boven
+// de vouw bestaat — de regel hoort een alarm te zijn, geen formaliteit.
+const MAX_OPPERVLAK_VIEWPORTS = 1.4;
+
+// De site-brede elevatiestap: kaarten staan 3 eenheden boven de pagina. Een band die
+// dat verschil op zijn eigen oppervlak niet haalt, laat zijn kaarten oplossen.
+const MIN_KAART_DELTA = 3;
+
+// Composite de ancestor-keten tot de eerste laag met alpha === 1. Zonder dit meet je
+// bij een rgba-achtergrond de laag ónder de verf — de fout uit Sessie 217.
+// (Zelfde aanpak als effBg() in eyebrow-contrast.spec.js.)
+const METEN = () => {
+  const parse = (c) => { const n = c.match(/[\d.]+/g).map(Number); return n.length === 3 ? [...n, 1] : n; };
+  const over = (fg, bg) => { const [r, g, b, a] = fg; return [0, 1, 2].map((i) => Math.round(a * [r, g, b][i] + (1 - a) * bg[i])); };
+  const delta = (x, y) => Math.max(...[0, 1, 2].map((i) => Math.abs(x[i] - y[i])));
+  const effBg = (el) => {
+    let n = el; const lagen = [];
+    while (n) {
+      const c = parse(getComputedStyle(n).backgroundColor);
+      if (c[3] > 0) { lagen.push(c); if (c[3] === 1) break; }
+      n = n.parentElement;
+    }
+    return lagen.reverse().reduce((acc, c) => over(c, acc), [255, 255, 255]);
+  };
+
+  const alle = [...document.querySelectorAll('main > section, body > section')];
+  // Alleen de secties ná de cijfers-band: dat is de reeks waar de klacht over ging.
+  // Bewust NIET eerst alles groeperen en dan de reeks-mét-results zoeken — verliest
+  // results zijn band, dan slokt die reeks de hele pagina op en meet de assertie
+  // stilzwijgend een staartje. Knippen op DOM-positie kan niet dissolven.
+  const start = alle.findIndex((s) => s.classList.contains('results-section')) + 1;
+  const secties = alle.slice(start);
+
+  // Groepeer opeenvolgende secties op effectieve achtergrond. Een gradient telt als
+  // eigen beat: de final-cta-glow is een bewuste visuele onderbreking.
+  const sleutel = (s) => {
+    const cs = getComputedStyle(s);
+    return effBg(s).join(',') + (cs.backgroundImage === 'none' ? '' : '+glow');
+  };
+  const reeksen = [];
+  for (const s of secties) {
+    const k = sleutel(s);
+    const h = Math.round(s.getBoundingClientRect().height);
+    const naam = (s.className || s.id).replace('landing-section ', '').replace(' section-band', '').trim();
+    if (reeksen.length && reeksen.at(-1).k === k) { reeksen.at(-1).h += h; reeksen.at(-1).leden.push(naam); }
+    else reeksen.push({ k, h, leden: [naam] });
+  }
+
+  const pagina = effBg(document.body);
+  const oppervlak = reeksen.filter((r) => !r.k.includes('glow') && r.k === pagina.join(','));
+
+  const banden = ['.trust-bar', '.results-section', '.leerpad-section', '.homepage-newsletter'].map((sel) => {
+    const el = document.querySelector(sel);
+    const band = effBg(el);
+    const kaart = el.querySelector('.result-item, .leerpad-card, .feature-card, .how-step');
+    return { sel, bandDelta: delta(band, pagina), kaartDelta: kaart ? delta(effBg(kaart), band) : null };
+  });
+
+  const rails = ['.leerpad-cards', '.how-it-works-steps', '.results-grid'].map((sel) => {
+    const b = document.querySelector(sel).getBoundingClientRect();
+    return `${sel} ${Math.round(b.left)},${Math.round(b.right)}`;
+  });
+
+  return {
+    langsteOppervlak: Math.max(...oppervlak.map((r) => r.h)),
+    langsteReeks: oppervlak.slice().sort((a, b) => b.h - a.h)[0].leden.join('+'),
+    viewportHoogte: window.innerHeight,
+    banden,
+    rails,
+    bandVolleBreedte: Math.round(document.querySelector('.leerpad-section').getBoundingClientRect().width),
+    clientWidth: document.documentElement.clientWidth,
+    overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+  };
+};
+
+test.describe('Homepage sectieritme', () => {
+  for (const vp of VIEWPORTS) {
+    for (const thema of THEMAS) {
+      test(`@${vp.width}px ${thema}: geen sectiereeks leest als één blok`, async ({ page }) => {
+        await page.setViewportSize(vp);
+        await page.goto('/index.html');
+        await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), thema);
+        const m = await page.evaluate(METEN);
+
+        const inViewports = m.langsteOppervlak / m.viewportHoogte;
+        expect(
+          inViewports,
+          `langste reeks zonder achtergrondwissel: ${m.langsteReeks} = ${m.langsteOppervlak}px (${inViewports.toFixed(2)} scherm)`
+        ).toBeLessThanOrEqual(MAX_OPPERVLAK_VIEWPORTS);
+
+        // Elke band moet zichtbaar afwijken van de pagina...
+        for (const b of m.banden) {
+          expect(b.bandDelta, `${b.sel} verschilt ${b.bandDelta} van de pagina`).toBeGreaterThanOrEqual(MIN_KAART_DELTA);
+        }
+        // ...én zijn kaarten moeten er nog bovenop staan. Dit is de assertie die de
+        // #161b22-val vangt: die haalt de regel hierboven wél en deze niet.
+        for (const b of m.banden.filter((x) => x.kaartDelta !== null)) {
+          expect(b.kaartDelta, `kaart op ${b.sel} verschilt ${b.kaartDelta} van zijn band`).toBeGreaterThanOrEqual(MIN_KAART_DELTA);
+        }
+      });
+    }
+  }
+
+  test('een full-bleed band houdt zijn content op dezelfde rail', async ({ page }) => {
+    await page.goto('/index.html');
+    // .leerpad-section heeft geen inner wrapper, dus full-bleed zou de kaarten meetrekken.
+    // De padding-inline-max() reproduceert de rail; deze assertie is het bewijs dat dat
+    // klopt tegenover een gewone begrensde sectie (.how-it-works-steps).
+    for (const vp of VIEWPORTS) {
+      await page.setViewportSize(vp);
+      const m = await page.evaluate(METEN);
+      expect(new Set(m.rails.map((r) => r.split(' ')[1])).size, `@${vp.width}px rails: ${m.rails.join(' | ')}`).toBe(1);
+      expect(m.bandVolleBreedte, `@${vp.width}px band niet edge-to-edge`).toBe(m.clientWidth);
+      expect(m.overflow, `@${vp.width}px horizontale overflow`).toBe(false);
+    }
+  });
+});

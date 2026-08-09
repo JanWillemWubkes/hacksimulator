@@ -796,6 +796,37 @@
   padding: 96px var(--landing-padding-desktop);
 }
 
+/* ==================== Sectieband ====================
+   Pagina = oppervlak, band = verdieping, kaart = verhoging. De band gaat in BEIDE thema's
+   ONDER --color-bg, want de kaarten zijn rgba(22,27,34,α)-tinten van #161b22: een band die
+   naar die kleur toe beweegt lost ze op (kaart-Δ wordt letterlijk 0). Omgekeerd houdt een
+   verdieping de kaart de lichtste laag. Gemeten Δ t.o.v. de pagina: dark 8, light 12;
+   kaart-op-band: dark 6, light 19.
+
+   Verf en full-bleed staan bewust los van elkaar: .trust-bar en .homepage-newsletter zijn
+   al volle breedte en hebben alleen de verf nodig. */
+.section-band {
+  background: var(--color-bg-alt);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Een breedte-begrensde .landing-section die als band moet lezen: verf edge-to-edge, maar
+   houd de content op exact dezelfde rail als de secties erboven en eronder. De max() doet
+   wat een inner wrapper zou doen — .leerpad-section heeft er geen (h2, subtitle en
+   .leerpad-cards zijn directe kinderen), dus kaal `max-width: 100%` zou de kaarten meetrekken.
+
+   --band-gutter is geen luxe: het mobiele padding-shorthand staat in een media query en die
+   voegt GEEN specificiteit toe (0,1,0), dus het verliest van deze regel (0,2,0). Zonder de
+   custom property bleef de desktop-gutter op mobiel staan. */
+.landing-section.section-band {
+  max-width: 100%;
+  margin: 0;
+  --band-gutter: var(--landing-padding-desktop);
+  padding-inline: max(var(--band-gutter),
+    calc((100% - (var(--landing-max-width) - 2 * var(--band-gutter))) / 2));
+}
+
 .landing-section h2 {
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   color: var(--color-text);
@@ -813,13 +844,11 @@
 }
 
 /* ==================== Trust Bar ==================== */
+/* Verf + haarlijnen komen van .section-band (zie index.html). */
 .trust-bar {
   width: 100%;
   padding: var(--spacing-lg) var(--landing-padding-desktop);
   text-align: center;
-  background: rgba(22, 27, 34, 0.3);
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
 }
 
 .trust-bar .social-proof-headline {
@@ -1147,16 +1176,10 @@
   border-radius: 4px;
 }
 
-/* ==================== Results Section ==================== */
-.results-section {
-  background: rgba(22, 27, 34, 0.2);
-  margin: 0;
-  max-width: 100%;
-  padding: 96px var(--landing-padding-desktop);
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-}
-
+/* ==================== Results Section ====================
+   Verf, haarlijnen en full-bleed komen van .landing-section.section-band (zie index.html).
+   Die levert ook de content-rail, waardoor .results-grid nu gelijk ligt met de andere
+   secties in plaats van 13px breder. */
 .results-section h2 {
   color: var(--color-text);
 }
@@ -1255,9 +1278,8 @@ a.result-item:focus-visible {
 }
 
 /* ==================== Leerpad Section ==================== */
-.leerpad-section {
-  background: transparent;
-}
+/* Geen `background: transparent` meer: dat is de default én het versloeg .section-band
+   (gelijke specificiteit, maar deze regel staat later in het bestand). */
 
 .leerpad-section h2 {
   margin-bottom: var(--spacing-md);
@@ -2037,6 +2059,12 @@ html {
     padding: var(--spacing-xl) var(--landing-padding-mobile);
   }
 
+  /* Media queries voegen geen specificiteit toe, dus de regel hierboven (0,1,0) verliest van
+     .landing-section.section-band (0,2,0). De gutter wisselt daarom via de custom property. */
+  .landing-section.section-band {
+    --band-gutter: var(--landing-padding-mobile);
+  }
+
   /* Trust Bar */
   .trust-bar {
     padding: var(--spacing-md) var(--landing-padding-mobile);
@@ -2230,10 +2258,8 @@ html {
    sinds Sessie 207 zelf --color-border-dark-frame, in beide themes dezelfde waarde. */
 
 /* Cards - Clean White met Subtle Elevation (Stripe/Linear pattern) */
-[data-theme="light"] .trust-bar {
-  background: #ffffff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-}
+/* .trust-bar heeft hier geen light-override meer: --color-bg-alt dekt beide thema's, en een
+   verdieping werpt geen slagschaduw (de box-shadow is daarom vervallen). */
 
 [data-theme="light"] .pain-point,
 [data-theme="light"] .feature-card,
@@ -2251,9 +2277,9 @@ html {
   background: rgba(0, 0, 0, 0.04);  /* Soft gray - clean SaaS look */
 }
 
-[data-theme="light"] .results-section {
-  background: rgba(248, 248, 248, 0.8);  /* Zeer subtiel off-white */
-}
+/* .results-section had hier `rgba(248,248,248,0.8)` — "zeer subtiel off-white", maar over een
+   #f8f8f8 pagina composit dat naar exact rgb(248,248,248): verschil [0,0,0], dus de band was
+   in light mode onzichtbaar en alleen de haarlijnen droegen hem. --color-bg-alt lost dat op. */
 
 [data-theme="light"] .comparison-header .comparison-cell {
   background: #ffffff;

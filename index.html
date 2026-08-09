@@ -43,12 +43,15 @@
   <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Preload Critical Resources (Sessie 144 fetchpriority hints) -->
-  <link rel="preload" href="styles/main.css?v=212" as="style" fetchpriority="high">
-  <link rel="preload" href="styles/landing.css?v=144" as="style" fetchpriority="high">
+  <!-- v=219 op BEIDE: .section-band (landing.css) leest --color-bg-alt (main.css). Een oude
+       cached main.css laat die var ongedefinieerd, waarna `background` terugvalt op transparent
+       en de banden verdwijnen. Deze twee horen dus altijd samen te bumpen. -->
+  <link rel="preload" href="styles/main.css?v=219" as="style" fetchpriority="high">
+  <link rel="preload" href="styles/landing.css?v=219" as="style" fetchpriority="high">
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="styles/main.css?v=212">
-  <link rel="stylesheet" href="styles/landing.css?v=144">
+  <link rel="stylesheet" href="styles/main.css?v=219">
+  <link rel="stylesheet" href="styles/landing.css?v=219">
   <link rel="stylesheet" href="styles/mobile.css?v=116" media="screen and (max-width: 768px)">
   <!-- Brevo Forms (newsletter signup) -->
   <link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
@@ -294,7 +297,7 @@
     </section>
 
     <!-- ===== TRUST BAR ===== -->
-    <section class="trust-bar">
+    <section class="trust-bar section-band">
       <p class="social-proof-headline">
         Alles wat je nodig hebt om <strong>veilig cybersecurity te leren</strong> — direct in je browser
       </p>
@@ -531,7 +534,7 @@
          linkt naar de plek waar je het kunt controleren.
          Alle getallen zijn open floors (zie validate-docs.sh assert_floor): ze blijven waar
          bij groei, dus een nieuw command of artikel vraagt hier geen aanpassing. -->
-    <section id="results" class="landing-section results-section">
+    <section id="results" class="landing-section results-section section-band">
       <h2>HackSimulator in cijfers</h2>
       <p class="section-subtitle">Geen beloftes — dit kun je allemaal zelf nakijken.</p>
 
@@ -619,7 +622,7 @@
     </section>
 
     <!-- ===== LEERPAD SECTION ===== -->
-    <section id="leerpad" class="landing-section leerpad-section">
+    <section id="leerpad" class="landing-section leerpad-section section-band">
       <h2>Jouw leerpad: van beginner tot expert</h2>
       <p class="section-subtitle">HackSimulator groeit met je mee. Van je eerste command tot geavanceerde tools.</p>
 
@@ -884,7 +887,7 @@
   </main>
 
   <!-- Newsletter Signup (Brevo) -->
-  <section class="homepage-newsletter" id="newsletter" data-newsletter-location="homepage">
+  <section class="homepage-newsletter section-band" id="newsletter" data-newsletter-location="homepage">
     <div class="newsletter-content">
       <h2>Gratis cybersecurity tips</h2>
       <p>Ontvang maandelijks tips over ethisch hacken, nieuwe tutorials en cybersecurity nieuws. Geen spam, altijd opzegbaar.</p>
