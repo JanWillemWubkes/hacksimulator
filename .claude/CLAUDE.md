@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 217)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 218)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -83,6 +83,23 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ---
 
 ## Recent Critical Learnings
+
+### Sessie 218: De strook onder de terminal was AdSense-vulling die AdSense vijf maanden overleefde (09 aug 2026)
+⚠️ **Never:**
+- Een contentblok beoordelen zonder eerst te vragen **waarom het er staat**. `git log` gaf het antwoord in één regel: commit `1cc04ff` heet *"full-viewport terminal + scroll hint for AdSense content"* en `f748c38` droeg `?v=108-adsense-content`. Advertenties gingen eruit in Sessie 208; het blok bleef, met zijn aanleiding dood. Zonder die herkomst was dit een smaakdiscussie geweest — mét was het een feit. Let op wat er méér uit die commit komt: ook de 100vh-terminal is AdSense-erfgoed.
+- `getComputedStyle` gebruiken alsof het een momentopname is. Het is een **live** object: ik zette het thema terug naar dark vóór het opbouwen van mijn resultaat, dus `cs.color` gaf de dark-kleur tegen een light-achtergrond die ik wél had geparsed — 1,42:1 onzin. Lees de waarden als string op het moment dat je ze meet.
+- De contrastwaarde uit een notitie overnemen als het element een **eigen** achtergrond heeft. §10 noemt 3,10:1 tegen `--color-bg`; de kaart is `#ffffff`, dus de echte waarde is **3,30:1**. En controleer of het grote tekst is: 19,8px/700 telt als large (lat 3 / 4,5), dus "onder AA" was alarmerender dan waar — het haalde AA wél en AAA niet.
+- Een exact aantal in copy zetten voor een groeiende inventaris. Mijn plan zei "Bekijk alle 41 commands" terwijl de site overal "40+" voert en `validate-docs.sh:432` daar een vloer op handhaaft.
+- Links toevoegen aan een blok dat zonder JS op `opacity: 0` staat. De reveal-observer voegt `.visible` nooit toe, dus élke link erin is waardeloos. `index.html:62-66` had het `<noscript><style>`-vangnet al; terminal.html niet — en ik stond op het punt er negen bij te zetten.
+- Een A/B-meting vertrouwen die naast andere belasting draait. Mijn eerste vergelijking gaf 4 rood tegen 1 rood en zag eruit als een regressie; de tijden verraadden het (1,0m vs 32s voor hetzelfde werk) omdat de achtergrondrun nog liep. Serieel opnieuw: 32/32 groen aan beide kanten.
+
+✅ **Always:**
+- Rangschik de rollen van een pagina in plaats van ze op te tellen. "App-oppervlak én doorstroom én SEO" wás de reden dat het blok alle drie slecht deed. De gedocumenteerde north-star besliste: `docs/launch-success-metrics.md:44` meet *activation* ("typte hij een command"), niet lezen — dus app eerst, SEO secundair, en "onboarding onder de vouw" is geen rol maar een bug.
+- Schrap inhoud die het product zélf al levert op een beter moment. "Zo begin je" dubbelde `onboarding.js:196`, de input-placeholder en de commands `next`/`leerpad` — vier schermen lager, en op mobiel onvindbaar omdat `.scroll-hint` daar `display: none` is.
+- Meet een tikdoel op de maat waar het uitmaakt. Mijn nieuwe CTA zag er prima uit en mat **193×22px** op 375px: onder de 44px-grens. Een kale tekstlink is bijna nooit een geldig tikdoel; `display: inline-block` + verticale padding, en zet de onderstreping op `text-decoration` want een `border-bottom` schuift met de padding mee.
+- Loop de **overlever** van een mutantenreeks na. Zeven mutanten gaven zeven rood; de test die groen bleef bij een kapot `#cmd-nmapx` doet dat terecht — hij stript de hash, en het ankerbewijs is de taak van de test die wél viel.
+- Zeg het hardop als een opruiming netto **bytes kost**. Dit was −26% hoogte en 4× zoveel links, maar **+3,3 KB**: de vervanging draagt uitleg, een noscript-vangnet en een trackingmodule. "Content weghalen" leest anders vanzelf als besparing.
+- Voeg de meting toe vóór je het volgende oordeel velt. Er bestond site-breed **geen enkel** scroll-event; `edu_section_reached` gedeeld door de `page_view` geeft nu de doorscroll-rate. Tot dat cijfer er is, is elke uitspraak over die strook een gevoel.
 
 ### Sessie 217: Vier pre-existing punten opgeruimd — en drie van de vier vastgelegde metingen klopten niet (09 aug 2026)
 ⚠️ **Never:**
@@ -192,20 +209,7 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
 - Behandel flaky tests als een meetfout tot het tegendeel blijkt. Vier "browserverschillen" waren allemaal `page.goto`-timeouts met nul assertiefouten; oorzaak was `TCPServer` in `scripts/nostore-server.py` die één request tegelijk afhandelt terwijl drie browsers parallel laden. `ThreadingTCPServer` haalde de hele faalklasse weg.
 - Leg vast wat géén bug is, mét de meting. De `<th>` uit `.blog-table--stacked` is het complete visually-hidden-patroon (absoluut, 1×1px, `clip-path`), uit de flow, geen scroll, niets raakbaar — "oplossen" zou `display: none` betekenen en schermlezers de kolomkoppen kosten.
 
-### Sessie 212: Lead magnets — verkeerde bestandsnaam en verkeerde welkomstmail (07 aug 2026)
-⚠️ **Never:**
-- Een `_headers`-wildcard een vaste `filename` laten dragen. `/assets/samples/*` met `filename="pentest-playbook-sample.pdf"` was correct toen de map één sample had, en werd stilzwijgend fout toen de juridische erbij kwam — zonder commit die de bug introduceert. Live bewijs: de juridische URL leverde 83.672 bytes (de júíste PDF) onder de pentest-naam. Geen 404, geen foutmelding, alleen een naam die loog.
-- Twee lead magnets op één Brevo-formulier laten posten terwijl de automation op een *Form submitted*-trigger draait — Brevo **kán** de instromen dan niet scheiden en tags zijn er geen automation-criterium. Eén formulier per lead magnet, één automation per formulier.
-- Een absolute regel maken van een eigen notitie die een voorwaarde draagt. "Plus-alias anti-evasion" gold alléén voor adressen die al op de blocklist staan, én alleen op het transactional-kanaal — een kanaalonderscheid dat ik in dezelfde boodschap zélf uitlegde. Ik adviseerde "geen plus-alias"; Heisenberg testte er gewoon mee en het werkte.
-- Twee keer achter elkaar met te veel zekerheid over hetzelfde punt praten. Ik claimde Brevo's Messages-gedrag zonder meting, corrigeerde daarna te ver op basis van alleen de goedkoop testbare foutpaden, en zat beide keren mis. Het pad dat telde (gelukte inzending) was juist het pad dat ik niet zelf kon testen.
-
-✅ **Always:**
-- Laat een drift-check filesystem-ground-truth eisen, geen lijst. Check 10 verlangt per `assets/samples/*.pdf` een exacte-pad-regel met zijn eigen basename én verbiedt een wildcard met vaste filename — een derde sample telt automatisch mee en kan de bug niet herhalen.
-- Codeer een openstaande handmatige stap als een **bewust rode test**, niet als TODO. "Elke sample post naar een ánder Brevo-formulier" faalde tot het Brevo-handwerk klaar was en werd groen op het exacte moment dat het af was. Een regel in een runbook meldt niets terug.
-- Vraag het de gebruiker wanneer hij de discriminator in twee seconden kan leveren. Welke tekst het bevestigingspaneel toont, kon alleen een echte inschrijving beantwoorden — en Heisenberg had de flow net doorlopen. De twee kandidaat-teksten liepen na "klaar." uiteen; dat had mijn eerste vraag moeten zijn, niet mijn derde.
-- Maak bij een browserverschil **beide kanten** correct in plaats van uit te zoeken wie wint. `download="<naam>.pdf"` én `Content-Disposition: filename` dragen nu dezelfde naam, dus de fix draagt geen browser-specifieke aanname. Zelfde reflex bij Netlify's header-merge: `Cache-Control` in elk exact blok herhaald i.p.v. hopen dat de wildcard-waarde meekomt (ná deploy bevestigd).
-
-**Rotation:** Top-6 huidig: 212-213-214-215-216-217 (Sessie 209 → `docs/sessions/current.md` via 1-in-1-out, Sessie 217). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 215 (200-204 → `archive-s200-s204.md`); current.md houdt nu het rolling window 205-217 (13 entries). **Volgende bulk-rotatie Sessie 220 → archiveer de staart (205-209).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10") — de eerdere notitie hier gaf bij Sessie 215 "205-209", wat 200-204 als ouder blok had laten staan én een gat in de archiefreeks gemaakt. SESSIONS.md-index gesynct. Historie 81-204 → `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 213-214-215-216-217-218 (Sessie 212 → `docs/sessions/current.md` via 1-in-1-out, Sessie 218). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 215 (200-204 → `archive-s200-s204.md`); current.md houdt nu het rolling window 205-218 (14 entries). **Volgende bulk-rotatie Sessie 220 → archiveer de staart (205-209).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10") — de eerdere notitie hier gaf bij Sessie 215 "205-209", wat 200-204 als ouder blok had laten staan én een gat in de archiefreeks gemaakt. SESSIONS.md-index gesynct. Historie 81-204 → `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -254,7 +258,7 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Bij elke sessie 1-in-1-out op de CLAUDE.md-learnings (top-6 vast). Bulk-rotatie van `current.md` bij `N % 5 == 0`: archiveer **de staart** — de oudste ~5 entries — naar `archive-sNNN-sMMM.md`. Laatste bulk: Sessie 215 (200-204). **Volgende bulk: Sessie 220** (staart = 205-209). Actuele stand: zie de **Rotation**-regel onder §Recent Critical Learnings.
-**Sessie counter:** 217
+**Sessie counter:** 218
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -309,6 +313,6 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
 
 ---
 
-**Last updated:** 09 aug 2026 (Sessie 217 — vier pre-existing punten opgeruimd; drie van de vier vastgelegde metingen klopten niet: de 76px-strook raakt 10 pagina's i.p.v. 9, het badge-contrast is 2,85:1 i.p.v. de genoteerde 3,10:1 (dus onder AA), en de terminal-overflow was al gefixt op 07 jul. Volledig: `docs/sessions/current.md`)
-**Version:** 5.91 (Sessie 217 — pre-existing-opruiming: reserve naar de donkere footer, `--eyebrow-text`-token, terminal-overflow-item gesloten met de test die ontbrak, budget expliciet naar 1120 KB; 3 mutanten tweezijdig bewezen incl. de overlevers nagelopen; historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 09 aug 2026 (Sessie 218 — de strook onder de terminal was AdSense-vulling die AdSense vijf maanden overleefde; gehalveerd naar 1784px, 3 → 12 links, 0 → 1 `<h1>`, en voor het eerst gemeten via `edu_section_reached`. Drie pre-existing bugs meegenomen, één eigen bug door te meten gevangen. Volledig: `docs/sessions/current.md`)
+**Version:** 5.92 (Sessie 218 — educatiestrook gehalveerd en klikbaar: `git log` gaf de aanleiding (AdSense, Sessie 208 verdwenen), `<h1>` toegevoegd, kaarten → `/commands/#cmd-X`, noscript-vangnet, tikdoel 193×22 → 217×46; 7 mutanten tweezijdig, overlever verklaard; kost ~3,3 KB i.p.v. te besparen; historie: `docs/sessions/current.md` + TASKS.md)
 

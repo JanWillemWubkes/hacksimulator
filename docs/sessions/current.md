@@ -4,6 +4,120 @@
 
 ---
 
+## Sessie 218: De strook onder de terminal was AdSense-vulling die AdSense vijf maanden overleefde (09 aug 2026)
+
+**Mission:** Heisenberg vroeg of alles onder de terminal-simulator nog nodig was, nu er geen advertenties meer zijn — met de opdracht grondig te analyseren, vragen te stellen en de keuze te beargumenteren. Verwijderen, laten staan of iets anders eronder zetten waren alle drie open.
+
+**Commits:** `9b44314` (gepusht)
+
+### De herkomst besliste de vraag
+
+Dit was geen smaakkwestie zodra de git-historie erbij lag:
+
+| Commit | Datum | Titel |
+|---|---|---|
+| `f748c38` | 1 mrt 2026 | *"enrich noscript fallbacks for SEO and **AdSense crawlability**"* — voegde de 131 regels + de stylesheet toe, met cache-buster `?v=108-adsense-content` |
+| `1cc04ff` | 4 mrt 2026 | *"full-viewport terminal + scroll hint **for AdSense content**"* — bericht: *"Education content stays below the fold, fully crawlable by AdSense"* |
+| `feea49e` | Sessie 208 | *"Feat: advertenties eruit"* — 44 advertentieblokken uit 20 bestanden, €0 opbrengst tegen 251,7 KB third-party |
+
+De aanleiding stond zelfs expliciet in `.claude/plans/monetization-C-content-seo.md:96`: *"Thin content penalty: <1000 woorden = Google ignores"*. Die drempel was van een advertentienetwerk dat sinds Sessie 208 niet meer bestaat. De strook is daarna nooit heroverwogen — en, zo bleek, ook nooit gemeten.
+
+**Let op:** de 100vh-terminal komt uit dezelfde commit. Ook die vorm is dus AdSense-erfgoed. Bewust níét teruggedraaid: voor een app-oppervlak is een groot terminalvenster gewoon goed, en dat is een aparte vraag.
+
+### Nulmeting op productie (1280×800)
+
+| | Vóór | Ná |
+|---|---:|---:|
+| Hoogte strook | 2424px | **1784px** (−26%) |
+| Aandeel van de pagina | 65% | 58% |
+| Pagina totaal | 4,67 schermen | 3,87 |
+| Links | **3** | 12 |
+| `<h1>` op de pagina | **0** | 1 |
+| Woorden | 396 | 284 |
+
+De drie links zaten allemaal in het láátste blok, na vier schermen scrollen. De zes command-kaarten noemden `nmap`, `hashcat` en `sqlmap` bij naam en waren geen link. Het was een doodlopende weg met een uitgang op de achterdeur.
+
+### "Alle drie de rollen" was het probleem, niet het antwoord
+
+Heisenberg dacht dat de pagina app-oppervlak, doorstroom én SEO-landingspagina tegelijk was. Dat is precies waarom de strook was wat hij was: hij probeerde drie dingen en deed ze alle drie slecht. Tegenbewijs per rol:
+
+- **Onboarding:** staat vier schermen ónder de plek waar onboarding nodig is, terwijl de terminal het zélf zegt op het juiste moment — `src/ui/onboarding.js:196` print `[→] Typ 'next' om te beginnen`, de placeholder zegt hetzelfde, en `next.js`/`leerpad.js` bestaan als commands. Erger: `.scroll-hint` staat onder 768px op `display: none` (bewuste keuze Sessie 176 wegens botsing met `#mobile-quick-commands`), dus mobiel weet niet eens dat er iets onder staat.
+- **Doorstroom:** 2424px met drie links, geen daarvan naar `/commands/` terwijl er een blok "Populaire commands" stond.
+- **SEO:** de enige echte rol — maar de pagina had nul `<h1>`, en de tekst was geschreven om een advertentiedrempel te halen, niet om een zoeker te beantwoorden.
+
+**Rangschikking i.p.v. gelijkwaardigheid.** De gedocumenteerde north-star van deze pagina is *activation-rate* — `docs/launch-success-metrics.md:44`: "typte de bezoeker een command", niet "las hij iets". Alle site-brede CTA's wijzen hiernaartoe, en alle monetisatie (Brevo, Ko-fi, lead magnets) staat op `index.html`; `terminal.html` heeft in eigen markup nul CTA's. Dus: app-oppervlak eerst, SEO een echte maar secundaire bijrol, en "onboarding onder de vouw" is geen rol maar een bug.
+
+### Wat er is gebeurd, per blok
+
+| Blok | Beslissing | Grond |
+|---|---|---|
+| Intro | `<h2>` → **`<h1>`**, ingekort naar 38 woorden | De pagina had er nul; deze alinea neemt bovendien de grootste beginnersangst weg ("je kunt onmogelijk per ongeluk echte systemen aanvallen") |
+| Populaire commands | Kaarten → links naar `/commands/#cmd-X` + CTA | Dubbelde `/commands/` en bevatte nul links. De ankervorm was al site-brede conventie (12× `#cmd-nmap` vanuit blogposts) |
+| Zo begin je | **Geschrapt** | De terminal zegt het zelf, op het juiste moment |
+| Veelgestelde vragen | Ongemoeid | Dichtste inhoud per pixel (160 woorden / 372px); schema-gebonden |
+| Lees meer op onze blog | → "Verder lezen", 2 kolommen, +woordenlijst +gidsen | Enige werkende uitgang; 450px voor 25 woorden was de dunste inhoud van de strook → 315px |
+
+"Bekijk alle **40+** commands", niet "41": `scripts/validate-docs.sh:432` handhaaft een site-brede `N+`-vloer, en het plan had hier per ongeluk een exact getal in staan.
+
+### Drie pre-existing bugs die bovenkwamen
+
+1. **Alle drie de bloglabels waren verlopen.** `"Wat is Ethisch Hacken? - Alles wat je moet weten"` tegen een `<h1>` die *"Wat is ethisch hacken?"* luidt; `"Terminal Basics voor Beginners"` tegen *"Terminal commands voor beginners"*; `"Nmap Beginnersgids - Netwerk Scanning Uitgelegd"` tegen *"Netwerk scanning met Nmap: beginnersgids"*. Alle drie bovendien in Engelse Title Case. De homepage heeft hier een test voor (`homepage-conversion.spec.js:311`), terminal.html niet — dus dreven ze stil weg.
+2. **Zonder JavaScript stond de hele strook op `opacity: 0`.** `.edu-command-card`, `.terminal-edu-faq .faq-item` en `.terminal-edu-blog-links a` starten verborgen en worden alleen zichtbaar als de IntersectionObserver `.visible` toevoegt. `index.html:62-66` heeft daar een `<noscript><style>`-vangnet voor; terminal.html heeft het nooit gekregen. Dat maakte élke link erin waardeloos zonder JS — en ik stond op het punt er negen bij te zetten.
+3. **`WebPage.name`, `<title>` en de zichtbare kop waren drie verschillende strings.** `WebPage.name` is nu woordelijk gelijk aan de nieuwe `<h1>`.
+
+### Eén bug van mezelf, gevonden door te meten
+
+De nieuwe CTA "Bekijk alle 40+ commands" mat als kale tekstlink **193×22px** op 375px — onder de 44px WCAG AAA-tikdoelgrens. Nu 217×46 via `display: inline-block` + verticale padding, met de onderstreping op `text-decoration` in plaats van `border-bottom` (een border zou met de padding meeschuiven en 11px onder de tekst landen). Assertie toegevoegd, mutant-bewezen.
+
+### Instrumentatie: het cijfer dat vijf maanden ontbrak
+
+Er bestond site-breed **geen enkel scroll-event** (`grep scroll_depth|scrollDepth` in `src/**/*.js` = niets). NEW `edu_section_reached` vuurt zodra de strook in beeld komt, één keer per paginaweergave. Gedeeld door de `page_view` op `/terminal.html` geeft dat de doorscroll-rate.
+
+Bewust een **eigen module** (`src/ui/edu-visibility-tracking.js`) en geen uitbreiding van `src/ui/faq.js`: die is een klassieke IIFE onder `<script defer>` en kan `events.js` dus niet importeren, én wordt ook door `index.html` en `contact.html` geladen — hem tot module maken verandert de uitvoeringssemantiek op twee pagina's die hier niets mee te maken hebben. De analytics-aanroep is omhuld met `typeof … === 'function'` tegen de submodule-cache-mismatch uit Sessie 214.
+
+### Eigen meetfout, hardop gecorrigeerd
+
+Mijn contrastmeting gaf eerst onzin (1,42:1). Oorzaak: **`getComputedStyle` geeft een live object terug.** Ik zette het thema terug naar dark vóórdat het resultaatobject werd opgebouwd, dus `cs.color` las de dark-kleur — tegen een achtergrond die ik wél als momentopname had geparsed. Met echte momentopnames:
+
+```
+.edu-command-card code, light, 19,8px/700 (telt als GROTE tekst → lat 3 / 4,5)
+  vóór: #16a34a op #ffffff        3,30:1   ← haalde AA wél, AAA niet
+  ná:   --color-text op #ffffff  19,80:1
+dark:   #9fef00 op rgb(30,35,42) 11,19:1  (ongewijzigd)
+```
+
+Twee dingen die ik bijna fout in een codecommentaar had gezet: de waarde is **3,30**, niet de 3,10 uit `architecture-patterns.md` §10 (die is tegen `--color-bg` gemeten, een laag lager — de kaart is `#ffffff`), en het is **grote tekst**, dus "onder AA" was alarmerender dan waar. De fix blijft juist (dit project voert AAA), maar de reden in het commentaar moest de gemeten reden worden.
+
+### Verificatie
+
+- **8 nieuwe asserties × 3 motoren groen** (`tests/e2e/terminal-seo.spec.js`) — de eerste asserties ooit op de content ónder de terminal. Vóór deze sessie gaf grep op `terminal-education|edu-command-card|scroll-hint|faq-terminal` in `tests/` **nul** hits; precies daarom konden de drie bugs hierboven stil ontstaan.
+- **Zeven mutanten geplant, zeven rood**, na herstel weer groen. De ene overlever is nagelopen in plaats van weggeredeneerd: "elke link wijst naar een bestaande pagina" bleef terecht groen bij een kapot `#cmd-nmapx`, want die test stript de hash — het ankerbewijs is de taak van de test die wél rood ging.
+- **Gerichte suite over drie motoren: 145 passed / 2 failed.** Beide falers zijn dezelfde `responsive-breakpoints.spec.js:209` (navbar) op firefox+webkit — en **géén regressie**: serieel gemeten tegen `git archive HEAD` op een tweede poort **32/32 groen**, 8× per motor per kant, met tijden die op 0,1s gelijk zijn (50,6 vs 50,7s / 35,4 vs 35,5s). Het is contentie: die test wacht 10s op een JS-geïnjecteerde navbar en haalt dat niet met drie browsers tegelijk.
+- **Mijn eerste A/B was zelf besmet** — die draaide terwijl de achtergrondrun nog liep en gaf 4 rood / 1 rood, wat er als een regressie uitzag. De tijden verraadden het (1,0m vs 32s voor hetzelfde werk). Opnieuw gemeten zonder belasting.
+- `bash scripts/validate-docs.sh` → exit 0. CSP gecontroleerd in `netlify.toml` (`style-src 'unsafe-inline'` staat toe wat de `<noscript><style>` nodig heeft — het lokale testserver-pad zou dat níét hebben laten zien).
+- Beide thema's visueel gecontroleerd, en 360/375px op horizontale overflow (nul) plus tikdoelen (nul onder 44px).
+
+### Metrics delta
+
+| | Vóór | Ná |
+|---|---:|---:|
+| Spec-bestanden | 36 | **37** |
+| `test()`-declaraties | 280 | **288** |
+| Sitetotaal (drift-alarm) | 1087,05 KB | **1091,02 KB** / 1120 |
+| terminal.html | 24.186 B | 24.262 B |
+| terminal-education.css | 8.264 B | 9.718 B |
+
+**Dit levert geen bytes op — het kost er ~3,3 KB.** De winst is hoogte, links en meetbaarheid. Dat hoort ook zo gelezen te worden: "content weghalen" klinkt als een besparing en is het hier niet, omdat de vervanging uitleg, een noscript-vangnet en een trackingmodule draagt. Terminal Core wordt niet geraakt door de CSS (die staat alleen op `terminal.html`), en `performance.spec.js:136` telt sowieso `index.html`, niet `terminal.html`.
+
+### Next steps
+
+1. **Search Console-data voor `/terminal.html`** (TASKS.md #59). Bepaalt of de strook verder mag krimpen of juist een echte landingstekst verdient. De gekozen snitten hangen er niet van af — wat weg is ging weg wegens dubbeling en doodlopendheid, en juist de twee blokken mét zoekwaarde staan er nog.
+2. **`responsive-breakpoints.spec.js:209` bestand maken tegen parallelle runs** (TASKS.md #60). Bewust niet stilzwijgend verruimd in deze sessie.
+3. **De mobiele blinde vlek** (`.scroll-hint` `display: none` <768px) pas aanpakken als `edu_section_reached` heeft gemeten hoeveel mensen er sowieso komen.
+4. **Niet gedaan, bewust:** de FAQ ontdubbelen tegen `index.html` (twee van de vier vragen overlappen in intentie met de acht daar) — aparte SEO-afweging met eigen schema-risico. En: reken de FAQPage níét als rich-result-opbrengst; Google beperkte FAQ rich results in aug 2023 tot gezaghebbende overheids- en gezondheidssites. Dat staat nu ook in `docs/seo-launch-checklist.md`.
+
+---
+
 ## Sessie 217: Vier pre-existing punten opgeruimd — en drie van de vier vastgelegde metingen klopten niet (09 aug 2026)
 
 **Mission:** Vier dingen stonden in de repo als "gemeten, gedocumenteerd, nooit gefixt" — één sinds Sessie 189. Heisenberg vroeg ze af te handelen, met de expliciete opdracht om te zeggen wanneer een vastgelegde meting níét klopt in plaats van hem over te nemen. Bij twee punten was "dit is geen bug" een geldige uitkomst, mits gemeten.
@@ -972,3 +1086,19 @@ Geen vierde gids (bottleneck is verkeer, niet aanbod). Geen docenten-pagina of c
   ⛔ **ACHTERHAALD — Sessie 217 heeft deze regel omgekeerd. Volg hem niet.** Die 7 falers zijn nagemeten en de lijst klopte op geen enkel punt: 5 waren verdwenen, twee structurele falers stonden er niet in, en alle vier de overgebleven falers waren **fouten in de test zelf** — geen enkele een omgevingsartefact. De drie toegewezen oorzaken ("device-emulatie", "resize-timing", "briefing-timing") waren alle drie fout, en zijn acht sessies lang niet meer getoetst omdat "bekende baseline" het lezen van de foutmelding stopt.
 
   De staande regel is nu: **er is geen baseline; een rode test is een regressie tot je het tegendeel meet.** Zie `.claude/CLAUDE.md` §Recent Critical Learnings, Sessie 217. Een niet-opgeloste conditie hoort als assertie in een test (`BASELINE_BEDEKT` in `hero-demo.spec.js`), want die meldt terug — een notitie niet.
+
+---
+
+## Sessie 212 — learnings (geroteerd uit CLAUDE.md, Sessie 218)
+
+⚠️ **Never:**
+- Een `_headers`-wildcard een vaste `filename` laten dragen. `/assets/samples/*` met `filename="pentest-playbook-sample.pdf"` was correct toen de map één sample had, en werd stilzwijgend fout toen de juridische erbij kwam — zonder commit die de bug introduceert. Live bewijs: de juridische URL leverde 83.672 bytes (de júíste PDF) onder de pentest-naam. Geen 404, geen foutmelding, alleen een naam die loog.
+- Twee lead magnets op één Brevo-formulier laten posten terwijl de automation op een *Form submitted*-trigger draait — Brevo **kán** de instromen dan niet scheiden en tags zijn er geen automation-criterium. Eén formulier per lead magnet, één automation per formulier.
+- Een absolute regel maken van een eigen notitie die een voorwaarde draagt. "Plus-alias anti-evasion" gold alléén voor adressen die al op de blocklist staan, én alleen op het transactional-kanaal — een kanaalonderscheid dat ik in dezelfde boodschap zélf uitlegde. Ik adviseerde "geen plus-alias"; Heisenberg testte er gewoon mee en het werkte.
+- Twee keer achter elkaar met te veel zekerheid over hetzelfde punt praten. Ik claimde Brevo's Messages-gedrag zonder meting, corrigeerde daarna te ver op basis van alleen de goedkoop testbare foutpaden, en zat beide keren mis. Het pad dat telde (gelukte inzending) was juist het pad dat ik niet zelf kon testen.
+
+✅ **Always:**
+- Laat een drift-check filesystem-ground-truth eisen, geen lijst. Check 10 verlangt per `assets/samples/*.pdf` een exacte-pad-regel met zijn eigen basename én verbiedt een wildcard met vaste filename — een derde sample telt automatisch mee en kan de bug niet herhalen.
+- Codeer een openstaande handmatige stap als een **bewust rode test**, niet als TODO. "Elke sample post naar een ánder Brevo-formulier" faalde tot het Brevo-handwerk klaar was en werd groen op het exacte moment dat het af was. Een regel in een runbook meldt niets terug.
+- Vraag het de gebruiker wanneer hij de discriminator in twee seconden kan leveren. Welke tekst het bevestigingspaneel toont, kon alleen een echte inschrijving beantwoorden — en Heisenberg had de flow net doorlopen. De twee kandidaat-teksten liepen na "klaar." uiteen; dat had mijn eerste vraag moeten zijn, niet mijn derde.
+- Maak bij een browserverschil **beide kanten** correct in plaats van uit te zoeken wie wint. `download="<naam>.pdf"` én `Content-Disposition: filename` dragen nu dezelfde naam, dus de fix draagt geen browser-specifieke aanname. Zelfde reflex bij Netlify's header-merge: `Cache-Control` in elk exact blok herhaald i.p.v. hopen dat de wildcard-waarde meekomt (ná deploy bevestigd).
