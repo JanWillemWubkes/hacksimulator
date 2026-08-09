@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 215)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 216)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -84,6 +84,25 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ## Recent Critical Learnings
 
+### Sessie 216: De CTA-balk verscheen waar hij niets toevoegde — en de guard die dat bewaakte, scrollde nooit (09 aug 2026)
+⚠️ **Never:**
+- `window.scrollTo(0, y)` in een synchrone lus zetten om scrollposities te meten. `html { scroll-behavior: smooth }` staat in `animations.css`, dus die aanroep **animeert**: 13× in één `page.evaluate`-tick liet `scrollY` op **2px** steken. De conversie-guard asserteerde daardoor dertien keer dezelfde ongescrollde pagina — een zwaardere blinde vlek dan het probleem waarvoor hij herschreven werd. `behavior: 'instant'` plus een await per stap.
+- `entry.isIntersecting` lezen als "voldoet aan mijn threshold". Die is `true` zodra het doel de root ráákt, ongeacht de threshold — bij het passeren van 0.5 vuurt de callback en levert `isIntersecting: true` met ratio 0.4. Wie daarop beslist, beslist op iets anders dan hij denkt.
+- Een bounding box als bewijs van zichtbaarheid nemen. Een `visibility: hidden` balk houdt zijn box van 65px, dus de oude assertie kon een verborgen CTA niet van een aantikbare onderscheiden. Hit-testing (`elementFromPoint`) op het midden is de meting die telt.
+- `transition: all` laten staan op een element dat zijn `visibility` **erft** van een ouder die je toggelt. De overerving loopt dan als transitie mee: gemeten liep de knop ~150ms achter op zijn balk — een onzichtbaar tikdoel dat nog reageert, en andersom een zichtbare balk waar een tik niets doet. Beide gaten bestaan alleen ná een toestandswissel, dus geen meting "in rust" ziet ze.
+- Aannemen dat een toestandswissel "naar de veilige kant faalt". Mijn plan claimde dat letterlijk voor beide richtingen en het was precies verkeerd om. Zo'n claim is een hypothese tot je hem in het overgangsvenster meet, niet erna.
+- Een `--global-timeout` kiezen die krapper is dan de suite. De volle run over drie motoren duurt >48 min; hij kapte af met **"78 did not run"** onder een regel "859 passed" — dat leest bijna als groen.
+- Een grens tussen twee concurrerende invarianten op gevoel kiezen. "Verberg zodra hij het scherm raakt" breekt de tikbaarheid (een strookje van 1px is geen tikdoel); "pas bij volledig zichtbaar" opent ~24px scroll waarin er twee identieke CTA's staan. Alleen "midden vrij" maakt béíde waar.
+
+✅ **Always:**
+- Los een "mechanisme A of B"-vraag op door eerst de **regel** op te schrijven; het mechanisme volgt er dan uit. `sticky` versus IO leek de keuze, maar de echte keuze was waar de balk opzij hoort te stappen — en zodra die grens er stond (*balk verborgen ⟺ CTA-midden aantikbaar*), was IO simpelweg de goedkoopste manier om hem te draaien.
+- Gebruik een observer als **trigger** en één geometrisch predicaat als **regel**. Dat vermijdt de `isIntersecting`-val, houdt de regel op één plek, en blijft correct als de `rootMargin` veroudert — bij toestelrotatie klopte de staat in alle vier de gemeten toestanden terwijl de observer nog met portretmarges liep.
+- Bewijs "strenger dan de oude versie" met een mutant waarop de **oude groen** is en de **nieuwe rood**. Balk altijd `visibility: hidden` → oude guard 3× groen, nieuwe 3× rood met zes benoemde posities. Zonder die tweezijdige uitkomst is "strenger" een bewering.
+- Kies de mutant die de **assertie zelf** laat vuren, niet de setup. Tegen `git archive HEAD` faalde de chip-test op zijn `waitForFunction` — dat bewijst "mechanisme afwezig", niet "de bedekkingsassertie ziet de bug". De CSS-mutant liet hem wél vuren, en gaf exact `375x812 groen / 360x800 + 390x844 rood`: dezelfde verdeling als de oorspronkelijke meting.
+- Meet een invariant op een resolutie die je test niet haalt. De guard stapt 0,9 viewport; een sweep van **884-893 posities à 10px** in drie engines liet zien dat er nul gaten en nul dubbels zijn — dat kán een grofmazige test niet aantonen.
+- Beantwoord "is deze faler van mij?" met het **codepad** als dat kan, niet met een steekproef. Alle falers draaiden op `/terminal.html`, dat geen van de drie gewijzigde bestanden laadt — dat is sterker en goedkoper dan 8× per kant draaien.
+- Corrigeer je eigen meetfout hardop. `grep -c "[webkit]"` gaf 0 terwijl er 237 WebKit-tests groen stonden: de haken zijn een karakterklasse, dus ik zocht naar één teken uit `webkit`. Ik had daarop "WebKit moet nog beginnen" gemeld.
+
 ### Sessie 215: Hero-terminal — uitlijning, focusrand en een cursor 317px van zijn eigen tekst (08 aug 2026)
 ⚠️ **Never:**
 - Een verhouding coderen als een getal. `margin-top: 3rem` op `.hero-terminal` was een handmatige optische centrering voor een venster van 313px; Sessie 214 hing er 152px demobalk onder en het stak **94px onder de tekstkolom uit** terwijl de bovenkant nog 54px te laag begon. Zo'n getal rot stilzwijgend — er is geen commit die de bug introduceert. Zet de verhouding als regel neer (`align-items: center`), dan corrigeert hij zichzelf.
@@ -163,24 +182,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Schrijf tests die het volledige pad door de code bewijzen, niet alleen de eindtoestand — de W2-tests volgen elk het pad (input → manager → certificate/help-system → output) en asserteren op de zichtbare terminal-tekst, niet op interne state. Dat ving ook dat `_hasErrorOutput()` op string-output werkt (niet objecten) en dat de tutorial-guard in `terminal.js:392` de escalatie correct onderdrukt.
 - Behandel pre-existing test-failures als gedocumenteerde baseline — 7/249 failures die óók tegen productie reproduceren zijn geen regressie. Documenteer ze (5× device-emulatie, 1× resize-timing, 1× briefing-timing) zodat de volgende sessie ze niet opnieuw diagnosticeert.
 
-### Sessie 208: Advertenties eruit, kwaliteit aantoonbaar, blog meetbaar (03 aug 2026)
-⚠️ **Never:**
-- Een verwijdering "geverifieerd" noemen op basis van een nulmeting achteraf — "0 advertentieverzoeken" is óók waar op een kapotte meting. Pas de vergelijking mét de oude code bewees het: `git archive HEAD` naar `/tmp` + een tweede no-store server op een andere poort gaf **2 advertentieverzoeken + 3 units vóór, 0/0 ná**. Twee servers naast elkaar is de goedkoopste rood-op-mutant die er is bij een verwijdering.
-- Een consent-model versimpelen door het opgeslagen dataformaat te wijzigen. Het JSON-formaat `{necessary, analytics, advertising}` ongewijzigd laten en alleen `advertising` niet meer schrijven, betekent dat élke bestaande bezoeker zijn keuze houdt en de banner niet opnieuw ziet. Vier scenario's live getest (vers / oude `advertising:true` / legacy-string `"true"` / geweigerd) — zonder die test was "geen migratie nodig" een aanname geweest.
-- Aannemen dat gelijkvormige pagina's ook gelijk geconfigureerd zijn. `commands/index.html` bleek als enige een **inline** Consent Mode-script te dragen; de CSP heeft geen `'unsafe-inline'`, dus dat script draaide daar nooit en die pagina had structureel geen consent-defaults. Gevonden omdat de opruiming langs élke pagina ging, niet omdat iets erop wees.
-- Een nieuwe kaart bouwen met een hardgecodeerde `rgba(22,27,34,.3)` omdat de buurkaart dat ook doet — de buurkaart heeft een `[data-theme="light"]`-override 500 regels verderop. Zonder die override werd de verantwoordingskaart grijs op wit (Sessie 44-valkuil, opnieuw). Kopieer de override mee, niet alleen de basisregel.
-- De RSS-titel als "één van de zeven lockstep-locaties" beschouwen: hij was het niet, en daardoor stonden **14 van de 14** feed-titels nog in Engelse Title Case sinds de sitebrede omzetting. Een lockstep die je niet valideert is geen lockstep.
-- De `<h1>` als bron nemen voor de RSS-titel. Bij `wat-is-ethisch-hacken` is de `<h1>` bewust korter dan de `<title>`; syncen op `<h1>` had de SEO-titel stilletjes ingekort. Eerst kijken wélke van de zeven locaties de juiste bron is.
-
-✅ **Always:**
-- Verwijder een kanaal op **gemeten kosten tegen gemeten baten**, niet op gevoel: €0 opbrengst tegen 251,7 KB third-party en 73% van de blokkeertijd, plus een eigen analyse uit maart 2026 die het al niet-lonend noemde. Het argument stond al in de repo; het was alleen nooit uitgevoerd.
-- Laat een nieuwe drift-check zijn eigen aanname bewijzen. Mijn eerste versie van Check 6d zocht de scenario-imports in `tutorial-manager.js` — de check faalde en had gelijk: ze staan in `core/terminal.js`. Een check die meteen groen is, heb je niet getest.
-- Genereer een reviewpakket **uit de bron** in plaats van het over te tikken: geen achtste plek die kan driften, en een tweede ronde kost één commando. Filter op "controleerbare bewering" (getallen met eenheid, CVE's, poorten, wetsartikelen) mét een code-filter, anders krijg je JavaScript in je vragenlijst.
-- Vul een verificatiedatum in met de **échte** datum. 13 posts kregen 14 jun 2026 (de laatste feitencontrole), de metasploit-post 3 aug omdat die daarna geschreven is en nu is nagelopen. Vandaag invullen voor alles zou de hele regel waardeloos maken.
-- Los een geloofwaardigheidsspanning op bij de bron, niet met een uitleg elders: "CERTIFICAAT VAN MEESTERSCHAP" naast een FAQ die zegt dat er geen certificaat is, wordt opgelost met één gedeelde `CERT_DISCLAIMER` in beide generatoren — inclusief de mobiele variant en gewordwrapt, want de box kan tot 30 tekens smal worden.
-- Wees expliciet over het plafond: bronvermelding, controledata en automatische gates maken kwaliteit **aantoonbaar en bewaakbaar**, niet **gegarandeerd**. Alleen een mens met vakkennis kan bewijzen dát de inhoud klopt; al het andere bestaat om die stap klein te maken.
-
-**Rotation:** Top-6 huidig: 208-209-212-213-214-215 (Sessie 207 → `docs/sessions/current.md` via 1-in-1-out, Sessie 215). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 215 (200-204 → `archive-s200-s204.md`); current.md houdt nu het rolling window 205-215 (11 entries). **Volgende bulk-rotatie Sessie 220 → archiveer de staart (205-209).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10") — de eerdere notitie hier gaf bij Sessie 215 "205-209", wat 200-204 als ouder blok had laten staan én een gat in de archiefreeks gemaakt. SESSIONS.md-index gesynct. Historie 81-204 → `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 209-212-213-214-215-216 (Sessie 208 → `docs/sessions/current.md` via 1-in-1-out, Sessie 216). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 215 (200-204 → `archive-s200-s204.md`); current.md houdt nu het rolling window 205-216 (12 entries). **Volgende bulk-rotatie Sessie 220 → archiveer de staart (205-209).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10") — de eerdere notitie hier gaf bij Sessie 215 "205-209", wat 200-204 als ouder blok had laten staan én een gat in de archiefreeks gemaakt. SESSIONS.md-index gesynct. Historie 81-204 → `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -229,7 +231,7 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Bij elke sessie 1-in-1-out op de CLAUDE.md-learnings (top-6 vast). Bulk-rotatie van `current.md` bij `N % 5 == 0`: archiveer **de staart** — de oudste ~5 entries — naar `archive-sNNN-sMMM.md`. Laatste bulk: Sessie 215 (200-204). **Volgende bulk: Sessie 220** (staart = 205-209). Actuele stand: zie de **Rotation**-regel onder §Recent Critical Learnings.
-**Sessie counter:** 215
+**Sessie counter:** 216
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -284,6 +286,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 
 ---
 
-**Last updated:** 08 aug 2026 (Sessie 215 — hero-terminal uitgelijnd (`margin-top: 3rem` was een verrotte handmatige centrering), blauwe focusrand vervangen door een groene vensterglow, uitnodigingsregel toegevoegd en de cursor teruggezet bij zijn tekst. Volledig: `docs/sessions/current.md`)
-**Version:** 5.89 (Sessie 215 — hero-uitlijning + focusrand + uitnodiging + cursor; 2 zelf-geintroduceerde regressies zelf gevangen; 9 nieuwe tests, alle met mutant bewezen; historie: `docs/sessions/current.md` + TASKS.md)
+**Last updated:** 09 aug 2026 (Sessie 216 — mobiele CTA-balk stapt opzij zodra het midden van een primaire CTA vrij ligt; conversie-guard herschreven omdat hij nooit scrollde en bounding boxes voor zichtbaarheid aanzag. Volledig: `docs/sessions/current.md`)
+**Version:** 5.90 (Sessie 216 — CTA-balk-zichtbaarheidsregel + guard-herschrijving; oude guard 3× groen / nieuwe 3× rood op dezelfde mutant; 1 zelf-geintroduceerde bug zelf gevangen; 5 nieuwe asserties, alle met mutant bewezen; historie: `docs/sessions/current.md` + TASKS.md)
 

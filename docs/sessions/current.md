@@ -4,6 +4,98 @@
 
 ---
 
+## Sessie 216: De CTA-balk verscheen waar hij niets toevoegde — en de guard die dat bewaakte, scrollde nooit (09 aug 2026)
+
+**Mission:** Sessie 215 legde vast dat `.mobile-cta-bar` bij scrollpositie 0 overbodig is én chips afdekt, maar loste het niet op: de fix zou de conversiegarantie tijdsafhankelijk maken en de synchrone scroll-guard in `homepage-conversion.spec.js` breken. Heisenberg vroeg om dat alsnog uit te zoeken, te beslissen tussen IntersectionObserver en `position: sticky`, en te bouwen — met de guard minstens zo streng als hij was.
+
+**Commits:** `2c1068e` (achterstallige Sessie 215-summary) · `00433e4` (balkgedrag) · `570d44c` (guard) — alle gepusht naar `origin/main`
+
+### De beslissing: IO, en waarom sticky afvalt
+
+`position: sticky; bottom: 0` lost de **plaats** van het probleem op, niet het mechanisme. Vier bezwaren, aflopend in gewicht:
+
+1. Een sticky balk overlapt content nog steeds zodra hij plakt — hij doet het alleen niet meer op scrollpositie 0. Het dubbele-CTA-probleem blijft ook: hij plakt zodra zijn natuurlijke positie (net onder de hero) de onderrand raakt, en de hero-CTA staat op dat moment nog bovenin beeld.
+2. Hij kost **65px echte flow-ruimte** — een gat pal na de hero.
+3. Hij vraagt een DOM-herstructurering (sticky-bottom werkt alleen binnen een container die de rest van de pagina omspant), waarmee een monetisatie-element door de markup verhuist en `data-terminal-cta="sticky_mobile"` van betekenis verandert.
+4. Zijn enige voordeel is "werkt in de synchrone test". Dat is winst voor de *test*, niet voor de bezoeker — en die herschrijving bleek geen kost maar een correctie.
+
+### De echte keuze was de grens, niet het mechanisme
+
+Drie kandidaat-regels, waarvan er maar één beide eisen **per constructie** waarmaakt:
+
+| regel | "altijd een tikbare CTA" | "nooit twee identieke" |
+|---|---|---|
+| verbergen zodra de CTA het scherm raakt | breekt — een strookje van 1px is geen tikdoel | ok |
+| verbergen pas bij volledig zichtbaar | ok | breekt — ~24px scrollvenster (halve knophoogte) waarin balk én CTA-midden aantikbaar zijn |
+| **verbergen zodra het midden vrij is** | **ok** | **ok** |
+
+Bij de derde geldt *balk verborgen ⟺ CTA-midden boven de balkrand ⟺ CTA-midden aantikbaar*. Verbergen en aantikbaarheid zijn dezelfde conditie, dus er is geen venster waarin beide zichtbaar zijn en geen positie zonder tikdoel. Bewezen met een sweep van **884-893 posities à 10px** per engine: nul gaten, nul dubbels, en in alle drie de engines hetzelfde wisselpatroon (5 wissels rond de hero-, mid- en final-CTA).
+
+### Implementatie
+
+- **`src/ui/landing-demo.js`** — `initCtaBar()` (~40 regels). IO is het "er is iets veranderd"-signaal; `middenVrij()` is de regel. Doelen: `a.btn-cta[href="/terminal.html"]` buiten de balk = hero/mid/final, precies de drie die het label "Start de simulator" delen. Bewust **niet** de leerpad-deeplinks en cijfertegels: die dragen een ander label, dus daar is geen duplicaat en blijft de balk nuttig als drager van het canonieke label. `navHoogte` uit `--navbar-height`; de balkrand leest de balk uit zichzelf (neemt `env(safe-area-inset-bottom)` mee, kan niet driften). Eén synchrone beoordeling bij init tegen een flits van één frame, plus een `resize`-listener.
+- **`styles/landing.css`** — `.mobile-cta-bar[data-state="verborgen"] { visibility: hidden; opacity: 0 }` (0,2,0 verslaat 0,1,0 in hetzelfde blok). `visibility` en niet `display`, want de box moet meetbaar blijven voor de JS-regel; `opacity: 0` alléén zou een onzichtbaar tikdoel opleveren. `padding-bottom: 76px` blijft **onvoorwaardelijk**: conditioneel verandert de documenthoogte per toggle → scrollsprong → herbeoordeling → terugkoppellus.
+- **`index.html`** — `?v=` gebumpt op `landing.css` (142→143) en `landing-demo.js` (1→2); commentaarblok bijgewerkt (het zei nog "zichtbaar t/m 768px", wat al niet meer klopte).
+
+### Vier metingen die de fix schragen
+
+1. **Zes maten, scroll 0:** hero-CTA-midden op y=306..361, balkrand vanaf y=602 (375×667) tot y=959 (768×1024) → `midVrij` op álle zes. De regel vuurt overal.
+2. **Pagina-bodem:** balk staat op alle zes maten aan en dekt de volle 76px reserve — geen lichte strook onder de donkere footer.
+3. **Toestelrotatie:** portret → landschap → scroll → terug; staat correct in alle vier, terwijl de `rootMargin` van de observer nog met portretwaarden liep. Dat is precies wat de "IO is alleen de trigger"-keuze moest opleveren.
+4. **Zonder JS / reduced motion:** `data-state` niet gezet, balk `visible` opacity 1 (gedrag van vóór deze sessie); reduced motion → `transitionDuration: 0s`, mechanisme werkt.
+
+### De guard was op drie punten blind
+
+1. **Hij scrollde niet.** `html { scroll-behavior: smooth }` staat in `animations.css`, dus `window.scrollTo(0, y)` ánimeert. De oude lus zette dat 13× in één synchrone `page.evaluate`-tick; de animatie kreeg nooit een frame en `scrollY` bleef op **2px** steken. Die test asserteerde dertien keer dezelfde ongescrollde pagina — een zwaardere blinde vlek dan "IO vuurt niet in een synchrone lus", want ook de oude meting was al blind.
+2. **Hij mat bounding boxes.** Een `visibility: hidden` balk heeft nog steeds een box van 65px.
+3. **Hij was synchroon**, waardoor een IO er per definitie nooit kon vuren.
+
+**"Even streng" is een meting geworden.** Op één mutant (balk onvoorwaardelijk `visibility: hidden`) is de oude guard **3× groen** en de nieuwe **3× rood**, met zes benoemde posities. Zelfde raster van 0,9 viewport, dus dezelfde posities als zijn voorganger; het predicaat is strikt sterker.
+
+### Bug die ik zelf introduceerde en zelf ving
+
+`.btn-cta` draagt `transition: all` en erft `visibility` van de balk — met `all` loopt die overerving als transitie mee. Gemeten: na het omklappen meldt de balk `hidden` terwijl de knop nog `visible` is (onzichtbaar tikdoel dat wél reageert), en andersom een zichtbare balk waar een tik niets doet. Na 400ms lopen ze weer gelijk. Twee spiegelbeeldige gaten van ~150ms die alleen bestaan ná een toestandswissel, dus geen meting "in rust" ziet ze. Mijn plan claimde letterlijk dat beide richtingen "naar de veilige kant falen" — dat was precies verkeerd om. Fix: `transition-property: opacity` op de knop in de balk.
+
+### Tests
+
+- `hero-demo.spec.js` — `BASELINE_BEDEKT` naar `[]` op alle drie de maten; **360×800 toegevoegd** (stond in het commentaar, niet in de map, dus die conditie werd daar niet bewaakt). Test hernoemd van "blijft op de vastgelegde baseline" naar "dekt niets de suggestiechips af", plus een directe assertie op `data-state === 'verborgen'`. Die test is in Sessie 215 bewust als tikkende baseline neergezet en heeft nu teruggemeld.
+- `homepage-conversion.spec.js` — guard async + hit-testing, twee helpers (`scrollposities`, `meetOpPositie`), plus NEW "de knop klapt mee met zijn balk, zonder na te lopen".
+
+**Mutanten (elk nieuw assertie-paar bewezen):**
+
+| assertie | mutant | uitkomst |
+|---|---|---|
+| guard strenger dan oud | balk altijd `visibility: hidden` | oud **3× groen**, nieuw **3× rood** |
+| geen chip bedekt | `[data-state="verborgen"]` verbergt niets | rood op 360×800 + 390×844, **375×812 blijft groen** (exact de Sessie 215-meting) |
+| geen dubbel label | idem | rood op y=0, 4386, 7310 — de drie CTA-zones |
+| balk uit op scroll 0 | beslissing vastgezet op `'zichtbaar'` | 6/6 rood |
+| knop loopt niet na | `transition-property` eruit | rood met `balk hidden, knop visible` |
+
+Tegen de oude code (`git archive HEAD`, poort 8898) faalt de chip-test op de `waitForFunction` — dat bewijst "mechanisme afwezig", niet "de bedekkingsassertie ziet de bug". Daarom de CSS-mutant erbij, die de assertie zélf laat vuren.
+
+### Vastgelegd, niet opgelost
+
+**9 pagina's dragen `body.landing-page` (dus 76px reserve) zonder balk:** `over-ons`, `gidsen`, `contact`, `woordenlijst`, `commands/index`, `404`, `sample-pentest`, `sample-juridisch`, `sample-download`. Gemeten byte-identiek tegen `git archive HEAD` → pre-existing sinds Sessie 214, niet van deze wijziging. Zie TASKS.md #57.
+
+**De hero-hint blijft uit op mobiel.** De reden om hem te verbergen (de balk dekte de chips af) valt weg, maar dezelfde notitie in `landing.css` zegt dat de hint een *desktop*-probleem oplost: met een muis lijkt het venster een plaatje, terwijl op een telefoon al zes knoppen onder de prompt staan. Bewust buiten scope; de assertie die het bewaakt blijft staan.
+
+### Metrics
+
+- **Bundle:** 1078,05 → **1084,92 KB** van 1100 (marge 21,95 → 15,08 KB, 2,0% → 1,4%). Mijn schatting was ~2 KB; het werd +6,87 KB, vrijwel volledig commentaar. Ground truth `du -sb`: src 720 KB · styles 428 KB · blog 474 KB · assets 1737 KB.
+- **Playwright:** 34 spec files, 273 → **274** `test()`-declaraties.
+- **Volledige suite** tegen no-store server: chromium 313✓/1✘ · firefox 310✓/3✘+1 flaky · webkit **309✓/2✘**. Alle falers draaien op `/terminal.html` (dat geen van de drie gewijzigde bestanden laadt) en reproduceren byte-identiek tegen `git archive HEAD`.
+- **Let op:** de eerste volledige run kapte af op mijn eigen `--global-timeout` van 2900s met "78 did not run" — dat leest in de samenvatting bijna als groen. WebKit apart uitgedraaid om die 78 alsnog een uitspraak te geven.
+
+### Learnings
+
+Zie `.claude/CLAUDE.md` §Recent Critical Learnings, Sessie 216.
+
+### Volgende stappen
+
+TASKS.md #57 — vier vastgelegde pre-existing punten, met startprompt in `/home/willem/.claude/plans/startprompt-pre-existing-bugs.md`. Twee daarvan dragen een meting die ik wantrouw (`.eyebrow-badge` 3,10:1 is tegen de páginaachtergrond gemeten terwijl het element een eigen achtergrond heeft; het terminal-overflow-item noemt 375px in de titel en `docW 360` in de meting). Bij beide is "dit is geen bug" een geldige uitkomst, mits gemeten.
+
+---
+
 ## Sessie 215: Hero-terminal — uitlijning, focusrand en een cursor 317px van zijn eigen tekst (08 aug 2026)
 
 **Mission:** Heisenberg leverde een screenshot met drie klachten over de hero-terminal uit Sessie 214: hij lijnt niet uit met de tekst ernaast, hij krijgt een blauwe standaardrand zodra je erin kunt typen, en niets nodigt uit om hem te gebruiken ("iets als 'try me' met een pijl"). Expliciet gevraagd: grondig analyseren en met advies komen.

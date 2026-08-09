@@ -224,3 +224,71 @@ hoort de tekst `var(--color-text)` te zijn en mag hooguit een decoratief glyph
 > Bestaand voorbeeld dat hier nog niet aan voldoet: `.eyebrow-badge` gebruikt
 > `--color-cta-primary` op 0.75rem op de lichte achtergrond. Pre-existing, apart van
 > Sessie 215 vastgelegd.
+
+---
+
+## 11. `transition: all` + geërfde `visibility` = een knop die achterloopt (Sessie 216)
+
+`visibility` erft. Zet je hem op een container om die te verbergen, dan krijgt elk kind de
+nieuwe waarde — en een kind met `transition: all` **animeert die overerving**. Gemeten op
+`.mobile-cta-bar`, waarvan de knop `.btn-cta` is (die draagt `transition: all` in zijn
+basisregel):
+
+```
+na omklappen, 0ms:    balk hidden   knop visible   → onzichtbaar tikdoel dat wél reageert
+na omklappen, 0ms:    balk visible  knop hidden    → zichtbare balk waar een tik niets doet
+na 400ms:             gelijk
+```
+
+Beide gaten bestaan **alleen in het venster ná een toestandswissel**. Geen enkele meting
+"in rust" ziet ze; je vindt ze door direct na het scrollen te meten in plaats van na een
+ruime wachttijd.
+
+```css
+.balk[data-state="verborgen"] { visibility: hidden; opacity: 0; }
+.balk .btn-cta { transition-property: opacity; }   /* nooit `all` onder een visibility-toggle */
+```
+
+Bewaakt door "de knop klapt mee met zijn balk, zonder na te lopen" in
+`tests/e2e/homepage-conversion.spec.js`.
+
+---
+
+## 12. IntersectionObserver als trigger, één predicaat als regel (Sessie 216)
+
+Bij "toon/verberg X afhankelijk van of Y in beeld staat" is de verleiding om op
+`entry.isIntersecting` of `entry.intersectionRatio` te beslissen. Twee problemen:
+
+- **`isIntersecting` is geen thresholdtest.** Hij is `true` zodra het doel de root ráákt,
+  ongeacht `threshold`. Bij het passeren van 0.5 vuurt de callback en levert dan gewoon
+  `isIntersecting: true` met ratio 0.4.
+- **`rootMargin` veroudert.** Hij staat vast bij constructie; na een viewportwijziging
+  (toestelrotatie) klopt hij niet meer, en de observer alleen herbouwen bij `resize`
+  betekent dat je tussen die momenten op stale marges beslist.
+
+Gebruik de observer daarom als "er is iets veranderd"-signaal en laat de beslissing door
+één geometrische functie doen, die je óók synchroon bij init en op `resize` aanroept:
+
+```js
+const middenVrij = (el) => {
+  const r = el.getBoundingClientRect();
+  const mid = r.top + r.height / 2;
+  return r.height > 0 && mid >= navHoogte && mid <= balkRand();
+};
+const herbeoordeel = () => { balk.dataset.state = doelen.some(middenVrij) ? 'verborgen' : 'zichtbaar'; };
+
+new IntersectionObserver(herbeoordeel, { rootMargin: `-${nav}px 0px -${balk}px 0px`, threshold: 0.5 })
+  .observe(...);
+herbeoordeel();                                             // geen flits van één frame bij eerste paint
+window.addEventListener('resize', herbeoordeel, { passive: true });
+```
+
+De `rootMargin` bepaalt hier alleen nog het *moment* van herbeoordelen; het predicaat leest
+de echte geometrie, dus drift is onschadelijk. Bij toestelrotatie klopte de staat in alle
+vier de gemeten toestanden.
+
+**Kies de grens op de invariant, niet op gevoel.** Bij "een vaste balk mag geen tweede
+identieke CTA opleveren én er moet altijd één aantikbaar zijn" breekt "verberg zodra het
+doel het scherm raakt" de eerste eis (een strookje van 1px is geen tikdoel) en "verberg pas
+bij volledig zichtbaar" de tweede (~24px scroll waarin beide aantikbaar zijn). Alleen
+"midden vrij" maakt ze allebei waar, want dan is *verborgen ⟺ aantikbaar* één conditie.
