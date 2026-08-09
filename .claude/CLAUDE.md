@@ -101,6 +101,21 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Kies de mutant die de oorspronkelijke meting **reproduceert**. `width: auto` weghalen gaf letterlijk `left 10 / width 360 / right 370 bij clientWidth 360` — cijfer voor cijfer de notitie uit Sessie 189. Daarmee is in één stap bewezen dat de bug echt was, dat hij weg is, en dat de nieuwe assertie hem zou zien.
 - Gebruik `grep -F` bij het tellen van `[chromium]`-achtige labels. De haken zijn anders een karakterklasse — de meetfout die Sessie 216 zichzelf moest corrigeren.
 
+📌 **Staande regel vanaf Sessie 217 — er is GEEN baseline van bekende testfalers meer.**
+De vastgelegde lijst (Sessie 209, chromium-only) klopte op geen enkel punt: 5 van de 7 falers
+waren verdwenen, twee stonden er niet in die wél structureel rood waren, en **alle vier de
+overgebleven falers waren fouten in de test zelf** — geen enkele was een omgevingsartefact.
+Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
+- **Gaat er iets rood, behandel het als regressie.** Er is niets meer om het aan toe te
+  schrijven. "Dat is een bekende faler" is vanaf nu een bewering die je moet meten.
+- **Voeg geen nieuwe baseline-notitie toe.** Een niet-opgeloste conditie hoort als assertie in
+  een test (zoals `BASELINE_BEDEKT` in `hero-demo.spec.js`), want die meldt terug; een notitie
+  niet. Een faler zonder gemeten oorzaak is geen baseline maar een openstaande diagnose.
+- **De diagnose is het risico, niet de faler.** De twee die het langst bleven staan droegen
+  allebei een oorzaak die nooit gemeten was ("timing", "device-emulatie"). Zodra iets "bekend"
+  heet, leest niemand de foutmelding nog — en dan loopt een verkeerde diagnose net zo lang mee
+  als de test.
+
 ### Sessie 216: De CTA-balk verscheen waar hij niets toevoegde — en de guard die dat bewaakte, scrollde nooit (09 aug 2026)
 ⚠️ **Never:**
 - `window.scrollTo(0, y)` in een synchrone lus zetten om scrollposities te meten. `html { scroll-behavior: smooth }` staat in `animations.css`, dus die aanroep **animeert**: 13× in één `page.evaluate`-tick liet `scrollY` op **2px** steken. De conversie-guard asserteerde daardoor dertien keer dezelfde ongescrollde pagina — een zwaardere blinde vlek dan het probleem waarvoor hij herschreven werd. `behavior: 'instant'` plus een await per stap.
