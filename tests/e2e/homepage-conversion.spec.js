@@ -138,6 +138,47 @@ function buitenScopeArg() {
   return BUITEN_SCOPE_TIKDOEL;
 }
 
+// Scrollposities in stappen van 0,9 viewport — dezelfde raster als vóór Sessie 216, zodat
+// deze guard aantoonbaar dezelfde posities dekt als zijn voorganger.
+async function scrollposities(page) {
+  return page.evaluate(() => {
+    const stap = Math.round(window.innerHeight * 0.9);
+    const uit = [];
+    for (let y = 0; y < document.documentElement.scrollHeight; y += stap) uit.push(y);
+    return uit;
+  });
+}
+
+// Eén scrollpositie meten. `behavior: 'instant'` is niet optioneel: html draagt
+// `scroll-behavior: smooth` (animations.css), dus zonder die vlag ánimeert de sprong en
+// meet je de vorige positie. De twee frames erna geven de IntersectionObserver in
+// landing-demo.js zijn beurt — IO-callbacks worden pas in de volgende rendering-update
+// afgeleverd, ná de rAF-callbacks van het huidige frame.
+async function meetOpPositie(page, y) {
+  await page.evaluate((doel) => {
+    window.scrollTo({ top: doel, behavior: 'instant' });
+    return new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  }, y);
+
+  return page.evaluate(() => {
+    const labels = [...document.querySelectorAll('a[href*="terminal.html"]')]
+      .filter((a) => {
+        const r = a.getBoundingClientRect();
+        if (r.width === 0 || r.height === 0) return false;
+        const x = r.left + r.width / 2;
+        const midY = r.top + r.height / 2;
+        // Het midden moet ín beeld liggen; buiten de viewport geeft elementFromPoint null
+        // en is er niets aan te tikken.
+        if (midY < 0 || midY > window.innerHeight || x < 0 || x > window.innerWidth) return false;
+        const raak = document.elementFromPoint(x, midY);
+        return raak === a || a.contains(raak);
+      })
+      .map((a) => a.textContent.trim().replace(/\s+/g, ' ') || '(zonder label)');
+    const balk = document.querySelector('.mobile-cta-bar');
+    return { labels, balk: balk ? balk.dataset.state : 'afwezig' };
+  });
+}
+
 test.describe('Homepage conversie-structuur', () => {
   test.use({ viewport: MOBIEL });
 
@@ -149,31 +190,97 @@ test.describe('Homepage conversie-structuur', () => {
   // Drie breedtes: 375 (kleinste gangbare telefoon), 768 (grens van de oude mobiele
   // query) en 1000 (midden van de navbar-inklapband, waar de desktop-CTA óók verborgen
   // is — die band bleek net zo goed zonder knop te zitten).
+  //
+  // Herschreven in Sessie 216, op drie punten strenger dan de vorige versie:
+  //
+  //  1. Hij scrollt nu écht. `html { scroll-behavior: smooth }` staat in animations.css,
+  //     dus `window.scrollTo(0, y)` ánimeert. De oude lus zette dat 13× in één synchrone
+  //     tick; de animatie kreeg nooit een frame en `scrollY` bleef op 2px steken. Die test
+  //     asserteerde dus dertien keer dezelfde ongescrollde pagina. `behavior: 'instant'`
+  //     plus een await per stap springt wél.
+  //  2. Hit-testing in plaats van bounding box. Een `visibility: hidden` balk heeft nog
+  //     steeds een box van 65px; de oude assertie kon een verborgen CTA niet van een
+  //     zichtbare onderscheiden. `elementFromPoint` op het midden meet wat de bezoeker
+  //     kan raken. Elke positie die de oude versie afkeurde, keurt deze ook af.
+  //  3. Async, zodat de IntersectionObserver van landing-demo.js zijn werk kan doen.
+  //
+  // Consent vooraf, anders meet de hit-test de cookiebanner in plaats van de pagina.
   for (const breedte of [375, 768, 1000]) {
-    test(`@${breedte}px is er op elke scrollpositie een CTA in beeld`, async ({ page }) => {
+    test(`@${breedte}px is er op elke scrollpositie een tikbare CTA`, async ({ page }) => {
+      await page.addInitScript(() => {
+        localStorage.setItem(
+          'hacksim_analytics_consent',
+          JSON.stringify({ necessary: true, analytics: true })
+        );
+      });
       await page.setViewportSize({ width: breedte, height: 812 });
       await page.goto('/index.html');
       await page.evaluate(() => document.fonts.ready);
+      await page.waitForFunction(() => document.querySelector('.mobile-cta-bar[data-state]'));
 
-      const kaal = await page.evaluate(() => {
-        const hoogte = document.documentElement.scrollHeight;
-        const stap = Math.round(window.innerHeight * 0.9);
-        const zonderCta = [];
-        for (let y = 0; y < hoogte; y += stap) {
-          window.scrollTo(0, y);
-          const inBeeld = [...document.querySelectorAll('a[href*="terminal.html"]')].some((a) => {
-            const r = a.getBoundingClientRect();
-            return r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < window.innerHeight;
-          });
-          if (!inBeeld) zonderCta.push(y);
-        }
-        return zonderCta;
-      });
+      const posities = await scrollposities(page);
+      const zonderCta = [];
+      const dubbel = [];
+
+      for (const y of posities) {
+        const m = await meetOpPositie(page, y);
+        if (!m.labels.length) zonderCta.push(`${y} (balk=${m.balk})`);
+        const doublures = m.labels.filter((l, i) => m.labels.indexOf(l) !== i);
+        if (doublures.length) dubbel.push(`${y}: ${doublures.join(', ')} (balk=${m.balk})`);
+      }
 
       // Was: 4179px (5,1 schermen) tussen de hero-CTA en de eerste leerpad-knop.
-      expect(kaal, `scrollposities zonder zichtbare CTA: ${kaal.join(', ')}`).toEqual([]);
+      expect(zonderCta, `scrollposities zonder tikbare CTA: ${zonderCta.join(' | ')}`).toEqual([]);
+
+      // De balk draagt hetzelfde label als hero/mid/final. Stond hij aan terwijl een van
+      // die drie in beeld was, dan zag de bezoeker twee identieke groene knoppen op één
+      // scherm (gemeten op 390×844, scrollpositie 0).
+      expect(dubbel, `twee keer hetzelfde CTA-label tikbaar: ${dubbel.join(' | ')}`).toEqual([]);
     });
   }
+
+  // De knop in de balk erft `visibility` van de balk, en `.btn-cta` draagt
+  // `transition: all` (landing.css:219) — waardoor die overerving als transitie meeloopt.
+  // Gemeten vóór de fix: ~150ms lang meldde de balk `hidden` terwijl de knop nog `visible`
+  // was (onzichtbaar tikdoel dat wél reageert) en andersom een zichtbare balk waar een tik
+  // niets deed. Twee gaten die alleen bestaan in het venster ná een toestandswissel, dus
+  // geen enkele meting "in rust" ziet ze.
+  test('de knop klapt mee met zijn balk, zonder na te lopen', async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem(
+        'hacksim_analytics_consent',
+        JSON.stringify({ necessary: true, analytics: true })
+      );
+    });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/index.html');
+    await page.waitForFunction(() => document.querySelector('.mobile-cta-bar[data-state]'));
+
+    // Scroll heen en weer over de grens waar de balk omklapt, en meet meteen — niet na
+    // een ruime wachttijd, want dan is de transitie voorbij en is de bug onzichtbaar.
+    const afwijkingen = await page.evaluate(async () => {
+      const balk = document.querySelector('.mobile-cta-bar');
+      const knop = balk.querySelector('a');
+      const uit = [];
+      for (const y of [0, 1200, 0, 1200]) {
+        window.scrollTo({ top: y, behavior: 'instant' });
+        await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+        const balkVis = getComputedStyle(balk).visibility;
+        const knopVis = getComputedStyle(knop).visibility;
+        const r = knop.getBoundingClientRect();
+        const raak = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+        const raakbaar = raak === knop || knop.contains(raak);
+        if (knopVis !== balkVis) uit.push(`y=${y}: balk ${balkVis}, knop ${knopVis}`);
+        // Aantikbaarheid moet de balkstaat volgen, niet die van de transitie.
+        if (raakbaar !== (balkVis === 'visible')) {
+          uit.push(`y=${y}: balk ${balkVis} maar raakbaar=${raakbaar}`);
+        }
+      }
+      return uit;
+    });
+
+    expect(afwijkingen, afwijkingen.join(' | ')).toEqual([]);
+  });
 
   test('alle primaire CTA\'s naar /terminal.html dragen hetzelfde label', async ({ page }) => {
     await page.goto('/index.html');
