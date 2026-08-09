@@ -179,3 +179,48 @@ Let ook op een `::before`-fade-mask: die is `position: absolute` binnen het elem
 scrollt dus mét de inhoud mee in plaats van bovenaan te blijven plakken — zet hem uit in
 live-modus. Bewaakt door "eerdere uitvoer blijft terugscrollbaar" in
 `tests/e2e/hero-demo.spec.js`; die test gaat rood zodra je `display: flex` terugzet.
+
+---
+
+## 9. Themavarianten en focusregels vechten op bronvolgorde (Sessie 215)
+
+`.hero-terminal:focus-within` en `[data-theme="light"] .hero-terminal` zijn allebei
+**(0,2,0)** — één klasse + één pseudo-klasse tegenover één attribuut + één klasse. Bij
+gelijke specificiteit beslist de laadvolgorde, dus een focusregel die *vóór* het
+light-theme-blok staat en dezelfde property zet (hier `box-shadow`) wordt daar
+stilzwijgend overruled. Symptoom: de focustoestand werkt in dark en is dood in light.
+
+**Regel:** zet focus-/state-varianten **ná** de themablokken, of geef ze hun eigen
+`[data-theme]`-variant. En test focusstijlen **in beide thema's** — de mutant hiervoor
+gaf letterlijk *light rood, dark groen*; één thema testen had de bug doorgelaten.
+
+Twee dingen die daarbij horen:
+
+- **Keyboard-only focus bestaat niet op een tekstveld.** Gemeten:
+  `input.matches(':focus-visible')` is `true` ná een muisklik — de spec schrijft voor dat
+  tekstvelden altijd focus tonen. `:focus-within` en `:has(:focus-visible)` zijn daar dus
+  equivalent. Je kunt de ring niet muis-vrij maken; je kunt hem alleen *bedoeld* laten
+  ogen.
+- **Houd een transparante outline.** `forced-colors`/High Contrast negeert `box-shadow`
+  maar kleurt `outline: 2px solid transparent` wél in. Zonder die regel heeft een
+  glow-gebaseerde focusindicator daar géén zichtbaar equivalent.
+
+Bewaakt door "het venster gaat groen aan bij focus (dark|light)" in
+`tests/e2e/hero-demo.spec.js`.
+
+---
+
+## 10. Kleur volgt de achtergrond, niet het merk (Sessie 215)
+
+`--color-cta-primary` is het merkgroen en werkt overal waar het op de zwarte terminal
+staat (~17:1). Op de **lichte paginaachtergrond** meet datzelfde token **3,10:1** bij
+14,4px — onder WCAG AA (4.5:1), laat staan de AAA die dit project voert.
+
+**Regel:** vóór je een merkkleur op tekst zet, kijk op wélke achtergrond die tekst landt.
+Binnen een Dark-Frame-element (terminal, navbar, footer) is merkgroen prima; daarbuiten
+hoort de tekst `var(--color-text)` te zijn en mag hooguit een decoratief glyph
+(`aria-hidden`) de merkkleur dragen.
+
+> Bestaand voorbeeld dat hier nog niet aan voldoet: `.eyebrow-badge` gebruikt
+> `--color-cta-primary` op 0.75rem op de lichte achtergrond. Pre-existing, apart van
+> Sessie 215 vastgelegd.
