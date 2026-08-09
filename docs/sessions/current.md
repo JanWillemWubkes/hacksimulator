@@ -4,6 +4,129 @@
 
 ---
 
+## Sessie 219: Onder "in cijfers" was de homepage één blok — en de band die als voorbeeld gold, maakte in light mode nul verschil (09 aug 2026)
+
+**Mission:** Heisenberg constateerde dat de secties tot en met "HackSimulator in cijfers" visueel onderscheidend zijn en alles daaronder als één blok leest, en vroeg om een UX/UI-analyse als expert. Tweede vraag: nu er ook een Sample Juridisch is, is het verstandig die naast de Sample Pentest op de homepage te zetten?
+
+**Commits:** `e7cc0c4` (gepusht)
+
+### De klacht was meetbaar, en erger op mobiel
+
+Methode: groepeer opeenvolgende secties op *effectieve* achtergrond en meet de langste reeks zonder wissel.
+
+| | @1440 | @375 |
+|---|---:|---:|
+| Langste reeks **boven** cijfers | 1023px (1,6 scherm) | 1329px (1,6 scherm) |
+| Langste reeks **onder** cijfers | **2390px (2,66)** | **3078px (3,79)** |
+| Ná deze sessie | **949px (1,05)** | **913px (1,12)** |
+
+De reeks bestond uit `how-it-works` + `leerpad` + `blog-links` + `faq`. Op mobiel telt mee dat `.landing-section` onder 768px van 96px naar 32px padding zakt: de scheiding tussen twee secties is daar 64px witruimte in plaats van 192px — mínder ruimte én geen kleurwissel.
+
+Wat de bovenhelft in werkelijkheid structuur geeft is niet subtiliteit maar de **groene solution-sectie** (Δ ~200). De twee banden daar zijn Δ2 en Δ0; de haarlijnen doen bijna al het werk. Dat is relevant voor de diagnose: er ontbrak onder de vouw niet alleen een kleurwissel, maar élke vorm van interpunctie.
+
+### Twee bugs die alleen uit een meting komen
+
+**1. De light-mode cijfers-band had nul kleurverschil met de pagina.**
+
+`[data-theme="light"] .results-section` was `rgba(248, 248, 248, 0.8)` over een `#f8f8f8` pagina. Dat composit naar **exact `rgb(248,248,248)`** — verschil `[0,0,0]`. De comment erboven zei *"Zeer subtiel off-white"*: de bedoeling klopte, de rekensom maakte hem nul. De band die als goed voorbeeld gold bestond in light mode alleen uit twee haarlijnen. Dit is dezelfde familie als Sessie 215 en 217 — de derde keer dat een rgba-over-ondergrond niet is uitgerekend.
+
+**2. "Banden lichter maken" is op deze site structureel fout.**
+
+Mijn eerste prototype gebruikte `#161b22` (de nieuwsbriefkleur). De kaarten zijn `rgba(22, 27, 34, α)` — tinten van precies dat `#161b22`. Een kaart op zo'n band composit naar de bándkleur:
+
+```
+kaart-Δ = 0.3 × |kaartkleur − bandkleur|   →   0 zodra de band naar #161b22 kruipt
+```
+
+Ik zag het niet in de cijfers (band Δ11: prima) maar op de screenshot: kaarten met alleen nog een randje. Een kaart heeft hier geen eigen kleur, alleen een verhouding tot wat erachter staat.
+
+### De regel die eruit volgde
+
+> **Pagina = oppervlak. Band = verdieping. Kaart = verhoging.**
+
+In beide thema's gaat de band *onder* `--color-bg`, zodat de kaart de lichtste laag blijft. Dat is de enige richting die niet botst met de kaart-tinten, en in light mode is het precies de Stripe/Linear-elevatie die de comment op `landing.css:2232` al nastreefde.
+
+| | band vs. pagina | kaart vs. band |
+|---|---:|---:|
+| dark, vóór | 2 | 3 |
+| dark, ná (`#080b0f`) | **8** | **6** |
+| light, vóór | **0** | 7 |
+| light, ná (`#eceef0`) | **12** | **19** |
+
+Beter op beide assen. Eén nieuwe band volstond (`.leerpad-section`): plaatsing telt, niet aantal — `how-it-works` moet oppervlak blijven omdat het op de cijfers-band volgt, dus leerpad is de eerste mogelijke beat en knipt de reeks doormidden.
+
+### Implementatie
+
+- **`--color-bg-alt`** in beide thema's (`main.css`).
+- **`.section-band`** (verf: achtergrond + twee haarlijnen) en **`.landing-section.section-band`** (full-bleed) staan bewust los: `.trust-bar` en `.homepage-newsletter` zijn al volle breedte en hebben alleen de verf nodig.
+- De **`padding-inline: max(…)`** vervangt een inner wrapper die `.leerpad-section` niet heeft (h2, subtitle en `.leerpad-cards` zijn directe kinderen, dus kaal `max-width: 100%` zou de kaarten meetrekken). Geverifieerd byte-identiek aan een gewone begrensde sectie: `[45, 1381]` @1440 naast `.how-it-works-steps`, `[20, 340]` @360 naast `.faq-grid`.
+- **`--band-gutter`** is geen luxe: het mobiele `padding`-shorthand staat in een media query, die géén specificiteit toevoegt (0,1,0) en dus verliest van de modifier (0,2,0). Zonder de custom property bleef de desktop-gutter op mobiel staan.
+- Netto **vier regels verwijderd, twee toegevoegd**. `.results-grid` ligt nu op dezelfde content-rail als de rest (was `[32,1393]`, nu `[45,1381]`).
+- **`?v=219` op main.css én landing.css.** `.section-band` leest `--color-bg-alt`; een oude cached `main.css` laat die var ongedefinieerd, waarna `background` terugvalt op transparent en álle banden verdwijnen.
+
+### Twee cascade-verliezen die alleen `getComputedStyle` verraadt
+
+Na de eerste implementatie waren twee van de vier banden Δ0. Beide declaraties zien er los prima uit:
+
+- `.leerpad-section { background: transparent }` — **gelijke** specificiteit aan `.section-band`, maar ~480 regels later in hetzelfde bestand. Bronvolgorde besliste.
+- `[data-theme="light"] .homepage-newsletter { background-color: var(--color-bg-modal) }` — herhaalde letterlijk zijn eigen basisregel (`--color-bg-modal` is zelf al thema-afhankelijk), maar deed dat op (0,2,0) en versloeg daarmee de band. Pure redundantie die toevallig zwaarder woog.
+
+De sample-pagina's houden hun verf via `.sample-hero-form.homepage-newsletter` (0,2,0) en zijn byte-identiek geverifieerd: `#161b22` dark / `#ffffff` light, eigen randen, geen band-klasse.
+
+### Bewijs
+
+- **26/26 groen** over chromium/firefox/webkit voor het nieuwe blok. De `max()`-met-custom-property is apart op firefox+webkit gecontroleerd — dat was het enige echte cross-engine-risico in de diff.
+- De **eerste testrun gaf 5 rood** omdat `playwright.config.js:32` standaard tegen *productie* draait (`BASE_URL || 'https://hacksimulator.nl'`). Geen bug maar een gratis nulmeting: productie is de oude code en reproduceerde exact de cijfers van vóór de wijziging.
+- **Mutant "band == pagina"** → ritme-assertie rood met **2392px (2,66)** en **3070px (3,78)**: cijfer voor cijfer de oorspronkelijke meting.
+- **Mutant "band == `#161b22`"** → alleen de kaart-Δ-assertie rood, ritme blijft groen. Dat bewijst dat die assertie niet overbodig is: zij ving mijn eigen eerste ontwerpfout. Light bleef groen omdat de mutant alleen het dark-token raakte — één thema testen had de bug doorgelaten (zelfde les als Sessie 215/217).
+
+**Zwakte in mijn eigen assertie, gevonden door de mutant.** Ik ankerde de ritmemeting eerst op "de reeks die `results-section` bevat". Verliest die sectie haar band, dan slokt die reeks de hele pagina op en meet de assertie stilzwijgend een staartje — hij ging groen op een pagina die kapot was. Nu knip ik op DOM-positie, wat niet kan dissolven.
+
+### De tweede vraag: juridische sample op de homepage — nee
+
+Beantwoord zonder werk, met de meting erbij:
+
+- De homepage eindigt **al met drie opeenvolgende asks** (final-cta → lead-magnet → nieuwsbrief). Een vierde verzwakt ze alle vier, en twee samples naast elkaar dwingen een keuze op het moment dat je nul wrijving wilt.
+- De north-star van deze pagina is *activation*, niet e-mail (`docs/launch-success-metrics.md:39`); lead magnets zijn trechterstap 6.
+- De asymmetrie is echt maar niet homepage-vormig: **17 inkomende links naar de pentest-sample tegen 1 naar de juridische** (alleen de chip op `gidsen.html:444`). De natuurlijke plek zijn de drie juridisch-getinte blogposts (`wat-is-ethisch-hacken`, `ethisch-hacker-worden`, `social-engineering`) die `gidsen.html:457-459` zélf al als juridische achtergrond labelt maar die alle drie naar de *pentest*-sample linken.
+- **Zwaarst:** `docs/newsletter/brevo-setup-sample-juridisch.md:9-10` zegt dat stap 2+3 (template + automation) niet af zijn, terwijl `sample-juridisch.html:132` belooft *"We mailen 'm ook zodra je je inschrijving bevestigt"*. Meer verkeer daarheen schaalt een niet-nagekomen belofte.
+- Er staat bovendien een poort op dit werk: `.claude/plans/lead-magnet-followup.md:13-15` hervat lead-magnet-werk pas bij ≥5 Brevo-contacten óf ≥50 GA4-pageviews/maand op `/sample-pentest.html`.
+
+**Los gat, vastgelegd niet opgelost:** `index.html` bevat **nul** links naar `/gidsen.html` — de enige pagina die beide samples symmetrisch behandelt is vanaf de drukste pagina alleen via de navbar bereikbaar.
+
+### De rode test was niet van mij (gemeten, niet beweerd)
+
+De 12-spec-run over drie motoren gaf **413 passed / 1 failed / 15 skipped**. De faler: `performance.spec.js:480` (VFS-groei) op firefox. Twee servers ernaast gezet (`d0ba157` op 8898, `e7cc0c4` op 8899), 5× per kant serieel: **5/5 groen op beide**, identiek. En CSS kan onmogelijk beïnvloeden hoeveel bytes `touch` naar localStorage schrijft. Hij viel alleen tijdens een run waar ik zelf twee extra Playwright-runs naast had gezet — dezelfde belasting-naast-de-meting als Sessie 218.
+
+**Maar de overlever verklaren leverde iets ergers op:** die test asserteert serieel helemaal niets. De `avgGrowth === 0`-guard op regel 530 (bedoeld tegen 0/0 = NaN) zet "er is niks gemeten" om in "geslaagd" — **10 van de 10 seriële runs namen die tak**, met `hacksim_filesystem` onaangeroerd terwijl `persistence.js:13` diezelfde sleutel gebruikt. Hij wordt pas een echte assertie onder load, en is dán variantie-gevoelig. Vastgelegd als openstaande diagnose (TASKS.md #62), niet als baseline.
+
+### De console-fout die ik bijna als bug rapporteerde
+
+Tijdens dat onderzoek gaf `terminal.html` op mijn lokale server: *"The requested module '../gamification/certificate-templates.js' does not provide an export named 'CERT_DISCLAIMER'"*. Oude code: 0 fouten. Productie: 0 fouten. JS byte-identiek (`diff -rq` leeg), werkmap schoon, en de export staat gewoon op regel 21.
+
+De verklaring stond in onze eigen regels. Warme fetch: **1603 bytes zonder** de export. Cache-bustende fetch: **2157 bytes mét**. Mijn MCP-debugbrowser hield een `certificate-templates.js` van vóór commit `feea49e` (Sessie 208, toen het bestand 1611 bytes was) vast — exact de val die `.claude/rules/architecture-patterns.md` §Cache Strategy beschrijft: *"Verifieer een submodule-fix altijd tegen een no-store server of via `import('…?cb='+Date.now())`, nooit tegen een warme browser."* De server stuurde keurig `no-store` en 40/40 curl-opvragingen gaven 2166 bytes; het was puur de browser.
+
+### Metrics
+
+| | Vóór | Ná |
+|---|---:|---:|
+| Langste oppervlak-reeks onder cijfers @1440 | 2390px | 949px |
+| Idem @375 | 3078px | 913px |
+| Band vs. pagina (dark / light) | 2 / **0** | 8 / 12 |
+| Kaart vs. band (dark / light) | 3 / 7 | 6 / 19 |
+| `test()`-declaraties | 288 | 290 |
+| Bundel (limiet 1120 KB) | 1091,02 KB | **1093,90 KB** (marge 2,3%) |
+
+⚠️ **+2,88 KB terwijl de diff nétto CSS-regels verwijdert.** Het commentaar dat beide bugs vastlegt is langer dan de code die het vervangt. Bewuste keuze — die twee rekensommen zijn precies wat een volgende sessie anders opnieuw moet ontdekken — maar de marge is nu 2,3% en de volgende wijziging tikt het alarm aan. Dan is de vraag niet "hoe knip ik bytes" en zeker niet weer een bump: 1000 → 1050 → 1100 → 1120 is drie bumps in 15 sessies.
+
+### Volgende stappen
+
+- `performance.spec.js:480` diagnosticeren (TASKS.md #62) — waarom persisteert `touch` in de testcontext niets?
+- Overwegen om `index.html` één contextuele link naar `/gidsen.html` te geven (wayfinding, geen extra ask).
+- De juridische Brevo-automation afmaken óf de belofte op `sample-juridisch.html:132` verzachten, vóór er meer verkeer heen gaat.
+
+---
+
 ## Sessie 218: De strook onder de terminal was AdSense-vulling die AdSense vijf maanden overleefde (09 aug 2026)
 
 **Mission:** Heisenberg vroeg of alles onder de terminal-simulator nog nodig was, nu er geen advertenties meer zijn — met de opdracht grondig te analyseren, vragen te stellen en de keuze te beargumenteren. Verwijderen, laten staan of iets anders eronder zetten waren alle drie open.
@@ -1102,3 +1225,22 @@ Geen vierde gids (bottleneck is verkeer, niet aanbod). Geen docenten-pagina of c
 - Codeer een openstaande handmatige stap als een **bewust rode test**, niet als TODO. "Elke sample post naar een ánder Brevo-formulier" faalde tot het Brevo-handwerk klaar was en werd groen op het exacte moment dat het af was. Een regel in een runbook meldt niets terug.
 - Vraag het de gebruiker wanneer hij de discriminator in twee seconden kan leveren. Welke tekst het bevestigingspaneel toont, kon alleen een echte inschrijving beantwoorden — en Heisenberg had de flow net doorlopen. De twee kandidaat-teksten liepen na "klaar." uiteen; dat had mijn eerste vraag moeten zijn, niet mijn derde.
 - Maak bij een browserverschil **beide kanten** correct in plaats van uit te zoeken wie wint. `download="<naam>.pdf"` én `Content-Disposition: filename` dragen nu dezelfde naam, dus de fix draagt geen browser-specifieke aanname. Zelfde reflex bij Netlify's header-merge: `Cache-Control` in elk exact blok herhaald i.p.v. hopen dat de wildcard-waarde meekomt (ná deploy bevestigd).
+
+## Sessie 213 — learnings (geroteerd uit CLAUDE.md, Sessie 219)
+
+⚠️ **Never:**
+- `flex: 1` op een type-selector zetten. `.gids-card p { flex: 1 }` selecteerde óók `p.gids-sample-link`, dus twee flex-items met `flex-basis: 0` deelden de rek (gemeten: 82px + 66px = precies de 164px van een kaart-zonder-sample min de extra marge). Twee vervolgeffecten die als los raadsel oogden: `margin-top: auto` op de knop werd een no-op (flex-grow verdeelt vóór auto-marges) en de eigen marge van de sample-link landde nooit ((0,1,1) verslaat (0,1,0)). **Zulke bugs vind je niet door de CSS te lezen — alleen `getComputedStyle` verraadt een `flex-grow` die je nooit hebt gezet.**
+- Denken dat een media query specificiteit toevoegt. Hij telt voor nul, dus bij gelijke selectoren wint puur de laadvolgorde. `.features-4col` in pages.css versloeg daardoor `@media (max-width: 1024px)` in landing.css, en mijn eigen 2-koloms-regel deed hetzelfde met de mobiele 1fr-regel: 6px overflow en kaarten van 173px op 375px. Gebruik wederzijds uitsluitende ranges (`≤768` naast `≥769`) — die hebben helemaal geen winnaar nodig.
+- `scrollWidth <= clientWidth` lezen als "het past". Wrappen is geen overflow: mijn eerste navbar-grens (1179px) werd door mijn eigen test goedgekeurd terwijl de screenshot twee afgebroken labels toonde. Zet een aparte wrap-assertie naast de overflow-check, want de ene maat is structureel blind voor de andere.
+- `getClientRects().length` gebruiken om wrap te detecteren in een flexbox. Flex-children zijn geblokkeerd, dus tekst over twee regels levert nog steeds één rect op. Meet op hoogte tegen `line-height`.
+- Een `color` meenemen in een layout-override met een ID in de selector. `#landing-mobile-menu .navbar-links a` is (1,1,1) en versloeg daarmee élke kleurregel in main.css — inclusief mijn eigen CTA-fix. Symptoom: `font-weight` kwam wél door en de kleur niet.
+- `checkVisibility()` vertrouwen bij visually-hidden-patronen. Die API kijkt naar `display`/`visibility`/`opacity` en negeert `clip-path` en `overflow` — hij gaf `true` op een `<th>` die aantoonbaar weggeknipt was. Hit-testing (`elementFromPoint`) is daar de betrouwbare meting.
+
+✅ **Always:**
+- Los een uitlijningsklacht structureel op, niet met een afstelling. Eén groeier (`.gids-card-body`) zet prijs, knop en bloglinks op vaste afstand van de kaartbodem, dus de invariant **kaartbodem − CTA-bodem = 186px** geldt voor alle vier de kaarten — ongeacht welke een sample draagt. Een `margin-top: auto`-fix was gebroken zodra iemand een derde sample toevoegde.
+- Zoek een breakpoint binair op in plaats van hem te schatten, en meet in élke engine. Vanaf 1147px liep er niets meer buiten de balk, maar pas vanaf 1264px (1266 in WebKit) brak er ook niets meer af. De strengste meting wint, plus marge: band tot 1279px zodat de desktopnav vanaf de gangbare 1280px verschijnt.
+- Bewijs met de oude code dat een gevonden overflow niet van jou is. Productie gaf exact dezelfde 341px en dezelfde 917px `nav-right` — daarmee was in één meting duidelijk dat het pre-existing was en hoe groot de blast radius was (élke marketingpagina + alle blogposts).
+- Verklein een regel met een selector-token in plaats van een uitzondering toe te voegen. `:nth-child(3)` → `:nth-child(3):last-child` drukt uit wat de regel altijd al bedoelde en fixte twee pagina's tegelijk; elk aangeraakt grid geteld (5× drie kinderen, 2× vier) om nul gedragswijziging te bewijzen waar het wél klopte.
+- Neem bij het verbreden van een media-band de **gemeten effectieve stijlen** van de directe buur over, niet de bron-CSS. Die bron wordt daar deels overruled, dus overtikken levert iets anders op dan wat er staat. Visueel vergeleken op 700px en 1000px: identiek.
+- Behandel flaky tests als een meetfout tot het tegendeel blijkt. Vier "browserverschillen" waren allemaal `page.goto`-timeouts met nul assertiefouten; oorzaak was `TCPServer` in `scripts/nostore-server.py` die één request tegelijk afhandelt terwijl drie browsers parallel laden. `ThreadingTCPServer` haalde de hele faalklasse weg.
+- Leg vast wat géén bug is, mét de meting. De `<th>` uit `.blog-table--stacked` is het complete visually-hidden-patroon (absoluut, 1×1px, `clip-path`), uit de flow, geen scroll, niets raakbaar — "oplossen" zou `display: none` betekenen en schermlezers de kolomkoppen kosten.
