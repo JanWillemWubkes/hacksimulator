@@ -4,6 +4,110 @@
 
 ---
 
+## Sessie 220: Opruimsessie — vier van de vijf punten bleken een notitie die niet meer klopte (10 aug 2026)
+
+**Mission:** Vijf losse opruimpunten: een pagina die een e-mail belooft, twee tests die niet meten wat ze beweren, de bulk-rotatie, en dode taken. De opdracht zei expliciet *"MEET EERST, BOUW DAARNA — de metingen hieronder komen uit Sessie 219 en kunnen achterhaald zijn"*. Dat bleek de kern van de sessie: **vier van de vijf punten waren geen bug maar een verouderde notitie.**
+
+### Punt 1 — de juridische welkomstmail was al gebouwd
+
+Het plan wilde `sample-juridisch.html:132` (*"We mailen 'm ook zodra je je inschrijving bevestigt"*) verzachten, want `docs/newsletter/brevo-setup-sample-juridisch.md:7-10` meldde nog "Stap 2 (template) en Stap 3 (automation) nog te doen".
+
+Heisenberg keek in de Brevo-UI: automation **`Sample Juridisch — welkomstflow`** staat sinds 7 aug op **Active**, trigger *Form submitted* op het juiste formulier (`Sample Juridisch embed`, token `MUIFAGIf…`, niet het pentest-formulier `MUIFACJ0…`), en de mail-actie draagt het echte template en niet Brevo's lege default — onderwerp en preview komen letterlijk overeen met Stap 2 §5-6, en de body toont `> Bestand klaargezet: juridische-gids-sample.pdf`. Repo-template bevestigd: 2× `gumroad.com/l/yzdtfx` (de volledige juridische gids, ~13 pagina's, vanaf €5) en de juiste PDF.
+
+**De pagina is niet gewijzigd.** Bijgewerkt: runbookstatus, Stap 2/3/4 afgevinkt, plus twee interne tegenspraken die náást elkaar in hetzelfde document stonden (*"de `action`-URL wijst nog naar het pentest-formulier"* terwijl Stap 1 vier alinea's verderop meldt dat hij vervangen is; en de free-tier-poort *"lukt een derde automation?"* die al met ja beantwoord was en in CLAUDE.md nog als blokkade werd meegedragen). Stap 4 dicht na Heisenbergs proefinschrijving.
+
+### Punt 2 — `performance.spec.js:480` asserteerde serieel niets
+
+Gereproduceerd: 5 metingen van `0.00 KB`, CV `NaN%`, guard genomen, **groen in 11,7s**.
+
+Oorzaak gemeten (10 `touch`-commando's tegen productie, drie condities):
+
+| Conditie | bytes in `hacksim_filesystem` |
+|---|---|
+| meteen uitlezen — wat de test deed | **0** |
+| 1200 ms wachten | 5139 |
+| `persistence.flush()` | 5139 |
+
+`persistence.js:47-58` doet `clearTimeout` + nieuwe `setTimeout(…, 1000)` bij élke mutatie; tussen twee `touch`-commando's zit ~350 ms. Die seconde verstrijkt dus nooit. Tegenbewijs stond in dezelfde repo: `vfs-versioning.spec.js:54-56` doet het wél goed, mét de comment *"laat de debounced save (1000ms) landen"*.
+
+Opgelost met een deterministische flush via de al geëxporteerde `window.HackSimulator.debug.persistence` (`main.js:336-344`) i.p.v. wachten — 5× 1200 ms zou de test van ~12s naar ~18s duwen tegen een timeout van 30s. Guard vervangen door `expect(avgGrowth).toBeGreaterThan(0)`, plus een assertie op de debug-handle zelf (`?.flush()` zou stil dezelfde nulmeting opleveren). Meet nu **44,00 bytes/bestand, stddev 0,00, CV 0,0%**.
+
+Twee mutanten: flush eruit → 5× `0.00 KB` + CV `NaN%`, cijfer voor cijfer de nulmeting, rood op de nieuwe assertie. Exponentieel groeiende bestandsnamen → 269 bytes/file bij CV 59,8%, **uitsluitend** rood op de CV-assertie terwijl `avgGrowth > 0` groen blijft. (Eerste poging met lineair groeiende namen gaf CV 23,8% — te zwak om iets te bewijzen.)
+
+### Punt 3 — de diagnose klopte op geen van beide punten
+
+TASKS.md #60 zei: *"faalt op firefox+webkit zodra drie motoren tegelijk draaien; oorzaak is de 10s `toBeVisible`-wachttijd op een JS-geïnjecteerde navbar onder CPU-contentie"*. Twee dingen die daar al niet mee rijmden: de eerste test in hetzelfde bestand heeft dezelfde race met een *krappere* 5s-timeout en valt niet om, en een `toBeVisible({timeout})` ís al een conditie-wacht.
+
+Gemeten: **7 falers, niet 1.** De DOM-snapshot van de faler:
+
+```
+- paragraph: "We are verifying your connection. This will only take a few seconds."
+- code: "Challenge ID: 01KZN1SA8QM5JFGZGN9V69SCFS"
+```
+
+**Netlify's bot-protectie.** Drie parallelle motoren die samen honderden navigaties naar productie afvuren krijgen een interstitial in plaats van de pagina; die bevat geen enkel site-element, vandaar `TypeError: Cannot read properties of null (reading 'getBoundingClientRect')`. Dezelfde suite tegen `scripts/nostore-server.py`: **27 passed / 0 failed.**
+
+`:209` was wél een echte testfout, maar een andere. De call log noemt het element letterlijk: `<div id="legal-modal" class="modal active"> intercepts pointer events`. Deze test was de enige in het bestand die klikt zónder `acceptLegalModal()` — de drie erboven roepen hem wel aan. Venster gemeten: op het moment dat `.navbar-toggle` zichtbaar wordt bestáát `#legal-modal` nog niet; binnen ~500 ms wordt hij ingevoegd, meteen mét `.active`. De hamburger komt van `init-components.js`, de modal van `main.js` (99 modules) — de modal landt dus structureel ín het klikvenster.
+
+NEW guard in `tests/e2e/fixtures.js`: wrapt `page.goto` en faalt op de interstitial mét oorzaak én uitweg. Mutant tegen een lokaal geserveerde neppagina met de challenge-tekst: de test faalt nu op de `goto` met de benoemde melding i.p.v. verderop met een `TypeError`. Dekt 150 `goto`-aanroepen in 37 specs; geen `about:blank`/`data:`-navigaties en opties worden doorgegeven.
+
+### Punt 4 — bulk-rotatie 205-209
+
+`current.md` hield geen 15 entries maar **20 `##`-secties**: 15 sessie-entries plus 5 losse learnings-blokken die eerder uit CLAUDE.md waren geroteerd (205, 207, 209, 212, 213). Die learnings horen mee te gaan met hun sessie — anders blijft *"Sessie 205 — learnings"* in `current.md` staan terwijl entry 205 in het archief zit. Toevallig aaneengesloten, dus het bleef één knip: regels 954-1214, byte-geverifieerd met `prefix + knip + suffix == origineel` (149.084 bytes), 20 → 12 secties.
+
+Drie stukken bijgevangen staleness in `SESSIONS.md`, geen van drieën van deze rotatie: de index claimde window "205-215" terwijl `current.md` er 15 hield; §Session Overview stond op Sessie 190; en §Maintenance Protocol gaf een rotatieregel ("max 5 sessions full detail", "verplaats 82-84 naar RECENT") die `docs/sessions/README.md` sinds Sessie 170 tegenspreekt en die naar het bevroren `recent.md` verwees.
+
+### Punt 5 — zeven dode taken gesloten
+
+| Item | Grond |
+|---|---|
+| #18 AdSense-monitoring | AdSense verwijderd in Sessie 208 — geen dashboard, geen ad-unit, geen CTR. Stond 12 sessies open ná zijn eigen onderwerp |
+| #22 Postmaster | Kalenderhelft van de trigger geschrapt: Postmaster aggregeert pas bij volume, dus die datum leverde nooit data. Enige conditie nu: eerste campagne >100 ontvangers |
+| #33 LT1-reductie | Alle vijf sub-paden beslist; (c) twee keer gemeten en twee keer teruggedraaid, (e) in Sessie 205 structureel opgelost via `max-age=3600` op `/src/**/*.js` i.p.v. handmatige `?v=`-boekhouding over ~99 modules |
+| #34 Mechanism-isolation | Sub-pad (a) draagt de trigger *"outcome 2/3 van #35(b)"* — en #35(b) sloot met **Outcome 4**. Wachtte 66 sessies op een poort die al dicht was |
+| launch-blok (3×) | "verse blogpost schrijven" stond open náást zijn eigen afgevinkte uitvoering; "Launch-uitvoering — doel wo 29 juli" las alsof er niets gebeurd was terwijl de launch die dag begon; de GA4-annotatie was op 29 jul gezet en stond nog open |
+
+M5.5-tabel 24/27 (88%) → 25/27 (92%), gemeld door `validate-docs.sh --deep` Check 6 — de forcing function ving exact mijn wijziging.
+
+### Extra — één wayfinding-link naar `/gidsen.html`
+
+`index.html` bevatte **nul** voorkomens van "gidsen". Correctie op de notitie uit Sessie 219 die "alleen via de navbar" zei: de footer linkt er ook naartoe (`footer.js:51`) — beide JS-geïnjecteerd, dus in-content is er geen route, maar het is iets anders dan er stond. Eén secundaire regel in de bestaande lead-magnet-strook; geen vierde ask. Geen `data-cta-location`, want dat attribuut werkt alleen náást `data-lead-magnet`/`data-product-id`/`data-lead-download` en zou los eraan dode markup zijn die er getrackt uitziet.
+
+Tikdoel gemeten i.p.v. aangenomen: **268×50 (chromium) / 268×49 (WebKit)** op 375px en 360px, hit-test raakbaar met de link zelf als opvanger, nul horizontale overflow, beide thema's.
+
+### Geen tweede rotatie deze sessie
+
+De `/summary`-skilltekst zegt "bij `N % 5 == 0`: archiveer [N-10 .. N-6]", wat bij N=220 op 210-214 uitkomt. **Dat is de formule die Sessie 215 al als fout heeft gecorrigeerd** (zie `SESSIONS.md` §Rotatie-log). De canonieke regel staat in `docs/sessions/README.md`: archiveer wat ouder is dan de laatste ~10, en houd `current.md` op 10-15 entries. Met Sessie 220 erbij staat de teller op 11 (210-220) en is de oudste precies 10 sessies oud — er kwalificeert dus niets. Nogmaals roteren zou `current.md` op 6 entries brengen. Volgende bulk: **Sessie 225, staart = 210-214.**
+
+**Commits (8, alle direct naar `main` gepusht):**
+- `d5741f5` — De VFS-groeitest mat niets: guard vervangen door assertie + deterministische flush
+- `69f785a` — Bulk-rotatie 205-209 — en de index die al twee bulks achterliep
+- `907597c` — Dode taken gesloten met reden: vijf items wachtten op iets dat al beslist was
+- `9076750` — Juridische welkomstmail was al af — het runbook liep drie dagen achter
+- `1e7d417` — De navbar-test faalde niet op contentie maar op de legal-modal — en 5 van de 7 falers waren Netlify
+- `3ccf880` — Homepage linkt eindelijk naar /gidsen.html — een link, geen vierde ask
+- `c5d3cdb` — Testitems bijgewerkt: #60 en #62 gesloten, #64 geopend als openstaande diagnose
+- `d5fd2b9` — Brevo-runbook juridische sample volledig afgerond (Stap 4 bevestigd)
+
+**Learnings:**
+
+- **Vier van de vijf punten waren dezelfde fout in verschillende vermommingen:** een notitie die een *toestand* beschreef in plaats van een meting, en die niets kon terugmelden toen hij verliep. #18 wachtte op een dashboard dat niet meer bestaat, #34 op een poort die al dicht was, het runbook meldde onaf werk dat af was, en #60 gaf een oorzaak die op geen enkel punt klopte. Dat is geen incident maar het patroon van de sessie — en de reden dat de guard in `fixtures.js` meer waard is dan de fix eronder: die *meldt* wél terug.
+- **Een testfaler is geen bewijs dat de test of de code stuk is.** Vijf van de zeven falers kwamen van de hostingpartij. De DOM-snapshot in `error-context.md` gaf het antwoord in vier regels; zonder die snapshot had ik naar timing zitten kijken, precies zoals de vorige sessie deed.
+- **Twee hypotheses hardop falsificeren is waardevoller dan een derde gokken.** Bij de flaky autocomplete-test bleken zowel "de app is nog niet gewired" (8/8 wél gewired — `goto` wacht op `load`) als "de legal-modal blokkeert Tab" (0/10 modal actief, 0/10 focus weg) onjuist. Die twee staan nu in #64 zodat de volgende sessie ze niet opnieuw onderzoekt. Doorgaan met gissen zou géén meting zijn geweest.
+- **Meet ook wanneer de bron je eigen plan is.** Mijn plan zei "verzacht de copy" op gezag van een runbook. Was ik gaan bouwen, dan had de bezoeker een slechtere pagina gekregen op basis van een document van drie dagen oud — de eerste keer dit jaar dat een verkeerde notitie bijna een *gedupeerde aan de bezoekerskant* opleverde in plaats van verspilde tijd.
+- **Drie eigen meetfouten, alle drie gemeld:** (a) ik hit-testte het tikdoel op coördinaten buiten beeld, wat `raakbaar=false` gaf — na `scrollIntoViewIfNeeded` klopt het (zelfde val als Sessie 215); (b) ik bewerkte `index.html` terwijl de suite tegen datzelfde bestand liep, waardoor die run als verificatie waardeloos was en opnieuw moest; (c) mijn eerste mutant voor de CV-assertie was te zwak (23,8%, onder de drempel van 50%) en bewees dus niets tot ik hem exponentieel maakte.
+- **Een lange run triëren op codepad in plaats van hem uitzitten.** De volle 3-motorensuite (1092 tests) liep op 156 na 20 minuten en zou zijn eigen `--global-timeout` niet halen — precies de val van Sessie 216 ("did not run" onder een regel "passed"). Afgekapt en vervangen door: de twee gewijzigde specs over drie motoren (al groen) plus alle 37 specs op één motor, want `fixtures.js` is de enige brede wijziging. 356 passed / 1 failed / 7 skipped in 17,1 min.
+- **Retries zijn geen antwoord maar wel context.** Ik draaide alles met `--retries=0` om schoon te meten; de echte config geeft lokaal 1 retry, dus de overgebleven flaky wordt in normaal gebruik als *flaky* gerapporteerd bij een groene run. Dat is de reden dat #64 geen sessie verdient — maar bewust géén reden om hem "bekende faler" te noemen, want dat is precies het label waar de staande regel van Sessie 217 tegen is geschreven.
+
+**Next steps:**
+- **#64** — `autocomplete-filesystem.spec.js:99` flaky onder volle-suite-load. Openstaande diagnose mét metingen; reproduceren ónder parallelle load i.p.v. in isolatie, en `focus-trap.js:74` + `input.js:138` instrumenteren op het faalmoment.
+- **Bundelmarge 24,46 KB (2,2%).** De volgende niet-triviale wijziging raakt de alarmgrens. De vraag is dan **niet** weer een bump — 1000 → 1050 → 1100 → 1120 is drie bumps in 16 sessies — maar of dit nog het juiste getal is om te meten.
+- Op Heisenberg: #59 Search Console-data voor `/terminal.html`, #17/#46 GA4 Realtime, #22 Postmaster bij de eerste campagne >100 ontvangers.
+
+**Metrics delta:** src/ 722 KB (−1, afronding), styles/ 434 KB, blog/ 474 KB, assets/ 1737 KB — ongewijzigd. Specs 37, `test()`-declaraties 290: **nul nieuwe**, deze sessie repareerde bestaande tests. Bundeltest 1093,90 → **1095,54 KB** van 1120 (marge 26,10 → 24,46 KB). `current.md` 149.084 → 106.210 bytes na de rotatie; NEW `archive-s205-s209.md` 43.378 bytes.
+
+---
+
 ## Sessie 219: Onder "in cijfers" was de homepage één blok — en de band die als voorbeeld gold, maakte in light mode nul verschil (09 aug 2026)
 
 **Mission:** Heisenberg constateerde dat de secties tot en met "HackSimulator in cijfers" visueel onderscheidend zijn en alles daaronder als één blok leest, en vroeg om een UX/UI-analyse als expert. Tweede vraag: nu er ook een Sample Juridisch is, is het verstandig die naast de Sample Pentest op de homepage te zetten?
@@ -983,3 +1087,23 @@ Beide gepusht naar `main`, CI success, deploy live geverifieerd met `curl -I`.
 - Neem bij het verbreden van een media-band de **gemeten effectieve stijlen** van de directe buur over, niet de bron-CSS. Die bron wordt daar deels overruled, dus overtikken levert iets anders op dan wat er staat. Visueel vergeleken op 700px en 1000px: identiek.
 - Behandel flaky tests als een meetfout tot het tegendeel blijkt. Vier "browserverschillen" waren allemaal `page.goto`-timeouts met nul assertiefouten; oorzaak was `TCPServer` in `scripts/nostore-server.py` die één request tegelijk afhandelt terwijl drie browsers parallel laden. `ThreadingTCPServer` haalde de hele faalklasse weg.
 - Leg vast wat géén bug is, mét de meting. De `<th>` uit `.blog-table--stacked` is het complete visually-hidden-patroon (absoluut, 1×1px, `clip-path`), uit de flow, geen scroll, niets raakbaar — "oplossen" zou `display: none` betekenen en schermlezers de kolomkoppen kosten.
+
+## Sessie 214 — learnings (geroteerd uit CLAUDE.md, Sessie 220)
+
+⚠️ **Never:**
+- Een demo laten staan die afwijkt van de engine. De hero gaf `whoami` → `user` (echt: `hacker`), `ls` → `passwords.txt`/`notes.md` (bestaan niet in de VFS) en `nmap 192.168.1.1` → poort 22 i.p.v. het router-profiel 53/80/443. Op een site die "aantoonbaar" als kwaliteitsclaim voert is dat geen cosmetiek maar een geloofwaardigheidslek — en het stond er sinds de bouw van de landingspagina.
+- `innerText()` ná een animatielus lezen om te bewijzen wát die lus toonde. `trimOldLines()` knipt de oudste regels weg, dus de meting kán het bewijs niet bevatten. Mijn test was daardoor **groen op de kapotte pagina**, mede omdat hij `hacker` zocht en dat gewoon in de promptregel `hacker@hacksim:~$` staat. Twee blinde vlekken die elkaar dekten. Een `MutationObserver` via `addInitScript()` vangt wél alles.
+- `RESPONSES[naam]` gebruiken als de sleutel van de bezoeker komt. `constructor`, `toString`, `__proto__` en `hasOwnProperty` zijn allemaal truthy op een object-literal; één getypt woord blokkeerde de hele REPL op `undefined.slice()`. `Object.hasOwn` is de fix — en meld het origineel terug, niet de kleingemaakte vorm (`toString` → `tostring` verwart).
+- Aannemen dat een browser een `readonly` veld focust als je die vlag tijdens `pointerdown` weghaalt. Firefox beslist focusbaarheid bij mousedown: `document.activeElement` bleef `BODY`, dus de bezoeker zag de terminal live gaan en zijn toetsaanslagen verdwenen. **Alleen de driemotorenrun ving dit** — op Chromium is het onzichtbaar.
+- `flex-direction: column; justify-content: flex-end` combineren met `overflow-y: auto`. Chrome en Firefox clippen de bovenkant van de inhoud dan onbereikbaar weg. `display: block` + `scrollTop = scrollHeight` doet hetzelfde zonder de val.
+- Een klasse op de regel zetten terwijl de CSS descendant-selectors gebruikt. `.terminal-line .tip` matcht niet op `<div class="terminal-line output tip">`; de markers renderden wit in plaats van groen. Kleuring hoort in een `<span>` bínnen de regel.
+- Een teller gebruiken die meer verzamelt dan je bedoelt. De afrondboodschap hing aan `gedaan.size`, en `gedaan` bevat élke invoer — zes willekeurige woorden riepen de CTA op, en daarna elk volgend command opnieuw.
+
+✅ **Always:**
+- Los een "geleid of vrij"-vraag op door te kijken wat de dúre helft is. De REPL-machinerie is het werk; begeleiding erbovenop is ~30 regels. "Geleid" als *vervanging* zou een click-through zonder invoer opleveren — precies de belofte die de subtitel drie regels hoger doet. Eén affordance die begeleiding, eerlijke grens én mobiele bediening tegelijk is (zes chips) verslaat twee systemen naast elkaar.
+- Bewijs een fix met de mutant, ook als de test al groen is. Drie van de vijf bugs deze sessie zijn zo geverifieerd: oude code terug → test weer rood. Zonder die stap weet je niet of je assertie de bug kán zien.
+- Kies een budgetgrens op bruikbaarheid, niet op "net genoeg". Mijn eerste bump (1075) liet 5,8 KB over — even krap als waar ik begon. Een limiet die op élke wijziging vuurt wordt weggeklikt in plaats van onderzocht; ~3% marge houdt hem een alarm. En zeg erbij wát het meet: dit is ongeminificeerde broncode sitebreed, geen perf-poort (Terminal Core wordt met nul bytes geraakt).
+- Meet mobiele breedte op twee manieren, want de ene is blind voor de andere: tekentelling ≤40 op regels die jíj schrijft, plus geometrische overflow tegen `clientWidth` voor álle regels. Letterlijke bestandsinhoud valt buiten de tekentelling — die hoort te wrappen, en inkorten zou het bestand vervalsen.
+- Omhul analytics-aanroepen naar een net uitgebreide gedeelde module. Relatief geïmporteerde submodules dragen geen `?v=`, dus een terugkerende bezoeker kan tot `max-age` een oude `events.js` krijgen; zonder guard is dat een `TypeError` na elk command.
+- Check het browserpad in plaats van het te gokken — de Sessie 209-les geldt nog steeds, maar andersom: hier stonden ze gewoon op de standaardlocatie en was `CHROMIUM_PATH` helemaal niet nodig. Mijn gok liet alle 30 tests falen.
+- Wees expliciet over wat je níét kunt bewijzen: of de hero-demo de doorklik verhoogt, weet je pas als `terminal_cta_click{location:hero}` te segmenteren is op sessies mét `hero_demo_started`. Tot dan is het een hypothese, geen resultaat.
