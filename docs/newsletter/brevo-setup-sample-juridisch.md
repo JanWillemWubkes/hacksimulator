@@ -17,9 +17,9 @@ de body toont `> Bestand klaargezet: juridische-gids-sample.pdf`.
 > drie dagen achtergelopen op de werkelijkheid. Een runbook dat zijn eigen voltooiing niet
 > bijhoudt, laat een correcte pagina eruitzien als een leugen.
 
-**Nog open: alleen Stap 4 (testen).** Dat is de enige poort die niet uit de UI af te lezen is:
-komt de mail daadwerkelijk aan, en klopt hij? Zie ook Stap 3 hieronder — de free-tier-vraag is
-inmiddels beantwoord.
+**Er staat niets meer open.** Stap 4 (de proefinschrijving) is door Heisenberg uitgevoerd en de
+flow werkt. Dit runbook is daarmee afgerond — laat het staan als naslag voor een vierde funnel,
+niet als to-do.
 
 Dit document is self-contained — je kunt het uitvoeren zonder andere context.
 
@@ -164,7 +164,7 @@ aannemen** — dat is precies wat Stap 4 doet.
 
 ---
 
-## Stap 4 — Testen ⬅️ **enige openstaande stap**
+## Stap 4 — Testen ✅ (proefinschrijving gedaan door Heisenberg, bevestigd Sessie 220)
 
 **Juridische flow:**
 1. Ga naar `https://hacksimulator.nl/sample-juridisch.html`, schrijf in met een testadres
