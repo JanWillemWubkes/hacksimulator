@@ -4,10 +4,22 @@
 **juridische** gids — met de juiste PDF en een cross-sell naar `yzdtfx`, niet naar het
 pentest-playbook.
 
-**Status (7 aug 2026):** formulier aangemaakt, `action`-URL staat op de pagina, E2E-poort groen.
-**Nog te doen: Stap 2 (template) en Stap 3 (automation).** Tot die twee klaar zijn krijgt een
-juridisch-inschrijver *geen* welkomstmail — de bevestigingsmail komt wel, en de PDF staat
-sowieso al in het success-panel.
+**Status (bijgewerkt 10 aug 2026, Sessie 220): Stap 1 t/m 3 zijn KLAAR.** Geverifieerd in de
+Brevo-UI: automation **`Sample Juridisch — welkomstflow`** staat op **Active**, trigger is
+*Form submitted* op **`Sample Juridisch embed`** (het juiste formulier — token `MUIFAGIf…`,
+niet het pentest-formulier `MUIFACJ0…`), en de mail-actie draagt **jouw template**, niet
+Brevo's lege default: onderwerp en preview-tekst komen letterlijk overeen met Stap 2 §5-6 en
+de body toont `> Bestand klaargezet: juridische-gids-sample.pdf`.
+
+> **De belofte op de pagina klopt dus.** `sample-juridisch.html:132` zegt *"We mailen 'm ook
+> zodra je je inschrijving bevestigt"*. Die zin stond in Sessie 220 op de nominatie om
+> verzacht te worden omdat dít document nog "Stap 2 en 3 nog te doen" meldde — de status was
+> drie dagen achtergelopen op de werkelijkheid. Een runbook dat zijn eigen voltooiing niet
+> bijhoudt, laat een correcte pagina eruitzien als een leugen.
+
+**Nog open: alleen Stap 4 (testen).** Dat is de enige poort die niet uit de UI af te lezen is:
+komt de mail daadwerkelijk aan, en klopt hij? Zie ook Stap 3 hieronder — de free-tier-vraag is
+inmiddels beantwoord.
 
 Dit document is self-contained — je kunt het uitvoeren zonder andere context.
 
@@ -35,19 +47,25 @@ inschrijving bevestigt"* — en die belofte werd gebroken.
 - [x] Downloadknop levert `juridische-gids-sample.pdf` (6 pagina's, 82 KB) onder zijn eigen naam
 - [x] E2E-dekking voor de juridische funnel in `tests/e2e/lead-magnet.spec.js`
 
-**Nog niet gedaan, want dat kan pas ná stap 1 hieronder:** de `action`-URL op
-`sample-juridisch.html:158` wijst nog naar het gedeelde pentest-formulier.
+**✅ Ook gedaan (7 aug 2026):** de `action`-URL op `sample-juridisch.html:158` wijst naar het
+eigen formulier (`…/serve/MUIFAGIfAx2w…`), niet meer naar het gedeelde pentest-formulier
+(`MUIFACJ0paJn…`). *Deze regel zei tot Sessie 220 het tegenovergestelde, terwijl Stap 1 hieronder
+in hetzelfde document meldt dat hij uitgevoerd is.*
 
 ---
 
-## Poort vooraf — controleer dit vóór je begint
+## Poort vooraf — ✅ BEANTWOORD (7 aug 2026, bevestigd Sessie 220)
 
 Brevo free staat **2.000 contacten in automation** toe. Over het *aantal* workflows doet de
-documentatie geen harde uitspraak, en er draaien er al twee (hoofdnieuwsbrief + sample-pentest).
+documentatie geen harde uitspraak, en er draaiden er al twee (hoofdnieuwsbrief + sample-pentest).
 
-**Controleer bij Stap 3 dat een derde automation daadwerkelijk aangemaakt kan worden.**
-Blokkeert Brevo dat: **stop en meld het.** Niet omheen werken — de terugvalroute is één neutrale
-gedeelde mail met beide downloadknoppen, en dat is een scope-beslissing, geen technische.
+**Een derde automation kán op free tier** — `Sample Juridisch — welkomstflow` is aangemaakt en
+staat op Active. De terugvalroute (één neutrale gedeelde mail met beide downloadknoppen) is
+daarmee niet nodig geweest.
+
+> Laat dit staan als antwoord, niet als vraag. Deze poort is drie sessies lang meegedragen als
+> "nooit geverifieerd" (CLAUDE.md Sessie 219 noemde hem nog als blokkade) terwijl hij al open
+> was. Een openstaande vraag die stilzwijgend beantwoord raakt, blijft anders eeuwig blokkeren.
 
 ---
 
@@ -98,7 +116,7 @@ De E2E-test *"elke sample post naar een ánder Brevo-formulier"* is hiermee groe
 
 ---
 
-## Stap 2 — Template uploaden
+## Stap 2 — Template uploaden ✅ (gedaan 7 aug 2026, geverifieerd Sessie 220)
 
 1. Brevo → **Campaigns** → **Email templates** → **New template**
 2. Naam: **`welkomstmail-sample-juridisch`**
@@ -116,10 +134,10 @@ De E2E-test *"elke sample post naar een ánder Brevo-formulier"* is hiermee groe
 
 ---
 
-## Stap 3 — Automation bouwen
+## Stap 3 — Automation bouwen ✅ (gedaan 7 aug 2026, geverifieerd Sessie 220)
 
 1. Brevo → **Automations** → **Create a new automation** → **Create from scratch**
-   → *hier valt de poort: lukt het aanmaken van een derde automation?*
+   → *hier viel de poort: een derde automation aanmaken **lukte** op free tier (7 aug 2026).*
 2. Naam: **`Sample Juridisch — welkomstflow`**
 3. **Entry point (Trigger):** sidebar **Forms → Form submitted** → selecteer
    **`Sample Juridisch embed`** (uit Stap 1)
@@ -146,7 +164,7 @@ aannemen** — dat is precies wat Stap 4 doet.
 
 ---
 
-## Stap 4 — Testen
+## Stap 4 — Testen ⬅️ **enige openstaande stap**
 
 **Juridische flow:**
 1. Ga naar `https://hacksimulator.nl/sample-juridisch.html`, schrijf in met een testadres
