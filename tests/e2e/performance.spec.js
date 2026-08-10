@@ -497,6 +497,26 @@ test.describe('Performance Tests - localStorage Quota', () => {
         await page.waitForTimeout(30);
       }
 
+      // De VFS-save is gedebounced op 1000ms (persistence.js:47-58) en die timer wordt door
+      // ELKE volgende mutatie teruggezet. Tussen twee `touch`-commando's zit hier ~350ms,
+      // dus die seconde verstrijkt nooit en localStorage blijft leeg. Gemeten Sessie 220,
+      // 10 touches tegen productie: meteen uitlezen = 0 bytes, na 1200ms wachten = 5139,
+      // na flush() = 5139. Daarmee stond deze test 10 van de 10 seriële runs op nul.
+      //
+      // Flushen i.p.v. wachten, om twee redenen: het is deterministisch (geen race die
+      // onder parallelle load wél een save laat landen en de variantie laat klappen), en
+      // het kost geen tijd — 5x 1200ms wachten duwt deze test van ~12s naar ~18s tegen
+      // een timeout van 30s.
+      const geflushed = await page.evaluate(() => {
+        const persistence = window.HackSimulator?.debug?.persistence;
+        if (!persistence) return false;
+        persistence.flush(); // no-op als de timer al vuurde — localStorage is dan al actueel
+        return true;
+      });
+      // Zonder deze assertie zou een ontbrekende debug-handle stil dezelfde nulmeting
+      // opleveren als de bug die we hier repareren.
+      expect(geflushed, 'window.HackSimulator.debug.persistence ontbreekt — er valt niets te meten').toBe(true);
+
       // Measure VFS size
       const vfsSize = await page.evaluate(() => {
         const vfsData = localStorage.getItem('hacksim_filesystem');
@@ -523,14 +543,16 @@ test.describe('Performance Tests - localStorage Quota', () => {
     console.log(`  Std deviation:  ${stdDev.toFixed(2)}`);
     console.log(`  Coefficient of variation: ${((stdDev / avgGrowth) * 100).toFixed(1)}%`);
 
+    // Tot Sessie 220 stond hier een `if (avgGrowth === 0) return;`-guard tegen 0/0 = NaN.
+    // Bedoeld als edge-case-afhandeling, in de praktijk een stille pass: hij zette "er is
+    // niets gemeten" om in "geslaagd" en werd 10 van de 10 seriële runs genomen. Nu de
+    // save geflusht wordt, betekent avgGrowth === 0 dat 50 `touch`-commando's nul bytes
+    // hebben gepersisteerd — dat hoort rood te zijn, niet groen.
+    expect(avgGrowth, 'VFS groeide 0 bytes over 50 bestanden — touch persisteert niets').toBeGreaterThan(0);
+
     // Growth should be roughly consistent (CV < 50% = acceptable linearity)
     // Note: first round has higher variance due to initial VFS structure serialization
     // and network latency when testing against production URL
-    // Edge case: avgGrowth === 0 means no VFS growth across rounds (= no leak = trivial pass; avoid 0/0 = NaN)
-    if (avgGrowth === 0) {
-      console.log(`  ✓ VFS growth = 0 (no leak, no variance to check)`);
-      return;
-    }
     expect(stdDev / avgGrowth).toBeLessThan(0.5);
 
     if (stdDev / avgGrowth > 0.3) {
