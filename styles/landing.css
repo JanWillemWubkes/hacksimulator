@@ -385,6 +385,30 @@
   border-color: var(--color-border);
 }
 
+.lead-magnet-secondary {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  margin: var(--spacing-md) 0 0 0;
+}
+
+.lead-magnet-secondary a {
+  /* `display: inline-block` + verticale padding, want een kale tekstlink is bijna nooit
+     een geldig tikdoel — Sessie 218 mat er een van 193x22px op 375px. De onderstreping
+     staat op `text-decoration` en niet op een `border-bottom`, want die schuift met de
+     padding mee naar beneden i.p.v. onder de tekst te blijven. */
+  display: inline-block;
+  padding: var(--spacing-md) var(--spacing-md);
+  color: var(--color-text-dim);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--transition-normal);
+}
+
+.lead-magnet-secondary a:hover,
+.lead-magnet-secondary a:focus-visible {
+  color: var(--color-cta-primary);
+}
+
 .lead-magnet-card .eyebrow-badge {
   margin-bottom: var(--spacing-md);
 }

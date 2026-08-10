@@ -43,15 +43,15 @@
   <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Preload Critical Resources (Sessie 144 fetchpriority hints) -->
-  <!-- v=219 op BEIDE: .section-band (landing.css) leest --color-bg-alt (main.css). Een oude
+  <!-- v=220 op BEIDE: .section-band (landing.css) leest --color-bg-alt (main.css). Een oude
        cached main.css laat die var ongedefinieerd, waarna `background` terugvalt op transparent
        en de banden verdwijnen. Deze twee horen dus altijd samen te bumpen. -->
-  <link rel="preload" href="styles/main.css?v=219" as="style" fetchpriority="high">
-  <link rel="preload" href="styles/landing.css?v=219" as="style" fetchpriority="high">
+  <link rel="preload" href="styles/main.css?v=220" as="style" fetchpriority="high">
+  <link rel="preload" href="styles/landing.css?v=220" as="style" fetchpriority="high">
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="styles/main.css?v=219">
-  <link rel="stylesheet" href="styles/landing.css?v=219">
+  <link rel="stylesheet" href="styles/main.css?v=220">
+  <link rel="stylesheet" href="styles/landing.css?v=220">
   <link rel="stylesheet" href="styles/mobile.css?v=116" media="screen and (max-width: 768px)">
   <!-- Brevo Forms (newsletter signup) -->
   <link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
@@ -882,6 +882,18 @@
           Download de gratis sample
           <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </a>
+        <!-- Wayfinding, geen vierde ask. index.html bevatte nul links naar /gidsen.html:
+             die pagina — de enige die beide gratis samples naast elkaar toont — was vanaf
+             de drukste pagina van de site alleen bereikbaar via de navbar en de footer, en
+             die worden allebei door JS geïnjecteerd. Bewust een bestemming benoemen i.p.v.
+             een tweede sample-CTA: de homepage eindigt al met drie opeenvolgende asks en
+             haar north-star is activation, niet e-mail (Sessie 219). Geen
+             data-cta-location: dat attribuut werkt alleen náást data-lead-magnet /
+             data-product-id / data-lead-download, dus los eraan zou het dode markup zijn
+             die er getrackt uitziet. -->
+        <p class="lead-magnet-secondary">
+          <a href="/gidsen.html">Of bekijk alle gidsen en samples</a>
+        </p>
       </div>
     </section>
   </main>
