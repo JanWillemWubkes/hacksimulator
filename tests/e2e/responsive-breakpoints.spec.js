@@ -206,10 +206,33 @@ test.describe('Responsive Breakpoints - Week 1+2 Fixes', () => {
   //
   // Beide zijn opgelost door de viewport vóór de navigatie te zetten en op de injectie te
   // wachten. De desktop-helft mag wél resizen: main.css hangt niet achter een media-attribuut.
+  //
+  // Er zat een DERDE race in, gevonden in Sessie 220. Deze test stond genoteerd als
+  // "overleeft geen parallelle run; oorzaak de 10s toBeVisible op een geïnjecteerde navbar
+  // onder CPU-contentie" (TASKS.md #60). Dat klopte niet. De call log van de faler wijst het
+  // echte element aan:
+  //
+  //     - attempting click action
+  //       <div role="dialog" id="legal-modal" class="modal active"> intercepts pointer events
+  //
+  // Het is de legal-modal die de klik op de hamburger opvangt. Deze test was de enige in dit
+  // bestand die klikt zónder `acceptLegalModal()` aan te roepen — de drie tests hierboven doen
+  // dat wel, direct na hun `goto`.
+  //
+  // Het venster is gemeten (chromium, lokale server): op het moment dat `.navbar-toggle`
+  // zichtbaar wordt BESTAAT `#legal-modal` nog niet; binnen ~500ms daarna wordt hij
+  // ingevoegd, meteen mét `class="modal active"`. De hamburger komt van
+  // `init-components.js`, de modal van `main.js` (99 modules) — dus de modal landt
+  // structureel ná de knop, precies in het venster waarin deze test klikt. Onder drie
+  // parallelle motoren schuift `main.js` verder op en wint de modal de race.
+  //
+  // `acceptLegalModal()` wacht tot 3s op `#legal-modal.active` en klikt hem weg; dat is
+  // ruim boven de gemeten ~500ms, dus de race is geen race meer.
   test('Responsive navbar layout - mobile vs desktop', async ({ page }) => {
     // Test 1: Mobile layout (375px) — viewport VÓÓR goto
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto(TERMINAL_URL);
+    await acceptLegalModal(page);
 
     // Verify hamburger is visible (wacht op de component-injectie)
     const hamburgerMobile = page.locator('.navbar-toggle');
