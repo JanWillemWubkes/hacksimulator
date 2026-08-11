@@ -251,6 +251,13 @@
   --color-cta-dark-frame-hover: #8ad600;          /* Darker neon lime hover - Dark Frame only (never changes with theme) */
   --color-cta-dark-frame-glow: rgba(159, 239, 0, 0.3); /* Neon glow - Dark Frame only (never changes with theme) */
 
+  /* Inline accent-TEKST (links, code, strong, badges) op een normale paginaondergrond.
+     Gescheiden van --color-cta-primary omdat die token twee onverenigbare rollen had:
+     als CTA-ACHTERGROND werkt het merkgroen (witte tekst erop), als TEKST faalde het in
+     light mode overal. Zie het light-blok voor de meting. In dark is de waarde gelijk aan
+     het merkgroen — daar is er geen probleem: 13,92:1 op een band, 13,04:1 op een kaart. */
+  --color-accent-text: #9fef00;                   /* HTB Neon Lime - identiek aan CTA in dark */
+
   /* Shadow System - Professional Elevation Pattern (Medium/GitHub/Stripe standard) */
   /* Content Cards - Subtle depth for blog posts, documentation boxes (NOT terminal UI) */
   --shadow-elevation-1: 0 2px 8px rgba(0, 0, 0, 0.4);     /* Base state - subtle depth on dark backgrounds */
@@ -304,11 +311,25 @@
   --color-prompt-border-strong: rgba(22, 163, 74, 0.6);
   --color-prompt-shadow: rgba(22, 163, 74, 0.15);
 
-  /* CTA Colors - Light mode (Tailwind Green 600 - rich, modern, WCAG AA 4.2:1) */
+  /* CTA Colors - Light mode. Deze token hoort op een ACHTERGROND met --color-cta-text
+     (wit) erop; zo gebruikt is hij prima. De comment hier claimde "WCAG AA 4.2:1" als
+     tekstkleur, en dat klopte niet: gemeten is #16a34a als TEKST 3,30:1 op wit en
+     2,83:1 op een .section-band — allebei onder AA (4,5). Voor tekst bestaat nu
+     --color-accent-text hieronder. */
   --color-cta-primary: #16a34a;                   /* Tailwind Green 600 - levendig, verzadigd groen */
   --color-cta-primary-hover: #15803d;             /* Tailwind Green 700 - darker hover state */
   --color-cta-primary-glow: rgba(22, 163, 74, 0.2); /* Matching glow for light backgrounds */
   --color-cta-text: #ffffff;                      /* White text on green CTA (better contrast) */
+
+  /* Inline accent-TEKST in light mode. Tailwind Green 900, gekozen op meting en niet op
+     gevoel — de vanzelfsprekende keuze (Green 700, bestaat al als -hover) haalt AA NIET
+     op een band:
+         #16a34a Green 600 (was)   2,83:1 op band   3,30:1 op wit   -> onder AA
+         #15803d Green 700         4,31:1 op band   5,02:1 op wit   -> onder AA op band
+         #166534 Green 800         6,13:1 op band   7,13:1 op wit   -> AA, geen AAA op band
+         #14532d Green 900         7,83:1 op band   9,11:1 op wit   -> AAA op beide
+     Ondergronden: .section-band = rgb(236,238,240), pagina = rgb(248,248,248)/wit. */
+  --color-accent-text: #14532d;                   /* Tailwind Green 900 - AAA als tekst in light */
 
   /* UI Elements - Vibrant terminal green + bright hover */
   --color-ui-primary: #0db34f;      /* Vibrant green - 3.25:1 contrast on white (WCAG AA) - terminal aesthetic */
@@ -1848,13 +1869,13 @@ abbr.jargon {
   font-family: var(--font-mono);
   font-size: 0.85em;
   background: var(--color-prompt-bg-light);
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   padding: 2px 6px;
   border-radius: 4px;
 }
 
 .faq-answer a {
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   text-decoration: none;
   transition: color var(--transition-fast);
 }

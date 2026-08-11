@@ -43,15 +43,18 @@
   <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Preload Critical Resources (Sessie 144 fetchpriority hints) -->
-  <!-- v=220 op BEIDE: .section-band (landing.css) leest --color-bg-alt (main.css). Een oude
-       cached main.css laat die var ongedefinieerd, waarna `background` terugvalt op transparent
-       en de banden verdwijnen. Deze twee horen dus altijd samen te bumpen. -->
-  <link rel="preload" href="styles/main.css?v=221" as="style" fetchpriority="high">
-  <link rel="preload" href="styles/landing.css?v=220" as="style" fetchpriority="high">
+  <!-- Zelfde ?v= op BEIDE: landing.css leest custom properties uit main.css
+       (--color-bg-alt voor .section-band, --color-accent-text voor de accent-tekst).
+       Een oude cached main.css laat die vars ongedefinieerd: `background` valt terug op
+       transparent (banden weg) en `color` op de geërfde waarde. Deze twee horen dus
+       altijd samen te bumpen — en dat geldt ook voor pages.css, commands.css en
+       terminal-education.css, die dezelfde token lezen. -->
+  <link rel="preload" href="styles/main.css?v=222" as="style" fetchpriority="high">
+  <link rel="preload" href="styles/landing.css?v=222" as="style" fetchpriority="high">
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="styles/main.css?v=221">
-  <link rel="stylesheet" href="styles/landing.css?v=220">
+  <link rel="stylesheet" href="styles/main.css?v=222">
+  <link rel="stylesheet" href="styles/landing.css?v=222">
   <link rel="stylesheet" href="styles/mobile.css?v=116" media="screen and (max-width: 768px)">
   <!-- Brevo Forms (newsletter signup) -->
   <link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
@@ -558,9 +561,8 @@
       </div>
 
       <p class="results-verify">
-        De volledige broncode staat op
-        <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>,
-        dus je hoeft niets van dit alles op mijn woord aan te nemen.
+        Ook de code erachter is openbaar: die staat volledig op
+        <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.
       </p>
     </section>
 

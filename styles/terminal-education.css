@@ -143,7 +143,7 @@
   font-family: var(--font-terminal);
   font-size: 1.1rem;
   font-weight: var(--font-weight-bold);
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   display: block;
   margin-bottom: var(--spacing-xs);
 }
