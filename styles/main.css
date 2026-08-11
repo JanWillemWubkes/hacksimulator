@@ -1183,6 +1183,20 @@ a.footer-donate:focus-visible {
     flex-direction: column;
     gap: var(--spacing-md);
   }
+
+  /* `align-items: center` centreert de DOOS, niet de tekst. Zodra de copyright-regel
+     afbreekt (≤385px) is max-content > beschikbare breedte, dus wordt de <p> exact zo
+     breed als de container en valt er niets meer te centreren — beide regels staan dan
+     links (gemeten @375px: regel 1 −44px, regel 2 −122,5px uit het midden).
+     In kolom-modus hoort de tekst zélf gecentreerd; de rij-layout ≥769px houdt
+     space-between en blijft dus links. */
+  .footer-bottom p {
+    text-align: center;
+    /* Gecentreerd is nog niet evenwichtig: de natuurlijke breuk gaf 247px naast 90px.
+       Balance maakt er 171/166 van. Progressive enhancement — oudere browsers negeren
+       het en houden de gecentreerde-maar-rafelige variant. */
+    text-wrap: balance;
+  }
 }
 
 /* ==================== Widescreen Modal Scaling ==================== */
