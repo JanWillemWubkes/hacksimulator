@@ -321,10 +321,15 @@ Kleuren: donkere achtergrond (#0d1117), groene accenten (#9fef00) — match site
 Afgerond: product aangemaakt (`ojort`), prijs op pay-what-you-want vanaf €5, productkaart +
 JSON-LD + tracking-attributen staan op `gidsen.html`, cover gegenereerd.
 
-**Nog open — en dit is een echte:** deze gids hoort óók in het bundelproduct (`emzjvj`). De site
-belooft al vier gidsen voor €10. Zolang `lab-opzetten.pdf` niet als vierde bestand aan het
-bundelproduct hangt, levert de bundel er drie en klopt de belofte niet. Zie de Gumroad-actielijst
-onderaan dit bestand.
+**Opgelost op 7 aug 2026:** deze gids hoorde óók in het bundelproduct (`emzjvj`) te zitten. Zolang
+`lab-opzetten.pdf` daar niet als vierde bestand aan hing, beloofde de site vier gidsen voor €10
+terwijl de bundel er drie leverde. Dat bestand is inmiddels toegevoegd — zie §Stand van zaken
+onderaan dit bestand, dat is de actuele status.
+
+> Deze alinea zei tot 11 aug 2026 nog "nog open", vier dagen nadat het punt gesloten was. Dat is
+> het bekende patroon: een notitie die een tóéstand beschrijft kan niet terugmelden dat hij
+> verlopen is. Bij een volgende wijziging aan een product: werk §Status en §Stand van zaken in
+> dezelfde bewerking bij, of laat §Status alleen naar §Stand van zaken verwijzen.
 
 ---
 
@@ -460,7 +465,7 @@ Er staat niets open. Deze sectie legt vast wát er gedaan is en — belangrijker
 
 - [x] Alle vier de PDF's opnieuw geüpload, zowel als los product als in bundel `emzjvj` —
       daarmee zit `lab-opzetten.pdf` als vierde bestand in de bundel en klopt de belofte
-      "alle 4 gidsen" weer.
+      "alle 4 gidsen" weer. **Bij de bron nageteld op 11 aug 2026: vier PDF's in `emzjvj`.**
 - [x] Beschrijvingen en paginagetallen van alle vijf de producten bijgewerkt.
 - [x] Bundel-cover vervangen door `assets/products/bundel-starter-kit.png` ("~72 pagina's").
 - [x] Gecontroleerd dat er nergens "gratis" staat bij de betaalde producten.
@@ -481,9 +486,14 @@ niet te mailen — Heisenberg's afweging, 7 aug 2026.
 Wat daarbij hoort te blijven staan voor een volgende keer: omdat de bestanden in het bestaande
 product zijn vervángen en niet in een nieuw product zijn gezet, halen bestaande kopers via hun
 oorspronkelijke downloadlink of Gumroad-bibliotheek automatisch de actuele versie op. Zij krijgen
-de correcties dus hoe dan ook, alleen zonder dat iemand ze erop wijst. **Niet geverifieerd bij de
-bron** — de Gumroad-helppagina's zitten achter een login; te bewijzen met je eigen
-testbestelling-link (staan er vier PDF's in de bundel, dan klopt het).
+de correcties dus hoe dan ook, alleen zonder dat iemand ze erop wijst.
+
+**Bundelinhoud geverifieerd op 11 aug 2026** — Heisenberg heeft bij de bron nageteld dat er vier
+PDF's in `emzjvj` zitten. Daarmee is de belofte "alle 4 gidsen" op de site gedekt door het product
+zelf, en niet langer alleen door dit document. Wat daarmee níét bewezen is: of de koper van vóór
+5 aug via zijn oude downloadlink óók die vierde PDF ziet. Dat hangt af van hoe Gumroad
+bestandsvervanging afhandelt en is alleen hard te maken met een eigen testbestelling — geen reden
+tot actie, want die ene koper kocht de bundel van drie en is bewust niet gemaild (zie hierboven).
 
 **Versienummers: wanneer wel, wanneer niet**
 
@@ -494,4 +504,5 @@ hacklab **1.0**.
 
 ---
 
-*Laatst bijgewerkt: 7 augustus 2026 — paginatellingen geteld uit de gebouwde PDF's*
+*Laatst bijgewerkt: 11 augustus 2026 — bundelinhoud (4 PDF's in `emzjvj`) bij de bron nageteld;
+paginatellingen eerder geteld uit de gebouwde PDF's*

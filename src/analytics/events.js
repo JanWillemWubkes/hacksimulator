@@ -133,7 +133,7 @@ const analyticsEvents = {
 
   /**
    * Track Gumroad / product CTA click
-   * @param {string} productId - Gumroad short ID (yzdtfx, wmvpx, eogjdk, emzjvj)
+   * @param {string} productId - Gumroad short ID (yzdtfx, wmvpx, eogjdk, ojort, emzjvj)
    * @param {string} location - Page context (gidsen_juridisch, blog_nmap, man_tip, etc.)
    * @param {string} label - Visible button text (for wording-effectiveness analysis)
    */

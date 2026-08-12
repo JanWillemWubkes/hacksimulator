@@ -35,7 +35,7 @@
 | M3: Network & Security | ✅ Voltooid | 28/28 | 100% |
 | M4: UX & Polish | ✅ Voltooid | 43/43 | 100% |
 | M5: Testing & Launch | 🔵 In uitvoering | 64/90 | 71% | ✅ **Performance + Config + Security + Accessibility + Content + Bundle Opt 100%**
-| M5.5: Monetization MVP | 🔵 In uitvoering | 25/27 | 92% | ✅ ~~AdSense (10 units, verwijderd Sessie 208)~~ + Ko-fi + **Brevo** (newsletter double opt-in + welkomstmail + deliverability tuning Sessies 134-136) + eigen consent banner + **Gumroad v1.0** (3 guides + bundel) + **Lead magnet** (sample PDF + landing + CTA-coverage 13 plaatsen + **Sessie 174 mobiele-download-fix: same-origin pad omzeilt Brevo-tracking-404**) |
+| M5.5: Monetization MVP | 🔵 In uitvoering | 25/27 | 92% | ✅ ~~AdSense (10 units, verwijderd Sessie 208)~~ + Ko-fi + **Brevo** (newsletter double opt-in + welkomstmail + deliverability tuning Sessies 134-136) + eigen consent banner + **Gumroad v1.0** (4 guides + bundel) + **Lead magnet** (sample PDF + landing + CTA-coverage 13 plaatsen + **Sessie 174 mobiele-download-fix: same-origin pad omzeilt Brevo-tracking-404**) |
 | M6: Tutorial System | ✅ Voltooid | 32/32 | 100% | ✅ ALL Phase 1-3 closed — Framework + 3 scenarios + cert + analytics + E2E tests + perf audit + mobile + cross-browser + **long-press hint gesture + beta protocol-doc (Sessie 156)** |
 | M7: Gamification | ✅ Voltooid | 47/47 | 100% | ✅ Phase 1-7 complete (framework, content, badges, certs, dashboard, leaderboard, testing) |
 | M8: Analytics & Scaling | ⏭️ Gepland | 1/37 | 2% | (Sessie 157 --deep zelf-test ground-truth fix: was 0/40 stale; section heeft 1 [x] + 36 [ ]) |

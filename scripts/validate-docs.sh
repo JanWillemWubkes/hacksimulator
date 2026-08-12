@@ -906,6 +906,84 @@ else
 fi
 
 # ============================================================
+# Check 13: aantal gidsen ↔ claims elders op de site (Sessie 221)
+#   Hard constraint — fast + --deep. Aanleiding: het aanbod groeide van 3 naar 4
+#   gidsen, maar de commits die dat deden (da366ce, 470f4f8, 8a9f6dd, db7d7de)
+#   raakten uitsluitend gidsen.html en docs/products/*. blog/welkom.html beloofde
+#   daardoor vijf dagen lang "drie gidsen" naast een knop die de bundel van vier
+#   verkoopt — er was niets dat dat kon terugmelden.
+#
+#   De grondwaarheid wordt AFGELEID uit gidsen.html, niet hardgecodeerd: anders is
+#   deze check zelf het volgende dat veroudert. De gebouwde PDF's zijn gitignored
+#   (.gitignore:15), dus dit leunt bewust niet op pdfinfo maar op interne
+#   consistentie — die werkt ook in CI, waar de PDF's niet bestaan.
+# ============================================================
+check_start "Aantal gidsen ↔ claims elders op de site"
+
+gids_problems=""
+gids_anker='gids-badge">PDF \| ~[0-9]+ pagina'
+gids_n=$(grep -cE "$gids_anker" gidsen.html)
+gids_som=$(grep -oE "$gids_anker" gidsen.html | grep -oE '[0-9]+' | awk '{s+=$1} END {print s+0}')
+
+if [ "$gids_n" -lt 1 ]; then
+  gids_problems+="gidsen.html: geen enkele gids-kaart gevonden — anker veranderd?"$'\n'
+else
+  # 13a: de bundel moet hetzelfde aantal en dezelfde paginasom claimen als de kaarten.
+  if ! grep -qiE "alle ${gids_n} gidsen" gidsen.html; then
+    bundel_claim=$(grep -ioE "alle [0-9]+ gidsen" gidsen.html | head -1)
+    gids_problems+="gidsen.html: ${gids_n} gids-kaarten, maar de bundel claimt '${bundel_claim:-geen aantal}'"$'\n'
+  fi
+  if ! grep -qE "~${gids_som} pagina" gidsen.html; then
+    gids_problems+="gidsen.html: paginasom van de kaarten is ${gids_som}, maar de bundel claimt dat getal niet"$'\n'
+  fi
+
+  # 13b: JSON-LD moet elke gids + de bundel als Product dragen.
+  gids_json=$(grep -cE '"@type": *"Product"' gidsen.html)
+  gids_verwacht=$((gids_n + 1))
+  if [ "$gids_json" != "$gids_verwacht" ]; then
+    gids_problems+="gidsen.html: ${gids_json} JSON-LD Products, verwacht ${gids_verwacht} (${gids_n} gidsen + bundel)"$'\n'
+  fi
+
+  # 13c: geen bezoeker-gerichte pagina claimt een ánder aantal. docs/ en .claude/
+  #      blijven buiten scope: dat zijn archieven, en die horen te vertellen wat er
+  #      tóén waar was (TASKS.md:74 mag "3 guides" zeggen over Sessie 129).
+  gids_treffers=$(grep -oiE '(twee|drie|vier|vijf|zes|[2-9])( [a-z-]+){0,2} [a-z-]*gidsen' \
+    ./*.html blog/*.html llms.txt 2>/dev/null | sed 's|^\./||')
+  while IFS= read -r gids_regel; do
+    [ -z "$gids_regel" ] && continue
+    gids_bestand="${gids_regel%%:*}"
+    gids_tekst="${gids_regel#*:}"
+    gids_woord=$(echo "$gids_tekst" | grep -oiE '^(twee|drie|vier|vijf|zes|[2-9])' | tr '[:upper:]' '[:lower:]')
+    case "$gids_woord" in
+      twee) gids_getal=2 ;; drie) gids_getal=3 ;; vier) gids_getal=4 ;;
+      vijf) gids_getal=5 ;; zes) gids_getal=6 ;; *) gids_getal="$gids_woord" ;;
+    esac
+    if [ "$gids_getal" != "$gids_n" ]; then
+      gids_problems+="${gids_bestand}: claimt ${gids_getal} gidsen (\"${gids_tekst}\"), gidsen.html heeft er ${gids_n}"$'\n'
+    fi
+  done <<< "$gids_treffers"
+
+  # 13d: elk product heeft minstens één instroomkanaal buiten gidsen.html. Ving in
+  #      Sessie 221 dat `ojort` nergens gelinkt was terwijl zijn kaart wél naar drie
+  #      blogposts verwees — eenrichtingsverkeer dat geen enkele test zag.
+  while IFS= read -r gids_pid; do
+    [ -z "$gids_pid" ] && continue
+    if ! grep -rqF "$gids_pid" ./*.html blog/*.html 2>/dev/null --exclude=gidsen.html; then
+      gids_problems+="product ${gids_pid} wordt nergens buiten gidsen.html gelinkt — geen instroom"$'\n'
+    fi
+  done <<< "$(grep -oE 'data-product-id="[a-z0-9]+"' gidsen.html | grep -oE '"[a-z0-9]+"' | tr -d '"' | sort -u)"
+fi
+
+if [ -z "$gids_problems" ]; then
+  pass "${gids_n} gidsen (${gids_som} pagina's) — bundel, JSON-LD, site-copy en instroom kloppen"
+else
+  # Dezelfde zin staat vaak in meta-, og-, twitter- én JSON-LD-velden; ontdubbeld
+  # met behoud van volgorde, anders verzuipt een echte tweede fout in de herhaling.
+  while IFS= read -r regel; do [ -n "$regel" ] && fail "13: $regel"; done \
+    <<< "$(echo "$gids_problems" | awk '!seen[$0]++')"
+fi
+
+# ============================================================
 echo ""
 echo "=========================================="
 if [ "$DEEP_MODE" = "1" ]; then

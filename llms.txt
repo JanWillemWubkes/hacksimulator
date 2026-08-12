@@ -11,7 +11,7 @@ Note for non-Dutch readers: HackSimulator.nl is a free Dutch-language browser-ba
 - [Terminal-simulator](https://hacksimulator.nl/terminal.html): De simulator zelf — 40+ commands, virtueel bestandssysteem, tutorials en challenges, volledig in de browser
 - [Woordenlijst](https://hacksimulator.nl/woordenlijst.html): 56 cybersecurity-termen in het Nederlands uitgelegd, van brute force tot zero-day
 - [Alle commands](https://hacksimulator.nl/commands/): Overzicht van alle 40+ terminal-commands met Nederlandse uitleg, voorbeelden en tips
-- [Gidsen](https://hacksimulator.nl/gidsen.html): Nederlandstalige PDF-gidsen over ethisch hacken — van de wet en ethiek tot je eerste pentest
+- [Gidsen](https://hacksimulator.nl/gidsen.html): Vier Nederlandstalige PDF-gidsen over ethisch hacken — de wet en ethiek, je eerste pentest, een 12-weken leerplan en je eigen hacklab
 - [Homepage](https://hacksimulator.nl/): Introductie, veelgestelde vragen en leerpad-overzicht
 
 ## Blog
