@@ -984,6 +984,99 @@ else
 fi
 
 # ============================================================
+# Check 14: blog-CTA's beloven geen download voor een betaald product
+#   Hard constraint — fast + --deep. Aanleiding: 13 van de 15 betaalde blog-CTA's
+#   zeiden "Download het Playbook" terwijl de link naar een Gumroad-productpagina
+#   achter een betaalmuur gaat. Buiten de blog zei alle 8 al "Bekijk…"; de blog was
+#   de enige plek op de site die een download beloofde die je niet krijgt.
+#
+#   In 6 posts stapelde dat op tot echte dubbelzinnigheid: bovenaan "Download de
+#   gratis sample" (9 pagina's uit het Pentest Playbook), 300 regels lager
+#   "Download het Playbook" — zelfde werkwoord, zelfde productnaam, geen prijs, in
+#   een visueel identieke doos (.blog-cta-product verschilt van .blog-cta in precies
+#   één property). docs/blog-template.md wees dat toe aan "twee CTAs voor hetzelfde
+#   product", maar dat is het sample-hoofdstuk-model dat sample-pentest.html zelf ook
+#   voert. De koppeling was nooit het probleem; de ononderscheidbaarheid wel.
+#
+#   14a en 14b zijn allebei POSITIEF geformuleerd, en dat is gemeten en niet bedacht:
+#   een eerste versie verbood alleen het wóórd "Download", en de mutant ">Pak het
+#   Playbook<" overleefde die glansrijk. 14b (betaalmarkering aanwezig) ving hem niet
+#   af — dat is een andere invariant. Dus: de knop moet met "Bekijk" beginnen (sitebreed
+#   23/23) én de alinea moet zeggen dat het product betaald is.
+#
+#   Grondwaarheid voor de paginaclaims komt uit gidsen.html (net als Check 13), zodat
+#   deze check niet zelf het volgende is dat veroudert.
+# ============================================================
+check_start "Blog-CTA's ↔ betaalde bestemming (werkwoord + betaalmarkering)"
+
+cta_problems=""
+cta_regels=$(grep -n 'data-product-id=' blog/*.html 2>/dev/null)
+
+if [ -z "$cta_regels" ]; then
+  cta_problems+="blog/: geen enkele betaalde CTA gevonden — anker veranderd of instroom weg?"$'\n'
+else
+  # Paginaclaims uit gidsen.html afleiden: de badge staat vóór de link in dezelfde kaart.
+  cta_pb_blok=$(awk '/gids-badge/{blok=""} {blok=blok $0 "\n"} /data-product-id="wmvpx"/{print blok; exit}' gidsen.html)
+  cta_pb_pag=$(echo "$cta_pb_blok" | grep -oE '~[0-9]+ pagina' | head -1 | grep -oE '[0-9]+')
+  cta_pb_sample=$(echo "$cta_pb_blok" | grep -oE 'eerste [0-9]+ pagina' | head -1 | grep -oE '[0-9]+')
+
+  while IFS= read -r cta_r; do
+    [ -z "$cta_r" ] && continue
+    cta_f=${cta_r%%:*}
+    cta_l=${cta_r#*:}; cta_l=${cta_l%%:*}
+
+    # 14a: knoptekst zegt "Bekijk …". Positief geformuleerd, want een verbod op
+    #      alleen het woord "Download" is te omzeilen met elk ander werkwoord
+    #      ("Pak het Playbook") — gemeten: die mutant overleefde de negatieve vorm.
+    if ! echo "$cta_r" | grep -qE 'data-product-id="[^"]+"[^>]*>[[:space:]]*Bekijk '; then
+      cta_werkwoord=$(echo "$cta_r" | sed -n 's/.*data-product-id="[^"]*"[^>]*>[[:space:]]*\([A-Za-z]*\).*/\1/p')
+      cta_problems+="${cta_f}:${cta_l}: betaalde CTA-knop begint met '${cta_werkwoord:-<geen tekst op deze regel>}' i.p.v. 'Bekijk' — een Gumroad-link gaat naar een productpagina, niet naar een download"$'\n'
+    fi
+
+    # 14b: de <p> boven de knop maakt zichtbaar dat het product betaald is.
+    cta_start=$(( cta_l > 4 ? cta_l - 4 : 1 ))
+    cta_blok=$(sed -n "${cta_start},${cta_l}p" "$cta_f")
+    if ! echo "$cta_blok" | grep -q "op Gumroad"; then
+      cta_problems+="${cta_f}:${cta_l}: betaalde CTA zegt niet dat hij betaald is — sluit de <p> af met 'Betaalde gids op Gumroad.'"$'\n'
+    fi
+    if echo "$cta_blok" | grep -qE '^[^!]*<p>[[:space:]]*Download '; then
+      cta_problems+="${cta_f}:${cta_l}: de alinea bij een betaalde CTA begint met 'Download' — noem het product, niet de handeling"$'\n'
+    fi
+
+    # 14c: het Playbook staat naast zijn eigen gratis sample, dus daar moet het
+    #      contrast (9 gratis ↔ ~19 volledig) kloppen met gidsen.html.
+    if echo "$cta_r" | grep -q 'data-product-id="wmvpx"'; then
+      if [ -z "$cta_pb_pag" ]; then
+        cta_problems+="gidsen.html: paginatelling van wmvpx niet af te leiden — anker veranderd?"$'\n'
+      elif ! echo "$cta_blok" | grep -q "~${cta_pb_pag} pagina"; then
+        cta_problems+="${cta_f}:${cta_l}: Playbook-CTA noemt niet '~${cta_pb_pag} pagina' zoals gidsen.html — het contrast met de gratis sample verdwijnt"$'\n'
+      fi
+    fi
+  done <<< "$cta_regels"
+
+  # 14d: de lead-magnet-CTA's claimen hetzelfde sample-formaat als gidsen.html.
+  if [ -n "$cta_pb_sample" ]; then
+    while IFS= read -r cta_r; do
+      [ -z "$cta_r" ] && continue
+      cta_f=${cta_r%%:*}
+      cta_l=${cta_r#*:}; cta_l=${cta_l%%:*}
+      cta_start=$(( cta_l > 4 ? cta_l - 4 : 1 ))
+      if ! sed -n "${cta_start},${cta_l}p" "$cta_f" | grep -q "${cta_pb_sample} pagina"; then
+        cta_problems+="${cta_f}:${cta_l}: sample-CTA noemt niet '${cta_pb_sample} pagina' zoals gidsen.html"$'\n'
+      fi
+    done <<< "$(grep -n 'data-lead-magnet="pentest_sample"' blog/*.html 2>/dev/null)"
+  fi
+fi
+
+if [ -z "$cta_problems" ]; then
+  cta_n=$(echo "$cta_regels" | grep -c 'data-product-id=')
+  pass "${cta_n} betaalde blog-CTA's — werkwoord, betaalmarkering en paginaclaims kloppen"
+else
+  while IFS= read -r regel; do [ -n "$regel" ] && fail "14: $regel"; done \
+    <<< "$(echo "$cta_problems" | awk '!seen[$0]++')"
+fi
+
+# ============================================================
 echo ""
 echo "=========================================="
 if [ "$DEEP_MODE" = "1" ]; then

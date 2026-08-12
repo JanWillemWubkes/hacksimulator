@@ -179,7 +179,28 @@ Plaats na een natuurlijke break in content (~50% door post, na een H2 die struct
 | Kali, VM's, tooling installeren, oefenomgeving | Je Eigen Hacklab | `ojort` |
 | Algemeen, instap, breed | Bundle | `emzjvj` |
 
-**Niet doen:** twee CTAs voor hetzelfde product. Pentest Playbook is alleen voor lead-magnet (gratis sample). Mid-CTA = ander product.
+**Niet doen: "Download" op een betaalde CTA.** Een Gumroad-link gaat naar een productpagina
+achter een betaalmuur, niet naar een download — dus `Bekijk [Product]`, zoals het snippet
+hierboven al voorschrijft. Sitebreed zegt élke betaalde CTA "Bekijk…". Bewaakt door
+`scripts/validate-docs.sh` Check 14.
+
+**Verplicht: elke betaalde CTA draagt zichtbaar dat hij betaald is.** Sluit de `<p>` af met
+"Betaalde gids op Gumroad." (bundel: "Betaald pakket op Gumroad."). De site noemt nergens een
+bedrag — prijzen leven op Gumroad, dus een prijs in de copy zetten creëert een plek die
+veroudert. Ook dit is een harde check.
+
+**Wél toegestaan: de gratis sample én het bijbehorende betaalde product in dezelfde post.**
+Dat is het sample-hoofdstuk-model, en `sample-pentest.html:238-244` doet exact dezelfde
+koppeling. Voorwaarde is dat de twee asks onderscheidbaar zijn: de betaalde CTA draagt het
+woord "volledige" en noemt wat je erbij krijgt (bij `wmvpx`: alle 6 fasen in ~19 pagina's
+tegenover de 9 gratis pagina's).
+
+> ⚠️ Hier stond eerder het omgekeerde: *"twee CTAs voor hetzelfde product — Pentest
+> Playbook is alleen voor lead-magnet"*. Die regel sprak de mapping-tabel hierboven tegen
+> (die `wmvpx` juist aan recon/pentest-posts toewijst), en zes posts volgden de tabel en
+> belandden zo in de "verboden" toestand. Het echte defect zat elders: 13 van de 15 betaalde
+> blog-CTA's beloofden een *download* voor een betaald product. De koppeling was nooit het
+> probleem; de ononderscheidbaarheid wel.
 
 ---
 
