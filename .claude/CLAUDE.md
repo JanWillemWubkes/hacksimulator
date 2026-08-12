@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 220)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 221)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -16,7 +16,7 @@
 **Blog:** 14 posts live at `/blog/` (105+ inline jargon explanations) | JSON-LD schema + internal cross-linking compleet (Sessie 125; +2 posts Sessie 160)
 **Contact:** contact@hacksimulator.nl (Gmail forwarding)
 
-**Performance:** Playwright E2E over Chromium/Firefox/WebKit (spec- en test-aantallen: zie TASKS.md §Huidige Focus) | WCAG AAA | 182+27 CSS variables (main.css + landing.css)
+**Performance:** Playwright E2E over Chromium/Firefox/WebKit (spec- en test-aantallen: zie TASKS.md §Huidige Focus) | WCAG AAA | 200+ CSS variables (main.css + landing.css; floor-notatie — de exacte telling groeit per sessie en stond hier 182+27 terwijl het er 178+31 waren)
 **Bundle:** Runtime <400 KB (strikt, terminal.html) + SEO/content-pijler budgetloos (blog + assets). Site-totaal en exacte KB-breakdown wisselen per sessie — zie TASKS.md §Huidige Focus voor ground truth.
 **Monetization stack:** Ko-fi + Brevo newsletter (double opt-in + welkomstmail + deliverability getuned) + Gumroad v1.0 (4 guides + bundel) + 2 lead magnets (Sample Pentest + Sample Juridisch, elk een eigen Brevo-formulier + automation sinds Sessie 212). Eigen consent banner (2 knoppen) met Consent Mode v2. **Geen advertenties** — AdSense verwijderd in Sessie 208 op gemeten kosten/baten. **Per-stack actuele status:** TASKS.md §M5.5 sectie-body.
 
@@ -83,6 +83,24 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ---
 
 ## Recent Critical Learnings
+
+### Sessie 221: Vijf commits over drie dagen — en de regel die twee van hen stuurde, bleek zelf fout (12 aug 2026)
+⚠️ **Never:**
+- Een **intern regeldocument** toepassen of handhaven zonder te toetsen of hij klopt. `blog-template.md` verbood iets dat volstrekt normaal is (gratis sample + betaald product = het sample-hoofdstuk-model, dat `sample-pentest.html:238-244` zelf ook voert), benoemde het echte defect niet, en **sprak zichzelf tegen**: zijn mapping-tabel wijst `wmvpx` toe aan recon-posts, de regel eronder verbiedt precies dat. Zes "overtredende" posts waren dus geen zes slordigheden maar één fout document dat zich zes keer reproduceerde. Heisenberg moest me hierop wijzen (*"misschien is die template wel niet correct"*) — ik stond op het punt de regel te gaan handhaven.
+- Een defect diagnosticeren op de laag waar het gemeld werd. Drie sessies meldden "6 posts promoten het Playbook twee keer" als redactionele keuze. Doormeten: het probleem was **13 posts**, en niet de koppeling maar het werkwoord — buiten de blog zei **8 van de 8** betaalde CTA's "Bekijk…", binnen de blog **13 van de 15** "Download…". De blog was de enige plek op de site die een download beloofde voor iets achter een betaalmuur.
+- Een **negatieve** check schrijven waar een positieve kan. Mijn eerste 14a verbood alleen het wóórd "Download"; de mutant `>Pak het Playbook<` overleefde glansrijk. Erger: het scriptcommentaar bewéérde dat 14b die omzeiling afving, terwijl 14b een ándere invariant meet (betaalmarkering aanwezig, niet werkwoord correct). Een check die één specifieke fout verbiedt, dekt de klasse niet.
+- Eén token twee rollen laten dragen. `--color-cta-primary` werkte als CTA-**achtergrond** (wit erop) en faalde als **tekst**: 101 van de 232 accent-tekstelementen onder AA in light mode, over 12 pagina's. En kies de vervanging op meting — de vanzelfsprekende Green 700 haalt AA níét op een `.section-band` (4,31:1); pas Green 900 haalt AAA op beide (7,83 / 9,11).
+- `align-items: center` gebruiken om tékst te centreren. Dat centreert de **doos** van de `<p>`, niet de inhoud. Ze vallen alleen samen zolang de regel niet afbreekt; zodra dat gebeurt wordt de doos containerbreed en valt de tekst terug op `text-align: start`. Zulke bugs leven in smalle banden — hier **≤385px fout, ≥390px goed**, en de meeste telefoons zitten daarboven.
+- Marketingpercentages als bewijs gebruiken. "266% meer conversie met één CTA" naast "+20% met meerdere" zijn allebei gerecyclede, niet-gerepliceerde cases die elkaar tegenspreken. Het enige robuuste mechanisme was peer-reviewed (zero-price effect) — en dat pleitte niet tégen de koppeling maar vóór onderscheidbaarheid.
+
+✅ **Always:**
+- Beantwoord "moet ik deze regel volgen?" met een **meting naast de regel**. Tellen wat er feitelijk staat (23 betaalde CTA's sitebreed, de 8/8-vs-13/15-verdeling) vond een defect dat de regel niet benoemde en dat ruim dubbel zoveel posts raakte. Repareer daarna de **oorzaak** (het document) samen met de symptomen, anders reproduceert hij zich opnieuw.
+- Loop de **overlever** van een mutantenreeks na. 6 van 7 rood zei niets tot ik wist waaróm die ene groen bleef — en dat ontmaskerde een claim die ik zelf al als opgelost in het commentaar had gezet. Zeven mutanten, zeven rood is pas een resultaat.
+- Kies de goedkoopste guard die de invariant kán dragen. Checks 13 en 14 bewaken statische tekst, dus ze horen in `validate-docs.sh` (draait al via pre-commit, geen server, geen browser) en niet in een Playwright-suite van 48 minuten. En **leid de grondwaarheid af** uit de bron (`gidsen.html`) i.p.v. hem te hardcoderen, anders is de check zelf het volgende dat veroudert.
+- Meet vóór je bouwt, ook als de bron je **eigen goedgekeurde plan** is. Punt 4 (CTA-volgorde omdraaien in `leren-hacken.html`) is na meting geschrapt: beide CTA's zitten contextueel goed — "Structuur nodig?" sluit *Stap 1: leer de terminal* af, de gratis sample staat onder *Gratis platforms om te oefenen*. Uitvoeren had consistentie gekocht met een slechtere plaatsing.
+- Attribueer een metriekdelta aan de commit die hem veroorzaakte in plaats van aan de laatste. De +2,92 KB bundelgroei kwam volledig uit twee CSS-commits; de blog-CTA-wijziging kost +0,49 KB en telt **nul** in die teller, want die meet `src/` + `styles/` + `index.html` en niet `blog/`.
+- Laat een verkeerde motivering niet de hele wijziging omverhalen. `e2dc950` verschoof de metasploit-mid-CTA met twee redenen, waarvan er één (de template) fout was — maar de andere (`ojort` had **nul** instroom) was zelfstandig geldig, en dát is precies waar Check 13d op toetst. Was `ojort` er niet geweest, dan had die commit een goed passend product vervangen door een slechter passend, op gezag van een document.
+- Draai `/summary` vóór hij zelf drift wordt. Vijf commits liepen drie dagen ongelogd door; `validate-docs.sh:909` claimde al "(Sessie 221)" terwijl TASKS.md en CLAUDE.md nog 220 hielden. Die counter-discrepantie wás het symptoom, niet een losse observatie.
 
 ### Sessie 220: Opruimsessie — vier van de vijf punten bleken een notitie die niet meer klopte (10 aug 2026)
 ⚠️ **Never:**
@@ -188,26 +206,7 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
 - Beantwoord "is deze faler van mij?" met het **codepad** als dat kan, niet met een steekproef. Alle falers draaiden op `/terminal.html`, dat geen van de drie gewijzigde bestanden laadt — dat is sterker en goedkoper dan 8× per kant draaien.
 - Corrigeer je eigen meetfout hardop. `grep -c "[webkit]"` gaf 0 terwijl er 237 WebKit-tests groen stonden: de haken zijn een karakterklasse, dus ik zocht naar één teken uit `webkit`. Ik had daarop "WebKit moet nog beginnen" gemeld.
 
-### Sessie 215: Hero-terminal — uitlijning, focusrand en een cursor 317px van zijn eigen tekst (08 aug 2026)
-⚠️ **Never:**
-- Een verhouding coderen als een getal. `margin-top: 3rem` op `.hero-terminal` was een handmatige optische centrering voor een venster van 313px; Sessie 214 hing er 152px demobalk onder en het stak **94px onder de tekstkolom uit** terwijl de bovenkant nog 54px te laag begon. Zo'n getal rot stilzwijgend — er is geen commit die de bug introduceert. Zet de verhouding als regel neer (`align-items: center`), dan corrigeert hij zichzelf.
-- `align-self` gebruiken om "dit item centreren" te bedoelen. Het **hoogste** flex-item bepaalt de cross-size van de regel, en dat wás de terminal (468 vs 428) — `align-self: center` mat 140→608, exact ongewijzigd. Het kórtere item moet bewegen, dus de regel hoort op de container.
-- Denken dat je een focusring keyboard-only kunt maken op een tekstveld. Gemeten: `input.matches(':focus-visible')` is `true` ná een muisklik (spec — tekstvelden tonen altijd focus). `:focus-within` en `:has(:focus-visible)` zijn daar identiek. De rand verschijnt hoe dan ook bij een klik; maak hem dus *bedoeld*, verberg hem niet.
-- Een focus-`box-shadow` vóór een `[data-theme="light"]`-override zetten die óók `box-shadow` zet. Gelijke specificiteit (0,2,0) → bronvolgorde beslist, en de gloed verdwijnt dán alleen in light mode. De mutant liet precies dat zien: **light rood, dark groen** — één thema testen had de bug laten passeren.
-- Groen tekstgroen op de lichte paginaachtergrond. `--color-cta-primary` meet daar **3,10:1** bij 14,4px: onder AA, laat staan de AAA die dit project voert. Op het zwart van de terminal is hetzelfde groen ~17:1. Kleur volgt de achtergrond waarop hij staat, niet het merk.
-- Een element krimpen zonder na te gaan wat je daarmee als tikdoel weggooit. Het veld naar `1ch` brengen zette de cursor goed en maakte het klikdoel **309px → 10px**; wie naast de prompt klikte activeerde de terminal niet meer. WebKit miste hem zelfs met een gerichte `.click()`.
-- Een `display: none` gebruiken voor "verberg dit na gebruik" binnen een gecentreerde kolom. De kolom krimpt 29px en het venster verspringt ~15px onder de muis van wie er net op klikte. `visibility: hidden` houdt de ruimte én haalt hem uit de toegankelijkheidsboom.
-
-✅ **Always:**
-- Behandel een testfalen als hypothese, en beslis met een steekproef die groot genoeg is. Twee kleine runs met tegengestelde uitkomst (2/4 rood, daarna 0/3 rood) zijn géén conclusie; 8× per kant gaf pas een uitspraak — en die was hard: **2/8 rood op nieuw, 0/8 op oud**. Daarna pas de oorzaak zoeken.
-- Vergelijk tegen de oude code op een tweede poort (`git archive HEAD` + `nostore-server.py`) vóór je "pre-existing" zegt. Bij de chipbedekking gaf dat over zes telefoonmaten een **byte-identieke** uitkomst — daarmee is "niet van mij" een meting en geen aanname.
-- Meet de vraag die telt, niet de vraag die makkelijk is. `elementFromPoint` zei "bedekt", maar de vraag was of de bezoeker een léésbaar label ziet dat hij vervolgens misklikt. Eén screenshot (dekkende balk, geen label zichtbaar) veranderde het advies van "fixen" naar "vastleggen".
-- Controleer je eigen meetdefinitie voordat je erop adviseert. Mijn `inBeeld`-check gebruikte de bounding box i.p.v. het midden, waardoor 375×667 drie "bedekte" chips gaf terwijl die middens buiten beeld lagen — `elementFromPoint` geeft daar `null`, en dat is geen bedekking.
-- Corrigeer je eigen eerdere rapportage als doormeten hem te gunstig maakt. "Alleen `help`, op één maat" werd "drie chips, op twee gangbare maten".
-- Geef een entry-point een `?v=` zodra je hem wijzigt. `landing-demo.js` had er geen terwijl `/src/**/*.js` op `max-age=3600` staat: een terugkerende bezoeker kreeg tot een uur nieuwe CSS naast oude JS — hier: de auto-demo typend in een veld van één teken breed.
-- Leg een niet-opgeloste conditie vast als **baseline in een test**, niet als notitie. `BASELINE_BEDEKT` per viewport wordt rood zodra de bedekking groeit, en zijn lijsten horen `[]` te worden zodra de balk gefixt is — een notitie meldt niets terug.
-
-**Rotation:** Top-6 huidig: 215-216-217-218-219-220 (Sessie 214 → `docs/sessions/current.md` via 1-in-1-out, Sessie 220). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 220 (205-209 → `archive-s205-s209.md`, byte-geverifieerd); current.md houdt nu het rolling window 210-220 (14 secties: 11 entries + de learnings van 212, 213 en 214). **Volgende bulk-rotatie Sessie 225 → archiveer de staart (210-214).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10"). Twee dingen die bij Sessie 220 bleken: (a) een learnings-blok hoort mee te gaan met de sessie waar het bij staat, anders blijft "Sessie N — learnings" achter terwijl entry N in het archief zit; (b) de SESSIONS.md-index dríft — hij claimde window "205-215" terwijl current.md er 15 hield, dus controleer hem bij elke bulk. Historie 81-209 → `archive-s205-s209.md` + `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 216-217-218-219-220-221 (Sessie 215 → `docs/sessions/current.md` via 1-in-1-out, Sessie 221). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 220 (205-209 → `archive-s205-s209.md`, byte-geverifieerd); current.md houdt nu het rolling window 210-220 (14 secties: 11 entries + de learnings van 212, 213 en 214). **Volgende bulk-rotatie Sessie 225 → archiveer de staart (210-214).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10"). Twee dingen die bij Sessie 220 bleken: (a) een learnings-blok hoort mee te gaan met de sessie waar het bij staat, anders blijft "Sessie N — learnings" achter terwijl entry N in het archief zit; (b) de SESSIONS.md-index dríft — hij claimde window "205-215" terwijl current.md er 15 hield, dus controleer hem bij elke bulk. Historie 81-209 → `archive-s205-s209.md` + `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -256,7 +255,7 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Bij elke sessie 1-in-1-out op de CLAUDE.md-learnings (top-6 vast). Bulk-rotatie van `current.md` bij `N % 5 == 0`: archiveer **de staart** — de oudste ~5 entries — naar `archive-sNNN-sMMM.md`. Laatste bulk: Sessie 220 (205-209). **Volgende bulk: Sessie 225** (staart = 210-214). Neem het learnings-blok van een sessie mee met zijn entry. Actuele stand: zie de **Rotation**-regel onder §Recent Critical Learnings.
-**Sessie counter:** 220
+**Sessie counter:** 221
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -311,6 +310,6 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
 
 ---
 
-**Last updated:** 10 aug 2026 (Sessie 220 — opruimsessie: vier van de vijf punten waren geen bug maar een verouderde notitie. De juridische welkomstmail stond al Active; twee tests asserteerden niet wat ze beweerden; 5 van 7 falers waren Netlify's bot-protectie, niet CPU-contentie. Bulk-rotatie 205-209 + zeven dode taken gesloten. Volledig: `docs/sessions/current.md`)
-**Version:** 5.94 (Sessie 220 — guard→assertie in `performance.spec.js` (mat 10/10 runs niets; 44,00 bytes/bestand, CV 0,0%); `:209` viel op de legal-modal, niet op contentie; NEW goto-guard in `fixtures.js` tegen Netlify's bot-challenge; bulk-rotatie 205-209 byte-geverifieerd; 7 dode taken gesloten mét reden; gidsen-link 268×49-50px. Open: #64. Bundel 1095,54/1120 (2,2%). Historie: `docs/sessions/current.md`)
+**Last updated:** 12 aug 2026 (Sessie 221 — vijf commits over drie dagen, ongelogd, dus één sessie. De regel die twee ervan stuurde bleek zelf fout: `blog-template.md` sprak zichzelf tegen en produceerde zo de overtredingen die hij verbood. Het echte defect was het werkwoord, niet de koppeling, en raakte 13 posts i.p.v. 6. Volledig: `docs/sessions/current.md`)
+**Version:** 5.95 (Sessie 221 — `blog-template.md` sprak zichzelf tegen; echte defect raakte 13 posts: buiten de blog 8/8 "Bekijk…", erin 13/15 "Download…" voor een betaald product → nu 0/15. NEW Check 13 + 14 in `validate-docs.sh`, beide positief geformuleerd na een overlevende mutant. `--color-accent-text` splitst een token met twee rollen: 101 → 0 onder AA. 39 specs / 296 declaraties. Bundel 1098,46/1120 (marge 1,9%). Historie: `docs/sessions/current.md`)
 

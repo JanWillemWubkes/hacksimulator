@@ -4,6 +4,142 @@
 
 ---
 
+## Sessie 221: Vijf commits over drie dagen — en de regel die twee van hen stuurde, bleek zelf fout (12 aug 2026)
+
+**Mission:** Geen enkele opdracht vooraf; dit is een verzamelsessie. Vijf commits liepen tussen 10 en 12 aug zonder tussentijdse `/summary`, dus ze vormen per de nummerregel (*nummer telt per summary-ronde, niet per commit — ook na `/clear`*) samen Sessie 221. Twee ervan raken dezelfde regel in `blog-template.md`, en komen tot tegengestelde conclusies. Dat is de rode draad.
+
+**Commits:**
+
+| | | |
+|---|---|---|
+| `0dd0c64` | 10 aug 21:35 | #64 draagt nu ook zijn prioriteit, niet alleen zijn diagnose |
+| `8c0c455` | 11 aug 06:49 | Copyright-regel centreert nu ook als hij afbreekt (≤385px) |
+| `c8cd46b` | 11 aug 19:57 | `--color-cta-primary` was ook tekstkleur, en faalde daar: 101 → 0 onder AA |
+| `e2dc950` | 12 aug 19:59 | Gidsen-verwijzingen op 4: de blog beloofde er drie naast een knop voor vier |
+| `3a78a5e` | 12 aug 21:04 | Betaalde blog-CTA's beloofden een download: 13 van de 15, nu 0 |
+
+### `0dd0c64` — een openstaand item dat zijn eigen prioriteit niet droeg
+
+#64 beschreef wát gemeten was en wat de volgende stap zou zijn, maar niet dat het láág geprioriteerd is. Een volgende sessie leest dat als werk. Toegevoegd: de suite draait met `retries: 1` lokaal, dus in normaal gebruik is dit een groene run met het label *flaky* en blokkeert hij niets; alle Sessie 220-metingen zijn met `--retries=0` gedaan om schoon te kunnen tellen, en pas dáár werd het een rode run. Met de expliciete waarschuwing erbij om hem tóch geen "bekende faler" te noemen — laag geprioriteerd is iets anders dan wegverklaard (staande regel sinds Sessie 217).
+
+### `8c0c455` — `align-items: center` centreert de doos, niet de tekst
+
+`.footer-bottom` stond op mobiel al op `align-items: center`, maar dat centreert de **doos** van de `<p>`, niet de tekst erin. Zolang de regel op één lijn past vallen die samen; zodra hij afbreekt is `max-content` groter dan de beschikbare breedte, wordt de doos exact containerbreed en staat de tekst op `text-align: start` — dus links.
+
+Daardoor leefde de bug in een smalle band: **≤385px breekt af (fout), ≥390px past (goed)**. De meeste telefoons zitten daarboven, wat verklaart waarom dit lang onopgemerkt bleef.
+
+Gemeten op `over-ons.html`, afwijking t.o.v. het midden van `.footer-bottom`:
+
+| viewport | vóór | ná |
+|---|---|---|
+| 360px | regel 1 −36,5 / regel 2 −115,0 | 0 / 0 |
+| 375px | regel 1 −44,0 / regel 2 −122,5 | 0 / 0 |
+| 390px | 0 (één regel) | 0 |
+| 769+ | links (`space-between`) | ongewijzigd |
+
+`text-wrap: balance` erbij omdat gecentreerd nog niet evenwichtig is: de natuurlijke breuk gaf 247px naast 90px, balance maakt er 171/166 van en breekt ná het em-streepje in plaats van middenin "Alle rechten". Progressive enhancement — oudere browsers negeren het en houden de gecentreerde-maar-rafelige variant. NEW `footer-copyright.spec.js`.
+
+### `c8cd46b` — één token met twee onverenigbare rollen
+
+`--color-cta-primary` droeg zowel de CTA-**achtergrond** (met wit erop: werkt) als **tekstkleur** (in light mode nergens AA). Gemeten over 12 pagina's tegen de *effectieve* achtergrond, niet tegen `--color-bg` (de meetfout van Sessie 217):
+
+| | accent-tekstelementen | onder AA | onder AAA |
+|---|---|---|---|
+| vóór | 232 | **101** | 232 |
+| ná | 232 | **0** | 90 |
+
+Nieuw token `--color-accent-text` (lime in dark, Tailwind Green 900 in light), op 22 declaraties. Green 900 is **op meting** gekozen, niet op gevoel — de vanzelfsprekende keuze (Green 700, bestond al als `-hover`) haalt AA níét op een `.section-band`:
+
+| | op band | op wit | |
+|---|---|---|---|
+| `#16a34a` Green 600 (was) | 2,83:1 | 3,30:1 | onder AA |
+| `#15803d` Green 700 | 4,31:1 | 5,02:1 | onder AA op band |
+| `#166534` Green 800 | 6,13:1 | 7,13:1 | geen AAA op band |
+| `#14532d` Green 900 | 7,83:1 | 9,11:1 | **AAA op beide** |
+
+Twee dingen die de nieuwe test vond en de sweep niet: `.terminal-line .tip/.highlight` stonden op een theme-token terwijl de hero-terminal in **beide** thema's zwart is (in light `#16a34a` op zwart = 6,37:1). NEW `accent-text-contrast.spec.js`. Dit scherpt `architecture-patterns.md §10` verder aan: niet alleen "kleur volgt de achtergrond", maar ook **"een token dat twee rollen draagt, faalt in minstens één"**.
+
+### `e2dc950` — vier gidsen, drie in de copy
+
+De commits die de vierde gids toevoegden (`da366ce`, `470f4f8`, `8a9f6dd`, `db7d7de`) raakten uitsluitend `gidsen.html` en `docs/products/*`. Elke aantal-claim daarbuiten bleef op 3 staan, en er was niets dat dat kon terugmelden: `blog/welkom.html` noemde "drie gidsen" pal naast de bundel-CTA (`emzjvj`) die er vier levert. Ook `llms.txt`, de JSDoc-ID-lijst in `src/analytics/events.js` en de huidige-toestand-regels in CLAUDE.md + TASKS.md M5.5 bijgewerkt.
+
+`gumroad-listings.md` sprak zichzelf tegen: §Status zei *"nog open — en dit is een echte"* over de bundelinhoud terwijl §Stand van zaken datzelfde punt op 7 aug al had afgevinkt. Bundelinhoud bij de bron nageteld (vier PDF's in `emzjvj`) en als **meting** vastgelegd i.p.v. als notitie; wat de telling níét bewijst staat er expliciet bij.
+
+NEW **Check 13** in `validate-docs.sh`: leidt N=4 en paginasom=72 **af** uit `gidsen.html` (niet hardgecodeerd) en toetst bundelclaim, JSON-LD-Product-aantal, elke aantal-claim in bezoekercopy, en of elk product buiten `gidsen.html` gelinkt wordt (13d — kwam er omdat `ojort` nul instroom had). Vier mutanten rood; drie vuurden elk precies één andere assertie.
+
+Ook hier: de metasploit-post kreeg `wmvpx` → `ojort` in de mid-CTA. **Twee redenen, waarvan er één fout was** — zie hieronder.
+
+### `3a78a5e` — de betaalde CTA beloofde een download
+
+Drie eerdere sessies meldden hetzelfde openstaande punt: 6 blogposts promoten het Pentest Playbook twee keer (gratis sample boven, betaald product midden), en `blog-template.md:182` noemt dat letterlijk *"Niet doen"*. Alle drie noemden het een **redactionele keuze**, geen correctheidsfout. Heisenberg vroeg expliciet om de norm zélf te onderzoeken in plaats van hem toe te passen: *"misschien is die template wel niet correct"*.
+
+**Dat bleek beslissend.** Drie uitkomsten:
+
+1. **De template was zijn eigen oorzaak.** De mapping-tabel wijst `wmvpx` toe aan *"Recon, pentest-praktijk, checklist"*; twintig regels lager staat dat `wmvpx` alleen lead-magnet mag zijn. Wie de tabel volgde, landde in de verboden toestand. Zes posts zijn dus geen zes slordigheden maar één tegenstrijdig document dat zich zes keer reproduceerde.
+2. **Het gemelde defect was niet het echte defect.** "Twee CTA's voor hetzelfde product" is het sample-hoofdstuk-model — `sample-pentest.html:238-244` doet exact dezelfde koppeling, met bétere copy (*"Bekijk het **volledige** Playbook"*). Het probleem was dat de twee asks ononderscheidbaar waren.
+3. **Het raakte 13 posts, niet 6.**
+
+| | vóór | ná |
+|---|---|---|
+| blog, betaalde knop "Download…" | **13 van 15** | 0 |
+| blog, betaalde knop "Bekijk…" | 2 | **15** |
+| buiten de blog | 8 van 8 "Bekijk…" | ongewijzigd |
+| sitebreed totaal | 23 | 23 (geen product raakte instroom kwijt) |
+
+De blog was de enige plek op de site die een *download* beloofde voor iets achter een betaalmuur. In de 6 `wmvpx`-posts stapelde dat op: bovenaan "Download de gratis sample" (9 pagina's uit het Playbook), 300 regels lager "Download het Playbook" — zelfde werkwoord, zelfde naam, geen prijs, in een visueel identieke doos (`.blog-cta-product` verschilt van `.blog-cta` in precies één property: `h3` font-size).
+
+**Geen prijzen in de copy.** De site noemt nergens een bedrag — de enige `€` in de blog zijn salariscijfers in lopende tekst. Een bedrag in 15 posts zetten creëert 15 plekken die verouderen. "Betaalde gids op Gumroad." geeft hetzelfde signaal zonder onderhoudslast. Bij `wmvpx` doet "alle 6 fasen in ~19 pagina's" tegenover de 9 gratis het onderscheidende werk.
+
+NEW **Check 14** in `validate-docs.sh`: knoptekst begint met "Bekijk", de alinea draagt een betaalmarkering, en de paginaclaims worden afgeleid uit `gidsen.html` zodat de check niet zelf veroudert.
+
+### De spanning tussen `e2dc950` en `3a78a5e`
+
+Beide commits raken `blog-template.md:182`, en ze concluderen het tegenovergestelde. `e2dc950` **handhaafde** de regel (metasploit-mid-CTA `wmvpx` → `ojort`, met als tweede motivering *"blog-template.md:182 verbiedt een betaalde CTA voor hetzelfde product als de gratis sample erboven"*). `3a78a5e` mat dat die regel zichzelf tegensprak.
+
+**Staat die wijziging dan nog?** Ja — omdat hij twee onafhankelijke redenen had, en de eerste geldig was: `ojort` had **nul** instroom terwijl het lijstitem pal boven die CTA over een eigen lab gaat. Alleen de tweede reden was onjuist. Dat is precies waarom Check 13d (elk product moet buiten `gidsen.html` gelinkt zijn) de goede grond was en de template niet.
+
+Het waarschuwende deel: was `ojort` er níét geweest, dan had `e2dc950` in zes posts een goed passend product vervangen door een slechter passend — de fout vergroot in plaats van verkleind, op gezag van een document.
+
+### Learnings
+
+- **Een intern regeldocument is een bewering, geen grondwaarheid.** De template verbood iets dat normaal is, benoemde het echte defect niet, en produceerde de overtredingen die hij verbood. Onderzoek de norm vóór je hem handhaaft — inclusief extern onderzoek naar wat het vakgebied zegt.
+- **Marketingstatistiek is geen bewijs.** "266% meer conversie met één CTA" naast "+20% met meerdere" zijn allebei gerecyclede, niet-gerepliceerde cases. Het enige robuuste mechanisme is het zero-price effect (peer-reviewed) — en dat pleit niet tégen de koppeling, maar vóór onderscheidbaarheid.
+- **Een negatieve check is te omzeilen.** De eerste versie van 14a verbood alleen het wóórd "Download"; de mutant `>Pak het Playbook<` overleefde glansrijk. Erger: het scriptcommentaar beweerde dat 14b die omzeiling afving, terwijl 14b een ándere invariant meet. Beide asserties zijn nu positief geformuleerd. **De overlever nalopen loonde — hij ontmaskerde een claim die ik zelf al als opgelost had opgeschreven.**
+- **Een token dat twee rollen draagt, faalt in minstens één.** `--color-cta-primary` werkte als achtergrond en faalde als tekst: 101 elementen onder AA. Splitsen is de fix, en de vervangende waarde hoort gemeten — Green 700 leek vanzelfsprekend en haalde AA niet op een band.
+- **Centreren van een doos is niet centreren van tekst.** `align-items: center` en `text-align` zijn verschillende dingen; ze vallen alleen samen zolang de inhoud niet afbreekt. Zulke bugs leven in smalle viewport-banden (hier ≤385px) en zijn daarom bijna onvindbaar zonder gerichte meting.
+- **Meet vóór je plant, ook als de bron je eigen plan is.** Punt 4 van het goedgekeurde plan (CTA-volgorde in `leren-hacken.html` omdraaien) is na meting **geschrapt**: beide CTA's zitten contextueel goed — "Structuur nodig?" sluit *Stap 1: leer de terminal* af, de gratis sample staat onder *Gratis platforms om te oefenen*. Omwisselen had consistentie gekocht met een slechtere plaatsing.
+- **De `/summary` zelf kan driften.** Vijf commits liepen drie dagen ongelogd door. `validate-docs.sh:909` claimde al "(Sessie 221)" terwijl TASKS.md en CLAUDE.md nog 220 hielden — de counter-discrepantie wás het symptoom, niet een losse observatie.
+
+### Metrics
+
+| | Sessie 220 | Sessie 221 |
+|---|---|---|
+| Bundel (`performance.spec.js`-teller) | 1095,54 KB | **1098,46 KB** |
+| Marge tot 1120 | 24,46 KB (2,2%) | **21,54 KB (1,9%)** |
+| Spec-bestanden | 37 | **39** |
+| `test()`-declaraties | 290 | **296** |
+| `du -sb` styles/ | 434 KB | 437 KB |
+| `du -sb` blog/ | 474 KB | 474 KB |
+
+De +2,92 KB komt volledig uit `8c0c455` + `c8cd46b` (CSS). De blog-CTA-wijziging kost +0,49 KB en telt **nul** in deze teller: die meet `src/` + `styles/` + `index.html`, niet `blog/`.
+
+⚠️ **De marge is nu 1,9% en de alarmgrens is in zicht.** 1000 → 1050 → 1100 → 1120 is drie bumps in 17 sessies. De volgende niet-triviale wijziging raakt de grens, en dan is de vraag niet weer een bump maar of dit nog het juiste getal is om te meten.
+
+### Verificatie
+
+- `validate-docs.sh` fast + `--deep` exit 0 (14 checks).
+- Check 14: **7 mutanten, 7 rood**, daarna hersteld groen.
+- `lead-magnet.spec.js` chromium tegen `nostore-server.py`: **19 passed / 0 failed** (2 skipped = productie-header-tests).
+- Pre-commit hooks groen bij beide commits van 12 aug.
+
+### Next steps
+
+- [ ] Bundelgrens: bij 1,9% marge is de volgende wijziging de aanleiding. Niet bumpen zonder eerst te toetsen of `src/ + styles/ + index.html` nog de juiste teller is.
+- [ ] #64 blijft open (laag geprioriteerd, draagt zijn diagnose én zijn prioriteit).
+- [ ] Bulk-rotatie bij Sessie 225: staart = 210-214.
+
+---
+
 ## Sessie 220: Opruimsessie — vier van de vijf punten bleken een notitie die niet meer klopte (10 aug 2026)
 
 **Mission:** Vijf losse opruimpunten: een pagina die een e-mail belooft, twee tests die niet meten wat ze beweren, de bulk-rotatie, en dode taken. De opdracht zei expliciet *"MEET EERST, BOUW DAARNA — de metingen hieronder komen uit Sessie 219 en kunnen achterhaald zijn"*. Dat bleek de kern van de sessie: **vier van de vijf punten waren geen bug maar een verouderde notitie.**
@@ -1107,3 +1243,23 @@ Beide gepusht naar `main`, CI success, deploy live geverifieerd met `curl -I`.
 - Omhul analytics-aanroepen naar een net uitgebreide gedeelde module. Relatief geïmporteerde submodules dragen geen `?v=`, dus een terugkerende bezoeker kan tot `max-age` een oude `events.js` krijgen; zonder guard is dat een `TypeError` na elk command.
 - Check het browserpad in plaats van het te gokken — de Sessie 209-les geldt nog steeds, maar andersom: hier stonden ze gewoon op de standaardlocatie en was `CHROMIUM_PATH` helemaal niet nodig. Mijn gok liet alle 30 tests falen.
 - Wees expliciet over wat je níét kunt bewijzen: of de hero-demo de doorklik verhoogt, weet je pas als `terminal_cta_click{location:hero}` te segmenteren is op sessies mét `hero_demo_started`. Tot dan is het een hypothese, geen resultaat.
+
+## Sessie 215 — learnings (geroteerd uit CLAUDE.md, Sessie 221)
+
+⚠️ **Never:**
+- Een verhouding coderen als een getal. `margin-top: 3rem` op `.hero-terminal` was een handmatige optische centrering voor een venster van 313px; Sessie 214 hing er 152px demobalk onder en het stak **94px onder de tekstkolom uit** terwijl de bovenkant nog 54px te laag begon. Zo'n getal rot stilzwijgend — er is geen commit die de bug introduceert. Zet de verhouding als regel neer (`align-items: center`), dan corrigeert hij zichzelf.
+- `align-self` gebruiken om "dit item centreren" te bedoelen. Het **hoogste** flex-item bepaalt de cross-size van de regel, en dat wás de terminal (468 vs 428) — `align-self: center` mat 140→608, exact ongewijzigd. Het kórtere item moet bewegen, dus de regel hoort op de container.
+- Denken dat je een focusring keyboard-only kunt maken op een tekstveld. Gemeten: `input.matches(':focus-visible')` is `true` ná een muisklik (spec — tekstvelden tonen altijd focus). `:focus-within` en `:has(:focus-visible)` zijn daar identiek. De rand verschijnt hoe dan ook bij een klik; maak hem dus *bedoeld*, verberg hem niet.
+- Een focus-`box-shadow` vóór een `[data-theme="light"]`-override zetten die óók `box-shadow` zet. Gelijke specificiteit (0,2,0) → bronvolgorde beslist, en de gloed verdwijnt dán alleen in light mode. De mutant liet precies dat zien: **light rood, dark groen** — één thema testen had de bug laten passeren.
+- Groen tekstgroen op de lichte paginaachtergrond. `--color-cta-primary` meet daar **3,10:1** bij 14,4px: onder AA, laat staan de AAA die dit project voert. Op het zwart van de terminal is hetzelfde groen ~17:1. Kleur volgt de achtergrond waarop hij staat, niet het merk. ⚠️ **Vervolg (Sessie 221, `c8cd46b`):** dit token droeg twee rollen — als CTA-achtergrond werkt het, als tekst faalde het op 101 van de 232 accent-tekstelementen. Opgelost met een apart `--color-accent-text`.
+- Een element krimpen zonder na te gaan wat je daarmee als tikdoel weggooit. Het veld naar `1ch` brengen zette de cursor goed en maakte het klikdoel **309px → 10px**; wie naast de prompt klikte activeerde de terminal niet meer. WebKit miste hem zelfs met een gerichte `.click()`.
+- Een `display: none` gebruiken voor "verberg dit na gebruik" binnen een gecentreerde kolom. De kolom krimpt 29px en het venster verspringt ~15px onder de muis van wie er net op klikte. `visibility: hidden` houdt de ruimte én haalt hem uit de toegankelijkheidsboom.
+
+✅ **Always:**
+- Behandel een testfalen als hypothese, en beslis met een steekproef die groot genoeg is. Twee kleine runs met tegengestelde uitkomst (2/4 rood, daarna 0/3 rood) zijn géén conclusie; 8× per kant gaf pas een uitspraak — en die was hard: **2/8 rood op nieuw, 0/8 op oud**. Daarna pas de oorzaak zoeken.
+- Vergelijk tegen de oude code op een tweede poort (`git archive HEAD` + `nostore-server.py`) vóór je "pre-existing" zegt. Bij de chipbedekking gaf dat over zes telefoonmaten een **byte-identieke** uitkomst — daarmee is "niet van mij" een meting en geen aanname.
+- Meet de vraag die telt, niet de vraag die makkelijk is. `elementFromPoint` zei "bedekt", maar de vraag was of de bezoeker een léésbaar label ziet dat hij vervolgens misklikt. Eén screenshot (dekkende balk, geen label zichtbaar) veranderde het advies van "fixen" naar "vastleggen".
+- Controleer je eigen meetdefinitie voordat je erop adviseert. Mijn `inBeeld`-check gebruikte de bounding box i.p.v. het midden, waardoor 375×667 drie "bedekte" chips gaf terwijl die middens buiten beeld lagen — `elementFromPoint` geeft daar `null`, en dat is geen bedekking.
+- Corrigeer je eigen eerdere rapportage als doormeten hem te gunstig maakt. "Alleen `help`, op één maat" werd "drie chips, op twee gangbare maten".
+- Geef een entry-point een `?v=` zodra je hem wijzigt. `landing-demo.js` had er geen terwijl `/src/**/*.js` op `max-age=3600` staat: een terugkerende bezoeker kreeg tot een uur nieuwe CSS naast oude JS — hier: de auto-demo typend in een veld van één teken breed.
+- Leg een niet-opgeloste conditie vast als **baseline in een test**, niet als notitie. `BASELINE_BEDEKT` per viewport wordt rood zodra de bedekking groeit, en zijn lijsten horen `[]` te worden zodra de balk gefixt is — een notitie meldt niets terug.

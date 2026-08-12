@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 10 aug 2026 (Sessie 220 — **testing-strategie geactualiseerd, geen architectuur-wijziging aan het product.** §Testing Strategie beschreef E2E-tests nog als "toekomst" terwijl de suite al tientallen sessies over drie motoren draait. Nieuw vastgelegd: draai tegen een lokale server en niet tegen productie — drie parallelle motoren lokken Netlify's bot-protectie uit, goed voor 5 van de 7 falers in Sessie 220 met een onbegrijpelijk symptoom. Plus: begrens elke volle run met `--global-timeout`, geen baseline van bekende falers, en bewijs een fix met een mutant die daadwerkelijk rood wordt.)
+**Laatst bijgewerkt:** 12 aug 2026 (Sessie 221 — **testing-strategie aangescherpt met twee regels, geen architectuur-wijziging aan het product.** §Testing Strategie kende al "bewijs een fix met een mutant"; daar horen twee dingen bij die deze sessie gemeten zijn: loop de **overlever** van een mutantenreeks na (die ontmaskerde een claim die al als opgelost in het scriptcommentaar stond), en kies de goedkoopste laag die de invariant kan dragen — statische tekst hoort in `validate-docs.sh` en niet in Playwright. Het design-systeem, de tech-stack en de deployment zijn ongewijzigd; het nieuwe token `--color-accent-text` is een toevoeging binnen het bestaande CSS-variabelen-systeem, geen systeemwijziging.)
 **Status:** ✅ LIVE on Netlify | M5 Testing 71% | M5.5 Monetization deep (Ko-fi + Brevo + Gumroad + Lead magnet) | M6 Tutorial 100% | M7 Gamification 100% | Blog content-pijler 14 posts live
 **Verantwoordelijk:** Development Team
 **Live URL:** https://hacksimulator.nl/
@@ -669,6 +669,19 @@ source of truth); hier alleen de architecturale regels.
 - **Bewijs een fix met een mutant**, ook als de test al groen is: draai de oude conditie
   terug en controleer dat de assertie dán rood wordt. Een mutant die niet rood wordt bewijst
   niets (Sessie 220: een te zwakke CV-mutant bleef groen op 23,8% tegen een grens van 50%).
+- **Loop de overlever na.** Een reeks van 6 rood en 1 groen is pas een resultaat als je weet
+  waaróm die ene groen bleef. In Sessie 221 ontmaskerde dat een claim die al als opgelost in
+  het scriptcommentaar stond: de negatieve check "knoptekst begint niet met `Download`" liet
+  `>Pak het Playbook<` ongemoeid, terwijl het commentaar beweerde dat een tweede assertie die
+  omzeiling afving — die meet een ándere invariant. **Formuleer een guard positief** (*moet
+  met "Bekijk" beginnen*) waar dat kan: een verbod op één specifieke fout dekt de klasse niet.
+- **Kies de goedkoopste laag die de invariant kan dragen.** Gaat het over **statische tekst**
+  (copy, attributen, claims die tussen documenten in lockstep horen), dan hoort de guard in
+  `scripts/validate-docs.sh` — die draait al via de pre-commit hook, zonder server, browser of
+  suite van 48 minuten. Playwright is voor **gedrag**: geometrie, focus, events, thema's.
+  Checks 13 en 14 (Sessie 221) zijn daarom shell-checks. Leid daarbij de grondwaarheid **af**
+  uit de bron (`gidsen.html`) in plaats van hem te hardcoderen, anders is de check zelf het
+  volgende dat veroudert.
 
 **Unit tests:** bewust nog niet ingericht. De commandolaag wordt via de echte codepad-import
 getest (`.claude/skills/verify-terminal`), wat voor een client-side simulator zonder backend
@@ -837,8 +850,8 @@ const DEBUG_MODE = false;
 
 ---
 
-**Laatst bijgewerkt:** 10 aug 2026 (Sessie 220 — **testing-strategie geactualiseerd, geen architectuur-wijziging aan het product.** §Testing Strategie beschreef E2E-tests nog als "toekomst" terwijl de suite al tientallen sessies over drie motoren draait. Nieuw vastgelegd: draai tegen een lokale server en niet tegen productie — drie parallelle motoren lokken Netlify's bot-protectie uit, goed voor 5 van de 7 falers in Sessie 220 met een onbegrijpelijk symptoom. Plus: begrens elke volle run met `--global-timeout`, geen baseline van bekende falers, en bewijs een fix met een mutant die daadwerkelijk rood wordt.)
-**Versie:** 4.42 (Sessie 220 — **testing-strategie geactualiseerd**: §Automated Testing beschreef de Playwright-suite nog als "toekomst"; nu de vier architecturale regels die er wél zijn — drie motoren, lokale server i.p.v. productie (Netlify bot-protectie, gemeten 5 van 7 falers), `--global-timeout` verplicht op elke volle run, geen baseline van bekende falers, en mutant-bewijs per fix. Aantallen blijven in TASKS.md §Huidige Focus. Geen productarchitectuur gewijzigd.)
+**Laatst bijgewerkt:** 12 aug 2026 (Sessie 221 — **testing-strategie aangescherpt met twee regels, geen architectuur-wijziging aan het product.** §Testing Strategie kende al "bewijs een fix met een mutant"; daar horen twee dingen bij die deze sessie gemeten zijn: loop de **overlever** van een mutantenreeks na (die ontmaskerde een claim die al als opgelost in het scriptcommentaar stond), en kies de goedkoopste laag die de invariant kan dragen — statische tekst hoort in `validate-docs.sh` en niet in Playwright. Het design-systeem, de tech-stack en de deployment zijn ongewijzigd; het nieuwe token `--color-accent-text` is een toevoeging binnen het bestaande CSS-variabelen-systeem, geen systeemwijziging.)
+**Versie:** 4.43 (Sessie 221 — **twee regels toegevoegd aan §Testing Strategie**: "loop de overlever na" + "kies de goedkoopste laag die de invariant kan dragen". Aanleiding: Check 13 en 14 in `validate-docs.sh` bewaken statische tekst en horen daarom niet in de Playwright-suite, en de eerste, negatieve versie van Check 14 liet een mutant overleven die het commentaar al als afgevangen beschreef. Geen product-architectuur gewijzigd.)
 **Status:** ✅ Deployed - Live in Production | M5.5 Monetization stack deep + Brevo deliverability getuned | M7 Gamification ✅ 100% | Blog content-pijler 14 posts live
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
