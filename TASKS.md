@@ -770,10 +770,12 @@
   rechterrand-spreiding ≤0,04px over 8 commando's. Sessie 204/205 hoeft niet heropend.
 - [x] **Verticale-continuïteitsdetector** in `responsive-ascii-boxes.spec.js` + `next`/`metasploit`
   toegevoegd (stonden niet in `COMMANDS` terwijl het de gemelde commando's waren) + reflow-test.
-- [ ] **Volle chromium-suite (420 tests) nog niet groen bevestigd** — eerste run kreeg van mij een
-  `--global-timeout` van 25 min terwijl de suite daaroverheen loopt (de Sessie 216-val: een
-  afgekapte run leest bijna als groen). Afgebroken, niet geteld, opnieuw gestart met 50 min.
-  Box-spec is wél groen over drie motoren (152 passed). Bevestig de volle run voor de volgende sessie.
+- [x] **Volle chromium-suite groen: 413 passed / 0 failed / 7 skipped in 18,1 min**, en hij liep
+  tot `[420/420]` — dus compleet, niet afgekapt. Nul flaky. Eerste poging kreeg van mij een
+  `--global-timeout` van 25 min terwijl de suite ~18 min nodig heeft plus opstart; die liep
+  eroverheen en zou afkappen met "did not run" onder een regel "passed" (de Sessie 216-val).
+  Afgebroken en **niet geteld**, opnieuw gedraaid met 50 min. Box-spec apart: 152 passed over
+  chromium/firefox/webkit.
 
 **Resterende handmatige acties:**
 - [ ] Mobile real device testing (iOS, Android)
