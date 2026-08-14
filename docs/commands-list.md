@@ -11,8 +11,8 @@
 | `man [cmd]` | Show manual for command | *(detailed help page)* |
 | `history` | Show command history | "1. ls<br>2. cd /home<br>3. pwd" |
 | `echo [text]` | Print text | "Hello World" |
-| `date` | Show current date/time | "Tue Dec 10 2024 14:30:22" |
-| `whoami` | Show current user | "user" |
+| `date` | Show current date/time | "Thu Aug 13 2026 14:30:00 GMT+0200 (Midden-Europese zomertijd)" |
+| `whoami` | Show current user | "hacker" |
 | `shortcuts` | Show keyboard shortcuts | "Ctrl+L: clear terminal..." |
 | `welcome` | Toon het welkomstbericht opnieuw | *(welkomstbericht)* |
 
@@ -30,7 +30,7 @@
 | Command | Description | Example Output |
 |---------|-------------|----------------|
 | `challenge` | Start/manage challenges | "15 challenges beschikbaar in 3 niveaus" |
-| `achievements` | Show unlocked badges | "🏆 Badges: 5/21 unlocked" |
+| `achievements` | Show unlocked badges | "[*] Badges: 5/22 ontgrendeld" |
 | `certificates` | Generate completion certificate | "Certificaat gegenereerd! Download of kopieer..." |
 | `dashboard` | Show progress overview | "Stats \| Badges \| Challenges" |
 | `leaderboard` | Show rankings | "Top 10 hackers..." |
@@ -39,10 +39,10 @@
 
 | Command | Description | Example Output |
 |---------|-------------|----------------|
-| `ls` | List files | "documents  downloads  notes.txt" |
-| `ls -la` | List all files with details (flag van `ls`, geen apart command) | "drwxr-xr-x user 4096 Dec 10 .ssh" |
+| `ls` | List files | "documents/  notes.txt  README.txt" |
+| `ls -la` | List all files with details (flag van `ls`, geen apart command) | "drw-r--r--    4096  Oct 14 12:00  documents/" |
 | `cd [path]` | Change directory | *(no output on success)* |
-| `pwd` | Print working directory | "/home/user" |
+| `pwd` | Print working directory | "/home/hacker" |
 | `cat [file]` | Show file contents | *(file content)* |
 | `mkdir [name]` | Create directory | *(no output on success)* |
 | `touch [file]` | Create empty file | *(no output on success)* |
@@ -56,22 +56,26 @@
 
 | Command | Description | Example Output |
 |---------|-------------|----------------|
-| `ping [host]` | Test connectivity | "PING 8.8.8.8: 64 bytes - time=12ms" |
-| `nmap [host]` | Scan ports | "Port 22/tcp OPEN (SSH)<br>Port 80/tcp OPEN (HTTP)" |
-| `ifconfig` | Show network config | "eth0: 192.168.1.100" |
-| `netstat` | Network statistics | "Active connections: 5" |
-| `whois [domain]` | Domain info | "Registrar: Example Inc." |
-| `traceroute [host]` | Trace network path | "1. 192.168.1.1 (1ms)<br>2. 10.0.0.1 (5ms)" |
+| `ping [host]` | Test connectivity | "64 bytes from 8.8.8.8: icmp_seq=1 ttl=64 time=12ms" |
+| `nmap [host]` | Scan ports | "53/tcp OPEN DNS dnsmasq<br>80/tcp OPEN HTTP router admin" (192.168.1.1 = routerprofiel; poort 22 is dicht) |
+| `ifconfig` | Show network config | "eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt; mtu 1500<br>inet 192.168.1.100" |
+| `netstat` | Network statistics | "7 active connections, 4 listening ports" |
+| `whois [domain]` | Domain info | "Registrar: Internet Assigned Numbers Authority" |
+| `traceroute [host]` | Trace network path | "1  router.local (192.168.1.1)  1ms  1ms  1ms" |
 
 ## Security Tools
 
 | Command | Description | Example Output |
 |---------|-------------|----------------|
-| `hashcat [hash]` | Crack password hash | "Cracking...<br>[FOUND] password: admin123" |
-| `hydra [target]` | Brute force attack | "Attempting passwords...<br>[SUCCESS] admin:password" |
-| `sqlmap [url]` | Test SQL injection | "Testing parameters...<br>[VULNERABLE] id parameter" |
-| `metasploit` | Exploitation framework | "msf > show exploits" |
-| `nikto [target]` | Scan web vulnerabilities | "Found: /admin exposed" |
+| `hashcat [hash]` | Crack password hash | "[✓] HASH CRACKED!<br>Password: password" |
+| `hydra <protocol>://<target>` | Brute force attack | "[22][SSH] host: ssh://192.168.1.100<br>login: admin  password: admin" (protocol-prefix is verplicht) |
+| `sqlmap [url]` | Test SQL injection | "[✓] VULNERABLE!<br>backend DBMS: MySQL 5.7.32" |
+| `metasploit` | Exploitation framework | "metasploit v6.3.4-dev<br>2344 exploits - 1377 payloads - 423 post-modules" |
+| `nikto [url]` | Scan web vulnerabilities | "+ /admin/: Directory indexing enabled" |
+
+> Alle vijf de security tools tonen bij het **eerste** gebruik een juridische waarschuwing
+> in plaats van output; het commando nogmaals typen geldt als akkoord
+> (`localStorage['security_tools_consent']`). Zie `.claude/rules/command-checklist.md` §4.
 
 ## Special Commands
 

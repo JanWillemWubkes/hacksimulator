@@ -42,8 +42,8 @@ export default {
       // Format output
       const output = matches.join('\n');
       const tip = matches.length > 1
-        ? `\n\n[?] ${matches.length} regels gevonden met '${args[0]}'. Het getal toont de regelnummer.`
-        : `\n\n[?] 1 regel gevonden. Het getal toont de regelnummer.`;
+        ? `\n\n[?] ${matches.length} regels gevonden met '${args[0]}'. Het getal toont het regelnummer.`
+        : `\n\n[?] 1 regel gevonden. Het getal toont het regelnummer.`;
 
       return output + tip;
 

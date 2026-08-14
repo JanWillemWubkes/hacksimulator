@@ -43,7 +43,7 @@ export default {
   name: 'hydra',
   category: 'security',
   description: 'Network logon brute force tool',
-  usage: 'hydra <target>',
+  usage: 'hydra <protocol>://<target>',
 
   async execute(args, flags, context) {
     // Check if user has given consent for security tools
@@ -80,7 +80,7 @@ GEBRUIK:
 
 [?] OM DOOR TE GAAN:
 
-    Typ 'hydra <target>' opnieuw om te accepteren en door te gaan
+    Typ 'hydra <protocol>://<target>' opnieuw om te accepteren
 
     Voorbeeld: hydra ssh://192.168.1.100
 
@@ -93,7 +93,7 @@ GEBRUIK:
       return `hydra: missing target argument
 
 [?] GEBRUIK:
-   hydra <target>
+   hydra <protocol>://<target>
 
    Voorbeelden:
    • hydra ssh://192.168.1.100

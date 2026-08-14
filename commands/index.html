@@ -226,9 +226,14 @@
           <div class="command-usage">ls [opties] [directory]</div>
           <div class="terminal-example">
             <div class="prompt">$ ls -la</div>
-            <div class="output">drwxr-xr-x 5 hacker hacker 4096 .
--rw-r--r-- 1 hacker hacker 3526 notes.txt
--rw------- 1 hacker hacker  220 .bash_history</div>
+            <div class="output">total 4
+drw-r--r--    4096  Oct 14 12:00  documents/
+-rw-r--r--    1024  Oct 14 12:00  .bash_history
+-rw-r--r--    1024  Oct 14 12:00  notes.txt
+-rw-r--r--    1024  Oct 14 12:00  README.txt
+
+[TIP] De eerste kolom toont type (d=directory,
+-=file) en permissies.</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Bestanden zien, permissions lezen, verborgen bestanden vinden</p>
         </div>
@@ -243,6 +248,7 @@
           <div class="command-usage">cd [directory]</div>
           <div class="terminal-example">
             <div class="prompt">$ cd /var/log</div>
+            <div class="output">[✓] Map gewijzigd naar /var/log</div>
             <div class="prompt">$ pwd</div>
             <div class="output">/var/log</div>
           </div>
@@ -259,7 +265,7 @@
           <div class="command-usage">pwd</div>
           <div class="terminal-example">
             <div class="prompt">$ pwd</div>
-            <div class="output">/home/hacker/Documents</div>
+            <div class="output">/home/hacker</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Filesystem structuur, absolute paden begrijpen</p>
         </div>
@@ -275,7 +281,7 @@
           <div class="terminal-example">
             <div class="prompt">$ cat /etc/passwd</div>
             <div class="output">root:x:0:0:root:/root:/bin/bash
-hacker:x:1000:1000::/home/hacker:/bin/bash</div>
+hacker:x:1000:1000:Ethical Hacker:/home/hacker:/bin/bash</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Bestanden lezen, systeembestanden begrijpen, data extractie</p>
         </div>
@@ -290,8 +296,9 @@ hacker:x:1000:1000::/home/hacker:/bin/bash</div>
           <div class="command-usage">mkdir &lt;directory&gt;</div>
           <div class="terminal-example">
             <div class="prompt">$ mkdir projects</div>
+            <div class="output">[✓] Directory 'projects' aangemaakt</div>
             <div class="prompt">$ ls</div>
-            <div class="output">Documents  Downloads  projects</div>
+            <div class="output">documents/  projects/  notes.txt  README.txt</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Filesystem organisatie, directory structuur opbouwen</p>
         </div>
@@ -305,8 +312,10 @@ hacker:x:1000:1000::/home/hacker:/bin/bash</div>
           <p>Verwijder bestanden of directories. Let op: er is geen prullenbak in de terminal!</p>
           <div class="command-usage">rm [opties] &lt;bestand&gt;</div>
           <div class="terminal-example">
-            <div class="prompt">$ rm old_file.txt</div>
-            <div class="output">Bestand verwijderd: old_file.txt</div>
+            <div class="prompt">$ touch tijdelijk.txt</div>
+            <div class="output">[✓] Bestand 'tijdelijk.txt' aangemaakt</div>
+            <div class="prompt">$ rm tijdelijk.txt</div>
+            <div class="output">[✓] 'tijdelijk.txt' verwijderd</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Veilig verwijderen, -r flag, risico's begrijpen</p>
         </div>
@@ -335,6 +344,8 @@ hacker:x:1000:1000::/home/hacker:/bin/bash</div>
           <p>Verplaats of hernoem bestanden en directories. Twee functies in een command.</p>
           <div class="command-usage">mv &lt;bron&gt; &lt;doel&gt;</div>
           <div class="terminal-example">
+            <div class="prompt">$ cp ~/notes.txt ~/kopie.txt</div>
+            <div class="output">[✓] '~/notes.txt' gekopieerd naar '~/kopie.txt'</div>
             <div class="prompt">$ mv ~/kopie.txt ~/archief.txt</div>
             <div class="output">[✓] '~/kopie.txt' verplaatst naar '~/archief.txt'</div>
           </div>
@@ -350,9 +361,10 @@ hacker:x:1000:1000::/home/hacker:/bin/bash</div>
           <p>Zoek bestanden op naam in het hele filesystem. Onmisbaar voor het vinden van verborgen data.</p>
           <div class="command-usage">find &lt;zoekterm&gt;</div>
           <div class="terminal-example">
-            <div class="prompt">$ find passwords</div>
-            <div class="output">/home/hacker/.hidden/passwords.txt
-/var/backups/old_passwords.bak</div>
+            <div class="prompt">$ find passwd</div>
+            <div class="output">/etc/passwd
+
+[?] Gebruik 'cat &lt;pad&gt;' om de inhoud te bekijken.</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Bestanden zoeken, verborgen bestanden ontdekken, recon technieken</p>
         </div>
@@ -366,8 +378,11 @@ hacker:x:1000:1000::/home/hacker:/bin/bash</div>
           <p>Zoek naar tekst in bestanden. Krachtig voor het doorzoeken van logs, configs en broncode.</p>
           <div class="command-usage">grep &lt;patroon&gt; &lt;bestand&gt;</div>
           <div class="terminal-example">
-            <div class="prompt">$ grep "password" config.txt</div>
-            <div class="output">3: password=my_secret_password</div>
+            <div class="prompt">$ grep "root" /etc/passwd</div>
+            <div class="output">1: root:x:0:0:root:/root:/bin/bash
+
+[?] 1 regel gevonden. Het getal toont het
+regelnummer.</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Tekst zoeken, log analyse, data extractie</p>
         </div>
@@ -381,8 +396,10 @@ hacker:x:1000:1000::/home/hacker:/bin/bash</div>
           <p>Maak een leeg bestand aan. Handig voor het snel aanmaken van configuratie- of scriptbestanden.</p>
           <div class="command-usage">touch &lt;bestand&gt;</div>
           <div class="terminal-example">
-            <div class="prompt">$ touch notes.txt</div>
-            <div class="output">Bestand aangemaakt: notes.txt</div>
+            <div class="prompt">$ touch scan-log.txt</div>
+            <div class="output">[✓] Bestand 'scan-log.txt' aangemaakt</div>
+            <div class="prompt">$ touch scan-log.txt</div>
+            <div class="output">[✓] Tijdstempel van 'scan-log.txt' bijgewerkt</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Bestanden aanmaken, timestamps begrijpen</p>
         </div>
@@ -407,10 +424,13 @@ hacker:x:1000:1000::/home/hacker:/bin/bash</div>
           <div class="command-usage">nmap &lt;target&gt;</div>
           <div class="terminal-example">
             <div class="prompt">$ nmap 192.168.1.1</div>
-            <div class="output">PORT    STATE  SERVICE
-22/tcp  OPEN   SSH      ← Secure Shell
-80/tcp  OPEN   HTTP     ← Webserver
-443/tcp OPEN   HTTPS    ← Versleuteld</div>
+            <div class="output">PORT      STATE   SERVICE   VERSION
+53/tcp    OPEN    DNS       dnsmasq
+   ← DNS: Name resolution
+80/tcp    OPEN    HTTP      router admin
+443/tcp   OPEN    HTTPS     router admin
+
+Port summary: 3 open, 997 closed, 0 filtered</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Poort scanning, service detectie, attack surface analyse</p>
         </div>
@@ -425,8 +445,12 @@ hacker:x:1000:1000::/home/hacker:/bin/bash</div>
           <div class="command-usage">ping &lt;host&gt;</div>
           <div class="terminal-example">
             <div class="prompt">$ ping 8.8.8.8</div>
-            <div class="output">PING 8.8.8.8: 64 bytes, time=12.3ms
-PING 8.8.8.8: 64 bytes, time=11.8ms</div>
+            <div class="output">PING 8.8.8.8: 56 data bytes
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=64 time=12ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=64 time=11ms
+
+--- 8.8.8.8 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> ICMP protocol, latency meten, host discovery</p>
         </div>
@@ -441,9 +465,13 @@ PING 8.8.8.8: 64 bytes, time=11.8ms</div>
           <div class="command-usage">traceroute &lt;bestemming&gt;</div>
           <div class="terminal-example">
             <div class="prompt">$ traceroute google.com</div>
-            <div class="output"> 1  router.local    1.2ms
- 2  isp-gw.nl      8.5ms
- 3  google.com     12.1ms</div>
+            <div class="output">traceroute to google.com, 30 hops max
+
+  1  router.local (192.168.1.1)  1ms  1ms  1ms
+  2  gateway.isp.net (10.0.0.1)  8ms  9ms  8ms
+  3  core1.isp.net (81.206.165.1)  12ms  11ms  13ms
+  4  edge.google.net (72.14.238.10)  15ms  16ms  14ms
+  5  google.com (142.250.185.46)  16ms  15ms  16ms</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Network routing, TTL, hop-by-hop analyse</p>
         </div>
@@ -458,10 +486,15 @@ PING 8.8.8.8: 64 bytes, time=11.8ms</div>
           <div class="command-usage">netstat</div>
           <div class="terminal-example">
             <div class="prompt">$ netstat</div>
-            <div class="output">Proto  Local Address     State
-tcp    0.0.0.0:22       LISTEN
-tcp    0.0.0.0:80       LISTEN
-tcp    10.0.0.1:443     ESTABLISHED</div>
+            <div class="output">Active Internet connections
+
+Proto  Local Address     Foreign Address   State
+tcp    127.0.0.1:5432    0.0.0.0:*         LISTEN
+   ← PostgreSQL
+tcp    0.0.0.0:22        0.0.0.0:*         LISTEN
+   ← SSH
+tcp    192.168.1.100:52341  93.184.216.34:443  ESTABLISHED
+   ← HTTPS naar CDN</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Actieve verbindingen monitoren, verdachte connecties detecteren</p>
         </div>
@@ -476,9 +509,14 @@ tcp    10.0.0.1:443     ESTABLISHED</div>
           <div class="command-usage">ifconfig</div>
           <div class="terminal-example">
             <div class="prompt">$ ifconfig</div>
-            <div class="output">eth0: inet 192.168.1.100
-      ether 00:1a:2b:3c:4d:5e
-      RX bytes: 1.2GB  TX bytes: 340MB</div>
+            <div class="output">eth0: flags=4163&lt;UP,BROADCAST,RUNNING&gt;  mtu 1500
+        inet 192.168.1.100  ← Je lokale IP adres
+        netmask 255.255.255.0
+        ether 08:00:27:3f:2a:1b  ← MAC adres
+        RX packets 15234  bytes 12847291 (12.8 MB)
+
+lo: flags=73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536
+        inet 127.0.0.1  ← Loopback (localhost)</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> IP-adressen, MAC-adressen, network interfaces</p>
         </div>
@@ -493,10 +531,13 @@ tcp    10.0.0.1:443     ESTABLISHED</div>
           <div class="command-usage">whois &lt;domein&gt;</div>
           <div class="terminal-example">
             <div class="prompt">$ whois example.com</div>
-            <div class="output">Domain: example.com
-Registrar: ICANN
-Created: 1995-08-14
-Expires: 2025-08-13</div>
+            <div class="output">Domain Name: EXAMPLE.COM
+
+Registrar Info:
+   Registrar: Internet Assigned Numbers Authority
+      ← Waar domain geregistreerd is
+   Created: 1995-08-14
+   Expires: Reserved</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> OSINT, domein onderzoek, registrar informatie</p>
         </div>
@@ -508,6 +549,7 @@ Expires: 2025-08-13</div>
     <section id="security" class="page-section commands-category">
       <h2>Security commands</h2>
       <p>Ontdek hoe professionals systemen testen op kwetsbaarheden. Deze tools worden in de simulator alleen educatief gebruikt — in de echte wereld heb je altijd schriftelijke toestemming nodig. Achtergrond nodig? Lees <a href="/blog/wachtwoord-beveiliging.html">hoe hackers wachtwoorden kraken</a> en <a href="/blog/sql-injection-uitgelegd.html">wat SQL injection is</a>.</p>
+      <p><strong>Let op:</strong> de eerste keer dat je een van deze tools gebruikt, toont de terminal eerst een juridische waarschuwing. Typ het commando daarna nog een keer om door te gaan. De voorbeelden hieronder tonen wat je ná die stap ziet.</p>
 
       <div class="commands-grid">
 
@@ -521,10 +563,14 @@ Expires: 2025-08-13</div>
           <div class="command-usage">hashcat &lt;hash&gt;</div>
           <div class="terminal-example">
             <div class="prompt">$ hashcat 5f4dcc3b5aa765d61d8327deb882cf99</div>
-            <div class="output">Hash type: MD5
-Status: CRACKED
-5f4dcc3b...cf99 → password
-[!] Tijd: 0.003s - te zwak!</div>
+            <div class="output">hashcat v6.2.5 - Password Recovery Tool
+
+[*] Detecting hash type... MD5 detected
+    ← Hash algoritme identificatie
+[*] Loading wordlist... rockyou.txt (14,344,391 words)
+
+[✓] HASH CRACKED!
+Password: password</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Hash algoritmes, wachtwoord sterkte, waarom MD5 onveilig is</p>
         </div>
@@ -536,13 +582,16 @@ Status: CRACKED
             <span class="command-level command-level-advanced">Advanced</span>
           </div>
           <p>Test login-beveiliging met brute force aanvallen. Begrijp waarom rate limiting en sterke wachtwoorden nodig zijn.</p>
-          <div class="command-usage">hydra &lt;target&gt;</div>
+          <div class="command-usage">hydra &lt;protocol&gt;://&lt;target&gt;</div>
           <div class="terminal-example">
-            <div class="prompt">$ hydra 192.168.1.1</div>
-            <div class="output">[22][ssh] host: 192.168.1.1
-[ATTEMPT] admin:password
-[ATTEMPT] admin:123456
-[SUCCESS] admin:admin123</div>
+            <div class="prompt">$ hydra ssh://192.168.1.100</div>
+            <div class="output">[DATA] attacking SSH on port 22
+   ← Service identificatie
+[STATUS] 47 login attempts to test
+
+[22][SSH] host: ssh://192.168.1.100
+   login: admin     ← Username gevonden!
+   password: admin  ← Password gekraakt!</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Brute force aanvallen, login beveiliging, verdedigingsmaatregelen</p>
         </div>
@@ -557,10 +606,17 @@ Status: CRACKED
           <div class="command-usage">sqlmap &lt;url&gt;</div>
           <div class="terminal-example">
             <div class="prompt">$ sqlmap http://target.com/login</div>
-            <div class="output">[*] Testing parameter 'id'...
-[VULNERABLE] SQL injection found!
-Type: UNION query
-Database: MySQL 5.7</div>
+            <div class="output">[INFO] testing if GET parameter 'id' is injectable
+[WARNING] reflective value(s) found
+   ← Parameter wordt terug getoond
+
+[✓] VULNERABLE!
+
+[INFO] backend DBMS: MySQL 5.7.32
+available databases [3]:  ← Database geëxtraheerd
+[*] information_schema
+[*] shop_db
+[*] users_db</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> SQL injection, database beveiliging, parameterized queries</p>
         </div>
@@ -575,11 +631,15 @@ Database: MySQL 5.7</div>
           <div class="command-usage">metasploit</div>
           <div class="terminal-example">
             <div class="prompt">$ metasploit</div>
-            <div class="output">       =[ metasploit v6.3.0 ]
-+ -- --=[ 2300+ exploits ]
-+ -- --=[ 1100+ auxiliary ]
+            <div class="output">[!] metasploit is een offensive tool — gebruik het
+    ALLEEN op systemen waar je schriftelijk
+    toestemming voor hebt.
 
-msf6 > _</div>
+metasploit v6.3.4-dev
+2344 exploits - 1377 payloads - 423 post-modules
+
+   exploit   ← code die een gat in software uitbuit
+   payload   ← wat er draait NA een geslaagde exploit</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Exploit frameworks, vulnerability databases, professioneel pentesten</p>
         </div>
@@ -594,10 +654,14 @@ msf6 > _</div>
           <div class="command-usage">nikto &lt;url&gt;</div>
           <div class="terminal-example">
             <div class="prompt">$ nikto http://target.com</div>
-            <div class="output">+ Server: Apache/2.4.41
-+ /.git/ - Git repository gevonden!
-+ /admin/ - Admin panel exposed
-- X-Frame-Options header ontbreekt</div>
+            <div class="output">+ Server: Apache/2.4.41 (Ubuntu)
+   ← Server fingerprinting
++ The anti-clickjacking X-Frame-Options header is
+  not present  ← Security header missing
++ /admin/: Directory indexing enabled
+   ← Sensitive directory exposed
++ /config.php.bak: Configuration backup file found
+   ← Config backup (credentials?)</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Web kwetsbaarheden, security headers, server hardening</p>
         </div>
@@ -637,7 +701,8 @@ msf6 > _</div>
           <div class="command-usage">date</div>
           <div class="terminal-example">
             <div class="prompt">$ date</div>
-            <div class="output">Mon Feb 10 14:30:00 CET 2026</div>
+            <div class="output">Thu Aug 13 2026 14:30:00 GMT+0200
+(Midden-Europese zomertijd)</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Systeem tijd, timestamps, tijdzones</p>
         </div>
@@ -788,8 +853,8 @@ Stap 1/4: Test connectiviteit
             <div class="output">CHALLENGE: Network Scout (Easy)
 
 Vereisten:
-  [ ] Scan een doelwit met ping
-  [ ] Ontdek open poorten met nmap</div>
+  [ ] Ping een doelwit
+  [ ] Scan poorten met nmap</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Zelfstandig problemen oplossen, pentest workflows</p>
         </div>
@@ -804,10 +869,10 @@ Vereisten:
           <div class="command-usage">leerpad</div>
           <div class="terminal-example">
             <div class="prompt">$ leerpad</div>
-            <div class="output">Fase 1: Terminal Basics    [====] 100%
-Fase 2: Bestandsbeheer     [==  ]  50%
-Fase 3: Reconnaissance     [    ]   0%
-Fase 4: Security Tools     [locked]</div>
+            <div class="output">FASE 1: TERMINAL BASICS    [====] 100%
+FASE 2: FILE MANIPULATION  [==  ]  50%
+FASE 3: RECONNAISSANCE     [    ]   0%
+FASE 4: SECURITY TOOLS     [locked]</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Gestructureerd leren, voortgang bijhouden, progressie</p>
         </div>
@@ -840,9 +905,9 @@ Fase 4: Security Tools     [locked]</div>
           <div class="terminal-example">
             <div class="prompt">$ achievements</div>
             <div class="output">BADGE GALERIJ
-  [*] First Blood     — Eerste command uitgevoerd
-  [#] Network Scout   — Eerste nmap scan
-  [?] ???             — Ontgrendel meer badges!</div>
+  [*] First Steps    — Voer je allereerste commando uit
+  [#] Network Novice — Gebruik een network commando
+  [?] ???            — Ontgrendel meer badges!</div>
           </div>
           <p class="command-learn"><strong>Wat leer je:</strong> Gamification, motivatie door beloningen</p>
         </div>

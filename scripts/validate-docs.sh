@@ -1077,6 +1077,46 @@ else
 fi
 
 # ============================================================
+# Check 15: de voorbeelden op /commands/ werken echt in de simulator
+#   Hard constraint — fast + --deep. Aanleiding (Sessie 222): de 41 command-namen
+#   op commands/index.html liepen exact in de pas met de registry, maar de
+#   VOORBEELDEN op die kaarten waren nooit tegen de code getoetst. `find passwords`
+#   wees naar twee paden die niet bestaan, `grep "password" config.txt` naar een
+#   bestand dat er niet is, `pwd` naar /home/hacker/Documents terwijl de map
+#   `documents` heet (vfs.js:146 doet een directe children-lookup, dus case-sensitive).
+#   Een beginner die het voorbeeld overtypte kreeg een foutmelding — precies de
+#   omgekeerde les voor een leersimulator.
+#
+#   Het script draait elk voorbeeld via de echte codepad (verse VFS per kaart) en
+#   toetst drie POSITIEVE invarianten: A het commando is geregistreerd, B het levert
+#   geen foutmelding op, C elk /home/-pad in de getoonde output bestaat echt.
+#   C is er niet voor de sier: A en B kijken alleen naar de prompt, dus zonder C
+#   blijft de pwd-bug — de aanleiding — groen. Gemeten met 5 mutanten: 5 rood, herstel
+#   groen, en alle drie de checks vuren minstens één keer.
+#
+#   Grondwaarheid komt uit src/main.js en de mapstructuur, niet uit een lijst in het
+#   script, zodat deze check niet zelf het volgende is dat veroudert.
+# ============================================================
+check_start "Voorbeelden op /commands/ ↔ echte command-output"
+
+if [ ! -f scripts/verify-command-examples.mjs ]; then
+  fail "15: scripts/verify-command-examples.mjs ontbreekt"
+elif ! command -v node >/dev/null 2>&1; then
+  pass "node niet beschikbaar — commandsvoorbeelden overgeslagen"
+else
+  # --no-warnings: package.json heeft geen "type": "module", dus Node waarschuwt
+  # per geladen module. Die ruis hoort niet in de validatie-output.
+  cmdex_out=$(node --no-warnings scripts/verify-command-examples.mjs 2>&1)
+  if [ $? -eq 0 ]; then
+    pass "$(echo "$cmdex_out" | sed 's/^\[✓\] //')"
+  else
+    while IFS= read -r regel; do
+      [ -n "$regel" ] && fail "15: $(echo "$regel" | sed 's/^ *//')"
+    done <<< "$(echo "$cmdex_out" | grep -E '^\s+cmd-')"
+  fi
+fi
+
+# ============================================================
 echo ""
 echo "=========================================="
 if [ "$DEEP_MODE" = "1" ]; then
