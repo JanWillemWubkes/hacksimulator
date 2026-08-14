@@ -125,7 +125,7 @@ class Renderer {
         lastSemanticType = lineType;
       }
 
-      line.className = `terminal-line terminal-output terminal-output-${lineType}`;
+      line.className = `terminal-line terminal-output terminal-output-${lineType}` + getBoxLineClass(lineText);
 
       // Store indent level for CSS hanging indent (mobile) — houdt wrappende
       // marker/ingesprongen regels uitgelijnd. Zie Sessie 84/85 + getLineIndent().
@@ -331,7 +331,7 @@ class Renderer {
         lastSemanticType = lineType;
       }
 
-      line.className = 'terminal-line terminal-output terminal-output-' + lineType;
+      line.className = 'terminal-line terminal-output terminal-output-' + lineType + getBoxLineClass(lineText);
 
       var indent = getLineIndent(lineText);
       if (indent !== null) line.dataset.indent = indent;
@@ -585,6 +585,31 @@ function getLineIndent(lineText) {
   if (hang !== null) return hang;
   const lead = getLeadingSpaces(lineText);
   return lead >= 1 ? lead : null;
+}
+
+/**
+ * Extra klasse(n) voor een regel die met een box-drawing-glyph begint (U+2500-257F).
+ *
+ * Waarom: .terminal-line draagt margin-bottom: var(--spacing-xs) = 4px. Box-regels zijn
+ * losse block-elementen en een verticale glyph (│/┃) tekent alléén binnen zijn eigen
+ * linebox — nooit over die marge heen. Elke marge werd dus een zichtbaar gat in de rand.
+ * Gemeten Sessie 222 op de gerenderde randkolom: 12 stubs van 27px met 4px gaten, en
+ * 8px op regels met een pijl — vandaar dat .marker-arrow/.inline-arrow in terminal.css
+ * met position:relative werken i.p.v. vertical-align (die telt mee in de linebox).
+ *
+ * De sluitregel (╰/┗) houdt zijn marge wél: die scheidt de box van wat erna komt.
+ * Gedeeld door beide render-paden zodat ze niet uit sync lopen, net als getLineIndent().
+ * @private
+ * @param {string} lineText - Ruwe regeltekst (vóór _formatText)
+ * @returns {string} '' of ' terminal-line--box[ terminal-line--box-end]'
+ */
+function getBoxLineClass(lineText) {
+  const first = lineText[0];
+  // Box Drawing-blok: U+2500 '─' t/m U+257F '╿'
+  if (!first || first < '─' || first > '╿') return '';
+  return (first === '╰' || first === '┗')
+    ? ' terminal-line--box terminal-line--box-end'
+    : ' terminal-line--box';
 }
 
 // Export as singleton

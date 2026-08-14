@@ -91,8 +91,9 @@ async function executeCommand(page, command) {
  *
  * Detector: element-hoogte > 1.5× line-height = gewrapt (een echte wrap
  * verdubbelt de hoogte). NB: rect-top-vergelijking of rects.length zijn GEEN
- * betrouwbare indicatoren — inline spans (marker-arrow heeft vertical-align:
- * 3.6px) verschuiven rects op dezelfde visuele regel (gemeten vals-positief).
+ * betrouwbare indicatoren — inline spans verschuiven rects op dezelfde visuele
+ * regel (gemeten vals-positief). Dat gold voor de vertical-align van .marker-arrow
+ * en geldt sinds Sessie 222 nog steeds, want die verschuift nu met position:relative.
  */
 async function measureBoxLineWraps(page) {
   return page.evaluate(() => {
@@ -117,6 +118,69 @@ async function measureBoxLineWraps(page) {
       }
     }
     return { boxLineCount, wrapped };
+  });
+}
+
+/**
+ * Meet of de VERTICALE randen van een box ononderbroken doorlopen.
+ *
+ * Waarom dit los van measureBoxLineWraps() staat: die meet uitsluitend of een regel
+ * wrapt — een horizontale eigenschap. De rand kan pixel-perfect uitgelijnd zijn en
+ * tóch als streepjeslijn renderen, want een verticale glyph (│/┃) tekent alleen binnen
+ * zijn eigen linebox. Elke ruimte tussen twee opeenvolgende box-regels (margin-bottom,
+ * een vertical-align die de linebox oprekt, of een line-height die boven de glyphhoogte
+ * uitgroeit) wordt dan een zichtbaar gat. Dat is de bug uit Sessie 222; hij stond
+ * jarenlang groen omdat geen enkele assertie de verticale as raakte.
+ *
+ * Predicaat: pitch (top-tot-top van twee aangrenzende box-regels) mag niet groter zijn
+ * dan de ink-hoogte van de randglyph. Eén conditie die drie regressieklassen dekt.
+ * Alleen aangrenzende siblings worden vergeleken, en nooit over een blokgrens (╰/┗)
+ * heen — ruimte tússen twee boxen hoort er juist te zijn.
+ */
+async function measureBoxVerticalGaps(page) {
+  return page.evaluate(async () => {
+    const out = document.getElementById('terminal-output');
+    const cs = getComputedStyle(out);
+
+    // Het boxfont wordt pas aangevraagd zodra er een box-glyph gerenderd wordt, dus
+    // fonts.ready alléén is geen garantie: zonder deze load meet je een fallback-font
+    // met een andere ink-hoogte (gemeten Sessie 222).
+    await document.fonts.load(`${cs.fontSize} ${cs.fontFamily}`, '│┃');
+
+    const ctx = document.createElement('canvas').getContext('2d');
+    ctx.font = `${cs.fontSize} ${cs.fontFamily}`;
+    const inkHeight = (ch) => {
+      const m = ctx.measureText(ch);
+      return m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
+    };
+    const ink = { '│': inkHeight('│'), '┃': inkHeight('┃') };
+
+    const isBox = (t) => !!t && t[0] >= '─' && t[0] <= '╿';
+    const isBlockEnd = (t) => t[0] === '╰' || t[0] === '┗';
+
+    const gaps = [];
+    let boxLineCount = 0;
+    for (const el of out.querySelectorAll('.terminal-line')) {
+      const text = el.textContent || '';
+      if (!isBox(text)) continue;
+      boxLineCount++;
+
+      const prev = el.previousElementSibling;
+      if (!prev || !prev.classList.contains('terminal-line')) continue;
+      const prevText = prev.textContent || '';
+      if (!isBox(prevText)) continue;
+      if (isBlockEnd(prevText)) continue; // nieuwe box onder een afgesloten box
+
+      const pitch = el.getBoundingClientRect().top - prev.getBoundingClientRect().top;
+      const glyphInk = ink[text[0] === '┃' || prevText[0] === '┃' ? '┃' : '│'];
+      if (pitch > glyphInk + 0.5) {
+        gaps.push(
+          `gat ${(pitch - glyphInk).toFixed(2)}px (pitch ${pitch.toFixed(2)} > ink ` +
+          `${glyphInk.toFixed(2)}) bij: ${text.slice(0, 34)}`
+        );
+      }
+    }
+    return { boxLineCount, gaps };
   });
 }
 
@@ -556,6 +620,81 @@ test.describe('Mobile/Desktop Hybrid UI (ASCII Checkbox Fix)', () => {
       expect(wrapped).toEqual([]);
     }
   });
+});
+
+// ─────────────────────────────────────────────────
+// Verticale randcontinuïteit (Sessie 222)
+// ─────────────────────────────────────────────────
+
+test.describe('Box-randen lopen verticaal door', () => {
+  // Commando's gekozen op faalklasse, niet op aantal:
+  //   next/leerpad → bevatten '→' (de span die de linebox oprekt);
+  //   metasploit   → zware charset ┏━┃ + de box uit de bugmelding;
+  //   help         → grootste blok, meerdere boxen onder elkaar (blokgrens-test).
+  // De breedte doet er voor deze invariant niet toe (het is ruimte tússen block-
+  // elementen), dus twee desktopbreedtes volstaan i.p.v. de volle VIEWPORTS-matrix.
+  const CASES = ['next', 'metasploit', 'leerpad', 'help'];
+  const WIDTHS = [1440, 900];
+
+  for (const width of WIDTHS) {
+    for (const cmd of CASES) {
+      test(`${cmd} @${width}px - geen gaten in de verticale rand`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto('/terminal.html');
+        await acceptLegalModal(page);
+        await closeMobileMenu(page);
+
+        await executeCommand(page, cmd);
+
+        const { boxLineCount, gaps } = await measureBoxVerticalGaps(page);
+        // Vangnet: gaat de box-render ooit stuk, dan mag deze test niet stilletjes
+        // groen worden op nul regels.
+        expect(boxLineCount).toBeGreaterThan(2);
+        expect(gaps).toEqual([]);
+      });
+    }
+  }
+
+  // Het scenario uit de bugmelding: box staat er al en het venster verandert. Onder
+  // 768px zakt de fontgrootte naar 16px; met de mobiele line-height van 1.6 wordt de
+  // regelafstand 25,6px — fractioneel én vrijwel gelijk aan de glyphhoogte, waardoor
+  // de rasterisatie alsnog naden van 1px liet vallen (gemeten: 9 naden, 97,8% dekking).
+  // Box-regels volgen daarom --line-height (1.5 → 24px, integer).
+  test('reflow naar smal venster - rand blijft ononderbroken', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/terminal.html');
+    await acceptLegalModal(page);
+    await closeMobileMenu(page);
+
+    await executeCommand(page, 'next');
+    await page.setViewportSize({ width: 700, height: 900 });
+    await page.waitForTimeout(700); // reflow-debounce is 250ms
+
+    const { boxLineCount, gaps } = await measureBoxVerticalGaps(page);
+    expect(boxLineCount).toBeGreaterThan(2);
+    expect(gaps).toEqual([]);
+
+    // en hij mag door het versmallen ook niet gaan wrappen
+    const { wrapped } = await measureBoxLineWraps(page);
+    expect(wrapped).toEqual([]);
+  });
+
+  // De commando's uit de bugmelding stonden niet in COMMANDS, dus de wrap-detector
+  // dekte ze nooit. Hier alsnog, op dezelfde breedtes.
+  for (const cmd of ['next', 'metasploit']) {
+    test(`${cmd} @1440px - box-regels wrappen niet`, async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await page.goto('/terminal.html');
+      await acceptLegalModal(page);
+      await closeMobileMenu(page);
+
+      await executeCommand(page, cmd);
+
+      const { boxLineCount, wrapped } = await measureBoxLineWraps(page);
+      expect(boxLineCount).toBeGreaterThan(2);
+      expect(wrapped).toEqual([]);
+    });
+  }
 });
 
 // ─────────────────────────────────────────────────
