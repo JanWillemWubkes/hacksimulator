@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 221)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 222)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -83,6 +83,23 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ---
 
 ## Recent Critical Learnings
+
+### Sessie 222: De box-randen braken verticaal — en zes eerdere fixes zochten allemaal in de breedte (14 aug 2026)
+⚠️ **Never:**
+- Een defect blijven repareren op de **as waar het symptoom naar wijst**. "De rand breekt" leest als breedte, dus Sessie 81/82/189/202/204/205 deden font-subset, canvas-advance, width-contract en reflow. Doorgemeten klopte die kant al volledig: boxfont byte-identiek + `loaded`, álle glyphs exact **10,8px** net als latin, rechterrand-spreiding **≤0,04px** over 8 commando's, nul wraps. De breuk zat in de **verticale** as — `.terminal-line` heeft `margin-bottom: 4px` en een `│`/`┃` tekent alleen binnen zijn eigen linebox. Een monospace-raster heeft twee assen; controleer de andere voordat je de bekende opnieuw optimaliseert.
+- `vertical-align` gebruiken om een glyph optisch op te tillen op een plek waar regelhoogte telt. Het doet **mee in de linebox-berekening**: `.marker-arrow{vertical-align:.2em}` maakte elke regel met een pijl 3,59px hoger en dus het gat 8px i.p.v. 4px. `position: relative; top: -.2em` geeft dezelfde optische nudge en raakt de layout niet. Meetbaar verschil: variant "alleen marge weg" gaf pitch {27; **30,59**}, pas met `position:relative` werd het uniform {27}.
+- Een `rgba`-achtige bijna-gelijkheid vertrouwen zonder marge uit te rekenen. Onder 768px is de regelafstand **25,6px** en de glyph-ink **~25,78px** — 0,18px overlap, en dat eet de rasterisatie op: **9 naden van 1px, 97,8% dekking**. De grijswaarden in die naden (7-13) waren gelijk aan de achtergrond (10,3), dus echte gaten. Een integer regelafstand (`--line-height` → 27px/24px) lost het op; "het pást wiskundig" is geen bewijs dat het rendert.
+- Meten vóór `document.fonts.load()`. `fonts.ready` resolvet terwijl `JetBrains Mono Box` nog op `loading` staat, want dat font wordt pas aangevraagd zodra er een box-glyph gerenderd wordt. Mijn eerste meting gaf daardoor **drie** advances (10,8 / 10,802 / 10,8371) uit fallback-fonts en wees vals naar fontmetrics — precies de conclusie die al zes sessies rondzingt.
+- Een assertie schrijven die één **as** van het probleem meet en denken dat de klasse gedekt is. `measureBoxLineWraps()` meet uitsluitend of een regel wrapt; de rand kan pixel-perfect uitgelijnd zijn en tóch als streepjeslijn renderen. Daarom stond deze bug jarenlang groen. En: de twee gemelde commando's (`next`, `metasploit`) stonden **niet eens in `COMMANDS`**.
+- Een `--global-timeout` kiezen zonder te weten hoe lang de suite duurt. Ik gaf 420 chromium-tests 25 minuten; hij liep eroverheen en zou afkappen — de Sessie 216-val waarbij "did not run" onder een regel "passed" bijna als groen leest. Afgebroken en **niet geteld**, niet "waarschijnlijk goed" gemeld.
+
+✅ **Always:**
+- Falsificeer de **staande** diagnose expliciet en leg de metingen vast. Vijf beweringen ("font corrupt", "advances wijken af", "horizontaal stuk", "reflow stuk", "letter-spacing") zijn stuk voor stuk doorgemeten en alle vijf onwaar. Dat is de helft van het antwoord: zonder die tabel gaat sessie zeven weer aan de breedte sleutelen.
+- Bewijs een layoutfix op **gerenderde pixels**, niet op `getComputedStyle`. De randkolom uitlezen gaf "27px ink … 4px gat … (12 stubs)" vóór en "één run van 293px" ná, en @760px "97,8% / 9 naden" → "100,0% / 0 naden". Cijfers uit de DOM hadden de 1px-naden nooit laten zien.
+- Kies mutanten die **verschillend** falen. Marge terug → 9 rood (overlevers: de wrap-tests, terecht). `vertical-align` terug → 7 rood, en `metasploit` blijft groen omdat die box geen pijl heeft. `line-height` terug → 1 rood, alleen de reflow-test. Drie identieke faalpatronen zouden betekenen dat twee asserties overbodig zijn.
+- Win op **specificiteit**, niet op `!important`, als een later ladend bestand dezelfde property zet. `.terminal-output{line-height:1.6}` in `mobile.css` (0,1,0) laadt ná `terminal.css`; daarom staan de box-regels op twee klassen (0,2,0). Mijn live-experiment werkte alleen omdat een geïnjecteerde `<style>` als laatste komt — dat is géén bewijs dat de echte regel wint.
+- Start de no-store-server op een **verse poort** als de debugbrowser een oude module vasthoudt. Ik kreeg `'certificate-templates.js' does not provide an export named 'CERT_DISCLAIMER'` terwijl de export op schijf én over de lijn bestond; nieuwe origin = lege cache. `?cb=` bust submodules niet.
+- Controleer de metriek die je overschrijft. TASKS.md/CLAUDE.md claimden **296** `test()`-declaraties terwijl de boom er op `HEAD~1` **300** had, en de bundelregel stond op "1050 → 1100 (Sessie 214)" terwijl de constante sinds Sessie 217 **1120** is. Beide gecorrigeerd; attributie van de +3 declaraties gaat naar deze commit, niet naar de drift.
 
 ### Sessie 221: Vijf commits over drie dagen — en de regel die twee van hen stuurde, bleek zelf fout (12 aug 2026)
 ⚠️ **Never:**
@@ -187,26 +204,8 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
   heet, leest niemand de foutmelding nog — en dan loopt een verkeerde diagnose net zo lang mee
   als de test.
 
-### Sessie 216: De CTA-balk verscheen waar hij niets toevoegde — en de guard die dat bewaakte, scrollde nooit (09 aug 2026)
-⚠️ **Never:**
-- `window.scrollTo(0, y)` in een synchrone lus zetten om scrollposities te meten. `html { scroll-behavior: smooth }` staat in `animations.css`, dus die aanroep **animeert**: 13× in één `page.evaluate`-tick liet `scrollY` op **2px** steken. De conversie-guard asserteerde daardoor dertien keer dezelfde ongescrollde pagina — een zwaardere blinde vlek dan het probleem waarvoor hij herschreven werd. `behavior: 'instant'` plus een await per stap.
-- `entry.isIntersecting` lezen als "voldoet aan mijn threshold". Die is `true` zodra het doel de root ráákt, ongeacht de threshold — bij het passeren van 0.5 vuurt de callback en levert `isIntersecting: true` met ratio 0.4. Wie daarop beslist, beslist op iets anders dan hij denkt.
-- Een bounding box als bewijs van zichtbaarheid nemen. Een `visibility: hidden` balk houdt zijn box van 65px, dus de oude assertie kon een verborgen CTA niet van een aantikbare onderscheiden. Hit-testing (`elementFromPoint`) op het midden is de meting die telt.
-- `transition: all` laten staan op een element dat zijn `visibility` **erft** van een ouder die je toggelt. De overerving loopt dan als transitie mee: gemeten liep de knop ~150ms achter op zijn balk — een onzichtbaar tikdoel dat nog reageert, en andersom een zichtbare balk waar een tik niets doet. Beide gaten bestaan alleen ná een toestandswissel, dus geen meting "in rust" ziet ze.
-- Aannemen dat een toestandswissel "naar de veilige kant faalt". Mijn plan claimde dat letterlijk voor beide richtingen en het was precies verkeerd om. Zo'n claim is een hypothese tot je hem in het overgangsvenster meet, niet erna.
-- Een `--global-timeout` kiezen die krapper is dan de suite. De volle run over drie motoren duurt >48 min; hij kapte af met **"78 did not run"** onder een regel "859 passed" — dat leest bijna als groen.
-- Een grens tussen twee concurrerende invarianten op gevoel kiezen. "Verberg zodra hij het scherm raakt" breekt de tikbaarheid (een strookje van 1px is geen tikdoel); "pas bij volledig zichtbaar" opent ~24px scroll waarin er twee identieke CTA's staan. Alleen "midden vrij" maakt béíde waar.
 
-✅ **Always:**
-- Los een "mechanisme A of B"-vraag op door eerst de **regel** op te schrijven; het mechanisme volgt er dan uit. `sticky` versus IO leek de keuze, maar de echte keuze was waar de balk opzij hoort te stappen — en zodra die grens er stond (*balk verborgen ⟺ CTA-midden aantikbaar*), was IO simpelweg de goedkoopste manier om hem te draaien.
-- Gebruik een observer als **trigger** en één geometrisch predicaat als **regel**. Dat vermijdt de `isIntersecting`-val, houdt de regel op één plek, en blijft correct als de `rootMargin` veroudert — bij toestelrotatie klopte de staat in alle vier de gemeten toestanden terwijl de observer nog met portretmarges liep.
-- Bewijs "strenger dan de oude versie" met een mutant waarop de **oude groen** is en de **nieuwe rood**. Balk altijd `visibility: hidden` → oude guard 3× groen, nieuwe 3× rood met zes benoemde posities. Zonder die tweezijdige uitkomst is "strenger" een bewering.
-- Kies de mutant die de **assertie zelf** laat vuren, niet de setup. Tegen `git archive HEAD` faalde de chip-test op zijn `waitForFunction` — dat bewijst "mechanisme afwezig", niet "de bedekkingsassertie ziet de bug". De CSS-mutant liet hem wél vuren, en gaf exact `375x812 groen / 360x800 + 390x844 rood`: dezelfde verdeling als de oorspronkelijke meting.
-- Meet een invariant op een resolutie die je test niet haalt. De guard stapt 0,9 viewport; een sweep van **884-893 posities à 10px** in drie engines liet zien dat er nul gaten en nul dubbels zijn — dat kán een grofmazige test niet aantonen.
-- Beantwoord "is deze faler van mij?" met het **codepad** als dat kan, niet met een steekproef. Alle falers draaiden op `/terminal.html`, dat geen van de drie gewijzigde bestanden laadt — dat is sterker en goedkoper dan 8× per kant draaien.
-- Corrigeer je eigen meetfout hardop. `grep -c "[webkit]"` gaf 0 terwijl er 237 WebKit-tests groen stonden: de haken zijn een karakterklasse, dus ik zocht naar één teken uit `webkit`. Ik had daarop "WebKit moet nog beginnen" gemeld.
-
-**Rotation:** Top-6 huidig: 216-217-218-219-220-221 (Sessie 215 → `docs/sessions/current.md` via 1-in-1-out, Sessie 221). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 220 (205-209 → `archive-s205-s209.md`, byte-geverifieerd); current.md houdt nu het rolling window 210-220 (14 secties: 11 entries + de learnings van 212, 213 en 214). **Volgende bulk-rotatie Sessie 225 → archiveer de staart (210-214).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10"). Twee dingen die bij Sessie 220 bleken: (a) een learnings-blok hoort mee te gaan met de sessie waar het bij staat, anders blijft "Sessie N — learnings" achter terwijl entry N in het archief zit; (b) de SESSIONS.md-index dríft — hij claimde window "205-215" terwijl current.md er 15 hield, dus controleer hem bij elke bulk. Historie 81-209 → `archive-s205-s209.md` + `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 217-218-219-220-221-222 (Sessie 216 → `docs/sessions/current.md` via 1-in-1-out, Sessie 222). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 220 (205-209 → `archive-s205-s209.md`, byte-geverifieerd); current.md houdt nu het rolling window 210-220 (14 secties: 11 entries + de learnings van 212, 213 en 214). **Volgende bulk-rotatie Sessie 225 → archiveer de staart (210-214).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10"). Twee dingen die bij Sessie 220 bleken: (a) een learnings-blok hoort mee te gaan met de sessie waar het bij staat, anders blijft "Sessie N — learnings" achter terwijl entry N in het archief zit; (b) de SESSIONS.md-index dríft — hij claimde window "205-215" terwijl current.md er 15 hield, dus controleer hem bij elke bulk. Historie 81-209 → `archive-s205-s209.md` + `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -255,7 +254,7 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Bij elke sessie 1-in-1-out op de CLAUDE.md-learnings (top-6 vast). Bulk-rotatie van `current.md` bij `N % 5 == 0`: archiveer **de staart** — de oudste ~5 entries — naar `archive-sNNN-sMMM.md`. Laatste bulk: Sessie 220 (205-209). **Volgende bulk: Sessie 225** (staart = 210-214). Neem het learnings-blok van een sessie mee met zijn entry. Actuele stand: zie de **Rotation**-regel onder §Recent Critical Learnings.
-**Sessie counter:** 221
+**Sessie counter:** 222
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -310,6 +309,6 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
 
 ---
 
-**Last updated:** 12 aug 2026 (Sessie 221 — vijf commits over drie dagen, ongelogd, dus één sessie. De regel die twee ervan stuurde bleek zelf fout: `blog-template.md` sprak zichzelf tegen en produceerde zo de overtredingen die hij verbood. Het echte defect was het werkwoord, niet de koppeling, en raakte 13 posts i.p.v. 6. Volledig: `docs/sessions/current.md`)
-**Version:** 5.95 (Sessie 221 — `blog-template.md` sprak zichzelf tegen; echte defect raakte 13 posts: buiten de blog 8/8 "Bekijk…", erin 13/15 "Download…" voor een betaald product → nu 0/15. NEW Check 13 + 14 in `validate-docs.sh`, beide positief geformuleerd na een overlevende mutant. `--color-accent-text` splitst een token met twee rollen: 101 → 0 onder AA. 39 specs / 296 declaraties. Bundel 1098,46/1120 (marge 1,9%). Historie: `docs/sessions/current.md`)
+**Last updated:** 14 aug 2026 (Sessie 222 — de box-randen braken verticaal, niet horizontaal: `.terminal-line`'s margin-bottom van 4px maakte van elke `│`/`┃` een streepje. Zes eerdere fixes zochten in de breedte, die kant klopte al. Volledig: `docs/sessions/current.md`)
+**Version:** 5.96 (Sessie 222 — box-rand brak verticaal: 4px marge + `vertical-align` op de pijl gaven 12 stubs met 4/8px gaten; ná: één run van 293px, 0 gaten over 8 commando's. Onder 768px extra 9 naden van 1px door fractionele line-height → `--line-height`. NEW verticale-continuïteitsdetector, 3 mutanten met verschillende faalpatronen. 39 specs / 303 declaraties (was 296 genoteerd, 300 gemeten). Bundel 1102,37/1120 (marge 1,57%). Historie: `docs/sessions/current.md`)
 

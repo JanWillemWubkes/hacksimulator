@@ -322,3 +322,46 @@ identieke CTA opleveren én er moet altijd één aantikbaar zijn" breekt "verber
 doel het scherm raakt" de eerste eis (een strookje van 1px is geen tikdoel) en "verberg pas
 bij volledig zichtbaar" de tweede (~24px scroll waarin beide aantikbaar zijn). Alleen
 "midden vrij" maakt ze allebei waar, want dan is *verborgen ⟺ aantikbaar* één conditie.
+
+---
+
+## 13. Box-drawing randen leven op de verticale as (Sessie 222)
+
+Een ASCII-box is geen tekening maar een **stapel losse block-elementen**. De horizontale
+randen (`─`/`━`) zijn onbreekbaar — die zitten binnen één regel. De verticale randen
+(`│`/`┃`) bestaan uit één glyph per regel, en zo'n glyph tekent **alleen binnen zijn eigen
+linebox**. Élke ruimte tussen twee opeenvolgende box-regels wordt daarom een zichtbaar gat.
+
+Drie bronnen van die ruimte, alle drie gemeten in Sessie 222:
+
+```
+margin-bottom op .terminal-line   → 4px gat per regel   (12 stubs van 27px)
+vertical-align op een inline-span → +3,59px op die regel (gat wordt 8px)
+line-height > glyph-ink-hoogte    → gat = verschil       (25,6 vs 25,78 → 1px naden)
+```
+
+`vertical-align` is de verraderlijkste: hij telt mee in de **linebox-berekening**. Wil je
+een glyph optisch optillen zonder de layout te raken, gebruik `position: relative`:
+
+```css
+/* FOUT binnen een box: rekt de linebox op, rand krijgt een gat */
+.marker-arrow { vertical-align: .2em; }
+
+/* GOED: zelfde optische nudge, nul layout-impact */
+.marker-arrow { vertical-align: baseline; position: relative; top: -.2em; }
+```
+
+**De invariant:** `pitch tussen twee aangrenzende box-regels ≤ ink-hoogte van de randglyph`.
+De ink-hoogte is ~1,61 × font-size voor JetBrains Mono (18px → 29px, 16px → ~25,78px), dus
+een `line-height` van 1,5 heeft ruimte; 1,6 op 16px níét. Houd de regelafstand bovendien op
+een **heel getal**: fractionele rij-origins laten de rasterisatie naden van 1px vallen, ook
+als het wiskundig past.
+
+Bewaakt door `measureBoxVerticalGaps()` in `tests/e2e/responsive-ascii-boxes.spec.js` — één
+predicaat dat alle drie de bronnen dekt. Meet **gerenderde pixels** als je twijfelt:
+`getComputedStyle` laat naden van 1px niet zien, een screenshot-kolomanalyse wel.
+
+> Let op de cascade: `.terminal-output{line-height:1.6}` staat in `mobile.css`, dat ná
+> `terminal.css` laadt. Box-regels winnen daarom op specificiteit (twee klassen, 0,2,0) en
+> niet met `!important`. Een live-experiment via een geïnjecteerde `<style>` bewijst dit
+> níét — die komt altijd als laatste.

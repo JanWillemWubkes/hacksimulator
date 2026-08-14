@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 12 aug 2026 (Sessie 221 — **testing-strategie aangescherpt met twee regels, geen architectuur-wijziging aan het product.** §Testing Strategie kende al "bewijs een fix met een mutant"; daar horen twee dingen bij die deze sessie gemeten zijn: loop de **overlever** van een mutantenreeks na (die ontmaskerde een claim die al als opgelost in het scriptcommentaar stond), en kies de goedkoopste laag die de invariant kan dragen — statische tekst hoort in `validate-docs.sh` en niet in Playwright. Het design-systeem, de tech-stack en de deployment zijn ongewijzigd; het nieuwe token `--color-accent-text` is een toevoeging binnen het bestaande CSS-variabelen-systeem, geen systeemwijziging.)
+**Laatst bijgewerkt:** 14 aug 2026 (Sessie 222 — **drie regels toegevoegd aan §Testing Strategie, geen architectuur-wijziging aan het product.** Meet gerenderde pixels als het over zichtbaarheid gaat; dek de hele faalklasse en niet één as ervan; laat mutanten verschillend falen. Alle drie komen uit de box-randbug, waar de DOM-cijfers in orde waren terwijl de rand als streepjeslijn rendeerde.)
 **Status:** ✅ LIVE on Netlify | M5 Testing 71% | M5.5 Monetization deep (Ko-fi + Brevo + Gumroad + Lead magnet) | M6 Tutorial 100% | M7 Gamification 100% | Blog content-pijler 14 posts live
 **Verantwoordelijk:** Development Team
 **Live URL:** https://hacksimulator.nl/
@@ -683,6 +683,23 @@ source of truth); hier alleen de architecturale regels.
   uit de bron (`gidsen.html`) in plaats van hem te hardcoderen, anders is de check zelf het
   volgende dat veroudert.
 
+- **Meet gerenderde pixels als het over zichtbaarheid gaat.** `getComputedStyle` en
+  `getBoundingClientRect` beschrijven de layout, niet wat er op het scherm staat. In Sessie 222
+  waren de box-randen volgens de DOM in orde terwijl ze als streepjeslijn renderden; pas een
+  kolomanalyse op een screenshot gaf het bewijs (27px ink / 4px gat, en later 9 naden van 1px
+  waarvan de grijswaarden gelijk waren aan de achtergrond). Voor sub-pixel-effecten —
+  rasterisatie, fractionele regelafstanden, antialiasing — is de screenshot de enige meting die
+  telt.
+- **Dek de hele faalklasse, niet één as ervan.** `measureBoxLineWraps()` bewaakte box-randen
+  jarenlang groen omdat hij uitsluitend *horizontaal* meet (wrapt de regel?), terwijl de breuk
+  *verticaal* zat. Vraag bij een nieuwe guard expliciet: welke dimensies kán dit defect hebben,
+  en meet ik ze allemaal? En controleer of de gemelde gevallen überhaupt in de testmatrix zitten
+  — `next` en `metasploit` stonden niet in `COMMANDS` terwijl het juist die twee waren.
+- **Laat mutanten verschillend falen.** Drie mutanten die alle drie hetzelfde patroon rood maken
+  betekenen dat twee asserties overbodig zijn. In Sessie 222 gaven ze 9 / 7 / 1 rood met
+  verschillende overlevers (de wrap-tests bij de marge-mutant, `metasploit` bij de pijl-mutant
+  omdat die box geen pijl bevat) — dát maakt aannemelijk dat elke assertie iets eigens draagt.
+
 **Unit tests:** bewust nog niet ingericht. De commandolaag wordt via de echte codepad-import
 getest (`.claude/skills/verify-terminal`), wat voor een client-side simulator zonder backend
 dichter bij het werkelijke gedrag zit dan geïsoleerde parserprogramma's.
@@ -850,8 +867,8 @@ const DEBUG_MODE = false;
 
 ---
 
-**Laatst bijgewerkt:** 12 aug 2026 (Sessie 221 — **testing-strategie aangescherpt met twee regels, geen architectuur-wijziging aan het product.** §Testing Strategie kende al "bewijs een fix met een mutant"; daar horen twee dingen bij die deze sessie gemeten zijn: loop de **overlever** van een mutantenreeks na (die ontmaskerde een claim die al als opgelost in het scriptcommentaar stond), en kies de goedkoopste laag die de invariant kan dragen — statische tekst hoort in `validate-docs.sh` en niet in Playwright. Het design-systeem, de tech-stack en de deployment zijn ongewijzigd; het nieuwe token `--color-accent-text` is een toevoeging binnen het bestaande CSS-variabelen-systeem, geen systeemwijziging.)
-**Versie:** 4.43 (Sessie 221 — **twee regels toegevoegd aan §Testing Strategie**: "loop de overlever na" + "kies de goedkoopste laag die de invariant kan dragen". Aanleiding: Check 13 en 14 in `validate-docs.sh` bewaken statische tekst en horen daarom niet in de Playwright-suite, en de eerste, negatieve versie van Check 14 liet een mutant overleven die het commentaar al als afgevangen beschreef. Geen product-architectuur gewijzigd.)
+**Laatst bijgewerkt:** 14 aug 2026 (Sessie 222 — **drie regels toegevoegd aan §Testing Strategie, geen architectuur-wijziging aan het product.** Meet gerenderde pixels als het over zichtbaarheid gaat; dek de hele faalklasse en niet één as ervan; laat mutanten verschillend falen. Alle drie komen uit de box-randbug, waar de DOM-cijfers in orde waren terwijl de rand als streepjeslijn rendeerde.)
+**Versie:** 4.44 (Sessie 222 — **drie regels toegevoegd aan §Testing Strategie**: gerenderde pixels boven `getComputedStyle` bij zichtbaarheid, dek alle assen van een faalklasse, en laat mutanten verschillend falen. Product-architectuur ongewijzigd.)
 **Status:** ✅ Deployed - Live in Production | M5.5 Monetization stack deep + Brevo deliverability getuned | M7 Gamification ✅ 100% | Blog content-pijler 14 posts live
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

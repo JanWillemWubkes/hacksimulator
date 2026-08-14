@@ -4,6 +4,103 @@
 
 ---
 
+## Sessie 222: De box-randen braken verticaal — en vier eerdere fixes zochten allemaal in de breedte (14 aug 2026)
+
+**Mission:** Heisenberg leverde drie foto's van een scherm met `metasploit`, `next` en `man metasploit`, waarop de omlijning rond de terminal-output stukgaat, met de vraag hoe dat kan na zoveel pogingen ("we hebben dit probleem al zo vaak proberen te verhelpen"). Eis: alles netjes uitgelijnd, en dat blijft zo bij een veranderende schermgrootte.
+
+**Commits:**
+
+| | | |
+|---|---|---|
+| `260f8af` | 14 aug | Box-randen braken verticaal: 4px marge tussen elke regel, geen breedteprobleem |
+
+### De diagnose die vier sessies lang de verkeerde as had
+
+Sessie 81, 82, 189, 202, 204 en 205 hebben dit alle zes als **breedte**probleem behandeld: font-subset, canvas-meting van de glyph-advance, contract-unificatie van `width`, reflow-bij-resize. Doorgemeten klopt die kant inmiddels volledig:
+
+| bewering | meting |
+|---|---|
+| inline base64-boxfont corrupt? | **nee** — byte-identiek aan `styles/fonts/jetbrains-mono-box-subset.woff2` (zelfde sha256, 5200 bytes), `status: loaded`, `fonts.check` true |
+| glyph-advances wijken af? | **nee** — `─ ━ │ ┃ ╭ ┏ ├ ┫` én latin `M`/spatie allemaal **10,8px** op 18px; beide woff2's 1000 upm / advance 600 |
+| horizontale uitlijning stuk? | **nee** — rechterrand-spreiding **≤0,04px** over 8 box-commando's @1440px, 0,02px @900px, 0,01px @620px ná reflow; nul wraps, nul overflow |
+| `box-reflow.js` stuk? | **nee** — render @900 (75 tekens) → resize naar 620 → herbouwd naar 54 tekens, spreiding 0,01px |
+| `letter-spacing`? | **nee** — `#terminal-output` staat expliciet op 0; de `0.5px`-regels raken alleen navbar-links |
+
+De breuk zit in de **verticale** as, die nooit onderzocht was. `.terminal-line` draagt `margin-bottom: var(--spacing-xs)` = 4px. Box-regels zijn losse block-elementen, en een verticale glyph (`│`/`┃`) tekent alléén binnen zijn eigen linebox — nooit over die marge heen. Gemeten op de gerenderde randkolom van een `next`-box (x=138, drempel >90):
+
+```
+segmenten: 27px ink … 4px gat … 27px ink … 4px gat …   (12 stubs)
+één gat van 8px op de regel met '→'
+```
+
+Die 8px is de tweede bijdrager: `.marker-arrow`/`.inline-arrow` droegen `vertical-align: .2em`, en `vertical-align` telt **mee in de linebox-hoogte**. Elke regel met een pijl werd 3,59px hoger.
+
+Regelafstand vóór de fix, alle acht box-producenten @1440px (`gap = pitch − line-height`):
+
+| commando | box-regels | pitch | gat |
+|---|---|---|---|
+| help | 55 | 31 / 34,59 | 4 / 7,59 |
+| shortcuts | 18 | 31 | 4 |
+| leerpad | 39 | 31 / 34,59 | 4 / 7,59 |
+| next | 11 | 31 / 34,59 | 4 / 7,59 |
+| man nmap | 2 | 31 | 4 |
+| metasploit | 17 | 31 | 4 |
+| dashboard | 34 | 31 / 34,59 | 4 / 7,59 |
+| tutorial | 23 | 31 | 4 |
+
+### Waarom "alleen de marge weghalen" niet genoeg was
+
+Drie varianten naast elkaar gemeten op dezelfde `next`-box:
+
+| variant | pitch | hoogte pijlregel |
+|---|---|---|
+| huidig | 31 / 34,59 | 30,59 |
+| A: alleen marge weg | 27 / **30,59** | 30,59 |
+| B: marge weg + pijl via `position: relative` | **27** (uniform) | **27** |
+
+`position: relative` verschuift alleen het **schilderen**, niet de layout: de pijl houdt exact dezelfde optische correctie (die bewust bestaat omdat het fallback-glyph laag zit) zonder de linebox te vergroten.
+
+### De tweede breuk, die pas bij het versmallen zichtbaar wordt
+
+Onder 768px zakt `--font-size-mobile` naar 16px en zet `mobile.css` `.terminal-output{line-height:1.6}` → **25,6px**, fractioneel, tegen een glyph-ink van ~25,78px. Dat is 0,18px overlap, en dat eet de rasterisatie op. Pixelmeting van de randkolom @760px ná reflow: **97,8% dekking, 9 naden van 1px** — de grijswaarden in die naden (7-13) waren identiek aan de achtergrond (gem. 10,3), dus echte gaten, geen antialiasing.
+
+Opgelost door box-regels `--line-height` (1,5) te laten volgen: 18px → 27px en 16px → 24px, allebei **integer**, en met 1px overlap tegen de glyph. Omdat `.terminal-output` in `mobile.css` (0,1,0) later laadt dan `terminal.css`, moesten de box-regels op **twee klassen** (0,2,0) — geen `!important`.
+
+### Resultaat
+
+| | voor | na |
+|---|---|---|
+| gaten, 8 commando's @1440px | 4px / 7,59px | **0** |
+| randdekking @1440px | 12 stukjes | **één run van 293px** |
+| randdekking @760px na resize | 97,8% (9 naden) | **100,0% (0 naden)** |
+| rechteruitlijning | ≤0,04px | onveranderd ≤0,05px |
+
+**Work done:**
+- `src/ui/renderer.js` — `getBoxLineClass()` naast de bestaande gedeelde helpers; aangehaakt op **beide** render-paden (`renderOutput` regel ~128 en de mission/completion-render regel ~334) zodat ze niet uit sync lopen. De sluitregel (`╰`/`┗`) houdt zijn marge, zodat de box losstaat van wat erna komt. `box-reflow.js` hoefde niet mee: `rebuildBlock` gebruikt `cloneNode(false)`, wat de className meekopieert.
+- `styles/terminal.css` — `.terminal-line.terminal-line--box{margin-bottom:0;line-height:var(--line-height)}` + `--box-end` die de marge terugzet; `.marker-arrow`/`.inline-arrow` van `vertical-align:.2em` naar `vertical-align:baseline;position:relative;top:-.2em`.
+- `terminal.html` — `terminal.css?v=118` → `?v=119`. `main.css` **niet** gebumpt: die verandert niet en `--spacing-xs`/`--line-height` bestonden daar al, dus geen cross-entry-staleness.
+- `tests/e2e/responsive-ascii-boxes.spec.js` — `measureBoxVerticalGaps()`: pitch tussen aangrenzende box-siblings mag niet groter zijn dan de ink-hoogte van de randglyph (via `canvas.measureText`). Eén predicaat dat **drie** regressieklassen dekt (marge, `vertical-align`, te grote `line-height`), vergelijkt alleen aangrenzende siblings en nooit over een blokgrens (`╰`/`┗`) heen. Plus `next` en `metasploit` — die stonden **niet in `COMMANDS`** terwijl het juist de gemelde commando's waren — en een reflow-test 1280 → 700px.
+
+**Mutanten** (drie, met **verschillende** faalpatronen — anders is een assertie blind):
+
+| mutant | uitkomst |
+|---|---|
+| `margin-bottom` terug op `.terminal-line--box` | **9 rood** — alle gap-tests; de 2 overlevers zijn de wrap-tests (marge veroorzaakt geen wrap) |
+| `vertical-align: .2em` terug op `.marker-arrow` | **7 rood** — alleen `next`/`leerpad`/`help` + reflow; `metasploit` blijft groen (geen pijl in die box) |
+| `line-height` uit `.terminal-line--box` | **1 rood** — alleen de reflow-test, de enige die onder 768px komt |
+
+**Twee meetvallen die tijd kostten:**
+1. **Meten vóór het font geladen is.** `document.fonts.ready` resolvet terwijl `JetBrains Mono Box` nog op `loading` staat — het font wordt pas aangevraagd zodra er een box-glyph gerenderd wordt. Mijn eerste meting gaf daardoor drie verschillende advances (10,8 / 10,802 / 10,8371) uit fallback-fonts en wees vals naar een fontmetrics-probleem. Altijd eerst `await document.fonts.load(...)`.
+2. **De MCP-browser hield een verouderde module vast** (`'certificate-templates.js' does not provide an export named 'CERT_DISCLAIMER'`) terwijl de export op schijf én over de lijn bestond; de terminal boot-te niet. Exact de val uit Sessie 219. Opgelost door de no-store-server op een **verse poort** te starten (nieuwe origin = lege cache), niet met `?cb=`.
+
+**Metrics delta:** bundel 1102,37 / 1120 KB (marge 17,63 KB = 1,57%); mijn wijziging kost ~2,0 KB, vrijwel volledig commentaar (renderer.js +1327 B, terminal.css +746 B). Specs 39 → 39; `test()`-declaraties **300 → 303** (+3 in `responsive-ascii-boxes.spec.js`, 16 → 19). NB: TASKS.md en CLAUDE.md claimden **296** voor Sessie 221 terwijl de boom er op `HEAD~1` **300** had — die telling liep al 4 achter vóór deze sessie, nu gecorrigeerd. Idem de bundelregel in TASKS.md, die op "1050 → 1100 (Sessie 214)" stond terwijl de constante sinds Sessie 217 op 1120 staat.
+
+**Next steps:**
+- De **volle chromium-suite (420 tests) is niet groen bevestigd**. Mijn eerste run kreeg een `--global-timeout` van 25 min terwijl de suite daaroverheen loopt — de Sessie 216-val, waarbij een afgekapte run bijna als groen leest. Afgebroken, niet geteld, opnieuw gestart met 50 min. De box-spec zelf is wél groen over drie motoren (152 passed, 4 skipped). Bevestig de volle run voor de volgende sessie.
+- Bundelmarge staat op 1,57%. 1000 → 1050 → 1100 → 1120 is drie bumps in 14 sessies; de volgende vraag is niet "bump".
+
+---
+
 ## Sessie 221: Vijf commits over drie dagen — en de regel die twee van hen stuurde, bleek zelf fout (12 aug 2026)
 
 **Mission:** Geen enkele opdracht vooraf; dit is een verzamelsessie. Vijf commits liepen tussen 10 en 12 aug zonder tussentijdse `/summary`, dus ze vormen per de nummerregel (*nummer telt per summary-ronde, niet per commit — ook na `/clear`*) samen Sessie 221. Twee ervan raken dezelfde regel in `blog-template.md`, en komen tot tegengestelde conclusies. Dat is de rode draad.
@@ -1263,3 +1360,28 @@ Beide gepusht naar `main`, CI success, deploy live geverifieerd met `curl -I`.
 - Corrigeer je eigen eerdere rapportage als doormeten hem te gunstig maakt. "Alleen `help`, op één maat" werd "drie chips, op twee gangbare maten".
 - Geef een entry-point een `?v=` zodra je hem wijzigt. `landing-demo.js` had er geen terwijl `/src/**/*.js` op `max-age=3600` staat: een terugkerende bezoeker kreeg tot een uur nieuwe CSS naast oude JS — hier: de auto-demo typend in een veld van één teken breed.
 - Leg een niet-opgeloste conditie vast als **baseline in een test**, niet als notitie. `BASELINE_BEDEKT` per viewport wordt rood zodra de bedekking groeit, en zijn lijsten horen `[]` te worden zodra de balk gefixt is — een notitie meldt niets terug.
+
+---
+
+## Sessie 216 — learnings (geroteerd uit CLAUDE.md, Sessie 222)
+
+> Oorspronkelijke kop: *De CTA-balk verscheen waar hij niets toevoegde — en de guard die dat bewaakte, scrollde nooit*
+
+### Sessie 216: De CTA-balk verscheen waar hij niets toevoegde — en de guard die dat bewaakte, scrollde nooit (09 aug 2026)
+⚠️ **Never:**
+- `window.scrollTo(0, y)` in een synchrone lus zetten om scrollposities te meten. `html { scroll-behavior: smooth }` staat in `animations.css`, dus die aanroep **animeert**: 13× in één `page.evaluate`-tick liet `scrollY` op **2px** steken. De conversie-guard asserteerde daardoor dertien keer dezelfde ongescrollde pagina — een zwaardere blinde vlek dan het probleem waarvoor hij herschreven werd. `behavior: 'instant'` plus een await per stap.
+- `entry.isIntersecting` lezen als "voldoet aan mijn threshold". Die is `true` zodra het doel de root ráákt, ongeacht de threshold — bij het passeren van 0.5 vuurt de callback en levert `isIntersecting: true` met ratio 0.4. Wie daarop beslist, beslist op iets anders dan hij denkt.
+- Een bounding box als bewijs van zichtbaarheid nemen. Een `visibility: hidden` balk houdt zijn box van 65px, dus de oude assertie kon een verborgen CTA niet van een aantikbare onderscheiden. Hit-testing (`elementFromPoint`) op het midden is de meting die telt.
+- `transition: all` laten staan op een element dat zijn `visibility` **erft** van een ouder die je toggelt. De overerving loopt dan als transitie mee: gemeten liep de knop ~150ms achter op zijn balk — een onzichtbaar tikdoel dat nog reageert, en andersom een zichtbare balk waar een tik niets doet. Beide gaten bestaan alleen ná een toestandswissel, dus geen meting "in rust" ziet ze.
+- Aannemen dat een toestandswissel "naar de veilige kant faalt". Mijn plan claimde dat letterlijk voor beide richtingen en het was precies verkeerd om. Zo'n claim is een hypothese tot je hem in het overgangsvenster meet, niet erna.
+- Een `--global-timeout` kiezen die krapper is dan de suite. De volle run over drie motoren duurt >48 min; hij kapte af met **"78 did not run"** onder een regel "859 passed" — dat leest bijna als groen.
+- Een grens tussen twee concurrerende invarianten op gevoel kiezen. "Verberg zodra hij het scherm raakt" breekt de tikbaarheid (een strookje van 1px is geen tikdoel); "pas bij volledig zichtbaar" opent ~24px scroll waarin er twee identieke CTA's staan. Alleen "midden vrij" maakt béíde waar.
+
+✅ **Always:**
+- Los een "mechanisme A of B"-vraag op door eerst de **regel** op te schrijven; het mechanisme volgt er dan uit. `sticky` versus IO leek de keuze, maar de echte keuze was waar de balk opzij hoort te stappen — en zodra die grens er stond (*balk verborgen ⟺ CTA-midden aantikbaar*), was IO simpelweg de goedkoopste manier om hem te draaien.
+- Gebruik een observer als **trigger** en één geometrisch predicaat als **regel**. Dat vermijdt de `isIntersecting`-val, houdt de regel op één plek, en blijft correct als de `rootMargin` veroudert — bij toestelrotatie klopte de staat in alle vier de gemeten toestanden terwijl de observer nog met portretmarges liep.
+- Bewijs "strenger dan de oude versie" met een mutant waarop de **oude groen** is en de **nieuwe rood**. Balk altijd `visibility: hidden` → oude guard 3× groen, nieuwe 3× rood met zes benoemde posities. Zonder die tweezijdige uitkomst is "strenger" een bewering.
+- Kies de mutant die de **assertie zelf** laat vuren, niet de setup. Tegen `git archive HEAD` faalde de chip-test op zijn `waitForFunction` — dat bewijst "mechanisme afwezig", niet "de bedekkingsassertie ziet de bug". De CSS-mutant liet hem wél vuren, en gaf exact `375x812 groen / 360x800 + 390x844 rood`: dezelfde verdeling als de oorspronkelijke meting.
+- Meet een invariant op een resolutie die je test niet haalt. De guard stapt 0,9 viewport; een sweep van **884-893 posities à 10px** in drie engines liet zien dat er nul gaten en nul dubbels zijn — dat kán een grofmazige test niet aantonen.
+- Beantwoord "is deze faler van mij?" met het **codepad** als dat kan, niet met een steekproef. Alle falers draaiden op `/terminal.html`, dat geen van de drie gewijzigde bestanden laadt — dat is sterker en goedkoper dan 8× per kant draaien.
+- Corrigeer je eigen meetfout hardop. `grep -c "[webkit]"` gaf 0 terwijl er 237 WebKit-tests groen stonden: de haken zijn een karakterklasse, dus ik zocht naar één teken uit `webkit`. Ik had daarop "WebKit moet nog beginnen" gemeld.
