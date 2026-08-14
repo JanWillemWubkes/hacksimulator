@@ -20,7 +20,15 @@ export default {
     const path = args[0];
 
     try {
-      vfs.createFile(path, '');
+      // createFile meldt terug of er echt iets is aangemaakt. Zonder dat
+      // onderscheid meldde touch ook "aangemaakt" voor een bestand dat al
+      // bestond — in een leersimulator precies de verkeerde les.
+      const aangemaakt = vfs.createFile(path, '');
+
+      if (!aangemaakt) {
+        return `[✓] Tijdstempel van '${path}' bijgewerkt\n\n[TIP] Dit bestand bestond al. touch maakt het niet opnieuw aan, maar werkt alleen de wijzigingsdatum bij. Zo werkt het ook op een echt Linux-systeem.`;
+      }
+
       return `[✓] Bestand '${path}' aangemaakt`;
 
     } catch (error) {

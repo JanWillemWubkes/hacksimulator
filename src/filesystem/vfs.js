@@ -33,6 +33,30 @@ class VirtualFilesystem {
   }
 
   /**
+   * Zet een kind-node onder een naam die van de gebruiker komt.
+   *
+   * Niet `children[naam] = node`: voor de naam '__proto__' is dat geen
+   * toewijzing maar de prototype-setter. Gemeten vóór deze fix deed
+   * `cp notes.txt __proto__` precies dat — het meldde "[✓] gekopieerd",
+   * verving stilletjes het prototype van de children-node, en het bestand
+   * verscheen nooit in `ls`. defineProperty maakt er een gewone own property
+   * van, zodat '__proto__' zich net als op Linux als bestandsnaam gedraagt.
+   *
+   * @param {Object} children - De children-map van de parent
+   * @param {string} naam - Bestands-/directorynaam uit gebruikersinvoer
+   * @param {Object} node - De nieuwe node
+   * @private
+   */
+  _setChild(children, naam, node) {
+    Object.defineProperty(children, naam, {
+      value: node,
+      writable: true,
+      enumerable: true,
+      configurable: true
+    });
+  }
+
+  /**
    * Initialize (or reset) the filesystem
    */
   init() {
@@ -143,7 +167,12 @@ class VirtualFilesystem {
         return null;
       }
 
-      if (!current.children || !current.children[part]) {
+      // hasOwn, niet [part]: een object-literal erft constructor/toString/
+      // __proto__ en die zijn allemaal truthy. Zonder deze check leverde
+      // 'cat constructor' de Object-constructor als "node" op, waarna cat
+      // "Is a directory" meldde en rm zelfs "[✓] verwijderd" voor iets dat
+      // niet bestaat. Zie architecture-patterns.md §7.
+      if (!current.children || !Object.hasOwn(current.children, part)) {
         return null;
       }
 
@@ -268,14 +297,14 @@ class VirtualFilesystem {
       throw new Error(`Not a directory: ${parentPath}`);
     }
 
-    if (parent.children[dirName]) {
+    if (Object.hasOwn(parent.children, dirName)) {
       throw new Error(`File exists: ${path}`);
     }
 
-    parent.children[dirName] = {
+    this._setChild(parent.children, dirName, {
       type: 'directory',
       children: {}
-    };
+    });
 
     this._notifyChange();
   }
@@ -301,21 +330,22 @@ class VirtualFilesystem {
       throw new Error(`Not a directory: ${parentPath}`);
     }
 
-    if (parent.children[fileName]) {
-      // File exists - update modified time (touch behavior)
+    if (Object.hasOwn(parent.children, fileName)) {
+      // Bestand bestaat al - alleen de modified time zou bijwerken (touch-gedrag)
       if (parent.children[fileName].type === 'file') {
-        return; // Touch updates timestamp (we don't track that yet)
+        return false; // niet aangemaakt; de aanroeper meldt "bijgewerkt"
       } else {
         throw new Error(`Is a directory: ${path}`);
       }
     }
 
-    parent.children[fileName] = {
+    this._setChild(parent.children, fileName, {
       type: 'file',
       content
-    };
+    });
 
     this._notifyChange();
+    return true; // nieuw aangemaakt
   }
 
   /**
@@ -387,7 +417,7 @@ class VirtualFilesystem {
       throw new Error(`Not a directory: ${destParentPath}`);
     }
 
-    destParent.children[destName] = clone;
+    this._setChild(destParent.children, destName, clone);
 
     this._notifyChange();
   }

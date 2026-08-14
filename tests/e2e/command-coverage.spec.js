@@ -175,6 +175,79 @@ test.describe('Command Coverage - Untested Commands', () => {
     expect(state2.commandsTried).toContain('traceroute');
   });
 
+  // ----------------------------------------
+  // 10. touch liegt niet over bestaande bestanden (Sessie 222)
+  // ----------------------------------------
+
+  // vfs.createFile() gaf undefined terug of het bestand nu nieuw was of niet, dus
+  // touch meldde onvoorwaardelijk "aangemaakt". Op een bestaand bestand is dat een
+  // verkeerde les: touch werkt daar alleen de tijdstempel bij.
+  test('touch meldt bijwerken i.p.v. aanmaken bij een bestaand bestand', async ({ page }) => {
+    await typeCommand(page, 'touch scan-log.txt');
+    await expect(page.locator('#terminal-output')).toContainText("Bestand 'scan-log.txt' aangemaakt", { timeout: 5000 });
+
+    // notes.txt zit in de initiële VFS (structure.js) en bestaat dus altijd al
+    await typeCommand(page, 'touch notes.txt');
+    const output = page.locator('#terminal-output');
+    await expect(output).toContainText("Tijdstempel van 'notes.txt' bijgewerkt", { timeout: 5000 });
+    await expect(output).not.toContainText("Bestand 'notes.txt' aangemaakt");
+  });
+
+  // ----------------------------------------
+  // 11. Geërfde Object-namen zijn geen bestanden (Sessie 222)
+  // ----------------------------------------
+
+  // vfs.js:146 deed `children[part]` op een object-literal, dus constructor/
+  // toString/__proto__ waren truthy en werden als node behandeld. Gevolg: cat zei
+  // "Is a directory", cd zei "Not a directory" — over hetzelfde niet-bestaande pad.
+  test('cat/cd/ls geven consistent "No such file" op geërfde Object-namen', async ({ page }) => {
+    const output = page.locator('#terminal-output');
+    for (const cmd of ['cat constructor', 'cd constructor', 'ls toString']) {
+      await typeCommand(page, cmd);
+    }
+    // Alle drie horen dezelfde reden te noemen; "Is a directory" impliceert bestaan.
+    await expect(output).not.toContainText('Is a directory', { timeout: 5000 });
+    await expect(output).not.toContainText('Not a directory');
+    const text = await output.innerText();
+    expect((text.match(/No such file or directory/g) || []).length).toBeGreaterThanOrEqual(3);
+  });
+
+  // rm doorliep getNode() met succes en meldde "[✓] verwijderd" terwijl de delete
+  // een no-op was op een geërfde property.
+  test('rm meldt geen succes voor een geërfde Object-naam', async ({ page }) => {
+    await typeCommand(page, 'rm constructor');
+    const output = page.locator('#terminal-output');
+    await expect(output).toContainText('No such file or directory', { timeout: 5000 });
+    await expect(output).not.toContainText("'constructor' verwijderd");
+  });
+
+  // __proto__ als bestandsnaam moet gewoon werken (zoals op Linux), niet het
+  // prototype van de children-node vervangen. Vóór de fix meldde cp "[✓] gekopieerd"
+  // terwijl het bestand nergens verscheen.
+  test('__proto__ werkt als gewone bestandsnaam en breekt de VFS niet', async ({ page }) => {
+    const output = page.locator('#terminal-output');
+    await typeCommand(page, 'mkdir __proto__');
+    // Niet op de losse tekst '__proto__' asserteren: de foutmelding van de oude
+    // code ("cannot create directory '__proto__'") bevat die óók, waardoor deze
+    // test groen bleef op een kapotte VFS. De succesmelding is het bewijs.
+    await expect(output).toContainText("Directory '__proto__' aangemaakt", { timeout: 5000 });
+    await expect(output).not.toContainText('cannot create directory');
+
+    await typeCommand(page, 'ls');
+
+    // De VFS blijft bruikbaar: een gewone kopie erna werkt nog steeds
+    await typeCommand(page, 'cp notes.txt kopie.txt');
+    await typeCommand(page, 'ls');
+    await expect(output).toContainText('kopie.txt', { timeout: 5000 });
+
+    const prototypeIntact = await page.evaluate(() => {
+      const home = window.vfs && window.vfs.getNode('/home/hacker');
+      if (!home) return null; // vfs niet globaal — dan zegt de ls-assertie het al
+      return Object.getPrototypeOf(home.children) === Object.prototype;
+    });
+    if (prototypeIntact !== null) expect(prototypeIntact).toBe(true);
+  });
+
   // hint is een simulator-only command → moet met '*' gemarkeerd worden in help.
   test("help markeert simulator-only commands (hint) met *", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
