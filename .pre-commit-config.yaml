@@ -17,5 +17,10 @@ repos:
         name: Validate cross-doc invariants + SEO-metadata sync (sessie-counter, datums, PRD-version, monetization-stack, sitemap/feed)
         entry: ./scripts/validate-docs.sh
         language: script
-        files: ^(\.claude/CLAUDE\.md|PLANNING\.md|TASKS\.md|sitemap\.xml|feed\.xml|blog/.*\.html)$
+        # commands/index.html + src/commands/ + vfs.js staan erbij vanwege Check 15:
+        # die toetst de voorbeelden op /commands/ tegen de echte command-output, en
+        # zou zonder deze patronen nooit vuren bij precies de wijzigingen die hem
+        # kunnen breken (een kaart bewerken, een command-output veranderen, of een
+        # pad uit de VFS halen).
+        files: ^(\.claude/CLAUDE\.md|PLANNING\.md|TASKS\.md|sitemap\.xml|feed\.xml|blog/.*\.html|commands/index\.html|src/commands/.*\.js|src/filesystem/vfs\.js)$
         pass_filenames: false
