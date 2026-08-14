@@ -362,12 +362,18 @@ a[href='#all'].category-btn {
   margin-left: var(--spacing-sm);
   margin-right: 0;
 }
-/* Verificatiedatum (Sessie 208): een vertrouwenssignaal, geen kop-informatie.
-   Bewust kleiner en gedempt zodat het de publicatiedatum niet beconcurreert. */
-.blog-fact-checked {
+/* AI-melding + datum laatste controle. Verplicht onder art. 50 lid 4 AI-verordening
+   (van toepassing sinds 02-08-2026): AI-tekst die het publiek informeert over
+   aangelegenheden van algemeen belang moet als zodanig herkenbaar zijn, zichtbaar
+   zonder interactie en bij de eerste blootstelling — dus hier, niet alleen op
+   /over-ons.html. Bewust kleiner en gedempt zodat het de publicatiedatum niet
+   beconcurreert, maar NOOIT visueel verbergen: dat breekt de wettelijke eis.
+   Heette tot Sessie 223 .blog-fact-checked; die naam beloofde een menselijke
+   feitencontrole die er niet is. */
+.blog-ai-notice {
   font-family: var(--font-body);
   font-size: 0.85rem;
-  color: var(--color-text-muted);
+  color: var(--color-text-dim);
 }
 
 /* Bronvermelding onder een tabel of cijferclaim. Alleen variabelen, geen
@@ -384,10 +390,15 @@ a[href='#all'].category-btn {
 .blog-post-meta > :not(:first-child) {
   margin-left: var(--spacing-sm);
 }
-.blog-post-meta span:last-child {
-  color: var(--color-link);
-  font-weight: var(--font-weight-medium);
-}
+/* VERWIJDERD (Sessie 223): .blog-post-meta span:last-child { color: var(--color-link) }
+   Die regel is geschreven toen de categorie-badge de laatste span in de meta-rij was.
+   Sessie 208 plakte er de controledatum-span achter, waarna de regel stilzwijgend van
+   doel wisselde: (0,2,1) verslaat .blog-ai-notice (0,1,0), dus de melding rendeerde in
+   linkblauw met medium gewicht terwijl het commentaar erboven "bewust gedempt" beloofde.
+   Gemeten light mode: 4,89:1 in plaats van de bedoelde 9,17:1, en niet-link-tekst in
+   linkkleur. Voor de badge was hij al dood — .category-badge (regel ~920) zet zelf
+   color + font-weight. Positionele selectors in een rij waar elementen worden
+   bijgeplakt: gebruik de klasse, niet :last-child. */
 .blog-post-content {
   color: var(--color-text-light);
   font-family: var(--font-body);

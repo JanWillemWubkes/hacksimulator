@@ -98,18 +98,36 @@ validate_blog() {
     errors=$((errors + 1))
   fi
 
-  # Check 7: zichtbare verificatiedatum (Sessie 208)
-  # De lezer kan niet zelf beoordelen of de inhoud klopt. Het minste wat we kunnen
-  # bieden is WANNEER de beweringen voor het laatst zijn nagelopen. Zonder deze gate
-  # vergeet de volgende post het, en dan zegt de datum op de andere posts ook niets meer.
+  # Check 7: zichtbare AI-melding + verificatiedatum (Sessie 208, uitgebreid Sessie 223)
+  # De lezer kan niet zelf beoordelen of de inhoud klopt. Twee dingen bieden we wel:
+  # WANNEER de beweringen voor het laatst zijn nagelopen, en WAARMEE dat gebeurde.
+  #
+  # Dat tweede is niet vrijblijvend. Art. 50 lid 4 AI-verordening (van toepassing sinds
+  # 02-08-2026) eist dat AI-gegenereerde tekst die het publiek informeert over
+  # aangelegenheden van algemeen belang als zodanig wordt aangemerkt, "uiterlijk bij de
+  # eerste blootstelling". Er is een uitzondering voor inhoud die een mens inhoudelijk
+  # heeft getoetst (feitencontrole is daarbij het minimumvereiste) — die uitzondering
+  # geldt hier NIET: de controle gebeurt met AI, niet door een mens. Een melding op
+  # /over-ons.html alleen is dus onvoldoende; wie via Google op een post landt, moet het
+  # dáár zien.
+  #
+  # De assertie is POSITIEF (de melding moet er staan), niet negatief (de oude tekst
+  # verbieden). Een verbod op één formulering laat elke andere formulering door — de val
+  # van Sessie 221 checkpunt 14a.
   # Skip blog/index.html: de hub bevat geen eigen beweringen.
   if [ "$(basename "$file")" != "index.html" ]; then
-    if ! grep -q 'class="blog-fact-checked"' "$file"; then
-      issues+="    [FAIL] MISSING: <span class=\"blog-fact-checked\"> met controledatum in .blog-post-meta\n"
+    if ! grep -q 'class="blog-ai-notice"' "$file"; then
+      issues+="    [FAIL] MISSING: <span class=\"blog-ai-notice\"> met AI-melding + controledatum in .blog-post-meta\n"
       errors=$((errors + 1))
-    elif ! grep -qE 'blog-fact-checked[^>]*>[^<]*<time datetime="[0-9]{4}-[0-9]{2}-[0-9]{2}">' "$file"; then
-      issues+="    [FAIL] blog-fact-checked zonder geldige <time datetime=\"JJJJ-MM-DD\">\n"
-      errors=$((errors + 1))
+    else
+      if ! grep -qE 'blog-ai-notice[^>]*>[^<]*<time datetime="[0-9]{4}-[0-9]{2}-[0-9]{2}">' "$file"; then
+        issues+="    [FAIL] blog-ai-notice zonder geldige <time datetime=\"JJJJ-MM-DD\">\n"
+        errors=$((errors + 1))
+      fi
+      if ! grep -q 'Met AI geschreven' "$file"; then
+        issues+="    [FAIL] blog-ai-notice zonder zichtbare AI-melding (art. 50 lid 4 AI-verordening)\n"
+        errors=$((errors + 1))
+      fi
     fi
   fi
 

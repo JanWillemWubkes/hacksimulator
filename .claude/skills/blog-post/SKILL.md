@@ -65,21 +65,32 @@ nieuwste-eerst en `validate-docs.sh --deep` check 9d faalt bij een oudere post b
 weekdag/datum met `date -d YYYY-MM-DD +%A` vóór je iets plant. Juridische claims spiegelen op de
 bestaande posts (art. 138ab Sr zónder verzonnen strafmaat).
 
-## Stap 5 — Zet de verificatiedatum (verplicht, gate in `validate-blogs.sh` check 7)
-Elke post draagt zichtbaar wannéér de feitelijke beweringen voor het laatst zijn nagelopen.
-De lezer kan de inhoud niet zelf beoordelen; dit is het minimum dat we wél kunnen bieden.
-Zet in `.blog-post-meta`, ná de categorie-badge:
+## Stap 5 — Zet de AI-melding + controledatum (verplicht, gate in `validate-blogs.sh` check 7)
+Elke post draagt zichtbaar **waarmee** de tekst is gemaakt en **wannéér** de beweringen voor het
+laatst zijn nagelopen. Zet in `.blog-post-meta`, ná de categorie-badge:
 
 ```html
-<span class="blog-fact-checked" title="Datum waarop de feitelijke beweringen in dit artikel voor het laatst zijn nagelopen">Feiten gecontroleerd: <time datetime="JJJJ-MM-DD">D maand JJJJ</time> &middot; <a href="/over-ons.html#verantwoording">hoe ik dit controleer</a></span>
+<span class="blog-ai-notice" title="Deze tekst is met AI geschreven en met AI gecontroleerd; er is geen menselijke feitencontrole">Met AI geschreven en gecontroleerd &middot; laatste controle: <time datetime="JJJJ-MM-DD">D maand JJJJ</time> &middot; <a href="/over-ons.html#verantwoording">hoe dat werkt</a></span>
 ```
 
-De link naar `#verantwoording` is verplicht: zonder ingang is het redactiebeleid onvindbaar.
-Zet hem **ná** de `</time>` — de gate in `validate-blogs.sh` eist dat er tussen de span-tag en
-`<time` geen `<` staat, dus een link ervóór breekt de check.
+**De AI-melding is niet optioneel en niet cosmetisch.** Art. 50 lid 4 AI-verordening (van
+toepassing sinds 02-08-2026) eist dat AI-gegenereerde tekst die het publiek informeert over
+aangelegenheden van algemeen belang — waar security- en strafrechtonderwerpen onder vallen — als
+zodanig wordt aangemerkt, zichtbaar zonder interactie en "uiterlijk bij de eerste blootstelling".
+Er bestaat een uitzondering voor inhoud die een **mens** inhoudelijk heeft getoetst (feitencontrole
+is daarbij het minimumvereiste, certificering is níét vereist). Die uitzondering geldt hier niet:
+de controle gebeurt met AI. Een melding op `/over-ons.html` alleen is dus onvoldoende — wie via
+Google op deze post landt, moet het hier zien. Verberg het element nooit visueel.
 
-**Vul de échte datum in — de dag waarop je de claims daadwerkelijk hebt nagelopen.** Niet
-"vandaag" omdat het bestand vandaag is aangeraakt: dan is de regel op álle posts waardeloos.
+Verandert de werkwijze ooit naar échte menselijke feitencontrole, dan mag de melding weg — pas
+dan, en pas nadat `#verantwoording` op `over-ons.html` in dezelfde commit is bijgewerkt.
+
+De link naar `#verantwoording` is verplicht: zonder ingang is het redactiebeleid onvindbaar.
+Zet hem **ná** de `</time>` — de gate eist dat er tussen de span-tag en `<time` geen `<` staat,
+dus een link ervóór breekt de check.
+
+**Vul de échte datum in — de dag waarop de claims daadwerkelijk zijn nagelopen.** Niet "vandaag"
+omdat het bestand vandaag is aangeraakt: dan is de regel op álle posts waardeloos.
 Elke harde numerieke claim (snelheden, CVSS-scores, percentages, jaartallen) krijgt een bron of
 verdwijnt — liever een feit weglaten dan een onzekere claim plaatsen (Sessie 164).
 

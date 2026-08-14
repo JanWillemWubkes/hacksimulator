@@ -211,6 +211,20 @@
       color: var(--color-text-dim);
       line-height: 1.7;
       max-width: 700px;
+      margin: 0 auto var(--spacing-sm);
+      text-align: center;
+    }
+
+    /* AI-melding. Verplicht onder art. 50 lid 4 AI-verordening (sinds 02-08-2026):
+       zichtbaar zonder interactie, bij de eerste blootstelling. Gedempt maar nooit
+       verborgen — visueel wegwerken breekt de wettelijke eis. Geen accentkleur:
+       accent-text-contrast.spec.js meet deze pagina in beide thema's. */
+    .glossary-ai-notice {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      color: var(--color-text-dim);
+      line-height: 1.7;
+      max-width: 700px;
       margin: 0 auto var(--spacing-xl);
       text-align: center;
     }
@@ -456,6 +470,10 @@
     <p class="glossary-intro">
       Deze woordenlijst bevat de belangrijkste termen die je tegenkomt bij het leren van cybersecurity en ethisch hacken.
       Elke term wordt uitgelegd in het Nederlands met praktische context. Typ in het zoekveld om direct te filteren.
+    </p>
+    <p class="glossary-ai-notice">
+      Met AI geschreven en gecontroleerd &middot;
+      <a href="/over-ons.html#verantwoording">hoe dat werkt</a>
     </p>
 
     <!-- Sticky filterbalk: live zoekveld dat termen filtert + categorie-chips met
