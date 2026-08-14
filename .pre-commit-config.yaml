@@ -15,8 +15,15 @@ repos:
 
       - id: validate-docs
         name: Validate cross-doc invariants + SEO-metadata sync (sessie-counter, datums, PRD-version, monetization-stack, sitemap/feed)
-        entry: ./scripts/validate-docs.sh
+        entry: ./scripts/validate-docs.sh --deep
         language: script
+        # --deep sinds Sessie 223: zonder die vlag draaide de hook 12 checks en de CI
+        # 15, dus Check 5 (bundle-KB), 6 (milestone/content-tellingen) en 7 (Versie
+        # CLAUDE.md ↔ TASKS.md) konden lokaal niet vuren. Gevolg bij Sessie 222: de
+        # /summary-commit bumpte CLAUDE.md naar 5.96 en liet TASKS.md op 5.95 staan,
+        # kwam groen door de hook, en werd twee runs later pas per e-mail gemeld.
+        # Een poort die minder controleert dan de CI is geen poort maar uitstel.
+        # Kosten gemeten: fast 2,03s vs deep 2,67s — 0,64s.
         # commands/index.html + src/commands/ + vfs.js staan erbij vanwege Check 15:
         # die toetst de voorbeelden op /commands/ tegen de echte command-output, en
         # zou zonder deze patronen nooit vuren bij precies de wijzigingen die hem

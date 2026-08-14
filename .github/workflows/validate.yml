@@ -18,7 +18,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      # v4 draaide op Node 20 en werd door de runner al geforceerd naar Node 24 — dat
+      # leverde elke run een deprecation-annotatie op naast het echte resultaat, wat
+      # de signaalwaarde van de annotatielijst verlaagt. v7 is de laatste major; zijn
+      # breaking change (fork-PR-checkout blokkeren) raakt alleen `pull_request_target`
+      # en `workflow_run`, en die triggers gebruikt deze workflow niet.
+      - uses: actions/checkout@v7
 
       - name: Blogstructuur (JSON-LD, breadcrumbs, tag-balans, verificatiedatum)
         run: ./scripts/validate-blogs.sh
