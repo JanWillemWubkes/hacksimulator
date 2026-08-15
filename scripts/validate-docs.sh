@@ -1117,6 +1117,71 @@ else
 fi
 
 # ============================================================
+# Check 16: strafmaat-claims bij art. 138ab Sr ↔ de wettekst
+#   Hard constraint — fast + --deep. Aanleiding (Sessie 223): drie plekken schreven
+#   de VERZWAARDE maximumstraf toe aan het BASISDELICT. De wettekst kent drie leden:
+#
+#     lid 1  opzettelijk en wederrechtelijk binnendringen            max 2 jaar
+#     lid 2  + gegevens overnemen, aftappen of opnemen               max 4 jaar
+#     lid 3  via openbaar telecomnet + verwerkingscapaciteit misbruiken  max 4 jaar
+#
+#   "Ongeautoriseerde toegang is strafbaar met maximaal 4 jaar" is dus onjuist:
+#   ongeautoriseerde toegang ís lid 1, en dat is 2 jaar. Gevonden in terms.html,
+#   cybersecurity-tools.html en wat-is-ethisch-hacken.html — die laatste sprak
+#   zichzelf tegen, want een andere alinea in hetzelfde bestand had de juiste
+#   uitsplitsing al. Dit is de DERDE keer dat deze fout opduikt: Sessie ~150 had hem
+#   in wat-is-ethisch-hacken.html gecorrigeerd, maar zonder sitebrede sweep en zonder
+#   guard, dus twee andere bestanden met dezelfde zin bleven staan.
+#
+#   POSITIEVE invariant (de les van Sessie 221: een verbod op één formulering dekt de
+#   klasse niet). Een venster rond een 138ab-vermelding dat een strafmaat in jaren
+#   noemt, moet de gradatie tonen op één van twee manieren:
+#     (a) open vorm    — "tot 4 jaar", "oplopen tot vier jaar"  (geen gesloten max)
+#     (b) beide grenzen — zowel 2 als 4 genoemd ("max 2 ... max 4", "2-4 jaar")
+#   Een gesloten maximum met maar één grens is per definitie de fout.
+#
+#   Vensters zonder jaartal worden overgeslagen: verwijzen naar 138ab zónder strafmaat
+#   is de veiligste vorm en moet vrij blijven (zo doen de meeste posts het al).
+# ============================================================
+check_start "Strafmaat-claims bij art. 138ab Sr ↔ de wettekst"
+
+sr_gecontroleerd=0
+sr_fouten=0
+while IFS=: read -r sr_bestand sr_regel _; do
+  [ -z "$sr_bestand" ] || [ -z "$sr_regel" ] && continue
+  [ -f "$sr_bestand" ] || continue
+  sr_start=$(( sr_regel > 3 ? sr_regel - 3 : 1 ))
+  sr_venster=$(sed -n "${sr_start},$((sr_regel + 3))p" "$sr_bestand" \
+    | sed 's/<[^>]*>//g' | tr '\n' ' ' | tr -s ' ')
+
+  # Alleen vensters mét een strafmaat in jaren zijn relevant.
+  echo "$sr_venster" | grep -qiE '(een|twee|drie|vier|vijf|[0-9]+)[ -]*(jaar|jaren)' || continue
+  sr_gecontroleerd=$((sr_gecontroleerd + 1))
+
+  sr_ok=0
+  # (a) open vorm: "tot N jaar" — presenteert geen gesloten maximum
+  echo "$sr_venster" | grep -qiE 'tot [a-z0-9]+[ -]*(jaar|jaren)' && sr_ok=1
+  # (b) beide grenzen genoemd (dekt ook de vorm "2-4 jaar")
+  if [ "$sr_ok" -eq 0 ] \
+    && echo "$sr_venster" | grep -qiE '(^|[^0-9a-z])(2|twee)([^0-9a-z]|$)' \
+    && echo "$sr_venster" | grep -qiE '(^|[^0-9a-z])(4|vier)([^0-9a-z]|$)'; then
+    sr_ok=1
+  fi
+
+  if [ "$sr_ok" -eq 0 ]; then
+    fail "16: ${sr_bestand}:${sr_regel} noemt een strafmaat bij art. 138ab Sr zonder de gradatie (lid 1 = 2 jaar, lid 2/3 = 4 jaar). Gebruik 'tot N jaar' of noem beide grenzen."
+    sr_fouten=$((sr_fouten + 1))
+  fi
+done <<< "$(grep -rn '138ab' --include=*.html --include=*.typ --include=*.js . \
+  --exclude-dir=node_modules --exclude-dir=test-results --exclude-dir=.playwright-mcp 2>/dev/null | sed 's|^\./||')"
+
+if [ "$sr_gecontroleerd" -eq 0 ]; then
+  fail "16: geen enkele strafmaat-claim bij art. 138ab gevonden — de check meet niets meer (regex verouderd?)"
+elif [ "$sr_fouten" -eq 0 ]; then
+  pass "${sr_gecontroleerd} strafmaat-claims bij art. 138ab Sr tonen allemaal de gradatie (2 jaar lid 1 / 4 jaar lid 2-3)"
+fi
+
+# ============================================================
 echo ""
 echo "=========================================="
 if [ "$DEEP_MODE" = "1" ]; then
