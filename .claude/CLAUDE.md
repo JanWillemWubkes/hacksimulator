@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 222)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 223)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -83,6 +83,24 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ---
 
 ## Recent Critical Learnings
+
+### Sessie 223: De verantwoording wekte wantrouwen — en de wet die dat regelt gold al twaalf dagen (16 aug 2026)
+⚠️ **Never:**
+- Een vertrouwenstekst **zelfverzekerder** maken zonder te vragen wat er feitelijk waar is. De defensieve toon wás accuraat: er is geen menselijke feitencontrole. Had ik alleen de toon opgepoetst, dan had ik precies de misleiding gebouwd waar art. 6:193c BW tegen beschermt. Vraag eerst wat het proces écht is — het antwoord ("ik controleer niets zelf, AI doet meerdere rondes") kantelde de hele conclusie.
+- Een **positionele selector** gebruiken in een rij waar elementen worden bijgeplakt. `.blog-post-meta span:last-child` (0,2,1) was geschreven voor de categorie-badge; Sessie 208 zette er een span achter en de regel wisselde stilzwijgend van doel, versloeg `.blog-ai-notice` (0,1,0) en verfde een wettelijk verplichte melding in linkblauw op **4,89:1** terwijl het commentaar "bewust gedempt" beloofde. En repareer zo'n regel door hem te **verwijderen** als hij dood is (`.category-badge` zet zelf color + font-weight) — CSS toevoegen om CSS te bevechten die niets meer doet, verdubbelt het probleem.
+- Een grep-populatie vertrouwen die één woord te veel eist. Mijn eerste sweep zocht een strafmaat mét "gevangenisstraf" ernaast en vond **3** claims; een ±3-regelvenster op `jaar|jaren` vond er **8**. Ik had Heisenberg een populatie van 3 gemeld die 8 bleek.
+- Een mutant accepteren die **het bestand niet verandert**. Twee van mijn vier Check 16-mutanten bleven groen: M1 verwijderde per ongeluk het `138ab`-anker waar de check op zoekt, M3 matchte niet door `<strong>`-tags in de ruwe HTML. "Geen failure" is ononderscheidbaar van "de check werkt niet" — alleen `diff -q` ná de sed onthulde het.
+- Een defect repareren zonder **sitebrede sweep en zonder guard**. De 138ab-strafmaatfout was al eens gecorrigeerd (`archive-s121-s164.md:16`); die fix raakte één regel, waardoor `wat-is-ethisch-hacken.html` zichzélf tegensprak (regel 213 fout, regel 301 correct) en twee andere bestanden dezelfde zin hielden. Derde keer dus.
+- Een bundelgetal uit een eigen `du`-som melden. `du -sb src/ styles/` gaf 1221 KB (over budget!) omdat het de woff2-fonts meetelt; de canonieke formule in `performance.spec.js:132-141` is `src/**/*.js` + `styles/**/*.css` + `src/ui/**/*.css` + `index.html` = **1103,43 KB**. Draai de test, som niet zelf.
+
+✅ **Always:**
+- Meet de **load-bearing** claim van een subagent zelf na. Art. 50 lid 4 AI-verordening geldt sinds **02-08-2026** en de uitzondering eist *menselijke* toetsing met feitencontrole als minimum (certificering uitdrukkelijk **niet**). Dat ene feit bepaalde de hele aanpak, dus het ging langs twee onafhankelijke bronnen vóór ik erop bouwde.
+- Zet de melding waar de **wet meet**, niet waar het uitkomt. "Uiterlijk bij de eerste blootstelling" betekent: op de blogpost zelf, want de meeste lezers landen via Google en zien `/over-ons.html` nooit. Een verantwoordingspagina dekt de bezoeker die er toevallig komt.
+- Verschuif de trustbasis naar wat **waar én sterk** is als "ik heb dit geverifieerd" niet kan. "Wat er gecontroleerd is" → **"Wat je zelf kunt natrekken"** met concrete ingangen (wetten.overheid.nl, rechtspraak.nl/ECLI, GitHub, de bestaande automatische checks). *Niet geloof me, maar controleer me* is eerlijker én robuuster dan een vage kwaliteitsbelofte.
+- Loop na wat een copy-edit **drie alinea's verderop** doet. Het schrappen van "ik loop de beweringen niet zelf na" maakte "geen menselijke feitencontrole" generiek, waardoor het de latere alinea over de *onafhankelijke* lezer inslikte. De blast radius van een tekstwijziging is groter dan de zin waar je in staat.
+- Geef een guard een tak die **zichzelf** bewaakt. Check 16 faalt óók wanneer hij nul claims vindt; zonder die tak zet een verouderde zoekterm de check stil op groen — precies hoe een guard verdampt zonder dat iemand het merkt.
+- Beantwoord "is deze faler van mij?" met een **A/B tegen HEAD**. De 22px overflow op `terms.html` mat 22px aan beide kanten (`git archive` + twee poorten), dus pre-existing. En noteer meteen de echte oorzaak dat hij ongezien bleef: er is **geen E2E-dekking op de drie legal-pagina's**.
+- Kies de goedkoopste laag die de invariant kan dragen. Beide nieuwe guards bewaken **statische tekst**, dus ze horen in `validate-docs.sh`/`validate-blogs.sh` — die draaien al via pre-commit én CI, zonder server en zonder browser. Spec-telling bleef dan ook 39/303.
 
 ### Sessie 222: De box-randen braken verticaal — en zes eerdere fixes zochten allemaal in de breedte (14 aug 2026)
 ⚠️ **Never:**
@@ -172,23 +190,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Zeg het hardop als een opruiming netto **bytes kost**. Dit was −26% hoogte en 4× zoveel links, maar **+3,3 KB**: de vervanging draagt uitleg, een noscript-vangnet en een trackingmodule. "Content weghalen" leest anders vanzelf als besparing.
 - Voeg de meting toe vóór je het volgende oordeel velt. Er bestond site-breed **geen enkel** scroll-event; `edu_section_reached` gedeeld door de `page_view` geeft nu de doorscroll-rate. Tot dat cijfer er is, is elke uitspraak over die strook een gevoel.
 
-### Sessie 217: Vier pre-existing punten opgeruimd — en drie van de vier vastgelegde metingen klopten niet (09 aug 2026)
-⚠️ **Never:**
-- Contrast meten tegen de **paginakleur** terwijl het element een eigen achtergrond heeft. `getComputedStyle(el).backgroundColor` gaf `rgba(22,163,74,0.08)` — geen kleur waar je tegen kúnt meten — en de notitie greep daarom naar `--color-bg`. Dat mat de laag ónder de verf: 3,10:1 genoteerd, **2,85:1** echt (2,74 op de hero, waar een radial glow laag drie is). De fout was niet alleen fout maar **te gunstig** — de badge zakte van "onder AAA" naar onder **AA**. Composite de ancestor-keten tot de eerste laag met `alpha === 1`.
-- Een open item laten staan zonder test die kan melden dat hij is opgelost. De terminal-overflow van Sessie 189 was op **07 jul** gefixt door commit `3d7df13`, wiens titel de bug letterlijk noemt — en stond vijf sessies later nog open, omdat er site-breed geen horizontale-overflow-assertie op `/terminal.html` bestond. Een notitie meldt niets terug; ook niet dat hij achterhaald is.
-- Een IO-gestuurde `data-state` aflezen na 2 rAF. De callback heeft dan nog niet gevuurd, dus je leest de staat van de **vorige** scrollpositie. Mijn eerste meting rapporteerde daardoor `verborgen` op maximale scroll (de staat van y=0) en overdreef de bug. 300ms settle geeft de echte waarde. Zelfde faalklasse als de smooth-scroll-val van Sessie 216: het zichtbare gedrag is asynchroon, de meting synchroon.
-- `Math.round()` op een geometrieverschil dat uit fractionele layout komt. Documenthoogtes zijn fractioneel (body 1308,5px) terwijl `scrollHeight` naar boven afrondt, dus scrollen naar de bodem schiet tot 1px door — `Math.round(0.5)` maakte daar een valse faler van op `/404.html`. Meet exact en zet de drempel op wat zichtbaar is.
-- Een testnaam een grens laten noemen die elders als constante staat. `Bundle size < 1000KB` stond er nog terwijl de limiet al 1050 en toen 1100 was — dezelfde staleness als de notities die deze sessie opruimde. Interpoleer de constante in de naam.
-- Een budgetgrens ophogen zonder te tellen hoe vaak dat al gebeurde. 1000 → 1050 → 1100 → 1120 is **drie bumps in 14 sessies**; zonder die telling erbij is de volgende bump vanzelfsprekend en is het geen grens meer.
-
-✅ **Always:**
-- Meet vóór je plant wanneer de opdracht "deze meting klopt misschien niet" zegt. Drie van de vier vastgelegde metingen bleken onjuist, en twee daarvan veranderden het plan: (a) raakte 10 pagina's i.p.v. 9, (c) was helemaal geen bug meer. Was ik met de notities gaan bouwen, dan had ik een gefixte bug "gefixt" en een strook op index.html laten staan.
-- Zeg het hardop als een vermoeden in de **omgekeerde richting** uitkomt. Heisenberg verwachtte dat de badge het bij goed meten wél zou halen; hij haalt zelfs AA niet. De diagnose klopte, de conclusie niet — dat onderscheid is de helft van het antwoord.
-- Los "verkeerd geverfde ruimte" op door de ruimte te **verplaatsen**, niet weg te halen. De reserve moest blijven bestaan (weghalen = balk dekt content af) én onvoorwaardelijk blijven (conditioneel = documenthoogte wisselt per toggle → terugkoppellus). In de dónkere footer zetten maakt beide waar en verft hem meteen goed; `:has()` op elementaanwezigheid is statisch, gemeten als 9481/9481/9481 over drie toggles.
-- Loop de **overlevers** van een mutant na, niet alleen de falers. 12 rood / 2 groen zegt niets tot je weet waaróm die 2 groen zijn: `@1280px` valt buiten de `≤1279px`-band en de terugkoppellus-test bewaakt een andere eigenschap. Beide horen groen te zijn — anders had ik een blinde assertie gehad.
-- Kies de mutant die de oorspronkelijke meting **reproduceert**. `width: auto` weghalen gaf letterlijk `left 10 / width 360 / right 370 bij clientWidth 360` — cijfer voor cijfer de notitie uit Sessie 189. Daarmee is in één stap bewezen dat de bug echt was, dat hij weg is, en dat de nieuwe assertie hem zou zien.
-- Gebruik `grep -F` bij het tellen van `[chromium]`-achtige labels. De haken zijn anders een karakterklasse — de meetfout die Sessie 216 zichzelf moest corrigeren.
-
 📌 **Staande regel vanaf Sessie 217 — er is GEEN baseline van bekende testfalers meer.**
 De vastgelegde lijst (Sessie 209, chromium-only) klopte op geen enkel punt: 5 van de 7 falers
 waren verdwenen, twee stonden er niet in die wél structureel rood waren, en **alle vier de
@@ -205,7 +206,7 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
   als de test.
 
 
-**Rotation:** Top-6 huidig: 217-218-219-220-221-222 (Sessie 216 → `docs/sessions/current.md` via 1-in-1-out, Sessie 222). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 220 (205-209 → `archive-s205-s209.md`, byte-geverifieerd); current.md houdt nu het rolling window 210-220 (14 secties: 11 entries + de learnings van 212, 213 en 214). **Volgende bulk-rotatie Sessie 225 → archiveer de staart (210-214).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10"). Twee dingen die bij Sessie 220 bleken: (a) een learnings-blok hoort mee te gaan met de sessie waar het bij staat, anders blijft "Sessie N — learnings" achter terwijl entry N in het archief zit; (b) de SESSIONS.md-index dríft — hij claimde window "205-215" terwijl current.md er 15 hield, dus controleer hem bij elke bulk. Historie 81-209 → `archive-s205-s209.md` + `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 218-219-220-221-222-223 (Sessie 217 → `docs/sessions/current.md` via 1-in-1-out, Sessie 223; de **staande regel** "geen baseline van bekende testfalers" is bewust in dit bestand gebléven — die is nog van kracht en is geen historisch leerpunt). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 220 (205-209 → `archive-s205-s209.md`, byte-geverifieerd); current.md houdt nu het rolling window 210-223 (16 secties: 13 entries + de learnings van 212-217). **Volgende bulk-rotatie Sessie 225 → archiveer de staart (210-214).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10"). Twee dingen die bij Sessie 220 bleken: (a) een learnings-blok hoort mee te gaan met de sessie waar het bij staat, anders blijft "Sessie N — learnings" achter terwijl entry N in het archief zit; (b) de SESSIONS.md-index dríft — hij claimde window "205-215" terwijl current.md er 15 hield, dus controleer hem bij elke bulk. Historie 81-209 → `archive-s205-s209.md` + `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -254,7 +255,7 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Bij elke sessie 1-in-1-out op de CLAUDE.md-learnings (top-6 vast). Bulk-rotatie van `current.md` bij `N % 5 == 0`: archiveer **de staart** — de oudste ~5 entries — naar `archive-sNNN-sMMM.md`. Laatste bulk: Sessie 220 (205-209). **Volgende bulk: Sessie 225** (staart = 210-214). Neem het learnings-blok van een sessie mee met zijn entry. Actuele stand: zie de **Rotation**-regel onder §Recent Critical Learnings.
-**Sessie counter:** 222
+**Sessie counter:** 223
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -309,6 +310,6 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
 
 ---
 
-**Last updated:** 14 aug 2026 (Sessie 222 — de box-randen braken verticaal, niet horizontaal: `.terminal-line`'s margin-bottom van 4px maakte van elke `│`/`┃` een streepje. Zes eerdere fixes zochten in de breedte, die kant klopte al. Volledig: `docs/sessions/current.md`)
-**Version:** 5.96 (Sessie 222 — box-rand brak verticaal: 4px marge + `vertical-align` op de pijl gaven 12 stubs met 4/8px gaten; ná: één run van 293px, 0 gaten over 8 commando's. Onder 768px extra 9 naden van 1px door fractionele line-height → `--line-height`. NEW verticale-continuïteitsdetector, 3 mutanten met verschillende faalpatronen. 39 specs / 303 declaraties (was 296 genoteerd, 300 gemeten). Bundel 1102,37/1120 (marge 1,57%). Historie: `docs/sessions/current.md`)
+**Last updated:** 16 aug 2026 (Sessie 223 — verantwoording herschreven van bekentenis naar controleerbaarheid; art. 50 lid 4 AI-verordening geldt sinds 02-08-2026 en de uitzondering vereist menselijke feitencontrole, die er niet is — dus AI-melding op 15 posts + woordenlijst. Volledig: `docs/sessions/current.md`)
+**Version:** 5.97 (Sessie 223 — verantwoording van "geloof me" naar "controleer me"; AI-melding per contentpagina, want art. 50 lid 4 meet bij de eerste blootstelling. Bijvangst: `span:last-child` verfde die melding linkblauw op 4,89:1 → 9,17:1, en de verzwaarde 138ab-strafmaat stond op het basisdelict (3x, derde keer) → NEW Check 16. 7 mutanten, 7 faalpatronen. 39 specs / 303 declaraties. Bundel 1103,43/1120. Historie: `docs/sessions/current.md`)
 

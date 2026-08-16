@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 14 aug 2026 (Sessie 222 — **drie regels toegevoegd aan §Testing Strategie, geen architectuur-wijziging aan het product.** Meet gerenderde pixels als het over zichtbaarheid gaat; dek de hele faalklasse en niet één as ervan; laat mutanten verschillend falen. Alle drie komen uit de box-randbug, waar de DOM-cijfers in orde waren terwijl de rand als streepjeslijn rendeerde.)
+**Laatst bijgewerkt:** 16 aug 2026 (Sessie 223 — **§Security & Privacy uitgebreid met AI-transparantie als staande publicatie-constraint.** Art. 50 lid 4 AI-verordening geldt sinds 02-08-2026; de uitzondering vereist menselijke feitencontrole en die is er niet, dus elke contentpagina draagt zelf de melding. Geen product-architectuur-wijziging.)
 **Status:** ✅ LIVE on Netlify | M5 Testing 71% | M5.5 Monetization deep (Ko-fi + Brevo + Gumroad + Lead magnet) | M6 Tutorial 100% | M7 Gamification 100% | Blog content-pijler 14 posts live
 **Verantwoordelijk:** Development Team
 **Live URL:** https://hacksimulator.nl/
@@ -499,6 +499,39 @@ Month 4-6 → Evaluate traffic
 Remove cookie banner → Better UX
 ```
 
+### AI-transparantie: een staande publicatie-constraint (Sessie 223)
+
+**Art. 50 lid 4 AI-verordening** is van toepassing sinds **2 augustus 2026**. Wie AI-gegenereerde
+tekst publiceert die het publiek informeert over aangelegenheden van algemeen belang — en
+security, computercriminaliteit en consumentenveiligheid vallen daaronder — moet die als zodanig
+aanmerken, **zichtbaar zonder interactie en uiterlijk bij de eerste blootstelling**.
+
+Er is één uitzondering: inhoud die een **natuurlijk persoon** inhoudelijk heeft getoetst
+(controle van de feitelijke juistheid is daarbij het minimumvereiste), gepubliceerd onder de
+redactionele verantwoordelijkheid van een met naam genoemd persoon. Certificering van die toetser
+is uitdrukkelijk **niet** vereist.
+
+**Voor dit project geldt de uitzondering niet.** De inhoud wordt met AI geschreven en met AI
+gecontroleerd; er is geen menselijke feitencontrole. Daaruit volgen drie constraints:
+
+1. **Elke contentpagina draagt zelf de melding** — niet alleen `/over-ons.html`. De meeste lezers
+   landen via een zoekmachine direct op een blogpost; dát is het moment van eerste blootstelling.
+2. **De melding mag nooit visueel verborgen worden.** Geen `display: none`, geen contrast onder de
+   AA-drempel, geen tooltip-only. Zie ook `.claude/rules/architecture-patterns.md` §14 — een
+   positionele selector verfde deze melding ooit in linkkleur op 4,89:1 zonder dat iemand het zag.
+3. **Geen claim mag menselijke verificatie suggereren** die er niet is. Dat is niet alleen de
+   AI-verordening maar ook art. 6:193c BW (misleidende informatie over hoedanigheid en
+   kwalificaties), met omkering van de bewijslast in art. 6:193j lid 2 BW.
+
+Bewaakt door Check 7 in `scripts/validate-blogs.sh`. **Wijzigt de werkwijze ooit naar échte
+menselijke feitencontrole, dan mag de melding weg** — pas dan, en pas nadat `#verantwoording` op
+`over-ons.html` in dezelfde commit is bijgewerkt.
+
+Wat hier bewust **niet** staat: een brede aansprakelijkheidsuitsluiting. Richting consumenten is
+die grotendeels vernietigbaar (art. 6:233 jo. 6:237 sub f BW) en het dwingende conformiteitsrecht
+van afd. 7.1AA BW laat zich er niet door opzijzetten. Wat wél werkt is een **scope-mededeling**
+vóór de aankoop: zeggen wat het product is en niet is.
+
 ---
 
 ## 📊 Performance Budgets
@@ -867,8 +900,8 @@ const DEBUG_MODE = false;
 
 ---
 
-**Laatst bijgewerkt:** 14 aug 2026 (Sessie 222 — **drie regels toegevoegd aan §Testing Strategie, geen architectuur-wijziging aan het product.** Meet gerenderde pixels als het over zichtbaarheid gaat; dek de hele faalklasse en niet één as ervan; laat mutanten verschillend falen. Alle drie komen uit de box-randbug, waar de DOM-cijfers in orde waren terwijl de rand als streepjeslijn rendeerde.)
-**Versie:** 4.44 (Sessie 222 — **drie regels toegevoegd aan §Testing Strategie**: gerenderde pixels boven `getComputedStyle` bij zichtbaarheid, dek alle assen van een faalklasse, en laat mutanten verschillend falen. Product-architectuur ongewijzigd.)
+**Laatst bijgewerkt:** 16 aug 2026 (Sessie 223 — **§Security & Privacy uitgebreid met AI-transparantie als staande publicatie-constraint.** Art. 50 lid 4 AI-verordening geldt sinds 02-08-2026; de uitzondering vereist menselijke feitencontrole en die is er niet, dus elke contentpagina draagt zelf de melding. Geen product-architectuur-wijziging.)
+**Versie:** 4.45 (Sessie 223 — **§Security & Privacy: AI-transparantie als staande constraint.** Melding per contentpagina i.p.v. één verantwoordingspagina, nooit visueel verbergen, geen claim die menselijke verificatie suggereert. Bewust géén brede exoneratie: vernietigbaar richting consumenten. Product-architectuur ongewijzigd.)
 **Status:** ✅ Deployed - Live in Production | M5.5 Monetization stack deep + Brevo deliverability getuned | M7 Gamification ✅ 100% | Blog content-pijler 14 posts live
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

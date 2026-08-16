@@ -365,3 +365,38 @@ predicaat dat alle drie de bronnen dekt. Meet **gerenderde pixels** als je twijf
 > `terminal.css` laadt. Box-regels winnen daarom op specificiteit (twee klassen, 0,2,0) en
 > niet met `!important`. Een live-experiment via een geïnjecteerde `<style>` bewijst dit
 > níét — die komt altijd als laatste.
+
+---
+
+## 14. Positionele selectors verouderen stil in een rij die aangroeit (Sessie 223)
+
+`:last-child`, `:nth-child(3)` en `:first-of-type` binden aan een **positie**, niet aan een
+bedoeling. Zodra iemand een element aan die rij toevoegt, wisselt de regel van doel — zonder
+foutmelding, zonder testfaler, zonder dat de auteur van de nieuwe regel het merkt.
+
+```css
+/* Geschreven toen .category-badge de laatste span was. */
+.blog-post-meta span:last-child { color: var(--color-link); font-weight: medium; }  /* (0,2,1) */
+
+/* Sessie 208 plakte hier een span achter → de regel greep die, en versloeg: */
+.blog-ai-notice { color: var(--color-text-dim); }                                   /* (0,1,0) */
+```
+
+Gevolg, gemeten: de AI-melding rendeerde in **linkblauw met medium gewicht** op **4,89:1** in
+light mode, terwijl het commentaar erboven "bewust gedempt" beloofde. Niet-link-tekst in
+linkkleur, op een element dat wettelijk zichtbaar móét zijn.
+
+**Repareer door te verwijderen, niet door te overschrijven.** Controleer eerst of de regel nog
+iets dóét voor zijn oorspronkelijke doel — hier zette `.category-badge` (blog.css:920) zijn
+`color` en `font-weight` allang zelf, dus de positionele regel was voor de badge al dood. Een
+tegenregel toevoegen (`.blog-post-meta span.blog-ai-notice`) had de specificiteitsstrijd
+gewonnen en het dode gewicht laten staan: CSS toevoegen om CSS te bevechten die niets meer doet,
+verdubbelt het probleem.
+
+**Regel:** in een container waar elementen bijkomen (meta-rijen, kaartvoeten, breadcrumb-lijsten)
+bind je op de **klasse** van wat je bedoelt. Positionele selectors zijn alleen veilig in een rij
+met een vaste, afgedwongen samenstelling.
+
+> Je vindt dit niet door de CSS te lezen — beide regels zien er los prima uit. Alleen
+> `getComputedStyle` op het gerenderde element verraadt dat er een kleur wint die je nergens op
+> dat element hebt gezet. Zelfde meetles als §5.

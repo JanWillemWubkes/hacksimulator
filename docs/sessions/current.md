@@ -4,6 +4,127 @@
 
 ---
 
+## Sessie 223: De verantwoording wekte wantrouwen — en de wet die dat regelt gold al twaalf dagen (14-16 aug 2026)
+
+**Mission:** Heisenberg stuurde een screenshot van `#verantwoording` op `over-ons.html` met de observatie dat die sectie de site juist *onbetrouwbaarder* laat overkomen. Opdracht: analyseer de huidige tekst, laat een subagent uitzoeken wat de Nederlandse wet- en regelgeving hier eist, en herschrijf hem wetsconform zonder het vertrouwen te schaden. Plus: de perspectiefsprong eruit — eerst derde persoon over Jan Willem, daarna de ik-vorm.
+
+**Commits:**
+
+| | | |
+|---|---|---|
+| `9e93336` | 14 aug | De AI-melding stond op één pagina; art. 50 lid 4 meet bij de eerste blootstelling |
+| `b051b1b` | 15 aug | Vier zinnen die zichzelf onderuithaalden, plus een tooltip die met ze mee moest |
+| `fbb1fc5` | 16 aug | De verzwaarde strafmaat stond op het basisdelict — op drie plekken, voor de derde keer |
+
+### De diagnose: het probleem was niet de toon, maar wat de toon verzweeg
+
+Vier oorzaken, gemeten in de tekst zelf:
+
+1. **De kop stelde de twijfel zelf.** *"Verantwoording: hoe betrouwbaar is deze inhoud?"* — een vraag die de lezer nog niet had, en die je daarna moet wegnemen.
+2. **De AI-alinea was een bekentenis, geen werkwijze.** *"levert fouten op die er overtuigend uitzien"* + *"Dat is geen excuus vooraf"* verdedigt zich tegen een aanklacht die niemand had ingediend.
+3. **Een eigen kop "Wat nog niet gecontroleerd is"** gaf structureel evenveel gewicht aan het ontbrekende als aan het aanwezige.
+4. **De hoofdcontrole stond in de toekomende tijd.** *"Zodra die review is uitgevoerd"* — de lezer hoort: het belangrijkste moet nog gebeuren.
+
+Plus een interne tegenspraak op één klik afstand: `index.html:553` claimde *"10+ Artikelen met bron en controledatum"* en linkte naar precies de sectie die zei dat de artikelen *"nog geen bronnenlijst"* hebben.
+
+### Het juridisch onderzoek draaide de aanname om
+
+Subagent-onderzoek langs negen vragen (AI-verordening, art. 3:15d BW, oneerlijke handelspraktijken, consumentenrecht digitale inhoud, exoneratie, art. 138ab/139d Sr, titelbescherming, AVG, en of een verantwoording überhaupt verplicht is). De load-bearing bevinding zelf nagemeten bij twee onafhankelijke bronnen:
+
+**Art. 50 lid 4 AI-verordening is van toepassing sinds 2 augustus 2026** — twaalf dagen op het moment van de sessie. Wie AI-tekst publiceert die het publiek informeert over aangelegenheden van algemeen belang (justitie, openbare veiligheid, consumentenveiligheid) moet die als zodanig aanmerken. Er is één uitzondering: menselijke inhoudelijke toetsing — de definitieve richtsnoeren noemen *"controle van de feitelijke juistheid vormt een minimumvereiste"* — plus een met naam genoemd redactioneel eindverantwoordelijke. **Certificering is uitdrukkelijk niet vereist**; dat Jan Willem geen OSCP heeft was dus nooit het probleem.
+
+Op de directe vraag antwoordde Heisenberg: *"Ik controleer niets zelf op feiten. Wel laat ik AI meerdere keren controleren."* AI die AI controleert is geen menselijke toetsing. **De uitzondering is dus niet beschikbaar**, en de melding moet op de contentpagina's zelf staan — de wet meet bij de *eerste blootstelling*, en de meeste lezers landen via Google direct op een blogpost, niet op `/over-ons.html`.
+
+### Twee claims die daardoor niet klopten
+
+| Waar | Wat er stond | Waarom fout |
+|---|---|---|
+| 15× `blog/*.html` | `title="Datum waarop de feitelijke beweringen … zijn nagelopen"` + "Feiten gecontroleerd:" | Impliceert menselijke redactie |
+| `over-ons.html:326` | *"De betaalde gidsen zijn apart gecontroleerd, inclusief de wetsartikelen en rechtszaken"* | Zelfde probleem, maar bij een **betaald** product |
+
+### De herschrijving: van "geloof me" naar "controleer me"
+
+Zonder menselijke feitencontrole kan het vertrouwen niet uit *"ik heb dit geverifieerd"* komen — dat zou precies de misleiding zijn waar art. 6:193c BW tegen beschermt. Het moet komen uit het enige dat waar én sterk is: **alles is controleerbaar, en hier staat hoe.** "Wat er gecontroleerd is" → **"Wat je zelf kunt natrekken"**, met concrete ingangen: wetten.overheid.nl, rechtspraak.nl/ECLI, de open broncode op GitHub, en de twee automatische checks die al bestonden.
+
+Elke hergebruikte claim eerst tegen de bron geverifieerd vóór hij opnieuw werd opgeschreven: Check 6e bewaakt de hash-snelheden echt, 6b/6c/6d de tellingen echt, 15/15 posts dragen echt een datum.
+
+Bewust **geen** brede aansprakelijkheidsuitsluiting toegevoegd: richting consumenten grotendeels vernietigbaar (art. 6:233 jo. 6:237 sub f BW), `terms.html:184-217` draagt hem al, en op een vertrouwenspagina kost hij alleen. Wel de scope-mededeling die juridisch wél werkt (educatief, geen juridisch of beveiligingsadvies).
+
+### Copy-revisie (commit 2): vier zinnen die zichzelf onderuithaalden
+
+Heisenberg las de nieuwe tekst terug en gaf drie punten; het vierde volgde uit de meting:
+
+1. *"klopt er iets niet, dan ligt dat bij mij"* → zin eindigt na *"gepubliceerd wordt"*. Het Nederlands klopte niet: *"de verantwoordelijkheid ligt bij mij"* is correct, maar hier is het onderwerp de **fout** zelf, en een fout "ligt" niet bij iemand. Grammaticaal correct zou "aan mij" zijn — precies de zelfbeschuldiging die weg moest.
+2. *"is er niet: ik loop de beweringen niet zelf regel voor regel na"* → *"is er nog niet."*
+3. *"Dat is een echte beperking, en het is de reden dat de site verder is ingericht op controleerbaarheid in plaats van op mijn woord"* → *"De site is ingericht op controleerbaarheid."*
+4. **Niet gemeld, wel gevolg van punt 2:** door het schrappen van die bijzin werd "geen menselijke feitencontrole" generiek en overlapte hij met de alinea verderop die opende met *"Wat er nog niet is: een onafhankelijke securityprofessional…"*. Die alinea leidt nu met het aanbod (het reviewpakket) in plaats van met het tekort.
+
+Randvoorwaarde die is bewaakt: **geen enkel feit verdwijnt**. *"Een menselijke feitencontrole is er nog niet"* dekt zowel de eigen controle als de onafhankelijke lezer.
+
+### Bijvangst 1: een CSS-bug die er sinds Sessie 208 zat
+
+`.blog-post-meta span:last-child { color: var(--color-link); font-weight: medium }` is geschreven toen de **categorie-badge** de laatste span in de meta-rij was. Sessie 208 plakte de controledatum-span erachter en de regel wisselde stilzwijgend van doel: (0,2,1) verslaat `.blog-ai-notice` (0,1,0), dus de melding rendeerde in **linkblauw met medium gewicht** terwijl het commentaar erboven "bewust gedempt" beloofde.
+
+Gemeten light mode: **4,89:1** in plaats van de bedoelde 9,17:1, plus niet-link-tekst in linkkleur. Voor de badge was de regel al dood — `.category-badge` (regel ~920) zet zelf `color` + `font-weight`. Dus **verwijderd** in plaats van er met specificiteit tegenaan geduwd: CSS toevoegen om CSS te bevechten die niets meer doet, verdubbelt het probleem.
+
+### Bijvangst 2: de verzwaarde strafmaat stond op het basisdelict — voor de derde keer
+
+Art. 138ab Sr, geverifieerd tegen de wettekst via meerdere juridische databases:
+
+| Lid | Delict | Max |
+|---|---|---|
+| 1 | opzettelijk en wederrechtelijk **binnendringen** | **2 jaar** |
+| 2 | + gegevens overnemen, aftappen of opnemen | 4 jaar |
+| 3 | via openbaar telecomnet + verwerkingscapaciteit misbruiken | 4 jaar |
+
+Drie plekken schreven het verzwaarde maximum toe aan het basisdelict: `terms.html:181`, `blog/cybersecurity-tools.html:461`, `blog/wat-is-ethisch-hacken.html:213`. Ongeautoriseerde toegang ís lid 1, dus 2 jaar.
+
+`wat-is-ethisch-hacken.html` **sprak zichzelf tegen**: regel 213 was fout terwijl regel 301 in hetzelfde bestand de juiste uitsplitsing al had. Dat is het spoor van de eerdere correctie (`archive-s121-s164.md:16`) — die repareerde één regel, veegde niet sitebreed en liet geen guard achter.
+
+Vijf claims waren al goed en leverden het model: drie posts gebruiken de open vorm (*"straffen kunnen oplopen tot vier jaar"*), twee noemen beide grenzen. **De betaalde juridische gids splitst óók correct uit per lid** — de gratis pagina's waren hier slechter dan het betaalde product, precies omgekeerd aan wat in de vorige sessie-notitie stond.
+
+### Guards
+
+- **`validate-blogs.sh` Check 7 uitgebreid**: assert positief dat elke post `Met AI geschreven` draagt. Niet: verbied de oude tekst — een verbod op één formulering laat elke andere door.
+- **NEW Check 16 in `validate-docs.sh`**: een venster rond een 138ab-vermelding dat een strafmaat in jaren noemt, moet de gradatie tonen via (a) open vorm `tot N jaar` of (b) beide grenzen (dekt ook `2-4 jaar`). Vensters zonder jaartal blijven vrij — 138ab noemen zónder strafmaat is de veiligste vorm en de meeste posts doen dat al. Meet 8 claims over html/typ/js, en faalt óók wanneer hij nul claims vindt (dan is de zoekterm verouderd).
+- **`.claude/skills/blog-post/SKILL.md` stap 5** in lockstep, inclusief de juridische grond én de conditie waaronder de melding weg mág (échte menselijke feitencontrole, en pas nadat `#verantwoording` in dezelfde commit is bijgewerkt).
+
+### Mutanten
+
+| Mutant | Uitkomst |
+|---|---|
+| AI-melding weg (label vervangen, span blijft) | rood — de AI-assertie |
+| span-klasse hernoemd | rood — de klasse-assertie |
+| `<strong>` vóór de `<time>` | rood — de structuur-assertie |
+| gesloten maximum terug in `terms.html` | rood — Check 16 tak (a)+(b) |
+| open vorm dichtgezet in `wachtwoord-beveiliging.html` | rood — tak (a) is dragend |
+| 2-jaar-grens weg uit `wat-is-ethisch-hacken.html:301` | rood — tak (b) is dragend |
+| zoekterm naar `138abXX` | rood — "check meet niets meer" |
+
+Zeven mutanten, zeven verschillende faalmeldingen. **Twee pogingen werden aanvankelijk niet rood omdat de mutant zelf niet muteerde**: M1 verwijderde per ongeluk het `138ab`-anker waar de check op zoekt, M3 matchte niet door `<strong>`-tags in de ruwe HTML. Beide gaven "geen failure" — ononderscheidbaar van "de check werkt niet". Alleen `diff -q` na de sed onthulde het.
+
+### Metrics
+
+| | Vóór | Ná |
+|---|---|---|
+| Bundel | 1102,37 KB | **1103,43 / 1120 KB** (marge 16,57 KB = 1,48%) |
+| Playwright specs / declaraties | 39 / 303 | **39 / 303 (ongewijzigd)** |
+| `validate-docs.sh` checks | 15 | **16** |
+| Contrast AI-melding light | 4,89:1 | **9,17:1 AAA** |
+| Contrast AI-melding dark | 6,15:1 | 6,15:1 (gelijk aan de publicatiedatum ernaast) |
+| E2E chromium (11 specs) | — | 164 passed, 2 skipped, **0 failed** |
+
+De +1,06 KB komt volledig uit `blog.css` (het commentaar dat beide rekensommen vastlegt) en `index.html`; de wijzigingen in `over-ons.html` en `blog/*.html` tellen niet mee in die formule.
+
+### Openstaand
+
+- **22px horizontale overflow op `assets/legal/terms.html` @375px.** A/B tegen HEAD (`git archive` + twee poorten): **22px aan beide kanten**, dus pre-existing en niet door deze sessie veroorzaakt. `scrollWidth` 397 tegen `clientWidth` 375, terwijl **geen enkel element** met zijn border-box buiten beeld valt — vermoedelijk een pseudo-element of scroll-regio.
+- **Geen E2E-dekking op de drie legal-pagina's** (`privacy.html`, `terms.html`, `cookies.html`). De bestaande overflow-asserties dekken index, gidsen, over-ons en één blogpost. Dát gat is waarschijnlijk waardevoller dan de 22px zelf — het is de reden dat dit ongezien bleef.
+- **Art. 3:15d sub a: fysiek vestigingsadres ontbreekt.** Onvoorwaardelijk verplicht, ook zonder KvK-inschrijving; een postbus telt niet. Heisenberg heeft besloten hier nu niets mee te doen. Het onderliggende punt — betaalde producten aan het publiek verkopen raakt in beginsel de inschrijfplicht van de Handelsregisterwet — is een beslissing, geen tekstwijziging.
+- **De 7 overige wetsartikelen en het ene ECLI-nummer in de betaalde gids** zijn niet doorgelopen: daar is geen gemeten defect, alleen een ongemeten aanname. Mechanisch verifieerbaar tegen rechtspraak.nl en wetten.overheid.nl.
+
+---
+
 ## Sessie 222: De box-randen braken verticaal — en vier eerdere fixes zochten allemaal in de breedte (14 aug 2026)
 
 **Mission:** Heisenberg leverde drie foto's van een scherm met `metasploit`, `next` en `man metasploit`, waarop de omlijning rond de terminal-output stukgaat, met de vraag hoe dat kan na zoveel pogingen ("we hebben dit probleem al zo vaak proberen te verhelpen"). Eis: alles netjes uitgelijnd, en dat blijft zo bij een veranderende schermgrootte.
@@ -1385,3 +1506,28 @@ Beide gepusht naar `main`, CI success, deploy live geverifieerd met `curl -I`.
 - Meet een invariant op een resolutie die je test niet haalt. De guard stapt 0,9 viewport; een sweep van **884-893 posities à 10px** in drie engines liet zien dat er nul gaten en nul dubbels zijn — dat kán een grofmazige test niet aantonen.
 - Beantwoord "is deze faler van mij?" met het **codepad** als dat kan, niet met een steekproef. Alle falers draaiden op `/terminal.html`, dat geen van de drie gewijzigde bestanden laadt — dat is sterker en goedkoper dan 8× per kant draaien.
 - Corrigeer je eigen meetfout hardop. `grep -c "[webkit]"` gaf 0 terwijl er 237 WebKit-tests groen stonden: de haken zijn een karakterklasse, dus ik zocht naar één teken uit `webkit`. Ik had daarop "WebKit moet nog beginnen" gemeld.
+
+---
+
+## Sessie 217 — learnings (geroteerd uit CLAUDE.md, Sessie 223)
+
+⚠️ **Never:**
+- Contrast meten tegen de **paginakleur** terwijl het element een eigen achtergrond heeft. `getComputedStyle(el).backgroundColor` gaf `rgba(22,163,74,0.08)` — geen kleur waar je tegen kúnt meten — en de notitie greep daarom naar `--color-bg`. Dat mat de laag ónder de verf: 3,10:1 genoteerd, **2,85:1** echt (2,74 op de hero, waar een radial glow laag drie is). De fout was niet alleen fout maar **te gunstig** — de badge zakte van "onder AAA" naar onder **AA**. Composite de ancestor-keten tot de eerste laag met `alpha === 1`.
+- Een open item laten staan zonder test die kan melden dat hij is opgelost. De terminal-overflow van Sessie 189 was op **07 jul** gefixt door commit `3d7df13`, wiens titel de bug letterlijk noemt — en stond vijf sessies later nog open, omdat er site-breed geen horizontale-overflow-assertie op `/terminal.html` bestond. Een notitie meldt niets terug; ook niet dat hij achterhaald is.
+- Een IO-gestuurde `data-state` aflezen na 2 rAF. De callback heeft dan nog niet gevuurd, dus je leest de staat van de **vorige** scrollpositie. Mijn eerste meting rapporteerde daardoor `verborgen` op maximale scroll (de staat van y=0) en overdreef de bug. 300ms settle geeft de echte waarde. Zelfde faalklasse als de smooth-scroll-val van Sessie 216: het zichtbare gedrag is asynchroon, de meting synchroon.
+- `Math.round()` op een geometrieverschil dat uit fractionele layout komt. Documenthoogtes zijn fractioneel (body 1308,5px) terwijl `scrollHeight` naar boven afrondt, dus scrollen naar de bodem schiet tot 1px door — `Math.round(0.5)` maakte daar een valse faler van op `/404.html`. Meet exact en zet de drempel op wat zichtbaar is.
+- Een testnaam een grens laten noemen die elders als constante staat. `Bundle size < 1000KB` stond er nog terwijl de limiet al 1050 en toen 1100 was — dezelfde staleness als de notities die deze sessie opruimde. Interpoleer de constante in de naam.
+- Een budgetgrens ophogen zonder te tellen hoe vaak dat al gebeurde. 1000 → 1050 → 1100 → 1120 is **drie bumps in 14 sessies**; zonder die telling erbij is de volgende bump vanzelfsprekend en is het geen grens meer.
+
+✅ **Always:**
+- Meet vóór je plant wanneer de opdracht "deze meting klopt misschien niet" zegt. Drie van de vier vastgelegde metingen bleken onjuist, en twee daarvan veranderden het plan: (a) raakte 10 pagina's i.p.v. 9, (c) was helemaal geen bug meer. Was ik met de notities gaan bouwen, dan had ik een gefixte bug "gefixt" en een strook op index.html laten staan.
+- Zeg het hardop als een vermoeden in de **omgekeerde richting** uitkomt. Heisenberg verwachtte dat de badge het bij goed meten wél zou halen; hij haalt zelfs AA niet. De diagnose klopte, de conclusie niet — dat onderscheid is de helft van het antwoord.
+- Los "verkeerd geverfde ruimte" op door de ruimte te **verplaatsen**, niet weg te halen. De reserve moest blijven bestaan (weghalen = balk dekt content af) én onvoorwaardelijk blijven (conditioneel = documenthoogte wisselt per toggle → terugkoppellus). In de dónkere footer zetten maakt beide waar en verft hem meteen goed; `:has()` op elementaanwezigheid is statisch, gemeten als 9481/9481/9481 over drie toggles.
+- Loop de **overlevers** van een mutant na, niet alleen de falers. 12 rood / 2 groen zegt niets tot je weet waaróm die 2 groen zijn: `@1280px` valt buiten de `≤1279px`-band en de terugkoppellus-test bewaakt een andere eigenschap. Beide horen groen te zijn — anders had ik een blinde assertie gehad.
+- Kies de mutant die de oorspronkelijke meting **reproduceert**. `width: auto` weghalen gaf letterlijk `left 10 / width 360 / right 370 bij clientWidth 360` — cijfer voor cijfer de notitie uit Sessie 189. Daarmee is in één stap bewezen dat de bug echt was, dat hij weg is, en dat de nieuwe assertie hem zou zien.
+- Gebruik `grep -F` bij het tellen van `[chromium]`-achtige labels. De haken zijn anders een karakterklasse — de meetfout die Sessie 216 zichzelf moest corrigeren.
+
+
+> De **staande regel** die bij deze sessie hoort ("er is GEEN baseline van bekende testfalers meer")
+> is bewust **in CLAUDE.md gebleven**: die is nog steeds van kracht en is geen historisch
+> leerpunt maar een lopende afspraak. Roteren zou een actieve regel uit de context halen.
