@@ -34,6 +34,26 @@ body.legal-page h3 {
   margin-top: 20px;
 }
 
+/* Koppen mogen binnen hun eigen box breken (Sessie 224).
+   Deze drie pagina's laden mobile.css NIET — alleen main.css + legal.css. Daardoor mist
+   `:root{--font-size-base:var(--font-size-mobile)}` op ≤768px, blijft html op 18px staan en
+   overleeft de UA-default `2em` op de h1: 36px, ook op 320px. Elke andere pagina schaalt daar
+   mee; deze drie niet.
+   Gemeten: "Gebruiksvoorwaarden" (19 tekens, geen breekpunt) is 377px in een contentbox van
+   280px, dus de documentbreedte is 20+377 = 397px ongeacht viewport → 77px overflow @320px,
+   22px @375px, en @414px nog 3px buiten de eigen box.
+   Generiek getest tot 502px ("Aansprakelijkheidsbeperking"): allemaal 0 na deze regel. Een
+   clamp() op font-size haalt dat niet — die kop zou 20px vragen, bodytekst-formaat voor een h1.
+   hyphens:auto is gemeten en AFGEVALLEN: alleen Firefox heeft nl-patronen (breekt netjes op
+   "Gebruiksvoor|waarden"); Chromium en WebKit lieten de 77/78px onveranderd staan.
+   Inert op desktop: overflow-wrap breekt uitsluitend wat anders niet zou passen.
+   Bewaakt door tests/e2e/legal-pages-overflow.spec.js. */
+body.legal-page h1,
+body.legal-page h2,
+body.legal-page h3 {
+  overflow-wrap: break-word;
+}
+
 [data-theme="light"] body.legal-page h1,
 [data-theme="light"] body.legal-page h2,
 [data-theme="light"] body.legal-page h3 {
