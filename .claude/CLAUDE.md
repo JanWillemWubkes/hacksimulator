@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 223)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 224)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -83,6 +83,26 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ---
 
 ## Recent Critical Learnings
+
+### Sessie 224: De dader was 280px breed en 377px lang — de scan keek naar het verkeerde getal (16-17 aug 2026)
+⚠️ **Never:**
+- Horizontale overflow diagnosticeren met **alleen** een border-box-scan. `getBoundingClientRect().right` en `scrollWidth` zijn **twee metingen op hetzelfde element**: de `<h1>` ís 280px breed en valt netjes binnen beeld, terwijl zijn **inhoud** 377px meet. Sessie 223 concludeerde daaruit "vermoedelijk een pseudo-element of scroll-regio" en die verkeerde oorzaak stond een sessie lang in #67. Scan altijd béíde klassen: `rect.right > clientWidth` (element steekt uit) én `el.scrollWidth > el.clientWidth` (inhoud steekt uit zijn eigen box).
+- Aannemen dat een pagina de site-brede mobiele schaal krijgt. De drie legal-pagina's laden **`mobile.css` niet** (alleen `main.css` + `legal.css`), dus `--font-size-base` blijft 18px op ≤768px en de h1 houdt de UA-default `2em` = **36px, ook op 320px**. Er staat nergens een `font-size` op `h1`. Controleer wélke stylesheets een pagina daadwerkelijk laadt voordat je over responsive gedrag redeneert.
+- Een fix-kandidaat kiezen op reputatie in plaats van op meting per motor. `hyphens:auto` klinkt als de nette oplossing en is dat ook — **in één van de drie motoren**. Alleen Firefox heeft nl-patronen (breekt op `Gebruiksvoor|waarden`); Chromium en WebKit lieten de 77/78px onveranderd staan. De breukpositie is de discriminator: fill-maximaal (14 tekens) = `overflow-wrap`, lettergreepgrens (12) = hyphenatie.
+- Een **schatting** in een plan zetten alsof het een meting is. Ik schreef "≈535px, vraagt 18,8px font"; gemeten is het 502px en **20,1px**. De conclusie hield stand, het getal niet — en een verkeerd getal in een plan wordt in de volgende sessie een feit.
+- Een declaratietelling **uitrekenen**. Eén `test()` in een dubbele `for`-lus genereert er hier negen; ik zou +9 hebben genoteerd waar +1 klopt (303 → **304**, niet 312). Vierde bestand met dat patroon. Meet met `grep -rE "^\s*test\("`, tel niet mee met wat je denkt te hebben geschreven.
+- Een per-element diagnoselijst ongefilterd laten. Kinderen van een `overflow-x:auto`-container houden hun **onafgekapte rect** (de ≤768px-tabellen gaven vier valse randen per meting), en Firefox geeft `clientWidth: 0` op **inline**-elementen, waardoor `scrollWidth > clientWidth` daar altijd waar is (elke `<strong>` als "158>0"). Ongefilterd staat de assertie permanent rood in één motor en wordt de echte dader uit de lijst geduwd.
+- Een symptoombeschrijving overnemen zonder er één screenshot tegenaan te houden. De briefing zei "de bezoeker ziet de pagina zijwaarts schuiven"; `main.css:422` zet `overflow-x:hidden` op `body`, wat **naar de viewport propageert**. `scrollTo` werkt daardoor programmatisch (dát was gemeten) maar pannen niet — de bezoeker ziet een **afgekapte** kop.
+- Een guard met een **vast venster** boven inhoud zetten die per sessie **groeit**. Check 2 zoekt de footer-sessiemarker in de laatste 30 regels van TASKS.md, terwijl elke `/summary` er 2 regels (`**Versie:**` + witregel) ónder prependt. Bij 9 entries stond het merk op 31 en viel de check om — niet door de wijziging van die sessie, maar door de lijst zelf. Zulke poorten hebben een houdbaarheidsdatum die niemand opschrijft; los het op met 1-in-1-out (max 8 entries) plus een comment dat de invariant benoemt.
+
+✅ **Always:**
+- Probeer de gemelde reeks te reproduceren met **één som** vóór je een browser opent. 77/37/22/7/0 bleek exact `397 − viewport`, en 397 = 20px padding + 377px kopinhoud. Daarmee was de diagnose rekenkundig sluitend en wist ik wat ik zocht; klopt de som niet, dan is er een tweede bron.
+- Kies mutanten die **elkaars complement** zijn. Fix eruit → B rood @414 waar A groen is. `min-width:700px` op de body → A rood waar B groen blijft. Pas dat paar bewijst dat géén van beide asserties overbodig is; twee mutanten met hetzelfde faalpatroon bewijzen dat er één te veel is.
+- Zorg voor een mutant die de pagina's rood maakt die **altijd** groen zijn. `privacy.html` en `cookies.html` zijn vóór én ná de fix groen — zonder mutant B is hun dekking nooit gefalsifieerd, en een check die nooit faalt is ononderscheidbaar van een check die niet werkt.
+- Bewijs "inert op desktop" op **geometrie**, niet op de property. A/B tegen `git archive HEAD` op een tweede poort gaf @1280 en @768 byte-identieke kopbreedte, kophoogte én documenthoogte; alleen de computed `overflow-wrap` verschilt. "De regel vuurt daar toch niet" is een redenering, dit is een meting.
+- Geef een nieuwe guard een **zelfbewakende tak**. HTTP-status 200 + een `<h1>` met niet-lege tekst en breedte > 0: een 404 heeft nul overflow en zou de spec anders groen laten staan zonder iets te meten.
+- Toets genericiteit door de **tekst te vervangen**, niet door te redeneren. `h1.textContent` tijdelijk op `Verwerkersovereenkomst` (437px, 137 overflow) en `Aansprakelijkheidsbeperking` (502px, 202 overflow) zetten liet zien dat beide naar 0 gaan — en verwierp `clamp()` op een cijfer in plaats van op een vermoeden.
+- Kies de scope van een CSS-fix op wat hij **naast** het doel raakt. Containerbrede `overflow-wrap` (het `blog.css`-precedent) zou de `<td>`-afbreking veranderen in de scrollbare tabellen; `h1,h2,h3` niet. De guard dekt de klasse, de CSS dekt het bekende geval.
 
 ### Sessie 223: De verantwoording wekte wantrouwen — en de wet die dat regelt gold al twaalf dagen (16 aug 2026)
 ⚠️ **Never:**
@@ -173,23 +193,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Beantwoord "moet dit erbij?" met de rol van de pagina. De homepage eindigt al met **drie opeenvolgende asks** en haar north-star is activation, niet e-mail — dus de juridische sample gaat er niet bij, ook al is de asymmetrie (17 links vs 1) echt. Die hoort contextueel opgelost — in Sessie 220 gebeurd met één wayfinding-link naar `/gidsen.html` in de bestaande lead-magnet-strook. ⚠️ **Correctie (Sessie 220):** de tweede grond ("geblokkeerd zolang `sample-juridisch.html:132` een welkomstmail belooft die de automation nog niet stuurt") was **onjuist**. De automation stond al op Active sinds 7 aug; alleen het runbook meldde nog "Stap 2 en 3 nog te doen". Ik stond op het punt correcte copy te verzachten op gezag van een document dat drie dagen achterliep — controleer de wérkelijkheid, niet de notitie erover.
 - Zeg het hardop als een opruiming bytes **kost**. −2 CSS-regels netto, +2,88 KB: het commentaar dat beide rekensommen vastlegt is langer dan de code. Marge nu 2,3% — en 1000 → 1050 → 1100 → 1120 is drie bumps in 15 sessies, dus de volgende vraag is niet "bump".
 
-### Sessie 218: De strook onder de terminal was AdSense-vulling die AdSense vijf maanden overleefde (09 aug 2026)
-⚠️ **Never:**
-- Een contentblok beoordelen zonder eerst te vragen **waarom het er staat**. `git log` gaf het antwoord in één regel: commit `1cc04ff` heet *"full-viewport terminal + scroll hint for AdSense content"* en `f748c38` droeg `?v=108-adsense-content`. Advertenties gingen eruit in Sessie 208; het blok bleef, met zijn aanleiding dood. Zonder die herkomst was dit een smaakdiscussie geweest — mét was het een feit. Let op wat er méér uit die commit komt: ook de 100vh-terminal is AdSense-erfgoed.
-- `getComputedStyle` gebruiken alsof het een momentopname is. Het is een **live** object: ik zette het thema terug naar dark vóór het opbouwen van mijn resultaat, dus `cs.color` gaf de dark-kleur tegen een light-achtergrond die ik wél had geparsed — 1,42:1 onzin. Lees de waarden als string op het moment dat je ze meet.
-- De contrastwaarde uit een notitie overnemen als het element een **eigen** achtergrond heeft. §10 noemt 3,10:1 tegen `--color-bg`; de kaart is `#ffffff`, dus de echte waarde is **3,30:1**. En controleer of het grote tekst is: 19,8px/700 telt als large (lat 3 / 4,5), dus "onder AA" was alarmerender dan waar — het haalde AA wél en AAA niet.
-- Een exact aantal in copy zetten voor een groeiende inventaris. Mijn plan zei "Bekijk alle 41 commands" terwijl de site overal "40+" voert en `validate-docs.sh:432` daar een vloer op handhaaft.
-- Links toevoegen aan een blok dat zonder JS op `opacity: 0` staat. De reveal-observer voegt `.visible` nooit toe, dus élke link erin is waardeloos. `index.html:62-66` had het `<noscript><style>`-vangnet al; terminal.html niet — en ik stond op het punt er negen bij te zetten.
-- Een A/B-meting vertrouwen die naast andere belasting draait. Mijn eerste vergelijking gaf 4 rood tegen 1 rood en zag eruit als een regressie; de tijden verraadden het (1,0m vs 32s voor hetzelfde werk) omdat de achtergrondrun nog liep. Serieel opnieuw: 32/32 groen aan beide kanten.
-
-✅ **Always:**
-- Rangschik de rollen van een pagina in plaats van ze op te tellen. "App-oppervlak én doorstroom én SEO" wás de reden dat het blok alle drie slecht deed. De gedocumenteerde north-star besliste: `docs/launch-success-metrics.md:44` meet *activation* ("typte hij een command"), niet lezen — dus app eerst, SEO secundair, en "onboarding onder de vouw" is geen rol maar een bug.
-- Schrap inhoud die het product zélf al levert op een beter moment. "Zo begin je" dubbelde `onboarding.js:196`, de input-placeholder en de commands `next`/`leerpad` — vier schermen lager, en op mobiel onvindbaar omdat `.scroll-hint` daar `display: none` is.
-- Meet een tikdoel op de maat waar het uitmaakt. Mijn nieuwe CTA zag er prima uit en mat **193×22px** op 375px: onder de 44px-grens. Een kale tekstlink is bijna nooit een geldig tikdoel; `display: inline-block` + verticale padding, en zet de onderstreping op `text-decoration` want een `border-bottom` schuift met de padding mee.
-- Loop de **overlever** van een mutantenreeks na. Zeven mutanten gaven zeven rood; de test die groen bleef bij een kapot `#cmd-nmapx` doet dat terecht — hij stript de hash, en het ankerbewijs is de taak van de test die wél viel.
-- Zeg het hardop als een opruiming netto **bytes kost**. Dit was −26% hoogte en 4× zoveel links, maar **+3,3 KB**: de vervanging draagt uitleg, een noscript-vangnet en een trackingmodule. "Content weghalen" leest anders vanzelf als besparing.
-- Voeg de meting toe vóór je het volgende oordeel velt. Er bestond site-breed **geen enkel** scroll-event; `edu_section_reached` gedeeld door de `page_view` geeft nu de doorscroll-rate. Tot dat cijfer er is, is elke uitspraak over die strook een gevoel.
-
 📌 **Staande regel vanaf Sessie 217 — er is GEEN baseline van bekende testfalers meer.**
 De vastgelegde lijst (Sessie 209, chromium-only) klopte op geen enkel punt: 5 van de 7 falers
 waren verdwenen, twee stonden er niet in die wél structureel rood waren, en **alle vier de
@@ -206,7 +209,7 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
   als de test.
 
 
-**Rotation:** Top-6 huidig: 218-219-220-221-222-223 (Sessie 217 → `docs/sessions/current.md` via 1-in-1-out, Sessie 223; de **staande regel** "geen baseline van bekende testfalers" is bewust in dit bestand gebléven — die is nog van kracht en is geen historisch leerpunt). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 220 (205-209 → `archive-s205-s209.md`, byte-geverifieerd); current.md houdt nu het rolling window 210-223 (16 secties: 13 entries + de learnings van 212-217). **Volgende bulk-rotatie Sessie 225 → archiveer de staart (210-214).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10"). Twee dingen die bij Sessie 220 bleken: (a) een learnings-blok hoort mee te gaan met de sessie waar het bij staat, anders blijft "Sessie N — learnings" achter terwijl entry N in het archief zit; (b) de SESSIONS.md-index dríft — hij claimde window "205-215" terwijl current.md er 15 hield, dus controleer hem bij elke bulk. Historie 81-209 → `archive-s205-s209.md` + `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 219-220-221-222-223-224 (Sessie 218 → `docs/sessions/current.md` via 1-in-1-out, Sessie 224; de **staande regel** "geen baseline van bekende testfalers" is bewust in dit bestand gebléven — die is nog van kracht en is geen historisch leerpunt). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 220 (205-209 → `archive-s205-s209.md`, byte-geverifieerd); current.md houdt nu het rolling window 210-224 (22 secties: 15 entries + de learnings van 212-218). **Volgende bulk-rotatie Sessie 225 → archiveer de staart (210-214).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10"). Twee dingen die bij Sessie 220 bleken: (a) een learnings-blok hoort mee te gaan met de sessie waar het bij staat, anders blijft "Sessie N — learnings" achter terwijl entry N in het archief zit; (b) de SESSIONS.md-index dríft — hij claimde window "205-215" terwijl current.md er 15 hield, dus controleer hem bij elke bulk. Historie 81-209 → `archive-s205-s209.md` + `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -255,7 +258,7 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Bij elke sessie 1-in-1-out op de CLAUDE.md-learnings (top-6 vast). Bulk-rotatie van `current.md` bij `N % 5 == 0`: archiveer **de staart** — de oudste ~5 entries — naar `archive-sNNN-sMMM.md`. Laatste bulk: Sessie 220 (205-209). **Volgende bulk: Sessie 225** (staart = 210-214). Neem het learnings-blok van een sessie mee met zijn entry. Actuele stand: zie de **Rotation**-regel onder §Recent Critical Learnings.
-**Sessie counter:** 223
+**Sessie counter:** 224
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -310,6 +313,6 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
 
 ---
 
-**Last updated:** 16 aug 2026 (Sessie 223 — verantwoording herschreven van bekentenis naar controleerbaarheid; art. 50 lid 4 AI-verordening geldt sinds 02-08-2026 en de uitzondering vereist menselijke feitencontrole, die er niet is — dus AI-melding op 15 posts + woordenlijst. Volledig: `docs/sessions/current.md`)
-**Version:** 5.97 (Sessie 223 — verantwoording van "geloof me" naar "controleer me"; AI-melding per contentpagina, want art. 50 lid 4 meet bij de eerste blootstelling. Bijvangst: `span:last-child` verfde die melding linkblauw op 4,89:1 → 9,17:1, en de verzwaarde 138ab-strafmaat stond op het basisdelict (3x, derde keer) → NEW Check 16. 7 mutanten, 7 faalpatronen. 39 specs / 303 declaraties. Bundel 1103,43/1120. Historie: `docs/sessions/current.md`)
+**Last updated:** 17 aug 2026 (Sessie 224 — legal-pagina's: de <h1> is 280px breed maar zijn inhoud 377px, dus de border-box-scan van Sessie 223 vond terecht niets. Oorzaak: deze pagina's laden mobile.css niet, dus de kop houdt 36px tot 320px toe. Eerste E2E-dekking ooit op assets/legal/*. Volledig: `docs/sessions/current.md`)
+**Version:** 5.98 (Sessie 224 — border-box en content-box zijn twee metingen op hetzelfde element; wie er één leest mist de andere. Fix `overflow-wrap` gekozen op meting in 3 motoren (`hyphens` werkt alleen in Firefox, `clamp()` verworpen op rekenwerk), desktop byte-identiek in A/B tegen HEAD. NEW legal-pages-overflow.spec.js: 2 asserties met verschillende faalbreedtes, 2 complementaire mutanten. 40 specs / 304 declaraties. Bundel 1104,61/1120. Historie: `docs/sessions/current.md`)
 

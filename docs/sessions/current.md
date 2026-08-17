@@ -4,6 +4,119 @@
 
 ---
 
+## Sessie 224: De dader was 280px breed en 377px lang — de scan keek naar het verkeerde getal (16-17 aug 2026)
+
+**Mission:** TASKS #67 afmaken: de 22px horizontale overflow op `assets/legal/terms.html` fixen én het dekkingsgat sluiten — de drie legal-pagina's kwamen in géén enkele assertie voor, in geen enkele spec. Sessie 223 had de overflow gemeten en via A/B tegen `git archive HEAD` als pre-existing bevestigd, maar de oorzaak bleef staan als *"niet vastgesteld — vermoedelijk een pseudo-element of scroll-regio"*.
+
+**Commits:**
+
+| | | |
+|---|---|---|
+| `0bffca5` | 16 aug | De dader was 280px breed en 377px lang — de scan keek naar het verkeerde getal |
+
+### De oorzaak: twee getallen op hetzelfde element
+
+De notitie van Sessie 223 zei dat **geen enkel element** met zijn border-box buiten beeld viel. Dat klopte — en juist daarom wees het de verkeerde kant op. De `<h1>` **is** 280px breed en blijft netjes binnen de viewport; het is zijn **inhoud** die 377px meet. `getBoundingClientRect().right` en `scrollWidth` zijn twee verschillende metingen op hetzelfde element, en de scan las alleen de eerste.
+
+Daaronder zat een structureel feit dat niemand eerder had opgeschreven: **de drie legal-pagina's laden `mobile.css` niet.** Ze linken alleen `main.css` en `legal.css` (regel 33-34). Daardoor mist `@media(max-width:768px){:root{--font-size-base:var(--font-size-mobile)}}`, blijft `html{font-size:18px}` staan tot 320px, en overleeft de UA-default `2em` op de h1 — want er staat **nergens** een `font-size` op `h1` (`main.css:426-431` zet alleen family, weight en line-height). Resultaat: **36px, ook op 320px**. Elke andere pagina op de site schaalt daar mee; deze drie niet.
+
+"Gebruiksvoorwaarden" is 19 tekens zonder breekpunt en meet dan 377px in een contentbox van 280px (`body.legal-page` = `max-width:800px; padding:20px`, `box-sizing:border-box`). De documentbreedte is dus 20px linkerpadding + 377 = **397px, ongeacht viewport**. Dat verklaart de hele gemelde reeks als één som:
+
+| viewport | 320 | 360 | 375 | 390 | 414 |
+|---|---|---|---|---|---|
+| doc-overflow | 77 | 37 | 22 | 7 | 0 |
+| = 397 − viewport | 77 | 37 | 22 | 7 | (397 < 414) |
+
+Firefox en WebKit meten consequent 378/398 in plaats van 377/397 — subpixel, geen tolerantie nodig.
+
+Privacy en cookies ontsnappen omdat hun koppen uit **twee woorden** bestaan (er is een breekpunt), niet omdat ze korter zijn. Dat is een correctie op de opdrachtbriefing, die aannam dat er "Privacybeleid" (13) en "Cookiebeleid" (12) stond. Er staat **"Privacy policy"** en **"Cookie policy"** — Engels, op een `lang="nl"`-pagina. Zie #68.
+
+### Het symptoom is afkapping, geen scroll
+
+De briefing zei: *"Het is echt scrollbaar … De bezoeker ziet de pagina zijwaarts schuiven."* De meting klopte, de duiding niet. `main.css:414-422` zet `overflow-x: hidden` op `body`, en omdat `html` op `visible` staat **propageert dat naar de viewport**. Gevolg: `window.scrollTo(9999,0)` verplaatst de pagina wél (programmatisch scrollen is niet geblokkeerd door `overflow:hidden`) maar de bezoeker kan niet pannen. De screenshot @320px op HEAD toont wat hij écht ziet: **"Gebruiksvoorwaa"**, afgekapt op de viewportrand.
+
+### De fix, gekozen op meting in drie motoren
+
+Drie kandidaten, elk via `page.addStyleTag` op de echte pagina, met `document.fonts.load()` vóór het meten (Sessie 222-les: `fonts.ready` resolvet vóór een nog niet aangevraagd font):
+
+| kandidaat | chromium | firefox | webkit |
+|---|---|---|---|
+| `overflow-wrap: break-word` | **0** | **0** | **0** |
+| `hyphens: auto` | 77 ✗ | 0 | 78 ✗ |
+| `clamp()` op font-size | verworpen op rekenwerk | | |
+
+De discriminator was **waar de breuk valt**. `overflow-wrap` breekt op het laatste teken dat past: `Gebruiksvoorwa|arden` (14 tekens, WebKit 15). Firefox met `hyphens:auto` breekt op `Gebruiksvoor|waarden` (12) — een lettergreepgrens, dus Firefox heeft nl-hyphenatiepatronen en Chromium/WebKit niet. Eén van drie motoren is te weinig voor een cosmetische verbetering die de rendering per engine laat verschillen; `hyphens` is afgevallen en dat staat nu in het CSS-commentaar, zodat niemand dit experiment overdoet.
+
+`clamp()` faalt op de genericiteitseis, gemeten in plaats van geschat: `Verwerkersovereenkomst` meet 437px (137px overflow) en `Aansprakelijkheidsbeperking` 502px (202px overflow). Die laatste zou **20,1px** font vragen om in 280px te passen — bodytekst-formaat voor een `h1`. Met `overflow-wrap` gaan beide naar 0. (Mijn vooraf-schatting was 535px en 18,8px; 6% te hoog, en dat is precies waarom het gemeten moest worden.)
+
+**Scoping:** `body.legal-page h1, h2, h3`, niet de container. `blog.css:846-855` doet het containerbreed op `.blog-container`, maar hier zou dat de `<td>`-afbreking veranderen in de `overflow-x:auto`-tabellen die `legal.css:145-150` op ≤768px maakt. De guard dekt de klasse, de CSS dekt het bekende geval.
+
+**A/B tegen HEAD** (`git archive HEAD` naar poort 8902, nieuw naar 8901):
+
+| breedte | HEAD | FIX |
+|---|---|---|
+| 1280 | kop 760/760, hoogte 43px, doc 9448 | 760/760, 43px, **9448** |
+| 768 | kop 728/728, hoogte 43px, doc 9563 | 728/728, 43px, **9563** |
+| 375 | 377/335, overflow 22 | 335/335, overflow **0**, kop 43→86px |
+| 320 | 377/280, overflow 77 | 280/280, overflow **0**, kop 43→86px |
+
+Desktop is byte-identiek in kopbreedte, kophoogte én documenthoogte. Alleen de *computed property* verschilt (`normal` → `break-word`): de regel is daar aanwezig maar inert.
+
+### De spec: twee asserties die op verschillende breedtes falen
+
+`tests/e2e/legal-pages-overflow.spec.js` — de eerste assertie ooit op `assets/legal/*`. 3 pagina's × [320, 375, 414] × 2 thema's, uit **één** `test()`-declaratie.
+
+```
+A  documentElement.scrollWidth − clientWidth ≤ 0      (pagina schuift/clipt niet zijwaarts)
+B  per kop: scrollWidth ≤ clientWidth + 1             (koptekst binnen de eigen box)
+```
+
+B is strenger en dat is opzet: **@414px is A groen** (397 < 414) **terwijl de kop zijn box nog 3px overschrijdt**. Zonder B zou het defect vanaf 414px onzichtbaar zijn voor de suite. 320px zit erbij omdat het defect daar 3,5× groter is en die maat nooit getest werd; 414 omdat de pagina daar op exact 0 stond, dus elke verbreding wordt er meteen rood.
+
+**Zelfbewakende tak:** HTTP-status 200 + een `<h1>` met niet-lege tekst en breedte > 0. Een 404 heeft nul overflow en zou de test anders groen laten staan zonder iets te meten.
+
+**Twee engine-meetvallen, alleen uit de meting gevonden:**
+
+1. **Kinderen van een scroll-container houden hun onafgekapte rect.** Op privacy/cookies meldde de border-box-scan `TBODY right 561`, `TR right 561`, `TH right 334` op **elke** breedte in **elke** motor — dat zijn de ≤768px-tabellen die legitiem in zichzelf scrollen. Ongefilterd vult dat de hele diagnoselijst en duwt het de echte dader uit de `slice(0,5)`. Opgelost door de ancestor-keten te lopen tot `body`.
+2. **Firefox geeft `clientWidth: 0` op inline-elementen.** Elke `<strong>` kwam terug als `158>0`, want `clientWidth` is per definitie 0 op inlines. Ongefilterd zou assertie B permanent rood staan in één motor. Opgelost door `display !== 'inline'` te eisen; B zelf kijkt alleen naar h1/h2/h3 en die zijn block-level.
+
+### Mutanten: elkaars complement
+
+| mutant | A | B | uitkomst |
+|---|---|---|---|
+| `overflow-wrap` weg | rood @320 (77) en @375 (22) | rood @320, @375 **én @414** | 9 rood / 18 groen, alleen terms |
+| `min-width:700px` op body | rood op **alle drie** de pagina's | **overal groen** | 27 rood |
+
+Mutant A maakt B rood waar A groen is → B is niet overbodig. Mutant B maakt A rood waar B groen blijft → A is niet overbodig. En mutant B is het **enige** bewijs dat `privacy.html` en `cookies.html` werkelijk gemeten worden: die zijn vóór én ná de fix groen, dus zonder een mutant die ze rood maakt is hun dekking niet gefalsifieerd. Beide mutanten met `cp` + `sed` + **`diff -q`** aangebracht, omdat twee van de vier mutanten in Sessie 223 het bestand niet veranderden en daarom vals groen bleven.
+
+De foutmelding van mutant A luidt letterlijk `Buiten beeld: (niets). Inhoud buiten eigen box: H1 377>280` — de border-box-scan vindt niets (precies zoals in Sessie 223) terwijl de inhoud-scan de dader bij naam noemt. Dat is de hele les in één regel.
+
+### Verificatie
+
+- Nieuwe spec **27/27 groen** over chromium/firefox/webkit (34,3s)
+- Regressie `responsive-breakpoints` + `responsive-ascii-boxes` op chromium: **60 passed / 3 skipped** (de bestaande `test.skip`'s)
+- `validate-docs.sh --deep` **exit 0** (16 checks) en `validate-blogs.sh` **exit 0**
+- Bundeltest groen: **1104,61 / 1120 KB**, marge 15,39 KB (1,37%)
+- Screenshots @320px, beide thema's, alle drie de pagina's → `.playwright-mcp/s224-*.png`
+
+### Metrics delta
+
+| | vóór | ná |
+|---|---|---|
+| spec files | 39 | **40** |
+| `test()`-declaraties | 303 | **304** (die er 9 genereert) |
+| bundel | 1103,43 KB | **1104,61 KB** (+1,18 KB, volledig commentaar) |
+| `styles/` (validate-docs Check 5) | 439 KB | **440 KB** (band 417-460) |
+
+De declaratietelling is een valstrik: mijn spec heeft **één** `test(` binnen een dubbele `for`-lus die er negen genereert. Had ik de delta uitgerekend in plaats van gemeten, dan stond hier 312. Dit is het vierde bestand met dat patroon, naast `lead-magnet`, `navbar-collapse` en drie blokken in `hero-demo`.
+
+### Next steps
+
+- **#68** — `privacy.html` en `cookies.html` voeren Engelse koppen ("Privacy policy" / "Cookie policy") in `<h1>`, `<title>`, `og:title` en `twitter:title` op een `lang="nl"`-pagina, terwijl de site er in het Nederlands naar linkt (*"Lees ons privacybeleid"*, `index.html:828,951` e.a.). Niet meegenomen: een hernoeming raakt 4 metatags × 2 bestanden, `sitemap.xml` en ~20 linklabels — eigen taak met SEO-lockstep. **Gemeten en géén blokkade:** `Privacybeleid` en `Cookiebeleid` passen @320px met 0 overflow, **ook zonder** de fix van #67. De aanname in het plan dat de fix die hernoeming "ongevaarlijk maakt" was te sterk; hij was al veilig.
+- Kandidaat voor `architecture-patterns.md` §15: border-box vs. content-box zijn twee metingen op hetzelfde element. Nu vastgelegd in het CLAUDE.md-learningsblok; als het patroon nog eens terugkomt hoort het in de rules-file.
+
+---
+
 ## Sessie 223: De verantwoording wekte wantrouwen — en de wet die dat regelt gold al twaalf dagen (14-16 aug 2026)
 
 **Mission:** Heisenberg stuurde een screenshot van `#verantwoording` op `over-ons.html` met de observatie dat die sectie de site juist *onbetrouwbaarder* laat overkomen. Opdracht: analyseer de huidige tekst, laat een subagent uitzoeken wat de Nederlandse wet- en regelgeving hier eist, en herschrijf hem wetsconform zonder het vertrouwen te schaden. Plus: de perspectiefsprong eruit — eerst derde persoon over Jan Willem, daarna de ik-vorm.
@@ -1531,3 +1644,26 @@ Beide gepusht naar `main`, CI success, deploy live geverifieerd met `curl -I`.
 > De **staande regel** die bij deze sessie hoort ("er is GEEN baseline van bekende testfalers meer")
 > is bewust **in CLAUDE.md gebleven**: die is nog steeds van kracht en is geen historisch
 > leerpunt maar een lopende afspraak. Roteren zou een actieve regel uit de context halen.
+
+---
+
+## Sessie 218 — learnings (geroteerd uit CLAUDE.md, Sessie 224)
+
+> Oorspronkelijke kop: *De strook onder de terminal was AdSense-vulling die AdSense vijf maanden overleefde* (09 aug 2026)
+
+⚠️ **Never:**
+- Een contentblok beoordelen zonder eerst te vragen **waarom het er staat**. `git log` gaf het antwoord in één regel: commit `1cc04ff` heet *"full-viewport terminal + scroll hint for AdSense content"* en `f748c38` droeg `?v=108-adsense-content`. Advertenties gingen eruit in Sessie 208; het blok bleef, met zijn aanleiding dood. Zonder die herkomst was dit een smaakdiscussie geweest — mét was het een feit. Let op wat er méér uit die commit komt: ook de 100vh-terminal is AdSense-erfgoed.
+- `getComputedStyle` gebruiken alsof het een momentopname is. Het is een **live** object: ik zette het thema terug naar dark vóór het opbouwen van mijn resultaat, dus `cs.color` gaf de dark-kleur tegen een light-achtergrond die ik wél had geparsed — 1,42:1 onzin. Lees de waarden als string op het moment dat je ze meet.
+- De contrastwaarde uit een notitie overnemen als het element een **eigen** achtergrond heeft. §10 noemt 3,10:1 tegen `--color-bg`; de kaart is `#ffffff`, dus de echte waarde is **3,30:1**. En controleer of het grote tekst is: 19,8px/700 telt als large (lat 3 / 4,5), dus "onder AA" was alarmerender dan waar — het haalde AA wél en AAA niet.
+- Een exact aantal in copy zetten voor een groeiende inventaris. Mijn plan zei "Bekijk alle 41 commands" terwijl de site overal "40+" voert en `validate-docs.sh:432` daar een vloer op handhaaft.
+- Links toevoegen aan een blok dat zonder JS op `opacity: 0` staat. De reveal-observer voegt `.visible` nooit toe, dus élke link erin is waardeloos. `index.html:62-66` had het `<noscript><style>`-vangnet al; terminal.html niet — en ik stond op het punt er negen bij te zetten.
+- Een A/B-meting vertrouwen die naast andere belasting draait. Mijn eerste vergelijking gaf 4 rood tegen 1 rood en zag eruit als een regressie; de tijden verraadden het (1,0m vs 32s voor hetzelfde werk) omdat de achtergrondrun nog liep. Serieel opnieuw: 32/32 groen aan beide kanten.
+
+✅ **Always:**
+- Rangschik de rollen van een pagina in plaats van ze op te tellen. "App-oppervlak én doorstroom én SEO" wás de reden dat het blok alle drie slecht deed. De gedocumenteerde north-star besliste: `docs/launch-success-metrics.md:44` meet *activation* ("typte hij een command"), niet lezen — dus app eerst, SEO secundair, en "onboarding onder de vouw" is geen rol maar een bug.
+- Schrap inhoud die het product zélf al levert op een beter moment. "Zo begin je" dubbelde `onboarding.js:196`, de input-placeholder en de commands `next`/`leerpad` — vier schermen lager, en op mobiel onvindbaar omdat `.scroll-hint` daar `display: none` is.
+- Meet een tikdoel op de maat waar het uitmaakt. Mijn nieuwe CTA zag er prima uit en mat **193×22px** op 375px: onder de 44px-grens. Een kale tekstlink is bijna nooit een geldig tikdoel; `display: inline-block` + verticale padding, en zet de onderstreping op `text-decoration` want een `border-bottom` schuift met de padding mee.
+- Loop de **overlever** van een mutantenreeks na. Zeven mutanten gaven zeven rood; de test die groen bleef bij een kapot `#cmd-nmapx` doet dat terecht — hij stript de hash, en het ankerbewijs is de taak van de test die wél viel.
+- Zeg het hardop als een opruiming netto **bytes kost**. Dit was −26% hoogte en 4× zoveel links, maar **+3,3 KB**: de vervanging draagt uitleg, een noscript-vangnet en een trackingmodule. "Content weghalen" leest anders vanzelf als besparing.
+- Voeg de meting toe vóór je het volgende oordeel velt. Er bestond site-breed **geen enkel** scroll-event; `edu_section_reached` gedeeld door de `page_view` geeft nu de doorscroll-rate. Tot dat cijfer er is, is elke uitspraak over die strook een gevoel.
+
