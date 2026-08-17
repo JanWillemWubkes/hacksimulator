@@ -787,8 +787,10 @@
 - [ ] Beta testers werven (5+ testers)
 - [ ] GA4 Real-Time dashboard verificatie
 - [ ] **Augustus-nieuwsbrief: dark-mode-test op telefoon (Sessie 206)** — kopieer
-  `docs/newsletter/nieuwsbrief-juli-2026.html` als basis (níét april: oude klassen + oude
-  MailerLite-syntax) en open de test-send op de telefoon in dark mode. Twee open vragen die
+  `docs/newsletter/nieuwsbrief-juli-2026.html` als basis (níét april: die draagt de
+  MailerLite-merge-tags `{$unsubscribe}`/`{$url}`, die Brevo niet vervangt, plus twee dode
+  blog-URLs — de klassen zijn wél identiek aan juli, beide gefixt in `8045b29`, dus dát is
+  geen onderscheid) en open de test-send op de telefoon in dark mode. Twee open vragen die
   alleen daar te beantwoorden zijn: (a) houdt de bg+color-koppeling de tekst op de lime
   balk/knoppen donker in de Gmail-app, en (b) gaat het `<style>`-blok mee bij import — een
   HTML-blok in een drag-and-drop-ontwerp draagt geen `<head>`, en zonder dat blok doen
