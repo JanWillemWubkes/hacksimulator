@@ -353,14 +353,31 @@ a[href='#all'].category-btn {
   flex-wrap: wrap;
   font-family: var(--font-heading);
   font-size: 1rem;
-  gap: 0;
+  /* Ruimte hoort op de container, niet als margin-left op de kinderen: align-items:center
+     centreert de MARGEBOX, dus in kolom-layout (≤768px) stond het eerste item 4px links van
+     de rest. column-gap draagt daar niets bij en de stapel is meteen recht. */
+  column-gap: var(--spacing-sm);
   justify-content: center;
 }
-.blog-post-meta > :not(:last-child):after {
-  color: var(--color-border);
-  content: '|';
-  margin-left: var(--spacing-sm);
-  margin-right: 0;
+/* Scheidingsteken tussen twee items OP DEZELFDE REGEL. Twee dingen zitten erin verwerkt:
+   - Alleen ≥769px. Onder 768px is deze rij een kolom (zie de media query onderaan) en scheidt
+     een | niets: daar bleef per gestapelde regel een losse pipe hangen.
+   - .category-badge is uitgesloten. Een ::after wordt geverfd BINNEN de box van zijn drager,
+     en die badge heeft background + padding + border-radius (regel ~925). Gemeten liep de tint
+     daardoor 17,1px te ver door, dwars over het scheidingsteken heen. De badge is bovendien
+     altijd het laatste item van regel 1 — de container is op 672px gecapt, dus de AI-melding
+     (631px) past er nooit naast — en hoort dus sowieso geen separator te dragen.
+   Wederzijds uitsluitende ranges i.p.v. een override, want @media voegt geen specificiteit toe
+   (architecture-patterns.md §4). Live geverifieerd: een `.blog-post-meta > *::after
+   { content: none }` in het ≤768-blok is (0,1,1), verliest van de (0,2,1) die hier stond en
+   deed aantoonbaar niets. */
+@media (min-width: 769px) {
+  .blog-post-meta > :not(:last-child):not(.category-badge)::after {
+    color: var(--color-border);
+    content: '|';
+    margin-left: var(--spacing-sm);
+    margin-right: 0;
+  }
 }
 /* AI-melding + datum laatste controle. Verplicht onder art. 50 lid 4 AI-verordening
    (van toepassing sinds 02-08-2026): AI-tekst die het publiek informeert over
@@ -387,9 +404,11 @@ a[href='#all'].category-btn {
   line-height: 1.5;
 }
 
-.blog-post-meta > :not(:first-child) {
-  margin-left: var(--spacing-sm);
-}
+/* VERWIJDERD (Sessie 225): .blog-post-meta > :not(:first-child) { margin-left: var(--spacing-sm) }
+   Vervangen door column-gap op .blog-post-meta zelf (regel ~356). In rij-layout identiek, maar
+   in kolom-layout centreerde align-items:center de margebox — het eerste item stond precies
+   een halve --spacing-sm (4px) links van de andere drie. Gemeten @375px én @768px, chromium:
+   spreiding 4,0px vóór, 0,0px erna. */
 /* VERWIJDERD (Sessie 223): .blog-post-meta span:last-child { color: var(--color-link) }
    Die regel is geschreven toen de categorie-badge de laatste span in de meta-rij was.
    Sessie 208 plakte er de controledatum-span achter, waarna de regel stilzwijgend van
@@ -733,9 +752,11 @@ a[href='#all'].category-btn {
   .blog-post-content h3 {
     font-size: 1.2rem;
   }
+  /* Kolom: alleen de verticale afstand telt hier nog, en er zijn geen scheidingstekens —
+     die bestaan alleen in het ≥769px-blok (regel ~373). */
   .blog-post-meta {
     flex-direction: column;
-    gap: var(--spacing-xs);
+    row-gap: var(--spacing-xs);
   }
   .blog-nav {
     align-items: center;
