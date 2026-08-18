@@ -400,3 +400,89 @@ met een vaste, afgedwongen samenstelling.
 > Je vindt dit niet door de CSS te lezen — beide regels zien er los prima uit. Alleen
 > `getComputedStyle` op het gerenderde element verraadt dat er een kleur wint die je nergens op
 > dat element hebt gezet. Zelfde meetles als §5.
+
+---
+
+## 15. De CSS klopt, de gerenderde box niet (Sessie 226)
+
+Twee bugs uit dezelfde sessie die je met lezen nóóit vindt, want in de bron staat niets fout.
+
+### `min-height` doet niets op een inline element
+
+```css
+/* Leest als een tapdoel van 44px. Is 26,8px. */
+.category-btn { min-height: 44px; padding: 5px 8px; }   /* <a> = inline */
+```
+
+Inline boxes negeren hoogte-constraints. De zeven blogfilters waren daardoor 26,8px hoog terwijl
+er geen enkele foute waarde in de regel stond — WCAG AAA 2.5.5 eist 44×44. De fix is niet meer
+padding maar een `display` die hoogte kán dragen:
+
+```css
+.category-btn { display: inline-flex; align-items: center;
+                min-height: 44px; min-width: 44px; }
+```
+
+**Meet tapdoelen dus altijd op `getBoundingClientRect()`**, niet op de gedeclareerde waarde.
+Hetzelfde geldt voor `<summary>`, `<a>` in meta-rijen en elk ander inline-element dat als knop
+oogt.
+
+### Specificiteit vergelijkt per tier — hij telt niet op
+
+```
+[data-theme="light"] .blog-post-content ol a   → (0,2,2)   wint
+.blog-toc ol li a                              → (0,1,3)   verliest
+```
+
+Twee klassen verslaan één klasse, ongeacht hoeveel type-selectors erachter komen. Een extra
+`ol` of `li` aan je selector plakken helpt dus **niet** tegen een `[data-theme]`-variant — het
+verhoogt alleen de tier die al gelijk was. Win met een klasse erbij:
+
+```css
+.blog-toc-nav .blog-toc ol li a { … }   /* (0,2,3) — wint van (0,2,2) */
+```
+
+Diagnose zonder gokken: loop `document.styleSheets` langs, filter op regels die het element
+`matches()` én de property zetten, en print selector + herkomst. Dat wees hier in één keer de
+winnende regel aan, inclusief bestand.
+
+> Vuistregel bij beide: als de gerenderde waarde niet matcht met wat je schreef, is de vraag
+> niet "welke waarde moet ik veranderen" maar "welk mechanisme kijkt hier overheen" — display,
+> cascade, of een transitie die nog loopt (zie §9/§10).
+
+---
+
+## 16. Scroll-spy hoort niet op een IntersectionObserver (Sessie 226)
+
+`animations.css` zet `html { scroll-behavior: smooth }`. Een observer die de actieve sectie moet
+bijhouden vuurt dan **tijdens** de animatie — op posities die de lezer nooit ziet — en ná afloop
+kruist er niets meer, dus de markering blijft op een tussenstand staan. Gemeten symptoom:
+stelselmatig de vórige sectie actief, bij élke sprong.
+
+```js
+// Scrollpositie verandert continu → scroll-listener met rAF, niet een observer.
+let gepland = false;
+const opScroll = () => {
+  if (gepland) return;
+  gepland = true;
+  requestAnimationFrame(() => { gepland = false; herbeoordeel(); });
+};
+window.addEventListener('scroll', opScroll, { passive: true });
+window.addEventListener('resize', opScroll, { passive: true });
+herbeoordeel();                                    // ook synchroon bij init
+```
+
+Dit spreekt §12 niet tegen: dáár is de observer een *"er is iets veranderd"*-signaal voor een
+**toestandswissel**. Een grootheid die continu verandert heeft een trigger nodig die dat ook doet.
+
+**Anker je grens op `scroll-padding-top`, niet op de navbar-hoogte.** Met
+`scroll-padding-top: calc(var(--navbar-height) + 16px)` parkeert een `#anker`-sprong de kop op
+76px; een grens van `navbar + 8 = 68` markeert dan structureel de sectie ervóór.
+
+```js
+const basis = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop);
+const grens = basis + 8;   // tolerantie voor afronding bij smooth scroll
+```
+
+En vergeet `scroll-padding-top` niet op de pagina zelf: `blog.css` had hem niet (terwijl
+`landing.css` en `commands.css` wel), dus elk anker landde achter de vaste navbar.

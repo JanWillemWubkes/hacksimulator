@@ -4,6 +4,170 @@
 
 ---
 
+## Sessie 226: De blog had 418 koppen zonder id en een filter van 26,8px — geen van beide stond in de CSS (18 aug 2026)
+
+**Mission:** analyseer de blogsectie op layout, UX/UI en design, en bepaal zelf verdere
+controlepunten. Uitdrukkelijk een *analyse*-opdracht; de reparatie kwam pas na goedkeuring van
+het plan, in volledige scope inclusief inhoudsopgave.
+
+### Commits
+
+| Hash | Onderwerp |
+|---|---|
+| `e19e74f` | contrast-tokens: dim-tekst naar AAA, twee knopkleuren die AAA claimden maar 4,60/5,75 maten |
+| `90e7ccd` | "Over Ons" → "Over ons", 58×, inclusief `navbar.js` en `footer.js` |
+| `04e4d57` | de blogsectie: tapdoelen, inhoudsopgave, index-UX, ARIA, guards |
+
+### Methode
+
+Alles gemeten op `scripts/nostore-server.py` @375px en @1280px, in **beide** thema's. Geen
+enkele bevinding komt uit het lezen van de CSS — de twee grootste defecten waren in de
+broncode onzichtbaar:
+
+- de filterknop had geen foute property; hij was 26,8px omdat een `<a>` **inline** is en
+  inline boxes hoogte-constraints negeren. `min-height: 44px` toevoegen zonder
+  `display: inline-flex` had niets gedaan;
+- de kop-id's waren niet fout maar **afwezig**, en afwezigheid grep je niet.
+
+### Wat gemeten is (13 punten)
+
+| # | Bevinding | Meting |
+|---|---|---|
+| 1 | Categoriefilters te klein | 7/7 op **26,8px** (WCAG AAA 2.5.5 = 44×44), font 11,2px |
+| 2 | Donker thema haalt AAA niet | `#8b949e` op `#0d1117` = **6,15**; op `#161b22` = **5,62** |
+| 3 | Kapotte ARIA-progressbar | 15× `role="progressbar"`, **0×** `aria-valuenow` |
+| 4 | Engelse aria-labels | **31**: 15× "Reading progress", 15× "Breadcrumb", 1× "Filter posts by category" |
+| 5 | Engelse Title Case | "Alle **P**osts", "Over **O**ns" (58× sitebreed) |
+| 6 | Geen in-page navigatie | **0 van 418** koppen met `id`; 19-41 koppen/post; artikel **17.815px** @375px |
+| 7 | Nieuwsbrief begraaft artikelen | blok **606px** (75% viewport); eerste kaart op **y=1125** @375×812 |
+| 8 | Filterstatus alleen visueel | geen `aria-current`, geen resultaatteller |
+| 9 | Datum-semantiek inconsistent | index **45 spans / 0 `<time>`**; posts wél `<time datetime>` |
+| 10 | Index-schema onvolledig | `Blog` + `BreadcrumbList`, geen `blogPost` |
+| 11 | Positionele selector, latent | `.blog-meta span:last-child` — het Sessie 223-patroon |
+| 12 | Filter-CSS versnipperd | `#bronnen` 600 regels verderop; `.category-btn.active`/`:target` matchen nooit iets |
+| 13 | Geen a11y-guards | `validate-blogs.sh` dekte head/meta/breadcrumb/AI-melding, geen van bovenstaande |
+
+**Gemeten en in orde bevonden** (geen werk aan besteed): regellengte 76 tekens @1280 (binnen
+WCAG 1.4.8), typografische schaal mobiel 28,8/24/19,2/16, per-post OG-images uniek,
+terminal-voorbeelden lopen niet over @360px, related-cards (158px) en CTA's (55px) ruim boven
+44px, en het CSS-only filter wérkt (5/15 kaarten bij `#tools`, juiste knop actief, geen
+scroll-sprong).
+
+### Werk
+
+**Tapdoelen.** `display: inline-flex` + `min-height/min-width: 44px` op `.category-btn`; de
+mobiele overrides mogen de fontgrootte nog verkleinen maar niet de tapmaat. 7/7 op 44px,
+breedtes 54-97px. Zeven knoppen wikkelen naar ~3 rijen op 360px — bewust boven een
+horizontale scrollstrip gekozen, want zo blijven alle categorieën zichtbaar.
+
+**Contrast.** `--color-text-dim` #8b949e → **#a1a8b0** (7,88 op de pagina, 7,20 op een kaart).
+Waarde afgeleid met een handberekening die eerst tegen de metingen is geijkt: mijn model
+reproduceerde 5,622 en 6,153 waar Playwright 5,62 en 6,15 mat, dus de voorspelling voor de
+nieuwe waarde was betrouwbaar. Bijvangst: de light-mode knopkleuren `#1976d2` en `#1565c0`
+droegen allebei "WCAG AAA compliant" in hun eigen commentaar en maten **4,60** en **5,75** met
+witte tekst — de dark-mode tegenhanger `#004494` is wél ooit doorgemeten (7,2), deze twee zijn
+er destijds "naar analogie" naast gezet. Nu 7,41 / 8,68. `.related-category` in light (4,88)
+kreeg een eigen token naar het `--eyebrow-text`-precedent uit Sessie 217.
+
+**Inhoudsopgave.** Bewust in drie lagen, elk in de goedkoopste laag die hem kan dragen:
+
+1. **statische id's** via NEW `scripts/add-heading-ids.mjs` (idempotent, 343 toegevoegd, alle
+   uniek) — statisch omdat alleen HTML-id's door `validate-blogs.sh` te bewaken zijn en een
+   deeplink dan zonder JS werkt;
+2. **runtime-TOC** via NEW `src/ui/blog-toc.js`, gebouwd uit de `h2`'s (callouts en CTA-boxen
+   uitgesloten met `closest()`) — runtime omdat een statische lijst in 15 bestanden in lockstep
+   met de koppen zou moeten blijven;
+3. **actieve-sectiemarkering** met een scroll-listener + rAF, niet met een IntersectionObserver.
+
+`blog.css` had géén `scroll-padding-top` terwijl `landing.css` en `commands.css` die wel
+hebben — zonder dat landen alle nieuwe ankers achter de 60px navbar. Toegevoegd.
+
+**Index-UX.** Nieuwsbrief van tussen filter en grid naar ná de derde kaart, als grid-item
+(de grid is enkelkoloms). Eerste artikel **y=1125 → y=522**, binnen het eerste scherm.
+`data-newsletter-location="blog_index"` meeverhuisd zodat `newsletter-tracking.js` het effect
+kan meten. 15 datums naar `<time datetime>` — de CSS was er al op voorbereid (`blog.css` had
+naast de `span`-varianten al `time`-selectors). NEW `src/ui/blog-filter.js` voor `aria-current`
++ resultaatteller ("5 van 15 artikelen", zelfde formulering als `term-filter.js`); het filter
+blijft CSS-only werken zonder JS. `blogPost`-array met 15 items in het index-schema.
+
+**Opgeruimd.** `.blog-meta span:last-child` → `.blog-category`; `#bronnen` bij zijn vijf broers
+gezet met een comment dat benoemt dat een nieuwe categorie drie regelgroepen raakt; twee dode
+selectors weg.
+
+**Guards.** `validate-blogs.sh` checks 8-10 (kop-id's, Engelse aria-labels, progressbar zonder
+waarde), elk met een tak die faalt bij **nul** treffers. NEW `tests/e2e/blog-navigation.spec.js`
+voor wat alleen gerenderd meetbaar is. `docs/blog-template.md` kreeg een verplichte
+TOC-sectie — zonder die regel neemt post 16 het gat weer over.
+
+### Learnings
+
+**Twee eigen meetfouten, allebei gevangen door een tweede meting.**
+
+1. Ik meldde eerst twee ernstige light-mode-contrastfouten: `.breadcrumb a` op **2,90** en
+   `.related-meta` op **1,78**. Een screenshot sprak dat tegen — de kaarten renderden wit. De
+   oorzaak: ik las `getComputedStyle` in dezelfde tick als de themawissel, terwijl
+   `.related-card` een `transition` van 0,15s heeft, dus ik mat de **startwaarde van een
+   lopende animatie**. Na 700ms settelen: **9,17** en **9,74**, allebei AAA. Zonder die
+   screenshot had ik twee defecten gerapporteerd die niet bestaan en er een "fix" op gebouwd.
+   `accent-text-contrast.spec.js` documenteert deze val al bovenaan — ik liep er alsnog in.
+2. De scroll-spy leek stelselmatig één sectie achter te lopen én het `<details>` opende niet op
+   desktop. Twee losse bugs, één oorzaak: de browser hield een **stale ES-module** vast. Op een
+   verse poort waren beide weg. `architecture-patterns.md §3` schrijft dit met zoveel woorden
+   op ("`?cb=` bust submodules niet"); ik verloor er twee meetrondes mee.
+
+**Specificiteit vergelijkt per tier, hij telt niet op.** De TOC-links bleven blauw omdat
+`[data-theme="light"] .blog-post-content ol a` **(0,2,2)** mijn `.blog-toc ol li a` **(0,1,3)**
+verslaat: twee klassen winnen van één, ongeacht hoeveel type-selectors erachter staan. Dat is
+ook waarom mijn eerste poging (er een `ol` bij zetten) precies niets veranderde tegen de
+`[data-theme]`-variant. Opgelost met een klasse op de wrapper → (0,2,3), niet met `!important`.
+
+**`html { scroll-behavior: smooth }` maakt een IntersectionObserver ongeschikt voor scroll-spy.**
+De observer vuurt tíjdens de animatie, op posities die de lezer nooit ziet, en ná afloop kruist
+er niets meer — dus de markering blijft staan op een tussenstand. Dat gaf het off-by-one-beeld
+dat ik aanvankelijk aan mijn grenswaarde toeschreef. Een scroll-listener met rAF is hier het
+juiste gereedschap; §12 ("observer als trigger") geldt voor toestandswissels, niet voor een
+grootheid die continu verandert.
+
+**Een grens moet mee-ademen met de scroll-padding.** Mijn eerste predicaat gebruikte
+navbar-hoogte + 8 = 68px, terwijl `scroll-padding-top` de kop op 76px parkeert — structureel
+de vórige sectie. Het predicaat leest nu de werkelijke `scrollPaddingTop`.
+
+**Een blog-analyse legde een budgetcontradictie bloot.** De bundel staat op **1118,63 / 1120 KB**
+(0,1% marge). De formule telt `styles/**/*.css` en `src/**/*.js`, dus `blog.css` en de twee
+nieuwe blogmodules tellen mee — terwijl `terminal.html` ze nooit laadt en CLAUDE.md de blog
+"budgetloos" noemt. Doc en gate spreken elkaar tegen; dit is de eerste sessie die er blogcode
+in schreef en het daarmee zichtbaar maakte. Staat als #70 open — een beslissing van Heisenberg,
+niet van de volgende sessie die toevallig tegen de grens loopt.
+
+**Wat ik bewust NIET heb gedaan.** `--color-link` meet **5,19:1** in light mode en faalt dus
+AAA op élke link van de site. Dat is een echte bevinding, maar een blogopdracht hoort niet de
+sitebrede linkkleur te herzien; het staat als #71 open met de meting erbij.
+
+### Metrics delta
+
+| | Voor | Na |
+|---|---|---|
+| Bundel | 1106,46 KB | **1118,63 KB** / 1120 (marge 0,1%) |
+| Spec-bestanden | 41 | **42** |
+| `test()`-declaraties | 305 | **312** (+7, gemeten — de laatste zit in een `for…of`) |
+| Kop-id's in blogposts | 0 van 418 | **343** |
+| Tapdoelen < 44px op `/blog/` | 7 | **0** |
+| Engelse aria-labels | 31 | **0** |
+
+Verificatie: 186 tests groen over Chromium/Firefox/WebKit (`blog-navigation`,
+`blog-meta-separators`, `blog-theme-toggle`, `accent-text-contrast` — die laatste dekt de
+token-wijziging af). `validate-blogs.sh` en `validate-docs.sh` exit 0. Vier mutanten op de
+nieuwe checks, alle vier rood, elk met `diff -q` geverifieerd dat hij het bestand écht wijzigt.
+
+### Next steps
+
+- **#70** bundelformule vs. "blog is budgetloos" — 0,1% marge, volgende wijziging breekt de poort
+- **#71** `--color-link` 5,19:1 in light mode (sitebreed); `--color-text-dim` 6,34 op `--color-bg-hover`
+- **#68** Engelse koppen op `privacy.html`/`cookies.html` (onaangeroerd)
+- **#64** flaky `autocomplete-filesystem.spec.js:99` (onaangeroerd)
+
+---
+
 ## Sessie 225: De nieuwsbrief was af na vijf redactierondes — en elke ronde legde een defect bloot dat níét in de tekst zat (17-18 aug 2026)
 
 **Mission:** ontwerp de augustus-nieuwsbrief. Wat begon als een redactieklus werd een
@@ -1378,3 +1542,23 @@ Vastgelegd als **TASKS.md #56** en als `BASELINE_BEDEKT` per viewport in `hero-d
 - Bump `?v=` op **beide** entry-points als de ene een custom property van de andere leest. `.section-band` (landing.css) leest `--color-bg-alt` (main.css); een oude cached main.css laat die var ongedefinieerd en `background` valt terug op transparent — álle banden weg.
 - Beantwoord "moet dit erbij?" met de rol van de pagina. De homepage eindigt al met **drie opeenvolgende asks** en haar north-star is activation, niet e-mail — dus de juridische sample gaat er niet bij, ook al is de asymmetrie (17 links vs 1) echt. Die hoort contextueel opgelost — in Sessie 220 gebeurd met één wayfinding-link naar `/gidsen.html` in de bestaande lead-magnet-strook. ⚠️ **Correctie (Sessie 220):** de tweede grond ("geblokkeerd zolang `sample-juridisch.html:132` een welkomstmail belooft die de automation nog niet stuurt") was **onjuist**. De automation stond al op Active sinds 7 aug; alleen het runbook meldde nog "Stap 2 en 3 nog te doen". Ik stond op het punt correcte copy te verzachten op gezag van een document dat drie dagen achterliep — controleer de wérkelijkheid, niet de notitie erover.
 - Zeg het hardop als een opruiming bytes **kost**. −2 CSS-regels netto, +2,88 KB: het commentaar dat beide rekensommen vastlegt is langer dan de code. Marge nu 2,3% — en 1000 → 1050 → 1100 → 1120 is drie bumps in 15 sessies, dus de volgende vraag is niet "bump".
+
+---
+
+## Sessie 220 — learnings (geroteerd uit CLAUDE.md, Sessie 226)
+
+⚠️ **Never:**
+- Een notitie vertrouwen die een **toestand** beschrijft in plaats van een meting. Vier van de vijf punten deze sessie waren dezelfde fout: #18 wachtte op een AdSense-dashboard dat sinds Sessie 208 niet bestaat, #34 wachtte 66 sessies op een poort die met Outcome 4 al dicht was, het Brevo-runbook meldde "Stap 2 en 3 nog te doen" terwijl de automation al op **Active** stond, en #60 gaf een oorzaak die op geen enkel punt klopte. Het gemene: **geen van vieren kon terugmelden dat hij verlopen was.** Een test doet dat wel — daarom is de guard die je toevoegt vaak meer waard dan de fix eronder.
+- Een testfaler lezen als "de test of de code is stuk". **5 van de 7 falers kwamen van de hostingpartij:** drie parallelle motoren tegen productie lokken **Netlify's bot-protectie** uit, die een interstitial serveert (*"We are verifying your connection"* + Challenge ID) zonder één site-element — symptoom `TypeError: tc is null`. Lees `test-results/*/error-context.md`: de DOM-snapshot geeft het antwoord in vier regels. Draai de suite tegen `scripts/nostore-server.py`, niet tegen productie (lokaal: 27/27 groen).
+- Een `if (x === 0) return;` als edge-case-afhandeling laten staan zonder te vragen hóé vaak hij vuurt. `performance.spec.js:480` nam **10 van de 10** seriële runs die tak en meldde "geslaagd". Oorzaak: de VFS-save is gedebounced op 1000 ms en die timer wordt door élke mutatie teruggezet, terwijl er ~350 ms tussen twee `touch`-commando's zit. Gemeten: meteen uitlezen **0 bytes**, na 1200 ms wachten **5139**, na `flush()` **5139**.
+- Een mutant accepteren die de drempel niet haalt. Mijn eerste CV-mutant gaf 23,8% tegen een grens van 50% — groen, dus bewees hij niets. Pas exponentieel groeiende namen (59,8%) lieten de assertie vuren. Een mutant die niet rood wordt, is geen mutant.
+- Een lange run uitzitten die zijn eigen deadline niet haalt. De volle 3-motorensuite stond na 20 min op 156/1092 en zou afkappen met "did not run" onder een regel "passed" (de val van Sessie 216). Trieer op codepad: de twee gewijzigde specs over drie motoren, plus alle 37 specs op één motor omdat `fixtures.js` de enige brede wijziging was.
+- Code wijzigen terwijl de suite tegen diezelfde bestanden draait. Ik bewerkte `index.html` en `landing.css` midden in een run; specs vóór en ná die edit testten verschillende markup, dus die run was als verificatie waardeloos en moest over.
+
+✅ **Always:**
+- Meet ook als de bron je **eigen plan** is. Het plan zei "verzacht de copy" op gezag van een runbook; de automation stond al drie dagen live. Was ik gaan bouwen, dan had de bezoeker een slechtere pagina gekregen — een verkeerde notitie met een gedupeerde aan de bezoekerskant in plaats van alleen verspilde tijd.
+- Falsificeer hypotheses **hardop** en leg ze vast. Bij de flaky autocomplete-test bleken "de app is nog niet gewired" (8/8 wél — `goto` wacht op `load`) en "de legal-modal blokkeert Tab" (0/10 modal actief) allebei onjuist. Beide staan nu in #64, zodat de volgende sessie ze niet opnieuw onderzoekt. Twee gefalsifieerde hypotheses zijn meer waard dan een derde gok.
+- Beantwoord "is deze faler van mij?" met een **A/B tegen de oude code**, niet met een gevoel. `git show HEAD:tests/e2e/fixtures.js` naast de nieuwe, zelfde opdracht, 4 runs per kant: **1 rood aan beide kanten** — daarmee is "pre-existing" een meting.
+- Laat een openstaande faler een **diagnose** heten, geen baseline. #64 draagt wat gemeten is én wat gefalsifieerd is. Retries (config: 1 lokaal) maken hem in normaal gebruik een groene "flaky"-run — reden om hem niet te prioriteren, géén reden om hem "bekend" te noemen.
+- Neem het learnings-blok van een sessie **mee** met zijn entry bij een bulk-rotatie, en controleer de `SESSIONS.md`-index: die claimde window "205-215" terwijl `current.md` er 15 hield, §Session Overview stond op Sessie 190, en §Maintenance Protocol sprak de canonieke README tegen.
+- Meet een tikdoel ná `scrollIntoViewIfNeeded`. Mijn eerste hit-test gaf `raakbaar=false` omdat het midden buiten beeld lag en `elementFromPoint` dan `null` geeft — dezelfde meetfout als Sessie 215. Ná scrollen: 268×50 (chromium) / 268×49 (WebKit), opvanger is de link zelf.

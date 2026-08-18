@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 225)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 226)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -83,6 +83,24 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ---
 
 ## Recent Critical Learnings
+
+### Sessie 226: De blog had 418 koppen zonder id en een filter van 26,8px — geen van beide stond in de CSS (18 aug 2026)
+⚠️ **Never:**
+- `min-height` op een **inline** element zetten en denken dat je een tapdoel hebt vergroot. De zeven categoriefilters waren 26,8px hoog terwijl er geen enkele foute property in de regel stond: een `<a>` is inline en inline boxes negeren hoogte-constraints. Pas `display: inline-flex` erbij maakt de 44px echt. Je vindt dit niet door de CSS te lezen — alleen door de gerenderde box te meten.
+- `getComputedStyle` lezen in **dezelfde tick** als een themawissel. `.related-card` draagt `transition: 0.15s`, dus ik mat de startwaarde van een lopende animatie en meldde bijna twee ernstige light-mode-defecten (2,90 en 1,78) die niet bestaan — na 700ms settelen 9,17 en 9,74, allebei AAA. De screenshot was de falsificatie, niet mijn redenering. `accent-text-contrast.spec.js` documenteert deze val al bovenaan; ik liep er alsnog in.
+- Specificiteit **optellen**. `[data-theme="light"] .blog-post-content ol a` is (0,2,2) en verslaat `.blog-toc ol li a` (0,1,3): twee klassen winnen van één, ongeacht hoeveel type-selectors erachter staan. Mijn eerste poging (er een `ol` bij zetten) veranderde daarom exact niets. Win met een klasse op de wrapper, niet met `!important` en niet met meer descendants.
+- Een **IntersectionObserver** gebruiken voor scroll-spy zolang `html { scroll-behavior: smooth }` aanstaat (dat staat het, in `animations.css`). De observer vuurt tíjdens de animatie op posities die de lezer nooit ziet, en ná afloop kruist er niets meer — de markering blijft dus op een tussenstand staan. Dat gaf een off-by-one die ik eerst aan mijn grenswaarde toeschreef. §12 ("observer als trigger") geldt voor toestandswissels, niet voor een grootheid die continu verandert.
+- Een scroll-grens ankeren op de navbar-hoogte terwijl `scroll-padding-top` de kop ergens anders parkeert. 60+8=68 tegen een kop die op 76px landt = structureel de vórige sectie actief. Lees de werkelijke `scrollPaddingTop`.
+- Twee losse symptomen als twee bugs behandelen zonder eerst de **cache** uit te sluiten. Een off-by-one scroll-spy én een `<details>` die niet opengaat op desktop hadden één oorzaak: een stale ES-module. `?v=`/`?cb=` bust submodules niet (§3) — verse poort = lege cache. Kostte twee meetrondes.
+- Een `**Versie:**`-entry toevoegen door alleen de kopregel te vervangen: mijn `sed`-anker eindigde op `5.99` en plakte de hele body van die entry aan de nieuwe vast. Acht entries werden er zeven zonder foutmelding. Tel de entries ná de bewerking, en houd 1-in-1-out (max 8) aan — de footer-marker moet binnen de laatste 30 regels blijven.
+
+✅ **Always:**
+- Meet **afwezigheid** ook. De grootste UX-bevinding was niet iets fouts maar iets dat er niet stond: 0 van 418 koppen had een `id`, in artikelen tot 17.815px hoog. Dat grep je niet; je vindt het door te vragen "wat zou hier moeten zijn?" en het te tellen.
+- IJk je rekenmodel eerst op een gemeten waarde vóór je er een nieuwe kleur mee kiest. Mijn luminantieberekening reproduceerde 5,622 en 6,153 waar Playwright 5,62 en 6,15 mat — pas daarna was de voorspelling voor #a1a8b0 (7,88/7,20) te vertrouwen, en die klopte op de honderdste.
+- Verdeel een feature over de **goedkoopste laag die elk stuk kan dragen**. Kop-id's statisch (alleen dan bewaakbaar door `validate-blogs.sh`, en de deeplink werkt zonder JS), de TOC runtime (een statische lijst in 15 bestanden zou in lockstep met de koppen moeten blijven). Niet één keuze voor het geheel.
+- Controleer of een claim in een **commentaar** ooit gemeten is. `#1976d2` en `#1565c0` droegen allebei "WCAG AAA compliant" en maten 4,60 en 5,75; hun dark-mode tegenhanger `#004494` is wél doorgemeten (7,2) en die twee zijn er "naar analogie" naast gezet. Een geruststellend commentaar is een bewering, geen meting.
+- Meet de blast radius van een **site-breed token** buiten het gebied waar je de bug vond. Na de dim-wijziging: 49 dim-tekstelementen op de homepage, 0 onder AAA in beide thema's. En noteer wat je níét oploste — `--color-link` is 5,19:1 in light mode en raakt élke link; dat hoort een eigen taak te zijn, geen bijvangst van een blogopdracht.
+- Laat je opdracht-scope de reikwijdte van een fix bepalen, niet de vindplaats. "Over Ons" stond 58× fout, óók in `navbar.js`/`footer.js` — die renderen op élke pagina, dus alleen de blog-noscript-fallback corrigeren had de zichtbare navigatie laten tegenspreken wat eronder stond.
 
 ### Sessie 225: De nieuwsbrief was af na vijf redactierondes — en elke ronde legde een defect bloot dat níét in de tekst zat (17-18 aug 2026)
 ⚠️ **Never:**
@@ -176,23 +194,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Laat een verkeerde motivering niet de hele wijziging omverhalen. `e2dc950` verschoof de metasploit-mid-CTA met twee redenen, waarvan er één (de template) fout was — maar de andere (`ojort` had **nul** instroom) was zelfstandig geldig, en dát is precies waar Check 13d op toetst. Was `ojort` er niet geweest, dan had die commit een goed passend product vervangen door een slechter passend, op gezag van een document.
 - Draai `/summary` vóór hij zelf drift wordt. Vijf commits liepen drie dagen ongelogd door; `validate-docs.sh:909` claimde al "(Sessie 221)" terwijl TASKS.md en CLAUDE.md nog 220 hielden. Die counter-discrepantie wás het symptoom, niet een losse observatie.
 
-### Sessie 220: Opruimsessie — vier van de vijf punten bleken een notitie die niet meer klopte (10 aug 2026)
-⚠️ **Never:**
-- Een notitie vertrouwen die een **toestand** beschrijft in plaats van een meting. Vier van de vijf punten deze sessie waren dezelfde fout: #18 wachtte op een AdSense-dashboard dat sinds Sessie 208 niet bestaat, #34 wachtte 66 sessies op een poort die met Outcome 4 al dicht was, het Brevo-runbook meldde "Stap 2 en 3 nog te doen" terwijl de automation al op **Active** stond, en #60 gaf een oorzaak die op geen enkel punt klopte. Het gemene: **geen van vieren kon terugmelden dat hij verlopen was.** Een test doet dat wel — daarom is de guard die je toevoegt vaak meer waard dan de fix eronder.
-- Een testfaler lezen als "de test of de code is stuk". **5 van de 7 falers kwamen van de hostingpartij:** drie parallelle motoren tegen productie lokken **Netlify's bot-protectie** uit, die een interstitial serveert (*"We are verifying your connection"* + Challenge ID) zonder één site-element — symptoom `TypeError: tc is null`. Lees `test-results/*/error-context.md`: de DOM-snapshot geeft het antwoord in vier regels. Draai de suite tegen `scripts/nostore-server.py`, niet tegen productie (lokaal: 27/27 groen).
-- Een `if (x === 0) return;` als edge-case-afhandeling laten staan zonder te vragen hóé vaak hij vuurt. `performance.spec.js:480` nam **10 van de 10** seriële runs die tak en meldde "geslaagd". Oorzaak: de VFS-save is gedebounced op 1000 ms en die timer wordt door élke mutatie teruggezet, terwijl er ~350 ms tussen twee `touch`-commando's zit. Gemeten: meteen uitlezen **0 bytes**, na 1200 ms wachten **5139**, na `flush()` **5139**.
-- Een mutant accepteren die de drempel niet haalt. Mijn eerste CV-mutant gaf 23,8% tegen een grens van 50% — groen, dus bewees hij niets. Pas exponentieel groeiende namen (59,8%) lieten de assertie vuren. Een mutant die niet rood wordt, is geen mutant.
-- Een lange run uitzitten die zijn eigen deadline niet haalt. De volle 3-motorensuite stond na 20 min op 156/1092 en zou afkappen met "did not run" onder een regel "passed" (de val van Sessie 216). Trieer op codepad: de twee gewijzigde specs over drie motoren, plus alle 37 specs op één motor omdat `fixtures.js` de enige brede wijziging was.
-- Code wijzigen terwijl de suite tegen diezelfde bestanden draait. Ik bewerkte `index.html` en `landing.css` midden in een run; specs vóór en ná die edit testten verschillende markup, dus die run was als verificatie waardeloos en moest over.
-
-✅ **Always:**
-- Meet ook als de bron je **eigen plan** is. Het plan zei "verzacht de copy" op gezag van een runbook; de automation stond al drie dagen live. Was ik gaan bouwen, dan had de bezoeker een slechtere pagina gekregen — een verkeerde notitie met een gedupeerde aan de bezoekerskant in plaats van alleen verspilde tijd.
-- Falsificeer hypotheses **hardop** en leg ze vast. Bij de flaky autocomplete-test bleken "de app is nog niet gewired" (8/8 wél — `goto` wacht op `load`) en "de legal-modal blokkeert Tab" (0/10 modal actief) allebei onjuist. Beide staan nu in #64, zodat de volgende sessie ze niet opnieuw onderzoekt. Twee gefalsifieerde hypotheses zijn meer waard dan een derde gok.
-- Beantwoord "is deze faler van mij?" met een **A/B tegen de oude code**, niet met een gevoel. `git show HEAD:tests/e2e/fixtures.js` naast de nieuwe, zelfde opdracht, 4 runs per kant: **1 rood aan beide kanten** — daarmee is "pre-existing" een meting.
-- Laat een openstaande faler een **diagnose** heten, geen baseline. #64 draagt wat gemeten is én wat gefalsifieerd is. Retries (config: 1 lokaal) maken hem in normaal gebruik een groene "flaky"-run — reden om hem niet te prioriteren, géén reden om hem "bekend" te noemen.
-- Neem het learnings-blok van een sessie **mee** met zijn entry bij een bulk-rotatie, en controleer de `SESSIONS.md`-index: die claimde window "205-215" terwijl `current.md` er 15 hield, §Session Overview stond op Sessie 190, en §Maintenance Protocol sprak de canonieke README tegen.
-- Meet een tikdoel ná `scrollIntoViewIfNeeded`. Mijn eerste hit-test gaf `raakbaar=false` omdat het midden buiten beeld lag en `elementFromPoint` dan `null` geeft — dezelfde meetfout als Sessie 215. Ná scrollen: 268×50 (chromium) / 268×49 (WebKit), opvanger is de link zelf.
-
 📌 **Staande regel vanaf Sessie 217 — er is GEEN baseline van bekende testfalers meer.**
 De vastgelegde lijst (Sessie 209, chromium-only) klopte op geen enkel punt: 5 van de 7 falers
 waren verdwenen, twee stonden er niet in die wél structureel rood waren, en **alle vier de
@@ -209,7 +210,7 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
   als de test.
 
 
-**Rotation:** Top-6 huidig: 220-221-222-223-224-225 (Sessie 219 → `docs/sessions/current.md` via 1-in-1-out, Sessie 225; de **staande regel** "geen baseline van bekende testfalers" is bewust in dit bestand gebléven — die is nog van kracht en is geen historisch leerpunt). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 225 (210-214 → `archive-s210-s214.md`, byte-geverifieerd: elke entry precies 1× in het archief en 0× in current.md, learnings 212/213/214 meegegaan met hun entry); current.md houdt nu het rolling window 215-225 (15 secties: 11 entries + de learnings van 215-219). **Volgende bulk-rotatie Sessie 230 → archiveer de staart (215-219).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10"). Twee dingen die bij Sessie 220 bleken: (a) een learnings-blok hoort mee te gaan met de sessie waar het bij staat, anders blijft "Sessie N — learnings" achter terwijl entry N in het archief zit; (b) de SESSIONS.md-index dríft — hij claimde window "205-215" terwijl current.md er 15 hield, dus controleer hem bij elke bulk. Historie 81-209 → `archive-s205-s209.md` + `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 221-222-223-224-225-226 (Sessie 220 → `docs/sessions/current.md` via 1-in-1-out, Sessie 226; de **staande regel** "geen baseline van bekende testfalers" is bewust in dit bestand gebléven — die is nog van kracht en is geen historisch leerpunt). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 225 (210-214 → `archive-s210-s214.md`, byte-geverifieerd: elke entry precies 1× in het archief en 0× in current.md, learnings 212/213/214 meegegaan met hun entry); current.md houdt nu het rolling window 215-226 (17 secties: 12 entries + de learnings van 215-220). **Volgende bulk-rotatie Sessie 230 → archiveer de staart (215-219).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10"). Twee dingen die bij Sessie 220 bleken: (a) een learnings-blok hoort mee te gaan met de sessie waar het bij staat, anders blijft "Sessie N — learnings" achter terwijl entry N in het archief zit; (b) de SESSIONS.md-index dríft — hij claimde window "205-215" terwijl current.md er 15 hield, dus controleer hem bij elke bulk. Historie 81-209 → `archive-s205-s209.md` + `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -258,7 +259,7 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
 **Rotation trigger:** Bij elke sessie 1-in-1-out op de CLAUDE.md-learnings (top-6 vast). Bulk-rotatie van `current.md` bij `N % 5 == 0`: archiveer **de staart** — de oudste ~5 entries — naar `archive-sNNN-sMMM.md`. Laatste bulk: Sessie 225 (210-214). **Volgende bulk: Sessie 230** (staart = 215-219). Neem het learnings-blok van een sessie mee met zijn entry. Actuele stand: zie de **Rotation**-regel onder §Recent Critical Learnings.
-**Sessie counter:** 225
+**Sessie counter:** 226
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -313,6 +314,6 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
 
 ---
 
-**Last updated:** 18 aug 2026 (Sessie 225 — nieuwsbrief augustus verzendklaar na vijf redactierondes; elke ronde legde een defect bloot in de gedeelde e-mailtemplate, niet in de kopij. Nul code geraakt. Volledig: `docs/sessions/current.md`)
-**Version:** 5.99 (Sessie 225 — `.mobile-padding td` is een afstammeling-selector terwijl de klasse óp de cel staat: de mobiele padding werkte nooit, −32px tekstbreedte. Vet erfde de bodykleur (5,62:1 beide) → `.heading-text` 11,21:1. Courier x-ratio 0,42 vs 0,53-0,55, én wél op Apple/Windows en niet Android → nieuwe fontstack, body 16px, iOS +40% x-hoogte. 41 specs / 305 decl., bundel 1106,46/1120 — beide van `d2d2484`. Historie: `docs/sessions/current.md`)
+**Last updated:** 18 aug 2026 (Sessie 226 — blogsectie-analyse: 13 punten gemeten, volledige scope uitgevoerd. Tapdoelen 26,8→44px, dim-tekst naar AAA, 343 kop-id's + inhoudsopgave, nieuwsbrief uit de vouw, 3 nieuwe guards. Volledig: `docs/sessions/current.md`)
+**Version:** 6.00 (Sessie 226 — tapdoel faalde op `display`, niet op padding: `min-height` doet niets op een inline `<a>` (7/7 26,8→44px). `--color-text-dim` haalde nergens AAA (6,15/5,62 → 7,88/7,20); twee knopkleuren claimden AAA in eigen commentaar en maten 4,60/5,75. 0 van 418 koppen had een id → 343 statisch + runtime-TOC. Eerste artikel y=1125→522. 42 specs / 312 decl. ⚠️ bundel 1118,63/1120 — zie TASKS #70. Historie: `docs/sessions/current.md`)
 

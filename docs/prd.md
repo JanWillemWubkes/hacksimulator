@@ -1356,7 +1356,7 @@ HackSimulator.nl hanteert een gefaseerde monetisatie strategie die de educatieve
 }
 
 .btn-donate-blue:hover {
-  background-color: var(--color-button-bg-hover);      /* #1976d2 dark / #248748 light */
+  background-color: var(--color-button-bg-hover);      /* #003d85 dark / #0e4c8a light (Sessie 226) */
   transform: translateY(-2px);
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
