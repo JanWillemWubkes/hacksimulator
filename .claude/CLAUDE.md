@@ -1,7 +1,7 @@
 # CLAUDE.md - HackSimulator.nl
 
 **Project:** Browser-based terminal simulator voor ethisch hacken leren
-**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 224)
+**Status:** MVP Development — ✅ LIVE on Netlify (laatste: Sessie 225)
 **Docs:** `docs/prd.md` v1.8 | `docs/commands-list.md` | `docs/style-guide.md` v1.5 | `SESSIONS.md`
 
 ---
@@ -83,6 +83,25 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 ---
 
 ## Recent Critical Learnings
+
+### Sessie 225: De nieuwsbrief was af na vijf redactierondes — en elke ronde legde een defect bloot dat níét in de tekst zat (17-18 aug 2026)
+⚠️ **Never:**
+- Typografie beoordelen op een Linux-machine zonder eerst `fc-match` te draaien. Mijn x-hoogtemeting gaf voor "Courier New" én "Arial" allebei 8px — verdacht, want Courier heeft een berucht kleine x-hoogte. `fc-match "Courier New"` → **LiberationMono-Regular.ttf**: het font staat er niet en ik mat het substituut. Metrisch compatibel betekent gelijke **breedtes**, niet gelijke x-hoogte (gemeten op 100px: Courier-ontwerp **0,42**, Liberation Mono **0,53**, DejaVu **0,55**). Je keurt anders een weergave goed die geen enkele Apple- of Windows-ontvanger krijgt.
+- Een **afstammeling-selector** schrijven waar de klasse óp het element staat. `.mobile-padding td` matcht alleen tds *binnen* de cel met die klasse, niet de cel zelf: `cel.matches('.mobile-padding td') === false`. De mobiele padding-verkleining heeft daardoor **nooit** gewerkt en de regel landde in plaats daarvan op de geneste code-block-cellen, waar hij met (0,1,1) de eigen `.code-block` (0,1,0) versloeg. Kostte 32px tekstbreedte op élke mobiele weergave, jarenlang onopgemerkt.
+- Nadruk stapelen. `<strong>` mét kopkleur legt de nadruk al twee keer (gewicht + contrast); een klemtoonteken erbovenop leest niet als nadruk maar als typefout. En `jíj` klopt sowieso niet: het accent hoort op de klinker en bij een digraaf op de eerste twéé letters (`één`, `dáár`) — een `j` kan geen accent aigu dragen.
+- Een **toonaanwijzing** als kop gebruiken. `maandelijks-template.md` zei *"Toon: geen harde sell, 'Misschien handig' vibe"* — een beschrijving van hoe het moet vóélen. Juli nam hem letterlijk als kop over, augustus kopieerde juli. Twee edities lang stond er een kop die de lezer vooraf vertelt dat hij het blok kan overslaan.
+- Verwijzen naar "die tweede regel" in een blok waar de lezer anders telt dan jij. Het blok had label + 2 regels, dus "die tweede" wees naar de regel die juist **wél** van de site kwam. Bind aan de **inhoud** ("die slotregel — *of alles waarvoor 1 = 1*"), niet aan een positie.
+- Een cadans ankeren op de **kalendermaand** als hij een **interval** is. "Eerste dinsdag" dwong na een editie van ~30 juli tot óf 5 dagen gat óf augustus overslaan. En de parenthese "(beste open rates voor B2C NL)" was een onbewezen claim: bij twee verstuurde edities is een dag-van-de-week-effect niet meetbaar.
+- `[^<>]{0,50}(a|b|c)[^<]{0,60}` op lange HTML-regels loslaten — twee keer catastrophic backtracking. En `pkill -f "grep -oE"` schiet zijn eigen shell af omdat het patroon in zijn eigen commandoregel staat. Zoek je letterlijke frasen, gebruik dan `grep -F`.
+
+✅ **Always:**
+- Vraag je af wélke knop je draait bij "de tekst is klein". Puntgrootte, x-hoogte en regellengte beïnvloeden elkaar; ik greep naar de enige die al in beeld was (17px) en dat kostte +1085px hoogte én duwde de regellengte naar 25 tekens. Heisenbergs vraag "kunnen we niet beter een ander lettertype kiezen?" was de goedkopere hefboom: grotere x-hoogte bij gelijke px = **nul** extra maillengte.
+- Kies een fontstack op **waar hij aanwezig is**, niet op reputatie. Courier New staat wél op Windows/macOS/iOS en níét op Android — aanwezig op precies de platforms waar hij het slechtst rendert, dus ~20% grootteverschil binnen dezelfde mailing. Moderne monospace voorop (`JetBrains Mono, Consolas, Menlo, Roboto Mono, …`) legt iedereen op ~0,55.
+- Introduceer niets wat de lezer niet kan **herleiden**. Drie feedbackrondes waren dezelfde fout vermomd: de aanvallersinvoer die nergens getoond werd, databasenamen die niet vertaald waren, apostrofs op precieze plekken zonder te zeggen wie ze daar zette. Wie het onderwerp kent leest eroverheen — alleen een lezer die het níét kent merkt het, en die spreek je pas ná verzending.
+- Repareer de **oorzaak in het brondocument**, niet alleen het symptoom. Elk van de vijf rondes leverde een regel in `maandelijks-template.md` op (toon-vs-kop, klemtoontekens, invoer náást resultaat, preview moet toevoegen niet parafraseren). Zonder dat neemt september ze allemaal weer over — juli→augustus bewees dat al.
+- Attribueer een metriekdelta aan de commit die hem veroorzaakte. Docs claimden 40 specs / 304 declaraties / 1104,61 KB; gemeten 41 / 305 / 1106,46. Alle drie komen uit **`d2d2484`**, een commit die ná de 224-summary viel — mijn vijf commits raakten uitsluitend `docs/newsletter/` en zijn metriek-neutraal.
+- Los een venster-guard op met **1-in-1-out** zodra je erin schrijft. De footer-marker van TASKS.md stond op 29 van achteren en Check 2 kijkt in de laatste 30; een 9e `**Versie:**`-entry had hem op 31 gezet. Nieuwe erbij, oudste eruit — precies de remedie die Sessie 224 opschreef.
+- Meet de gerenderde weergave die je **niet** hebt. Met `'Nimbus Mono PS'` geforceerd (ratio 0,42, hetzelfde ontwerp als Courier New) bleef alles 0 wraps / 0 overflow — dat is de dichtstbijzijnde benadering van een iOS-ontvanger op een machine zonder Courier New.
 
 ### Sessie 224: De dader was 280px breed en 377px lang — de scan keek naar het verkeerde getal (16-17 aug 2026)
 ⚠️ **Never:**
@@ -174,25 +193,6 @@ Bij nieuwe command: 80/20 output | Educatieve feedback | Help/man (NL) | Warning
 - Neem het learnings-blok van een sessie **mee** met zijn entry bij een bulk-rotatie, en controleer de `SESSIONS.md`-index: die claimde window "205-215" terwijl `current.md` er 15 hield, §Session Overview stond op Sessie 190, en §Maintenance Protocol sprak de canonieke README tegen.
 - Meet een tikdoel ná `scrollIntoViewIfNeeded`. Mijn eerste hit-test gaf `raakbaar=false` omdat het midden buiten beeld lag en `elementFromPoint` dan `null` geeft — dezelfde meetfout als Sessie 215. Ná scrollen: 268×50 (chromium) / 268×49 (WebKit), opvanger is de link zelf.
 
-### Sessie 219: Onder "in cijfers" was de homepage één blok — en de band die als voorbeeld gold, maakte in light mode nul verschil (09 aug 2026)
-⚠️ **Never:**
-- Een `rgba()` over een ondergrond zetten zonder het product uit te rekenen. `rgba(248,248,248,0.8)` over een `#f8f8f8` pagina composit naar **exact `rgb(248,248,248)`** — de cijfers-band die als goed voorbeeld gold, bestond in light mode alleen uit twee haarlijnen. De comment erboven zei "zeer subtiel off-white": de bedoeling klopte, de rekensom maakte hem nul. **Derde keer in vijf sessies** (215, 217, nu) dat een alpha-over-ondergrond niet is uitgerekend — dit is geen incident maar een patroon.
-- Een kaart behandelen alsof hij een kleur heeft. `rgba(22,27,34,α)` is een **verhouding tot wat erachter staat**, niet een waarde: het verschil is `0.3 × |kaart − band|`, dus nul zodra de band naar `#161b22` kruipt. Daardoor is "banden lichter maken" op deze site structureel fout. Ik zag het niet in de cijfers (band Δ11 = prima) maar op de screenshot.
-- Een assertie ankeren op iets dat zelf kan verdwijnen. Ik mat "de langste reeks ná de reeks die `results-section` bevat" — verliest die sectie haar band, dan slokt die reeks de pagina op en gaat de test **groen op een kapotte pagina**. Knip op DOM-positie, niet op een groepering die van de bug zelf afhangt.
-- Aannemen dat een testfaler jouw code betreft omdat hij ná jouw wijziging valt. `playwright.config.js:32` draait standaard tegen **productie** (`BASE_URL || 'https://hacksimulator.nl'`); mijn eerste 5 rood waren de oude code die zichzelf correct rapporteerde.
-- Een browserfout als codefout melden zonder cache-bust. `terminal.html` gaf lokaal een ontbrekende module-export bij byte-identieke JS; warme fetch 1603 bytes, cache-bustend 2157. Mijn MCP-debugbrowser hield een bestand van vóór Sessie 208 vast — precies de val die `architecture-patterns.md` §Cache Strategy beschrijft.
-- Een meting vertrouwen die naast je eigen belasting draait. De enige rode test viel tijdens een run waar ik zélf twee extra Playwright-runs naast had gezet. Zelfde fout als Sessie 218, één sessie later.
-
-✅ **Always:**
-- Kwantificeer "het leest als één blok" voordat je erover ontwerpt. Groeperen op effectieve achtergrond gaf **3,8 schermen onder** tegen 1,6 boven — dat maakt van een smaakoordeel een meting, en levert meteen de norm voor de fix (949px / 913px = 1,05 / 1,12 scherm).
-- Schrijf de **regel** op in plaats van waarden te kiezen. *Pagina = oppervlak, band = verdieping, kaart = verhoging* beslist beide thema's tegelijk, verklaart waarom lichter fout is, en maakt van drie ad-hoc rgba's één token. Netto vier CSS-regels weg, twee erbij.
-- Kies de plaats van een beat op de invariant, niet op aantal. Eén band volstond omdat `how-it-works` oppervlak móét blijven (het volgt op de cijfers-band), dus leerpad is de eerste mogelijke beat en knipt de reeks doormidden.
-- Prototype in de browser vóór je in het bestand schrijft. De kaart-botsing zag ik alleen op de screenshot; de cijfers zeiden dat het goed was.
-- Laat de mutant de oorspronkelijke meting **reproduceren**. "Band == pagina" gaf 2392px (2,66) en 3070px (3,78) — cijfer voor cijfer de nulmeting. En kies een tweede mutant die alleen de andere assertie raakt: "band == `#161b22`" maakt uitsluitend de kaart-Δ rood terwijl het ritme groen blijft, wat bewijst dat die assertie niet overbodig is.
-- Bump `?v=` op **beide** entry-points als de ene een custom property van de andere leest. `.section-band` (landing.css) leest `--color-bg-alt` (main.css); een oude cached main.css laat die var ongedefinieerd en `background` valt terug op transparent — álle banden weg.
-- Beantwoord "moet dit erbij?" met de rol van de pagina. De homepage eindigt al met **drie opeenvolgende asks** en haar north-star is activation, niet e-mail — dus de juridische sample gaat er niet bij, ook al is de asymmetrie (17 links vs 1) echt. Die hoort contextueel opgelost — in Sessie 220 gebeurd met één wayfinding-link naar `/gidsen.html` in de bestaande lead-magnet-strook. ⚠️ **Correctie (Sessie 220):** de tweede grond ("geblokkeerd zolang `sample-juridisch.html:132` een welkomstmail belooft die de automation nog niet stuurt") was **onjuist**. De automation stond al op Active sinds 7 aug; alleen het runbook meldde nog "Stap 2 en 3 nog te doen". Ik stond op het punt correcte copy te verzachten op gezag van een document dat drie dagen achterliep — controleer de wérkelijkheid, niet de notitie erover.
-- Zeg het hardop als een opruiming bytes **kost**. −2 CSS-regels netto, +2,88 KB: het commentaar dat beide rekensommen vastlegt is langer dan de code. Marge nu 2,3% — en 1000 → 1050 → 1100 → 1120 is drie bumps in 15 sessies, dus de volgende vraag is niet "bump".
-
 📌 **Staande regel vanaf Sessie 217 — er is GEEN baseline van bekende testfalers meer.**
 De vastgelegde lijst (Sessie 209, chromium-only) klopte op geen enkel punt: 5 van de 7 falers
 waren verdwenen, twee stonden er niet in die wél structureel rood waren, en **alle vier de
@@ -209,7 +209,7 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
   als de test.
 
 
-**Rotation:** Top-6 huidig: 219-220-221-222-223-224 (Sessie 218 → `docs/sessions/current.md` via 1-in-1-out, Sessie 224; de **staande regel** "geen baseline van bekende testfalers" is bewust in dit bestand gebléven — die is nog van kracht en is geen historisch leerpunt). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 220 (205-209 → `archive-s205-s209.md`, byte-geverifieerd); current.md houdt nu het rolling window 210-224 (22 secties: 15 entries + de learnings van 212-218). **Volgende bulk-rotatie Sessie 225 → archiveer de staart (210-214).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10"). Twee dingen die bij Sessie 220 bleken: (a) een learnings-blok hoort mee te gaan met de sessie waar het bij staat, anders blijft "Sessie N — learnings" achter terwijl entry N in het archief zit; (b) de SESSIONS.md-index dríft — hij claimde window "205-215" terwijl current.md er 15 hield, dus controleer hem bij elke bulk. Historie 81-209 → `archive-s205-s209.md` + `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
+**Rotation:** Top-6 huidig: 220-221-222-223-224-225 (Sessie 219 → `docs/sessions/current.md` via 1-in-1-out, Sessie 225; de **staande regel** "geen baseline van bekende testfalers" is bewust in dit bestand gebléven — die is nog van kracht en is geen historisch leerpunt). **Bestemmings-conventie (Sessie 170): `docs/sessions/README.md`** — range-naamgeving `archive-sNNN-sMMM.md`, legacy `archive-q*`/`recent.md` bevroren. **Bulk-rotatie:** laatste uitgevoerd Sessie 225 (210-214 → `archive-s210-s214.md`, byte-geverifieerd: elke entry precies 1× in het archief en 0× in current.md, learnings 212/213/214 meegegaan met hun entry); current.md houdt nu het rolling window 215-225 (15 secties: 11 entries + de learnings van 215-219). **Volgende bulk-rotatie Sessie 230 → archiveer de staart (215-219).** NB: archiveer altijd de **oudste** entries (README §Rotatie-regel: "sessies ouder dan de laatste ~10"). Twee dingen die bij Sessie 220 bleken: (a) een learnings-blok hoort mee te gaan met de sessie waar het bij staat, anders blijft "Sessie N — learnings" achter terwijl entry N in het archief zit; (b) de SESSIONS.md-index dríft — hij claimde window "205-215" terwijl current.md er 15 hield, dus controleer hem bij elke bulk. Historie 81-209 → `archive-s205-s209.md` + `archive-s200-s204.md` + `archive-s195-s199.md` + `archive-s190-s194.md` + `archive-s185-s189.md` + `archive-s180-s184.md` + `archive-s175-s179.md` + `archive-s170-s174.md` + `archive-s165-s169.md` + `archive-s121-s164.md` + `archive-s081-s120.md`; pre-Sessie 81 → legacy `archive-*`.
 
 ---
 
@@ -257,8 +257,8 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
    - Pre-commit hook draait dit automatisch
    - Checks: sessie-counter alignment, datum-consistency binnen doc, PRD-version-match across docs
 
-**Rotation trigger:** Bij elke sessie 1-in-1-out op de CLAUDE.md-learnings (top-6 vast). Bulk-rotatie van `current.md` bij `N % 5 == 0`: archiveer **de staart** — de oudste ~5 entries — naar `archive-sNNN-sMMM.md`. Laatste bulk: Sessie 220 (205-209). **Volgende bulk: Sessie 225** (staart = 210-214). Neem het learnings-blok van een sessie mee met zijn entry. Actuele stand: zie de **Rotation**-regel onder §Recent Critical Learnings.
-**Sessie counter:** 224
+**Rotation trigger:** Bij elke sessie 1-in-1-out op de CLAUDE.md-learnings (top-6 vast). Bulk-rotatie van `current.md` bij `N % 5 == 0`: archiveer **de staart** — de oudste ~5 entries — naar `archive-sNNN-sMMM.md`. Laatste bulk: Sessie 225 (210-214). **Volgende bulk: Sessie 230** (staart = 215-219). Neem het learnings-blok van een sessie mee met zijn entry. Actuele stand: zie de **Rotation**-regel onder §Recent Critical Learnings.
+**Sessie counter:** 225
 
 → **Document Ownership map:** `PLANNING.md §Document Ownership`
 
@@ -313,6 +313,6 @@ Ze zijn gerepareerd; eindstand 224 passed / 0 failed over drie motoren.
 
 ---
 
-**Last updated:** 17 aug 2026 (Sessie 224 — legal-pagina's: de <h1> is 280px breed maar zijn inhoud 377px, dus de border-box-scan van Sessie 223 vond terecht niets. Oorzaak: deze pagina's laden mobile.css niet, dus de kop houdt 36px tot 320px toe. Eerste E2E-dekking ooit op assets/legal/*. Volledig: `docs/sessions/current.md`)
-**Version:** 5.98 (Sessie 224 — border-box en content-box zijn twee metingen op hetzelfde element; wie er één leest mist de andere. Fix `overflow-wrap` gekozen op meting in 3 motoren (`hyphens` werkt alleen in Firefox, `clamp()` verworpen op rekenwerk), desktop byte-identiek in A/B tegen HEAD. NEW legal-pages-overflow.spec.js: 2 asserties met verschillende faalbreedtes, 2 complementaire mutanten. 40 specs / 304 declaraties. Bundel 1104,61/1120. Historie: `docs/sessions/current.md`)
+**Last updated:** 18 aug 2026 (Sessie 225 — nieuwsbrief augustus verzendklaar na vijf redactierondes; elke ronde legde een defect bloot in de gedeelde e-mailtemplate, niet in de kopij. Nul code geraakt. Volledig: `docs/sessions/current.md`)
+**Version:** 5.99 (Sessie 225 — `.mobile-padding td` is een afstammeling-selector terwijl de klasse óp de cel staat: de mobiele padding werkte nooit, −32px tekstbreedte. Vet erfde de bodykleur (5,62:1 beide) → `.heading-text` 11,21:1. Courier x-ratio 0,42 vs 0,53-0,55, én wél op Apple/Windows en niet Android → nieuwe fontstack, body 16px, iOS +40% x-hoogte. 41 specs / 305 decl., bundel 1106,46/1120 — beide van `d2d2484`. Historie: `docs/sessions/current.md`)
 

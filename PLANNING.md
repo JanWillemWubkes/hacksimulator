@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 17 aug 2026 (Sessie 224 — **geen architectuurwijziging.** Alleen de sessie-marker bijgewerkt; de fix van TASKS #67 (`overflow-wrap` op de legal-koppen) en de nieuwe overflow-spec zijn uitvoering, geen tech-stack-, design-system- of security-beslissing. Kandidaat voor `.claude/rules/architecture-patterns.md` §15 als het patroon 'border-box en content-box zijn twee metingen' nog eens terugkomt.)
+**Laatst bijgewerkt:** 18 aug 2026 (Sessie 225 — **geen architectuurwijziging.** Alleen de sessie-marker bijgewerkt; de augustus-nieuwsbrief en de drie typografiefixes in de gedeelde e-mailtemplate zijn uitvoering, geen tech-stack-, design-system- of security-beslissing. De mail raakte nul bestanden in `src/`, `styles/`, `tests/` of `blog/`. Kandidaat voor `.claude/rules/architecture-patterns.md` §15 als het patroon 'een afstammeling-selector waar de klasse óp het element staat' nog eens terugkomt — dat is dezelfde familie als §14 (positionele selectors verouderen stil).)
 **Status:** ✅ LIVE on Netlify | M5 Testing 71% | M5.5 Monetization deep (Ko-fi + Brevo + Gumroad + Lead magnet) | M6 Tutorial 100% | M7 Gamification 100% | Blog content-pijler 14 posts live
 **Verantwoordelijk:** Development Team
 **Live URL:** https://hacksimulator.nl/
@@ -900,7 +900,7 @@ const DEBUG_MODE = false;
 
 ---
 
-**Laatst bijgewerkt:** 17 aug 2026 (Sessie 224 — **geen architectuurwijziging.** Alleen de sessie-marker bijgewerkt; de fix van TASKS #67 (`overflow-wrap` op de legal-koppen) en de nieuwe overflow-spec zijn uitvoering, geen tech-stack-, design-system- of security-beslissing. Kandidaat voor `.claude/rules/architecture-patterns.md` §15 als het patroon 'border-box en content-box zijn twee metingen' nog eens terugkomt.)
+**Laatst bijgewerkt:** 18 aug 2026 (Sessie 225 — **geen architectuurwijziging.** Alleen de sessie-marker bijgewerkt; de augustus-nieuwsbrief en de drie typografiefixes in de gedeelde e-mailtemplate zijn uitvoering, geen tech-stack-, design-system- of security-beslissing. De mail raakte nul bestanden in `src/`, `styles/`, `tests/` of `blog/`. Kandidaat voor `.claude/rules/architecture-patterns.md` §15 als het patroon 'een afstammeling-selector waar de klasse óp het element staat' nog eens terugkomt — dat is dezelfde familie als §14 (positionele selectors verouderen stil).)
 **Versie:** 4.45 (Sessie 223 — **§Security & Privacy: AI-transparantie als staande constraint.** Melding per contentpagina i.p.v. één verantwoordingspagina, nooit visueel verbergen, geen claim die menselijke verificatie suggereert. Bewust géén brede exoneratie: vernietigbaar richting consumenten. Product-architectuur ongewijzigd.)
 **Status:** ✅ Deployed - Live in Production | M5.5 Monetization stack deep + Brevo deliverability getuned | M7 Gamification ✅ 100% | Blog content-pijler 14 posts live
 **Live URL:** https://hacksimulator.nl/
