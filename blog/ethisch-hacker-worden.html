@@ -107,7 +107,7 @@
 </head>
 <body>
   <!-- Reading Progress Bar -->
-  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+  <div class="reading-progress" aria-hidden="true"></div>
 
   <!-- Skip Link -->
   <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
@@ -122,7 +122,7 @@
         <a href="../commands/">Commands</a>
         <a href="../gidsen.html">Gidsen</a>
         <a href="../woordenlijst.html">Woordenlijst</a>
-        <a href="../over-ons.html">Over Ons</a>
+        <a href="../over-ons.html">Over ons</a>
         <a href="../contact.html">Contact</a>
       </nav>
     </noscript>
@@ -131,7 +131,7 @@
   <!-- Main Content -->
   <main id="main-content" class="blog-container">
     <!-- Breadcrumb (Sessie 139) -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
       <ol>
         <li><a href="/">Home</a></li>
         <li><a href="/blog/">Blog</a></li>
@@ -162,12 +162,12 @@
 
         <!-- Lead Magnet CTA: gratis Pentest Playbook sample -->
         <div class="blog-cta blog-cta-product">
-          <h3>Klaar voor je eerste pentest?</h3>
+          <h3 id="klaar-voor-je-eerste-pentest">Klaar voor je eerste pentest?</h3>
           <p>Krijg gratis 9 pagina's uit het Pentest Playbook: Fase 0 (voorbereiding &amp; toestemming) en Fase 1 (het doelwit verkennen). Meteen te downloaden.</p>
           <a href="/sample-pentest.html" class="blog-cta-button" data-lead-magnet="pentest_sample" data-cta-location="blog_ethisch_hacker_top">Download de gratis sample</a>
         </div>
 
-        <h2>Wat doet een ethisch hacker?</h2>
+        <h2 id="wat-doet-een-ethisch-hacker">Wat doet een ethisch hacker?</h2>
         <p>
           Een ethisch hacker - ook wel <abbr class="jargon" title="White hat hacker: een beveiligingsexpert die systemen hackt met toestemming om zwakke plekken te vinden" tabindex="0"><strong>white hat hacker</strong></abbr> genoemd -
           wordt ingehuurd om systemen te testen op kwetsbaarheden. Je denkt als een aanvaller, maar werkt voor de verdediging.
@@ -200,7 +200,7 @@ PORT     STATE   SERVICE
           In de <a href="../terminal.html">HackSimulator</a> kun je dit veilig oefenen.
         </p>
 
-        <h2>Verschil met "gewoon" hacken</h2>
+        <h2 id="verschil-met-gewoon-hacken">Verschil met "gewoon" hacken</h2>
         <p>
           Het cruciale verschil tussen ethisch hacken en crimineel hacken komt neer op drie woorden: <strong>toestemming, legaliteit en intentie</strong>.
           Een ethisch hacker heeft altijd schriftelijke toestemming (een zogenaamd <abbr class="jargon" title="Scope document: contract dat precies vastlegt welke systemen je mag testen en onder welke voorwaarden" tabindex="0"><strong>scope document</strong></abbr>)
@@ -222,18 +222,18 @@ PORT     STATE   SERVICE
 
         <!-- Gumroad CTA: Juridische Gids (contextual placement na strafrecht-warning) -->
         <div class="blog-cta blog-cta-product">
-          <h3>Ken je de regels?</h3>
+          <h3 id="ken-je-de-regels">Ken je de regels?</h3>
           <p>De Juridische Gids — wat mag wel en wat niet bij ethisch hacken in Nederland. Betaalde gids op Gumroad.</p>
           <a href="https://hacksimulator.gumroad.com/l/yzdtfx" class="blog-cta-button" target="_blank" rel="noopener noreferrer" data-product-id="yzdtfx" data-cta-location="blog_ethisch_hacker_worden">Bekijk de Juridische Gids</a>
         </div>
 
-        <h2>Welke skills heb je nodig?</h2>
+        <h2 id="welke-skills-heb-je-nodig">Welke skills heb je nodig?</h2>
         <p>
           Ethisch hacken is een breed vakgebied dat meerdere technische disciplines combineert. Je hoeft niet alles tegelijk te leren,
           maar dit zijn de kerngebieden die je uiteindelijk moet beheersen:
         </p>
 
-        <h3>Networking (netwerken)</h3>
+        <h3 id="networking-netwerken">Networking (netwerken)</h3>
         <p>
           Begrijpen hoe netwerken werken is fundamenteel. Je moet weten hoe data van punt A naar punt B reist.
           Denk aan <abbr class="jargon" title="TCP/IP: het fundament van internetcommunicatie - regelt hoe data in pakketjes wordt verstuurd en ontvangen" tabindex="0"><strong>TCP/IP</strong></abbr>,
@@ -243,7 +243,7 @@ PORT     STATE   SERVICE
           <a href="/commands/#cmd-traceroute"><code>traceroute</code></a> eigenlijk doen.
         </p>
 
-        <h3>Operating systems (besturingssystemen)</h3>
+        <h3 id="operating-systems-besturingssystemen">Operating systems (besturingssystemen)</h3>
         <p>
           Linux is het platform bij uitstek voor ethisch hackers. De meeste security tools draaien op Linux, en de meeste servers
           die je zult testen draaien ook op Linux. Begin bij de mappenstructuur: onze uitleg over het
@@ -252,7 +252,7 @@ PORT     STATE   SERVICE
           op Windows draait - denk aan Active Directory, PowerShell en Windows-specifieke kwetsbaarheden.
         </p>
 
-        <h3>Programmeren</h3>
+        <h3 id="programmeren">Programmeren</h3>
         <p>
           Je hoeft geen software developer te zijn, maar basiskennis van programmeren is essentieel.
           <strong>Python</strong> is de taal bij uitstek voor security scripts en automatisering.
@@ -261,7 +261,7 @@ PORT     STATE   SERVICE
           <abbr class="jargon" title="Cross-Site Scripting: een aanval waarbij kwaadaardige scripts worden geïnjecteerd in websites die andere gebruikers bezoeken" tabindex="0"><strong>XSS</strong></abbr>.
         </p>
 
-        <h3>Web technologies</h3>
+        <h3 id="web-technologies">Web technologies</h3>
         <p>
           De meeste kwetsbaarheden zitten tegenwoordig in webapplicaties. Je moet HTTP begrijpen, weten hoe HTML en
           <abbr class="jargon" title="SQL: Structured Query Language - de taal waarmee databases worden bevraagd en beheerd" tabindex="0"><strong>SQL</strong></abbr>
@@ -269,7 +269,7 @@ PORT     STATE   SERVICE
           <code>curl</code> (op een echt systeem) helpen je om HTTP-verkeer te inspecteren.
         </p>
 
-        <h3>Security tools</h3>
+        <h3 id="security-tools">Security tools</h3>
         <p>
           Je leert werken met een <a href="cybersecurity-tools.html">arsenaal aan essentiële security tools</a>. De belangrijkste voor beginners:
           <a href="/commands/#cmd-nmap"><code>nmap</code></a> voor network scanning,
@@ -285,13 +285,13 @@ PORT     STATE   SERVICE
           wat ze eigenlijk doen.
         </div>
 
-        <h2>Leerpad: van beginner tot professional</h2>
+        <h2 id="leerpad-van-beginner-tot-professional">Leerpad: van beginner tot professional</h2>
         <p>
           Hier is een realistisch stappenplan. Elk niveau bouwt voort op het vorige. Reken op 1 tot 3 jaar
           om van complete beginner naar een instapfunctie te komen, afhankelijk van hoeveel tijd je investeert.
         </p>
 
-        <h3>Stap 1: basis IT-kennis (0-3 maanden)</h3>
+        <h3 id="stap-1-basis-it-kennis-0-3-maanden">Stap 1: basis IT-kennis (0-3 maanden)</h3>
         <p>
           Voordat je gaat hacken, moet je snappen hoe computers en netwerken werken. Dit is je fundament.
           Goede startpunten zijn de <strong>CompTIA A+</strong> (hardware en software basics) en
@@ -299,7 +299,7 @@ PORT     STATE   SERVICE
           Je hoeft de examens niet per se te doen, maar de leerstof geeft je een solide basis.
         </p>
 
-        <h3>Stap 2: Linux en de command line (1-3 maanden)</h3>
+        <h3 id="stap-2-linux-en-de-command-line-1-3-maanden">Stap 2: Linux en de command line (1-3 maanden)</h3>
         <p>
           Linux is het werkpaard van elke ethisch hacker. Installeer een distributie als Ubuntu of Kali Linux,
           en leer de <a href="terminal-basics.html">basis terminal commands</a>: navigeren met
@@ -327,14 +327,14 @@ PORT     STATE   SERVICE
           begeleide tutorial.
         </div>
 
-        <h3>Stap 3: security fundamentals (2-4 maanden)</h3>
+        <h3 id="stap-3-security-fundamentals-2-4-maanden">Stap 3: security fundamentals (2-4 maanden)</h3>
         <p>
           Nu je de basis hebt, ga je security-specifieke kennis opbouwen. De <strong>CompTIA Security+</strong>
           certificering is hiervoor de gouden standaard. Je leert over encryptie, authenticatie, netwerk security,
           threat analysis en compliance. Dit is ook de certificering die veel werkgevers als minimum eis stellen.
         </p>
 
-        <h3>Stap 4: hands-on hacking (3-12 maanden)</h3>
+        <h3 id="stap-4-hands-on-hacking-3-12-maanden">Stap 4: hands-on hacking (3-12 maanden)</h3>
         <p>
           Theorie is belangrijk, maar ethisch hacken leer je door te doen. Dit is waar platforms als
           <a href="https://tryhackme.com" target="_blank" rel="noopener noreferrer">TryHackMe</a> (beginner-friendly),
@@ -344,18 +344,18 @@ PORT     STATE   SERVICE
           aanvalstechnieken toe te passen.
         </p>
 
-        <h3>Stap 5: certificeringen (6-18 maanden)</h3>
+        <h3 id="stap-5-certificeringen-6-18-maanden">Stap 5: certificeringen (6-18 maanden)</h3>
         <p>
           Met hands-on ervaring ben je klaar voor een professionele certificering die je kennis valideert
           en deuren opent bij werkgevers. Meer hierover in de volgende sectie.
         </p>
 
-        <h2>Certificeringen uitgelegd</h2>
+        <h2 id="certificeringen-uitgelegd">Certificeringen uitgelegd</h2>
         <p>
           Er zijn tientallen security certificeringen, maar deze vier zijn het meest relevant als je ethisch hacker wilt worden:
         </p>
 
-        <h3><abbr class="jargon" title="Certified Ethical Hacker: brede certificering van EC-Council die de basis van ethical hacking dekt" tabindex="0"><strong>CEH</strong></abbr> - Certified Ethical Hacker</h3>
+        <h3 id="ceh-certified-ethical-hacker"><abbr class="jargon" title="Certified Ethical Hacker: brede certificering van EC-Council die de basis van ethical hacking dekt" tabindex="0"><strong>CEH</strong></abbr> - Certified Ethical Hacker</h3>
         <p>
           <strong>Aanbieder:</strong> EC-Council | <strong>Niveau:</strong> Beginner-gemiddeld | <strong>Kosten:</strong> ~$1.200
         </p>
@@ -366,7 +366,7 @@ PORT     STATE   SERVICE
           HR-afdelingen specifiek naar "CEH" zoeken in cv's.
         </p>
 
-        <h3><abbr class="jargon" title="Offensive Security Certified Professional: intensieve hands-on certificering met een 24-uurs praktijkexamen" tabindex="0"><strong>OSCP</strong></abbr> - Offensive Security Certified Professional</h3>
+        <h3 id="oscp-offensive-security-certified-professional"><abbr class="jargon" title="Offensive Security Certified Professional: intensieve hands-on certificering met een 24-uurs praktijkexamen" tabindex="0"><strong>OSCP</strong></abbr> - Offensive Security Certified Professional</h3>
         <p>
           <strong>Aanbieder:</strong> OffSec | <strong>Niveau:</strong> Gevorderd | <strong>Kosten:</strong> ~$1.600+
         </p>
@@ -377,7 +377,7 @@ PORT     STATE   SERVICE
           "Try Harder" en dat vat de mentaliteit perfect samen.
         </p>
 
-        <h3><abbr class="jargon" title="eLearnSecurity Junior Penetration Tester: betaalbare instap-certificering met praktijkgericht examen" tabindex="0"><strong>eJPT</strong></abbr> - eLearnSecurity Junior Penetration Tester</h3>
+        <h3 id="ejpt-elearnsecurity-junior-penetration-tester"><abbr class="jargon" title="eLearnSecurity Junior Penetration Tester: betaalbare instap-certificering met praktijkgericht examen" tabindex="0"><strong>eJPT</strong></abbr> - eLearnSecurity Junior Penetration Tester</h3>
         <p>
           <strong>Aanbieder:</strong> INE Security | <strong>Niveau:</strong> Beginner | <strong>Kosten:</strong> ~$250
         </p>
@@ -387,7 +387,7 @@ PORT     STATE   SERVICE
           dat je de basis beheerst. Veel beginners doen eerst eJPT, dan CEH of direct OSCP.
         </p>
 
-        <h3>CompTIA PenTest+</h3>
+        <h3 id="comptia-pentest">CompTIA PenTest+</h3>
         <p>
           <strong>Aanbieder:</strong> CompTIA | <strong>Niveau:</strong> Gemiddeld | <strong>Kosten:</strong> ~$400
         </p>
@@ -403,7 +403,7 @@ PORT     STATE   SERVICE
           of een eigen security blog. Combineer certificeringen met hands-on bewijs van je skills.
         </div>
 
-        <h2>Salarissen en arbeidsmarkt in Nederland</h2>
+        <h2 id="salarissen-en-arbeidsmarkt-in-nederland">Salarissen en arbeidsmarkt in Nederland</h2>
         <p>
           De vraag naar cybersecurity professionals in Nederland is enorm. Volgens recent onderzoek zijn er
           duizenden onvervulde vacatures in de sector. Dit betekent goede salarissen en uitstekende vooruitzichten.
@@ -433,33 +433,33 @@ PORT     STATE   SERVICE
           LinkedIn is hier het belangrijkste platform.
         </div>
 
-        <h2>Functies in cybersecurity</h2>
+        <h2 id="functies-in-cybersecurity">Functies in cybersecurity</h2>
         <p>
           "Ethisch hacker" is een overkoepelende term. In de praktijk zijn er verschillende specialisaties:
         </p>
 
-        <h3>Penetration tester</h3>
+        <h3 id="penetration-tester">Penetration tester</h3>
         <p>
           De "klassieke" ethisch hacker. Je voert pentests uit voor klanten: web applicaties, netwerken,
           mobiele apps, API's. Je werkt vaak bij een security consultancy en hebt afwisselende projecten
           bij verschillende organisaties.
         </p>
 
-        <h3>Security analyst (SOC)</h3>
+        <h3 id="security-analyst-soc">Security analyst (SOC)</h3>
         <p>
           Je werkt in een <abbr class="jargon" title="Security Operations Center: de centrale plek waar een organisatie alle beveiligingsmeldingen monitort en afhandelt" tabindex="0"><strong>SOC</strong></abbr> en monitort
           netwerken op verdachte activiteit. Meer defensief dan een pentester, maar je moet wel begrijpen hoe aanvallers denken.
           Goed startpunt als je nog geen pentest-ervaring hebt.
         </p>
 
-        <h3>Red teamer</h3>
+        <h3 id="red-teamer">Red teamer</h3>
         <p>
           Een stap verder dan pentesting. Red teamers simuleren realistische aanvallen op een hele organisatie, inclusief
           <abbr class="jargon" title="Social engineering: het manipuleren van mensen om vertrouwelijke informatie te delen of toegang te verlenen" tabindex="0"><strong>social engineering</strong></abbr>,
           fysieke inbraak en geavanceerde technieken. Je probeert zo lang mogelijk ongedetecteerd te blijven, net als een echte aanvaller.
         </p>
 
-        <h3>Bug bounty hunter</h3>
+        <h3 id="bug-bounty-hunter">Bug bounty hunter</h3>
         <p>
           Freelance kwetsbaarhedenjager. Je zoekt bugs in systemen van bedrijven die een
           <abbr class="jargon" title="Bug bounty programma: een beloning die bedrijven uitloven voor het verantwoord melden van kwetsbaarheden in hun systemen" tabindex="0"><strong>bug bounty programma</strong></abbr>
@@ -467,7 +467,7 @@ PORT     STATE   SERVICE
           50 euro voor kleine bugs tot tienduizenden euro's voor kritieke kwetsbaarheden. Flexibel, maar je inkomen is onvoorspelbaar.
         </p>
 
-        <h2>Beginnen zonder ervaring: 8 concrete tips</h2>
+        <h2 id="beginnen-zonder-ervaring-8-concrete-tips">Beginnen zonder ervaring: 8 concrete tips</h2>
         <p>
           Heb je geen IT-achtergrond? Geen probleem. Veel succesvolle ethisch hackers zijn autodidact.
           Hier zijn concrete stappen om vandaag te beginnen:
@@ -490,25 +490,25 @@ PORT     STATE   SERVICE
           komen vanzelf als je fundatie stevig staat.
         </div>
 
-        <h2>Nederlandse opleidingen en resources</h2>
+        <h2 id="nederlandse-opleidingen-en-resources">Nederlandse opleidingen en resources</h2>
         <p>
           Naast zelfstudie zijn er in Nederland verschillende mogelijkheden om formeel opgeleid te worden:
         </p>
 
-        <h3>HBO en universiteit</h3>
+        <h3 id="hbo-en-universiteit">HBO en universiteit</h3>
         <ul>
           <li><strong>HBO ICT / Cyber Security</strong> - Aangeboden door o.a. Haagse Hogeschool, NHL Stenden, Saxion</li>
           <li><strong>WO Informatica met specialisatie Security</strong> - TU Delft, TU Eindhoven, Radboud Universiteit, Universiteit van Amsterdam</li>
         </ul>
 
-        <h3>Commerciële trainingen</h3>
+        <h3 id="commerciele-trainingen">Commerciële trainingen</h3>
         <ul>
           <li><strong>SANS Institute</strong> - Wereldwijd erkende trainingen, ook in het Nederlands aangeboden via SANS Amsterdam</li>
           <li><strong>OffSec (voorheen Offensive Security)</strong> - Makers van OSCP, online training met lab-omgeving</li>
           <li><strong>INE Security</strong> - Betaalbare online trainingen, makers van eJPT certificering</li>
         </ul>
 
-        <h3>Gratis resources</h3>
+        <h3 id="gratis-resources">Gratis resources</h3>
         <ul>
           <li><a href="https://tryhackme.com" target="_blank" rel="noopener noreferrer">TryHackMe</a> - Gestructureerde leerpaden, deels gratis</li>
           <li><a href="https://www.hackthebox.eu" target="_blank" rel="noopener noreferrer">HackTheBox Academy</a> - Hands-on training modules</li>
@@ -517,7 +517,7 @@ PORT     STATE   SERVICE
           <li><a href="https://www.youtube.com/@JohnHammond010" target="_blank" rel="noopener noreferrer">John Hammond (YouTube)</a> - Uitstekende Engelstalige CTF walkthroughs</li>
         </ul>
 
-        <h2>Veelgestelde vragen</h2>
+        <h2 id="veelgestelde-vragen">Veelgestelde vragen</h2>
 
         <div class="blog-faq" itemscope itemtype="https://schema.org/FAQPage">
 
@@ -558,7 +558,7 @@ PORT     STATE   SERVICE
 
         </div>
 
-        <h2>Begin vandaag met HackSimulator.nl</h2>
+        <h2 id="begin-vandaag-met-hacksimulator-nl">Begin vandaag met HackSimulator.nl</h2>
         <p>
           De beste tijd om te beginnen was gisteren. De op een na beste tijd is nu. Je hoeft niet te wachten tot je
           een opleiding hebt gevonden of een certificering hebt betaald. Open de <a href="../terminal.html">simulator</a>,
@@ -574,7 +574,7 @@ PORT     STATE   SERVICE
         </ul>
 
         <div class="blog-cta">
-          <h3>Klaar om ethisch hacker te worden?</h3>
+          <h3 id="klaar-om-ethisch-hacker-te-worden">Klaar om ethisch hacker te worden?</h3>
           <p>
             Type <code>next</code> voor persoonlijke begeleiding. Gebruik <code>leerpad</code> om je voortgang te
             bekijken, of spring direct naar <code>nmap</code> en <code>hashcat</code>. Jouw carrière in cybersecurity begint hier.
@@ -586,7 +586,7 @@ PORT     STATE   SERVICE
 
       <!-- Support Banner -->
       <div class="blog-support-banner">
-        <h3>Vond je dit artikel nuttig?</h3>
+        <h3 id="vond-je-dit-artikel-nuttig">Vond je dit artikel nuttig?</h3>
         <p>HackSimulator.nl is een onafhankelijk project &mdash; gebouwd door &#233;&#233;n developer. Met een koffie help je de simulator gratis houden voor iedereen.</p>
         <div class="blog-support-actions">
           <a href="https://ko-fi.com/hacksimulator" class="blog-cta-button" target="_blank" rel="noopener noreferrer">Steun met een koffie</a>
@@ -642,7 +642,7 @@ PORT     STATE   SERVICE
           <a href="../assets/legal/privacy.html">Privacy</a>
           <a href="../assets/legal/terms.html">Voorwaarden</a>
           <a href="../assets/legal/cookies.html">Cookies</a>
-          <a href="../over-ons.html">Over Ons</a>
+          <a href="../over-ons.html">Over ons</a>
           <a href="../contact.html">Contact</a>
         </nav>
       </footer>
@@ -654,6 +654,9 @@ PORT     STATE   SERVICE
 
   <!-- Component Injection (external script for CSP compliance) -->
   <script src="/src/init-components.js?v=4" type="module"></script>
+
+  <!-- Inhoudsopgave uit de statische kop-ids (scripts/add-heading-ids.mjs) -->
+  <script src="/src/ui/blog-toc.js?v=1" type="module"></script>
 
   <!-- Analytics & Consent (external for CSP compliance) -->
   <script src="/src/init-analytics.js" type="module"></script>

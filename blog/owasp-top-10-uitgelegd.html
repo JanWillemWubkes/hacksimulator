@@ -107,7 +107,7 @@
 </head>
 <body>
   <!-- Reading Progress Bar -->
-  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+  <div class="reading-progress" aria-hidden="true"></div>
 
   <!-- Skip Link -->
   <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
@@ -122,7 +122,7 @@
         <a href="../commands/">Commands</a>
         <a href="../gidsen.html">Gidsen</a>
         <a href="../woordenlijst.html">Woordenlijst</a>
-        <a href="../over-ons.html">Over Ons</a>
+        <a href="../over-ons.html">Over ons</a>
         <a href="../contact.html">Contact</a>
       </nav>
     </noscript>
@@ -131,7 +131,7 @@
   <!-- Main Content -->
   <main id="main-content" class="blog-container">
     <!-- Breadcrumb (Sessie 139) -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
       <ol>
         <li><a href="/">Home</a></li>
         <li><a href="/blog/">Blog</a></li>
@@ -162,12 +162,12 @@
 
         <!-- Lead Magnet CTA: gratis Pentest Playbook sample -->
         <div class="blog-cta blog-cta-product">
-          <h3>Klaar om OWASP-kwetsbaarheden in de praktijk te vinden?</h3>
+          <h3 id="klaar-om-owasp-kwetsbaarheden-in-de-praktijk-te-vinden">Klaar om OWASP-kwetsbaarheden in de praktijk te vinden?</h3>
           <p>Krijg gratis 9 pagina's uit het Pentest Playbook: voorbereiding en verkenning &mdash; de eerste stappen voor elke OWASP-test. Meteen te downloaden.</p>
           <a href="/sample-pentest.html" class="blog-cta-button" data-lead-magnet="pentest_sample" data-cta-location="blog_owasp_top10_top">Download de gratis sample</a>
         </div>
 
-        <h2>Wat is OWASP en waarom de top 10?</h2>
+        <h2 id="wat-is-owasp-en-waarom-de-top-10">Wat is OWASP en waarom de top 10?</h2>
         <p>
           OWASP staat voor <strong>Open Worldwide Application Security Project</strong>, een internationale non-profit organisatie
           opgericht in 2001. OWASP publiceert gratis tools, documentatie en standaarden om webapplicaties veiliger te maken.
@@ -191,7 +191,7 @@
           (ASVS) of de uitgebreide <strong>OWASP Testing Guide</strong>.
         </div>
 
-        <h2>De OWASP Top 10 (2021) &mdash; overzicht</h2>
+        <h2 id="de-owasp-top-10-2021-overzicht">De OWASP Top 10 (2021) &mdash; overzicht</h2>
         <p>
           Hier is de complete lijst in volgorde. De ranking is gebaseerd op een combinatie van prevalentie (hoe vaak komt het voor),
           detecteerbaarheid (hoe makkelijk te vinden), exploiteerbaarheid (hoe makkelijk uit te buiten) en technische impact.
@@ -229,9 +229,9 @@
           De principes die we hieronder uitleggen blijven onverkort gelden. Voor de exacte 2025-volgorde en -details raadpleeg je de officiële lijst.
         </div>
 
-        <h2>De 10 risico's toegelicht</h2>
+        <h2 id="de-10-risico-s-toegelicht">De 10 risico's toegelicht</h2>
 
-        <h3>A01: Broken Access Control</h3>
+        <h3 id="a01-broken-access-control">A01: Broken Access Control</h3>
         <p>
           <strong>Wat:</strong> Gebruikers krijgen toegang tot data of functies waar ze geen rechten voor hebben. Denk aan een URL
           met <code>?user_id=42</code> die je naar <code>?user_id=43</code> kan veranderen om iemand anders' gegevens te zien
@@ -243,7 +243,7 @@
           Volgens OWASP heeft 94% van de geteste applicaties een vorm van broken access control.
         </p>
 
-        <h3>A02: Cryptographic Failures</h3>
+        <h3 id="a02-cryptographic-failures">A02: Cryptographic Failures</h3>
         <p>
           <strong>Wat:</strong> Gevoelige data (wachtwoorden, creditcards, persoonsgegevens) wordt slecht of niet versleuteld
           opgeslagen of verstuurd. Voorbeelden: wachtwoorden opgeslagen in <abbr class="jargon" title="Plaintext: leesbare, onversleutelde tekst zonder enige bescherming" tabindex="0"><strong>plaintext</strong></abbr>,
@@ -256,7 +256,7 @@
           maakt goede cryptografie het verschil tussen "incident gemeld, geen schade" en "alle wachtwoorden gekraakt binnen een week".
         </p>
 
-        <h3>A03: Injection</h3>
+        <h3 id="a03-injection">A03: Injection</h3>
         <p>
           <strong>Wat:</strong> De applicatie vertrouwt user-input zonder validatie, waardoor een aanvaller commando's of queries kan injecteren.
           De bekendste vorm is <a href="sql-injection-uitgelegd.html">SQL injection</a>, maar er bestaan ook OS command injection,
@@ -285,7 +285,7 @@
           strafbaar onder artikel 138ab Sr (Computercriminaliteit III).
         </div>
 
-        <h3>A04: Insecure Design</h3>
+        <h3 id="a04-insecure-design">A04: Insecure Design</h3>
         <p>
           <strong>Wat:</strong> Fouten die al in het <em>ontwerp</em> van de applicatie zitten, niet in de implementatie. Een typisch voorbeeld:
           een "wachtwoord vergeten"-functie die een 4-cijferige code naar e-mail stuurt zonder rate-limiting &mdash; zelfs perfecte code
@@ -297,7 +297,7 @@
           vroeg in het ontwikkelproces zo waardevol.
         </p>
 
-        <h3>A05: Security Misconfiguration</h3>
+        <h3 id="a05-security-misconfiguration">A05: Security Misconfiguration</h3>
         <p>
           <strong>Wat:</strong> Default-instellingen die nooit aangepast zijn, debug-modes die in productie aanstaan, onnodige features
           die open staan, of cloud-storage (S3-buckets) die per ongeluk publiek bereikbaar is. Tools als
@@ -309,7 +309,7 @@
           alle drie zijn echte voorbeelden uit recente datalekken.
         </p>
 
-        <h3>A06: Vulnerable and Outdated Components</h3>
+        <h3 id="a06-vulnerable-and-outdated-components">A06: Vulnerable and Outdated Components</h3>
         <p>
           <strong>Wat:</strong> Je applicatie gebruikt libraries, frameworks of dependencies met bekende kwetsbaarheden. Denk aan een oude
           Log4j-versie (de beruchte <em>Log4Shell</em>-bug uit 2021), een verouderd WordPress-thema, of een npm-pakket met een gemelde CVE.
@@ -321,7 +321,7 @@
           op kwetsbare componenten.
         </p>
 
-        <h3>A07: Identification and Authentication Failures</h3>
+        <h3 id="a07-identification-and-authentication-failures">A07: Identification and Authentication Failures</h3>
         <p>
           <strong>Wat:</strong> Zwakke logica rond inloggen, sessies en wachtwoorden. Bijvoorbeeld: geen rate-limiting op login-pogingen
           (brute-force-aanvallen mogelijk), session-tokens die na uitloggen geldig blijven, of geen ondersteuning voor
@@ -333,7 +333,7 @@
           structureel terug als root cause.
         </p>
 
-        <h3>A08: Software and Data Integrity Failures</h3>
+        <h3 id="a08-software-and-data-integrity-failures">A08: Software and Data Integrity Failures</h3>
         <p>
           <strong>Wat:</strong> Updates, configuraties of code worden geaccepteerd zonder dat hun integriteit gecontroleerd wordt.
           Denk aan een CI/CD-pipeline die onbeveiligde dependencies inlaadt, of een auto-update-mechanisme dat geen handtekening verifieert.
@@ -344,7 +344,7 @@
           De impact schaalt mee met de populariteit van het component.
         </p>
 
-        <h3>A09: Security Logging and Monitoring Failures</h3>
+        <h3 id="a09-security-logging-and-monitoring-failures">A09: Security Logging and Monitoring Failures</h3>
         <p>
           <strong>Wat:</strong> Niet detecteren wat er gebeurt. Geen logs, logs zonder relevante events, of logs die nooit
           bekeken worden. Volgens onderzoek duurt het gemiddeld <em>200+ dagen</em> voor een breach gedetecteerd wordt &mdash;
@@ -356,7 +356,7 @@
           "incident" en "ramp".
         </p>
 
-        <h3>A10: Server-Side Request Forgery (SSRF)</h3>
+        <h3 id="a10-server-side-request-forgery-ssrf">A10: Server-Side Request Forgery (SSRF)</h3>
         <p>
           <strong>Wat:</strong> De server haalt op verzoek van een gebruiker een externe resource op, zonder de URL te valideren.
           Een aanvaller misbruikt dit om de server interne resources te laten benaderen die anders niet bereikbaar zijn
@@ -367,7 +367,7 @@
           IAM-credentials op, daarmee val je het rest van de cloud-account aan. Capital One's 2019-breach (100 miljoen records) begon zo.
         </p>
 
-        <h2>Hoe gebruik je deze lijst als beginner?</h2>
+        <h2 id="hoe-gebruik-je-deze-lijst-als-beginner">Hoe gebruik je deze lijst als beginner?</h2>
         <p>
           Tien categorieën tegelijk leren is overweldigend. Een realistische aanpak: begin met A03 (Injection) en A07
           (Authentication). Dat zijn de meest voorkomende én de meest leerzame &mdash; je leert ineens over user-input,
@@ -389,12 +389,12 @@
 
         <!-- Gumroad CTA: 12-Weken Leerplan (contextual placement na leer-roadmap) -->
         <div class="blog-cta blog-cta-product">
-          <h3>Wil je OWASP Top 10 systematisch beheersen?</h3>
+          <h3 id="wil-je-owasp-top-10-systematisch-beheersen">Wil je OWASP Top 10 systematisch beheersen?</h3>
           <p>Het 12-Weken Leerplan brengt je van OWASP-theorie naar hands-on labs &mdash; week voor week, met opdrachten en checklists. Betaalde gids op Gumroad.</p>
           <a href="https://hacksimulator.gumroad.com/l/eogjdk" class="blog-cta-button" target="_blank" rel="noopener noreferrer" data-product-id="eogjdk" data-cta-location="blog_owasp_top10_mid">Bekijk het Leerplan</a>
         </div>
 
-        <h2>Tools en hands-on oefenen</h2>
+        <h2 id="tools-en-hands-on-oefenen">Tools en hands-on oefenen</h2>
         <p>
           De OWASP-categorieën zijn theorie; je leert ze pas echt door ze in een lab te zien. Een aantal gratis tools en omgevingen
           die elke beginnende web-tester gebruikt:
@@ -430,7 +430,7 @@
           voordat je naar echte test-omgevingen overstapt.
         </p>
 
-        <h2>Volgende stappen</h2>
+        <h2 id="volgende-stappen">Volgende stappen</h2>
         <p>
           De OWASP Top 10 is geen eindpunt &mdash; het is je startpunt voor webapp-security. Als je dit document onder de knie hebt,
           ben je klaar voor verdiepende OWASP-publicaties (ASVS, Testing Guide), platforms als TryHackMe en uiteindelijk
@@ -447,7 +447,7 @@
         </ul>
 
         <div class="blog-cta">
-          <h3>Klaar om met OWASP-tools aan de slag te gaan?</h3>
+          <h3 id="klaar-om-met-owasp-tools-aan-de-slag-te-gaan">Klaar om met OWASP-tools aan de slag te gaan?</h3>
           <p>
             Type een tool met een doelwit erachter - bijvoorbeeld <code>nikto http://testsite.nl</code>,
             <code>sqlmap http://testsite.nl/?id=1</code> of <code>nmap 192.168.1.1</code> - in de HackSimulator en zie hoe deze tools
@@ -460,7 +460,7 @@
 
       <!-- Support Banner -->
       <div class="blog-support-banner">
-        <h3>Vond je dit artikel nuttig?</h3>
+        <h3 id="vond-je-dit-artikel-nuttig">Vond je dit artikel nuttig?</h3>
         <p>HackSimulator.nl is een onafhankelijk project &mdash; gebouwd door &#233;&#233;n developer. Met een koffie help je de simulator gratis houden voor iedereen.</p>
         <div class="blog-support-actions">
           <a href="https://ko-fi.com/hacksimulator" class="blog-cta-button" target="_blank" rel="noopener noreferrer">Steun met een koffie</a>
@@ -516,7 +516,7 @@
           <a href="../assets/legal/privacy.html">Privacy</a>
           <a href="../assets/legal/terms.html">Voorwaarden</a>
           <a href="../assets/legal/cookies.html">Cookies</a>
-          <a href="../over-ons.html">Over Ons</a>
+          <a href="../over-ons.html">Over ons</a>
           <a href="../contact.html">Contact</a>
         </nav>
       </footer>
@@ -528,6 +528,9 @@
 
   <!-- Component Injection (external script for CSP compliance) -->
   <script src="/src/init-components.js?v=4" type="module"></script>
+
+  <!-- Inhoudsopgave uit de statische kop-ids (scripts/add-heading-ids.mjs) -->
+  <script src="/src/ui/blog-toc.js?v=1" type="module"></script>
 
   <!-- Analytics & Consent (external for CSP compliance) -->
   <script src="/src/init-analytics.js" type="module"></script>

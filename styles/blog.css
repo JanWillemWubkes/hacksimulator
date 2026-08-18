@@ -1,9 +1,79 @@
+/* De navbar staat fixed op --navbar-height; zonder scroll-padding landt een #anker-sprong
+   eronder en lijkt de kop te ontbreken. Zelfde waarde als landing.css/commands.css. */
+html {
+  scroll-padding-top: calc(var(--navbar-height) + 16px);
+}
 .blog-container {
   margin: 0 auto;
   max-width: 720px;
   min-height: 100vh;
   padding: calc(var(--navbar-height) + var(--spacing-xl)) var(--spacing-lg) var(--spacing-xl);
   width: 100%;
+}
+
+/* ---- Inhoudsopgave (gebouwd door src/ui/blog-toc.js uit de statische kop-ids) ---- */
+.blog-toc {
+  background-color: var(--color-bg-modal);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-link);
+  border-radius: var(--border-radius-modal);
+  margin: var(--spacing-xl) 0;
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+.blog-toc summary {
+  color: var(--color-text);
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: var(--font-weight-semibold);
+  /* 44px tapdoel (WCAG AAA 2.5.5) — een <summary> is een knop, geen tekstregel. */
+  align-items: center;
+  display: flex;
+  min-height: 44px;
+}
+.blog-toc summary:hover {
+  color: var(--color-link);
+}
+.blog-toc ol {
+  list-style: none;
+  margin: var(--spacing-sm) 0 var(--spacing-xs);
+  padding: 0;
+}
+.blog-toc li {
+  counter-increment: toc;
+  margin: 0;
+}
+.blog-toc ol {
+  counter-reset: toc;
+}
+.blog-toc-nav .blog-toc ol li a {
+  align-items: center;
+  color: var(--color-text-dim);
+  display: flex;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  min-height: 44px;
+  padding: var(--spacing-xs) 0;
+  text-decoration: none;
+}
+.blog-toc-nav .blog-toc ol li a::before {
+  color: var(--color-link);
+  content: counter(toc) '.';
+  flex-shrink: 0;
+  font-family: var(--font-terminal);
+  font-size: 0.85rem;
+  margin-right: var(--spacing-sm);
+  min-width: 1.75em;
+}
+.blog-toc-nav .blog-toc ol li a:hover {
+  color: var(--color-link);
+  text-decoration: underline;
+}
+/* Actieve sectie: gezet door blog-toc.js op basis van scrollpositie. */
+.blog-toc-nav .blog-toc ol li a[aria-current='true'] {
+  color: var(--color-link);
+  font-weight: var(--font-weight-semibold);
 }
 .blog-header {
   border-bottom: 2px solid var(--color-border);
@@ -112,14 +182,21 @@
   margin-bottom: var(--spacing-xl);
   padding: var(--spacing-md) 0;
 }
+/* inline-flex is functioneel, niet cosmetisch: op een inline <a> doet min-height niets,
+   en 44px is de WCAG-AAA-tapdoelmaat (2.5.5). Zonder display-wissel bleef de knop 26,8px. */
 .category-btn {
+  align-items: center;
   background-color: transparent;
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-button);
   color: var(--color-text-dim);
   cursor: pointer;
+  display: inline-flex;
   font-family: var(--font-terminal);
   font-size: 0.9rem;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
   padding: var(--spacing-sm) var(--spacing-md);
   text-decoration: none;
   transition: all var(--transition-fast);
@@ -128,32 +205,36 @@
   border-color: var(--color-link);
   color: var(--color-link);
 }
-.category-btn.active,
-.category-btn:target {
-  background-color: var(--color-button-bg);
-  border-color: var(--color-button-bg);
-  color: var(--color-button-text);
-  font-weight: var(--font-weight-bold);
-}
 .blog-post-card {
   display: block;
 }
-#beginners:target
-  ~ .blog-posts-grid
-  .blog-post-card:not([data-category='beginners']),
-#carriere:target
-  ~ .blog-posts-grid
-  .blog-post-card:not([data-category='carriere']),
-#concepten:target
-  ~ .blog-posts-grid
-  .blog-post-card:not([data-category='concepten']),
-#gevorderden:target
-  ~ .blog-posts-grid
-  .blog-post-card:not([data-category='gevorderden']),
+
+/* ---------------------------------------------------------------------------
+   CSS-only categoriefilter (:target). Werkt zonder JavaScript; src/ui/blog-filter.js
+   voegt alleen aria-current en een resultaatteller toe.
+
+   ⚠️ EEN NIEUWE CATEGORIE RAAKT ALLE DRIE DE GROEPEN HIERONDER — en ze staan bewust
+   bij elkaar. Tot Sessie 226 stond `#bronnen` als losse kopie ~600 regels verderop,
+   waardoor "voeg een categorie toe" in de praktijk betekende: vind de drie plekken,
+   waarvan één niet in beeld staat.
+   Enumeratie is met :target niet te vermijden (er is geen selector die
+   `[data-category]` aan een target-id koppelt), maar hij hoort wel op één plek.
+   --------------------------------------------------------------------------- */
+
+/* 1. Verberg alles wat niet in de gekozen categorie valt. */
+#beginners:target ~ .blog-posts-grid .blog-post-card:not([data-category='beginners']),
+#bronnen:target ~ .blog-posts-grid .blog-post-card:not([data-category='bronnen']),
+#carriere:target ~ .blog-posts-grid .blog-post-card:not([data-category='carriere']),
+#concepten:target ~ .blog-posts-grid .blog-post-card:not([data-category='concepten']),
+#gevorderden:target ~ .blog-posts-grid .blog-post-card:not([data-category='gevorderden']),
 #tools:target ~ .blog-posts-grid .blog-post-card:not([data-category='tools']) {
   display: none;
 }
+
+/* 2. Markeer de gekozen knop. `a[href='#all']` staat er zonder :target bij, want
+      "Alle posts" is de standaardtoestand wanneer er géén target actief is. */
 #beginners:target ~ .blog-category-filter a[href='#beginners'],
+#bronnen:target ~ .blog-category-filter a[href='#bronnen'],
 #carriere:target ~ .blog-category-filter a[href='#carriere'],
 #concepten:target ~ .blog-category-filter a[href='#concepten'],
 #gevorderden:target ~ .blog-category-filter a[href='#gevorderden'],
@@ -164,7 +245,10 @@ a[href='#all'].category-btn {
   color: var(--color-button-text);
   font-weight: var(--font-weight-bold);
 }
+
+/* 3. Zet "Alle posts" terug naar neutraal zodra er wél een categorie gekozen is. */
 #beginners:target ~ .blog-category-filter a[href='#all'],
+#bronnen:target ~ .blog-category-filter a[href='#all'],
 #carriere:target ~ .blog-category-filter a[href='#all'],
 #concepten:target ~ .blog-category-filter a[href='#all'],
 #gevorderden:target ~ .blog-category-filter a[href='#all'],
@@ -182,15 +266,18 @@ a[href='#all'].category-btn {
     justify-content: center;
     padding: var(--spacing-sm) var(--spacing-md);
   }
+  /* Font mag krimpen, de tapmaat niet: min-height/min-width blijven staan uit de basisregel.
+     Zeven knoppen à 44px wikkelen naar ~3 rijen op 360px — bewuste keuze boven een
+     horizontale scrollstrip, omdat alle categorieën dan zichtbaar blijven. */
   .category-btn {
-    font-size: 0.75rem;
-    padding: 5px 8px;
+    font-size: 0.8rem;
+    padding: var(--spacing-xs) 10px;
   }
 }
 @media (max-width: 480px) {
   .category-btn {
-    font-size: 0.7rem;
-    padding: 4px 6px;
+    font-size: 0.75rem;
+    padding: var(--spacing-xs) 8px;
   }
 }
 @media (min-width: 769px) and (max-width: 1023px) {
@@ -201,6 +288,18 @@ a[href='#all'].category-btn {
     font-size: 0.9rem;
     padding: 7px 12px;
   }
+}
+/* Resultaatteller onder het filter — verbergt zichzelf als leeg, dus geen layout-shift
+   wanneer er niet gefilterd wordt (zelfde patroon als .glossary-search-count). */
+.blog-filter-count {
+  color: var(--color-text-dim);
+  font-family: var(--font-terminal);
+  font-size: 0.85rem;
+  margin: calc(-1 * var(--spacing-lg)) 0 var(--spacing-lg);
+  text-align: center;
+}
+.blog-filter-count:empty {
+  display: none;
 }
 .blog-posts-grid {
   display: grid;
@@ -264,7 +363,11 @@ a[href='#all'].category-btn {
 .blog-meta time:not(:first-child) {
   margin-left: var(--spacing-sm);
 }
-.blog-meta span:last-child {
+/* Bind op de klasse, niet op de positie. Dit was `.blog-meta span:last-child` — exact de
+   constructie die in Sessie 223 op .blog-post-meta van doel wisselde zodra er een span werd
+   bijgeplakt, en daar een wettelijk verplichte melding in linkblauw verfde. Deze rij groeit
+   ook (datum, leestijd, categorie), dus hij liep hetzelfde risico. */
+.blog-meta .blog-category {
   color: var(--color-link);
   font-weight: var(--font-weight-medium);
 }
@@ -785,23 +888,6 @@ a[href='#all'].category-btn {
     text-decoration: underline;
   }
 }
-#bronnen:target
-  ~ .blog-posts-grid
-  .blog-post-card:not([data-category='bronnen']) {
-  display: none;
-}
-#bronnen:target ~ .blog-category-filter a[href='#bronnen'] {
-  background-color: var(--color-button-bg);
-  border-color: var(--color-button-bg);
-  color: var(--color-button-text);
-  font-weight: var(--font-weight-bold);
-}
-#bronnen:target ~ .blog-category-filter a[href='#all'] {
-  background-color: transparent;
-  border-color: var(--color-border);
-  color: var(--color-text-dim);
-  font-weight: 400;
-}
 .blog-nav-actions {
   display: flex;
   gap: var(--spacing-lg);
@@ -1012,6 +1098,13 @@ a[href='#all'].category-btn {
   padding: 2px 6px;
   border-radius: 4px;
   margin-bottom: var(--spacing-sm);
+}
+/* De badge heeft een eigen rgba-achtergrond, dus de tekst ligt op de compositie ervan over de
+   kaart — niet op de kaartkleur zelf (zie architecture-patterns.md §10). In light mode gaf
+   --color-link daar 4,88:1; dit is een eigen, donkerder tint voor uitsluitend deze badge,
+   naar het voorbeeld van --eyebrow-text (Sessie 217). Dark mode haalt al 7,34 en blijft. */
+[data-theme='light'] .related-card .related-category {
+  color: #0a4d94;
 }
 
 .related-card h3 {

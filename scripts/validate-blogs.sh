@@ -131,6 +131,45 @@ validate_blog() {
     fi
   fi
 
+  # Check 8: elke h2/h3 in .blog-post-content heeft een id (Sessie 226)
+  # Zonder id is er geen deeplink en kan src/ui/blog-toc.js geen inhoudsopgave bouwen.
+  # Tot Sessie 226 had 0 van de 418 koppen er een; artikelen lopen tot ~17.800px op 375px.
+  # De id's worden gezet door `node scripts/add-heading-ids.mjs` — die is idempotent.
+  #
+  # Zelfbewakende tak: als er NUL koppen gevonden worden klopt de zoekterm niet meer, en dan
+  # moet de check falen in plaats van stil groen blijven (de val uit Sessie 223 Check 16).
+  if [ "$(basename "$file")" != "index.html" ]; then
+    body=$(sed -n '/<div class="blog-post-content">/,/<section class="related-articles">/p' "$file")
+    koppen=$(printf '%s' "$body" | grep -cE '<h[23][ >]' || true)
+    zonder_id=$(printf '%s' "$body" | grep -oE '<h[23][^>]*>' | grep -cve 'id=' || true)
+    if [ "$koppen" -eq 0 ]; then
+      issues+="    [FAIL] Check 8 vond NUL h2/h3 in .blog-post-content — zoekterm verouderd?\n"
+      errors=$((errors + 1))
+    elif [ "$zonder_id" -gt 0 ]; then
+      issues+="    [FAIL] $zonder_id van $koppen koppen zonder id — draai: node scripts/add-heading-ids.mjs\n"
+      errors=$((errors + 1))
+    fi
+  fi
+
+  # Check 9: geen Engelse aria-labels op een lang="nl"-pagina (Sessie 226)
+  # Stonden er 31 (15x "Reading progress", 15x "Breadcrumb", 1x "Filter posts by category").
+  # Een schermlezer in NL-modus spreekt die uit met Nederlandse fonologie.
+  engels=$(grep -oE 'aria-label="[^"]*"' "$file" \
+    | grep -icE 'aria-label="(Reading|Breadcrumb|Filter posts|Search|Close|Menu|Next|Previous)' || true)
+  if [ "$engels" -gt 0 ]; then
+    issues+="    [FAIL] $engels Engelse aria-label(s) op een Nederlandse pagina\n"
+    errors=$((errors + 1))
+  fi
+
+  # Check 10: geen role="progressbar" zonder aria-valuenow (Sessie 226)
+  # Een progressbar zonder waarde is een kapot aangegeven widget: de schermlezer meldt
+  # "voortgangsbalk" en kan geen stand noemen. De leesvoortgangsbalk is decoratief en
+  # hoort daarom aria-hidden="true" te zijn, zonder role.
+  if grep -q 'role="progressbar"' "$file" && ! grep -q 'aria-valuenow' "$file"; then
+    issues+="    [FAIL] role=\"progressbar\" zonder aria-valuenow (maak hem aria-hidden of geef hem waarden)\n"
+    errors=$((errors + 1))
+  fi
+
   # Report per file
   if [ $errors -eq 0 ]; then
     printf "  %-42s ${GREEN}[OK]${NC}\n" "$filename"

@@ -107,7 +107,7 @@
 </head>
 <body>
   <!-- Reading Progress Bar -->
-  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+  <div class="reading-progress" aria-hidden="true"></div>
 
   <!-- Skip Link -->
   <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
@@ -122,7 +122,7 @@
         <a href="../commands/">Commands</a>
         <a href="../gidsen.html">Gidsen</a>
         <a href="../woordenlijst.html">Woordenlijst</a>
-        <a href="../over-ons.html">Over Ons</a>
+        <a href="../over-ons.html">Over ons</a>
         <a href="../contact.html">Contact</a>
       </nav>
     </noscript>
@@ -131,7 +131,7 @@
   <!-- Main Content -->
   <main id="main-content" class="blog-container">
     <!-- Breadcrumb (Sessie 139) -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
       <ol>
         <li><a href="/">Home</a></li>
         <li><a href="/blog/">Blog</a></li>
@@ -160,19 +160,19 @@
 
         <!-- Lead Magnet CTA: gratis Pentest Playbook sample -->
         <div class="blog-cta blog-cta-product">
-          <h3>Klaar met de basis? Volgende stap: een echte pentest</h3>
+          <h3 id="klaar-met-de-basis-volgende-stap-een-echte-pentest">Klaar met de basis? Volgende stap: een echte pentest</h3>
           <p>Krijg gratis 9 pagina's: Fase 0 (voorbereiding) en Fase 1 (het doelwit verkennen). Meteen te downloaden, geen account.</p>
           <a href="/sample-pentest.html" class="blog-cta-button" data-lead-magnet="pentest_sample" data-cta-location="blog_terminal_top">Download de gratis sample</a>
         </div>
 
-        <h2>Wat is een terminal?</h2>
+        <h2 id="wat-is-een-terminal">Wat is een terminal?</h2>
         <p>
           Een <strong>terminal</strong> (ook wel "command line" of "CLI" - Command Line Interface) is een manier om je computer te besturen
           met tekst commands in plaats van met je muis en grafische knoppen. Zie het als een direct gesprek met je
           besturingssysteem, zonder tussenpersoon (de GUI).
         </p>
 
-        <h3>Waarom terminal gebruiken?</h3>
+        <h3 id="waarom-terminal-gebruiken">Waarom terminal gebruiken?</h3>
         <p>Als grafische interfaces zo makkelijk zijn, waarom dan typen? Goede vraag! Hier is waarom:</p>
 
         <ul>
@@ -187,7 +187,7 @@
           Elke developer, sysadmin, hacker en security professional gebruikt dagelijks de terminal. Het is niet optioneel - het is essentieel.
         </div>
 
-        <h3>Terminal vs shell vs console</h3>
+        <h3 id="terminal-vs-shell-vs-console">Terminal vs shell vs console</h3>
         <p>Deze termen worden vaak door elkaar gebruikt, maar technisch gezien:</p>
         <ul>
           <li><strong>Terminal</strong> - Het programma/window waar je commando's intypt</li>
@@ -196,7 +196,7 @@
         </ul>
         <p>In de praktijk: maakt niet uit, gebruik de term die je wilt. Iedereen snapt wat je bedoelt.</p>
 
-        <h2>De anatomie van de terminal</h2>
+        <h2 id="de-anatomie-van-de-terminal">De anatomie van de terminal</h2>
         <p>
           Wanneer je een terminal opent, zie je meestal zoiets:
         </p>
@@ -216,14 +216,14 @@
 
         <p>Na de prompt typ je je command en druk je Enter. De output verschijnt eronder.</p>
 
-        <h2>Essential commands - je eerste 10</h2>
+        <h2 id="essential-commands-je-eerste-10">Essential commands - je eerste 10</h2>
         <p>
           Deze 10 commands zijn de absolute basis. Leer deze en je kunt al 80% van je dagelijkse taken doen:
         </p>
 
         <p>Bekijk alle commands met uitgebreide voorbeelden op onze <a href="/commands/">command reference pagina</a>.</p>
 
-        <h3>1. pwd - print working directory</h3>
+        <h3 id="1-pwd-print-working-directory">1. pwd - print working directory</h3>
         <p>Waar ben ik op dit moment?</p>
         <div class="terminal-example">
           <div class="prompt">$ pwd</div>
@@ -231,7 +231,7 @@
         </div>
         <p><strong>Wanneer gebruiken:</strong> Je bent verdwaald in je filesystem en wilt weten waar je bent.</p>
 
-        <h3>2. ls - list</h3>
+        <h3 id="2-ls-list">2. ls - list</h3>
         <p>Toon bestanden en mappen in huidige directory.</p>
         <div class="terminal-example">
           <div class="prompt">$ ls</div>
@@ -244,7 +244,7 @@
           <li><code>ls -lh</code> - Human-readable file sizes (2.3M ipv 2359296)</li>
         </ul>
 
-        <h3>3. cd - change directory</h3>
+        <h3 id="3-cd-change-directory">3. cd - change directory</h3>
         <p>Navigeer naar een andere map.</p>
         <div class="terminal-example">
           <div class="prompt">$ cd Documents</div>
@@ -259,7 +259,7 @@
           <li><code>cd /</code> - Ga naar root (top van <a href="linux-bestandssysteem.html">filesystem</a>)</li>
         </ul>
 
-        <h3>4. cat - concatenate</h3>
+        <h3 id="4-cat-concatenate">4. cat - concatenate</h3>
         <p>Toon inhoud van een bestand.</p>
         <div class="terminal-example">
           <div class="prompt">$ cat notes.txt</div>
@@ -268,7 +268,7 @@ Regel 2 van het bestand.</div>
         </div>
         <p><strong>Wanneer gebruiken:</strong> Snel een tekstbestand bekijken zonder editor te openen.</p>
 
-        <h3>5. mkdir - make directory</h3>
+        <h3 id="5-mkdir-make-directory">5. mkdir - make directory</h3>
         <p>Maak een nieuwe map aan.</p>
         <div class="terminal-example">
           <div class="prompt">$ mkdir projects</div>
@@ -277,7 +277,7 @@ Regel 2 van het bestand.</div>
         </div>
         <p><code>mkdir -p path/to/nested/folder</code> - Maak meerdere niveaus tegelijk.</p>
 
-        <h3>6. rm - remove</h3>
+        <h3 id="6-rm-remove">6. rm - remove</h3>
         <p>Verwijder bestanden of mappen.</p>
         <div class="terminal-example">
           <div class="prompt">$ rm old_file.txt</div>
@@ -294,14 +294,14 @@ Regel 2 van het bestand.</div>
           <li><code>rm -i file.txt</code> - Vraag bevestiging voor verwijderen (veiliger!)</li>
         </ul>
 
-        <h3>7. cp - copy</h3>
+        <h3 id="7-cp-copy">7. cp - copy</h3>
         <p>Kopieer bestanden of mappen.</p>
         <div class="terminal-example">
           <div class="prompt">$ cp original.txt backup.txt</div>
         </div>
         <p><code>cp -r folder1/ folder2/</code> - Kopieer hele map met inhoud.</p>
 
-        <h3>8. mv - move</h3>
+        <h3 id="8-mv-move">8. mv - move</h3>
         <p>Verplaats of hernoem bestanden.</p>
         <div class="terminal-example">
           <div class="prompt">$ mv old_name.txt new_name.txt</div>
@@ -310,7 +310,7 @@ Regel 2 van het bestand.</div>
         <p><strong>Gebruik 1:</strong> Hernoemen (beide in zelfde directory)<br>
         <strong>Gebruik 2:</strong> Verplaatsen naar andere directory</p>
 
-        <h3>9. grep - global regular expression print</h3>
+        <h3 id="9-grep-global-regular-expression-print">9. grep - global regular expression print</h3>
         <p>Zoek naar tekst in bestanden.</p>
         <div class="terminal-example">
           <div class="prompt">$ grep "password" config.txt</div>
@@ -318,7 +318,7 @@ Regel 2 van het bestand.</div>
         </div>
         <p><strong>Krachtige combinatie:</strong> <code>grep -r "TODO" .</code> - Zoek in alle bestanden in huidige map (en submappen) naar "TODO".</p>
 
-        <h3>10. chmod - change mode</h3>
+        <h3 id="10-chmod-change-mode">10. chmod - change mode</h3>
         <p>Verander file permissions (wie mag lezen/schrijven/uitvoeren).</p>
         <div class="terminal-example">
           <div class="prompt">$ chmod +x script.sh</div>
@@ -332,7 +332,7 @@ Regel 2 van het bestand.</div>
           <strong>Let op:</strong> <code>chmod</code> werkt op een echt Linux-systeem; in de HackSimulator oefen je de andere negen commands uit deze lijst.
         </div>
 
-        <h2>Command structuur</h2>
+        <h2 id="command-structuur">Command structuur</h2>
         <p>Elk command volgt meestal dit patroon:</p>
         <div class="terminal-example">
           <div class="prompt">$ command -options arguments</div>
@@ -349,9 +349,9 @@ Regel 2 van het bestand.</div>
           <li><code>/home/user</code> - Argument (waar moet ls kijken?)</li>
         </ul>
 
-        <h2>Pro tips voor beginners</h2>
+        <h2 id="pro-tips-voor-beginners">Pro tips voor beginners</h2>
 
-        <h3>Tab completion</h3>
+        <h3 id="tab-completion">Tab completion</h3>
         <p>
           Druk op <strong>Tab</strong> om commands en bestandsnamen automatisch aan te vullen. Dit scheelt typen en voorkomt spelfouten!
         </p>
@@ -360,12 +360,12 @@ Regel 2 van het bestand.</div>
           <div class="prompt">$ cd Documents/</div>
         </div>
 
-        <h3>Command history</h3>
+        <h3 id="command-history">Command history</h3>
         <p>
           Gebruik <strong>pijltje omhoog</strong> om vorige commands terug te halen. Scheelt herhalen van lange commands!
         </p>
 
-        <h3>man pages (manual)</h3>
+        <h3 id="man-pages-manual">man pages (manual)</h3>
         <p>
           Elk command heeft een handleiding. Type <code>man command</code> om te lezen hoe het werkt:
         </p>
@@ -374,31 +374,31 @@ Regel 2 van het bestand.</div>
         </div>
         <p>Druk <code>q</code> om te sluiten.</p>
 
-        <h3>Ctrl+C - noodstop</h3>
+        <h3 id="ctrl-c-noodstop">Ctrl+C - noodstop</h3>
         <p>
           Command loopt vast of duurt te lang? Druk <strong>Ctrl+C</strong> om het af te breken (kill).
         </p>
 
-        <h3>clear - schoon scherm</h3>
+        <h3 id="clear-schoon-scherm">clear - schoon scherm</h3>
         <p>
           Terminal vol met oude output? Type <code>clear</code> of druk <strong>Ctrl+L</strong> om schoon te maken.
         </p>
 
-        <h2>Veelgemaakte beginner fouten</h2>
+        <h2 id="veelgemaakte-beginner-fouten">Veelgemaakte beginner fouten</h2>
 
-        <h3>1. Spaties in bestandsnamen</h3>
+        <h3 id="1-spaties-in-bestandsnamen">1. Spaties in bestandsnamen</h3>
         <div class="terminal-example">
           <div class="prompt">$ cat my file.txt  # FOUT</div>
           <div class="prompt">$ cat "my file.txt"  # GOED</div>
           <div class="prompt">$ cat my\ file.txt  # OOK GOED</div>
         </div>
 
-        <h3>2. Case sensitivity</h3>
+        <h3 id="2-case-sensitivity">2. Case sensitivity</h3>
         <p>
           Linux is <strong>case sensitive</strong>. <code>File.txt</code>, <code>file.txt</code> en <code>FILE.TXT</code> zijn drie verschillende bestanden!
         </p>
 
-        <h3>3. Vergeten sudo</h3>
+        <h3 id="3-vergeten-sudo">3. Vergeten sudo</h3>
         <div class="terminal-example">
           <div class="prompt">$ apt install nodejs</div>
           <div class="output">Permission denied</div>
@@ -412,14 +412,14 @@ Regel 2 van het bestand.</div>
 
         <!-- Gumroad CTA: 12-Weken Leerplan (contextual placement na veelgemaakte fouten) -->
         <div class="blog-cta blog-cta-product">
-          <h3>Net begonnen met ethisch hacken?</h3>
+          <h3 id="net-begonnen-met-ethisch-hacken">Net begonnen met ethisch hacken?</h3>
           <p>Het 12-Weken Leerplan — van complete beginner naar je eerste Capture The Flag. Betaalde gids op Gumroad.</p>
           <a href="https://hacksimulator.gumroad.com/l/eogjdk" class="blog-cta-button" target="_blank" rel="noopener noreferrer" data-product-id="eogjdk" data-cta-location="blog_terminal_basics">Bekijk het Leerplan</a>
         </div>
 
-        <h2>Oefenen in HackSimulator.nl</h2>
+        <h2 id="oefenen-in-hacksimulator-nl">Oefenen in HackSimulator.nl</h2>
         <div class="blog-cta">
-          <h3>Begin met de basis</h3>
+          <h3 id="begin-met-de-basis">Begin met de basis</h3>
           <p>
             Open de simulator en typ <code>help</code> om alle beschikbare commands te zien. Begin met <code>ls</code>
             en <code>cd</code> — de basis van alles. Typ <code>man ls</code> voor uitgebreide uitleg bij elk command.
@@ -427,7 +427,7 @@ Regel 2 van het bestand.</div>
           <a href="../terminal.html" class="blog-cta-button" data-terminal-cta="blog_terminal-basics">Open de terminal</a>
         </div>
 
-        <h2>Volgende stappen</h2>
+        <h2 id="volgende-stappen">Volgende stappen</h2>
         <p>
           Nu je de basics kent, kun je:
         </p>
@@ -445,7 +445,7 @@ Regel 2 van het bestand.</div>
           Probeer elke dag 10 minuten in de terminal te werken. Consistentie is belangrijker dan lange sessies - je vingers leren de commands vanzelf!
         </div>
 
-        <h2>Resources</h2>
+        <h2 id="resources">Resources</h2>
         <ul>
           <li><strong>Cheatsheets:</strong> <a href="https://devhints.io/bash" target="_blank" rel="noopener noreferrer">Bash Cheatsheet</a></li>
           <li><strong>Interactieve tutorials:</strong> <a href="https://overthewire.org/wargames/bandit/" target="_blank" rel="noopener noreferrer">OverTheWire Bandit</a> - gratis online game om Linux command line te leren via puzzels</li>
@@ -456,7 +456,7 @@ Regel 2 van het bestand.</div>
 
       <!-- Support Banner -->
       <div class="blog-support-banner">
-        <h3>Vond je dit artikel nuttig?</h3>
+        <h3 id="vond-je-dit-artikel-nuttig">Vond je dit artikel nuttig?</h3>
         <p>HackSimulator.nl is een onafhankelijk project &mdash; gebouwd door &#233;&#233;n developer. Met een koffie help je de simulator gratis houden voor iedereen.</p>
         <div class="blog-support-actions">
           <a href="https://ko-fi.com/hacksimulator" class="blog-cta-button" target="_blank" rel="noopener noreferrer">Steun met een koffie</a>
@@ -512,7 +512,7 @@ Regel 2 van het bestand.</div>
           <a href="../assets/legal/privacy.html">Privacy</a>
           <a href="../assets/legal/terms.html">Voorwaarden</a>
           <a href="../assets/legal/cookies.html">Cookies</a>
-          <a href="../over-ons.html">Over Ons</a>
+          <a href="../over-ons.html">Over ons</a>
           <a href="../contact.html">Contact</a>
         </nav>
       </footer>
@@ -524,6 +524,9 @@ Regel 2 van het bestand.</div>
 
   <!-- Component Injection (external script for CSP compliance) -->
   <script src="/src/init-components.js?v=4" type="module"></script>
+
+  <!-- Inhoudsopgave uit de statische kop-ids (scripts/add-heading-ids.mjs) -->
+  <script src="/src/ui/blog-toc.js?v=1" type="module"></script>
 
   <!-- Analytics & Consent (external for CSP compliance) -->
   <script src="/src/init-analytics.js" type="module"></script>

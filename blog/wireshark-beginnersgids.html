@@ -150,7 +150,7 @@
 </head>
 <body>
   <!-- Reading Progress Bar -->
-  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+  <div class="reading-progress" aria-hidden="true"></div>
 
   <!-- Skip Link -->
   <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
@@ -165,7 +165,7 @@
         <a href="../commands/">Commands</a>
         <a href="../gidsen.html">Gidsen</a>
         <a href="../woordenlijst.html">Woordenlijst</a>
-        <a href="../over-ons.html">Over Ons</a>
+        <a href="../over-ons.html">Over ons</a>
         <a href="../contact.html">Contact</a>
       </nav>
     </noscript>
@@ -174,7 +174,7 @@
   <!-- Main Content -->
   <main id="main-content" class="blog-container">
     <!-- Breadcrumb -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
       <ol>
         <li><a href="/">Home</a></li>
         <li><a href="/blog/">Blog</a></li>
@@ -207,12 +207,12 @@
 
         <!-- Lead Magnet CTA: gratis Pentest Playbook sample (top placement, hoogste intent) -->
         <div class="blog-cta blog-cta-product">
-          <h3>Gratis: 9 pagina's uit het Pentest Playbook</h3>
+          <h3 id="gratis-9-pagina-s-uit-het-pentest-playbook">Gratis: 9 pagina's uit het Pentest Playbook</h3>
           <p>Netwerkanalyse hoort bij elke pentest — download Fase 0 en 1: voorbereiding en het doelwit verkennen. Geen account, alleen je email.</p>
           <a href="/sample-pentest.html" class="blog-cta-button" data-lead-magnet="pentest_sample" data-cta-location="blog_wireshark_top">Download de gratis sample</a>
         </div>
 
-        <h2>Wat is Wireshark?</h2>
+        <h2 id="wat-is-wireshark">Wat is Wireshark?</h2>
         <p>
           Wireshark is een gratis, open-source <strong>netwerk protocol analyzer</strong>. Het project bestaat sinds
           1998 (toen nog onder de naam Ethereal) en wordt onderhouden door honderden vrijwilligers wereldwijd. De tool
@@ -236,7 +236,7 @@
           verderop.
         </div>
 
-        <h2>Hoe werkt packet sniffing?</h2>
+        <h2 id="hoe-werkt-packet-sniffing">Hoe werkt packet sniffing?</h2>
         <p>
           Netwerkverkeer reist in lagen, netjes verpakt als een matroesjka-pop. Een
           <abbr class="jargon" title="Packet: klein blokje data met adresinformatie dat over een netwerk reist" tabindex="0"><strong>pakket</strong></abbr>
@@ -260,7 +260,7 @@
           leest een sniffer gewoon je wachtwoorden mee. Onthoud dit als je ooit op openbare wifi zit.
         </div>
 
-        <h2>De Wireshark interface in 3 panelen</h2>
+        <h2 id="de-wireshark-interface-in-3-panelen">De Wireshark interface in 3 panelen</h2>
         <p>
           Open je Wireshark en start je een capture, dan zie je drie panelen:
         </p>
@@ -274,7 +274,7 @@
           je — en daarom zijn filters de belangrijkste Wireshark-vaardigheid die je kunt leren.
         </p>
 
-        <h3>Display filters: je belangrijkste gereedschap</h3>
+        <h3 id="display-filters-je-belangrijkste-gereedschap">Display filters: je belangrijkste gereedschap</h3>
         <p>
           Met display filters laat je alleen zien wat relevant is. Een paar voorbeelden die je dagelijks gebruikt:
         </p>
@@ -317,7 +317,7 @@
           <em>andere</em> kant.
         </div>
 
-        <h2>Verdacht verkeer herkennen</h2>
+        <h2 id="verdacht-verkeer-herkennen">Verdacht verkeer herkennen</h2>
         <p>
           Waar let een security analist op tijdens een capture? Dit zijn de klassieke rode vlaggen:
         </p>
@@ -344,7 +344,7 @@
           </li>
         </ul>
 
-        <h2>Oefenen zonder Wireshark te installeren</h2>
+        <h2 id="oefenen-zonder-wireshark-te-installeren">Oefenen zonder Wireshark te installeren</h2>
         <p>
           Wireshark draait op echte netwerkdata en heeft dus een echte machine nodig. Maar de onderliggende
           netwerk-concepten — verbindingen, poorten, protocollen — kun je direct oefenen in de
@@ -369,7 +369,7 @@ tcp    0.0.0.0:80           *:*                    LISTEN
           de mentale basis die je nodig hebt om Wireshark-captures te begrijpen.
         </p>
 
-        <h2>Ethische en juridische grenzen</h2>
+        <h2 id="ethische-en-juridische-grenzen">Ethische en juridische grenzen</h2>
         <div class="blog-warning">
           <strong>Sniff alleen netwerken die van jou zijn of waar je expliciete, schriftelijke toestemming voor hebt!</strong>
           Het aftappen van andermans netwerkverkeer is in Nederland strafbaar (artikel 139c Wetboek van Strafrecht).
@@ -388,12 +388,12 @@ tcp    0.0.0.0:80           *:*                    LISTEN
 
         <!-- Gumroad CTA: Pentest Playbook -->
         <div class="blog-cta blog-cta-product">
-          <h3>Wil je een echte pentest leren uitvoeren?</h3>
+          <h3 id="wil-je-een-echte-pentest-leren-uitvoeren">Wil je een echte pentest leren uitvoeren?</h3>
           <p>Het volledige Pentest Playbook — alle 6 fasen in ~19 pagina's, met beslisbomen bij elke stap en een rapport-template. Betaalde gids op Gumroad.</p>
           <a href="https://hacksimulator.gumroad.com/l/wmvpx" class="blog-cta-button" target="_blank" rel="noopener noreferrer" data-product-id="wmvpx" data-cta-location="blog_wireshark">Bekijk het volledige Playbook</a>
         </div>
 
-        <h2>Aan de slag: je eerste capture in 5 stappen</h2>
+        <h2 id="aan-de-slag-je-eerste-capture-in-5-stappen">Aan de slag: je eerste capture in 5 stappen</h2>
         <ol>
           <li><strong>Download Wireshark</strong> van <a href="https://www.wireshark.org" target="_blank" rel="noopener noreferrer">wireshark.org</a> (Windows, macOS, Linux)</li>
           <li><strong>Kies je netwerkinterface</strong> - Meestal je wifi-adapter; het grafiekje ernaast toont live activiteit</li>
@@ -409,7 +409,7 @@ tcp    0.0.0.0:80           *:*                    LISTEN
         </div>
 
         <div class="blog-cta">
-          <h3>Oefen eerst zonder installatie</h3>
+          <h3 id="oefen-eerst-zonder-installatie">Oefen eerst zonder installatie</h3>
           <p>
             Wireshark installeren kan even duren. Wil je nu al zien wat er over een netwerk gaat? Open de
             simulator en typ <code>traceroute google.com</code> om de route van je pakketten te volgen, of
@@ -419,7 +419,7 @@ tcp    0.0.0.0:80           *:*                    LISTEN
           <a href="../terminal.html" class="blog-cta-button" data-terminal-cta="blog_wireshark-beginnersgids">Open de terminal</a>
         </div>
 
-        <h2>Samenvatting</h2>
+        <h2 id="samenvatting">Samenvatting</h2>
         <p>
           Wireshark is de microscoop van de netwerkwereld. Wat je hebt geleerd:
         </p>
@@ -437,7 +437,7 @@ tcp    0.0.0.0:80           *:*                    LISTEN
           <a href="cybersecurity-tools.html">essentiële security tools</a> je als beginner moet kennen.
         </p>
 
-        <h2>Nuttige resources</h2>
+        <h2 id="nuttige-resources">Nuttige resources</h2>
         <ul>
           <li><strong>Officieel:</strong> <a href="https://www.wireshark.org" target="_blank" rel="noopener noreferrer">wireshark.org</a> - Downloads, documentatie en de User's Guide</li>
           <li><strong>Sample captures:</strong> <a href="https://wiki.wireshark.org/SampleCaptures" target="_blank" rel="noopener noreferrer">Wireshark Wiki</a> - Gratis pcap-bestanden om mee te oefenen</li>
@@ -449,7 +449,7 @@ tcp    0.0.0.0:80           *:*                    LISTEN
 
       <!-- Support Banner -->
       <div class="blog-support-banner">
-        <h3>Vond je dit artikel nuttig?</h3>
+        <h3 id="vond-je-dit-artikel-nuttig">Vond je dit artikel nuttig?</h3>
         <p>HackSimulator.nl is een onafhankelijk project &mdash; gebouwd door &#233;&#233;n developer. Met een koffie help je de simulator gratis houden voor iedereen.</p>
         <div class="blog-support-actions">
           <a href="https://ko-fi.com/hacksimulator" class="blog-cta-button" target="_blank" rel="noopener noreferrer">Steun met een koffie</a>
@@ -505,7 +505,7 @@ tcp    0.0.0.0:80           *:*                    LISTEN
           <a href="../assets/legal/privacy.html">Privacy</a>
           <a href="../assets/legal/terms.html">Voorwaarden</a>
           <a href="../assets/legal/cookies.html">Cookies</a>
-          <a href="../over-ons.html">Over Ons</a>
+          <a href="../over-ons.html">Over ons</a>
           <a href="../contact.html">Contact</a>
         </nav>
       </footer>
@@ -517,6 +517,9 @@ tcp    0.0.0.0:80           *:*                    LISTEN
 
   <!-- Component Injection (external script for CSP compliance) -->
   <script src="/src/init-components.js?v=4" type="module"></script>
+
+  <!-- Inhoudsopgave uit de statische kop-ids (scripts/add-heading-ids.mjs) -->
+  <script src="/src/ui/blog-toc.js?v=1" type="module"></script>
 
   <!-- Analytics & Consent (external for CSP compliance) -->
   <script src="/src/init-analytics.js" type="module"></script>

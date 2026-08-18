@@ -161,7 +161,7 @@
 </head>
 <body>
   <!-- Reading Progress Bar -->
-  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+  <div class="reading-progress" aria-hidden="true"></div>
 
   <!-- Skip Link -->
   <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
@@ -176,7 +176,7 @@
         <a href="../commands/">Commands</a>
         <a href="../gidsen.html">Gidsen</a>
         <a href="../woordenlijst.html">Woordenlijst</a>
-        <a href="../over-ons.html">Over Ons</a>
+        <a href="../over-ons.html">Over ons</a>
         <a href="../contact.html">Contact</a>
       </nav>
     </noscript>
@@ -185,7 +185,7 @@
   <!-- Main Content -->
   <main id="main-content" class="blog-container">
     <!-- Breadcrumb (Sessie 139) -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
       <ol>
         <li><a href="/">Home</a></li>
         <li><a href="/blog/">Blog</a></li>
@@ -216,12 +216,12 @@
 
         <!-- Lead Magnet CTA: gratis Pentest Playbook sample (top placement, hoogste intent) -->
         <div class="blog-cta blog-cta-product">
-          <h3>Gratis: 9 pagina's uit het Pentest Playbook</h3>
+          <h3 id="gratis-9-pagina-s-uit-het-pentest-playbook">Gratis: 9 pagina's uit het Pentest Playbook</h3>
           <p>Exploitation komt pas ná goede voorbereiding. Download Fase 0 en 1: toestemming regelen en het doelwit verkennen. Geen account, alleen je email.</p>
           <a href="/sample-pentest.html" class="blog-cta-button" data-lead-magnet="pentest_sample" data-cta-location="blog_metasploit_top">Download de gratis sample</a>
         </div>
 
-        <h2>Wat is Metasploit?</h2>
+        <h2 id="wat-is-metasploit">Wat is Metasploit?</h2>
         <p>
           Metasploit is een <strong>framework</strong>: een verzameling tools die samen het hele proces van kwetsbaarheden testen
           automatiseren. Het is gratis en <abbr class="jargon" title="Open-source: software waarvan de broncode vrij beschikbaar is, zodat iedereen hem kan bekijken, gebruiken en verbeteren" tabindex="0">open-source</abbr>, wordt onderhouden door beveiligingsbedrijf Rapid7, en bevat meer dan
@@ -240,7 +240,7 @@
           <strong>zonder toestemming</strong> op systemen van anderen richt. Verderop lees je precies waar die grens ligt.
         </div>
 
-        <h2>Waarom een framework, en niet losse tools?</h2>
+        <h2 id="waarom-een-framework-en-niet-losse-tools">Waarom een framework, en niet losse tools?</h2>
         <p>
           Zonder een framework zou een pentester voor elke stap een aparte tool en losse scripts nodig hebben: één voor het scannen,
           één voor het exploiteren, één voor wat je daarná doet. Metasploit brengt dat allemaal onder één dak, met een consistente
@@ -248,7 +248,7 @@
           patroon. Die uniformiteit is de echte waarde: je hoeft niet 2300 losse tools te leren, maar één werkwijze.
         </p>
 
-        <h2>De bouwstenen van Metasploit</h2>
+        <h2 id="de-bouwstenen-van-metasploit">De bouwstenen van Metasploit</h2>
         <p>
           Om Metasploit te begrijpen, moet je vier soorten modules kennen. Samen vormen ze de gereedschapskist:
         </p>
@@ -278,7 +278,7 @@
           <em>nadat</em> je toegang hebt — informatie verzamelen, rechten verhogen, of je positie behouden.
         </p>
 
-        <h2>De exploit-workflow: zo werkt een pentester</h2>
+        <h2 id="de-exploit-workflow-zo-werkt-een-pentester">De exploit-workflow: zo werkt een pentester</h2>
         <p>
           Exploitation is geen losse actie maar een keten van stappen. Metasploit volgt een vaste volgorde die je overal in
           penetration testing terugziet:
@@ -299,7 +299,7 @@
           op dit onderwerp.
         </div>
 
-        <h3>Een exploit in de praktijk</h3>
+        <h3 id="een-exploit-in-de-praktijk">Een exploit in de praktijk</h3>
         <p>
           Zo ziet een exploit-sessie er versimpeld uit in de Metasploit-console. In dit voorbeeld gebruiken we de beroemde
           <strong>EternalBlue</strong>-exploit tegen een verouderd Windows-systeem:
@@ -324,7 +324,7 @@ msf6 > exploit                    <- exploit afvuren
           uitproberen. Het toont een educatieve demonstratie van precies deze workflow — zonder dat er ook maar iets echt gebeurt.
         </div>
 
-        <h2>Payloads: wat gebeurt er na de exploit?</h2>
+        <h2 id="payloads-wat-gebeurt-er-na-de-exploit">Payloads: wat gebeurt er na de exploit?</h2>
         <p>
           De exploit opent de deur, maar de <strong>payload</strong> bepaalt wat er dan gebeurt. Er zijn drie types die je als
           beginner moet kennen:
@@ -351,7 +351,7 @@ msf6 > exploit                    <- exploit afvuren
           de machine van het doelwit. Wie een shell heeft, kan commando's uitvoeren op dat systeem.
         </div>
 
-        <h2>Beroemde exploits in Metasploit</h2>
+        <h2 id="beroemde-exploits-in-metasploit">Beroemde exploits in Metasploit</h2>
         <p>
           De kracht van Metasploit zit in zijn database van bekende kwetsbaarheden. Een paar hebben geschiedenis geschreven:
         </p>
@@ -388,7 +388,7 @@ msf6 > exploit                    <- exploit afvuren
           </tbody>
         </table>
 
-        <h2>Het belangrijkste leermoment</h2>
+        <h2 id="het-belangrijkste-leermoment">Het belangrijkste leermoment</h2>
         <p>
           Als je één ding onthoudt uit deze gids, laat het dit zijn: <strong>de meeste exploits in Metasploit zijn voor oude
           kwetsbaarheden waarvoor allang een patch bestaat.</strong> Organisaties worden zelden gehackt door een gloednieuwe,
@@ -406,7 +406,7 @@ msf6 > exploit                    <- exploit afvuren
           up-to-date is, is immuun voor het overgrote deel van wat er in Metasploit zit.
         </div>
 
-        <h2>Hoe bescherm je je hiertegen?</h2>
+        <h2 id="hoe-bescherm-je-je-hiertegen">Hoe bescherm je je hiertegen?</h2>
         <p>
           Metasploit begrijpen maakt je een betere verdediger. Dit zijn de belangrijkste maatregelen:
         </p>
@@ -430,7 +430,7 @@ msf6 > exploit                    <- exploit afvuren
           </li>
         </ul>
 
-        <h2>Ethische en juridische overwegingen</h2>
+        <h2 id="ethische-en-juridische-overwegingen">Ethische en juridische overwegingen</h2>
         <p>
           Dit is het belangrijkste deel van dit artikel. Metasploit is een offensieve tool, en die kracht brengt verantwoordelijkheid mee.
         </p>
@@ -465,12 +465,12 @@ msf6 > exploit                    <- exploit afvuren
 
         <!-- Gumroad CTA: Je Eigen Hacklab (contextual placement direct na "oefen in een eigen lab") -->
         <div class="blog-cta blog-cta-product">
-          <h3>Wil je dat eigen lab echt opzetten?</h3>
+          <h3 id="wil-je-dat-eigen-lab-echt-opzetten">Wil je dat eigen lab echt opzetten?</h3>
           <p>Je Eigen Hacklab — Kali Linux en Metasploitable als virtuele machines op je eigen computer, stap voor stap. Zo oefen je exploits op een doelwit dat van jou is. Betaalde gids op Gumroad.</p>
           <a href="https://hacksimulator.gumroad.com/l/ojort" class="blog-cta-button" target="_blank" rel="noopener noreferrer" data-product-id="ojort" data-cta-location="blog_metasploit_mid">Bekijk Je Eigen Hacklab</a>
         </div>
 
-        <h2>Veelgemaakte fouten door beginners</h2>
+        <h2 id="veelgemaakte-fouten-door-beginners">Veelgemaakte fouten door beginners</h2>
         <ul>
           <li>
             <strong>Meteen willen exploiteren</strong> — Zonder goede reconnaissance kies je de verkeerde exploit. Verkenning eerst,
@@ -490,9 +490,9 @@ msf6 > exploit                    <- exploit afvuren
           </li>
         </ul>
 
-        <h2>Oefenen in HackSimulator.nl</h2>
+        <h2 id="oefenen-in-hacksimulator-nl">Oefenen in HackSimulator.nl</h2>
         <div class="blog-cta">
-          <h3>Probeer het Metasploit command</h3>
+          <h3 id="probeer-het-metasploit-command">Probeer het Metasploit command</h3>
           <p>
             Open de simulator en typ <code>metasploit</code> om een veilige, educatieve demonstratie van het framework te zien —
             inclusief de exploit-workflow en een uitleg per stap. Typ <code>man metasploit</code> voor de volledige Nederlandstalige
@@ -501,7 +501,7 @@ msf6 > exploit                    <- exploit afvuren
           <a href="../terminal.html" class="blog-cta-button" data-terminal-cta="blog_metasploit-beginnersgids">Start de simulator</a>
         </div>
 
-        <h2>Legale oefenomgevingen</h2>
+        <h2 id="legale-oefenomgevingen">Legale oefenomgevingen</h2>
         <p>
           Wil je verder dan de simulator? Deze platforms zijn speciaal gemaakt om exploitation legaal te oefenen:
         </p>
@@ -513,7 +513,7 @@ msf6 > exploit                    <- exploit afvuren
           <li><strong>DVWA</strong> (Damn Vulnerable Web Application) — Een oefen-webapplicatie vol ingebouwde kwetsbaarheden.</li>
         </ul>
 
-        <h2>Samenvatting</h2>
+        <h2 id="samenvatting">Samenvatting</h2>
         <p>
           Metasploit is het bekendste exploit-framework en met de basis uit dit artikel begrijp je nu:
         </p>
@@ -532,7 +532,7 @@ msf6 > exploit                    <- exploit afvuren
           webkwetsbaarheden? Lees dan de <a href="owasp-top-10-uitgelegd.html">OWASP Top 10</a>.
         </p>
 
-        <h2>Nuttige resources</h2>
+        <h2 id="nuttige-resources">Nuttige resources</h2>
         <ul>
           <li><strong>Officieel:</strong> <a href="https://www.metasploit.com" target="_blank" rel="noopener noreferrer">metasploit.com</a> - Documentatie en downloads</li>
           <li><strong>Oefenomgevingen:</strong> <a href="https://www.hackthebox.eu" target="_blank" rel="noopener noreferrer">HackTheBox</a>,
@@ -545,7 +545,7 @@ msf6 > exploit                    <- exploit afvuren
 
       <!-- Support Banner -->
       <div class="blog-support-banner">
-        <h3>Vond je dit artikel nuttig?</h3>
+        <h3 id="vond-je-dit-artikel-nuttig">Vond je dit artikel nuttig?</h3>
         <p>HackSimulator.nl is een onafhankelijk project &mdash; gebouwd door &#233;&#233;n developer. Met een koffie help je de simulator gratis houden voor iedereen.</p>
         <div class="blog-support-actions">
           <a href="https://ko-fi.com/hacksimulator" class="blog-cta-button" target="_blank" rel="noopener noreferrer">Steun met een koffie</a>
@@ -601,7 +601,7 @@ msf6 > exploit                    <- exploit afvuren
           <a href="../assets/legal/privacy.html">Privacy</a>
           <a href="../assets/legal/terms.html">Voorwaarden</a>
           <a href="../assets/legal/cookies.html">Cookies</a>
-          <a href="../over-ons.html">Over Ons</a>
+          <a href="../over-ons.html">Over ons</a>
           <a href="../contact.html">Contact</a>
         </nav>
       </footer>
@@ -613,6 +613,9 @@ msf6 > exploit                    <- exploit afvuren
 
   <!-- Component Injection (external script for CSP compliance) -->
   <script src="/src/init-components.js?v=4" type="module"></script>
+
+  <!-- Inhoudsopgave uit de statische kop-ids (scripts/add-heading-ids.mjs) -->
+  <script src="/src/ui/blog-toc.js?v=1" type="module"></script>
 
   <!-- Analytics & Consent (external for CSP compliance) -->
   <script src="/src/init-analytics.js" type="module"></script>

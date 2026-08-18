@@ -107,7 +107,7 @@
 </head>
 <body>
   <!-- Reading Progress Bar -->
-  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+  <div class="reading-progress" aria-hidden="true"></div>
 
   <!-- Skip Link -->
   <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
@@ -122,7 +122,7 @@
         <a href="../commands/">Commands</a>
         <a href="../gidsen.html">Gidsen</a>
         <a href="../woordenlijst.html">Woordenlijst</a>
-        <a href="../over-ons.html">Over Ons</a>
+        <a href="../over-ons.html">Over ons</a>
         <a href="../contact.html">Contact</a>
       </nav>
     </noscript>
@@ -131,7 +131,7 @@
   <!-- Main Content -->
   <main id="main-content" class="blog-container">
     <!-- Breadcrumb (Sessie 139) -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
       <ol>
         <li><a href="/">Home</a></li>
         <li><a href="/blog/">Blog</a></li>
@@ -160,12 +160,12 @@
 
         <!-- Lead Magnet CTA: gratis Pentest Playbook sample -->
         <div class="blog-cta blog-cta-product">
-          <h3>Direct aan de slag?</h3>
+          <h3 id="direct-aan-de-slag">Direct aan de slag?</h3>
           <p>Naast de simulator: download gratis 9 pagina's uit het Pentest Playbook &mdash; Fase 0 (voorbereiding) en Fase 1 (het doelwit verkennen).</p>
           <a href="/sample-pentest.html" class="blog-cta-button" data-lead-magnet="pentest_sample" data-cta-location="blog_welkom_top">Download de gratis sample</a>
         </div>
 
-        <h2>Wat is HackSimulator.nl?</h2>
+        <h2 id="wat-is-hacksimulator-nl">Wat is HackSimulator.nl?</h2>
         <p>
           HackSimulator.nl is een <abbr class="jargon" title="tekstgebaseerde interface om je computer te besturen met commando's" tabindex="0"><strong>browser-based terminal simulator</strong></abbr> waar je ethisch hacken leert door te doen.
           Geen ingewikkelde installaties, geen <abbr class="jargon" title="gesimuleerde computers in software" tabindex="0">virtual machines (VMs)</abbr>, geen risico op schade aan je systeem. Open je browser, type een
@@ -184,7 +184,7 @@
           Je hoeft geen programmeur te zijn om te beginnen. Als je kunt typen en nieuwsgierig bent, kun je al aan de slag!
         </div>
 
-        <h2>Voor wie is dit?</h2>
+        <h2 id="voor-wie-is-dit">Voor wie is dit?</h2>
         <p>
           HackSimulator.nl is speciaal gebouwd voor <strong>Nederlandse beginners</strong> die cybersecurity willen verkennen.
           Of je nu student bent, van loopbaan wilt veranderen, of een enthousiaste hobbyist bent - als je nieuwsgierig bent maar niet weet waar
@@ -193,17 +193,17 @@
 
         <p><strong>Onze community bestaat uit drie groepen:</strong></p>
 
-        <h3>Studenten</h3>
+        <h3 id="studenten">Studenten</h3>
         <p>
           Overweeg je een carrière in cybersecurity? Bereid je voor op je studie of certificering door hands-on te oefenen met realistische tools.
         </p>
 
-        <h3>Overstappers</h3>
+        <h3 id="overstappers">Overstappers</h3>
         <p>
           Werk je in IT-support, sysadmin of development en wil je de overstap naar ethisch hacken maken? Valideer je interesse zonder commitment.
         </p>
 
-        <h3>Enthousiastelingen</h3>
+        <h3 id="enthousiastelingen">Enthousiastelingen</h3>
         <p>
           Nieuwsgierig hoe hackers werken? Wil je snappen wat er gebeurt in hacking scenes uit films (Mr. Robot fans!)? Leer op je eigen tempo.
         </p>
@@ -213,7 +213,7 @@
           kun je aan de slag. We begeleiden je vanaf de absolute basis.
         </p>
 
-        <h2>Wat kun je leren?</h2>
+        <h2 id="wat-kun-je-leren">Wat kun je leren?</h2>
         <p>
           De simulator bevat <strong>40+ commands uit de praktijk</strong> verdeeld over vier categorieën:
         </p>
@@ -222,7 +222,7 @@
           De simulator werkt volledig in je browser. Je data blijft lokaal - er wordt niks naar een server gestuurd. Perfect om veilig te experimenteren!
         </div>
 
-        <h3>Filesystem commands</h3>
+        <h3 id="filesystem-commands">Filesystem commands</h3>
         <p>
           Navigeer door een virtueel bestandssysteem, lees bestanden, zoek naar verborgen data. Commands als <a href="/commands/#cmd-ls"><code>ls</code></a>,
           <a href="/commands/#cmd-cd"><code>cd</code></a>, <a href="/commands/#cmd-cat"><code>cat</code></a> en <a href="/commands/#cmd-find"><code>find</code></a> zijn de basis van elke terminal gebruiker.
@@ -239,7 +239,7 @@ drwxr-xr-x 3 root   root   4096 Nov 10 10:00 ..
           </div>
         </div>
 
-        <h3>Security commands</h3>
+        <h3 id="security-commands">Security commands</h3>
         <p>
           Ontdek hoe professionals systemen scannen en testen. Leer tools als <abbr class="jargon" title="Network Mapper voor network scanning" tabindex="0"><code>nmap</code></abbr>,
           <code>hashcat</code> voor password cracking (ethisch!), en <a href="sql-injection-uitgelegd.html"><code>sqlmap</code></a> voor database security testing.
@@ -251,20 +251,20 @@ drwxr-xr-x 3 root   root   4096 Nov 10 10:00 ..
           je toestemming voor hebt</strong>!
         </div>
 
-        <h3>Network commands</h3>
+        <h3 id="network-commands">Network commands</h3>
         <p>
           Begrijp hoe netwerken werken met commands als <a href="/commands/#cmd-ping"><code>ping</code></a>, <a href="/commands/#cmd-traceroute"><code>traceroute</code></a>, <a href="/commands/#cmd-netstat"><code>netstat</code></a> en
           <a href="/commands/#cmd-whois"><code>whois</code></a>. Essentiële kennis voor iedereen in IT.
           Bekijk alle <a href="/commands/#network">network commands</a>.
         </p>
 
-        <h3>System commands</h3>
+        <h3 id="system-commands">System commands</h3>
         <p>
           Bekijk wie je bent, hoe laat het is en wat je eerder deed, en leer hoe Linux/Unix systemen werken met <code>whoami</code>, <code>date</code>,
           <code>history</code> en <code>man</code>.
         </p>
 
-        <h2>Hoe werkt het?</h2>
+        <h2 id="hoe-werkt-het">Hoe werkt het?</h2>
         <p>
           HackSimulator.nl is zo simpel mogelijk gehouden. Er zijn geen accounts, geen downloads, geen configuratie. Hier is hoe
           je start:
@@ -281,7 +281,7 @@ drwxr-xr-x 3 root   root   4096 Nov 10 10:00 ..
           Type <code>next</code> in de terminal — dit command analyseert je voortgang en wijst je de juiste volgende stap. Gebruik <code>leerpad</code> om je totale voortgang te bekijken.
         </div>
 
-        <h2>Waarom Nederlands?</h2>
+        <h2 id="waarom-nederlands">Waarom Nederlands?</h2>
         <p>
           De meeste cybersecurity resources zijn in het Engels, wat voor veel beginners een extra drempel vormt. Bij
           HackSimulator.nl krijg je:
@@ -298,7 +298,7 @@ drwxr-xr-x 3 root   root   4096 Nov 10 10:00 ..
           Maar alle hulpteksten, errors, en educational content zijn in Nederlands zodat je niet hoeft te raden wat er gebeurt.
         </p>
 
-        <h2>Is dit legaal?</h2>
+        <h2 id="is-dit-legaal">Is dit legaal?</h2>
         <p>
           <strong>Absoluut!</strong> HackSimulator.nl is 100% legaal omdat:
         </p>
@@ -316,14 +316,14 @@ drwxr-xr-x 3 root   root   4096 Nov 10 10:00 ..
 
         <!-- Gumroad CTA: Starter Kit (contextual placement na legaliteit-warning) -->
         <div class="blog-cta blog-cta-product">
-          <h3>Klaar om serieus te beginnen?</h3>
+          <h3 id="klaar-om-serieus-te-beginnen">Klaar om serieus te beginnen?</h3>
           <p>De Starter Kit — vier gidsen over de wet, pentesting, een 12-weken studieplan en je eigen hacklab. Betaald pakket op Gumroad.</p>
           <a href="https://hacksimulator.gumroad.com/l/emzjvj" class="blog-cta-button" target="_blank" rel="noopener noreferrer" data-product-id="emzjvj" data-cta-location="blog_welkom">Bekijk de Starter Kit</a>
         </div>
 
-        <h2>Wat nu?</h2>
+        <h2 id="wat-nu">Wat nu?</h2>
         <div class="blog-cta">
-          <h3>Start je eerste sessie!</h3>
+          <h3 id="start-je-eerste-sessie">Start je eerste sessie!</h3>
           <p>
             Type <code>next</code> om direct te starten met persoonlijke begeleiding. Type <code>help</code> als je eerst een overzicht van alle commands wilt zien.
           </p>
@@ -334,7 +334,7 @@ drwxr-xr-x 3 root   root   4096 Nov 10 10:00 ..
 
       <!-- Support Banner -->
       <div class="blog-support-banner">
-        <h3>Vond je dit artikel nuttig?</h3>
+        <h3 id="vond-je-dit-artikel-nuttig">Vond je dit artikel nuttig?</h3>
         <p>HackSimulator.nl is een onafhankelijk project &mdash; gebouwd door &#233;&#233;n developer. Met een koffie help je de simulator gratis houden voor iedereen.</p>
         <div class="blog-support-actions">
           <a href="https://ko-fi.com/hacksimulator" class="blog-cta-button" target="_blank" rel="noopener noreferrer">Steun met een koffie</a>
@@ -390,7 +390,7 @@ drwxr-xr-x 3 root   root   4096 Nov 10 10:00 ..
           <a href="../assets/legal/privacy.html">Privacy</a>
           <a href="../assets/legal/terms.html">Voorwaarden</a>
           <a href="../assets/legal/cookies.html">Cookies</a>
-          <a href="../over-ons.html">Over Ons</a>
+          <a href="../over-ons.html">Over ons</a>
           <a href="../contact.html">Contact</a>
         </nav>
       </footer>
@@ -402,6 +402,9 @@ drwxr-xr-x 3 root   root   4096 Nov 10 10:00 ..
 
   <!-- Component Injection (external script for CSP compliance) -->
   <script src="/src/init-components.js?v=4" type="module"></script>
+
+  <!-- Inhoudsopgave uit de statische kop-ids (scripts/add-heading-ids.mjs) -->
+  <script src="/src/ui/blog-toc.js?v=1" type="module"></script>
 
   <!-- Analytics & Consent (external for CSP compliance) -->
   <script src="/src/init-analytics.js" type="module"></script>

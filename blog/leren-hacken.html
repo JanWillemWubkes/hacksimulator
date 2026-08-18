@@ -107,7 +107,7 @@
 </head>
 <body>
   <!-- Reading Progress Bar -->
-  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+  <div class="reading-progress" aria-hidden="true"></div>
 
   <!-- Skip Link -->
   <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
@@ -122,7 +122,7 @@
         <a href="../commands/">Commands</a>
         <a href="../gidsen.html">Gidsen</a>
         <a href="../woordenlijst.html">Woordenlijst</a>
-        <a href="../over-ons.html">Over Ons</a>
+        <a href="../over-ons.html">Over ons</a>
         <a href="../contact.html">Contact</a>
       </nav>
     </noscript>
@@ -131,7 +131,7 @@
   <!-- Main Content -->
   <main id="main-content" class="blog-container">
     <!-- Breadcrumb -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
       <ol>
         <li><a href="/">Home</a></li>
         <li><a href="/blog/">Blog</a></li>
@@ -166,7 +166,7 @@
           <a href="wat-is-ethisch-hacken.html">uitleg over ethisch hacken</a>.
         </div>
 
-        <h2>Wat is hacken eigenlijk?</h2>
+        <h2 id="wat-is-hacken-eigenlijk">Wat is hacken eigenlijk?</h2>
         <p>
           Hacken betekent systemen onderzoeken om te begrijpen hoe ze werken — en waar ze kwetsbaar zijn.
           <abbr class="jargon" title="Ethisch hacken: systemen testen op kwetsbaarheden met toestemming van de eigenaar, om de beveiliging te verbeteren" tabindex="0"><strong>Ethisch hackers</strong></abbr>
@@ -180,7 +180,7 @@
           <a href="wat-is-ethisch-hacken.html">complete uitleg over ethisch hacken</a>.
         </p>
 
-        <h2>Wat heb je nodig?</h2>
+        <h2 id="wat-heb-je-nodig">Wat heb je nodig?</h2>
         <p>
           Minder dan je denkt:
         </p>
@@ -194,7 +194,7 @@
           begonnen zonder IT-achtergrond.
         </p>
 
-        <h2>Stap 1: leer de terminal</h2>
+        <h2 id="stap-1-leer-de-terminal">Stap 1: leer de terminal</h2>
         <p>
           De terminal (ook wel <abbr class="jargon" title="Command line interface: een tekstgebaseerde interface waarmee je commando's typt in plaats van te klikken" tabindex="0"><strong>command line</strong></abbr>
           genoemd) is het belangrijkste gereedschap van een hacker. In plaats van klikken typ je commando's
@@ -230,12 +230,12 @@ documents/  passwords.txt  config.ini  notes/
 
         <!-- Gumroad CTA: 12-Weken Leerplan -->
         <div class="blog-cta blog-cta-product">
-          <h3>Structuur nodig?</h3>
+          <h3 id="structuur-nodig">Structuur nodig?</h3>
           <p>Het 12-Weken Leerplan — van complete beginner naar je eerste Capture The Flag. Betaalde gids op Gumroad.</p>
           <a href="https://hacksimulator.gumroad.com/l/eogjdk" class="blog-cta-button" target="_blank" rel="noopener noreferrer" data-product-id="eogjdk" data-cta-location="blog_leren_hacken">Bekijk het Leerplan</a>
         </div>
 
-        <h2>Stap 2: begrijp hoe netwerken werken</h2>
+        <h2 id="stap-2-begrijp-hoe-netwerken-werken">Stap 2: begrijp hoe netwerken werken</h2>
         <p>
           Bijna elke hack gaat via een netwerk. Als je niet begrijpt hoe data van A naar B reist,
           kun je niet begrijpen wat security tools eigenlijk doen. Je hoeft geen expert te worden,
@@ -253,7 +253,7 @@ documents/  passwords.txt  config.ini  notes/
           <a href="/commands/#cmd-netstat"><code>netstat</code></a> (bekijk actieve verbindingen).
         </p>
 
-        <h2>Stap 3: installeer Linux</h2>
+        <h2 id="stap-3-installeer-linux">Stap 3: installeer Linux</h2>
         <p>
           Linux is het platform van hackers. De meeste security tools draaien erop, en de meeste servers
           die je ooit zult testen draaien er ook op. Je hoeft niet je hele computer om te gooien — begin
@@ -270,7 +270,7 @@ documents/  passwords.txt  config.ini  notes/
           <a href="linux-bestandssysteem.html">Linux bestandssysteem</a> helpt je de mappenstructuur begrijpen.
         </p>
 
-        <h2>Stap 4: doe je eerste scan</h2>
+        <h2 id="stap-4-doe-je-eerste-scan">Stap 4: doe je eerste scan</h2>
         <p>
           Nu wordt het spannend. Met <a href="/commands/#cmd-nmap"><code>nmap</code></a> kun je netwerken
           scannen om te ontdekken welke apparaten actief zijn, welke poorten openstaan en welke services
@@ -295,7 +295,7 @@ PORT     STATE   SERVICE
           vlaggen en interpretatie stap voor stap uit.
         </p>
 
-        <h2>Stap 5: ontdek webkwetsbaarheden</h2>
+        <h2 id="stap-5-ontdek-webkwetsbaarheden">Stap 5: ontdek webkwetsbaarheden</h2>
         <p>
           De meeste kwetsbaarheden zitten tegenwoordig in webapplicaties. Twee van de belangrijkste
           om te kennen:
@@ -316,7 +316,7 @@ PORT     STATE   SERVICE
           tien meest voorkomende webkwetsbaarheden — een must-read voor elke beginner.
         </p>
 
-        <h2>Gratis platforms om te oefenen</h2>
+        <h2 id="gratis-platforms-om-te-oefenen">Gratis platforms om te oefenen</h2>
         <p>
           Oefenen op echte systemen zonder toestemming is illegaal. Gelukkig zijn er platforms die
           speciaal zijn gebouwd om veilig te hacken:
@@ -346,12 +346,12 @@ PORT     STATE   SERVICE
 
         <!-- Lead Magnet CTA -->
         <div class="blog-cta blog-cta-product">
-          <h3>Klaar voor je eerste pentest?</h3>
+          <h3 id="klaar-voor-je-eerste-pentest">Klaar voor je eerste pentest?</h3>
           <p>Krijg gratis 9 pagina's uit het Pentest Playbook: Fase 0 (voorbereiding &amp; toestemming) en Fase 1 (het doelwit verkennen). Meteen te downloaden.</p>
           <a href="/sample-pentest.html" class="blog-cta-button" data-lead-magnet="pentest_sample" data-cta-location="blog_leren_hacken">Download de gratis sample</a>
         </div>
 
-        <h2>Veelgemaakte fouten</h2>
+        <h2 id="veelgemaakte-fouten">Veelgemaakte fouten</h2>
         <ul>
           <li>
             <strong>Meteen tools willen gebruiken zonder de basis</strong> — Metasploit starten
@@ -372,7 +372,7 @@ PORT     STATE   SERVICE
           </li>
         </ul>
 
-        <h2>Veelgestelde vragen</h2>
+        <h2 id="veelgestelde-vragen">Veelgestelde vragen</h2>
 
         <div class="blog-faq" itemscope itemtype="https://schema.org/FAQPage">
 
@@ -406,7 +406,7 @@ PORT     STATE   SERVICE
 
         </div>
 
-        <h2>De volgende stap</h2>
+        <h2 id="de-volgende-stap">De volgende stap</h2>
         <p>
           Je kent nu het pad: terminal, netwerken, Linux, scanning, webkwetsbaarheden. De vraag is
           niet of je het kunt — de vraag is of je begint.
@@ -419,7 +419,7 @@ PORT     STATE   SERVICE
         </p>
 
         <div class="blog-cta">
-          <h3>Begin nu met hacken leren</h3>
+          <h3 id="begin-nu-met-hacken-leren">Begin nu met hacken leren</h3>
           <p>
             Open de simulator en typ <code>next</code> voor een begeleide tutorial. Of spring direct naar
             <code>nmap</code>, <code>hashcat</code> of <code>nikto</code> en ontdek hoe echte security tools
@@ -432,7 +432,7 @@ PORT     STATE   SERVICE
 
       <!-- Support Banner -->
       <div class="blog-support-banner">
-        <h3>Vond je dit artikel nuttig?</h3>
+        <h3 id="vond-je-dit-artikel-nuttig">Vond je dit artikel nuttig?</h3>
         <p>HackSimulator.nl is een onafhankelijk project &mdash; gebouwd door &#233;&#233;n developer. Met een koffie help je de simulator gratis houden voor iedereen.</p>
         <div class="blog-support-actions">
           <a href="https://ko-fi.com/hacksimulator" class="blog-cta-button" target="_blank" rel="noopener noreferrer">Steun met een koffie</a>
@@ -488,7 +488,7 @@ PORT     STATE   SERVICE
           <a href="../assets/legal/privacy.html">Privacy</a>
           <a href="../assets/legal/terms.html">Voorwaarden</a>
           <a href="../assets/legal/cookies.html">Cookies</a>
-          <a href="../over-ons.html">Over Ons</a>
+          <a href="../over-ons.html">Over ons</a>
           <a href="../contact.html">Contact</a>
         </nav>
       </footer>
@@ -500,6 +500,9 @@ PORT     STATE   SERVICE
 
   <!-- Component Injection (external script for CSP compliance) -->
   <script src="/src/init-components.js?v=4" type="module"></script>
+
+  <!-- Inhoudsopgave uit de statische kop-ids (scripts/add-heading-ids.mjs) -->
+  <script src="/src/ui/blog-toc.js?v=1" type="module"></script>
 
   <!-- Analytics & Consent (external for CSP compliance) -->
   <script src="/src/init-analytics.js" type="module"></script>

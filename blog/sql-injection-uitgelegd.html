@@ -107,7 +107,7 @@
 </head>
 <body>
   <!-- Reading Progress Bar -->
-  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+  <div class="reading-progress" aria-hidden="true"></div>
 
   <!-- Skip Link -->
   <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
@@ -122,7 +122,7 @@
         <a href="../commands/">Commands</a>
         <a href="../gidsen.html">Gidsen</a>
         <a href="../woordenlijst.html">Woordenlijst</a>
-        <a href="../over-ons.html">Over Ons</a>
+        <a href="../over-ons.html">Over ons</a>
         <a href="../contact.html">Contact</a>
       </nav>
     </noscript>
@@ -131,7 +131,7 @@
   <!-- Main Content -->
   <main id="main-content" class="blog-container">
     <!-- Breadcrumb (Sessie 139) -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
       <ol>
         <li><a href="/">Home</a></li>
         <li><a href="/blog/">Blog</a></li>
@@ -161,12 +161,12 @@
 
         <!-- Lead Magnet CTA: gratis Pentest Playbook sample -->
         <div class="blog-cta blog-cta-product">
-          <h3>SQL injection vinden begint bij verkenning</h3>
+          <h3 id="sql-injection-vinden-begint-bij-verkenning">SQL injection vinden begint bij verkenning</h3>
           <p>Voor je een SQL endpoint test: ken het systeem. Download de gratis voorbereidings- en verkenningsfase (9 pagina's PDF).</p>
           <a href="/sample-pentest.html" class="blog-cta-button" data-lead-magnet="pentest_sample" data-cta-location="blog_sql_injection_top">Download de gratis sample</a>
         </div>
 
-        <h2>Wat is SQL?</h2>
+        <h2 id="wat-is-sql">Wat is SQL?</h2>
         <p>
           Voordat we het over SQL injection hebben, moet je eerst begrijpen wat <abbr class="jargon" title="Structured Query Language: een programmeertaal waarmee je gegevens in databases kunt opvragen, toevoegen, wijzigen en verwijderen" tabindex="0"><strong>SQL</strong></abbr> is.
           SQL staat voor Structured Query Language en is de standaardtaal waarmee websites met hun
@@ -191,7 +191,7 @@ WHERE naam = 'jan' AND wachtwoord = 'geheim123';</code></pre>
           van je favoriete webshop tot je bank en sociale media.
         </div>
 
-        <h2>Wat is SQL injection?</h2>
+        <h2 id="wat-is-sql-injection">Wat is SQL injection?</h2>
         <p>
           <abbr class="jargon" title="Een aanvalstechniek waarbij een hacker kwaadaardige SQL-code invoert via een invoerveld om de database te manipuleren" tabindex="0"><strong>SQL injection</strong></abbr> (vaak afgekort als SQLi) is een aanvalstechniek
           waarbij een aanvaller kwaadaardige SQL-code "injecteert" via een invoerveld op een website. In plaats van een normale
@@ -203,12 +203,12 @@ WHERE naam = 'jan' AND wachtwoord = 'geheim123';</code></pre>
           ingevoerd. Het behandelt alles als geldige instructies.
         </p>
 
-        <h2>Hoe werkt SQL injection? Een praktijkvoorbeeld</h2>
+        <h2 id="hoe-werkt-sql-injection-een-praktijkvoorbeeld">Hoe werkt SQL injection? Een praktijkvoorbeeld</h2>
         <p>
           Laten we het concreet maken met een klassiek voorbeeld: het omzeilen van een loginpagina.
         </p>
 
-        <h3>De normale situatie</h3>
+        <h3 id="de-normale-situatie">De normale situatie</h3>
         <p>
           Stel, een website heeft een inlogformulier. De code achter dat formulier bouwt een SQL-query als volgt op:
         </p>
@@ -223,7 +223,7 @@ WHERE naam = 'jan' AND wachtwoord = 'geheim123';</code></pre>
 
         <p>Prima. Maar wat als iemand iets anders invult?</p>
 
-        <h3>De aanval</h3>
+        <h3 id="de-aanval">De aanval</h3>
         <p>
           Een aanvaller typt het volgende als gebruikersnaam:
         </p>
@@ -247,7 +247,7 @@ WHERE naam = '' OR '1'='1' AND wachtwoord = '';</code></pre>
           of de HackSimulator.
         </div>
 
-        <h3>Wat kan een aanvaller nog meer doen?</h3>
+        <h3 id="wat-kan-een-aanvaller-nog-meer-doen">Wat kan een aanvaller nog meer doen?</h3>
         <p>
           SQL injection gaat veel verder dan inloggen. Met de juiste query kan een aanvaller:
         </p>
@@ -267,12 +267,12 @@ WHERE naam = '' OR '1'='1' AND wachtwoord = '';</code></pre>
           aanvaller gevoelige informatie uit willekeurige tabellen opvragen.
         </p>
 
-        <h2>Soorten SQL injection</h2>
+        <h2 id="soorten-sql-injection">Soorten SQL injection</h2>
         <p>
           Niet alle SQL injection-aanvallen werken hetzelfde. Security professionals onderscheiden drie hoofdcategorieën:
         </p>
 
-        <h3>1. In-band SQLi (klassiek)</h3>
+        <h3 id="1-in-band-sqli-klassiek">1. In-band SQLi (klassiek)</h3>
         <p>
           Dit is de meest directe vorm. De aanvaller stuurt een kwaadaardige query en ziet het resultaat direct op de webpagina.
           Het voorbeeld hierboven met <code>' OR '1'='1</code> is een typisch in-band voorbeeld. De twee meest voorkomende
@@ -280,7 +280,7 @@ WHERE naam = '' OR '1'='1' AND wachtwoord = '';</code></pre>
           (de aanvaller combineert zijn eigen query met de originele).
         </p>
 
-        <h3>2. Blind SQLi</h3>
+        <h3 id="2-blind-sqli">2. Blind SQLi</h3>
         <p>
           Bij <abbr class="jargon" title="SQL injection waarbij de aanvaller het resultaat niet direct ziet, maar moet afleiden uit het gedrag van de website" tabindex="0"><strong>blind SQL injection</strong></abbr> ziet de aanvaller het resultaat
           niet direct op de pagina. In plaats daarvan stelt hij ja/nee-vragen aan de database en leidt het antwoord af uit hoe
@@ -292,7 +292,7 @@ WHERE naam = '' OR '1'='1' AND wachtwoord = '';</code></pre>
           seconden langer laadt, was het antwoord "ja".
         </p>
 
-        <h3>3. Out-of-band SQLi</h3>
+        <h3 id="3-out-of-band-sqli">3. Out-of-band SQLi</h3>
         <p>
           De zeldzaamste vorm. Hierbij stuurt de database de gestolen data naar een externe server van de aanvaller, bijvoorbeeld
           via een <abbr class="jargon" title="Domain Name System: het systeem dat domeinnamen vertaalt naar IP-adressen" tabindex="0"><strong>DNS</strong></abbr>-verzoek.
@@ -304,7 +304,7 @@ WHERE naam = '' OR '1'='1' AND wachtwoord = '';</code></pre>
           Blind en out-of-band SQLi zijn voor gevorderde toepassingen.
         </div>
 
-        <h2>De impact: waarom SQL injection zo gevaarlijk is</h2>
+        <h2 id="de-impact-waarom-sql-injection-zo-gevaarlijk-is">De impact: waarom SQL injection zo gevaarlijk is</h2>
         <p>
           SQL injection is niet zomaar een theoretisch probleem. Enkele van de grootste datalekken in de geschiedenis zijn veroorzaakt
           door SQL injection:
@@ -331,7 +331,7 @@ WHERE naam = '' OR '1'='1' AND wachtwoord = '';</code></pre>
           wijdverspreid het probleem is.
         </div>
 
-        <h2>Sqlmap: automatische detectie</h2>
+        <h2 id="sqlmap-automatische-detectie">Sqlmap: automatische detectie</h2>
         <p>
           <abbr class="jargon" title="Een open-source penetration testing tool die het detecteren en exploiteren van SQL injection-kwetsbaarheden automatiseert" tabindex="0"><strong>SQLmap</strong></abbr> is een
           van de meest gebruikte tools door ethisch hackers om SQL injection-kwetsbaarheden automatisch op te sporen en te testen.
@@ -408,13 +408,13 @@ Parameter: id (GET)
           </div>
         </div>
 
-        <h2>Hoe bescherm je je tegen SQL injection?</h2>
+        <h2 id="hoe-bescherm-je-je-tegen-sql-injection">Hoe bescherm je je tegen SQL injection?</h2>
         <p>
           Nu je weet hoe SQL injection werkt, is de volgende vraag: hoe voorkom je het? Gelukkig zijn er bewezen technieken
           die SQL injection vrijwel volledig elimineren.
         </p>
 
-        <h3>1. Prepared statements (parameterized queries)</h3>
+        <h3 id="1-prepared-statements-parameterized-queries">1. Prepared statements (parameterized queries)</h3>
         <p>
           Dit is de <strong>gouden standaard</strong> en verreweg de belangrijkste maatregel.
           <abbr class="jargon" title="Een manier om SQL-queries op te bouwen waarbij gebruikersinvoer als data wordt behandeld, niet als code" tabindex="0"><strong>Prepared statements</strong></abbr>
@@ -442,7 +442,7 @@ execute(query, [invoer]);</code></pre>
           Er is geen excuus om ze niet te gebruiken.
         </div>
 
-        <h3>2. Input validatie</h3>
+        <h3 id="2-input-validatie">2. Input validatie</h3>
         <p>
           Controleer <strong>altijd</strong> wat een gebruiker invoert voordat je het verwerkt:
         </p>
@@ -458,7 +458,7 @@ execute(query, [invoer]);</code></pre>
           Prepared statements zijn je eerste verdedigingslinie. Input validatie is je tweede. Gebruik altijd beide.
         </div>
 
-        <h3>3. Web application firewall (WAF)</h3>
+        <h3 id="3-web-application-firewall-waf">3. Web application firewall (WAF)</h3>
         <p>
           Een <abbr class="jargon" title="Web Application Firewall: een beveiligingslaag die verkeer naar een webapplicatie filtert en bekende aanvalspatronen blokkeert" tabindex="0"><strong>WAF</strong></abbr>
           is een beveiligingslaag die al het verkeer naar je website filtert. Een WAF herkent bekende SQL injection-patronen
@@ -470,14 +470,14 @@ execute(query, [invoer]);</code></pre>
           <abbr class="jargon" title="Het aanpassen van een aanval zodat beveiligingsfilters de kwaadaardige code niet herkennen" tabindex="0"><strong>obfuscation</strong></abbr>-technieken.
         </p>
 
-        <h3>4. Least privilege principe</h3>
+        <h3 id="4-least-privilege-principe">4. Least privilege principe</h3>
         <p>
           Geef de database-gebruiker die je website gebruikt <strong>zo min mogelijk rechten</strong>. Als je website alleen
           gegevens hoeft te lezen, geef dan alleen leesrechten. Als een aanvaller er toch doorheen komt, kan hij dan in ieder
           geval geen data verwijderen of de hele server overnemen.
         </p>
 
-        <h3>5. Error handling</h3>
+        <h3 id="5-error-handling">5. Error handling</h3>
         <p>
           Toon <strong>nooit</strong> gedetailleerde database-foutmeldingen aan gebruikers. Een foutmelding als
           "MySQL error: column 'password' not found in table 'users'" geeft een aanvaller gratis informatie over je
@@ -491,12 +491,12 @@ execute(query, [invoer]);</code></pre>
 
         <!-- Gumroad CTA: Pentest Playbook (contextual placement na bescherming-sectie) -->
         <div class="blog-cta blog-cta-product">
-          <h3>Wil je een echte pentest leren uitvoeren?</h3>
+          <h3 id="wil-je-een-echte-pentest-leren-uitvoeren">Wil je een echte pentest leren uitvoeren?</h3>
           <p>Het volledige Pentest Playbook — alle 6 fasen in ~19 pagina's, met beslisbomen bij elke stap en een rapport-template. Betaalde gids op Gumroad.</p>
           <a href="https://hacksimulator.gumroad.com/l/wmvpx" class="blog-cta-button" target="_blank" rel="noopener noreferrer" data-product-id="wmvpx" data-cta-location="blog_sql_injection">Bekijk het volledige Playbook</a>
         </div>
 
-        <h2>Ethische overwegingen</h2>
+        <h2 id="ethische-overwegingen">Ethische overwegingen</h2>
         <p>
           SQL injection testen is een belangrijk onderdeel van ethisch hacken en
           <abbr class="jargon" title="Penetration testing: het geautoriseerd testen van systemen op beveiligingskwetsbaarheden door ze te proberen te hacken" tabindex="0"><strong>pentesting</strong></abbr>.
@@ -525,9 +525,9 @@ execute(query, [invoer]);</code></pre>
           <li><strong>HackSimulator.nl</strong> - Oefen sqlmap en andere tools veilig in je browser</li>
         </ul>
 
-        <h2>Oefenen in HackSimulator.nl</h2>
+        <h2 id="oefenen-in-hacksimulator-nl">Oefenen in HackSimulator.nl</h2>
         <div class="blog-cta">
-          <h3>Detecteer SQL injection zelf</h3>
+          <h3 id="detecteer-sql-injection-zelf">Detecteer SQL injection zelf</h3>
           <p>
             Open de simulator en typ <code>sqlmap</code> voor de introductie, daarna <code>sqlmap http://testsite.nl/?id=1</code>
             om te zien hoe SQL injection detectie werkt. Je leert welke parameters kwetsbaar zijn, hoe je databases
@@ -536,7 +536,7 @@ execute(query, [invoer]);</code></pre>
           <a href="../terminal.html" class="blog-cta-button" data-terminal-cta="blog_sql-injection-uitgelegd">Start met sqlmap</a>
         </div>
 
-        <h2>Samenvatting</h2>
+        <h2 id="samenvatting">Samenvatting</h2>
         <p>
           SQL injection is een aanvalstechniek waarbij kwaadaardige SQL-code via invoervelden wordt geïnjecteerd om een database
           te manipuleren. Het is al decennialang een van de meest voorkomende en gevaarlijkste kwetsbaarheden op het web. De kern
@@ -561,7 +561,7 @@ execute(query, [invoer]);</code></pre>
 
       <!-- Support Banner -->
       <div class="blog-support-banner">
-        <h3>Vond je dit artikel nuttig?</h3>
+        <h3 id="vond-je-dit-artikel-nuttig">Vond je dit artikel nuttig?</h3>
         <p>HackSimulator.nl is een onafhankelijk project &mdash; gebouwd door &#233;&#233;n developer. Met een koffie help je de simulator gratis houden voor iedereen.</p>
         <div class="blog-support-actions">
           <a href="https://ko-fi.com/hacksimulator" class="blog-cta-button" target="_blank" rel="noopener noreferrer">Steun met een koffie</a>
@@ -617,7 +617,7 @@ execute(query, [invoer]);</code></pre>
           <a href="../assets/legal/privacy.html">Privacy</a>
           <a href="../assets/legal/terms.html">Voorwaarden</a>
           <a href="../assets/legal/cookies.html">Cookies</a>
-          <a href="../over-ons.html">Over Ons</a>
+          <a href="../over-ons.html">Over ons</a>
           <a href="../contact.html">Contact</a>
         </nav>
       </footer>
@@ -629,6 +629,9 @@ execute(query, [invoer]);</code></pre>
 
   <!-- Component Injection (external script for CSP compliance) -->
   <script src="/src/init-components.js?v=4" type="module"></script>
+
+  <!-- Inhoudsopgave uit de statische kop-ids (scripts/add-heading-ids.mjs) -->
+  <script src="/src/ui/blog-toc.js?v=1" type="module"></script>
 
   <!-- Analytics & Consent (external for CSP compliance) -->
   <script src="/src/init-analytics.js" type="module"></script>

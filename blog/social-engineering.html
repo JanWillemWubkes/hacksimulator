@@ -107,7 +107,7 @@
 </head>
 <body>
   <!-- Reading Progress Bar -->
-  <div class="reading-progress" role="progressbar" aria-label="Reading progress"></div>
+  <div class="reading-progress" aria-hidden="true"></div>
 
   <!-- Skip Link -->
   <a href="#main-content" class="skip-link">Spring naar hoofdinhoud</a>
@@ -122,7 +122,7 @@
         <a href="../commands/">Commands</a>
         <a href="../gidsen.html">Gidsen</a>
         <a href="../woordenlijst.html">Woordenlijst</a>
-        <a href="../over-ons.html">Over Ons</a>
+        <a href="../over-ons.html">Over ons</a>
         <a href="../contact.html">Contact</a>
       </nav>
     </noscript>
@@ -131,7 +131,7 @@
   <!-- Main Content -->
   <main id="main-content" class="blog-container">
     <!-- Breadcrumb (Sessie 139) -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
       <ol>
         <li><a href="/">Home</a></li>
         <li><a href="/blog/">Blog</a></li>
@@ -168,12 +168,12 @@
 
         <!-- Lead Magnet CTA: gratis Pentest Playbook sample -->
         <div class="blog-cta blog-cta-product">
-          <h3>Reconnaissance gaat verder dan techniek</h3>
+          <h3 id="reconnaissance-gaat-verder-dan-techniek">Reconnaissance gaat verder dan techniek</h3>
           <p>Sociale verkenning hoort bij Fase 1: het doelwit verkennen. Download gratis 9 pagina's &mdash; voorbereiding (Fase 0) en verkenning met o.a. openbare bronnen. Geen account.</p>
           <a href="/sample-pentest.html" class="blog-cta-button" data-lead-magnet="pentest_sample" data-cta-location="blog_social_eng_top">Download de gratis sample</a>
         </div>
 
-        <h2>Wat is social engineering?</h2>
+        <h2 id="wat-is-social-engineering">Wat is social engineering?</h2>
         <p>
           Social engineering is de kunst van het manipuleren van mensen zodat ze vertrouwelijke informatie delen, toegang verlenen
           of acties uitvoeren die ze normaal niet zouden doen. Het draait niet om technische kwetsbaarheden in software, maar om
@@ -192,44 +192,44 @@
           Nokia, Motorola en het Pentagon - grotendeels door mensen te manipuleren.
         </div>
 
-        <h2>Waarom werkt social engineering zo goed?</h2>
+        <h2 id="waarom-werkt-social-engineering-zo-goed">Waarom werkt social engineering zo goed?</h2>
         <p>
           Social engineering werkt omdat het inspeelt op fundamentele menselijke psychologie. We zijn als mens geprogrammeerd om
           bepaalde patronen te volgen, en aanvallers kennen die patronen. De zes principes van overtuiging, beschreven door psycholoog
           Robert Cialdini, vormen de basis van vrijwel elke social engineering aanval:
         </p>
 
-        <h3>1. Urgentie en angst</h3>
+        <h3 id="1-urgentie-en-angst">1. Urgentie en angst</h3>
         <p>
           "Je account wordt binnen 24 uur geblokkeerd als je niet nu handelt!" Onder druk nemen mensen slechte beslissingen.
           Ze skippen de verificatiestappen die ze normaal wel zouden nemen. Aanvallers weten dit en creëren kunstmatig tijdsdruk.
         </p>
 
-        <h3>2. Autoriteit</h3>
+        <h3 id="2-autoriteit">2. Autoriteit</h3>
         <p>
           Een e-mail van "de IT-afdeling" of een telefoontje van "je bank" - we zijn geneigd instructies op te volgen van
           mensen in een autoriteitspositie. Aanvallers doen zich voor als managers, systeembeheerders, politieagenten of bankmedewerkers.
         </p>
 
-        <h3>3. Schaarste</h3>
+        <h3 id="3-schaarste">3. Schaarste</h3>
         <p>
           "Alleen vandaag beschikbaar!" of "Nog 2 plekken over!" Schaarste maakt ons impulsief. In de context van cybersecurity
           wordt dit gebruikt om je snel te laten klikken voordat je nadenkt.
         </p>
 
-        <h3>4. Reciprociteit</h3>
+        <h3 id="4-reciprociteit">4. Reciprociteit</h3>
         <p>
           Als iemand je iets geeft, voel je de drang om iets terug te doen. Een aanvaller die je eerst "helpt" met een
           nep-probleem kan daarna om gevoelige informatie vragen - en je geeft het omdat je je verplicht voelt.
         </p>
 
-        <h3>5. Sympathie en vertrouwen</h3>
+        <h3 id="5-sympathie-en-vertrouwen">5. Sympathie en vertrouwen</h3>
         <p>
           We helpen mensen die we aardig vinden. Aanvallers investeren tijd in het opbouwen van een relatie voordat ze
           toeslaan. Op sociale media kan dit weken of maanden duren.
         </p>
 
-        <h3>6. Social proof</h3>
+        <h3 id="6-social-proof">6. Social proof</h3>
         <p>
           "Al 50.000 mensen hebben dit gedownload!" Als anderen het doen, moet het wel veilig zijn - toch? Niet per se.
           Nepreviewers en nepstatistieken worden actief ingezet om slachtoffers over de streep te trekken.
@@ -240,12 +240,12 @@
           hoe waarschijnlijker het is dat iemand je probeert te manipuleren. Legitieme organisaties geven je altijd de tijd om na te denken.
         </div>
 
-        <h2>Soorten social engineering aanvallen</h2>
+        <h2 id="soorten-social-engineering-aanvallen">Soorten social engineering aanvallen</h2>
         <p>
           Social engineering kent veel verschijningsvormen. Hier zijn de belangrijkste methoden die aanvallers gebruiken:
         </p>
 
-        <h3>Phishing (e-mail)</h3>
+        <h3 id="phishing-e-mail">Phishing (e-mail)</h3>
         <p>
           <abbr class="jargon" title="Frauduleuze e-mails die zich voordoen als legitieme organisaties om gegevens te stelen" tabindex="0"><strong>Phishing</strong></abbr>
           is de meest voorkomende vorm van social engineering. Je ontvangt een e-mail die eruitziet alsof deze van een betrouwbare
@@ -286,7 +286,7 @@ Amazon Security Team</div>
           overgrote deel van phishing aanvallen.
         </div>
 
-        <h3>Vishing (voice phishing)</h3>
+        <h3 id="vishing-voice-phishing">Vishing (voice phishing)</h3>
         <p>
           <abbr class="jargon" title="Phishing via de telefoon, waarbij aanvallers zich voordoen als medewerkers van banken of helpdesks" tabindex="0"><strong>Vishing</strong></abbr>
           is phishing via de telefoon. De aanvaller belt je op en doet zich voor als een bankmedewerker, IT-helpdesk of
@@ -298,7 +298,7 @@ Amazon Security Team</div>
           <strong>nooit</strong> om deze gegevens via de telefoon.
         </p>
 
-        <h3>Smishing (SMS phishing)</h3>
+        <h3 id="smishing-sms-phishing">Smishing (SMS phishing)</h3>
         <p>
           <abbr class="jargon" title="Phishing via SMS-berichten met kwaadaardige links" tabindex="0"><strong>Smishing</strong></abbr>
           gebruikt SMS-berichten. "Je pakket kan niet bezorgd worden. Klik hier om een nieuw bezorgmoment te kiezen." Omdat
@@ -306,7 +306,7 @@ Amazon Security Team</div>
           voordat je nadenkt.
         </p>
 
-        <h3>Pretexting</h3>
+        <h3 id="pretexting">Pretexting</h3>
         <p>
           Bij <abbr class="jargon" title="Een verzonnen scenario of identiteit gebruiken om vertrouwen te winnen en informatie los te krijgen" tabindex="0"><strong>pretexting</strong></abbr>
           creert de aanvaller een compleet verzonnen scenario (een "pretext") om je vertrouwen te winnen. Dit gaat verder
@@ -318,7 +318,7 @@ Amazon Security Team</div>
           die wil helpen en onder druk staat, geeft het wachtwoord. De aanvaller is binnen.
         </p>
 
-        <h3>Baiting (lokaas)</h3>
+        <h3 id="baiting-lokaas">Baiting (lokaas)</h3>
         <p>
           <abbr class="jargon" title="Aanvalstechniek waarbij fysiek of digitaal lokaas wordt achtergelaten om slachtoffers te verleiden" tabindex="0"><strong>Baiting</strong></abbr>
           speelt in op nieuwsgierigheid. De bekendste fysieke variant: USB-sticks "per ongeluk" achterlaten op parkeerplaatsen
@@ -336,7 +336,7 @@ Amazon Security Team</div>
           Het is een van de meest effectieve fysieke aanvalsmethoden.
         </div>
 
-        <h3>Tailgating en piggybacking</h3>
+        <h3 id="tailgating-en-piggybacking">Tailgating en piggybacking</h3>
         <p>
           Dit zijn fysieke social engineering technieken. Bij <abbr class="jargon" title="Ongeautoriseerd een beveiligd gebouw binnenlopen door direct achter iemand met toegang aan te sluiten" tabindex="0"><strong>tailgating</strong></abbr>
           loopt de aanvaller direct achter een geautoriseerd persoon een beveiligd gebouw binnen. "Oh, ik ben mijn
@@ -348,9 +348,9 @@ Amazon Security Team</div>
           van de derde verdieping").
         </p>
 
-        <h2>Beroemde social engineering aanvallen</h2>
+        <h2 id="beroemde-social-engineering-aanvallen">Beroemde social engineering aanvallen</h2>
 
-        <h3>Kevin Mitnick (jaren 90)</h3>
+        <h3 id="kevin-mitnick-jaren-90">Kevin Mitnick (jaren 90)</h3>
         <p>
           Kevin Mitnick was een van de meest gezochte hackers in de geschiedenis van de FBI. Zijn geheim? Hij was
           geen briljante programmeur - hij was een briljante manipulator. Mitnick belde telefooncentrales,
@@ -359,7 +359,7 @@ Amazon Security Team</div>
           en schreef het boek "The Art of Deception" - verplichte literatuur voor iedereen in cybersecurity.
         </p>
 
-        <h3>Twitter hack (2020)</h3>
+        <h3 id="twitter-hack-2020">Twitter hack (2020)</h3>
         <p>
           In juli 2020 werden de Twitter-accounts gehackt van Barack Obama, Elon Musk, Bill Gates, Apple en vele anderen.
           De berichten beloofden: "Stuur Bitcoin naar dit adres en je krijgt het dubbele terug." De aanvallers - geleid door een
@@ -368,7 +368,7 @@ Amazon Security Team</div>
           engineering alleen haalden ze meer dan 100.000 dollar op en legden ze het hele platform plat.
         </p>
 
-        <h3>RSA SecurID breach (2011)</h3>
+        <h3 id="rsa-securid-breach-2011">RSA SecurID breach (2011)</h3>
         <p>
           RSA, een van de grootste beveiligingsbedrijven ter wereld, werd gehackt via een simpele phishing e-mail.
           Een medewerker ontving een Excel-bestand getiteld "2011 Recruitment Plan". Het bestand bevatte een
@@ -386,7 +386,7 @@ Amazon Security Team</div>
           zijn beide uitgebreid gedocumenteerd.
         </div>
 
-        <h2>Rode vlaggen: hoe herken je social engineering?</h2>
+        <h2 id="rode-vlaggen-hoe-herken-je-social-engineering">Rode vlaggen: hoe herken je social engineering?</h2>
         <p>
           Train jezelf om deze waarschuwingssignalen te herkennen:
         </p>
@@ -408,19 +408,19 @@ Amazon Security Team</div>
           vorm van social engineering.
         </div>
 
-        <h2>Hoe bescherm je jezelf?</h2>
+        <h2 id="hoe-bescherm-je-jezelf">Hoe bescherm je jezelf?</h2>
         <p>
           Social engineering volledig voorkomen is onmogelijk - we zijn en blijven mensen. Maar je kunt het risico
           drastisch verkleinen met deze maatregelen:
         </p>
 
-        <h3>1. Verificeer altijd via een ander kanaal</h3>
+        <h3 id="1-verificeer-altijd-via-een-ander-kanaal">1. Verificeer altijd via een ander kanaal</h3>
         <p>
           Krijg je een e-mail van "je bank"? Bel de bank via het nummer op je bankpas. Vraagt een "collega" per e-mail
           om een betaling? Loop even langs of bel. Deze simpele stap stopt de meeste aanvallen.
         </p>
 
-        <h3>2. Activeer tweefactorauthenticatie (2FA)</h3>
+        <h3 id="2-activeer-tweefactorauthenticatie-2fa">2. Activeer tweefactorauthenticatie (2FA)</h3>
         <p>
           <abbr class="jargon" title="Extra beveiligingslaag naast je wachtwoord, bijvoorbeeld een code via een app of SMS" tabindex="0"><strong>Twee-factor authenticatie (2FA)</strong></abbr>
           zorgt ervoor dat zelfs als een aanvaller je wachtwoord steelt via phishing, ze nog steeds niet kunnen inloggen
@@ -434,21 +434,21 @@ Amazon Security Team</div>
 [!] Zonder fysieke toegang tot het tweede apparaat kom je er niet in.</div>
         </div>
 
-        <h3>3. Gebruik een wachtwoordmanager</h3>
+        <h3 id="3-gebruik-een-wachtwoordmanager">3. Gebruik een wachtwoordmanager</h3>
         <p>
           Een wachtwoordmanager vult je wachtwoord alleen in op de <strong>echte</strong> website. Als je op een
           phishing-site belandt die eruitziet als je bank, zal de wachtwoordmanager het niet herkennen en niets
           invullen. Dit is een ingebouwde phishing-detector.
         </p>
 
-        <h3>4. Security awareness training</h3>
+        <h3 id="4-security-awareness-training">4. Security awareness training</h3>
         <p>
           Voor organisaties is regelmatige training cruciaal. Niet een eenmalige presentatie, maar doorlopende
           oefeningen inclusief gesimuleerde phishing campagnes. Medewerkers die regelmatig getraind worden, herkennen
           aanvallen aanzienlijk vaker.
         </p>
 
-        <h3>5. Wees kritisch op sociale media</h3>
+        <h3 id="5-wees-kritisch-op-sociale-media">5. Wees kritisch op sociale media</h3>
         <p>
           Alles wat je online deelt kan worden gebruikt voor spear phishing. Je functietitel op LinkedIn, je
           vakantiefoto's op Instagram, de naam van je huisdier op Facebook - het is allemaal brandstof voor een
@@ -460,7 +460,7 @@ Amazon Security Team</div>
           niet onbeleefd om te verifiëren - het is slim. Echte professionals zullen je verificatie juist waarderen.
         </div>
 
-        <h2>Social engineering in pentesting</h2>
+        <h2 id="social-engineering-in-pentesting">Social engineering in pentesting</h2>
         <p>
           Social engineering is niet alleen een aanvalsmethode - het is ook een belangrijk onderdeel van
           <abbr class="jargon" title="Geautoriseerde simulatie van cyberaanvallen om de beveiliging van een organisatie te testen" tabindex="0"><strong>penetration testing</strong></abbr>.
@@ -488,12 +488,12 @@ Amazon Security Team</div>
 
         <!-- Gumroad CTA: Juridische Gids (contextual placement na toestemming-warning) -->
         <div class="blog-cta blog-cta-product">
-          <h3>Ken je de regels?</h3>
+          <h3 id="ken-je-de-regels">Ken je de regels?</h3>
           <p>De Juridische Gids — wat mag wel en wat niet bij ethisch hacken in Nederland. Betaalde gids op Gumroad.</p>
           <a href="https://hacksimulator.gumroad.com/l/yzdtfx" class="blog-cta-button" target="_blank" rel="noopener noreferrer" data-product-id="yzdtfx" data-cta-location="blog_social_engineering">Bekijk de Juridische Gids</a>
         </div>
 
-        <h2>De verbinding met technische aanvallen</h2>
+        <h2 id="de-verbinding-met-technische-aanvallen">De verbinding met technische aanvallen</h2>
         <p>
           Social engineering staat zelden op zichzelf. Het is bijna altijd de eerste stap in een grotere aanval. Het
           typische patroon ziet er zo uit:
@@ -523,9 +523,9 @@ interne netwerk scannen op kwetsbare systemen.</div>
           Daarom is het voorkomen van social engineering de eerste en belangrijkste verdedigingslinie.
         </p>
 
-        <h2>Wat kun je nu doen?</h2>
+        <h2 id="wat-kun-je-nu-doen">Wat kun je nu doen?</h2>
         <div class="blog-cta">
-          <h3>Oefen je vaardigheden</h3>
+          <h3 id="oefen-je-vaardigheden">Oefen je vaardigheden</h3>
           <p>
             Wil je beter begrijpen hoe aanvallers denken en werken? In HackSimulator.nl kun je veilig experimenteren met
             security tools als <code>nmap</code>, <code>nikto</code> en <code>hydra</code>. Begrijp de technieken zodat je
@@ -538,7 +538,7 @@ interne netwerk scannen op kwetsbare systemen.</div>
 
       <!-- Support Banner -->
       <div class="blog-support-banner">
-        <h3>Vond je dit artikel nuttig?</h3>
+        <h3 id="vond-je-dit-artikel-nuttig">Vond je dit artikel nuttig?</h3>
         <p>HackSimulator.nl is een onafhankelijk project &mdash; gebouwd door &#233;&#233;n developer. Met een koffie help je de simulator gratis houden voor iedereen.</p>
         <div class="blog-support-actions">
           <a href="https://ko-fi.com/hacksimulator" class="blog-cta-button" target="_blank" rel="noopener noreferrer">Steun met een koffie</a>
@@ -594,7 +594,7 @@ interne netwerk scannen op kwetsbare systemen.</div>
           <a href="../assets/legal/privacy.html">Privacy</a>
           <a href="../assets/legal/terms.html">Voorwaarden</a>
           <a href="../assets/legal/cookies.html">Cookies</a>
-          <a href="../over-ons.html">Over Ons</a>
+          <a href="../over-ons.html">Over ons</a>
           <a href="../contact.html">Contact</a>
         </nav>
       </footer>
@@ -606,6 +606,9 @@ interne netwerk scannen op kwetsbare systemen.</div>
 
   <!-- Component Injection (external script for CSP compliance) -->
   <script src="/src/init-components.js?v=4" type="module"></script>
+
+  <!-- Inhoudsopgave uit de statische kop-ids (scripts/add-heading-ids.mjs) -->
+  <script src="/src/ui/blog-toc.js?v=1" type="module"></script>
 
   <!-- Analytics & Consent (external for CSP compliance) -->
   <script src="/src/init-analytics.js" type="module"></script>

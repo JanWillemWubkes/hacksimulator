@@ -229,6 +229,32 @@ Mirror `blog/ethisch-hacker-worden.html` regel 562-589 — 4 kaarten naar gerela
 
 ## Content-patterns
 
+### Kop-id's en inhoudsopgave (verplicht, Sessie 226)
+
+Elke `<h2>`/`<h3>` binnen `.blog-post-content` heeft een **geslugificeerde `id`**. Je typt ze niet
+zelf — draai na het schrijven:
+
+```bash
+node scripts/add-heading-ids.mjs          # vult ontbrekende id's aan (idempotent)
+node scripts/add-heading-ids.mjs --check  # CI-modus: exit 1 bij een kop zonder id
+```
+
+De **inhoudsopgave zelf zet je niet in de HTML.** `src/ui/blog-toc.js` bouwt hem runtime uit de
+`h2`'s (callouts en CTA-boxen worden overgeslagen) en zet hem vóór de eerste sectiekop. Een
+statische lijst in de post zou in lockstep met de koppen moeten blijven, en dat is precies de
+drift die dit project bestrijdt. Neem dus wel het scripttag over uit een bestaande post:
+
+```html
+<script src="/src/ui/blog-toc.js?v=1" type="module"></script>
+```
+
+Waarom dit bestaat: tot Sessie 226 had **geen enkele** van de 15 posts in-page navigatie, terwijl
+een artikel op 375px tot ~17.800px hoog loopt — zo'n 22 schermen zonder enige manier om een sectie
+over te slaan of ernaar terug te keren. Het ontbrak in alle posts omdat het hier niet stond.
+
+> Wijzig de tekst van een bestaande kop niet zonder reden: het `id` is eraan ontleend en bestaande
+> deeplinks breken. Het script laat bestaande id's met rust, dus hernoemen is een bewuste actie.
+
 ### Inline jargon (verplicht)
 
 Elke technische term de eerste keer in de post:
