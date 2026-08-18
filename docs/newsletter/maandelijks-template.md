@@ -226,6 +226,20 @@ gekopieerd van de pentest-variant en draagt dezelfde footer-conventie, maar staa
 zodra `brevo-setup-sample-juridisch.md` is uitgevoerd. Controleer bij die import hetzelfde:
 geen extra native footer-blok.
 
+### De privacylink: gebruik de kórte URL
+
+In de footer staat `https://hacksimulator.nl/privacy.html`, **niet**
+`/assets/legal/privacy.html`. Dat is bewust, ook al is de korte vorm een 301-redirect.
+
+De redirect staat expliciet vastgelegd in `netlify.toml` (samen met dezelfde regels voor
+`terms.html`, `cookies.html` en `security.txt`), dus hij is versiebeheerd en stabiel. En in
+e-mail is die indirectie juist een **voordeel**: verstuurde mail ligt voor altijd vast. Verhuizen
+de bestanden ooit, dan herricht je één regel in `netlify.toml` en blijven alle eerder verstuurde
+nieuwsbrieven werken. Een diep pad in de mail zou dan dood zijn.
+
+Alle e-mailtemplates in deze map doen dit zo — houd dat zo. Dit is ook de enige link in de mail
+zonder UTM-parameters: het is een juridische link, geen campagnelink.
+
 ---
 
 ## Design
@@ -416,6 +430,19 @@ kleurenpaar voorkomt dat. Haal die achtergrond er niet af.
 Mei en juni 2026 zijn **niet** verstuurd. Hun geplande onderwerpen staan hieronder weer op
 de kandidatenlijst — de SQL-injectietip van juni is in augustus 2026 alsnog gebruikt.
 
+### Verzonden onderwerpregels
+
+Leg deze vast bij elke verzending. De onderwerpregel is bij deze lijstgrootte het enige
+element waar vergelijken zin heeft (weekdag en verzendtijd zijn bij twee tot drie edities
+per jaar niet meetbaar) — maar dan moet je wél weten wat je verstuurd hebt.
+
+| Editie | Onderwerpregel | Tekens | Preview-tekst |
+|---|---|---|---|
+| Augustus 2026 | Eén apostrof en de database ligt open | 37 | Een database ziet het verschil niet tussen jouw gegevens en een instructie — tenzij de programmeur dat verschil aanbrengt. |
+
+Verzendgegevens augustus 2026: dinsdag 18 augustus 10:00 CET, lijst `hacksimulator-main`,
+`utm_campaign=augustus-2026`.
+
 ### Kandidaten
 
 Elke tip heeft een commando in de simulator nodig waar de lezer hem direct kan proberen;
@@ -454,7 +481,8 @@ verkoopt. Herhaal geen product dat de vorige editie al pushte: de lezer zag het 
       overflow-check én makkelijk te missen in een previewvenster
 - [ ] Uitschrijflink werkt (`{{ unsubscribe }}`) — echt aanklikken in de test-mail
 - [ ] Eén footer: de gestileerde regel in de HTML, géén los Brevo-blok eronder
-- [ ] Verzendtijd: 10:00 CET, eerste dinsdag
+- [ ] Verzendtijd: 10:00 CET, **derde dinsdag** — en minimaal 21 dagen na de vorige
+      verzending (zie de invariant bovenaan dit document)
 - [ ] Test-email verstuurd naar eigen adres
 - [ ] Test-email geopend op telefoon in **dark mode** (Gmail-app) — donkere tekst op de
       groene balk/knop, code-chips binnen hun regel

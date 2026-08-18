@@ -6,50 +6,6 @@
 <meta name="color-scheme" content="light dark">
 <meta name="supported-color-schemes" content="light dark">
 <title>Nieuwsbrief Augustus 2026 — HackSimulator</title>
-<!--
-  VERZENDGEGEVENS (voor Brevo — plaats via Import HTML, niet de drag-and-drop editor)
-
-  Onderwerpregel : Eén apostrof en de database ligt open        (37 tekens, limiet 60)
-  Preview-tekst  : zie de verborgen preheader-div direct onder <body>
-  Verzenddatum   : dinsdag 18 augustus 2026, 10:00 CET          (derde dinsdag)
-  Lijst          : hacksimulator-main
-  UTM-campagne   : augustus-2026
-
-  Het <style>-blok hieronder is byte-identiek aan nieuwsbrief-juli-2026.html.
-  Wijzig die klassen NIET per editie — ze beschermen de HackSimulator-kleuren tegen
-  automatische dark-mode-inversie door e-mailclients. Zie maandelijks-template.md.
-
-  CODEBLOK-BUDGET: 29 tekens per regel (@320px) / 37 (@375px). Gemeten, niet gerekend.
-  Houd 29 aan: dan is de mail op élke breedte schoon. Langste regel nu 29.
-  Let op: `word-break: break-all` laat een te lange regel WRAPPEN, niet overlopen.
-  scrollWidth == clientWidth blijft dan gelden, dus een overflow-check ziet dit
-  NIET. Meet de tekstbreedte per regel tegen de binnenruimte.
-
-  TYPOGRAFIE (augustus 2026 herzien — zie maandelijks-template.md §Design):
-  - Fontstack is NIET meer 'Courier New' voorop. Het Courier-ontwerp heeft een
-    x-hoogte-ratio van 0,42 tegen 0,53-0,55 voor elke moderne monospace, en staat
-    juist wél op Windows/macOS/iOS en níét op Android. Gevolg was ~20% verschil in
-    optische grootte per ontvanger, met de kleinste weergave voor Apple-lezers.
-  - Vet krijgt de KOPKLEUR (#c9d1d9, 11,21:1), niet alleen font-weight. Met alleen
-    gewicht bleef vet op 5,62:1 staan — exact gelijk aan de bodytekst.
-  - De mobiele padding-selector is gerepareerd: `.mobile-padding td` was een
-    afstammeling-selector die de cel zelf nooit raakte. Zie de comment in <style>.
-
-  CODE-CHIPS: `white-space:nowrap` staat op de drie KORTE chips, bewust NIET op de
-  lange commando-chip. Gemeten @320px in een iframe, drie varianten:
-    nowrap op alle 4  -> document 19px te breed (de 219px chip kan niet breken)
-    nowrap nergens    -> 0px te breed, maar `shop.nl/?id=1` valt in 2 stukken
-    nowrap op 3 korte -> 0px te breed EN de URL-chip blijft heel   <- gekozen
-  De commando-chip mag dus over twee regels vallen. Dat is veilig: elk fragment
-  is 17px in een regelbox van 24px, dus geen overlap (de Sessie 206-val).
-  Zet hier nooit nowrap op een chip breder dan ~190px zonder @320px te hermeten.
-
-  PRIVACYLINK: /privacy.html is bewust de korte URL, niet /assets/legal/privacy.html.
-  De redirect staat expliciet in netlify.toml:70-72 (301). Dat is hier een voordeel en
-  geen omweg: verstuurde mail ligt voor altijd vast, dus een stabiele publieke URL die
-  je kunt herrichten als de bestanden verhuizen is veiliger dan een diep pad in de mail.
-  Alle andere templates in deze map doen hetzelfde — houd dat zo.
--->
 <!--[if mso]>
 <xml>
 <o:OfficeDocumentSettings>
