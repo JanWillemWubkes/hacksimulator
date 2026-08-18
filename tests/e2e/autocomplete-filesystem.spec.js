@@ -10,6 +10,33 @@ import { test, expect } from './fixtures.js';
 
 test.describe('Tab Autocomplete - Filesystem Commands', () => {
   test.beforeEach(async ({ page }) => {
+    // TASKS #64 (opgelost Sessie 227): deze spec was de enige terminal-spec ZONDER
+    // legal-modal-afhandeling, en dat maakte hem flaky onder worker-load.
+    //
+    // Gemeten met --repeat-each=12 --workers=4 (36 runs, 4 rood). De discriminator is
+    // de FOCUS op het moment van Tab, niet of de modal open staat:
+    //
+    //   actiefVoor=terminal-input   -> actiefNa=terminal-input   OK    (31x)
+    //   actiefVoor=legal-accept-btn -> actiefNa=A                FAAL   (3x)
+    //   actiefVoor=terminal-input   -> actiefNa=A                FAAL   (1x)
+    //
+    // `input.fill()` zet de waarde ook zonder focus, dus die stap slaagt altijd. Daarna
+    // grijpt de legal-modal de focus (asynchroon, ná de eerste paint) en gaat Tab naar
+    // zijn focus-trap in plaats van naar de terminal — de waarde blijft dan ongewijzigd.
+    // Onder load valt dat moment vaak ná de fill; in isolatie ervóór, en daarom
+    // reproduceerde Sessie 220 het daar 0/10.
+    //
+    // Consent vóór de navigatie zetten neemt de race wég in plaats van hem te overleven:
+    // de modal verschijnt niet, dus er is geen focus-dief. Dat is ook zuiverder — deze
+    // spec gaat over autocomplete, niet over de modal.
+    await page.addInitScript(() => {
+      try {
+        localStorage.setItem('hacksim_legal_accepted', 'true');
+      } catch (e) {
+        /* private mode: dan valt de test terug op het oude, flaky gedrag */
+      }
+    });
+
     // Navigate to the application
     await page.goto('/terminal.html');
 

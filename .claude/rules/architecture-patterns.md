@@ -486,3 +486,78 @@ const grens = basis + 8;   // tolerantie voor afronding bij smooth scroll
 
 En vergeet `scroll-padding-top` niet op de pagina zelf: `blog.css` had hem niet (terwijl
 `landing.css` en `commands.css` wel), dus elk anker landde achter de vaste navbar.
+
+---
+
+## 17. Een rusttoestand-sweep laat de helft van je kleuren ongemeten (Sessie 227)
+
+Contrastspecs meten wat `getComputedStyle` op een element teruggeeft. Dat is per definitie de
+**rusttoestand** — dus `:hover`, `:focus-visible` en `:active` worden nooit aangeraakt. Vier
+defecten die in Sessie 227 boven kwamen zaten precies daar, en drie ervan waren **onder AA**:
+
+```
+.btn-secondary:hover        --color-ui-primary als TEKST   2,61-2,77 (light)   onder AA
+.gids-sample-link:hover     --color-cta-primary            2,76                onder AA
+--color-link-hover (dark)   #58a6ff op --color-bg-modal    6,85                onder AAA
+```
+
+De `.gids-sample-link` is het scherpste voorbeeld: Sessie 221 repareerde daar de **rust**-kleur
+naar `--color-accent-text` (8,07:1) en liet de hover op het oude merkgroen staan. Twee sessies
+lang groen, want geen enkele spec keek.
+
+**Simuleer de hover niet** — een muis-hover per element over 16 pagina's maakt de suite
+onwerkbaar. Toets in plaats daarvan de **token-matrix**: verzamel tijdens de element-sweep de
+verzameling effectieve achtergronden waar het token feitelijk op landt, en zet élk verwant
+token daar tegenaan.
+
+```js
+const achtergronden = new Set();
+achtergronden.add(effBg(document.body));           // ondergrens: de paginakleur zelf
+for (const el of kandidaten) achtergronden.add(effBg(el));
+
+for (const naam of ['--color-link', '--color-link-hover'])
+  for (const bg of achtergronden)
+    if (ratio(token(naam), bg) < 7) overtreders.push(`${naam} op ${bg}`);
+```
+
+Die ondergrens is niet cosmetisch: vier pagina's (contact + de drie sample-pagina's) dragen in
+light **nul** elementen met een link-token — hun links staan op knopstijlen, en de navbar is
+Dark Frame met een eigen token. Zonder de body-achtergrond zou de matrix daar niets toetsen.
+
+**De mutant die dit bewijst faalt anders dan de rest.** `--color-link-hover` in dark
+terugzetten gaf *4 rood, 12 groen*, en die 4 uitsluitend op de token-matrix — de element-sweep
+bleef groen, want een hover-kleur komt in rust nergens voor.
+
+---
+
+## 18. Bevries transities voordat je meet; wachten is geen oplossing (Sessie 227)
+
+§15 zegt al dat een lopende transitie een tussenframe oplevert. De remedie die daar (en in
+Sessie 226) stond — "wacht ~700 ms" — is **niet betrouwbaar**. Gemeten op dezelfde pagina, met
+dezelfde wachttijd, twee opeenvolgende runs:
+
+```
+run A   .related-category (light)   7,88:1  op rgb(242,249,255)   ← badge over de WITTE kaart
+run B   .related-category (light)   1,70:1  op rgb(32,44,56)      ← badge over de DONKERE kaart
+```
+
+En het aantal gemeten elementen wisselde mee (106 vs 110 op één pagina). De oorzaak is niet de
+kleurtransitie maar de fade-ins uit `animations.css`: die bepalen wanneer een kaart zijn
+eindstaat heeft, en dat hangt van timing af die je niet in de hand hebt. Een guard die soms
+1,70 meet gaat willekeurig rood — en wordt dan weggeklikt.
+
+Haal de race wég in plaats van hem te overleven:
+
+```js
+await page.addStyleTag({ content:
+  `*, *::before, *::after { transition: none !important; animation: none !important; }` });
+```
+
+`getComputedStyle` geeft daarna per definitie de eindwaarde. Drie runs erna byte-identiek.
+`!important` is hier het juiste gereedschap — dit is een **meetinstrument** dat auteur-CSS
+moet verslaan, geen productiecode (vgl. de vuistregel om `!important` in `styles/` te mijden).
+
+> Diagnostisch signaal, uit §10 en hier bevestigd: komt een gemeten kleur **of achtergrond**
+> met geen enkel token overeen, dan meet je een tussenframe. Let op dat het ook de
+> ACHTERGROND kan zijn die achterloopt, niet alleen de tekstkleur — dat kostte hier een
+> verkeerde diagnose ("de fix heeft iets gesloopt") voordat een directe inspectie 7,88 gaf.
