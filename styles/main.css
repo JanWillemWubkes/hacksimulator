@@ -104,7 +104,11 @@
   --color-prompt: #9fef00;          /* HTB Neon Lime - terminal prompt (exciting hacker vibe) */
   --color-input: #9fef00;           /* HTB Neon Lime - user typed commands (consistent) */
   --color-text: #c9d1d9;            /* Soft white - primary output text (GitHub standard) */
-  --color-text-dim: #8b949e;        /* Muted grey - hints/secondary info (GitHub secondary text) */
+  /* Muted grey - hints/secondary info. Was #8b949e (GitHub secondary text), maar dat haalde de
+     AAA-lat (7,0) op geen enkel donker oppervlak: 6,15 op --color-bg (#0d1117) en 5,62 op
+     --color-bg-modal (#161b22). Zelfde tint, opgetild tot 7,88 resp. 7,20 (Sessie 226).
+     Let op: op --color-bg-hover (#21262d) haalt dit 6,34 — zie de meting in de sessie-log. */
+  --color-text-dim: #a1a8b0;
 
   /* Semantic Colors - GitHub Dark Muted Palette (50-60% sat) */
   --color-error: #f85149;           /* GitHub red - errors stand out (60% sat) */
@@ -374,9 +378,13 @@
   /* Modal Overlay - Dark dimming in light mode (Bootstrap/Material UI pattern) */
   --color-modal-overlay: rgba(0, 0, 0, 0.5);  /* Semi-transparent dark overlay for focus effect */
 
-  /* Button Colors - Light Mode (Pairing 1: Cyber Professional - WCAG AAA Compliant) */
-  --color-button-bg: #1976d2;               /* ✅ Blue base (was green #1a6634) - matches dark mode logic */
-  --color-button-bg-hover: #1565c0;         /* ✅ Darker blue hover - WCAG AAA compliant */
+  /* Button Colors - Light Mode (Pairing 1: Cyber Professional)
+     Sessie 226: beide waarden claimden AAA en haalden het geen van beide met witte tekst —
+     #1976d2 mat 4,60:1 en #1565c0 mat 5,75:1 (AAA = 7,0). De dark-mode-tegenhanger #004494 is
+     wél ooit doorgemeten (7,2:1); deze twee zijn er destijds "naar analogie" naast gezet.
+     Zelfde tint, donkerder tot 7,41 resp. 8,68. */
+  --color-button-bg: #11569c;
+  --color-button-bg-hover: #0e4c8a;
   --color-button-text: #ffffff;             /* White text - industry standard for saturated buttons */
   --color-button-text-hover: #ffffff;       /* White text on hover - consistent pattern */
   --color-button-shadow-hover: rgba(25, 118, 210, 0.3);  /* ✅ Blue shadow (was green) - matches hover color */
