@@ -48,7 +48,7 @@ function getMarketingNavbar(options = {}) {
           <a href="/commands/"${activeAttr('commands')}>Commands</a>
           <a href="/gidsen.html"${activeAttr('gidsen')}>Gidsen</a>
           <a href="/woordenlijst.html"${activeAttr('woordenlijst')}>Woordenlijst</a>
-          <a href="/over-ons.html"${activeAttr('over-ons')}>Over Ons</a>
+          <a href="/over-ons.html"${activeAttr('over-ons')}>Over ons</a>
         </div>
         <!-- Mobile Hamburger Toggle (hidden on desktop via mobile.css) -->
         <button class="navbar-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="landing-mobile-menu">
@@ -81,7 +81,7 @@ function getMarketingNavbar(options = {}) {
       <li><a href="/commands/"${activeAttr('commands')}>Commands</a></li>
       <li><a href="/gidsen.html"${activeAttr('gidsen')}>Gidsen</a></li>
       <li><a href="/woordenlijst.html"${activeAttr('woordenlijst')}>Woordenlijst</a></li>
-      <li><a href="/over-ons.html"${activeAttr('over-ons')}>Over Ons</a></li>
+      <li><a href="/over-ons.html"${activeAttr('over-ons')}>Over ons</a></li>
     </ul>
     <div class="navbar-actions">
       <button class="theme-toggle" aria-label="Wissel naar light mode" aria-pressed="false" title="Toggle tussen dark en light mode">
@@ -139,7 +139,7 @@ function getAppNavbar() {
           <!-- Commands Link -->
           <li><a href="/commands/">Commands</a></li>
           <!-- Over Ons Link -->
-          <li><a href="/over-ons.html">Over Ons</a></li>
+          <li><a href="/over-ons.html">Over ons</a></li>
         </ul>
 
         <div class="navbar-actions">
