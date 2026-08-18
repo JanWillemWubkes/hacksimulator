@@ -15,32 +15,46 @@ const ROOT_DIR = process.cwd();
 // ========================================
 
 const LIMITS = {
-  // 1120 KB (Sessie 217): verhoogd van 1100, dat van 1050 kwam (Sessie 214) en zelf van
-  // 1000 (Sessie 204). Gemeten stand vóór de bump: 1084,92 KB — 15,08 KB vrij (1,37%).
-  // De aanleiding was NIET dat er iets niet paste: de drie fixes van Sessie 217 kosten
-  // samen ~0,3 KB (de terminal-overflow kostte nul bronbytes, want die was al gefixt).
-  // De grens ging omhoog omdat 1,37% marge betekent dat het alarm op de eerstvolgende
-  // niet-triviale wijziging vuurt, en een alarm dat altijd afgaat wordt weggeklikt in
-  // plaats van onderzocht — hetzelfde argument als in Sessie 214. ~3% marge (35 KB).
+  // DRIFT-ALARM op ongeminificeerde broncode van de RUNTIME-pijler. Niet de echte
+  // performancepoort — dat blijft Terminal Core <400 KB minified.
   //
-  // ⚠️ Dit is de derde bump in 14 sessies. Nog een keer ophogen zonder discussie maakt er
-  // een ratel van in plaats van een grens; kijk dan eerst of dit nog het juiste getal is
-  // om te meten (de teller telt ongeminificeerde broncode + alleen index.html — niet
-  // terminal.html, niet blog/).
+  // ── Sessie 227: de formule meet nu wat hij beweert te meten ────────────────────────
+  // De grens is NIET verhoogd (dat zou de vierde bump in 22 sessies zijn: 1000 → 1050 →
+  // 1100 → 1120, en dat patroon zegt dat het getal het probleem niet is). In plaats
+  // daarvan zijn drie fouten in de TELLER gerepareerd, gemeten op HEAD~ = 1118,63 KB:
   //
-  // Historische context bij de vorige bump (Sessie 214):
-  // Aanleiding: de interactieve hero-terminal (src/ui/hero-repl.js + hero-CSS + markup)
-  // kostte 24 KB tegen 4,78 KB resterende ruimte. Dat is géén code-golf-probleem —
-  // deze meting is een DRIFT-ALARM over ongeminificeerde repo-broncode sitebreed, geen
-  // performancepoort:
-  //   - de echte poort blijft Terminal Core <400 KB minified, en die wordt hier met NUL
-  //     bytes geraakt: hero-repl.js zit alleen in de module-graph van index.html,
-  //     niet in die van terminal.html;
-  //   - on-wire kost voor de homepage is ~14 KB naast een index.html van 52 KB.
-  // Gemeten na de wijziging: 1069,20 KB. De marge is bewust ~31 KB (2,9%) en niet 6 KB:
-  // een limiet die vlak boven de huidige stand ligt vuurt op élke wijziging en wordt dan
-  // weggeklikt i.p.v. onderzocht. Zie TASKS.md §Huidige Focus.
-  TOTAL_BUNDLE: 1120 * 1024,       // 1120 KB hard limit (ONLY real constraint)
+  //   1. `styles/blog.css` (42.991 B) en `src/ui/blog-*.js` (8.689 B) telden mee, terwijl
+  //      .claude/CLAUDE.md de blog expliciet "SEO/content-pijler budgetloos" noemt.
+  //      Nagemeten: alleen blog/*.html laadt ze (navbar.js noemt blog.css enkel in een
+  //      comment). Ze horen dus niet tegen dit budget. Zie BLOG_UITSLUITING hieronder;
+  //      de som ervan wordt nog wél GELOGD, zodat groei zichtbaar blijft zonder poort.
+  //   2. De term `src/ui/**/*.css` matchte NUL bestanden — die directory bevat geen CSS.
+  //      Een dode term suggereert dat er iets bewaakt wordt. Verwijderd.
+  //   3. `index.html` telde mee, `terminal.html` niet — terwijl juist dát de entry van de
+  //      pijler is waar deze poort naar vernoemd is. Beide entry-points, of geen.
+  //
+  // Stand na de herdefinitie: 1091,85 / 1120 KB = 28,15 KB marge (2,5%). Dat is bewust
+  // ruim en niet 1,37 KB (de stand ná Sessie 226): een limiet die vlak boven de huidige
+  // stand ligt vuurt op élke wijziging en wordt dan weggeklikt i.p.v. onderzocht — het
+  // argument uit Sessie 214 en 217.
+  //
+  // Drie mutanten waarmee deze poort is gefalsifieerd. Ze falen op DRIE verschillende
+  // asserties, dus geen van de drie is overbodig:
+  //   M1  60 KB dummy onder src/          → GROOTTE rood  (1151,85 KB), integriteit groen.
+  //   M2' alle 4 blogbestanden hernoemd   → NUL-TREFFER rood; die vuurt vóór de grootte,
+  //                                         dus de diagnose leest als "uitsluiting kapot"
+  //                                         i.p.v. het onbegrijpelijke "1142 > 1120".
+  //   M3  predicaat verbreed met          → TE-BREED rood terwijl de som juist DAALT naar
+  //       styles/landing.css                1015,53 KB. Dit is het bewijs dat de
+  //                                         integriteitstak zelfstandig werkt: de
+  //                                         grootte-assertie zou hier glansrijk slagen.
+  //
+  // Twee mutanten die NIET werken, met de reden erbij:
+  //   - "de uitsluiting weghalen": 1118,63 zit nog onder 1120 → blijft groen.
+  //   - "alleen blog.css hernoemen": faalt op de GROOTTE, niet op de integriteit, want de
+  //     blogsom (50,47 KB) is groter dan de marge (28,15 KB). Elke deel-rename tilt de som
+  //     hoe dan ook over de limiet. Alleen M3 kan die twee uit elkaar trekken.
+  RUNTIME_SOURCE: 1120 * 1024,     // 1120 KB hard limit (ONLY real constraint)
   WARNING_THRESHOLD: 1008 * 1024,  // 1008 KB warning (90%)
   LCP_TARGET: 3000,              // LCP < 3s on 4G
   TTI_TARGET: 5000,              // TTI < 5s (Google's "good" TTI on 4G)
@@ -119,6 +133,21 @@ function calculateSize(dir, pattern) {
   return { totalSize, files };
 }
 
+/**
+ * Hoort dit bestand bij de BLOG-pijler (SEO/content, budgetloos) i.p.v. de runtime-pijler?
+ *
+ * Expliciet en greppbaar gehouden, niet slim: wie `blog.css` hernoemt of een vierde
+ * blogmodule toevoegt moet hier langs. De integriteits-assertie hieronder vangt af dat
+ * dit predicaat stilzwijgend nul (rename) of te veel (te breed patroon) matcht.
+ *
+ * @param {string} absPad - absoluut pad naar het bestand
+ * @returns {boolean}
+ */
+function isBlogAsset(absPad) {
+  const rel = path.relative(ROOT_DIR, absPad).split(path.sep).join('/');
+  return rel === 'styles/blog.css' || /^src\/ui\/blog-[a-z-]+\.js$/.test(rel);
+}
+
 // ========================================
 // TEST 1: BUNDLE SIZE VERIFICATION
 // ========================================
@@ -127,31 +156,52 @@ test.describe('Performance Tests - Bundle Size', () => {
 
   // Naam interpoleert de constante: hij stond op "1000KB" terwijl de limiet al twee keer
   // was opgehoogd (1050, 1100). Een testnaam die zijn eigen grens noemt rot stilzwijgend.
-  test(`Bundle size < ${LIMITS.TOTAL_BUNDLE / 1024} KB (hard limit)`, async () => {
-    // Calculate sizes for production files
+  test(`Runtime source < ${LIMITS.RUNTIME_SOURCE / 1024} KB (hard limit)`, async () => {
+    // Alle kandidaat-bronbestanden, daarna gesplitst in runtime-pijler en blog-pijler.
+    // De term `src/ui/**/*.css` stond hier tot Sessie 227 en matchte nul bestanden.
     const jsResult = calculateSize(path.join(ROOT_DIR, 'src'), /\.js$/);
-    const cssMainResult = calculateSize(path.join(ROOT_DIR, 'styles'), /\.css$/);
-    const cssUIResult = calculateSize(path.join(ROOT_DIR, 'src/ui'), /\.css$/);
+    const cssResult = calculateSize(path.join(ROOT_DIR, 'styles'), /\.css$/);
+    const alleBronbestanden = [...jsResult.files, ...cssResult.files];
 
-    const htmlPath = path.join(ROOT_DIR, 'index.html');
-    const htmlSize = fs.existsSync(htmlPath) ? fs.statSync(htmlPath).size : 0;
+    const blogBestanden = alleBronbestanden.filter((f) => isBlogAsset(f.path));
+    const runtimeBestanden = alleBronbestanden.filter((f) => !isBlogAsset(f.path));
 
-    const totalJS = jsResult.totalSize;
-    const totalCSS = cssMainResult.totalSize + cssUIResult.totalSize;
+    const som = (lijst) => lijst.reduce((t, f) => t + f.size, 0);
+
+    // Beide entry-points, of geen van beide. Tot Sessie 227 telde alleen index.html mee.
+    const ENTRY_HTML = ['index.html', 'terminal.html'];
+    const htmlBestanden = ENTRY_HTML
+      .map((naam) => path.join(ROOT_DIR, naam))
+      .filter((p) => fs.existsSync(p))
+      .map((p) => ({ path: p, size: fs.statSync(p).size }));
+
+    const totalJS = som(runtimeBestanden.filter((f) => f.path.endsWith('.js')));
+    const totalCSS = som(runtimeBestanden.filter((f) => f.path.endsWith('.css')));
+    const htmlSize = som(htmlBestanden);
     const totalSize = totalJS + totalCSS + htmlSize;
+    const blogSize = som(blogBestanden);
 
     // Report breakdown
-    console.log('\n📦 Bundle Size Breakdown:');
-    console.log(`  JavaScript:  ${(totalJS / 1024).toFixed(2)} KB (${jsResult.files.length} files)`);
-    console.log(`  CSS:         ${(totalCSS / 1024).toFixed(2)} KB (${cssMainResult.files.length + cssUIResult.files.length} files)`);
-    console.log(`  HTML:        ${(htmlSize / 1024).toFixed(2)} KB`);
+    console.log('\n📦 Runtime Source Breakdown:');
+    console.log(`  JavaScript:  ${(totalJS / 1024).toFixed(2)} KB (${runtimeBestanden.filter(f => f.path.endsWith('.js')).length} files)`);
+    console.log(`  CSS:         ${(totalCSS / 1024).toFixed(2)} KB (${runtimeBestanden.filter(f => f.path.endsWith('.css')).length} files)`);
+    console.log(`  HTML:        ${(htmlSize / 1024).toFixed(2)} KB (${htmlBestanden.map(f => path.basename(f.path)).join(', ')})`);
     console.log(`  ────────────────────────────────`);
     console.log(`  TOTAL:       ${(totalSize / 1024).toFixed(2)} KB`);
-    console.log(`  Limit:       ${(LIMITS.TOTAL_BUNDLE / 1024).toFixed(2)} KB`);
-    console.log(`  Buffer:      ${((LIMITS.TOTAL_BUNDLE - totalSize) / 1024).toFixed(2)} KB (${((1 - totalSize/LIMITS.TOTAL_BUNDLE) * 100).toFixed(1)}%)`);
+    console.log(`  Limit:       ${(LIMITS.RUNTIME_SOURCE / 1024).toFixed(2)} KB`);
+    console.log(`  Buffer:      ${((LIMITS.RUNTIME_SOURCE - totalSize) / 1024).toFixed(2)} KB (${((1 - totalSize/LIMITS.RUNTIME_SOURCE) * 100).toFixed(1)}%)`);
+
+    // Blog-pijler: GELOGD, niet geasserteerd. De blog is per .claude/CLAUDE.md budgetloos
+    // (SEO/content-pijler), dus een limiet hier zou de doctrine tegenspreken. Zichtbaar
+    // houden is wél de bedoeling — anders groeit hij ongemerkt.
+    console.log(`\n📝 Blog-pijler (budgetloos, alleen ter informatie): ${(blogSize / 1024).toFixed(2)} KB`);
+    blogBestanden
+      .sort((a, b) => b.size - a.size)
+      .forEach((f) => console.log(`  ${(f.size / 1024).toFixed(2)} KB  ${path.relative(ROOT_DIR, f.path)}`));
 
     // Top 5 largest JS files
-    const largestJS = jsResult.files
+    const largestJS = runtimeBestanden
+      .filter((f) => f.path.endsWith('.js'))
       .sort((a, b) => b.size - a.size)
       .slice(0, 5);
 
@@ -162,8 +212,8 @@ test.describe('Performance Tests - Bundle Size', () => {
     });
 
     // Top 3 largest CSS files
-    const allCSSFiles = [...cssMainResult.files, ...cssUIResult.files];
-    const largestCSS = allCSSFiles
+    const largestCSS = runtimeBestanden
+      .filter((f) => f.path.endsWith('.css'))
       .sort((a, b) => b.size - a.size)
       .slice(0, 3);
 
@@ -175,12 +225,31 @@ test.describe('Performance Tests - Bundle Size', () => {
 
     // Warning at 90%
     if (totalSize > LIMITS.WARNING_THRESHOLD) {
-      console.warn(`\n⚠️  WARNING: Bundle approaching limit (${((totalSize/LIMITS.TOTAL_BUNDLE) * 100).toFixed(1)}%)`);
+      console.warn(`\n⚠️  WARNING: Runtime source approaching limit (${((totalSize/LIMITS.RUNTIME_SOURCE) * 100).toFixed(1)}%)`);
     }
 
+    // ── Integriteit van de uitsluiting ────────────────────────────────────────────────
+    // Zonder deze twee takken is "de blog wordt uitgesloten" een bewering. Een rename van
+    // blog.css laat het predicaat stil nul matchen; een te breed patroon laat er stil te
+    // veel uit vallen. Beide zijn onzichtbaar in de grootte-assertie zolang die groen is.
+    expect(
+      blogBestanden.map((f) => path.relative(ROOT_DIR, f.path)),
+      'De blog-uitsluiting matchte NUL bestanden. Is styles/blog.css hernoemd of verplaatst? ' +
+        'Zonder treffers meet deze poort stilzwijgend de blog mee — zie isBlogAsset().'
+    ).not.toEqual([]);
+
+    const verdacht = blogBestanden
+      .map((f) => path.relative(ROOT_DIR, f.path))
+      .filter((rel) => !/(^|\/)blog[-.]/.test(rel));
+    expect(
+      verdacht,
+      'Deze bestanden zijn uitgesloten maar horen niet bij de blog-pijler. Een te breed ' +
+        'predicaat verlaagt de gemeten som zonder dat iemand het ziet.'
+    ).toEqual([]);
+
     // Assertions
-    // ONLY check total bundle size - JS/CSS split doesn't matter
-    expect(totalSize).toBeLessThan(LIMITS.TOTAL_BUNDLE);
+    // ONLY check total runtime source size - JS/CSS split doesn't matter
+    expect(totalSize).toBeLessThan(LIMITS.RUNTIME_SOURCE);
   });
 
 });
