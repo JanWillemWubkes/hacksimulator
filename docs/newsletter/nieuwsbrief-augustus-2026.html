@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="nl" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark">
+<title>Nieuwsbrief Augustus 2026 — HackSimulator</title>
+<!--
+  VERZENDGEGEVENS (voor Brevo — plaats via Import HTML, niet de drag-and-drop editor)
+
+  Onderwerpregel : Eén apostrof en de database ligt open        (37 tekens, limiet 60)
+  Preview-tekst  : zie de verborgen preheader-div direct onder <body>
+  Verzenddatum   : dinsdag 18 augustus 2026, 10:00 CET          (derde dinsdag)
+  Lijst          : hacksimulator-main
+  UTM-campagne   : augustus-2026
+
+  Het <style>-blok hieronder is byte-identiek aan nieuwsbrief-juli-2026.html.
+  Wijzig die klassen NIET per editie — ze beschermen de HackSimulator-kleuren tegen
+  automatische dark-mode-inversie door e-mailclients. Zie maandelijks-template.md.
+
+  CODEBLOK-BUDGET: 29 tekens per regel (@320px) / 37 (@375px). Gemeten, niet gerekend.
+  Houd 29 aan: dan is de mail op élke breedte schoon. Langste regel nu 29.
+  Let op: `word-break: break-all` laat een te lange regel WRAPPEN, niet overlopen.
+  scrollWidth == clientWidth blijft dan gelden, dus een overflow-check ziet dit
+  NIET. Meet de tekstbreedte per regel tegen de binnenruimte.
+
+  TYPOGRAFIE (augustus 2026 herzien — zie maandelijks-template.md §Design):
+  - Fontstack is NIET meer 'Courier New' voorop. Het Courier-ontwerp heeft een
+    x-hoogte-ratio van 0,42 tegen 0,53-0,55 voor elke moderne monospace, en staat
+    juist wél op Windows/macOS/iOS en níét op Android. Gevolg was ~20% verschil in
+    optische grootte per ontvanger, met de kleinste weergave voor Apple-lezers.
+  - Vet krijgt de KOPKLEUR (#c9d1d9, 11,21:1), niet alleen font-weight. Met alleen
+    gewicht bleef vet op 5,62:1 staan — exact gelijk aan de bodytekst.
+  - De mobiele padding-selector is gerepareerd: `.mobile-padding td` was een
+    afstammeling-selector die de cel zelf nooit raakte. Zie de comment in <style>.
+
+  CODE-CHIPS: `white-space:nowrap` staat op de drie KORTE chips, bewust NIET op de
+  lange commando-chip. Gemeten @320px in een iframe, drie varianten:
+    nowrap op alle 4  -> document 19px te breed (de 219px chip kan niet breken)
+    nowrap nergens    -> 0px te breed, maar `shop.nl/?id=1` valt in 2 stukken
+    nowrap op 3 korte -> 0px te breed EN de URL-chip blijft heel   <- gekozen
+  De commando-chip mag dus over twee regels vallen. Dat is veilig: elk fragment
+  is 17px in een regelbox van 24px, dus geen overlap (de Sessie 206-val).
+  Zet hier nooit nowrap op een chip breder dan ~190px zonder @320px te hermeten.
+
+  PRIVACYLINK: /privacy.html is bewust de korte URL, niet /assets/legal/privacy.html.
+  De redirect staat expliciet in netlify.toml:70-72 (301). Dat is hier een voordeel en
+  geen omweg: verstuurde mail ligt voor altijd vast, dus een stabiele publieke URL die
+  je kunt herrichten als de bestanden verhuizen is veiliger dan een diep pad in de mail.
+  Alle andere templates in deze map doen hetzelfde — houd dat zo.
+-->
+<!--[if mso]>
+<xml>
+<o:OfficeDocumentSettings>
+<o:PixelsPerInch>96</o:PixelsPerInch>
+</o:OfficeDocumentSettings>
+</xml>
+<![endif]-->
+<style>
+:root { color-scheme: light dark; }
+/* Dark mode: behoud onze eigen kleuren */
+@media (prefers-color-scheme: dark) {
+  .body-bg { background-color: #0d1117 !important; }
+  .content-bg { background-color: #161b22 !important; }
+  .header-bg { background-color: #9fef00 !important; }
+  .header-text { background-color: #9fef00 !important; color: #0d1117 !important; }
+  .heading-text { color: #c9d1d9 !important; }
+  .body-text { color: #8b949e !important; }
+  .link-text { color: #79c0ff !important; }
+  .code-block { background-color: #0d1117 !important; color: #9fef00 !important; }
+  .code-inline { background-color: #0d1117 !important; color: #9fef00 !important; }
+  .btn-bg { background-color: #9fef00 !important; }
+  .btn-text { background-color: #9fef00 !important; color: #0d1117 !important; }
+}
+/* Gmail dark mode prevention */
+u + .body { background-color: #0d1117 !important; }
+u + .body .header-bg { background-color: #9fef00 !important; }
+u + .body .header-text { background-color: #9fef00 !important; color: #0d1117 !important; }
+u + .body .btn-bg { background-color: #9fef00 !important; }
+u + .body .btn-text { background-color: #9fef00 !important; color: #0d1117 !important; }
+u + .body .content-bg { background-color: #161b22 !important; }
+u + .body .heading-text { color: #c9d1d9 !important; }
+u + .body .body-text { color: #8b949e !important; }
+u + .body .link-text { color: #79c0ff !important; }
+u + .body .code-block { background-color: #0d1117 !important; color: #9fef00 !important; }
+u + .body .code-inline { background-color: #0d1117 !important; color: #9fef00 !important; }
+/* Outlook.com / dark mode overrides */
+[data-ogsc] .heading-text { color: #c9d1d9 !important; }
+[data-ogsc] .body-text { color: #8b949e !important; }
+[data-ogsc] .header-bg { background-color: #9fef00 !important; }
+[data-ogsc] .header-text { background-color: #9fef00 !important; color: #0d1117 !important; }
+[data-ogsc] .btn-bg { background-color: #9fef00 !important; }
+[data-ogsc] .btn-text { background-color: #9fef00 !important; color: #0d1117 !important; }
+[data-ogsc] .link-text { color: #79c0ff !important; }
+[data-ogsc] .code-block { background-color: #0d1117 !important; color: #9fef00 !important; }
+[data-ogsc] .code-inline { background-color: #0d1117 !important; color: #9fef00 !important; }
+[data-ogsc] .content-bg { background-color: #161b22 !important; }
+/* Responsive: betere mobiele weergave */
+@media screen and (max-width: 600px) {
+  /* Let op: de klasse staat ÓP de contentcel, dus dit MOET td.mobile-padding zijn.
+     Tot augustus 2026 stond hier `.mobile-padding td` — een afstammeling-selector die de
+     cel zelf nooit raakte (die hield 32px) en in plaats daarvan de geneste code-block-cellen
+     verfde. Kostte 32px tekstbreedte op elke mobiele weergave. */
+  td.mobile-padding { padding-left: 16px !important; padding-right: 16px !important; }
+  .mobile-full { width: 100% !important; }
+  h1 span { font-size: 20px !important; }
+  h2 span { font-size: 16px !important; }
+  .btn-bg { padding: 14px 24px !important; }
+  .mobile-header { padding: 16px 16px !important; }
+  .code-block { font-size: 12px !important; padding: 12px 14px !important; }
+  .code-inline { font-size: 13px !important; padding: 1px 4px !important; }
+  .tip-title span { font-size: 20px !important; }
+}
+</style>
+</head>
+<body class="body" style="margin:0;padding:0;background-color:#0d1117;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;color-scheme:light dark;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;mso-line-height-rule:exactly;">
+<div style="display:none;font-size:1px;color:#0d1117;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+Een database ziet het verschil niet tussen jouw gegevens en een instructie &mdash; tenzij de programmeur dat verschil aanbrengt.&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;
+</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="body-bg" style="background-color:#0d1117;">
+<tr><td align="center" style="padding:24px 16px;background-color:#0d1117;" class="body-bg">
+<!--[if mso]>
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" align="center"><tr><td>
+<![endif]-->
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" class="content-bg mobile-full" style="max-width:600px;width:100%;background-color:#161b22;border-radius:8px;overflow:hidden;">
+
+<!-- Terminal Header Bar -->
+<tr><td class="header-bg mobile-header" style="background-color:#9fef00;padding:20px 32px;">
+<p style="margin:0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:13px;line-height:1.8;">
+<span class="header-text" style="background-color:#9fef00;color:#0d1117;">$ cat nieuwsbrief-augustus-2026.txt</span><br>
+<span class="header-text" style="background-color:#9fef00;color:#0d1117;">&gt; Loading...</span><br>
+<span class="header-text" style="background-color:#9fef00;color:#0d1117;">&gt; <strong>Nieuwsbrief geladen.</strong> Veel leesplezier!</span>
+</p>
+</td></tr>
+
+<!-- Intro -->
+<tr><td class="content-bg mobile-padding" style="padding:28px 32px 0 32px;background-color:#161b22;">
+<h1 style="margin:0 0 16px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:22px;line-height:1.4;">
+<span class="heading-text" style="color:#c9d1d9;">Welkom bij je maandelijkse dosis cybersecurity.</span>
+</h1>
+<p style="margin:0 0 16px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">Vorige maand ging het over het kraken van wachtwoorden. Deze keer kijken we naar de stap d&aacute;&aacute;rvoor: hoe komt een aanvaller &uuml;berhaupt aan die wachtwoorden? Verrassend vaak via &eacute;&eacute;n los teken in de adresbalk van een website.</span>
+</p>
+
+<!-- Divider -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-top:1px solid #30363d;padding:24px 0 0 0;background-color:#161b22;" class="content-bg"></td></tr></table>
+
+<!-- Tip van de Maand -->
+<h2 style="margin:0 0 4px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:13px;line-height:1.4;text-transform:uppercase;letter-spacing:1px;">
+<span class="body-text" style="color:#8b949e;">Tip van de maand</span>
+</h2>
+<h2 class="tip-title" style="margin:0 0 16px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:22px;line-height:1.4;">
+<span class="heading-text" style="color:#c9d1d9;">Hoe &eacute;&eacute;n apostrof een database opent</span>
+</h2>
+<p style="margin:0 0 16px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">Achter een webwinkel zit geen mens die producten opzoekt, maar een <strong class="heading-text" style="color:#c9d1d9;">database</strong>: een lange lijst waar de site vragen aan stelt. En die vraag is elke keer hetzelfde briefje, met &eacute;&eacute;n invulvak erin:</span>
+</p>
+
+<!-- Code Block 1: het briefje, leeg en normaal ingevuld -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px 0;">
+<tr><td class="code-block" style="background-color:#0d1117;color:#9fef00;padding:16px 20px;border-radius:6px;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:13px;line-height:1.8;word-break:break-all;overflow-wrap:break-word;">
+Het briefje:<br>
+Zoek product met nummer: ___<br>
+<br>
+Jij typt 1, dus:<br>
+Zoek product met nummer: 1
+</td></tr>
+</table>
+
+<p style="margin:0 0 16px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">In dat vak zet de site letterlijk wat jij in de adresbalk hebt getypt &mdash; bij </span><code class="code-inline" style="background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">shop.nl/?id=1</code><span class="body-text" style="color:#8b949e;"> is dat de <strong class="heading-text" style="color:#c9d1d9;">1</strong>. Daarna leest de database het hele briefje als &eacute;&eacute;n opdracht en voert uit wat er staat.</span>
+</p>
+
+<p style="margin:0 0 16px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">Alleen controleert de site niet of er echt een <strong class="heading-text" style="color:#c9d1d9;">getal</strong> in dat vak staat. Typ je meer, dan komt dat er net zo goed in:</span>
+</p>
+
+<!-- Code Block 2: dezelfde plek, maar er is een halve zin ingevuld -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px 0;">
+<tr><td class="code-block" style="background-color:#0d1117;color:#9fef00;padding:16px 20px;border-radius:6px;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:13px;line-height:1.8;word-break:break-all;overflow-wrap:break-word;">
+Jij typt 1 of 1=1, dus:<br>
+Zoek product met nummer: 1<br>
+of alles waarvoor 1 = 1
+</td></tr>
+</table>
+
+<p style="margin:0 0 16px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">Die tweede regel heeft de bezoeker zelf in het invulvak getypt. De database kan niet zien dat hij daar niet hoort &mdash; voor hem is het gewoon de rest van de opdracht. En <strong class="heading-text" style="color:#c9d1d9;">1 is altijd gelijk aan 1</strong>, dus voldoet ieder product aan die voorwaarde. Het briefje was bedoeld om &eacute;&eacute;n product op te vragen; zoals het nu verstuurd wordt, vraagt het om de hele voorraad &mdash; en dat is precies wat de site terugkrijgt.</span>
+</p>
+
+<p style="margin:0 0 16px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">Nu de apostrof uit de titel, want die staat in het voorbeeld hierboven nergens. Dat klopt ook: verwacht een site een getal, dan zet hij er niets omheen en werkt het meteen. Maar meestal staat jouw invoer tussen aanhalingstekens, en die markeren waar het invulvak begint en waar het ophoudt. Typ je er zelf &eacute;&eacute;n, dan zeg je dus: <em>hier houdt het vak op</em>. Alles wat je daarna nog typt, staat er buiten en telt als opdracht. En dat ene teken is de apostrof:</span>
+</p>
+
+<!-- Code Block 3: waarom de apostrofs staan waar ze staan -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px 0;">
+<tr><td class="code-block" style="background-color:#0d1117;color:#9fef00;padding:16px 20px;border-radius:6px;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:13px;line-height:1.8;word-break:break-all;overflow-wrap:break-word;">
+De site zet er zelf omheen:<br>
+nummer = '___'<br>
+<br>
+Jij vult in:<br>
+1' OR '1'='1<br>
+<br>
+Samen wordt dat:<br>
+nummer = '1' OR '1'='1'
+</td></tr>
+</table>
+
+<p style="margin:0 0 24px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">Elk aanhalingsteken heeft een partner nodig, en daar volgen die posities uit. De <strong class="heading-text" style="color:#c9d1d9;">eerste die j&iacute;j typt</strong> maakt het paar af met het teken dat de site al had geopend &mdash; d&aacute;&aacute;r houdt het invulvak dus op. En de laatste laat je juist w&eacute;g: de site zet er zelf nog eentje achter, en die maakt jouw laatste af. Zo staan er in het eindresultaat zes aanhalingstekens die keurig in drie paren vallen.</span>
+</p>
+
+<p style="margin:0 0 16px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">Een aanvaller zoekt zoiets niet met de hand uit. <strong class="heading-text" style="color:#c9d1d9;">sqlmap</strong> gooit honderden van dit soort varianten tegen elke parameter aan en kijkt waar de database struikelt:</span>
+</p>
+
+<!-- Code Block 4: de tool -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px 0;">
+<tr><td class="code-block" style="background-color:#0d1117;color:#9fef00;padding:16px 20px;border-radius:6px;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:13px;line-height:1.8;word-break:break-all;overflow-wrap:break-word;">
+$ sqlmap http://shop.nl/?id=1<br>
+<br>
+[INFO] 'id' is injectable<br>
+[INFO] backend: MySQL 5.7.32<br>
+<br>
+available databases [3]:<br>
+[*] information_schema<br>
+[*] shop_db<br>
+[*] users_db
+</td></tr>
+</table>
+
+<p style="margin:0 0 16px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">Dat lijstje onderaan is de vangst. E&eacute;n server draait meestal meerdere van die lijsten naast elkaar, en sqlmap heeft nu hun namen. </span><code class="code-inline" style="background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">information_schema</code><span class="body-text" style="color:#8b949e;"> is de eigen boekhouding van de database. </span><code class="code-inline" style="background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">shop_db</code><span class="body-text" style="color:#8b949e;"> zal de producten bevatten. Maar </span><code class="code-inline" style="background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">users_db</code><span class="body-text" style="color:#8b949e;"> is waar het om gaat: <em>users</em> (gebruikers) &mdash; daar staan de accounts in. E-mailadressen, en de wachtwoorden die erbij horen.</span>
+</p>
+
+<p style="margin:0 0 16px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">Met dezelfde truc kan een aanvaller doorvragen naar de inhoud daarvan. Wachtwoorden staan er meestal niet leesbaar in, maar als <strong class="heading-text" style="color:#c9d1d9;">hash</strong> &mdash; en hoe je zo'n hash kraakt, was precies de tip van vorige maand. Zo sluiten die twee aanvallen op elkaar aan: deze levert de kluis, die van vorige maand opent hem.</span>
+</p>
+
+<p style="margin:0 0 24px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">De oplossing is <em>niet</em> apostrofs wegfilteren &mdash; dat is een wapenwedloop die je verliest. De echte fix heet een <strong class="heading-text" style="color:#c9d1d9;">prepared statement</strong>: de website stuurt het briefje en de ingevulde waarde <em>apart</em> naar de database. Die weet dan van tevoren wat de opdracht is, en behandelt de rest altijd als invulling &mdash; ook als er een halve zin in staat. Meer daarover in </span><a href="https://hacksimulator.nl/blog/sql-injection-uitgelegd.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=augustus-2026" class="link-text" style="color:#79c0ff;text-decoration:none;">SQL injection uitgelegd voor beginners</a><span class="body-text" style="color:#8b949e;">.</span>
+</p>
+
+<p style="margin:0 0 24px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;"><strong class="heading-text" style="color:#c9d1d9;">Probeer het zelf:</strong> Open de simulator en typ </span><code class="code-inline" style="background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;">sqlmap http://shop.nl/?id=1</code><span class="body-text" style="color:#8b949e;">. Krijg je eerst een juridische waarschuwing te zien? Typ het commando dan nog een keer &mdash; dat is de bevestiging. Alles gebeurt in een oefenomgeving, op een doelwit dat niet bestaat.</span>
+</p>
+
+<!-- CTA Button -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+<tr><td align="center" style="padding:8px 0 24px 0;mso-padding-alt:8px 0 24px 0;background-color:#161b22;" class="content-bg">
+<!--[if mso]>
+<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://hacksimulator.nl/terminal.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=augustus-2026" style="height:48px;v-text-anchor:middle;width:250px;" arcsize="13%" fillcolor="#9fef00" stroke="f">
+<w:anchorlock/>
+<center style="color:#0d1117;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;font-weight:bold;">Open de simulator →</center>
+</v:roundrect>
+<![endif]-->
+<!--[if !mso]><!-->
+<a href="https://hacksimulator.nl/terminal.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=augustus-2026" target="_blank" class="btn-bg" style="display:inline-block;background-color:#9fef00;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;font-weight:bold;text-decoration:none;text-align:center;padding:14px 32px;border-radius:6px;">
+<span class="btn-text" style="background-color:#9fef00;color:#0d1117;">Open de simulator →</span>
+</a>
+<!--<![endif]-->
+</td></tr>
+</table>
+
+<!-- Divider -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-top:1px solid #30363d;padding:24px 0 0 0;background-color:#161b22;" class="content-bg"></td></tr></table>
+
+<!-- Wat is er nieuw? -->
+<h2 style="margin:0 0 12px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:18px;line-height:1.4;">
+<span class="heading-text" style="color:#c9d1d9;">Wat is er nieuw?</span>
+</h2>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px 0;">
+<tr><td class="content-bg" style="padding:0 0 0 20px;background-color:#161b22;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;line-height:2;">
+<span class="body-text" style="color:#8b949e;">→ Nieuw op het blog: </span><a href="https://hacksimulator.nl/blog/leren-hacken.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=augustus-2026" class="link-text" style="color:#79c0ff;text-decoration:none;">Leren hacken: de complete beginnersgids</a><span class="body-text" style="color:#8b949e;"> &mdash; het stappenplan van terminal-basics tot je eerste scan, voor wie niet weet waar te beginnen.</span><br>
+<span class="body-text" style="color:#8b949e;">→ Er is een <strong class="heading-text" style="color:#c9d1d9;">vierde gids</strong>: <em>Je eigen hacklab</em>. Elke handleiding begint met "start je Kali VM" &mdash; deze bouwt hem, inclusief de netwerkmodus die bepaalt of je per ongeluk je hele huis scant.</span>
+</td></tr>
+</table>
+
+<!-- Divider -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-top:1px solid #30363d;padding:24px 0 0 0;background-color:#161b22;" class="content-bg"></td></tr></table>
+
+<!-- Aanbeveling -->
+<h2 style="margin:0 0 12px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:18px;line-height:1.4;">
+<span class="heading-text" style="color:#c9d1d9;">Misschien handig</span>
+</h2>
+<p style="margin:0 0 20px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">In de simulator mag alles &mdash; daar is hij voor. Buiten die oefenomgeving ligt het anders, en dan blijkt "ik had toestemming" minder waterdicht dan het klinkt. De <strong class="heading-text" style="color:#c9d1d9;">gratis juridische sample</strong> (6 pagina's) legt uit wat artikel 138ab Sr precies strafbaar stelt, wanneer toestemming je w&eacute;l en niet beschermt, en wat je mag doen als je een lek vindt. Geen account, alleen je e-mailadres.</span>
+</p>
+
+<!-- CTA Button (gratis sample) -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+<tr><td align="center" style="padding:0 0 20px 0;mso-padding-alt:0 0 20px 0;background-color:#161b22;" class="content-bg">
+<!--[if mso]>
+<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://hacksimulator.nl/sample-juridisch.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=augustus-2026" style="height:48px;v-text-anchor:middle;width:280px;" arcsize="13%" fillcolor="#9fef00" stroke="f">
+<w:anchorlock/>
+<center style="color:#0d1117;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;font-weight:bold;">Download gratis sample →</center>
+</v:roundrect>
+<![endif]-->
+<!--[if !mso]><!-->
+<a href="https://hacksimulator.nl/sample-juridisch.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=augustus-2026" target="_blank" class="btn-bg" style="display:inline-block;background-color:#9fef00;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:16px;font-weight:bold;text-decoration:none;text-align:center;padding:14px 32px;border-radius:6px;">
+<span class="btn-text" style="background-color:#9fef00;color:#0d1117;">Download gratis sample →</span>
+</a>
+<!--<![endif]-->
+</td></tr>
+</table>
+
+<p style="margin:0 0 8px 0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:14px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">Wil je verder? Er zijn vier betaalde gidsen (wet, pentest-playbook, 12-weken leerplan en je eigen hacklab) &mdash; samen 72 pagina's, </span><a href="https://hacksimulator.nl/gidsen.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=augustus-2026" class="link-text" style="color:#79c0ff;text-decoration:none;">bekijk de gidsen →</a>
+</p>
+
+</td></tr>
+
+<!-- Footer -->
+<tr><td class="content-bg" style="padding:24px 32px 0 32px;background-color:#161b22;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-top:1px solid #30363d;background-color:#161b22;" class="content-bg"></td></tr></table>
+</td></tr>
+<tr><td class="content-bg" style="padding:24px 32px;background-color:#161b22;">
+<p style="margin:0;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:13px;line-height:1.6;text-align:center;">
+<strong><span class="heading-text" style="color:#c9d1d9;">HackSimulator.nl</span></strong> <span class="body-text" style="color:#8b949e;">&mdash; Leer ethisch hacken in je browser</span><br><br>
+<span class="body-text" style="color:#8b949e;">Je ontvangt deze mail omdat je bent aangemeld voor de HackSimulator nieuwsbrief.</span><br>
+<a href="{{ unsubscribe }}" class="link-text" style="color:#79c0ff;text-decoration:none;">Uitschrijven</a> <span class="body-text" style="color:#8b949e;">&middot;</span> <a href="https://hacksimulator.nl/privacy.html" class="link-text" style="color:#79c0ff;text-decoration:none;">Privacybeleid</a> <span class="body-text" style="color:#8b949e;">&middot;</span> <a href="{{ mirror }}" class="link-text" style="color:#79c0ff;text-decoration:none;">Bekijk in browser</a>
+</p>
+</td></tr>
+
+</table>
+<!--[if mso]>
+</td></tr></table>
+<![endif]-->
+</td></tr>
+</table>
+</body>
+</html>
