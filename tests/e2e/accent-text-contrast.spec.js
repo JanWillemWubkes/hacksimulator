@@ -25,6 +25,7 @@
 //     Zie architecture-patterns.md §10.
 
 import { test, expect } from './fixtures.js';
+import { installeerContrastMeter, zetThema } from './helpers/contrast.js';
 
 const PAGINAS = [
   '/index.html', '/over-ons.html', '/gidsen.html', '/contact.html', '/woordenlijst.html',
@@ -39,53 +40,13 @@ const PAGINAS = [
  * los van elkaar kunnen oordelen.
  */
 async function meetAccentTekst(page, thema) {
-  await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), thema);
-  await page.waitForTimeout(400); // color-transities laten uitklinken - zie kop van dit bestand
+  await zetThema(page, thema); // wacht 400ms - color-transities, zie kop van dit bestand
+  await installeerContrastMeter(page);
 
   return page.evaluate(() => {
-    const parse = (c) => {
-      const h = c.trim().match(/^#([0-9a-f]{6})$/i);
-      if (h) {
-        const n = parseInt(h[1], 16);
-        return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255, a: 1 };
-      }
-      const m = c.match(/rgba?\(([^)]+)\)/);
-      if (!m) return null;
-      const p = m[1].split(',').map(Number);
-      return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 };
-    };
-    const over = (f, b) => ({
-      r: f.r * f.a + b.r * (1 - f.a),
-      g: f.g * f.a + b.g * (1 - f.a),
-      b: f.b * f.a + b.b * (1 - f.a),
-      a: 1,
-    });
-    const lin = (c) => {
-      c /= 255;
-      return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-    };
-    const L = (c) => 0.2126 * lin(c.r) + 0.7152 * lin(c.g) + 0.0722 * lin(c.b);
-    const ratio = (a, b) => {
-      const x = L(a) + 0.05;
-      const y = L(b) + 0.05;
-      return Math.round((100 * Math.max(x, y)) / Math.min(x, y)) / 100;
-    };
-    const effBg = (el) => {
-      const stapel = [];
-      for (let n = el; n; n = n.parentElement) {
-        const c = parse(getComputedStyle(n).backgroundColor);
-        if (c && c.a > 0) stapel.push(c);
-        if (c && c.a === 1) break;
-      }
-      let acc = { r: 255, g: 255, b: 255, a: 1 };
-      for (let i = stapel.length - 1; i >= 0; i--) acc = over(stapel[i], acc);
-      return acc;
-    };
-    const gelijk = (a, b) => a && b && a.r === b.r && a.g === b.g && a.b === b.b;
-    // Rendert dit element ZELF tekst? Een container die de kleur alleen doorgeeft aan
-    // kinderen telt niet mee - anders wordt elke voorouder dubbel geteld.
-    const eigenTekst = (el) =>
-      [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim().length > 0);
+    // parse/effBg/ratio/gelijk/eigenTekst komen sinds Sessie 227 uit helpers/contrast.js;
+    // ze stonden hier en in eyebrow-contrast.spec.js in twee kopieën.
+    const { parse, ratio, effBg, gelijk, eigenTekst } = window.__contrast;
 
     // Lees de tokens uit :root, zodat deze test blijft kloppen als de waarden wijzigen.
     const root = getComputedStyle(document.documentElement);

@@ -41,7 +41,7 @@
 
   /* Terminal Demo Text - Fixed (always light on dark terminal) */
   --terminal-demo-text: #c9d1d9;
-  --terminal-demo-text-dim: #8b949e;
+  --terminal-demo-text-dim: #a1a8b0;  /* Sessie 227: was #8b949e — 6,83 op de zwarte demo, onder AAA */
   --terminal-demo-prompt: #9fef00;
 }
 

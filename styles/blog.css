@@ -595,13 +595,24 @@ a[href='#all'].category-btn {
 .blog-post-content code {
   background-color: var(--color-bg-hover);
   border-radius: var(--border-radius-small);
-  color: var(--color-ui-primary);
+  /* Sessie 227: was --color-ui-primary (#58a6ff in dark). Die staat hier op zijn EIGEN
+     achtergrond --color-bg-hover (#21262d), niet op de paginakleur, en meet daar 6,03:1 —
+     onder AAA. --color-link (#79c0ff) haalt op datzelfde oppervlak 7,82 en maakt de regel
+     bovendien symmetrisch met de light-override hieronder, die al --color-link gebruikt. */
+  color: var(--color-link);
   font-family: var(--font-terminal);
   font-size: 0.95em;
   padding: 2px 6px;
 }
 [data-theme='light'] .blog-post-content code {
   background-color: #f5f5f5;
+  color: var(--color-link);
+}
+/* Sessie 227: `th` claimde in zijn eigen commentaar "zelfde accent als code", maar alleen
+   `code` kreeg deze light-override. `th` bleef dus op --color-ui-primary staan, dat in light
+   het terminalgroen #0db34f is: gemeten 2,61:1 op #f8f8f8 bij 19,8px bold — ONDER AA (lat
+   3,0 voor large text). Het was geen tokenprobleem maar een vergeten override. */
+[data-theme='light'] .blog-post-content th {
   color: var(--color-link);
 }
 .blog-post-content pre {
@@ -1099,13 +1110,12 @@ a[href='#all'].category-btn {
   border-radius: 4px;
   margin-bottom: var(--spacing-sm);
 }
-/* De badge heeft een eigen rgba-achtergrond, dus de tekst ligt op de compositie ervan over de
-   kaart — niet op de kaartkleur zelf (zie architecture-patterns.md §10). In light mode gaf
-   --color-link daar 4,88:1; dit is een eigen, donkerder tint voor uitsluitend deze badge,
-   naar het voorbeeld van --eyebrow-text (Sessie 217). Dark mode haalt al 7,34 en blijft. */
-[data-theme='light'] .related-card .related-category {
-  color: #0a4d94;
-}
+/* VERWIJDERD (Sessie 227): [data-theme='light'] .related-card .related-category { color: #0a4d94 }
+   Deze uitzondering bestond omdat --color-link (#0969da) op de gecomposite badge-achtergrond
+   maar 4,88:1 haalde. Sessie 227 heeft #0a4d94 tot de waarde van --color-link zélf gemaakt —
+   precies deze tint, nu sitebreed — dus de regel zette de kleur nog op wat hij toch al was.
+   Een dode override laten staan is hoe een uitzondering later een raadsel wordt
+   (architecture-patterns §14: repareren door te verwijderen). */
 
 .related-card h3 {
   font-family: var(--font-heading);

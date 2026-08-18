@@ -24,6 +24,7 @@
 // bug doorgelaten — dezelfde les als §9.
 
 import { test, expect } from './fixtures.js';
+import { installeerContrastMeter } from './helpers/contrast.js';
 
 // Alle pagina's met een .eyebrow-badge. index.html heeft er twee: de hero-badge (met de
 // radial glow van .hero::after erachter) en die op de lead-magnet-kaart.
@@ -42,50 +43,17 @@ const PAGINAS_MET_BADGE = [
 const AAA_NORMALE_TEKST = 7;
 
 /**
- * Meet elke .eyebrow-badge op de pagina tegen zijn EFFECTIEVE achtergrond: de stapel
- * ancestor-achtergronden gecomposite tot de eerste ondoorzichtige laag.
+ * Meet elke .eyebrow-badge op de pagina tegen zijn EFFECTIEVE achtergrond.
  *
- * `getComputedStyle(el).backgroundColor` geeft hier `rgba(22,163,74,0.08)` — geen kleur
- * waar je tegen kunt meten. Wie dan naar de paginakleur grijpt meet de laag ONDER de verf
- * in plaats van de verf zelf; precies hoe de 3,10:1 in de rules-file ontstond.
+ * `parse`/`effBg`/`ratio` komen sinds Sessie 227 uit `helpers/contrast.js` — ze stonden
+ * hier en in `accent-text-contrast.spec.js` in twee kopieën, die identiek moeten blijven
+ * om vergelijkbare cijfers te geven. De verantwoording van de meetmethode staat daar.
  */
 async function meetBadges(page, thema) {
+  await installeerContrastMeter(page);
   return page.evaluate((thema) => {
     document.documentElement.setAttribute('data-theme', thema);
-
-    const parse = (c) => {
-      const m = c.match(/rgba?\(([^)]+)\)/);
-      if (!m) return null;
-      const p = m[1].split(',').map(Number);
-      return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 };
-    };
-    const over = (f, b) => ({
-      r: f.r * f.a + b.r * (1 - f.a),
-      g: f.g * f.a + b.g * (1 - f.a),
-      b: f.b * f.a + b.b * (1 - f.a),
-      a: 1,
-    });
-    const lin = (c) => {
-      c /= 255;
-      return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-    };
-    const L = (c) => 0.2126 * lin(c.r) + 0.7152 * lin(c.g) + 0.0722 * lin(c.b);
-    const ratio = (a, b) => {
-      const x = L(a) + 0.05;
-      const y = L(b) + 0.05;
-      return Math.round((100 * Math.max(x, y)) / Math.min(x, y)) / 100;
-    };
-    const effBg = (el) => {
-      const stapel = [];
-      for (let n = el; n; n = n.parentElement) {
-        const c = parse(getComputedStyle(n).backgroundColor);
-        if (c && c.a > 0) stapel.push(c);
-        if (c && c.a === 1) break;
-      }
-      let acc = { r: 255, g: 255, b: 255, a: 1 };
-      for (let i = stapel.length - 1; i >= 0; i--) acc = over(stapel[i], acc);
-      return acc;
-    };
+    const { parse, ratio, effBg } = window.__contrast;
 
     return [...document.querySelectorAll('.eyebrow-badge')].map((el) => {
       const cs = getComputedStyle(el);

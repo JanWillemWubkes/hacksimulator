@@ -123,17 +123,27 @@
   /* UI Elements - GitHub Dark Blue Primary (60% sat) */
   --color-ui-primary: #58a6ff;      /* Muted blue - primary buttons/headings (60% sat, GitHub accent) */
   --color-ui-hover: #79c0ff;        /* Lighter blue - hover state (consistent feedback) */
-  --color-ui-secondary: #8b949e;    /* Muted grey - secondary elements */
+  /* Sessie 227: was #8b949e. Sessie 226 tilde --color-text-dim van #8b949e naar #a1a8b0
+     omdat die kleur op GEEN enkel donker oppervlak AAA haalde, maar repareerde alleen dat
+     ene token — terwijl dezelfde waarde óók hier, in --color-text-muted, in landing.css
+     (--terminal-demo-text-dim) en op drie hardcoded plekken stond. Gemeten in Sessie 227:
+     34 tekstelementen onder AAA (5,62 laagste op --color-bg-modal), o.a. de footer-tagline,
+     het copyright en de terminal-titel. Zelfde tint, opgetild: 7,20-8,74. */
+  --color-ui-secondary: #a1a8b0;    /* Muted grey - secondary elements */
   --color-border: #30363d;          /* GitHub border - visible but subtle */
   --color-link: #79c0ff;            /* Muted blue - links (60% sat, readable) */
   --color-modal-text: #c9d1d9;      /* Soft white - readable text for long legal content */
 
   /* Extended UI Colors - GitHub Dark consistency */
-  --color-text-muted: #8b949e;        /* Dimmed UI text (modal close button) - GitHub secondary */
+  --color-text-muted: #a1a8b0;        /* Dimmed UI text (modal close button) - zie --color-ui-secondary */
   --color-text-light: #c9d1d9;        /* Modal body text & feedback elements - GitHub primary text */
   --color-star-inactive: #30363d;     /* Unselected rating stars - GitHub border color */
   --color-border-input: #30363d;      /* Form input borders - GitHub border */
-  --color-link-hover: #58a6ff;        /* Link hover states - GitHub accent (brighter blue) */
+  /* Sessie 227: was #58a6ff, dat 6,85 haalde op --color-bg-modal (blogkaart, "Lees verder")
+     en 6,03 op --color-bg-hover — onder AAA. Een hover hoort in dark LICHTER te zijn dan de
+     link zelf; #58a6ff was juist donkerder dan --color-link (#79c0ff). #8ecbff meet 8,80
+     als slechtste over alle gemeten donkere oppervlakken. */
+  --color-link-hover: #8ecbff;        /* Link hover states - lichter dan --color-link */
   --color-bg-modal-content: #161b22;  /* Modal content background - GitHub secondary bg */
   --color-modal-header: #ffffff;      /* Modal header text - pure white for maximum hierarchy & test compliance */
 
@@ -340,7 +350,16 @@
   --color-ui-hover: #1aff6b;        /* Bright neon hover - 40% delta for clear interaction */
   --color-ui-secondary: #0969da;    /* GitHub blue - matches info/links (context-aware theming) */
   --color-border: #e0e0e0;          /* Darker grey borders - better visibility */
-  --color-link: #0969da;            /* GitHub blue - professional readability on light backgrounds */
+  /* Sessie 227: was #0969da (5,19 op wit — AA gehaald, AAA 7,0 niet). Gemeten over 16
+     pagina's × 2 thema's: 291 tekstelementen dragen dit token in light, 98 daarvan onder
+     AAA, laagste 4,51. De achtergrondenset is breder dan de pagina- en kaartkleur:
+     #fff / #fefefe / #f8f8f8 / #f5f5f5 (inline code) / #f1f1f1 / #e8f0f9 (categorie-badge).
+     #0a4d94 haalt AAA op alle zes (7,30 als slechtste) en stond al in de codebase — het is
+     de tint die Sessie 226 voor .related-category doormat, nu gepromoveerd tot het token
+     zelf, zodat die uitzonderingsregel weg kan (architecture-patterns §14: repareren door
+     te verwijderen). Let op: blog.css mapt in light óók koppen, <strong> en inline code op
+     dit token, dus de blast radius is de hele light-mode blog, niet alleen links. */
+  --color-link: #0a4d94;            /* Donkere GitHub blue - AAA op elk gemeten light oppervlak */
   --color-modal-text: #0a0a0a;      /* Very dark text - maximum contrast */
 
   /* Extended UI Colors - Light mode variants */
@@ -348,7 +367,9 @@
   --color-text-light: #2a2a2a;      /* Very dark grey - better contrast */
   --color-star-inactive: #999999;   /* Much darker grey - visibility fix! */
   --color-border-input: #d0d0d0;    /* Darker grey - better visibility */
-  --color-link-hover: #0550ae;      /* Darker GitHub blue for hover (increased contrast) */
+  /* Sessie 227: was #0550ae (6,60 als slechtste — onder AAA). Moet donkerder blijven dan
+     --color-link (#0a4d94), dus opgeschoven naar #044289: 8,51 als slechtste. */
+  --color-link-hover: #044289;      /* Nog donkerder blue for hover (increased contrast) */
   --color-bg-modal-content: #fafafa;  /* Off-white modal content */
   --color-modal-header: #0a0a0a;    /* Very dark text - maximum contrast */
 
@@ -500,10 +521,17 @@ button {
   border-radius: var(--border-radius-button);
 }
 
+/* Sessie 227: de TEKST stond hier op --color-ui-primary. Dat token is in light het
+   levendige terminalgroen (#0db34f) en meet als tekst 2,61-2,77 op de drie achtergronden
+   waar deze knop landt — ONDER AA, niet alleen onder AAA. In dark was het #58a6ff = 6,85
+   op de modal, ook onder AAA. Klassiek §10: een merkkleur op een lichte achtergrond zetten.
+   De knop gaat in rust al naar --color-ui-secondary (de blauw/grijs-familie), dus de hover
+   hoort de link-hover te zijn, niet het groen: nu 8,98 (light) en 10,00 (dark).
+   De RAND houdt --color-ui-primary — die valt onder non-text contrast (lat 3,0). */
 .btn-secondary:hover {
   background-color: transparent;
   border-color: var(--color-ui-primary);
-  color: var(--color-ui-primary);
+  color: var(--color-link-hover);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px var(--color-button-shadow-hover);
 }
@@ -520,7 +548,7 @@ button {
 .btn-small.btn-secondary:hover {
   background-color: transparent;
   border-color: var(--color-ui-primary);
-  color: var(--color-ui-primary);
+  color: var(--color-link-hover);  /* zie .btn-secondary:hover hierboven (Sessie 227) */
 }
 
 .btn-small {
@@ -1054,7 +1082,7 @@ button {
 .footer-tagline {
   font-family: var(--font-body);
   font-size: 0.875rem;
-  color: #8b949e;
+  color: #a1a8b0;  /* Sessie 227: was #8b949e (5,90 op de footer) - Dark Frame, dus bewust hardcoded */
   line-height: 1.6;
   margin: 0;
 }
@@ -1117,7 +1145,7 @@ button {
 .footer-bottom p {
   font-family: var(--font-body);
   font-size: 0.8rem;
-  color: #8b949e;
+  color: #a1a8b0;  /* Sessie 227: was #8b949e (5,90 op de footer) - Dark Frame, dus bewust hardcoded */
   margin: 0;
 }
 
@@ -1128,7 +1156,7 @@ button {
 }
 
 .footer-social a {
-  color: #8b949e;
+  color: #a1a8b0;  /* Sessie 227: was #8b949e (5,90 op de footer) - Dark Frame, dus bewust hardcoded */
   transition: color var(--transition-fast);
   /* Het icoon is 20px; zonder dit was het aanwijsdoel 26px (WCAG 2.5.5 vraagt 44px).
      Inline-flex + centreren houdt het icoon optisch op zijn plek; het doel groeit eromheen. */

@@ -582,9 +582,15 @@
   font-weight: var(--font-weight-semibold);
 }
 
+/* Sessie 227: de hover stond op --color-cta-primary en mat in light 2,76:1 — ONDER AA.
+   Dat is exact het defect dat Sessie 221 voor de RUST-toestand oploste (die staat hierboven
+   al op --color-accent-text, 8,07:1); de hover bleef achter omdat geen enkele spec een
+   hover-toestand meet. In dark verandert de kleur bij hover al niet (#9fef00 blijft
+   #9fef00) — het is de achtergrond die de feedback geeft. Light volgt nu datzelfde
+   patroon: kleur vast op --color-accent-text, achtergrond + border-style doen het werk. */
 .gids-sample-link:hover,
 .gids-sample-link:focus-visible {
-  color: var(--color-cta-primary); /* overschrijf de generieke a:hover */
+  color: var(--color-accent-text); /* overschrijf de generieke a:hover */
   background: var(--color-prompt-bg-medium);
   border-style: solid;
 }
