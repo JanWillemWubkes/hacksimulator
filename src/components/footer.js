@@ -57,10 +57,10 @@ function getMarketingFooter(options = {}) {
         <div class="footer-column">
           <h3>Juridisch</h3>
           <ul>
-            <li><a href="${basePath}assets/legal/privacy.html">Privacy Beleid</a></li>
-            <li><a href="${basePath}assets/legal/terms.html">Algemene Voorwaarden</a></li>
+            <li><a href="${basePath}assets/legal/privacy.html">Privacybeleid</a></li>
+            <li><a href="${basePath}assets/legal/terms.html">Gebruiksvoorwaarden</a></li>
             <li><a href="${basePath}assets/legal/cookies.html">Cookies</a></li>
-            ${showCookieSettings ? '<li><a href="#" id="cookie-settings">Cookie Instellingen</a></li>' : ''}
+            ${showCookieSettings ? '<li><a href="#" id="cookie-settings">Cookie-instellingen</a></li>' : ''}
           </ul>
         </div>
       </div>

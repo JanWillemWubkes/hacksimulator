@@ -1182,6 +1182,72 @@ elif [ "$sr_fouten" -eq 0 ]; then
 fi
 
 # ============================================================
+# Check 17: legal-pagina's dragen één Nederlandse kop in alle vier de titelvelden
+#   Hard constraint — fast + --deep. Aanleiding (TASKS #68, gevonden Sessie 224):
+#   privacy.html en cookies.html voerden "Privacy policy" en "Cookie policy" in
+#   <title>, og:title, twitter:title én <h1> — Engels, op een lang="nl"-pagina,
+#   terwijl de site er in het Nederlands naar verwees ("Lees ons privacybeleid").
+#   De pagina heette dus anders dan waarnaar gelinkt werd.
+#
+#   Twee invarianten, want er zijn twee manieren om dit te laten verrotten:
+#     (a) TAAL       — geen "policy" in een titelveld. Een Engels kernwoord in de
+#                      kop van een Nederlandstalige juridische pagina is de fout
+#                      zelf. Google's eigen "Privacy Policy" blijft vrij: die staat
+#                      in de BODY, niet in een titelveld, en is een eigennaam.
+#     (b) LOCKSTEP   — <h1>, <title>, og:title en twitter:title moeten dezelfde kop
+#                      dragen. Vier velden bijwerken en er één vergeten is precies
+#                      hoe de helft van zo'n hernoeming blijft staan; alleen de <h1>
+#                      is zichtbaar bij het redigeren, de rest zie je pas in de SERP.
+#
+#   POSITIEVE invariant (de les van Sessie 221: een verbod op één woord dekt de
+#   klasse niet). (b) toetst gelijkheid, niet de afwezigheid van een formulering.
+#
+#   Zelfbewakende tak: nul gevonden legal-pagina's of nul velden = failure. Zonder
+#   die tak zet een verplaatsing van assets/legal/ de check stil op groen.
+# ============================================================
+check_start "Legal-pagina's ↔ Nederlandse kop in alle vier de titelvelden"
+
+lg_gecontroleerd=0
+lg_fouten=0
+for lg_bestand in assets/legal/*.html; do
+  [ -f "$lg_bestand" ] || continue
+
+  lg_h1=$(grep -oP '(?<=<h1>)[^<]+' "$lg_bestand" | head -1)
+  lg_title=$(grep -oP '(?<=<title>)[^<]+' "$lg_bestand" | head -1 | sed 's/ - HackSimulator\.nl$//')
+  lg_og=$(grep -oP '(?<=property="og:title" content=")[^"]+' "$lg_bestand" | head -1 | sed 's/ - HackSimulator\.nl$//')
+  lg_tw=$(grep -oP '(?<=name="twitter:title" content=")[^"]+' "$lg_bestand" | head -1 | sed 's/ - HackSimulator\.nl$//')
+
+  # Zelfbewaking per bestand: alle vier de velden moeten bestaan.
+  if [ -z "$lg_h1" ] || [ -z "$lg_title" ] || [ -z "$lg_og" ] || [ -z "$lg_tw" ]; then
+    fail "17: ${lg_bestand} mist een titelveld (h1='${lg_h1}' title='${lg_title}' og='${lg_og}' twitter='${lg_tw}')"
+    lg_fouten=$((lg_fouten + 1))
+    continue
+  fi
+  lg_gecontroleerd=$((lg_gecontroleerd + 1))
+
+  # (a) taal: geen Engels "policy" in een titelveld
+  for lg_veld in "$lg_h1" "$lg_title" "$lg_og" "$lg_tw"; do
+    if echo "$lg_veld" | grep -qi 'policy'; then
+      fail "17: ${lg_bestand} voert '${lg_veld}' — Engels 'policy' in een titelveld van een lang=\"nl\"-pagina. Gebruik de Nederlandse kop (Privacybeleid / Cookiebeleid / Gebruiksvoorwaarden)."
+      lg_fouten=$((lg_fouten + 1))
+      break
+    fi
+  done
+
+  # (b) lockstep: de vier velden dragen dezelfde kop
+  if [ "$lg_h1" != "$lg_title" ] || [ "$lg_h1" != "$lg_og" ] || [ "$lg_h1" != "$lg_tw" ]; then
+    fail "17: ${lg_bestand} loopt uit de pas — h1='${lg_h1}' title='${lg_title}' og:title='${lg_og}' twitter:title='${lg_tw}'. Alle vier moeten dezelfde kop dragen."
+    lg_fouten=$((lg_fouten + 1))
+  fi
+done
+
+if [ "$lg_gecontroleerd" -eq 0 ]; then
+  fail "17: geen enkele legal-pagina met vier titelvelden gevonden — de check meet niets meer (is assets/legal/ verplaatst?)"
+elif [ "$lg_fouten" -eq 0 ]; then
+  pass "${lg_gecontroleerd} legal-pagina's dragen één Nederlandse kop in h1, title, og:title en twitter:title"
+fi
+
+# ============================================================
 echo ""
 echo "=========================================="
 if [ "$DEEP_MODE" = "1" ]; then
