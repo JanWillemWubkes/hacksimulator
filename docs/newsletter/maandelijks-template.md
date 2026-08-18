@@ -438,7 +438,22 @@ per jaar niet meetbaar) — maar dan moet je wél weten wat je verstuurd hebt.
 
 | Editie | Onderwerpregel | Tekens | Preview-tekst |
 |---|---|---|---|
-| Augustus 2026 | Eén apostrof en de database ligt open | 37 | Een database ziet het verschil niet tussen jouw gegevens en een instructie — tenzij de programmeur dat verschil aanbrengt. |
+| Augustus 2026 | Eén apostrof en de database ligt open | 37 | De scan vond niet alleen de producten, maar ook de lijst met e-mailadressen en wachtwoorden. |
+
+**De preview-tekst moet iets toevoegen, niet parafraseren.** Verdeel het werk: de
+onderwerpregel levert het *mechanisme*, de preview het *gevolg* — of andersom, als dat beter
+uitkomt. Twee valkuilen die de augustus-editie eerst allebei had:
+
+- **Geen abstractie die de mail nog moet uitleggen.** De eerste versie luidde *"Een database
+  ziet het verschil niet tussen jouw gegevens en een instructie…"* Dat is precies het begrip dat
+  de tip komt uitleggen, dus de preview veronderstelt wat hij moet verkopen.
+- **Geen herformulering van het onderwerp op een hoger abstractieniveau.** Als het onderwerp al
+  "de database ligt open" zegt, voegt "gegevens versus instructie" niets toe. Zet er iets
+  concreets naast dat er nog niet stond.
+
+Toets de preview op één vraag: *staat hier iets in dat de onderwerpregel niet al zegt, en kan ik
+het woordelijk waarmaken in de mail?* Bij augustus is dat `users_db` — de sqlmap-output toont
+hem, en de alinea eronder zegt letterlijk dat daar e-mailadressen en wachtwoorden staan.
 
 Verzendgegevens augustus 2026: dinsdag 18 augustus 10:00 CET, lijst `hacksimulator-main`,
 `utm_campaign=augustus-2026`.
