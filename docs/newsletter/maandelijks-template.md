@@ -178,6 +178,20 @@ Maximaal 2-3 bullets. Als er geen nieuws is, laat deze sectie weg.
 
 **Toon:** Geen harde sell. "Misschien handig" vibe.
 
+> ⚠️ **Dat is een toonaanwijzing, géén kop.** In juli 2026 is die omschrijving letterlijk als
+> sectiekop overgenomen ("Misschien handig"), en in augustus is hij klakkeloos meegekopieerd.
+> Twee edities lang stond er dus een kop die de lezer vooraf vertelt dat hij dit blok kan
+> overslaan. "Geen harde sell" betekent niet dat je je eigen aanbod wegwuift.
+
+**Kies de kop als de vraag die de tip oproept.** Een goede aanbevelingskop is een vraag waar de
+lezer na het lezen van de tip mee zit, en het aanbod is dan het antwoord in plaats van een
+advertentie. Augustus 2026: de sqlmap-tip laat een aanval zien, dus de kop werd
+**"Mag dit eigenlijk wel?"** met de gratis juridische sample eronder.
+
+**Laat de kop matchen met de H1 van de landingspagina.** Die van augustus staat woordelijk zo op
+`sample-juridisch.html`. Kop en bestemming zeggen dan hetzelfde: eerlijker, en de klik levert wat
+hij belooft.
+
 Als er geen nieuw product is, verwijs naar een bestaande cheatsheet of laat weg.
 
 ---
@@ -264,6 +278,23 @@ monospace is dat te weinig om op te vallen.
 `heading-text` is bewust hergebruikt: die klasse heeft in het gedeelde `<style>`-blok al haar
 drie dark-mode-varianten, dus dit vraagt geen blokwijziging. **Uitzonderingen:** de `<strong>` in
 de terminal-header (staat op de groene balk) en die in de footer (draagt de kopkleur al).
+
+### Klemtoontekens: spaarzaam, en nooit bovenop vet
+
+Een `<strong>` met de kopkleur legt de nadruk al twee keer (gewicht + contrast). Zet daar geen
+klemtoonteken bovenop — een derde signaal leest niet als nadruk maar als typefout. In augustus
+2026 stond er `eerste die jíj typt` binnen zo'n strong; het accent is geschrapt, het vet bleef.
+
+Twee regels:
+
+- **Nooit op `ij`.** Het accent hoort op de klinker, en staat die met meer letters geschreven,
+  dan op de eerste twéé (`één`, `óók`, `dáár`). In `jij` is de klinker de digraaf `ij` en een `j`
+  kan geen accent aigu dragen, dus `jíj` accentueert de helft. Los het op met vet, cursief of
+  een herformulering.
+- **`één` is de uitzondering** en blijft altijd staan: dat is geen nadruk maar een
+  betekenisonderscheid (telwoord tegenover lidwoord).
+
+Correcte gevallen in de augustus-editie, ter referentie: `één` (6×), `dáár` (2×), `wél` (1×).
 
 > **Meet nooit typografie op een Linux-machine zonder eerst `fc-match` te draaien.**
 > `fc-match "Courier New"` geeft hier LiberationMono-Regular.ttf. Dat substituut is metrisch
