@@ -1430,7 +1430,7 @@ helper; houd ze synchroon). De feitelijke mapping:
 
 **`[TIP]` vs `[?]` semantiek (beide info-blauw sinds Sessie 194):**
 - `[TIP]` = educatieve tip in command-output — het canonieke 80/20-patroon
-  (CLAUDE.md, tone-and-output.md, command-checklist.md).
+  (CLAUDE.md, .claude/rules/command-output.md).
 - `[?]` = hint-/vraag-inhoud of een verwijzing ("Typ 'man nmap' voor help").
 
 **`[~]` vs `[?]` hiërarchie (bewust):**

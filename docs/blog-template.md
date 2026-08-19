@@ -389,7 +389,7 @@ Voor élke nieuwe blog-post:
 
 **Documentatie:**
 
-- `.claude/rules/tone-and-output.md` — taal- en stijlvoorbeelden
+- `.claude/rules/command-output.md` — taal- en stijlvoorbeelden
 - `.claude/plans/monetization-C-content-seo.md` — Plan C bron (product-mapping, meetcriteria)
 - `docs/prd.md` — full PRD inclusief monetization-strategie
 

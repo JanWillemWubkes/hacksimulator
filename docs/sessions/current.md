@@ -1484,7 +1484,12 @@ De twee falers per motor zijn `tutorial-mobile.spec.js:65` (chromium + firefox) 
 
 ### Learnings
 
-Zie `.claude/CLAUDE.md` §Recent Critical Learnings.
+Uitgewerkt met code in `.claude/rules/css-layout.md` §9 (themavarianten en focusregels vechten
+op bronvolgorde) en §10 (kleur volgt de effectieve achtergrond, niet het merk).
+
+> Deze verwijzing stond tot Sessie 229 op `.claude/CLAUDE.md` §Recent Critical Learnings — maar
+> dat blok rouleerde per sessie, dus de pointer wees al sinds Sessie 222 naar niets. Learnings
+> horen bij een bestemming die ze houdt.
 
 ### De baseline per motor — er is er geen meer
 
@@ -1599,7 +1604,12 @@ Tegen de oude code (`git archive HEAD`, poort 8898) faalt de chip-test op de `wa
 
 ### Learnings
 
-Zie `.claude/CLAUDE.md` §Recent Critical Learnings, Sessie 216.
+Uitgewerkt met code in `.claude/rules/css-layout.md` §11 (`transition: all` + geërfde
+`visibility` = een knop die achterloopt) en `.claude/rules/js-runtime.md` §12
+(IntersectionObserver als trigger, één predicaat als regel).
+
+> Zelfde correctie als bij Sessie 215 hierboven: de oude pointer naar CLAUDE.md
+> §Recent Critical Learnings was door de rotatie leeg komen te staan.
 
 ### Volgende stappen
 

@@ -5,14 +5,14 @@ description: Gebruik bij het toevoegen van een nieuw terminal-command aan HackSi
 
 # Nieuw terminal-command toevoegen
 
-Dunne wrapper. De inhoudelijke standaard staat in `.claude/rules/command-checklist.md` en
-`.claude/rules/tone-and-output.md` — **lees die eerst**. Deze skill levert de volgorde + de gate zodat
-geen stap wegvalt.
+Dunne wrapper. De inhoudelijke standaard (toonvoorbeelden + 8-staps checklist) staat in
+`.claude/rules/command-output.md` — **lees die eerst**. Die rule laadt automatisch zodra je een
+bestand in `src/commands/` opent. Deze skill levert de volgorde + de gate zodat geen stap wegvalt.
 
 ## Flow
 1. **Spec checken** — staat het command in `docs/commands-list.md` en past het in MVP-scope (PRD §13)?
 2. **80/20-output** — realistische maar simplified output: EN-output + `← NL`-context + `[TIP]` (NL).
-   Niet te technisch, niet te simpel (zie tone-and-output.md voor good/bad-paren).
+   Niet te technisch, niet te simpel (zie command-output.md voor good/bad-paren).
 3. **Educatieve feedback** — elk command = leermoment. `[TIP]` verplicht; toon "waarom", niet alleen "wat".
 4. **Help/man (NL)** — `manPage`-property, 3-tier: fuzzy-match typo → progressive hints → volledige man-page.
 5. **Warning + consent (offensive tools)** — voor security-category (hashcat/hydra/sqlmap/metasploit/nikto):

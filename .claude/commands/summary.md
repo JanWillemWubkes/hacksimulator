@@ -50,34 +50,44 @@ Add new entry for Sessie [N] with full detail:
 
 Rotation: if N % 5 == 0, archive sessies [N-10 .. N-6] from current.md to `archive-*.md`.
 
-## Step 4: Update `.claude/CLAUDE.md` (AI-context, lean)
+## Step 4: Learnings routeren + `.claude/CLAUDE.md` bijwerken
 
-- **Sessie counter:** [N] (in §Sessie Protocol section)
-- **Recent Critical Learnings**: prepend new sessie entry using this format:
+CLAUDE.md is de **altijd-geladen laag**: elke regel kost context in élke sessie, ook in sessies
+waar hij niet over gaat. Anthropics richtlijn is <200 regels; hier bewaakt `validate-docs.sh`
+Check 18 een harde grens van 150.
 
-```markdown
-### Sessie [N]: [Topic] ([Datum])
-⚠️ **Never:**
-- Anti-pattern 1 — [why: concrete cost/incident from this sessie]
-- Anti-pattern 2 — [why]
-- Anti-pattern 3 — [why]
+Tot Sessie 228 schreef deze stap voor om elke sessie een narratieve entry van 5-8 bullets te
+**prependen** in §Recent Critical Learnings. Dat blok groeide daardoor naar 134 van de 320 regels
+— en stond woordelijk óók al in `architecture-patterns.md` én `current.md`. De les over guards
+gold hier op zichzelf: Check 8 bewaakte twee losse regels, dus het bestand kon van 12 KB naar
+43 KB groeien zonder dat er iets rood werd.
 
-✅ **Always:**
-- Best practice 1 — [why: validated benefit from this sessie]
-- Best practice 2 — [why]
-- Best practice 3 — [why]
-- Best practice 4 — [why]
-```
+**Routeer elke learning naar de goedkoopste laag die hem kan dragen:**
 
-- **Rotation**: keep top-6 learnings full, ouderen → `docs/sessions/current.md` already has them
-- **Footer**: `**Last updated:** [DATUM] (Sessie [N] — [short tag])` + `**Version:** [bumped]`
-- **Live metrics block in Quick Reference**: NIET updaten met concrete cijfers — verwijs naar TASKS.md
+| soort learning | bestemming | laadt |
+|---|---|---|
+| Narratief, casuïstiek, dead-ends, metingen | `docs/sessions/current.md` (Step 3) | alleen bij lezen |
+| Herbruikbaar patroon met code | de bijpassende rule in `.claude/rules/` | bij matchende bestanden |
+| Écht sessie-overstijgende invariant | §Harde invarianten in CLAUDE.md | altijd |
 
-**Guidelines for learnings format:**
-- Focus on actionable anti-patterns and best practices
-- Keep CLAUDE.md entry to 5-8 bullets per sessie
-- Include the *why* (concrete reasoning) — these enable judgment calls in edge cases
-- NO commit details (those go in `docs/sessions/current.md`)
+De rules zijn gescopet op `paths:` — kies op wát de learning raakt:
+`css-layout.md` (styles, html) · `js-runtime.md` (src) · `meten-en-guards.md` (tests, scripts) ·
+`caching-deploy.md` (_headers, netlify.toml) · `command-output.md` (src/commands).
+Bestaat er geen passende rule, maak er dan één mét `paths:`-frontmatter — Check 18c weigert een
+nieuwe rule zonder scope, want die zou stilzwijgend in elke sessie meeladen.
+
+**De lat voor §Harde invarianten is hoog.** Alleen als de regel in méérdere domeinen geldt en
+niet aan een bestandstype te koppelen is. Max 10 regels, **1-in-1-out**: nieuwe erbij = zwakste
+eruit. Eén regel, geen sessienummer, geen datum. Check 18d weigert `### Sessie NNN`-koppen in
+CLAUDE.md — het rotatieritueel is daarmee structureel overbodig in plaats van handmatig.
+
+**Verder in CLAUDE.md:**
+- **Sessie counter:** [N] (in §Sessie Protocol)
+- **Footer**: `**Last updated:** [DATUM] (Sessie [N] — [short tag])` + `**Version:** [bumped]`.
+  Beide VERVANGEN, niet appenden. Hard limit ≤500 bytes per regel (Check 8).
+- **Geen tellingen** (KB, specs, commands, blogposts) — die wonen in TASKS.md.
+
+Sluit deze stap af met `bash scripts/validate-docs.sh --deep` → exit 0.
 
 ## Step 5: Update `PLANNING.md` ALLEEN bij architectuur-wijziging
 

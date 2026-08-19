@@ -36,6 +36,14 @@
 #               (forcing-function tegen single-line narrative-accumulation —
 #                CLAUDE.md 77,6 KB → 12 KB cleanup voorkomt herintreding via deze check).
 #               Runs in zowel fast als --deep mode (hard constraint, niet tolerance-gevoelig).
+#               ⚠️ Sessie 229: die claim hield NIET. Check 8 meet twee losse REGELS, niet het
+#               bestand; CLAUDE.md groeide naar 320 regels / 43 KB en bleef groen. Zie Check 18.
+#
+# Sessie 229 (CLAUDE.md-herstructurering): Check 18 toegevoegd — context-budget.
+#   - Check 18: de altijd-geladen instructielaag (CLAUDE.md + rules zonder paths:-scope)
+#       18a CLAUDE.md <= 150 regels · 18b laag <= 400 regels · 18c elke rule draagt
+#       paths:-frontmatter of staat op de allowlist · 18d geen '### Sessie N' in CLAUDE.md.
+#       Hard constraint, fast + --deep. Vervangt het handmatige "top-6 rotatie"-ritueel.
 #
 # Sessie 160 (public-launch prep): Check 9 toegevoegd voor SEO-metadata integriteit.
 #   - Check 9: sitemap.xml + feed.xml ↔ blog content-sync (hard constraint, fast + --deep).
@@ -1245,6 +1253,85 @@ if [ "$lg_gecontroleerd" -eq 0 ]; then
   fail "17: geen enkele legal-pagina met vier titelvelden gevonden — de check meet niets meer (is assets/legal/ verplaatst?)"
 elif [ "$lg_fouten" -eq 0 ]; then
   pass "${lg_gecontroleerd} legal-pagina's dragen één Nederlandse kop in h1, title, og:title en twitter:title"
+fi
+
+# ============================================================
+# Check 18: context-budget van de altijd-geladen instructielaag
+#   Waarom deze check bestaat (Sessie 229):
+#   Check 8 bewaakt TWEE REGELS (Last updated + Version), niet het bestand. Zijn eigen
+#   commentaar claimt "voorkomt herintreding" na de Sessie 159-cleanup van 77,6 KB naar
+#   12 KB — maar CLAUDE.md groeide daarna terug naar 320 regels / 43 KB terwijl Check 8
+#   elke run groen bleef. Een guard die een lijst bewaakt, bewaakt geen klasse
+#   (.claude/rules/meten-en-guards.md §19).
+#
+#   Wat er op het spel staat: CLAUDE.md én elke rule ZONDER paths:-frontmatter laden in
+#   ELKE sessie mee, ook in sessies waar ze niet over gaan ("Rules without paths frontmatter
+#   are loaded at launch with the same priority as .claude/CLAUDE.md"). Anthropics richtlijn
+#   is <200 regels per CLAUDE.md; langer verlaagt aantoonbaar de opvolging omdat belangrijke
+#   regels in de ruis verdwijnen.
+#
+#   18a  CLAUDE.md            <= CLAUDE_MAX_LINES
+#   18b  altijd-geladen laag  <= ALWAYS_MAX_LINES  (CLAUDE.md + ongescopete rules)
+#   18c  elke rule draagt paths:-frontmatter, of staat bewust op RULES_ONGESCOPED_OK
+#   18d  geen '### Sessie N'-koppen in CLAUDE.md — narratief hoort in current.md
+#   + zelfbewakende tak: faalt als er niets te meten valt (Sessie 223/224-huisregel).
+#   Hard structuur-constraint: draait in fast mode én --deep, net als Check 8.
+# ============================================================
+check_start "Context-budget van de altijd-geladen instructielaag"
+
+CLAUDE_MAX_LINES=150
+ALWAYS_MAX_LINES=400
+RULES_DIR=".claude/rules"
+# Bewust ongescopete rules: klein én cross-cutting. Elke andere rule MOET paths: dragen.
+RULES_ONGESCOPED_OK="troubleshooting.md"
+
+cb_rules=$(ls "$RULES_DIR"/*.md 2>/dev/null)
+
+if [ ! -r "$CLAUDE" ] || [ -z "$cb_rules" ]; then
+  fail "18: CLAUDE.md onleesbaar of $RULES_DIR bevat geen .md-bestanden — de check meet niets (zelfbewaking)"
+else
+  # --- 18a: CLAUDE.md zelf ---
+  cb_claude_lines=$(wc -l < "$CLAUDE")
+  if [ "$cb_claude_lines" -gt "$CLAUDE_MAX_LINES" ]; then
+    fail "18a: CLAUDE.md is ${cb_claude_lines} regels > ${CLAUDE_MAX_LINES} max. Verplaats naar een gescopete rule in ${RULES_DIR}/ of naar docs/sessions/current.md (zie /summary Step 4)."
+  else
+    pass "18a: CLAUDE.md ${cb_claude_lines} regels <= ${CLAUDE_MAX_LINES}"
+  fi
+
+  # --- 18b + 18c: de rules-laag ---
+  cb_altijd=$cb_claude_lines
+  cb_ongescoped=""
+  cb_scope_fouten=0
+  for cb_f in $cb_rules; do
+    cb_naam=$(basename "$cb_f")
+    # paths:-frontmatter = eerste regel '---' én een 'paths:'-sleutel vóór de sluitende '---'
+    if [ "$(head -1 "$cb_f")" = "---" ] && sed -n '2,/^---$/p' "$cb_f" | grep -qE '^paths:'; then
+      continue
+    fi
+    cb_altijd=$((cb_altijd + $(wc -l < "$cb_f")))
+    cb_ongescoped="${cb_ongescoped}${cb_naam} "
+    if ! echo " $RULES_ONGESCOPED_OK " | grep -q " $cb_naam "; then
+      fail "18c: ${cb_f} draagt geen paths:-frontmatter en staat niet op de allowlist — hij laadt daardoor in ELKE sessie mee. Voeg 'paths:' toe, of zet hem bewust in RULES_ONGESCOPED_OK."
+      cb_scope_fouten=$((cb_scope_fouten + 1))
+    fi
+  done
+  if [ "$cb_scope_fouten" -eq 0 ]; then
+    pass "18c: elke rule buiten de allowlist (${RULES_ONGESCOPED_OK}) draagt paths:-frontmatter"
+  fi
+
+  if [ "$cb_altijd" -gt "$ALWAYS_MAX_LINES" ]; then
+    fail "18b: altijd-geladen laag is ${cb_altijd} regels > ${ALWAYS_MAX_LINES} max (CLAUDE.md + ongescopet: ${cb_ongescoped:-geen}). Scope een rule met paths:, of kort in."
+  else
+    pass "18b: altijd-geladen laag ${cb_altijd} regels <= ${ALWAYS_MAX_LINES} (ongescopet naast CLAUDE.md: ${cb_ongescoped:-geen})"
+  fi
+
+  # --- 18d: geen sessienarratief in de altijd-geladen laag ---
+  cb_narratief=$(grep -cE '^### Sessie [0-9]+' "$CLAUDE" || true)
+  if [ "$cb_narratief" -gt 0 ]; then
+    fail "18d: CLAUDE.md bevat ${cb_narratief} '### Sessie N'-kop(pen). Sessienarratief hoort in docs/sessions/current.md, herbruikbare patronen in ${RULES_DIR}/, en alleen een sessie-overstijgende invariant in §Harde invarianten. Zie /summary Step 4."
+  else
+    pass "18d: geen sessienarratief in CLAUDE.md"
+  fi
 fi
 
 # ============================================================

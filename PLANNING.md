@@ -480,7 +480,7 @@ Drie regels die daaruit volgen en die in de tokenlaag thuishoren:
 
 **Meetdiscipline** (waarom drie eerdere rondes de klasse misten): niet op tokennaam filteren,
 scrollen vóór het meten, beide viewports, en de toestanden meenemen die interactie vereisen.
-Uitgewerkt met code in `.claude/rules/architecture-patterns.md` §19.
+Uitgewerkt met code in `.claude/rules/meten-en-guards.md` §19.
 
 ---
 
@@ -547,7 +547,7 @@ gecontroleerd; er is geen menselijke feitencontrole. Daaruit volgen drie constra
 1. **Elke contentpagina draagt zelf de melding** — niet alleen `/over-ons.html`. De meeste lezers
    landen via een zoekmachine direct op een blogpost; dát is het moment van eerste blootstelling.
 2. **De melding mag nooit visueel verborgen worden.** Geen `display: none`, geen contrast onder de
-   AA-drempel, geen tooltip-only. Zie ook `.claude/rules/architecture-patterns.md` §14 — een
+   AA-drempel, geen tooltip-only. Zie ook `.claude/rules/css-layout.md` §14 — een
    positionele selector verfde deze melding ooit in linkkleur op 4,89:1 zonder dat iemand het zag.
 3. **Geen claim mag menselijke verificatie suggereren** die er niet is. Dat is niet alleen de
    AI-verordening maar ook art. 6:193c BW (misleidende informatie over hoedanigheid en
@@ -719,7 +719,7 @@ source of truth); hier alleen de architecturale regels.
   ```
 
   `nostore-server.py` markeert élke respons als `no-store` — nodig omdat submodules geen
-  `?v=` dragen (zie `.claude/rules/architecture-patterns.md` §Cache Strategy). Een guard in
+  `?v=` dragen (zie `.claude/rules/caching-deploy.md` §3). Een guard in
   `tests/e2e/fixtures.js` faalt met een benoemde melding als er tóch een challenge-pagina
   binnenkomt.
 - **Begrens elke volle run.** `--global-timeout` is verplicht: zonder die grens kapt een
@@ -931,7 +931,7 @@ const DEBUG_MODE = false;
 ---
 
 **Laatst bijgewerkt:** 19 aug 2026 (Sessie 228 — **geen architectuurwijziging, wél een verbreding van de design-system-constraint.** Sessie 226 legde AAA vast op dim- en knoptokens; ongefilterd meten liet zien dat die scope te smal was — 152 element-toestanden onder AA over 18 kleurwaarden. De norm is nu élk element dat zelf tekst rendert, in beide thema's en beide viewports, tegen de effectieve achtergrond. Zie §Design System → Contrast.)
-**Versie:** 4.47 (Sessie 228 — **AAA op élk renderend tekstelement, plus drie tokenregels die daaruit volgen:** één token draagt één rol (oppervlak vs. tekst — de CTA-knop stond op 3,30:1 omdat beide rollen in één token zaten); een oppervlak dat van zijn thema afwijkt herdefinieert zijn tokens op de container, niet per selector; en een kleur die tegelijk 15%-tint én tekst is haalt nooit AAA. Uitzonderingen alleen als assertie met de gemeten waarde. Meetdiscipline met code: architecture-patterns §19.)
+**Versie:** 4.47 (Sessie 228 — **AAA op élk renderend tekstelement, plus drie tokenregels die daaruit volgen:** één token draagt één rol (oppervlak vs. tekst — de CTA-knop stond op 3,30:1 omdat beide rollen in één token zaten); een oppervlak dat van zijn thema afwijkt herdefinieert zijn tokens op de container, niet per selector; en een kleur die tegelijk 15%-tint én tekst is haalt nooit AAA. Uitzonderingen alleen als assertie met de gemeten waarde. Meetdiscipline met code: meten-en-guards §19.)
 **Status:** ✅ Deployed - Live in Production | M5.5 Monetization stack deep + Brevo deliverability getuned | M7 Gamification ✅ 100% | Blog content-pijler 14 posts live
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator

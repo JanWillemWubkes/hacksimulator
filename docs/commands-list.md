@@ -75,7 +75,7 @@
 
 > Alle vijf de security tools tonen bij het **eerste** gebruik een juridische waarschuwing
 > in plaats van output; het commando nogmaals typen geldt als akkoord
-> (`localStorage['security_tools_consent']`). Zie `.claude/rules/command-checklist.md` §4.
+> (`localStorage['security_tools_consent']`). Zie `.claude/rules/command-output.md` §4.
 
 ## Special Commands
 
