@@ -148,6 +148,24 @@
   margin-bottom: var(--spacing-xs);
 }
 
+/* ── Edu-zone: eigen gedempte tint (S228, sluit TASKS #72) ──────────────────────────────
+   --color-text-dim (#a1a8b0) haalt AAA op élk site-breed donker oppervlak (7,20-8,74) maar
+   niet op de twee die alleen hier voorkomen: .edu-cmd-category op --color-prompt-bg-light
+   (rgb(43,55,38), 5,21) en .edu-command-card p (rgb(30,35,42), 6,58). Die eerste is een
+   badge met een eigen lime-rgba, dus de tekst ligt op de compositie (arch-patterns §10).
+   Gekozen voor een ZONE-token i.p.v. een derde site-brede verhoging: die zou het token op
+   #c0c7cf zetten, zó dicht bij --color-text-light (#c9d1d9) dat het onderscheid
+   dim-vs-normaal sitebreed verdwijnt. Op de container, zodat latere dim-tekst meeloopt.
+
+   ⚠️ Alleen in DARK. Zonder themascope zette dit #c0c7cf óók op de lichte edu-panelen:
+   14 elementen op 1,53:1 — een zwaardere regressie dan het defect zelf. In light staat
+   --color-text-dim op #444444 (8,37-9,74). `:not([data-theme="light"])` en niet
+   `[data-theme="dark"]`, want dark is de default en het attribuut ontbreekt tot navbar.js
+   gedraaid heeft. */
+html:not([data-theme='light']) .terminal-edu-inner {
+  --color-text-dim: #c0c7cf;   /* 7,34 op de badge-tint / 9,26 op het paneel (AAA) */
+}
+
 .edu-cmd-category {
   font-family: var(--font-body);
   font-size: 0.75rem;

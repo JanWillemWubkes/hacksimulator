@@ -406,7 +406,7 @@
 
 .lead-magnet-secondary a:hover,
 .lead-magnet-secondary a:focus-visible {
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
 }
 
 .lead-magnet-card .eyebrow-badge {
@@ -447,7 +447,7 @@
 .text-underline {
   position: relative;
   white-space: nowrap;
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   text-shadow:
     -4px -2px 0 var(--color-bg),
      4px -2px 0 var(--color-bg),
@@ -909,7 +909,7 @@
 }
 
 .badge-icon-svg {
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   flex-shrink: 0;
 }
 
@@ -972,7 +972,7 @@
 }
 
 .pain-icon-svg {
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
 }
 
 .pain-point h3 {
@@ -1096,7 +1096,7 @@
 }
 
 .comparison-header .comparison-cell.highlight {
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
 }
 
 .comparison-cell.negative {
@@ -1114,7 +1114,7 @@
 }
 
 .check-icon.positive {
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   flex-shrink: 0;
 }
 
@@ -1167,7 +1167,7 @@
   background: var(--color-prompt-bg-light);
   border-radius: 12px;
   margin-bottom: var(--spacing-md);
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
 }
 
 .feature-card h3 {
@@ -1292,7 +1292,7 @@ a.result-item:focus-visible {
   font-family: var(--font-heading);
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: var(--font-weight-bold);
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   line-height: 1;
   margin-bottom: var(--spacing-sm);
 }
@@ -1372,19 +1372,23 @@ a.result-item:focus-visible {
   width: fit-content;
 }
 
+/* Sessie 228: zelfde defect als .command-level-* in commands.css — de tekstkleur was de
+   hue van zijn eigen 15%-tint (light 1,74-3,09:1, dark 4,42-6,65:1). Getokeniseerd.
+   Deze kaarten liggen onder een scroll-reveal (`.leerpad-card` start op opacity 0), dus
+   ze vielen buiten elke eerdere meting die niet eerst de pagina doorscrolde. */
 .level-badge.beginner {
   background: rgba(34, 197, 94, 0.15);
-  color: #22c55e;
+  color: var(--badge-success-text);
 }
 
 .level-badge.intermediate {
   background: rgba(234, 179, 8, 0.15);
-  color: #eab308;
+  color: var(--badge-warning-text);
 }
 
 .level-badge.advanced {
   background: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
+  color: var(--badge-danger-text);
 }
 
 /* Terminal-style command lines */
@@ -1450,7 +1454,7 @@ a.result-item:focus-visible {
 
 .leerpad-learn-link:hover,
 .leerpad-learn-link:focus-visible {
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   border-bottom-color: var(--color-cta-primary);
 }
 
@@ -1491,7 +1495,7 @@ a.result-item:focus-visible {
 
 .blog-links-more a:hover,
 .blog-links-more a:focus-visible {
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   border-bottom-color: var(--color-cta-primary);
 }
 
@@ -1517,7 +1521,7 @@ a.result-item:focus-visible {
 }
 
 .blog-link:hover {
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   border-color: var(--color-cta-primary);
   background: var(--color-prompt-bg-light);  /* rgba(159,239,0,0.1) lime-tint */
   transform: translateY(-2px);
@@ -1636,7 +1640,7 @@ a.result-item:focus-visible {
 }
 
 .final-cta-secondary a:hover {
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
 }
 
 .final-cta-contact {
@@ -1745,7 +1749,7 @@ html {
   margin-bottom: var(--spacing-md);
   background: var(--color-prompt-bg-light);
   border-radius: 12px;
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
 }
 
 .how-step h3 {
@@ -1924,7 +1928,7 @@ html {
 }
 
 .btn-cta-secondary:hover {
-  color: var(--color-cta-primary);  /* Behoud groene tekst - overschrijf generieke a:hover */
+  color: var(--color-accent-text);  /* Behoud groene tekst - overschrijf generieke a:hover */
   transform: translateY(-2px);
   box-shadow: 0 4px 12px var(--color-cta-primary-glow);  /* Theme-aware glow */
 }
@@ -2315,17 +2319,24 @@ html {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-/* Solution Section - Tailwind Green 600 with white text for rich, modern appearance */
+/* Solution Section - groene band met witte tekst.
+   S228: stond hardgecodeerd op #16a34a met het commentaar "consistent met CTA buttons" —
+   en juist dáárom liep hij NIET mee toen --color-cta-primary naar Green 800 ging: wit erop
+   bleef 3,30 terwijl de knoppen al op 7,13 zaten. Een hardcoded kopie van een token is per
+   definitie één wijziging verwijderd van inconsistent. Nu volgt de band het token. */
 [data-theme="light"] .solution-section {
-  background: #16a34a;  /* Tailwind Green 600 - consistent met CTA buttons */
+  background: var(--color-cta-primary);
 }
 
 [data-theme="light"] .solution-section h2 {
   color: #ffffff;  /* Pure white - maximum impact */
 }
 
+/* S228: was rgba(255,255,255,.95) ("readable but soft") = 3,12:1 op de groene band. Ook ná
+   Green 800 blijft 95% wit op 6,55 steken — die laatste 5% alpha ís het verschil met 7,13,
+   dus de "zachtheid" kostte de AAA-lat. */
 [data-theme="light"] .solution-description {
-  color: rgba(255, 255, 255, 0.95);  /* White at 95% - readable but soft */
+  color: #ffffff;  /* 7,13:1 op de Green 800-band (AAA) */
 }
 
 /* Step Numbers - White text on green circles in light mode */
@@ -2463,7 +2474,7 @@ html {
   position: absolute;
   left: 0;
   top: var(--spacing-sm);
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   font-weight: var(--font-weight-bold);
 }
 

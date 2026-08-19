@@ -53,6 +53,8 @@ export const THEMA_SETTLE_MS = 700;
  *   effBg(el)         → effectieve (gecomposite) achtergrond van een element
  *   eigenTekst(el)    → rendert dit element ZELF een tekstnode?
  *   isGroot(cs)       → large text volgens WCAG (≥24px, of ≥18,66px én bold)
+ *   effOpacity(el)    → cumulatieve opacity van el + voorouders
+ *   rendert(el)       → heeft rects, opacity > 0 en niet-transparante tekstkleur
  *   gelijk(a, b)      → kleurvergelijking op rgb, alpha genegeerd
  *   omschrijf(el)     → korte selector-achtige aanduiding voor foutmeldingen
  *
@@ -120,6 +122,36 @@ export async function installeerContrastMeter(page) {
 
     const gelijk = (a, b) => a && b && a.r === b.r && a.g === b.g && a.b === b.b;
 
+    // Cumulatieve opacity van het element én al zijn voorouders. `opacity` erft niet, maar
+    // stapelt wel: een kind van een `opacity: 0`-container is onzichtbaar hoe ondoorzichtig
+    // het zelf ook is.
+    const effOpacity = (el) => {
+      let o = 1;
+      for (let n = el; n && n !== document.documentElement; n = n.parentElement) {
+        const v = parseFloat(getComputedStyle(n).opacity);
+        if (!Number.isNaN(v)) o *= v;
+      }
+      return o;
+    };
+
+    // Rendert dit element daadwerkelijk zichtbare tekst?
+    //
+    // `getComputedStyle(el).color` blijft gewoon een kleur teruggeven voor iets dat niemand
+    // ziet — een sweep die daar niet op filtert rapporteert defecten op onzichtbare
+    // elementen. Gemeten in Sessie 228: `.toggle-indicator` staat op `opacity: 0` behalve
+    // in de active-pill, en leverde 54 valse metingen op (waaronder 1,00:1).
+    //
+    // `visibility: hidden` telt hier NIET als onzichtbaar-en-dus-overslaan: zulke elementen
+    // houden hun rects en worden zichtbaar zodra een toestand omklapt (zie
+    // architecture-patterns §11), dus hun kleur moet kloppen. Volledig transparante tekst
+    // (`color: …, 0`) rendert per definitie niets en valt af.
+    const rendert = (el) => {
+      if (el.getClientRects().length === 0) return false;
+      if (effOpacity(el) === 0) return false;
+      const c = parse(getComputedStyle(el).color);
+      return !!c && c.a > 0;
+    };
+
     const omschrijf = (el) => {
       let sel = el.tagName.toLowerCase();
       if (el.id) sel += '#' + el.id;
@@ -128,7 +160,10 @@ export async function installeerContrastMeter(page) {
       return sel;
     };
 
-    window.__contrast = { parse, over, lin, L, ratio, effBg, eigenTekst, isGroot, gelijk, omschrijf };
+    window.__contrast = {
+      parse, over, lin, L, ratio, effBg, eigenTekst, isGroot, gelijk, omschrijf,
+      effOpacity, rendert,
+    };
   });
 }
 
@@ -158,6 +193,36 @@ export async function bevriesAnimaties(page) {
 }
 
 /**
+ * Scroll de pagina één keer helemaal door, zodat scroll-onthulde inhoud daadwerkelijk
+ * zichtbaar wordt, en keer daarna terug naar boven.
+ *
+ * Zonder dit meet een sweep alleen wat boven de vouw staat. `.leerpad-card` (landing.css
+ * :1328) staat op `opacity: 0` en krijgt pas `.visible` van een IntersectionObserver;
+ * hetzelfde patroon staat op drie andere kaartgroepen ("Entrance animation"). Gemeten in
+ * Sessie 228: zonder scrollen viel de hele `.level-badge`-groep buiten de populatie — en
+ * díé bevat het laagste contrast van de site (1,74:1).
+ *
+ * Let op de volgorde: dit hoort ná `bevriesAnimaties()`, want dan klapt `.visible`
+ * onmiddellijk door in plaats van over een transitie. `behavior: 'instant'` is nodig omdat
+ * `animations.css` `html { scroll-behavior: smooth }` zet — een smooth scroll levert
+ * tussenposities op en de observers vuren dan op een andere plek dan bedoeld.
+ *
+ * @param {import('@playwright/test').Page} page
+ */
+export async function onthulAlles(page) {
+  await page.evaluate(async () => {
+    const stap = Math.round(window.innerHeight * 0.8);
+    const eind = document.documentElement.scrollHeight;
+    for (let y = 0; y < eind + stap; y += stap) {
+      window.scrollTo({ top: y, behavior: 'instant' });
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    }
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    await new Promise((r) => setTimeout(r, 150));
+  });
+}
+
+/**
  * Zet het thema en wacht tot kleuren én achtergronden stabiel zijn.
  *
  * Bevriest eerst de animaties, zodat de wachttijd alleen nog de layout hoeft op te vangen
@@ -168,7 +233,25 @@ export async function bevriesAnimaties(page) {
  */
 export async function zetThema(page, thema) {
   await bevriesAnimaties(page);
-  await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), thema);
+  await page.evaluate((t) => {
+    document.documentElement.setAttribute('data-theme', t);
+
+    // `data-theme` is niet de enige themastaat op de pagina. `navbar.js:290`
+    // (`updateThemeToggleUI`) verplaatst óók de `.active`-klasse op `.toggle-option`, en
+    // `.toggle-option.active` draagt een eigen achtergrond-pill. Zetten we alleen het
+    // attribuut, dan spreekt de toggle het thema tegen en meten we een combinatie die op
+    // de echte site niet bestaat.
+    //
+    // Gemeten gevolg in Sessie 228: de `.toggle-indicator` in de active-pill kwam uit op
+    // 1,00:1 (`--color-button-bg` op `--color-button-bg`) — een "defect" op een element
+    // dat daar `opacity: 0` heeft. Twee valse positieven over 27 pagina's.
+    document.querySelectorAll('.theme-toggle').forEach((toggle) => {
+      toggle.setAttribute('aria-pressed', String(t === 'light'));
+      toggle.querySelectorAll('.toggle-option').forEach((optie) => {
+        optie.classList.toggle('active', optie.dataset.theme === t);
+      });
+    });
+  }, thema);
   await page.waitForTimeout(THEMA_SETTLE_MS);
 }
 

@@ -665,9 +665,21 @@ a[href='#all'].category-btn {
   margin: var(--spacing-lg) 0;
   padding: var(--spacing-lg);
 }
+/* Een donker eiland binnen light mode (S228). De link-tokens zijn themabreed licht-
+   geoptimaliseerd (--color-link = #0a4d94 in light) en landen hier op #0a0a0a: gemeten
+   2,36:1 op de `[TIP] Gehashte <a>wachtwoorden</a>`-regel in sql-injection-uitgelegd.html.
+   link-contrast.spec.js dekt één blogpost en het was niet deze. Custom properties erven,
+   dus deze herdefinitie repareert élke link in élk .terminal-example-blok. */
 [data-theme='light'] .terminal-example {
   background-color: #0a0a0a;
   color: var(--color-ui-primary);
+  --color-link: #79c0ff;        /* dark-variant - 10,18:1 op #0a0a0a (AAA) */
+  --color-link-hover: #8ecbff;  /* dark-variant - 11,44:1 op #0a0a0a (AAA) */
+  /* De felle UI-tokens hóren hier: op #0a0a0a meten ze 7,14 en 14,67. Sitebreed gingen ze
+     in light naar donkergroen (2,61 op de paginakleur), wat hier juist de rand onzichtbaar
+     zou maken — deze container gebruikt het token alleen als `border-color`. */
+  --color-ui-primary: #0db34f;  /* 7,14:1 op #0a0a0a */
+  --color-ui-hover: #1aff6b;    /* 14,67:1 op #0a0a0a */
 }
 [data-theme='light'] .terminal-example .output {
   color: var(--color-navbar-link);

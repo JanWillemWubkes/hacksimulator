@@ -66,7 +66,7 @@
   font-family: var(--font-heading);
   font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: var(--font-weight-bold);
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   display: block;
 }
 
@@ -164,7 +164,7 @@
   font-family: var(--font-heading);
   font-size: 2rem;
   font-weight: var(--font-weight-bold);
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   display: block;
   margin-top: var(--spacing-sm);
 }
@@ -275,7 +275,7 @@
 }
 
 .developer-card .social-links a:hover {
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
 }
 
 /* ==================== FAQ Section (Mini — Layout Only) ==================== */
@@ -333,7 +333,7 @@
   justify-content: center;
   background: var(--color-prompt-bg-light);
   border-radius: 10px;
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
 }
 
 .legal-link-content {
@@ -363,7 +363,7 @@
 }
 
 .legal-link-card:hover .legal-link-arrow {
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   transform: translateX(4px);
 }
 
@@ -467,7 +467,7 @@
 
 .form-status-success {
   display: block;
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   background: var(--color-prompt-bg-light);
   border: 1px solid var(--color-prompt-border-light);
   padding: var(--spacing-sm) var(--spacing-md);
@@ -627,7 +627,7 @@
 
 .gids-related a:hover,
 .gids-related a:focus-visible {
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   border-bottom-color: var(--color-cta-primary);
 }
 
@@ -636,7 +636,7 @@
   font-family: var(--font-terminal);
   font-size: 1.1rem;
   font-weight: var(--font-weight-bold);
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   margin-bottom: var(--spacing-md);
 }
 
@@ -698,7 +698,7 @@
   font-family: var(--font-terminal);
   font-size: 1.4rem;
   font-weight: var(--font-weight-bold);
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
 }
 
 .gids-price-sub {
@@ -759,7 +759,7 @@
   font-family: var(--font-terminal);
   font-size: 1.75rem;
   font-weight: var(--font-weight-bold);
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   line-height: 1.1;
 }
 

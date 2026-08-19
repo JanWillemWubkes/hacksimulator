@@ -58,7 +58,7 @@ html:has(.commands-category-nav-sticky) {
 .commands-category-nav a:hover,
 .commands-category-nav a.active {
   border-color: var(--color-cta-primary);
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
 }
 
 /* Actieve categorie krijgt een subtiele vulling zodat de filter-staat
@@ -173,7 +173,7 @@ html:has(.commands-category-nav-sticky) {
   font-family: var(--font-heading);
   font-size: 1.3rem;
   font-weight: var(--font-weight-bold);
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   text-align: left;
   margin: 0 0 var(--spacing-sm) 0;
   padding-bottom: var(--spacing-xs);
@@ -241,24 +241,27 @@ html:has(.commands-category-nav-sticky) {
   text-transform: uppercase;
 }
 
+/* Sessie 228: de `color` was hier gelijk aan de hue van de eigen 15%-tint, wat in light
+   1,74-2,83:1 opleverde en in dark 4,56-5,82:1. Nu per thema getokeniseerd; de tint zelf
+   is onveranderd, zodat de badges dezelfde kleurcodering houden. Zie main.css. */
 .command-level-beginner {
   background: rgba(63, 185, 80, 0.15);
-  color: #3fb950;
+  color: var(--badge-success-text);
 }
 
 .command-level-intermediate {
   background: rgba(210, 153, 34, 0.15);
-  color: #d29922;
+  color: var(--badge-warning-text);
 }
 
 .command-level-advanced {
   background: rgba(248, 81, 73, 0.15);
-  color: #f85149;
+  color: var(--badge-danger-text);
 }
 
 .command-level-simulator {
   background: rgba(163, 113, 247, 0.15);
-  color: #a371f7;
+  color: var(--badge-sim-text);
 }
 
 /* ==================== Card Content ==================== */
@@ -328,7 +331,7 @@ html:has(.commands-category-nav-sticky) {
   font-family: var(--font-heading);
   font-size: clamp(1.25rem, 3vw, 1.75rem);
   font-weight: var(--font-weight-bold);
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   display: block;
 }
 

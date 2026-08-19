@@ -137,33 +137,23 @@ test.describe('Accent-tekst — contrast tegen de effectieve achtergrond', () =>
     });
   }
 
-  // De grens tussen "opgelost" en "bewust gelaten" is een MEETBARE eigenschap, geen notitie:
-  // alles wat nog --color-cta-primary als tekst draagt en onder AAA zit, hoort large text te
-  // zijn. Zodra iemand die token op normale tekst zet, valt deze test - ook als het element
-  // toevallig AA haalt. Dat is precies het gat waar de 101 falers in zaten.
+  // ── VERWIJDERD in Sessie 228: "resterende CTA-groene tekst onder AAA is uitsluitend
+  //    large text" (12 tests) ──────────────────────────────────────────────────────────
   //
-  // Per pagina, niet als een lus over alle twaalf in een test. De eerste versie deed 12
-  // navigaties achter elkaar en werd daardoor flaky zodra er een tweede worker naast draaide
-  // (groen in isolatie, rood in de volle run) - een test die onder belasting iets anders
-  // meet dan in rust is geen guard.
-  for (const pad of PAGINAS) {
-    test(`${pad} — resterende CTA-groene tekst onder AAA is uitsluitend large text`, async ({ page }) => {
-      await page.goto(pad);
-      await page.evaluate(() => document.fonts.ready);
-
-      const rijen = await meetAccentTekst(page, 'light');
-      // Expliciet op isCta filteren, niet op !isAccent: sinds de Dark-Frame-token
-      // meegescand wordt zou !isAccent die er ook in trekken, en dan zou de foutmelding
-      // naar de verkeerde token wijzen.
-      const overtreders = rijen
-        .filter((r) => r.isCta && r.contrast < r.AAA && !r.groot)
-        .map(beschrijf);
-
-      expect(
-        overtreders,
-        `${pad}: normale tekst in --color-cta-primary hoort --color-accent-text te gebruiken. ` +
-          'De CTA-token is bedoeld als ACHTERGROND (met --color-cta-text erop), niet als tekst.'
-      ).toEqual([]);
-    });
-  }
+  // Die assertie tolereerde `--color-cta-primary` als tekstkleur zolang het large text was.
+  // Sessie 228 heeft élk tekstgebruik van dat token weggehaald — 32 regels in styles/ en 3
+  // in woordenlijst.html — dus zijn populatie (`rijen.filter(r => r.isCta …)`) is sindsdien
+  // structureel LEEG. Een filter over nul rijen levert altijd `[]` en dus altijd groen: de
+  // test kon niet meer om de juiste reden falen. Dat is exact de klacht uit TASKS #62 ("een
+  // test die niet kan falen om de juiste reden is erger dan geen test"), en hij weghalen is
+  // het patroon uit architecture-patterns §14: repareren door te verwijderen, niet door er
+  // een tegenregel naast te zetten.
+  //
+  // De invariant is niet verdwenen maar STRENGER geworden, in
+  // `text-contrast.spec.js` → `OPPERVLAK_TOKENS` (assertie 5):
+  //     hier    CTA-token als tekst mag, mits large text én ≥ AAA   — 12 pagina's, light
+  //     daar    CTA-token als tekst mag NOOIT                       — 30 pagina's, 2 thema's
+  // Die versie is met een eigen mutant bewezen: `.gids-price` terugzetten op het
+  // oppervlak-token geeft 1 failed / 30 passed, terwijl de contrast-sweep groen blijft —
+  // #166534 haalt daar namelijk 7,07:1 en zou dus door élke contrastdrempel heen komen.
 });

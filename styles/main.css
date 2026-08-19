@@ -111,17 +111,32 @@
   --color-text-dim: #a1a8b0;
 
   /* Semantic Colors - GitHub Dark Muted Palette (50-60% sat) */
-  --color-error: #f85149;           /* GitHub red - errors stand out (60% sat) */
+  /* S228: was #f85149 = 5,65 op --color-bg. Enige semantische kleur die in dark onder AAA
+     viel (warning 7,50 / success 7,45 zitten erboven). Meting: text-contrast.spec.js. */
+  --color-error: #fa7c76;           /* GitHub red, lichter - 7,40:1 op --color-bg (AAA) */
   --color-warning: #d29922;         /* Muted orange - readable (55% sat) */
   --color-info: #79c0ff;            /* Muted blue - tips, hints (60% sat) */
   --color-success: #3fb950;         /* Muted green - positive feedback (DISTINCT from prompt!) */
+
+  /* ── Niveaubadges (S228) ────────────────────────────────────────────────────────────
+     `.level-badge` (landing.css) + `.command-level-*` (commands.css) deden allebei
+     `background: rgba(HUE,.15); color: HUE`. Eén hue kan niet tegelijk een 15%-tint ZIJN
+     en er leesbaar OP staan: gemeten light 1,74-3,09 (alle acht onder AA), dark 4,42-7,66
+     (zes onder AAA) — fout in BEIDE thema's. Tint blijft, tekst per thema; waarden gekozen
+     op ≥7,4 (kop boven de lat van 7,0). Details: TASKS #72. */
+  --badge-success-text: #6bcd79;    /* 7,66 / 7,40 op de groene tint in dark */
+  --badge-warning-text: #e2b14a;    /* 7,44 / 7,40 op de gele tint in dark */
+  --badge-danger-text:  #fb9692;    /* 7,84 / 7,40 op de rode tint in dark */
+  --badge-sim-text:     #c5a6fa;    /* 7,41 op de paarse tint in dark */
 
   /* Derived Color Utilities - Hybrid palette support */
   --color-info-dim: color-mix(in srgb, var(--color-info) 40%, transparent);
   --color-text-secondary: color-mix(in srgb, var(--color-text) 70%, transparent);
 
   /* UI Elements - GitHub Dark Blue Primary (60% sat) */
-  --color-ui-primary: #58a6ff;      /* Muted blue - primary buttons/headings (60% sat, GitHub accent) */
+  /* S228: was #58a6ff — grootste AAA-gat in dark, 115 elementen over 15 blogpagina's op
+     6,70 (blog-h3 en <strong> op de kaartkleur). Blijft onderscheidbaar van --color-link. */
+  --color-ui-primary: #6cb6ff;      /* Muted blue - AAA op elk gemeten donker oppervlak (7,87 slechtste) */
   --color-ui-hover: #79c0ff;        /* Lighter blue - hover state (consistent feedback) */
   /* Sessie 227: was #8b949e. Sessie 226 tilde --color-text-dim van #8b949e naar #a1a8b0
      omdat die kleur op GEEN enkel donker oppervlak AAA haalde, maar repareerde alleen dat
@@ -233,7 +248,12 @@
 
   /* Theme Toggle Colors */
   --color-toggle-text-active: #ffffff;  /* Bright white for active toggle label (VS Code pattern) */
-  --color-toggle-text-inactive: rgba(204, 204, 204, 0.4);  /* Dimmed grey for inactive label (40% opacity) */
+  /* S228: was rgba(204,204,204,.4) — composite over de #1a1a1a navbar = rgb(97,97,97),
+     2,82:1, onder AA op 27 pagina's in BEIDE thema's. Géén "inactive UI component" in
+     WCAG-zin: beide opties zijn altijd klikbaar (`.toggle-option { cursor: pointer }`),
+     dus de 1.4.3-uitzondering geldt niet. De actieve staat blijft herkenbaar aan pill +
+     witte tekst + █-indicator; het dimmen droeg dat onderscheid niet alleen. */
+  --color-toggle-text-inactive: #a1a8b0;  /* Gedempt label - 7,25:1 op de #1a1a1a navbar (AAA) */
   --color-toggle-hover: rgba(255, 255, 255, 0.1);  /* Subtle white overlay for hover highlight */
 
   /* Modal Overlay */
@@ -301,16 +321,34 @@
   --vignette-edge: rgba(240, 240, 240, 1);     /* Off-white edges - subtle fade */
 
   /* Text Colors - Dark variant for readability (WCAG AA/AAA compliant) */
-  --color-prompt: #7ac800;          /* HTB Lime adjusted - 4.8:1 contrast (WCAG AA ✅) */
+  /* S228: het commentaar hier claimde "4.8:1 (WCAG AA ✅)" — een bewering zonder ondergrond.
+     Gemeten hangt alles af van WAAR de kleur landt: navbar #1a1a1a 8,36 · blog-demo
+     #0a0a0a 9,00 · de LICHTE terminal #f8f8f8 **1,96** (de promptregel én de getypte
+     tekst). Token blijft; terminal.css herdefinieert --color-prompt/--color-input op
+     `[data-theme="light"] #terminal-container`. */
+  --color-prompt: #7ac800;          /* HTB Lime - AAA op donkere oppervlakken (8,36 navbar / 9,00 demo) */
   --color-input: #7ac800;           /* Consistent with prompt */
   --color-text: #0a0a0a;            /* Very dark grey - maximum contrast */
   --color-text-dim: #444444;        /* Dimmed grey for secondary info */
 
   /* Semantic Colors - Darker variants for light backgrounds */
-  --color-error: #d60047;           /* Darker magenta for contrast */
-  --color-warning: #dd8800;         /* Darker orange for contrast */
-  --color-info: #0969da;            /* GitHub blue - proven readability on light backgrounds */
-  --color-success: #008844;         /* Darker green - 7.5:1 (WCAG AAA ✅) DISTINCT from prompt! */
+  /* S228, gemeten op #f8f8f8: error #d60047 → 5,01; success #008844 → 4,29 (het commentaar
+     claimde "7.5:1 WCAG AAA ✅" — zelfs op zuiver wit haalt het 4,56). Tint behouden. */
+  --color-error: #a30039;           /* Donkerder magenta - 7,56:1 op #f8f8f8 (AAA) */
+  /* Deze twee renderen in light op géén enkele IDLE pagina: ze zitten in
+     .terminal-output-warning / .tip-box / .warning-icon, die pas ontstaan nádat er een
+     commando is getypt — daarom bleven ze drie rondes buiten beeld. Gemeten: warning
+     #dd8800 → 2,76 wit / 2,60 op #f8f8f8 (onder AA); info #0969da → 5,19 / 4,89 (onder
+     AAA — dezelfde waarde die S227 uit --color-link haalde, hier blijven staan). */
+  --color-warning: #744800;         /* Donkerder amber - 7,87 wit / 7,41 op #f8f8f8 (AAA) */
+  --color-info: #074fa4;            /* Donkerder GitHub blue - 7,88 wit / 7,42 op #f8f8f8 (AAA) */
+  --color-success: #0a5c2e;         /* Donkerder groen - 7,65:1 op #f8f8f8 (AAA) DISTINCT from prompt! */
+
+  /* Niveaubadges - light variant. Zie het dark-blok voor de diagnose. */
+  --badge-success-text: #1e5726;    /* 7,52 / 7,40 op de groene tint in light */
+  --badge-warning-text: #634810;    /* 7,70 / 7,40 op de gele tint in light */
+  --badge-danger-text:  #950c06;    /* 7,40 / 7,45 op de rode tint in light */
+  --badge-sim-text:     #570cd4;    /* 7,40 op de paarse tint in light */
 
   /* Alert/Info Box Surfaces - Light mode overrides (subtle dark tint on white) */
   --color-surface-elevated: rgba(0, 0, 0, 0.03);  /* Very subtle grey tint - professional alerts */
@@ -325,14 +363,18 @@
   --color-prompt-border-strong: rgba(22, 163, 74, 0.6);
   --color-prompt-shadow: rgba(22, 163, 74, 0.15);
 
-  /* CTA Colors - Light mode. Deze token hoort op een ACHTERGROND met --color-cta-text
-     (wit) erop; zo gebruikt is hij prima. De comment hier claimde "WCAG AA 4.2:1" als
-     tekstkleur, en dat klopte niet: gemeten is #16a34a als TEKST 3,30:1 op wit en
-     2,83:1 op een .section-band — allebei onder AA (4,5). Voor tekst bestaat nu
-     --color-accent-text hieronder. */
-  --color-cta-primary: #16a34a;                   /* Tailwind Green 600 - levendig, verzadigd groen */
-  --color-cta-primary-hover: #15803d;             /* Tailwind Green 700 - darker hover state */
-  --color-cta-primary-glow: rgba(22, 163, 74, 0.2); /* Matching glow for light backgrounds */
+  /* CTA Colors - Light mode. Dit token draagt het CTA-OPPERVLAK; de tekst erop is
+     --color-cta-text (wit). Voor accenttekst bestaat --color-accent-text hieronder.
+
+     S227 schreef hier "zo gebruikt is hij prima" — zelf een onbewezen bewering. Gemeten
+     is WIT EROP: Green 600 #16a34a 3,30 (onder AA, 13 pagina's) · Green 700 5,02 · Green
+     800 7,13 · Green 900 9,11. Het gaat om de primaire "Start de simulator"-knop plus
+     .step-number, de nieuwsbriefknop en de h2 in de groene band — 20,25px/600 telt als
+     NORMALE tekst (gewicht 600 is geen bold), dus de lat is 7,0. Green 800 is de kleinste
+     stap die dat haalt; de hover gaat mee naar Green 900. */
+  --color-cta-primary: #166534;                   /* Tailwind Green 800 - wit erop haalt 7,13:1 (AAA) */
+  --color-cta-primary-hover: #14532d;             /* Tailwind Green 900 - wit erop haalt 9,11:1 (AAA) */
+  --color-cta-primary-glow: rgba(22, 101, 52, 0.2); /* Matching glow for light backgrounds */
   --color-cta-text: #ffffff;                      /* White text on green CTA (better contrast) */
 
   /* Inline accent-TEKST in light mode. Tailwind Green 900, gekozen op meting en niet op
@@ -345,10 +387,21 @@
      Ondergronden: .section-band = rgb(236,238,240), pagina = rgb(248,248,248)/wit. */
   --color-accent-text: #14532d;                   /* Tailwind Green 900 - AAA als tekst in light */
 
-  /* UI Elements - Vibrant terminal green + bright hover */
-  --color-ui-primary: #0db34f;      /* Vibrant green - 3.25:1 contrast on white (WCAG AA) - terminal aesthetic */
-  --color-ui-hover: #1aff6b;        /* Bright neon hover - 40% delta for clear interaction */
-  --color-ui-secondary: #0969da;    /* GitHub blue - matches info/links (context-aware theming) */
+  /* UI Elements - terminalgroen.
+     S228: het commentaar claimde "3.25:1 on white (WCAG AA)" — 3,25 ís geen AA. Gemeten:
+     ui-primary #0db34f → 2,61 op #f8f8f8, ui-hover #1aff6b → 1,27. Ze renderen in light
+     nergens als tekst (blog.css/legal.css mappen dat op --color-link), dus de element-sweep
+     was er schoon; gevonden door de TOKEN-MATRIX, die toetst wat er zou gebeuren als er wél
+     tekst in landde — precies wat de naam uitnodigt. De felle variant blijft lokaal in het
+     donkere .terminal-example-eiland (blog.css). */
+  --color-ui-primary: #075f2a;      /* Donker terminalgroen - 7,40:1 op #f8f8f8 (AAA) */
+  --color-ui-hover: #00511d;        /* Donkerder hover - 9,00:1 op #f8f8f8 (AAA) */
+  /* S228: was #0969da met het commentaar "matches info/links" — en juist dát klopte niet
+     meer: --color-link ging in S227 naar #0a4d94 en --color-info hierboven naar #074fa4,
+     allebei omdat 5,19 geen AAA is. Dit token bleef achter, o.a. op `.btn-secondary` in de
+     cookiebanner. Derde keer dat één helft van een tokenpaar gerepareerd was en de andere
+     niet (vgl. --color-text-dim S226, --color-ui-primary hierboven). */
+  --color-ui-secondary: #074fa4;    /* GitHub blue, donkerder - 7,88 wit / 7,42 op #f8f8f8 (AAA) */
   --color-border: #e0e0e0;          /* Darker grey borders - better visibility */
   /* Sessie 227: was #0969da (5,19 op wit — AA gehaald, AAA 7,0 niet). Gemeten over 16
      pagina's × 2 thema's: 291 tekstelementen dragen dit token in light, 98 daarvan onder
@@ -363,7 +416,9 @@
   --color-modal-text: #0a0a0a;      /* Very dark text - maximum contrast */
 
   /* Extended UI Colors - Light mode variants */
-  --color-text-muted: #666666;      /* Darker muted text */
+  /* S228: was #666666 (5,41 op #f8f8f8) — onder AAA op 7 elementen over 4 pagina's.
+     #4f4f4f haalt 7,71 en blijft gedempt t.o.v. --color-text (16,61). */
+  --color-text-muted: #4f4f4f;      /* Gedempte tekst - 7,71:1 op #f8f8f8 (AAA) */
   --color-text-light: #2a2a2a;      /* Very dark grey - better contrast */
   --color-star-inactive: #999999;   /* Much darker grey - visibility fix! */
   --color-border-input: #d0d0d0;    /* Darker grey - better visibility */
@@ -389,7 +444,7 @@
 
   /* Theme Toggle Colors - STAYS LIGHT in light mode (navbar is dark) */
   --color-toggle-text-active: #ffffff;  /* Bright white for active label (same as dark mode - navbar stays dark) */
-  --color-toggle-text-inactive: rgba(204, 204, 204, 0.4);  /* Dimmed inactive label (40% opacity - VS Code pattern) */
+  --color-toggle-text-inactive: #a1a8b0;  /* Gedempt label - 7,25:1 op de #1a1a1a navbar (AAA); zie het dark-blok */
   --color-toggle-hover: rgba(255, 255, 255, 0.15);  /* Slightly brighter hover for visibility on #1a1a1a navbar */
 
   /* Dropdown Colors - STAYS DARK in light mode (Dark Frame Pattern) */
@@ -892,15 +947,20 @@ button {
   margin: 0;
 }
 
-/* Cookie banner link styling - matches footer links (Phase 1.5.1)
-   No underline on hover, just color change for consistency with footer chrome */
+/* Cookie banner link styling.
+   S228: stond op --color-footer-link "for consistency with footer chrome". Die premisse
+   klopt niet — de footer is Dark Frame (altijd donker), maar deze banner draagt
+   `background-color: var(--color-bg-modal)` en dat is in light #ffffff. Dark-Frame-tekst op
+   een thema-volgend oppervlak = #c9d1d9 op wit = **1,54:1**, het laagste contrast dat de
+   sitebrede sweep vond, in de banner die elke nieuwe bezoeker als eerste ziet
+   (spiegelbeeld van troubleshooting-issue 7). Nu 8,39 in light / 8,89 in dark. */
 .cookie-banner a {
-  color: var(--color-footer-link);
+  color: var(--color-link);
   text-decoration: none;
 }
 
 .cookie-banner a:hover {
-  color: var(--color-footer-link-hover);
+  color: var(--color-link-hover);
 }
 
 .cookie-buttons {
@@ -1860,7 +1920,7 @@ abbr.jargon {
 }
 
 .faq-question:hover .faq-question-text {
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
 }
 
 .faq-question:focus-visible {
@@ -1877,7 +1937,7 @@ abbr.jargon {
 
 .faq-item.open .faq-icon {
   transform: rotate(180deg);
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
 }
 
 /* FAQ Answer (Collapsible) */
@@ -2072,7 +2132,7 @@ abbr.jargon {
   transition: color var(--transition-fast);
 }
 .homepage-newsletter .newsletter-privacy a:hover {
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
 }
 /* [data-theme="light"] .homepage-newsletter is vervallen: het herhaalde exact de basisregel
    hierboven (--color-bg-modal is zelf al thema-afhankelijk), maar deed dat op (0,2,0) en
@@ -2091,7 +2151,7 @@ abbr.jargon {
   transition: color var(--transition-fast), border-color var(--transition-fast);
 }
 .newsletter-or-support a:hover {
-  color: var(--color-cta-primary);
+  color: var(--color-accent-text);
   border-bottom-color: var(--color-cta-primary);
 }
 @media (max-width: 768px) {
