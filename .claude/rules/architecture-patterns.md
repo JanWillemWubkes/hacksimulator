@@ -561,3 +561,76 @@ moet verslaan, geen productiecode (vgl. de vuistregel om `!important` in `styles
 > met geen enkel token overeen, dan meet je een tussenframe. Let op dat het ook de
 > ACHTERGROND kan zijn die achterloopt, niet alleen de tekstkleur — dat kostte hier een
 > verkeerde diagnose ("de fix heeft iets gesloopt") voordat een directe inspectie 7,88 gaf.
+
+---
+
+## 19. Een guard die op een tokenlijst filtert, bewaakt geen klasse (Sessie 228)
+
+§17 loste "de rusttoestand-sweep ziet geen hover" op met een token-**matrix**. Dat werkte —
+maar de matrix filterde zelf op vijf tokennamen, en dat is dezelfde fout één laag hoger.
+Drie sessies achter elkaar (226, 227, #72) repareerden telkens de vindplaats die toevallig
+in de lijst stond. Ongefilterd gemeten waren het **152 element-toestanden onder AA en 378
+onder AAA, over 18 kleurwaarden**.
+
+**Draai de populatie om.** Meet élk element dat zelf een tekstnode rendert, en laat de
+uitzonderingen zich verantwoorden:
+
+```js
+for (const el of document.querySelectorAll('*')) {
+  if (!eigenTekst(el)) continue;                 // container die alleen doorgeeft telt niet
+  if (el.getClientRects().length === 0) { uitgesloten.push('geen-rects'); continue; }
+  if (effOpacity(el) === 0)             { uitgesloten.push('opacity-0');  continue; }
+  const rauw = parse(getComputedStyle(el).color);
+  if (!rauw || rauw.a === 0)            { uitgesloten.push('transparant'); continue; }
+  // alpha < 1 landt ÓP de achtergrond; ratio() negeert alpha
+  const kleur = rauw.a < 1 ? over(rauw, effBg(el)) : rauw;
+  …
+}
+// En asserteer de uitsluitingen: een sweep die stil overslaat kan een defect wegfilteren.
+expect(uitgesloten.filter(u => !TOEGESTAAN.has(u.reden))).toEqual([]);
+```
+
+### Vier meetgaten, elk met een gemeten voorbeeld
+
+| gat | wat er gebeurt | wat het kostte |
+|---|---|---|
+| **tokenfilter** | wat niet in de lijst staat, wordt niet gemeten | `--color-footer-link` #c9d1d9 op de witte cookiebanner: **1,54:1**, op élke pagina |
+| **geen scroll** | `opacity: 0` tot een observer `.visible` zet | de hele `.level-badge`-groep — met de laagste waarde van de site (**1,74:1**) |
+| **één viewport** | de large-text-lat kantelt met de basisfont | blog-`<strong>` is LARGE op desktop (lat 4,5, haalt 6,70) en normaal op mobiel (lat 7,0): **115 falers alleen mobiel**, 54 alleen desktop |
+| **alleen rust** | sommige tokens renderen pas ná interactie | `--color-warning` 2,60 en `--color-info` 4,89 in `.tip-box`/`.terminal-output-warning`; en een `<input>` heeft géén tekstnode, dus de getypte prompttekst (1,96:1) is onzichtbaar voor `eigenTekst()` |
+
+Groepeer bevindingen op **kleurwaarde**, niet op tokennaam: #a1a8b0 is tegelijk
+`--color-text-dim`, `--color-ui-secondary` én `--color-text-muted`, dus per token
+rapporteren verdeelt één defect over drie regels en verbergt de omvang.
+
+### Een uitzondering is een assertie, geen notitie
+
+`--color-cta-primary` haalt AAA niet als tekst (6,71 op #f8f8f8) en dát is correct — het is
+een oppervlak. Schrijf dan niet "niet als tekst gebruiken" maar:
+
+```js
+// NUL elementen mogen tekst in deze kleur renderen.
+expect(rijen.filter(r => r.kleur === tokenWaarde('--color-cta-primary'))).toEqual([]);
+```
+
+Die assertie ving in de mutantenreeks wat géén contrastdrempel vangt: `.gids-price` terug op
+het oppervlak-token geeft **1 failed / 30 passed**, terwijl de sweep groen blijft omdat
+#166534 daar 7,07:1 haalt. Zonder haar is de regel ononderscheidbaar van geen regel.
+
+Geef de uitzondering-op-de-uitzondering er één bij. In dark valt `--color-cta-primary` samen
+met `--color-accent-text` (allebei #9fef00), dus kleurvergelijking kan ze daar niet
+onderscheiden en de check slaat over — vastgelegd in `gelijkInThema` en geasserteerd, zodat
+hij vanzelf weer aangaat zodra de waarden uit elkaar lopen.
+
+### Twee meetvallen die hierbij horen
+
+- **`getComputedStyle` liegt niet, maar meet ook onzichtbare dingen.** Een element met
+  `opacity: 0` levert gewoon een kleur — 54 valse metingen, waaronder een "defect" van
+  1,00:1 op de thema-indicator.
+- **Een themawissel is meer dan `data-theme`.** `navbar.js:290` verplaatst óók de
+  `.active`-klasse van de toggle. Zet je alleen het attribuut, dan meet je een combinatie
+  die op de echte site niet bestaat. `zetThema()` synchroniseert dat sinds Sessie 228.
+
+> Vuistregel: als je guard een **lijst** als populatie heeft, bewaakt hij die lijst — niet
+> het probleem. Vraag bij elke nieuwe guard: wat is hier de klasse, en wat is de goedkoopste
+> manier om de héle klasse te meten in plaats van de exemplaren die ik nu toevallig ken?

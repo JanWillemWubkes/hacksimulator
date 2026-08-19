@@ -4,6 +4,295 @@
 
 ---
 
+## Sessie 228: Vier CSS-commentaren claimden een contrast dat ze niet haalden — en de sweep die dat had moeten zien, filterde op tokennaam (19 aug 2026)
+
+**Mission:** sluit de contrast-KLASSE, niet het volgende exemplaar. TASKS #72 noteerde één
+token op één oppervlak (`--color-text-dim` op de edu-panelen, 5,21:1), maar dat was de derde
+ronde van hetzelfde patroon: Sessie 226 tilde `--color-text-dim` van #8b949e naar #a1a8b0
+("haalt nergens AAA"), Sessie 227 vond dat #8b949e óók op `--color-ui-secondary`,
+`--color-text-muted`, `landing.css --terminal-demo-text-dim` en drie hardcoded footer-regels
+stond (34 elementen), en #72 was de nieuwe waarde die het op een derde oppervlak alsnog niet
+haalde. Opdracht: één ongefilterde sitebrede sweep, per kleurwaarde rapporteren, en het
+verschil tussen "gerepareerd" en "gemeten uitzondering" vastleggen als assertie.
+
+**Meting.** 30 pagina's × 2 thema's × 2 viewports = **13.157 unieke element-toestanden**.
+Élk element dat zelf een tekstnode rendert, tegen zijn effectieve achtergrond, gegroepeerd op
+**kleurwaarde** en niet op tokennaam — dezelfde hex zit onder meerdere namen (#a1a8b0 is
+tegelijk `--color-text-dim`, `--color-ui-secondary` en `--color-text-muted`, dus per token
+rapporteren verdeelt één defect over drie regels en verbergt de omvang).
+
+| | element-toestanden | onder AA | onder AAA |
+|---|---|---|---|
+| vóór | 13.157 | **152** | **378** |
+| ná | 13.157 | **0** | **0** |
+
+18 kleurwaarden faalden. De grootste, op laagste ratio:
+
+| kleur | rol | laagste | omvang |
+|---|---|---|---|
+| `#c9d1d9` op wit | `--color-footer-link` in de cookiebanner | **1,54** | élke pagina, light |
+| `#eab308` | `.level-badge.intermediate` op eigen 15%-tint | **1,74** | index, light |
+| `#7ac800` | `--color-prompt`/`--color-input` op de lichte terminal | **1,96** | promptregel + getypte tekst |
+| `#1aff6b` | `--color-ui-hover` (latent) | **1,27** | via token-matrix |
+| `rgba(204,204,204,.4)` | `--color-toggle-text-inactive` | **2,82** | 27 pagina's, **beide** thema's |
+| `#0a4d94` op `#0a0a0a` | `--color-link` in een blog-demo | **2,36** | sql-injection-uitgelegd |
+| wit op `#16a34a` | `--color-cta-primary` als knopvlak | **3,30** | 13 pagina's — de primaire CTA |
+
+**Waarom drie eerdere rondes de klasse misten — vier meetgaten, elk met een gemeten voorbeeld:**
+
+1. **Tokenfilter.** Álle bestaande contrastspecs filteren op een tokenlijst (`link-contrast`
+   op vijf tokens, `accent-text` en `eyebrow` op één). Het zwaarste defect van de site stond
+   op geen enkele lijst. Een guard die een *lijst* bewaakt, bewaakt geen *klasse*.
+2. **Geen scroll.** `.leerpad-card` (landing.css) staat op `opacity: 0` tot een
+   IntersectionObserver `.visible` zet. Zonder een scrollstap viel de hele `.level-badge`-groep
+   buiten de populatie — en dáár zat de laagste waarde van de site.
+3. **Eén viewport.** 115 falers bestaan alléén op mobiel: blog-`<strong>` en `h3` zijn op
+   desktop ≥18,66px én bold (LARGE, lat 4,5) en halen 6,70, maar op mobiel zakt de font-size
+   en geldt de lat van 7,0. Omgekeerd bestaan 54 falers alleen op desktop, omdat de
+   thema-toggle op mobiel in het dichtgeklapte menu zit en dan geen rects heeft.
+4. **Alleen rusttoestanden.** `--color-warning` en `--color-info` renderen in light op géén
+   enkele stilstaande pagina: ze zitten in `.terminal-output-warning`, `.tip-box` en
+   `.warning-icon`, die pas ontstaan nádat er een commando is getypt. En een `<input>` heeft
+   geen tekstnode, dus `eigenTekst()` ziet de getypte waarde nooit — dáár zat 1,96:1.
+
+**Vier CSS-commentaren claimden een contrast dat ze niet haalden**, alle vier in de
+geruststellende richting (de richting waarin niemand narekent):
+
+| commentaar | claim | gemeten |
+|---|---|---|
+| `--color-prompt` | "4.8:1 contrast (WCAG AA ✅)" | **1,96** op de lichte terminal |
+| `--color-success` | "7.5:1 (WCAG AAA ✅)" | **4,29** op #f8f8f8 (4,56 op zuiver wit) |
+| `--color-ui-primary` | "3.25:1 on white (WCAG AA)" | 3,25 **ís** geen AA (lat 4,5) |
+| `--color-cta-primary` | "op een ACHTERGROND met wit erop is hij prima" (S227) | **3,30** |
+
+Die laatste is de scherpste: Sessie 227 diagnosticeerde correct dat het token als *tekst*
+faalde en verplaatste die gebruiken, maar schreef zonder meten dat de *achtergrond*-rol in
+orde was. De rol die als veilig werd afgeschreven, was de rol die faalde — op de primaire
+"Start de simulator"-knop van de hele site.
+
+**Fixes, langs vier mechanismen:**
+
+- **Tokenwaarden** (waar de waarde simpelweg te licht/donker was): `--color-error` (light
+  #d60047→#a30039, dark #f85149→#fa7c76), `--color-warning` (light #dd8800→#744800),
+  `--color-info` (light #0969da→#074fa4), `--color-success` (light #008844→#0a5c2e),
+  `--color-text-muted` (light #666666→#4f4f4f), `--color-ui-primary` (dark #58a6ff→#6cb6ff,
+  light #0db34f→#075f2a), `--color-ui-hover` (light #1aff6b→#00511d), `--color-ui-secondary`
+  (light #0969da→#074fa4), `--color-toggle-text-inactive` (beide thema's, rgba→#a1a8b0).
+- **Eén token, twee rollen** (S221-patroon): `--color-cta-primary` blijft het CTA-OPPERVLAK
+  en gaat naar Green 800 (#166534) zodat wit erop 7,13 haalt; de hover naar Green 900. Álle
+  **35** `color:`-gebruiken (32 in `styles/`, 3 in een inline `<style>` in `woordenlijst.html`)
+  verhuizen naar `--color-accent-text`. In dark is dat een no-op: daar zijn beide #9fef00.
+- **Eén badge-tokenset** voor `.level-badge.*` (landing.css) en `.command-level-*`
+  (commands.css). Beide deden `background: rgba(HUE,.15); color: HUE` — één hue kan niet
+  tegelijk een 15%-tint ZIJN en er leesbaar OP staan. Vier hues × twee thema's, waarden
+  gekozen door de lichtheid te schuiven tot de laagste van beide badge-achtergronden ≥7,4
+  haalt (kop boven de lat, zodat een kleine achtergrondwijziging hem er niet onder duwt).
+- **Drie gescopede herdefinities** voor oppervlakken die van hun thema afwijken. Custom
+  properties erven, dus één herdefinitie op de container dekt alles eronder:
+  `[data-theme="light"] #terminal-container` (prompt/input → Green 900; dekt óók de negen
+  `--color-prompt`-gebruiken in terminal.css die pas ná een commando renderen),
+  `[data-theme='light'] .terminal-example` (donker eiland: link- én UI-tokens houden hun
+  donkere waarde), en `html:not([data-theme='light']) .terminal-edu-inner` (`--color-text-dim`
+  → #c0c7cf) — dát sluit de oorspronkelijke #72.
+
+**NEW `tests/e2e/text-contrast.spec.js`** (2 declaraties → 31 tests). Zes asserties per
+pagina: zelfbewaking, ongefilterde element-sweep, **uitsluitingen-als-assertie** (elk
+overgeslagen element moet een gedocumenteerde reden hebben), token-matrix voor de hover,
+de OPPERVLAK-token-assertie, en de uitzondering-op-de-uitzondering. Plus een aparte test die
+eerst commando's typt en dán meet, inclusief de `<input>`-waarde.
+
+**De gedocumenteerde uitzondering is een assertie, geen notitie.** `--color-cta-primary`
+haalt AAA niet als tekst (6,71 op #f8f8f8) en dat is correct — het is een oppervlak-token.
+In plaats van "let op, niet als tekst gebruiken" staat er: nul elementen mogen tekst in die
+kleur renderen. En omdat het token in dark samenvalt met zijn tekstalternatief (allebei
+#9fef00) slaat die check daar over — wat op zijn beurt in `gelijkInThema` is vastgelegd en
+geasserteerd, zodat de check vanzelf weer aangaat zodra de waarden uit elkaar lopen.
+
+**Zes mutanten, zes verschillende faalpatronen** (basislijn 31 passed):
+
+| mutant | uitkomst | wat het bewijst |
+|---|---|---|
+| M1 `--color-cta-primary` → #16a34a | 18 passed | element-sweep, 13 pagina's |
+| M2 `--color-ui-primary` → #0db34f | 1 passed | **alle 30** via ALLEEN de matrix — dit token rendert in light nergens als tekst |
+| M3 `.gids-price` → oppervlak-token | 1 failed / 30 passed | **ALLEEN assertie 5**; de sweep blijft groen want 7,07 haalt AAA gewoon |
+| M4 `--color-warning` → #dd8800 | 29 passed | 1 idle element tegen **14** in de terminal-uitvoertest |
+| M5 `--color-link` hernoemd | assertie 2 én 4 | de zelfbewakende tak ("token bestaat niet") |
+| M6 `.level-badge.intermediate` → #eab308 | 1 failed / 30 passed | uitsluitend zichtbaar dankzij `onthulAlles()` |
+
+M2, M3 en M4 zijn de dragende drie: elk faalt op precies één assertie die de andere twee niet
+raken. Zonder M3 zou de oppervlak-token-check ononderscheidbaar zijn van een check die niets
+doet; zonder M4 zou de terminal-uitvoertest niets toevoegen boven de paginasweep.
+
+**Helper uitgebreid** (`tests/e2e/helpers/contrast.js`):
+- `zetThema()` zette alleen `data-theme` en liet de `.active`-klasse van de thema-toggle
+  staan, terwijl `navbar.js:290` die óók verplaatst. Gevolg: een pagina waar de toggle het
+  thema tegensprak, en twee valse defecten (1,00:1 en 2,35:1) op een element met `opacity: 0`.
+- `rendert(el)` — rects + cumulatieve opacity + niet-transparante tekstkleur.
+- `onthulAlles(page)` — scrollt de pagina één keer door zodat scroll-onthulde inhoud
+  daadwerkelijk gemeten wordt.
+
+**Bijvangst: een test verwijderd.** `accent-text-contrast.spec.js` had een assertie die
+`--color-cta-primary` als tekst tolereerde mits large text. Sinds élk tekstgebruik weg is, is
+die populatie structureel leeg en levert het filter altijd `[]` — groen zonder iets te meten,
+exact de klacht uit #62. Verwijderd (arch-patterns §14: repareren door te verwijderen) en
+vervangen door de strengere assertie 5, die 30 pagina's × 2 thema's dekt in plaats van 12
+pagina's in light.
+
+**#73 gemeten en bewust niet uitgevoerd.** A/B op `certificates.spec.js`
+(`--repeat-each=4 --workers=4`, 24 test-instanties per run, 2 runs per arm): arm A (huidige
+klik-gebaseerde `acceptLegalModal`) **94 s / 93 s**, arm B (`addInitScript` vóór de navigatie
++ de klik weg) **82 s / 80 s** — ~13% sneller, **24/24 passed in alle vier de runs**. Winst in
+tijd, nul winst in robuustheid: geen van beide armen reproduceerde de teardown-timeout. Omdat
+#73 een robuustheidsprobleem is, is de omzetting van 69 aanroepen over 20 specs niet gedaan.
+
+**Commits:** `a9a4946` (implementatie + spec + TASKS), plus de doc-commit van deze `/summary`.
+
+**Metrics delta:**
+- Specs **43 → 44**, declaraties **313 → 314** (+2 van `text-contrast.spec.js`, −1 van de
+  verwijderde vacuüme test). Gemeten met `grep -rE "^\s*test\("`, niet uitgerekend: die +2
+  genereren **31** gedraaide tests.
+- Bundel **1095,17 → 1103,62 / 1120 KB**, marge 16,38 KB (1,5%). De +8,45 KB is volledig
+  CSS-**commentaar**; hij stond eerst op +13,5 KB en is binnen de sessie gehalveerd door het
+  verhaal naar de spec en naar TASKS te verplaatsen en in de CSS alleen het gemeten cijfer te
+  laten staan. `styles/` wordt niet geminificeerd, dus commentaar gaat letterlijk over de lijn.
+- Volle chromium-suite **489 passed / 0 failed / 7 skipped** (22,0 min) — nul regressies
+  ondanks 14 gewijzigde tokenwaarden. Nieuwe spec **93 passed** over drie motoren (7,9 min).
+
+**Learnings**
+
+⚠️ **Never:**
+- Een guard schrijven die op een **tokenlijst** filtert en denken dat je een klasse dekt. Drie
+  sessies lang repareerde elke ronde de vindplaats die toevallig in de lijst stond. Het
+  zwaarste defect van de site (1,54:1, elke pagina) stond in geen enkele lijst en was
+  onvindbaar zolang de populatie een lijst was in plaats van "alles".
+- Een contrastsweep draaien **zonder te scrollen**. Vier kaartgroepen dragen "Entrance
+  animation" met `opacity: 0` + een observer; zonder scrollstap meet je ze niet, en juist daar
+  zat 1,74:1.
+- Een contrastsweep draaien in **één viewport**. Het is niet symmetrisch: de large-text-lat
+  (≥18,66px én bold) kantelt bij een kleinere basisfont, dus 6,70 is groen op desktop en rood
+  op mobiel. 115 falers bestonden alleen mobiel, 54 alleen desktop.
+- `getComputedStyle` vertrouwen op een element met `opacity: 0`. Het geeft gewoon een kleur
+  terug voor iets dat niemand ziet — 54 valse metingen, waaronder een "defect" van 1,00:1.
+- Een **themawissel** simuleren met alleen `data-theme`. `navbar.js` verplaatst óók de
+  `.active`-klasse van de toggle; zonder die synchronisatie meet je een combinatie die op de
+  echte site niet bestaat.
+- Een `alpha < 1`-tekstkleur meten zonder hem eerst **over de achtergrond te compositen**.
+  `ratio()` negeert alpha, dus `rgba(204,204,204,.4)` leest als #cccccc (10,73) terwijl het
+  gerenderd rgb(97,97,97) is (**2,82**).
+- Een A/B draaien terwijl je in de bestanden schrijft die de tests laden. Mijn eerste
+  #73-meting gaf 1112 s en 4 falers; dat was mijn eigen CSS-edit, geen eigenschap van de
+  variant. Een A/B hoort op een bevroren werkboom.
+- Een tokenwaarde site-breed optillen om een **lokaal** probleem op te lossen. De edu-zone
+  vroeg #c0c7cf; site-breed doorvoeren zou het onderscheid dim-vs-normaal wissen
+  (#c9d1d9 is `--color-text-light`). En scope zo'n fix op het thema: mijn eerste versie was
+  themaloos en zette #c0c7cf óók op de lichte panelen — 14 elementen op 1,53:1, een zwaardere
+  regressie dan het defect.
+
+✅ **Always:**
+- Groepeer contrastbevindingen op **kleurwaarde**, niet op token. Dezelfde hex zit onder
+  meerdere namen; per token rapporteren verdeelt één defect over drie regels.
+- Behandel een contrastclaim in een **commentaar** als een bewering tot je hem hebt gemeten.
+  Vier stuks logen hier, alle vier geruststellend. Eén ervan ("zo gebruikt is hij prima") was
+  vorige sessie geschreven bij een correcte diagnose van de *andere* rol van hetzelfde token.
+- Meet de **toestand die interactie vereist** apart. Negen van de tien `--color-prompt`-
+  gebruiken en beide onzichtbare semantische tokens renderen pas ná een commando; een
+  `<input>`-waarde heeft geen tekstnode en valt door élke `eigenTekst()`-filter.
+- Laat de **uitsluitingen** van een sweep zelf een assertie zijn. Een sweep die stil
+  overslaat kan een defect wegfilteren; nu faalt de test op een reden die niet in de lijst
+  staat.
+- Codeer een uitzondering als **assertie met de gemeten waarde**, niet als notitie. En geef
+  de uitzondering-op-de-uitzondering er één bij: in dark valt het oppervlak-token samen met
+  zijn tekstalternatief, en dát feit is nu geasserteerd in plaats van aangenomen.
+- Kies mutanten die op **verschillende asserties** falen en controleer welke assertie vuurde,
+  niet alleen hoeveel tests rood werden. M2 en M3 hebben allebei "een token op de verkeerde
+  plek" als mutatie, maar M2 raakt uitsluitend de matrix en M3 uitsluitend assertie 5.
+- Bepaal een testtimeout op een **meting**. De 17 webkit-falers waren geen defect maar 24,6 s
+  serieel tegen een limiet van 30 s; 120 s is ~5× de gemeten waarde. Een timeout die je op de
+  gemeten waarde plakt, wordt de volgende flaky test.
+- Reken de blast radius van een fix door tot in de **bundel**. 13,5 KB commentaar op een
+  marge van 1,5% is geen detail; het verhaal hoort in de spec en in TASKS (die tellen niet
+  mee), de CSS houdt het gemeten cijfer.
+
+**Next steps:**
+- **Bundelmarge 1,5%** (16,38 KB). `styles/` wordt niet geminificeerd, dus élk commentaar
+  gaat over de lijn. De eerlijke keuzes zijn een minify-stap voor `styles/` of een bewuste
+  limietverhoging — niet nóg een ronde comprimeren, want dat haalt gemeten waarden weg.
+- **#73 blijft open** met een gemeten, niet-uitgevoerde optie. Twee volle runs op rij zonder
+  de faler; de oorzaak is nog steeds niet gemeten.
+- **Hover wordt gedekt via de token-matrix, niet gesimuleerd.** Dat werkt voor tokenparen,
+  maar een `:hover` die een *hardcoded* kleur zet (geen token) blijft onzichtbaar. Nog niet
+  gemeten of die bestaan.
+- **`--color-warning` in dark** haalt 7,50 op `--color-bg` maar is niet doorgemeten op de
+  lichtere donkere oppervlakken (`--color-bg-hover` #21262d). Dezelfde vraag geldt voor
+  `--color-success` (7,45). Beide net boven de lat, dus een klein achtergrondverschil kantelt ze.
+
+---
+
+## Sessie 227: Vier taken die elk een halve reparatie van een eerdere sessie afmaakten (18 aug 2026)
+
+> ⚠️ **Deze entry is achteraf gereconstrueerd** (in Sessie 228) uit de vier commits en de
+> TASKS-items #64, #68, #70 en #71. Sessie 227 kreeg destijds geen `/summary`: de counter bleef
+> op 226 staan terwijl de commits en TASKS-items zichzelf al 227 noemden. De inhoud hieronder
+> is feitelijk — maar dead-ends, verworpen alternatieven en metingen die niet in TASKS beland
+> zijn, ontbreken. Lees de afwezigheid van verrassingen hier dus als "niet vastgelegd", niet
+> als "er waren er geen".
+
+**Mission:** vier openstaande TASKS-items afwerken. Achteraf hebben ze een gemeenschappelijke
+vorm: elk maakte een reparatie af die een eerdere sessie half had gedaan.
+
+**Werk (per commit):**
+
+- **`8daf26d` — de bundelpoort telde 50 KB blog mee en de helft van zijn eigen entry-points
+  niet (#70).** Niet de grens verhoogd (dat zou de vierde bump in 22 sessies zijn: 1000 →
+  1050 → 1100 → 1120) maar drie fouten in de *teller* gerepareerd: `styles/blog.css` +
+  `src/ui/blog-*.js` telden mee terwijl alleen `blog/*.html` ze laadt; de term
+  `src/ui/**/*.css` matchte **nul** bestanden (dode term); en `index.html` telde mee terwijl
+  `terminal.html` — juist de entry van deze pijler — ontbrak. `TOTAL_BUNDLE` →
+  `RUNTIME_SOURCE`. Gemeten 1118,63 → **1091,85 / 1120 KB**. Drie mutanten op drie
+  verschillende asserties, en twee die het níét doen staan mét reden in het commentaar.
+- **`8696111` — de linkkleur haalde nergens AAA, en vier hover-toestanden zaten onder AA
+  (#71).** `--color-link` #0969da → **#0a4d94** (light), hover #0550ae → #044289; in dark ging
+  de hover van #58a6ff → #8ecbff, want die was **donkerder** dan de link zelf. Eindmeting over
+  16 pagina's × 2 thema's, 3× byte-identiek: light 302 elementen / 0 onder AA / 0 onder AAA /
+  laagste 7,29; dark 130/0/0/7,34. **Vier onder-AA-defecten als bijvangst, alle vier ernstiger
+  dan #71 zelf** — `.blog-post-content th` (2,61), `.btn-secondary:hover` en
+  `.btn-small.btn-secondary:hover` (2,61-2,77 in light), `.gids-sample-link:hover` (**2,76**,
+  waar Sessie 221 de rust-toestand al had gerepareerd maar de hover had laten staan omdat geen
+  enkele spec een hover-toestand mat). NEW `tests/e2e/link-contrast.spec.js` (element-sweep +
+  token-matrix) en NEW `tests/e2e/helpers/contrast.js` — de derde kopie van `effBg()` was de
+  aanleiding.
+- **`53f6412` — de pagina heette anders dan waar de site naar linkte, in vier titelvelden
+  tegelijk (#68).** `Privacy policy` → **Privacybeleid**, `Cookie policy` → **Cookiebeleid**
+  in `<h1>`, `<title>`, `og:title` en `twitter:title`. De omvang week in beide richtingen af
+  van de schatting: kleiner (geen JSON-LD op die pagina's, de ~20 "linklabels" bleken al
+  Nederlands), groter (twee `<h3>`'s op `over-ons.html` plus 19 body-voorkomens, en uit
+  `footer.js` — dat op élke pagina rendert — `Privacy Beleid` → `Privacybeleid` en
+  `Algemene Voorwaarden` → **Gebruiksvoorwaarden**). NEW Check 17 in `validate-docs.sh` met
+  twee invarianten (geen `policy` in een titelveld; **lockstep** tussen de vier velden) en
+  vier mutanten op vier verschillende takken.
+- **`d2dad44` — de flaky autocomplete-spec was de enige zonder legal-modal-afhandeling
+  (#64).** De vastgelegde diagnose was te smal: het was de spec als klasse, niet één regel.
+  Goedkope reproductie gevonden (`--repeat-each=12 --workers=4` in 1,5 min i.p.v. een volle
+  run van 20 min), en dáármee de oorzaak gemeten: de discriminator is de **focus** op het
+  moment van `Tab`, niet of de modal open staat. `input.fill()` zet de waarde ook zonder
+  focus, dus die stap slaagt altijd; daarna grijpt de legal-modal de focus en gaat `Tab` naar
+  zijn focus-trap. Fix: `page.addInitScript` zet `hacksim_legal_accepted` vóór de navigatie —
+  de race is wég in plaats van overleefd. Ná de fix 144 passed / 0 failed onder dezelfde load;
+  mutant → 12 rood.
+
+**Commits:** `8daf26d`, `8696111`, `53f6412`, `d2dad44` (alle gepusht).
+
+**Metrics delta (gereconstrueerd):** specs 39 → 43, declaraties 303 → 313; bundel 1118,63 →
+1091,85 → 1095,17 / 1120 KB.
+
+**Wat Sessie 228 hierop bouwde:** #71 loste de linkkleur op maar liet drie tokens met dezelfde
+oude waarde staan (`--color-info`, `--color-ui-secondary` en — via een commentaar dat "matches
+info/links" beloofde — de knopkleur in de cookiebanner). En het commentaar dat #71 bij
+`--color-cta-primary` achterliet ("zo gebruikt is hij prima") bleek zelf ongemeten: wit op dat
+token haalt 3,30.
+
+---
+
 ## Sessie 226: De blog had 418 koppen zonder id en een filter van 26,8px — geen van beide stond in de CSS (18 aug 2026)
 
 **Mission:** analyseer de blogsectie op layout, UX/UI en design, en bepaal zelf verdere

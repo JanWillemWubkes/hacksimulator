@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 18 aug 2026 (Sessie 226 — **geen architectuurwijziging, wél een design-system-constraint.** Drie site-brede tokens hebben een nieuwe waarde gekregen omdat ze gemeten de AAA-lat niet haalden: `--color-text-dim` #8b949e → #a1a8b0 (6,15/5,62 → 7,88/7,20) en de light-mode `--color-button-bg`/`-hover` #1976d2/#1565c0 → #11569c/#0e4c8a (4,60/5,75 → 7,41/8,68). Dat is geen kleurkeuze maar een **ondergrens**: een token dat als tekst of als knopvlak dienstdoet, wordt tegen zijn *effectieve* achtergrond gemeten (§10) en haalt 7,0 — in **beide** thema's. De structuur van het tokensysteem is ongewijzigd; er zijn geen tokens bij- of afgekomen. Twee patronen toegevoegd aan `.claude/rules/architecture-patterns.md`: §15 (`min-height` doet niets op een inline element; specificiteit vergelijkt per tier en telt niet op) en §16 (scroll-spy hoort op een scroll-listener zolang `scroll-behavior: smooth` aanstaat). **Openstaande architectuurvraag, niet hier beslist:** de bundelpoort in `performance.spec.js` sommeert `styles/**/*.css` + `src/**/*.js` en telt dus blog-assets mee, terwijl `terminal.html` die nooit laadt en CLAUDE.md de blog 'budgetloos' noemt — stand 1118,63/1120, zie TASKS.md #70.)
+**Laatst bijgewerkt:** 19 aug 2026 (Sessie 228 — **geen architectuurwijziging, wél een verbreding van de design-system-constraint.** Sessie 226 legde AAA vast op dim- en knoptokens; ongefilterd meten liet zien dat die scope te smal was — 152 element-toestanden onder AA over 18 kleurwaarden. De norm is nu élk element dat zelf tekst rendert, in beide thema's en beide viewports, tegen de effectieve achtergrond. Zie §Design System → Contrast.)
 **Status:** ✅ LIVE on Netlify | M5 Testing 71% | M5.5 Monetization deep (Ko-fi + Brevo + Gumroad + Lead magnet) | M6 Tutorial 100% | M7 Gamification 100% | Blog content-pijler 14 posts live
 **Verantwoordelijk:** Development Team
 **Live URL:** https://hacksimulator.nl/
@@ -452,6 +452,36 @@ python -m http.server 8000
    Bewaakt door `tests/e2e/homepage-conversion.spec.js` §Homepage sectieritme, dat óók de
    kaart-Δ asserteert; die assertie is degene die de "lichtere band"-val vangt.
 
+
+### Contrast: de norm is AAA op élk renderend tekstelement (Sessie 228)
+
+Sessie 226 legde AAA vast als meetbare ondergrens op *dim- en knoptokens*. Die formulering
+was te smal, en dat is gemeten: een ongefilterde sweep (30 pagina's × 2 thema's × 2 viewports,
+13.157 element-toestanden) vond **152 onder AA en 378 onder AAA, verdeeld over 18
+kleurwaarden**. De constraint luidt daarom nu:
+
+> **Élk element dat zelf tekst rendert haalt WCAG AAA tegen zijn *effectieve* achtergrond,
+> in beide thema's en in beide viewports.** Uitzonderingen bestaan, maar alleen als
+> assertie met de gemeten waarde erbij — nooit als notitie.
+
+Drie regels die daaruit volgen en die in de tokenlaag thuishoren:
+
+1. **Een token draagt één rol.** `--color-cta-primary` is een OPPERVLAK (wit erop, 7,13:1);
+   accenttekst is `--color-accent-text` (8,58:1). Beide rollen in één token gepropt geeft
+   gegarandeerd één rol die faalt — het kostte hier 35 misgebruiken en een primaire CTA op
+   3,30:1. Bewaakt door de `OPPERVLAK_TOKENS`-assertie in `tests/e2e/text-contrast.spec.js`.
+2. **Een oppervlak dat van zijn thema afwijkt herdefinieert zijn tokens op de container**,
+   niet per selector. Custom properties erven, dus één regel dekt ook de gebruiken die pas
+   ná interactie renderen (`[data-theme="light"] #terminal-container` dekt tien
+   `--color-prompt`-gebruiken waarvan er negen alleen ná een commando bestaan).
+3. **Een kleur die tegelijk tint én tekst is, bestaat niet.** `background: rgba(HUE,.15);
+   color: HUE` haalt nooit AAA; badges krijgen een tekst-token per thema
+   (`--badge-*-text`), de tint blijft.
+
+**Meetdiscipline** (waarom drie eerdere rondes de klasse misten): niet op tokennaam filteren,
+scrollen vóór het meten, beide viewports, en de toestanden meenemen die interactie vereisen.
+Uitgewerkt met code in `.claude/rules/architecture-patterns.md` §19.
+
 ---
 
 ## 🔐 Security & Privacy
@@ -900,8 +930,8 @@ const DEBUG_MODE = false;
 
 ---
 
-**Laatst bijgewerkt:** 18 aug 2026 (Sessie 226 — **geen architectuurwijziging, wél een design-system-constraint.** Drie site-brede tokens hebben een nieuwe waarde gekregen omdat ze gemeten de AAA-lat niet haalden: `--color-text-dim` #8b949e → #a1a8b0 (6,15/5,62 → 7,88/7,20) en de light-mode `--color-button-bg`/`-hover` #1976d2/#1565c0 → #11569c/#0e4c8a (4,60/5,75 → 7,41/8,68). Dat is geen kleurkeuze maar een **ondergrens**: een token dat als tekst of als knopvlak dienstdoet, wordt tegen zijn *effectieve* achtergrond gemeten (§10) en haalt 7,0 — in **beide** thema's. De structuur van het tokensysteem is ongewijzigd; er zijn geen tokens bij- of afgekomen. Twee patronen toegevoegd aan `.claude/rules/architecture-patterns.md`: §15 (`min-height` doet niets op een inline element; specificiteit vergelijkt per tier en telt niet op) en §16 (scroll-spy hoort op een scroll-listener zolang `scroll-behavior: smooth` aanstaat). **Openstaande architectuurvraag, niet hier beslist:** de bundelpoort in `performance.spec.js` sommeert `styles/**/*.css` + `src/**/*.js` en telt dus blog-assets mee, terwijl `terminal.html` die nooit laadt en CLAUDE.md de blog 'budgetloos' noemt — stand 1118,63/1120, zie TASKS.md #70.)
-**Versie:** 4.46 (Sessie 226 — **AAA als meetbare ondergrens op dim- en knoptokens, in beide thema's, tegen de effectieve achtergrond.** Vervangt de impliciete aanname dat een token dat 'AAA' in zijn commentaar draagt ook AAA haalt: twee van de drie deden dat niet. Structuur van het tokensysteem ongewijzigd. Eerder — 4.45, Sessie 223 — **§Security & Privacy: AI-transparantie als staande constraint.** Melding per contentpagina i.p.v. één verantwoordingspagina, nooit visueel verbergen, geen claim die menselijke verificatie suggereert. Bewust géén brede exoneratie: vernietigbaar richting consumenten. Product-architectuur ongewijzigd.)
+**Laatst bijgewerkt:** 19 aug 2026 (Sessie 228 — **geen architectuurwijziging, wél een verbreding van de design-system-constraint.** Sessie 226 legde AAA vast op dim- en knoptokens; ongefilterd meten liet zien dat die scope te smal was — 152 element-toestanden onder AA over 18 kleurwaarden. De norm is nu élk element dat zelf tekst rendert, in beide thema's en beide viewports, tegen de effectieve achtergrond. Zie §Design System → Contrast.)
+**Versie:** 4.47 (Sessie 228 — **AAA op élk renderend tekstelement, plus drie tokenregels die daaruit volgen:** één token draagt één rol (oppervlak vs. tekst — de CTA-knop stond op 3,30:1 omdat beide rollen in één token zaten); een oppervlak dat van zijn thema afwijkt herdefinieert zijn tokens op de container, niet per selector; en een kleur die tegelijk 15%-tint én tekst is haalt nooit AAA. Uitzonderingen alleen als assertie met de gemeten waarde. Meetdiscipline met code: architecture-patterns §19.)
 **Status:** ✅ Deployed - Live in Production | M5.5 Monetization stack deep + Brevo deliverability getuned | M7 Gamification ✅ 100% | Blog content-pijler 14 posts live
 **Live URL:** https://hacksimulator.nl/
 **GitHub:** https://github.com/JanWillemWubkes/hacksimulator
