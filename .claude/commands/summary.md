@@ -89,13 +89,43 @@ CLAUDE.md — het rotatieritueel is daarmee structureel overbodig in plaats van 
 
 Sluit deze stap af met `bash scripts/validate-docs.sh --deep` → exit 0.
 
-## Step 5: Update `PLANNING.md` ALLEEN bij architectuur-wijziging
+## Step 5: `PLANNING.md` — sessie-marker ALTIJD, inhoud alleen bij architectuur-wijziging
 
-Wel updaten bij: nieuwe tech-stack-keuze, design-system-change, security-strategie-shift, performance-budget-aanpassing, deployment-shift, monetization-architectuur-change.
+Twee verschillende dingen, en ze hebben verschillende voorwaarden. Tot Sessie 229 stond hier
+"ALLEEN bij architectuur-wijziging" plus *"**Als** je PLANNING.md updatet: ook header + footer
+synchroniseren"* — die conditionele formulering klopt niet met de guards en levert elke sessie
+zonder architectuurwijziging twee falers op.
 
-NIET updaten bij: milestone-percentage updates, bundle KB cijfers, sprint-status, task-niveau wijzigingen — die wonen in TASKS.md.
+**(a) De sessie-marker: onvoorwaardelijk.** Bump de header (eerste 10 regels) én de footer
+(laatste 30 regels) naar de nieuwe sessie, óók als er inhoudelijk niets verandert:
 
-Als je PLANNING.md updatet: ook header + footer sessie-nummer synchroniseren (validate-docs Check 2).
+```
+**Laatst bijgewerkt:** [DATUM] (Sessie [N] — [korte reden, of expliciet "geen architectuurwijziging, wél …"])
+```
+
+Wat de guards feitelijk eisen — gelezen in `scripts/validate-docs.sh`, niet aangenomen:
+
+| check | eis |
+|---|---|
+| Check 1 | `Sessie N` (N = de counter uit CLAUDE.md) staat **ergens** in TASKS.md **én** PLANNING.md |
+| Check 2 | binnen CLAUDE.md, PLANNING.md én TASKS.md dragen **eerste 10** en **laatste 30** regels dezelfde N |
+| Check 2 | herkent alleen `Laatst bijgewerkt` / `Last updated` / `laatste`, met `Sessie N` binnen 80 tekens |
+| Check 7 | vergelijkt **alleen** CLAUDE.md `**Version:**` ↔ TASKS.md `**Versie:**` — PLANNING.md's `**Versie:**` doet hier niet mee |
+
+Die laatste rij betekent: PLANNING.md's eigen `**Versie:**` bumpen is **optioneel**. Doe het als
+er inhoudelijk iets verandert; laat het staan bij een pure marker-bump.
+
+Precedent voor de formulering bij een niet-architectuursessie: Sessie 228 en 229 openen hun
+PLANNING-entry met *"geen architectuurwijziging, wél …"* — dat houdt de marker eerlijk zonder te
+suggereren dat de architectuur schoof.
+
+**(b) De inhoud: alleen bij een echte architectuur-wijziging.**
+
+Wel: nieuwe tech-stack-keuze, design-system-change (óók een sitebrede default zoals typografie),
+security-strategie-shift, performance-budget-aanpassing, deployment-shift,
+monetization-architectuur-change.
+
+Niet: milestone-percentages, bundle-KB, sprint-status, task-niveau — die wonen in TASKS.md.
 
 ## Step 6: Update `docs/prd.md` ALLEEN bij scope-wijziging
 
