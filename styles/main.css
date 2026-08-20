@@ -170,6 +170,7 @@
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;  /* Body text, forms, modals - screen-optimized readability */
   --font-terminal: 'JetBrains Mono Box', 'JetBrains Mono', 'Courier New', 'Courier', monospace;  /* Terminal, code blocks - box-drawing subset first (Sessie 81) */
   --font-ui: var(--font-heading);  /* Legacy alias for backward compatibility */
+  /* Ligaturen: zie de regel onder :root — sitebreed uit (Sessie 229). */
   --font-size-base: 18px;
   --font-size-mobile: 16px;
   --line-height: 1.5;
@@ -301,6 +302,20 @@
   --shadow-accent-terminal: 0 0 20px rgba(0, 255, 136, 0.15);  /* Branded glow - hacking aesthetic */
 
   /* Muted info color for educational context */
+}
+
+/* Ligaturen sitebreed uit (Sessie 229). JetBrains Mono ligeert via `calt` (367 lookups,
+   standaard aan): `>=` rendeerde als ≥, `_|_` in de sqlmap-banner als ⊥, en `$pdo->prepare`
+   als `$pdo→prepare` in `man sqlmap` — onder het kopje "Veilige code:", dus wie overtypte
+   kreeg een PHP-parse-error. Populatie omgedraaid i.p.v. een lijst mono-selectors (48
+   declaraties, 7 stylesheets): drift valt dan in de goedkope richting. Kosten in prose
+   gemeten op 40px, normal vs none: Space Grotesk 0,17px, Inter 0,00px — sub-pixel.
+   Volledige meting, mutanten en de reden dat breedte dit NIET detecteert:
+   tests/e2e/font-ligatures.spec.js. */
+*,
+*::before,
+*::after {
+  font-variant-ligatures: none;
 }
 
 /* ==================== Light Mode Theme ==================== */

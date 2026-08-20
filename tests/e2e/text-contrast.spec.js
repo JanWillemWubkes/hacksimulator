@@ -53,20 +53,7 @@
 
 import { test, expect } from './fixtures.js';
 import { installeerContrastMeter, zetThema, onthulAlles, LAT } from './helpers/contrast.js';
-
-const PAGINAS = [
-  '/index.html', '/over-ons.html', '/gidsen.html', '/contact.html', '/woordenlijst.html',
-  '/404.html', '/sample-pentest.html', '/sample-juridisch.html', '/sample-download.html',
-  '/commands/index.html', '/terminal.html', '/blog/index.html',
-  '/blog/nmap-beginnersgids.html', '/blog/welkom.html', '/blog/owasp-top-10-uitgelegd.html',
-  '/blog/wachtwoord-beveiliging.html', '/blog/terminal-basics.html',
-  '/blog/social-engineering.html', '/blog/sql-injection-uitgelegd.html',
-  '/blog/cybersecurity-tools.html', '/blog/ethisch-hacker-worden.html',
-  '/blog/hashcat-wachtwoorden-kraken.html', '/blog/leren-hacken.html',
-  '/blog/linux-bestandssysteem.html', '/blog/metasploit-beginnersgids.html',
-  '/blog/wat-is-ethisch-hacken.html', '/blog/wireshark-beginnersgids.html',
-  '/assets/legal/privacy.html', '/assets/legal/terms.html', '/assets/legal/cookies.html',
-];
+import { PAGINAS } from './helpers/paginas.js';
 
 const VIEWPORTS = [
   { naam: 'desktop', width: 1280, height: 900 },
