@@ -4,6 +4,166 @@
 
 ---
 
+## Sessie 229: Het font schreef iets anders dan de DOM — `calt`-ligaturen stonden sitebreed aan (20 aug 2026)
+
+**Mission:** een vraag beantwoorden, niet een taak uitvoeren. Heisenberg vroeg of de vreemde
+tekens in de `sqlmap`-output bewust waren of een bug. Het bleek een bug, met een vindplaats die
+ernstiger was dan de plek waar hij opviel.
+
+### Commits
+
+- `aab57a2` — De sqlmap-banner was niet corrupt, het font schreef iets anders dan de DOM
+- `3d3a228` — De sqlmap-banner was het enige output-blok zonder NL-context
+
+### Diagnose
+
+De bron was correct. `textContent` op de live site gaf keurig `>=`, `-|` en `_|_` terug — er
+stond dus niets fout in `src/commands/security/sqlmap.js`. Het ging mis in de **font-shaping**.
+
+`--font-terminal` is JetBrains Mono, en die ligeert via de OpenType-feature `calt`. Gemeten met
+fontTools op `styles/fonts/jetbrainsmono-latin.woff2`: **367 lookups**. `calt` staat in browsers
+standaard aan, en een grep over `styles/` gaf **0 treffers** op `font-variant-ligatures` of
+`font-feature-settings`. Gerenderd werd:
+
+```
+>=   ->  ≥        -|   ->  ⊣        <=  ->  ≤     =>  ->  ⇒
+_|_  ->  ⊥        ->   ->  →        !=  ->  ≠     ==  ->  samengevoegde balk
+```
+
+**De zwaarste vindplaats was niet de banner.** In `man sqlmap`, onder het kopje *"Veilige
+code:"*, rendeerde de site:
+
+```
+$stmt = $pdo→prepare("SELECT * FROM products WHERE id = ?");
+$stmt→execute([$id]);
+[✓] Prepared statement = SQL en data gescheiden
+```
+
+Dat staat direct onder het onveilige voorbeeld dat met `[X]` is gemarkeerd. Een beginner die
+overtypt wat hij ziet krijgt een PHP-parse-error — bij precies het voorbeeld dat als het juiste
+alternatief wordt aangewezen. Dat maakte dit een leerbug in plaats van cosmetiek.
+
+**Waarom dit drie sessies onopgemerkt bleef:** de schade zat óók in de sqlmap-banner, en daar
+valt hij niet op. Een corrupte `⊥` in ASCII-art ziet er niet corrupter uit dan een correcte
+`_|_`. Pas waar de tekens *betekenis* dragen was het ondubbelzinnig.
+
+### Werk
+
+- **`styles/main.css`** — één regel: `*, *::before, *::after { font-variant-ligatures: none }`.
+  Populatie omgedraaid i.p.v. een lijst mono-selectors, want `--font-terminal` staat in **48
+  declaraties over 7 stylesheets** en zo'n lijst bewaakt zichzelf, niet de klasse. Drift valt nu
+  in de goedkope richting: een prose-element dat de regel mist verliest een fi-ligatuur; een
+  mono-context die hem mist toont weer `$pdo→prepare`.
+- **Kosten van die keuze gemeten, niet beredeneerd.** De prose-fonts dragen wél
+  ligature-features (fontTools op de subsets: Space Grotesk `liga`, 22 lookups; Inter `calt`,
+  43), dus een blanket-disable is niet gratis. Breedtedelta `normal` vs `none` op **40px** tekst
+  over vier teststrings incl. `fi fl ff ffi ffl`: Space Grotesk max **0,17px**, Inter
+  **0,00px**. Sub-pixel op 40px, dus onmeetbaar op de werkelijke 16-32px — geen uitzondering
+  waard.
+- **`?v=228` → `?v=229`** op **79 verwijzingen over 30 HTML-bestanden**. Geverifieerd dat de sed
+  niets anders raakte: 79 regels weg, 79 erbij, en een diff-filter op alles behalve `v=22[89]`
+  gaf leeg.
+- **NEW `tests/e2e/font-ligatures.spec.js`** en **NEW `tests/e2e/helpers/paginas.js`** (de
+  `PAGINAS`-lijst uit `text-contrast.spec.js` gehaald — twee sweeps over dezelfde site horen
+  niet elk hun eigen paginalijst te dragen).
+- **`src/commands/security/sqlmap.js`** (commit 2) — één `[TIP]`-regel onder de banner, in
+  **beide** takken.
+
+### Learnings
+
+**1. Breedte kan een ligatuur niet detecteren.** JetBrains Mono-ligaturen behouden het
+monospace-grid **exact** — dat is hun ontwerpdoel, zodat code niet verspringt. Gemeten delta
+tussen `MySQL >= 5.0` met en zonder ligaturen: **0,00px**; `$pdo->prepare()`: **0,00px**. Een
+guard op breedte is dus groen bij een kapotte render. Een guard op `textContent` óók, want de
+DOM klopte al. Alleen **gerenderde pixels** bewijzen hier iets. Die meting bepaalde de hele
+opzet van de spec.
+
+**2. De zelfbewakende tak verdiende zich onmiddellijk terug.** Assertie B vergelijkt drie
+screenshots van dezelfde probe: pagina-CSS, `normal` geforceerd, `none` geforceerd. Tak 1 eist
+dat `normal` en `none` **verschillen** — vuurt die niet, dan ligeert het font niet en bewijst
+tak 2 niets. Bij de eerste run vuurde precies die tak: de probe was een `<pre>`, en de
+UA-stylesheet zet daarop een eigen `font-family: monospace` die **overerving verslaat**. Gemeten
+computed `fontFamily`: `"monospace"`. De probe mat dus de generieke browser-monospace, die niet
+ligeert. Zonder tak 1 was assertie 2 groen geweest en had de guard niets aangetoond. Opgelost
+met een `<div>` plus een eigen assertie dat de probe daadwerkelijk in JetBrains Mono staat.
+
+**3. De legal-modal krijgt `active` pas rond 800ms.** Een `isVisible()` op t=0 geeft `false`,
+slaat het wegklikken over, en dan appendt de terminal **nul** regels — 6 seconden later nog
+steeds leeg (gemeten op 200/800/1500/3000/6000ms). Mijn `waitForFunction` op een stabiele
+regeltelling liep daardoor in een timeout. Dezelfde valstrik als de flaky autocomplete-spec uit
+Sessie 227; de house-pattern (`expect(legal).toBeVisible()` eerst) lost het op.
+
+**4. Een pixelvergelijking racet met alles wat de layout beweegt.** Tak 2 was eerst
+intermitterend rood omdat de bootsequentie tussen twee screenshots door regels appendde en de
+probe meebewoog — de beelden verschilden op **layout**, niet op shaping. Opgelost door de probe
+`position: fixed` met een dekkende achtergrond te geven: hij blijft een DOM-kind van
+`#terminal-output` (dus erft de fontstack) maar staat buiten de flow.
+
+**5. Exit code 0 is geen bewijs van een groene run.** De eerste volle chromium-run gaf exit 0
+mét `55 did not run`, `2 failed` en `Timed out waiting 1500s for the test suite to run`. Mijn
+eigen `--global-timeout` van 25 min had de run afgekapt; 451 passed in **25,0** min las als
+groen. De twee falers waren mid-flight afgekapte tests, geen assertiefouten. Twee fouten in één:
+de limiet stond op een **gevoel** i.p.v. een meting (`meten-en-guards.md` §0 zegt dit letterlijk),
+en ik rapporteerde tussentijds "0 falers" op basis van een grep die het faalformaat van de
+reporter niet matcht. Een grep die nul teruggeeft is niet hetzelfde als nul falers. Meting:
+chromium alleen ~28 min, drie motoren **1,2 uur**.
+
+**6. Cross-browser was hier geen ceremonie.** `font-variant-ligatures` had in oudere WebKit een
+`-webkit-`-prefix nodig, dus "werkt overal" was een aanname. Gemeten: **62/62** op Firefox +
+WebKit, inclusief tak 1 — wat bewijst dat beide engines écht ligeerden met `normal` en écht
+onderdrukken met `none`.
+
+**7. Een verwarrend beeld is een bevinding, ook als het correct is.** Na de fix vroeg
+Heisenberg of dat blok tekens wel klopte. Het klopt — het is het echte ASCII-logo van sqlmap —
+maar de verwarring wees op iets meetbaars: `sqlmap` is de **enige** van de 41 commands met
+ASCII-art (8 bannerregels), en daarmee het enige output-blok zonder `← NL-context` of `[TIP]`,
+terwijl `.claude/rules/command-output.md` dat voorschrijft. Er was geen precedent voor het
+toelichten van een banner omdat er geen tweede banner is.
+
+**8. Handmatige regelafbrekingen zijn een tweede opmaaksysteem.** De eerste `[TIP]`-formulering
+brak de zin middenin (`...ASCII-logo van` / `sqlmap - dat print...`). Op desktop onzichtbaar; op
+375px viel die breuk samen met de soft-wrap en las het blok als twee losse stukken met een gat.
+De vraag is niet "past het" maar "waar mág het breken" — een breuk op een zinsgrens is immuun,
+een breuk midden in een naamwoordgroep niet. Dat viel niet af te leiden uit de tekenlengte (62
+en 49 klonken allebei prima); het moest gezien worden op 375px.
+
+### Mutanten
+
+| mutant | uitkomst | welke assertie |
+|---|---|---|
+| M1 — de `*`-regel weghalen | 30 failed / 1 passed | A op 29 pagina's + B tak 2 |
+| M2 — regel scopen naar `#terminal-output` | 29 failed / 2 passed | A alleen; **B groen** |
+| M3 — `jetbrainsmono-latin.woff2` hernoemen | 1 failed / 30 passed | **B tak 1 alleen**; A groen |
+
+De ene groene bij M1 is `/assets/legal/terms.html`: **nul** monospace-elementen, dus daar valt
+niets te overtreden. Dat was zelf een correctie op een aanname — ik ging ervan uit dat elke
+pagina wel ergens mono-tekst draagt, en de zelfbewakende tak ving dat. Gemeten over alle 30:
+terms 0, cookies 1, contact 1, privacy 3, tot `linux-bestandssysteem.html` 138 en
+`commands/index.html` 132. Vastgelegd als `PAGINAS_ZONDER_MONO`, geasserteerd in **twee**
+richtingen — een pagina erin moet nul houden, een pagina erbuiten minstens één.
+
+### Metrics delta
+
+| | vóór | ná |
+|---|---|---|
+| Bundel (`performance.spec.js`) | 1103,62 KB | **1104,62 KB** (marge 15,38 KB = 1,4%) |
+| Spec-bestanden | 44 | **45** |
+| `test()`-declaraties | 314 | **316** (= 31 gedraaide tests) |
+| Volle suite, 3 motoren | — | **1520 passed / 0 failed / 25 skipped** (1,2 u) |
+
+Het CSS-commentaar stond eerst op +1,69 KB en is gehalveerd door de volledige meting naar de
+spec te verplaatsen (die telt niet mee in de bundelpoort) en in de CSS alleen het gemeten cijfer
+plus een verwijzing te laten staan. Zelfde remedie als Sessie 228.
+
+### Next steps
+
+- **#73** (`certificates.spec.js` teardown-timeout) kwam in de derde volle run op rij niet
+  terug. Diagnose blijft open; nog steeds niets gerepareerd op een vermoeden.
+- **#74** (minify-trigger) staat nog niet aan: marge > 5 KB en de groei is CSS-commentaar, geen
+  JS.
+
+---
+
 ## Sessie 228: Vier CSS-commentaren claimden een contrast dat ze niet haalden — en de sweep die dat had moeten zien, filterde op tokennaam (19 aug 2026)
 
 **Mission:** sluit de contrast-KLASSE, niet het volgende exemplaar. TASKS #72 noteerde één

@@ -55,8 +55,11 @@ HackSimulator.nl gebruikt **twee font stacks** voor verschillende contexten:
 #### Primary: Terminal Font (Monospace)
 
 ```css
---font-terminal: 'Courier New', 'Courier', monospace;
+--font-terminal: 'JetBrains Mono Box', 'JetBrains Mono', 'Courier New', 'Courier', monospace;
 ```
+
+De box-drawing-subset staat bewust vóóraan (Sessie 81): die dekt alleen `U+2500-257F` en levert
+dus uitsluitend de randglyphs, de rest valt door naar JetBrains Mono.
 
 **Gebruik voor:**
 - ✅ Terminal output/input (authenticity)
@@ -65,6 +68,18 @@ HackSimulator.nl gebruikt **twee font stacks** voor verschillende contexten:
 - ✅ Code blocks & command examples
 
 **Rationale:** Monospace fonts geven retro terminal feel en zijn essentieel voor de brand identity.
+
+**Ligaturen staan sitebreed UIT** (Sessie 229, `styles/main.css`):
+
+```css
+*, *::before, *::after { font-variant-ligatures: none; }
+```
+
+JetBrains Mono ligeert via `calt` (367 lookups) en dat staat standaard aan, waardoor de terminal
+`>=` als ≥ toonde en `$pdo->prepare` als `$pdo→prepare` — in een voorbeeld dat bedoeld was om
+over te typen. Een simulator die commando's leert, moet tonen wát er staat. De regel is
+omgedraaid naar "alles uit" i.p.v. een lijst monospace-selectors; de prose-kosten zijn gemeten
+en sub-pixel (Space Grotesk 0,17px op 40px, Inter 0,00px).
 
 #### Secondary: UI Font (Sans-serif)
 

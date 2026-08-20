@@ -1,7 +1,7 @@
 # CLAUDE.md — HackSimulator.nl
 
 **Project:** Browser-based terminal simulator die Nederlandse beginners ethisch hacken leert.
-**Status:** MVP Development — ✅ LIVE op Netlify (laatste: Sessie 228)
+**Status:** MVP Development — ✅ LIVE op Netlify (laatste: Sessie 229)
 **Stack:** Vanilla JS/CSS, client-side only, geen backend, geen build-stap. Deploy = push naar `main`.
 **Docs:** `docs/prd.md` v1.8 | `PLANNING.md` v3.0 | `TASKS.md` (live metrics) | `docs/style-guide.md` v1.5
 
@@ -81,13 +81,16 @@ Sessie-overstijgend, duur betaald. De uitwerking mét code staat in de gescopete
 - Een contrast- of kwaliteitsclaim in een **commentaar** is een **bewering** tot je hem meet.
 - Een guard die op een **lijst** filtert, bewaakt die lijst — niet de klasse. Draai de populatie
   om naar "alles" en laat de uitzonderingen zich verantwoorden.
-- Meet **gerenderde pixels**, niet `getComputedStyle`, bij layout, naden en tapdoelen.
+- Meet **gerenderde pixels**, niet `getComputedStyle` of `textContent`, bij layout, naden,
+  tapdoelen en shaping — het font kan iets anders schrijven dan er in de DOM staat.
 - **Bevries transities vóór je meet**; wachten op "uitgesetteld" is niet betrouwbaar.
 - Kies mutanten die op **verschillende asserties** falen, en controleer wélke vuurde.
 - Geef elke guard een **zelfbewakende tak** — een check die nooit kán falen is niet te
   onderscheiden van een kapotte check.
 - Verifieer een submodule-fix tegen een **no-store server**, nooit tegen een warme browser.
 - Repareer de **oorzaak in het brondocument**, niet alleen het symptoom op de vindplaats.
+- Eis **positief bewijs dat een meting gedraaid heeft** — een eindblok, een niet-lege populatie.
+  Exit 0, een lege grep en een afgekapte run zien er anders identiek uit.
 
 ---
 
@@ -131,7 +134,7 @@ architectuurwijziging, `docs/prd.md` alleen bij scopewijziging.
 **Afsluiten:** `/summary` — die bevat de volledige 7-staps flow, inclusief de ground-truth-meting
 en de validatiegate. Niet hier dupliceren.
 
-**Sessie counter:** 228
+**Sessie counter:** 229
 
 <!-- Onderhoudsnotitie (wordt niet in context geladen):
      Dit bestand is de altijd-geladen laag. Houd het onder 150 regels — validate-docs.sh
@@ -141,5 +144,5 @@ en de validatiegate. Niet hier dupliceren.
 
 ---
 
-**Last updated:** 19 aug 2026 (Sessie 228 — ongefilterde sitebrede contrastsweep: 13.157 element-toestanden, 152 onder AA en 378 onder AAA over 18 kleurwaarden → 0/0. Vier meetgaten verklaarden waarom drie rondes dit misten. NEW `text-contrast.spec.js`. Volledig: `docs/sessions/current.md`)
-**Version:** 6.01 (Sessie 228 — vier CSS-commentaren claimden een contrast dat ze niet haalden (1,96 / 4,29 / "3,25 = AA" / 3,30 op de primaire CTA). Ongefilterd meten vond 152 onder AA; de zwaarste was 1,54:1 in de cookiebanner, op élke pagina. Een guard die op een tokenlijst filtert bewaakt geen klasse. 44 specs / 314 decl; 489 passed chromium. ⚠️ bundel 1103,62/1120 (1,5%) — CSS-commentaar telt mee, `styles/` wordt niet geminificeerd. Historie: `docs/sessions/current.md`)
+**Last updated:** 20 aug 2026 (Sessie 229 — JetBrains Mono ligeert via `calt`, standaard aan: de terminal rendeerde `>=` als ≥ en `$pdo->prepare` als `$pdo→prepare` in het "Veilige code"-voorbeeld. Sitebreed uitgezet. NEW `font-ligatures.spec.js`. Volledig: `docs/sessions/current.md`)
+**Version:** 6.02 (Sessie 229 — de bron klopte; `textContent` gaf `>=`, het scherm toonde ≥. Ligaturen behouden het monospace-grid exact, dus breedte detecteert dit niet — alleen pixels. Populatie omgedraaid i.p.v. een lijst mono-selectors. De zelfbewakende tak ving direct een eigen meetfout: `<pre>` erft de font-family niet. Exit 0 met een afgekapte run las als groen. Historie: `docs/sessions/current.md`)

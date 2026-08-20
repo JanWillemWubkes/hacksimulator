@@ -342,3 +342,56 @@ winnende regel aan, inclusief bestand.
 
 ---
 
+## 20. Het font kan iets anders schrijven dan er in de DOM staat (Sessie 229)
+
+`--font-terminal` resolvet naar JetBrains Mono, en die ligeert via de OpenType-feature `calt`
+(367 lookups, gemeten met fontTools). **`calt` staat in browsers standaard aan.** In een terminal
+die letterlijke tekst moet tonen is dat altijd fout:
+
+```
+>=   ->  ≥        _|_  ->  ⊥        ->  ->  →        !=  ->  ≠
+```
+
+Die laatste is geen cosmetiek: `$pdo->prepare(` rendeerde als `$pdo→prepare(` in het PHP-
+voorbeeld onder het kopje "Veilige code:" — wie overtypte wat hij zag kreeg een parse-error.
+
+```css
+/* Populatie omgedraaid, GEEN lijst mono-selectors. */
+*, *::before, *::after { font-variant-ligatures: none; }
+```
+
+**Waarom sitebreed en niet gescopet.** `--font-terminal` staat in **48 declaraties over 7
+stylesheets**; een selectorlijst bewaakt zichzelf, niet de klasse. Omgedraaid valt de drift in de
+goedkope richting: een prose-element dat de regel mist verliest een fi-ligatuur, een mono-context
+die hem mist toont weer `$pdo→prepare`. De kosten zijn gemeten en niet beredeneerd — de
+prose-fonts dragen wél features (Space Grotesk `liga` 22 lookups, Inter `calt` 43), maar de
+breedtedelta `normal` vs `none` op 40px tekst is **0,17px** resp. **0,00px**. Sub-pixel.
+
+`font-variant-ligatures: none` dekt `calt` volgens spec en werkt **unprefixed** in Chromium,
+Firefox én WebKit (gemeten, 62/62). Zet er geen `font-feature-settings: "calt" 0` naast: twee
+mechanismen voor hetzelfde is er één te veel.
+
+> Let op bij het schrijven van een guard hierop: breedte en `textContent` detecteren dit
+> **niet** — zie `meten-en-guards.md` §21.
+
+---
+
+## 21. Een UA-declaratie op het element zelf verslaat overerving (Sessie 229)
+
+`font-family` erft, maar `<pre>`, `<code>`, `<kbd>`, `<samp>`, `<textarea>` en `<input>` krijgen
+in de UA-stylesheet een **eigen** `font-family` (`monospace`, resp. de systeem-UI-font). Een
+declaratie die het element zelf matcht wint altijd van een geërfde waarde, ongeacht
+specificiteit — overerving komt pas aan bod als er níéts matcht.
+
+```js
+// In #terminal-output (font-family: var(--font-terminal)) een <pre> hangen:
+getComputedStyle(pre).fontFamily   // "monospace"  ← NIET de terminal-stack
+```
+
+Dat kostte in Sessie 229 een meetinstrument dat het verkeerde font mat. Gebruik een `<div>` als
+je de context-font wilt erven, of zet expliciet `font-family: inherit`. Zelfde mechanisme als
+`min-height` op een inline `<a>` (§15): de regel die je schreef is niet fout, er kijkt iets
+overheen dat je niet zelf hebt gezet.
+
+---
+

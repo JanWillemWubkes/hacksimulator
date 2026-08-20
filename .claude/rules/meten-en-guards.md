@@ -191,3 +191,88 @@ hij vanzelf weer aangaat zodra de waarden uit elkaar lopen.
 > Vuistregel: als je guard een **lijst** als populatie heeft, bewaakt hij die lijst — niet
 > het probleem. Vraag bij elke nieuwe guard: wat is hier de klasse, en wat is de goedkoopste
 > manier om de héle klasse te meten in plaats van de exemplaren die ik nu toevallig ken?
+
+---
+
+## 20. Een groene uitkomst en een niet-gedraaide meting zien er identiek uit (Sessie 229)
+
+Drie keer in één sessie las iets als "groen" terwijl er niets gemeten was. Alle drie hadden
+dezelfde vorm: **afwezigheid van een faalsignaal** werd gelezen als **aanwezigheid van bewijs**.
+
+**Exit code 0 met een afgekapte run.** De volle chromium-suite gaf `EXIT=0` én:
+
+```
+Timed out waiting 1500s for the test suite to run
+2 failed · 7 skipped · 55 did not run · 451 passed (25.0m)
+```
+
+`--global-timeout=1500000` was op gevoel gekozen; 451 passed in **25,0** min is de limiet zelf.
+De 2 falers waren mid-flight afgekapt, geen assertiefouten. Lees dus altijd het **eindblok van
+de reporter**, en tel `did not run` mee — exit 0 dekt hem niet af. Gemeten: chromium alleen
+~28 min, drie motoren ~1,2 uur. Dat is de waarde waarop de limiet hoort te staan (§0).
+
+**Een grep die het verkeerde patroon zoekt.** Tussentijds rapporteerde ik "0 falers" op basis van
+`grep -cE '^\s+[0-9]+\) \[chromium\]'`. Playwright zet falers pas in het **eindblok** in dat
+formaat; tijdens de run staan ze er anders. Nul treffers betekende "verkeerd patroon", niet
+"geen falers".
+
+```bash
+# FOUT: bevestigt alleen dat jouw regex niets vond
+[ "$(grep -c 'FAIL' $LOG)" -eq 0 ] && echo groen
+
+# GOED: eis een positief eindsignaal, en faal als dat ontbreekt
+tr '\r' '\n' < "$LOG" | grep -qE '^\s+[0-9]+ passed' || { echo "geen eindblok"; exit 1; }
+tr '\r' '\n' < "$LOG" | grep -qE 'did not run|failed|Timed out' && exit 1
+```
+
+**Een populatie die leeg is.** De dekkingssweep van deze sessie ging over "elk element dat in een
+monospace-familie rendert". Op `/assets/legal/terms.html` zijn dat er **nul** — die pagina zou
+dus altijd groen zijn, ongeacht de fix. De aanname "elke pagina heeft wel ergens mono-tekst" was
+fout (gemeten: terms 0, cookies 1, contact 1, privacy 3, `linux-bestandssysteem.html` 138). Leg
+zo'n uitzondering vast als **assertie in twee richtingen**, zodat hij zichzelf opruimt:
+
+```js
+if (ZONDER.has(pad)) expect(aantal).toBe(0);        // erin? dan MOET het nul blijven
+else                 expect(aantal).toBeGreaterThan(0);
+```
+
+> Vuistregel bij alle drie: vraag niet "is er een faalmelding?" maar "wat is het **positieve**
+> bewijs dat deze meting heeft gedraaid?" — een eindblok, een niet-lege populatie, een
+> verwachte hoeveelheid. Zonder dat is groen ononderscheidbaar van stil.
+
+---
+
+## 21. Bij shaping meet je pixels; breedte en textContent liegen allebei (Sessie 229)
+
+`--font-terminal` is JetBrains Mono, die ligeert via `calt` (367 lookups, standaard aan). De
+terminal rendeerde `>=` als ≥ en `$pdo->prepare` als `$pdo→prepare`. Twee voor de hand liggende
+guards zouden daar **groen** op staan:
+
+- **`textContent`** geeft de bron terug, niet wat er op het scherm staat — die gaf keurig `>=`.
+- **Breedte** verandert niet: JetBrains Mono-ligaturen behouden het monospace-grid **exact**.
+  Gemeten delta tussen `>=` en ≥, en tussen `$pdo->prepare()` met en zonder ligaturen: **0,00px**
+  (bij Space Grotesk is de delta 0,17px op 40px, bij Inter 0,00 — prose meet je dus óók niet
+  betrouwbaar op breedte).
+
+Vergelijk daarom **screenshots van hetzelfde element** onder drie condities, en laat de
+positieve control het meetinstrument bewaken:
+
+```js
+const paginaCSS = await probe.screenshot();
+await zet('normal'); const aan = await probe.screenshot();
+await zet('none');   const uit = await probe.screenshot();
+
+expect(aan.equals(uit)).toBe(false);       // zelfbewakend: ligeert dit font überhaupt?
+expect(paginaCSS.equals(uit)).toBe(true);  // de eigenlijke assertie
+```
+
+Twee valkuilen die dit kostte:
+
+- **`<pre>` erft de font-family niet.** De UA-stylesheet zet er een eigen `font-family: monospace`
+  op, en een UA-declaratie op het element zélf verslaat overerving. De probe mat daardoor de
+  generieke browser-monospace (die niet ligeert) — computed `fontFamily` was letterlijk
+  `"monospace"`. Gebruik een `<div>`, en asserteer dat de probe in het bedoelde font staat.
+- **Alles wat de layout beweegt racet met je screenshot.** De bootsequentie appendde regels
+  tussen twee opnames door, dus de beelden verschilden op layout i.p.v. op shaping. `position:
+  fixed` + dekkende achtergrond haalt de probe uit de flow zonder hem uit de DOM-boom (en dus uit
+  de overerving) te halen.
