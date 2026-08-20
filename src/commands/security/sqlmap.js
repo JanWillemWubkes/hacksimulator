@@ -94,6 +94,9 @@ GEBRUIK:
 |___|_  ["]_|_|_|__,|  _|
       |_|V...       |_|   https://sqlmap.org
 
+[TIP] Dat blokje tekens hierboven is het ASCII-logo van sqlmap.
+      De echte tool print het ook, bij elke start.
+
 [*] starting @ ${new Date().toLocaleTimeString('nl-NL')}
 
 [12:00:01] [INFO] testing connection to the target URL
@@ -121,6 +124,9 @@ GEBRUIK:
 |_ -| . [']     | .'| . |
 |___|_  [(]_|_|_|__,|  _|
       |_|V...       |_|   https://sqlmap.org
+
+[TIP] Dat blokje tekens hierboven is het ASCII-logo van sqlmap.
+      De echte tool print het ook, bij elke start.
 
 [*] starting @ ${new Date().toLocaleTimeString('nl-NL')}
 
