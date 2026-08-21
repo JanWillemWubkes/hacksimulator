@@ -17,6 +17,7 @@ Verwante bestanden: `js-runtime.md` (§2, 7, 12, 16), `meten-en-guards.md` (§6,
 - **3-Layer Modals:** Legal (z-10) > Feedback (z-20) > Tutorial (z-30) — Sessie 33
 - **Responsive Blog Tables:** brede `<table>` in blogcontent → opt-in class `.blog-table--stacked` (Sessie 181), NIET horizontale `overflow-x:auto`-scroll. Op `@media≤768px` wordt elke rij een gelabelde kaart via `data-label` op elke `<td>` + `::before`; voeg ook `role="table"` op de tabel + `scope="col"` op elke `<th>` toe (a11y: `<thead>` clip-verborgen, niet `display:none`). → `styles/blog.css`
 - **Geen `!important` in `styles/`.** Win op specificiteit; check eerst of de tegenregel dood is en verwijderd kan worden (§14).
+- **Een geïnjecteerde `<style>` bewijst niets over de cascade** — die komt altijd als laatste, dus hij wint ook als de echte regel zou verliezen (§13). Verifieer tegen een no-store server. Deze regel staat hier omdat hij in §13 onvindbaar was voor wie niet over box-randen las (Sessie 230).
 
 ---
 
@@ -395,3 +396,45 @@ overheen dat je niet zelf hebt gezet.
 
 ---
 
+## 22. In een grid met één auto-track bepaalt het breedste item de breedte van álle items (Sessie 230)
+
+`.blog-posts-grid { display: grid; gap: … }` zonder `grid-template-columns` krijgt **één
+impliciete `auto`-track**. Die track wordt zo breed als de **min-content-bijdrage van het
+breedste item** — en alle andere items erven die breedte, ook als ze zelf smal kunnen.
+
+Eén vaste breedte diep in één kind lekt daarmee uit naar de hele lijst:
+
+```
+.newsletter-signup .sib-form .entry__field input { width: 280px; }   /* 1 item */
+        ↓ min-content van dat item wordt 400px
+        ↓ track wordt 400px
+15 blogkaarten renderen 400px in een container van 336px            /* 15 items */
+```
+
+`main.blog-container { overflow-x: hidden }` knipte die 64px onzichtbaar weg, dus het defect
+was maanden aanwezig zonder melding. **Een overflow-guard op `document.scrollWidth` staat hier
+per definitie groen** — het document groeit niet mee. Toets elementrects tegen de containerrand.
+
+**Vind de schuldige door min-content per item te meten**, niet door de CSS te lezen — de
+gerenderde breedte van élk item is identiek, dus die verraadt niets:
+
+```js
+const meetMin = (el) => {                       // kloon, vrij laten meten, opruimen
+  const k = el.cloneNode(true);
+  k.style.cssText += ';position:absolute;visibility:hidden;width:min-content;left:-9999px;';
+  document.body.appendChild(k);
+  const w = k.getBoundingClientRect().width;
+  k.remove();
+  return w;
+};
+[...grid.children].map(meetMin);   // 15 kaarten < 360px, nieuwsbrief 400px → dader gevonden
+```
+
+**Repareer bij de bron, niet met een `max-width` op de zusters.** Hier hoorde de vaste 280px in
+`@media (min-width: 769px)` — elkaar uitsluitende ranges (§4) in plaats van een cascade-gevecht,
+want de mobiele tegenregel was (0,2,1) tegen (0,3,1) en verloor stilzwijgend. Ná de fix zakte de
+min-content naar 232px en de track naar 336px = exact de container.
+
+> Percentage-breedtes (`width: 100%`) tellen **niet** mee voor de min-content-bijdrage; vaste
+> px-breedtes wél. Dat is precies waarom de mobiele regel het probleem zou hebben opgelost als
+> hij had gewonnen.

@@ -1,7 +1,7 @@
 # CLAUDE.md — HackSimulator.nl
 
 **Project:** Browser-based terminal simulator die Nederlandse beginners ethisch hacken leert.
-**Status:** MVP Development — ✅ LIVE op Netlify (laatste: Sessie 229)
+**Status:** MVP Development — ✅ LIVE op Netlify (laatste: Sessie 230)
 **Stack:** Vanilla JS/CSS, client-side only, geen backend, geen build-stap. Deploy = push naar `main`.
 **Docs:** `docs/prd.md` v1.8 | `PLANNING.md` v3.0 | `TASKS.md` (live metrics) | `docs/style-guide.md` v1.5
 
@@ -134,7 +134,7 @@ architectuurwijziging, `docs/prd.md` alleen bij scopewijziging.
 **Afsluiten:** `/summary` — die bevat de volledige 7-staps flow, inclusief de ground-truth-meting
 en de validatiegate. Niet hier dupliceren.
 
-**Sessie counter:** 229
+**Sessie counter:** 230
 
 <!-- Onderhoudsnotitie (wordt niet in context geladen):
      Dit bestand is de altijd-geladen laag. Houd het onder 150 regels — validate-docs.sh
@@ -144,5 +144,5 @@ en de validatiegate. Niet hier dupliceren.
 
 ---
 
-**Last updated:** 20 aug 2026 (Sessie 229 — JetBrains Mono ligeert via `calt`, standaard aan: de terminal rendeerde `>=` als ≥ en `$pdo->prepare` als `$pdo→prepare` in het "Veilige code"-voorbeeld. Sitebreed uitgezet. NEW `font-ligatures.spec.js`. Volledig: `docs/sessions/current.md`)
-**Version:** 6.02 (Sessie 229 — de bron klopte; `textContent` gaf `>=`, het scherm toonde ≥. Ligaturen behouden het monospace-grid exact, dus breedte detecteert dit niet — alleen pixels. Populatie omgedraaid i.p.v. een lijst mono-selectors. De zelfbewakende tak ving direct een eigen meetfout: `<pre>` erft de font-family niet. Exit 0 met een afgekapte run las als groen. Historie: `docs/sessions/current.md`)
+**Last updated:** 21 aug 2026 (Sessie 230 — het blogfilter verbergt alleen `.blog-post-card`, dus het nieuwsbriefblok bleef staan: 4 van de 6 categorieën toonden bovenaan een formulier i.p.v. een artikel. Klasse-gebaseerde `order` erbij. Rotatie 215-219. Volledig: `docs/sessions/current.md`)
+**Version:** 6.03 (Sessie 230 — één grid-item met een vaste breedte rekte via de enige `auto`-track álle 15 kaarten op, onzichtbaar weggeknipt door `overflow-x: hidden`. Twee metingen logen groen: een geïnjecteerde `<style>` wint altijd op bronvolgorde, en `goto` naar een fragment-only URL herlaadt niet. Historie: `docs/sessions/current.md`)

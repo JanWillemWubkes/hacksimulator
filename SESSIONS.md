@@ -10,22 +10,37 @@
 
 > **Rotatie/archivering-conventie:** zie [`docs/sessions/README.md`](docs/sessions/README.md)
 > (range-naamgeving `archive-sNNN-sMMM.md`; legacy `archive-q*`-namen zijn bevroren + fout gelabeld).
-> `current.md` houdt het rolling window Sessie 210-219; ouder is geroteerd naar de range-archieven hieronder.
+> `current.md` houdt het rolling window Sessie 220-230; ouder is geroteerd naar de range-archieven hieronder.
 
-### [Current Sessions (210-219)](docs/sessions/current.md) - Full Detail
-**Sessies:** 219, 218, 217, 216, 215, 214, 213, 212, 211, 210
-**Period:** 06 - 09 augustus 2026
+### [Current Sessions (220-230)](docs/sessions/current.md) - Full Detail
+**Sessies:** 230, 229, 228, 227, 226, 225, 224, 223, 222, 221, 220
+**Period:** 10 - 21 augustus 2026
 **Topics:**
-- Sectieritme onder "in cijfers" hersteld: de langste reeks zonder achtergrondwissel ging van 3,8 schermen naar 1,05/1,12 — strakker dan de 1,6 boven de vouw. Twee bugs uit de meting: de light-mode cijfers-band had Δ0 met de pagina (`rgba(248,248,248,0.8)` over `#f8f8f8` composit naar exact de paginakleur), en een lichtere band lost de kaarten op omdat die tinten van de bandkleur zijn. Eén `--color-bg-alt`-token + één regel i.p.v. drie ad-hoc rgba's (Sessie 219)
-- Educatiestrook onder de terminal gehalveerd (−26% hoogte, 3 → 12 links) nadat `git log` de herkomst gaf: het blok was AdSense-vulling uit commit `1cc04ff`, en AdSense ging er in Sessie 208 uit. Rollen gerangschikt op de gedocumenteerde north-star (activation, niet lezen); "Zo begin je" geschrapt omdat de terminal het zelf al zegt; eerste scroll-event van de site (Sessie 218)
-- Vier vastgelegde pre-existing punten opgeruimd — en **drie van de vier metingen bleken niet te kloppen**: de eyebrow-badge mat 2,85:1 i.p.v. de genoteerde 3,10:1 (contrast tegen de effectieve achtergrond, niet de paginakleur), de terminal-overflow was al vijf sessies eerder gefixt, en de sticky-balk-meting las een IO-staat te vroeg. Staande regel sindsdien: er is géén baseline van bekende testfalers (Sessie 217)
-- `.mobile-cta-bar` verschijnt nu op de invariant *balk verborgen ⟺ CTA-midden aantikbaar*: IntersectionObserver als trigger, één geometrisch predicaat als regel. De oude guard scrollde nooit (`scroll-behavior: smooth` maakte 13 `scrollTo`'s in één tick tot 2px) en kon een `visibility: hidden` balk niet van een aantikbare onderscheiden (Sessie 216)
-- Hero-terminal uitgelijnd, focusrand vervangen en een uitnodiging toegevoegd: `margin-top: 3rem` was een handmatige centrering voor een venster dat sinds Sessie 214 155px hoger is (94px onder de tekstkolom uit) → `align-items: center` in een `≥769px`-band; de blauwe focusrand bleek onze eigen sitebrede `--color-info` en het venster gaat nu groen aan (regel ná het light-theme-blok, want bronvolgorde beslist bij gelijke specificiteit); NEW uitnodigingsregel boven het venster, niet op mobiel omdat hij daar drie chips onder de vaste CTA-balk duwde; de decoratieve cursor stond 317px van zijn eigen tekst. Twee zelf-geïntroduceerde regressies zelf gevangen; 9 nieuwe testdeclaraties elk met mutant bewezen (Sessie 215)
-- Interactieve hero-terminal op `index.html`: vrije mini-REPL (`help`/`ls`/`cat`/`nmap`/`whoami`/`pwd`) met zes tikbare suggestiechips die tegelijk begeleiding, de eerlijke grens van de demo én de mobiele affordance zijn; de auto-demo loog over `whoami`, `ls` én `nmap` en is tegen de bron rechtgezet. Vijf bugs (2 bestaand in `landing-demo.js`, 3 tijdens de bouw — alle drie met een mutant bewezen). Plus de homepage-trechter: CTA-gat van 4179px gedicht, één CTA-label site-breed, 20 tikdoelen <44px → 0, 16 blokken leeg zonder JS. Bundlelimiet 1050 → 1100 KB (Sessie 214)
-- Gidsen-grid 2×2 + CTA-uitlijning structureel opgelost (`.gids-card p { flex: 1 }` selecteerde óók de sample-link, twee groeiers deelden de rek) + beide gratis samples als coupon-chip op hun eigen kaart; `:nth-child(3):last-child` fixte gidsen én over-ons; **site-brede navbar-inklapband tot 1279px** (341px overflow @820px op elke marketingpagina en blogpost); `.mobile-cta-link` op specificiteit gefixt; threaded no-store server (Sessie 213)
-- Lead magnets: de juridische sample leverde de pentest-bestandsnaam (`_headers`-wildcard met vaste `filename`) én de pentest-welkomstmail (één gedeeld Brevo-formulier bij een *Form submitted*-trigger); eigen formulier + automation + welkomstmail, NEW Check 10, E2E geparametriseerd over beide samples, `type="email"` op alle vier de formulieren (Sessie 212)
-- Interne links naar `leren-hacken.html` vanuit 5 blogposts + homepage, achterstallige /summary Sessie 210, bulk-rotatie 195-199 (Sessie 211)
-- SEO-optimalisaties op zoekdata + nieuwe blogpost `leren-hacken.html` (~2500 woorden beginnersgids), titel/meta-optimalisaties op 3 bestaande pagina's (Sessie 210)
+- Het nieuwsbriefblok viel buiten de filterpopulatie — en rekte via één grid-track alle 15 kaarten op: het `:target`-filter verbergt uitsluitend `.blog-post-card`, dus het blok bleef in élke stand op DOM-positie 4 staan (gemeten 4 van de 6 categorieën met het formulier bovenaan). Twee stille defecten erbij: een vaste inputbreedte die de mobiele regel op specificiteit versloeg gaf het blok een min-content van 400px — één impliciete `auto`-track maakte daarmee álle 15 kaarten 400px in een container van 336px, onzichtbaar weggeknipt door `overflow-x: hidden`; en de skip-link `#main-content` liet "0 van 15 artikelen" omroepen (Sessie 230)
+- Het font schreef iets anders dan de DOM: JetBrains Mono ligeert via `calt` (367 lookups, standaard aan) en `$pdo->prepare` rendeerde als `$pdo→prepare` onder het kopje "Veilige code". Sitebreed uitgezet met omgedraaide populatie; breedte en `textContent` detecteren dit niet, alleen pixels (Sessie 229)
+- Vier CSS-commentaren claimden een contrast dat ze niet haalden — en de sweep die dat had moeten zien filterde op tokennaam. Ongefilterd gemeten: 13.157 element-toestanden, 152 onder AA / 378 onder AAA over 18 kleurwaarden, daarna 0/0 (Sessie 228)
+- Vier taken die elk een halve reparatie van een eerdere sessie afmaakten: bundelformule, `--color-link` plus vier hover-toestanden, legal-titels in vier velden, en de flaky autocomplete-spec (Sessie 227)
+- De blog had 418 koppen zonder id en een filter van 26,8px — geen van beide stond in de CSS. `min-height` doet niets op een inline `<a>`; specificiteit vergelijkt per tier (Sessie 226)
+- De nieuwsbrief was af na vijf redactierondes — elke ronde legde een defect bloot dat níét in de tekst zat. Rotatie 210-214 (Sessie 225)
+- De dader was 280px breed en 377px lang — de scan keek naar het verkeerde getal (Sessie 224)
+- De verantwoording wekte wantrouwen — en art. 50 lid 4 AI-verordening gold al twaalf dagen (Sessie 223)
+- De box-randen braken verticaal — vier eerdere fixes zochten allemaal in de breedte. Box-drawing leeft op de verticale as (Sessie 222)
+- Vijf commits over drie dagen — en de regel die twee van hen stuurde, bleek zelf fout (Sessie 221)
+- Opruimsessie: vier van de vijf punten bleken een notitie die niet meer klopte. Rotatie 205-209 (Sessie 220)
+
+---
+
+### [Archief Sessie 215-219](docs/sessions/archive-s215-s219.md) - Full Detail (geroteerd)
+**Sessies:** 219 → 215 (nieuwste-eerst, incl. de uit CLAUDE.md geroteerde learnings van 215 t/m 219)
+**Period:** 08 - 09 augustus 2026
+**Geroteerd bij:** Sessie 230
+
+---
+
+### [Archief Sessie 210-214](docs/sessions/archive-s210-s214.md) - Full Detail (geroteerd)
+**Sessies:** 214 → 210 (nieuwste-eerst, incl. de uit CLAUDE.md geroteerde learnings van 212, 213 en 214)
+**Period:** 06 - 08 augustus 2026
+**Geroteerd bij:** Sessie 225 — deze index-stap was daar overgeslagen en is bij Sessie 230 alsnog gezet
 
 ---
 
@@ -195,7 +210,7 @@
 
 **Total Sessions:** 220 (as of 10 augustus 2026)
 **Current Session:** 220 (Opruimsessie: twee blinde tests, bulk-rotatie 205-209, dode taken)
-**Sessions with full documentation:** 81-220 (current.md 210-219 + range-archieven 205-209, 200-204, 195-199, 190-194, 185-189, 180-184, 175-179, 170-174, 165-169, 121-164 & 81-120)
+**Sessions with full documentation:** 81-230 (current.md 220-230 + range-archieven 215-219, 210-214, 205-209, 200-204, 195-199, 190-194, 185-189, 180-184, 175-179, 170-174, 165-169, 121-164 & 81-120)
 **Sessions compressed:** 2-77 (various compression levels)
 
 **Structure rationale:**
@@ -241,10 +256,11 @@ houd `current.md` op ~10-15 sessies / <250 KB, en werk de index hierboven bij.
 
 ---
 
-**Last updated:** 10 augustus 2026 (Sessie 220 — bulk-rotatie: 205-209 geroteerd naar `archive-s205-s209.md`, current.md → window 210-219, index + Session Overview + Maintenance Protocol gesynct)
+**Last updated:** 21 augustus 2026 (Sessie 230 — rotatie 215-219 naar `archive-s215-s219.md`, current.md → window 220-230; index, Session Overview en de bij Sessie 225 overgeslagen archief-entry 210-214 alsnog gesynct)
 **Next update:** bij volgende `N%5`-rotatie (steady-state per `docs/sessions/README.md`)
 
 **Recent updates:**
+- Sessie 230: Steady-state `N%5`-rotatie — 215-219 (staart) geknipt naar `archive-s215-s219.md` (10 H2-secties: 5 sessies + de uit CLAUDE.md geroteerde learnings van 215 t/m 219), current.md window 220-230 (12 secties: 11 entries + de learnings van 220). `current.md` 200.340 → 118.043 bytes, archief 82.831 bytes. **De skill-formule klopte opnieuw niet:** `/summary` schrijft "archiveer [N-10 .. N-6]" = 220-224, wat 215-219 als ouder blok in `current.md` zou laten staan én een gat in de archiefreeks maakt — exact de correctie die bij Sessie 215 al is vastgelegd. De README-regel ("sessies ouder dan de laatste ~10", staart-eerst) geeft 215-219. **Bijgevangen staleness:** de index claimde window 210-219 terwijl `current.md` 215-230 hield, `archive-s210-s214.md` (geroteerd bij Sessie 225) stond er helemaal niet in, en §Session Overview stond op 81-220 — alle drie gecorrigeerd
 - Sessie 220: Steady-state `N%5`-rotatie — 205-209 (staart) geknipt naar `archive-s205-s209.md` (8 H2-secties: 5 sessies + de uit CLAUDE.md geroteerde learnings van 205, 207 en 209), current.md window 210-219 (12 secties: 10 entries + de learnings van 212 en 213). Byte-geverifieerd (`prefix+knip+suffix == origineel`, 149.084 bytes). **Bijgevangen staleness:** de index claimde nog window "205-215" terwijl `current.md` 205-219 hield, §Session Overview stond op Sessie 190, en §Maintenance Protocol gaf een rotatieregel die de README sinds Sessie 170 tegenspreekt — alle drie gecorrigeerd
 - Sessie 215: Steady-state `N%5`-rotatie — 200-204 (staart) geknipt naar `archive-s200-s204.md` (8 H2-secties: 5 sessies + de Follow-up van 27 jul + de geroteerde learnings van 202 en 204), current.md window 205-215 (11 entries). **Correctie:** de rotatienotitie in `.claude/CLAUDE.md` gaf "archiveer 205-209" — dat zou 200-204 als ouder blok in `current.md` laten staan én een gat in de archiefreeks maken. De README-regel ("sessies ouder dan de laatste ~10", staart-eerst) geeft 200-204, consistent met alle voorgaande rotaties
 - Sessie 205: Steady-state `N%5`-rotatie — 190-194 (staart) geknipt naar `archive-s190-s194.md` (5 entries), current.md window 195-205 (11 entries)

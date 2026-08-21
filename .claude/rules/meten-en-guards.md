@@ -236,9 +236,39 @@ if (ZONDER.has(pad)) expect(aantal).toBe(0);        // erin? dan MOET het nul bl
 else                 expect(aantal).toBeGreaterThan(0);
 ```
 
-> Vuistregel bij alle drie: vraag niet "is er een faalmelding?" maar "wat is het **positieve**
+**Een navigatie die niet navigeert (Sessie 230).** `page.goto()` naar een URL die alleen in het
+**fragment** verschilt is een same-document navigatie: er herlaadt niets. Een guard die per
+categorie `goto('/blog/#tools')` deed bleef daardoor **groen op mutant 1** — een regressie die
+handmatig direct zichtbaar was.
+
+```js
+await page.goto('/blog/');                    // laadt
+await page.goto('/blog/#tools');              // FOUT: zelfde document, geen herlading
+await page.goto(`/blog/?cb=${Date.now()}#tools`);  // GOED: unieke URL = verse load
+```
+
+De cache-buster is niet alleen determinisme, hij is ook **representatiever**: zo komt een
+bezoeker via een gedeelde link binnen. Diagnose ging hier niet via de test maar via een los
+script dat dezelfde stand mét en zónder de fix laadde — verschilden de uitkomsten daar wél, dan
+zit het probleem in de meting en niet in de code.
+
+**Drie ANSI-escapes vóór je cijfer (Sessie 230).** Zelfs een guard die netjes een positief
+eindblok eist, faalt als zijn patroon het niet kán vinden: `^\s+[0-9]+ passed` matcht níét op
+Playwright's `line`-reporter, want daar staan `\x1b[1A\x1b[2K` vóór de spaties. Strip ze eerst:
+
+```bash
+CLEAN=$(tr '\r' '\n' <"$LOG" | sed -E 's/\x1b\[[0-9;]*[A-Za-z]//g')
+```
+
+Zelfde vorm, derde variant: `grep -rn "geïnjecteerde <style>"` gaf nul treffers omdat er
+`geïnjecteerde \`<style>\`` staat, mét backtick — waaruit bijna volgde dat een les nog niet
+gedocumenteerd was terwijl hij er al stond.
+
+> Vuistregel bij alle vijf: vraag niet "is er een faalmelding?" maar "wat is het **positieve**
 > bewijs dat deze meting heeft gedraaid?" — een eindblok, een niet-lege populatie, een
-> verwachte hoeveelheid. Zonder dat is groen ononderscheidbaar van stil.
+> verwachte hoeveelheid, een mutant die daadwerkelijk rood werd. Zonder dat is groen
+> ononderscheidbaar van stil. En een grep met nul treffers bewijst iets over je **patroon**,
+> niet over de werkelijkheid.
 
 ---
 
