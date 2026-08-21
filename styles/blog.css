@@ -213,12 +213,13 @@ html {
    CSS-only categoriefilter (:target). Werkt zonder JavaScript; src/ui/blog-filter.js
    voegt alleen aria-current en een resultaatteller toe.
 
-   ⚠️ EEN NIEUWE CATEGORIE RAAKT ALLE DRIE DE GROEPEN HIERONDER — en ze staan bewust
+   ⚠️ EEN NIEUWE CATEGORIE RAAKT GROEP 1 T/M 3 HIERONDER — en ze staan bewust
    bij elkaar. Tot Sessie 226 stond `#bronnen` als losse kopie ~600 regels verderop,
    waardoor "voeg een categorie toe" in de praktijk betekende: vind de drie plekken,
    waarvan één niet in beeld staat.
-   Enumeratie is met :target niet te vermijden (er is geen selector die
+   Enumeratie is dáár met :target niet te vermijden (er is geen selector die
    `[data-category]` aan een target-id koppelt), maar hij hoort wel op één plek.
+   Groep 4 is klasse-gebaseerd en houdt zichzelf bij — daar hoort GEEN selector bij.
    --------------------------------------------------------------------------- */
 
 /* 1. Verberg alles wat niet in de gekozen categorie valt. */
@@ -257,6 +258,23 @@ a[href='#all'].category-btn {
   border-color: var(--color-border);
   color: var(--color-text-dim);
   font-weight: 400;
+}
+
+/* 4. Gefilterd = "eerst de resultaten, dan het aanbod". Het nieuwsbriefblok staat als 4e kind
+      ín de grid en draagt géén data-category, dus groep 1 raakt het niet: in elke categorie
+      waarvan de eerste match ná het blok valt (gemeten: concepten, carriere, bronnen,
+      gevorderden — 4 van de 6) was het formulier het eerste dat de bezoeker zag.
+      Ongefilterd blijft het blok op zijn DOM-plek staan; dat is een bewuste conversiekeuze
+      (naar de gridbodem is 5458px dieper), bewaakt in blog-navigation.spec.js.
+      Deze groep matcht op de KLASSE .category-target en groeit dus vanzelf mee met een
+      nieuwe categorie — anders dan groep 1 t/m 3 hierboven.
+      Prijs, bewust betaald: in een gefilterde stand wijkt de DOM-volgorde af van de visuele.
+      Een toetsenbordgebruiker tabt eerst door het formulier, daarna naar het artikel erboven.
+      De node in JS verplaatsen zou dat oplossen, maar breekt de belofte in blog-filter.js dat
+      het filter zonder JS volledig werkt — en beide volgordes zijn betekenisbehoudend: het
+      zijn twee losse blokken, geen omgedraaide leesvolgorde bínnen één component. */
+.category-target:not(#all):target ~ .blog-posts-grid .newsletter-signup {
+  order: 1;
 }
 @media (max-width: 768px) {
   .blog-category-filter {
@@ -1286,7 +1304,6 @@ a[href='#all'].category-btn {
   font-size: 1rem;
   height: 44px;
   padding: 0 var(--spacing-md);
-  width: 280px;
   max-width: 100%;
   transition: border-color var(--transition-fast);
 }
@@ -1355,9 +1372,9 @@ a[href='#all'].category-btn {
     flex-direction: column;
     align-items: stretch;
   }
-  .newsletter-form input[type="email"] {
-    width: 100%;
-  }
+  /* De input krijgt hier bewust GEEN breedte: `align-items: stretch` hierboven laat hem de
+     kolom vullen. De vaste 280px staat in het `@media (min-width: 769px)`-blok bij de
+     Brevo-overrides — zie de uitleg daar waarom die de hele kaartenlijst te breed maakte. */
   .newsletter-signup {
     margin-left: 0;
     margin-right: 0;
@@ -1398,9 +1415,26 @@ a[href='#all'].category-btn {
   font-size: 1rem !important;
   height: 44px !important;
   padding: 0 var(--spacing-md) !important;
-  width: 280px;
   max-width: 100%;
   transition: border-color var(--transition-fast);
+}
+
+/* De vaste inputbreedte hoort in een range die de mobiele stand uitsluit, niet in de
+   basisregel. Stond hij daar (twee keer zelfs: hier én op de generieke .newsletter-form-regel),
+   dan bleef de input óók op 375px 280px breed — de tegenregel `.newsletter-form
+   input[type="email"]{width:100%}` was (0,2,1) tegen (0,3,1) en verloor, en een media query
+   voegt geen specificiteit toe (css-layout.md §4).
+   Gevolg was niet zichtbaar op de input maar op de héle lijst: 280px gaf het nieuwsbriefblok
+   een min-content van 400px, en dat is het enige grid-item boven 360px. .blog-posts-grid heeft
+   één impliciete auto-track, dus alle 15 kaarten renderden 400px breed in een container van
+   336px. `main.blog-container{overflow-x:hidden}` knipte die 64px onzichtbaar weg.
+   Gemeten @375px: kaartrand 412px -> 348px == containerrand, min-content 400px -> 232px. */
+@media (min-width: 769px) {
+  .newsletter-form input[type="email"],
+  .newsletter-signup .sib-form .entry__field input,
+  .newsletter-signup .sib-form .entry__field input.input {
+    width: 280px;
+  }
 }
 .newsletter-signup .sib-form .entry__field input:focus {
   border-color: var(--color-ui-primary) !important;

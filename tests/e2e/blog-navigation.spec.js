@@ -106,11 +106,15 @@ test.describe('Blogindex: categoriefilter', () => {
     );
     expect(actief).toEqual(['Tools']);
 
-    const zichtbaar = await page.$$eval('.blog-post-card', (els) =>
-      els.filter((e) => getComputedStyle(e).display !== 'none').length
-    );
+    // Totaal uit de DOM, niet hardcoded: dan toetst deze assertie de FORMULE en gooit
+    // blogpost #16 de test niet om.
+    const { zichtbaar, totaal } = await page.$$eval('.blog-post-card', (els) => ({
+      zichtbaar: els.filter((e) => getComputedStyle(e).display !== 'none').length,
+      totaal: els.length,
+    }));
+    expect(totaal, 'geen .blog-post-card gevonden — selector verouderd?').toBeGreaterThan(0);
     const teller = await page.textContent('.blog-filter-count');
-    expect(teller).toBe(`${zichtbaar} van 15 artikelen`);
+    expect(teller).toBe(`${zichtbaar} van ${totaal} artikelen`);
   });
 
   test('het eerste artikel staat binnen het eerste scherm (@375x812)', async ({ page }) => {
@@ -121,6 +125,112 @@ test.describe('Blogindex: categoriefilter', () => {
     await page.goto('/blog/');
     const top = await page.$eval('.blog-post-card', (e) => e.getBoundingClientRect().top);
     expect(top).toBeLessThan(812);
+  });
+
+  // Het CSS-filter verbergt alleen .blog-post-card. Het nieuwsbriefblok staat als 4e kind ín
+  // .blog-posts-grid en draagt geen data-category, dus het bleef in elke stand staan waar het
+  // stond. Gemeten vóór de fix: in concepten/carriere/bronnen/gevorderden (4 van de 6) was het
+  // formulier het EERSTE dat de bezoeker zag — geen enkel artikel in beeld.
+  test('geen filterstand begint met het nieuwsbriefblok', async ({ page }) => {
+    await page.goto('/blog/');
+
+    const categorieen = await page.$$eval('.category-target', (els) => els.map((e) => e.id));
+    // Zelfbewakend: nul categorieën = verouderde selector, niet "alles in orde".
+    expect(categorieen.length, 'geen .category-target gevonden').toBeGreaterThan(1);
+
+    const standen = [];
+    for (const cat of categorieen) {
+      // Unieke query per stand: `goto` naar een URL die alleen in het fragment verschilt is
+      // een same-document navigatie — geen herlading, en de meting werd er flaky van. Een
+      // verse load is bovendien representatiever: zo komt een bezoeker via een gedeelde link.
+      await page.goto(`/blog/?cb=${Date.now()}-${cat}#${cat}`);
+      standen.push(
+        await page.evaluate((c) => {
+          const grid = document.querySelector('.blog-posts-grid');
+          const zichtbaar = [...grid.children]
+            .filter((el) => getComputedStyle(el).display !== 'none')
+            // Sorteren op gerenderde positie, niet op DOM-volgorde: `order` verplaatst het
+            // blok visueel zonder de DOM te raken, dus alleen de y-positie is bewijs.
+            .map((el) => ({
+              nieuwsbrief: el.classList.contains('newsletter-signup'),
+              top: el.getBoundingClientRect().top + window.scrollY,
+            }))
+            .sort((a, b) => a.top - b.top);
+          return {
+            cat: c,
+            kaarten: zichtbaar.filter((z) => !z.nieuwsbrief).length,
+            eersteIsNieuwsbrief: zichtbaar[0]?.nieuwsbrief === true,
+            nieuwsbriefIndex: zichtbaar.findIndex((z) => z.nieuwsbrief),
+            laatsteIndex: zichtbaar.length - 1,
+          };
+        }, cat)
+      );
+    }
+
+    // Een categorie zonder artikelen zou "eerste is nieuwsbrief" óók waar maken. Apart
+    // asserteren, anders is een lege categorie niet te onderscheiden van de bug.
+    expect(standen.filter((s) => s.kaarten === 0)).toEqual([]);
+    expect(standen.filter((s) => s.eersteIsNieuwsbrief)).toEqual([]);
+
+    // Gefilterd hoort het blok ACHTER de resultaten; ongefilterd blijft het op zijn DOM-plek
+    // (na 3 kaarten) staan — dat is een bewuste conversiekeuze, de gridbodem ligt 5458px
+    // dieper. Deze assertie gaat dus ook rood als iemand dit "oplost" door de node te verplaatsen.
+    const gefilterd = standen.filter((s) => s.cat !== 'all');
+    expect(gefilterd.filter((s) => s.nieuwsbriefIndex !== s.laatsteIndex)).toEqual([]);
+    const alles = standen.find((s) => s.cat === 'all');
+    expect(alles.nieuwsbriefIndex).toBe(3);
+  });
+
+  // De teller behandelde ELKE hash als categorie. `#main-content` is het doel van de skip-link
+  // — de eerste bediening die een toetsenbordgebruiker tegenkomt — en gaf "0 van 15 artikelen"
+  // in een role="status"-regio terwijl CSS alle 15 kaarten toonde.
+  test('een hash die geen categorie is, laat de teller met rust', async ({ page }) => {
+    await page.goto('/blog/');
+    // Zelfbewakend: test geen dode URL. De skip-link moet bestaan én ergens op landen.
+    const skip = await page.$eval('.skip-link', (e) => e.getAttribute('href'));
+    expect(skip).toBe('#main-content');
+    expect(await page.$('#main-content')).not.toBeNull();
+
+    const totaal = await page.$$eval('.blog-post-card', (els) => els.length);
+
+    for (const hash of ['#main-content', '#newsletter', '#bestaat-niet']) {
+      await page.goto(`/blog/?cb=${Date.now()}${hash}`); // verse load, zie de lus hierboven
+      const staat = await page.evaluate(() => ({
+        teller: document.querySelector('.blog-filter-count').textContent,
+        zichtbaar: [...document.querySelectorAll('.blog-post-card')].filter(
+          (e) => getComputedStyle(e).display !== 'none'
+        ).length,
+      }));
+      expect(staat.teller, `teller sprak de pagina tegen op ${hash}`).toBe('');
+      expect(staat.zichtbaar, `CSS toont niet alles op ${hash}`).toBe(totaal);
+    }
+  });
+
+  // .blog-posts-grid heeft één impliciete auto-track, dus het BREEDSTE item bepaalt de breedte
+  // van alle 15 kaarten. Het nieuwsbriefblok had een min-content van 400px (vaste inputbreedte),
+  // waardoor elke kaart 400px breed werd in een container van 336px.
+  test('geen grid-item steekt buiten de container (@375px)', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/blog/');
+
+    const uit = await page.evaluate(() => {
+      const grid = document.querySelector('.blog-posts-grid');
+      const rand = grid.getBoundingClientRect().right;
+      return {
+        aantal: grid.children.length,
+        // NIET op document.scrollWidth toetsen: main.blog-container heeft overflow-x:hidden,
+        // dus het document groeit nooit mee en zo'n test staat hier permanent groen.
+        overhang: [...grid.children]
+          .map((el) => ({
+            klasse: el.className,
+            over: Math.round(el.getBoundingClientRect().right - rand),
+          }))
+          .filter((x) => x.over > 1),
+      };
+    });
+
+    expect(uit.aantal, 'lege grid — selector verouderd?').toBeGreaterThan(0);
+    expect(uit.overhang).toEqual([]);
   });
 });
 

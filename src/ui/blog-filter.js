@@ -16,14 +16,23 @@
 
 const ITEM_NOUN = 'artikelen';
 
-/** Categorie uit de hash, of null voor "alles". */
-function actieveCategorie() {
+/**
+ * Categorie uit de hash, of null voor "alles".
+ *
+ * `geldig` is niet optioneel gedrag maar een correctheidseis: elke hash als categorie
+ * behandelen liet de teller "0 van 15 artikelen" melden op `#main-content` — het doel van de
+ * skip-link, en dus de eerste bediening die een toetsenbordgebruiker tegenkomt. CSS toonde
+ * daar alle 15 kaarten (er is geen matchende :target-regel), dus de role="status"-regio
+ * sprak een schermlezer tegen wat er stond. Zelfde gat op `#newsletter`.
+ */
+function actieveCategorie(geldig) {
   const hash = window.location.hash.slice(1);
-  return !hash || hash === 'all' ? null : hash;
+  if (!hash || hash === 'all' || !geldig.has(hash)) return null;
+  return hash;
 }
 
-function herbeoordeel(knoppen, kaarten, teller) {
-  const categorie = actieveCategorie();
+function herbeoordeel(knoppen, kaarten, teller, geldig) {
+  const categorie = actieveCategorie(geldig);
   const doelHref = `#${categorie ?? 'all'}`;
 
   for (const knop of knoppen) {
@@ -47,7 +56,10 @@ function init() {
   if (!knoppen.length || !kaarten.length) return;
 
   const teller = document.querySelector('.blog-filter-count');
-  const draai = () => herbeoordeel(knoppen, kaarten, teller);
+  // Uit de pagina zelf, niet uit een lijst hier: dezelfde .category-target-divs die het
+  // CSS-filter aanstuurt. Een nieuwe categorie is daarmee vanzelf geldig.
+  const geldig = new Set([...document.querySelectorAll('.category-target')].map((d) => d.id));
+  const draai = () => herbeoordeel(knoppen, kaarten, teller, geldig);
 
   window.addEventListener('hashchange', draai);
   draai(); // synchroon bij init: anders staat de eerste paint zonder aria-current
