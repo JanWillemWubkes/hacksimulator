@@ -70,7 +70,7 @@ Elke post draagt zichtbaar **waarmee** de tekst is gemaakt en **wannéér** de b
 laatst zijn nagelopen. Zet in `.blog-post-meta`, ná de categorie-badge:
 
 ```html
-<span class="blog-ai-notice" title="Deze tekst is met AI geschreven en met AI gecontroleerd; er is nog geen menselijke feitencontrole">Met AI geschreven en gecontroleerd &middot; laatste controle: <time datetime="JJJJ-MM-DD">D maand JJJJ</time> &middot; <a href="/over-ons.html#verantwoording">hoe dat werkt</a></span>
+<span class="blog-ai-notice">Met AI geschreven en gecontroleerd &middot; laatste controle: <time datetime="JJJJ-MM-DD">D maand JJJJ</time> &middot; <a href="/over-ons.html#verantwoording">hoe dat werkt</a></span>
 ```
 
 **De AI-melding is niet optioneel en niet cosmetisch.** Art. 50 lid 4 AI-verordening (van
