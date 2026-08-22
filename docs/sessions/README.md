@@ -27,6 +27,9 @@ Bij elke `/summary` waar `N % 5 == 0`:
 1. Bepaal het te archiveren blok: sessies ouder dan de laatste ~10 (houd `current.md` ≈ laatste
    10-15 sessies / **<250 KB**).
 2. Knip die entries uit `current.md` en plak ze (nieuwste-eerst) in het **lopende** range-archief.
+   Neem het **learnings-blok** van een sessie mee mét zijn entry: laat je het staan, dan houdt
+   `current.md` een "Sessie N — learnings"-sectie terwijl entry N in het archief zit (vastgesteld
+   bij Sessie 220, opnieuw geraakt bij 230).
 3. Bereikt een range-archief ~250 KB → sluit 'm af (definitieve `archive-sNNN-sMMM.md`) en
    open een nieuwe voor het volgende blok.
 4. Werk de index in **`SESSIONS.md`** bij: nieuw range-entry + gecorrigeerde `current.md`-range.

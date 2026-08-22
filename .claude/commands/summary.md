@@ -48,7 +48,26 @@ Add new entry for Sessie [N] with full detail:
 - **Next steps** (open items that didn't fit this sessie)
 - **Metrics delta** (bundle KB before/after, test count change, etc.)
 
-Rotation: if N % 5 == 0, archive sessies [N-10 .. N-6] from current.md to `archive-*.md`.
+### Rotatie (bij `N % 5 == 0`)
+
+**De regel staat in [`docs/sessions/README.md`](../../docs/sessions/README.md) §Rotatie-regel —
+lees hem daar en reken hier niets uit.** Hier stond tot Sessie 230 *"archiveer [N-10 .. N-6]"*,
+en die formule gaf twee keer aantoonbaar de verkeerde actie:
+
+| | formule zei | README-regel gaf | wat de formule had aangericht |
+|---|---|---|---|
+| Sessie 215 (de notitie stond toen in `CLAUDE.md`) | 205-209 | 200-204 | 200-204 blijft als **ouder** blok staan |
+| Sessie 230 (de notitie stond toen hier) | 220-224 | 215-219 | 215-219 blijft staan + **gat** in de archiefreeks |
+
+De correctie is bij Sessie 215 al vastgelegd in `SESSIONS.md` en overleefde tóch in dit document —
+de fout verhuisde mee in plaats van te verdwijnen. Dáárom staat hier nu geen rekensom meer maar
+een verwijzing: twee formuleringen van dezelfde regel is er één te veel, en de kopie is degene
+die verjaart.
+
+**Volg alle vijf de stappen van de README-regel, ook de saaie.** Bij Sessie 225 is stap 4 (de
+index in `SESSIONS.md`) overgeslagen; de index claimde daarna tien sessies lang het verkeerde
+window en miste het archief dat diezelfde sessie had aangemaakt. Zo'n overslag meldt zichzelf
+niet — `validate-docs.sh` kijkt niet naar `SESSIONS.md`.
 
 ## Step 4: Learnings routeren + `.claude/CLAUDE.md` bijwerken
 

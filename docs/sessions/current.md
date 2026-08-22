@@ -133,9 +133,33 @@ Gemeten in plaats van aangenomen: `styles/blog.css` en `src/ui/blog-filter.js` v
 **Blog-pijler (budgetloos)** — totaal onveranderd, delta **0,00 KB**. De uitsluiting uit Sessie
 227 dekt blog.css, niet alleen blogafbeeldingen. Goede uitkomst, maar de check was het punt.
 
+### Nasleep: de rotatieformule in `/summary` verwijderd i.p.v. gecorrigeerd
+
+De `/summary`-skill schreef *"archiveer [N-10 .. N-6]"*. Dat gaf bij deze rotatie 220-224,
+wat 215-219 als ouder blok in `current.md` zou laten staan én een gat in de archiefreeks maakt.
+`SESSIONS.md` legt exact dezelfde correctie al vast bij **Sessie 215** — toen stond de foute
+notitie in `CLAUDE.md` en gaf hij 205-209 waar de README-regel 200-204 geeft.
+
+Dat is het interessante deel: de correctie werd toen vastgelegd, maar de **formule verhuisde
+mee** naar een ander document in plaats van te verdwijnen. Een kopie van een regel verjaart, de
+eigenaar niet. De skill draagt daarom nu geen rekensom meer maar een verwijzing naar
+`docs/sessions/README.md` §Rotatie-regel, plus de falsificatietabel die uitlegt waaróm er geen
+getal meer staat.
+
+Bij het schrijven van die fix maakte ik prompt dezelfde fout: mijn eerste versie zette drie
+operationele punten in de skill, waarvan er **twee al woordelijk in de README stonden** (de
+index-stap en de Python-occurrence-asserts). Alleen "neem het learnings-blok mee met zijn entry"
+ontbrak daar — dus dat punt is toegevoegd bij de eigenaar, en de skill is teruggetrimd tot
+verwijzing + historie.
+
+Eén claim in die tekst is gemeten en niet aangenomen: `validate-docs.sh` noemt `SESSIONS.md`
+nergens (0 treffers), dus een overgeslagen index-stap meldt zich inderdaad niet vanzelf — dat is
+precies hoe hij bij Sessie 225 tien sessies lang onopgemerkt bleef.
+
 ### Commits
 
 - `e55f21e` — Het nieuwsbriefblok viel buiten de filterpopulatie en rekte alle 15 kaarten op
+- `11c89f0` — Sessie 230 /summary: het filter bewaakte een klasse waar het blok niet in zat
 
 ### Metrics delta
 
