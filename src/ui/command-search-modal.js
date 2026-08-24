@@ -335,10 +335,29 @@ window.CommandSearchModal = class {
    * @param {Array} commands
    * @returns {string}
    */
+  /**
+   * Escape HTML zodat geïnterpoleerde waarden niet uit hun tag of attribuut kunnen
+   * breken. Zelfde aanpak als renderer.js:463 - de browser doet het escapen.
+   *
+   * Vandaag komt alles hier uit de statische command-registry, dus dit verandert
+   * niets aan de output. Het staat er omdat dit de enige innerHTML in de codebase
+   * is die geïnterpoleerde data verwerkt: één commandnaam of -beschrijving met een
+   * aanhalingsteken zou zonder dit uit `data-command="…"` breken. De registry is nu
+   * een gesloten set, maar dat is een eigenschap van vandaag, geen garantie.
+   *
+   * @private
+   */
+  _escapeHtml(value) {
+    const div = document.createElement('div');
+    div.textContent = String(value ?? '');
+    return div.innerHTML.replace(/"/g, '&quot;');
+  }
+
   renderCategory(category, commands) {
+    const naam = this._escapeHtml(this.formatCategoryName(category));
     let html = `
-      <div class="command-category" role="group" aria-label="${this.formatCategoryName(category)} commands">
-        <h3 class="command-category-header">${this.formatCategoryName(category)} (${commands.length})</h3>
+      <div class="command-category" role="group" aria-label="${naam} commands">
+        <h3 class="command-category-header">${naam} (${commands.length})</h3>
     `;
 
     commands.forEach((cmd) => {
@@ -357,15 +376,17 @@ window.CommandSearchModal = class {
    * @returns {string}
    */
   renderCommandItem(cmd, index) {
+    const naam = this._escapeHtml(cmd.name);
+    const omschrijving = this._escapeHtml(cmd.description);
     return `
       <div class="command-item"
-           data-command="${cmd.name}"
-           data-index="${index}"
+           data-command="${naam}"
+           data-index="${Number(index)}"
            role="option"
            aria-selected="false"
            tabindex="-1">
-        <span class="command-item-name">${cmd.name}</span>
-        <span class="command-item-description">- ${cmd.description}</span>
+        <span class="command-item-name">${naam}</span>
+        <span class="command-item-description">- ${omschrijving}</span>
       </div>
     `;
   }

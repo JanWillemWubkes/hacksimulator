@@ -1335,6 +1335,101 @@ else
 fi
 
 # ============================================================
+# Check 19: interne paden zijn afgeschermd van publish = "."
+# ============================================================
+# Aanleiding (Sessie 231): netlify.toml zet publish = ".", er is geen build-stap,
+# dus de CDN serveert de repo-root. Daardoor stonden /docs/products/*.typ - de
+# volledige bron van de vier BETAALDE gidsen - en een sessielog met het privé-
+# mailadres van de eigenaar publiek op hacksimulator.nl. Alles HTTP 200.
+#
+# De populatie is bewust OMGEDRAAID: niet "staan de paden die ik nu ken in de
+# blokkeerlijst", maar "élke top-level entry die git trackt wordt geserveerd,
+# dus verantwoord je". Een lijst-guard bewaakt zijn lijst, niet de klasse - en
+# precies daardoor kon docs/products/ jarenlang meeliften.
+#
+# Drie manieren waarop een entry zich mag verantwoorden, alle drie gemeten tegen
+# productie in Sessie 231:
+#   1. dotfile/dotdir      -> Netlify serveert die nooit (.claude, .github: 404)
+#   2. Netlify's eigen config -> wordt geconsumeerd, niet uitgeleverd (404)
+#   3. PUBLIEK-allowlist   -> hoort er te zijn (index.html, styles/, LICENSE, ...)
+# Al het overige moet een 404-redirect in netlify.toml hebben.
+check_start "Interne paden afgeschermd van publish = \".\" + geen privé-mailadressen"
+
+# --- 19a: elke top-level entry is publiek bedoeld of geblokkeerd ---
+# LET OP: deze twee strings worden met `case *" $entry "*` doorzocht, dus elke naam
+# moet door spaties omsloten zijn. Een meerregelige string levert newlines op de
+# regelovergangen en dan matcht de laatste naam van elke regel niet — dat gaf bij
+# invoering vijf valse falers (favicon-96x96.png, llms.txt, styles, ...). Vandaar
+# de `tr` hieronder die alle witruimte platslaat.
+PUBLIEK=$(printf '%s' "
+  404.html apple-touch-icon.png assets blog commands contact.html favicon-96x96.png
+  favicon.ico favicon.svg feed.xml gidsen.html index.html LICENSE llms.txt
+  over-ons.html README.md robots.txt sample-download.html sample-juridisch.html
+  sample-pentest.html SECURITY.md sitemap.xml site.webmanifest src styles
+  terminal.html web-app-manifest-192x192.png web-app-manifest-512x512.png
+  woordenlijst.html
+" | tr -s '[:space:]' ' ')
+NETLIFY_CONFIG=" netlify.toml _headers _redirects "
+
+topniveau=$(git ls-files | awk -F/ '{print $1}' | sort -u)
+aantal_top=$(printf '%s\n' "$topniveau" | grep -c . || true)
+
+# Zelfbewakende tak: een lege populatie is geen bewijs van veiligheid.
+# Zonder deze check zou een kapotte `git ls-files` (of draaien buiten een repo)
+# er identiek uitzien als een schone repo.
+if [ "$aantal_top" -lt 20 ]; then
+  fail "19a: populatie is ${aantal_top} top-level entries — dat is te weinig om echt te zijn. Draait dit script wel in de repo-root, en werkt 'git ls-files'?"
+else
+  onbeschermd=""
+  for entry in $topniveau; do
+    case "$entry" in
+      .*) continue ;;                                    # 1. Netlify serveert dotfiles niet
+    esac
+    case "$NETLIFY_CONFIG" in *" $entry "*) continue ;; esac   # 2. config, niet uitgeleverd
+    case "$PUBLIEK" in *" $entry "*) continue ;; esac           # 3. bewust publiek
+
+    # Rest moet een 404-redirect hebben, als map (/x/*) of als bestand (/x)
+    if ! grep -qE "^[[:space:]]*from[[:space:]]*=[[:space:]]*\"/${entry}(/\*)?\"" netlify.toml; then
+      onbeschermd="${onbeschermd} ${entry}"
+    fi
+  done
+
+  if [ -n "$onbeschermd" ]; then
+    fail "19a: geen 404-redirect in netlify.toml voor:${onbeschermd}. publish = \".\" serveert die dus publiek. Zet er een [[redirects]]-blok bij (status 404, force true), of voeg de entry toe aan PUBLIEK in deze check als hij bewust openbaar is."
+  else
+    pass "19a: ${aantal_top} top-level entries — elk publiek bedoeld, config, dotfile of geblokkeerd"
+  fi
+fi
+
+# --- 19b: geen privé-mailadressen in getrackte bestanden ---
+# Klasse, geen lijst: elk adres bij een consumenten-mailprovider. contact@hacksimulator.nl
+# en de lesvoorbeelden (je@email.nl, support@g00gle.com) vallen er buiten omdat die geen
+# persoonlijke mailbox zijn.
+#
+# De lokale naam MOET met een letter of cijfer beginnen én mag daar niet nóg een
+# adresteken vóór hebben. Zonder die eis matchte `+suffix@gmail.com` in een
+# plan-document — een generieke uitleg van het plus-aliaspatroon, geen mailbox.
+# Alleen "begin met alfanumeriek" was niet genoeg: grep vindt substrings, dus die
+# variant matchte gewoon `suffix@gmail.com` binnenin. ERE kent geen lookbehind,
+# vandaar de expliciete grens `(^|[^A-Za-z0-9._%+-])` ervoor.
+# Een guard die op placeholders vuurt, leert je hem te negeren.
+PRIVE_PATROON='(^|[^A-Za-z0-9._%+-])[A-Za-z0-9][A-Za-z0-9._%+-]*@(gmail|googlemail|hotmail|outlook|live|yahoo|icloud|protonmail|proton)\.[A-Za-z.]{2,}'
+prive_treffers=$(git grep -IEl "$PRIVE_PATROON" -- . ':!scripts/validate-docs.sh' 2>/dev/null || true)
+
+# Zelfbewakende tak: bewijs dat de regex überhaupt kán matchen. Zonder dit is
+# "geen treffers" niet te onderscheiden van een stukgelopen patroon.
+# Het testadres wordt uit stukjes opgebouwd zodat dit script niet zijn eigen
+# guard laat vuren — vandaar ook de path-exclude hierboven.
+prive_testgeval="voorbeeld$(printf '@')gmail.com"
+if ! printf '%s\n' "$prive_testgeval" | grep -qE "$PRIVE_PATROON"; then
+  fail "19b: het privé-mailpatroon matcht zijn eigen testgeval niet — de regex is stuk, niet de repo schoon"
+elif [ -n "$prive_treffers" ]; then
+  fail "19b: privé-mailadres(sen) in getrackte bestanden: $(printf '%s' "$prive_treffers" | tr '\n' ' '). Vervang door een placeholder zoals <eigenaar-mail>; deze bestanden staan in de publieke GitHub-repo."
+else
+  pass "19b: geen privé-mailadressen in getrackte bestanden"
+fi
+
+# ============================================================
 echo ""
 echo "=========================================="
 if [ "$DEEP_MODE" = "1" ]; then

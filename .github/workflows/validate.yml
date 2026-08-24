@@ -12,6 +12,13 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Zonder dit blok erft GITHUB_TOKEN de repo-default, die read-write kan zijn.
+# Deze workflow leest alleen de checkout en schrijft nergens naartoe, dus het
+# minimum volstaat. Expliciet neerzetten scheelt afhankelijkheid van een
+# repo-instelling die je niet in de diff ziet veranderen.
+permissions:
+  contents: read
+
 jobs:
   validate:
     name: Documentatie- en blogvalidatie
@@ -24,6 +31,25 @@ jobs:
       # breaking change (fork-PR-checkout blokkeren) raakt alleen `pull_request_target`
       # en `workflow_run`, en die triggers gebruikt deze workflow niet.
       - uses: actions/checkout@v7
+
+      # gitleaks draaide tot Sessie 231 uitsluitend als pre-commit hook, en dan nog
+      # alleen over de *staged* bestanden. Een --no-verify, een push vanaf een andere
+      # machine of een web-edit omzeilde de secret-scan dus volledig - hetzelfde gat
+      # dat de comment bovenaan voor de andere gates beschrijft.
+      #
+      # --no-git scant de werkboom in plaats van de historie; dat werkt met de shallow
+      # checkout hierboven. Versie gepind op dezelfde major als .pre-commit-config.yaml,
+      # zodat lokaal en CI hetzelfde meten.
+      #
+      # `gitleaks version` staat er bewust vóór: als de download stilletjes mislukt,
+      # faalt die regel zichtbaar in plaats van dat een lege scan groen oogt.
+      - name: Secret-scan (gitleaks)
+        run: |
+          VERSIE=8.21.2
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${VERSIE}/gitleaks_${VERSIE}_linux_x64.tar.gz" \
+            | tar -xz -C /tmp gitleaks
+          /tmp/gitleaks version
+          /tmp/gitleaks detect --no-git --source . --config .gitleaks.toml --redact --verbose
 
       - name: Blogstructuur (JSON-LD, breadcrumbs, tag-balans, verificatiedatum)
         run: ./scripts/validate-blogs.sh

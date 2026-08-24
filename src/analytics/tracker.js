@@ -99,7 +99,11 @@ const analyticsTracker = {
     gtag('js', new Date());
     gtag('config', GA_MEASUREMENT_ID, {
       anonymize_ip: true, // IP anonymization (AVG/GDPR compliance)
-      cookie_flags: 'SameSite=None;Secure',
+      // SameSite=Lax, niet None (Sessie 231). `None` betekent "stuur dit cookie ook
+      // mee bij cross-site requests" en vereist daarom Secure. Deze site heeft geen
+      // cross-site context: geen iframes (frame-src 'none'), geen third-party embed
+      // van hacksimulator.nl. `None` gaf dus onnodig ruimere cookie-scope dan nodig.
+      cookie_flags: 'SameSite=Lax;Secure',
       send_page_view: true
     });
 

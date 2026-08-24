@@ -1,0 +1,42 @@
+# gitleaks-configuratie voor HackSimulator.nl
+#
+# Waarom dit bestand bestaat (Sessie 231): gitleaks draaide als pre-commit hook op
+# uitsluitend de *staged* bestanden, dus de bestaande werkboom was nooit in zijn
+# geheel gescand. Bij het toevoegen van de CI-stap kwamen er 12 treffers uit, en
+# alle 12 bleken vals. Ze staan hieronder per patroon uitgezonderd - niet per pad,
+# zodat de betreffende bestanden verder gewoon gescand blijven.
+#
+# Beoordeeld op de echte waarde, niet op de regelnaam. Voeg hier alleen iets toe
+# nadat je de match hebt uitgelezen en hebt vastgesteld dat hij publiek hoort te
+# zijn of geen credential is.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Valse positieven, elk handmatig nagelopen in Sessie 231"
+
+regexes = [
+  # LET OP: gitleaks matcht deze regexes tegen het *secret* dat de regel extraheert,
+  # niet tegen de hele regel. Een patroon dat de omliggende context beschrijft
+  # (bijv. `data:image/jpeg;base64,...`) filtert dus niets - je moet de uitgesneden
+  # waarde zelf raken. Dat kostte hier een meetronde.
+
+  # Base64-JPEG-thumbnails in docs/testing/lighthouse-m9-baseline.json. gitleaks'
+  # aws-access-token-regel snijdt hier `AIDAQEBAAAAAAAAAAAAA` uit - dat zijn de
+  # padding-bytes van de JPEG-header, geen IAM-user-ID. Een echte AWS-ID bestaat
+  # niet uit een rij A's, dus deze exacte string uitzonderen is veilig.
+  '''AIDAQEBA{13}''',
+
+  # AdSense publisher-ID. Publiek per ontwerp - die staat in de paginabron van elke
+  # site met AdSense - en SECURITY.md verklaart publieke identifiers expliciet
+  # out-of-scope. AdSense zelf is in Sessie 208 verwijderd; dit is een historisch
+  # Lighthouse-rapport dat er nog naar verwijst.
+  '''ca-pub-6345664385525701''',
+
+  # GA4 Measurement ID. Zelfde categorie: hoort publiek te zijn, staat in tracker.js.
+  '''G-7F792VS6CE''',
+
+  # Naam van een Claude API-betavlag in een sessielog-foutmelding, geen credential.
+  '''clear_thinking_\d+''',
+]
