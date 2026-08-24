@@ -36,12 +36,12 @@
 <body class="legal-page">
   <h1>Privacybeleid</h1>
 
-  <p><strong>Laatst bijgewerkt:</strong> 16 oktober 2025</p>
-  <p><strong>Versie:</strong> 1.0 (MVP)</p>
+  <p><strong>Laatst bijgewerkt:</strong> 24 augustus 2026</p>
+  <p><strong>Versie:</strong> 1.1</p>
 
   <div class="info-box">
-    <strong>TL;DR (Kort Samengevat):</strong><br>
-    HackSimulator.nl slaat minimale data op in je browser (localStorage). We gebruiken Google Analytics om bezoekersstatistieken te verzamelen. We verkopen geen data en loggen geen gevoelige informatie. Alles draait lokaal in je browser.
+    <strong>TL;DR (kort samengevat):</strong><br>
+    HackSimulator.nl slaat minimale data op in je browser (localStorage). We gebruiken Google Analytics om bezoekersstatistieken te verzamelen, en alleen als je daar toestemming voor geeft. We verkopen geen data en loggen geen gevoelige informatie. De simulator zelf draait volledig lokaal in je browser. Meld je je aan voor de nieuwsbrief, koop je een gids of doneer je? Dan komen er drie partijen bij kijken; die staan in paragraaf 5.1.
   </div>
 
   <h2>1. Wie zijn wij?</h2>
@@ -210,7 +210,38 @@
       <td>Server logs (IP, user-agent) - max 30 dagen</td>
       <td><a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener">Netlify Privacy</a></td>
     </tr>
+    <tr>
+      <td>Netlify Forms</td>
+      <td>Verwerken van het contactformulier</td>
+      <td>Naam, e-mailadres, onderwerp en berichttekst die je zelf invult</td>
+      <td><a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener">Netlify Privacy</a></td>
+    </tr>
+    <tr>
+      <td>Brevo (voorheen Sendinblue)</td>
+      <td>Versturen van de nieuwsbrief en de gidsen waar je je voor aanmeldt</td>
+      <td>Je e-mailadres, plus of en wanneer je de bevestigingsmail hebt aangeklikt. Op pagina's met een aanmeldformulier laden we een stylesheet van Brevo; daarbij ziet Brevo je IP-adres, browser en de pagina waarvandaan je komt - ook als je je niet aanmeldt.</td>
+      <td><a href="https://www.brevo.com/legal/privacypolicy/" target="_blank" rel="noopener">Brevo Privacy</a></td>
+    </tr>
+    <tr>
+      <td>Gumroad</td>
+      <td>Verkoop van de betaalde gidsen</td>
+      <td>Alles wat je bij Gumroad zelf invult om te betalen. Wij ontvangen geen betaalgegevens; je verlaat onze site zodra je op een koopknop klikt.</td>
+      <td><a href="https://gumroad.com/privacy" target="_blank" rel="noopener">Gumroad Privacy</a></td>
+    </tr>
+    <tr>
+      <td>Ko-fi</td>
+      <td>Vrijwillige donaties</td>
+      <td>Alles wat je bij Ko-fi zelf invult om te doneren. Ook hier verlaat je onze site voordat je iets invult.</td>
+      <td><a href="https://more.ko-fi.com/privacy" target="_blank" rel="noopener">Ko-fi Privacy</a></td>
+    </tr>
   </table>
+
+  <p class="highlight">
+    <strong>Brevo, Gumroad en Ko-fi komen alleen in beeld als je er zelf iets doet:</strong> je
+    aanmelden voor de nieuwsbrief, een gids kopen of doneren. Wie alleen de simulator gebruikt,
+    krijgt met geen van drieen te maken - op die ene stylesheet na, die we hierboven expliciet
+    noemen omdat hij ook zonder aanmelding laadt.
+  </p>
 
   <p class="highlight">
     <strong>Let op:</strong> Toekomstige migratie naar Plausible Analytics (privacy-friendly, EU-hosted) is gepland bij 10k+ bezoekers.
@@ -222,9 +253,18 @@
     <li>[✗] We tonen GEEN advertenties</li>
     <li>[✗] We verkopen GEEN data aan adverteerders</li>
     <li>[✗] We delen GEEN data met social media platforms</li>
-    <li>[✗] We gebruiken GEEN tracking pixels van derde partijen</li>
+    <li>[✗] We gebruiken GEEN tracking pixels, en er draait GEEN JavaScript van derde partijen op deze site</li>
     <li>[✗] We doen GEEN cross-site tracking</li>
   </ul>
+
+  <p>
+    Die vierde regel verdient een precisering, want "geen tracking" is makkelijker gezegd dan
+    waargemaakt. Op de pagina's met een aanmeldformulier laden we een <em>stylesheet</em> van
+    Brevo - opmaak, geen code. Je browser haalt dat bestand bij Brevo op, en daarbij zien zij je
+    IP-adres en browser. Dat is geen tracking pixel en het volgt je niet over andere sites, maar
+    het is wel contact met een derde partij dat je niet zelf hebt gestart. We noemen het liever
+    dan dat je het zelf in je netwerkverkeer moet ontdekken.
+  </p>
 
   <h2>6. Hoe lang bewaren we data?</h2>
 

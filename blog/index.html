@@ -51,7 +51,6 @@
   <link rel="stylesheet" href="../styles/landing.css?v=229">
   <link rel="stylesheet" href="../styles/blog.css?v=230">
   <link rel="stylesheet" href="../styles/mobile.css?v=116" media="screen and (max-width: 768px)">
-  <!-- Brevo Forms (newsletter signup) -->
   <link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
 
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
@@ -323,7 +322,7 @@
                 <span class="sib-form-message-panel__inner-text">Bijna klaar! Check je mailbox en bevestig je inschrijving.</span>
               </div>
             </div>
-            <form id="sib-form" class="newsletter-form" method="POST" action="https://09a5e5c2.sibforms.com/serve/MUIFADH0_vgGhb_FtKCDMfSZ6rjIRSJh-4N5o5GVrdzX91Jm21mM4zMY9-uyfWaYGM4uixNn1BWU_sBXVZkWtxPIicAKD37yK0Nd_cmsCXTjpKqwoE8FTTSh79CSYZos2KWR7_0_7ReDusej4VIdai0nOKAl_JfXPqEb1cAsgi-XWSGKuCKtzCCI92Wgk8T4We4iSrmAOrs43_x-SQ==" data-type="subscription" target="_blank">
+            <form id="sib-form" class="newsletter-form" method="POST" action="https://09a5e5c2.sibforms.com/serve/MUIFADH0_vgGhb_FtKCDMfSZ6rjIRSJh-4N5o5GVrdzX91Jm21mM4zMY9-uyfWaYGM4uixNn1BWU_sBXVZkWtxPIicAKD37yK0Nd_cmsCXTjpKqwoE8FTTSh79CSYZos2KWR7_0_7ReDusej4VIdai0nOKAl_JfXPqEb1cAsgi-XWSGKuCKtzCCI92Wgk8T4We4iSrmAOrs43_x-SQ==" data-type="subscription" target="_blank" rel="noopener noreferrer">
               <div class="sib-input sib-form-block">
                 <div class="form__entry entry_block">
                   <div class="form__label-row">
@@ -343,37 +342,6 @@
             </form>
           </div>
         </div>
-        <script>
-        window.REQUIRED_CODE_ERROR_MESSAGE = 'Selecteer een landcode';
-        window.LOCALE = 'nl';
-        window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE = "Het e-mailadres lijkt niet te kloppen. Controleer het en probeer opnieuw.";
-        window.REQUIRED_ERROR_MESSAGE = "Vul je e-mailadres in.";
-        window.GENERIC_INVALID_MESSAGE = "Het e-mailadres lijkt niet te kloppen. Controleer het en probeer opnieuw.";
-        window.translation = {
-          common: {
-            selectedList: '{quantity} list selected',
-            selectedLists: '{quantity} lists selected'
-          }
-        };
-        var AUTOHIDE = Boolean(0);
-
-        // Prevent Brevo main.js from auto-scrolling on validation errors
-        // Brevo calls window.scrollTo({top, behavior:'smooth'}) after form interaction
-        (function() {
-          var origScrollTo = window.scrollTo.bind(window);
-          var blocking = false;
-          document.addEventListener('click', function(e) {
-            if (e.target.closest && e.target.closest('.sib-form')) {
-              blocking = true;
-              setTimeout(function() { blocking = false; }, 500);
-            }
-          }, true);
-          window.scrollTo = function() {
-            if (blocking) return;
-            return origScrollTo.apply(window, arguments);
-          };
-        })();
-        </script>
         <p class="newsletter-privacy">We respecteren je privacy. Lees ons <a href="../assets/legal/privacy.html">privacybeleid</a>.</p>
       </section>
 
@@ -572,6 +540,27 @@
 
     </div>
 
+  <!-- Footer (Component Injection).
+       Ontbrak hier als enige van de 16 blogbestanden: init-components.js draaide wel,
+       vond geen #footer-placeholder en logde een waarschuwing. Gevolg op productie:
+       geen footer op de blog-indexpagina, en daarmee geen "Cookie-instellingen"-link -
+       de enige plek waar je je analytics-toestemming kunt intrekken (AVG art. 7 lid 3).
+       De footerconfig stond al klaar in init-components.js (showCookieSettings: true). -->
+  <div id="footer-placeholder">
+    <noscript>
+      <footer class="noscript-footer">
+        <p>&copy; 2026 HackSimulator.nl</p>
+        <nav>
+          <a href="../assets/legal/privacy.html">Privacy</a>
+          <a href="../assets/legal/terms.html">Voorwaarden</a>
+          <a href="../assets/legal/cookies.html">Cookies</a>
+          <a href="../over-ons.html">Over ons</a>
+          <a href="../contact.html">Contact</a>
+        </nav>
+      </footer>
+    </noscript>
+  </div>
+
   <!-- Theme Initialization (prevents flash) - external for CSP compliance -->
   <script src="/src/init-theme.js"></script>
 
@@ -584,7 +573,5 @@
   <!-- Analytics & Consent (external for CSP compliance) -->
   <script src="/src/init-analytics.js" type="module"></script>
 
-  <!-- Brevo Forms (newsletter signup) -->
-  <script defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
 </body>
 </html>

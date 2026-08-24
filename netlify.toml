@@ -194,7 +194,20 @@
     # Sessie 126: Brevo newsletter (sibforms.com) added to script-src, style-src, connect-src, form-action; MailerLite removed
     # Sessie 208: AdSense volledig verwijderd → alle ad-domeinen uit script-src/img-src/connect-src
     #   en frame-src naar 'none' (alleen ad-iframes gebruikten frame-src).
-    Content-Security-Policy = "default-src 'self'; script-src 'self' https://www.googletagmanager.com https://sibforms.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://sibforms.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data:; frame-src 'none'; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://sibforms.com https://*.sibforms.com; object-src 'none'; base-uri 'self'; form-action 'self' https://sibforms.com https://*.sibforms.com;"
+    # Sessie 231: sibforms.com UIT script-src. Brevo's main.js (450 KB) is verwijderd:
+    #   brevo-submit.js onderschept het submit-event met stopImmediatePropagation() en
+    #   doet de POST zelf, dus die bundel deed niets meer. Ablatie-meting: de nieuwsbrief-
+    #   kaart rendert byte-identiek zonder (zelfde MD5 op de screenshot), en native
+    #   type=email + required dekt de validatie. Daarmee vervalt ook het SRI-gat: er is
+    #   geen extern script meer om te pinnen.
+    #   sibforms.com blijft in style-src (sib-styles.css draagt wél layout — zonder die
+    #   stylesheet verschuift de kaart 74px), in connect-src (de fetch-POST) en in
+    #   form-action (native fallback als brevo-submit.js niet laadt).
+    # Sessie 231: frame-ancestors 'self' toegevoegd — de moderne tegenhanger van
+    #   X-Frame-Options, die bij conflict wint en door meer browsers wordt gehonoreerd.
+    # Sessie 231: fonts.googleapis.com/gstatic.com verwijderd — de fonts staan sinds
+    #   Sessie 95 self-hosted in /styles/fonts/, de allowlist was dode ruimte.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://sibforms.com; font-src 'self' data:; img-src 'self' data:; frame-src 'none'; frame-ancestors 'self'; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://sibforms.com https://*.sibforms.com; object-src 'none'; base-uri 'self'; form-action 'self' https://sibforms.com https://*.sibforms.com;"
 
 # Strict Transport Security (Upgraded Sessie 97 - Security Headers B → A)
 # 1-year max-age: browser remembers HTTPS-only for 12 months
