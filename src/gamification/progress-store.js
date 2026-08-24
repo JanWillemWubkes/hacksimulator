@@ -38,7 +38,17 @@ export default new class ProgressStore {
         this._cache = this._defaults();
         return this._cache;
       }
-      this._cache = JSON.parse(raw);
+      // try/catch dekt kapotte JSON, niet een geldige JSON van de verkeerde vorm.
+      // `"hoi"`, `[]` en `null` parsen prima en glippen er zo doorheen; de eerste
+      // property-lookup daarna geeft dan undefined i.p.v. een default. Zelfde
+      // patroon als history.js:180 (Array.isArray) en vfs.js:469 (schemasignature).
+      var data = JSON.parse(raw);
+      if (!data || typeof data !== 'object' || Array.isArray(data)) {
+        console.warn('Gamification data has unexpected shape, falling back to defaults');
+        this._cache = this._defaults();
+        return this._cache;
+      }
+      this._cache = data;
       return this._cache;
     } catch (e) {
       console.warn('Could not load gamification data:', e);

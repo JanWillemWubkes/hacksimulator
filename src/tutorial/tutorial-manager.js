@@ -520,7 +520,11 @@ export default new class TutorialManager {
     try {
       var raw = localStorage.getItem(STORAGE_KEY_PROGRESS);
       if (!raw) return null;
-      return JSON.parse(raw);
+      // Vormcontrole naast de try/catch: geldige JSON van het verkeerde type
+      // (een string, een array) parseert prima en zou hier als voortgangsobject
+      // terugkomen. null is de bestaande "geen voortgang"-uitkomst.
+      var data = JSON.parse(raw);
+      return data && typeof data === 'object' && !Array.isArray(data) ? data : null;
     } catch (e) {
       console.warn('Could not load tutorial progress:', e);
       return null;
@@ -539,7 +543,10 @@ export default new class TutorialManager {
     try {
       var raw = localStorage.getItem(STORAGE_KEY_HINTS);
       if (!raw) return {};
-      return JSON.parse(raw);
+      // Idem: hintCounts wordt als map geïndexeerd, dus een array of string hier
+      // levert stille onzin op in plaats van de lege map die de catch al teruggeeft.
+      var data = JSON.parse(raw);
+      return data && typeof data === 'object' && !Array.isArray(data) ? data : {};
     } catch (e) {
       return {};
     }
