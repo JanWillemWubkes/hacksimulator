@@ -29,5 +29,17 @@ repos:
         # zou zonder deze patronen nooit vuren bij precies de wijzigingen die hem
         # kunnen breken (een kaart bewerken, een command-output veranderen, of een
         # pad uit de VFS halen).
-        files: ^(\.claude/CLAUDE\.md|PLANNING\.md|TASKS\.md|sitemap\.xml|feed\.xml|blog/.*\.html|commands/index\.html|src/commands/.*\.js|src/filesystem/vfs\.js)$
+        #
+        # netlify.toml + .gitignore erbij (Sessie 231) vanwege Check 19: die leest
+        # netlify.toml om te bepalen of een top-level entry afgeschermd is, en een
+        # .gitignore-wijziging kan een bestand nieuw deploybaar maken. Zonder deze
+        # twee patronen vuurde de hook níét bij precies de commit die hem brak: het
+        # untracken van package-lock.json maakte er een nieuwe publieke entry van,
+        # kwam lokaal groen doorheen ("no files to check") en werd pas door de CI
+        # gemeld. Zelfde vorm als het Sessie 222-geval hierboven.
+        #
+        # LET OP bij het handmatig draaien: valideer ná `git add`. Check 19 leest
+        # `git ls-files`, dus een nog niet-gestaged nieuw bestand bestaat voor hem
+        # niet — dat is precies waarom deze bug lokaal onzichtbaar bleef.
+        files: ^(\.claude/CLAUDE\.md|PLANNING\.md|TASKS\.md|sitemap\.xml|feed\.xml|blog/.*\.html|commands/index\.html|src/commands/.*\.js|src/filesystem/vfs\.js|netlify\.toml|\.gitignore)$
         pass_filenames: false
