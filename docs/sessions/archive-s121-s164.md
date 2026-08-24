@@ -2932,7 +2932,7 @@ Plan-file `lead-magnet-followup.md` kreeg banner bovenaan met:
 
 ### Stap 2 — Brevo unblock-UI discovery + Track G ✅
 
-**Context (Sessie 135-blocker):** `jan.willem.wubkes@gmail.com` op transactional-channel-blocklist, root cause vermoedelijk Unsubscribe-klik tijdens Sessie 133/134 template-validatie. Plus-alias-workaround faalt op anti-evasion-normalisatie. Sessie 135 sloot zonder vondst van unblock-route.
+**Context (Sessie 135-blocker):** `<eigenaar-mail>` op transactional-channel-blocklist, root cause vermoedelijk Unsubscribe-klik tijdens Sessie 133/134 template-validatie. Plus-alias-workaround faalt op anti-evasion-normalisatie. Sessie 135 sloot zonder vondst van unblock-route.
 
 **UI-discovery — drie kandidaat-routes systematisch (timebox 15 min):**
 
@@ -2949,7 +2949,7 @@ Route A's popup toont letterlijk: `"<email> contact can receive transactional em
 
 **Unblock-actie + verificatie:**
 1. Klik toggle naast `contact@hacksimulator.nl` in Route A-popup → status switch `Blocklisted` → `Subscribed`
-2. Send Test `welkomstmail-v2-DnD` → recipient `jan.willem.wubkes@gmail.com`:
+2. Send Test `welkomstmail-v2-DnD` → recipient `<eigenaar-mail>`:
    - Brevo Real-time: `Delivered` ✓ (Logs hadden 3-5 min vertraging — verwacht batch-pipeline-gedrag, niet zorgwekkend)
    - Gmail tab: **Reclame** (Promotions) — plan-success-criterium voor welkomstmail behaald
 3. Send Test `sample-pentest-welkomstmail-v2-DnD`:
@@ -3056,7 +3056,7 @@ Pre-save verificatie via "Home-key-truc" (cursor naar begin van textbox forceren
 
 ### Stap C — Gmail Postmaster Tools ✅
 
-- Geregistreerd onder `jan.willem.wubkes@gmail.com`
+- Geregistreerd onder `<eigenaar-mail>`
 - Domain `hacksimulator.nl` toegevoegd
 - TXT-verificatie via TransIP (zie Stap A tweede DNS-sessie)
 - Verify-klik succesvol
@@ -3075,21 +3075,21 @@ Brevo's eigen tracking-subdomain (`r.hacksimulator.nl` vervangt `r.sendibm1.com`
 
 **Diagnose-flow tijdens uitvoeren:**
 
-1. Verstuur welkomstmail-test naar `jan.willem.wubkes@gmail.com` via Brevo Send Test
+1. Verstuur welkomstmail-test naar `<eigenaar-mail>` via Brevo Send Test
 2. Mail komt niet aan in Primary, niet in Promotions, niet in Spam, niet in All Mail
-3. Brevo Transactional → Logs onthult: `Sent → Blocked` op alle Send-Test-pogingen naar `jan.willem.wubkes@gmail.com`
+3. Brevo Transactional → Logs onthult: `Sent → Blocked` op alle Send-Test-pogingen naar `<eigenaar-mail>`
 4. Detail-paneel toont reason: **`blocked : due to unsubscribed user`**
-5. Test met `jan.willem.wubkes@gmail.com` → contact-detail toont: `Email campaigns: Subscribed ✓` / `Transactional emails: Blocklisted` — Brevo's dual-channel model, transactional-channel apart geblokt
+5. Test met `<eigenaar-mail>` → contact-detail toont: `Email campaigns: Subscribed ✓` / `Transactional emails: Blocklisted` — Brevo's dual-channel model, transactional-channel apart geblokt
 
 **Plus-alias workaround geprobeerd, gefaald:**
-- Verstuur naar `jan.willem.wubkes+welcomesessieC@gmail.com` en `jan.willem.wubkes+samplesessieC@gmail.com`
+- Verstuur naar `<eigenaar-mail+welcomesessieC>` en `<eigenaar-mail+samplesessieC>`
 - **Geen mail aangekomen, geen log-regel in Brevo**
 - Conclusie: Brevo normaliseert plus-aliases pre-send tegen blocklist (anti-evasion). Match → abort vóór log-creatie
 
 **Root cause:** waarschijnlijk klikte Heisenberg in Sessie 133 of 134 op een Unsubscribe-link tijdens template-test-validatie (bekend bug-cluster: URL-encoded `{$unsubscribe}` → 404 → fix → her-test → één daadwerkelijke klik geregistreerd). Brevo's compliance-engine markeert het adres permanent op transactional channel.
 
 **Drie opties besproken:**
-1. Deblokkeer `jan.willem.wubkes@gmail.com` in Brevo Contacts → Transactional emails channel (Heisenberg kon unblock-UI niet vinden in dual-channel model — verstopt achter "More" of dropdown-toggle)
+1. Deblokkeer `<eigenaar-mail>` in Brevo Contacts → Transactional emails channel (Heisenberg kon unblock-UI niet vinden in dual-channel model — verstopt achter "More" of dropdown-toggle)
 2. Tweede e-mailadres gebruiken
 3. Skip — plan §G is expliciet *aspirational*, niet must-have
 

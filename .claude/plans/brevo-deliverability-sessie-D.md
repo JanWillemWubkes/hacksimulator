@@ -23,7 +23,7 @@ Deze sessie focust op **post-baseline-werk**: Postmaster reputation-snapshot, ev
    - DMARC `p=none`
 3. Vraag Heisenberg:
    - Is Postmaster Tools dashboard data binnengekomen? (data komt 24-48u na verify; verify was op 11 mei avond → data zou vanaf 13-14 mei beschikbaar moeten zijn)
-   - Is de Brevo blocklist-unblock-UI inmiddels uitgezocht voor `jan.willem.wubkes@gmail.com` op transactional channel?
+   - Is de Brevo blocklist-unblock-UI inmiddels uitgezocht voor `<eigenaar-mail>` op transactional channel?
 
 ---
 
@@ -44,7 +44,7 @@ Belangrijkste outcomes uit Sessie 135 (volledig in `docs/sessions/current.md`):
 - Niet-fixable verliezen (tier-gated): `HEADER_FROM_DIFFERENT_DOMAINS -0.25` + tracking pixel alt `-0.5` + Hostkarma blacklist `-1.0`. Effectieve ceiling op Free/Starter: ~8.4-8.5.
 
 **Track G-blocker (Sessie 135):**
-- `jan.willem.wubkes@gmail.com` staat op Brevo transactional-channel-blocklist (reason: `blocked : due to unsubscribed user`)
+- `<eigenaar-mail>` staat op Brevo transactional-channel-blocklist (reason: `blocked : due to unsubscribed user`)
 - Root cause: vermoedelijk Unsubscribe-link-klik tijdens Sessie 133/134 template-validatie
 - Plus-alias workaround (`+suffix@gmail.com`) faalt door Brevo anti-evasion-normalisatie
 - Unblock-UI verstopt achter Brevo's dual-channel-model (zie `~/.claude/projects/-home-willem-projecten-hacksimulator/memory/reference_brevo_blocklist.md`)
@@ -94,7 +94,7 @@ Huidige policy: `p=none` (monitoring-mode).
 **Stap 1: Unblock-UI lokaliseren**
 
 Per memory `reference_brevo_blocklist.md`: dual-channel-model met verstopte unblock-actie. Mogelijke routes om te proberen:
-- Contacts → zoek `jan.willem.wubkes@gmail.com` → klik contact → contact-detail-pagina
+- Contacts → zoek `<eigenaar-mail>` → klik contact → contact-detail-pagina
 - Bij `Channels (1)` sectie: klik op de **dropdown** naast "Transactional emails" (niet de status-tag)
 - Of: klik op "More" menu (3-dots) rechtsboven → zoek "Resubscribe" / "Unblock" / "Remove from blocklist"
 - Of: tab "History" → laatste blocked-event → mogelijk "Restore"-knop
@@ -103,7 +103,7 @@ Als geen unblock-UI te vinden: Brevo Help Docs raadplegen of support-ticket over
 
 **Stap 2: Verstuur testmails**
 
-Na unblock — verstuur via Brevo Send Test naar `jan.willem.wubkes@gmail.com`:
+Na unblock — verstuur via Brevo Send Test naar `<eigenaar-mail>`:
 1. `welkomstmail-v2-DnD` template
 2. `sample-pentest-welkomstmail-v2-DnD` template
 
@@ -141,7 +141,7 @@ Niet uitvoeren tenzij Heisenberg expliciet vraagt:
 
 ⚠️ **NIET** SPF/DKIM-records aanraken zonder concrete reden — alles is groen, elke wijziging risico op regressie.
 
-⚠️ **NIET** `jan.willem.wubkes@gmail.com` unblocken zonder vóóraf te valideren dat de unblock-UI gedocumenteerd is — als de UI weer verloren raakt, kunnen we niet snel reverten.
+⚠️ **NIET** `<eigenaar-mail>` unblocken zonder vóóraf te valideren dat de unblock-UI gedocumenteerd is — als de UI weer verloren raakt, kunnen we niet snel reverten.
 
 ⚠️ **NIET** assume dat lege Postmaster-dashboards = probleem — bij lage outbound-volumes (zoals het onze) is "Not enough data" een neutraal-positief signaal, geen rode vlag.
 

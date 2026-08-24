@@ -144,7 +144,7 @@ Brevo biedt in betaalde tiers de mogelijkheid om de standaard `r.sendibm1.com`-r
 ### G. Re-test in Gmail
 
 Na alle fixes uit A-E:
-1. Verzend testmails naar `jan.willem.wubkes@gmail.com`
+1. Verzend testmails naar `<eigenaar-mail>`
 2. Check Gmail-classificatie:
    - Welkomstmail → blijft Promotions (verwacht, acceptabel)
    - Sample-pentest → hopelijk Primary (was lead-magnet B4-criterium)

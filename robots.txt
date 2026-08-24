@@ -5,11 +5,20 @@
 User-agent: *
 Allow: /
 
-# Blokkeer interne/technische directories
+# Blokkeer interne/technische directories.
+# Tweede laag: netlify.toml geeft deze paden sinds Sessie 231 een harde 404.
+# Deze regels blijven bewust staan als vangnet — als een redirect ooit sneuvelt,
+# voorkomt Disallow nog steeds dat /docs/products/*.typ (de bron van de betaalde
+# gidsen) geïndexeerd en gecachet wordt. Een 404 die regresseert is stil;
+# een geïndexeerde betaalde gids krijg je niet meer uit de zoekresultaten.
 Disallow: /node_modules/
 Disallow: /tests/
 Disallow: /playwright-report/
 Disallow: /docs/
+Disallow: /scripts/
+Disallow: /TASKS.md
+Disallow: /PLANNING.md
+Disallow: /SESSIONS.md
 
 # AI-crawlers expliciet welkom (zoek/antwoord-indexering)
 # Zelfde regels als hierboven: alles open behalve interne directories
@@ -30,6 +39,10 @@ Disallow: /node_modules/
 Disallow: /tests/
 Disallow: /playwright-report/
 Disallow: /docs/
+Disallow: /scripts/
+Disallow: /TASKS.md
+Disallow: /PLANNING.md
+Disallow: /SESSIONS.md
 
 # Sitemap locatie
 Sitemap: https://hacksimulator.nl/sitemap.xml

@@ -91,6 +91,76 @@
   status = 301
   force = true
 
+# =============================================================================
+# Interne paden afschermen (Sessie 231)
+#
+# `publish = "."` hierboven serveert de HELE repo-root op de CDN. Er is geen
+# build-stap die een schone dist/ oplevert, dus alles wat in git zit stond live.
+# Gemeten op productie vóór deze fix, allemaal HTTP 200:
+#   /docs/products/*.typ          de volledige bron van de 4 BETAALDE Gumroad-gidsen
+#   /docs/sessions/archive-*.md   sessielogs incl. het privé-mailadres van de eigenaar
+#   /TASKS.md /PLANNING.md        326 KB interne planning
+#   /scripts/*.sh /package.json   buildscripts en dependency-manifest
+#
+# robots.txt had `Disallow: /docs/`, maar dat is indexeringsadvies — geen
+# toegangscontrole. Het wees juist de weg naar de mappen die verborgen moesten
+# blijven. Dit blok is de echte poort; robots.txt noemt ze daarom niet meer.
+#
+# Geverifieerd vóór invoering: geen enkele publieke href/src in HTML/XML/txt
+# wijst naar /docs/, /scripts/ of /tests/, en llms.txt noemt ze niet.
+# SECURITY.md blijft bewust bereikbaar (responsible disclosure, RFC 9116).
+#
+# Nieuwe interne map of root-doc erbij? Dan hier een regel bijzetten — Check 19
+# in scripts/validate-docs.sh faalt als je dat vergeet.
+# =============================================================================
+[[redirects]]
+  from = "/docs/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/scripts/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/tests/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/TASKS.md"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/PLANNING.md"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/SESSIONS.md"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/package.json"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/playwright.config.js"
+  to = "/404.html"
+  status = 404
+  force = true
+
 # Security Headers
 [[headers]]
   for = "/*"

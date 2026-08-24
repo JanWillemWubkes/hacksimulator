@@ -107,7 +107,7 @@ In plaats van de HTML te laten converteren naar drag-and-drop blocks (waar termi
 4. Save automation
 
 **Stap 8: Test**
-1. Send test naar `jan.willem.wubkes@gmail.com`
+1. Send test naar `<eigenaar-mail>`
 2. Controleer in Gmail-web + Gmail-mobile
 3. Doorloop B4-checklist hieronder
 
