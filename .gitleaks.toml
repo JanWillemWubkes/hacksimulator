@@ -22,16 +22,10 @@ regexes = [
   # (bijv. `data:image/jpeg;base64,...`) filtert dus niets - je moet de uitgesneden
   # waarde zelf raken. Dat kostte hier een meetronde.
 
-  # Base64-JPEG-thumbnails in docs/testing/lighthouse-m9-baseline.json. gitleaks'
-  # aws-access-token-regel snijdt hier `AIDAQEBAAAAAAAAAAAAA` uit - dat zijn de
-  # padding-bytes van de JPEG-header, geen IAM-user-ID. Een echte AWS-ID bestaat
-  # niet uit een rij A's, dus deze exacte string uitzonderen is veilig.
-  '''AIDAQEBA{13}''',
-
   # AdSense publisher-ID. Publiek per ontwerp - die staat in de paginabron van elke
   # site met AdSense - en SECURITY.md verklaart publieke identifiers expliciet
-  # out-of-scope. AdSense zelf is in Sessie 208 verwijderd; dit is een historisch
-  # Lighthouse-rapport dat er nog naar verwijst.
+  # out-of-scope. AdSense zelf is in Sessie 208 verwijderd; wat resteert is een
+  # vermelding in het sessielog docs/sessions/archive-s175-s179.md.
   '''ca-pub-6345664385525701''',
 
   # GA4 Measurement ID. Zelfde categorie: hoort publiek te zijn, staat in tracker.js.
