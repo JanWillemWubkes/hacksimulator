@@ -13,6 +13,15 @@
  * weggezet (addInitScript) zodat er geen modal/muis in beeld komt — conform kit "strak, een take".
  * De echte disclaimer/consent blijft uiteraard op de live site staan; dit raakt alleen deze opname.
  *
+ * Vignette in de GIF: terminal.html draagt .grid-background, een radiale vignette (dark:
+ * rgb(35,35,35) center -> zwart aan de rand, styles/terminal.css + main.css:219). Verliesvrij
+ * is dat vloeiend (gemeten: 74 tinten in de achtergrondstrook, ramp 4->17). Een GIF heeft maar
+ * 256 kleuren, en dat palet gaat op aan de groene terminaltekst; de encoder dithert de ramp
+ * dan met 2 tinten, waarvan de dichtheid met de straal springt (100% -> 91% -> 40% -> 18%).
+ * Dat leest als concentrische CIRKELS die op de live site niet te zien zijn. Voor de GIF
+ * slaan we de vignette daarom plat tot een effen tint; de PNG's houden hem, want die
+ * renderen hem wel getrouw. Zelfde soort opname-ingreep als CLEAN_STATE hierboven.
+ *
  * GIF-encoding: pure-JS (gifenc + pngjs). Playwright's gebundelde ffmpeg is een gestripte build
  * zonder gif-muxer/palettegen; system-ffmpeg vereist sudo-wachtwoord. Pure-JS = geen system-install.
  *
@@ -49,6 +58,12 @@ const CLEAN_STATE = `
     localStorage.setItem('hacksim_analytics_consent',
       JSON.stringify({ necessary: true, analytics: false, advertising: false }));
   } catch (e) {}
+`;
+
+// Alleen voor de GIF: vervang de radiale vignette door de effen middentint, zodat het
+// 256-kleurenpalet hem niet hoeft te ditheren. Zie de toelichting in de headercomment.
+const FLAT_BACKDROP = `
+  .grid-background { background: var(--vignette-center) !important; }
 `;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -111,6 +126,7 @@ async function captureGif(browser) {
   await context.addInitScript(CLEAN_STATE);
   const page = await context.newPage();
   const input = await readyTerminal(page);
+  await page.addStyleTag({ content: FLAT_BACKDROP });
 
   const frames = []; // { data: Buffer(RGBA), delay }
   const onFrame = async (delay) => {

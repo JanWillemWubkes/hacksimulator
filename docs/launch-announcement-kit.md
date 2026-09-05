@@ -1,8 +1,13 @@
 # Launch-aankondigings-kit — HackSimulator.nl
 
-**Doel:** plak-klare aankondiging voor de publieke launch. **Datum nog te kiezen** — ná de
-demand-validatie (TASKS.md item #44, `docs/demand-validation-protocol.md`); kies bij voorkeur
-een **woensdag** (sterke HN/Reddit-dag, vastgelegd Sessie 173).
+**Doel:** plak-klare aankondiging voor de publieke launch.
+
+> **De launch is al begonnen (29 juli 2026).** De demand-validatie (item #44) is op 22 juli
+> **bewust overgeslagen** — die poort staat dicht, volg hem niet meer. Gedaan op launch-dag:
+> D-1-prep, GA4-annotatie, EHGN-intro, LinkedIn. **Nog open:** EHGN-projectpost, Show HN,
+> r/SideProject. De actuele uitvoeringsstand staat in **`docs/launch-checklist.md` §Stand** —
+> dat document is de eigenaar, dit document levert alleen de teksten en de kanaalkennis.
+
 Hoort bij `docs/public-launch-runbook.md` **Fase 4 — Aankondiging & eerste backlinks**.
 
 **Productie-URL:** https://hacksimulator.nl/ · **Terminal:** https://hacksimulator.nl/terminal.html
@@ -30,13 +35,13 @@ Elke copy-variant hieronder put **alleen** uit deze lijst. Niets daarbuiten clai
 
 | Claim | Status |
 |-------|--------|
-| 40+ commando's | ✅ 41 command-files, ~38 user-facing. Gebruik "40+", nooit een exact getal dat een lezer kan natellen. |
+| 40+ commando's | ✅ **42 command-files** (her-geteld 5 sep 2026; was 41 op 29 jul). Gebruik "40+", nooit een exact getal dat een lezer kan natellen — de vloer overleeft de groei, een exact getal niet. |
 | 100% gratis, geen account/registratie | ✅ |
 | Geen installatie, draait in de browser | ✅ |
 | Nederlands: uitleg, tips, foutmeldingen (commando's zelf blijven Engels — dat is echt) | ✅ |
 | Veilige sandbox: de aanvallen zijn gesimuleerd, er worden geen echte systemen benaderd → legaal | ✅ (FAQ-beeld: "vluchtsimulator — leren vliegen zonder het vliegveld te verlaten"). Let op: scope de claim op de *simulatie/commands*, niet op de pagina — die laadt wél analytics/ads/fonts. |
 | 3 niveaus (Beginner → Gevorderd → Expert, NL-labels sinds Sessie 187/188), man pages, "80/20 realisme" | ✅ |
-| 12+ blogposts op `/blog/` | ✅ (her-geteld 29 jul 2026: 15 html-files − index − welkom = 13). Gebruik "12+", nooit een exact getal dat een lezer kan natellen. |
+| 12+ blogposts op `/blog/` | ✅ **14 posts** (her-geteld 5 sep 2026: 16 html-files − index − welkom; was 13 op 29 jul). Gebruik "12+", nooit een exact getal dat een lezer kan natellen. |
 
 **NIET claimen (anti-overdrijving):**
 - ❌ `netcat` / `wireshark` — bestaan **niet** als commando (de homepage-leerpad-vermelding is
@@ -183,12 +188,17 @@ met een paar losse checks. Op HN en in communities is binnen-een-uur antwoorden 
 dan het bericht zelf.
 
 ### Vooraf — D-1 (avond vóór launch-dag)
-- [ ] Runbook Fase 3 afgerond? (GSC: sitemap (her)submit, indexering top-pagina's aangevraagd)
-- [ ] GIF + statische screenshot + mobiele screenshot klaar
-- [ ] Alle links in de copy getest (terminal, homepage, 1 cornerstone-blogpost)
-- [ ] `site:hacksimulator.nl` nulmeting genoteerd (voor/na-vergelijking)
-- [ ] GA4 DebugView-check: funnel één keer doorlopen, elk event landt in de property
-      (stappen: `docs/launch-success-metrics.md` §4; read-order launch-dag: §6)
+
+> **Uitgevoerd op 29 juli 2026.** Deze lijst is hier bewaard als *inhoud* van de stap, niet als
+> af te vinken to-do — de vinkjes leven in `docs/launch-checklist.md` §Stand. Twee documenten
+> die dezelfde toestand bijhouden lopen uit elkaar; dat is precies wat hier gebeurd was.
+
+- Runbook Fase 3 afgerond? (GSC: sitemap (her)submit, indexering top-pagina's aangevraagd)
+- GIF + statische screenshot + mobiele screenshot klaar
+- Alle links in de copy getest (terminal, homepage, 1 cornerstone-blogpost)
+- `site:hacksimulator.nl` nulmeting genoteerd (voor/na-vergelijking)
+- GA4 DebugView-check: funnel één keer doorlopen, elk event landt in de property
+  (stappen: `docs/launch-success-metrics.md` §4; read-order launch-dag: §6)
 
 ### Launch-dag — tijdschema (CET)
 
@@ -221,6 +231,92 @@ dan het bericht zelf.
 
 ---
 
+---
+
+## 6. De drie open kanalen — definitieve tekst
+
+De varianten in §2 zijn bouwstenen met keuzes erin. Hieronder staan ze **afgemaakt**, per open
+kanaal één blok, zodat posten een kwestie van kopiëren is. Elke claim komt uit de §1-tabel.
+Volgorde binnen je bewaakbare uur: EHGN → r/SideProject → Show HN (reactie-gevoeligste laatst,
+als je nog scherp bent en er ~2 uur achteraan kunt zitten).
+
+### 6.1 EHGN Discord — projectpost (NL, + GIF)
+
+> **HackSimulator.nl — gratis Nederlandstalige terminal-simulator om ethisch hacken te leren**
+>
+> Ik liep ertegenaan dat vrijwel alles om cybersecurity te leren Engels is, en dat je voor
+> echte tools iets moet installeren waar beginners huiverig voor zijn. Daarom heb ik
+> HackSimulator.nl gebouwd — draait volledig in je browser.
+>
+> - 40+ commando's, van `ls` en `cd` tot `nmap`, `sqlmap` en `hashcat`
+> - Nederlandse uitleg, tips en foutmeldingen; de commando's zelf blijven Engels
+> - Veilige sandbox: de aanvallen zijn gesimuleerd, er worden geen echte systemen benaderd
+> - Geen installatie, geen account
+> - Drie niveaus, van je eerste command tot pentesting-tools
+>
+> https://hacksimulator.nl/ — feedback welkom, ik bouw er actief aan.
+
+**Bij het posten:** kanaal `#projecten` / `#showcase` / `#zelfpromotie` (welke er is), GIF
+meesturen uit `~/hacksimulator-launch-visuals/`. Je intro staat al in `#voorstellen`, dus dit
+is geen koude drop.
+
+### 6.2 Hacker News — Show HN (Engels, kaal)
+
+**Titel** (URL-veld: `https://hacksimulator.nl/`, tekstveld leeg laten):
+
+```
+Show HN: HackSimulator – browser terminal to learn ethical hacking (Dutch)
+```
+
+**Eerste comment** — meteen zelf plaatsen nadat de post live is:
+
+> I built this because nearly all beginner material for security work is in English, and the
+> real tools ask you to install something before you have any idea what you are doing.
+>
+> It is a simulated terminal that runs entirely in the browser. 40+ commands, from `ls` and
+> `cd` through `nmap`, `sqlmap` and `hashcat`. The command output is in English, as it would
+> be, but the explanations, tips and error messages are in Dutch — that is the part that is
+> hard to find. Nothing touches a real system; the attacks are simulated.
+>
+> No install, no account. It is aimed at people starting out, so the depth is deliberately
+> limited — I would rather hear where it is too shallow than pretend otherwise.
+
+**Valkuil** (uit `launch-checklist.md`): vul het **URL-veld** in en laat het tekstveld leeg.
+Vul je allebei, dan wordt je link een tekstpost. De beschrijving hoort in het eerste comment.
+Blijf het eerste uur actief reageren — op HN telt dat zwaarder dan het bericht zelf.
+
+### 6.3 Reddit r/SideProject (Engels)
+
+**Titel:**
+
+```
+I built a browser terminal that teaches ethical hacking in Dutch
+```
+
+**Body:**
+
+> Most beginner security material is English-only, and the real tools want you to install a
+> VM before you know whether you are even interested. I built HackSimulator.nl to remove both
+> steps: a simulated terminal in the browser, with the explanations in Dutch.
+>
+> - 40+ commands (`ls`, `cd`, `nmap`, `sqlmap`, `hashcat`, …)
+> - English command output, Dutch explanations, tips and error messages
+> - Simulated sandbox — no real systems are contacted
+> - No install, no account, free
+>
+> https://hacksimulator.nl/
+>
+> It is aimed at complete beginners, so experienced people will find it shallow on purpose.
+> I am mostly curious whether the first two minutes make sense to someone who has never
+> opened a terminal.
+
+**Voor je post:** lees de sidebar vlak vóór posten — regels veranderen. Let op dat het account
+`WoLLom18` 7 jaar oud is maar **1 karma**; r/SideProject is daar het soepelst in, de strengere
+subs (r/thenetherlands, r/cybersecurity) filteren daarop. Bouw die eerst op als je daar wilt
+posten.
+
+---
+
 *Opgesteld Sessie 161 (11 juni 2026). Feiten geverifieerd tegen `index.html`,
 `docs/commands-list.md`, `src/commands/*`. Kanaal-etiquette via web-research; exacte
 sidebar-regels per community altijd op het moment van posten checken.*
@@ -230,3 +326,11 @@ datum-agnostisch gemaakt (D-1 / launch-dag / D+14 — nieuwe datum kiezen ná de
 demand-validatie, item #44), feiten geactualiseerd (12+ blogposts, NL-niveau-labels,
 `[TIP]`-marker, leerpad-opschoning Sessie 188/195) en de D-1-checklist gekoppeld aan
 `docs/launch-success-metrics.md`.*
+
+*Her-geverifieerd 5 sep 2026 (Sessie 233): feitentabel opnieuw geteld tegen de repo (42
+command-files, 14 blogposts — beide vloeren houden), stale demand-validatie-poort uit de kop
+gehaald (#44 is 22 jul overgeslagen, launch liep 29 jul), D-1-lijst van dode vinkjes naar
+inhoud met `launch-checklist.md` als eigenaar, en §6 toegevoegd met de drie open kanalen als
+definitieve tekst. Alle bestemmings-links + 28 sitemap-URL's gemeten op HTTP 200.
+**Visuals geblokkeerd:** zie TASKS.md #77 — de terminal rendert `[→]` in Chromium als `→]`,
+dus een verse capture toont een defect dat de live site óók heeft.*
