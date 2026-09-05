@@ -152,7 +152,7 @@ Wel updaten bij: nieuwe functional requirements, success criteria change, new mi
 
 NIET updaten bij: tactical execution, implementatie-details, sessie-tracking.
 
-## Step 7: Validatie (forcing function)
+## Step 7: Validatie (forcing function) + werkplek opruimen
 
 ```bash
 bash scripts/validate-docs.sh
@@ -163,6 +163,41 @@ Vereist exit code 0. Bij FAIL:
 - Quickfix: sync sessie-counter / datum / monetization-keyword / PRD-version
 - Re-run tot exit 0
 - Pre-commit hook draait dit automatisch bij `git commit` — een gefaalde validate-docs blokkeert de commit
+
+### Debug-artefacten opruimen
+
+Drie mappen groeien buiten git om en niemand ruimt ze op, omdat `.gitignore` ze onzichtbaar
+maakt in `git status`. Bij een bloat-analyse stond `.playwright-mcp/` op **55 MB in 1111
+screenshots**, opgebouwd over vijf maanden — meer dan de rest van de repo bij elkaar.
+Dat is geen incident maar het steady-state-gedrag: elke `verify-terminal`-run en elke
+mobielmeting laat er iets achter, en niets haalt het weg.
+
+Doe dit ná Step 3, niet ervoor — `current.md` moet geschreven zijn vóórdat je het bewijs
+weggooit waar je casuïstiek op steunt.
+
+```bash
+# Zelfbewakende tak: dit MOET 0 zijn. Staat er iets getrackt in deze mappen,
+# dan klopt de aanname niet en mag je niet blind rm'en.
+git ls-files .playwright-mcp playwright-report test-results | wc -l
+
+# Meet vóór — het getal hoort in Step 3's metrics-delta zodra het noemenswaardig is
+du -sh .playwright-mcp playwright-report test-results 2>/dev/null
+
+rm -rf .playwright-mcp playwright-report test-results
+
+du -sh .    # positief bewijs dat het gedraaid heeft
+```
+
+`playwright-report/` en `test-results/` regenereren bij de volgende testrun; `test-results/`
+loopt hard op door `video: 'retain-on-failure'` (37 MB na drie suite-runs). De screenshots in
+`.playwright-mcp/` regenereren níet vanzelf — ze zijn wegwerpartefacten van één verificatie,
+en wat ze bewezen hoort in `current.md` te staan, niet in een PNG die niemand terugzoekt.
+
+> **Dit is een notitie, en notities verjaren.** Er is geen guard die meldt dat de map weer vol
+> loopt, dus deze stap werkt alleen zolang iemand hem daadwerkelijk uitvoert — precies het
+> zwakke patroon dat CLAUDE.md elders veroordeelt. Wordt hij twee keer overgeslagen, promoveer
+> hem dan naar een check in `validate-docs.sh` (faalt boven een drempel) in plaats van deze
+> alinea strenger te formuleren.
 
 ---
 
