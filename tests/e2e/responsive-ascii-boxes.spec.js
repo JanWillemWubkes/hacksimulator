@@ -92,8 +92,8 @@ async function executeCommand(page, command) {
  * Detector: element-hoogte > 1.5× line-height = gewrapt (een echte wrap
  * verdubbelt de hoogte). NB: rect-top-vergelijking of rects.length zijn GEEN
  * betrouwbare indicatoren — inline spans verschuiven rects op dezelfde visuele
- * regel (gemeten vals-positief). Dat gold voor de vertical-align van .marker-arrow
- * en geldt sinds Sessie 222 nog steeds, want die verschuift nu met position:relative.
+ * regel (gemeten vals-positief). Dat gold voor de opgetilde .marker-arrow, die in
+ * Sessie 233 is verdwenen, en blijft gelden voor elke inline span op een box-regel.
  */
 async function measureBoxLineWraps(page) {
   return page.evaluate(() => {
@@ -628,7 +628,8 @@ test.describe('Mobile/Desktop Hybrid UI (ASCII Checkbox Fix)', () => {
 
 test.describe('Box-randen lopen verticaal door', () => {
   // Commando's gekozen op faalklasse, niet op aantal:
-  //   next/leerpad → bevatten '→' (de span die de linebox oprekt);
+  //   next/leerpad → bevatten '→' (tot Sessie 233 een span die de linebox oprekte;
+  //                    de span is weg, de pijl blijft de interessante glyph op deze regels);
   //   metasploit   → zware charset ┏━┃ + de box uit de bugmelding;
   //   help         → grootste blok, meerdere boxen onder elkaar (blokgrens-test).
   // De breedte doet er voor deze invariant niet toe (het is ruimte tússen block-

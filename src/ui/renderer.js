@@ -435,11 +435,12 @@ class Renderer {
     // Format inline arrows (← for Dutch explanations)
     formatted = formatted.replace(/←/g, '<span class="inline-arrow">←</span>');
 
-    // Til de → glyph naar de tekst-baseline: het font-fallback-glyph zit laag in de
-    // regel waardoor de pijl in [→] en → FASE-regels te ver naar beneden staat.
-    // Zelfde verticale correctie als ← maar zónder margin/kleur (→ is marker/bullet,
-    // niet een los inline-label; de kleur komt van de regel-lineType).
-    formatted = formatted.replace(/→/g, '<span class="marker-arrow">→</span>');
+    // GEEN span om → (Sessie 233). Die bestond om het fallback-glyph op te tillen,
+    // want de subset miste U+2192; sinds de subset hem bevat komt de pijl uit
+    // JetBrains Mono en staat hij vanzelf goed. De span was bovendien de OORZAAK van
+    // #77: hij liet de '[' van [→] achter als tekst-run van één teken vóór een
+    // elementgrens, en die schildert Chromium niet. Zet hem niet terug zonder de
+    // guard in tests/e2e/marker-brackets.spec.js te lezen.
 
     // Format markdown bold (mobile headers) - **text** → <strong>text</strong>
     formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
@@ -594,8 +595,9 @@ function getLineIndent(lineText) {
  * losse block-elementen en een verticale glyph (│/┃) tekent alléén binnen zijn eigen
  * linebox — nooit over die marge heen. Elke marge werd dus een zichtbaar gat in de rand.
  * Gemeten Sessie 222 op de gerenderde randkolom: 12 stubs van 27px met 4px gaten, en
- * 8px op regels met een pijl — vandaar dat .marker-arrow/.inline-arrow in terminal.css
- * met position:relative werken i.p.v. vertical-align (die telt mee in de linebox).
+ * 8px op regels met een pijl, want die droegen toen nog een opgetilde span. Sessie 233
+ * haalde die weg (de subset bevat U+2192 nu zelf); .inline-arrow is nog het enige
+ * pijl-element en zet alleen kleur/marge, geen verticale verschuiving meer.
  *
  * De sluitregel (╰/┗) houdt zijn marge wél: die scheidt de box van wat erna komt.
  * Gedeeld door beide render-paden zodat ze niet uit sync lopen, net als getLineIndent().
