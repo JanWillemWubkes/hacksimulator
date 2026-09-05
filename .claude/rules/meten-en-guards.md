@@ -264,7 +264,27 @@ Zelfde vorm, derde variant: `grep -rn "geïnjecteerde <style>"` gaf nul treffers
 `geïnjecteerde \`<style>\`` staat, mét backtick — waaruit bijna volgde dat een les nog niet
 gedocumenteerd was terwijl hij er al stond.
 
-> Vuistregel bij alle vijf: vraag niet "is er een faalmelding?" maar "wat is het **positieve**
+**Een pipe die de exit-code vervangt (Sessie 232).** `cmd | tail -40` rapporteert de exit-code
+van **`tail`**, niet die van `cmd` — dus een afgekapte Playwright-run las als `EXIT=0` terwijl
+het eindblok `862 did not run` zei. Dit is de vorige val één laag dieper: §20 zei al dat exit 0
+een afgekapte run niet afdekt, maar hier was de exit-code niet eens die van de meting. De pipe
+verergert het bovendien: `tail` buffert tot EOF, dus het logbestand bleef 0 bytes en er was geen
+tussenstand mogelijk zolang de run liep.
+
+```bash
+# FOUT: $? en de notificatie komen van tail
+npx playwright test | tail -40
+
+# GOED: ongefilterd naar bestand, exit-code van het commando zelf, daarna pas filteren
+npx playwright test > "$LOG" 2>&1; echo "PLAYWRIGHT_EXIT=$?"
+grep -oE '[0-9]+ (passed|failed|did not run|flaky)' "$LOG" | sort | uniq -c
+# (moet het toch door een pipe: gebruik ${PIPESTATUS[0]})
+```
+
+Dat deze fout één sessie ná de vorige variant terugkwam, is zelf het argument voor deze rule:
+de les stond in het sessielog van Sessie 229, en een sessielog laadt niet mee.
+
+> Vuistregel bij alle zes: vraag niet "is er een faalmelding?" maar "wat is het **positieve**
 > bewijs dat deze meting heeft gedraaid?" — een eindblok, een niet-lege populatie, een
 > verwachte hoeveelheid, een mutant die daadwerkelijk rood werd. Zonder dat is groen
 > ononderscheidbaar van stil. En een grep met nul treffers bewijst iets over je **patroon**,

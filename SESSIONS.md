@@ -12,10 +12,12 @@
 > (range-naamgeving `archive-sNNN-sMMM.md`; legacy `archive-q*`-namen zijn bevroren + fout gelabeld).
 > `current.md` houdt het rolling window Sessie 220-230; ouder is geroteerd naar de range-archieven hieronder.
 
-### [Current Sessions (220-230)](docs/sessions/current.md) - Full Detail
-**Sessies:** 230, 229, 228, 227, 226, 225, 224, 223, 222, 221, 220
-**Period:** 10 - 21 augustus 2026
+### [Current Sessions (220-232)](docs/sessions/current.md) - Full Detail
+**Sessies:** 232, 231, 230, 229, 228, 227, 226, 225, 224, 223, 222, 221, 220
+**Period:** 10 augustus - 5 september 2026
 **Topics:**
+- De bloat zat niet in de code: `src/` (118 modules), `styles/` (11) en `assets/` (36) hadden nul verweesde bestanden en nul md5-duplicaten over 387 getrackte bestanden. Wat wél groeide stond in `.gitignore` en verscheen dus nooit in `git status` — `.playwright-mcp/` op 55 MB in 1111 screenshots over vijf maanden. Twee "debugtests" konden niet falen op hun eigen onderwerp: álle zes `expect()`-calls klikten enkel een modal weg als setup. 153M → 53M, 45 → 42 specs, NEW Check 20 met twee drempels (Sessie 232)
+- `publish = "."` zette de bron van vier betaalde gidsen op de CDN: de vier `.typ`-bestanden gaven HTTP 200 op productie, naast een sessie-archief van 388 KB met privé-mailadressen. `Disallow` is indexeringsadvies, geen toegangscontrole. Check 19 erbij met de populatie omgedraaid — en die betrapte in zijn eerste CI-run de commit die hem introduceerde. Achteraf gereconstrueerd in Sessie 232 (Sessie 231)
 - Het nieuwsbriefblok viel buiten de filterpopulatie — en rekte via één grid-track alle 15 kaarten op: het `:target`-filter verbergt uitsluitend `.blog-post-card`, dus het blok bleef in élke stand op DOM-positie 4 staan (gemeten 4 van de 6 categorieën met het formulier bovenaan). Twee stille defecten erbij: een vaste inputbreedte die de mobiele regel op specificiteit versloeg gaf het blok een min-content van 400px — één impliciete `auto`-track maakte daarmee álle 15 kaarten 400px in een container van 336px, onzichtbaar weggeknipt door `overflow-x: hidden`; en de skip-link `#main-content` liet "0 van 15 artikelen" omroepen (Sessie 230)
 - Het font schreef iets anders dan de DOM: JetBrains Mono ligeert via `calt` (367 lookups, standaard aan) en `$pdo->prepare` rendeerde als `$pdo→prepare` onder het kopje "Veilige code". Sitebreed uitgezet met omgedraaide populatie; breedte en `textContent` detecteren dit niet, alleen pixels (Sessie 229)
 - Vier CSS-commentaren claimden een contrast dat ze niet haalden — en de sweep die dat had moeten zien filterde op tokennaam. Ongefilterd gemeten: 13.157 element-toestanden, 152 onder AA / 378 onder AAA over 18 kleurwaarden, daarna 0/0 (Sessie 228)

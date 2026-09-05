@@ -4,6 +4,243 @@
 
 ---
 
+## Sessie 232: De bloat zat niet in de code — twee "debugtests" klikten alleen een modal weg (5 september 2026)
+
+**Mission:** "analyseer dit project op bloat — zijn er bestanden die niet meer nodig zijn of
+dubbel zijn?" Doel was een schone, goed georganiseerde projectmap.
+
+### Diagnose: de code was al schoon, en dat is de hoofdbevinding
+
+Gemeten vóór er iets werd weggegooid, per basename over de hele repo behalve `node_modules`
+en `.git`:
+
+```
+src/      118 JS-modules      0 ongebruikt
+styles/    11 stylesheets     0 verweesd
+assets/    36 bestanden       0 ongerefereerd
+tracked   387 bestanden       0 md5-duplicaten
+```
+
+Er viel in de applicatie dus niets weg te gooien. Dat is een compliment aan de validate-scripts
+en de 8-staps command-checklist: die houden de code schoon. De bloat was verschoven naar de
+lagen die géén guard hadden.
+
+### Werk
+
+**(a) Schijf-cruft, 153M → 97M.** `.playwright-mcp/` stond op **55 MB in 1111 screenshots**
+(mrt–aug 2026; 147 uit juni, 143 uit augustus) — meer dan alle broncode, docs en assets samen.
+Plus `playwright-report/` (608 KB) en `test-results/`. Alle drie gitignored, en juist daardoor
+onzichtbaar in `git status`. De twee sample-PDF's in `docs/products/` bleken bovendien
+**md5-identiek** aan de geserveerde `assets/samples/*.pdf`.
+
+**(b) `git gc`, 69M → 26M.** `git count-objects -vH` gaf 3388 losse objecten (44,31 MiB) naast
+4 packs (23,02 MiB). Losse objecten krijgen geen delta-compressie, en de historie bestaat
+grotendeels uit honderden revisies van `current.md`/`SESSIONS.md` van 500–600 KB die onderling
+nauwelijks verschillen — precies waar delta-packing wint. Ná: 0 los, 1 pack, `git fsck` schoon.
+**Bewust niet gedaan:** `filter-repo`/BFG om die blobs uit de historie te snijden. Dat
+herschrijft elke commit-hash en breekt elke `git`-verwijzing in TASKS.md en de archieven, voor
+minder winst dan een `gc`.
+
+**(c) Twee tests die niet konden falen op hun eigen onderwerp.**
+
+```
+debug-console.spec.js   2 expects  15 console.logs
+debug-storage.spec.js   4 expects  15 console.logs
+```
+
+Alle zes `expect()`-calls doen hetzelfde: het legal-modal wegklikken als setup. Geen enkele
+assertie over console-errors of localStorage — de bestanden printten, en een mens moest kijken.
+Ze draaiden wel mee in elke run over drie motoren, en wekten de indruk dat die paden gedekt
+waren. De echte dekking staat assertief in `persistence-flush.spec.js` (flush-on-hidden voor
+challenges én VFS) en `vfs-versioning.spec.js` (matchende signature, stale save, verse
+bezoeker). `modal-colors-simple.spec.js` (2 expects) was een strikte subset van
+`modal-headers.spec.js` (7 expects, dekt legal + feedback + de neon-green-guard). 45 → 42 specs
+zonder verlies van één assertie.
+
+**(d) Het grootste getrackte bestand was een dood meetartefact.**
+`docs/testing/lighthouse-m9-baseline.json`, **637 KB** — groter dan TASKS.md — en de enige
+verwijzing in de hele repo was een *uitsluitingsregel* in `.gitleaks.toml`. Bij het opruimen
+daarvan bleek de meting het waard: van de vier exclusies was er maar **één** exclusief van dat
+bestand afhankelijk (`AIDAQEBA{13}`). Het commentaar bij `ca-pub-6345664385525701` noemde
+expliciet "een historisch Lighthouse-rapport", maar die ID staat óók in
+`archive-s175-s179.md` — beide schrappen had de CI-secretscan rood gemaakt. Het commentaar was
+een bewering: het zei waar de match vandaan kwam, niet waar hij overál vandaan komt.
+
+**(e) Verweesde docs, per bestand beoordeeld.** Vier plandocumenten in `docs/archive/` plus
+`docs/milestones/m5-audit-report.md` hadden nul verwijzingen. `docs/netlify-setup.md` is even
+verweesd maar operationeel en blijft staan — verweesd is een reden om te kijken, geen
+verwijderargument. Ook weg: `tests/e2e/test-report.md`, een subset van
+`CROSS-BROWSER-TEST-REPORT.md` (zelfde suite, zelfde datum 22 okt 2025); de langere verhuisde
+naar `docs/testing/` bij de vier andere.
+
+**(f) NEW Check 20 in `validate-docs.sh`** — op verzoek, nadat de opruimstap eerst als notitie
+in `/summary` Step 7 was gezet.
+
+`20a` meet de omvang met **twee** drempels: warn vanaf 10 MB, fail vanaf 50 MB. Bewust
+verschillend. Een volle map is rommel, geen defect — er lekt niets en de site werkt. Alleen
+warnen scrollt voorbij in twintig checks; alleen falen blokkeert een commit midden in een
+debugsessie en leert je `--no-verify`, wat de guard erger maakt dan geen guard. De 50 is geen
+rond getal maar de gemeten stand waarop het probleem ontdekt werd (55 MB).
+
+`20b` faalt zodra er iets getrackt onder die paden staat. Dat bewaakt de aanname waaronder de
+`rm -rf` uit Step 7 veilig is, en het is de subcheck die **wél** in CI vuurt — daar bestaan die
+mappen nooit, dus `20a` meet er per definitie 0 MB.
+
+Beide dragen een ijkmeting (`du -sb src` ≥ 100 KB, `git ls-files src` ≥ 1 bestand), want de
+mappen zijn er meestal niet en "0 MB, niets getrackt" is anders niet te onderscheiden van een
+script dat in de verkeerde map draait.
+
+Vijf mutanten, elk op een **andere** assertie:
+
+```
+15 MB artefacten          20a WARN        script exit 0  (blokkeert niet)
+60 MB artefacten          20a FAIL        script exit 1
+getrackt bestand erin     20b FAIL        20a bleef OK
+du naar leeg pad          20a ijk-FAIL
+git ls-files naar leeg    20b ijk-FAIL
+```
+
+### Learnings
+
+**Een pipe verbergt de exit-code van het commando dat je meet.** Mijn eerste volle suite draaide
+als `npx playwright test ... | tail -40` en rapporteerde exit 0. Dat was `tail`'s exit-code. De
+werkelijke run was afgekapt door mijn eigen `--global-timeout=1800000`: **672 passed, 862 did
+not run, 1 interrupted**. Erger: de `| tail` buffert tot EOF, dus het outputbestand bleef 0
+bytes en er was geen tussenstand mogelijk. Correcte meting daarna: `> bestand 2>&1` gevolgd door
+`echo "PLAYWRIGHT_EXIT=$?"` → **1520 passed / 0 failed / 0 did not run** in 1.3h.
+
+**Dit stond al opgeschreven en heeft niet geholpen.** De `**Versie:** 6.02`-entry van Sessie 229
+eindigt met: *"⚠️ Een eerste volle run gaf exit 0 mét `55 did not run` — een global-timeout op
+gevoel i.p.v. op een meting."* Exact hetzelfde patroon, één sessie eerder, en het herhaalde zich
+toch. Een sessielog laadt niet mee in de volgende sessie. Daarom is de regel deze keer naar
+`.claude/rules/meten-en-guards.md` gegaan (scoped op `tests/e2e/**` en `scripts/**`, dus hij
+laadt vanzelf zodra iemand een testrun aanraakt) in plaats van naar een derde sessielog dat
+hetzelfde nog eens vertelt.
+
+**Ik heb tijdens het verifiëren 37 MB nieuwe bloat gemaakt.** De drie testruns vulden
+`test-results/` (video's via `retain-on-failure`) en `playwright-report/` opnieuw, en die stonden
+bijna in de eindmeting. Opgeruimd na het uitlezen — maar het illustreert waarom Check 20 nodig
+was: deze mappen groeien door normaal werk, niet door nalatigheid.
+
+**Drie Firefox-flakies blijven staan:** `blog-theme-toggle`, `tutorial-mobile`, `tutorial`, plus
+`persistence-flush.spec.js:76` in de gerichte run. Alle vier timing, alle vier groen bij retry.
+Die laatste is ongemakkelijk: het is precies de test die de dekking van het geschrapte
+`debug-storage.spec.js` overneemt. Hij dekt het assertief, maar stabiel is hij niet — en "de
+dekking bestaat al" is een sterkere claim dan "de dekking bestaat al en is stabiel". Alleen het
+eerste is gemeten waar.
+
+### Metrics delta
+
+```
+schijf         153M → 53M        (.git 69M → 26M, werkbestanden 8,6M)
+specs           45  → 42
+test()         316  → 315
+getrackt       387  → 377
+bundel        1104,62 → 1104,85 KB / 1120  (marge 15,15 KB)
+checks          19  → 20
+```
+
+### Next steps
+
+- **`.playwright-mcp/` groeit door normaal werk.** Check 20 meldt het nu, maar de opruiming is
+  handwerk in `/summary` Step 7.
+- **De vier Firefox-flakies** horen gemeten te worden, niet gewend — er is geen baseline van
+  bekende falers.
+- **TASKS.md's footer-marker staat op 29 regels van het einde** (Check 2 eist < 30). Elke sessie
+  voegt een `**Versie:**`-regel bóven die marker toe, dus de volgende sessie breekt hem.
+
+---
+
+## Sessie 231: `publish = "."` zette de bron van vier betaalde gidsen op de CDN (22–24 augustus 2026)
+
+> **Achteraf gereconstrueerd in Sessie 232** uit de acht commits. Deze sessie kreeg destijds
+> geen `/summary`, terwijl acht codebestanden zichzelf al "Sessie 231" noemen — de code kende
+> het nummer, de documentatie niet. Precedent: Sessie 227 is op dezelfde manier gereconstrueerd.
+
+**Mission:** niet vooraf vastgelegd. Uit de commits blijkt een securityronde die uitwaaierde
+naar CI-gates, privacy en een paar copy-defecten.
+
+### Het lek
+
+Er is geen build-stap, dus de Netlify publish-root is de repo-root: **alles wat git trackt werd
+geserveerd**. Gemeten op productie, allemaal HTTP 200:
+
+```
+/docs/products/pentest-playbook.typ    24.584 bytes
+/docs/products/leerplan.typ            36.373 bytes
+/docs/products/lab-opzetten.typ        31.067 bytes
+/docs/products/juridische-gids.typ     17.830 bytes
+```
+
+Dat is de volledige inhoud van de vier Gumroad-gidsen, gratis naast de betaalde PDF.
+`.gitignore` sluit `docs/products/*.pdf` uit en houdt de `.typ`-bron bewust getrackt — een keuze
+die klopte zolang niemand de map kon opvragen. Daarnaast stond `archive-s121-s164.md` live
+(388 KB) met drie privé-mailadressen van de eigenaar, naast `/TASKS.md`, `/PLANNING.md`,
+`/SESSIONS.md`, `/scripts/*.sh` en `/package.json`. `robots.txt` had `Disallow: /docs/`, maar
+dat is indexeringsadvies en geen toegangscontrole.
+
+### Werk
+
+**(a) Check 19, met de populatie omgedraaid.** Niet "staan de paden die ik nu ken in een
+blokkeerlijst", maar "élke top-level entry die git trackt wordt door `publish = "."` geserveerd,
+dus verantwoord je". Een entry mag dat op drie manieren, alle drie gemeten tegen productie:
+dotfile/dotdir (Netlify serveert die nooit), `netlify.toml`/`_headers` (wordt geconsumeerd), of
+de expliciete PUBLIEK-allowlist. Al het overige moet een 404-redirect hebben. Een lijst-guard
+bewaakt zijn lijst — precies daardoor kon `docs/products/` meeliften. 19b vangt
+privé-mailadressen als *klasse* (consumenten-mailproviders), niet als lijst.
+
+**(b) Check 19 betrapte in zijn eerste CI-run de commit die hem introduceerde.**
+`package-lock.json` uit `.gitignore` halen maakte er een getrackte top-level entry van — precies
+de klasse die 19a bewaakt. Twee redenen dat het lokaal groen was, beide gerepareerd: validate-docs
+draaide vóór `git add` (Check 19 leest `git ls-files`, dus een ongestaged bestand bestaat voor hem
+niet), en de pre-commit-hook draaide helemaal niet omdat zijn `files:`-patroon `netlify.toml` noch
+`.gitignore` dekte — terwijl Check 19 juist `netlify.toml` uitleest en een `.gitignore`-wijziging
+een bestand nieuw deploybaar maakt.
+
+**(c) 450 KB derde-partij-JS dat niets meer deed.** Brevo's `main.js` stond op vier pagina's en
+laadde vóór elke toestemmingsvraag, terwijl `brevo-submit.js` het submit-event in de capture-fase
+onderschept met `stopImmediatePropagation()` en de POST zelf doet — Brevo's eigen handler kwam er
+niet meer aan te pas. Ablatie gemeten in plaats van beredeneerd, want "Brevo-assets" is één naam
+voor twee verschillende dingen:
+
+```
+main.js         450,6 KB   render byte-identiek zonder (zelfde MD5)  → weg
+sib-styles.css   57,6 KB   kaart verschuift 74px zonder              → blijft
+```
+
+Zelf-hosten van die stylesheet viel af op de bundel (1118,63/1120 KB). Hij staat nu expliciet in
+het privacybeleid in plaats van dat je hem in je netwerkverkeer moet ontdekken; het beleid noemde
+vier verwerkers niet.
+
+**(d) `try/catch` dekt kapotte JSON, niet geldige JSON van de verkeerde vorm.** `"hoi"`, `[]` en
+`null` zijn allemaal geldige JSON, komen dus nooit in de `catch`, en werden daarna als object
+geïndexeerd. De fallback bestond in alle drie de gevallen al — hij werd alleen niet bereikt.
+`progress-store.load()` → `_defaults()`, `tutorial-manager._load()` → `null`, `._loadHints()` →
+`{}`. Zelfde patroon als `history.js:180` en `vfs.js:469`, die dit al deden.
+
+**(e) De rotatieformule uit `/summary` verwijderd.** Hij droeg `archiveer [N-10 .. N-6]` en gaf
+twee keer aantoonbaar de verkeerde actie (Sessie 215: 205-209 i.p.v. 200-204; Sessie 230:
+220-224 i.p.v. 215-219). Het patroon is niet "de formule is fout" maar "er is een kopie": de
+correctie werd bij 215 al vastgelegd en de formule verhuisde naar een ánder document in plaats
+van te verdwijnen. Nu een verwijzing naar de eigenaar (`docs/sessions/README.md`) plus een
+falsificatietabel, zodat "hier stond ooit een getal" niet als omissie leest.
+
+**(f) Copy.** De AI-tooltip uit 15 blogposts — gematcht op de exacte 107-byte string en niet op
+`title=`, want dezelfde pagina's dragen 149 `abbr`-jargontooltips en 16 RSS-link-titles die een
+brede strip zou hebben meegenomen; beide tellingen staan als zelfbewakende tak. En een CTA op
+`over-ons.html` die "Direct aan de slag" beloofde en één regel later "Nieuw met hacken? Lees
+eerst ..." zei — een aarzelprikkel op precies het punt waar de bezoeker de knop indrukt.
+
+### Learnings
+
+- **Een lijst-guard bewaakt zijn lijst, niet de klasse.** Dit is dezelfde les als bij de
+  contrastsweep (Sessie 228) en de ligaturen (Sessie 229), nu in een securitycontext.
+- **`git ls-files` ziet geen ongestagede bestanden.** Een guard die daarop leest, moet ná
+  `git add` draaien — anders meet je de vorige toestand.
+- **`Disallow` is geen toegangscontrole.** Het is een verzoek aan crawlers, geen 404.
+
+---
+
 ## Sessie 230: Het nieuwsbriefblok viel buiten de filterpopulatie — en rekte via één grid-track alle 15 kaarten op (21 aug 2026)
 
 **Mission:** een melding met screenshot — `/blog/#gevorderden` toont bovenaan het
