@@ -332,5 +332,7 @@ command-files, 14 blogposts — beide vloeren houden), stale demand-validatie-po
 gehaald (#44 is 22 jul overgeslagen, launch liep 29 jul), D-1-lijst van dode vinkjes naar
 inhoud met `launch-checklist.md` als eigenaar, en §6 toegevoegd met de drie open kanalen als
 definitieve tekst. Alle bestemmings-links + 28 sitemap-URL's gemeten op HTTP 200.
-**Visuals geblokkeerd:** zie TASKS.md #77 — de terminal rendert `[→]` in Chromium als `→]`,
-dus een verse capture toont een defect dat de live site óók heeft.*
+**Visuals opnieuw gecaptured tegen productie** nadat TASKS.md #77 was gerepareerd (de
+terminal rendeerde `[→]` in Chromium als `→]`): marker `[TIP]`, doorlopende box-randen,
+complete `[→]`-haken en geen dither-ringen meer in de GIF. Liggen in
+`~/hacksimulator-launch-visuals/`; de oude take staat daar onder `oud-pre-s233/`.*
