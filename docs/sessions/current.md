@@ -4,6 +4,212 @@
 
 ---
 
+## Sessie 233: De pijl ontbrak in de font-subset, en die ene hack liet de haak van `[→]` onzichtbaar (5 september 2026)
+
+**Mission:** "lees TASKS.md en CLAUDE.md, wat is de volgende stap?" — uitgemond in het
+fire-ready maken van de launch-kit, en van daaruit in een renderbug die de site 38 dagen
+onopgemerkt droeg.
+
+### Mijn eerste antwoord was fout gerangschikt
+
+Ik stelde de vier Firefox-flakies uit Sessie 232 voor. Heisenberg vroeg: *"is dat de beste
+volgende stap? En niet de site kenbaar maken op fora?"* Dat was terecht, en het bewijs is hard:
+
+| feit | waarde |
+|---|---|
+| dagen sinds launch-dag (29 jul) | **38** |
+| sessies sindsdien (221-232) | **12, allemaal technisch** |
+| nooit afgevuurde kanalen | **3** (EHGN-projectpost, Show HN, r/SideProject) |
+| D+14-meting (`site:` + GSC + funnel) | gepland ~12 aug, **nooit gedaan** |
+
+`launch-checklist.md:25` noemt dat blok *"Morgen oppakken"*. Dat "morgen" was 37 dagen geleden.
+
+**De bias, expliciet:** ik rangschikte op *meetbaarheid vanuit de repo*, niet op waarde. Een
+flaky test geeft een getal, distributie niet. Een codebase met 20 checks en 43 specs genereert
+eindeloos zichtbaar werk; zonder tegenkracht wint de repo altijd. Twaalf sessies op rij is geen
+toeval maar een patroon. Ook: #45 en #59 wachten op data die niemand ophaalt, dus ze blokkeren
+zichzelf.
+
+### De launch-visuals waren de take van vóór 6 juli
+
+Twee onafhankelijke tells, beide gemeten en niet geredeneerd:
+
+1. Ze dragen nog `[?] TIP:` — commit `43eeb58` hernoemde die marker op **6 juli** naar `[TIP]`
+   (82 hits, 27 bestanden). Productie serveert `[TIP]` correct (gemeten, HTTP 200 op
+   `/src/commands/network/nmap.js`).
+2. De GIF is **640 hoog**, terwijl `capture-launch-visuals.mjs` sinds 14 juli 720 zegt.
+
+Dus de her-capture van Sessie 173 is nooit in `~/hacksimulator-launch-visuals/` beland; wat daar
+op 29 juli is heen gekopieerd was de oude take, en Sessie 232 gooide `.playwright-mcp/` weg
+inclusief het goede origineel. Ondertussen tekende `TASKS.md` over precies die her-capture af:
+*"3 artefacten geverifieerd (router-profiel + cyaan `[TIP]` + geen banner)"*. **Die claim is
+onwaar tegen het artefact** — het beeld toont het tegendeel. Niemand heeft het beeld bekeken.
+
+Sinds die take: **47 commits** op `styles/` en `src/`, waaronder `260f8af` (14 aug) die
+repareerde dat elke verticale box-rand als streepjeslijn rendeerde — en het GIF-scenario is
+`help` → `nmap`, waarbij `help.js:38` juist die boxen bouwt.
+
+### De "vreemde cirkels" waren dithering, geen site-bug
+
+Heisenberg meldde cirkels in de achtergrond die hij live niet ziet. `terminal.html:189` draagt
+`<div class="grid-background">`, een echte radiale vignette (`main.css:219`, dark: center
+`rgb(35,35,35)` → zwarte rand). Gemeten in dezelfde achtergrondstrook:
+
+| | uitkomst |
+|---|---|
+| PNG (verliesvrij) | **74 unieke tinten**, ramp 4→17, vloeiend |
+| GIF (226-kleurenpalet) | **2 kleuren**, pixel-om-pixel, **60 harde overgangen** |
+
+Dither-dichtheid als functie van de straal: `100% → 91,4% → **39,5%** → 17,7% → 9,4% → 0%`.
+Die sprong ís de zichtbare ring. De lichtere dithertint is `(13,17,14)` — groenig, want het
+palet wordt opgeslokt door de groene terminaltekst en er blijft geen neutraal donkergrijs over.
+Vandaar "vreemd" en niet gewoon korrelig.
+
+**Fix:** `.grid-background` platgeslagen tot één effen tint via `addStyleTag`, **alleen in de
+GIF-capture**; de PNG's houden de echte vignette omdat die hem getrouw renderen. Zelfde soort
+opname-ingreep als de bestaande `CLEAN_STATE`. Afgetekend op de meting: **1 kleur, 0 overgangen**.
+
+### #77 — de haak die niet schilderde
+
+De verse capture toonde ` →]` in plaats van `[→]`. Zelfde beeld, alle drie op x=60:
+
+```
+[✓]    inkt 185      rendert
+[TIP]  inkt 255      rendert
+[→]    inkt 9 en 13  ACHTERGROND
+```
+
+Zelfbewakend gemeten: rects vóór én ná de screenshot identiek, populatie niet leeg. Trigger is
+`help`; het overleeft scroll, geforceerde repaint én een volledige relayout via viewport-wissel,
+dus geen paint-invalidatie. **Chromium-only** — firefox en webkit meten 255.
+
+**Oorzaakketen (fontTools):** `jetbrainsmono-latin.woff2` (229 codepoints) miste U+2192 `→`,
+U+2190 `←` én U+2713 `✓`. Die vielen terug op een systeemfont met een andere baseline —
+precies waaróm `.marker-arrow`/`.inline-arrow` met `top:-.2em` bestonden. Die spans knippen de
+regel in font-runs en laten `[` over als run van één teken vóór een elementgrens.
+
+**Vier leads gemeten en uitgesloten** (zodat een volgende sessie ze niet opnieuw loopt):
+
+| lead | uitkomst |
+|---|---|
+| `'JetBrains Mono Box'` eerst in de stack | **nee** — ook volledig uit de stack blijft de inkt 9 |
+| `font-variant-ligatures: none` (S229) | **nee** — terug op `normal` én `contextual`: inkt blijft 9 |
+| `::first-letter`-regel | **nee** — die bestaat nergens in `styles/` |
+| span nesten i.p.v. verwijderen | **nee** — een wrapper zonder lift faalt identiek (inkt 9) |
+
+**Vier structuren op de échte regels gemeten**, met de huidige structuur als control die móét falen:
+
+```
+A  huidig  [<span>→</span>]                inkt   9   <- control vuurt
+B  hele marker in de lift-span             inkt 255   maar tilt óók de haken 4px op,
+                                                      en de pijl staat dan nog steeds
+                                                      laag t.o.v. de haken -> lost niets op
+C  wrapper zonder lift, pijl-span erin     inkt   9   nesten helpt niet
+D  geen span                               inkt 255   maar pijl zakt +3,5px door
+```
+
+Dat B niets oplost was de vondst die de richting bepaalde: beide "goedkope" fixes zijn slechter
+dan ze lijken, dus de reparatie hoorde een laag dieper.
+
+### De reparatie: het brondocument, niet de vindplaats
+
+Subset opnieuw gebouwd uit upstream JetBrains Mono (SIL OFL; licentie stond al in
+`styles/fonts/LICENSES/`), ná expliciete toestemming voor de download:
+
+- as beperkt tot **wght 400-800** zoals het origineel (`varLib.instancer`)
+- gesubset op de bestaande 229 codepoints **+ U+2190/U+2192/U+2713**
+- features gelijkgehouden op `calt,ccmp,frac,locl,mark`
+
+**Twee dingen die de meting corrigeerde vóór installatie:**
+
+1. Met `--layout-features='*'` sleepte de subsetter **36 features en 123 alternate-glyphs** mee:
+   35.772 bytes, +4,3 KB voor drie glyphs. Met de originele feature-set: 30.268.
+2. **U+00AD** (zachte afbreekstreep) zat wél in de oude subset maar **niet in upstream** — die
+   was door de vorige tool op de gewone hyphen gemapt. Zonder expliciet terugmappen was de
+   wijziging stilzwijgend *subtractief* geweest.
+
+**Verificatie vóór installatie:** 232 codepoints, niets kwijt, upem 1000, as 400-800, en
+**0 advance-width-verschillen over alle 229 gedeelde codepoints** — dus geen layout-verschuiving.
+Bestand **31.432 → 30.272 bytes**: kleiner mét drie glyphs erbij.
+
+Daarna kon de hack weg: `.marker-arrow` volledig uit `renderer.js` + `terminal.css`, en
+`.inline-arrow` behield kleur/marge maar verloor `position:relative;top:-.2em`.
+
+**Gemeten ná de fix** (lokaal, no-store server, drie motoren), pijl t.o.v. haak:
+
+```
+chromium  +0,5px      firefox  0,0px      webkit  +0,5px
+```
+
+Beter dan de opgetilde span (−0,5) en ver beter dan de span weghalen zónder font-fix (+3,5).
+De `←` in de nmap-output staat op **0,5px** van zijn referentieletter op alle drie de regels.
+
+### Guard + mutanten
+
+NEW `tests/e2e/marker-brackets.spec.js` (2 tests × 3 motoren) met drie asserties: **populatie**
+(faalt óók bij nul treffers), **haak-schildert** (pixels, niet DOM) en **pijl-op-de-haaklijn**.
+
+| mutant | faalt op | bijzonderheid |
+|---|---|---|
+| M1 span terug | structureel (3 motoren) **+** haak-inkt (**alleen chromium**) | bewijst dat de haak-tak motorspecifiek werkt |
+| M2 unicode-range inperken | alleen uitlijning, 3 motoren | haak-inkt blijft groen — andere tak |
+| M3 marker hernoemen | populatie, mét diagnostische melding | vuurt vóór de rest, dus leesbare diagnose |
+
+⚠️ **De guard betrapte eerst mijn eigen meetfout.** Op webkit is de screenshot in
+**device-pixels** en `getBoundingClientRect` in **CSS-pixels** — factor 2. Daardoor lazen álle
+vier de markers als "geen inkt", inclusief `[?]` en `[✓]` die aantoonbaar renderen. Zonder een
+control die móét slagen had ik dat als een tweede bug gerapporteerd. Nu `devicePixelRatio`-bewust.
+
+⚠️ Tweede eigen fout, dezelfde klasse: mijn verificatiescript filterde op `bb.y + bb.h <= 720`
+terwijl een `DOMRect` geen `.h` heeft → `NaN <= 720` is false → **lege populatie**. De spec meldde
+dat als "LEGE POPULATIE" in plaats van groen te zijn. Dat is precies waarvoor die tak bestaat.
+
+### Launch-kit fire-ready
+
+- Feitentabel hergeteld: **42** command-files (was 41), **14** blogposts (was 13). Beide vloeren
+  (`40+`, `12+`) overleven de drift — dát is waarom ze als vloer staan en niet als exact getal.
+- Twee stale instructies weg: de kop stuurde nog naar de op 22 jul overgeslagen demand-validatie
+  (#44), en de D-1-lijst stond onafgevinkt terwijl `launch-checklist.md` §Stand meldt dat hij is
+  uitgevoerd. Twee documenten die dezelfde toestand bijhielden; de checklist is nu expliciet eigenaar.
+- NEW **§6**: de drie open kanalen als definitieve tekst, met de HN-valkuil (URL-veld invullen →
+  tekstveld leeg → beschrijving als eerste comment).
+- Gemeten: alle bestemmingslinks + **28 sitemap-URL's op HTTP 200**, 0 falers.
+
+### Commits
+
+- `417fa53` — De cirkels waren GIF-dithering; de ontbrekende haak is een echte regressie
+- `e50630e` — De pijl ontbrak in de font-subset; die hack liet de haak van `[->]` onzichtbaar
+- `86d958d` — Visuals opnieuw gecaptured nu #77 gefixt is; kit-footer bijgewerkt
+
+### Metrics delta
+
+```
+specs           42  → 43        (NEW marker-brackets.spec.js)
+test()         315  → 317
+getrackt       377  → 378
+bundel      1104,85 → 1105,32 KB / 1120   (marge 15,15 → 14,68 KB; +480 B, alleen commentaar)
+font woff2   31.432 → 30.272 bytes        (telt niet mee in RUNTIME_SOURCE; wél voor de bezoeker)
+codepoints      229 → 232                 (+U+2190 +U+2192 +U+2713, 0 advance-width-verschillen)
+checks           20 → 20
+```
+
+Regressie: **251 passed / 0 failed / 4 skipped** over `responsive-ascii-boxes` +
+`font-ligatures` + `marker-brackets`, drie motoren, mét eindblok. De guard daarna óók
+**6/6 groen tegen productie**.
+
+### Next steps
+
+- **De vier Firefox-flakies staan er nog steeds** (`blog-theme-toggle`, `tutorial-mobile`,
+  `tutorial`, `persistence-flush.spec.js:76`). Sessie 232 noteerde ze al; twee sessies is nog
+  geen patroon, drie wel.
+- **#45/#46/#59 blokkeren zichzelf** zolang de GA4-funnel en GSC Coverage niet worden opgehaald.
+  De launch-kit is nu klaar; wat rest is Heisenberg's uur en zijn login.
+- **#74 (minify) heeft zijn trigger niet gehaald:** marge 14,68 KB tegen een drempel van 5.
+- De les uit #77 die generaliseert: een **font-subset is een aanname**. Elke CSS-hack die een
+  glyph verticaal corrigeert, is een symptoom van een ontbrekende codepoint — kijk daar eerst.
+
+---
+
 ## Sessie 232: De bloat zat niet in de code — twee "debugtests" klikten alleen een modal weg (5 september 2026)
 
 **Mission:** "analyseer dit project op bloat — zijn er bestanden die niet meer nodig zijn of

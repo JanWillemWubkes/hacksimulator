@@ -326,3 +326,39 @@ Twee valkuilen die dit kostte:
   tussen twee opnames door, dus de beelden verschilden op layout i.p.v. op shaping. `position:
   fixed` + dekkende achtergrond haalt de probe uit de flow zonder hem uit de DOM-boom (en dus uit
   de overerving) te halen.
+
+---
+
+## 22. Je screenshot en je rect staan niet in dezelfde eenheid (Sessie 233)
+
+`getBoundingClientRect()` geeft **CSS-pixels**. `page.screenshot()` levert **device-pixels**.
+Op `devices['Desktop Safari']` is dat een factor 2, en dan wijst elke afgeleide x/y naar de
+verkeerde helft van het beeld. Gemeten gevolg in de eerste run van `marker-brackets.spec.js`:
+**alle vier** de markers lazen als "geen inkt" — inclusief `[?]` en `[✓]`, die aantoonbaar
+renderen. Zonder een control die móét slagen was dat als een tweede bug gerapporteerd.
+
+```js
+// vraag het de pagina, neem het niet aan
+const { dpr, regels } = await page.evaluate(() => ({
+  dpr: window.devicePixelRatio || 1, regels: /* … rects … */ }));
+
+const x1 = Math.round((regel.x + n * CELBREEDTE) * dpr);   // naar device-pixels om te meten
+…
+return { midden: (min + max) / 2 / dpr };                   // terug naar CSS-pixels om te asserteren
+```
+
+Schaal **naar** device-pixels om de PNG te indexeren, en reken het resultaat **terug** naar
+CSS-pixels voordat je het tegen een drempel legt — anders is je tolerantie op webkit stiekem
+de helft van die op chromium.
+
+### Twee eigen meetfouten uit dezelfde sessie, zelfde klasse
+
+- **`DOMRect` heeft geen `.h`.** Een filter `bb.y + bb.h <= 720` geeft `NaN <= 720` → `false`
+  → **lege populatie**. De spec meldde dat als "LEGE POPULATIE" in plaats van groen te zijn;
+  dát is waarvoor die tak bestaat (§20).
+- **`pkill -f <patroon>` matcht je eigen commandoregel.** `pkill -f "nostore-server.py 8899"`
+  binnen een shell-commando dat die string bevat, schiet de shell zelf af (exit 144). Twee keer
+  achter elkaar. Kill op de **poort**, niet op een patroon: `kill $(lsof -ti:8899)`.
+
+> Vuistregel: elke meting heeft een eenheid en een populatie. Noteer beide expliciet, en laat
+> een control die niet kán falen bewijzen dat je instrument werkt vóór je de uitkomst gelooft.

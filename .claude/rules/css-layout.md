@@ -438,3 +438,67 @@ min-content naar 232px en de track naar 336px = exact de container.
 > Percentage-breedtes (`width: 100%`) tellen **niet** mee voor de min-content-bijdrage; vaste
 > px-breedtes wél. Dat is precies waarom de mobiele regel het probleem zou hebben opgelost als
 > hij had gewonnen.
+
+---
+
+## 23. Een CSS-correctie op een glyph is een symptoom van een ontbrekende codepoint (Sessie 233)
+
+`--font-terminal` staat op een **self-hosted subset**. Gemeten met fontTools bevatte
+`styles/fonts/jetbrainsmono-latin.woff2` 229 codepoints, en daar zaten `→` (U+2192), `←`
+(U+2190) en `✓` (U+2713) **niet** bij — precies de drie markers die de terminal het vaakst
+tekent. Ze vielen dus terug op een systeem-monospace met een andere baseline, en die stonden
+zichtbaar te laag.
+
+De reflex was een span met een verticale correctie:
+
+```css
+/* WAS: symptoombestrijding op de vindplaats */
+.marker-arrow { position: relative; top: -.2em }
+```
+
+Die span was **zelf de oorzaak** van een ergere bug (TASKS.md #77): hij knipt de regel in
+tekst-runs en laat de `[` van `[→]` over als run van **één teken** vóór een elementgrens.
+Chromium schildert die niet — firefox en webkit wel. Netto: haak onzichtbaar op de meest
+gebruikte onboarding-regel van de site, in de meest gebruikte browser.
+
+**Kijk eerst in de font, niet in de CSS.**
+
+```bash
+python3 -c "
+from fontTools.ttLib import TTFont
+t=TTFont('styles/fonts/jetbrainsmono-latin.woff2'); cps=set()
+for c in t['cmap'].tables: cps|=set(c.cmap.keys())
+for ch in '→←✓│': print(f'U+{ord(ch):04X} {ch}', ord(ch) in cps)"
+```
+
+### Een subset uitbreiden zonder iets anders te verschuiven
+
+```bash
+python3 -m fontTools.varLib.instancer upstream.ttf wght=400:800 -o as.ttf   # as gelijk aan het origineel
+python3 -m fontTools.subset as.ttf --unicodes-file=cp.txt \
+  --layout-features=calt,ccmp,frac,locl,mark --flavor=woff2 --output-file=nieuw.woff2
+```
+
+Twee vallen, allebei gemeten en allebei stil:
+
+- **`--layout-features='*'` is duurder dan het lijkt.** Dat sleepte 36 features en 123
+  alternate-glyphs mee: **35.772 bytes** voor drie glyphs erbij. Met exact de feature-set van
+  het origineel: **30.268** — kleiner dan de 31.432 waarmee je begon.
+- **De oude subset kan codepoints dragen die upstream niet heeft.** U+00AD (zachte
+  afbreekstreep) zat er wél in, gemapt op de gewone hyphen door de vorige tool. Zonder
+  expliciet terugmappen is je "additieve" wijziging stiekem subtractief.
+
+**De assertie die dit veilig maakt** — zonder dit cijfer is een font vervangen een sitebrede
+layout-gok:
+
+```python
+afw = [c for c in oud_cps & nieuw_cps if hmtx_oud[cmap_oud[c]][0] != hmtx_nieuw[cmap_nieuw[c]][0]]
+assert not afw, afw          # 0 advance-width-verschillen = geen enkele regel schuift
+```
+
+Daarna kon de span wég in plaats van dieper genest. Gemeten pijl t.o.v. haak ná de fix:
+chromium **+0,5px**, firefox **0,0**, webkit **+0,5** — béter dan de opgetilde span (−0,5) en
+ver beter dan de span weghalen zónder de font-fix (**+3,5px**, zichtbaar doorzakkend).
+
+> Vuistregel: zie je `position:relative;top:-.Xem` of `vertical-align` op één glyph, vraag dan
+> niet "hoeveel px moet dit omhoog" maar "waarom komt dit glyph niet uit ons eigen font".
