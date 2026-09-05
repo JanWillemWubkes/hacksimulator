@@ -1430,6 +1430,74 @@ else
 fi
 
 # ============================================================
+# Check 20: debug-artefacten die buiten git om vollopen
+# ============================================================
+# Deze drie mappen staan in .gitignore, en juist daarom meldt niets dat ze
+# groeien: `git status` toont ze niet, de bundle-budgetten in TASKS.md tellen
+# ze niet mee, en een schone werkboom zegt niets over hun omvang. Gemeten
+# aanleiding: .playwright-mcp/ stond op 55 MB in 1111 screenshots, opgebouwd
+# over vijf maanden — meer dan alle broncode, docs en assets bij elkaar.
+#
+# /summary Step 7 ruimt ze op. Deze check bestaat omdat die stap een notitie is
+# en notities verjaren; hij is de terugmelding die de notitie zelf niet geeft.
+ARTEFACT_PADEN=".playwright-mcp playwright-report test-results"
+WAARSCHUW_MB=10
+FAAL_MB=50
+
+check_start "Debug-artefacten buiten git (.playwright-mcp, playwright-report, test-results)"
+
+# --- 20a: omvang ---
+# Twee drempels, bewust. Een volle map is rommel, geen defect: er lekt niets en
+# de site werkt. Alleen warnen scrollt voorbij in twintig checks; alleen falen
+# blokkeert een commit midden in een debugsessie en leert je `--no-verify`.
+# Dus zichtbaar vanaf WAARSCHUW_MB, blokkerend pas op het niveau waarop het
+# aantoonbaar uit de hand was gelopen.
+artefact_bytes=0
+artefact_detail=""
+for pad in $ARTEFACT_PADEN; do
+  [ -d "$pad" ] || continue
+  pad_bytes=$(du -sb "$pad" 2>/dev/null | cut -f1)
+  case "$pad_bytes" in ''|*[!0-9]*) pad_bytes=0 ;; esac
+  artefact_bytes=$((artefact_bytes + pad_bytes))
+  artefact_detail="${artefact_detail} ${pad}=$((pad_bytes / 1048576))MB"
+done
+artefact_mb=$((artefact_bytes / 1048576))
+
+# Zelfbewakende tak: meestal bestaan deze mappen NIET — vers na /summary, en
+# altijd in CI. Dan meet 20a niets, en "0 MB" is niet te onderscheiden van een
+# stukgelopen meting. Dus ijk het meetmechanisme op iets dat gegarandeerd
+# bestaat en niet leeg is.
+ijk_bytes=$(du -sb src 2>/dev/null | cut -f1)
+case "$ijk_bytes" in ''|*[!0-9]*) ijk_bytes=0 ;; esac
+ijk_kb=$((ijk_bytes / 1024))
+
+if [ "$ijk_bytes" -lt 100000 ]; then
+  fail "20a: de ijkmeting op src/ geeft ${ijk_bytes} bytes — dat kan niet kloppen. 'du -sb' werkt niet of dit draait niet in de repo-root; een schone uitslag hieronder zou dus niets bewijzen."
+elif [ "$artefact_mb" -ge "$FAAL_MB" ]; then
+  fail "20a: debug-artefacten staan op ${artefact_mb} MB (${artefact_detail# }) — boven de ${FAAL_MB} MB-grens. Ruim op met de stap uit /summary Step 7: rm -rf ${ARTEFACT_PADEN}"
+elif [ "$artefact_mb" -ge "$WAARSCHUW_MB" ]; then
+  warn "20a: debug-artefacten staan op ${artefact_mb} MB (${artefact_detail# }) — nog geen probleem, wel opruimen waard bij de volgende /summary (Step 7). Blokkeert vanaf ${FAAL_MB} MB. [ijk: src/ = ${ijk_kb} KB]"
+else
+  pass "20a: debug-artefacten ${artefact_mb} MB (< ${WAARSCHUW_MB} MB), ijkmeting src/ = ${ijk_kb} KB"
+fi
+
+# --- 20b: er staat niets getrackt in die mappen ---
+# Dit bewaakt de aanname waar de `rm -rf` uit Step 7 op steunt. Raakt er ooit
+# een getrackt bestand in een van deze paden, dan gooit die opruiming werk weg
+# in plaats van rommel — en dat merk je pas als het te laat is. Deze subcheck
+# vuurt óók in CI, waar 20a per definitie 0 MB meet.
+artefact_getrackt=$(git ls-files $ARTEFACT_PADEN 2>/dev/null | wc -l)
+ijk_getrackt=$(git ls-files src 2>/dev/null | wc -l)
+
+if [ "$ijk_getrackt" -lt 1 ]; then
+  fail "20b: 'git ls-files src' geeft 0 bestanden — git ls-files werkt hier niet, dus '0 getrackt' hieronder is geen bewijs."
+elif [ "$artefact_getrackt" -gt 0 ]; then
+  fail "20b: ${artefact_getrackt} getrackt(e) bestand(en) onder ${ARTEFACT_PADEN}: $(git ls-files $ARTEFACT_PADEN | tr '\n' ' '). De opruimstap in /summary Step 7 zou die weggooien. Verplaats ze of pas de stap aan."
+else
+  pass "20b: niets getrackt onder deze paden (ijk: ${ijk_getrackt} bestanden in src/) — de opruiming van Step 7 raakt alleen wegwerpartefacten"
+fi
+
+# ============================================================
 echo ""
 echo "=========================================="
 if [ "$DEEP_MODE" = "1" ]; then

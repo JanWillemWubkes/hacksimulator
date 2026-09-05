@@ -193,11 +193,15 @@ loopt hard op door `video: 'retain-on-failure'` (37 MB na drie suite-runs). De s
 `.playwright-mcp/` regenereren níet vanzelf — ze zijn wegwerpartefacten van één verificatie,
 en wat ze bewezen hoort in `current.md` te staan, niet in een PNG die niemand terugzoekt.
 
-> **Dit is een notitie, en notities verjaren.** Er is geen guard die meldt dat de map weer vol
-> loopt, dus deze stap werkt alleen zolang iemand hem daadwerkelijk uitvoert — precies het
-> zwakke patroon dat CLAUDE.md elders veroordeelt. Wordt hij twee keer overgeslagen, promoveer
-> hem dan naar een check in `validate-docs.sh` (faalt boven een drempel) in plaats van deze
-> alinea strenger te formuleren.
+**Deze stap is niet de guard — Check 20 in `validate-docs.sh` is dat.** De notitie hierboven
+zou verjaren zoals elke notitie, dus de terugmelding staat in het script: `20a` warnt vanaf
+10 MB en faalt vanaf 50 MB (het niveau waarop het aantoonbaar uit de hand was gelopen), `20b`
+faalt zodra er iets getrackt onder deze paden staat — want dán zou de `rm` hierboven werk
+weggooien in plaats van rommel. Beide dragen een ijkmeting, omdat de mappen er meestal niet
+zijn en "0 MB" anders niet te onderscheiden is van een stukgelopen meting.
+
+Je hoeft dus niet te onthouden dát je opruimt: bij 10 MB krijg je het te zien zonder dat je
+commit breekt, en pas bij 50 MB dwingt het script je hand.
 
 ---
 
