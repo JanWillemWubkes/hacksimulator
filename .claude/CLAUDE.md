@@ -1,7 +1,7 @@
 # CLAUDE.md — HackSimulator.nl
 
 **Project:** Browser-based terminal simulator die Nederlandse beginners ethisch hacken leert.
-**Status:** MVP Development — ✅ LIVE op Netlify (laatste: Sessie 233)
+**Status:** MVP Development — ✅ LIVE op Netlify (laatste: Sessie 234)
 **Stack:** Vanilla JS/CSS, client-side only, geen backend, geen build-stap. Deploy = push naar `main`.
 **Docs:** `docs/prd.md` v1.8 | `PLANNING.md` v3.0 | `TASKS.md` (live metrics) | `docs/style-guide.md` v1.5
 
@@ -135,7 +135,7 @@ architectuurwijziging, `docs/prd.md` alleen bij scopewijziging.
 **Afsluiten:** `/summary` — die bevat de volledige 7-staps flow, inclusief de ground-truth-meting
 en de validatiegate. Niet hier dupliceren.
 
-**Sessie counter:** 233
+**Sessie counter:** 234
 
 <!-- Onderhoudsnotitie (wordt niet in context geladen):
      Dit bestand is de altijd-geladen laag. Houd het onder 150 regels — validate-docs.sh
@@ -145,5 +145,5 @@ en de validatiegate. Niet hier dupliceren.
 
 ---
 
-**Last updated:** 5 sep 2026 (Sessie 233 — de launch-visuals waren de take van vóór 6 juli, en de verse capture legde een renderbug bloot: de terminal schreef `[→]` in Chromium als `→]`. Oorzaak lag in de font-subset, niet in de CSS. Volledig: `docs/sessions/current.md`)
-**Version:** 6.06 (Sessie 233 — een CSS-correctie op één glyph bleek het symptoom van drie ontbrekende codepoints, en de span die hem ophief liet `[` achter als tekst-run van één teken die Chromium niet schildert. Gerepareerd in de font, niet op de vindplaats: 0 advance-width-verschillen, bestand kleiner. Historie: `docs/sessions/current.md`)
+**Last updated:** 15 sep 2026 (Sessie 234 — de mailbox kostte ~EUR 96/jaar en er was geen kleiner pakket; Zoho Mail Free op het EU-datacenter, waar de regio afhangt van de ingang en niet van je IP. Volledig: `docs/sessions/current.md`)
+**Version:** 6.07 (Sessie 234 — Brevo's nieuwsbrief slaagt op DKIM, niet op SPF: de Return-Path is Brevo's eigen bounce-domein, dus onze SPF-include wordt voor die mail niet geraadpleegd. Historie: `docs/sessions/current.md`)

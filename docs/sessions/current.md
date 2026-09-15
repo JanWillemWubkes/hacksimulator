@@ -4,6 +4,200 @@
 
 ---
 
+## Sessie 234: De mailbox kostte ~EUR 96/jaar, en de gratis standaardroute sterft in januari 2027 (15 sep 2026)
+
+**Mission:** "ik heb een emailadres bij TransIP dat 7 euro per maand kost — kan dit ook ergens
+gratis?" Uitgemond in een volledige mailmigratie naar Zoho Mail Free, inclusief drie bevindingen
+die alleen door meten boven water kwamen en twee correcties op mijn eigen eerdere advies.
+
+### De vraag was breder dan hij leek
+
+Eerste meting: waar wordt `contact@hacksimulator.nl` eigenlijk voor gebruikt?
+
+| taak | loopt via | mailbox nodig? |
+|---|---|---|
+| Contactformulier | Netlify Forms (`contact.html:169`, `data-netlify="true"`) | nee |
+| Nieuwsbrief versturen | Brevo, eigen infra + eigen DKIM | nee |
+| 12 `mailto:`-links, SECURITY.md, privacy.html | direct naar contact@ | ontvangen |
+| DMARC rua-reports | naar contact@ | ontvangen |
+| Antwoorden vanaf contact@ | mailbox | **versturen** |
+
+Negentig procent van de behoefte is ontvangen. Alleen het antwoorden vraagt een echt verzendpad —
+en dat maakte het verschil tussen de opties.
+
+### Waarom de klassieke gratis route afviel
+
+De standaardoplossing (forwarden naar Gmail, van daaruit antwoorden als contact@) is stervende:
+Google schrapt **"Send mail as" voor niet-Google-adressen in januari 2027** en beperkt nieuwe
+configuraties nu al. Bevestigd op Google's eigen supportpagina (`support.google.com/mail/answer/17101213`),
+niet alleen in secundaire bronnen.
+
+Voor een domein dat security-disclosures en AVG-verzoeken ontvangt betekent forwarding-zonder-send-as
+dat elk antwoord zichtbaar van een prive-Gmail komt. Dat is geen acceptabele eindtoestand, dus
+TransIP's doorstuurdienst (EUR 6,99/jaar) viel af ondanks de lage prijs.
+
+### Dead-end: een prijs die niet bestond
+
+Ik adviseerde aanvankelijk "TransIP Email Only vanaf EUR 1,99/mnd" — een cijfer uit een
+zoekresultaat-titel dat ik niet kon verifieren omdat hun pagina achter een bot-check zit.
+TransIP-support (Seth Peters) weerlegde het direct: er is geen kleiner pakket. Het cijfer was een
+bewering die ik als feit had gepresenteerd, en de correctie kwam van buiten in plaats van uit een
+meting.
+
+### Bevinding 1: de regio hangt af van de ingang, niet van je IP
+
+Zoho's datacenter-keuze ligt onherroepelijk vast bij het aanmaken van het account. Ik nam eerst aan
+dat een `.eu`-URL volstond. Gemeten in de browser bleek iets anders — dezelfde knop, dezelfde
+pagina, twee uitkomsten:
+
+| ingang | gratis-knop wijst naar | datacenter |
+|---|---|---|
+| `www.zoho.com/nl/mail/zohomail-pricing.html` | `workplace.zoho.com` | VS |
+| `www.zoho.eu/mail/zohomail-pricing.html` | `workplace.zoho.eu` | EU |
+
+`www.zoho.eu` bestaat niet als eigen site; hij redirect naar `zoho.com/nl/...?sredirect=true`.
+Die querystring is het enige zichtbare bewijs dat de EU-context actief is. Heisenberg zat al op
+`zoho.com/nl` toen hij dit meldde — een klik verder was het account in het VS-datacenter beland,
+onomkeerbaar, en daarmee had de privacyverklaring een paragraaf over internationale doorgifte
+nodig gehad.
+
+### Bevinding 2: Brevo slaagt op DKIM, niet op SPF
+
+Ik heb de hele migratie gehamerd op "`include:spf.brevo.com` moet blijven staan, anders breekt je
+nieuwsbrief". De headers van de testcampagne weerleggen dat:
+
+```
+dkim=pass   header.i=@hacksimulator.nl  header.s=brevo2
+spf=pass    smtp.mailfrom=bounces-...@gw.d.sender-sib.com
+dmarc=pass  header.from=hacksimulator.nl
+```
+
+SPF wordt geevalueerd op het envelope-domein (`Return-Path`), en dat is Brevo's eigen
+bounce-domein. Het SPF-record van `hacksimulator.nl` wordt voor die mail dus niet eens
+geraadpleegd. Wat de nieuwsbrief laat slagen zijn de twee `brevo*._domainkey`-CNAMEs.
+
+De include blijft staan — hij kost 0 extra DNS-lookups (gemeten: 5/10 voor en na) en is een
+vangnet als Brevo ooit een custom Return-Path krijgt. Maar de rangorde van wat je moet beschermen
+lag anders dan ik zei.
+
+### Bevinding 3: een guard die niet kon falen
+
+`check-mail.sh` v1 bevatte deze check:
+
+```bash
+chk "MX niet meer TransIP" '^((?!transip).)*$' "$(grep -v transip <<<"$mx" | head -1)"
+```
+
+Negatieve lookahead werkt niet in `grep -E`; de `grep -v` gaf een lege string terug, en het
+patroon matchte die lege string. Resultaat: `[OK] MX niet meer TransIP` terwijl de MX nog naar
+`mx.transip.email` wees. De proefdraai vóór de wissel legde het bloot — precies waarvoor die
+proefdraai bedoeld was. Herschreven naar een expliciete `hasnt()`-functie; daarna gaf de
+voor-meting 6 geslaagd / 6 mislukt, met de zes falers exact gelijk aan de zes voorgenomen
+wijzigingen.
+
+Dit is de invariant uit CLAUDE.md in levende lijve: een check die nooit kán falen is niet te
+onderscheiden van een kapotte check.
+
+### Herziening: aliassen in plaats van losse gebruikers
+
+Het runbook schreef eerst `contact@` en `dmarc@` als twee aparte gebruikers voor. Heisenberg maakte
+zelf een superuser aan op een eigen adres, wat de betere structuur bleek: beheerdersaccount los van
+het publieke adres. Geverifieerd dat Zoho 30 aliassen per postvak toestaat op het gratis plan, die
+niet meetellen voor de limiet van 5 gebruikers. Eindopzet: één postvak, drie adressen, één
+filterregel op het ontvangende adres (niet op afzender — DMARC-rapporten komen van tientallen
+providers, het alias is het enige stabiele gegeven in die stroom).
+
+### Waarom vijf records eruit en één erin
+
+Heisenberg vroeg terecht of Zoho geen equivalenten nodig had. Twee verschillende oorzaken:
+
+- `autoconfig` / `autodiscover`: dienen om mailclients hun serverinstellingen te laten vinden.
+  Zoho Free heeft geen IMAP/POP/ActiveSync, dus er is niets te ontdekken — en Zoho doet
+  autodiscovery sowieso met een SRV-record of XML-bestand, niet met CNAME's.
+- `transip-a/b/c._domainkey`: drie selectors is TransIP's sleutelrotatie. Bij het CNAME-model staat
+  de sleutel bij de provider, die achter de verwijzing kan roteren — daarvoor zijn meerdere
+  selectors nodig. Zoho gebruikt het TXT-model: de sleutel staat in je eigen zone en jij roteert.
+  Eén selector volstaat dan.
+
+Praktisch gevolg: de Brevo-DKIM onderhoudt zichzelf, de Zoho-DKIM niet.
+
+### Bijvangst: elf maanden versiedrift in privacy.html
+
+Bij het toevoegen van Zoho aan de verwerkerstabel bleek de kop `v1.1 / 24 augustus 2026` te zeggen
+en de footer `v1.0 / 16 oktober 2025`. Voor een juridisch document is dat geen schoonheidsfout: een
+bezoeker die onderaan kijkt leest een beleid dat elf maanden ouder lijkt. Beide nu op
+`v1.2 / 15 september 2026`.
+
+Gecontroleerd dat de claim "drie partijen" in de TL;DR blijft kloppen — die telt de partijen achter
+nieuwsbrief, gids en donatie (Brevo, Gumroad, Ko-fi), niet de tabel als geheel.
+
+TASKS.md en SESSIONS.md noemen nog "Gmail forwarding", maar dat staat in afgevinkte logs van
+Sessie 91 en wás toen waar. Historische logs herschrijven maakt de projectgeschiedenis
+onbetrouwbaar; alleen levende documentatie is bijgewerkt.
+
+### Eindstand
+
+```
+MX      10 mx.zoho.eu. / 20 mx2.zoho.eu. / 50 mx3.zoho.eu.
+SPF     v=spf1 a mx include:zoho.eu include:spf.brevo.com ~all   (5/10 lookups)
+DKIM    zoho._domainkey  2048-bit, heel aangekomen (OpenSSL-gedecodeerd)
+DMARC   v=DMARC1; p=none; rua=mailto:dmarc@hacksimulator.nl
+check-mail.sh  12 geslaagd / 0 mislukt, ook ná de opzegging
+```
+
+Beide verzendpaden geverifieerd met echte mail, niet met aannames: Zoho SPF/DKIM/DMARC pass,
+Brevo DKIM-aligned pass.
+
+### Commits (2)
+
+- `82a9a08` Mail van TransIP naar Zoho Mail (EU) verhuisd; runbook en DNS-guard vastgelegd
+- `c058577` Zoho in de verwerkerstabel; de footer liep elf maanden achter op de kop
+
+Vóór de commit is `janwillem@hacksimulator.nl` uit het runbook vervangen door `<eigenaar>@...`.
+Check 19b zou het doorlaten (die kijkt naar consumenten-providers), maar het is de superuser-login
+van de mailomgeving en deze repo is publiek.
+
+### Learnings
+
+- **Een prijs uit een zoekresultaat-titel is een bewering, geen meting.** De EUR 1,99 die ik
+  adviseerde bestond niet; de bot-check die de verificatie blokkeerde was het signaal om het
+  cijfer als onzeker te presenteren, niet om het alsnog te noemen.
+- **Diagnosticeer niet vanuit één mislukte poging.** Ik concludeerde dat Zoho de directe signup-URL
+  weigerde zonder referer. De echte oorzaak was dat mijn browserpaneel dichtstond. Die verkeerde
+  diagnose kwam als vaststaand feit in het runbook terecht.
+- **De eerste rode regel in een console is zelden de oorzaak.** De lege signup-pagina gaf een 403
+  en een 400; dezelfde twee fouten verschenen bij een load die daarna gewoon slaagde. Pas een
+  vergelijking met een geslaagde load maakte een foutmelding betekenisvol.
+- **Scheid je eigen meting van de bevestiging van de leverancier.** Zoho's Verify-knop herkent een
+  vers TXT-record pas na 30-60 minuten. Zonder een onafhankelijke `dig`-meting zit je een uur te
+  twijfelen of je record fout is.
+
+### Next steps
+
+- [ ] DMARC `p=none` → `p=quarantine` zodra de rapporten op `dmarc@` alleen eigen verzendpaden
+      tonen. Stond al als ambitie in `.claude/plans/brevo-deliverability-sessie-C.md`.
+- [ ] Losse bevinding, buiten deze migratie: er staat een wildcard `* AAAA 2a01:7c8:e100:1::50a0`
+      in de zone. Gemeten: `willekeurig-subdomein-test.hacksimulator.nl` resolvet daarheen, dus elk
+      niet-gedefinieerd subdomein wijst naar TransIP-infrastructuur die niet meer van ons is.
+      Eerst uitzoeken of er iets op leunt (`www` heeft een eigen CNAME, dus waarschijnlijk niet —
+      maar dat is een bewering tot je het meet).
+
+### Metrics delta
+
+| | vóór | ná |
+|---|---|---|
+| Mailkosten | ~EUR 96/jaar | EUR 0 |
+| Bundle `assets/` | 1740 KB | 1741 KB (+1 KB, privacy.html) |
+| `src/` / `styles/` / `blog/` | 734 / 462 / 491 KB | ongewijzigd |
+| Playwright | 43 specs / 317 `test()` | ongewijzigd |
+| DNS-records mail | 8 (TransIP) | 4 (Zoho + Brevo) |
+
+Geen code-wijziging aan `src/`, `styles/` of `tests/`. `legal-pages-overflow.spec.js` gedraaid op
+de gewijzigde pagina: **27 passed** over drie motoren op 320/375/414px, dark + light — de nieuwe
+tabelrij veroorzaakt geen horizontale overflow.
+
+---
+
 ## Sessie 233: De pijl ontbrak in de font-subset, en die ene hack liet de haak van `[→]` onzichtbaar (5 september 2026)
 
 **Mission:** "lees TASKS.md en CLAUDE.md, wat is de volgende stap?" — uitgemond in het
