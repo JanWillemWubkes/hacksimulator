@@ -259,6 +259,24 @@ Dit stond al als voornemen in `.claude/plans/brevo-deliverability-sessie-D.md:90
       `v=DMARC1; p=none; rua=mailto:dmarc@hacksimulator.nl`
 - [ ] `dig @8.8.8.8 TXT _dmarc.hacksimulator.nl +short`
 - [ ] Na een paar dagen: komen er reports binnen op dmarc@?
+- [ ] Rapporten samenvatten met `python3 .claude/plans/dmarc-rapport.py <map>`
+      (leest .xml/.xml.gz/.zip, groepeert op DMARC-uitkomst i.p.v. op een lijst
+      bekende IP's, en zegt expliciet FOUT bij een lege populatie)
+
+### Naar p=quarantine
+
+Pas als de parser `=> Klaar voor p=quarantine; pct=25` meldt: geen falende bronnen,
+minstens 7 dagen dekking, minstens 2 rapporterende providers. Ga dan gefaseerd:
+
+```
+v=DMARC1; p=quarantine; pct=25; rua=mailto:dmarc@hacksimulator.nl   <- week 1
+v=DMARC1; p=quarantine; pct=50; rua=mailto:dmarc@hacksimulator.nl   <- week 2
+v=DMARC1; p=quarantine;         rua=mailto:dmarc@hacksimulator.nl   <- week 3 (=100%)
+```
+
+Let op de blinde vlek: rapporten tonen alleen wat er daadwerkelijk verstuurd is.
+Zonder Brevo-campagne in de meetperiode staat dat pad niet in de data, en stel je
+scherp op onvolledig bewijs.
 
 ---
 
