@@ -54,6 +54,12 @@ tests/screenshots/
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
 
+# Impeccable: alleen de OUTPUT negeren, de invoer blijft getrackt.
+# .impeccable/config.json bevat de ignore-regels mét motivering — dat is invoer
+# en hoort in review. Een artefact buiten git veroudert stil.
+.impeccable/config.local.json
+.impeccable/critique/
+
 # Test artifacts (build output, should not be committed)
 playwright-report/
 test-results/

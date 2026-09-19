@@ -170,6 +170,21 @@
   status = 404
   force = true
 
+# Impeccable (design-skill) schrijft zijn context naar de repo-root. Beide zijn
+# interne werkdocumenten, geen publieke pagina's. .impeccable/ is een dotdir en
+# valt daarmee al onder verantwoordingsgrond 1 van Check 19a.
+[[redirects]]
+  from = "/PRODUCT.md"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/DESIGN.md"
+  to = "/404.html"
+  status = 404
+  force = true
+
 # Security Headers
 [[headers]]
   for = "/*"
