@@ -183,6 +183,59 @@ houdt zijn eigen horizontale scroll zodat de boxen nooit breken.
 - De terminal zelf verandert niet. Geen enkele regel in `terminal.html`.
 - Het palet krijgt geen nieuwe hues.
 
+## Welke Impeccable-commando's de bouwsessie moet draaien
+
+*Toegevoegd nadat bleek dat dit voorstel grotendeels buiten de skill om tot stand kwam.*
+
+In sessie 235 zijn maar **2 van de 24 commando's** gedraaid: `init` en `document` (die laatste
+handmatig, door zijn playbook te volgen), plus de `detect`-CLI. De diagnose hierboven — de 23
+neon-elementen, de AI-tells, het gat in de typeschaal — is **eigen analyse**, niet die van de
+skill. Op twee punten week dat ook af van het plan: fase C zou via `/impeccable extract` gaan
+maar werd een eigen script, en dit voorstel hoorde door `reference/new-work.md` te lopen.
+
+Dat is geen ramp, maar het betekent wel dat de richting nog nergens tegen is gehouden. De
+bouwsessie doet dat alsnog:
+
+**Vóór er code verandert**
+
+1. **`/impeccable critique index.html`** — UX-review met heuristische scoring. Dit is de
+   onafhankelijke toets op de diagnose hierboven. Als de skill tot een ander oordeel komt dan
+   dit document, is dát het interessante resultaat; niet de bevestiging.
+
+**Tijdens het bouwen**
+
+2. **`reference/new-work.md` volgen** (52 KB) — de playbook voor het vaststellen van een
+   visuele wereld. Die is bij het schrijven van dit voorstel overgeslagen. Lees hem vóór de
+   eerste CSS-regel en volg wat hij voorschrijft, inclusief de subagents waar hij naar
+   verwijst. De les uit sessie 235: volg de playbook in plaats van je herinnering eraan.
+3. **`/impeccable typeset index.html`** — typografische hiërarchie en fonts. Precies het
+   terrein van de fontwissel en de herstelde schaal.
+4. **`/impeccable layout index.html`** — ritme, spacing en hiërarchie. Het terrein van de
+   herschikte hero.
+
+**Na afloop, als poort**
+
+5. De **`impeccable-finish-reviewer`**-subagent, als `new-work.md` daarnaar verwijst. Die
+   toetst een afgeronde bouw tegen zijn eigen richtingscontract — en dat contract is dit
+   document.
+6. **`impeccable detect --json`** tegen de **URL's**, één keer, als de UI af is. De
+   setup-output schrijft dit expliciet zo voor: niet eerder, en niet tegen bestanden.
+   Gebruik `python3 -m http.server`, nooit `npx serve` (troubleshooting punt 12).
+
+**Bewust overgeslagen, met reden**
+
+- `audit` — de mechanische kant is al gedekt door `detect`, en contrast is hier met echte
+  pixels gemeten. Alsnog draaien als `critique` iets over responsive of performance opwerpt.
+- `quieter` — het commando voor te luide ontwerpen past op papier perfect bij het
+  neon-probleem, maar de diagnose is al gesteld en de ingreep al beschreven. Zou hooguit
+  bevestigen.
+- `polish` — overlapt met de finish-reviewer. Eén van de twee is genoeg, en de reviewer is de
+  sterkere omdat hij tegen dit document toetst in plaats van tegen een algemene lat.
+- `colorize` — is voor het tóévoegen van kleur aan monochrome UI. Hier gebeurt het omgekeerde.
+- `live`, `generate` — vereisen de browserbundel; interessant, maar niet nodig om dit te bouwen.
+
+---
+
 ## Meetlat vóór het live mag
 
 - De 7 contrast-specs groen, in beide thema's.
