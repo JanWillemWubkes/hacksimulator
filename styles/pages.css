@@ -475,7 +475,7 @@
 
 .form-status-error {
   display: block;
-  color: var(--color-error, #ff6b6b);
+  color: var(--color-error, var(--color-error));
   background: rgba(255, 107, 107, 0.1);
   border: 1px solid rgba(255, 107, 107, 0.3);
   padding: var(--spacing-sm) var(--spacing-md);

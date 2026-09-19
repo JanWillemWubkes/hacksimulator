@@ -19,6 +19,13 @@ colors:
   signal-warning: "#d29922"
   signal-info: "#79c0ff"
   signal-success: "#3fb950"
+  footer-text-dim: "#a1a8b0"
+  footer-text-strong: "#ffffff"
+  bg-navbar-mobile: "#000000"
+  bg-demo-terminal: "#000000"
+  traffic-light-red: "#ff5f56"
+  traffic-light-yellow: "#ffbd2e"
+  traffic-light-green: "#27c93f"
   paper-light: "#f8f8f8"
   paper-sunken-light: "#eceef0"
   paper-raised-light: "#ffffff"
@@ -201,7 +208,7 @@ JetBrains Mono werkt. Een vierde familie voegt niets toe wat een gewicht niet oo
 **The Shell Is Mono Rule.** Alles binnen het terminalvenster is monospace — output, prompt
 en invoer. Dit is geen smaak: `asciiBox` en de nmap-achtige output rekenen op
 kolomuitlijning, en prompt en invoer moeten dezelfde metriek hebben als de regels erboven.
-**Dit wordt op dit moment geschonden** (zie Don'ts).
+Alle drie gemeten op 10,8px per teken; het box-teken en de letter `M` zijn even breed.
 
 **The Scale Gap Rule.** De sprong van Headline (45px) naar Title (22,5px) is precies factor
 twee, terwijl Display naar Headline factor 1,4 is. Dat gat is niet ontworpen maar ontstaan.
@@ -259,6 +266,12 @@ een deel van wat er draait.
 
 Randen zijn consequent 1px en grijs; de neon-rand op badges is het enige gekleurde
 randgebruik en blijft onder 40% alpha.
+
+Voor kleur is die scheur op 19 sep 2026 gedicht: van de 51 hardgecodeerde kleurwaarden in
+`styles/` zijn er 47 vervangen door een token, en zeven nieuwe tokens gaven een naam aan
+wat geen naam had (`--color-footer-text-dim`, `--color-footer-text-strong`,
+`--color-bg-navbar-mobile`, `--color-bg-demo-terminal`, `--traffic-light-red/-yellow/-green`).
+De vier die overblijven staan in `docs/design/impeccable-bevindingen.md`.
 
 ## Components
 
@@ -329,11 +342,10 @@ Markers zijn ASCII, nooit emoji. Gemeten frequentie: `[?]` 149x, `[TIP]` 113x, `
 
 ### Don't:
 - **Don't** schaduwen introduceren. Dit systeem is vlak; zie The No Shadow Rule.
-- **Don't** het terminalvenster uit monospace halen. **Nu geschonden, in drie stappen te
-  repareren:** `#terminal-output` gebruikt correct `var(--font-terminal)`, maar
-  `#terminal-input` declareert hardgecodeerd `Courier New, Courier, monospace` en omzeilt
-  het token, en `#terminal-prompt` declareert helemaal geen `font-family` en erft daardoor
-  Inter — een proportioneel font in de prompt van een shell.
+- **Don't** het terminalvenster uit monospace halen. Output, prompt en invoer delen sinds
+  19 sep 2026 alle drie `var(--font-terminal)`; daarvoor stond de prompt in Inter en het
+  invoerveld in een hardgecodeerde Courier-stack. Verwijs nooit rechtstreeks naar een
+  fontnaam in het terminalvenster.
 - **Don't** emoji gebruiken in code of output. ASCII-markers, altijd.
 - **Don't** een vierde lettertypefamilie toevoegen.
 - **Don't** `!important` gebruiken in `styles/`; win op specificiteit.

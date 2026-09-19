@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-19T07:05:59+00:00",
+  "generatedAt": "2026-09-19T08:59:26+00:00",
   "title": "Design System: HackSimulator.nl",
   "extensions": {
     "colorMeta": {
@@ -318,6 +318,111 @@
           "oklch(83.6% 0.000 89.9)",
           "oklch(95.0% 0.000 89.9)"
         ]
+      },
+      "footer-text-dim": {
+        "role": "neutral",
+        "displayName": "Footer Text Dim (Dark Frame)",
+        "canonical": "oklch(72.8% 0.014 251.6)",
+        "tonalRamp": [
+          "oklch(15.0% 0.014 251.6)",
+          "oklch(26.4% 0.014 251.6)",
+          "oklch(37.9% 0.014 251.6)",
+          "oklch(49.3% 0.014 251.6)",
+          "oklch(60.7% 0.014 251.6)",
+          "oklch(72.1% 0.014 251.6)",
+          "oklch(83.6% 0.014 251.6)",
+          "oklch(95.0% 0.014 251.6)"
+        ]
+      },
+      "footer-text-strong": {
+        "role": "neutral",
+        "displayName": "Footer Text Strong (Dark Frame)",
+        "canonical": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "oklch(15.0% 0.000 89.9)",
+          "oklch(26.4% 0.000 89.9)",
+          "oklch(37.9% 0.000 89.9)",
+          "oklch(49.3% 0.000 89.9)",
+          "oklch(60.7% 0.000 89.9)",
+          "oklch(72.1% 0.000 89.9)",
+          "oklch(83.6% 0.000 89.9)",
+          "oklch(95.0% 0.000 89.9)"
+        ]
+      },
+      "bg-navbar-mobile": {
+        "role": "neutral",
+        "displayName": "Navbar Mobile (Dark Frame)",
+        "canonical": "oklch(0.0% 0.000 0.0)",
+        "tonalRamp": [
+          "oklch(15.0% 0.000 0.0)",
+          "oklch(26.4% 0.000 0.0)",
+          "oklch(37.9% 0.000 0.0)",
+          "oklch(49.3% 0.000 0.0)",
+          "oklch(60.7% 0.000 0.0)",
+          "oklch(72.1% 0.000 0.0)",
+          "oklch(83.6% 0.000 0.0)",
+          "oklch(95.0% 0.000 0.0)"
+        ]
+      },
+      "bg-demo-terminal": {
+        "role": "neutral",
+        "displayName": "Demo Terminal",
+        "canonical": "oklch(0.0% 0.000 0.0)",
+        "tonalRamp": [
+          "oklch(15.0% 0.000 0.0)",
+          "oklch(26.4% 0.000 0.0)",
+          "oklch(37.9% 0.000 0.0)",
+          "oklch(49.3% 0.000 0.0)",
+          "oklch(60.7% 0.000 0.0)",
+          "oklch(72.1% 0.000 0.0)",
+          "oklch(83.6% 0.000 0.0)",
+          "oklch(95.0% 0.000 0.0)"
+        ]
+      },
+      "traffic-light-red": {
+        "role": "tertiary",
+        "displayName": "Traffic Light Red",
+        "canonical": "oklch(69.3% 0.197 26.7)",
+        "tonalRamp": [
+          "oklch(15.0% 0.197 26.7)",
+          "oklch(26.4% 0.197 26.7)",
+          "oklch(37.9% 0.197 26.7)",
+          "oklch(49.3% 0.197 26.7)",
+          "oklch(60.7% 0.197 26.7)",
+          "oklch(72.1% 0.197 26.7)",
+          "oklch(83.6% 0.197 26.7)",
+          "oklch(95.0% 0.197 26.7)"
+        ]
+      },
+      "traffic-light-yellow": {
+        "role": "tertiary",
+        "displayName": "Traffic Light Yellow",
+        "canonical": "oklch(83.8% 0.162 81.1)",
+        "tonalRamp": [
+          "oklch(15.0% 0.162 81.1)",
+          "oklch(26.4% 0.162 81.1)",
+          "oklch(37.9% 0.162 81.1)",
+          "oklch(49.3% 0.162 81.1)",
+          "oklch(60.7% 0.162 81.1)",
+          "oklch(72.1% 0.162 81.1)",
+          "oklch(83.6% 0.162 81.1)",
+          "oklch(95.0% 0.162 81.1)"
+        ]
+      },
+      "traffic-light-green": {
+        "role": "tertiary",
+        "displayName": "Traffic Light Green",
+        "canonical": "oklch(73.0% 0.219 144.6)",
+        "tonalRamp": [
+          "oklch(15.0% 0.219 144.6)",
+          "oklch(26.4% 0.219 144.6)",
+          "oklch(37.9% 0.219 144.6)",
+          "oklch(49.3% 0.219 144.6)",
+          "oklch(60.7% 0.219 144.6)",
+          "oklch(72.1% 0.219 144.6)",
+          "oklch(83.6% 0.219 144.6)",
+          "oklch(95.0% 0.219 144.6)"
+        ]
       }
     },
     "typographyMeta": {
@@ -486,7 +591,7 @@
       {
         "name": "The Shell Is Mono Rule",
         "section": "typography",
-        "body": "Alles binnen het terminalvenster is monospace: output, prompt en invoer. asciiBox en de nmap-achtige output rekenen op kolomuitlijning, en prompt en invoer moeten dezelfde metriek hebben als de regels erboven. Dit wordt op dit moment geschonden."
+        "body": "Alles binnen het terminalvenster is monospace: output, prompt en invoer. asciiBox en de nmap-achtige output rekenen op kolomuitlijning, en prompt en invoer moeten dezelfde metriek hebben als de regels erboven. Alle drie gemeten op 10,8px per teken; box-teken en letter M zijn even breed."
       },
       {
         "name": "The Scale Gap Rule",
@@ -509,7 +614,7 @@
     ],
     "donts": [
       "Don't schaduwen introduceren. Dit systeem is vlak.",
-      "Don't het terminalvenster uit monospace halen. Nu geschonden: #terminal-input declareert hardgecodeerd Courier New en omzeilt het token, #terminal-prompt declareert geen font-family en erft Inter.",
+      "Don't het terminalvenster uit monospace halen. Output, prompt en invoer delen sinds 19 sep 2026 alle drie var(--font-terminal); verwijs nooit rechtstreeks naar een fontnaam.",
       "Don't emoji gebruiken in code of output. ASCII-markers, altijd.",
       "Don't een vierde lettertypefamilie toevoegen.",
       "Don't !important gebruiken in styles/; win op specificiteit.",

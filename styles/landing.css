@@ -263,12 +263,12 @@
   font-size: 0.875rem;
   border-radius: var(--border-radius-cta-nav);
   background: var(--color-cta-dark-frame);  /* Always neon on dark navbar */
-  color: #0d1117;  /* Always dark text on neon button (Dark Frame - never changes with theme) */
+  color: var(--color-text-on-neon);  /* Always dark text on neon button (Dark Frame - never changes with theme) */
 }
 
 .btn-cta-nav:hover {
   background: var(--color-cta-dark-frame-hover);  /* Dark Frame: always neon hover (never changes with theme) */
-  color: #0d1117;  /* Always dark text (Dark Frame - never changes with theme) */
+  color: var(--color-text-on-neon);  /* Always dark text (Dark Frame - never changes with theme) */
   box-shadow: 0 4px 20px var(--color-cta-dark-frame-glow);  /* Dark Frame: always neon glow (never changes with theme) */
 }
 
@@ -552,7 +552,7 @@
   align-items: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-sm) var(--spacing-md);
-  background: #161b22;  /* Fixed dark - terminal always dark */
+  background: var(--color-bg-demo-terminal-header);  /* Fixed dark - terminal always dark */
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -562,9 +562,9 @@
   border-radius: 50%;
 }
 
-.terminal-header .dot.red { background: #ff5f56; }
-.terminal-header .dot.yellow { background: #ffbd2e; }
-.terminal-header .dot.green { background: #27c93f; }
+.terminal-header .dot.red { background: var(--traffic-light-red); }
+.terminal-header .dot.yellow { background: var(--traffic-light-yellow); }
+.terminal-header .dot.green { background: var(--traffic-light-green); }
 
 .terminal-title {
   font-family: var(--font-terminal);
@@ -575,7 +575,7 @@
 
 /* Terminal Body */
 .terminal-body {
-  background: #000;
+  background: var(--color-bg-demo-terminal);
   padding: var(--spacing-lg);
   height: 235px;
   overflow: hidden;
@@ -627,11 +627,11 @@
 }
 
 .terminal-line .warn {
-  color: #d29922;
+  color: var(--color-warning);
 }
 
 .terminal-line .err {
-  color: #f85149;
+  color: var(--color-error);
 }
 
 /* Typing Cursor */
@@ -655,7 +655,7 @@
   height: 40px;
   background: linear-gradient(
     to bottom,
-    #000 0%,
+    var(--color-bg-demo-terminal) 0%,
     rgba(0, 0, 0, 0.8) 50%,
     transparent 100%
   );
@@ -689,7 +689,7 @@
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-lg);
-  background: #000;
+  background: var(--color-bg-demo-terminal);
   color: var(--terminal-demo-prompt);
   font-family: var(--font-terminal);
   font-size: 0.9rem;
@@ -756,7 +756,7 @@
    (.hero-text + .hero-terminal), dus een derde kind zou er een derde kolom van maken. */
 .hero-demo-bar {
   padding: var(--spacing-sm) var(--spacing-lg);
-  background: #000;               /* vast donker, net als .terminal-input-line */
+  background: var(--color-bg-demo-terminal);               /* vast donker, net als .terminal-input-line */
   border-top: 1px solid var(--color-border);
 }
 
@@ -1030,7 +1030,7 @@
   font-family: var(--font-heading);
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 900;
-  color: #000;
+  color: var(--color-cta-text);
   margin: 0 0 var(--spacing-md) 0;
 }
 
@@ -1109,7 +1109,7 @@
 }
 
 .check-icon.negative {
-  color: #ef4444;
+  color: var(--color-error);
   flex-shrink: 0;
 }
 
@@ -1730,7 +1730,7 @@ html {
   width: 32px;
   height: 32px;
   background: var(--color-cta-primary);
-  color: #000;
+  color: var(--color-cta-text);
   font-family: var(--font-heading);
   font-weight: var(--font-weight-bold);
   font-size: 0.9rem;
@@ -1837,7 +1837,7 @@ html {
     align-items: stretch;
     gap: 0;
     padding: var(--spacing-lg);
-    background-color: #000;
+    background-color: var(--color-bg-navbar-mobile);
     overflow-y: auto;
     z-index: 999;
   }
@@ -2300,7 +2300,7 @@ html {
 [data-theme="light"] .how-step,
 [data-theme="light"] .blog-link,
 [data-theme="light"] .result-item {
-  background: #ffffff;
+  background: var(--color-bg-modal);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
@@ -2315,7 +2315,7 @@ html {
    in light mode onzichtbaar en alleen de haarlijnen droegen hem. --color-bg-alt lost dat op. */
 
 [data-theme="light"] .comparison-header .comparison-cell {
-  background: #ffffff;
+  background: var(--color-bg-modal);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
@@ -2329,19 +2329,19 @@ html {
 }
 
 [data-theme="light"] .solution-section h2 {
-  color: #ffffff;  /* Pure white - maximum impact */
+  color: var(--color-cta-text);  /* Pure white - maximum impact */
 }
 
 /* S228: was rgba(255,255,255,.95) ("readable but soft") = 3,12:1 op de groene band. Ook ná
    Green 800 blijft 95% wit op 6,55 steken — die laatste 5% alpha ís het verschil met 7,13,
    dus de "zachtheid" kostte de AAA-lat. */
 [data-theme="light"] .solution-description {
-  color: #ffffff;  /* 7,13:1 op de Green 800-band (AAA) */
+  color: var(--color-cta-text);  /* 7,13:1 op de Green 800-band (AAA) */
 }
 
 /* Step Numbers - White text on green circles in light mode */
 [data-theme="light"] .step-number {
-  color: #ffffff;  /* White on Tailwind Green 600 */
+  color: var(--color-cta-text);  /* White on Tailwind Green 600 */
 }
 
 /* Terminal Demo - Clean elevation instead of glow */

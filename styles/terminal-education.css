@@ -277,7 +277,7 @@ html:not([data-theme='light']) .terminal-edu-inner {
 [data-theme="light"] .edu-command-card,
 [data-theme="light"] .terminal-edu-faq .faq-item,
 [data-theme="light"] .terminal-edu-blog-links a {
-  background: #ffffff;
+  background: var(--color-bg-modal);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 

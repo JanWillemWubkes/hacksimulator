@@ -75,9 +75,57 @@ handmatig tegen URL's wanneer er iets te meten valt.
 
 ---
 
+## Correctie op de hextellingen (19 sep 2026)
+
+Elk getal over hardgecodeerde kleuren dat eerder in dit traject genoemd is, was fout.
+Drie oorzaken, opeenvolgend gevonden:
+
+1. **De regex `#[0-9a-fA-F]{6}` matcht CSS-selectors.** `#feedback-modal` levert de
+   "kleur" `#feedba`, want f-e-e-d-b-a zijn geldige hexcijfers. Dat alleen al gaf 33
+   spookkleuren in `tests/e2e/`.
+2. **Het `[data-theme="light"]`-blok werd meegeteld als "buiten `:root`".** Dat zijn geen
+   losse waarden maar de tokens van het lichte thema.
+3. **CSS-commentaar en `@media print` telden mee.** Dit project documenteert zijn gemeten
+   contrastratio's in commentaar - dat is geen drift maar goede praktijk. En zwarte tekst
+   in een printblok is correct, geen fout.
+
+De gecontroleerde telling, met een patroon dat zijn eigen testgevallen haalt
+(vijf kleuren gevonden, vier selectors afgewezen) en een parser die op een minivoorbeeld
+2 tokens / 2 hardcoded / 1 print moet opleveren:
+
+| categorie | n |
+|---|---|
+| hexcodes in `styles/` totaal | 292 |
+| waarvan in CSS-commentaar | 124 |
+| waarvan tokendefinities (`--x: #hex`) | 115 |
+| waarvan `@media print` | 2 |
+| **werkelijk hardgecodeerd** | **51** over 19 unieke waarden |
+
+Eerder genoemd in dit traject: 211, daarna 111, daarna 118, daarna 58. Allemaal te hoog.
+Fase C bleek daardoor een middag in plaats van een project.
+
+---
+
 ## Openstaand
 
 - `clipped-overflow-container` op `terminal.html` verifiëren.
 - `line-length` (14) nameten.
 - De blogpagina's zijn alleen statisch gescand (dus onbruikbaar); één gerenderde pass
   gaf 27 bevindingen op `nmap-beginnersgids.html`. De rest van de blog nog gerenderd meten.
+
+**Na fase C staan er nog vier hardgecodeerde waarden.** Alle vier zijn lichtthema-nuances
+waar geen bestaand token exact op past, dus ze vragen een besluit in plaats van een
+mechanische vervanging:
+
+| waarde | plek | wat het is |
+|---|---|---|
+| `#f5f5f5` | `blog.css` `[data-theme=light] .blog-post-content code` | achtergrond van inline code |
+| `#fafafa` | `blog.css` `[data-theme=light] .blog-post-content pre` | achtergrond van codeblokken; verschilt nauwelijks van de vorige |
+| `#0a0a0a` | `blog.css` `[data-theme=light] .terminal-example` | een terminalvoorbeeld dat óók in het lichte thema donker hoort te blijven |
+| `#57606a` | `main.css` `[data-theme=light] .modal-close` | gedempte sluitknop; `--color-text-dim` is in licht `#444444` en dus donkerder |
+
+Voorstel: `#f5f5f5` en `#fafafa` samentrekken tot één `--color-bg-code` (het verschil is
+met het blote oog niet te zien), `#0a0a0a` een thema-onafhankelijk
+`--color-bg-example-terminal` geven naar analogie van `--color-bg-demo-terminal`, en
+`#57606a` laten staan of bewust naar `--color-text-dim` schuiven - dat laatste verhoogt
+het contrast maar verandert het uiterlijk.

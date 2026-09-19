@@ -243,6 +243,29 @@
   --color-footer-link-hover: #9fef00;   /* Neon green hover - matches landing footer (Sessie 97 uniformity) */
   --color-border-dark-frame: #30363d;   /* Dark Frame borders - GitHub grey for dark-on-dark transitions */
 
+  /* Dark Frame-tekst: navbar en footer blijven in BEIDE thema's donker, dus deze
+     waarden mogen niet met het thema meebewegen. Ze stonden hardgecodeerd in
+     main.css en mobile.css - dat was naleving van de Dark Frame-regel zonder naam. */
+  --color-footer-text-dim: #a1a8b0;     /* secundaire footertekst op #1a1a1a */
+  --color-footer-text-strong: #ffffff;  /* hover op de donate-link */
+  --color-bg-navbar-mobile: #000;       /* mobiel schermvullend menu - dieper dan de navbar */
+
+  /* Demo-terminal op de landingspagina: puur zwart, bewust dieper dan --color-bg,
+     zodat het venster als scherm leest en niet als paginasectie. */
+  --color-bg-demo-terminal: #000;
+  --color-bg-demo-terminal-header: #161b22;  /* titelbalk - vast donker, ook in licht thema */
+
+  /* Donkere tekst op een vlak dat in BEIDE thema's neon/limoen blijft: de CTA in navbar
+     en footer, en de mobiele snelknoppen. --color-cta-text kan hier NIET, want dat wisselt
+     naar wit in het lichte thema terwijl het vlak neon blijft - gemeten 1,42:1. */
+  --color-text-on-neon: #0d1117;
+
+  /* Vensterknopjes van de demo-terminal (macOS-conventie). Geen merkkleuren:
+     ze zijn juist herkenbaar omdat ze overal hetzelfde zijn. */
+  --traffic-light-red: #ff5f56;
+  --traffic-light-yellow: #ffbd2e;
+  --traffic-light-green: #27c93f;
+
   /* Dropdown Colors - Dark mode (GitHub Dark) */
   --color-bg-dropdown: #161b22;         /* Dropdown background - GitHub secondary bg */
   --color-bg-dropdown-hover: #21262d;   /* Dropdown hover - GitHub tertiary bg */
@@ -680,7 +703,7 @@ button {
 }
 
 [data-theme="light"] .modal-content {
-  background-color: #ffffff;
+  background-color: var(--color-bg-modal);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 
@@ -709,9 +732,9 @@ button {
   /* Override scroll affordance gradients for light theme */
   background:
     /* Top cover */
-    linear-gradient(#ffffff 30%, transparent),
+    linear-gradient(var(--color-bg-modal) 30%, transparent),
     /* Bottom cover */
-    linear-gradient(transparent, #ffffff 70%) 0 100%,
+    linear-gradient(transparent, var(--color-bg-modal) 70%) 0 100%,
     /* Top shadow */
     radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.2), transparent),
     /* Bottom shadow */
@@ -731,7 +754,7 @@ button {
 }
 
 [data-theme="light"] .modal-body::-webkit-scrollbar-track {
-  background: #ffffff;
+  background: var(--color-bg-modal);
 }
 
 .modal-body::-webkit-scrollbar-thumb {
@@ -757,7 +780,7 @@ button {
 }
 
 [data-theme="light"] .modal-footer {
-  background-color: #ffffff;
+  background-color: var(--color-bg-modal);
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -848,7 +871,7 @@ button {
 
 /* Light theme support for modal close button */
 [data-theme="light"] .modal-close {
-  background: #ffffff;  /* Opaque white - CONSTANT (never changes) */
+  background: var(--color-bg-modal);  /* Opaque white - CONSTANT (never changes) */
   color: #57606a;       /* GitHub dark grey for light mode */
   opacity: 0.6;
 }
@@ -881,7 +904,7 @@ button {
 }
 
 [data-theme="light"] .legal-modal-header {
-  background: #ffffff;
+  background: var(--color-bg-modal);
 }
 
 .legal-warning-icon {
@@ -1157,7 +1180,7 @@ button {
 .footer-tagline {
   font-family: var(--font-body);
   font-size: 0.875rem;
-  color: #a1a8b0;  /* Sessie 227: was #8b949e (5,90 op de footer) - Dark Frame, dus bewust hardcoded */
+  color: var(--color-footer-text-dim);  /* Sessie 227: was #8b949e (5,90 op de footer) - Dark Frame, dus bewust hardcoded */
   line-height: 1.6;
   margin: 0;
 }
@@ -1220,7 +1243,7 @@ button {
 .footer-bottom p {
   font-family: var(--font-body);
   font-size: 0.8rem;
-  color: #a1a8b0;  /* Sessie 227: was #8b949e (5,90 op de footer) - Dark Frame, dus bewust hardcoded */
+  color: var(--color-footer-text-dim);  /* Sessie 227: was #8b949e (5,90 op de footer) - Dark Frame, dus bewust hardcoded */
   margin: 0;
 }
 
@@ -1231,7 +1254,7 @@ button {
 }
 
 .footer-social a {
-  color: #a1a8b0;  /* Sessie 227: was #8b949e (5,90 op de footer) - Dark Frame, dus bewust hardcoded */
+  color: var(--color-footer-text-dim);  /* Sessie 227: was #8b949e (5,90 op de footer) - Dark Frame, dus bewust hardcoded */
   transition: color var(--transition-fast);
   /* Het icoon is 20px; zonder dit was het aanwijsdoel 26px (WCAG 2.5.5 vraagt 44px).
      Inline-flex + centreren houdt het icoon optisch op zijn plek; het doel groeit eromheen. */
@@ -1254,7 +1277,7 @@ a.footer-donate {
   font-family: var(--font-heading);
   font-size: 0.85rem;
   font-weight: 600;
-  color: #c9d1d9;
+  color: var(--color-footer-text);
   background-color: rgba(159, 239, 0, 0.08);
   border: 1px solid rgba(159, 239, 0, 0.3);
   border-radius: var(--border-radius-button);
@@ -1271,7 +1294,7 @@ a.footer-donate {
 }
 
 a.footer-donate:hover {
-  color: #ffffff;
+  color: var(--color-footer-text-strong);
   border-color: rgba(159, 239, 0, 0.6);
   background-color: rgba(159, 239, 0, 0.15);
   transform: translateY(-4px);
@@ -1896,7 +1919,7 @@ abbr.jargon {
 }
 
 [data-theme="light"] .faq-item {
-  background: #ffffff;
+  background: var(--color-bg-modal);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
