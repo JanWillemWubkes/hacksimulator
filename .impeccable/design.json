@@ -1,0 +1,520 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-19T07:05:59+00:00",
+  "title": "Design System: HackSimulator.nl",
+  "extensions": {
+    "colorMeta": {
+      "neon-lime": {
+        "role": "primary",
+        "displayName": "Neon Lime",
+        "canonical": "oklch(86.7% 0.233 129.9)",
+        "tonalRamp": [
+          "oklch(15.0% 0.233 129.9)",
+          "oklch(26.4% 0.233 129.9)",
+          "oklch(37.9% 0.233 129.9)",
+          "oklch(49.3% 0.233 129.9)",
+          "oklch(60.7% 0.233 129.9)",
+          "oklch(72.1% 0.233 129.9)",
+          "oklch(83.6% 0.233 129.9)",
+          "oklch(95.0% 0.233 129.9)"
+        ]
+      },
+      "neon-lime-hover": {
+        "role": "primary",
+        "displayName": "Neon Lime Deep",
+        "canonical": "oklch(79.5% 0.216 130.7)",
+        "tonalRamp": [
+          "oklch(15.0% 0.216 130.7)",
+          "oklch(26.4% 0.216 130.7)",
+          "oklch(37.9% 0.216 130.7)",
+          "oklch(49.3% 0.216 130.7)",
+          "oklch(60.7% 0.216 130.7)",
+          "oklch(72.1% 0.216 130.7)",
+          "oklch(83.6% 0.216 130.7)",
+          "oklch(95.0% 0.216 130.7)"
+        ]
+      },
+      "lime-aaa-light": {
+        "role": "primary",
+        "displayName": "Lime AAA (licht thema)",
+        "canonical": "oklch(75.3% 0.209 132.0)",
+        "tonalRamp": [
+          "oklch(15.0% 0.209 132.0)",
+          "oklch(26.4% 0.209 132.0)",
+          "oklch(37.9% 0.209 132.0)",
+          "oklch(49.3% 0.209 132.0)",
+          "oklch(60.7% 0.209 132.0)",
+          "oklch(72.1% 0.209 132.0)",
+          "oklch(83.6% 0.209 132.0)",
+          "oklch(95.0% 0.209 132.0)"
+        ]
+      },
+      "forest-cta-light": {
+        "role": "primary",
+        "displayName": "Forest CTA (licht thema)",
+        "canonical": "oklch(44.8% 0.108 151.3)",
+        "tonalRamp": [
+          "oklch(15.0% 0.108 151.3)",
+          "oklch(26.4% 0.108 151.3)",
+          "oklch(37.9% 0.108 151.3)",
+          "oklch(49.3% 0.108 151.3)",
+          "oklch(60.7% 0.108 151.3)",
+          "oklch(72.1% 0.108 151.3)",
+          "oklch(83.6% 0.108 151.3)",
+          "oklch(95.0% 0.108 151.3)"
+        ]
+      },
+      "night": {
+        "role": "neutral",
+        "displayName": "Night",
+        "canonical": "oklch(17.6% 0.014 258.4)",
+        "tonalRamp": [
+          "oklch(15.0% 0.014 258.4)",
+          "oklch(26.4% 0.014 258.4)",
+          "oklch(37.9% 0.014 258.4)",
+          "oklch(49.3% 0.014 258.4)",
+          "oklch(60.7% 0.014 258.4)",
+          "oklch(72.1% 0.014 258.4)",
+          "oklch(83.6% 0.014 258.4)",
+          "oklch(95.0% 0.014 258.4)"
+        ]
+      },
+      "night-sunken": {
+        "role": "neutral",
+        "displayName": "Night Sunken",
+        "canonical": "oklch(14.8% 0.010 254.7)",
+        "tonalRamp": [
+          "oklch(15.0% 0.010 254.7)",
+          "oklch(26.4% 0.010 254.7)",
+          "oklch(37.9% 0.010 254.7)",
+          "oklch(49.3% 0.010 254.7)",
+          "oklch(60.7% 0.010 254.7)",
+          "oklch(72.1% 0.010 254.7)",
+          "oklch(83.6% 0.010 254.7)",
+          "oklch(95.0% 0.010 254.7)"
+        ]
+      },
+      "night-raised": {
+        "role": "neutral",
+        "displayName": "Night Raised",
+        "canonical": "oklch(22.0% 0.016 256.8)",
+        "tonalRamp": [
+          "oklch(15.0% 0.016 256.8)",
+          "oklch(26.4% 0.016 256.8)",
+          "oklch(37.9% 0.016 256.8)",
+          "oklch(49.3% 0.016 256.8)",
+          "oklch(60.7% 0.016 256.8)",
+          "oklch(72.1% 0.016 256.8)",
+          "oklch(83.6% 0.016 256.8)",
+          "oklch(95.0% 0.016 256.8)"
+        ]
+      },
+      "night-hover": {
+        "role": "neutral",
+        "displayName": "Night Hover",
+        "canonical": "oklch(26.7% 0.015 256.8)",
+        "tonalRamp": [
+          "oklch(15.0% 0.015 256.8)",
+          "oklch(26.4% 0.015 256.8)",
+          "oklch(37.9% 0.015 256.8)",
+          "oklch(49.3% 0.015 256.8)",
+          "oklch(60.7% 0.015 256.8)",
+          "oklch(72.1% 0.015 256.8)",
+          "oklch(83.6% 0.015 256.8)",
+          "oklch(95.0% 0.015 256.8)"
+        ]
+      },
+      "chrome-black": {
+        "role": "neutral",
+        "displayName": "Chrome Black",
+        "canonical": "oklch(21.8% 0.000 89.9)",
+        "tonalRamp": [
+          "oklch(15.0% 0.000 89.9)",
+          "oklch(26.4% 0.000 89.9)",
+          "oklch(37.9% 0.000 89.9)",
+          "oklch(49.3% 0.000 89.9)",
+          "oklch(60.7% 0.000 89.9)",
+          "oklch(72.1% 0.000 89.9)",
+          "oklch(83.6% 0.000 89.9)",
+          "oklch(95.0% 0.000 89.9)"
+        ]
+      },
+      "soft-white": {
+        "role": "neutral",
+        "displayName": "Soft White",
+        "canonical": "oklch(85.7% 0.014 248.0)",
+        "tonalRamp": [
+          "oklch(15.0% 0.014 248.0)",
+          "oklch(26.4% 0.014 248.0)",
+          "oklch(37.9% 0.014 248.0)",
+          "oklch(49.3% 0.014 248.0)",
+          "oklch(60.7% 0.014 248.0)",
+          "oklch(72.1% 0.014 248.0)",
+          "oklch(83.6% 0.014 248.0)",
+          "oklch(95.0% 0.014 248.0)"
+        ]
+      },
+      "dim-grey": {
+        "role": "neutral",
+        "displayName": "Dim Grey",
+        "canonical": "oklch(72.8% 0.014 251.6)",
+        "tonalRamp": [
+          "oklch(15.0% 0.014 251.6)",
+          "oklch(26.4% 0.014 251.6)",
+          "oklch(37.9% 0.014 251.6)",
+          "oklch(49.3% 0.014 251.6)",
+          "oklch(60.7% 0.014 251.6)",
+          "oklch(72.1% 0.014 251.6)",
+          "oklch(83.6% 0.014 251.6)",
+          "oklch(95.0% 0.014 251.6)"
+        ]
+      },
+      "border-grey": {
+        "role": "neutral",
+        "displayName": "Border Grey",
+        "canonical": "oklch(33.0% 0.015 252.3)",
+        "tonalRamp": [
+          "oklch(15.0% 0.015 252.3)",
+          "oklch(26.4% 0.015 252.3)",
+          "oklch(37.9% 0.015 252.3)",
+          "oklch(49.3% 0.015 252.3)",
+          "oklch(60.7% 0.015 252.3)",
+          "oklch(72.1% 0.015 252.3)",
+          "oklch(83.6% 0.015 252.3)",
+          "oklch(95.0% 0.015 252.3)"
+        ]
+      },
+      "azure-deep": {
+        "role": "secondary",
+        "displayName": "Azure Deep",
+        "canonical": "oklch(40.2% 0.145 257.4)",
+        "tonalRamp": [
+          "oklch(15.0% 0.145 257.4)",
+          "oklch(26.4% 0.145 257.4)",
+          "oklch(37.9% 0.145 257.4)",
+          "oklch(49.3% 0.145 257.4)",
+          "oklch(60.7% 0.145 257.4)",
+          "oklch(72.1% 0.145 257.4)",
+          "oklch(83.6% 0.145 257.4)",
+          "oklch(95.0% 0.145 257.4)"
+        ]
+      },
+      "signal-error": {
+        "role": "tertiary",
+        "displayName": "Signal Error",
+        "canonical": "oklch(73.0% 0.155 24.4)",
+        "tonalRamp": [
+          "oklch(15.0% 0.155 24.4)",
+          "oklch(26.4% 0.155 24.4)",
+          "oklch(37.9% 0.155 24.4)",
+          "oklch(49.3% 0.155 24.4)",
+          "oklch(60.7% 0.155 24.4)",
+          "oklch(72.1% 0.155 24.4)",
+          "oklch(83.6% 0.155 24.4)",
+          "oklch(95.0% 0.155 24.4)"
+        ]
+      },
+      "signal-warning": {
+        "role": "tertiary",
+        "displayName": "Signal Warning",
+        "canonical": "oklch(72.0% 0.140 79.9)",
+        "tonalRamp": [
+          "oklch(15.0% 0.140 79.9)",
+          "oklch(26.4% 0.140 79.9)",
+          "oklch(37.9% 0.140 79.9)",
+          "oklch(49.3% 0.140 79.9)",
+          "oklch(60.7% 0.140 79.9)",
+          "oklch(72.1% 0.140 79.9)",
+          "oklch(83.6% 0.140 79.9)",
+          "oklch(95.0% 0.140 79.9)"
+        ]
+      },
+      "signal-info": {
+        "role": "tertiary",
+        "displayName": "Signal Info",
+        "canonical": "oklch(78.6% 0.115 246.7)",
+        "tonalRamp": [
+          "oklch(15.0% 0.115 246.7)",
+          "oklch(26.4% 0.115 246.7)",
+          "oklch(37.9% 0.115 246.7)",
+          "oklch(49.3% 0.115 246.7)",
+          "oklch(60.7% 0.115 246.7)",
+          "oklch(72.1% 0.115 246.7)",
+          "oklch(83.6% 0.115 246.7)",
+          "oklch(95.0% 0.115 246.7)"
+        ]
+      },
+      "signal-success": {
+        "role": "tertiary",
+        "displayName": "Signal Success",
+        "canonical": "oklch(69.5% 0.181 145.6)",
+        "tonalRamp": [
+          "oklch(15.0% 0.181 145.6)",
+          "oklch(26.4% 0.181 145.6)",
+          "oklch(37.9% 0.181 145.6)",
+          "oklch(49.3% 0.181 145.6)",
+          "oklch(60.7% 0.181 145.6)",
+          "oklch(72.1% 0.181 145.6)",
+          "oklch(83.6% 0.181 145.6)",
+          "oklch(95.0% 0.181 145.6)"
+        ]
+      },
+      "paper-light": {
+        "role": "neutral",
+        "displayName": "Paper (licht thema)",
+        "canonical": "oklch(97.9% 0.000 89.9)",
+        "tonalRamp": [
+          "oklch(15.0% 0.000 89.9)",
+          "oklch(26.4% 0.000 89.9)",
+          "oklch(37.9% 0.000 89.9)",
+          "oklch(49.3% 0.000 89.9)",
+          "oklch(60.7% 0.000 89.9)",
+          "oklch(72.1% 0.000 89.9)",
+          "oklch(83.6% 0.000 89.9)",
+          "oklch(95.0% 0.000 89.9)"
+        ]
+      },
+      "paper-sunken-light": {
+        "role": "neutral",
+        "displayName": "Paper Sunken (licht thema)",
+        "canonical": "oklch(94.8% 0.003 247.9)",
+        "tonalRamp": [
+          "oklch(15.0% 0.003 247.9)",
+          "oklch(26.4% 0.003 247.9)",
+          "oklch(37.9% 0.003 247.9)",
+          "oklch(49.3% 0.003 247.9)",
+          "oklch(60.7% 0.003 247.9)",
+          "oklch(72.1% 0.003 247.9)",
+          "oklch(83.6% 0.003 247.9)",
+          "oklch(95.0% 0.003 247.9)"
+        ]
+      },
+      "paper-raised-light": {
+        "role": "neutral",
+        "displayName": "Paper Raised (licht thema)",
+        "canonical": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "oklch(15.0% 0.000 89.9)",
+          "oklch(26.4% 0.000 89.9)",
+          "oklch(37.9% 0.000 89.9)",
+          "oklch(49.3% 0.000 89.9)",
+          "oklch(60.7% 0.000 89.9)",
+          "oklch(72.1% 0.000 89.9)",
+          "oklch(83.6% 0.000 89.9)",
+          "oklch(95.0% 0.000 89.9)"
+        ]
+      },
+      "ink-light": {
+        "role": "neutral",
+        "displayName": "Ink (licht thema)",
+        "canonical": "oklch(14.5% 0.000 89.9)",
+        "tonalRamp": [
+          "oklch(15.0% 0.000 89.9)",
+          "oklch(26.4% 0.000 89.9)",
+          "oklch(37.9% 0.000 89.9)",
+          "oklch(49.3% 0.000 89.9)",
+          "oklch(60.7% 0.000 89.9)",
+          "oklch(72.1% 0.000 89.9)",
+          "oklch(83.6% 0.000 89.9)",
+          "oklch(95.0% 0.000 89.9)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "De h1 van een landingspagina. Een per pagina."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Sectiekoppen."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Kaartkoppen en subsecties."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Lopende tekst. Basis 18px, op mobiel 16px."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Eyebrow-badges en metadata, monospace."
+      },
+      "terminal": {
+        "displayName": "Terminal",
+        "purpose": "Alle simulatoroutput. Kolomuitlijning is functioneel."
+      }
+    },
+    "shadows": [
+      {
+        "name": "geen",
+        "value": "none",
+        "purpose": "Dit systeem gebruikt geen schaduwen. Diepte komt uit de toonladder (#080b0f / #0d1117 / #161b22 / #21262d) en 1px randen in #30363d. De tokens --shadow-elevation-1/-2 bestaan nog maar zijn restanten, geen vocabulaire."
+      },
+      {
+        "name": "prompt-focus",
+        "value": "0 0 0 3px rgba(159, 239, 0, 0.15)",
+        "purpose": "Enige sanctionele uitzondering: focusring op terminalinvoer. Dit is toestandsfeedback, geen elevatie."
+      }
+    ],
+    "motion": [
+      {
+        "name": "transition-fast",
+        "value": "0.15s ease",
+        "purpose": "Hover- en focuswissels op knoppen, links en velden."
+      },
+      {
+        "name": "transition-normal",
+        "value": "0.3s ease",
+        "purpose": "Grotere toestandswissels: menu openklappen, modals."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "Altijd respecteren; motion is nooit dragend voor betekenis."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobile",
+        "value": "768px"
+      },
+      {
+        "name": "small",
+        "value": "480px"
+      },
+      {
+        "name": "container-max",
+        "value": "1400px"
+      },
+      {
+        "name": "terminal-max",
+        "value": "1200px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "De hoofdweg. Neon Lime vlak met donkere tekst; een per scherm.",
+      "html": "<button class=\"ds-btn-primary\">Start met leren</button>",
+      "css": ".ds-btn-primary { background: var(--color-cta-primary, #9fef00); color: var(--color-cta-text, #0d1117); font-family: var(--font-heading, 'Space Grotesk', sans-serif); font-size: 16px; font-weight: 600; padding: 8px 16px; border: 2px solid transparent; border-radius: var(--border-radius-button, 4px); cursor: pointer; transition: background var(--transition-fast, .15s ease); } .ds-btn-primary:hover { background: var(--color-cta-primary-hover, #8ad600); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-cta-primary, #9fef00); outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Rustig van zichzelf; kleurt pas bij interactie.",
+      "html": "<button class=\"ds-btn-secondary\">Bekijk de gidsen</button>",
+      "css": ".ds-btn-secondary { background: transparent; color: var(--color-ui-secondary, #a1a8b0); font-family: var(--font-heading, 'Space Grotesk', sans-serif); font-size: 16px; padding: 8px 16px; border: 2px solid var(--color-ui-secondary, #a1a8b0); border-radius: var(--border-radius-button, 4px); cursor: pointer; transition: color var(--transition-fast, .15s ease), border-color var(--transition-fast, .15s ease); } .ds-btn-secondary:hover { color: var(--color-cta-primary, #9fef00); border-color: var(--color-cta-primary, #9fef00); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--color-cta-primary, #9fef00); outline-offset: 2px; }"
+    },
+    {
+      "name": "Eyebrow Badge",
+      "kind": "chip",
+      "refersTo": "eyebrow-badge",
+      "description": "De kanonieke chip: monolabel dat context geeft boven een kop. Statisch, labelt en schakelt niet.",
+      "html": "<span class=\"ds-eyebrow\">Browser-based Terminal Simulator</span>",
+      "css": ".ds-eyebrow { display: inline-block; font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 13.5px; font-weight: 500; letter-spacing: .5px; color: var(--color-prompt, #9fef00); background: var(--color-prompt-bg-subtle, rgba(159,239,0,.05)); border: 1px solid var(--color-prompt-border-light, rgba(159,239,0,.3)); border-radius: 20px; padding: 4px 16px; }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Halftransparant opgetild vlak; de paginatoon schemert door. Geen schaduw.",
+      "html": "<div class=\"ds-card\"><h3>40+ commands uit de praktijk</h3><p>Van bestandssysteem tot netwerkscans.</p></div>",
+      "css": ".ds-card { background: rgba(22, 27, 34, .5); border: 1px solid var(--color-border, #30363d); border-radius: 16px; padding: 32px; } .ds-card h3 { font-family: var(--font-heading, 'Space Grotesk', sans-serif); font-size: 22.5px; font-weight: 600; line-height: 1.2; color: var(--color-text, #c9d1d9); margin: 0 0 8px; } .ds-card p { font-family: var(--font-body, Inter, sans-serif); font-size: 18px; line-height: 1.5; color: var(--color-text-dim, #a1a8b0); margin: 0; }"
+    },
+    {
+      "name": "Terminal Input",
+      "kind": "input",
+      "refersTo": "terminal-input",
+      "description": "Waar je typt. Monospace, Neon Lime, haarlijnrand, geen afronding.",
+      "html": "<div class=\"ds-terminal-line\"><span class=\"ds-prompt\">user@hacksim:~$</span><input class=\"ds-terminal-input\" value=\"nmap 192.168.1.1\"></div>",
+      "css": ".ds-terminal-line { display: flex; align-items: center; gap: 8px; background: var(--color-bg-terminal, #0d1117); } .ds-prompt { font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 18px; color: var(--color-prompt, #9fef00); } .ds-terminal-input { flex: 1; font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 18px; color: var(--color-input, #9fef00); background: var(--color-bg-terminal, #0d1117); border: 1px solid var(--color-border, #30363d); border-radius: 0; padding: 8px 12px; } .ds-terminal-input:focus { outline: none; border-color: var(--color-prompt, #9fef00); box-shadow: 0 0 0 3px var(--color-prompt-shadow, rgba(159,239,0,.15)); }"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Dark Frame: blijft donker in beide thema's, dus alle kleuren erin zijn thema-onafhankelijk vastgezet.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\" class=\"ds-nav-link ds-active\">Terminal</a><a href=\"#\" class=\"ds-nav-link\">Gidsen</a><a href=\"#\" class=\"ds-nav-link\">Blog</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 24px; height: 60px; padding: 0 32px; background: var(--color-bg-navbar, #1a1a1a); } .ds-nav-link { font-family: var(--font-body, Inter, sans-serif); font-size: 1rem; font-weight: 500; color: var(--color-navbar-link, #c9d1d9); text-decoration: none; padding: 8px 0; border-bottom: 2px solid transparent; min-height: 44px; display: flex; align-items: center; transition: color var(--transition-fast, .15s ease); } .ds-nav-link:hover { color: var(--color-navbar-link-hover, #fff); border-bottom-color: var(--navbar-accent, #9fef00); } .ds-nav-link.ds-active { border-bottom-color: var(--color-navbar-underline, #58a6ff); }"
+    },
+    {
+      "name": "Terminal Output Line",
+      "kind": "custom",
+      "refersTo": "terminal",
+      "description": "Het handtekeningcomponent. De renderer kleurt op het eerste teken: [X] rood, vinkje groen, [TIP] als les. Kolomuitlijning is functioneel, geen smaak.",
+      "html": "<pre class=\"ds-terminal-output\"><span class=\"ds-line\">22/tcp   open  ssh     OpenSSH 8.2p1</span>\n<span class=\"ds-line ds-nl\">  &lt;- Secure Shell: versleutelde toegang op afstand</span>\n<span class=\"ds-line ds-tip\">[TIP] Open poorten zijn mogelijke ingangen. Kijk altijd welke versie er draait.</span>\n<span class=\"ds-line ds-ok\">[✓] Scan voltooid</span>\n<span class=\"ds-line ds-err\">[X] Host niet bereikbaar</span></pre>",
+      "css": ".ds-terminal-output { font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 18px; line-height: 1.5; background: var(--color-bg-terminal, #0d1117); color: var(--color-text, #c9d1d9); padding: 20px; margin: 0; white-space: pre; overflow-x: auto; } .ds-line { display: block; } .ds-nl { color: var(--color-text-dim, #a1a8b0); } .ds-tip { color: var(--color-info, #79c0ff); } .ds-ok { color: var(--color-success, #3fb950); } .ds-err { color: var(--color-error, #fa7c76); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "De ondertitelde terminal",
+    "overview": "Alles ziet er echt en Engels uit, met Nederlands dat er rustig naast meeloopt. Dat is tegelijk de positionering van het product en de vorm van elke output: de tool spreekt zoals de echte tool spreekt, en de uitleg staat ernaast in plaats van eroverheen. Een bezoeker die op Engels afhaakt kan hier meekijken zonder dat het echte werk verwatert.\n\nHet systeem is donker, vlak en precies. De diepte komt niet uit schaduw maar uit een toonladder van vier stappen en uit haarlijnen van 1px. Het neon-lime accent is zeldzaam: het markeert waar jij aan zet bent (de prompt, wat je typt, de primaire CTA) en verder niets. Die zeldzaamheid is de reden dat het werkt. De omliggende site is bewust stiller dan het terminalvenster, zodat het terminalvenster de hoofdrol houdt.\n\nToon is bemoedigend en nuchter. Geen hype, geen opgeklopte cijfers, geen urgentie die er niet is. Wat je ziet is wat het is.",
+    "keyCharacteristics": [
+      "Donkerbasis #0d1117 met een tonale ladder in vier stappen; geen schaduwen.",
+      "Een schel accent (#9fef00), spaarzaam ingezet als signaal, nooit als decoratie.",
+      "Drie fonts met drie duidelijke rollen: Space Grotesk kopt, Inter leest, JetBrains Mono werkt.",
+      "Volwaardig licht thema met eigen AAA-afgestemde waarden, niet een omgekeerd donker thema.",
+      "Chrome (navbar, footer) blijft donker in beide thema's: het Dark Frame-patroon."
+    ],
+    "rules": [
+      {
+        "name": "The One Voice Rule",
+        "section": "colors",
+        "body": "Neon Lime markeert alleen waar de gebruiker aan zet is: de prompt, de invoer, de primaire CTA, en hover in het Dark Frame. Zodra het ook decoratie wordt, stopt het met signaleren en is het alleen nog fel."
+      },
+      {
+        "name": "The Dark Frame Rule",
+        "section": "colors",
+        "body": "Navbar en footer zijn in beide thema's donker (#1a1a1a). Kleuren die daarop landen zijn daarom thema-onafhankelijk vastgezet. Gebruik nooit een thema-afhankelijke tekstkleur op dat vaste donker: in het lichte thema wordt die onzichtbaar."
+      },
+      {
+        "name": "The Measured Contrast Rule",
+        "section": "colors",
+        "body": "Elke kleurwaarde is gekozen op een gemeten ratio, niet op gevoel. Een nieuwe waarde is pas geldig als de 7 contrast-specs in tests/e2e/ groen blijven. Doel is AAA, niet AA."
+      },
+      {
+        "name": "The Three Voices Rule",
+        "section": "typography",
+        "body": "Drie fonts, drie rollen: Space Grotesk kopt, Inter leest, JetBrains Mono werkt. Een vierde familie voegt niets toe wat een gewicht niet ook kan."
+      },
+      {
+        "name": "The Shell Is Mono Rule",
+        "section": "typography",
+        "body": "Alles binnen het terminalvenster is monospace: output, prompt en invoer. asciiBox en de nmap-achtige output rekenen op kolomuitlijning, en prompt en invoer moeten dezelfde metriek hebben als de regels erboven. Dit wordt op dit moment geschonden."
+      },
+      {
+        "name": "The Scale Gap Rule",
+        "section": "typography",
+        "body": "De sprong van Headline (45px) naar Title (22,5px) is precies factor twee, terwijl Display naar Headline factor 1,4 is. Dat gat is niet ontworpen maar ontstaan. Elke nieuwe tussenlaag hoort die verhouding te repareren, niet te verdiepen."
+      },
+      {
+        "name": "The No Shadow Rule",
+        "section": "elevation",
+        "body": "Een shell heeft geen schaduwen; schaduw is een papiermetafoor en dit is geen papier. Wie diepte nodig heeft pakt de volgende toontrede of een haarlijn. De enige uitzondering die nog ter discussie staat is de neon-glow rond het terminalvenster: die is identiteit, geen elevatie."
+      }
+    ],
+    "dos": [
+      "Do diepte uitdrukken in de toonladder (#080b0f / #0d1117 / #161b22 / #21262d) en 1px #30363d-randen.",
+      "Do Neon Lime bewaren voor waar de gebruiker aan zet is. Zeldzaamheid is de functie.",
+      "Do elke nieuwe kleurwaarde afrekenen op een gemeten ratio en de 7 contrast-specs in tests/e2e/ groen houden. Doel is AAA.",
+      "Do voor het lichte thema een eigen waarde kiezen in plaats van de donkere om te keren.",
+      "Do thema-onafhankelijke kleuren gebruiken op navbar en footer.",
+      "Do elke nieuwe kleur, radius of spacing als token toevoegen, niet als losse waarde."
+    ],
+    "donts": [
+      "Don't schaduwen introduceren. Dit systeem is vlak.",
+      "Don't het terminalvenster uit monospace halen. Nu geschonden: #terminal-input declareert hardgecodeerd Courier New en omzeilt het token, #terminal-prompt declareert geen font-family en erft Inter.",
+      "Don't emoji gebruiken in code of output. ASCII-markers, altijd.",
+      "Don't een vierde lettertypefamilie toevoegen.",
+      "Don't !important gebruiken in styles/; win op specificiteit.",
+      "Don't het groene accent van de hoofdsite doortrekken naar de blog. Die gebruikt bewust blauw.",
+      "Don't een buildstap, framework of bundler introduceren om een ontwerpprobleem op te lossen."
+    ]
+  }
+}
