@@ -818,16 +818,25 @@
 - [ ] Mobile real device testing (iOS, Android)
 - [ ] Beta testers werven (5+ testers)
 - [ ] GA4 Real-Time dashboard verificatie
-- [ ] **Augustus-nieuwsbrief: dark-mode-test op telefoon (Sessie 206)** — kopieer
-  `docs/newsletter/nieuwsbrief-juli-2026.html` als basis (níét april: die draagt de
-  MailerLite-merge-tags `{$unsubscribe}`/`{$url}`, die Brevo niet vervangt, plus twee dode
-  blog-URLs — de klassen zijn wél identiek aan juli, beide gefixt in `8045b29`, dus dát is
-  geen onderscheid) en open de test-send op de telefoon in dark mode. Twee open vragen die
-  alleen daar te beantwoorden zijn: (a) houdt de bg+color-koppeling de tekst op de lime
-  balk/knoppen donker in de Gmail-app, en (b) gaat het `<style>`-blok mee bij import — een
-  HTML-blok in een drag-and-drop-ontwerp draagt geen `<head>`, en zonder dat blok doen
-  `.code-inline`/`.code-block` niets. Blijft de tekst wit → escaleren naar de ontwerpvariant
-  (donkere balk/knop met groene tekst; die kan Gmail's dark mode per definitie niet breken).
+- [x] **Augustus-nieuwsbrief: dark-mode-test op telefoon (Sessie 206) — BEANTWOORD, en het
+  antwoord was "nee".** Heisenberg meldde de witte tekst op de groene balk opnieuw, dus de
+  bg+color-mitigatie uit Sessie 206 heeft de Gmail-app niet tegengehouden. Vraag (a) is daarmee
+  beslist en de escalatie die hier als plan B stond, is uitgevoerd in de september-editie:
+  balk én knoppen zijn omgedraaid naar `#0d1117` met `#9fef00` tekst (+ 2px groene rand op de
+  knop). Gemeten: wit op groen haalt **1,42:1**, groen op donker **13,36:1**. Het bewijs dat de
+  omgekeerde combinatie wél standhoudt stond al in dezelfde mail — de codeblokken dragen dat
+  paar sinds editie één en zijn nooit gemeld. Vraag (b) (gaat het `<style>`-blok mee bij
+  import) staat nog open en verhuist naar het item hieronder.
+- [ ] **September-nieuwsbrief: test-send vóór dinsdag 22 september 10:00 CET.** Bestand:
+  `docs/newsletter/nieuwsbrief-september-2026.html`, via **Import HTML** (niet de
+  drag-and-drop editor). Drie dingen om op de telefoon in dark mode te controleren:
+  (a) staat de tekst op de balk en de knoppen **groen op donker** — is hij wit of grijs, dan is
+  dat een nieuw geval en zijn beide ontwerpen uitgeput, meld het dan in plaats van zelf bij te
+  kleuren; (b) gaat het `<style>`-blok mee bij de import (een HTML-blok in een drag-and-drop-
+  ontwerp draagt geen `<head>`, en zonder dat blok doen `.code-inline`/`.code-block` niets);
+  (c) blijven de drie codeblokken binnen hun regels — de fontstack uit augustus gaat nu voor
+  de tweede keer door een echte client. Verder: `{{ unsubscribe }}` écht aanklikken, en de
+  regel in `maandelijks-template.md` §Klaargezet verplaatsen naar §Verstuurd zodra hij weg is.
 
 ---
 
