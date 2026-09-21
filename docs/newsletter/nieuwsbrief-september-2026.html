@@ -116,7 +116,7 @@ Het stond al in een bestand dat de server zelf bijhoudt.&#847;&zwnj;&nbsp;&#847;
 <span class="body-text" style="color:#8b949e;">Een Linux-server schrijft mee. Niet omdat iemand dat heeft aangezet, maar omdat het standaard gebeurt: elke keer dat iemand probeert in te loggen, komt er een regel bij in een <strong class="heading-text" style="color:#c9d1d9;">logbestand</strong>. Een dagboek dat de server over zichzelf bijhoudt, zonder dat er iemand naar kijkt.</span>
 </p>
 <p style="margin:0 0 16px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.65;">
-<span class="body-text" style="color:#8b949e;">Je hoeft zo'n bestand niet te begrijpen om er iets in te vinden. Je hebt er twee commando's voor nodig, en het verschil daartussen is meteen het hele idee: </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">find</code><span class="body-text" style="color:#8b949e;"> zoekt in bestands<em>namen</em>, </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">grep</code><span class="body-text" style="color:#8b949e;"> zoekt in de <em>inhoud</em> van een bestand. Eerst zoek je dus waar het staat:</span>
+<span class="body-text" style="color:#8b949e;">Je hoeft zo'n bestand niet te begrijpen om erin te kunnen kijken. Je moet alleen weten waar het staat, en daar is </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">find</code><span class="body-text" style="color:#8b949e;"> voor: dat zoekt in bestands<em>namen</em>.</span>
 </p>
 
 <!-- Code Block 1: find -->
@@ -131,10 +131,45 @@ $ find log<br>
 </table>
 
 <p style="margin:0 0 16px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.65;">
-<span class="body-text" style="color:#8b949e;">Drie treffers, en de middelste is de interessante. De </span><em><span class="body-text" style="color:#8b949e;">auth</span></em><span class="body-text" style="color:#8b949e;"> in </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">auth.log</code><span class="body-text" style="color:#8b949e;"> staat voor <em>authentication</em>: wie zich heeft aangemeld, en of dat lukte. Ga er eerst heen met </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">cd /var/log</code><span class="body-text" style="color:#8b949e;">, dan hoef je het hele pad daarna niet meer te typen. En zoek in de inhoud naar het woord dat je wil hebben:</span>
+<span class="body-text" style="color:#8b949e;">Drie treffers, en de middelste is de interessante. De <em>auth</em> in </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">auth.log</code><span class="body-text" style="color:#8b949e;"> staat voor <em>authentication</em>: wie zich heeft aangemeld, en of dat lukte. Ga erheen met </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">cd /var/log</code><span class="body-text" style="color:#8b949e;"> en open het bestand:</span>
 </p>
 
-<!-- Code Block 2: grep Failed -->
+<!-- Code Block 2: het hele logbestand -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px 0;">
+<tr><td class="code-block" style="background-color:#0d1117;color:#9fef00;padding:16px 20px;border-radius:6px;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:13px;line-height:1.8;word-break:break-all;overflow-wrap:break-word;">
+$ cat auth.log<br>
+<br>
+10:23:45 Accepted password<br>
+&nbsp;&nbsp;&nbsp;for hacker from<br>
+&nbsp;&nbsp;&nbsp;192.168.1.50<br>
+10:25:12 Failed password<br>
+&nbsp;&nbsp;&nbsp;for root from 10.0.0.99<br>
+10:25:15 Failed password<br>
+&nbsp;&nbsp;&nbsp;for root from 10.0.0.99<br>
+10:25:18 Failed password<br>
+&nbsp;&nbsp;&nbsp;for root from 10.0.0.99<br>
+10:25:20 Connection closed<br>
+&nbsp;&nbsp;&nbsp;by 10.0.0.99
+</td></tr>
+</table>
+
+<p style="margin:0 0 16px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.65;">
+<span class="body-text" style="color:#8b949e;">Vijf regels, en samen vertellen ze een verhaal. Bovenaan logt <strong class="heading-text" style="color:#c9d1d9;">hacker</strong> zichzelf in vanaf 192.168.1.50 &mdash; <em>Accepted</em>, gelukt. Daarna probeert iemand vanaf een heel ander adres, 10.0.0.99, het wachtwoord van <strong class="heading-text" style="color:#c9d1d9;">root</strong> &mdash; het account dat op een Linux-systeem alles mag. <em>Failed</em>, drie keer achter elkaar. En dan gaat de verbinding dicht.</span>
+</p>
+
+<p style="margin:0 0 16px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.65;">
+<span class="body-text" style="color:#8b949e;">Kijk nu naar de klok: 10:25:12, dan 10:25:15, dan 10:25:18. <strong class="heading-text" style="color:#c9d1d9;">Precies drie seconden ertussen.</strong> Iemand die zijn eigen wachtwoord vergeten is, typt onregelmatig, vloekt een keer en probeert het twee minuten later nog eens. Dit ritme hoort bij een programma dat een lijst met wachtwoorden afwerkt. De inhoud van de regels vertelt je <em>wat</em> er gebeurde. Het tempo vertelt je <em>wie</em> het deed.</span>
+</p>
+
+<p style="margin:0 0 16px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.6;">
+<span class="body-text" style="color:#8b949e;">(Wat je op je scherm ziet is iets voller dan hierboven: op elke logregel staan ook nog een datum, de naam van de server en een poortnummer, en de simulator zet er zelf nog een hint onder. Ik heb dat hier weggelaten &mdash; anders past &eacute;&eacute;n logregel niet eens in je mail.)</span>
+</p>
+
+<p style="margin:0 0 16px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.65;">
+<span class="body-text" style="color:#8b949e;">Dit oefenbestand heeft vijf regels, dus je ziet het verhaal in &eacute;&eacute;n oogopslag. Een echte server schrijft er duizenden per dag, en dan werkt scrollen niet meer. Daarvoor is het tweede commando: </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">grep</code><span class="body-text" style="color:#8b949e;"> zoekt niet in bestandsnamen maar in de <em>inhoud</em>. En je weet inmiddels welk woord je zoekt &mdash; een mislukte poging heet hier <em>Failed</em>:</span>
+</p>
+
+<!-- Code Block 3: filteren met grep -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px 0;">
 <tr><td class="code-block" style="background-color:#0d1117;color:#9fef00;padding:16px 20px;border-radius:6px;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:13px;line-height:1.8;word-break:break-all;overflow-wrap:break-word;">
 $ grep Failed auth.log<br>
@@ -149,36 +184,14 @@ $ grep Failed auth.log<br>
 </table>
 
 <p style="margin:0 0 16px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.65;">
-<span class="body-text" style="color:#8b949e;">Het getal vooraan is het regelnummer in het bestand. <em>Failed password for root</em> betekent: iemand probeerde het wachtwoord van <strong class="heading-text" style="color:#c9d1d9;">root</strong> &mdash; het account dat op een Linux-systeem alles mag &mdash; en had het fout. Drie keer, en elke keer vanaf hetzelfde adres: 10.0.0.99.</span>
-</p>
-<p style="margin:0 0 16px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.65;">
-<span class="body-text" style="color:#8b949e;">Kijk nu naar de klok: 10:25:12, dan 10:25:15, dan 10:25:18. <strong class="heading-text" style="color:#c9d1d9;">Precies drie seconden ertussen.</strong> Iemand die zijn eigen wachtwoord vergeten is, typt onregelmatig, vloekt een keer en probeert het twee minuten later nog eens. Dit ritme hoort bij een programma dat een lijst met wachtwoorden afwerkt. De inhoud van de regels vertelt je <em>wat</em> er gebeurde. Het tempo vertelt je <em>wie</em> het deed.</span>
-</p>
-<p style="margin:0 0 16px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.6;">
-<span class="body-text" style="color:#8b949e;">(Wat je op je scherm ziet is iets voller dan hierboven: op elke logregel staan ook nog een datum, de naam van de server en een poortnummer, en onder elk resultaat zet de simulator een regel met uitleg. Ik heb dat hier weggelaten, anders past &eacute;&eacute;n logregel niet eens in je mail.)</span>
-</p>
-<p style="margin:0 0 16px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.65;">
-<span class="body-text" style="color:#8b949e;">Zoek je nu op het adres in plaats van op het woord, dan krijg je dezelfde drie regels terug &mdash; plus &eacute;&eacute;n die je nog niet had:</span>
+<span class="body-text" style="color:#8b949e;">Dezelfde drie regels, nu zonder de rest eromheen. Het getal vooraan is het regelnummer in het bestand, zodat je ze terugvindt &mdash; en dat klopt precies: regel&nbsp;1 was de geslaagde login van <strong class="heading-text" style="color:#c9d1d9;">hacker</strong>, dus de mislukte pogingen staan op 2, 3 en 4.</span>
 </p>
 
-<!-- Code Block 3: grep op het IP-adres -->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px 0;">
-<tr><td class="code-block" style="background-color:#0d1117;color:#9fef00;padding:16px 20px;border-radius:6px;font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;font-size:13px;line-height:1.8;word-break:break-all;overflow-wrap:break-word;">
-$ grep 10.0.0.99 auth.log<br>
-<br>
-5: 10:25:20 Connection<br>
-&nbsp;&nbsp;&nbsp;closed by 10.0.0.99
-</td></tr>
-</table>
-
-<p style="margin:0 0 16px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.65;">
-<span class="body-text" style="color:#8b949e;"><em>Connection closed</em>: twee seconden na de laatste poging gaat de verbinding dicht. Wie dit deed is gestopt, of doorgelopen naar de volgende server. Vier regels, en je weet wat er die ochtend gebeurd is &mdash; inclusief dat het niet gelukt is, want een geslaagde login had er als <em>Accepted</em> in gestaan.</span>
+<p style="margin:0 0 20px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.65;">
+<span class="body-text" style="color:#8b949e;">Dat is monitoring in zijn kortste vorm. Geen dashboard, geen abonnement: een bestand dat er toch al stond, en &eacute;&eacute;n goede zoekterm.</span>
 </p>
 <p style="margin:0 0 20px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.65;">
-<span class="body-text" style="color:#8b949e;">Dit is meteen de kortste vorm van monitoring die bestaat. Geen dashboard, geen abonnement: een bestand dat er toch al stond, en &eacute;&eacute;n goede zoekterm.</span>
-</p>
-<p style="margin:0 0 20px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.65;">
-<span class="body-text" style="color:#8b949e;"><strong class="heading-text" style="color:#c9d1d9;">Probeer het zelf:</strong> Open de simulator en typ </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">find log</code><span class="body-text" style="color:#8b949e;">, dan </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">cd /var/log</code><span class="body-text" style="color:#8b949e;"> en </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;">grep Failed auth.log</code><span class="body-text" style="color:#8b949e;">. Kijk daarna zelf eens wat </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;">grep Accepted auth.log</code><span class="body-text" style="color:#8b949e;"> oplevert &mdash; dat is de andere helft van het verhaal.</span>
+<span class="body-text" style="color:#8b949e;"><strong class="heading-text" style="color:#c9d1d9;">Probeer het zelf:</strong> Open de simulator en typ </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">find log</code><span class="body-text" style="color:#8b949e;">, dan </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">cd /var/log</code><span class="body-text" style="color:#8b949e;">, dan </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">cat auth.log</code><span class="body-text" style="color:#8b949e;"> en tot slot </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;">grep Failed auth.log</code><span class="body-text" style="color:#8b949e;">. Kijk daarna zelf eens wat </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;">grep Accepted auth.log</code><span class="body-text" style="color:#8b949e;"> oplevert.</span>
 </p>
 
 <!-- CTA Button -->
@@ -217,10 +230,13 @@ $ grep 10.0.0.99 auth.log<br>
 
 <!-- Aanbeveling -->
 <h2 style="margin:0 0 12px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:18px;line-height:1.4;">
-<span class="heading-text" style="color:#c9d1d9;">Waar kijk je in een echt logbestand?</span>
+<span class="heading-text" style="color:#c9d1d9;">En op je eigen computer?</span>
 </h2>
 <p style="margin:0 0 20px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.65;">
-<span class="body-text" style="color:#8b949e;">In de simulator is het bestand nagebouwd. Wil je in een <em>echte</em> </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">auth.log</code><span class="body-text" style="color:#8b949e;"> kijken, dan heb je een computer nodig die van jou is &mdash; en dat is net iets meer werk dan "installeer Kali". De gids <strong class="heading-text" style="color:#c9d1d9;">Je eigen hacklab</strong> bouwt hem op: virtualisatie, de netwerkmodus die bepaalt of je per ongeluk je hele huis scant, snapshots zodat je terug kunt als je iets sloopt, en een doelwit om legaal op te oefenen.</span>
+<span class="body-text" style="color:#8b949e;">Draai je zelf Linux? Dan heb je zo'n bestand ook &mdash; op Ubuntu en Debian meestal als </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">/var/log/auth.log</code><span class="body-text" style="color:#8b949e;">, op andere distributies onder een andere naam of via </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">journalctl</code><span class="body-text" style="color:#8b949e;">. Je hebt er </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">sudo</code><span class="body-text" style="color:#8b949e;"> voor nodig, want het logbestand is niet voor iedereen leesbaar. Kijken kun je dus meteen.
+</span></p>
+<p style="margin:0 0 20px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.65;">
+<span class="body-text" style="color:#8b949e;">Wat je thuis niet hebt is een doelwit waar je <em>op</em> mag oefenen &mdash; en zonder aanvalskant zie je nooit hoe die regels in je log terechtkomen. Daar is een eigen lab voor. De gids <strong class="heading-text" style="color:#c9d1d9;">Je eigen hacklab</strong> bouwt hem op: virtualisatie, de netwerkmodus die bepaalt of je per ongeluk je hele huis scant, snapshots zodat je terug kunt als je iets sloopt, en een doelwit om legaal op te oefenen.</span>
 </p>
 
 <!-- CTA Button (gidsen) -->
@@ -241,7 +257,7 @@ $ grep 10.0.0.99 auth.log<br>
 </table>
 
 <p style="margin:0 0 8px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.6;">
-<span class="body-text" style="color:#8b949e;">Nog niet aan een eigen lab toe? De </span><a href="https://hacksimulator.nl/sample-juridisch.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=september-2026" class="link-text" style="color:#79c0ff;text-decoration:underline;">gratis juridische sample</a><span class="body-text" style="color:#8b949e;"> uit de vorige nieuwsbrief legt eerst uit wat je buiten de simulator w&eacute;l en niet mag.</span>
+<span class="body-text" style="color:#8b949e;">Nog niet aan een eigen lab toe? De </span><a href="https://hacksimulator.nl/sample-juridisch.html?utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=september-2026" class="link-text" style="color:#79c0ff;text-decoration:underline;">gratis juridische sample</a><span class="body-text" style="color:#8b949e;"> legt eerst uit wat je buiten de simulator w&eacute;l en niet mag.</span>
 </p>
 
 </td></tr>

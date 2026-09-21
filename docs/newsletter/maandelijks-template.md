@@ -132,6 +132,13 @@ Dat is geen taalprobleem. Wie het onderwerp kent leest eroverheen, want zíjn ho
 herkomst zelf in. Alleen een lezer die het níét kent merkt het — en die krijg je pas te spreken
 nadat de mail verstuurd is. Leg een tip daarom langs deze drie vragen:
 
+0. **Komt elk commando-argument ergens vandaan?** De september-editie zei *"zoek in de inhoud
+   naar het woord dat je wil hebben"* en zette er `grep Failed auth.log` onder — terwijl het woord
+   *Failed* daarvóór nergens in de mail stond. De lezer moest een zoekterm aannemen die hij
+   nooit gezien had. Opgelost door er een stap vóór te zetten: eerst `cat auth.log`, zodat de
+   lezer *Failed* met eigen ogen in het bestand ziet staan, en `grep` daarna gemotiveerd is door
+   schaal ("dit bestand heeft 5 regels, een echte server duizenden"). Dezelfde fout als hieronder,
+   maar op een argument in plaats van op een symbool — en daarom makkelijk te missen.
 1. **Komt elk symbool ergens vandaan?** Als er ineens vier apostrofs op precieze plekken staan,
    moet de tekst zeggen wie ze daar heeft gezet en waarom. "Zo ziet het er in het echt uit" is
    geen uitleg maar een verzoek om vertrouwen.
@@ -164,7 +171,10 @@ achter met het gevoel dat hij iets gemist heeft.
 Er is ook geen uitweg via een link: de mirror-link (`{{ mirror }}`) is per ontvanger en werkt
 dus alleen voor wie de mail zelf kreeg. Er is **geen publiek archief** van verstuurde edities.
 
-**Regel:** schrijf de intro zo dat hij klopt voor editie 1 én editie 10. Verwijs naar het
+**Regel:** schrijf de intro zo dat hij klopt voor editie 1 én editie 10 — en controleer de
+**hele** mail op ditzelfde patroon. In de september-editie stond de aanname twee keer: in de
+intro, en onderaan bij *"de gratis juridische sample uit de vorige nieuwsbrief"*. Die tweede
+ontsnapte aan de eerste correctieronde. Verwijs naar het
 terugkerende *thema* van de nieuwsbrief, niet naar een specifieke vorige aflevering.
 
 ```
@@ -175,6 +185,18 @@ GOED   Meestal kijk je in deze nieuwsbrief mee met de aanvaller. Deze keer sta j
 
 De tweede zin beloont een vaste lezer nog steeds (hij hérkent het), maar vraagt niets van een
 nieuwe.
+
+### Neem niet aan wat de lezer niet heeft
+
+De aanbeveling van september begon als *"Wil je in een echte `auth.log` kijken, dan heb je een
+computer nodig die van jou is"* — met een VM-gids eronder. Dat klopt niet voor de lezer die al
+Linux draait: die kan het logbestand gewoon openen, zonder iets te installeren.
+
+Zo'n aanname kost je precies de lezer die het verst is. Controleer een aanbeveling daarom op de
+vraag: **wat als de lezer dit al heeft?** Vaak is het antwoord dat het product een ándere waarde
+heeft dan je eerst opschreef — en dat is meestal de betere pitch. Hier werd het: kijken kan
+iedereen met Linux meteen, maar een doelwit waar je legaal op mag *aanvallen* heeft niemand
+thuis. Dát is wat de hacklab-gids levert.
 
 ### Woordkeuze: geen "machine" (gemeten, september 2026)
 
