@@ -827,6 +827,26 @@
   omgekeerde combinatie wél standhoudt stond al in dezelfde mail — de codeblokken dragen dat
   paar sinds editie één en zijn nooit gemeld. Vraag (b) (gaat het `<style>`-blok mee bij
   import) staat nog open en verhuist naar het item hieronder.
+- [ ] **`find` in de simulator wijkt twee kanten op af van echt Linux (gevonden Sessie 235).**
+  Heisenberg typte `find log` in een terminal en kreeg niets — de nieuwsbrief leerde een syntaxis
+  die buiten de simulator niet bestaat. Gemeten tegen `src/commands/filesystem/find.js`:
+
+  | invoer | simulator | echt Linux |
+  |---|---|---|
+  | `find log` | 3 treffers | niets (zoekt ín een map génaamd `log`) |
+  | `find . -name "log"` | **7 onzin-treffers** (de punt matcht als substring) | correct |
+  | `find /var -name "*.log"` | foutmelding | correct |
+
+  De vereenvoudiging is **bewust en gedocumenteerd** — `man find` zegt het zelf onder
+  *"[!] In deze simulator"* en *"[→] In real Linux"*. Het probleem is dat die disclosure
+  alleen in de man-pagina staat: wie `find` gewoon gebruikt ziet hem nooit, leert een
+  niet-bestaande syntaxis, en loopt buiten de simulator vast. Andersom net zo erg: wie de
+  échte syntaxis kent krijgt hier zeven willekeurige bestanden terug in plaats van een fout.
+  **Te beslissen:** (a) `-name` als vorm accepteren zodat echte syntaxis óók werkt,
+  (b) een `[!]`-regel in de gewone output zetten in plaats van alleen in `man`, of (c) laten
+  staan en accepteren. Dit raakt de kern van wat de site belooft — oefenen voor het echte werk —
+  dus het is een productkeuze, niet mijn keuze. Voor de nieuwsbrief is het omzeild: die gebruikt
+  nu `cd`, `ls`, `cat` en `grep`, die alle vier identiek zijn in beide werelden.
 - [ ] **September-nieuwsbrief: test-send vóór dinsdag 22 september 10:00 CET.** Bestand:
   `docs/newsletter/nieuwsbrief-september-2026.html`, via **Import HTML** (niet de
   drag-and-drop editor). Drie dingen om op de telefoon in dark mode te controleren:

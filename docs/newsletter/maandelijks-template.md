@@ -186,6 +186,32 @@ GOED   Meestal kijk je in deze nieuwsbrief mee met de aanvaller. Deze keer sta j
 De tweede zin beloont een vaste lezer nog steeds (hij hérkent het), maar vraagt niets van een
 nieuwe.
 
+### Gebruik alleen commando's die óók buiten de simulator kloppen
+
+De september-editie opende met `find log`. Dat werkt in de simulator, maar Heisenberg typte het
+in een echte terminal en kreeg niets: echt `find` verwacht een **pad**, niet een zoekterm
+(`find /var -name "*.log"`). De mail leerde dus een syntaxis die buiten de oefenomgeving niet
+bestaat — en de aanbeveling eronder stuurde de lezer juist naar zijn eigen machine.
+
+De afwijking gaat twee kanten op, en dat maakt hem erger dan een leemte:
+
+| invoer | simulator | echt Linux |
+|---|---|---|
+| `find log` | 3 treffers | niets |
+| `find . -name "log"` | 7 onzin-treffers | correct |
+
+**Regel:** kies voor de tip commando's waarvan de vorm in beide werelden hetzelfde is, en
+controleer dat vóór je schrijft — niet alleen of het commando in de simulator *iets* teruggeeft.
+`cd`, `ls`, `cat`, `grep <patroon> <bestand>` en `whoami` zijn veilig. `find` en alles met
+flags die de simulator niet kent, zijn dat niet. Twijfel je: lees `manPage` in
+`src/commands/<categorie>/<naam>.js` — staat daar een blok *"In deze simulator"* of *"In real
+Linux"*, dan is er een afwijking en hoort dat commando niet zonder uitleg in een mail die de
+lezer naar een echte machine stuurt.
+
+Dat is ook de winst voor de aanbeveling: nu de mail alleen echte commando's gebruikt, kan hij
+letterlijk zeggen dat je ze thuis precies zo typt. Dat is een sterkere belofte dan welke
+formulering ook.
+
 ### Neem niet aan wat de lezer niet heeft
 
 De aanbeveling van september begon als *"Wil je in een echte `auth.log` kijken, dan heb je een
@@ -586,7 +612,7 @@ een eigen donkertint.
 
 | Maand | Tip van de Maand | Aanbeveling |
 |-------|-----------------|-------------|
-| September 2026 | "Een server schrijft alles op" (`find`, `cd`, `grep`) | Gids *Je eigen hacklab* |
+| September 2026 | "Een server schrijft alles op" (`cd`, `ls`, `cat`, `grep`) | Gids *Je eigen hacklab* |
 
 Onderwerpregel: **"Drie mislukte logins, één IP-adres"** (34 tekens). Preview: *"Het stond al in
 een bestand dat de server zelf bijhoudt."* Gepland op dinsdag 22 september 10:00 CET
@@ -660,6 +686,9 @@ verkoopt. Herhaal geen product dat de vorige editie al pushte: de lezer zag het 
 - [ ] **Intro werkt ook voor een nieuwe inschrijver** — geen verwijzing naar de vorige editie
 - [ ] **Geen "machine"** — server / computer / systeem (zie §Woordkeuze)
 - [ ] **Geen prijs in de mail** — die staat op de landingspagina
+- [ ] **Elk commando in de tip werkt ook op een echte Linux-machine** (zie §Gebruik alleen
+      commando's die óók buiten de simulator kloppen) — check `manPage` op een
+      "In deze simulator"-blok
 - [ ] Preview tekst ingevuld (de verborgen preheader-div bovenaan de HTML)
 - [ ] Alle links getest (terminal, blog, cheatsheet) **en onderstreept** (`text-decoration:underline`)
 - [ ] UTM parameters op alle links (`?utm_source=newsletter&utm_medium=email&utm_campaign=[maand]-[jaar]`)
