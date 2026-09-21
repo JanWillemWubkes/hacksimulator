@@ -55,12 +55,16 @@ async function meetRegels(page) {
 
 test.describe('Footer-copyright — gecentreerd in kolom-modus', () => {
 
-  // 360 en 375 zijn de maten waar de regel afbreekt (iPhone SE, oudere Android).
-  for (const breedte of [360, 375]) {
+  // Sessie 236: waren 360 en 375. Met Atkinson Hyperlegible Next past de regel op 375px
+  // op één regel, dus die maat testte het wrappende geval niet meer — de spec zei dat
+  // zelf, met de reparatie erbij. Opnieuw gemeten op /over-ons.html: 2 regels tot en met
+  // 360px, 1 regel vanaf 375. 320 en 344 liggen er ruim onder, zodat een volgende
+  // letterwissel de grens niet meteen weer passeert.
+  for (const breedte of [320, 344]) {
     test(`@${breedte}px staat elke regel van de copyright gecentreerd`, async ({ page }) => {
       await page.setViewportSize({ width: breedte, height: 812 });
       await page.goto(PAGINA);
-      await page.evaluate(() => document.fonts.ready);
+      await page.evaluate(() => document.fonts.ready.then(() => true));
 
       const meting = await meetRegels(page);
       expect(meting.fout, meting.fout).toBeUndefined();
@@ -119,7 +123,7 @@ test.describe('Footer-copyright — gecentreerd in kolom-modus', () => {
     test(`@${breedte}px blijft de copyright links staan (rij-layout)`, async ({ page }) => {
       await page.setViewportSize({ width: breedte, height: 900 });
       await page.goto(PAGINA);
-      await page.evaluate(() => document.fonts.ready);
+      await page.evaluate(() => document.fonts.ready.then(() => true));
 
       const meting = await meetRegels(page);
       expect(meting.fout, meting.fout).toBeUndefined();

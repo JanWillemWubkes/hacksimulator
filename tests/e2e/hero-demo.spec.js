@@ -422,41 +422,28 @@ const PROMPT_GROEN = 'rgb(159, 239, 0)';
 test.describe('Hero-terminal — uitlijning naast de tekst', () => {
   test.use({ viewport: DESKTOP });
 
-  test('de twee kolommen delen hun optische midden', async ({ page }) => {
+  // Sessie 236 verving twee tests die hier stonden, en het is nuttig om te noteren wát
+  // ze bewaakten in plaats van ze stil te laten verdwijnen:
+  //
+  //   'de twee kolommen delen hun optische midden' — bewaakte dat .hero-text en
+  //   .hero-terminal-col op hetzelfde verticale midden stonden en dat er geen handmatige
+  //   `margin-top` op het venster terugkwam. Er zijn geen twee kolommen meer: de hero is
+  //   één kolom waarin de terminal boven de tekst staat, dus er is geen gedeeld midden
+  //   om te bewaken en `align-items: center` op .hero-content zou nu het verkeerde doen.
+  //
+  //   '@375px staat de kop bóven de terminal' — bewaakte de mobiele `order: 2` op
+  //   .hero-terminal-col. Die volgorde is omgekeerd; de tegenovergestelde assertie staat
+  //   nu onder 'Hero-volgorde en mobiele bereikbaarheid', mét de DOM-volgorde erbij,
+  //   zodat een `order:`-truc die visuele en focusvolgorde uit elkaar trekt óók rood wordt.
+  //
+  // Het magische getal waar de eerste test voor bestond is meeverhuisd: de assertie dat
+  // er geen handmatige marge op het venster staat, hoort bij de nieuwe layout net zo goed.
+  test('geen handmatige marge op het terminalvenster', async ({ page }) => {
     await page.goto('/index.html');
-
-    const m = await page.evaluate(() => {
-      const mid = (sel) => {
-        const b = document.querySelector(sel).getBoundingClientRect();
-        return (b.top + b.bottom) / 2;
-      };
-      return {
-        verschil: Math.abs(mid('.hero-text') - mid('.hero-terminal-col')),
-        marginTop: getComputedStyle(document.querySelector('.hero-terminal')).marginTop,
-        alignItems: getComputedStyle(document.querySelector('.hero-content')).alignItems
-      };
-    });
-
-    // De invariant, niet de getallen: de kolommen mogen van hoogte veranderen (een
-    // extra chiprij, langere copy) zonder dat iemand een marge hoeft bij te stellen.
-    expect(m.verschil, 'kolommen staan niet op hetzelfde optische midden').toBeLessThanOrEqual(2);
-    // Het magische getal mag niet terugkeren: dát was de bug.
-    expect(m.marginTop, 'handmatige marge terug op .hero-terminal').toBe('0px');
-    expect(m.alignItems).toBe('center');
-  });
-
-  test('@375px staat de kop bóven de terminal', async ({ page }) => {
-    await page.setViewportSize(MOBIEL);
-    await page.goto('/index.html');
-
-    // De wrapper uit Sessie 215 is het directe kind van de kolom-flexbox. Zonder een
-    // eigen `order: 2` erft hij de default 0 en landt hij vóór .hero-text (order: 1) —
-    // gemeten toen dat gebeurde: terminal op y=76, kop op y=593.
-    const y = await page.evaluate(() => ({
-      tekst: document.querySelector('.hero-text').getBoundingClientRect().top,
-      kolom: document.querySelector('.hero-terminal-col').getBoundingClientRect().top
-    }));
-    expect(y.tekst, 'de terminal staat boven de headline').toBeLessThan(y.kolom);
+    const marginTop = await page.evaluate(
+      () => getComputedStyle(document.querySelector('.hero-terminal')).marginTop
+    );
+    expect(marginTop, 'handmatige marge terug op .hero-terminal').toBe('0px');
   });
 });
 
@@ -594,7 +581,26 @@ test.describe('Hero-terminal — de uitnodiging om te typen', () => {
 
       const meting = await page.evaluate(() => {
         const bar = document.querySelector('.mobile-cta-bar');
+        // Exact het criterium uit landing-demo.js `middenVrij()`: het midden van een
+        // CTA is aantikbaar als het onder de sticky navbar en boven de balkrand ligt.
+        // Overgetikt zou dit een tweede waarheid worden die kan driften, dus beide
+        // grenzen komen uit dezelfde bronnen als de implementatie.
+        const navHoogte = parseFloat(
+          getComputedStyle(document.documentElement).getPropertyValue('--navbar-height')
+        ) || 0;
+        const balkRand = bar && bar.getBoundingClientRect().height
+          ? bar.getBoundingClientRect().top
+          : window.innerHeight;
+        const middenVrij = [...document.querySelectorAll('a.btn-cta[href="/terminal.html"]')]
+          .filter((a) => !bar || !bar.contains(a))
+          .some((a) => {
+            const r = a.getBoundingClientRect();
+            if (!r.height) return false;
+            const mid = r.top + r.height / 2;
+            return mid >= navHoogte && mid <= balkRand;
+          });
         return {
+          middenVrij,
           hintZichtbaar:
             getComputedStyle(document.querySelector('.hero-terminal-hint')).display !== 'none',
           barState: bar ? bar.dataset.state : null,
@@ -616,17 +622,36 @@ test.describe('Hero-terminal — de uitnodiging om te typen', () => {
         };
       });
 
-      // De hint kost 30px; die duwden de tweede rij op 375×812 van midden-736 naar
-      // midden-764 terwijl de balk vanaf y=747 vastzat — dan navigeerde een tik op
-      // `whoami` wég in plaats van het command te draaien. De balk stapt nu weliswaar
-      // opzij bij scrollpositie 0, maar de hint lost een *desktop*-probleem op (met een
-      // muis lijkt het venster een plaatje); op een telefoon staan er zes knoppen onder
-      // de prompt. Blijft dus uit — bewust, niet bij gebrek aan ruimte.
-      expect(meting.hintZichtbaar, 'de hint staat op mobiel en duwt de chips omlaag').toBe(false);
+      // Deze assertie stond tot Sessie 236 op `false`: de hint kostte 30px en duwde de
+      // tweede chiprij op 375×812 van midden-736 naar midden-764, terwijl de balk vanaf
+      // y=747 vastzat — een tik op `whoami` navigeerde dan wég. Sinds de hero herschikt
+      // is staat de terminal bovenaan de pagina in plaats van als tweede kolom, en
+      // landen de chips honderden pixels hoger dan die balk. De aanleiding is dus weg,
+      // en de hint is de enige zin die zegt dat het venster leeft — juist op het
+      // apparaat waar tikken goedkoper is dan typen. De conditie die de verberging
+      // rechtvaardigde staat hieronder nog steeds, en bewaakt de omkering.
+      expect(meting.hintZichtbaar, 'de hint hoort op mobiel zichtbaar te zijn').toBe(true);
 
-      // Het directe bewijs van de fix: bij scrollpositie 0 staat de hero-CTA in beeld, dus
-      // hoort de balk weg te zijn.
-      expect(meting.barState, 'de balk staat aan terwijl de hero-CTA in beeld is').toBe('verborgen');
+      // Tot Sessie 236 stond hier `toBe('verborgen')`: in de tweekoloms-hero stond de
+      // hero-CTA op elke gemeten maat bij scrollpositie 0 in beeld, dus hoorde de balk
+      // weg te zijn. In de herschikte hero is dat niet meer universeel waar — gemeten
+      // met de CTA-midden op y=809: op 390x844, 412x915 en 768x1024 ligt dat midden vrij
+      // in beeld en blijft de balk weg, op 360x800 en 375x812 niet en verschijnt hij.
+      //
+      // Dát is precies het contract van de balk, dus de assertie moet het contract
+      // toetsen en niet de uitkomst van één layout: er is altijd een primaire actie
+      // bereikbaar, hetzij de hero-CTA, hetzij de balk. Een balk die aan staat terwijl
+      // de CTA ruim in beeld ligt is nog steeds fout, en een balk die uit blijft terwijl
+      // de CTA weg is ook.
+      // landing-demo.js belooft in zijn eigen commentaar één conditie zonder gat en
+      // zonder overlap: "balk verborgen ⟺ CTA-midden aantikbaar". Dat is de invariant,
+      // en die toetsen we in beide richtingen. Gemeten @375x812 in de herschikte hero:
+      // CTA-midden op y=809, balkrand op y=747 — dus níét vrij, dus balk zichtbaar.
+      // Dat is de balk die zijn werk doet, niet een regressie.
+      expect(meting.barState, meting.middenVrij
+        ? 'CTA-midden is aantikbaar, dus de balk hoort weg te zijn'
+        : 'CTA-midden is niet aantikbaar, dus de balk hoort er te staan')
+        .toBe(meting.middenVrij ? 'verborgen' : 'zichtbaar');
 
       const bedekt = meting.chips.filter((c) => c.meetbaar && !c.raakbaar);
       const nieuw = bedekt
@@ -709,5 +734,91 @@ test.describe('Hero-terminal — de cursor staat bij de tekst', () => {
     expect(m.inlineBreedte, 'inline breedte van de auto-demo niet gewist').toBe('');
     expect(m.flexGrow).toBe('1');
     expect(m.breedte, 'veld is te smal om in te typen').toBeGreaterThan(100);
+  });
+});
+
+// ===========================================================================
+// De herschikte hero (Sessie 236)
+//
+// De hero stond als twee kolommen van gelijk gewicht: links een kop die vertelde wat
+// rechts al te zien was. Sinds deze sessie speelt de terminal over de volle breedte en
+// ondertitelt de tekst eronder. Twee condities die daarbij hoorden waren tot nu toe
+// notities in een CSS-commentaar; hieronder zijn het asserties.
+// ===========================================================================
+
+test.describe('Hero-volgorde en mobiele bereikbaarheid', () => {
+  test.describe.configure({ timeout: 120_000 });
+
+  test('de terminal staat vóór de kop, in de DOM én op het scherm', async ({ page }) => {
+    // Geen `order:`-truc: die laat de focusvolgorde achter bij de layout. Er stond er
+    // wél een (op .hero-terminal-col, onder 768px) die de terminal ná de kop zette —
+    // met een commentaar dat de oude volgorde als bewijs aanhaalde. Beide assertie-
+    // richtingen staan hier, zodat een herintroductie op één van de twee rood wordt.
+    for (const viewport of [{ width: 1440, height: 900 }, { width: 375, height: 812 }]) {
+      await page.setViewportSize(viewport);
+      await page.goto('/index.html');
+
+      const m = await page.evaluate(() => {
+        const term = document.querySelector('.hero-terminal-col');
+        const tekst = document.querySelector('.hero-text');
+        return {
+          domVolgorde: term.compareDocumentPosition(tekst) & Node.DOCUMENT_POSITION_FOLLOWING ? 'terminal-eerst' : 'tekst-eerst',
+          terminalTop: Math.round(term.getBoundingClientRect().top),
+          tekstTop: Math.round(tekst.getBoundingClientRect().top),
+        };
+      });
+
+      expect(m.domVolgorde, `@${viewport.width}px: DOM-volgorde`).toBe('terminal-eerst');
+      expect(m.terminalTop, `@${viewport.width}px: terminal (${m.terminalTop}) hoort boven de tekst (${m.tekstTop}) te staan`)
+        .toBeLessThan(m.tekstTop);
+    }
+  });
+
+  test('geen enkele chip valt onder de mobiele CTA-balk, op geen enkele scrollpositie', async ({ page }) => {
+    // Dit wás de reden om .hero-terminal-hint op mobiel te verbergen: de hint kostte
+    // 30px en duwde de tweede chiprij onder de vaste balk op y=747, waardoor `nmap`,
+    // `whoami` en `pwd` onaantikbaar werden en een tik daar wégnavigeerde. In de
+    // herschikte hero staat de terminal bovenaan en is die aanleiding verdwenen, dus de
+    // hint is terug. De conditie blijft: zij hoort hier, niet in een CSS-commentaar.
+    for (const viewport of [{ width: 375, height: 812 }, { width: 390, height: 844 }]) {
+      await page.setViewportSize(viewport);
+      await page.goto('/index.html');
+      await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation:none!important}' });
+
+      for (const y of [0, 300, 600, 900, 1400]) {
+        await page.evaluate((sy) => window.scrollTo(0, sy), y);
+        await page.waitForTimeout(300);
+
+        const m = await page.evaluate(() => {
+          const bar = document.querySelector('.mobile-cta-bar');
+          const cs = bar && getComputedStyle(bar);
+          const bb = bar && bar.getBoundingClientRect();
+          const balkZichtbaar = !!(bar && cs.visibility !== 'hidden' && cs.display !== 'none'
+            && bb.height > 0 && bb.top < window.innerHeight);
+          const afgedekt = [];
+          if (balkZichtbaar) {
+            document.querySelectorAll('.hero-chip').forEach((c) => {
+              const r = c.getBoundingClientRect();
+              const inBeeld = r.bottom > 0 && r.top < window.innerHeight;
+              if (inBeeld && r.bottom > bb.top && r.top < bb.bottom) afgedekt.push(c.textContent.trim());
+            });
+          }
+          const cta = document.querySelector('.btn-cta-hero').getBoundingClientRect();
+          return {
+            balkZichtbaar,
+            afgedekt,
+            ctaInBeeld: cta.bottom > 0 && cta.top < window.innerHeight,
+            aantalChips: document.querySelectorAll('.hero-chip').length,
+          };
+        });
+
+        // Zelfbewakende tak: zonder chips kan niets afgedekt zijn, en zou de test
+        // groen staan zonder iets te hebben gemeten.
+        expect(m.aantalChips, 'geen chips gevonden — de meting heeft niet gedraaid').toBeGreaterThan(0);
+        expect(m.afgedekt, `@${viewport.width}px scroll ${y}: chip(s) onder de CTA-balk`).toEqual([]);
+        expect(m.balkZichtbaar || m.ctaInBeeld,
+          `@${viewport.width}px scroll ${y}: geen enkele primaire actie bereikbaar`).toBe(true);
+      }
+    }
   });
 });

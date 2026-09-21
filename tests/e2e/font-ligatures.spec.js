@@ -70,7 +70,12 @@ const MONO_FAMILIES = ['jetbrains mono', 'courier', 'monospace'];
  * codeblok, dan gaat deze lijst rood en moet hij bijgewerkt worden — een uitzondering die
  * stilzwijgend blijft staan is een guard die verdampt.
  */
-const PAGINAS_ZONDER_MONO = new Set(['/assets/legal/terms.html']);
+// Sessie 236: terms.html stond hier en droeg daarna 41 monospace-elementen — de
+// legal-koppen staan sinds de fontwissel in JetBrains Mono, want --font-heading is die
+// letter geworden. De assertie meldde dat zelf ("een uitzondering die niets meer
+// uitzondert"), dus de lijst is nu leeg. Leeg is hier de juiste waarde en geen verzuim:
+// élke pagina draagt inmiddels mono, en de andere tak van deze test bewaakt dat.
+const PAGINAS_ZONDER_MONO = new Set([]);
 
 /**
  * Probestrings: elke sequentie die op de live site aantoonbaar fout rendeerde, plus de

@@ -59,6 +59,10 @@ tests/screenshots/
 # en hoort in review. Een artefact buiten git veroudert stil.
 .impeccable/config.local.json
 .impeccable/critique/
+# Reviewscreenshots zijn bewijs bij één ronde, geen bron: 3,3 MB PNG die bij de
+# volgende bouw opnieuw gemaakt wordt. .impeccable/surfaces/ blijft WEL getrackt —
+# dat is het direction contract dat latere agents herladen, dus invoer.
+.impeccable/review/
 
 # Test artifacts (build output, should not be committed)
 playwright-report/

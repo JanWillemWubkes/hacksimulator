@@ -6,6 +6,7 @@ colors:
   neon-lime-hover: "#8ad600"
   lime-aaa-light: "#7ac800"
   forest-cta-light: "#166534"
+  forest-cta-light-hover: "#14532d"
   night: "#0d1117"
   night-sunken: "#080b0f"
   night-raised: "#161b22"
@@ -29,34 +30,46 @@ colors:
   paper-light: "#f8f8f8"
   paper-sunken-light: "#eceef0"
   paper-raised-light: "#ffffff"
+  paper-hover-light: "#ebebeb"
   ink-light: "#0a0a0a"
+  ink-dim-light: "#444444"
+  border-grey-light: "#e0e0e0"
+  signal-error-light: "#a30039"
+  signal-warning-light: "#744800"
+  signal-info-light: "#074fa4"
+  signal-success-light: "#0a5c2e"
 typography:
   display:
-    fontFamily: "Space Grotesk, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
-    fontSize: "63px"
+    fontFamily: "JetBrains Mono, Courier New, Courier, monospace"
+    fontSize: "clamp(1.75rem, 4.2vw, 2.55rem)"
     fontWeight: 700
     lineHeight: 1.1
     letterSpacing: "-1px"
   headline:
-    fontFamily: "Space Grotesk, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
-    fontSize: "45px"
+    fontFamily: "JetBrains Mono, Courier New, Courier, monospace"
+    fontSize: "clamp(1.4rem, 3vw, 1.78rem)"
     fontWeight: 700
     lineHeight: 1.2
   title:
-    fontFamily: "Space Grotesk, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
-    fontSize: "22.5px"
+    fontFamily: "JetBrains Mono, Courier New, Courier, monospace"
+    fontSize: "1.22rem"
     fontWeight: 600
     lineHeight: 1.2
   body:
-    fontFamily: "Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+    fontFamily: "Atkinson Hyperlegible Next, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
     fontSize: "18px"
     fontWeight: 400
     lineHeight: 1.5
-  label:
-    fontFamily: "JetBrains Mono Box, JetBrains Mono, Courier New, monospace"
-    fontSize: "13.5px"
+  ui:
+    fontFamily: "Atkinson Hyperlegible Next, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+    fontSize: "18px"
     fontWeight: 500
     letterSpacing: "0.5px"
+  label:
+    fontFamily: "Atkinson Hyperlegible Next, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+    fontSize: "13px"
+    fontWeight: 600
+    letterSpacing: "1px"
   terminal:
     fontFamily: "JetBrains Mono Box, JetBrains Mono, Courier New, Courier, monospace"
     fontSize: "18px"
@@ -65,6 +78,7 @@ rounded:
   sm: "2px"
   md: "4px"
   lg: "8px"
+  cta-nav: "10px"
   circle: "50%"
 spacing:
   xs: "4px"
@@ -72,41 +86,69 @@ spacing:
   md: "16px"
   lg: "24px"
   xl: "32px"
+  section: "96px"
 components:
   button-primary:
     backgroundColor: "{colors.neon-lime}"
     textColor: "{colors.night}"
-    rounded: "{rounded.md}"
-    padding: "8px 16px"
+    typography: "{typography.ui}"
+    rounded: "{rounded.lg}"
+    padding: "16px 32px"
   button-primary-hover:
     backgroundColor: "{colors.neon-lime-hover}"
     textColor: "{colors.night}"
   button-secondary:
     backgroundColor: "transparent"
-    textColor: "{colors.dim-grey}"
-    borderColor: "{colors.dim-grey}"
+    textColor: "{colors.neon-lime}"
     rounded: "{rounded.md}"
+    padding: "11px 20px"
+    height: "44px"
+  button-nav:
+    backgroundColor: "transparent"
+    textColor: "{colors.soft-white}"
+    rounded: "{rounded.cta-nav}"
     padding: "8px 16px"
-  card:
-    backgroundColor: "{colors.night-raised}"
-    borderColor: "{colors.border-grey}"
-    padding: "32px"
-  eyebrow-badge:
+  command-chip:
+    backgroundColor: "transparent"
     textColor: "{colors.neon-lime}"
-    borderColor: "{colors.neon-lime}"
+    typography: "{typography.terminal}"
+    rounded: "{rounded.md}"
     padding: "4px 16px"
+    height: "44px"
+  card:
+    backgroundColor: "rgba(22, 27, 34, 0.3)"
+    textColor: "{colors.soft-white}"
+    rounded: "16px"
+    padding: "32px"
+  terminal-window:
+    backgroundColor: "{colors.bg-demo-terminal}"
+    textColor: "{colors.soft-white}"
+    typography: "{typography.terminal}"
+    rounded: "{rounded.lg}"
   terminal-input:
-    backgroundColor: "{colors.night}"
+    backgroundColor: "{colors.bg-demo-terminal}"
     textColor: "{colors.neon-lime}"
-    borderColor: "{colors.border-grey}"
+    typography: "{typography.terminal}"
     rounded: "0"
-    padding: "8px 12px"
+    padding: "8px 24px"
+  nav-link:
+    backgroundColor: "transparent"
+    textColor: "{colors.soft-white}"
+    typography: "{typography.ui}"
+    padding: "8px 16px"
+  theme-toggle-active:
+    backgroundColor: "{colors.soft-white}"
+    textColor: "{colors.chrome-black}"
+    rounded: "{rounded.sm}"
+    padding: "4px 8px"
+    height: "44px"
 ---
 
 # Design System: HackSimulator.nl
 
-> Afgeleid uit `styles/` en uit gerenderde computed styles op 19 september 2026, niet uit
-> `docs/style-guide.md`. Waar dit document en de CSS uiteenlopen wint de CSS: dat is wat
+> Afgeleid uit `styles/` en uit gerenderde computed styles op `index.html` (1440x900,
+> transities bevroren) op 20 september 2026, niet uit `docs/style-guide.md` en niet uit
+> het ontwerpvoorstel. Waar dit document en de CSS uiteenlopen wint de CSS: dat is wat
 > er draait. `docs/style-guide.md` blijft het menselijke document en volgt.
 >
 > Dit is een **vertrekpunt, geen bevriezing**. De identiteit ligt vast, de uitvoering niet.
@@ -121,20 +163,24 @@ de echte tool spreekt, en de uitleg staat ernaast in plaats van eroverheen. Een 
 die op Engels afhaakt kan hier meekijken zonder dat het echte werk verwatert.
 
 Het systeem is donker, vlak en precies. De diepte komt niet uit schaduw maar uit een
-toonladder van vier stappen en uit haarlijnen van 1px. Het neon-lime accent is zeldzaam:
-het markeert waar jij aan zet bent (de prompt, wat je typt, de primaire CTA) en verder
-niets. Die zeldzaamheid is de reden dat het werkt. De omliggende site is bewust stiller dan
-het terminalvenster, zodat het terminalvenster de hoofdrol houdt.
+toonladder van vier stappen en uit haarlijnen van 1px. Op de hele landingspagina rendert
+nog precies één `box-shadow`, en dat is een inzetrand van 1px op de volgende commandochip —
+geen hoogte, maar een rand die geen ruimte inneemt. Het neon-lime accent is zeldzaam: het
+markeert waar jij aan zet bent (de prompt, wat je typt, de primaire actie) en verder niets.
+Die zeldzaamheid is de reden dat het werkt.
 
-Toon is bemoedigend en nuchter. Geen hype, geen opgeklopte cijfers, geen urgentie die er
-niet is. Wat je ziet is wat het is.
+De letter is sinds deze bouw de werkletter van het product zelf. JetBrains Mono kopt én
+werkt; Atkinson Hyperlegible Next leest en draagt het chroom. Twee families, drie rollen —
+en mono is de stem van het ding, nooit een sfeerlaagje op een los label. Toon is
+bemoedigend en nuchter. Geen hype, geen opgeklopte cijfers, geen urgentie die er niet is.
 
 **Key Characteristics:**
 - Donkerbasis `#0d1117` met een tonale ladder in vier stappen; geen schaduwen.
 - Eén schel accent (`#9fef00`), spaarzaam ingezet als signaal, nooit als decoratie.
-- Drie fonts met drie duidelijke rollen: Space Grotesk kopt, Inter leest, JetBrains Mono werkt.
+- Twee letters in drie rollen: JetBrains Mono kopt en werkt, Atkinson Hyperlegible Next
+  leest en draagt het chroom.
 - Volwaardig licht thema met eigen AAA-afgestemde waarden, niet een omgekeerd donker thema.
-- Chrome (navbar, footer) blijft donker in beide thema's: het Dark Frame-patroon.
+- Chroom (navbar, footer) blijft donker in beide thema's: het Dark Frame-patroon.
 
 ## Colors
 
@@ -142,179 +188,249 @@ Een donkere GitHub-achtige basis met precies één schel accent, en een lichte t
 waarin elk accent opnieuw is afgestemd in plaats van omgedraaid.
 
 ### Primary
-- **Neon Lime** (`#9fef00`): de prompt, de tekst die jij typt, de primaire CTA en de
-  hover-accenten in navbar en footer. Dit is de kleur van "hier ben jij aan zet". In het
-  lichte thema wordt dit `#7ac800` op donkere oppervlakken en `#166534` (Forest CTA) waar
-  witte tekst erop moet: hetzelfde signaal, opnieuw gemeten voor AAA.
+- **Neon Lime** (`#9fef00`): de prompt, de tekst die jij typt, de commandochips binnen het
+  venster en de primaire actie eronder. Dit is de kleur van "hier ben jij aan zet". In het
+  lichte thema wordt dit `#7ac800` op vast donkere oppervlakken en Forest CTA (`#166534`,
+  hover `#14532d`) waar witte tekst erop moet: hetzelfde signaal, opnieuw gemeten voor AAA.
 
 ### Secondary
-- **Azure Deep** (`#004494`): secundaire knoppen met witte tekst, 7,2:1. Draagt de acties
-  die wel belangrijk maar niet de hoofdweg zijn.
+- **Azure Deep** (`#004494`): knoppen met witte tekst buiten de landingspagina. Draagt de
+  acties die wel belangrijk maar niet de hoofdweg zijn. Op de landingspagina komt deze
+  kleur sinds deze bouw niet meer voor — de themaschakelaar was de laatste drager.
 
 ### Tertiary
 De statuskleuren. Ze zijn bewust gedempt zodat ze naast elkaar kunnen staan zonder te
-schreeuwen, en elk haalt AAA op de donkere basis:
-- **Signal Success** (`#3fb950`): positieve terugkoppeling. Nadrukkelijk onderscheiden van
-  Neon Lime — succes is niet hetzelfde als "jij bent aan zet".
-- **Signal Error** (`#fa7c76`), **Signal Warning** (`#d29922`), **Signal Info** (`#79c0ff`).
+schreeuwen, en elk haalt AAA op zijn eigen basis:
+- **Signal Success** (`#3fb950`, licht `#0a5c2e`): positieve terugkoppeling. Nadrukkelijk
+  onderscheiden van Neon Lime — succes is niet hetzelfde als "jij bent aan zet".
+- **Signal Error** (`#fa7c76` / `#a30039`), **Signal Warning** (`#d29922` / `#744800`),
+  **Signal Info** (`#79c0ff` / `#074fa4`).
 
 ### Neutral
 - **Night** (`#0d1117`): pagina en terminal. GitHub-donker, bewust geen puur zwart.
 - **Night Sunken** (`#080b0f`): sectiebanden, een verdieping onder de pagina.
-- **Night Raised** (`#161b22`): kaarten, modals, dropdowns.
+- **Night Raised** (`#161b22`): kaarten, modals, dropdowns, de titelbalk van het venster.
 - **Night Hover** (`#21262d`): hover-toestanden.
 - **Chrome Black** (`#1a1a1a`): navbar en footer, in beide thema's gelijk.
 - **Soft White** (`#c9d1d9`): primaire tekst. **Dim Grey** (`#a1a8b0`): secundaire tekst.
-- **Border Grey** (`#30363d`): alle randen en scheidingen.
+- **Border Grey** (`#30363d`, licht `#e0e0e0`): alle randen en scheidingen.
+- **Demo Terminal** (`#000000`): het venster op de landingspagina staat een trede dieper
+  dan de pagina, zodat het als scherm leest en niet als sectie.
 
 ### Named Rules
 
 **The One Voice Rule.** Neon Lime markeert alleen waar de gebruiker aan zet is: de prompt,
-de invoer, de primaire CTA, en hover in het Dark Frame. Zodra het ook decoratie wordt,
-stopt het met signaleren en is het alleen nog fel.
+de invoer, de commandochips, de primaire actie, en hover in het Dark Frame. Zodra het ook
+decoratie wordt, stopt het met signaleren en is het alleen nog fel.
+
+**The One Carrier Rule.** Binnen het terminalvenster ís kleur betekenis en verandert er
+niets. Buiten het venster betekent kleur "hier kun je klikken" en staat er hoogstens één
+accentdrager per scherm. **Deze regel geldt op dit moment alleen voor het eerste scherm.**
+Gemeten op 1440x900: het eerste scherm draagt 1 accent buiten het venster (de primaire
+actie) en 14 erbinnen; de acht schermen onder de vouw dragen er 2 tot 12 per scherm —
+de vergelijkingstabel, de leerpad-kaarten met hun `$`-regels, de sectie-iconen. Dat is
+een vastgelegde grens uit het direction contract, geen vergeten opruiming. Wie hier
+verdergaat, sweept de resterende acht schermen of schrapt de regel als sitebrede belofte;
+laat hem niet half staan. De grens zelf is geasserteerd in
+`tests/e2e/hero-accent-budget.spec.js`, dat de populatie splitst naar binnen/buiten en
+alleen eigenschappen telt die daadwerkelijk verf op het scherm zetten.
 
 **The Dark Frame Rule.** Navbar en footer zijn in beide thema's donker (`#1a1a1a`). Kleuren
 die daarop landen zijn daarom thema-onafhankelijk vastgezet (`--color-cta-dark-frame`,
-`--color-navbar-*`). Gebruik nooit een thema-afhankelijke tekstkleur op dat vaste donker:
-in het lichte thema wordt die onzichtbaar.
+`--color-navbar-*`, `--color-footer-text-*`). Gebruik nooit een thema-afhankelijke
+tekstkleur op dat vaste donker: in het lichte thema wordt die onzichtbaar.
 
 **The Measured Contrast Rule.** Elke kleurwaarde hier is gekozen op een gemeten ratio,
 niet op gevoel; de comments in `styles/main.css` dragen die cijfers. Een nieuwe waarde is
-pas geldig als de 7 contrast-specs in `tests/e2e/` groen blijven. Doel is AAA, niet AA.
+pas geldig als de contrast-specs in `tests/e2e/` groen blijven (`text-contrast`,
+`link-contrast`, `accent-text-contrast`, `eyebrow-contrast`). Doel is AAA, niet AA.
 
 ## Typography
 
-**Display Font:** Space Grotesk (fallback `-apple-system`, `BlinkMacSystemFont`, `Segoe UI`, sans-serif)
-**Body Font:** Inter (zelfde fallbackketen)
-**Label/Mono Font:** JetBrains Mono Box, met JetBrains Mono en Courier New als terugval
+**Display / Heading Font:** JetBrains Mono, variabel op de as 400–800 (terugval `Courier New`, `Courier`, monospace)
+**Body & UI Font:** Atkinson Hyperlegible Next, variabel op de as 200–800 (terugval `-apple-system`, `BlinkMacSystemFont`, `Segoe UI`, sans-serif)
+**Terminal Font:** JetBrains Mono Box, met JetBrains Mono en Courier New als terugval
 
-**Character:** Space Grotesk geeft koppen een technische, licht geometrische stem; Inter
-leest rustig op schermen; JetBrains Mono Box draagt alles wat een terminal is. De
-box-drawing-subset staat vooraan in de stack omdat `asciiBox` op die glyphs rekent.
+**Character:** de kopletter is de werkletter van het product zelf: een kop leest als iets
+dat een machine heeft uitgeprint, niet als iets dat een merkbureau heeft gezet. Atkinson
+Hyperlegible Next is gekozen op een functie en niet op smaak — hij houdt verwarbare tekens
+uit elkaar op een site waar bezoekers tekens overtypen. Beide bestanden zijn variabel, dus
+één `@font-face` met een gewichtsbereik in plaats van meerdere blokken naar hetzelfde
+bestand. De box-drawing-subset staat vooraan in de terminalstack omdat `asciiBox` op die
+glyphs rekent.
 
 ### Hierarchy
-- **Display** (700, 63px, 1.1, -1px): de h1 van een landingspagina. Eén per pagina.
-- **Headline** (700, 45px, 1.2): sectiekoppen.
-- **Title** (600, 22.5px, 1.2): kaartkoppen en subsecties.
-- **Body** (400, 18px, 1.5): lopende tekst; 19,8px in hero-lead. Basis is 18px, op mobiel 16px.
-- **Label** (500, 13.5px, 0.5px, mono): eyebrow-badges en metadata.
-- **Terminal** (18px, 1.5, mono): alle simulatoroutput.
+Gemeten op de gerenderde pagina bij 1440px breedte:
+- **Display** (700, 45,9px, 1.1, -1px): de h1. Eén per pagina.
+- **Headline** (700, 32,0px, 1.2): sectiekoppen.
+- **Title** (600, 22,0px token / 22,5px zoals gerenderd, 1.2): kaartkoppen en subsecties.
+- **Body** (400, 18px, 1.5): lopende tekst. Basis is 18px, op mobiel 16px.
+- **UI** (500, 18px, 0,5px): navigatielinks, knoplabels, formulierlabels, meta — het
+  chroom. Zelfde familie als Body, ander gewicht.
+- **Label** (600, 13px, 1px): kleine schakelaarlabels en metadata.
+- **Terminal** (400, 18px, 1.5, mono): alle simulatoroutput. De demo op de landingspagina
+  rendert deze rol op 16,2px, en de commandochips eronder op 14,4px.
 
 ### Named Rules
 
-**The Three Voices Rule.** Drie fonts, drie rollen: Space Grotesk kopt, Inter leest,
-JetBrains Mono werkt. Een vierde familie voegt niets toe wat een gewicht niet ook kan.
+**The Two Letters Rule.** Twee families, drie rollen: JetBrains Mono kopt en werkt,
+Atkinson Hyperlegible Next leest én draagt het chroom. Een derde familie voegt niets toe
+wat een gewicht niet ook kan. De Body- en UI-rol delen bewust één bestand: `--font-ui` is
+een rol, geen familie.
+
+**The Mono Is The Voice Rule.** Mono draagt de koppen, de merknaam en getallen — een getal
+is een meting, geen decoratie. Mono op losse labels, knoppen of navigatielinks is precies
+het sfeerlaagje dat deze wereld weigert, en het kost breedte: gemeten op 1280px vroeg de
+balk met de navlinks in mono 1303px bij 1265px beschikbaar, met de bodyletter 1211px.
 
 **The Shell Is Mono Rule.** Alles binnen het terminalvenster is monospace — output, prompt
 en invoer. Dit is geen smaak: `asciiBox` en de nmap-achtige output rekenen op
 kolomuitlijning, en prompt en invoer moeten dezelfde metriek hebben als de regels erboven.
-Alle drie gemeten op 10,8px per teken; het box-teken en de letter `M` zijn even breed.
 
-**The Scale Gap Rule.** De sprong van Headline (45px) naar Title (22,5px) is precies factor
-twee, terwijl Display naar Headline factor 1,4 is. Dat gat is niet ontworpen maar ontstaan.
-Elke nieuwe tussenlaag hoort die verhouding te repareren, niet te verdiepen.
+**The Even Ladder Rule.** De ladder is gelijkmatig: 45,9 → 32,0 → 22,5 → 18px, dus factor
+1,43 / 1,42 / 1,25. Het gat van factor 2,00 tussen Headline en Title dat dit document tot
+19 sep 2026 als ontwerpschuld noteerde, bestaat niet meer. Een nieuwe tussenlaag hoort die
+verhouding te houden, niet opnieuw te openen. Display en Headline zijn vloeiend
+(`clamp()`); Title is dat niet.
 
 ## Layout
 
-Eén gecentreerde kolom, geen zichtbaar raster. Containers gaan tot `--layout-max-width:
-1400px` met `--layout-padding-x: 32px` aan weerszijden; het terminalvenster is smaller op
+Eén kolom, links uitgelijnd, geen zichtbaar raster. Containers gaan tot
+`--layout-max-width: 1400px` met `--layout-padding-x: 32px` aan weerszijden. Het
+terminalvenster op de landingspagina loopt over de volle contentbreedte
+(`--terminal-demo-max-width: 100%`); in de simulator zelf blijft het op
 `--terminal-max-width: 1200px` met 20px binnenruimte, zodat regels leesbaar blijven.
 
-Ritme komt uit een spacingschaal van vijf stappen: 4 / 8 / 16 / 24 / 32px. Secties krijgen
-ruime verticale lucht (de footer opent met 96px). Eén breekpunt doet het echte werk:
+Ritme komt uit een spacingschaal van vijf stappen: 4 / 8 / 16 / 24 / 32px. Daarboven staat
+één sectieritme: 10 van de 13 secties op de landingspagina meten 96px boven én onder, en
+de footer opent met dezelfde 96px. Eén breekpunt doet het echte werk:
 `--mobile-breakpoint: 768px`, waar de basisgrootte van 18px naar 16px gaat en de navigatie
 naar een volledig scherm klapt. Een tweede breekpunt op 480px verkleint alleen de
 spacingstappen.
 
 Kaartroosters vloeien en stapelen; niets krijgt een `min-width` breder dan het scherm.
+Tapdoelen zijn minimaal 44x44px — de commandochips, de themaschakelaar en de secundaire
+knoppen dragen daarvoor een expliciete `min-height`.
 
 ## Elevation & Depth
 
-**Dit systeem gebruikt geen schaduwen.** Op de volledige landingspagina renderen er twee,
-en dat is eerder een restant dan een systeem. Diepte komt uit twee middelen:
+**Dit systeem gebruikt geen schaduwen.** Op de volledige landingspagina rendert er nog
+precies één `box-shadow`, en dat is `inset 0 0 0 1px` neon op de volgende commandochip:
+een rand die geen layout verschuift, geen hoogte. Diepte komt uit twee middelen:
 
 1. **Toonladder.** `#080b0f` (verzonken) → `#0d1117` (pagina) → `#161b22` (opgetild) →
-   `#21262d` (hover). Het lichte thema spiegelt die ladder exact: `#eceef0` → `#f8f8f8` →
-   `#ffffff` → `#ebebeb`. Een schaduwsysteem overleeft zo'n themawissel niet netjes, want
-   schaduwen op licht vragen andere alpha's; een toonladder wel.
-2. **Haarlijnen.** 1px `#30363d` markeert waar een vlak ophoudt.
+   `#21262d` (hover). Het lichte thema spiegelt die ladder met eigen waarden:
+   `#eceef0` → `#f8f8f8` → `#ffffff` → `#ebebeb`. Een schaduwsysteem overleeft zo'n
+   themawissel niet netjes, want schaduwen op licht vragen andere alpha's; een toonladder
+   wel. Het terminalvenster tilt niet op door een halo maar doordat het een trede dieper
+   staat dan de pagina: puur zwart op `#0d1117`.
+2. **Haarlijnen.** 1px `#30363d` markeert waar een vlak ophoudt — de vensterrand, de
+   titelbalk, de invoerregel, de kaarten, de footer.
 
 Modals worden ook tonaal gescheiden, met een bijna dekkende scrim
 (`--color-modal-overlay: rgba(0,0,0,0.95)`) in plaats van met hoogte.
 
 De tokens `--shadow-elevation-1`, `--shadow-elevation-2` en `--shadow-accent-terminal`
-bestaan nog maar worden nauwelijks gebruikt. Ze zijn restanten, geen vocabulaire.
+bestaan nog en worden buiten de landingspagina nog aangeroepen. Ze zijn restanten, geen
+vocabulaire; ze dragen geen enkele regel op het gedocumenteerde oppervlak.
 
 ### Named Rules
 
 **The No Shadow Rule.** Een shell heeft geen schaduwen; schaduw is een papiermetafoor en
 dit is geen papier. Wie diepte nodig heeft pakt de volgende toontrede of een haarlijn.
-De enige uitzondering die nog ter discussie staat is de neon-glow rond het terminalvenster
-— die is identiteit, geen elevatie, en hoort thuis in de esthetische afweging.
+Er is geen uitzondering meer: de statische neon-glow — de halo om het venster, de radiale
+waas achter de hero, de halo's onder de laatste CTA en de limoengloed op de knophovers —
+is in deze bouw verwijderd, samen met de tokens die hem droegen. Glow die overblijft is
+toestandsfeedback (de focusring op de terminalinvoer), en die is state, geen elevatie.
 
 ## Shapes
 
 Zachte maar bescheiden afrondingen op een donker, rechthoekig grondvlak. De tokens
-definiëren 2px (kleine chips), 4px (knoppen, invoervelden, dropdowns), 8px (modals en grote
-containers), 50% (cirkels) en 10px (CTA-navigatieknoppen).
+definiëren 2px (kleine chips en schakelaars), 4px (knoppen, invoervelden, commandochips,
+dropdowns), 8px (het terminalvenster, modals en grote containers), 10px
+(CTA-navigatieknoppen) en 50% (cirkels).
 
-**De praktijk wijkt hiervan af, gemeten op `index.html`:** in gebruik zijn 4px (25x), 12px
-(21x), 16px (14x), 8px (10x), 2px (7x), 50% (6x) en 999px (3x). Van die zeven zijn 12px,
-16px en 999px géén token. En `--border-radius-cta-nav: 10px`, dat wél gedefinieerd is, komt
-op die pagina niet voor. Dat is dezelfde scheur als bij kleur: het tokensysteem dekt maar
-een deel van wat er draait.
+**De praktijk wijkt hiervan af, gemeten op `index.html` op 20 sep 2026:** in gebruik zijn
+4px (23x), 12px (21x), 16px (14x), 8px (10x), 2px (7x), 50% (6x), 999px (3x), 10px (1x) en
+3px (1x). Van die negen zijn 12px, 16px, 999px en 3px géén token. De telling is vrijwel
+onveranderd sinds de vorige meting; `--border-radius-cta-nav: 10px` rendert nu wél, op de
+nav-CTA. Het tokensysteem dekt nog steeds maar een deel van wat er draait.
 
-Randen zijn consequent 1px en grijs; de neon-rand op badges is het enige gekleurde
-randgebruik en blijft onder 40% alpha.
+Randen zijn consequent 1px en grijs. Het enige gekleurde randgebruik zit op de
+commandochips en de invoerregel van het venster: volle neon op 1px, binnen het venster,
+waar kleur betekenis is.
 
-Voor kleur is die scheur op 19 sep 2026 gedicht: van de 51 hardgecodeerde kleurwaarden in
-`styles/` zijn er 47 vervangen door een token, en zeven nieuwe tokens gaven een naam aan
-wat geen naam had (`--color-footer-text-dim`, `--color-footer-text-strong`,
-`--color-bg-navbar-mobile`, `--color-bg-demo-terminal`, `--traffic-light-red/-yellow/-green`).
-De vier die overblijven staan in `docs/design/impeccable-bevindingen.md`.
+Voor kleur is de scheur maar half gedicht. Hergemeten op 20 sep 2026, met blokcommentaar
+weggestreept en tokendefinities zelf niet meegeteld: **6 losse hexwaarden** (5 uniek, 2
+stylesheets) én **73 chromatische `rgb()`/`rgba()`-literals zonder token** (23 unieke
+basiskleuren, 9 stylesheets). De grootste post is `rgba(22,27,34,α)` — de halftransparante
+kaartvulling, 24 keer. Het getal "vier waarden" dat hier tot 19 sep 2026 stond telde alleen
+hex en gaf daarmee een te gunstig beeld. Zie `docs/design/impeccable-bevindingen.md`.
 
 ## Components
 
 ### Buttons
-- **Shape:** licht afgerond, 4px (`{rounded.md}`).
-- **Primary:** Neon Lime vlak met donkere tekst (`#0d1117`), 8px/16px binnenruimte. In het
-  lichte thema Forest CTA (`#166534`) met witte tekst.
-- **Hover / Focus:** donkerder accent (`#8ad600`), overgang `--transition-fast` (0.15s ease).
-  Focus blijft zichtbaar; reserveer een transparante rand zodat er niets verspringt.
-- **Secondary / Ghost:** transparant met een 2px rand in Dim Grey en tekst in dezelfde
-  kleur. Rustig van zichzelf, kleurt pas bij interactie.
+- **Shape:** 8px op de primaire actie (`{rounded.lg}`), 4px op de secundaire
+  (`{rounded.md}`), 10px op de nav-CTA (`{rounded.cta-nav}`).
+- **Primary:** Neon Lime vlak met donkere tekst (`#0d1117`), 16px/32px binnenruimte, UI-rol
+  op 20,25px/600 met 0,5px letterafstand, geen rand. In het lichte thema Forest CTA
+  (`#166534`) met witte tekst. Eén per scherm; dit is de enige accentdrager buiten het
+  venster in het eerste scherm.
+- **Hover / Focus:** donkerder accent (`#8ad600`), overgang `--transition-fast` (0.15s
+  ease). Geen gloed. Focus blijft zichtbaar; reserveer een transparante rand zodat er
+  niets verspringt.
+- **Secondary:** transparant met een 1px rand in Neon Lime en tekst in dezelfde kleur,
+  11px/20px binnenruimte, `min-height: 44px`. Rustig van zichzelf.
+- **Nav-CTA:** transparant met een 1px rand in Border Grey en tekst in Soft White,
+  8px/16px. Sinds deze bouw draagt hij op de homepage géén neon meer — een navigatieknop
+  is niet de hoofdweg.
 
 ### Chips
-- **Style:** de eyebrow-badge is de kanonieke chip: monotekst 13,5px/500 met 0,5px
-  letterafstand, Neon Lime tekst op `rgba(159,239,0,0.05)`, 1px rand op 30% alpha,
-  volledig afgerond (20px), 4px/16px binnenruimte.
-- **State:** statisch; badges labelen, ze schakelen niet.
+- **Style:** de commandochip onder het venster is de kanonieke chip: terminaltekst op
+  14,4px, Neon Lime op transparant, 1px neon rand, 4px afronding, 4px/16px binnenruimte,
+  `min-height: 44px`.
+- **State:** tikbaar, niet decoratief. De eerstvolgende chip draagt `inset 0 0 0 1px` neon
+  als tweede rand. Een chip die niet klikt hoort hier niet.
 
 ### Cards / Containers
 - **Corner Style:** 16px in de praktijk (niet getokeniseerd — zie Shapes).
-- **Background:** Night Raised, vaak op halve alpha (`rgba(22,27,34,0.5)`) zodat de
+- **Background:** Night Raised op lage alpha (`rgba(22,27,34,0.3)`, elders 0,5) zodat de
   paginatoon doorschemert.
 - **Shadow Strategy:** geen. Zie Elevation & Depth.
 - **Border:** 1px Border Grey.
 - **Internal Padding:** 32px (`{spacing.xl}`).
 
 ### Inputs / Fields
-- **Style:** Night-vlak met 1px Border Grey, geen afronding in het terminalvenster,
-  8px/12px binnenruimte, tekst in Neon Lime.
-- **Focus:** randverschuiving plus een subtiele lime-gloed
-  (`--color-prompt-shadow: rgba(159,239,0,0.15)`).
+- **Style:** in het venster een zwart vlak met een 1px Border Grey-scheiding erboven, geen
+  afronding, 8px/24px binnenruimte, tekst in Neon Lime in de terminalletter.
+- **Focus:** randverschuiving plus een subtiele lime-focusring
+  (`--color-prompt-shadow: rgba(159,239,0,0.15)`). Dit is state, geen elevatie.
 - **Error / Disabled:** statuskleuren uit Tertiary; nooit alleen kleur als signaal.
 
 ### Navigation
-- Chrome Black (`#1a1a1a`) in beide thema's, 60px hoog, 32px horizontale ruimte.
-- Links in Soft White op 1rem/500, hover naar wit met een neon-accent; de actieve
-  onderstreping is blauw (`#58a6ff`) en thema-onafhankelijk.
-- Onder 768px: volledig schermmenu, tapdoelen minimaal 44x44px.
+- Chrome Black (`#1a1a1a`) in beide thema's, 60px hoog, 32px horizontale ruimte, 1px
+  Border Grey onderrand.
+- De merknaam staat in de kopletter (JetBrains Mono, 18,9px/600, 0,3px) in Soft White; het
+  merkicoon deelt die kleur. Een wordmark is geen actie en draagt dus geen accent.
+- Links in de UI-rol (Atkinson, 18px/500, 0,5px) in Soft White, 8px/16px, hover naar wit;
+  de actieve onderstreping is blauw (`#58a6ff`) en thema-onafhankelijk.
+- **Themaschakelaar:** in de balk icoon-only — getekende maan- en zon-SVG's van 14px op
+  `currentColor`, met de tekstlabels visueel weggeklemd en alleen leesbaar in het
+  overlaymenu. Een glyph-icoon uit de fontsubset is hier geen optie: het `█`-teken dat er
+  eerder stond zat in geen van de geladen subsets. De actieve optie is een **toon-inversie**
+  (navbar-tekstkleur als vlak, navbar-achtergrond als tekst, 2px afronding), niet een
+  gevuld gekleurd vlak — dat zou een tweede accentdrager in het eerste scherm zijn. De
+  inactieve optie wordt gedempt met een kleur (`#a1a8b0`) en nooit met `opacity`, omdat een
+  gemeten ratio een alpha-laag niet overleeft.
+- Onder 768px: volledig schermmenu op `#000`, tapdoelen minimaal 44x44px.
 
 ### Signature Component: het terminalvenster
 
-De reden dat het product bestaat. Transparant vlak binnen een 1200px-kolom, output in
-JetBrains Mono Box op 18px/1.5, prompt en invoer in Neon Lime.
+De reden dat het product bestaat, en op de landingspagina de hoofdrol: het staat bovenaan
+over de volle contentbreedte, niet als screenshot naast een kop. Een puur zwart vlak (8px
+afronding) met een 1px Border Grey-rand, een titelbalk in Night Raised met de drie
+macOS-vensterknopjes, gedraaide nmap-uitvoer met een Nederlandse ondertitel per regel, een
+`[TIP]`, en een levende prompt.
 
 Twee eigenschappen zijn functioneel en niet esthetisch:
 
@@ -324,30 +440,36 @@ Twee eigenschappen zijn functioneel en niet esthetisch:
 2. **Kolomuitlijning.** `asciiBox` en de nmap-achtige output rekenen erop dat elk teken
    dezelfde breedte heeft.
 
-Markers zijn ASCII, nooit emoji. Gemeten frequentie: `[?]` 149x, `[TIP]` 113x, `[✓]` 92x,
-`[!]` 51x, `[X]` 49x.
+Markers zijn ASCII, nooit emoji.
 
 ## Do's and Don'ts
 
 ### Do:
 - **Do** diepte uitdrukken in de toonladder (`#080b0f` / `#0d1117` / `#161b22` / `#21262d`)
   en 1px `#30363d`-randen.
-- **Do** Neon Lime bewaren voor waar de gebruiker aan zet is. Zeldzaamheid is de functie.
-- **Do** elke nieuwe kleurwaarde afrekenen op een gemeten ratio en de 7 contrast-specs in
+- **Do** Neon Lime bewaren voor waar de gebruiker aan zet is. Zeldzaamheid is de functie:
+  binnen het venster is kleur betekenis, buiten het venster hoogstens één drager.
+- **Do** elke nieuwe kleurwaarde afrekenen op een gemeten ratio en de contrast-specs in
   `tests/e2e/` groen houden. Doel is AAA.
 - **Do** voor het lichte thema een eigen waarde kiezen in plaats van de donkere om te
   keren; dat is hoe het huidige systeem het doet en waarom het AAA haalt.
 - **Do** thema-onafhankelijke kleuren gebruiken op navbar en footer.
+- **Do** een selectie tonen door te inverteren binnen de bestaande tonen, niet door er een
+  nieuwe verzadigde kleur bij te zetten.
+- **Do** iconen tekenen als SVG op `currentColor`, niet kiezen uit een fontsubset.
 - **Do** elke nieuwe kleur, radius of spacing als token toevoegen, niet als losse waarde.
 
 ### Don't:
-- **Don't** schaduwen introduceren. Dit systeem is vlak; zie The No Shadow Rule.
-- **Don't** het terminalvenster uit monospace halen. Output, prompt en invoer delen sinds
-  19 sep 2026 alle drie `var(--font-terminal)`; daarvoor stond de prompt in Inter en het
-  invoerveld in een hardgecodeerde Courier-stack. Verwijs nooit rechtstreeks naar een
-  fontnaam in het terminalvenster.
+- **Don't** schaduwen of statische gloed introduceren. Dit systeem is vlak; zie
+  The No Shadow Rule. Glow mag alleen state zijn.
+- **Don't** het terminalvenster uit monospace halen. Output, prompt en invoer delen alle
+  drie `var(--font-terminal)`. Verwijs nooit rechtstreeks naar een fontnaam in het venster.
+- **Don't** mono gebruiken op chroom — knoppen, navigatielinks, formulierlabels, meta. Die
+  staan in `--font-ui`; zie The Mono Is The Voice Rule.
 - **Don't** emoji gebruiken in code of output. ASCII-markers, altijd.
-- **Don't** een vierde lettertypefamilie toevoegen.
+- **Don't** een derde lettertypefamilie toevoegen.
+- **Don't** een merknaam, merkicoon, sectie-icoon of navigatieknop in het accent zetten.
+  Accent is een aanwijzing dat je kunt handelen, geen merkkleur.
 - **Don't** `!important` gebruiken in `styles/`; win op specificiteit.
 - **Don't** het groene accent van de hoofdsite doortrekken naar de blog. Die gebruikt
   bewust blauw, en de in-content CTA-boxen zijn bewust links uitgelijnd met een blauwe

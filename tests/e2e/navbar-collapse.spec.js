@@ -19,13 +19,17 @@ const INKLAP_TOT = 1279; // laatste breedte waarop de hamburger hoort te staan
 // Eén pagina per navbar-context: statisch, blog (ander pad naar de CSS) en terminal.
 const MARKETING_PAGINAS = ['/gidsen.html', '/index.html', '/over-ons.html', '/blog/nmap-beginnersgids.html'];
 
-const BREEDTES = [375, 700, 820, 1000, 1024, 1180, 1279, 1280, 1440];
+// 1280 is de eerste breedte bóven de inklapband en meteen de gangbare 13"-laptop; 1290
+// en 1366 zitten erbij omdat het defect van Sessie 236 zich uitstrekte tot 1380 en met
+// alleen 1280 en 1440 half onzichtbaar zou zijn gebleven.
+const BREEDTES = [375, 700, 820, 1000, 1024, 1180, 1279, 1280, 1290, 1366, 1440];
 
 async function meetNavbar(page) {
   return page.evaluate(async () => {
     // Wachten op de webfont is niet optioneel: de wrap-detectie hieronder meet
-    // tekstbreedtes, en Space Grotesk verschilt genoeg van de fallback om onder
-    // parallelle load een vals positief op te leveren.
+    // tekstbreedtes, en de webfont verschilt genoeg van de fallback om onder parallelle
+    // load een vals positief op te leveren. (Was Space Grotesk; sinds Sessie 236 draagt
+    // de nav de bodyletter Atkinson Hyperlegible Next.)
     await document.fonts.ready;
 
     const nav = document.querySelector('.landing-nav');
@@ -84,6 +88,13 @@ test.describe('Marketing-navbar — geen horizontale overflow', () => {
 
         expect(m.buitenBeeld, `${pad} @${breedte}px: ${m.buitenBeeld} navbar-element(en) buiten beeld`).toBe(0);
         expect(m.navPast, `${pad} @${breedte}px: navbar-inhoud past niet in de balk`).toBe(true);
+
+        // Sessie 236: `gewrapt` werd hierboven al berekend en teruggegeven, maar nergens
+        // geasserteerd — een meting die nooit meldt. Daardoor bleef maanden onopgemerkt
+        // dat "Over ons" en de CTA op 1280-1287px over twee regels vielen, 70px hoog in
+        // een balk van 59px. Precies de gangbare 13"-laptopbreedte, en precies de eerste
+        // breedte bóven de inklapband — de band bewaakte zichzelf, niet zijn buur.
+        expect(m.gewrapt, `${pad} @${breedte}px: label(s) over twee regels`).toEqual([]);
       }
     });
   }

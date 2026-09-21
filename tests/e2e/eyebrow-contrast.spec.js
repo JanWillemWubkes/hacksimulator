@@ -28,8 +28,13 @@ import { installeerContrastMeter } from './helpers/contrast.js';
 
 // Alle pagina's met een .eyebrow-badge. index.html heeft er twee: de hero-badge (met de
 // radial glow van .hero::after erachter) en die op de lead-magnet-kaart.
+// Sessie 236: /index.html stond hier met twee badges (.hero-eyebrow + .lead-magnet-card)
+// en heeft er nu nul. Beide zijn verwijderd omdat de craft floor een kicker boven een kop
+// als harde ban voert: de kop draagt zijn eigen gewicht. De feiten die de badges droegen
+// staan in de omliggende copy. De pagina hoort daarom NIET meer in deze lijst — en dat is
+// geen verzwakking: de tegenassertie hieronder bewaakt dat er op elke pagina die er wél
+// in staat ook echt een badge gevonden wordt.
 const PAGINAS_MET_BADGE = [
-  '/index.html',            // .hero-eyebrow + .lead-magnet-card
   '/over-ons.html',         // .page-hero
   '/gidsen.html',           // .page-hero
   '/contact.html',          // .page-hero
@@ -75,7 +80,7 @@ test.describe('Eyebrow-badge — WCAG AAA tegen zijn eigen achtergrond', () => {
     test(`${pad} — badge haalt AAA in beide thema's`, async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 812 });
       await page.goto(pad);
-      await page.evaluate(() => document.fonts.ready);
+      await page.evaluate(() => document.fonts.ready.then(() => true));
 
       for (const thema of ['light', 'dark']) {
         const badges = await meetBadges(page, thema);
@@ -93,20 +98,24 @@ test.describe('Eyebrow-badge — WCAG AAA tegen zijn eigen achtergrond', () => {
     });
   }
 
-  // Desktop heeft een andere font-size (13,5px i.p.v. 10,4px) en op index.html een andere
-  // achtergrondstapel, want .hero::after legt daar een radial gradient onder de badge.
-  test('/index.html — beide badges halen AAA op desktop', async ({ page }) => {
+  // Desktop heeft een andere font-size dan mobiel (13,5 tegen 11,5px sinds Sessie 236,
+  // toen de mobiele 0.65rem = 10,4px onder de 11px-ondergrens bleek te zitten).
+  //
+  // Deze test stond op /index.html, dat toen twee badges droeg en er nu nul heeft. Hij is
+  // verplaatst naar /gidsen.html i.p.v. geschrapt: de desktopmaat is een eigen conditie en
+  // die hoort bewaakt te blijven, ongeacht op welke pagina de badge staat.
+  test('/gidsen.html — de badge haalt AAA op desktop', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto('/index.html');
-    await page.evaluate(() => document.fonts.ready);
+    await page.goto('/gidsen.html');
+    await page.evaluate(() => document.fonts.ready.then(() => true));
 
     for (const thema of ['light', 'dark']) {
       const badges = await meetBadges(page, thema);
-      expect(badges.length, `index.html (${thema}) hoort twee badges te hebben`).toBe(2);
+      expect(badges.length, `gidsen.html (${thema}): geen .eyebrow-badge gevonden`).toBeGreaterThan(0);
       for (const b of badges) {
         expect(
           b.contrast,
-          `index.html desktop (${thema}) "${b.tekst}": ${b.contrast}:1 — ${b.kleur} op ${b.achtergrond}`
+          `gidsen.html desktop (${thema}) "${b.tekst}": ${b.contrast}:1 — ${b.kleur} op ${b.achtergrond}`
         ).toBeGreaterThanOrEqual(AAA_NORMALE_TEKST);
       }
     }

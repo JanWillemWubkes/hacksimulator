@@ -1,6 +1,6 @@
 # Impeccable-bevindingen — fase B
 
-**Gemeten:** 19 september 2026 · Impeccable v4.3.1 · branch `design/impeccable`
+**Gemeten:** 19 september 2026 · gecorrigeerd 20 september 2026 (Sessie 236) · Impeccable v4.3.1 · branch `design/impeccable`
 **Methode:** `impeccable detect` tegen **gerenderde URL's** op een lokale server, @1280x800 en @390x844.
 **Status:** analyse. Nul coderegels gewijzigd.
 
@@ -30,17 +30,17 @@ Elke regel hieronder is geverifieerd tegen de draaiende pagina, niet overgenomen
 
 | regel | n (desktop/mobiel) | bewijs |
 |---|---|---|
+| `undersized-ui-text` | — / 4 | **Correctie Sessie 236.** Stond hieronder als false positive, op grond van een meting @1280x800 (13,5px en 18,9px). Die getallen kloppen, maar zijn op het verkeerde viewport gemeten: onder de 768px-breakpoint zetten `.eyebrow-badge` en `.comparison-header .comparison-cell` (beide in het `@media (max-width: 768px)`-blok van `landing.css`) een `font-size: 0.65rem`, en de mobiele basis is 16px — dus exact **10,4px**, vier elementen, onder de 11px-ondergrens. De `.comparison-cell` draagt daar bovendien uppercase met 1,5px letterafstand. Alle vier gerepareerd naar 0.72rem (11,52px). |
 | `skipped-heading` | 6 / — | `woordenlijst.html`: `h1 "50+ cybersecurity termen uitgelegd"` → `h3 "Basis termen"`, geen h2. Geverifieerd via DOM-uitlezing. Ook contact, gidsen, sample-pentest, sample-juridisch. Raakt schermlezers én SEO. |
 | `cramped-padding` | 20 / 12 | `.faq-item` heeft `padding: 0px` met een 1px border én achtergrond `rgba(22,27,34,.3)`; het eerste kind `h3.faq-heading` ook `padding: 0px`. De tekst plakt tegen de rand. Geverifieerd via computed style. |
 | `layout-transition` | 19 / 14 | `transition: max-height, padding` op de faq-items. Staat letterlijk in de CSS. Echte layout-thrash; de moderne fix is `grid-template-rows`, geen eenregelige wissel. |
-| `clipped-overflow-container` | 1 / 1 | `main` op `terminal.html` klipt een absoluut gepositioneerd kind. **Nog niet geverifieerd** — staat hier als open punt, niet als feit. |
 
 ### Bevestigd false positive — niet fixen
 
 | regel | n | waarom het niet klopt |
 |---|---|---|
+| `clipped-overflow-container` | 1 | **Geverifieerd Sessie 236**, stond hierboven nog als open punt. Het enige absoluut gepositioneerde directe kind van `body.landing-page` is `a.skip-link` op `top: -900px`; na `.focus()` gaat die naar `top: 0` en verschijnt correct. `overflow-x: hidden` klipt niet verticaal, en `scrollWidth - clientWidth === 0`. Dit is het WCAG-skiplinkpatroon. De bevinding komt bovendien alleen uit de bestandsscan; beide URL-scans zien hem niet. |
 | `low-contrast` | 26 / 18 | Twee artefactklassen, allebei nagemeten. **(a)** `analytic-gradient+alpha`: de detector claimt 1.1:1 op `h2 "Direct aan de slag?"`; uit de screenshotpixels gemeten is het **12.10:1**. Hij rekent de gradientkleur door in plaats van hem over de basisachtergrond te compositen. **(b)** `on filter`: gemeten dóór een nog niet gevuurde scroll-reveal heen — de ouder `.animate-on-scroll` staat dan op `opacity: 0; filter: blur(4px)`. Na de reveal: `opacity: 1, blur(0px)`. Dit is exact de invariant "bevries transities vóór je meet"; de detector doet dat niet. |
-| `undersized-ui-text` | 11 / 4 | Claimt 10.4px op `.eyebrow-badge` en `.comparison-cell`. Gerenderd @1280x800 gemeten: **13.5px** en **18.9px**. De 11px-ondergrens wordt nergens geraakt. |
 
 ### Smaakoordeel — invoer voor fase D, geen defect
 
@@ -99,7 +99,24 @@ De gecontroleerde telling, met een patroon dat zijn eigen testgevallen haalt
 | waarvan in CSS-commentaar | 124 |
 | waarvan tokendefinities (`--x: #hex`) | 115 |
 | waarvan `@media print` | 2 |
-| **werkelijk hardgecodeerd** | **51** over 19 unieke waarden |
+| **werkelijk hardgecodeerd (alleen hex)** | **51** over 19 unieke waarden |
+
+**Correctie Sessie 236: deze telling dekt maar de helft van de syntax.** Het patroon
+`#[0-9a-fA-F]{6}` ziet geen `rgb()` of `rgba()`. Opnieuw gemeten over `styles/`, met
+commentaar gestript en tokendefinities afgetrokken:
+
+| categorie | n |
+|---|---|
+| `rgb()`/`rgba()`-literals, excl. commentaar | 169 |
+| waarvan tokendefinities (`--x: rgba(...)`) | 49 |
+| **los / hardgecodeerd** | **120** |
+| — waarvan neutraal (zwart/wit alpha-overlays) | 45 |
+| — **waarvan chromatisch, echte kleur zonder token** | **75** |
+
+Die 75 verdelen zich over ~26 unieke waarden en 9 stylesheets, waaronder het merkaccent
+zelf (`rgba(159,239,0,…)`) in vier bestanden. De claim in `DESIGN.md` dat de scheur voor
+kleur gedicht is en dat er "vier waarden overblijven", houdt dus alleen stand als je
+hex-only telt. Een volgende census hoort hex én functionele notatie te dekken.
 
 Eerder genoemd in dit traject: 211, daarna 111, daarna 118, daarna 58. Allemaal te hoog.
 Fase C bleek daardoor een middag in plaats van een project.
@@ -108,8 +125,8 @@ Fase C bleek daardoor een middag in plaats van een project.
 
 ## Openstaand
 
-- `clipped-overflow-container` op `terminal.html` verifiëren.
-- `line-length` (14) nameten.
+- `line-length`: op `index.html` nagemeten in Sessie 236 — drie alinea's boven 80 tekens
+  per regel, alle drie begrensd op 70ch. De overige pagina's nog niet nagemeten.
 - De blogpagina's zijn alleen statisch gescand (dus onbruikbaar); één gerenderde pass
   gaf 27 bevindingen op `nmap-beginnersgids.html`. De rest van de blog nog gerenderd meten.
 

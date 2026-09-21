@@ -39,8 +39,8 @@
   <link rel="preconnect" href="https://sibforms.com" crossorigin>
 
   <!-- Critical Font Preloads (self-hosted, SIL OFL 1.1) -->
-  <link rel="preload" href="/styles/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/styles/fonts/spacegrotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/styles/fonts/atkinson-next-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/styles/fonts/jetbrainsmono-latin.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Preload Critical Resources (Sessie 144 fetchpriority hints) -->
   <!-- Zelfde ?v= op BEIDE: landing.css leest custom properties uit main.css
@@ -49,12 +49,12 @@
        transparent (banden weg) en `color` op de geërfde waarde. Deze twee horen dus
        altijd samen te bumpen — en dat geldt ook voor pages.css, commands.css en
        terminal-education.css, die dezelfde token lezen. -->
-  <link rel="preload" href="styles/main.css?v=233" as="style" fetchpriority="high">
-  <link rel="preload" href="styles/landing.css?v=229" as="style" fetchpriority="high">
+  <link rel="preload" href="styles/main.css?v=236" as="style" fetchpriority="high">
+  <link rel="preload" href="styles/landing.css?v=236" as="style" fetchpriority="high">
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="styles/main.css?v=233">
-  <link rel="stylesheet" href="styles/landing.css?v=229">
+  <link rel="stylesheet" href="styles/main.css?v=236">
+  <link rel="stylesheet" href="styles/landing.css?v=236">
   <link rel="stylesheet" href="styles/mobile.css?v=116" media="screen and (max-width: 768px)">
   <link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
 
@@ -173,7 +173,7 @@
   }
   </script>
 </head>
-<body class="landing-page">
+<body class="landing-page home">
   <!-- Skip Link for Accessibility -->
   <a href="#hero" class="skip-link">Skip naar inhoud</a>
 
@@ -196,35 +196,10 @@
     <!-- ===== HERO SECTION ===== -->
     <section id="hero" class="hero">
       <div class="hero-content">
-        <!-- Left Column: Text Content -->
-        <div class="hero-text">
-          <!-- Eyebrow Badge -->
-          <div class="hero-eyebrow">
-            <span class="eyebrow-badge">Browser-based Terminal Simulator</span>
-          </div>
-
-          <h1>Leer ethisch hacken in een <span class="text-underline">veilige Nederlandse</span> terminal</h1>
-
-          <!-- Zei drie dingen die de <h1> er direct boven al zegt ("ethisch hacken",
-               "veilig", "Nederlands"). Nu alleen wat de kop níét vertelt. -->
-          <p class="hero-subtitle">
-            40+ commands uit de praktijk, met uitleg in gewoon Nederlands. Je kunt alles
-            uitproberen zonder echte gevolgen.
-          </p>
-
-          <div class="hero-cta-group">
-            <a href="/terminal.html" class="btn-cta btn-cta-hero" data-terminal-cta="hero">
-              Start de simulator
-              <!-- Chevron Right Icon -->
-              <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="9 18 15 12 9 6"></polyline>
-              </svg>
-            </a>
-            <p class="cta-microcopy">Geen account nodig — direct beginnen</p>
-          </div>
-        </div>
-
-        <!-- Right Column: Terminal Demo — interactief sinds Sessie 214.
+        <!-- De hero zelf (Sessie 236). Stond hiervoor als tweede kolom naast een kop
+             die vertelde wat hier al te zien was. Nu speelt de terminal en
+             ondertitelt de tekst eronder — het kernbeeld uit DESIGN.md, letterlijk
+             genomen. Interactief sinds Sessie 214.
              Het <input> staat statisch in de HTML mét readonly: zonder JS ziet de
              bezoeker dan een niet-bewerkbaar veld (eerlijk) in plaats van een veld dat
              belooft te werken en niets doet. hero-repl.js haalt readonly weg zodra de
@@ -243,7 +218,7 @@
                Woorden in --color-text, niet in het CTA-groen: dat groen meet 3,10:1 op
                de lichte achtergrond en zakt daarmee door AA. -->
           <p class="hero-terminal-hint">
-            <span class="hint-arrow" aria-hidden="true">↓</span>
+            <svg class="hint-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
             Deze terminal werkt echt — typ maar
           </p>
           <div class="hero-terminal" role="group" aria-label="Terminal demonstratie">
@@ -295,6 +270,31 @@
             </div>
           </div>
         </div>
+        <!-- De ondertiteling. Staat ONDER de terminal, in de DOM en op het scherm:
+             leesvolgorde, tabvolgorde en visuele volgorde zijn hetzelfde. Geen
+             `order:`-truc, want die laat de focusvolgorde achter bij de layout. -->
+        <div class="hero-text">
+          <h1>Leer ethisch hacken in een veilige Nederlandse terminal</h1>
+
+          <!-- Zei drie dingen die de <h1> er direct boven al zegt ("ethisch hacken",
+               "veilig", "Nederlands"). Nu alleen wat de kop níét vertelt. -->
+          <p class="hero-subtitle">
+            40+ commands uit de praktijk, met uitleg in gewoon Nederlands. Je kunt alles
+            uitproberen zonder echte gevolgen.
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="/terminal.html" class="btn-cta btn-cta-hero" data-terminal-cta="hero">
+              Start de simulator
+              <!-- Chevron Right Icon -->
+              <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+            <p class="cta-microcopy">Geen account nodig — direct beginnen</p>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -390,7 +390,7 @@
     </section>
 
     <!-- ===== SOLUTION SECTION (Green Banner) ===== -->
-    <section class="solution-section">
+    <section class="solution-section section-band">
       <div class="solution-content">
         <!-- Stap 4 van de trechter (docs/landing-page-plan.md): de wending na de drie
              pijnpunten. De oude tekst herhaalde de hero-subtitel bijna woordelijk plus
@@ -876,9 +876,8 @@
     <!-- ===== LEAD MAGNET STRIP: gratis Pentest Playbook sample ===== -->
     <section class="landing-section lead-magnet">
       <div class="lead-magnet-card">
-        <span class="eyebrow-badge">Gratis sample | 9 pagina's PDF</span>
         <h2>Zo begint een echte pentest</h2>
-        <p>De eerste 9 pagina's van het Pentest Playbook: hoe je een pentest voorbereidt &mdash; toestemming, scope en de juridische check &mdash; en je doelwit verkent v&oacute;&oacute;r de eerste aanval. Precies de stap die beginners overslaan. Geen account, alleen je email.</p>
+        <p>De eerste 9 pagina's van het Pentest Playbook, als pdf: hoe je een pentest voorbereidt &mdash; toestemming, scope en de juridische check &mdash; en je doelwit verkent v&oacute;&oacute;r de eerste aanval. Precies de stap die beginners overslaan. Geen account, alleen je email.</p>
         <a href="/sample-pentest.html" class="btn-cta" data-lead-magnet="pentest_sample" data-cta-location="homepage_lead_strip">
           Download de gratis sample
           <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>

@@ -29,7 +29,23 @@
   // (filesystem/structure.js:7-206). Op een site die "aantoonbaar" als kwaliteitsclaim
   // voert is een demo met verzonnen bestanden een geloofwaardigheidslek. Nu afgeleid
   // uit de bron; `nmap 192.168.1.1` treft het router-profiel (network/nmap.js:32-39).
+  // Sessie 236: `nmap` staat bewust vooraan. Het is het openingsbeeld van de pagina én —
+  // via showStaticContent(), dat DEMO_COMMANDS[0] rendert — het enige beeld dat een
+  // bezoeker met `prefers-reduced-motion` ooit te zien krijgt. Daarvoor stond `ls`
+  // vooraan: drie regels zonder één Nederlandse ondertitel, terwijl juist die ondertitels
+  // het enige zijn wat dit product van een screenshot onderscheidt. Het venster reserveert
+  // 235px; `ls` vulde daar 116px van.
   const DEMO_COMMANDS = [
+    {
+      command: 'nmap 192.168.1.1',
+      output: [
+        'PORT     STATE  SERVICE',
+        '53/tcp   <span class="highlight">OPEN</span>   DNS    ← naamserver',
+        '80/tcp   <span class="highlight">OPEN</span>   HTTP   ← onversleuteld',
+        '443/tcp  <span class="highlight">OPEN</span>   HTTPS  ← versleuteld',
+        '<span class="tip">[TIP] Open poorten zijn ingangen</span>'
+      ]
+    },
     {
       command: 'ls',
       output: [
@@ -42,16 +58,6 @@
       output: [
         'hacker',
         '<span class="tip">[TIP] Geen root — dat scheelt ongelukken</span>'
-      ]
-    },
-    {
-      command: 'nmap 192.168.1.1',
-      output: [
-        'PORT     STATE  SERVICE',
-        '53/tcp   <span class="highlight">OPEN</span>   DNS    ← naamserver',
-        '80/tcp   <span class="highlight">OPEN</span>   HTTP   ← onversleuteld',
-        '443/tcp  <span class="highlight">OPEN</span>   HTTPS  ← versleuteld',
-        '<span class="tip">[TIP] Open poorten zijn ingangen</span>'
       ]
     },
     {
@@ -116,6 +122,12 @@
       return;
     }
 
+    // Het venster begint gevuld in plaats van leeg: showStaticContent() zet meteen het
+    // nmap-frame neer — hetzelfde beeld dat het direction contract voor dit scherm
+    // voorschrijft — en startAnimation() typt daar vanaf het TWEEDE command overheen.
+    // Zonder dit stond het venster ~1,2 s leeg (gemeten: 0 regels op t=0/200/500/1000ms),
+    // en dat is sinds de herschikking het eerste wat een bezoeker ziet.
+    showStaticContent();
     startAnimation();
   }
 
@@ -141,15 +153,25 @@
   // ==================== Animation Loop ====================
   async function startAnimation() {
     if (isRunning || overgedragen) return;
+    // showStaticContent() zet de cursor op display:none — juist voor de eindtoestand bij
+    // prefers-reduced-motion, fout als openingsbeeld vóór deze lus. Een verborgen element
+    // heeft een rechthoek op (0,0), en dat las in hero-demo.spec.js als "cursor staat 255px
+    // vóór de tekst" in plaats van als "cursor ontbreekt".
+    if (cursorEl) cursorEl.style.display = '';
     isRunning = true;
     const gen = ++generatie;
 
+    // De eerste ronde slaat DEMO_COMMANDS[0] over en wist het venster niet: dat frame
+    // staat er al van showStaticContent(), en de demo leest daardoor als een sessie die
+    // doorloopt in plaats van als een venster dat leeg begint. Vanaf de tweede ronde is
+    // het gedrag ongewijzigd.
+    let eersteRonde = true;
+
     while (isRunning && gen === generatie) {
-      // Clear output area
-      outputEl.innerHTML = '';
+      if (!eersteRonde) outputEl.innerHTML = '';
 
       // Run through each command
-      for (const item of DEMO_COMMANDS) {
+      for (const item of (eersteRonde ? DEMO_COMMANDS.slice(1) : DEMO_COMMANDS)) {
         if (!isRunning || gen !== generatie) break;
 
         // Type the command
@@ -160,6 +182,8 @@
         await showOutput(item.command, item.output, gen);
         await delay(CONFIG.commandPause);
       }
+
+      eersteRonde = false;
 
       // Pause before looping
       await delay(CONFIG.loopDelay);

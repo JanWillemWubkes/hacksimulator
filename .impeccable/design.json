@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-19T08:59:26+00:00",
+  "generatedAt": "2026-09-20T00:00:00+00:00",
   "title": "Design System: HackSimulator.nl",
   "extensions": {
     "colorMeta": {
@@ -62,6 +62,21 @@
           "oklch(72.1% 0.108 151.3)",
           "oklch(83.6% 0.108 151.3)",
           "oklch(95.0% 0.108 151.3)"
+        ]
+      },
+      "forest-cta-light-hover": {
+        "role": "primary",
+        "displayName": "Forest CTA Deep (licht thema)",
+        "canonical": "oklch(38.0% 0.096 152.0)",
+        "tonalRamp": [
+          "oklch(15.0% 0.096 152.0)",
+          "oklch(26.4% 0.096 152.0)",
+          "oklch(37.9% 0.096 152.0)",
+          "oklch(49.3% 0.096 152.0)",
+          "oklch(60.7% 0.096 152.0)",
+          "oklch(72.1% 0.096 152.0)",
+          "oklch(83.6% 0.096 152.0)",
+          "oklch(95.0% 0.096 152.0)"
         ]
       },
       "night": {
@@ -184,6 +199,21 @@
           "oklch(95.0% 0.015 252.3)"
         ]
       },
+      "border-grey-light": {
+        "role": "neutral",
+        "displayName": "Border Grey (licht thema)",
+        "canonical": "oklch(90.6% 0.000 89.9)",
+        "tonalRamp": [
+          "oklch(15.0% 0.000 89.9)",
+          "oklch(26.4% 0.000 89.9)",
+          "oklch(37.9% 0.000 89.9)",
+          "oklch(49.3% 0.000 89.9)",
+          "oklch(60.7% 0.000 89.9)",
+          "oklch(72.1% 0.000 89.9)",
+          "oklch(83.6% 0.000 89.9)",
+          "oklch(95.0% 0.000 89.9)"
+        ]
+      },
       "azure-deep": {
         "role": "secondary",
         "displayName": "Azure Deep",
@@ -259,6 +289,66 @@
           "oklch(95.0% 0.181 145.6)"
         ]
       },
+      "signal-error-light": {
+        "role": "tertiary",
+        "displayName": "Signal Error (licht thema)",
+        "canonical": "oklch(44.6% 0.191 5.8)",
+        "tonalRamp": [
+          "oklch(15.0% 0.191 5.8)",
+          "oklch(26.4% 0.191 5.8)",
+          "oklch(37.9% 0.191 5.8)",
+          "oklch(49.3% 0.191 5.8)",
+          "oklch(60.7% 0.191 5.8)",
+          "oklch(72.1% 0.191 5.8)",
+          "oklch(83.6% 0.191 5.8)",
+          "oklch(95.0% 0.191 5.8)"
+        ]
+      },
+      "signal-warning-light": {
+        "role": "tertiary",
+        "displayName": "Signal Warning (licht thema)",
+        "canonical": "oklch(43.5% 0.106 65.0)",
+        "tonalRamp": [
+          "oklch(15.0% 0.106 65.0)",
+          "oklch(26.4% 0.106 65.0)",
+          "oklch(37.9% 0.106 65.0)",
+          "oklch(49.3% 0.106 65.0)",
+          "oklch(60.7% 0.106 65.0)",
+          "oklch(72.1% 0.106 65.0)",
+          "oklch(83.6% 0.106 65.0)",
+          "oklch(95.0% 0.106 65.0)"
+        ]
+      },
+      "signal-info-light": {
+        "role": "tertiary",
+        "displayName": "Signal Info (licht thema)",
+        "canonical": "oklch(40.3% 0.163 259.4)",
+        "tonalRamp": [
+          "oklch(15.0% 0.163 259.4)",
+          "oklch(26.4% 0.163 259.4)",
+          "oklch(37.9% 0.163 259.4)",
+          "oklch(49.3% 0.163 259.4)",
+          "oklch(60.7% 0.163 259.4)",
+          "oklch(72.1% 0.163 259.4)",
+          "oklch(83.6% 0.163 259.4)",
+          "oklch(95.0% 0.163 259.4)"
+        ]
+      },
+      "signal-success-light": {
+        "role": "tertiary",
+        "displayName": "Signal Success (licht thema)",
+        "canonical": "oklch(41.5% 0.117 154.5)",
+        "tonalRamp": [
+          "oklch(15.0% 0.117 154.5)",
+          "oklch(26.4% 0.117 154.5)",
+          "oklch(37.9% 0.117 154.5)",
+          "oklch(49.3% 0.117 154.5)",
+          "oklch(60.7% 0.117 154.5)",
+          "oklch(72.1% 0.117 154.5)",
+          "oklch(83.6% 0.117 154.5)",
+          "oklch(95.0% 0.117 154.5)"
+        ]
+      },
       "paper-light": {
         "role": "neutral",
         "displayName": "Paper (licht thema)",
@@ -304,10 +394,40 @@
           "oklch(95.0% 0.000 89.9)"
         ]
       },
+      "paper-hover-light": {
+        "role": "neutral",
+        "displayName": "Paper Hover (licht thema)",
+        "canonical": "oklch(94.1% 0.000 89.9)",
+        "tonalRamp": [
+          "oklch(15.0% 0.000 89.9)",
+          "oklch(26.4% 0.000 89.9)",
+          "oklch(37.9% 0.000 89.9)",
+          "oklch(49.3% 0.000 89.9)",
+          "oklch(60.7% 0.000 89.9)",
+          "oklch(72.1% 0.000 89.9)",
+          "oklch(83.6% 0.000 89.9)",
+          "oklch(95.0% 0.000 89.9)"
+        ]
+      },
       "ink-light": {
         "role": "neutral",
         "displayName": "Ink (licht thema)",
         "canonical": "oklch(14.5% 0.000 89.9)",
+        "tonalRamp": [
+          "oklch(15.0% 0.000 89.9)",
+          "oklch(26.4% 0.000 89.9)",
+          "oklch(37.9% 0.000 89.9)",
+          "oklch(49.3% 0.000 89.9)",
+          "oklch(60.7% 0.000 89.9)",
+          "oklch(72.1% 0.000 89.9)",
+          "oklch(83.6% 0.000 89.9)",
+          "oklch(95.0% 0.000 89.9)"
+        ]
+      },
+      "ink-dim-light": {
+        "role": "neutral",
+        "displayName": "Ink Dim (licht thema)",
+        "canonical": "oklch(38.0% 0.000 89.9)",
         "tonalRamp": [
           "oklch(15.0% 0.000 89.9)",
           "oklch(26.4% 0.000 89.9)",
@@ -428,39 +548,48 @@
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "De h1 van een landingspagina. Een per pagina."
+        "purpose": "De h1 van een pagina, in de kopletter JetBrains Mono. Een per pagina. Gemeten 45,9px bij 1440px breedte."
       },
       "headline": {
         "displayName": "Headline",
-        "purpose": "Sectiekoppen."
+        "purpose": "Sectiekoppen. Gemeten 32,0px bij 1440px breedte."
       },
       "title": {
         "displayName": "Title",
-        "purpose": "Kaartkoppen en subsecties."
+        "purpose": "Kaartkoppen en subsecties. Token 1,22rem (22,0px); de kaartkoppen op index.html renderen op 22,5px uit twee losse regels in landing.css."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "Lopende tekst. Basis 18px, op mobiel 16px."
+        "purpose": "Lopende tekst in Atkinson Hyperlegible Next. Basis 18px, op mobiel 16px."
+      },
+      "ui": {
+        "displayName": "UI",
+        "purpose": "Het chroom: navigatielinks, knoplabels, formulierlabels, meta. Zelfde familie als Body, ander gewicht. --font-ui is een rol, geen derde familie."
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Eyebrow-badges en metadata, monospace."
+        "purpose": "Kleine schakelaarlabels en metadata."
       },
       "terminal": {
         "displayName": "Terminal",
-        "purpose": "Alle simulatoroutput. Kolomuitlijning is functioneel."
+        "purpose": "Alle simulatoroutput. Kolomuitlijning is functioneel. De demo op de landingspagina rendert deze rol op 16,2px, de commandochips op 14,4px."
       }
     },
     "shadows": [
       {
         "name": "geen",
         "value": "none",
-        "purpose": "Dit systeem gebruikt geen schaduwen. Diepte komt uit de toonladder (#080b0f / #0d1117 / #161b22 / #21262d) en 1px randen in #30363d. De tokens --shadow-elevation-1/-2 bestaan nog maar zijn restanten, geen vocabulaire."
+        "purpose": "Dit systeem gebruikt geen schaduwen. Diepte komt uit de toonladder (#080b0f / #0d1117 / #161b22 / #21262d) en 1px randen in #30363d. Gemeten op index.html rendert er precies een box-shadow op de hele pagina, en dat is een inzetrand. De tokens --shadow-elevation-1/-2 en --shadow-accent-terminal bestaan nog en worden buiten de landingspagina nog aangeroepen; ze zijn restanten, geen vocabulaire."
+      },
+      {
+        "name": "chip-next-ring",
+        "value": "inset 0 0 0 1px #9fef00",
+        "purpose": "De eerstvolgende commandochip krijgt een tweede rand binnen zijn eigen kader. Een rand die geen layout verschuift, geen hoogte."
       },
       {
         "name": "prompt-focus",
         "value": "0 0 0 3px rgba(159, 239, 0, 0.15)",
-        "purpose": "Enige sanctionele uitzondering: focusring op terminalinvoer. Dit is toestandsfeedback, geen elevatie."
+        "purpose": "Focusring op terminalinvoer. Toestandsfeedback, geen elevatie."
       }
     ],
     "motion": [
@@ -472,7 +601,7 @@
       {
         "name": "transition-normal",
         "value": "0.3s ease",
-        "purpose": "Grotere toestandswissels: menu openklappen, modals."
+        "purpose": "Grotere toestandswissels: menu openklappen, modals, de pil van de themaschakelaar."
       },
       {
         "name": "reduced-motion",
@@ -504,74 +633,95 @@
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "De hoofdweg. Neon Lime vlak met donkere tekst; een per scherm.",
-      "html": "<button class=\"ds-btn-primary\">Start met leren</button>",
-      "css": ".ds-btn-primary { background: var(--color-cta-primary, #9fef00); color: var(--color-cta-text, #0d1117); font-family: var(--font-heading, 'Space Grotesk', sans-serif); font-size: 16px; font-weight: 600; padding: 8px 16px; border: 2px solid transparent; border-radius: var(--border-radius-button, 4px); cursor: pointer; transition: background var(--transition-fast, .15s ease); } .ds-btn-primary:hover { background: var(--color-cta-primary-hover, #8ad600); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-cta-primary, #9fef00); outline-offset: 2px; }"
+      "description": "De hoofdweg. Neon Lime vlak met donkere tekst; de enige accentdrager buiten het venster in het eerste scherm.",
+      "html": "<a href=\"#\" class=\"ds-btn-primary\">Start de simulator</a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--color-cta-primary, #9fef00); color: var(--color-cta-text, #0d1117); font-family: var(--font-ui, 'Atkinson Hyperlegible Next', sans-serif); font-size: 20.25px; font-weight: 600; letter-spacing: .5px; text-decoration: none; padding: 16px 32px; border: 2px solid transparent; border-radius: var(--border-radius-modal, 8px); cursor: pointer; transition: background var(--transition-fast, .15s ease); } .ds-btn-primary:hover { background: var(--color-cta-primary-hover, #8ad600); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-info, #79c0ff); outline-offset: 2px; }"
     },
     {
       "name": "Secondary Button",
       "kind": "button",
       "refersTo": "button-secondary",
-      "description": "Rustig van zichzelf; kleurt pas bij interactie.",
-      "html": "<button class=\"ds-btn-secondary\">Bekijk de gidsen</button>",
-      "css": ".ds-btn-secondary { background: transparent; color: var(--color-ui-secondary, #a1a8b0); font-family: var(--font-heading, 'Space Grotesk', sans-serif); font-size: 16px; padding: 8px 16px; border: 2px solid var(--color-ui-secondary, #a1a8b0); border-radius: var(--border-radius-button, 4px); cursor: pointer; transition: color var(--transition-fast, .15s ease), border-color var(--transition-fast, .15s ease); } .ds-btn-secondary:hover { color: var(--color-cta-primary, #9fef00); border-color: var(--color-cta-primary, #9fef00); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--color-cta-primary, #9fef00); outline-offset: 2px; }"
+      "description": "Transparant met een neon haarlijn. Onder de vouw, waar de accentgrens nog niet doorgevoerd is.",
+      "html": "<a href=\"#\" class=\"ds-btn-secondary\">Bekijk het leerpad</a>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-height: 44px; background: transparent; color: var(--color-cta-primary, #9fef00); font-family: var(--font-ui, 'Atkinson Hyperlegible Next', sans-serif); font-size: 15.3px; font-weight: 600; letter-spacing: .5px; text-decoration: none; padding: 11px 20px; border: 1px solid var(--color-cta-primary, #9fef00); border-radius: var(--border-radius-button, 4px); cursor: pointer; transition: color var(--transition-fast, .15s ease), border-color var(--transition-fast, .15s ease); } .ds-btn-secondary:hover { color: var(--color-cta-primary-hover, #8ad600); border-color: var(--color-cta-primary-hover, #8ad600); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--color-info, #79c0ff); outline-offset: 2px; }"
     },
     {
-      "name": "Eyebrow Badge",
+      "name": "Nav CTA Button",
+      "kind": "button",
+      "refersTo": "button-nav",
+      "description": "De knop in de balk. Draagt sinds Sessie 236 geen accent: een navigatieknop is niet de hoofdweg.",
+      "html": "<a href=\"#\" class=\"ds-btn-nav\">Open de terminal</a>",
+      "css": ".ds-btn-nav { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--color-navbar-link, #c9d1d9); font-family: var(--font-ui, 'Atkinson Hyperlegible Next', sans-serif); font-size: 15.75px; font-weight: 600; letter-spacing: .3px; text-decoration: none; padding: 8px 16px; border: 1px solid var(--color-border-dark-frame, #30363d); border-radius: var(--border-radius-cta-nav, 10px); transition: color var(--transition-fast, .15s ease), border-color var(--transition-fast, .15s ease); } .ds-btn-nav:hover { color: var(--color-navbar-link-hover, #fff); border-color: var(--color-navbar-link-hover, #fff); } .ds-btn-nav:focus-visible { outline: 2px solid var(--color-info, #79c0ff); outline-offset: 2px; }"
+    },
+    {
+      "name": "Command Chip",
       "kind": "chip",
-      "refersTo": "eyebrow-badge",
-      "description": "De kanonieke chip: monolabel dat context geeft boven een kop. Statisch, labelt en schakelt niet.",
-      "html": "<span class=\"ds-eyebrow\">Browser-based Terminal Simulator</span>",
-      "css": ".ds-eyebrow { display: inline-block; font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 13.5px; font-weight: 500; letter-spacing: .5px; color: var(--color-prompt, #9fef00); background: var(--color-prompt-bg-subtle, rgba(159,239,0,.05)); border: 1px solid var(--color-prompt-border-light, rgba(159,239,0,.3)); border-radius: 20px; padding: 4px 16px; }"
+      "refersTo": "command-chip",
+      "description": "De kanonieke chip: een tikbaar commando onder het venster. De eerstvolgende chip draagt een tweede rand binnen zijn eigen kader. Statische labels horen hier niet.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip ds-chip-next\">nmap 192.168.1.1</button><button class=\"ds-chip\">ls</button><button class=\"ds-chip\">help</button></div>",
+      "css": ".ds-chips { display: flex; flex-wrap: wrap; gap: 8px; background: var(--color-bg-demo-terminal, #000); padding: 12px 24px; } .ds-chip { min-height: 44px; background: transparent; color: var(--color-cta-primary, #9fef00); font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 14.4px; padding: 4px 16px; border: 1px solid var(--color-cta-primary, #9fef00); border-radius: var(--border-radius-button, 4px); cursor: pointer; transition: background-color var(--transition-fast, .15s ease); } .ds-chip:hover { background-color: rgba(159, 239, 0, .1); } .ds-chip-next { box-shadow: inset 0 0 0 1px var(--color-cta-primary, #9fef00); } .ds-chip:focus-visible { outline: 2px solid var(--color-info, #79c0ff); outline-offset: 2px; }"
     },
     {
       "name": "Card",
       "kind": "card",
       "refersTo": "card",
-      "description": "Halftransparant opgetild vlak; de paginatoon schemert door. Geen schaduw.",
-      "html": "<div class=\"ds-card\"><h3>40+ commands uit de praktijk</h3><p>Van bestandssysteem tot netwerkscans.</p></div>",
-      "css": ".ds-card { background: rgba(22, 27, 34, .5); border: 1px solid var(--color-border, #30363d); border-radius: 16px; padding: 32px; } .ds-card h3 { font-family: var(--font-heading, 'Space Grotesk', sans-serif); font-size: 22.5px; font-weight: 600; line-height: 1.2; color: var(--color-text, #c9d1d9); margin: 0 0 8px; } .ds-card p { font-family: var(--font-body, Inter, sans-serif); font-size: 18px; line-height: 1.5; color: var(--color-text-dim, #a1a8b0); margin: 0; }"
+      "description": "Halftransparant opgetild vlak; de paginatoon schemert door. Geen schaduw, 16px hoek (niet getokeniseerd).",
+      "html": "<div class=\"ds-card\"><h3>40+ commando's uit de praktijk</h3><p>Van bestandssysteem tot netwerkscans.</p></div>",
+      "css": ".ds-card { background: rgba(22, 27, 34, .3); border: 1px solid var(--color-border, #30363d); border-radius: 16px; padding: 32px; } .ds-card h3 { font-family: var(--font-heading, 'JetBrains Mono', monospace); font-size: 22.5px; font-weight: 600; line-height: 1.2; color: var(--color-text, #c9d1d9); margin: 0 0 8px; } .ds-card p { font-family: var(--font-body, 'Atkinson Hyperlegible Next', sans-serif); font-size: 18px; line-height: 1.5; color: var(--color-text-dim, #a1a8b0); margin: 0; }"
     },
     {
       "name": "Terminal Input",
       "kind": "input",
       "refersTo": "terminal-input",
-      "description": "Waar je typt. Monospace, Neon Lime, haarlijnrand, geen afronding.",
-      "html": "<div class=\"ds-terminal-line\"><span class=\"ds-prompt\">user@hacksim:~$</span><input class=\"ds-terminal-input\" value=\"nmap 192.168.1.1\"></div>",
-      "css": ".ds-terminal-line { display: flex; align-items: center; gap: 8px; background: var(--color-bg-terminal, #0d1117); } .ds-prompt { font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 18px; color: var(--color-prompt, #9fef00); } .ds-terminal-input { flex: 1; font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 18px; color: var(--color-input, #9fef00); background: var(--color-bg-terminal, #0d1117); border: 1px solid var(--color-border, #30363d); border-radius: 0; padding: 8px 12px; } .ds-terminal-input:focus { outline: none; border-color: var(--color-prompt, #9fef00); box-shadow: 0 0 0 3px var(--color-prompt-shadow, rgba(159,239,0,.15)); }"
+      "description": "Waar je typt. Monospace, Neon Lime, haarlijnscheiding boven, geen afronding.",
+      "html": "<div class=\"ds-terminal-line\"><span class=\"ds-prompt\">user@hacksim:~$</span><input class=\"ds-terminal-input\" value=\"nmap 192.168.1.1\" aria-label=\"Commando\"></div>",
+      "css": ".ds-terminal-line { display: flex; align-items: center; gap: 8px; background: var(--color-bg-demo-terminal, #000); border-top: 1px solid var(--color-border, #30363d); padding: 8px 24px; } .ds-prompt { font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 16.2px; color: var(--color-prompt, #9fef00); } .ds-terminal-input { flex: 1; font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 16.2px; color: var(--color-input, #9fef00); background: transparent; border: none; border-radius: 0; padding: 0; } .ds-terminal-input:focus { outline: none; box-shadow: 0 0 0 3px var(--color-prompt-shadow, rgba(159,239,0,.15)); }"
     },
     {
       "name": "Navigation",
       "kind": "nav",
-      "refersTo": "navigation",
-      "description": "Dark Frame: blijft donker in beide thema's, dus alle kleuren erin zijn thema-onafhankelijk vastgezet.",
-      "html": "<nav class=\"ds-nav\"><a href=\"#\" class=\"ds-nav-link ds-active\">Terminal</a><a href=\"#\" class=\"ds-nav-link\">Gidsen</a><a href=\"#\" class=\"ds-nav-link\">Blog</a></nav>",
-      "css": ".ds-nav { display: flex; align-items: center; gap: 24px; height: 60px; padding: 0 32px; background: var(--color-bg-navbar, #1a1a1a); } .ds-nav-link { font-family: var(--font-body, Inter, sans-serif); font-size: 1rem; font-weight: 500; color: var(--color-navbar-link, #c9d1d9); text-decoration: none; padding: 8px 0; border-bottom: 2px solid transparent; min-height: 44px; display: flex; align-items: center; transition: color var(--transition-fast, .15s ease); } .ds-nav-link:hover { color: var(--color-navbar-link-hover, #fff); border-bottom-color: var(--navbar-accent, #9fef00); } .ds-nav-link.ds-active { border-bottom-color: var(--color-navbar-underline, #58a6ff); }"
+      "refersTo": "nav-link",
+      "description": "Dark Frame: blijft donker in beide thema's, dus alle kleuren erin zijn thema-onafhankelijk. De merknaam staat in de kopletter en draagt geen accent.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\" class=\"ds-nav-brand\"><span class=\"ds-brand-icon\">[&gt;_]</span>HackSimulator</a><a href=\"#\" class=\"ds-nav-link ds-active\">Terminal</a><a href=\"#\" class=\"ds-nav-link\">Gidsen</a><a href=\"#\" class=\"ds-nav-link\">Blog</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 24px; height: 60px; padding: 0 32px; background: var(--color-bg-navbar, #1a1a1a); border-bottom: 1px solid var(--color-border-dark-frame, #30363d); } .ds-nav-brand { display: flex; align-items: center; gap: 8px; font-family: var(--font-heading, 'JetBrains Mono', monospace); font-size: 18.9px; font-weight: 600; letter-spacing: .3px; color: var(--color-navbar-link, #c9d1d9); text-decoration: none; } .ds-brand-icon { color: var(--color-navbar-link, #c9d1d9); } .ds-nav-link { font-family: var(--font-ui, 'Atkinson Hyperlegible Next', sans-serif); font-size: 18px; font-weight: 500; letter-spacing: .5px; color: var(--color-navbar-link, #c9d1d9); text-decoration: none; padding: 8px 16px; border-bottom: 2px solid transparent; transition: color var(--transition-fast, .15s ease); } .ds-nav-link:hover { color: var(--color-navbar-link-hover, #fff); } .ds-nav-link.ds-active { border-bottom-color: var(--color-navbar-underline, #58a6ff); }"
     },
     {
-      "name": "Terminal Output Line",
+      "name": "Theme Toggle",
       "kind": "custom",
-      "refersTo": "terminal",
-      "description": "Het handtekeningcomponent. De renderer kleurt op het eerste teken: [X] rood, vinkje groen, [TIP] als les. Kolomuitlijning is functioneel, geen smaak.",
-      "html": "<pre class=\"ds-terminal-output\"><span class=\"ds-line\">22/tcp   open  ssh     OpenSSH 8.2p1</span>\n<span class=\"ds-line ds-nl\">  &lt;- Secure Shell: versleutelde toegang op afstand</span>\n<span class=\"ds-line ds-tip\">[TIP] Open poorten zijn mogelijke ingangen. Kijk altijd welke versie er draait.</span>\n<span class=\"ds-line ds-ok\">[✓] Scan voltooid</span>\n<span class=\"ds-line ds-err\">[X] Host niet bereikbaar</span></pre>",
-      "css": ".ds-terminal-output { font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 18px; line-height: 1.5; background: var(--color-bg-terminal, #0d1117); color: var(--color-text, #c9d1d9); padding: 20px; margin: 0; white-space: pre; overflow-x: auto; } .ds-line { display: block; } .ds-nl { color: var(--color-text-dim, #a1a8b0); } .ds-tip { color: var(--color-info, #79c0ff); } .ds-ok { color: var(--color-success, #3fb950); } .ds-err { color: var(--color-error, #fa7c76); }"
+      "refersTo": "theme-toggle-active",
+      "description": "In de balk icoon-only: getekende maan/zon-SVG's, tekstlabels visueel weggeklemd en alleen leesbaar in het overlaymenu. De actieve optie is een toon-inversie, geen gekleurd vlak.",
+      "html": "<button type=\"button\" class=\"ds-toggle\" aria-label=\"Wissel naar light mode\" aria-pressed=\"false\"><span class=\"ds-toggle-option ds-active\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z\"></path></svg><span class=\"ds-toggle-label\">DARK</span></span><span class=\"ds-toggle-option\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"4\"></circle><path d=\"M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4\"></path></svg><span class=\"ds-toggle-label\">LIGHT</span></span></button>",
+      "css": ".ds-toggle { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 4px 8px; background: var(--color-bg-navbar, #1a1a1a); border: none; border-radius: var(--border-radius-button, 4px); font-family: var(--font-ui, 'Atkinson Hyperlegible Next', sans-serif); font-size: 13px; font-weight: 600; letter-spacing: 1px; cursor: pointer; } .ds-toggle-option { display: flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: var(--border-radius-small, 2px); color: var(--color-toggle-text-inactive, #a1a8b0); transition: all var(--transition-normal, .3s ease); } .ds-toggle-option.ds-active { color: var(--color-bg-navbar, #1a1a1a); background-color: var(--color-navbar-link, #c9d1d9); } .ds-toggle-option:hover { background-color: var(--color-toggle-hover, rgba(255,255,255,.1)); } .ds-toggle-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; } .ds-toggle:focus-visible { outline: 2px solid var(--color-info, #79c0ff); outline-offset: 2px; }"
+    },
+    {
+      "name": "Terminal Window",
+      "kind": "custom",
+      "refersTo": "terminal-window",
+      "description": "Het handtekeningcomponent, op de landingspagina over de volle contentbreedte. Het tilt op door een toontrede (puur zwart op #0d1117), niet door een halo. De renderer kleurt op het eerste teken: [X] rood, vinkje groen, [TIP] als les. Kolomuitlijning is functioneel, geen smaak.",
+      "html": "<div class=\"ds-term\"><div class=\"ds-term-bar\"><span class=\"ds-dot ds-r\"></span><span class=\"ds-dot ds-y\"></span><span class=\"ds-dot ds-g\"></span><span class=\"ds-term-title\">user@hacksim: ~</span></div><pre class=\"ds-term-body\"><span class=\"ds-line ds-pr\">user@hacksim:~$ nmap 192.168.1.1</span>\n<span class=\"ds-line\">22/tcp   open  ssh     OpenSSH 8.2p1</span>\n<span class=\"ds-line ds-nl\">  &lt;- Secure Shell: versleutelde toegang op afstand</span>\n<span class=\"ds-line ds-tip\">[TIP] Open poorten zijn mogelijke ingangen. Kijk altijd welke versie er draait.</span>\n<span class=\"ds-line ds-ok\">[✓] Scan voltooid</span>\n<span class=\"ds-line ds-err\">[X] Host niet bereikbaar</span></pre></div>",
+      "css": ".ds-term { background: var(--color-bg-demo-terminal, #000); border: 1px solid var(--color-border, #30363d); border-radius: var(--border-radius-modal, 8px); overflow: hidden; } .ds-term-bar { display: flex; align-items: center; gap: 4px; padding: 8px 16px; background: var(--color-bg-demo-terminal-header, #161b22); border-bottom: 1px solid var(--color-border, #30363d); } .ds-dot { width: 12px; height: 12px; border-radius: var(--border-radius-circle, 50%); } .ds-r { background: var(--traffic-light-red, #ff5f56); } .ds-y { background: var(--traffic-light-yellow, #ffbd2e); } .ds-g { background: var(--traffic-light-green, #27c93f); } .ds-term-title { margin-left: 8px; font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 13.5px; color: var(--color-text-dim, #a1a8b0); } .ds-term-body { font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 16.2px; line-height: 1.5; color: #c9d1d9; padding: 20px 24px; margin: 0; white-space: pre; overflow-x: auto; } .ds-line { display: block; } .ds-pr { color: var(--color-prompt, #9fef00); } .ds-nl { color: #a1a8b0; } .ds-tip { color: var(--color-info, #79c0ff); } .ds-ok { color: var(--color-success, #3fb950); } .ds-err { color: var(--color-error, #fa7c76); }"
     }
   ],
   "narrative": {
     "northStar": "De ondertitelde terminal",
-    "overview": "Alles ziet er echt en Engels uit, met Nederlands dat er rustig naast meeloopt. Dat is tegelijk de positionering van het product en de vorm van elke output: de tool spreekt zoals de echte tool spreekt, en de uitleg staat ernaast in plaats van eroverheen. Een bezoeker die op Engels afhaakt kan hier meekijken zonder dat het echte werk verwatert.\n\nHet systeem is donker, vlak en precies. De diepte komt niet uit schaduw maar uit een toonladder van vier stappen en uit haarlijnen van 1px. Het neon-lime accent is zeldzaam: het markeert waar jij aan zet bent (de prompt, wat je typt, de primaire CTA) en verder niets. Die zeldzaamheid is de reden dat het werkt. De omliggende site is bewust stiller dan het terminalvenster, zodat het terminalvenster de hoofdrol houdt.\n\nToon is bemoedigend en nuchter. Geen hype, geen opgeklopte cijfers, geen urgentie die er niet is. Wat je ziet is wat het is.",
+    "overview": "Alles ziet er echt en Engels uit, met Nederlands dat er rustig naast meeloopt. Dat is tegelijk de positionering van het product en de vorm van elke output: de tool spreekt zoals de echte tool spreekt, en de uitleg staat ernaast in plaats van eroverheen. Een bezoeker die op Engels afhaakt kan hier meekijken zonder dat het echte werk verwatert.\n\nHet systeem is donker, vlak en precies. De diepte komt niet uit schaduw maar uit een toonladder van vier stappen en uit haarlijnen van 1px. Op de hele landingspagina rendert nog precies een box-shadow, en dat is een inzetrand van 1px op de volgende commandochip — geen hoogte, maar een rand die geen ruimte inneemt. Het neon-lime accent is zeldzaam: het markeert waar jij aan zet bent (de prompt, wat je typt, de primaire actie) en verder niets. Die zeldzaamheid is de reden dat het werkt.\n\nDe letter is sinds deze bouw de werkletter van het product zelf. JetBrains Mono kopt en werkt; Atkinson Hyperlegible Next leest en draagt het chroom. Twee families, drie rollen — en mono is de stem van het ding, nooit een sfeerlaagje op een los label. Toon is bemoedigend en nuchter. Geen hype, geen opgeklopte cijfers, geen urgentie die er niet is.",
     "keyCharacteristics": [
       "Donkerbasis #0d1117 met een tonale ladder in vier stappen; geen schaduwen.",
       "Een schel accent (#9fef00), spaarzaam ingezet als signaal, nooit als decoratie.",
-      "Drie fonts met drie duidelijke rollen: Space Grotesk kopt, Inter leest, JetBrains Mono werkt.",
+      "Twee letters in drie rollen: JetBrains Mono kopt en werkt, Atkinson Hyperlegible Next leest en draagt het chroom.",
       "Volwaardig licht thema met eigen AAA-afgestemde waarden, niet een omgekeerd donker thema.",
-      "Chrome (navbar, footer) blijft donker in beide thema's: het Dark Frame-patroon."
+      "Chroom (navbar, footer) blijft donker in beide thema's: het Dark Frame-patroon."
     ],
     "rules": [
       {
         "name": "The One Voice Rule",
         "section": "colors",
-        "body": "Neon Lime markeert alleen waar de gebruiker aan zet is: de prompt, de invoer, de primaire CTA, en hover in het Dark Frame. Zodra het ook decoratie wordt, stopt het met signaleren en is het alleen nog fel."
+        "body": "Neon Lime markeert alleen waar de gebruiker aan zet is: de prompt, de invoer, de commandochips, de primaire actie, en hover in het Dark Frame. Zodra het ook decoratie wordt, stopt het met signaleren en is het alleen nog fel."
+      },
+      {
+        "name": "The One Carrier Rule",
+        "section": "colors",
+        "body": "Binnen het terminalvenster is kleur betekenis en verandert er niets. Buiten het venster betekent kleur 'hier kun je klikken' en staat er hoogstens een accentdrager per scherm. Deze regel geldt op dit moment alleen voor het eerste scherm. Gemeten op 1440x900: het eerste scherm draagt 1 accent buiten het venster en 14 erbinnen; de acht schermen onder de vouw dragen er 2 tot 12 per scherm. Dat is een vastgelegde grens uit het direction contract, geen vergeten opruiming. Wie hier verdergaat, sweept de resterende acht schermen of schrapt de regel als sitebrede belofte; laat hem niet half staan. De grens is geasserteerd in tests/e2e/hero-accent-budget.spec.js."
       },
       {
         "name": "The Dark Frame Rule",
@@ -581,45 +731,54 @@
       {
         "name": "The Measured Contrast Rule",
         "section": "colors",
-        "body": "Elke kleurwaarde is gekozen op een gemeten ratio, niet op gevoel. Een nieuwe waarde is pas geldig als de 7 contrast-specs in tests/e2e/ groen blijven. Doel is AAA, niet AA."
+        "body": "Elke kleurwaarde is gekozen op een gemeten ratio, niet op gevoel. Een nieuwe waarde is pas geldig als de contrast-specs in tests/e2e/ groen blijven (text-contrast, link-contrast, accent-text-contrast, eyebrow-contrast). Doel is AAA, niet AA."
       },
       {
-        "name": "The Three Voices Rule",
+        "name": "The Two Letters Rule",
         "section": "typography",
-        "body": "Drie fonts, drie rollen: Space Grotesk kopt, Inter leest, JetBrains Mono werkt. Een vierde familie voegt niets toe wat een gewicht niet ook kan."
+        "body": "Twee families, drie rollen: JetBrains Mono kopt en werkt, Atkinson Hyperlegible Next leest en draagt het chroom. Een derde familie voegt niets toe wat een gewicht niet ook kan. De Body- en UI-rol delen bewust een bestand: --font-ui is een rol, geen familie."
+      },
+      {
+        "name": "The Mono Is The Voice Rule",
+        "section": "typography",
+        "body": "Mono draagt de koppen, de merknaam en getallen — een getal is een meting, geen decoratie. Mono op losse labels, knoppen of navigatielinks is precies het sfeerlaagje dat deze wereld weigert, en het kost breedte: gemeten op 1280px vroeg de balk met de navlinks in mono 1303px bij 1265px beschikbaar, met de bodyletter 1211px."
       },
       {
         "name": "The Shell Is Mono Rule",
         "section": "typography",
-        "body": "Alles binnen het terminalvenster is monospace: output, prompt en invoer. asciiBox en de nmap-achtige output rekenen op kolomuitlijning, en prompt en invoer moeten dezelfde metriek hebben als de regels erboven. Alle drie gemeten op 10,8px per teken; box-teken en letter M zijn even breed."
+        "body": "Alles binnen het terminalvenster is monospace: output, prompt en invoer. asciiBox en de nmap-achtige output rekenen op kolomuitlijning, en prompt en invoer moeten dezelfde metriek hebben als de regels erboven."
       },
       {
-        "name": "The Scale Gap Rule",
+        "name": "The Even Ladder Rule",
         "section": "typography",
-        "body": "De sprong van Headline (45px) naar Title (22,5px) is precies factor twee, terwijl Display naar Headline factor 1,4 is. Dat gat is niet ontworpen maar ontstaan. Elke nieuwe tussenlaag hoort die verhouding te repareren, niet te verdiepen."
+        "body": "De ladder is gelijkmatig: 45,9 → 32,0 → 22,5 → 18px, dus factor 1,43 / 1,42 / 1,25. Het gat van factor 2,00 tussen Headline en Title dat hier tot 19 sep 2026 als ontwerpschuld stond, bestaat niet meer. Een nieuwe tussenlaag hoort die verhouding te houden, niet opnieuw te openen. Display en Headline zijn vloeiend (clamp()); Title is dat niet."
       },
       {
         "name": "The No Shadow Rule",
         "section": "elevation",
-        "body": "Een shell heeft geen schaduwen; schaduw is een papiermetafoor en dit is geen papier. Wie diepte nodig heeft pakt de volgende toontrede of een haarlijn. De enige uitzondering die nog ter discussie staat is de neon-glow rond het terminalvenster: die is identiteit, geen elevatie."
+        "body": "Een shell heeft geen schaduwen; schaduw is een papiermetafoor en dit is geen papier. Wie diepte nodig heeft pakt de volgende toontrede of een haarlijn. Er is geen uitzondering meer: de statische neon-glow — de halo om het venster, de radiale waas achter de hero, de halo's onder de laatste CTA en de limoengloed op de knophovers — is in deze bouw verwijderd, samen met de tokens die hem droegen. Glow die overblijft is toestandsfeedback, en die is state, geen elevatie."
       }
     ],
     "dos": [
       "Do diepte uitdrukken in de toonladder (#080b0f / #0d1117 / #161b22 / #21262d) en 1px #30363d-randen.",
-      "Do Neon Lime bewaren voor waar de gebruiker aan zet is. Zeldzaamheid is de functie.",
-      "Do elke nieuwe kleurwaarde afrekenen op een gemeten ratio en de 7 contrast-specs in tests/e2e/ groen houden. Doel is AAA.",
-      "Do voor het lichte thema een eigen waarde kiezen in plaats van de donkere om te keren.",
+      "Do Neon Lime bewaren voor waar de gebruiker aan zet is. Zeldzaamheid is de functie: binnen het venster is kleur betekenis, buiten het venster hoogstens een drager.",
+      "Do elke nieuwe kleurwaarde afrekenen op een gemeten ratio en de contrast-specs in tests/e2e/ groen houden. Doel is AAA.",
+      "Do voor het lichte thema een eigen waarde kiezen in plaats van de donkere om te keren; dat is hoe het huidige systeem het doet en waarom het AAA haalt.",
       "Do thema-onafhankelijke kleuren gebruiken op navbar en footer.",
+      "Do een selectie tonen door te inverteren binnen de bestaande tonen, niet door er een nieuwe verzadigde kleur bij te zetten.",
+      "Do iconen tekenen als SVG op currentColor, niet kiezen uit een fontsubset.",
       "Do elke nieuwe kleur, radius of spacing als token toevoegen, niet als losse waarde."
     ],
     "donts": [
-      "Don't schaduwen introduceren. Dit systeem is vlak.",
-      "Don't het terminalvenster uit monospace halen. Output, prompt en invoer delen sinds 19 sep 2026 alle drie var(--font-terminal); verwijs nooit rechtstreeks naar een fontnaam.",
+      "Don't schaduwen of statische gloed introduceren. Dit systeem is vlak; zie The No Shadow Rule. Glow mag alleen state zijn.",
+      "Don't het terminalvenster uit monospace halen. Output, prompt en invoer delen alle drie var(--font-terminal). Verwijs nooit rechtstreeks naar een fontnaam in het venster.",
+      "Don't mono gebruiken op chroom — knoppen, navigatielinks, formulierlabels, meta. Die staan in --font-ui; zie The Mono Is The Voice Rule.",
       "Don't emoji gebruiken in code of output. ASCII-markers, altijd.",
-      "Don't een vierde lettertypefamilie toevoegen.",
+      "Don't een derde lettertypefamilie toevoegen.",
+      "Don't een merknaam, merkicoon, sectie-icoon of navigatieknop in het accent zetten. Accent is een aanwijzing dat je kunt handelen, geen merkkleur.",
       "Don't !important gebruiken in styles/; win op specificiteit.",
-      "Don't het groene accent van de hoofdsite doortrekken naar de blog. Die gebruikt bewust blauw.",
-      "Don't een buildstap, framework of bundler introduceren om een ontwerpprobleem op te lossen."
+      "Don't het groene accent van de hoofdsite doortrekken naar de blog. Die gebruikt bewust blauw, en de in-content CTA-boxen zijn bewust links uitgelijnd met een blauwe linkerrand.",
+      "Don't een buildstap, framework of bundler introduceren om een ontwerpprobleem op te lossen. Vanilla is een red line, geen voorkeur."
     ]
   }
 }

@@ -71,7 +71,7 @@
 - **Playwright:** **43 spec files, 317 `test()`-declaraties** per browser-project (ground truth Sessie 234; regel hierboven stond al goed, deze regel hing nog op de Sessie 232-stand 42/315) — **Sessie 232: −3 specs** (drie tests die niets bewaakten; dekking staat assertief elders) (drie guards in `blog-navigation.spec.js`: filterstand-volgorde, niet-categorie-hash, container-overflow @375px). Gemeten met `grep -rE "^\s*test\("`, niet uitgerekend, en opnieuw is de declaratie-telling misleidend: die 2 declaraties genereren **31 tests** (één `test()` in een `for…of` over de 30 pagina's uit `helpers/paginas.js`, plus de pixelvergelijking). Sessie 229-verificatie: volle suite over **drie motoren** **1520 passed / 0 failed / 25 skipped** (1,2 uur). ⚠️ De eerste poging gaf exit 0 mét `55 did not run` — een zelfgekozen `--global-timeout` van 25 min kapte de run af, en 451-passed-in-25,0-min las als groen. Een afgekapte run is geen groene run; de limiet hoort op een **meting** te staan (chromium alleen heeft ~28 min nodig), niet op een gevoel. Zie ook #73.
 
 <!-- VALIDATE-BUNDLE-START Sessie 157 — ground-truth target voor scripts/validate-docs.sh --deep -->
-<!-- src=734 styles=462 blog=491 assets=1741 (KB unminified, du -sb / 1024 basis; Sessie 234 ground-truth meting) -->
+<!-- src=735 styles=429 blog=491 assets=1741 (KB unminified, du -sb / 1024 basis; Sessie 236 ground-truth meting — styles zakte van 462 naar 429 doordat Inter en Space Grotesk zijn vervangen door één variabele Atkinson: fonts 103,5 -> 67,8 KB) -->
 <!-- VALIDATE-BUNDLE-END -->
 
 **Volgende Stappen:**

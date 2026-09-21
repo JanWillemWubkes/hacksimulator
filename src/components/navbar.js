@@ -33,10 +33,10 @@ function getMarketingNavbar(options = {}) {
     <nav class="landing-nav" role="navigation" aria-label="Main navigation">
       <a href="/" class="nav-brand">
         <svg class="brand-icon" width="32" height="32" viewBox="6 6 20 20" aria-hidden="true">
-          <rect x="10" y="7.5" width="3" height="11.5" rx="0.8" fill="#9fef00"/>
-          <rect x="19" y="7.5" width="3" height="11.5" rx="0.8" fill="#9fef00"/>
-          <rect x="10" y="11.75" width="12" height="3" rx="0.8" fill="#9fef00"/>
-          <rect x="9" y="22" width="14" height="2.5" rx="1.25" fill="#9fef00"/>
+          <rect x="10" y="7.5" width="3" height="11.5" rx="0.8" fill="currentColor"/>
+          <rect x="19" y="7.5" width="3" height="11.5" rx="0.8" fill="currentColor"/>
+          <rect x="10" y="11.75" width="12" height="3" rx="0.8" fill="currentColor"/>
+          <rect x="9" y="22" width="14" height="2.5" rx="1.25" fill="currentColor"/>
         </svg>
         <span>HackSimulator<span class="brand-accent">.nl</span></span>
       </a>
@@ -60,10 +60,10 @@ function getMarketingNavbar(options = {}) {
         <!-- Theme Toggle (desktop only - hidden on mobile) -->
         <button type="button" class="theme-toggle" aria-label="Wissel naar light mode" aria-pressed="false">
           <span class="toggle-option active" data-theme="dark">
-            <span class="toggle-indicator">█</span> DARK
+            <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span class="toggle-label">DARK</span>
           </span>
           <span class="toggle-option" data-theme="light">
-            <span class="toggle-indicator">█</span> LIGHT
+            <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><span class="toggle-label">LIGHT</span>
           </span>
         </button>
 
@@ -86,10 +86,10 @@ function getMarketingNavbar(options = {}) {
     <div class="navbar-actions">
       <button class="theme-toggle" aria-label="Wissel naar light mode" aria-pressed="false" title="Toggle tussen dark en light mode">
         <span class="toggle-option" data-theme="dark">
-          <span class="toggle-indicator">█</span> DARK
+          <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span class="toggle-label">DARK</span>
         </span>
         <span class="toggle-option" data-theme="light">
-          <span class="toggle-indicator">█</span> LIGHT
+          <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><span class="toggle-label">LIGHT</span>
         </span>
       </button>
     </div>
@@ -107,10 +107,10 @@ function getAppNavbar() {
       <!-- Brand/Logo -->
       <a href="/" class="nav-brand" aria-label="HackSimulator.nl home">
         <svg class="brand-icon" width="32" height="32" viewBox="6 6 20 20" aria-hidden="true">
-          <rect x="10" y="7.5" width="3" height="11.5" rx="0.8" fill="#9fef00"/>
-          <rect x="19" y="7.5" width="3" height="11.5" rx="0.8" fill="#9fef00"/>
-          <rect x="10" y="11.75" width="12" height="3" rx="0.8" fill="#9fef00"/>
-          <rect x="9" y="22" width="14" height="2.5" rx="1.25" fill="#9fef00"/>
+          <rect x="10" y="7.5" width="3" height="11.5" rx="0.8" fill="currentColor"/>
+          <rect x="19" y="7.5" width="3" height="11.5" rx="0.8" fill="currentColor"/>
+          <rect x="10" y="11.75" width="12" height="3" rx="0.8" fill="currentColor"/>
+          <rect x="9" y="22" width="14" height="2.5" rx="1.25" fill="currentColor"/>
         </svg>
         <span>HackSimulator<span class="brand-accent">.nl</span></span>
       </a>
@@ -159,10 +159,10 @@ function getAppNavbar() {
           <!-- Theme Toggle -->
           <button class="theme-toggle" aria-label="Wissel naar light mode" aria-pressed="false" title="Toggle tussen dark en light mode">
             <span class="toggle-option" data-theme="dark">
-              <span class="toggle-indicator">█</span> DARK
+              <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span class="toggle-label">DARK</span>
             </span>
             <span class="toggle-option" data-theme="light">
-              <span class="toggle-indicator">█</span> LIGHT
+              <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><span class="toggle-label">LIGHT</span>
             </span>
           </button>
         </div>
@@ -190,10 +190,10 @@ function getBlogNavbar(options = {}) {
     <div class="blog-nav-inner">
       <a href="${basePath}" class="nav-brand">
         <svg class="brand-icon" width="32" height="32" viewBox="6 6 20 20" aria-hidden="true">
-          <rect x="10" y="7.5" width="3" height="11.5" rx="0.8" fill="#9fef00"/>
-          <rect x="19" y="7.5" width="3" height="11.5" rx="0.8" fill="#9fef00"/>
-          <rect x="10" y="11.75" width="12" height="3" rx="0.8" fill="#9fef00"/>
-          <rect x="9" y="22" width="14" height="2.5" rx="1.25" fill="#9fef00"/>
+          <rect x="10" y="7.5" width="3" height="11.5" rx="0.8" fill="currentColor"/>
+          <rect x="19" y="7.5" width="3" height="11.5" rx="0.8" fill="currentColor"/>
+          <rect x="10" y="11.75" width="12" height="3" rx="0.8" fill="currentColor"/>
+          <rect x="9" y="22" width="14" height="2.5" rx="1.25" fill="currentColor"/>
         </svg>
         <span>HackSimulator<span class="brand-accent">.nl</span></span>
       </a>
@@ -214,10 +214,10 @@ function getBlogNavbar(options = {}) {
         </a>
         <button class="theme-toggle" aria-label="Wissel naar light mode" aria-pressed="false" title="Toggle tussen dark en light mode">
           <span class="toggle-option" data-theme="dark">
-            <span class="toggle-indicator">█</span> DARK
+            <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span class="toggle-label">DARK</span>
           </span>
           <span class="toggle-option" data-theme="light">
-            <span class="toggle-indicator">█</span> LIGHT
+            <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><span class="toggle-label">LIGHT</span>
           </span>
         </button>
         <a href="${basePath}terminal.html" class="btn-cta btn-cta-nav">Start de simulator</a>
@@ -235,10 +235,10 @@ function getBlogNavbar(options = {}) {
     <div class="navbar-actions">
       <button class="theme-toggle" aria-label="Wissel naar light mode" aria-pressed="false" title="Toggle tussen dark en light mode">
         <span class="toggle-option" data-theme="dark">
-          <span class="toggle-indicator">█</span> DARK
+          <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span class="toggle-label">DARK</span>
         </span>
         <span class="toggle-option" data-theme="light">
-          <span class="toggle-indicator">█</span> LIGHT
+          <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><span class="toggle-label">LIGHT</span>
         </span>
       </button>
     </div>

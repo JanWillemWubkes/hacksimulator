@@ -12,12 +12,19 @@
   --landing-padding-desktop: var(--layout-padding-x, 32px);  /* Unified with navbar (was 60px) */
   --landing-padding-mobile: 20px;
 
-  /* Typography Scale - Fluid */
-  --font-size-display: clamp(2rem, 5vw, 3.5rem);
+  /* Typografische schaal - vloeiend (herijkt Sessie 236)
+     Was 63 / 45 / 22,5px: factor 1,40 gevolgd door factor 2,00, met een gat in het
+     midden waar geen laag zat. Nu 46 / 32 / 22px, dus 1,44 / 1,45 - een gelijkmatige
+     ladder. De absolute maten mogen omlaag omdat JetBrains Mono breder loopt dan de
+     schreefloze die hier stond: 46px mono draagt hetzelfde gewicht als 63px Space
+     Grotesk. Basis is 18px, dus 1rem = 18px. */
+  --font-size-display: clamp(1.75rem, 4.2vw, 2.55rem);   /* max 45,9px */
+  --font-size-headline: clamp(1.4rem, 3vw, 1.78rem);     /* max 32,0px */
+  --font-size-title: 1.22rem;                            /* 22,0px */
   --font-size-subtitle: clamp(0.9rem, 2vw, 1.1rem);
 
   /* Terminal Demo */
-  --terminal-demo-max-width: 550px;
+  --terminal-demo-max-width: 100%;   /* Sessie 236: was 550px, tweede kolom. Nu de hero zelf. */
 
   /* Hero Background - Theme-aware */
   --hero-grid-color: rgba(255, 255, 255, 0.03);
@@ -31,13 +38,8 @@
      rgb(20,28,22) — ruim boven AAA, dus hier blijft het staan. Zie het light-blok. */
   --eyebrow-text: var(--color-cta-primary);
 
-  /* Glow Effects - Theme-aware */
-  --hero-glow: rgba(160, 240, 0, 0.08);
-  --final-cta-glow: rgba(159, 239, 0, 0.18);
-
   /* Terminal Demo - Theme-aware */
   --terminal-demo-border: var(--color-prompt-border-light);
-  --terminal-demo-glow: 0 0 40px var(--color-prompt-bg-light);
 
   /* Terminal Demo Text - Fixed (always light on dark terminal) */
   --terminal-demo-text: #c9d1d9;
@@ -65,13 +67,8 @@
      dus de badge blijft herkenbaar. Bewaakt door tests/e2e/eyebrow-contrast.spec.js. */
   --eyebrow-text: var(--color-text);
 
-  /* Glow Effects - Much subtler on light backgrounds */
-  --hero-glow: rgba(22, 163, 74, 0.04);
-  --final-cta-glow: rgba(22, 163, 74, 0.06);
-
   /* Terminal Demo - Elevation instead of glow */
   --terminal-demo-border: rgba(22, 163, 74, 0.35);
-  --terminal-demo-glow: none;
 }
 
 /* ==================== Landing Page Base ==================== */
@@ -119,11 +116,11 @@
 }
 
 .nav-brand .brand-icon {
-  color: var(--color-cta-dark-frame);  /* Always neon on dark navbar */
+  color: var(--color-navbar-link);   /* Sessie 236: zie main.css — een wordmark is geen actie */
 }
 
 .nav-brand .brand-accent {
-  color: var(--color-cta-dark-frame);  /* Always neon on dark navbar */
+  color: var(--color-navbar-link);   /* Sessie 236: zie main.css — een wordmark is geen actie */
 }
 
 .nav-brand:hover {
@@ -137,8 +134,20 @@
   gap: var(--spacing-lg);
 }
 
+/* `nowrap` is hier een guard, geen opmaak. Zonder hem krimpen deze flex-items
+   (`flex: 0 1 auto`) tot onder hun tekstbreedte en vallen ze over twee regels — 70px hoog
+   in een balk van 59px, zichtbaar kapot maar door geen enkele scrollWidth-check gezien.
+   Met `nowrap` wordt datzelfde tekort horizontale overflow: luidruchtig en meetbaar.
+   Gemeten @1280px (beschikbaar 1265): nodig 1211px. Zie navbar-collapse.spec.js. */
+.nav-links a,
+.landing-nav .btn-cta-nav {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+
 .nav-links a {
-  font-family: var(--font-heading);
+  font-family: var(--font-ui);
   font-size: var(--navbar-link-size);
   font-weight: var(--navbar-link-weight);
   color: var(--color-navbar-link);
@@ -177,15 +186,37 @@
   gap: var(--spacing-md);
 }
 
-/* Sessie 214: het CTA-label ging van "Start Simulator" naar "Start de simulator" (één
-   naam voor één actie, sitebreed). Dat maakt de knop ~20px breder, en op precies 1280px
-   — de breedte waarop de desktopnav volgens Sessie 213 hoort te verschijnen — kwam de
-   balk daardoor 5px tekort: brand 198 + nav-right 1023 = 1221 tegen 1216 beschikbaar,
-   met afbrekende labels als gevolg. 3px van elk van de vier link-gaps levert 12px op,
-   ruim genoeg, en is diffuser dan de ruimte rond de knop weghalen. De inklapgrens zelf
-   blijft op 1279px: die is bewust op de gangbare 1280px-laptop gekozen. */
+/* Op 1280px zit deze balk al twee sessies op zijn grens: S214 shaafde er
+   `calc(var(--spacing-lg) - 3px)` af, S236 liep er opnieuw tegenaan door de letterwissel.
+   Nu een échte schaalstap i.p.v. nog een magisch getal: 20px winst, die via
+   `space-between` vanzelf landt als afstand wordmark-navblok (gemeten 0px zonder).
+   Géén vaste `gap` op .landing-nav: dat is daar een ondergrens, geen ruimte — liep 17px
+   over de rand. */
 .landing-nav .nav-links {
-  gap: calc(var(--spacing-lg) - 3px);
+  gap: var(--spacing-md);
+}
+
+/* De schakelaar toonde LIGHT en DARK voluit en was daarmee 168px breed — het grootste
+   losse item in de balk na de links. Op 1280px hield dat 3px over tussen de wordmark en
+   het navblok (gemeten). Icoon-only in de balk maakt ~124px vrij. Het label blijft in de
+   toegankelijkheidsboom staan via clip-path i.p.v. display:none, en in het overlaymenu
+   blijft hij gewoon zichtbaar: daar is ruimte, en daar ligt de reden voor de tekstversie. */
+/* Icoon-only maakt de knop smal; zonder ondergrens zakt hij onder het tapdoel dat
+   PRODUCT.md eist. Gemeten vóór deze regel: 84x30px. */
+.landing-nav .theme-toggle,
+.blog-nav .theme-toggle {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.landing-nav .toggle-label,
+.blog-nav .toggle-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /* Theme Toggle - Unified styling (Sessie 97 uniformity) */
@@ -207,8 +238,11 @@
   transition: color var(--transition-fast);
 }
 
+/* Volgt de inversie uit main.css (Sessie 236). Deze regel is (0,3,0) en versloeg daar
+   de basisregel; hem laten staan op --color-toggle-text-active gaf wit op een lichte pil,
+   gemeten 1,7:1. */
 .landing-nav .toggle-option.active {
-  color: var(--color-toggle-text-active);
+  color: var(--color-bg-navbar);
 }
 
 
@@ -221,7 +255,7 @@
   padding: 12px 24px;
   background: var(--color-cta-primary);
   color: var(--color-cta-text);
-  font-family: var(--font-heading);
+  font-family: var(--font-ui);
   font-size: 1rem;
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.3px;
@@ -235,8 +269,8 @@
 .btn-cta:hover {
   background: var(--color-cta-primary-hover);
   color: var(--color-cta-text);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 20px var(--color-cta-primary-glow);
+  transform: translateY(-2px);   /* Sessie 236: de 20px lime-schaduw eronder is weg;
+                                    kleurwissel plus lift dragen de hover al. */
 }
 
 .btn-cta:focus-visible {
@@ -257,6 +291,24 @@
   transform: translateX(4px);
 }
 
+/* Op de homepage draagt deze knop hetzelfde label als de hero-CTA, in hetzelfde scherm.
+   Gemeten: die hero-CTA valt boven de vouw op 1440x900/1280x800/1366x768/390x844; op
+   375x812 neemt de sticky balk het over. Scoping op `body.home` en niet `.landing-page`
+   (dat staat op 9 pagina's): elders is dit de enige CTA. Hover blijft neon — de Dark
+   Frame-uitzondering op One Voice. */
+body.home .btn-cta-nav {
+  background: transparent;
+  color: var(--color-navbar-link);
+  border: 1px solid var(--color-border-dark-frame);
+}
+
+body.home .btn-cta-nav:hover {
+  background: transparent;
+  color: var(--color-cta-dark-frame);
+  border-color: var(--color-cta-dark-frame);
+  box-shadow: none;
+}
+
 /* Nav CTA - Smaller, always neon on dark navbar */
 .btn-cta-nav {
   padding: 8px 16px;
@@ -269,7 +321,6 @@
 .btn-cta-nav:hover {
   background: var(--color-cta-dark-frame-hover);  /* Dark Frame: always neon hover (never changes with theme) */
   color: var(--color-text-on-neon);  /* Always dark text (Dark Frame - never changes with theme) */
-  box-shadow: 0 4px 20px var(--color-cta-dark-frame-glow);  /* Dark Frame: always neon glow (never changes with theme) */
 }
 
 /* Hero CTA - Larger */
@@ -284,9 +335,11 @@
   min-height: auto;
   display: flex;
   align-items: center;
-  padding: 80px 0 64px;
+  /* Was 80px boven. Toen stond hier een kop naast een venster en droeg die ruimte de
+     ademhaling; nu begint het venster meteen en telt elke pixel mee voor de vraag of de
+     primaire actie nog boven de vouw valt. Gemeten @1440x900. */
+  padding: 48px 0 64px;
   position: relative;
-  overflow: hidden;
 }
 
 /* Laag 1: Removed grid pattern (clean dark background per Blink target) */
@@ -294,27 +347,21 @@
   content: none;
 }
 
-/* Laag 2: Subtle green glow only (removed blue orb per Blink target) */
-.hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 30% 50%, var(--hero-glow) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
-}
+/* S236: radiale lime-waas (--hero-glow) weg. Gemeten heroveld rgb(23,32,21) tegen basis
+   rgb(13,17,23): gloed, geen toontrede — het contract sluit glow uit. `overflow: hidden`
+   verviel ermee (de detector zag dat als geklipte container). */
 
 /* Side-by-Side Layout: Text Left, Terminal Right
    `align-items` blijft hier flex-start; de tweekoloms-uitlijning staat in een eigen
    @media (min-width: 769px)-blok verderop. Reden: op ≤768px klapt deze container naar
    `flex-direction: column`, en dan stuurt align-items de *horizontale* as. Eén waarde
    voor beide standen zou dus twee verschillende dingen betekenen. */
+/* Sessie 236: een kolom. De terminal speelt, de tekst ondertitelt eronder. */
 .hero-content {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: flex-start;
-  gap: 32px;
+  gap: var(--spacing-xl);
   max-width: var(--layout-max-width, 1400px);  /* Unified with navbar (was 1600px) */
   width: 100%;
   margin: 0 auto;
@@ -323,28 +370,17 @@
   z-index: 1;
 }
 
-/* Left Column: Text Content */
+/* De ondertiteling onder het venster. De leesmaat staat op .hero-subtitle (672px), niet
+   hier: een displayregel mag langer lopen dan lopende tekst. Met 60ch op deze container
+   viel de h1 over drie regels en zakte de CTA 29px onder de vouw — gemeten @1440x900. */
 .hero-text {
   text-align: left;
-  flex: 1;
+  width: 100%;
 }
 
-/* Tweekoloms-uitlijning (Sessie 215). De terminalkolom (468px) is hóger dan de tekst
-   (428px) en bepaalt dus de cross-size van de flexregel — `align-self: center` op de
-   terminal is daarmee een no-op; het kortere item moet bewegen, dus de regel hoort op
-   de container. Eigen band i.p.v. de basisregel: onder 769px is dit een kolom-flexbox
-   waar align-items de horizontale as stuurt (architecture-patterns.md §4). */
-@media (min-width: 769px) {
-  .hero-content {
-    align-items: center;
-  }
-}
-
-/* Hero Eyebrow Badge */
-.hero-eyebrow {
-  margin: 0 0 var(--spacing-md) 0;
-}
-
+/* Eyebrow-badge. De hero droeg er tot Sessie 236 ook een; die is weg (craft-floor:
+   een kicker boven een kop is een ban, geen default). De klasse blijft omdat acht
+   andere pagina's hem gebruiken, o.a. de lead-magnetkaart op deze pagina. */
 .eyebrow-badge {
   display: inline-block;
   font-family: var(--font-terminal);
@@ -443,32 +479,6 @@
   letter-spacing: -1px;
 }
 
-/* Text Underline Accent */
-.text-underline {
-  position: relative;
-  white-space: nowrap;
-  color: var(--color-accent-text);
-  text-shadow:
-    -4px -2px 0 var(--color-bg),
-     4px -2px 0 var(--color-bg),
-    -4px  2px 0 var(--color-bg),
-     4px  2px 0 var(--color-bg),
-    -3px  0   0 var(--color-bg),
-     3px  0   0 var(--color-bg);
-}
-
-.text-underline::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0.1em;
-  width: 100%;
-  height: 4px;
-  background: var(--color-cta-primary-glow);
-  border-radius: 2px;
-  z-index: -1;
-}
-
 /* Hero Subtitle */
 .hero-subtitle {
   font-family: var(--font-body);
@@ -508,15 +518,22 @@
    bij 14,4px — onder AA, laat staan de AAA die dit project voert. Alleen de pijl is
    groen, en die is decoratief (aria-hidden). */
 .hero-terminal-hint {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
   margin: 0 0 var(--spacing-sm);
   font-family: var(--font-terminal);
   font-size: 0.8rem;
   color: var(--color-text);
 }
 
-.hint-arrow {
-  color: var(--color-accent-text);
-  margin-right: var(--spacing-xs);
+/* Was een Unicode-pijl in --color-accent-text. Twee redenen om er een getekend icoon van
+   te maken: Atkinson Hyperlegible Next draagt U+2193 niet (gemeten met fontTools), en een
+   unicode-glyph als icoonsysteem is geen icoonsysteem. Kleur volgt de tekst, niet het
+   accent — buiten de terminal betekent kleur "hier kun je klikken", en dit is geen knop. */
+.hint-icon {
+  flex-shrink: 0;
+  color: currentColor;
 }
 
 /* Een uitnodiging die je hebt aangenomen is ruis. `is-taken` zet hero-repl.js in
@@ -538,12 +555,14 @@
   margin: 0;
   border-radius: var(--border-radius-modal);
   overflow: hidden;
-  border: 1px solid var(--terminal-demo-border);
+  /* Sessie 236: de neon rand en de 60px-schaduw zijn weg. Het venster had ze nodig om
+     als venster te lezen toen het 550px breed naast een kop stond; over de volle breedte
+     doet de toonstap dat werk al — de body is #000 op een pagina van #0d1117. Wat
+     overblijft is de haarlijn uit DESIGN.md's eigen dieptevocabulaire. De detector
+     kaartte deze combinatie aan als `gpt-thin-border-wide-shadow` (1px rand + 60px blur:
+     kies er een) en als `dark-glow` (nul-offset gekleurde halo). */
+  border: 1px solid var(--color-border);
   position: relative;
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.05),
-    var(--terminal-demo-glow);
 }
 
 /* Terminal Header - macOS style dots */
@@ -804,7 +823,11 @@
 
 /* Theme-agnostisch dim: staat op een vaste zwarte balk, dus --color-text-dim zou in
    light mode de verkeerde kant op gaan (Dark Frame-patroon, Sessie 44). */
+/* `max-width` in ch: tot Sessie 236 begrensde het 550px brede venster deze regel vanzelf
+   op ~70 tekens. Over de volle breedte werd dat 158 — ruim twee keer de comfortabele
+   leesmaat. De grens hoort dus op de tekst en niet op zijn toevallige container. */
 .hero-demo-uitleg {
+  max-width: 70ch;
   margin: var(--spacing-sm) 0 0;
   font-size: 0.7rem;
   line-height: 1.4;
@@ -857,7 +880,7 @@
 }
 
 .landing-section h2 {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-size: var(--font-size-headline);
   color: var(--color-text);
   text-align: center;
   margin: 0 0 var(--spacing-md) 0;
@@ -881,6 +904,8 @@
 }
 
 .trust-bar .social-proof-headline {
+  max-width: 70ch;   /* 117 tekens per regel zonder grens, gemeten @1440 */
+  margin-inline: auto;
   font-family: var(--font-body);
   font-size: 1rem;
   color: var(--color-text-dim);
@@ -908,8 +933,10 @@
   color: var(--color-text);
 }
 
+/* Vier iconen in het accent naast vier stukken tekst die al zeggen wat er staat. Kleur
+   buiten de terminal betekent "hier kun je klikken", en deze badges zijn geen knoppen. */
 .badge-icon-svg {
-  color: var(--color-accent-text);
+  color: var(--color-text);
   flex-shrink: 0;
 }
 
@@ -977,7 +1004,7 @@
 
 .pain-point h3 {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
+  font-size: var(--font-size-title);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text);
   margin: 0 0 var(--spacing-sm) 0;
@@ -999,23 +1026,15 @@
   margin: 0;
 }
 
-/* ==================== Solution Section (Green Banner) ==================== */
+/* ==================== Solution Section ====================
+   S236: was een lime plaat van 1425x381px = 543.225 px2, oftewel 7,1x alle zes
+   CTA-knoppen samen (76.385 px2) — zonder eigen CTA. Brak One Voice op de grootst
+   mogelijke schaal. Nu een gewone .section-band. Het stippenpatroon (zwart op lime) is
+   op een donkere band onzichtbaar en dus verwijderd, niet omgekleurd. */
 .solution-section {
   width: 100%;
-  background: var(--color-cta-primary);
   padding: 96px var(--landing-padding-desktop);
   position: relative;
-  overflow: hidden;
-}
-
-/* Dot pattern overlay */
-.solution-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
-  background-size: 20px 20px;
-  pointer-events: none;
 }
 
 .solution-content {
@@ -1028,17 +1047,17 @@
 
 .solution-section h2 {
   font-family: var(--font-heading);
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 900;
-  color: var(--color-cta-text);
+  font-size: var(--font-size-headline);
+  font-weight: var(--font-weight-bold);   /* was 900: geen enkele as hier reikt zo ver, dus het codeerde een intentie die niet rendert */
+  color: var(--color-text);
   margin: 0 0 var(--spacing-md) 0;
 }
 
 .solution-description {
   font-family: var(--font-body);
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: rgba(0, 0, 0, 0.9);
+  font-size: var(--font-size-subtitle);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-dim);   /* was rgba(0,0,0,0.9): zwart op lime, en niet getokeniseerd */
   max-width: 800px;
   margin: 0 auto;
   line-height: 1.6;
@@ -1084,7 +1103,7 @@
 }
 
 .comparison-header .comparison-cell {
-  font-family: var(--font-heading);
+  font-family: var(--font-ui);
   font-size: 1.05rem;
   font-weight: var(--font-weight-bold);
   text-transform: uppercase;
@@ -1172,7 +1191,7 @@
 
 .feature-card h3 {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
+  font-size: var(--font-size-title);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text);
   margin: 0 0 var(--spacing-sm) 0;
@@ -1213,9 +1232,14 @@
   color: var(--color-text);
 }
 
+/* `minmax(0, 1fr)` en niet `1fr`: die laatste is `minmax(auto, 1fr)`, en de auto-
+   ondergrens is min-content. Gemeten @390px vóór deze fix: kolommen van 157,5 en 183,7px
+   in plaats van twee gelijke, omdat "woordenlijst" als woord onbreekbaar is — 2,2px
+   horizontale overflow op het document. Met een nul-ondergrens mag de track krimpen en
+   breekt het woord, in plaats van andersom (css-layout.md §22). */
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--spacing-xl);
   max-width: var(--landing-max-width);
   margin: 0 auto;
@@ -1259,7 +1283,7 @@ a.result-item:focus-visible {
 /* Verifieerbaarheidsregel onder het raster: de eerlijke vervanger van de testimonials
    die stap 8 van het oorspronkelijke plan nooit heeft gekregen. */
 .results-verify {
-  max-width: var(--landing-max-width);
+  max-width: 70ch;   /* was --landing-max-width: 127 tekens per regel, gemeten @1440 */
   margin: var(--spacing-lg) auto 0;
   padding: 0 var(--landing-padding-desktop);
   text-align: center;
@@ -1287,10 +1311,15 @@ a.result-item:focus-visible {
 .result-item:nth-child(3) { transition-delay: 200ms; }
 .result-item:nth-child(4) { transition-delay: 300ms; }
 
+.result-item {
+  overflow-wrap: break-word;   /* sluitstuk van minmax(0,1fr): de track mag krimpen, dus
+                                  het woord moet kunnen breken in plaats van uit te steken */
+}
+
 .result-number {
   display: block;
   font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: var(--font-size-display);
   font-weight: var(--font-weight-bold);
   color: var(--color-accent-text);
   line-height: 1;
@@ -1360,9 +1389,11 @@ a.result-item:focus-visible {
 }
 
 /* Level Badges */
+/* Was --font-terminal: mono op een statuslabel buiten het terminalvenster. Precies wat
+   het direction contract "een sfeerlaagje op losse labels" noemt. */
 .level-badge {
   display: inline-block;
-  font-family: var(--font-terminal);
+  font-family: var(--font-ui);
   font-size: 0.7rem;
   font-weight: var(--font-weight-bold);
   letter-spacing: 1px;
@@ -1581,25 +1612,26 @@ a.result-item:focus-visible {
 }
 
 /* ==================== Final CTA Section ==================== */
+/* Sessie 236: hier stonden twee radiale lime-halo's — een naad-uplight langs de
+   onderrand, en voor de homepage (waar de lead-magnet erop volgt) een zelfstandige
+   ambient-halo. Gemeten uit de opname kwam het veld daar uit op rgb(22,62,17) tegen een
+   basis van rgb(13,17,23). DESIGN.md's No Shadow Rule en het direction contract sluiten
+   allebei glow uit, en dit was de grootste die er nog stond. De sectie draagt nu gewoon
+   de paginakleur; wie hem wil onderscheiden pakt een toontrede of een haarlijn.
+   Raakt vijf pagina's (homepage plus over-ons, woordenlijst, commands, contact): dezelfde
+   gloed op alle vijf, dus hem op één plek weghalen zou de inconsistentie zijn. */
 .final-cta {
   width: 100%;
   padding: 96px var(--landing-padding-desktop);
-  background:
-    radial-gradient(ellipse 25% 95% at 50% 100%, var(--final-cta-glow) 0%, transparent 95%),
-    var(--color-bg);
+  /* De verwijderde lime halo deed hier ook bandwerk: zonder vervanging vormden
+     blog-links + faq + final-cta + lead-magnet één vlak van 1944px (2,16 scherm) tegen
+     een lat van 1,4 — gemeten door "geen sectiereeks leest als één blok" in
+     homepage-conversion.spec.js. DESIGN.md schrijft de vervanging zelf voor: wie diepte
+     nodig heeft pakt de volgende toontrede of een haarlijn, geen gloed. */
+  background: var(--color-bg-alt);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
   position: relative;
-}
-
-/* Homepage: de lead-magnet volgt nu op de final-cta i.p.v. de nieuwsbrief-band.
-   De onderrand-glow (at 50% 100%) verwacht een aangrenzende band om in over te
-   lopen; zonder die naad zweeft hij hard afgekapt "uit het niets". Hier daarom
-   een zelfstandige ambient-halo achter de CTA die naar alle randen uitvaagt.
-   :has(+ .lead-magnet) raakt alleen de homepage; de 4 andere final-cta-pagina's
-   (over-ons/woordenlijst/commands/contact) houden de naad-uplight. */
-.final-cta:has(+ .lead-magnet) {
-  background:
-    radial-gradient(ellipse 42% 58% at 50% 44%, var(--final-cta-glow) 0%, transparent 72%),
-    var(--color-bg);
 }
 
 .final-cta-content {
@@ -1611,7 +1643,7 @@ a.result-item:focus-visible {
 }
 
 .final-cta h2 {
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: var(--font-size-headline);
   color: var(--color-text);
   margin: 0 0 var(--spacing-md) 0;
 }
@@ -1914,7 +1946,7 @@ html {
      afrondingsverschil van te krap, dus ondergrens erbij (zie .blog-link). */
   min-height: 44px;
   box-sizing: border-box;
-  font-family: var(--font-heading);
+  font-family: var(--font-ui);
   font-size: 0.85rem;
   font-weight: var(--font-weight-semibold);
   color: var(--color-accent-text);
@@ -1963,7 +1995,7 @@ html {
   }
 
   .results-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--spacing-lg);
   }
 
@@ -1975,6 +2007,30 @@ html {
   .footer-brand {
     grid-column: 1 / -1;
     max-width: 100%;
+  }
+}
+
+/* Korte desktopvensters (de 13"-laptop op 1280x800 is de gangbare). Gemeten met de
+   ruime maten: de hero-CTA eindigde daar op y=846 bij een vouw op 800. De beperking is
+   de hoogte en niet de breedte, dus staat de query op de hoogte. Elkaar uitsluitende
+   ranges met de mobiele band hieronder via de min-width. */
+@media (min-width: 769px) and (max-height: 860px) {
+  .hero {
+    padding: var(--spacing-xl) 0 var(--spacing-xl);
+  }
+
+  .hero-content {
+    gap: var(--spacing-lg);
+  }
+
+  .hero-subtitle {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  /* Vloeiend i.p.v. een vaste 200px: op 1366x768 viel de primaire actie anders nog 11px
+     onder de vouw. Gemeten: 24vh geeft 184px @768 en 192px @800. */
+  .terminal-body {
+    height: clamp(170px, 24vh, 200px);
   }
 }
 
@@ -1993,35 +2049,37 @@ html {
   }
 
   .hero-content {
-    flex-direction: column;
+    /* `flex-direction: column` stond hier ook; sinds Sessie 236 is dat de basisstand,
+       dus alleen de mobiele maten blijven over. */
     gap: var(--spacing-lg);
     padding: 0 var(--landing-padding-mobile);
   }
 
   .hero-text {
-    text-align: center;
-    order: 1;
+    /* Stond op `text-align: center` met `order: 1`. Dat `order` zette de tekst ná de
+       terminal terwijl de DOM haar ervóór had — dat doet de DOM nu zelf, dus de regel is
+       dood. En centreren botste met de richting: een kolom, links uitgelijnd. */
+    max-width: 100%;
   }
 
-  .hero-eyebrow {
-    display: flex;
-    justify-content: center;
-  }
-
+  /* Was 0.65rem = 10,4px op een mobiele basis van 16px. De detector meldde dat en het
+     bevindingendoc schreef het af als false positive op grond van een meting op 1280px,
+     waar het 13,5px is. Die afschrijving was fout: onder 768px wordt de ondergrens van
+     11px wél geraakt. 0.72rem = 11,52px. */
   .eyebrow-badge {
-    font-size: 0.65rem;
+    font-size: 0.72rem;
   }
 
   .lead-magnet-card {
     padding: var(--spacing-lg) var(--spacing-md);
   }
 
-  /* De `order` hoort op de wrapper, niet op het venster: het directe kind van de
-     kolom-flexbox is sinds Sessie 215 .hero-terminal-col, en die zou met de default
-     order: 0 vóór .hero-text (order: 1) landen. Gemeten zonder deze regel: terminal op
-     y=76, kop op y=593 — de terminal sprong boven de headline. */
+  /* Hier stond `order: 2`, dat de terminal op mobiel ná de kop zette. Het commentaar
+     erbij noemde als bewijs dat de terminal zonder die regel "boven de headline sprong"
+     op y=76 — en precies dat is sinds Sessie 236 de bedoeling: de terminal speelt, de
+     tekst ondertitelt. De regel is weg, en daarmee is de mobiele volgorde weer gelijk
+     aan de DOM-volgorde en de tabvolgorde. */
   .hero-terminal-col {
-    order: 2;
     max-width: 100%;
   }
 
@@ -2030,16 +2088,10 @@ html {
     max-width: 100%;
   }
 
-  /* Géén hint op mobiel — gemeten afweging, geen bezuiniging. Hij kost 30px en duwde de
-     tweede chiprij van midden-736 naar midden-764, terwijl `.mobile-cta-bar` op 375×812
-     vanaf y=747 vastzit: `nmap`, `whoami` en `pwd` werden onaantikbaar en een tik daar
-     navigeerde wég van de pagina. De hint lost bovendien een *desktop*-probleem op — met
-     een muis lijkt het venster een plaatje; op een telefoon staan er zes knoppen onder
-     de prompt. (`help` valt óók vóór deze wijziging onder die balk — inherent aan een
-     vaste balk onderaan, staat los hiervan.) */
-  .hero-terminal-hint {
-    display: none;
-  }
+  /* Stond op `display: none` omdat de hint 30px kostte en chips onder `.mobile-cta-bar`
+     duwde (375x812, balk vanaf y=747). S236 heft dat op: de terminal staat nu bovenaan,
+     dus de chips landen honderden pixels hoger, en dit is de enige zin die zegt dat het
+     venster leeft. De conditie is nu een assertie in hero-demo.spec.js. */
 
   /* Smallere balk: op 375px is de horizontale ruimte de schaarste, niet de verticale.
      De chips zijn hier de primaire affordance — typen kost een toetsenbord dat het
@@ -2051,14 +2103,6 @@ html {
   .hero-chip {
     padding: var(--spacing-xs) var(--spacing-sm);
     font-size: 0.75rem;
-  }
-
-  .hero h1 {
-    font-size: clamp(1.75rem, 8vw, 2.5rem);
-  }
-
-  .text-underline {
-    white-space: normal;
   }
 
   .hero-subtitle {
@@ -2132,10 +2176,6 @@ html {
     padding: var(--spacing-xl) var(--landing-padding-mobile);
   }
 
-  .solution-section h2 {
-    font-size: clamp(1.5rem, 6vw, 2rem);
-  }
-
   .solution-description {
     font-size: 1rem;
   }
@@ -2152,8 +2192,10 @@ html {
     gap: 4px;
   }
 
+  /* Zelfde 10,4px als de eyebrow, en hier erger: ook uppercase met 1,5px letterafstand.
+     0.72rem = 11,52px. */
   .comparison-header .comparison-cell {
-    font-size: 0.65rem;
+    font-size: 0.72rem;
   }
 
   /* Feature/Leerpad/How-it-works Cards */
@@ -2176,13 +2218,9 @@ html {
   }
 
   .results-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--spacing-lg);
     padding: 0;
-  }
-
-  .result-number {
-    font-size: clamp(2rem, 10vw, 3rem);
   }
 
   /* Blog Links — chips blijven wrappen, geen verticale tekstkolom */
@@ -2201,10 +2239,6 @@ html {
   /* Final CTA */
   .final-cta {
     padding: var(--spacing-xl) var(--landing-padding-mobile);
-  }
-
-  .final-cta h2 {
-    font-size: clamp(1.5rem, 8vw, 2rem);
   }
 
   /* Footer mobile moved to main.css (Sessie 107) */
@@ -2324,20 +2358,10 @@ html {
    en juist dáárom liep hij NIET mee toen --color-cta-primary naar Green 800 ging: wit erop
    bleef 3,30 terwijl de knoppen al op 7,13 zaten. Een hardcoded kopie van een token is per
    definitie één wijziging verwijderd van inconsistent. Nu volgt de band het token. */
-[data-theme="light"] .solution-section {
-  background: var(--color-cta-primary);
-}
-
-[data-theme="light"] .solution-section h2 {
-  color: var(--color-cta-text);  /* Pure white - maximum impact */
-}
-
-/* S228: was rgba(255,255,255,.95) ("readable but soft") = 3,12:1 op de groene band. Ook ná
-   Green 800 blijft 95% wit op 6,55 steken — die laatste 5% alpha ís het verschil met 7,13,
-   dus de "zachtheid" kostte de AAA-lat. */
-[data-theme="light"] .solution-description {
-  color: var(--color-cta-text);  /* 7,13:1 op de Green 800-band (AAA) */
-}
+/* De drie [data-theme="light"]-overrides op deze sectie zijn in Sessie 236 verwijderd.
+   Ze bestonden alleen om witte tekst leesbaar te houden op de lime band (S228 mat daar
+   7,13:1). Nu de sectie een gewone .section-band is, dragen --color-text en
+   --color-text-dim beide thema's zelf: dark 12,77:1 en 8,21:1 op #080b0f. */
 
 /* Step Numbers - White text on green circles in light mode */
 [data-theme="light"] .step-number {
@@ -2443,7 +2467,7 @@ html {
 }
 
 .sample-hero-text h1 {
-  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-size: var(--font-size-display);
   line-height: 1.15;
   letter-spacing: -0.5px;
   color: var(--color-text);
@@ -2509,7 +2533,7 @@ html {
 }
 
 .sample-hero-form.homepage-newsletter h3 {
-  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  font-size: var(--font-size-title);
   margin-bottom: var(--spacing-sm);
 }
 
@@ -2565,9 +2589,6 @@ html {
       "form"
       "bullets";
     row-gap: var(--spacing-xl);
-  }
-  .sample-hero-text h1 {
-    font-size: clamp(1.75rem, 7vw, 2.25rem);
   }
 }
 

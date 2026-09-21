@@ -14,8 +14,15 @@ export function createConsentBanner() {
             <p id="cookie-title">
                 <strong>[!] Privacy:</strong> Cookies voor analytics · <a href="/assets/legal/cookies.html" target="_blank" rel="noopener noreferrer">Meer info</a>
             </p>
+            <!-- Beide knoppen dragen exact dezelfde klassen, en dat is de hele bedoeling.
+                 Tot Sessie 236 was "Accepteren" een gevulde azuren knop en "Weigeren" een
+                 transparante met een dimgrijze rand, die daardoor als uitgeschakeld las.
+                 Ongelijk visueel gewicht op een toestemmingskeuze is een consent dark
+                 pattern, en dit is de eerste interactie van elke nieuwe bezoeker.
+                 PRODUCT.md: "Een ontwerp dat beter converteert door de bezoeker te
+                 manipuleren is een mislukking, geen verbetering." -->
             <div class="cookie-buttons">
-                <button id="cookie-accept-analytics" class="btn-small">Accepteren</button>
+                <button id="cookie-accept-analytics" class="btn-small btn-secondary">Accepteren</button>
                 <button id="cookie-decline" class="btn-small btn-secondary">Weigeren</button>
             </div>
         </div>

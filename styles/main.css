@@ -23,71 +23,32 @@
 }
 
 /* ==================== Self-Hosted Variable Fonts — Latin Subset ==================== */
-/* SIL OFL 1.1 — see /styles/fonts/LICENSES/{Inter,JetBrainsMono,SpaceGrotesk}-OFL.txt */
-/* Variable woff2 per family: browser dedupliceert fetch across weight-declarations (3 unique files) */
+/* SIL OFL 1.1 — see /styles/fonts/LICENSES/{AtkinsonHyperlegibleNext,JetBrainsMono}-OFL.txt */
+/* Sessie 236: van drie families naar twee. Inter en Space Grotesk zijn vervangen door
+   Atkinson Hyperlegible Next (leest) en JetBrains Mono (kopt en werkt). Beide zijn
+   variabel, dus een @font-face met een gewichtsbereik in plaats van drie blokken die
+   naar hetzelfde bestand wijzen. Dat lost ook een stille bug op: met losse blokken op
+   400 en 700 matchte een kop op font-weight 600 het 700-blok en werd hij op 700 geklemd
+   in plaats van geinterpoleerd. Fontbudget: 103,5 KB -> 67,8 KB. */
 @font-face {
-  font-family: 'Inter';
+  font-family: 'Atkinson Hyperlegible Next';
   font-style: normal;
-  font-weight: 400;
+  font-weight: 200 800;   /* echte as van het bestand, gemeten met fontTools */
   font-display: swap;
-  src: url('/styles/fonts/inter-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url('/styles/fonts/inter-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/styles/fonts/inter-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src: url('/styles/fonts/atkinson-next-latin.woff2') format('woff2');
+  /* Gelijk aan de oude Inter-range MINUS U+2191, U+2193 en U+02BB-02BC: die vier
+     codepoints zitten niet in Atkinson Next (gemeten). Een range declareren die de font
+     niet dekt kost een stille terugval naar een systeemfont met een andere baseline -
+     precies de fout uit Sessie 233. De pijlen leven in --font-terminal, die ze wel draagt. */
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
   font-family: 'JetBrains Mono';
   font-style: normal;
-  font-weight: 400;
+  font-weight: 400 800;   /* echte as van het bestand; draagt sinds Sessie 236 ook de koppen */
   font-display: swap;
   src: url('/styles/fonts/jetbrainsmono-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2190-2193, U+2212, U+2215, U+2713, U+FEFF, U+FFFD; /* Sessie 233: U+2190/2192 pijlen + U+2713 vinkje toegevoegd aan de subset — zonder die drie viel de terminal terug op een systeemfont met een andere baseline, wat de correctie-spans afdwong die TASKS.md #77 veroorzaakten */
-}
-@font-face {
-  font-family: 'JetBrains Mono';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/styles/fonts/jetbrainsmono-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2190-2193, U+2212, U+2215, U+2713, U+FEFF, U+FFFD; /* Sessie 233: U+2190/2192 pijlen + U+2713 vinkje toegevoegd aan de subset — zonder die drie viel de terminal terug op een systeemfont met een andere baseline, wat de correctie-spans afdwong die TASKS.md #77 veroorzaakten */
-}
-@font-face {
-  font-family: 'Space Grotesk';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/styles/fonts/spacegrotesk-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: 'Space Grotesk';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url('/styles/fonts/spacegrotesk-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: 'Space Grotesk';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/styles/fonts/spacegrotesk-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2190-2193, U+2212, U+2215, U+2713, U+FEFF, U+FFFD; /* Sessie 233: U+2190/2192 pijlen + U+2713 vinkje toegevoegd aan de subset */
 }
 
 /* ==================== CSS Variables ==================== */
@@ -165,11 +126,18 @@
   /* Alert/Info Box Surfaces - Neutral backgrounds for blog content boxes */
   --color-surface-elevated: rgba(255, 255, 255, 0.05);  /* Subtle white tint - professional alerts (GitHub Docs pattern) */
   --color-surface-elevated-hover: rgba(255, 255, 255, 0.08);  /* Slightly brighter hover state */
-  /* Typography - 3-Font System (Sessie 99 - Font System Upgrade) */
-  --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;  /* Headings, nav, buttons - modern tech aesthetic */
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;  /* Body text, forms, modals - screen-optimized readability */
+  /* Typografie - 2-fontsysteem (Sessie 236). JetBrains Mono kopt en werkt,
+     Atkinson Hyperlegible Next leest. Was 3 families t/m Sessie 235. */
+  --font-heading: 'JetBrains Mono', 'Courier New', Courier, monospace;  /* Koppen, nav, knoppen - de werkletter van het product zelf (Sessie 236) */
+  --font-body: 'Atkinson Hyperlegible Next', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;  /* Lopende tekst - ontworpen om verwarbare tekens uit elkaar te houden */
   --font-terminal: 'JetBrains Mono Box', 'JetBrains Mono', 'Courier New', 'Courier', monospace;  /* Terminal, code blocks - box-drawing subset first (Sessie 81) */
-  --font-ui: var(--font-heading);  /* Legacy alias for backward compatibility */
+  /* Derde ROL, geen derde familie (Sessie 236). Was een legacy-alias met nul gebruikers.
+     Chroom — knoppen, nav, footerlinks, formulierlabels, meta — hoort niet in de
+     kopletter: mono daarop is precies het "sfeerlaagje op losse labels" dat de richting
+     verbiedt, en het maakt alles breder. Gemeten @1280px: met de nav-links in mono had
+     de balk 1303px nodig bij 1265px beschikbaar; met de bodyletter 1211px. Koppen,
+     merknaam en getallen blijven mono — een getal is measurement, geen decoratie. */
+  --font-ui: var(--font-body);
   /* Ligaturen: zie de regel onder :root — sitebreed uit (Sessie 229). */
   --font-size-base: 18px;
   --font-size-mobile: 16px;
@@ -331,8 +299,13 @@
    standaard aan): `>=` rendeerde als ≥, `_|_` in de sqlmap-banner als ⊥, en `$pdo->prepare`
    als `$pdo→prepare` in `man sqlmap` — onder het kopje "Veilige code:", dus wie overtypte
    kreeg een PHP-parse-error. Populatie omgedraaid i.p.v. een lijst mono-selectors (48
-   declaraties, 7 stylesheets): drift valt dan in de goedkope richting. Kosten in prose
-   gemeten op 40px, normal vs none: Space Grotesk 0,17px, Inter 0,00px — sub-pixel.
+   declaraties, 7 stylesheets): drift valt dan in de goedkope richting.
+   Sessie 236 hermeten na de fontwissel, met fontTools op de geleverde subsets:
+   JetBrains Mono heeft `calt` met 154 lookups (was 367 op de toenmalige subset) en zet
+   sinds deze sessie ook de koppen en knoppen — deze regel bewaakt dus een groter
+   oppervlak dan waarvoor hij geschreven is: zonder hem wordt `->` in een kop een pijl.
+   Atkinson Hyperlegible Next draagt géén `liga` en géén `calt`, dus in prose kost de
+   regel nu niets in plaats van sub-pixel.
    Volledige meting, mutanten en de reden dat breedte dit NIET detecteert:
    tests/e2e/font-ligatures.spec.js. */
 *,
@@ -579,7 +552,7 @@ strong {
 button {
   -webkit-appearance: none;
   appearance: none;
-  font-family: var(--font-heading);
+  font-family: var(--font-ui);
   cursor: pointer;
   border: none;
   transition: all var(--transition-fast);
@@ -1165,12 +1138,13 @@ button {
   margin-bottom: var(--spacing-md);
 }
 
+/* Zelfde ingreep als in de navbar: de wordmark is geen actie. */
 .footer-logo .brand-icon {
-  color: var(--color-cta-dark-frame);
+  color: var(--color-footer-text-strong);
 }
 
 .footer-logo .brand-accent {
-  color: var(--color-cta-dark-frame);
+  color: var(--color-footer-text-strong);
 }
 
 .footer-logo:hover {
@@ -1211,7 +1185,7 @@ button {
 }
 
 .footer-column a {
-  font-family: var(--font-heading);
+  font-family: var(--font-ui);
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--color-footer-text);
@@ -1274,7 +1248,7 @@ button {
 a.footer-donate {
   align-self: center;
   padding: 11px 16px;   /* 44px hoog: WCAG 2.5.5 aanwijsdoel (was 36px) */
-  font-family: var(--font-heading);
+  font-family: var(--font-ui);
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--color-footer-text);
@@ -1425,15 +1399,19 @@ a.footer-donate:focus-visible {
   transition: color var(--transition-fast);
 }
 
+/* Sessie 236: merkicoon en `.nl` stonden in het accent. DESIGN.md's One Voice Rule zegt
+   dat dat accent alleen markeert wáár de gebruiker aan zet is — een wordmark is dat niet.
+   Ze staan nu in de navbar-tekstkleur; de hover hieronder blijft wél neon, want "hover in
+   het Dark Frame" is volgens diezelfde regel juist wél een geldige inzet. */
 .navbar-brand .brand-icon,
 .nav-brand .brand-icon {
   flex-shrink: 0;
-  color: var(--color-cta-dark-frame);  /* Always neon green on dark navbar */
+  color: var(--color-navbar-link);
 }
 
 .navbar-brand .brand-accent,
 .nav-brand .brand-accent {
-  color: var(--color-cta-dark-frame);  /* Always neon green on dark navbar */
+  color: var(--color-navbar-link);
 }
 
 .navbar-brand:hover,
@@ -1477,7 +1455,7 @@ a.footer-donate:focus-visible {
 /* Generic navbar links - Animated Underline Pattern (Sessie 53 upgrade) */
 .navbar-links > li:not(.navbar-dropdown) > a {
   color: var(--color-navbar-link);
-  font-family: var(--font-heading);
+  font-family: var(--font-ui);
   font-size: var(--navbar-link-size);  /* Unified: 16px (was 19px) - Sessie 97 */
   font-weight: var(--navbar-link-weight);  /* Unified: 500 */
   letter-spacing: 0.5px; /* Improved monospace readability */
@@ -1519,7 +1497,7 @@ a.footer-donate:focus-visible {
 /* Dropdown Trigger - Animated Underline Pattern (Sessie 53 upgrade) - matches generic navbar links */
 .dropdown-trigger {
   color: var(--color-navbar-link);
-  font-family: var(--font-heading);
+  font-family: var(--font-ui);
   font-size: var(--navbar-link-size);  /* Unified: 16px (was 19px) - Sessie 97 */
   font-weight: var(--navbar-link-weight);  /* Unified: 500 */
   letter-spacing: 0.5px; /* Improved monospace readability */
@@ -1654,7 +1632,7 @@ a.footer-donate:focus-visible {
   border: none;
   color: var(--color-toggle-text);
   cursor: pointer;
-  font-family: var(--font-heading);
+  font-family: var(--font-ui);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 1px;
@@ -1691,33 +1669,40 @@ a.footer-donate:focus-visible {
    mobiele menu waar de pagina-flip achter het volledige overlay niet zichtbaar is.
    De `all`-transition op .toggle-option laat de pill soepel in-/uitfaden bij het
    wisselen (subtiele motion; uitgeschakeld bij prefers-reduced-motion hieronder). */
+/* Sessie 236: de actieve pil was een gevuld Azure Deep-vlak (#004494) met witte tekst,
+   en daarmee een tweede verzadigde accentdrager in het eerste scherm naast de lime CTA —
+   in een tint die verder nergens in de wereld voorkomt. Het direction contract laat er
+   één toe. De selectie blijft even duidelijk door te inverteren in plaats van te kleuren:
+   navbar-tekstkleur als vlak, navbar-achtergrond als tekst. Beide zijn Dark
+   Frame-tokens, dus thema-onafhankelijk, en de combinatie meet 10,9:1. */
 .toggle-option.active {
-  color: var(--color-toggle-text-active);
-  background-color: var(--color-button-bg);
+  color: var(--color-bg-navbar);
+  background-color: var(--color-navbar-link);
 }
 
 /* Toggle Indicator - Filled block for active theme */
 .toggle-indicator {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-button-bg);
-  margin-right: 2px;
-  opacity: 0;
+  flex-shrink: 0;
+  /* Dempen met een KLEUR, niet met opacity: --color-toggle-text-inactive is gekozen op
+     een gemeten 7,25:1 tegen de #1a1a1a navbar, en een alpha eroverheen vernietigt die
+     meting (gemeten 3,14:1). Sinds de schakelaar icoon-only is, ís dit icoon het hele
+     besturingselement. */
+  color: var(--color-toggle-text-inactive);
+  opacity: 1;
   transition: opacity var(--transition-normal);
 }
 
 /* Active theme shows filled block - wit zodat het blokje zichtbaar blijft op de
    blauwe active-pill (de default indicator-kleur is dezelfde blauwe --color-button-bg). */
+/* Sessie 236: was een `█` (U+2588) dat op `opacity: 0` stond voor de inactieve helft.
+   Twee redenen om er getekende iconen van te maken: dat codepoint zit in geen van onze
+   twee fontsubsets — gemeten rendert het op 45,34px, exact gelijk aan kale `sans-serif`,
+   dus het kwam altijd al uit een systeemfont — en een unicode-glyph als icoonsysteem is
+   geen icoonsysteem. Nu maan en zon, allebei zichtbaar; de gevulde pil zegt welke actief
+   is. Dat maakt de schakelaar ook leesbaar zónder tekstlabel, wat de balk nodig heeft. */
 [data-theme="dark"] .toggle-option[data-theme="dark"] .toggle-indicator,
 [data-theme="light"] .toggle-option[data-theme="light"] .toggle-indicator {
-  opacity: 1;
-  color: var(--color-toggle-text-active);
-}
-
-/* Inactive theme hides indicator */
-[data-theme="dark"] .toggle-option[data-theme="light"] .toggle-indicator,
-[data-theme="light"] .toggle-option[data-theme="dark"] .toggle-indicator {
-  opacity: 0;
+  color: currentColor;   /* erft de tekstkleur van de actieve pil: 11,28:1 (gemeten) */
 }
 
 /* Both options are always clickable - enables switching between them */
@@ -1949,7 +1934,7 @@ abbr.jargon {
 }
 
 .faq-question .faq-question-text {
-  font-family: var(--font-heading);
+  font-family: var(--font-ui);
   font-size: 1rem;
   font-weight: var(--font-weight-semibold);
   color: var(--color-text);
@@ -2132,7 +2117,7 @@ abbr.jargon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-heading);
+  font-family: var(--font-ui);
   font-size: 1rem;
   font-weight: var(--font-weight-bold);
   height: 44px;
@@ -2145,7 +2130,6 @@ abbr.jargon {
 .homepage-newsletter .newsletter-button:hover {
   background-color: var(--color-cta-primary-hover);
   border-color: var(--color-cta-primary-hover);
-  box-shadow: 0 4px 20px var(--color-cta-primary-glow);
   color: var(--color-cta-text);
   transform: translateY(-2px);
 }
@@ -2178,7 +2162,7 @@ abbr.jargon {
    via .sample-hero-form.homepage-newsletter (landing.css). */
 .newsletter-or-support {
   margin-top: var(--spacing-sm);
-  font-family: var(--font-heading);
+  font-family: var(--font-ui);
   font-size: 0.85rem;
   color: var(--color-text-dim);
 }
