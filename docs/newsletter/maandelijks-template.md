@@ -247,17 +247,67 @@ zonder UTM-parameters: het is een juridische link, geen campagnelink.
 Zelfde stijl als welkomstmail:
 - Achtergrond: #0d1117 (outer) / #161b22 (inner)
 - Tekst: #c9d1d9 (headings) / #8b949e (body)
-- Links: #79c0ff
+- Links: #79c0ff **met onderstreping** (zie §Links: onderstreep ze)
 - Buttons: #0d1117 met #9fef00 tekst en een 2px #9fef00 rand (omgedraaid in september 2026, zie hieronder)
-- **Font: de monospace-stack hieronder, 16px** (was Courier New 15px tot augustus 2026)
+- **Twee fontstacks, 16px** (zie §De fontstacks): prosa en koppen in systeem-sans, terminal
+  en code in monospace. Tot september 2026 stond álles in monospace
 - **Vet = kopkleur #c9d1d9, niet alleen font-weight** (zie hieronder)
 - Max breedte: 600px
+- Kaart: `#161b22` met `1px solid #30363d` rand — nodig sinds de balk donker werd, anders valt
+  de bovenrand van de kaart weg tegen de pagina-achtergrond (beide `#0d1117`)
+- Koptrap: tip-titel 26px, vaste welkomstkop 22px, sectiekoppen 18px. De tip-titel is de
+  inhoud van de maand en hoort zwaarder te wegen dan de begroeting die elke editie hetzelfde is
 
-### De fontstack (herzien augustus 2026)
+### Links: onderstreep ze
+
+`text-decoration:underline`, niet `none`. Tot september 2026 waren links alleen aan hun kleur te
+herkennen. Dat is een WCAG 1.4.1-faler (*Use of Color*): wie kleur slecht onderscheidt, ziet geen
+link. In e-mail weegt dat zwaarder dan op de site, want er is geen hover-state om op terug te
+vallen en geen focus-ring die het goedmaakt.
+
+Het contrast zelf was nooit het probleem — `#79c0ff` op `#161b22` meet **8,89:1**. Een ruime
+score op de ene richtlijn compenseert de andere niet.
+
+### De fontstacks (gesplitst september 2026)
+
+**Prosa, koppen, knoppen en footer:**
+
+```
+-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif
+```
+
+**Terminalbalk, codeblokken en code-chips:**
 
 ```
 'JetBrains Mono', Consolas, Menlo, 'Roboto Mono', 'DejaVu Sans Mono', 'Courier New', monospace
 ```
+
+**Waarom gesplitst.** De mail zette tot september 2026 álles in monospace, terwijl de site dat
+niet doet: `styles/main.css:169-171` zet `--font-body: Inter` voor lopende tekst, `--font-heading:
+Space Grotesk` voor koppen en `--font-terminal: JetBrains Mono` alléén voor terminal en
+codeblokken. De mail week dus af van het merk dat hij moest uitstralen. Gemeten @375px op de
+september-editie:
+
+| | alles monospace | gesplitst |
+|---|---|---|
+| tekens per regel | 30 | **42** (richtlijn 45-75) |
+| hoogte van de mail | 4812px | **4023px** |
+| codeblokken (bedoeld/gerenderd) | 5/5 8/8 4/4 | ongewijzigd |
+
+Het derde argument heeft geen getal: zolang álles monospace is, valt een commando alleen op aan
+zijn kleurvlak. Met sans eromheen is monospace weer een **signaal** — het betekent "dit typ je in
+een terminal". Dat is precies wat deze nieuwsbrief moet overbrengen.
+
+Geen webfonts: Gmail stript `@font-face`, dus de sans-stack leunt op wat er al staat. Windows
+krijgt Segoe UI, Apple San Francisco, Android Roboto, Linux valt terug op Arial/Liberation Sans.
+
+> **Een code-chip draagt zelf géén `font-family` tenzij je hem geeft.** Een `<code
+> class="code-inline">` erft van de alinea eromheen. Zolang die alinea monospace was, viel dat
+> niet op; nu de alinea sans is, wordt een chip zónder eigen `font-family` stilletjes sans — en
+> dan is het verschil tussen tekst en commando weg. **Zet de monospace-stack inline op elke
+> chip.** In de september-editie staat hij op alle 12.
+
+De monospace-stack zelf blijft ongewijzigd sinds augustus 2026, en die keuze staat nog steeds:
 
 Windows pakt Consolas (Vista+, komt ook met Office mee), Apple pakt Menlo, Android Roboto Mono,
 Linux DejaVu Sans Mono. Courier New staat achteraan als vangnet. JetBrains Mono voorop kost
@@ -532,12 +582,14 @@ verkoopt. Herhaal geen product dat de vorige editie al pushte: de lezer zag het 
 
 - [ ] Onderwerpregel < 60 tekens
 - [ ] Preview tekst ingevuld (de verborgen preheader-div bovenaan de HTML)
-- [ ] Alle links getest (terminal, blog, cheatsheet)
+- [ ] Alle links getest (terminal, blog, cheatsheet) **en onderstreept** (`text-decoration:underline`)
 - [ ] UTM parameters op alle links (`?utm_source=newsletter&utm_medium=email&utm_campaign=[maand]-[jaar]`)
       — behalve `privacy.html`, dat is een juridische link en geen campagnelink
 - [ ] Elk getal in de mail nageteld tegen zijn bron (pagina-aantallen ↔ `gidsen.html`,
       command-output ↔ `src/commands/…`) — niet tegen een eerdere editie
 - [ ] `<style>`-blok byte-identiek aan de vorige editie (`diff`, niet op het oog)
+- [ ] **Elke code-chip draagt inline de monospace-stack** — een chip zonder eigen `font-family`
+      erft de sans van de alinea en is dan niet meer als commando te herkennen
 - [ ] Via **Import HTML** geplaatst, niet via de drag-and-drop editor
 - [ ] **Codeblokregels ≤ 29 tekens, gemeten** — niet "mobiel preview gecheckt". Zie
       §Codeblok-budget: een te lange regel *wrapt* en is daardoor onzichtbaar voor een
