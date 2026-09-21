@@ -581,11 +581,20 @@ stappen, want de tussenstap is een waarschuwing waard:
    precies wat er op het scherm stond. Groen op donker meet **13,36:1** — exact dezelfde ratio
    als de bedoelde combinatie, maar omgekeerd.
 
-**Waarom dit wél houdt, en waarom dat meer is dan een redenering:** Gmail's dark mode repareert
-wat hij te donker vindt voor een donkere achtergrond. Lichte tekst op donker geeft hem niets te
-repareren. Het bewijs stond al in dezelfde mail: de **codeblokken** dragen `#0d1117` met
-`#9fef00` sinds de eerste editie, in dezelfde inbox, en zijn nooit gemeld. Dat is een waarneming
-uit de praktijk, geen voorspelling.
+**Bevestigd in een echte inbox (21 september 2026).** Dit is geen redenering meer: de
+september-editie is via Import HTML in Brevo gezet en op de telefoon getest in de Gmail-app in
+dark mode. De balk en de knoppen blijven **groen op donker**. Daarmee is de vraag die sinds
+Sessie 206 openstond beantwoord, en meteen ook de tweede: **het `<style>`-blok komt mee bij
+Import HTML** (bij de drag-and-drop editor niet — die waarschuwing blijft staan).
+
+Het mechanisme erachter: Gmail's dark mode repareert wat hij te donker vindt voor een donkere
+achtergrond. Lichte tekst op donker geeft hem niets te repareren. Dat was vooraf al zichtbaar in
+dezelfde mail — de **codeblokken** dragen `#0d1117` met `#9fef00` sinds de eerste editie en zijn
+nooit gemeld — en is nu direct bevestigd.
+
+**De regel die hieruit volgt, voor elke volgende mail:** lichte tekst op een donkere achtergrond,
+nooit donkere tekst op een licht merkvlak. De omgekeerde variant is één editie lang geprobeerd
+(augustus 2026) en werkte niet.
 
 **Wat blijft staan:** `background-color` en `color` horen nog steeds op hetzelfde element (zowel
 inline als in de `.header-text`/`.btn-text` klasseregels). Die koppeling was niet fout, hij was

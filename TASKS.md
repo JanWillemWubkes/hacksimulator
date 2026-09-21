@@ -847,16 +847,49 @@
   staan en accepteren. Dit raakt de kern van wat de site belooft — oefenen voor het echte werk —
   dus het is een productkeuze, niet mijn keuze. Voor de nieuwsbrief is het omzeild: die gebruikt
   nu `cd`, `ls`, `cat` en `grep`, die alle vier identiek zijn in beide werelden.
-- [ ] **September-nieuwsbrief: test-send vóór dinsdag 22 september 10:00 CET.** Bestand:
-  `docs/newsletter/nieuwsbrief-september-2026.html`, via **Import HTML** (niet de
-  drag-and-drop editor). Drie dingen om op de telefoon in dark mode te controleren:
-  (a) staat de tekst op de balk en de knoppen **groen op donker** — is hij wit of grijs, dan is
-  dat een nieuw geval en zijn beide ontwerpen uitgeput, meld het dan in plaats van zelf bij te
-  kleuren; (b) gaat het `<style>`-blok mee bij de import (een HTML-blok in een drag-and-drop-
-  ontwerp draagt geen `<head>`, en zonder dat blok doen `.code-inline`/`.code-block` niets);
-  (c) blijven de drie codeblokken binnen hun regels — de fontstack uit augustus gaat nu voor
-  de tweede keer door een echte client. Verder: `{{ unsubscribe }}` écht aanklikken, en de
-  regel in `maandelijks-template.md` §Klaargezet verplaatsen naar §Verstuurd zodra hij weg is.
+- [x] **September-nieuwsbrief: test-send GEDAAN en geslaagd (21 sep 2026).** Heisenberg heeft de
+  mail via Import HTML in Brevo gezet en op de telefoon getest: **alles werkt.** Daarmee is de
+  vraag die sinds Sessie 206 openstond beantwoord met bewijs uit een echte inbox, niet met een
+  redenering:
+  - **De omgedraaide balk houdt stand in de Gmail-app.** Donker `#0d1117` met groene `#9fef00`
+    tekst wordt niet herschreven. De mitigatie uit Sessie 206 (bg+color op hetzelfde element,
+    groen vlak met donkere tekst) hield dat **niet** tegen en is één editie lang geprobeerd.
+    Conclusie voor elke volgende mail: **lichte tekst op donker, nooit donkere tekst op een
+    lichte merkkleur** — Gmail's dark mode repareert alleen wat hij te donker vindt.
+  - **Het `<style>`-blok komt mee bij Import HTML.** De tweede openstaande vraag uit Sessie 206.
+    Import HTML behoudt de `<head>`; de drag-and-drop editor doet dat niet (daar blijft de
+    waarschuwing voor staan).
+  - **De gesplitste fontstack overleeft een echte client.** Schreefloze prosa naast monospace
+    codeblokken rendert zoals bedoeld.
+- [ ] **September-nieuwsbrief: verzenden.** Dinsdag 22 september 10:00 CET, lijst
+  `hacksimulator-main`, onderwerpregel *"Drie mislukte logins, één IP-adres"*. Ná verzending:
+  de regel in `maandelijks-template.md` §Klaargezet verplaatsen naar §Verstuurd, en de
+  verzendgegevens eronder noteren zoals bij augustus.
+- [ ] **Nieuwsbrief-ontwerpronde voor de oktober-editie.** In september is het ontwerp
+  *gerepareerd*, niet *ontworpen*: er zijn gemeten defecten opgelost (contrast, regellengte,
+  ontbrekende kaartrand, links zonder onderstreping) maar de vraag "hoe zou deze mail eruit
+  moeten zien" is nooit gesteld. Vijf concrete kansen, op volgorde van verwachte opbrengst:
+
+  1. **De terminalmetafoor is halverwege blijven steken.** De balk is nu een terminalvenster,
+     maar de rest van de mail weet dat niet. Sectiekoppen zouden een `$`-prompt kunnen dragen,
+     de codeblokken een zichtbaar onderscheid tussen *invoer* en *uitvoer*, en de knop zou een
+     promptregel kunnen zijn in plaats van een knop.
+  2. **Geen enkel beeld.** De mail is 100% tekst. Eén diagram — bijvoorbeeld de drie
+     inlogpogingen op een tijdlijn — kan meer doen dan de twee alinea's die het nu uitleggen.
+     Let op: e-mailclients blokkeren remote images standaard, dus dit moet werken mét en zónder
+     geladen afbeelding (alt-tekst die op zichzelf staat, of een tabel-gebaseerde "tekening").
+  3. **Ritme.** De marges zijn nu 8/16/20/24px door elkaar. Eén schaal (8-16-24-40) maakt het
+     rustiger zonder dat iemand kan aanwijzen waarom.
+  4. **De scheidingslijnen doen geen werk.** Drie identieke haarlijntjes van `#30363d` die er
+     alleen maar staan.
+  5. **De footer is gecentreerd terwijl de hele mail links uitlijnt.** Erfenis, geen keuze.
+
+  **Randvoorwaarde, en dit is waarom een front-end-designskill hier niet helpt:** HTML-e-mail is
+  bijna het tegenovergestelde van een webpagina — tabellen, inline styles, geen JavaScript, geen
+  webfonts in Gmail, en Outlook rendert met de Word-engine. Een skill die op moderne CSS mikt
+  stuurt hier de verkeerde kant op. Wat ontbreekt is een ontwerpronde met varianten naast
+  elkaar, niet een lijst verbeteringen. **Plan:** varianten renderen en vergelijken vóórdat er
+  één in een editie landt, met ruim tijd — niet op de avond vóór verzending.
 
 ---
 
