@@ -116,7 +116,7 @@ Het stond al in een bestand dat de server zelf bijhoudt.&#847;&zwnj;&nbsp;&#847;
 <span class="body-text" style="color:#8b949e;">Een Linux-server schrijft mee. Niet omdat iemand dat heeft aangezet, maar omdat het standaard gebeurt: elke keer dat iemand probeert in te loggen, komt er een regel bij in een <strong class="heading-text" style="color:#c9d1d9;">logbestand</strong>. Een dagboek dat de server over zichzelf bijhoudt, zonder dat er iemand naar kijkt.</span>
 </p>
 <p style="margin:0 0 16px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.65;">
-<span class="body-text" style="color:#8b949e;">Je hoeft zo'n bestand niet te begrijpen om erin te kunnen kijken. Je moet alleen weten waar het staat, en dat is op Linux altijd dezelfde plek: de map </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">/var/log</code><span class="body-text" style="color:#8b949e;">. Ga erheen en kijk wat er ligt:</span>
+<span class="body-text" style="color:#8b949e;">Je hoeft zo'n bestand niet te begrijpen om erin te kunnen kijken. Je moet alleen weten waar het staat, en dat is op Linux altijd dezelfde plek: de map </span><code class="code-inline" style="font-family:'JetBrains Mono',Consolas,Menlo,'Roboto Mono','DejaVu Sans Mono','Courier New',monospace;background-color:#0d1117;color:#9fef00;padding:2px 6px;border-radius:3px;white-space:nowrap;">/var/log</code><span class="body-text" style="color:#8b949e;">. Ga erheen en kijk wat daar staat:</span>
 </p>
 
 <!-- Code Block 1: waar het bestand staat -->
@@ -153,7 +153,7 @@ $ cat auth.log<br>
 </table>
 
 <p style="margin:0 0 16px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.65;">
-<span class="body-text" style="color:#8b949e;">Vijf regels, en samen vertellen ze een verhaal. Bovenaan logt <strong class="heading-text" style="color:#c9d1d9;">hacker</strong> zichzelf in vanaf 192.168.1.50 &mdash; <em>Accepted</em>, gelukt. Daarna probeert iemand vanaf een heel ander adres, 10.0.0.99, het wachtwoord van <strong class="heading-text" style="color:#c9d1d9;">root</strong> &mdash; het account dat op een Linux-systeem alles mag. <em>Failed</em>, drie keer achter elkaar. En dan gaat de verbinding dicht.</span>
+<span class="body-text" style="color:#8b949e;">Vijf regels, en samen vertellen ze een verhaal. Bovenaan logt <strong class="heading-text" style="color:#c9d1d9;">hacker</strong> zichzelf in vanaf 192.168.1.50 &mdash; <em>Accepted</em>, gelukt. Daarna probeert iemand vanaf een heel ander adres, 10.0.0.99, het wachtwoord van <strong class="heading-text" style="color:#c9d1d9;">root</strong> &mdash; het account dat op een Linux-systeem alles mag. <em>Failed</em>, drie keer achter elkaar. Twee seconden later verbreekt 10.0.0.99 de verbinding zelf.</span>
 </p>
 
 <p style="margin:0 0 16px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.65;">
