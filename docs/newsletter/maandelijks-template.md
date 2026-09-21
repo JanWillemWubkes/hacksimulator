@@ -154,6 +154,60 @@ overbodig. Moet de lezer iets aannemen, dan ontbreekt er juist een regel.
 
 ---
 
+### De intro mag niet aannemen dat de lezer de vorige editie heeft gehad
+
+Elke maand komen er inschrijvers bij. Die krijgen hun eerste nieuwsbrief zonder ooit de vorige
+te hebben gezien — en de welkomstmail is geen vervanging, want die gaat over iets anders. Een
+intro die begint met *"Vorige maand keek je mee met een aanvaller…"* laat zo'n lezer meteen
+achter met het gevoel dat hij iets gemist heeft.
+
+Er is ook geen uitweg via een link: de mirror-link (`{{ mirror }}`) is per ontvanger en werkt
+dus alleen voor wie de mail zelf kreeg. Er is **geen publiek archief** van verstuurde edities.
+
+**Regel:** schrijf de intro zo dat hij klopt voor editie 1 én editie 10. Verwijs naar het
+terugkerende *thema* van de nieuwsbrief, niet naar een specifieke vorige aflevering.
+
+```
+FOUT   Vorige maand keek je mee met een aanvaller: hoe één apostrof een database openbreekt.
+GOED   Meestal kijk je in deze nieuwsbrief mee met de aanvaller. Deze keer sta je aan de
+       andere kant van de deur.
+```
+
+De tweede zin beloont een vaste lezer nog steeds (hij hérkent het), maar vraagt niets van een
+nieuwe.
+
+### Woordkeuze: geen "machine" (gemeten, september 2026)
+
+Gebruik **server** voor het systeem waar iemand op inlogt of dat wordt aangevallen, **computer**
+voor het apparaat van de lezer, en **systeem** waar het algemeen is. Níét "machine".
+
+Dat is geen smaakkwestie maar een merkconsistentie-meting over de bestaande copy:
+
+| woord | blog | command-output |
+|---|---|---|
+| systeem | 63 | 21 |
+| computer | 49 | 16 |
+| server | 42 | 64 |
+| **machine** | **19** | 15 |
+
+En die 19 blogtreffers zijn bijna allemaal *"virtuele machines"*. Op deze site betekent
+"machine" dus in de praktijk **VM** — lees je copy terug met die betekenis en er staat iets
+anders dan je bedoelde.
+
+### Noem de prijs niet in de mail
+
+De prijs hoort op de landingspagina, niet in de aanbeveling. *"Betalen wat je wil, vanaf €5"*
+stond in de eerste versie van de september-editie en is eruit gehaald: het dwingt de lezer tot
+een koop-beslissing vóórdat hij weet wat hij krijgt, en filtert dus op prijs in plaats van op
+interesse.
+
+> **De tegenwerping, voor als je hier ooit op terugkomt:** een prijs verzwijgen kan de klik
+> juist duurder maken — wie €49 vreest klikt niet, en "vanaf €5" had dat weggenomen. Dat
+> argument is niet onzinnig, alleen niet meetbaar op deze lijstgrootte. Wil je het ooit
+> beslissen, meet het dan (klik → koop), niet met een redenering.
+
+---
+
 ### [3] Nieuws / Updates (kort)
 
 **Format:**
@@ -510,10 +564,10 @@ een eigen donkertint.
 
 | Maand | Tip van de Maand | Aanbeveling |
 |-------|-----------------|-------------|
-| September 2026 | "Drie mislukte logins in een logbestand" (`find`, `cd`, `grep`) | Gids *Je eigen hacklab* |
+| September 2026 | "Een server schrijft alles op" (`find`, `cd`, `grep`) | Gids *Je eigen hacklab* |
 
 Onderwerpregel: **"Drie mislukte logins, één IP-adres"** (34 tekens). Preview: *"Het stond al in
-een bestand dat de machine zelf bijhoudt."* Gepland op dinsdag 22 september 10:00 CET
+een bestand dat de server zelf bijhoudt."* Gepland op dinsdag 22 september 10:00 CET
 (35 dagen na augustus; de derde dinsdag viel op 15 september en was al verstreken, dus volgens de
 invariant schuift hij naar de eerstvolgende dinsdag). **Verplaats deze regel naar §Verstuurd
 zodra hij de deur uit is** — een editie die hier blijft staan terwijl hij verzonden is, maakt de
@@ -581,6 +635,9 @@ verkoopt. Herhaal geen product dat de vorige editie al pushte: de lezer zag het 
 ## Checklist voor verzending
 
 - [ ] Onderwerpregel < 60 tekens
+- [ ] **Intro werkt ook voor een nieuwe inschrijver** — geen verwijzing naar de vorige editie
+- [ ] **Geen "machine"** — server / computer / systeem (zie §Woordkeuze)
+- [ ] **Geen prijs in de mail** — die staat op de landingspagina
 - [ ] Preview tekst ingevuld (de verborgen preheader-div bovenaan de HTML)
 - [ ] Alle links getest (terminal, blog, cheatsheet) **en onderstreept** (`text-decoration:underline`)
 - [ ] UTM parameters op alle links (`?utm_source=newsletter&utm_medium=email&utm_campaign=[maand]-[jaar]`)
