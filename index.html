@@ -543,22 +543,31 @@
       <h2>HackSimulator in cijfers</h2>
       <p class="section-subtitle">Geen beloftes — dit kun je allemaal zelf nakijken.</p>
 
-      <div class="results-grid">
+      <!-- S237: was vier tegels met een groot accentgetal — de "hero-metric template" die
+           de craft floor bij naam weigert. Nu een inventarislijst in de kolomtaal van de
+           tool zelf: getal, wat het is, en waar je het natelt. De getallen blijven open
+           floors en staan op dezelfde twee opeenvolgende regels, want validate-docs.sh
+           grept `result-number` op de regel vóór `result-label`. -->
+      <div class="results-list">
         <a href="/commands/" class="result-item animate-on-scroll">
           <span class="result-number">40+</span>
           <span class="result-label">Commands, elk met een man-pagina</span>
+          <span class="result-where">/commands/</span>
         </a>
         <a href="/terminal.html" class="result-item animate-on-scroll">
           <span class="result-number">3</span>
           <span class="result-label">Missies, van beginner tot expert</span>
+          <span class="result-where">leerpad</span>
         </a>
         <a href="/over-ons.html#verantwoording" class="result-item animate-on-scroll">
           <span class="result-number">10+</span>
           <span class="result-label">Artikelen met datum van laatste controle</span>
+          <span class="result-where">/over-ons</span>
         </a>
         <a href="/woordenlijst.html" class="result-item animate-on-scroll">
           <span class="result-number">50+</span>
           <span class="result-label">Begrippen in de woordenlijst</span>
+          <span class="result-where">/woordenlijst</span>
         </a>
       </div>
 

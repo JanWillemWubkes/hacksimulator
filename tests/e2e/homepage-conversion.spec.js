@@ -452,7 +452,13 @@ const METEN = () => {
     return { sel, bandDelta: delta(band, pagina), kaartDelta: kaart ? delta(effBg(kaart), band) : null };
   });
 
-  const rails = ['.leerpad-cards', '.how-it-works-steps', '.results-grid'].map((sel) => {
+  // .results-grid stond hier tot Sessie 237 als derde vergelijkingsrail. Die sectie is
+  // toen van vier tegels naar een inventarislijst gegaan en staat sindsdien bewust op een
+  // smallere maat (68ch leesmaat i.p.v. de contentrail), dus hij is geen geldige
+  // vergelijking meer. De assertie zelf blijft intact: .leerpad-cards (full-bleed, zonder
+  // inner wrapper) moet nog steeds op dezelfde rail liggen als .how-it-works-steps (een
+  // gewoon begrensde sectie), en dát is wat deze test bewijst.
+  const rails = ['.leerpad-cards', '.how-it-works-steps'].map((sel) => {
     const b = document.querySelector(sel).getBoundingClientRect();
     return `${sel} ${Math.round(b.left)},${Math.round(b.right)}`;
   });

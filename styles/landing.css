@@ -1232,7 +1232,7 @@ body.home .btn-cta-nav:hover {
 
 /* ==================== Results Section ====================
    Verf, haarlijnen en full-bleed komen van .landing-section.section-band (zie index.html).
-   Die levert ook de content-rail, waardoor .results-grid nu gelijk ligt met de andere
+   Die levert ook de content-rail, waardoor .results-list nu gelijk ligt met de andere
    secties in plaats van 13px breder. */
 .results-section h2 {
   color: var(--color-text);
@@ -1243,26 +1243,24 @@ body.home .btn-cta-nav:hover {
    in plaats van twee gelijke, omdat "woordenlijst" als woord onbreekbaar is — 2,2px
    horizontale overflow op het document. Met een nul-ondergrens mag de track krimpen en
    breekt het woord, in plaats van andersom (css-layout.md §22). */
-.results-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--spacing-xl);
-  max-width: var(--landing-max-width);
+/* S237: was `repeat(4, minmax(0,1fr))` met tegels. Nu een lijst: de sectie gaat over
+   natelbaarheid, en de eerlijke vorm daarvan is een inventaris, geen metric-tegels. */
+.results-list {
+  max-width: 68ch;
   margin: 0 auto;
   padding: 0 var(--landing-padding-desktop);
+  border-top: 1px solid var(--color-border);
 }
 
-/* De tegels zijn sinds Sessie 214 links naar de plek waar je het cijfer kunt
-   controleren; vandaar het resetten van de link-eigenschappen. */
 .result-item {
-  display: block;
+  display: grid;
+  grid-template-columns: 4ch minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--spacing-md);
   text-decoration: none;
   color: inherit;
-  text-align: center;
-  border: 1px solid var(--color-border);
-  border-radius: 16px;
-  padding: 32px;
-  background: rgba(22, 27, 34, 0.3);
+  padding: var(--spacing-md) var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border);
   /* Entrance animation */
   opacity: 0;
   transform: translateY(20px);
@@ -1322,23 +1320,39 @@ a.result-item:focus-visible {
                                   het woord moet kunnen breken in plaats van uit te steken */
 }
 
+/* Mono en rechts uitgelijnd, zoals een tool zijn aantallen zet. Niet in het accent:
+   kleur buiten de terminal betekent "hier kun je klikken", en dit is een getal. De
+   display-maat hoorde bij de tegel en is hier misplaatst. */
 .result-number {
-  display: block;
   font-family: var(--font-heading);
-  font-size: var(--font-size-display);
+  font-size: var(--font-size-title);
   font-weight: var(--font-weight-bold);
-  color: var(--color-accent-text);
-  line-height: 1;
-  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+  text-align: right;
+  line-height: 1.3;
 }
 
+/* `text-transform: uppercase` met 1px letterafstand stond hier tot S237. Dat is het
+   decoratieve register dat het direction contract afwijst op losse labels, en het is
+   bovendien slechter leesbaar: hoofdletters halen de stokken en staarten weg waar we
+   woorden aan herkennen. */
 .result-label {
   font-family: var(--font-body);
-  font-size: 0.875rem;
-  font-weight: var(--font-weight-medium);
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+/* Waar je het natelt. Mono omdat het een pad is, gedimd omdat het de bijzin is. */
+.result-where {
+  font-family: var(--font-terminal);
+  font-size: 0.8rem;
   color: var(--color-text-dim);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.result-item:hover .result-where,
+.result-item:focus-visible .result-where {
+  color: var(--color-link-hover);
 }
 
 /* ==================== Leerpad Section ==================== */
@@ -2000,10 +2014,6 @@ html {
     margin: 0 auto;
   }
 
-  .results-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--spacing-lg);
-  }
 
   .footer-content {
     grid-template-columns: 1fr 1fr;
@@ -2228,11 +2238,15 @@ html {
     padding: var(--spacing-xl) var(--landing-padding-mobile);
   }
 
-  .results-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--spacing-lg);
-    padding: 0;
+  /* Op smalle schermen past het pad niet naast het label: die zakt eronder. */
+  .results-list { padding: 0; }
+
+  .result-item {
+    grid-template-columns: 4ch minmax(0, 1fr);
+    gap: var(--spacing-sm) var(--spacing-md);
   }
+
+  .result-where { grid-column: 2; }
 
   /* Blog Links — chips blijven wrappen, geen verticale tekstkolom */
   .blog-links-list {
@@ -2288,9 +2302,6 @@ html {
     padding: var(--spacing-md);
   }
 
-  .results-grid {
-    gap: var(--spacing-md);
-  }
 }
 
 /* ==================== Reduced Motion ==================== */
