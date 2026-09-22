@@ -63,5 +63,16 @@
    - Bekijk report achteraf: `npx playwright show-report`
    - File: `playwright.config.js` (reporter sectie)
 
+## Lokale testserver
+
+12. **E2E-tests falen op URL-asserties, maar de site werkt:** `npx serve` herschrijft `.html`
+   - Symptoom: `lead-magnet.spec.js` en `leerpad-deeplink.spec.js` falen op `toContainText`/URL,
+     terwijl niets aan navigatie gewijzigd is. Gemeten Sessie 235: 10 falers, allemaal hierdoor.
+   - Oorzaak: `npx serve` stuurt `/sample-pentest.html` met een **301** naar `/sample-pentest`.
+     Netlify serveert `.html` gewoon met 200, dus de test klopt en de server niet.
+   - Fix: gebruik `python3 -m http.server <poort>` — die geeft 200 op `.html`, net als productie.
+   - `playwright.config.js` heeft geen `webServer`; `baseURL` is standaard productie en CI draait
+     Playwright niet. De keuze van lokale server is dus volledig handwerk en dus een valkuil.
+
 → **Volledige troubleshooting:** docs/sessions/current.md §Common Issues
 → **Memory leak debugging:** docs/testing/memory-leak-results.md
