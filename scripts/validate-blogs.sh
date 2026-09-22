@@ -57,18 +57,30 @@ validate_blog() {
     errors=$((errors + 1))
   fi
 
-  # Check 3: HTML tag-balans (Sessie 138-learning)
-  # Catches unclosed <div> elements that browsers render forgiving
-  # but inherit styling (e.g. blog-tip class) over subsequent content.
-  local open_count
-  local close_count
-  open_count=$(grep -o '<div' "$file" | wc -l)
-  close_count=$(grep -o '</div>' "$file" | wc -l)
-  if [ "$open_count" -ne "$close_count" ]; then
-    local diff=$((open_count - close_count))
-    issues+="    [FAIL] TAG-BALANS: <div>=$open_count, </div>=$close_count (diff=$diff)\n"
-    errors=$((errors + 1))
-  fi
+  # Check 3: HTML tag-balans over gepaarde structuurtags (Sessie 138, verbreed Sessie 235)
+  #
+  # Een niet-gesloten containerelement geeft geen enkel foutsignaal: de parser sluit hem stil
+  # bij </body>. Het enige symptoom is dat alles erna zijn stijl erft. In Sessie 138 was dat
+  # een <div class="blog-tip">; in Sessie 235 miste blog/index.html zijn </main>, waardoor de
+  # site-brede footer IN main.blog-container belandde en diens max-width: 720px erfde —
+  # gemeten 672px breed i.p.v. 1823px, met een Ko-fi-knop die over twee regels brak.
+  #
+  # Die tweede bug viel buiten deze check omdat hij uitsluitend <div> telde. Een guard die op
+  # één tag filtert bewaakt die tag, niet de klasse "niet-gesloten container". Vandaar de
+  # volledige set gepaarde structuurtags. <p> en <li> horen er bewust NIET bij: HTML staat
+  # daar impliciet sluiten toe, dus die zouden vals alarm geven op correcte markup.
+  #
+  # De woordgrens in <tag[[:space:]>] is niet cosmetisch: '<main' matcht ook een toekomstige
+  # <main-nav>, en dan telt de guard iets anders dan hij beweert te tellen.
+  local tag open_count close_count
+  for tag in div main section article nav header footer aside figure table form; do
+    open_count=$(grep -oE "<$tag[[:space:]>]" "$file" | wc -l)
+    close_count=$(grep -oE "</$tag>" "$file" | wc -l)
+    if [ "$open_count" -ne "$close_count" ]; then
+      issues+="    [FAIL] TAG-BALANS: <$tag>=$open_count, </$tag>=$close_count (diff=$((open_count - close_count)))\n"
+      errors=$((errors + 1))
+    fi
+  done
 
   # Checks 4+5: breadcrumb + BreadcrumbList JSON-LD (Sessie 139)
   # Skip voor blog/index.html — hub-pagina, geen breadcrumb nodig.
@@ -204,6 +216,14 @@ else
   echo "Invalid: 0"
 fi
 echo ""
+
+# Zelfbewakende tak: een sweep over nul bestanden ziet er identiek uit aan een schone sweep.
+# Zonder deze tak meldt het script "All blog files pass" terwijl er niets gemeten is.
+if [ "$TOTAL_FILES" -eq 0 ]; then
+  echo -e "${RED}Geen enkel blogbestand gecontroleerd - de populatie is leeg.${NC}"
+  echo "Draai dit script vanuit de projectroot; blog/*.html hoort treffers op te leveren."
+  exit 1
+fi
 
 if [ $INVALID_FILES -eq 0 ]; then
   echo -e "${GREEN}All blog files pass validation.${NC}"
