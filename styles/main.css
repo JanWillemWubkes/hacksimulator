@@ -239,7 +239,6 @@
   --color-bg-dropdown-hover: #21262d;   /* Dropdown hover - GitHub tertiary bg */
 
   /* Theme Toggle Colors */
-  --color-toggle-text-active: #ffffff;  /* Bright white for active toggle label (VS Code pattern) */
   /* S228: was rgba(204,204,204,.4) — composite over de #1a1a1a navbar = rgb(97,97,97),
      2,82:1, onder AA op 27 pagina's in BEIDE thema's. Géén "inactive UI component" in
      WCAG-zin: beide opties zijn altijd klikbaar (`.toggle-option { cursor: pointer }`),
@@ -275,7 +274,6 @@
   --color-cta-text: #0d1117;                      /* Dark text on bright CTA bg */
   --color-cta-dark-frame: #9fef00;                /* Neon lime - ALWAYS used in dark navbar/footer (never changes with theme) */
   --color-cta-dark-frame-hover: #8ad600;          /* Darker neon lime hover - Dark Frame only (never changes with theme) */
-  --color-cta-dark-frame-glow: rgba(159, 239, 0, 0.3); /* Neon glow - Dark Frame only (never changes with theme) */
 
   /* Inline accent-TEKST (links, code, strong, badges) op een normale paginaondergrond.
      Gescheiden van --color-cta-primary omdat die token twee onverenigbare rollen had:
@@ -290,7 +288,6 @@
   --shadow-elevation-2: 0 4px 16px rgba(0, 0, 0, 0.5);    /* Hover state - elevated interaction feedback */
 
   /* Terminal Accent - Neon green glow for terminal-specific UI (hint boxes, command output) */
-  --shadow-accent-terminal: 0 0 20px rgba(0, 255, 136, 0.15);  /* Branded glow - hacking aesthetic */
 
   /* Muted info color for educational context */
 }
@@ -454,7 +451,6 @@
   --color-border-dark-frame: #30363d;   /* Dark Frame borders - same as dark mode (navbar/footer always dark) */
 
   /* Theme Toggle Colors - STAYS LIGHT in light mode (navbar is dark) */
-  --color-toggle-text-active: #ffffff;  /* Bright white for active label (same as dark mode - navbar stays dark) */
   --color-toggle-text-inactive: #a1a8b0;  /* Gedempt label - 7,25:1 op de #1a1a1a navbar (AAA); zie het dark-blok */
   --color-toggle-hover: rgba(255, 255, 255, 0.15);  /* Slightly brighter hover for visibility on #1a1a1a navbar */
 
@@ -482,7 +478,6 @@
   --shadow-elevation-2: 0 4px 16px rgba(0, 0, 0, 0.12);   /* Hover state - professional elevation */
 
   /* Terminal Accent - Adapted for light backgrounds (same visual weight as dark mode) */
-  --shadow-accent-terminal: 0 0 20px rgba(0, 255, 136, 0.08);  /* Softer glow on white - prevents oversaturation */
 
   /* Muted info color for educational context */
 }

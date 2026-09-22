@@ -27,9 +27,6 @@
   --terminal-demo-max-width: 100%;   /* Sessie 236: was 550px, tweede kolom. Nu de hero zelf. */
 
   /* Hero Background - Theme-aware */
-  --hero-grid-color: rgba(255, 255, 255, 0.03);
-  --hero-orb-green: rgba(159, 239, 0, 0.12);
-  --hero-orb-blue: rgba(88, 166, 255, 0.10);
 
   /* Eyebrow Badge - Theme-aware */
   --eyebrow-border: var(--color-prompt-border-light);
@@ -43,15 +40,17 @@
 
   /* Terminal Demo Text - Fixed (always light on dark terminal) */
   --terminal-demo-text: #c9d1d9;
+  /* Vast, net als de andere demo-tekstkleuren: het transcript staat op een zwart vlak dat
+     in beide thema's gelijk is, dus een thema-afhankelijke --color-error/-warning meet
+     daar 2,62:1 in light (gemeten). Op #000: 8,21 en 8,32 — beide AAA. */
+  --terminal-demo-error: #fa7c76;
+  --terminal-demo-warning: #d29922;
   --terminal-demo-text-dim: #a1a8b0;  /* Sessie 227: was #8b949e — 6,83 op de zwarte demo, onder AAA */
   --terminal-demo-prompt: #9fef00;
 }
 
 /* Light theme overrides - Tailwind Green 600 for rich, modern appearance (WCAG AA 4.2:1) */
 [data-theme="light"] {
-  --hero-grid-color: rgba(0, 0, 0, 0.04);
-  --hero-orb-green: rgba(22, 163, 74, 0.05);   /* Subtiel op wit - Tailwind Green 600 */
-  --hero-orb-blue: rgba(88, 166, 255, 0.06);   /* Consistent subtiel */
 
   /* Eyebrow Badge - Higher opacity for visibility on light */
   --eyebrow-border: rgba(22, 163, 74, 0.4);
@@ -946,19 +945,52 @@ body.home .btn-cta-nav:hover {
   padding-bottom: 96px;
 }
 
+/* S237: was `repeat(3, 1fr)`. Een terminalvenster in elke kaart stoppen zou hetzelfde
+   raster met andere inhoud zijn. Nu een stapel: transcript links, uitleg rechts. */
 .pain-points {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  max-width: var(--landing-max-width);
+  margin: 0 auto;
 }
 
-/* Pain Point Cards */
-.pain-point {
-  background: rgba(22, 27, 34, 0.5);
+.pain-exchange {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: var(--spacing-xl);
+  align-items: center;
+}
+
+/* Zelfde vensterstaal als de hero: zwart vlak, haarlijn, geen gloed. Géén 16px-kaart. */
+.pain-transcript {
+  background: var(--color-bg-demo-terminal);
   border: 1px solid var(--color-border);
-  border-radius: 16px;
-  padding: var(--spacing-xl);
-  text-align: left;
+  border-radius: var(--border-radius-button);
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-family: var(--font-terminal);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+.pain-transcript .terminal-line {
+  white-space: pre;
+  color: var(--terminal-demo-text);
+}
+
+.pain-transcript .terminal-line.prompt { color: var(--terminal-demo-prompt); }
+.pain-transcript .terminal-line.error { color: var(--terminal-demo-error); }
+.pain-transcript .terminal-line.warning {
+  color: var(--terminal-demo-warning);
+  white-space: pre-wrap;   /* deze regel is te lang voor `pre` op smalle schermen */
+}
+
+/* NL-ondertitel in de uitvoer: dimmer, loopt mee i.p.v. te concurreren. */
+.pain-sub { color: var(--terminal-demo-text-dim); }
+
+/* Tekstkant: geen achtergrond, rand of radius — proximity groepeert. */
+.pain-exchange {
   /* Entrance animation */
   opacity: 0;
   transform: translateY(20px);
@@ -970,39 +1002,21 @@ body.home .btn-cta-nav:hover {
     border-color var(--transition-normal);
 }
 
-.pain-point.visible {
+.pain-exchange.visible {
   opacity: 1;
   transform: translateY(0);
   filter: blur(0);
 }
 
 /* Staggered entrance timing */
-.pain-point:nth-child(1) { transition-delay: 0ms; }
-.pain-point:nth-child(2) { transition-delay: 100ms; }
-.pain-point:nth-child(3) { transition-delay: 200ms; }
+.pain-exchange:nth-child(1) { transition-delay: 0ms; }
+.pain-exchange:nth-child(2) { transition-delay: 100ms; }
+.pain-exchange:nth-child(3) { transition-delay: 200ms; }
 
-.pain-point:hover {
-  border-color: var(--color-prompt-border-medium);
-  transform: translateY(-4px);
-}
-
-/* Pain Icon */
-.pain-icon {
-  margin-bottom: var(--spacing-md);
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-prompt-bg-light);
-  border-radius: 12px;
-}
-
-.pain-icon-svg {
-  color: var(--color-accent-text);
-}
-
-.pain-point h3 {
+/* Weg in S237: .pain-icon(-svg) en .pain-quote — een generiek pictogram naast een kop
+   die zichzelf uitlegt, en een bronloos citaat dat als testimonial leest. Hover-lift ook:
+   er is geen kaart meer om op te tillen. */
+.pain-text h3 {
   font-family: var(--font-heading);
   font-size: var(--font-size-title);
   font-weight: var(--font-weight-semibold);
@@ -1010,15 +1024,7 @@ body.home .btn-cta-nav:hover {
   margin: 0 0 var(--spacing-sm) 0;
 }
 
-.pain-quote {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  font-style: italic;
-  color: var(--color-text-dim);
-  margin: 0 0 var(--spacing-sm) 0;
-}
-
-.pain-description {
+.pain-text p {
   font-family: var(--font-body);
   font-size: 0.95rem;
   color: var(--color-text-dim);
@@ -2161,14 +2167,19 @@ html {
     justify-content: center;
   }
 
-  /* Problem Section */
+  /* Problem Section — transcript boven de uitleg i.p.v. ernaast */
   .pain-points {
+    gap: var(--spacing-lg);
+  }
+
+  .pain-exchange {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
   }
 
-  .pain-point {
-    padding: var(--spacing-lg);
+  .pain-transcript {
+    font-size: 0.7rem;   /* de nmap-kolommen moeten op 375px nog uitlijnen */
+    padding: var(--spacing-sm) var(--spacing-md);
   }
 
   /* Solution Section */
@@ -2269,7 +2280,7 @@ html {
     flex: 0 0 100%;
   }
 
-  .pain-point,
+  .pain-exchange,
   .feature-card,
   .leerpad-card,
   .how-step,
@@ -2298,7 +2309,7 @@ html {
     transform: none;
   }
 
-  .pain-point,
+  .pain-exchange,
   .feature-card,
   .leerpad-card,
   .how-step,
@@ -2310,7 +2321,6 @@ html {
     transition: none;
   }
 
-  .pain-point:hover,
   .feature-card:hover,
   .leerpad-card:hover,
   .how-step:hover {
@@ -2328,7 +2338,6 @@ html {
 /* .trust-bar heeft hier geen light-override meer: --color-bg-alt dekt beide thema's, en een
    verdieping werpt geen slagschaduw (de box-shadow is daarom vervallen). */
 
-[data-theme="light"] .pain-point,
 [data-theme="light"] .feature-card,
 [data-theme="light"] .leerpad-card,
 [data-theme="light"] .how-step,
@@ -2339,7 +2348,6 @@ html {
 }
 
 [data-theme="light"] .feature-icon,
-[data-theme="light"] .pain-icon,
 [data-theme="light"] .step-icon {
   background: rgba(0, 0, 0, 0.04);  /* Soft gray - clean SaaS look */
 }

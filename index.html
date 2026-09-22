@@ -340,52 +340,55 @@
       </div>
     </section>
 
-    <!-- ===== PROBLEM SECTION ===== -->
+    <!-- ===== PROBLEM SECTION =====
+         S237: was drie kaarten (icoon + bronloze quote + alinea) die de pijn beweerden.
+         Nu drie uitwisselingen die hem tonen, met uitvoer die uit de engine komt
+         (gedraaid op terminal.html): ifconfig, rm -rf / en lss. Een stapel, geen raster:
+         drie kaarten naast elkaar blijven de container die de craft floor afwijst. -->
     <section class="landing-section problem-section">
       <h2>Herkenbaar?</h2>
-      <p class="section-subtitle">Cybersecurity leren is lastig als de tools en de taal een barrière vormen.</p>
+      <p class="section-subtitle">Cybersecurity leren is lastig als de tools en de taal een barri&egrave;re vormen. Dit is wat je hier in plaats daarvan krijgt.</p>
 
       <div class="pain-points">
-        <div class="pain-point animate-on-scroll">
-          <div class="pain-icon">
-            <!-- HelpCircle Icon -->
-            <svg class="pain-icon-svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-              <line x1="12" y1="17" x2="12.01" y2="17"></line>
-            </svg>
+
+        <div class="pain-exchange animate-on-scroll">
+          <div class="pain-transcript" aria-hidden="true">
+            <div class="terminal-line prompt">hacker@hacksim:~$ ifconfig</div>
+            <div class="terminal-line output">eth0: flags=4163&lt;UP,BROADCAST,RUNNING&gt;  mtu 1500</div>
+            <div class="terminal-line output">        inet 192.168.1.100  <span class="pain-sub">&#8592; Je lokale IP adres</span></div>
+            <div class="terminal-line output">        ether 08:00:27:3f:2a:1b  <span class="pain-sub">&#8592; MAC adres (hardware)</span></div>
           </div>
-          <h3>Te veel Engels</h3>
-          <p class="pain-quote">"Alle goede cybersecurity platforms zijn in het Engels"</p>
-          <p class="pain-description"><a href="/blog/leren-hacken.html">Je wilt leren hacken</a>, maar moet eerst een Engels woordenboek erbij pakken. Elke foutmelding, elke tutorial, alles in het Engels. Frustrerend als je gewoon wilt beginnen.</p>
+          <div class="pain-text">
+            <h3>Te veel Engels</h3>
+            <p>De tool praat Engels, zoals de echte tool dat doet. De uitleg loopt er in het Nederlands naast mee &mdash; niet eroverheen, zodat je leert wat er werkelijk staat. <a href="/blog/leren-hacken.html">Leren hacken</a> zonder woordenboek ernaast.</p>
+          </div>
         </div>
 
-        <div class="pain-point animate-on-scroll">
-          <div class="pain-icon">
-            <!-- AlertTriangle Icon -->
-            <svg class="pain-icon-svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-              <line x1="12" y1="9" x2="12" y2="13"></line>
-              <line x1="12" y1="17" x2="12.01" y2="17"></line>
-            </svg>
+        <div class="pain-exchange animate-on-scroll">
+          <div class="pain-transcript" aria-hidden="true">
+            <div class="terminal-line prompt">hacker@hacksim:~$ rm -rf /</div>
+            <div class="terminal-line output">rm: cannot remove '/': Critical system directory</div>
+            <div class="terminal-line warning">[!] WAARSCHUWING: Dit is een kritieke system directory. In een echte omgeving zou dit je systeem onbruikbaar maken!</div>
+            <div class="terminal-line output">[TIP] Gebruik 'reset' om het filesystem te resetten naar de beginwaarde.</div>
           </div>
-          <h3>Bang je pc te breken</h3>
-          <p class="pain-quote">"Echte hacking tools kunnen je systeem beschadigen"</p>
-          <p class="pain-description">Je hebt gehoord van Kali Linux, maar durft het niet te installeren. Wat als je iets fout doet? Wat als je je laptop kapot maakt? De angst houdt je tegen.</p>
+          <div class="pain-text">
+            <h3>Bang je pc te breken</h3>
+            <p>Er zit geen echt systeem achter. Het gevaarlijkste commando dat er bestaat legt hier uit w&aacute;t het gedaan zou hebben, en &eacute;&eacute;n woord zet alles terug. Je hoeft niet voorzichtig te doen.</p>
+          </div>
         </div>
 
-        <div class="pain-point animate-on-scroll">
-          <div class="pain-icon">
-            <!-- BookOpen Icon -->
-            <svg class="pain-icon-svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-            </svg>
+        <div class="pain-exchange animate-on-scroll">
+          <div class="pain-transcript" aria-hidden="true">
+            <div class="terminal-line prompt">hacker@hacksim:~$ lss</div>
+            <div class="terminal-line error">Command not found: lss</div>
+            <div class="terminal-line output">[TIP] Bedoelde je misschien 'ls'?</div>
           </div>
-          <h3>Geen ervaring</h3>
-          <p class="pain-quote">"Terminal commands zijn te technisch en overweldigend"</p>
-          <p class="pain-description">Je opent een terminal en ziet een knipperende cursor. Wat nu? Je typt iets, krijgt een cryptische foutmelding, en geeft op. Iedereen lijkt het te snappen behalve jij.</p>
+          <div class="pain-text">
+            <h3>Geen ervaring</h3>
+            <p>Een typefout is hier geen doodlopende weg maar de volgende aanwijzing. Je hoeft niets uit je hoofd te kennen om te beginnen &mdash; de terminal helpt je verder waar een echte je laat zitten.</p>
+          </div>
         </div>
+
       </div>
     </section>
 
