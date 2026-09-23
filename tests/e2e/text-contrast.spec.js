@@ -252,8 +252,10 @@ test.describe('Tekstcontrast — ongefilterd, élk renderend element (WCAG AAA)'
   test.describe.configure({ timeout: 120_000 });
 
   // Eén test per pagina; binnen de test 2 viewports × 2 thema's op dezelfde navigatie.
-  // (Zestien navigaties in één test werd flaky zodra er een tweede worker naast draaide —
-  // zie de notitie in accent-text-contrast.spec.js. Een viewportwissel is geen navigatie.)
+  // (Zestien navigaties in één test werd flaky zodra er een tweede worker naast draaide:
+  // groen in isolatie, rood in de volle run. Dezelfde les had accent-text-contrast al
+  // geleerd — de notitie staat in `git show 8696111:tests/e2e/accent-text-contrast.spec.js`,
+  // want spec én notitie zijn weg. Een viewportwissel is geen navigatie.)
   for (const pad of PAGINAS) {
     test(`${pad} — alle tekst haalt AAA (2 thema's × 2 viewports)`, async ({ page }) => {
       // De legal-modal vóór de navigatie accepteren i.p.v. wegklikken: anders dekt de modal
