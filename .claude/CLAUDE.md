@@ -1,7 +1,7 @@
 # CLAUDE.md — HackSimulator.nl
 
 **Project:** Browser-based terminal simulator die Nederlandse beginners ethisch hacken leert.
-**Status:** MVP Development — ✅ LIVE op Netlify (laatste: Sessie 234)
+**Status:** MVP Development — ✅ LIVE op Netlify (laatste: Sessie 235)
 **Stack:** Vanilla JS/CSS, client-side only, geen backend, geen build-stap. Deploy = push naar `main`.
 **Docs:** `docs/prd.md` v1.8 | `PLANNING.md` v3.0 | `TASKS.md` (live metrics) | `docs/style-guide.md` v1.5
 
@@ -135,7 +135,7 @@ architectuurwijziging, `docs/prd.md` alleen bij scopewijziging.
 **Afsluiten:** `/summary` — die bevat de volledige 7-staps flow, inclusief de ground-truth-meting
 en de validatiegate. Niet hier dupliceren.
 
-**Sessie counter:** 234
+**Sessie counter:** 235
 
 <!-- Onderhoudsnotitie (wordt niet in context geladen):
      Dit bestand is de altijd-geladen laag. Houd het onder 150 regels — validate-docs.sh
@@ -145,5 +145,5 @@ en de validatiegate. Niet hier dupliceren.
 
 ---
 
-**Last updated:** 15 sep 2026 (Sessie 234 — de mailbox kostte ~EUR 96/jaar en er was geen kleiner pakket; Zoho Mail Free op het EU-datacenter, waar de regio afhangt van de ingang en niet van je IP. Volledig: `docs/sessions/current.md`)
-**Version:** 6.07 (Sessie 234 — Brevo's nieuwsbrief slaagt op DKIM, niet op SPF: de Return-Path is Brevo's eigen bounce-domein, dus onze SPF-include wordt voor die mail niet geraadpleegd. Historie: `docs/sessions/current.md`)
+**Last updated:** 23 sep 2026 (Sessie 235 — een niet-gesloten `<main>` sluit de parser stil bij `</body>`; de footer erfde daardoor de breedte van de blogcontainer. Volledig: `docs/sessions/current.md`)
+**Version:** 6.08 (Sessie 235 — een guard die uit één incident geboren is, bewaakt dat incident: de tagbalans-check telde sinds Sessie 138 alleen `<div>`. Historie: `docs/sessions/current.md`)

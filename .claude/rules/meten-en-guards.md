@@ -362,3 +362,67 @@ de helft van die op chromium.
 
 > Vuistregel: elke meting heeft een eenheid en een populatie. Noteer beide expliciet, en laat
 > een control die niet kán falen bewijzen dat je instrument werkt vóór je de uitkomst gelooft.
+
+---
+
+## 23. Een sweep kan niet bewaken dat iets er *moet zijn* (Sessie 235)
+
+§19 zei: draai de populatie om naar "alles". Dat werkt voor "wat er is, moet kloppen" — en
+juist dáárom kan zo'n guard nooit "dit hoort er te staan" dekken. Verdwijnt het element, dan
+levert dat geen faler op maar een **kleinere populatie**, en kleiner is altijd groen.
+
+Gemeten bij het opruimen van drie gefilterde contrastspecs. Twee bleken een strikte subset van
+de ongefilterde opvolger en zijn verwijderd; de derde bleef, want hij asserteert óók
+*aanwezigheid*. Eén mutant die één van twee badges hernoemt:
+
+```
+eyebrow-contrast   1 failed / 9 passed   ← "index.html hoort twee badges te hebben"
+text-contrast      3 passed              ← ongefilterd, ziet niets, want er is niets
+```
+
+**Bewijs redundantie met mutanten, niet met een redenering over scope.** Twee specs zijn pas
+overbodig als élke mutant die de ene vangt, ook de andere rood maakt:
+
+```
+--color-accent-text -> #9fef00   accent-spec 4 failed | opvolger ook rood, 246x rgb(159,239,0)
+--color-link        -> #0969da   link-spec   1 failed | opvolger ook rood,  12x rgb(9,105,218)
+```
+
+En draai de vervanger **volledig groen** vóór je de voorganger weggooit, niet erna — andersom
+laat een rode vervanger een gat achter dat niemand ziet.
+
+## 24. Zoek op de vorm, niet op de naam (Sessie 235)
+
+Een inventarisatie van "specs met een eigen paginalijst" via `grep PAGINAS` gaf **drie**
+treffers. Een detector op de *vorm* — een array-literal met ≥2 HTML-paden — gaf er **zeven**:
+de andere heten `POSTS`, `SAMPLES`, `LANDINGSPAGINAS` en `PAGINAS_MET_BADGE`.
+
+```python
+ARRAY = re.compile(r"^const\s+([A-Za-z_]\w*)\s*=\s*\[(.*?)^\];", re.S | re.M)
+PAD   = re.compile(r"""['"](/[A-Za-z0-9._/-]*\.html)['"]""")
+```
+
+Dit is §20's "een grep met nul treffers bewijst iets over je patroon" één slag verder: ook een
+grep mét treffers bewijst niets over volledigheid. Kies een grens die je kunt verantwoorden —
+hier ≥2 paden, zodat een losse `const PAGINA = '/over-ons.html'` (een fixture) er niet in valt.
+
+**En laat de uitzonderingen zich melden.** Een registratie met reden per gescopete lijst, plus
+een tak die faalt op een registratie zónder bijbehorende lijst: zo ruimt de uitzondering
+zichzelf op in plaats van te blijven staan als afspraak die niet meer geldt.
+
+## 25. Twee valkuilen in de Playwright-suite zelf (Sessie 235)
+
+**`import.meta.url` bestaat hier niet.** `package.json` heeft geen `"type": "module"`, dus
+Playwright transpileert specs naar CJS en je krijgt `ReferenceError: require is not defined` —
+met een regelverwijzing naar een **comment**, want de sourcemap klopt niet. Anker op
+`process.cwd()` (Playwright draait vanuit de map van `playwright.config.js`) en asserteer dat:
+
+```js
+const WORTEL = process.cwd();
+const HIER = path.join(WORTEL, 'tests', 'e2e');
+expect(fs.existsSync(HIER), `${HIER} bestaat niet — cwd is ${WORTEL}`).toBe(true);
+```
+
+**`-g` matcht de vólledige titel, inclusief het describe-blok.** `-g "^/index.html"` vindt dus
+niets en geeft `exit 1` met `Error: No tests found` — dat leest als een faler terwijl er niets
+gemeten is. Zelfde klasse als §20: eis een positief eindblok vóór je een uitkomst gelooft.
