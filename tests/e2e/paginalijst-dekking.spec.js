@@ -55,24 +55,6 @@ const GESCOPET = {
   'legal-pages-overflow.spec.js':
     'De drie legal-pagina\'s laden mobile.css NIET, waardoor --font-size-base op mobiel 18px ' +
     'blijft. Die spec bestaat juist omdat ze in geen enkele andere assertie voorkwamen.',
-
-  // ── De twee hieronder zijn GEEN bewuste scope maar een gemeten subset ─────────────────
-  // Sessie 228 bouwde text-contrast.spec.js expliciet als de ONGEFILTERDE opvolger van deze
-  // twee: 30 pagina's x 2 thema's x 2 viewports, elk element dat zelf tekst rendert, plus
-  // dezelfde token-matrix voor de hover-paren (HOVER_PAREN bevat --color-link/-hover).
-  // Met mutanten gemeten in Sessie 235, tegen een no-store server:
-  //   --color-accent-text -> #9fef00  accent-spec 4 failed  | text-contrast ook rood (246x
-  //                                                            rgb(159,239,0) op /index.html)
-  //   --color-link -> #0969da         link-spec 1 failed    | text-contrast ook rood (12x
-  //                                                            rgb(9,105,218) op /over-ons.html)
-  // Beide dus redundant. Ze staan hier geregistreerd zodat deze guard groen is; de beslissing
-  // om ze te verwijderen ligt bij de eigenaar van de suite.
-  'accent-text-contrast.spec.js':
-    'Subset van text-contrast.spec.js (ongefilterd, 30 pagina\'s, 2 viewports). Met mutanten ' +
-    'gemeten redundant — kandidaat voor verwijdering.',
-  'link-contrast.spec.js':
-    'Subset van text-contrast.spec.js, inclusief de token-matrix voor de hover-paren. Met ' +
-    'mutanten gemeten redundant — kandidaat voor verwijdering.',
 };
 
 // Een losse `const PAGINA = '/over-ons.html'` is een testfixture, geen paginalijst. De grens

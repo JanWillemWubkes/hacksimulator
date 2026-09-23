@@ -15,7 +15,22 @@
 // nooit gesloten.
 //
 // Deze spec filtert niet. Élk element dat zelf een tekstnode rendert wordt gemeten tegen
-// zijn effectieve achtergrond. Eindstand van de sweep die hem voortbracht: 30 pagina's ×
+// zijn effectieve achtergrond.
+//
+// ── Sessie 235: twee van die voorgangers zijn hierom verwijderd ──────────────────────────
+// `accent-text-contrast.spec.js` (12 pagina's, 1 viewport, 2 tokens) en `link-contrast.spec.js`
+// (16 pagina's, 5 tokens, mét eigen token-matrix) bleken een strikte subset van deze spec —
+// niet beredeneerd maar met mutanten gemeten, tegen een no-store server:
+//
+//   --color-accent-text -> #9fef00   accent-spec 4 failed | hier ook rood: 246x rgb(159,239,0)
+//                                                           op /index.html
+//   --color-link        -> #0969da   link-spec   1 failed | hier ook rood:  12x rgb(9,105,218)
+//                                                           op /over-ons.html
+//
+// De hover-dekking van link-contrast zit hier in HOVER_PAREN, dat `--color-link`/`-hover`
+// bevat en over 30 pagina's draait i.p.v. 16. Wat die twee specs maten, meet deze strenger:
+// AAA voor álle tekst i.p.v. AA voor twee tokens. Besparing: 120 tests, 229s wandklok over
+// drie motoren. Eindstand van de sweep die hem voortbracht: 30 pagina's ×
 // 2 thema's × 2 viewports = 13.157 element-toestanden, **152 onder AA en 378 onder AAA**,
 // verdeeld over 18 kleurwaarden. Na de fixes: 0 en 0.
 //
