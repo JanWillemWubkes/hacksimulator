@@ -75,7 +75,7 @@ buildstap.
 **Functioneel**
 
 - 41 terminalcommando's verdeeld over vijf categorieen: `filesystem` (11), `network` (6),
-  `security` (6), `special` (1), `system` (18). Gemeten: 42 JS-bestanden onder
+  `security` (5), `special` (1), `system` (18). Gemeten: 42 JS-bestanden onder
   `src/commands/`, waarvan `security/hash-benchmarks.js` een gedeelde databron is en geen
   commando (het exporteert constanten, geen `export default`).
 - Virtueel bestandssysteem, tutorialsysteem, gamification met badges en certificaten,
@@ -111,9 +111,10 @@ eigenaar gemaakt en is het belangrijkste dat in dit bestand staat.
 
 - **Bindend:** dit moet voelen als een hacker- en terminalomgeving. Wie `terminal.html`
   opent weet binnen een seconde waar hij is. Dat is het product.
-- **Open:** palet, typografie, ritme, chrome, spacing en motion. De huidige uitvoering
-  (neon-lime op GitHub-donker, Inter en Space Grotesk) is een keuze uit 2024, geen
-  natuurwet. Als het beter kan, mag het beter. Een voorstel dat de identiteit bewaart maar
+- **Open:** palet, typografie, ritme, chrome, spacing en motion. De uitvoering uit 2024
+  (neon-lime op GitHub-donker, Inter en Space Grotesk) was een keuze, geen natuurwet; de
+  typografie is in het Impeccable-traject al herzien (stand: `DESIGN.md`). Als het beter
+  kan, mag het beter. Een voorstel dat de identiteit bewaart maar
   anders uitvoert is welkom, geen overtreding.
 
 **Naam en toon**
@@ -137,14 +138,17 @@ eigenaar gemaakt en is het belangrijkste dat in dit bestand staat.
 
 ## Evidence on Hand
 
-Gemeten op 19 september 2026, niet overgenomen uit documentatie.
+Gemeten op 23 september 2026, niet overgenomen uit documentatie.
 
 - Live: https://hacksimulator.nl/ — bron: https://github.com/JanWillemWubkes/hacksimulator
 - 42 JS-bestanden onder `src/commands/`, specificaties in `docs/commands-list.md`.
 - 14 blogartikelen in `blog/` (naast index en welkomstpost).
 - 4 betaalde gidsen plus 2 sample-pdf's, bron in `docs/products/*.typ`.
 - 3 juridische pagina's in `assets/legal/`.
-- 43 end-to-end-specs in `tests/e2e/`, waarvan 7 specifiek op contrast.
+- End-to-end-specs in `tests/e2e/`. De contrastvangrail is `text-contrast.spec.js`: ongefilterd,
+  elk element dat zelf tekst rendert, over `helpers/paginas.js` in beide thema's en op twee viewports.
+  Geen aantal hier: de specpopulatie verandert per sessie (`main` schrapte er twee als strikte
+  subset van deze spec, commit `7a49b0f`).
 - Designsysteem beschreven in `docs/style-guide.md` (8203 regels).
 
 **Niet aanwezig, dus niet verzinnen:** er zijn geen klantcitaten, testimonials,
@@ -165,8 +169,8 @@ een meting komen of wegblijven.
 
 ## Accessibility & Inclusion
 
-- WCAG AAA-contrast is het doel, niet AA. Er staan 7 specs in `tests/e2e/` die gerenderd
-  contrast meten; die zijn de vangrail bij elke paletwijziging.
+- WCAG AAA-contrast is het doel, niet AA. `tests/e2e/text-contrast.spec.js` meet gerenderd
+  contrast en is de vangrail bij elke paletwijziging.
 - Toetsenbordnavigatie en zichtbare focus overal; de terminal is per definitie een
   toetsenbordinterface.
 - Tapdoelen minimaal 44 bij 44 pixels.
