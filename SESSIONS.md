@@ -244,7 +244,10 @@ houd `current.md` op ~10-15 sessies / <250 KB, en werk de index hierboven bij.
 2. Update "Total Sessions" count in this navigation file
 3. Every 5 sessions: Review compression of sessions 20+ old
 
-**Next rotation:** Sessie 90 (estimated late december 2025)
+**Volgende rotatie:** de eerstvolgende `/summary` waar `N % 5 == 0` — bij Sessie 235 was dat
+220-224. Hier staat bewust géén sessienummer of datum meer: de vorige notitie zei "Sessie 90
+(estimated late december 2025)" en was bij Sessie 235 dus 145 sessies verlopen, terwijl de
+regel zelf al die tijd gewoon werkte. Een afgeleide waarde hoort niet overgeschreven te worden.
 
 ---
 

@@ -196,7 +196,13 @@ zijn historie en blijven staan.
   "plak in het **lopende** range-archief, sluit af bij ~250 KB"; de repo doet sinds s165 één
   archief per blok van vijf, en de bestandsnamen dragen exacte ranges. `archive-s215-s219.md` is
   84 KB — volgens de letter had 220-224 daarin gemoeten, wat de naam een leugen maakt. Gevolgd:
-  de praktijk. Genoteerd als #80.
+  de praktijk, en de README is binnen dezelfde sessie aangepast (#80): één blok = één bestand,
+  de afsluit-drempel is weg, en de onderbouwing staat als blockquote ín de README zodat niemand
+  hem op gevoel terugdraait. **Meet voor je zo'n regel kiest:** twaalf opeenvolgende blokken van
+  exact vijf sinds `s165`, grootste 81 KB — een drempel van 250 KB die in twaalf rotaties nooit
+  geraakt is, is geen regel maar een fossiel. Bijvangst: `SESSIONS.md` beloofde "Next rotation:
+  Sessie 90 (estimated late december 2025)", **145 sessies verlopen**, terwijl de regel zelf al
+  die tijd werkte — een afgeleide waarde hoort niet overgeschreven te worden.
 
 ### Metrics delta
 
@@ -209,8 +215,6 @@ zijn historie en blijven staan.
 
 ### Next steps
 
-- #80: de rotatieregel in `docs/sessions/README.md` laten kloppen met de praktijk (één archief
-  per blok van vijf) of de praktijk met de regel — nu spreken ze elkaar tegen.
 - Openstaand uit eerdere sessies, ongewijzigd: #64 (flaky autocomplete-diagnose), #74
   (minify-trigger, marge nog > 5 KB), DMARC `p=quarantine` zodra de rapporten schoon zijn.
 
