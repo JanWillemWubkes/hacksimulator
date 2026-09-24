@@ -136,9 +136,13 @@ test.describe('Gidsen-fix raakt gedeelde CSS — regressiewacht', () => {
 
   // landing.css :nth-child(3) kreeg :last-child erbij. Grids met precies 3 kaarten
   // moeten hun gecentreerde onderkaart op tablet HOUDEN.
-  test('index.html houdt zijn gecentreerde 3e kaart op tablet', async ({ page }) => {
+  // Sessie 238: index.html heeft geen .feature-cards meer (het affiche draagt eigen
+  // af-klassen). De regel bestaat nog en grijpt aan op de twee sample-pagina's — de enige
+  // grids met precies drie kaarten (gemeten: gidsen en over-ons hebben er vier). De wacht
+  // verhuist dus mee in plaats van te verdwijnen.
+  test('sample-pentest.html houdt zijn gecentreerde 3e kaart op tablet', async ({ page }) => {
     await page.setViewportSize(TABLET);
-    await page.goto('/');
+    await page.goto('/sample-pentest.html');
 
     const derde = await page.locator('.feature-cards .feature-card').nth(2).evaluate((el) => {
       const s = getComputedStyle(el);

@@ -147,6 +147,12 @@ body.home {
     transparent 58.3333%);
 }
 
+[data-theme="dark"] body.home .af-transcript,
+[data-theme="dark"] body.home .af-specimen-cmds {
+  outline: 1px solid var(--af-lijn-sterk);
+  outline-offset: -1px;
+}
+
 /* ==================== Browseroppervlakken ==================== */
 body.home ::selection {
   background: var(--af-inkt);
@@ -370,9 +376,13 @@ body.home a.af-knop--vol:hover {
   line-height: 1.2;
 }
 
+/* Eén maat voor lopende tekst. `ch` is de breedte van een "0"; in Atkinson zijn de
+   meeste letters smaller, dus 62ch geeft ~75 tekens per regel (craft floor: 65–75).
+   Zonder deze grens liep een alinea over twaalf kolommen tot boven de 80. */
 .af p {
   margin: 0;
   line-height: 1.55;
+  max-width: 62ch;
 }
 
 .af-kop {
@@ -626,17 +636,15 @@ body.home .af-term .hero-input::placeholder {
   opacity: 1;
 }
 
+/* Staand, niet knipperend: het veld is in rust readonly en tekent dus geen eigen caret;
+   dit blokje zegt "hier typ je". De beweging die de pagina heeft, is de registratie. */
 body.home .af-term .cursor {
   color: var(--af-m-tekst);
-  animation: af-knipper 1s steps(1) infinite;
+  animation: none;
 }
 
 body.home .af-term:has(.is-live) .cursor {
   display: none;
-}
-
-@keyframes af-knipper {
-  50% { opacity: 0; }
 }
 
 /* Focus: de module krijgt een rood kader — jij bent aan zet. De transparante outline
@@ -1109,7 +1117,7 @@ body.home .af-transcript .terminal-line.error { color: var(--af-m-fout); }
 
 body.home .af-lijst-rij {
   display: grid;
-  grid-template-columns: 3fr 6fr 3fr;
+  grid-template-columns: 7rem minmax(0, 1fr) auto;
   align-items: baseline;
   gap: 0;
   min-height: 56px;
@@ -1295,6 +1303,7 @@ body.home .af-lees-lijst .blog-link {
   background: none;
   border: 0;
   border-radius: 0;
+  box-shadow: none;   /* de gedeelde .blog-link draagt 0 1px 3px; deze wereld heeft geen schaduw */
 }
 
 body.home .af-lees-lijst .blog-link:hover {
@@ -1368,8 +1377,14 @@ body.home .af-faq .faq-item.open .faq-icon {
   transform: rotate(180deg);
 }
 
+/* De gedeelde FAQ animeert max-height en padding: layout-eigenschappen, en hier is de
+   enige beweging de registratie. Open en dicht zonder overgang. */
+body.home .af-faq .faq-answer {
+  transition: none;
+}
+
 body.home .af-faq .faq-answer p {
-  max-width: 68ch;
+  max-width: 60ch;
   padding-bottom: 20px;
   color: var(--af-inkt);
 }
@@ -1412,19 +1427,19 @@ body.home .af-faq .faq-answer p {
 }
 
 .af-sample h2 {
-  grid-column: 1 / 6;
+  grid-column: 1 / 8;
   color: var(--af-papier);
 }
 
 .af-sample p {
-  grid-column: 6 / -1;
+  grid-column: 8 / -1;
   padding-left: var(--af-cel);
   color: var(--af-papier);
   max-width: 60ch;
 }
 
 .af-sample-acties {
-  grid-column: 6 / -1;
+  grid-column: 8 / -1;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1452,15 +1467,23 @@ body.home .af-sample a.af-knop--vol:hover {
 }
 
 /* ==================== Nieuwsbrief ==================== */
+/* De gedeelde .homepage-newsletter centreert en geeft 32px zijpadding; die padding
+   versmalt het raster en schuift zijn rail (gemeten). Hier: links, en de rand komt
+   van het raster zelf. */
+body.home .af-news {
+  padding-inline: 0;
+  text-align: left;
+}
+
 .af-news-tekst {
-  grid-column: 1 / 6;
+  grid-column: 1 / 8;
   display: grid;
   gap: 16px;
   align-content: start;
 }
 
 .af-news-form {
-  grid-column: 6 / -1;
+  grid-column: 8 / -1;
   padding-left: var(--af-cel);
 }
 
@@ -1565,6 +1588,19 @@ body.home .landing-footer {
   --color-navbar-link-hover: #efefec;
   --color-footer-link-hover: #efefec;
   border-top: 0;
+}
+
+/* De footer op de rail van het raster: zelfde rand, zelfde contentbreedte. Hij had
+   32px padding en een eigen max-width van 1400px, dus zijn inhoud begon 13px naast de
+   rail (gemeten op 1440). */
+body.home .landing-footer {
+  padding-inline: var(--af-rand);
+}
+
+body.home .landing-footer .footer-content,
+body.home .landing-footer .footer-bottom {
+  max-width: calc(var(--af-breed) - 2 * var(--af-rand));
+  margin-inline: auto;
 }
 
 body.home .landing-footer a {
@@ -1687,6 +1723,11 @@ body.home a.footer-donate:hover {
   .af-term-kop,
   body.home .af-term .terminal-input-line {
     grid-column: 1 / -1;
+  }
+
+  [data-theme="dark"] body.home .af-term .terminal-body {
+    outline: 1px solid var(--af-lijn-sterk);
+    outline-offset: -1px;
   }
 
   body.home .af-term .terminal-body,
@@ -1837,7 +1878,4 @@ body.home a.footer-donate:hover {
     transition: none;
   }
 
-  body.home .af-term .cursor {
-    animation: none;
-  }
 }
