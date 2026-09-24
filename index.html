@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="nl" data-theme-default="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,13 +34,19 @@
   <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
-  <meta name="theme-color" content="#0d1117">
+  <meta name="theme-color" content="#efefec">
 
   <link rel="preconnect" href="https://sibforms.com" crossorigin>
 
   <!-- Critical Font Preloads (self-hosted, SIL OFL 1.1) -->
   <link rel="preload" href="/styles/fonts/atkinson-next-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/styles/fonts/jetbrainsmono-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/styles/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Thema vóór de eerste paint (Sessie 238). Stond onderaan de body: dan rendert de
+       pagina eerst in de standaardkleuren en springt ze daarna om. Synchroon en extern
+       (CSP heeft geen 'unsafe-inline' voor scripts). -->
+  <script src="/src/init-theme.js"></script>
 
   <!-- Preload Critical Resources (Sessie 144 fetchpriority hints) -->
   <!-- Zelfde ?v= op BEIDE: landing.css leest custom properties uit main.css
@@ -50,25 +56,18 @@
        altijd samen te bumpen — en dat geldt ook voor pages.css, commands.css en
        terminal-education.css, die dezelfde token lezen. -->
   <link rel="preload" href="styles/main.css?v=236" as="style" fetchpriority="high">
-  <link rel="preload" href="styles/landing.css?v=236" as="style" fetchpriority="high">
+  <link rel="preload" href="styles/landing.css?v=238" as="style" fetchpriority="high">
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="styles/main.css?v=236">
-  <link rel="stylesheet" href="styles/landing.css?v=236">
+  <link rel="stylesheet" href="styles/landing.css?v=238">
   <link rel="stylesheet" href="styles/mobile.css?v=116" media="screen and (max-width: 768px)">
   <link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
-
-  <!-- No-JS vangnet: .animate-on-scroll staat op opacity:0 en wordt alleen door
-       landing-demo.js zichtbaar gemaakt. Zonder dit blok zijn 16 contentblokken leeg
-       als de scriptlading faalt — alle pijnpunten, feature-kaarten, cijfers,
-       leerpad-kaarten en stappen. prefers-reduced-motion was al afgevangen
-       (landing.css), no-JS niet. Inline <style> mag: CSP style-src heeft
-       'unsafe-inline' (netlify.toml). -->
-  <noscript>
-    <style>
-      .animate-on-scroll { opacity: 1; transform: none; filter: none; }
-    </style>
-  </noscript>
+  <!-- De wereld van deze pagina (Sessie 238). Als laatste geladen en gescoped op
+       body.home: hij herdefinieert de gedeelde tokens voor navbar, footer en .btn-cta
+       in plaats van tegen hun regels te vechten, en draagt de secties zelf in eigen
+       af-klassen. De andere pagina's laden hem niet. -->
+  <link rel="stylesheet" href="styles/affiche.css?v=1">
 
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
   <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
@@ -192,54 +191,36 @@
     </noscript>
   </div>
 
-  <main>
-    <!-- ===== HERO SECTION ===== -->
-    <section id="hero" class="hero">
-      <div class="hero-content">
-        <!-- De hero zelf (Sessie 236). Stond hiervoor als tweede kolom naast een kop
-             die vertelde wat hier al te zien was. Nu speelt de terminal en
-             ondertitelt de tekst eronder — het kernbeeld uit DESIGN.md, letterlijk
-             genomen. Interactief sinds Sessie 214.
-             Het <input> staat statisch in de HTML mét readonly: zonder JS ziet de
-             bezoeker dan een niet-bewerkbaar veld (eerlijk) in plaats van een veld dat
-             belooft te werken en niets doet. hero-repl.js haalt readonly weg zodra de
-             bezoeker het veld aanraakt — dat houdt het mobiele toetsenbord ook dicht
-             tijdens de auto-demo.
+  <main class="af">
+    <!-- ===== HERO — het affiche (Sessie 238) =====
+         De terminal is een donkere module in een zichtbaar 12-koloms raster: zeven
+         kolommen breed, met de Nederlandse glos per regel op dezelfde rasterrij ernaast
+         (hero-registratie.js bouwt elke regel als één rij met twee cellen). Daaronder het
+         netwerkdiagram, dan de chips met hun herkomst, dan de kop als ondertiteling en de
+         enige rode actie van dit scherm.
+         Het <input> staat statisch in de HTML mét readonly: zonder JS ziet de bezoeker een
+         niet-bewerkbaar veld (eerlijk) in plaats van een veld dat belooft te werken en niets
+         doet. hero-repl.js haalt readonly weg zodra de bezoeker het veld aanraakt. -->
+    <section id="hero" class="af-hero" aria-labelledby="hero-kop">
+      <div class="af-raster af-hero-raster">
+        <div class="hero-terminal-col af-term-col">
+          <p class="hero-terminal-hint af-hint">Deze terminal werkt echt &mdash; typ maar</p>
+          <p class="af-glos-kop" aria-hidden="true">In gewoon Nederlands</p>
 
-             De wrapper bestaat omdat .hero-content precies twee kolommen telt: een
-             derde kind zou een derde kolom worden. De hint hoort búíten het venster —
-             binnenin zou hij als vensterchroom lezen in plaats van als aanwijzing. -->
-        <div class="hero-terminal-col">
-          <!-- De affordance bestond al (zes tikbare chips); wat ontbrak was de zin die
-               zegt dat het venster leeft. De enige copy in de buurt was de disclaimer
-               onderaan ("Proefversie met zes commands") — het laatste wat je leest, en
-               geframed als beperking. Deze regel benoemt de aanname die de bezoeker
-               maakt (dit is een screenshot) en wordt drie regels lager begrensd.
-               Woorden in --color-text, niet in het CTA-groen: dat groen meet 3,10:1 op
-               de lichte achtergrond en zakt daarmee door AA. -->
-          <p class="hero-terminal-hint">
-            <svg class="hint-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
-            Deze terminal werkt echt — typ maar
-          </p>
-          <div class="hero-terminal" role="group" aria-label="Terminal demonstratie">
-            <div class="terminal-header">
-              <span class="dot red"></span>
-              <span class="dot yellow"></span>
-              <span class="dot green"></span>
-              <span class="terminal-title">❯ hacker@hacksim: ~</span>
+          <div class="hero-terminal af-term" role="group" aria-label="Terminal demonstratie">
+            <div class="af-term-kop" aria-hidden="true">
+              <span>hacker@hacksim: ~</span>
+              <span>demo</span>
             </div>
             <!-- aria-live blijft "off" zolang de auto-demo loopt; hero-repl.js zet hem op
                  "polite" bij overname. Anders leest een schermlezer de eindeloze lus voor. -->
-            <div class="terminal-body" id="hero-demo" role="log" aria-live="off">
-              <!-- Auto-typing content injected by JavaScript -->
-              <noscript>
-                <div class="terminal-line prompt">hacker@hacksim:~$ ls</div>
-                <div class="terminal-line output">documents/  notes.txt  README.txt</div>
-                <div class="terminal-line prompt">hacker@hacksim:~$ whoami</div>
-                <div class="terminal-line output">hacker</div>
-              </noscript>
+            <div class="terminal-body af-term-body" id="hero-demo" role="log" aria-live="off">
+              <div class="reg reg--prompt"><div class="terminal-line prompt">hacker@hacksim:~$ ls</div><div class="reg-glos" aria-hidden="true"></div></div>
+              <div class="reg"><div class="terminal-line output">documents/  notes.txt  README.txt</div><div class="reg-glos">een map en twee tekstbestanden</div></div>
+              <div class="reg reg--prompt"><div class="terminal-line prompt">hacker@hacksim:~$ whoami</div><div class="reg-glos" aria-hidden="true"></div></div>
+              <div class="reg"><div class="terminal-line output">hacker</div><div class="reg-glos">jouw gebruikersnaam hier</div></div>
             </div>
-            <div class="terminal-input-line">
+            <div class="terminal-input-line af-term-invoer">
               <label class="hero-input-label" for="typing-target">Typ een command in de demo</label>
               <span aria-hidden="true">hacker@hacksim:~$</span>
               <input id="typing-target" class="hero-input" type="text" readonly
@@ -248,160 +229,155 @@
                      aria-describedby="hero-demo-uitleg">
               <span class="cursor" aria-hidden="true">_</span>
             </div>
+          </div>
 
-            <!-- Zes tikbare suggesties, binnen het venster zoals #mobile-quick-commands dat
-                 op terminal.html doet. Ze zijn tegelijk de begeleiding (de eerstvolgende is
-                 gemarkeerd), de eerlijke grens van de demo (je ziet dat het er zes zijn) en
-                 de mobiele affordance (op 375px is tikken goedkoper dan typen).
-                 NB: geen .btn-cta-klasse en geen link naar /terminal.html — dat zou het
-                 sitebrede "één label per primaire CTA"-contract breken. -->
-            <div class="hero-demo-bar">
-              <div class="hero-chips" id="hero-chips">
-                <button type="button" class="hero-chip" data-command="ls">ls</button>
-                <button type="button" class="hero-chip" data-command="cat notes.txt">cat notes.txt</button>
-                <button type="button" class="hero-chip" data-command="nmap 192.168.1.1">nmap 192.168.1.1</button>
-                <button type="button" class="hero-chip" data-command="whoami">whoami</button>
-                <button type="button" class="hero-chip" data-command="pwd">pwd</button>
-                <button type="button" class="hero-chip" data-command="help">help</button>
-              </div>
-              <p class="hero-demo-uitleg" id="hero-demo-uitleg">
-                Proefversie met zes commands. De volledige simulator heeft er 40+ en een leerpad.
-              </p>
+          <!-- Het netwerk dat je niet kunt zien, op papier. Gebouwd in het raster zelf: twee
+               blokken en twaalf poortsleuven op twaalf kolommen. aria-hidden, want de
+               terminaluitvoer hierboven is de tekstuele waarheid; dit is de tekening ervan.
+               De IP-adressen komen uit de engine: 192.168.1.100 is jouw machine (ifconfig),
+               192.168.1.1 het router-profiel van nmap.js met 53, 80 en 443 open. -->
+          <div class="af-net" aria-hidden="true">
+            <div class="af-node af-node--jij" data-node="jij">
+              <span class="af-node-naam">jouw machine</span>
+              <span class="af-node-adres">192.168.1.100</span>
             </div>
+            <div class="af-lijn"><span>scan</span></div>
+            <div class="af-node af-node--host" data-node="host">
+              <span class="af-node-naam">router</span>
+              <span class="af-node-adres">192.168.1.1</span>
+            </div>
+            <div class="af-poorten">
+              <span class="af-poort" data-poort="21">21</span>
+              <span class="af-poort" data-poort="22">22</span>
+              <span class="af-poort" data-poort="23">23</span>
+              <span class="af-poort" data-poort="25">25</span>
+              <span class="af-poort" data-poort="53">53</span>
+              <span class="af-poort" data-poort="80">80</span>
+              <span class="af-poort" data-poort="110">110</span>
+              <span class="af-poort" data-poort="143">143</span>
+              <span class="af-poort" data-poort="443">443</span>
+              <span class="af-poort" data-poort="445">445</span>
+              <span class="af-poort" data-poort="3306">3306</span>
+              <span class="af-poort" data-poort="8080">8080</span>
+            </div>
+            <p class="af-poorten-uitleg"><span class="af-legenda af-legenda--open"></span>open &nbsp; <span class="af-legenda"></span>dicht</p>
+            <p class="af-net-kop">Gesimuleerd netwerk &mdash; niets verlaat je browser</p>
+          </div>
+
+          <!-- Zes tikbare suggesties met hun herkomst: categorie uit docs/commands-list.md,
+               niveau uit het leerpad verderop op deze pagina. Ze zijn tegelijk de
+               begeleiding (de eerstvolgende draagt het rode merkteken), de eerlijke grens
+               van de demo (je ziet dat het er zes zijn) en de mobiele affordance.
+               NB: geen .btn-cta-klasse en geen link naar /terminal.html — dat zou het
+               sitebrede "één label per primaire CTA"-contract breken. -->
+          <div class="hero-demo-bar af-chips-rij">
+            <div class="hero-chips af-chips" id="hero-chips">
+              <button type="button" class="hero-chip" data-command="ls"><span class="af-chip-cmd">ls</span><span class="af-chip-herkomst">bestanden · beginner</span></button>
+              <button type="button" class="hero-chip" data-command="cat notes.txt"><span class="af-chip-cmd">cat notes.txt</span><span class="af-chip-herkomst">bestanden · beginner</span></button>
+              <button type="button" class="hero-chip" data-command="nmap 192.168.1.1"><span class="af-chip-cmd">nmap 192.168.1.1</span><span class="af-chip-herkomst">netwerk · gevorderd</span></button>
+              <button type="button" class="hero-chip" data-command="whoami"><span class="af-chip-cmd">whoami</span><span class="af-chip-herkomst">systeem · beginner</span></button>
+              <button type="button" class="hero-chip" data-command="pwd"><span class="af-chip-cmd">pwd</span><span class="af-chip-herkomst">bestanden · beginner</span></button>
+              <button type="button" class="hero-chip" data-command="help"><span class="af-chip-cmd">help</span><span class="af-chip-herkomst">systeem · beginner</span></button>
+            </div>
+            <p class="hero-demo-uitleg af-chips-uitleg" id="hero-demo-uitleg">
+              Proefversie met zes commands. De volledige simulator heeft er 40+ en een leerpad.
+            </p>
           </div>
         </div>
-        <!-- De ondertiteling. Staat ONDER de terminal, in de DOM en op het scherm:
-             leesvolgorde, tabvolgorde en visuele volgorde zijn hetzelfde. Geen
-             `order:`-truc, want die laat de focusvolgorde achter bij de layout. -->
-        <div class="hero-text">
-          <h1>Leer ethisch hacken in een veilige Nederlandse terminal</h1>
 
-          <!-- Zei drie dingen die de <h1> er direct boven al zegt ("ethisch hacken",
-               "veilig", "Nederlands"). Nu alleen wat de kop níét vertelt. -->
-          <p class="hero-subtitle">
+        <!-- De ondertiteling. Staat ONDER de terminal, in de DOM en op het scherm:
+             leesvolgorde, tabvolgorde en visuele volgorde zijn hetzelfde. -->
+        <div class="hero-text af-hero-tekst">
+          <h1 id="hero-kop">Leer ethisch hacken in een veilige Nederlandse terminal</h1>
+          <div class="af-hero-zij">
+          <p class="hero-subtitle af-hero-sub">
             40+ commands uit de praktijk, met uitleg in gewoon Nederlands. Je kunt alles
             uitproberen zonder echte gevolgen.
           </p>
-
-          <div class="hero-cta-group">
-            <a href="/terminal.html" class="btn-cta btn-cta-hero" data-terminal-cta="hero">
+          <div class="af-actie">
+            <a href="/terminal.html" class="btn-cta af-cta" data-terminal-cta="hero">
               Start de simulator
-              <!-- Chevron Right Icon -->
-              <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="9 18 15 12 9 6"></polyline>
-              </svg>
             </a>
-            <p class="cta-microcopy">Geen account nodig — direct beginnen</p>
+            <p class="cta-microcopy af-microcopy">Geen account nodig &mdash; direct beginnen</p>
+          </div>
           </div>
         </div>
-
       </div>
     </section>
 
-    <!-- ===== TRUST BAR ===== -->
-    <section class="trust-bar section-band">
-      <p class="social-proof-headline">
-        Alles wat je nodig hebt om <strong>veilig cybersecurity te leren</strong> — direct in je browser
-      </p>
-      <div class="trust-badges">
-        <div class="trust-badge">
-          <!-- Terminal Icon -->
-          <svg class="badge-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="4 17 10 11 4 5"></polyline>
-            <line x1="12" y1="19" x2="20" y2="19"></line>
-          </svg>
-          <span class="badge-text">40+ commands</span>
-        </div>
-        <div class="trust-badge">
-          <!-- Euro Icon -->
-          <svg class="badge-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M8 12h8"></path>
-            <path d="M8 8h8"></path>
-            <path d="M10 16c2.2 0 4-1.8 4-4s-1.8-4-4-4"></path>
-          </svg>
-          <span class="badge-text">100% gratis</span>
-        </div>
-        <div class="trust-badge">
-          <!-- EyeOff Icon -->
-          <svg class="badge-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-            <line x1="1" y1="1" x2="23" y2="23"></line>
-          </svg>
-          <span class="badge-text">Geen advertenties</span>
-        </div>
-        <div class="trust-badge">
-          <!-- Shield Icon -->
-          <svg class="badge-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-          </svg>
-          <span class="badge-text">Geen account nodig</span>
-        </div>
+    <!-- ===== VIER FEITEN ===== -->
+    <section class="af-band af-feiten" aria-label="In het kort">
+      <div class="af-raster">
+        <p class="af-feiten-zin">Alles wat je nodig hebt om veilig cybersecurity te leren, direct in je browser.</p>
+        <ul class="af-feiten-rij">
+          <li>40+ commands</li>
+          <li>100% gratis</li>
+          <li>Geen advertenties</li>
+          <li>Geen account nodig</li>
+        </ul>
       </div>
     </section>
 
-    <!-- ===== PROBLEM SECTION =====
-         S237: was drie kaarten (icoon + bronloze quote + alinea) die de pijn beweerden.
-         Nu drie uitwisselingen die hem tonen, met uitvoer die uit de engine komt
-         (gedraaid op terminal.html): ifconfig, rm -rf / en lss. Een stapel, geen raster:
-         drie kaarten naast elkaar blijven de container die de craft floor afwijst. -->
-    <section class="landing-section problem-section">
-      <h2>Herkenbaar?</h2>
-      <p class="section-subtitle">Cybersecurity leren is lastig als de tools en de taal een barri&egrave;re vormen. Dit is wat je hier in plaats daarvan krijgt.</p>
+    <!-- ===== HERKENBAAR? =====
+         S237: drie uitwisselingen die de pijn tonen in plaats van beweren, met uitvoer
+         die uit de engine komt (gedraaid op terminal.html): ifconfig, rm -rf / en lss.
+         S238: elke uitwisseling is een rasterrij — de transcript als donkere module over
+         zeven kolommen, de bewering ernaast over vijf. -->
+    <section class="af-sectie af-pijn" aria-labelledby="pijn-kop">
+      <div class="af-raster">
+        <header class="af-kop">
+          <h2 id="pijn-kop">Herkenbaar?</h2>
+          <p>Cybersecurity leren is lastig als de tools en de taal een barri&egrave;re vormen. Dit is wat je hier in plaats daarvan krijgt.</p>
+        </header>
 
-      <div class="pain-points">
-
-        <div class="pain-exchange animate-on-scroll">
-          <div class="pain-transcript" aria-hidden="true">
+        <div class="af-pijn-rij">
+          <div class="af-transcript" aria-hidden="true">
             <div class="terminal-line prompt">hacker@hacksim:~$ ifconfig</div>
             <div class="terminal-line output">eth0: flags=4163&lt;UP,BROADCAST,RUNNING&gt;  mtu 1500</div>
-            <div class="terminal-line output">        inet 192.168.1.100  <span class="pain-sub">&#8592; Je lokale IP adres</span></div>
-            <div class="terminal-line output">        ether 08:00:27:3f:2a:1b  <span class="pain-sub">&#8592; MAC adres (hardware)</span></div>
+            <div class="terminal-line output">        inet 192.168.1.100  <span class="af-sub">&#8592; Je lokale IP adres</span></div>
+            <div class="terminal-line output">        ether 08:00:27:3f:2a:1b  <span class="af-sub">&#8592; MAC adres (hardware)</span></div>
           </div>
-          <div class="pain-text">
+          <div class="af-pijn-tekst">
             <h3>Te veel Engels</h3>
             <p>De tool praat Engels, zoals de echte tool dat doet. De uitleg loopt er in het Nederlands naast mee &mdash; niet eroverheen, zodat je leert wat er werkelijk staat. <a href="/blog/leren-hacken.html">Leren hacken</a> zonder woordenboek ernaast.</p>
           </div>
         </div>
 
-        <div class="pain-exchange animate-on-scroll">
-          <div class="pain-transcript" aria-hidden="true">
+        <div class="af-pijn-rij">
+          <div class="af-transcript" aria-hidden="true">
             <div class="terminal-line prompt">hacker@hacksim:~$ rm -rf /</div>
             <div class="terminal-line output">rm: cannot remove '/': Critical system directory</div>
             <div class="terminal-line warning">[!] WAARSCHUWING: Dit is een kritieke system directory. In een echte omgeving zou dit je systeem onbruikbaar maken!</div>
             <div class="terminal-line output">[TIP] Gebruik 'reset' om het filesystem te resetten naar de beginwaarde.</div>
           </div>
-          <div class="pain-text">
+          <div class="af-pijn-tekst">
             <h3>Bang je pc te breken</h3>
             <p>Er zit geen echt systeem achter. Het gevaarlijkste commando dat er bestaat legt hier uit w&aacute;t het gedaan zou hebben, en &eacute;&eacute;n woord zet alles terug. Je hoeft niet voorzichtig te doen.</p>
           </div>
         </div>
 
-        <div class="pain-exchange animate-on-scroll">
-          <div class="pain-transcript" aria-hidden="true">
+        <div class="af-pijn-rij">
+          <div class="af-transcript" aria-hidden="true">
             <div class="terminal-line prompt">hacker@hacksim:~$ lss</div>
             <div class="terminal-line error">Command not found: lss</div>
             <div class="terminal-line output">[TIP] Bedoelde je misschien 'ls'?</div>
           </div>
-          <div class="pain-text">
+          <div class="af-pijn-tekst">
             <h3>Geen ervaring</h3>
             <p>Een typefout is hier geen doodlopende weg maar de volgende aanwijzing. Je hoeft niets uit je hoofd te kennen om te beginnen &mdash; de terminal helpt je verder waar een echte je laat zitten.</p>
           </div>
         </div>
-
       </div>
     </section>
 
-    <!-- ===== SOLUTION SECTION (Green Banner) ===== -->
-    <section class="solution-section section-band">
-      <div class="solution-content">
-        <!-- Stap 4 van de trechter (docs/landing-page-plan.md): de wending na de drie
-             pijnpunten. De oude tekst herhaalde de hero-subtitel bijna woordelijk plus
-             drie bezwaren die elders al 7× langskomen; deze versie beantwoordt de drie
-             pijnpunten uit de vorige sectie en voegt één ding toe dat nergens anders
-             staat: je hoeft niet voorzichtig te zijn. -->
-        <h2>De oplossing: HackSimulator.nl</h2>
-        <p class="solution-description">
+    <!-- ===== DE WENDING =====
+         Het omgekeerde affiche: inkt als vlak, papier als letter. Stap 4 van de trechter
+         (docs/landing-page-plan.md): beantwoordt de drie pijnpunten en voegt één ding toe
+         dat nergens anders staat — je hoeft niet voorzichtig te zijn. -->
+    <section class="af-band af-omslag" aria-labelledby="omslag-kop">
+      <div class="af-raster">
+        <h2 id="omslag-kop">De oplossing: HackSimulator.nl</h2>
+        <p>
           Alle drie die drempels verdwijnen zodra de terminal gewoon in je browser draait
           en Nederlands terugpraat. Je kunt er niets stukmaken, want er zit geen echt
           systeem achter &mdash; dus je hoeft niet voorzichtig te doen.
@@ -409,305 +385,202 @@
       </div>
     </section>
 
-    <!-- ===== FEATURES SECTION ===== -->
-    <section id="features" class="landing-section features-section">
-      <h2>Wat maakt HackSimulator anders?</h2>
+    <!-- ===== WAT MAAKT HET ANDERS ===== -->
+    <section id="features" class="af-sectie af-verschil" aria-labelledby="verschil-kop">
+      <div class="af-raster">
+        <header class="af-kop">
+          <h2 id="verschil-kop">Wat maakt HackSimulator anders?</h2>
+        </header>
 
-      <!-- Comparison Table -->
-      <div class="comparison-table">
-        <div class="comparison-row comparison-header">
-          <div class="comparison-cell">VOORHEEN</div>
-          <div class="comparison-cell highlight">MET HACKSIMULATOR</div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-cell negative">
-            <svg class="check-icon negative" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="15" y1="9" x2="9" y2="15"></line>
-              <line x1="9" y1="9" x2="15" y2="15"></line>
-            </svg>
-            Engelse foutmeldingen
-          </div>
-          <div class="comparison-cell positive">
-            <svg class="check-icon positive" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="16 10 11 15 8 12"></polyline>
-            </svg>
-            Nederlandse tips en uitleg
-          </div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-cell negative">
-            <svg class="check-icon negative" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="15" y1="9" x2="9" y2="15"></line>
-              <line x1="9" y1="9" x2="15" y2="15"></line>
-            </svg>
-            Echte systemen nodig
-          </div>
-          <div class="comparison-cell positive">
-            <svg class="check-icon positive" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="16 10 11 15 8 12"></polyline>
-            </svg>
-            Veilige browser sandbox
-          </div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-cell negative">
-            <svg class="check-icon negative" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="15" y1="9" x2="9" y2="15"></line>
-              <line x1="9" y1="9" x2="15" y2="15"></line>
-            </svg>
-            Uren setup en installatie
-          </div>
-          <div class="comparison-cell positive">
-            <svg class="check-icon positive" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="16 10 11 15 8 12"></polyline>
-            </svg>
-            Direct starten, geen setup
-          </div>
-        </div>
-        <div class="comparison-row">
-          <div class="comparison-cell negative">
-            <svg class="check-icon negative" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="15" y1="9" x2="9" y2="15"></line>
-              <line x1="9" y1="9" x2="15" y2="15"></line>
-            </svg>
-            Droge documentatie
-          </div>
-          <div class="comparison-cell positive">
-            <svg class="check-icon positive" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="16 10 11 15 8 12"></polyline>
-            </svg>
-            Educatieve output + context
-          </div>
-        </div>
-      </div>
-
-      <!-- Feature Cards -->
-      <div class="feature-cards">
-        <div class="feature-card animate-on-scroll">
-          <div class="feature-icon">
-            <!-- Terminal Icon -->
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="4 17 10 11 4 5"></polyline>
-              <line x1="12" y1="19" x2="20" y2="19"></line>
-            </svg>
-          </div>
-          <h3>40+ commands uit de praktijk</h3>
-          <p>Van basis bestandssysteem-commands tot geavanceerde security tools. Elke command heeft man pages en educatieve output.</p>
+        <div class="af-tabel-wrap">
+          <table class="af-tabel">
+            <thead>
+              <tr><th scope="col">Voorheen</th><th scope="col">Met HackSimulator</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Engelse foutmeldingen</td><td>Nederlandse tips en uitleg</td></tr>
+              <tr><td>Echte systemen nodig</td><td>Veilige browser sandbox</td></tr>
+              <tr><td>Uren setup en installatie</td><td>Direct starten, geen setup</td></tr>
+              <tr><td>Droge documentatie</td><td>Educatieve output + context</td></tr>
+            </tbody>
+          </table>
         </div>
 
-        <div class="feature-card animate-on-scroll">
-          <div class="feature-icon">
-            <!-- Database Icon -->
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
-              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
-              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
-            </svg>
+        <div class="af-drie">
+          <div class="af-drie-item">
+            <h3>40+ commands uit de praktijk</h3>
+            <p>Van basis bestandssysteem-commands tot geavanceerde security tools. Elke command heeft man pages en educatieve output.</p>
           </div>
-          <h3>Virtueel bestandssysteem</h3>
-          <p>Volledige Linux-achtige mappenstructuur. Bestanden aanmaken, kopiëren, verplaatsen en doorzoeken - alles in een veilige sandbox.</p>
-        </div>
-
-        <div class="feature-card animate-on-scroll">
-          <div class="feature-icon">
-            <!-- Lightbulb Icon -->
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <line x1="9" y1="18" x2="15" y2="18"></line>
-              <line x1="10" y1="22" x2="14" y2="22"></line>
-              <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path>
-            </svg>
+          <div class="af-drie-item">
+            <h3>Virtueel bestandssysteem</h3>
+            <p>Volledige Linux-achtige mappenstructuur. Bestanden aanmaken, kopiëren, verplaatsen en doorzoeken - alles in een veilige sandbox.</p>
           </div>
-          <h3>Educatieve output</h3>
-          <p>Niet alleen realistische output, maar ook uitleg waarom het belangrijk is. Leer door te doen en begrijp waaróm iets werkt.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== RESULTS SECTION =====
-         Stap 6 van de trechter in docs/landing-page-plan.md. Die stap droeg oorspronkelijk
-         "1.200+ actieve gebruikers" — een placeholder die er terecht nooit is gekomen. Wat
-         overbleef (40+ / 100% / 0 / 3) herhaalde alleen de trust-bar 2000px hoger, terwijl
-         de kop tractie belooft. Nu gevuld met wat wél waar én natelbaar is, en elk cijfer
-         linkt naar de plek waar je het kunt controleren.
-         Alle getallen zijn open floors (zie validate-docs.sh assert_floor): ze blijven waar
-         bij groei, dus een nieuw command of artikel vraagt hier geen aanpassing. -->
-    <section id="results" class="landing-section results-section section-band">
-      <h2>HackSimulator in cijfers</h2>
-      <p class="section-subtitle">Geen beloftes — dit kun je allemaal zelf nakijken.</p>
-
-      <!-- S237: was vier tegels met een groot accentgetal — de "hero-metric template" die
-           de craft floor bij naam weigert. Nu een inventarislijst in de kolomtaal van de
-           tool zelf: getal, wat het is, en waar je het natelt. De getallen blijven open
-           floors en staan op dezelfde twee opeenvolgende regels, want validate-docs.sh
-           grept `result-number` op de regel vóór `result-label`. -->
-      <div class="results-list">
-        <a href="/commands/" class="result-item animate-on-scroll">
-          <span class="result-number">40+</span>
-          <span class="result-label">Commands, elk met een man-pagina</span>
-          <span class="result-where">/commands/</span>
-        </a>
-        <a href="/terminal.html" class="result-item animate-on-scroll">
-          <span class="result-number">3</span>
-          <span class="result-label">Missies, van beginner tot expert</span>
-          <span class="result-where">leerpad</span>
-        </a>
-        <a href="/over-ons.html#verantwoording" class="result-item animate-on-scroll">
-          <span class="result-number">10+</span>
-          <span class="result-label">Artikelen met datum van laatste controle</span>
-          <span class="result-where">/over-ons</span>
-        </a>
-        <a href="/woordenlijst.html" class="result-item animate-on-scroll">
-          <span class="result-number">50+</span>
-          <span class="result-label">Begrippen in de woordenlijst</span>
-          <span class="result-where">/woordenlijst</span>
-        </a>
-      </div>
-
-      <p class="results-verify">
-        Ook de code erachter is openbaar: die staat volledig op
-        <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.
-      </p>
-    </section>
-
-    <!-- ===== HOE HET WERKT SECTION ===== -->
-    <section class="landing-section how-it-works-section">
-      <h2>Hoe het werkt</h2>
-      <p class="section-subtitle">In 3 stappen van beginner naar hacker.</p>
-
-      <div class="how-it-works-steps">
-        <div class="how-step animate-on-scroll">
-          <div class="step-number">1</div>
-          <div class="step-icon">
-            <!-- Globe/Browser Icon -->
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="2" y1="12" x2="22" y2="12"></line>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-            </svg>
-          </div>
-          <h3>Open je browser</h3>
-          <p>Klik op "Start de simulator" en je terminal draait &mdash; in het tabblad waar je nu al zit.</p>
-        </div>
-
-        <div class="how-step animate-on-scroll">
-          <div class="step-number">2</div>
-          <div class="step-icon">
-            <!-- Terminal Icon -->
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="4 17 10 11 4 5"></polyline>
-              <line x1="12" y1="19" x2="20" y2="19"></line>
-            </svg>
-          </div>
-          <h3>Typ commands</h3>
-          <p>Van <code>ls</code> tot <code>nmap</code>: alles werkt zoals in een echte terminal, inclusief je typfouten.</p>
-        </div>
-
-        <div class="how-step animate-on-scroll">
-          <div class="step-number">3</div>
-          <div class="step-icon">
-            <!-- Lightbulb Icon -->
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <line x1="9" y1="18" x2="15" y2="18"></line>
-              <line x1="10" y1="22" x2="14" y2="22"></line>
-              <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path>
-            </svg>
-          </div>
-          <h3>Leer door te doen</h3>
-          <p>Elke command geeft Nederlandse uitleg en educatieve tips. Je leert niet alleen het "wat", maar ook het "waarom".</p>
-        </div>
-      </div>
-
-      <div class="how-it-works-cta">
-        <a href="/terminal.html" class="btn-cta" data-terminal-cta="mid">
-          Start de simulator
-          <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </a>
-      </div>
-
-    </section>
-
-    <!-- ===== LEERPAD SECTION ===== -->
-    <section id="leerpad" class="landing-section leerpad-section section-band">
-      <h2>Jouw leerpad: van beginner tot expert</h2>
-      <p class="section-subtitle">HackSimulator groeit met je mee. Van je eerste command tot geavanceerde tools.</p>
-
-      <div class="leerpad-cards">
-        <div class="leerpad-card animate-on-scroll">
-          <span class="level-badge beginner">BEGINNER</span>
-          <div class="leerpad-cmd-lines">
-            <div class="leerpad-cmd-line">$ ls, cd, pwd, cat</div>
-            <div class="leerpad-cmd-line">$ whoami, history</div>
-            <div class="leerpad-cmd-line">$ mkdir, touch, rm</div>
-          </div>
-          <p>Leer de fundamenten: navigeren door mappen, bestanden lezen, en je eerste bestanden aanmaken en verwijderen.</p>
-          <div class="leerpad-cta-group">
-            <a href="/blog/terminal-basics.html" class="leerpad-learn-link">Lees eerst: Terminal voor beginners -&gt;</a>
-            <a href="/terminal.html?tutorial=fundamentals" class="btn-cta-secondary leerpad-btn" data-terminal-cta="leerpad_beginner">Start de Beginner-missie</a>
-          </div>
-        </div>
-
-        <div class="leerpad-card animate-on-scroll">
-          <span class="level-badge intermediate">GEVORDERD</span>
-          <div class="leerpad-cmd-lines">
-            <div class="leerpad-cmd-line">$ ping, nmap</div>
-            <div class="leerpad-cmd-line">$ whois, traceroute</div>
-            <div class="leerpad-cmd-line">$ ifconfig, netstat</div>
-          </div>
-          <p>Ontdek netwerken: scan poorten, bekijk actieve verbindingen, en begrijp hoe een netwerk is opgebouwd.</p>
-          <div class="leerpad-cta-group">
-            <a href="/blog/nmap-beginnersgids.html" class="leerpad-learn-link">Lees eerst: Nmap-gids -&gt;</a>
-            <a href="/terminal.html?tutorial=recon" class="btn-cta-secondary leerpad-btn" data-terminal-cta="leerpad_gevorderd">Start de Gevorderd-missie</a>
-          </div>
-        </div>
-
-        <div class="leerpad-card animate-on-scroll">
-          <span class="level-badge advanced">EXPERT</span>
-          <div class="leerpad-cmd-lines">
-            <div class="leerpad-cmd-line">$ metasploit, hydra</div>
-            <div class="leerpad-cmd-line">$ sqlmap, nikto</div>
-            <div class="leerpad-cmd-line">$ hashcat</div>
-          </div>
-          <p>Echte pentesting tools: exploit frameworks, SQL injection testing, brute force en password cracking.</p>
-          <div class="leerpad-cta-group">
-            <a href="/blog/sql-injection-uitgelegd.html" class="leerpad-learn-link">Lees eerst: SQL-injection -&gt;</a>
-            <a href="/terminal.html?tutorial=exploitation" class="btn-cta-secondary leerpad-btn" data-terminal-cta="leerpad_expert">Start de Expert-missie</a>
+          <div class="af-drie-item">
+            <h3>Educatieve output</h3>
+            <p>Niet alleen realistische output, maar ook uitleg waarom het belangrijk is. Leer door te doen en begrijp waaróm iets werkt.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ===== BLOG LINKS =====
-         Terug naar de drie previews die docs/landing-page-plan.md §8 specificeerde. De
-         lijst was in Sessie 173 naar 14 gegroeid om SEO-redenen en werd daarmee de
-         grootste bundel uitgaande links op de pagina, pal onder de mid-CTA. De andere
-         elf blijven bereikbaar via /blog/ (die linkt alle 15) en via 3-13 onderlinge
-         links per post — er raakt dus niets verweesd (gemeten). De drie hier vormen de
-         boog wat → hoe → waarheen, en hun labels zijn de échte <h1> van de post
-         (bewaakt door validate-docs.sh Check 11 + homepage-conversion.spec.js). -->
-    <section class="landing-section blog-links-section">
-      <div class="blog-links">
-        <p class="blog-links-title">Lees meer op de blog</p>
-        <div class="blog-links-list">
-          <a href="/blog/wat-is-ethisch-hacken.html" class="blog-link">Wat is ethisch hacken?</a>
-          <a href="/blog/leren-hacken.html" class="blog-link">Leren hacken: de complete beginnersgids</a>
-          <a href="/blog/ethisch-hacker-worden.html" class="blog-link">Hoe word je ethisch hacker?</a>
+    <!-- ===== IN CIJFERS =====
+         Stap 6 van de trechter in docs/landing-page-plan.md. Een inventaris, geen tegels
+         met een groot accentgetal (de hero-metric template die de craft floor weigert):
+         getal, wat het is, en waar je het natelt. Alle getallen zijn open floors (zie
+         validate-docs.sh assert_floor) en staan op twee opeenvolgende regels, want die
+         check grept `result-number` op de regel vóór `result-label`. -->
+    <section id="results" class="af-band af-inventaris" aria-labelledby="cijfers-kop">
+      <div class="af-raster">
+        <header class="af-kop">
+          <h2 id="cijfers-kop">HackSimulator in cijfers</h2>
+          <p>Geen beloftes &mdash; dit kun je allemaal zelf nakijken.</p>
+        </header>
+
+        <div class="af-lijst">
+          <a href="/commands/" class="af-lijst-rij">
+            <span class="result-number">40+</span>
+            <span class="result-label">Commands, elk met een man-pagina</span>
+            <span class="af-lijst-waar">/commands/</span>
+          </a>
+          <a href="/terminal.html" class="af-lijst-rij">
+            <span class="result-number">3</span>
+            <span class="result-label">Missies, van beginner tot expert</span>
+            <span class="af-lijst-waar">leerpad</span>
+          </a>
+          <a href="/over-ons.html#verantwoording" class="af-lijst-rij">
+            <span class="result-number">10+</span>
+            <span class="result-label">Artikelen met datum van laatste controle</span>
+            <span class="af-lijst-waar">/over-ons</span>
+          </a>
+          <a href="/woordenlijst.html" class="af-lijst-rij">
+            <span class="result-number">50+</span>
+            <span class="result-label">Begrippen in de woordenlijst</span>
+            <span class="af-lijst-waar">/woordenlijst</span>
+          </a>
         </div>
-        <p class="blog-links-more"><a href="/blog/">Alle artikelen &rarr;</a></p>
+
+        <p class="af-noot">
+          Ook de code erachter is openbaar: die staat volledig op
+          <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.
+        </p>
       </div>
     </section>
 
-    <!-- ===== FAQ SECTION ===== -->
-    <section id="faq" class="landing-section faq-section">
-      <h2>Veelgestelde vragen</h2>
-      <div class="faq-grid">
+    <!-- ===== HOE HET WERKT =====
+         De enige plek naast het leerpad met nummers: hier is de volgorde zelf de
+         informatie (eerst openen, dan typen, dan leren). -->
+    <section class="af-sectie af-stappen" aria-labelledby="stappen-kop">
+      <div class="af-raster">
+        <header class="af-kop">
+          <h2 id="stappen-kop">Hoe het werkt</h2>
+          <p>In 3 stappen van beginner naar hacker.</p>
+        </header>
+
+        <ol class="af-stappen-rij">
+          <li>
+            <span class="af-index" aria-hidden="true">1</span>
+            <h3>Open je browser</h3>
+            <p>Klik op "Start de simulator" en je terminal draait &mdash; in het tabblad waar je nu al zit.</p>
+          </li>
+          <li>
+            <span class="af-index" aria-hidden="true">2</span>
+            <h3>Typ commands</h3>
+            <p>Van <code>ls</code> tot <code>nmap</code>: alles werkt zoals in een echte terminal, inclusief je typfouten.</p>
+          </li>
+          <li>
+            <span class="af-index" aria-hidden="true">3</span>
+            <h3>Leer door te doen</h3>
+            <p>Elke command geeft Nederlandse uitleg en educatieve tips. Je leert niet alleen het "wat", maar ook het "waarom".</p>
+          </li>
+        </ol>
+
+        <div class="af-actie af-actie--midden">
+          <a href="/terminal.html" class="btn-cta af-cta" data-terminal-cta="mid">
+            Start de simulator
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== LEERPAD =====
+         Drie specimenkaarten: genummerd, want het is een volgorde; één kader van 1px, geen
+         radius en geen schaduw. De commandoregels zijn echte commands (bewaakt door
+         fundamentals.spec.js: geen netcat/wireshark). -->
+    <section id="leerpad" class="af-band af-leerpad" aria-labelledby="leerpad-kop">
+      <div class="af-raster">
+        <header class="af-kop">
+          <h2 id="leerpad-kop">Jouw leerpad: van beginner tot expert</h2>
+          <p>HackSimulator groeit met je mee. Van je eerste command tot geavanceerde tools.</p>
+        </header>
+
+        <ol class="af-specimens">
+          <li class="af-specimen">
+            <div class="af-specimen-kop"><span class="af-index">01</span><span class="af-niveau">Beginner</span></div>
+            <div class="af-specimen-cmds">
+              <div class="leerpad-cmd-line">ls, cd, pwd, cat</div>
+              <div class="leerpad-cmd-line">whoami, history</div>
+              <div class="leerpad-cmd-line">mkdir, touch, rm</div>
+            </div>
+            <p>Leer de fundamenten: navigeren door mappen, bestanden lezen, en je eerste bestanden aanmaken en verwijderen.</p>
+            <div class="af-specimen-voet">
+              <a href="/blog/terminal-basics.html" class="af-leeslink">Lees eerst: Terminal voor beginners</a>
+              <a href="/terminal.html?tutorial=fundamentals" class="af-knop" data-terminal-cta="leerpad_beginner">Start de Beginner-missie</a>
+            </div>
+          </li>
+          <li class="af-specimen">
+            <div class="af-specimen-kop"><span class="af-index">02</span><span class="af-niveau">Gevorderd</span></div>
+            <div class="af-specimen-cmds">
+              <div class="leerpad-cmd-line">ping, nmap</div>
+              <div class="leerpad-cmd-line">whois, traceroute</div>
+              <div class="leerpad-cmd-line">ifconfig, netstat</div>
+            </div>
+            <p>Ontdek netwerken: scan poorten, bekijk actieve verbindingen, en begrijp hoe een netwerk is opgebouwd.</p>
+            <div class="af-specimen-voet">
+              <a href="/blog/nmap-beginnersgids.html" class="af-leeslink">Lees eerst: Nmap-gids</a>
+              <a href="/terminal.html?tutorial=recon" class="af-knop" data-terminal-cta="leerpad_gevorderd">Start de Gevorderd-missie</a>
+            </div>
+          </li>
+          <li class="af-specimen">
+            <div class="af-specimen-kop"><span class="af-index">03</span><span class="af-niveau">Expert</span></div>
+            <div class="af-specimen-cmds">
+              <div class="leerpad-cmd-line">metasploit, hydra</div>
+              <div class="leerpad-cmd-line">sqlmap, nikto</div>
+              <div class="leerpad-cmd-line">hashcat</div>
+            </div>
+            <p>Echte pentesting tools: exploit frameworks, SQL injection testing, brute force en password cracking.</p>
+            <div class="af-specimen-voet">
+              <a href="/blog/sql-injection-uitgelegd.html" class="af-leeslink">Lees eerst: SQL-injection</a>
+              <a href="/terminal.html?tutorial=exploitation" class="af-knop" data-terminal-cta="leerpad_expert">Start de Expert-missie</a>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===== BLOG =====
+         De drie previews die docs/landing-page-plan.md §8 specificeerde: de boog
+         wat → hoe → waarheen. Hun labels zijn de échte <h1> van de post (bewaakt door
+         validate-docs.sh Check 11 + homepage-conversion.spec.js); href staat vóór class,
+         want zo leest die check de markup. -->
+    <section class="af-sectie af-lees" aria-labelledby="lees-kop">
+      <div class="af-raster">
+        <h2 id="lees-kop" class="af-lees-kop">Lees meer op de blog</h2>
+        <ul class="af-lees-lijst">
+          <li><a href="/blog/wat-is-ethisch-hacken.html" class="blog-link">Wat is ethisch hacken?</a></li>
+          <li><a href="/blog/leren-hacken.html" class="blog-link">Leren hacken: de complete beginnersgids</a></li>
+          <li><a href="/blog/ethisch-hacker-worden.html" class="blog-link">Hoe word je ethisch hacker?</a></li>
+        </ul>
+        <p class="af-lees-meer"><a href="/blog/">Alle artikelen</a></p>
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== (faq.js leest .faq-item / .faq-question; markup ongewijzigd) -->
+    <section id="faq" class="af-band af-faq" aria-labelledby="faq-kop">
+      <div class="af-raster">
+        <header class="af-kop">
+          <h2 id="faq-kop">Veelgestelde vragen</h2>
+        </header>
+        <div class="af-faq-lijst">
         <div class="faq-item">
           <h3 class="faq-heading">
             <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-1">
@@ -858,64 +731,52 @@
             </p>
           </div>
         </div>
+      
+        </div>
       </div>
     </section>
 
-    <!-- ===== FINAL CTA ===== -->
-    <section class="final-cta">
-      <div class="final-cta-content">
-        <h2>Klaar om te beginnen?</h2>
-        <p>Geen account. Geen creditcard. Geen risico.</p>
-        <a href="/terminal.html" class="btn-cta btn-cta-hero" data-terminal-cta="final">
-          Start de simulator
-          <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </a>
-        <p class="final-cta-secondary">
-          <a href="/blog/welkom.html">Of lees eerst hoe het werkt</a>
-        </p>
-        <p class="final-cta-contact">
-          <svg class="contact-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-            <polyline points="22,6 12,13 2,6"></polyline>
-          </svg>
-          Vragen? <a href="mailto:contact@hacksimulator.nl">contact@hacksimulator.nl</a>
-        </p>
+    <!-- ===== SLOT ===== -->
+    <section class="af-sectie af-slot" aria-labelledby="slot-kop">
+      <div class="af-raster">
+        <h2 id="slot-kop">Klaar om te beginnen?</h2>
+        <p class="af-slot-zin">Geen account. Geen creditcard. Geen risico.</p>
+        <div class="af-actie">
+          <a href="/terminal.html" class="btn-cta af-cta" data-terminal-cta="final">
+            Start de simulator
+          </a>
+          <p class="af-microcopy"><a href="/blog/welkom.html">Of lees eerst hoe het werkt</a></p>
+        </div>
+        <p class="af-contact">Vragen? <a href="mailto:contact@hacksimulator.nl">contact@hacksimulator.nl</a></p>
       </div>
     </section>
 
-    <!-- ===== LEAD MAGNET STRIP: gratis Pentest Playbook sample ===== -->
-    <section class="landing-section lead-magnet">
-      <div class="lead-magnet-card">
-        <h2>Zo begint een echte pentest</h2>
+    <!-- ===== LEAD MAGNET: gratis Pentest Playbook sample =====
+         Wayfinding naar /gidsen.html in plaats van een tweede sample-CTA: de homepage
+         eindigt al met opeenvolgende asks en haar north-star is activation, niet e-mail
+         (Sessie 219). Geen data-cta-location op de tweede link: dat attribuut werkt alleen
+         náást data-lead-magnet / data-product-id / data-lead-download. -->
+    <section class="af-band af-sample" aria-labelledby="sample-kop">
+      <div class="af-raster">
+        <h2 id="sample-kop">Zo begint een echte pentest</h2>
         <p>De eerste 9 pagina's van het Pentest Playbook, als pdf: hoe je een pentest voorbereidt &mdash; toestemming, scope en de juridische check &mdash; en je doelwit verkent v&oacute;&oacute;r de eerste aanval. Precies de stap die beginners overslaan. Geen account, alleen je email.</p>
-        <a href="/sample-pentest.html" class="btn-cta" data-lead-magnet="pentest_sample" data-cta-location="homepage_lead_strip">
-          Download de gratis sample
-          <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </a>
-        <!-- Wayfinding, geen vierde ask. index.html bevatte nul links naar /gidsen.html:
-             die pagina — de enige die beide gratis samples naast elkaar toont — was vanaf
-             de drukste pagina van de site alleen bereikbaar via de navbar en de footer, en
-             die worden allebei door JS geïnjecteerd. Bewust een bestemming benoemen i.p.v.
-             een tweede sample-CTA: de homepage eindigt al met drie opeenvolgende asks en
-             haar north-star is activation, niet e-mail (Sessie 219). Geen
-             data-cta-location: dat attribuut werkt alleen náást data-lead-magnet /
-             data-product-id / data-lead-download, dus los eraan zou het dode markup zijn
-             die er getrackt uitziet. -->
-        <p class="lead-magnet-secondary">
-          <a href="/gidsen.html">Of bekijk alle gidsen en samples</a>
-        </p>
+        <div class="af-sample-acties">
+          <a href="/sample-pentest.html" class="af-knop af-knop--vol" data-lead-magnet="pentest_sample" data-cta-location="homepage_lead_strip">Download de gratis sample</a>
+          <a href="/gidsen.html" class="af-leeslink">Of bekijk alle gidsen en samples</a>
+        </div>
       </div>
     </section>
   </main>
 
-  <!-- Newsletter Signup (Brevo) -->
-  <section class="homepage-newsletter section-band" id="newsletter" data-newsletter-location="homepage">
-    <div class="newsletter-content">
-      <h2>Gratis cybersecurity tips</h2>
-      <p>Ontvang maandelijks tips over ethisch hacken, nieuwe tutorials en cybersecurity nieuws. Geen spam, altijd opzegbaar.</p>
-      <div class="sib-form">
+  <!-- Newsletter Signup (Brevo) — de formuliermarkup is die van Brevo en blijft gelijk:
+       brevo-submit.js en newsletter-tracking.js lezen hem zo. -->
+  <section class="af af-band af-news homepage-newsletter" id="newsletter" data-newsletter-location="homepage" aria-labelledby="news-kop">
+    <div class="af-raster">
+      <div class="af-news-tekst">
+        <h2 id="news-kop">Gratis cybersecurity tips</h2>
+        <p>Ontvang maandelijks tips over ethisch hacken, nieuwe tutorials en cybersecurity nieuws. Geen spam, altijd opzegbaar.</p>
+      </div>
+      <div class="sib-form af-news-form">
         <div id="sib-form-container" class="sib-form-container">
           <div id="error-message" class="sib-form-message-panel" style="display:none;max-width:540px;">
             <div class="sib-form-message-panel__text sib-form-message-panel__text--center">
@@ -956,27 +817,20 @@
             <input type="hidden" name="locale" value="nl">
           </form>
         </div>
+        <p class="newsletter-privacy">We respecteren je privacy. Lees ons <a href="/assets/legal/privacy.html">privacybeleid</a>.</p>
+        <p class="newsletter-or-support">Of <a href="https://ko-fi.com/hacksimulator" target="_blank" rel="noopener noreferrer">steun het project met een koffie</a></p>
       </div>
-      <p class="newsletter-privacy">We respecteren je privacy. Lees ons <a href="/assets/legal/privacy.html">privacybeleid</a>.</p>
-      <p class="newsletter-or-support">Of <a href="https://ko-fi.com/hacksimulator" target="_blank" rel="noopener noreferrer">steun het project met een koffie</a></p>
     </div>
   </section>
 
   <!-- ===== MOBIELE STICKY CTA =====
-       Op mobiel droeg de balk bovenaan alleen logo + hamburger, waardoor er 4179px
-       (5,1 schermen) tussen de hero-CTA en de eerstvolgende knop zat — de hele
-       overtuigingsboog was onklikbaar. In de navbar paste het niet: op 375px is er
-       112px vrij naast de merknaam en het label heeft er 150px nodig. Onderaan is er
-       wél ruimte voor het volledige label, en het is met de duim bereikbaar.
-       Zichtbaar t/m 1279px — exact de band waarin .btn-cta-nav inklapt; zie landing.css.
-
-       Sessie 216: hij staat in vóór de primaire CTA en stapt opzij zodra het midden van
-       een echte "Start de simulator" vrij in beeld ligt. landing-demo.js zet daarvoor
-       `data-state`; zonder JS blijft hij zichtbaar. -->
+       Op mobiel draagt de balk bovenaan alleen logo + hamburger, waardoor de hele
+       overtuigingsboog onklikbaar was. Zichtbaar t/m 1279px — exact de band waarin
+       .btn-cta-nav inklapt. Hij stapt opzij zodra het midden van een echte "Start de
+       simulator" vrij in beeld ligt; landing-demo.js zet daarvoor `data-state`. -->
   <div class="mobile-cta-bar">
-    <a href="/terminal.html" class="btn-cta" data-terminal-cta="sticky_mobile">
+    <a href="/terminal.html" class="btn-cta af-cta" data-terminal-cta="sticky_mobile">
       Start de simulator
-      <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
     </a>
   </div>
 
@@ -997,20 +851,17 @@
   </div>
 
   <!-- Hero Terminal Animation -->
-  <script src="src/ui/landing-demo.js?v=2" defer></script>
+  <script src="/src/ui/landing-demo.js?v=3" type="module"></script>
 
   <!-- Interactieve hero-REPL (extern bestand: script-src heeft geen 'unsafe-inline',
        netlify.toml:127). Draait ná landing-demo.js, want die publiceert window.landingDemo. -->
-  <script src="/src/ui/hero-repl.js?v=2" type="module"></script>
+  <script src="/src/ui/hero-repl.js?v=3" type="module"></script>
 
   <!-- FAQ Accordion -->
   <script src="src/ui/faq.js" defer></script>
 
-  <!-- Theme Initialization (prevents flash) - external for CSP compliance -->
-  <script src="/src/init-theme.js"></script>
-
   <!-- Component Injection (external script for CSP compliance) -->
-  <script src="/src/init-components.js?v=4" type="module"></script>
+  <script src="/src/init-components.js?v=5" type="module"></script>
 
   <!-- Analytics & Consent (external for CSP compliance) -->
   <script src="/src/init-analytics.js" type="module"></script>

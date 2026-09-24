@@ -258,10 +258,11 @@ function initThemeToggle() {
   const themeToggles = document.querySelectorAll('.theme-toggle');
   if (themeToggles.length === 0) return;
 
-  // Get saved theme or default to dark
-  const savedTheme = localStorage.getItem('theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  updateThemeToggleUI(savedTheme);
+  // init-theme.js heeft het thema al gezet, inclusief de paginastandaard
+  // (data-theme-default, Sessie 238). Hier opnieuw uit localStorage lezen met 'dark' als
+  // terugval zette de landingspagina na de navbar-injectie terug op donker.
+  const huidig = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  updateThemeToggleUI(huidig);
 
   // Handle click on ALL theme toggles (desktop + mobile)
   themeToggles.forEach(toggle => {

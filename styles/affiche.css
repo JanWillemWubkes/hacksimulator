@@ -1,0 +1,1843 @@
+/**
+ * affiche.css — de landingspagina als affiche op een zichtbaar raster (Sessie 238)
+ *
+ * Direction contract: .impeccable/surfaces/index-html.md ("Het raster van Total Design").
+ * Licht papier, zwarte inkt, precies één signaalrood dat uitsluitend "hier ben jij aan
+ * zet" betekent. Een 12-koloms raster zonder goot: de kolomgrenzen zijn de haarlijnen,
+ * cellen dragen hun eigen binnenruimte. Toestanden spreken via inversie, niet via extra
+ * kleur. De terminal is een donkere module die binnen zijn rand zijn eigen
+ * betekeniskleuren houdt (prompt, tip, fout) — dat is inhoud, geen decoratie.
+ *
+ * Alleen index.html laadt dit bestand, als laatste. Alles hangt onder body.home:
+ * - de gedeelde componenten (navbar, footer, .btn-cta, schakelaar) worden hier niet
+ *   bevochten maar opnieuw getokend — hun regels lezen custom properties, en de
+ *   dichtstbijzijnde declaratie wint;
+ * - de secties zelf dragen eigen af-klassen, zodat de gedeelde regels van landing.css
+ *   (die 25 pagina's laden) er niet op matchen.
+ *
+ * Elke kleurwaarde hieronder is gemeten, niet geschat (ratio's in de comments, WCAG 2.x).
+ */
+
+/* ==================== Letter ==================== */
+/* Archivo: neo-grotesk, geïnstantieerd op wdth 100 en wght 700–900, gesubset op dezelfde
+   219 codepoints als Atkinson Hyperlegible Next. 22.068 B; fonttotaal 91.536 B, onder de
+   lat van 106.016 B in hero-accent-budget.spec.js. Staat hier en niet in main.css: alleen
+   deze pagina gebruikt hem, en een @font-face zonder gebruiker downloadt niets maar is
+   wel ruis in het gedeelde bestand. */
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700 900;
+  font-display: swap;
+  src: url('/styles/fonts/archivo-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ==================== Tokens ==================== */
+body.home {
+  /* Papier en inkt. Neutraal-koel gebroken wit, bewust geen crème: crème + rood is een
+     van de looks waar gegenereerde ontwerpen standaard op landen (new-work.md §4). */
+  --af-papier: #efefec;
+  --af-papier-2: #e2e2de;      /* banden; inkt erop 14,54:1 */
+  --af-inkt: #111111;          /* 16,39:1 op papier */
+  --af-inkt-2: #444440;        /* gedempte tekst: 8,49 op papier, 7,53 op papier-2 */
+  --af-lijn: #c9c9c4;          /* rasterlijnen: decoratief, draagt geen informatie */
+  --af-lijn-sterk: #7a7a75;    /* randen van bedieningselementen: 3,74 / 3,32 (≥3 niet-tekst) */
+
+  /* Het signaal. Alleen als vlak met een witte letter op groot formaat (20,7px bold, dus
+     de lat voor grote tekst: 4,5) of als niet-tekstig merkteken (lat 3). Wit op rood
+     5,79; rood op papier 5,02. Kleine rode tekst komt op deze pagina niet voor. */
+  --af-rood: #cc0a1e;
+  --af-op-rood: #ffffff;
+
+  /* De module: in beide thema's zwart, met de kleuren van de simulator zelf.
+     Gemeten op #0a0a0a: tekst 12,83 · dim 8,24 · prompt 13,97 · fout 7,74 · waarschuwing 7,84 */
+  --af-m-grond: #0a0a0a;
+  --af-m-lijn: #2c2c2a;
+  --af-m-tekst: #c9d1d9;
+  --af-m-dim: #a1a8b0;
+  --af-m-prompt: #9fef00;
+  --af-m-fout: #fa7c76;
+  --af-m-waarsch: #d29922;
+  --af-m-glos: #d6d6d2;        /* glos ín de module (onder 768px): 13,58 */
+  --af-m-oplicht: #23231f;
+
+  /* Maat en ritme */
+  --af-breed: 1400px;
+  --af-rand: clamp(16px, 3vw, 32px);
+  --af-cel: clamp(12px, 1.4vw, 20px);
+  --af-sectie: clamp(72px, 9vw, 136px);
+  --af-kop: 'Archivo', 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif;
+  --af-tekst: var(--font-body);
+  --af-mono: var(--font-terminal);
+  --af-display: clamp(2.2rem, 4.6vw, 3.6rem);   /* max 64,8px: twee regels op negen kolommen */
+  --af-h2: clamp(1.75rem, 3.3vw, 2.85rem);      /* max 51,3px */
+  --af-h3: 1.22rem;                              /* 22px */
+  --af-klein: 0.83rem;                           /* 15px: labels, herkomst, glos */
+  --af-rij: 1.5rem;                              /* 27px regel in de module */
+  --af-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --af-registratie: 700ms;
+
+  /* De gedeelde componenten, opnieuw getokend in plaats van overschreven. */
+  --color-bg: var(--af-papier);
+  --color-text: var(--af-inkt);
+  --color-text-dim: var(--af-inkt-2);
+  --color-text-secondary: var(--af-inkt-2);
+  --color-border: var(--af-lijn-sterk);
+  --color-link: var(--af-inkt);
+  --color-link-hover: var(--af-inkt);
+  /* Het groen en de accenttekst van de vorige wereld: hier is elke interactieve tekst inkt
+     (toestanden via inversie). #075f2a mat 6,8:1 op dit papier. */
+  --color-accent-text: var(--af-inkt);
+  --color-ui-primary: var(--af-inkt);
+  --color-ui-hover: var(--af-inkt);
+  --font-heading: var(--af-kop);
+
+  --color-bg-navbar: var(--af-papier);
+  --color-bg-navbar-mobile: var(--af-papier);
+  --color-navbar-link: var(--af-inkt);
+  --color-navbar-link-hover: var(--af-inkt);
+  --color-border-dark-frame: var(--af-inkt);
+  --color-toggle-text-inactive: var(--af-inkt-2);
+  --color-toggle-hover: var(--af-papier-2);
+  --color-bg-footer: var(--af-inkt);
+
+  --color-cta-primary: var(--af-rood);
+  --color-cta-primary-hover: var(--af-inkt);
+  --color-cta-text: var(--af-op-rood);
+
+  --border-radius-button: 0;
+  --border-radius-small: 0;
+  --border-radius-modal: 0;
+  --border-radius-cta-nav: 0;
+
+  background: var(--af-papier);
+  color: var(--af-inkt);
+}
+
+/* Het donkere thema: het geïnverteerde affiche. Inkt wordt grond, papier wordt letter.
+   Gemeten op #111111: papier 16,39 · dim 8,67 (7,79 op grond-2) · rand 3,74 / 3,38.
+   Het rood blijft; als merkteken 3,26 op de grond. De module blijft zwart en wordt door
+   een papieren haarlijn van de inktgrond gescheiden. */
+[data-theme="dark"] body.home {
+  --af-papier: #111111;
+  --af-papier-2: #1c1c1b;
+  --af-inkt: #efefec;
+  --af-inkt-2: #b0b0ab;
+  --af-lijn: #2e2e2c;
+  --af-lijn-sterk: #6f6f6a;
+  --af-m-grond: #000000;
+  --af-m-lijn: #3a3a37;
+}
+
+/* De module op de inktgrond: een papieren haarlijn eromheen, zodat hij als module leest
+   en niet als gat in de pagina (#6f6f6a op #000: 3,74 — niet-tekst, lat 3). De rechter-
+   rand van het lichaam zit in zijn verloop, want dat lichaam loopt door onder de glossen. */
+[data-theme="dark"] body.home .af-term-kop,
+[data-theme="dark"] body.home .af-term .terminal-input-line {
+  outline: 1px solid var(--af-lijn-sterk);
+  outline-offset: -1px;
+}
+
+[data-theme="dark"] body.home .af-term .terminal-body {
+  background: linear-gradient(to right,
+    var(--af-lijn-sterk) 0 1px,
+    var(--af-m-grond) 1px calc(58.3333% - 1px),
+    var(--af-lijn-sterk) calc(58.3333% - 1px) 58.3333%,
+    transparent 58.3333%);
+}
+
+/* ==================== Browseroppervlakken ==================== */
+body.home ::selection {
+  background: var(--af-inkt);
+  color: var(--af-papier);
+}
+
+body.home :focus-visible {
+  outline: 2px solid var(--af-rood);   /* focus = hier ben jij: het enige andere rood */
+  outline-offset: 2px;
+}
+
+body.home a {
+  color: var(--af-inkt);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+body.home a:hover {
+  text-decoration-thickness: 2px;
+}
+
+body.home code {
+  font-family: var(--af-mono);
+  font-size: 0.9em;
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+
+/* ==================== Het raster ==================== */
+.af-raster {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 0;
+  max-width: var(--af-breed);
+  margin-inline: auto;
+  padding-inline: var(--af-rand);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.af-raster > * {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+/* De haarlijnen zijn zichtbaar in het eerste scherm: daar ís het raster de vorm. Eén
+   achtergrondlaag, geen extra DOM. Twaalf tegels over de contentbox, plus de rechterrand
+   apart (de laatste tegel eindigt precies op de rand en tekent die dus niet). */
+.af-hero-raster {
+  background-image:
+    linear-gradient(to right, var(--af-lijn) 1px, transparent 1px),
+    linear-gradient(to left, var(--af-lijn) 1px, transparent 1px);
+  background-size: calc(100% / 12) 100%, 100% 100%;
+  background-repeat: repeat-x, no-repeat;
+  background-origin: content-box;
+  background-clip: content-box;
+}
+
+/* ==================== Navbar op deze pagina ==================== */
+/* Papier met een inktlijn eronder; de kleuren komen uit de tokens hierboven. */
+body.home .landing-nav-wrapper {
+  border-bottom-width: 1px;
+}
+
+body.home .nav-brand {
+  font-family: var(--af-kop);
+  font-weight: 800;
+}
+
+body.home .nav-brand:hover,
+body.home .nav-brand:hover .brand-icon,
+body.home .nav-brand:hover .brand-accent {
+  color: var(--af-inkt);
+}
+
+body.home .nav-links a {
+  text-decoration: none;
+}
+
+body.home .nav-links a:hover {
+  background: var(--af-inkt);
+  color: var(--af-papier);
+}
+
+/* De nav-CTA draagt hetzelfde label als de hero-actie in hetzelfde scherm; rood is
+   daarom voor de hero. Hier een inkten kader, en bij hover de inversie. */
+body.home .btn-cta-nav {
+  background: transparent;
+  color: var(--af-inkt);
+  border: 1px solid var(--af-inkt);
+  text-decoration: none;
+}
+
+body.home .btn-cta-nav:hover {
+  background: var(--af-inkt);
+  color: var(--af-papier);
+  border-color: var(--af-inkt);
+  transform: none;
+}
+
+body.home #landing-mobile-menu .navbar-links a {
+  color: var(--af-inkt);
+  text-decoration: none;
+}
+
+body.home .navbar-links .mobile-cta-link {
+  color: var(--af-inkt);
+  font-weight: 700;
+}
+
+body.home .navbar-toggle span {
+  background-color: var(--af-inkt);
+}
+
+/* ==================== De actie ==================== */
+/* Het enige rood-als-vlak. Geen icoon, geen lift, geen schaduw: bij hover inverteert hij
+   naar inkt. (0,3,0) wint van .btn-cta:hover en [data-theme] .btn-cta (0,2,0); bij een
+   gelijke stand beslist de laadvolgorde, en dit bestand laadt als laatste. */
+body.home .btn-cta.af-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 14px 28px;
+  box-sizing: border-box;
+  background: var(--af-rood);
+  color: var(--af-op-rood);
+  font-family: var(--af-tekst);
+  /* Grote tekst (≥18,66px bold, lat 4,5) op élke breedte: onder 768px zakt de basis naar
+     16px en werd 1.15rem 18,4px — normale tekst, lat 7, en wit op rood haalt 5,79. */
+  font-size: max(1.15rem, 19px);
+  font-weight: 700;
+  letter-spacing: 0;
+  text-decoration: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  transform: none;
+  transition: background-color 160ms var(--af-ease), color 160ms var(--af-ease);
+}
+
+body.home .btn-cta.af-cta:hover,
+body.home .btn-cta.af-cta:focus-visible {
+  background: var(--af-inkt);
+  color: var(--af-papier);
+  transform: none;
+}
+
+.af-actie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+
+.af-microcopy {
+  margin: 0;
+  font-size: var(--af-klein);
+  color: var(--af-inkt-2);
+}
+
+/* Secundaire knop: inkten kader, inversie bij hover. */
+.af-knop {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 18px;
+  box-sizing: border-box;
+  border: 1px solid var(--af-inkt);
+  font-family: var(--af-tekst);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+body.home a.af-knop {
+  color: var(--af-inkt);
+  text-decoration: none;
+}
+
+body.home a.af-knop:hover,
+body.home a.af-knop--vol {
+  background: var(--af-inkt);
+  color: var(--af-papier);
+}
+
+body.home a.af-knop--vol:hover {
+  background: transparent;
+  color: var(--af-inkt);
+}
+
+.af-leeslink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.9rem;
+}
+
+/* ==================== Koppen en tekst ==================== */
+.af h1,
+.af h2,
+.af h3 {
+  font-family: var(--af-kop);
+  color: var(--af-inkt);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.af h2 {
+  font-size: var(--af-h2);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.af h3 {
+  font-size: var(--af-h3);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.af p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.af-kop {
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: end;
+  row-gap: 16px;
+  padding-bottom: clamp(28px, 4vw, 56px);
+}
+
+.af-kop h2 {
+  grid-column: 1 / 8;
+}
+
+.af-kop p {
+  grid-column: 8 / -1;
+  color: var(--af-inkt-2);
+  max-width: 44ch;
+}
+
+/* ==================== Secties en banden ==================== */
+.af-sectie,
+.af-band {
+  padding-block: var(--af-sectie);
+}
+
+.af-band {
+  background: var(--af-papier-2);
+}
+
+/* ==================== HERO ==================== */
+.af-hero {
+  padding-block: 12px clamp(40px, 5vw, 72px);
+}
+
+.af-hero-raster {
+  row-gap: 0;
+}
+
+.af-term-col {
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: end;
+}
+
+body.home .af-hint,
+.af-glos-kop {
+  margin: 0;
+  font-family: var(--af-tekst);
+  padding: 0 var(--af-cel) 6px;
+  font-size: var(--af-klein);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--af-inkt);
+}
+
+.af-hint { grid-column: 1 / 8; padding-left: 0; }
+.af-glos-kop { grid-column: 8 / -1; color: var(--af-inkt-2); font-weight: 600; }
+
+/* Een uitnodiging die je hebt aangenomen is ruis. `visibility` en niet `display`: anders
+   krimpt de kolom en verspringt het venster onder de muis (gemeten 29px). */
+.af-term-col.is-taken .af-hint {
+  visibility: hidden;
+}
+
+/* ---------- De module ---------- */
+/* body.home erbij: [data-theme="light"] .hero-terminal (0,2,0) zet een schaduw. */
+body.home .af-term {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: none;
+  overflow: visible;
+}
+
+.af-term-kop {
+  grid-column: 1 / 8;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 6px var(--af-cel);
+  background: var(--af-m-grond);
+  border-bottom: 1px solid var(--af-m-lijn);
+  font-family: var(--af-mono);
+  font-size: var(--af-klein);
+  color: var(--af-m-dim);
+}
+
+/* Het lichaam loopt over alle twaalf kolommen: links de module, rechts het papier van de
+   glossen. Zonder goot is de modulebreedte exact 7/12. */
+body.home .af-term .terminal-body {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-rows: auto;
+  align-content: end;
+  /* landing.css zet hier justify-content: flex-end voor zijn flexvenster; in een grid
+     schuift dat de track naar rechts (gemeten: 1150px track, 205px ingesprongen). */
+  justify-content: stretch;
+  flex-direction: initial;
+  height: calc(var(--af-rij) * 7 + 16px);
+  padding: 8px 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(to right, var(--af-m-grond) 0 58.3333%, transparent 58.3333%);
+  font-family: var(--af-mono);
+  font-size: 0.86rem;
+  line-height: var(--af-rij);
+}
+
+/* Het oude vervagingsmasker van landing.css hoort bij een ander venster. */
+body.home .af-term .terminal-body::before {
+  content: none;
+}
+
+/* Live: scrollbaar, en bovenaan beginnen. Grid met align-content:end én overflow clipt
+   de bovenkant onbereikbaar (css-layout §8) — dus bij overname naar start, en de JS
+   pint de scroll op de nieuwste regel. */
+body.home .af-term .terminal-body.is-live {
+  display: grid;
+  align-content: start;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--af-lijn-sterk) transparent;
+}
+
+/* ---------- De registratie: één rij, twee cellen ---------- */
+.reg {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  align-items: baseline;
+}
+
+/* De cel draagt zelf de modulegrond. Het verloop op het lichaam vult alleen de lege
+   ruimte; zonder eigen achtergrondkleur staat de tekst voor elk kleurinstrument
+   (contrastspec, forced-colors) op papier — gemeten 1,34:1, terwijl hij op zwart staat. */
+body.home .reg .terminal-line {
+  margin: 0;
+  padding: 0 var(--af-cel);
+  background-color: var(--af-m-grond);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--af-m-tekst);
+  transition: background-color var(--af-registratie) var(--af-ease);
+}
+
+body.home .reg .terminal-line.prompt { color: var(--af-m-prompt); }
+body.home .reg .terminal-line .tip { color: var(--af-m-prompt); }
+body.home .reg .terminal-line .dim { color: var(--af-m-dim); }
+body.home .reg .terminal-line .warn { color: var(--af-m-waarsch); }
+body.home .reg .terminal-line .err { color: var(--af-m-fout); }
+
+.reg-glos {
+  position: relative;
+  padding: 0 var(--af-cel);
+  font-family: var(--af-tekst);
+  font-size: var(--af-klein);
+  line-height: var(--af-rij);
+  color: var(--af-inkt);
+  transition: background-color var(--af-registratie) var(--af-ease), color var(--af-registratie) var(--af-ease);
+}
+
+/* Een glos met inhoud snijdt zich uit het raster (papieren vlak) en hangt met een
+   aanhaallijn van 1px aan zijn regel. Een lege cel laat de rasterlijnen doorlopen. */
+.reg-glos:not(:empty) {
+  background: var(--af-papier);
+}
+
+.reg-glos:not(:empty)::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: calc(var(--af-rij) / 2);
+  width: calc(var(--af-cel) - 6px);
+  border-top: 1px solid var(--af-inkt);
+}
+
+/* De signatuur: regel, glos en poort lichten samen op. Erin zonder transitie, eruit met
+   een ease-out — het oplichten is het moment, het nagloeien de rust. */
+.reg.is-lit .reg-glos:not(:empty) {
+  background: var(--af-inkt);
+  color: var(--af-papier);
+  transition: none;
+}
+
+.reg.is-lit .reg-glos:not(:empty)::before {
+  border-top-color: var(--af-papier);
+}
+
+body.home .reg.is-lit .terminal-line {
+  background: var(--af-m-oplicht);
+  transition: none;
+}
+
+/* ---------- Invoerregel ---------- */
+body.home .af-term .terminal-input-line {
+  grid-column: 1 / 8;
+  display: flex;
+  align-items: center;
+  gap: 1ch;
+  min-height: 44px;
+  padding: 0 var(--af-cel);
+  box-sizing: border-box;
+  background: var(--af-m-grond);
+  border-top: 1px solid var(--af-m-lijn);
+  font-family: var(--af-mono);
+  font-size: 0.86rem;
+  color: var(--af-m-prompt);
+  cursor: text;
+}
+
+.hero-input-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* In rust is het veld één teken breed, zodat de cursor bij de prompt staat en niet aan
+   de rechterrand; bij overname krijgt het de hele regel. */
+body.home .af-term .hero-input {
+  flex: 0 0 auto;
+  width: 1ch;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: var(--af-m-tekst);
+  caret-color: var(--af-m-prompt);
+  font: inherit;
+  outline: none;
+}
+
+body.home .af-term-col.is-taken .hero-input,
+body.home .af-term:has(.is-live) .hero-input {
+  flex: 1 1 auto;
+  width: auto;
+}
+
+body.home .af-term .hero-input::placeholder {
+  color: var(--af-m-dim);
+  opacity: 1;
+}
+
+body.home .af-term .cursor {
+  color: var(--af-m-tekst);
+  animation: af-knipper 1s steps(1) infinite;
+}
+
+body.home .af-term:has(.is-live) .cursor {
+  display: none;
+}
+
+@keyframes af-knipper {
+  50% { opacity: 0; }
+}
+
+/* Focus: de module krijgt een rood kader — jij bent aan zet. De transparante outline
+   blijft als vangnet voor forced-colors, dat box-shadow negeert (css-layout §9). */
+body.home .af-term:focus-within {
+  outline: 2px solid transparent;
+}
+
+body.home .af-term:focus-within .af-term-kop,
+body.home .af-term:focus-within .terminal-input-line {
+  box-shadow: inset 4px 0 0 var(--af-rood);
+}
+
+body.home .af-term .hero-input:focus-visible {
+  outline: none;
+}
+
+/* ---------- Chips met herkomst ---------- */
+body.home .af-chips-rij {
+  grid-column: 1 / -1;
+  margin-top: 16px;
+  padding: 0;
+  background: none;
+  border: 0;
+}
+
+.af-chips {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  border-top: 1px solid var(--af-lijn-sterk);
+  border-left: 1px solid var(--af-lijn-sterk);
+}
+
+body.home .hero-chip {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  min-height: 60px;
+  padding: 8px var(--af-cel) 8px calc(var(--af-cel) + 16px);
+  box-sizing: border-box;
+  background: var(--af-papier);
+  color: var(--af-inkt);
+  border: 0;
+  border-right: 1px solid var(--af-lijn-sterk);
+  border-bottom: 1px solid var(--af-lijn-sterk);
+  border-radius: 0;
+  box-shadow: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 160ms var(--af-ease), color 160ms var(--af-ease);
+}
+
+.af-chip-cmd {
+  font-family: var(--af-mono);
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.af-chip-herkomst {
+  font-family: var(--af-tekst);
+  font-size: 0.72rem;           /* 13px */
+  line-height: 1.3;
+  color: var(--af-inkt-2);
+}
+
+/* Het merkteken: hol vierkant = nog niet, inkt = gedaan, rood = de volgende. Vorm én
+   kleur, zodat de toestand niet op kleur alleen leunt. */
+body.home .hero-chip::before {
+  content: '';
+  position: absolute;
+  left: var(--af-cel);
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  box-sizing: border-box;
+  border: 1px solid var(--af-inkt);
+}
+
+body.home .hero-chip.is-done::before {
+  background: var(--af-inkt);
+}
+
+body.home .hero-chip.is-next::before {
+  background: var(--af-rood);
+  border-color: var(--af-rood);
+}
+
+body.home .hero-chip:hover,
+body.home .hero-chip:focus-visible {
+  background: var(--af-inkt);
+  color: var(--af-papier);
+  transform: none;
+  box-shadow: none;
+}
+
+body.home .hero-chip:hover .af-chip-herkomst,
+body.home .hero-chip:focus-visible .af-chip-herkomst {
+  color: var(--af-papier);
+}
+
+body.home .hero-chip:hover::before,
+body.home .hero-chip:focus-visible::before {
+  border-color: var(--af-papier);
+}
+
+.af-chips-uitleg {
+  margin: 0;
+  padding-top: 6px;
+  font-size: var(--af-klein);
+  color: var(--af-inkt-2);
+}
+
+/* ---------- Het netwerkdiagram ---------- */
+.af-net {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: stretch;
+  margin-top: 12px;
+}
+
+.af-node {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  min-height: 52px;
+  padding: 6px var(--af-cel);
+  box-sizing: border-box;
+  border: 1px solid var(--af-inkt);
+  background: var(--af-papier);
+  color: var(--af-inkt);
+  transition: background-color var(--af-registratie) var(--af-ease), color var(--af-registratie) var(--af-ease);
+}
+
+.af-node--jij { grid-column: 1 / 5; }
+.af-node--host { grid-column: 7 / -1; }
+
+.af-node-naam {
+  font-family: var(--af-kop);
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.af-node-adres {
+  font-family: var(--af-mono);
+  font-size: var(--af-klein);
+}
+
+.af-node.is-actief {
+  background: var(--af-inkt);
+  color: var(--af-papier);
+}
+
+.af-lijn {
+  grid-column: 5 / 7;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.af-lijn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top: 1px solid var(--af-inkt);
+}
+
+/* Pijlpunt: twee lijnen van 1px, getekend, geen glyph. */
+.af-lijn::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  border-top: 1px solid var(--af-inkt);
+  border-right: 1px solid var(--af-inkt);
+  transform: rotate(45deg);
+  transform-origin: center;
+  box-sizing: border-box;
+}
+
+.af-lijn span {
+  position: relative;
+  padding: 0 8px;
+  margin-top: -28px;
+  background: var(--af-papier);
+  font-size: var(--af-klein);
+  color: var(--af-inkt-2);
+}
+
+.af-poorten {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  margin-top: 8px;
+  border-left: 1px solid var(--af-lijn-sterk);
+}
+
+.af-poort {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  border-block: 1px solid var(--af-lijn-sterk);
+  border-right: 1px solid var(--af-lijn-sterk);
+  font-family: var(--af-mono);
+  font-size: var(--af-klein);
+  color: var(--af-inkt-2);
+  background: var(--af-papier);
+  transition: background-color var(--af-registratie) var(--af-ease), color var(--af-registratie) var(--af-ease);
+}
+
+.af-poort.is-open {
+  background: var(--af-inkt);
+  color: var(--af-papier);
+  font-weight: 700;
+}
+
+.af-poort.is-lit {
+  transition: none;
+}
+
+.af-poorten-uitleg,
+.af-net-kop {
+  grid-column: 1 / 7;
+  margin: 0;
+  padding-top: 6px;
+  font-size: var(--af-klein);
+  color: var(--af-inkt-2);
+}
+
+.af-net-kop {
+  grid-column: 7 / -1;
+  text-align: right;   /* onderschrift, op de rij van de legenda */
+}
+
+.af-legenda {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  vertical-align: -1px;
+  border: 1px solid var(--af-inkt);
+  box-sizing: border-box;
+}
+
+.af-legenda--open {
+  background: var(--af-inkt);
+}
+
+/* ---------- Kop en actie ---------- */
+/* De kop over negen kolommen, ondertitel en actie samen in de laatste drie, onderaan
+   uitgelijnd op de kop. Zo is de rij zo hoog als het hoogste van de twee, niet de som. */
+.af-hero-tekst {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: end;
+  margin-top: clamp(20px, 2.4vw, 32px);
+}
+
+.af-hero-tekst h1 {
+  grid-column: 1 / 10;
+  font-size: var(--af-display);
+  font-weight: 900;
+  line-height: 0.98;
+  letter-spacing: -0.018em;
+  padding-right: var(--af-cel);
+}
+
+.af-hero-zij {
+  grid-column: 10 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-left: var(--af-cel);
+}
+
+.af-hero-sub {
+  font-size: 1rem;
+  color: var(--af-inkt);
+}
+
+.af-hero-zij .af-actie {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* ==================== Vier feiten ==================== */
+.af-feiten {
+  padding-block: 0;
+  border-block: 1px solid var(--af-inkt);
+}
+
+.af-feiten-zin {
+  grid-column: 1 / 5;
+  padding: 24px var(--af-cel) 24px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  align-self: center;
+}
+
+.af-feiten-rij {
+  grid-column: 5 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.af-feiten-rij li {
+  display: flex;
+  align-items: center;
+  padding: 24px var(--af-cel);
+  border-left: 1px solid var(--af-inkt);
+  font-family: var(--af-kop);
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+/* ==================== Herkenbaar? ==================== */
+.af-pijn-rij {
+  display: grid;
+  grid-template-columns: subgrid;
+  border-top: 1px solid var(--af-inkt);
+  padding-block: 32px;
+}
+
+.af-pijn-rij:last-child {
+  border-bottom: 1px solid var(--af-inkt);
+}
+
+.af-transcript {
+  grid-column: 1 / 8;
+  align-self: start;
+  padding: 16px var(--af-cel);
+  background: var(--af-m-grond);
+  font-family: var(--af-mono);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+body.home .af-transcript .terminal-line {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--af-m-tekst);
+}
+
+body.home .af-transcript .terminal-line.prompt { color: var(--af-m-prompt); }
+body.home .af-transcript .terminal-line.warning { color: var(--af-m-waarsch); }
+body.home .af-transcript .terminal-line.error { color: var(--af-m-fout); }
+.af-sub { color: var(--af-m-dim); }
+
+.af-pijn-tekst {
+  grid-column: 8 / -1;
+  padding-left: var(--af-cel);
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.af-pijn-tekst p {
+  max-width: 46ch;
+}
+
+/* ==================== De wending: het omgekeerde affiche ==================== */
+.af-omslag {
+  background: var(--af-inkt);
+  color: var(--af-papier);
+}
+
+.af-omslag h2 {
+  grid-column: 1 / 8;
+  color: var(--af-papier);
+  font-size: clamp(2rem, 4.6vw, 3.9rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.af-omslag p {
+  grid-column: 8 / -1;
+  padding-left: var(--af-cel);
+  align-self: end;
+  font-size: 1.05rem;
+  color: var(--af-papier);
+  max-width: 40ch;
+}
+
+/* ==================== Verschil ==================== */
+.af-tabel-wrap {
+  overflow-x: auto;
+}
+
+.af-tabel {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+
+.af-tabel th,
+.af-tabel td {
+  padding: 16px var(--af-cel);
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--af-lijn-sterk);
+}
+
+.af-tabel th {
+  font-family: var(--af-kop);
+  font-size: var(--af-klein);
+  font-weight: 800;
+  border-bottom: 2px solid var(--af-inkt);
+  color: var(--af-inkt);
+}
+
+.af-tabel td:first-child {
+  width: 41.6667%;              /* 5 van 12 kolommen */
+  color: var(--af-inkt-2);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.af-tabel td:last-child {
+  font-weight: 700;
+}
+
+.af-drie {
+  display: grid;
+  grid-template-columns: subgrid;
+  margin-top: clamp(40px, 5vw, 72px);
+}
+
+.af-drie-item {
+  grid-column: span 4;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 20px var(--af-cel) 0;
+  border-top: 2px solid var(--af-inkt);
+  border-left: 1px solid var(--af-lijn-sterk);
+}
+
+.af-drie-item:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+
+/* ==================== Inventaris ==================== */
+.af-lijst {
+  grid-column: 1 / 10;
+  border-top: 2px solid var(--af-inkt);
+}
+
+body.home .af-lijst-rij {
+  display: grid;
+  grid-template-columns: 3fr 6fr 3fr;
+  align-items: baseline;
+  gap: 0;
+  min-height: 56px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--af-lijn-sterk);
+  color: var(--af-inkt);
+  text-decoration: none;
+}
+
+body.home .af-lijst-rij:hover {
+  background: var(--af-inkt);
+  color: var(--af-papier);
+}
+
+body.home .af-lijst-rij:hover .af-lijst-waar {
+  color: var(--af-papier);
+}
+
+/* Getallen zijn metingen: mono, tabulair. Geen afficheschaal — dat is de metric-tegel. */
+body.home .af-lijst .result-number {
+  padding-left: var(--af-cel);
+  text-align: left;               /* landing.css zet hem rechts voor de oude tegels */
+  font-family: var(--af-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: inherit;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+}
+
+body.home .af-lijst .result-label {
+  font-size: 1rem;
+  color: inherit;
+}
+
+.af-lijst-waar {
+  padding-right: var(--af-cel);
+  text-align: right;
+  font-family: var(--af-mono);
+  font-size: var(--af-klein);
+  color: var(--af-inkt-2);
+}
+
+.af-noot {
+  grid-column: 1 / 10;
+  padding-top: 20px;
+  color: var(--af-inkt-2);
+}
+
+/* ==================== Hoe het werkt ==================== */
+.af-stappen-rij {
+  display: grid;
+  grid-template-columns: subgrid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.af-stappen-rij li {
+  grid-column: span 4;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 0 var(--af-cel) 0;
+  border-left: 1px solid var(--af-lijn-sterk);
+}
+
+.af-stappen-rij li:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.af-index {
+  font-family: var(--af-mono);
+  font-weight: 700;
+  font-size: 0.83rem;
+  color: var(--af-inkt);
+}
+
+.af-stappen-rij .af-index {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  line-height: 1;
+  font-weight: 800;
+}
+
+.af-actie--midden {
+  margin-top: clamp(40px, 5vw, 64px);
+}
+
+/* ==================== Leerpad: specimenkaarten ==================== */
+.af-specimens {
+  display: grid;
+  grid-template-columns: subgrid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.af-specimen {
+  grid-column: span 4;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 16px;
+  padding: var(--af-cel);
+  border: 1px solid var(--af-inkt);
+  background: var(--af-papier);
+  margin-left: -1px;         /* aangrenzende kaders delen één lijn van 1px */
+}
+
+.af-specimen:first-child {
+  margin-left: 0;
+}
+
+.af-specimen-kop {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--af-inkt);
+}
+
+.af-niveau {
+  font-family: var(--af-kop);
+  font-size: var(--af-h3);
+  font-weight: 800;
+}
+
+.af-specimen-cmds {
+  padding: 12px var(--af-cel);
+  margin-inline: calc(var(--af-cel) * -1);
+  background: var(--af-m-grond);
+}
+
+body.home .leerpad-cmd-line {
+  font-family: var(--af-mono);
+  font-size: 0.83rem;
+  line-height: 1.7;
+  color: var(--af-m-tekst);
+}
+
+.af-specimen-voet {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+}
+
+/* ==================== Blog ==================== */
+.af-lees-kop {
+  grid-column: 1 / 5;
+}
+
+.af .af-lees-kop {
+  font-size: var(--af-h3);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.af-lees-lijst {
+  grid-column: 5 / -1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--af-inkt);
+}
+
+.af-lees-lijst li {
+  border-bottom: 1px solid var(--af-lijn-sterk);
+}
+
+body.home .af-lees-lijst .blog-link {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding: 8px 0;
+  font-family: var(--af-kop);
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--af-inkt);
+  background: none;
+  border: 0;
+  border-radius: 0;
+}
+
+body.home .af-lees-lijst .blog-link:hover {
+  background: var(--af-inkt);
+  color: var(--af-papier);
+  padding-left: var(--af-cel);
+}
+
+.af-lees-meer {
+  grid-column: 5 / -1;
+  padding-top: 16px;
+}
+
+/* ==================== FAQ ==================== */
+.af-faq-lijst {
+  grid-column: 1 / 10;
+  border-top: 2px solid var(--af-inkt);
+}
+
+body.home .af-faq .faq-item {
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--af-lijn-sterk);
+  border-radius: 0;
+  box-shadow: none;
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+body.home .af-faq .faq-heading {
+  margin: 0;
+  font-size: inherit;
+}
+
+body.home .af-faq .faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 60px;
+  padding: 14px 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  color: var(--af-inkt);
+  font-family: var(--af-kop);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+body.home .af-faq .faq-question:hover {
+  background: none;
+  color: var(--af-inkt);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+body.home .af-faq .faq-icon {
+  flex-shrink: 0;
+  color: var(--af-inkt);
+  transition: transform 200ms var(--af-ease);
+}
+
+body.home .af-faq .faq-item.open .faq-icon {
+  transform: rotate(180deg);
+}
+
+body.home .af-faq .faq-answer p {
+  max-width: 68ch;
+  padding-bottom: 20px;
+  color: var(--af-inkt);
+}
+
+/* ==================== Slot ==================== */
+.af-slot {
+  border-top: 1px solid var(--af-inkt);
+}
+
+.af-slot h2 {
+  grid-column: 1 / 9;
+  font-size: var(--af-display);
+  font-weight: 900;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+
+.af-slot-zin {
+  grid-column: 1 / 9;
+  padding-top: 20px;
+  font-size: 1.1rem;
+}
+
+.af-slot .af-actie {
+  grid-column: 1 / -1;
+  padding-top: 32px;
+}
+
+.af-contact {
+  grid-column: 1 / -1;
+  padding-top: 40px;
+  color: var(--af-inkt-2);
+  font-size: var(--af-klein);
+}
+
+/* ==================== Sample ==================== */
+.af-sample {
+  background: var(--af-inkt);
+  color: var(--af-papier);
+}
+
+.af-sample h2 {
+  grid-column: 1 / 6;
+  color: var(--af-papier);
+}
+
+.af-sample p {
+  grid-column: 6 / -1;
+  padding-left: var(--af-cel);
+  color: var(--af-papier);
+  max-width: 60ch;
+}
+
+.af-sample-acties {
+  grid-column: 6 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+  padding: 28px 0 0 var(--af-cel);
+}
+
+/* Op inkt zijn de rollen omgedraaid: papieren kader, papieren letter. */
+body.home .af-sample a {
+  color: var(--af-papier);
+}
+
+body.home .af-sample a.af-knop {
+  border-color: var(--af-papier);
+}
+
+body.home .af-sample a.af-knop--vol {
+  background: var(--af-papier);
+  color: var(--af-inkt);
+}
+
+body.home .af-sample a.af-knop--vol:hover {
+  background: transparent;
+  color: var(--af-papier);
+}
+
+/* ==================== Nieuwsbrief ==================== */
+.af-news-tekst {
+  grid-column: 1 / 6;
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.af-news-form {
+  grid-column: 6 / -1;
+  padding-left: var(--af-cel);
+}
+
+body.home .af-news .sib-form,
+body.home .af-news .sib-form-container,
+body.home .af-news #sib-form-container {
+  padding: 0;
+  margin: 0;
+  background: none;
+  text-align: left;
+}
+
+body.home .af-news .newsletter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  max-width: 560px;
+  margin: 0;
+}
+
+body.home .af-news .sib-input {
+  flex: 1 1 260px;
+  margin: 0;
+  padding: 0;
+}
+
+body.home .af-news .entry__field {
+  margin: 0;
+  border: 0;
+  background: none;
+  border-radius: 0;
+}
+
+body.home .af-news .newsletter-form .input {
+  width: 100%;
+  min-height: 56px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  border: 1px solid var(--af-inkt);
+  border-right: 0;
+  border-radius: 0;
+  background: var(--af-papier);
+  color: var(--af-inkt);
+  font-family: var(--af-tekst);
+  font-size: 1rem;
+  box-shadow: none;
+}
+
+body.home .af-news .newsletter-form .input::placeholder {
+  color: var(--af-inkt-2);
+  opacity: 1;
+}
+
+body.home .af-news .newsletter-button {
+  min-height: 56px;
+  padding: 0 24px;
+  border: 1px solid var(--af-inkt);
+  border-radius: 0;
+  background: var(--af-inkt);
+  color: var(--af-papier);
+  font-family: var(--af-tekst);
+  font-size: 1rem;
+  font-weight: 700;
+  box-shadow: none;
+  cursor: pointer;
+  transform: none;
+}
+
+body.home .af-news .newsletter-button:hover {
+  background: var(--af-papier);
+  color: var(--af-inkt);
+  transform: none;
+  box-shadow: none;
+}
+
+body.home .af-news .newsletter-privacy,
+body.home .af-news .newsletter-or-support {
+  margin: 12px 0 0;
+  font-size: var(--af-klein);
+  color: var(--af-inkt-2);
+  text-align: left;
+}
+
+/* ==================== Footer ==================== */
+/* De pagina eindigt op een inktvlak: het omgekeerde affiche als slot. De footerregels
+   lezen hun achtergrond uit --color-bg-footer (inkt) en hun tekst uit de vaste
+   footertokens, die voor donker zijn gemeten. In het donkere thema is "inkt" papier;
+   daar blijft de footer donker, zodat hij zijn gemeten tekstkleuren houdt. */
+[data-theme="dark"] body.home {
+  --color-bg-footer: #000000;
+}
+
+/* In de footer draaien papier en inkt om: hier is inkt de grond. Dan lezen de gedeelde
+   linkregel (body.home a) en de schakelaars van deze wereld vanzelf papier, en de twee
+   lime tokens waar footer.js-markup op leunt (kolomkoppen, hovers) worden papier.
+   Papier op #111: 16,39; gedempt #b0b0ab: 8,67. Op #000 (donker thema) hoger. */
+body.home .landing-footer {
+  --af-inkt: #efefec;
+  --af-inkt-2: #b0b0ab;
+  --af-papier: #111111;
+  --color-cta-dark-frame: #efefec;
+  --color-navbar-link-hover: #efefec;
+  --color-footer-link-hover: #efefec;
+  border-top: 0;
+}
+
+body.home .landing-footer a {
+  text-decoration: none;
+}
+
+body.home .landing-footer a:hover {
+  text-decoration: underline;
+}
+
+/* De Ko-fi-link droeg een lime waas (rgba op de footer). Hier een papieren kader. */
+body.home a.footer-donate,
+body.home a.footer-donate:hover {
+  background-color: transparent;
+  border: 1px solid var(--af-inkt);
+  border-radius: 0;
+  color: var(--af-inkt);
+  box-shadow: none;
+  transform: none;
+}
+
+/* ==================== Mobiele CTA-balk ==================== */
+@media (max-width: 1279px) {
+  body.home .mobile-cta-bar {
+    background-color: var(--af-papier);
+    backdrop-filter: none;
+    border-top: 1px solid var(--af-inkt);
+  }
+
+  body.home .mobile-cta-bar .btn-cta.af-cta {
+    width: 100%;
+    max-width: 420px;
+    min-height: 52px;
+    transition-property: opacity;
+  }
+}
+
+/* ==================== Tablet ==================== */
+@media (max-width: 1023px) {
+  .af-kop h2,
+  .af-kop p {
+    grid-column: 1 / -1;
+  }
+
+  .af-hero-tekst h1,
+  .af-hero-zij {
+    grid-column: 1 / -1;
+    padding-left: 0;
+  }
+
+  .af-hero-zij {
+    padding-top: 20px;
+  }
+
+  .af-chips {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .af-feiten-zin,
+  .af-feiten-rij {
+    grid-column: 1 / -1;
+  }
+
+  .af-feiten-rij li:first-child {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .af-feiten-zin {
+    padding-bottom: 0;
+  }
+
+  .af-lijst,
+  .af-noot,
+  .af-faq-lijst {
+    grid-column: 1 / -1;
+  }
+
+  .af-specimen {
+    grid-column: 1 / -1;
+    margin-left: 0;
+    margin-top: -1px;
+  }
+
+  .af-specimen:first-child {
+    margin-top: 0;
+  }
+
+  .af-lees-kop,
+  .af-lees-lijst,
+  .af-lees-meer {
+    grid-column: 1 / -1;
+  }
+
+  .af-lees-kop {
+    padding-bottom: 16px;
+  }
+}
+
+/* ==================== Mobiel ==================== */
+/* Eén kolom. De glos gaat de module in, onder zijn regel: op 390px is naast elkaar
+   onleesbaar, en onder elkaar houdt de registratie (regel en glos in één rij-element). */
+@media (max-width: 767px) {
+  .af-raster {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .af-hero-raster {
+    background-size: calc(100% / 4) 100%, 100% 100%;
+  }
+
+  .af-hint {
+    grid-column: 1 / -1;
+  }
+
+  .af-glos-kop {
+    display: none;
+  }
+
+  .af-term-kop,
+  body.home .af-term .terminal-input-line {
+    grid-column: 1 / -1;
+  }
+
+  body.home .af-term .terminal-body,
+  [data-theme="dark"] body.home .af-term .terminal-body {
+    height: 300px;
+    background: var(--af-m-grond);
+    font-size: 0.8rem;
+  }
+
+  .reg {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .reg-glos:empty {
+    display: none;
+  }
+
+  .reg-glos:not(:empty) {
+    background: none;
+    color: var(--af-m-glos);
+    padding-left: calc(var(--af-cel) + 2ch);
+    font-size: 0.78rem;
+  }
+
+  .reg-glos:not(:empty)::before {
+    left: var(--af-cel);
+    width: 1ch;
+    border-top-color: var(--af-m-dim);
+  }
+
+  .reg.is-lit .reg-glos:not(:empty) {
+    background: var(--af-m-oplicht);
+    color: var(--af-m-glos);
+  }
+
+  .reg.is-lit .reg-glos:not(:empty)::before {
+    border-top-color: var(--af-m-dim);
+  }
+
+  .af-chips {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Chips direct onder de invoer: hier is tikken goedkoper dan typen, en zo liggen ze op
+     elke gemeten telefoonmaat boven de vaste CTA-balk. `order` mag, want het diagram is
+     aria-hidden en heeft niets focusbaars: tab- en leesvolgorde blijven gelijk. */
+  .af-net {
+    order: 1;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .af-node--jij { grid-column: 1 / 3; }
+  .af-node--host { grid-column: 3 / -1; margin-left: -1px; }
+  .af-lijn { display: none; }
+
+  .af-poorten-uitleg,
+  .af-net-kop {
+    grid-column: 1 / -1;
+    text-align: left;
+  }
+
+  .af-poorten {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .af-poort:nth-child(n + 7) {
+    border-top: 0;
+  }
+
+  .af-transcript,
+  .af-pijn-tekst,
+  .af-omslag h2,
+  .af-omslag p,
+  .af-sample h2,
+  .af-sample p,
+  .af-sample-acties,
+  .af-news-tekst,
+  .af-news-form,
+  .af-slot h2,
+  .af-slot-zin {
+    grid-column: 1 / -1;
+    padding-left: 0;
+  }
+
+  .af-pijn-tekst,
+  .af-omslag p,
+  .af-sample p,
+  .af-news-form {
+    padding-top: 20px;
+  }
+
+  .af-feiten-rij {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .af-feiten-rij li {
+    padding-left: var(--af-cel);
+  }
+
+  .af-feiten-rij li:nth-child(odd) {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .af-feiten-rij li:nth-child(n + 3) {
+    border-top: 1px solid var(--af-inkt);
+  }
+
+  .af-drie-item,
+  .af-stappen-rij li {
+    grid-column: 1 / -1;
+    border-left: 0;
+    padding-left: 0;
+    padding-bottom: 28px;
+  }
+
+  .af-stappen-rij li + li {
+    border-top: 1px solid var(--af-lijn-sterk);
+    padding-top: 24px;
+  }
+
+  body.home .af-lijst-rij {
+    grid-template-columns: 5rem 1fr;
+  }
+
+  .af-lijst-waar {
+    display: none;
+  }
+
+  body.home .af-news .newsletter-form .input {
+    border-right: 1px solid var(--af-inkt);
+  }
+
+  body.home .af-news .newsletter-button {
+    width: 100%;
+  }
+}
+
+/* ==================== Minder beweging ==================== */
+/* De eindstand is de rusttoestand: niets hoeft te bewegen om de pagina te begrijpen. */
+@media (prefers-reduced-motion: reduce) {
+  .reg-glos,
+  body.home .reg .terminal-line,
+  .af-node,
+  .af-poort,
+  body.home .btn-cta.af-cta,
+  body.home .hero-chip {
+    transition: none;
+  }
+
+  body.home .af-term .cursor {
+    animation: none;
+  }
+}

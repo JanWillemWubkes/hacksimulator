@@ -27,6 +27,11 @@ import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 const WORTEL = process.cwd();
+
+// Sessie 238: het accent is rood geworden (de wereld van Total Design). Lime bestaat nog,
+// maar alleen binnen de donkere modules, als betekeniskleur van de terminal zelf.
+const NEON_BRON = '(159,\\s*239,\\s*0|#9fef00)';
+const ROOD_BRON = '(204,\\s*10,\\s*30|#cc0a1e)';
 const DESKTOP = { width: 1440, height: 900 };
 
 /** Bevriest alles wat beweegt en onthult de scroll-reveals.
@@ -49,9 +54,9 @@ async function bevries(page) {
  *  mee), randen alleen bij een breedte > 0 en een stijl ≠ none. `outline-color` en
  *  `caret-color` blijven eruit: die erven van `color` en blazen de telling op zonder dat
  *  er een pixel kleurt. Visueel verborgen elementen (sr-only via clip-path) tellen niet. */
-async function telAccent(page) {
-  return page.evaluate(() => {
-    const NEON = /(159,\s*239,\s*0|#9fef00)/i;
+async function telAccent(page, kleur = NEON_BRON) {
+  return page.evaluate((bron) => {
+    const NEON = new RegExp(bron, 'i');
     const buiten = [];
     const binnen = [];
     const gezien = new Set();
@@ -93,37 +98,61 @@ async function telAccent(page) {
       const sleutel = `${naam(doel)}|${(doel.textContent || '').trim().slice(0, 16)}`;
       if (gezien.has(sleutel)) return;
       gezien.add(sleutel);
-      (doel.closest('.hero-terminal') ? binnen : buiten).push(`${sleutel} [${props.join(',')}]`);
+      (doel.closest('.hero-terminal, .af-transcript, .af-specimen-cmds') ? binnen : buiten).push(`${sleutel} [${props.join(',')}]`);
     });
     return { buiten, binnen };
-  });
+  }, kleur);
 }
 
-test.describe('Accentbudget in het eerste scherm', () => {
-  test('buiten het terminalvenster draagt hoogstens de primaire actie het accent', async ({ page }) => {
+/** Loopt de pagina scherm voor scherm af en telt per positie. */
+async function perScherm(page, kleur) {
+  const { hoogte, vp } = await page.evaluate(() => ({
+    hoogte: document.documentElement.scrollHeight, vp: window.innerHeight,
+  }));
+  const uit = [];
+  for (let y = 0; y < hoogte; y += vp) {
+    await page.evaluate((sy) => window.scrollTo(0, sy), y);
+    await page.waitForTimeout(80);
+    uit.push({ y, ...(await telAccent(page, kleur)) });
+  }
+  return uit;
+}
+
+// Sessie 238. Tot hier gold de regel "één accentdrager per scherm" alleen voor het eerste
+// scherm; de andere acht droegen er 2 tot 12 (DESIGN.md, One Carrier Rule). Het direction
+// contract zei: sweep de rest of schrap de regel, laat hem niet half staan. Hij geldt nu
+// op elke schermhoogte van de pagina.
+test.describe('Het signaal: rood betekent "jij bent aan zet"', () => {
+  test('op elke schermhoogte draagt hoogstens één element rood, en dat is een primaire actie', async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto('/index.html');
     await bevries(page);
-    await page.evaluate(() => window.scrollTo(0, 0));
 
-    // De hero-demo typt regels in en uit; drie samples geven het stabiele deel.
-    const samples = [];
-    for (let i = 0; i < 3; i += 1) {
-      samples.push(await telAccent(page));
-      await page.waitForTimeout(900);
-    }
+    const schermen = await perScherm(page, ROOD_BRON);
 
-    const buitenAltijd = samples[0].buiten.filter((d) => samples.every((s) => s.buiten.includes(d)));
-    const buitenMax = Math.max(...samples.map((s) => s.buiten.length));
+    // Zelfbewakend: bovenaan staat de hero-actie, dus daar móét één drager zijn. Nul zou
+    // betekenen dat de teller het rood niet meer herkent (andere waarde, ander pad).
+    expect(schermen[0].buiten.length, `bovenaan: ${JSON.stringify(schermen[0].buiten)}`).toBe(1);
+    expect(schermen.length, 'de pagina is maar één scherm — de sweep bewijst niets').toBeGreaterThan(4);
 
-    // Positief bewijs dat er iets gemeten is: een lege populatie ziet er anders identiek
-    // uit als een geslaagde meting. Binnen het venster hóórt het accent te staan.
-    expect(
-      Math.min(...samples.map((s) => s.binnen.length)),
-      'binnen het venster hoort het accent te staan (prompt, tip, chips) — nul betekent dat de meting niet gedraaid heeft',
-    ).toBeGreaterThan(3);
+    const teVeel = schermen.filter((s) => s.buiten.length > 1);
+    expect(teVeel.map((s) => `y=${s.y}: ${s.buiten.join(' | ')}`), 'meer dan één rode drager op één scherm').toEqual([]);
 
-    expect(buitenMax, `neon buiten het venster: ${JSON.stringify(buitenAltijd)}`).toBeLessThanOrEqual(1);
+    const geenActie = schermen.flatMap((s) => s.buiten.filter((d) => !d.startsWith('a.btn-cta')));
+    expect(geenActie, 'rood op iets anders dan een primaire actie').toEqual([]);
+  });
+
+  test('lime komt buiten de terminalmodules nergens meer voor', async ({ page }) => {
+    await page.setViewportSize(DESKTOP);
+    await page.goto('/index.html');
+    await bevries(page);
+
+    const schermen = await perScherm(page, NEON_BRON);
+    // Zelfbewakend: binnen de module is lime de prompt en de tip. Zonder die dragers heeft
+    // de meting het venster niet gezien.
+    expect(schermen[0].binnen.length, 'binnen de module hoort lime te staan (prompt, tip)').toBeGreaterThan(0);
+    const buiten = schermen.flatMap((s) => s.buiten.map((d) => `y=${s.y}: ${d}`));
+    expect(buiten, 'lime buiten de modules: de oude wereld sluipt terug').toEqual([]);
   });
 
   test('de teller is niet blind: drie mutanten vuren elk via een ander eigenschapspad', async ({ page }) => {
@@ -137,19 +166,19 @@ test.describe('Accentbudget in het eerste scherm', () => {
     await bevries(page);
     await page.evaluate(() => window.scrollTo(0, 0));
 
-    const basis = (await telAccent(page)).buiten.length;
+    const basis = (await telAccent(page, ROOD_BRON)).buiten.length;
 
     const mutanten = [
-      ['color', '.hero h1 { color: #9fef00 !important; }', true],
-      ['border', '.hero-subtitle { border: 2px solid #9fef00 !important; }', true],
-      ['fill', '.nav-brand .brand-icon rect { fill: #9fef00 !important; }', true],
-      ['onder de vouw', '.trust-badge { color: #9fef00 !important; }', false],
+      ['color', '.af-hero-sub { color: #cc0a1e !important; }', true],
+      ['border', '.af-hint { border: 2px solid #cc0a1e !important; }', true],
+      ['fill', '.nav-brand .brand-icon rect { fill: #cc0a1e !important; }', true],
+      ['onder de vouw', '.af-omslag h2 { color: #cc0a1e !important; }', false],
     ];
 
     for (const [tak, css, moetVuren] of mutanten) {
       const handle = await page.addStyleTag({ content: css });
       await page.waitForTimeout(250);
-      const na = (await telAccent(page)).buiten.length;
+      const na = (await telAccent(page, ROOD_BRON)).buiten.length;
       await page.evaluate((el) => el.remove(), handle);
       await page.waitForTimeout(150);
 

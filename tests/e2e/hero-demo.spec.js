@@ -213,7 +213,10 @@ test.describe('Hero-terminal — bedienbaar', () => {
         new MutationObserver((muts) => {
           for (const m of muts) {
             for (const n of m.addedNodes) {
-              if (n.textContent) window.__demoRegels.push(n.textContent);
+              // Sessie 238: elke regel is een rij met een glos ernaast. Alleen de regel
+              // telt; de glos is uitleg, geen uitvoer van de engine.
+              const regel = n.querySelector ? n.querySelector('.terminal-line') || n : n;
+              if (regel.textContent) window.__demoRegels.push(regel.textContent);
             }
           }
         }).observe(doel, { childList: true });
@@ -222,7 +225,7 @@ test.describe('Hero-terminal — bedienbaar', () => {
     });
     await page.goto('/index.html');
 
-    // Eén volledige lus is 4 commands × (typen + output + 1500ms pauze) ≈ 20s.
+    // Sessie 238: geen typemachine meer; één command per 3200ms, whoami is de derde.
     await page.waitForFunction(
       () => window.__demoRegels.some((r) => r.includes('$ whoami')),
       null,
@@ -417,27 +420,13 @@ test.describe('Hero-terminal zonder JavaScript', () => {
 //   breed was — `flex: 1` op het <input> at de hele regel.
 // ============================================================================
 
-const PROMPT_GROEN = 'rgb(159, 239, 0)';
+const SIGNAAL_ROOD = 'rgb(204, 10, 30)';
 
 test.describe('Hero-terminal — uitlijning naast de tekst', () => {
   test.use({ viewport: DESKTOP });
 
-  // Sessie 236 verving twee tests die hier stonden, en het is nuttig om te noteren wát
-  // ze bewaakten in plaats van ze stil te laten verdwijnen:
-  //
-  //   'de twee kolommen delen hun optische midden' — bewaakte dat .hero-text en
-  //   .hero-terminal-col op hetzelfde verticale midden stonden en dat er geen handmatige
-  //   `margin-top` op het venster terugkwam. Er zijn geen twee kolommen meer: de hero is
-  //   één kolom waarin de terminal boven de tekst staat, dus er is geen gedeeld midden
-  //   om te bewaken en `align-items: center` op .hero-content zou nu het verkeerde doen.
-  //
-  //   '@375px staat de kop bóven de terminal' — bewaakte de mobiele `order: 2` op
-  //   .hero-terminal-col. Die volgorde is omgekeerd; de tegenovergestelde assertie staat
-  //   nu onder 'Hero-volgorde en mobiele bereikbaarheid', mét de DOM-volgorde erbij,
-  //   zodat een `order:`-truc die visuele en focusvolgorde uit elkaar trekt óók rood wordt.
-  //
-  // Het magische getal waar de eerste test voor bestond is meeverhuisd: de assertie dat
-  // er geen handmatige marge op het venster staat, hoort bij de nieuwe layout net zo goed.
+  // Het magische getal uit Sessie 215 (`margin-top: 3rem` op het venster) blijft bewaakt:
+  // de module hoort op het raster te staan, niet op een handmatige verschuiving.
   test('geen handmatige marge op het terminalvenster', async ({ page }) => {
     await page.goto('/index.html');
     const marginTop = await page.evaluate(
@@ -450,31 +439,30 @@ test.describe('Hero-terminal — uitlijning naast de tekst', () => {
 test.describe('Hero-terminal — focustoestand', () => {
   test.use({ viewport: DESKTOP });
 
-  // Beide thema's, want de focusregel en `[data-theme="light"] .hero-terminal` zetten
-  // allebei box-shadow en zijn even specifiek (0,2,0). Bij gelijkspel wint bronvolgorde:
-  // staat de focusregel vóór het light-blok, dan verdwijnt de gloed alleen in light mode.
+  // Sessie 238: de module gaat bij focus rood aan — het enige andere rood op de pagina,
+  // met dezelfde betekenis als de actie: hier ben jij aan zet. Beide thema's, want een
+  // [data-theme]-regel en een focusregel van gelijke specificiteit vechten op
+  // bronvolgorde (css-layout §9).
   for (const thema of ['dark', 'light']) {
-    test(`het venster gaat groen aan bij focus (${thema})`, async ({ page }) => {
+    test(`de module gaat rood aan bij focus (${thema})`, async ({ page }) => {
       await page.goto('/index.html');
       await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), thema);
 
+      const rust = await page.evaluate(
+        () => getComputedStyle(document.querySelector('.af-term-kop')).boxShadow
+      );
       await page.locator('#typing-target').click();
 
-      const stijl = await page.evaluate(() => {
-        const cs = getComputedStyle(document.querySelector('.hero-terminal'));
-        return {
-          outlineColor: cs.outlineColor,
-          borderColor: cs.borderColor,
-          boxShadow: cs.boxShadow,
-          dot: getComputedStyle(document.querySelector('.hero-terminal .dot.green')).boxShadow
-        };
-      });
+      const stijl = await page.evaluate(() => ({
+        kop: getComputedStyle(document.querySelector('.af-term-kop')).boxShadow,
+        invoer: getComputedStyle(document.querySelector('.hero-terminal .terminal-input-line')).boxShadow,
+        outlineColor: getComputedStyle(document.querySelector('.hero-terminal')).outlineColor,
+      }));
 
-      expect(stijl.borderColor, 'rand niet in het promptgroen').toBe(PROMPT_GROEN);
-      expect(stijl.boxShadow, 'geen groene gloed om het venster').toContain('159, 239, 0');
-      expect(stijl.dot, 'het groene vensterbolletje licht niet op').not.toBe('none');
-      // De outline blijft bestaan (vangnet voor forced-colors) maar mag niets tekenen:
-      // een zichtbare blauwe systeemrand is precies wat hier weg moest.
+      expect(rust, 'het rode merkteken staat er al vóór de focus').not.toContain('204, 10, 30');
+      expect(stijl.kop, 'kop van de module licht niet rood op').toContain(SIGNAAL_ROOD);
+      expect(stijl.invoer, 'invoerregel licht niet rood op').toContain(SIGNAAL_ROOD);
+      // De outline blijft bestaan (vangnet voor forced-colors) maar tekent niets.
       expect(stijl.outlineColor).toBe('rgba(0, 0, 0, 0)');
     });
   }
@@ -803,7 +791,7 @@ test.describe('Hero-volgorde en mobiele bereikbaarheid', () => {
               if (inBeeld && r.bottom > bb.top && r.top < bb.bottom) afgedekt.push(c.textContent.trim());
             });
           }
-          const cta = document.querySelector('.btn-cta-hero').getBoundingClientRect();
+          const cta = document.querySelector('[data-terminal-cta="hero"]').getBoundingClientRect();
           return {
             balkZichtbaar,
             afgedekt,
@@ -820,5 +808,109 @@ test.describe('Hero-volgorde en mobiele bereikbaarheid', () => {
           `@${viewport.width}px scroll ${y}: geen enkele primaire actie bereikbaar`).toBe(true);
       }
     }
+  });
+});
+
+// ===========================================================================
+// De registratie (Sessie 238)
+//
+// Het direction contract: de Nederlandse uitleg staat per outputregel exact ernaast, op
+// dezelfde rasterrij. hero-registratie.js garandeert dat door constructie (regel en glos
+// zitten in één rij-element); deze meting is het bewijs in gerenderde pixels. Een
+// basislijn meet je niet met getComputedStyle: een inline-block van nul hoog op de eerste
+// positie van een cel zit met zijn onderrand precies op die basislijn.
+// ===========================================================================
+
+const METEN_REGISTRATIE = () => {
+  const basislijn = (cel) => {
+    const m = document.createElement('span');
+    m.style.cssText = 'display:inline-block;width:0;height:0;padding:0;margin:0;border:0';
+    cel.insertBefore(m, cel.firstChild);
+    const y = m.getBoundingClientRect().bottom;
+    m.remove();
+    return y;
+  };
+  const body = document.querySelector('#hero-demo').getBoundingClientRect();
+  return [...document.querySelectorAll('#hero-demo .reg')]
+    .filter((r) => r.querySelector('.reg-glos').textContent.trim())
+    .map((r) => {
+      const regel = r.querySelector('.terminal-line');
+      const glos = r.querySelector('.reg-glos');
+      const rg = regel.getBoundingClientRect();
+      const gg = glos.getBoundingClientRect();
+      return {
+        tekst: regel.textContent.trim().slice(0, 24),
+        basisDelta: Math.abs(basislijn(regel) - basislijn(glos)),
+        rasterDelta: Math.abs(gg.left - (body.left + body.width * 7 / 12)),
+        glosOnder: gg.top - rg.bottom,
+        glosLinks: gg.left - rg.left,
+      };
+    });
+};
+
+test.describe('De registratie: regel en glos op dezelfde rasterrij', () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  for (const thema of ['light', 'dark']) {
+    test(`@1440px ${thema}: elke glos staat op de basislijn van zijn regel`, async ({ page }) => {
+      await page.goto('/index.html');
+      await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), thema);
+      await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation:none!important}' });
+
+      const rijen = await page.evaluate(METEN_REGISTRATIE);
+      // Zelfbewakend: het nmap-frame draagt vijf of meer glossen. Nul rijen is geen groen.
+      expect(rijen.length, 'geen rijen met glos — de meting heeft niet gedraaid').toBeGreaterThanOrEqual(4);
+
+      const scheef = rijen.filter((r) => r.basisDelta > 1).map((r) => `${r.tekst}: ${r.basisDelta.toFixed(1)}px`);
+      expect(scheef, 'glos niet op de basislijn van zijn regel').toEqual([]);
+      const vanRaster = rijen.filter((r) => r.rasterDelta > 1).map((r) => `${r.tekst}: ${r.rasterDelta.toFixed(1)}px`);
+      expect(vanRaster, 'glos begint niet op de rasterlijn na zeven kolommen').toEqual([]);
+
+      // Het instrument ziet een verschuiving: een glos die 4px zakt moet vuren.
+      await page.addStyleTag({ content: '.reg-glos{transform:translateY(4px)}' });
+      const na = await page.evaluate(METEN_REGISTRATIE);
+      expect(na.every((r) => r.basisDelta >= 3), 'de meting ziet een verschoven glos niet').toBe(true);
+    });
+  }
+
+  test('@390px staat de glos onder zijn regel, in dezelfde rij', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/index.html');
+    await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation:none!important}' });
+
+    const rijen = await page.evaluate(METEN_REGISTRATIE);
+    expect(rijen.length, 'geen rijen met glos — de meting heeft niet gedraaid').toBeGreaterThanOrEqual(4);
+    const fout = rijen.filter((r) => r.glosOnder < -1 || r.glosOnder > 2).map((r) => `${r.tekst}: ${r.glosOnder}px`);
+    expect(fout, 'glos staat niet direct onder zijn regel').toEqual([]);
+  });
+});
+
+test.describe('Het diagram antwoordt op elk command', () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  const staat = (page) => page.evaluate(() => ({
+    actief: [...document.querySelectorAll('.af-node.is-actief')].map((n) => n.dataset.node),
+    open: [...document.querySelectorAll('.af-poort.is-open')].map((p) => p.dataset.poort),
+    poorten: document.querySelectorAll('.af-poort').length,
+  }));
+
+  test('lokale commands raken jouw machine, nmap de router en zijn drie open poorten', async ({ page }) => {
+    await page.goto('/index.html');
+
+    await page.locator('.hero-chip[data-command="ls"]').click();
+    let s = await staat(page);
+    expect(s.poorten, 'geen poortsleuven — het diagram ontbreekt').toBe(12);
+    expect(s.actief, 'ls hoort jouw machine te raken').toEqual(['jij']);
+
+    await page.locator('.hero-chip[data-command="nmap 192.168.1.1"]').click();
+    s = await staat(page);
+    expect(s.actief, 'nmap hoort de router te raken').toEqual(['host']);
+    // Het router-profiel van nmap.js: 53, 80 en 443. Geen andere, geen minder.
+    expect(s.open.sort()).toEqual(['443', '53', '80']);
+
+    await page.locator('.hero-chip[data-command="help"]').click();
+    s = await staat(page);
+    expect(s.actief, 'help laat het diagram in rust').toEqual([]);
+    expect(s.open.length, 'een scan is kennis: open poorten blijven open').toBe(3);
   });
 });

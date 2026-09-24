@@ -119,6 +119,11 @@ const OPPERVLAK_TOKENS = [
     alsTekstGemeten: { light: 6.71, dark: 13.36 },
     tekstAlternatief: '--color-accent-text',
     gelijkInThema: { light: false, dark: true },
+    // Sessie 238: index.html draagt een eigen wereld (tokens op body.home). Daar is het
+    // oppervlak rood en het tekstalternatief inkt, dus ook in dark vallen ze niet samen
+    // en draait check 5 er gewoon. Verhuizen de andere pagina's naar deze wereld, dan
+    // wordt dit de standaard en verdwijnt deze regel.
+    perPagina: { '/index.html': { light: false, dark: false } },
   },
 ];
 
@@ -134,7 +139,11 @@ async function meet(page) {
   return page.evaluate(
     ({ hoverParen, oppervlakTokens }) => {
       const { parse, over, ratio, effBg, eigenTekst, isGroot, effOpacity, omschrijf } = window.__contrast;
-      const root = getComputedStyle(document.documentElement);
+      // Van <body>, niet van <html>: de inhoud erft van body, en een pagina mag daar zijn
+      // tokens herdefiniëren (index.html doet dat sinds Sessie 238 op body.home). Van
+      // <html> gelezen mat de matrix op die pagina een groen dat nergens rendert. Op elke
+      // pagina zonder eigen body-tokens zijn beide identiek.
+      const root = getComputedStyle(document.body);
       const token = (n) => parse(root.getPropertyValue(n).trim());
 
       const rijen = [];
@@ -330,7 +339,7 @@ test.describe('Tekstcontrast — ongefilterd, élk renderend element (WCAG AAA)'
             `${waar}: valt een oppervlak-token samen met zijn tekstalternatief, anders dan ` +
               `vastgelegd? Waar ze samenvallen kan check 5 niets onderscheiden.`
           ).toEqual(
-            OPPERVLAK_TOKENS.map((t) => `${t.naam}/${thema}: ${t.gelijkInThema[thema]}`)
+            OPPERVLAK_TOKENS.map((t) => `${t.naam}/${thema}: ${((t.perPagina || {})[pad] || t.gelijkInThema)[thema]}`)
           );
         }
       }

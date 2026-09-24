@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "archivo",
+        "createdAt": "2026-09-24T19:52:10.459Z",
+        "reason": "redesign Sessie 238: kopletter uit het goedgekeurde plan (ga-verder-met-het-peaceful-willow.md); DESIGN.md wordt na de bouw door de documenter vervangen (new-work §5)"
+      }
+    ]
+  }
+}

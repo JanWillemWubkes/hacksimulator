@@ -364,11 +364,20 @@ test.describe('Homepage zonder JavaScript', () => {
     // `evaluate` wérkt wél met javaScriptEnabled: false — Playwright's injected script
     // draait in een isolated world die de vlag niet raakt. Dat is hier de enige
     // meting die de faalklasse kán detecteren.
-    const onzichtbaar = await page.evaluate(
-      () => [...document.querySelectorAll('.animate-on-scroll')]
-        .filter((e) => getComputedStyle(e).opacity === '0').length
-    );
-    expect(onzichtbaar, `${onzichtbaar} blokken onzichtbaar zonder JS`).toBe(0);
+    // Sessie 238: de scroll-reveals zijn weg (één geregisseerd moment, niet een entree
+    // per sectie), dus `.animate-on-scroll` heeft nul leden — en een lege populatie is
+    // altijd groen. De populatie is nu alles wat in <main> zelf tekst rendert.
+    const m = await page.evaluate(() => {
+      const kandidaten = [...document.querySelectorAll('main *')].filter((e) =>
+        [...e.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()));
+      const effOpacity = (e) => { let o = 1; for (let n = e; n; n = n.parentElement) o *= Number(getComputedStyle(n).opacity); return o; };
+      return {
+        aantal: kandidaten.length,
+        onzichtbaar: kandidaten.filter((e) => effOpacity(e) === 0).map((e) => e.className || e.tagName).slice(0, 10),
+      };
+    });
+    expect(m.aantal, 'geen tekst in <main> — de meting heeft niet gedraaid').toBeGreaterThan(50);
+    expect(m.onzichtbaar, `onzichtbaar zonder JS: ${m.onzichtbaar.join(', ')}`).toEqual([]);
   });
 });
 
@@ -424,7 +433,8 @@ const METEN = () => {
   // Bewust NIET eerst alles groeperen en dan de reeks-mét-results zoeken — verliest
   // results zijn band, dan slokt die reeks de hele pagina op en meet de assertie
   // stilzwijgend een staartje. Knippen op DOM-positie kan niet dissolven.
-  const start = alle.findIndex((s) => s.classList.contains('results-section')) + 1;
+  // Sessie 238: de cijfers heten nu #results.af-inventaris; de regel is dezelfde.
+  const start = alle.findIndex((s) => s.id === 'results') + 1;
   const secties = alle.slice(start);
 
   // Groepeer opeenvolgende secties op effectieve achtergrond. Een gradient telt als
@@ -437,7 +447,7 @@ const METEN = () => {
   for (const s of secties) {
     const k = sleutel(s);
     const h = Math.round(s.getBoundingClientRect().height);
-    const naam = (s.className || s.id).replace('landing-section ', '').replace(' section-band', '').trim();
+    const naam = s.id || (s.className.match(/af-[a-z]+(?!-)/g) || [s.className]).pop();
     if (reeksen.length && reeksen.at(-1).k === k) { reeksen.at(-1).h += h; reeksen.at(-1).leden.push(naam); }
     else reeksen.push({ k, h, leden: [naam] });
   }
@@ -445,10 +455,11 @@ const METEN = () => {
   const pagina = effBg(document.body);
   const oppervlak = reeksen.filter((r) => !r.k.includes('glow') && r.k === pagina.join(','));
 
-  const banden = ['.trust-bar', '.results-section', '.leerpad-section', '.homepage-newsletter'].map((sel) => {
+  const banden = ['.af-feiten', '#results', '#leerpad', '#newsletter'].map((sel) => {
     const el = document.querySelector(sel);
     const band = effBg(el);
-    const kaart = el.querySelector('.result-item, .leerpad-card, .feature-card, .how-step');
+    // Sessie 238: de enige kaart in deze wereld is de specimenkaart van het leerpad.
+    const kaart = el.querySelector('.af-specimen');
     return { sel, bandDelta: delta(band, pagina), kaartDelta: kaart ? delta(effBg(kaart), band) : null };
   });
 
@@ -458,7 +469,7 @@ const METEN = () => {
   // vergelijking meer. De assertie zelf blijft intact: .leerpad-cards (full-bleed, zonder
   // inner wrapper) moet nog steeds op dezelfde rail liggen als .how-it-works-steps (een
   // gewoon begrensde sectie), en dát is wat deze test bewijst.
-  const rails = ['.leerpad-cards', '.how-it-works-steps'].map((sel) => {
+  const rails = ['.af-specimens', '.af-stappen-rij'].map((sel) => {
     const b = document.querySelector(sel).getBoundingClientRect();
     return `${sel} ${Math.round(b.left)},${Math.round(b.right)}`;
   });
@@ -469,7 +480,7 @@ const METEN = () => {
     viewportHoogte: window.innerHeight,
     banden,
     rails,
-    bandVolleBreedte: Math.round(document.querySelector('.leerpad-section').getBoundingClientRect().width),
+    bandVolleBreedte: Math.round(document.querySelector('#leerpad').getBoundingClientRect().width),
     clientWidth: document.documentElement.clientWidth,
     overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
   };
