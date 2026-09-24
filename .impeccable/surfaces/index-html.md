@@ -7,7 +7,7 @@ related_targets: []
 
 # Surface brief — index.html
 
-**Scope:** de landingspagina. Niet terminal.html, niet src/, niet de simulator zelf.
+**Scope:** de landingspagina. Niet terminal.html, niet src/commands, niet de simulator zelf.
 **Visitor mode:** Persuade.
 
 **Publiek:** de absolute beginner die nog nooit een terminal opende, plus de
@@ -20,69 +20,78 @@ geen benchmarks — die mogen niet verzonnen worden.
 **Bindende beperkingen:** vanilla JS/CSS, geen buildstap, geen framework. Geen
 `!important` in styles/. WCAG AAA-contrast in beide thema's. Geen emoji. Geen dark
 patterns.
+**Voelt fout (eigenaar, 24 sep 2026):** hackerkostuum, te schools of kinderlijk, te
+intimiderend. Niets anders ligt vast: "als iets beter kan, mag het aangepast worden."
 
 ---
 
 ## Direction contract
 
-**THESIS.** De pagina neemt haar eigen kernbeeld letterlijk: de terminal speelt, de tekst
-ondertitelt. Geweigerd wordt de categoriestandaard waarin een kop links vertelt wat een
-screenshot rechts al laat zien — twee kolommen die hetzelfde werk twee keer doen. Hier
-is het bewijs de hoofdrol en is de beschrijving eronder de bijrol.
+**THESIS.** De pagina is een affiche op een zichtbaar raster, in de traditie van Total
+Design: de terminal is een module in dat raster, en de Nederlandse uitleg staat per
+outputregel exact ernaast, op dezelfde rasterrij. Geweigerd worden de categoriestandaard
+(donkere hero, neon, terminalscreenshot, featuretegels) en het voorspelbare tegendeel
+(pastel edtech met illustraties).
 
-**OWN-WORLD.** Donkerbasis met een toonladder van vier treden en 1px-haarlijnen; geen
-schaduwen. Precies een schel accent (neon-lime), dat uitsluitend betekent "hier ben jij
-aan zet": de prompt, de invoer, de primaire actie. Buiten de terminal hoogstens een
-accentdrager per scherm — **en die regel is op dit moment alleen in het eerste scherm
-doorgevoerd** (gemeten: 21 vaste dragers naar 1). Onder de vouw staat hij nog op 5 tot 9
-per scherm: de vergelijkingstabel met zijn vier vinkjes, en de leerpad-kaarten met hun
-`$`-regels en drie knoppen. Dat is een bewuste scopebeperking van Sessie 236, geen
-vergeten sweep: de meetlat in het goedgekeurde voorstel gaat expliciet over het eerste
-scherm, en de eigenaar heeft de sessie daarop begrensd. Wie hier verder gaat, sweept de
-resterende acht schermen of schrapt de regel als sitebrede belofte — maar laat hem niet
-half staan. Twee letters in plaats van drie: JetBrains Mono kopt en werkt,
-Atkinson Hyperlegible Next leest. Mono is de stem, nooit een sfeerlaagje op losse labels.
-Expliciet niet: scanlines, glow, groen-op-zwart-nostalgie, matrixregen.
+**OWN-WORLD.** Licht papier (gebroken wit) als grond, zwarte inkt, en precies een
+signaalrood dat uitsluitend betekent "hier ben jij aan zet". Een zichtbaar 12-koloms
+raster met 1px-haarlijnen; geen schaduwen, geen verlopen, geen afgeronde kaarten.
+Toestanden spreken via inversie (zwart blok, papieren letter), niet via extra kleur. De
+terminal is een donker blok op het papier en behoudt binnen zijn rand zijn eigen
+betekeniskleuren (prompt, tip, fout); dat is inhoud, geen decoratie. Koppen in een
+neo-grotesk op afficheschaal, opgebouwd op het raster; JetBrains Mono alleen binnen de
+terminal en voor indexnummers. Expliciet niet: scanlines, glow, groen-op-zwart, matrixregen,
+mascottes, badges op de voorgrond.
 
-**STORY.** De bezoeker begrijpt binnen een scherm dat dit een echte terminal is die hij
-zelf kan bedienen, gelooft dat hij er niets mee kan breken en dat de uitleg Nederlands is,
-en opent de simulator. Wie twijfelt tikt eerst een chip en merkt dat het venster antwoordt.
+**STORY.** De bezoeker ziet in een scherm een echte terminal waarvan elke regel in het
+Nederlands wordt uitgelegd, begrijpt via het netwerkdiagram wat een scan eigenlijk doet,
+gelooft dat hij hier niets kan breken, en opent de simulator. Wie twijfelt tikt eerst een
+commando en ziet het diagram antwoorden.
 
-**FIRST VIEWPORT.** Een kolom, links uitgelijnd, maximaal 1400px. Bovenaan het
-terminalvenster over de volle contentbreedte — geen gekleurde rand, geen 60px-schaduw; het
-venster tilt op doordat de pagina een toontrede dieper staat. Daarbinnen een gedraaide
-nmap-uitvoer met Nederlandse ondertitels per regel, een [TIP], en een levende prompt. Onder
-het venster de zes tikbare commandochips met de zin die zegt dat het venster echt werkt —
-ook op mobiel, waar die zin nu ten onrechte verborgen is. Daaronder de kop als
-ondertiteling, in mono op 46px, zonder eyebrow-badge en zonder gekleurd onderstreept
-tussenstuk. Daaronder de primaire actie: een lime knop "Start de simulator" met
-"geen account nodig" ernaast. Dat is de enige accentdrager in dit scherm.
+**FIRST VIEWPORT.** Maximaal 1400px, 12 kolommen, haarlijnen zichtbaar. Bovenaan links de
+terminalmodule over zeven kolommen met de nmap-uitvoer; rechts daarvan, op dezelfde
+rasterrijen, de Nederlandse glos per regel. Daaronder over de volle breedte het
+netwerkdiagram: de gesimuleerde host als blok, de gevonden poorten als uitsparingen die
+invers oplichten, gelabeld "gesimuleerd netwerk". Daaronder de zes commandochips met
+herkomstlabel, dan de kop op afficheschaal als ondertiteling, dan de enige rode actie:
+"Start de simulator", met "geen account nodig" ernaast. Onder 768px: een kolom, glos onder
+zijn regel, diagram behoudt zijn raster op kleinere schaal.
 
-**FORM.** Herzien binnen een bestaande wereld, geen vervanging ervan. De richting is
-brief-pinned door docs/design/voorstel-landingspagina.md, goedgekeurd op 19 sep 2026, en
-slaat daarmee de dobbelsteen — new-work.md: "a user- or brief-pinned direction beats the
-roll, always". Er is dus geen seed key en geen richtingstoernooi; dat is een bewuste
-uitzondering, geen overgeslagen stap. Code-led: geen comp, de ambitie staat in FIRST
-VIEWPORT hierboven.
+**FORM.** Vervanging van de visuele wereld (redesign), geen verfijning van de vorige.
+Kandidaat 3 van 7 op de eigen lijst ("Crouwel / Total Design"), toegewezen door de loting;
+seed key 88f43840. Code-led: er is geen beeldgeneratie, dus geen comp; de ambitie staat in
+FIRST VIEWPORT en in de signatuurinteractie hieronder. Verbeteringen uit de ronde, elk als
+eigen regel:
+- van de netwerkstad: het onzichtbare netwerk zichtbaar maken, in de grammatica van het raster.
+- van de 1-bit desktop: toestanden via inversie in plaats van kleur.
+- van de nachtvlucht-instrumenten: elke rastermodule draagt een bewering, in vaste leesvolgorde.
+- van de zeefdruk-overdruk: exacte registratie van glos op outputregel, zelfde basislijn.
+- van de schaduwbazaar: een herkomstlabel per commando (categorie en niveau).
+- van de glazuurplank: leerpadlessen als genummerde specimenkaarten met mono-index.
 
-**FINISH.** unreviewed and undocumented is unfinished; this build ends with the finish
-review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+**FINISH.** unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 
 ---
 
 ## Memorabel moment
 
-Je tikt op de chip `nmap 192.168.1.1` en er rolt echte poortuitvoer uit, met achter elke
-regel een Nederlandse ondertitel. Geen animatie die iets naspeelt — het ding antwoordt.
+Je tikt `nmap 192.168.1.1`. Links rolt de poortuitvoer uit, rechts verschijnt per regel de
+Nederlandse uitleg op dezelfde rij, en in het diagram eronder springen drie uitsparingen in
+het hostblok invers open: 53, 80, 443. Het netwerk dat je niet kon zien, staat nu op papier.
+
+## Signatuurinteractie
+
+De registratie: outputregel, glos en diagramuitsparing lichten als een rij tegelijk op. Een
+beweging per commando, geen typanimatie, en `prefers-reduced-motion` toont de eindstand.
 
 ## Nog niet besloten
 
-- Houdt mono als displayletter stand, of glijdt hij af naar kostuum? De finish-reviewer
-  toetst dat tegen dit contract. Terugvaloptie bij afkeuring: een nuchtere schreefloze,
-  niet Space Grotesk terug.
-- Atkinson Hyperlegible is functioneel verdedigd (verwarbare tekens uit elkaar houden op
-  een site waar je tekens overtypt). Houdt dat in de praktijk geen stand, dan is
-  Source Sans 3 de terugval.
-- Uit de critique meegenomen maar niet in het oorspronkelijke voorstel: de lime-plaat van
-  .solution-section, het knopgewicht in de consentbanner, vier elementen op 10,4px, en de
-  navbar-inklapband. Blijven liggen: de FAQ-herschikking en de sectievolgorde.
+- De exacte neo-grotesk voor de koppen: kiezen in `typeset`, buiten de lijst met versleten
+  standaardkeuzes uit new-work.md. Atkinson Hyperlegible Next blijft kandidaat voor
+  lopende tekst vanwege het functionele argument (verwarbare tekens uit elkaar houden).
+- De exacte rode waarde: moet AAA halen als knopvlak met papieren letter en als tekst op
+  papier. Meten, niet schatten.
+- Het donkere thema: het geïnverteerde affiche (inkt als grond, papier als letter). Blijft
+  verplicht, want de themaschakelaar bestaat sitebreed.
+- De vorige bouw (terminal-hero, lime-accent, mono-koppen, commit 8b33014) is bewijs van
+  wat werkte, geen autoriteit: behouden wat inhoud is (demo, chips, copy), de look vervalt.
