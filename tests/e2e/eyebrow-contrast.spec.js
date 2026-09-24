@@ -51,7 +51,7 @@ const AAA_NORMALE_TEKST = 7;
  * Meet elke .eyebrow-badge op de pagina tegen zijn EFFECTIEVE achtergrond.
  *
  * `parse`/`effBg`/`ratio` komen sinds Sessie 227 uit `helpers/contrast.js` — ze stonden
- * hier en in `accent-text-contrast.spec.js` in twee kopieën, die identiek moeten blijven
+ * toen hier en in twee andere contrastspecs in losse kopieën, die identiek moesten blijven
  * om vergelijkbare cijfers te geven. De verantwoording van de meetmethode staat daar.
  */
 async function meetBadges(page, thema) {

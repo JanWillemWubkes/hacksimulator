@@ -502,3 +502,25 @@ ver beter dan de span weghalen zónder de font-fix (**+3,5px**, zichtbaar doorza
 
 > Vuistregel: zie je `position:relative;top:-.Xem` of `vertical-align` op één glyph, vraag dan
 > niet "hoeveel px moet dit omhoog" maar "waarom komt dit glyph niet uit ons eigen font".
+
+---
+
+## 24. Een niet-gesloten containertag geeft geen enkel foutsignaal (Sessie 235)
+
+De parser sluit hem stil bij `</body>`: geen console-fout, geen gebroken pagina. Het enige
+symptoom is dat álles erna zijn stijl erft. `blog/index.html` sloot zijn
+`<main class="blog-container">` niet, waardoor de sitebrede footer een kind van die container
+werd en `max-width: 720px` erfde — **672px breed in een viewport van 1823px**, ingesprongen tot
+576px van links, met een knop die daardoor over twee regels brak.
+
+Twee dingen die dit zo lang verborgen hielden:
+
+- **Inspringing in de bron is geen DOM-structuur.** `terminal.html` zet zijn
+  `#footer-placeholder` op inspringniveau 4 en ziet er dus verdacht uit; gerenderd is de ouder
+  gewoon `BODY`. Meet de ouder, lees hem niet af uit de opmaak van het bestand.
+- **De guard bewaakte de tag uit de vorige bug.** `validate-blogs.sh` check 3 bestond sinds
+  Sessie 138 voor exact deze faalvorm — met een `<div>` — en telde daarna alleen `<div>`.
+
+Tel daarom élke gepaarde structuurtag, met woordgrens (`<main[[:space:]>]`, anders matcht een
+toekomstige `<main-nav>` mee). `<p>` en `<li>` horen er níét bij: HTML staat daar impliciet
+sluiten toe, dus die geven vals alarm op correcte markup.

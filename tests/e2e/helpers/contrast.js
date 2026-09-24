@@ -2,9 +2,11 @@
 //
 // Deze code draait IN DE BROWSER, niet in Node. `page.evaluate()` serialiseert de callback,
 // dus een gewone import is daarbinnen niet zichtbaar — vandaar dat elke spec zijn eigen
-// kopie had. Bij de derde kopie (link-contrast) is dat een lockstep-probleem geworden:
-// `accent-text-contrast.spec.js` en `eyebrow-contrast.spec.js` droegen allebei een eigen
-// `effBg()`, en die moeten identiek blijven om vergelijkbare cijfers te geven.
+// kopie had. Bij de derde kopie is dat een lockstep-probleem geworden: drie specs droegen
+// allebei een eigen `effBg()`, en die moeten identiek blijven om vergelijkbare cijfers te
+// geven. (Twee van die drie — `accent-text-contrast` en `link-contrast` — zijn in Sessie 235
+// verwijderd als gemeten subset van `text-contrast.spec.js`; `eyebrow-contrast` gebruikt deze
+// helper nog.)
 //
 // Oplossing: installeer de meter één keer op `window.__contrast` en laat elke evaluate hem
 // daar vandaan halen. Geen `new Function`, geen bronstring-truc.

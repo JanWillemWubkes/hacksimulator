@@ -132,6 +132,13 @@ Dat is geen taalprobleem. Wie het onderwerp kent leest eroverheen, want zíjn ho
 herkomst zelf in. Alleen een lezer die het níét kent merkt het — en die krijg je pas te spreken
 nadat de mail verstuurd is. Leg een tip daarom langs deze drie vragen:
 
+0. **Komt elk commando-argument ergens vandaan?** De september-editie zei *"zoek in de inhoud
+   naar het woord dat je wil hebben"* en zette er `grep Failed auth.log` onder — terwijl het woord
+   *Failed* daarvóór nergens in de mail stond. De lezer moest een zoekterm aannemen die hij
+   nooit gezien had. Opgelost door er een stap vóór te zetten: eerst `cat auth.log`, zodat de
+   lezer *Failed* met eigen ogen in het bestand ziet staan, en `grep` daarna gemotiveerd is door
+   schaal ("dit bestand heeft 5 regels, een echte server duizenden"). Dezelfde fout als hieronder,
+   maar op een argument in plaats van op een symbool — en daarom makkelijk te missen.
 1. **Komt elk symbool ergens vandaan?** Als er ineens vier apostrofs op precieze plekken staan,
    moet de tekst zeggen wie ze daar heeft gezet en waarom. "Zo ziet het er in het echt uit" is
    geen uitleg maar een verzoek om vertrouwen.
@@ -151,6 +158,101 @@ overbodig. Moet de lezer iets aannemen, dan ontbreekt er juist een regel.
 - "3 manieren om een sterk wachtwoord te herkennen"
 - "Wat gebeurt er eigenlijk als je `ping` typt?"
 - "De 5 belangrijkste Linux commando's voor beginners"
+
+---
+
+### De intro mag niet aannemen dat de lezer de vorige editie heeft gehad
+
+Elke maand komen er inschrijvers bij. Die krijgen hun eerste nieuwsbrief zonder ooit de vorige
+te hebben gezien — en de welkomstmail is geen vervanging, want die gaat over iets anders. Een
+intro die begint met *"Vorige maand keek je mee met een aanvaller…"* laat zo'n lezer meteen
+achter met het gevoel dat hij iets gemist heeft.
+
+Er is ook geen uitweg via een link: de mirror-link (`{{ mirror }}`) is per ontvanger en werkt
+dus alleen voor wie de mail zelf kreeg. Er is **geen publiek archief** van verstuurde edities.
+
+**Regel:** schrijf de intro zo dat hij klopt voor editie 1 én editie 10 — en controleer de
+**hele** mail op ditzelfde patroon. In de september-editie stond de aanname twee keer: in de
+intro, en onderaan bij *"de gratis juridische sample uit de vorige nieuwsbrief"*. Die tweede
+ontsnapte aan de eerste correctieronde. Verwijs naar het
+terugkerende *thema* van de nieuwsbrief, niet naar een specifieke vorige aflevering.
+
+```
+FOUT   Vorige maand keek je mee met een aanvaller: hoe één apostrof een database openbreekt.
+GOED   Meestal kijk je in deze nieuwsbrief mee met de aanvaller. Deze keer sta je aan de
+       andere kant van de deur.
+```
+
+De tweede zin beloont een vaste lezer nog steeds (hij hérkent het), maar vraagt niets van een
+nieuwe.
+
+### Gebruik alleen commando's die óók buiten de simulator kloppen
+
+De september-editie opende met `find log`. Dat werkt in de simulator, maar Heisenberg typte het
+in een echte terminal en kreeg niets: echt `find` verwacht een **pad**, niet een zoekterm
+(`find /var -name "*.log"`). De mail leerde dus een syntaxis die buiten de oefenomgeving niet
+bestaat — en de aanbeveling eronder stuurde de lezer juist naar zijn eigen machine.
+
+De afwijking gaat twee kanten op, en dat maakt hem erger dan een leemte:
+
+| invoer | simulator | echt Linux |
+|---|---|---|
+| `find log` | 3 treffers | niets |
+| `find . -name "log"` | 7 onzin-treffers | correct |
+
+**Regel:** kies voor de tip commando's waarvan de vorm in beide werelden hetzelfde is, en
+controleer dat vóór je schrijft — niet alleen of het commando in de simulator *iets* teruggeeft.
+`cd`, `ls`, `cat`, `grep <patroon> <bestand>` en `whoami` zijn veilig. `find` en alles met
+flags die de simulator niet kent, zijn dat niet. Twijfel je: lees `manPage` in
+`src/commands/<categorie>/<naam>.js` — staat daar een blok *"In deze simulator"* of *"In real
+Linux"*, dan is er een afwijking en hoort dat commando niet zonder uitleg in een mail die de
+lezer naar een echte machine stuurt.
+
+Dat is ook de winst voor de aanbeveling: nu de mail alleen echte commando's gebruikt, kan hij
+letterlijk zeggen dat je ze thuis precies zo typt. Dat is een sterkere belofte dan welke
+formulering ook.
+
+### Neem niet aan wat de lezer niet heeft
+
+De aanbeveling van september begon als *"Wil je in een echte `auth.log` kijken, dan heb je een
+computer nodig die van jou is"* — met een VM-gids eronder. Dat klopt niet voor de lezer die al
+Linux draait: die kan het logbestand gewoon openen, zonder iets te installeren.
+
+Zo'n aanname kost je precies de lezer die het verst is. Controleer een aanbeveling daarom op de
+vraag: **wat als de lezer dit al heeft?** Vaak is het antwoord dat het product een ándere waarde
+heeft dan je eerst opschreef — en dat is meestal de betere pitch. Hier werd het: kijken kan
+iedereen met Linux meteen, maar een doelwit waar je legaal op mag *aanvallen* heeft niemand
+thuis. Dát is wat de hacklab-gids levert.
+
+### Woordkeuze: geen "machine" (gemeten, september 2026)
+
+Gebruik **server** voor het systeem waar iemand op inlogt of dat wordt aangevallen, **computer**
+voor het apparaat van de lezer, en **systeem** waar het algemeen is. Níét "machine".
+
+Dat is geen smaakkwestie maar een merkconsistentie-meting over de bestaande copy:
+
+| woord | blog | command-output |
+|---|---|---|
+| systeem | 63 | 21 |
+| computer | 49 | 16 |
+| server | 42 | 64 |
+| **machine** | **19** | 15 |
+
+En die 19 blogtreffers zijn bijna allemaal *"virtuele machines"*. Op deze site betekent
+"machine" dus in de praktijk **VM** — lees je copy terug met die betekenis en er staat iets
+anders dan je bedoelde.
+
+### Noem de prijs niet in de mail
+
+De prijs hoort op de landingspagina, niet in de aanbeveling. *"Betalen wat je wil, vanaf €5"*
+stond in de eerste versie van de september-editie en is eruit gehaald: het dwingt de lezer tot
+een koop-beslissing vóórdat hij weet wat hij krijgt, en filtert dus op prijs in plaats van op
+interesse.
+
+> **De tegenwerping, voor als je hier ooit op terugkomt:** een prijs verzwijgen kan de klik
+> juist duurder maken — wie €49 vreest klikt niet, en "vanaf €5" had dat weggenomen. Dat
+> argument is niet onzinnig, alleen niet meetbaar op deze lijstgrootte. Wil je het ooit
+> beslissen, meet het dan (klik → koop), niet met een redenering.
 
 ---
 
@@ -247,17 +349,67 @@ zonder UTM-parameters: het is een juridische link, geen campagnelink.
 Zelfde stijl als welkomstmail:
 - Achtergrond: #0d1117 (outer) / #161b22 (inner)
 - Tekst: #c9d1d9 (headings) / #8b949e (body)
-- Links: #79c0ff
-- Buttons: #9fef00 met #0d1117 tekst
-- **Font: de monospace-stack hieronder, 16px** (was Courier New 15px tot augustus 2026)
+- Links: #79c0ff **met onderstreping** (zie §Links: onderstreep ze)
+- Buttons: #0d1117 met #9fef00 tekst en een 2px #9fef00 rand (omgedraaid in september 2026, zie hieronder)
+- **Twee fontstacks, 16px** (zie §De fontstacks): prosa en koppen in systeem-sans, terminal
+  en code in monospace. Tot september 2026 stond álles in monospace
 - **Vet = kopkleur #c9d1d9, niet alleen font-weight** (zie hieronder)
 - Max breedte: 600px
+- Kaart: `#161b22` met `1px solid #30363d` rand — nodig sinds de balk donker werd, anders valt
+  de bovenrand van de kaart weg tegen de pagina-achtergrond (beide `#0d1117`)
+- Koptrap: tip-titel 26px, vaste welkomstkop 22px, sectiekoppen 18px. De tip-titel is de
+  inhoud van de maand en hoort zwaarder te wegen dan de begroeting die elke editie hetzelfde is
 
-### De fontstack (herzien augustus 2026)
+### Links: onderstreep ze
+
+`text-decoration:underline`, niet `none`. Tot september 2026 waren links alleen aan hun kleur te
+herkennen. Dat is een WCAG 1.4.1-faler (*Use of Color*): wie kleur slecht onderscheidt, ziet geen
+link. In e-mail weegt dat zwaarder dan op de site, want er is geen hover-state om op terug te
+vallen en geen focus-ring die het goedmaakt.
+
+Het contrast zelf was nooit het probleem — `#79c0ff` op `#161b22` meet **8,89:1**. Een ruime
+score op de ene richtlijn compenseert de andere niet.
+
+### De fontstacks (gesplitst september 2026)
+
+**Prosa, koppen, knoppen en footer:**
+
+```
+-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif
+```
+
+**Terminalbalk, codeblokken en code-chips:**
 
 ```
 'JetBrains Mono', Consolas, Menlo, 'Roboto Mono', 'DejaVu Sans Mono', 'Courier New', monospace
 ```
+
+**Waarom gesplitst.** De mail zette tot september 2026 álles in monospace, terwijl de site dat
+niet doet: `styles/main.css:169-171` zet `--font-body: Inter` voor lopende tekst, `--font-heading:
+Space Grotesk` voor koppen en `--font-terminal: JetBrains Mono` alléén voor terminal en
+codeblokken. De mail week dus af van het merk dat hij moest uitstralen. Gemeten @375px op de
+september-editie:
+
+| | alles monospace | gesplitst |
+|---|---|---|
+| tekens per regel | 30 | **42** (richtlijn 45-75) |
+| hoogte van de mail | 4812px | **4023px** |
+| codeblokken (bedoeld/gerenderd) | 5/5 8/8 4/4 | ongewijzigd |
+
+Het derde argument heeft geen getal: zolang álles monospace is, valt een commando alleen op aan
+zijn kleurvlak. Met sans eromheen is monospace weer een **signaal** — het betekent "dit typ je in
+een terminal". Dat is precies wat deze nieuwsbrief moet overbrengen.
+
+Geen webfonts: Gmail stript `@font-face`, dus de sans-stack leunt op wat er al staat. Windows
+krijgt Segoe UI, Apple San Francisco, Android Roboto, Linux valt terug op Arial/Liberation Sans.
+
+> **Een code-chip draagt zelf géén `font-family` tenzij je hem geeft.** Een `<code
+> class="code-inline">` erft van de alinea eromheen. Zolang die alinea monospace was, viel dat
+> niet op; nu de alinea sans is, wordt een chip zónder eigen `font-family` stilletjes sans — en
+> dan is het verschil tussen tekst en commando weg. **Zet de monospace-stack inline op elke
+> chip.** In de september-editie staat hij op alle 12.
+
+De monospace-stack zelf blijft ongewijzigd sinds augustus 2026, en die keuze staat nog steeds:
 
 Windows pakt Consolas (Vista+, komt ook met Office mee), Apple pakt Menlo, Android Roboto Mono,
 Linux DejaVu Sans Mono. Courier New staat achteraan als vangnet. JetBrains Mono voorop kost
@@ -321,15 +473,17 @@ Correcte gevallen in de augustus-editie, ter referentie: `één` (6×), `dáár`
 ## Base CSS Block (kopieer naar elke nieuwe email)
 
 Het `<style>` blok in de `<head>` is identiek voor alle emails.
-Kopieer dit blok exact uit `nieuwsbrief-augustus-2026.html`, **niet uit juli of eerder**.
-Controleer na het kopiëren met een diff dat het blok byte-identiek is aan augustus; wijkt er iets
+Kopieer dit blok exact uit `nieuwsbrief-september-2026.html`, **niet uit augustus of eerder**.
+Controleer na het kopiëren met een diff dat het blok byte-identiek is aan september; wijkt er iets
 af, dan heb je per ongeluk een dark-mode-override meegewijzigd.
 
-> **Het blok is in augustus 2026 gewijzigd en die wijziging is bewust.** Twee dingen: de
-> `.mobile-padding`-selector is gerepareerd (zie §De `.mobile-padding`-bug) en de fontstack is
-> vervangen (zie §Design). De juli-editie en de drie welkomstmails dragen dus nog het óude blok.
-> Dat is geen drift maar historie: juli is een verzendrecord. Werk je een welkomstmail bij, neem
-> dan het augustus-blok mee en importeer hem opnieuw in Brevo.
+> **Het blok is in september 2026 opnieuw gewijzigd en die wijziging is bewust.** De vier
+> `.header-*`/`.btn-*`-regels zijn omgedraaid naar donkere achtergrond met groene tekst, en
+> `.btn-bg` heeft er een `border-color` bij (zie §Donkere balk met groene tekst). Daarvóór, in
+> augustus, waren de `.mobile-padding`-selector gerepareerd en de fontstack vervangen. De
+> edities tot en met augustus en de drie welkomstmails dragen dus nog een ouder blok. Dat is
+> geen drift maar historie: een verstuurde editie is een verzendrecord. Werk je een welkomstmail
+> bij, neem dan het september-blok mee en importeer hem opnieuw in Brevo.
 
 Het blok bevat:
 - `@media (prefers-color-scheme: dark)` — dark mode overrides (11 klassen)
@@ -408,12 +562,48 @@ drie varianten in augustus 2026:
 Een chip met `nowrap` die breder is dan de kolom kan niet breken en duwt de buitenste tabel
 voorbij de viewport. De lange commando-chip (219px) houdt daarom géén `nowrap`.
 
-### Donkere tekst op de groene balk/knop
+### Donkere balk met groene tekst (omgedraaid, september 2026)
 
-De donkere tekstkleur staat altijd sámen met `background-color:#9fef00` op hetzelfde element
-(zowel inline als in de `.header-text`/`.btn-text` klasseregels). De Gmail-app herschrijft in
-dark mode losse tekstfragmenten zonder eigen achtergrond naar wit — een lokaal kloppend
-kleurenpaar voorkomt dat. Haal die achtergrond er niet af.
+**De balk en de knoppen zijn `#0d1117` met tekst `#9fef00`, niet andersom.** De knoppen hebben
+daarbij een `2px solid #9fef00` rand, zodat ze op de kaart (`#161b22`) nog als knop lezen.
+
+Dit is de escalatie die Sessie 206 al als plan B had opgeschreven. De geschiedenis in twee
+stappen, want de tussenstap is een waarschuwing waard:
+
+1. **Augustus 2026 (mitigatie, gefaald).** De balk was groen met donkere tekst. De Gmail-app op
+   Android herschrijft in dark mode kleuren ná de CSS en tilt tekst die hij als bijna-zwart-op-
+   donker leest naar wit; `!important` stopt dat niet en de `prefers-color-scheme`-blokken zijn
+   in die app sowieso dood. De mitigatie was `background-color` en `color` sámen op hetzelfde
+   element zetten, in de hoop dat een lokaal kloppend kleurenpaar de correctie afremt. Dat is
+   één editie lang geprobeerd en **werkte niet** — de melding kwam in september onveranderd
+   terug.
+2. **September 2026 (omgedraaid).** Wit op `#9fef00` meet **1,42:1**; onleesbaar, en dat is
+   precies wat er op het scherm stond. Groen op donker meet **13,36:1** — exact dezelfde ratio
+   als de bedoelde combinatie, maar omgekeerd.
+
+**Bevestigd in een echte inbox (21 september 2026).** Dit is geen redenering meer: de
+september-editie is via Import HTML in Brevo gezet en op de telefoon getest in de Gmail-app in
+dark mode. De balk en de knoppen blijven **groen op donker**. Daarmee is de vraag die sinds
+Sessie 206 openstond beantwoord, en meteen ook de tweede: **het `<style>`-blok komt mee bij
+Import HTML** (bij de drag-and-drop editor niet — die waarschuwing blijft staan).
+
+Het mechanisme erachter: Gmail's dark mode repareert wat hij te donker vindt voor een donkere
+achtergrond. Lichte tekst op donker geeft hem niets te repareren. Dat was vooraf al zichtbaar in
+dezelfde mail — de **codeblokken** dragen `#0d1117` met `#9fef00` sinds de eerste editie en zijn
+nooit gemeld — en is nu direct bevestigd.
+
+**De regel die hieruit volgt, voor elke volgende mail:** lichte tekst op een donkere achtergrond,
+nooit donkere tekst op een licht merkvlak. De omgekeerde variant is één editie lang geprobeerd
+(augustus 2026) en werkte niet.
+
+**Wat blijft staan:** `background-color` en `color` horen nog steeds op hetzelfde element (zowel
+inline als in de `.header-text`/`.btn-text` klasseregels). Die koppeling was niet fout, hij was
+alleen niet genoeg. Haal die achtergrond er niet af.
+
+**Wat je hier makkelijk verkeerd doet:** de balk is nu even donker als de pagina-achtergrond,
+dus de bovenrand van de kaart valt weg. De `border-bottom:2px solid #9fef00` onder de balk is
+daarom geen versiering maar de scheiding tussen balk en inhoud. Laat hem staan, of geef de balk
+een eigen donkertint.
 
 ---
 
@@ -426,6 +616,24 @@ kleurenpaar voorkomt dat. Haal die achtergrond er niet af.
 | April 2026 | "Wat vertelt nmap over een netwerk?" | — |
 | Juli 2026 | "Hoe kraakt een hacker een wachtwoord?" (`hashcat`) | Gratis Sample Pentest |
 | Augustus 2026 | "Hoe één apostrof een database opent" (`sqlmap`) | Gratis juridische sample |
+
+### Klaargezet, nog niet verstuurd
+
+| Maand | Tip van de Maand | Aanbeveling |
+|-------|-----------------|-------------|
+| September 2026 | "Een server schrijft alles op" (`cd`, `ls`, `cat`, `grep`) | Gids *Je eigen hacklab* |
+
+Onderwerpregel: **"Drie mislukte logins, één IP-adres"** (34 tekens). Preview: *"Het stond al in
+een bestand dat de server zelf bijhoudt."* Gepland op dinsdag 22 september 10:00 CET
+(35 dagen na augustus; de derde dinsdag viel op 15 september en was al verstreken, dus volgens de
+invariant schuift hij naar de eerstvolgende dinsdag). **Verplaats deze regel naar §Verstuurd
+zodra hij de deur uit is** — een editie die hier blijft staan terwijl hij verzonden is, maakt de
+hele tabel onbetrouwbaar.
+
+Deze editie heeft **geen** "Wat is er nieuw?"-blok: er is sinds augustus geen blogpost of gids
+bijgekomen (gemeten met `git log --diff-filter=A -- 'blog/*.html'`). In plaats daarvan staat er
+een *Verder lezen*-blok met twee bestaande posts. Verzin liever geen nieuws dan dat je oud nieuws
+als nieuw presenteert.
 
 Mei en juni 2026 zijn **niet** verstuurd. Hun geplande onderwerpen staan hieronder weer op
 de kandidatenlijst — de SQL-injectietip van juni is in augustus 2026 alsnog gebruikt.
@@ -465,7 +673,7 @@ zonder dat hoort het onderwerp op het blog, niet in de tipslot.
 
 | Onderwerp | Commando('s) | Bestaande blogpost om naar te linken |
 |---|---|---|
-| Zoeken in een systeem: waar informatie ligt | `grep`, `find` | `linux-bestandssysteem.html`, `terminal-basics.html` |
+| ~~Zoeken in een systeem: waar informatie ligt~~ — **gebruikt in september 2026** | `grep`, `find` | `linux-bestandssysteem.html`, `terminal-basics.html` |
 | Wat verraadt jouw eigen machine? | `netstat`, `ifconfig` | — (nog geen post) |
 | Wat een open poort eigenlijk zegt | `nmap`, `whois` | `nmap-beginnersgids.html` |
 | Zwakke plekken in een webserver | `nikto` | `cybersecurity-tools.html` |
@@ -473,7 +681,8 @@ zonder dat hoort het onderwerp op het blog, niet in de tipslot.
 
 **Twee aanvalstools op rij is een signaal, geen verbod.** Juli (`hashcat`) en augustus
 (`sqlmap`) waren beide offensief. De doelgroep is beginners, dus zet daar een tip tegenover
-die de terminal zelf leert — de eerste kandidaat in de tabel is daarvoor bedoeld.
+die de terminal zelf leert — dat is in september 2026 gedaan met de eerste kandidaat uit de
+tabel (logbestanden lezen met `find` en `grep`). De teller staat daarmee weer op nul.
 
 **Kies de aanbeveling op wat nieuw is sinds de vorige editie**, niet op wat het beste
 verkoopt. Herhaal geen product dat de vorige editie al pushte: de lezer zag het net.
@@ -483,13 +692,21 @@ verkoopt. Herhaal geen product dat de vorige editie al pushte: de lezer zag het 
 ## Checklist voor verzending
 
 - [ ] Onderwerpregel < 60 tekens
+- [ ] **Intro werkt ook voor een nieuwe inschrijver** — geen verwijzing naar de vorige editie
+- [ ] **Geen "machine"** — server / computer / systeem (zie §Woordkeuze)
+- [ ] **Geen prijs in de mail** — die staat op de landingspagina
+- [ ] **Elk commando in de tip werkt ook op een echte Linux-machine** (zie §Gebruik alleen
+      commando's die óók buiten de simulator kloppen) — check `manPage` op een
+      "In deze simulator"-blok
 - [ ] Preview tekst ingevuld (de verborgen preheader-div bovenaan de HTML)
-- [ ] Alle links getest (terminal, blog, cheatsheet)
+- [ ] Alle links getest (terminal, blog, cheatsheet) **en onderstreept** (`text-decoration:underline`)
 - [ ] UTM parameters op alle links (`?utm_source=newsletter&utm_medium=email&utm_campaign=[maand]-[jaar]`)
       — behalve `privacy.html`, dat is een juridische link en geen campagnelink
 - [ ] Elk getal in de mail nageteld tegen zijn bron (pagina-aantallen ↔ `gidsen.html`,
       command-output ↔ `src/commands/…`) — niet tegen een eerdere editie
 - [ ] `<style>`-blok byte-identiek aan de vorige editie (`diff`, niet op het oog)
+- [ ] **Elke code-chip draagt inline de monospace-stack** — een chip zonder eigen `font-family`
+      erft de sans van de alinea en is dan niet meer als commando te herkennen
 - [ ] Via **Import HTML** geplaatst, niet via de drag-and-drop editor
 - [ ] **Codeblokregels ≤ 29 tekens, gemeten** — niet "mobiel preview gecheckt". Zie
       §Codeblok-budget: een te lange regel *wrapt* en is daardoor onzichtbaar voor een
@@ -499,8 +716,10 @@ verkoopt. Herhaal geen product dat de vorige editie al pushte: de lezer zag het 
 - [ ] Verzendtijd: 10:00 CET, **derde dinsdag** — en minimaal 21 dagen na de vorige
       verzending (zie de invariant bovenaan dit document)
 - [ ] Test-email verstuurd naar eigen adres
-- [ ] Test-email geopend op telefoon in **dark mode** (Gmail-app) — donkere tekst op de
-      groene balk/knop, code-chips binnen hun regel
+- [ ] Test-email geopend op telefoon in **dark mode** (Gmail-app) — **groene tekst op de
+      donkere balk/knop** (niet andersom, zie §Donkere balk met groene tekst), code-chips
+      binnen hun regel. Staat de tekst er wit of grijs bij: melden, niet zelf bijkleuren —
+      dat is een nieuw geval en de vorige twee ontwerpen zijn allebei al geprobeerd
 
 ### Brevo variabelen
 - Uitschrijven: `{{ unsubscribe }}`

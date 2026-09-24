@@ -26,17 +26,33 @@ immuun voor het kapotte datum-schema.
 Bij elke `/summary` waar `N % 5 == 0`:
 1. Bepaal het te archiveren blok: sessies ouder dan de laatste ~10 (houd `current.md` ≈ laatste
    10-15 sessies / **<250 KB**).
-2. Knip die entries uit `current.md` en plak ze (nieuwste-eerst) in het **lopende** range-archief.
+2. Knip die entries uit `current.md` en plak ze (nieuwste-eerst) in een **nieuw** range-archief
+   voor exact dat blok: `archive-sNNN-sMMM.md` waarin `NNN`-`MMM` de vijf geroteerde sessies zijn.
+   Eén blok = één bestand; bestaande archieven worden nooit uitgebreid.
    Neem het **learnings-blok** van een sessie mee mét zijn entry: laat je het staan, dan houdt
    `current.md` een "Sessie N — learnings"-sectie terwijl entry N in het archief zit (vastgesteld
    bij Sessie 220, opnieuw geraakt bij 230).
-3. Bereikt een range-archief ~250 KB → sluit 'm af (definitieve `archive-sNNN-sMMM.md`) en
-   open een nieuwe voor het volgende blok.
+3. Er is geen afsluit-drempel voor een range-archief. De <250 KB uit stap 1 geldt alleen voor
+   `current.md`; een archief is per definitie af zodra het geschreven is.
 4. Werk de index in **`SESSIONS.md`** bij: nieuw range-entry + gecorrigeerde `current.md`-range.
 5. `validate-docs.sh` exit 0 als gate.
 
 Knip-techniek voor grote bestanden (>25k tokens) zoals `current.md`: Python met
 occurrence-asserts (entry-count behouden, geen dubbele scheiders) — zie Sessie 164/167-learnings.
+
+> **Waarom één bestand per blok, en niet "vullen tot 250 KB" (gewijzigd Sessie 235).** Tot dan
+> zei stap 2 *"plak in het **lopende** range-archief"* en stap 3 *"sluit af bij ~250 KB"*. De
+> praktijk deed sinds `archive-s165-s169.md` iets anders: **twaalf opeenvolgende blokken van
+> exact vijf**, zonder uitzondering. Gemeten bij die wijziging: het grootste blok-van-vijf is
+> **81 KB** (`archive-s215-s219.md`), een derde van de drempel — die zou pas rond vijftien
+> sessies per archief in beeld komen. De regel was dus dode letter, en tegelijk gevaarlijk:
+> hem volgen betekent 220-224 in een bestand plakken dat `s215-s219` heet, waarmee de
+> **naamgeving een leugen wordt** die elke latere lezer op het verkeerde been zet. De
+> bestandsnaam is de invariant — ook als een blok ooit ongewoon groot uitvalt blijft het één
+> bestand met de juiste range in zijn naam.
+>
+> De twee uitschieters (`archive-s081-s120.md` 151 KB en `archive-s121-s164.md` 378 KB) zijn
+> de **eenmalige catch-up** van Sessie 176, geen steady state.
 
 ## Catch-up backlog — OPGELOST (Sessie 176)
 

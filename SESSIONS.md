@@ -10,12 +10,15 @@
 
 > **Rotatie/archivering-conventie:** zie [`docs/sessions/README.md`](docs/sessions/README.md)
 > (range-naamgeving `archive-sNNN-sMMM.md`; legacy `archive-q*`-namen zijn bevroren + fout gelabeld).
-> `current.md` houdt het rolling window Sessie 220-230; ouder is geroteerd naar de range-archieven hieronder.
+> `current.md` houdt het rolling window Sessie 225-235; ouder is geroteerd naar de range-archieven hieronder.
 
-### [Current Sessions (220-232)](docs/sessions/current.md) - Full Detail
-**Sessies:** 232, 231, 230, 229, 228, 227, 226, 225, 224, 223, 222, 221, 220
-**Period:** 10 augustus - 5 september 2026
+### [Current Sessions (225-235)](docs/sessions/current.md) - Full Detail
+**Sessies:** 235, 234, 233, 232, 231, 230, 229, 228, 227, 226, 225
+**Period:** 17 augustus - 23 september 2026
 **Topics:**
+- Een ontbrekende `</main>` trok de footer de blogcontainer in: `blog/index.html` sloot zijn `<main>` nooit, dus de geïnjecteerde footer erfde `max-width: 720px` — 672px breed in een viewport van 1823px, als enige van 25 pagina's. De tagbalans-guard bestond al sinds Sessie 138 maar telde alleen `<div>`: hij bewaakte de tag uit die ene bug, niet de klasse. Twee contrastspecs verwijderd na mutantmeting (hun opvolger vangt dezelfde mutanten, mét kleurbewijs); `eyebrow-contrast` bewust behouden om zijn aanwezigheids-asserties (Sessie 235)
+- De mailbox kostte ~EUR 96/jaar en de gratis standaardroute sterft in januari 2027: Google schrapt "Send mail as" voor niet-Google-adressen, dus forwarden-en-antwoorden viel af. Zoho Mail Free op het EU-datacenter — en de regio hangt af van de ingang, niet van je IP. Brevo slaagt op DKIM, niet op SPF: de Return-Path is Brevo's eigen bounce-domein (Sessie 234)
+- De pijl ontbrak in de font-subset, en die ene hack liet de haak van `[→]` onzichtbaar: U+2192/U+2190/U+2713 vielen terug op een systeemfont, `renderer.js` compenseerde met een opgetilde span, en die liet `[` achter als tekst-run van één teken — wat Chromium niet schildert. Subset herbouwd uit upstream (0 advance-width-verschillen, 1.160 bytes kleiner), hack weg (Sessie 233)
 - De bloat zat niet in de code: `src/` (118 modules), `styles/` (11) en `assets/` (36) hadden nul verweesde bestanden en nul md5-duplicaten over 387 getrackte bestanden. Wat wél groeide stond in `.gitignore` en verscheen dus nooit in `git status` — `.playwright-mcp/` op 55 MB in 1111 screenshots over vijf maanden. Twee "debugtests" konden niet falen op hun eigen onderwerp: álle zes `expect()`-calls klikten enkel een modal weg als setup. 153M → 53M, 45 → 42 specs, NEW Check 20 met twee drempels (Sessie 232)
 - `publish = "."` zette de bron van vier betaalde gidsen op de CDN: de vier `.typ`-bestanden gaven HTTP 200 op productie, naast een sessie-archief van 388 KB met privé-mailadressen. `Disallow` is indexeringsadvies, geen toegangscontrole. Check 19 erbij met de populatie omgedraaid — en die betrapte in zijn eerste CI-run de commit die hem introduceerde. Achteraf gereconstrueerd in Sessie 232 (Sessie 231)
 - Het nieuwsbriefblok viel buiten de filterpopulatie — en rekte via één grid-track alle 15 kaarten op: het `:target`-filter verbergt uitsluitend `.blog-post-card`, dus het blok bleef in élke stand op DOM-positie 4 staan (gemeten 4 van de 6 categorieën met het formulier bovenaan). Twee stille defecten erbij: een vaste inputbreedte die de mobiele regel op specificiteit versloeg gaf het blok een min-content van 400px — één impliciete `auto`-track maakte daarmee álle 15 kaarten 400px in een container van 336px, onzichtbaar weggeknipt door `overflow-x: hidden`; en de skip-link `#main-content` liet "0 van 15 artikelen" omroepen (Sessie 230)
@@ -24,11 +27,13 @@
 - Vier taken die elk een halve reparatie van een eerdere sessie afmaakten: bundelformule, `--color-link` plus vier hover-toestanden, legal-titels in vier velden, en de flaky autocomplete-spec (Sessie 227)
 - De blog had 418 koppen zonder id en een filter van 26,8px — geen van beide stond in de CSS. `min-height` doet niets op een inline `<a>`; specificiteit vergelijkt per tier (Sessie 226)
 - De nieuwsbrief was af na vijf redactierondes — elke ronde legde een defect bloot dat níét in de tekst zat. Rotatie 210-214 (Sessie 225)
-- De dader was 280px breed en 377px lang — de scan keek naar het verkeerde getal (Sessie 224)
-- De verantwoording wekte wantrouwen — en art. 50 lid 4 AI-verordening gold al twaalf dagen (Sessie 223)
-- De box-randen braken verticaal — vier eerdere fixes zochten allemaal in de breedte. Box-drawing leeft op de verticale as (Sessie 222)
-- Vijf commits over drie dagen — en de regel die twee van hen stuurde, bleek zelf fout (Sessie 221)
-- Opruimsessie: vier van de vijf punten bleken een notitie die niet meer klopte. Rotatie 205-209 (Sessie 220)
+
+---
+
+### [Archief Sessie 220-224](docs/sessions/archive-s220-s224.md) - Full Detail (geroteerd)
+**Sessies:** 224 → 220 (nieuwste-eerst, incl. het uit CLAUDE.md geroteerde learnings-blok van 220)
+**Period:** 10 - 17 augustus 2026
+**Geroteerd bij:** Sessie 235
 
 ---
 
@@ -210,9 +215,9 @@
 
 ## 📊 Session Overview
 
-**Total Sessions:** 220 (as of 10 augustus 2026)
-**Current Session:** 220 (Opruimsessie: twee blinde tests, bulk-rotatie 205-209, dode taken)
-**Sessions with full documentation:** 81-230 (current.md 220-230 + range-archieven 215-219, 210-214, 205-209, 200-204, 195-199, 190-194, 185-189, 180-184, 175-179, 170-174, 165-169, 121-164 & 81-120)
+**Total Sessions:** 235 (as of 23 september 2026)
+**Current Session:** 235 (Ontbrekende `</main>` trok de footer de blogcontainer in; tagbalans-guard naar de klasse; twee redundante contrastspecs verwijderd)
+**Sessions with full documentation:** 81-235 (current.md 225-235 + range-archieven 220-224, 215-219, 210-214, 205-209, 200-204, 195-199, 190-194, 185-189, 180-184, 175-179, 170-174, 165-169, 121-164 & 81-120)
 **Sessions compressed:** 2-77 (various compression levels)
 
 **Structure rationale:**
@@ -239,7 +244,10 @@ houd `current.md` op ~10-15 sessies / <250 KB, en werk de index hierboven bij.
 2. Update "Total Sessions" count in this navigation file
 3. Every 5 sessions: Review compression of sessions 20+ old
 
-**Next rotation:** Sessie 90 (estimated late december 2025)
+**Volgende rotatie:** de eerstvolgende `/summary` waar `N % 5 == 0` — bij Sessie 235 was dat
+220-224. Hier staat bewust géén sessienummer of datum meer: de vorige notitie zei "Sessie 90
+(estimated late december 2025)" en was bij Sessie 235 dus 145 sessies verlopen, terwijl de
+regel zelf al die tijd gewoon werkte. Een afgeleide waarde hoort niet overgeschreven te worden.
 
 ---
 
@@ -258,7 +266,7 @@ houd `current.md` op ~10-15 sessies / <250 KB, en werk de index hierboven bij.
 
 ---
 
-**Last updated:** 21 augustus 2026 (Sessie 230 — rotatie 215-219 naar `archive-s215-s219.md`, current.md → window 220-230; index, Session Overview en de bij Sessie 225 overgeslagen archief-entry 210-214 alsnog gesynct)
+**Last updated:** 23 september 2026 (Sessie 235 — rotatie 220-224 naar `archive-s220-s224.md`, current.md → window 225-235; de topics van Sessie 233 en 234 ontbraken in de index en zijn alsnog toegevoegd)
 **Next update:** bij volgende `N%5`-rotatie (steady-state per `docs/sessions/README.md`)
 
 **Recent updates:**
