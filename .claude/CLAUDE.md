@@ -118,6 +118,7 @@ dus niet in elke sessie in context, maar zijn er wél voordat je zo'n bestand be
 | Scope, requirements, tech-rationale | `docs/prd.md` | lezen |
 | Architectuur + document-ownership | `PLANNING.md §Document Ownership` | lezen |
 | Executietracker + live metrics | `TASKS.md` | lezen |
+| Issue tracker, triagelabels, domeindocs (Matt Pocock-skills) | `docs/agents/*.md` | lezen |
 
 **Monetization:** Ko-fi + Brevo-nieuwsbrief (double opt-in) + Gumroad (4 guides + bundel) +
 2 lead magnets (Sample Pentest + Sample Juridisch). Eigen consent banner met Consent Mode v2.

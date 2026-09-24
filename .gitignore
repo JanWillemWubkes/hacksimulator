@@ -76,3 +76,6 @@ debug-*.html
 # (Playwright screenshots should live in .playwright-mcp/, not root)
 # Scoped to root only — assets/**/*.png en blog/**/*.png blijven tracked
 /*.png
+
+# Werkmap van de Matt Pocock-skills (specs/tickets per feature) — bewust lokaal
+.scratch/
