@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 23 sep 2026 (Sessie 235 — geen architectuurwijziging, wél een correctie in de testarchitectuur: de guard-laag telde drie paginalijsten waar er zeven waren, en twee contrastspecs stonden nog naast de ongefilterde opvolger die ze in Sessie 228 al verving. Stack, hosting en build ongemoeid; de wijziging raakt `tests/e2e/`, `scripts/validate-blogs.sh` en één sluittag in `blog/index.html`.)
+**Laatst bijgewerkt:** 25 sep 2026 (Sessie 239 — design-system-wijziging op branch `design/impeccable`, nog niet op `main`: de landingspagina als affiche, sitebreed Atkinson Hyperlegible Next)
 **Status:** ✅ LIVE on Netlify | M5 Testing 71% | M5.5 Monetization deep (Ko-fi + Brevo + Gumroad + Lead magnet) | M6 Tutorial 100% | M7 Gamification 100% | Blog content-pijler 14 posts live
 **Verantwoordelijk:** Development Team
 **Live URL:** https://hacksimulator.nl/
@@ -366,6 +366,21 @@ python -m http.server 8000
 ---
 
 ## 🎨 Design System
+
+### Designtraject op `design/impeccable` (Sessies 236-239, nog niet gemerged)
+
+- **Richting:** "Het raster van Total Design" — licht papier, zichtbaar 12-koloms raster,
+  één signaalrood dat alleen "jij bent aan zet" betekent, de terminal als donkere module.
+  Contract: `.impeccable/surfaces/index-html.md`; afweging tegen pixelstad en teletekst:
+  `docs/design/vergelijking-richtingen.md`.
+- **Scope-architectuur:** `affiche.css` hangt onder `body.home` en laadt alleen op index;
+  secties dragen `af-`-klassen omdat `landing.css` door 25 pagina's geladen wordt. Voor de
+  uitrol naar andere pagina's moet besloten worden of dit systeem naar gedeelde tokens
+  verhuist (TASKS.md #85).
+- **Typografie:** Atkinson Hyperlegible Next sitebreed voor tekst, Archivo 700-900 voor de
+  koppen van de landingspagina, JetBrains Mono binnen de terminal.
+- Na de merge wordt `DESIGN.md` de bron van het systeem; de tokens hieronder beschrijven tot
+  dan `main`.
 
 ### CSS Variables (Theming)
 
@@ -930,7 +945,8 @@ const DEBUG_MODE = false;
 
 ---
 
-**Laatst bijgewerkt:** 23 sep 2026 (Sessie 235 — geen architectuurwijziging, wél een correctie in de testarchitectuur: de guard-laag telde drie paginalijsten waar er zeven waren, en twee contrastspecs stonden nog naast de ongefilterde opvolger die ze in Sessie 228 al verving. Stack, hosting en build ongemoeid; de wijziging raakt `tests/e2e/`, `scripts/validate-blogs.sh` en één sluittag in `blog/index.html`.)
+**Laatst bijgewerkt:** 25 sep 2026 (Sessie 239 — design-system-wijziging op branch `design/impeccable`, nog niet op `main`)
+**Versie:** 4.50 (Sessie 239 — **het design system krijgt een tweede bron, tijdelijk.** Op `design/impeccable` staat de landingspagina als affiche in `styles/affiche.css` (alleen `body.home`), met eigen tokens die de gedeelde componenten opnieuw tokenen in plaats van overschrijven. Tot de merge blijft de sectie Design System hieronder de beschrijving van `main`; daarna wordt `DESIGN.md` (uit de gebouwde CSS afgeleid door de documenter) de bron en verwijst deze sectie ernaar.)
 **Versie:** 4.49 (Sessie 233 — **de font-subset is een contract, geen optimalisatie.** `jetbrainsmono-latin.woff2` miste U+2192/U+2190/U+2713 terwijl de terminal die drie als markers gebruikt; ze vielen terug op een systeemfont met een andere baseline, en de CSS-correctie die dat verbloemde liet `[` achter als tekst-run van één teken die Chromium niet schildert. Regel die hieruit volgt: een subset dekt élk teken dat de UI rendert, en een verticale correctie op één glyph is voortaan een signaal om de font te controleren — niet om px te tunen. Uitbreiden mag alleen met een assertie op 0 advance-width-verschillen, anders is het een sitebrede layout-gok)
 **Versie:** 4.48 (Sessie 229 — **een typografie-default hoort bij het design system, niet bij een component.** Ligaturen staan sitebreed uit: JetBrains Mono ligeert via `calt` en toonde `>=` als ≥ en `$pdo->prepare` als `$pdo→prepare` in een voorbeeld dat bedoeld was om over te typen. De keuze is "alles uit, uitzonderingen verantwoorden zich" i.p.v. een lijst monospace-selectors — `--font-terminal` staat in 48 declaraties over 7 stylesheets, en zo'n lijst bewaakt zichzelf en niet de klasse. De kosten van die keuze zijn gemeten in plaats van beredeneerd: prose-breedtedelta 0,17px (Space Grotesk) en 0,00px (Inter) op 40px tekst. Bijgewerkt: `style-guide.md` §Typography System droeg nog de Courier-New-waarde van vóór Sessie 81.)
 **Versie:** 4.47 (Sessie 228 — **AAA op élk renderend tekstelement, plus drie tokenregels die daaruit volgen:** één token draagt één rol (oppervlak vs. tekst — de CTA-knop stond op 3,30:1 omdat beide rollen in één token zaten); een oppervlak dat van zijn thema afwijkt herdefinieert zijn tokens op de container, niet per selector; en een kleur die tegelijk 15%-tint én tekst is haalt nooit AAA. Uitzonderingen alleen als assertie met de gemeten waarde. Meetdiscipline met code: meten-en-guards §19.)

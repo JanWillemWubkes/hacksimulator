@@ -4,6 +4,149 @@
 
 ---
 
+## Sessie 239: Het affiche blijft — en de hero kreeg een instappunt (25 sep 2026)
+
+**Branch:** `design/impeccable`. `main` staat op Sessie 235 en is onaangeroerd; niets van
+dit werk staat live. Deze entry vat 236-238 samen uit de commits, want op de branch is tot nu
+toe geen `/summary` gedraaid terwijl code en commits zichzelf al 236-238 noemen. Dit is
+Sessie 239 zodat teller en code overeenkomen; telt `main` intussen door, dan wordt het bij de
+merge rechtgezet.
+
+**Mission:** de twee uitdagers uit de richtingsronde (pixelstad/eBoy en teletekst) in het
+echt zien naast het gebouwde affiche, vóór de finish review werk vastlegt dat bij een wissel
+verloren gaat. Daarna: de keuze van Heisenberg uitvoeren.
+
+### 236-238 in het kort (uit de commits)
+
+- Impeccable-traject gestart: `PRODUCT.md`, `DESIGN.md`, `.impeccable/design.json`,
+  bevindingen in `docs/design/impeccable-bevindingen.md`. De detector is alleen betrouwbaar
+  op structurele regels; zijn contrastmetingen gingen twee van twee keer onderuit.
+- Sitebrede fontwissel: drie fonts werden er twee (Atkinson Hyperlegible Next voor tekst;
+  Archivo 700-900 voor de koppen van de landingspagina).
+- Richtingsronde (seed `88f43840`, `924ea95`): "Het raster van Total Design" koos boven de
+  neon-terminal. Contract: `.impeccable/surfaces/index-html.md`.
+- Het affiche gebouwd (`a8bf4fa`, `bec060e`): `styles/affiche.css` onder `body.home`, alleen
+  op index; gedeelde componenten opnieuw getokend in plaats van overschreven; 189 dode
+  `landing.css`-regels weg; themastandaard per pagina via `data-theme-default`.
+
+### De verloren beschrijvingen stonden op een screenshot
+
+Het vergelijkingsdoc ging ervan uit dat de beslispagina van sessie 1 verloren was
+(`.impeccable/questions/` leeg). Heisenberg had een screenshot bewaard. De teletekstkaart
+stond er volledig op, inclusief FIRST VIEWPORT en RISK; de eBoy-kaart was rechts
+afgesneden. Het contract per richting markeerde daarom per zin wat letterlijk van de
+screenshot kwam en wat reconstructie was. Die markering maakte de bevestiging goedkoop: hij
+hoefde alleen de reconstructie te beoordelen.
+
+### De prototypes
+
+Beide in een eigen worktree, alleen het eerste scherm, met de vier hero-scripts
+ongewijzigd hergebruikt. Het DOM-contract (`#hero-demo`, `.reg`, `.af-net`, `.af-node`,
+`.af-poort`) bleek de echte naad:
+
+- **Pixelstad:** canvas van 200x156 logische pixels, opgeschaald met
+  `image-rendering: pixelated`. Afwijking van het contract, en gemeld: SVG blijft vector en
+  schaalt met gladde randen. De stad leest de toestand van `zetDiagram` met een
+  MutationObserver; de deuren gaan pas open als een pakketje over de kabel is aangekomen.
+- **Teletekst:** klok, mozaieklogo en paginateller in één klein bestand; de ondertitel onder
+  de regel is alleen CSS op de bestaande `.reg`.
+
+Twee bugs tijdens de bouw, allebei alleen zichtbaar op een tussenmoment:
+- pixelstad: `.px-onder .reg-glos` woog zwaarder dan `.reg.is-lit` van het affiche, dus bij
+  het oplichten werd de glos papier op papier;
+- teletekst: de pagina was 700ms leeg terwijl de teller al op 888 stond, omdat de module
+  onderaan gepind is en de zichtbare regels dus als laatste verschenen.
+
+### De meting en de keuze
+
+| | kop | CTA | terminal (1440x900) | terminal (375) |
+|---|---|---|---|---|
+| affiche (toen) | 761-888 | 798-857 | 101 | 95 |
+| pixelstad | 162-448 | 576-635 | **714** | **1034** |
+| teletekst | 204-290 | 788-844 | 435 | 441 |
+
+Alle drie: nul consolefouten, geen horizontale scroll, tekst >= 7:1; rode CTA's 5,79 en 5,25
+als grote vetgedrukte letter (lat 4,5). Op herkenning en productduidelijkheid won teletekst.
+**Heisenberg koos het affiche**: teletekst visueel niet mooi, pixelstad te verwarrend voor het
+product. Het criterium was vooraf vastgelegd tegen "welke vind ik vandaag het mooist" — het
+was een hulpmiddel, geen vervanging van het oordeel van de eigenaar over zijn eigen merk.
+Worktrees en branches verwijderd (lokaal, nooit gepusht).
+
+### De hero: een instappunt en twee dingen die op elkaar leken
+
+Heisenberg miste een blikvanger en vond de hero onoverzichtelijk, vooral de band diagram +
+poorten + legenda + chips. Gemeten oorzaak voor het eerste: zeven lagen van gelijk gewicht,
+met het enige grote typografische moment onderaan. Voor het tweede: diagram en chips deelden
+celvorm; ■/□ betekende in de legenda open/dicht en op de chips gedaan/nog niet; de
+poortenrij hing onder beide machines; de uitleg stond verspreid.
+
+- Kop bovenaan, CTA ernaast op de onderste kopregel **vanaf 1280px**. Bij 1024 brak de knop
+  over twee regels in een kolom van 3/12; 1280 is ook de grens van de mobiele CTA-balk. De
+  ondertitel naast de kop was vier regels hoog en duwde de kop 100px omlaag; nu staat hij
+  eronder, via `display: contents` zodat DOM-, lees- en tabvolgorde gelijk blijven.
+- Chips direct onder de terminal als knoppen: 2px inktkader, index 01-06 (aria-hidden),
+  `[✓]` als ze gedaan zijn, inkten balk voor de volgende.
+- Diagram als één zin: jouw machine → scan → router, poorten als sleuven in het blok, één
+  onderschrift. Eerst "Zwart = open poort" — fout in het donkere thema, waar open licht is;
+  nu "een gevulde poort staat open". Op mobiel wees de scan-pijl het scherm uit; nu
+  verticaal.
+- `hero-demo.spec.js`: "terminal vóór de kop" omgedraaid naar "kop vóór de terminal", met
+  de actie erbij, en met waarom de reden van Sessie 236 niet meer geldt.
+
+### De guard die een pseudo-element niet zag
+
+De eerste run gaf 3 falers, alle drie `hero-accent-budget.spec.js`: de rode rand op de
+volgende chip stond in hetzelfde scherm als de CTA. De rode markering bestond al sinds de
+bouw van het affiche — als vierkantje in `::before` — en de teller keek alleen naar
+elementen. Nu kop en CTA in hetzelfde scherm als de chips staan, kwam het boven. Opgelost
+aan twee kanten: de markering is inkt, en de teller leest `::before`/`::after`.
+
+Mutanten, elk op een eigen assertie en gecontroleerd welke vuurde:
+- het oude rode vierkantje terug → `bovenaan: [... "button.hero-chip|01ls ... [::before]"]`;
+- `order: 2` op de kop → `@1440px: kop (673) hoort boven de terminal (72)`, de
+  scherm-assertie en niet de DOM-assertie.
+
+### Commits
+
+- `33ce10b` Hero herschikt: de kop is het instappunt, diagram en chips niet langer één tabel
+- (236-238: `924ea95`, `a8bf4fa`, `bec060e`)
+
+### Learnings
+
+- **Een vooraf vastgelegd criterium is een hulpmiddel, geen stemming.** Het deed wat het
+  moest: de vergelijking ging over herkenning en duidelijkheid in plaats van smaak. Dat de
+  eigenaar daarna anders koos, is geen falen van het criterium maar zijn recht.
+- **"Onoverzichtelijk" was meetbaar.** Het oordeel werd pas bruikbaar toen het cijfers had:
+  zeven lagen, kop op 761, CTA op 798, dezelfde vierkantjes met twee betekenissen.
+- **De afwijking van het contract melden kostte niets.** Canvas in plaats van SVG stond in
+  het contract; het vooraf zeggen voorkwam een discussie achteraf.
+- **Een DOM-contract als naad maakte hergebruik gratis.** Zolang klassen en ids bleven,
+  bestuurden de bestaande demoscripts een pixelstad en een teletekstpagina zonder één regel
+  JS-wijziging.
+- **`pkill -f` op een patroon schoot opnieuw de eigen shell af** (exit 144), precies zoals
+  `meten-en-guards.md` §22 al zegt. Kill op PID of poort.
+- **Een themawissel via alleen `data-theme` gaf een screenshot die op de echte site niet
+  bestaat** (navbartekst onzichtbaar, lege knooppunten). Via de echte schakelaar klopte alles.
+  §19 van dezelfde rule, opnieuw bevestigd.
+
+### Next steps
+
+Zie TASKS.md #82-85: eerst tweakrondes op de hero, dan de finish review + documenter, dan de
+merge, dan de overige pagina's één per sessie op `main`.
+
+### Metrics delta
+
+- Runtime-bundel (`performance.spec.js`): **1105,32 → 1062,32 KB** (Sessie 233 → 239),
+  marge 14,68 → **57,68 KB (5,15%)**. Het grootste deel komt uit Sessie 238 (dode
+  `landing.css`-regels).
+- Playwright: **43 → 45 spec files, 320 → 332 `test()`-declaraties** (branch 236-239).
+- `du -sb`: src 738 KB, styles 409 KB, blog 492 KB, assets 1741 KB.
+- Verificatie deze sessie: 14 specs die index laden × 3 motoren = **668 passed / 0 failed /
+  10 skipped** (678, volledig gedraaid). CI "Validatie" op de branch groen.
+
+---
+
+
 ## Sessie 235: Een ontbrekende `</main>` trok de footer de blogcontainer in — en twee contrastspecs bleken hun eigen opvolger (23 sep 2026)
 
 **Mission:** "De footer in /blog/ is niet juist, vergelijk maar met de footers elders." Eén

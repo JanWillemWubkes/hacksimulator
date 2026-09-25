@@ -1,7 +1,7 @@
 # CLAUDE.md — HackSimulator.nl
 
 **Project:** Browser-based terminal simulator die Nederlandse beginners ethisch hacken leert.
-**Status:** MVP Development — ✅ LIVE op Netlify (laatste: Sessie 235)
+**Status:** MVP Development — ✅ LIVE op Netlify vanaf `main`; laatste: Sessie 239 (op branch `design/impeccable`)
 **Stack:** Vanilla JS/CSS, client-side only, geen backend, geen build-stap. Deploy = push naar `main`.
 **Docs:** `docs/prd.md` v1.8 | `PLANNING.md` v3.0 | `TASKS.md` (live metrics) | `docs/style-guide.md` v1.5
 
@@ -136,7 +136,7 @@ architectuurwijziging, `docs/prd.md` alleen bij scopewijziging.
 **Afsluiten:** `/summary` — die bevat de volledige 7-staps flow, inclusief de ground-truth-meting
 en de validatiegate. Niet hier dupliceren.
 
-**Sessie counter:** 235
+**Sessie counter:** 239
 
 <!-- Onderhoudsnotitie (wordt niet in context geladen):
      Dit bestand is de altijd-geladen laag. Houd het onder 150 regels — validate-docs.sh
@@ -146,5 +146,5 @@ en de validatiegate. Niet hier dupliceren.
 
 ---
 
-**Last updated:** 23 sep 2026 (Sessie 235 — een niet-gesloten `<main>` sluit de parser stil bij `</body>`; de footer erfde daardoor de breedte van de blogcontainer. Volledig: `docs/sessions/current.md`)
-**Version:** 6.08 (Sessie 235 — een guard die uit één incident geboren is, bewaakt dat incident: de tagbalans-check telde sinds Sessie 138 alleen `<div>`. Historie: `docs/sessions/current.md`)
+**Last updated:** 25 sep 2026 (Sessie 239 — het affiche blijft na de vergelijking met pixelstad en teletekst; de hero kreeg een instappunt. Volledig: `docs/sessions/current.md`)
+**Version:** 6.09 (Sessie 239 — een teller die elementen afloopt ziet `::before` niet: een rood merkteken ontweek zo de één-drager-regel. Historie: `docs/sessions/current.md`)

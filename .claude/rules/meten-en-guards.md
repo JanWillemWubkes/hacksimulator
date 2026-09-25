@@ -426,3 +426,24 @@ expect(fs.existsSync(HIER), `${HIER} bestaat niet — cwd is ${WORTEL}`).toBe(tr
 **`-g` matcht de vólledige titel, inclusief het describe-blok.** `-g "^/index.html"` vindt dus
 niets en geeft `exit 1` met `Error: No tests found` — dat leest als een faler terwijl er niets
 gemeten is. Zelfde klasse als §20: eis een positief eindblok vóór je een uitkomst gelooft.
+
+## 26. Een teller die elementen afloopt, ziet `::before` en `::after` niet (Sessie 239)
+
+`document.querySelectorAll('*')` levert elementen, en `getComputedStyle(el)` geeft de stijl
+van het element zelf. Een rood vierkantje dat in `::before` getekend wordt, bestaat voor
+zo'n sweep niet. `hero-accent-budget.spec.js` bewaakt "hoogstens één rode drager per scherm",
+en het "volgende"-merkteken van de chips ontweek die regel sinds de bouw van het affiche. Het
+kwam pas boven toen de markering naar `box-shadow` op het element zelf verhuisde, en dat
+gebeurde bij toeval.
+
+```js
+for (const pseudo of ['::before', '::after']) {
+  const ps = getComputedStyle(el, pseudo);
+  if (ps.content === 'none' || ps.display === 'none') continue;   // bestaat niet
+  if (NEON.test(ps.backgroundColor) || NEON.test(ps.boxShadow) /* … randen, color */) props.push(pseudo);
+}
+```
+
+Dit is §19 in een andere vorm: de populatie "elementen" is niet de klasse "dingen die kleur
+op het scherm zetten". Het bewijs is een mutant die precies het oude vierkantje terugzet; die
+moet vuren met `[::before]` in de melding, niet op een andere tak.
