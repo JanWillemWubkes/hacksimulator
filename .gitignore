@@ -89,3 +89,5 @@ debug-*.html
 
 # Werkmap van de Matt Pocock-skills (specs/tickets per feature) — bewust lokaal
 .scratch/
+# Runtime-state van de beslispagina-server (pid, poort, heartbeat): output, geen invoer.
+.impeccable/questions/

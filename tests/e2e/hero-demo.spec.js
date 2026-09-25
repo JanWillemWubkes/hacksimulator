@@ -726,22 +726,24 @@ test.describe('Hero-terminal — de cursor staat bij de tekst', () => {
 });
 
 // ===========================================================================
-// De herschikte hero (Sessie 236)
+// De herschikte hero (Sessie 236, omgedraaid in sessie 2b)
 //
-// De hero stond als twee kolommen van gelijk gewicht: links een kop die vertelde wat
-// rechts al te zien was. Sinds deze sessie speelt de terminal over de volle breedte en
-// ondertitelt de tekst eronder. Twee condities die daarbij hoorden waren tot nu toe
-// notities in een CSS-commentaar; hieronder zijn het asserties.
+// Sessie 236 zette de terminal boven de kop: in de tweekoloms-hero vertelde de kop links
+// wat rechts al te zien was. In het affiche bleek het omgekeerde het probleem. Gemeten
+// op 1440x900: zeven lagen van gelijk gewicht en het enige grote typografische moment
+// (de kop, 761-888) plus de rode actie tegen de onderrand; op 375px stond de kop op
+// y=947. Geen instappunt. De kop staat nu bovenaan als het beeld van het affiche, met de
+// actie ernaast; de terminal is het bewijs eronder. De reden van Sessie 236 (twee
+// kolommen van gelijk gewicht) bestaat niet meer: kop en terminal staan onder elkaar.
 // ===========================================================================
 
 test.describe('Hero-volgorde en mobiele bereikbaarheid', () => {
   test.describe.configure({ timeout: 120_000 });
 
-  test('de terminal staat vóór de kop, in de DOM én op het scherm', async ({ page }) => {
-    // Geen `order:`-truc: die laat de focusvolgorde achter bij de layout. Er stond er
-    // wél een (op .hero-terminal-col, onder 768px) die de terminal ná de kop zette —
-    // met een commentaar dat de oude volgorde als bewijs aanhaalde. Beide assertie-
-    // richtingen staan hier, zodat een herintroductie op één van de twee rood wordt.
+  test('de kop staat vóór de terminal, in de DOM én op het scherm', async ({ page }) => {
+    // Geen `order:`-truc: die laat de focusvolgorde achter bij de layout. Beide
+    // assertierichtingen staan hier, zodat een herintroductie op één van de twee rood
+    // wordt. De actie hoort bij de kop: ook zij staat boven de terminal.
     for (const viewport of [{ width: 1440, height: 900 }, { width: 375, height: 812 }]) {
       await page.setViewportSize(viewport);
       await page.goto('/index.html');
@@ -749,16 +751,20 @@ test.describe('Hero-volgorde en mobiele bereikbaarheid', () => {
       const m = await page.evaluate(() => {
         const term = document.querySelector('.hero-terminal-col');
         const tekst = document.querySelector('.hero-text');
+        const cta = document.querySelector('#hero a.btn-cta');
         return {
-          domVolgorde: term.compareDocumentPosition(tekst) & Node.DOCUMENT_POSITION_FOLLOWING ? 'terminal-eerst' : 'tekst-eerst',
+          domVolgorde: tekst.compareDocumentPosition(term) & Node.DOCUMENT_POSITION_FOLLOWING ? 'tekst-eerst' : 'terminal-eerst',
           terminalTop: Math.round(term.getBoundingClientRect().top),
           tekstTop: Math.round(tekst.getBoundingClientRect().top),
+          ctaBodem: Math.round(cta.getBoundingClientRect().bottom),
         };
       });
 
-      expect(m.domVolgorde, `@${viewport.width}px: DOM-volgorde`).toBe('terminal-eerst');
-      expect(m.terminalTop, `@${viewport.width}px: terminal (${m.terminalTop}) hoort boven de tekst (${m.tekstTop}) te staan`)
-        .toBeLessThan(m.tekstTop);
+      expect(m.domVolgorde, `@${viewport.width}px: DOM-volgorde`).toBe('tekst-eerst');
+      expect(m.tekstTop, `@${viewport.width}px: kop (${m.tekstTop}) hoort boven de terminal (${m.terminalTop}) te staan`)
+        .toBeLessThan(m.terminalTop);
+      expect(m.ctaBodem, `@${viewport.width}px: de actie (bodem ${m.ctaBodem}) hoort boven de terminal (${m.terminalTop}) te staan`)
+        .toBeLessThanOrEqual(m.terminalTop);
     }
   });
 

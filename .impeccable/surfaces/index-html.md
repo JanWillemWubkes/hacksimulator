@@ -43,19 +43,26 @@ neo-grotesk op afficheschaal, opgebouwd op het raster; JetBrains Mono alleen bin
 terminal en voor indexnummers. Expliciet niet: scanlines, glow, groen-op-zwart, matrixregen,
 mascottes, badges op de voorgrond.
 
-**STORY.** De bezoeker ziet in een scherm een echte terminal waarvan elke regel in het
-Nederlands wordt uitgelegd, begrijpt via het netwerkdiagram wat een scan eigenlijk doet,
+**STORY.** De bezoeker leest eerst wat dit is, ziet dan in hetzelfde scherm een echte
+terminal waarvan elke regel in het Nederlands wordt uitgelegd, begrijpt via het netwerkdiagram wat een scan eigenlijk doet,
 gelooft dat hij hier niets kan breken, en opent de simulator. Wie twijfelt tikt eerst een
 commando en ziet het diagram antwoorden.
 
-**FIRST VIEWPORT.** Maximaal 1400px, 12 kolommen, haarlijnen zichtbaar. Bovenaan links de
-terminalmodule over zeven kolommen met de nmap-uitvoer; rechts daarvan, op dezelfde
-rasterrijen, de Nederlandse glos per regel. Daaronder over de volle breedte het
-netwerkdiagram: de gesimuleerde host als blok, de gevonden poorten als uitsparingen die
-invers oplichten, gelabeld "gesimuleerd netwerk". Daaronder de zes commandochips met
-herkomstlabel, dan de kop op afficheschaal als ondertiteling, dan de enige rode actie:
-"Start de simulator", met "geen account nodig" ernaast. Onder 768px: een kolom, glos onder
-zijn regel, diagram behoudt zijn raster op kleinere schaal.
+**FIRST VIEWPORT.** Maximaal 1400px, 12 kolommen, haarlijnen zichtbaar. Bovenaan de kop
+op afficheschaal over negen kolommen: het instappunt en het beeld van het affiche. Vanaf
+1280px staat de enige rode actie, "Start de simulator" met "geen account nodig", in de
+laatste drie kolommen op de onderste kopregel, en de ondertitel onder de kop; daaronder
+alles onder elkaar. Dan links de terminalmodule over zeven kolommen met de nmap-uitvoer,
+rechts daarvan op dezelfde rasterrijen de Nederlandse glos per regel. Direct onder de
+invoerregel de zes commandochips als knoppen (inktkader, index 01-06, herkomstlabel),
+met "Probeer:" en de proefversiezin erboven. Als laatste het netwerkdiagram in één zin:
+jouw machine, een scan-pijl, en het routerblok met de twaalf poorten als sleuven erin;
+één onderschrift zegt dat een gevulde poort open staat. Onder 768px: een kolom, glos
+onder zijn regel, de scan-pijl verticaal.
+Herzien in sessie 2b (25 sep 2026): de kop stond eerst onderaan als ondertiteling. Gemeten
+gevolg: zeven lagen van gelijk gewicht, kop en actie tegen de onderrand (761-888 op
+1440x900, y=947 op 375px), en diagram en chips in dezelfde celvorm met dezelfde
+vierkantjes, zodat ze als één tabel lazen.
 
 **FORM.** Vervanging van de visuele wereld (redesign), geen verfijning van de vorige.
 Kandidaat 3 van 7 op de eigen lijst ("Crouwel / Total Design"), toegewezen door de loting;

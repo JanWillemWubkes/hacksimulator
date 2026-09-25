@@ -663,9 +663,12 @@ body.home .af-term .hero-input:focus-visible {
 }
 
 /* ---------- Chips met herkomst ---------- */
+/* Direct onder de invoerregel: ze horen bij de terminal. Knoppen hebben een inktkader van
+   2px en een schaduwloze inversie; het diagram eronder heeft géén celkaders, zodat
+   klikbaar en tekening niet op elkaar lijken (sessie 2b: ze lazen als één tabel). */
 body.home .af-chips-rij {
   grid-column: 1 / -1;
-  margin-top: 16px;
+  margin-top: 20px;
   padding: 0;
   background: none;
   border: 0;
@@ -674,25 +677,22 @@ body.home .af-chips-rij {
 .af-chips {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  border-top: 1px solid var(--af-lijn-sterk);
-  border-left: 1px solid var(--af-lijn-sterk);
+  gap: 8px;
 }
 
 body.home .hero-chip {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 2px;
+  display: grid;
+  grid-template-columns: 3ch minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: 8px;
+  align-content: center;
   min-height: 60px;
-  padding: 8px var(--af-cel) 8px calc(var(--af-cel) + 16px);
+  padding: 8px var(--af-cel);
   box-sizing: border-box;
   background: var(--af-papier);
   color: var(--af-inkt);
-  border: 0;
-  border-right: 1px solid var(--af-lijn-sterk);
-  border-bottom: 1px solid var(--af-lijn-sterk);
+  border: 2px solid var(--af-inkt);
   border-radius: 0;
   box-shadow: none;
   text-align: left;
@@ -700,7 +700,17 @@ body.home .hero-chip {
   transition: background-color 160ms var(--af-ease), color 160ms var(--af-ease);
 }
 
+.af-chip-nr {
+  grid-row: 1 / 3;
+  align-self: center;
+  position: relative;
+  font-family: var(--af-mono);
+  font-size: var(--af-klein);
+  color: var(--af-inkt-2);
+}
+
 .af-chip-cmd {
+  grid-column: 2;
   font-family: var(--af-mono);
   font-size: 0.86rem;
   font-weight: 700;
@@ -708,33 +718,34 @@ body.home .hero-chip {
 }
 
 .af-chip-herkomst {
+  grid-column: 2;
   font-family: var(--af-tekst);
   font-size: 0.72rem;           /* 13px */
   line-height: 1.3;
   color: var(--af-inkt-2);
 }
 
-/* Het merkteken: hol vierkant = nog niet, inkt = gedaan, rood = de volgende. Vorm én
-   kleur, zodat de toestand niet op kleur alleen leunt. */
-body.home .hero-chip::before {
-  content: '';
+/* De volgende: een inkten balk links. Niet rood — de actie staat sinds sessie 2b in
+   hetzelfde scherm, en rood is per scherm één drager: de primaire actie
+   (hero-accent-budget.spec.js). Het oude rode vierkantje ontweek die telling omdat het in
+   ::before stond; de spec telt pseudo-elementen nu mee. */
+body.home .hero-chip.is-next {
+  box-shadow: inset 6px 0 0 var(--af-inkt);
+}
+
+/* Gedaan: het nummer maakt plaats voor [✓]. `visibility` en niet `display`, zodat de
+   kolom niet verspringt; het vinkje staat over dezelfde plek. */
+body.home .hero-chip.is-done .af-chip-nr {
+  visibility: hidden;
+}
+
+body.home .hero-chip.is-done .af-chip-nr::after {
+  content: '[✓]';
+  visibility: visible;
   position: absolute;
-  left: var(--af-cel);
-  top: 50%;
-  width: 8px;
-  height: 8px;
-  margin-top: -4px;
-  box-sizing: border-box;
-  border: 1px solid var(--af-inkt);
-}
-
-body.home .hero-chip.is-done::before {
-  background: var(--af-inkt);
-}
-
-body.home .hero-chip.is-next::before {
-  background: var(--af-rood);
-  border-color: var(--af-rood);
+  left: 0;
+  top: 0;
+  color: var(--af-inkt);
 }
 
 body.home .hero-chip:hover,
@@ -742,51 +753,65 @@ body.home .hero-chip:focus-visible {
   background: var(--af-inkt);
   color: var(--af-papier);
   transform: none;
-  box-shadow: none;
 }
 
 body.home .hero-chip:hover .af-chip-herkomst,
-body.home .hero-chip:focus-visible .af-chip-herkomst {
+body.home .hero-chip:focus-visible .af-chip-herkomst,
+body.home .hero-chip:hover .af-chip-nr,
+body.home .hero-chip:focus-visible .af-chip-nr,
+body.home .hero-chip:hover .af-chip-nr::after,
+body.home .hero-chip:focus-visible .af-chip-nr::after {
   color: var(--af-papier);
 }
 
-body.home .hero-chip:hover::before,
-body.home .hero-chip:focus-visible::before {
-  border-color: var(--af-papier);
-}
-
-.af-chips-uitleg {
+.af .af-chips-uitleg {
   margin: 0;
-  padding-top: 6px;
+  padding-bottom: 8px;
   font-size: var(--af-klein);
   color: var(--af-inkt-2);
+  max-width: none;
+}
+
+.af-chips-uitleg strong {
+  color: var(--af-inkt);
 }
 
 /* ---------- Het netwerkdiagram ---------- */
+/* Eén zin: jouw machine — scan — de router, met zijn poorten als sleuven ín het blok.
+   Alleen de blokranden zijn inkt; de sleuven hebben geen kader, zodat ze niet op de
+   chips hierboven lijken. Actief = de kopregel van het blok inverteert, niet het hele
+   blok: anders zou een open poort in een gevuld blok leeg moeten ogen, en dan klopt
+   "gevuld = open" niet meer. Het onderschrift zegt "gevuld", niet "zwart": in het
+   donkere thema is een open poort licht. */
 .af-net {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  align-items: stretch;
-  margin-top: 12px;
+  align-items: start;
+  margin-top: 28px;
 }
 
 .af-node {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 2px;
-  min-height: 52px;
-  padding: 6px var(--af-cel);
-  box-sizing: border-box;
   border: 1px solid var(--af-inkt);
   background: var(--af-papier);
   color: var(--af-inkt);
-  transition: background-color var(--af-registratie) var(--af-ease), color var(--af-registratie) var(--af-ease);
 }
 
-.af-node--jij { grid-column: 1 / 5; }
-.af-node--host { grid-column: 7 / -1; }
+.af-node--jij { grid-column: 1 / 4; }
+.af-node--host { grid-column: 6 / -1; }
+
+.af-node-kop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 12px;
+  min-height: 48px;
+  padding: 10px var(--af-cel);
+  box-sizing: border-box;
+  transition: background-color var(--af-registratie) var(--af-ease), color var(--af-registratie) var(--af-ease);
+}
 
 .af-node-naam {
   font-family: var(--af-kop);
@@ -800,14 +825,15 @@ body.home .hero-chip:focus-visible::before {
   font-size: var(--af-klein);
 }
 
-.af-node.is-actief {
+.af-node.is-actief .af-node-kop {
   background: var(--af-inkt);
   color: var(--af-papier);
 }
 
 .af-lijn {
-  grid-column: 5 / 7;
+  grid-column: 4 / 6;
   position: relative;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -819,53 +845,51 @@ body.home .hero-chip:focus-visible::before {
   left: 0;
   right: 0;
   top: 50%;
-  border-top: 1px solid var(--af-inkt);
+  border-top: 2px solid var(--af-inkt);
+  margin-top: -1px;
 }
 
-/* Pijlpunt: twee lijnen van 1px, getekend, geen glyph. */
+/* Pijlpunt: twee lijnen, getekend, geen glyph. */
 .af-lijn::after {
   content: '';
   position: absolute;
-  right: 0;
+  right: 1px;
   top: 50%;
-  width: 8px;
-  height: 8px;
-  margin-top: -4px;
-  border-top: 1px solid var(--af-inkt);
-  border-right: 1px solid var(--af-inkt);
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  border-top: 2px solid var(--af-inkt);
+  border-right: 2px solid var(--af-inkt);
   transform: rotate(45deg);
-  transform-origin: center;
   box-sizing: border-box;
 }
 
 .af-lijn span {
   position: relative;
   padding: 0 8px;
-  margin-top: -28px;
   background: var(--af-papier);
+  font-family: var(--af-mono);
   font-size: var(--af-klein);
-  color: var(--af-inkt-2);
+  font-weight: 700;
+  color: var(--af-inkt);
 }
 
 .af-poorten {
-  grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  margin-top: 8px;
-  border-left: 1px solid var(--af-lijn-sterk);
+  gap: 4px;
+  padding: 0 var(--af-cel) var(--af-cel);
 }
 
 .af-poort {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 36px;
-  border-block: 1px solid var(--af-lijn-sterk);
-  border-right: 1px solid var(--af-lijn-sterk);
+  min-height: 30px;
   font-family: var(--af-mono);
-  font-size: var(--af-klein);
+  font-size: 0.78rem;
   color: var(--af-inkt-2);
-  background: var(--af-papier);
+  background: var(--af-papier-2);
   transition: background-color var(--af-registratie) var(--af-ease), color var(--af-registratie) var(--af-ease);
 }
 
@@ -879,43 +903,26 @@ body.home .hero-chip:focus-visible::before {
   transition: none;
 }
 
-.af-poorten-uitleg,
-.af-net-kop {
-  grid-column: 1 / 7;
+.af .af-net-kop {
+  grid-column: 6 / -1;
   margin: 0;
-  padding-top: 6px;
+  padding-top: 8px;
   font-size: var(--af-klein);
   color: var(--af-inkt-2);
-}
-
-.af-net-kop {
-  grid-column: 7 / -1;
-  text-align: right;   /* onderschrift, op de rij van de legenda */
-}
-
-.af-legenda {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  margin-right: 6px;
-  vertical-align: -1px;
-  border: 1px solid var(--af-inkt);
-  box-sizing: border-box;
-}
-
-.af-legenda--open {
-  background: var(--af-inkt);
+  max-width: none;
 }
 
 /* ---------- Kop en actie ---------- */
-/* De kop over negen kolommen, ondertitel en actie samen in de laatste drie, onderaan
-   uitgelijnd op de kop. Zo is de rij zo hoog als het hoogste van de twee, niet de som. */
+/* Het instappunt: de kop over negen kolommen, ondertitel en actie samen in de laatste
+   drie, onderaan uitgelijnd op de kop. Zo is de rij zo hoog als het hoogste van de twee,
+   niet de som. */
 .af-hero-tekst {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: subgrid;
   align-items: end;
-  margin-top: clamp(20px, 2.4vw, 32px);
+  padding-top: clamp(16px, 2.4vw, 36px);
+  margin-bottom: clamp(24px, 3vw, 44px);
 }
 
 .af-hero-tekst h1 {
@@ -944,6 +951,36 @@ body.home .hero-chip:focus-visible::before {
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
+}
+
+/* Desktop: de actie staat naast de kop, op zijn onderste regel; de ondertitel eronder,
+   onder de kop. Stond de ondertitel naast de kop, dan werd die kolom (vier regels + knop)
+   hoger dan de kop en zakte het instappunt 100px (gemeten: kop op 197 i.p.v. ~100).
+   `display: contents` en geen `order`: de DOM-volgorde kop → ondertitel → actie blijft de
+   leesvolgorde, en de actie is het enige focusbare element van de drie.
+   Pas vanaf 1280px: daaronder is de kolom naast de kop 3/12 van ~1000px en brak de knop
+   over twee regels (gemeten @1024). Het is ook de grens van de mobiele CTA-balk. */
+@media (min-width: 1280px) {
+  .af-hero-zij {
+    display: contents;
+  }
+
+  .af-hero-tekst h1 {
+    grid-row: 1;
+  }
+
+  .af .af-hero-sub {
+    grid-column: 1 / 9;
+    grid-row: 2;
+    padding-top: 16px;
+  }
+
+  .af-hero-zij .af-actie {
+    grid-column: 10 / -1;
+    grid-row: 1;
+    align-self: end;
+    padding-left: var(--af-cel);
+  }
 }
 
 /* ==================== Vier feiten ==================== */
@@ -1638,13 +1675,8 @@ body.home a.footer-donate:hover {
   }
 }
 
-/* ==================== Tablet ==================== */
-@media (max-width: 1023px) {
-  .af-kop h2,
-  .af-kop p {
-    grid-column: 1 / -1;
-  }
-
+/* ==================== Tot 1280px: kop en actie onder elkaar ==================== */
+@media (max-width: 1279px) {
   .af-hero-tekst h1,
   .af-hero-zij {
     grid-column: 1 / -1;
@@ -1657,6 +1689,14 @@ body.home a.footer-donate:hover {
 
   .af-chips {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ==================== Tablet ==================== */
+@media (max-width: 1023px) {
+  .af-kop h2,
+  .af-kop p {
+    grid-column: 1 / -1;
   }
 
   .af-feiten-zin,
@@ -1771,30 +1811,53 @@ body.home a.footer-donate:hover {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  /* Chips direct onder de invoer: hier is tikken goedkoper dan typen, en zo liggen ze op
-     elke gemeten telefoonmaat boven de vaste CTA-balk. `order` mag, want het diagram is
-     aria-hidden en heeft niets focusbaars: tab- en leesvolgorde blijven gelijk. */
   .af-net {
-    order: 1;
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    row-gap: 0;
   }
 
-  .af-node--jij { grid-column: 1 / 3; }
-  .af-node--host { grid-column: 3 / -1; margin-left: -1px; }
-  .af-lijn { display: none; }
+  /* Onder elkaar, dus de scan loopt omlaag: een verticale lijn met de pijlpunt op de
+     router. Een pijl naar rechts wees hier het scherm uit (gemeten @375). */
+  .af-node--jij,
+  .af-lijn,
+  .af-node--host { grid-column: 1 / -1; }
 
-  .af-poorten-uitleg,
-  .af-net-kop {
+  .af-lijn {
+    height: 44px;
+    justify-content: flex-start;
+    padding-left: calc(var(--af-cel) + 22px);
+  }
+
+  .af-lijn::before {
+    left: var(--af-cel);
+    right: auto;
+    top: 0;
+    bottom: 0;
+    margin: 0;
+    border-top: 0;
+    border-left: 2px solid var(--af-inkt);
+  }
+
+  .af-lijn::after {
+    right: auto;
+    left: calc(var(--af-cel) - 4px);
+    top: auto;
+    bottom: 1px;
+    margin: 0;
+    transform: rotate(135deg);
+  }
+
+  .af-lijn span {
+    padding: 0;
+    background: none;
+  }
+
+  .af .af-net-kop {
     grid-column: 1 / -1;
-    text-align: left;
   }
 
   .af-poorten {
     grid-template-columns: repeat(6, minmax(0, 1fr));
-  }
-
-  .af-poort:nth-child(n + 7) {
-    border-top: 0;
   }
 
   .af-transcript,

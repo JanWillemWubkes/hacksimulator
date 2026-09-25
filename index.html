@@ -192,17 +192,37 @@
   </div>
 
   <main class="af">
-    <!-- ===== HERO — het affiche (Sessie 238) =====
-         De terminal is een donkere module in een zichtbaar 12-koloms raster: zeven
-         kolommen breed, met de Nederlandse glos per regel op dezelfde rasterrij ernaast
-         (hero-registratie.js bouwt elke regel als één rij met twee cellen). Daaronder het
-         netwerkdiagram, dan de chips met hun herkomst, dan de kop als ondertiteling en de
-         enige rode actie van dit scherm.
+    <!-- ===== HERO — het affiche (Sessie 238, herschikt in sessie 2b) =====
+         Leesvolgorde = schermvolgorde = tabvolgorde, zonder `order`:
+         1. de kop op afficheschaal met de enige rode actie ernaast — het instappunt;
+         2. de terminal als bewijs, met de Nederlandse glos per regel op dezelfde rasterrij
+            (hero-registratie.js bouwt elke regel als één rij met twee cellen);
+         3. de chips direct eronder: dit kun je typen;
+         4. het netwerkdiagram: wat er gebeurt als je scant.
+         Tot sessie 2b stond de kop onderaan, als ondertiteling. Gemeten gevolg: zeven
+         lagen van gelijk gewicht en het enige grote typografische moment tegen de
+         onderrand (kop 761–888 op 1440×900, y=947 op 375px) — geen instappunt.
          Het <input> staat statisch in de HTML mét readonly: zonder JS ziet de bezoeker een
          niet-bewerkbaar veld (eerlijk) in plaats van een veld dat belooft te werken en niets
          doet. hero-repl.js haalt readonly weg zodra de bezoeker het veld aanraakt. -->
     <section id="hero" class="af-hero" aria-labelledby="hero-kop">
       <div class="af-raster af-hero-raster">
+        <div class="hero-text af-hero-tekst">
+          <h1 id="hero-kop">Leer ethisch hacken in een veilige Nederlandse terminal</h1>
+          <div class="af-hero-zij">
+            <p class="hero-subtitle af-hero-sub">
+              40+ commands uit de praktijk, met uitleg in gewoon Nederlands. Je kunt alles
+              uitproberen zonder echte gevolgen.
+            </p>
+            <div class="af-actie">
+              <a href="/terminal.html" class="btn-cta af-cta" data-terminal-cta="hero">
+                Start de simulator
+              </a>
+              <p class="cta-microcopy af-microcopy">Geen account nodig &mdash; direct beginnen</p>
+            </div>
+          </div>
+        </div>
+
         <div class="hero-terminal-col af-term-col">
           <p class="hero-terminal-hint af-hint">Deze terminal werkt echt &mdash; typ maar</p>
           <p class="af-glos-kop" aria-hidden="true">In gewoon Nederlands</p>
@@ -231,75 +251,64 @@
             </div>
           </div>
 
-          <!-- Het netwerk dat je niet kunt zien, op papier. Gebouwd in het raster zelf: twee
-               blokken en twaalf poortsleuven op twaalf kolommen. aria-hidden, want de
+          <!-- Zes tikbare suggesties met hun herkomst: categorie uit docs/commands-list.md,
+               niveau uit het leerpad verderop op deze pagina. Ze staan direct onder de
+               invoerregel omdat ze bij de terminal horen: dit kun je typen.
+               Het indexnummer is aria-hidden (de knopnaam is het command); de toestand
+               spreekt zonder eigen teken dat met het diagram kan botsen: de volgende krijgt
+               de rode rand van "jij bent aan zet", een gedane toont [✓].
+               NB: geen .btn-cta-klasse en geen link naar /terminal.html — dat zou het
+               sitebrede "één label per primaire CTA"-contract breken. -->
+          <div class="hero-demo-bar af-chips-rij">
+            <p class="hero-demo-uitleg af-chips-uitleg" id="hero-demo-uitleg">
+              <strong>Probeer:</strong> tik een command. Proefversie met 6 van de 40+ commands.
+            </p>
+            <div class="hero-chips af-chips" id="hero-chips">
+              <button type="button" class="hero-chip" data-command="ls"><span class="af-chip-nr" aria-hidden="true">01</span><span class="af-chip-cmd">ls</span><span class="af-chip-herkomst">bestanden · beginner</span></button>
+              <button type="button" class="hero-chip" data-command="cat notes.txt"><span class="af-chip-nr" aria-hidden="true">02</span><span class="af-chip-cmd">cat notes.txt</span><span class="af-chip-herkomst">bestanden · beginner</span></button>
+              <button type="button" class="hero-chip" data-command="nmap 192.168.1.1"><span class="af-chip-nr" aria-hidden="true">03</span><span class="af-chip-cmd">nmap 192.168.1.1</span><span class="af-chip-herkomst">netwerk · gevorderd</span></button>
+              <button type="button" class="hero-chip" data-command="whoami"><span class="af-chip-nr" aria-hidden="true">04</span><span class="af-chip-cmd">whoami</span><span class="af-chip-herkomst">systeem · beginner</span></button>
+              <button type="button" class="hero-chip" data-command="pwd"><span class="af-chip-nr" aria-hidden="true">05</span><span class="af-chip-cmd">pwd</span><span class="af-chip-herkomst">bestanden · beginner</span></button>
+              <button type="button" class="hero-chip" data-command="help"><span class="af-chip-nr" aria-hidden="true">06</span><span class="af-chip-cmd">help</span><span class="af-chip-herkomst">systeem · beginner</span></button>
+            </div>
+          </div>
+
+          <!-- Het netwerk dat je niet kunt zien, op papier: jouw machine, een scan, en de
+               router met zijn twaalf poorten als sleuven ín het blok. aria-hidden, want de
                terminaluitvoer hierboven is de tekstuele waarheid; dit is de tekening ervan.
+               Geen celkaders en geen legenda: de poorten mogen niet op de chips lijken, en
+               één onderschrift zegt wat zwart betekent.
                De IP-adressen komen uit de engine: 192.168.1.100 is jouw machine (ifconfig),
                192.168.1.1 het router-profiel van nmap.js met 53, 80 en 443 open. -->
           <div class="af-net" aria-hidden="true">
             <div class="af-node af-node--jij" data-node="jij">
-              <span class="af-node-naam">jouw machine</span>
-              <span class="af-node-adres">192.168.1.100</span>
+              <div class="af-node-kop">
+                <span class="af-node-naam">jouw machine</span>
+                <span class="af-node-adres">192.168.1.100</span>
+              </div>
             </div>
             <div class="af-lijn"><span>scan</span></div>
             <div class="af-node af-node--host" data-node="host">
-              <span class="af-node-naam">router</span>
-              <span class="af-node-adres">192.168.1.1</span>
+              <div class="af-node-kop">
+                <span class="af-node-naam">router</span>
+                <span class="af-node-adres">192.168.1.1</span>
+              </div>
+              <div class="af-poorten">
+                <span class="af-poort" data-poort="21">21</span>
+                <span class="af-poort" data-poort="22">22</span>
+                <span class="af-poort" data-poort="23">23</span>
+                <span class="af-poort" data-poort="25">25</span>
+                <span class="af-poort" data-poort="53">53</span>
+                <span class="af-poort" data-poort="80">80</span>
+                <span class="af-poort" data-poort="110">110</span>
+                <span class="af-poort" data-poort="143">143</span>
+                <span class="af-poort" data-poort="443">443</span>
+                <span class="af-poort" data-poort="445">445</span>
+                <span class="af-poort" data-poort="3306">3306</span>
+                <span class="af-poort" data-poort="8080">8080</span>
+              </div>
             </div>
-            <div class="af-poorten">
-              <span class="af-poort" data-poort="21">21</span>
-              <span class="af-poort" data-poort="22">22</span>
-              <span class="af-poort" data-poort="23">23</span>
-              <span class="af-poort" data-poort="25">25</span>
-              <span class="af-poort" data-poort="53">53</span>
-              <span class="af-poort" data-poort="80">80</span>
-              <span class="af-poort" data-poort="110">110</span>
-              <span class="af-poort" data-poort="143">143</span>
-              <span class="af-poort" data-poort="443">443</span>
-              <span class="af-poort" data-poort="445">445</span>
-              <span class="af-poort" data-poort="3306">3306</span>
-              <span class="af-poort" data-poort="8080">8080</span>
-            </div>
-            <p class="af-poorten-uitleg"><span class="af-legenda af-legenda--open"></span>open &nbsp; <span class="af-legenda"></span>dicht</p>
-            <p class="af-net-kop">Gesimuleerd netwerk &mdash; niets verlaat je browser</p>
-          </div>
-
-          <!-- Zes tikbare suggesties met hun herkomst: categorie uit docs/commands-list.md,
-               niveau uit het leerpad verderop op deze pagina. Ze zijn tegelijk de
-               begeleiding (de eerstvolgende draagt het rode merkteken), de eerlijke grens
-               van de demo (je ziet dat het er zes zijn) en de mobiele affordance.
-               NB: geen .btn-cta-klasse en geen link naar /terminal.html — dat zou het
-               sitebrede "één label per primaire CTA"-contract breken. -->
-          <div class="hero-demo-bar af-chips-rij">
-            <div class="hero-chips af-chips" id="hero-chips">
-              <button type="button" class="hero-chip" data-command="ls"><span class="af-chip-cmd">ls</span><span class="af-chip-herkomst">bestanden · beginner</span></button>
-              <button type="button" class="hero-chip" data-command="cat notes.txt"><span class="af-chip-cmd">cat notes.txt</span><span class="af-chip-herkomst">bestanden · beginner</span></button>
-              <button type="button" class="hero-chip" data-command="nmap 192.168.1.1"><span class="af-chip-cmd">nmap 192.168.1.1</span><span class="af-chip-herkomst">netwerk · gevorderd</span></button>
-              <button type="button" class="hero-chip" data-command="whoami"><span class="af-chip-cmd">whoami</span><span class="af-chip-herkomst">systeem · beginner</span></button>
-              <button type="button" class="hero-chip" data-command="pwd"><span class="af-chip-cmd">pwd</span><span class="af-chip-herkomst">bestanden · beginner</span></button>
-              <button type="button" class="hero-chip" data-command="help"><span class="af-chip-cmd">help</span><span class="af-chip-herkomst">systeem · beginner</span></button>
-            </div>
-            <p class="hero-demo-uitleg af-chips-uitleg" id="hero-demo-uitleg">
-              Proefversie met zes commands. De volledige simulator heeft er 40+ en een leerpad.
-            </p>
-          </div>
-        </div>
-
-        <!-- De ondertiteling. Staat ONDER de terminal, in de DOM en op het scherm:
-             leesvolgorde, tabvolgorde en visuele volgorde zijn hetzelfde. -->
-        <div class="hero-text af-hero-tekst">
-          <h1 id="hero-kop">Leer ethisch hacken in een veilige Nederlandse terminal</h1>
-          <div class="af-hero-zij">
-          <p class="hero-subtitle af-hero-sub">
-            40+ commands uit de praktijk, met uitleg in gewoon Nederlands. Je kunt alles
-            uitproberen zonder echte gevolgen.
-          </p>
-          <div class="af-actie">
-            <a href="/terminal.html" class="btn-cta af-cta" data-terminal-cta="hero">
-              Start de simulator
-            </a>
-            <p class="cta-microcopy af-microcopy">Geen account nodig &mdash; direct beginnen</p>
-          </div>
+            <p class="af-net-kop">Een gevulde poort staat open: een deur die de router openzet. Gesimuleerd &mdash; niets verlaat je browser.</p>
           </div>
         </div>
       </div>

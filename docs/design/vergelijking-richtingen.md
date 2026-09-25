@@ -1,7 +1,7 @@
 # Vergelijking van richtingen: affiche, pixelstad, teletekst
 
-**Status:** klaargezet op 24 sep 2026 (sessie 2 van het Impeccable-traject). Uitvoeren in de
-volgende sessie, **vóór** sessie 3 (finish review + DESIGN.md van het affiche).
+**Status:** uitgevoerd op 25 sep 2026 (sessie 2b). **Uitkomst: het affiche blijft.** De
+prototypebranches zijn verwijderd; zie "Uitkomst" onderaan.
 
 ## Waarom
 
@@ -72,12 +72,41 @@ schools of kinderlijk, te intimiderend.
 Uitkomst: één richting gaat door naar de echte bouw. Blijft het affiche, dan worden de
 prototypebranches verwijderd en volgt sessie 3 zoals gepland.
 
+## Uitkomst (25 sep 2026)
+
+De beschrijvingen uit sessie 1 bleken toch grotendeels bewaard, op een screenshot van de
+beslispagina: de teletekstkaart volledig, de eBoy-kaart rechts afgesneden. Daarmee zijn per
+richting contracten geschreven, bevestigd, en als wegwerpprototype van het eerste scherm
+gebouwd (lokale commits, nooit gepusht, daarna verwijderd).
+
+Gemeten op 1440x900 en 375x812: in alle drie nul consolefouten en geen horizontale scroll;
+alle tekst haalt 7:1 of meer, de rode CTA's 5,79 (pixelstad) en 5,25 (teletekst) als grote
+vetgedrukte letter (lat 4,5).
+
+| | herkenning | productduidelijkheid | voelt fout |
+|---|---|---|---|
+| affiche | zwak (Crouwel kent vrijwel niemand) | sterk | laag |
+| pixelstad | middel | zwak: terminal pas op y=714/900 (mobiel 1034), en een klik in de terminal scrollt de stad uit beeld | hoog op "kinderlijk" |
+| teletekst | sterk (888 kent iedereen) | sterk: alles in één scherm, ook op 375px | middel op "hackerkostuum" (zwart + mono) |
+
+Op de twee vooraf vastgelegde assen won teletekst. **De eigenaar koos het affiche**:
+teletekst vond hij visueel niet mooi ondanks de herkenbaarheid, de pixelstad (de animatie
+wel leuk) te onduidelijk voor het product. Dat is een geldige weging: het criterium was een
+hulpmiddel tegen "welke vind ik vandaag het mooist", geen vervanging van het oordeel van de
+eigenaar over zijn eigen merk.
+
 ## Aanpassingspunten voor het affiche
 
-De eigenaar heeft na sessie 2 punten gezien die hij wil aanpassen. Die horen hier genoteerd
-te worden, zodat ze niet verdampen, en worden alleen uitgevoerd als het affiche wint:
+Van de eigenaar na de vergelijking, uitgevoerd in sessie 2b:
 
-- _(nog in te vullen door de eigenaar)_
+- **De hero mist een blikvanger.** Oorzaak: de kop, het enige grote typografische moment,
+  stond onderaan (761-888 op 1440x900, y=947 op 375px). Nu staat hij bovenaan, met de
+  rode actie ernaast; `hero-demo.spec.js` bewaakt de nieuwe volgorde.
+- **De hero is onoverzichtelijk, vooral de band diagram + poorten + legenda + chips.**
+  Oorzaken: diagram en chips hadden dezelfde celvorm; ■/□ betekende in de legenda
+  open/dicht en op de chips gedaan/nog niet; de poortenrij hing onder beide machines;
+  uitleg stond verspreid. Nu: chips direct onder de terminal als knoppen met index 01-06
+  en `[✓]`, het diagram als één zin met de poorten ín het routerblok en één onderschrift.
 
 Open punt uit de inspectieronde van sessie 2, voor de finish-reviewer: het invoerveld van
 het Brevo-formulier staat op desktop ~70px rechts van de privacyregels eronder.

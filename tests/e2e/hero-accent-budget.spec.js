@@ -88,6 +88,18 @@ async function telAccent(page, kleur = NEON_BRON) {
       if (NEON.test(cs.fill)) props.push('fill');
       if (NEON.test(cs.stroke)) props.push('stroke');
       if (NEON.test(cs.boxShadow)) props.push('box-shadow');
+      // Pseudo-elementen tellen mee: een rood vierkantje in ::before is net zo goed een
+      // drager. Tot sessie 2b keek deze teller er niet naar, en de "volgende"-chip droeg
+      // daar ongezien rood naast de primaire actie.
+      for (const pseudo of ['::before', '::after']) {
+        const ps = getComputedStyle(el, pseudo);
+        if (ps.content === 'none' || ps.display === 'none') continue;
+        if (NEON.test(ps.backgroundColor) || NEON.test(ps.color) || NEON.test(ps.boxShadow) ||
+            ['Top', 'Right', 'Bottom', 'Left'].some((z) => parseFloat(ps[`border${z}Width`]) > 0 &&
+              ps[`border${z}Style`] !== 'none' && NEON.test(ps[`border${z}Color`]))) {
+          props.push(pseudo);
+        }
+      }
       if (!props.length) return;
 
       // SVG-vormkinderen rollen op naar hun <svg>: vier rects in één icoon zijn één drager.
