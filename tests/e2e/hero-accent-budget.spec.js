@@ -110,7 +110,12 @@ async function telAccent(page, kleur = NEON_BRON) {
       const sleutel = `${naam(doel)}|${(doel.textContent || '').trim().slice(0, 16)}`;
       if (gezien.has(sleutel)) return;
       gezien.add(sleutel);
-      (doel.closest('.hero-terminal, .af-transcript, .af-specimen-cmds') ? binnen : buiten).push(`${sleutel} [${props.join(',')}]`);
+      // De glossen, de kolomkop en de uitnodiging staan in de DOM ín .hero-terminal (ze
+      // delen de rij met hun terminalregel), maar liggen op papier: daar geldt het budget.
+      // Tot sessie 241 telde een rode glos als "binnen" en ontsnapte hij aan de teller.
+      const inModule = doel.closest('.hero-terminal, .af-transcript, .af-specimen-cmds')
+        && !doel.closest('.reg-glos, .af-glos-kop, .af-hint');
+      (inModule ? binnen : buiten).push(`${sleutel} [${props.join(',')}]`);
     });
     return { buiten, binnen };
   }, kleur);

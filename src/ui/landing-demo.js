@@ -154,6 +154,11 @@ window.landingDemo = {
 // CTA). Bij "midden vrij" geldt: balk verborgen ⟺ CTA-midden aantikbaar — één conditie,
 // dus geen gat en geen overlap. Geverifieerd over 890 posities à 10px in drie engines.
 //
+// Uitzondering (sessie 241): de balk blijft ook weg zolang hij een chip van de hero zou
+// afdekken (zie zouChipAfdekken). In dat venster van 10-30px scroll is geen van beide
+// "Start"-knoppen aantikbaar, maar de chips zijn het wel: die zijn daar de actie. Een
+// afgedekte chip is erger, want een tik erop navigeerde weg in plaats van te proberen.
+//
 // Zonder JS blijft de CSS-default staan: dan gedraagt de pagina zich als vóór Sessie 216.
 function initCtaBar() {
   const balk = document.querySelector('.mobile-cta-bar');
@@ -189,8 +194,23 @@ function initCtaBar() {
     return mid >= navHoogte && mid <= balkRand();
   }
 
+  // De balk dekt nooit een chip van de hero af. Bij "midden vrij" alleen bleef er een smal
+  // venster over: de hero-CTA net onder de navbar, de onderste chiprij nog in de balkzone.
+  // Gemeten per 10px over drie engines en twee telefoonmaten: 22 scrollposities met een
+  // afgedekte chip in de layout van sessie 240, 3 in die van 241 — nooit nul. In dat
+  // venster zijn de chips zelf de actie, dus de balk wacht tot ze de zone uit zijn.
+  const chips = [...document.querySelectorAll('.hero-chip')];
+
+  function zouChipAfdekken() {
+    const rand = balkRand();
+    return chips.some((c) => {
+      const r = c.getBoundingClientRect();
+      return r.height > 0 && r.bottom > rand && r.top < window.innerHeight;
+    });
+  }
+
   function herbeoordeel() {
-    balk.dataset.state = doelen.some(middenVrij) ? 'verborgen' : 'zichtbaar';
+    balk.dataset.state = doelen.some(middenVrij) || zouChipAfdekken() ? 'verborgen' : 'zichtbaar';
   }
 
   // De observer is het "er is iets veranderd"-signaal; `middenVrij()` is de regel.
@@ -207,6 +227,14 @@ function initCtaBar() {
     threshold: 0.5
   });
   doelen.forEach((el) => observer.observe(el));
+
+  // De chips kruisen de balkrand met hun randen, niet hun midden: threshold 0 en 1 vuren
+  // precies wanneer een chip de zone in- of uitgaat.
+  const chipObserver = new IntersectionObserver(herbeoordeel, {
+    rootMargin: `0px 0px -${window.innerHeight - balkRand()}px 0px`,
+    threshold: [0, 1]
+  });
+  chips.forEach((el) => chipObserver.observe(el));
 
   // Eén synchrone beoordeling bij init: de eerste IO-callback komt pas in de volgende
   // rendering-update, en dat is één frame waarin de balk zichtbaar over de chips flitst.

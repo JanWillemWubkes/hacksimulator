@@ -674,6 +674,10 @@ test.describe('Hero-terminal — de uitnodiging om te typen', () => {
       // en die toetsen we in beide richtingen. Gemeten @375x812 in de herschikte hero:
       // CTA-midden op y=809, balkrand op y=747 — dus níét vrij, dus balk zichtbaar.
       // Dat is de balk die zijn werk doet, niet een regressie.
+      // Sinds sessie 241 blijft de balk óók weg zolang hij een chip zou afdekken. Op
+      // scrollpositie 0 staat op geen van deze maten een chip in de balkzone (gemeten),
+      // dus hier geldt de oorspronkelijke invariant nog letterlijk; het chipvenster zelf
+      // bewaakt "geen enkele chip valt onder de mobiele CTA-balk" hieronder.
       expect(meting.barState, meting.middenVrij
         ? 'CTA-midden is aantikbaar, dus de balk hoort weg te zijn'
         : 'CTA-midden is niet aantikbaar, dus de balk hoort er te staan')
@@ -812,14 +816,22 @@ test.describe('Hero-volgorde en mobiele bereikbaarheid', () => {
     // `whoami` en `pwd` onaantikbaar werden en een tik daar wégnavigeerde. In de
     // herschikte hero staat de terminal bovenaan en is die aanleiding verdwenen, dus de
     // hint is terug. De conditie blijft: zij hoort hier, niet in een CSS-commentaar.
+    //
+    // Sessie 241: tot hier meet deze test op vijf posities (0, 300, 600, 900, 1400), en
+    // "op geen enkele scrollpositie" gold nooit. Per 10px gemeten dekte de balk in de
+    // layout van sessie 240 chips af op 22 posities (drie engines, twee maten), steeds in
+    // het venster waarin de hero-CTA net onder de navbar schoof. De vijf punten misten
+    // ze; een krappere hero verschoof het venster naar precies y=300. Nu een sweep, en
+    // landing-demo.js houdt de balk weg zolang hij een chip zou afdekken.
     for (const viewport of [{ width: 375, height: 812 }, { width: 390, height: 844 }]) {
       await page.setViewportSize(viewport);
       await page.goto('/index.html');
       await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation:none!important}' });
 
-      for (const y of [0, 300, 600, 900, 1400]) {
+      let balkGezien = 0;
+      for (let y = 0; y <= 1400; y += 10) {
         await page.evaluate((sy) => window.scrollTo(0, sy), y);
-        await page.waitForTimeout(300);
+        await page.waitForTimeout(80);
 
         const m = await page.evaluate(() => {
           const bar = document.querySelector('.mobile-cta-bar');
@@ -850,7 +862,10 @@ test.describe('Hero-volgorde en mobiele bereikbaarheid', () => {
         expect(m.afgedekt, `@${viewport.width}px scroll ${y}: chip(s) onder de CTA-balk`).toEqual([]);
         expect(m.balkZichtbaar || m.ctaInBeeld,
           `@${viewport.width}px scroll ${y}: geen enkele primaire actie bereikbaar`).toBe(true);
+        if (m.balkZichtbaar) balkGezien++;
       }
+      // Zelfbewakend: een balk die nooit verschijnt dekt ook nooit iets af.
+      expect(balkGezien, `@${viewport.width}px: de balk verscheen op geen enkele positie`).toBeGreaterThan(0);
     }
   });
 });
@@ -980,5 +995,71 @@ test.describe('Het diagram antwoordt op elk command', () => {
     s = await staat(page);
     expect(s.actief, 'help laat het diagram in rust').toEqual([]);
     expect(s.open.length, 'een scan is kennis: open poorten blijven open').toBe(3);
+  });
+});
+
+// De vouw (sessie 241). Het memorabele moment is dat nmap de poorten in het diagram
+// opent; staat het diagram onder de vouw, dan gebeurt dat buiten beeld. Gemeten vóór de
+// fix: onderkant .af-net op 949/900 (1440), 927/800 (1280), 1071/768 (1024). Daarna
+// 788 en 770. Op 1024 is de afspraak kleiner: de hele terminal, tot en met de invoerregel
+// en zijn uitnodiging, want dat is het bewijs en het instappunt.
+test.describe('De vouw: terminal en diagram samen in beeld', () => {
+  async function meet(page, viewport) {
+    await page.addInitScript(() => {
+      localStorage.setItem('hacksim_analytics_consent', JSON.stringify({ necessary: true, analytics: false }));
+    });
+    await page.setViewportSize(viewport);
+    await page.goto('/index.html');
+    await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation:none!important}' });
+    return page.evaluate(() => {
+      const r = (s) => document.querySelector(s).getBoundingClientRect();
+      const body = document.querySelector('.af-term .terminal-body');
+      const poorten = [...document.querySelectorAll('.af-poort')].map((p) => p.getBoundingClientRect());
+      return {
+        vh: window.innerHeight,
+        net: r('.af-net').bottom,
+        poortBodem: Math.max(...poorten.map((p) => p.bottom)),
+        poorten: poorten.filter((p) => p.height > 0).length,
+        rij: parseFloat(getComputedStyle(body).lineHeight),
+        bodyHoogte: body.clientHeight,
+        invoer: r('.af-term .terminal-input-line'),
+        hint: r('.af-hint'),
+        glosKop: r('.af-glos-kop'),
+        termKop: r('.af-term-kop')
+      };
+    });
+  }
+
+  for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 800 }]) {
+    test(`@${viewport.width}x${viewport.height} staan de poorten van de router boven de vouw`, async ({ page }) => {
+      const m = await meet(page, viewport);
+      // Zelfbewakend: twaalf zichtbare poorten, en de terminal houdt zijn zeven regels.
+      // Zonder die tweede tak haal je de vouw door de terminal in te korten.
+      expect(m.poorten, 'niet alle twaalf poorten renderen').toBe(12);
+      expect(m.bodyHoogte, `de terminal is geen 7 regels van ${m.rij}px meer`).toBe(7 * m.rij + 16);
+      expect(m.net, `diagram eindigt op ${Math.round(m.net)}, de vouw ligt op ${m.vh}`).toBeLessThanOrEqual(m.vh);
+      expect(m.poortBodem).toBeLessThanOrEqual(m.vh);
+    });
+  }
+
+  test('@1024x768 staat de hele terminal met zijn uitnodiging boven de vouw', async ({ page }) => {
+    const m = await meet(page, { width: 1024, height: 768 });
+    expect(m.invoer.height, 'invoerregel zonder hoogte').toBeGreaterThan(0);
+    expect(m.invoer.bottom, `invoerregel eindigt op ${Math.round(m.invoer.bottom)}`).toBeLessThanOrEqual(m.vh);
+    expect(m.hint.bottom, `uitnodiging eindigt op ${Math.round(m.hint.bottom)}`).toBeLessThanOrEqual(m.vh);
+  });
+
+  // De kolomkop en de uitnodiging kregen hun ruimte terug door op de rij van hun
+  // terminaltegenhanger te gaan staan; zakt een van beide terug naar een eigen rij, dan
+  // is de vouw weer een regel kwijt.
+  test('@1280 staan kolomkop en uitnodiging op de rij van terminalkop en invoerregel', async ({ page }) => {
+    const m = await meet(page, { width: 1280, height: 800 });
+    const midden = (b) => b.top + b.height / 2;
+    expect(m.glosKop.left, 'kolomkop staat niet rechts van de module').toBeGreaterThanOrEqual(m.termKop.right - 1);
+    expect(Math.abs(midden(m.glosKop) - midden(m.termKop)), 'kolomkop niet op de rij van de terminalkop')
+      .toBeLessThanOrEqual(2);
+    expect(m.hint.left, 'uitnodiging staat niet rechts van de module').toBeGreaterThanOrEqual(m.invoer.right - 1);
+    expect(Math.abs(midden(m.hint) - midden(m.invoer)), 'uitnodiging niet op de rij van de invoerregel')
+      .toBeLessThanOrEqual(2);
   });
 });

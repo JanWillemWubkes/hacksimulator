@@ -67,7 +67,7 @@
        body.home: hij herdefinieert de gedeelde tokens voor navbar, footer en .btn-cta
        in plaats van tegen hun regels te vechten, en draagt de secties zelf in eigen
        af-klassen. De andere pagina's laden hem niet. -->
-  <link rel="stylesheet" href="styles/affiche.css?v=3">
+  <link rel="stylesheet" href="styles/affiche.css?v=4">
 
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
   <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
@@ -224,14 +224,18 @@
         </div>
 
         <div class="hero-terminal-col af-term-col">
-          <p class="hero-terminal-hint af-hint">Deze terminal werkt echt &mdash; typ maar</p>
-          <p class="af-glos-kop" aria-hidden="true">In gewoon Nederlands</p>
-
+          <!-- Kop, uitvoer en invoer hebben elk hun Nederlandse tegenhanger op dezelfde
+               rasterrij: de kolomkop naast de terminalkop, de glos naast elke regel, en de
+               uitnodiging naast de invoerregel. Auto-placement zet ze paarsgewijs op één rij
+               (kolom 1-7 en 8-12). Tot sessie 241 stonden kolomkop en uitnodiging op een eigen
+               rij boven de terminal en herhaalde een "Probeer:"-regel eronder dezelfde
+               boodschap; samen kostten die 56px, en daarmee viel het diagram onder de vouw. -->
           <div class="hero-terminal af-term" role="group" aria-label="Terminal demonstratie">
             <div class="af-term-kop" aria-hidden="true">
-              <span>hacker@hacksim: ~</span>
-              <span>demo</span>
+              <span class="af-term-titel">hacker@hacksim: ~</span>
+              <span id="hero-demo-omvang">proefversie &middot; 6 van de 40+ commands</span>
             </div>
+            <p class="af-glos-kop" aria-hidden="true">In gewoon Nederlands</p>
             <!-- aria-live blijft "off" zolang de auto-demo loopt; hero-repl.js zet hem op
                  "polite" bij overname. Anders leest een schermlezer de eindeloze lus voor. -->
             <div class="terminal-body af-term-body" id="hero-demo" role="log" aria-live="off">
@@ -246,9 +250,10 @@
               <input id="typing-target" class="hero-input" type="text" readonly
                      autocomplete="off" autocapitalize="off" autocorrect="off"
                      spellcheck="false" inputmode="text" enterkeyhint="go"
-                     aria-describedby="hero-demo-uitleg">
+                     aria-describedby="hero-demo-uitleg hero-demo-omvang">
               <span class="cursor" aria-hidden="true">_</span>
             </div>
+            <p class="hero-terminal-hint af-hint" id="hero-demo-uitleg">Werkt echt: typ hier, of tik hieronder een command.</p>
           </div>
 
           <!-- Zes tikbare suggesties met hun herkomst: categorie uit docs/commands-list.md,
@@ -260,9 +265,6 @@
                NB: geen .btn-cta-klasse en geen link naar /terminal.html — dat zou het
                sitebrede "één label per primaire CTA"-contract breken. -->
           <div class="hero-demo-bar af-chips-rij">
-            <p class="hero-demo-uitleg af-chips-uitleg" id="hero-demo-uitleg">
-              <strong>Probeer:</strong> tik een command. Proefversie met 6 van de 40+ commands.
-            </p>
             <div class="hero-chips af-chips" id="hero-chips">
               <button type="button" class="hero-chip" data-command="ls"><span class="af-chip-nr" aria-hidden="true">01</span><span class="af-chip-cmd">ls</span><span class="af-chip-herkomst">bestanden · beginner</span></button>
               <button type="button" class="hero-chip" data-command="cat notes.txt"><span class="af-chip-nr" aria-hidden="true">02</span><span class="af-chip-cmd">cat notes.txt</span><span class="af-chip-herkomst">bestanden · beginner</span></button>
@@ -860,7 +862,7 @@
   </div>
 
   <!-- Hero Terminal Animation -->
-  <script src="/src/ui/landing-demo.js?v=3" type="module"></script>
+  <script src="/src/ui/landing-demo.js?v=4" type="module"></script>
 
   <!-- Interactieve hero-REPL (extern bestand: script-src heeft geen 'unsafe-inline',
        netlify.toml:127). Draait ná landing-demo.js, want die publiceert window.landingDemo. -->

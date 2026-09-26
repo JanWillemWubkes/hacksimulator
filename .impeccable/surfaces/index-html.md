@@ -53,12 +53,21 @@ op afficheschaal over negen kolommen: het instappunt en het beeld van het affich
 1280px staat de enige rode actie, "Start de simulator" met "geen account nodig", in de
 laatste drie kolommen op de onderste kopregel, en de ondertitel onder de kop; daaronder
 alles onder elkaar. Dan links de terminalmodule over zeven kolommen met de nmap-uitvoer,
-rechts daarvan op dezelfde rasterrijen de Nederlandse glos per regel. Direct onder de
-invoerregel de zes commandochips als knoppen (inktkader, index 01-06, herkomstlabel),
-met "Probeer:" en de proefversiezin erboven. Als laatste het netwerkdiagram in één zin:
-jouw machine, een scan-pijl, en het routerblok met de twaalf poorten als sleuven erin;
-één onderschrift zegt dat een gevulde poort open staat. Onder 768px: een kolom, glos
-onder zijn regel, de scan-pijl verticaal.
+rechts daarvan op dezelfde rasterrijen de Nederlandse glos per regel. Die grammatica geldt
+voor elke rij van de module: de kolomkop "In gewoon Nederlands" staat naast de
+terminalkop, en de uitnodiging ("Werkt echt: typ hier, of tik hieronder een command.") is
+de glos van de invoerregel, met dezelfde aanhaallijn. De terminalkop noemt de omvang
+("proefversie · 6 van de 40+ commands"). Direct onder de invoerregel de zes commandochips
+als knoppen (inktkader, index 01-06, herkomstlabel). Als laatste het netwerkdiagram in één
+zin: jouw machine, een scan-pijl, en het routerblok met de twaalf poorten als sleuven erin;
+één onderschrift zegt dat een gevulde poort open staat, vanaf 1280px in de kolom onder
+jouw machine, met zijn onderkant op die van de router. Onder 768px: een kolom, glos onder
+zijn regel, de uitnodiging onder de invoer, de scan-pijl verticaal.
+**De vouw (sessie 241):** op 1440x900 en 1280x800 staan terminal, chips en de poorten van de
+router samen boven de vouw (gemeten bodem 788 en 770; vóór 949 en 927). Op 1024x768 valt de
+vouw na de terminal: daar moeten kop, actie en de héle terminal met zijn uitnodiging boven
+staan (invoerregel eindigt op 663). Bewaakt in `hero-demo.spec.js` "De vouw". De terminal
+houdt zeven regels; de ruimte kwam uit twee rijen die dezelfde uitnodiging herhaalden.
 Herzien in sessie 2b (25 sep 2026): de kop stond eerst onderaan als ondertiteling. Gemeten
 gevolg: zeven lagen van gelijk gewicht, kop en actie tegen de onderrand (761-888 op
 1440x900, y=947 op 375px), en diagram en chips in dezelfde celvorm met dezelfde
