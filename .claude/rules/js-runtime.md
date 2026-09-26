@@ -101,6 +101,14 @@ doel het scherm raakt" de eerste eis (een strookje van 1px is geen tikdoel) en "
 bij volledig zichtbaar" de tweede (~24px scroll waarin beide aantikbaar zijn). Alleen
 "midden vrij" maakt ze allebei waar, want dan is *verborgen ⟺ aantikbaar* één conditie.
 
+**Een uitzondering hoort in het predicaat, met de afweging in het commentaar (Sessie 241).**
+"Midden vrij" liet een venster open waarin de hero-CTA net onder de navbar schoof terwijl de
+onderste chiprij nog in de balkzone stond (22 afgedekte posities, gemeten per 10px). Nu:
+`doelen.some(middenVrij) || zouChipAfdekken()`, met een tweede observer op de chips
+(`threshold: [0, 1]`, want die kruisen de balkrand met hun randen, niet hun midden). In dat
+venster is geen "Start"-knop aantikbaar, maar de chips zijn het wel. Dat is een bewuste
+afweging, en ze staat in het contractcommentaar van `landing-demo.js`.
+
 ---
 
 ## 16. Scroll-spy hoort niet op een IntersectionObserver (Sessie 226)

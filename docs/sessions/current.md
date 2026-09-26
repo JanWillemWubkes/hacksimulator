@@ -4,6 +4,130 @@
 
 ---
 
+## Sessie 241: Een test die op vijf posities meet, bewaakt vijf posities — de vouw gehaald, en twee oude gaten dicht (27 sep 2026)
+
+**Branch:** `design/impeccable`. `main` onaangeroerd; niets staat live.
+
+**Mission:** ronde 3 (diagram en terminal samen boven de vouw) en ronde 4 (clarify) uit
+TASKS.md #82, elk met gemeten posities, screenshots en de index-gate over drie motoren.
+
+### Ronde 3 — de vouw
+
+- **Beginstand gemeten, reproduceerde sessie 240:** onderkant `.af-net` 949/900 (1440),
+  927/800 (1280), 1071/768 (1024). De chips waren 77px in plaats van 60: `nmap
+  192.168.1.1` vraagt 144px, een gelijke kolom gaf 121 (1280) of 137 (1440).
+- **Waarom alleen marges niet genoeg waren:** op 1280x800 is 741px onder de navbar, en de
+  vaste delen (h1 115, ondertitel 72, terminal 285, chips 60-77, router 98) kosten er al
+  ~640. Voor alle tussenruimtes bleef ~100px. Er moest een hele rij uit.
+- **Het besluit: de glos-grammatica doortrekken.** Twee uitnodigingen zeiden hetzelfde
+  ("Deze terminal werkt echt — typ maar" boven, "Probeer: tik een command…" onder), elk
+  op een eigen rij. Nu staan de kolomkop "In gewoon Nederlands" naast `.af-term-kop` en de
+  uitnodiging als glos naast de invoerregel, met dezelfde aanhaallijn van 1px. Beide
+  staan in `.af-term`, zodat auto-placement ze paarsgewijs op één rij zet. De "Probeer:"-
+  regel verviel; "proefversie · 6 van de 40+ commands" staat in de terminalkop (via
+  `aria-describedby` ook voor schermlezers). Onder 768 staat de uitnodiging onder de
+  invoer, en de venstertitel valt weg (beide labels braken @375).
+- **Onderschrift van het diagram** ≥1280 onder "jouw machine", met zijn onderkant op die
+  van de router. Eerste poging landde bóven de router: een expliciete `grid-row: 1` wordt
+  eerst geplaatst en duwde de auto-geplaatste nodes naar rij 2. Oplossing: het diagram
+  expliciet in twee rijen, router over beide.
+- **Chips in `repeat(6, auto)`:** nmap past (145px ruimte voor 144px tekst op 1280), en
+  een auto-track valt terug op wrappen als het niet past.
+- **Uitkomst:** 949 → **788** (1440), 927 → **770** (1280); op 1024 de hele terminal met
+  uitnodiging (invoerregel eindigt op 663) plus de eerste chiprij. Terminal houdt 7 regels.
+- **Guard "De vouw"** in `hero-demo.spec.js` (4 tests): poorten boven de vouw met
+  zelfbewakende takken (12 poorten, body = 7 × rij + 16), 1024-afspraak, registratie van
+  kolomkop en uitnodiging. Mutanten: onderschrift-blok weg → *"diagram eindigt op 801, de
+  vouw ligt op 800"*; 6 regels → zeven-regels-tak; kolomkop terug boven → registratietest.
+  Een zwakkere mutant (onderschrift onder de router, mét de nieuwe regelafstand) bleef
+  groen, en terecht: 790 ≤ 800. Ik controleerde eerst of hij landde, vóór ik de guard
+  wantrouwde.
+
+### Twee gates, twee oude gaten
+
+- **`hero-accent-budget`: de zelfbewakende tak vuurde niet meer** (Expected 2, Received 1).
+  De teller rekende alles in `.hero-terminal` als "binnen de module", waar de terminal
+  eigen kleuren mag houden. De hint stond daar nu in; maar de glossen (`.reg-glos`) stonden
+  er al sinds de bouw, op papier. Een rode glos ontsnapte dus altijd. Gerepareerd in de
+  classificatie: glos, kolomkop en uitnodiging tellen als papier.
+- **"Geen chip onder de mobiele CTA-balk, op geen enkele scrollpositie"** faalde op webkit
+  @375 bij y=300, ook na retry. **A/B tegen `git archive HEAD` op poort 8902:** oud groen,
+  nieuw rood, dus schijnbaar mijn regressie. Een sweep per 10px liet het tegendeel zien:
+
+  | | oud | nieuw |
+  |---|---|---|
+  | afgedekte posities (3 engines × 375/390) | 22 | 3 |
+
+  De invariant gold nooit; de vijf meetpunten misten het venster (hero-CTA net onder de
+  navbar, onderste chiprij nog in de balkzone). De krappere hero schoof één positie precies
+  op y=300. **Oorzaak gerepareerd:** `landing-demo.js` houdt de balk ook weg zolang hij een
+  chip zou afdekken (`zouChipAfdekken`, een tweede observer op de chips met threshold 0/1).
+  Bewust afgewogen tegen het contract uit sessie 216 ("verborgen ⟺ CTA-midden
+  aantikbaar"): in dat venster van 10-30px zijn de chips de actie, en een afgedekte chip
+  navigeerde weg bij een tik. De uitzondering staat in het contractcommentaar zelf.
+  Gemeten ná: 0 afgedekt, 0 posities zonder actie, drie engines × 360/375/390. De test is
+  nu een sweep per 10px met een tak "de balk verscheen wel"; mutant (fix weg) → rood in
+  alle drie.
+
+### Ronde 4 — clarify, beperkt
+
+- **Scopebesluit (Heisenberg):** de onderpagina krijgt een schone sessie, en de hype en het
+  jargon daar ("van beginner naar hacker", "sandbox", "man-pagina") staan in secties die
+  bij het schrappen kunnen verdwijnen. Die punten staan nu letterlijk, met voorstel, bij
+  het onderpagina-item in TASKS #82. "Elk command heeft een man-pagina" is gemeten en
+  klopt: 41 van 41 (`hash-benchmarks.js` is een databron).
+- **Footerclaim** "De enige Nederlandse terminal simulator" → "Een Nederlandse terminal
+  simulator waarin je zonder account ethisch hacken leert…". Grep op `de enige|eerste
+  Nederlandse|uniek` vond geen andere claim van die soort.
+- **Mobiel menu en themaknop:** Het verschil / Vragen / DONKER / LICHT, aria-label en title
+  "licht thema". "Blog" en "Commands" blijven: paginanamen en leenwoorden. Guard met een
+  exacte lijst (geen denylist); mutant "FAQ" terug → rood op `+ "FAQ"`.
+- **FAQ-vraag voor de carrièreswitcher:** "Past security bij mij als ik van vak wil
+  wisselen?" Eerlijk: hier ontdek je of het werk je ligt, een baan krijg je er niet mee.
+  Zichtbaar en in de FAQPage-JSON-LD, antwoord woordelijk gelijk (gecontroleerd); ids 4-9
+  hernummerd.
+- **Cache:** `navbar.js`/`footer.js` `?v=4`, `init-components.js` `?v=6` op 27 pagina's,
+  `affiche.css` en `landing-demo.js` `?v=4`.
+
+### Commits
+
+- `ea9a0f6` Ronde 3: terminal en diagram samen boven de vouw
+- `6498b44` Ronde 4: de footer beweert niets meer, het menu spreekt Nederlands
+
+### Learnings
+
+- **Een meetlijst bewaakt zichzelf, niet de klasse — ook als die lijst scrollposities is.**
+  "Op geen enkele scrollpositie" met vijf posities was 22 posities lang onwaar.
+- **Een "regressie" kan een verbetering zijn die een oude fout zichtbaar maakt.** Zonder
+  A/B tegen HEAD had ik de hero teruggedraaid of het meetpunt verschoven; met A/B plus een
+  sweep werd het "22 → 3, en hier is de oorzaak".
+- **Een budget laat zien welk soort ingreep nodig is.** Tel de vaste delen tegen de
+  beschikbare hoogte vóór je marges schaaft: blijft er minder over dan de som van de
+  tussenruimtes, dan moet er structureel iets uit.
+- **Een expliciete grid-plaatsing gaat vóór auto-placement.** Eén item met `grid-row: 1`
+  op kolommen die een auto-item nodig had, duwt dat hele item een rij omlaag.
+- **Scope volgt de levensduur van de tekst.** Copy polijsten in een sectie die de volgende
+  sessie mogelijk schrapt, is dubbel werk; de punten horen bij het item dat de sectie
+  herbouwt.
+
+### Next steps
+
+TASKS.md #82: de onderpagina in een schone sessie (raster doortrekken, herhaling schrappen,
+h1 < `#omslag-kop`, plus de hype- en jargonpunten uit ronde 4), daarna `adapt` (mobiel
+meescrollen, focus bij een chip-tik, de band 1024-1279), dan #83 (finish review +
+documenter).
+
+### Metrics delta
+
+- Runtime-bundel (`performance.spec.js`): **1063,96 → 1069,20 KB**, marge **50,80 KB
+  (4,5%)**. Vooral uitlegcommentaar; JS 730,65, CSS 263,18, HTML 75,37.
+- Playwright: 45 spec files, **334 → 338** `test()`-declaraties.
+- `du -sb`: src 738 → 740 KB, styles 409 → 410 KB, blog 492, assets 1741.
+- Gates: ronde 3 **560 passed / 0 failed / 4 skipped**, ronde 4 **563 / 0 / 4**, drie
+  motoren (de skips zijn de chromium-only bestandssysteemtests).
+
+---
+
 ## Sessie 240: Een critique is een lijst beweringen — twee rondes gerepareerd, vier bevindingen vielen bij meting weg (26 sep 2026)
 
 **Branch:** `design/impeccable`. `main` onaangeroerd; niets staat live.

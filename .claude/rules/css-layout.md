@@ -561,3 +561,23 @@ viewport (gemeten 892,0 tegen 831,3).
 Je ziet deze fout niet in de testbrowsers, want die verbergen de balk (zie
 `meten-en-guards.md` §27). Simuleer hem met `padding-right: 10px` op de container, die krimpt
 de contentbox op dezelfde manier, en bewijs met een tak dat de krimp echt landde.
+
+---
+
+## 26. Expliciete grid-plaatsing gaat vóór auto-placement (Sessie 241)
+
+Een item met een expliciete `grid-row` wordt eerst geplaatst; auto-items vullen daarna de
+cellen die nog vrij zijn. Het onderschrift van het diagram kreeg `grid-row: 1` op kolom
+1-5, terwijl "jouw machine" (kolom 1-3) alleen een `grid-column` had. Gevolg: het
+onderschrift stond op rij 1 en duwde machine, scanlijn én router naar rij 2. Het landde
+dus bóven de router in plaats van ernaast.
+
+```css
+/* Plaats alle deelnemers expliciet zodra één ervan een rij krijgt */
+.af-node--jij, .af-lijn { grid-row: 1; }
+.af-node--host         { grid-row: 1 / 3; }
+.af .af-net-kop        { grid-column: 1 / 6; grid-row: 2; align-self: end; }
+```
+
+Meet de posities na zo'n wijziging; de CSS leest correct en de volgorde ziet er in de bron
+logisch uit.

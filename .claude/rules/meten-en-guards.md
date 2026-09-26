@@ -468,3 +468,21 @@ laten lekken:
 
 Zelfde familie als §19 (thema via de echte schakelaar): meet de toestand die de bezoeker
 heeft, niet die de meetopstelling toevallig geeft.
+
+---
+
+## 28. Een vaste lijst meetpunten is een lijst; een "regressie" kan een oude fout blootleggen (Sessie 241)
+
+"Geen chip onder de mobiele CTA-balk, op **geen enkele** scrollpositie" mat op
+0/300/600/900/1400. Per 10px gemeten (drie engines, 375/390) dekte de balk chips af op
+**22** posities, allemaal tussen de meetpunten. Een layoutwijziging verkleinde dat naar 3,
+en schoof er één precies op y=300; de test ging rood op de verbetering.
+
+- **Beweert een test "op elke positie", meet dan elke positie** (sweep met een stap onder
+  de kleinste relevante maat), plus een tak die bewijst dat de toestand die je zoekt ook
+  echt voorkwam (`balkGezien > 0`). Anders is groen niet te onderscheiden van "nooit
+  getoond".
+- **Rood na je wijziging? Meet oud en nieuw met dezelfde sweep, niet alleen het rode
+  punt.** A/B tegen `git archive HEAD` (§6) gaf eerst "oud groen, nieuw rood", schijnbaar
+  een regressie. Pas de sweep liet 22 → 3 zien. Repareer dan de oorzaak; schuif het
+  meetpunt niet op en draai de verbetering niet terug.
