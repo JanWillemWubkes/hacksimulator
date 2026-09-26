@@ -19,15 +19,17 @@
  */
 
 /* ==================== Letter ==================== */
-/* Archivo: neo-grotesk, geïnstantieerd op wdth 100 en wght 700–900, gesubset op dezelfde
-   219 codepoints als Atkinson Hyperlegible Next. 22.068 B; fonttotaal 91.536 B, onder de
-   lat van 106.016 B in hero-accent-budget.spec.js. Staat hier en niet in main.css: alleen
+/* Archivo: neo-grotesk, geïnstantieerd op wdth 100 en wght 700–800, gesubset op dezelfde
+   219 codepoints als Atkinson Hyperlegible Next. 20.688 B; fonttotaal 90.156 B, onder de
+   lat van 106.016 B in hero-accent-budget.spec.js. Sessie 240: koppen 700 (was 900, las
+   als startup-display en liet de woordspaties dichtlopen), labels 800; 900 had geen
+   gebruiker meer en is eruit (−1.380 B, gerenderde breedtes op 700 en 800 identiek). Staat hier en niet in main.css: alleen
    deze pagina gebruikt hem, en een @font-face zonder gebruiker downloadt niets maar is
    wel ruis in het gedeelde bestand. */
 @font-face {
   font-family: 'Archivo';
   font-style: normal;
-  font-weight: 700 900;
+  font-weight: 700 800;
   font-display: swap;
   src: url('/styles/fonts/archivo-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2212, U+2215, U+FEFF, U+FFFD;
@@ -365,7 +367,7 @@ body.home a.af-knop--vol:hover {
 
 .af h2 {
   font-size: var(--af-h2);
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.02em;
 }
@@ -940,9 +942,9 @@ body.home .hero-chip:focus-visible .af-chip-nr::after {
 .af-hero-tekst h1 {
   grid-column: 1 / 10;
   font-size: var(--af-display);
-  font-weight: 900;
+  font-weight: 700;
   line-height: 0.98;
-  letter-spacing: -0.018em;
+  letter-spacing: -0.012em;
   padding-right: var(--af-cel);
 }
 
@@ -1085,9 +1087,9 @@ body.home .af-transcript .terminal-line.error { color: var(--af-m-fout); }
   grid-column: 1 / 8;
   color: var(--af-papier);
   font-size: clamp(2rem, 4.6vw, 3.9rem);
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.012em;
 }
 
 .af-omslag p {
@@ -1322,7 +1324,7 @@ body.home .leerpad-cmd-line {
 
 .af .af-lees-kop {
   font-size: var(--af-h3);
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.2;
   letter-spacing: 0;
 }
@@ -1446,9 +1448,9 @@ body.home .af-faq .faq-answer p {
 .af-slot h2 {
   grid-column: 1 / 9;
   font-size: var(--af-display);
-  font-weight: 900;
+  font-weight: 700;
   line-height: 0.98;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.012em;
 }
 
 .af-slot-zin {

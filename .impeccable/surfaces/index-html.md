@@ -93,11 +93,18 @@ beweging per commando, geen typanimatie, en `prefers-reduced-motion` toont de ei
 
 ## Nog niet besloten
 
-- De exacte neo-grotesk voor de koppen: kiezen in `typeset`, buiten de lijst met versleten
-  standaardkeuzes uit new-work.md. Atkinson Hyperlegible Next blijft kandidaat voor
-  lopende tekst vanwege het functionele argument (verwarbare tekens uit elkaar houden).
-- De exacte rode waarde: moet AAA halen als knopvlak met papieren letter en als tekst op
-  papier. Meten, niet schatten.
+Besloten in sessie 240 (typeset, na een letterproef op gelijke maat en breedte):
+- **Koppen: Archivo 700**, labels 800; 900 is eruit. Vergeleken met Archivo 900/800,
+  Archivo smal (wdth 72) en Schibsted Grotesk op 64,8px over negen kolommen. 900 liet de
+  woordspaties dichtlopen en las als startup-display; smal was het meest affiche maar luid
+  (botst met "te intimiderend"); Schibsted kostte +38 KB zonder zichtbaar eigen karakter
+  op deze maat. 700 staat al in het bestand: nul extra bytes, het bestand kromp 1.380 B.
+- **Rood: #cc0a1e blijft.** Papieren letter op rood 5,02, rood op papier 5,02 (AAA grote
+  tekst ≥4,5; de knoptekst is 18,9px vet). Warmer gaat onder de lat: #d4380d 4,17,
+  #e0401f 3,70. Fout in de terminal is zalm (--af-m-fout), geen signaalrood.
+- De koppenmaat is bewust niet vergroot: dat duwt terminal en diagram verder onder de
+  vouw. Maat beslissen met de vouw erbij gemeten.
+
 - Het donkere thema: het geïnverteerde affiche (inkt als grond, papier als letter). Blijft
   verplicht, want de themaschakelaar bestaat sitebreed.
 - De vorige bouw (terminal-hero, lime-accent, mono-koppen, commit 8b33014) is bewijs van
