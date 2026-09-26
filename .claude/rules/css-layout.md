@@ -533,3 +533,31 @@ Twee dingen die dit zo lang verborgen hielden:
 Tel daarom élke gepaarde structuurtag, met woordgrens (`<main[[:space:]>]`, anders matcht een
 toekomstige `<main-nav>` mee). `<p>` en `<li>` horen er níét bij: HTML staat daar impliciet
 sluiten toe, dus die geven vals alarm op correcte markup.
+
+---
+
+## 25. `fr` verdeelt de ruimte binnen een scrollbalk; meet uitlijning tegen het raster (Sessie 240)
+
+Een scrollcontainer met een klassieke scrollbalk (Linux, Windows: ~10px) krimpt zijn
+contentbox. Kolommen in `fr` verdelen die kleinere ruimte, dus alles erin schuift ten
+opzichte van elementen búíten de container die op hetzelfde raster staan:
+
+```css
+/* FOUT: de naad zakt 5,8px zodra de balk verschijnt (818,0 tegen kop 823,8) */
+.reg { grid-template-columns: 7fr 5fr; }
+
+/* GOED: de kolom meet tegen de rastercontainer, die de balk niet ziet */
+.af-hero-raster { container-type: inline-size; }        /* NIET op een subgrid */
+.af-term { --af-module: calc(100cqw * 7 / 12); }
+.reg { grid-template-columns: var(--af-module) minmax(0, 1fr); }
+```
+
+**`container-type` hoort nooit op een subgrid.** Het brengt layout-containment mee, en een
+element met layout-containment kan geen subgrid zijn: `grid-template-columns: subgrid` valt
+stil terug op `none`, zonder foutmelding. Zet de container op het echte raster erboven. Een
+mutant die `container-type` weghaalt bewijst dat hij nodig is: `cqw` valt dan terug op de
+viewport (gemeten 892,0 tegen 831,3).
+
+Je ziet deze fout niet in de testbrowsers, want die verbergen de balk (zie
+`meten-en-guards.md` §27). Simuleer hem met `padding-right: 10px` op de container, die krimpt
+de contentbox op dezelfde manier, en bewijs met een tak dat de krimp echt landde.

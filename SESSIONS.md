@@ -10,23 +10,27 @@
 
 > **Rotatie/archivering-conventie:** zie [`docs/sessions/README.md`](docs/sessions/README.md)
 > (range-naamgeving `archive-sNNN-sMMM.md`; legacy `archive-q*`-namen zijn bevroren + fout gelabeld).
-> `current.md` houdt het rolling window Sessie 225-235; ouder is geroteerd naar de range-archieven hieronder.
+> `current.md` houdt het rolling window Sessie 230-240 (236-238 samengevat in 239); ouder is geroteerd naar de range-archieven hieronder.
 
-### [Current Sessions (225-235)](docs/sessions/current.md) - Full Detail
-**Sessies:** 235, 234, 233, 232, 231, 230, 229, 228, 227, 226, 225
-**Period:** 17 augustus - 23 september 2026
+### [Current Sessions (230-240)](docs/sessions/current.md) - Full Detail
+**Sessies:** 240, 239 (vat 236-238 samen), 235, 234, 233, 232, 231, 230
+**Period:** 21 augustus - 26 september 2026
 **Topics:**
+- Een critique is een lijst beweringen: dual-agent critique van de hele landingspagina (25/36), daarna het getikte command in beeld, een registratienaad die niet meer van de scrollbalk afhangt (`cqw` i.p.v. `fr`), en koppen in Archivo 700 na een letterproef op gelijke maat. Vier van de tien bevindingen vielen bij meting weg. Rotatie 225-229 (Sessie 240, branch `design/impeccable`)
+- Het affiche blijft: pixelstad en teletekst als wegwerpprototype gemeten, teletekst won op de vooraf vastgelegde assen, de eigenaar koos het affiche; de hero kreeg de kop als instappunt (Sessie 239, vat 236-238 samen, branch `design/impeccable`)
 - Een ontbrekende `</main>` trok de footer de blogcontainer in: `blog/index.html` sloot zijn `<main>` nooit, dus de geïnjecteerde footer erfde `max-width: 720px` — 672px breed in een viewport van 1823px, als enige van 25 pagina's. De tagbalans-guard bestond al sinds Sessie 138 maar telde alleen `<div>`: hij bewaakte de tag uit die ene bug, niet de klasse. Twee contrastspecs verwijderd na mutantmeting (hun opvolger vangt dezelfde mutanten, mét kleurbewijs); `eyebrow-contrast` bewust behouden om zijn aanwezigheids-asserties (Sessie 235)
 - De mailbox kostte ~EUR 96/jaar en de gratis standaardroute sterft in januari 2027: Google schrapt "Send mail as" voor niet-Google-adressen, dus forwarden-en-antwoorden viel af. Zoho Mail Free op het EU-datacenter — en de regio hangt af van de ingang, niet van je IP. Brevo slaagt op DKIM, niet op SPF: de Return-Path is Brevo's eigen bounce-domein (Sessie 234)
 - De pijl ontbrak in de font-subset, en die ene hack liet de haak van `[→]` onzichtbaar: U+2192/U+2190/U+2713 vielen terug op een systeemfont, `renderer.js` compenseerde met een opgetilde span, en die liet `[` achter als tekst-run van één teken — wat Chromium niet schildert. Subset herbouwd uit upstream (0 advance-width-verschillen, 1.160 bytes kleiner), hack weg (Sessie 233)
 - De bloat zat niet in de code: `src/` (118 modules), `styles/` (11) en `assets/` (36) hadden nul verweesde bestanden en nul md5-duplicaten over 387 getrackte bestanden. Wat wél groeide stond in `.gitignore` en verscheen dus nooit in `git status` — `.playwright-mcp/` op 55 MB in 1111 screenshots over vijf maanden. Twee "debugtests" konden niet falen op hun eigen onderwerp: álle zes `expect()`-calls klikten enkel een modal weg als setup. 153M → 53M, 45 → 42 specs, NEW Check 20 met twee drempels (Sessie 232)
 - `publish = "."` zette de bron van vier betaalde gidsen op de CDN: de vier `.typ`-bestanden gaven HTTP 200 op productie, naast een sessie-archief van 388 KB met privé-mailadressen. `Disallow` is indexeringsadvies, geen toegangscontrole. Check 19 erbij met de populatie omgedraaid — en die betrapte in zijn eerste CI-run de commit die hem introduceerde. Achteraf gereconstrueerd in Sessie 232 (Sessie 231)
 - Het nieuwsbriefblok viel buiten de filterpopulatie — en rekte via één grid-track alle 15 kaarten op: het `:target`-filter verbergt uitsluitend `.blog-post-card`, dus het blok bleef in élke stand op DOM-positie 4 staan (gemeten 4 van de 6 categorieën met het formulier bovenaan). Twee stille defecten erbij: een vaste inputbreedte die de mobiele regel op specificiteit versloeg gaf het blok een min-content van 400px — één impliciete `auto`-track maakte daarmee álle 15 kaarten 400px in een container van 336px, onzichtbaar weggeknipt door `overflow-x: hidden`; en de skip-link `#main-content` liet "0 van 15 artikelen" omroepen (Sessie 230)
-- Het font schreef iets anders dan de DOM: JetBrains Mono ligeert via `calt` (367 lookups, standaard aan) en `$pdo->prepare` rendeerde als `$pdo→prepare` onder het kopje "Veilige code". Sitebreed uitgezet met omgedraaide populatie; breedte en `textContent` detecteren dit niet, alleen pixels (Sessie 229)
-- Vier CSS-commentaren claimden een contrast dat ze niet haalden — en de sweep die dat had moeten zien filterde op tokennaam. Ongefilterd gemeten: 13.157 element-toestanden, 152 onder AA / 378 onder AAA over 18 kleurwaarden, daarna 0/0 (Sessie 228)
-- Vier taken die elk een halve reparatie van een eerdere sessie afmaakten: bundelformule, `--color-link` plus vier hover-toestanden, legal-titels in vier velden, en de flaky autocomplete-spec (Sessie 227)
-- De blog had 418 koppen zonder id en een filter van 26,8px — geen van beide stond in de CSS. `min-height` doet niets op een inline `<a>`; specificiteit vergelijkt per tier (Sessie 226)
-- De nieuwsbrief was af na vijf redactierondes — elke ronde legde een defect bloot dat níét in de tekst zat. Rotatie 210-214 (Sessie 225)
+
+---
+
+### [Archief Sessie 225-229](docs/sessions/archive-s225-s229.md) - Full Detail (geroteerd)
+**Sessies:** 229 → 225 (nieuwste-eerst)
+**Period:** 17 - 20 augustus 2026
+**Geroteerd bij:** Sessie 240
 
 ---
 
@@ -217,7 +221,7 @@
 
 **Total Sessions:** 235 (as of 23 september 2026)
 **Current Session:** 235 (Ontbrekende `</main>` trok de footer de blogcontainer in; tagbalans-guard naar de klasse; twee redundante contrastspecs verwijderd)
-**Sessions with full documentation:** 81-235 (current.md 225-235 + range-archieven 220-224, 215-219, 210-214, 205-209, 200-204, 195-199, 190-194, 185-189, 180-184, 175-179, 170-174, 165-169, 121-164 & 81-120)
+**Sessions with full documentation:** 81-240 (current.md 230-240 + range-archieven 225-229, 220-224, 215-219, 210-214, 205-209, 200-204, 195-199, 190-194, 185-189, 180-184, 175-179, 170-174, 165-169, 121-164 & 81-120)
 **Sessions compressed:** 2-77 (various compression levels)
 
 **Structure rationale:**

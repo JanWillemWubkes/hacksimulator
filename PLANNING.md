@@ -1,6 +1,6 @@
 # PLANNING.md - HackSimulator.nl
 
-**Laatst bijgewerkt:** 25 sep 2026 (Sessie 239 — design-system-wijziging op branch `design/impeccable`, nog niet op `main`: de landingspagina als affiche, sitebreed Atkinson Hyperlegible Next)
+**Laatst bijgewerkt:** 26 sep 2026 (Sessie 240 — geen architectuurwijziging, wél op de branch: koppen van de affichewereld in Archivo 700 i.p.v. 900; de sectie Design System hieronder blijft tot de merge die van `main`)
 **Status:** ✅ LIVE on Netlify | M5 Testing 71% | M5.5 Monetization deep (Ko-fi + Brevo + Gumroad + Lead magnet) | M6 Tutorial 100% | M7 Gamification 100% | Blog content-pijler 14 posts live
 **Verantwoordelijk:** Development Team
 **Live URL:** https://hacksimulator.nl/
@@ -945,7 +945,7 @@ const DEBUG_MODE = false;
 
 ---
 
-**Laatst bijgewerkt:** 25 sep 2026 (Sessie 239 — design-system-wijziging op branch `design/impeccable`, nog niet op `main`)
+**Laatst bijgewerkt:** 26 sep 2026 (Sessie 240 — geen architectuurwijziging, wél koppen Archivo 700 op de branch)
 **Versie:** 4.50 (Sessie 239 — **het design system krijgt een tweede bron, tijdelijk.** Op `design/impeccable` staat de landingspagina als affiche in `styles/affiche.css` (alleen `body.home`), met eigen tokens die de gedeelde componenten opnieuw tokenen in plaats van overschrijven. Tot de merge blijft de sectie Design System hieronder de beschrijving van `main`; daarna wordt `DESIGN.md` (uit de gebouwde CSS afgeleid door de documenter) de bron en verwijst deze sectie ernaar.)
 **Versie:** 4.49 (Sessie 233 — **de font-subset is een contract, geen optimalisatie.** `jetbrainsmono-latin.woff2` miste U+2192/U+2190/U+2713 terwijl de terminal die drie als markers gebruikt; ze vielen terug op een systeemfont met een andere baseline, en de CSS-correctie die dat verbloemde liet `[` achter als tekst-run van één teken die Chromium niet schildert. Regel die hieruit volgt: een subset dekt élk teken dat de UI rendert, en een verticale correctie op één glyph is voortaan een signaal om de font te controleren — niet om px te tunen. Uitbreiden mag alleen met een assertie op 0 advance-width-verschillen, anders is het een sitebrede layout-gok)
 **Versie:** 4.48 (Sessie 229 — **een typografie-default hoort bij het design system, niet bij een component.** Ligaturen staan sitebreed uit: JetBrains Mono ligeert via `calt` en toonde `>=` als ≥ en `$pdo->prepare` als `$pdo→prepare` in een voorbeeld dat bedoeld was om over te typen. De keuze is "alles uit, uitzonderingen verantwoorden zich" i.p.v. een lijst monospace-selectors — `--font-terminal` staat in 48 declaraties over 7 stylesheets, en zo'n lijst bewaakt zichzelf en niet de klasse. De kosten van die keuze zijn gemeten in plaats van beredeneerd: prose-breedtedelta 0,17px (Space Grotesk) en 0,00px (Inter) op 40px tekst. Bijgewerkt: `style-guide.md` §Typography System droeg nog de Courier-New-waarde van vóór Sessie 81.)

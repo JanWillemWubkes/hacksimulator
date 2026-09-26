@@ -447,3 +447,24 @@ for (const pseudo of ['::before', '::after']) {
 Dit is §19 in een andere vorm: de populatie "elementen" is niet de klasse "dingen die kleur
 op het scherm zetten". Het bewijs is een mutant die precies het oude vierkantje terugzet; die
 moet vuren met `[::before]` in de melding, niet op een andere tak.
+
+---
+
+## 27. Wat de meetbrowser zelf verbergt of deelt (Sessie 240)
+
+Twee eigenschappen van de meetopstelling die een echte fout onzichtbaar maken of een meting
+laten lekken:
+
+- **Playwright start Chromium met `--hide-scrollbars`.** Een fout die alleen met klassieke
+  scrollbalken bestaat (Linux- en Windows-bezoekers) reproduceert dan niet, en "kan ik niet
+  reproduceren" streept een echte bug weg. Voor een meting:
+  ```js
+  chromium.launch({ ignoreDefaultArgs: ['--hide-scrollbars'] })   // balk 10px, zichtbaar
+  ```
+  Voor een spec die in drie motoren draait: simuleer de balk (zie `css-layout.md` §25).
+- **`localStorage` is per origin, niet per tab.** Twee agents of scripts die tegelijk op
+  dezelfde origin meten, erven elkaars themawissel. Scheid ze op origin
+  (`127.0.0.1:8901` naast `localhost:8901`) of op browsercontext, niet op tab.
+
+Zelfde familie als §19 (thema via de echte schakelaar): meet de toestand die de bezoeker
+heeft, niet die de meetopstelling toevallig geeft.

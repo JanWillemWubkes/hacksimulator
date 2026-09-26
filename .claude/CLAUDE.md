@@ -1,7 +1,7 @@
 # CLAUDE.md — HackSimulator.nl
 
 **Project:** Browser-based terminal simulator die Nederlandse beginners ethisch hacken leert.
-**Status:** MVP Development — ✅ LIVE op Netlify vanaf `main`; laatste: Sessie 239 (op branch `design/impeccable`)
+**Status:** MVP Development — ✅ LIVE op Netlify vanaf `main`; laatste: Sessie 240 (op branch `design/impeccable`)
 **Stack:** Vanilla JS/CSS, client-side only, geen backend, geen build-stap. Deploy = push naar `main`.
 **Docs:** `docs/prd.md` v1.8 | `PLANNING.md` v3.0 | `TASKS.md` (live metrics) | `docs/style-guide.md` v1.5
 
@@ -136,7 +136,7 @@ architectuurwijziging, `docs/prd.md` alleen bij scopewijziging.
 **Afsluiten:** `/summary` — die bevat de volledige 7-staps flow, inclusief de ground-truth-meting
 en de validatiegate. Niet hier dupliceren.
 
-**Sessie counter:** 239
+**Sessie counter:** 240
 
 <!-- Onderhoudsnotitie (wordt niet in context geladen):
      Dit bestand is de altijd-geladen laag. Houd het onder 150 regels — validate-docs.sh
@@ -146,5 +146,5 @@ en de validatiegate. Niet hier dupliceren.
 
 ---
 
-**Last updated:** 25 sep 2026 (Sessie 239 — het affiche blijft na de vergelijking met pixelstad en teletekst; de hero kreeg een instappunt. Volledig: `docs/sessions/current.md`)
-**Version:** 6.09 (Sessie 239 — een teller die elementen afloopt ziet `::before` niet: een rood merkteken ontweek zo de één-drager-regel. Historie: `docs/sessions/current.md`)
+**Last updated:** 26 sep 2026 (Sessie 240 — critique over de hele landingspagina; command in beeld, naad los van de scrollbalk, koppen Archivo 700. Volledig: `docs/sessions/current.md`)
+**Version:** 6.10 (Sessie 240 — vier van tien critiquebevindingen vielen bij meting weg; `fr` verdeelt binnen een scrollbalk, en `container-type` zet subgrid uit. Historie: `docs/sessions/current.md`)
