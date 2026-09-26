@@ -160,6 +160,32 @@ test.describe('Marketing-navbar — omslagpunt hamburger', () => {
     await expect(menu.locator('.navbar-links a')).toHaveCount(6);
   });
 
+  // Sessie 241: het menu op de homepage sprak Engels ("Features", "FAQ", "DARK", "LIGHT")
+  // tegen een publiek dat op Engels afhaakt. Exacte gelijkheid, geen lijst verboden
+  // woorden: een denylist bewaakt alleen de woorden die we al kenden. "Blog" en "Commands"
+  // zijn paginanamen en ingeburgerde leenwoorden, geen onvertaalde UI.
+  test('het mobiele menu op de homepage is Nederlands', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/index.html');
+    await page.locator('.landing-nav-wrapper .navbar-toggle').click();
+    const menu = page.locator('#landing-mobile-menu');
+    await expect(menu).toBeVisible();
+
+    const m = await menu.evaluate((el) => ({
+      links: [...el.querySelectorAll('.navbar-links a')]
+        .filter((a) => a.getClientRects().length)
+        .map((a) => a.innerText.trim()),
+      thema: [...el.querySelectorAll('.toggle-label')].map((s) => s.innerText.trim()),
+      themaNaam: (el.querySelector('.theme-toggle') || {}).getAttribute?.('aria-label')
+    }));
+
+    expect(m.links.length, 'geen menulinks gevonden: de meting heeft niet gedraaid').toBeGreaterThan(0);
+    expect(m.links).toEqual(['Start de simulator', 'Het verschil', 'Leerpad', 'Vragen',
+      'Blog', 'Commands', 'Gidsen', 'Woordenlijst', 'Over ons']);
+    expect(m.thema).toEqual(['DONKER', 'LICHT']);
+    expect(m.themaNaam).toMatch(/^Wissel naar (donker|licht) thema$/);
+  });
+
   // "Start Simulator" is de primaire conversie-actie. In de desktopbalk is dat een
   // neongroene knop; in het menu was het tot Sessie 213 niet van "Woordenlijst" te
   // onderscheiden. Oorzaak: main.css `.navbar-links > li:not(.navbar-dropdown) > a`

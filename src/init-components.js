@@ -16,8 +16,8 @@
 // normale module-imports ondanks nieuwe origin-versie (cache-status: fwd=stale).
 // Versie-query forceert een nieuwe cache-key -> gegarandeerd verse logo-code.
 // Bump dit nummer bij elke logo/markup-wijziging in navbar.js of footer.js.
-import { injectNavbar } from '/src/components/navbar.js?v=3';
-import { injectFooter } from '/src/components/footer.js?v=3';
+import { injectNavbar } from '/src/components/navbar.js?v=4';
+import { injectFooter } from '/src/components/footer.js?v=4';
 import '/src/ui/cta-tracking.js';
 import '/src/ui/newsletter-tracking.js';
 import '/src/ui/brevo-submit.js';

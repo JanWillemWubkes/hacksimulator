@@ -38,7 +38,7 @@ function getMarketingFooter(options = {}) {
           </svg>
           <span>HackSimulator<span class="brand-accent">.nl</span></span>
         </a>
-        <p class="footer-tagline">De enige Nederlandse terminal simulator waar je direct, zonder account, ethisch hacken leert — van je eerste command tot security tools.</p>
+        <p class="footer-tagline">Een Nederlandse terminal simulator waarin je zonder account ethisch hacken leert, van je eerste command tot security tools.</p>
       </div>
 
       <div class="footer-links">
