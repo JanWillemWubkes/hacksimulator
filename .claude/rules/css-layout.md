@@ -107,6 +107,15 @@ bovenkant van de inhoud onbereikbaar weg**: je kunt niet terugscrollen naar wat 
 bodyEl.scrollTop = bodyEl.scrollHeight;   // ná elke append
 ```
 
+**Maar pin niet blind op de bodem als één command meer uitvoer geeft dan het venster hoog is**
+(Sessie 240). Bij nmap (374px in 205px) schoof dat de promptregel 107px boven de rand: je zag
+poorten zonder het command dat je tikte. Zet het nieuwste command bovenaan; past de uitvoer,
+dan klemt de browser vanzelf op de bodem:
+
+```js
+bodyEl.scrollTop = promptRij.offsetTop;   // offsetParent = het lichaam (position: relative)
+```
+
 Let ook op een `::before`-fade-mask: die is `position: absolute` binnen het element en
 scrollt dus mét de inhoud mee in plaats van bovenaan te blijven plakken — zet hem uit in
 live-modus. Bewaakt door "eerdere uitvoer blijft terugscrollbaar" in

@@ -374,11 +374,49 @@ test.describe('Hero-terminal — mobiel', () => {
     });
 
     expect(scroll.scrollbaar, 'output past in één scherm — test bewijst niets').toBe(true);
-    expect(scroll.gepindOpBodem, 'scroll stond niet op de nieuwste regel').toBe(true);
+    expect(scroll.gepindOpBodem, 'scroll stond nog bovenaan: het nieuwste command is niet in beeld gebracht').toBe(true);
     expect(scroll.bovensteRegel, 'bovenkant van de output is onbereikbaar geclipt').toContain(
       'Demo-terminal'
     );
   });
+});
+
+// Sessie 240: de scroll pinde op de bodem, dus bij nmap (374px uitvoer in een venster van
+// 205px) stonden de promptregel en "Nmap scan report" 107px boven de rand. Je zag poorten
+// zonder het command dat je net tikte. Mutant pinScroll() terug -> de eerste assertie.
+test.describe('Hero-terminal — het getikte command staat in beeld', () => {
+  for (const vp of [DESKTOP, MOBIEL]) {
+    test(`@${vp.width}px: bovenaan na een lange uitvoer, en een korte blijft op de bodem`, async ({ page }) => {
+      await page.setViewportSize(vp);
+      await page.goto('/index.html');
+      await neemOver(page);
+
+      const staat = () => page.evaluate(() => {
+        const b = document.getElementById('hero-demo');
+        const bb = b.getBoundingClientRect();
+        const prompt = [...b.querySelectorAll('.terminal-line.prompt')].pop().getBoundingClientRect();
+        const laatste = [...b.querySelectorAll('.terminal-line')].pop().getBoundingClientRect();
+        return {
+          promptVanRand: prompt.top - bb.top,
+          promptBinnen: prompt.top >= bb.top - 1 && prompt.bottom <= bb.bottom + 1,
+          laatsteBinnen: laatste.bottom <= bb.bottom + 1,
+          teLang: b.scrollHeight - b.clientHeight
+        };
+      });
+
+      await typ(page, 'nmap 192.168.1.1');
+      const lang = await staat();
+      // Zelfbewakend: past de uitvoer, dan staat alles in beeld en bewijst dit niets.
+      expect(lang.teLang, 'nmap past in het venster — de test bewijst niets').toBeGreaterThan(40);
+      expect(lang.promptBinnen, `promptregel ${lang.promptVanRand.toFixed(0)}px van de bovenrand`).toBe(true);
+      expect(Math.abs(lang.promptVanRand), 'command staat niet strak bovenaan').toBeLessThanOrEqual(1);
+
+      await typ(page, 'pwd');
+      const kort = await staat();
+      expect(kort.promptBinnen, 'kort command niet in beeld').toBe(true);
+      expect(kort.laatsteBinnen, 'laatste regel van een korte uitvoer valt buiten beeld').toBe(true);
+    });
+  }
 });
 
 test.describe('Hero-terminal zonder JavaScript', () => {
@@ -878,6 +916,30 @@ test.describe('De registratie: regel en glos op dezelfde rasterrij', () => {
       expect(na.every((r) => r.basisDelta >= 3), 'de meting ziet een verschoven glos niet').toBe(true);
     });
   }
+
+  // Sessie 240: `7fr 5fr` verdeelde de ruimte BINNEN de scrollbalk. Een klassieke balk
+  // (10px, Linux/Windows) schoof de naad 5,8px van .af-term-kop af, precies bij nmap. De
+  // testbrowsers draaien met overlaybalken, dus padding-right simuleert hem: die krimpt de
+  // contentbox op dezelfde manier. Mutant `7fr 5fr` terug -> 5,8px, deze assertie.
+  test('@1440px de naad blijft op de rasterlijn als het lichaam smaller wordt', async ({ page }) => {
+    await page.goto('/index.html');
+    await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation:none!important}' });
+    await neemOver(page);
+    await typ(page, 'nmap 192.168.1.1');
+
+    const meet = () => page.evaluate(() => ({
+      cel: document.querySelector('#hero-demo .reg .terminal-line').getBoundingClientRect().right,
+      kop: document.querySelector('.af-term-kop').getBoundingClientRect().right,
+      rij: document.querySelector('#hero-demo .reg').getBoundingClientRect().width
+    }));
+    const voor = await meet();
+    await page.evaluate(() => { document.getElementById('hero-demo').style.paddingRight = '10px'; });
+    const na = await meet();
+
+    // Zelfbewakend: zonder krimp bewijst gelijke naden niets.
+    expect(voor.rij - na.rij, 'de gesimuleerde scrollbalk kromp het lichaam niet').toBeGreaterThanOrEqual(9);
+    expect(Math.abs(na.cel - na.kop), `naad ${na.cel.toFixed(1)} tegen kop ${na.kop.toFixed(1)}`).toBeLessThanOrEqual(0.5);
+  });
 
   test('@390px staat de glos onder zijn regel, in dezelfde rij', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });

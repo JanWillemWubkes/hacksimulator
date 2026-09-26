@@ -418,8 +418,12 @@ body.home a.af-knop--vol:hover {
   padding-block: 12px clamp(40px, 5vw, 72px);
 }
 
+/* Container voor de registratie (zie .reg): het raster, niet .af-term. container-type
+   brengt layout-containment mee, en daarmee valt subgrid terug op `none` — .af-term-col
+   en .af-term zijn allebei subgrid. */
 .af-hero-raster {
   row-gap: 0;
+  container-type: inline-size;
 }
 
 .af-term-col {
@@ -492,7 +496,7 @@ body.home .af-term .terminal-body {
   box-sizing: border-box;
   overflow: hidden;
   position: relative;
-  background: linear-gradient(to right, var(--af-m-grond) 0 58.3333%, transparent 58.3333%);
+  background: linear-gradient(to right, var(--af-m-grond) 0 var(--af-module), transparent 0);
   font-family: var(--af-mono);
   font-size: 0.86rem;
   line-height: var(--af-rij);
@@ -505,7 +509,7 @@ body.home .af-term .terminal-body::before {
 
 /* Live: scrollbaar, en bovenaan beginnen. Grid met align-content:end én overflow clipt
    de bovenkant onbereikbaar (css-layout §8) — dus bij overname naar start, en de JS
-   pint de scroll op de nieuwste regel. */
+   brengt het nieuwste command bovenaan in beeld (hero-repl.js toonCommand). */
 body.home .af-term .terminal-body.is-live {
   display: grid;
   align-content: start;
@@ -516,9 +520,17 @@ body.home .af-term .terminal-body.is-live {
 }
 
 /* ---------- De registratie: één rij, twee cellen ---------- */
+/* De modulebreedte gemeten tegen het raster (container .af-hero-raster), niet tegen het
+   lichaam. `7fr 5fr` verdeelde de ruimte BINNEN de scrollbalk: met een klassieke balk
+   (10px, Linux/Windows) verschoof de naad 5,8px t.o.v. .af-term-kop en .af-glos-kop,
+   precies bij het signatuurmoment. Nu eet de balk alleen uit de glos-kolom. */
+body.home .af-term {
+  --af-module: calc(100cqw * 7 / 12);
+}
+
 .reg {
   display: grid;
-  grid-template-columns: 7fr 5fr;
+  grid-template-columns: var(--af-module) minmax(0, 1fr);
   align-items: baseline;
 }
 
@@ -1860,7 +1872,12 @@ body.home a.footer-donate:hover {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 
-  .af-transcript,
+  /* De transcript is een donkere module, geen tekstblok: hij houdt zijn binnenmarge.
+     In de lijst hieronder zette padding-left:0 de tekst op x=0 van het zwarte vlak. */
+  .af-transcript {
+    grid-column: 1 / -1;
+  }
+
   .af-pijn-tekst,
   .af-omslag h2,
   .af-omslag p,

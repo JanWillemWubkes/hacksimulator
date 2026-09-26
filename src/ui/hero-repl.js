@@ -79,6 +79,15 @@ function initHeroRepl() {
     bodyEl.scrollTop = bodyEl.scrollHeight;
   }
 
+  // Het nieuwste command bovenaan, niet de laatste regel onderaan: wie een chip tikt moet
+  // zien wát hij tikte. Naar de bodem pinnen schoof bij nmap (374px uitvoer in 205px) de
+  // promptregel en "Nmap scan report" 107px boven de rand weg. Past de uitvoer wél, dan
+  // klemt de browser dit vanzelf op de bodem. Strak op de rand en niet op de padding: met
+  // 8px ruimte erboven piepte de afgesneden onderkant van de vorige regel erdoor.
+  function toonCommand(promptRij) {
+    bodyEl.scrollTop = promptRij.offsetTop;
+  }
+
 // ==================== Overname ====================
   function neemOver() {
     if (overgenomen) return;
@@ -157,7 +166,7 @@ function initHeroRepl() {
     }
 
     trim();
-    pinScroll();
+    toonCommand(rijen[0]);
     markeerVolgende();
 
     // Alléén de commandonaam, nooit argumenten (PRD §13). De guard in
