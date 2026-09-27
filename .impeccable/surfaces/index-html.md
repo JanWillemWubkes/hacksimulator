@@ -145,6 +145,21 @@ vond zeven plekken waar de vorm iets anders zei dan de inhoud. Regel: **de glos-
   getal het kleinste element van een sectie die "in cijfers" heet.
 Bewaakt in `homepage-conversion.spec.js` "Vorm volgt soort"; zes mutanten, zes falers.
 
+**Ronde 3: copy, kantlijn, leerpad** (na feedback eigenaar op het scherm).
+- **Leerpad zonder kaarten** (proef L1/L2/L3, `.playwright-mcp/s242-r3-proef-leerpad.png`,
+  L3 gekozen): drie kolommen gescheiden door een haarlijn, zoals Herkenbaar zijn rijen
+  scheidt; het donkere commandoblok is het enige vlak; per kolom één knop vooraan en
+  "Lees eerst" klein eronder. Van 12 naar 5 lijnen per kolom, sectie 954 → 855px. De
+  scheidingslijnen in het commandoblok waren geërfd uit de gedeelde `landing.css`.
+- **De kantlijn loopt langs de hele vragenlijst** (stopte halverwege: de rand stond op een
+  blok zo hoog als zijn inhoud).
+- **Paden in één schrijfwijze:** `/` vooraan, geen `/` achteraan.
+- **Copyregel:** Nederlandse samenstellingen aaneen ("netwerken scannen",
+  "cybersecuritynieuws", "pentesttools"), geen Engelse zinsbouw ("Weet je in de simulator
+  niet verder"), en concreet boven vaag: noem `reset` in plaats van "één woord".
+  "Tool" zei niet wat er bedoeld werd: het zijn de commando's.
+Bewaakt in "Vorm volgt soort" (paden, kantlijnhoogte, geen randen in de module).
+
 **Bewust niet:** geen verticale haarlijnen onder de hero (daar is het raster de vorm,
 eronder wordt het behang; de naad draagt het raster), geen mid-CTA (mobiele balk ≤1279,
 navbar ≥1280, bewaakt door "op elke scrollpositie een tikbare CTA").

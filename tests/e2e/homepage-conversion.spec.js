@@ -459,8 +459,9 @@ const METEN = () => {
   const banden = ['#leerpad', '.af-faq', '#newsletter'].map((sel) => {
     const el = document.querySelector(sel);
     const band = effBg(el);
-    // Sessie 238: de enige kaart in deze wereld is de specimenkaart van het leerpad.
-    const kaart = el.querySelector('.af-specimen');
+    // Sessie 242: het leerpad heeft geen kaarten meer (kolommen met haarlijnen); wat
+    // er nog op een band ligt is de donkere commandomodule, en die moet zich onderscheiden.
+    const kaart = el.querySelector('.af-specimen-cmds');
     return { sel, bandDelta: delta(band, pagina), kaartDelta: kaart ? delta(effBg(kaart), band) : null };
   });
 
@@ -677,7 +678,22 @@ test.describe('Vorm volgt soort', () => {
       // 5. Het nieuwsbriefveld begint op de naad.
       const veld = R('.af-news .newsletter-form .input').left;
 
-      return { zelfdeVorm, dubbel, koppen: koppen.length, losseInleiding, rijen, tekst: tekst.length, doorkruist, naad, veld };
+      // 6. Paden (bronnen, blogartikelen) in één schrijfwijze: met / vooraan, zonder / achteraan.
+      const paden = [...document.querySelectorAll('.af-lijst-waar, .af-lees-pad')].map((e) => e.textContent.trim());
+      const scheef = paden.filter((p) => !p.startsWith('/') || p.endsWith('/'));
+
+      // 7. De kantlijn loopt langs de hele vragenlijst, niet tot zijn eigen inhoud.
+      const kantlijn = R('.af-faq-lees').height, lijst = R('.af-faq-lijst').height;
+
+      // 8. De commandomodule van het leerpad heeft geen interne randen (die waren geërfd uit
+      //    de gedeelde landing.css). Populatie: alles in de modules.
+      const inModule = [...document.querySelectorAll('.af-specimen-cmds *')];
+      const randen = inModule.filter((e) => ['Top', 'Right', 'Bottom', 'Left'].some((z) => {
+        const c = cs(e); return c['border' + z + 'Style'] !== 'none' && parseFloat(c['border' + z + 'Width']) > 0;
+      })).map((e) => e.className || e.tagName);
+
+      return { zelfdeVorm, dubbel, koppen: koppen.length, losseInleiding, rijen, tekst: tekst.length, doorkruist, naad, veld,
+        paden: paden.length, scheef, kantlijn, lijst, modulekinderen: inModule.length, randen };
     });
 
     expect(m.zelfdeVorm, 'bloglinks hebben de letter en het gewicht van de FAQ-vragen').toBe(false);
@@ -689,5 +705,10 @@ test.describe('Vorm volgt soort', () => {
     expect(m.tekst, 'geen hero-tekst gemeten').toBeGreaterThanOrEqual(3);
     expect(m.doorkruist, 'haarlijn door lopende tekst').toEqual([]);
     expect(Math.abs(m.veld - m.naad), `veld op ${m.veld.toFixed(1)}, naad op ${m.naad.toFixed(1)}`).toBeLessThanOrEqual(1);
+    expect(m.paden, 'geen paden gemeten').toBeGreaterThanOrEqual(5);
+    expect(m.scheef, 'pad in een andere schrijfwijze').toEqual([]);
+    expect(m.kantlijn, `kantlijn ${m.kantlijn.toFixed(0)}px naast een lijst van ${m.lijst.toFixed(0)}px`).toBeGreaterThanOrEqual(m.lijst - 1);
+    expect(m.modulekinderen, 'geen regels in de commandomodules').toBeGreaterThanOrEqual(9);
+    expect(m.randen, 'randen in de commandomodule').toEqual([]);
   });
 });

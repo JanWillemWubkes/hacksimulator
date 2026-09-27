@@ -67,7 +67,7 @@
        body.home: hij herdefinieert de gedeelde tokens voor navbar, footer en .btn-cta
        in plaats van tegen hun regels te vechten, en draagt de secties zelf in eigen
        af-klassen. De andere pagina's laden hem niet. -->
-  <link rel="stylesheet" href="styles/affiche.css?v=6">
+  <link rel="stylesheet" href="styles/affiche.css?v=7">
 
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
   <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
@@ -117,7 +117,7 @@
         "name": "Is HackSimulator legaal?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Ja, absoluut. HackSimulator.nl is een volledig gesimuleerde omgeving die lokaal in je browser draait. Je \"hackt\" geen echte systemen — alles wat je ziet is een educatieve simulatie. Er worden geen verbindingen gemaakt met externe servers en je kunt onmogelijk per ongeluk iets illegaals doen. Het is vergelijkbaar met een vluchtsimulator: je leert vliegen zonder ooit het vliegveld te verlaten."
+          "text": "Ja. HackSimulator.nl is een volledig gesimuleerde omgeving die lokaal in je browser draait. Je \"hackt\" geen echte systemen — alles wat je ziet is een educatieve simulatie. Er worden geen verbindingen gemaakt met externe servers en je kunt onmogelijk per ongeluk iets illegaals doen. Het is vergelijkbaar met een vluchtsimulator: je leert vliegen zonder ooit het vliegveld te verlaten."
         }
       },
       {
@@ -125,7 +125,7 @@
         "name": "Heb ik programmeerervaring nodig?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Nee, je hebt geen programmeerervaring nodig om te beginnen. HackSimulator.nl is speciaal ontworpen voor absolute beginners. We beginnen met basis terminal commands zoals ls, cd en cat, en bouwen stap voor stap op naar meer geavanceerde security tools. Elke command bevat Nederlandse uitleg zodat je precies begrijpt wat je doet."
+          "text": "Nee, je hebt geen programmeerervaring nodig om te beginnen. HackSimulator.nl is speciaal ontworpen voor absolute beginners. We beginnen met basiscommando's zoals ls, cd en cat, en bouwen stap voor stap op naar meer geavanceerde security tools. Elk command bevat Nederlandse uitleg zodat je precies begrijpt wat je doet."
         }
       },
       {
@@ -141,7 +141,7 @@
         "name": "Wat leer ik met de terminal simulator?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Je leert de basis van Linux terminal navigatie, bestandsbeheer, netwerk scanning met tools als nmap, wachtwoord analyse, en hoe security professionals denken. Na het doorlopen van alle modules begrijp je hoe hackers kwetsbaarheden vinden, en belangrijker: hoe je systemen kunt beschermen tegen aanvallen."
+          "text": "Je leert navigeren in een Linux-terminal, bestandsbeheer, netwerken scannen met tools als nmap, wachtwoorden analyseren, en hoe security professionals denken. Na het doorlopen van alle modules begrijp je hoe hackers kwetsbaarheden vinden, en belangrijker: hoe je systemen kunt beschermen tegen aanvallen."
         }
       },
       {
@@ -157,7 +157,7 @@
         "name": "Kan ik een certificaat krijgen?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Op dit moment bieden we geen officieel certificaat aan. HackSimulator.nl is bedoeld als startpunt voor je cybersecurity reis, niet als vervanging voor erkende certificeringen zoals CEH, OSCP of CompTIA Security+. We helpen je de basis te begrijpen zodat je beter voorbereid bent op die officiële trainingen en examens."
+          "text": "Op dit moment bieden we geen officieel certificaat aan. HackSimulator.nl is bedoeld als startpunt in cybersecurity, niet als vervanging voor erkende certificeringen zoals CEH, OSCP of CompTIA Security+. We helpen je de basis te begrijpen zodat je beter voorbereid bent op die officiële trainingen en examens."
         }
       },
       {
@@ -336,7 +336,7 @@
       <div class="af-raster">
         <header class="af-kop">
           <h2 id="pijn-kop">Herkenbaar?</h2>
-          <p>Drie redenen waarom beginners afhaken, en wat de terminal hier terugzegt.</p>
+          <p>Drie redenen waarom beginners afhaken, en hoe de simulator daarmee omgaat.</p>
         </header>
 
         <div class="af-pijn-rij">
@@ -348,7 +348,7 @@
           </div>
           <div class="af-pijn-tekst">
             <h3>Te veel Engels</h3>
-            <p>De tool praat Engels, zoals de echte tool dat doet. De uitleg loopt er in het Nederlands naast mee &mdash; niet eroverheen, zodat je leert wat er werkelijk staat. <a href="/blog/leren-hacken.html">Leren hacken</a> zonder woordenboek ernaast.</p>
+            <p>De commando's antwoorden in het Engels, net als in een echte terminal. Achter de belangrijke regels staat in het Nederlands wat ze betekenen, zodat je de echte uitvoer leert lezen. Een woordenboek heb je er niet bij nodig.</p>
           </div>
         </div>
 
@@ -361,7 +361,7 @@
           </div>
           <div class="af-pijn-tekst">
             <h3>Bang je pc te breken</h3>
-            <p>Er zit geen echt systeem achter. Het gevaarlijkste commando dat er bestaat legt hier uit w&aacute;t het gedaan zou hebben, en &eacute;&eacute;n woord zet alles terug. Je hoeft niet voorzichtig te doen.</p>
+            <p>Er zit geen echt systeem achter. Zelfs het gevaarlijkste commando, <code>rm -rf /</code>, legt hier alleen uit wat het gedaan zou hebben, en met <code>reset</code> staat alles weer zoals het was. Je hoeft niet voorzichtig te doen.</p>
           </div>
         </div>
 
@@ -373,7 +373,7 @@
           </div>
           <div class="af-pijn-tekst">
             <h3>Geen ervaring</h3>
-            <p>Een typefout is hier geen doodlopende weg maar de volgende aanwijzing. Je hoeft niets uit je hoofd te kennen om te beginnen &mdash; de terminal helpt je verder waar een echte je laat zitten.</p>
+            <p>Een typefout loopt hier niet dood: de terminal raadt wat je bedoelde. Je hoeft niets uit je hoofd te kennen om te beginnen.</p>
           </div>
         </div>
       </div>
@@ -387,7 +387,7 @@
       <div class="af-raster">
         <header class="af-kop">
           <h2 id="leerpad-kop">Jouw leerpad: van beginner tot expert</h2>
-          <p>Vijf begeleide missies in drie niveaus. Weet je in de simulator niet verder, typ dan <code>next</code>: die wijst je de volgende stap.</p>
+          <p>Vijf begeleide missies in drie niveaus. Loop je vast in de simulator? Typ dan <code>next</code>: dat commando wijst je de volgende stap.</p>
         </header>
 
         <ol class="af-specimens">
@@ -424,7 +424,7 @@
               <div class="leerpad-cmd-line">sqlmap, nikto</div>
               <div class="leerpad-cmd-line">hashcat</div>
             </div>
-            <p>Echte pentesting tools: exploit frameworks, SQL injection testing, brute force en password cracking.</p>
+            <p>Echte pentesttools: exploitframeworks, SQL-injectie testen, brute force en wachtwoorden kraken.</p>
             <div class="af-specimen-voet">
               <a href="/blog/sql-injection-uitgelegd.html" class="af-leeslink">Lees eerst: SQL-injection</a>
               <a href="/terminal.html?tutorial=exploitation" class="af-knop" data-terminal-cta="leerpad_expert">Start de Expert-missie</a>
@@ -451,7 +451,7 @@
           <a href="/commands/" class="af-lijst-rij">
             <span class="result-number">40+</span>
             <span class="result-label">Commands, elk met een handleiding (typ <code>man</code> en de naam)</span>
-            <span class="af-lijst-waar">/commands/</span>
+            <span class="af-lijst-waar">/commands</span>
           </a>
           <a href="/over-ons.html#verantwoording" class="af-lijst-rij">
             <span class="result-number">10+</span>
@@ -511,7 +511,7 @@
           </h3>
           <div class="faq-answer" id="faq-2">
             <p>
-              Ja, absoluut. HackSimulator.nl is een volledig gesimuleerde omgeving die lokaal in je browser draait.
+              Ja. HackSimulator.nl is een volledig gesimuleerde omgeving die lokaal in je browser draait.
               Je "hackt" geen echte systemen — alles wat je ziet is een educatieve simulatie. Er worden geen verbindingen
               gemaakt met externe servers en je kunt onmogelijk per ongeluk iets illegaals doen. Het is vergelijkbaar
               met een vluchtsimulator: je leert vliegen zonder ooit het vliegveld te verlaten.
@@ -531,9 +531,8 @@
           <div class="faq-answer" id="faq-3">
             <p>
               Nee, je hebt geen programmeerervaring nodig om te beginnen. HackSimulator.nl is speciaal ontworpen
-              voor absolute beginners. We beginnen met basis terminal commands zoals <code>ls</code>, <code>cd</code>
-              en <code>cat</code>, en bouwen stap voor stap op naar meer geavanceerde security tools. Elke command
-              bevat Nederlandse uitleg zodat je precies begrijpt wat je doet.
+              voor absolute beginners. We beginnen met basiscommando's zoals <code>ls</code>, <code>cd</code>
+              en <code>cat</code>, en bouwen stap voor stap op naar meer geavanceerde security tools. Elk command bevat Nederlandse uitleg zodat je precies begrijpt wat je doet.
             </p>
           </div>
         </div>
@@ -569,8 +568,8 @@
           </h3>
           <div class="faq-answer" id="faq-5">
             <p>
-              Je leert de basis van Linux terminal navigatie, bestandsbeheer, netwerk scanning met tools als
-              <code>nmap</code>, wachtwoord analyse, en hoe security professionals denken. Na het doorlopen van
+              Je leert navigeren in een Linux-terminal, bestandsbeheer, netwerken scannen met tools als
+              <code>nmap</code>, wachtwoorden analyseren, en hoe security professionals denken. Na het doorlopen van
               alle modules begrijp je hoe hackers kwetsbaarheden vinden, en belangrijker: hoe je systemen
               kunt beschermen tegen aanvallen.
             </p>
@@ -607,8 +606,7 @@
           </h3>
           <div class="faq-answer" id="faq-7">
             <p>
-              Op dit moment bieden we geen officieel certificaat aan. HackSimulator.nl is bedoeld als startpunt
-              voor je cybersecurity reis, niet als vervanging voor erkende certificeringen zoals CEH, OSCP of
+              Op dit moment bieden we geen officieel certificaat aan. HackSimulator.nl is bedoeld als startpunt in cybersecurity, niet als vervanging voor erkende certificeringen zoals CEH, OSCP of
               CompTIA Security+. We helpen je de basis te begrijpen zodat je beter voorbereid bent op
               die officiële trainingen en examens.
             </p>
@@ -691,7 +689,7 @@
     <section class="af-band af-sample" aria-labelledby="sample-kop">
       <div class="af-raster">
         <h2 id="sample-kop">Zo begint een echte pentest</h2>
-        <p>De eerste 9 pagina's van het Pentest Playbook, als pdf: hoe je een pentest voorbereidt &mdash; toestemming, scope en de juridische check &mdash; en je doelwit verkent v&oacute;&oacute;r de eerste aanval. Precies de stap die beginners overslaan. Geen account, alleen je email.</p>
+        <p>De eerste 9 pagina's van het Pentest Playbook, als pdf: hoe je een pentest voorbereidt &mdash; toestemming, scope en de juridische check &mdash; en je doelwit verkent v&oacute;&oacute;r de eerste aanval. Precies de stap die beginners overslaan. Geen account, alleen je e-mailadres.</p>
         <div class="af-sample-acties">
           <a href="/sample-pentest.html" class="af-knop af-knop--vol" data-lead-magnet="pentest_sample" data-cta-location="homepage_lead_strip">Download de gratis sample</a>
           <a href="/gidsen.html" class="af-leeslink">Of bekijk alle gidsen en samples</a>
@@ -706,7 +704,7 @@
     <div class="af-raster">
       <div class="af-news-tekst">
         <h2 id="news-kop">Gratis cybersecurity tips</h2>
-        <p>Ontvang maandelijks tips over ethisch hacken, nieuwe tutorials en cybersecurity nieuws. Geen spam, altijd opzegbaar.</p>
+        <p>Ontvang maandelijks tips over ethisch hacken, nieuwe tutorials en cybersecuritynieuws. Geen spam, altijd opzegbaar.</p>
       </div>
       <div class="sib-form af-news-form">
         <div id="sib-form-container" class="sib-form-container">

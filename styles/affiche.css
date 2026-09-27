@@ -1191,7 +1191,11 @@ body.home .af-lijst .result-label {
   color: var(--af-inkt);
 }
 
-/* ==================== Leerpad: specimenkaarten ==================== */
+/* ==================== Leerpad: drie kolommen op het raster ==================== */
+/* Sessie 242 (proef L1/L2/L3): geen kaarten meer, maar kolommen gescheiden door een
+   haarlijn, zoals Herkenbaar zijn rijen scheidt. Het donkere commandoblok is het enige
+   vlak. Van 12 naar 5 lijnen per kolom; de scheidingslijnen in het blok waren geërfd uit
+   de gedeelde landing.css, geen keuze van deze pagina. */
 .af-specimens {
   display: grid;
   grid-template-columns: subgrid;
@@ -1205,22 +1209,23 @@ body.home .af-lijst .result-label {
   display: grid;
   grid-template-rows: auto auto 1fr auto;
   gap: 16px;
-  padding: var(--af-cel);
-  border: 1px solid var(--af-inkt);
-  background: var(--af-papier);
-  margin-left: -1px;         /* aangrenzende kaders delen één lijn van 1px */
+  padding: 0 var(--af-cel);
+  border-left: 1px solid var(--af-inkt);
 }
 
 .af-specimen:first-child {
-  margin-left: 0;
+  border-left: 0;
+  padding-left: 0;
+}
+
+.af-specimen:last-child {
+  padding-right: 0;
 }
 
 .af-specimen-kop {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--af-inkt);
 }
 
 .af-niveau {
@@ -1231,22 +1236,31 @@ body.home .af-lijst .result-label {
 
 .af-specimen-cmds {
   padding: 12px var(--af-cel);
-  margin-inline: calc(var(--af-cel) * -1);
   background: var(--af-m-grond);
 }
 
+/* (0,2,0) wint van landing.css .leerpad-cmd-line (0,1,0): de rand en padding daar zijn
+   voor de lijst op de andere pagina's. */
 body.home .leerpad-cmd-line {
+  padding: 0;
+  border-bottom: 0;
   font-family: var(--af-mono);
   font-size: 0.83rem;
   line-height: 1.7;
   color: var(--af-m-tekst);
 }
 
+/* Eén actie per kolom vooraan: de knop; "Lees eerst" als kleine regel eronder. */
 .af-specimen-voet {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.af-specimen-voet .af-leeslink {
+  order: 2;
+  font-size: var(--af-klein);
 }
 
 /* ==================== Blog: kantlijn naast de vragen ==================== */
@@ -1258,7 +1272,8 @@ body.home .leerpad-cmd-line {
 .af-faq-lees {
   grid-column: 8 / -1;
   grid-row: 2;
-  align-self: start;
+  align-self: stretch;          /* de lijn loopt langs de hele lijst, niet tot de inhoud */
+  align-content: start;
   display: grid;
   gap: 20px;
   padding: 4px 0 8px var(--af-cel);
@@ -1669,12 +1684,18 @@ body.home a.footer-donate:hover {
 
   .af-specimen {
     grid-column: 1 / -1;
-    margin-left: 0;
-    margin-top: -1px;
+    padding: 28px 0;
+    border-left: 0;
+    border-top: 1px solid var(--af-inkt);
   }
 
   .af-specimen:first-child {
-    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .af-specimen:last-child {
+    padding-bottom: 0;
   }
 
   /* Onder 1024 staan de vragen op de volle breedte; de bloglinks volgen eronder. */
