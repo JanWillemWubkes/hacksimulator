@@ -67,7 +67,7 @@
        body.home: hij herdefinieert de gedeelde tokens voor navbar, footer en .btn-cta
        in plaats van tegen hun regels te vechten, en draagt de secties zelf in eigen
        af-klassen. De andere pagina's laden hem niet. -->
-  <link rel="stylesheet" href="styles/affiche.css?v=5">
+  <link rel="stylesheet" href="styles/affiche.css?v=6">
 
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
   <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
@@ -109,7 +109,7 @@
         "name": "Wat is ethisch hacken?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Ethisch hacken (ook wel \"white hat hacking\" genoemd) is het geautoriseerd testen van computersystemen op beveiligingslekken. In tegenstelling tot kwaadwillende hackers, werken ethische hackers met toestemming van de systeemeigenaar om kwetsbaarheden te vinden en te rapporteren voordat criminelen ze kunnen misbruiken. Het is een legitieme en gevraagde vaardigheid in de cybersecurity-industrie."
+          "text": "Ethisch hacken (ook wel \"white hat hacking\" genoemd) is het geautoriseerd testen van computersystemen op beveiligingslekken. In tegenstelling tot kwaadwillende hackers, werken ethische hackers met toestemming van de systeemeigenaar om kwetsbaarheden te vinden en te rapporteren voordat criminelen ze kunnen misbruiken. Het is een legitieme en gevraagde vaardigheid in de cybersecurity-industrie. Het hele verhaal lees je in ons artikel Wat is ethisch hacken?"
         }
       },
       {
@@ -477,7 +477,7 @@
       <div class="af-raster">
         <header class="af-kop">
           <h2 id="faq-kop">Veelgestelde vragen</h2>
-          <p>Staat je vraag er niet bij? Begin dan met een van deze drie artikelen.</p>
+          <p>Staat je vraag er niet bij? Mail hem naar <a href="mailto:contact@hacksimulator.nl">contact@hacksimulator.nl</a>.</p>
         </header>
         <div class="af-faq-lijst">
         <div class="faq-item">
@@ -495,6 +495,7 @@
               op beveiligingslekken. In tegenstelling tot kwaadwillende hackers, werken ethische hackers met toestemming
               van de systeemeigenaar om kwetsbaarheden te vinden en te rapporteren voordat criminelen ze kunnen misbruiken.
               Het is een legitieme en gevraagde vaardigheid in de cybersecurity-industrie.
+              Het hele verhaal lees je in ons artikel <a href="/blog/wat-is-ethisch-hacken.html">Wat is ethisch hacken?</a>
             </p>
           </div>
         </div>
@@ -653,17 +654,18 @@
         </div>
         <!-- De drie bloglinks: de boog wat → hoe → waarheen. Hun labels zijn de échte <h1>
              van de post (validate-docs.sh Check 11 + homepage-conversion.spec.js); href staat
-             vóór class, want zo leest die check de markup. S242: van een eigen sectie naar
-             de glos-kolom van de vragen: wie hier zoekt, leest daarna verder. Beide lijsten
-             beginnen op rij 2, dus hun inktlijnen liggen op dezelfde hoogte. -->
-        <div class="af-faq-lees">
-          <ul class="af-lees-lijst" aria-label="Artikelen op de blog">
-            <li><a href="/blog/wat-is-ethisch-hacken.html" class="blog-link">Wat is ethisch hacken?</a></li>
-            <li><a href="/blog/leren-hacken.html" class="blog-link">Leren hacken: de complete beginnersgids</a></li>
-            <li><a href="/blog/ethisch-hacker-worden.html" class="blog-link">Hoe word je ethisch hacker?</a></li>
+             vóór class, want zo leest die check de markup; het pad staat daarom búíten de
+             link. S242: een kantlijn naast de vragen, in een andere vorm dan de vragen
+             (label, mono-pad, gewone letter), zodat hij niet als nog drie vragen leest. -->
+        <aside class="af-faq-lees" aria-labelledby="lees-kop">
+          <p class="af-lees-label" id="lees-kop">Verder lezen op de blog</p>
+          <ul class="af-lees-lijst">
+            <li><span class="af-lees-pad" aria-hidden="true">/blog/leren-hacken</span><a href="/blog/leren-hacken.html" class="blog-link">Leren hacken: de complete beginnersgids</a></li>
+            <li><span class="af-lees-pad" aria-hidden="true">/blog/cybersecurity-tools</span><a href="/blog/cybersecurity-tools.html" class="blog-link">5 essentiële tools voor cybersecurity beginners</a></li>
+            <li><span class="af-lees-pad" aria-hidden="true">/blog/ethisch-hacker-worden</span><a href="/blog/ethisch-hacker-worden.html" class="blog-link">Hoe word je ethisch hacker?</a></li>
           </ul>
           <p class="af-lees-meer"><a href="/blog/">Alle artikelen</a></p>
-        </div>
+        </aside>
       </div>
     </section>
 
@@ -678,7 +680,6 @@
           </a>
           <p class="af-microcopy"><a href="/blog/welkom.html">Of lees eerst hoe het werkt</a></p>
         </div>
-        <p class="af-contact">Vragen? <a href="mailto:contact@hacksimulator.nl">contact@hacksimulator.nl</a></p>
       </div>
     </section>
 

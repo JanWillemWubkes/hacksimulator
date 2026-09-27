@@ -582,7 +582,6 @@ test.describe('Onderpagina', () => {
           ['.af-pijn-rij .af-transcript', '.af-pijn-rij .af-pijn-tekst'],
           ['.af-inventaris .af-lijst', '.af-inventaris .af-noot'],
           ['.af-faq .af-faq-lijst', '.af-faq .af-faq-lees'],
-          ['.af-slot .af-actie', '.af-slot .af-contact'],
           ['.af-sample h2', '.af-sample p'],
           ['.af-news-tekst', '.af-news-form'],
         ];
@@ -625,4 +624,70 @@ test.describe('Onderpagina', () => {
       expect(fout).toEqual([]);
     });
   }
+});
+
+// ==================== Vorm volgt soort (Sessie 242, ronde 2) ====================
+//
+// Een doorloop van de hele pagina vond zeven plekken waar de vorm iets anders zei dan de
+// inhoud: bloglinks in de vorm van FAQ-vragen (en één titel twee keer naast elkaar), een
+// inleiding in de glos-kolom, Herkenbaar-koppen 16px boven hun prompt, haarlijnen door
+// lopende tekst, en een nieuwsbriefveld 70px naast de naad. Eén assertie per soort fout.
+
+test.describe('Vorm volgt soort', () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('elke soort staat op zijn plek en in zijn eigen vorm', async ({ page }) => {
+    await page.goto('/index.html');
+    await page.evaluate(() => document.fonts.ready);
+    const m = await page.evaluate(() => {
+      const R = (e) => (typeof e === 'string' ? document.querySelector(e) : e).getBoundingClientRect();
+      const cs = (e) => getComputedStyle(typeof e === 'string' ? document.querySelector(e) : e);
+      const naad = R('.af-glos-kop').left;
+
+      // 1. Bloglinks zijn geen vragen: andere letter of ander gewicht, en geen gedeelde titel.
+      const vraag = cs('.af-faq .faq-question'), link = cs('.af-lees-lijst .blog-link');
+      const zelfdeVorm = vraag.fontFamily === link.fontFamily && vraag.fontWeight === link.fontWeight;
+      const vragen = [...document.querySelectorAll('.faq-question-text')].map((e) => e.textContent.trim());
+      const dubbel = [...document.querySelectorAll('.blog-link')].map((a) => a.textContent.trim()).filter((t) => vragen.includes(t));
+
+      // 2. Een inleiding hoort bij haar kop: zelfde linkerrand, niet in de glos-kolom.
+      const koppen = [...document.querySelectorAll('.af-kop')].filter((k) => k.querySelector('p'));
+      const losseInleiding = koppen.filter((k) => Math.abs(R(k.querySelector('p')).left - R(k.querySelector('h2')).left) > 1)
+        .map((k) => k.querySelector('h2').id);
+
+      // 3. Herkenbaar: de kop staat op de rij van zijn promptregel (midden tegen midden).
+      const rijen = [...document.querySelectorAll('.af-pijn-rij')].map((r) => {
+        const a = R(r.querySelector('h3')), b = R(r.querySelector('.terminal-line.prompt'));
+        return Math.round((a.top + a.height / 2) - (b.top + b.height / 2));
+      });
+
+      // 4. Geen haarlijn door lopende tekst in de hero: óf geen lijn binnen de box, óf de
+      //    box snijdt zich uit (eigen, dekkende achtergrond).
+      const raster = document.querySelector('.af-hero-raster'); const rb = R(raster);
+      const pl = parseFloat(cs(raster).paddingLeft); const kol = (rb.width - 2 * pl) / 12;
+      const lijnen = [...Array(13)].map((_, i) => rb.left + pl + i * kol);
+      const tekst = [...raster.querySelectorAll('p, .reg-glos:not(:empty)')].filter((e) => e.getClientRects().length && e.textContent.trim()
+        && !e.closest('.af-term-body, .terminal-input-line'));
+      const doorkruist = tekst.filter((e) => {
+        const q = R(e); const n = lijnen.filter((x) => x > q.left + 2 && x < q.right - 2).length;
+        const bg = cs(e).backgroundColor; const dekt = bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent';
+        return n > 0 && !dekt;
+      }).map((e) => e.className || e.tagName);
+
+      // 5. Het nieuwsbriefveld begint op de naad.
+      const veld = R('.af-news .newsletter-form .input').left;
+
+      return { zelfdeVorm, dubbel, koppen: koppen.length, losseInleiding, rijen, tekst: tekst.length, doorkruist, naad, veld };
+    });
+
+    expect(m.zelfdeVorm, 'bloglinks hebben de letter en het gewicht van de FAQ-vragen').toBe(false);
+    expect(m.dubbel, 'titel staat als vraag én als bloglink').toEqual([]);
+    expect(m.koppen, 'geen kop met inleiding gevonden').toBeGreaterThanOrEqual(3);
+    expect(m.losseInleiding, 'inleiding niet op de linkerrand van haar kop').toEqual([]);
+    expect(m.rijen.length).toBe(3);
+    for (const d of m.rijen) expect(Math.abs(d), `Herkenbaar-kop ${d}px naast zijn promptregel`).toBeLessThanOrEqual(4);
+    expect(m.tekst, 'geen hero-tekst gemeten').toBeGreaterThanOrEqual(3);
+    expect(m.doorkruist, 'haarlijn door lopende tekst').toEqual([]);
+    expect(Math.abs(m.veld - m.naad), `veld op ${m.veld.toFixed(1)}, naad op ${m.naad.toFixed(1)}`).toBeLessThanOrEqual(1);
+  });
 });

@@ -124,6 +124,27 @@ dan de h1 (vóór: omslag 66,24 > 64,8). Beide bewaakt.
   direct boven de kaarten 01-03, twee nummeringen in één beeld. De mono-index blijft voor
   volgordes (chips, leerpad).
 
+**Ronde 2: vorm volgt soort** (na feedback eigenaar: "die kleinere tekst boven de rechter
+kolom vind ik niet mooi", "de bloglinks lijken ook FAQ's"). Een doorloop van de hele pagina
+vond zeven plekken waar de vorm iets anders zei dan de inhoud. Regel: **de glos-kolom
+(8-12) is alleen voor uitleg naast iets links**; wat bij een kop hoort, staat onder die kop.
+- Inleidingen onder hun kop (1-7), niet rechtsboven.
+- Bloglinks als kantlijn op de naad: haarlijn op kolom 8, mono-label "Verder lezen op de
+  blog", pad in mono, titel in lopende letter. Proef K/R: K gekozen; R liet vijf lege
+  kolommen naast de vragen. "Wat is ethisch hacken?" stond als vraag én als link; de link
+  staat nu in het antwoord (zichtbaar + FAQPage), de lijst noemt de tools-gids.
+- Herkenbaar-koppen op de rij van hun promptregel, met de aanhaallijn van de hero (was 16px
+  erboven).
+- Elke alinea in het hero-raster snijdt zich uit het raster, zoals de glos al deed (was:
+  haarlijnen door ondertitel, onderschrift, kolomkop, uitnodiging en microcopy).
+- Nieuwsbriefveld op de naad (de gedeelde regel centreerde het: 70px ernaast).
+- Contactregel van het slot naar de FAQ-inleiding ("Staat je vraag er niet bij? Mail …").
+- **Cijfers op afficheschaal, in inkt** (proef N/G, G gekozen). Dit herziet de regel "geen
+  afficheschaal, dat is de metric-tegel": een metric-tegel is een los accentgetal in een
+  kaart. Hier staat elk getal in een tabelrij met zijn bron, zonder kleur. Op 19px was het
+  getal het kleinste element van een sectie die "in cijfers" heet.
+Bewaakt in `homepage-conversion.spec.js` "Vorm volgt soort"; zes mutanten, zes falers.
+
 **Bewust niet:** geen verticale haarlijnen onder de hero (daar is het raster de vorm,
 eronder wordt het behang; de naad draagt het raster), geen mid-CTA (mobiele balk ≤1279,
 navbar ≥1280, bewaakt door "op elke scrollpositie een tikbare CTA").
