@@ -455,7 +455,8 @@ const METEN = () => {
   const pagina = effBg(document.body);
   const oppervlak = reeksen.filter((r) => !r.k.includes('glow') && r.k === pagina.join(','));
 
-  const banden = ['.af-feiten', '#results', '#leerpad', '#newsletter'].map((sel) => {
+  // Sessie 242: feitenband weg, cijfers naar papier, de vragen werden een band.
+  const banden = ['#leerpad', '.af-faq', '#newsletter'].map((sel) => {
     const el = document.querySelector(sel);
     const band = effBg(el);
     // Sessie 238: de enige kaart in deze wereld is de specimenkaart van het leerpad.
@@ -469,7 +470,8 @@ const METEN = () => {
   // vergelijking meer. De assertie zelf blijft intact: .leerpad-cards (full-bleed, zonder
   // inner wrapper) moet nog steeds op dezelfde rail liggen als .how-it-works-steps (een
   // gewoon begrensde sectie), en dát is wat deze test bewijst.
-  const rails = ['.af-specimens', '.af-stappen-rij'].map((sel) => {
+  // Sessie 242: "Hoe het werkt" is geschrapt; .af-pijn-rij is de gewone begrensde rij.
+  const rails = ['.af-specimens', '.af-pijn-rij'].map((sel) => {
     const b = document.querySelector(sel).getBoundingClientRect();
     return `${sel} ${Math.round(b.left)},${Math.round(b.right)}`;
   });
@@ -527,4 +529,100 @@ test.describe('Homepage sectieritme', () => {
       expect(m.overflow, `@${vp.width}px horizontale overflow`).toBe(false);
     }
   });
+});
+
+// ==================== Onderpagina (Sessie 242) ====================
+//
+// Onder de hero stond een reeks van twaalf secties met één padding (129,6px @1440) en één
+// koppenmaat, en een omslagkop van 66,24px bóven de h1 (64,8). Vier secties herhaalden in
+// woorden wat Herkenbaar toont, en zijn geschrapt. Deze vier guards bewaken wat daarvoor in
+// de plaats kwam; elk heeft een tak die bewijst dat de meting een populatie had.
+
+const BREEDTES_ONDER = [1440, 1280, 1024, 375];
+
+test.describe('Onderpagina', () => {
+  for (const breedte of BREEDTES_ONDER) {
+    test(`@${breedte}px is geen kop groter dan de h1`, async ({ page }) => {
+      await page.setViewportSize({ width: breedte, height: 900 });
+      await page.goto('/index.html');
+      await page.evaluate(() => document.fonts.ready);
+      const m = await page.evaluate(() => {
+        const h1 = parseFloat(getComputedStyle(document.querySelector('h1')).fontSize);
+        const koppen = [...document.querySelectorAll('main h2, main h3, #newsletter h2')]
+          .filter((h) => h.getClientRects().length)
+          .map((h) => ({ id: h.id || h.textContent.trim().slice(0, 30), fs: parseFloat(getComputedStyle(h).fontSize) }));
+        return { h1, koppen, te_groot: koppen.filter((k) => k.fs > h1).map((k) => `${k.id} ${k.fs}px`) };
+      });
+      expect(m.koppen.length, 'geen koppen gemeten — de meting heeft niet gedraaid').toBeGreaterThan(5);
+      expect(m.te_groot, `koppen groter dan de h1 (${m.h1}px)`).toEqual([]);
+    });
+  }
+
+  test('elk anker in het landingsmenu wijst naar een element dat bestaat', async ({ page }) => {
+    await page.goto('/index.html');
+    await page.waitForSelector('#landing-mobile-menu a[href^="#"]', { state: 'attached' });
+    const m = await page.evaluate(() => {
+      const ankers = [...document.querySelectorAll('#landing-mobile-menu a[href^="#"]:not(.dropdown-trigger)')]
+        .map((a) => a.getAttribute('href')).filter((h) => h.length > 1);
+      return { ankers, zoek: ankers.filter((h) => !document.querySelector(h)) };
+    });
+    expect(m.ankers.length, 'geen menu-ankers gevonden').toBeGreaterThanOrEqual(3);
+    expect(m.zoek, 'ankers zonder doel').toEqual([]);
+  });
+
+  // De glos-naad van de hero (terminal 1-7, uitleg 8-12) is de naad van de hele pagina:
+  // elke tweedelige rij eronder deelt op dezelfde x.
+  for (const breedte of [1440, 1280]) {
+    test(`@${breedte}px deelt elke tweedelige rij onder de hero op de glos-naad`, async ({ page }) => {
+      await page.setViewportSize({ width: breedte, height: 900 });
+      await page.goto('/index.html');
+      const m = await page.evaluate(() => {
+        const naad = document.querySelector('.af-glos-kop').getBoundingClientRect().left;
+        const paren = [
+          ['.af-pijn-rij .af-transcript', '.af-pijn-rij .af-pijn-tekst'],
+          ['.af-inventaris .af-lijst', '.af-inventaris .af-noot'],
+          ['.af-faq .af-faq-lijst', '.af-faq .af-faq-lees'],
+          ['.af-slot .af-actie', '.af-slot .af-contact'],
+          ['.af-sample h2', '.af-sample p'],
+          ['.af-news-tekst', '.af-news-form'],
+        ];
+        return {
+          naad,
+          afwijkend: paren.map(([l, r]) => {
+            const L = document.querySelector(l).getBoundingClientRect();
+            const R = document.querySelector(r).getBoundingClientRect();
+            return { l, links: L.right, rechts: R.left };
+          }).filter((p) => Math.abs(p.links - naad) > 1 || Math.abs(p.rechts - naad) > 1)
+            .map((p) => `${p.l}: ${p.links.toFixed(1)} | ${p.rechts.toFixed(1)}`),
+          aantal: paren.length,
+        };
+      });
+      expect(m.aantal).toBeGreaterThanOrEqual(4);
+      expect(m.afwijkend, `naad op ${m.naad.toFixed(1)}`).toEqual([]);
+    });
+  }
+
+  // Lucht mag de inhoud niet overtreffen: met één maat voor alles hadden sample en
+  // nieuwsbrief 259px lucht om 184 en 155px inhoud.
+  for (const breedte of [1440, 375]) {
+    test(`@${breedte}px heeft geen sectie onder de hero meer lucht dan inhoud`, async ({ page }) => {
+      await page.setViewportSize({ width: breedte, height: 900 });
+      await page.goto('/index.html');
+      await page.evaluate(() => document.fonts.ready);
+      const m = await page.evaluate(() => {
+        const secties = [...document.querySelectorAll('main.af > section:not(#hero), #newsletter')];
+        return secties.map((s) => {
+          const blad = [...s.querySelectorAll('h2,h3,p,li,a,.af-transcript,.af-specimen,.faq-item,input,button')]
+            .filter((e) => e.getClientRects().length);
+          let top = Infinity, bodem = 0;
+          for (const e of blad) { const r = e.getBoundingClientRect(); top = Math.min(top, r.top); bodem = Math.max(bodem, r.bottom); }
+          const h = s.getBoundingClientRect().height;
+          return { naam: s.id || s.className.split(' ').pop(), inhoud: Math.round(bodem - top), lucht: Math.round(h - (bodem - top)) };
+        });
+      });
+      expect(m.length, 'te weinig secties gemeten').toBeGreaterThanOrEqual(6);
+      const fout = m.filter((s) => s.lucht > s.inhoud).map((s) => `${s.naam} lucht ${s.lucht} > inhoud ${s.inhoud}`);
+      expect(fout).toEqual([]);
+    });
+  }
 });

@@ -164,8 +164,8 @@ function initCtaBar() {
   const balk = document.querySelector('.mobile-cta-bar');
   if (!balk || !('IntersectionObserver' in window)) return;
 
-  // Alleen de CTA's die hetzelfde label dragen als de balk ("Start de simulator"): hero,
-  // mid en final. Bewust NIET de leerpad-deeplinks (?tutorial=) — die dragen een ander
+  // Alleen de CTA's die hetzelfde label dragen als de balk ("Start de simulator"): hero
+  // en final (de mid-CTA verviel met "Hoe het werkt" in sessie 242). Bewust NIET de leerpad-deeplinks (?tutorial=) — die dragen een ander
   // label, dus daar is geen duplicaat en blijft de balk juist nuttig als drager van het
   // canonieke label.
   const doelen = [...document.querySelectorAll('a.btn-cta[href="/terminal.html"]')]

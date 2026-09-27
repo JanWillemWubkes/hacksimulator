@@ -89,6 +89,45 @@ eigen regel:
 
 ---
 
+## Onderpagina (sessie 242)
+
+**Besluit.** Onder de hero volgen zeven secties in plaats van twaalf: Herkenbaar (papier,
+inktlijn boven, draagt het menu-anker `#features`), Leerpad (band), In cijfers (papier),
+Vragen met de bloglinks ernaast (band), Slot (papier), Sample (inkt, de enige inversie
+onder de hero), Nieuwsbrief (band). Geschrapt: de feitenband, "De oplossing" (omslag),
+"Wat maakt HackSimulator anders?" (tabel + drie features) en "Hoe het werkt" (incl. de
+mid-CTA). Documenthoogte 8745 → 5494 @1440, 10834 → 7892 @375.
+
+**Herhaling per functie, niet per telling.** Herhaling blijft als ze een functie heeft:
+bewering → bewijs (h1 "veilig" → `rm -rf /`), geruststelling bij de actie (microcopy
+naast een rode knop), naslag (FAQ, FAQPage) of natelbaar maken ("40+" → `/commands/`). De
+geschrapte secties waren abstracte herformuleringen zonder nieuw bewijs, niet op een
+beslismoment. De twee feiten die alleen in de feitenband stonden (gratis, geen
+advertenties) staan nu bij de slot-actie.
+
+**De naad.** De glos-naad van de hero (terminal 1-7, uitleg 8-12) is de naad van de hele
+pagina: links het ding (transcript, lijst, vragen, actie), rechts de uitleg of de
+vervolgstap (glos, noot, bloglinks, contact). Vóór: delingen op kolom 4, 5, 8, 9 en 10.
+Bewaakt in `homepage-conversion.spec.js` "Onderpagina".
+
+**Ritme naar gewicht.** Hoofdsecties (Herkenbaar, Leerpad, Vragen) houden `--af-sectie`;
+korte secties (cijfers, slot, sample, nieuwsbrief) krijgen `--af-sectie-kort`. Regel: lucht
+≤ inhoud (vóór: sample 259 lucht om 184 inhoud, nieuwsbrief 259 om 155). Geen kop groter
+dan de h1 (vóór: omslag 66,24 > 64,8). Beide bewaakt.
+
+**De proef** (`.playwright-mcp/s242-proef-koppen.png`, gelijke breedte, onder elkaar):
+- B: Herkenbaar-kop 47,52, gelijk aan de andere h2's. **Gekozen.**
+- C: Herkenbaar-kop 58px. Een derde koppenmaat voor een verschil dat op de proef
+  nauwelijks zichtbaar was; de platte hiërarchie kwam van de gelijke padding, niet van
+  de kopmaat.
+- D: een mono-sectie-index 01-04 boven de koppen. Verworpen: "02 Jouw leerpad" stond
+  direct boven de kaarten 01-03, twee nummeringen in één beeld. De mono-index blijft voor
+  volgordes (chips, leerpad).
+
+**Bewust niet:** geen verticale haarlijnen onder de hero (daar is het raster de vorm,
+eronder wordt het behang; de naad draagt het raster), geen mid-CTA (mobiele balk ≤1279,
+navbar ≥1280, bewaakt door "op elke scrollpositie een tikbare CTA").
+
 ## Memorabel moment
 
 Je tikt `nmap 192.168.1.1`. Links rolt de poortuitvoer uit, rechts verschijnt per regel de

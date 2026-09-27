@@ -69,6 +69,10 @@ body.home {
   --af-rand: clamp(16px, 3vw, 32px);
   --af-cel: clamp(12px, 1.4vw, 20px);
   --af-sectie: clamp(72px, 9vw, 136px);
+  /* Korte secties (cijfers, slot, sample, nieuwsbrief): regel lucht <= inhoud. Met één
+     maat voor alles hadden sample en nieuwsbrief meer lucht dan inhoud (259 tegen 184 en
+     155 @1440), en las de reeks als een metronoom (sessie 242). */
+  --af-sectie-kort: clamp(48px, 5vw, 72px);
   --af-kop: 'Archivo', 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif;
   --af-tekst: var(--font-body);
   --af-mono: var(--font-terminal);
@@ -413,6 +417,13 @@ body.home a.af-knop--vol:hover {
 
 .af-band {
   background: var(--af-papier-2);
+}
+
+.af-inventaris,
+.af-slot,
+.af-sample,
+.af-news {
+  padding-block: var(--af-sectie-kort);
 }
 
 /* ==================== HERO ==================== */
@@ -1022,41 +1033,13 @@ body.home .hero-chip:focus-visible .af-chip-nr::after {
   }
 }
 
-/* ==================== Vier feiten ==================== */
-.af-feiten {
-  padding-block: 0;
-  border-block: 1px solid var(--af-inkt);
-}
-
-.af-feiten-zin {
-  grid-column: 1 / 5;
-  padding: 24px var(--af-cel) 24px 0;
-  font-size: 1rem;
-  font-weight: 700;
-  align-self: center;
-}
-
-.af-feiten-rij {
-  grid-column: 5 / -1;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.af-feiten-rij li {
-  display: flex;
-  align-items: center;
-  padding: 24px var(--af-cel);
-  border-left: 1px solid var(--af-inkt);
-  font-family: var(--af-kop);
-  font-size: 1.1rem;
-  font-weight: 800;
-  line-height: 1.15;
-}
-
 /* ==================== Herkenbaar? ==================== */
+/* Papier op papier na de hero: één inktlijn scheidt ze (de rand van de vroegere
+   feitenband). */
+.af-pijn {
+  border-top: 1px solid var(--af-inkt);
+}
+
 .af-pijn-rij {
   display: grid;
   grid-template-columns: subgrid;
@@ -1102,92 +1085,10 @@ body.home .af-transcript .terminal-line.error { color: var(--af-m-fout); }
   max-width: 46ch;
 }
 
-/* ==================== De wending: het omgekeerde affiche ==================== */
-.af-omslag {
-  background: var(--af-inkt);
-  color: var(--af-papier);
-}
-
-.af-omslag h2 {
-  grid-column: 1 / 8;
-  color: var(--af-papier);
-  font-size: clamp(2rem, 4.6vw, 3.9rem);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.012em;
-}
-
-.af-omslag p {
-  grid-column: 8 / -1;
-  padding-left: var(--af-cel);
-  align-self: end;
-  font-size: 1.05rem;
-  color: var(--af-papier);
-  max-width: 40ch;
-}
-
-/* ==================== Verschil ==================== */
-.af-tabel-wrap {
-  overflow-x: auto;
-}
-
-.af-tabel {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 1rem;
-}
-
-.af-tabel th,
-.af-tabel td {
-  padding: 16px var(--af-cel);
-  text-align: left;
-  vertical-align: top;
-  border-bottom: 1px solid var(--af-lijn-sterk);
-}
-
-.af-tabel th {
-  font-family: var(--af-kop);
-  font-size: var(--af-klein);
-  font-weight: 800;
-  border-bottom: 2px solid var(--af-inkt);
-  color: var(--af-inkt);
-}
-
-.af-tabel td:first-child {
-  width: 41.6667%;              /* 5 van 12 kolommen */
-  color: var(--af-inkt-2);
-  text-decoration: line-through;
-  text-decoration-thickness: 1px;
-}
-
-.af-tabel td:last-child {
-  font-weight: 700;
-}
-
-.af-drie {
-  display: grid;
-  grid-template-columns: subgrid;
-  margin-top: clamp(40px, 5vw, 72px);
-}
-
-.af-drie-item {
-  grid-column: span 4;
-  display: grid;
-  gap: 12px;
-  align-content: start;
-  padding: 20px var(--af-cel) 0;
-  border-top: 2px solid var(--af-inkt);
-  border-left: 1px solid var(--af-lijn-sterk);
-}
-
-.af-drie-item:first-child {
-  border-left: 0;
-  padding-left: 0;
-}
-
 /* ==================== Inventaris ==================== */
 .af-lijst {
-  grid-column: 1 / 10;
+  grid-column: 1 / 8;
+  grid-row: 2;
   border-top: 2px solid var(--af-inkt);
 }
 
@@ -1238,50 +1139,21 @@ body.home .af-lijst .result-label {
   color: var(--af-inkt-2);
 }
 
+/* De noot is de glos van de lijst: rechts ervan, op de naad (sessie 242). */
 .af-noot {
-  grid-column: 1 / 10;
-  padding-top: 20px;
+  grid-column: 8 / -1;
+  grid-row: 2;
+  align-self: start;
+  padding: 14px 0 0 var(--af-cel);
   color: var(--af-inkt-2);
 }
 
-/* ==================== Hoe het werkt ==================== */
-.af-stappen-rij {
-  display: grid;
-  grid-template-columns: subgrid;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.af-stappen-rij li {
-  grid-column: span 4;
-  display: grid;
-  gap: 12px;
-  align-content: start;
-  padding: 0 var(--af-cel) 0;
-  border-left: 1px solid var(--af-lijn-sterk);
-}
-
-.af-stappen-rij li:first-child {
-  border-left: 0;
-  padding-left: 0;
-}
-
+/* Mono-index: genummerd waar de volgorde de informatie is (chips, leerpad). */
 .af-index {
   font-family: var(--af-mono);
   font-weight: 700;
   font-size: 0.83rem;
   color: var(--af-inkt);
-}
-
-.af-stappen-rij .af-index {
-  font-size: clamp(2.5rem, 4vw, 3.5rem);
-  line-height: 1;
-  font-weight: 800;
-}
-
-.af-actie--midden {
-  margin-top: clamp(40px, 5vw, 64px);
 }
 
 /* ==================== Leerpad: specimenkaarten ==================== */
@@ -1342,24 +1214,21 @@ body.home .leerpad-cmd-line {
   gap: 4px 16px;
 }
 
-/* ==================== Blog ==================== */
-.af-lees-kop {
-  grid-column: 1 / 5;
-}
-
-.af .af-lees-kop {
-  font-size: var(--af-h3);
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: 0;
+/* ==================== Blog: rechts van de vragen ==================== */
+/* Rij 2 expliciet: de kop is rij 1, en een expliciete plaatsing gaat vóór auto-placement
+   (css-layout.md §26). */
+.af-faq-lees {
+  grid-column: 8 / -1;
+  grid-row: 2;
+  align-self: start;
+  padding-left: var(--af-cel);
 }
 
 .af-lees-lijst {
-  grid-column: 5 / -1;
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: 1px solid var(--af-inkt);
+  border-top: 2px solid var(--af-inkt);
 }
 
 .af-lees-lijst li {
@@ -1389,13 +1258,13 @@ body.home .af-lees-lijst .blog-link:hover {
 }
 
 .af-lees-meer {
-  grid-column: 5 / -1;
   padding-top: 16px;
 }
 
 /* ==================== FAQ ==================== */
 .af-faq-lijst {
-  grid-column: 1 / 10;
+  grid-column: 1 / 8;
+  grid-row: 2;
   border-top: 2px solid var(--af-inkt);
 }
 
@@ -1471,7 +1340,7 @@ body.home .af-faq .faq-answer p {
 }
 
 .af-slot h2 {
-  grid-column: 1 / 9;
+  grid-column: 1 / 8;
   font-size: var(--af-display);
   font-weight: 700;
   line-height: 0.98;
@@ -1479,19 +1348,24 @@ body.home .af-faq .faq-answer p {
 }
 
 .af-slot-zin {
-  grid-column: 1 / 9;
+  grid-column: 1 / 8;
   padding-top: 20px;
   font-size: 1.1rem;
 }
 
 .af-slot .af-actie {
-  grid-column: 1 / -1;
+  grid-column: 1 / 8;
+  grid-row: 3;
   padding-top: 32px;
 }
 
-.af-contact {
-  grid-column: 1 / -1;
-  padding-top: 40px;
+/* De contactregel staat als glos naast de actie, met zijn onderkant op die van de
+   microcopy. Rijen expliciet, anders duwt hij de rest omlaag (§26). */
+.af-slot .af-contact {
+  grid-column: 8 / -1;
+  grid-row: 3;
+  align-self: end;
+  padding-left: var(--af-cel);
   color: var(--af-inkt-2);
   font-size: var(--af-klein);
 }
@@ -1738,24 +1612,15 @@ body.home a.footer-donate:hover {
     grid-column: 1 / -1;
   }
 
-  .af-feiten-zin,
-  .af-feiten-rij {
-    grid-column: 1 / -1;
-  }
-
-  .af-feiten-rij li:first-child {
-    border-left: 0;
-    padding-left: 0;
-  }
-
-  .af-feiten-zin {
-    padding-bottom: 0;
-  }
-
   .af-lijst,
   .af-noot,
   .af-faq-lijst {
     grid-column: 1 / -1;
+  }
+
+  .af-noot {
+    grid-row: auto;
+    padding: 20px 0 0;
   }
 
   .af-specimen {
@@ -1768,14 +1633,16 @@ body.home a.footer-donate:hover {
     margin-top: 0;
   }
 
-  .af-lees-kop,
-  .af-lees-lijst,
-  .af-lees-meer {
+  /* Onder 1024 staan de vragen op de volle breedte; de bloglinks volgen eronder. */
+  .af-faq-lees,
+  .af-slot .af-contact {
     grid-column: 1 / -1;
+    grid-row: auto;
+    padding-left: 0;
   }
 
-  .af-lees-kop {
-    padding-bottom: 16px;
+  .af-faq-lees {
+    padding-top: 40px;
   }
 }
 
@@ -1919,8 +1786,6 @@ body.home a.footer-donate:hover {
   }
 
   .af-pijn-tekst,
-  .af-omslag h2,
-  .af-omslag p,
   .af-sample h2,
   .af-sample p,
   .af-sample-acties,
@@ -1933,40 +1798,9 @@ body.home a.footer-donate:hover {
   }
 
   .af-pijn-tekst,
-  .af-omslag p,
   .af-sample p,
   .af-news-form {
     padding-top: 20px;
-  }
-
-  .af-feiten-rij {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .af-feiten-rij li {
-    padding-left: var(--af-cel);
-  }
-
-  .af-feiten-rij li:nth-child(odd) {
-    border-left: 0;
-    padding-left: 0;
-  }
-
-  .af-feiten-rij li:nth-child(n + 3) {
-    border-top: 1px solid var(--af-inkt);
-  }
-
-  .af-drie-item,
-  .af-stappen-rij li {
-    grid-column: 1 / -1;
-    border-left: 0;
-    padding-left: 0;
-    padding-bottom: 28px;
-  }
-
-  .af-stappen-rij li + li {
-    border-top: 1px solid var(--af-lijn-sterk);
-    padding-top: 24px;
   }
 
   body.home .af-lijst-rij {

@@ -67,7 +67,7 @@
        body.home: hij herdefinieert de gedeelde tokens voor navbar, footer en .btn-cta
        in plaats van tegen hun regels te vechten, en draagt de secties zelf in eigen
        af-klassen. De andere pagina's laden hem niet. -->
-  <link rel="stylesheet" href="styles/affiche.css?v=4">
+  <link rel="stylesheet" href="styles/affiche.css?v=5">
 
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
   <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
@@ -324,29 +324,19 @@
       </div>
     </section>
 
-    <!-- ===== VIER FEITEN ===== -->
-    <section class="af-band af-feiten" aria-label="In het kort">
-      <div class="af-raster">
-        <p class="af-feiten-zin">Alles wat je nodig hebt om veilig cybersecurity te leren, direct in je browser.</p>
-        <ul class="af-feiten-rij">
-          <li>40+ commands</li>
-          <li>100% gratis</li>
-          <li>Geen advertenties</li>
-          <li>Geen account nodig</li>
-        </ul>
-      </div>
-    </section>
-
     <!-- ===== HERKENBAAR? =====
          S237: drie uitwisselingen die de pijn tonen in plaats van beweren, met uitvoer
          die uit de engine komt (gedraaid op terminal.html): ifconfig, rm -rf / en lss.
          S238: elke uitwisseling is een rasterrij — de transcript als donkere module over
-         zeven kolommen, de bewering ernaast over vijf. -->
-    <section class="af-sectie af-pijn" aria-labelledby="pijn-kop">
+         zeven kolommen, de bewering ernaast over vijf.
+         S242: draagt #features, het anker van "Het verschil" in het mobiele menu. De
+         sectie die zo heette (tabel + drie features) herhaalde in woorden wat hier getoond
+         wordt, en is geschrapt. -->
+    <section id="features" class="af-sectie af-pijn" aria-labelledby="pijn-kop">
       <div class="af-raster">
         <header class="af-kop">
           <h2 id="pijn-kop">Herkenbaar?</h2>
-          <p>Cybersecurity leren is lastig als de tools en de taal een barri&egrave;re vormen. Dit is wat je hier in plaats daarvan krijgt.</p>
+          <p>Drie redenen waarom beginners afhaken, en wat de terminal hier terugzegt.</p>
         </header>
 
         <div class="af-pijn-rij">
@@ -389,138 +379,6 @@
       </div>
     </section>
 
-    <!-- ===== DE WENDING =====
-         Het omgekeerde affiche: inkt als vlak, papier als letter. Stap 4 van de trechter
-         (docs/landing-page-plan.md): beantwoordt de drie pijnpunten en voegt één ding toe
-         dat nergens anders staat — je hoeft niet voorzichtig te zijn. -->
-    <section class="af-band af-omslag" aria-labelledby="omslag-kop">
-      <div class="af-raster">
-        <h2 id="omslag-kop">De oplossing: HackSimulator.nl</h2>
-        <p>
-          Alle drie die drempels verdwijnen zodra de terminal gewoon in je browser draait
-          en Nederlands terugpraat. Je kunt er niets stukmaken, want er zit geen echt
-          systeem achter &mdash; dus je hoeft niet voorzichtig te doen.
-        </p>
-      </div>
-    </section>
-
-    <!-- ===== WAT MAAKT HET ANDERS ===== -->
-    <section id="features" class="af-sectie af-verschil" aria-labelledby="verschil-kop">
-      <div class="af-raster">
-        <header class="af-kop">
-          <h2 id="verschil-kop">Wat maakt HackSimulator anders?</h2>
-        </header>
-
-        <div class="af-tabel-wrap">
-          <table class="af-tabel">
-            <thead>
-              <tr><th scope="col">Voorheen</th><th scope="col">Met HackSimulator</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Engelse foutmeldingen</td><td>Nederlandse tips en uitleg</td></tr>
-              <tr><td>Echte systemen nodig</td><td>Veilige browser sandbox</td></tr>
-              <tr><td>Uren setup en installatie</td><td>Direct starten, geen setup</td></tr>
-              <tr><td>Droge documentatie</td><td>Educatieve output + context</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="af-drie">
-          <div class="af-drie-item">
-            <h3>40+ commands uit de praktijk</h3>
-            <p>Van basis bestandssysteem-commands tot geavanceerde security tools. Elke command heeft man pages en educatieve output.</p>
-          </div>
-          <div class="af-drie-item">
-            <h3>Virtueel bestandssysteem</h3>
-            <p>Volledige Linux-achtige mappenstructuur. Bestanden aanmaken, kopiëren, verplaatsen en doorzoeken - alles in een veilige sandbox.</p>
-          </div>
-          <div class="af-drie-item">
-            <h3>Educatieve output</h3>
-            <p>Niet alleen realistische output, maar ook uitleg waarom het belangrijk is. Leer door te doen en begrijp waaróm iets werkt.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== IN CIJFERS =====
-         Stap 6 van de trechter in docs/landing-page-plan.md. Een inventaris, geen tegels
-         met een groot accentgetal (de hero-metric template die de craft floor weigert):
-         getal, wat het is, en waar je het natelt. Alle getallen zijn open floors (zie
-         validate-docs.sh assert_floor) en staan op twee opeenvolgende regels, want die
-         check grept `result-number` op de regel vóór `result-label`. -->
-    <section id="results" class="af-band af-inventaris" aria-labelledby="cijfers-kop">
-      <div class="af-raster">
-        <header class="af-kop">
-          <h2 id="cijfers-kop">HackSimulator in cijfers</h2>
-          <p>Geen beloftes &mdash; dit kun je allemaal zelf nakijken.</p>
-        </header>
-
-        <div class="af-lijst">
-          <a href="/commands/" class="af-lijst-rij">
-            <span class="result-number">40+</span>
-            <span class="result-label">Commands, elk met een man-pagina</span>
-            <span class="af-lijst-waar">/commands/</span>
-          </a>
-          <a href="/terminal.html" class="af-lijst-rij">
-            <span class="result-number">3</span>
-            <span class="result-label">Missies, van beginner tot expert</span>
-            <span class="af-lijst-waar">leerpad</span>
-          </a>
-          <a href="/over-ons.html#verantwoording" class="af-lijst-rij">
-            <span class="result-number">10+</span>
-            <span class="result-label">Artikelen met datum van laatste controle</span>
-            <span class="af-lijst-waar">/over-ons</span>
-          </a>
-          <a href="/woordenlijst.html" class="af-lijst-rij">
-            <span class="result-number">50+</span>
-            <span class="result-label">Begrippen in de woordenlijst</span>
-            <span class="af-lijst-waar">/woordenlijst</span>
-          </a>
-        </div>
-
-        <p class="af-noot">
-          Ook de code erachter is openbaar: die staat volledig op
-          <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.
-        </p>
-      </div>
-    </section>
-
-    <!-- ===== HOE HET WERKT =====
-         De enige plek naast het leerpad met nummers: hier is de volgorde zelf de
-         informatie (eerst openen, dan typen, dan leren). -->
-    <section class="af-sectie af-stappen" aria-labelledby="stappen-kop">
-      <div class="af-raster">
-        <header class="af-kop">
-          <h2 id="stappen-kop">Hoe het werkt</h2>
-          <p>In 3 stappen van beginner naar hacker.</p>
-        </header>
-
-        <ol class="af-stappen-rij">
-          <li>
-            <span class="af-index" aria-hidden="true">1</span>
-            <h3>Open je browser</h3>
-            <p>Klik op "Start de simulator" en je terminal draait &mdash; in het tabblad waar je nu al zit.</p>
-          </li>
-          <li>
-            <span class="af-index" aria-hidden="true">2</span>
-            <h3>Typ commands</h3>
-            <p>Van <code>ls</code> tot <code>nmap</code>: alles werkt zoals in een echte terminal, inclusief je typfouten.</p>
-          </li>
-          <li>
-            <span class="af-index" aria-hidden="true">3</span>
-            <h3>Leer door te doen</h3>
-            <p>Elke command geeft Nederlandse uitleg en educatieve tips. Je leert niet alleen het "wat", maar ook het "waarom".</p>
-          </li>
-        </ol>
-
-        <div class="af-actie af-actie--midden">
-          <a href="/terminal.html" class="btn-cta af-cta" data-terminal-cta="mid">
-            Start de simulator
-          </a>
-        </div>
-      </div>
-    </section>
-
     <!-- ===== LEERPAD =====
          Drie specimenkaarten: genummerd, want het is een volgorde; één kader van 1px, geen
          radius en geen schaduw. De commandoregels zijn echte commands (bewaakt door
@@ -529,7 +387,7 @@
       <div class="af-raster">
         <header class="af-kop">
           <h2 id="leerpad-kop">Jouw leerpad: van beginner tot expert</h2>
-          <p>HackSimulator groeit met je mee. Van je eerste command tot geavanceerde tools.</p>
+          <p>Vijf begeleide missies in drie niveaus. Weet je in de simulator niet verder, typ dan <code>next</code>: die wijst je de volgende stap.</p>
         </header>
 
         <ol class="af-specimens">
@@ -576,20 +434,41 @@
       </div>
     </section>
 
-    <!-- ===== BLOG =====
-         De drie previews die docs/landing-page-plan.md §8 specificeerde: de boog
-         wat → hoe → waarheen. Hun labels zijn de échte <h1> van de post (bewaakt door
-         validate-docs.sh Check 11 + homepage-conversion.spec.js); href staat vóór class,
-         want zo leest die check de markup. -->
-    <section class="af-sectie af-lees" aria-labelledby="lees-kop">
+    <!-- ===== IN CIJFERS =====
+         Een inventaris, geen tegels
+         met een groot accentgetal (de hero-metric template die de craft floor weigert):
+         getal, wat het is, en waar je het natelt. Alle getallen zijn open floors (zie
+         validate-docs.sh assert_floor) en staan op twee opeenvolgende regels, want die
+         check grept `result-number` op de regel vóór `result-label`. -->
+    <section id="results" class="af-sectie af-inventaris" aria-labelledby="cijfers-kop">
       <div class="af-raster">
-        <h2 id="lees-kop" class="af-lees-kop">Lees meer op de blog</h2>
-        <ul class="af-lees-lijst">
-          <li><a href="/blog/wat-is-ethisch-hacken.html" class="blog-link">Wat is ethisch hacken?</a></li>
-          <li><a href="/blog/leren-hacken.html" class="blog-link">Leren hacken: de complete beginnersgids</a></li>
-          <li><a href="/blog/ethisch-hacker-worden.html" class="blog-link">Hoe word je ethisch hacker?</a></li>
-        </ul>
-        <p class="af-lees-meer"><a href="/blog/">Alle artikelen</a></p>
+        <header class="af-kop">
+          <h2 id="cijfers-kop">HackSimulator in cijfers</h2>
+          <p>Geen beloftes &mdash; dit kun je allemaal zelf nakijken.</p>
+        </header>
+
+        <div class="af-lijst">
+          <a href="/commands/" class="af-lijst-rij">
+            <span class="result-number">40+</span>
+            <span class="result-label">Commands, elk met een handleiding (typ <code>man</code> en de naam)</span>
+            <span class="af-lijst-waar">/commands/</span>
+          </a>
+          <a href="/over-ons.html#verantwoording" class="af-lijst-rij">
+            <span class="result-number">10+</span>
+            <span class="result-label">Artikelen met datum van laatste controle</span>
+            <span class="af-lijst-waar">/over-ons</span>
+          </a>
+          <a href="/woordenlijst.html" class="af-lijst-rij">
+            <span class="result-number">50+</span>
+            <span class="result-label">Begrippen in de woordenlijst</span>
+            <span class="af-lijst-waar">/woordenlijst</span>
+          </a>
+        </div>
+
+        <p class="af-noot">
+          Ook de code erachter is openbaar: die staat volledig op
+          <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.
+        </p>
       </div>
     </section>
 
@@ -598,6 +477,7 @@
       <div class="af-raster">
         <header class="af-kop">
           <h2 id="faq-kop">Veelgestelde vragen</h2>
+          <p>Staat je vraag er niet bij? Begin dan met een van deze drie artikelen.</p>
         </header>
         <div class="af-faq-lijst">
         <div class="faq-item">
@@ -770,7 +650,19 @@
             </p>
           </div>
         </div>
-      
+        </div>
+        <!-- De drie bloglinks: de boog wat → hoe → waarheen. Hun labels zijn de échte <h1>
+             van de post (validate-docs.sh Check 11 + homepage-conversion.spec.js); href staat
+             vóór class, want zo leest die check de markup. S242: van een eigen sectie naar
+             de glos-kolom van de vragen: wie hier zoekt, leest daarna verder. Beide lijsten
+             beginnen op rij 2, dus hun inktlijnen liggen op dezelfde hoogte. -->
+        <div class="af-faq-lees">
+          <ul class="af-lees-lijst" aria-label="Artikelen op de blog">
+            <li><a href="/blog/wat-is-ethisch-hacken.html" class="blog-link">Wat is ethisch hacken?</a></li>
+            <li><a href="/blog/leren-hacken.html" class="blog-link">Leren hacken: de complete beginnersgids</a></li>
+            <li><a href="/blog/ethisch-hacker-worden.html" class="blog-link">Hoe word je ethisch hacker?</a></li>
+          </ul>
+          <p class="af-lees-meer"><a href="/blog/">Alle artikelen</a></p>
         </div>
       </div>
     </section>
@@ -779,7 +671,7 @@
     <section class="af-sectie af-slot" aria-labelledby="slot-kop">
       <div class="af-raster">
         <h2 id="slot-kop">Klaar om te beginnen?</h2>
-        <p class="af-slot-zin">Geen account. Geen creditcard. Geen risico.</p>
+        <p class="af-slot-zin">Gratis, zonder advertenties en zonder account.</p>
         <div class="af-actie">
           <a href="/terminal.html" class="btn-cta af-cta" data-terminal-cta="final">
             Start de simulator

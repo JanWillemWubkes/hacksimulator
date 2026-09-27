@@ -189,7 +189,7 @@ test.describe('Het signaal: rood betekent "jij bent aan zet"', () => {
       ['color', '.af-hero-sub { color: #cc0a1e !important; }', true],
       ['border', '.af-hint { border: 2px solid #cc0a1e !important; }', true],
       ['fill', '.nav-brand .brand-icon rect { fill: #cc0a1e !important; }', true],
-      ['onder de vouw', '.af-omslag h2 { color: #cc0a1e !important; }', false],
+      ['onder de vouw', '.af-faq h2 { color: #cc0a1e !important; }', false],
     ];
 
     for (const [tak, css, moetVuren] of mutanten) {
