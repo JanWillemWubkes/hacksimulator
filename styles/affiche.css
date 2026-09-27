@@ -1289,7 +1289,7 @@ body.home .leerpad-cmd-line {
 
 .af-lees-lijst {
   display: grid;
-  gap: 16px;
+  gap: 6px;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -1302,11 +1302,11 @@ body.home .leerpad-cmd-line {
   color: var(--af-inkt-2);
 }
 
+/* Het tikdoel (≥44px) komt uit een vaste padding, niet uit min-height: die zette de
+   restruimte ónder een titel van één regel, zodat de afstanden in de lijst verschilden. */
 body.home .af-lees-lijst .blog-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding: 0;
+  display: inline-block;
+  padding: 10px 0;
   font-family: var(--af-tekst);
   font-size: 1.05rem;
   font-weight: 400;
@@ -1844,6 +1844,12 @@ body.home a.footer-donate:hover {
 
   .af-poorten {
     grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  /* Onder elkaar staat er niets naast de kop om aan te hangen; de aanhaallijn stak dan
+     als los streepje buiten de zijmarge (zelfde regel als .af-hint hierboven). */
+  .af-pijn-tekst h3::before {
+    content: none;
   }
 
   /* De transcript is een donkere module, geen tekstblok: hij houdt zijn binnenmarge.

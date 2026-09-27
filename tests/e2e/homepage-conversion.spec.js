@@ -712,3 +712,28 @@ test.describe('Vorm volgt soort', () => {
     expect(m.randen, 'randen in de commandomodule').toEqual([]);
   });
 });
+
+// Een aanhaallijn wijst van een regel naar zijn uitleg. Staan ze onder elkaar (mobiel),
+// dan wijst hij nergens heen en stak hij als streepje buiten de zijmarge (sessie 242).
+test.describe('Aanhaallijnen', () => {
+  for (const breedte of [375, 1440]) {
+    test(`@${breedte}px valt geen aanhaallijn buiten de rand van de inhoud`, async ({ page }) => {
+      await page.setViewportSize({ width: breedte, height: 900 });
+      await page.goto('/index.html');
+      const m = await page.evaluate(() => {
+        const rand = document.querySelector('#features .af-raster');
+        const pl = parseFloat(getComputedStyle(rand).paddingLeft);
+        const links = rand.getBoundingClientRect().left + pl;
+        const koppen = [...document.querySelectorAll('.af-pijn-tekst h3')];
+        const uit = koppen.filter((h) => {
+          const ps = getComputedStyle(h, '::before');
+          if (ps.content === 'none' || ps.borderTopStyle === 'none') return false;
+          return h.getBoundingClientRect().left + parseFloat(ps.left) < links - 0.5;
+        }).map((h) => h.textContent.trim());
+        return { koppen: koppen.length, uit };
+      });
+      expect(m.koppen, 'geen Herkenbaar-koppen gevonden').toBe(3);
+      expect(m.uit, 'aanhaallijn buiten de zijmarge').toEqual([]);
+    });
+  }
+});
