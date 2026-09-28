@@ -1464,11 +1464,34 @@ body.home .af-faq .faq-answer p {
 
 .af-sample-acties {
   grid-column: 8 / -1;
+  align-self: start;            /* niet meerekken met de pagina's: de knop staat op hun bovenkant */
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 24px;
   padding: 28px 0 0 var(--af-cel);
+}
+
+/* De negen pagina's links naast de knoppen, bovenkant op die van de knop (dezelfde
+   rasterrij, zoals de glos naast zijn regel). Zonder stond hier een leeg vlak van 779x72px
+   (1440) en 592x124 (1024): de kop is één regel, de uitleg ernaast vier. Negen gelijke
+   cellen: het raster telt mee. align-self: start, anders rekte de rasterrij het blok
+   op tot knop plus gebroken link, en de pagina's mee (54x96 i.p.v. 54x76 op 1024). */
+.af-sample-paginas {
+  grid-column: 1 / 8;
+  grid-row: 2;
+  align-self: start;
+  display: flex;
+  gap: 8px;
+  padding: 28px var(--af-cel) 0 0;
+}
+
+.af-sample-paginas img {
+  flex: 1 1 0;
+  min-width: 0;
+  height: auto;
+  display: block;
+  outline: 1px solid var(--af-lijn-sterk);
 }
 
 /* Op inkt zijn de rollen omgedraaid: papieren kader, papieren letter. */
@@ -1905,6 +1928,7 @@ body.home a.footer-donate:hover {
   .af-pijn-tekst,
   .af-sample h2,
   .af-sample p,
+  .af-sample-paginas,
   .af-sample-acties,
   .af-news-tekst,
   .af-news-form,
@@ -1918,6 +1942,11 @@ body.home a.footer-donate:hover {
   .af-sample p,
   .af-news-form {
     padding-top: 20px;
+  }
+
+  .af-sample-paginas {
+    grid-row: auto;
+    padding: 20px 0 0;
   }
 
   body.home .af-lijst-rij {

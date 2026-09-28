@@ -13,6 +13,8 @@
 // De meeste asserties hier zijn geschreven vóór de fix en waren toen rood.
 
 import { test, expect } from './fixtures.js';
+import fs from 'fs';
+import path from 'path';
 
 const MOBIEL = { width: 375, height: 812 };
 
@@ -630,7 +632,8 @@ test.describe('Onderpagina', () => {
       const m = await page.evaluate(() => {
         const secties = [...document.querySelectorAll('main.af > section:not(#hero), #newsletter')];
         return secties.map((s) => {
-          const blad = [...s.querySelectorAll('h2,h3,p,li,a,.af-transcript,.af-specimen,.faq-item,input,button')]
+          // img hoort erbij (sessie 243): de pagina's van de sample telden anders als lucht.
+          const blad = [...s.querySelectorAll('h2,h3,p,li,a,img,.af-transcript,.af-specimen,.faq-item,input,button')]
             .filter((e) => e.getClientRects().length);
           let top = Infinity, bodem = 0;
           for (const e of blad) { const r = e.getBoundingClientRect(); top = Math.min(top, r.top); bodem = Math.max(bodem, r.bottom); }
@@ -733,6 +736,63 @@ test.describe('Vorm volgt soort', () => {
 
 // Een aanhaallijn wijst van een regel naar zijn uitleg. Staan ze onder elkaar (mobiel),
 // dan wijst hij nergens heen en stak hij als streepje buiten de zijmarge (sessie 242).
+// ==================== De sample toont zijn pagina's (Sessie 243) ====================
+//
+// Linksonder in de sample stond een leeg vlak (779x72px op 1440, 592x124 op 1024): de kop
+// is één regel, de uitleg ernaast vier. Proef A/B/C9/C4; gekozen: de negen pagina's zelf,
+// verkleind, op de rasterrij van de knop. Ze bewijzen "de eerste 9 pagina's" en mogen dus
+// niet stil gaan liegen: zin, afbeeldingen en pdf tellen hetzelfde.
+
+const WORTEL = process.cwd();
+const SAMPLE_PDF = path.join(WORTEL, 'assets', 'samples', 'pentest-playbook-sample.pdf');
+
+test.describe('De sample toont zijn pagina\'s', () => {
+  test('zin, afbeeldingen en pdf tellen hetzelfde, en elke pagina laadt', async ({ page }) => {
+    expect(fs.existsSync(SAMPLE_PDF), `${SAMPLE_PDF} bestaat niet — cwd is ${WORTEL}`).toBe(true);
+    const inPdf = (fs.readFileSync(SAMPLE_PDF).toString('latin1').match(/\/Type\s*\/Page(?!s)/g) || []).length;
+    expect(inPdf, 'geen pagina\'s in de pdf gevonden — de telling heeft niet gedraaid').toBeGreaterThan(0);
+
+    await page.goto('/index.html');
+    await page.locator('.af-sample').scrollIntoViewIfNeeded();
+    const m = await page.evaluate(async () => {
+      const imgs = [...document.querySelectorAll('.af-sample-paginas img')];
+      await Promise.all(imgs.map((i) => (i.complete ? null : new Promise((r) => { i.onload = i.onerror = r; }))));
+      const zin = document.querySelector('.af-sample p').textContent.match(/eerste (\d+) pagina/);
+      return { zin: zin ? Number(zin[1]) : null, beelden: imgs.length, geladen: imgs.filter((i) => i.naturalWidth > 0).length };
+    });
+    expect(m.zin, 'de zin noemt geen aantal pagina\'s meer').not.toBeNull();
+    expect([m.zin, m.beelden], `pdf telt ${inPdf} pagina's`).toEqual([inPdf, inPdf]);
+    expect(m.geladen, 'niet elke pagina laadt').toBe(m.beelden);
+  });
+
+  for (const breedte of [1440, 1280, 1024, 768]) {
+    test(`@${breedte}px staan de pagina's links op de rij van de knop, onvervormd`, async ({ page }) => {
+      await page.setViewportSize({ width: breedte, height: 900 });
+      await page.goto('/index.html');
+      await page.locator('.af-sample').scrollIntoViewIfNeeded();
+      const m = await page.evaluate(async () => {
+        const imgs = [...document.querySelectorAll('.af-sample-paginas img')];
+        await Promise.all(imgs.map((i) => (i.complete ? null : new Promise((r) => { i.onload = i.onerror = r; }))));
+        const R = (q) => document.querySelector(q).getBoundingClientRect();
+        const knop = R('.af-sample .af-knop');
+        const p = R('.af-sample p');
+        const scheef = imgs.filter((i) => {
+          const r = i.getBoundingClientRect();
+          return Math.abs(r.height / r.width - i.naturalHeight / i.naturalWidth) > 0.02;
+        }).length;
+        return {
+          n: imgs.length, top: imgs[0].getBoundingClientRect().top, knopTop: knop.top,
+          rechts: Math.max(...imgs.map((i) => i.getBoundingClientRect().right)), naad: p.left, scheef,
+        };
+      });
+      expect(m.n, 'geen pagina\'s gevonden').toBeGreaterThan(0);
+      expect(Math.abs(m.top - m.knopTop), `eerste pagina op ${m.top.toFixed(0)}, knop op ${m.knopTop.toFixed(0)}`).toBeLessThanOrEqual(1);
+      expect(m.rechts, 'de pagina\'s steken over de naad').toBeLessThanOrEqual(m.naad + 1);
+      expect(m.scheef, 'pagina\'s vervormd (verhouding wijkt af van het bestand)').toBe(0);
+    });
+  }
+});
+
 test.describe('Aanhaallijnen', () => {
   for (const breedte of [375, 1440]) {
     test(`@${breedte}px valt geen aanhaallijn buiten de rand van de inhoud`, async ({ page }) => {

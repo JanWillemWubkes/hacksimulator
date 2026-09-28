@@ -206,9 +206,27 @@ De indexkolom is `1.8em` en niet `3ch`: `--font-terminal` begint met de kadertek
 WebKit rekent `ch` op dat font (3ch = 31px in de chip, 22 in het nummer tegen 27 elders).
 Zes keer 4px was precies waarom de nmap-chip in WebKit op 1280 7px over zijn rand liep.
 
+**De sample toont zijn pagina's** (na feedback eigenaar: "dit is niet mooi"). Linksonder
+stond een leeg vlak: 779x72px op 1440, 592x124 op 1024, want de kop is één regel en de uitleg
+ernaast vier. Proef A/B/C9/C4 (`.playwright-mcp/s243-proef-sample-{1440,1024}.png`):
+- A (huidig): het lege vlak.
+- B (knoppen links onder de kop): herschikt alleen; op 1024 bleef links een gat, en de knop
+  raakte los van de uitleg die hij afsluit.
+- **C9 (de negen pagina's, klein, naast elkaar): gekozen.** Het vult het gat met het bewijs
+  zelf: de zin belooft "de eerste 9 pagina's", en hier staan ze, telbaar, in negen gelijke
+  cellen. Eerste pagina op dezelfde rasterrij als de knop (op elke breedte ≥768 0px
+  verschil). Sectie 328 → 393px op 1440. Negen WebP's samen 22 KB, lazy.
+- C4 (vier pagina's groot): 544px voor een korte sectie, en de oude lime-cover werd een
+  blikvanger.
+De productcover (`assets/products/eerste-pentest-playbook.png`) is afgewezen: lime-neon,
+afgeronde rand, Title Case, de wereld die dit affiche vervangt. De kleine accenten in de
+pagina's zelf zijn inhoud van het product, net als de kleuren binnen de terminal.
+Zin, afbeeldingen en pdf tellen hetzelfde (bewaakt; de pdf wordt uit de bytes geteld).
+
 **Bewaakt** in `hero-demo.spec.js` ("een chip-tik op elke scrollpositie", "focus en naam",
 "Hero op elke breedte": 320-1440 per 8px), `thema-standaard.spec.js` ("Thematokens horen op
-de wortel") en `homepage-conversion.spec.js` (naad en kantlijn ook op 1279/1180/1024).
+de wortel") en `homepage-conversion.spec.js` (naad en kantlijn ook op 1279/1180/1024; "De
+sample toont zijn pagina's").
 
 **Gemeten en bewust niet opgelost.**
 - Onder 352px breken de omvangregel en het nmap-command nog; vastgelegd als assertie in
