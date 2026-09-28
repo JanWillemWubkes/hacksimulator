@@ -4,6 +4,106 @@
 
 ---
 
+## Sessie 242: Herhaling is geen fout, herhaling zonder functie wel — de onderpagina op de glos-naad (27-28 sep 2026)
+
+**Branch:** `design/impeccable`. `main` onaangeroerd; niets staat live.
+
+**Mission:** de onderpagina van index.html (alles onder de hero) uit TASKS #82: meten wat er
+staat, schrappen en samenvoegen, en de affichegrammatica van de hero doortrekken, met een proef
+op gelijke maat per smaakkeuze.
+
+### Ronde 1 — schrappen en volgorde (`89a60f9`)
+
+- **Inventaris gemeten** @1440/375: twaalf secties, 8745/10834px. Critiquepunten nagemeten:
+  `#omslag-kop` 66,24 > h1 64,8 klopte @1440 (niet @375). "Zonder het raster" was half waar:
+  het raster liep door (subgrid, spans), maar de secties deelden op kolom 4, 5, 8, 9 of 10.
+- **Mijn eerste plan telde herhaling en liet de layout liggen.** Heisenberg: *"is herhaling per
+  se slecht? of kan het ook bewust zijn en een functie hebben? En wordt de layout verder niet
+  beoordeeld?"* Daarna per functie ingedeeld: bewering → bewijs, geruststelling bij de actie,
+  naslag, natelbaar maken. De herhalingen zonder functie zaten allemaal in feiten, omslag,
+  verschil en stappen. Die gingen weg; "geen account" naast de knoppen bleef.
+- **Layout gemeten:** elke sectie 129,6px padding en elke h2 47,52px — een metronoom; ~36% van
+  de onderpagina was padding, en sample en nieuwsbrief hadden meer lucht dan inhoud. Nu twee
+  sectiegewichten (`--af-sectie-kort`), regel lucht ≤ inhoud.
+- **De naad:** de glos-naad van de hero (7|5) werd de naad van de hele pagina; bloglinks naast
+  de vragen, cijfers en slot op kolom 8.
+- **Proef B/C/D** voor de koppen: B (47,52, gelijk aan de andere h2's) gekozen; C (58px) een
+  derde maat voor een nauwelijks zichtbaar verschil; D (sectie-index) gaf "02 Jouw leerpad"
+  boven de kaarten 01-03.
+- **Aangrenzend:** de rij "3 Missies" was een onderclaim; `src/tutorial/scenarios/` heeft er 5
+  (1 Beginner, 2 Gevorderd, 2 Expert). `next` bestaat en wijst precies één stap aan.
+- `#features` (menu "Het verschil") verhuisde naar Herkenbaar, zodat `navbar.js` en 27
+  cache-bumps buiten schot bleven.
+
+### Ronde 2 — vorm volgt soort (`87f1f4b`)
+
+Heisenberg zag de intro's rechtsboven en bloglinks die als FAQ lazen, en vroeg om de hele pagina
+op zulke fouten na te lopen. Zeven gemeten: intro's in de glos-kolom; bloglinks in FAQ-letter,
+zelfs groter (20,7 tegen 19,8px) en "Wat is ethisch hacken?" twee keer naast elkaar;
+Herkenbaar-koppen 16px boven hun prompt; haarlijnen door lopende tekst in de hero; het
+Brevo-veld 70px naast de naad (gedeelde regel: `justify-content: center`); een contactregel als
+wees; cijfers als kleinste element van "in cijfers". **Regel: de glos-kolom is alleen voor
+uitleg naast iets links.** Proeven K/R (kantlijn gekozen) en N/G (cijfers op afficheschaal in
+inkt; herziet de regel "geen afficheschaal = metric-tegel", want een tegel is een los
+accentgetal, dit is een tabelrij met bron). De guard op haarlijnen vond twee elementen meer
+dan mijn fixlijst (kolomkop, uitnodiging), dus de CSS-regel ging naar de populatie
+(`.af-hero-raster p`).
+
+### Ronde 3 — copy, kantlijn, leerpad (`cadd8b3`) en @375 (`afcdc08`)
+
+- Heisenberg vond copyfouten ("Weet je in de simulator niet verder", "die wijst", "De tool praat
+  Engels … niet eroverheen"), een pad met slash, een kantlijn die halverwege stopte en een
+  onrustig leerpad. Mijn doorloop vond het patroon op 12 plekken: losse samenstellingen,
+  Engelse zinsbouw, vaagheid. FAQ zichtbaar én FAQPage, woordelijk gelijk.
+- **Kantlijn:** de border stond op een blok zo hoog als zijn inhoud (323 van 551px).
+- **Leerpad:** proef L1-L3, L3 gekozen: kolommen met haarlijnen, geen kaarten, 12 → 5 lijnen. De
+  lijnen in het commandoblok kwamen uit de gedeelde `landing.css:584`. Het sectieritme-spec mat
+  "de kaart op de band"; die bestaat niet meer, dus de assertie meet nu de module die er ligt.
+- **@375** (doorloop terwijl de gate liep; code aanpassen tijdens een gate op een live no-store
+  server maakt het resultaat waardeloos): de aanhaallijn stak buiten de zijmarge, en `min-height`
+  op de bloglinks zette de restruimte onder titels van één regel.
+
+### Commits
+
+- `89a60f9` Onderpagina: zeven secties op de glos-naad in plaats van twaalf
+- `87f1f4b` Onderpagina ronde 2: vorm volgt soort
+- `cadd8b3` Onderpagina ronde 3: copy in gewoon Nederlands, kantlijn over de volle hoogte, leerpad zonder kaarten
+- `afcdc08` Onderpagina @375: geen losse aanhaallijn, gelijke afstanden in de bloglijst
+
+### Learnings
+
+- **Een telling is geen oordeel.** "Staat in zes secties" werd pas bruikbaar toen elk voorkomen
+  een functie kreeg of niet. Geheugen: `feedback_repetition_by_function`.
+- **Een kolom met één betekenis vindt zijn eigen fouten.** Zodra "rechts = uitleg naast iets
+  links" vastlag, vielen intro's, bloglinks en de contactregel vanzelf af.
+- **Een guard die mijn fixlijst meet, bewaakt mijn fixlijst.** De haarlijn-guard op alle alinea's
+  vond er twee die ik miste; daarna ging ook de CSS naar de populatie.
+- **Een mutant die niet vuurt, eerst controleren of hij landde.** `.af-specimen-cmds
+  .leerpad-cmd-line` (0,2,0) verloor van `body.home .leerpad-cmd-line` (0,2,1); met een winnende
+  selector vuurde de guard wel.
+- **Een guard op vorm meet niet de lengte.** De kantlijn-assertie controleerde letter en gewicht,
+  niet of de lijn langs de hele lijst liep; de eigenaar zag het op het scherm.
+- **Ik begrensde mijn eigen gate te krap** (900s): afgekapt zonder eindblok, dus zonder bewijs.
+  Tweede run zonder die grens; 25 minuten is de werkelijke duur met performance.spec erbij.
+- **Skips verklaren, niet aannemen:** 4 → 13 kwam volledig uit performance.spec, nieuw in de
+  gate (4 + 2 + 3 motorgebonden).
+
+### Next steps
+
+TASKS #82: `adapt` (mobiel meescrollen, focus bij een chip-tik, de band 1024-1279). Door
+Heisenberg zelf te beoordelen: het lege vlak linksonder in de sample-sectie. Dan #83 (finish
+review + documenter); het open reviewerpunt (Brevo-veld) is dicht.
+
+### Metrics delta
+
+- Runtime-bundel (`performance.spec.js`): **1069,20 → 1065,72 KB**, marge **54,28 KB (4,8%)**.
+- Documenthoogte @1440: **8745 → 5764**; @375: **10834 → 7836**.
+- Playwright: 45 spec files, **338 → 344** `test()`-declaraties.
+- `du -sb`: src 740, styles 410 → 411, blog 492, assets 1741 KB.
+- Gates: **665 / 668 / 668 / 674 passed, 0 failed, 13 skipped**, drie motoren; validate-docs 20/20.
+
+---
+
 ## Sessie 241: Een test die op vijf posities meet, bewaakt vijf posities — de vouw gehaald, en twee oude gaten dicht (27 sep 2026)
 
 **Branch:** `design/impeccable`. `main` onaangeroerd; niets staat live.

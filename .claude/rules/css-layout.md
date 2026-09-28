@@ -581,3 +581,27 @@ dus bóven de router in plaats van ernaast.
 
 Meet de posities na zo'n wijziging; de CSS leest correct en de volgorde ziet er in de bron
 logisch uit.
+
+---
+
+## 27. Een gedeelde regel neemt zijn vorm mee de gescopete wereld in (Sessie 242)
+
+`affiche.css` hertokent de gedeelde componenten onder `body.home`, maar wat een gedeelde regel
+aan **vorm** zet (randen, uitlijning), lekt stil door zolang de nieuwe wereld die eigenschap
+niet zelf zet. Twee keer gemeten op één pagina:
+
+```
+landing.css  .leerpad-cmd-line { border-bottom: 1px … }        → lijnen in het zwarte commandoblok
+gedeeld      .homepage-newsletter form { justify-content: center } → invoerveld 70px naast de naad
+```
+
+Geen van beide was een ontwerpkeuze van de pagina; ze zagen er "bedoeld" uit en overleefden
+daardoor drie rondes. **Zet in de gescopete wereld de vormeigenschappen expliciet** die je wilt
+(`border-bottom: 0`, `justify-content: flex-start`), met een commentaar dat de erfenis noemt,
+en raak het gedeelde bestand niet aan (25 pagina's laden `landing.css`).
+
+**Een tikdoel van 44px hoort uit padding te komen, niet uit `min-height`.** `min-height` zet de
+restruimte onder een titel van één regel en boven niets bij twee regels, dus een lijst krijgt
+ongelijke afstanden (gezien op 375: na een titel van één regel een groter gat dan na twee).
+`padding-block: 10px` op een regel van ~25px geeft ≥44 en overal dezelfde witruimte; gemeten
+ná de fix: pad → titel 10px en titel → volgend pad 17-18px, op 375 en 1440.

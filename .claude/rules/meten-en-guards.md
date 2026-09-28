@@ -486,3 +486,17 @@ en schoof er één precies op y=300; de test ging rood op de verbetering.
   punt.** A/B tegen `git archive HEAD` (§6) gaf eerst "oud groen, nieuw rood", schijnbaar
   een regressie. Pas de sweep liet 22 → 3 zien. Repareer dan de oorzaak; schuif het
   meetpunt niet op en draai de verbetering niet terug.
+
+---
+
+## 29. Een mutant die niet vuurt: eerst meten of hij landde (Sessie 242)
+
+`.af-specimen-cmds .leerpad-cmd-line { border-bottom: … }` als mutant liet de guard groen. De
+guard was niet blind: de mutant verloor op specificiteit, (0,2,0) tegen `body.home
+.leerpad-cmd-line` (0,2,1), en de rand is er nooit gekomen. Met een winnende selector vuurde hij
+direct. Controleer bij een groene mutant eerst in de gerenderde waarde of hij toegepast is,
+vóór je de guard wantrouwt of zwakker maakt.
+
+En: een guard op **vorm** meet de **lengte** niet. "Bloglinks hebben een andere letter dan de
+vragen" stond groen terwijl de kantlijn halverwege stopte (323 van 551px). Leg bij een lijn of
+rand ook zijn bereik vast.
