@@ -528,6 +528,10 @@ body.home .af-term .terminal-body {
   box-sizing: border-box;
   overflow: hidden;
   position: relative;
+  /* Geen ankerpunt voor de paginascroll. Stond de vensterrand binnen de uitvoer, dan koos
+     de browser een uitvoerregel als anker; haalde trim() bij 120 regels de oudste weg, dan
+     "corrigeerde" hij de pagina 192px omhoog (sessie 243, chromium en firefox). */
+  overflow-anchor: none;
   background: linear-gradient(to right, var(--af-m-grond) 0 var(--af-module), transparent 0);
   font-family: var(--af-mono);
   font-size: 0.86rem;

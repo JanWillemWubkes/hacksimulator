@@ -419,6 +419,147 @@ test.describe('Hero-terminal — het getikte command staat in beeld', () => {
   }
 });
 
+// Sessie 243 (adapt). Twee gemeten fouten bij een chip-tik, op elke breedte:
+//  1. Wie voorbij de terminaltop scrolde om de chips te zien, kreeg zijn promptregel tot
+//     181px boven de rand of onder de navbar: je tikte en zag niets gebeuren.
+//  2. De tik focuste het invoerveld. Stond dat boven de rand, dan trok de browser de pagina
+//     er 391-611px naartoe; op touch opende elke tik het toetsenbord; en Tab ging vanaf het
+//     veld terug naar chip 01 in plaats van naar de volgende.
+// Beweging bevroren (reduced motion + geen transities): de scroll is dan direct, en een
+// meting midden in een smooth scroll las in de inventaris een sprong die er niet was.
+const BEVRIES = 'html{scroll-behavior:auto!important}*,*::before,*::after{transition:none!important;animation:none!important}';
+
+test.describe('Hero-terminal — een chip-tik op elke scrollpositie', () => {
+  // Landscape (past: false): tussen navbar en balk is er 242-330px, de terminal alleen al
+  // is 300px. Daar gaat de uitvoer voor en mag de chip onder de rand schuiven; een
+  // zichtbare balk mag hem nooit half afdekken.
+  const MATEN = [
+    { ...MOBIEL, past: true }, { width: 390, height: 844, past: true },
+    { width: 1024, height: 768, past: true }, { ...DESKTOP, past: true },
+    { width: 844, height: 390, past: false }, { width: 667, height: 375, past: false },
+  ];
+  for (const vp of MATEN) {
+    test(`@${vp.width}x${vp.height}: de uitvoer komt in beeld, alleen met het tekort, en de chip ${vp.past ? 'blijft zichtbaar' : 'valt nooit half onder de balk'}`, async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      await page.setViewportSize({ width: vp.width, height: vp.height });
+      await page.goto('/index.html');
+      await page.addStyleTag({ content: BEVRIES });
+
+      const eind = await page.evaluate(() => {
+        const c = document.getElementById('hero-chips').getBoundingClientRect();
+        return Math.round(c.bottom + scrollY);
+      });
+
+      let tikbaar = 0;
+      let nodig = 0;
+      const fouten = [];
+      for (let y = 0; y <= eind; y += 20) {
+        await page.evaluate((y) => window.scrollTo(0, y), y);
+        // De onderste chip die helemaal tikbaar is: onder de navbar, boven een zichtbare balk.
+        const doel = await page.evaluate(() => {
+          const nav = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height')) || 0;
+          const balk = document.querySelector('.mobile-cta-bar');
+          const br = balk && balk.getBoundingClientRect();
+          const rand = br && br.height && balk.dataset.state === 'zichtbaar' ? br.top : innerHeight;
+          const chips = [...document.querySelectorAll('.hero-chip')].filter((c) => {
+            const r = c.getBoundingClientRect();
+            return r.top >= nav && r.bottom <= rand;
+          });
+          const c = chips.pop();
+          if (!c) return null;
+          const r = c.getBoundingClientRect();
+          const body = document.getElementById('hero-demo').getBoundingClientRect();
+          return { cmd: c.dataset.command, x: r.x + r.width / 2, y: r.y + r.height / 2,
+                   s: scrollY, tekort: Math.max(0, nav + 8 - body.top) };
+        });
+        if (!doel) continue;
+        tikbaar++;
+        if (doel.tekort > 1) nodig++;
+        await page.mouse.click(doel.x, doel.y);
+        // De balk beslist in een IntersectionObserver-callback, een frame later.
+        await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+        const meetNa = (cmd) => page.evaluate((cmd) => {
+          const nav = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height')) || 0;
+          const balk = document.querySelector('.mobile-cta-bar');
+          const br = balk && balk.getBoundingClientRect();
+          const rand = br && br.height && balk.dataset.state === 'zichtbaar' ? br.top : innerHeight;
+          const prompt = [...document.querySelectorAll('#hero-demo .terminal-line.prompt')].pop().getBoundingClientRect();
+          const chip = document.querySelector(`.hero-chip[data-command="${cmd}"]`).getBoundingClientRect();
+          return { s: scrollY, nav, rand, vh: innerHeight, balk: rand < innerHeight,
+                   pt: prompt.top, pb: prompt.bottom, ct: chip.top, cb: chip.bottom };
+        }, cmd);
+        let na = await meetNa(doel.cmd);
+        const tag = `y=${y} ${doel.cmd}`;
+        const promptFout = (m) => m.pt < m.nav - 1 || m.pb > m.rand + 1;
+        const chipFout = (m) => vp.past
+          ? m.ct < m.nav - 1 || m.cb > m.rand + 1
+          : m.balk && m.ct < m.vh && m.cb > m.rand + 1;
+        // Onder belasting heeft de IntersectionObserver van de balk in WebKit soms meer dan
+        // twee frames nodig, en beide checks lezen de balkrand. Een balk die één frame staat
+        // is niet tikbaar: tel alleen wat blijft staan nadat hij beslist heeft. De scroll is
+        // direct (reduced motion) en verandert in die 250ms niet.
+        if (promptFout(na) || chipFout(na)) { await page.waitForTimeout(250); na = await meetNa(doel.cmd); }
+        if (promptFout(na)) fouten.push(`${tag}: promptregel op ${na.pt.toFixed(0)} (navbar ${na.nav}, rand ${na.rand.toFixed(0)})`);
+        if (chipFout(na)) fouten.push(`${tag}: chip op ${na.ct.toFixed(0)}-${na.cb.toFixed(0)} buiten beeld of onder de balk`);
+        const verschoven = doel.s - na.s;
+        if (Math.abs(verschoven - doel.tekort) > 1) fouten.push(`${tag}: pagina ${verschoven.toFixed(0)}px verschoven (${doel.s} -> ${na.s}), tekort was ${doel.tekort.toFixed(0)}`);
+      }
+
+      // Zelfbewakend: genoeg posities, en minstens één waar de uitvoer echt buiten beeld stond.
+      expect(tikbaar, 'te weinig tikbare posities — de sweep heeft niet gedraaid').toBeGreaterThanOrEqual(12);
+      expect(nodig, 'geen enkele positie had een tekort — de sweep bewijst het meescrollen niet').toBeGreaterThan(0);
+      expect(fouten.filter((f) => f.includes('promptregel')), 'uitvoer buiten beeld na de tik').toEqual([]);
+      expect(fouten.filter((f) => f.includes('chip op')), 'getikte chip uit beeld').toEqual([]);
+      expect(fouten.filter((f) => f.includes('verschoven')), 'de pagina bewoog meer of minder dan het tekort').toEqual([]);
+    });
+  }
+});
+
+test.describe('Hero-terminal — focus en naam van een chip', () => {
+  test.use({ viewport: DESKTOP });
+
+  test('een getikte chip houdt de focus, Tab gaat naar de volgende, en de ring is zichtbaar', async ({ page }) => {
+    await page.goto('/index.html');
+    await page.addStyleTag({ content: BEVRIES });
+    const veld = page.locator('#typing-target');
+
+    // Aanwijzer: het veld krijgt de focus niet (geen toetsenbord op touch, geen sprong).
+    await page.locator('.hero-chip[data-command="whoami"]').click();
+    await expect(page.locator('#hero-demo')).toContainText('$ whoami');
+    await expect(veld, 'een chip-tik gaf de focus aan het invoerveld').not.toBeFocused();
+
+    // Toetsenbord: Enter op 01 houdt de focus daar, Tab gaat naar 02.
+    const ls = page.locator('.hero-chip[data-command="ls"]');
+    await ls.focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#hero-demo')).toContainText('$ ls');
+    await expect(ls, 'Enter op een chip verplaatste de focus').toBeFocused();
+    await page.keyboard.press('Tab');
+    const cat = page.locator('.hero-chip[data-command="cat notes.txt"]');
+    await expect(cat, 'Tab na een chip ging niet naar de volgende chip').toBeFocused();
+
+    // De ring in pixels: hetzelfde vlak met en zonder focus moet verschillen.
+    const vak = await cat.boundingBox();
+    const clip = { x: vak.x - 4, y: vak.y - 4, width: vak.width + 8, height: vak.height + 8 };
+    const met = await page.screenshot({ clip });
+    await cat.evaluate((el) => el.blur());
+    const zonder = await page.screenshot({ clip });
+    expect(Buffer.compare(met, zonder), 'focus op een chip is niet te zien').not.toBe(0);
+  });
+
+  test('de toestand van een chip staat in zijn naam', async ({ page }) => {
+    await page.goto('/index.html');
+    await page.locator('.hero-chip[data-command="whoami"]').click();
+    await expect(page.locator('#hero-demo')).toContainText('$ whoami');
+    await expect(page.getByRole('button', { name: 'whoami, systeem · beginner, gedaan' })).toHaveCount(1);
+    await expect(page.getByRole('button', { name: /, volgende suggestie$/ })).toHaveCount(1);
+    // Label-in-name: elke chipnaam begint met zijn zichtbare command.
+    const namen = await page.$$eval('.hero-chip', (els) =>
+      els.filter((e) => !e.getAttribute('aria-label')?.startsWith(e.dataset.command)).map((e) => e.dataset.command));
+    expect(namen, 'chipnaam begint niet met de zichtbare tekst').toEqual([]);
+  });
+});
+
 test.describe('Hero-terminal zonder JavaScript', () => {
   test.use({ viewport: MOBIEL, javaScriptEnabled: false });
 

@@ -88,8 +88,26 @@ function initHeroRepl() {
     bodyEl.scrollTop = promptRij.offsetTop;
   }
 
+  // Na een chip-tik moet de uitvoer in beeld staan. Wie voorbij de terminaltop scrolde (om
+  // de chips te zien), kreeg zijn promptregel tot 181px boven de rand of onder de navbar
+  // (gemeten sessie 243, alle breedtes 360-1279). Alleen omhoog en alleen het tekort: de
+  // getikte chip staat onder de terminal, dus hij blijft in beeld zolang de module past
+  // (terminal tot chips 592-640px, vrij 667-711 op 360-390). Staat de top al in beeld,
+  // dan beweegt er niets. Navbarhoogte uit de bron, zoals landing-demo.js.
+  function haalUitvoerInBeeld() {
+    const nav =
+      parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height')) || 0;
+    const tekort = nav + 8 - bodyEl.getBoundingClientRect().top;
+    if (tekort <= 0) return;
+    const verminderd = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollBy({ top: -tekort, behavior: verminderd ? 'auto' : 'smooth' });
+  }
+
 // ==================== Overname ====================
-  function neemOver() {
+  // `focus: false` voor de chips: een geactiveerde knop houdt zijn focus. Het veld focussen
+  // opende op touch het toetsenbord bij elke tik, en stond het veld boven de rand, dan
+  // trok de browser de pagina er in één klap 391-611px naartoe (sessie 243).
+  function neemOver({ focus = true } = {}) {
     if (overgenomen) return;
     overgenomen = true;
 
@@ -114,7 +132,7 @@ function initHeroRepl() {
     // van de mousedown nog `readonly` was (gemeten: document.activeElement bleef BODY).
     // Zonder deze regel klikt een Firefox-bezoeker de terminal aan, ziet hem live gaan,
     // en verdwijnen zijn toetsaanslagen in het niets.
-    inputEl.focus();
+    if (focus) inputEl.focus();
 
     schrijf('Demo-terminal — 6 commands werken hier.', 'output');
     schrijf(
@@ -132,8 +150,15 @@ function initHeroRepl() {
     const volgende = SUGGESTIES.find((s) => !gedaan.has(s));
     chipsEl.querySelectorAll('.hero-chip').forEach((chip) => {
       const cmd = chip.dataset.command;
-      chip.classList.toggle('is-next', cmd === volgende);
-      chip.classList.toggle('is-done', gedaan.has(cmd));
+      const isNext = cmd === volgende;
+      const isDone = gedaan.has(cmd);
+      chip.classList.toggle('is-next', isNext);
+      chip.classList.toggle('is-done', isDone);
+      // De toestand is alleen zichtbaar ([✓] op een aria-hidden nummer, een inktbalk). De
+      // naam begint met de zichtbare tekst (label-in-name), de toestand volgt erachter.
+      const zichtbaar = `${cmd}, ${chip.querySelector('.af-chip-herkomst').textContent}`;
+      const staat = isDone ? ', gedaan' : isNext ? ', volgende suggestie' : '';
+      chip.setAttribute('aria-label', zichtbaar + staat);
     });
   }
 
@@ -172,6 +197,7 @@ function initHeroRepl() {
     // Alléén de commandonaam, nooit argumenten (PRD §13). De guard in
     // analytics/tracker.js:146 is het vangnet, niet de eerste verdediging.
     meld('heroDemoCommand', command.split(/\s+/)[0].toLowerCase());
+    return rijen[0];
   }
 
   // ==================== Events ====================
@@ -206,9 +232,8 @@ function initHeroRepl() {
     chipsEl.addEventListener('click', (e) => {
       const chip = e.target.closest('.hero-chip');
       if (!chip) return;
-      neemOver();
-      inputEl.focus();
-      voerUit(chip.dataset.command);
+      neemOver({ focus: false });
+      if (voerUit(chip.dataset.command)) haalUitvoerInBeeld();
     });
   }
 
