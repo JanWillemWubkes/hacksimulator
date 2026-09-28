@@ -4,6 +4,129 @@
 
 ---
 
+## Sessie 243: Een attribuutselector is geen wortelselector — adapt, en de critique opnieuw gemeten (28 sep 2026)
+
+**Branch:** `design/impeccable`. `main` onaangeroerd; niets staat live.
+
+**Mission:** `adapt` voor de landingspagina uit TASKS #82: mobiel meescrollen na een chip-tik,
+de focus daarna, de band 1024-1279, en uitzoeken wat "tokens" betekende. De critique van sessie
+240 (buiten git, twee ombouwen oud) eerst punt voor punt nameten.
+
+### Inventaris
+
+- Gemeten op 360/375/390, 768, 1024, 1180, 1279, 1280 en landscape, beide thema's via de echte
+  schakelaar. Verouderd: "chips op 766/768", "labels breken @1280" (in Chromium), "sticky 76px"
+  (navbar 60px), de naad in de band (binnen 0,5px op kolomlijn 8 op 1024/1100/1180/1279).
+- **Mijn eerste meting was vals:** een "sprong" van +188px na een tik bleek `html{scroll-behavior:
+  smooth}`; ik las scrollY midden in de animatie. De sweep bevriest dat sindsdien.
+- **"tokens" = critiquepunt P2 8** (zonder het Brevo-veld, dicht in 242): themaschakelaar en
+  footer in kleuren van het oude GitHub-palet.
+
+### Ronde 1 — een chip-tik (`26da24e`)
+
+- Uitvoer tot **181px** buiten beeld na een tik, op elke breedte 360-1279, zodra je voorbij de
+  terminaltop scrolde. De echte sprong kwam van `inputEl.focus()`: stond het veld boven de rand,
+  dan trok de browser de pagina **391-611px** omhoog, en op touch opende elke tik het toetsenbord.
+- Nu: focus blijft op de chip (`neemOver({ focus: false })`), Tab gaat naar de volgende; de pagina
+  scrolt alleen omhoog en alleen het tekort; de chipnaam draagt ", gedaan" / ", volgende
+  suggestie" (label-in-name).
+- **De sweep vond een oude fout:** bij 120 regels haalt `trim()` de oudste weg, en de pagina
+  schoof 192px, zonder `scrollBy`, ín de click-handler. Scroll-anchoring koos een uitvoerregel als
+  anker. `overflow-anchor: none` op het terminallichaam (chromium en firefox; webkit kent het niet).
+- **De gate ving mijn eigen fout:** `return rijen[0]` stond vóór `meld('heroDemoCommand')`, dus
+  geen enkel command stuurde nog zijn event (3 falers, één test, drie motoren).
+- Landscape: de module past niet (242-330px vrij, terminal 300). Uitvoer gaat voor; de chip mag
+  onder de rand, een zichtbare balk dekt hem nooit half.
+
+### Ronde 2 — tokens (`8ae459f`)
+
+- `main.css` `[data-theme="light"] { …tokens… }` matchte ook `<span class="toggle-option"
+  data-theme="light">`. Dat span zette alle lichte sitetokens op zichzelf en negeerde `body.home`:
+  actieve pil `#c9d1d9` met `#1a1a1a` (licht), inactief `#a1a8b0` i.p.v. `--af-inkt-2` (donker).
+  Gemeten via de keten: span `#a1a8b0`, button erboven `#b0b0ab`. Ook `landing.css` had zo'n blok.
+  Beide op `:root`. **Voor/na over 522 metingen op 18 pagina's: alleen index.html veranderde.**
+- Footer donker: `--color-bg-footer` werd alleen in `[data-theme="light"] .landing-footer` gelezen;
+  in donker won `rgba(22,27,34,.5)`. De `#000` in `affiche.css` was dood, zijn commentaar een onware
+  bewering. Nu leest `body.home .landing-footer` het token zelf.
+- Guard over **alle** CSS-regels op alle pagina's (geen tokenregel raakt een optie met
+  `data-theme`). Mutant `landing.css` kaal vuurde alléén daar: geen kleur verandert, dus alleen een
+  klassebrede guard kan hem zien.
+- **Gate rood in firefox 667x375:** de cookiebanner verscheen na een vertraging en lag in landscape
+  over de chips; de tik raakte de banner. Mijn losse replay zag het eerst niet. Sweep tikt nu alleen
+  waar `elementFromPoint` in de chip valt, wacht twee frames na `scrollTo` (Firefox hit-testte op de
+  oude layout) en zet consent vooraf.
+
+### Ronde 3 — tabletband en chips (`b079037`)
+
+- Sweep per 16px vond wat de gevraagde maten misten: **768-928** brak de terminalkop over twee
+  regels (losse `~`), **768-864** staken 3306/8080 uit hun sleuf. De oplossingen voor <768 (titel
+  weg, poorten 2x6) gelden nu tot 1023.
+- Chips: onder 430 brak `nmap 192.168.1.1` en de herkomst per chip verschillend (86/68). Proef
+  P1-P3, **P2** (index boven het command): zes chips van 70px, alles op één regel 360-767.
+- **WebKit, drie keer:** brak nmap op 1280-1296 (sessie 241 mat alleen Chromium), schatte de
+  mobiele rij op 85 i.p.v. 68, en liet nmap op 1280 7px over de rand lopen. Oorzaak van dat laatste:
+  `3ch` was in WebKit 31px (Chromium 27), want `--font-terminal` begint met de kadertekensubset en
+  WebKit rekent `ch` op dat font. `nowrap` op het command, de indexkolom `1.8em`. Onder 352 mag
+  het command weer breken: overlopen (-8px) is erger. Grens als assertie in twee richtingen.
+- WebKit houdt de rijhoogte van het gebroken command vast als het venster over 352 groeit, tot een
+  herlading. Alleen bij een 320px-telefoon die je kantelt; bewust niet opgelost, in het contract.
+
+### Sample (`4cd303a`) en TASKS (`b6741fb`)
+
+- Heisenberg: "er moet wel iets gebeuren, dit is niet mooi." Linksonder 779x72px leeg (1440),
+  592x124 (1024). Proef A/B/C9/C4: **C9**, de negen pagina's van de sample zelf, verkleind, op de
+  rasterrij van de knop. De productcover afgewezen (lime, afgerond, de oude wereld).
+- Eerste versie vervormde de pagina's op 1024/768 (de rij rekte mee) en zette de knop op 1440 in
+  het midden van zijn blok. `align-self: start` op beide. Mutant "zonder `align-items: flex-start`"
+  bleef groen: die regel had geen functie meer, geschrapt.
+- Gate rood op "lucht ≤ inhoud": de populatie was een taglijst zonder `img`, dus de pagina's telden
+  als lucht (209 > 184). `img` toegevoegd.
+- Heisenberg vroeg of het oorspronkelijke stappenplan klopte. Nagekeken: audit en polish nooit
+  gedaan, de `nl-content-reviewer` nooit gedraaid. Ik had "volgende: sessie 3" gezegd; dat was fout.
+  TASKS #82 kreeg twee open subitems vóór #83.
+
+### Commits
+
+- `26da24e` Adapt ronde 1: een chip-tik houdt de focus en haalt de uitvoer in beeld
+- `8ae459f` Adapt ronde 2: thematokens op de wortel, de footer in het donker zwart
+- `b079037` Adapt ronde 3: de tabletband en de chips, op elke breedte gemeten
+- `4cd303a` Sample-sectie: de negen pagina's vullen het lege vlak
+- `b6741fb` TASKS #82: audit, NL-review en polish vóór de finish review
+
+### Learnings
+
+- **Een attribuutselector is geen wortelselector.** `[data-theme="light"] { tokens }` betekent
+  "elk element met dat attribuut". Als componenten hetzelfde attribuut dragen, herdefiniëren ze
+  alle tokens op zichzelf. Rule: `css-layout.md`.
+- **`ch` hangt aan het eerste font in de stapel, in WebKit ook als dat font de "0" niet heeft.**
+  Maten voor mono-elementen in `em` (JetBrains Mono: 0,6em per teken). Rule: `css-layout.md`.
+- **Een losse replay naast de test zetten gaf drie keer de oorzaak.** Smooth scroll, scroll-anchoring
+  bij trim en de cookiebanner verschenen alleen onder de voorgeschiedenis van de test. Rule:
+  `meten-en-guards.md`.
+- **Tik op wat tikbaar is, niet op wat volgens de geometrie vrij ligt:** `elementFromPoint` op het
+  tikpunt, en twee frames na een programmatische scroll.
+- **Een guard op een taglijst bewaakt die lijst** (lucht ≤ inhoud zonder `img`), dezelfde les als §19.
+- **Een mutant die niet vuurt kan een overbodige regel bewijzen**, niet alleen een blinde guard.
+- **Mijn eigen stappenplan was een bewering.** Ik noemde sessie 3 als volgende stap zonder het plan na
+  te lopen; Heisenberg deed dat wel.
+
+### Next steps
+
+TASKS #82: `impeccable audit` + `nl-content-reviewer`, daarna `polish` met Heisenbergs eigen
+designpunten, pas dan #83 (finish review + documenter). #86: `ch` in het terminalfont in WebKit,
+sitebreed, eerst meten op terminal.html. #85 kreeg de footer-zweem op andere pagina's als notitie.
+
+### Metrics delta
+
+- Runtime-bundel (`performance.spec.js`): **1065,72 → 1073,18 KB**, marge **46,82 KB (4,2%)**.
+- Playwright: 45 spec files, **344 → 353** `test()`-declaraties.
+- `du -sb`: src 740 → 742, styles 411 → 415, blog 492, assets 1741 → 1763 KB (negen WebP's, 22 KB).
+- Gates: **698 / 736 / 728 / 740 passed**, 13 skipped (motorgebonden), rood verklaard en gerepareerd
+  (analytics-return, cookiebanner, img in de lucht-populatie); validate-docs 20/20.
+- Mutanten: 23 over vier guards, elke assertie door minstens één geraakt.
+
+---
+
 ## Sessie 242: Herhaling is geen fout, herhaling zonder functie wel — de onderpagina op de glos-naad (27-28 sep 2026)
 
 **Branch:** `design/impeccable`. `main` onaangeroerd; niets staat live.

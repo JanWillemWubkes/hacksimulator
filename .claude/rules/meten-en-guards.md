@@ -500,3 +500,25 @@ vóór je de guard wantrouwt of zwakker maakt.
 En: een guard op **vorm** meet de **lengte** niet. "Bloglinks hebben een andere letter dan de
 vragen" stond groen terwijl de kantlijn halverwege stopte (323 van 551px). Leg bij een lijn of
 rand ook zijn bereik vast.
+
+## 30. Zet een losse replay naast de test; tik op wat tikbaar is (Sessie 243)
+
+Drie keer las een meting iets anders dan er gebeurde, en telkens kwam de oorzaak pas boven door een
+los script naast de test te zetten, met dezelfde voorgeschiedenis:
+
+| wat ik zag | wat het was |
+|---|---|
+| "sprong" van +188px na een tik | `html { scroll-behavior: smooth }`: scrollY gelezen midden in de animatie |
+| pagina schuift 192px zonder `scrollBy` | scroll-anchoring bij `trim()`, alleen na 120 regels, dus alleen in de lange sweep |
+| promptregel buiten beeld (firefox 667x375) | de tik raakte de cookiebanner die na een vertraging verscheen |
+
+- **Bevries scrollgedrag** naast transities: `html { scroll-behavior: auto !important }`, of
+  `emulateMedia({ reducedMotion: 'reduce' })` als de code `behavior` expliciet zet.
+- **Tik op wat tikbaar is, niet op wat volgens de geometrie vrij ligt:**
+  `chip.contains(document.elementFromPoint(x, y))`. En wacht twee frames na een programmatische
+  `scrollTo`: Firefox hit-testte anders nog op de layout van ervoor.
+- **Zet consent vooraf** in een sweep die tot onder in beeld tikt; de banner is timing, geen layout.
+- **Een populatie als taglijst is een lijst** (§19): "lucht ≤ inhoud" telde `img` niet, en de
+  negen pagina's van de sample lazen als lucht (209 > 184).
+- **Een mutant die niet vuurt, kan ook een overbodige regel bewijzen.** `align-items: flex-start`
+  weghalen liet de guard groen, gemeten terecht: `align-self: start` op het blok had het al opgelost.

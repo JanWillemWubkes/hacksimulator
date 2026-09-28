@@ -605,3 +605,31 @@ restruimte onder een titel van één regel en boven niets bij twee regels, dus e
 ongelijke afstanden (gezien op 375: na een titel van één regel een groter gat dan na twee).
 `padding-block: 10px` op een regel van ~25px geeft ≥44 en overal dezelfde witruimte; gemeten
 ná de fix: pad → titel 10px en titel → volgend pad 17-18px, op 375 en 1440.
+
+## 28. Een attribuutselector is geen wortelselector; `ch` hangt aan het eerste font (Sessie 243)
+
+**Tokens op `[data-theme="light"]` gelden voor elk element met dat attribuut.** De opties van de
+themaschakelaar dragen zelf `data-theme="light"`/`"dark"`. Het kale blok zette daardoor alle lichte
+sitetokens óp dat span, en elke override van een voorouder (`body.home`) verloor. Op de
+landingspagina: een actieve pil in `#c9d1d9` in plaats van de inversie. Diagnose door de custom
+property per voorouder te lezen: span `#a1a8b0`, button erboven `#b0b0ab`.
+
+```css
+[data-theme="light"] { --token: …; }        /* FOUT: ook elk ander element met het attribuut */
+:root[data-theme="light"] { --token: …; }   /* GOED: alleen het document */
+```
+
+`thema-standaard.spec.js` bewaakt de klasse: geen regel met custom properties raakt een element
+met `data-theme` dat niet `<html>` is, over alle stylesheets en alle pagina's.
+
+**`ch` rekent WebKit op het eerste font in de familie, ook als dat font de "0" niet heeft.**
+`--font-terminal` begint met de kadertekensubset (U+2500-257F). Gemeten in een mono-element:
+3ch = 22px in WebKit tegen 27 in Chromium en Firefox. Op een element in een ánder font (de chip)
+kwam 3ch uit op 31px. Maat een mono-kolom in `em` (JetBrains Mono: 600/1000, dus 3 tekens = 1,8em).
+Sitebreed nog open: TASKS #86.
+
+**Twee kleinere, uit dezelfde sessie:**
+- `overflow-anchor: none` op een scroller die van boven inkort. Stond de vensterrand in de uitvoer,
+  dan koos de browser een uitvoerregel als anker, en `trim()` schoof de pagina 192px.
+- WebKit onthoudt de intrinsieke rijhoogte als een mediaquery `white-space` wisselt terwijl het
+  venster groeit (85 i.p.v. 68px tot een herlading). Laden op elke breedte geeft de juiste maat.
