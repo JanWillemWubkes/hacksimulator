@@ -33,8 +33,8 @@
         // Update aria-expanded attribute
         this.setAttribute('aria-expanded', !isOpen);
 
-        // Remove focus to prevent mobile keyboard from opening
-        this.blur();
+        // De focus blijft op de knop: een <button> opent geen toetsenbord, en blur() zette
+        // de focus op <body> (WebKit begon de volgende Tab dan bovenaan). Sessie 244.
       });
     });
   }

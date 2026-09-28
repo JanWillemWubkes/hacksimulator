@@ -1894,7 +1894,9 @@ abbr.jargon {
   background: rgba(22, 27, 34, 0.3);
   border: 1px solid var(--color-border);
   border-radius: 12px;
-  overflow: hidden;
+  /* Geen `overflow: hidden`: de kinderen zijn transparant, dus er viel niets te knippen
+     behalve de focusring van de vraag (offset 2px, buiten de knop). Gemeten sessie 244:
+     0 veranderde pixels bij focus op index en terminal. */
   transition: border-color var(--transition-fast);
 }
 
@@ -1963,15 +1965,21 @@ abbr.jargon {
 }
 
 /* FAQ Answer (Collapsible) */
+/* Dicht is ook onzichtbaar voor Tab en schermlezer: `max-height: 0` alleen liet de links
+   in een dicht antwoord focusbaar (focus op een onzichtbaar element). Open heeft geen
+   plafond: 300px kapte FAQ 1 van index af op 320px breed en bij vergrote tekstafstand
+   (WCAG 1.4.10/1.4.12). Sessie 244. */
 .faq-answer {
   max-height: 0;
   overflow: hidden;
-  transition: max-height var(--transition-normal), padding var(--transition-normal);
+  visibility: hidden;
+  transition: max-height var(--transition-normal), padding var(--transition-normal), visibility var(--transition-normal);
   padding: 0 var(--spacing-lg);
 }
 
 .faq-item.open .faq-answer {
-  max-height: 300px;
+  max-height: none;
+  visibility: visible;
   padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
 }
 

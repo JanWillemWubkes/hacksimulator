@@ -238,6 +238,27 @@ sample toont zijn pagina's").
 - `ch` in `--font-terminal` is in WebKit sitebreed fout (kadertekensubset vooraan). Buiten
   deze pagina: TASKS.
 
+## Audit (sessie 244)
+
+`impeccable audit` tegen de URL, in beide thema's via de echte schakelaar, plus de eerste
+`nl-content-reviewer`-ronde. Elk punt nagemeten; score na meting 16/20. Vervallen bij meting:
+alle twaalf detectormeldingen (de h1-contrastclaim voor de derde keer; `text-contrast` +
+`eyebrow-contrast` 120 passed), de 14 tikdoelen onder 24px (allemaal de afstandsuitzondering
+van 2.5.8, dichtstbij ≥21,5px), en de geneste `aside` (best practice, geen WCAG).
+
+**De FAQ met het toetsenbord.** Vier fouten in één gedeeld component, op index, contact en
+terminal. Opgelost bij de oorzaak (`main.css`, `faq.js`), niet onder `body.home`:
+- De focusring werd weggeknipt door `.faq-item { overflow: hidden }` (0 veranderde pixels bij
+  focus op index en terminal). De kinderen zijn transparant, dus er viel niets anders te knippen.
+- Een dicht antwoord is `visibility: hidden`: de links erin waren Tab-stops op iets onzichtbaars.
+- Open heeft geen plafond meer (was 300px: FAQ 1 verloor 22px op 320 en 85px bij de tekstafstand
+  van WCAG 1.4.12). Geen verlies aan beweging: de transitie was op alle drie de pagina's al `none`.
+- `faq.js` roept geen `blur()` meer aan: na Enter stond de focus op `<body>`, en WebKit begon de
+  volgende Tab bovenaan de pagina. Het commentaar ("mobiel toetsenbord") klopte niet.
+Voor/na: 36 beelden (drie pagina's, 1440/375, beide thema's, dicht/open/hover) pixel-identiek.
+Bewaakt in `faq-toetsenbord.spec.js`, over alle pagina's uit `PAGINAS`: vier mutanten, vier
+asserties.
+
 ## Memorabel moment
 
 Je tikt `nmap 192.168.1.1`. Links rolt de poortuitvoer uit, rechts verschijnt per regel de
