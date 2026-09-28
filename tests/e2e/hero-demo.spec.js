@@ -441,6 +441,15 @@ test.describe('Hero-terminal — een chip-tik op elke scrollpositie', () => {
   for (const vp of MATEN) {
     test(`@${vp.width}x${vp.height}: de uitvoer komt in beeld, alleen met het tekort, en de chip ${vp.past ? 'blijft zichtbaar' : 'valt nooit half onder de balk'}`, async ({ page }) => {
       await page.emulateMedia({ reducedMotion: 'reduce' });
+      // Een terugkerende bezoeker: zonder keuze verschijnt de cookiebanner na een korte
+      // vertraging onderaan en ligt hij in landscape over de chips. Dan hing de uitkomst af
+      // van welke engine de banner het eerst toonde (gemeten sessie 243, firefox 667x375).
+      await page.addInitScript(() => {
+        try {
+          localStorage.setItem('hacksim_analytics_consent',
+            JSON.stringify({ necessary: true, analytics: false, advertising: false }));
+        } catch (e) { /* private mode */ }
+      });
       await page.setViewportSize({ width: vp.width, height: vp.height });
       await page.goto('/index.html');
       await page.addStyleTag({ content: BEVRIES });
@@ -455,7 +464,11 @@ test.describe('Hero-terminal — een chip-tik op elke scrollpositie', () => {
       const fouten = [];
       for (let y = 0; y <= eind; y += 20) {
         await page.evaluate((y) => window.scrollTo(0, y), y);
-        // De onderste chip die helemaal tikbaar is: onder de navbar, boven een zichtbare balk.
+        // Twee frames: de balk beslist in een IntersectionObserver-callback, en Firefox deed
+        // zijn hit-test anders nog op de layout van vóór de scroll.
+        await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+        // De onderste chip die helemaal tikbaar is: onder de navbar, boven een zichtbare balk,
+        // en op het tikpunt ligt echt de chip (geen balk, banner of ander vlak eroverheen).
         const doel = await page.evaluate(() => {
           const nav = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height')) || 0;
           const balk = document.querySelector('.mobile-cta-bar');
@@ -465,7 +478,10 @@ test.describe('Hero-terminal — een chip-tik op elke scrollpositie', () => {
             const r = c.getBoundingClientRect();
             return r.top >= nav && r.bottom <= rand;
           });
-          const c = chips.pop();
+          const c = chips.filter((k) => {
+            const r = k.getBoundingClientRect();
+            return k.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2));
+          }).pop();
           if (!c) return null;
           const r = c.getBoundingClientRect();
           const body = document.getElementById('hero-demo').getBoundingClientRect();

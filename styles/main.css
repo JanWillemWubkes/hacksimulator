@@ -312,7 +312,11 @@
 }
 
 /* ==================== Light Mode Theme ==================== */
-[data-theme="light"] {
+/* :root en niet een kaal attribuut: de opties van de themaschakelaar dragen zelf
+   data-theme="light", en een kaal [data-theme="light"] zette zo alle lichte tokens óp dat
+   ene span. Daarmee negeerde de actieve pil elke tokenoverride van een voorouder (sessie
+   243: #c9d1d9 op de landingspagina in plaats van de inversie inkt/papier). */
+:root[data-theme="light"] {
   /* Light Mode - Subtle grey palette (#1a1a1a → #e5e5e5) */
 
   /* Background Layers - Light variant */

@@ -54,3 +54,85 @@ test.describe('Themastandaard per pagina', () => {
     expect(kop).not.toMatch(/init-theme\.js"[^>]*(defer|async|type="module")/);
   });
 });
+
+// ==================== Tokens horen op de wortel (Sessie 243) ====================
+//
+// `[data-theme="light"] { --tokens }` bedoelde "het document is licht", maar matchte óók
+// de optie `<span class="toggle-option" data-theme="light">` van de schakelaar. Dat span
+// kreeg zo alle lichte sitetokens op zichzelf en negeerde elke override van een voorouder:
+// op de landingspagina een actieve pil in #c9d1d9 (GitHub-grijs) in plaats van de inversie
+// inkt/papier, en in donker een inactief label in #a1a8b0 in plaats van --af-inkt-2.
+// Twee blokken (main.css, landing.css) staan nu op :root. De klasse is breder dan die twee:
+// élke regel met custom properties die een ander element dan <html> met data-theme raakt.
+
+import { PAGINAS } from './helpers/paginas.js';
+
+const ZONDER_SCHAKELAAR = new Set(['/assets/legal/privacy.html', '/assets/legal/terms.html', '/assets/legal/cookies.html']);
+
+test.describe('Thematokens horen op de wortel', () => {
+  test('geen regel met tokens raakt een schakelaaroptie, op geen enkele pagina', async ({ page }) => {
+    test.setTimeout(120_000);
+    const fouten = [];
+    let paginasMetOpties = 0;
+    let regelsMetTokens = 0;
+    for (const pad of PAGINAS) {
+      await page.goto(pad);
+      if (!ZONDER_SCHAKELAAR.has(pad)) await page.waitForSelector('.theme-toggle', { state: 'attached' });
+      const m = await page.evaluate(() => {
+        const doelen = [...document.querySelectorAll('[data-theme]')].filter((e) => e !== document.documentElement);
+        const regels = [];
+        const loop = (lijst) => {
+          for (const r of lijst) {
+            if (r.cssRules && !r.selectorText) { loop(r.cssRules); continue; }   // @media, @supports
+            if (!r.selectorText || !r.style) continue;
+            if (![...r.style].some((p) => p.startsWith('--'))) continue;
+            regels.push(r.selectorText);
+          }
+        };
+        for (const s of document.styleSheets) { try { loop(s.cssRules); } catch { /* andere origin */ } }
+        const raak = [];
+        for (const sel of regels) for (const d of doelen) { try { if (d.matches(sel)) raak.push(`${sel} -> ${d.className}[${d.dataset.theme}]`); } catch { /* onbekende selector */ } }
+        return { opties: doelen.length, regels: regels.length, raak: [...new Set(raak)] };
+      });
+      if (ZONDER_SCHAKELAAR.has(pad)) { expect(m.opties, `${pad} heeft opeens elementen met data-theme`).toBe(0); continue; }
+      if (m.opties >= 2) paginasMetOpties++;
+      regelsMetTokens = Math.max(regelsMetTokens, m.regels);
+      for (const r of m.raak) fouten.push(`${pad}: ${r}`);
+    }
+    // Zelfbewakend: de schakelaar is gevonden en er zijn tokenregels gelezen.
+    expect(paginasMetOpties, 'te weinig pagina\'s met schakelaaropties gemeten').toBeGreaterThanOrEqual(20);
+    expect(regelsMetTokens, 'geen tokenregels gelezen — de meting heeft niet gedraaid').toBeGreaterThan(5);
+    expect(fouten, 'tokenregel raakt een schakelaaroptie').toEqual([]);
+  });
+
+  for (const thema of ['light', 'dark']) {
+    test(`landingspagina ${thema}: de actieve optie is de inversie, de inactieve gedempt, de footer inkt`, async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await page.goto('/index.html');
+      await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation:none!important}' });
+      const schakelaar = page.locator('.theme-toggle:visible').first();
+      if (thema === 'dark') await schakelaar.click();
+      await expect(page.locator('html')).toHaveAttribute('data-theme', thema);
+
+      const m = await page.evaluate(() => {
+        const kleur = (v) => { const e = document.createElement('i'); e.style.color = v; document.body.appendChild(e); const c = getComputedStyle(e).color; e.remove(); return c; };
+        const body = getComputedStyle(document.body);
+        const token = (n) => kleur(body.getPropertyValue(n).trim());
+        const t = [...document.querySelectorAll('.theme-toggle')].find((e) => e.getClientRects().length);
+        const actief = t.querySelector('.toggle-option.active');
+        const inactief = t.querySelector('.toggle-option:not(.active)');
+        return {
+          inkt: token('--af-inkt'), papier: token('--af-papier'), inkt2: token('--af-inkt-2'),
+          actiefBg: getComputedStyle(actief).backgroundColor, actiefKleur: getComputedStyle(actief).color,
+          inactiefKleur: getComputedStyle(inactief).color,
+          footer: getComputedStyle(document.querySelector('footer')).backgroundColor,
+        };
+      });
+      expect(m.inkt, 'token --af-inkt niet gelezen').toMatch(/^rgb/);
+      expect([m.actiefBg, m.actiefKleur], 'actieve optie is niet de inversie inkt/papier').toEqual([m.inkt, m.papier]);
+      expect(m.inactiefKleur, 'inactieve optie niet in --af-inkt-2').toBe(m.inkt2);
+      // Licht: de footer is inkt (#111). Donker: zwart, zodat hij zijn gemeten tekstkleuren houdt.
+      expect(m.footer, 'footer heeft niet de achtergrond van het affiche').toBe(thema === 'light' ? m.inkt : 'rgb(0, 0, 0)');
+    });
+  }
+});

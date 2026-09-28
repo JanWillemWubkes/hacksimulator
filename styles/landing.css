@@ -50,7 +50,11 @@
 }
 
 /* Light theme overrides - Tailwind Green 600 for rich, modern appearance (WCAG AA 4.2:1) */
-[data-theme="light"] {
+/* :root en niet een kaal attribuut: de opties van de themaschakelaar dragen zelf
+   data-theme="light", en een kaal [data-theme="light"] zette zo alle lichte tokens óp dat
+   ene span. Daarmee negeerde de actieve pil elke tokenoverride van een voorouder (sessie
+   243: #c9d1d9 op de landingspagina in plaats van de inversie inkt/papier). */
+:root[data-theme="light"] {
 
   /* Eyebrow Badge - Higher opacity for visibility on light */
   --eyebrow-border: rgba(22, 163, 74, 0.4);

@@ -1581,10 +1581,11 @@ body.home .af-news .newsletter-or-support {
 }
 
 /* ==================== Footer ==================== */
-/* De pagina eindigt op een inktvlak: het omgekeerde affiche als slot. De footerregels
-   lezen hun achtergrond uit --color-bg-footer (inkt) en hun tekst uit de vaste
-   footertokens, die voor donker zijn gemeten. In het donkere thema is "inkt" papier;
-   daar blijft de footer donker, zodat hij zijn gemeten tekstkleuren houdt. */
+/* De pagina eindigt op een inktvlak: het omgekeerde affiche als slot. In het donkere
+   thema is "inkt" papier; daar blijft de footer zwart, zodat hij zijn gemeten
+   tekstkleuren houdt. De gedeelde regels lezen --color-bg-footer alleen in het lichte
+   thema (main.css), en in donker gaf de basisregel rgba(22,27,34,.5): een blauwe zweem
+   van het oude GitHub-palet (gemeten sessie 243). Daarom leest de footer hier zelf. */
 [data-theme="dark"] body.home {
   --color-bg-footer: #000000;
 }
@@ -1594,6 +1595,7 @@ body.home .af-news .newsletter-or-support {
    lime tokens waar footer.js-markup op leunt (kolomkoppen, hovers) worden papier.
    Papier op #111: 16,39; gedempt #b0b0ab: 8,67. Op #000 (donker thema) hoger. */
 body.home .landing-footer {
+  background: var(--color-bg-footer);
   --af-inkt: #efefec;
   --af-inkt-2: #b0b0ab;
   --af-papier: #111111;
