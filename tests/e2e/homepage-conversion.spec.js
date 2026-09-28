@@ -572,8 +572,9 @@ test.describe('Onderpagina', () => {
   });
 
   // De glos-naad van de hero (terminal 1-7, uitleg 8-12) is de naad van de hele pagina:
-  // elke tweedelige rij eronder deelt op dezelfde x.
-  for (const breedte of [1440, 1280]) {
+  // elke tweedelige rij eronder deelt op dezelfde x. Sessie 243: ook in de band 1024-1279,
+  // waar kop en actie onder elkaar vallen en de navbar inklapt; daar was hij ongedekt.
+  for (const breedte of [1440, 1280, 1279, 1180, 1024]) {
     test(`@${breedte}px deelt elke tweedelige rij onder de hero op de glos-naad`, async ({ page }) => {
       await page.setViewportSize({ width: breedte, height: 900 });
       await page.goto('/index.html');
@@ -599,6 +600,23 @@ test.describe('Onderpagina', () => {
       });
       expect(m.aantal).toBeGreaterThanOrEqual(4);
       expect(m.afwijkend, `naad op ${m.naad.toFixed(1)}`).toEqual([]);
+    });
+  }
+
+  // De kantlijn meet "Vorm volgt soort" op 1440; in de band is de vragenlijst smaller en
+  // dus hoger, en moet de lijn nog steeds de hele lengte volgen (sessie 243).
+  for (const breedte of [1279, 1180, 1024]) {
+    test(`@${breedte}px loopt de kantlijn langs de hele vragenlijst`, async ({ page }) => {
+      await page.setViewportSize({ width: breedte, height: 900 });
+      await page.goto('/index.html');
+      const m = await page.evaluate(() => {
+        const lees = document.querySelector('.af-faq-lees');
+        return { kantlijn: lees.getBoundingClientRect().height,
+                 lijst: document.querySelector('.af-faq-lijst').getBoundingClientRect().height,
+                 rand: parseFloat(getComputedStyle(lees).borderLeftWidth) };
+      });
+      expect(m.rand, 'geen kantlijn gemeten').toBeGreaterThan(0);
+      expect(m.kantlijn, `kantlijn ${m.kantlijn.toFixed(0)}px naast een lijst van ${m.lijst.toFixed(0)}px`).toBeGreaterThanOrEqual(m.lijst - 1);
     });
   }
 

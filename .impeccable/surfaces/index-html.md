@@ -164,6 +164,62 @@ Bewaakt in "Vorm volgt soort" (paden, kantlijnhoogte, geen randen in de module).
 eronder wordt het behang; de naad draagt het raster), geen mid-CTA (mobiele balk ≤1279,
 navbar ≥1280, bewaakt door "op elke scrollpositie een tikbare CTA").
 
+## Adapt (sessie 243)
+
+De critique van sessie 240 (buiten git, twee ombouwen oud) is punt voor punt opnieuw gemeten
+op 360/375/390, 768, 1024, 1180, 1279, 1280 en landscape 844x390/667x375, in beide thema's
+via de echte schakelaar. Verouderd bij meting: "chips op 766/768", "labels breken @1280"
+(in Chromium; in WebKit wél, zie hieronder), "sticky 76px" (navbar 60px), en de naad in de
+band (op 1024/1100/1180/1279 binnen 0,5px op kolomlijn 8).
+
+**Een chip-tik.** De focus blijft op de chip: een geactiveerde knop houdt zijn focus, Tab
+gaat naar de volgende chip, en op touch opent er geen toetsenbord. Het invoerveld focussen
+trok de pagina 391-611px omhoog zodra het veld boven de rand stond. Daarna scrolt de pagina
+alleen omhoog en alleen het tekort, tot de bovenkant van de uitvoer 8px onder de navbar
+staat (was tot 181px buiten beeld, op elke breedte). Staat de uitvoer al in beeld, dan
+beweegt er niets. In landscape past de module niet (242-330px vrij, terminal 300px): daar
+gaat de uitvoer voor en mag de chip onder de rand schuiven, maar een zichtbare balk dekt hem
+nooit half af. De chipnaam draagt de toestand (", gedaan" / ", volgende suggestie"), met de
+zichtbare tekst vooraan. Het terminallichaam heeft `overflow-anchor: none`: trim() bij 120
+regels schoof de pagina anders 192px.
+
+**Thematokens op de wortel.** `[data-theme="light"] { tokens }` matchte ook de schakelaaroptie
+met dat attribuut, en die negeerde daarmee elke override van `body.home`: de actieve pil was
+`#c9d1d9` (licht) en het inactieve label `#a1a8b0` (donker). Nu `:root[data-theme="light"]`
+in main.css en landing.css; de schakelaar is in beide thema's de inversie inkt/papier, het
+inactieve label `--af-inkt-2`. De footer is in het donker `#000` (was de zweem
+`rgba(22,27,34,.5)`, want `--color-bg-footer` werd alleen in licht gelezen). Voor/na over
+522 metingen op 18 pagina's: alleen index.html veranderde. Dit was "tokens" in TASKS #82.
+
+**De tabletband 768-1023.** De mobiele oplossingen gelden nu tot 1023: de terminaltitel
+verdwijnt (titel en omvang braken 768-928 allebei, met een losse `~`), en de poorten staan
+in twee rijen van zes (3306 en 8080 staken 768-864 buiten hun sleuf).
+
+**Chips.** Een command breekt nooit (`nowrap`), behalve onder 352px, waar een halve chip
+112px heeft en "nmap 192.168.1.1" 132 vraagt: overlopen is erger dan breken. Onder 768 staat
+de index bóven het command (proef P1-P3, `.playwright-mcp/s243-r3-proef-chips-P*.png`):
+- P1 (index ernaast): command en herkomst braken per chip verschillend, rijen 86/68.
+- **P2 (index erboven): gekozen.** Zes gelijke chips van 70px, alles op één regel op
+  360-767; de index staat als mono-label boven wat hij nummert, zoals in het leerpad.
+- P3 (P2 + herkomst in twee regels): 85px per chip zonder winst boven P2.
+De indexkolom is `1.8em` en niet `3ch`: `--font-terminal` begint met de kadertekensubset en
+WebKit rekent `ch` op dat font (3ch = 31px in de chip, 22 in het nummer tegen 27 elders).
+Zes keer 4px was precies waarom de nmap-chip in WebKit op 1280 7px over zijn rand liep.
+
+**Bewaakt** in `hero-demo.spec.js` ("een chip-tik op elke scrollpositie", "focus en naam",
+"Hero op elke breedte": 320-1440 per 8px), `thema-standaard.spec.js` ("Thematokens horen op
+de wortel") en `homepage-conversion.spec.js` (naad en kantlijn ook op 1279/1180/1024).
+
+**Gemeten en bewust niet opgelost.**
+- Onder 352px breken de omvangregel en het nmap-command nog; vastgelegd als assertie in
+  twee richtingen (`ONDERGRENS_EEN_REGEL`).
+- WebKit houdt de rijhoogte van het gebroken command (85px) vast als het venster van onder
+  352 over die grens groeit, tot een herlading. Alleen bij een 320px-telefoon die je kantelt.
+- Ongemeten, want headless niet te meten: of een schermlezer de eerste uitvoer na de
+  overname voorleest (aria-live gaat pas bij overname op polite), en het virtuele toetsenbord.
+- `ch` in `--font-terminal` is in WebKit sitebreed fout (kadertekensubset vooraan). Buiten
+  deze pagina: TASKS.
+
 ## Memorabel moment
 
 Je tikt `nmap 192.168.1.1`. Links rolt de poortuitvoer uit, rechts verschijnt per regel de

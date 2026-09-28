@@ -735,7 +735,10 @@ body.home .af-chips-rij {
 body.home .hero-chip {
   position: relative;
   display: grid;
-  grid-template-columns: 3ch minmax(0, 1fr);
+  /* De indexkolom meet zich in zijn eigen letter (min-width op .af-chip-nr), niet in
+     `ch` van de chip: WebKit gaf 3ch hier 31px (Chromium 27), zes keer 4px was precies
+     het tekort waardoor de nmap-chip op 1280 over zijn rand liep (sessie 243). */
+  grid-template-columns: auto minmax(0, 1fr);
   grid-template-rows: auto auto;
   column-gap: 8px;
   align-content: center;
@@ -756,6 +759,10 @@ body.home .hero-chip {
   grid-row: 1 / 3;
   align-self: center;
   position: relative;
+  /* Drie tekens breed voor [✓]. In em en niet in ch: `--font-terminal` begint met de
+     kadertekensubset, en WebKit rekent ch op dat font (3ch = 22px). JetBrains Mono heeft
+     een advance van 600/1000, dus drie tekens = 1,8em, in elke engine 27px. */
+  min-width: 1.8em;
   font-family: var(--af-mono);
   font-size: var(--af-klein);
   color: var(--af-inkt-2);
@@ -767,6 +774,11 @@ body.home .hero-chip {
   font-size: 0.86rem;
   font-weight: 700;
   line-height: 1.3;
+  /* Een command is één ding dat je typt, dus het breekt nooit. Dit is ook de intrinsieke
+     maat: zonder nowrap gaf WebKit de nmap-chip in de auto-kolommen op 1280-1296px te
+     weinig breedte (brak), en schatte het de tweede chiprij op mobiel 85 in plaats van
+     68px hoog (sessie 243). */
+  white-space: nowrap;
 }
 
 .af-chip-herkomst {
@@ -1672,6 +1684,21 @@ body.home a.footer-donate:hover {
 
 /* ==================== Tablet ==================== */
 @media (max-width: 1023px) {
+  /* Titel en omvang passen pas vanaf 944px naast elkaar in zeven kolommen; daaronder
+     braken ze allebei, met een losse "~" op de tweede regel (gemeten sessie 243,
+     768-928). De prompt eronder noemt hacker@hacksim al, de omvang zegt iets wat nergens
+     anders staat. Eén grens met de rest van de tabletregels in plaats van een eigen. */
+  .af-term-titel {
+    display: none;
+  }
+
+  /* Twaalf sleuven in een router van zeven kolommen: onder ~880px staken "3306" en "8080"
+     buiten hun sleuf en lazen twee poorten als één getal. Twee rijen van zes, zoals op
+     mobiel. */
+  .af-poorten {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
   .af-kop h2,
   .af-kop p {
     grid-column: 1 / -1;
@@ -1723,6 +1750,27 @@ body.home a.footer-donate:hover {
 /* Eén kolom. De glos gaat de module in, onder zijn regel: op 390px is naast elkaar
    onleesbaar, en onder elkaar houdt de registratie (regel en glos in één rij-element). */
 @media (max-width: 767px) {
+  /* Twee chips naast elkaar: de index gaat boven het command (proef P1-P3, sessie 243).
+     Naast elkaar liet hij 104px voor tekst; "nmap 192.168.1.1" vraagt 120 en brak, en de
+     herkomst brak bij de ene chip wel en bij de andere niet (rijen 86/68). Zo zijn alle
+     zes 70px, elk command en label op één regel, van 360 tot 767. */
+  body.home .hero-chip {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    align-content: start;
+  }
+
+  .af-chip-nr {
+    grid-row: 1;
+    align-self: start;
+    line-height: 1.3;
+  }
+
+  .af-chip-cmd,
+  .af-chip-herkomst {
+    grid-column: 1;
+  }
+
   .af-raster {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
@@ -1732,12 +1780,6 @@ body.home a.footer-donate:hover {
   }
 
   .af-glos-kop {
-    display: none;
-  }
-
-  /* Titel en omvang pasten niet naast elkaar (beide braken @375); de prompt eronder
-     noemt hacker@hacksim al, de omvang zegt iets wat nergens anders staat. */
-  .af-term-titel {
     display: none;
   }
 
@@ -1848,10 +1890,6 @@ body.home a.footer-donate:hover {
     grid-column: 1 / -1;
   }
 
-  .af-poorten {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-  }
-
   /* Onder elkaar staat er niets naast de kop om aan te hangen; de aanhaallijn stak dan
      als los streepje buiten de zijmarge (zelfde regel als .af-hint hierboven). */
   .af-pijn-tekst h3::before {
@@ -1897,6 +1935,15 @@ body.home a.footer-donate:hover {
 
   body.home .af-news .newsletter-button {
     width: 100%;
+  }
+}
+
+/* Onder 352px is een halve chip 112px voor tekst en vraagt "nmap 192.168.1.1" 132: met
+   nowrap liep het command 8px over de rand (320). Breken op de spatie is dan het mindere
+   kwaad; de hero-demo-spec houdt deze grens in twee richtingen vast. */
+@media (max-width: 351px) {
+  .af-chip-cmd {
+    white-space: normal;
   }
 }
 

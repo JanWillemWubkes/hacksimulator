@@ -576,6 +576,79 @@ test.describe('Hero-terminal — focus en naam van een chip', () => {
   });
 });
 
+// Sessie 243 (adapt), inventaris per 16px: tussen 768 en 928 brak de terminalkop over twee
+// regels (een losse "~"), tussen 768 en 864 staken "3306" en "8080" buiten hun sleuf, en
+// onder 430 brak "nmap 192.168.1.1" en de herkomst per chip verschillend (rijen 86/68).
+// De oplossingen voor mobiel (titel weg, poorten 2x6) gelden nu tot 1023; de chips zetten
+// onder 768 hun index boven het command. Gemeten op elke 8px, niet op een lijst maten.
+// Onder 352 is een halve chip 120px en vraagt "bestanden · beginner" 151: daar breekt het
+// nog. Dat staat als assertie in twee richtingen, zodat een oplossing zich meldt.
+const ONDERGRENS_EEN_REGEL = 352;
+
+test.describe('Hero op elke breedte: kop, poorten en chips op één regel', () => {
+  test('van 320 tot 1440, per 8px', async ({ page }) => {
+    await page.setViewportSize({ width: 768, height: 900 });
+    await page.goto('/index.html');
+    await page.evaluate(() => document.fonts.ready);
+    const fouten = [];
+    let gemeten = 0;
+    let onderGrensBreekt = 0;
+    for (let w = 320; w <= 1440; w += 8) {
+      await page.setViewportSize({ width: w, height: 900 });
+      // Opnieuw laden op de grens: WebKit houdt de rijhoogte van het gebroken command (85)
+      // vast als het venster van onder 352 over de grens groeit, tot een herlading. Wie op
+      // een breedte laadt krijgt 68 (gemeten sessie 243). Dit meet layout per breedte, niet
+      // dat rotatiegedrag; het staat in het contract.
+      if (w === ONDERGRENS_EEN_REGEL) { await page.reload(); await page.evaluate(() => document.fonts.ready); }
+      const r = await page.evaluate(() => {
+        const regels = (e) => {
+          const g = document.createRange(); g.selectNodeContents(e);
+          return new Set([...g.getClientRects()].map((x) => Math.round(x.top))).size;
+        };
+        const kop = [...document.querySelectorAll('.af-term-kop span')].filter((s) => s.getClientRects().length);
+        const poorten = [...document.querySelectorAll('.af-poort')];
+        const krap = poorten.filter((s) => {
+          const g = document.createRange(); g.selectNodeContents(s);
+          return s.getBoundingClientRect().width - g.getBoundingClientRect().width < 4;
+        }).map((s) => s.textContent);
+        const chips = [...document.querySelectorAll('.hero-chip')];
+        // Afstand van de tekst tot de binnenkant van de chiprand (2px rand).
+        const lucht = Math.min(...chips.flatMap((c) => ['.af-chip-cmd', '.af-chip-herkomst'].map((s) => {
+          const g = document.createRange(); g.selectNodeContents(c.querySelector(s));
+          return c.getBoundingClientRect().right - 2 - g.getBoundingClientRect().right;
+        })));
+        return {
+          lucht,
+          kop: kop.length, kopBreekt: kop.filter((s) => regels(s) > 1).map((s) => s.textContent.trim()),
+          poorten: poorten.length, krap,
+          chips: chips.length,
+          chipBreekt: chips.filter((c) => regels(c.querySelector('.af-chip-cmd')) > 1 || regels(c.querySelector('.af-chip-herkomst')) > 1).map((c) => c.dataset.command),
+          hoogtes: [...new Set(chips.map((c) => Math.round(c.getBoundingClientRect().height)))],
+        };
+      });
+      gemeten++;
+      if (r.kop < 1 || r.poorten !== 12 || r.chips !== 6) fouten.push(`${w}: populatie kop ${r.kop}, poorten ${r.poorten}, chips ${r.chips}`);
+      if (r.krap.length) fouten.push(`${w}: poortlabel zonder 4px lucht: ${r.krap.join(' ')}`);
+      // Op elke breedte, ook onder de grens: tekst loopt nooit over de rand van zijn chip.
+      if (r.lucht < 0) fouten.push(`${w}: chiptekst ${(-r.lucht).toFixed(0)}px over de rand`);
+      if (w >= ONDERGRENS_EEN_REGEL && r.lucht < 6) fouten.push(`${w}: chiptekst ${r.lucht.toFixed(1)}px van de rand, minder dan 6`);
+      const breekt = r.kopBreekt.length || r.chipBreekt.length || r.hoogtes.length > 1;
+      if (w < ONDERGRENS_EEN_REGEL) { if (breekt) onderGrensBreekt++; continue; }
+      if (r.kopBreekt.length) fouten.push(`${w}: terminalkop breekt: ${r.kopBreekt.join(' | ')}`);
+      if (r.chipBreekt.length) fouten.push(`${w}: chip breekt: ${r.chipBreekt.join(' | ')}`);
+      if (r.hoogtes.length > 1) fouten.push(`${w}: chips ongelijk hoog: ${r.hoogtes.join('/')}`);
+    }
+    expect(gemeten, 'de sweep heeft niet gedraaid').toBeGreaterThanOrEqual(140);
+    expect(fouten.filter((f) => f.includes('populatie')), 'kop, poorten of chips niet gevonden').toEqual([]);
+    expect(fouten.filter((f) => f.includes('terminalkop')), 'terminalkop op meer dan één regel').toEqual([]);
+    expect(fouten.filter((f) => f.includes('poortlabel')), 'poortlabel te krap in zijn sleuf').toEqual([]);
+    expect(fouten.filter((f) => f.includes('chiptekst')), 'chiptekst over of te dicht op de rand').toEqual([]);
+    expect(fouten.filter((f) => f.includes('chip breekt') || f.includes('ongelijk hoog')), 'chip op meer dan één regel of ongelijk hoog').toEqual([]);
+    // Twee richtingen: breekt het onder de grens niet meer, verlaag dan ONDERGRENS_EEN_REGEL.
+    expect(onderGrensBreekt, `onder ${ONDERGRENS_EEN_REGEL}px breekt niets meer — verlaag de grens`).toBeGreaterThan(0);
+  });
+});
+
 test.describe('Hero-terminal zonder JavaScript', () => {
   test.use({ viewport: MOBIEL, javaScriptEnabled: false });
 
