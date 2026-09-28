@@ -274,6 +274,23 @@ asserties.
 Bewaakt in `laden-en-beweging.spec.js` (CLS per pagina met positieve controle, alleen Chromium;
 reduced motion over alle pagina's); drie mutanten.
 
+**Copy (NL-review, nagemeten).**
+- FAQ 8: het schema miste de laatste zin. De guard "FAQPage-schema blijft woordelijk gelijk"
+  vergeleek alleen de vragen; hij vergelijkt nu ook de antwoorden (mutant: één zin weg → rood op
+  de antwoorden, niet op de vragen).
+- **"command", niet "commando".** De pagina zei 22× "command(s)" (chips, "40+ commands", de pagina
+  /commands) en 4× "commando", in FAQ 3 allebei in één alinea. "basiscommando's" werd "eenvoudige
+  commands".
+- "Gratis cybersecuritytips" (ook op /blog/), aria-label "E-mailadres voor de nieuwsbrief" (ook
+  op /blog/), skiplink "Naar de inhoud", terminaltitel `hacker@hacksim:~` zoals de prompt,
+  "Onze aanpak heet "80/20 realisme": …" (de term zelf staat op acht plekken en blijft), en het
+  noscript-menu noemt Gidsen. De kop breekt op geen van 141 breedtes (320-1440) over zijn rand.
+- **Bewust niet:** title en meta ("hacking simulator", SEO-besluit sessie 210), "Lees eerst:
+  Terminal voor beginners" (bewust ingekort, sessie 188), "pdf" (Woordenlijst: kleine letters),
+  "pentester" en "root" in de hero-tips (in de woordenlijst; elk woord in de glos kost ruimte).
+  Sitebreed en dus niet op deze branch: "terminal simulator" (21 pagina's, en een zoekterm) en de
+  desktopnav die op `px` inklapt (horizontaal scrollen bij alleen-tekstzoom). Beide in TASKS.
+
 ## Memorabel moment
 
 Je tikt `nmap 192.168.1.1`. Links rolt de poortuitvoer uit, rechts verschijnt per regel de

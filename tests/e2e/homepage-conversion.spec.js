@@ -108,6 +108,12 @@ async function meetHomepage(page) {
     const schemaVragen = faqSchema ? faqSchema.mainEntity.map((q) => q.name) : [];
     const zichtbareVragen = [...document.querySelectorAll('.faq-question .faq-question-text')]
       .map((h) => h.textContent.trim());
+    // Ook de antwoorden (sessie 244): tot dan vergeleek deze lockstep alleen de vragen, en
+    // FAQ 8 miste in het schema zijn laatste zin zonder dat iets rood werd.
+    const normaal = (t) => t.replace(/\s+/g, ' ').trim();
+    const schemaAntwoorden = faqSchema ? faqSchema.mainEntity.map((q) => normaal(q.acceptedAnswer.text)) : [];
+    const zichtbareAntwoorden = [...document.querySelectorAll('.faq-answer')]
+      .map((a) => normaal(a.textContent));
 
     // Alleen `.blog-link`: die chips presenteren zich als de titel van een artikel, dus
     // daar moet het label de echte titel zijn. Twee andere soorten bloglinks vallen
@@ -130,6 +136,8 @@ async function meetHomepage(page) {
       kleineTikdoelen,
       schemaVragen,
       zichtbareVragen,
+      schemaAntwoorden,
+      zichtbareAntwoorden,
       bloglinks,
       woordenInMain: document.querySelector('main').innerText.split(/\s+/).filter(Boolean).length
     };
@@ -308,6 +316,8 @@ test.describe('Homepage conversie-structuur', () => {
     const m = await meetHomepage(page);
     expect(m.schemaVragen.length).toBeGreaterThan(0);
     expect(m.zichtbareVragen).toEqual(m.schemaVragen);
+    expect(m.schemaAntwoorden.length, 'evenveel antwoorden als vragen').toBe(m.schemaVragen.length);
+    expect(m.zichtbareAntwoorden).toEqual(m.schemaAntwoorden);
   });
 
   test('elke bloglink draagt de echte titel van zijn doelpost', async ({ page, baseURL }) => {
