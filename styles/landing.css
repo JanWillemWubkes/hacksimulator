@@ -83,6 +83,15 @@
 }
 
 /* ==================== Navbar ==================== */
+/* navbar.js vervangt de placeholder door een sticky navbar van --navbar-height. Zonder
+   reserve zakte <main> daarna 60px: CLS 0,02-0,04 op 1440 en 0,07-0,08 op 375, op elke
+   pagina die dit bestand laadt (sessie 244). Terminal laadt het niet: daar is de navbar
+   fixed, en een reserve zou juist een sprong geven. Na de injectie bestaat dit element niet
+   meer, dus de reserve kan nooit dubbel tellen. */
+#navbar-placeholder {
+  min-height: var(--navbar-height);
+}
+
 .landing-nav-wrapper {
   position: sticky;
   top: 0;
@@ -711,6 +720,13 @@ a.result-item:focus-visible {
 html {
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--navbar-height) + 16px);
+}
+
+/* Met reduced motion stond een ankersprong toch ~350ms te scrollen (2000px, sessie 244). */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 /* ==================== "Hoe het werkt" Section ==================== */

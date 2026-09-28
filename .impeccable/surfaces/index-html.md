@@ -259,6 +259,21 @@ Voor/na: 36 beelden (drie pagina's, 1440/375, beide thema's, dicht/open/hover) p
 Bewaakt in `faq-toetsenbord.spec.js`, over alle pagina's uit `PAGINAS`: vier mutanten, vier
 asserties.
 
+**Laden en beweging.**
+- `<main>` zakte 60px zodra `navbar.js` de placeholder verving (CLS 0,042 op 1440, 0,074 op 375,
+  en zo op elke pagina die `landing.css` laadt). `landing.css` reserveert nu `--navbar-height` op
+  `#navbar-placeholder`: CLS 0 op alle pagina's. Terminal laadt `landing.css` niet (navbar
+  `fixed`, daar zou een reserve een sprong maken). Prijs: met JS uit staat er 33px lucht boven het
+  noscript-menu (placeholder 60, menu 27). Aangrenzend: de cover op sample-download had geen
+  `width`/`height` (CLS 0,067 op 375).
+- Onder reduced motion scrolde een ankersprong nog ~350ms: `landing.css` zet `scroll-behavior:
+  auto` onder `reduce`, zoals de signatuurinteractie al de eindstand toont.
+- **Bewust niet:** de Brevo-CSS niet uit het kritieke pad. Onder Slow 4G (150ms, 1,6 Mbps,
+  4x CPU, vijf runs) scheelt het 56ms FCP (mediaan 2300 → 2244): hij laadt parallel met onze
+  eigen CSS. Onder de vooraf gekozen drempel van 100ms, en de CSP staat geen inline `onload` toe.
+Bewaakt in `laden-en-beweging.spec.js` (CLS per pagina met positieve controle, alleen Chromium;
+reduced motion over alle pagina's); drie mutanten.
+
 ## Memorabel moment
 
 Je tikt `nmap 192.168.1.1`. Links rolt de poortuitvoer uit, rechts verschijnt per regel de
