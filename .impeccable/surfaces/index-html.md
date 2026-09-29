@@ -291,6 +291,49 @@ reduced motion over alle pagina's); drie mutanten.
   Sitebreed en dus niet op deze branch: "terminal simulator" (21 pagina's, en een zoekterm) en de
   desktopnav die op `px` inklapt (horizontaal scrollen bij alleen-tekstzoom). Beide in TASKS.
 
+## Polish (sessie 245)
+
+Zes designpunten van de eigenaar plus een eigen pass (`impeccable polish`): 63 bedieningselementen
+× 2 thema's in rust, hover en focus, tekstranden tegen de 13 rasterlijnen, typografie per rol,
+console. Schoon bij meting: 0 consolefouten, één maat per rol, geen tekst naast het raster behalve
+de slot-microcopy naast zijn knop, geen overloop op 320-414. De hovertaal heeft twee woorden:
+**een blok inverteert, een tekstlink wordt dikker** (1 → 2px). Wat geen van beide deed, of beide
+tegelijk, was de fout.
+
+**Ronde 1: de oude wereld lekte, en twee toestanden stapelden.** Alles in `affiche.css`, op één
+regel in `main.css` na.
+- **Woordmerk.** `main.css` kleurt bij hover élke span in het merk lime; de naam is een klasseloze
+  span, dus "HackSimulator" werd `rgb(159,239,0)`. En `body.home a` onderstreepte het merk in rust.
+  Nu: rust zonder lijn, hover onderstreept, zoals het woordmerk in de footer.
+- **Tweede lijnen.** Van 43 zichtbare links kregen er drie een tweede lijn bij hover: de koffielink
+  een rand in `--color-cta-primary` (het signaalrood, gemeten als band van 3px met rode onderrij),
+  de footerknop een onderstreping in zijn kader, de skiplink idem. Koffielink nu een gewone
+  tekstlink; de footerknop inverteert zoals elke knop.
+- **Focus.** De schakelaar had als enige van 61 een blauwe ring (`--color-info` uit `landing.css`);
+  nu rood. Het e-mailveld had `outline: none` en alleen een gekleurde rand; nu de rode ring.
+- **GitHub-icoon:** zijn hover was een onderstreping, en een icoon heeft er geen. Nu de inversie.
+- **Nieuwsbrief.** Veld 1,59px lager dan de knop: `main.css` reserveert onder beide ruimte voor een
+  foutmelding in `em`, onder een letter van 16 en van 18px. Vanaf 1024 nu bovenkant op bovenkant.
+  Twee dingen daaronder die je niet in de CSS van deze pagina ziet: de `flex` van de wrapper
+  verloor op elke breedte van een (0,4,0)-regel in `main.css`, dus het veld had zijn eigen 247px
+  en de knop brak op 768-1032 onder een veld **zonder rechterrand**. En de rand van 2px kwam van
+  een `!important` in `main.css` die niets won: Brevo's eigen regel (0,2,0) verliest ook zonder.
+  Die `!important` is weg (de enige wijziging in een gedeeld bestand; voor/na op sample-pentest,
+  sample-juridisch en /blog/, 1440/375, beide thema's, rand en focus: 24 van 24 identiek). Nu:
+  vanaf 1024 één rij tot de rasterrand, daaronder onder elkaar met de knop op volle breedte;
+  gemeten op 201 breedtes 320-1920.
+- **Bloglinks:** het zwarte blok stond op 0px van zijn letters. Nu 8px, met een even grote
+  negatieve marge: de tekst blijft op de naad.
+- **Cijfertabel:** "naam)" stond op 1024-1920 alleen op de laatste regel (49px); `text-wrap:
+  pretty` → "de naam)" (74px). Niet bewaakt: WebKit ondersteunt het niet overal, en een los woord
+  is geen fout.
+Bewaakt in `homepage-conversion.spec.js` "Polish (sessie 245)", acht tests; zeven mutanten, elk op
+een eigen assertie. De pixeltest heeft een positieve controle, en die ving de eerste versie: in
+WebKit (`deviceScaleFactor` 2) keek de teller naar het verkeerde stuk beeld.
+
+**Gemeten, niet opgelost.** Het terminalveld verandert bij focus 0 pixels: alleen de caret, die de
+invoerregel van de module met zijn prompt deelt. Genoteerd voor de finish review.
+
 ## Memorabel moment
 
 Je tikt `nmap 192.168.1.1`. Links rolt de poortuitvoer uit, rechts verschijnt per regel de

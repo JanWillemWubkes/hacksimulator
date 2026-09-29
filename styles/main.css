@@ -2220,7 +2220,9 @@ abbr.jargon {
 .homepage-newsletter .sib-form .entry__field input,
 .homepage-newsletter .sib-form .entry__field input.input {
   background-color: var(--color-bg) !important;
-  border: 2px solid var(--color-border) !important;
+  /* border zonder !important: Brevo's eigen regel (.sib-form .input, (0,2,0)) verliest
+     ook zonder, en een pagina met een eigen formulierwereld (index) kan hem dan tekenen. */
+  border: 2px solid var(--color-border);
   border-radius: var(--border-radius-modal) !important;
   color: var(--color-text) !important;
   font-family: var(--font-body) !important;
@@ -2232,7 +2234,7 @@ abbr.jargon {
   transition: border-color var(--transition-fast);
 }
 .homepage-newsletter .sib-form .entry__field input:focus {
-  border-color: var(--color-cta-primary) !important;
+  border-color: var(--color-cta-primary);
   outline: none;
 }
 .homepage-newsletter .sib-form-message-panel {

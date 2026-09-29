@@ -15,6 +15,7 @@
 import { test, expect } from './fixtures.js';
 import fs from 'fs';
 import path from 'path';
+import { zetThema } from './helpers/contrast.js';
 
 const MOBIEL = { width: 375, height: 812 };
 
@@ -824,4 +825,234 @@ test.describe('Aanhaallijnen', () => {
       expect(m.uit, 'aanhaallijn buiten de zijmarge').toEqual([]);
     });
   }
+});
+
+// ==================== Polish (sessie 245) ====================
+//
+// Gemeten vóór de fix, 1440, beide thema's: de koffielink kreeg bij hover een rode rand
+// onder zijn onderstreping (main.css zet --color-cta-primary: het signaalrood), de
+// footerknop een onderstreping in zijn kader, de schakelaar een blauwe focusring naast 60
+// rode, het GitHub-icoon geen zichtbare hover, het woordmerk een lime "HackSimulator" en
+// een onderstreping in rust. Het e-mailveld stond 1,59px lager dan de knop, en brak op
+// 768-1032 onder het veld (zonder rechterrand), omdat een (0,4,0)-regel in main.css de
+// flex van de wrapper op elke breedte won. Het bloglinkblok stond op 0px van zijn letters.
+//
+// Elke meting hieronder heeft een tak die bewijst dat hij iets mat: een populatie, een
+// hovertoestand die echt aan staat, of een positieve controle.
+
+const ROOD = 'rgb(204, 10, 30)';
+const POLISH_THEMAS = ['light', 'dark'];
+
+const lijnOnderLink = (a) => {
+  const c = getComputedStyle(a);
+  const onderstreept = c.textDecorationLine.includes('underline');
+  const zichtbaar = (w, s, kleur) => parseFloat(w) > 0 && s !== 'none' && !/rgba\(.*,\s*0\)$/.test(kleur) && kleur !== 'transparent';
+  const rand = zichtbaar(c.borderBottomWidth, c.borderBottomStyle, c.borderBottomColor);
+  const kader = rand && zichtbaar(c.borderTopWidth, c.borderTopStyle, c.borderTopColor);
+  return {
+    naam: a.textContent.trim().replace(/\s+/g, ' ').slice(0, 40) || a.getAttribute('aria-label'),
+    hover: a.matches(':hover'),
+    onderstreept, rand, kader,
+    schaduw: c.boxShadow !== 'none',
+  };
+};
+
+test.describe('Polish (sessie 245)', () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+  // Zonder beslissing dekt de cookiebanner de footer af en krijgt geen link daar de muis.
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('hacksim_analytics_consent', 'false'));
+  });
+
+  for (const thema of POLISH_THEMAS) {
+    test(`${thema}: geen link krijgt bij hover een tweede lijn`, async ({ page }) => {
+      await page.goto('/index.html');
+      await zetThema(page, thema);
+      const links = page.locator('main a, #newsletter a, .landing-footer a');
+      const n = await links.count();
+      const dubbel = [];
+      let gehoverd = 0;
+      for (let i = 0; i < n; i++) {
+        const a = links.nth(i);
+        if (!(await a.isVisible())) continue;
+        await a.scrollIntoViewIfNeeded();
+        await a.hover();
+        const m = await a.evaluate(lijnOnderLink);
+        if (!m.hover) continue;
+        gehoverd++;
+        // Een onderstreping mag niet samengaan met een rand eronder, een kader of een schaduw.
+        if (m.onderstreept && (m.rand || m.kader || m.schaduw)) dubbel.push(m.naam);
+      }
+      expect(gehoverd, 'te weinig links echt gehoverd — de meting heeft niet gedraaid').toBeGreaterThan(30);
+      expect(dubbel, 'onderstreping plus een tweede lijn bij hover').toEqual([]);
+    });
+  }
+
+  test('de koffielink draagt bij hover geen rood (pixels, met positieve controle)', async ({ page }) => {
+    await page.goto('/index.html');
+    await zetThema(page, 'light');
+    const a = page.locator('.newsletter-or-support a');
+    await a.scrollIntoViewIfNeeded();
+    // Een clip-screenshot verloor in deze sessie de hovertoestand; daarom het hele venster.
+    const roodOnder = async () => {
+      const b = await a.boundingBox();
+      const png = await page.screenshot();
+      return page.evaluate(async ({ data, b }) => {
+        const img = new Image(); img.src = data; await img.decode();
+        const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
+        const x = c.getContext('2d'); x.drawImage(img, 0, 0);
+        // WebKit draait hier met deviceScaleFactor 2: reken CSS-px om naar beeldpixels.
+        const k = img.width / innerWidth;
+        const d = x.getImageData(Math.round(b.x * k), Math.round((b.y + b.height / 2) * k), Math.round(b.width * k), Math.round((b.height / 2 + 4) * k)).data;
+        let rood = 0;
+        for (let j = 0; j < d.length; j += 4) if (d[j] > 150 && d[j + 1] < 80 && d[j + 2] < 90) rood++;
+        return rood;
+      }, { data: 'data:image/png;base64,' + png.toString('base64'), b });
+    };
+    await a.hover();
+    expect(await a.evaluate((e) => e.matches(':hover')), 'de link is niet gehoverd').toBe(true);
+    expect(await roodOnder(), 'rode pixels onder de koffielink bij hover').toBe(0);
+    // Positieve controle: dezelfde teller moet een rode rand wél zien.
+    await a.evaluate((e) => { e.style.borderBottom = '2px solid rgb(204, 10, 30)'; });
+    expect(await roodOnder(), 'de teller ziet een ingespoten rode rand niet').toBeGreaterThan(20);
+  });
+
+  test('het woordmerk: geen onderstreping in rust, en bij hover blijft elke letter inkt', async ({ page }) => {
+    await page.goto('/index.html');
+    for (const thema of POLISH_THEMAS) {
+      await zetThema(page, thema);
+      const merk = page.locator('.nav-brand');
+      await page.mouse.move(1, 1);
+      const meet = () => merk.evaluate((e) => ({
+        td: getComputedStyle(e).textDecorationLine,
+        hover: e.matches(':hover'),
+        inkt: getComputedStyle(document.body).getPropertyValue('--af-inkt').trim(),
+        kleuren: [...e.querySelectorAll('*')].filter((k) => [...k.childNodes].some((c) => c.nodeType === 3 && c.textContent.trim()))
+          .map((k) => getComputedStyle(k).color),
+      }));
+      const rust = await meet();
+      await merk.hover();
+      const hover = await meet();
+      expect(rust.kleuren.length, `${thema}: geen tekst in het woordmerk gevonden`).toBeGreaterThanOrEqual(2);
+      expect(hover.hover, `${thema}: het woordmerk is niet gehoverd`).toBe(true);
+      expect(rust.td, `${thema}: woordmerk onderstreept in rust`).toBe('none');
+      expect(new Set(hover.kleuren).size, `${thema}: letters van het merk in verschillende kleuren bij hover: ${hover.kleuren}`).toBe(1);
+      expect(hover.kleuren[0], `${thema}: merk bij hover niet in de kleur van rust`).toBe(rust.kleuren[0]);
+    }
+  });
+
+  test('elk focusbaar element toont de rode ring', async ({ page }) => {
+    await page.goto('/index.html');
+    // Uitzondering, met reden: de invoerregel van de terminalmodule toont focus met zijn
+    // eigen prompt en caret (sessie 245 gemeten, voor de finish review genoteerd).
+    const UITGEZONDERD = ['hero-input'];
+    for (const thema of POLISH_THEMAS) {
+      await zetThema(page, thema);
+      const n = await page.evaluate(() => {
+        const els = [...document.querySelectorAll('a[href], button, input:not([type=hidden])')]
+          .filter((e) => e.getClientRects().length && getComputedStyle(e).visibility !== 'hidden' && !e.closest('.mobile-cta-bar'));
+        els.forEach((e, i) => { e.dataset.polishFocus = i; });
+        return els.length;
+      });
+      const mis = [];
+      let getoetst = 0;
+      for (let i = 0; i < n; i++) {
+        const el = page.locator(`[data-polish-focus="${i}"]`);
+        const cls = (await el.getAttribute('class')) || '';
+        if (UITGEZONDERD.some((u) => cls.split(' ').includes(u))) continue;
+        await el.focus();
+        await page.keyboard.press('Shift');
+        const m = await el.evaluate((e) => ({ fv: e.matches(':focus-visible'), stijl: getComputedStyle(e).outlineStyle, kleur: getComputedStyle(e).outlineColor, naam: e.className || e.textContent.trim().slice(0, 30) }));
+        if (!m.fv) continue;
+        getoetst++;
+        if (m.stijl === 'none' || m.kleur !== ROOD) mis.push(`${m.naam}: ${m.stijl} ${m.kleur}`);
+      }
+      expect(getoetst, `${thema}: te weinig elementen met :focus-visible — de meting heeft niet gedraaid`).toBeGreaterThan(40);
+      expect(mis, `${thema}: focus zonder de rode ring`).toEqual([]);
+    }
+  });
+
+  test('een icoon zonder tekst verandert zichtbaar bij hover', async ({ page }) => {
+    await page.goto('/index.html');
+    for (const thema of POLISH_THEMAS) {
+      await zetThema(page, thema);
+      const iconen = page.locator('.landing-footer .footer-social a');
+      const n = await iconen.count();
+      expect(n, 'geen footericonen gevonden').toBeGreaterThan(0);
+      for (let i = 0; i < n; i++) {
+        const a = iconen.nth(i);
+        await a.scrollIntoViewIfNeeded();
+        await page.mouse.move(1, 1);
+        const lees = () => a.evaluate((e) => { const c = getComputedStyle(e); return { h: e.matches(':hover'), s: `${c.backgroundColor} ${c.color}` }; });
+        const rust = await lees();
+        await a.hover();
+        const hover = await lees();
+        expect(hover.h, `${thema}: icoon ${i} niet gehoverd`).toBe(true);
+        expect(hover.s, `${thema}: icoon ${i} verandert niet van kleur of vlak`).not.toBe(rust.s);
+      }
+    }
+  });
+
+  test('het bloglinkblok heeft lucht naast de letters, en de tekst blijft op de naad', async ({ page }) => {
+    for (const breedte of [1440, 1024, 375]) {
+      await page.setViewportSize({ width: breedte, height: 900 });
+      await page.goto('/index.html');
+      await zetThema(page, 'light');
+      const links = page.locator('.af-lees-lijst .blog-link');
+      const n = await links.count();
+      expect(n, 'geen bloglinks gevonden').toBe(3);
+      for (let i = 0; i < n; i++) {
+        const a = links.nth(i);
+        await a.scrollIntoViewIfNeeded();
+        await page.mouse.move(1, 1);
+        const meet = () => a.evaluate((e) => {
+          const g = document.createRange(); g.selectNodeContents(e);
+          const rs = [...g.getClientRects()]; const b = e.getBoundingClientRect();
+          return { h: e.matches(':hover'), bg: getComputedStyle(e).backgroundColor, tl: Math.min(...rs.map((x) => x.left)), tr: Math.max(...rs.map((x) => x.right)), bl: b.left, br: b.right };
+        });
+        const rust = await meet();
+        await a.hover();
+        const hover = await meet();
+        expect(hover.h, `@${breedte} link ${i} niet gehoverd`).toBe(true);
+        expect(hover.bg, `@${breedte} link ${i} inverteert niet`).not.toBe(rust.bg);
+        expect(hover.tl - hover.bl, `@${breedte} link ${i}: lucht links`).toBeGreaterThanOrEqual(6);
+        expect(hover.br - hover.tr, `@${breedte} link ${i}: lucht rechts`).toBeGreaterThanOrEqual(6);
+        expect(Math.abs(hover.tl - rust.tl), `@${breedte} link ${i}: tekst verschuift bij hover`).toBeLessThan(0.5);
+      }
+    }
+  });
+
+  test('nieuwsbrief: vanaf 1024 veld en knop op één rij tot de rand, daaronder onder elkaar', async ({ page }) => {
+    await page.goto('/index.html');
+    const BREEDTES = [1920, 1440, 1384, 1280, 1032, 1024, 1023, 900, 769, 768, 375, 320];
+    let rij = 0, stapel = 0;
+    for (const w of BREEDTES) {
+      await page.setViewportSize({ width: w, height: 900 });
+      const m = await page.evaluate(() => {
+        const i = document.querySelector('.af-news .newsletter-form .input');
+        const b = document.querySelector('.af-news .newsletter-button');
+        const ri = i.getBoundingClientRect(), rb = b.getBoundingClientRect();
+        const r = document.querySelector('.af-news .af-raster'); const cs = getComputedStyle(r);
+        const rand = r.getBoundingClientRect().right - parseFloat(cs.paddingRight);
+        return {
+          dTop: ri.top - rb.top, rechts: Math.max(ri.right, rb.right) - rand,
+          iRand: [getComputedStyle(i).borderTopWidth, getComputedStyle(i).borderRightWidth], bRand: getComputedStyle(b).borderTopWidth,
+          bBreed: rb.width, iBreed: ri.width,
+        };
+      });
+      expect(Math.abs(m.rechts), `@${w}: formulier eindigt ${m.rechts.toFixed(1)}px naast de rand`).toBeLessThan(1);
+      expect(m.iRand[0], `@${w}: veld en knop hebben een andere rand`).toBe(m.bRand);
+      if (w >= 1024) {
+        rij++;
+        expect(Math.abs(m.dTop), `@${w}: veld staat ${m.dTop.toFixed(2)}px naast de knop`).toBeLessThan(0.5);
+      } else {
+        stapel++;
+        expect(m.dTop, `@${w}: veld en knop staan naast elkaar`).toBeLessThan(-20);
+        expect(m.iRand[1], `@${w}: gestapeld veld zonder rechterrand`).toBe(m.bRand);
+        expect(Math.abs(m.bBreed - m.iBreed), `@${w}: knop niet zo breed als het veld`).toBeLessThan(1);
+      }
+    }
+    expect(rij, 'geen rijbreedtes gemeten').toBeGreaterThan(3);
+    expect(stapel, 'geen stapelbreedtes gemeten').toBeGreaterThan(3);
+  });
 });

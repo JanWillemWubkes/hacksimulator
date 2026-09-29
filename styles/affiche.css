@@ -170,6 +170,17 @@ body.home :focus-visible {
   outline-offset: 2px;
 }
 
+/* landing.css geeft de schakelaar een eigen, blauwe ring (--color-info, (0,3,0)); hier
+   draagt hij hetzelfde rood als de andere 60 focusbare elementen op de pagina. */
+body.home .theme-toggle:focus-visible {
+  outline-color: var(--af-rood);
+}
+
+/* De skiplink heeft een kader; body.home a zette er een onderstreping bij. */
+body.home .skip-link {
+  text-decoration: none;
+}
+
 body.home a {
   color: var(--af-inkt);
   text-decoration: underline;
@@ -225,14 +236,23 @@ body.home .landing-nav-wrapper {
   border-bottom-width: 1px;
 }
 
+/* Het woordmerk is geen lopende tekstlink: in rust geen onderstreping (body.home a gaf er
+   een), bij hover wel, zoals het woordmerk in de footer. main.css kleurt bij hover élke
+   span in het merk lime (.nav-brand:hover span); de naam zelf is een klasseloze span, dus
+   die regel staat hier op span en niet op .brand-accent alleen (gemeten sessie 245). */
 body.home .nav-brand {
   font-family: var(--af-kop);
   font-weight: 800;
+  text-decoration: none;
+}
+
+body.home .nav-brand:hover {
+  text-decoration: underline;
 }
 
 body.home .nav-brand:hover,
-body.home .nav-brand:hover .brand-icon,
-body.home .nav-brand:hover .brand-accent {
+body.home .nav-brand:hover span,
+body.home .nav-brand:hover .brand-icon {
   color: var(--af-inkt);
 }
 
@@ -1180,6 +1200,7 @@ body.home .af-lijst .result-number {
 body.home .af-lijst .result-label {
   font-size: 1rem;
   color: inherit;
+  text-wrap: pretty;   /* "naam)" stond op 1024-1920 alleen op de laatste regel */
 }
 
 .af-lijst-waar {
@@ -1320,9 +1341,13 @@ body.home .leerpad-cmd-line {
 
 /* Het tikdoel (≥44px) komt uit een vaste padding, niet uit min-height: die zette de
    restruimte ónder een titel van één regel, zodat de afstanden in de lijst verschilden. */
+/* Zijpadding met een even grote negatieve marge: de tekst blijft op zijn plek (op de
+   naad), en het geïnverteerde blok bij hover krijgt 8px lucht naast de letters. Zonder
+   stond de laatste letter tegen de rand van het zwarte vlak (gemeten sessie 245). */
 body.home .af-lees-lijst .blog-link {
   display: inline-block;
-  padding: 10px 0;
+  padding: 10px 8px;
+  margin-inline: -8px;
   font-family: var(--af-tekst);
   font-size: 1.05rem;
   font-weight: 400;
@@ -1537,6 +1562,7 @@ body.home .af-news {
 body.home .af-news .sib-form,
 body.home .af-news .sib-form-container,
 body.home .af-news #sib-form-container {
+  max-width: none;   /* main.css: .sib-form 540px; de rasterkolom is de maat */
   padding: 0;
   margin: 0;
   background: none;
@@ -1548,12 +1574,17 @@ body.home .af-news .newsletter-form {
   flex-wrap: wrap;
   justify-content: flex-start;   /* de gedeelde regel centreert: veld 70px naast de naad */
   gap: 0;
-  max-width: 560px;
+  max-width: none;
   margin: 0;
 }
 
-body.home .af-news .sib-input {
-  flex: 1 1 260px;
+/* De wrapper groeit tot de rasterrand (kolom 8-12), met een basis van 220: vanaf 1024
+   passen veld en knop (150) naast elkaar (381px op 1024). Selector met .newsletter-form:
+   main.css zet (0,4,0) `flex: 0 1 auto`, en die won van de vorige (0,3,1) op elke breedte,
+   dus het veld had zijn eigen 247px en de knop brak op 768-1032 onder een veld zonder
+   rechterrand (gemeten sessie 245). Onder 1024 staan ze bewust onder elkaar. */
+body.home .af-news .newsletter-form .sib-input {
+  flex: 1 1 220px;
   margin: 0;
   padding: 0;
 }
@@ -1605,6 +1636,31 @@ body.home .af-news .newsletter-button:hover {
   color: var(--af-inkt);
   transform: none;
   box-shadow: none;
+}
+
+/* Op één rij bovenkant op bovenkant. main.css reserveert onder beide ruimte voor een
+   foutmelding, 1.6em onder de wrapper (16px letter: 25,6) en onder de knop (18px: 28,8);
+   gecentreerd stond het veld daardoor 1,6px lager dan de knop. Alleen vanaf 1024: onder
+   769 zet main.css de rij in een kolom die moet blijven rekken. */
+@media (min-width: 1024px) {
+  body.home .af-news .newsletter-form {
+    align-items: flex-start;
+  }
+}
+
+/* Focus zoals elk ander element hier: de rode ring. main.css zet outline: none en
+   kleurt alleen de rand. */
+body.home .af-news .newsletter-form .input:focus-visible {
+  border-color: var(--af-inkt);
+  outline: 2px solid var(--af-rood);
+  outline-offset: 2px;
+}
+
+/* main.css geeft deze link bij hover een rand in --color-cta-primary: het signaalrood,
+   als tweede lijn onder de onderstreping. Hier is hij een gewone tekstlink. */
+body.home .af-news .newsletter-or-support a,
+body.home .af-news .newsletter-or-support a:hover {
+  border-bottom: 0;
 }
 
 body.home .af-news .newsletter-privacy,
@@ -1661,7 +1717,9 @@ body.home .landing-footer a:hover {
   text-decoration: underline;
 }
 
-/* De Ko-fi-link droeg een lime waas (rgba op de footer). Hier een papieren kader. */
+/* De Ko-fi-link droeg een lime waas (rgba op de footer). Hier een papieren kader, en bij
+   hover de inversie zoals elke knop op de pagina; de onderstreping van de footerlinks
+   stond anders als tweede lijn in het kader. */
 body.home a.footer-donate,
 body.home a.footer-donate:hover {
   background-color: transparent;
@@ -1669,6 +1727,20 @@ body.home a.footer-donate:hover {
   border-radius: 0;
   color: var(--af-inkt);
   box-shadow: none;
+  transform: none;
+}
+
+body.home .landing-footer a.footer-donate:hover {
+  background-color: var(--af-inkt);
+  color: var(--af-papier);
+  text-decoration: none;
+}
+
+/* Het GitHub-icoon: zijn hover was alleen een onderstreping, en een icoon heeft er geen.
+   Nu dezelfde inversie als de knop ernaast. */
+body.home .landing-footer .footer-social a:hover {
+  background-color: var(--af-inkt);
+  color: var(--af-papier);
   transform: none;
 }
 
@@ -1957,7 +2029,11 @@ body.home a.footer-donate:hover {
   .af-lijst-waar {
     display: none;
   }
+}
 
+/* Veld en knop onder elkaar tot 1023 (was: tot 767). Op 768-1032 brak de knop al onder
+   het veld, op zijn eigen breedte en met een veld zonder rechterrand. */
+@media (max-width: 1023px) {
   body.home .af-news .newsletter-form .input {
     border-right: 1px solid var(--af-inkt);
   }
