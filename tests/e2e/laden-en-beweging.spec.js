@@ -84,6 +84,10 @@ test.describe('Reduced motion', () => {
   });
 
   test('geen pagina scrolt zacht onder reduced motion', async ({ page }) => {
+    // Het budget schaalt mee met de populatie. Los laadt Firefox de 30 pagina's in 15s (de
+    // traagste 1,5s); met de vaste 30s ging hij in een volle gate één keer over de grens
+    // (sessie 245). Elke pagina die erbij komt, at die marge verder op.
+    test.setTimeout(PAGINAS.length * 5000);
     await voorbereid(page);
     const zacht = [];
     // Tak: de emulatie is echt actief; anders meet deze test het standaardgedrag.

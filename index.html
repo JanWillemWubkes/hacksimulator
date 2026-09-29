@@ -67,7 +67,7 @@
        body.home: hij herdefinieert de gedeelde tokens voor navbar, footer en .btn-cta
        in plaats van tegen hun regels te vechten, en draagt de secties zelf in eigen
        af-klassen. De andere pagina's laden hem niet. -->
-  <link rel="stylesheet" href="styles/affiche.css?v=21">
+  <link rel="stylesheet" href="styles/affiche.css?v=23">
 
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
   <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
@@ -445,7 +445,10 @@
       <div class="af-raster">
         <header class="af-kop">
           <h2 id="cijfers-kop">HackSimulator in cijfers</h2>
-          <p>Geen beloftes &mdash; dit kun je allemaal zelf nakijken.</p>
+          <!-- De code is het vierde bewijs naast de drie getallen: hij hoort bij de belofte
+               "zelf nakijken", niet in de glos-kolom naast rij 1 (sessie 245, proef N0-N3). -->
+          <p>Geen beloftes &mdash; dit kun je allemaal zelf nakijken. Ook de code erachter staat volledig openbaar op
+            <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
         </header>
 
         <div class="af-lijst">
@@ -465,11 +468,6 @@
             <span class="af-lijst-waar">/woordenlijst</span>
           </a>
         </div>
-
-        <p class="af-noot">
-          Ook de code erachter is openbaar: die staat volledig op
-          <a href="https://github.com/JanWillemWubkes/hacksimulator" target="_blank" rel="noopener noreferrer">GitHub</a>.
-        </p>
       </div>
     </section>
 
@@ -691,22 +689,17 @@
       <div class="af-raster">
         <h2 id="sample-kop">Zo begint een echte pentest</h2>
         <p>De eerste 9 pagina's van het Pentest Playbook, als pdf: hoe je een pentest voorbereidt &mdash; toestemming, scope en de juridische check &mdash; en je doelwit verkent v&oacute;&oacute;r de eerste aanval. Precies de stap die beginners overslaan. Geen account, alleen je e-mailadres.</p>
-        <!-- De negen pagina's zelf, verkleind: de zin hierboven belooft "de eerste 9 pagina's",
-             en dit is dat bewijs, telbaar (sessie 243, proef A/B/C9/C4). aria-hidden: de zin
-             zegt het al. Gemaakt uit assets/samples/pentest-playbook-sample.pdf met
-             `pdftoppm -png -scale-to-x 320` en verkleind naar 160px WebP (q80). Verandert de
-             pdf, maak ze dan opnieuw; homepage-conversion.spec.js telt ze tegen de pdf. -->
-        <div class="af-sample-paginas" aria-hidden="true">
-          <img src="/assets/samples/paginas/pentest-1.webp" width="160" height="226" alt="" loading="lazy" decoding="async">
-          <img src="/assets/samples/paginas/pentest-2.webp" width="160" height="226" alt="" loading="lazy" decoding="async">
-          <img src="/assets/samples/paginas/pentest-3.webp" width="160" height="226" alt="" loading="lazy" decoding="async">
-          <img src="/assets/samples/paginas/pentest-4.webp" width="160" height="226" alt="" loading="lazy" decoding="async">
-          <img src="/assets/samples/paginas/pentest-5.webp" width="160" height="226" alt="" loading="lazy" decoding="async">
-          <img src="/assets/samples/paginas/pentest-6.webp" width="160" height="226" alt="" loading="lazy" decoding="async">
-          <img src="/assets/samples/paginas/pentest-7.webp" width="160" height="226" alt="" loading="lazy" decoding="async">
-          <img src="/assets/samples/paginas/pentest-8.webp" width="160" height="226" alt="" loading="lazy" decoding="async">
-          <img src="/assets/samples/paginas/pentest-9.webp" width="160" height="226" alt="" loading="lazy" decoding="async">
-        </div>
+        <!-- Wat er in de sample staat, als inhoudsopgave in de vorm van de cijfertabel: index,
+             titel, bron. Vervangt negen miniaturen (sessie 243) die op telefoon 23-34px breed
+             waren, en die de omslag, het slot en de verkooppagina als bewijs meetelden (sessie
+             245, proef S0-S3). Titels en paginanummers komen uit
+             assets/samples/pentest-playbook-sample.pdf (pdftotext); verandert de pdf, lees ze
+             dan opnieuw. homepage-conversion.spec.js houdt de verwijzingen binnen de pdf. -->
+        <ol class="af-sample-inhoud">
+          <li><span class="af-inhoud-nr">01</span><span class="af-inhoud-titel">De 6 fases van een pentest</span><span class="af-inhoud-p">p. 3</span></li>
+          <li><span class="af-inhoud-nr">02</span><span class="af-inhoud-titel">Fase 0: voorbereiding, vóór je begint</span><span class="af-inhoud-p">p. 4&ndash;5</span></li>
+          <li><span class="af-inhoud-nr">03</span><span class="af-inhoud-titel">Fase 1: reconnaissance, het doelwit verkennen</span><span class="af-inhoud-p">p. 6&ndash;7</span></li>
+        </ol>
         <div class="af-sample-acties">
           <a href="/sample-pentest.html" class="af-knop af-knop--vol" data-lead-magnet="pentest_sample" data-cta-location="homepage_lead_strip">Download de gratis sample</a>
           <a href="/gidsen.html" class="af-leeslink">Of bekijk alle gidsen en samples</a>

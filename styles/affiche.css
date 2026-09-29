@@ -236,18 +236,21 @@ body.home .landing-nav-wrapper {
   border-bottom-width: 1px;
 }
 
-/* Het woordmerk is geen lopende tekstlink: in rust geen onderstreping (body.home a gaf er
-   een), bij hover wel, zoals het woordmerk in de footer. main.css kleurt bij hover élke
-   span in het merk lime (.nav-brand:hover span); de naam zelf is een klasseloze span, dus
-   die regel staat hier op span en niet op .brand-accent alleen (gemeten sessie 245). */
-body.home .nav-brand {
-  font-family: var(--af-kop);
-  font-weight: 800;
+/* Een woordmerk is geen actie (sessie 236): geen onderstreping, in rust noch bij hover, en
+   dat geldt ook voor het merk in de footer (besluit eigenaar, sessie 245). body.home a gaf
+   het in rust een lijn. main.css kleurt bij hover élke span in het merk lime
+   (.nav-brand:hover span); de naam zelf is een klasseloze span, dus die regel staat hier op
+   span en niet op .brand-accent alleen (gemeten sessie 245). */
+body.home .nav-brand,
+body.home .nav-brand:hover,
+body.home .landing-footer a.footer-logo,
+body.home .landing-footer a.footer-logo:hover {
   text-decoration: none;
 }
 
-body.home .nav-brand:hover {
-  text-decoration: underline;
+body.home .nav-brand {
+  font-family: var(--af-kop);
+  font-weight: 800;
 }
 
 body.home .nav-brand:hover,
@@ -1211,15 +1214,6 @@ body.home .af-lijst .result-label {
   color: var(--af-inkt-2);
 }
 
-/* De noot is de glos van de lijst: rechts ervan, op de naad (sessie 242). */
-.af-noot {
-  grid-column: 8 / -1;
-  grid-row: 2;
-  align-self: start;
-  padding: 14px 0 0 var(--af-cel);
-  color: var(--af-inkt-2);
-}
-
 /* Mono-index: genummerd waar de volgorde de informatie is (chips, leerpad). */
 .af-index {
   font-family: var(--af-mono);
@@ -1497,26 +1491,45 @@ body.home .af-faq .faq-answer p {
   padding: 28px 0 0 var(--af-cel);
 }
 
-/* De negen pagina's links naast de knoppen, bovenkant op die van de knop (dezelfde
-   rasterrij, zoals de glos naast zijn regel). Zonder stond hier een leeg vlak van 779x72px
-   (1440) en 592x124 (1024): de kop is één regel, de uitleg ernaast vier. Negen gelijke
-   cellen: het raster telt mee. align-self: start, anders rekte de rasterrij het blok
-   op tot knop plus gebroken link, en de pagina's mee (54x96 i.p.v. 54x76 op 1024). */
-.af-sample-paginas {
+/* De inhoud van de sample links naast de knoppen, bovenlijn op de rij van de knop (zoals
+   de glos naast zijn regel). Dezelfde grammatica als de cijfertabel: haarlijnen, mono-index
+   vooraan, bron rechts in mono; de lijnen in papier op 35% omdat dit de inktband is.
+   align-self: start, anders rekte de rij hem op tot knop plus gebroken link. */
+.af-sample-inhoud {
   grid-column: 1 / 8;
   grid-row: 2;
   align-self: start;
-  display: flex;
-  gap: 8px;
-  padding: 28px var(--af-cel) 0 0;
+  margin: 28px 0 0;
+  padding: 0 var(--af-cel) 0 0;
+  list-style: none;
 }
 
-.af-sample-paginas img {
-  flex: 1 1 0;
-  min-width: 0;
-  height: auto;
-  display: block;
-  outline: 1px solid var(--af-lijn-sterk);
+.af-sample-inhoud li {
+  display: grid;
+  grid-template-columns: 3.2em minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: var(--af-cel);
+  padding: 10px 0;
+  border-top: 1px solid color-mix(in srgb, var(--af-papier) 35%, transparent);
+  color: var(--af-papier);
+}
+
+.af-sample-inhoud li:last-child {
+  border-bottom: 1px solid color-mix(in srgb, var(--af-papier) 35%, transparent);
+}
+
+.af-inhoud-nr,
+.af-inhoud-p {
+  font-family: var(--af-mono);
+  font-size: var(--af-klein);
+}
+
+.af-inhoud-nr {
+  font-weight: 700;
+}
+
+.af-inhoud-p {
+  white-space: nowrap;
 }
 
 /* Op inkt zijn de rollen omgedraaid: papieren kader, papieren letter. */
@@ -1800,14 +1813,8 @@ body.home .landing-footer .footer-social a:hover {
   }
 
   .af-lijst,
-  .af-noot,
   .af-faq-lijst {
     grid-column: 1 / -1;
-  }
-
-  .af-noot {
-    grid-row: auto;
-    padding: 20px 0 0;
   }
 
   .af-specimen {
@@ -1838,6 +1845,13 @@ body.home .landing-footer .footer-social a:hover {
     padding: 20px 0 0;
     border-left: 0;
     border-top: 1px solid var(--af-inkt);
+  }
+
+  /* Hier opent het blogblok met een eigen lijn, 40px onder de laatste vraag: twee haarlijnen
+     vlak onder elkaar. Vanaf 1024 blijft de lijn: daar sluit hij de hoek met de kantlijn
+     (proef F0/F1, sessie 245). */
+  body.home .af-faq .faq-item:last-child {
+    border-bottom: 0;
   }
 }
 
@@ -2000,7 +2014,7 @@ body.home .landing-footer .footer-social a:hover {
   .af-pijn-tekst,
   .af-sample h2,
   .af-sample p,
-  .af-sample-paginas,
+  .af-sample-inhoud,
   .af-sample-acties,
   .af-news-tekst,
   .af-news-form,
@@ -2016,9 +2030,10 @@ body.home .landing-footer .footer-social a:hover {
     padding-top: 20px;
   }
 
-  .af-sample-paginas {
+  .af-sample-inhoud {
     grid-row: auto;
-    padding: 20px 0 0;
+    margin-top: 24px;
+    padding: 0;
   }
 
   body.home .af-lijst-rij {

@@ -304,7 +304,10 @@ tegelijk, was de fout.
 regel in `main.css` na.
 - **Woordmerk.** `main.css` kleurt bij hover élke span in het merk lime; de naam is een klasseloze
   span, dus "HackSimulator" werd `rgb(159,239,0)`. En `body.home a` onderstreepte het merk in rust.
-  Nu: rust zonder lijn, hover onderstreept, zoals het woordmerk in de footer.
+  Nu zonder lijn en zonder kleurwissel, in rust én bij hover, en dat geldt ook voor het merk in
+  de footer (dat kreeg via de footerlinks een onderstreping bij hover). Eerst zette ronde 1 er een
+  hover-onderstreping op; de eigenaar vroeg of dat bewust was, en het botste met "een woordmerk is
+  geen actie" (sessie 236) en met de hovertaal hieronder, want een merk is blok noch tekstlink.
 - **Tweede lijnen.** Van 43 zichtbare links kregen er drie een tweede lijn bij hover: de koffielink
   een rand in `--color-cta-primary` (het signaalrood, gemeten als band van 3px met rode onderrij),
   de footerknop een onderstreping in zijn kader, de skiplink idem. Koffielink nu een gewone
@@ -330,6 +333,40 @@ regel in `main.css` na.
 Bewaakt in `homepage-conversion.spec.js` "Polish (sessie 245)", acht tests; zeven mutanten, elk op
 een eigen assertie. De pixeltest heeft een positieve controle, en die ving de eerste versie: in
 WebKit (`deviceScaleFactor` 2) keek de teller naar het verkeerde stuk beeld.
+
+**Ronde 2: drie besluiten na een proef** (gelijke breedte en ondergrond, onder elkaar;
+`.playwright-mcp/s245-proef-{noot-1440,faq,sample-1440,sample-375}.png`).
+- **De noot staat bij de belofte** (proef N0-N3, N3 gekozen). "Ook de code erachter…" stond in
+  de glos-kolom naast rij 1 van de cijfertabel (eerste regel 3024,4 in rij 3011,4-3099,4) en
+  hoorde bij geen regel ervan. Hij is geen uitleg van "40+" maar een vierde bewijs, dus hoort hij
+  bij "dit kun je allemaal zelf nakijken". N1 (op de labelregel) schoof 4px en bleef zonder
+  reden naast rij 1; N2 (onder de tabel) las als voetnoot, het lichtste gewicht voor een even
+  sterk bewijs. De glos-kolom naast de tabel is nu leeg, en dat klopt: er staat links niets
+  dat uitleg nodig heeft. Sectie 563 → 593 @1440, 538 → 495 @375.
+- **De laatste FAQ-lijn per breedte** (proef F0/F1). Vanaf 1024 blijft hij: de kantlijn eindigt
+  op dezelfde y (4180,5 = 4180,5), en zonder slotlijn hing die verticale lijn onder de laatste
+  vraag in het niets. Onder 1024 wordt de kantlijn een bovenlijn van het blogblok, 40px onder de
+  laatste vraag: twee haarlijnen vlak onder elkaar. Daar valt hij weg.
+- **De sample toont wat erin staat** (proef S0-S3, S2 gekozen; herziet "De sample toont zijn
+  pagina's" van sessie 243). De negen miniaturen waren op 320-414 23-34px breed, en telden de
+  omslag, "over dit sample", het slot en de verkooppagina als bewijs mee; de inhoud zelf is
+  p. 3-7. Nu een inhoudsopgave in de grammatica van de cijfertabel: mono-index, titel, bron in
+  mono, haarlijnen (papier op 35% in de inktband). Drie regels, titels uit de pdf (pdftotext) in
+  zinskapitaal: de 6 fases (p. 3), Fase 0 (p. 4-5), Fase 1 (p. 6-7); de verkooppagina telt niet.
+  - S1 (rechterblok op de onderlijn, voorstel eigenaar): de knop kwam 110px los van de zin die
+    hij afsluit, en op 375 botsten de miniaturen tegen de knop.
+  - S3 (geen beeld, kop op twee regels): linksonder weer het lege vlak van sessie 243.
+  - **Animatie bewust niet:** de pagina heeft één beweging per command (de registratie); een
+    tweede beweging onderaan is decoratie, en onder reduced motion bleef het vlak toch leeg.
+  Prijs: sectie 393 → 429 @1440, 509 → 656 @375. De negen WebP's (21.966 B) zijn weg.
+Bewaakt: "Polish (sessie 245)" (noot, slotlijn) en "De sample toont wat erin staat" (zin = pdf,
+verwijzingen binnen de pdf en oplopend, geen miniaturen, bovenlijn op de knoprij, binnen de
+naad); zeven mutanten, elk op een eigen assertie.
+
+**Een guard die met zijn populatie meegroeit, krijgt een budget dat meegroeit.** De gate van ronde
+2 ving één faler: "geen pagina scrolt zacht" (sessie 244) laadt alle 30 pagina's in één test met
+de vaste 30s. Los: 15s in Firefox, traagste pagina 1,5s, geen uitschieter; in de volle gate één
+keer over de grens. Nu 5s per pagina.
 
 **Gemeten, niet opgelost.** Het terminalveld verandert bij focus 0 pixels: alleen de caret, die de
 invoerregel van de module met zijn prompt deelt. Genoteerd voor de finish review.

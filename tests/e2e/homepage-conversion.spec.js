@@ -595,7 +595,7 @@ test.describe('Onderpagina', () => {
         const naad = document.querySelector('.af-glos-kop').getBoundingClientRect().left;
         const paren = [
           ['.af-pijn-rij .af-transcript', '.af-pijn-rij .af-pijn-tekst'],
-          ['.af-inventaris .af-lijst', '.af-inventaris .af-noot'],
+          ['.af-inventaris .af-lijst', null],
           ['.af-faq .af-faq-lijst', '.af-faq .af-faq-lees'],
           ['.af-sample h2', '.af-sample p'],
           ['.af-news-tekst', '.af-news-form'],
@@ -604,7 +604,7 @@ test.describe('Onderpagina', () => {
           naad,
           afwijkend: paren.map(([l, r]) => {
             const L = document.querySelector(l).getBoundingClientRect();
-            const R = document.querySelector(r).getBoundingClientRect();
+            const R = r ? document.querySelector(r).getBoundingClientRect() : { left: naad };
             return { l, links: L.right, rechts: R.left };
           }).filter((p) => Math.abs(p.links - naad) > 1 || Math.abs(p.rechts - naad) > 1)
             .map((p) => `${p.l}: ${p.links.toFixed(1)} | ${p.rechts.toFixed(1)}`),
@@ -757,49 +757,45 @@ test.describe('Vorm volgt soort', () => {
 const WORTEL = process.cwd();
 const SAMPLE_PDF = path.join(WORTEL, 'assets', 'samples', 'pentest-playbook-sample.pdf');
 
-test.describe('De sample toont zijn pagina\'s', () => {
-  test('zin, afbeeldingen en pdf tellen hetzelfde, en elke pagina laadt', async ({ page }) => {
+test.describe('De sample toont wat erin staat', () => {
+  // Sessie 243 toonde de negen pagina's als miniaturen; sessie 245 verving ze door een
+  // inhoudsopgave (op telefoon waren ze 23-34px breed). De zin belooft nog steeds "de eerste
+  // N pagina's": die telt tegen de pdf, en elke verwijzing in de tabel valt daarbinnen.
+  test('zin telt als de pdf, en elke paginaverwijzing staat in de pdf, oplopend', async ({ page }) => {
     expect(fs.existsSync(SAMPLE_PDF), `${SAMPLE_PDF} bestaat niet — cwd is ${WORTEL}`).toBe(true);
     const inPdf = (fs.readFileSync(SAMPLE_PDF).toString('latin1').match(/\/Type\s*\/Page(?!s)/g) || []).length;
     expect(inPdf, 'geen pagina\'s in de pdf gevonden — de telling heeft niet gedraaid').toBeGreaterThan(0);
 
     await page.goto('/index.html');
-    await page.locator('.af-sample').scrollIntoViewIfNeeded();
-    const m = await page.evaluate(async () => {
-      const imgs = [...document.querySelectorAll('.af-sample-paginas img')];
-      await Promise.all(imgs.map((i) => (i.complete ? null : new Promise((r) => { i.onload = i.onerror = r; }))));
+    const m = await page.evaluate(() => {
       const zin = document.querySelector('.af-sample p').textContent.match(/eerste (\d+) pagina/);
-      return { zin: zin ? Number(zin[1]) : null, beelden: imgs.length, geladen: imgs.filter((i) => i.naturalWidth > 0).length };
+      const refs = [...document.querySelectorAll('.af-sample-inhoud .af-inhoud-p')]
+        .map((e) => e.textContent.match(/\d+/g).map(Number));
+      return { zin: zin ? Number(zin[1]) : null, refs, miniaturen: document.querySelectorAll('.af-sample img').length };
     });
-    expect(m.zin, 'de zin noemt geen aantal pagina\'s meer').not.toBeNull();
-    expect([m.zin, m.beelden], `pdf telt ${inPdf} pagina's`).toEqual([inPdf, inPdf]);
-    expect(m.geladen, 'niet elke pagina laadt').toBe(m.beelden);
+    expect(m.zin, 'de zin noemt geen aantal pagina\'s meer').toBe(inPdf);
+    expect(m.refs.length, 'geen inhoudsregels gevonden').toBeGreaterThanOrEqual(3);
+    const plat = m.refs.flat();
+    expect(Math.max(...plat), `verwijzing voorbij de laatste pdf-pagina (${inPdf})`).toBeLessThanOrEqual(inPdf);
+    expect(Math.min(...plat), 'verwijzing naar een pagina onder 1').toBeGreaterThanOrEqual(1);
+    expect(plat, 'paginaverwijzingen niet oplopend').toEqual([...plat].sort((x, y) => x - y));
+    expect(m.miniaturen, 'er staan weer miniaturen in de sample').toBe(0);
   });
 
   for (const breedte of [1440, 1280, 1024, 768]) {
-    test(`@${breedte}px staan de pagina's links op de rij van de knop, onvervormd`, async ({ page }) => {
+    test(`@${breedte}px staat de inhoud links op de rij van de knop, binnen de naad`, async ({ page }) => {
       await page.setViewportSize({ width: breedte, height: 900 });
       await page.goto('/index.html');
       await page.locator('.af-sample').scrollIntoViewIfNeeded();
-      const m = await page.evaluate(async () => {
-        const imgs = [...document.querySelectorAll('.af-sample-paginas img')];
-        await Promise.all(imgs.map((i) => (i.complete ? null : new Promise((r) => { i.onload = i.onerror = r; }))));
+      const m = await page.evaluate(() => {
         const R = (q) => document.querySelector(q).getBoundingClientRect();
-        const knop = R('.af-sample .af-knop');
-        const p = R('.af-sample p');
-        const scheef = imgs.filter((i) => {
-          const r = i.getBoundingClientRect();
-          return Math.abs(r.height / r.width - i.naturalHeight / i.naturalWidth) > 0.02;
-        }).length;
-        return {
-          n: imgs.length, top: imgs[0].getBoundingClientRect().top, knopTop: knop.top,
-          rechts: Math.max(...imgs.map((i) => i.getBoundingClientRect().right)), naad: p.left, scheef,
-        };
+        const lijst = R('.af-sample-inhoud');
+        const rijen = [...document.querySelectorAll('.af-sample-inhoud li')].map((li) => li.getBoundingClientRect());
+        return { n: rijen.length, top: lijst.top, knopTop: R('.af-sample .af-knop').top, rechts: lijst.right, naad: R('.af-sample p').left };
       });
-      expect(m.n, 'geen pagina\'s gevonden').toBeGreaterThan(0);
-      expect(Math.abs(m.top - m.knopTop), `eerste pagina op ${m.top.toFixed(0)}, knop op ${m.knopTop.toFixed(0)}`).toBeLessThanOrEqual(1);
-      expect(m.rechts, 'de pagina\'s steken over de naad').toBeLessThanOrEqual(m.naad + 1);
-      expect(m.scheef, 'pagina\'s vervormd (verhouding wijkt af van het bestand)').toBe(0);
+      expect(m.n, 'geen inhoudsregels gevonden').toBeGreaterThan(0);
+      expect(Math.abs(m.top - m.knopTop), `inhoud op ${m.top.toFixed(0)}, knop op ${m.knopTop.toFixed(0)}`).toBeLessThanOrEqual(1);
+      expect(m.rechts, 'de inhoud steekt over de naad').toBeLessThanOrEqual(m.naad + 1);
     });
   }
 });
@@ -917,27 +913,33 @@ test.describe('Polish (sessie 245)', () => {
     expect(await roodOnder(), 'de teller ziet een ingespoten rode rand niet').toBeGreaterThan(20);
   });
 
-  test('het woordmerk: geen onderstreping in rust, en bij hover blijft elke letter inkt', async ({ page }) => {
+  test('beide woordmerken: geen onderstreping en geen kleurwissel, in rust noch bij hover', async ({ page }) => {
+    // Een woordmerk is geen actie (sessie 236; besluit eigenaar sessie 245): geen hovertoestand.
+    await page.addInitScript(() => localStorage.setItem('hacksim_analytics_consent', 'false'));
     await page.goto('/index.html');
     for (const thema of POLISH_THEMAS) {
       await zetThema(page, thema);
-      const merk = page.locator('.nav-brand');
-      await page.mouse.move(1, 1);
-      const meet = () => merk.evaluate((e) => ({
-        td: getComputedStyle(e).textDecorationLine,
-        hover: e.matches(':hover'),
-        inkt: getComputedStyle(document.body).getPropertyValue('--af-inkt').trim(),
-        kleuren: [...e.querySelectorAll('*')].filter((k) => [...k.childNodes].some((c) => c.nodeType === 3 && c.textContent.trim()))
-          .map((k) => getComputedStyle(k).color),
-      }));
-      const rust = await meet();
-      await merk.hover();
-      const hover = await meet();
-      expect(rust.kleuren.length, `${thema}: geen tekst in het woordmerk gevonden`).toBeGreaterThanOrEqual(2);
-      expect(hover.hover, `${thema}: het woordmerk is niet gehoverd`).toBe(true);
-      expect(rust.td, `${thema}: woordmerk onderstreept in rust`).toBe('none');
-      expect(new Set(hover.kleuren).size, `${thema}: letters van het merk in verschillende kleuren bij hover: ${hover.kleuren}`).toBe(1);
-      expect(hover.kleuren[0], `${thema}: merk bij hover niet in de kleur van rust`).toBe(rust.kleuren[0]);
+      for (const sel of ['.nav-brand', '.landing-footer a.footer-logo']) {
+        const merk = page.locator(sel);
+        await merk.scrollIntoViewIfNeeded();
+        await page.mouse.move(1, 1);
+        const meet = () => merk.evaluate((e) => {
+          const tekst = [...e.querySelectorAll('*'), e].filter((k) => [...k.childNodes].some((c) => c.nodeType === 3 && c.textContent.trim()));
+          return {
+            hover: e.matches(':hover'),
+            lijnen: tekst.map((k) => getComputedStyle(k).textDecorationLine).concat(getComputedStyle(e).textDecorationLine),
+            kleuren: tekst.map((k) => getComputedStyle(k).color),
+          };
+        });
+        const rust = await meet();
+        await merk.hover();
+        const hover = await meet();
+        expect(rust.kleuren.length, `${thema} ${sel}: geen tekst in het woordmerk gevonden`).toBeGreaterThanOrEqual(1);
+        expect(hover.hover, `${thema} ${sel}: niet gehoverd`).toBe(true);
+        expect(rust.lijnen.filter((l) => l !== 'none'), `${thema} ${sel}: onderstreept in rust`).toEqual([]);
+        expect(hover.lijnen.filter((l) => l !== 'none'), `${thema} ${sel}: onderstreept bij hover`).toEqual([]);
+        expect(hover.kleuren, `${thema} ${sel}: kleur verandert bij hover`).toEqual(rust.kleuren);
+      }
     }
   });
 
@@ -1018,6 +1020,53 @@ test.describe('Polish (sessie 245)', () => {
         expect(hover.tl - hover.bl, `@${breedte} link ${i}: lucht links`).toBeGreaterThanOrEqual(6);
         expect(hover.br - hover.tr, `@${breedte} link ${i}: lucht rechts`).toBeGreaterThanOrEqual(6);
         expect(Math.abs(hover.tl - rust.tl), `@${breedte} link ${i}: tekst verschuift bij hover`).toBeLessThan(0.5);
+      }
+    }
+  });
+
+  test('de code staat bij de belofte, en de cijfertabel heeft geen glos', async ({ page }) => {
+    for (const breedte of [1440, 1024, 375]) {
+      await page.setViewportSize({ width: breedte, height: 900 });
+      await page.goto('/index.html');
+      const m = await page.evaluate(() => {
+        const sec = document.querySelector('.af-inventaris');
+        const lijst = sec.querySelector('.af-lijst').getBoundingClientRect();
+        const inleiding = sec.querySelector('.af-kop p');
+        const buiten = [...sec.querySelectorAll('.af-raster > *')]
+          .filter((e) => e.getClientRects().length && e.getBoundingClientRect().left > lijst.right - 1)
+          .map((e) => e.className || e.tagName);
+        return { github: !!inleiding.querySelector('a[href*="github.com"]'), buiten, kinderen: sec.querySelectorAll('.af-raster > *').length };
+      });
+      expect(m.kinderen, `@${breedte}: sectie leeg — de meting heeft niet gedraaid`).toBeGreaterThanOrEqual(2);
+      expect(m.github, `@${breedte}: de GitHub-link staat niet in de inleiding`).toBe(true);
+      expect(m.buiten, `@${breedte}: iets in de glos-kolom naast de cijfertabel`).toEqual([]);
+    }
+  });
+
+  test('de laatste vraag sluit met een lijn alleen waar de kantlijn ernaast staat', async ({ page }) => {
+    for (const breedte of [1440, 1280, 1024, 1023, 768, 375]) {
+      await page.setViewportSize({ width: breedte, height: 900 });
+      await page.goto('/index.html');
+      const m = await page.evaluate(() => {
+        const vragen = [...document.querySelectorAll('.af-faq .faq-item')];
+        const laatste = vragen.at(-1);
+        const lees = document.querySelector('.af-faq-lees');
+        const lb = laatste.getBoundingClientRect(), kb = lees.getBoundingClientRect();
+        return {
+          n: vragen.length, lijn: parseFloat(getComputedStyle(laatste).borderBottomWidth),
+          andere: parseFloat(getComputedStyle(vragen.at(-2)).borderBottomWidth),
+          ernaast: kb.left >= lb.right - 1, onderkantGelijk: Math.abs(kb.bottom - lb.bottom) < 1,
+        };
+      });
+      expect(m.n, 'geen vragen gevonden').toBeGreaterThan(5);
+      expect(m.andere, `@${breedte}: de andere vragen verloren hun lijn`).toBe(1);
+      if (breedte >= 1024) {
+        expect(m.ernaast, `@${breedte}: de kantlijn staat niet naast de vragen`).toBe(true);
+        expect(m.lijn, `@${breedte}: laatste vraag zonder slotlijn naast de kantlijn`).toBe(1);
+        expect(m.onderkantGelijk, `@${breedte}: kantlijn en slotlijn eindigen niet samen`).toBe(true);
+      } else {
+        expect(m.ernaast, `@${breedte}: de kantlijn staat nog naast de vragen`).toBe(false);
+        expect(m.lijn, `@${breedte}: dubbele lijn boven het blogblok`).toBe(0);
       }
     }
   });
