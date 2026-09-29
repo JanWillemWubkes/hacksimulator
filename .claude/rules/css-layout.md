@@ -653,3 +653,18 @@ Uit dezelfde FAQ:
 hebben allebei een kale `<body>`, maar alleen de sticky-pagina's laden `landing.css`, dus daar staat
 `#navbar-placeholder { min-height: var(--navbar-height) }`. Op terminal (navbar `fixed`) had een
 reserve juist een sprong gegeven.
+
+## 30. Een gescopete declaratie kan al sessies dood zijn (Sessie 245)
+
+`body.home .af-news .sib-input { flex: 1 1 260px }` is (0,3,1). In `main.css` staat
+`.homepage-newsletter .newsletter-form .sib-input.sib-form-block { flex: 0 1 auto }`, (0,4,0): vier
+klassen verslaan drie klassen plus een type, ongeacht de laadvolgorde. De regel won dus op **geen
+enkele** breedte. Het viel niet op: op 1440 was de kolom breed genoeg voor het veld op zijn eigen
+247px. Op 768-1032 brak de knop eronder, en het veld hield zijn `border-right: 0`.
+
+Twee dingen hoorden erbij:
+- De 2px-rand kwam van een `!important` in `main.css` die niets won: Brevo's eigen regel is
+  (0,2,0) en verliest ook zonder. Een `!important` die je moet overschrijven, controleer je eerst
+  op nut (§14); hier was weghalen de fix, en de andere pagina's bleven 24/24 identiek.
+- Meet na een fix de **computed** waarde van elke eigenschap die je zette, niet alleen het
+  zichtbare effect: de nameting op 1024 brak nog, en `getComputedStyle(el).flex` gaf `0 1 auto`.

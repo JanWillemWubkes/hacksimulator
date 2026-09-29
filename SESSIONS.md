@@ -10,20 +10,27 @@
 
 > **Rotatie/archivering-conventie:** zie [`docs/sessions/README.md`](docs/sessions/README.md)
 > (range-naamgeving `archive-sNNN-sMMM.md`; legacy `archive-q*`-namen zijn bevroren + fout gelabeld).
-> `current.md` houdt het rolling window Sessie 230-240 (236-238 samengevat in 239); ouder is geroteerd naar de range-archieven hieronder.
+> `current.md` houdt het rolling window Sessie 235-245 (236-238 samengevat in 239); ouder is geroteerd naar de range-archieven hieronder.
 
-### [Current Sessions (230-240)](docs/sessions/current.md) - Full Detail
-**Sessies:** 240, 239 (vat 236-238 samen), 235, 234, 233, 232, 231, 230
-**Period:** 21 augustus - 26 september 2026
+### [Current Sessions (235-245)](docs/sessions/current.md) - Full Detail
+**Sessies:** 245, 244, 243, 242, 241, 240, 239 (vat 236-238 samen), 235
+**Period:** 23 - 29 september 2026
 **Topics:**
+- Een skill die je niet laadt, draait niet: polish eerst alleen op de punten van de eigenaar, pas op zijn vraag met de eigen pass van `impeccable polish` (63 elementen × 2 thema's). Eén hovertaal (blok inverteert, tekstlink dikt), een dode `!important` en een al sessies dode `flex` in de nieuwsbrief, de GitHub-noot naar de inleiding, de sample als inhoudstabel, woordmerken zonder hover. Rotatie 230-234 (Sessie 245, branch `design/impeccable`)
+- Een guard die "woordelijk gelijk" heet, vergeleek alleen de helft: audit + NL-review, de gedeelde FAQ toetsenbordvast (focusring weggeknipt door `overflow: hidden`), CLS 0 door een navbarreserve, reduced motion scrolt niet meer, "command" i.p.v. "commando" (Sessie 244)
+- Een attribuutselector is geen wortelselector: `adapt` op de hero, thematokens op `:root`, de tabletband 768-1023 en chips per 8px in drie motoren; WebKit rekent `ch` op de kadertekensubset (Sessie 243)
+- Herhaling is geen fout, herhaling zonder functie wel: de onderpagina van twaalf naar zeven secties op de glos-naad, bloglinks als kantlijn, cijfers op afficheschaal (Sessie 242)
+- Een test die op vijf posities meet, bewaakt vijf posities: de vouw gehaald met de glos-grammatica, en twee oude gaten dicht in de roodteller en de mobiele CTA-balk (Sessie 241)
 - Een critique is een lijst beweringen: dual-agent critique van de hele landingspagina (25/36), daarna het getikte command in beeld, een registratienaad die niet meer van de scrollbalk afhangt (`cqw` i.p.v. `fr`), en koppen in Archivo 700 na een letterproef op gelijke maat. Vier van de tien bevindingen vielen bij meting weg. Rotatie 225-229 (Sessie 240, branch `design/impeccable`)
 - Het affiche blijft: pixelstad en teletekst als wegwerpprototype gemeten, teletekst won op de vooraf vastgelegde assen, de eigenaar koos het affiche; de hero kreeg de kop als instappunt (Sessie 239, vat 236-238 samen, branch `design/impeccable`)
 - Een ontbrekende `</main>` trok de footer de blogcontainer in: `blog/index.html` sloot zijn `<main>` nooit, dus de geïnjecteerde footer erfde `max-width: 720px` — 672px breed in een viewport van 1823px, als enige van 25 pagina's. De tagbalans-guard bestond al sinds Sessie 138 maar telde alleen `<div>`: hij bewaakte de tag uit die ene bug, niet de klasse. Twee contrastspecs verwijderd na mutantmeting (hun opvolger vangt dezelfde mutanten, mét kleurbewijs); `eyebrow-contrast` bewust behouden om zijn aanwezigheids-asserties (Sessie 235)
-- De mailbox kostte ~EUR 96/jaar en de gratis standaardroute sterft in januari 2027: Google schrapt "Send mail as" voor niet-Google-adressen, dus forwarden-en-antwoorden viel af. Zoho Mail Free op het EU-datacenter — en de regio hangt af van de ingang, niet van je IP. Brevo slaagt op DKIM, niet op SPF: de Return-Path is Brevo's eigen bounce-domein (Sessie 234)
-- De pijl ontbrak in de font-subset, en die ene hack liet de haak van `[→]` onzichtbaar: U+2192/U+2190/U+2713 vielen terug op een systeemfont, `renderer.js` compenseerde met een opgetilde span, en die liet `[` achter als tekst-run van één teken — wat Chromium niet schildert. Subset herbouwd uit upstream (0 advance-width-verschillen, 1.160 bytes kleiner), hack weg (Sessie 233)
-- De bloat zat niet in de code: `src/` (118 modules), `styles/` (11) en `assets/` (36) hadden nul verweesde bestanden en nul md5-duplicaten over 387 getrackte bestanden. Wat wél groeide stond in `.gitignore` en verscheen dus nooit in `git status` — `.playwright-mcp/` op 55 MB in 1111 screenshots over vijf maanden. Twee "debugtests" konden niet falen op hun eigen onderwerp: álle zes `expect()`-calls klikten enkel een modal weg als setup. 153M → 53M, 45 → 42 specs, NEW Check 20 met twee drempels (Sessie 232)
-- `publish = "."` zette de bron van vier betaalde gidsen op de CDN: de vier `.typ`-bestanden gaven HTTP 200 op productie, naast een sessie-archief van 388 KB met privé-mailadressen. `Disallow` is indexeringsadvies, geen toegangscontrole. Check 19 erbij met de populatie omgedraaid — en die betrapte in zijn eerste CI-run de commit die hem introduceerde. Achteraf gereconstrueerd in Sessie 232 (Sessie 231)
-- Het nieuwsbriefblok viel buiten de filterpopulatie — en rekte via één grid-track alle 15 kaarten op: het `:target`-filter verbergt uitsluitend `.blog-post-card`, dus het blok bleef in élke stand op DOM-positie 4 staan (gemeten 4 van de 6 categorieën met het formulier bovenaan). Twee stille defecten erbij: een vaste inputbreedte die de mobiele regel op specificiteit versloeg gaf het blok een min-content van 400px — één impliciete `auto`-track maakte daarmee álle 15 kaarten 400px in een container van 336px, onzichtbaar weggeknipt door `overflow-x: hidden`; en de skip-link `#main-content` liet "0 van 15 artikelen" omroepen (Sessie 230)
+
+---
+
+### [Archief Sessie 230-234](docs/sessions/archive-s230-s234.md) - Full Detail (geroteerd)
+**Sessies:** 234 → 230 (nieuwste-eerst)
+**Period:** 21 augustus - 15 september 2026
+**Geroteerd bij:** Sessie 245
 
 ---
 
@@ -221,7 +228,7 @@
 
 **Total Sessions:** 235 (as of 23 september 2026)
 **Current Session:** 235 (Ontbrekende `</main>` trok de footer de blogcontainer in; tagbalans-guard naar de klasse; twee redundante contrastspecs verwijderd)
-**Sessions with full documentation:** 81-240 (current.md 230-240 + range-archieven 225-229, 220-224, 215-219, 210-214, 205-209, 200-204, 195-199, 190-194, 185-189, 180-184, 175-179, 170-174, 165-169, 121-164 & 81-120)
+**Sessions with full documentation:** 81-245 (current.md 235-245 + range-archieven 230-234, 225-229, 220-224, 215-219, 210-214, 205-209, 200-204, 195-199, 190-194, 185-189, 180-184, 175-179, 170-174, 165-169, 121-164 & 81-120)
 **Sessions compressed:** 2-77 (various compression levels)
 
 **Structure rationale:**

@@ -540,3 +540,17 @@ Twee valkuilen uit dezelfde sessie, zelfde familie als §20:
 
 Bij een focusring: vergelijk screenshots mét en zónder focus op hetzelfde clipgebied en tel de
 veranderde pixels. Een teller op "rode pixels" telt ander rood mee (813 met én zonder focus).
+
+## 32. Hover in pixels, pixels in beeldpunten, en een budget dat meegroeit (Sessie 245)
+
+- **Een clip-screenshot verloor de hovertoestand**, terwijl `el.matches(':hover')` true gaf: rust en
+  hover gaven identieke pixels. Meet hover in een screenshot van het hele venster en snijd daarna.
+- **Reken CSS-px om naar beeldpunten.** Het WebKit-project draait met `deviceScaleFactor: 2`
+  (screenshot 2880×1800); een teller die `boundingBox()` direct gebruikte, keek naar het verkeerde
+  stuk en gaf 0. Schaal = `img.width / innerWidth`. De positieve controle (een ingespoten rode rand
+  moet > 20 pixels geven) ving dit; zonder die tak had "0 rode pixels" in WebKit altijd gepast.
+- **Een test die zijn populatie in één test doorloopt, krijgt een budget dat meegroeit.** "Geen
+  pagina scrolt zacht" laadde 30 pagina's binnen de vaste 30s: los 15s, in een volle gate één keer
+  erover. Nu `test.setTimeout(PAGINAS.length * 5000)`.
+- **Werk niet in de browser tijdens een gate.** Proeven in de MCP-browser naast de gate gaven 13
+  tests/min (normaal ~25) en twee teardown-time-outs die in een schone run niet terugkwamen.
