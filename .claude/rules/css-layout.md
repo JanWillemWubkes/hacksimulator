@@ -633,3 +633,23 @@ Sitebreed nog open: TASKS #86.
   dan koos de browser een uitvoerregel als anker, en `trim()` schoof de pagina 192px.
 - WebKit onthoudt de intrinsieke rijhoogte als een mediaquery `white-space` wisselt terwijl het
   venster groeit (85 i.p.v. 68px tot een herlading). Laden op elke breedte geeft de juiste maat.
+
+## 29. `overflow: hidden` knipt de focusring van de kinderen (Sessie 244)
+
+`.faq-item { overflow: hidden }` (voor een radius die de kinderen niet nodig hadden) knipte de ring
+van de vraag weg: `outline` met offset 2px valt buiten de knop. `getComputedStyle` gaf keurig
+`2px solid`; gerenderd veranderde er 0 pixels. Op contact won toevallig `outline-offset: -2px`, dus
+daar zag je hem wel. Controleer bij `overflow: hidden` of er iets te knippen valt behalve een ring.
+
+Uit dezelfde FAQ:
+- **Dicht met alleen `max-height: 0` laat de inhoud focusbaar.** Zet `visibility: hidden` erbij (en
+  `visibility` in de transitie als die er is), dan vallen links uit de Tab-volgorde en de
+  toegankelijkheidsboom.
+- **Een `max-height`-plafond voor open kapt af** zodra tekst smaller of ruimer wordt (320px,
+  WCAG-tekstafstand). Zonder transitie: `none`.
+
+**Een reserve voor een geïnjecteerd element hoort bij het stylesheet dat de populatie al kent.**
+`navbar.js` vervangt `#navbar-placeholder`; zonder reserve zakte `<main>` 60px. Blog en terminal
+hebben allebei een kale `<body>`, maar alleen de sticky-pagina's laden `landing.css`, dus daar staat
+`#navbar-placeholder { min-height: var(--navbar-height) }`. Op terminal (navbar `fixed`) had een
+reserve juist een sprong gegeven.

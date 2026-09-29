@@ -4,6 +4,104 @@
 
 ---
 
+## Sessie 244: Een guard die "woordelijk gelijk" heet, vergeleek alleen de helft — audit en NL-review (28-29 sep 2026)
+
+**Branch:** `design/impeccable`. `main` onaangeroerd; niets staat live.
+
+**Mission:** de twee open stappen uit TASKS #82 vóór polish: `impeccable audit` tegen
+`http://127.0.0.1:8901/` (toegankelijkheid, performance, responsive, beide thema's via de echte
+schakelaar) en de eerste `nl-content-reviewer`-ronde van het traject. Beide leveren beweringen op;
+elk punt nagemeten vóór het voorgelegd werd, bouw pas na go.
+
+### Inventaris (plan: `~/.claude/plans/pasted-content-id-69fb-ga-verder-ancient-quiche.md`)
+
+- **Score na meting 16/20.** Toegankelijkheid 2 (vier AA-fouten, alle in de gedeelde FAQ),
+  performance 3, responsive 3, theming 4, integriteit 4.
+- **Vervallen bij meting:** alle 12 detectormeldingen. De h1 "1,1:1 via analytic-gradient" voor de
+  derde keer vals (`text-contrast` + `eyebrow-contrast` 120 passed); `cramped-padding` ×10 waren
+  dichte antwoorden van 0px en terminalregels; `layout-transition` was een main.css-regel die op
+  home al `none` is. axe (via cdnjs in de pagina, niets geïnstalleerd): alleen
+  `landmark-complementary-is-top-level`, best practice. 14 tikdoelen < 24px halen allemaal de
+  afstandsuitzondering van 2.5.8 (dichtstbij ≥ 21,5px). NL: title/meta = SEO-besluit 210, "Lees
+  eerst"-labels bewust ingekort (188), "pdf" klein is correct, "pentester"/"root" in de woordenlijst.
+- **Mijn eigen meetfouten:** "1 Tab-stop in donker" (twee links "Start de simulator" leken één stop
+  voor mijn herhaaldetectie); een "gekleurde pixels"-teller die ander rood meetelde (813 met én
+  zonder focus); een focusmeting midden in een outline-transitie (1px, kleur halverwege).
+- De NL-reviewer miste de skiplink "Skip naar inhoud"; die kwam uit de Tab-ronde.
+
+### Ronde 1 — de FAQ met het toetsenbord (`22cfafc`)
+
+- Vier fouten in één gedeeld component, op index, contact en terminal. Opgelost in `main.css` en
+  `faq.js`, niet onder `body.home`: de fout zat in de gedeelde code.
+- `.faq-item { overflow: hidden }` knipte de ring (2px offset) weg: 0 veranderde pixels op index en
+  terminal, 3320 op contact (daar won `outline-offset: -2px`). De kinderen zijn transparant, dus
+  er viel niets anders te knippen. 36 voor/na-beelden pixel-identiek, met een tak die bewijst dat
+  de vergelijking toestanden wél ziet (open ≠ dicht, hover ≠ rust).
+- Dicht antwoord nu `visibility: hidden` (3 links op index, 3 op contact waren Tab-stops).
+- Plafond `max-height: 300px` weg: FAQ 1 −22px @320 (drie motoren), −85px bij 1.4.12-tekstafstand.
+  De transitie was op alle drie de pagina's al `none`, dus `none` kost geen beweging.
+- `faq.js` `this.blur()` weg: na Enter stond de focus op `<body>`; WebKit begon de volgende Tab bij
+  "Skip naar inhoud". Het commentaar ("mobiel toetsenbord") klopte niet voor een `<button>`.
+- Guard `faq-toetsenbord.spec.js` over `PAGINAS`; vier mutanten, vier asserties. `main.css ?v=238`.
+
+### Ronde 2 — laden en beweging (`0c3acaf`)
+
+- `navbar.js` vervangt `#navbar-placeholder` (`outerHTML`); zonder reserve zakte `<main>` 60px: CLS
+  0,021-0,042 op 1440 en 0,070-0,078 op 375, op 12 van 13 gemeten pagina's. Terminal (navbar
+  `fixed`) had 0. `landing.css` wordt door precies de 26 sticky-pagina's geladen en niet door
+  terminal, dus de reserve staat daar. Prijs: 33px lucht boven het noscript-menu met JS uit.
+- Aangrenzend: sample-download-cover zonder `width`/`height` (CLS 0,067 @375).
+- `html { scroll-behavior: smooth }` gold ook onder reduce (ankersprong ~350ms over 2000px).
+- Brevo-CSS niet verplaatst: Slow 4G + 4x CPU, vijf runs, mediaan FCP 2300 → 2244 (56ms), onder de
+  vooraf gezette drempel van 100ms. De CSP staat geen inline `onload` toe.
+- Guard `laden-en-beweging.spec.js`: CLS per pagina alleen in Chromium, met een positieve controle
+  (een ingevoegd blok van 200px moet tellen); reduced motion over alle pagina's plus de ankersprong.
+  **`test.use({ reducedMotion })` kwam stil niet aan**: terminal.html bleef `smooth` terwijl
+  animations.css daar `auto` afdwingt. Nu `emulateMedia`, met een tak die `matchMedia` controleert.
+  Drie mutanten, elk op zijn eigen tak. `landing.css ?v=240`.
+
+### Ronde 3 — copy (`2228f84`)
+
+- FAQ 8: schema miste "Lees ons privacybeleid voor alle details." De test heette "FAQPage-schema
+  blijft woordelijk gelijk aan de zichtbare FAQ" en vergeleek alleen `q.name`. Nu ook antwoorden;
+  eerst rood op precies FAQ 8, mutant vuurt op regel 320 (antwoorden), niet 318 (vragen).
+- "command" i.p.v. "commando" (22 tegen 4, in FAQ 3 allebei in één alinea); cybersecuritytips en
+  aria-label ook op /blog/; skiplink, terminaltitel, "Onze aanpak heet "80/20 realisme":",
+  noscript-menu met Gidsen. De kop breekt op geen van 141 breedtes over de rand (chromium, webkit).
+- TASKS #87 (terminalsimulator, 21 pagina's + zoekterm) en #88 (nav klapt in op `px`) erbij.
+
+### Learnings
+
+- **Een guard draagt een belofte in zijn naam; lees wat hij echt vergelijkt.** "Woordelijk gelijk"
+  vergeleek de vragen. Rule: `meten-en-guards.md` §31.
+- **Een fout in een gedeeld component hoort in het gedeelde bestand.** Onder `body.home` repareren
+  had terminal en contact kapot gelaten; de nulmeting per pagina liet dat zien.
+- **`overflow: hidden` op een container knipt de focusring van zijn kinderen**, en dat zie je alleen
+  in pixels: `getComputedStyle` gaf keurig `2px solid`. Rule: `css-layout.md` §29.
+- **Een reserve voor een geïnjecteerd element hoort bij het stylesheet dat de populatie al kent.**
+  Bodyklasses scheidden blog en terminal niet; `landing.css` wel.
+- **Een emulatie die niet aankomt, meet het standaardgedrag.** Alleen een pagina met een
+  gegarandeerde uitkomst (terminal onder reduce) maakte het zichtbaar.
+- **Een meter die altijd 0 kan geven, heeft een positieve controle nodig** (CLS: Firefox en WebKit
+  kennen `layout-shift` niet).
+
+### Next steps
+
+TASKS #82: polish met de designpunten van Heisenberg (startprompt gegeven), dan #83 (finish review
++ documenter). Sitebreed op `main` na de merge: #86 (`ch` in WebKit), #87, #88.
+
+### Metrics delta
+
+- Runtime-bundel (`performance.spec.js`): **1073,18 → 1074,57 KB**, marge **45,43 KB (4,1%)**.
+- Playwright: 45 → **47** spec files, **353 → 357** `test()`-declaraties.
+- `du -sb`: src 742 → 741, styles 415 → 416, blog 491, assets 1763 → 1762 KB.
+- Gates: **884 / 922 / 853 passed, 0 failed**; skips 13/23/17, elk verklaard (motorgebonden 13,
+  CLS buiten Chromium 4, lead-magnet alleen tegen Netlify 6). validate-docs 20/20.
+- Mutanten: 8 over drie guards, elk op een eigen assertie.
+- CLS: 0,042/0,074 → 0 op elke landing.css-pagina.
+
+---
+
 ## Sessie 243: Een attribuutselector is geen wortelselector — adapt, en de critique opnieuw gemeten (28 sep 2026)
 
 **Branch:** `design/impeccable`. `main` onaangeroerd; niets staat live.

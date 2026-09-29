@@ -522,3 +522,21 @@ los script naast de test te zetten, met dezelfde voorgeschiedenis:
   negen pagina's van de sample lazen als lucht (209 > 184).
 - **Een mutant die niet vuurt, kan ook een overbodige regel bewijzen.** `align-items: flex-start`
   weghalen liet de guard groen, gemeten terecht: `align-self: start` op het blok had het al opgelost.
+
+## 31. Een guard belooft iets in zijn naam; lees wat hij vergelijkt (Sessie 244)
+
+"FAQPage-schema blijft woordelijk gelijk aan de zichtbare FAQ" vergeleek alleen `q.name`. FAQ 8
+miste in het schema zijn laatste zin, en niets werd rood. Bij het uitbreiden ging de test eerst rood
+op precies dat item: dat is het bewijs dat het gat echt was.
+
+Twee valkuilen uit dezelfde sessie, zelfde familie als §20:
+
+- **`test.use({ reducedMotion: 'reduce' })` kwam stil niet aan.** De test mat daardoor het
+  standaardgedrag. Het viel alleen op omdat terminal.html (waar `animations.css` onder reduce `auto`
+  afdwingt) óók faalde. Gebruik `page.emulateMedia({ reducedMotion: 'reduce' })` en asserteer
+  `matchMedia('(prefers-reduced-motion: reduce)').matches` vóór de meting.
+- **`layout-shift` bestaat alleen in Chromium.** Een CLS-meter geeft elders altijd 0. Skip daar
+  expliciet, en geef de meter een positieve controle: een ingevoegd blok van 200px moet tellen.
+
+Bij een focusring: vergelijk screenshots mét en zónder focus op hetzelfde clipgebied en tel de
+veranderde pixels. Een teller op "rode pixels" telt ander rood mee (813 met én zonder focus).

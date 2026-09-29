@@ -1,7 +1,7 @@
 # CLAUDE.md — HackSimulator.nl
 
 **Project:** Browser-based terminal simulator die Nederlandse beginners ethisch hacken leert.
-**Status:** MVP Development — ✅ LIVE op Netlify vanaf `main`; laatste: Sessie 243 (op branch `design/impeccable`)
+**Status:** MVP Development — ✅ LIVE op Netlify vanaf `main`; laatste: Sessie 244 (op branch `design/impeccable`)
 **Stack:** Vanilla JS/CSS, client-side only, geen backend, geen build-stap. Deploy = push naar `main`.
 **Docs:** `docs/prd.md` v1.8 | `PLANNING.md` v3.0 | `TASKS.md` (live metrics) | `docs/style-guide.md` v1.5
 
@@ -136,7 +136,7 @@ architectuurwijziging, `docs/prd.md` alleen bij scopewijziging.
 **Afsluiten:** `/summary` — die bevat de volledige 7-staps flow, inclusief de ground-truth-meting
 en de validatiegate. Niet hier dupliceren.
 
-**Sessie counter:** 243
+**Sessie counter:** 244
 
 <!-- Onderhoudsnotitie (wordt niet in context geladen):
      Dit bestand is de altijd-geladen laag. Houd het onder 150 regels — validate-docs.sh
@@ -146,5 +146,5 @@ en de validatiegate. Niet hier dupliceren.
 
 ---
 
-**Last updated:** 28 sep 2026 (Sessie 243 — adapt: een chip-tik houdt de focus, thematokens op de wortel, de tabletband, de sample toont zijn pagina's. Volledig: `docs/sessions/current.md`)
-**Version:** 6.13 (Sessie 243 — een attribuutselector is geen wortelselector; een guard op een taglijst bewaakt die lijst. Historie: `docs/sessions/current.md`)
+**Last updated:** 29 sep 2026 (Sessie 244 — audit + NL-review: de FAQ met het toetsenbord, laden zonder verschuiving, de copy nagemeten. Volledig: `docs/sessions/current.md`)
+**Version:** 6.14 (Sessie 244 — een guard belooft iets in zijn naam, lees wat hij vergelijkt; een fout in gedeelde code hoort in de gedeelde code. Historie: `docs/sessions/current.md`)
