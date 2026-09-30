@@ -485,7 +485,7 @@ body.home .af-hint,
   color: var(--af-inkt);
 }
 
-.af-glos-kop { color: var(--af-inkt-2); font-weight: 600; }
+.af-glos-kop { color: var(--af-inkt-2); }
 
 /* De uitnodiging is de glos van de invoerregel: dezelfde aanhaallijn als .reg-glos. */
 body.home .af-hint {
@@ -1371,11 +1371,17 @@ body.home .leerpad-cmd-line {
   border-left: 1px solid var(--af-inkt);
 }
 
+/* De kop van een kolom op de naad: "In gewoon Nederlands" boven de glos, "Verder lezen
+   op de blog" boven de kantlijn. Eén vorm voor één functie (proef P0-P2 sessie 246, P1):
+   Atkinson 700 in gedempte inkt. Het gewicht maakt het een kop, de kleur zet hem achter
+   wat hij aankondigt (glos en links in inkt). Tot sessie 246 twee vormen: 600 gedempt, en
+   vette mono in inkt, terwijl mono alleen voor wat je kunt nalopen is (de paden eronder). */
+.af-glos-kop,
 .af-lees-label {
-  font-family: var(--af-mono);
+  font-family: var(--af-tekst);
   font-size: var(--af-klein);
   font-weight: 700;
-  color: var(--af-inkt);
+  color: var(--af-inkt-2);
 }
 
 .af-lees-lijst {

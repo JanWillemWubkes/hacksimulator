@@ -213,7 +213,7 @@ De rem-basis is 18px op desktop en 16px onder 768px. De maten hieronder schalen 
 - **Title** (Archivo 700, 1.22rem = 22px, regelhoogte 1,2): h3 in Herkenbaar. De FAQ-vraag gebruikt Archivo 700 op 1.1rem.
 - **Label** (Archivo 800, 1.1rem tot 1.22rem): namen die iets aanduiden in plaats van iets te beweren. Denk aan het woordmerk, de bloknamen in het diagram ("jouw machine", de router) en de niveaus in het leerpad.
 - **Body** (Atkinson 400, 1rem, regelhoogte 1,55, max 62ch, ongeveer 75 tekens): alle lopende tekst. Een inleiding onder een kop is 1.1rem in gedempte inkt, max 52ch.
-- **Small** (Atkinson, 0.83rem = 15px): microcopy, de glos, de kolomkop, herkomst- en privacyregels. De herkomst in een chip is 0.72rem (13px).
+- **Small** (Atkinson, 0.83rem = 15px): microcopy, de glos, de kolomkop, herkomst- en privacyregels. De herkomst in een chip is 0.72rem (13px). Een kop boven een kolom op de naad ("In gewoon Nederlands" boven de glos, "Verder lezen op de blog" boven de kantlijn) is Small in 700 en gedempte inkt (#444440): het gewicht maakt het een kop, de kleur zet hem achter wat hij aankondigt.
 - **Button** (Atkinson 700): de primaire actie op max(1.15rem, 19px), zodat hij op elke breedte grote tekst blijft. De secundaire knop staat op 0.9rem.
 - **Mono** (JetBrains Mono 400, 0.86rem, regelhoogte 1.5rem = 27px in de module): terminaluitvoer, de invoerregel en de commands in chips (700). Buiten de module op 0.83rem voor indexnummers (700), adressen, bronnen en paginaverwijzingen, en op 0.75rem voor paden.
 

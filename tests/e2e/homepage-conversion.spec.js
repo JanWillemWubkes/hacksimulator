@@ -956,6 +956,10 @@ test.describe('Polish (sessie 245)', () => {
         els.forEach((e, i) => { e.dataset.polishFocus = i; });
         return els.length;
       });
+      // Een budget dat met de populatie meegroeit: los 13,2s in Firefox, in de gate van
+      // sessie 246 (47 min, met iemand in de browser) over de vaste 30s. 400ms per element
+      // per thema, ~4x de losse meting.
+      if (thema === POLISH_THEMAS[0]) test.setTimeout(POLISH_THEMAS.length * n * 400 + 15_000);
       const mis = [];
       let getoetst = 0;
       for (let i = 0; i < n; i++) {
@@ -1312,6 +1316,29 @@ test.describe('Finish review (sessie 246)', () => {
     }
     expect(gemeten, 'te weinig breedtes gemeten').toBeGreaterThan(10);
   });
+
+  // Mono is voor wat je kunt nalopen (paden, adressen, nummers), nooit voor een kop. Populatie
+  // omgedraaid: niet een lijst koppen, maar élk element dat iets labelt (h1-h6 en elk doel
+  // van aria-labelledby), zodat een nieuwe kop er vanzelf onder valt. Sessie 246 vond
+  // "Verder lezen op de blog" in vette mono.
+  for (const thema of POLISH_THEMAS) {
+    test(`${thema}: geen kop in mono, en de kolomkoppen op de naad hebben één vorm`, async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await page.goto('/index.html');
+      await zetThema(page, thema);
+      const m = await page.evaluate(() => {
+        const ids = [...document.querySelectorAll('[aria-labelledby]')].flatMap((e) => e.getAttribute('aria-labelledby').split(/\s+/));
+        const koppen = [...new Set([...document.querySelectorAll('h1, h2, h3, h4, h5, h6'), ...ids.map((i) => document.getElementById(i)).filter(Boolean)])]
+          .filter((e) => e.getClientRects().length && !e.closest('.af-term, .af-transcript, footer, nav'));
+        const mono = koppen.filter((e) => /JetBrains/i.test(getComputedStyle(e).fontFamily.split(',')[0])).map((e) => e.textContent.trim().slice(0, 40));
+        const vorm = (s) => { const c = getComputedStyle(document.querySelector(s)); return `${c.fontFamily.split(',')[0]} ${c.fontWeight} ${c.fontSize} ${c.color}`; };
+        return { n: koppen.length, mono, glos: vorm('.af-glos-kop'), lees: vorm('.af-lees-label') };
+      });
+      expect(m.n, 'te weinig koppen gevonden — de populatie is leeg').toBeGreaterThan(8);
+      expect(m.mono, 'kop in mono').toEqual([]);
+      expect(m.lees, 'de twee kolomkoppen op de naad hebben twee vormen').toBe(m.glos);
+    });
+  }
 
   test('de footer tekent geen glyph als icoon (met positieve controle)', async ({ page }) => {
     await page.goto('/index.html');

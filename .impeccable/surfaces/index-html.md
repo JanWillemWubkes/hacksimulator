@@ -422,10 +422,15 @@ Wat hij als afwijking tussen contract en CSS vond, en wat ermee gebeurde:
   kolommen i.p.v. "een kolom": besluiten uit latere rondes; DESIGN.md beschrijft de bouw.
 - "Geen verlopen": de haarlijnen zijn getekend met gradiënten met harde overgangen. Vastgelegd
   als regel (lijnen tekenen mag, zichtbare kleurverlopen niet).
+- **Kolomkoppen op de naad, opgelost in dezelfde sessie.** "Verder lezen op de blog" stond in
+  vette mono (mono is voor wat je kunt nalopen, niet voor een kop) en "In gewoon Nederlands" in
+  600: één functie, twee vormen. Proef P0-P2 (`.playwright-mcp/s246-proef-kolomkoppen.png`):
+  **P1**, allebei Atkinson 700 in gedempte inkt. P2 (inkt) liet de kop concurreren met de glos en
+  de links die hij aankondigt. Eén regel voor beide; 200 posities en beide labels 0px verschoven.
+  Bewaakt: geen kop in mono (populatie: élk h1-h6 en elk doel van aria-labelledby, niet een
+  lijst) en de twee koppen hebben één vorm; twee mutanten, elk op een eigen assertie.
 - **Open, buiten deze ronde:** `code` erft nog 4px radius uit `main.css` (onzichtbaar, geen
-  achtergrond); het label "Verder lezen op de blog" in vette mono en `.af-glos-kop` in gewicht 600
-  vallen buiten de bevestigde rollen. Geen defect op het scherm; meenemen bij de migratie van de
-  andere pagina's (TASKS #85).
+  achtergrond). Gedeelde regel, dus bij de migratie van de andere pagina's (TASKS #85).
 
 **FINISH afgelost:** review, verdict (ship, op de gescoorde fixes) en DESIGN.md zijn er. Rasters:
 gemeten, niet aangenomen. `index.html` laadt twee rasters, `favicon-96x96.png` en
