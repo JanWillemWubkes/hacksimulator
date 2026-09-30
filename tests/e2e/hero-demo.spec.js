@@ -707,31 +707,33 @@ test.describe('Hero-terminal — uitlijning naast de tekst', () => {
 test.describe('Hero-terminal — focustoestand', () => {
   test.use({ viewport: DESKTOP });
 
-  // Sessie 238: de module gaat bij focus rood aan — het enige andere rood op de pagina,
-  // met dezelfde betekenis als de actie: hier ben jij aan zet. Beide thema's, want een
-  // [data-theme]-regel en een focusregel van gelijke specificiteit vechten op
-  // bronvolgorde (css-layout §9).
+  // Sessie 238: de module ging bij focus rood aan met twee zijstrepen van 4px. Sessie 246
+  // (finish review): dat waren 308 veranderde pixels tegen ~3300 die WCAG 2.4.13 vraagt,
+  // en een zijstreep waar elk ander element een ring heeft. Nu draagt de invoerregel de
+  // ring van de pagina. Beide thema's, want een [data-theme]-regel en een focusregel van
+  // gelijke specificiteit vechten op bronvolgorde (css-layout §9). De pixels bewaakt
+  // homepage-conversion.spec.js "Finish review (sessie 246)".
   for (const thema of ['dark', 'light']) {
-    test(`de module gaat rood aan bij focus (${thema})`, async ({ page }) => {
+    test(`de invoerregel krijgt de rode ring bij focus (${thema})`, async ({ page }) => {
       await page.goto('/index.html');
       await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), thema);
 
-      const rust = await page.evaluate(
-        () => getComputedStyle(document.querySelector('.af-term-kop')).boxShadow
-      );
+      const lees = () => page.evaluate(() => {
+        const regel = getComputedStyle(document.querySelector('.hero-terminal .terminal-input-line'));
+        return {
+          ring: `${regel.outlineStyle} ${regel.outlineWidth} ${regel.outlineColor}`,
+          kop: getComputedStyle(document.querySelector('.af-term-kop')).boxShadow,
+          invoer: regel.boxShadow,
+        };
+      });
+      const rust = await lees();
       await page.locator('#typing-target').click();
+      const focus = await lees();
 
-      const stijl = await page.evaluate(() => ({
-        kop: getComputedStyle(document.querySelector('.af-term-kop')).boxShadow,
-        invoer: getComputedStyle(document.querySelector('.hero-terminal .terminal-input-line')).boxShadow,
-        outlineColor: getComputedStyle(document.querySelector('.hero-terminal')).outlineColor,
-      }));
-
-      expect(rust, 'het rode merkteken staat er al vóór de focus').not.toContain('204, 10, 30');
-      expect(stijl.kop, 'kop van de module licht niet rood op').toContain(SIGNAAL_ROOD);
-      expect(stijl.invoer, 'invoerregel licht niet rood op').toContain(SIGNAAL_ROOD);
-      // De outline blijft bestaan (vangnet voor forced-colors) maar tekent niets.
-      expect(stijl.outlineColor).toBe('rgba(0, 0, 0, 0)');
+      expect(rust.ring, 'de ring staat er al vóór de focus').not.toContain(SIGNAAL_ROOD);
+      expect(focus.ring, 'invoerregel zonder rode ring bij focus').toBe(`solid 2px ${SIGNAAL_ROOD}`);
+      // Geen zijstreep meer, in geen van beide toestanden.
+      expect([rust.kop, rust.invoer, focus.kop, focus.invoer].filter((b) => b.includes('204, 10, 30')), 'rode zijstreep op kop of invoerregel').toEqual([]);
     });
   }
 });

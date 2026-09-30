@@ -669,6 +669,11 @@ body.home .af-term .terminal-input-line {
   font-size: 0.86rem;
   color: var(--af-m-prompt);
   cursor: text;
+  /* Het lichaam erboven is position: relative (scrollTop, css-layout §8) en schildert
+     daardoor over de outline van een statische broer: de bovenzijde van de focusring
+     verdween (gemeten sessie 246, 0 rode pixels boven). Gepositioneerd en later in de
+     boom schildert deze regel erna. Het enige absolute kind is het sr-only-label. */
+  position: relative;
 }
 
 .hero-input-label {
@@ -718,15 +723,14 @@ body.home .af-term:has(.is-live) .cursor {
   display: none;
 }
 
-/* Focus: de module krijgt een rood kader — jij bent aan zet. De transparante outline
-   blijft als vangnet voor forced-colors, dat box-shadow negeert (css-layout §9). */
-body.home .af-term:focus-within {
-  outline: 2px solid transparent;
-}
-
-body.home .af-term:focus-within .af-term-kop,
+/* Focus: de invoerregel krijgt de ring die elk ander focusbaar element hier draagt: jij
+   bent aan zet, en hier typ je. Tot sessie 246 waren het twee rode strepen van 4px links
+   op kop en invoerregel: 308 veranderde pixels tegen ~3300 die WCAG 2.4.13 vraagt
+   (omtrek x 2px), en een zijstreep waar de rest van de pagina een ring heeft. Een echte
+   outline tekent ook onder forced-colors, dus het transparante vangnet is niet meer nodig. */
 body.home .af-term:focus-within .terminal-input-line {
-  box-shadow: inset 4px 0 0 var(--af-rood);
+  outline: 2px solid var(--af-rood);
+  outline-offset: 2px;
 }
 
 body.home .af-term .hero-input:focus-visible {
@@ -812,12 +816,17 @@ body.home .hero-chip {
   color: var(--af-inkt-2);
 }
 
-/* De volgende: een inkten balk links. Niet rood — de actie staat sinds sessie 2b in
-   hetzelfde scherm, en rood is per scherm één drager: de primaire actie
-   (hero-accent-budget.spec.js). Het oude rode vierkantje ontweek die telling omdat het in
-   ::before stond; de spec telt pseudo-elementen nu mee. */
-body.home .hero-chip.is-next {
-  box-shadow: inset 6px 0 0 var(--af-inkt);
+/* De volgende: het indexnummer inverteert (inktblok, papieren cijfer), zoals een open
+   poort in het diagram. Niet rood: rood is per scherm één drager, de primaire actie
+   (hero-accent-budget.spec.js). Tot sessie 246 een inkten balk van 6px links: een
+   zijstreep in plaats van de inversie van deze wereld, en bij hover verdween hij in de
+   geïnverteerde chip (proef C0/C1, .playwright-mcp/s246-proef-chips-*.png). De kolom
+   houdt zijn 1.8em, zodat command en herkomst niet verschuiven. */
+body.home .hero-chip.is-next .af-chip-nr {
+  justify-self: start;          /* op mobiel staat de index in één kolom: niet oprekken */
+  background: var(--af-inkt);
+  color: var(--af-papier);
+  text-align: center;
 }
 
 /* Gedaan: het nummer maakt plaats voor [✓]. `visibility` en niet `display`, zodat de
@@ -849,6 +858,13 @@ body.home .hero-chip:focus-visible .af-chip-nr,
 body.home .hero-chip:hover .af-chip-nr::after,
 body.home .hero-chip:focus-visible .af-chip-nr::after {
   color: var(--af-papier);
+}
+
+/* In de geïnverteerde chip inverteert het label terug: het blijft zichtbaar als blok. */
+body.home .hero-chip.is-next:hover .af-chip-nr,
+body.home .hero-chip.is-next:focus-visible .af-chip-nr {
+  background: var(--af-papier);
+  color: var(--af-inkt);
 }
 
 /* ---------- Het netwerkdiagram ---------- */
@@ -1059,11 +1075,30 @@ body.home .hero-chip:focus-visible .af-chip-nr::after {
     padding-top: 10px;
   }
 
+  /* De knop staat óp de onderste kopregel: zijn onderkant op de basislijn van regel 2, de
+     microcopy eronder op de rij van de ondertitel. Tot sessie 246 stonden knop en
+     microcopy samen onderaan rij 1, en zat de knop 20,7px (1440) boven die basislijn,
+     gecentreerd op het kopblok. 0,165 is de afstand basislijn → onderkant kopregel,
+     gemeten in Archivo 700 bij line-height 0,98 (0,162-0,168 over 1280-1920). */
   .af-hero-zij .af-actie {
+    display: contents;
+  }
+
+  .af-hero-zij .af-cta {
     grid-column: 10 / -1;
     grid-row: 1;
     align-self: end;
-    padding-left: var(--af-cel);
+    justify-self: start;
+    margin-left: var(--af-cel);
+    margin-bottom: calc(var(--af-display) * 0.165);
+  }
+
+  .af-hero-zij .af-microcopy {
+    grid-column: 10 / -1;
+    grid-row: 2;
+    align-self: start;
+    margin-left: var(--af-cel);   /* marge, geen padding: de papieren achtergrond van */
+    margin-top: 10px;             /* hero-alinea's zou anders de rasterlijn afdekken */
   }
 
   /* Het onderschrift als onderschriftkolom: onder "jouw machine", in de ruimte die naast
@@ -1122,6 +1157,31 @@ body.home .af-transcript .terminal-line.prompt { color: var(--af-m-prompt); }
 body.home .af-transcript .terminal-line.warning { color: var(--af-m-waarsch); }
 body.home .af-transcript .terminal-line.error { color: var(--af-m-fout); }
 .af-sub { color: var(--af-m-dim); }
+
+/* Smal: een afgebroken regel springt in, zodat hij als vervolg leest en niet als nieuwe
+   regel, en de glos staat op een eigen regel onder zijn waarde, zoals in de mobiele hero.
+   Voorheen viel "← Je lokale IP adres" uit elkaar en liep "IP adres" terug naar kolom 0
+   (gemeten sessie 246: 4 gebroken regels op 320-414). De inspringing in em, niet in ch
+   (TASKS #86). De glos springt in met dezelfde acht spaties als zijn waarde, niet met een
+   em-maat: Chromium rondt de tekenbreedte af op 8px, Firefox niet (7,68), dus 4,8em stond
+   in Chromium 2,6px naast "inet". De transcript is aria-hidden: de spaties worden niet
+   voorgelezen. */
+@media (max-width: 767px) {
+  body.home .af-transcript .terminal-line {
+    padding-left: 2em;
+    text-indent: -2em;
+  }
+
+  body.home .af-transcript .af-sub {
+    display: block;
+    margin-left: -2em;
+    text-indent: 0;
+  }
+
+  body.home .af-transcript .af-sub::before {
+    content: '        ';
+  }
+}
 
 .af-pijn-tekst {
   grid-column: 8 / -1;
@@ -1602,6 +1662,15 @@ body.home .af-news .newsletter-form .sib-input {
   padding: 0;
 }
 
+/* Tot 768 zet main.css het formulier in een kolom, en daar is flex-basis de hoogte: de
+   220px hierboven maakte het blok om een veld van 56px 220px hoog, 164px lucht tussen veld
+   en knop (regressie van sessie 245, gevonden sessie 246). Zelfde grens als main.css. */
+@media (max-width: 768px) {
+  body.home .af-news .newsletter-form .sib-input {
+    flex: none;
+  }
+}
+
 body.home .af-news .entry__field {
   margin: 0;
   border: 0;
@@ -1754,6 +1823,39 @@ body.home .landing-footer a.footer-donate:hover {
 body.home .landing-footer .footer-social a:hover {
   background-color: var(--af-inkt);
   color: var(--af-papier);
+  transform: none;
+}
+
+/* ==================== Consentbanner ==================== */
+/* Het eerste wat elke nieuwe bezoeker ziet, en hij stond nog in de oude wereld: in licht
+   een witte kaart (--color-bg-modal) met blauwe knoppen (--color-ui-secondary #074fa4),
+   in donker de GitHub-slate #161b22 (gemeten sessie 246). Nu zoals de mobiele CTA-balk:
+   papier, een inktlijn boven, knoppen met een inkten kader die inverteren. Beide knoppen
+   blijven gelijkwaardig: weigeren mag niet zwakker ogen dan accepteren (geen dark pattern). */
+body.home .cookie-banner {
+  background-color: var(--af-papier);
+  color: var(--af-inkt);
+  border-top: 1px solid var(--af-inkt);
+}
+
+body.home .cookie-banner .btn-small.btn-secondary {
+  min-height: 44px;
+  background-color: transparent;
+  color: var(--af-inkt);
+  border: 1px solid var(--af-inkt);
+  border-radius: 0;
+  font-family: var(--af-tekst);
+  font-weight: 700;
+  box-shadow: none;
+  transform: none;
+}
+
+body.home .cookie-banner .btn-small.btn-secondary:hover,
+body.home .cookie-banner .btn-small.btn-secondary:focus-visible {
+  background-color: var(--af-inkt);
+  color: var(--af-papier);
+  border-color: var(--af-inkt);
+  box-shadow: none;
   transform: none;
 }
 

@@ -138,6 +138,10 @@ test.describe('Blog Theme Toggle (CSP-Compliant)', () => {
       '/blog/cybersecurity-tools.html',
       '/blog/ethisch-hacker-worden.html'
     ];
+    // Een budget dat met de populatie meegroeit (zoals "geen pagina scrolt zacht", sessie
+    // 245): los 15,1s in Firefox, gelijk aan HEAD (15,0), maar in de volle gate van sessie
+    // 246 over de vaste 30s. Per pagina een goto, een reload en twee klikken: 10s elk.
+    test.setTimeout(blogPages.length * 10_000);
 
     for (const pagePath of blogPages) {
       await page.goto(pagePath);

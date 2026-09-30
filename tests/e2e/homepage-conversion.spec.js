@@ -945,8 +945,8 @@ test.describe('Polish (sessie 245)', () => {
 
   test('elk focusbaar element toont de rode ring', async ({ page }) => {
     await page.goto('/index.html');
-    // Uitzondering, met reden: de invoerregel van de terminalmodule toont focus met zijn
-    // eigen prompt en caret (sessie 245 gemeten, voor de finish review genoteerd).
+    // Uitzondering, met reden: het veld zelf draagt geen ring; die staat op zijn invoerregel
+    // (sessie 246), zodat hij ook de prompt omsluit. Bewaakt in pixels in "Finish review".
     const UITGEZONDERD = ['hero-input'];
     for (const thema of POLISH_THEMAS) {
       await zetThema(page, thema);
@@ -1103,5 +1103,227 @@ test.describe('Polish (sessie 245)', () => {
     }
     expect(rij, 'geen rijbreedtes gemeten').toBeGreaterThan(3);
     expect(stapel, 'geen stapelbreedtes gemeten').toBeGreaterThan(3);
+  });
+});
+
+// ==================== Finish review (sessie 246) ====================
+// De bevindingen van impeccable-finish-reviewer (vers, zonder historie) plus de eigen pass,
+// elk nagemeten in gerenderde pixels. Contract: .impeccable/surfaces/index-html.md,
+// blok "Finish review (sessie 246)".
+
+/** Rode pixels op vier punten: midden van elke zijde, `d` px buiten de box. Ringt de
+ *  outline (2px, offset 2px), dan ligt hij op 2-4px buiten de rand: `d` = 3. */
+async function roodRondom(page, box, d = 3) {
+  const png = await page.screenshot();
+  return page.evaluate(async ({ data, b, d }) => {
+    const img = new Image(); img.src = data; await img.decode();
+    const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
+    const x = c.getContext('2d'); x.drawImage(img, 0, 0);
+    const k = img.width / innerWidth;   // WebKit: deviceScaleFactor 2
+    const mx = b.x + b.width / 2, my = b.y + b.height / 2;
+    const punten = { links: [b.x - d, my], rechts: [b.x + b.width + d, my], boven: [mx, b.y - d], onder: [mx, b.y + b.height + d] };
+    const uit = {};
+    for (const [z, [px, py]] of Object.entries(punten)) {
+      const p = x.getImageData(Math.round(px * k), Math.round(py * k), 1, 1).data;
+      uit[z] = p[0] > 150 && p[1] < 80 && p[2] < 90;
+    }
+    return uit;
+  }, { data: 'data:image/png;base64,' + png.toString('base64'), b: box, d });
+}
+
+/** Resolve een custom property van body tot rgb(). */
+const tokenKleuren = (namen) => {
+  const body = getComputedStyle(document.body);
+  return namen.map((n) => {
+    const e = document.createElement('i'); e.style.color = body.getPropertyValue(n).trim();
+    document.body.appendChild(e); const c = getComputedStyle(e).color; e.remove(); return c;
+  });
+};
+
+test.describe('Finish review (sessie 246)', () => {
+  for (const thema of POLISH_THEMAS) {
+    for (const breedte of [1440, 375]) {
+      test(`${thema} @${breedte}: de invoerregel van de terminal krijgt bij focus de ring, rondom`, async ({ page }) => {
+        await page.setViewportSize({ width: breedte, height: 900 });
+        await page.addInitScript(() => localStorage.setItem('hacksim_analytics_consent', 'false'));
+        await page.goto('/index.html');
+        await zetThema(page, thema);
+        const regel = page.locator('.af-term .terminal-input-line');
+        await regel.scrollIntoViewIfNeeded();
+        // Eerst de overname (de eerste focus leegt de demo), dan een rusttoestand op een
+        // chip, zodat rust en focus alleen in de focus verschillen.
+        await page.locator('.af-term .hero-input').focus();
+        await page.locator('.hero-chip').nth(1).focus();
+        // De box per toestand opnieuw: een focus op het veld kan de pagina scrollen (op 375
+        // brengt de overname de uitvoer in beeld), en dan meet een oude box naast de ring.
+        const rust = await roodRondom(page, await regel.boundingBox());
+        await page.locator('.af-term .hero-input').focus();
+        const focus = await roodRondom(page, await regel.boundingBox());
+        // Zelfbewakend: in rust staat er nergens rood; anders bewijst "rood bij focus" niets.
+        expect(Object.values(rust).filter(Boolean), `rood rond de invoerregel in rust: ${JSON.stringify(rust)}`).toEqual([]);
+        expect(focus, 'de ring is niet aan alle vier de zijden zichtbaar').toEqual({ links: true, rechts: true, boven: true, onder: true });
+      });
+    }
+
+    test(`${thema}: de consentbanner staat in de wereld van het affiche`, async ({ page }) => {
+      await page.goto('/index.html');
+      await zetThema(page, thema);
+      await page.locator('#cookie-decline').waitFor({ state: 'visible' });
+      const m = await page.evaluate((tokenKleurenSrc) => {
+        const tokenKleuren = eval(tokenKleurenSrc);
+        const [papier, inkt, inkt2] = tokenKleuren(['--af-papier', '--af-inkt', '--af-inkt-2']);
+        const toegestaan = new Set([papier, inkt, inkt2, 'rgba(0, 0, 0, 0)']);
+        const banner = document.getElementById('cookie-consent');
+        const els = [banner, ...banner.querySelectorAll('*')].filter((e) => e.getClientRects().length);
+        const vreemd = [];
+        for (const e of els) {
+          const c = getComputedStyle(e);
+          const eigenTekst = [...e.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim());
+          const verf = [];
+          if (eigenTekst) verf.push(['color', c.color]);
+          if (c.backgroundColor !== 'rgba(0, 0, 0, 0)') verf.push(['background', c.backgroundColor]);
+          for (const z of ['Top', 'Right', 'Bottom', 'Left']) if (parseFloat(c[`border${z}Width`]) > 0 && c[`border${z}Style`] !== 'none') verf.push([`border-${z}`, c[`border${z}Color`]]);
+          for (const [p, v] of verf) if (!toegestaan.has(v)) vreemd.push(`${e.tagName}.${e.className} ${p} ${v}`);
+        }
+        const knop = (id) => { const c = getComputedStyle(document.getElementById(id)); return `${c.backgroundColor} ${c.color} ${c.borderTopColor} ${c.borderTopWidth} ${c.fontWeight}`; };
+        return { n: els.length, vreemd, bg: getComputedStyle(banner).backgroundColor, papier, accept: knop('cookie-accept-analytics'), weiger: knop('cookie-decline') };
+      }, `(${tokenKleuren.toString()})`);
+      expect(m.n, 'banner leeg — de meting heeft niet gedraaid').toBeGreaterThan(4);
+      expect(m.bg, 'de banner heeft niet de grond van de pagina').toBe(m.papier);
+      expect(m.vreemd, 'kleur in de banner die niet uit het affiche komt').toEqual([]);
+      // Geen dark pattern: weigeren oogt precies zo zwaar als accepteren.
+      expect(m.weiger, 'weigeren en accepteren zien er verschillend uit').toBe(m.accept);
+      const knop = page.locator('#cookie-decline');
+      const rust = await knop.evaluate((e) => getComputedStyle(e).backgroundColor);
+      await knop.hover();
+      expect(await knop.evaluate((e) => getComputedStyle(e).backgroundColor), 'bannerknop inverteert niet bij hover').not.toBe(rust);
+    });
+
+    test(`${thema}: de volgende chip inverteert zijn index, en houdt dat bij hover`, async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await page.addInitScript(() => localStorage.setItem('hacksim_analytics_consent', 'false'));
+      await page.goto('/index.html');
+      await zetThema(page, thema);
+      const volgende = page.locator('.hero-chip.is-next');
+      expect(await volgende.count(), 'geen chip met is-next — de meting bewijst niets').toBe(1);
+      const lees = () => page.evaluate(() => {
+        const [papier, inkt] = ['--af-papier', '--af-inkt'].map((n) => { const e = document.createElement('i'); e.style.color = getComputedStyle(document.body).getPropertyValue(n).trim(); document.body.appendChild(e); const c = getComputedStyle(e).color; e.remove(); return c; });
+        const chip = document.querySelector('.hero-chip.is-next'); const nr = chip.querySelector('.af-chip-nr');
+        const ander = document.querySelector('.hero-chip:not(.is-next)');
+        const cmdX = (c) => c.querySelector('.af-chip-cmd').getBoundingClientRect().left - c.getBoundingClientRect().left;
+        return { papier, inkt, nrBg: getComputedStyle(nr).backgroundColor, nrKleur: getComputedStyle(nr).color, chipBg: getComputedStyle(chip).backgroundColor, schaduw: getComputedStyle(chip).boxShadow, dx: cmdX(chip) - cmdX(ander) };
+      });
+      const rust = await lees();
+      expect(rust.schaduw, 'de zijbalk is terug').toBe('none');
+      expect([rust.nrBg, rust.nrKleur], 'index van de volgende chip is niet geïnverteerd').toEqual([rust.inkt, rust.papier]);
+      expect(Math.abs(rust.dx), 'het command van de volgende chip verspringt t.o.v. de andere').toBeLessThan(0.5);
+      await volgende.hover();
+      const hover = await lees();
+      expect(hover.chipBg, 'de chip inverteert niet bij hover').toBe(hover.inkt);
+      expect(hover.nrBg, 'de index verdwijnt in de geïnverteerde chip').not.toBe(hover.chipBg);
+    });
+  }
+
+  test('Herkenbaar op smal: vervolgregels springen in en de glos staat onder zijn waarde', async ({ page }) => {
+    let gebroken = 0;
+    for (const breedte of [320, 375, 414, 767, 768, 1440]) {
+      await page.setViewportSize({ width: breedte, height: 900 });
+      await page.goto('/index.html');
+      const m = await page.evaluate(() => {
+        const uit = { terug: [], glos: [], gebroken: 0, subs: 0, inline: 0 };
+        for (const regel of document.querySelectorAll('#features .af-transcript .terminal-line')) {
+          // Alleen de eigen tekst van de regel: de glos is een blok met een negatieve marge,
+          // en zijn box begint links van zijn tekst.
+          const rs = [...regel.childNodes].filter((n) => n.nodeType === 3).flatMap((n) => {
+            const g = document.createRange(); g.selectNodeContents(n); return [...g.getClientRects()];
+          }).filter((r) => r.width > 0);
+          const tops = [...new Set(rs.map((r) => Math.round(r.top)))];
+          if (tops.length < 2) continue;
+          uit.gebroken++;
+          const eerste = Math.min(...rs.filter((r) => Math.round(r.top) === tops[0]).map((r) => r.left));
+          const verder = rs.filter((r) => Math.round(r.top) !== tops[0]).map((r) => r.left);
+          if (Math.min(...verder) < eerste + 5) uit.terug.push(regel.textContent.trim().slice(0, 30));
+        }
+        for (const sub of document.querySelectorAll('#features .af-sub')) {
+          uit.subs++;
+          const regel = sub.parentElement; const tekst = regel.firstChild.textContent;
+          const i = tekst.search(/\S/); const g = document.createRange(); g.setStart(regel.firstChild, i); g.setEnd(regel.firstChild, i + 1);
+          const waarde = g.getBoundingClientRect();
+          // De tekst van de glos, niet zijn box: de inspringing zit in een ::before.
+          const h = document.createRange(); h.setStart(sub.firstChild, 0); h.setEnd(sub.firstChild, 1);
+          const s = h.getBoundingClientRect();
+          if (getComputedStyle(sub).display === 'inline') { uit.inline++; continue; }
+          if (s.top < waarde.bottom - 1 || Math.abs(s.left - waarde.left) > 1.5) uit.glos.push(`${sub.textContent.trim()}: dx=${(s.left - waarde.left).toFixed(1)} onder=${s.top >= waarde.bottom - 1}`);
+        }
+        return uit;
+      });
+      expect(m.subs, 'geen glossen in Herkenbaar gevonden').toBe(2);
+      if (breedte < 768) {
+        gebroken += m.gebroken;
+        expect(m.terug, `@${breedte}: een afgebroken regel loopt terug naar kolom 0`).toEqual([]);
+        expect(m.glos, `@${breedte}: glos niet op een eigen regel onder zijn waarde`).toEqual([]);
+        expect(m.inline, `@${breedte}: glos nog inline`).toBe(0);
+      } else {
+        expect(m.inline, `@${breedte}: glos niet meer inline naast zijn waarde`).toBe(2);
+      }
+    }
+    // Zelfbewakend: op smal moeten er regels breken, anders toetst "springt in" niets.
+    expect(gebroken, 'geen enkele regel brak op smal — de inspringing is niet getoetst').toBeGreaterThan(5);
+  });
+
+  test('vanaf 1280 staat de knop op de onderste kopregel, de microcopy op de rij van de ondertitel', async ({ page }) => {
+    for (const breedte of [1280, 1366, 1440, 1920]) {
+      await page.setViewportSize({ width: breedte, height: 900 });
+      await page.goto('/index.html');
+      const m = await page.evaluate(() => {
+        const h1 = document.querySelector('.af-hero-tekst h1');
+        const probe = document.createElement('span'); probe.style.cssText = 'display:inline-block;width:0;height:0';
+        h1.appendChild(probe); const basis = probe.getBoundingClientRect().bottom; probe.remove();
+        const g = document.createRange(); g.selectNodeContents(h1);
+        const regels = new Set([...g.getClientRects()].map((r) => Math.round(r.top))).size;
+        const knop = document.querySelector('.af-hero-zij .af-cta').getBoundingClientRect();
+        const micro = document.querySelector('.af-hero-zij .af-microcopy').getBoundingClientRect();
+        const sub = document.querySelector('.af-hero-sub');
+        const subTekst = parseFloat(getComputedStyle(sub).paddingTop) + sub.getBoundingClientRect().top;
+        return { basis, regels, knopOnder: knop.bottom, knopL: knop.left, microTop: micro.top, microL: micro.left, subTekst };
+      });
+      expect(m.regels, `@${breedte}: de kop is geen twee regels — de basislijnmeting klopt niet`).toBe(2);
+      expect(Math.abs(m.knopOnder - m.basis), `@${breedte}: knop ${(m.knopOnder - m.basis).toFixed(1)}px naast de basislijn van kopregel 2`).toBeLessThan(1.5);
+      expect(Math.abs(m.microTop - m.subTekst), `@${breedte}: microcopy niet op de rij van de ondertitel`).toBeLessThan(1);
+      expect(Math.abs(m.microL - m.knopL), `@${breedte}: microcopy niet onder de knop`).toBeLessThan(0.5);
+    }
+  });
+
+  test('nieuwsbrief gestapeld: tussen veld en knop alleen de foutreserve', async ({ page }) => {
+    await page.goto('/index.html');
+    let gemeten = 0;
+    for (let w = 320; w <= 768; w += 32) {
+      await page.setViewportSize({ width: w, height: 900 });
+      const m = await page.evaluate(() => {
+        const i = document.querySelector('.af-news .newsletter-form .input').getBoundingClientRect();
+        const b = document.querySelector('.af-news .newsletter-button').getBoundingClientRect();
+        // main.css reserveert 1.6em onder het veldblok voor een foutmelding (16px: 25,6).
+        const reserve = 1.6 * parseFloat(getComputedStyle(document.querySelector('.af-news .sib-input')).fontSize);
+        return { gat: b.top - i.bottom, reserve };
+      });
+      gemeten++;
+      expect(m.gat, `@${w}: veld en knop overlappen`).toBeGreaterThanOrEqual(0);
+      expect(m.gat, `@${w}: ${m.gat.toFixed(1)}px tussen veld en knop, reserve ${m.reserve}`).toBeLessThanOrEqual(m.reserve + 1);
+    }
+    expect(gemeten, 'te weinig breedtes gemeten').toBeGreaterThan(10);
+  });
+
+  test('de footer tekent geen glyph als icoon (met positieve controle)', async ({ page }) => {
+    await page.goto('/index.html');
+    // Pijlen, vormen, dingbats, kaartsymbolen (♥ = U+2665) en emoji; niet © of ®, dat zijn
+    // tekens en geen iconen.
+    const glyphs = () => page.evaluate(() => {
+      const f = document.querySelector('footer');
+      return (f.innerText.match(/[\u2190-\u2BFF\u{1F000}-\u{1FAFF}]/gu) || []);
+    });
+    expect(await glyphs(), 'symboolglyph in de footer').toEqual([]);
+    // Positieve controle: dezelfde teller ziet een ingespoten hartje.
+    await page.evaluate(() => { document.querySelector('.footer-donate').insertAdjacentText('afterbegin', '♥ '); });
+    expect((await glyphs()).length, 'de teller ziet een ingespoten glyph niet').toBe(1);
   });
 });

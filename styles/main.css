@@ -1260,12 +1260,6 @@ a.footer-donate {
   transform: translateY(-2px);
 }
 
-/* Heart-glyph optisch centreren binnen [ ] — suit-glyph zit optisch te hoog */
-.footer-donate-heart {
-  display: inline-block;
-  transform: translateY(0.05em);
-}
-
 a.footer-donate:hover {
   color: var(--color-footer-text-strong);
   border-color: rgba(159, 239, 0, 0.6);
