@@ -371,6 +371,70 @@ keer over de grens. Nu 5s per pagina.
 **Gemeten, niet opgelost.** Het terminalveld verandert bij focus 0 pixels: alleen de caret, die de
 invoerregel van de module met zijn prompt deelt. Genoteerd voor de finish review.
 
+## Finish review (sessie 246)
+
+`impeccable-finish-reviewer`, vers en zonder historie, met het contract, 26 beelden (1440 en 375,
+beide thema's via de echte schakelaar, transities bevroren, full-page zonder banner, folds mét
+banner, mobiel in stukken van 1200px), de craft floor en de betwiste detectorbevindingen.
+Geen comp en geen QUALITY BAR-kaart (code-led zonder beeldgeneratie): TYPE, MATERIAL en GROUND
+tegen OWN-WORLD. Die drie: **match** (papier #efefec zonder crèmedrift, inkt #111 zonder
+slatedrift, Archivo 700, geen nepmateriaal).
+
+**Review: `disposition: fix`**, acht material fixes. Elke bevinding eerst nagemeten.
+**Verdict pass: `disposition: ship`**, voor de acht gescoorde fixes (geen nieuwe review van het
+hele oppervlak). 1-6 resolved, 7 en 8 door de reviewer ingetrokken.
+
+| # | Bevinding | Gemeten | Besluit |
+|---|---|---|---|
+| 1 | Terminalveld toont focus alleen via de caret (open punt sessie 245) | Twee rode zijstrepen van 4px: 308 px (licht), 225 (donker), tegen ~3300 die WCAG 2.4.13 vraagt. "0 pixels" uit sessie 245 was zelf een meetfout. | De ring van de pagina om de invoerregel. De bovenzijde verdween onder het `position: relative`-lichaam; de regel is nu zelf gepositioneerd. |
+| 2 | Consentbanner in de oude wereld | Licht `#fff` + blauw `#074fa4`, donker `#161b22`. 75-110px van elke eerste viewport. | Papier/inkt, inktlijn boven, knoppen die inverteren; weigeren even zwaar als accepteren. |
+| 3 | Chip "volgende" = balk van 6px | Bij hover verdween hij in de geïnverteerde chip (beide thema's). | Proef C0/C1: **C1**, de index inverteert. Kolom houdt 1.8em, command verschuift 0px. |
+| 4 | Herkenbaar-terminals breken naar kolom 0 op mobiel | 4 regels op 320-414, "← Je lokale" / "IP adres" uit elkaar. | Proef H0/H1/H2: **H2**, hangende inspringing (2em) en de glos op een eigen regel onder zijn waarde, zoals de mobiele hero. Ingesprongen met dezelfde acht spaties: Chromium rondt de tekenbreedte af op 8px (Firefox 7,68), dus 4,8em stond 2,6px naast "inet". |
+| 5 | `[♥]` in de footerknop | Glyph als icoon naast een SVG-icoon; ♥ kan op iOS als emoji renderen. | Alleen tekst. Gedeeld: `footer.js` v5, `init-components.js` v7, dode regel uit `main.css` (v240). 108 pagina-configuraties: 0 verschillen buiten die knop. |
+| 6 | CTA niet op de onderste kopregel | Onderkant 20,7px (1440) / 21,4px (1280) boven de basislijn van regel 2. | Onderkant op de basislijn: `margin-bottom: calc(var(--af-display) * 0.165)` (0,162-0,168 gemeten over 1280-1920). Microcopy naar de rij van de ondertitel. Vouw ongewijzigd. |
+| 7 | h1 niet uit het raster gesneden op mobiel | Op 1440 lopen de haarlijnen óók door de h1. | Niets: "de kop op afficheschaal mag over het raster staan" (sessie 242). Ingetrokken. |
+| 8 | FAQ `layout-transition` (detector) | Berekend `transition: none` op `.faq-answer`. | Niets. Ingetrokken. |
+
+**Eigen pass (niet in de lijst van de reviewer):** onder 769 stond er **164px** tussen
+nieuwsbriefveld en knop. `flex: 1 1 220px` (sessie 245) wordt in de flexkolom van `main.css` de
+hoogte. Nu `flex: none` tot 768 (dezelfde grens als `main.css`): 25,6px, de foutreserve. De guard
+van sessie 245 eiste alleen "gestapeld" (dTop < −20) en liet het gat door.
+
+**Bewust niet (ceiling-punten van de reviewer):** wisselende banden (sessie 242, ritme naar
+gewicht), lege kolommen 8-12 naast de cijfers (sessie 245, proef N3), het slot op inkt (dat zou
+samensmelten met de inktband van de sample direct eronder, één zwart vlak van ~1000px).
+
+**Bewaakt** in `homepage-conversion.spec.js` "Finish review (sessie 246)" (ring per zijde in
+pixels met een rust-tak zonder rood, bannerkleuren uit de tokens, index-inversie en hover,
+inspringing en glos op 320-1440 met een tak die gebroken regels eist, CTA op de basislijn over
+1280-1920, veld→knop ≤ foutreserve op 320-768, glyphs met positieve controle) en `hero-demo`
+"focustoestand" (ring, geen zijstreep). Acht mutanten, elk op een eigen assertie, eerst
+gecontroleerd dat ze geserveerd werden. `blog-theme-toggle` "all blog pages" kreeg een budget per
+pagina: los gelijk aan HEAD (15,1 tegen 15,0s), in de volle gate over de vaste 30s.
+
+**Documenter.** `impeccable-documenter` schreef `DESIGN.md` en `.impeccable/design.json`
+(schemaVersion 2) opnieuw, afgeleid uit `affiche.css` en de gerenderde pagina, en verving de
+oude wereld (lime op GitHub-donker) volledig. Steekproef: 18 waarden tegen de CSS-regel en 5
+gerenderd (h1 64,8, h2 47,52 Archivo, CTA 20,7px wit, raster 1400, body 18px): allemaal gelijk.
+Wat hij als afwijking tussen contract en CSS vond, en wat ermee gebeurde:
+- De letter op rood: de notitie hieronder was fout, gerepareerd in de bron (zie "Nog niet besloten").
+- Haarlijnen alleen in de hero, mono ook voor paden en paginaverwijzingen, en onder 768 vier
+  kolommen i.p.v. "een kolom": besluiten uit latere rondes; DESIGN.md beschrijft de bouw.
+- "Geen verlopen": de haarlijnen zijn getekend met gradiënten met harde overgangen. Vastgelegd
+  als regel (lijnen tekenen mag, zichtbare kleurverlopen niet).
+- **Open, buiten deze ronde:** `code` erft nog 4px radius uit `main.css` (onzichtbaar, geen
+  achtergrond); het label "Verder lezen op de blog" in vette mono en `.af-glos-kop` in gewicht 600
+  vallen buiten de bevestigde rollen. Geen defect op het scherm; meenemen bij de migratie van de
+  andere pagina's (TASKS #85).
+
+**FINISH afgelost:** review, verdict (ship, op de gescoorde fixes) en DESIGN.md zijn er. Rasters:
+gemeten, niet aangenomen. `index.html` laadt twee rasters, `favicon-96x96.png` en
+`apple-touch-icon.png`, allebei van vóór het traject; de bouw maakte geen enkel raster (code-led,
+geen beeldgeneratie). `impeccable embed-prompt --scan assets` meldt 26 van 26 rasters zonder
+ingebedde herkomst: allemaal bestaand (productcovers, screenshots), geen ervan geladen door deze
+pagina. Niet ingebed: dat wijzigt binaire bestanden sitebreed voor een pagina die er geen levert.
+Als herkomst sitebreed gewenst is: een eigen taak.
+
 ## Memorabel moment
 
 Je tikt `nmap 192.168.1.1`. Links rolt de poortuitvoer uit, rechts verschijnt per regel de
@@ -390,8 +454,10 @@ Besloten in sessie 240 (typeset, na een letterproef op gelijke maat en breedte):
   woordspaties dichtlopen en las als startup-display; smal was het meest affiche maar luid
   (botst met "te intimiderend"); Schibsted kostte +38 KB zonder zichtbaar eigen karakter
   op deze maat. 700 staat al in het bestand: nul extra bytes, het bestand kromp 1.380 B.
-- **Rood: #cc0a1e blijft.** Papieren letter op rood 5,02, rood op papier 5,02 (AAA grote
-  tekst ≥4,5; de knoptekst is 18,9px vet). Warmer gaat onder de lat: #d4380d 4,17,
+- **Rood: #cc0a1e blijft.** Witte letter op rood 5,79 (`--af-op-rood: #ffffff`, sinds de bouw
+  `a8bf4fa`; hier stond tot sessie 246 "papieren letter 5,02", dat is papier op rood en niet wat
+  de knop draagt), rood op papier 5,02 (AAA grote tekst ≥4,5; de knoptekst is `max(1.15rem,
+  19px)`, 20,7px vet op 1440). Warmer gaat onder de lat: #d4380d 4,17,
   #e0401f 3,70. Fout in de terminal is zalm (--af-m-fout), geen signaalrood.
 - De koppenmaat is bewust niet vergroot: dat duwt terminal en diagram verder onder de
   vouw. Maat beslissen met de vouw erbij gemeten.

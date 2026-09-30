@@ -1,162 +1,162 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-20T00:00:00+00:00",
+  "generatedAt": "2026-09-30T15:53:39+00:00",
   "title": "Design System: HackSimulator.nl",
   "extensions": {
     "colorMeta": {
-      "neon-lime": {
+      "rood": {
         "role": "primary",
-        "displayName": "Neon Lime",
-        "canonical": "oklch(86.7% 0.233 129.9)",
+        "displayName": "Signaalrood",
+        "canonical": "oklch(53.5% 0.214 26.0)",
         "tonalRamp": [
-          "oklch(15.0% 0.233 129.9)",
-          "oklch(26.4% 0.233 129.9)",
-          "oklch(37.9% 0.233 129.9)",
-          "oklch(49.3% 0.233 129.9)",
-          "oklch(60.7% 0.233 129.9)",
-          "oklch(72.1% 0.233 129.9)",
-          "oklch(83.6% 0.233 129.9)",
-          "oklch(95.0% 0.233 129.9)"
+          "oklch(15.0% 0.214 26.0)",
+          "oklch(26.4% 0.214 26.0)",
+          "oklch(37.9% 0.214 26.0)",
+          "oklch(49.3% 0.214 26.0)",
+          "oklch(60.7% 0.214 26.0)",
+          "oklch(72.1% 0.214 26.0)",
+          "oklch(83.6% 0.214 26.0)",
+          "oklch(95.0% 0.214 26.0)"
         ]
       },
-      "neon-lime-hover": {
+      "op-rood": {
         "role": "primary",
-        "displayName": "Neon Lime Deep",
-        "canonical": "oklch(79.5% 0.216 130.7)",
+        "displayName": "Letter op rood",
+        "canonical": "oklch(100.0% 0.0 89.9)",
         "tonalRamp": [
-          "oklch(15.0% 0.216 130.7)",
-          "oklch(26.4% 0.216 130.7)",
-          "oklch(37.9% 0.216 130.7)",
-          "oklch(49.3% 0.216 130.7)",
-          "oklch(60.7% 0.216 130.7)",
-          "oklch(72.1% 0.216 130.7)",
-          "oklch(83.6% 0.216 130.7)",
-          "oklch(95.0% 0.216 130.7)"
+          "oklch(15.0% 0.0 89.9)",
+          "oklch(26.4% 0.0 89.9)",
+          "oklch(37.9% 0.0 89.9)",
+          "oklch(49.3% 0.0 89.9)",
+          "oklch(60.7% 0.0 89.9)",
+          "oklch(72.1% 0.0 89.9)",
+          "oklch(83.6% 0.0 89.9)",
+          "oklch(95.0% 0.0 89.9)"
         ]
       },
-      "lime-aaa-light": {
-        "role": "primary",
-        "displayName": "Lime AAA (licht thema)",
-        "canonical": "oklch(75.3% 0.209 132.0)",
-        "tonalRamp": [
-          "oklch(15.0% 0.209 132.0)",
-          "oklch(26.4% 0.209 132.0)",
-          "oklch(37.9% 0.209 132.0)",
-          "oklch(49.3% 0.209 132.0)",
-          "oklch(60.7% 0.209 132.0)",
-          "oklch(72.1% 0.209 132.0)",
-          "oklch(83.6% 0.209 132.0)",
-          "oklch(95.0% 0.209 132.0)"
-        ]
-      },
-      "forest-cta-light": {
-        "role": "primary",
-        "displayName": "Forest CTA (licht thema)",
-        "canonical": "oklch(44.8% 0.108 151.3)",
-        "tonalRamp": [
-          "oklch(15.0% 0.108 151.3)",
-          "oklch(26.4% 0.108 151.3)",
-          "oklch(37.9% 0.108 151.3)",
-          "oklch(49.3% 0.108 151.3)",
-          "oklch(60.7% 0.108 151.3)",
-          "oklch(72.1% 0.108 151.3)",
-          "oklch(83.6% 0.108 151.3)",
-          "oklch(95.0% 0.108 151.3)"
-        ]
-      },
-      "forest-cta-light-hover": {
-        "role": "primary",
-        "displayName": "Forest CTA Deep (licht thema)",
-        "canonical": "oklch(38.0% 0.096 152.0)",
-        "tonalRamp": [
-          "oklch(15.0% 0.096 152.0)",
-          "oklch(26.4% 0.096 152.0)",
-          "oklch(37.9% 0.096 152.0)",
-          "oklch(49.3% 0.096 152.0)",
-          "oklch(60.7% 0.096 152.0)",
-          "oklch(72.1% 0.096 152.0)",
-          "oklch(83.6% 0.096 152.0)",
-          "oklch(95.0% 0.096 152.0)"
-        ]
-      },
-      "night": {
+      "papier": {
         "role": "neutral",
-        "displayName": "Night",
-        "canonical": "oklch(17.6% 0.014 258.4)",
+        "displayName": "Papier",
+        "canonical": "oklch(95.1% 0.004 106.5)",
         "tonalRamp": [
-          "oklch(15.0% 0.014 258.4)",
-          "oklch(26.4% 0.014 258.4)",
-          "oklch(37.9% 0.014 258.4)",
-          "oklch(49.3% 0.014 258.4)",
-          "oklch(60.7% 0.014 258.4)",
-          "oklch(72.1% 0.014 258.4)",
-          "oklch(83.6% 0.014 258.4)",
-          "oklch(95.0% 0.014 258.4)"
+          "oklch(15.0% 0.004 106.5)",
+          "oklch(26.4% 0.004 106.5)",
+          "oklch(37.9% 0.004 106.5)",
+          "oklch(49.3% 0.004 106.5)",
+          "oklch(60.7% 0.004 106.5)",
+          "oklch(72.1% 0.004 106.5)",
+          "oklch(83.6% 0.004 106.5)",
+          "oklch(95.0% 0.004 106.5)"
         ]
       },
-      "night-sunken": {
+      "papier-2": {
         "role": "neutral",
-        "displayName": "Night Sunken",
-        "canonical": "oklch(14.8% 0.010 254.7)",
+        "displayName": "Band",
+        "canonical": "oklch(91.2% 0.005 106.5)",
         "tonalRamp": [
-          "oklch(15.0% 0.010 254.7)",
-          "oklch(26.4% 0.010 254.7)",
-          "oklch(37.9% 0.010 254.7)",
-          "oklch(49.3% 0.010 254.7)",
-          "oklch(60.7% 0.010 254.7)",
-          "oklch(72.1% 0.010 254.7)",
-          "oklch(83.6% 0.010 254.7)",
-          "oklch(95.0% 0.010 254.7)"
+          "oklch(15.0% 0.005 106.5)",
+          "oklch(26.4% 0.005 106.5)",
+          "oklch(37.9% 0.005 106.5)",
+          "oklch(49.3% 0.005 106.5)",
+          "oklch(60.7% 0.005 106.5)",
+          "oklch(72.1% 0.005 106.5)",
+          "oklch(83.6% 0.005 106.5)",
+          "oklch(95.0% 0.005 106.5)"
         ]
       },
-      "night-raised": {
+      "inkt": {
         "role": "neutral",
-        "displayName": "Night Raised",
-        "canonical": "oklch(22.0% 0.016 256.8)",
+        "displayName": "Inkt",
+        "canonical": "oklch(17.8% 0.0 89.9)",
         "tonalRamp": [
-          "oklch(15.0% 0.016 256.8)",
-          "oklch(26.4% 0.016 256.8)",
-          "oklch(37.9% 0.016 256.8)",
-          "oklch(49.3% 0.016 256.8)",
-          "oklch(60.7% 0.016 256.8)",
-          "oklch(72.1% 0.016 256.8)",
-          "oklch(83.6% 0.016 256.8)",
-          "oklch(95.0% 0.016 256.8)"
+          "oklch(15.0% 0.0 89.9)",
+          "oklch(26.4% 0.0 89.9)",
+          "oklch(37.9% 0.0 89.9)",
+          "oklch(49.3% 0.0 89.9)",
+          "oklch(60.7% 0.0 89.9)",
+          "oklch(72.1% 0.0 89.9)",
+          "oklch(83.6% 0.0 89.9)",
+          "oklch(95.0% 0.0 89.9)"
         ]
       },
-      "night-hover": {
+      "inkt-2": {
         "role": "neutral",
-        "displayName": "Night Hover",
-        "canonical": "oklch(26.7% 0.015 256.8)",
+        "displayName": "Gedempte inkt",
+        "canonical": "oklch(38.5% 0.007 106.7)",
         "tonalRamp": [
-          "oklch(15.0% 0.015 256.8)",
-          "oklch(26.4% 0.015 256.8)",
-          "oklch(37.9% 0.015 256.8)",
-          "oklch(49.3% 0.015 256.8)",
-          "oklch(60.7% 0.015 256.8)",
-          "oklch(72.1% 0.015 256.8)",
-          "oklch(83.6% 0.015 256.8)",
-          "oklch(95.0% 0.015 256.8)"
+          "oklch(15.0% 0.007 106.7)",
+          "oklch(26.4% 0.007 106.7)",
+          "oklch(37.9% 0.007 106.7)",
+          "oklch(49.3% 0.007 106.7)",
+          "oklch(60.7% 0.007 106.7)",
+          "oklch(72.1% 0.007 106.7)",
+          "oklch(83.6% 0.007 106.7)",
+          "oklch(95.0% 0.007 106.7)"
         ]
       },
-      "chrome-black": {
+      "lijn": {
         "role": "neutral",
-        "displayName": "Chrome Black",
-        "canonical": "oklch(21.8% 0.000 89.9)",
+        "displayName": "Rasterlijn",
+        "canonical": "oklch(83.4% 0.007 106.5)",
         "tonalRamp": [
-          "oklch(15.0% 0.000 89.9)",
-          "oklch(26.4% 0.000 89.9)",
-          "oklch(37.9% 0.000 89.9)",
-          "oklch(49.3% 0.000 89.9)",
-          "oklch(60.7% 0.000 89.9)",
-          "oklch(72.1% 0.000 89.9)",
-          "oklch(83.6% 0.000 89.9)",
-          "oklch(95.0% 0.000 89.9)"
+          "oklch(15.0% 0.007 106.5)",
+          "oklch(26.4% 0.007 106.5)",
+          "oklch(37.9% 0.007 106.5)",
+          "oklch(49.3% 0.007 106.5)",
+          "oklch(60.7% 0.007 106.5)",
+          "oklch(72.1% 0.007 106.5)",
+          "oklch(83.6% 0.007 106.5)",
+          "oklch(95.0% 0.007 106.5)"
         ]
       },
-      "soft-white": {
+      "lijn-sterk": {
         "role": "neutral",
-        "displayName": "Soft White",
+        "displayName": "Bedieningslijn",
+        "canonical": "oklch(57.8% 0.008 106.6)",
+        "tonalRamp": [
+          "oklch(15.0% 0.008 106.6)",
+          "oklch(26.4% 0.008 106.6)",
+          "oklch(37.9% 0.008 106.6)",
+          "oklch(49.3% 0.008 106.6)",
+          "oklch(60.7% 0.008 106.6)",
+          "oklch(72.1% 0.008 106.6)",
+          "oklch(83.6% 0.008 106.6)",
+          "oklch(95.0% 0.008 106.6)"
+        ]
+      },
+      "m-grond": {
+        "role": "module",
+        "displayName": "Modulegrond",
+        "canonical": "oklch(14.5% 0.0 89.9)",
+        "tonalRamp": [
+          "oklch(15.0% 0.0 89.9)",
+          "oklch(26.4% 0.0 89.9)",
+          "oklch(37.9% 0.0 89.9)",
+          "oklch(49.3% 0.0 89.9)",
+          "oklch(60.7% 0.0 89.9)",
+          "oklch(72.1% 0.0 89.9)",
+          "oklch(83.6% 0.0 89.9)",
+          "oklch(95.0% 0.0 89.9)"
+        ]
+      },
+      "m-lijn": {
+        "role": "module",
+        "displayName": "Modulelijn",
+        "canonical": "oklch(29.2% 0.004 106.6)",
+        "tonalRamp": [
+          "oklch(15.0% 0.004 106.6)",
+          "oklch(26.4% 0.004 106.6)",
+          "oklch(37.9% 0.004 106.6)",
+          "oklch(49.3% 0.004 106.6)",
+          "oklch(60.7% 0.004 106.6)",
+          "oklch(72.1% 0.004 106.6)",
+          "oklch(83.6% 0.004 106.6)",
+          "oklch(95.0% 0.004 106.6)"
+        ]
+      },
+      "m-tekst": {
+        "role": "module",
+        "displayName": "Uitvoer",
         "canonical": "oklch(85.7% 0.014 248.0)",
         "tonalRamp": [
           "oklch(15.0% 0.014 248.0)",
@@ -169,9 +169,9 @@
           "oklch(95.0% 0.014 248.0)"
         ]
       },
-      "dim-grey": {
-        "role": "neutral",
-        "displayName": "Dim Grey",
+      "m-dim": {
+        "role": "module",
+        "displayName": "Gedimde uitvoer",
         "canonical": "oklch(72.8% 0.014 251.6)",
         "tonalRamp": [
           "oklch(15.0% 0.014 251.6)",
@@ -184,54 +184,24 @@
           "oklch(95.0% 0.014 251.6)"
         ]
       },
-      "border-grey": {
-        "role": "neutral",
-        "displayName": "Border Grey",
-        "canonical": "oklch(33.0% 0.015 252.3)",
+      "m-prompt": {
+        "role": "module",
+        "displayName": "Prompt en tip",
+        "canonical": "oklch(86.7% 0.233 129.9)",
         "tonalRamp": [
-          "oklch(15.0% 0.015 252.3)",
-          "oklch(26.4% 0.015 252.3)",
-          "oklch(37.9% 0.015 252.3)",
-          "oklch(49.3% 0.015 252.3)",
-          "oklch(60.7% 0.015 252.3)",
-          "oklch(72.1% 0.015 252.3)",
-          "oklch(83.6% 0.015 252.3)",
-          "oklch(95.0% 0.015 252.3)"
+          "oklch(15.0% 0.233 129.9)",
+          "oklch(26.4% 0.233 129.9)",
+          "oklch(37.9% 0.233 129.9)",
+          "oklch(49.3% 0.233 129.9)",
+          "oklch(60.7% 0.233 129.9)",
+          "oklch(72.1% 0.233 129.9)",
+          "oklch(83.6% 0.233 129.9)",
+          "oklch(95.0% 0.233 129.9)"
         ]
       },
-      "border-grey-light": {
-        "role": "neutral",
-        "displayName": "Border Grey (licht thema)",
-        "canonical": "oklch(90.6% 0.000 89.9)",
-        "tonalRamp": [
-          "oklch(15.0% 0.000 89.9)",
-          "oklch(26.4% 0.000 89.9)",
-          "oklch(37.9% 0.000 89.9)",
-          "oklch(49.3% 0.000 89.9)",
-          "oklch(60.7% 0.000 89.9)",
-          "oklch(72.1% 0.000 89.9)",
-          "oklch(83.6% 0.000 89.9)",
-          "oklch(95.0% 0.000 89.9)"
-        ]
-      },
-      "azure-deep": {
-        "role": "secondary",
-        "displayName": "Azure Deep",
-        "canonical": "oklch(40.2% 0.145 257.4)",
-        "tonalRamp": [
-          "oklch(15.0% 0.145 257.4)",
-          "oklch(26.4% 0.145 257.4)",
-          "oklch(37.9% 0.145 257.4)",
-          "oklch(49.3% 0.145 257.4)",
-          "oklch(60.7% 0.145 257.4)",
-          "oklch(72.1% 0.145 257.4)",
-          "oklch(83.6% 0.145 257.4)",
-          "oklch(95.0% 0.145 257.4)"
-        ]
-      },
-      "signal-error": {
-        "role": "tertiary",
-        "displayName": "Signal Error",
+      "m-fout": {
+        "role": "module",
+        "displayName": "Fout (zalm)",
         "canonical": "oklch(73.0% 0.155 24.4)",
         "tonalRamp": [
           "oklch(15.0% 0.155 24.4)",
@@ -244,541 +214,370 @@
           "oklch(95.0% 0.155 24.4)"
         ]
       },
-      "signal-warning": {
-        "role": "tertiary",
-        "displayName": "Signal Warning",
-        "canonical": "oklch(72.0% 0.140 79.9)",
+      "m-waarsch": {
+        "role": "module",
+        "displayName": "Waarschuwing",
+        "canonical": "oklch(72.0% 0.14 79.9)",
         "tonalRamp": [
-          "oklch(15.0% 0.140 79.9)",
-          "oklch(26.4% 0.140 79.9)",
-          "oklch(37.9% 0.140 79.9)",
-          "oklch(49.3% 0.140 79.9)",
-          "oklch(60.7% 0.140 79.9)",
-          "oklch(72.1% 0.140 79.9)",
-          "oklch(83.6% 0.140 79.9)",
-          "oklch(95.0% 0.140 79.9)"
+          "oklch(15.0% 0.14 79.9)",
+          "oklch(26.4% 0.14 79.9)",
+          "oklch(37.9% 0.14 79.9)",
+          "oklch(49.3% 0.14 79.9)",
+          "oklch(60.7% 0.14 79.9)",
+          "oklch(72.1% 0.14 79.9)",
+          "oklch(83.6% 0.14 79.9)",
+          "oklch(95.0% 0.14 79.9)"
         ]
       },
-      "signal-info": {
-        "role": "tertiary",
-        "displayName": "Signal Info",
-        "canonical": "oklch(78.6% 0.115 246.7)",
+      "m-glos": {
+        "role": "module",
+        "displayName": "Glos in de module",
+        "canonical": "oklch(87.5% 0.005 106.5)",
         "tonalRamp": [
-          "oklch(15.0% 0.115 246.7)",
-          "oklch(26.4% 0.115 246.7)",
-          "oklch(37.9% 0.115 246.7)",
-          "oklch(49.3% 0.115 246.7)",
-          "oklch(60.7% 0.115 246.7)",
-          "oklch(72.1% 0.115 246.7)",
-          "oklch(83.6% 0.115 246.7)",
-          "oklch(95.0% 0.115 246.7)"
+          "oklch(15.0% 0.005 106.5)",
+          "oklch(26.4% 0.005 106.5)",
+          "oklch(37.9% 0.005 106.5)",
+          "oklch(49.3% 0.005 106.5)",
+          "oklch(60.7% 0.005 106.5)",
+          "oklch(72.1% 0.005 106.5)",
+          "oklch(83.6% 0.005 106.5)",
+          "oklch(95.0% 0.005 106.5)"
         ]
       },
-      "signal-success": {
-        "role": "tertiary",
-        "displayName": "Signal Success",
-        "canonical": "oklch(69.5% 0.181 145.6)",
+      "m-oplicht": {
+        "role": "module",
+        "displayName": "Oplichten",
+        "canonical": "oklch(25.5% 0.007 106.9)",
         "tonalRamp": [
-          "oklch(15.0% 0.181 145.6)",
-          "oklch(26.4% 0.181 145.6)",
-          "oklch(37.9% 0.181 145.6)",
-          "oklch(49.3% 0.181 145.6)",
-          "oklch(60.7% 0.181 145.6)",
-          "oklch(72.1% 0.181 145.6)",
-          "oklch(83.6% 0.181 145.6)",
-          "oklch(95.0% 0.181 145.6)"
+          "oklch(15.0% 0.007 106.9)",
+          "oklch(26.4% 0.007 106.9)",
+          "oklch(37.9% 0.007 106.9)",
+          "oklch(49.3% 0.007 106.9)",
+          "oklch(60.7% 0.007 106.9)",
+          "oklch(72.1% 0.007 106.9)",
+          "oklch(83.6% 0.007 106.9)",
+          "oklch(95.0% 0.007 106.9)"
         ]
       },
-      "signal-error-light": {
-        "role": "tertiary",
-        "displayName": "Signal Error (licht thema)",
-        "canonical": "oklch(44.6% 0.191 5.8)",
-        "tonalRamp": [
-          "oklch(15.0% 0.191 5.8)",
-          "oklch(26.4% 0.191 5.8)",
-          "oklch(37.9% 0.191 5.8)",
-          "oklch(49.3% 0.191 5.8)",
-          "oklch(60.7% 0.191 5.8)",
-          "oklch(72.1% 0.191 5.8)",
-          "oklch(83.6% 0.191 5.8)",
-          "oklch(95.0% 0.191 5.8)"
-        ]
-      },
-      "signal-warning-light": {
-        "role": "tertiary",
-        "displayName": "Signal Warning (licht thema)",
-        "canonical": "oklch(43.5% 0.106 65.0)",
-        "tonalRamp": [
-          "oklch(15.0% 0.106 65.0)",
-          "oklch(26.4% 0.106 65.0)",
-          "oklch(37.9% 0.106 65.0)",
-          "oklch(49.3% 0.106 65.0)",
-          "oklch(60.7% 0.106 65.0)",
-          "oklch(72.1% 0.106 65.0)",
-          "oklch(83.6% 0.106 65.0)",
-          "oklch(95.0% 0.106 65.0)"
-        ]
-      },
-      "signal-info-light": {
-        "role": "tertiary",
-        "displayName": "Signal Info (licht thema)",
-        "canonical": "oklch(40.3% 0.163 259.4)",
-        "tonalRamp": [
-          "oklch(15.0% 0.163 259.4)",
-          "oklch(26.4% 0.163 259.4)",
-          "oklch(37.9% 0.163 259.4)",
-          "oklch(49.3% 0.163 259.4)",
-          "oklch(60.7% 0.163 259.4)",
-          "oklch(72.1% 0.163 259.4)",
-          "oklch(83.6% 0.163 259.4)",
-          "oklch(95.0% 0.163 259.4)"
-        ]
-      },
-      "signal-success-light": {
-        "role": "tertiary",
-        "displayName": "Signal Success (licht thema)",
-        "canonical": "oklch(41.5% 0.117 154.5)",
-        "tonalRamp": [
-          "oklch(15.0% 0.117 154.5)",
-          "oklch(26.4% 0.117 154.5)",
-          "oklch(37.9% 0.117 154.5)",
-          "oklch(49.3% 0.117 154.5)",
-          "oklch(60.7% 0.117 154.5)",
-          "oklch(72.1% 0.117 154.5)",
-          "oklch(83.6% 0.117 154.5)",
-          "oklch(95.0% 0.117 154.5)"
-        ]
-      },
-      "paper-light": {
+      "papier-2-donker": {
         "role": "neutral",
-        "displayName": "Paper (licht thema)",
-        "canonical": "oklch(97.9% 0.000 89.9)",
+        "displayName": "Band (donker thema)",
+        "canonical": "oklch(22.6% 0.002 106.6)",
         "tonalRamp": [
-          "oklch(15.0% 0.000 89.9)",
-          "oklch(26.4% 0.000 89.9)",
-          "oklch(37.9% 0.000 89.9)",
-          "oklch(49.3% 0.000 89.9)",
-          "oklch(60.7% 0.000 89.9)",
-          "oklch(72.1% 0.000 89.9)",
-          "oklch(83.6% 0.000 89.9)",
-          "oklch(95.0% 0.000 89.9)"
+          "oklch(15.0% 0.002 106.6)",
+          "oklch(26.4% 0.002 106.6)",
+          "oklch(37.9% 0.002 106.6)",
+          "oklch(49.3% 0.002 106.6)",
+          "oklch(60.7% 0.002 106.6)",
+          "oklch(72.1% 0.002 106.6)",
+          "oklch(83.6% 0.002 106.6)",
+          "oklch(95.0% 0.002 106.6)"
         ]
       },
-      "paper-sunken-light": {
+      "inkt-2-donker": {
         "role": "neutral",
-        "displayName": "Paper Sunken (licht thema)",
-        "canonical": "oklch(94.8% 0.003 247.9)",
+        "displayName": "Gedempte inkt (donker thema)",
+        "canonical": "oklch(75.6% 0.007 106.6)",
         "tonalRamp": [
-          "oklch(15.0% 0.003 247.9)",
-          "oklch(26.4% 0.003 247.9)",
-          "oklch(37.9% 0.003 247.9)",
-          "oklch(49.3% 0.003 247.9)",
-          "oklch(60.7% 0.003 247.9)",
-          "oklch(72.1% 0.003 247.9)",
-          "oklch(83.6% 0.003 247.9)",
-          "oklch(95.0% 0.003 247.9)"
+          "oklch(15.0% 0.007 106.6)",
+          "oklch(26.4% 0.007 106.6)",
+          "oklch(37.9% 0.007 106.6)",
+          "oklch(49.3% 0.007 106.6)",
+          "oklch(60.7% 0.007 106.6)",
+          "oklch(72.1% 0.007 106.6)",
+          "oklch(83.6% 0.007 106.6)",
+          "oklch(95.0% 0.007 106.6)"
         ]
       },
-      "paper-raised-light": {
+      "lijn-donker": {
         "role": "neutral",
-        "displayName": "Paper Raised (licht thema)",
-        "canonical": "oklch(100.0% 0.000 89.9)",
+        "displayName": "Rasterlijn (donker thema)",
+        "canonical": "oklch(30.0% 0.004 106.6)",
         "tonalRamp": [
-          "oklch(15.0% 0.000 89.9)",
-          "oklch(26.4% 0.000 89.9)",
-          "oklch(37.9% 0.000 89.9)",
-          "oklch(49.3% 0.000 89.9)",
-          "oklch(60.7% 0.000 89.9)",
-          "oklch(72.1% 0.000 89.9)",
-          "oklch(83.6% 0.000 89.9)",
-          "oklch(95.0% 0.000 89.9)"
+          "oklch(15.0% 0.004 106.6)",
+          "oklch(26.4% 0.004 106.6)",
+          "oklch(37.9% 0.004 106.6)",
+          "oklch(49.3% 0.004 106.6)",
+          "oklch(60.7% 0.004 106.6)",
+          "oklch(72.1% 0.004 106.6)",
+          "oklch(83.6% 0.004 106.6)",
+          "oklch(95.0% 0.004 106.6)"
         ]
       },
-      "paper-hover-light": {
+      "lijn-sterk-donker": {
         "role": "neutral",
-        "displayName": "Paper Hover (licht thema)",
-        "canonical": "oklch(94.1% 0.000 89.9)",
+        "displayName": "Bedieningslijn (donker thema)",
+        "canonical": "oklch(54.0% 0.008 106.7)",
         "tonalRamp": [
-          "oklch(15.0% 0.000 89.9)",
-          "oklch(26.4% 0.000 89.9)",
-          "oklch(37.9% 0.000 89.9)",
-          "oklch(49.3% 0.000 89.9)",
-          "oklch(60.7% 0.000 89.9)",
-          "oklch(72.1% 0.000 89.9)",
-          "oklch(83.6% 0.000 89.9)",
-          "oklch(95.0% 0.000 89.9)"
+          "oklch(15.0% 0.008 106.7)",
+          "oklch(26.4% 0.008 106.7)",
+          "oklch(37.9% 0.008 106.7)",
+          "oklch(49.3% 0.008 106.7)",
+          "oklch(60.7% 0.008 106.7)",
+          "oklch(72.1% 0.008 106.7)",
+          "oklch(83.6% 0.008 106.7)",
+          "oklch(95.0% 0.008 106.7)"
         ]
       },
-      "ink-light": {
-        "role": "neutral",
-        "displayName": "Ink (licht thema)",
-        "canonical": "oklch(14.5% 0.000 89.9)",
+      "m-grond-donker": {
+        "role": "module",
+        "displayName": "Modulegrond (donker thema)",
+        "canonical": "oklch(0.0% 0.0 0.0)",
         "tonalRamp": [
-          "oklch(15.0% 0.000 89.9)",
-          "oklch(26.4% 0.000 89.9)",
-          "oklch(37.9% 0.000 89.9)",
-          "oklch(49.3% 0.000 89.9)",
-          "oklch(60.7% 0.000 89.9)",
-          "oklch(72.1% 0.000 89.9)",
-          "oklch(83.6% 0.000 89.9)",
-          "oklch(95.0% 0.000 89.9)"
+          "oklch(15.0% 0.0 0.0)",
+          "oklch(26.4% 0.0 0.0)",
+          "oklch(37.9% 0.0 0.0)",
+          "oklch(49.3% 0.0 0.0)",
+          "oklch(60.7% 0.0 0.0)",
+          "oklch(72.1% 0.0 0.0)",
+          "oklch(83.6% 0.0 0.0)",
+          "oklch(95.0% 0.0 0.0)"
         ]
       },
-      "ink-dim-light": {
-        "role": "neutral",
-        "displayName": "Ink Dim (licht thema)",
-        "canonical": "oklch(38.0% 0.000 89.9)",
+      "m-lijn-donker": {
+        "role": "module",
+        "displayName": "Modulelijn (donker thema)",
+        "canonical": "oklch(34.7% 0.005 106.7)",
         "tonalRamp": [
-          "oklch(15.0% 0.000 89.9)",
-          "oklch(26.4% 0.000 89.9)",
-          "oklch(37.9% 0.000 89.9)",
-          "oklch(49.3% 0.000 89.9)",
-          "oklch(60.7% 0.000 89.9)",
-          "oklch(72.1% 0.000 89.9)",
-          "oklch(83.6% 0.000 89.9)",
-          "oklch(95.0% 0.000 89.9)"
-        ]
-      },
-      "footer-text-dim": {
-        "role": "neutral",
-        "displayName": "Footer Text Dim (Dark Frame)",
-        "canonical": "oklch(72.8% 0.014 251.6)",
-        "tonalRamp": [
-          "oklch(15.0% 0.014 251.6)",
-          "oklch(26.4% 0.014 251.6)",
-          "oklch(37.9% 0.014 251.6)",
-          "oklch(49.3% 0.014 251.6)",
-          "oklch(60.7% 0.014 251.6)",
-          "oklch(72.1% 0.014 251.6)",
-          "oklch(83.6% 0.014 251.6)",
-          "oklch(95.0% 0.014 251.6)"
-        ]
-      },
-      "footer-text-strong": {
-        "role": "neutral",
-        "displayName": "Footer Text Strong (Dark Frame)",
-        "canonical": "oklch(100.0% 0.000 89.9)",
-        "tonalRamp": [
-          "oklch(15.0% 0.000 89.9)",
-          "oklch(26.4% 0.000 89.9)",
-          "oklch(37.9% 0.000 89.9)",
-          "oklch(49.3% 0.000 89.9)",
-          "oklch(60.7% 0.000 89.9)",
-          "oklch(72.1% 0.000 89.9)",
-          "oklch(83.6% 0.000 89.9)",
-          "oklch(95.0% 0.000 89.9)"
-        ]
-      },
-      "bg-navbar-mobile": {
-        "role": "neutral",
-        "displayName": "Navbar Mobile (Dark Frame)",
-        "canonical": "oklch(0.0% 0.000 0.0)",
-        "tonalRamp": [
-          "oklch(15.0% 0.000 0.0)",
-          "oklch(26.4% 0.000 0.0)",
-          "oklch(37.9% 0.000 0.0)",
-          "oklch(49.3% 0.000 0.0)",
-          "oklch(60.7% 0.000 0.0)",
-          "oklch(72.1% 0.000 0.0)",
-          "oklch(83.6% 0.000 0.0)",
-          "oklch(95.0% 0.000 0.0)"
-        ]
-      },
-      "bg-demo-terminal": {
-        "role": "neutral",
-        "displayName": "Demo Terminal",
-        "canonical": "oklch(0.0% 0.000 0.0)",
-        "tonalRamp": [
-          "oklch(15.0% 0.000 0.0)",
-          "oklch(26.4% 0.000 0.0)",
-          "oklch(37.9% 0.000 0.0)",
-          "oklch(49.3% 0.000 0.0)",
-          "oklch(60.7% 0.000 0.0)",
-          "oklch(72.1% 0.000 0.0)",
-          "oklch(83.6% 0.000 0.0)",
-          "oklch(95.0% 0.000 0.0)"
-        ]
-      },
-      "traffic-light-red": {
-        "role": "tertiary",
-        "displayName": "Traffic Light Red",
-        "canonical": "oklch(69.3% 0.197 26.7)",
-        "tonalRamp": [
-          "oklch(15.0% 0.197 26.7)",
-          "oklch(26.4% 0.197 26.7)",
-          "oklch(37.9% 0.197 26.7)",
-          "oklch(49.3% 0.197 26.7)",
-          "oklch(60.7% 0.197 26.7)",
-          "oklch(72.1% 0.197 26.7)",
-          "oklch(83.6% 0.197 26.7)",
-          "oklch(95.0% 0.197 26.7)"
-        ]
-      },
-      "traffic-light-yellow": {
-        "role": "tertiary",
-        "displayName": "Traffic Light Yellow",
-        "canonical": "oklch(83.8% 0.162 81.1)",
-        "tonalRamp": [
-          "oklch(15.0% 0.162 81.1)",
-          "oklch(26.4% 0.162 81.1)",
-          "oklch(37.9% 0.162 81.1)",
-          "oklch(49.3% 0.162 81.1)",
-          "oklch(60.7% 0.162 81.1)",
-          "oklch(72.1% 0.162 81.1)",
-          "oklch(83.6% 0.162 81.1)",
-          "oklch(95.0% 0.162 81.1)"
-        ]
-      },
-      "traffic-light-green": {
-        "role": "tertiary",
-        "displayName": "Traffic Light Green",
-        "canonical": "oklch(73.0% 0.219 144.6)",
-        "tonalRamp": [
-          "oklch(15.0% 0.219 144.6)",
-          "oklch(26.4% 0.219 144.6)",
-          "oklch(37.9% 0.219 144.6)",
-          "oklch(49.3% 0.219 144.6)",
-          "oklch(60.7% 0.219 144.6)",
-          "oklch(72.1% 0.219 144.6)",
-          "oklch(83.6% 0.219 144.6)",
-          "oklch(95.0% 0.219 144.6)"
+          "oklch(15.0% 0.005 106.7)",
+          "oklch(26.4% 0.005 106.7)",
+          "oklch(37.9% 0.005 106.7)",
+          "oklch(49.3% 0.005 106.7)",
+          "oklch(60.7% 0.005 106.7)",
+          "oklch(72.1% 0.005 106.7)",
+          "oklch(83.6% 0.005 106.7)",
+          "oklch(95.0% 0.005 106.7)"
         ]
       }
     },
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "De h1 van een pagina, in de kopletter JetBrains Mono. Een per pagina. Gemeten 45,9px bij 1440px breedte."
+        "purpose": "h1 over negen kolommen en de slotkop; geen kop groter."
       },
       "headline": {
         "displayName": "Headline",
-        "purpose": "Sectiekoppen. Gemeten 32,0px bij 1440px breedte."
+        "purpose": "Sectiekoppen over kolom 1-7."
+      },
+      "figure": {
+        "displayName": "Cijfer",
+        "purpose": "Getallen in de cijfertabel, in inkt, met bron ernaast."
       },
       "title": {
         "displayName": "Title",
-        "purpose": "Kaartkoppen en subsecties. Token 1,22rem (22,0px); de kaartkoppen op index.html renderen op 22,5px uit twee losse regels in landing.css."
-      },
-      "body": {
-        "displayName": "Body",
-        "purpose": "Lopende tekst in Atkinson Hyperlegible Next. Basis 18px, op mobiel 16px."
-      },
-      "ui": {
-        "displayName": "UI",
-        "purpose": "Het chroom: navigatielinks, knoplabels, formulierlabels, meta. Zelfde familie als Body, ander gewicht. --font-ui is een rol, geen derde familie."
+        "purpose": "h3 in Herkenbaar; FAQ-vraag op 1.1rem."
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Kleine schakelaarlabels en metadata."
+        "purpose": "Namen: woordmerk, diagramblokken, leerpadniveaus (Archivo 800)."
       },
-      "terminal": {
-        "displayName": "Terminal",
-        "purpose": "Alle simulatoroutput. Kolomuitlijning is functioneel. De demo op de landingspagina rendert deze rol op 16,2px, de commandochips op 14,4px."
+      "body": {
+        "displayName": "Body",
+        "purpose": "Lopende tekst, max 62ch."
+      },
+      "small": {
+        "displayName": "Klein",
+        "purpose": "Microcopy, glos, kolomkop, herkomst (15px)."
+      },
+      "button": {
+        "displayName": "Knop",
+        "purpose": "Primaire actie; altijd grote tekst."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Terminal; buiten de module alleen index, pad, adres, bron, paginaverwijzing."
       }
     },
-    "shadows": [
-      {
-        "name": "geen",
-        "value": "none",
-        "purpose": "Dit systeem gebruikt geen schaduwen. Diepte komt uit de toonladder (#080b0f / #0d1117 / #161b22 / #21262d) en 1px randen in #30363d. Gemeten op index.html rendert er precies een box-shadow op de hele pagina, en dat is een inzetrand. De tokens --shadow-elevation-1/-2 en --shadow-accent-terminal bestaan nog en worden buiten de landingspagina nog aangeroepen; ze zijn restanten, geen vocabulaire."
-      },
-      {
-        "name": "chip-next-ring",
-        "value": "inset 0 0 0 1px #9fef00",
-        "purpose": "De eerstvolgende commandochip krijgt een tweede rand binnen zijn eigen kader. Een rand die geen layout verschuift, geen hoogte."
-      },
-      {
-        "name": "prompt-focus",
-        "value": "0 0 0 3px rgba(159, 239, 0, 0.15)",
-        "purpose": "Focusring op terminalinvoer. Toestandsfeedback, geen elevatie."
-      }
-    ],
+    "shadows": [],
     "motion": [
       {
-        "name": "transition-fast",
-        "value": "0.15s ease",
-        "purpose": "Hover- en focuswissels op knoppen, links en velden."
+        "name": "af-ease",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "De enige curve: hovers, registratie-uitloop, FAQ-chevron."
       },
       {
-        "name": "transition-normal",
-        "value": "0.3s ease",
-        "purpose": "Grotere toestandswissels: menu openklappen, modals, de pil van de themaschakelaar."
+        "name": "hover",
+        "value": "160ms",
+        "purpose": "Kleurovergang van primaire actie en chips bij inversie."
+      },
+      {
+        "name": "registratie",
+        "value": "700ms",
+        "purpose": "Uitloop van regel, glos en poort na het oplichten; erin zonder overgang."
+      },
+      {
+        "name": "faq-chevron",
+        "value": "200ms",
+        "purpose": "Draaien van de FAQ-chevron; het antwoord zelf opent zonder overgang."
       },
       {
         "name": "reduced-motion",
-        "value": "prefers-reduced-motion: reduce",
-        "purpose": "Altijd respecteren; motion is nooit dragend voor betekenis."
+        "value": "transition: none",
+        "purpose": "Onder prefers-reduced-motion staat de eindstand direct."
       }
     ],
     "breakpoints": [
       {
-        "name": "mobile",
+        "name": "chip-breuk",
+        "value": "352px"
+      },
+      {
+        "name": "mobiel",
         "value": "768px"
       },
       {
-        "name": "small",
-        "value": "480px"
+        "name": "tablet",
+        "value": "1024px"
       },
       {
-        "name": "container-max",
+        "name": "desktop",
+        "value": "1280px"
+      },
+      {
+        "name": "raster-max",
         "value": "1400px"
-      },
-      {
-        "name": "terminal-max",
-        "value": "1200px"
       }
     ]
   },
   "components": [
     {
-      "name": "Primary Button",
+      "name": "Primaire actie",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "De hoofdweg. Neon Lime vlak met donkere tekst; de enige accentdrager buiten het venster in het eerste scherm.",
-      "html": "<a href=\"#\" class=\"ds-btn-primary\">Start de simulator</a>",
-      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--color-cta-primary, #9fef00); color: var(--color-cta-text, #0d1117); font-family: var(--font-ui, 'Atkinson Hyperlegible Next', sans-serif); font-size: 20.25px; font-weight: 600; letter-spacing: .5px; text-decoration: none; padding: 16px 32px; border: 2px solid transparent; border-radius: var(--border-radius-modal, 8px); cursor: pointer; transition: background var(--transition-fast, .15s ease); } .ds-btn-primary:hover { background: var(--color-cta-primary-hover, #8ad600); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-info, #79c0ff); outline-offset: 2px; }"
+      "description": "De enige rode knop per scherm: 'Start de simulator'. Inverteert naar inkt bij hover.",
+      "html": "<a class=\"ds-cta\" href=\"#\">Start de simulator</a>",
+      "css": ".ds-cta { display: inline-flex; align-items: center; justify-content: center; min-height: 56px; padding: 14px 28px; box-sizing: border-box; background: #cc0a1e; color: #ffffff; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; font-size: max(1.15rem, 19px); font-weight: 700; text-decoration: none; border: 0; border-radius: 0; box-shadow: none; transition: background-color 160ms cubic-bezier(0.16, 1, 0.3, 1), color 160ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-cta:hover, .ds-cta:focus-visible { background: #111111; color: #efefec; } .ds-cta:focus-visible { outline: 2px solid #cc0a1e; outline-offset: 2px; }"
     },
     {
-      "name": "Secondary Button",
+      "name": "Secundaire knop",
       "kind": "button",
       "refersTo": "button-secondary",
-      "description": "Transparant met een neon haarlijn. Onder de vouw, waar de accentgrens nog niet doorgevoerd is.",
-      "html": "<a href=\"#\" class=\"ds-btn-secondary\">Bekijk het leerpad</a>",
-      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-height: 44px; background: transparent; color: var(--color-cta-primary, #9fef00); font-family: var(--font-ui, 'Atkinson Hyperlegible Next', sans-serif); font-size: 15.3px; font-weight: 600; letter-spacing: .5px; text-decoration: none; padding: 11px 20px; border: 1px solid var(--color-cta-primary, #9fef00); border-radius: var(--border-radius-button, 4px); cursor: pointer; transition: color var(--transition-fast, .15s ease), border-color var(--transition-fast, .15s ease); } .ds-btn-secondary:hover { color: var(--color-cta-primary-hover, #8ad600); border-color: var(--color-cta-primary-hover, #8ad600); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--color-info, #79c0ff); outline-offset: 2px; }"
+      "description": "Inkten kader van 1px; inverteert bij hover. Voor elke actie die niet de primaire is.",
+      "html": "<a class=\"ds-knop\" href=\"#\">Begin met niveau 1</a>",
+      "css": ".ds-knop { display: inline-flex; align-items: center; min-height: 44px; padding: 10px 18px; box-sizing: border-box; border: 1px solid #111111; background: #efefec; color: #111111; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; font-size: 0.9rem; font-weight: 700; line-height: 1.2; text-decoration: none; border-radius: 0; } .ds-knop:hover { background: #111111; color: #efefec; } .ds-knop:focus-visible { outline: 2px solid #cc0a1e; outline-offset: 2px; }"
     },
     {
-      "name": "Nav CTA Button",
-      "kind": "button",
-      "refersTo": "button-nav",
-      "description": "De knop in de balk. Draagt sinds Sessie 236 geen accent: een navigatieknop is niet de hoofdweg.",
-      "html": "<a href=\"#\" class=\"ds-btn-nav\">Open de terminal</a>",
-      "css": ".ds-btn-nav { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--color-navbar-link, #c9d1d9); font-family: var(--font-ui, 'Atkinson Hyperlegible Next', sans-serif); font-size: 15.75px; font-weight: 600; letter-spacing: .3px; text-decoration: none; padding: 8px 16px; border: 1px solid var(--color-border-dark-frame, #30363d); border-radius: var(--border-radius-cta-nav, 10px); transition: color var(--transition-fast, .15s ease), border-color var(--transition-fast, .15s ease); } .ds-btn-nav:hover { color: var(--color-navbar-link-hover, #fff); border-color: var(--color-navbar-link-hover, #fff); } .ds-btn-nav:focus-visible { outline: 2px solid var(--color-info, #79c0ff); outline-offset: 2px; }"
-    },
-    {
-      "name": "Command Chip",
+      "name": "Commandochip",
       "kind": "chip",
-      "refersTo": "command-chip",
-      "description": "De kanonieke chip: een tikbaar commando onder het venster. De eerstvolgende chip draagt een tweede rand binnen zijn eigen kader. Statische labels horen hier niet.",
-      "html": "<div class=\"ds-chips\"><button class=\"ds-chip ds-chip-next\">nmap 192.168.1.1</button><button class=\"ds-chip\">ls</button><button class=\"ds-chip\">help</button></div>",
-      "css": ".ds-chips { display: flex; flex-wrap: wrap; gap: 8px; background: var(--color-bg-demo-terminal, #000); padding: 12px 24px; } .ds-chip { min-height: 44px; background: transparent; color: var(--color-cta-primary, #9fef00); font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 14.4px; padding: 4px 16px; border: 1px solid var(--color-cta-primary, #9fef00); border-radius: var(--border-radius-button, 4px); cursor: pointer; transition: background-color var(--transition-fast, .15s ease); } .ds-chip:hover { background-color: rgba(159, 239, 0, .1); } .ds-chip-next { box-shadow: inset 0 0 0 1px var(--color-cta-primary, #9fef00); } .ds-chip:focus-visible { outline: 2px solid var(--color-info, #79c0ff); outline-offset: 2px; }"
+      "refersTo": "chip-command",
+      "description": "Suggestieknop onder de terminal: mono-index, command, herkomst. Kader 2px, inversie bij hover.",
+      "html": "<button class=\"ds-chip\" type=\"button\"><span class=\"ds-chip-nr\">01</span><span class=\"ds-chip-cmd\">nmap 192.168.1.1</span><span class=\"ds-chip-her\">Netwerk · beginner</span></button>",
+      "css": ".ds-chip { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto auto; column-gap: 8px; align-content: center; min-height: 60px; padding: 8px 20px; box-sizing: border-box; background: #efefec; color: #111111; border: 2px solid #111111; border-radius: 0; text-align: left; cursor: pointer; transition: background-color 160ms cubic-bezier(0.16, 1, 0.3, 1), color 160ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-chip-nr { grid-row: 1 / 3; align-self: center; min-width: 1.8em; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 0.83rem; color: #444440; } .ds-chip-cmd { grid-column: 2; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 0.86rem; font-weight: 700; line-height: 1.3; white-space: nowrap; } .ds-chip-her { grid-column: 2; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; font-size: 0.72rem; line-height: 1.3; color: #444440; } .ds-chip:hover, .ds-chip:focus-visible { background: #111111; color: #efefec; } .ds-chip:hover .ds-chip-nr, .ds-chip:hover .ds-chip-her, .ds-chip:focus-visible .ds-chip-nr, .ds-chip:focus-visible .ds-chip-her { color: #efefec; } .ds-chip:focus-visible { outline: 2px solid #cc0a1e; outline-offset: 2px; }"
     },
     {
-      "name": "Card",
-      "kind": "card",
-      "refersTo": "card",
-      "description": "Halftransparant opgetild vlak; de paginatoon schemert door. Geen schaduw, 16px hoek (niet getokeniseerd).",
-      "html": "<div class=\"ds-card\"><h3>40+ commando's uit de praktijk</h3><p>Van bestandssysteem tot netwerkscans.</p></div>",
-      "css": ".ds-card { background: rgba(22, 27, 34, .3); border: 1px solid var(--color-border, #30363d); border-radius: 16px; padding: 32px; } .ds-card h3 { font-family: var(--font-heading, 'JetBrains Mono', monospace); font-size: 22.5px; font-weight: 600; line-height: 1.2; color: var(--color-text, #c9d1d9); margin: 0 0 8px; } .ds-card p { font-family: var(--font-body, 'Atkinson Hyperlegible Next', sans-serif); font-size: 18px; line-height: 1.5; color: var(--color-text-dim, #a1a8b0); margin: 0; }"
-    },
-    {
-      "name": "Terminal Input",
+      "name": "Nieuwsbriefveld",
       "kind": "input",
-      "refersTo": "terminal-input",
-      "description": "Waar je typt. Monospace, Neon Lime, haarlijnscheiding boven, geen afronding.",
-      "html": "<div class=\"ds-terminal-line\"><span class=\"ds-prompt\">user@hacksim:~$</span><input class=\"ds-terminal-input\" value=\"nmap 192.168.1.1\" aria-label=\"Commando\"></div>",
-      "css": ".ds-terminal-line { display: flex; align-items: center; gap: 8px; background: var(--color-bg-demo-terminal, #000); border-top: 1px solid var(--color-border, #30363d); padding: 8px 24px; } .ds-prompt { font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 16.2px; color: var(--color-prompt, #9fef00); } .ds-terminal-input { flex: 1; font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 16.2px; color: var(--color-input, #9fef00); background: transparent; border: none; border-radius: 0; padding: 0; } .ds-terminal-input:focus { outline: none; box-shadow: 0 0 0 3px var(--color-prompt-shadow, rgba(159,239,0,.15)); }"
+      "refersTo": "input-newsletter",
+      "description": "Papieren veld met inkten kader en een inkten knop op dezelfde rij; focus is de rode ring.",
+      "html": "<form class=\"ds-news\"><input class=\"ds-news-input\" type=\"email\" placeholder=\"jouw@email.nl\" aria-label=\"E-mailadres\"><button class=\"ds-news-btn\" type=\"button\">Aanmelden</button></form>",
+      "css": ".ds-news { display: flex; flex-wrap: wrap; gap: 0; } .ds-news-input { flex: 1 1 220px; min-height: 56px; padding: 0 16px; box-sizing: border-box; border: 1px solid #111111; border-right: 0; border-radius: 0; background: #efefec; color: #111111; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; font-size: 1rem; box-shadow: none; } .ds-news-input::placeholder { color: #444440; opacity: 1; } .ds-news-input:focus-visible { outline: 2px solid #cc0a1e; outline-offset: 2px; } .ds-news-btn { min-height: 56px; padding: 0 24px; border: 1px solid #111111; border-radius: 0; background: #111111; color: #efefec; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; } .ds-news-btn:hover { background: #efefec; color: #111111; } .ds-news-btn:focus-visible { outline: 2px solid #cc0a1e; outline-offset: 2px; }"
     },
     {
-      "name": "Navigation",
+      "name": "Navigatie",
       "kind": "nav",
-      "refersTo": "nav-link",
-      "description": "Dark Frame: blijft donker in beide thema's, dus alle kleuren erin zijn thema-onafhankelijk. De merknaam staat in de kopletter en draagt geen accent.",
-      "html": "<nav class=\"ds-nav\"><a href=\"#\" class=\"ds-nav-brand\"><span class=\"ds-brand-icon\">[&gt;_]</span>HackSimulator</a><a href=\"#\" class=\"ds-nav-link ds-active\">Terminal</a><a href=\"#\" class=\"ds-nav-link\">Gidsen</a><a href=\"#\" class=\"ds-nav-link\">Blog</a></nav>",
-      "css": ".ds-nav { display: flex; align-items: center; gap: 24px; height: 60px; padding: 0 32px; background: var(--color-bg-navbar, #1a1a1a); border-bottom: 1px solid var(--color-border-dark-frame, #30363d); } .ds-nav-brand { display: flex; align-items: center; gap: 8px; font-family: var(--font-heading, 'JetBrains Mono', monospace); font-size: 18.9px; font-weight: 600; letter-spacing: .3px; color: var(--color-navbar-link, #c9d1d9); text-decoration: none; } .ds-brand-icon { color: var(--color-navbar-link, #c9d1d9); } .ds-nav-link { font-family: var(--font-ui, 'Atkinson Hyperlegible Next', sans-serif); font-size: 18px; font-weight: 500; letter-spacing: .5px; color: var(--color-navbar-link, #c9d1d9); text-decoration: none; padding: 8px 16px; border-bottom: 2px solid transparent; transition: color var(--transition-fast, .15s ease); } .ds-nav-link:hover { color: var(--color-navbar-link-hover, #fff); } .ds-nav-link.ds-active { border-bottom-color: var(--color-navbar-underline, #58a6ff); }"
+      "refersTo": "nav-link-hover",
+      "description": "Papieren balk met inktlijn; woordmerk in Archivo 800 zonder hover; links inverteren; nav-CTA als inkten kader.",
+      "html": "<nav class=\"ds-nav\"><span class=\"ds-nav-merk\">HackSimulator</span><a class=\"ds-nav-link\" href=\"#\">Gidsen</a><a class=\"ds-nav-link\" href=\"#\">Blog</a><a class=\"ds-nav-cta\" href=\"#\">Start de simulator</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 8px; min-height: 60px; padding: 0 32px; background: #efefec; border-bottom: 1px solid #111111; } .ds-nav-merk { margin-right: auto; font-family: 'Archivo', 'Atkinson Hyperlegible Next', -apple-system, sans-serif; font-weight: 800; color: #111111; } .ds-nav-link { padding: 8px 12px; color: #111111; text-decoration: none; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; } .ds-nav-link:hover { background: #111111; color: #efefec; } .ds-nav-cta { padding: 8px 16px; border: 1px solid #111111; color: #111111; text-decoration: none; font-weight: 700; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; } .ds-nav-cta:hover { background: #111111; color: #efefec; } .ds-nav a:focus-visible { outline: 2px solid #cc0a1e; outline-offset: 2px; }"
     },
     {
-      "name": "Theme Toggle",
+      "name": "Tekstlink",
       "kind": "custom",
-      "refersTo": "theme-toggle-active",
-      "description": "In de balk icoon-only: getekende maan/zon-SVG's, tekstlabels visueel weggeklemd en alleen leesbaar in het overlaymenu. De actieve optie is een toon-inversie, geen gekleurd vlak.",
-      "html": "<button type=\"button\" class=\"ds-toggle\" aria-label=\"Wissel naar light mode\" aria-pressed=\"false\"><span class=\"ds-toggle-option ds-active\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z\"></path></svg><span class=\"ds-toggle-label\">DARK</span></span><span class=\"ds-toggle-option\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"4\"></circle><path d=\"M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4\"></path></svg><span class=\"ds-toggle-label\">LIGHT</span></span></button>",
-      "css": ".ds-toggle { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 4px 8px; background: var(--color-bg-navbar, #1a1a1a); border: none; border-radius: var(--border-radius-button, 4px); font-family: var(--font-ui, 'Atkinson Hyperlegible Next', sans-serif); font-size: 13px; font-weight: 600; letter-spacing: 1px; cursor: pointer; } .ds-toggle-option { display: flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: var(--border-radius-small, 2px); color: var(--color-toggle-text-inactive, #a1a8b0); transition: all var(--transition-normal, .3s ease); } .ds-toggle-option.ds-active { color: var(--color-bg-navbar, #1a1a1a); background-color: var(--color-navbar-link, #c9d1d9); } .ds-toggle-option:hover { background-color: var(--color-toggle-hover, rgba(255,255,255,.1)); } .ds-toggle-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; } .ds-toggle:focus-visible { outline: 2px solid var(--color-info, #79c0ff); outline-offset: 2px; }"
+      "refersTo": "",
+      "description": "Inkt met onderstreping van 1px; bij hover 2px. Het tweede woord van de hovertaal.",
+      "html": "<p class=\"ds-p\">Lees de <a class=\"ds-link\" href=\"#\">tools-gids</a> voor meer.</p>",
+      "css": ".ds-p { font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; font-size: 1rem; line-height: 1.55; color: #111111; } .ds-link { color: #111111; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; } .ds-link:hover { text-decoration-thickness: 2px; } .ds-link:focus-visible { outline: 2px solid #cc0a1e; outline-offset: 2px; }"
     },
     {
-      "name": "Terminal Window",
+      "name": "Terminalmodule met glos",
       "kind": "custom",
-      "refersTo": "terminal-window",
-      "description": "Het handtekeningcomponent, op de landingspagina over de volle contentbreedte. Het tilt op door een toontrede (puur zwart op #0d1117), niet door een halo. De renderer kleurt op het eerste teken: [X] rood, vinkje groen, [TIP] als les. Kolomuitlijning is functioneel, geen smaak.",
-      "html": "<div class=\"ds-term\"><div class=\"ds-term-bar\"><span class=\"ds-dot ds-r\"></span><span class=\"ds-dot ds-y\"></span><span class=\"ds-dot ds-g\"></span><span class=\"ds-term-title\">user@hacksim: ~</span></div><pre class=\"ds-term-body\"><span class=\"ds-line ds-pr\">user@hacksim:~$ nmap 192.168.1.1</span>\n<span class=\"ds-line\">22/tcp   open  ssh     OpenSSH 8.2p1</span>\n<span class=\"ds-line ds-nl\">  &lt;- Secure Shell: versleutelde toegang op afstand</span>\n<span class=\"ds-line ds-tip\">[TIP] Open poorten zijn mogelijke ingangen. Kijk altijd welke versie er draait.</span>\n<span class=\"ds-line ds-ok\">[✓] Scan voltooid</span>\n<span class=\"ds-line ds-err\">[X] Host niet bereikbaar</span></pre></div>",
-      "css": ".ds-term { background: var(--color-bg-demo-terminal, #000); border: 1px solid var(--color-border, #30363d); border-radius: var(--border-radius-modal, 8px); overflow: hidden; } .ds-term-bar { display: flex; align-items: center; gap: 4px; padding: 8px 16px; background: var(--color-bg-demo-terminal-header, #161b22); border-bottom: 1px solid var(--color-border, #30363d); } .ds-dot { width: 12px; height: 12px; border-radius: var(--border-radius-circle, 50%); } .ds-r { background: var(--traffic-light-red, #ff5f56); } .ds-y { background: var(--traffic-light-yellow, #ffbd2e); } .ds-g { background: var(--traffic-light-green, #27c93f); } .ds-term-title { margin-left: 8px; font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 13.5px; color: var(--color-text-dim, #a1a8b0); } .ds-term-body { font-family: var(--font-terminal, 'JetBrains Mono', monospace); font-size: 16.2px; line-height: 1.5; color: #c9d1d9; padding: 20px 24px; margin: 0; white-space: pre; overflow-x: auto; } .ds-line { display: block; } .ds-pr { color: var(--color-prompt, #9fef00); } .ds-nl { color: #a1a8b0; } .ds-tip { color: var(--color-info, #79c0ff); } .ds-ok { color: var(--color-success, #3fb950); } .ds-err { color: var(--color-error, #fa7c76); }"
+      "refersTo": "terminal-module",
+      "description": "Signatuur: zwarte module over 7/12, per outputregel de Nederlandse glos ernaast op dezelfde rij, met aanhaallijn; een opgelichte rij inverteert de glos.",
+      "html": "<div class=\"ds-term\"><div class=\"ds-reg\"><span class=\"ds-line ds-prompt\">$ nmap 192.168.1.1</span><span class=\"ds-glos\"></span></div><div class=\"ds-reg ds-lit\"><span class=\"ds-line\">80/tcp  open  http</span><span class=\"ds-glos\">Een webserver luistert hier</span></div><div class=\"ds-reg\"><span class=\"ds-line\"><span class=\"ds-tip\">[TIP]</span> Open poorten = attack vectors</span><span class=\"ds-glos\">Elke open poort is een ingang</span></div></div>",
+      "css": ".ds-term { background: #efefec; padding: 8px 0; } .ds-reg { display: grid; grid-template-columns: 58.3333% minmax(0, 1fr); align-items: baseline; } .ds-line { padding: 0 20px; background: #0a0a0a; color: #c9d1d9; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 0.86rem; line-height: 1.5rem; white-space: pre-wrap; transition: background-color 700ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-prompt, .ds-tip { color: #9fef00; } .ds-glos { position: relative; padding: 0 20px; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; font-size: 0.83rem; line-height: 1.5rem; color: #111111; transition: background-color 700ms cubic-bezier(0.16, 1, 0.3, 1), color 700ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-glos:not(:empty)::before { content: ''; position: absolute; left: 0; top: 0.75rem; width: 14px; border-top: 1px solid #111111; } .ds-lit .ds-line { background: #23231f; transition: none; } .ds-lit .ds-glos:not(:empty) { background: #111111; color: #efefec; transition: none; } .ds-lit .ds-glos:not(:empty)::before { border-top-color: #efefec; }"
+    },
+    {
+      "name": "Cijferrij",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Getal op afficheschaal in inkt, in een tabelrij met label en bron in mono; de rij inverteert bij hover.",
+      "html": "<a class=\"ds-rij\" href=\"#\"><span class=\"ds-getal\">40+</span><span class=\"ds-label\">commands die je echt kunt typen</span><span class=\"ds-waar\">/commands</span></a>",
+      "css": ".ds-rij { display: grid; grid-template-columns: 11rem minmax(0, 1fr) auto; align-items: center; column-gap: 20px; min-height: 88px; padding: 12px 0; border-top: 2px solid #111111; border-bottom: 1px solid #7a7a75; color: #111111; text-decoration: none; background: #efefec; } .ds-getal { padding-left: 20px; font-family: 'Archivo', 'Atkinson Hyperlegible Next', -apple-system, sans-serif; font-size: clamp(2rem, 3.4vw, 3rem); font-weight: 700; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; } .ds-label { font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; font-size: 1rem; } .ds-waar { padding-right: 20px; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 0.83rem; color: #444440; } .ds-rij:hover { background: #111111; color: #efefec; } .ds-rij:hover .ds-waar { color: #efefec; } .ds-rij:focus-visible { outline: 2px solid #cc0a1e; outline-offset: 2px; }"
     }
   ],
   "narrative": {
-    "northStar": "De ondertitelde terminal",
-    "overview": "Alles ziet er echt en Engels uit, met Nederlands dat er rustig naast meeloopt. Dat is tegelijk de positionering van het product en de vorm van elke output: de tool spreekt zoals de echte tool spreekt, en de uitleg staat ernaast in plaats van eroverheen. Een bezoeker die op Engels afhaakt kan hier meekijken zonder dat het echte werk verwatert.\n\nHet systeem is donker, vlak en precies. De diepte komt niet uit schaduw maar uit een toonladder van vier stappen en uit haarlijnen van 1px. Op de hele landingspagina rendert nog precies een box-shadow, en dat is een inzetrand van 1px op de volgende commandochip — geen hoogte, maar een rand die geen ruimte inneemt. Het neon-lime accent is zeldzaam: het markeert waar jij aan zet bent (de prompt, wat je typt, de primaire actie) en verder niets. Die zeldzaamheid is de reden dat het werkt.\n\nDe letter is sinds deze bouw de werkletter van het product zelf. JetBrains Mono kopt en werkt; Atkinson Hyperlegible Next leest en draagt het chroom. Twee families, drie rollen — en mono is de stem van het ding, nooit een sfeerlaagje op een los label. Toon is bemoedigend en nuchter. Geen hype, geen opgeklopte cijfers, geen urgentie die er niet is.",
+    "northStar": "Het affiche op het raster",
+    "overview": "De pagina is een affiche op een zichtbaar raster, in de traditie van Total Design (Wim Crouwel). Gebroken wit papier, zwarte inkt, en precies één signaalrood dat alleen \"hier ben jij aan zet\" betekent. Alles staat op een 12-koloms raster zonder goot: de kolomgrenzen zijn de haarlijnen, en elke cel draagt zijn eigen binnenruimte. De terminal is een donkere module in dat raster, en de Nederlandse uitleg staat per outputregel ernaast, op dezelfde rasterrij.\n\nToestanden spreken via inversie en nooit via een extra kleur: een blok wordt inkt met een papieren letter. Er zijn geen schaduwen, geen zichtbare kleurverlopen en geen afgeronde hoeken. Diepte bestaat niet; er is alleen papier, inkt en de zwarte module. Het donkere thema is het geïnverteerde affiche: inkt wordt grond, papier wordt letter.\n\n**Reikwijdte.** Dit systeem draait nu alleen op `index.html`. Het staat in één stylesheet dat alleen die pagina laadt, als laatste, en hangt volledig onder de homepage-scope. Het hertokent de gedeelde componenten (navbar, footer, knoppen, FAQ, nieuwsbrief) in plaats van ze te overschrijven. De andere pagina's (gidsen, samples, blog, terminal, juridisch) tonen nog het oudere systeem en gaan één per sessie over. Dat oudere systeem hoort niet bij dit document.\n\nExpliciet niet: scanlines, glow, groen-op-zwart, matrixregen, mascottes, badges op de voorgrond, kickers en eyebrows.",
     "keyCharacteristics": [
-      "Donkerbasis #0d1117 met een tonale ladder in vier stappen; geen schaduwen.",
-      "Een schel accent (#9fef00), spaarzaam ingezet als signaal, nooit als decoratie.",
-      "Twee letters in drie rollen: JetBrains Mono kopt en werkt, Atkinson Hyperlegible Next leest en draagt het chroom.",
-      "Volwaardig licht thema met eigen AAA-afgestemde waarden, niet een omgekeerd donker thema.",
-      "Chroom (navbar, footer) blijft donker in beide thema's: het Dark Frame-patroon."
+      "Papier, inkt, één signaalrood. Verder niets buiten de terminalmodule.",
+      "Een 12-koloms raster zonder goot, met in het eerste scherm zichtbare haarlijnen van 1px.",
+      "De naad op kolom 8: links het ding, rechts de uitleg.",
+      "Toestanden via inversie (inktblok, papieren letter), nooit via een extra kleur.",
+      "Hoeken van 0, geen schaduwen, geen zichtbare verlopen.",
+      "Eén beweging per command: de registratie."
     ],
     "rules": [
       {
         "name": "The One Voice Rule",
-        "section": "colors",
-        "body": "Neon Lime markeert alleen waar de gebruiker aan zet is: de prompt, de invoer, de commandochips, de primaire actie, en hover in het Dark Frame. Zodra het ook decoratie wordt, stopt het met signaleren en is het alleen nog fel."
+        "body": "Het rood betekent alleen \"jij bent aan zet\": de primaire actie en de focusring. Er is per scherm één rood vlak. Een tweede actie in hetzelfde scherm (de nav-CTA, een volgende chip, een actieve toestand) wordt inkt.",
+        "section": "colors"
       },
       {
-        "name": "The One Carrier Rule",
-        "section": "colors",
-        "body": "Binnen het terminalvenster is kleur betekenis en verandert er niets. Buiten het venster betekent kleur 'hier kun je klikken' en staat er hoogstens een accentdrager per scherm. Deze regel geldt op dit moment alleen voor het eerste scherm. Gemeten op 1440x900: het eerste scherm draagt 1 accent buiten het venster en 14 erbinnen; de acht schermen onder de vouw dragen er 2 tot 12 per scherm. Dat is een vastgelegde grens uit het direction contract, geen vergeten opruiming. Wie hier verdergaat, sweept de resterende acht schermen of schrapt de regel als sitebrede belofte; laat hem niet half staan. De grens is geasserteerd in tests/e2e/hero-accent-budget.spec.js."
+        "name": "The Inversion Rule",
+        "body": "Een toestand krijgt geen nieuwe kleur. Hover, actief, volgende, open en oplichten zijn allemaal hetzelfde gebaar: inktblok, papieren letter. Binnen een blok dat al geïnverteerd is, inverteert het label terug.",
+        "section": "colors"
       },
       {
-        "name": "The Dark Frame Rule",
-        "section": "colors",
-        "body": "Navbar en footer zijn in beide thema's donker (#1a1a1a). Kleuren die daarop landen zijn daarom thema-onafhankelijk vastgezet. Gebruik nooit een thema-afhankelijke tekstkleur op dat vaste donker: in het lichte thema wordt die onzichtbaar."
+        "name": "The Module Boundary Rule",
+        "body": "De simulatorkleuren (groen, zalm, amber, blauwgrijs) leven alleen binnen de zwarte module. Buiten de module is groen geen accent.",
+        "section": "colors"
       },
       {
-        "name": "The Measured Contrast Rule",
-        "section": "colors",
-        "body": "Elke kleurwaarde is gekozen op een gemeten ratio, niet op gevoel. Een nieuwe waarde is pas geldig als de contrast-specs in tests/e2e/ groen blijven (text-contrast, link-contrast, accent-text-contrast, eyebrow-contrast). Doel is AAA, niet AA."
+        "name": "The Mono Is Evidence Rule",
+        "body": "JetBrains Mono staat alleen in de terminal en voor dingen die je letterlijk kunt nalopen: indexnummers, paden, adressen, bronnen, paginaverwijzingen. Nooit voor koppen of lopende tekst.",
+        "section": "typography"
       },
       {
-        "name": "The Two Letters Rule",
-        "section": "typography",
-        "body": "Twee families, drie rollen: JetBrains Mono kopt en werkt, Atkinson Hyperlegible Next leest en draagt het chroom. Een derde familie voegt niets toe wat een gewicht niet ook kan. De Body- en UI-rol delen bewust een bestand: --font-ui is een rol, geen familie."
+        "name": "The Numbered Order Rule",
+        "body": "Een mono-index (01-06, 01-03) staat alleen waar de volgorde zelf de informatie is: de chips, het leerpad en de inhoud van de sample. Sectiekoppen worden nooit genummerd.",
+        "section": "typography"
       },
       {
-        "name": "The Mono Is The Voice Rule",
-        "section": "typography",
-        "body": "Mono draagt de koppen, de merknaam en getallen — een getal is een meting, geen decoratie. Mono op losse labels, knoppen of navigatielinks is precies het sfeerlaagje dat deze wereld weigert, en het kost breedte: gemeten op 1280px vroeg de balk met de navlinks in mono 1303px bij 1265px beschikbaar, met de bodyletter 1211px."
+        "name": "The Two Weights Rule",
+        "body": "Archivo 700 is voor een bewering (koppen, cijfers), Archivo 800 voor een naam (een merk, een blok of een niveau). Andere gewichten van Archivo worden niet gebruikt.",
+        "section": "typography"
       },
       {
-        "name": "The Shell Is Mono Rule",
-        "section": "typography",
-        "body": "Alles binnen het terminalvenster is monospace: output, prompt en invoer. asciiBox en de nmap-achtige output rekenen op kolomuitlijning, en prompt en invoer moeten dezelfde metriek hebben als de regels erboven."
+        "name": "The Paper Has No Z-Axis Rule",
+        "body": "Niets zweeft. Een element is papier, inkt of module. Wil je iets laten opvallen, dan inverteer je het. Je tilt het nooit op.",
+        "section": "elevation"
       },
       {
-        "name": "The Even Ladder Rule",
-        "section": "typography",
-        "body": "De ladder is gelijkmatig: 45,9 → 32,0 → 22,5 → 18px, dus factor 1,43 / 1,42 / 1,25. Het gat van factor 2,00 tussen Headline en Title dat hier tot 19 sep 2026 als ontwerpschuld stond, bestaat niet meer. Een nieuwe tussenlaag hoort die verhouding te houden, niet opnieuw te openen. Display en Headline zijn vloeiend (clamp()); Title is dat niet."
-      },
-      {
-        "name": "The No Shadow Rule",
-        "section": "elevation",
-        "body": "Een shell heeft geen schaduwen; schaduw is een papiermetafoor en dit is geen papier. Wie diepte nodig heeft pakt de volgende toontrede of een haarlijn. Er is geen uitzondering meer: de statische neon-glow — de halo om het venster, de radiale waas achter de hero, de halo's onder de laatste CTA en de limoengloed op de knophovers — is in deze bouw verwijderd, samen met de tokens die hem droegen. Glow die overblijft is toestandsfeedback, en die is state, geen elevatie."
+        "name": "The Drawn Line Rule",
+        "body": "Een lineair verloop met harde stops is hier gereedschap om lijnen en vlakken te tekenen (de rasterlijnen, de modulegrond naast de glos). Dat mag. Een zichtbare overgang tussen twee kleuren mag nooit.",
+        "section": "elevation"
       }
     ],
     "dos": [
-      "Do diepte uitdrukken in de toonladder (#080b0f / #0d1117 / #161b22 / #21262d) en 1px #30363d-randen.",
-      "Do Neon Lime bewaren voor waar de gebruiker aan zet is. Zeldzaamheid is de functie: binnen het venster is kleur betekenis, buiten het venster hoogstens een drager.",
-      "Do elke nieuwe kleurwaarde afrekenen op een gemeten ratio en de contrast-specs in tests/e2e/ groen houden. Doel is AAA.",
-      "Do voor het lichte thema een eigen waarde kiezen in plaats van de donkere om te keren; dat is hoe het huidige systeem het doet en waarom het AAA haalt.",
-      "Do thema-onafhankelijke kleuren gebruiken op navbar en footer.",
-      "Do een selectie tonen door te inverteren binnen de bestaande tonen, niet door er een nieuwe verzadigde kleur bij te zetten.",
-      "Do iconen tekenen als SVG op currentColor, niet kiezen uit een fontsubset.",
-      "Do elke nieuwe kleur, radius of spacing als token toevoegen, niet als losse waarde."
+      "**Do** zet het signaalrood (#cc0a1e) alleen op de primaire actie en op de focusring (2px, offset 2px). Eén rood vlak per scherm.",
+      "**Do** laat elke toestand spreken via inversie: inktblok (#111111), papieren letter (#efefec).",
+      "**Do** houd de hovertaal op twee woorden: een blok inverteert, een tekstlink gaat van een onderstreping van 1px naar 2px. Nooit allebei tegelijk, en nooit een tweede lijn.",
+      "**Do** zet uitleg op de naad: het ding in kolom 1-7, de uitleg in kolom 8-12, op dezelfde rasterrij.",
+      "**Do** laat alinea's in het hero-raster zich met een papieren achtergrond uit de haarlijnen snijden.",
+      "**Do** hertoken gedeelde componenten onder de homepage-scope, en zet de vormeigenschappen die je wilt expliciet (rand 0, schaduw none, radius 0), zodat de vorm van de oude wereld niet doorlekt.",
+      "**Do** houd de simulatorkleuren binnen de zwarte module (#0a0a0a).",
+      "**Do** maak tikdoelen minimaal 44px. De primaire actie is 56px."
     ],
     "donts": [
-      "Don't schaduwen of statische gloed introduceren. Dit systeem is vlak; zie The No Shadow Rule. Glow mag alleen state zijn.",
-      "Don't het terminalvenster uit monospace halen. Output, prompt en invoer delen alle drie var(--font-terminal). Verwijs nooit rechtstreeks naar een fontnaam in het venster.",
-      "Don't mono gebruiken op chroom — knoppen, navigatielinks, formulierlabels, meta. Die staan in --font-ui; zie The Mono Is The Voice Rule.",
-      "Don't emoji gebruiken in code of output. ASCII-markers, altijd.",
-      "Don't een derde lettertypefamilie toevoegen.",
-      "Don't een merknaam, merkicoon, sectie-icoon of navigatieknop in het accent zetten. Accent is een aanwijzing dat je kunt handelen, geen merkkleur.",
-      "Don't !important gebruiken in styles/; win op specificiteit.",
-      "Don't het groene accent van de hoofdsite doortrekken naar de blog. Die gebruikt bewust blauw, en de in-content CTA-boxen zijn bewust links uitgelijnd met een blauwe linkerrand.",
-      "Don't een buildstap, framework of bundler introduceren om een ontwerpprobleem op te lossen. Vanilla is een red line, geen voorkeur."
+      "**Don't** gebruik schaduwen, zichtbare kleurverlopen, afgeronde hoeken of lift bij hover.",
+      "**Don't** introduceer een tweede accentkleur of kleur een toestand in een andere tint dan inkt.",
+      "**Don't** zet rood op kleine tekst, en gebruik het niet voor fouten: een fout in de terminal is zalm (#fa7c76).",
+      "**Don't** gebruik groen, glow, scanlines, matrixregen of groen-op-zwart als pagina-esthetiek. Het groen van de prompt hoort alleen in de module.",
+      "**Don't** gebruik mascottes, badges op de voorgrond, kickers of eyebrows boven koppen.",
+      "**Don't** zet getallen als los accentgetal in een kaart. Een cijfer staat in een tabelrij met zijn bron.",
+      "**Don't** nummer sectiekoppen. Een mono-index is alleen voor een echte volgorde.",
+      "**Don't** trek verticale rasterlijnen door onder de hero. Daar draagt de naad het raster.",
+      "**Don't** voeg een tweede beweging toe naast de registratie. Een hover-overgang is hoogstens 160ms op kleur, en de FAQ opent zonder animatie."
     ]
   }
 }
