@@ -1303,6 +1303,29 @@ test.describe('Finish review (sessie 246)', () => {
     }
   });
 
+  // Finish review s247: het mono-pad stond bóven de bloglinktitel en las als eyebrow (de
+  // craft floor verbiedt dat zonder uitzondering). Nu onder de titel, en het tikdoel blijft.
+  test('bloglinks: het pad staat onder de titel, niet erboven, en het tikdoel blijft 44px', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/index.html');
+    // elementFromPoint werkt alleen binnen het venster: elke rij eerst in beeld.
+    const rijen = await page.evaluate(() => [...document.querySelectorAll('.af-lees-lijst li')].map((li) => {
+      li.scrollIntoView({ block: 'center', behavior: 'instant' });
+      const a = li.querySelector('.blog-link'); const pad = li.querySelector('.af-lees-pad');
+      const g = document.createRange(); g.selectNodeContents(a); const tekst = [...g.getClientRects()];
+      const p = pad.getBoundingClientRect(); const box = a.getBoundingClientRect();
+      const midden = document.elementFromPoint(box.left + 4, box.bottom - 2);
+      return { titelOnder: Math.max(...tekst.map((r) => r.bottom)), padTop: p.top, hoogte: box.height,
+               onderkantRaaktLink: a.contains(midden) };
+    }));
+    expect(rijen.length, 'geen bloglinks gevonden').toBe(3);
+    for (const r of rijen) {
+      expect(r.padTop, 'het pad staat boven of in zijn titel').toBeGreaterThanOrEqual(r.titelOnder - 1);
+      expect(r.hoogte, 'tikdoel onder 44px').toBeGreaterThanOrEqual(44);
+      expect(r.onderkantRaaktLink, 'het pad vangt de tik op de onderkant van de link').toBe(true);
+    }
+  });
+
   // Sessie 247: het slot is de slotklap op inkt, de sample staat op papier (omgewisseld; zo
   // geen ~1000px aaneengesloten zwart, finish review s246). Op inkt inverteert de actie naar
   // papier: naar inkt zou hij in zijn grond verdwijnen.

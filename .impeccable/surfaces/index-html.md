@@ -480,7 +480,8 @@ everything around it": een schaalzet en een moment, niet drie.
   verhouding tot de sectiekop 1,86. Op 375 blijft 35,2px (40px gaf vijf regels).
 - Vanaf 1280 is `.af-actie` een blok in kolom 10-12 op de rij van de ondertitel, de knop op
   haar eerste regel (267 = 257 + 10), de microcopy eronder.
-- Poorten 56px, 1rem, open 1,3rem; bloknamen 1.4rem. De open poorten zijn de zwaarste
+- Poorten 56px; de letter schaalt naar de sleuf (container query), met 1rem en open 1,3rem
+  als plafond (zie Gate 1 hieronder); bloknamen 1.4rem. De open poorten zijn de zwaarste
   inversies van het scherm.
 - De scan: de reeks rolt regel voor regel uit (`clip-path`, 90ms per regel, alleen de regels in
   het venster tellen), bij nmap tekent eerst de pijl zich (360ms, `--scan-duur`), en elke open
@@ -520,7 +521,33 @@ breedte … per 8px", poortlabel zonder 4px lucht op 320-336 en 1024-1184 ("3306
 `6.8cqw`/`9cqw`). 1440 ongewijzigd (18 / 23,4px), 1024 14 / 18,9px, 320 13,8 / 18,6px. De
 gate zelf was de mutant: met de vaste maat vuurde precies deze assertie.
 
-**Budget:** runtime 1082,35 → 1089,73 / 1120 KB (vóór de poortfix).
+**Budget:** runtime 1082,35 → 1089,83 / 1120 KB (na de reviewfixes; marge 30,17).
+
+**Gate 3 (na de reviewfixes): 847 passed, 17 skipped, 0 failed, 0 flaky.**
+
+**Finish review (s247): `disposition: fix`**, vijf material fixes, elk eerst nagemeten:
+
+| # | Bevinding | Gemeten | Besluit |
+|---|---|---|---|
+| 1 | Signatuur niet in rust: de lus toonde na 3,2s `ls`, 53/80/443 gevuld zonder regels | Klopt: `ls` op 3,5s, `whoami` op 7,5s; 12 van elke 15,2s | Geen lus meer: het nmap-frame ís de ruststand. Replay op 1280/mobiel blijft, één keer. |
+| 2 | Moment achter de consentbanner (1440, eerste bezoek) | Deels: de laadreeks loopt 0-1,1s, de banner komt op 2,57s; daarna dekt hij de poortrij (823 tegen 812-868) | Geen replay na de banner: met fix 1 staat de eindstand heel in beeld na het wegklikken. |
+| 3 | Overname: lege terminal, poorten gevuld, uitnodiging weg | Poorten: klopt. Uitnodiging: eerder besluit (`is-taken`) | Diagram naar rust bij overname (`rustDiagram`). Uitnodiging blijft weg: een aangenomen uitnodiging is ruis. |
+| 4 | Mono-pad boven de bloglinktitel = eyebrow (floor) | Klopt | Pad onder de titel, in de onderpadding van de link met `pointer-events: none`: tikdoel 44px heel. |
+| 5 | DESIGN.md verouderd | Klopt | Documenter na de verdict. |
+
+**Ceiling (voor #90, niet in deze ronde):** het raster stopt bij y≈950; zeven van zeven secties
+hangen aan kolom 1; elke sectie is H2 → lede → module met metronoom-wisseling papier/band;
+Herkenbaar en het leerpad zijn herhaling als structuur; de cijfers en de slotkop gebruiken de
+afficheschaal niet; het onderscheid (de naad met aanhaallijn en Nederlandse glos) leeft alleen
+in de hero.
+
+**Bewaakt:** "de ruststand is het nmap-frame" (na 8s alleen nmap, elke gevulde poort met regel
+en glos in beeld), "overname zet het diagram in rust", "bloglinks: het pad onder de titel"
+(met tikdoel en hit-test). Drie mutanten (lus terug, rustDiagram weg, pad weer boven), elk op
+een eigen assertie. Onderweg twee meetfouten in mijn eigen tests, gevangen door de
+zelfbewakende tak: een observer die pas op DOMContentLoaded startte (modules draaien eerder), en
+`elementFromPoint` buiten het venster (geeft `null`). Herhaling: 81/81 in drie motoren, zonder
+retries.
 
 ## Memorabel moment
 

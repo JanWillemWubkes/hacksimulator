@@ -1,15 +1,18 @@
 /**
  * landing-demo.js - de auto-demo van de hero-terminal (Landing Page)
  *
- * Sessie 238: geen typemachine meer. Het direction contract vraagt één beweging per
- * command: de regels verschijnen in één keer en lichten samen met hun glos en hun
- * uitsparing in het diagram op (hero-registratie.js). Wat er getoond wordt komt uit
+ * Sessie 238: geen typemachine meer. Sinds sessie 247 vraagt het contract één reeks per
+ * command, regel voor regel: elke regel verschijnt met zijn glos, en elke open poort in
+ * het diagram springt open op de tik van zijn regel (hero-registratie.js). Wat er getoond wordt komt uit
  * hero-antwoorden.js — dezelfde bron als wat een bezoeker krijgt als hij zelf typt.
  *
- * - Begint met het nmap-frame: het openingsbeeld uit het contract. Sinds sessie 247 rolt
- *   het bij laden uit (het memorabele moment zonder klik), en speelt het nog één keer als
- *   het diagram pas later in beeld komt (1280x800, mobiel). Onder prefers-reduced-motion
- *   staat de eindstand er meteen, en is het het enige beeld dat de bezoeker ziet.
+ * - Toont het nmap-frame: het openingsbeeld uit het contract, en sinds sessie 247 ook de
+ *   ruststand. Het rolt bij laden uit (het memorabele moment zonder klik), en speelt nog
+ *   één keer als het diagram pas later in beeld komt (1280x800, mobiel). Onder
+ *   prefers-reduced-motion staat de eindstand er meteen.
+ * - Geen lus meer (finish review s247): na 3,2s toonde hij `ls`, en dan stonden 53/80/443
+ *   gevuld zonder hun regels en glossen, 12 van elke 15,2s. De registratie (regel, glos,
+ *   poort op één rij) is het product; die hoort in rust heel te zijn.
  * - Stopt definitief zodra de bezoeker de terminal overneemt (handOff, via hero-repl.js).
  * - Pauzeert als het tabblad verborgen is.
  */
@@ -17,34 +20,20 @@
 import { respons } from './hero-antwoorden.js';
 import { maakRij, lichtOp, zetDiagram } from './hero-registratie.js';
 
-const CONFIG = {
-  commandPause: 3200,    // ms dat een antwoord blijft staan vóór het volgende command
-  loopDelay: 2400,       // ms extra rust aan het eind van de reeks
-  maxRijen: 24,          // de module toont er minder; dit begrenst alleen de DOM
-};
-
-// Volgorde van de demo. `nmap` staat vooraan: het openingsbeeld, en de enige scène die
-// het diagram laat antwoorden met drie open poorten (53/80/443, het router-profiel).
-const REEKS = ['nmap 192.168.1.1', 'ls', 'whoami', 'pwd'];
+// Het enige command van de auto-demo: de enige scène die het diagram laat antwoorden met
+// drie open poorten (53/80/443, het router-profiel van nmap.js).
+const SCAN = 'nmap 192.168.1.1';
 const PROMPT = 'hacker@hacksim:~$';
 
 let outputEl = null;
 let typingTargetEl = null;
-let isRunning = false;
 
-// Generatieteller. `isRunning = false` breekt de lopende await-keten NIET af: elke
-// opgeschorte `delay()` komt gewoon terug en loopt verder langs zijn poorten. Zette
-// iets `isRunning` intussen weer op true (de visibilitychange-handler deed dat), dan
-// liepen er twee lussen in dezelfde DOM. Een lus die niet meer de huidige generatie
-// is, stopt onherroepelijk.
-let generatie = 0;
-
-// Zodra de bezoeker zelf typt is de auto-demo definitief klaar. Zonder deze vlag
-// herstartte hij bij elke tabwissel over de sessie van de bezoeker heen.
+// Zodra de bezoeker zelf typt is de auto-demo definitief klaar: geen replay meer over
+// zijn sessie heen.
 let overgedragen = false;
 
-// Heeft de bezoeker de laatste scan zien spelen, met het diagram in beeld? Zo niet, dan
-// speelt hij opnieuw zodra het diagram verschijnt (initScanInBeeld). Eén keer per scan.
+// Heeft de bezoeker de scan zien spelen, met het diagram in beeld? Zo niet, dan speelt
+// hij één keer opnieuw zodra het diagram verschijnt (initScanInBeeld).
 let scanGezien = false;
 
 const verminderd = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -60,15 +49,15 @@ function leegInvoer() {
   typingTargetEl.style.width = '';
 }
 
-/** Schrijft één command met zijn antwoord en laat het als één rij oplichten. */
-function toon(command, { oplichten = true } = {}) {
-  const rijen = [maakRij(`${PROMPT} ${command}`, null, 'prompt')];
-  for (const [tekst, glos] of respons(command)) rijen.push(maakRij(tekst, glos, 'output'));
+/** Zet het nmap-frame neer en laat het uitrollen; het vorige frame maakt plaats. */
+function toonScan({ oplichten = true } = {}) {
+  outputEl.textContent = '';
+  const rijen = [maakRij(`${PROMPT} ${SCAN}`, null, 'prompt')];
+  for (const [tekst, glos] of respons(SCAN)) rijen.push(maakRij(tekst, glos, 'output'));
   rijen.forEach((r) => outputEl.appendChild(r));
-  while (outputEl.children.length > CONFIG.maxRijen) outputEl.firstChild.remove();
-  if (oplichten) lichtOp(rijen, command);
-  zetDiagram(command, oplichten ? rijen : null);
-  if (command === REEKS[0]) scanGezien = oplichten && diagramInBeeld();
+  if (oplichten) lichtOp(rijen, SCAN);
+  zetDiagram(SCAN, oplichten ? rijen : null);
+  scanGezien = oplichten && diagramInBeeld();
 }
 
 /** Staat minstens 60% van het diagram tussen navbar en vensterrand? */
@@ -85,18 +74,19 @@ function diagramInBeeld() {
 /**
  * Het memorabele moment hoort te spelen waar de bezoeker kijkt. Op 1440x900 staat het
  * diagram bij laden in beeld; op 1280x800 en mobiel niet (poorten op 864 resp. 1367px).
- * Daar speelt de scan opnieuw zodra het diagram voor 60% in beeld komt, niet eerder en
- * niet vaker: daarna loopt de gewone reeks verder.
+ * Daar speelt de scan opnieuw zodra het diagram voor 60% in beeld komt, één keer.
+ * (De consentbanner verschijnt pas na 2,57s, ná de laadreeks van ~1,1s: gemeten s247.)
  */
 function initScanInBeeld() {
   const net = document.querySelector('.af-net');
   if (!net || !('IntersectionObserver' in window)) return;
-  new IntersectionObserver(() => {
-    if (scanGezien || overgedragen || verminderd() || !diagramInBeeld()) return;
-    stop();
-    toon(REEKS[0]);
-    startAnimation();
-  }, { threshold: [0.6, 1] }).observe(net);
+  const io = new IntersectionObserver(() => {
+    if (overgedragen) { io.disconnect(); return; }
+    if (scanGezien || verminderd() || !diagramInBeeld()) return;
+    toonScan();
+    io.disconnect();
+  }, { threshold: [0.6, 1] });
+  io.observe(net);
 }
 
 function init() {
@@ -108,44 +98,14 @@ function init() {
     return;
   }
 
-  // Het venster begint met het nmap-frame in plaats van leeg (zonder dit stond het ~1,2 s
-  // leeg). De rijen staan meteen in de DOM; alleen hun beeld rolt uit.
-  outputEl.textContent = '';
-  toon(REEKS[0], { oplichten: !verminderd() });
+  // De rijen staan meteen in de DOM; alleen hun beeld rolt uit.
+  toonScan({ oplichten: !verminderd() });
   leegInvoer();
-
-  if (verminderd()) return;
-  initScanInBeeld();
-  startAnimation();
+  if (!verminderd()) initScanInBeeld();
 }
 
-async function startAnimation() {
-  if (isRunning || overgedragen) return;
-  isRunning = true;
-  const gen = ++generatie;
-
-  // De eerste ronde slaat REEKS[0] over: dat frame staat er al, en de demo leest
-  // daardoor als een sessie die doorloopt in plaats van als een venster dat leeg begint.
-  let volgende = 1;
-
-  while (isRunning && gen === generatie) {
-    await delay(CONFIG.commandPause);
-    if (!isRunning || gen !== generatie) break;
-
-    toon(REEKS[volgende]);
-    volgende = (volgende + 1) % REEKS.length;
-    if (volgende === 0) await delay(CONFIG.loopDelay);
-  }
-}
-
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-function stop() {
-  isRunning = false;
-  generatie++;   // maakt elke nog lopende lus onherroepelijk ongeldig
-}
+/** Er loopt niets meer dat gestopt hoeft te worden; blijft voor de API van hero-repl. */
+function stop() {}
 
 /**
  * De bezoeker neemt de terminal over. Onomkeerbaar: de auto-demo is een lokmiddel,
@@ -153,18 +113,8 @@ function stop() {
  */
 function handOff() {
   overgedragen = true;
-  stop();
   leegInvoer();
 }
-
-// Pauzeer als het tabblad niet zichtbaar is (performance).
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    stop();
-  } else if (!isRunning && !overgedragen && outputEl && !verminderd()) {
-    startAnimation();
-  }
-});
 
 // Modules draaien na het parsen, vóór DOMContentLoaded: de DOM is er al.
 init();

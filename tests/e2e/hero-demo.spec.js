@@ -198,56 +198,58 @@ test.describe('Hero-terminal — bedienbaar', () => {
     expect(await telAfronding(), 'afronding herhaalt zich').toBe(1);
   });
 
-  test('de auto-demo toont wat de echte engine ook toont', async ({ page }) => {
-    // Momentopnames van #hero-demo deugen hier niet: trimOldLines() knipt de oudste
-    // regels weg (maxVisibleLines 8), dus een `innerText()` ná de lus mist juist de
-    // regels die je wilt controleren. Eerste versie van deze test was daardoor groen
-    // op de ONgewijzigde pagina — hij vond "hacker" in de promptregel
-    // "hacker@hacksim:~$ help" en concludeerde dat `whoami` klopte. Daarom een
-    // observer die álles opvangt wat de lus ooit heeft geschreven.
+  // Finish review s247: de auto-demo liep een lus (nmap, ls, whoami, pwd), en 12 van elke
+  // 15,2s stonden 53/80/443 gevuld zonder hun regels en glossen. De registratie hoort in
+  // rust heel te zijn: het nmap-frame is de ruststand en blijft dat. Wat de demo toont komt
+  // uit dezelfde bron als wat een bezoeker typt ("elk van de zes commands" hieronder).
+  test('de ruststand is het nmap-frame, met elke open poort naast zijn regel', async ({ page }) => {
     await page.addInitScript(() => {
-      window.__demoRegels = [];
-      const start = () => {
-        const doel = document.getElementById('hero-demo');
-        if (!doel) return;
-        new MutationObserver((muts) => {
-          for (const m of muts) {
-            for (const n of m.addedNodes) {
-              // Sessie 238: elke regel is een rij met een glos ernaast. Alleen de regel
-              // telt; de glos is uitleg, geen uitvoer van de engine.
-              const regel = n.querySelector ? n.querySelector('.terminal-line') || n : n;
-              if (regel.textContent) window.__demoRegels.push(regel.textContent);
-            }
+      // Vanaf de eerste byte: modules draaien vóór DOMContentLoaded, dus een observer die
+      // daar pas start mist de laadreeks (eerste versie: lege populatie, de tak ving het).
+      window.__demoPrompts = [];
+      new MutationObserver((muts) => {
+        for (const m of muts) for (const n of m.addedNodes) {
+          // Niet tijdens het parsen: dan voegt de parser de statische no-JS-rijen (ls, whoami)
+          // in, die de demo daarna vervangt. Modules draaien pas na het parsen.
+          if (document.readyState !== 'loading' && n.classList && n.classList.contains('reg--prompt') && n.closest('#hero-demo')) {
+            window.__demoPrompts.push(n.textContent.trim());
           }
-        }).observe(doel, { childList: true });
-      };
-      document.addEventListener('DOMContentLoaded', start);
+        }
+      }).observe(document, { childList: true, subtree: true });
     });
+    await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/index.html');
+    // Ruim langer dan de oude lus (3,2s per command): kwam er een tweede command, dan nu.
+    await page.waitForTimeout(8000);
+    const m = await page.evaluate(() => {
+      const body = document.getElementById('hero-demo').getBoundingClientRect();
+      const zichtbaar = [...document.querySelectorAll('#hero-demo .reg')].filter((r) => {
+        const b = r.getBoundingClientRect(); return b.top >= body.top - 1 && b.bottom <= body.bottom + 1;
+      });
+      const regelVan = (p) => zichtbaar.find((r) => r.querySelector('.terminal-line').textContent.trimStart().startsWith(`${p}/tcp`));
+      const open = [...document.querySelectorAll('.af-poort.is-open')].map((e) => e.dataset.poort);
+      return { prompts: window.__demoPrompts, open,
+        zonderRegel: open.filter((p) => !regelVan(p) || !regelVan(p).querySelector('.reg-glos').textContent.trim()) };
+    });
+    // Zelfbewakend: de observer zag de laadreeks; leeg betekent "niet gemeten".
+    expect(m.prompts.length, 'de observer zag geen enkel command').toBeGreaterThan(0);
+    expect([...new Set(m.prompts)], 'de auto-demo toont meer dan het nmap-frame').toEqual(['hacker@hacksim:~$ nmap 192.168.1.1']);
+    expect(m.open.sort(), 'de ruststand mist zijn open poorten').toEqual(['443', '53', '80']);
+    expect(m.zonderRegel, 'een gevulde poort staat in rust zonder zijn regel en glos in beeld').toEqual([]);
+  });
 
-    // Sessie 238: geen typemachine meer; één command per 3200ms, whoami is de derde.
-    await page.waitForFunction(
-      () => window.__demoRegels.some((r) => r.includes('$ whoami')),
-      null,
-      { timeout: 30000 }
-    );
-    await page.waitForTimeout(1500);
-    const alles = await page.evaluate(() => window.__demoRegels.join('\n'));
-
-    // `passwords.txt` en `notes.md` bestaan niet in de VFS (structure.js:7-206);
-    // `ls` geeft daar `documents/  notes.txt  README.txt`.
-    expect(alles, 'hero toont bestanden die niet in de simulator bestaan').not.toContain(
-      'passwords.txt'
-    );
-    expect(alles).not.toContain('notes.md');
-    expect(alles, '`ls` toont niet wat de echte VFS toont').toContain('documents/');
-
-    // `whoami` geeft `hacker` (terminal.js:45), niet `user`. De promptregel bevat óók
-    // "hacker", dus meten op de regel ná de echo — anders is de assertie blind.
-    const naWhoami = alles.slice(alles.indexOf('$ whoami') + 8).split('\n')[1] || '';
-    expect(naWhoami.trim(), 'whoami geeft niet de gebruiker van de echte engine').toBe(
-      'hacker'
-    );
+  test('overname zet het diagram in rust: lege terminal, geen gevulde poorten', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/index.html');
+    const voor = await page.evaluate(() => document.querySelectorAll('.af-poort.is-open').length);
+    expect(voor, 'vóór de overname staat de scan er niet: dan toetst dit niets').toBe(3);
+    await neemOver(page);
+    const na = await page.evaluate(() => ({
+      open: document.querySelectorAll('.af-poort.is-open').length,
+      actief: document.querySelectorAll('.af-node.is-actief').length,
+    }));
+    expect(na.open, 'de scan van de demo blijft gevuld in de terminal van de bezoeker').toBe(0);
+    expect(na.actief, 'een blok blijft actief na de overname').toBe(0);
   });
 
   test('hero_demo_command stuurt alleen de commandonaam, nooit argumenten', async ({ page }) => {

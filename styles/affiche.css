@@ -1412,7 +1412,8 @@ body.home .leerpad-cmd-line {
 /* ==================== Blog: kantlijn naast de vragen ==================== */
 /* Een andere soort dan de vragen, en dat moet je zien: geen Archivo-vet, geen
    scheidingslijnen, geen chevron. Een haarlijn op de naad (kolom 8), een mono-label, en
-   per artikel het pad in mono boven de titel, zoals de cijferlijst zijn bron noemt. Tot
+   per artikel de titel met het pad in mono eronder, zoals de cijferlijst zijn bron noemt
+   (sessie 247: boven de titel las het pad als eyebrow, de craft floor verbiedt dat). Tot
    sessie 242 (ronde 2) was de vorm gelijk aan de vragen en lazen ze als drie extra FAQ's.
    Rij 2 expliciet: de kop is rij 1 (css-layout.md §26). */
 .af-faq-lees {
@@ -1449,6 +1450,8 @@ body.home .leerpad-cmd-line {
 
 .af-lees-pad {
   display: block;
+  margin-top: -6px;             /* in de onderpadding van de link: het pad hoort bij zijn titel */
+  pointer-events: none;         /* en houdt het tikdoel van de link heel */
   font-family: var(--af-mono);
   font-size: 0.75rem;
   color: var(--af-inkt-2);

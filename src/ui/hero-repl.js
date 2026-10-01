@@ -17,7 +17,7 @@
 
 import events from '../analytics/events.js';
 import { respons, CTA_LABEL } from './hero-antwoorden.js';
-import { maakRij, lichtOp, zetDiagram } from './hero-registratie.js';
+import { maakRij, lichtOp, zetDiagram, rustDiagram } from './hero-registratie.js';
 
 const outputEl = document.getElementById('hero-demo');
 const inputEl = document.getElementById('typing-target');
@@ -114,6 +114,7 @@ function initHeroRepl() {
     if (window.landingDemo && window.landingDemo.handOff) window.landingDemo.handOff();
 
     outputEl.innerHTML = '';
+    rustDiagram();   // de lege terminal en het diagram vertellen hetzelfde
     bodyEl.classList.add('is-live');
     outputEl.setAttribute('aria-live', 'polite');
     inputEl.readOnly = false;

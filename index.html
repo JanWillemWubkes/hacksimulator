@@ -67,7 +67,7 @@
        body.home: hij herdefinieert de gedeelde tokens voor navbar, footer en .btn-cta
        in plaats van tegen hun regels te vechten, en draagt de secties zelf in eigen
        af-klassen. De andere pagina's laden hem niet. -->
-  <link rel="stylesheet" href="styles/affiche.css?v=26">
+  <link rel="stylesheet" href="styles/affiche.css?v=27">
 
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
   <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
@@ -657,9 +657,9 @@
         <aside class="af-faq-lees" aria-labelledby="lees-kop">
           <p class="af-lees-label" id="lees-kop">Verder lezen op de blog</p>
           <ul class="af-lees-lijst">
-            <li><span class="af-lees-pad" aria-hidden="true">/blog/leren-hacken</span><a href="/blog/leren-hacken.html" class="blog-link">Leren hacken: de complete beginnersgids</a></li>
-            <li><span class="af-lees-pad" aria-hidden="true">/blog/cybersecurity-tools</span><a href="/blog/cybersecurity-tools.html" class="blog-link">5 essentiële tools voor cybersecurity beginners</a></li>
-            <li><span class="af-lees-pad" aria-hidden="true">/blog/ethisch-hacker-worden</span><a href="/blog/ethisch-hacker-worden.html" class="blog-link">Hoe word je ethisch hacker?</a></li>
+            <li><a href="/blog/leren-hacken.html" class="blog-link">Leren hacken: de complete beginnersgids</a><span class="af-lees-pad" aria-hidden="true">/blog/leren-hacken</span></li>
+            <li><a href="/blog/cybersecurity-tools.html" class="blog-link">5 essentiële tools voor cybersecurity beginners</a><span class="af-lees-pad" aria-hidden="true">/blog/cybersecurity-tools</span></li>
+            <li><a href="/blog/ethisch-hacker-worden.html" class="blog-link">Hoe word je ethisch hacker?</a><span class="af-lees-pad" aria-hidden="true">/blog/ethisch-hacker-worden</span></li>
           </ul>
           <p class="af-lees-meer"><a href="/blog/">Alle artikelen</a></p>
         </aside>
@@ -791,11 +791,11 @@
   </div>
 
   <!-- Hero Terminal Animation -->
-  <script src="/src/ui/landing-demo.js?v=5" type="module"></script>
+  <script src="/src/ui/landing-demo.js?v=6" type="module"></script>
 
   <!-- Interactieve hero-REPL (extern bestand: script-src heeft geen 'unsafe-inline',
        netlify.toml:127). Draait ná landing-demo.js, want die publiceert window.landingDemo. -->
-  <script src="/src/ui/hero-repl.js?v=6" type="module"></script>
+  <script src="/src/ui/hero-repl.js?v=7" type="module"></script>
 
   <!-- FAQ Accordion -->
   <script src="src/ui/faq.js" defer></script>

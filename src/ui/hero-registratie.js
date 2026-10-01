@@ -116,6 +116,19 @@ function herstart(el, klasse) {
 }
 
 /**
+ * Zet het diagram terug in rust: geen actief blok, geen open poort. Voor de overname
+ * (finish review s247): de bezoeker begint met een lege terminal, dus de scan van de
+ * auto-demo is niet zijn kennis; gevulde poorten zonder hun regels braken de registratie.
+ */
+export function rustDiagram() {
+  const net = document.querySelector('.af-net');
+  if (!net) return;
+  net.classList.remove('is-scan');
+  net.querySelectorAll('.af-node').forEach((n) => n.classList.remove('is-actief'));
+  net.querySelectorAll('.af-poort').forEach((p) => p.classList.remove('is-open', 'is-scan', 'is-lit'));
+}
+
+/**
  * Het diagram antwoordt op elk command. Netwerkcommando's raken de router, lokale
  * commando's jouw machine, en `help` laat het in rust. Een scan is kennis: open poorten
  * blijven open staan nadat je iets anders typt.
