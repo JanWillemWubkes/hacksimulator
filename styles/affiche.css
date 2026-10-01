@@ -76,7 +76,14 @@ body.home {
   --af-kop: 'Archivo', 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif;
   --af-tekst: var(--font-body);
   --af-mono: var(--font-terminal);
-  --af-display: clamp(2.2rem, 4.6vw, 3.6rem);   /* max 64,8px: twee regels op negen kolommen */
+  --af-display: clamp(2.2rem, 4.6vw, 3.6rem);   /* max 64,8px: slotkop */
+  /* De h1 op afficheschaal, over alle twaalf kolommen (sessie 247, bolder). Tot dan stond
+     hij op --af-display over negen kolommen: 1,26x de sectiekop, en het zwaarste vlak van
+     het eerste scherm was de terminal, niet de kop. Het plafond is de rasterbreedte, niet
+     de viewport: het raster stopt op 1400px, en 6rem (108px) gaf op 1920 drie regels.
+     4.9rem = 88,2px past in twee regels op 1336px tekstbreedte. Onder ~570px wint
+     2.2rem: 40px gaf op 375 vijf regels, 35,2 vier. */
+  --af-affiche: clamp(2.2rem, 6.2vw, 4.9rem);
   --af-h2: clamp(1.75rem, 3.3vw, 2.85rem);      /* max 51,3px */
   --af-h3: 1.22rem;                              /* 22px */
   --af-klein: 0.83rem;                           /* 15px: labels, herkomst, glos */
@@ -906,7 +913,7 @@ body.home .hero-chip.is-next:focus-visible .af-chip-nr {
 
 .af-node-naam {
   font-family: var(--af-kop);
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   font-weight: 800;
   line-height: 1.15;
 }
@@ -970,15 +977,26 @@ body.home .hero-chip.is-next:focus-visible .af-chip-nr {
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 4px;
   padding: 0 var(--af-cel) var(--af-cel);
+  /* De letter rekent tegen de sleuf, niet tegen de viewport (sessie 247). Een sleuf is
+     (100cqw - 11 x 4px) / 12; vier mono-tekens (0,6em) plus 4px lucht passen bij
+     3,4cqw - 4px, drie open tekens bij 4,5cqw - 5px. De vaste maat is het plafond: op 1440
+     verandert er niets, op 1024-1184 en 320-336 krimpt hij (gemeten: "3306", "8080" en
+     open "443" zonder 4px lucht in hun sleuf). Een eigen container: geen subgrid. */
+  container-type: inline-size;
+  --af-poort-letter: min(1rem, calc(3.4cqw - 4px));
+  --af-poort-open: min(1.3rem, calc(4.5cqw - 5px));
 }
 
+/* De sleuven zijn het memorabele moment (sessie 247): een open poort is de zwaarste
+   inversie van het eerste scherm. Tot dan 30px hoog in 0.78rem, even zwaar als een chip,
+   zodat diagram en chips als één tabel lazen. */
 .af-poort {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 30px;
+  min-height: 56px;
   font-family: var(--af-mono);
-  font-size: 0.78rem;
+  font-size: var(--af-poort-letter);
   color: var(--af-inkt-2);
   background: var(--af-papier-2);
   transition: background-color var(--af-registratie) var(--af-ease), color var(--af-registratie) var(--af-ease);
@@ -987,11 +1005,62 @@ body.home .hero-chip.is-next:focus-visible .af-chip-nr {
 .af-poort.is-open {
   background: var(--af-inkt);
   color: var(--af-papier);
+  font-size: var(--af-poort-open);
   font-weight: 700;
 }
 
 .af-poort.is-lit {
   transition: none;
+}
+
+/* ---------- De scan (sessie 247, overdrive) ----------
+   Het memorabele moment zonder klik: de reeks rolt regel voor regel uit (.reg.is-rol), de
+   scanpijl tekent zich van jouw machine naar de router, en elke open poort springt invers
+   open op de tik van zijn regel. De vertragingen zet hero-registratie.js (STAP_MS); hier
+   staat alleen de vorm. Alles beweegt vanuit een zichtbare eindstand: zonder animatie
+   (reduced motion, een meting) staat er meteen het eindbeeld. */
+.reg.is-rol {
+  animation: af-rol 180ms var(--af-ease) var(--reg-vertraging, 0ms) backwards;
+}
+
+@keyframes af-rol {
+  from { clip-path: inset(0 100% 0 0); }
+}
+
+.af-net.is-scan .af-lijn::before {
+  transform-origin: left center;
+  animation: af-scan var(--scan-duur, 360ms) var(--af-ease) backwards;
+}
+
+.af-net.is-scan .af-lijn::after {
+  animation: af-pijl var(--scan-duur, 360ms) step-end backwards;
+}
+
+@keyframes af-scan {
+  from { transform: scaleX(0); }
+}
+
+@keyframes af-scan-omlaag {
+  from { transform: scaleY(0); }
+}
+
+@keyframes af-pijl {
+  from { opacity: 0; }
+}
+
+/* Een open poort draagt tot zijn regel verschijnt de gesloten vorm; daarna springt hij
+   zonder overgang om. `is-open` staat al: de toestand is waar, het beeld wacht. */
+.af-poort.is-open.is-scan {
+  animation: af-poort-wacht var(--poort-vertraging, 0ms) step-end;
+}
+
+@keyframes af-poort-wacht {
+  from, to {
+    background-color: var(--af-papier-2);
+    color: var(--af-inkt-2);
+    font-size: var(--af-poort-letter);
+    font-weight: 400;
+  }
 }
 
 .af .af-net-kop {
@@ -1004,9 +1073,8 @@ body.home .hero-chip.is-next:focus-visible .af-chip-nr {
 }
 
 /* ---------- Kop en actie ---------- */
-/* Het instappunt: de kop over negen kolommen, ondertitel en actie samen in de laatste
-   drie, onderaan uitgelijnd op de kop. Zo is de rij zo hoog als het hoogste van de twee,
-   niet de som. */
+/* Het instappunt: de kop op afficheschaal over alle twaalf kolommen; ondertitel en actie
+   eronder (zie de regel vanaf 1280px). */
 .af-hero-tekst {
   grid-column: 1 / -1;
   display: grid;
@@ -1017,11 +1085,11 @@ body.home .hero-chip.is-next:focus-visible .af-chip-nr {
 }
 
 .af-hero-tekst h1 {
-  grid-column: 1 / 10;
-  font-size: var(--af-display);
+  grid-column: 1 / -1;
+  font-size: var(--af-affiche);
   font-weight: 700;
-  line-height: 0.98;
-  letter-spacing: -0.012em;
+  line-height: 0.94;
+  letter-spacing: -0.02em;
   padding-right: var(--af-cel);
 }
 
@@ -1053,10 +1121,10 @@ body.home .hero-chip.is-next:focus-visible .af-chip-nr {
   gap: 8px;
 }
 
-/* Desktop: de actie staat naast de kop, op zijn onderste regel; de ondertitel eronder,
-   onder de kop. Stond de ondertitel naast de kop, dan werd die kolom (vier regels + knop)
-   hoger dan de kop en zakte het instappunt 100px (gemeten: kop op 197 i.p.v. ~100).
-   `display: contents` en geen `order`: de DOM-volgorde kop → ondertitel → actie blijft de
+/* Desktop: de kop over de volle breedte, daaronder de ondertitel (kolom 1-8) en de actie
+   (kolom 10-12) op één rij. Stond de ondertitel naast de kop, dan werd die kolom (vier
+   regels + knop) hoger dan de kop en zakte het instappunt 100px (gemeten: kop op 197 i.p.v.
+   ~100). `display: contents` en geen `order`: de DOM-volgorde kop → ondertitel → actie blijft de
    leesvolgorde, en de actie is het enige focusbare element van de drie.
    Pas vanaf 1280px: daaronder is de kolom naast de kop 3/12 van ~1000px en brak de knop
    over twee regels (gemeten @1024). Het is ook de grens van de mobiele CTA-balk. */
@@ -1072,33 +1140,20 @@ body.home .hero-chip.is-next:focus-visible .af-chip-nr {
   .af .af-hero-sub {
     grid-column: 1 / 9;
     grid-row: 2;
+    align-self: start;   /* de actie ernaast is hoger; met `end` zakte de ondertitel 25px */
     padding-top: 10px;
   }
 
-  /* De knop staat óp de onderste kopregel: zijn onderkant op de basislijn van regel 2, de
-     microcopy eronder op de rij van de ondertitel. Tot sessie 246 stonden knop en
-     microcopy samen onderaan rij 1, en zat de knop 20,7px (1440) boven die basislijn,
-     gecentreerd op het kopblok. 0,165 is de afstand basislijn → onderkant kopregel,
-     gemeten in Archivo 700 bij line-height 0,98 (0,162-0,168 over 1280-1920). */
+  /* De actie staat op de rij van de ondertitel, in kolom 10-12: de knop op de hoogte van
+     zijn eerste regel, de microcopy eronder (sessie 247). Tot dan stond de knop naast de
+     kop, met zijn onderkant op de basislijn van kopregel 2; de kop gaat nu over alle
+     twaalf kolommen, dus naast de kop is geen plaats meer. */
   .af-hero-zij .af-actie {
-    display: contents;
-  }
-
-  .af-hero-zij .af-cta {
-    grid-column: 10 / -1;
-    grid-row: 1;
-    align-self: end;
-    justify-self: start;
-    margin-left: var(--af-cel);
-    margin-bottom: calc(var(--af-display) * 0.165);
-  }
-
-  .af-hero-zij .af-microcopy {
     grid-column: 10 / -1;
     grid-row: 2;
     align-self: start;
-    margin-left: var(--af-cel);   /* marge, geen padding: de papieren achtergrond van */
-    margin-top: 10px;             /* hero-alinea's zou anders de rasterlijn afdekken */
+    display: flex;
+    padding: 10px 0 0 var(--af-cel);   /* 10px = padding-top van de ondertitel */
   }
 
   /* Het onderschrift als onderschriftkolom: onder "jouw machine", in de ruimte die naast
@@ -1114,7 +1169,7 @@ body.home .hero-chip.is-next:focus-visible .af-chip-nr {
     grid-row: 2;
     align-self: end;
     padding: 0 var(--af-cel) 0 0;
-    line-height: 1.35;            /* twee regels binnen de 48px naast de poortrij */
+    line-height: 1.35;            /* twee regels naast de poortrij */
   }
 }
 
@@ -1505,8 +1560,28 @@ body.home .af-faq .faq-answer p {
 }
 
 /* ==================== Slot ==================== */
+/* De slotklap op inkt (sessie 247): de enige inktband onder de hero, met de rode actie
+   erop. Tot dan was de sample de inktband en stond het slot op papier; een slot op inkt
+   direct boven een inkten sample gaf ~1000px aaneengesloten zwart (finish review s246).
+   Nu wisselen ze: band (vragen), inkt (slot), papier (sample), band (nieuwsbrief). */
 .af-slot {
-  border-top: 1px solid var(--af-inkt);
+  background: var(--af-inkt);
+  color: var(--af-papier);
+}
+
+body.home .af-slot h2,
+body.home .af-slot-zin,
+body.home .af-slot .af-microcopy,
+body.home .af-slot .af-microcopy a {
+  color: var(--af-papier);
+}
+
+/* Op inkt inverteert de actie naar papier, niet naar inkt: anders verdwijnt hij in zijn
+   grond (The Inversion Rule: binnen een geïnverteerd blok inverteert het label terug). */
+body.home .af-slot .btn-cta.af-cta:hover,
+body.home .af-slot .btn-cta.af-cta:focus-visible {
+  background: var(--af-papier);
+  color: var(--af-inkt);
 }
 
 .af-slot h2 {
@@ -1530,20 +1605,21 @@ body.home .af-faq .faq-answer p {
 
 
 /* ==================== Sample ==================== */
+/* Op papier sinds sessie 247 (zie Slot): een inleiding, een inhoudstabel en twee knoppen
+   lezen hier als naslag, niet als finale. De HTML houdt .af-band; deze regel komt later
+   en wint met dezelfde specificiteit. */
 .af-sample {
-  background: var(--af-inkt);
-  color: var(--af-papier);
+  background: var(--af-papier);
+  color: var(--af-inkt);
 }
 
 .af-sample h2 {
   grid-column: 1 / 8;
-  color: var(--af-papier);
 }
 
 .af-sample p {
   grid-column: 8 / -1;
   padding-left: var(--af-cel);
-  color: var(--af-papier);
   max-width: 60ch;
 }
 
@@ -1559,7 +1635,7 @@ body.home .af-faq .faq-answer p {
 
 /* De inhoud van de sample links naast de knoppen, bovenlijn op de rij van de knop (zoals
    de glos naast zijn regel). Dezelfde grammatica als de cijfertabel: haarlijnen, mono-index
-   vooraan, bron rechts in mono; de lijnen in papier op 35% omdat dit de inktband is.
+   vooraan, bron rechts in mono; een bovenlijn van 2px in inkt, rijen in de bedieningslijn.
    align-self: start, anders rekte de rij hem op tot knop plus gebroken link. */
 .af-sample-inhoud {
   grid-column: 1 / 8;
@@ -1576,12 +1652,11 @@ body.home .af-faq .faq-answer p {
   align-items: baseline;
   column-gap: var(--af-cel);
   padding: 10px 0;
-  border-top: 1px solid color-mix(in srgb, var(--af-papier) 35%, transparent);
-  color: var(--af-papier);
+  border-bottom: 1px solid var(--af-lijn-sterk);
 }
 
-.af-sample-inhoud li:last-child {
-  border-bottom: 1px solid color-mix(in srgb, var(--af-papier) 35%, transparent);
+.af-sample-inhoud li:first-child {
+  border-top: 2px solid var(--af-inkt);
 }
 
 .af-inhoud-nr,
@@ -1596,25 +1671,6 @@ body.home .af-faq .faq-answer p {
 
 .af-inhoud-p {
   white-space: nowrap;
-}
-
-/* Op inkt zijn de rollen omgedraaid: papieren kader, papieren letter. */
-body.home .af-sample a {
-  color: var(--af-papier);
-}
-
-body.home .af-sample a.af-knop {
-  border-color: var(--af-papier);
-}
-
-body.home .af-sample a.af-knop--vol {
-  background: var(--af-papier);
-  color: var(--af-inkt);
-}
-
-body.home .af-sample a.af-knop--vol:hover {
-  background: transparent;
-  color: var(--af-papier);
 }
 
 /* ==================== Nieuwsbrief ==================== */
@@ -1913,6 +1969,9 @@ body.home .cookie-banner .btn-small.btn-secondary:focus-visible {
      mobiel. */
   .af-poorten {
     grid-template-columns: repeat(6, minmax(0, 1fr));
+    /* Zes per rij: sleuf (100cqw - 5 x 4px) / 6, zelfde rekensom als hierboven. */
+    --af-poort-letter: min(1rem, calc(6.8cqw - 4px));
+    --af-poort-open: min(1.3rem, calc(9cqw - 5px));
   }
 
   .af-kop h2,
@@ -2098,6 +2157,12 @@ body.home .cookie-banner .btn-small.btn-secondary:focus-visible {
     transform: rotate(135deg);
   }
 
+  /* Verticaal: de scan tekent zich omlaag. */
+  .af-net.is-scan .af-lijn::before {
+    transform-origin: center top;
+    animation-name: af-scan-omlaag;
+  }
+
   .af-lijn span {
     padding: 0;
     background: none;
@@ -2185,6 +2250,14 @@ body.home .cookie-banner .btn-small.btn-secondary:focus-visible {
   body.home .btn-cta.af-cta,
   body.home .hero-chip {
     transition: none;
+  }
+
+  /* hero-registratie.js zet deze klassen onder reduce niet; dit is het vangnet. */
+  .reg.is-rol,
+  .af-poort.is-open.is-scan,
+  .af-net.is-scan .af-lijn::before,
+  .af-net.is-scan .af-lijn::after {
+    animation: none;
   }
 
 }

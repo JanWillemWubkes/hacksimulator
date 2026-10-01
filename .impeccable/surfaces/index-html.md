@@ -49,10 +49,10 @@ gelooft dat hij hier niets kan breken, en opent de simulator. Wie twijfelt tikt 
 commando en ziet het diagram antwoorden.
 
 **FIRST VIEWPORT.** Maximaal 1400px, 12 kolommen, haarlijnen zichtbaar. Bovenaan de kop
-op afficheschaal over negen kolommen: het instappunt en het beeld van het affiche. Vanaf
-1280px staat de enige rode actie, "Start de simulator" met "geen account nodig", in de
-laatste drie kolommen op de onderste kopregel, en de ondertitel onder de kop; daaronder
-alles onder elkaar. Dan links de terminalmodule over zeven kolommen met de nmap-uitvoer,
+op afficheschaal over alle twaalf kolommen (88px op 1440, sessie 247): het instappunt en het
+beeld van het affiche. Vanaf 1280px staan daaronder de ondertitel (kolom 1-8) en de enige
+rode actie, "Start de simulator" met "geen account nodig", in de laatste drie kolommen op
+één rij; daaronder alles onder elkaar. Dan links de terminalmodule over zeven kolommen met de nmap-uitvoer,
 rechts daarvan op dezelfde rasterrijen de Nederlandse glos per regel. Die grammatica geldt
 voor elke rij van de module: de kolomkop "In gewoon Nederlands" staat naast de
 terminalkop, en de uitnodiging ("Werkt echt: typ hier, of tik hieronder een command.") is
@@ -63,7 +63,10 @@ zin: jouw machine, een scan-pijl, en het routerblok met de twaalf poorten als sl
 één onderschrift zegt dat een gevulde poort open staat, vanaf 1280px in de kolom onder
 jouw machine, met zijn onderkant op die van de router. Onder 768px: een kolom, glos onder
 zijn regel, de uitnodiging onder de invoer, de scan-pijl verticaal.
-**De vouw (sessie 241):** op 1440x900 en 1280x800 staan terminal, chips en de poorten van de
+**De vouw (sessie 241, herzien in sessie 247):** sinds de afficheschaal geldt de pixelvouw
+op 1440x900 (diagram 889/900) en 1024x768; op 1280x800 staan de poorten 64px onder de vouw
+(864/800) en speelt de scan opnieuw zodra het diagram in beeld komt (zie "Bolder (sessie
+247)"). Oorspronkelijk: op 1440x900 en 1280x800 staan terminal, chips en de poorten van de
 router samen boven de vouw (gemeten bodem 788 en 770; vóór 949 en 927). Op 1024x768 valt de
 vouw na de terminal: daar moeten kop, actie en de héle terminal met zijn uitnodiging boven
 staan (invoerregel eindigt op 663). Bewaakt in `hero-demo.spec.js` "De vouw". De terminal
@@ -440,16 +443,98 @@ ingebedde herkomst: allemaal bestaand (productcovers, screenshots), geen ervan g
 pagina. Niet ingebed: dat wijzigt binaire bestanden sitebreed voor een pagina die er geen levert.
 Als herkomst sitebreed gewenst is: een eigen taak.
 
+## Bolder (sessie 247)
+
+**Aanleiding.** Verdict `ship` in sessie 246, en toch van de eigenaar: "strak, maar oogt niet
+uniek". Een review toetst het contract, niet de ambitie; dit contract was zelf ingetoomd.
+`impeccable` geladen; `bolder.md`, `overdrive.md`, `animate.md`, daarna `craft-floor.md`.
+
+**Eigen pass (1440 en 375, beide thema's via de schakelaar, transities bevroren).**
+- Skeleton test: zonder copy las het eerste scherm als dashboard (kop, zwart blok, rij vakjes,
+  rij vakjes). Chips en diagram droegen dezelfde celvorm en hetzelfde gewicht.
+- De h1 (64,8px) was 1,26x de sectiekop; het zwaarste vlak was de terminal, niet de kop. Kolom
+  10-12 boven de knop was leeg papier.
+- "Het moment zit achter een klik": half waar. De auto-demo opende met nmap, maar de poorten
+  flitsten 450ms bij laden terwijl het oog op de kop stond, en het hele moment kwam pas na
+  14,9s terug. Op 375 stond het diagram 290px onder de vouw: daar nooit gezien.
+- Rood: 1,07% van de viewport op 1440.
+
+**Proeven** (`.playwright-mcp/s247-proef-{0,A,B,C,AC,onder}.png`, gelijke maat, licht en donker):
+
+| | 1440 `.af-net` (≤900) | 1280 (≤800) | 1024 invoer (≤768) | rood |
+|---|---|---|---|---|
+| nu | 788 | 770 | 663 | 1,07% |
+| A: kop over 12 kolommen, 6,7vw | 883 | 856 | 700 | 1,07% |
+| B: rood vlak kolom 10-12 | 788 | 770 | 716 | 3% op 1440, 12-14% op 1024/375 |
+| C: diagram groter + scan speelt zelf | 815 | 797 | 663 | 1,07% |
+| A+C, 6,2vw | 897 | 871 | 690 | 1,07% |
+
+**Besluit (go eigenaar): A+C, plus de omwisseling slot/sample. B niet.** A geeft het
+statische affiche, C het ene moment. B las op 1440 als een grotere knop en werd op smal
+opdringerig (12-14% rood); het rood blijft de actie. Bolder.md: "commit, then quiet
+everything around it": een schaalzet en een moment, niet drie.
+
+**Gebouwd** (gemeten na de bouw):
+- `--af-affiche: clamp(2.2rem, 6.2vw, 4.9rem)` voor de h1, over 1/-1, lh 0,94, -0,02em. Het
+  plafond is de rasterbreedte: 6rem gaf op 1920 drie regels. 1440: 88,2px, kop 89-255;
+  verhouding tot de sectiekop 1,86. Op 375 blijft 35,2px (40px gaf vijf regels).
+- Vanaf 1280 is `.af-actie` een blok in kolom 10-12 op de rij van de ondertitel, de knop op
+  haar eerste regel (267 = 257 + 10), de microcopy eronder.
+- Poorten 56px, 1rem, open 1,3rem; bloknamen 1.4rem. De open poorten zijn de zwaarste
+  inversies van het scherm.
+- De scan: de reeks rolt regel voor regel uit (`clip-path`, 90ms per regel, alleen de regels in
+  het venster tellen), bij nmap tekent eerst de pijl zich (360ms, `--scan-duur`), en elke open
+  poort springt open op de tik van zijn regel. `is-open` staat meteen: de toestand is waar, het
+  beeld wacht. Speelt bij laden, en één keer opnieuw als het diagram pas later voor 60% in
+  beeld komt (1280x800, mobiel). Onder reduced motion: de eindstand, op beide paden.
+- Slot op inkt (slotactie inverteert naar papier), sample op papier (tabel met bovenlijn 2px
+  inkt, rijen in de bedieningslijn). Volgorde: band, inkt, papier, band.
+
+**Teruggedraaide besluiten, met prijs:**
+- *De vouw op 1280x800* (sessie 241): poorten 864/800. De guard toetst daar nu de bedoeling
+  (de scan speelt als het diagram in beeld komt, één keer), met een tak die faalt zodra de
+  poorten weer boven de vouw staan. 1440 en 1024 houden de pixelvouw.
+- *De koppenmaat bewust klein* (sessie 240): vervallen, met de vouw gemeten (zie boven).
+- *CTA op de basislijn van kopregel 2* (finish review s246, #6): naast de kop is geen plaats
+  meer. Nu: actie op de rij van de ondertitel.
+- *Eén beweging per command* (signatuur): wordt één reeks per command, regel voor regel.
+- *De sample als enige inktband* (sessie 242): het slot is nu die band.
+- Roodbudget ongewijzigd: één drager per scherm, een primaire actie.
+
+**Bewaakt.** `hero-demo` "De scan" (laden 1440 met de scan in beeld en geen tweede; 1280
+replay één keer, met zelfbewakende tak; poort op de tik van zijn regel en na de pijl; reduced
+motion bij laden én bij zelf typen) en "De vouw" (1440, 1024). `homepage-conversion`: kop op
+afficheschaal (2 regels, stap ≥1,7, knop op de eerste regel van de ondertitel, microcopy
+eronder, 1280-1920) en slot/sample per thema (met de hero-hover als tak tegen lekken). Negen
+mutanten, elk geserveerd gecontroleerd en elk op een eigen assertie. Twee lessen onderweg: een
+mutant (`flex-direction: row`) landde maar veranderde niets door `flex-wrap`; en de
+reduced-motion-guard keek alleen naar het laadpad, waar `lichtOp` onder reduce nooit wordt
+aangeroepen. Achteraf `getAnimations()` lezen na `goto` was flaky (de reeks kan voor `load`
+voorbij zijn); de guard logt `animationstart` vanaf de eerste byte.
+
+**Gate 1: 838 passed, 17 skipped, 3 failed**, één test in drie motoren: "Hero op elke
+breedte … per 8px", poortlabel zonder 4px lucht op 320-336 en 1024-1184 ("3306", "8080", open
+"443"). Mijn eigen meting keek naar 1440, 1280 en 375, niet per breedte; de guard van sessie
+243 ving het. Fix: de poortrij is een container en de letter rekent tegen de sleuf
+(`min(1rem, calc(3.4cqw - 4px))`, open `min(1.3rem, calc(4.5cqw - 5px))`, zes per rij
+`6.8cqw`/`9cqw`). 1440 ongewijzigd (18 / 23,4px), 1024 14 / 18,9px, 320 13,8 / 18,6px. De
+gate zelf was de mutant: met de vaste maat vuurde precies deze assertie.
+
+**Budget:** runtime 1082,35 → 1089,73 / 1120 KB (vóór de poortfix).
+
 ## Memorabel moment
 
-Je tikt `nmap 192.168.1.1`. Links rolt de poortuitvoer uit, rechts verschijnt per regel de
-Nederlandse uitleg op dezelfde rij, en in het diagram eronder springen drie uitsparingen in
-het hostblok invers open: 53, 80, 443. Het netwerk dat je niet kon zien, staat nu op papier.
+Je tikt `nmap 192.168.1.1`, of je doet niets: bij laden, en als het diagram pas later in beeld
+komt, speelt het vanzelf. Eerst tekent de scanpijl zich van jouw machine naar de router.
+Links rolt de poortuitvoer uit, rechts verschijnt per regel de Nederlandse uitleg op dezelfde
+rij, en in het diagram eronder springen drie uitsparingen in het hostblok invers open, elk op
+de tik van zijn regel: 53, 80, 443. Het netwerk dat je niet kon zien, staat nu op papier.
 
 ## Signatuurinteractie
 
-De registratie: outputregel, glos en diagramuitsparing lichten als een rij tegelijk op. Een
-beweging per commando, geen typanimatie, en `prefers-reduced-motion` toont de eindstand.
+De registratie: outputregel, glos en diagramuitsparing lichten als een rij tegelijk op. Eén
+reeks per command, regel voor regel (90ms), geen typanimatie per letter; een poort springt
+open op de tik van zijn regel. `prefers-reduced-motion` toont de eindstand.
 
 ## Nog niet besloten
 
@@ -464,8 +549,8 @@ Besloten in sessie 240 (typeset, na een letterproef op gelijke maat en breedte):
   de knop draagt), rood op papier 5,02 (AAA grote tekst ≥4,5; de knoptekst is `max(1.15rem,
   19px)`, 20,7px vet op 1440). Warmer gaat onder de lat: #d4380d 4,17,
   #e0401f 3,70. Fout in de terminal is zalm (--af-m-fout), geen signaalrood.
-- De koppenmaat is bewust niet vergroot: dat duwt terminal en diagram verder onder de
-  vouw. Maat beslissen met de vouw erbij gemeten.
+- De koppenmaat: besloten in sessie 247, met de vouw erbij gemeten. De h1 gaat naar
+  afficheschaal (`--af-affiche`, 88px op 1440); prijs en guard staan in "Bolder (sessie 247)".
 
 - Het donkere thema: het geïnverteerde affiche (inkt als grond, papier als letter). Blijft
   verplicht, want de themaschakelaar bestaat sitebreed.

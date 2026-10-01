@@ -1235,6 +1235,12 @@ test.describe('Het diagram antwoordt op elk command', () => {
 // fix: onderkant .af-net op 949/900 (1440), 927/800 (1280), 1071/768 (1024). Daarna
 // 788 en 770. Op 1024 is de afspraak kleiner: de hele terminal, tot en met de invoerregel
 // en zijn uitnodiging, want dat is het bewijs en het instappunt.
+//
+// Sessie 247 (bolder): de h1 ging naar afficheschaal (88px over twaalf kolommen) en de
+// poorten naar 56px. Gemeten prijs: 1440x900 houdt het (diagram 889/900), 1280x800 niet
+// (poorten 864/800, 71px eronder in de proef A+C). De vouw bestond om het moment in beeld
+// te houden; op 1280 toetst "De scan" hieronder dat nu direct: het speelt opnieuw zodra
+// het diagram in beeld komt. De pixelvouw geldt nog op 1440 en 1024.
 test.describe('De vouw: terminal en diagram samen in beeld', () => {
   async function meet(page, viewport) {
     await page.addInitScript(() => {
@@ -1262,7 +1268,7 @@ test.describe('De vouw: terminal en diagram samen in beeld', () => {
     });
   }
 
-  for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 800 }]) {
+  for (const viewport of [{ width: 1440, height: 900 }]) {
     test(`@${viewport.width}x${viewport.height} staan de poorten van de router boven de vouw`, async ({ page }) => {
       const m = await meet(page, viewport);
       // Zelfbewakend: twaalf zichtbare poorten, en de terminal houdt zijn zeven regels.
@@ -1293,5 +1299,124 @@ test.describe('De vouw: terminal en diagram samen in beeld', () => {
     expect(m.hint.left, 'uitnodiging staat niet rechts van de module').toBeGreaterThanOrEqual(m.invoer.right - 1);
     expect(Math.abs(midden(m.hint) - midden(m.invoer)), 'uitnodiging niet op de rij van de invoerregel')
       .toBeLessThanOrEqual(2);
+  });
+});
+
+// De scan (sessie 247, overdrive). Het memorabele moment speelt zonder klik: bij laden, en
+// nog één keer als het diagram pas later in beeld komt. De rijen staan meteen in de DOM;
+// het beeld wacht (clip-path per regel, poort per regel). Deze tests lezen de lopende
+// animaties via getAnimations(), want het moment ís de timing.
+test.describe('De scan: het moment speelt waar je kijkt', () => {
+  // Gelogd vanaf de eerste byte via animationstart, niet achteraf via getAnimations(): goto
+  // wacht op `load`, en de laadreeks (~1,1s) kan dan al voorbij zijn (flaky in de eerste
+  // versie van deze test).
+  const voorbereid = (page) => page.addInitScript(() => {
+    localStorage.setItem('hacksim_analytics_consent', JSON.stringify({ necessary: true, analytics: false }));
+    window.__scan = [];
+    document.addEventListener('animationstart', (e) => {
+      if (/^af-(scan|poort-wacht|rol)/.test(e.animationName)) window.__scan.push(e.animationName);
+    });
+  });
+  const leesLog = (page) => page.evaluate(() => window.__scan.splice(0));
+  const tel = (log, naam) => log.filter((n) => n === naam).length;
+
+  test('@1440x900 speelt de scan bij laden, met het diagram in beeld, en niet nog eens', async ({ page }) => {
+    await voorbereid(page);
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/index.html');
+    await page.waitForTimeout(1500);
+    const bijLaden = await leesLog(page);
+    expect(tel(bijLaden, 'af-scan'), 'bij laden speelt geen scanpijl').toBe(1);
+    expect(tel(bijLaden, 'af-poort-wacht'), 'bij laden springen niet drie poorten open').toBe(3);
+    await page.evaluate(() => document.querySelector('.af-net').scrollIntoView({ block: 'center' }));
+    await page.waitForTimeout(1200);
+    // Alleen scans tellen: de lus speelt intussen gewoon `ls` (af-rol), en onder last valt
+    // dat binnen dit venster.
+    expect(tel(await leesLog(page), 'af-scan'), 'het diagram was al in beeld; een tweede scan is ruis').toBe(0);
+  });
+
+  test('@1280x800 speelt de scan opnieuw zodra het diagram in beeld komt, één keer', async ({ page }) => {
+    await voorbereid(page);
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/index.html');
+    const m = await page.evaluate(() => ({
+      vh: innerHeight,
+      poortBodem: Math.max(...[...document.querySelectorAll('.af-poort')].map((p) => p.getBoundingClientRect().bottom)),
+      poorten: document.querySelectorAll('.af-poort').length,
+    }));
+    // Zelfbewakend: deze test bestaat omdat de poorten hier onder de vouw staan. Komen ze
+    // erboven, dan hoort 1280 terug in "De vouw" en toetst deze tak niets meer.
+    expect(m.poorten, 'niet alle twaalf poorten renderen').toBe(12);
+    expect(m.poortBodem, 'de poorten staan boven de vouw: zet 1280 terug in De vouw').toBeGreaterThan(m.vh);
+
+    await page.waitForTimeout(1500);
+    expect(tel(await leesLog(page), 'af-scan'), 'de laadreeks speelde niet').toBe(1);
+
+    await page.evaluate(() => document.querySelector('.af-net').scrollIntoView({ block: 'center' }));
+    await page.waitForTimeout(1200);
+    const inBeeld = await leesLog(page);
+    expect(tel(inBeeld, 'af-scan'), 'de scanpijl speelt niet als het diagram in beeld komt').toBe(1);
+    expect(tel(inBeeld, 'af-poort-wacht'), 'de poorten springen niet opnieuw open').toBe(3);
+
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(150);
+    await page.evaluate(() => document.querySelector('.af-net').scrollIntoView({ block: 'center' }));
+    await page.waitForTimeout(1200);
+    expect(tel(await leesLog(page), 'af-scan'), 'de scan speelt vaker dan één keer bij in beeld komen').toBe(0);
+  });
+
+  test('elke poort springt open op de tik van zijn regel, na de scanpijl', async ({ page }) => {
+    await voorbereid(page);
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/index.html');
+    await neemOver(page);
+    await typ(page, 'nmap 192.168.1.1');
+    const r = await page.evaluate(() => {
+      const ms = (el, v) => parseFloat(el.style.getPropertyValue(v));
+      const rijen = [...document.querySelectorAll('#hero-demo .reg')];
+      const scan = parseFloat(document.querySelector('.af-net').style.getPropertyValue('--scan-duur'));
+      return ['53', '80', '443'].map((p) => {
+        const regel = rijen.filter((x) => x.querySelector('.terminal-line').textContent.trimStart().startsWith(`${p}/tcp`)).pop();
+        const poort = document.querySelector(`.af-poort[data-poort="${p}"]`);
+        return { p, regel: ms(regel, '--reg-vertraging'), poort: ms(poort, '--poort-vertraging'), scan,
+                 open: poort.classList.contains('is-open') };
+      });
+    });
+    // Zelfbewakend: de toestand is meteen waar (een scan is kennis), alleen het beeld wacht.
+    expect(r.map((x) => x.open), 'is-open hoort meteen te staan').toEqual([true, true, true]);
+    for (const x of r) {
+      expect(x.poort, `poort ${x.p} springt niet op zijn regel (${x.poort} tegen ${x.regel}ms)`).toBe(x.regel);
+      expect(x.poort, `poort ${x.p} opent vóór de scanpijl er is`).toBeGreaterThanOrEqual(x.scan);
+    }
+    expect(r[0].poort < r[1].poort && r[1].poort < r[2].poort, 'de poorten openen niet in de volgorde van de uitvoer').toBe(true);
+  });
+
+  test('reduced motion: de eindstand meteen, bij laden en bij zelf typen', async ({ page }) => {
+    await voorbereid(page);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/index.html');
+    const staat = () => page.evaluate(() => ({
+      reduce: matchMedia('(prefers-reduced-motion: reduce)').matches,
+      rol: document.querySelectorAll('.reg.is-rol').length,
+      scan: document.querySelectorAll('.is-scan').length,
+      open: [...document.querySelectorAll('.af-poort.is-open')].map((p) => p.dataset.poort).sort(),
+      regels: document.querySelectorAll('#hero-demo .reg').length,
+    }));
+    const m = await staat();
+    expect(m.reduce, 'reduced motion kwam niet aan; de test meet het standaardgedrag').toBe(true);
+    expect(m.regels, 'het nmap-frame staat er niet').toBeGreaterThan(6);
+    expect(m.open, 'de eindstand mist zijn open poorten').toEqual(['443', '53', '80']);
+    expect(m.rol + m.scan, 'bij laden onder reduced motion: toch een reeks of scan').toBe(0);
+
+    // Het tweede pad: de auto-demo roept lichtOp onder reduce niet eens aan, dus alleen het
+    // getypte command toetst de eigen weigering van lichtOp en zetDiagram.
+    await neemOver(page);
+    await typ(page, 'nmap 192.168.1.1');
+    const t = await staat();
+    expect(t.rol, 'zelf typen onder reduced motion: de uitvoer rolt toch uit').toBe(0);
+    expect(t.scan, 'zelf typen onder reduced motion: de scan speelt toch').toBe(0);
+    await page.waitForTimeout(300);
+    expect(await leesLog(page), 'er startten scananimaties onder reduced motion').toEqual([]);
   });
 });

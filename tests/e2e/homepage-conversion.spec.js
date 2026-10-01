@@ -1275,28 +1275,65 @@ test.describe('Finish review (sessie 246)', () => {
     expect(gebroken, 'geen enkele regel brak op smal — de inspringing is niet getoetst').toBeGreaterThan(5);
   });
 
-  test('vanaf 1280 staat de knop op de onderste kopregel, de microcopy op de rij van de ondertitel', async ({ page }) => {
+  // Sessie 247 (bolder): de kop gaat over alle twaalf kolommen op afficheschaal, dus de
+  // knop kan niet meer naast hem staan. Tot dan (s246) stond hij met zijn onderkant op de
+  // basislijn van kopregel 2; nu op de rij van de ondertitel, op de hoogte van haar eerste
+  // regel, met de microcopy eronder. De schaalstap kop:sectiekop is de reden van de zet.
+  test('vanaf 1280 gaat de kop op afficheschaal over de breedte, en staat de actie op de rij van de ondertitel', async ({ page }) => {
     for (const breedte of [1280, 1366, 1440, 1920]) {
       await page.setViewportSize({ width: breedte, height: 900 });
       await page.goto('/index.html');
       const m = await page.evaluate(() => {
         const h1 = document.querySelector('.af-hero-tekst h1');
-        const probe = document.createElement('span'); probe.style.cssText = 'display:inline-block;width:0;height:0';
-        h1.appendChild(probe); const basis = probe.getBoundingClientRect().bottom; probe.remove();
         const g = document.createRange(); g.selectNodeContents(h1);
         const regels = new Set([...g.getClientRects()].map((r) => Math.round(r.top))).size;
         const knop = document.querySelector('.af-hero-zij .af-cta').getBoundingClientRect();
         const micro = document.querySelector('.af-hero-zij .af-microcopy').getBoundingClientRect();
         const sub = document.querySelector('.af-hero-sub');
         const subTekst = parseFloat(getComputedStyle(sub).paddingTop) + sub.getBoundingClientRect().top;
-        return { basis, regels, knopOnder: knop.bottom, knopL: knop.left, microTop: micro.top, microL: micro.left, subTekst };
+        const fs = (el) => parseFloat(getComputedStyle(el).fontSize);
+        return { regels, stap: fs(h1) / fs(document.querySelector('#pijn-kop')),
+          knopTop: knop.top, knopOnder: knop.bottom, knopL: knop.left, microTop: micro.top, microL: micro.left, subTekst };
       });
-      expect(m.regels, `@${breedte}: de kop is geen twee regels — de basislijnmeting klopt niet`).toBe(2);
-      expect(Math.abs(m.knopOnder - m.basis), `@${breedte}: knop ${(m.knopOnder - m.basis).toFixed(1)}px naast de basislijn van kopregel 2`).toBeLessThan(1.5);
-      expect(Math.abs(m.microTop - m.subTekst), `@${breedte}: microcopy niet op de rij van de ondertitel`).toBeLessThan(1);
-      expect(Math.abs(m.microL - m.knopL), `@${breedte}: microcopy niet onder de knop`).toBeLessThan(0.5);
+      expect(m.regels, `@${breedte}: de kop is geen twee regels (plafond --af-affiche te hoog?)`).toBe(2);
+      expect(m.stap, `@${breedte}: kop maar ${m.stap.toFixed(2)}x de sectiekop: geen affiche`).toBeGreaterThanOrEqual(1.7);
+      expect(Math.abs(m.knopTop - m.subTekst), `@${breedte}: knop ${(m.knopTop - m.subTekst).toFixed(1)}px naast de eerste regel van de ondertitel`).toBeLessThan(1);
+      expect(Math.abs(m.microL - m.knopL), `@${breedte}: microcopy niet onder de knop (links)`).toBeLessThan(0.5);
+      expect(m.microTop, `@${breedte}: microcopy niet onder de knop`).toBeGreaterThanOrEqual(m.knopOnder - 0.5);
     }
   });
+
+  // Sessie 247: het slot is de slotklap op inkt, de sample staat op papier (omgewisseld; zo
+  // geen ~1000px aaneengesloten zwart, finish review s246). Op inkt inverteert de actie naar
+  // papier: naar inkt zou hij in zijn grond verdwijnen.
+  for (const thema of ['light', 'dark']) {
+    test(`slot op inkt, sample op papier, en de slotactie inverteert naar papier (${thema})`, async ({ page }) => {
+      await page.goto('/index.html');
+      await zetThema(page, thema);
+      const lees = () => page.evaluate(() => {
+        const v = (n) => {
+          const p = document.createElement('div'); p.style.color = `var(${n})`; document.body.appendChild(p);
+          const c = getComputedStyle(p).color; p.remove(); return c;
+        };
+        const bg = (s) => getComputedStyle(document.querySelector(s)).backgroundColor;
+        return { inkt: v('--af-inkt'), papier: v('--af-papier'), slot: bg('.af-slot'), sample: bg('.af-sample'),
+          kop: getComputedStyle(document.querySelector('.af-slot h2')).color };
+      });
+      const m = await lees();
+      // Zelfbewakend: inkt en papier zijn verschillende kleuren, anders bewijst gelijkheid niets.
+      expect(m.inkt).not.toBe(m.papier);
+      expect(m.slot, 'het slot staat niet op inkt').toBe(m.inkt);
+      expect(m.kop, 'de slotkop is niet papier op inkt').toBe(m.papier);
+      expect(m.sample, 'de sample staat niet op papier').toBe(m.papier);
+
+      await page.locator('.af-slot .af-cta').hover();
+      const slotHover = await page.evaluate(() => getComputedStyle(document.querySelector('.af-slot .af-cta')).backgroundColor);
+      expect(slotHover, 'de slotactie inverteert naar inkt en verdwijnt in zijn grond').toBe(m.papier);
+      await page.locator('.af-hero .af-cta').hover();
+      const heroHover = await page.evaluate(() => getComputedStyle(document.querySelector('.af-hero .af-cta')).backgroundColor);
+      expect(heroHover, 'de uitzondering lekt: de hero-actie inverteert niet meer naar inkt').toBe(m.inkt);
+    });
+  }
 
   test('nieuwsbrief gestapeld: tussen veld en knop alleen de foutreserve', async ({ page }) => {
     await page.goto('/index.html');

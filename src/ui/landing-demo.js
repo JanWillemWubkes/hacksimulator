@@ -6,8 +6,10 @@
  * uitsparing in het diagram op (hero-registratie.js). Wat er getoond wordt komt uit
  * hero-antwoorden.js — dezelfde bron als wat een bezoeker krijgt als hij zelf typt.
  *
- * - Begint gevuld met het nmap-frame: het openingsbeeld uit het contract, en het enige
- *   beeld dat een bezoeker met prefers-reduced-motion ooit ziet.
+ * - Begint met het nmap-frame: het openingsbeeld uit het contract. Sinds sessie 247 rolt
+ *   het bij laden uit (het memorabele moment zonder klik), en speelt het nog één keer als
+ *   het diagram pas later in beeld komt (1280x800, mobiel). Onder prefers-reduced-motion
+ *   staat de eindstand er meteen, en is het het enige beeld dat de bezoeker ziet.
  * - Stopt definitief zodra de bezoeker de terminal overneemt (handOff, via hero-repl.js).
  * - Pauzeert als het tabblad verborgen is.
  */
@@ -41,6 +43,10 @@ let generatie = 0;
 // herstartte hij bij elke tabwissel over de sessie van de bezoeker heen.
 let overgedragen = false;
 
+// Heeft de bezoeker de laatste scan zien spelen, met het diagram in beeld? Zo niet, dan
+// speelt hij opnieuw zodra het diagram verschijnt (initScanInBeeld). Eén keer per scan.
+let scanGezien = false;
+
 const verminderd = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /**
@@ -60,8 +66,37 @@ function toon(command, { oplichten = true } = {}) {
   for (const [tekst, glos] of respons(command)) rijen.push(maakRij(tekst, glos, 'output'));
   rijen.forEach((r) => outputEl.appendChild(r));
   while (outputEl.children.length > CONFIG.maxRijen) outputEl.firstChild.remove();
-  if (oplichten) lichtOp(rijen);
-  zetDiagram(command);
+  if (oplichten) lichtOp(rijen, command);
+  zetDiagram(command, oplichten ? rijen : null);
+  if (command === REEKS[0]) scanGezien = oplichten && diagramInBeeld();
+}
+
+/** Staat minstens 60% van het diagram tussen navbar en vensterrand? */
+function diagramInBeeld() {
+  const net = document.querySelector('.af-net');
+  if (!net) return false;
+  const r = net.getBoundingClientRect();
+  const nav =
+    parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height')) || 0;
+  const zichtbaar = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, nav);
+  return r.height > 0 && zichtbaar / r.height >= 0.6;
+}
+
+/**
+ * Het memorabele moment hoort te spelen waar de bezoeker kijkt. Op 1440x900 staat het
+ * diagram bij laden in beeld; op 1280x800 en mobiel niet (poorten op 864 resp. 1367px).
+ * Daar speelt de scan opnieuw zodra het diagram voor 60% in beeld komt, niet eerder en
+ * niet vaker: daarna loopt de gewone reeks verder.
+ */
+function initScanInBeeld() {
+  const net = document.querySelector('.af-net');
+  if (!net || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(() => {
+    if (scanGezien || overgedragen || verminderd() || !diagramInBeeld()) return;
+    stop();
+    toon(REEKS[0]);
+    startAnimation();
+  }, { threshold: [0.6, 1] }).observe(net);
 }
 
 function init() {
@@ -73,13 +108,14 @@ function init() {
     return;
   }
 
-  // Het venster begint gevuld in plaats van leeg: het nmap-frame staat er meteen, met
-  // het diagram al in zijn eindstand. Zonder dit stond het venster ~1,2 s leeg.
+  // Het venster begint met het nmap-frame in plaats van leeg (zonder dit stond het ~1,2 s
+  // leeg). De rijen staan meteen in de DOM; alleen hun beeld rolt uit.
   outputEl.textContent = '';
-  toon(REEKS[0], { oplichten: false });
+  toon(REEKS[0], { oplichten: !verminderd() });
   leegInvoer();
 
   if (verminderd()) return;
+  initScanInBeeld();
   startAnimation();
 }
 

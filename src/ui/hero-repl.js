@@ -170,9 +170,6 @@ function initHeroRepl() {
     for (const [tekst, glos] of respons(command, isSmal())) {
       rijen.push(schrijf(tekst, 'output', glos));
     }
-    // De signatuur: regel, glos en diagramuitsparing lichten samen op, één keer.
-    lichtOp(rijen);
-    zetDiagram(command);
 
     gedaan.add(command);
 
@@ -192,6 +189,10 @@ function initHeroRepl() {
 
     trim();
     toonCommand(rijen[0]);
+    // De signatuur: de reeks rolt uit, regel, glos en diagramuitsparing lichten samen op.
+    // Ná toonCommand: lichtOp telt alleen de rijen die in het venster staan.
+    lichtOp(rijen, command);
+    zetDiagram(command, rijen);
     markeerVolgende();
 
     // Alléén de commandonaam, nooit argumenten (PRD §13). De guard in
