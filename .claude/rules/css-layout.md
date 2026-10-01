@@ -668,3 +668,23 @@ Twee dingen hoorden erbij:
   op nut (§14); hier was weghalen de fix, en de andere pagina's bleven 24/24 identiek.
 - Meet na een fix de **computed** waarde van elke eigenschap die je zette, niet alleen het
   zichtbare effect: de nameting op 1024 brak nog, en `getComputedStyle(el).flex` gaf `0 1 auto`.
+
+## 31. `flex-basis` is de hoofdas; een gepositioneerde broer schildert over je outline (Sessie 246)
+
+**`flex-basis` meet op de hoofdas.** `flex: 1 1 220px` op het nieuwsbriefveld betekende in de rij
+(≥1024) "minstens 220 breed". Onder 769 zet `main.css` het formulier in `flex-direction: column`,
+en dezelfde declaratie werd "220 hoog": een blok van 220px om een veld van 56px, 164px lucht tot
+de knop. Een flexregel die een breekpunt overleeft waar de richting omslaat, verandert stil van
+betekenis. Scope hem in de range waar hij bedoeld is (§4), hier `flex: none` tot 768.
+
+**Een outline op een statisch element verdwijnt onder een gepositioneerde broer.** De focusring
+van de terminalinvoer had geen bovenzijde: het lichaam erboven is `position: relative` (§8) en
+wordt in de schilderfase van gepositioneerde elementen getekend, ná de outline van de statische
+invoerregel. `getComputedStyle` gaf `2px solid`. Fix: de invoerregel zelf `position: relative`;
+gepositioneerd en later in de boom schildert hij erna. Controleer eerst de absolute kinderen,
+want hun containing block verandert mee (hier alleen een sr-only-label).
+
+**Uitlijnen op tekens: gebruik tekens, geen `em`.** Chromium rondt de breedte van een monospace-
+teken af op hele pixels (8,0 bij 12,8px), Firefox niet (7,68 = 0,6em). Een glos die met 4,8em onder
+een waarde na acht spaties moest staan, stond in Chromium 2,6px ernaast. `::before { content:
+'        ' }` in hetzelfde font geeft in elke engine exact dezelfde voorsprong.

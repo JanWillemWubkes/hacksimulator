@@ -4,6 +4,126 @@
 
 ---
 
+## Sessie 246: Een review controleert het contract, niet de ambitie (29 sep - 1 okt 2026)
+
+**Branch:** `design/impeccable`. `main` onaangeroerd; niets staat live.
+
+**Mission:** sessie 3 van het impeccable-traject (TASKS #83): verse reviewbeelden,
+`impeccable-finish-reviewer` vers en zonder historie, elke bevinding nameten vóór er iets gebouwd
+wordt, daarna `impeccable-documenter` voor DESIGN.md en `.impeccable/design.json`.
+
+### Skill eerst
+
+Het eerste wat er gebeurde was de skill laden en `impeccable context --target index.html` draaien
+(les uit sessie 245). Gelezen: `new-work.md` §7 (de finish-handoff), `document.md`,
+`degraded/finish-reviewer.md` (alleen voor het inputcontract; de agentdefinitie lees je niet).
+
+### De beelden: twee keer ongeldig voordat ze geldig waren
+
+- De reviewbeelden in `.impeccable/review/` waren van 24 sep, van vóór 240-245. Opnieuw gemaakt.
+- **Eerste set ongeldig.** De consentbanner is `fixed` en stond in de full-page-opname op y≈860,
+  midden tussen hero en Herkenbaar: een reviewer leest dat als een element in de layout. Mobiel
+  375×8143 werd voor de beeldlezer 92px breed.
+- **Tweede set ook nog fout op mobiel.** De banner verschijnt pas ná het klikken op "Weigeren"
+  (vertraagd), dus de klik raakte niets. Nu: wachten op `#cookie-decline`, de fold mét banner
+  vastleggen, dan weigeren en full-page maken.
+- Eindset: full-page zonder banner, folds mét banner, mobiel in stukken van 1200px, en (voor de
+  verdict pass) aparte focus- en hoverbeelden, want een stilstaand beeld toont geen focus.
+
+### De review: fix, acht punten, zes hielden stand
+
+Detector één keer tegen de URL (`--no-design-system`, want DESIGN.md beschreef nog de oude
+wereld): alleen bekende klassen (h1-contrast via analytic-gradient voor de vierde keer, dichte
+FAQ-antwoorden als "hidden at rest", cramped-padding op FAQ-rijen).
+
+Reviewer: TYPE, MATERIAL, GROUND **match**; **disposition fix**. Nagemeten:
+- **Focus terminalveld (open punt 245).** Niet "0 pixels" zoals 245 noteerde: bij focus kwamen
+  twee rode zijstrepen van 4px, **308 px** (licht) / 225 (donker), tegen ~3300 die WCAG 2.4.13
+  vraagt. De reviewer noemde de regel "dood": ook fout. Wel terecht op andere gronden.
+- **Consentbanner:** licht `#fff` + blauw `#074fa4`, donker `#161b22`. Houdt stand.
+- **Chip-balk van 6px:** verdween bij hover in de geïnverteerde chip. Houdt stand.
+- **Herkenbaar op mobiel:** 4 regels breken op 320-414 naar kolom 0. Houdt stand.
+- **`[♥]`:** glyph als icoon. Houdt stand.
+- **CTA:** 20,7px (1440) / 21,4 (1280) boven de basislijn van kopregel 2. Houdt stand.
+- **h1 uit het raster op mobiel:** op 1440 lopen de lijnen óók door de h1, en het commentaar zegt
+  "de kop op afficheschaal mag over het raster staan". Valt om.
+- **FAQ `layout-transition`:** berekend `transition: none`. Valt om.
+- **Eigen pass:** onder 769 **164px** tussen nieuwsbriefveld en knop. `flex: 1 1 220px` uit 245
+  wordt in de flexkolom van `main.css` de hoogte. De guard van 245 eiste alleen dTop < −20.
+
+### Ronde 1 (`d1d42d4`)
+
+- Ring om de invoerregel. Een pixelguard per zijde ving dat de **bovenzijde** ontbrak: het lichaam
+  erboven is `position: relative` (scrollTop) en schildert over de outline van een statische broer.
+  De invoerregel is nu zelf gepositioneerd (enige absolute kind: het sr-only-label).
+- Banner papier/inkt, knoppen die inverteren, weigeren even zwaar als accepteren.
+- Chip: proef C0/C1, C1 (index inverteert). Kolom houdt 1.8em, command 0px verschoven.
+- Herkenbaar: proef H0/H1/H2, H2 (hangende inspringing 2em, glos op eigen regel). Eerst in `em`
+  (2,8em), maar Chromium rondt de tekenbreedte af op 8px (Firefox 7,68, WebKit gemengd): 2,6px
+  naast "inet". Nu een `::before` met dezelfde acht spaties: exact in elke engine.
+- CTA: `margin-bottom: calc(var(--af-display) * 0.165)` (0,162-0,168 gemeten over 1280-1920).
+- Nieuwsbrief: `flex: none` tot 768, dezelfde grens als `main.css` (§4). Gat 25,6px.
+- Footer: glyph weg; `footer.js` v5, `init-components.js` v7 (27 pagina's), dode regel uit
+  `main.css` (v240). 108 pagina-configuraties, 1132 footerelementen: 0 verschillen buiten de knop.
+- Guard "Finish review (sessie 246)", 72 passed in drie motoren. Acht mutanten, elk op een eigen
+  assertie, eerst gecontroleerd dat ze geserveerd werden.
+- Gate: 849 passed, 17 skipped, **1 failed**: `blog-theme-toggle` "all blog pages" over 30s. Los
+  15,1s, gelijk aan HEAD (15,0). Budget per pagina; daarna 36/36.
+
+### Verdict en documenter (`ab4e2ac`)
+
+- Verdict pass: 1-6 resolved, 7-8 ingetrokken, geen regressies: **ship**, op de gescoorde fixes.
+- Documenter: DESIGN.md + sidecar opnieuw, oude wereld volledig vervangen. Steekproef: 18 waarden
+  tegen de CSS-regel, 5 gerenderd: allemaal gelijk.
+- De documenter vond een fout in de bron: "papieren letter op rood 5,02" in het contract. De knop
+  draagt sinds de bouw (`a8bf4fa`) wit, **5,79**. Gerepareerd in het contract.
+- Herkomst van rasters gemeten: index laadt er twee van vóór het traject; de bouw maakte er geen.
+  `embed-prompt --scan assets`: 26/26 zonder herkomst, allemaal bestaand. Niet ingebed.
+
+### Kleine ronde (`e02a89a`)
+
+"Verder lezen op de blog" in vette mono en "In gewoon Nederlands" in 600 leken twee punten. Op
+functie bekeken één: twee koppen boven een kolom op dezelfde naad, twee vormen. Atkinson is
+variabel (200-800), dus 600 was echt, geen synthese. Proef P0-P2: **P1** (Atkinson 700, gedempte
+inkt); in inkt concurreerde de kop met wat hij aankondigt. Guard: geen kop in mono over élk h1-h6
+en élk doel van `aria-labelledby`. Twee mutanten, elk een eigen assertie.
+Gate 2: 855 passed, 17 skipped, 0 failed, **1 flaky** (Polish-focustest, los 13,2s, in de gate
+over 30s: 47 min, met de eigenaar in de browser). Budget per element; daarna 9/9.
+
+### Learnings
+
+- **Een review controleert het contract, niet de ambitie.** Ship op de fixes, en toch: "strak,
+  maar oogt niet uniek". Het contract was ingetoomd (koppen klein voor de vouw, alles getoetst
+  tegen "te intimiderend"). De ceiling-punten zijn met eerdere besluiten afgedaan; een eerder
+  besluit bewijst niet dat het goed was voor een ander doel.
+- **Een guard die de bedoeling toetst, laat het gevolg door.** "Gestapeld" (dTop < −20) was waar
+  bij 164px gat. Toets de relatie (veld→knop ≤ reserve), niet de vorm.
+- **Een populatietest met een vast budget wordt flaky onder last.** Twee keer deze sessie, na één
+  keer in 245. Het patroon is nu: budget × populatie.
+- **De reviewer heeft geen browser.** Toestanden (focus, hover) en lange mobiele pagina's moeten
+  als eigen beelden mee, anders kan hij ze niet beoordelen.
+- **`flex-basis` is de maat op de hoofdas.** Bij een omslag naar kolom wordt "breed" "hoog".
+
+### Commits
+
+- `d1d42d4` Finish review ronde 1: de ring om de invoerregel, en de banner in het affiche
+- `ab4e2ac` Finish review vastgelegd: DESIGN.md opnieuw uit het affiche
+- `e02a89a` Kolomkoppen op de naad: één vorm, en geen kop in mono
+
+### Metrics delta
+
+- Runtime 1078,18 → **1082,35 / 1120 KB** (marge 37,65).
+- `test()`-declaraties 366 → **374** (47 specs).
+- `.playwright-mcp/` opgeruimd na deze entry (zie Step 7).
+
+### Next steps
+
+- **Besluit eigenaar (1 okt):** eerst `bolder` (+ `overdrive`) op de landingspagina (TASKS #89),
+  dan de gedeelde laag sitebreed (#85), dan de merge (#84). Startprompt gegeven.
+- Open: `code` erft 4px radius uit `main.css` (onzichtbaar), bij #85.
+
+---
+
 ## Sessie 245: Een skill die je niet laadt, draait niet — polish met een eigen pass (29 sep 2026)
 
 **Branch:** `design/impeccable`. `main` onaangeroerd; niets staat live.

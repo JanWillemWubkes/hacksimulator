@@ -554,3 +554,22 @@ veranderde pixels. Een teller op "rode pixels" telt ander rood mee (813 met én 
   erover. Nu `test.setTimeout(PAGINAS.length * 5000)`.
 - **Werk niet in de browser tijdens een gate.** Proeven in de MCP-browser naast de gate gaven 13
   tests/min (normaal ~25) en twee teardown-time-outs die in een schone run niet terugkwamen.
+
+## 33. Toets de relatie, niet de vorm; en meet een ring per zijde (Sessie 246)
+
+**Een guard die de bedoeling van een fix toetst, laat het gevolg door.** Sessie 245 bewaakte de
+nieuwsbrief onder 1024 met "veld en knop staan onder elkaar" (`dTop < −20`). Dat was waar bij een
+gat van **164px**: de nieuwe `flex-basis` was in de kolom de hoogte geworden. De vorm klopte, de
+relatie niet. Toets wat bij elkaar hoort: `knop.top − veld.bottom ≤ foutreserve`, op elke breedte
+van de stapel (320-768 per 32px), niet alleen of er gestapeld wordt.
+
+**Een ring in pixels: per zijde, met een rust-tak.** Een totaaltelling van veranderde pixels zag
+niet dat de bovenzijde van een focusring ontbrak (een `position: relative`-broer schilderde
+eroverheen, `css-layout.md` §31). Sample het midden van elke zijde op 3px buiten de box (ring 2px,
+offset 2px) en eis vier keer rood bij focus én nul keer in rust: zonder die rust-tak bewijst
+"rood bij focus" niets. Lees de box per toestand opnieuw; een focus kan de pagina scrollen.
+
+**Het budget uit §32 gold deze sessie twee keer opnieuw** (`blog-theme-toggle`, de Polish-focustest):
+los ruim binnen 30s, in de volle gate erover, en gelijk aan HEAD gemeten. Een test die over een
+populatie loopt krijgt `test.setTimeout(n × per-item)`; meet eerst los én tegen HEAD, zodat een
+traagheid door je wijziging niet als "last" wordt weggezet.

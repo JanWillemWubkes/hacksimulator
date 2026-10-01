@@ -1,7 +1,7 @@
 # CLAUDE.md — HackSimulator.nl
 
 **Project:** Browser-based terminal simulator die Nederlandse beginners ethisch hacken leert.
-**Status:** MVP Development — ✅ LIVE op Netlify vanaf `main`; laatste: Sessie 245 (op branch `design/impeccable`)
+**Status:** MVP Development — ✅ LIVE op Netlify vanaf `main`; laatste: Sessie 246 (op branch `design/impeccable`)
 **Stack:** Vanilla JS/CSS, client-side only, geen backend, geen build-stap. Deploy = push naar `main`.
 **Docs:** `docs/prd.md` v1.8 | `PLANNING.md` v3.0 | `TASKS.md` (live metrics) | `docs/style-guide.md` v1.5
 
@@ -136,7 +136,7 @@ architectuurwijziging, `docs/prd.md` alleen bij scopewijziging.
 **Afsluiten:** `/summary` — die bevat de volledige 7-staps flow, inclusief de ground-truth-meting
 en de validatiegate. Niet hier dupliceren.
 
-**Sessie counter:** 245
+**Sessie counter:** 246
 
 <!-- Onderhoudsnotitie (wordt niet in context geladen):
      Dit bestand is de altijd-geladen laag. Houd het onder 150 regels — validate-docs.sh
@@ -146,5 +146,5 @@ en de validatiegate. Niet hier dupliceren.
 
 ---
 
-**Last updated:** 29 sep 2026 (Sessie 245 — polish: één hovertaal, de nieuwsbrief op zijn rij, de sample toont wat erin staat. Volledig: `docs/sessions/current.md`)
-**Version:** 6.15 (Sessie 245 — een skill die je niet laadt, draait niet; een gescopete declaratie kan al sessies dood zijn. Historie: `docs/sessions/current.md`)
+**Last updated:** 1 okt 2026 (Sessie 246 — finish review en DESIGN.md: de ring om de invoerregel, de banner in het affiche, één vorm voor de kolomkoppen. Volledig: `docs/sessions/current.md`)
+**Version:** 6.16 (Sessie 246 — een review controleert het contract, niet de ambitie; een guard die de bedoeling toetst, laat het gevolg door. Historie: `docs/sessions/current.md`)
