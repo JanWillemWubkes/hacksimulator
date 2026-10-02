@@ -1425,8 +1425,9 @@ test.describe('Layout (sessie 248)', () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/index.html');
     await page.evaluate(() => document.fonts.ready);
-    const fout = { slotkop: [], slotKolom: [], slotRegel: [], slotOnder: [], getalRand: [], bronRand: [], getalSchaal: [], overlap: [], overloop: [] };
-    const tak = { naast: 0, onder: 0, bron: 0, zonderBron: 0, gemeten: 0 };
+    const fout = { slotkop: [], slotKolom: [], slotRegel: [], slotOnder: [], getalRand: [], bronRand: [], getalSchaal: [], overlap: [], overloop: [],
+      symmetrie: [], bronOnder: [], labelRegel: [] };
+    const tak = { naast: 0, onder: 0, bron: 0, bronOnder: 0, gemeten: 0 };
     for (let w = 320; w <= 1920; w += 8) {
       await page.setViewportSize({ width: w, height: 900 });
       // WebKit werkt layout niet bij als het venster in kleine stappen over een mediagrens
@@ -1445,14 +1446,19 @@ test.describe('Layout (sessie 248)', () => {
         const kop = document.querySelector('.af-slot h2');
         const zin = document.querySelector('.af-slot-zin');
         const knop = document.querySelector('.af-slot .af-cta');
+        // Tekstranden uit de glyphs (Range), niet uit de box: de box staat op de lijn, de
+        // letter op --af-cel ervan.
+        const inkt = (e) => { const g = document.createRange(); g.selectNodeContents(e); const q = [...g.getClientRects()]; return { l: Math.min(...q.map((x) => x.left)), r: Math.max(...q.map((x) => x.right)) }; };
         const rijen = [...document.querySelectorAll('.af-lijst-rij')].map((rij) => {
           const g = rij.querySelector('.result-number'), l = rij.querySelector('.result-label'), b = rij.querySelector('.af-lijst-waar');
-          return { g: R(g), l: R(l), b: b.getClientRects().length ? R(b) : null, gFs: parseFloat(getComputedStyle(g).fontSize) };
+          return { g: R(g), l: R(l), b: b.getClientRects().length ? R(b) : null, gFs: parseFloat(getComputedStyle(g).fontSize),
+            gInkt: inkt(g).l, bInkt: inkt(b).r, lRegel: parseFloat(getComputedStyle(l).lineHeight) };
         });
         return {
           L, R: Rr, kol: (Rr - L) / 12, h1, kopFs: parseFloat(getComputedStyle(kop).fontSize),
           breed: matchMedia('(min-width: 1280px)').matches,
           zin: R(zin), zinPad: parseFloat(getComputedStyle(zin).paddingTop), knop: R(knop), rijen,
+          tabelBreed: matchMedia('(min-width: 768px)').matches,
           sw: document.documentElement.scrollWidth,
         };
       });
@@ -1472,11 +1478,19 @@ test.describe('Layout (sessie 248)', () => {
         if (Math.abs(q.g.left - r.L) > 1) fout.getalRand.push(`${w} rij ${i}: getal op ${q.g.left.toFixed(1)}, rand ${r.L.toFixed(1)}`);
         if (Math.abs(q.gFs - r.h1) > 0.1) fout.getalSchaal.push(`${w} rij ${i}: ${q.gFs} tegen h1 ${r.h1}`);
         if (q.g.right > q.l.left + 0.5) fout.overlap.push(`${w} rij ${i}: getal tot ${q.g.right.toFixed(1)}, label vanaf ${q.l.left.toFixed(1)}`);
-        if (q.b) {
-          tak.bron++;
+        if (r.tabelBreed) tak.bron++; else tak.bronOnder++;
+        if (!q.b) { fout.bronOnder.push(`${w} rij ${i}: geen bron zichtbaar`); return; }
+        if (r.tabelBreed) {
           if (Math.abs(q.b.right - r.R) > 1) fout.bronRand.push(`${w} rij ${i}: bron tot ${q.b.right.toFixed(1)}, rand ${r.R.toFixed(1)}`);
           if (q.l.right > q.b.left + 0.5) fout.overlap.push(`${w} rij ${i}: label tot ${q.l.right.toFixed(1)}, bron vanaf ${q.b.left.toFixed(1)}`);
-        } else tak.zonderBron++;
+          // Gelijke binnenruimte links en rechts (finish review s248): getal en bron elk
+          // minstens 8px van hun lijn, en even ver.
+          const links = q.gInkt - r.L, rechts = r.R - q.bInkt;
+          if (links < 8 || Math.abs(links - rechts) > 1) fout.symmetrie.push(`${w} rij ${i}: getal ${links.toFixed(1)} van de lijn, bron ${rechts.toFixed(1)}`);
+          if (w >= 1280 && q.l.height > q.lRegel * 1.5) fout.labelRegel.push(`${w} rij ${i}: label ${q.l.height.toFixed(1)}px hoog bij regel ${q.lRegel}`);
+        } else {
+          if (Math.abs(q.b.left - q.l.left) > 1 || q.b.top < q.l.bottom - 1) fout.bronOnder.push(`${w} rij ${i}: bron op ${q.b.left.toFixed(1)},${q.b.top.toFixed(1)}, label ${q.l.left.toFixed(1)} tot ${q.l.bottom.toFixed(1)}`);
+        }
       });
       if (r.sw > w) fout.overloop.push(`${w}: scrollWidth ${r.sw}`);
     }
@@ -1485,7 +1499,7 @@ test.describe('Layout (sessie 248)', () => {
     expect(tak.naast, 'nooit de brede vorm van het slot gemeten').toBeGreaterThan(50);
     expect(tak.onder, 'nooit de gestapelde vorm van het slot gemeten').toBeGreaterThan(50);
     expect(tak.bron, 'nooit een bron gemeten').toBeGreaterThan(100);
-    expect(tak.zonderBron, 'nooit de smalle tabel zonder bron gemeten').toBeGreaterThan(50);
+    expect(tak.bronOnder, 'nooit de smalle tabel gemeten').toBeGreaterThan(50);
     expect(fout.slotkop, 'de slotkop staat niet op afficheschaal').toEqual([]);
     expect(fout.slotKolom, 'de slotactie staat niet in kolom 10-12').toEqual([]);
     expect(fout.slotRegel, 'de slotknop staat niet op de eerste regel van de zin').toEqual([]);
@@ -1495,7 +1509,34 @@ test.describe('Layout (sessie 248)', () => {
     expect(fout.getalSchaal, 'het getal staat niet op afficheschaal').toEqual([]);
     expect(fout.overlap, 'cellen van de cijfertabel overlappen').toEqual([]);
     expect(fout.overloop, 'horizontale overloop').toEqual([]);
+    expect(fout.symmetrie, 'getal en bron hebben niet dezelfde binnenruimte').toEqual([]);
+    expect(fout.bronOnder, 'smal staat de bron niet onder het label').toEqual([]);
+    expect(fout.labelRegel, 'het label vult zijn cel niet (breekt af vanaf 1280)').toEqual([]);
   });
+
+  // Focus is dezelfde toestand als hover: inversie (finish review s248). Tak: in rust is de
+  // rij níét inkt, anders bewijst de focusmeting niets.
+  for (const thema of ['light', 'dark']) {
+    test(`een cijferrij inverteert bij focus, zoals bij hover (${thema})`, async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await page.goto('/index.html');
+      await zetThema(page, thema);
+      const lees = () => page.evaluate(() => {
+        const rij = document.querySelector('.af-lijst-rij');
+        const inkt = getComputedStyle(document.body).getPropertyValue('--af-inkt').trim();
+        const kleur = (c) => { const d = document.createElement('div'); d.style.color = c; document.body.append(d); const v = getComputedStyle(d).color; d.remove(); return v; };
+        return { inkt: kleur(inkt), rij: getComputedStyle(rij).backgroundColor, getal: getComputedStyle(rij.querySelector('.result-number')).backgroundColor };
+      });
+      const rust = await lees();
+      expect(rust.rij, 'in rust is de rij al inkt — de meting bewijst niets').not.toBe(rust.inkt);
+      await page.locator('.af-lijst-rij').first().focus();
+      await page.keyboard.press('Shift+Tab');
+      await page.keyboard.press('Tab');
+      const focus = await lees();
+      expect(await page.evaluate(() => document.activeElement.classList.contains('af-lijst-rij')), 'de focus staat niet op de rij').toBe(true);
+      expect([focus.rij, focus.getal], 'de rij inverteert niet bij focus').toEqual([focus.inkt, focus.inkt]);
+    });
+  }
 
   // Populatie: élk element in main met een betegelde verloop-achtergrond (tegel smaller dan
   // het element), niet een lijst selectors. Uitzonderingen benoemd: hero en cijfers.
