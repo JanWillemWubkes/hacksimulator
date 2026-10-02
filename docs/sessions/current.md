@@ -4,6 +4,128 @@
 
 ---
 
+## Sessie 248: Een proef die faalt, wijst de plek aan waar het idee niet past (2 okt 2026)
+
+**Branch:** `design/impeccable`. `main` onaangeroerd; niets staat live.
+
+**Mission:** TASKS #90, `layout` op de landingspagina. De eigenaar na bolder: de compositie is
+sterker, maar stilstaand dezelfde indeling: alles links, elke sectie kop → lede → module, papier en
+band als metronoom, en de naad leeft alleen in de hero. Proeven op gelijke maat, pas bouwen na zijn go.
+
+### Skill eerst, twee geïsoleerde beoordelingen
+
+Eerste tool-call de skill, dan `impeccable context --target index.html`, dan `reference/layout.md`
+(voor het eerst in dit traject); `craft-floor.md` vlak vóór de eerste edit. De mechanische scan
+(`detect --scope layout` tegen de URL, 1280 en 390) draaide in een aparte agent, zodat zijn
+uitvoer mijn layoutbeoordeling niet kleurde: 11 en 10 meldingen, geen structurele (dichte
+FAQ-items, de oplichtende terminalregel, de dichte antwoorden als "content-hidden").
+
+- 7/7 koppen op kolom 1, elke h2 47,52px; 6/7 secties kop 1-7 / ding 1-7 / uitleg 8-12.
+- Na de h1 (88,2) geen schaalsprong; kolom 8-12 leeg naast de cijfers en in het slot (5/12 inkt).
+- In Herkenbaar staat het Nederlands als pijltje ín de module: de enige rij in de oude vorm.
+- Oordeel: de indeling, niet de wereld. Geen `new-work`.
+
+### Proeven en keuze
+
+| | 1440 | 375 | |
+|---|---|---|---|
+| P1 Herkenbaar: glos per regel op de naad | 1069 → 1467 | 1442 → 1567 | verworpen |
+| P2 cijfers over 12 kolommen + haarlijnen | 593 → 677 | 471 → 481 | gekozen |
+| P3 slot als tegenhanger van de hero | 349 → 347 | 361 → 358 | gekozen |
+
+P1 maakte elke rij kop → tekst → module, precies het stramien, en 8 van de 12 regels waren al
+Nederlands. Proef-CSS via `addStyleTag`, samengesteld in een HTML met data-URI's (`setContent`
+laadt geen `file://`-beelden; de eerste bladen waren 12 KB groot en leeg). Twee proeffouten
+eerst gerepareerd voordat ik oordeelde: de sticky navbar schoof over de element-screenshot, en
+de muis bleef na de klik op de schakelaar op een cijferrij hangen (hover in "donker").
+
+### De bouw (`fd55a70`)
+
+- Cijfers via subgrid over 12 kolommen, getal op `--af-affiche`, de haarlijnen als gedeelde
+  selector met de hero, elke cel uitgesneden. Slotkop op `--af-affiche` over 12 kolommen, vanaf
+  1280 zin 1-8 en actie 10-12. `--af-display` had nog één gebruiker en is weg.
+- **De pixelguard ving een haarlijn door "40+"** (71 van 81 pixelrijen). Oorzaak: een
+  `background: none` op het getal (0,3,1) versloeg de uitsnede (0,2,1), en landing.css zet er al
+  lang niets meer: dood, dus weg in plaats van overschreven.
+- WebKit: de positieve controle zag geen lijnen. Op `deviceScaleFactor` 2 legt WebKit de tegels
+  anders op het pixelraster; de guard zoekt de lijnkolom nu binnen ±3px in apparaatpixels.
+- WebKit, en dat bestond al: groeit het venster in stappen van 8px over 768 of 1280, dan blijft
+  de layout van de vorige kant staan (85 breedtes `display: none`; hero- en slotactie 81/81
+  links), terwijl `matchMedia` al het nieuwe zegt. Gelijk met de css van HEAD (via `route`
+  geserveerd). De sweep laadt op die grenzen opnieuw.
+
+### Gates
+
+- **Gate 1: `exit 124` op 869/876.** De deadline van 30 min was te krap voor 876 tests; 0 fouten
+  tot daar, maar geen eindblok. Niet als groen geteld.
+- **Gate 2: 859 passed, 17 skipped, 0 failed** (30,0 min). validate-docs faalde eerst alleen op
+  105 MB `test-results` van de mutantruns.
+- **Gate 3 (na de review): 865 passed, 17 skipped, 0 failed** (30,1 min).
+
+### Finish review (`3e71936`)
+
+- **Eerst `recapture`, terecht.** Mijn folds liepen via `html { scroll-behavior: smooth }`;
+  transities bevriezen stopt een geprogrammeerde smooth scroll niet, dus elke fold toonde een
+  tussenpositie (de "results"-fold was de hero). Opnieuw met `scrollBehavior = 'auto'`,
+  `behavior: 'instant'` en per shot een gelogde controle (scrollY, navbar op 0, sectie onder de
+  navbar, banner op `innerHeight`): 16/16.
+- **Dan `fix`**, vier punten, elk nagemeten: focus gaf alleen de ring (nu inversie zoals hover);
+  getal op de lijn en bron 20px ervan (nu beide `--af-cel`, symmetrisch vanaf 768; het
+  `::before`-voorstel niet gevolgd: ring midden in het inktvlak, rijlijnen niet gelijk met de
+  tabellijn); `40ch` brak het label af op kolom 7 (weg); smal was de bron verborgen (nu onder het
+  label).
+- **Verdict `ship`** op de gescoorde fixes. Prijs: het getal staat nu op `--af-cel` van de lijn,
+  de sample-index "01" op de lijn. Twee tabellen, twee regels: open.
+- Documenter: DESIGN.md + design.json opnieuw; steekproef 14 CSS + 9 gerenderd, plus mijn eigen.
+  Drie contractregels die het besluit tegenspraken, in de bron gemarkeerd als herzien.
+
+### Mutanten
+
+Twaalf, elk eerst geserveerd (curl) en gerenderd gecontroleerd, elk op een eigen assertie. Eén
+vuurde verkeerd: F4 (bron smal weer weg) trof de zelfbewakende tak "nooit de smalle tabel
+gemeten" in plaats van "bron niet onder het label", omdat de tak pas ná een vroege `return`
+telde. Fout in de guard, hersteld. En de populatieguard op haarlijnen moest eerst in drie
+asserties uiteen: "cijfers zonder lijnen" en "lijnen elders" vuurden op dezelfde regel.
+
+### Na de sessie: de eigenaar
+
+"Stukken beter, maar het kan nog onderscheidender." Hero bijzonder maar onrustig; Herkenbaar
+saai; "Zo begint een echte pentest" klopt niet (gemeten: kop van 1 regel naast 4, tabel van 146
+naast knoppen van 44; de randen kloppen, de massa zigzagt); hij houdt van secties die in elkaar
+overlopen, mits met een doel. Vastgelegd als TASKS #91, vóór #85.
+
+### Learnings
+
+- **Een proef die faalt, wijst de plek aan waar het idee niet past, niet dat het idee niet
+  deugt.** P1 faalde omdat onder de hero bijna geen Engels staat om uit te leggen; vakjargon in
+  de lopende tekst is er wel. Vandaar de kanttekening als kandidaat in #91.
+- **Bewijs voor een review heeft een gelogde controle per shot nodig, net als een test.**
+  Smooth scroll en bevroren transities zijn verschillende mechanismen.
+- **Een dode declaratie wint ook van nieuwe regels.** De `background: none` deed niets meer
+  voor zijn doel en versloeg toch de uitsnede. Alleen de pixels lieten het zien.
+- **Een mutant die op de verkeerde assertie vuurt, is een bevinding over de guard.**
+- **Een gate groeit mee met zijn populatie; zijn deadline ook.** 876 tests passen niet in 30 min.
+
+### Commits
+
+- `fd55a70` Layout: de cijfers op het raster, en het slot als tegenhanger van de hero
+- `3e71936` Finish review layout: de cijfertabel symmetrisch, focus als hover, bron ook smal
+- `5087f8d` Layout (sessie 248) vastgelegd: contract, DESIGN.md uit de bouw, #90 af
+- `9418eaa` TASKS #91: onderscheid-ronde vóór #85, met het oordeel van de eigenaar na sessie 248
+
+### Metrics delta
+
+- Runtime 1089,83 → **1092,76 / 1120 KB** (marge 27,24).
+- `test()`-declaraties 381 → **385** (47 specs).
+- Bundle (du -sb/1024): src 745 → 745, styles 429 → 432, blog 492 → 492, assets 1741 → 1741.
+
+### Next steps
+
+- **#91 onderscheid-ronde** (hero rustiger, Herkenbaar, de sample-sectie, overlopende secties,
+  plus de vier open punten uit "Layout (sessie 248)"), dan #85, dan #84.
+
+---
+
 ## Sessie 247: Wat de bezoeker ziet als hij niets doet, is het ontwerp (1-2 okt 2026)
 
 **Branch:** `design/impeccable`. `main` onaangeroerd; niets staat live.

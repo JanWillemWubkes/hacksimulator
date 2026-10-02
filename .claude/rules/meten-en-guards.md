@@ -608,3 +608,29 @@ nodig is.
 
 **Een schaalwijziging meet je per breedte.** Een grotere poortletter zag er goed uit op 1440, 1280
 en 375; de sweep per 8px van sessie 243 vond 320-336 en 1024-1184 zonder lucht.
+
+## 35. Bewijs voor een review logt zijn eigen controle; een mutant op de verkeerde assertie is een guardfout (Sessie 248)
+
+**Folds via smooth scroll zijn tussenposities.** `html { scroll-behavior: smooth }` (landing.css)
+maakt van `scrollTo` een animatie, en transities bevriezen stopt die niet. De reviewer kreeg een
+"cijfers"-fold waarop de hero stond. Zet vóór elke shot `documentElement.style.scrollBehavior =
+'auto'`, scroll met `behavior: 'instant'`, en log per shot: scrollY = doel, navbar op 0, sectie net
+onder de navbar, banner op `innerHeight`. Geen reduced-motion-emulatie: die zet ook de scan om.
+
+**Pixels in WebKit: zoek de lijn, reken hem niet uit.** Op `deviceScaleFactor` 2 legt WebKit
+betegelde verlopen anders op het pixelraster; een berekende lijn-x trof papier. Zoek per lijn
+binnen ±3px de eerste kolom die geen papier is, in apparaatpixels, en toets daarop.
+
+**WebKit werkt layout niet bij als het venster in kleine stappen over een mediagrens groeit**
+(over 768: `display: none` bleef staan; over 1280: de rasterplaatsing), terwijl `matchMedia` al
+het nieuwe zegt. Een sweep per 8px laadt op zulke grenzen opnieuw, en zegt in commentaar waarom.
+Vergelijk eerst met de vorige css (`page.route` die HEAD serveert) voordat je het je diff toeschrijft.
+
+**Een mutant die op de zelfbewakende tak vuurt in plaats van op zijn eigen assertie, wijst een
+fout in de guard aan**: hier telde de tak pas ná een vroege `return`. Tel de tak vóór je uitstapt.
+En splits een populatie-assertie in "ontbreekt waar het hoort" en "staat waar het niet hoort",
+anders vuren twee mutanten op dezelfde regel.
+
+**Een gate groeit mee met zijn populatie.** 876 tests op twee workers duren ~30 min; een deadline
+van 30 min kapte af op 869 met `exit 124`. Exit 0 van de omhulling en een lege foutgrep zeggen dan
+niets: eis het eindblok.
