@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-01T20:22:43+00:00",
+  "generatedAt": "2026-10-02T07:40:32+00:00",
   "title": "Design System: HackSimulator.nl",
   "extensions": {
     "colorMeta": {
@@ -353,11 +353,7 @@
     "typographyMeta": {
       "affiche": {
         "displayName": "Affiche",
-        "purpose": "Alleen de h1, over alle twaalf kolommen; max 88,2px, twee regels van 1280 tot 1920. Geen kop groter."
-      },
-      "display": {
-        "displayName": "Display",
-        "purpose": "Alleen de slotkop, over kolom 1-7."
+        "purpose": "De h1 en de slotkop, allebei over alle twaalf kolommen; max 88,2px, h1 op twee regels van 1280 tot 1920. Geen kop groter; even groot mag. De oude displaymaat (slotkop, 64,8px) is vervallen."
       },
       "headline": {
         "displayName": "Headline",
@@ -365,7 +361,7 @@
       },
       "figure": {
         "displayName": "Cijfer",
-        "purpose": "Getallen in de cijfertabel, in inkt, met bron ernaast."
+        "purpose": "Getallen in de cijfertabel op afficheschaal (88,2px op 1440, zoals de h1), kolom 1-3, in inkt, met omschrijving en bron in dezelfde rij."
       },
       "title": {
         "displayName": "Title",
@@ -527,9 +523,9 @@
       "name": "Cijferrij",
       "kind": "custom",
       "refersTo": "",
-      "description": "Getal in de cijferrol (Archivo 700, tabelcijfers) in inkt, in een tabelrij met label en bron in mono; de rij inverteert bij hover.",
-      "html": "<a class=\"ds-rij\" href=\"#\"><span class=\"ds-getal\">40+</span><span class=\"ds-label\">commands die je echt kunt typen</span><span class=\"ds-waar\">/commands</span></a>",
-      "css": ".ds-rij { display: grid; grid-template-columns: 11rem minmax(0, 1fr) auto; align-items: center; column-gap: 20px; min-height: 88px; padding: 12px 0; border-top: 2px solid #111111; border-bottom: 1px solid #7a7a75; color: #111111; text-decoration: none; background: #efefec; } .ds-getal { padding-left: 20px; font-family: 'Archivo', 'Atkinson Hyperlegible Next', -apple-system, sans-serif; font-size: clamp(2rem, 3.4vw, 3rem); font-weight: 700; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; } .ds-label { font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; font-size: 1rem; } .ds-waar { padding-right: 20px; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 0.83rem; color: #444440; } .ds-rij:hover { background: #111111; color: #efefec; } .ds-rij:hover .ds-waar { color: #efefec; } .ds-rij:focus-visible { outline: 2px solid #cc0a1e; outline-offset: 2px; }"
+      "description": "Een rij op het 12-koloms raster: getal op afficheschaal (Archivo 700, tabelcijfers) in kolom 1-3, omschrijving (1.1rem) in 4-9, bron in mono rechts in 10-12. Cellen staan op de haarlijnen, snijden zich er met papier uit en dragen de celmaat binnenruimte, links en rechts gelijk. Hover en focus inverteren rij, cellen en bron.",
+      "html": "<div class=\"ds-tabel\"><a class=\"ds-rij\" href=\"#\"><span class=\"ds-getal\">40+</span><span class=\"ds-label\">Commands, elk met een handleiding</span><span class=\"ds-waar\">/commands</span></a></div>",
+      "css": ".ds-tabel { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); border-top: 2px solid #111111; background-color: #efefec; background-image: linear-gradient(to right, #c9c9c4 1px, transparent 1px), linear-gradient(to left, #c9c9c4 1px, transparent 1px); background-size: calc(100% / 12) 100%, 100% 100%; background-repeat: repeat-x, no-repeat; } .ds-rij { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: center; padding: 16px 0; border-bottom: 1px solid #7a7a75; color: #111111; text-decoration: none; } .ds-rij > * { width: fit-content; background: #efefec; } .ds-getal { grid-column: 1 / 4; padding-left: 20px; font-family: 'Archivo', 'Atkinson Hyperlegible Next', -apple-system, sans-serif; font-size: clamp(2.2rem, 6.2vw, 4.9rem); font-weight: 700; line-height: 0.94; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; } .ds-label { grid-column: 4 / 10; padding-left: 20px; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; font-size: 1.1rem; } .ds-waar { grid-column: 10 / -1; justify-self: end; padding-right: 20px; text-align: right; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 0.83rem; color: #444440; } .ds-rij:hover, .ds-rij:hover > *, .ds-rij:focus-visible, .ds-rij:focus-visible > * { background: #111111; color: #efefec; } .ds-rij:focus-visible { outline: 2px solid #cc0a1e; outline-offset: 2px; }"
     }
   ],
   "narrative": {
@@ -537,8 +533,9 @@
     "overview": "De pagina is een affiche op een zichtbaar raster, in de traditie van Total Design (Wim Crouwel). Gebroken wit papier, zwarte inkt, en precies één signaalrood dat alleen \"hier ben jij aan zet\" betekent. Alles staat op een 12-koloms raster zonder goot: de kolomgrenzen zijn de haarlijnen, en elke cel draagt zijn eigen binnenruimte. De terminal is een donkere module in dat raster, en de Nederlandse uitleg staat per outputregel ernaast, op dezelfde rasterrij.\n\nToestanden spreken via inversie en nooit via een extra kleur: een blok wordt inkt met een papieren letter. Er zijn geen schaduwen, geen zichtbare kleurverlopen en geen afgeronde hoeken. Diepte bestaat niet; er is alleen papier, inkt en de zwarte module. Het donkere thema is het geïnverteerde affiche: inkt wordt grond, papier wordt letter.\n\n**Reikwijdte.** Dit systeem draait nu alleen op `index.html`. Het staat in één stylesheet dat alleen die pagina laadt, als laatste, en hangt volledig onder de homepage-scope. Het hertokent de gedeelde componenten (navbar, footer, knoppen, FAQ, nieuwsbrief) in plaats van ze te overschrijven. De andere pagina's (gidsen, samples, blog, terminal, juridisch) tonen nog het oudere systeem en gaan één per sessie over. Dat oudere systeem hoort niet bij dit document.\n\nExpliciet niet: scanlines, glow, groen-op-zwart, matrixregen, mascottes, badges op de voorgrond, kickers en eyebrows.",
     "keyCharacteristics": [
       "Papier, inkt, één signaalrood. Verder niets buiten de terminalmodule.",
-      "Een 12-koloms raster zonder goot, met in het eerste scherm zichtbare haarlijnen van 1px.",
+      "Een 12-koloms raster zonder goot, met zichtbare haarlijnen van 1px in de hero en in de cijfertabel, en nergens anders.",
       "De naad op kolom 8: links het ding, rechts de uitleg.",
+      "Eén schaal voor de grote vormen: de h1, de getallen in de cijfertabel en de slotkop staan alle drie op afficheschaal.",
       "Toestanden via inversie (inktblok, papieren letter), nooit via een extra kleur.",
       "Hoeken van 0, geen schaduwen, geen zichtbare verlopen.",
       "Eén reeks per command, regel voor regel: de registratie."
@@ -590,7 +587,8 @@
       "**Do** laat elke toestand spreken via inversie: inktblok (#111111), papieren letter (#efefec).",
       "**Do** houd de hovertaal op twee woorden: een blok inverteert, een tekstlink gaat van een onderstreping van 1px naar 2px. Nooit allebei tegelijk, en nooit een tweede lijn.",
       "**Do** zet uitleg op de naad: het ding in kolom 1-7, de uitleg in kolom 8-12, op dezelfde rasterrij.",
-      "**Do** laat alinea's in het hero-raster zich met een papieren achtergrond uit de haarlijnen snijden.",
+      "**Do** laat tekst in een raster met haarlijnen (hero en cijfers) zich met een papieren achtergrond uit de lijnen snijden: alinea's, kop en inleiding, en elke tabelcel.",
+      "**Do** geef een cel op een rasterlijn zijn binnenruimte zelf, links en rechts gelijk (de celmaat).",
       "**Do** hertoken gedeelde componenten onder de homepage-scope, en zet de vormeigenschappen die je wilt expliciet (rand 0, schaduw none, radius 0), zodat de vorm van de oude wereld niet doorlekt.",
       "**Do** houd de simulatorkleuren binnen de zwarte module (#0a0a0a).",
       "**Do** maak tikdoelen minimaal 44px. De primaire actie is 56px."
@@ -603,7 +601,8 @@
       "**Don't** gebruik mascottes, badges op de voorgrond, kickers of eyebrows boven koppen.",
       "**Don't** zet getallen als los accentgetal in een kaart. Een cijfer staat in een tabelrij met zijn bron.",
       "**Don't** nummer sectiekoppen. Een mono-index is alleen voor een echte volgorde.",
-      "**Don't** trek verticale rasterlijnen door onder de hero. Daar draagt de naad het raster.",
+      "**Don't** trek verticale rasterlijnen buiten de hero en de cijfertabel. In de andere secties draagt de naad het raster.",
+      "**Don't** maak een kop groter dan de h1. Even groot mag: de slotkop en de cijfers delen zijn schaal.",
       "**Don't** voeg een tweede beweging toe naast de registratie. Eén reeks per command, regel voor regel (90ms), zonder typanimatie per letter en zonder lus. Een hover-overgang is hoogstens 160ms op kleur, en de FAQ opent zonder animatie."
     ]
   }

@@ -96,7 +96,7 @@ eigen regel:
 
 **Besluit.** Onder de hero volgen zeven secties in plaats van twaalf: Herkenbaar (papier,
 inktlijn boven, draagt het menu-anker `#features`), Leerpad (band), In cijfers (papier),
-Vragen met de bloglinks ernaast (band), Slot (papier), Sample (inkt, de enige inversie
+Vragen met de bloglinks ernaast (band), Slot (papier; *sinds sessie 247 inkt*), Sample (inkt, de enige inversie
 onder de hero), Nieuwsbrief (band). Geschrapt: de feitenband, "De oplossing" (omslag),
 "Wat maakt HackSimulator anders?" (tabel + drie features) en "Hoe het werkt" (incl. de
 mid-CTA). Documenthoogte 8745 → 5494 @1440, 10834 → 7892 @375.
@@ -164,7 +164,8 @@ Bewaakt in `homepage-conversion.spec.js` "Vorm volgt soort"; zes mutanten, zes f
 Bewaakt in "Vorm volgt soort" (paden, kantlijnhoogte, geen randen in de module).
 
 **Bewust niet:** geen verticale haarlijnen onder de hero (daar is het raster de vorm,
-eronder wordt het behang; de naad draagt het raster), geen mid-CTA (mobiele balk ≤1279,
+eronder wordt het behang; de naad draagt het raster; *herzien in sessie 248: ook in de
+cijfers, als tabel, en verder nergens*, zie "Layout (sessie 248)"), geen mid-CTA (mobiele balk ≤1279,
 navbar ≥1280, bewaakt door "op elke scrollpositie een tikbare CTA").
 
 ## Adapt (sessie 243)
@@ -539,7 +540,9 @@ gate zelf was de mutant: met de vaste maat vuurde precies deze assertie.
 hangen aan kolom 1; elke sectie is H2 → lede → module met metronoom-wisseling papier/band;
 Herkenbaar en het leerpad zijn herhaling als structuur; de cijfers en de slotkop gebruiken de
 afficheschaal niet; het onderscheid (de naad met aanhaallijn en Nederlandse glos) leeft alleen
-in de hero.
+in de hero. *Uitgewerkt in "Layout (sessie 248)": cijfers en slotkop staan op afficheschaal en
+het raster loopt in de cijfers door; Herkenbaar, de metronoom en de naad buiten de hero bewust
+niet.*
 
 **Bewaakt:** "de ruststand is het nmap-frame" (na 8s alleen nmap, elke gevulde poort met regel
 en glos in beeld), "overname zet het diagram in rust", "bloglinks: het pad onder de titel"
@@ -548,6 +551,112 @@ een eigen assertie. Onderweg twee meetfouten in mijn eigen tests, gevangen door 
 zelfbewakende tak: een observer die pas op DOMContentLoaded startte (modules draaien eerder), en
 `elementFromPoint` buiten het venster (geeft `null`). Herhaling: 81/81 in drie motoren, zonder
 retries.
+
+## Layout (sessie 248)
+
+**Aanleiding.** Na bolder (s247) van de eigenaar: "meer dan alleen bolder: indeling, ritme,
+onderscheid". `impeccable` geladen, `reference/layout.md` voor het eerst in dit traject, daarna
+`craft-floor.md` vlak voor de eerste edit. Twee geïsoleerde beoordelingen.
+
+**Layoutbeoordeling (1440x900 en 375x812, transities bevroren).** De hero leest goed; daaronder
+zeven blokken van gelijk gewicht. Gemeten: 7/7 koppen op kolom 1, elke h2 47,52px (slot 64,8),
+6/7 secties kop 1-7 / ding 1-7 / uitleg 8-12; na de h1 (88,2) geen schaalsprong; kolom 8-12 leeg
+naast de cijfers (266px hoog) en in het slot (349px inkt, 5/12 leeg). In Herkenbaar staat het
+Nederlands als `.af-sub`-pijltje ín de module, de enige rij in de oude 80/20-vorm. **Oordeel:
+de indeling, niet de wereld**: het vocabulaire (raster, naad, inversie, afficheschaal) werd onder
+de hero niet gebruikt. Dus `layout`, geen `new-work`.
+
+**Mechanische scan** (`detect --scope layout` tegen de URL, 1280 en 390): 11 en 10 meldingen,
+geen structurele. `cramped-padding` op dichte FAQ-items en de oplichtende terminalregel,
+`content-hidden-at-rest` 41-43% = de dichte FAQ-antwoorden (bewust, s244).
+
+**Proeven** (`.playwright-mcp/s248-proef-{P1,P2,P2b,P3}-{1440,375}.png`, nul-stand ernaast,
+licht en donker via de echte schakelaar):
+
+| | sectie 1440 | sectie 375 | besluit |
+|---|---|---|---|
+| P1 Herkenbaar: glos per regel op de naad | 1069 → 1467 | 1442 → 1567 | **verworpen** |
+| P2 cijfers over 12 kolommen + haarlijnen | 593 → 677 | 471 → 481 | **gekozen** |
+| P2b als P2, zonder haarlijnen | 593 → 677 | 471 → 481 | (prijs van het raster los) |
+| P3 slot als tegenhanger van de hero | 349 → 347 | 361 → 358 | **gekozen** |
+
+- P1 maakte elke Herkenbaar-rij kop → tekst → module (precies het stramien), liet de
+  rechterkolom leeg (vier korte glossen op +398px), en er valt weinig te glossen: 8 van de 12
+  regels zijn al Nederlands (`[!]`, `[TIP]`). De glos als drager werkt in de hero omdat daar
+  Engelse uitvoer staat; elders is hij decoratie in de vorm van uitleg. Niet geforceerd.
+- P2 boven P2b: het raster loopt één keer door, als tabel (rijlijnen kruisen kolomlijnen).
+- Go eigenaar: P2 + P3.
+
+**Gebouwd** (`fd55a70`, reviewfixes `3e71936`):
+- **Cijfers** over 12 kolommen via subgrid: getal op `--af-affiche` in 1-3, label 4-9 (de cel is
+  de maat), bron 10-12. Elke cel snijdt zich met papier uit de haarlijnen. Elke cel draagt
+  `--af-cel`: getal en bron staan vanaf 768 exact even ver van hun lijn (12 @768 … 20 @1440).
+  Onder 768: getal in kolom 1 óp de lijn ("40+" is 62,9px, kolom op 320 72px), label 2-4, bron
+  eronder. Hover en focus inverteren rij en cellen.
+- **Slot**: kop op `--af-affiche` over 12 kolommen; vanaf 1280 zin 1-8 en actie 10-12 op één
+  rij, knop op de eerste zinregel (zelfde definitie als de hero). `--af-display` vervallen.
+- Een dode `background: none` op het getal (landing.css zet daar al lang niets meer) versloeg
+  de uitsnede; de pixelguard ving een haarlijn door "40+" (71 van 81 pixelrijen).
+
+**Omgegane besluiten, met prijs:**
+- *Haarlijnen alleen in de hero* (s242): nu hero én cijfers, verder nergens. Bewaakt als
+  populatie (élk element met een betegelde verloop-achtergrond), niet als selectorlijst.
+- *Kolom 8-12 leeg naast de cijfers* (s245, N3): de tabel vult nu het raster. De noot-afweging
+  van N3 blijft geldig: er staat geen glos naast de tabel.
+- *De naad 7|8 voor elke tweedelige rij* (s242): de cijfers zijn een benoemde uitzondering;
+  de naadguard noemt ze in commentaar en de Layout-guard bewaakt hun eigen vorm.
+- *Slotkop op display over 1-7*: nu afficheschaal; "geen kop groter dan de h1" blijft waar
+  (gelijk mag) en bewaakt.
+- *Getal op de lijn* (proef P2): teruggedraaid na de review, zie hieronder.
+
+**Finish review (vers): eerst `recapture`, dan `fix`, verdict `ship`** op de gescoorde fixes.
+- *Recapture*: mijn folds liepen via `html { scroll-behavior: smooth }`; transities bevriezen
+  stopt een geprogrammeerde smooth scroll niet. Opnieuw met `scrollBehavior = 'auto'`,
+  `behavior: 'instant'` en per shot gelogd: scrollY, navbar op 0, sectie onder de navbar,
+  banner op `innerHeight` (16/16).
+- Vier fixes, elk nagemeten: (1) focus gaf alleen de ring → inversie zoals hover; (2) getal op
+  de lijn, bron 20px ervan, bij hover plakte het getal tegen zijn inktblok → beide cellen
+  `--af-cel`. Het `::before`-voorstel van de reviewer niet gevolgd: dat legt de focusring
+  midden in het inktvlak en de rijlijnen lopen dan niet meer gelijk met de bovenlijn van de
+  tabel; (3) `max-width: 40ch` brak rij 1 af op kolom 7 → weg; (4) smal was de bron verborgen,
+  zonder hover zie je niet dat de rij een link is → onder het label.
+- Prijs (reviewer): het getal hangt in rust ~20px rechts van de kop, terwijl de inhoudsopgave
+  van de sample "01" op de lijn houdt. Twee tabellen, twee regels. **Open**, zie hieronder.
+
+**Bewaakt** in `homepage-conversion.spec.js` "Layout (sessie 248)": sweep per 8px 320-1920
+(slotkop en getal op afficheschaal, slotactie in 10-12 op de eerste zinregel ≥1280 en eronder
+smal, getal en bron op de rasterranden met gelijke binnenruimte, label op één regel ≥1280, bron
+onder het label smal, geen overlap, geen overloop; zelfbewakend: 201 breedtes, beide vormen van
+slot en tabel gemeten), haarlijnen alleen in hero en cijfers (populatie), geen haarlijn door tekst
+in de cijfers (gerenderde pixels, lijnkolom gezocht in apparaatpixels, positieve controle per
+lijn, beide thema's), focus-inversie per thema met een rusttak. **Twaalf mutanten, twaalf
+asserties**, elk eerst geserveerd en gerenderd gecontroleerd. Een mutant ving een fout in de guard
+zelf: de smalle tak telde ná een vroege `return`, dus vuurde de zelfbewakende tak in plaats van de
+bedoelde assertie.
+
+**Gates:** gate 1 afgekapt (`exit 124` op 869/876: de deadline van 30 min was te krap, 0 fouten
+tot daar; telt niet als groen). Gate 2: 859 passed, 17 skipped, 0 failed. Gate 3 (na de review):
+865 passed, 17 skipped, 0 failed. Runtime 1089,83 → 1092,76 / 1120 KB.
+
+**Gemeten, niet opgelost.**
+- **WebKit werkt layout niet bij als het venster in kleine stappen over een mediagrens groeit**
+  (matchMedia zegt al het nieuwe): over 768 bleef `display: none` staan (85 breedtes), over 1280
+  bleven hero- én slotactie links (81/81). Gelijk op de commit vóór deze sessie (HEAD-css via een
+  route geserveerd); weg na een herlading. Zelfde familie als de rijhoogte in s243. De sweep laadt
+  op 768 en 1280 opnieuw. Alleen voor wie een Safari-venster sleept.
+- **Twee tabellen, twee regels**: cijfers met binnenruimte, de sample-inhoud op de lijn. Eén
+  regel kiezen hoort bij #85 (de gedeelde laag), niet bij deze ronde.
+
+**Bewust niet (ceiling van de reviewer, voor de eigenaar).**
+- *Basislijn-registratie*: label en bron op de basislijn van het getal (FORM belooft "zelfde
+  basislijn"). Nu `align-items: center`. Goedkoop en on-thesis, maar niet gevraagd en niet
+  geproefd.
+- *"Geen schaalsprong na de hero"* was het probleem, niet het doel: de schaal springt nu
+  88 → 47 → 88 (cijfers) → 47 → 88 (slot). Kop van ±47 boven getallen van 88: in gewicht is de
+  kop het lichtste element van zijn sectie. Dat is gekozen, geen tegenspraak.
+- *Onderscheid via de naad*: P1 liet zien dat de glos onder de hero geen inhoud heeft. Het
+  onderscheid blijft in de hero; het raster en de afficheschaal lopen nu door.
+- *Metronoom papier/band*: P2 breekt hem één keer met textuur; meer vraagt een nieuw ritmebesluit.
 
 ## Memorabel moment
 

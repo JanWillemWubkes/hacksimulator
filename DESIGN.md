@@ -32,12 +32,6 @@ typography:
     fontWeight: 700
     lineHeight: 0.94
     letterSpacing: "-0.02em"
-  display:
-    fontFamily: "Archivo, Atkinson Hyperlegible Next, -apple-system, Segoe UI, sans-serif"
-    fontSize: "clamp(2.2rem, 4.6vw, 3.6rem)"
-    fontWeight: 700
-    lineHeight: 0.98
-    letterSpacing: "-0.012em"
   headline:
     fontFamily: "Archivo, Atkinson Hyperlegible Next, -apple-system, Segoe UI, sans-serif"
     fontSize: "clamp(1.75rem, 3.3vw, 2.85rem)"
@@ -46,9 +40,9 @@ typography:
     letterSpacing: "-0.02em"
   figure:
     fontFamily: "Archivo, Atkinson Hyperlegible Next, -apple-system, Segoe UI, sans-serif"
-    fontSize: "clamp(2rem, 3.4vw, 3rem)"
+    fontSize: "clamp(2.2rem, 6.2vw, 4.9rem)"
     fontWeight: 700
-    lineHeight: 1
+    lineHeight: 0.94
     letterSpacing: "-0.02em"
     fontFeature: "tnum"
   title:
@@ -174,8 +168,9 @@ Expliciet niet: scanlines, glow, groen-op-zwart, matrixregen, mascottes, badges 
 
 **Key Characteristics:**
 - Papier, inkt, één signaalrood. Verder niets buiten de terminalmodule.
-- Een 12-koloms raster zonder goot, met in het eerste scherm zichtbare haarlijnen van 1px.
+- Een 12-koloms raster zonder goot, met zichtbare haarlijnen van 1px in de hero en in de cijfertabel, en nergens anders.
 - De naad op kolom 8: links het ding, rechts de uitleg.
+- Eén schaal voor de grote vormen: de h1, de getallen in de cijfertabel en de slotkop staan alle drie op afficheschaal.
 - Toestanden via inversie (inktblok, papieren letter), nooit via een extra kleur.
 - Hoeken van 0, geen schaduwen, geen zichtbare verlopen.
 - Eén reeks per command, regel voor regel: de registratie.
@@ -227,13 +222,12 @@ Papier en inkt wisselen van rol. De grond wordt #111111 en de letter #efefec. Da
 De rem-basis is 18px op desktop en 16px onder 768px. De maten hieronder schalen daarmee mee.
 
 ### Hierarchy
-- **Affiche** (Archivo 700, clamp(2.2rem, 6.2vw, 4.9rem), max 88,2px, regelhoogte 0,94, spatiëring -0,02em): alleen de h1, over alle twaalf kolommen. Het plafond is de rasterbreedte en niet de viewport: van 1280 tot 1920px staat de kop op twee regels. Op 375 is hij 35,2px. Op 1440 is hij 1,86x de sectiekop. Er is geen kop groter dan de h1.
-- **Display** (Archivo 700, clamp(2.2rem, 4.6vw, 3.6rem), max 64,8px, regelhoogte 0,98, spatiëring -0,012em): alleen de slotkop, over kolom 1-7.
+- **Affiche** (Archivo 700, clamp(2.2rem, 6.2vw, 4.9rem), max 88,2px, regelhoogte 0,94, spatiëring -0,02em): de h1 en de slotkop, allebei over alle twaalf kolommen. Het plafond is de rasterbreedte en niet de viewport: van 1280 tot 1920px staat de h1 op twee regels. Op 375 is hij 35,2px. Op 1440 is hij 1,86x de sectiekop. De slotkop deelt de schaal met de h1, zodat de pagina eindigt in de vorm waarin ze begint. Er is geen kop groter dan de h1; even groot mag. De aparte displaymaat (64,8px) die alleen de slotkop droeg, is vervallen.
 - **Headline** (Archivo 700, clamp(1.75rem, 3.3vw, 2.85rem), max 51,3px, regelhoogte 1,05, spatiëring -0,02em): sectiekoppen over kolom 1-7, met `text-wrap: balance`.
-- **Figure** (Archivo 700, clamp(2rem, 3.4vw, 3rem), regelhoogte 1, tabelcijfers): de getallen in de cijfertabel. Altijd in inkt en in een tabelrij met zijn bron, nooit als los accentgetal in een kaart.
+- **Figure** (Archivo 700, afficheschaal clamp(2.2rem, 6.2vw, 4.9rem), max 88,2px, regelhoogte 0,94, spatiëring -0,02em, tabelcijfers): de getallen in de cijfertabel, op dezelfde maat als de h1. Altijd in inkt en in een tabelrij met zijn bron, nooit als los accentgetal in een kaart.
 - **Title** (Archivo 700, 1.22rem = 22px, regelhoogte 1,2): h3 in Herkenbaar. De FAQ-vraag gebruikt Archivo 700 op 1.1rem.
 - **Label** (Archivo 800, 1.1rem tot 1.4rem): namen die iets aanduiden in plaats van iets te beweren. Denk aan het woordmerk, de niveaus in het leerpad (1.22rem) en de bloknamen in het diagram ("jouw machine", de router), die met 1.4rem de grootste zijn.
-- **Body** (Atkinson 400, 1rem, regelhoogte 1,55, max 62ch, ongeveer 75 tekens): alle lopende tekst. Een inleiding onder een kop is 1.1rem in gedempte inkt, max 52ch.
+- **Body** (Atkinson 400, 1rem, regelhoogte 1,55, max 62ch, ongeveer 75 tekens): alle lopende tekst. Een inleiding onder een kop is 1.1rem in gedempte inkt, max 52ch. De omschrijving in de cijfertabel is 1.1rem in inkt (1rem onder 768px) en heeft geen eigen max-width: de cel (kolom 4-9) is de maat. De zin in het slot is 1.1rem.
 - **Small** (Atkinson, 0.83rem = 15px): microcopy, de glos, de kolomkop, herkomst- en privacyregels. De herkomst in een chip is 0.72rem (13px). Een kop boven een kolom op de naad ("In gewoon Nederlands" boven de glos, "Verder lezen op de blog" boven de kantlijn) is Small in 700 en gedempte inkt (#444440): het gewicht maakt het een kop, de kleur zet hem achter wat hij aankondigt.
 - **Button** (Atkinson 700): de primaire actie op max(1.15rem, 19px), zodat hij op elke breedte grote tekst blijft. De secundaire knop staat op 0.9rem.
 - **Mono** (JetBrains Mono 400, 0.86rem, regelhoogte 1.5rem = 27px in de module): terminaluitvoer, de invoerregel en de commands in chips (700). Buiten de module op 0.83rem voor indexnummers (700), adressen, bronnen en paginaverwijzingen, en op 0.75rem voor paden. In de poorten van het diagram schaalt de letter mee met zijn sleuf, tot 1rem (open 1.3rem, 700).
@@ -249,19 +243,23 @@ De rem-basis is 18px op desktop en 16px onder 768px. De maten hieronder schalen 
 
 Het raster heeft 12 kolommen (`repeat(12, minmax(0, 1fr))`) zonder goot, is maximaal 1400px breed en heeft een zijrand van clamp(16px, 3vw, 32px). Omdat er geen goot is, zijn de kolomgrenzen de lijnen, en elke cel geeft zijn inhoud zelf binnenruimte (clamp(12px, 1.4vw, 20px)). Kinderen erven het raster via subgrid.
 
-**Haarlijnen alleen in het eerste scherm.** In de hero ís het raster de vorm: twaalf verticale lijnen van 1px in de rasterlijnkleur, getekend als één achtergrondlaag. Elke alinea in dat raster snijdt zich er met een papieren achtergrond uit, zodat er geen lijn door een regel tekst loopt. De kop op afficheschaal mag over het raster staan. Onder de hero staan geen verticale haarlijnen: daar draagt de naad het raster.
+**Haarlijnen in de hero en in de cijfers, verder nergens.** Twaalf verticale lijnen van 1px in de rasterlijnkleur (onder 768px vier), getekend als één achtergrondlaag op de contentbox. In de hero ís het raster de vorm. In "HackSimulator in cijfers" is het een tabel: de kolomlijnen kruisen de rijlijnen. In beide snijdt de tekst zich er met een papieren achtergrond uit (`width: fit-content`), zodat er geen lijn door een regel tekst of een cijfer loopt. Dat geldt voor de kop en inleiding van de cijfers en voor elke cel van de tabel. De h1 op afficheschaal mag over het raster staan. In de andere secties staan geen verticale haarlijnen: daar draagt de naad het raster.
 
-**De naad.** Kolom 1-7 is voor het ding (terminal, transcript, tabel, vragen, actie) en kolom 8-12 voor de uitleg of de vervolgstap (glos, bloglinks, sample-uitleg, nieuwsbriefveld). De glos-kolom is alleen voor uitleg naast iets links. Wat bij een kop hoort, staat onder die kop.
+**De cijfertabel op het raster.** De tabel loopt over alle twaalf kolommen (subgrid): het getal in kolom 1-3 op afficheschaal, de omschrijving in kolom 4-9 en de bron (een pad in mono) in kolom 10-12, rechts uitgelijnd. De cellen staan op de rasterlijnen en dragen zelf hun binnenruimte (de celmaat), links en rechts gelijk: vanaf 768px staat de letter van het getal even ver van zijn lijn als de bron van de zijne, 12px op 768 en 20px op 1440. Onder 768px heeft het raster vier kolommen: het getal staat in kolom 1, zonder binnenruimte op de lijn ("40+" past op 320 niet met marge in 72px), de omschrijving in kolom 2-4 en de bron als tweede regel onder de omschrijving. Een rij inverteert bij hover én bij focus: de rij, elke cel en de bron worden inkt met een papieren letter, en focus tekent daarnaast de rode ring.
+
+**Het slot als tegenhanger van de hero.** De slotkop staat op afficheschaal over alle twaalf kolommen, op elke breedte. Vanaf 1280px staan op één rij de zin (kolom 1-8, max 62ch) en de actie als kolom in 10-12: de rode knop met de microcopy eronder, 8px ertussen. De knop staat op de hoogte van de eerste regel van de zin (beide 28px padding boven), met de celmaat binnenruimte vanaf de lijn van kolom 10. Daaronder staan kop, zin en actie onder elkaar, zin en actie in kolom 1-7.
+
+**De naad.** Kolom 1-7 is voor het ding (terminal, transcript, sample-inhoud, vragen) en kolom 8-12 voor de uitleg of de vervolgstap (glos, bloglinks, sample-uitleg, nieuwsbriefveld). De glos-kolom is alleen voor uitleg naast iets links. Wat bij een kop hoort, staat onder die kop. Twee secties gebruiken het hele raster in plaats van de naad: de cijfertabel (1-3, 4-9, 10-12) en het slot (1-8, 10-12), dat de verdeling van het eerste scherm herhaalt.
 
 **De registratie.** Outputregel en glos zijn één rij met twee cellen. De module is precies 7/12 van het raster breed, gemeten tegen de rastercontainer en niet tegen het scrollende lichaam, zodat een scrollbalk de naad niet verschuift. De glos hangt met een aanhaallijn van 1px in inkt aan zijn regel.
 
 **Ritme naar gewicht.** Hoofdsecties (Herkenbaar, Leerpad, Vragen) krijgen clamp(72px, 9vw, 136px) boven en onder. Korte secties (cijfers, slot, sample, nieuwsbrief) krijgen clamp(48px, 5vw, 72px), zodat de lucht nooit groter is dan de inhoud. Secties wisselen tussen papier en band. Het slot is de enige inktband onder de hero, met de rode actie erop; de sample erna staat op papier. Onderaan is de volgorde dus band (vragen), inkt (slot), papier (sample), band (nieuwsbrief). De eerste sectie na de hero begint met een inktlijn van 1px.
 
 **Responsief.**
-- Vanaf 1280px staat de kop over alle twaalf kolommen. Daaronder staan op één rij de ondertitel (kolom 1-8) en de actie als blok in kolom 10-12: de knop op de hoogte van de eerste regel van de ondertitel, de microcopy eronder.
-- Onder 1280px staan kop, ondertitel en actie onder elkaar, gaan de chips naar 3 kolommen en neemt een mobiele CTA-balk met de rode actie de rol van de nav-CTA over.
-- Onder 1024px gaan tabel, vragen en leerpad over de volle breedte. Leerpadkolommen worden rijen met een inktlijn ertussen, de bloglinks komen onder de vragen en de poorten staan in twee rijen van zes.
-- Onder 768px wordt het raster 4 kolommen. De glos gaat de module in, onder zijn regel, in 0.78rem. De chips staan twee aan twee met de index boven het command, en de scanpijl in het diagram loopt verticaal en tekent zich omlaag.
+- Vanaf 1280px staat de kop over alle twaalf kolommen. Daaronder staan op één rij de ondertitel (kolom 1-8) en de actie als blok in kolom 10-12: de knop op de hoogte van de eerste regel van de ondertitel, de microcopy eronder. Het slot volgt dezelfde verdeling.
+- Onder 1280px staan kop, ondertitel en actie onder elkaar (in de hero en in het slot), gaan de chips naar 3 kolommen en neemt een mobiele CTA-balk met de rode actie de rol van de nav-CTA over.
+- Onder 1024px gaan vragen en leerpad over de volle breedte (de cijfertabel staat daar altijd al). Leerpadkolommen worden rijen met een inktlijn ertussen, de bloglinks komen onder de vragen en de poorten staan in twee rijen van zes.
+- Onder 768px wordt het raster 4 kolommen, ook de haarlijnen. De cijfertabel wordt getal (kolom 1) naast omschrijving met de bron eronder (kolom 2-4). De glos gaat de module in, onder zijn regel, in 0.78rem. De chips staan twee aan twee met de index boven het command, en de scanpijl in het diagram loopt verticaal en tekent zich omlaag.
 
 ## Elevation & Depth
 
@@ -297,7 +295,8 @@ Er zijn geen kaarten. Inhoud staat in rijen en kolommen, gescheiden door haarlij
 - **Background:** papier, of de band voor een hele sectie, of inkt voor het slot. De zwarte module is het enige vlak binnen een sectie.
 - **Shadow Strategy:** geen, zie Elevation & Depth.
 - **Border:** tabelrijen (de cijfertabel en de inhoud van de sample) en FAQ-items hebben een onderlijn van 1px in de bedieningslijnkleur onder een bovenlijn van 2px in inkt. Leerpadkolommen hebben een scheidingslijn van 1px in inkt.
-- **Internal Padding:** de celmaat clamp(12px, 1.4vw, 20px) horizontaal. Rijen van de cijfertabel zijn minimaal 88px hoog.
+- **Internal Padding:** de celmaat clamp(12px, 1.4vw, 20px) horizontaal. Rijen van de cijfertabel hebben 16px boven en onder en geen minimumhoogte: het getal op afficheschaal bepaalt de hoogte.
+- **Bekende ongelijkheid, geen regel:** de inhoudstabel van de sample zet zijn index ("01") op de lijn, zonder binnenruimte, terwijl het getal in de cijfertabel vanaf 768px de celmaat van zijn lijn staat. Dat is een verschil in de bouw, niet een tweede toegestane vorm; neem het niet over op nieuwe tabellen.
 
 ### Inputs / Fields
 - **Style:** het nieuwsbriefveld is papier met een kader van 1px in inkt, 56px hoog, padding 0 16px, radius 0 en Atkinson 1rem. De knop ernaast is een inktblok van 56px. Vanaf 1024px staan ze op één rij tot de rasterrand, zonder rechterrand op het veld. Daaronder staan ze onder elkaar en neemt de knop de volle breedte.
@@ -311,7 +310,7 @@ Er zijn geen kaarten. Inhoud staat in rijen en kolommen, gescheiden door haarlij
 - **Footer:** een inktvlak op de rail van het raster (dezelfde zijrand en breedte). Papier en inkt draaien er om. De Ko-fi-link en het GitHub-icoon zijn een blok met een papieren kader dat inverteert.
 
 ### Links
-Een tekstlink is inkt met een onderstreping van 1px, offset 0.2em. Bij hover wordt de onderstreping 2px. Staat een link als blok in een lijst (bloglinks, tabelrijen), dan inverteert het blok in plaats daarvan, met 8px lucht naast de letters. Een bloglink noemt zijn pad in mono (0.75rem, gedempt) onder de titel, zoals een cijfer zijn bron noemt, en nooit erboven. Het pad ligt in de onderpadding van de link en vangt geen tik, zodat het tikdoel van 44px heel blijft.
+Een tekstlink is inkt met een onderstreping van 1px, offset 0.2em. Bij hover wordt de onderstreping 2px. Staat een link als blok in een lijst (bloglinks, tabelrijen), dan inverteert het blok in plaats daarvan, met 8px lucht naast de letters (in de cijfertabel de celmaat), bij hover en bij focus. Een bloglink noemt zijn pad in mono (0.75rem, gedempt) onder de titel, zoals een cijfer zijn bron noemt, en nooit erboven. Het pad ligt in de onderpadding van de link en vangt geen tik, zodat het tikdoel van 44px heel blijft.
 
 ### Terminal module (signatuur)
 Een zwarte module over kolom 1-7 met een mono kopregel (titel en omvang), een lichaam van zeven regels van 27px, en een invoerregel. Het lichaam loopt over alle twaalf kolommen: links de module, rechts op papier de glos per regel. Elk command speelt één reeks, regel voor regel. De rijen staan meteen in de DOM; alleen het beeld wacht. Elke rij rolt in 180ms van links open (een clip-path), 90ms na de vorige, en alleen de rijen in het venster tellen mee. Op het moment van verschijnen lichten outputregel, glos en diagramsleuf samen op als één rij: de regel krijgt de oplichtkleur en de glos inverteert naar inkt. Dat gebeurt zonder overgang erin, staat 450ms, en loopt uit in 700ms in cubic-bezier(0.16, 1, 0.3, 1). Er is geen typanimatie per letter en geen lus. Onder `prefers-reduced-motion` staat meteen de eindstand, bij laden en bij zelf typen.
@@ -330,7 +329,8 @@ Bij een scan tekent eerst de pijl zich in 360ms van jouw machine naar de router;
 - **Do** laat elke toestand spreken via inversie: inktblok (#111111), papieren letter (#efefec).
 - **Do** houd de hovertaal op twee woorden: een blok inverteert, een tekstlink gaat van een onderstreping van 1px naar 2px. Nooit allebei tegelijk, en nooit een tweede lijn.
 - **Do** zet uitleg op de naad: het ding in kolom 1-7, de uitleg in kolom 8-12, op dezelfde rasterrij.
-- **Do** laat alinea's in het hero-raster zich met een papieren achtergrond uit de haarlijnen snijden.
+- **Do** laat tekst in een raster met haarlijnen (hero en cijfers) zich met een papieren achtergrond uit de lijnen snijden: alinea's, kop en inleiding, en elke tabelcel.
+- **Do** geef een cel op een rasterlijn zijn binnenruimte zelf, links en rechts gelijk (de celmaat).
 - **Do** hertoken gedeelde componenten onder de homepage-scope, en zet de vormeigenschappen die je wilt expliciet (rand 0, schaduw none, radius 0), zodat de vorm van de oude wereld niet doorlekt.
 - **Do** houd de simulatorkleuren binnen de zwarte module (#0a0a0a).
 - **Do** maak tikdoelen minimaal 44px. De primaire actie is 56px.
@@ -343,5 +343,6 @@ Bij een scan tekent eerst de pijl zich in 360ms van jouw machine naar de router;
 - **Don't** gebruik mascottes, badges op de voorgrond, kickers of eyebrows boven koppen.
 - **Don't** zet getallen als los accentgetal in een kaart. Een cijfer staat in een tabelrij met zijn bron.
 - **Don't** nummer sectiekoppen. Een mono-index is alleen voor een echte volgorde.
-- **Don't** trek verticale rasterlijnen door onder de hero. Daar draagt de naad het raster.
+- **Don't** trek verticale rasterlijnen buiten de hero en de cijfertabel. In de andere secties draagt de naad het raster.
+- **Don't** maak een kop groter dan de h1. Even groot mag: de slotkop en de cijfers delen zijn schaal.
 - **Don't** voeg een tweede beweging toe naast de registratie. Eén reeks per command, regel voor regel (90ms), zonder typanimatie per letter en zonder lus. Een hover-overgang is hoogstens 160ms op kleur, en de FAQ opent zonder animatie.
