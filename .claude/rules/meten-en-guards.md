@@ -573,3 +573,38 @@ offset 2px) en eis vier keer rood bij focus én nul keer in rust: zonder die rus
 los ruim binnen 30s, in de volle gate erover, en gelijk aan HEAD gemeten. Een test die over een
 populatie loopt krijgt `test.setTimeout(n × per-item)`; meet eerst los én tegen HEAD, zodat een
 traagheid door je wijziging niet als "last" wordt weggezet.
+
+## 34. Een animatie meet je vanaf de eerste byte; een tak bewaakt de regel die je vervangt (Sessie 247)
+
+**Lees een animatie niet achteraf.** `getAnimations()` na `page.goto()` was flaky: `goto` wacht op
+`load`, en een laadreeks van ~1,1s kan dan al voorbij zijn. Log het begin zelf:
+
+```js
+await page.addInitScript(() => {
+  window.__log = [];
+  document.addEventListener('animationstart', (e) => window.__log.push(e.animationName));
+});
+```
+
+Vier verwante valkuilen uit dezelfde sessie; een tak die op een lege of onmogelijke populatie
+faalt, ving de eerste twee:
+
+- **Een observer op `DOMContentLoaded` mist wat modules schrijven**: modules draaien eerder. En
+  een observer vanaf de eerste byte ziet ook wat de parser invoegt (statische no-JS-rijen die het
+  script daarna vervangt). Filter op `document.readyState !== 'loading'`.
+- **`elementFromPoint` buiten het venster geeft `null`.** Scroll het doel eerst in beeld.
+- **Een mutant kan landen zonder iets te veranderen.** `flex-direction: row` op een blok met
+  `flex-wrap: wrap` brak toch naar een nieuwe regel. Meet de gerenderde layout vóór je de guard
+  blind noemt (§29), en kies dan een mutant die de layout wél raakt.
+- **Een pad dat de code onder een voorwaarde overslaat, toetst die voorwaarde niet.** Onder
+  reduced motion riep de auto-demo `lichtOp` nooit aan, dus een guard op het laadpad bleef groen
+  toen `lichtOp` zijn eigen weigering kwijt was. Toets ook het tweede pad (zelf typen).
+
+**Vervang je een pixelregel door een guard op de bedoeling, bewaak dan de oude conditie.** "De
+vouw" op 1280 werd "de scan speelt opnieuw als het diagram in beeld komt". Die test eist eerst dat
+de poorten ónder de vouw staan; komen ze erboven, dan faalt hij met de melding dat 1280 terug hoort
+in de pixelvouw. Zonder die tak blijft de vervanger groen voor een situatie waarvoor hij niet meer
+nodig is.
+
+**Een schaalwijziging meet je per breedte.** Een grotere poortletter zag er goed uit op 1440, 1280
+en 375; de sweep per 8px van sessie 243 vond 320-336 en 1024-1184 zonder lucht.

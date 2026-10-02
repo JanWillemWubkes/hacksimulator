@@ -688,3 +688,26 @@ want hun containing block verandert mee (hier alleen een sr-only-label).
 teken af op hele pixels (8,0 bij 12,8px), Firefox niet (7,68 = 0,6em). Een glos die met 4,8em onder
 een waarde na acht spaties moest staan, stond in Chromium 2,6px ernaast. `::before { content:
 '        ' }` in hetzelfde font geeft in elke engine exact dezelfde voorsprong.
+
+## 32. Een plafond hoort bij de container, en een letter bij zijn vak (Sessie 247)
+
+**Een `vw`-maat groeit door waar het raster stopt.** `clamp(2.2rem, 6.2vw, 6rem)` gaf op 1920 drie
+regels kop, want het raster is maximaal 1400px en de viewport groeit door. Zet het plafond op de
+waarde waarbij de tekst in de maximale rasterbreedte past (hier 4.9rem), en toets twee regels tot
+1920.
+
+**Laat een letter in een vak rekenen tegen dat vak.** Poortnummers in twaalf sleuven van een
+router werden krap op 1024-1184. Maak de rij een container en reken de sleuf uit:
+
+```css
+.af-poorten {                       /* een eigen container: geen subgrid (§25) */
+  container-type: inline-size;
+  --af-poort-letter: min(1rem, calc(3.4cqw - 4px));   /* (100cqw - 11 gaten)/12, 4 tekens à 0,6em + 4px */
+}
+```
+
+De vaste maat blijft het plafond, dus waar het past verandert niets.
+
+**`align-items: end` op een rasterouder schuift een korte cel omlaag** zodra een buurcel op
+dezelfde rij hoger wordt. De ondertitel zakte 25px toen de actie ernaast een blok van knop plus
+microcopy werd. Zet `align-self: start` op de cel die bovenaan hoort.

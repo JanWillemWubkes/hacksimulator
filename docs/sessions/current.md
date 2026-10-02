@@ -4,6 +4,124 @@
 
 ---
 
+## Sessie 247: Wat de bezoeker ziet als hij niets doet, is het ontwerp (1-2 okt 2026)
+
+**Branch:** `design/impeccable`. `main` onaangeroerd; niets staat live.
+
+**Mission:** TASKS #89, `bolder` (+ `overdrive` voor het signatuurmoment) op de landingspagina.
+De eigenaar na de ship van sessie 246: "strak, maar oogt niet uniek". Richting kiezen na proeven
+op gelijke maat, pas bouwen na zijn go.
+
+### Skill eerst, dan de diagnose toetsen
+
+Eerste tool-call: de skill, dan `impeccable context --target index.html`, dan `bolder.md`,
+`overdrive.md`, `animate.md`; `craft-floor.md` vlak vóór de eerste edit. De diagnose van de
+eigenaar gemeten in plaats van overgenomen:
+
+- **"Het moment zit achter een klik": half waar.** De auto-demo opende met nmap, en
+  `zetDiagram` riep `lichtOp(poorten)` ook bij `oplichten: false` aan. De poorten flitsten dus
+  450ms bij laden, terwijl het oog op de kop stond; het hele moment kwam pas na **14,9s** terug.
+  Op 375 stond het diagram op y=1102 bij een vouw van 812: daar nooit gezien.
+- **"De schaal is braaf": waar.** h1 64,8px = 1,26x de sectiekop; het zwaarste vlak was de terminal.
+- **"Het rood is een knop": waar.** 1,07% van de viewport op 1440.
+
+### Proeven (gelijke maat, licht en donker, 1440 en 375)
+
+Proef-CSS via `addStyleTag` (bewijst niets over de cascade, mocht ook niet: het was een proef).
+Samengesteld in een tijdelijke HTML-pagina, want er is geen `magick`.
+
+| | 1440 `.af-net` (≤900) | 1280 (≤800) | rood |
+|---|---|---|---|
+| nu | 788 | 770 | 1,07% |
+| A kop 12 kolommen | 883 | 856 | 1,07% |
+| B rood vlak | 788 | 770 | 3% / 12-14% op smal |
+| C scan + diagram | 815 | 797 | 1,07% |
+| A+C 6,2vw | 897 | 871 | 1,07% |
+
+Keuze A+C plus slot op inkt/sample op papier; B las op 1440 als een grotere knop en werd op smal
+opdringerig. Eigenaar: go.
+
+### De bouw (`e8970b9`)
+
+- `--af-affiche: clamp(2.2rem, 6.2vw, 4.9rem)`. Eerst 6rem als plafond: op 1920 drie regels,
+  want het raster stopt op 1400px en de viewport groeit door. Het plafond hoort bij de
+  rasterbreedte.
+- Vanaf 1280 de actie als blok op de rij van de ondertitel. De ondertitel zakte 25px: de
+  `align-items: end` van het kopblok, en het actieblok was hoger. `align-self: start`.
+- Diagram op schaal; slot op inkt (actie inverteert naar papier), sample op papier.
+- De scan: rijen staan meteen in de DOM, alleen het beeld wacht (`clip-path` per regel, 90ms).
+  Eén test las `.is-open` direct na een klik, dus de toestand bleef meteen waar en alleen de
+  poort wachtte visueel (`af-poort-wacht`). Eerste film: 400ms zwarte module, want prompt en kop
+  vielen boven het ruststand-venster maar telden mee in de stagger. Nu tellen alleen zichtbare
+  rijen, en de pijl gaat vóór de uitvoer.
+- Filmen: pauzeren per frame verschoof alle volgende animaties. Eén verse load per frame.
+
+### Gates en de eerste fout
+
+- **Gate 1: 838 passed, 3 failed**, één test in drie motoren: poortlabel zonder 4px lucht op
+  320-336 en 1024-1184. Mijn eigen meting keek naar drie breedtes; de 8px-guard van sessie 243
+  ving het. Fix: de poortrij is een container en de letter rekent tegen de sleuf. De gate zelf
+  was de mutant.
+- **Gate 2: 840 passed, 1 flaky**: eyebrow-contrast op `/sample-juridisch.html` in WebKit, een
+  goto-time-out op de externe sibforms-stylesheet. Die pagina laadt geen enkel gewijzigd
+  bestand; los 5/5.
+
+### Finish review (`e821992`)
+
+Reviewer vers: `fix`, vijf punten, elk nagemeten:
+- **Ruststand**: klopte. De lus toonde na 3,2s `ls`, en 53/80/443 stonden gevuld zonder hun
+  regels, 12 van elke 15,2s. Geen lus meer: het nmap-frame is de ruststand.
+- **Banner**: half. Hij komt op 2,57s, na de laadreeks van 1,1s. Geen replay.
+- **Overname**: de poorten klopten (`rustDiagram`); de uitnodiging verdwijnt bewust (`is-taken`).
+- **Eyebrow**: het mono-pad stond boven de bloglinktitel. Nu eronder, tikdoel heel.
+- **DESIGN.md**: documenter, zonder browser omdat de gate liep; steekproef 18 bron + 9 gerenderd.
+Verdict: 1-4 resolved, daarna 5; **ship**, op de gescoorde fixes. **Gate 3: 847 passed, 17
+skipped, 0 failed, 0 flaky.**
+
+### Eigen meetfouten, gevangen door zelfbewakende takken
+
+- `getAnimations()` na `goto` was flaky: `goto` wacht op `load`, de reeks kan dan al voorbij zijn.
+  Nu `animationstart` gelogd vanaf de eerste byte.
+- Een observer op `DOMContentLoaded` miste de demo: modules draaien eerder. En vanaf de eerste
+  byte zag hij de statische no-JS-rijen die de parser invoegt; filter op `readyState`.
+- `elementFromPoint` buiten het venster geeft `null`.
+- Een mutant (`flex-direction: row`) landde maar veranderde niets door `flex-wrap`.
+- De reduced-motion-guard keek alleen naar het laadpad, waar `lichtOp` onder reduce nooit loopt.
+
+### Learnings
+
+- **Wat de bezoeker ziet als hij niets doet, is het ontwerp.** Het moment bestond al, maar
+  speelde waar niemand keek, en de lus maakte de ruststand 80% van de tijd tot een
+  tegenspraak. Ontwerp de ruststand, niet alleen de demo.
+- **Een guard die een pixelregel vervangt door de bedoeling, heeft een tak nodig die de oude
+  conditie bewaakt.** De replay-guard op 1280 faalt als de poorten weer boven de vouw komen, zodat
+  1280 dan terug kan in "De vouw".
+- **Een schaalwijziging meet je per breedte, niet op drie maten.** De bestaande sweep per 8px
+  ving wat ik miste.
+- **Bolder versterkt de compositie, het verandert haar niet.** Stilstaand is het dezelfde
+  indeling; de eigenaar bedoelde ook indeling, ritme en onderscheid. Dat is `layout` (#90);
+  `layout.md` is in dit traject nooit geladen.
+
+### Commits
+
+- `e8970b9` Bolder: het affiche op schaal, en de scan die zichzelf speelt
+- `e821992` Finish review bolder: de ruststand is de scan, en DESIGN.md uit de bouw
+
+### Metrics delta
+
+- Runtime 1082,35 → **1089,83 / 1120 KB** (marge 30,17).
+- `test()`-declaraties 374 → **381** (47 specs).
+- Bundle (du -sb/1024): src 741 → 745, styles 416 → 429, blog 491 → 492, assets 1762 → 1741.
+- `.playwright-mcp/` 5,9 MB opgeruimd na deze entry.
+
+### Next steps
+
+- **#90 `layout`** op de landingspagina (indeling, ritme, onderscheid), met de ceiling-punten
+  van de reviewer als input; concludeert layout dat de wereld het probleem is: voorleggen, dan
+  pas `new-work`. Daarna #85 (gedeelde laag), dan #84 (merge).
+
+---
+
 ## Sessie 246: Een review controleert het contract, niet de ambitie (29 sep - 1 okt 2026)
 
 **Branch:** `design/impeccable`. `main` onaangeroerd; niets staat live.

@@ -148,3 +148,19 @@ En vergeet `scroll-padding-top` niet op de pagina zelf: `blog.css` had hem niet 
 
 ---
 
+
+## 17. De toestand meteen, het beeld met vertraging; een stagger telt wat je ziet (Sessie 247)
+
+Een reeks die regel voor regel uitrolt, hoeft de DOM niet stap voor stap te vullen. Zet alles
+meteen neer en laat alleen het beeld wachten (`animation-delay` per element, `backwards`-fill).
+Dan leest een schermlezer, een test of een kopieerder nooit een halve reeks, en staat zonder
+animatie (reduced motion, een meting) direct de eindstand. Zo bleef `is-open` op een poort meteen
+waar terwijl de inversie op de tik van zijn regel wachtte; een bestaande test las `.is-open`
+direct na een klik.
+
+Tel in een stagger alleen wat in beeld staat. In een venster met `justify-content: flex-end`
+vielen de eerste regels van een lange uitvoer boven de rand, maar telden ze mee in de vertraging:
+400ms zwarte module voordat er iets verscheen.
+
+En: wat een auto-demo in rust laat staan, is het ontwerp. Een lus die na 3,2s een ander command
+toont, liet de open poorten zonder hun regels staan, 12 van elke 15 seconden.
