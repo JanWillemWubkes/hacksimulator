@@ -10,7 +10,10 @@
  * engine hem geeft (verwijzing per command). De glos is het Nederlands dat de engine
  * achter een `←` zet, hier typografisch ernaast gezet in plaats van erachter geplakt.
  * Regels die al Nederlands zijn ([TIP], help-omschrijvingen, bestandsinhoud) krijgen er
- * geen: een vertaling van een vertaling is ruis.
+ * geen vertaling: een vertaling van een vertaling is ruis. Wel krijgt elke reeks minstens
+ * één glos (sessie 250): bij `cat` en `help` stond de kolom "In gewoon Nederlands" anders
+ * helemaal leeg, en dat las als kapot. Daar zegt de glos wat er gebeurt of waar de naam
+ * van het command vandaan komt — het waarom, niet nog eens het wat.
  *
  * `smal` volgt isMobileView() van de engine (utils/box-utils.js:101-107): onder 768px
  * blijft een regel binnen 40 tekens. De nmap-tabel is in het origineel 60-77 tekens.
@@ -47,21 +50,21 @@ const RESPONSES = {
   },
   help: {
     breed: [
-      'Deze demo kent 6 commands:',
-      '  ls      Toon bestanden',
-      '  cat     Lees een bestand',
-      '  pwd     Waar ben ik nu?',
-      '  whoami  Wie ben ik?',
-      '  nmap    Scan poorten',
+      ['Deze demo kent 6 commands:', 'de naam zegt vaak al wat het doet'],
+      ['  ls      Toon bestanden', 'van list: opsommen'],
+      ['  cat     Lees een bestand', 'van concatenate: aan elkaar plakken'],
+      ['  pwd     Waar ben ik nu?', 'van print working directory'],
+      ['  whoami  Wie ben ik?', 'who am i, aan elkaar geschreven'],
+      ['  nmap    Scan poorten', 'van network mapper: netwerk in kaart'],
       '[TIP] De volledige simulator kent 40+ commands en een leerpad.'
     ],
     smal: [
-      'Deze demo kent 6 commands:',
-      '  ls      Toon bestanden',
-      '  cat     Lees een bestand',
-      '  pwd     Waar ben ik nu?',
-      '  whoami  Wie ben ik?',
-      '  nmap    Scan poorten',
+      ['Deze demo kent 6 commands:', 'de naam zegt vaak al wat het doet'],
+      ['  ls      Toon bestanden', 'van list'],
+      ['  cat     Lees een bestand', 'van concatenate: aan elkaar plakken'],
+      ['  pwd     Waar ben ik nu?', 'van print working directory'],
+      ['  whoami  Wie ben ik?', 'who am i, aan elkaar'],
+      ['  nmap    Scan poorten', 'van network mapper'],
       '[TIP] De simulator kent er 40+.'
     ]
   }
@@ -105,7 +108,9 @@ function catRespons(args, smal) {
   }
   const inhoud = Object.hasOwn(BESTANDEN, pad) ? BESTANDEN[pad] : null;
   if (inhoud) {
-    return inhoud.concat([
+    // De inhoud is al Nederlands; de glos zegt wat cat doet (zie de kop van dit bestand).
+    const [eerste, ...rest] = inhoud;
+    return [[eerste, `cat zet ${pad} letterlijk op je scherm`], ...rest].concat([
       smal ? '[~] Ingekort — zie de simulator.' : '[~] Ingekort. De volledige simulator toont het hele bestand.'
     ]);
   }
@@ -122,7 +127,7 @@ function nmapRespons(args, smal) {
   }
   if (args[0] !== '192.168.1.1') {
     return [
-      `nmap: ${args[0]} valt buiten deze demo`,
+      [`nmap: ${args[0]} valt buiten deze demo`, 'de demo scant alleen je eigen router'],
       smal ? '[TIP] Probeer: nmap 192.168.1.1' : '[TIP] Probeer nmap 192.168.1.1 — de simulator scant het hele oefennetwerk.'
     ];
   }

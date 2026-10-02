@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-02T07:40:32+00:00",
+  "generatedAt": "2026-10-02T20:45:57+00:00",
   "title": "Design System: HackSimulator.nl",
   "extensions": {
     "colorMeta": {
@@ -157,46 +157,76 @@
       "m-tekst": {
         "role": "module",
         "displayName": "Uitvoer",
-        "canonical": "oklch(85.7% 0.014 248.0)",
+        "canonical": "oklch(87.5% 0.005 106.5)",
         "tonalRamp": [
-          "oklch(15.0% 0.014 248.0)",
-          "oklch(26.4% 0.014 248.0)",
-          "oklch(37.9% 0.014 248.0)",
-          "oklch(49.3% 0.014 248.0)",
-          "oklch(60.7% 0.014 248.0)",
-          "oklch(72.1% 0.014 248.0)",
-          "oklch(83.6% 0.014 248.0)",
-          "oklch(95.0% 0.014 248.0)"
+          "oklch(15.0% 0.005 106.5)",
+          "oklch(26.4% 0.005 106.5)",
+          "oklch(37.9% 0.005 106.5)",
+          "oklch(49.3% 0.005 106.5)",
+          "oklch(60.7% 0.005 106.5)",
+          "oklch(72.1% 0.005 106.5)",
+          "oklch(83.6% 0.005 106.5)",
+          "oklch(95.0% 0.005 106.5)"
         ]
       },
       "m-dim": {
         "role": "module",
         "displayName": "Gedimde uitvoer",
-        "canonical": "oklch(72.8% 0.014 251.6)",
+        "canonical": "oklch(71.4% 0.009 106.6)",
         "tonalRamp": [
-          "oklch(15.0% 0.014 251.6)",
-          "oklch(26.4% 0.014 251.6)",
-          "oklch(37.9% 0.014 251.6)",
-          "oklch(49.3% 0.014 251.6)",
-          "oklch(60.7% 0.014 251.6)",
-          "oklch(72.1% 0.014 251.6)",
-          "oklch(83.6% 0.014 251.6)",
-          "oklch(95.0% 0.014 251.6)"
+          "oklch(15.0% 0.009 106.6)",
+          "oklch(26.4% 0.009 106.6)",
+          "oklch(37.9% 0.009 106.6)",
+          "oklch(49.3% 0.009 106.6)",
+          "oklch(60.7% 0.009 106.6)",
+          "oklch(72.1% 0.009 106.6)",
+          "oklch(83.6% 0.009 106.6)",
+          "oklch(95.0% 0.009 106.6)"
         ]
       },
       "m-prompt": {
         "role": "module",
-        "displayName": "Prompt en tip",
-        "canonical": "oklch(86.7% 0.233 129.9)",
+        "displayName": "Prompt (700)",
+        "canonical": "oklch(95.1% 0.004 106.5)",
         "tonalRamp": [
-          "oklch(15.0% 0.233 129.9)",
-          "oklch(26.4% 0.233 129.9)",
-          "oklch(37.9% 0.233 129.9)",
-          "oklch(49.3% 0.233 129.9)",
-          "oklch(60.7% 0.233 129.9)",
-          "oklch(72.1% 0.233 129.9)",
-          "oklch(83.6% 0.233 129.9)",
-          "oklch(95.0% 0.233 129.9)"
+          "oklch(15.0% 0.004 106.5)",
+          "oklch(26.4% 0.004 106.5)",
+          "oklch(37.9% 0.004 106.5)",
+          "oklch(49.3% 0.004 106.5)",
+          "oklch(60.7% 0.004 106.5)",
+          "oklch(72.1% 0.004 106.5)",
+          "oklch(83.6% 0.004 106.5)",
+          "oklch(95.0% 0.004 106.5)"
+        ]
+      },
+      "m-label": {
+        "role": "module",
+        "displayName": "Label (info-rol)",
+        "canonical": "oklch(95.1% 0.004 106.5)",
+        "tonalRamp": [
+          "oklch(15.0% 0.004 106.5)",
+          "oklch(26.4% 0.004 106.5)",
+          "oklch(37.9% 0.004 106.5)",
+          "oklch(49.3% 0.004 106.5)",
+          "oklch(60.7% 0.004 106.5)",
+          "oklch(72.1% 0.004 106.5)",
+          "oklch(83.6% 0.004 106.5)",
+          "oklch(95.0% 0.004 106.5)"
+        ]
+      },
+      "m-label-inkt": {
+        "role": "module",
+        "displayName": "Labelinkt",
+        "canonical": "oklch(17.8% 0.000 89.9)",
+        "tonalRamp": [
+          "oklch(15.0% 0.000 89.9)",
+          "oklch(26.4% 0.000 89.9)",
+          "oklch(37.9% 0.000 89.9)",
+          "oklch(49.3% 0.000 89.9)",
+          "oklch(60.7% 0.000 89.9)",
+          "oklch(72.1% 0.000 89.9)",
+          "oklch(83.6% 0.000 89.9)",
+          "oklch(95.0% 0.000 89.9)"
         ]
       },
       "m-fout": {
@@ -361,7 +391,7 @@
       },
       "figure": {
         "displayName": "Cijfer",
-        "purpose": "Getallen in de cijfertabel op afficheschaal (88,2px op 1440, zoals de h1), kolom 1-3, in inkt, met omschrijving en bron in dezelfde rij."
+        "purpose": "Getallen in de cijfertabel op afficheschaal (88,2px op 1440, zoals de h1), kolom 1-3, in inkt; omschrijving en bron op de basislijn van het getal."
       },
       "title": {
         "displayName": "Title",
@@ -369,7 +399,7 @@
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Namen: woordmerk, leerpadniveaus, diagramblokken (1.4rem, de grootste) (Archivo 800)."
+        "purpose": "Namen: woordmerk en leerpadniveaus (1.22rem) (Archivo 800)."
       },
       "body": {
         "displayName": "Body",
@@ -377,7 +407,7 @@
       },
       "small": {
         "displayName": "Klein",
-        "purpose": "Microcopy, glos, kolomkop, herkomst (15px). Kolomkoppen op de naad: 700, gedempte inkt."
+        "purpose": "Microcopy, glos, kolomkop, uitnodiging (15px). Kolomkoppen op de naad: 700, gedempte inkt."
       },
       "button": {
         "displayName": "Knop",
@@ -385,7 +415,7 @@
       },
       "mono": {
         "displayName": "Mono",
-        "purpose": "Terminal; buiten de module alleen index, pad, adres, bron, paginaverwijzing. In de poorten schaalt de letter met de sleuf, tot 1rem (open 1.3rem)."
+        "purpose": "Terminal (0.86rem op 27px; onder 768px 0.8rem op 24px); invoerregel en chipcommands 700. Buiten de module alleen index, pad, adres, bron, paginaverwijzing."
       }
     },
     "shadows": [],
@@ -393,7 +423,7 @@
       {
         "name": "af-ease",
         "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "De enige curve: hovers, registratie-uitloop, FAQ-chevron."
+        "purpose": "De enige curve: hovers, registratie-uitloop, rol, FAQ-chevron."
       },
       {
         "name": "hover",
@@ -403,7 +433,7 @@
       {
         "name": "registratie",
         "value": "700ms",
-        "purpose": "Uitloop van regel, glos en poort na het oplichten (dat 450ms staat); erin zonder overgang."
+        "purpose": "Uitloop van regel en glos na het oplichten (dat 450ms staat); erin zonder overgang."
       },
       {
         "name": "rol",
@@ -413,12 +443,7 @@
       {
         "name": "stap",
         "value": "90ms",
-        "purpose": "Afstand tussen twee rijen van één reeks; een open poort springt op de tik van zijn regel."
-      },
-      {
-        "name": "scan",
-        "value": "360ms",
-        "purpose": "Bij nmap tekent de scanpijl zich eerst; pas daarna rolt de uitvoer uit."
+        "purpose": "Afstand tussen twee rijen van één reeks."
       },
       {
         "name": "faq-chevron",
@@ -475,9 +500,9 @@
       "name": "Commandochip",
       "kind": "chip",
       "refersTo": "chip-command",
-      "description": "Suggestieknop onder de terminal: mono-index, command, herkomst. Kader 2px, inversie bij hover.",
-      "html": "<button class=\"ds-chip\" type=\"button\"><span class=\"ds-chip-nr\">01</span><span class=\"ds-chip-cmd\">nmap 192.168.1.1</span><span class=\"ds-chip-her\">Netwerk · beginner</span></button>",
-      "css": ".ds-chip { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto auto; column-gap: 8px; align-content: center; min-height: 60px; padding: 8px 20px; box-sizing: border-box; background: #efefec; color: #111111; border: 2px solid #111111; border-radius: 0; text-align: left; cursor: pointer; transition: background-color 160ms cubic-bezier(0.16, 1, 0.3, 1), color 160ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-chip-nr { grid-row: 1 / 3; align-self: center; min-width: 1.8em; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 0.83rem; color: #444440; } .ds-chip-cmd { grid-column: 2; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 0.86rem; font-weight: 700; line-height: 1.3; white-space: nowrap; } .ds-chip-her { grid-column: 2; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; font-size: 0.72rem; line-height: 1.3; color: #444440; } .ds-chip:hover, .ds-chip:focus-visible { background: #111111; color: #efefec; } .ds-chip:hover .ds-chip-nr, .ds-chip:hover .ds-chip-her, .ds-chip:focus-visible .ds-chip-nr, .ds-chip:focus-visible .ds-chip-her { color: #efefec; } .ds-chip:focus-visible { outline: 2px solid #cc0a1e; outline-offset: 2px; }"
+      "description": "De toetsenrij onder de invoerregel: mono-index en command, aaneen op het raster met gedeelde lijnen van 2px, inversie bij hover. Geen herkomstlabel.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip ds-next\" type=\"button\"><span class=\"ds-chip-nr\">01</span><span class=\"ds-chip-cmd\">ls</span></button><button class=\"ds-chip\" type=\"button\"><span class=\"ds-chip-nr\">02</span><span class=\"ds-chip-cmd\">cat notes.txt</span></button><button class=\"ds-chip\" type=\"button\"><span class=\"ds-chip-nr\">03</span><span class=\"ds-chip-cmd\">nmap 192.168.1.1</span></button></div>",
+      "css": ".ds-chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; } .ds-chip { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 8px; align-content: center; min-height: 52px; padding: 8px 20px; box-sizing: border-box; background: #efefec; color: #111111; border: 2px solid #111111; border-radius: 0; text-align: left; cursor: pointer; transition: background-color 160ms cubic-bezier(0.16, 1, 0.3, 1), color 160ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-chip + .ds-chip { border-left-width: 0; padding-left: 22px; } .ds-chip-nr { align-self: center; min-width: 1.8em; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 0.83rem; color: #444440; } .ds-chip-cmd { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 0.86rem; font-weight: 700; line-height: 1.3; white-space: nowrap; } .ds-next .ds-chip-nr { justify-self: start; background: #111111; color: #efefec; text-align: center; } .ds-chip:hover, .ds-chip:focus-visible { background: #111111; color: #efefec; } .ds-chip:hover .ds-chip-nr, .ds-chip:focus-visible .ds-chip-nr { color: #efefec; } .ds-next:hover .ds-chip-nr, .ds-next:focus-visible .ds-chip-nr { background: #efefec; color: #111111; } .ds-chip:focus-visible { outline: 2px solid #cc0a1e; outline-offset: 2px; }"
     },
     {
       "name": "Nieuwsbriefveld",
@@ -507,17 +532,9 @@
       "name": "Terminalmodule met glos",
       "kind": "custom",
       "refersTo": "terminal-module",
-      "description": "Signatuur: zwarte module over 7/12, per outputregel de Nederlandse glos ernaast op dezelfde rij, met aanhaallijn. Eén reeks per command: elke rij rolt 90ms na de vorige uit en licht bij verschijnen op; een opgelichte rij inverteert de glos.",
-      "html": "<div class=\"ds-term\"><div class=\"ds-reg\"><span class=\"ds-line ds-prompt\">$ nmap 192.168.1.1</span><span class=\"ds-glos\"></span></div><div class=\"ds-reg ds-lit\"><span class=\"ds-line\">80/tcp  open  http</span><span class=\"ds-glos\">Een webserver luistert hier</span></div><div class=\"ds-reg\"><span class=\"ds-line\"><span class=\"ds-tip\">[TIP]</span> Open poorten = attack vectors</span><span class=\"ds-glos\">Elke open poort is een ingang</span></div></div>",
-      "css": ".ds-term { background: #efefec; padding: 8px 0; } .ds-reg { display: grid; grid-template-columns: 58.3333% minmax(0, 1fr); align-items: baseline; } .ds-line { padding: 0 20px; background: #0a0a0a; color: #c9d1d9; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 0.86rem; line-height: 1.5rem; white-space: pre-wrap; transition: background-color 700ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-prompt, .ds-tip { color: #9fef00; } .ds-glos { position: relative; padding: 0 20px; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; font-size: 0.83rem; line-height: 1.5rem; color: #111111; transition: background-color 700ms cubic-bezier(0.16, 1, 0.3, 1), color 700ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-glos:not(:empty)::before { content: ''; position: absolute; left: 0; top: 0.75rem; width: 14px; border-top: 1px solid #111111; } .ds-lit .ds-line { background: #23231f; transition: none; } .ds-lit .ds-glos:not(:empty) { background: #111111; color: #efefec; transition: none; } .ds-lit .ds-glos:not(:empty)::before { border-top-color: #efefec; }"
-    },
-    {
-      "name": "Poortrij",
-      "kind": "custom",
-      "refersTo": "diagram-port-open",
-      "description": "De poorten van het routerblok: sleuven van 56px op de band, letter tegen de sleuf geschaald (container query); een open poort is de zwaarste inversie van het eerste scherm.",
-      "html": "<div class=\"ds-poorten\"><span class=\"ds-poort\">22</span><span class=\"ds-poort is-open\">53</span><span class=\"ds-poort is-open\">80</span><span class=\"ds-poort\">139</span><span class=\"ds-poort is-open\">443</span><span class=\"ds-poort\">3306</span></div>",
-      "css": ".ds-poorten { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; container-type: inline-size; --ds-letter: min(1rem, calc(6.8cqw - 4px)); --ds-open: min(1.3rem, calc(9cqw - 5px)); } .ds-poort { display: flex; align-items: center; justify-content: center; min-height: 56px; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: var(--ds-letter); color: #444440; background: #e2e2de; border-radius: 0; transition: background-color 700ms cubic-bezier(0.16, 1, 0.3, 1), color 700ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-poort.is-open { background: #111111; color: #efefec; font-size: var(--ds-open); font-weight: 700; }"
+      "description": "Signatuur: zwarte module over 7/12, per outputregel de Nederlandse glos ernaast op dezelfde rij, met aanhaallijn. Prompt in papier 700, de info-rol op een papieren label, de cursor een rood blok op het invoerpunt. Eén reeks per command: elke rij rolt 90ms na de vorige uit en licht bij verschijnen op.",
+      "html": "<div class=\"ds-term\"><div class=\"ds-reg\"><span class=\"ds-line ds-prompt\">hacker@hacksim:~$ nmap 192.168.1.1</span><span class=\"ds-glos\"></span></div><div class=\"ds-reg ds-lit\"><span class=\"ds-line\">80/tcp    OPEN   HTTP</span><span class=\"ds-glos\">onversleuteld: het beheerscherm</span></div><div class=\"ds-reg\"><span class=\"ds-line\"><span class=\"ds-tip\">[TIP] Open poorten zijn ingangen.</span></span><span class=\"ds-glos\"></span></div><div class=\"ds-reg\"><span class=\"ds-line ds-err\">Command not found: lss</span><span class=\"ds-glos\">dit command kent de demo niet</span></div><div class=\"ds-invoer\"><span class=\"ds-prompt\">hacker@hacksim:~$</span><span class=\"ds-cursor\"></span></div></div>",
+      "css": ".ds-term { background: #efefec; } .ds-reg { display: grid; grid-template-columns: 58.3333% minmax(0, 1fr); align-items: baseline; } .ds-line { padding: 0 20px; background: #0a0a0a; color: #d6d6d2; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 0.86rem; line-height: 1.5rem; white-space: pre-wrap; transition: background-color 700ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-prompt { color: #efefec; font-weight: 700; } .ds-err { color: #fa7c76; } .ds-tip { background: #efefec; color: #111111; padding: 1px 6px; margin-left: -6px; -webkit-box-decoration-break: clone; box-decoration-break: clone; } .ds-glos { position: relative; padding: 0 20px; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; font-size: 0.83rem; line-height: 1.5rem; color: #111111; transition: background-color 700ms cubic-bezier(0.16, 1, 0.3, 1), color 700ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-glos:not(:empty)::before { content: ''; position: absolute; left: 0; top: 0.75rem; width: 14px; border-top: 1px solid #111111; } .ds-lit .ds-line { background: #23231f; transition: none; } .ds-lit .ds-glos:not(:empty) { background: #111111; color: #efefec; transition: none; } .ds-lit .ds-glos:not(:empty)::before { border-top-color: #efefec; } .ds-invoer { width: 58.3333%; box-sizing: border-box; display: flex; align-items: center; gap: 1ch; min-height: 44px; padding: 0 20px; background: #0a0a0a; border-top: 1px solid #2c2c2a; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 0.86rem; } .ds-cursor { display: inline-block; width: 1ch; height: 1.3em; background: #cc0a1e; }"
     },
     {
       "name": "Cijferrij",
@@ -530,7 +547,7 @@
   ],
   "narrative": {
     "northStar": "Het affiche op het raster",
-    "overview": "De pagina is een affiche op een zichtbaar raster, in de traditie van Total Design (Wim Crouwel). Gebroken wit papier, zwarte inkt, en precies één signaalrood dat alleen \"hier ben jij aan zet\" betekent. Alles staat op een 12-koloms raster zonder goot: de kolomgrenzen zijn de haarlijnen, en elke cel draagt zijn eigen binnenruimte. De terminal is een donkere module in dat raster, en de Nederlandse uitleg staat per outputregel ernaast, op dezelfde rasterrij.\n\nToestanden spreken via inversie en nooit via een extra kleur: een blok wordt inkt met een papieren letter. Er zijn geen schaduwen, geen zichtbare kleurverlopen en geen afgeronde hoeken. Diepte bestaat niet; er is alleen papier, inkt en de zwarte module. Het donkere thema is het geïnverteerde affiche: inkt wordt grond, papier wordt letter.\n\n**Reikwijdte.** Dit systeem draait nu alleen op `index.html`. Het staat in één stylesheet dat alleen die pagina laadt, als laatste, en hangt volledig onder de homepage-scope. Het hertokent de gedeelde componenten (navbar, footer, knoppen, FAQ, nieuwsbrief) in plaats van ze te overschrijven. De andere pagina's (gidsen, samples, blog, terminal, juridisch) tonen nog het oudere systeem en gaan één per sessie over. Dat oudere systeem hoort niet bij dit document.\n\nExpliciet niet: scanlines, glow, groen-op-zwart, matrixregen, mascottes, badges op de voorgrond, kickers en eyebrows.",
+    "overview": "De pagina is een affiche op een zichtbaar raster, in de traditie van Total Design (Wim Crouwel). Gebroken wit papier, zwarte inkt, en precies één signaalrood dat alleen \"hier ben jij aan zet\" betekent. Alles staat op een 12-koloms raster zonder goot: de kolomgrenzen zijn de haarlijnen, en elke cel draagt zijn eigen binnenruimte. De terminal is een donkere module in dat raster, en de Nederlandse uitleg staat per outputregel ernaast, op dezelfde rasterrij.\n\nToestanden spreken via inversie en nooit via een extra kleur: een blok wordt inkt met een papieren letter. Er zijn geen schaduwen, geen zichtbare kleurverlopen en geen afgeronde hoeken. Diepte bestaat niet; er is alleen papier, inkt en de zwarte module. Ook de module spreekt de taal van de pagina: haar tekst komt uit de papierfamilie, de prompt is papier in 700, de Nederlandse laag (`[TIP]`, `[→]`) staat op een papieren label, en de cursor is een blok signaalrood. Alleen fout (zalm) en waarschuwing (amber) zijn eigen tinten. Het donkere thema is het geïnverteerde affiche: inkt wordt grond, papier wordt letter.\n\n**Reikwijdte.** Dit systeem draait nu alleen op `index.html`. Het staat in één stylesheet dat alleen die pagina laadt, als laatste, en hangt volledig onder de homepage-scope. Het hertokent de gedeelde componenten (navbar, footer, knoppen, FAQ, nieuwsbrief) in plaats van ze te overschrijven. De andere pagina's (gidsen, samples, blog, terminal, juridisch) tonen nog het oudere systeem en gaan één per sessie over. Dat oudere systeem hoort niet bij dit document.\n\nExpliciet niet: scanlines, glow, groen-op-zwart, matrixregen, mascottes, badges op de voorgrond, kickers en eyebrows.",
     "keyCharacteristics": [
       "Papier, inkt, één signaalrood. Verder niets buiten de terminalmodule.",
       "Een 12-koloms raster zonder goot, met zichtbare haarlijnen van 1px in de hero en in de cijfertabel, en nergens anders.",
@@ -538,22 +555,22 @@
       "Eén schaal voor de grote vormen: de h1, de getallen in de cijfertabel en de slotkop staan alle drie op afficheschaal.",
       "Toestanden via inversie (inktblok, papieren letter), nooit via een extra kleur.",
       "Hoeken van 0, geen schaduwen, geen zichtbare verlopen.",
-      "Eén reeks per command, regel voor regel: de registratie."
+      "Eén reeks per command, regel voor regel: de registratie. Het terminalvenster staat altijd op hele regels."
     ],
     "rules": [
       {
         "name": "The One Voice Rule",
-        "body": "Het rood betekent alleen \"jij bent aan zet\": de primaire actie en de focusring. Er is per scherm één rood vlak. Een tweede actie in hetzelfde scherm (de nav-CTA, een volgende chip, een actieve toestand) wordt inkt.",
+        "body": "Het rood betekent alleen \"jij bent aan zet\": de primaire actie, de focusring en de cursor in de module. Buiten de module is er per scherm één rode drager; een tweede actie in hetzelfde scherm (de nav-CTA, een volgende chip, een actieve toestand) wordt inkt. Binnen de module is rood alleen de cursor, een blok van één teken op het invoerpunt. Bij overname verdwijnt dat blok en blijft alleen de native caret, ook rood: nooit twee rode cursors.",
         "section": "colors"
       },
       {
         "name": "The Inversion Rule",
-        "body": "Een toestand krijgt geen nieuwe kleur. Hover, actief, volgende, open en oplichten zijn allemaal hetzelfde gebaar: inktblok, papieren letter. Binnen een blok dat al geïnverteerd is, inverteert het label terug.",
+        "body": "Een toestand krijgt geen nieuwe kleur. Hover, actief, volgende en oplichten zijn allemaal hetzelfde gebaar: inktblok, papieren letter. Binnen een blok dat al geïnverteerd is, inverteert het label terug.",
         "section": "colors"
       },
       {
         "name": "The Module Boundary Rule",
-        "body": "De simulatorkleuren (groen, zalm, amber, blauwgrijs) leven alleen binnen de zwarte module. Buiten de module is groen geen accent.",
+        "body": "De simulatortinten (zalm, amber) leven alleen binnen de zwarte module, en het papieren label ook. Buiten de module is er geen groen en geen andere accentkleur dan het rood.",
         "section": "colors"
       },
       {
@@ -568,7 +585,12 @@
       },
       {
         "name": "The Two Weights Rule",
-        "body": "Archivo 700 is voor een bewering (koppen, cijfers), Archivo 800 voor een naam (een merk, een blok of een niveau). Andere gewichten van Archivo worden niet gebruikt.",
+        "body": "Archivo 700 is voor een bewering (koppen, cijfers), Archivo 800 voor een naam (een merk of een niveau). Andere gewichten van Archivo worden niet gebruikt.",
+        "section": "typography"
+      },
+      {
+        "name": "The Literal Output Rule",
+        "body": "Terminaluitvoer staat er zoals de tool hem schrijft. Een smalle breedte herschikt de uitvoer niet; alleen de zachte omslag springt in (onder 768px 1,8em, drie tekens), op de lijn van een harde vervolgregel.",
         "section": "typography"
       },
       {
@@ -583,27 +605,31 @@
       }
     ],
     "dos": [
-      "**Do** zet het signaalrood (#cc0a1e) alleen op de primaire actie en op de focusring (2px, offset 2px). Eén rood vlak per scherm.",
-      "**Do** laat elke toestand spreken via inversie: inktblok (#111111), papieren letter (#efefec).",
-      "**Do** houd de hovertaal op twee woorden: een blok inverteert, een tekstlink gaat van een onderstreping van 1px naar 2px. Nooit allebei tegelijk, en nooit een tweede lijn.",
-      "**Do** zet uitleg op de naad: het ding in kolom 1-7, de uitleg in kolom 8-12, op dezelfde rasterrij.",
-      "**Do** laat tekst in een raster met haarlijnen (hero en cijfers) zich met een papieren achtergrond uit de lijnen snijden: alinea's, kop en inleiding, en elke tabelcel.",
-      "**Do** geef een cel op een rasterlijn zijn binnenruimte zelf, links en rechts gelijk (de celmaat).",
-      "**Do** hertoken gedeelde componenten onder de homepage-scope, en zet de vormeigenschappen die je wilt expliciet (rand 0, schaduw none, radius 0), zodat de vorm van de oude wereld niet doorlekt.",
-      "**Do** houd de simulatorkleuren binnen de zwarte module (#0a0a0a).",
-      "**Do** maak tikdoelen minimaal 44px. De primaire actie is 56px."
+      "Do zet het signaalrood (#cc0a1e) alleen op de primaire actie, op de focusring (2px, offset 2px) en, binnen de module, op de cursor. Buiten de module één rode drager per scherm.",
+      "Do laat elke toestand spreken via inversie: inktblok (#111111), papieren letter (#efefec).",
+      "Do houd de hovertaal op twee woorden: een blok inverteert, een tekstlink gaat van een onderstreping van 1px naar 2px. Nooit allebei tegelijk, en nooit een tweede lijn.",
+      "Do zet uitleg op de naad: het ding in kolom 1-7, de uitleg in kolom 8-12, op dezelfde rasterrij. Geef elke reeks minstens één glos.",
+      "Do laat tekst in een raster met haarlijnen (hero en cijfers) zich met een papieren achtergrond uit de lijnen snijden: alinea's, kop en inleiding, en elke tabelcel.",
+      "Do geef een cel op een rasterlijn zijn binnenruimte zelf, links en rechts gelijk (de celmaat).",
+      "Do groepeer met lucht: wat bij elkaar hoort staat dicht, de stap naar het volgende blok is de grote.",
+      "Do houd elk terminalvenster op een geheel aantal regels; lucht boven en onder is een rand, geen padding.",
+      "Do hertoken gedeelde componenten onder de homepage-scope, en zet de vormeigenschappen die je wilt expliciet (rand 0, schaduw none, radius 0), zodat de vorm van de oude wereld niet doorlekt.",
+      "Do houd zalm, amber en het papieren label binnen de zwarte module (#0a0a0a).",
+      "Do maak tikdoelen minimaal 44px. De primaire actie is 56px."
     ],
     "donts": [
-      "**Don't** gebruik schaduwen, zichtbare kleurverlopen, afgeronde hoeken of lift bij hover.",
-      "**Don't** introduceer een tweede accentkleur of kleur een toestand in een andere tint dan inkt.",
-      "**Don't** zet rood op kleine tekst, en gebruik het niet voor fouten: een fout in de terminal is zalm (#fa7c76).",
-      "**Don't** gebruik groen, glow, scanlines, matrixregen of groen-op-zwart als pagina-esthetiek. Het groen van de prompt hoort alleen in de module.",
-      "**Don't** gebruik mascottes, badges op de voorgrond, kickers of eyebrows boven koppen.",
-      "**Don't** zet getallen als los accentgetal in een kaart. Een cijfer staat in een tabelrij met zijn bron.",
-      "**Don't** nummer sectiekoppen. Een mono-index is alleen voor een echte volgorde.",
-      "**Don't** trek verticale rasterlijnen buiten de hero en de cijfertabel. In de andere secties draagt de naad het raster.",
-      "**Don't** maak een kop groter dan de h1. Even groot mag: de slotkop en de cijfers delen zijn schaal.",
-      "**Don't** voeg een tweede beweging toe naast de registratie. Eén reeks per command, regel voor regel (90ms), zonder typanimatie per letter en zonder lus. Een hover-overgang is hoogstens 160ms op kleur, en de FAQ opent zonder animatie."
+      "Don't gebruik schaduwen, zichtbare kleurverlopen, afgeronde hoeken of lift bij hover.",
+      "Don't introduceer een tweede accentkleur of kleur een toestand in een andere tint dan inkt.",
+      "Don't zet rood op kleine tekst, en gebruik het niet voor fouten: een fout in de terminal is zalm (#fa7c76).",
+      "Don't gebruik groen, glow, scanlines, matrixregen of groen-op-zwart, ook niet in de module: de prompt is papier in 700.",
+      "Don't zet een strook over de volle modulebreedte om een regel te markeren; de info-rol is een label achter de tekst.",
+      "Don't herschik terminaluitvoer voor een smalle breedte; alleen de zachte omslag springt in.",
+      "Don't gebruik mascottes, badges op de voorgrond, kickers of eyebrows boven koppen.",
+      "Don't zet getallen als los accentgetal in een kaart. Een cijfer staat in een tabelrij met zijn bron.",
+      "Don't nummer sectiekoppen. Een mono-index is alleen voor een echte volgorde.",
+      "Don't trek verticale rasterlijnen buiten de hero en de cijfertabel. In de andere secties draagt de naad het raster.",
+      "Don't maak een kop groter dan de h1. Even groot mag: de slotkop en de cijfers delen zijn schaal.",
+      "Don't voeg een tweede beweging toe naast de registratie. Eén reeks per command, regel voor regel (90ms), zonder typanimatie per letter en zonder lus. Een hover-overgang is hoogstens 160ms op kleur, de cursor knippert niet, en de FAQ opent zonder animatie."
     ]
   }
 }

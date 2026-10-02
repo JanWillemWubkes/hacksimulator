@@ -17,7 +17,7 @@
 
 import events from '../analytics/events.js';
 import { respons, CTA_LABEL } from './hero-antwoorden.js';
-import { maakRij, lichtOp, zetDiagram, rustDiagram } from './hero-registratie.js';
+import { maakRij, lichtOp } from './hero-registratie.js';
 
 const outputEl = document.getElementById('hero-demo');
 const inputEl = document.getElementById('typing-target');
@@ -82,10 +82,14 @@ function initHeroRepl() {
   // Het nieuwste command bovenaan, niet de laatste regel onderaan: wie een chip tikt moet
   // zien wát hij tikte. Naar de bodem pinnen schoof bij nmap (374px uitvoer in 205px) de
   // promptregel en "Nmap scan report" 107px boven de rand weg. Past de uitvoer wél, dan
-  // klemt de browser dit vanzelf op de bodem. Strak op de rand en niet op de padding: met
-  // 8px ruimte erboven piepte de afgesneden onderkant van de vorige regel erdoor.
+  // klemt de browser dit vanzelf op de bodem. De bovenpadding blijft staan (sessie 250):
+  // strak op de rand kwam het venster één padding te laag uit, en stond de laatste regel
+  // half onderaan. Met rijen van precies één regelhoogte (affiche.css, .reg-glos) en een
+  // venster van hele regels plus padding valt de rand nu altijd tussen twee regels, ook
+  // als de browser op de bodem klemt.
   function toonCommand(promptRij) {
-    bodyEl.scrollTop = promptRij.offsetTop;
+    const boven = parseFloat(getComputedStyle(bodyEl).paddingTop) || 0;
+    bodyEl.scrollTop = promptRij.offsetTop - boven;
   }
 
   // Na een chip-tik moet de uitvoer in beeld staan. Wie voorbij de terminaltop scrolde (om
@@ -114,7 +118,6 @@ function initHeroRepl() {
     if (window.landingDemo && window.landingDemo.handOff) window.landingDemo.handOff();
 
     outputEl.innerHTML = '';
-    rustDiagram();   // de lege terminal en het diagram vertellen hetzelfde
     bodyEl.classList.add('is-live');
     outputEl.setAttribute('aria-live', 'polite');
     inputEl.readOnly = false;
@@ -155,11 +158,10 @@ function initHeroRepl() {
       const isDone = gedaan.has(cmd);
       chip.classList.toggle('is-next', isNext);
       chip.classList.toggle('is-done', isDone);
-      // De toestand is alleen zichtbaar ([✓] op een aria-hidden nummer, een inktbalk). De
-      // naam begint met de zichtbare tekst (label-in-name), de toestand volgt erachter.
-      const zichtbaar = `${cmd}, ${chip.querySelector('.af-chip-herkomst').textContent}`;
+      // De toestand is alleen zichtbaar ([✓] of een omgekeerd nummer, allebei aria-hidden).
+      // De naam begint met de zichtbare tekst (label-in-name), de toestand volgt erachter.
       const staat = isDone ? ', gedaan' : isNext ? ', volgende suggestie' : '';
-      chip.setAttribute('aria-label', zichtbaar + staat);
+      chip.setAttribute('aria-label', cmd + staat);
     });
   }
 
@@ -190,10 +192,9 @@ function initHeroRepl() {
 
     trim();
     toonCommand(rijen[0]);
-    // De signatuur: de reeks rolt uit, regel, glos en diagramuitsparing lichten samen op.
+    // De signatuur: de reeks rolt uit, regel en glos lichten samen op.
     // Ná toonCommand: lichtOp telt alleen de rijen die in het venster staan.
-    lichtOp(rijen, command);
-    zetDiagram(command, rijen);
+    lichtOp(rijen);
     markeerVolgende();
 
     // Alléén de commandonaam, nooit argumenten (PRD §13). De guard in

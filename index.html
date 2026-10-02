@@ -67,7 +67,7 @@
        body.home: hij herdefinieert de gedeelde tokens voor navbar, footer en .btn-cta
        in plaats van tegen hun regels te vechten, en draagt de secties zelf in eigen
        af-klassen. De andere pagina's laden hem niet. -->
-  <link rel="stylesheet" href="styles/affiche.css?v=30">
+  <link rel="stylesheet" href="styles/affiche.css?v=31">
 
   <!-- Google Consent Mode v2 defaults (must be before Google scripts) -->
   <script src="/src/analytics/consent-default.js" data-cookieconsent="ignore"></script>
@@ -203,11 +203,14 @@
   <main class="af">
     <!-- ===== HERO — het affiche (Sessie 238, herschikt in sessie 2b) =====
          Leesvolgorde = schermvolgorde = tabvolgorde, zonder `order`:
-         1. de kop op afficheschaal met de enige rode actie ernaast — het instappunt;
+         1. de kop op afficheschaal, de ondertitel en daaronder de enige rode actie — het
+            instappunt, in leesvolgorde (sessie 249);
          2. de terminal als bewijs, met de Nederlandse glos per regel op dezelfde rasterrij
             (hero-registratie.js bouwt elke regel als één rij met twee cellen);
-         3. de chips direct eronder: dit kun je typen;
-         4. het netwerkdiagram: wat er gebeurt als je scant.
+         3. de chips direct eronder, als toetsenrij: dit kun je typen.
+         Tot sessie 249 volgde een netwerkdiagram (jouw machine, scan, router met twaalf
+         poorten); eruit na proef V0-V3: zes lagen onder elkaar was "onrustig en onduidelijk"
+         (eigenaar), en het herhaalde wat de glos al zegt.
          Tot sessie 2b stond de kop onderaan, als ondertiteling. Gemeten gevolg: zeven
          lagen van gelijk gewicht en het enige grote typografische moment tegen de
          onderrand (kop 761–888 op 1440×900, y=947 op 375px) — geen instappunt.
@@ -227,7 +230,7 @@
               <a href="/terminal.html" class="btn-cta af-cta" data-terminal-cta="hero">
                 Start de simulator
               </a>
-              <p class="cta-microcopy af-microcopy">Geen account nodig &mdash; direct beginnen</p>
+              <p class="cta-microcopy af-microcopy">Geen account nodig. Alles is nagebootst: je raakt geen echte systemen.</p>
             </div>
           </div>
         </div>
@@ -265,61 +268,22 @@
             <p class="hero-terminal-hint af-hint" id="hero-demo-uitleg">Werkt echt: typ hier, of tik hieronder een command.</p>
           </div>
 
-          <!-- Zes tikbare suggesties met hun herkomst: categorie uit docs/commands-list.md,
-               niveau uit het leerpad verderop op deze pagina. Ze staan direct onder de
-               invoerregel omdat ze bij de terminal horen: dit kun je typen.
-               Het indexnummer is aria-hidden (de knopnaam is het command); de toestand
-               spreekt zonder eigen teken dat met het diagram kan botsen: de volgende krijgt
-               de rode rand van "jij bent aan zet", een gedane toont [✓].
+          <!-- Zes tikbare suggesties, als toetsenrij vast onder de invoerregel: ze horen bij
+               de terminal, dit kun je typen. Tot sessie 249 droeg elke chip ook zijn herkomst
+               (categorie en niveau); die is weg, een derde tekstniveau zonder taak voor wie
+               begint. Het indexnummer is aria-hidden (de knopnaam is het command); de
+               volgende keert zijn nummer om (inktblok), een gedane toont [✓].
                NB: geen .btn-cta-klasse en geen link naar /terminal.html — dat zou het
                sitebrede "één label per primaire CTA"-contract breken. -->
           <div class="hero-demo-bar af-chips-rij">
             <div class="hero-chips af-chips" id="hero-chips">
-              <button type="button" class="hero-chip" data-command="ls"><span class="af-chip-nr" aria-hidden="true">01</span><span class="af-chip-cmd">ls</span><span class="af-chip-herkomst">bestanden · beginner</span></button>
-              <button type="button" class="hero-chip" data-command="cat notes.txt"><span class="af-chip-nr" aria-hidden="true">02</span><span class="af-chip-cmd">cat notes.txt</span><span class="af-chip-herkomst">bestanden · beginner</span></button>
-              <button type="button" class="hero-chip" data-command="nmap 192.168.1.1"><span class="af-chip-nr" aria-hidden="true">03</span><span class="af-chip-cmd">nmap 192.168.1.1</span><span class="af-chip-herkomst">netwerk · gevorderd</span></button>
-              <button type="button" class="hero-chip" data-command="whoami"><span class="af-chip-nr" aria-hidden="true">04</span><span class="af-chip-cmd">whoami</span><span class="af-chip-herkomst">systeem · beginner</span></button>
-              <button type="button" class="hero-chip" data-command="pwd"><span class="af-chip-nr" aria-hidden="true">05</span><span class="af-chip-cmd">pwd</span><span class="af-chip-herkomst">bestanden · beginner</span></button>
-              <button type="button" class="hero-chip" data-command="help"><span class="af-chip-nr" aria-hidden="true">06</span><span class="af-chip-cmd">help</span><span class="af-chip-herkomst">systeem · beginner</span></button>
+              <button type="button" class="hero-chip" data-command="ls"><span class="af-chip-nr" aria-hidden="true">01</span><span class="af-chip-cmd">ls</span></button>
+              <button type="button" class="hero-chip" data-command="cat notes.txt"><span class="af-chip-nr" aria-hidden="true">02</span><span class="af-chip-cmd">cat notes.txt</span></button>
+              <button type="button" class="hero-chip" data-command="nmap 192.168.1.1"><span class="af-chip-nr" aria-hidden="true">03</span><span class="af-chip-cmd">nmap 192.168.1.1</span></button>
+              <button type="button" class="hero-chip" data-command="whoami"><span class="af-chip-nr" aria-hidden="true">04</span><span class="af-chip-cmd">whoami</span></button>
+              <button type="button" class="hero-chip" data-command="pwd"><span class="af-chip-nr" aria-hidden="true">05</span><span class="af-chip-cmd">pwd</span></button>
+              <button type="button" class="hero-chip" data-command="help"><span class="af-chip-nr" aria-hidden="true">06</span><span class="af-chip-cmd">help</span></button>
             </div>
-          </div>
-
-          <!-- Het netwerk dat je niet kunt zien, op papier: jouw machine, een scan, en de
-               router met zijn twaalf poorten als sleuven ín het blok. aria-hidden, want de
-               terminaluitvoer hierboven is de tekstuele waarheid; dit is de tekening ervan.
-               Geen celkaders en geen legenda: de poorten mogen niet op de chips lijken, en
-               één onderschrift zegt wat zwart betekent.
-               De IP-adressen komen uit de engine: 192.168.1.100 is jouw machine (ifconfig),
-               192.168.1.1 het router-profiel van nmap.js met 53, 80 en 443 open. -->
-          <div class="af-net" aria-hidden="true">
-            <div class="af-node af-node--jij" data-node="jij">
-              <div class="af-node-kop">
-                <span class="af-node-naam">jouw machine</span>
-                <span class="af-node-adres">192.168.1.100</span>
-              </div>
-            </div>
-            <div class="af-lijn"><span>scan</span></div>
-            <div class="af-node af-node--host" data-node="host">
-              <div class="af-node-kop">
-                <span class="af-node-naam">router</span>
-                <span class="af-node-adres">192.168.1.1</span>
-              </div>
-              <div class="af-poorten">
-                <span class="af-poort" data-poort="21">21</span>
-                <span class="af-poort" data-poort="22">22</span>
-                <span class="af-poort" data-poort="23">23</span>
-                <span class="af-poort" data-poort="25">25</span>
-                <span class="af-poort" data-poort="53">53</span>
-                <span class="af-poort" data-poort="80">80</span>
-                <span class="af-poort" data-poort="110">110</span>
-                <span class="af-poort" data-poort="143">143</span>
-                <span class="af-poort" data-poort="443">443</span>
-                <span class="af-poort" data-poort="445">445</span>
-                <span class="af-poort" data-poort="3306">3306</span>
-                <span class="af-poort" data-poort="8080">8080</span>
-              </div>
-            </div>
-            <p class="af-net-kop">Een gevulde poort staat open: een deur die de router openzet. Gesimuleerd &mdash; niets verlaat je browser.</p>
           </div>
         </div>
       </div>
@@ -358,7 +322,7 @@
             <div class="terminal-line prompt">hacker@hacksim:~$ rm -rf /</div>
             <div class="terminal-line output">rm: cannot remove '/': Critical system directory</div>
             <div class="terminal-line warning">[!] WAARSCHUWING: Dit is een kritieke system directory. In een echte omgeving zou dit je systeem onbruikbaar maken!</div>
-            <div class="terminal-line output">[TIP] Gebruik 'reset' om het filesystem te resetten naar de beginwaarde.</div>
+            <div class="terminal-line output"><span class="tip">[TIP] Gebruik 'reset' om het filesystem te resetten naar de beginwaarde.</span></div>
           </div>
           <div class="af-pijn-tekst">
             <h3>Bang je pc te breken</h3>
@@ -370,7 +334,7 @@
           <div class="af-transcript" aria-hidden="true">
             <div class="terminal-line prompt">hacker@hacksim:~$ lss</div>
             <div class="terminal-line error">Command not found: lss</div>
-            <div class="terminal-line output">[TIP] Bedoelde je misschien 'ls'?</div>
+            <div class="terminal-line output"><span class="tip">[TIP] Bedoelde je misschien 'ls'?</span></div>
           </div>
           <div class="af-pijn-tekst">
             <h3>Geen ervaring</h3>
@@ -401,8 +365,8 @@
             </div>
             <p>Leer de fundamenten: navigeren door mappen, bestanden lezen, en je eerste bestanden aanmaken en verwijderen.</p>
             <div class="af-specimen-voet">
-              <a href="/blog/terminal-basics.html" class="af-leeslink">Lees eerst: Terminal voor beginners</a>
               <a href="/terminal.html?tutorial=fundamentals" class="af-knop" data-terminal-cta="leerpad_beginner">Start de Beginner-missie</a>
+              <a href="/blog/terminal-basics.html" class="af-leeslink">Lees eerst: Terminal voor beginners</a>
             </div>
           </li>
           <li class="af-specimen">
@@ -414,8 +378,8 @@
             </div>
             <p>Ontdek netwerken: scan poorten, bekijk actieve verbindingen, en begrijp hoe een netwerk is opgebouwd.</p>
             <div class="af-specimen-voet">
-              <a href="/blog/nmap-beginnersgids.html" class="af-leeslink">Lees eerst: Nmap-gids</a>
               <a href="/terminal.html?tutorial=recon" class="af-knop" data-terminal-cta="leerpad_gevorderd">Start de Gevorderd-missie</a>
+              <a href="/blog/nmap-beginnersgids.html" class="af-leeslink">Lees eerst: Nmap-gids</a>
             </div>
           </li>
           <li class="af-specimen">
@@ -427,8 +391,8 @@
             </div>
             <p>Echte pentesttools: exploitframeworks, SQL-injectie testen, brute force en wachtwoorden kraken.</p>
             <div class="af-specimen-voet">
-              <a href="/blog/sql-injection-uitgelegd.html" class="af-leeslink">Lees eerst: SQL-injection</a>
               <a href="/terminal.html?tutorial=exploitation" class="af-knop" data-terminal-cta="leerpad_expert">Start de Expert-missie</a>
+              <a href="/blog/sql-injection-uitgelegd.html" class="af-leeslink">Lees eerst: SQL-injection</a>
             </div>
           </li>
         </ol>
@@ -791,11 +755,11 @@
   </div>
 
   <!-- Hero Terminal Animation -->
-  <script src="/src/ui/landing-demo.js?v=6" type="module"></script>
+  <script src="/src/ui/landing-demo.js?v=7" type="module"></script>
 
   <!-- Interactieve hero-REPL (extern bestand: script-src heeft geen 'unsafe-inline',
        netlify.toml:127). Draait ná landing-demo.js, want die publiceert window.landingDemo. -->
-  <script src="/src/ui/hero-repl.js?v=7" type="module"></script>
+  <script src="/src/ui/hero-repl.js?v=8" type="module"></script>
 
   <!-- FAQ Accordion -->
   <script src="src/ui/faq.js" defer></script>

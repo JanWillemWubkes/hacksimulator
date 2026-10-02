@@ -202,7 +202,9 @@ test.describe('Hero-terminal — bedienbaar', () => {
   // 15,2s stonden 53/80/443 gevuld zonder hun regels en glossen. De registratie hoort in
   // rust heel te zijn: het nmap-frame is de ruststand en blijft dat. Wat de demo toont komt
   // uit dezelfde bron als wat een bezoeker typt ("elk van de zes commands" hieronder).
-  test('de ruststand is het nmap-frame, met elke open poort naast zijn regel', async ({ page }) => {
+  // Sessie 249-250: het netwerkdiagram is uit de hero (proef V3). De ruststand toont nu de
+  // drie open poorten als regels in de terminal, elk met zijn glos.
+  test('de ruststand is het nmap-frame, met elke open poort als regel met zijn glos', async ({ page }) => {
     await page.addInitScript(() => {
       // Vanaf de eerste byte: modules draaien vóór DOMContentLoaded, dus een observer die
       // daar pas start mist de laadreeks (eerste versie: lege populatie, de tak ving het).
@@ -227,29 +229,32 @@ test.describe('Hero-terminal — bedienbaar', () => {
         const b = r.getBoundingClientRect(); return b.top >= body.top - 1 && b.bottom <= body.bottom + 1;
       });
       const regelVan = (p) => zichtbaar.find((r) => r.querySelector('.terminal-line').textContent.trimStart().startsWith(`${p}/tcp`));
-      const open = [...document.querySelectorAll('.af-poort.is-open')].map((e) => e.dataset.poort);
-      return { prompts: window.__demoPrompts, open,
-        zonderRegel: open.filter((p) => !regelVan(p) || !regelVan(p).querySelector('.reg-glos').textContent.trim()) };
+      const poorten = ['53', '80', '443'];
+      return { prompts: window.__demoPrompts, diagram: document.querySelectorAll('.af-net, .af-poort').length,
+        zonderRegel: poorten.filter((p) => !regelVan(p) || !regelVan(p).querySelector('.reg-glos').textContent.trim()) };
     });
     // Zelfbewakend: de observer zag de laadreeks; leeg betekent "niet gemeten".
     expect(m.prompts.length, 'de observer zag geen enkel command').toBeGreaterThan(0);
     expect([...new Set(m.prompts)], 'de auto-demo toont meer dan het nmap-frame').toEqual(['hacker@hacksim:~$ nmap 192.168.1.1']);
-    expect(m.open.sort(), 'de ruststand mist zijn open poorten').toEqual(['443', '53', '80']);
-    expect(m.zonderRegel, 'een gevulde poort staat in rust zonder zijn regel en glos in beeld').toEqual([]);
+    expect(m.zonderRegel, 'een open poort staat in rust niet als regel met glos in beeld').toEqual([]);
+    expect(m.diagram, 'het netwerkdiagram staat weer in de hero (sessie 249: eruit)').toBe(0);
   });
 
-  test('overname zet het diagram in rust: lege terminal, geen gevulde poorten', async ({ page }) => {
+  // Sessie 249-250: wat bij overname in rust gaat, is de terminal zelf (het diagram is uit de
+  // hero). De demo schrijft niet over de sessie van de bezoeker heen.
+  test('overname: de terminal van de bezoeker begint leeg, en de demo komt niet terug', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/index.html');
-    const voor = await page.evaluate(() => document.querySelectorAll('.af-poort.is-open').length);
-    expect(voor, 'vóór de overname staat de scan er niet: dan toetst dit niets').toBe(3);
+    const voor = await page.evaluate(() => document.querySelectorAll('#hero-demo .reg').length);
+    expect(voor, 'vóór de overname staat het nmap-frame er niet: dan toetst dit niets').toBeGreaterThan(6);
     await neemOver(page);
-    const na = await page.evaluate(() => ({
-      open: document.querySelectorAll('.af-poort.is-open').length,
-      actief: document.querySelectorAll('.af-node.is-actief').length,
-    }));
-    expect(na.open, 'de scan van de demo blijft gevuld in de terminal van de bezoeker').toBe(0);
-    expect(na.actief, 'een blok blijft actief na de overname').toBe(0);
+    // De bezoeker krijgt een eigen welkomstregel; wat weg moet, is de uitvoer van de demo.
+    const demo = () => page.evaluate(() => [...document.querySelectorAll('#hero-demo .terminal-line')]
+      .filter((l) => /nmap|\/tcp/.test(l.textContent)).length);
+    expect(await demo(), 'de uitvoer van de demo blijft staan in de terminal van de bezoeker').toBe(0);
+    expect(await page.evaluate(() => window.landingDemo.isHandedOff()), 'de auto-demo weet niet dat hij is overgenomen').toBe(true);
+    await page.waitForTimeout(1500);
+    expect(await demo(), 'de demo schrijft na de overname toch weer').toBe(0);
   });
 
   test('hero_demo_command stuurt alleen de commandonaam, nooit argumenten', async ({ page }) => {
@@ -276,7 +281,9 @@ test.describe('Hero-terminal — bedienbaar', () => {
 test.describe('Hero-terminal — mobiel', () => {
   test.use({ viewport: MOBIEL });
 
-  test('@375px past elke authored outputregel binnen 40 tekens', async ({ page }) => {
+  // Sessie 250: gemeten passen er op 375 39 tekens (319px binnen de cel, Chromium rondt de
+  // letter af op 8px), niet 40; een regel van precies 40 brak dus al om. De lat is 39.
+  test('@375px past elke authored outputregel binnen 39 tekens', async ({ page }) => {
     await page.goto('/index.html');
     await neemOver(page);
 
@@ -288,7 +295,7 @@ test.describe('Hero-terminal — mobiel', () => {
     for (const { cmd } of DEMO_COMMANDS.filter((c) => !c.cmd.startsWith('cat'))) {
       await typ(page, cmd);
       for (const regel of await outputRegels(page)) {
-        if (regel.length > 40) teBreed.push(`${cmd}: ${regel.length} — "${regel}"`);
+        if (regel.length > 39) teBreed.push(`${cmd}: ${regel.length} — "${regel}"`);
       }
     }
     expect(teBreed, teBreed.join('\n')).toEqual([]);
@@ -395,7 +402,9 @@ test.describe('Hero-terminal — het getikte command staat in beeld', () => {
 
       const staat = () => page.evaluate(() => {
         const b = document.getElementById('hero-demo');
-        const bb = b.getBoundingClientRect();
+        // De paddingbox, binnen de rand van 8px (sessie 250): daar knipt het venster af.
+        const r = b.getBoundingClientRect();
+        const bb = { top: r.top + b.clientTop, bottom: r.top + b.clientTop + b.clientHeight };
         const prompt = [...b.querySelectorAll('.terminal-line.prompt')].pop().getBoundingClientRect();
         const laatste = [...b.querySelectorAll('.terminal-line')].pop().getBoundingClientRect();
         return {
@@ -569,7 +578,8 @@ test.describe('Hero-terminal — focus en naam van een chip', () => {
     await page.goto('/index.html');
     await page.locator('.hero-chip[data-command="whoami"]').click();
     await expect(page.locator('#hero-demo')).toContainText('$ whoami');
-    await expect(page.getByRole('button', { name: 'whoami, systeem · beginner, gedaan' })).toHaveCount(1);
+    // Sessie 249: de herkomst staat niet meer op de chip, dus ook niet meer in de naam.
+    await expect(page.getByRole('button', { name: 'whoami, gedaan', exact: true })).toHaveCount(1);
     await expect(page.getByRole('button', { name: /, volgende suggestie$/ })).toHaveCount(1);
     // Label-in-name: elke chipnaam begint met zijn zichtbare command.
     const namen = await page.$$eval('.hero-chip', (els) =>
@@ -587,7 +597,8 @@ test.describe('Hero-terminal — focus en naam van een chip', () => {
 // nog. Dat staat als assertie in twee richtingen, zodat een oplossing zich meldt.
 const ONDERGRENS_EEN_REGEL = 352;
 
-test.describe('Hero op elke breedte: kop, poorten en chips op één regel', () => {
+// Sessie 249-250: de poorten verlieten de hero met het diagram; hun labeltoets ging mee.
+test.describe('Hero op elke breedte: kop en chips op één regel', () => {
   test('van 320 tot 1440, per 8px', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 900 });
     await page.goto('/index.html');
@@ -608,29 +619,22 @@ test.describe('Hero op elke breedte: kop, poorten en chips op één regel', () =
           return new Set([...g.getClientRects()].map((x) => Math.round(x.top))).size;
         };
         const kop = [...document.querySelectorAll('.af-term-kop span')].filter((s) => s.getClientRects().length);
-        const poorten = [...document.querySelectorAll('.af-poort')];
-        const krap = poorten.filter((s) => {
-          const g = document.createRange(); g.selectNodeContents(s);
-          return s.getBoundingClientRect().width - g.getBoundingClientRect().width < 4;
-        }).map((s) => s.textContent);
         const chips = [...document.querySelectorAll('.hero-chip')];
         // Afstand van de tekst tot de binnenkant van de chiprand (2px rand).
-        const lucht = Math.min(...chips.flatMap((c) => ['.af-chip-cmd', '.af-chip-herkomst'].map((s) => {
+        const lucht = Math.min(...chips.flatMap((c) => ['.af-chip-cmd'].map((s) => {
           const g = document.createRange(); g.selectNodeContents(c.querySelector(s));
           return c.getBoundingClientRect().right - 2 - g.getBoundingClientRect().right;
         })));
         return {
           lucht,
           kop: kop.length, kopBreekt: kop.filter((s) => regels(s) > 1).map((s) => s.textContent.trim()),
-          poorten: poorten.length, krap,
           chips: chips.length,
-          chipBreekt: chips.filter((c) => regels(c.querySelector('.af-chip-cmd')) > 1 || regels(c.querySelector('.af-chip-herkomst')) > 1).map((c) => c.dataset.command),
+          chipBreekt: chips.filter((c) => regels(c.querySelector('.af-chip-cmd')) > 1).map((c) => c.dataset.command),
           hoogtes: [...new Set(chips.map((c) => Math.round(c.getBoundingClientRect().height)))],
         };
       });
       gemeten++;
-      if (r.kop < 1 || r.poorten !== 12 || r.chips !== 6) fouten.push(`${w}: populatie kop ${r.kop}, poorten ${r.poorten}, chips ${r.chips}`);
-      if (r.krap.length) fouten.push(`${w}: poortlabel zonder 4px lucht: ${r.krap.join(' ')}`);
+      if (r.kop < 1 || r.chips !== 6) fouten.push(`${w}: populatie kop ${r.kop}, chips ${r.chips}`);
       // Op elke breedte, ook onder de grens: tekst loopt nooit over de rand van zijn chip.
       if (r.lucht < 0) fouten.push(`${w}: chiptekst ${(-r.lucht).toFixed(0)}px over de rand`);
       if (w >= ONDERGRENS_EEN_REGEL && r.lucht < 6) fouten.push(`${w}: chiptekst ${r.lucht.toFixed(1)}px van de rand, minder dan 6`);
@@ -641,9 +645,8 @@ test.describe('Hero op elke breedte: kop, poorten en chips op één regel', () =
       if (r.hoogtes.length > 1) fouten.push(`${w}: chips ongelijk hoog: ${r.hoogtes.join('/')}`);
     }
     expect(gemeten, 'de sweep heeft niet gedraaid').toBeGreaterThanOrEqual(140);
-    expect(fouten.filter((f) => f.includes('populatie')), 'kop, poorten of chips niet gevonden').toEqual([]);
+    expect(fouten.filter((f) => f.includes('populatie')), 'kop of chips niet gevonden').toEqual([]);
     expect(fouten.filter((f) => f.includes('terminalkop')), 'terminalkop op meer dan één regel').toEqual([]);
-    expect(fouten.filter((f) => f.includes('poortlabel')), 'poortlabel te krap in zijn sleuf').toEqual([]);
     expect(fouten.filter((f) => f.includes('chiptekst')), 'chiptekst over of te dicht op de rand').toEqual([]);
     expect(fouten.filter((f) => f.includes('chip breekt') || f.includes('ongelijk hoog')), 'chip op meer dan één regel of ongelijk hoog').toEqual([]);
     // Twee richtingen: breekt het onder de grens niet meer, verlaag dan ONDERGRENS_EEN_REGEL.
@@ -957,6 +960,23 @@ test.describe('Hero-terminal — de cursor staat bij de tekst', () => {
     expect(m.gat, 'cursor staat vóór de tekst').toBeGreaterThan(-2);
   });
 
+  // Finish review s250: het rode blok stond 2ch rechts van waar je eerste letter komt (gap
+  // van 1ch plus het rustveld van 1ch ervoor). De toets hierboven liet 24px toe en zag het niet.
+  for (const breedte of [1440, 375]) {
+    test(`@${breedte}px staat het rode blok precies waar je eerste letter komt`, async ({ page }) => {
+      await page.setViewportSize({ width: breedte, height: 900 });
+      await page.goto('/index.html');
+      await page.evaluate(() => document.fonts.ready);
+      const m = await page.evaluate(() => {
+        const c = document.querySelector('.af-term .cursor').getBoundingClientRect();
+        const i = document.getElementById('typing-target').getBoundingClientRect();
+        return { cursor: c.left, invoer: i.left, breedte: c.width, zichtbaar: getComputedStyle(document.querySelector('.af-term .cursor')).display !== 'none' };
+      });
+      expect(m.zichtbaar && m.breedte > 4, 'het blok staat niet in beeld: dan meet dit niets').toBe(true);
+      expect(Math.abs(m.cursor - m.invoer), `blok ${(m.cursor - m.invoer).toFixed(1)}px naast het invoerpunt`).toBeLessThanOrEqual(1);
+    });
+  }
+
   test('de hele promptregel neemt over, niet alleen het veld van één teken', async ({ page }) => {
     await page.goto('/index.html');
 
@@ -1202,48 +1222,56 @@ test.describe('De registratie: regel en glos op dezelfde rasterrij', () => {
   });
 });
 
-test.describe('Het diagram antwoordt op elk command', () => {
+// ==================== Sessie 249-250: de hero zonder diagram ====================
+// Proef V3 (sessie 249) haalde het netwerkdiagram uit de hero: te veel lagen. Wat het diagram
+// bewaakte, verhuist naar wat er nu staat: de terminal, zijn glos en zijn toetsenrij. De oude
+// blokken "Het diagram antwoordt", "De vouw" (poorten) en "De scan" zijn hierdoor vervangen.
+
+// Sessie 250 (eigenaar): "cat en help tonen geen tekst bij 'in gewoon Nederlands'". Regels die
+// al Nederlands zijn kregen bewust geen vertaling, en dan stond de kolom helemaal leeg. Nu
+// heeft elke reeks minstens één glos: wat er gebeurt, of waar de naam vandaan komt.
+test.describe('Elke reeks heeft Nederlands ernaast', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
-  const staat = (page) => page.evaluate(() => ({
-    actief: [...document.querySelectorAll('.af-node.is-actief')].map((n) => n.dataset.node),
-    open: [...document.querySelectorAll('.af-poort.is-open')].map((p) => p.dataset.poort),
-    poorten: document.querySelectorAll('.af-poort').length,
-  }));
-
-  test('lokale commands raken jouw machine, nmap de router en zijn drie open poorten', async ({ page }) => {
+  test('elk command, ook help, cat en een fout, krijgt minstens één glos', async ({ page }) => {
     await page.goto('/index.html');
+    await neemOver(page);
+    const invoer = [...DEMO_COMMANDS.map((d) => d.cmd), 'cat README.txt', 'nmap 10.0.0.1', 'lss'];
+    const zonder = [];
+    let gemeten = 0;
+    for (const cmd of invoer) {
+      await typ(page, cmd);
+      const n = await page.evaluate(() => {
+        const rijen = [...document.querySelectorAll('#hero-demo .reg')];
+        const laatstePrompt = rijen.map((r) => r.classList.contains('reg--prompt')).lastIndexOf(true);
+        return rijen.slice(laatstePrompt + 1).filter((r) => r.querySelector('.reg-glos').textContent.trim()).length;
+      });
+      gemeten++;
+      if (n < 1) zonder.push(cmd);
+    }
+    expect(gemeten, 'niet elke invoer is gemeten').toBe(invoer.length);
+    expect(zonder, 'een reeks zonder Nederlands ernaast: de kolom staat leeg').toEqual([]);
+  });
 
-    await page.locator('.hero-chip[data-command="ls"]').click();
-    let s = await staat(page);
-    expect(s.poorten, 'geen poortsleuven — het diagram ontbreekt').toBe(12);
-    expect(s.actief, 'ls hoort jouw machine te raken').toEqual(['jij']);
-
-    await page.locator('.hero-chip[data-command="nmap 192.168.1.1"]').click();
-    s = await staat(page);
-    expect(s.actief, 'nmap hoort de router te raken').toEqual(['host']);
-    // Het router-profiel van nmap.js: 53, 80 en 443. Geen andere, geen minder.
-    expect(s.open.sort()).toEqual(['443', '53', '80']);
-
-    await page.locator('.hero-chip[data-command="help"]').click();
-    s = await staat(page);
-    expect(s.actief, 'help laat het diagram in rust').toEqual([]);
-    expect(s.open.length, 'een scan is kennis: open poorten blijven open').toBe(3);
+  test('help legt bij elk command uit waar zijn naam vandaan komt', async ({ page }) => {
+    await page.goto('/index.html');
+    await neemOver(page);
+    await typ(page, 'help');
+    const rijen = await page.evaluate(() => [...document.querySelectorAll('#hero-demo .reg')]
+      .map((r) => [r.querySelector('.terminal-line').textContent.trim(), r.querySelector('.reg-glos').textContent.trim()])
+      .filter(([t]) => /^(ls|cat|pwd|whoami|nmap)\s/.test(t)));
+    // Zelfbewakend: de vijf commandregels van help zijn gevonden.
+    expect(rijen.length, 'de commandregels van help niet gevonden').toBe(5);
+    expect(rijen.filter(([, g]) => !g).map(([t]) => t), 'een command in help zonder glos').toEqual([]);
   });
 });
 
-// De vouw (sessie 241). Het memorabele moment is dat nmap de poorten in het diagram
-// opent; staat het diagram onder de vouw, dan gebeurt dat buiten beeld. Gemeten vóór de
-// fix: onderkant .af-net op 949/900 (1440), 927/800 (1280), 1071/768 (1024). Daarna
-// 788 en 770. Op 1024 is de afspraak kleiner: de hele terminal, tot en met de invoerregel
-// en zijn uitnodiging, want dat is het bewijs en het instappunt.
-//
-// Sessie 247 (bolder): de h1 ging naar afficheschaal (88px over twaalf kolommen) en de
-// poorten naar 56px. Gemeten prijs: 1440x900 houdt het (diagram 889/900), 1280x800 niet
-// (poorten 864/800, 71px eronder in de proef A+C). De vouw bestond om het moment in beeld
-// te houden; op 1280 toetst "De scan" hieronder dat nu direct: het speelt opnieuw zodra
-// het diagram in beeld komt. De pixelvouw geldt nog op 1440 en 1024.
-test.describe('De vouw: terminal en diagram samen in beeld', () => {
+// De vouw (sessie 241, herzien 250). Tot sessie 249 bewaakte dit de poorten van het diagram
+// boven de vouw. Nu: de terminal met zijn invoerregel en de hele toetsenrij, op 1440x900 en
+// 1280x800 (gemeten na de lucht van sessie 250: chips onder op 821 en 793). Op 1024 de hele
+// terminal met zijn uitnodiging. De terminal houdt zijn zeven regels: zonder die tak haal je
+// de vouw door hem in te korten.
+test.describe('De vouw: terminal en toetsenrij in beeld', () => {
   async function meet(page, viewport) {
     await page.addInitScript(() => {
       localStorage.setItem('hacksim_analytics_consent', JSON.stringify({ necessary: true, analytics: false }));
@@ -1251,18 +1279,17 @@ test.describe('De vouw: terminal en diagram samen in beeld', () => {
     await page.setViewportSize(viewport);
     await page.goto('/index.html');
     await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important;animation:none!important}' });
+    await page.evaluate(() => document.fonts.ready);
     return page.evaluate(() => {
       const r = (s) => document.querySelector(s).getBoundingClientRect();
       const body = document.querySelector('.af-term .terminal-body');
-      const poorten = [...document.querySelectorAll('.af-poort')].map((p) => p.getBoundingClientRect());
       return {
         vh: window.innerHeight,
-        net: r('.af-net').bottom,
-        poortBodem: Math.max(...poorten.map((p) => p.bottom)),
-        poorten: poorten.filter((p) => p.height > 0).length,
         rij: parseFloat(getComputedStyle(body).lineHeight),
-        bodyHoogte: body.clientHeight,
+        bodyHoogte: body.getBoundingClientRect().height,
+        venster: body.clientHeight,
         invoer: r('.af-term .terminal-input-line'),
+        chips: r('#hero-chips'),
         hint: r('.af-hint'),
         glosKop: r('.af-glos-kop'),
         termKop: r('.af-term-kop')
@@ -1270,15 +1297,14 @@ test.describe('De vouw: terminal en diagram samen in beeld', () => {
     });
   }
 
-  for (const viewport of [{ width: 1440, height: 900 }]) {
-    test(`@${viewport.width}x${viewport.height} staan de poorten van de router boven de vouw`, async ({ page }) => {
+  for (const viewport of [{ width: 1440, height: 900 }, { width: 1280, height: 800 }]) {
+    test(`@${viewport.width}x${viewport.height} staan invoerregel en toetsenrij boven de vouw`, async ({ page }) => {
       const m = await meet(page, viewport);
-      // Zelfbewakend: twaalf zichtbare poorten, en de terminal houdt zijn zeven regels.
-      // Zonder die tweede tak haal je de vouw door de terminal in te korten.
-      expect(m.poorten, 'niet alle twaalf poorten renderen').toBe(12);
-      expect(m.bodyHoogte, `de terminal is geen 7 regels van ${m.rij}px meer`).toBe(7 * m.rij + 16);
-      expect(m.net, `diagram eindigt op ${Math.round(m.net)}, de vouw ligt op ${m.vh}`).toBeLessThanOrEqual(m.vh);
-      expect(m.poortBodem).toBeLessThanOrEqual(m.vh);
+      expect(m.chips.height, 'toetsenrij zonder hoogte').toBeGreaterThan(40);
+      expect(m.venster, `het venster is geen 7 regels van ${m.rij}px meer`).toBe(7 * m.rij);
+      expect(m.bodyHoogte, 'de rand boven en onder is geen 8px meer').toBe(7 * m.rij + 16);
+      expect(m.invoer.bottom, `invoerregel eindigt op ${Math.round(m.invoer.bottom)}`).toBeLessThanOrEqual(m.vh);
+      expect(m.chips.bottom, `toetsenrij eindigt op ${Math.round(m.chips.bottom)}, de vouw ligt op ${m.vh}`).toBeLessThanOrEqual(m.vh);
     });
   }
 
@@ -1304,93 +1330,131 @@ test.describe('De vouw: terminal en diagram samen in beeld', () => {
   });
 });
 
-// De scan (sessie 247, overdrive). Het memorabele moment speelt zonder klik: bij laden, en
-// nog één keer als het diagram pas later in beeld komt. De rijen staan meteen in de DOM;
-// het beeld wacht (clip-path per regel, poort per regel). Deze tests lezen de lopende
-// animaties via getAnimations(), want het moment ís de timing.
-test.describe('De scan: het moment speelt waar je kijkt', () => {
-  // Gelogd vanaf de eerste byte via animationstart, niet achteraf via getAnimations(): goto
-  // wacht op `load`, en de laadreeks (~1,1s) kan dan al voorbij zijn (flaky in de eerste
-  // versie van deze test).
+// Sessie 250: na help stond de [TIP] half afgesneden onderaan, na cat een halve oude regel
+// bovenaan. Drie oorzaken, alle drie gerepareerd: rijen van 28 (de glos zakte 1px voor de
+// basislijn), een venster van 7,6 regels (padding scrolde mee), en toonCommand zette de
+// prompt op de rand. Nu valt de rand van het venster altijd tussen twee regels.
+// Finish review s250: na `cat notes.txt` brak item 1 zacht terug naar kolom 0, terwijl item 2
+// zijn eigen harde vervolgregel van drie spaties heeft (zo staat het in het bestand). Een zachte
+// omslag springt nu evenveel in. Op 320 breekt item 1 in elke engine.
+test.describe('Een zachte omslag springt in zoals het bestand zelf', () => {
+  test('@320px staat de omslag van item 1 op de lijn van "iets werkt"', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 800 });
+    await page.goto('/index.html');
+    await page.evaluate(() => document.fonts.ready);
+    await page.locator('.hero-chip[data-command="cat notes.txt"]').click();
+    await expect(page.locator('#hero-demo')).toContainText('iets werkt');
+    const m = await page.evaluate(() => {
+      const regels = [...document.querySelectorAll('#hero-demo .terminal-line')];
+      const hard = regels.find((l) => l.textContent.startsWith('   iets werkt'));
+      const g = document.createRange(); g.setStart(hard.firstChild, 3); g.setEnd(hard.firstChild, 4);
+      const lijn = g.getBoundingClientRect().left;
+      // Alleen tekstknopen: een range over een regel met een <span> (de [~]- of [TIP]-regel)
+      // geeft ook de box van het element, met een iets andere top, en die telde als rij.
+      const vervolg = regels.flatMap((l) => {
+        const w = document.createTreeWalker(l, NodeFilter.SHOW_TEXT); const rs = [];
+        for (let n = w.nextNode(); n; n = w.nextNode()) { const r = document.createRange(); r.selectNodeContents(n); rs.push(...r.getClientRects()); }
+        const rij = new Map();
+        rs.forEach((x) => { const k = Math.round(x.top / 4); if (!rij.has(k) || x.left < rij.get(k).left) rij.set(k, { left: x.left, tekst: l.textContent.slice(0, 20) }); });
+        return [...rij.values()].slice(1);
+      });
+      return { lijn, vervolg };
+    });
+    expect(m.vervolg.length, 'geen enkele regel brak: dan toetst dit niets').toBeGreaterThan(0);
+    const scheef = m.vervolg.filter((x) => Math.abs(x.left - m.lijn) > 1.5).map((x) => `${(x.left - m.lijn).toFixed(1)} in "${x.tekst}"`);
+    expect(scheef, 'een zachte omslag staat niet op de lijn van de harde vervolgregel').toEqual([]);
+  });
+});
+
+test.describe('Het venster staat op hele regels', () => {
+  for (const vp of [{ width: 1440, height: 900 }, { width: 375, height: 812 }]) {
+    test(`@${vp.width}px: na elke chip staat geen regel half in beeld`, async ({ page }) => {
+      await page.setViewportSize(vp);
+      await page.goto('/index.html');
+      await page.evaluate(() => document.fonts.ready);
+      const fouten = [];
+      let geschoven = 0;
+      let rijenGeteld = 0;
+      for (const { cmd } of DEMO_COMMANDS) {
+        await page.locator(`.hero-chip[data-command="${cmd}"]`).click();
+        await expect(page.locator('#hero-demo')).toContainText(`$ ${cmd}`);
+        const r = await page.evaluate(() => {
+          const body = document.getElementById('hero-demo');
+          const b = body.getBoundingClientRect();
+          const cs = getComputedStyle(body);
+          const rij = parseFloat(cs.lineHeight);
+          // Het venster is de paddingbox: binnen de rand, daar knipt overflow af.
+          const boven = b.top + parseFloat(cs.borderTopWidth);
+          const onder = b.bottom - parseFloat(cs.borderBottomWidth);
+          const rijen = [...body.children].map((x) => x.getBoundingClientRect())
+            .filter((x) => x.bottom > boven + 0.5 && x.top < onder - 0.5);
+          // Een rij kan meer regels hoog zijn (onder 768 staat de glos onder zijn regel); de
+          // rand mag dan tussen regel en glos vallen. Wat niet mag: een rij die niet op een
+          // hele regel vanaf de rand begint, want dan snijdt de rand door tekst.
+          const opRegel = (x) => { const v = (x.top - boven) / rij; return Math.abs(v - Math.round(v)) < 0.02; };
+          return {
+            scrollTop: body.scrollTop, n: rijen.length,
+            vensterRegels: (onder - boven) / rij,
+            half: rijen.filter((x) => !opRegel(x)).map((x) => `${(x.top - boven).toFixed(1)}..${(x.bottom - boven).toFixed(1)}`),
+            scheef: rijen.filter((x) => Math.abs(x.height / rij - Math.round(x.height / rij)) > 0.02).map((x) => x.height.toFixed(1)),
+          };
+        });
+        if (r.scrollTop > 0) geschoven++;
+        // Ook de onderrand: een venster van 7,6 regels toont onderaan altijd een strook.
+        if (Math.abs(r.vensterRegels - Math.round(r.vensterRegels)) > 0.02) fouten.push(`${cmd}: venster is ${r.vensterRegels.toFixed(2)} regels`);
+        rijenGeteld += r.n;
+        if (r.half.length) fouten.push(`${cmd}: half in beeld ${r.half.join(', ')}`);
+        if (r.scheef.length) fouten.push(`${cmd}: rij geen veelvoud van de regel: ${r.scheef.join(', ')}`);
+      }
+      // Zelfbewakend: er is gemeten, en het venster is ook echt geschoven (anders toetst de
+      // rand niets: een korte uitvoer klemt gewoon op de bodem).
+      expect(rijenGeteld, 'geen rijen in het venster gemeten').toBeGreaterThan(DEMO_COMMANDS.length);
+      expect(geschoven, 'het venster schoof bij geen enkel command').toBeGreaterThan(0);
+      expect(fouten).toEqual([]);
+    });
+  }
+});
+
+// De reeks (sessie 247, zonder diagram sinds 249). Het memorabele moment speelt zonder klik:
+// bij laden rolt het nmap-frame regel voor regel uit, één keer. De rijen staan meteen in de
+// DOM; het beeld wacht (clip-path per regel). Gelezen via animationstart, want het moment ís
+// de timing.
+test.describe('De reeks: het moment speelt bij laden', () => {
   const voorbereid = (page) => page.addInitScript(() => {
     localStorage.setItem('hacksim_analytics_consent', JSON.stringify({ necessary: true, analytics: false }));
-    window.__scan = [];
+    window.__rol = [];
     document.addEventListener('animationstart', (e) => {
-      if (/^af-(scan|poort-wacht|rol)/.test(e.animationName)) window.__scan.push(e.animationName);
+      if (/^af-/.test(e.animationName)) window.__rol.push(e.animationName);
     });
   });
-  const leesLog = (page) => page.evaluate(() => window.__scan.splice(0));
-  const tel = (log, naam) => log.filter((n) => n === naam).length;
+  const leesLog = (page) => page.evaluate(() => window.__rol.splice(0));
 
-  test('@1440x900 speelt de scan bij laden, met het diagram in beeld, en niet nog eens', async ({ page }) => {
+  test('@1440x900 rolt het nmap-frame bij laden uit, en niet nog eens', async ({ page }) => {
     await voorbereid(page);
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/index.html');
     await page.waitForTimeout(1500);
     const bijLaden = await leesLog(page);
-    expect(tel(bijLaden, 'af-scan'), 'bij laden speelt geen scanpijl').toBe(1);
-    expect(tel(bijLaden, 'af-poort-wacht'), 'bij laden springen niet drie poorten open').toBe(3);
-    await page.evaluate(() => document.querySelector('.af-net').scrollIntoView({ block: 'center' }));
+    // De regels in het venster: zeven, de prompt valt erboven.
+    expect(bijLaden.filter((n) => n === 'af-rol').length, 'bij laden rolt de reeks niet uit').toBeGreaterThanOrEqual(6);
+    expect(bijLaden.filter((n) => n !== 'af-rol'), 'een tweede beweging naast de registratie').toEqual([]);
+    await page.evaluate(() => window.scrollTo({ top: 1200, behavior: 'instant' }));
+    await page.waitForTimeout(300);
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
     await page.waitForTimeout(1200);
-    // Alleen scans tellen: de lus speelt intussen gewoon `ls` (af-rol), en onder last valt
-    // dat binnen dit venster.
-    expect(tel(await leesLog(page), 'af-scan'), 'het diagram was al in beeld; een tweede scan is ruis').toBe(0);
+    expect(await leesLog(page), 'de reeks speelt opnieuw bij terugscrollen: dat was de replay van het diagram').toEqual([]);
   });
 
-  test('@1280x800 speelt de scan opnieuw zodra het diagram in beeld komt, één keer', async ({ page }) => {
-    await voorbereid(page);
-    await page.setViewportSize({ width: 1280, height: 800 });
-    await page.goto('/index.html');
-    const m = await page.evaluate(() => ({
-      vh: innerHeight,
-      poortBodem: Math.max(...[...document.querySelectorAll('.af-poort')].map((p) => p.getBoundingClientRect().bottom)),
-      poorten: document.querySelectorAll('.af-poort').length,
-    }));
-    // Zelfbewakend: deze test bestaat omdat de poorten hier onder de vouw staan. Komen ze
-    // erboven, dan hoort 1280 terug in "De vouw" en toetst deze tak niets meer.
-    expect(m.poorten, 'niet alle twaalf poorten renderen').toBe(12);
-    expect(m.poortBodem, 'de poorten staan boven de vouw: zet 1280 terug in De vouw').toBeGreaterThan(m.vh);
-
-    await page.waitForTimeout(1500);
-    expect(tel(await leesLog(page), 'af-scan'), 'de laadreeks speelde niet').toBe(1);
-
-    await page.evaluate(() => document.querySelector('.af-net').scrollIntoView({ block: 'center' }));
-    await page.waitForTimeout(1200);
-    const inBeeld = await leesLog(page);
-    expect(tel(inBeeld, 'af-scan'), 'de scanpijl speelt niet als het diagram in beeld komt').toBe(1);
-    expect(tel(inBeeld, 'af-poort-wacht'), 'de poorten springen niet opnieuw open').toBe(3);
-
-    await page.evaluate(() => window.scrollTo(0, 0));
-    await page.waitForTimeout(150);
-    await page.evaluate(() => document.querySelector('.af-net').scrollIntoView({ block: 'center' }));
-    await page.waitForTimeout(1200);
-    expect(tel(await leesLog(page), 'af-scan'), 'de scan speelt vaker dan één keer bij in beeld komen').toBe(0);
-  });
-
-  test('elke poort springt open op de tik van zijn regel, na de scanpijl', async ({ page }) => {
+  test('elke regel rolt 90ms na de vorige, in de volgorde van de uitvoer', async ({ page }) => {
     await voorbereid(page);
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/index.html');
     await neemOver(page);
     await typ(page, 'nmap 192.168.1.1');
-    const r = await page.evaluate(() => {
-      const ms = (el, v) => parseFloat(el.style.getPropertyValue(v));
-      const rijen = [...document.querySelectorAll('#hero-demo .reg')];
-      const scan = parseFloat(document.querySelector('.af-net').style.getPropertyValue('--scan-duur'));
-      return ['53', '80', '443'].map((p) => {
-        const regel = rijen.filter((x) => x.querySelector('.terminal-line').textContent.trimStart().startsWith(`${p}/tcp`)).pop();
-        const poort = document.querySelector(`.af-poort[data-poort="${p}"]`);
-        return { p, regel: ms(regel, '--reg-vertraging'), poort: ms(poort, '--poort-vertraging'), scan,
-                 open: poort.classList.contains('is-open') };
-      });
-    });
-    // Zelfbewakend: de toestand is meteen waar (een scan is kennis), alleen het beeld wacht.
-    expect(r.map((x) => x.open), 'is-open hoort meteen te staan').toEqual([true, true, true]);
-    for (const x of r) {
-      expect(x.poort, `poort ${x.p} springt niet op zijn regel (${x.poort} tegen ${x.regel}ms)`).toBe(x.regel);
-      expect(x.poort, `poort ${x.p} opent vóór de scanpijl er is`).toBeGreaterThanOrEqual(x.scan);
-    }
-    expect(r[0].poort < r[1].poort && r[1].poort < r[2].poort, 'de poorten openen niet in de volgorde van de uitvoer').toBe(true);
+    const ms = await page.evaluate(() => [...document.querySelectorAll('#hero-demo .reg.is-rol:not(.reg--prompt)')]
+      .map((r) => parseFloat(r.style.getPropertyValue('--reg-vertraging'))));
+    expect(ms.length, 'geen rollende regels: de reeks heeft niet gespeeld').toBeGreaterThan(3);
+    expect(ms, 'de regels rollen niet om de 90ms').toEqual(ms.map((_, i) => i * 90));
   });
 
   test('reduced motion: de eindstand meteen, bij laden en bij zelf typen', async ({ page }) => {
@@ -1401,24 +1465,20 @@ test.describe('De scan: het moment speelt waar je kijkt', () => {
     const staat = () => page.evaluate(() => ({
       reduce: matchMedia('(prefers-reduced-motion: reduce)').matches,
       rol: document.querySelectorAll('.reg.is-rol').length,
-      scan: document.querySelectorAll('.is-scan').length,
-      open: [...document.querySelectorAll('.af-poort.is-open')].map((p) => p.dataset.poort).sort(),
       regels: document.querySelectorAll('#hero-demo .reg').length,
     }));
     const m = await staat();
     expect(m.reduce, 'reduced motion kwam niet aan; de test meet het standaardgedrag').toBe(true);
     expect(m.regels, 'het nmap-frame staat er niet').toBeGreaterThan(6);
-    expect(m.open, 'de eindstand mist zijn open poorten').toEqual(['443', '53', '80']);
-    expect(m.rol + m.scan, 'bij laden onder reduced motion: toch een reeks of scan').toBe(0);
+    expect(m.rol, 'bij laden onder reduced motion: toch een reeks').toBe(0);
 
     // Het tweede pad: de auto-demo roept lichtOp onder reduce niet eens aan, dus alleen het
-    // getypte command toetst de eigen weigering van lichtOp en zetDiagram.
+    // getypte command toetst de eigen weigering van lichtOp.
     await neemOver(page);
     await typ(page, 'nmap 192.168.1.1');
     const t = await staat();
     expect(t.rol, 'zelf typen onder reduced motion: de uitvoer rolt toch uit').toBe(0);
-    expect(t.scan, 'zelf typen onder reduced motion: de scan speelt toch').toBe(0);
     await page.waitForTimeout(300);
-    expect(await leesLog(page), 'er startten scananimaties onder reduced motion').toEqual([]);
+    expect(await leesLog(page), 'er startten animaties onder reduced motion').toEqual([]);
   });
 });

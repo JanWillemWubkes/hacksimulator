@@ -8,7 +8,8 @@
  * een regel omslaat of de module scrollt. `hero-demo.spec.js` meet het toch, in pixels.
  *
  * Gedeeld door landing-demo.js (de auto-demo) en hero-repl.js (de bezoeker), zodat er
- * één renderer en één diagram is in plaats van twee die uit elkaar kunnen groeien.
+ * één renderer is in plaats van twee die uit elkaar kunnen groeien. Het netwerkdiagram
+ * dat hier tot sessie 249 meeantwoordde, is uit de hero (proef V3: te veel lagen).
  *
  * Tekst gaat altijd via textContent: bij hero-repl komt de invoer van de bezoeker.
  */
@@ -17,21 +18,8 @@
 const OPLICHT_MS = 450;
 
 /** Afstand tussen twee regels van één reeks (sessie 247): de uitvoer rolt uit zoals een
- *  terminal hem schrijft, en elke poort springt open op het moment van zíjn regel. */
+ *  terminal hem schrijft. (Tot sessie 249 sprong op die tik ook een poort in het diagram open.) */
 const STAP_MS = 90;
-
-/** Bij een scan tekent eerst de pijl zich van jouw machine naar de router; pas dan komt
- *  de uitvoer. Eén bron: zetDiagram geeft hem als --scan-duur aan affiche.css. */
-const SCAN_MS = 360;
-
-/** Scant dit command de router? Alleen dan opent het diagram poorten. */
-function isScan(invoer) {
-  const [naam = '', doel] = invoer.trim().split(/\s+/);
-  return naam.toLowerCase() === 'nmap' && doel === '192.168.1.1';
-}
-
-/** Poorten die het router-profiel open heeft (src/commands/network/nmap.js, 'router'). */
-const OPEN_BIJ_ROUTER = ['53', '80', '443'];
 
 const verminderd = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -89,16 +77,15 @@ export function maakRij(tekst, glos, soort = 'output') {
  * leest, een schermlezer of een test, ziet dus nooit een halve reeks.
  * Onder prefers-reduced-motion gebeurt er niets: de eindstand ís de rusttoestand.
  */
-export function lichtOp(rijen, invoer = '') {
+export function lichtOp(rijen) {
   if (verminderd() || !rijen.length) return;
   // Alleen wat in het venster staat telt mee: in de rusttoestand (flex-end) vallen prompt
   // en kop van een lange uitvoer boven de rand, en die telden eerst 400ms zwarte module.
   const venster = rijen[0].parentElement.getBoundingClientRect();
-  const voorloop = isScan(invoer) ? SCAN_MS : 0;
   let k = 0;
   rijen.forEach((r) => {
     if (r.getBoundingClientRect().bottom <= venster.top + 1) return;
-    const ms = r.classList.contains('reg--prompt') ? 0 : voorloop + k++ * STAP_MS;
+    const ms = r.classList.contains('reg--prompt') ? 0 : k++ * STAP_MS;
     r.style.setProperty('--reg-vertraging', `${ms}ms`);
     r.classList.add('is-rol');
     setTimeout(() => {
@@ -106,65 +93,4 @@ export function lichtOp(rijen, invoer = '') {
       setTimeout(() => r.classList.remove('is-lit'), OPLICHT_MS);
     }, ms);
   });
-}
-
-/** Zet een klasse opnieuw, zodat de animatie die eraan hangt opnieuw start. */
-function herstart(el, klasse) {
-  el.classList.remove(klasse);
-  void el.offsetWidth;   // reflow: anders ziet de browser geen nieuwe start
-  el.classList.add(klasse);
-}
-
-/**
- * Zet het diagram terug in rust: geen actief blok, geen open poort. Voor de overname
- * (finish review s247): de bezoeker begint met een lege terminal, dus de scan van de
- * auto-demo is niet zijn kennis; gevulde poorten zonder hun regels braken de registratie.
- */
-export function rustDiagram() {
-  const net = document.querySelector('.af-net');
-  if (!net) return;
-  net.classList.remove('is-scan');
-  net.querySelectorAll('.af-node').forEach((n) => n.classList.remove('is-actief'));
-  net.querySelectorAll('.af-poort').forEach((p) => p.classList.remove('is-open', 'is-scan', 'is-lit'));
-}
-
-/**
- * Het diagram antwoordt op elk command. Netwerkcommando's raken de router, lokale
- * commando's jouw machine, en `help` laat het in rust. Een scan is kennis: open poorten
- * blijven open staan nadat je iets anders typt.
- *
- * Met `rijen` (de reeks die lichtOp laat uitrollen) speelt nmap het memorabele moment: de
- * scanpijl tekent zich en elke open poort springt invers open op de tik van zijn regel.
- * `is-open` staat meteen: de toestand is waar, alleen het beeld wacht (`.is-scan`).
- */
-export function zetDiagram(invoer, rijen = null) {
-  const net = document.querySelector('.af-net');
-  if (!net) return;
-  const naam = (invoer.trim().split(/\s+/)[0] || '').toLowerCase();
-
-  let actief = null;
-  if (naam === 'nmap') actief = 'host';
-  else if (['ls', 'cat', 'pwd', 'whoami'].includes(naam)) actief = 'jij';
-
-  net.querySelectorAll('.af-node').forEach((n) => {
-    n.classList.toggle('is-actief', n.dataset.node === actief);
-  });
-
-  if (isScan(invoer)) {
-    const poorten = OPEN_BIJ_ROUTER.map((p) => net.querySelector(`.af-poort[data-poort="${p}"]`))
-      .filter(Boolean);
-    poorten.forEach((p) => p.classList.add('is-open'));
-    if (!rijen || verminderd()) return;
-    // De poort volgt de vertraging die lichtOp zijn regel gaf; een regel buiten het venster
-    // heeft er geen, en dan staat de poort open zodra de pijl er is.
-    poorten.forEach((p) => {
-      const regel = rijen.find((r) =>
-        r.querySelector('.terminal-line').textContent.trimStart().startsWith(`${p.dataset.poort}/tcp`));
-      const ms = regel && regel.style.getPropertyValue('--reg-vertraging');
-      p.style.setProperty('--poort-vertraging', ms || `${SCAN_MS}ms`);
-      herstart(p, 'is-scan');
-    });
-    net.style.setProperty('--scan-duur', `${SCAN_MS}ms`);
-    herstart(net, 'is-scan');
-  }
 }

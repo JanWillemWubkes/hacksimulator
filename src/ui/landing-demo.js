@@ -2,26 +2,26 @@
  * landing-demo.js - de auto-demo van de hero-terminal (Landing Page)
  *
  * Sessie 238: geen typemachine meer. Sinds sessie 247 vraagt het contract één reeks per
- * command, regel voor regel: elke regel verschijnt met zijn glos, en elke open poort in
- * het diagram springt open op de tik van zijn regel (hero-registratie.js). Wat er getoond wordt komt uit
- * hero-antwoorden.js — dezelfde bron als wat een bezoeker krijgt als hij zelf typt.
+ * command, regel voor regel: elke regel verschijnt met zijn glos (hero-registratie.js).
+ * Wat er getoond wordt komt uit hero-antwoorden.js — dezelfde bron als wat een bezoeker
+ * krijgt als hij zelf typt.
  *
  * - Toont het nmap-frame: het openingsbeeld uit het contract, en sinds sessie 247 ook de
- *   ruststand. Het rolt bij laden uit (het memorabele moment zonder klik), en speelt nog
- *   één keer als het diagram pas later in beeld komt (1280x800, mobiel). Onder
- *   prefers-reduced-motion staat de eindstand er meteen.
+ *   ruststand. Het rolt bij laden uit (het memorabele moment zonder klik). Onder
+ *   prefers-reduced-motion staat de eindstand er meteen. Tot sessie 249 speelde het nog
+ *   één keer als het netwerkdiagram later in beeld kwam; het diagram is uit de hero.
  * - Geen lus meer (finish review s247): na 3,2s toonde hij `ls`, en dan stonden 53/80/443
- *   gevuld zonder hun regels en glossen, 12 van elke 15,2s. De registratie (regel, glos,
- *   poort op één rij) is het product; die hoort in rust heel te zijn.
+ *   gevuld zonder hun regels en glossen, 12 van elke 15,2s. De registratie (regel en glos
+ *   op één rij) is het product; die hoort in rust heel te zijn.
  * - Stopt definitief zodra de bezoeker de terminal overneemt (handOff, via hero-repl.js).
  * - Pauzeert als het tabblad verborgen is.
  */
 
 import { respons } from './hero-antwoorden.js';
-import { maakRij, lichtOp, zetDiagram } from './hero-registratie.js';
+import { maakRij, lichtOp } from './hero-registratie.js';
 
-// Het enige command van de auto-demo: de enige scène die het diagram laat antwoorden met
-// drie open poorten (53/80/443, het router-profiel van nmap.js).
+// Het enige command van de auto-demo: drie open poorten (53/80/443, het router-profiel van
+// nmap.js), elk met zijn Nederlandse glos.
 const SCAN = 'nmap 192.168.1.1';
 const PROMPT = 'hacker@hacksim:~$';
 
@@ -31,10 +31,6 @@ let typingTargetEl = null;
 // Zodra de bezoeker zelf typt is de auto-demo definitief klaar: geen replay meer over
 // zijn sessie heen.
 let overgedragen = false;
-
-// Heeft de bezoeker de scan zien spelen, met het diagram in beeld? Zo niet, dan speelt
-// hij één keer opnieuw zodra het diagram verschijnt (initScanInBeeld).
-let scanGezien = false;
 
 const verminderd = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -55,38 +51,7 @@ function toonScan({ oplichten = true } = {}) {
   const rijen = [maakRij(`${PROMPT} ${SCAN}`, null, 'prompt')];
   for (const [tekst, glos] of respons(SCAN)) rijen.push(maakRij(tekst, glos, 'output'));
   rijen.forEach((r) => outputEl.appendChild(r));
-  if (oplichten) lichtOp(rijen, SCAN);
-  zetDiagram(SCAN, oplichten ? rijen : null);
-  scanGezien = oplichten && diagramInBeeld();
-}
-
-/** Staat minstens 60% van het diagram tussen navbar en vensterrand? */
-function diagramInBeeld() {
-  const net = document.querySelector('.af-net');
-  if (!net) return false;
-  const r = net.getBoundingClientRect();
-  const nav =
-    parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height')) || 0;
-  const zichtbaar = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, nav);
-  return r.height > 0 && zichtbaar / r.height >= 0.6;
-}
-
-/**
- * Het memorabele moment hoort te spelen waar de bezoeker kijkt. Op 1440x900 staat het
- * diagram bij laden in beeld; op 1280x800 en mobiel niet (poorten op 864 resp. 1367px).
- * Daar speelt de scan opnieuw zodra het diagram voor 60% in beeld komt, één keer.
- * (De consentbanner verschijnt pas na 2,57s, ná de laadreeks van ~1,1s: gemeten s247.)
- */
-function initScanInBeeld() {
-  const net = document.querySelector('.af-net');
-  if (!net || !('IntersectionObserver' in window)) return;
-  const io = new IntersectionObserver(() => {
-    if (overgedragen) { io.disconnect(); return; }
-    if (scanGezien || verminderd() || !diagramInBeeld()) return;
-    toonScan();
-    io.disconnect();
-  }, { threshold: [0.6, 1] });
-  io.observe(net);
+  if (oplichten) lichtOp(rijen);
 }
 
 function init() {
@@ -101,7 +66,6 @@ function init() {
   // De rijen staan meteen in de DOM; alleen hun beeld rolt uit.
   toonScan({ oplichten: !verminderd() });
   leegInvoer();
-  if (!verminderd()) initScanInBeeld();
 }
 
 /** Er loopt niets meer dat gestopt hoeft te worden; blijft voor de API van hero-repl. */

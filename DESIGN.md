@@ -12,9 +12,11 @@ colors:
   lijn-sterk: "#7a7a75"
   m-grond: "#0a0a0a"
   m-lijn: "#2c2c2a"
-  m-tekst: "#c9d1d9"
-  m-dim: "#a1a8b0"
-  m-prompt: "#9fef00"
+  m-tekst: "#d6d6d2"
+  m-dim: "#a3a39d"
+  m-prompt: "#efefec"
+  m-label: "#efefec"
+  m-label-inkt: "#111111"
   m-fout: "#fa7c76"
   m-waarsch: "#d29922"
   m-glos: "#d6d6d2"
@@ -82,6 +84,8 @@ spacing:
   cel: "clamp(12px, 1.4vw, 20px)"
   sectie: "clamp(72px, 9vw, 136px)"
   sectie-kort: "clamp(48px, 5vw, 72px)"
+  groep-boven: "clamp(24px, 2.5vw, 44px)"
+  groep-stap: "clamp(40px, 3.45vw, 56px)"
   breed: "1400px"
 components:
   button-primary:
@@ -111,7 +115,7 @@ components:
     textColor: "{colors.inkt}"
     rounded: "{rounded.none}"
     padding: "8px {spacing.cel}"
-    height: "60px"
+    height: "52px"
   chip-command-hover:
     backgroundColor: "{colors.inkt}"
     textColor: "{colors.papier}"
@@ -136,17 +140,16 @@ components:
     textColor: "{colors.m-tekst}"
     typography: "{typography.mono}"
     rounded: "{rounded.none}"
-  diagram-port:
-    backgroundColor: "{colors.papier-2}"
-    textColor: "{colors.inkt-2}"
+  terminal-label:
+    backgroundColor: "{colors.m-label}"
+    textColor: "{colors.m-label-inkt}"
     typography: "{typography.mono}"
     rounded: "{rounded.none}"
-    height: "56px"
-  diagram-port-open:
-    backgroundColor: "{colors.inkt}"
-    textColor: "{colors.papier}"
+    padding: "1px 6px"
+  terminal-cursor:
+    backgroundColor: "{colors.rood}"
     rounded: "{rounded.none}"
-    height: "56px"
+    width: "1ch"
   nav-link-hover:
     backgroundColor: "{colors.inkt}"
     textColor: "{colors.papier}"
@@ -160,7 +163,7 @@ components:
 
 De pagina is een affiche op een zichtbaar raster, in de traditie van Total Design (Wim Crouwel). Gebroken wit papier, zwarte inkt, en precies één signaalrood dat alleen "hier ben jij aan zet" betekent. Alles staat op een 12-koloms raster zonder goot: de kolomgrenzen zijn de haarlijnen, en elke cel draagt zijn eigen binnenruimte. De terminal is een donkere module in dat raster, en de Nederlandse uitleg staat per outputregel ernaast, op dezelfde rasterrij.
 
-Toestanden spreken via inversie en nooit via een extra kleur: een blok wordt inkt met een papieren letter. Er zijn geen schaduwen, geen zichtbare kleurverlopen en geen afgeronde hoeken. Diepte bestaat niet; er is alleen papier, inkt en de zwarte module. Het donkere thema is het geïnverteerde affiche: inkt wordt grond, papier wordt letter.
+Toestanden spreken via inversie en nooit via een extra kleur: een blok wordt inkt met een papieren letter. Er zijn geen schaduwen, geen zichtbare kleurverlopen en geen afgeronde hoeken. Diepte bestaat niet; er is alleen papier, inkt en de zwarte module. Ook de module spreekt de taal van de pagina: haar tekst komt uit de papierfamilie, de prompt is papier in 700, de Nederlandse laag (`[TIP]`, `[→]`) staat op een papieren label, en de cursor is een blok signaalrood. Alleen fout (zalm) en waarschuwing (amber) zijn eigen tinten. Het donkere thema is het geïnverteerde affiche: inkt wordt grond, papier wordt letter.
 
 **Reikwijdte.** Dit systeem draait nu alleen op `index.html`. Het staat in één stylesheet dat alleen die pagina laadt, als laatste, en hangt volledig onder de homepage-scope. Het hertokent de gedeelde componenten (navbar, footer, knoppen, FAQ, nieuwsbrief) in plaats van ze te overschrijven. De andere pagina's (gidsen, samples, blog, terminal, juridisch) tonen nog het oudere systeem en gaan één per sessie over. Dat oudere systeem hoort niet bij dit document.
 
@@ -173,43 +176,44 @@ Expliciet niet: scanlines, glow, groen-op-zwart, matrixregen, mascottes, badges 
 - Eén schaal voor de grote vormen: de h1, de getallen in de cijfertabel en de slotkop staan alle drie op afficheschaal.
 - Toestanden via inversie (inktblok, papieren letter), nooit via een extra kleur.
 - Hoeken van 0, geen schaduwen, geen zichtbare verlopen.
-- Eén reeks per command, regel voor regel: de registratie.
+- Eén reeks per command, regel voor regel: de registratie. Het terminalvenster staat altijd op hele regels.
 
 ## Colors
 
-Een neutraal-koel papier met zwarte inkt en één verzadigd rood. Daarbinnen een zwarte module die zijn eigen simulatorkleuren houdt.
+Een neutraal-koel papier met zwarte inkt en één verzadigd rood. Daarbinnen een zwarte module die dezelfde papierfamilie spreekt, met alleen voor fout en waarschuwing een eigen tint.
 
 ### Primary
-- **Signaalrood** (#cc0a1e): de enige kleur buiten de module. Het vult alleen de primaire actie ("Start de simulator", ook in de mobiele CTA-balk en op de inktband van het slot, waar het als niet-tekstig vlak 3,26 haalt op inkt) en tekent de focusring van 2px op elk focusbaar element. Wit op rood haalt 5,79:1, rood op papier 5,02:1. Kleine rode tekst komt niet voor.
+- **Signaalrood** (#cc0a1e): de enige kleur buiten de module. Het vult alleen de primaire actie ("Start de simulator", ook in de mobiele CTA-balk en op de inktband van het slot, waar het als niet-tekstig vlak 3,26 haalt op inkt) en tekent de focusring van 2px op elk focusbaar element. Binnen de module is het alleen de cursor (3,42 op de modulegrond, 3,63 op de donkere modulegrond; niet-tekst, lat 3). Wit op rood haalt 5,79:1, rood op papier 5,02:1. Kleine rode tekst komt niet voor.
 - **Letter op rood** (#ffffff): de letter van de primaire actie, altijd vet en groot (20,7px op desktop, minimaal 19px).
 
 ### Neutral
 - **Papier** (#efefec): de grond. Neutraal-koel gebroken wit, bewust geen crème.
-- **Band** (#e2e2de): de achtergrond van afwisselende secties (Leerpad, Vragen, Nieuwsbrief) en van gesloten poorten in het diagram. Inkt erop haalt 14,54:1.
+- **Band** (#e2e2de): de achtergrond van afwisselende secties (Leerpad, Vragen, Nieuwsbrief). Inkt erop haalt 14,54:1.
 - **Inkt** (#111111): alle tekst, koppen, kaders en elk geïnverteerd blok. Haalt 16,39:1 op papier.
-- **Gedempte inkt** (#444440): inleidingen, microcopy, herkomstlabels, bronnen en indexnummers in rust. Haalt 8,49 op papier en 7,53 op de band.
+- **Gedempte inkt** (#444440): inleidingen, microcopy, kolomkoppen, bronnen en indexnummers in rust. Haalt 8,49 op papier en 7,53 op de band.
 - **Rasterlijn** (#c9c9c4): de haarlijnen van het raster. Decoratief, ze dragen geen informatie.
 - **Bedieningslijn** (#7a7a75): randen van bedieningselementen en de scheidingslijnen tussen rijen in tabel en FAQ. Haalt 3,74 op papier en 3,32 op de band (lat 3 voor niet-tekst).
 
 ### De terminalmodule
-Deze kleuren gelden alleen binnen de rand van de zwarte module (hero-terminal, transcripten in Herkenbaar, commandoblokken in het leerpad). Het is inhoud van de simulator, geen decoratie van de pagina. Ze komen nooit op papier.
+Deze kleuren gelden alleen binnen de rand van de zwarte module (hero-terminal, transcripten in Herkenbaar, commandoblokken in het leerpad). Het is inhoud van de simulator, geen decoratie van de pagina. Ze komen nooit op papier. Contrast hieronder op de modulegrond (#0a0a0a); op de donkere modulegrond (#000000) is het telkens hoger.
 - **Modulegrond** (#0a0a0a) met **modulelijn** (#2c2c2a) tussen kop, lichaam en invoerregel.
-- **Uitvoer** (#c9d1d9, 12,83:1) en **gedimde uitvoer** (#a1a8b0, 8,24:1).
-- **Prompt en tip** (#9fef00, 13,97:1): de prompt, de caret en `[TIP]`-regels.
+- **Uitvoer** (#d6d6d2, 13,58:1) en **gedimde uitvoer** (#a3a39d, 7,81:1): uit de papierfamilie, niet blauwgrijs.
+- **Prompt** (#efefec in 700, 17,18:1): de promptregel en de invoerregel. Gewicht onderscheidt de prompt, geen tint.
+- **Label** (#efefec met **labelinkt** #111111, 16,39:1): de info-rol (`[TIP]` en `[→]`) staat als papieren label achter de tekst, binnen de module. Het label hoort bij de rol, niet bij het woord: de renderer geeft `[?]`, `[→]` en `[TIP]` één rol. Vaste kleuren, ook in het donkere thema.
 - **Fout** (#fa7c76, 7,74:1): zalm, en uitdrukkelijk niet het signaalrood.
-- **Waarschuwing** (#d29922, 7,84:1).
-- **Glos in de module** (#d6d6d2, 13,58:1): alleen onder 768px, waar de uitleg onder zijn regel in de module staat.
-- **Oplichten** (#23231f): de achtergrond van een regel tijdens de registratie.
+- **Waarschuwing** (#d29922, 7,84:1): amber.
+- **Glos in de module** (#d6d6d2, 13,58:1): alleen onder 768px, waar de uitleg onder zijn regel in de module staat. Dezelfde waarde als de uitvoer.
+- **Oplichten** (#23231f): de achtergrond van een regel tijdens de registratie (450ms). Uitvoer erop haalt 10,82, prompt 13,69.
 
 ### Het donkere thema
-Papier en inkt wisselen van rol. De grond wordt #111111 en de letter #efefec. Daarnaast: band #1c1c1b, gedempte inkt #b0b0ab (8,67 op de grond), rasterlijn #2e2e2c, bedieningslijn #6f6f6a (3,74). De module wordt #000000 met modulelijn #3a3a37 en krijgt een haarlijn in de bedieningslijnkleur, zodat hij als module leest en niet als gat. Het rood blijft; als niet-tekstig merkteken haalt het 3,26 op de grond. De footer is in beide thema's een inktvlak: in licht #111111, in donker #000000. Het slot volgt het token en niet de toon: in donker is het de lichte band (#efefec) met een donkere letter, en de rode actie erop inverteert bij hover naar de grond (#111111).
+Papier en inkt wisselen van rol. De grond wordt #111111 en de letter #efefec. Daarnaast: band #1c1c1b, gedempte inkt #b0b0ab (8,67 op de grond), rasterlijn #2e2e2c, bedieningslijn #6f6f6a (3,74). De module wordt #000000 met modulelijn #3a3a37 en krijgt een haarlijn in de bedieningslijnkleur, zodat hij als module leest en niet als gat. Het rood blijft; als niet-tekstig merkteken haalt het 3,26 op de grond. Het tiplabel blijft papier met inkt, anders verdwijnt het in de grond. De footer is in beide thema's een inktvlak: in licht #111111, in donker #000000. Het slot volgt het token en niet de toon: in donker is het de lichte band (#efefec) met een donkere letter, en de rode actie erop inverteert bij hover naar de grond (#111111).
 
 ### Named Rules
-**The One Voice Rule.** Het rood betekent alleen "jij bent aan zet": de primaire actie en de focusring. Er is per scherm één rood vlak. Een tweede actie in hetzelfde scherm (de nav-CTA, een volgende chip, een actieve toestand) wordt inkt.
+**The One Voice Rule.** Het rood betekent alleen "jij bent aan zet": de primaire actie, de focusring en de cursor in de module. Buiten de module is er per scherm één rode drager; een tweede actie in hetzelfde scherm (de nav-CTA, een volgende chip, een actieve toestand) wordt inkt. Binnen de module is rood alleen de cursor, een blok van één teken op het invoerpunt. Bij overname verdwijnt dat blok en blijft alleen de native caret, ook rood: nooit twee rode cursors.
 
-**The Inversion Rule.** Een toestand krijgt geen nieuwe kleur. Hover, actief, volgende, open en oplichten zijn allemaal hetzelfde gebaar: inktblok, papieren letter. Binnen een blok dat al geïnverteerd is, inverteert het label terug.
+**The Inversion Rule.** Een toestand krijgt geen nieuwe kleur. Hover, actief, volgende en oplichten zijn allemaal hetzelfde gebaar: inktblok, papieren letter. Binnen een blok dat al geïnverteerd is, inverteert het label terug.
 
-**The Module Boundary Rule.** De simulatorkleuren (groen, zalm, amber, blauwgrijs) leven alleen binnen de zwarte module. Buiten de module is groen geen accent.
+**The Module Boundary Rule.** De simulatortinten (zalm, amber) leven alleen binnen de zwarte module, en het papieren label ook. Buiten de module is er geen groen en geen andere accentkleur dan het rood.
 
 ## Typography
 
@@ -222,44 +226,53 @@ Papier en inkt wisselen van rol. De grond wordt #111111 en de letter #efefec. Da
 De rem-basis is 18px op desktop en 16px onder 768px. De maten hieronder schalen daarmee mee.
 
 ### Hierarchy
-- **Affiche** (Archivo 700, clamp(2.2rem, 6.2vw, 4.9rem), max 88,2px, regelhoogte 0,94, spatiëring -0,02em): de h1 en de slotkop, allebei over alle twaalf kolommen. Het plafond is de rasterbreedte en niet de viewport: van 1280 tot 1920px staat de h1 op twee regels. Op 375 is hij 35,2px. Op 1440 is hij 1,86x de sectiekop. De slotkop deelt de schaal met de h1, zodat de pagina eindigt in de vorm waarin ze begint. Er is geen kop groter dan de h1; even groot mag. De aparte displaymaat (64,8px) die alleen de slotkop droeg, is vervallen.
+- **Affiche** (Archivo 700, clamp(2.2rem, 6.2vw, 4.9rem), max 88,2px, regelhoogte 0,94, spatiëring -0,02em): de h1 en de slotkop, allebei over alle twaalf kolommen. Het plafond is de rasterbreedte en niet de viewport: van 1280 tot 1920px staat de h1 op twee regels. Op 375 is hij 35,2px. De slotkop deelt de schaal met de h1, zodat de pagina eindigt in de vorm waarin ze begint. Er is geen kop groter dan de h1; even groot mag.
 - **Headline** (Archivo 700, clamp(1.75rem, 3.3vw, 2.85rem), max 51,3px, regelhoogte 1,05, spatiëring -0,02em): sectiekoppen over kolom 1-7, met `text-wrap: balance`.
-- **Figure** (Archivo 700, afficheschaal clamp(2.2rem, 6.2vw, 4.9rem), max 88,2px, regelhoogte 0,94, spatiëring -0,02em, tabelcijfers): de getallen in de cijfertabel, op dezelfde maat als de h1. Altijd in inkt en in een tabelrij met zijn bron, nooit als los accentgetal in een kaart.
+- **Figure** (Archivo 700, afficheschaal, tabelcijfers): de getallen in de cijfertabel, op dezelfde maat als de h1. Altijd in inkt en in een tabelrij met zijn bron, nooit als los accentgetal in een kaart. Omschrijving en bron staan op de basislijn van het getal (bij een omschrijving over twee regels: de laatste).
 - **Title** (Archivo 700, 1.22rem = 22px, regelhoogte 1,2): h3 in Herkenbaar. De FAQ-vraag gebruikt Archivo 700 op 1.1rem.
-- **Label** (Archivo 800, 1.1rem tot 1.4rem): namen die iets aanduiden in plaats van iets te beweren. Denk aan het woordmerk, de niveaus in het leerpad (1.22rem) en de bloknamen in het diagram ("jouw machine", de router), die met 1.4rem de grootste zijn.
-- **Body** (Atkinson 400, 1rem, regelhoogte 1,55, max 62ch, ongeveer 75 tekens): alle lopende tekst. Een inleiding onder een kop is 1.1rem in gedempte inkt, max 52ch. De omschrijving in de cijfertabel is 1.1rem in inkt (1rem onder 768px) en heeft geen eigen max-width: de cel (kolom 4-9) is de maat. De zin in het slot is 1.1rem.
-- **Small** (Atkinson, 0.83rem = 15px): microcopy, de glos, de kolomkop, herkomst- en privacyregels. De herkomst in een chip is 0.72rem (13px). Een kop boven een kolom op de naad ("In gewoon Nederlands" boven de glos, "Verder lezen op de blog" boven de kantlijn) is Small in 700 en gedempte inkt (#444440): het gewicht maakt het een kop, de kleur zet hem achter wat hij aankondigt.
+- **Label** (Archivo 800, 1.1rem tot 1.22rem): namen die iets aanduiden in plaats van iets te beweren: het woordmerk en de niveaus in het leerpad (1.22rem).
+- **Body** (Atkinson 400, 1rem, regelhoogte 1,55, max 62ch, ongeveer 75 tekens): alle lopende tekst, ook de ondertitel in de hero. Een inleiding onder een kop is 1.1rem in gedempte inkt, max 52ch. De omschrijving in de cijfertabel is 1.1rem in inkt (1rem onder 768px) en heeft geen eigen max-width: de cel (kolom 4-9) is de maat. De zin in het slot is 1.1rem.
+- **Small** (Atkinson, 0.83rem = 15px): microcopy, de glos, de kolomkop, privacyregels. Een kop boven een kolom op de naad ("In gewoon Nederlands" boven de glos, "Verder lezen op de blog" boven de kantlijn) is Small in 700 en gedempte inkt (#444440): het gewicht maakt het een kop, de kleur zet hem achter wat hij aankondigt. De uitnodiging naast de invoerregel is Small 700 in inkt.
 - **Button** (Atkinson 700): de primaire actie op max(1.15rem, 19px), zodat hij op elke breedte grote tekst blijft. De secundaire knop staat op 0.9rem.
-- **Mono** (JetBrains Mono 400, 0.86rem, regelhoogte 1.5rem = 27px in de module): terminaluitvoer, de invoerregel en de commands in chips (700). Buiten de module op 0.83rem voor indexnummers (700), adressen, bronnen en paginaverwijzingen, en op 0.75rem voor paden. In de poorten van het diagram schaalt de letter mee met zijn sleuf, tot 1rem (open 1.3rem, 700).
+- **Mono** (JetBrains Mono 400, 0.86rem, regelhoogte 1.5rem = 27px in de module; onder 768px 0.8rem op een regel van 24px): terminaluitvoer, de invoerregel (700) en de commands in chips (700). In de transcripten van Herkenbaar 0.8rem, regelhoogte 1,6. Buiten de module op 0.83rem voor indexnummers (700 in tabellen), adressen, bronnen en paginaverwijzingen, en op 0.75rem voor paden.
 
 ### Named Rules
 **The Mono Is Evidence Rule.** JetBrains Mono staat alleen in de terminal en voor dingen die je letterlijk kunt nalopen: indexnummers, paden, adressen, bronnen, paginaverwijzingen. Nooit voor koppen of lopende tekst.
 
 **The Numbered Order Rule.** Een mono-index (01-06, 01-03) staat alleen waar de volgorde zelf de informatie is: de chips, het leerpad en de inhoud van de sample. Sectiekoppen worden nooit genummerd.
 
-**The Two Weights Rule.** Archivo 700 is voor een bewering (koppen, cijfers), Archivo 800 voor een naam (een merk, een blok of een niveau). Andere gewichten van Archivo worden niet gebruikt.
+**The Two Weights Rule.** Archivo 700 is voor een bewering (koppen, cijfers), Archivo 800 voor een naam (een merk of een niveau). Andere gewichten van Archivo worden niet gebruikt.
+
+**The Literal Output Rule.** Terminaluitvoer staat er zoals de tool hem schrijft. Een smalle breedte herschikt de uitvoer niet; alleen de zachte omslag springt in (onder 768px 1,8em, drie tekens), op de lijn van een harde vervolgregel.
 
 ## Layout
 
 Het raster heeft 12 kolommen (`repeat(12, minmax(0, 1fr))`) zonder goot, is maximaal 1400px breed en heeft een zijrand van clamp(16px, 3vw, 32px). Omdat er geen goot is, zijn de kolomgrenzen de lijnen, en elke cel geeft zijn inhoud zelf binnenruimte (clamp(12px, 1.4vw, 20px)). Kinderen erven het raster via subgrid.
 
-**Haarlijnen in de hero en in de cijfers, verder nergens.** Twaalf verticale lijnen van 1px in de rasterlijnkleur (onder 768px vier), getekend als één achtergrondlaag op de contentbox. In de hero ís het raster de vorm. In "HackSimulator in cijfers" is het een tabel: de kolomlijnen kruisen de rijlijnen. In beide snijdt de tekst zich er met een papieren achtergrond uit (`width: fit-content`), zodat er geen lijn door een regel tekst of een cijfer loopt. Dat geldt voor de kop en inleiding van de cijfers en voor elke cel van de tabel. De h1 op afficheschaal mag over het raster staan. In de andere secties staan geen verticale haarlijnen: daar draagt de naad het raster.
+**Haarlijnen in de hero en in de cijfers, verder nergens.** Twaalf verticale lijnen van 1px in de rasterlijnkleur (onder 768px vier), getekend als één achtergrondlaag op de contentbox. In de hero ís het raster de vorm. In "HackSimulator in cijfers" is het een tabel: de kolomlijnen kruisen de rijlijnen. In beide snijdt de tekst zich er met een papieren achtergrond uit (`width: fit-content`), zodat er geen lijn door een regel tekst of een cijfer loopt. Dat geldt voor elke alinea in de hero, voor de kop en inleiding van de cijfers en voor elke cel van de tabel. De h1 op afficheschaal mag over het raster staan. In de andere secties staan geen verticale haarlijnen: daar draagt de naad het raster.
 
-**De cijfertabel op het raster.** De tabel loopt over alle twaalf kolommen (subgrid): het getal in kolom 1-3 op afficheschaal, de omschrijving in kolom 4-9 en de bron (een pad in mono) in kolom 10-12, rechts uitgelijnd. De cellen staan op de rasterlijnen en dragen zelf hun binnenruimte (de celmaat), links en rechts gelijk: vanaf 768px staat de letter van het getal even ver van zijn lijn als de bron van de zijne, 12px op 768 en 20px op 1440. Onder 768px heeft het raster vier kolommen: het getal staat in kolom 1, zonder binnenruimte op de lijn ("40+" past op 320 niet met marge in 72px), de omschrijving in kolom 2-4 en de bron als tweede regel onder de omschrijving. Een rij inverteert bij hover én bij focus: de rij, elke cel en de bron worden inkt met een papieren letter, en focus tekent daarnaast de rode ring.
+**Het eerste scherm: lucht naar groep.** Kop, ondertitel en actie zijn één groep en staan dicht op elkaar, in leesvolgorde onder elkaar: de kop over alle twaalf kolommen, de ondertitel in kolom 1-8, de rode actie eronder in de leesrij. Vanaf 1280px staat de microcopy naast de knop (20px ertussen), daaronder eronder (8px). De groep begint clamp(24px, 2.5vw, 44px) onder de nav en houdt clamp(40px, 3.45vw, 56px) tot de terminal: de stap naar de terminal is de grote, minstens 40px en 1,4x de grootste stap binnen de groep. Direct onder de invoerregel ligt de toetsenrij, zonder tussenruimte. De vouw is een eis: op 1440x900 en 1280x800 staan de invoerregel en de hele toetsenrij boven de vouw, op 1024x768 de hele terminal met zijn uitnodiging.
 
-**Het slot als tegenhanger van de hero.** De slotkop staat op afficheschaal over alle twaalf kolommen, op elke breedte. Vanaf 1280px staan op één rij de zin (kolom 1-8, max 62ch) en de actie als kolom in 10-12: de rode knop met de microcopy eronder, 8px ertussen. De knop staat op de hoogte van de eerste regel van de zin (beide 28px padding boven), met de celmaat binnenruimte vanaf de lijn van kolom 10. Daaronder staan kop, zin en actie onder elkaar, zin en actie in kolom 1-7.
+**De cijfertabel op het raster.** De tabel loopt over alle twaalf kolommen (subgrid): het getal in kolom 1-3 op afficheschaal, de omschrijving in kolom 4-9 en de bron (een pad in mono) in kolom 10-12, rechts uitgelijnd. De cellen staan op de rasterlijnen en dragen zelf hun binnenruimte (de celmaat), links en rechts gelijk. Onder 768px heeft het raster vier kolommen: het getal staat in kolom 1, zonder binnenruimte op de lijn ("40+" past op 320 niet met marge in 72px), de omschrijving in kolom 2-4 en de bron als tweede regel onder de omschrijving. Een rij inverteert bij hover én bij focus: de rij, elke cel en de bron worden inkt met een papieren letter, en focus tekent daarnaast de rode ring.
 
-**De naad.** Kolom 1-7 is voor het ding (terminal, transcript, sample-inhoud, vragen) en kolom 8-12 voor de uitleg of de vervolgstap (glos, bloglinks, sample-uitleg, nieuwsbriefveld). De glos-kolom is alleen voor uitleg naast iets links. Wat bij een kop hoort, staat onder die kop. Twee secties gebruiken het hele raster in plaats van de naad: de cijfertabel (1-3, 4-9, 10-12) en het slot (1-8, 10-12), dat de verdeling van het eerste scherm herhaalt.
+**De inhoud van de sample, dezelfde grammatica.** Kop, inleiding (kolom 1-7, max 62ch), inhoud en actie staan onder elkaar, in leesvolgorde. De inhoudstabel staat op het raster: index in kolom 1, titel in kolom 2-10, paginaverwijzing rechts in kolom 11-12, elke cel met de celmaat van zijn lijn. Onder 768px houdt de rij een eigen raster, met de index op de lijn, zoals het getal in de cijfertabel.
 
-**De registratie.** Outputregel en glos zijn één rij met twee cellen. De module is precies 7/12 van het raster breed, gemeten tegen de rastercontainer en niet tegen het scrollende lichaam, zodat een scrollbalk de naad niet verschuift. De glos hangt met een aanhaallijn van 1px in inkt aan zijn regel.
+**Het slot als tegenhanger van de hero.** De slotkop staat op afficheschaal over alle twaalf kolommen, op elke breedte. Vanaf 1280px staan op één rij de zin (kolom 1-8, max 62ch) en de actie als kolom in 10-12: de rode knop met de microcopy eronder, 8px ertussen. Daaronder staan kop, zin en actie onder elkaar, zin en actie in kolom 1-7.
+
+**De naad.** Kolom 1-7 is voor het ding (terminal, transcript, vragen) en kolom 8-12 voor de uitleg of de vervolgstap (glos, bloglinks, nieuwsbriefveld). De glos-kolom is alleen voor uitleg naast iets links. Wat bij een kop hoort, staat onder die kop. Drie secties gebruiken het hele raster in plaats van de naad: de cijfertabel (1-3, 4-9, 10-12), de sample-inhoud (1, 2-10, 11-12) en het slot (1-8, 10-12).
+
+**De registratie.** Outputregel en glos zijn één rij met twee cellen. De module is precies 7/12 van het raster breed, gemeten tegen de rastercontainer en niet tegen het scrollende lichaam, zodat een scrollbalk de naad niet verschuift. De glos hangt met een aanhaallijn van 1px in inkt aan zijn regel. Elke reeks heeft minstens één glos: ook waar de uitvoer al Nederlands is, legt de glos uit wat er gebeurt of waar een naam vandaan komt, zodat de kolom "In gewoon Nederlands" nooit leeg staat.
+
+**Het venster op hele regels.** Het terminalvenster is een geheel aantal regels hoog: zeven regels van 27px plus 16px (vanaf 768px), twaalf regels van 24px plus 16px = 304px (daaronder). De lucht van 8px boven en onder is een transparante rand en geen padding, want padding scrolt mee en laat een halve naburige regel doorpiepen. Elke rij is precies één regel hoog: de glos krijgt vanaf 768px een marge van -1px onder, omdat hij op de basislijn 1px (of 0,5px) zakt.
 
 **Ritme naar gewicht.** Hoofdsecties (Herkenbaar, Leerpad, Vragen) krijgen clamp(72px, 9vw, 136px) boven en onder. Korte secties (cijfers, slot, sample, nieuwsbrief) krijgen clamp(48px, 5vw, 72px), zodat de lucht nooit groter is dan de inhoud. Secties wisselen tussen papier en band. Het slot is de enige inktband onder de hero, met de rode actie erop; de sample erna staat op papier. Onderaan is de volgorde dus band (vragen), inkt (slot), papier (sample), band (nieuwsbrief). De eerste sectie na de hero begint met een inktlijn van 1px.
 
 **Responsief.**
-- Vanaf 1280px staat de kop over alle twaalf kolommen. Daaronder staan op één rij de ondertitel (kolom 1-8) en de actie als blok in kolom 10-12: de knop op de hoogte van de eerste regel van de ondertitel, de microcopy eronder. Het slot volgt dezelfde verdeling.
-- Onder 1280px staan kop, ondertitel en actie onder elkaar (in de hero en in het slot), gaan de chips naar 3 kolommen en neemt een mobiele CTA-balk met de rode actie de rol van de nav-CTA over.
-- Onder 1024px gaan vragen en leerpad over de volle breedte (de cijfertabel staat daar altijd al). Leerpadkolommen worden rijen met een inktlijn ertussen, de bloglinks komen onder de vragen en de poorten staan in twee rijen van zes.
-- Onder 768px wordt het raster 4 kolommen, ook de haarlijnen. De cijfertabel wordt getal (kolom 1) naast omschrijving met de bron eronder (kolom 2-4). De glos gaat de module in, onder zijn regel, in 0.78rem. De chips staan twee aan twee met de index boven het command, en de scanpijl in het diagram loopt verticaal en tekent zich omlaag.
+- Vanaf 1280px staat de microcopy naast de hero-actie, staat de toetsenrij op zes chips (twee rasterkolommen per chip) en staat het slot op één rij.
+- Onder 1280px staat de microcopy onder de knop, gaan de chips naar drie per rij en neemt een mobiele CTA-balk met de rode actie de rol van de nav-CTA over.
+- Onder 1024px gaan vragen en leerpad over de volle breedte. Leerpadkolommen worden rijen met een inktlijn ertussen, de bloglinks komen onder de vragen, en de terminalkop toont alleen de omvang.
+- Onder 768px wordt het raster 4 kolommen, ook de haarlijnen. De cijfertabel wordt getal (kolom 1) naast omschrijving met de bron eronder (kolom 2-4). De glos gaat de module in, onder zijn regel, in 0.78rem, met een aanhaallijn van 1ch in gedimde uitvoer. De kolomkop vervalt, de uitnodiging komt onder de invoerregel zonder aanhaallijn, en de chips staan twee aan twee met de index boven het command.
+- Onder 352px mag een command in een chip op de spatie breken.
 
 ## Elevation & Depth
 
@@ -272,7 +285,7 @@ Het systeem is volledig plat. Er zijn geen schaduwen, ook niet bij hover of focu
 
 ## Shapes
 
-Elke hoek is recht (0). Knoppen, chips, velden, de module, de FAQ-items en de consentbanner hebben allemaal een radius van 0. Randen zijn inkt: 1px voor knoppen, velden, diagramblokken en kolomscheidingen, 2px voor de commandochips (klikbaar) en voor de bovenlijn van tabel en vragenlijst. Rijen binnen een tabel of lijst worden gescheiden door 1px in de bedieningslijnkleur. Pijlen in het diagram zijn getekend uit twee lijnen van 2px, geen glyphs. Het diagram heeft bewust geen celkaders, zodat klikbare elementen en tekening niet op elkaar lijken.
+Elke hoek is recht (0). Knoppen, chips, velden, de module, het tiplabel, de cursor, de FAQ-items en de consentbanner hebben allemaal een radius van 0. Randen zijn inkt: 1px voor knoppen, velden en kolomscheidingen, 2px voor de commandochips (klikbaar) en voor de bovenlijn van tabellen en vragenlijst. Aangrenzende chips delen één lijn van 2px: een chip na de eerste in zijn rij laat zijn linkerrand weg, een rij na de eerste zijn bovenrand, en krijgt die 2px als binnenruimte terug. Rijen binnen een tabel of lijst worden gescheiden door 1px in de bedieningslijnkleur.
 
 ## Components
 
@@ -284,10 +297,10 @@ Rechthoekig, plat en direct. Een knop is een blok dat inverteert.
 - **Secondary:** een kader van 1px in inkt met een inkten letter in Atkinson 700 op 0.9rem, padding 10px 18px, minimaal 44px hoog. Bij hover inverteert hij. De gevulde variant begint als inkt en wordt bij hover weer papier.
 - **Nav-CTA:** hetzelfde label als de hero-actie, maar als inkten kader. Het rood blijft voor de hero.
 
-### Command chips
-De zes suggesties onder de invoerregel. Het zijn knoppen, geen tags.
-- **Style:** papier met een kader van 2px in inkt, minimaal 60px hoog, padding 8px plus de celmaat. Links een mono-index (0.83rem, gedempt), rechts het command in mono 700 (0.86rem, breekt nooit) met eronder de herkomst (categorie en niveau, 0.72rem, gedempt).
-- **State:** hover en focus inverteren de hele chip. De volgende suggestie keert alleen het indexnummer om (inktblok, papieren cijfer). Een gedane chip vervangt het nummer door `[✓]` zonder dat de kolom verspringt.
+### Command chips (de toetsenrij)
+De zes suggesties onder de invoerregel. Het zijn toetsen van de terminal, geen tags.
+- **Style:** één rij zonder tussenruimte, strak onder de invoerregel, met de randen op de rasterlijnen: zes gelijke kolommen vanaf 1280px, drie tot 1279, twee onder 768. Elke chip is papier met een kader van 2px in inkt, minimaal 52px hoog, padding 8px plus de celmaat (vanaf 1280px 12px, en 14px na een gedeelde lijn). Links een mono-index (0.83rem, gedempt, 1,8em breed: drie tekens voor `[✓]`; vanaf 1280px 1,6em, waar een gedane `[✓]` 0,2em in de gap steekt, zodat "nmap 192.168.1.1" in Firefox en WebKit 6px lucht tot zijn rand houdt), rechts het command in mono 700 (0.86rem, breekt nooit). Er is geen herkomstlabel: wie begint heeft geen derde tekstniveau nodig om te tikken.
+- **State:** hover en focus inverteren de hele chip. De volgende suggestie keert alleen het indexnummer om (inktblok, papieren cijfer); in een geïnverteerde chip keert dat nummer terug naar papier. Een gedane chip vervangt het nummer door `[✓]` zonder dat de kolom verspringt.
 
 ### Cards / Containers
 Er zijn geen kaarten. Inhoud staat in rijen en kolommen, gescheiden door haarlijnen.
@@ -295,13 +308,12 @@ Er zijn geen kaarten. Inhoud staat in rijen en kolommen, gescheiden door haarlij
 - **Background:** papier, of de band voor een hele sectie, of inkt voor het slot. De zwarte module is het enige vlak binnen een sectie.
 - **Shadow Strategy:** geen, zie Elevation & Depth.
 - **Border:** tabelrijen (de cijfertabel en de inhoud van de sample) en FAQ-items hebben een onderlijn van 1px in de bedieningslijnkleur onder een bovenlijn van 2px in inkt. Leerpadkolommen hebben een scheidingslijn van 1px in inkt.
-- **Internal Padding:** de celmaat clamp(12px, 1.4vw, 20px) horizontaal. Rijen van de cijfertabel hebben 16px boven en onder en geen minimumhoogte: het getal op afficheschaal bepaalt de hoogte.
-- **Bekende ongelijkheid, geen regel:** de inhoudstabel van de sample zet zijn index ("01") op de lijn, zonder binnenruimte, terwijl het getal in de cijfertabel vanaf 768px de celmaat van zijn lijn staat. Dat is een verschil in de bouw, niet een tweede toegestane vorm; neem het niet over op nieuwe tabellen.
+- **Internal Padding:** de celmaat clamp(12px, 1.4vw, 20px) horizontaal, aan beide kanten van een cel op een rasterlijn. Rijen van de cijfertabel hebben 16px boven en onder en geen minimumhoogte: het getal op afficheschaal bepaalt de hoogte. Rijen van de sample-inhoud hebben 10px.
 
 ### Inputs / Fields
 - **Style:** het nieuwsbriefveld is papier met een kader van 1px in inkt, 56px hoog, padding 0 16px, radius 0 en Atkinson 1rem. De knop ernaast is een inktblok van 56px. Vanaf 1024px staan ze op één rij tot de rasterrand, zonder rechterrand op het veld. Daaronder staan ze onder elkaar en neemt de knop de volle breedte.
 - **Focus:** de rode ring (2px, offset 2px), net als elk ander element. Het kader blijft inkt.
-- **Terminalinvoer:** een mono-invoerregel in de module, minimaal 44px hoog, met een staande (niet knipperende) cursor. Bij focus krijgt de hele invoerregel de rode ring.
+- **Terminalinvoer:** een mono-invoerregel (700, prompt in papier) in de module, minimaal 44px hoog. In rust staat er een staand (niet knipperend) blok signaalrood van één teken, precies op het invoerpunt; het is beeld en vangt geen klik. Bij overname verdwijnt het blok en neemt de native caret (rood) het over. Bij focus krijgt de hele invoerregel de rode ring, boven de toetsenrij.
 
 ### Navigation
 - **Style:** een balk van papier met een inktlijn van 1px eronder. Het woordmerk staat in Archivo 800 en is geen actie: het heeft geen onderstreping en wisselt niet van kleur, in rust noch bij hover, en in de footer net zo.
@@ -313,36 +325,39 @@ Er zijn geen kaarten. Inhoud staat in rijen en kolommen, gescheiden door haarlij
 Een tekstlink is inkt met een onderstreping van 1px, offset 0.2em. Bij hover wordt de onderstreping 2px. Staat een link als blok in een lijst (bloglinks, tabelrijen), dan inverteert het blok in plaats daarvan, met 8px lucht naast de letters (in de cijfertabel de celmaat), bij hover en bij focus. Een bloglink noemt zijn pad in mono (0.75rem, gedempt) onder de titel, zoals een cijfer zijn bron noemt, en nooit erboven. Het pad ligt in de onderpadding van de link en vangt geen tik, zodat het tikdoel van 44px heel blijft.
 
 ### Terminal module (signatuur)
-Een zwarte module over kolom 1-7 met een mono kopregel (titel en omvang), een lichaam van zeven regels van 27px, en een invoerregel. Het lichaam loopt over alle twaalf kolommen: links de module, rechts op papier de glos per regel. Elk command speelt één reeks, regel voor regel. De rijen staan meteen in de DOM; alleen het beeld wacht. Elke rij rolt in 180ms van links open (een clip-path), 90ms na de vorige, en alleen de rijen in het venster tellen mee. Op het moment van verschijnen lichten outputregel, glos en diagramsleuf samen op als één rij: de regel krijgt de oplichtkleur en de glos inverteert naar inkt. Dat gebeurt zonder overgang erin, staat 450ms, en loopt uit in 700ms in cubic-bezier(0.16, 1, 0.3, 1). Er is geen typanimatie per letter en geen lus. Onder `prefers-reduced-motion` staat meteen de eindstand, bij laden en bij zelf typen.
+Een zwarte module over kolom 1-7 met een mono kopregel (titel en omvang), een lichaam van zeven hele regels van 27px, en een invoerregel. Het lichaam loopt over alle twaalf kolommen: links de module, rechts op papier de glos per regel. Naast de kopregel staat de kolomkop "In gewoon Nederlands"; naast de invoerregel de uitnodiging, met dezelfde aanhaallijn als een glos.
 
-De auto-demo speelt alleen `nmap 192.168.1.1`, bij laden en nog één keer als het diagram pas later voor 60% in beeld komt. Daarna is dat nmap-frame de ruststand: elke gevulde poort staat met zijn regel en zijn glos in beeld. Neemt de bezoeker de terminal over, dan gaat het diagram terug naar rust (geen actief blok, geen open poort).
+De rollen in de module: uitvoer in de papierfamilie, de prompt in papier 700, de info-rol (`[TIP]`, `[→]`) als papieren label achter de tekst (padding 1px 6px, breekt mee met de regel), fout in zalm, waarschuwing in amber, `[~]` gedimd. Dezelfde rollen en hetzelfde label gelden in de transcripten van Herkenbaar.
 
-### Netwerkdiagram
-Twee blokken met een kader van 1px in inkt ("jouw machine" over kolom 1-3 en de router over kolom 6-12), verbonden door een getekende scanpijl van 2px. De bloknamen staan in Archivo 800 op 1.4rem. In het routerblok zitten twaalf poorten als sleuven op de band, elk minimaal 56px hoog. De poortrij is een eigen container: de mono-letter rekent tegen de breedte van de sleuf en niet tegen de viewport, met 1rem als plafond (open 1.3rem), zodat een nummer van vier cijfers altijd 4px lucht in zijn sleuf houdt. Een open poort is gevuld (inktblok, papieren cijfer, 700) en is de zwaarste inversie van het eerste scherm. Een actief blok keert alleen zijn kopregel om, zodat "gevuld = open" blijft kloppen.
+Elk command speelt één reeks, regel voor regel. De rijen staan meteen in de DOM; alleen het beeld wacht. Elke rij rolt in 180ms van links open (een clip-path), 90ms na de vorige, en alleen de rijen in het venster tellen mee. Op het moment van verschijnen lichten outputregel en glos samen op als één rij: de regel krijgt de oplichtkleur en de glos inverteert naar inkt. Dat gebeurt zonder overgang erin, staat 450ms, en loopt uit in 700ms in cubic-bezier(0.16, 1, 0.3, 1). Er is geen typanimatie per letter en geen lus. Onder `prefers-reduced-motion` staat meteen de eindstand, bij laden en bij zelf typen.
 
-Bij een scan tekent eerst de pijl zich in 360ms van jouw machine naar de router; pas dan rolt de uitvoer uit. Elke open poort springt zonder overgang open op de tik van zijn eigen regel. De toestand `open` staat meteen; alleen het beeld wacht in de gesloten vorm.
+De auto-demo speelt alleen `nmap 192.168.1.1`, bij laden. Dat nmap-frame is daarna de ruststand: de poortregels staan met hun glos in beeld, met de tip op zijn label. Neemt de bezoeker de terminal over, dan is de demo-uitvoer weg en komt hij niet terug.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** zet het signaalrood (#cc0a1e) alleen op de primaire actie en op de focusring (2px, offset 2px). Eén rood vlak per scherm.
+- **Do** zet het signaalrood (#cc0a1e) alleen op de primaire actie, op de focusring (2px, offset 2px) en, binnen de module, op de cursor. Buiten de module één rode drager per scherm.
 - **Do** laat elke toestand spreken via inversie: inktblok (#111111), papieren letter (#efefec).
 - **Do** houd de hovertaal op twee woorden: een blok inverteert, een tekstlink gaat van een onderstreping van 1px naar 2px. Nooit allebei tegelijk, en nooit een tweede lijn.
-- **Do** zet uitleg op de naad: het ding in kolom 1-7, de uitleg in kolom 8-12, op dezelfde rasterrij.
+- **Do** zet uitleg op de naad: het ding in kolom 1-7, de uitleg in kolom 8-12, op dezelfde rasterrij. Geef elke reeks minstens één glos.
 - **Do** laat tekst in een raster met haarlijnen (hero en cijfers) zich met een papieren achtergrond uit de lijnen snijden: alinea's, kop en inleiding, en elke tabelcel.
 - **Do** geef een cel op een rasterlijn zijn binnenruimte zelf, links en rechts gelijk (de celmaat).
+- **Do** groepeer met lucht: wat bij elkaar hoort staat dicht, de stap naar het volgende blok is de grote.
+- **Do** houd elk terminalvenster op een geheel aantal regels; lucht boven en onder is een rand, geen padding.
 - **Do** hertoken gedeelde componenten onder de homepage-scope, en zet de vormeigenschappen die je wilt expliciet (rand 0, schaduw none, radius 0), zodat de vorm van de oude wereld niet doorlekt.
-- **Do** houd de simulatorkleuren binnen de zwarte module (#0a0a0a).
+- **Do** houd zalm, amber en het papieren label binnen de zwarte module (#0a0a0a).
 - **Do** maak tikdoelen minimaal 44px. De primaire actie is 56px.
 
 ### Don't:
 - **Don't** gebruik schaduwen, zichtbare kleurverlopen, afgeronde hoeken of lift bij hover.
 - **Don't** introduceer een tweede accentkleur of kleur een toestand in een andere tint dan inkt.
 - **Don't** zet rood op kleine tekst, en gebruik het niet voor fouten: een fout in de terminal is zalm (#fa7c76).
-- **Don't** gebruik groen, glow, scanlines, matrixregen of groen-op-zwart als pagina-esthetiek. Het groen van de prompt hoort alleen in de module.
+- **Don't** gebruik groen, glow, scanlines, matrixregen of groen-op-zwart, ook niet in de module: de prompt is papier in 700.
+- **Don't** zet een strook over de volle modulebreedte om een regel te markeren; de info-rol is een label achter de tekst.
+- **Don't** herschik terminaluitvoer voor een smalle breedte; alleen de zachte omslag springt in.
 - **Don't** gebruik mascottes, badges op de voorgrond, kickers of eyebrows boven koppen.
 - **Don't** zet getallen als los accentgetal in een kaart. Een cijfer staat in een tabelrij met zijn bron.
 - **Don't** nummer sectiekoppen. Een mono-index is alleen voor een echte volgorde.
 - **Don't** trek verticale rasterlijnen buiten de hero en de cijfertabel. In de andere secties draagt de naad het raster.
 - **Don't** maak een kop groter dan de h1. Even groot mag: de slotkop en de cijfers delen zijn schaal.
-- **Don't** voeg een tweede beweging toe naast de registratie. Eén reeks per command, regel voor regel (90ms), zonder typanimatie per letter en zonder lus. Een hover-overgang is hoogstens 160ms op kleur, en de FAQ opent zonder animatie.
+- **Don't** voeg een tweede beweging toe naast de registratie. Eén reeks per command, regel voor regel (90ms), zonder typanimatie per letter en zonder lus. Een hover-overgang is hoogstens 160ms op kleur, de cursor knippert niet, en de FAQ opent zonder animatie.

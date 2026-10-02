@@ -128,7 +128,11 @@ async function perScherm(page, kleur) {
   }));
   const uit = [];
   for (let y = 0; y < hoogte; y += vp) {
-    await page.evaluate((sy) => window.scrollTo(0, sy), y);
+    // `instant`: html heeft scroll-behavior: smooth, en dan stond de pagina na 80ms nog
+    // vrijwel bovenaan. Tot sessie 250 telde deze sweep zo zes keer het eerste scherm in
+    // plaats van de pagina (gevonden toen de rode cursor op zes "schermen" stond).
+    const echt = await page.evaluate((sy) => { window.scrollTo({ top: sy, behavior: 'instant' }); return window.scrollY; }, y);
+    if (Math.abs(echt - Math.min(y, hoogte - vp)) > 1) throw new Error(`sweep schoof naar ${echt} in plaats van ${y}`);
     await page.waitForTimeout(80);
     uit.push({ y, ...(await telAccent(page, kleur)) });
   }
@@ -159,17 +163,67 @@ test.describe('Het signaal: rood betekent "jij bent aan zet"', () => {
     expect(geenActie, 'rood op iets anders dan een primaire actie').toEqual([]);
   });
 
-  test('lime komt buiten de terminalmodules nergens meer voor', async ({ page }) => {
+  // Sessie 250 (proef A/B, B gekozen): ook binnen de module is lime weg. De prompt is papier
+  // 700, een [TIP] staat op een papieren label. Lime was het laatste stuk van de wereld van
+  // 2024 op deze pagina. De andere pagina's houden het tot ze overgaan (TASKS #85).
+  test('lime komt op de landingspagina nergens meer voor, ook niet in de module', async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto('/index.html');
     await bevries(page);
 
     const schermen = await perScherm(page, NEON_BRON);
-    // Zelfbewakend: binnen de module is lime de prompt en de tip. Zonder die dragers heeft
-    // de meting het venster niet gezien.
-    expect(schermen[0].binnen.length, 'binnen de module hoort lime te staan (prompt, tip)').toBeGreaterThan(0);
-    const buiten = schermen.flatMap((s) => s.buiten.map((d) => `y=${s.y}: ${d}`));
-    expect(buiten, 'lime buiten de modules: de oude wereld sluipt terug').toEqual([]);
+    const overal = schermen.flatMap((s) => [...s.buiten, ...s.binnen].map((d) => `y=${s.y}: ${d}`));
+    expect(schermen.length, 'de pagina is maar één scherm — de sweep bewijst niets').toBeGreaterThan(4);
+    expect(overal, 'lime op de landingspagina: de oude wereld sluipt terug').toEqual([]);
+
+    // Zelfbewakend: de teller ziet lime in de module nog wel als het er staat.
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+    await page.addStyleTag({ content: 'body.home .af-term-titel{color:#9fef00}' });
+    expect((await telAccent(page, NEON_BRON)).binnen.length, 'de teller ziet geen lime in de module: blind').toBe(1);
+  });
+
+  // Het rood betekent "jij bent aan zet". In de module is dat precies één ding: de cursor,
+  // een blok waar je typt (niet-tekst, 3,42 op de modulegrond). Geen rode tekst, geen rode fout.
+  test('rood in de module is alleen de cursor', async ({ page }) => {
+    await page.setViewportSize(DESKTOP);
+    await page.goto('/index.html');
+    await bevries(page);
+    const schermen = await perScherm(page, ROOD_BRON);
+    const binnen = schermen.flatMap((s) => s.binnen);
+    expect(binnen, 'rood in de module op iets anders dan de cursor').toEqual(['span.cursor|_ [background]']);
+  });
+
+  // De Nederlandse laag op papier: een [TIP] is een label (inkt op papier) in elke module op de
+  // pagina, en de prompt staat in 700. Het label hoort bij de rol, niet bij het woord: de echte
+  // renderer (ui/renderer.js) geeft [?], [→] en [TIP] dezelfde rol `info`, en PRODUCT.md maakt die
+  // afbeelding bindend. Dus ook de hint [→] die de bezoeker na de overname krijgt (finish review
+  // s250). Populatie: elke regel die met een van die markers begint, ná een overname.
+  test('elke info-regel ([TIP], [→]) in een module staat op een papieren label, en de prompt is vet', async ({ page }) => {
+    await page.setViewportSize(DESKTOP);
+    await page.goto('/index.html');
+    await bevries(page);
+    await page.locator('#typing-target').click();
+    await page.locator('#typing-target').fill('ls');
+    await page.locator('#typing-target').press('Enter');
+    const m = await page.evaluate(() => {
+      const regels = [...document.querySelectorAll('.hero-terminal .terminal-line, .af-transcript .terminal-line')]
+        .filter((l) => /^\[(TIP|→|\?)\]/.test(l.textContent.trim()));
+      const soorten = [...new Set(regels.map((l) => l.textContent.trim().slice(0, 3)))];
+      const label = (l) => {
+        const t = l.querySelector('.tip'); if (!t) return 'geen .tip';
+        const cs = getComputedStyle(t);
+        return `${cs.backgroundColor} / ${cs.color}`;
+      };
+      const prompts = [...document.querySelectorAll('.hero-terminal .terminal-line.prompt, .af-transcript .terminal-line.prompt')];
+      return { n: regels.length, soorten, labels: [...new Set(regels.map(label))],
+        promptGewicht: [...new Set(prompts.map((p) => getComputedStyle(p).fontWeight))], prompts: prompts.length };
+    });
+    expect(m.n, 'geen info-regels gevonden: de populatie is leeg').toBeGreaterThanOrEqual(3);
+    // Zelfbewakend: beide markers zijn gemeten, anders bewijst "allemaal een label" weinig.
+    expect(m.soorten.sort(), 'niet zowel [TIP] als [→] in de populatie').toEqual(['[TI', '[→]']);
+    expect(m.labels, 'een info-regel staat niet op het papieren label').toEqual(['rgb(239, 239, 236) / rgb(17, 17, 17)']);
+    expect(m.prompts, 'geen promptregels gevonden').toBeGreaterThan(3);
+    expect(m.promptGewicht, 'de prompt is niet vet').toEqual(['700']);
   });
 
   test('de teller is niet blind: drie mutanten vuren elk via een ander eigenschapspad', async ({ page }) => {

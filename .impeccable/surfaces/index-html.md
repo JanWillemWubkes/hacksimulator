@@ -37,33 +37,38 @@ outputregel exact ernaast, op dezelfde rasterrij. Geweigerd worden de categories
 signaalrood dat uitsluitend betekent "hier ben jij aan zet". Een zichtbaar 12-koloms
 raster met 1px-haarlijnen; geen schaduwen, geen verlopen, geen afgeronde kaarten.
 Toestanden spreken via inversie (zwart blok, papieren letter), niet via extra kleur. De
-terminal is een donker blok op het papier en behoudt binnen zijn rand zijn eigen
-betekeniskleuren (prompt, tip, fout); dat is inhoud, geen decoratie. Koppen in een
+terminal is een donker blok op het papier en behoudt binnen zijn rand het onderscheid tussen
+zijn rollen (prompt, tip, fout, waarschuwing); dat is inhoud, geen decoratie. Sinds sessie 250
+spreekt de module daarbij de taal van de pagina: prompt in papier 700, de info-rol (`[TIP]`,
+`[→]`) op een papieren label, de cursor in het signaalrood; fout (zalm) en waarschuwing (amber)
+zijn de enige tinten. Koppen in een
 neo-grotesk op afficheschaal, opgebouwd op het raster; JetBrains Mono alleen binnen de
 terminal en voor indexnummers. Expliciet niet: scanlines, glow, groen-op-zwart, matrixregen,
 mascottes, badges op de voorgrond.
 
 **STORY.** De bezoeker leest eerst wat dit is, ziet dan in hetzelfde scherm een echte
-terminal waarvan elke regel in het Nederlands wordt uitgelegd, begrijpt via het netwerkdiagram wat een scan eigenlijk doet,
-gelooft dat hij hier niets kan breken, en opent de simulator. Wie twijfelt tikt eerst een
-commando en ziet het diagram antwoorden.
+terminal waarvan elke regel in het Nederlands wordt uitgelegd, gelooft dat hij hier niets kan
+breken, en opent de simulator. Wie twijfelt tikt eerst een command en ziet de terminal in het
+Nederlands antwoorden. (Tot sessie 249 legde een netwerkdiagram uit wat een scan doet; het is
+uit de hero, zie "Onderscheid (sessie 249-250)".)
 
 **FIRST VIEWPORT.** Maximaal 1400px, 12 kolommen, haarlijnen zichtbaar. Bovenaan de kop
 op afficheschaal over alle twaalf kolommen (88px op 1440, sessie 247): het instappunt en het
-beeld van het affiche. Vanaf 1280px staan daaronder de ondertitel (kolom 1-8) en de enige
-rode actie, "Start de simulator" met "geen account nodig", in de laatste drie kolommen op
-één rij; daaronder alles onder elkaar. Dan links de terminalmodule over zeven kolommen met de nmap-uitvoer,
+beeld van het affiche. Daaronder, in de leesrij en op de lijn van de kop, de ondertitel en de
+enige rode actie, "Start de simulator". De microcopy staat vanaf 1280px naast de knop en
+daaronder eronder (sessie 249; tot dan stond de actie in de laatste drie kolommen). Kop, zin en actie
+zijn één groep; de stap naar de terminal is de grote (sessie 250). Dan links de terminalmodule over zeven kolommen met de nmap-uitvoer,
 rechts daarvan op dezelfde rasterrijen de Nederlandse glos per regel. Die grammatica geldt
 voor elke rij van de module: de kolomkop "In gewoon Nederlands" staat naast de
 terminalkop, en de uitnodiging ("Werkt echt: typ hier, of tik hieronder een command.") is
 de glos van de invoerregel, met dezelfde aanhaallijn. De terminalkop noemt de omvang
 ("proefversie · 6 van de 40+ commands"). Direct onder de invoerregel de zes commandochips
-als knoppen (inktkader, index 01-06, herkomstlabel). Als laatste het netwerkdiagram in één
-zin: jouw machine, een scan-pijl, en het routerblok met de twaalf poorten als sleuven erin;
-één onderschrift zegt dat een gevulde poort open staat, vanaf 1280px in de kolom onder
-jouw machine, met zijn onderkant op die van de router. Onder 768px: een kolom, glos onder
-zijn regel, de uitnodiging onder de invoer, de scan-pijl verticaal.
-**De vouw (sessie 241, herzien in sessie 247):** sinds de afficheschaal geldt de pixelvouw
+als toetsenrij (inktkader, index 01-06, aaneen op het raster; sessie 249). Het netwerkdiagram
+dat hier tot sessie 249 als laatste stond, is weg. Onder 768px: een kolom, glos onder zijn
+regel, de uitnodiging onder de invoer.
+**De vouw (sessie 241, herzien in 247 en 250):** sinds sessie 250 moeten op 1440x900 en
+1280x800 de invoerregel en de hele toetsenrij boven de vouw staan (gemeten onderkant 821 en
+793), op 1024x768 de hele terminal met zijn uitnodiging (735). Daarvóór, met diagram: sinds de afficheschaal gold de pixelvouw
 op 1440x900 (diagram 889/900) en 1024x768; op 1280x800 staan de poorten 64px onder de vouw
 (864/800) en speelt de scan opnieuw zodra het diagram in beeld komt (zie "Bolder (sessie
 247)"). Oorspronkelijk: op 1440x900 en 1280x800 staan terminal, chips en de poorten van de
@@ -658,19 +663,174 @@ tot daar; telt niet als groen). Gate 2: 859 passed, 17 skipped, 0 failed. Gate 3
   onderscheid blijft in de hero; het raster en de afficheschaal lopen nu door.
 - *Metronoom papier/band*: P2 breekt hem één keer met textuur; meer vraagt een nieuw ritmebesluit.
 
+## Onderscheid (sessie 249-250)
+
+**Aanleiding.** TASKS #91, eigenaar na sessie 248: "stukken beter, maar het kan nog
+onderscheidender". Hero onrustig/onduidelijk, Herkenbaar saai, de sample zigzagt, en de wens
+"secties die op een bepaalde manier in elkaar overlopen".
+
+**Sessie 249 (niet apart gecommit; samen met 250 vastgelegd).** Critique (dual-agent) 26/36,
+detector zonder echte defecten. Gebouwd na go:
+- **V3, de hero zonder diagram.** Het netwerkdiagram (markup, CSS, `zetDiagram`, `rustDiagram`,
+  replay) is uit de hero: zes lagen onder elkaar las als onrustig. De actie staat in de leesrij
+  onder de ondertitel in plaats van in kolom 10-12 ("vreemd gepositioneerd"), met de microcopy
+  "Geen account nodig. Alles is nagebootst: je raakt geen echte systemen."
+- **H2, de toetsenrij.** De chips aaneen op het raster, strak onder de invoerregel, zonder
+  herkomstlabel.
+- **S3, de sample onder elkaar** (kop, inleiding, inhoud, actie), met de inhoudstabel op het
+  raster: één regel voor een cel op de lijn (open punt (a) van 248).
+- **B1, basislijn-registratie** in de cijfers (open punt (b)), en in het leerpad de knop vóór
+  "Lees eerst" in de bron, zoals in beeld.
+
+**Teruggedraaid na het live-oordeel van de eigenaar, met prijs.** Beide waren gekozen op
+verkleinde verzamelbladen; op ware grootte zag de eigenaar het meteen. Gemeten op de
+sectiecaptures van 249 (grootste aaneengesloten inktvlak, lijnen dunner dan 5px gefilterd):
+- **E1, het slot als laatste sectie, direct op de footer:** "Klaar om te beginnen loopt in één
+  zwart vlak door naar de footer". 655.756 → 1.102.926 px² op 1440 (+68%, 820px hoog),
+  193.192 → 303.212 op 375 (+57%).
+- **K2, Herkenbaar als één doorlopende module:** "één groot zwart vlak". 100.535 → 435.405 px²
+  op 1440 (4,3x).
+- Prijs van het terugdraaien: de wens "secties die in elkaar overlopen" staat nog open.
+  "Overlopen" betekent niet: vlakken samensmelten. Een volgende poging toetst eerst de massa
+  (zie hieronder) en wordt op ware grootte voorgelegd.
+
+**Sessie 250: verder op de hero.** Eigenaar: cat en help tonen geen tekst bij "In gewoon
+Nederlands"; het lime komt uit de oude wereld, en ook de andere modulekleuren (hero,
+Herkenbaar, leerpad) mogen worden beoordeeld; alles zit krap op elkaar; is het weinige kleur
+op de pagina bewust? Werkwijze: proeven als losse folds op ware grootte (1440x900, 1280x800,
+375x812, licht en donker), per variant de grootste aaneengesloten donkere vlakte gemeten.
+
+- **De glos bij elke reeks.** De bron gaf regels die al Nederlands zijn bewust geen glos, en dan
+  stond de kolom leeg (`help`, `cat`, en ook `nmap` op een ander adres). Nu krijgt elke reeks
+  er minstens één, die niet vertaalt maar uitlegt: wat cat doet, waar een naam vandaan komt
+  ("van concatenate: aan elkaar plakken"). Gemeten: 16 invoeren x breed/smal, 0 reeksen leeg.
+- **Lucht naar groep.** Op 1440 stond alles even ver: nav→kop 30, kop→zin ±14, zin→knop 20,
+  knop→terminal 26. Nu zijn kop, zin en knop één groep, en de stap naar de terminal is de grote:
+  minstens 40px en 1,4x de grootste stap binnen de groep, op elke breedte (1440: 49,7; 375: 40).
+  Begrensd door de vouw op 1280x800 (toetsenrij onder op 793).
+- **Het modulepalet (proef A/B, B gekozen).** A: warme tekst en een blauwe prompt (`#7ab4ff`,
+  9,24). Rustig, maar alleen een kleurwissel. **B: de module spreekt de taal van de pagina.**
+  Tekst uit de papierfamilie (`#d6d6d2`, 13,58; dim `#a3a39d`, 7,81) in plaats van
+  GitHub-blauwgrijs; de prompt in papier 700 in plaats van lime; de cursor een blok in
+  signaalrood; een `[TIP]` op een papieren label (inkt op papier, 16,39), omdat de tip de
+  Nederlandse laag van de 80/20-output is: Engelse uitvoer op zwart, Nederlandse uitleg op
+  papier. Zalm en amber blijven, en zijn nu de enige tinten. De eerste versie van B faalde: een
+  strook over de volle modulebreedte las als een snee (dezelfde kleur als de pagina, op de rand);
+  een label achter de tekst houdt de module heel. Massa op 1440 licht: 203.704 (nu) → 193.446
+  (B); op 375 36,8% → 31,9% van de fold.
+- **Een regel van het systeem opgerekt.** *One Voice* zei één rood vlak per scherm. De cursor is
+  een tweede rood element in het eerste scherm (±10x22px, niet-tekst, 3,42 op de modulegrond),
+  met dezelfde betekenis: jij bent aan zet, hier typ je. Buiten de module blijft het één rode
+  drager per scherm; binnen de module is rood alleen de cursor. Beide bewaakt.
+- **Herkenbaar:** de `[TIP]`-regels kregen in de transcripten geen tipkleur (klasse `output`),
+  in de hero wel. Nu dezelfde `.tip` en hetzelfde label.
+
+**Aangrenzend gevonden en gerepareerd.**
+- *Halve regels in het venster.* Na `help` stond de `[TIP]` half onderaan, na `cat` een halve oude
+  regel bovenaan. Drie oorzaken: de glos zakte 1px (Chromium, WebKit) of 0,5px (Firefox) voor de
+  basislijn en maakte de rij 28 in plaats van 27; de padding van 8px scrolde mee, waardoor het
+  venster 7,6 regels hoog was; en `toonCommand` zette de prompt op de rand. Nu een marge van
+  -1px op de glos (alleen naast elkaar, onder 768 maakte hij de rij 47), een transparante rand
+  van 8px in plaats van padding (een rand scrolt niet mee), en een mobiel venster van 12 hele
+  regels (300 → 304px).
+- *De eerste chip dood sinds sessie 249.* Het blok `@media (min-width: 1280px)` met de
+  binnenruimte van de chips stond vóór de basisregel en verloor op volgorde: de eerste chip hield
+  `--af-cel` (20px op 1440), 8px meer dan de rest. Nu erna.
+- *De focusring van de invoerregel viel onderaan weg* sinds de toetsenrij er strak onder ligt (de
+  chips schilderen erna). `z-index: 1` bij focus.
+- *De accentbudget-sweep schoof nooit.* `perScherm` deed `scrollTo(0, y)` onder `html {
+  scroll-behavior: smooth }` en wachtte 80ms: hij telde zes keer het eerste scherm. Gevonden toen
+  de rode cursor op zes "schermen" stond. Nu `instant`, met een controle dat de pagina er echt is.
+  De regel "één rode drager per scherm" is daarmee voor het eerst over de hele pagina gemeten.
+- *De focustest van 246 mat tijdens een smooth scroll* op 375x900 (de invoerregel staat sinds de
+  lucht net onder de vouw); nu `scrollBehavior = 'auto'` vóór het meten.
+
+**Bewaakt.** `hero-demo.spec.js`: de diagramguards zijn vervangen door "Elke reeks heeft
+Nederlands ernaast" (alle zes plus `cat README.txt`, `nmap 10.0.0.1`, `lss`; help per regel),
+"De vouw: terminal en toetsenrij in beeld" (1440 en 1280, venster precies 7 regels, rand 8px;
+1024; kolomkop en uitnodiging op hun rij), "Het venster staat op hele regels" (1440 en 375: elke
+rij begint op een hele regel vanaf de rand, het venster is een geheel aantal regels; zelfbewakend:
+het venster schoof), "De reeks" (rolt bij laden en niet opnieuw, 90ms per regel, reduced
+motion), de ruststand (de drie poortregels met glos, geen diagram) en de overname (de demo-uitvoer
+is weg en komt niet terug). Uit de breedtesweep zijn de poortlabels gehaald.
+`homepage-conversion.spec.js`: "de actie in de leesrij" op 375-1920 (vervangt de guard voor kolom
+10-12) en "lucht naar groep". `hero-accent-budget.spec.js`: geen lime meer op de pagina (met
+positieve controle), rood in de module alleen de cursor, elke `[TIP]` op het label en de prompt
+vet. Twaalf mutanten, twaalf asserties (vóór de review; zie hieronder voor de zestien), elk rood op de bedoelde melding; na elke mutant en
+aan het eind sha256 van `affiche.css`, `hero-antwoorden.js` en `hero-registratie.js` gelijk aan
+het origineel, 0 MUTANT-markeringen.
+
+**Finish review (vers, zonder browser omdat de gate liep): verdict `fix`, vier punten, alle vier
+verwerkt en nagemeten.** Daarna de captures die de reviewer zelf niet kon maken
+(`.playwright-mcp/s250-aanvraag-*.png`): een fout (`lss`) in zalm, onderscheiden; focus en typen;
+375 tot de toetsenrij; 1024.
+1. *Het rode blok stond 2ch rechts van het invoerpunt* (gap van 1ch plus het rustveld van 1ch
+   ervoor): "hier typ je" klopte niet. Nu `margin-left: -2ch` en exact op het invoerpunt in drie
+   engines (0,0px). Een eerste versie ving de klik op het veld eronder (de suite zag het:
+   "intercepts pointer events"), dus ook `pointer-events: none`. Bij overname verdwijnt het blok,
+   en dan staat er alleen de native caret: nooit twee rode cursors in de module.
+2. *Het contract sprak zichzelf tegen* (OWN-WORLD noemde nog de eigen kleuren van prompt en tip;
+   een verminkte zin in FIRST VIEWPORT). Bijgewerkt.
+3. *Het papieren label ook voor `[→]`.* Bewust: de echte renderer (`ui/renderer.js`) geeft `[?]`,
+   `[→]` en `[TIP]` één rol (`info`), en PRODUCT.md maakt de afbeelding marker → rol bindend. Het
+   label hoort bij de rol, niet bij het woord. Geen gedragswijziging: de hint blijft in de
+   geschiedenis staan, zoals in een terminal.
+4. *De cat-uitvoer op smal rafelde.* Het voorstel (een `smal`-variant met andere regelbreuken) is
+   niet gevolgd: de harde breuk "   iets werkt" staat zo in het bestand (`structure.js:47-48`), en
+   herschikken zou het bestand vervalsen. Het rafelige zat in de zachte omslag. Die springt nu 1,8em
+   in (drie tekens), op de lijn van de harde vervolgregel: Firefox en WebKit exact, Chromium 1px
+   (het rondt de letter af op 8px).
+- *Ceiling, niet gedaan (voor de eigenaar):* de glos onder 768 heeft dezelfde kleur als de uitvoer
+  (`--af-m-glos` = `--af-m-tekst`); Engels en Nederlands verschillen daar alleen in letter, maat en
+  streepje. En Herkenbaar oogt als vóór deze ronde.
+- *Aangrenzend:* de guard "@375px binnen 40 tekens" klopte niet; gemeten passen er 39 (319px, 8px
+  per letter in Chromium). De lat is 39.
+- Vier mutanten erbij (cursor op het invoerpunt, klik door het blok, zachte omslag, label voor
+  `[→]`): **zestien mutanten, zestien asserties.** Eén meetfout in mijn eigen guard: een range over
+  een regel met een `<span>` gaf ook de elementbox, die als extra rij telde; nu alleen tekstknopen.
+
+**Gates.** De suite telt 1908 tests (gemeten met `--list`; HEAD 1824). De "17 skipped" en ±880 van
+sessie 248 horen niet bij deze populatie en zijn niet te reproduceren.
+- Poging 1 gestopt op 74/1899: de deadline van 60 min was gerekend op ±880 tests. Poging 2 gestopt op
+  126/1899 met 0 falers, om de reviewfixes in te voeren. Geen van beide telt.
+- **Gate: 1873 passed, 33 skipped, 2 failed (82 min).** De twee falers waren één test in Firefox
+  en WebKit: de nmap-chip stond op 1280-1296 3,2/3,3px van zijn rand (lat 6). Een regressie van
+  s249 (H2, zes gelijke kolommen); Chromium haalde het, en s249 draaide nooit een volle gate. Eerst
+  rechts de kleinste celmaat geprobeerd: geen effect, want het command breekt nooit en staat links,
+  dus alleen wat links staat telt. Fix: de indexkolom vanaf 1280 1,6em in plaats van 1,8em; lucht
+  nu 6,2 / 6,3 / 10,8 (Firefox, WebKit, Chromium), van `[✓]` tot het command 5px. De gate zelf was
+  de mutant: dezelfde assertie vuurde op de echte fout.
+- **Herhaling van de specs die dit codepad raken** (hero-demo, homepage-conversion,
+  hero-accent-budget) in drie engines: **464 passed, 4 skipped, 0 failed** (11 min).
+- Skips (33), elk verklaard uit zijn voorwaarde in de bron: 18 motorgebonden (fontbudget, preloads,
+  CLS, ES6-cascade, 4G, kadertekens), 9 onvoorwaardelijk `test.skip` (quota, dropdown, modal), 6
+  alleen tegen productie (`_headers` is Netlify-only, lead-magnet). Geen raakt deze diff.
+
+**Bekende toestand, geen regel:** gedimde uitvoer (#a3a39d) op de oplichtkleur (#23231f) haalt 6,22,
+onder AAA, gedurende de 450ms van het oplichten. Met de vorige dim (#a1a8b0) was dat 6,57: ook
+eronder. Gemeld door de documenter.
+
+**Open, voor de eigenaar.**
+- *Kleur op de pagina.* Bewust: papier, inkt, één signaalrood (DESIGN.md). De eigenaar vroeg of
+  dat zo blijft; mijn advies: ja, de kracht van het rood komt uit zijn zeldzaamheid. Meer kleur
+  kan alleen eerlijk per functie, niet per sectie, en verandert een regel van de wereld. Eerst
+  vaststellen wat de eigenaar mist (warmte, contrast tussen secties, iets anders).
+- *Secties die in elkaar overlopen* (zie E1/K2).
+- *Herkenbaar saai*: in 249 niet opgelost (K2 teruggedraaid).
+
 ## Memorabel moment
 
-Je tikt `nmap 192.168.1.1`, of je doet niets: bij laden, en als het diagram pas later in beeld
-komt, speelt het vanzelf. Eerst tekent de scanpijl zich van jouw machine naar de router.
-Links rolt de poortuitvoer uit, rechts verschijnt per regel de Nederlandse uitleg op dezelfde
-rij, en in het diagram eronder springen drie uitsparingen in het hostblok invers open, elk op
-de tik van zijn regel: 53, 80, 443. Het netwerk dat je niet kon zien, staat nu op papier.
+Je doet niets, en bij laden rolt de nmap-scan regel voor regel uit; of je tikt zelf een command.
+Links staat de uitvoer zoals de tool hem schrijft, rechts verschijnt per regel de Nederlandse
+uitleg op dezelfde rij, en de tip staat op papier in de module. Zelfs bij `help` en `cat` staat
+er iets in de kolom "In gewoon Nederlands": waar de naam vandaan komt, wat er gebeurt. (Tot
+sessie 249 sprongen ook drie poorten open in een netwerkdiagram eronder.)
 
 ## Signatuurinteractie
 
-De registratie: outputregel, glos en diagramuitsparing lichten als een rij tegelijk op. Eén
-reeks per command, regel voor regel (90ms), geen typanimatie per letter; een poort springt
-open op de tik van zijn regel. `prefers-reduced-motion` toont de eindstand.
+De registratie: outputregel en glos lichten als één rij tegelijk op. Eén reeks per command,
+regel voor regel (90ms), geen typanimatie per letter. Het venster staat altijd op hele regels.
+`prefers-reduced-motion` toont de eindstand.
 
 ## Nog niet besloten
 

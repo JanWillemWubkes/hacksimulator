@@ -589,6 +589,8 @@ test.describe('Onderpagina', () => {
   // waar kop en actie onder elkaar vallen en de navbar inklapt; daar was hij ongedekt.
   // Sessie 248 (layout): de cijfers lopen over de volle breedte en staan hier niet meer in;
   // dat bewaakt "Layout (sessie 248)" (getal en bron op de twee rasterranden).
+  // Sessie 249 (onderscheid): de sample staat onder elkaar met zijn tabel over het hele
+  // raster, en is daarmee geen tweedelige rij meer; dat bewaakt "Onderscheid (sessie 249)".
   for (const breedte of [1440, 1280, 1279, 1180, 1024]) {
     test(`@${breedte}px deelt elke tweedelige rij onder de hero op de glos-naad`, async ({ page }) => {
       await page.setViewportSize({ width: breedte, height: 900 });
@@ -598,7 +600,6 @@ test.describe('Onderpagina', () => {
         const paren = [
           ['.af-pijn-rij .af-transcript', '.af-pijn-rij .af-pijn-tekst'],
           ['.af-faq .af-faq-lijst', '.af-faq .af-faq-lees'],
-          ['.af-sample h2', '.af-sample p'],
           ['.af-news-tekst', '.af-news-form'],
         ];
         return {
@@ -612,7 +613,7 @@ test.describe('Onderpagina', () => {
           aantal: paren.length,
         };
       });
-      expect(m.aantal).toBeGreaterThanOrEqual(4);
+      expect(m.aantal).toBeGreaterThanOrEqual(3);
       expect(m.afwijkend, `naad op ${m.naad.toFixed(1)}`).toEqual([]);
     });
   }
@@ -783,20 +784,27 @@ test.describe('De sample toont wat erin staat', () => {
     expect(m.miniaturen, 'er staan weer miniaturen in de sample').toBe(0);
   });
 
-  for (const breedte of [1440, 1280, 1024, 768]) {
-    test(`@${breedte}px staat de inhoud links op de rij van de knop, binnen de naad`, async ({ page }) => {
+  // Sessie 249 (proef S3): kop, inleiding, inhoud en actie onder elkaar, in leesvolgorde.
+  // Tot dan stond de inhoud links op de rij van de knop (sessie 245) en zigzagde de massa.
+  for (const breedte of [1440, 1280, 1024, 768, 375]) {
+    test(`@${breedte}px staat de sample in leesvolgorde onder elkaar`, async ({ page }) => {
       await page.setViewportSize({ width: breedte, height: 900 });
       await page.goto('/index.html');
-      await page.locator('.af-sample').scrollIntoViewIfNeeded();
+      await page.evaluate(() => document.fonts.ready);
       const m = await page.evaluate(() => {
         const R = (q) => document.querySelector(q).getBoundingClientRect();
-        const lijst = R('.af-sample-inhoud');
-        const rijen = [...document.querySelectorAll('.af-sample-inhoud li')].map((li) => li.getBoundingClientRect());
-        return { n: rijen.length, top: lijst.top, knopTop: R('.af-sample .af-knop').top, rechts: lijst.right, naad: R('.af-sample p').left };
+        const delen = ['.af-sample h2', '.af-sample p', '.af-sample-inhoud', '.af-sample-acties'].map((q) => [q, R(q)]);
+        return { n: document.querySelectorAll('.af-sample-inhoud li').length,
+          delen: delen.map(([q, r]) => ({ q, top: r.top, bottom: r.bottom, left: r.left })) };
       });
       expect(m.n, 'geen inhoudsregels gevonden').toBeGreaterThan(0);
-      expect(Math.abs(m.top - m.knopTop), `inhoud op ${m.top.toFixed(0)}, knop op ${m.knopTop.toFixed(0)}`).toBeLessThanOrEqual(1);
-      expect(m.rechts, 'de inhoud steekt over de naad').toBeLessThanOrEqual(m.naad + 1);
+      const fout = [];
+      for (let i = 1; i < m.delen.length; i++) {
+        const a = m.delen[i - 1], b = m.delen[i];
+        if (b.top < a.bottom - 1) fout.push(`${b.q} (top ${b.top.toFixed(0)}) begint vóór het einde van ${a.q} (${a.bottom.toFixed(0)})`);
+        if (Math.abs(b.left - m.delen[0].left) > 1) fout.push(`${b.q} op x ${b.left.toFixed(0)}, kop op ${m.delen[0].left.toFixed(0)}`);
+      }
+      expect(fout).toEqual([]);
     });
   }
 });
@@ -1153,6 +1161,10 @@ test.describe('Finish review (sessie 246)', () => {
         await page.addInitScript(() => localStorage.setItem('hacksim_analytics_consent', 'false'));
         await page.goto('/index.html');
         await zetThema(page, thema);
+        // Schuiven zonder animatie: html heeft scroll-behavior: smooth, en sinds de lucht van
+        // sessie 250 staat de invoerregel op 375x900 net onder de vouw. Dan mat de rust een box
+        // halverwege de scroll (y 825 op weg naar 391), boven op de rode CTA-balk.
+        await page.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto'; });
         const regel = page.locator('.af-term .terminal-input-line');
         await regel.scrollIntoViewIfNeeded();
         // Eerst de overname (de eerste focus leegt de demo), dan een rusttoestand op een
@@ -1276,32 +1288,76 @@ test.describe('Finish review (sessie 246)', () => {
     expect(gebroken, 'geen enkele regel brak op smal — de inspringing is niet getoetst').toBeGreaterThan(5);
   });
 
-  // Sessie 247 (bolder): de kop gaat over alle twaalf kolommen op afficheschaal, dus de
-  // knop kan niet meer naast hem staan. Tot dan (s246) stond hij met zijn onderkant op de
-  // basislijn van kopregel 2; nu op de rij van de ondertitel, op de hoogte van haar eerste
-  // regel, met de microcopy eronder. De schaalstap kop:sectiekop is de reden van de zet.
-  test('vanaf 1280 gaat de kop op afficheschaal over de breedte, en staat de actie op de rij van de ondertitel', async ({ page }) => {
-    for (const breedte of [1280, 1366, 1440, 1920]) {
+  // Sessie 247 (bolder): de kop over alle twaalf kolommen op afficheschaal. Sessie 249 (proef
+  // V1-V3): de actie staat in de leesrij, onder de ondertitel en links op dezelfde lijn: kop,
+  // zin, knop. Van 247 tot 249 stond hij in kolom 10-12 op de rij van de ondertitel ("vreemd
+  // gepositioneerd", eigenaar); die guard is hierdoor vervangen. Vanaf 1280 staat de microcopy
+  // naast de knop, daaronder eronder.
+  for (const breedte of [375, 768, 1024, 1279, 1280, 1440, 1920]) {
+    test(`@${breedte}px staat de actie in de leesrij: kop, zin, knop`, async ({ page }) => {
       await page.setViewportSize({ width: breedte, height: 900 });
       await page.goto('/index.html');
+      await page.evaluate(() => document.fonts.ready);
       const m = await page.evaluate(() => {
-        const h1 = document.querySelector('.af-hero-tekst h1');
-        const g = document.createRange(); g.selectNodeContents(h1);
-        const regels = new Set([...g.getClientRects()].map((r) => Math.round(r.top))).size;
-        const knop = document.querySelector('.af-hero-zij .af-cta').getBoundingClientRect();
-        const micro = document.querySelector('.af-hero-zij .af-microcopy').getBoundingClientRect();
-        const sub = document.querySelector('.af-hero-sub');
-        const subTekst = parseFloat(getComputedStyle(sub).paddingTop) + sub.getBoundingClientRect().top;
+        const tekst = (el) => {
+          const g = document.createRange(); g.selectNodeContents(el);
+          const rs = [...g.getClientRects()];
+          return { top: Math.min(...rs.map((x) => x.top)), bottom: Math.max(...rs.map((x) => x.bottom)),
+                   left: Math.min(...rs.map((x) => x.left)), regels: new Set(rs.map((x) => Math.round(x.top))).size };
+        };
+        const h1el = document.querySelector('.af-hero-tekst h1');
         const fs = (el) => parseFloat(getComputedStyle(el).fontSize);
-        return { regels, stap: fs(h1) / fs(document.querySelector('#pijn-kop')),
-          knopTop: knop.top, knopOnder: knop.bottom, knopL: knop.left, microTop: micro.top, microL: micro.left, subTekst };
+        const knopEl = document.querySelector('.af-hero-zij .af-cta');
+        const volgorde = [h1el, document.querySelector('.af-hero-sub'), knopEl];
+        return {
+          h1: tekst(h1el), sub: tekst(document.querySelector('.af-hero-sub')),
+          knop: knopEl.getBoundingClientRect().toJSON(), micro: document.querySelector('.af-hero-zij .af-microcopy').getBoundingClientRect().toJSON(),
+          stap: fs(h1el) / fs(document.querySelector('#pijn-kop')),
+          domOk: volgorde.every((el, i) => i === 0 || volgorde[i - 1].compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING),
+        };
       });
-      expect(m.regels, `@${breedte}: de kop is geen twee regels (plafond --af-affiche te hoog?)`).toBe(2);
-      expect(m.stap, `@${breedte}: kop maar ${m.stap.toFixed(2)}x de sectiekop: geen affiche`).toBeGreaterThanOrEqual(1.7);
-      expect(Math.abs(m.knopTop - m.subTekst), `@${breedte}: knop ${(m.knopTop - m.subTekst).toFixed(1)}px naast de eerste regel van de ondertitel`).toBeLessThan(1);
-      expect(Math.abs(m.microL - m.knopL), `@${breedte}: microcopy niet onder de knop (links)`).toBeLessThan(0.5);
-      expect(m.microTop, `@${breedte}: microcopy niet onder de knop`).toBeGreaterThanOrEqual(m.knopOnder - 0.5);
+      expect(m.domOk, 'de bronvolgorde is niet kop, zin, knop').toBe(true);
+      expect(m.knop.top, 'de knop staat niet onder de ondertitel').toBeGreaterThanOrEqual(m.sub.bottom);
+      expect(Math.abs(m.knop.left - m.sub.left), `knop ${(m.knop.left - m.sub.left).toFixed(1)}px naast de lijn van de zin`).toBeLessThan(1);
+      expect(Math.abs(m.sub.left - m.h1.left), 'de zin staat niet op de lijn van de kop').toBeLessThan(6);
+      if (breedte >= 1280) {
+        expect(m.h1.regels, `@${breedte}: de kop is geen twee regels (plafond --af-affiche te hoog?)`).toBe(2);
+        expect(m.stap, `@${breedte}: kop maar ${m.stap.toFixed(2)}x de sectiekop: geen affiche`).toBeGreaterThanOrEqual(1.7);
+        expect(m.micro.left, 'microcopy staat niet naast de knop').toBeGreaterThanOrEqual(m.knop.right);
+        expect(Math.abs((m.micro.top + m.micro.height / 2) - (m.knop.top + m.knop.height / 2)), 'microcopy niet op de rij van de knop').toBeLessThan(1);
+      } else {
+        expect(m.micro.top, 'microcopy staat niet onder de knop').toBeGreaterThanOrEqual(m.knop.bottom - 0.5);
+      }
+    });
+  }
+
+  // Sessie 250 (eigenaar: "het zit allemaal een beetje krap op elkaar"). Gemeten vóór op 1440:
+  // kop→zin 14, zin→knop 20, knop→terminal 26: alles even ver, dus geen groepen. Nu staan kop,
+  // zin en knop dicht bij elkaar en is de stap naar de terminal de grote: minstens 1,4x de
+  // grootste stap binnen de groep, en minstens 40px.
+  test('lucht naar groep: de stap naar de terminal is de grote', async ({ page }) => {
+    const fout = [];
+    let gemeten = 0;
+    for (const breedte of [375, 768, 1024, 1279, 1280, 1440, 1920]) {
+      await page.setViewportSize({ width: breedte, height: 900 });
+      await page.goto('/index.html');
+      await page.evaluate(() => document.fonts.ready);
+      const r = await page.evaluate(() => {
+        const tekst = (el) => { const g = document.createRange(); g.selectNodeContents(el); const rs = [...g.getClientRects()];
+          return { top: Math.min(...rs.map((x) => x.top)), bottom: Math.max(...rs.map((x) => x.bottom)) }; };
+        const h1 = tekst(document.querySelector('#hero-kop')), sub = tekst(document.querySelector('.af-hero-sub'));
+        const k = document.querySelector('.af-hero-zij .af-cta').getBoundingClientRect();
+        const mc = document.querySelector('.af-hero-zij .af-microcopy').getBoundingClientRect();
+        const t = document.querySelector('.af-term-kop').getBoundingClientRect();
+        return { binnen: Math.max(sub.top - h1.bottom, k.top - sub.bottom), groep: t.top - Math.max(k.bottom, mc.bottom) };
+      });
+      gemeten++;
+      if (!(r.binnen > 0)) fout.push(`${breedte}: geen stap binnen de groep gemeten (${r.binnen})`);
+      if (r.groep < 40 - 0.5) fout.push(`${breedte}: naar de terminal maar ${r.groep.toFixed(1)}px`);
+      if (r.groep < 1.4 * r.binnen) fout.push(`${breedte}: groep ${r.groep.toFixed(1)} tegen binnen ${r.binnen.toFixed(1)}, minder dan 1,4x`);
     }
+    expect(gemeten, 'de breedtes zijn niet gemeten').toBe(7);
+    expect(fout).toEqual([]);
   });
 
   // Finish review s247: het mono-pad stond bóven de bloglinktitel en las als eyebrow (de
@@ -1607,6 +1663,135 @@ test.describe('Layout (sessie 248)', () => {
       expect(m.tekst, 'geen tekst in de cijfers gemeten').toBeGreaterThanOrEqual(9);
       expect(m.controle.filter((c) => c === m.papier), 'positieve controle: geen haarlijn zichtbaar in de lucht').toEqual([]);
       expect(m.door, 'haarlijn door tekst in de cijfers').toEqual([]);
+    });
+  }
+});
+
+// ==================== Onderscheid (sessie 249) ====================
+//
+// Na de critique van sessie 249 en proeven op gelijke maat (H2, S3, B1; contract
+// "Onderscheid (sessie 249)"). Elke test heeft een zelfbewakende tak die eist dat de vorm die
+// hij bewaakt ook echt gemeten is.
+
+test.describe('Onderscheid (sessie 249)', () => {
+  // H2: de chips zijn één toetsenrij vast onder de terminal, met hun randen op de rasterlijnen
+  // en zonder tussenruimte; de herkomst per chip is weg. Per 8px van 320 tot 1920.
+  test('de toetsenrij staat op het raster, tegen de terminal, op elke breedte', async ({ page }) => {
+    test.setTimeout(180_000);
+    await page.setViewportSize({ width: 320, height: 900 });
+    await page.goto('/index.html');
+    await page.evaluate(() => document.fonts.ready);
+    const fout = { populatie: [], vorm: [], raster: [], aaneen: [], terminal: [] };
+    const vormen = { 6: 0, 3: 0, 2: 0 };
+    let gemeten = 0;
+    for (let w = 320; w <= 1920; w += 8) {
+      await page.setViewportSize({ width: w, height: 900 });
+      // WebKit werkt de layout niet bij als het venster in stappen over een mediagrens groeit
+      // (meten-en-guards §35); opnieuw laden op 768 en 1280.
+      if (w === 768 || w === 1280) { await page.reload(); await page.evaluate(() => document.fonts.ready); }
+      const r = await page.evaluate(() => {
+        const raster = document.querySelector('.af-hero-raster');
+        const cs = getComputedStyle(raster); const rb = raster.getBoundingClientRect();
+        const L = rb.left + parseFloat(cs.paddingLeft), Rr = rb.right - parseFloat(cs.paddingRight);
+        const kolommen = cs.gridTemplateColumns.split(' ').length;
+        const chips = [...document.querySelectorAll('.hero-chip')].map((c) => {
+          const q = c.getBoundingClientRect();
+          // Wat de chip aan tekst toont, per kind: alleen index en command horen erin.
+          const kinderen = [...c.children].filter((k) => k.getClientRects().length && k.textContent.trim()).map((k) => k.className);
+          return { l: q.left, r: q.right, t: q.top, b: q.bottom, kinderen };
+        });
+        return { L, kol: (Rr - L) / kolommen, kolommen, chips,
+          herkomst: document.querySelectorAll('.af-chip-herkomst').length,
+          term: document.querySelector('.af-term').getBoundingClientRect().bottom };
+      });
+      gemeten++;
+      if (r.herkomst || r.chips.length !== 6) fout.populatie.push(`${w}: ${r.chips.length} chips, ${r.herkomst} herkomst`);
+      const vreemd = r.chips.filter((c) => c.kinderen.some((k) => k !== 'af-chip-nr' && k !== 'af-chip-cmd'));
+      if (vreemd.length) fout.populatie.push(`${w}: chip toont ${vreemd[0].kinderen.join(', ')}`);
+      const perRij = r.chips.filter((c) => Math.abs(c.t - r.chips[0].t) < 1).length;
+      const verwacht = w >= 1280 ? 6 : w >= 768 ? 3 : 2;
+      if (perRij !== verwacht) { fout.vorm.push(`${w}: ${perRij} per rij, verwacht ${verwacht}`); continue; }
+      vormen[perRij]++;
+      const span = r.kolommen / perRij;
+      r.chips.forEach((c, i) => {
+        const k = (i % perRij) * span;
+        const links = r.L + k * r.kol, rechts = r.L + (k + span) * r.kol;
+        if (Math.abs(c.l - links) > 1 || Math.abs(c.r - rechts) > 1) fout.raster.push(`${w} chip ${i + 1}: ${c.l.toFixed(1)}-${c.r.toFixed(1)}, lijnen ${links.toFixed(1)}-${rechts.toFixed(1)}`);
+        if (i % perRij && Math.abs(c.l - r.chips[i - 1].r) > 1) fout.aaneen.push(`${w} chip ${i + 1}: ${(c.l - r.chips[i - 1].r).toFixed(1)}px naast zijn buur`);
+        if (i >= perRij && Math.abs(c.t - r.chips[i - perRij].b) > 1) fout.aaneen.push(`${w} chip ${i + 1}: ${(c.t - r.chips[i - perRij].b).toFixed(1)}px onder de rij erboven`);
+      });
+      if (Math.abs(r.chips[0].t - r.term) > 1) fout.terminal.push(`${w}: toetsenrij op ${r.chips[0].t.toFixed(1)}, terminal eindigt op ${r.term.toFixed(1)}`);
+    }
+    expect(gemeten, 'niet elke breedte gemeten').toBe(201);
+    expect(vormen[6], 'nooit zes per rij gemeten').toBeGreaterThan(50);
+    expect(vormen[3], 'nooit drie per rij gemeten').toBeGreaterThan(50);
+    expect(vormen[2], 'nooit twee per rij gemeten').toBeGreaterThan(40);
+    expect(fout.populatie, 'chipinhoud').toEqual([]);
+    expect(fout.vorm, 'chips per rij').toEqual([]);
+    expect(fout.raster, 'chipranden niet op de rasterlijnen').toEqual([]);
+    expect(fout.aaneen, 'chips niet aaneengesloten').toEqual([]);
+    expect(fout.terminal, 'toetsenrij los van de terminal').toEqual([]);
+  });
+
+  // Open punt (a) uit sessie 248: twee tabellen, twee regels. Nu één: een cel op een
+  // rasterlijn draagt vanaf 768 zelf de celmaat (index en getal even ver van hun lijn),
+  // onder 768 staan ze allebei op de lijn.
+  for (const breedte of [375, 768, 1024, 1440]) {
+    test(`@${breedte}px houden de cijfertabel en de sample-inhoud één regel voor de cel op de lijn`, async ({ page }) => {
+      await page.setViewportSize({ width: breedte, height: 900 });
+      await page.goto('/index.html');
+      await page.evaluate(() => document.fonts.ready);
+      const m = await page.evaluate(() => {
+        const inkt = (e) => { const g = document.createRange(); g.selectNodeContents(e); return g.getBoundingClientRect().left; };
+        const getal = [...document.querySelectorAll('.af-lijst-rij')].map((r) => inkt(r.querySelector('.result-number')) - r.getBoundingClientRect().left);
+        const index = [...document.querySelectorAll('.af-sample-inhoud li')].map((r) => inkt(r.querySelector('.af-inhoud-nr')) - r.getBoundingClientRect().left);
+        return { getal, index, cel: parseFloat(getComputedStyle(document.querySelector('.af-lijst .result-number')).paddingLeft) };
+      });
+      expect(m.getal.length, 'geen cijferrijen').toBeGreaterThanOrEqual(3);
+      expect(m.index.length, 'geen inhoudsregels').toBeGreaterThanOrEqual(3);
+      // Tak: vanaf 768 is er echt binnenruimte, eronder echt niet; anders bewijst gelijkheid niets.
+      if (breedte >= 768) expect(Math.min(...m.getal), 'getal staat op de lijn').toBeGreaterThanOrEqual(8);
+      else expect(Math.max(...m.getal), 'getal staat niet op de lijn').toBeLessThanOrEqual(1);
+      const verschil = [...m.getal, ...m.index].map((x) => x - m.getal[0]).filter((d) => Math.abs(d) > 1);
+      expect(verschil, `getal ${m.getal.map((x) => x.toFixed(1))}, index ${m.index.map((x) => x.toFixed(1))}`).toEqual([]);
+    });
+  }
+
+  // Open punt (b): label en bron op de basislijn van het getal, vanaf 768. Gemeten met een
+  // nul-hoge inline-block aan het eind van elke cel: zijn top ís de basislijn van de laatste regel.
+  for (const breedte of [768, 1024, 1280, 1440, 1920]) {
+    test(`@${breedte}px staan label en bron op de basislijn van het getal`, async ({ page }) => {
+      await page.setViewportSize({ width: breedte, height: 900 });
+      await page.goto('/index.html');
+      await page.evaluate(() => document.fonts.ready);
+      const rijen = await page.evaluate(() => [...document.querySelectorAll('.af-lijst-rij')].map((rij) => {
+        const lijn = (q) => {
+          const p = document.createElement('span');
+          p.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline';
+          rij.querySelector(q).appendChild(p);
+          const y = p.getBoundingClientRect().top; p.remove(); return y;
+        };
+        return { getal: lijn('.result-number'), label: lijn('.result-label'), bron: lijn('.af-lijst-waar') };
+      }));
+      expect(rijen.length, 'geen cijferrijen').toBeGreaterThanOrEqual(3);
+      const fout = rijen.flatMap((r, i) => ['label', 'bron'].filter((k) => Math.abs(r[k] - r.getal) > 1)
+        .map((k) => `rij ${i + 1}: ${k} ${(r[k] - r.getal).toFixed(1)}px van de basislijn`));
+      expect(fout).toEqual([]);
+    });
+  }
+
+  // Aangrenzend (critique s249): in het leerpad kwam "Lees eerst" in de Tab-volgorde vóór de
+  // knop maar stond hij in beeld eronder (`order: 2`). Bron- en beeldvolgorde zijn gelijk.
+  for (const vp of [{ width: 1440, height: 900 }, MOBIEL]) {
+    test(`@${vp.width}px volgt het leerpad in beeld de volgorde van de bron`, async ({ page }) => {
+      await page.setViewportSize(vp);
+      await page.goto('/index.html');
+      const voeten = await page.evaluate(() => [...document.querySelectorAll('.af-specimen-voet')]
+        .map((v) => [...v.querySelectorAll('a, button')].map((a) => a.getBoundingClientRect().top)));
+      expect(voeten.length, 'geen leerpadkolommen').toBe(3);
+      const fout = voeten.flatMap((tops, i) => tops.slice(1).filter((t, j) => t < tops[j] - 1).map(() => `kolom ${i + 1}: ${tops.map((t) => t.toFixed(0)).join(' > ')}`));
+      expect(voeten.every((t) => t.length >= 2), 'minder dan twee links per kolom').toBe(true);
+      expect(fout).toEqual([]);
     });
   }
 });
