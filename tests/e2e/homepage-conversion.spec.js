@@ -587,6 +587,8 @@ test.describe('Onderpagina', () => {
   // De glos-naad van de hero (terminal 1-7, uitleg 8-12) is de naad van de hele pagina:
   // elke tweedelige rij eronder deelt op dezelfde x. Sessie 243: ook in de band 1024-1279,
   // waar kop en actie onder elkaar vallen en de navbar inklapt; daar was hij ongedekt.
+  // Sessie 248 (layout): de cijfers lopen over de volle breedte en staan hier niet meer in;
+  // dat bewaakt "Layout (sessie 248)" (getal en bron op de twee rasterranden).
   for (const breedte of [1440, 1280, 1279, 1180, 1024]) {
     test(`@${breedte}px deelt elke tweedelige rij onder de hero op de glos-naad`, async ({ page }) => {
       await page.setViewportSize({ width: breedte, height: 900 });
@@ -595,7 +597,6 @@ test.describe('Onderpagina', () => {
         const naad = document.querySelector('.af-glos-kop').getBoundingClientRect().left;
         const paren = [
           ['.af-pijn-rij .af-transcript', '.af-pijn-rij .af-pijn-tekst'],
-          ['.af-inventaris .af-lijst', null],
           ['.af-faq .af-faq-lijst', '.af-faq .af-faq-lees'],
           ['.af-sample h2', '.af-sample p'],
           ['.af-news-tekst', '.af-news-form'],
@@ -1413,4 +1414,158 @@ test.describe('Finish review (sessie 246)', () => {
     await page.evaluate(() => { document.querySelector('.footer-donate').insertAdjacentText('afterbegin', '♥ '); });
     expect((await glyphs()).length, 'de teller ziet een ingespoten glyph niet').toBe(1);
   });
+});
+
+// Sessie 248 (layout): de cijfers over de volle breedte op het raster, en het slot als
+// tegenhanger van de hero. Twee besluiten gingen om: "haarlijnen alleen in de hero" (s242)
+// en "kolom 8-12 leeg naast de cijfers" (s245, proef N3). Zie het contract, "Layout (sessie 248)".
+test.describe('Layout (sessie 248)', () => {
+  test('slot en cijfers op elke breedte, per 8px van 320 tot 1920', async ({ page }) => {
+    test.setTimeout(120_000);
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/index.html');
+    await page.evaluate(() => document.fonts.ready);
+    const fout = { slotkop: [], slotKolom: [], slotRegel: [], slotOnder: [], getalRand: [], bronRand: [], getalSchaal: [], overlap: [], overloop: [] };
+    const tak = { naast: 0, onder: 0, bron: 0, zonderBron: 0, gemeten: 0 };
+    for (let w = 320; w <= 1920; w += 8) {
+      await page.setViewportSize({ width: w, height: 900 });
+      // WebKit werkt layout niet bij als het venster in kleine stappen over een mediagrens
+      // groeit (matchMedia zegt al het nieuwe): over 768 bleef `display: none` staan (85
+      // breedtes), over 1280 bleven hero- én slotactie links (81 van 81). Gemeten sessie 248,
+      // gelijk op HEAD vóór deze sessie; weg na een herlading. Zelfde familie als de rijhoogte
+      // in hero-demo (sessie 243). Dit meet layout per breedte, niet dat venstergedrag.
+      if (w === 768 || w === 1280) { await page.reload(); await page.evaluate(() => document.fonts.ready); }
+      const r = await page.evaluate(() => {
+        const R = (e) => e.getBoundingClientRect();
+        const raster = document.querySelector('.af-slot .af-raster');
+        const cs = getComputedStyle(raster);
+        const L = R(raster).left + parseFloat(cs.paddingLeft);
+        const Rr = R(raster).right - parseFloat(cs.paddingRight);
+        const h1 = parseFloat(getComputedStyle(document.querySelector('h1')).fontSize);
+        const kop = document.querySelector('.af-slot h2');
+        const zin = document.querySelector('.af-slot-zin');
+        const knop = document.querySelector('.af-slot .af-cta');
+        const rijen = [...document.querySelectorAll('.af-lijst-rij')].map((rij) => {
+          const g = rij.querySelector('.result-number'), l = rij.querySelector('.result-label'), b = rij.querySelector('.af-lijst-waar');
+          return { g: R(g), l: R(l), b: b.getClientRects().length ? R(b) : null, gFs: parseFloat(getComputedStyle(g).fontSize) };
+        });
+        return {
+          L, R: Rr, kol: (Rr - L) / 12, h1, kopFs: parseFloat(getComputedStyle(kop).fontSize),
+          breed: matchMedia('(min-width: 1280px)').matches,
+          zin: R(zin), zinPad: parseFloat(getComputedStyle(zin).paddingTop), knop: R(knop), rijen,
+          sw: document.documentElement.scrollWidth,
+        };
+      });
+      tak.gemeten++;
+      if (Math.abs(r.kopFs - r.h1) > 0.1) fout.slotkop.push(`${w}: ${r.kopFs} tegen h1 ${r.h1}`);
+      if (r.breed) {
+        tak.naast++;
+        const kol10 = r.L + 9 * r.kol;
+        if (r.knop.left < kol10 - 1 || r.knop.right > r.R + 1) fout.slotKolom.push(`${w}: knop ${r.knop.left.toFixed(1)}-${r.knop.right.toFixed(1)}, kolom 10 op ${kol10.toFixed(1)}`);
+        const regel = r.zin.top + r.zinPad;
+        if (Math.abs(r.knop.top - regel) > 1) fout.slotRegel.push(`${w}: knop ${r.knop.top.toFixed(1)}, eerste zinregel ${regel.toFixed(1)}`);
+      } else {
+        tak.onder++;
+        if (r.knop.top < r.zin.bottom - 1) fout.slotOnder.push(`${w}: knop ${r.knop.top.toFixed(1)} naast de zin (bodem ${r.zin.bottom.toFixed(1)})`);
+      }
+      r.rijen.forEach((q, i) => {
+        if (Math.abs(q.g.left - r.L) > 1) fout.getalRand.push(`${w} rij ${i}: getal op ${q.g.left.toFixed(1)}, rand ${r.L.toFixed(1)}`);
+        if (Math.abs(q.gFs - r.h1) > 0.1) fout.getalSchaal.push(`${w} rij ${i}: ${q.gFs} tegen h1 ${r.h1}`);
+        if (q.g.right > q.l.left + 0.5) fout.overlap.push(`${w} rij ${i}: getal tot ${q.g.right.toFixed(1)}, label vanaf ${q.l.left.toFixed(1)}`);
+        if (q.b) {
+          tak.bron++;
+          if (Math.abs(q.b.right - r.R) > 1) fout.bronRand.push(`${w} rij ${i}: bron tot ${q.b.right.toFixed(1)}, rand ${r.R.toFixed(1)}`);
+          if (q.l.right > q.b.left + 0.5) fout.overlap.push(`${w} rij ${i}: label tot ${q.l.right.toFixed(1)}, bron vanaf ${q.b.left.toFixed(1)}`);
+        } else tak.zonderBron++;
+      });
+      if (r.sw > w) fout.overloop.push(`${w}: scrollWidth ${r.sw}`);
+    }
+    // Zelfbewakend: beide vormen van het slot en beide vormen van de tabel zijn gemeten.
+    expect(tak.gemeten, 'niet elke breedte gemeten').toBe(201);
+    expect(tak.naast, 'nooit de brede vorm van het slot gemeten').toBeGreaterThan(50);
+    expect(tak.onder, 'nooit de gestapelde vorm van het slot gemeten').toBeGreaterThan(50);
+    expect(tak.bron, 'nooit een bron gemeten').toBeGreaterThan(100);
+    expect(tak.zonderBron, 'nooit de smalle tabel zonder bron gemeten').toBeGreaterThan(50);
+    expect(fout.slotkop, 'de slotkop staat niet op afficheschaal').toEqual([]);
+    expect(fout.slotKolom, 'de slotactie staat niet in kolom 10-12').toEqual([]);
+    expect(fout.slotRegel, 'de slotknop staat niet op de eerste regel van de zin').toEqual([]);
+    expect(fout.slotOnder, 'de slotactie staat smal niet onder de zin').toEqual([]);
+    expect(fout.getalRand, 'het getal staat niet op de linker rasterrand').toEqual([]);
+    expect(fout.bronRand, 'de bron staat niet op de rechter rasterrand').toEqual([]);
+    expect(fout.getalSchaal, 'het getal staat niet op afficheschaal').toEqual([]);
+    expect(fout.overlap, 'cellen van de cijfertabel overlappen').toEqual([]);
+    expect(fout.overloop, 'horizontale overloop').toEqual([]);
+  });
+
+  // Populatie: élk element in main met een betegelde verloop-achtergrond (tegel smaller dan
+  // het element), niet een lijst selectors. Uitzonderingen benoemd: hero en cijfers.
+  test('haarlijnen alleen in de hero en de cijfers', async ({ page }) => {
+    for (const breedte of [1440, 375]) {
+      await page.setViewportSize({ width: breedte, height: 900 });
+      await page.goto('/index.html');
+      const plekken = await page.evaluate(() => [...document.querySelectorAll('main *')].filter((e) => {
+        const c = getComputedStyle(e);
+        if (!c.backgroundImage.includes('linear-gradient')) return false;
+        const m = c.backgroundSize.split(',')[0].match(/([\d.]+)(%|px)/);
+        if (!m) return false;
+        const w = e.getBoundingClientRect().width;
+        const tegel = m[2] === '%' ? parseFloat(m[1]) / 100 * w : parseFloat(m[1]);
+        return tegel > 0 && tegel < w - 1;
+      }).map((e) => e.closest('section')?.id || e.className));
+      expect(plekken.filter((p) => p === 'hero').length, `@${breedte}: geen haarlijnen in de hero gemeten — de meting zag niets`).toBe(1);
+      expect(plekken.filter((p) => p === 'results').length, `@${breedte}: de cijfers staan niet op het raster`).toBe(1);
+      expect(plekken.filter((p) => p !== 'hero' && p !== 'results'), `@${breedte}: haarlijnen buiten hero en cijfers`).toEqual([]);
+    }
+  });
+
+  // Gerenderde pixels, niet de achtergrondkleur in de cascade: per kolomlijn die een tekstvak
+  // kruist, telt hoeveel pixelrijen in dat vak de lijnkleur hebben. Positieve controle: in
+  // de lucht tussen kop en tabel staat op elke lijn een pixel dat geen papier is.
+  for (const thema of ['light', 'dark']) {
+    test(`geen haarlijn door tekst in de cijfers, gerenderd (${thema})`, async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await page.goto('/index.html');
+      await zetThema(page, thema);
+      await page.locator('#results').scrollIntoViewIfNeeded();
+      await page.mouse.move(1, 1);
+      const png = (await page.locator('#results').screenshot()).toString('base64');
+      const m = await page.evaluate(async (b64) => {
+        const img = new Image(); img.src = `data:image/png;base64,${b64}`; await img.decode();
+        const sec = document.querySelector('#results'); const sr = sec.getBoundingClientRect();
+        const k = img.width / sr.width;
+        const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
+        const x = c.getContext('2d'); x.drawImage(img, 0, 0);
+        // In apparaatpixels: WebKit draait hier op deviceScaleFactor 2 en legt de tegels anders
+        // op het pixelraster dan Chromium. De lijnkolom wordt daarom gezocht, niet uitgerekend.
+        const dpx = (dx, Y) => [...x.getImageData(dx, Math.floor((Y - sr.top) * k), 1, 1).data].slice(0, 3).join(',');
+        const raster = sec.querySelector('.af-raster'); const rb = raster.getBoundingClientRect();
+        const pl = parseFloat(getComputedStyle(raster).paddingLeft); const kol = (rb.width - 2 * pl) / 12;
+        const yLucht = sec.querySelector('.af-lijst').getBoundingClientRect().top - 8;
+        const papier = dpx(Math.floor((rb.left + pl + kol * 11.5 - sr.left) * k), yLucht);
+        const kolommen = [...Array(11)].map((_, i) => {
+          const X = rb.left + pl + (i + 1) * kol - sr.left;
+          for (let dx = Math.floor((X - 3) * k); dx <= Math.ceil((X + 3) * k); dx++) if (dpx(dx, yLucht) !== papier) return dx;
+          return null;
+        });
+        const controle = kolommen.map((dx) => (dx === null ? papier : dpx(dx, yLucht)));
+        const lijnen = kolommen.map((dx) => (dx === null ? -1 : dx / k + sr.left));
+        const px = (X, Y) => dpx(Math.round((X - sr.left) * k), Y);
+        const tekst = [...sec.querySelectorAll('h2, .af-kop p, .result-number, .result-label, .af-lijst-waar')].filter((e) => e.getClientRects().length);
+        const door = [];
+        for (const e of tekst) {
+          const q = e.getBoundingClientRect();
+          lijnen.forEach((X, i) => {
+            if (X <= q.left + 2 || X >= q.right - 2) return;
+            let n = 0, rijen = 0;
+            for (let Y = q.top + 1; Y < q.bottom - 1; Y += 1) { rijen++; if (px(X, Y) === controle[i]) n++; }
+            if (n / rijen > 0.3) door.push(`${e.className || e.tagName} lijn ${i + 1}: ${n}/${rijen}`);
+          });
+        }
+        return { papier, controle, tekst: tekst.length, door };
+      }, png);
+      expect(m.tekst, 'geen tekst in de cijfers gemeten').toBeGreaterThanOrEqual(9);
+      expect(m.controle.filter((c) => c === m.papier), 'positieve controle: geen haarlijn zichtbaar in de lucht').toEqual([]);
+      expect(m.door, 'haarlijn door tekst in de cijfers').toEqual([]);
+    });
+  }
 });

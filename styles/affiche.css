@@ -76,13 +76,15 @@ body.home {
   --af-kop: 'Archivo', 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif;
   --af-tekst: var(--font-body);
   --af-mono: var(--font-terminal);
-  --af-display: clamp(2.2rem, 4.6vw, 3.6rem);   /* max 64,8px: slotkop */
   /* De h1 op afficheschaal, over alle twaalf kolommen (sessie 247, bolder). Tot dan stond
      hij op --af-display over negen kolommen: 1,26x de sectiekop, en het zwaarste vlak van
      het eerste scherm was de terminal, niet de kop. Het plafond is de rasterbreedte, niet
      de viewport: het raster stopt op 1400px, en 6rem (108px) gaf op 1920 drie regels.
      4.9rem = 88,2px past in twee regels op 1336px tekstbreedte. Onder ~570px wint
-     2.2rem: 40px gaf op 375 vijf regels, 35,2 vier. */
+     2.2rem: 40px gaf op 375 vijf regels, 35,2 vier.
+     Sinds sessie 248 (layout) ook de slotkop: het slot herhaalt de compositie van het
+     eerste scherm, zodat de pagina eindigt in de vorm waarin ze begint. --af-display
+     (64,8px), dat alleen de slotkop droeg, is daarmee vervallen. */
   --af-affiche: clamp(2.2rem, 6.2vw, 4.9rem);
   --af-h2: clamp(1.75rem, 3.3vw, 2.85rem);      /* max 51,3px */
   --af-h3: 1.22rem;                              /* 22px */
@@ -226,8 +228,12 @@ body.home code {
 
 /* De haarlijnen zijn zichtbaar in het eerste scherm: daar ís het raster de vorm. Eén
    achtergrondlaag, geen extra DOM. Twaalf tegels over de contentbox, plus de rechterrand
-   apart (de laatste tegel eindigt precies op de rand en tekent die dus niet). */
-.af-hero-raster {
+   apart (de laatste tegel eindigt precies op de rand en tekent die dus niet).
+   Sessie 248 (layout): ook in de cijfers, en verder nergens. Daar is het raster een tabel
+   (rijlijnen kruisen kolomlijnen) en geen behang; het stopte tot dan na het eerste scherm.
+   Bewaakt: "haarlijnen alleen in hero en cijfers". */
+.af-hero-raster,
+.af-inventaris .af-raster {
   background-image:
     linear-gradient(to right, var(--af-lijn) 1px, transparent 1px),
     linear-gradient(to left, var(--af-lijn) 1px, transparent 1px);
@@ -1270,25 +1276,41 @@ body.home .af-transcript .terminal-line.error { color: var(--af-m-fout); }
 }
 
 /* ==================== Inventaris ==================== */
+/* Over de volle breedte, op het raster (sessie 248, layout): het getal in kolom 1-3, wat
+   het is in 4-9, de bron rechts op de rasterrand. Tot dan stond de tabel in kolom 1-7 en
+   bleef 8-12 leeg (sessie 245, proef N3). Elke cel snijdt zich met papier uit de
+   haarlijnen, zoals de alinea's in de hero, zodat er geen lijn door een cijfer loopt. */
 .af-lijst {
-  grid-column: 1 / 8;
+  grid-column: 1 / -1;
   grid-row: 2;
+  display: grid;
+  grid-template-columns: subgrid;
   border-top: 2px solid var(--af-inkt);
 }
 
+.af-inventaris .af-kop > * {
+  width: fit-content;
+  background: var(--af-papier);
+}
+
 body.home .af-lijst-rij {
+  grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: 11rem minmax(0, 1fr) auto;
+  grid-template-columns: subgrid;
   align-items: center;
-  column-gap: var(--af-cel);
-  min-height: 88px;
-  padding: 12px 0;
+  padding: 16px 0;
   border-bottom: 1px solid var(--af-lijn-sterk);
   color: var(--af-inkt);
   text-decoration: none;
 }
 
-body.home .af-lijst-rij:hover {
+body.home .af-lijst-rij > * {
+  width: fit-content;
+  background: var(--af-papier);
+}
+
+body.home .af-lijst-rij:hover,
+body.home .af-lijst-rij:hover > * {
   background: var(--af-inkt);
   color: var(--af-papier);
 }
@@ -1302,26 +1324,31 @@ body.home .af-lijst-rij:hover .af-lijst-waar {
    elk getal in een tabelrij met zijn bron ernaast, natelbaar, zonder kleur. Op 19px mono
    was het getal het kleinste element van een sectie die "in cijfers" heet. */
 body.home .af-lijst .result-number {
-  padding-left: var(--af-cel);
+  grid-column: 1 / 4;
+  padding-left: 0;
   text-align: left;               /* landing.css zet hem rechts voor de oude tegels */
   font-family: var(--af-kop);
-  font-size: clamp(2rem, 3.4vw, 3rem);
+  font-size: var(--af-affiche);   /* sessie 248: de schaalsprong midden op de pagina */
   font-weight: 700;
-  line-height: 1;
+  line-height: 0.94;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
   color: inherit;
-  background: none;
   -webkit-text-fill-color: currentColor;
 }
 
 body.home .af-lijst .result-label {
-  font-size: 1rem;
+  grid-column: 4 / 10;
+  padding-left: var(--af-cel);
+  max-width: 40ch;
+  font-size: 1.1rem;
   color: inherit;
   text-wrap: pretty;   /* "naam)" stond op 1024-1920 alleen op de laatste regel */
 }
 
 .af-lijst-waar {
+  grid-column: 10 / -1;
+  justify-self: end;
   padding-right: var(--af-cel);
   text-align: right;
   font-family: var(--af-mono);
@@ -1588,11 +1615,11 @@ body.home .af-slot .btn-cta.af-cta:focus-visible {
 }
 
 .af-slot h2 {
-  grid-column: 1 / 8;
-  font-size: var(--af-display);
+  grid-column: 1 / -1;
+  font-size: var(--af-affiche);
   font-weight: 700;
-  line-height: 0.98;
-  letter-spacing: -0.012em;
+  line-height: 0.94;
+  letter-spacing: -0.02em;
 }
 
 .af-slot-zin {
@@ -1604,6 +1631,29 @@ body.home .af-slot .btn-cta.af-cta:focus-visible {
 .af-slot .af-actie {
   grid-column: 1 / 8;
   padding-top: 32px;
+}
+
+/* De tegenhanger van de hero (sessie 248, layout): kop over twaalf kolommen, de zin in
+   kolom 1-8 en de actie in 10-12 op dezelfde rij, de knop op de hoogte van de eerste regel
+   van de zin. Tot dan stond alles in kolom 1-7 en bleef 5/12 van de inktband leeg.
+   Dezelfde grens als de hero: daaronder is kolom 10-12 te smal voor de knop. */
+@media (min-width: 1280px) {
+  .af-slot-zin {
+    grid-column: 1 / 9;
+    grid-row: 2;
+    align-self: start;
+    padding-top: 28px;
+  }
+
+  .af-slot .af-actie {
+    grid-column: 10 / -1;
+    grid-row: 2;
+    align-self: start;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 28px 0 0 var(--af-cel);   /* 28px = padding-top van de zin */
+  }
 }
 
 
@@ -1982,7 +2032,6 @@ body.home .cookie-banner .btn-small.btn-secondary:focus-visible {
     grid-column: 1 / -1;
   }
 
-  .af-lijst,
   .af-faq-lijst {
     grid-column: 1 / -1;
   }
@@ -2054,7 +2103,8 @@ body.home .cookie-banner .btn-small.btn-secondary:focus-visible {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  .af-hero-raster {
+  .af-hero-raster,
+  .af-inventaris .af-raster {
     background-size: calc(100% / 4) 100%, 100% 100%;
   }
 
@@ -2212,9 +2262,14 @@ body.home .cookie-banner .btn-small.btn-secondary:focus-visible {
     padding: 0;
   }
 
-  body.home .af-lijst-rij {
-    grid-template-columns: 5.5rem 1fr;
-    min-height: 72px;
+  /* Vier kolommen: het getal in de eerste, de omschrijving over de andere drie. */
+  body.home .af-lijst .result-number {
+    grid-column: 1 / 2;
+  }
+
+  body.home .af-lijst .result-label {
+    grid-column: 2 / -1;
+    font-size: 1rem;
   }
 
   .af-lijst-waar {
