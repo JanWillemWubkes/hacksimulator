@@ -8,50 +8,19 @@
  * kleur. De terminal is een donkere module die binnen zijn rand zijn eigen
  * betekeniskleuren houdt (prompt, tip, fout) — dat is inhoud, geen decoratie.
  *
- * Alleen index.html laadt dit bestand, als laatste. Alles hangt onder body.home:
- * - de gedeelde componenten (navbar, footer, .btn-cta, schakelaar) worden hier niet
- *   bevochten maar opnieuw getokend — hun regels lezen custom properties, en de
- *   dichtstbijzijnde declaratie wint;
- * - de secties zelf dragen eigen af-klassen, zodat de gedeelde regels van landing.css
- *   (die 25 pagina's laden) er niet op matchen.
+ * Alleen index.html laadt dit bestand, als laatste, ná affiche-basis.css. Dat bestand
+ * draagt sinds sessie 252 wat elke pagina deelt: het palet (--af-papier, --af-inkt,
+ * --af-rood, ...), de Archivo-letter, het hertokenen van de gedeelde regels, en navbar,
+ * footer en consentbanner. Hier staat alleen de pagina zelf, onder body.home:
+ * - de module- en ritmetokens van deze pagina;
+ * - de secties, met eigen af-klassen, zodat de gedeelde regels van landing.css (die 25
+ *   pagina's laden) er niet op matchen.
  *
  * Elke kleurwaarde hieronder is gemeten, niet geschat (ratio's in de comments, WCAG 2.x).
  */
 
-/* ==================== Letter ==================== */
-/* Archivo: neo-grotesk, geïnstantieerd op wdth 100 en wght 700–800, gesubset op dezelfde
-   219 codepoints als Atkinson Hyperlegible Next. 20.688 B; fonttotaal 90.156 B, onder de
-   lat van 106.016 B in hero-accent-budget.spec.js. Sessie 240: koppen 700 (was 900, las
-   als startup-display en liet de woordspaties dichtlopen), labels 800; 900 had geen
-   gebruiker meer en is eruit (−1.380 B, gerenderde breedtes op 700 en 800 identiek). Staat hier en niet in main.css: alleen
-   deze pagina gebruikt hem, en een @font-face zonder gebruiker downloadt niets maar is
-   wel ruis in het gedeelde bestand. */
-@font-face {
-  font-family: 'Archivo';
-  font-style: normal;
-  font-weight: 700 800;
-  font-display: swap;
-  src: url('/styles/fonts/archivo-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
 /* ==================== Tokens ==================== */
 body.home {
-  /* Papier en inkt. Neutraal-koel gebroken wit, bewust geen crème: crème + rood is een
-     van de looks waar gegenereerde ontwerpen standaard op landen (new-work.md §4). */
-  --af-papier: #efefec;
-  --af-papier-2: #e2e2de;      /* banden; inkt erop 14,54:1 */
-  --af-inkt: #111111;          /* 16,39:1 op papier */
-  --af-inkt-2: #444440;        /* gedempte tekst: 8,49 op papier, 7,53 op papier-2 */
-  --af-lijn: #c9c9c4;          /* rasterlijnen: decoratief, draagt geen informatie */
-  --af-lijn-sterk: #7a7a75;    /* randen van bedieningselementen: 3,74 / 3,32 (≥3 niet-tekst) */
-
-  /* Het signaal. Alleen als vlak met een witte letter op groot formaat (20,7px bold, dus
-     de lat voor grote tekst: 4,5) of als niet-tekstig merkteken (lat 3). Wit op rood
-     5,79; rood op papier 5,02. Kleine rode tekst komt op deze pagina niet voor. */
-  --af-rood: #cc0a1e;
-  --af-op-rood: #ffffff;
-
   /* De module: in beide thema's zwart. Sinds sessie 250 spreekt hij de taal van de pagina
      (proef A/B, B gekozen): tekst uit de papierfamilie in plaats van GitHub-blauwgrijs, de
      prompt in papier 700 in plaats van lime, de cursor in het signaalrood (jij bent aan
@@ -72,17 +41,12 @@ body.home {
   --af-m-oplicht: #23231f;
 
   /* Maat en ritme */
-  --af-breed: 1400px;
-  --af-rand: clamp(16px, 3vw, 32px);
   --af-cel: clamp(12px, 1.4vw, 20px);
   --af-sectie: clamp(72px, 9vw, 136px);
   /* Korte secties (cijfers, slot, sample, nieuwsbrief): regel lucht <= inhoud. Met één
      maat voor alles hadden sample en nieuwsbrief meer lucht dan inhoud (259 tegen 184 en
      155 @1440), en las de reeks als een metronoom (sessie 242). */
   --af-sectie-kort: clamp(48px, 5vw, 72px);
-  --af-kop: 'Archivo', 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif;
-  --af-tekst: var(--font-body);
-  --af-mono: var(--font-terminal);
   /* De h1 op afficheschaal, over alle twaalf kolommen (sessie 247, bolder). Tot dan stond
      hij op --af-display over negen kolommen: 1,26x de sectiekop, en het zwaarste vlak van
      het eerste scherm was de terminal, niet de kop. Het plafond is de rasterbreedte, niet
@@ -100,54 +64,13 @@ body.home {
   --af-ease: cubic-bezier(0.16, 1, 0.3, 1);
   --af-registratie: 700ms;
 
-  /* De gedeelde componenten, opnieuw getokend in plaats van overschreven. */
-  --color-bg: var(--af-papier);
-  --color-text: var(--af-inkt);
-  --color-text-dim: var(--af-inkt-2);
-  --color-text-secondary: var(--af-inkt-2);
-  --color-border: var(--af-lijn-sterk);
-  --color-link: var(--af-inkt);
-  --color-link-hover: var(--af-inkt);
-  /* Het groen en de accenttekst van de vorige wereld: hier is elke interactieve tekst inkt
-     (toestanden via inversie). #075f2a mat 6,8:1 op dit papier. */
-  --color-accent-text: var(--af-inkt);
-  --color-ui-primary: var(--af-inkt);
-  --color-ui-hover: var(--af-inkt);
-  --font-heading: var(--af-kop);
-
-  --color-bg-navbar: var(--af-papier);
-  --color-bg-navbar-mobile: var(--af-papier);
-  --color-navbar-link: var(--af-inkt);
-  --color-navbar-link-hover: var(--af-inkt);
-  --color-border-dark-frame: var(--af-inkt);
-  --color-toggle-text-inactive: var(--af-inkt-2);
-  --color-toggle-hover: var(--af-papier-2);
-  --color-bg-footer: var(--af-inkt);
-
-  --color-cta-primary: var(--af-rood);
-  --color-cta-primary-hover: var(--af-inkt);
-  --color-cta-text: var(--af-op-rood);
-
-  --border-radius-button: 0;
-  --border-radius-small: 0;
-  --border-radius-modal: 0;
-  --border-radius-cta-nav: 0;
-
   background: var(--af-papier);
   color: var(--af-inkt);
 }
 
-/* Het donkere thema: het geïnverteerde affiche. Inkt wordt grond, papier wordt letter.
-   Gemeten op #111111: papier 16,39 · dim 8,67 (7,79 op grond-2) · rand 3,74 / 3,38.
-   Het rood blijft; als merkteken 3,26 op de grond. De module blijft zwart en wordt door
-   een papieren haarlijn van de inktgrond gescheiden. */
+/* Het donkere thema: het palet staat in affiche-basis.css (:root[data-theme="dark"]); hier
+   alleen de module, die op de inktgrond nog dieper zwart wordt. */
 [data-theme="dark"] body.home {
-  --af-papier: #111111;
-  --af-papier-2: #1c1c1b;
-  --af-inkt: #efefec;
-  --af-inkt-2: #b0b0ab;
-  --af-lijn: #2e2e2c;
-  --af-lijn-sterk: #6f6f6a;
   --af-m-grond: #000000;
   --af-m-lijn: #3a3a37;
 }
@@ -184,12 +107,6 @@ body.home ::selection {
 body.home :focus-visible {
   outline: 2px solid var(--af-rood);   /* focus = hier ben jij: het enige andere rood */
   outline-offset: 2px;
-}
-
-/* landing.css geeft de schakelaar een eigen, blauwe ring (--color-info, (0,3,0)); hier
-   draagt hij hetzelfde rood als de andere 60 focusbare elementen op de pagina. */
-body.home .theme-toggle:focus-visible {
-  outline-color: var(--af-rood);
 }
 
 /* De skiplink heeft een kader; body.home a zette er een onderstreping bij. */
@@ -248,74 +165,6 @@ body.home code {
   background-repeat: repeat-x, no-repeat;
   background-origin: content-box;
   background-clip: content-box;
-}
-
-/* ==================== Navbar op deze pagina ==================== */
-/* Papier met een inktlijn eronder; de kleuren komen uit de tokens hierboven. */
-body.home .landing-nav-wrapper {
-  border-bottom-width: 1px;
-}
-
-/* Een woordmerk is geen actie (sessie 236): geen onderstreping, in rust noch bij hover, en
-   dat geldt ook voor het merk in de footer (besluit eigenaar, sessie 245). body.home a gaf
-   het in rust een lijn. main.css kleurt bij hover élke span in het merk lime
-   (.nav-brand:hover span); de naam zelf is een klasseloze span, dus die regel staat hier op
-   span en niet op .brand-accent alleen (gemeten sessie 245). */
-body.home .nav-brand,
-body.home .nav-brand:hover,
-body.home .landing-footer a.footer-logo,
-body.home .landing-footer a.footer-logo:hover {
-  text-decoration: none;
-}
-
-body.home .nav-brand {
-  font-family: var(--af-kop);
-  font-weight: 800;
-}
-
-body.home .nav-brand:hover,
-body.home .nav-brand:hover span,
-body.home .nav-brand:hover .brand-icon {
-  color: var(--af-inkt);
-}
-
-body.home .nav-links a {
-  text-decoration: none;
-}
-
-body.home .nav-links a:hover {
-  background: var(--af-inkt);
-  color: var(--af-papier);
-}
-
-/* De nav-CTA draagt hetzelfde label als de hero-actie in hetzelfde scherm; rood is
-   daarom voor de hero. Hier een inkten kader, en bij hover de inversie. */
-body.home .btn-cta-nav {
-  background: transparent;
-  color: var(--af-inkt);
-  border: 1px solid var(--af-inkt);
-  text-decoration: none;
-}
-
-body.home .btn-cta-nav:hover {
-  background: var(--af-inkt);
-  color: var(--af-papier);
-  border-color: var(--af-inkt);
-  transform: none;
-}
-
-body.home #landing-mobile-menu .navbar-links a {
-  color: var(--af-inkt);
-  text-decoration: none;
-}
-
-body.home .navbar-links .mobile-cta-link {
-  color: var(--af-inkt);
-  font-weight: 700;
-}
-
-body.home .navbar-toggle span {
-  background-color: var(--af-inkt);
 }
 
 /* ==================== De actie ==================== */
@@ -1768,127 +1617,20 @@ body.home .af-news .newsletter-or-support {
   text-align: left;
 }
 
-/* ==================== Footer ==================== */
-/* De pagina eindigt op een inktvlak: het omgekeerde affiche als slot. In het donkere
-   thema is "inkt" papier; daar blijft de footer zwart, zodat hij zijn gemeten
-   tekstkleuren houdt. De gedeelde regels lezen --color-bg-footer alleen in het lichte
-   thema (main.css), en in donker gaf de basisregel rgba(22,27,34,.5): een blauwe zweem
-   van het oude GitHub-palet (gemeten sessie 243). Daarom leest de footer hier zelf. */
-[data-theme="dark"] body.home {
-  --color-bg-footer: #000000;
-}
-
-/* In de footer draaien papier en inkt om: hier is inkt de grond. Dan lezen de gedeelde
-   linkregel (body.home a) en de schakelaars van deze wereld vanzelf papier, en de twee
-   lime tokens waar footer.js-markup op leunt (kolomkoppen, hovers) worden papier.
-   Papier op #111: 16,39; gedempt #b0b0ab: 8,67. Op #000 (donker thema) hoger. */
-body.home .landing-footer {
-  background: var(--color-bg-footer);
-  --af-inkt: #efefec;
-  --af-inkt-2: #b0b0ab;
-  --af-papier: #111111;
-  --color-cta-dark-frame: #efefec;
-  --color-navbar-link-hover: #efefec;
-  --color-footer-link-hover: #efefec;
-  border-top: 0;
-}
-
-/* De footer op de rail van het raster: zelfde rand, zelfde contentbreedte. Hij had
-   32px padding en een eigen max-width van 1400px, dus zijn inhoud begon 13px naast de
-   rail (gemeten op 1440). */
-body.home .landing-footer {
-  padding-inline: var(--af-rand);
-}
-
-body.home .landing-footer .footer-content,
-body.home .landing-footer .footer-bottom {
-  max-width: calc(var(--af-breed) - 2 * var(--af-rand));
-  margin-inline: auto;
-}
-
-body.home .landing-footer a {
-  text-decoration: none;
-}
-
-body.home .landing-footer a:hover {
-  text-decoration: underline;
-}
-
-/* De Ko-fi-link droeg een lime waas (rgba op de footer). Hier een papieren kader, en bij
-   hover de inversie zoals elke knop op de pagina; de onderstreping van de footerlinks
-   stond anders als tweede lijn in het kader. */
-body.home a.footer-donate,
-body.home a.footer-donate:hover {
-  background-color: transparent;
-  border: 1px solid var(--af-inkt);
-  border-radius: 0;
-  color: var(--af-inkt);
-  box-shadow: none;
-  transform: none;
-}
-
-body.home .landing-footer a.footer-donate:hover {
-  background-color: var(--af-inkt);
-  color: var(--af-papier);
-  text-decoration: none;
-}
-
-/* Het GitHub-icoon: zijn hover was alleen een onderstreping, en een icoon heeft er geen.
-   Nu dezelfde inversie als de knop ernaast. */
-body.home .landing-footer .footer-social a:hover {
-  background-color: var(--af-inkt);
-  color: var(--af-papier);
-  transform: none;
-}
-
-/* ==================== Consentbanner ==================== */
-/* Het eerste wat elke nieuwe bezoeker ziet, en hij stond nog in de oude wereld: in licht
-   een witte kaart (--color-bg-modal) met blauwe knoppen (--color-ui-secondary #074fa4),
-   in donker de GitHub-slate #161b22 (gemeten sessie 246). Nu zoals de mobiele CTA-balk:
-   papier, een inktlijn boven, knoppen met een inkten kader die inverteren. Beide knoppen
-   blijven gelijkwaardig: weigeren mag niet zwakker ogen dan accepteren (geen dark pattern). */
-body.home .cookie-banner {
+/* ==================== Mobiele CTA-balk ==================== */
+html.nav-ingeklapt body.home .mobile-cta-bar {
   background-color: var(--af-papier);
-  color: var(--af-inkt);
+  backdrop-filter: none;
   border-top: 1px solid var(--af-inkt);
 }
 
-body.home .cookie-banner .btn-small.btn-secondary {
-  min-height: 44px;
-  background-color: transparent;
-  color: var(--af-inkt);
-  border: 1px solid var(--af-inkt);
-  border-radius: 0;
-  font-family: var(--af-tekst);
-  font-weight: 700;
-  box-shadow: none;
-  transform: none;
+html.nav-ingeklapt body.home .mobile-cta-bar .btn-cta.af-cta {
+  width: 100%;
+  max-width: 420px;
+  min-height: 52px;
+  transition-property: opacity;
 }
 
-body.home .cookie-banner .btn-small.btn-secondary:hover,
-body.home .cookie-banner .btn-small.btn-secondary:focus-visible {
-  background-color: var(--af-inkt);
-  color: var(--af-papier);
-  border-color: var(--af-inkt);
-  box-shadow: none;
-  transform: none;
-}
-
-/* ==================== Mobiele CTA-balk ==================== */
-@media (max-width: 1279px) {
-  body.home .mobile-cta-bar {
-    background-color: var(--af-papier);
-    backdrop-filter: none;
-    border-top: 1px solid var(--af-inkt);
-  }
-
-  body.home .mobile-cta-bar .btn-cta.af-cta {
-    width: 100%;
-    max-width: 420px;
-    min-height: 52px;
-    transition-property: opacity;
-  }
-}
 
 /* ==================== Tot 1280px: kop en actie onder elkaar ==================== */
 @media (max-width: 1279px) {

@@ -1,0 +1,539 @@
+/**
+ * affiche-basis.css — de gedeelde laag van het affiche (sessie 252, TASKS #85)
+ *
+ * Wat elke pagina deelt: de letter van het woordmerk, de affichetokens, en de chrome die op
+ * elke pagina staat (navbar, footer, consentbanner). Elke pagina met die componenten laadt
+ * dit bestand als laatste stylesheet. affiche.css (alleen index.html) bouwt erop voort met de
+ * pagina zelf; de andere pagina's staan met hun inhoud nog in de oude wereld en gaan één per
+ * sessie over (PLANNING.md, Design System).
+ *
+ * Twee regels die de grens tussen die werelden bewaken:
+ * - Hertokenen gebeurt op de wortel van een component, nooit op :root. De oude wereld leest
+ *   dezelfde tokens ook in pagina-inhoud (--color-bg-footer in .blog-post-footer,
+ *   --color-cta-dark-frame in iconen van blog en landing); op :root zou die inhoud
+ *   meeveranderen. Op de wortel erven alleen de kinderen van de component.
+ * - De pagina's die al in het affiche staan (nu body.home) staan in dezelfde lijst: een
+ *   gemigreerde pagina is voor de tokens gewoon één wortel meer.
+ *
+ * Elke kleurwaarde is gemeten (WCAG 2.x, ratio's in de comments).
+ */
+
+/* ==================== Letter ==================== */
+/* Archivo: neo-grotesk, geïnstantieerd op wdth 100 en wght 700–800, gesubset op dezelfde
+   219 codepoints als Atkinson Hyperlegible Next. 20.688 B; sinds sessie 252 op elke pagina,
+   want het woordmerk in navbar en footer staat erin (Archivo 800). Sessie 240: koppen 700,
+   labels 800; 900 had geen gebruiker en is eruit. */
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700 800;
+  font-display: swap;
+  src: url('/styles/fonts/archivo-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ==================== Tokens ==================== */
+:root {
+  /* Papier en inkt. Neutraal-koel gebroken wit, bewust geen crème: crème + rood is een
+     van de looks waar gegenereerde ontwerpen standaard op landen (new-work.md §4). */
+  --af-papier: #efefec;
+  --af-papier-2: #e2e2de;      /* banden; inkt erop 14,54:1 */
+  --af-inkt: #111111;          /* 16,39:1 op papier */
+  --af-inkt-2: #444440;        /* gedempte tekst: 8,49 op papier, 7,53 op papier-2 */
+  --af-lijn: #c9c9c4;          /* rasterlijnen: decoratief, draagt geen informatie */
+  --af-lijn-sterk: #7a7a75;    /* randen van bedieningselementen: 3,74 / 3,32 (≥3 niet-tekst) */
+
+  /* Het signaal. Alleen als vlak met een witte letter op groot formaat (lat 4,5) of als
+     niet-tekstig merkteken (lat 3). Wit op rood 5,79; rood op papier 5,02. */
+  --af-rood: #cc0a1e;
+  --af-op-rood: #ffffff;
+
+  /* De footer is in beide thema's een inktvlak. Een eigen token en geen var(--af-inkt):
+     in de footer draaien papier en inkt om, dus daar ís --af-inkt papier. */
+  --af-footer: #111111;
+
+  --af-breed: 1400px;
+  --af-rand: clamp(16px, 3vw, 32px);
+  --af-kop: 'Archivo', 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif;
+  --af-tekst: var(--font-body);
+  --af-mono: var(--font-terminal);
+}
+
+/* Het donkere thema: het geïnverteerde affiche. Inkt wordt grond, papier wordt letter.
+   Gemeten op #111111: papier 16,39 · dim 8,67 (7,79 op grond-2) · rand 3,74 / 3,38.
+   Het rood blijft; als merkteken 3,26 op de grond. De footer wordt zwart (#000), zodat
+   hij zich van de grond scheidt en zijn gemeten tekstkleuren houdt. */
+:root[data-theme="dark"] {
+  --af-papier: #111111;
+  --af-papier-2: #1c1c1b;
+  --af-inkt: #efefec;
+  --af-inkt-2: #b0b0ab;
+  --af-lijn: #2e2e2c;
+  --af-lijn-sterk: #6f6f6a;
+  --af-footer: #000000;
+}
+
+/* ==================== Hertokenen op de wortel ==================== */
+/* De gedeelde regels in main.css en landing.css lezen custom properties; hier krijgen die
+   op de wortel van elke component de waarden van het affiche, en de dichtstbijzijnde
+   declaratie wint. Het groen en de accenttekst van de vorige wereld worden inkt: hier is
+   elke interactieve tekst inkt en spreekt een toestand via inversie. */
+body.home,
+.landing-nav-wrapper,
+#landing-mobile-menu,
+#navbar,
+.landing-footer,
+.cookie-banner {
+  --color-bg: var(--af-papier);
+  --color-text: var(--af-inkt);
+  --color-text-dim: var(--af-inkt-2);
+  --color-text-secondary: var(--af-inkt-2);
+  --color-border: var(--af-lijn-sterk);
+  --color-link: var(--af-inkt);
+  --color-link-hover: var(--af-inkt);
+  --color-accent-text: var(--af-inkt);
+  --color-ui-primary: var(--af-inkt);
+  --color-ui-hover: var(--af-inkt);
+  --font-heading: var(--af-kop);
+
+  --color-bg-navbar: var(--af-papier);
+  --color-bg-navbar-mobile: var(--af-papier);
+  --color-navbar-link: var(--af-inkt);
+  --color-navbar-link-hover: var(--af-inkt);
+  --color-border-dark-frame: var(--af-inkt);
+  --color-toggle-text-inactive: var(--af-inkt-2);
+  --color-toggle-hover: var(--af-papier-2);
+  --color-cta-dark-frame: var(--af-inkt);
+  --color-cta-dark-frame-hover: var(--af-inkt);
+  --color-navbar-action: var(--af-inkt);
+  --color-navbar-dropdown-icon: var(--af-inkt-2);
+  --color-bg-dropdown: var(--af-papier);
+  --color-bg-dropdown-hover: var(--af-inkt);
+  --color-bg-footer: var(--af-footer);
+
+  --color-cta-primary: var(--af-rood);
+  --color-cta-primary-hover: var(--af-inkt);
+  --color-cta-text: var(--af-op-rood);
+
+  --border-radius-button: 0;
+  --border-radius-small: 0;
+  --border-radius-modal: 0;
+  --border-radius-cta-nav: 0;
+}
+
+/* ==================== Focus in de chrome ==================== */
+/* Focus = hier ben jij: het enige andere rood. Binnen de chrome op elke pagina; de focus
+   van de pagina-inhoud hoort bij de pagina en gaat mee als die migreert. De schakelaar staat
+   er apart in: landing.css geeft hem een blauwe ring op (0,3,0), en op gelijke stand wint
+   dit bestand op volgorde. */
+.landing-nav-wrapper :focus-visible,
+#landing-mobile-menu :focus-visible,
+#navbar :focus-visible,
+.landing-footer :focus-visible,
+.landing-footer .footer-column a:focus-visible,
+.landing-footer a.footer-donate:focus-visible,
+.cookie-banner :focus-visible,
+.theme-toggle:focus-visible,
+.landing-nav .theme-toggle:focus-visible {
+  outline: 2px solid var(--af-rood);
+  outline-offset: 2px;
+}
+
+/* ==================== Navbar ==================== */
+/* Papier met een inktlijn eronder; de kleuren komen uit de tokens hierboven. De letter zet
+   de wortel zelf: hij erfde die van de pagina, en op een pagina in de oude wereld is dat de
+   oude tekstkleur (gemeten sessie 252 via de schakelaar, die currentColor leest). */
+.landing-nav-wrapper,
+#landing-mobile-menu,
+#navbar {
+  color: var(--af-inkt);
+}
+
+.landing-nav-wrapper {
+  border-bottom-width: 1px;
+}
+
+/* Een woordmerk is geen actie (sessie 236): geen onderstreping en geen kleurwissel, in rust
+   noch bij hover, en dat geldt ook voor het merk in de footer (besluit eigenaar, sessie
+   245). main.css kleurt bij hover élke span in het merk (.nav-brand:hover span); de naam
+   zelf is een klasseloze span, dus die regel staat hier op span en niet op .brand-accent
+   alleen (gemeten sessie 245). */
+.landing-nav a.nav-brand,
+.landing-nav a.nav-brand:hover,
+#navbar a.nav-brand,
+#navbar a.nav-brand:hover,
+.landing-footer a.footer-logo[href],
+.landing-footer a.footer-logo[href]:hover {
+  text-decoration: none;
+}
+
+.nav-brand {
+  font-family: var(--af-kop);
+  font-weight: 800;
+}
+
+.nav-brand:hover,
+.nav-brand:hover span,
+.nav-brand:hover .brand-icon {
+  color: var(--af-inkt);
+}
+
+.landing-nav .nav-links a,
+#navbar .navbar-links a {
+  text-decoration: none;
+}
+
+.landing-nav .nav-links a:hover,
+#navbar .navbar-links a:hover,
+#navbar .navbar-action:hover {
+  background: var(--af-inkt);
+  color: var(--af-papier);
+}
+
+/* De iconen in de app-navbar (zoeken, GitHub) tilden bij hover 2px op: niets zweeft. */
+#navbar .navbar-action:hover {
+  transform: none;
+}
+
+/* Het Help-menu van de app-navbar: papier met een inkten kader, en een regel inverteert. Het
+   pijltje voor elke regel staat gedempt en gaat in het blok mee met de letter. Zonder
+   animatie, zoals de FAQ. */
+#navbar .dropdown-menu {
+  border-color: var(--af-inkt);
+  box-shadow: none;
+  animation: none;
+}
+
+#navbar .dropdown-menu a:hover::before {
+  color: inherit;
+}
+
+/* De nav-CTA is een inkten kader, op elke pagina. Rood is per scherm één drager, de
+   primaire actie van de pagina zelf; en waar die nog in de oude wereld staat, mag de nav er
+   niet met een tweede kleur naast gaan staan. */
+.landing-nav .btn-cta-nav {
+  background: transparent;
+  color: var(--af-inkt);
+  border: 1px solid var(--af-inkt);
+  border-radius: 0;
+  box-shadow: none;
+  text-decoration: none;
+}
+
+.landing-nav .btn-cta-nav:hover {
+  background: var(--af-inkt);
+  color: var(--af-papier);
+  border-color: var(--af-inkt);
+  box-shadow: none;
+  transform: none;
+}
+
+#landing-mobile-menu .navbar-links a {
+  color: var(--af-inkt);
+  text-decoration: none;
+}
+
+/* De pagina waar je bent: een onderstreping van 2px, de taal van een tekstlink. Waar je bent
+   is oriëntatie, geen toestand, dus niet de inversie: die is voor hover (sessie 252, met de
+   eigenaar; eerst als inktblok gebouwd, maar dan waren 'hier ben je' en 'hier wijs je'
+   hetzelfde gebaar, en het zwaarste vlak van de navbar wees naar waar je al was). Hij las
+   --color-prompt, het lime van de terminalprompt; de rand van 2px uit landing.css wordt
+   doorzichtig, zodat de link niet verspringt. */
+.landing-nav .nav-links a.active,
+#landing-mobile-menu .navbar-links a.active {
+  color: var(--af-inkt);
+  border-bottom-color: transparent;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+.landing-nav .nav-links a.active:hover {
+  background: var(--af-inkt);
+  color: var(--af-papier);
+}
+
+.navbar-toggle span {
+  background-color: var(--af-inkt);
+}
+
+/* De app-navbar (terminal) op dezelfde rail als de marketing-navbar, en dus als het raster
+   van het affiche: gemeten stond zijn woordmerk op 56px tegen 52 (1440) en 56 tegen 32
+   (1280), omdat #navbar zijn eigen 24px padding óm de rail van 32 zette, en de links
+   stonden 24px uit elkaar in plaats van 16. */
+/* De rail zelf (32px) zet main.css al op .navbar-content; de 24px die #navbar eromheen zette
+   moest eraf (een mutant die de rail hier opnieuw zette, veranderde niets: sessie 252). */
+#navbar {
+  padding-inline: 0;
+}
+
+/* Tot 768 zet landing.css de marketing-nav op --landing-padding-mobile (20px); dat token
+   staat in landing.css, dat de terminal niet laadt, vandaar de terugval. */
+@media (max-width: 768px) {
+  #navbar .navbar-content {
+    padding-inline: var(--landing-padding-mobile, 20px);
+  }
+}
+
+@media (min-width: 769px) {
+  #navbar .navbar-links {
+    gap: var(--spacing-md);
+  }
+}
+
+/* Woordmerk en hamburger op de rail, links en rechts even ver van de rand. mobile.css gaf de
+   hamburger 8px marge rechts (tot 768), en de terminal had daar nog 12px padding om de rail:
+   op 375 stond het merk op 20 tegen 32, en de hamburger 28 en 40 van de rand. */
+.landing-nav-wrapper .navbar-toggle,
+#navbar .navbar-toggle {
+  margin-right: 0;
+}
+
+/* Een tikdoel van 44px, zoals in de marketing-navbar (landing.css); hier was hij 30. */
+#navbar .theme-toggle {
+  min-height: 44px;
+}
+
+/* De schakelaar is in elke navbar dezelfde: twee tekens, de labels alleen voor
+   schermlezers. landing.css verbergt ze in de marketing-navbar; de app-navbar (terminal)
+   toonde "DONKER" en "LICHT". In het ingeklapte menu (tot 768) staan ze in beide navbars
+   zichtbaar, daar is ruimte. */
+@media (min-width: 769px) {
+  html:not(.nav-ingeklapt) #navbar .toggle-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* ==================== Inklappen op wat past (TASKS #88) ==================== */
+/* navbar.js zet html.nav-ingeklapt zodra de uitgeklapte nav niet in de balk past. Dat werkt
+   alleen als een link die niet past ook echt uitloopt: tot sessie 252 viel hij stil over twee
+   regels (sessie 213: "past" volgens scrollWidth, maar een balk van 70px). */
+.landing-nav .nav-links a,
+.landing-nav .btn-cta-nav,
+#navbar .navbar-links > li > a {
+  white-space: nowrap;
+}
+
+/* De app-navbar (terminal) ingeklapt vanaf 769px. Tot 768 doet mobile.css dit, maar dat
+   bestand laadt alleen tot 768; daarboven klapte hij nooit in en liep hij tot 266px buiten
+   beeld. De waarden zijn die van mobile.css, zodat het menu op elke breedte hetzelfde is. */
+@media (min-width: 769px) {
+  html.nav-ingeklapt #navbar .navbar-toggle {
+    display: flex;
+    width: 44px;
+    height: 44px;
+    padding: 14px 0;
+  }
+
+  html.nav-ingeklapt #navbar .navbar-menu {
+    position: fixed;
+    top: var(--navbar-height);
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 999;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: var(--spacing-lg);
+    background-color: var(--color-bg-navbar-mobile);
+    overflow-y: auto;
+  }
+
+  html.nav-ingeklapt #navbar .navbar-menu.active {
+    display: flex;
+  }
+
+  html.nav-ingeklapt #navbar .navbar-links {
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  html.nav-ingeklapt #navbar .navbar-links li {
+    width: 100%;
+    border-bottom: 1px solid var(--color-border-dark-frame);
+  }
+
+  html.nav-ingeklapt #navbar .navbar-links a {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    padding: var(--spacing-md);
+    font-size: 1.1rem;
+    font-weight: 400;
+    text-align: left;
+  }
+
+  html.nav-ingeklapt #navbar .dropdown-menu {
+    position: static;
+    min-width: 100%;
+    padding: var(--spacing-xs) 0;
+    border: 0;
+    border-top: 1px solid var(--color-border-dark-frame);
+  }
+
+  html.nav-ingeklapt #navbar .dropdown-menu a {
+    padding-left: calc(var(--spacing-xl) + var(--spacing-md));
+    padding-right: var(--spacing-xl);
+  }
+
+  html.nav-ingeklapt #navbar .navbar-actions {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    width: 100%;
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-border-dark-frame);
+  }
+
+  html.nav-ingeklapt #navbar .navbar-action,
+  html.nav-ingeklapt #navbar .theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid var(--color-border-dark-frame);
+    border-radius: 0;
+    background-color: transparent;
+    color: var(--color-navbar-link);
+  }
+
+  html.nav-ingeklapt #navbar .navbar-action {
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 1.1rem;
+  }
+
+  html.nav-ingeklapt #navbar .navbar-action svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  html.nav-ingeklapt #navbar .navbar-action[aria-label="Zoek commands"]::after {
+    content: "Zoek Commands";
+    margin-left: auto;
+    font-family: var(--font-terminal);
+  }
+
+  html.nav-ingeklapt #navbar .navbar-action[aria-label="GitHub repository"]::after {
+    content: "GitHub";
+    margin-left: auto;
+    font-family: var(--font-terminal);
+  }
+
+  html.nav-ingeklapt #navbar .theme-toggle {
+    gap: 2px;
+    padding: 0 4px;
+    font-size: 11px;
+  }
+
+  html.nav-ingeklapt body.mobile-menu-open {
+    overflow: hidden;
+  }
+}
+
+/* ==================== Footer ==================== */
+/* De pagina eindigt op een inktvlak: het omgekeerde affiche als slot. In de footer draaien
+   papier en inkt om: hier is inkt de grond. Dan lezen de linkregels en de schakelaars
+   vanzelf papier, en de lime tokens waar footer.js-markup op leunt (kolomkoppen, hovers)
+   worden papier. Papier op #111: 16,39; gedempt #b0b0ab: 8,67. Op #000 (donker) hoger. */
+.landing-footer {
+  background: var(--color-bg-footer);
+  --af-inkt: #efefec;
+  --af-inkt-2: #b0b0ab;
+  --af-papier: #111111;
+  --color-cta-dark-frame: #efefec;
+  --color-navbar-link-hover: #efefec;
+  --color-footer-text: #efefec;
+  --color-footer-text-dim: #b0b0ab;
+  --color-footer-text-strong: #efefec;
+  --color-footer-link: #efefec;
+  --color-footer-link-hover: #efefec;
+  border-top: 0;
+  /* De footer op de rail van het raster: zelfde rand, zelfde contentbreedte. Hij had 32px
+     padding en een eigen max-width van 1400px, dus zijn inhoud begon 13px naast de rail. */
+  padding-inline: var(--af-rand);
+}
+
+.landing-footer .footer-content,
+.landing-footer .footer-bottom {
+  max-width: calc(var(--af-breed) - 2 * var(--af-rand));
+  margin-inline: auto;
+}
+
+/* Met [href]: affiche.css laadt hierna en geeft body.home a (0,1,2) een onderstreping. Een
+   gelijke stand wint die op volgorde, dus deze regel is (0,2,1). */
+.landing-footer a[href] {
+  color: var(--af-inkt);
+  text-decoration: none;
+}
+
+.landing-footer a[href]:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+/* De Ko-fi-link droeg een lime waas. Hier een papieren kader, en bij hover de inversie zoals
+   elke knop; de onderstreping van de footerlinks stond anders als tweede lijn in het kader. */
+.landing-footer a.footer-donate,
+.landing-footer a.footer-donate:hover {
+  background-color: transparent;
+  border: 1px solid var(--af-inkt);
+  border-radius: 0;
+  color: var(--af-inkt);
+  box-shadow: none;
+  transform: none;
+}
+
+.landing-footer a.footer-donate:hover {
+  background-color: var(--af-inkt);
+  color: var(--af-papier);
+  text-decoration: none;
+}
+
+/* Het GitHub-icoon: zijn hover was alleen een onderstreping, en een icoon heeft er geen. */
+.landing-footer .footer-social a:hover {
+  background-color: var(--af-inkt);
+  color: var(--af-papier);
+  transform: none;
+}
+
+/* ==================== Consentbanner ==================== */
+/* Het eerste wat elke nieuwe bezoeker ziet. Papier, een inktlijn boven, knoppen met een
+   inkten kader die inverteren. Beide knoppen blijven gelijkwaardig: weigeren mag niet
+   zwakker ogen dan accepteren (geen dark pattern). */
+.cookie-banner {
+  background-color: var(--af-papier);
+  color: var(--af-inkt);
+  border-top: 1px solid var(--af-inkt);
+}
+
+.cookie-banner .btn-small.btn-secondary {
+  min-height: 44px;
+  background-color: transparent;
+  color: var(--af-inkt);
+  border: 1px solid var(--af-inkt);
+  border-radius: 0;
+  font-family: var(--af-tekst);
+  font-weight: 700;
+  box-shadow: none;
+  transform: none;
+}
+
+.cookie-banner .btn-small.btn-secondary:hover,
+.cookie-banner .btn-small.btn-secondary:focus-visible {
+  background-color: var(--af-inkt);
+  color: var(--af-papier);
+  border-color: var(--af-inkt);
+  box-shadow: none;
+  transform: none;
+}

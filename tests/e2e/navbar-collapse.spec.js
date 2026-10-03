@@ -10,11 +10,21 @@
 // loopt daarom tot 1279px (marge tot de gangbare 1280px-laptop) + een wrap-assertie.
 //
 // De terminal heeft een eigen, smallere navbar (menu 738px @1000px) die wél paste.
-// Die is bewust NIET mee ingeklapt; deze suite bewaakt dat onderscheid.
+// Die is bewust NIET mee ingeklapt; deze suite bewaakte dat onderscheid.
+//
+// Sessie 252 (TASKS #88): geen px-grens meer. navbar.js zet html.nav-ingeklapt zodra de
+// uitgeklapte nav niet in de balk past (bewaakInklap), voor beide navbars. Twee redenen:
+//   - alleen-tekstzoom 200% liet de marketing-nav 359px uitlopen bij een venster van 1280
+//     (sessie 244): een px-grens kent de tekst niet;
+//   - de terminal-navbar paste níét: op 769-1033px liep hij tot 266px buiten beeld,
+//     onbereikbaar want position: fixed. De oude test hier controleerde alleen dat er géén
+//     hamburger stond, en bewaakte zo de fout.
+// De invariant is daarom: uitgeklapt ⟺ alles past, op één regel, met lucht tot het merk.
 
 import { test, expect } from './fixtures.js';
 
-const INKLAP_TOT = 1279; // laatste breedte waarop de hamburger hoort te staan
+// Lucht tussen woordmerk en eerste link in de uitgeklapte stand (navbar.js, bewaakInklap).
+const MERK_LUCHT = 64;
 
 // Eén pagina per navbar-context: statisch, blog (ander pad naar de CSS) en terminal.
 const MARKETING_PAGINAS = ['/gidsen.html', '/index.html', '/over-ons.html', '/blog/nmap-beginnersgids.html'];
@@ -22,7 +32,8 @@ const MARKETING_PAGINAS = ['/gidsen.html', '/index.html', '/over-ons.html', '/bl
 // 1280 is de eerste breedte bóven de inklapband en meteen de gangbare 13"-laptop; 1290
 // en 1366 zitten erbij omdat het defect van Sessie 236 zich uitstrekte tot 1380 en met
 // alleen 1280 en 1440 half onzichtbaar zou zijn gebleven.
-const BREEDTES = [375, 700, 820, 1000, 1024, 1180, 1279, 1280, 1290, 1366, 1440];
+// Sessie 252: 1184, 1224, 1232 en 1240 erbij, de buurt van het omslagpunt in drie engines.
+const BREEDTES = [375, 700, 820, 1000, 1024, 1180, 1184, 1224, 1232, 1240, 1279, 1280, 1290, 1366, 1440];
 
 async function meetNavbar(page) {
   return page.evaluate(async () => {
@@ -64,7 +75,11 @@ async function meetNavbar(page) {
       })
       .map((el) => el.textContent.trim());
 
+    const merk = document.querySelector('.landing-nav .nav-brand').getBoundingClientRect();
+    const eerste = [...document.querySelectorAll('.landing-nav .nav-links a')].find((a) => a.getClientRects().length);
     return {
+      ingeklapt: document.documentElement.classList.contains('nav-ingeklapt'),
+      merkLucht: eerste ? eerste.getBoundingClientRect().left - merk.right : null,
       buitenBeeld,
       gewrapt,
       navPast: nav.scrollWidth <= nav.clientWidth + 1,
@@ -106,24 +121,55 @@ test.describe('Marketing-navbar — omslagpunt hamburger', () => {
   // per breedte. Onder drie parallelle browsers haalt Firefox de standaard 30s niet.
   test.describe.configure({ timeout: 120_000 });
 
-  test('hamburger tot en met 1279px, desktop-links vanaf 1280px', async ({ page }) => {
+  test('uitgeklapt alleen als alles past, anders de hamburger', async ({ page }) => {
+    const gezien = { in: 0, uit: 0 };
     for (const breedte of BREEDTES) {
       await page.setViewportSize({ width: breedte, height: 800 });
       await page.goto('/gidsen.html');
       const m = await meetNavbar(page);
 
-      if (breedte <= INKLAP_TOT) {
-        expect(m.hamburger, `@${breedte}px hoort de hamburger zichtbaar te zijn`).not.toBe('none');
-        expect(m.navLinks, `@${breedte}px horen de desktop-links verborgen te zijn`).toBe('none');
-        expect(m.ctaBalk, `@${breedte}px hoort de CTA in het menu te zitten, niet in de balk`).toBe('none');
+      if (m.ingeklapt) {
+        gezien.in++;
+        expect(m.hamburger, `@${breedte}px ingeklapt: de hamburger hoort zichtbaar te zijn`).not.toBe('none');
+        expect(m.navLinks, `@${breedte}px ingeklapt: de desktop-links horen verborgen te zijn`).toBe('none');
+        expect(m.ctaBalk, `@${breedte}px ingeklapt: de CTA hoort in het menu, niet in de balk`).toBe('none');
       } else {
-        expect(m.hamburger, `@${breedte}px hoort de hamburger verborgen te zijn`).toBe('none');
-        expect(m.navLinks, `@${breedte}px horen de desktop-links zichtbaar te zijn`).not.toBe('none');
-        expect(m.ctaBalk, `@${breedte}px hoort de CTA in de balk te staan`).not.toBe('none');
-        // Zichtbaar zijn is niet genoeg: de labels moeten ook op één regel passen.
+        gezien.uit++;
+        expect(m.hamburger, `@${breedte}px uitgeklapt: de hamburger hoort verborgen te zijn`).toBe('none');
+        expect(m.navLinks, `@${breedte}px uitgeklapt: de desktop-links horen zichtbaar te zijn`).not.toBe('none');
+        expect(m.ctaBalk, `@${breedte}px uitgeklapt: de CTA hoort in de balk te staan`).not.toBe('none');
         expect(m.gewrapt, `@${breedte}px breken nav-labels af: ${m.gewrapt.join(', ')}`).toEqual([]);
+        expect(m.merkLucht, `@${breedte}px staat de eerste link te dicht op het merk`).toBeGreaterThanOrEqual(MERK_LUCHT - 0.5);
       }
     }
+    // Zelfbewakend: beide standen moeten voorkomen, anders bewijst de lus niets. En de
+    // vaste punten: een telefoon klapt altijd in, een gangbaar desktopvenster nooit.
+    expect(gezien.in, 'geen enkele breedte ingeklapt: de meting heeft niet gedraaid').toBeGreaterThan(0);
+    expect(gezien.uit, 'geen enkele breedte uitgeklapt: de meting heeft niet gedraaid').toBeGreaterThan(0);
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.goto('/gidsen.html');
+    expect((await meetNavbar(page)).ingeklapt, '@375px hoort de nav ingeklapt te zijn').toBe(true);
+    await page.setViewportSize({ width: 1440, height: 800 });
+    await page.goto('/gidsen.html');
+    expect((await meetNavbar(page)).ingeklapt, '@1440px hoort de nav uitgeklapt te zijn').toBe(false);
+  });
+
+  // TASKS #88: bij alleen-tekstzoom groeit de tekst, niet het venster. Nagebootst door de
+  // letter van de hele balk (ook het merk) te vergroten; de nav moet dan op hetzelfde
+  // venster inklappen in plaats van uit te lopen, en terugkomen als de tekst krimpt.
+  test('tekstzoom klapt de nav in op een breed venster (#88)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 800 });
+    await page.goto('/gidsen.html');
+    expect((await meetNavbar(page)).ingeklapt, 'uitgangspunt: uitgeklapt @1440px').toBe(false);
+
+    const zoom = await page.addStyleTag({ content: '.landing-nav-wrapper { font-size: 200%; } .landing-nav-wrapper * { font-size: inherit; }' });
+    await expect.poll(async () => (await meetNavbar(page)).ingeklapt, { message: 'tekst 200%: de nav klapt niet in' }).toBe(true);
+    const m = await meetNavbar(page);
+    expect(m.buitenBeeld, 'tekst 200%: navbar-elementen buiten beeld').toBe(0);
+    expect(m.hamburger).not.toBe('none');
+
+    await zoom.evaluate((el) => el.remove());
+    await expect.poll(async () => (await meetNavbar(page)).ingeklapt, { message: 'tekst terug: de nav klapt niet weer uit' }).toBe(false);
   });
 
   test('menu opent als volledig overlay in de nieuwe band (1000px)', async ({ page }) => {
@@ -210,10 +256,12 @@ test.describe('Marketing-navbar — omslagpunt hamburger', () => {
         };
       });
 
-      expect(kleuren.cta.kleur, 'CTA heeft dezelfde kleur als een gewone menulink')
-        .not.toBe(kleuren.gewoon.kleur);
-      expect(kleuren.cta.kleur, 'CTA hoort de neon dark-frame-kleur te dragen').toBe('rgb(159, 239, 0)');
-      expect(Number(kleuren.cta.gewicht)).toBeGreaterThan(Number(kleuren.gewoon.gewicht));
+      // Sessie 252: de chrome staat sitebreed in het affiche. Daar is elke interactieve tekst
+      // inkt en onderscheidt de CTA zich door gewicht, niet door een tweede kleur (zo staat
+      // hij op index sinds sessie 236). Het neongroen hoorde bij de oude wereld.
+      expect(kleuren.cta.kleur, 'CTA hoort inkt te zijn, zoals elke menulink').toBe(kleuren.gewoon.kleur);
+      expect(kleuren.cta.kleur, 'CTA draagt nog het neongroen van de oude wereld').not.toBe('rgb(159, 239, 0)');
+      expect(Number(kleuren.cta.gewicht), 'CTA is niet zwaarder dan een gewone menulink').toBeGreaterThan(Number(kleuren.gewoon.gewicht));
     });
   }
 
@@ -238,21 +286,44 @@ test.describe('Marketing-navbar — omslagpunt hamburger', () => {
 
 });
 
-test.describe('Terminal-navbar blijft ongemoeid', () => {
+test.describe('Terminal-navbar: dezelfde inklapregel', () => {
 
-  // De terminal heeft een eigen navbar-variant die in deze band wél past. Zou hij
-  // meeklappen, dan zouden gebruikers op een 1024px-laptop onnodig een hamburger zien.
-  test('terminal houdt zijn inline nav tussen 769 en 1279px', async ({ page }) => {
-    for (const breedte of [820, 1000, 1279]) {
+  // Sessie 252: deze test heette "terminal houdt zijn inline nav tussen 769 en 1279px" en
+  // controleerde alleen dat er géén hamburger stond. Ondertussen liep de navbar op
+  // 769-1033px tot 266px buiten beeld (position: fixed, dus niet eens scrollbaar). Nu
+  // dezelfde invariant als de marketing-navbar: uitgeklapt alleen als alles past.
+  test('niets buiten beeld, en uitgeklapt alleen als alles past', async ({ page }) => {
+    test.setTimeout(120_000);
+    const gezien = { in: 0, uit: 0 };
+    for (const breedte of [375, 769, 820, 900, 1000, 1024, 1100, 1280, 1440]) {
       await page.setViewportSize({ width: breedte, height: 800 });
       await page.goto('/terminal.html');
-
-      const toggleDisplay = await page
-        .locator('#navbar .navbar-toggle')
-        .evaluate((el) => getComputedStyle(el).display);
-
-      expect(toggleDisplay, `terminal @${breedte}px hoort géén hamburger te tonen`).toBe('none');
+      const m = await page.evaluate(async () => {
+        await document.fonts.ready;
+        const vw = document.documentElement.clientWidth;
+        const nav = document.querySelector('#navbar');
+        const toggle = nav.querySelector('.navbar-toggle');
+        const zichtbaar = [...nav.querySelectorAll('a, button')].filter((e) => e.checkVisibility() && !e.closest('.navbar-menu.active'));
+        return {
+          ingeklapt: document.documentElement.classList.contains('nav-ingeklapt'),
+          hamburger: getComputedStyle(toggle).display,
+          buitenBeeld: zichtbaar.filter((e) => e.getBoundingClientRect().right > vw + 0.5).map((e) => e.className || e.textContent.trim()),
+          links: zichtbaar.filter((e) => e.closest('.navbar-links')).length,
+        };
+      });
+      expect(m.buitenBeeld, `terminal @${breedte}px: navbar-element(en) buiten beeld`).toEqual([]);
+      if (m.ingeklapt) {
+        gezien.in++;
+        expect(m.hamburger, `terminal @${breedte}px ingeklapt zonder hamburger`).not.toBe('none');
+        expect(m.links, `terminal @${breedte}px ingeklapt, maar links in de balk`).toBe(0);
+      } else {
+        gezien.uit++;
+        expect(m.hamburger, `terminal @${breedte}px uitgeklapt met hamburger`).toBe('none');
+        expect(m.links, `terminal @${breedte}px uitgeklapt zonder links`).toBeGreaterThan(0);
+      }
     }
+    expect(gezien.in, 'terminal: geen enkele breedte ingeklapt').toBeGreaterThan(0);
+    expect(gezien.uit, 'terminal: geen enkele breedte uitgeklapt').toBeGreaterThan(0);
   });
 
 });

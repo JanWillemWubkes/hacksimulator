@@ -1105,7 +1105,10 @@ button {
 .landing-footer {
   width: 100%;
   margin-top: 0;
-  background: rgba(22, 27, 34, 0.5);
+  /* Het token, in beide thema's. Hier stond rgba(22, 27, 34, 0.5) met alleen in licht een
+     override naar het token: in donker een blauwe zweem van het oude GitHub-palet
+     (gemeten sessie 243 en 252). */
+  background: var(--color-bg-footer);
   /* Dark-frame-token, NIET --color-border (zie .landing-nav-wrapper in landing.css) */
   border-top: 1px solid var(--color-border-dark-frame);
   padding: 96px var(--layout-padding-x, 32px) var(--spacing-xl);
@@ -1276,13 +1279,6 @@ a.footer-donate:active {
 a.footer-donate:focus-visible {
   outline: 2px solid var(--color-cta-dark-frame);
   outline-offset: 2px;
-}
-
-/* Light theme - Dark Frame Pattern (footer stays dark) */
-/* border-top staat niet meer hier: de basisregel gebruikt sinds Sessie 207 zelf het
-   dark-frame-token, dus een light-override zou dezelfde waarde herhalen. */
-[data-theme="light"] .landing-footer {
-  background: var(--color-bg-footer);
 }
 
 /* Footer Mobile */

@@ -1492,6 +1492,11 @@ test.describe('Layout (sessie 248)', () => {
       // gelijk op HEAD vóór deze sessie; weg na een herlading. Zelfde familie als de rijhoogte
       // in hero-demo (sessie 243). Dit meet layout per breedte, niet dat venstergedrag.
       if (w === 768 || w === 1280) { await page.reload(); await page.evaluate(() => document.fonts.ready); }
+      // Eén frame laten renderen vóór het meten (sessie 252). De navbar klapt sindsdien in op
+      // wat past, via de resize-gebeurtenis, en die valt pas in het volgende frame. Direct na
+      // setViewportSize meten zag in WebKit op 320-336 nog de uitgeklapte nav (scrollWidth
+      // 1035): een toestand die nooit geschilderd wordt.
+      await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
       const r = await page.evaluate(() => {
         const R = (e) => e.getBoundingClientRect();
         const raster = document.querySelector('.af-slot .af-raster');

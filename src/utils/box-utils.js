@@ -98,12 +98,14 @@ export function getResponsiveBoxWidth() {
   return Math.max(30, Math.min(120, maxChars));
 }
 
+// Mobiele opmaak van terminaluitvoer hangt af van de breedte, niet van de navbar. Hier stond
+// "breedte < 768 óf de hamburger is zichtbaar"; dat viel samen zolang de terminal-navbar op
+// 768px inklapte. Sinds sessie 252 klapt hij in op wat past (tot ±1000px), en kreeg een venster
+// van 900px de mobiele lijst in plaats van de boxen. max-width: 768px is precies de oude
+// betekenis: tot en met 768 stond de hamburger.
 export function isMobileView() {
   if (typeof window === 'undefined') return false;
-  const narrow = window.innerWidth < 768;
-  const toggle = document.querySelector('.navbar-toggle');
-  const toggleVisible = toggle && getComputedStyle(toggle).display !== 'none';
-  return narrow || toggleVisible;
+  return window.matchMedia('(max-width: 768px)').matches;
 }
 
 export function smartTruncate(text, maxLen) {

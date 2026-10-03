@@ -13,7 +13,7 @@ Verwante bestanden: `js-runtime.md` (§2, 7, 12, 16), `meten-en-guards.md` (§6,
 
 ## 0. Snelle regels
 
-- **Dark Frame:** navbar/footer altijd donker (Sessie 44) → `styles/main.css`
+- **Chrome in het affiche (sessie 252, verving Dark Frame):** navbar papier met inktlijn (donker: geïnverteerd), footer altijd inkt (`#111` licht, `#000` donker), op elke pagina via `styles/affiche-basis.css` (als laatste geladen). De oude Dark Frame-regels in `main.css`/`landing.css` zijn de basis die die laag hertokent, tot fase C ze opruimt (TASKS #85). Zie §34.
 - **3-Layer Modals:** Legal (z-10) > Feedback (z-20) > Tutorial (z-30) — Sessie 33
 - **Responsive Blog Tables:** brede `<table>` in blogcontent → opt-in class `.blog-table--stacked` (Sessie 181), NIET horizontale `overflow-x:auto`-scroll. Op `@media≤768px` wordt elke rij een gelabelde kaart via `data-label` op elke `<td>` + `::before`; voeg ook `role="table"` op de tabel + `scope="col"` op elke `<th>` toe (a11y: `<thead>` clip-verborgen, niet `display:none`). → `styles/blog.css`
 - **Geen `!important` in `styles/`.** Win op specificiteit; check eerst of de tegenregel dood is en verwijderd kan worden (§14).
@@ -730,3 +730,39 @@ te veel). Zet een override ná zijn basisregel, of meet dat hij wint.
 **Een tekst die nooit breekt en links staat, hangt alleen af van wat links van hem staat.**
 Meer binnenruimte rechts gaf de nmap-chip 0px lucht; de indexkolom smaller maken gaf 3px.
 Reken de kolom uit vóór je een knop draait.
+
+## 34. Een gedeelde laag hertokent op de componentwortel; een nav klapt in op wat past (Sessie 252)
+
+**Hertoken nooit op `:root` als de oude wereld nog leeft.** De oude stylesheets lezen dezelfde
+tokens ook in pagina-inhoud: `--color-bg-footer` in `.blog-post-footer`, `--color-cta-dark-frame`
+in iconen van blog en landing. Op `:root` kleurt die inhoud mee op 26 pagina's die niemand opnieuw
+ontwierp. Zet de tokens op de wortel van de component (`.landing-nav-wrapper`, `#navbar`,
+`.landing-footer`, `.cookie-banner`): custom properties erven, dus alleen de kinderen krijgen ze.
+Een gemigreerde pagina staat in dezelfde lijst (`body.home`). Bewaakt door `gedeelde-laag.spec.js`
+(de grond van een niet-gemigreerde pagina beweegt niet mee).
+
+**Reken specificiteit uit per tier, ook die van je eigen scope.** `body.home a` is (0,1,2), niet
+(0,1,1): `footer.landing-footer a` (0,1,2) speelde gelijk en verloor op volgorde van `affiche.css`.
+`[href]` erbij gaf (0,2,1). Gevonden door de chrome van index pixel voor pixel tegen een
+HEAD-worktree te leggen; een stijlsonde zonder hover zag het niet.
+
+**Een navbar klapt in op wat past, niet op een px-grens.** Een grens kent de tekst niet:
+alleen-tekstzoom liet de nav uitlopen, en de terminal-navbar liep op 769-1033px tot 266px buiten
+beeld (onbereikbaar, want `position: fixed`, dus geen scrollbalk die het verraadt). `navbar.js`
+(`bewaakInklap`) meet de uitgeklapte stand en zet `html.nav-ingeklapt`; links staan op `nowrap`,
+zodat niet-passen uitlopen is en niet stil afbreken (zie §4 en sessie 213). Alles wat aan de oude
+grens hing (de mobiele CTA-balk, de footerreserve) gaat mee op de klasse. Let op modules die bij
+het laden geometrie cachen: `landing-demo.js` las de balkhoogte één keer, en zag 0 zolang de klasse
+er nog niet stond; die bouwt zijn observers nu opnieuw bij elke maatwissel van de balk.
+
+Vier valkuilen uit dezelfde bouw, alle vier pas door de volle gate gevonden:
+- **Code die "mobiel" afleidt uit de navbar** breekt zodra de navbar anders inklapt.
+  `isMobileView()` keek naar de hamburger; terminaluitvoer hoort af te hangen van de breedte.
+- **Meet na een transitie, niet ervoor.** Links met `transition: all` groeien na een
+  tekstzoom nog door; observeer elk element dat breder kan worden, niet alleen het merk.
+- **Na `document.fonts.ready` direct meten**, niet via rAF: wie op die belofte wacht hoort de
+  nieuwe stand te zien.
+- **Resize synchroon afhandelen.** De gebeurtenis valt vóór animatie-callbacks en schilderen;
+  een meting direct na een viewportwissel (een test) ziet anders een toestand die nooit
+  geschilderd wordt. Laat zo'n test één frame renderen vóór hij meet.
+

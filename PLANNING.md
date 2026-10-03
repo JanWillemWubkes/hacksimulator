@@ -373,12 +373,41 @@ python -m http.server 8000
   één signaalrood dat alleen "jij bent aan zet" betekent, de terminal als donkere module.
   Contract: `.impeccable/surfaces/index-html.md`; afweging tegen pixelstad en teletekst:
   `docs/design/vergelijking-richtingen.md`.
-- **Scope-architectuur:** `affiche.css` hangt onder `body.home` en laadt alleen op index;
-  secties dragen `af-`-klassen omdat `landing.css` door 25 pagina's geladen wordt. Voor de
-  uitrol naar andere pagina's moet besloten worden of dit systeem naar gedeelde tokens
-  verhuist (TASKS.md #85).
-- **Typografie:** Atkinson Hyperlegible Next sitebreed voor tekst, Archivo 700-900 voor de
-  koppen van de landingspagina, JetBrains Mono binnen de terminal.
+- **Scope-architectuur (besluit sessie 252, TASKS #85):** twee lagen, twee bestanden.
+  - `styles/affiche-basis.css` is de **gedeelde laag**: de Archivo-letter, de `--af-`-tokens
+    op `:root` (donker op `:root[data-theme="dark"]`), en de navbar (marketing én app),
+    footer en consentbanner. Elke pagina met die componenten laadt hem **als laatste
+    stylesheet** (27 pagina's; de 3 juridische pagina's hebben geen van de drie en laden hem
+    niet).
+  - `styles/affiche.css` blijft de **homepage** onder `body.home`: het hertokenen van de
+    pagina zelf (`--color-bg`, `--color-text`, ...) en de `af-`-secties.
+  - **Hertokenen op de componentwortel, niet op `:root`.** De oude wereld leest dezelfde
+    componenttokens ook in pagina-inhoud (`--color-bg-footer` in `.blog-post-footer`,
+    `--color-cta-dark-frame` in blog- en landingsiconen). Op `:root` zou de inhoud dus
+    meeveranderen. Op `.landing-nav-wrapper`, `#landing-mobile-menu`, `#navbar`,
+    `.landing-footer` en `.cookie-banner` erven alleen hun eigen kinderen de nieuwe waarden.
+  - **Waarom niet `affiche.css` sitebreed:** 70.064 B waarvan het overgrote deel
+    homepagesecties is; elke andere pagina zou dat render-blocking laden en niet gebruiken,
+    en zonder `body.home` matcht het er toch niet.
+  - **Waarom niet in `main.css`/`landing.css`:** `main.css` laadt als eerste, dus
+    `landing.css`, `pages.css`, `blog.css`, `mobile.css` en `terminal.css` winnen elke
+    gelijke stand; dat wordt een specificiteitswedloop (en `!important` is een red line).
+    `landing.css` laadt niet op `terminal.html`, dus is niet sitebreed. En de naad tussen
+    oud en nieuw wordt onzichtbaar in een bestand van 97 KB, terwijl de oude regels per
+    pagina moeten kunnen verdwijnen.
+  - **Kosten, gemeten:** `affiche-basis.css` 18.454 B (`affiche.css` 70.064 → 60.616 B); budgetteller
+    (`performance.spec.js`) 1087,00 → 1101,04 KB, marge 18,96 KB van 1120. Elke pagina laadt
+    nu ook Archivo (20.688 B, één keer gecachet), want het woordmerk staat erin.
+  - **Inklappen op wat past (#88):** `navbar.js` zet `html.nav-ingeklapt` zodra de uitgeklapte
+    nav niet past; geen px-grens meer voor navbar, mobiele CTA-balk en footerreserve.
+  - **Bewust niet:** de paginagrond en lopende tekst van de andere pagina's (dat is de
+    migratie per pagina op `main`, #85 stap 3); de oude nav/footer/bannerregels in
+    `main.css`/`landing.css` schrappen (zij zijn de basis die de laag hertokent; opruimen
+    kan pas als geen pagina ze meer nodig heeft); de focusring, selectie en linkstijl van
+    de pagina-inhoud (browseroppervlakken horen bij de pagina, niet bij de chrome).
+- **Typografie:** Atkinson Hyperlegible Next sitebreed voor tekst, Archivo 700-800 voor de
+  koppen van de landingspagina en (sinds sessie 252) het woordmerk in navbar en footer op
+  elke pagina, JetBrains Mono binnen de terminal.
 - Na de merge wordt `DESIGN.md` de bron van het systeem; de tokens hieronder beschrijven tot
   dan `main`.
 

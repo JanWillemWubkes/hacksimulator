@@ -60,7 +60,10 @@ test.describe('Footer-copyright — gecentreerd in kolom-modus', () => {
   // zelf, met de reparatie erbij. Opnieuw gemeten op /over-ons.html: 2 regels tot en met
   // 360px, 1 regel vanaf 375. 320 en 344 liggen er ruim onder, zodat een volgende
   // letterwissel de grens niet meteen weer passeert.
-  for (const breedte of [320, 344]) {
+  // Sessie 252: de footer staat op de rail van het affiche (16px zijrand op telefoon, was
+  // 20), dus de regel kreeg 8px meer ruimte. Gemeten in drie engines: 2 regels tot en met
+  // 340, 1 regel vanaf 344. Nu 320 en 336.
+  for (const breedte of [320, 336]) {
     test(`@${breedte}px staat elke regel van de copyright gecentreerd`, async ({ page }) => {
       await page.setViewportSize({ width: breedte, height: 812 });
       await page.goto(PAGINA);

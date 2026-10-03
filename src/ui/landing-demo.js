@@ -171,20 +171,35 @@ function initCtaBar() {
   // De rootMargin krimpt de root tot het gebied dat navbar noch balk bedekt, zodat de
   // callback-grens samenvalt met de predicaatgrens. Hij bepaalt alleen het *moment* — het
   // predicaat leest de echte geometrie, dus wat drift na een draaiing is onschadelijk.
-  const observer = new IntersectionObserver(herbeoordeel, {
-    // window.innerHeight - balkRand() is de balkhoogte, of 0 wanneer hij display:none is.
-    rootMargin: `-${navHoogte}px 0px -${window.innerHeight - balkRand()}px 0px`,
-    threshold: 0.5
-  });
-  doelen.forEach((el) => observer.observe(el));
+  // De grenzen hangen af van de balkhoogte, en die is pas bekend als de balk bestaat. Sinds
+  // sessie 252 bestaat hij zodra navbar.js html.nav-ingeklapt zet (inklappen op wat past,
+  // TASKS #88); start deze module eerder, dan is hij nog display:none (hoogte 0) en klopten
+  // de grenzen nooit meer: op 375 was op scroll 410 geen enkele actie bereikbaar. Daarom
+  // bouwen de observers zich opnieuw op zodra de balk van maat verandert (ook bij draaien).
+  let observers = [];
+  function bouw() {
+    observers.forEach((o) => o.disconnect());
+    const onder = window.innerHeight - balkRand();
+    const observer = new IntersectionObserver(herbeoordeel, {
+      // window.innerHeight - balkRand() is de balkhoogte, of 0 wanneer hij display:none is.
+      rootMargin: `-${navHoogte}px 0px -${onder}px 0px`,
+      threshold: 0.5
+    });
+    doelen.forEach((el) => observer.observe(el));
 
-  // De chips kruisen de balkrand met hun randen, niet hun midden: threshold 0 en 1 vuren
-  // precies wanneer een chip de zone in- of uitgaat.
-  const chipObserver = new IntersectionObserver(herbeoordeel, {
-    rootMargin: `0px 0px -${window.innerHeight - balkRand()}px 0px`,
-    threshold: [0, 1]
-  });
-  chips.forEach((el) => chipObserver.observe(el));
+    // De chips kruisen de balkrand met hun randen, niet hun midden: threshold 0 en 1 vuren
+    // precies wanneer een chip de zone in- of uitgaat.
+    const chipObserver = new IntersectionObserver(herbeoordeel, {
+      rootMargin: `0px 0px -${onder}px 0px`,
+      threshold: [0, 1]
+    });
+    chips.forEach((el) => chipObserver.observe(el));
+    observers = [observer, chipObserver];
+  }
+  bouw();
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(() => { bouw(); herbeoordeel(); }).observe(balk);
+  }
 
   // Eén synchrone beoordeling bij init: de eerste IO-callback komt pas in de volgende
   // rendering-update, en dat is één frame waarin de balk zichtbaar over de chips flitst.

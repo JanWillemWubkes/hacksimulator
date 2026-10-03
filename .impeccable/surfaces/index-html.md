@@ -847,6 +847,71 @@ kleurig, waarvan 0,28% rood (de rest: zalm en amber in de module). Papier en ban
   uitvoer (onderscheid via letter, maat en aanhaallijn). De bron is in deze sessie niet
   gewijzigd.
 
+## De gedeelde laag (sessie 252, TASKS #85 stap 1 en #88)
+
+**Besluit (ook in PLANNING.md).** Twee lagen, twee bestanden: `styles/affiche-basis.css` is de
+gedeelde laag (Archivo, de `--af-`-tokens op `:root`, navbar marketing én app, footer,
+consentbanner) en laadt als laatste stylesheet op de 27 pagina's met chrome; `styles/affiche.css`
+blijft de homepage onder `body.home`. Hertokend wordt op de componentwortel, niet op `:root`: de
+oude wereld leest dezelfde tokens in pagina-inhoud. Niet `affiche.css` sitebreed (70.064 B,
+grotendeels homepage, render-blocking zonder gebruik), niet in `main.css`/`landing.css`
+(laadvolgorde: vijf latere bestanden winnen elke gelijke stand; `landing.css` laadt niet op de
+terminal; de naad oud/nieuw verdwijnt in 97 KB).
+
+**Wat er sitebreed veranderde.** Navbar papier met inktlijn (donker geïnverteerd), woordmerk
+Archivo 800, nav-CTA als inkten kader. De pagina waar je bent is een onderstreping van 2px, geen
+inktblok (eerst als blok gebouwd; met de eigenaar herzien: 'hier ben je' en 'hier wijs je' waren
+hetzelfde gebaar, en het zwaarste vlak wees naar waar je al was). Footer `#111`/`#000`; de zweem
+`rgba(22,27,34,.5)` in donker is in de bron (`main.css`) weg, en op index zelf twee relicten
+(`.nl` `#fff`, tagline `#a1a8b0` → `#efefec`/`#b0b0ab`). Banner papier met twee gelijkwaardige
+inkten knoppen. De terminal-navbar: dezelfde rail (merk 56 → 52 @1440, 32 @1280, 20 @375), links
+16px uit elkaar (was 24), schakelaar 44px (was 30) zonder zichtbare labels, Help-menu papier met
+inkten kader (was inkt op `#1a1a1a`, onleesbaar), iconen inkt (waren wit op papier).
+
+**#88: inklappen op wat past.** `navbar.js` (`bewaakInklap`) zet `html.nav-ingeklapt` zodra de
+uitgeklapte nav niet past met 64px tot het merk (met 16 stond "Blog" dichter bij het merk dan bij
+de volgende link). Links op `nowrap`. Omslag nu 1224-1232 (marketing) en 1000-1008 (terminal) per
+engine; op HEAD liep de terminal-navbar op 769-1033 tot 266px buiten beeld (fixed, dus
+onbereikbaar). Mobiele CTA-balk en footerreserve gaan mee op de klasse; `landing-demo.js` bouwt
+zijn observers opnieuw bij een maatwissel van de balk (anders cachete hij hoogte 0).
+
+**Gemeten.** 30 pagina's × 1440/375 × beide thema's via de echte schakelaar, 240 opnamen, twee
+nulmetingen (ruisvloer 1/240). De pagina-inhoud bleef gelijk; elk restverschil herleid met een
+tegenproef: 1px kortere pagina (footerrand) verschuift full-page-opnamen, de ondoorzichtige footer
+verandert de anti-aliasing op terminal donker (0 px met een ondoorzichtige footer op HEAD), de
+banner is een eigen laag (0 px met de banner verborgen). Index-chrome tegen een HEAD-worktree:
+nav, menu en banner pixelgelijk, footer alleen x 52-408 (de twee kleurcorrecties).
+
+**Bewaakt.** `gedeelde-laag.spec.js` (chrome = index op elke pagina, beide thema's; grond van
+niet-gemigreerde pagina's beweegt niet; blogpostinhoud leest de oude tokens; actief = onderstreping;
+terminal-rail en schakelaar), `navbar-collapse.spec.js` (uitgeklapt ⟺ past, op elke breedte; tekstzoom
+200%; terminal dezelfde regel). Mutanten met sha256-herstelcontrole: M1 hertoken op `:root` → grond;
+M2 footertoken weg → footerkleur; M3 actief als blok → onderstreping; M4b `#navbar` padding → rail;
+M5 merklucht 16 → merklucht; M6 observer-herbouw weg → CTA-balk @375; M7 schakelaarfocus → rode ring;
+M8 tekstzoom-observer weg → tekstzoom. Equivalente mutant M4 (rail op `.navbar-content`) wees een
+dode regel aan; verwijderd.
+
+**Wat de eerste gate vond (1872/20/1/33), en hoe het opgelost is.**
+- *Terminaluitvoer leidde "mobiel" af uit de navbar* (18 falers, `responsive-ascii-boxes`
+  op 800/900 in drie engines): `isMobileView()` in `src/utils/box-utils.js` gaf mobiel als de
+  hamburger zichtbaar was. Zolang de terminal-navbar op 768 inklapte viel dat samen; nu kreeg
+  een venster van 900px de mobiele lijst in plaats van de boxen. Nu `max-width: 768px`, de
+  oude betekenis, los van de navigatie.
+- *Tekstzoom klapte niet in* (Firefox; in Chromium slaagde het op geluk): de links groeien
+  via een transitie, ná de meting (op het meetmoment r=1388 = past, 500ms later 1463). De
+  ResizeObserver kijkt nu naar het merk én elk element rechts. Mutant M9 (alleen het merk)
+  faalt in Firefox op de tekstzoomtest.
+- *Merklucht 62,5 tegen 64 op 1224 in WebKit*: na de webfont werd via rAF gemeten; wie op
+  `document.fonts.ready` wachtte, zag de terugvalletter. Nu direct.
+- *Flaky sweep in WebKit (scrollWidth 1035 op 320-336)*: meten direct na `setViewportSize`,
+  vóór het frame waarin de resize-gebeurtenis valt. De nav meet nu synchroon bij resize
+  (vóór animatie-callbacks en schilderen), en de sweep laat één frame renderen vóór hij meet.
+- Een schone herhaling van de geraakte specs in drie engines: 707/4/0/0.
+
+**Bewust niet.** De paginagrond en lopende tekst van andere pagina's (fase B, per pagina, met
+herbeoordeling van de oude kleuren en koppen in Archivo, besluit eigenaar); de oude
+nav/footer-regels schrappen (fase C); de focus en selectie van de pagina-inhoud.
+
 ## Memorabel moment
 
 Je doet niets, en bij laden rolt de nmap-scan regel voor regel uit; of je tikt zelf een command.

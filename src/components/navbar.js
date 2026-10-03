@@ -423,6 +423,81 @@ function initNavbarToggle() {
 }
 
 // ============================================
+// INKLAPPEN OP WAT PAST (Sessie 252, TASKS #88)
+// ============================================
+
+/**
+ * Klapt de navbar in zodra zijn inhoud niet in de balk past, in plaats van op een vaste
+ * breedte. Een px-grens (1279 marketing, 768 app) kent de tekst niet: bij alleen-tekstzoom
+ * 200% liep de marketing-nav 359px uit (sessie 244), en de app-navbar liep op 769-1033px
+ * tot 266px buiten beeld, onbereikbaar want position: fixed (gemeten sessie 252).
+ *
+ * Gemeten wordt de uitgeklapte stand: klasse eraf, rechthoeken lezen, klasse zo nodig
+ * terug. Dat gebeurt in één taak, dus de browser schildert de tussenstand nooit.
+ * Tot 768px klapt hij altijd in (daar regelt mobile.css de balk mee).
+ *
+ * @param {HTMLElement} balk - de rij met merk en links (.landing-nav of #navbar .navbar-content)
+ */
+function bewaakInklap(balk) {
+  const root = document.documentElement;
+  const smal = window.matchMedia('(max-width: 768px)');
+  const merk = balk.querySelector('.nav-brand');
+  const rechts = balk.querySelector('.nav-right, .navbar-menu');
+  if (!merk || !rechts) return;
+
+  const past = () => {
+    const b = balk.getBoundingClientRect();
+    const grens = b.right - parseFloat(getComputedStyle(balk).paddingRight);
+    const zichtbaar = [...rechts.querySelectorAll('a, button')]
+      .filter(el => el.getClientRects().length > 0 && !el.closest('.dropdown-menu'));
+    if (zichtbaar.length === 0) return false;
+    const r = Math.max(...zichtbaar.map(el => el.getBoundingClientRect().right));
+    const l = Math.min(...zichtbaar.map(el => el.getBoundingClientRect().left));
+    // Afbreken kan niet: links staan in de balk op nowrap (affiche-basis.css), dus een
+    // link die niet past loopt uit in plaats van stil over twee regels te vallen (s213).
+    // 64px tot het merk: met 16 stond "Blog" dichter bij het merk dan bij de volgende
+    // link, en las de balk als één rij in plaats van merk + navigatie (gemeten s252).
+    return r <= grens + 0.5 && l >= merk.getBoundingClientRect().right + 64;
+  };
+
+  const meet = () => {
+    if (smal.matches) {
+      root.classList.add('nav-ingeklapt');
+      return;
+    }
+    root.classList.remove('nav-ingeklapt');
+    root.classList.toggle('nav-ingeklapt', !past());
+  };
+
+  meet();
+  let wacht = 0;
+  const later = () => {
+    cancelAnimationFrame(wacht);
+    wacht = requestAnimationFrame(meet);
+  };
+  // Synchroon bij een resize: die gebeurtenis valt in het renderframe vóór de animatie-callbacks
+  // en het schilderen, dus de oude stand wordt nooit getekend. Via rAF bleef er een moment
+  // waarop een meting (en WebKit in een sweep) de uitgeklapte nav op 320px zag (s252).
+  window.addEventListener('resize', meet);
+  // Tekstzoom verandert breedtes zonder dat het venster verandert. Niet alleen het merk: de
+  // links hebben een transitie, en groeiden ná de meting nog door (gemeten s252: op het moment
+  // van meten r=1388 = past, 500ms later r=1463 = loopt 75px uit). Elk element observeren laat
+  // de meting de hele transitie volgen; rAF bundelt dat tot één meting per frame. Ingeklapt
+  // zijn ze display:none en melden ze 0, daarna niets meer: geen lus.
+  if ('ResizeObserver' in window) {
+    const ro = new ResizeObserver(later);
+    [merk, ...rechts.querySelectorAll('a, button')].forEach(el => ro.observe(el));
+  }
+  // Na de webfont direct meten, niet een frame later: de letter verandert de breedtes, en wie
+  // op document.fonts.ready wacht (een test, of een andere module) hoort de nieuwe stand te
+  // zien. Met rAF las WebKit op 1224px nog de meting van de terugvalletter (gemeten s252).
+  if (document.fonts) {
+    document.fonts.ready.then(meet);
+    document.fonts.addEventListener('loadingdone', later);
+  }
+}
+
+// ============================================
 // MAIN EXPORT FUNCTION
 // ============================================
 
@@ -470,6 +545,9 @@ export function injectNavbar(variant = 'marketing', options = {}) {
 
   // Inject HTML
   placeholder.outerHTML = html;
+
+  const balk = document.querySelector('.landing-nav, #navbar .navbar-content');
+  if (balk && variant !== 'blog') bewaakInklap(balk);
 
   // Initialize appropriate functionality
   // NOTE: Terminal-specific handlers (Help menu actions, About modal, etc.)
