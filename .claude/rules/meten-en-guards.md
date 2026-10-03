@@ -634,3 +634,17 @@ anders vuren twee mutanten op dezelfde regel.
 **Een gate groeit mee met zijn populatie.** 876 tests op twee workers duren ~30 min; een deadline
 van 30 min kapte af op 869 met `exit 124`. Exit 0 van de omhulling en een lege foutgrep zeggen dan
 niets: eis het eindblok.
+Tel de populatie vóór je de deadline kiest (`npx playwright test --list | tail -1`), en reken niet
+met het getal van een vorige sessie: in Sessie 250 was de suite 1908 tests en geen ±880, en
+duurde de gate 82 min. Een deadline gerekend op het onthouden getal is dezelfde fout als een
+deadline die niet meegroeit.
+
+**Een sweep die scrolt, controleert dat hij er is.** `scrollTo(0, y)` onder `html {
+scroll-behavior: smooth }` met 80ms wachten liet de pagina vrijwel bovenaan staan: de
+accentbudget-sweep telde sinds Sessie 238 zes keer het eerste scherm. Scroll met
+`behavior: 'instant'` en eis dat `scrollY` de bedoelde waarde heeft. Dezelfde val in een
+focustest: `scrollIntoViewIfNeeded` onder smooth scroll gaf een box halverwege de animatie.
+
+**Een range over een element meet ook zijn kinderen als box.** `getClientRects()` op een range
+over een regel met een `<span>` geeft de elementbox erbij, met een iets andere `top`; per top
+gegroepeerd telde die als extra rij. Meet tekstknopen (TreeWalker, `SHOW_TEXT`).

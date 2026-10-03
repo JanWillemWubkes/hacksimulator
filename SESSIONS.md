@@ -10,20 +10,32 @@
 
 > **Rotatie/archivering-conventie:** zie [`docs/sessions/README.md`](docs/sessions/README.md)
 > (range-naamgeving `archive-sNNN-sMMM.md`; legacy `archive-q*`-namen zijn bevroren + fout gelabeld).
-> `current.md` houdt het rolling window Sessie 235-245 (236-238 samengevat in 239); ouder is geroteerd naar de range-archieven hieronder.
+> `current.md` houdt het rolling window Sessie 240-250 (249 samengevat in 250); ouder is geroteerd naar de range-archieven hieronder.
 
-### [Current Sessions (235-245)](docs/sessions/current.md) - Full Detail
-**Sessies:** 245, 244, 243, 242, 241, 240, 239 (vat 236-238 samen), 235
-**Period:** 23 - 29 september 2026
+### [Current Sessions (240-250)](docs/sessions/current.md) - Full Detail
+**Sessies:** 250 (vat 249 samen), 248, 247, 246, 245, 244, 243, 242, 241, 240
+**Period:** 26 september - 3 oktober 2026
 **Topics:**
+- Een gate meet de populatie die er is, niet die je onthield: de hero zonder diagram, de module in de taal van de pagina (proef A/B), glos bij elke reeks, venster op hele regels; suite 1908 tests, gate 82 min; een accentbudget-sweep die nooit schoof (Sessie 250, vat 249 samen)
+- Een proef die faalt, wijst de plek aan waar het idee niet past: layout, de cijfers op het raster en het slot als tegenhanger van de hero (Sessie 248)
+- Wat de bezoeker ziet als hij niets doet, is het ontwerp: bolder en overdrive, de kop op afficheschaal en de scan die zichzelf speelt (Sessie 247)
+- Een review controleert het contract, niet de ambitie: finish review en documenter, elke bevinding nagemeten (Sessie 246)
 - Een skill die je niet laadt, draait niet: polish eerst alleen op de punten van de eigenaar, pas op zijn vraag met de eigen pass van `impeccable polish` (63 elementen × 2 thema's). Eén hovertaal (blok inverteert, tekstlink dikt), een dode `!important` en een al sessies dode `flex` in de nieuwsbrief, de GitHub-noot naar de inleiding, de sample als inhoudstabel, woordmerken zonder hover. Rotatie 230-234 (Sessie 245, branch `design/impeccable`)
 - Een guard die "woordelijk gelijk" heet, vergeleek alleen de helft: audit + NL-review, de gedeelde FAQ toetsenbordvast (focusring weggeknipt door `overflow: hidden`), CLS 0 door een navbarreserve, reduced motion scrolt niet meer, "command" i.p.v. "commando" (Sessie 244)
 - Een attribuutselector is geen wortelselector: `adapt` op de hero, thematokens op `:root`, de tabletband 768-1023 en chips per 8px in drie motoren; WebKit rekent `ch` op de kadertekensubset (Sessie 243)
 - Herhaling is geen fout, herhaling zonder functie wel: de onderpagina van twaalf naar zeven secties op de glos-naad, bloglinks als kantlijn, cijfers op afficheschaal (Sessie 242)
 - Een test die op vijf posities meet, bewaakt vijf posities: de vouw gehaald met de glos-grammatica, en twee oude gaten dicht in de roodteller en de mobiele CTA-balk (Sessie 241)
 - Een critique is een lijst beweringen: dual-agent critique van de hele landingspagina (25/36), daarna het getikte command in beeld, een registratienaad die niet meer van de scrollbalk afhangt (`cqw` i.p.v. `fr`), en koppen in Archivo 700 na een letterproef op gelijke maat. Vier van de tien bevindingen vielen bij meting weg. Rotatie 225-229 (Sessie 240, branch `design/impeccable`)
-- Het affiche blijft: pixelstad en teletekst als wegwerpprototype gemeten, teletekst won op de vooraf vastgelegde assen, de eigenaar koos het affiche; de hero kreeg de kop als instappunt (Sessie 239, vat 236-238 samen, branch `design/impeccable`)
-- Een ontbrekende `</main>` trok de footer de blogcontainer in: `blog/index.html` sloot zijn `<main>` nooit, dus de geïnjecteerde footer erfde `max-width: 720px` — 672px breed in een viewport van 1823px, als enige van 25 pagina's. De tagbalans-guard bestond al sinds Sessie 138 maar telde alleen `<div>`: hij bewaakte de tag uit die ene bug, niet de klasse. Twee contrastspecs verwijderd na mutantmeting (hun opvolger vangt dezelfde mutanten, mét kleurbewijs); `eyebrow-contrast` bewust behouden om zijn aanwezigheids-asserties (Sessie 235)
+
+---
+
+### [Archief Sessie 235-239](docs/sessions/archive-s235-s239.md) - Full Detail (geroteerd)
+**Sessies:** 239 (vat 236-238 samen), 235 (nieuwste-eerst)
+**Period:** 23 - 25 september 2026
+**Geroteerd bij:** Sessie 250 (de rotatie bij 245 sloeg dit blok over)
+**Topics:**
+- Het affiche blijft: pixelstad en teletekst als wegwerpprototype gemeten; de hero kreeg de kop als instappunt (Sessie 239, vat 236-238 samen)
+- Een ontbrekende `</main>` trok de footer de blogcontainer in; tagbalans-guard naar de klasse; twee redundante contrastspecs verwijderd (Sessie 235)
 
 ---
 
@@ -226,9 +238,9 @@
 
 ## 📊 Session Overview
 
-**Total Sessions:** 235 (as of 23 september 2026)
-**Current Session:** 235 (Ontbrekende `</main>` trok de footer de blogcontainer in; tagbalans-guard naar de klasse; twee redundante contrastspecs verwijderd)
-**Sessions with full documentation:** 81-245 (current.md 235-245 + range-archieven 230-234, 225-229, 220-224, 215-219, 210-214, 205-209, 200-204, 195-199, 190-194, 185-189, 180-184, 175-179, 170-174, 165-169, 121-164 & 81-120)
+**Total Sessions:** 250 (as of 3 oktober 2026)
+**Current Session:** 250 (Onderscheid: de hero zonder diagram, een terminal in de taal van de pagina; gate meet de echte populatie)
+**Sessions with full documentation:** 81-250 (current.md 240-250 + range-archieven 235-239, 230-234, 225-229, 220-224, 215-219, 210-214, 205-209, 200-204, 195-199, 190-194, 185-189, 180-184, 175-179, 170-174, 165-169, 121-164 & 81-120)
 **Sessions compressed:** 2-77 (various compression levels)
 
 **Structure rationale:**
@@ -277,10 +289,11 @@ regel zelf al die tijd gewoon werkte. Een afgeleide waarde hoort niet overgeschr
 
 ---
 
-**Last updated:** 23 september 2026 (Sessie 235 — rotatie 220-224 naar `archive-s220-s224.md`, current.md → window 225-235; de topics van Sessie 233 en 234 ontbraken in de index en zijn alsnog toegevoegd)
+**Last updated:** 3 oktober 2026 (Sessie 250 — rotatie 235-239 naar `archive-s235-s239.md`, current.md → window 240-250; de topics van 246-248 ontbraken in de index en zijn toegevoegd)
 **Next update:** bij volgende `N%5`-rotatie (steady-state per `docs/sessions/README.md`)
 
 **Recent updates:**
+- Sessie 250: Steady-state `N%5`-rotatie — 235-239 (staart; 2 entries, 236-238 zaten al in 239) geknipt naar `archive-s235-s239.md`, current.md window 240-250 (10 entries, 249 in 250). De rotatie bij 245 had dit blok overgeslagen en de index stond nog op 235-245; beide rechtgezet. `current.md` 94.968 → 73.528 bytes, archief 21.440 bytes.
 - Sessie 230: Steady-state `N%5`-rotatie — 215-219 (staart) geknipt naar `archive-s215-s219.md` (10 H2-secties: 5 sessies + de uit CLAUDE.md geroteerde learnings van 215 t/m 219), current.md window 220-230 (12 secties: 11 entries + de learnings van 220). `current.md` 200.340 → 118.043 bytes, archief 82.831 bytes. **De skill-formule klopte opnieuw niet:** `/summary` schrijft "archiveer [N-10 .. N-6]" = 220-224, wat 215-219 als ouder blok in `current.md` zou laten staan én een gat in de archiefreeks maakt — exact de correctie die bij Sessie 215 al is vastgelegd. De README-regel ("sessies ouder dan de laatste ~10", staart-eerst) geeft 215-219. **Bijgevangen staleness:** de index claimde window 210-219 terwijl `current.md` 215-230 hield, `archive-s210-s214.md` (geroteerd bij Sessie 225) stond er helemaal niet in, en §Session Overview stond op 81-220 — alle drie gecorrigeerd
 - Sessie 220: Steady-state `N%5`-rotatie — 205-209 (staart) geknipt naar `archive-s205-s209.md` (8 H2-secties: 5 sessies + de uit CLAUDE.md geroteerde learnings van 205, 207 en 209), current.md window 210-219 (12 secties: 10 entries + de learnings van 212 en 213). Byte-geverifieerd (`prefix+knip+suffix == origineel`, 149.084 bytes). **Bijgevangen staleness:** de index claimde nog window "205-215" terwijl `current.md` 205-219 hield, §Session Overview stond op Sessie 190, en §Maintenance Protocol gaf een rotatieregel die de README sinds Sessie 170 tegenspreekt — alle drie gecorrigeerd
 - Sessie 215: Steady-state `N%5`-rotatie — 200-204 (staart) geknipt naar `archive-s200-s204.md` (8 H2-secties: 5 sessies + de Follow-up van 27 jul + de geroteerde learnings van 202 en 204), current.md window 205-215 (11 entries). **Correctie:** de rotatienotitie in `.claude/CLAUDE.md` gaf "archiveer 205-209" — dat zou 200-204 als ouder blok in `current.md` laten staan én een gat in de archiefreeks maken. De README-regel ("sessies ouder dan de laatste ~10", staart-eerst) geeft 200-204, consistent met alle voorgaande rotaties

@@ -711,3 +711,22 @@ De vaste maat blijft het plafond, dus waar het past verandert niets.
 **`align-items: end` op een rasterouder schuift een korte cel omlaag** zodra een buurcel op
 dezelfde rij hoger wordt. De ondertitel zakte 25px toen de actie ernaast een blok van knop plus
 microcopy werd. Zet `align-self: start` op de cel die bovenaan hoort.
+
+## 33. Een padding scrolt mee, een rand niet; en een mediablok wint niet op specificiteit (Sessie 250)
+
+**Een scrollend venster dat op hele regels moet uitkomen, krijgt zijn lucht als rand.** De
+padding van een `overflow`-container hoort bij het scrollgebied: met 8px boven en onder was het
+venster 7,6 regels hoog en piepte er altijd een strook van de naburige regel door. Een
+transparante rand (`border-block: 8px solid transparent`) knipt de inhoud af op de paddingbox,
+en de achtergrond loopt er gewoon onder door (`background-clip: border-box`). Meet ook de
+rijhoogte zelf: twee fonts op één basislijn (`align-items: baseline`) maakten een rij van 27px
+er 28; een negatieve ondermarge van 1px op de gezakte cel gaf hem terug zonder de basislijn te
+raken.
+
+**Een `@media`-blok voegt geen specificiteit toe.** Stond het vóór de basisregel met dezelfde
+selector, dan won de basisregel op volgorde en was het blok dood (de eerste chip hield 8px
+te veel). Zet een override ná zijn basisregel, of meet dat hij wint.
+
+**Een tekst die nooit breekt en links staat, hangt alleen af van wat links van hem staat.**
+Meer binnenruimte rechts gaf de nmap-chip 0px lucht; de indexkolom smaller maken gaf 3px.
+Reken de kolom uit vóór je een knop draait.
