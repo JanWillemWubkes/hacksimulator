@@ -4,6 +4,91 @@
 
 ---
 
+## Sessie 251-252: Opnamen voor een review horen ná de laatste bronwijziging (3 okt 2026)
+
+Inclusief sessie 251 (het kleurgesprek, alleen contract en TASKS, geen bron, geen eigen `/summary`).
+Branch `design/impeccable`; `main` onaangeroerd. TASKS #91 gesloten (251), #85 stap 1 en #88 (252).
+
+### Mission
+
+251: de eigenaar mist "warmte en contrast"; voorstel signaalgeel als vlak van de Nederlandse
+uitleg, proef A/B/C op ware grootte, oordeel: geen variant, de stand blijft (#91 dicht).
+252: de gedeelde laag van het affiche sitebreed (navbar, footer, thematokens, consentbanner), met
+eerst een architectuurbesluit, voor/na-meting over alle pagina's, folds en een go van de eigenaar,
+daarna guards, mutanten, gate, een verse finish review en de documenter. #88 kwam op verzoek mee.
+
+### Work done
+
+- **Besluit** (PLANNING.md, contract): `styles/affiche-basis.css` als laatste stylesheet op de 27
+  pagina's met chrome; `affiche.css` blijft homepage. Hertokenen op de componentwortel, niet op
+  `:root`, omdat de oude wereld dezelfde tokens in pagina-inhoud leest (`.blog-post-footer`).
+  Verworpen: `affiche.css` sitebreed (70 KB, grotendeels homepage) en `main.css`/`landing.css`
+  (laadvolgorde, specificiteitswedloop, `landing.css` niet op terminal).
+- **Bouw:** footerzweem `rgba(22,27,34,.5)` in de bron weg (`main.css`); op index twee relicten
+  in de footer (`.nl` #fff, tagline #a1a8b0). Terminal-navbar op de rail, schakelaar 44px, Help-menu
+  leesbaar (was inkt op #1a1a1a). Actief: eerst inktblok, met de eigenaar naar onderstreping van 2px.
+- **#88:** `navbar.js` `bewaakInklap` zet `html.nav-ingeklapt` zodra de uitgeklapte nav niet past
+  (64px tot het merk, links `nowrap`); de 1279/1280-band in `landing.css`, de mobiele CTA-balk en
+  de footerreserve gaan mee op de klasse. Op HEAD liep de terminal-navbar op 769-1033px tot 266px
+  buiten beeld (fixed, dus onbereikbaar). Omslag nu 1224-1232 / 1000-1008 per engine.
+- **Gate-vondsten:** `isMobileView()` (`box-utils.js`) gaf "mobiel" als de hamburger zichtbaar was:
+  18 falers in `responsive-ascii-boxes` op 800/900. Tekstzoom klapte niet in, want de links groeiden
+  via een transitie ná de meting (r=1388 → 1463); de ResizeObserver kijkt nu naar elk element.
+  Meten na de webfont direct, resize synchroon; de 8px-sweep laat één frame renderen.
+- **Finish review** (vers): twee keer `recapture` (mijn folds van 13:03 tegen bron van 15:23; een
+  selector raakte Ko-fi i.p.v. GitHub), daarna fix (8): navlinks focus blauw, "Meer info"
+  onherkenbaar, onderstreping alleen op blog, banner naast de rail, glyphs in het Help-menu, mono
+  Title Case-labels, dubbele lijn in het blad, schakelaarlabels 11px. Alles nagemeten en opgelost,
+  plus: terminalblad nam maat uit `mobile.css` (19,8/400/63 tegen 18/500/45).
+- **Docs:** `css-layout.md` §0 (Dark Frame vervangen) en §34; TASKS #85 fase B-plan (cyclus van
+  twee sessies, `layout.md` bij shape, vaste commands per modus) en de besluiten van de eigenaar;
+  #88 dicht; #92 nieuw. DESIGN.md + design.json opnieuw door de documenter (verzonnen bannertekst
+  in de sidecar vervangen door de echte).
+
+### Commits
+
+- `1aa4ee6` Sessie 251: #91 gesloten, de huidige stand blijft
+- `1e86220` De gedeelde laag (sessie 252, #85 stap 1 + #88): navbar, footer en banner sitebreed in het affiche
+- `0c2c3e4` Finish review gedeelde laag (sessie 252): acht fixes, DESIGN.md opnieuw
+
+### Learnings
+
+- **Opnamen voor een review zijn een meting van een stand.** Ik leverde folds van vóór drie
+  bronwijzigingen; de reviewer las de tijdstempels en de pixels en weigerde terecht. Maak ze ná de
+  laatste wijziging, en controleer zelf het doel van elke opname (`.footer-social a` = Ko-fi).
+- **Een volle gate vindt koppelingen die losse specs niet zien.** Niemand verwacht dat de
+  terminaluitvoer van de navbar afhangt; `isMobileView` keek naar de hamburger.
+- **Een wachtlus met plafond is een stille race.** Een opdracht die "na de testrun" edits zou
+  toepassen, had een maximum van 15 min en paste ze toe op 638/711. De run is weggegooid en schoon
+  herhaald; wacht op het eindblok, niet op een timer.
+- **Specificiteit van je eigen scope reken je uit.** `body.home a` is (0,1,2); mijn
+  `footer.landing-footer a` speelde gelijk en verloor op volgorde. Pas een pixelvergelijking van
+  de index-chrome tegen een HEAD-worktree liet de onderstreping zien.
+- **Een full-page-opname is geen neutrale meting:** 1px kortere pagina verschuift `vh`-lagen,
+  een ondoorzichtige footer verandert de anti-aliasing erboven, een vaste banner is een eigen laag.
+  Elk restverschil met een tegenproef herleid (opvullen, HEAD-footer ondoorzichtig, banner verborgen).
+- **Een equivalente mutant wijst dood gewicht aan:** de rail op `.navbar-content` zette dezelfde
+  32px die `main.css` al zette; regel verwijderd.
+- **Populatietests krijgen een gemeten budget:** zes navigaties los 10,1s, onder zes workers in
+  Firefox over 30s.
+
+### Next steps
+
+- #84 merge naar `main` (eigen sessie): `main` op frontendwijzigingen controleren, sessienummering,
+  validate + gate, live nameten op Netlify (cache-bust `main.css` 241, `landing.css` 241,
+  `affiche-basis.css` 10, `init-components.js` 12).
+- Fase B: gidsen eerst (shape met `layout.md`, kickers weg).
+- #92 flaky FAQ-ring WebKit; eigenaar: kader voor "Start de simulator" in het menublad?
+
+### Metrics delta
+
+- Budgetteller: 1087,00 → 1105,20 KB (marge 33,00 → 14,80).
+- du (KB): src 741 → 747, styles 432 → 445, blog 492 → 493, assets 1741.
+- Specs 47 → 48; `test()` 395 → 404; per motor 1908 → 1941 tests. Gate 3: 1907/1/33/0.
+- `.playwright-mcp/` 16 MB vóór opruimen.
+
+---
+
 ## Sessie 250: Een gate meet de populatie die er is, niet die je onthield (2-3 okt 2026)
 
 Inclusief het ongecommitte werk van sessie 249 (geen eigen `/summary`; één commit, één entry).

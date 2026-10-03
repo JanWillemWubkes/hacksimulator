@@ -648,3 +648,20 @@ focustest: `scrollIntoViewIfNeeded` onder smooth scroll gaf een box halverwege d
 **Een range over een element meet ook zijn kinderen als box.** `getClientRects()` op een range
 over een regel met een `<span>` geeft de elementbox erbij, met een iets andere `top`; per top
 gegroepeerd telde die als extra rij. Meet tekstknopen (TreeWalker, `SHOW_TEXT`).
+
+## 36. Bewijs voor een review heeft een tijdstempel; een wachtlus op een testrun heeft geen plafond (Sessie 252)
+
+**Opnamen voor een reviewer zijn een meting van één stand.** De folds van 13:03 gingen naar de
+reviewer terwijl de bron tot 15:23 nog veranderde (rail, actieve link, inklappen); hij las de
+tijdstempels en de pixels en weigerde. Maak ze ná de laatste bronwijziging, op de commitstand, en
+controleer per opname het doel: `.footer-social a` pakte de Ko-fi-knop, niet het GitHub-icoon
+(zoek op `aria-label`, niet op positie).
+
+**Wacht op het eindblok, niet op een timer.** Een opdracht die "na de testrun" edits toepaste,
+wachtte met een lus van maximaal 15 minuten en schreef ze op 638/711 weg. Het laatste deel van die
+run mat andere code dan het eerste. Wacht tot de log zijn eindblok draagt (`EXIT=`-regel), en leg
+met `sha256sum -c` vast dat de bron tijdens een gate niet veranderde.
+
+**Een stresstest beslist alleen als de faalvorm dezelfde is.** De flaky FAQ-ring (0px zichtbaar)
+werd onder zes workers op de oude stand 4/8 rood, maar op time-outs: dat zegt niets over de ring.
+

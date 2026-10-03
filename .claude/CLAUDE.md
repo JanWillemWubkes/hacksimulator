@@ -1,7 +1,7 @@
 # CLAUDE.md — HackSimulator.nl
 
 **Project:** Browser-based terminal simulator die Nederlandse beginners ethisch hacken leert.
-**Status:** MVP Development — ✅ LIVE op Netlify vanaf `main`; laatste: Sessie 250 (op branch `design/impeccable`)
+**Status:** MVP Development — ✅ LIVE op Netlify vanaf `main`; laatste: Sessie 252 (op branch `design/impeccable`)
 **Stack:** Vanilla JS/CSS, client-side only, geen backend, geen build-stap. Deploy = push naar `main`.
 **Docs:** `docs/prd.md` v1.8 | `PLANNING.md` v3.0 | `TASKS.md` (live metrics) | `docs/style-guide.md` v1.5
 
@@ -136,7 +136,7 @@ architectuurwijziging, `docs/prd.md` alleen bij scopewijziging.
 **Afsluiten:** `/summary` — die bevat de volledige 7-staps flow, inclusief de ground-truth-meting
 en de validatiegate. Niet hier dupliceren.
 
-**Sessie counter:** 250
+**Sessie counter:** 252
 
 <!-- Onderhoudsnotitie (wordt niet in context geladen):
      Dit bestand is de altijd-geladen laag. Houd het onder 150 regels — validate-docs.sh
@@ -146,5 +146,5 @@ en de validatiegate. Niet hier dupliceren.
 
 ---
 
-**Last updated:** 3 okt 2026 (Sessie 250 — onderscheid: de hero zonder diagram, een terminal in de taal van de pagina. Volledig: `docs/sessions/current.md`)
-**Version:** 6.19 (Sessie 250 — een gate meet de populatie die er is, niet die je onthield. Historie: `docs/sessions/current.md`)
+**Last updated:** 3 okt 2026 (Sessie 252 — de gedeelde laag: navbar, footer en banner sitebreed in het affiche, #88 inklappen op wat past. Volledig: `docs/sessions/current.md`)
+**Version:** 6.20 (Sessie 252 — opnamen voor een review horen ná de laatste bronwijziging. Historie: `docs/sessions/current.md`)
