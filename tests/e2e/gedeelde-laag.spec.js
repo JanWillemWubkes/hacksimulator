@@ -96,6 +96,113 @@ test('de inhoud van een blogpost leest de oude tokens nog (hertokenen op de wort
   expect(m.blok, 'de inhoud van de blogpost is meegekleurd met de chrome').toBe('rgb(26, 26, 26)');
 });
 
+// Finish review s252: de onderstreping stond alleen op de blog. Elke navbestemming draagt hem.
+test('elke navbestemming markeert zichzelf', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  // Budget per navigatie (meten-en-guards §32): los ±2s per pagina, onder zes workers in
+  // Firefox gingen zes navigaties over de standaard 30s.
+  test.setTimeout(5 * 8000 + 15_000);
+  const BESTEMMINGEN = { '/blog/welkom.html': 'Blog', '/commands/index.html': 'Commands', '/gidsen.html': 'Gidsen', '/woordenlijst.html': 'Woordenlijst', '/over-ons.html': 'Over ons' };
+  const fout = [];
+  for (const [pad, naam] of Object.entries(BESTEMMINGEN)) {
+    await page.goto(pad);
+    await page.waitForSelector('.landing-nav .nav-links a');
+    const m = await page.evaluate(() => [...document.querySelectorAll('.landing-nav .nav-links a[aria-current="page"]')]
+      .map((a) => ({ tekst: a.textContent.trim(), lijn: getComputedStyle(a).textDecorationLine })));
+    if (m.length !== 1 || m[0].tekst !== naam || m[0].lijn !== 'underline') fout.push(`${pad}: ${JSON.stringify(m)}`);
+  }
+  expect(fout).toEqual([]);
+});
+
+// Finish review s252: navlinks hadden een blauwe ring met radius (landing.css won). Elk focusbaar
+// element in de chrome draagt de rode ring, op een pagina in de oude wereld, in beide thema's.
+for (const thema of ['light', 'dark']) {
+  test(`elk focusbaar element in de chrome toont de rode ring (${thema})`, async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.addInitScript((t) => localStorage.setItem('theme', t), thema);
+    await page.goto('/gidsen.html');
+    await page.waitForSelector('.cookie-banner.active');
+    // Transities bevriezen: knoppen dragen transition: all, en zonder bevriezing meet je de ring
+    // halverwege zijn overgang naar rood (gemeten: rgb(181,16,33) en dergelijke).
+    await page.addStyleTag({ content: '*,*::before,*::after{transition:none!important}' });
+    const n = await page.evaluate(() => {
+      const els = [...document.querySelectorAll('.landing-nav-wrapper a[href], .landing-nav-wrapper button, footer.landing-footer a[href], footer.landing-footer button, .cookie-banner a[href], .cookie-banner button')]
+        .filter((e) => e.getClientRects().length && getComputedStyle(e).visibility !== 'hidden');
+      els.forEach((e, i) => { e.dataset.chromeFocus = i; });
+      return els.length;
+    });
+    test.setTimeout(n * 2 * 400 + 20_000);
+    const mis = [];
+    let getoetst = 0;
+    for (let i = 0; i < n; i++) {
+      const el = page.locator(`[data-chrome-focus="${i}"]`);
+      await el.focus();
+      await page.keyboard.press('Shift');
+      const m = await el.evaluate((e) => ({ fv: e.matches(':focus-visible'), s: getComputedStyle(e).outlineStyle, k: getComputedStyle(e).outlineColor, r: getComputedStyle(e).borderTopLeftRadius, naam: e.getAttribute('aria-label') || e.textContent.trim().slice(0, 24) }));
+      if (!m.fv) continue;
+      getoetst++;
+      if (m.s === 'none' || m.k !== 'rgb(204, 10, 30)' || m.r !== '0px') mis.push(`${m.naam}: ${m.s} ${m.k} radius ${m.r}`);
+    }
+    expect(getoetst, 'te weinig focusbare elementen getoetst: de meting heeft niet gedraaid').toBeGreaterThan(15);
+    expect(mis).toEqual([]);
+  });
+}
+
+test('de banner staat op de rail en "Meer info" is een link', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/gidsen.html');
+  await page.waitForSelector('.cookie-banner.active');
+  const m = await page.evaluate(() => {
+    const merk = document.querySelector('.landing-nav .nav-brand').getBoundingClientRect();
+    const cta = document.querySelector('.landing-nav .btn-cta-nav').getBoundingClientRect();
+    const inh = document.querySelector('.cookie-banner .cookie-content').getBoundingClientRect();
+    const l = getComputedStyle(document.querySelector('.cookie-banner a[href]'));
+    return { links: inh.left - merk.left, rechts: inh.right - cta.right, lijn: l.textDecorationLine };
+  });
+  expect(Math.abs(m.links), 'de banner begint niet op de rail van de navbar').toBeLessThan(1);
+  expect(Math.abs(m.rechts), 'de banner eindigt niet op de rail van de navbar').toBeLessThan(1);
+  expect(m.lijn, '"Meer info" is niet als link te herkennen').toBe('underline');
+});
+
+// Finish review s252: de twee menubladen verschilden (terminal 19,8px/400 en rijen van 63px),
+// er stond een lege dubbele lijn tussen links en acties, glyphs als icoon in het Help-menu, en
+// de themaschakelaar had labels van 11px. Eén blad, gemeten in beide navbars.
+test('het ingeklapte menublad is in beide navbars hetzelfde', async ({ page }) => {
+  test.setTimeout(4 * 10_000 + 15_000);   // vier navigaties, twee naar de zware terminal
+  await page.addInitScript(() => localStorage.setItem('hacksim_legal_accepted', 'true'));
+  const fout = [];
+  for (const breedte of [375, 900]) {
+    await page.setViewportSize({ width: breedte, height: 800 });
+    const metingen = {};
+    for (const [pad, menu] of [['/gidsen.html', '#landing-mobile-menu'], ['/terminal.html', '#navbar-menu']]) {
+      await page.goto(pad);
+      await page.locator('.navbar-toggle:visible').first().click();
+      await expect(page.locator(menu)).toBeVisible();
+      metingen[pad] = await page.evaluate((menu) => {
+        const m = document.querySelector(menu);
+        const links = [...m.querySelectorAll('.navbar-links > li > a:not(.mobile-cta-link)')];
+        // De actieve link hoort dezelfde vorm te hebben; alleen de onderstreping onderscheidt hem.
+        const vorm = (a) => { const s = getComputedStyle(a); return `${s.fontSize}/${s.fontWeight}/${Math.round(a.closest('li').getBoundingClientRect().height)}`; };
+        const acties = getComputedStyle(m.querySelector('.navbar-actions'));
+        const opties = [...m.querySelectorAll('.theme-toggle .toggle-option')].map((o) => o.getBoundingClientRect().height);
+        const glyphs = [...m.querySelectorAll('a')].map((a) => [getComputedStyle(a, '::before').content, getComputedStyle(a, '::after').content])
+          .flat().filter((c) => c && c !== 'none' && c !== 'normal' && /[+→►×]/.test(c));
+        const label = getComputedStyle(m.querySelector('.theme-toggle .toggle-label')).fontSize;
+        return { vormen: [...new Set(links.map(vorm))], dubbel: acties.borderTopWidth !== '0px', opties, glyphs, label, linkMaat: getComputedStyle(links[0]).fontSize };
+      }, menu);
+    }
+    const [mk, tm] = [metingen['/gidsen.html'], metingen['/terminal.html']];
+    if (mk.vormen.length !== 1 || tm.vormen.length !== 1 || mk.vormen[0] !== tm.vormen[0]) fout.push(`@${breedte} links: marketing ${mk.vormen} tegen terminal ${tm.vormen}`);
+    for (const [naam, x] of Object.entries(metingen)) {
+      if (x.dubbel) fout.push(`@${breedte} ${naam}: dubbele lijn boven de acties`);
+      if (x.glyphs.length) fout.push(`@${breedte} ${naam}: glyphs als icoon ${x.glyphs}`);
+      if (x.opties.length !== 2 || x.opties.some((h) => h < 42)) fout.push(`@${breedte} ${naam}: schakelaarhelften ${x.opties}`);
+      if (x.label !== x.linkMaat) fout.push(`@${breedte} ${naam}: schakelaarlabel ${x.label} tegen links ${x.linkMaat}`);
+    }
+  }
+  expect(fout).toEqual([]);
+});
+
 test('de pagina waar je bent is een onderstreping, geen blok', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.addInitScript(() => localStorage.setItem('theme', 'light'));
@@ -114,6 +221,8 @@ test('de pagina waar je bent is een onderstreping, geen blok', async ({ page }) 
 });
 
 test('de terminal-navbar staat op dezelfde rail en heeft dezelfde schakelaar', async ({ page }) => {
+  // Zes navigaties: los 10,1s, onder zes workers in Firefox over de standaard 30s (gemeten s252).
+  test.setTimeout(6 * 10_000 + 15_000);
   await page.addInitScript(() => {
     localStorage.setItem('hacksim_legal_accepted', 'true');
     localStorage.setItem('hacksim_analytics_consent', '{"necessary":true,"analytics":false}');

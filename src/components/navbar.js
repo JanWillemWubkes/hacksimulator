@@ -60,10 +60,10 @@ function getMarketingNavbar(options = {}) {
         <!-- Theme Toggle (desktop only - hidden on mobile) -->
         <button type="button" class="theme-toggle" aria-label="Wissel naar licht thema" aria-pressed="false">
           <span class="toggle-option active" data-theme="dark">
-            <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span class="toggle-label">DONKER</span>
+            <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span class="toggle-label">Donker</span>
           </span>
           <span class="toggle-option" data-theme="light">
-            <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><span class="toggle-label">LICHT</span>
+            <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><span class="toggle-label">Licht</span>
           </span>
         </button>
 
@@ -86,10 +86,10 @@ function getMarketingNavbar(options = {}) {
     <div class="navbar-actions">
       <button class="theme-toggle" aria-label="Wissel naar licht thema" aria-pressed="false" title="Wissel tussen donker en licht thema">
         <span class="toggle-option" data-theme="dark">
-          <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span class="toggle-label">DONKER</span>
+          <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span class="toggle-label">Donker</span>
         </span>
         <span class="toggle-option" data-theme="light">
-          <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><span class="toggle-label">LICHT</span>
+          <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><span class="toggle-label">Licht</span>
         </span>
       </button>
     </div>
@@ -127,7 +127,7 @@ function getAppNavbar() {
         <ul class="navbar-links">
           <!-- Help Dropdown -->
           <li class="navbar-dropdown">
-            <a href="#" class="dropdown-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="help-dropdown-menu" aria-label="Help menu">Help</a>
+            <a href="#" class="dropdown-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="help-dropdown-menu" aria-label="Help menu">Help<svg class="dropdown-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></a>
             <ul class="dropdown-menu" id="help-dropdown-menu" role="menu" aria-hidden="true">
               <li><a href="#leerpad">Leerpad</a></li>
               <li><a href="#commands">Commands</a></li>
@@ -159,10 +159,10 @@ function getAppNavbar() {
           <!-- Theme Toggle -->
           <button class="theme-toggle" aria-label="Wissel naar licht thema" aria-pressed="false" title="Wissel tussen donker en licht thema">
             <span class="toggle-option" data-theme="dark">
-              <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span class="toggle-label">DONKER</span>
+              <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span class="toggle-label">Donker</span>
             </span>
             <span class="toggle-option" data-theme="light">
-              <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><span class="toggle-label">LICHT</span>
+              <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><span class="toggle-label">Licht</span>
             </span>
           </button>
         </div>
@@ -214,10 +214,10 @@ function getBlogNavbar(options = {}) {
         </a>
         <button class="theme-toggle" aria-label="Wissel naar licht thema" aria-pressed="false" title="Wissel tussen donker en licht thema">
           <span class="toggle-option" data-theme="dark">
-            <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span class="toggle-label">DONKER</span>
+            <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span class="toggle-label">Donker</span>
           </span>
           <span class="toggle-option" data-theme="light">
-            <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><span class="toggle-label">LICHT</span>
+            <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><span class="toggle-label">Licht</span>
           </span>
         </button>
         <a href="${basePath}terminal.html" class="btn-cta btn-cta-nav">Start de simulator</a>
@@ -235,10 +235,10 @@ function getBlogNavbar(options = {}) {
     <div class="navbar-actions">
       <button class="theme-toggle" aria-label="Wissel naar licht thema" aria-pressed="false" title="Wissel tussen donker en licht thema">
         <span class="toggle-option" data-theme="dark">
-          <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span class="toggle-label">DONKER</span>
+          <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span class="toggle-label">Donker</span>
         </span>
         <span class="toggle-option" data-theme="light">
-          <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><span class="toggle-label">LICHT</span>
+          <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg><span class="toggle-label">Licht</span>
         </span>
       </button>
     </div>

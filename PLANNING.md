@@ -396,7 +396,7 @@ python -m http.server 8000
     oud en nieuw wordt onzichtbaar in een bestand van 97 KB, terwijl de oude regels per
     pagina moeten kunnen verdwijnen.
   - **Kosten, gemeten:** `affiche-basis.css` 18.454 B (`affiche.css` 70.064 → 60.616 B); budgetteller
-    (`performance.spec.js`) 1087,00 → 1101,04 KB, marge 18,96 KB van 1120. Elke pagina laadt
+    (`performance.spec.js`) 1087,00 → 1105,20 KB, marge 14,80 KB van 1120 (gate 3, na de fixes van de finish review). Elke pagina laadt
     nu ook Archivo (20.688 B, één keer gecachet), want het woordmerk staat erin.
   - **Inklappen op wat past (#88):** `navbar.js` zet `html.nav-ingeklapt` zodra de uitgeklapte
     nav niet past; geen px-grens meer voor navbar, mobiele CTA-balk en footerreserve.

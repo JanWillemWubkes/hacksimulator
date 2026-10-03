@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-02T20:45:57+00:00",
+  "generatedAt": "2026-10-03T17:43:40+00:00",
   "title": "Design System: HackSimulator.nl",
   "extensions": {
     "colorMeta": {
@@ -378,6 +378,36 @@
           "oklch(83.6% 0.005 106.7)",
           "oklch(95.0% 0.005 106.7)"
         ]
+      },
+      "footer": {
+        "role": "neutral",
+        "displayName": "Footer (inkt in beide thema's)",
+        "canonical": "oklch(17.8% 0.0 89.9)",
+        "tonalRamp": [
+          "oklch(15.0% 0.0 89.9)",
+          "oklch(26.4% 0.0 89.9)",
+          "oklch(37.9% 0.0 89.9)",
+          "oklch(49.3% 0.0 89.9)",
+          "oklch(60.7% 0.0 89.9)",
+          "oklch(72.1% 0.0 89.9)",
+          "oklch(83.6% 0.0 89.9)",
+          "oklch(95.0% 0.0 89.9)"
+        ]
+      },
+      "footer-donker": {
+        "role": "neutral",
+        "displayName": "Footer (donker thema)",
+        "canonical": "oklch(0.0% 0.0 0.0)",
+        "tonalRamp": [
+          "oklch(15.0% 0.0 0.0)",
+          "oklch(26.4% 0.0 0.0)",
+          "oklch(37.9% 0.0 0.0)",
+          "oklch(49.3% 0.0 0.0)",
+          "oklch(60.7% 0.0 0.0)",
+          "oklch(72.1% 0.0 0.0)",
+          "oklch(83.6% 0.0 0.0)",
+          "oklch(95.0% 0.0 0.0)"
+        ]
       }
     },
     "typographyMeta": {
@@ -470,6 +500,10 @@
         "value": "1024px"
       },
       {
+        "name": "nav-inklap",
+        "value": "op wat past (html.nav-ingeklapt; links nowrap, ≥64px merk tot eerste link; gemeten 1224-1232 marketing, 1000-1008 terminal)"
+      },
+      {
         "name": "desktop",
         "value": "1280px"
       },
@@ -516,9 +550,25 @@
       "name": "Navigatie",
       "kind": "nav",
       "refersTo": "nav-link-hover",
-      "description": "Papieren balk met inktlijn; woordmerk in Archivo 800 zonder hover; links inverteren; nav-CTA als inkten kader.",
-      "html": "<nav class=\"ds-nav\"><span class=\"ds-nav-merk\">HackSimulator</span><a class=\"ds-nav-link\" href=\"#\">Gidsen</a><a class=\"ds-nav-link\" href=\"#\">Blog</a><a class=\"ds-nav-cta\" href=\"#\">Start de simulator</a></nav>",
-      "css": ".ds-nav { display: flex; align-items: center; gap: 8px; min-height: 60px; padding: 0 32px; background: #efefec; border-bottom: 1px solid #111111; } .ds-nav-merk { margin-right: auto; font-family: 'Archivo', 'Atkinson Hyperlegible Next', -apple-system, sans-serif; font-weight: 800; color: #111111; } .ds-nav-link { padding: 8px 12px; color: #111111; text-decoration: none; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; } .ds-nav-link:hover { background: #111111; color: #efefec; } .ds-nav-cta { padding: 8px 16px; border: 1px solid #111111; color: #111111; text-decoration: none; font-weight: 700; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; } .ds-nav-cta:hover { background: #111111; color: #efefec; } .ds-nav a:focus-visible { outline: 2px solid #cc0a1e; outline-offset: 2px; }"
+      "description": "Papieren balk met inktlijn op de rail; woordmerk in Archivo 800 zonder hover; links op één regel, 16px uit elkaar, inverteren bij hover; de huidige pagina is een onderstreping van 2px; nav-CTA als inkten kader; rode focusring op elk chrome-element.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-merk\" href=\"#\">HackSimulator</a><a class=\"ds-nav-link\" href=\"#\">Gidsen</a><a class=\"ds-nav-link ds-actief\" href=\"#\" aria-current=\"page\">Blog</a><a class=\"ds-nav-cta\" href=\"#\">Start de simulator</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 16px; min-height: 60px; padding: 0 clamp(16px, 3vw, 32px); background: #efefec; border-bottom: 1px solid #111111; } .ds-nav-merk { margin-right: auto; font-family: 'Archivo', 'Atkinson Hyperlegible Next', -apple-system, sans-serif; font-weight: 800; color: #111111; text-decoration: none; } .ds-nav-link { padding: 8px 16px; color: #111111; text-decoration: none; white-space: nowrap; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; font-weight: 500; } .ds-nav-link.ds-actief { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.2em; } .ds-nav-link:hover { background: #111111; color: #efefec; } .ds-nav-cta { padding: 8px 16px; border: 1px solid #111111; color: #111111; text-decoration: none; white-space: nowrap; font-weight: 700; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; } .ds-nav-cta:hover { background: #111111; color: #efefec; } .ds-nav a:focus-visible { outline: 2px solid #cc0a1e; outline-offset: 2px; border-radius: 0; }"
+    },
+    {
+      "name": "Footer",
+      "kind": "custom",
+      "refersTo": "footer",
+      "description": "Inktvlak in beide thema's (#111111 licht, #000000 donker) op de rail van het raster; papier en inkt draaien om. Links papier zonder onderstreping, bij hover 2px; tagline en copyright in #b0b0ab; Ko-fi als papieren kader dat inverteert.",
+      "html": "<footer class=\"ds-foot\"><p class=\"ds-foot-tag\">Leer ethisch hacken in een veilige terminal.</p><a class=\"ds-foot-link\" href=\"#\">Blog</a> <a class=\"ds-foot-kofi\" href=\"#\">Steun via Ko-fi</a><p class=\"ds-foot-tag\">© 2026 HackSimulator.nl</p></footer>",
+      "css": ".ds-foot { padding: 32px clamp(16px, 3vw, 32px); background: #111111; color: #efefec; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; } .ds-foot-tag { color: #b0b0ab; font-size: 0.83rem; } .ds-foot-link { color: #efefec; text-decoration: none; } .ds-foot-link:hover { text-decoration: underline; text-decoration-thickness: 2px; } .ds-foot-kofi { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid #efefec; color: #efefec; text-decoration: none; } .ds-foot-kofi:hover { background: #efefec; color: #111111; } .ds-foot a:focus-visible { outline: 2px solid #cc0a1e; outline-offset: 2px; }"
+    },
+    {
+      "name": "Consentbanner",
+      "kind": "custom",
+      "refersTo": "consent-banner",
+      "description": "Papier met een inktlijn erboven, op de rail; 'Meer info' als tekstlink; twee gelijkwaardige knoppen met een inkten kader die inverteren.",
+      "html": "<div class=\"ds-banner\"><p>[!] Privacy: Cookies voor analytics <a href=\"#\">Meer info</a></p><div class=\"ds-banner-knoppen\"><button class=\"ds-banner-knop\" type=\"button\">Weigeren</button><button class=\"ds-banner-knop\" type=\"button\">Accepteren</button></div></div>",
+      "css": ".ds-banner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 16px clamp(16px, 3vw, 32px); background: #efefec; color: #111111; border-top: 1px solid #111111; border-radius: 0; font-family: 'Atkinson Hyperlegible Next', -apple-system, 'Segoe UI', sans-serif; } .ds-banner a { color: #111111; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; } .ds-banner a:hover { text-decoration-thickness: 2px; } .ds-banner-knoppen { display: flex; gap: 8px; } .ds-banner-knop { min-height: 44px; padding: 0 18px; background: transparent; color: #111111; border: 1px solid #111111; border-radius: 0; font: inherit; font-weight: 700; cursor: pointer; } .ds-banner-knop:hover, .ds-banner-knop:focus-visible { background: #111111; color: #efefec; } .ds-banner :focus-visible { outline: 2px solid #cc0a1e; outline-offset: 2px; }"
     },
     {
       "name": "Tekstlink",
@@ -547,7 +597,7 @@
   ],
   "narrative": {
     "northStar": "Het affiche op het raster",
-    "overview": "De pagina is een affiche op een zichtbaar raster, in de traditie van Total Design (Wim Crouwel). Gebroken wit papier, zwarte inkt, en precies één signaalrood dat alleen \"hier ben jij aan zet\" betekent. Alles staat op een 12-koloms raster zonder goot: de kolomgrenzen zijn de haarlijnen, en elke cel draagt zijn eigen binnenruimte. De terminal is een donkere module in dat raster, en de Nederlandse uitleg staat per outputregel ernaast, op dezelfde rasterrij.\n\nToestanden spreken via inversie en nooit via een extra kleur: een blok wordt inkt met een papieren letter. Er zijn geen schaduwen, geen zichtbare kleurverlopen en geen afgeronde hoeken. Diepte bestaat niet; er is alleen papier, inkt en de zwarte module. Ook de module spreekt de taal van de pagina: haar tekst komt uit de papierfamilie, de prompt is papier in 700, de Nederlandse laag (`[TIP]`, `[→]`) staat op een papieren label, en de cursor is een blok signaalrood. Alleen fout (zalm) en waarschuwing (amber) zijn eigen tinten. Het donkere thema is het geïnverteerde affiche: inkt wordt grond, papier wordt letter.\n\n**Reikwijdte.** Dit systeem draait nu alleen op `index.html`. Het staat in één stylesheet dat alleen die pagina laadt, als laatste, en hangt volledig onder de homepage-scope. Het hertokent de gedeelde componenten (navbar, footer, knoppen, FAQ, nieuwsbrief) in plaats van ze te overschrijven. De andere pagina's (gidsen, samples, blog, terminal, juridisch) tonen nog het oudere systeem en gaan één per sessie over. Dat oudere systeem hoort niet bij dit document.\n\nExpliciet niet: scanlines, glow, groen-op-zwart, matrixregen, mascottes, badges op de voorgrond, kickers en eyebrows.",
+    "overview": "De pagina is een affiche op een zichtbaar raster, in de traditie van Total Design (Wim Crouwel). Gebroken wit papier, zwarte inkt, en precies één signaalrood dat alleen \"hier ben jij aan zet\" betekent. Alles staat op een 12-koloms raster zonder goot: de kolomgrenzen zijn de haarlijnen, en elke cel draagt zijn eigen binnenruimte. De terminal is een donkere module in dat raster, en de Nederlandse uitleg staat per outputregel ernaast, op dezelfde rasterrij.\n\nToestanden spreken via inversie en nooit via een extra kleur: een blok wordt inkt met een papieren letter. Er zijn geen schaduwen, geen zichtbare kleurverlopen en geen afgeronde hoeken. Diepte bestaat niet; er is alleen papier, inkt en de zwarte module. Ook de module spreekt de taal van de pagina: haar tekst komt uit de papierfamilie, de prompt is papier in 700, de Nederlandse laag (`[TIP]`, `[→]`) staat op een papieren label, en de cursor is een blok signaalrood. Alleen fout (zalm) en waarschuwing (amber) zijn eigen tinten. Het donkere thema is het geïnverteerde affiche: inkt wordt grond, papier wordt letter.\n\n**Reikwijdte.** Het systeem staat in twee lagen. De gedeelde laag (de tokens op `:root` en in het donkere thema, Archivo, de navbar in beide varianten, de footer en de consentbanner) draait sitebreed: elke pagina met chrome laadt hem als laatste stylesheet, 27 pagina's. De pagina-inhoud staat alleen op `index.html` in het affiche, in een eigen stylesheet onder de homepage-scope. De inhoud van de andere pagina's (gidsen, samples, blog, woordenlijst, commands, over ons, contact, 404, terminal) toont nog het oudere systeem en gaat één pagina per sessie over; dat oudere systeem hoort niet bij dit document. Een gemigreerde pagina doet mee door haar bodyklasse toe te voegen aan de lijst van wortels waarop de gedeelde laag hertokent. Hertokenen gebeurt op de wortel van een component of gemigreerde pagina, nooit op `:root`, want de oude inhoud leest dezelfde tokens. De drie juridische pagina's hebben geen chrome en laden de laag niet.\n\nExpliciet niet: scanlines, glow, groen-op-zwart, matrixregen, mascottes, badges op de voorgrond, kickers en eyebrows.",
     "keyCharacteristics": [
       "Papier, inkt, één signaalrood. Verder niets buiten de terminalmodule.",
       "Een 12-koloms raster zonder goot, met zichtbare haarlijnen van 1px in de hero en in de cijfertabel, en nergens anders.",
@@ -565,7 +615,7 @@
       },
       {
         "name": "The Inversion Rule",
-        "body": "Een toestand krijgt geen nieuwe kleur. Hover, actief, volgende en oplichten zijn allemaal hetzelfde gebaar: inktblok, papieren letter. Binnen een blok dat al geïnverteerd is, inverteert het label terug.",
+        "body": "Een toestand krijgt geen nieuwe kleur. Hover, volgende en oplichten, de toestanden die je zelf veroorzaakt of die je de weg wijzen, zijn allemaal hetzelfde gebaar: inktblok, papieren letter. Binnen een blok dat al geïnverteerd is, inverteert het label terug. Waar je bent is oriëntatie en geen toestand: de huidige pagina in de navbar is een onderstreping van 2px, de taal van een tekstlink, en geen inktblok. Anders zijn \"hier ben je\" en \"hier wijs je\" hetzelfde gebaar, en wijst het zwaarste vlak van de balk naar waar je al bent.",
         "section": "colors"
       },
       {
@@ -607,13 +657,16 @@
     "dos": [
       "Do zet het signaalrood (#cc0a1e) alleen op de primaire actie, op de focusring (2px, offset 2px) en, binnen de module, op de cursor. Buiten de module één rode drager per scherm.",
       "Do laat elke toestand spreken via inversie: inktblok (#111111), papieren letter (#efefec).",
+      "Do markeer de pagina waar je bent met een onderstreping van 2px. Oriëntatie is geen toestand; de inversie is voor hover.",
       "Do houd de hovertaal op twee woorden: een blok inverteert, een tekstlink gaat van een onderstreping van 1px naar 2px. Nooit allebei tegelijk, en nooit een tweede lijn.",
       "Do zet uitleg op de naad: het ding in kolom 1-7, de uitleg in kolom 8-12, op dezelfde rasterrij. Geef elke reeks minstens één glos.",
       "Do laat tekst in een raster met haarlijnen (hero en cijfers) zich met een papieren achtergrond uit de lijnen snijden: alinea's, kop en inleiding, en elke tabelcel.",
       "Do geef een cel op een rasterlijn zijn binnenruimte zelf, links en rechts gelijk (de celmaat).",
       "Do groepeer met lucht: wat bij elkaar hoort staat dicht, de stap naar het volgende blok is de grote.",
       "Do houd elk terminalvenster op een geheel aantal regels; lucht boven en onder is een rand, geen padding.",
-      "Do hertoken gedeelde componenten onder de homepage-scope, en zet de vormeigenschappen die je wilt expliciet (rand 0, schaduw none, radius 0), zodat de vorm van de oude wereld niet doorlekt.",
+      "Do hertoken gedeelde componenten op hun wortel (de component of de bodyklasse van een gemigreerde pagina), nooit op `:root`, en zet de vormeigenschappen die je wilt expliciet (rand 0, schaduw none, radius 0), zodat de vorm van de oude wereld niet doorlekt.",
+      "Do laat de navbar inklappen op wat past, niet op een px-grens: links op één regel, minstens 64px tussen woordmerk en eerste link. Wat aan het inklappen hangt (de mobiele CTA-balk) gaat mee op hetzelfde moment.",
+      "Do zet de chrome (nav, footer, banner) op de rail van het raster: dezelfde zijrand clamp(16px, 3vw, 32px) en dezelfde contentbreedte.",
       "Do houd zalm, amber en het papieren label binnen de zwarte module (#0a0a0a).",
       "Do maak tikdoelen minimaal 44px. De primaire actie is 56px."
     ],
@@ -625,6 +678,8 @@
       "Don't zet een strook over de volle modulebreedte om een regel te markeren; de info-rol is een label achter de tekst.",
       "Don't herschik terminaluitvoer voor een smalle breedte; alleen de zachte omslag springt in.",
       "Don't gebruik mascottes, badges op de voorgrond, kickers of eyebrows boven koppen.",
+      "Don't gebruik een teken (`+`, `→`, `►`) als icoon. Een icoon is een SVG; een hoverpijl is overbodig, de inversie is de feedback.",
+      "Don't maak in de consentbanner de ene keuze zwakker dan de andere.",
       "Don't zet getallen als los accentgetal in een kaart. Een cijfer staat in een tabelrij met zijn bron.",
       "Don't nummer sectiekoppen. Een mono-index is alleen voor een echte volgorde.",
       "Don't trek verticale rasterlijnen buiten de hero en de cijfertabel. In de andere secties draagt de naad het raster.",

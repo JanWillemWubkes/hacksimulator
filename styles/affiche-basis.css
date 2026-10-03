@@ -125,7 +125,8 @@ body.home,
 /* Focus = hier ben jij: het enige andere rood. Binnen de chrome op elke pagina; de focus
    van de pagina-inhoud hoort bij de pagina en gaat mee als die migreert. De schakelaar staat
    er apart in: landing.css geeft hem een blauwe ring op (0,3,0), en op gelijke stand wint
-   dit bestand op volgorde. */
+   dit bestand op volgorde. De navlinks ook: .nav-links a:focus-visible (0,2,1) gaf ze een
+   blauwe ring met radius 4px (finish review s252). */
 .landing-nav-wrapper :focus-visible,
 #landing-mobile-menu :focus-visible,
 #navbar :focus-visible,
@@ -134,9 +135,11 @@ body.home,
 .landing-footer a.footer-donate:focus-visible,
 .cookie-banner :focus-visible,
 .theme-toggle:focus-visible,
-.landing-nav .theme-toggle:focus-visible {
+.landing-nav .theme-toggle:focus-visible,
+.landing-nav .nav-links a:focus-visible {
   outline: 2px solid var(--af-rood);
   outline-offset: 2px;
+  border-radius: 0;
 }
 
 /* ==================== Navbar ==================== */
@@ -204,8 +207,30 @@ body.home,
   animation: none;
 }
 
+/* Geen glyphs als icoon (craft floor): de "+" op de trigger werd een SVG-chevron in navbar.js,
+   die draait als het menu open is; de pijl "→" die bij hover "►" werd, vervalt: de inversie is
+   al de hoverfeedback. */
+#navbar .dropdown-trigger::after,
+#navbar .dropdown-menu a::before,
 #navbar .dropdown-menu a:hover::before {
-  color: inherit;
+  content: none;
+}
+
+#navbar .dropdown-chevron {
+  flex-shrink: 0;
+}
+
+/* "Help" is een navlink zoals de rest. Tot 768 gaf mobile.css .navbar-links a (0,1,1) hem
+   17,6px/400 tegen 16px/500 voor de andere links: hun regel in main.css is sterker dan de
+   basisregel van de trigger (0,1,0). Dezelfde tokens, op elke breedte. */
+#navbar .navbar-links .dropdown-trigger {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--navbar-link-size);
+  font-weight: var(--navbar-link-weight);
+}
+
+#navbar .dropdown-trigger[aria-expanded="true"] .dropdown-chevron {
+  transform: rotate(180deg);
 }
 
 /* De nav-CTA is een inkten kader, op elke pagina. Rood is per scherm één drager, de
@@ -236,12 +261,15 @@ body.home,
 /* De pagina waar je bent: een onderstreping van 2px, de taal van een tekstlink. Waar je bent
    is oriëntatie, geen toestand, dus niet de inversie: die is voor hover (sessie 252, met de
    eigenaar; eerst als inktblok gebouwd, maar dan waren 'hier ben je' en 'hier wijs je'
-   hetzelfde gebaar, en het zwaarste vlak van de navbar wees naar waar je al was). Hij las
+   hetzelfde gebaar, en het zwaarste vlak van de navbar wees naar waar je al was). Elke
+   navbestemming krijgt hem (init-components.js leidt de pagina af uit het pad). Hij las
    --color-prompt, het lime van de terminalprompt; de rand van 2px uit landing.css wordt
    doorzichtig, zodat de link niet verspringt. */
 .landing-nav .nav-links a.active,
 #landing-mobile-menu .navbar-links a.active {
   color: var(--af-inkt);
+  /* landing.css gaf de actieve link in het blad ook 600: twee markeringen voor één ding. */
+  font-weight: var(--navbar-link-weight);
   border-bottom-color: transparent;
   text-decoration: underline;
   text-decoration-thickness: 2px;
@@ -362,13 +390,12 @@ body.home,
     border-bottom: 1px solid var(--color-border-dark-frame);
   }
 
+  /* Alleen de vorm; maat, gewicht en binnenruimte komen uit main.css, zoals in het marketing-
+     blad (de waarden uit mobile.css gaven hier 19,8px/400 en rijen van 63px tegen 18/500/45). */
   html.nav-ingeklapt #navbar .navbar-links a {
     display: block;
     width: 100%;
     min-height: 44px;
-    padding: var(--spacing-md);
-    font-size: 1.1rem;
-    font-weight: 400;
     text-align: left;
   }
 
@@ -418,18 +445,6 @@ body.home,
     height: 24px;
   }
 
-  html.nav-ingeklapt #navbar .navbar-action[aria-label="Zoek commands"]::after {
-    content: "Zoek Commands";
-    margin-left: auto;
-    font-family: var(--font-terminal);
-  }
-
-  html.nav-ingeklapt #navbar .navbar-action[aria-label="GitHub repository"]::after {
-    content: "GitHub";
-    margin-left: auto;
-    font-family: var(--font-terminal);
-  }
-
   html.nav-ingeklapt #navbar .theme-toggle {
     gap: 2px;
     padding: 0 4px;
@@ -439,6 +454,60 @@ body.home,
   html.nav-ingeklapt body.mobile-menu-open {
     overflow: hidden;
   }
+}
+
+/* De labels naast de iconen in het ingeklapte terminalblad, op elke breedte (tot 768 zette
+   mobile.css ze). Ze stonden in de terminalletter met Title Case en met margin-left: auto,
+   op 900 zo'n 640px van hun icoon (finish review s252): mono als kostuum, en een label dat
+   niet bij zijn icoon staat. Nu de letter van het blad, zinskapitaal, naast het icoon. */
+html.nav-ingeklapt #navbar .navbar-action[aria-label="Zoek commands"]::after,
+html.nav-ingeklapt #navbar .navbar-action[aria-label="GitHub repository"]::after {
+  margin-left: 0;
+  font-family: inherit;
+}
+
+html.nav-ingeklapt #navbar .navbar-action[aria-label="Zoek commands"]::after {
+  content: "Zoek commands";
+}
+
+/* Eén lijn tussen de links en de acties, niet twee met een lege strook ertussen: de onderrand
+   van de laatste link sluit de lijst al af (finish review s252, beide bladen). In het Help-blok
+   droeg elk item ook de rand van de lijstregels: onder "Shortcuts" stonden er twee. */
+html.nav-ingeklapt #landing-mobile-menu .navbar-actions,
+html.nav-ingeklapt #navbar .navbar-actions {
+  margin-top: 0;
+  border-top: 0;
+}
+
+html.nav-ingeklapt #navbar .dropdown-menu li {
+  border-bottom: 0;
+}
+
+/* De themaschakelaar in het blad: de enige plek op mobiel om van thema te wisselen. De labels
+   stonden op 11px in kapitalen, links in een kader van volle breedte. Nu twee gelijke helften
+   in de letter van het blad, elk minstens 44px hoog (de rand telt mee). */
+html.nav-ingeklapt #landing-mobile-menu .theme-toggle,
+html.nav-ingeklapt #navbar .theme-toggle {
+  gap: 0;
+  padding: 0;
+  font-size: 1rem;
+}
+
+html.nav-ingeklapt #landing-mobile-menu .toggle-option,
+html.nav-ingeklapt #navbar .toggle-option {
+  flex: 1;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  min-height: 42px;
+  padding: 0;
+  font-size: inherit;
+}
+
+html.nav-ingeklapt #landing-mobile-menu .toggle-label,
+html.nav-ingeklapt #navbar .toggle-label {
+  font-size: inherit;
+  font-weight: 500;
+  letter-spacing: 0;
 }
 
 /* ==================== Footer ==================== */
@@ -515,6 +584,26 @@ body.home,
   background-color: var(--af-papier);
   color: var(--af-inkt);
   border-top: 1px solid var(--af-inkt);
+  /* Op de rail, zoals navbar en footer: main.css gaf .cookie-content de terminalbreedte, dus
+     stond de inhoud op 120-1319 tegen 52-1388 (finish review s252). */
+  padding-inline: var(--af-rand);
+}
+
+.cookie-banner .cookie-content {
+  max-width: calc(var(--af-breed) - 2 * var(--af-rand));
+}
+
+/* "Meer info" is een link en moet er een zijn: in de inkt van de lopende tekst, zonder
+   onderstreping en zonder hover, was hij niet te herkennen. De taal van een tekstlink. */
+.cookie-banner a[href] {
+  color: var(--af-inkt);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.cookie-banner a[href]:hover {
+  text-decoration-thickness: 2px;
 }
 
 .cookie-banner .btn-small.btn-secondary {

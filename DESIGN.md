@@ -27,6 +27,8 @@ colors:
   lijn-sterk-donker: "#6f6f6a"
   m-grond-donker: "#000000"
   m-lijn-donker: "#3a3a37"
+  footer: "#111111"
+  footer-donker: "#000000"
 typography:
   affiche:
     fontFamily: "Archivo, Atkinson Hyperlegible Next, -apple-system, Segoe UI, sans-serif"
@@ -153,6 +155,23 @@ components:
   nav-link-hover:
     backgroundColor: "{colors.inkt}"
     textColor: "{colors.papier}"
+  nav-link-active:
+    textColor: "{colors.inkt}"
+  footer:
+    backgroundColor: "{colors.footer}"
+    textColor: "{colors.papier}"
+  consent-banner:
+    backgroundColor: "{colors.papier}"
+    textColor: "{colors.inkt}"
+    rounded: "{rounded.none}"
+  button-consent:
+    backgroundColor: "{colors.papier}"
+    textColor: "{colors.inkt}"
+    rounded: "{rounded.none}"
+    height: "44px"
+  button-consent-hover:
+    backgroundColor: "{colors.inkt}"
+    textColor: "{colors.papier}"
 ---
 
 # Design System: HackSimulator.nl
@@ -165,7 +184,7 @@ De pagina is een affiche op een zichtbaar raster, in de traditie van Total Desig
 
 Toestanden spreken via inversie en nooit via een extra kleur: een blok wordt inkt met een papieren letter. Er zijn geen schaduwen, geen zichtbare kleurverlopen en geen afgeronde hoeken. Diepte bestaat niet; er is alleen papier, inkt en de zwarte module. Ook de module spreekt de taal van de pagina: haar tekst komt uit de papierfamilie, de prompt is papier in 700, de Nederlandse laag (`[TIP]`, `[→]`) staat op een papieren label, en de cursor is een blok signaalrood. Alleen fout (zalm) en waarschuwing (amber) zijn eigen tinten. Het donkere thema is het geïnverteerde affiche: inkt wordt grond, papier wordt letter.
 
-**Reikwijdte.** Dit systeem draait nu alleen op `index.html`. Het staat in één stylesheet dat alleen die pagina laadt, als laatste, en hangt volledig onder de homepage-scope. Het hertokent de gedeelde componenten (navbar, footer, knoppen, FAQ, nieuwsbrief) in plaats van ze te overschrijven. De andere pagina's (gidsen, samples, blog, terminal, juridisch) tonen nog het oudere systeem en gaan één per sessie over. Dat oudere systeem hoort niet bij dit document.
+**Reikwijdte.** Het systeem staat in twee lagen. De gedeelde laag (de tokens op `:root` en in het donkere thema, Archivo, de navbar in beide varianten, de footer en de consentbanner) draait sitebreed: elke pagina met chrome laadt hem als laatste stylesheet, 27 pagina's. De pagina-inhoud staat alleen op `index.html` in het affiche, in een eigen stylesheet onder de homepage-scope. De inhoud van de andere pagina's (gidsen, samples, blog, woordenlijst, commands, over ons, contact, 404, terminal) toont nog het oudere systeem en gaat één pagina per sessie over; dat oudere systeem hoort niet bij dit document. Een gemigreerde pagina doet mee door haar bodyklasse toe te voegen aan de lijst van wortels waarop de gedeelde laag hertokent. Hertokenen gebeurt op de wortel van een component of gemigreerde pagina, nooit op `:root`, want de oude inhoud leest dezelfde tokens. De drie juridische pagina's hebben geen chrome en laden de laag niet.
 
 Expliciet niet: scanlines, glow, groen-op-zwart, matrixregen, mascottes, badges op de voorgrond, kickers en eyebrows.
 
@@ -206,12 +225,12 @@ Deze kleuren gelden alleen binnen de rand van de zwarte module (hero-terminal, t
 - **Oplichten** (#23231f): de achtergrond van een regel tijdens de registratie (450ms). Uitvoer erop haalt 10,82, prompt 13,69.
 
 ### Het donkere thema
-Papier en inkt wisselen van rol. De grond wordt #111111 en de letter #efefec. Daarnaast: band #1c1c1b, gedempte inkt #b0b0ab (8,67 op de grond), rasterlijn #2e2e2c, bedieningslijn #6f6f6a (3,74). De module wordt #000000 met modulelijn #3a3a37 en krijgt een haarlijn in de bedieningslijnkleur, zodat hij als module leest en niet als gat. Het rood blijft; als niet-tekstig merkteken haalt het 3,26 op de grond. Het tiplabel blijft papier met inkt, anders verdwijnt het in de grond. De footer is in beide thema's een inktvlak: in licht #111111, in donker #000000. Het slot volgt het token en niet de toon: in donker is het de lichte band (#efefec) met een donkere letter, en de rode actie erop inverteert bij hover naar de grond (#111111).
+Papier en inkt wisselen van rol. De grond wordt #111111 en de letter #efefec. Daarnaast: band #1c1c1b, gedempte inkt #b0b0ab (8,67 op de grond), rasterlijn #2e2e2c, bedieningslijn #6f6f6a (3,74). De module wordt #000000 met modulelijn #3a3a37 en krijgt een haarlijn in de bedieningslijnkleur, zodat hij als module leest en niet als gat. Het rood blijft; als niet-tekstig merkteken haalt het 3,26 op de grond. Het tiplabel blijft papier met inkt, anders verdwijnt het in de grond. De footer is in beide thema's een inktvlak met een eigen token: in licht #111111, in donker #000000, zodat hij zich van de donkere grond scheidt. Een eigen token en niet de inkt, want in de footer draaien papier en inkt om; daar is papier de letter (16,39 op #111111) en is de gedempte letter #b0b0ab (8,67), voor tagline en copyright. Het slot volgt het token en niet de toon: in donker is het de lichte band (#efefec) met een donkere letter, en de rode actie erop inverteert bij hover naar de grond (#111111).
 
 ### Named Rules
 **The One Voice Rule.** Het rood betekent alleen "jij bent aan zet": de primaire actie, de focusring en de cursor in de module. Buiten de module is er per scherm één rode drager; een tweede actie in hetzelfde scherm (de nav-CTA, een volgende chip, een actieve toestand) wordt inkt. Binnen de module is rood alleen de cursor, een blok van één teken op het invoerpunt. Bij overname verdwijnt dat blok en blijft alleen de native caret, ook rood: nooit twee rode cursors.
 
-**The Inversion Rule.** Een toestand krijgt geen nieuwe kleur. Hover, actief, volgende en oplichten zijn allemaal hetzelfde gebaar: inktblok, papieren letter. Binnen een blok dat al geïnverteerd is, inverteert het label terug.
+**The Inversion Rule.** Een toestand krijgt geen nieuwe kleur. Hover, volgende en oplichten, de toestanden die je zelf veroorzaakt of die je de weg wijzen, zijn allemaal hetzelfde gebaar: inktblok, papieren letter. Binnen een blok dat al geïnverteerd is, inverteert het label terug. Waar je bent is oriëntatie en geen toestand: de huidige pagina in de navbar is een onderstreping van 2px, de taal van een tekstlink, en geen inktblok. Anders zijn "hier ben je" en "hier wijs je" hetzelfde gebaar, en wijst het zwaarste vlak van de balk naar waar je al bent.
 
 **The Module Boundary Rule.** De simulatortinten (zalm, amber) leven alleen binnen de zwarte module, en het papieren label ook. Buiten de module is er geen groen en geen andere accentkleur dan het rood.
 
@@ -221,7 +240,7 @@ Papier en inkt wisselen van rol. De grond wordt #111111 en de letter #efefec. Da
 **Body Font:** Atkinson Hyperlegible Next (met -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif)
 **Label/Mono Font:** JetBrains Mono (met een eigen subset voor kadertekens vooraan, dan Courier New, monospace)
 
-**Character:** Een neo-grotesk op afficheschaal, strak op het raster opgebouwd, met een lopende letter die is ontworpen om verwarbare tekens uit elkaar te houden. Archivo is zelf gehost op wdth 100 en gewicht 700-800. 900 is er bewust uit.
+**Character:** Een neo-grotesk op afficheschaal, strak op het raster opgebouwd, met een lopende letter die is ontworpen om verwarbare tekens uit elkaar te houden. Archivo is zelf gehost op wdth 100 en gewicht 700-800, en laadt op elke pagina met chrome, want het woordmerk in navbar en footer staat erin. 900 is er bewust uit.
 
 De rem-basis is 18px op desktop en 16px onder 768px. De maten hieronder schalen daarmee mee.
 
@@ -269,7 +288,8 @@ Het raster heeft 12 kolommen (`repeat(12, minmax(0, 1fr))`) zonder goot, is maxi
 
 **Responsief.**
 - Vanaf 1280px staat de microcopy naast de hero-actie, staat de toetsenrij op zes chips (twee rasterkolommen per chip) en staat het slot op één rij.
-- Onder 1280px staat de microcopy onder de knop, gaan de chips naar drie per rij en neemt een mobiele CTA-balk met de rode actie de rol van de nav-CTA over.
+- Onder 1280px staat de microcopy onder de knop en gaan de chips naar drie per rij.
+- De navbar klapt niet in op een vaste breedte maar op wat past: zodra de uitgeklapte nav niet meer in de balk staat met minstens 64px tussen het woordmerk en de eerste link, klapt hij in tot een menublad. Links breken nooit, dus wat niet past loopt uit en wordt gezien; dat werkt ook bij alleen-tekstzoom. Gemeten ligt de omslag rond 1224-1232px (marketing) en 1000-1008px (terminal). De mobiele CTA-balk met de rode actie neemt de rol van de nav-CTA over op hetzelfde moment, niet op een eigen grens.
 - Onder 1024px gaan vragen en leerpad over de volle breedte. Leerpadkolommen worden rijen met een inktlijn ertussen, de bloglinks komen onder de vragen, en de terminalkop toont alleen de omvang.
 - Onder 768px wordt het raster 4 kolommen, ook de haarlijnen. De cijfertabel wordt getal (kolom 1) naast omschrijving met de bron eronder (kolom 2-4). De glos gaat de module in, onder zijn regel, in 0.78rem, met een aanhaallijn van 1ch in gedimde uitvoer. De kolomkop vervalt, de uitnodiging komt onder de invoerregel zonder aanhaallijn, en de chips staan twee aan twee met de index boven het command.
 - Onder 352px mag een command in een chip op de spatie breken.
@@ -316,13 +336,29 @@ Er zijn geen kaarten. Inhoud staat in rijen en kolommen, gescheiden door haarlij
 - **Terminalinvoer:** een mono-invoerregel (700, prompt in papier) in de module, minimaal 44px hoog. In rust staat er een staand (niet knipperend) blok signaalrood van één teken, precies op het invoerpunt; het is beeld en vangt geen klik. Bij overname verdwijnt het blok en neemt de native caret (rood) het over. Bij focus krijgt de hele invoerregel de rode ring, boven de toetsenrij.
 
 ### Navigation
-- **Style:** een balk van papier met een inktlijn van 1px eronder. Het woordmerk staat in Archivo 800 en is geen actie: het heeft geen onderstreping en wisselt niet van kleur, in rust noch bij hover, en in de footer net zo.
-- **Links:** inkt zonder onderstreping. Bij hover inverteren ze tot een inktblok.
-- **Mobiel:** de menulinks zijn inkt op papier, het hamburgerteken is inkt.
-- **Footer:** een inktvlak op de rail van het raster (dezelfde zijrand en breedte). Papier en inkt draaien er om. De Ko-fi-link en het GitHub-icoon zijn een blok met een papieren kader dat inverteert.
+Eén navbar op elke pagina met chrome, in twee varianten (de marketingnav en de app-navbar van de terminal) met dezelfde vorm, dezelfde rail en hetzelfde menublad.
+- **Style:** een balk van papier met een inktlijn van 1px eronder (donker: geïnverteerd). Woordmerk en hamburger staan op de rail van het raster, links en rechts even ver van de rand. Het woordmerk staat in Archivo 800 en is geen actie: het heeft geen onderstreping en wisselt niet van kleur, in rust noch bij hover, en in de footer net zo.
+- **Links:** inkt zonder onderstreping, op één regel (ze breken nooit), 16px uit elkaar. Bij hover inverteren ze tot een inktblok.
+- **Actief:** de pagina waar je bent krijgt een onderstreping van 2px in inkt (offset 0.2em), zonder extra gewicht. Elke navbestemming heeft hem. Bij hover inverteert ook de actieve link; de onderstreping gaat mee in de papieren letter.
+- **Nav-CTA:** een inkten kader van 1px op elke pagina, dat bij hover inverteert. Rood is per scherm één drager, de primaire actie van de pagina zelf.
+- **Focus:** de rode ring (2px, offset 2px, radius 0) op elk element van de chrome: links, woordmerk, schakelaar, menu, footer en banner.
+- **Themaschakelaar (uitgeklapt):** twee iconen in een tikdoel van minstens 44px; de labels zijn er alleen voor schermlezers.
+- **Help-menu (terminal):** een blad van papier met een inkten kader, zonder schaduw en zonder animatie; een regel inverteert. De trigger draagt een SVG-chevron die 180 graden draait als het menu open is.
+- **Ingeklapt (het menublad):** één ontwerp voor beide navbars. Het blad is papier; elke link is een rij van minstens 44px met een inktlijn van 1px eronder, en de onderlijn van de laatste link is de enige lijn vóór de acties. De acties (zoeken, GitHub, schakelaar) zijn blokken met een inkten kader over de volle breedte, met hun label in de letter van het blad naast het icoon, in zinskapitaal. De schakelaar is twee gelijke helften van minstens 44px met "Donker" en "Licht" in de lettermaat van het blad. Het hamburgerteken is inkt.
+- **Mobiele CTA-balk (index):** papier met een inktlijn van 1px erboven, de rode actie van 52px hoog over de volle breedte (max 420px). Hij verschijnt wanneer de navbar inklapt.
+
+### Footer
+- **Style:** een inktvlak in beide thema's (het footertoken), op de rail van het raster: dezelfde zijrand en dezelfde contentbreedte als nav en raster. Papier en inkt draaien er om: de letter is papier, tagline en copyright staan in de gedempte letter #b0b0ab.
+- **Links:** papier zonder onderstreping; bij hover een onderstreping van 2px. De Ko-fi-link en het GitHub-icoon zijn een blok met een papieren kader dat inverteert.
+
+### Consentbanner
+Het eerste wat elke nieuwe bezoeker ziet, op elke pagina met chrome.
+- **Style:** papier met een inktlijn van 1px erboven, op de rail van het raster, radius 0.
+- **Meer info:** een tekstlink (onderstreping 1px, bij hover 2px).
+- **Knoppen:** twee gelijkwaardige knoppen met een inkten kader van 1px, Atkinson 700, minstens 44px hoog; hover en focus inverteren. Weigeren oogt nooit zwakker dan accepteren.
 
 ### Links
-Een tekstlink is inkt met een onderstreping van 1px, offset 0.2em. Bij hover wordt de onderstreping 2px. Staat een link als blok in een lijst (bloglinks, tabelrijen), dan inverteert het blok in plaats daarvan, met 8px lucht naast de letters (in de cijfertabel de celmaat), bij hover en bij focus. Een bloglink noemt zijn pad in mono (0.75rem, gedempt) onder de titel, zoals een cijfer zijn bron noemt, en nooit erboven. Het pad ligt in de onderpadding van de link en vangt geen tik, zodat het tikdoel van 44px heel blijft.
+Een tekstlink is inkt met een onderstreping van 1px, offset 0.2em. Bij hover wordt de onderstreping 2px. Dezelfde taal draagt de oriëntatie in de navbar: de huidige pagina staat op een onderstreping van 2px. In de footer staan de links zonder onderstreping in rust; daar is de onderstreping van 2px de hover. Staat een link als blok in een lijst (bloglinks, tabelrijen), dan inverteert het blok in plaats daarvan, met 8px lucht naast de letters (in de cijfertabel de celmaat), bij hover en bij focus. Een bloglink noemt zijn pad in mono (0.75rem, gedempt) onder de titel, zoals een cijfer zijn bron noemt, en nooit erboven. Het pad ligt in de onderpadding van de link en vangt geen tik, zodat het tikdoel van 44px heel blijft.
 
 ### Terminal module (signatuur)
 Een zwarte module over kolom 1-7 met een mono kopregel (titel en omvang), een lichaam van zeven hele regels van 27px, en een invoerregel. Het lichaam loopt over alle twaalf kolommen: links de module, rechts op papier de glos per regel. Naast de kopregel staat de kolomkop "In gewoon Nederlands"; naast de invoerregel de uitnodiging, met dezelfde aanhaallijn als een glos.
@@ -338,13 +374,16 @@ De auto-demo speelt alleen `nmap 192.168.1.1`, bij laden. Dat nmap-frame is daar
 ### Do:
 - **Do** zet het signaalrood (#cc0a1e) alleen op de primaire actie, op de focusring (2px, offset 2px) en, binnen de module, op de cursor. Buiten de module één rode drager per scherm.
 - **Do** laat elke toestand spreken via inversie: inktblok (#111111), papieren letter (#efefec).
+- **Do** markeer de pagina waar je bent met een onderstreping van 2px. Oriëntatie is geen toestand; de inversie is voor hover.
 - **Do** houd de hovertaal op twee woorden: een blok inverteert, een tekstlink gaat van een onderstreping van 1px naar 2px. Nooit allebei tegelijk, en nooit een tweede lijn.
 - **Do** zet uitleg op de naad: het ding in kolom 1-7, de uitleg in kolom 8-12, op dezelfde rasterrij. Geef elke reeks minstens één glos.
 - **Do** laat tekst in een raster met haarlijnen (hero en cijfers) zich met een papieren achtergrond uit de lijnen snijden: alinea's, kop en inleiding, en elke tabelcel.
 - **Do** geef een cel op een rasterlijn zijn binnenruimte zelf, links en rechts gelijk (de celmaat).
 - **Do** groepeer met lucht: wat bij elkaar hoort staat dicht, de stap naar het volgende blok is de grote.
 - **Do** houd elk terminalvenster op een geheel aantal regels; lucht boven en onder is een rand, geen padding.
-- **Do** hertoken gedeelde componenten onder de homepage-scope, en zet de vormeigenschappen die je wilt expliciet (rand 0, schaduw none, radius 0), zodat de vorm van de oude wereld niet doorlekt.
+- **Do** hertoken gedeelde componenten op hun wortel (de component of de bodyklasse van een gemigreerde pagina), nooit op `:root`, en zet de vormeigenschappen die je wilt expliciet (rand 0, schaduw none, radius 0), zodat de vorm van de oude wereld niet doorlekt.
+- **Do** laat de navbar inklappen op wat past, niet op een px-grens: links op één regel, minstens 64px tussen woordmerk en eerste link. Wat aan het inklappen hangt (de mobiele CTA-balk) gaat mee op hetzelfde moment.
+- **Do** zet de chrome (nav, footer, banner) op de rail van het raster: dezelfde zijrand clamp(16px, 3vw, 32px) en dezelfde contentbreedte.
 - **Do** houd zalm, amber en het papieren label binnen de zwarte module (#0a0a0a).
 - **Do** maak tikdoelen minimaal 44px. De primaire actie is 56px.
 
@@ -356,6 +395,8 @@ De auto-demo speelt alleen `nmap 192.168.1.1`, bij laden. Dat nmap-frame is daar
 - **Don't** zet een strook over de volle modulebreedte om een regel te markeren; de info-rol is een label achter de tekst.
 - **Don't** herschik terminaluitvoer voor een smalle breedte; alleen de zachte omslag springt in.
 - **Don't** gebruik mascottes, badges op de voorgrond, kickers of eyebrows boven koppen.
+- **Don't** gebruik een teken (`+`, `→`, `►`) als icoon. Een icoon is een SVG; een hoverpijl is overbodig, de inversie is de feedback.
+- **Don't** maak in de consentbanner de ene keuze zwakker dan de andere.
 - **Don't** zet getallen als los accentgetal in een kaart. Een cijfer staat in een tabelrij met zijn bron.
 - **Don't** nummer sectiekoppen. Een mono-index is alleen voor een echte volgorde.
 - **Don't** trek verticale rasterlijnen buiten de hero en de cijfertabel. In de andere secties draagt de naad het raster.

@@ -907,6 +907,37 @@ dode regel aan; verwijderd.
   vóór het frame waarin de resize-gebeurtenis valt. De nav meet nu synchroon bij resize
   (vóór animatie-callbacks en schilderen), en de sweep laat één frame renderen vóór hij meet.
 - Een schone herhaling van de geraakte specs in drie engines: 707/4/0/0.
+- Gate 2 (na deze fixes): 1893/33/0 (1926). Gate 3 (na de finish review): 1907 geslaagd,
+  1 flaky, 33 overgeslagen, 0 gefaald (1941); budget 1105,20 KB (marge 14,80). De flaky
+  (focusring FAQ-vraag 2 op terminal, WebKit) staat als TASKS #92.
+
+**Finish review (vers, sessie 252).** Twee keer `recapture`, beide terecht: (1) mijn folds waren
+van 13:03, vóór de laatste bronwijzigingen van 15:23 (rail, actief als onderstreping, #88); (2) de
+GitHub-opnamen pakten `.footer-social a` en raakten de Ko-fi-knop. Daarna verdict **fix** (8),
+elk nagemeten en opgelost:
+1. navlinks focus blauw met radius 4px (`landing.css` `.nav-links a:focus-visible` (0,2,1) won):
+   nu rood, radius 0;
+2. "Meer info" in de banner onherkenbaar (inkt, geen lijn, hover = rust): nu tekstlink;
+3. de onderstreping alleen op blog: `init-components.js` leidt `currentPage` nu af uit het pad
+   (gidsen, woordenlijst, over ons, commands);
+4. banner naast de rail (120-1319): nu 52-1388;
+5. glyphs als icoon in het Help-menu (`+`, `→`/`►`): SVG-chevron die draait op `aria-expanded`;
+6. "Zoek Commands" in mono, Title Case, 640px van zijn icoon: letter van het blad, zinskapitaal;
+7. lege dubbele lijn tussen links en acties (en onder "Shortcuts"): één lijn;
+8. themaschakelaar in het blad met labels van 11px: twee helften van 44px, "Donker"/"Licht" in de
+   letter van het blad.
+Onderweg: het terminalblad nam maat/gewicht/padding over uit `mobile.css` (19,8px/400, rijen 63)
+tegen het marketingblad (18/500/45); "Help" kreeg 17,6px/400 en een rij van 49; de actieve link in
+het blad had ook nog gewicht 600. Alle drie gelijkgetrokken. Mutanten R1-R7, elk op een eigen
+assertie in `gedeelde-laag.spec.js`; populatietests kregen een gemeten budget (zes navigaties: los
+10,1s, onder zes workers in Firefox over 30s).
+**Ceiling, bewust niet gedaan:** de themaschakelaar inverteert niet bij hover (hij bevat al een
+geïnverteerde pil; heel de knop inverteren geeft inkt op inkt); "Start de simulator" in het blad
+blijft een gewone eerste regel (smaakkeuze voor de eigenaar); de zichtbare rechterrand van de
+terminal-navbar (1379 tegen rail 1387, schakelaar zonder kader).
+**Buiten scope, naar fase B:** de voortgangsbalk van blogposts loopt van groen naar blauw over de
+navbar (`blog.css:446`, breekt "blog: blauw, geen groen"); kickers op gidsen ("PDF Gidsen",
+"BUNDEL | ALLE 4 GIDSEN | BESPAAR €10"); de blauwzwarte oude grond in donker.
 
 **Bewust niet.** De paginagrond en lopende tekst van andere pagina's (fase B, per pagina, met
 herbeoordeling van de oude kleuren en koppen in Archivo, besluit eigenaar); de oude

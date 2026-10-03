@@ -228,7 +228,8 @@ test.describe('Marketing-navbar — omslagpunt hamburger', () => {
     expect(m.links.length, 'geen menulinks gevonden: de meting heeft niet gedraaid').toBeGreaterThan(0);
     expect(m.links).toEqual(['Start de simulator', 'Het verschil', 'Leerpad', 'Vragen',
       'Blog', 'Commands', 'Gidsen', 'Woordenlijst', 'Over ons']);
-    expect(m.thema).toEqual(['DONKER', 'LICHT']);
+    // Sessie 252: zinskapitaal in de letter van het blad (was 11px in kapitalen).
+    expect(m.thema).toEqual(['Donker', 'Licht']);
     expect(m.themaNaam).toMatch(/^Wissel naar (donker|licht) thema$/);
   });
 
