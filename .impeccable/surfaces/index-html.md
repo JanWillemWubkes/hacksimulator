@@ -810,13 +810,42 @@ sessie 248 horen niet bij deze populatie en zijn niet te reproduceren.
 onder AAA, gedurende de 450ms van het oplichten. Met de vorige dim (#a1a8b0) was dat 6,57: ook
 eronder. Gemeld door de documenter.
 
-**Open, voor de eigenaar.**
+**Open na sessie 250, voor de eigenaar** (beslist in sessie 251, hieronder).
 - *Kleur op de pagina.* Bewust: papier, inkt, één signaalrood (DESIGN.md). De eigenaar vroeg of
   dat zo blijft; mijn advies: ja, de kracht van het rood komt uit zijn zeldzaamheid. Meer kleur
   kan alleen eerlijk per functie, niet per sectie, en verandert een regel van de wereld. Eerst
   vaststellen wat de eigenaar mist (warmte, contrast tussen secties, iets anders).
 - *Secties die in elkaar overlopen* (zie E1/K2).
 - *Herkenbaar saai*: in 249 niet opgelost (K2 teruggedraaid).
+
+**Sessie 251: het kleurgesprek en de laatste proef. Uitkomst: de huidige stand blijft, #91 is
+dicht.** De eigenaar op "wat mis je aan kleur": "enige warmte en contrast. Feitelijk is alles
+zwart-wit en heel klein beetje rood." Gemeten, en het klopt: op 1440 is 2,25% van de pixels
+kleurig, waarvan 0,28% rood (de rest: zalm en amber in de module). Papier en band verschillen
+1,13:1 (donker 1,11).
+- **Voorstel van Claude:** één tweede kleur met één rol. Signaalgeel (`#ffc917`, inkt erop
+  12,25) als het vlak waarop de Nederlandse uitleg staat (Engels op zwart, Nederlands op geel),
+  altijd vlak en nooit letter; in de module alleen het label van de info-rol. Verworpen vóór de
+  proef: crème papier (warmte zonder contrast, AI-standaardlook), meer rood (s247 proef B),
+  oranje (te dicht bij rood en amber), blauw (koel, het accent van de blog).
+- **Gevonden in de proef:** gele *letters* in de module (de glos `← Je lokale IP adres`)
+  botsten met het amber van `[!]`; één tint droeg dan twee rollen. Wie ooit opnieuw kleur
+  toevoegt: in de module is elke warme tint al bezet (rood, zalm, amber).
+- **De proef** (folds op ware grootte, 1440x900, 1280x800, 375x812, licht en donker;
+  `.playwright-mcp/s251-proef-{0,A,B,C}-*.png`). Grootste aaneengesloten donkere vlakte in licht
+  in alle varianten gelijk aan nu (geel is een licht vlak); in donker brak het geel de massa
+  (hero 72 → 61/58%, Herkenbaar 71 → 60/34%).
+  - A "Rol": alleen het label en een gele aanhaallijn onder 768 (geel 0,9% van de fold).
+  - B "Kolom": de uitlegkolom naast de module en de tekstcellen van Herkenbaar als geel vlak
+    (12,5-16,7%).
+  - C "Draad": B, met de gele kolom ononderbroken van de module tot het eind van Herkenbaar,
+    over de sectiegrens (tot 35,7%); prijs: een leeg geel vlak van ±557x313px naast de kop van
+    Herkenbaar.
+- **Oordeel eigenaar: geen variant, laat zoals het was.** Daarmee staan ook de open punten:
+  papier, inkt en één signaalrood blijven (DESIGN.md ongewijzigd); "secties die overlopen" en
+  "Herkenbaar saai" worden niet verder nagestreefd; de glos onder 768 houdt de kleur van de
+  uitvoer (onderscheid via letter, maat en aanhaallijn). De bron is in deze sessie niet
+  gewijzigd.
 
 ## Memorabel moment
 
